@@ -351,7 +351,7 @@ void Ico_PutPrefIconLink (const char *Icon,const char *Title)
   {
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO_HIGHLIGHT ICOx25\" />",
+		      " class=\"ICO_HIGHLIGHT ICOx20\" />",
 	    Gbl.Prefs.URLIcons,Icon,
 	    Title,Title);
   }

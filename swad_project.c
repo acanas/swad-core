@@ -357,7 +357,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
    extern const char *Txt_PROJECT_MY_ALL_PROJECTS[Prj_NUM_WHOSE_PROJECTS];
    struct Prj_Filter Filter;
    Prj_WhoseProjects_t My_All;
-   static const char *WhoseProjectsImage[Prj_NUM_WHOSE_PROJECTS] =
+   static const char *WhoseProjectsIcon[Prj_NUM_WHOSE_PROJECTS] =
      {
       "mysitemap.png",	// Prj_MY__PROJECTS
       "sitemap.svg",	// Prj_ALL_PROJECTS
@@ -380,7 +380,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
                      Gbl.Prjs.SelectedOrder,
                      Gbl.Prjs.CurrentPage,
                      -1L);
-      Ico_PutPrefIconLink (WhoseProjectsImage[My_All],
+      Ico_PutPrefIconLink (WhoseProjectsIcon[My_All],
 	                   Txt_PROJECT_MY_ALL_PROJECTS[My_All]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
@@ -432,7 +432,7 @@ static void Prj_ShowFormToFilterByHidden (void)
    extern const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[Prj_NUM_HIDDEN_VISIBL];
    struct Prj_Filter Filter;
    Prj_HiddenVisibl_t HidVis;
-   static const char *HiddenVisiblImage[Prj_NUM_HIDDEN_VISIBL] =
+   static const char *HiddenVisiblIcon[Prj_NUM_HIDDEN_VISIBL] =
      {
       "eye-slash.svg",	// Prj_HIDDEN
       "eye.svg",	// Prj_VISIBL
@@ -455,7 +455,7 @@ static void Prj_ShowFormToFilterByHidden (void)
                      Gbl.Prjs.SelectedOrder,
                      Gbl.Prjs.CurrentPage,
                      -1L);
-      Ico_PutPrefIconLink (HiddenVisiblImage[HidVis],
+      Ico_PutPrefIconLink (HiddenVisiblIcon[HidVis],
 	                   Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");

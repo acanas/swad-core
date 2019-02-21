@@ -1060,41 +1060,35 @@ static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
   }
 
 /*****************************************************************************/
-/******** Put form to select users whom public activity is displayed *********/
+/******** Show form to select users whom public activity is displayed ********/
 /*****************************************************************************/
 
 static void Soc_PutFormWhichUsrs (void)
   {
    extern const char *Txt_TIMELINE_WHICH_USERS[Soc_NUM_WHICH_USRS];
    Soc_WhichUsrs_t WhichUsrs;
+   static const char *Icon[Soc_NUM_WHICH_USRS] =
+     {
+      NULL,		// Soc_USRS_UNKNOWN
+      "user-check.svg",	// Soc_USRS_FOLLOWED
+      "users.svg",	// Soc_USRS_ALL
+     };
 
-   /***** Form to select which users I want to see in timeline:
-          - only the users I follow
-          - all users *****/
-   Frm_StartForm (ActSeeSocTmlGbl);
-   fprintf (Gbl.F.Out,"<div class=\"SEL_BELOW_TITLE\">"
-	              "<ul>");
-
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (WhichUsrs = (Soc_WhichUsrs_t) 1;
 	WhichUsrs < Soc_NUM_WHICH_USRS;
 	WhichUsrs++)
      {
-      fprintf (Gbl.F.Out,"<li>"
-                         "<label>"
-                         "<input type=\"radio\" name=\"WhichUsrs\""
-                         " value=\"%u\"",
-               (unsigned) WhichUsrs);
-      if (WhichUsrs == Gbl.Social.WhichUsrs)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-	                 "%s"
-                         "</label>"
-                         "</li>",
-               Gbl.Form.Id,Txt_TIMELINE_WHICH_USERS[WhichUsrs]);
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	       WhichUsrs == Gbl.Social.WhichUsrs ? "PREF_ON" :
+						   "PREF_OFF");
+      Frm_StartForm (ActSeeSocTmlGbl);
+      Par_PutHiddenParamUnsigned ("WhichUsrs",WhichUsrs);
+      Ico_PutPrefIconLink (Icon[WhichUsrs],Txt_TIMELINE_WHICH_USERS[WhichUsrs]);
+      Frm_EndForm ();
+      fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
-   Frm_EndForm ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Show warning if I do not follow anyone *****/
    if (Gbl.Social.WhichUsrs == Soc_USRS_FOLLOWED)

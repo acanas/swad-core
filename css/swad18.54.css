@@ -1603,15 +1603,15 @@ a:hover						/* Default ==> underlined */
 	}
 
 /*********************************** Icons ***********************************/
-.ICOx16		{height:16px; vertical-align:middle;}
-.ICO16x16	{width:16px; height:16px; vertical-align:middle;}
-.ICO20x20	{width:20px; height:20px; vertical-align:middle;}
-.ICO25x25	{width:25px; height:25px; vertical-align:middle;}
-.ICOx25		{height:25px; vertical-align:middle; margin:0 auto;}
-.ICO40x40	{width:40px; height:40px; vertical-align:middle;}
-.ICO64x64	{width:64px; height:64px; vertical-align:middle;}
-.ICO160x160	{width:160px; height:160px; vertical-align:middle;}
-.BANNER		{width:150px; height:50px;}
+.ICOx16			{			 height:16px; vertical-align:middle;}
+.ICO16x16		{width:16px; height:16px; vertical-align:middle;}
+.ICO20x20		{width:20px; height:20px; vertical-align:middle;}
+.ICOx20			{			 height:20px; vertical-align:middle; margin:0 auto;}
+.ICO25x25		{width:25px; height:25px; vertical-align:middle;}
+.ICO40x40		{width:40px; height:40px; vertical-align:middle;}
+.ICO64x64		{width:64px; height:64px; vertical-align:middle;}
+.ICO160x160		{width:160px; height:160px; vertical-align:middle;}
+.BANNER			{width:150px; height:50px;}
 .BANNER_SMALL	{width:75px; height:25px;}
 
 /****** Contextual links with small icons and text to go to some action ******/

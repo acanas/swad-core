@@ -179,7 +179,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
   {
    extern const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2];
    Agd_Past__FutureEvents_t PstFut;
-   static const char *Image[2] =
+   static const char *Icon[2] =
      {
       "calendar-minus.svg",	// Agd_PAST___EVENTS
       "calendar-plus.svg",	// Agd_FUTURE_EVENTS
@@ -199,7 +199,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
 		             Gbl.Agenda.HiddenVisiblEvents,
 		             Gbl.Agenda.CurrentPage,
 		             -1L);
-      Ico_PutPrefIconLink (Image[PstFut],
+      Ico_PutPrefIconLink (Icon[PstFut],
 	                   Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
@@ -215,7 +215,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
   {
    extern const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2];
    Agd_PrivatPublicEvents_t PrvPub;
-   static const char *Image[2] =
+   static const char *Icon[2] =
      {
       "lock.svg",	// Agd_PRIVAT_EVENTS
       "unlock.svg",	// Agd_PUBLIC_EVENTS
@@ -235,7 +235,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
 		             Gbl.Agenda.HiddenVisiblEvents,
 		             Gbl.Agenda.CurrentPage,
 		             -1L);
-      Ico_PutPrefIconLink (Image[PrvPub],
+      Ico_PutPrefIconLink (Icon[PrvPub],
 	                   Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
@@ -251,7 +251,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
   {
    extern const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2];
    Agd_HiddenVisiblEvents_t HidVis;
-   static const char *Image[2] =
+   static const char *Icon[2] =
      {
       "eye-slash.svg",	// Agd_HIDDEN_EVENTS
       "eye.svg",	// Agd_VISIBL_EVENTS
@@ -271,7 +271,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
 		             Gbl.Agenda.HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
 		             Gbl.Agenda.CurrentPage,
 		             -1L);
-      Ico_PutPrefIconLink (Image[HidVis],
+      Ico_PutPrefIconLink (Icon[HidVis],
 	                   Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
