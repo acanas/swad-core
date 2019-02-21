@@ -431,7 +431,7 @@ void Fil_RemoveTree (const char Path[PATH_MAX + 1])
    if (Fil_CheckIfPathExists (Path))
      {
       if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
-	 Lay_ShowErrorAndExit ("Can not get information about a file or folder in Fil_RemoveTree.");
+	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
       else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	{
 	 if (rmdir (Path))
@@ -496,44 +496,44 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDire
    char Path2[PATH_MAX + 1];
    struct stat FileStatus;
 
-   if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
-     {
-      Ale_ShowAlert (Ale_ERROR,"Error while trying to remove old temporary files in directory &quot;%s&quot;",Path);
-      Lay_ShowErrorAndExit ("Can not get information about a file or folder in Fil_RemoveOldTmpFiles.");
-     }
-   else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
-     {
-      /***** Scan the directory *****/
-      if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)	// No error
-	{
-	 /* Loop over files */
-	 for (NumFile = 0;
-	      NumFile < NumFiles;
-	      NumFile++)
+   /***** Check this path (file or directory)
+          because it could have already been deleted *****/
+   if (Fil_CheckIfPathExists (Path))
+      if (!lstat (Path,&FileStatus))		// On success ==> 0 is returned
+	 if (S_ISDIR (FileStatus.st_mode))	// It's a directory
 	   {
-	    if (strcmp (FileList[NumFile]->d_name,".") &&
-		strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+	    /***** Scan the directory and delete recursively *****/
+	    if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)	// No error
 	      {
-	       snprintf (Path2,sizeof (Path2),
-		         "%s/%s",
-			 Path,FileList[NumFile]->d_name);
-	       Fil_RemoveOldTmpFiles (Path2,TimeToRemove,true);	// Recursive call
-	      }
-	    free ((void *) FileList[NumFile]);
-	   }
-	 free ((void *) FileList);
+	       /* Loop over files */
+	       for (NumFile = 0;
+		    NumFile < NumFiles;
+		    NumFile++)
+		 {
+		  if (strcmp (FileList[NumFile]->d_name,".") &&
+		      strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
+		    {
+		     snprintf (Path2,sizeof (Path2),
+			       "%s/%s",
+			       Path,FileList[NumFile]->d_name);
+		     Fil_RemoveOldTmpFiles (Path2,TimeToRemove,true);	// Recursive call
+		    }
+		  free ((void *) FileList[NumFile]);
+		 }
+	       free ((void *) FileList);
 
-	 if (RemoveDirectory)
-	    /* Remove the directory itself */
+	       if (RemoveDirectory)
+		  /* Remove the directory itself */
+		  if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
+		     rmdir (Path);
+	      }
+	    else
+	       Lay_ShowErrorAndExit ("Error while scanning directory.");
+	   }
+	 else					// Not a directory
 	    if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
-	       rmdir (Path);
-	}
-      else
-	 Lay_ShowErrorAndExit ("Error while scanning directory.");
-     }
-   else
-      if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
-	 unlink (Path);
+	       unlink (Path);
+        }
   }
 
 /*****************************************************************************/

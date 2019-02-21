@@ -399,8 +399,6 @@ Antonio
 
 // TODO: Chequear todos los iconos .gif y .png que restan, concretamente los de file_browser
 
-// TODO: Sale de vez en cuando un mensaje "Can not get information about a file or folder.", por ejemplo en el timeline.
-
 // TODO: Pedro Villar Castro:
 // Al asignar un TFG a alumnos, no escribir el DNI del alumno, sino escogerlo de una lista de entre los alumnos inscritos en la asignatura.
 
@@ -431,10 +429,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.52.2 (2019-02-21)"
+#define Log_PLATFORM_VERSION	"SWAD 18.52.3 (2019-02-21)"
 #define CSS_FILE		"swad18.52.css"
 #define JS_FILE			"swad18.51.js"
 /*
+	Version 18.52.3:  Feb 21, 2019 	Fixed bug in removing of old temporary files. (237458 lines)
 	Version 18.52.2:  Feb 20, 2019 	Fixed bug in reception of images. (237458 lines)
 	Version 18.52.1:  Feb 20, 2019 	Messages to debug problem with files. (237425 lines)
 	Version 18.52:    Feb 20, 2019 	Two new color themes: purple and pink. (237424 lines)

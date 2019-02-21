@@ -5352,7 +5352,7 @@ static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
 		      "%s/%s",
 		      Path,FileList[NumFile]->d_name);
 	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
-	       Lay_ShowErrorAndExit ("Can not get information about a file or folder in Brw_CalcSizeOfDirRecursive.");
+	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	      {
 	       Gbl.FileBrowser.Size.NumFolds++;
@@ -5423,7 +5423,7 @@ static void Brw_ListDir (unsigned Level,const char *ParentRowId,
 
 	    /***** Get file or folder status *****/
 	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
-	       Lay_ShowErrorAndExit ("Can not get information about a file or folder in Brw_ListDir.");
+	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
 	      {
 	       if (Gbl.FileBrowser.FullTree)
@@ -6764,7 +6764,7 @@ void Brw_RemFileFromTree (void)
 
       /***** Check if is a file/link or a folder *****/
       if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
-	 Lay_ShowErrorAndExit ("Can not get information about a file or folder in Brw_RemFileFromTree.");
+	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
       else if (S_ISREG (FileStatus.st_mode))		// It's a file or a link
         {
 	 /* Name of the file/link to be shown */
@@ -6818,7 +6818,7 @@ void Brw_RemFolderFromTree (void)
 
       /***** Check if it's a file or a folder *****/
       if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
-	 Lay_ShowErrorAndExit ("Can not get information about a file or folder in Brw_RemFolderFromTree.");
+	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
       else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	 if (Brw_RemoveFolderFromDiskAndDB (Path,
                                             Gbl.FileBrowser.Priv.FullPathInTree))
@@ -8288,7 +8288,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
    /***** Is it a file or a folder? *****/
    FileType = Brw_IS_UNKNOWN;
    if (lstat (PathOrg,&FileStatus))	// On success ==> 0 is returned
-      Lay_ShowErrorAndExit ("Can not get information about a file or folder in Brw_PasteTreeIntoFolder.");
+      Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
       FileType = Brw_IS_FOLDER;
    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
@@ -12558,7 +12558,7 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,
    // Folder st_mtime must be saved before remove files inside it
    // because st_mtime is updated by the deletion
    if (lstat (Path,&FolderStatus))	// On success ==> 0 is returned
-      Lay_ShowErrorAndExit ("Can not get information about a file or folder in Brw_ScanDirRemovingOldFiles.");
+      Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
    /***** Scan directory *****/
    else if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
      {
@@ -12580,7 +12580,7 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,
 
 	    /***** Get file or folder status *****/
 	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
-	       Lay_ShowErrorAndExit ("Can not get information about a file or folder in Brw_ScanDirRemovingOldFiles.");
+	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))				// It's a folder
 	       /* Scan subtree starting at this this directory recursively */
 	       Brw_ScanDirRemovingOldFiles (Level + 1,PathFileRel,
