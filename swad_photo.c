@@ -40,6 +40,7 @@
 #include "swad_enrolment.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
+#include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_logo.h"
@@ -1183,6 +1184,10 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,Pho_Zoom_t Zoom,
                        bool FormUnique)
   {
+   extern const char *Txt_Following;
+   extern const char *Txt_Followers;
+   unsigned NumFollowing;
+   unsigned NumFollowers;
    bool PhotoExists;
    bool BrowserTabIs1stTab = Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;
    bool PutLinkToPublicProfile = !Gbl.Form.Inside &&	// Only if not inside another form
@@ -1220,7 +1225,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</div>");
 
-      /* Institution  full name and institution country */
+      /* Institution full name and institution country */
       if (UsrDat->InsCod > 0)
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">");
@@ -1235,6 +1240,17 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	                       NULL);	// Don't put link to country
 	 fprintf (Gbl.F.Out,"</div>");
 	}
+
+      /* Following and followers */
+      Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
+      fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE\">"
+			 "<span class=\"DAT_N_BOLD\">%u</span>"
+	                 "<span class=\"DAT_SMALL\">&nbsp;%s&nbsp;&nbsp;</span>"
+			 "<span class=\"DAT_N_BOLD\">%u</span>"
+	                 "<span class=\"DAT_SMALL\">&nbsp;%s</span>"
+	                 "</div>",
+	       NumFollowing,Txt_Following,
+	       NumFollowers,Txt_Followers);
 
       fprintf (Gbl.F.Out,"</div>");
      }

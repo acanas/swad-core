@@ -49,7 +49,9 @@ void Fol_SuggestUsrsToFollowMainZone (void);
 void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void);
 
 bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
-unsigned Fol_GetNumFollowing (long UsrCod);
+void Fol_FlushCacheFollow (void);
+void Fol_GetNumFollow (long UsrCod,
+                       unsigned *NumFollowing,unsigned *NumFollowers);
 unsigned Fol_GetNumFollowers (long UsrCod);
 void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
                                     unsigned NumFollowing,unsigned NumFollowers,

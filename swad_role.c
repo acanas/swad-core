@@ -344,7 +344,7 @@ Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long CrsCod)
        CrsCod <= 0)
       return Rol_UNK;
 
-   /***** 2. Fast check: Is role in course already calculated *****/
+   /***** 2. Fast check: Is role in course already calculated? *****/
    if (UsrCod == Gbl.Cache.RoleUsrInCrs.UsrCod &&
        CrsCod == Gbl.Cache.RoleUsrInCrs.CrsCod )
       return Gbl.Cache.RoleUsrInCrs.Role;

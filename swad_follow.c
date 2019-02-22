@@ -453,28 +453,43 @@ bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
 /*************************** Get number of followed **************************/
 /*****************************************************************************/
 
-unsigned Fol_GetNumFollowing (long UsrCod)
+void Fol_FlushCacheFollow (void)
   {
-   /***** Check if a user is a follower of another user *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of followed",
-	                     "SELECT COUNT(*) FROM usr_follow"
-	                     " WHERE FollowerCod=%ld",
-                             UsrCod);
+   Gbl.Cache.Follow.UsrCod = -1L;
+   Gbl.Cache.Follow.NumFollowing =
+   Gbl.Cache.Follow.NumFollowers = 0;
   }
 
-/*****************************************************************************/
-/************************** Get number of followers **************************/
-/*****************************************************************************/
-
-unsigned Fol_GetNumFollowers (long UsrCod)
+void Fol_GetNumFollow (long UsrCod,
+                       unsigned *NumFollowing,unsigned *NumFollowers)
   {
-   /***** Check if a user is a follower of another user *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of followers",
-			     "SELECT COUNT(*) FROM usr_follow"
-			     " WHERE FollowedCod=%ld",
-			     UsrCod);
+   /***** 1. Fast check: trivial cases *****/
+   if (UsrCod <= 0)
+     {
+      *NumFollowing = *NumFollowers = 0;
+      return;
+     }
+
+   /***** 2. Fast check: Is number of following already calculated? *****/
+   if (UsrCod == Gbl.Cache.Follow.UsrCod)
+     {
+      *NumFollowing = Gbl.Cache.Follow.NumFollowing;
+      *NumFollowers = Gbl.Cache.Follow.NumFollowers;
+      return;
+     }
+
+   /***** 3. Slow check: Get number of following/followers from database *****/
+   Gbl.Cache.Follow.UsrCod = UsrCod;
+   *NumFollowing = Gbl.Cache.Follow.NumFollowing =
+      (unsigned) DB_QueryCOUNT ("can not get number of followed",
+	                        "SELECT COUNT(*) FROM usr_follow"
+	                        " WHERE FollowerCod=%ld",
+                                UsrCod);
+   *NumFollowers = Gbl.Cache.Follow.NumFollowers =
+      (unsigned) DB_QueryCOUNT ("can not get number of followers",
+			        "SELECT COUNT(*) FROM usr_follow"
+			        " WHERE FollowedCod=%ld",
+			        UsrCod);
   }
 
 /*****************************************************************************/
@@ -1019,6 +1034,9 @@ void Fol_FollowUsr1 (void)
 			     Gbl.Usrs.Me.UsrDat.UsrCod,
 			     Gbl.Usrs.Other.UsrDat.UsrCod);
 
+	    /***** Flush cache *****/
+	    Fol_FlushCacheFollow ();
+
 	    /***** This follow must be notified by email? *****/
             CreateNotif = (Gbl.Usrs.Other.UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
             NotifyByEmail = CreateNotif &&
@@ -1072,12 +1090,17 @@ void Fol_UnfollowUsr1 (void)
       // Unfollow only if I follow him/her
       if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
                                     Gbl.Usrs.Other.UsrDat.UsrCod))
+        {
 	 /***** Unfollow user in database *****/
 	 DB_QueryREPLACE ("can not unfollow user",
 			  "DELETE FROM usr_follow"
 			  " WHERE FollowerCod=%ld AND FollowedCod=%ld",
 		          Gbl.Usrs.Me.UsrDat.UsrCod,
                           Gbl.Usrs.Other.UsrDat.UsrCod);
+
+	 /***** Flush cache *****/
+	 Fol_FlushCacheFollow ();
+        }
       Gbl.DelayedAlert.Type = Ale_SUCCESS;
      }
    else
@@ -1221,4 +1244,7 @@ void Fol_RemoveUsrFromUsrFollow (long UsrCod)
 		   "DELETE FROM usr_follow"
 		   " WHERE FollowerCod=%ld OR FollowedCod=%ld",
 	           UsrCod,UsrCod);
+
+   /***** Flush cache *****/
+   Fol_FlushCacheFollow ();
   }

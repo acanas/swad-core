@@ -301,8 +301,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
       Prf_ShowDetailsUserProfile (UsrDat);
 
       /***** Count following and followers *****/
-      NumFollowing = Fol_GetNumFollowing (UsrDat->UsrCod);
-      NumFollowers = Fol_GetNumFollowers (UsrDat->UsrCod);
+      Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
       UsrFollowsMe = false;
       if (NumFollowing)
          UsrFollowsMe = Fol_CheckUsrIsFollowerOf (UsrDat->UsrCod,

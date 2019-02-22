@@ -1184,9 +1184,12 @@ static void Soc_SaveWhichUsersInDB (void)
 static void Soc_ShowWarningYouDontFollowAnyUser (void)
   {
    extern const char *Txt_You_dont_follow_any_user;
+   unsigned NumFollowing;
+   unsigned NumFollowers;
 
    /***** Check if I follow someone *****/
-   if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
+   Fol_GetNumFollow (Gbl.Usrs.Me.UsrDat.UsrCod,&NumFollowing,&NumFollowers);
+   if (!NumFollowing)
      {
       /***** Show warning if I do not follow anyone *****/
       Ale_ShowAlert (Ale_WARNING,Txt_You_dont_follow_any_user);

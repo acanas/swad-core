@@ -870,6 +870,12 @@ struct Globals
 	 long PrjCod;
 	 Prj_RoleInProject_t RoleInProject;
 	} MyRoleInProject;
+      struct
+        {
+	 long UsrCod;
+	 unsigned NumFollowing;
+	 unsigned NumFollowers;
+        } Follow;
      } Cache;
   };
 

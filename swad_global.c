@@ -39,6 +39,7 @@
 #include "swad_config.h"
 #include "swad_constant.h"
 #include "swad_exam.h"
+#include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_icon.h"
 #include "swad_parameter.h"
@@ -486,6 +487,7 @@ void Gbl_InitializeGlobals (void)
    Prj_FlushCacheMyRoleInProject ();
    Grp_FlushCacheIBelongToGrp ();
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+   Fol_FlushCacheFollow ();
   }
 
 /*****************************************************************************/

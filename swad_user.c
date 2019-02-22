@@ -44,6 +44,7 @@
 #include "swad_database.h"
 #include "swad_duplicate.h"
 #include "swad_enrolment.h"
+#include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group.h"
@@ -830,6 +831,7 @@ void Usr_FlushCachesUsr (void)
    Rol_FlushCacheRoleUsrInCrs ();
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
    Grp_FlushCacheIBelongToGrp ();
+   Fol_FlushCacheFollow ();
   }
 
 /*****************************************************************************/
