@@ -231,7 +231,7 @@ void Cty_PrintConfiguration (void)
 static void Cty_Configuration (bool PrintView)
   {
    extern const char *Hlp_COUNTRY_Information;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Shortcut;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -318,7 +318,7 @@ static void Cty_Configuration (bool PrintView)
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Country);
       if (!PrintView && Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language][0])
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
@@ -339,7 +339,7 @@ static void Cty_Configuration (bool PrintView)
 			 "%s/%s?cty=%ld</a>"
 			 "</td>"
 			 "</tr>",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
 	       Cfg_URL_SWAD_CGI,
 	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
@@ -356,7 +356,7 @@ static void Cty_Configuration (bool PrintView)
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkTo (250,"cty",Gbl.CurrentCty.Cty.CtyCod);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -373,7 +373,7 @@ static void Cty_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Users_of_the_country,
 		  Usr_GetNumUsrsWhoClaimToBelongToCty (Gbl.CurrentCty.Cty.CtyCod));
 
@@ -383,7 +383,7 @@ static void Cty_Configuration (bool PrintView)
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Institutions);
 
 	 /* Form to go to see institutions of this country */
@@ -409,7 +409,7 @@ static void Cty_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Centres,
 		  Ctr_GetNumCtrsInCty (Gbl.CurrentCty.Cty.CtyCod));
 
@@ -422,7 +422,7 @@ static void Cty_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Degrees,
 		  Deg_GetNumDegsInCty (Gbl.CurrentCty.Cty.CtyCod));
 
@@ -435,7 +435,7 @@ static void Cty_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Courses,
 		  Crs_GetNumCrssInCty (Gbl.CurrentCty.Cty.CtyCod));
 
@@ -469,7 +469,7 @@ static void Cty_PutIconToPrint (void)
 
 static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
@@ -481,7 +481,7 @@ static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role)
 		      "%u"
 		      "</td>"
 		      "</tr>",
-	    The_ClassForm[Gbl.Prefs.Theme],
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
             Usr_GetNumUsrsInCrssOfCty (Role,Gbl.CurrentCty.Cty.CtyCod));

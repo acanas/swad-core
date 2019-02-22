@@ -1729,7 +1729,7 @@ void Gam_RequestCreatOrEditGame (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_game;
    extern const char *Txt_Scope;
    extern const char *Txt_Edit_game;
@@ -1809,7 +1809,7 @@ void Gam_RequestCreatOrEditGame (void)
                       "<label for=\"ScopeGame\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Scope);
    Gam_SetDefaultAndAllowedScope (&Game);
    Sco_GetScope ("ScopeGame");
@@ -1828,7 +1828,7 @@ void Gam_RequestCreatOrEditGame (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Title,
             Gam_MAX_CHARS_SURVEY_TITLE,Game.Title);
 
@@ -1843,7 +1843,7 @@ void Gam_RequestCreatOrEditGame (void)
                       "<td class=\"LEFT_TOP\">"
                       "<textarea id=\"Txt\" name=\"Txt\""
                       " cols=\"60\" rows=\"10\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Description);
    if (!ItsANewGame)
       fprintf (Gbl.F.Out,"%s",Txt);
@@ -1856,7 +1856,7 @@ void Gam_RequestCreatOrEditGame (void)
 	              "<td class=\"RIGHT_TOP %s\">%s:"
 	              "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
@@ -1979,7 +1979,7 @@ static void Gam_SetDefaultAndAllowedScope (struct Game *Game)
 
 static void Gam_ShowLstGrpsToEditGame (long GamCod)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1995,7 +1995,7 @@ static void Gam_ShowLstGrpsToEditGame (long GamCod)
 	                 "%s:"
 	                 "</td>"
                          "<td class=\"LEFT_TOP\">",
-               The_ClassForm[Gbl.Prefs.Theme],
+               The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_Groups);
       Box_StartBoxTable ("95%",NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,0);

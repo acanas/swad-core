@@ -1107,7 +1107,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    const char *Icon,
 				    const char *Text)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
 
    /***** Separator *****/
    fprintf (Gbl.F.Out," ");	// This space is necessary to enable
@@ -1119,7 +1119,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
       FuncParams ();
 
    /***** Put icon and text with link *****/
-   Frm_LinkFormSubmit (Text,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (Text,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink (Icon,Text);
    fprintf (Gbl.F.Out,"</a>");
 
@@ -1141,7 +1141,7 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
 					       const char *Text,
 					       const char *OnSubmit)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
 
    /***** Separator *****/
    fprintf (Gbl.F.Out," ");	// This space is necessary to enable
@@ -1153,7 +1153,7 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
       FuncParams ();
 
    /***** Put icon with link *****/
-   Frm_LinkFormSubmit (Text,The_ClassFormBold[Gbl.Prefs.Theme],OnSubmit);
+   Frm_LinkFormSubmit (Text,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],OnSubmit);
    Ico_PutIconTextLink (Icon,Text);
    fprintf (Gbl.F.Out,"</a>");
 
@@ -1175,7 +1175,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
                                 bool Checked,bool Disabled,
                                 const char *Title,const char *Text)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
 
    /***** Separator *****/
    if (Text)
@@ -1192,7 +1192,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 	              "<label>",
             Checked ? "CHECKBOX_CHECKED" :
         	      "CHECKBOX_UNCHECKED",
-            The_ClassFormBold[Gbl.Prefs.Theme],
+            The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
             Title);
 
    /****** Checkbox and text *****/

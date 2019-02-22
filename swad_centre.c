@@ -286,7 +286,7 @@ void Ctr_PrintConfiguration (void)
 static void Ctr_Configuration (bool PrintView)
   {
    extern const char *Hlp_CENTRE_Information;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Institution;
    extern const char *Txt_Centre;
    extern const char *Txt_Short_name;
@@ -404,7 +404,7 @@ static void Ctr_Configuration (bool PrintView)
 	                 "<label for=\"OthInsCod\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Institution);
 
       if (!PrintView &&
@@ -446,7 +446,7 @@ static void Ctr_Configuration (bool PrintView)
 	                 "<label for=\"FullName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Centre);
       if (!PrintView &&
 	  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
@@ -475,7 +475,7 @@ static void Ctr_Configuration (bool PrintView)
 	                 "<label for=\"ShortName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Short_name);
       if (!PrintView &&
 	  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
@@ -506,7 +506,7 @@ static void Ctr_Configuration (bool PrintView)
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Place);
       if (!PrintView &&
 	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
@@ -551,7 +551,7 @@ static void Ctr_Configuration (bool PrintView)
 	                 "<label for=\"WWW\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Web);
       if (!PrintView &&
 	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
@@ -591,7 +591,7 @@ static void Ctr_Configuration (bool PrintView)
 			 "</a>"
 			 "</td>"
 			 "</tr>",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
 	       Cfg_URL_SWAD_CGI,
 	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
@@ -608,7 +608,7 @@ static void Ctr_Configuration (bool PrintView)
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkTo (250,"ctr",Gbl.CurrentCtr.Ctr.CtrCod);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -625,7 +625,7 @@ static void Ctr_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Users_of_the_centre,
 		  Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod));
 
@@ -635,7 +635,7 @@ static void Ctr_Configuration (bool PrintView)
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Degrees);
 
 	 /* Form to go to see degrees of this centre */
@@ -661,7 +661,7 @@ static void Ctr_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Courses,
 		  Crs_GetNumCrssInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
 
@@ -735,7 +735,7 @@ static void Ctr_PutIconToChangePhoto (void)
 
 static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
@@ -747,7 +747,7 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
 		      "%u"
 		      "</td>"
 		      "</tr>",
-	    The_ClassForm[Gbl.Prefs.Theme],
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
 	    Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.CurrentCtr.Ctr.CtrCod));
@@ -2298,7 +2298,7 @@ void Ctr_RemoveLogo (void)
 
 void Ctr_RequestPhoto (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_Recommended_aspect_ratio;
    extern const char *Txt_Recommended_resolution;
@@ -2328,7 +2328,7 @@ void Ctr_RequestPhoto (void)
                       "<input type=\"file\" name=\"%s\" accept=\"image/*\""
                       " onchange=\"document.getElementById('%s').submit();\" />"
 	              "</label>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);

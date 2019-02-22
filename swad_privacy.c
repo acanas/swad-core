@@ -148,7 +148,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Pri_Visibility_t CurrentVisibilityInDB,
                                    unsigned MaskAllowedVisibility)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
    Pri_Visibility_t Visibility;
 
@@ -158,7 +158,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 	              "%s:"
 	              "</td>"
 	              "<td class=\"LEFT_TOP\">",
-	    The_ClassForm[Gbl.Prefs.Theme],TxtLabel);
+	    The_ClassFormInBox[Gbl.Prefs.Theme],TxtLabel);
 
    /***** Form with list of options *****/
    if (Action != ActUnk)

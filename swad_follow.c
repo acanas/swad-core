@@ -423,12 +423,10 @@ static void Fol_PutIconsWhoToFollow (void)
 
 static void Fol_PutIconToUpdateWhoToFollow (void)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Update;
 
    Frm_StartForm (ActSeeSocPrf);
-   Frm_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme],
-                               NULL);
+   Frm_LinkFormSubmitAnimated (Txt_Update,NULL,NULL);
    Ico_PutCalculateIcon (Txt_Update);
    Frm_EndForm ();
   }
@@ -596,8 +594,8 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
                                                   Act_Action_t Action,
                                                   const char *Title)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBox[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_BOX\">");
@@ -627,16 +625,17 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 
    /***** Text *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            (Gbl.Action.Act == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
-        	                         The_ClassForm[Gbl.Prefs.Theme]);
+            (Gbl.Action.Act == Action) ? The_ClassFormOutBoxBold[Gbl.Prefs.Theme] :
+        	                         The_ClassFormOutBox    [Gbl.Prefs.Theme]);
    if (NumUsrs)
      {
       /* Form to list users */
       Frm_StartFormAnchor (Action,Fol_FOLLOW_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Frm_LinkFormSubmit (Title,
-                          (Gbl.Action.Act == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :
-        	                                       The_ClassForm[Gbl.Prefs.Theme],NULL);
+                          (Gbl.Action.Act == Action) ? The_ClassFormOutBoxBold[Gbl.Prefs.Theme] :
+        	                                       The_ClassFormOutBox    [Gbl.Prefs.Theme],
+			  NULL);
      }
    fprintf (Gbl.F.Out,"%s",Title);
    if (NumUsrs)

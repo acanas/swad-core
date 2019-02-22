@@ -455,7 +455,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
 static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                                    const char *Anchor)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_Confirm_ID;
    Act_Action_t NextAction;
 
@@ -496,7 +496,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 	    UsrDat->IDs.List[NumID].ID);
 
    /***** Put link *****/
-   Frm_LinkFormSubmit (Txt_Confirm_ID,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (Txt_Confirm_ID,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink ("check.svg",
 			Txt_Confirm_ID);
    fprintf (Gbl.F.Out,"</a>");
@@ -577,7 +577,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 			            bool ItsMe,bool IShouldFillInID)
   {
    extern const char *Hlp_PROFILE_Account;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Please_fill_in_your_ID;
    extern const char *Txt_ID_X_confirmed;
    extern const char *Txt_ID_X_not_confirmed;
@@ -612,7 +612,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 			    "</label>"
 			    "</td>"
 			    "<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_ID);
+		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_ID);
       else	// NumID >= 1
          fprintf (Gbl.F.Out,"<br />");
 
@@ -684,7 +684,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 			 "<label for=\"NewID\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"REC_C2_BOT LEFT_TOP DAT\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
 		                 Txt_ID);		// The first user's ID
       if (ItsMe)

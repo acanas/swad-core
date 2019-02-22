@@ -186,7 +186,7 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
 void Fig_ReqShowFigures (void)
   {
    extern const char *Hlp_ANALYTICS_Figures;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Figures;
    extern const char *Txt_Scope;
    extern const char *Txt_Statistic;
@@ -203,7 +203,7 @@ void Fig_ReqShowFigures (void)
 
    /***** Compute stats for anywhere, degree or course? *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
 	               1 << Sco_SCOPE_INS |
@@ -218,7 +218,7 @@ void Fig_ReqShowFigures (void)
    /***** Type of statistic *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;"
 	              "<select name=\"FigureType\">",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_Statistic);
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Statistic);
    for (FigureType = (Fig_FigureType_t) 0;
 	FigureType < Fig_NUM_FIGURES;
 	FigureType++)
@@ -1405,7 +1405,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
 static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		          const char *TxtFigure)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Institution;
    unsigned NumIns;
    unsigned NumOrder;
@@ -1436,7 +1436,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 
 	       /***** Write link to institution *****/
 	       fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">",
-			The_ClassForm[Gbl.Prefs.Theme]);
+			The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       Ins_DrawInstitutionLogoWithLink (&Ins,40);
                fprintf (Gbl.F.Out,"<br />%u</td>",
 	                NumberThisRow);
@@ -1486,12 +1486,12 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 
 	       /***** Write link to institution *****/
 	       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
-			The_ClassForm[Gbl.Prefs.Theme]);
+			The_ClassFormInBox[Gbl.Prefs.Theme]);
 
 	       /* Icon and name of this institution */
 	       Frm_StartForm (ActSeeInsInf);
 	       Ins_PutParamInsCod (Ins.InsCod);
-	       Frm_LinkFormSubmit (Ins.ShrtName,The_ClassForm[Gbl.Prefs.Theme],NULL);
+	       Frm_LinkFormSubmit (Ins.ShrtName,The_ClassFormInBox[Gbl.Prefs.Theme],NULL);
 	       if (Gbl.Usrs.Listing.WithPhotos)
 		 {
 		  Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,

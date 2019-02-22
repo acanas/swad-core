@@ -399,7 +399,7 @@ static long Ann_GetParamAnnCod (void)
 void Ann_ShowFormAnnouncement (void)
   {
    extern const char *Hlp_MESSAGES_Announcements;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_announcement;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
@@ -423,7 +423,7 @@ void Ann_ShowFormAnnouncement (void)
                       "%s: "
                       "</td>"
                       "<td class=\"DAT LEFT_TOP\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_UNK     |
                            1 << Rol_GST     |
@@ -453,7 +453,7 @@ void Ann_ShowFormAnnouncement (void)
 static void Ann_PutSubjectMessage (const char *Field,const char *Label,
                                    unsigned Rows)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP\">"
@@ -465,7 +465,7 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
                       "</textarea>"
 	              "</td>"
 	              "</tr>",
-	    Field,The_ClassForm[Gbl.Prefs.Theme],Label,
+	    Field,The_ClassFormInBox[Gbl.Prefs.Theme],Label,
 	    Field,Field,Rows);
   }
 

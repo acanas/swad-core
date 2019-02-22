@@ -3317,7 +3317,7 @@ static void Usr_SetMyPrefsAndRoles (void)
 void Usr_ShowFormsLogoutAndRole (void)
   {
    extern const char *Hlp_PROFILE_Session_role;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Session;
    extern const char *Txt_Role;
    extern const char *Txt_You_are_now_LOGGED_IN_as_X;
@@ -3344,7 +3344,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    else
      {
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
-               The_ClassForm[Gbl.Prefs.Theme],Txt_Role);
+               The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Role);
       Rol_PutFormToChangeMyRole (NULL);
       fprintf (Gbl.F.Out,"</label>");
      }
@@ -5901,7 +5901,7 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
 
 static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsType_t ListType)
   {
-   extern const char *The_ClassFormNoWrap[The_NUM_THEMES];
+   extern const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES];
    extern const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES];
 
    /***** Start form *****/
@@ -5913,7 +5913,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
 
    /***** Link and image *****/
    Frm_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],
-                       The_ClassFormNoWrap[Gbl.Prefs.Theme],
+                       The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
                        NextAction == ActReqMsgUsr ? "CopyMessageToHiddenFields()" :
                                                     NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
@@ -6110,7 +6110,7 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 
 static void Usr_PutCheckboxListWithPhotos (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Display_photos;
 
    Par_PutHiddenParamChar ("WithPhotosExists",'Y');
@@ -6119,7 +6119,7 @@ static void Usr_PutCheckboxListWithPhotos (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "<input type=\"checkbox\" name=\"WithPhotos\""
 	              " value=\"Y\"",
-	    The_ClassForm[Gbl.Prefs.Theme]);
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Listing.WithPhotos)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
@@ -6983,7 +6983,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 void Usr_ListDataAdms (void)
   {
    extern const char *Hlp_USERS_Administrators;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    extern const char *Txt_No_INDEX;
@@ -7066,7 +7066,7 @@ void Usr_ListDataAdms (void)
    Frm_StartForm (ActLstOth);
    Usr_PutParamListWithPhotos ();
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    fprintf (Gbl.F.Out,"</label>");
    Frm_EndForm ();
@@ -7492,7 +7492,7 @@ static void Usr_PutLinkToSeeGuests (void)
 void Usr_SeeGuests (void)
   {
    extern const char *Hlp_USERS_Guests;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    extern const char *Txt_Show_records;
@@ -7535,7 +7535,7 @@ void Usr_SeeGuests (void)
       Frm_StartForm (ActLstGst);
       Usr_PutParamsPrefsAboutUsrList ();
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
-	       The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+	       The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
       Sco_PutSelectorScope ("ScopeUsr",true);
       fprintf (Gbl.F.Out,"</label>");
       Frm_EndForm ();
@@ -7615,7 +7615,7 @@ void Usr_SeeGuests (void)
 void Usr_SeeStudents (void)
   {
    extern const char *Hlp_USERS_Students;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    extern const char *Txt_Show_records;
@@ -7685,7 +7685,7 @@ void Usr_SeeStudents (void)
 	 Frm_StartForm (ActLstStd);
 	 Usr_PutParamsPrefsAboutUsrList ();
 	 fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
 	 Sco_PutSelectorScope ("ScopeUsr",true);
 	 fprintf (Gbl.F.Out,"</label>");
 	 Frm_EndForm ();
@@ -7788,7 +7788,7 @@ void Usr_SeeStudents (void)
 void Usr_SeeTeachers (void)
   {
    extern const char *Hlp_USERS_Teachers;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    extern const char *Txt_Show_records;
@@ -7864,7 +7864,7 @@ void Usr_SeeTeachers (void)
    Frm_StartForm (ActLstTch);
    Usr_PutParamsPrefsAboutUsrList ();
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    fprintf (Gbl.F.Out,"</label>");
    Frm_EndForm ();
@@ -8392,7 +8392,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 void Usr_PutSelectorNumColsClassPhoto (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_columns;
    unsigned Cols;
 
@@ -8400,7 +8400,7 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "<select name=\"ColsClassPhoto\""
                       " onchange=\"document.getElementById('%s').submit();\">",
-            The_ClassForm[Gbl.Prefs.Theme],Gbl.Form.Id);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Gbl.Form.Id);
 
    /***** Put a row in selector for every number from 1 to Usr_CLASS_PHOTO_COLS_MAX *****/
    for (Cols = 1;

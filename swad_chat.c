@@ -326,13 +326,13 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName,
                                   unsigned Level,bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS])
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
    fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
    Frm_StartForm (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
-   Frm_LinkFormSubmit (RoomFullName,The_ClassForm[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (RoomFullName,The_ClassFormInBox[Gbl.Prefs.Theme],NULL);
   }
 
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)

@@ -231,7 +231,7 @@ void Log_PutIconToChangeLogo (Sco_Scope_t Scope)
 
 void Log_RequestLogo (Sco_Scope_t Scope)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Remove_logo;
    extern const char *Txt_Logo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y;
@@ -301,7 +301,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
                       "<input type=\"file\" name=\"%s\""
                       " onchange=\"document.getElementById('%s').submit();\" />"
 	              "</label>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_File_with_the_logo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);

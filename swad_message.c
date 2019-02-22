@@ -177,7 +177,7 @@ void Msg_FormMsgUsrs (void)
 static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    extern const char *Hlp_MESSAGES_Write;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
@@ -294,7 +294,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 		      "%s:"
 		      "</td>"
 		      "<td class=\"LEFT_TOP\">",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_To);
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_To);
    if (Gbl.Msg.ShowOnlyOneRecipient)
       /***** Show only one user as recipient *****/
       Msg_ShowOneUniqueRecipient ();
@@ -495,7 +495,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Content;
    extern const char *Txt_Original_message;
@@ -518,7 +518,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
                       "<td class=\"LEFT_MIDDLE\">"
                       "<textarea id=\"MsgSubject\" name=\"Subject\""
                       " class=\"MSG_SUBJECT\" rows=\"2\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
 
    /* If message is a reply ==> get original message */
@@ -568,7 +568,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
                          " class=\"MSG_CONTENT\" rows=\"20\">",
-               The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Content);
+               The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Content);
 
       /* Start textarea with a '\n', that will be not visible in textarea.
          When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
@@ -600,7 +600,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
                          " class=\"MSG_CONTENT\" rows=\"20\">",
-               The_ClassForm[Gbl.Prefs.Theme],
+               The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_MSG_Content);
 
       /* Start textarea with a '\n', that will be not visible in textarea.
@@ -1661,7 +1661,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    extern const char *Hlp_MESSAGES_Received_filter;
    extern const char *Hlp_MESSAGES_Sent;
    extern const char *Hlp_MESSAGES_Sent_filter;
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Filter;
    extern const char *Txt_Update_messages;
    char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
@@ -1744,8 +1744,8 @@ static void Msg_ShowSentOrReceivedMessages (void)
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Frm_LinkFormSubmitAnimated (Txt_Update_messages,
-                               The_ClassFormBold[Gbl.Prefs.Theme],
-                               NULL);
+	                       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
+			       NULL);
    Ico_PutCalculateIconWithText (Txt_Update_messages);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2572,7 +2572,7 @@ void Msg_GetDistinctCoursesInMyMessages (void)
 
 void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Messages_received_from_A_COURSE;
    extern const char *Txt_Messages_sent_from_A_COURSE;
    extern const char *Txt_any_course;
@@ -2587,7 +2587,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;"
                       "<select name=\"FilterCrsCod\">"
                       "<option value=\"\"",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             TxtSelector[Gbl.Msg.TypeOfMessages]);
    if (Gbl.Msg.FilterCrsCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -2613,7 +2613,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
 
 void Msg_ShowFormToFilterMsgs (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_MSG_From;
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Content;
@@ -2635,7 +2635,7 @@ void Msg_ShowFormToFilterMsgs (void)
                       " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</label>"
                       "</td>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             TxtFromTo[Gbl.Msg.TypeOfMessages],
             Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,Gbl.Msg.FilterFromTo);
 
@@ -2648,7 +2648,7 @@ void Msg_ShowFormToFilterMsgs (void)
                       "</label>"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_MSG_Content,
             Msg_MAX_CHARS_FILTER_CONTENT,Gbl.Msg.FilterContent);
 
@@ -2662,14 +2662,14 @@ void Msg_ShowFormToFilterMsgs (void)
 
 static void Msg_ShowFormToShowOnlyUnreadMessages (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_only_unread_messages;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "<input type=\"checkbox\" name=\"OnlyUnreadMsgs\""
 	              " value=\"Y\"",
-            The_ClassForm[Gbl.Prefs.Theme]);
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
    if (Gbl.Msg.ShowOnlyUnreadMsgs)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," />"
@@ -3288,7 +3288,6 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
                                   bool FromThisCrs,bool Replied,
                                   const struct UsrData *UsrDat)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Reply;
    extern const char *Txt_Reply_again;
    extern const char *Txt_Go_to_course_and_reply;

@@ -1194,12 +1194,12 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
                                         const char *Icon,const char *Text)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
    /***** Link to toggle on/off some fields of project *****/
    fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"%s\""
                       " onclick=\"toggleProject('%u');return false;\" />",
-            Text,The_ClassForm[Gbl.Prefs.Theme],
+            Text,The_ClassFormInBox[Gbl.Prefs.Theme],
             UniqueId);
    Ico_PutIconTextLink (Icon,Text);
    fprintf (Gbl.F.Out,"</a>");
@@ -2898,7 +2898,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
   {
    extern const char *Hlp_ASSESSMENT_Projects_new_project;
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_project;
    extern const char *Txt_Edit_project;
    extern const char *Txt_Data;
@@ -2972,7 +2972,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title,
             Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title);
 
    /* Department */
@@ -2982,7 +2982,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             Dpt_PARAM_DPT_COD_NAME,
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Department);
    Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,	// Departments in current institution
                                 Prj->DptCod,			// Selected department
                                 "PRJ_INPUT",			// Selector class
@@ -2999,7 +2999,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"Preassigned\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Preassigned_QUESTION);
 
    fprintf (Gbl.F.Out,"<option value=\"Y\"");
@@ -3026,7 +3026,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                       " min=\"0\" value=\"%u\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Number_of_students,
             Prj->NumStds);
 
@@ -3037,7 +3037,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"Proposal\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Proposal);
    for (Proposal  = (Prj_Proposal_t) 0;
 	Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
@@ -3075,7 +3075,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 		      " size=\"45\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>"
 		      "</tr>",
-	    The_ClassForm[Gbl.Prefs.Theme],
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_URL,
 	    Cns_MAX_CHARS_WWW,Prj->URL);
 
@@ -3100,7 +3100,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
                                        unsigned NumRows)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP\">"
@@ -3112,7 +3112,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
                       "</textarea>"
                       "</td>"
                       "</tr>",
-            Id,The_ClassForm[Gbl.Prefs.Theme],Label,
+            Id,The_ClassFormInBox[Gbl.Prefs.Theme],Label,
             Id,Id,
             NumRows,
             TxtField);

@@ -2024,33 +2024,24 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /********************************* Form fonts ********************************/
-.FORM_WHITE			{color:#4D88A1; font-size:13pt;}
-.FORM_GREY			{color:#4D88A1; font-size:13pt;}
-.FORM_PURPLE		{color:#4D88A1; font-size:13pt;}
-.FORM_BLUE			{color:#4D88A1; font-size:13pt;}
-.FORM_YELLOW		{color:#7C4D2A; font-size:13pt;}
-.FORM_PINK			{color:#4D88A1; font-size:13pt;}
+/* Inside white box */
+.FORM_IN_WHITE		{color:#4d88a1; font-size:13pt;}
+.FORM_IN_GREY		{color:#4d88a1; font-size:13pt;}
+.FORM_IN_PURPLE		{color:#4d88a1; font-size:13pt;}
+.FORM_IN_BLUE		{color:#4d88a1; font-size:13pt;}
+.FORM_IN_YELLOW		{color:#7c4d2a; font-size:13pt;}
+.FORM_IN_PINK		{color:#4d88a1; font-size:13pt;}
 
-.FORM_DARK_WHITE	{color:#365E6E; font-size:13pt;}
-.FORM_DARK_GREY		{color:#365E6E; font-size:13pt;}
-.FORM_DARK_PURPLE	{color:#365E6E; font-size:13pt;}
-.FORM_DARK_BLUE		{color:#365E6E; font-size:13pt;}
-.FORM_DARK_YELLOW	{color:#4A2E19; font-size:13pt;}
-.FORM_DARK_PINK		{color:#365E6E; font-size:13pt;}
+/* Outside white box */
+.FORM_OUT_WHITE		{color:#4d88a1; font-size:13pt;}
+.FORM_OUT_GREY		{color:#4d88a1; font-size:13pt;}
+.FORM_OUT_PURPLE	{color:#573c4d; font-size:13pt;}
+.FORM_OUT_BLUE		{color:#4d88a1; font-size:13pt;}
+.FORM_OUT_YELLOW	{color:#7c4d2a; font-size:13pt;}
+.FORM_OUT_PINK		{color:#63474e; font-size:13pt;}
 
-.FORM_NOWRAP_WHITE	{color:#4D88A1; font-size:13pt; white-space:nowrap;}
-.FORM_NOWRAP_GREY	{color:#4D88A1; font-size:13pt; white-space:nowrap;}
-.FORM_NOWRAP_PURPLE	{color:#4D88A1; font-size:13pt; white-space:nowrap;}
-.FORM_NOWRAP_BLUE	{color:#4D88A1; font-size:13pt; white-space:nowrap;}
-.FORM_NOWRAP_YELLOW	{color:#7C4D2A; font-size:13pt; white-space:nowrap;}
-.FORM_NOWRAP_PINK	{color:#4D88A1; font-size:13pt; white-space:nowrap;}
-
-.FORM_BOLD_WHITE	{color:#4D88a1; font-size:13pt; font-weight:bold;}
-.FORM_BOLD_GREY		{color:#4D88a1; font-size:13pt; font-weight:bold;}
-.FORM_BOLD_PURPLE	{color:#573c4d; font-size:13pt; font-weight:bold;}
-.FORM_BOLD_BLUE		{color:#4D88a1; font-size:13pt; font-weight:bold;}
-.FORM_BOLD_YELLOW	{color:#7c4d2a; font-size:13pt; font-weight:bold;}
-.FORM_BOLD_PINK		{color:#63474e; font-size:13pt; font-weight:bold;}
+.BOLD	{font-weight:bold;}
+.NOWRAP	{white-space:nowrap;}
 
 /****************************** Placing of objects ***************************/
 .LEFT_TOP		{text-align:left; vertical-align:top;}

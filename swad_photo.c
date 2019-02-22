@@ -294,7 +294,7 @@ static void Pho_ReqOtherUsrPhoto (void)
 static void Pho_ReqPhoto (const struct UsrData *UsrDat)
   {
    extern const char *Hlp_PROFILE_Photo;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_;
    extern const char *Txt_File_with_the_photo;
@@ -338,7 +338,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
                       "<input type=\"file\" name=\"%s\" accept=\"image/*\""
                       " onchange=\"document.getElementById('%s').submit();\" />"
                       "</label>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);
@@ -1245,7 +1245,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
       fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE\">"
 			 "<span class=\"DAT_N_BOLD\">%u</span>"
-	                 "<span class=\"DAT_SMALL\">&nbsp;%s&nbsp;&nbsp;</span>"
+	                 "<span class=\"DAT_SMALL\">&nbsp;%s&nbsp;</span>"
 			 "<span class=\"DAT_N_BOLD\">%u</span>"
 	                 "<span class=\"DAT_SMALL\">&nbsp;%s</span>"
 	                 "</div>",
@@ -1769,7 +1769,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
 static void Pho_PutSelectorForTypeOfAvg (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Average_type;
    extern const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES];
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
@@ -1779,7 +1779,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 	              "<label for=\"AvgType\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_Average_type);
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Average_type);
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1830,7 +1830,7 @@ static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
 
 static void Pho_PutSelectorForHowComputePhotoSize (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Size_of_photos;
    extern const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES];
    Pho_HowComputePhotoSize_t PhoSi;
@@ -1840,7 +1840,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 	              "<label for=\"PhotoSize\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_Size_of_photos);
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Size_of_photos);
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1891,7 +1891,7 @@ static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
 
 static void Pho_PutSelectorForHowOrderDegrees (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Sort_degrees_by;
    extern const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES];
    Pho_HowOrderDegrees_t Order;
@@ -1901,7 +1901,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 	              "<label for=\"Order\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
@@ -1969,7 +1969,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)
 
 static void Pho_PutLinkToCalculateDegreeStats (void)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Calculate_average_photo_of_THE_DEGREE_X;
    extern const char *Txt_unknown_TIME;
    extern const char *Txt_time;
@@ -1997,7 +1997,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Pho_PutHiddenParamOrderDegrees ();
       Usr_PutParamsPrefsAboutUsrList ();
       Frm_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_THE_DEGREE_X,
-                                  The_ClassFormBold[Gbl.Prefs.Theme],
+	                          The_ClassFormInBoxBold[Gbl.Prefs.Theme],
                                   NULL);
       Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_THE_DEGREE_X);
 

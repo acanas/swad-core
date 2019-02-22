@@ -1033,7 +1033,7 @@ void Att_RequestCreatOrEditAttEvent (void)
   {
    extern const char *Hlp_USERS_Attendance_new_event;
    extern const char *Hlp_USERS_Attendance_edit_event;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
    extern const char *Txt_Teachers_comment;
@@ -1113,7 +1113,7 @@ void Att_RequestCreatOrEditAttEvent (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title,
             Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Att.Title);
 
    /***** Assignment start and end dates *****/
@@ -1126,7 +1126,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<select id=\"ComTchVisible\" name=\"ComTchVisible\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Teachers_comment);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Teachers_comment);
 
    fprintf (Gbl.F.Out,"<option value=\"N\"");
    if (!Att.CommentTchVisible)
@@ -1152,7 +1152,7 @@ void Att_RequestCreatOrEditAttEvent (void)
                       "<td class=\"LEFT_TOP\">"
                       "<textarea id=\"Txt\" name=\"Txt\""
                       " cols=\"60\" rows=\"5\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Description);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Description);
    if (!ItsANewAttEvent)
       fprintf (Gbl.F.Out,"%s",Description);
    fprintf (Gbl.F.Out,"</textarea>"
@@ -1182,7 +1182,7 @@ void Att_RequestCreatOrEditAttEvent (void)
 
 static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1198,7 +1198,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 	                 "%s:"
 	                 "</td>"
                          "<td class=\"LEFT_TOP\">",
-               The_ClassForm[Gbl.Prefs.Theme],Txt_Groups);
+               The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Groups);
       Box_StartBoxTable ("100%",NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,0);
 
@@ -3149,7 +3149,7 @@ static void Att_PutButtonToShowDetails (void)
 
 static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -3250,8 +3250,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"5\" class=\"CENTER_MIDDLE\">");
       Frm_LinkFormSubmitAnimated (Txt_Update_attendance,
-                                  The_ClassFormBold[Gbl.Prefs.Theme],
-                                  NULL);
+	                          The_ClassFormInBoxBold[Gbl.Prefs.Theme],
+				  NULL);
       Ico_PutCalculateIconWithText (Txt_Update_attendance);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

@@ -1444,7 +1444,7 @@ void Agd_RequestCreatOrEditEvent (void)
   {
    extern const char *Hlp_PROFILE_Agenda_new_event;
    extern const char *Hlp_PROFILE_Agenda_edit_event;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
    extern const char *Txt_Location;
@@ -1515,7 +1515,7 @@ void Agd_RequestCreatOrEditEvent (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Event,
             Agd_MAX_CHARS_EVENT,AgdEvent.Event);
 
@@ -1530,7 +1530,7 @@ void Agd_RequestCreatOrEditEvent (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Location,
             Agd_MAX_CHARS_LOCATION,AgdEvent.Location);
 
@@ -1546,7 +1546,7 @@ void Agd_RequestCreatOrEditEvent (void)
                       "<td class=\"LEFT_TOP\">"
                       "<textarea id=\"Txt\" name=\"Txt\""
                       " cols=\"60\" rows=\"10\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Description);
    if (!ItsANewEvent)
       fprintf (Gbl.F.Out,"%s",Txt);

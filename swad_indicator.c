@@ -92,7 +92,7 @@ static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod);
 void Ind_ReqIndicatorsCourses (void)
   {
    extern const char *Hlp_ANALYTICS_Indicators;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_only_if_the_scope_is_X;
@@ -125,7 +125,7 @@ void Ind_ReqIndicatorsCourses (void)
                       "<label for=\"ScopeInd\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeInd",true);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -136,7 +136,7 @@ void Ind_ReqIndicatorsCourses (void)
                       "<label for=\"OthDegTypCod\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Types_of_degree);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Types_of_degree);
    DT_WriteSelectorDegreeTypes ();
    fprintf (Gbl.F.Out," (");
    fprintf (Gbl.F.Out,Txt_only_if_the_scope_is_X,
@@ -151,7 +151,7 @@ void Ind_ReqIndicatorsCourses (void)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             Dpt_PARAM_DPT_COD_NAME,
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Department);
    Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,	// Departments in current insitution
                                 Gbl.Stat.DptCod,		// Selected department
                                 "INDICATORS_INPUT",		// Selector class
@@ -178,7 +178,7 @@ void Ind_ReqIndicatorsCourses (void)
                       "%s:"
                       "</td>"
                       "<td class=\"LEFT_TOP\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_No_of_indicators);
    Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,true);
    fprintf (Gbl.F.Out,"</td>"

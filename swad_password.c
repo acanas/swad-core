@@ -275,7 +275,7 @@ static void Pwd_PutLinkToSendNewPasswdParams (void)
 void Pwd_ShowFormSendNewPwd (void)
   {
    extern const char *Hlp_PROFILE_Password;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_If_you_have_forgotten_your_password_;
    extern const char *Txt_Forgotten_password;
    extern const char *Txt_nick_email_or_ID;
@@ -298,7 +298,7 @@ void Pwd_ShowFormSendNewPwd (void)
                       " size=\"8\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</label>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_nick_email_or_ID,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_nick_email_or_ID,
             Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin);
 
    /***** Send button and end box *****/
@@ -664,7 +664,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
 void Pwd_ShowFormChgMyPwd (void)
   {
    extern const char *Hlp_PROFILE_Password;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Before_going_to_any_other_option_you_must_create_your_password;
    extern const char *Txt_Your_password_is_not_secure_enough;
    extern const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_;
@@ -717,7 +717,7 @@ void Pwd_ShowFormChgMyPwd (void)
 			 " autocomplete=\"off\" required=\"required\" />"
 			 "</td>"
 			 "</tr>",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Current_password,
 	       Pwd_MAX_CHARS_PLAIN_PASSWORD);
 
@@ -750,7 +750,7 @@ void Pwd_ShowFormChgMyPwd (void)
 
 void Pwd_PutFormToGetNewPasswordOnce (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Password;
    extern const char *Txt_HELP_password;
 
@@ -762,7 +762,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"password\" id=\"Passwd\" name=\"Paswd\""
                       " size=\"18\" maxlength=\"%u\" placeholder=\"",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Password,
             Pwd_MAX_CHARS_PLAIN_PASSWORD);
 
@@ -783,7 +783,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
 
 void Pwd_PutFormToGetNewPasswordTwice (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_password;
    extern const char *Txt_HELP_password;
    extern const char *Txt_Retype_new_password;
@@ -798,7 +798,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
                       "<input type=\"password\" id=\"Paswd1\" name=\"Paswd1\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_New_password,
             Pwd_MAX_CHARS_PLAIN_PASSWORD);
 
@@ -821,7 +821,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
                       "<input type=\"password\" id=\"Paswd2\" name=\"Paswd2\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Retype_new_password,
             Pwd_MAX_CHARS_PLAIN_PASSWORD);
 
@@ -896,7 +896,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 
 void Pwd_AskForConfirmationOnDangerousAction (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_I_understand_that_this_action_can_not_be_undone;
    extern const char *Txt_For_security_enter_your_password;
 
@@ -913,9 +913,9 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 		      " autocomplete=\"off\" required=\"required\" />"
 		      "</label>"
 		      "</div>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_I_understand_that_this_action_can_not_be_undone,
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_For_security_enter_your_password,
 	    Pwd_MAX_CHARS_PLAIN_PASSWORD);
   }

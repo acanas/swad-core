@@ -98,7 +98,7 @@ void Sch_ReqSysSearch (void)
 static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco_Scope_t DefaultScope)
   {
    extern const char *Hlp_Search;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_SEARCH_X_in_Y;
    extern const char *Txt_all;
@@ -144,7 +144,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
                  current centre, current degree or current course) *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
 	              "<label class=\"%s\">%s:&nbsp;",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
 		       1 << Sco_SCOPE_INS |
@@ -163,7 +163,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    /***** What to search? *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              " %s&nbsp;",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_SEARCH_X_in_Y);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_SEARCH_X_in_Y);
    fprintf (Gbl.F.Out,"<select name=\"WhatToSearch\" style=\"width:186px;\">");
    for (WhatToSearch = (Sch_WhatToSearch_t) 0;
         WhatToSearch < Sch_NUM_WHAT_TO_SEARCH;

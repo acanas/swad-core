@@ -299,7 +299,7 @@ void Ins_PrintConfiguration (void)
 static void Ins_Configuration (bool PrintView)
   {
    extern const char *Hlp_INSTITUTION_Information;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
@@ -349,7 +349,7 @@ static void Ins_Configuration (bool PrintView)
 	                 "<label for=\"OthCtyCod\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Country);
 
       if (!PrintView &&
@@ -391,7 +391,7 @@ static void Ins_Configuration (bool PrintView)
 	                 "<label for=\"FullName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Institution);
       if (!PrintView &&
 	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -420,7 +420,7 @@ static void Ins_Configuration (bool PrintView)
 	                 "<label for=\"ShortName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Short_name);
       if (!PrintView &&
 	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -449,7 +449,7 @@ static void Ins_Configuration (bool PrintView)
 	                 "<label for=\"WWW\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Web);
       if (!PrintView &&
 	  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
@@ -489,7 +489,7 @@ static void Ins_Configuration (bool PrintView)
 			 "</a>"
 			 "</td>"
 			 "</tr>",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
 	       Cfg_URL_SWAD_CGI,
 	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
@@ -506,7 +506,7 @@ static void Ins_Configuration (bool PrintView)
 			    "%s:"
 			    "</td>"
 			    "<td class=\"LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkTo (250,"ins",Gbl.CurrentIns.Ins.InsCod);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -523,7 +523,7 @@ static void Ins_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Users_of_the_institution,
 		  Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.CurrentIns.Ins.InsCod));
 
@@ -533,7 +533,7 @@ static void Ins_Configuration (bool PrintView)
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Centres);
 
 	 /* Form to go to see centres of this institution */
@@ -559,7 +559,7 @@ static void Ins_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Degrees,
 		  Deg_GetNumDegsInIns (Gbl.CurrentIns.Ins.InsCod));
 
@@ -572,7 +572,7 @@ static void Ins_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Courses,
 		  Crs_GetNumCrssInIns (Gbl.CurrentIns.Ins.InsCod));
 
@@ -585,7 +585,7 @@ static void Ins_Configuration (bool PrintView)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Departments,
 		  Dpt_GetNumDepartmentsInInstitution (Gbl.CurrentIns.Ins.InsCod));
 
@@ -627,7 +627,7 @@ static void Ins_PutIconsToPrintAndUpload (void)
 
 static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
@@ -639,7 +639,7 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
 		      "%u"
 		      "</td>"
 		      "</tr>",
-	    The_ClassForm[Gbl.Prefs.Theme],
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
             Usr_GetNumUsrsInCrssOfIns (Role,Gbl.CurrentIns.Ins.InsCod));

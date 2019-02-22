@@ -127,13 +127,11 @@ void Con_ShowConnectedUsrs (void)
 
 static void Con_PutIconToUpdateConnected (void)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Update;
 
    Frm_StartForm (ActLstCon);
    Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
-   Frm_LinkFormSubmitAnimated (Txt_Update,The_ClassFormBold[Gbl.Prefs.Theme],
-                               NULL);
+   Frm_LinkFormSubmitAnimated (Txt_Update,NULL,NULL);
    Ico_PutCalculateIcon (Txt_Update);
    Frm_EndForm ();
   }

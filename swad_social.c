@@ -1294,7 +1294,7 @@ static void Soc_ShowOldPubsInTimeline (char *Query)
 
 static void Soc_PutLinkToViewNewPublishings (void)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_See_new_activity;
 
    /***** Link to view (show hidden) new publishings *****/
@@ -1307,7 +1307,7 @@ static void Soc_PutLinkToViewNewPublishings (void)
                       "%s (<span id=\"view_new_posts_count\">0</span>)"
 	              "</a>"
 	              "</div>",
-	    The_ClassFormBold[Gbl.Prefs.Theme],
+	    The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
 	    Txt_See_new_activity);
   }
 
@@ -1317,7 +1317,7 @@ static void Soc_PutLinkToViewNewPublishings (void)
 
 static void Soc_PutLinkToViewOldPublishings (void)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_See_more;
 
    /***** Animated link to view old publishings *****/
@@ -1337,7 +1337,7 @@ static void Soc_PutLinkToViewOldPublishings (void)
 		      "&nbsp;%s"
 	              "</a>"
 	              "</div>",
-	    The_ClassFormBold[Gbl.Prefs.Theme],
+	    The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
 	    Gbl.Prefs.URLIcons,Txt_See_more,Txt_See_more,
 	    Gbl.Prefs.URLIcons,Txt_See_more,Txt_See_more,
 	    Txt_See_more);
@@ -1800,7 +1800,7 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
    char Class[64];
@@ -1957,7 +1957,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       /***** Link and end form *****/
       snprintf (Class,sizeof (Class),
 	        "%s ICO_HIGHLIGHT",
-		The_ClassFormBold[Gbl.Prefs.Theme]);
+		The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
       Frm_LinkFormSubmitUnique (Txt_SOCIAL_NOTE[SocNot->NoteType],Class);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\""

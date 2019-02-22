@@ -166,7 +166,7 @@ void Crs_PrintConfiguration (void)
 static void Crs_Configuration (bool PrintView)
   {
    extern const char *Hlp_COURSE_Information;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    extern const char *Txt_Short_name;
@@ -232,7 +232,7 @@ static void Crs_Configuration (bool PrintView)
 	              "<label for=\"OthDegCod\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Degree);
 
    if (!PrintView &&
@@ -274,7 +274,7 @@ static void Crs_Configuration (bool PrintView)
 	              "<label for=\"FullName\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT_N LEFT_MIDDLE\">",
-	    The_ClassForm[Gbl.Prefs.Theme],
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Course);
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
@@ -303,7 +303,7 @@ static void Crs_Configuration (bool PrintView)
 	              "<label for=\"ShortName\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT_N LEFT_MIDDLE\">",
-	    The_ClassForm[Gbl.Prefs.Theme],
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Short_name);
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
@@ -332,7 +332,7 @@ static void Crs_Configuration (bool PrintView)
 	              "<label for=\"OthCrsYear\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Year_OF_A_DEGREE);
    if (IsForm)
      {
@@ -366,7 +366,7 @@ static void Crs_Configuration (bool PrintView)
 	                 "<label for=\"InsCrsCod\" class=\"%s\">%s:</label>"
                          "</td>"
                          "<td class=\"DAT LEFT_MIDDLE\">",
-              The_ClassForm[Gbl.Prefs.Theme],
+              The_ClassFormInBox[Gbl.Prefs.Theme],
               Txt_Institutional_code);
       if (IsForm)
 	{
@@ -395,7 +395,7 @@ static void Crs_Configuration (bool PrintView)
                          "%ld"
                          "</td>"
                          "</tr>",
-              The_ClassForm[Gbl.Prefs.Theme],
+              The_ClassFormInBox[Gbl.Prefs.Theme],
               Txt_Internal_code,
               Gbl.CurrentCrs.Crs.CrsCod);
      }
@@ -410,7 +410,7 @@ static void Crs_Configuration (bool PrintView)
                       "%s/%s?crs=%ld</a>"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Shortcut,
             Cfg_URL_SWAD_CGI,
             Lan_STR_LANG_ID[Gbl.Prefs.Language],
@@ -427,7 +427,7 @@ static void Crs_Configuration (bool PrintView)
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_QR_code);
       QR_LinkTo (250,"crs",Gbl.CurrentCrs.Crs.CrsCod);
       fprintf (Gbl.F.Out,"</td>"
@@ -449,7 +449,7 @@ static void Crs_Configuration (bool PrintView)
                          "%s:"
                          "</td>"
                          "<td class=\"LEFT_MIDDLE\">",
-               The_ClassForm[Gbl.Prefs.Theme],
+               The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_Indicators);
       Frm_StartForm (ActReqStaCrs);
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -492,7 +492,7 @@ static void Crs_PutIconToPrint (void)
 
 static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -503,7 +503,7 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
 		      "%u"
 		      "</td>"
 		      "</tr>",
-	    The_ClassForm[Gbl.Prefs.Theme],
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
             Gbl.CurrentCrs.Crs.NumUsrs[Role]);
   }
@@ -517,8 +517,8 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern const char *Hlp_PROFILE_Courses;
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *The_ClassFormDark[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
    extern const char *Txt_Go_to_X;
@@ -549,10 +549,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    const char *ClassNormal;
    char ClassHighlight[64];
 
-   ClassNormal = The_ClassForm[Gbl.Prefs.Theme];
+   ClassNormal = The_ClassFormInBox[Gbl.Prefs.Theme];
    snprintf (ClassHighlight,sizeof (ClassHighlight),
 	     "%s LIGHT_BLUE",
-	     The_ClassFormDark[Gbl.Prefs.Theme]);
+	     The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_My_courses,Crs_PutIconToSearchCourses,
@@ -3379,7 +3379,7 @@ void Crs_PutLinkToRemoveOldCrss (void)
 void Crs_AskRemoveOldCrss (void)
   {
    extern const char *Hlp_SYSTEM_Hierarchy_eliminate_old_courses;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Eliminate_old_courses;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2;
@@ -3397,7 +3397,7 @@ void Crs_AskRemoveOldCrss (void)
    /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;"
 	              "<select name=\"Months\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
         i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;

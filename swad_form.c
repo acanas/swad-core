@@ -216,32 +216,32 @@ void Frm_EndForm (void)
 /*****************************************************************************/
 // Requires an extern </a>
 
-void Frm_LinkFormSubmit (const char *Title,const char *LinkStyle,
+void Frm_LinkFormSubmit (const char *Title,const char *LinkClass,
                          const char *OnSubmit)
   {
-   Frm_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.Id,OnSubmit);
+   Frm_LinkFormSubmitId (Title,LinkClass,Gbl.Form.Id,OnSubmit);
   }
 
-void Frm_LinkFormSubmitUnique (const char *Title,const char *LinkStyle)
+void Frm_LinkFormSubmitUnique (const char *Title,const char *LinkClass)
   {
-   Frm_LinkFormSubmitId (Title,LinkStyle,Gbl.Form.UniqueId,NULL);
+   Frm_LinkFormSubmitId (Title,LinkClass,Gbl.Form.UniqueId,NULL);
   }
 
 // Title can be NULL
-// LinkStyle can be NULL
+// LinkClass can be NULL
 // Id can not be NULL
 // OnSubmit can be NULL
 
-void Frm_LinkFormSubmitId (const char *Title,const char *LinkStyle,
+void Frm_LinkFormSubmitId (const char *Title,const char *LinkClass,
                            const char *Id,const char *OnSubmit)
   {
    fprintf (Gbl.F.Out,"<a href=\"\"");
    if (Title)
       if (Title[0])
          fprintf (Gbl.F.Out," title=\"%s\"",Title);
-   if (LinkStyle)
-      if (LinkStyle[0])
-         fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
+   if (LinkClass)
+      if (LinkClass[0])
+         fprintf (Gbl.F.Out," class=\"%s\"",LinkClass);
    fprintf (Gbl.F.Out," onclick=\"");
    if (OnSubmit)	// JavaScript function to be called
 			// before submitting the form
@@ -252,16 +252,16 @@ void Frm_LinkFormSubmitId (const char *Title,const char *LinkStyle,
 	    Id);
   }
 
-void Frm_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,
+void Frm_LinkFormSubmitAnimated (const char *Title,const char *LinkClass,
                                  const char *OnSubmit)
   {
    fprintf (Gbl.F.Out,"<a href=\"\"");
    if (Title)
       if (Title[0])
          fprintf (Gbl.F.Out," title=\"%s\"",Title);
-   if (LinkStyle)
-      if (LinkStyle[0])
-         fprintf (Gbl.F.Out," class=\"%s\"",LinkStyle);
+   if (LinkClass)
+      if (LinkClass[0])
+	 fprintf (Gbl.F.Out," class=\"%s\"",LinkClass);
    fprintf (Gbl.F.Out," onclick=\"");
    if (OnSubmit)	// JavaScript function to be called
 			// before submitting the form

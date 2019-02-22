@@ -286,7 +286,7 @@ void Sta_RemoveOldEntriesRecentLog (void)
 void Sta_AskShowCrsHits (void)
   {
    extern const char *Hlp_ANALYTICS_Visits_visits_to_course;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_visits_to_the_course_X;
    extern const char *Txt_Users;
    extern const char *Txt_Show;
@@ -379,8 +379,8 @@ void Sta_AskShowCrsHits (void)
 			    "</td>"
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">"
                             "<table>",
-                  The_ClassForm[Gbl.Prefs.Theme],Txt_Users,
-                  The_ClassForm[Gbl.Prefs.Theme]);
+                  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users,
+                  The_ClassFormInBox[Gbl.Prefs.Theme]);
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
@@ -398,7 +398,7 @@ void Sta_AskShowCrsHits (void)
          fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"RIGHT_MIDDLE %s\">%s:</td>"
 			    "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
-                  The_ClassForm[Gbl.Prefs.Theme],Txt_Show);
+                  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Show);
 
          if ((Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
               Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
@@ -417,7 +417,7 @@ void Sta_AskShowCrsHits (void)
 
          fprintf (Gbl.F.Out,"<label class=\"%s\">&nbsp;%s&nbsp;"
                             "<select id=\"GroupedBy\" name=\"GroupedBy\">",
-                  The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
+                  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_distributed_by);
          for (ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
               ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
               ClicksGroupedBy++)
@@ -502,7 +502,7 @@ void Sta_AskShowCrsHits (void)
 void Sta_AskShowGblHits (void)
   {
    extern const char *Hlp_ANALYTICS_Visits_global_visits;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_all_visits;
    extern const char *Txt_Users;
    extern const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT];
@@ -542,7 +542,7 @@ void Sta_AskShowGblHits (void)
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">"
                       "<select id=\"Role\" name=\"Role\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Users);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users);
    for (RoleStat = (Sta_Role_t) 0;
 	RoleStat < Sta_NUM_ROLES_STAT;
 	RoleStat++)
@@ -565,7 +565,7 @@ void Sta_AskShowGblHits (void)
                       "<label for=\"ScopeSta\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
 		       1 << Sco_SCOPE_INS |
@@ -584,12 +584,12 @@ void Sta_AskShowGblHits (void)
                       "<label for=\"CountType\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Show);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Show);
    Sta_WriteSelectorCountType ();
 
    /***** Type of statistic *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">&nbsp;%s&nbsp;",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_distributed_by);
 
    if (Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
        Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_GBL_PER_COURSE)
@@ -689,7 +689,7 @@ static void Sta_WriteSelectorCountType (void)
 
 static void Sta_WriteSelectorAction (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Action;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    Act_Action_t Action;
@@ -703,7 +703,7 @@ static void Sta_WriteSelectorAction (void)
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">"
                       "<select id=\"StatAct\" name=\"StatAct\""
                       " style=\"width:375px;\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Action);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Action);
    for (Action = (Act_Action_t) 0;
 	Action < Act_NUM_ACTIONS;
 	Action++)
@@ -2067,7 +2067,7 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
 
 static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Color_of_the_graphic;
    extern const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES];
    extern const char *Txt_Date;
@@ -2115,7 +2115,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;"
                       "<select name=\"ColorType\""
                       " onchange=\"document.getElementById('%s').submit();\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Color_of_the_graphic,
             Gbl.Form.Id);
    for (ColorType = (Sta_ColorType_t) 0;

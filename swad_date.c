@@ -421,7 +421,7 @@ void Dat_ConvDateToDateStr (struct Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 
 
 void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS000000To235959)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Yesterday;
    extern const char *Txt_Today;
@@ -432,7 +432,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
                       "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_START_END_TIME[Dat_START_TIME]);
 
    /* Date-time */
@@ -464,7 +464,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
                       "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_START_END_TIME[Dat_END_TIME]);
    /* Date-time */
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("End",
@@ -487,7 +487,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
                                               Dat_FormSeconds FormSeconds)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    Dat_StartEndTime_t StartEndTime;
    const char *Id[Dat_NUM_START_END_TIME] =
@@ -506,7 +506,7 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
 	                 "<label class=\"%s\">%s:</label>"
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\">",
-               The_ClassForm[Gbl.Prefs.Theme],
+               The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_START_END_TIME[StartEndTime]);
       Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartEndTime],
                                                    Id[StartEndTime],

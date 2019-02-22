@@ -1774,7 +1774,7 @@ void Svy_RequestCreatOrEditSvy (void)
   {
    extern const char *Hlp_ASSESSMENT_Surveys_new_survey;
    extern const char *Hlp_ASSESSMENT_Surveys_edit_survey;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
    extern const char *Txt_Edit_survey;
@@ -1858,7 +1858,7 @@ void Svy_RequestCreatOrEditSvy (void)
                       "<label for=\"ScopeSvy\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Scope);
    Svy_SetDefaultAndAllowedScope (&Svy);
    Sco_GetScope ("ScopeSvy");
@@ -1877,7 +1877,7 @@ void Svy_RequestCreatOrEditSvy (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Title,
             Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title);
 
@@ -1892,7 +1892,7 @@ void Svy_RequestCreatOrEditSvy (void)
                       "<td class=\"LEFT_TOP\">"
                       "<textarea id=\"Txt\" name=\"Txt\""
                       " cols=\"60\" rows=\"10\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Description);
    if (!ItsANewSurvey)
       fprintf (Gbl.F.Out,"%s",Txt);
@@ -1905,7 +1905,7 @@ void Svy_RequestCreatOrEditSvy (void)
 	              "<td class=\"RIGHT_TOP %s\">%s:"
 	              "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
@@ -2028,7 +2028,7 @@ static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy)
 
 static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -2044,7 +2044,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 	                 "%s:"
 	                 "</td>"
                          "<td class=\"LEFT_TOP\">",
-               The_ClassForm[Gbl.Prefs.Theme],
+               The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_Groups);
       Box_StartBoxTable ("95%",NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,0);
@@ -2596,7 +2596,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
                                     char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    extern const char *Hlp_ASSESSMENT_Surveys_questions;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Question;
    extern const char *Txt_New_question;
    extern const char *Txt_Stem;
@@ -2696,7 +2696,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
                       "</textarea>"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Stem,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Stem,
 	    Txt);
 
    /***** Type of answer *****/
@@ -2705,9 +2705,9 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 	              "%s:"
 	              "</td>"
 	              "<td class=\"%s LEFT_TOP\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Type,
-            The_ClassForm[Gbl.Prefs.Theme]);
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
    for (AnsType = (Svy_AnswerType_t) 0;
 	AnsType < Svy_NUM_ANS_TYPES;
 	AnsType++)
@@ -2741,7 +2741,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 	                 "<td class=\"RIGHT_TOP\">"
 	                 "<label for=\"AnsStr%u\" class=\"%s\">%u)</label>"
 	                 "</td>",
-               NumAns,The_ClassForm[Gbl.Prefs.Theme],NumAns + 1);
+               NumAns,The_ClassFormInBox[Gbl.Prefs.Theme],NumAns + 1);
 
       /* Answer text */
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"

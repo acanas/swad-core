@@ -1916,7 +1916,7 @@ void Ntf_MarkAllNotifAsSeen (void)
 void Ntf_PutFormChangeNotifSentByEMail (void)
   {
    extern const char *Hlp_PROFILE_Preferences_notifications;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Save_changes;
    extern const char *Txt_Notifications;
    extern const char *Txt_Create_BR_notification;
@@ -1961,7 +1961,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	                 "</td>"
 	                 "<td class=\"CENTER_MIDDLE\">"
                          "<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
-               The_ClassForm[Gbl.Prefs.Theme],
+               The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent],
                Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents & (1 << NotifyEvent)))

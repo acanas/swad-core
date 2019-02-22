@@ -1501,19 +1501,19 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
 static void Rec_ShowLinkToPrintPreviewOfRecords (void)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Print;
    extern const char *Txt_record_cards_per_page;
    unsigned i;
 
-   Frm_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (Txt_Print,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink ("print.svg",
 			Txt_Print);
    fprintf (Gbl.F.Out,"</a>"
                       "<label class=\"%s\">"
                       "(<select name=\"RecsPerPag\">",
-	    The_ClassForm[Gbl.Prefs.Theme]);
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
    for (i = Rec_MIN_RECORDS_PER_PAGE;
         i <= Rec_MAX_RECORDS_PER_PAGE;
         i++)
@@ -1678,7 +1678,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct UsrData *UsrDat,const char *Anchor)
   {
    extern const char *Hlp_USERS_Students_course_record_card;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_RECORD_FIELD_VISIBILITY_RECORD[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Save_changes;
    const char *Rec_RecordHelp[Rec_COURSE_NUM_VIEW_TYPES] =
@@ -1819,7 +1819,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"REC_C1_BOT %s RIGHT_TOP COLOR%u\">"
                             "%s:",
-                  ICanEditThisField ? The_ClassForm[Gbl.Prefs.Theme] :
+                  ICanEditThisField ? The_ClassFormInBox[Gbl.Prefs.Theme] :
                 	             "REC_DAT_SMALL",
                   Gbl.RowEvenOdd,
                   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
@@ -2146,7 +2146,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    extern const char *Hlp_USERS_Guests;
    extern const char *Hlp_USERS_Students_shared_record_card;
    extern const char *Hlp_USERS_Teachers_shared_record_card;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Sign_up;
    extern const char *Txt_Save_changes;
    extern const char *Txt_Register;
@@ -2241,7 +2241,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       case Rec_SHA_MY_RECORD_FORM:
       case Rec_SHA_OTHER_NEW_USR_FORM:
       case Rec_SHA_OTHER_EXISTING_USR_FORM:
-         ClassForm = The_ClassForm[Gbl.Prefs.Theme];
+         ClassForm = The_ClassFormInBox[Gbl.Prefs.Theme];
 	 break;
       case Rec_SHA_OTHER_USR_CHECK:
       case Rec_SHA_RECORD_LIST:
@@ -3963,7 +3963,7 @@ void Rec_ShowMySharedRecordAndMore (void)
 static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
   {
    extern const char *Hlp_PROFILE_Institution;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Institution_centre_and_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Country;
@@ -3973,7 +3973,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
-   const char *ClassForm = The_ClassForm[Gbl.Prefs.Theme];
+   const char *ClassForm = The_ClassFormInBox[Gbl.Prefs.Theme];
    unsigned NumCty;
    unsigned NumIns;
    unsigned NumCtr;

@@ -135,7 +135,7 @@ void Acc_ShowFormMyAccount (void)
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
   {
    extern const char *Hlp_PROFILE_SignUp;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_If_you_think_you_may_have_been_registered_;
    extern const char *Txt_ID;
    extern const char *Txt_Check;
@@ -155,7 +155,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 		      " size=\"18\" maxlength=\"%u\" value=\"\""
 		      " required=\"required\" />"
 		      "</label>",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_ID,
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_ID,
 	    ID_MAX_CHARS_USR_ID);
    Btn_PutConfirmButton (Txt_Check);
    Frm_EndForm ();
@@ -326,7 +326,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                                                      const char *NewEmail)
   {
    extern const char *Hlp_PROFILE_SignUp;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Create_account;
    extern const char *Txt_Nickname;
    extern const char *Txt_HELP_nickname;
@@ -359,7 +359,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Nickname,
             1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
             Txt_HELP_nickname,
@@ -377,7 +377,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Email,
             Cns_MAX_CHARS_EMAIL_ADDRESS,
             Txt_HELP_email,

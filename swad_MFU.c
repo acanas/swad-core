@@ -206,7 +206,7 @@ void MFU_ShowMyMFUActions (void)
 void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern const char *Hlp_ANALYTICS_Frequent;
-   extern const char *The_ClassFormNoWrap[The_NUM_THEMES];
+   extern const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
@@ -243,7 +243,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          /* Icon and text */
          fprintf (Gbl.F.Out,"<li class=\"ICO_HIGHLIGHT\">");
          Frm_StartForm (Action);
-         Frm_LinkFormSubmit (TabMenuStr,The_ClassFormNoWrap[Gbl.Prefs.Theme],NULL);
+         Frm_LinkFormSubmit (TabMenuStr,The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],NULL);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" />",
 		  Gbl.Prefs.URLIconSet,
 		  Act_GetIcon (Action),

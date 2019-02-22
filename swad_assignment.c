@@ -1073,7 +1073,7 @@ void Asg_RequestCreatOrEditAsg (void)
   {
    extern const char *Hlp_ASSESSMENT_Assignments_new_assignment;
    extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_assignment;
    extern const char *Txt_Edit_assignment;
    extern const char *Txt_Title;
@@ -1152,7 +1152,7 @@ void Asg_RequestCreatOrEditAsg (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title,
             Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title);
 
    /***** Assignment start and end dates *****/
@@ -1170,7 +1170,7 @@ void Asg_RequestCreatOrEditAsg (void)
                       "</label>"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Upload_files_QUESTION,
             Txt_Folder,
             Brw_MAX_CHARS_FOLDER,Asg.Folder);
@@ -1183,7 +1183,7 @@ void Asg_RequestCreatOrEditAsg (void)
                       "<td class=\"LEFT_TOP\">"
                       "<textarea id=\"Txt\" name=\"Txt\""
                       " cols=\"60\" rows=\"10\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Description);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Description);
    if (!ItsANewAssignment)
       fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</textarea>"
@@ -1213,7 +1213,7 @@ void Asg_RequestCreatOrEditAsg (void)
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
    extern const char *Hlp_USERS_Groups;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
    unsigned NumGrpTyp;
@@ -1229,7 +1229,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 	                 "%s:"
 	                 "</td>"
                          "<td class=\"LEFT_TOP\">",
-               The_ClassForm[Gbl.Prefs.Theme],
+               The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_Groups);
       Box_StartBoxTable ("100%",NULL,NULL,
                          Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);

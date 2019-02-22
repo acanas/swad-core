@@ -862,7 +862,7 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
 void Mai_ListEmails (void)
   {
    extern const char *Hlp_MESSAGES_Email;
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_Students_who_have_accepted_and_who_have_email;
    extern const char *Txt_X_students_who_have_email;
    extern const char *Txt_X_students_who_have_accepted_and_who_have_email;
@@ -968,7 +968,7 @@ void Mai_ListEmails (void)
 	          Gbl.Usrs.Me.UsrDat.Email,
 	          StrAddresses,
                   Txt_Create_email_message,
-                  The_ClassFormBold[Gbl.Prefs.Theme]);
+                  The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
          Ico_PutIconTextLink ("pen.svg",
                               Txt_Create_email_message);
          fprintf (Gbl.F.Out,"</a>"
@@ -1196,7 +1196,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
 static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 				        bool IMustFillInEmail,bool IShouldConfirmEmail)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_in_your_email_address;
    extern const char *Txt_Please_confirm_your_email_address;
    extern const char *Txt_Current_email;
@@ -1256,7 +1256,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 			    "</label>"
 			    "</td>"
 			    "<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Current_email);
       else	// NumEmail >= 2
 	{
@@ -1267,7 +1267,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 			       "%s:"
 			       "</label>",
 		     NumEmails - 1,
-		     The_ClassForm[Gbl.Prefs.Theme],
+		     The_ClassFormInBox[Gbl.Prefs.Theme],
 		     Txt_Other_emails);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "<td class=\"REC_C2_BOT LEFT_TOP DAT\">");
@@ -1358,7 +1358,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
                       "<label for=\"NewEmail\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"REC_C2_BOT LEFT_TOP DAT\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             NumEmails ? Txt_New_email :	// A new email
         	        Txt_Email);	// The first email
    if (ItsMe)

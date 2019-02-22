@@ -8536,7 +8536,7 @@ void Brw_ShowFormFileBrowser (void)
 
 static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Create_folder;
    extern const char *Txt_You_can_create_a_new_folder_inside_the_folder_X;
    extern const char *Txt_Folder;
@@ -8561,7 +8561,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
                       " size=\"30\" maxlength=\"%u\" value=\"\""
                       " required=\"required\" />"
 	              "</label>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Folder,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Folder,
             Brw_MAX_CHARS_FOLDER);
 
    /***** Send button and end box *****/
@@ -8708,7 +8708,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 
 static void Brw_PutFormToCreateALink (const char *FileNameToShow)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Create_link;
    extern const char *Txt_or_you_can_create_a_new_link_inside_the_folder_X;
    extern const char *Txt_URL;
@@ -8745,7 +8745,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_URL,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_URL,
             PATH_MAX);
 
    /***** Link name *****/
@@ -8762,7 +8762,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       "</td>"
                       "</tr>"
                       "</table>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional,
             Brw_MAX_CHARS_FOLDER);
 
    /***** Send button and end box *****/
@@ -9611,7 +9611,7 @@ bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
 
 void Brw_ShowFileMetadata (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    extern const char *Txt_Filename;
    extern const char *Txt_File_size;
@@ -9771,7 +9771,7 @@ void Brw_ShowFileMetadata (void)
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_Filename);
+		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Filename);
 	 Brw_WriteSmallLinkToDownloadFile (URL,FileMetadata.FileType,FileNameToShow);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -9782,7 +9782,7 @@ void Brw_ShowFileMetadata (void)
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_Uploaded_by);
+		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Uploaded_by);
 	 if (FileHasPublisher)
 	   {
 	    /* Show photo */
@@ -9815,7 +9815,7 @@ void Brw_ShowFileMetadata (void)
 	                    "%s"
 	                    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_File_size,
 		  FileSizeStr);
 
@@ -9831,7 +9831,7 @@ void Brw_ShowFileMetadata (void)
 		            "</script>"
 	                    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Date_of_creation,
 	          (long) FileMetadata.Time,
 	          (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
@@ -9844,7 +9844,7 @@ void Brw_ShowFileMetadata (void)
 			    "</label>"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_Availability);
+		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Availability);
 	 if (ICanChangePublic)	// I can change file to public
 	   {
 	    fprintf (Gbl.F.Out,"<select id=\"PublicFile\" name=\"PublicFile\">");
@@ -9874,7 +9874,7 @@ void Brw_ShowFileMetadata (void)
 			    "<label for=\"License\" class=\"%s\">%s:</label>"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_License);
+		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_License);
 	 if (ICanEdit)	// I can edit file properties
 	   {
 	    fprintf (Gbl.F.Out,"<select id=\"License\" name=\"License\">");
@@ -9905,7 +9905,7 @@ void Brw_ShowFileMetadata (void)
 			       "%u"
 			       "</td>"
 			       "</tr>",
-		     The_ClassForm[Gbl.Prefs.Theme],Txt_My_views,
+		     The_ClassFormInBox[Gbl.Prefs.Theme],Txt_My_views,
 		     FileMetadata.NumMyViews);
 
 	 /***** Write number of identificated views *****/
@@ -9917,7 +9917,7 @@ void Brw_ShowFileMetadata (void)
 			    "%u (%u %s)"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_Identified_views,
+		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Identified_views,
 		  FileMetadata.NumViewsFromLoggedUsrs,
 		  FileMetadata.NumLoggedUsrs,
 		  (FileMetadata.NumLoggedUsrs == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
@@ -9932,7 +9932,7 @@ void Brw_ShowFileMetadata (void)
 			    "%u"
 			    "</td>"
 			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_Public_views,
+		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Public_views,
 		  FileMetadata.NumPublicViews);
 
 	 /***** End box *****/
@@ -12419,7 +12419,7 @@ static void Brw_PutLinkToAskRemOldFiles (void)
 
 void Brw_AskRemoveOldFiles (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Remove_old_files;
    extern const char *Txt_Remove_files_older_than_PART_1_OF_2;
    extern const char *Txt_Remove_files_older_than_PART_2_OF_2;
@@ -12439,7 +12439,7 @@ void Brw_AskRemoveOldFiles (void)
 
    /***** Form to request number of months (to remove files older) *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Remove_files_older_than_PART_1_OF_2);
    fprintf (Gbl.F.Out,"<select name=\"Months\">");
    for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;

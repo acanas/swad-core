@@ -981,7 +981,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
    extern const char *Hlp_ASSESSMENT_Announcements_new_announcement;
    extern const char *Hlp_ASSESSMENT_Announcements_edit_announcement;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_EXAM_ANNOUNCEMENT;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Course;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Year_or_semester;
@@ -1043,7 +1043,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
          StyleNormal = "CONV_IMPR";
          break;
       case Exa_FORM_VIEW:
-         StyleForm = The_ClassForm[Gbl.Prefs.Theme];
+         StyleForm = The_ClassFormInBox[Gbl.Prefs.Theme];
          break;
      }
 

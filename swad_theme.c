@@ -199,44 +199,54 @@ const char *The_ClassTitle[The_NUM_THEMES] =
    "TITLE_PINK",
   };
 
-const char *The_ClassForm[The_NUM_THEMES] =
+const char *The_ClassFormInBox[The_NUM_THEMES] =
   {
-   "FORM_WHITE",
-   "FORM_GREY",
-   "FORM_PURPLE",
-   "FORM_BLUE",
-   "FORM_YELLOW",
-   "FORM_PINK",
+   "FORM_IN_WHITE",
+   "FORM_IN_GREY",
+   "FORM_IN_PURPLE",
+   "FORM_IN_BLUE",
+   "FORM_IN_YELLOW",
+   "FORM_IN_PINK",
   };
 
-const char *The_ClassFormDark[The_NUM_THEMES] =
+const char *The_ClassFormInBoxBold[The_NUM_THEMES] =
   {
-   "FORM_DARK_WHITE",
-   "FORM_DARK_GREY",
-   "FORM_DARK_PURPLE",
-   "FORM_DARK_BLUE",
-   "FORM_DARK_YELLOW",
-   "FORM_DARK_PINK",
+   "FORM_IN_WHITE BOLD",
+   "FORM_IN_GREY BOLD",
+   "FORM_IN_PURPLE BOLD",
+   "FORM_IN_BLUE BOLD",
+   "FORM_IN_YELLOW BOLD",
+   "FORM_IN_PINK BOLD",
   };
 
-const char *The_ClassFormNoWrap[The_NUM_THEMES] =
+const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES] =
   {
-   "FORM_NOWRAP_WHITE",
-   "FORM_NOWRAP_GREY",
-   "FORM_NOWRAP_PURPLE",
-   "FORM_NOWRAP_BLUE",
-   "FORM_NOWRAP_YELLOW",
-   "FORM_NOWRAP_PINK",
+   "FORM_IN_WHITE NOWRAP",
+   "FORM_IN_GREY NOWRAP",
+   "FORM_IN_PURPLE NOWRAP",
+   "FORM_IN_BLUE NOWRAP",
+   "FORM_IN_YELLOW NOWRAP",
+   "FORM_IN_PINK NOWRAP",
   };
 
-const char *The_ClassFormBold[The_NUM_THEMES] =
+const char *The_ClassFormOutBox[The_NUM_THEMES] =
   {
-   "FORM_BOLD_WHITE",
-   "FORM_BOLD_GREY",
-   "FORM_BOLD_PURPLE",
-   "FORM_BOLD_BLUE",
-   "FORM_BOLD_YELLOW",
-   "FORM_BOLD_PINK",
+   "FORM_OUT_WHITE",
+   "FORM_OUT_GREY",
+   "FORM_OUT_PURPLE",
+   "FORM_OUT_BLUE",
+   "FORM_OUT_YELLOW",
+   "FORM_OUT_PINK",
+  };
+
+const char *The_ClassFormOutBoxBold[The_NUM_THEMES] =
+  {
+   "FORM_OUT_WHITE BOLD",
+   "FORM_OUT_GREY BOLD",
+   "FORM_OUT_PURPLE BOLD",
+   "FORM_OUT_BLUE BOLD",
+   "FORM_OUT_YELLOW BOLD",
+   "FORM_OUT_PINK BOLD",
   };
 
 /*****************************************************************************/

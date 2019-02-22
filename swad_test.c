@@ -312,7 +312,7 @@ static void Tst_GetTestResultQuestionsFromDB (long TstCod);
 void Tst_ShowFormAskTst (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Take_a_test;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_Generate_test;
@@ -369,7 +369,7 @@ void Tst_ShowFormAskTst (void)
                             "<input type=\"number\""
                             " id=\"NumQst\" name=\"NumQst\""
                             " min=\"%u\" max=\"%u\" value=\"%u\"",
-                  The_ClassForm[Gbl.Prefs.Theme],Txt_No_of_questions,
+                  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_No_of_questions,
                   Gbl.Test.Config.Min,
                   Gbl.Test.Config.Max,
                   Gbl.Test.Config.Def);
@@ -425,7 +425,7 @@ static void Tst_PutFormToViewResultsOfUsersTests (Act_Action_t Action)
 void Tst_ShowNewTest (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    extern const char *Txt_Test;
    extern const char *Txt_Allow_teachers_to_consult_this_test;
@@ -480,7 +480,7 @@ void Tst_ShowNewTest (void)
 	                       "<label class=\"%s\">"
 			       "<input type=\"checkbox\" name=\"Save\""
 			       " value=\"Y\"",
-		     The_ClassForm[Gbl.Prefs.Theme]);
+		     The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    if (Gbl.Test.AllowTeachers)
 	       fprintf (Gbl.F.Out," checked=\"checked\"");
 	    fprintf (Gbl.F.Out," />"
@@ -1112,7 +1112,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
                                        const char *ClassImgTitURL,
                                        bool OptionsDisabled)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_No_image;
    extern const char *Txt_Current_image;
    extern const char *Txt_Change_image;
@@ -1133,7 +1133,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
       /***** Choice 1: No image *****/
       fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	                 "<input type=\"radio\" name=\"%s\" value=\"%u\"",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       ParamUploadImg.Action,Img_ACTION_NO_IMAGE);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -1146,7 +1146,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
       fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	                 "<input type=\"radio\" name=\"%s\" value=\"%u\""
 	                 " checked=\"checked\"",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       ParamUploadImg.Action,Img_ACTION_KEEP_IMAGE);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -1161,7 +1161,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
       fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	                 "<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
 			 " value=\"%u\"",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       UniqueId,ParamUploadImg.Action,
 	       Img_ACTION_CHANGE_IMAGE);	// Replace existing image by new image
       if (OptionsDisabled)
@@ -1693,7 +1693,7 @@ static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
 static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
                                  bool ShowOnlyEnabledTags,unsigned NumCols)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Tags;
    extern const char *Txt_All_tags;
    extern const char *Txt_Tag_not_allowed;
@@ -1709,7 +1709,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 		      "<td class=\"RIGHT_TOP %s\">"
 		      "%s:"
                       "</td>",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_Tags);
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Tags);
 
    /***** Select all tags *****/
    fprintf (Gbl.F.Out,"<td");
@@ -1723,7 +1723,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
 	              "<input type=\"checkbox\" name=\"AllTags\" value=\"Y\"",
-            The_ClassForm[Gbl.Prefs.Theme]);
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
    if (Gbl.Test.Tags.All)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'ChkTag');\" />"
@@ -1890,7 +1890,7 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
 static void Tst_ShowFormConfigTst (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Configure_tests;
    extern const char *Txt_Plugins;
    extern const char *Txt_TST_PLUGGABLE[Tst_NUM_OPTIONS_PLUGGABLE];
@@ -1922,7 +1922,7 @@ static void Tst_ShowFormConfigTst (void)
 	              "%s:"
 	              "</td>"
 	              "<td class=\"LEFT_BOTTOM\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Plugins);
    for (Pluggable = Tst_PLUGGABLE_NO;
 	Pluggable <= Tst_PLUGGABLE_YES;
@@ -1947,7 +1947,7 @@ static void Tst_ShowFormConfigTst (void)
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_BOTTOM\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_No_of_questions);
    Tbl_StartTable (2);
    Tst_PutInputFieldNumQst ("NumQstMin",Txt_minimum,
@@ -1974,7 +1974,7 @@ static void Tst_ShowFormConfigTst (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Minimum_time_seconds_per_question_between_two_tests,
             Gbl.Test.Config.MinTimeNxtTstPerQst);
 
@@ -1984,7 +1984,7 @@ static void Tst_ShowFormConfigTst (void)
 	              "%s:"
 	              "</td>"
 	              "<td class=\"LEFT_BOTTOM\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Feedback_to_students);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Feedback_to_students);
    for (Feedback = (Tst_Feedback_t) 0;
 	Feedback < Tst_NUM_TYPES_FEEDBACK;
 	Feedback++)
@@ -2308,7 +2308,7 @@ static void Tst_CheckAndCorrectNumbersQst (void)
 
 static void Tst_ShowFormAnswerTypes (unsigned NumCols)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Types_of_answers;
    extern const char *Txt_All_types_of_answers;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
@@ -2321,7 +2321,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
 		      "<td class=\"RIGHT_TOP %s\">"
 		      "%s:"
                       "</td>",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_Types_of_answers);
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Types_of_answers);
 
    /***** Select all types of answers *****/
    fprintf (Gbl.F.Out,"<td");
@@ -2333,7 +2333,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
 	              "<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
                       "<input type=\"checkbox\" name=\"AllAnsTypes\" value=\"Y\"",
-            The_ClassForm[Gbl.Prefs.Theme]);
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
    if (Gbl.Test.AllAnsTypes)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'AnswerType');\" />"
@@ -4945,7 +4945,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                                    char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Question_code_X;
    extern const char *Txt_New_question;
    extern const char *Txt_Tags;
@@ -5014,7 +5014,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                       "%s:"
                       "</td>"
                       "<td class=\"LEFT_TOP\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Tags);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Tags);
    Tbl_StartTable (2);	// Table for tags
 
    for (NumTag = 0;
@@ -5082,7 +5082,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                       " class=\"STEM\" rows=\"5\" required=\"required\">"
                       "%s"
                       "</textarea><br />",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Stem,
             Stem);
    Tst_PutFormToEditQstImage (&Gbl.Test.Image,-1,
@@ -5095,7 +5095,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "%s (%s):<br />"
                       "<textarea name=\"Feedback\" class=\"STEM\" rows=\"2\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Feedback,Txt_optional);
    if (Feedback)
       if (Feedback[0])
@@ -5111,9 +5111,9 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	              "%s:"
 	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Type,
-            The_ClassForm[Gbl.Prefs.Theme]);
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
    for (AnsType = (Tst_AnswerType_t) 0;
 	AnsType < Tst_NUM_ANS_TYPES;
 	AnsType++)
@@ -5142,8 +5142,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                       "%s:&nbsp;"
                       "<input type=\"text\" name=\"AnsInt\""
                       " size=\"11\" maxlength=\"11\" value=\"%ld\"",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Answers,
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Integer_number,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Answers,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Integer_number,
             Gbl.Test.Answer.Integer);
    if (Gbl.Test.AnswerType != Tst_ANS_INT)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -5178,7 +5178,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                       "<td class=\"LEFT_TOP\">"
                       "<label class=\"%s\">"
                       "<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"",
-            The_ClassForm[Gbl.Prefs.Theme]);
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
    if (Gbl.Test.Shuffle)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
@@ -5243,7 +5243,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       /***** Center column: letter of the answer and expand / contract icon *****/
       fprintf (Gbl.F.Out,"<td class=\"%s TEST_EDI_ANS_CENTER_COL COLOR%u\">"
 	                 "%c)",
-	       The_ClassForm[Gbl.Prefs.Theme],Gbl.RowEvenOdd,
+	       The_ClassFormInBox[Gbl.Prefs.Theme],Gbl.RowEvenOdd,
                'a' + (char) NumOpt);
 
       /* Icon to expand (show the answer) */
@@ -5308,7 +5308,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       /* Feedback */
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s (%s):<br />"
 	                 "<textarea name=\"FbStr%u\" class=\"ANS_STR\" rows=\"2\"",
-	       The_ClassForm[Gbl.Prefs.Theme],Txt_Feedback,Txt_optional,
+	       The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Feedback,Txt_optional,
 	       NumOpt);
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -5351,13 +5351,13 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 static void Tst_PutFloatInputField (const char *Label,const char *Field,
                                     double Value)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;"
                       "<input type=\"text\" name=\"%s\""
                       " size=\"11\" maxlength=\"%u\""
                       " value=\"%lg\"",
-            The_ClassForm[Gbl.Prefs.Theme],Label,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Label,
             Field,
             Tst_MAX_BYTES_FLOAT_ANSWER,
             Value);
@@ -5373,11 +5373,11 @@ static void Tst_PutFloatInputField (const char *Label,const char *Field,
 
 static void Tst_PutTFInputField (const char *Label,char Value)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "<input type=\"radio\" name=\"AnsTF\" value=\"%c\"",
-            The_ClassForm[Gbl.Prefs.Theme],Value);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Value);
    if (Gbl.Test.Answer.TF == Value)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    if (Gbl.Test.AnswerType != Tst_ANS_TRUE_FALSE)
@@ -7457,7 +7457,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
 void Tst_SelUsrsToSeeUsrsTestResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_test_results;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Test_results;
    extern const char *Txt_Users;
    extern const char *Txt_View_test_results;
@@ -7507,8 +7507,8 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 			    "%s:"
 			    "</td>"
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
-                  The_ClassForm[Gbl.Prefs.Theme],Txt_Users,
-                  The_ClassForm[Gbl.Prefs.Theme]);
+                  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users,
+                  The_ClassFormInBox[Gbl.Prefs.Theme]);
          Tbl_StartTable (2);
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);

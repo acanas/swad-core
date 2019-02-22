@@ -74,7 +74,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *EncryptedUsrCod);
+static void Prf_PutLinkCalculateFigures (Act_Action_t Action,const char *EncryptedUsrCod);
 
 static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName);
 static unsigned long Prf_GetNumUsrsWithFigure (const char *FieldName);
@@ -161,7 +161,7 @@ void Prf_RequestUserProfile (void)
   {
    extern const char *Hlp_SOCIAL_Profiles_view_public_profile;
    extern const char *Txt_Another_user_s_profile;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
 
@@ -189,7 +189,7 @@ void Prf_RequestUserProfile (void)
                       "<input type=\"text\" name=\"usr\""
                       " size=\"18\" maxlength=\"%u\" value=\"@%s\" />"
                       "</label>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Nickname,
             Nck_MAX_BYTES_NICKNAME_FROM_FORM,
             Gbl.Usrs.Me.UsrDat.Nickname);
@@ -463,7 +463,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
      }
    else	// First click time is unknown or user never logged
       /***** Button to fetch and store first click time *****/
-      Prf_PutLinkToUpdateAction (ActCal1stClkTim,UsrDat->EncryptedUsrCod);
+      Prf_PutLinkCalculateFigures (ActCal1stClkTim,UsrDat->EncryptedUsrCod);
    fprintf (Gbl.F.Out,"</li>");
 
    /***** End left list *****/
@@ -503,7 +503,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	}
       else	// Number of clicks is unknown
 	 /***** Button to fetch and store number of clicks *****/
-         Prf_PutLinkToUpdateAction (ActCalNumClk,UsrDat->EncryptedUsrCod);
+         Prf_PutLinkCalculateFigures (ActCalNumClk,UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Number of file views *****/
@@ -530,7 +530,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	}
       else	// Number of file views is unknown
 	 /***** Button to fetch and store number of file views *****/
-         Prf_PutLinkToUpdateAction (ActCalNumFilVie,UsrDat->EncryptedUsrCod);
+         Prf_PutLinkCalculateFigures (ActCalNumFilVie,UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Number of posts in forums *****/
@@ -557,7 +557,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	}
       else	// Number of forum posts is unknown
 	 /***** Button to fetch and store number of forum posts *****/
-         Prf_PutLinkToUpdateAction (ActCalNumForPst,UsrDat->EncryptedUsrCod);
+         Prf_PutLinkCalculateFigures (ActCalNumForPst,UsrDat->EncryptedUsrCod);
 
       fprintf (Gbl.F.Out,"</li>");
 
@@ -585,7 +585,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	}
       else	// Number of messages sent is unknown
 	 /***** Button to fetch and store number of messages sent *****/
-         Prf_PutLinkToUpdateAction (ActCalNumMsgSnt,UsrDat->EncryptedUsrCod);
+         Prf_PutLinkCalculateFigures (ActCalNumMsgSnt,UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
      }
 
@@ -598,15 +598,16 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 /******** Put contextual link with animated icon to update an action *********/
 /*****************************************************************************/
 
-static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *EncryptedUsrCod)
+static void Prf_PutLinkCalculateFigures (Act_Action_t Action,const char *EncryptedUsrCod)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_Calculate;
 
    Frm_StartForm (Action);
    Usr_PutParamUsrCodEncrypted (EncryptedUsrCod);
-   Frm_LinkFormSubmitAnimated (Txt_Calculate,The_ClassForm[Gbl.Prefs.Theme],
-                               NULL);
+   Frm_LinkFormSubmitAnimated (Txt_Calculate,
+			       The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
+			       NULL);
    Ico_PutCalculateIconWithText (Txt_Calculate);
    Frm_EndForm ();
   }
@@ -744,7 +745,7 @@ static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
 
 static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_of_PART_OF_A_TOTAL;
 
    /***** Part of a total and end container *****/
@@ -756,7 +757,7 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    Frm_StartForm (ActSeeUseGbl);
    Sco_PutParamScope ("ScopeSta",Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Fig_USERS_RANKING);
-   Frm_LinkFormSubmit (Gbl.Title,The_ClassForm[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (Gbl.Title,The_ClassFormInBox[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"#%lu</a>",Rank);
    Frm_EndForm ();
   }

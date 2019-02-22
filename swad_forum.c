@@ -2031,8 +2031,8 @@ static void For_WriteLinkToForum (struct Forum *Forum,
                                    unsigned Level,
                                    bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;
    unsigned NumThrs;
    unsigned NumThrsWithNewPosts;
@@ -2044,8 +2044,8 @@ static void For_WriteLinkToForum (struct Forum *Forum,
    /***** Get number of threads and number of posts *****/
    NumThrs = For_GetNumThrsInForum (Forum);
    NumThrsWithNewPosts = For_GetNumThrsWithNewPstsInForum (Forum,NumThrs);
-   Style = (NumThrsWithNewPosts ? The_ClassFormBold[Gbl.Prefs.Theme] :
-	                          The_ClassForm[Gbl.Prefs.Theme]);
+   Style = (NumThrsWithNewPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
+	                          The_ClassFormInBox[Gbl.Prefs.Theme]);
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<li");
@@ -3361,8 +3361,8 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
                                struct Pagination *PaginationThrs)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_You_have_written_1_post_in_this_thread;
    extern const char *Txt_You_have_written_X_posts_in_this_thread;
    extern const char *Txt_Thread_with_posts_from_you;
@@ -3489,8 +3489,8 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                              &PaginationPsts,
                              Thr.Enabled[For_FIRST_MSG],
                              Thr.Subject,
-                             Thr.NumUnreadPosts ? The_ClassFormBold[Gbl.Prefs.Theme] :
-                        	                  The_ClassForm[Gbl.Prefs.Theme],
+                             Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
+                        	                  The_ClassFormInBox[Gbl.Prefs.Theme],
                              true);
       fprintf (Gbl.F.Out,"</td>");
 
@@ -3929,7 +3929,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
   {
    extern const char *Hlp_SOCIAL_Forums_new_post;
    extern const char *Hlp_SOCIAL_Forums_new_thread;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_post;
    extern const char *Txt_New_thread;
    extern const char *Txt_MSG_Subject;
@@ -3974,7 +3974,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 		      " required=\"required\" />"
 		      "</td>"
 		      "</tr>",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Subject,
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Subject,
 	    Cns_MAX_CHARS_SUBJECT,
 	    IsReply ? Subject :
 		      "");
@@ -3991,7 +3991,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
                       "</textarea>"
 	              "</td>"
 	              "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Content);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Content);
 
    Tbl_EndTable ();
 

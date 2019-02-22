@@ -271,7 +271,7 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 void Net_ShowFormMyWebsAndSocialNets (void)
   {
    extern const char *Hlp_PROFILE_Webs;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Webs_social_networks;
    extern const char *Txt_Save_changes;
    MYSQL_RES *mysql_res;
@@ -342,7 +342,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "</td>"
 
 			 "</tr>",
-	       (unsigned) NumURL,The_ClassForm[Gbl.Prefs.Theme],
+	       (unsigned) NumURL,The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Gbl.Prefs.URLIcons,Net_WebsAndSocialNetworksIcons[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],

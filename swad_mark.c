@@ -109,7 +109,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                                             const char *PathInTree,
                                             const char *FileName)
   {
-   extern const char *The_ClassFormNoWrap[The_NUM_THEMES];
+   extern const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES];
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
    struct MarksProperties Marks;
@@ -126,7 +126,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
 
       /***** Write the number of rows of header *****/
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
-               The_ClassFormNoWrap[Gbl.Prefs.Theme],
+               The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
                Gbl.RowEvenOdd);
       if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
         {
@@ -153,7 +153,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
 
       /***** Write the number of rows of footer *****/
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
-               The_ClassFormNoWrap[Gbl.Prefs.Theme],
+               The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
                Gbl.RowEvenOdd);
       if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
         {

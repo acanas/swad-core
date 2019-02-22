@@ -585,7 +585,7 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
 
 void Inf_WriteMsgYouMustReadInfo (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Required_reading;
    extern const char *Txt_You_should_read_the_following_information;
    Inf_InfoType_t InfoType;
@@ -609,7 +609,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
          fprintf (Gbl.F.Out,"<li>");
          Frm_StartForm (Inf_ActionsSeeInfo[InfoType]);
          Frm_LinkFormSubmit (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
-                             The_ClassForm[Gbl.Prefs.Theme],NULL);
+                             The_ClassFormInBox[Gbl.Prefs.Theme],NULL);
          fprintf (Gbl.F.Out,"%s"
                             "</a>",
                   Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
@@ -1022,7 +1022,7 @@ void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1])
 
 static void Inf_ShowPage (const char *URL)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Txt_View_in_a_new_window;
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    bool ICanEdit = (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -1047,7 +1047,7 @@ static void Inf_ShowPage (const char *URL)
 
    /***** Link to view in a new window *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
-	    URL,The_ClassFormBold[Gbl.Prefs.Theme]);
+	    URL,The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
    Ico_PutIconTextLink ("expand-arrows-alt.svg",
 		        Txt_View_in_a_new_window);
    fprintf (Gbl.F.Out,"</a>");
@@ -1080,7 +1080,7 @@ void Inf_SetInfoSrc (void)
 
 void Inf_FormsToSelSendInfo (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES];
@@ -1164,7 +1164,7 @@ void Inf_FormsToSelSendInfo (void)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">"
 	                 "<label for=\"InfoSrc%u\" class=\"%s\">%s</label>",
-	       (unsigned) InfoSrc,The_ClassForm[Gbl.Prefs.Theme],
+	       (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
       if (Txt_INFO_SRC_HELP[InfoSrc])
          fprintf (Gbl.F.Out,"<span class=\"DAT\"><br />(%s)</span>",
@@ -1261,7 +1261,7 @@ void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc)
 
 void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_File;
    extern const char *Txt_Upload_file;
 
@@ -1275,7 +1275,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
                       "<input type=\"file\" name=\"%s\" />"
                       "</label>"
                       "</div>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_File,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_File,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
    /***** Send button *****/
@@ -1291,7 +1291,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
 
 void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_URL;
    extern const char *Txt_Send_URL;
    char PathFile[PATH_MAX + 1];
@@ -1309,7 +1309,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
                       "%s:&nbsp;"
                       "<input type=\"url\" name=\"InfoSrcURL\""
                       " size=\"50\" maxlength=\"256\" value=\"",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_URL);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_URL);
    if ((FileURL = fopen (PathFile,"rb")) == NULL)
       fprintf (Gbl.F.Out,"http://");
    else

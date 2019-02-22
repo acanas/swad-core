@@ -351,7 +351,7 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
 
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) ())
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Continue;
 
@@ -366,7 +366,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
                       "<input type=\"text\" id=\"OtherUsrIDNickOrEMail\""
                       " name=\"OtherUsrIDNickOrEMail\""
                       " size=\"18\" maxlength=\"%u\" required=\"required\" />",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_nick_email_or_ID,
             Cns_MAX_CHARS_EMAIL_ADDRESS);
 
@@ -782,7 +782,7 @@ void Enr_PutLinkToRemOldUsrs (void)
 
 void Enr_AskRemoveOldUsrs (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Eliminate_old_users;
    extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2;
@@ -798,7 +798,7 @@ void Enr_AskRemoveOldUsrs (void)
 
    /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
    fprintf (Gbl.F.Out,"<select name=\"Months\">");
    for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
@@ -906,7 +906,7 @@ void Enr_RemoveOldUsrs (void)
 
 static void Enr_PutAreaToEnterUsrsIDs (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
    /***** Text area for users' IDs *****/
@@ -921,7 +921,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
                       "</textarea>"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
    Tbl_EndTable ();
   }
@@ -933,7 +933,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
 bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Modify_me_in_the_course_X;
    extern const char *Txt_Modify_user_in_the_course_X;
    extern const char *Txt_Register_me_in_X;
@@ -987,7 +987,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
    /***** Start list of options *****/
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
-	    The_ClassForm[Gbl.Prefs.Theme]);
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
 
    /***** Register user in course / Modify user's data *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
@@ -1275,7 +1275,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 
 static void Enr_PutActionsRegRemSeveralUsrs (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Register_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_indicated_in_step_1;
    extern const char *Txt_Remove_the_users_not_indicated_in_step_1;
@@ -1284,7 +1284,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 
    /***** Start list of options *****/
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
-            The_ClassForm[Gbl.Prefs.Theme]);
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
 
    /***** Register / remove users listed or not listed *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
@@ -2240,7 +2240,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
   {
    extern const char *Hlp_USERS_Requests;
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Enrolment_requests;
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
@@ -2297,7 +2297,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                       "<label for=\"ScopeEnr\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeEnr",true);
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
@@ -2308,7 +2308,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                       "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Users);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
                            1 << Rol_TCH,

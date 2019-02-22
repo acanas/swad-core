@@ -429,10 +429,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.54.1 (2019-02-21)"
-#define CSS_FILE		"swad18.54.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.55 (2019-02-21)"
+#define CSS_FILE		"swad18.55.css"
 #define JS_FILE			"swad18.51.js"
 /*
+	Version 18.55:    Feb 22, 2019 	Changes in CSS styles related to forms. (237585 lines)
 	Version 18.54.1:  Feb 22, 2019 	Following and followers shown in photo zoom. (237586 lines)
 	Version 18.54:    Feb 21, 2019 	Selection of users scope in timeline is made with icons. (237534 lines)
 	Version 18.53:    Feb 21, 2019 	Last selection of users scope in timeline is saved in database. (237538 lines)

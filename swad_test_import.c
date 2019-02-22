@@ -127,7 +127,7 @@ void TsI_PutFormToImportQuestions (void)
 void TsI_ShowFormImportQstsFromXML (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Import_questions;
    extern const char *Txt_You_need_an_XML_file_containing_a_list_of_questions;
    extern const char *Txt_XML_file;
@@ -146,7 +146,7 @@ void TsI_ShowFormImportQstsFromXML (void)
                       "<input type=\"file\" name=\"%s\" accept=\".xml\""
                       " onchange=\"document.getElementById('%s').submit();\" />"
                       "</label>",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_XML_file,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);
@@ -162,7 +162,7 @@ void TsI_ShowFormImportQstsFromXML (void)
 
 void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_XML_file;
@@ -261,7 +261,7 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
    fprintf (Gbl.F.Out,"<a href=\"%s/%s/%s/test.xml\" class=\"%s\" target=\"_blank\">",
             Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
             Gbl.FileBrowser.TmpPubDir,
-            The_ClassFormBold[Gbl.Prefs.Theme]);
+            The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
    Ico_PutIconTextLink ("file.svg",
 			Txt_XML_file);
    fprintf (Gbl.F.Out,"</a>");

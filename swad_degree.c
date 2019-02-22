@@ -290,7 +290,7 @@ void Deg_PrintConfiguration (void)
 static void Deg_Configuration (bool PrintView)
   {
    extern const char *Hlp_DEGREE_Information;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Centre;
    extern const char *Txt_Degree;
    extern const char *Txt_Short_name;
@@ -337,7 +337,7 @@ static void Deg_Configuration (bool PrintView)
 	                 "<label for=\"OthCtrCod\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Centre);
 
       if (!PrintView &&
@@ -379,7 +379,7 @@ static void Deg_Configuration (bool PrintView)
 	                 "<label for=\"FullName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Degree);
       if (!PrintView &&
 	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
@@ -409,7 +409,7 @@ static void Deg_Configuration (bool PrintView)
 	                 "<label for=\"ShortName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Short_name);
       if (!PrintView &&
 	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
@@ -439,7 +439,7 @@ static void Deg_Configuration (bool PrintView)
 	                 "<label for=\"WWW\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Web);
       if (!PrintView &&
 	  Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
@@ -479,7 +479,7 @@ static void Deg_Configuration (bool PrintView)
 			 "</a>"
 			 "</td>"
 			 "</tr>",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Shortcut,
 	       Cfg_URL_SWAD_CGI,
 	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
@@ -496,7 +496,7 @@ static void Deg_Configuration (bool PrintView)
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_QR_code);
 	 QR_LinkTo (250,"deg",Gbl.CurrentDeg.Deg.DegCod);
 	 fprintf (Gbl.F.Out,"</td>"
@@ -510,7 +510,7 @@ static void Deg_Configuration (bool PrintView)
 	                    "%s:"
 	                    "</td>"
 			    "<td class=\"LEFT_MIDDLE\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Courses);
 
 	 /* Form to go to see courses of this degree */
@@ -564,7 +564,7 @@ static void Deg_PutIconsToPrintAndUpload (void)
 
 static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
@@ -576,7 +576,7 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
 		      "%u"
 		      "</td>"
 		      "</tr>",
-	    The_ClassForm[Gbl.Prefs.Theme],
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
             Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.CurrentDeg.Deg.DegCod));

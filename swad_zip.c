@@ -374,14 +374,14 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
 
 void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *FileName)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Create_ZIP_file;
 
    Frm_StartForm (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (ZIP_ActZIPFolder[Gbl.FileBrowser.Type],
                              PathInTree,FileName,
                              Brw_IS_FOLDER,-1L);
-   Frm_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassForm[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassFormInBox[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/download.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO16x16\" />"
@@ -625,7 +625,7 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                                        off_t FileSize,unsigned long long UncompressedSize)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ZIP_file;
    extern const char *Txt_Download;
    extern const char *Txt_Filename;
@@ -668,7 +668,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      "<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">%s</a>"
 		      "</td>"
 		      "</tr>",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_Filename,
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Filename,
 	    URL,FileName,FileName);
 
    /***** Write the file size *****/
@@ -679,7 +679,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">"
 		      "%s",
-	    The_ClassForm[Gbl.Prefs.Theme],
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_File_size,
 	    FileSizeStr);
    if (UncompressedSize)

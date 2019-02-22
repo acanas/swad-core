@@ -91,7 +91,7 @@ void Hie_SeePending (void)
 
 void Hie_WriteMenuHierarchy (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
    extern const char *Txt_Centre;
@@ -108,7 +108,7 @@ void Hie_WriteMenuHierarchy (void)
                       "<label for=\"cty\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Country);
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Country);
    Cty_WriteSelectorOfCountry ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -122,7 +122,7 @@ void Hie_WriteMenuHierarchy (void)
                          "<label for=\"ins\" class=\"%s\">%s:</label>"
                          "</td>"
                          "<td class=\"LEFT_MIDDLE\">",
-               The_ClassForm[Gbl.Prefs.Theme],Txt_Institution);
+               The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Institution);
       Ins_WriteSelectorOfInstitution ();
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -136,7 +136,7 @@ void Hie_WriteMenuHierarchy (void)
                             "<label for=\"ctr\" class=\"%s\">%s:</label>"
                             "</td>"
                             "<td class=\"LEFT_MIDDLE\">",
-                  The_ClassForm[Gbl.Prefs.Theme],Txt_Centre);
+                  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Centre);
          Ctr_WriteSelectorOfCentre ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -150,7 +150,7 @@ void Hie_WriteMenuHierarchy (void)
                                "<label for=\"deg\" class=\"%s\">%s:</label>"
                                "</td>"
                                "<td class=\"LEFT_MIDDLE\">",
-                     The_ClassForm[Gbl.Prefs.Theme],Txt_Degree);
+                     The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Degree);
             Deg_WriteSelectorOfDegree ();
             fprintf (Gbl.F.Out,"</td>"
         	               "</tr>");
@@ -164,7 +164,7 @@ void Hie_WriteMenuHierarchy (void)
                                   "<label for=\"crs\" class=\"%s\">%s:</label>"
 				  "</td>"
 				  "<td class=\"LEFT_MIDDLE\">",
-			The_ClassForm[Gbl.Prefs.Theme],Txt_Course);
+			The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Course);
 	       Crs_WriteSelectorOfCourse ();
 	       fprintf (Gbl.F.Out,"</td>"
 				  "</tr>");

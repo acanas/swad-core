@@ -216,7 +216,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
                                            bool IMustFillNickname)
   {
    extern const char *Hlp_PROFILE_Account;
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Current_nickname;
@@ -278,7 +278,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 			    "</label>"
 			    "</td>"
 			    "<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">",
-		  The_ClassForm[Gbl.Prefs.Theme],
+		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Current_nickname);
       else	// NumNick >= 2
 	{
@@ -291,7 +291,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 			       "</label>"
 			       "</td>",
 		     NumNicks - 1,
-		     The_ClassForm[Gbl.Prefs.Theme],
+		     The_ClassFormInBox[Gbl.Prefs.Theme],
 		     Txt_Other_nicknames);
 	 fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_TOP DAT\">");
 
@@ -373,7 +373,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
                       "</label>"
                       "</td>"
                       "<td class=\"REC_C2_BOT LEFT_TOP DAT\">",
-            The_ClassForm[Gbl.Prefs.Theme],
+            The_ClassFormInBox[Gbl.Prefs.Theme],
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname
    if (ItsMe)

@@ -356,7 +356,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
                                         Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
    extern const char *Hlp_USERS_Groups;
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_Update_users;
    unsigned NumGrpTyp;
@@ -404,7 +404,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 			 " style=\"padding-top:12px;\">");
       Frm_LinkFormSubmitAnimated (Txt_Update_users,
-				  The_ClassFormBold[Gbl.Prefs.Theme],
+	                          The_ClassFormInBoxBold[Gbl.Prefs.Theme],
 				  "CopyMessageToHiddenFields()");
       Ico_PutCalculateIconWithText (Txt_Update_users);
       fprintf (Gbl.F.Out,"</div>");
@@ -423,7 +423,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
 
 static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_All_groups;
    bool ICanSelUnselGroup;
 
@@ -461,7 +461,7 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
 		      "&nbsp;%s"
 		      "</label>"
 		      "</div>",
-	    The_ClassForm[Gbl.Prefs.Theme],
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_All_groups);
   }
 
