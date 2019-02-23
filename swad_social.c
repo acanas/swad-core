@@ -198,6 +198,8 @@ static void Soc_PutDisabledIconShare (unsigned NumShared);
 static void Soc_PutDisabledIconFav (unsigned NumFavs);
 
 static void Soc_PutFormToShareSocialNote (long NotCod);
+static void Soc_PutFormToFavSocialNote_new (long NotCod,const char *FavId,bool Hidden);
+static void Soc_PutFormToUnfavSocialNote_new (long NotCod,const char *FavId,bool Hidden);
 static void Soc_PutFormToFavSocialNote (long NotCod);
 
 static void Soc_PutFormToUnshareSocialNote (long NotCod);
@@ -213,12 +215,14 @@ static long Soc_GetParamPubCod (void);
 static long Soc_ReceiveComment (void);
 
 static long Soc_ShareSocialNote (void);
+static long Soc_FavSocialNote_new (void);
 static long Soc_FavSocialNote (void);
 static long Soc_FavSocialComment (void);
 static void Soc_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                      Ntf_NotifyEvent_t NotifyEvent);
 
 static long Soc_UnshareSocialNote (void);
+static long Soc_UnfavSocialNote_new (void);
 static long Soc_UnfavSocialNote (void);
 static long Soc_UnfavSocialComment (void);
 
@@ -1373,6 +1377,8 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    unsigned NumComments;
    char IdNewComment[Frm_MAX_BYTES_ID + 1];
+   static unsigned Num = 0;
+   char FavId[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1 + 10 + 1];
 
    /***** Start box ****/
    if (ShowNoteAlone)
@@ -1563,18 +1569,37 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	                 "<div class=\"SOCIAL_ICOS_FAV_SHA_REM\">");
 
       /* Put icon to mark this social note as favourite */
+      Num++;
+      sprintf (FavId,"%s_%u",Gbl.UniqueNameEncrypted,Num);
+
       if (IAmTheAuthor)				// I am the author
 	 Soc_PutDisabledIconFav (SocNot->NumFavs);
       else if (IAmAFaverOfThisSocNot)	// I have favourited this social note
+        {
 	 /* Put icon to unfav this publishing */
-	 Soc_PutFormToUnfavSocialNote (SocNot->NotCod);
+	 fprintf (Gbl.F.Out,"<div id=\"%s\" data-status=\"faved\""
+	                    " class=\"SOCIAL_ICO_FAV\">",
+	          FavId);
+	 Soc_PutFormToFavSocialNote_new (SocNot->NotCod,FavId,true);
+	 Soc_PutFormToUnfavSocialNote_new (SocNot->NotCod,FavId,false);
+	 // Soc_PutFormToUnfavSocialNote (SocNot->NotCod);
+ 	 fprintf (Gbl.F.Out,"</div>");
+        }
       else					// I am not the author and I am not a sharer
 	{
 	 if (SocNot->Unavailable)		// Unavailable social notes can not be favourited
 	    Soc_PutDisabledIconFav (SocNot->NumFavs);
 	 else
-	    /* Put icon to share this publishing */
-	    Soc_PutFormToFavSocialNote (SocNot->NotCod);
+	   {
+	    /* Put icon to fav this publishing */
+	    fprintf (Gbl.F.Out,"<div id=\"%s\" data-status=\"unfaved\""
+	                       " class=\"SOCIAL_ICO_FAV\">",
+	             FavId);
+	    Soc_PutFormToFavSocialNote_new (SocNot->NotCod,FavId,false);
+	    Soc_PutFormToUnfavSocialNote_new (SocNot->NotCod,FavId,true);
+	    // Soc_PutFormToFavSocialNote (SocNot->NotCod);
+	    fprintf (Gbl.F.Out,"</div>");
+	   }
 	}
 
       /* Show who have marked this social note as favourite */
@@ -2842,6 +2867,76 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
+static void Soc_PutFormToFavSocialNote_new (long NotCod,const char *FavId,bool Hidden)
+  {
+   extern const char *Txt_Mark_as_favourite;
+   char JavaScriptFunc[256 + Brw_MAX_ROW_ID];
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div id=\"fav_%s\"",FavId);
+   if (Hidden)
+      fprintf (Gbl.F.Out," style=\"display:none;\"");
+   fprintf (Gbl.F.Out,">");
+
+   /***** Form and icon to mark social note as favourite *****/
+   snprintf (JavaScriptFunc,sizeof (JavaScriptFunc),
+	     "FavSocial('%s')",
+	     FavId);
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Frm_StartFormUniqueAnchorOnSubmit (ActFavSocNotUsr,"timeline",
+				         JavaScriptFunc);	// JavaScript function to fav social note
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+     {
+      Frm_StartFormUniqueAnchorOnSubmit (ActFavSocNotGbl,NULL,
+				         JavaScriptFunc);	// JavaScript function to fav social note
+      Soc_PutParamWhichUsrs ();
+     }
+   Soc_PutHiddenParamNotCod (NotCod);
+   Ico_PutIconLink ("heart.svg",Txt_Mark_as_favourite);
+   Frm_EndForm ();
+
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Soc_PutFormToUnfavSocialNote_new (long NotCod,const char *FavId,bool Hidden)
+  {
+   extern const char *Txt_SOCIAL_NOTE_Favourite;
+   char JavaScriptFunc[256 + Brw_MAX_ROW_ID];
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div id=\"unfav_%s\"",FavId);
+   if (Hidden)
+      fprintf (Gbl.F.Out," style=\"display:none;\"");
+   fprintf (Gbl.F.Out,">");
+
+   /***** Form and icon to mark social note as favourite *****/
+   snprintf (JavaScriptFunc,sizeof (JavaScriptFunc),
+	     "UnfavSocial('%s')",
+	     FavId);
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnfSocNotUsr,"timeline",
+				         JavaScriptFunc);	// JavaScript function to unfav social note
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+     {
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnfSocNotGbl,NULL,
+				         JavaScriptFunc);	// JavaScript function to unfav social note
+      Soc_PutParamWhichUsrs ();
+     }
+   Soc_PutHiddenParamNotCod (NotCod);
+   Ico_PutIconLink ("heart-red.svg",Txt_SOCIAL_NOTE_Favourite);
+   Frm_EndForm ();
+
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
 static void Soc_PutFormToFavSocialNote (long NotCod)
   {
    extern const char *Txt_Mark_as_favourite;
@@ -3159,6 +3254,14 @@ static long Soc_ShareSocialNote (void)
 /********************** Mark a social note as favourite **********************/
 /*****************************************************************************/
 
+void Soc_FavSocialNoteGbl_new (void)
+  {
+   long NotCod;
+
+   /***** Mark social note as favourite *****/
+   NotCod = Soc_FavSocialNote_new ();
+  }
+
 void Soc_FavSocialNoteGbl (void)
   {
    long NotCod;
@@ -3191,6 +3294,47 @@ void Soc_FavSocialNoteUsr (void)
 
    /***** End section *****/
    Lay_EndSection ();
+  }
+
+static long Soc_FavSocialNote_new (void)
+  {
+   extern const char *Txt_The_original_post_no_longer_exists;
+   struct SocialNote SocNot;
+   bool ItsMe;
+   long OriginalPubCod;
+
+   /***** Get data of social note *****/
+   SocNot.NotCod = Soc_GetParamNotCod ();
+   Soc_GetDataOfSocialNotByCod (&SocNot);
+
+   if (SocNot.NotCod > 0)
+     {
+      ItsMe = Usr_ItsMe (SocNot.UsrCod);
+      if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
+	 if (!Soc_CheckIfNoteIsFavedByUsr (SocNot.NotCod,
+					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
+	   {
+	    /***** Mark as favourite in database *****/
+	    DB_QueryINSERT ("can not favourite social note",
+			    "INSERT IGNORE INTO social_notes_fav"
+			    " (NotCod,UsrCod,TimeFav)"
+			    " VALUES"
+			    " (%ld,%ld,NOW())",
+			    SocNot.NotCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
+
+	    /* Update number of times this social note is favourited */
+	    SocNot.NumFavs = Soc_GetNumTimesANoteHasBeenFav (&SocNot);
+
+	    /**** Create notification about favourite post
+		  for the author of the post ***/
+	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+	    if (OriginalPubCod > 0)
+	       Soc_CreateNotifToAuthor (SocNot.UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_FAV);
+	   }
+     }
+
+   return SocNot.NotCod;
   }
 
 static long Soc_FavSocialNote (void)
@@ -3457,6 +3601,14 @@ static long Soc_UnshareSocialNote (void)
 /******* Stop marking as favourite a previously favourited social note *******/
 /*****************************************************************************/
 
+void Soc_UnfavSocialNoteGbl_new (void)
+  {
+   long NotCod;
+
+   /***** Stop marking as favourite a previously favourited social note *****/
+   NotCod = Soc_UnfavSocialNote_new ();
+  }
+
 void Soc_UnfavSocialNoteGbl (void)
   {
    long NotCod;
@@ -3489,6 +3641,44 @@ void Soc_UnfavSocialNoteUsr (void)
 
    /***** End section *****/
    Lay_EndSection ();
+  }
+
+static long Soc_UnfavSocialNote_new (void)
+  {
+   struct SocialNote SocNot;
+   long OriginalPubCod;
+   bool ItsMe;
+
+   /***** Get data of social note *****/
+   SocNot.NotCod = Soc_GetParamNotCod ();
+   Soc_GetDataOfSocialNotByCod (&SocNot);
+
+   if (SocNot.NotCod > 0)
+     {
+      ItsMe = Usr_ItsMe (SocNot.UsrCod);
+      if (SocNot.NumFavs &&
+	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
+	 if (Soc_CheckIfNoteIsFavedByUsr (SocNot.NotCod,
+					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
+	   {
+	    /***** Delete the mark as favourite from database *****/
+	    DB_QueryDELETE ("can not unfavourite social note",
+			    "DELETE FROM social_notes_fav"
+			    " WHERE NotCod=%ld AND UsrCod=%ld",
+			    SocNot.NotCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
+
+	    /***** Update number of times this social note is favourited *****/
+	    SocNot.NumFavs = Soc_GetNumTimesANoteHasBeenFav (&SocNot);
+
+            /***** Mark possible notifications on this social note as removed *****/
+	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+	    if (OriginalPubCod > 0)
+	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
+	   }
+     }
+
+   return SocNot.NotCod;
   }
 
 static long Soc_UnfavSocialNote (void)

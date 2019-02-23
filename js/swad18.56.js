@@ -1373,7 +1373,7 @@ function ExpandChildren (idParent) {
 }
 
 function ContractFolder (idParent) {
-	var parent = document.getElementById(idParent);
+	var parent				= document.getElementById(idParent);
 	var iconToExpand		= document.getElementById('expand_'			+ idParent);
 	var iconToContract		= document.getElementById('contract_'		+ idParent);
 	var iconFolderClosed	= document.getElementById('folder_closed_'	+ idParent);
@@ -1401,5 +1401,33 @@ function ContractChildren (idParent) {
 			if (row.id.indexOf(idParent) == 0)		// row.id starts by idParent, so it's a child
 				/* Unhide row */
 				row.style.display = 'none';			// hide
+	}
+}
+
+/*****************************************************************************/
+/**************** Animate icon "recycle" when click on a link ****************/
+/*****************************************************************************/
+
+function FavSocial (idParent) {
+	var parent				= document.getElementById(idParent);
+	var iconToFav			= document.getElementById('fav_'	+ idParent);
+	var iconToUnfav			= document.getElementById('unfav_'	+ idParent);
+
+	if (parent.dataset.status == 'unfaved') {
+		parent.dataset.status = 'faved';
+		iconToFav.style.display		= 'none';
+		iconToUnfav.style.display	= '';
+	}
+}
+
+function UnfavSocial (idParent) {
+	var parent				= document.getElementById(idParent);
+	var iconToFav			= document.getElementById('fav_'	+ idParent);
+	var iconToUnfav			= document.getElementById('unfav_'	+ idParent);
+
+	if (parent.dataset.status == 'faved') {
+		parent.dataset.status = 'unfaved';
+		iconToUnfav.style.display	= 'none';
+		iconToFav.style.display		= '';
 	}
 }

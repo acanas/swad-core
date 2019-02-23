@@ -157,6 +157,7 @@ void Soc_ReceiveCommentUsr (void);
 
 void Soc_ShareSocialNoteGbl (void);
 void Soc_ShareSocialNoteUsr (void);
+void Soc_FavSocialNoteGbl_new (void);
 void Soc_FavSocialNoteGbl (void);
 void Soc_FavSocialNoteUsr (void);
 void Soc_FavSocialCommentGbl (void);
@@ -164,6 +165,7 @@ void Soc_FavSocialCommentUsr (void);
 
 void Soc_UnshareSocialNoteGbl (void);
 void Soc_UnshareSocialNoteUsr (void);
+void Soc_UnfavSocialNoteGbl_new (void);
 void Soc_UnfavSocialNoteGbl (void);
 void Soc_UnfavSocialNoteUsr (void);
 void Soc_UnfavSocialCommentGbl (void);

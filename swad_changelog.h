@@ -429,10 +429,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.55 (2019-02-21)"
+#define Log_PLATFORM_VERSION	"SWAD 18.56 (2019-02-23)"
 #define CSS_FILE		"swad18.55.css"
-#define JS_FILE			"swad18.51.js"
+#define JS_FILE			"swad18.56.js"
 /*
+	Version 18.56:    Feb 23, 2019 	Favourite is made in Javascript without reloading page. (237787 lines)
 	Version 18.55:    Feb 22, 2019 	Changes in CSS styles related to forms. (237585 lines)
 	Version 18.54.1:  Feb 22, 2019 	Following and followers shown in photo zoom. (237586 lines)
 	Version 18.54:    Feb 21, 2019 	Selection of users scope in timeline is made with icons. (237534 lines)

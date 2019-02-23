@@ -745,7 +745,7 @@ static unsigned long Prf_GetNumUsrsWithNumClicksPerDay (void)
 
 static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *The_ClassFormOutBox[The_NUM_THEMES];
    extern const char *Txt_of_PART_OF_A_TOTAL;
 
    /***** Part of a total and end container *****/
@@ -757,7 +757,7 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    Frm_StartForm (ActSeeUseGbl);
    Sco_PutParamScope ("ScopeSta",Sco_SCOPE_SYS);
    Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Fig_USERS_RANKING);
-   Frm_LinkFormSubmit (Gbl.Title,The_ClassFormInBox[Gbl.Prefs.Theme],NULL);
+   Frm_LinkFormSubmit (Gbl.Title,The_ClassFormOutBox[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"#%lu</a>",Rank);
    Frm_EndForm ();
   }
