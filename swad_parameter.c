@@ -733,7 +733,9 @@ void Par_GetMainParameters (void)
        Gbl.Action.Act == ActRefLstClk       ||
        Gbl.Action.Act == ActRefNewSocPubGbl ||
        Gbl.Action.Act == ActRefOldSocPubGbl ||
-       Gbl.Action.Act == ActRefOldSocPubUsr)
+       Gbl.Action.Act == ActRefOldSocPubUsr ||
+       Gbl.Action.Act == ActFavSocNotGbl    ||
+       Gbl.Action.Act == ActUnfSocNotGbl)
      {
       Gbl.Action.UsesAJAX = true;
       if (Gbl.Action.Act == ActRefCon       ||

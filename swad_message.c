@@ -256,7 +256,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
 	    /***** Check if it's a big list *****/
-	    ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,"CopyMessageToHiddenFields()");
+	    ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,"CopyMessageToHiddenFields();");
 
 	    if (ShowUsrsInCrs)
 	       /***** Get lists of selected users *****/
@@ -367,7 +367,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void)
 					  Msg_PutParamsShowMorePotentialRecipients,
 					  "users.svg",
 					  Txt_Show_more_recipients,
-					  "CopyMessageToHiddenFields()");
+					  "CopyMessageToHiddenFields();");
    fprintf (Gbl.F.Out,"</div>");
   }
 

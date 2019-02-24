@@ -1925,6 +1925,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /******************************* User's photo ********************************/
+.PHOTO12x16	{width: 12px; height: 16px; border-radius:1px; vertical-align:middle; margin-top:-2px;}
 .PHOTO15x20	{width: 15px; height: 20px; border-radius:2px; vertical-align:middle;}
 .PHOTO15x20B	{width: 15px; height: 20px; border-radius:2px; display:block; margin:0 auto;}
 .PHOTO18x24	{width: 18px; height: 24px; border-radius:2px; vertical-align:middle;}

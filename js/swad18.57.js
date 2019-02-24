@@ -689,7 +689,75 @@ function expandTextarea (textareaElem,idButton,rows) {
 	document.getElementById(idButton).style.display = '';
 }
 
-//Change display of a project
+/*****************************************************************************/
+/************** Update fav area in social timeline using AJAX ****************/
+/*****************************************************************************/
+
+var objXMLHttpReqFavSocNot = false;
+var idDivFav = null;
+
+// This function is called when user clicks in icon to fav/unfav
+function refreshFavSocNot (elem,ActCod,NotCod) {
+	idDivFav = elem.parentNode.id;
+
+	objXMLHttpReqFavSocNot = AJAXCreateObject ();
+	if (objXMLHttpReqFavSocNot) {
+		/* Build request parameters */
+		var RefreshParams = 'act=' + ActCod + '&' +
+							RefreshParamIdSes + '&' +
+							'NotCod=' + NotCod;
+		if (RefreshParamUsr) {
+			if (RefreshParamUsr.length)
+				RefreshParams += '&' + RefreshParamUsr;
+		}
+		else {
+			if (RefreshParamWhichUsrs.length)
+				RefreshParams += '&' + RefreshParamWhichUsrs;
+		}
+
+		/* Send request to server */
+		objXMLHttpReqFavSocNot.onreadystatechange = readAndUpdateFav;	// onreadystatechange must be lowercase
+		objXMLHttpReqFavSocNot.open('POST',ActionAJAX,true);
+		objXMLHttpReqFavSocNot.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqFavSocNot.send(RefreshParams);
+	}
+}
+
+// Receives and shows fav note area: icon and users who have faved a social note or comment
+function readAndUpdateFav () {
+	if (objXMLHttpReqFavSocNot.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqFavSocNot.status == 200)
+			if (idDivFav) {
+				var htmlFav = objXMLHttpReqFavSocNot.responseText;
+				var divFav = document.getElementById(idDivFav);			// Access to last click DIV
+				if (divFav) {
+					divFav.innerHTML = htmlFav;	// Update fav area DIV
+				}
+			}
+	}
+}
+
+function readLastClicksData () {
+	if (objXMLHttpReqLog.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqLog.status == 200) {
+			var endOfDelay = objXMLHttpReqLog.responseText.indexOf('|',0);	// Get separator position
+
+			var delay = parseInt(objXMLHttpReqLog.responseText.substring(0,endOfDelay));	// Get refresh delay
+			var htmlLastClicks = objXMLHttpReqLog.responseText.substring(endOfDelay + 1);	// Get HTML code for last clicks
+
+			var divLastClicks = document.getElementById('lastclicks');			// Access to last click DIV
+			if (divLastClicks)
+				divLastClicks.innerHTML = htmlLastClicks;				// Update global connected DIV
+			if (delay > 200)	// If refresh slower than 1 time each 0.2 seconds, do refresh; else abort
+				setTimeout('refreshLastClicks()',delay);
+		}
+	}
+}
+
+/*****************************************************************************/
+/************************ Change display of a project ************************/
+/*****************************************************************************/
+
 function toggleProject (prjID) {
 	toggleDisplay('prj_exp_' + prjID);
 	toggleDisplay('prj_con_' + prjID);
@@ -700,14 +768,20 @@ function toggleProject (prjID) {
 	toggleDisplay('prj_url_' + prjID);
 }
 
-// Change display of a test answer
+/*****************************************************************************/
+/********************** Change display of a test answer **********************/
+/*****************************************************************************/
+
 function toggleAnswer (option) {
 	toggleDisplay('ans_' + option);
 	toggleDisplay('con_' + option);
 	toggleDisplay('exp_' + option);
 }
 
-// Change display of a element (hidden or visible)
+/*****************************************************************************/
+/************* Change display of an element (hidden or visible) **************/
+/*****************************************************************************/
+
 function toggleDisplay (elementID) {
 	var stl = document.getElementById (elementID).style;
 	stl.display = (stl.display === 'none') ? '' : 'none';

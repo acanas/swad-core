@@ -5914,7 +5914,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    /***** Link and image *****/
    Frm_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],
                        The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
-                       NextAction == ActReqMsgUsr ? "CopyMessageToHiddenFields()" :
+                       NextAction == ActReqMsgUsr ? "CopyMessageToHiddenFields();" :
                                                     NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""

@@ -12598,3 +12598,16 @@ SELECT Weekday,TIME_TO_SEC(StartTime) AS S,TIME_TO_SEC(Duration) AS D,Place,Clas
 
 CREATE TABLE IF NOT EXISTS firewall (ClickTime DATETIME NOT NULL,IP CHAR(15) NOT NULL,INDEX(ClickTime),INDEX(IP));
 
+
+
+SELECT UsrCod,FavCod FROM
+(
+(SELECT UsrCod,FavCod FROM social_notes_fav WHERE NotCod=278 ORDER BY FavCod)
+ UNION
+(SELECT 1,(SELECT FavCod FROM social_notes_fav WHERE NotCod=278 AND UsrCod=1) AS FavCod)
+ORDER BY FavCod LIMIT 7
+) AS favers;
+ 
+SELECT UsrCod FROM social_notes_fav WHERE NotCod=278 AND UsrCod<>7 AND UsrCod<>1 ORDER BY FavCod LIMIT 7;
+
+SELECT CAST(~0 AS UNSIGNED);

@@ -668,7 +668,7 @@ static void Lay_WriteScriptInit (void)
             Gbl.Usrs.Connected.TimeToRefreshInMs);
 
    if (Gbl.Action.Act == ActLstClk)
-      // Refresh timeline via AJAX
+      // Refresh fav button via AJAX
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
    else
@@ -1294,8 +1294,24 @@ void Lay_ShowErrorAndExit (const char *Txt)
       Lay_WriteEndOfPage ();
      }
 
+      if (Gbl.Action.Act == ActFavSocNotGbl ||
+	  Gbl.Action.Act == ActUnfSocNotGbl)
+                  DB_QueryINSERT ("can not debug",
+		      "INSERT INTO debug"
+		      " (DebugTime,Txt)"
+		      " VALUES"
+		      " (NOW(),'antes de Gbl_Cleanup')");
+
    /***** Free memory and close all the open files *****/
    Gbl_Cleanup ();
+
+      if (Gbl.Action.Act == ActFavSocNotGbl ||
+	  Gbl.Action.Act == ActUnfSocNotGbl)
+                  DB_QueryINSERT ("can not debug",
+		      "INSERT INTO debug"
+		      " (DebugTime,Txt)"
+		      " VALUES"
+		      " (NOW(),'tras Gbl_Cleanup')");
 
    /***** Page is generated (except </body> and </html>).
           Compute time to generate page *****/
@@ -1338,6 +1354,14 @@ void Lay_ShowErrorAndExit (const char *Txt)
 	   }
 	}
      }
+
+      if (Gbl.Action.Act == ActFavSocNotGbl ||
+	  Gbl.Action.Act == ActUnfSocNotGbl)
+                  DB_QueryINSERT ("can not debug",
+		      "INSERT INTO debug"
+		      " (DebugTime,Txt)"
+		      " VALUES"
+		      " (NOW(),'antes de DB_CloseDBConnection')");
 
    /***** Close database connection *****/
    DB_CloseDBConnection ();
