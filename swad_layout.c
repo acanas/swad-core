@@ -746,7 +746,6 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
 			    "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
 			    "var RefreshParamMaxOldPubsToGetAndShow = \"%u\";\n"
-			    "var RefreshParamUsr = \"\";\n"	// No user specified
 			    "var RefreshParamWhichUsrs = \"WhichUsrs=%u\";\n",
 		  Act_GetActCod (ActRefNewSocPubGbl),
 		  Act_GetActCod (ActRefOldSocPubGbl),
