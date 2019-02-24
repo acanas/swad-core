@@ -4117,9 +4117,10 @@ void Sta_GetAndShowLastClicks (void)
 			     "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(ClickTime) AS Dif,"
 			     "Role,CtyCod,InsCod,CtrCod,DegCod"
 			     " FROM log_recent ORDER BY LogCod DESC LIMIT 20)"
-			     " AS last_logs,actions"
-			     " WHERE last_logs.ActCod=actions.ActCod"
-			     " AND actions.Language='es'");
+			     " AS last_logs LEFT JOIN actions"	// LEFT JOIN because action may be not present in table of actions
+			     " ON last_logs.ActCod=actions.ActCod"
+			     " WHERE actions.Language='es'"	// TODO: Change to user's language
+			     " OR actions.Language IS NULL");	// When action is not present in table of actions
 
    /***** Write list of connected users *****/
    Tbl_StartTableCenter (1);
@@ -4229,16 +4230,18 @@ void Sta_GetAndShowLastClicks (void)
                          "<td class=\"%s LEFT_MIDDLE\">"
                          "%s"					// Degree
                          "</td>"
-                         "<td class=\"%s LEFT_MIDDLE\">"
-                         "%s"					// Action
-                         "</td>"
-			 "</tr>",
+                         "<td class=\"%s LEFT_MIDDLE\">",
                ClassRow,Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN],
                ClassRow,Cty.Name[Gbl.Prefs.Language],
                ClassRow,Ins.ShrtName,
                ClassRow,Ctr.ShrtName,
                ClassRow,Deg.ShrtName,
-	       ClassRow,row[8]);
+	       ClassRow);
+      if (row[8])
+	 if (row[8][0])
+	    fprintf (Gbl.F.Out,"%s",row[8]);			// Action
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
      }
    Tbl_EndTable ();
 

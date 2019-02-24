@@ -152,38 +152,14 @@ int main (void)
 	 /***** Write HTTP Status 204 No Content *****/
 	 Lay_WriteHTTPStatus204NoContent ();
 
-      if (Gbl.Action.Act == ActFavSocNotGbl ||
-	  Gbl.Action.Act == ActUnfSocNotGbl)
-            DB_QueryINSERT ("can not debug",
-		      "INSERT INTO debug"
-		      " (DebugTime,Txt)"
-		      " VALUES"
-		      " (NOW(),'tras FunctionPriori')");
-
       /***** Start writing HTML output *****/
       Lay_WriteStartOfPage ();
-
-      if (Gbl.Action.Act == ActFavSocNotGbl ||
-	  Gbl.Action.Act == ActUnfSocNotGbl)
-                  DB_QueryINSERT ("can not debug",
-		      "INSERT INTO debug"
-		      " (DebugTime,Txt)"
-		      " VALUES"
-		      " (NOW(),'antes de FunctionPosteriori')");
 
       /***** Make a processing or other depending on the action *****/
       FunctionPosteriori = Act_GetFunctionPosteriori (Gbl.Action.Act);
       if (FunctionPosteriori != NULL)
 	  FunctionPosteriori ();
      }
-
-      if (Gbl.Action.Act == ActFavSocNotGbl ||
-	  Gbl.Action.Act == ActUnfSocNotGbl)
-                  DB_QueryINSERT ("can not debug",
-		      "INSERT INTO debug"
-		      " (DebugTime,Txt)"
-		      " VALUES"
-		      " (NOW(),'antes de Lay_ShowErrorAndExit')");
 
    /***** Cleanup and exit *****/
    Lay_ShowErrorAndExit (NULL);

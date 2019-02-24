@@ -12611,3 +12611,8 @@ ORDER BY FavCod LIMIT 7
 SELECT UsrCod FROM social_notes_fav WHERE NotCod=278 AND UsrCod<>7 AND UsrCod<>1 ORDER BY FavCod LIMIT 7;
 
 SELECT CAST(~0 AS UNSIGNED);
+
+
+SELECT last_logs.LogCod,last_logs.ActCod,last_logs.Dif,last_logs.Role,last_logs.CtyCod,last_logs.InsCod,last_logs.CtrCod,last_logs.DegCod,actions.Txt FROM (SELECT LogCod,ActCod,UNIX_TIMESTAMP()-UNIX_TIMESTAMP(ClickTime) AS Dif,Role,CtyCod,InsCod,CtrCod,DegCod FROM log_recent ORDER BY LogCod DESC LIMIT 20) AS last_logs LEFT JOIN actions ON last_logs.ActCod=actions.ActCod WHERE actions.Language='es';
+
+

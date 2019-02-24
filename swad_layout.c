@@ -679,10 +679,6 @@ static void Lay_WriteScriptInit (void)
 	 case ActRcvSocComGbl:
 	 case ActShaSocNotGbl:
 	 case ActUnsSocNotGbl:
-	 case ActFavSocNotGbl:
-	 case ActUnfSocNotGbl:
-	 case ActFavSocComGbl:
-	 case ActUnfSocComGbl:
 	 case ActReqRemSocPubGbl:
 	 case ActRemSocPubGbl:
 	 case ActReqRemSocComGbl:
@@ -694,7 +690,6 @@ static void Lay_WriteScriptInit (void)
 	 default:
 	    break;
         }
-   // fprintf (Gbl.F.Out,"	document.getElementById('whole_page').style.opacity='1';\n");
    fprintf (Gbl.F.Out,"}\n"
                       "</script>\n");
   }
@@ -733,10 +728,6 @@ static void Lay_WriteScriptParamsAJAX (void)
       case ActRcvSocComGbl:
       case ActShaSocNotGbl:
       case ActUnsSocNotGbl:
-      case ActFavSocNotGbl:
-      case ActUnfSocNotGbl:
-      case ActFavSocComGbl:
-      case ActUnfSocComGbl:
       case ActReqRemSocPubGbl:
       case ActRemSocPubGbl:
       case ActReqRemSocComGbl:
@@ -757,10 +748,6 @@ static void Lay_WriteScriptParamsAJAX (void)
       case ActRcvSocComUsr:
       case ActShaSocNotUsr:
       case ActUnsSocNotUsr:
-      case ActFavSocNotUsr:
-      case ActUnfSocNotUsr:
-      case ActFavSocComUsr:
-      case ActUnfSocComUsr:
       case ActReqRemSocPubUsr:
       case ActRemSocPubUsr:
       case ActReqRemSocComUsr:
@@ -1293,24 +1280,8 @@ void Lay_ShowErrorAndExit (const char *Txt)
       Lay_WriteEndOfPage ();
      }
 
-      if (Gbl.Action.Act == ActFavSocNotGbl ||
-	  Gbl.Action.Act == ActUnfSocNotGbl)
-                  DB_QueryINSERT ("can not debug",
-		      "INSERT INTO debug"
-		      " (DebugTime,Txt)"
-		      " VALUES"
-		      " (NOW(),'antes de Gbl_Cleanup')");
-
    /***** Free memory and close all the open files *****/
    Gbl_Cleanup ();
-
-      if (Gbl.Action.Act == ActFavSocNotGbl ||
-	  Gbl.Action.Act == ActUnfSocNotGbl)
-                  DB_QueryINSERT ("can not debug",
-		      "INSERT INTO debug"
-		      " (DebugTime,Txt)"
-		      " VALUES"
-		      " (NOW(),'tras Gbl_Cleanup')");
 
    /***** Page is generated (except </body> and </html>).
           Compute time to generate page *****/
@@ -1353,14 +1324,6 @@ void Lay_ShowErrorAndExit (const char *Txt)
 	   }
 	}
      }
-
-      if (Gbl.Action.Act == ActFavSocNotGbl ||
-	  Gbl.Action.Act == ActUnfSocNotGbl)
-                  DB_QueryINSERT ("can not debug",
-		      "INSERT INTO debug"
-		      " (DebugTime,Txt)"
-		      " VALUES"
-		      " (NOW(),'antes de DB_CloseDBConnection')");
 
    /***** Close database connection *****/
    DB_CloseDBConnection ();

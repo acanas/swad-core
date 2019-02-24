@@ -710,15 +710,14 @@ function refreshFav (elem,Params) {
 	}
 }
 
-// Receives and shows fav note area: icon and users who have faved a social note or comment in timeline
+// Receives and shows fav area: icon and users who have faved a social note or comment in timeline
 function readAndUpdateFav () {
 	if (objXMLHttpReqFavSoc.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqFavSoc.status == 200)
 			if (idDivFav) {
-				var htmlFav = objXMLHttpReqFavSoc.responseText;
 				var divFav = document.getElementById(idDivFav);			// Access to last click DIV
 				if (divFav)
-					divFav.innerHTML = htmlFav;	// Update fav area DIV
+					divFav.innerHTML = objXMLHttpReqFavSoc.responseText;	// Update fav area DIV
 			}
 	}
 }

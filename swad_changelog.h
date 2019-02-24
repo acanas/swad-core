@@ -429,10 +429,23 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.58 (2019-02-24)"
+#define Log_PLATFORM_VERSION	"SWAD 18.58.1 (2019-02-24)"
 #define CSS_FILE		"swad18.57.css"
 #define JS_FILE			"swad18.58.js"
 /*
+	Version 18.58.1:  Feb 24, 2019 	Code cleaning related to AJAX and timeline.
+					Fixed bug in recent clicks. (237768 lines)
+					9 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1512','es','N','Favorito public. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1513','es','N','Deshacer fav. public. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1514','es','N','Favorito public. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1515','es','N','Deshacer fav. public. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1516','es','N','Favorito coment. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1517','es','N','Deshacer fav. coment. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1518','es','N','Favorito coment. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1519','es','N','Deshacer fav. coment. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1520','es','N','Sugerir lista de usuarios a seguir');
+
 	Version 18.58:    Feb 24, 2019 	Favourites in social comments are made in AJAX without reloading page. (237816 lines)
 	Version 18.57.3:  Feb 24, 2019 	Changes in social timeline related to AJAX and favourites. (237804 lines)
 	Version 18.57.2:  Feb 24, 2019 	Changes in social timeline related to AJAX and favourites. (237827 lines)

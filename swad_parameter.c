@@ -727,23 +727,26 @@ void Par_GetMainParameters (void)
       Gbl.Action.Act = Gbl.Action.Original = Act_FromActCodToAction[ActCod];
 
    /***** Some preliminary adjusts depending on action *****/
-   Gbl.Action.UsesAJAX = false;
-   Gbl.Action.IsAJAXAutoRefresh = false;
    if (Gbl.Action.Act == ActRefCon          ||
        Gbl.Action.Act == ActRefLstClk       ||
-       Gbl.Action.Act == ActRefNewSocPubGbl ||
-       Gbl.Action.Act == ActRefOldSocPubGbl ||
-       Gbl.Action.Act == ActRefOldSocPubUsr ||
-       Gbl.Action.Act == ActFavSocNotGbl    || Gbl.Action.Act == ActFavSocNotUsr ||
-       Gbl.Action.Act == ActUnfSocNotGbl    || Gbl.Action.Act == ActUnfSocNotUsr ||
-       Gbl.Action.Act == ActFavSocComGbl    || Gbl.Action.Act == ActFavSocComUsr ||
-       Gbl.Action.Act == ActUnfSocComGbl    || Gbl.Action.Act == ActUnfSocComUsr)
+       Gbl.Action.Act == ActRefNewSocPubGbl)
+      {
+       Gbl.Action.UsesAJAX          = true;
+       Gbl.Action.IsAJAXAutoRefresh = true;
+      }
+   else if (Gbl.Action.Act == ActRefOldSocPubGbl || Gbl.Action.Act == ActRefOldSocPubUsr ||
+            Gbl.Action.Act == ActFavSocNotGbl    || Gbl.Action.Act == ActFavSocNotUsr    ||
+            Gbl.Action.Act == ActUnfSocNotGbl    || Gbl.Action.Act == ActUnfSocNotUsr    ||
+            Gbl.Action.Act == ActFavSocComGbl    || Gbl.Action.Act == ActFavSocComUsr    ||
+            Gbl.Action.Act == ActUnfSocComGbl    || Gbl.Action.Act == ActUnfSocComUsr)
      {
-      Gbl.Action.UsesAJAX = true;
-      if (Gbl.Action.Act == ActRefCon       ||
-	  Gbl.Action.Act == ActRefLstClk    ||
-	  Gbl.Action.Act == ActRefNewSocPubGbl)
-         Gbl.Action.IsAJAXAutoRefresh = true;
+      Gbl.Action.UsesAJAX          = true;
+      Gbl.Action.IsAJAXAutoRefresh = false;
+     }
+   else
+     {
+      Gbl.Action.UsesAJAX          = false;
+      Gbl.Action.IsAJAXAutoRefresh = false;
      }
 
    /***** Get session identifier, if exists *****/
