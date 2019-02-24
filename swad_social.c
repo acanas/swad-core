@@ -215,13 +215,13 @@ static long Soc_GetParamPubCod (void);
 static long Soc_ReceiveComment (void);
 
 static long Soc_ShareSocialNote (void);
-static void Soc_FavSocialNote_new (struct SocialNote *SocNot);
+static void Soc_FavSocialNote (struct SocialNote *SocNot);
 static long Soc_FavSocialComment (void);
 static void Soc_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                      Ntf_NotifyEvent_t NotifyEvent);
 
 static long Soc_UnshareSocialNote (void);
-static void Soc_UnfavSocialNote_new (struct SocialNote *SocNot);
+static void Soc_UnfavSocialNote (struct SocialNote *SocNot);
 static long Soc_UnfavSocialComment (void);
 
 static void Soc_RequestRemovalSocialNote (void);
@@ -3209,7 +3209,7 @@ static long Soc_ShareSocialNote (void)
 /********************** Mark a social note as favourite **********************/
 /*****************************************************************************/
 
-void Soc_FavSocialNoteGbl_new (void)
+void Soc_FavSocialNoteGbl (void)
   {
    struct SocialNote SocNot;
 
@@ -3217,7 +3217,7 @@ void Soc_FavSocialNoteGbl_new (void)
    Soc_GetParamsWhichUsrs ();
 
    /***** Mark social note as favourite *****/
-   Soc_FavSocialNote_new (&SocNot);
+   Soc_FavSocialNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unfav *****/
    Soc_PutFormToUnfavSocialNote_new (&SocNot);
@@ -3226,7 +3226,7 @@ void Soc_FavSocialNoteGbl_new (void)
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void Soc_FavSocialNoteUsr_new (void)
+void Soc_FavSocialNoteUsr (void)
   {
    struct SocialNote SocNot;
 
@@ -3234,7 +3234,7 @@ void Soc_FavSocialNoteUsr_new (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Mark social note as favourite *****/
-   Soc_FavSocialNote_new (&SocNot);
+   Soc_FavSocialNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unfav *****/
    Soc_PutFormToUnfavSocialNote_new (&SocNot);
@@ -3243,30 +3243,7 @@ void Soc_FavSocialNoteUsr_new (void)
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-//void Soc_FavSocialNoteUsr (void)
-//  {
-//   long NotCod;
-//
-//   /***** Get user whom profile is displayed *****/
-//   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-//
-//   /***** Show user's profile *****/
-//   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
-//
-//   /***** Start section *****/
-//   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
-//
-//   /***** Mark social note as favourite *****/
-//   NotCod = Soc_FavSocialNote ();
-//
-//   /***** Write updated timeline after marking as favourite (user) *****/
-//   Soc_ShowTimelineUsrHighlightingNot (NotCod);
-//
-//   /***** End section *****/
-//   Lay_EndSection ();
-//  }
-
-static void Soc_FavSocialNote_new (struct SocialNote *SocNot)
+static void Soc_FavSocialNote (struct SocialNote *SocNot)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    bool ItsMe;
@@ -3568,7 +3545,7 @@ static long Soc_UnshareSocialNote (void)
 /******* Stop marking as favourite a previously favourited social note *******/
 /*****************************************************************************/
 
-void Soc_UnfavSocialNoteGbl_new (void)
+void Soc_UnfavSocialNoteGbl (void)
   {
    struct SocialNote SocNot;
 
@@ -3576,7 +3553,7 @@ void Soc_UnfavSocialNoteGbl_new (void)
    Soc_GetParamsWhichUsrs ();
 
    /***** Stop marking as favourite a previously favourited social note *****/
-   Soc_UnfavSocialNote_new (&SocNot);
+   Soc_UnfavSocialNote (&SocNot);
 
    /***** Write HTML inside DIV with form to fav *****/
    Soc_PutFormToFavSocialNote_new (&SocNot);
@@ -3585,7 +3562,7 @@ void Soc_UnfavSocialNoteGbl_new (void)
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void Soc_UnfavSocialNoteUsr_new (void)
+void Soc_UnfavSocialNoteUsr (void)
   {
    struct SocialNote SocNot;
 
@@ -3593,7 +3570,7 @@ void Soc_UnfavSocialNoteUsr_new (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Unfav a social note previously marked as favourite *****/
-   Soc_UnfavSocialNote_new (&SocNot);
+   Soc_UnfavSocialNote (&SocNot);
 
    /***** Write HTML inside DIV with form to fav *****/
    Soc_PutFormToFavSocialNote_new (&SocNot);
@@ -3602,7 +3579,7 @@ void Soc_UnfavSocialNoteUsr_new (void)
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-static void Soc_UnfavSocialNote_new (struct SocialNote *SocNot)
+static void Soc_UnfavSocialNote (struct SocialNote *SocNot)
   {
    long OriginalPubCod;
    bool ItsMe;

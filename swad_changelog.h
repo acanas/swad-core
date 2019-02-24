@@ -429,10 +429,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.57.2 (2019-02-24)"
+#define Log_PLATFORM_VERSION	"SWAD 18.57.3 (2019-02-24)"
 #define CSS_FILE		"swad18.57.css"
 #define JS_FILE			"swad18.57.js"
 /*
+	Version 18.57.3:  Feb 24, 2019 	Changes in social timeline related to AJAX and favourites. (237804 lines)
 	Version 18.57.2:  Feb 24, 2019 	Changes in social timeline related to AJAX and favourites. (237827 lines)
 	Version 18.57.1:  Feb 24, 2019 	Changes in social timeline related to AJAX and favourites. (237862 lines)
 	Version 18.57:    Feb 23, 2019 	Favourites in social notes is made in AJAX without reloading page. (237892 lines)
