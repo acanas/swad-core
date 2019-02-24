@@ -216,14 +216,12 @@ static long Soc_ReceiveComment (void);
 
 static long Soc_ShareSocialNote (void);
 static void Soc_FavSocialNote_new (struct SocialNote *SocNot);
-static long Soc_FavSocialNote (void);
 static long Soc_FavSocialComment (void);
 static void Soc_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                      Ntf_NotifyEvent_t NotifyEvent);
 
 static long Soc_UnshareSocialNote (void);
 static void Soc_UnfavSocialNote_new (struct SocialNote *SocNot);
-static long Soc_UnfavSocialNote (void);
 static long Soc_UnfavSocialComment (void);
 
 static void Soc_RequestRemovalSocialNote (void);
@@ -3228,39 +3226,45 @@ void Soc_FavSocialNoteGbl_new (void)
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void Soc_FavSocialNoteGbl (void)
+void Soc_FavSocialNoteUsr_new (void)
   {
-   long NotCod;
-
-   /***** Mark social note as favourite *****/
-   NotCod = Soc_FavSocialNote ();
-
-   /***** Write updated timeline after marking as favourite (global) *****/
-   Soc_ShowTimelineGblHighlightingNot (NotCod);
-  }
-
-void Soc_FavSocialNoteUsr (void)
-  {
-   long NotCod;
+   struct SocialNote SocNot;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
-
-   /***** Start section *****/
-   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
-
    /***** Mark social note as favourite *****/
-   NotCod = Soc_FavSocialNote ();
+   Soc_FavSocialNote_new (&SocNot);
 
-   /***** Write updated timeline after marking as favourite (user) *****/
-   Soc_ShowTimelineUsrHighlightingNot (NotCod);
+   /***** Write HTML inside DIV with form to unfav *****/
+   Soc_PutFormToUnfavSocialNote_new (&SocNot);
 
-   /***** End section *****/
-   Lay_EndSection ();
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
+
+//void Soc_FavSocialNoteUsr (void)
+//  {
+//   long NotCod;
+//
+//   /***** Get user whom profile is displayed *****/
+//   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+//
+//   /***** Show user's profile *****/
+//   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
+//
+//   /***** Start section *****/
+//   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
+//
+//   /***** Mark social note as favourite *****/
+//   NotCod = Soc_FavSocialNote ();
+//
+//   /***** Write updated timeline after marking as favourite (user) *****/
+//   Soc_ShowTimelineUsrHighlightingNot (NotCod);
+//
+//   /***** End section *****/
+//   Lay_EndSection ();
+//  }
 
 static void Soc_FavSocialNote_new (struct SocialNote *SocNot)
   {
@@ -3300,53 +3304,53 @@ static void Soc_FavSocialNote_new (struct SocialNote *SocNot)
      }
   }
 
-static long Soc_FavSocialNote (void)
-  {
-   extern const char *Txt_The_original_post_no_longer_exists;
-   struct SocialNote SocNot;
-   bool ItsMe;
-   long OriginalPubCod;
-
-   /***** Get data of social note *****/
-   SocNot.NotCod = Soc_GetParamNotCod ();
-   Soc_GetDataOfSocialNotByCod (&SocNot);
-
-   if (SocNot.NotCod > 0)
-     {
-      ItsMe = Usr_ItsMe (SocNot.UsrCod);
-      if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (!Soc_CheckIfNoteIsFavedByUsr (SocNot.NotCod,
-					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
-	   {
-	    /***** Mark as favourite in database *****/
-	    DB_QueryINSERT ("can not favourite social note",
-			    "INSERT IGNORE INTO social_notes_fav"
-			    " (NotCod,UsrCod,TimeFav)"
-			    " VALUES"
-			    " (%ld,%ld,NOW())",
-			    SocNot.NotCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	    /* Update number of times this social note is favourited */
-	    SocNot.NumFavs = Soc_GetNumTimesANoteHasBeenFav (&SocNot);
-
-	    /**** Create notification about favourite post
-		  for the author of the post ***/
-	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
-	    if (OriginalPubCod > 0)
-	       Soc_CreateNotifToAuthor (SocNot.UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_FAV);
-
-	    /***** Show the social note just favourited *****/
-	    Soc_WriteSocialNote (&SocNot,
-				 Soc_TOP_MESSAGE_FAVED,Gbl.Usrs.Me.UsrDat.UsrCod,
-				 true,true);
-	   }
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
-
-   return SocNot.NotCod;
-  }
+// static long Soc_FavSocialNote (void)
+//  {
+//   extern const char *Txt_The_original_post_no_longer_exists;
+//   struct SocialNote SocNot;
+//   bool ItsMe;
+//   long OriginalPubCod;
+//
+//   /***** Get data of social note *****/
+//   SocNot.NotCod = Soc_GetParamNotCod ();
+//   Soc_GetDataOfSocialNotByCod (&SocNot);
+//
+//   if (SocNot.NotCod > 0)
+//     {
+//      ItsMe = Usr_ItsMe (SocNot.UsrCod);
+//      if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
+//	 if (!Soc_CheckIfNoteIsFavedByUsr (SocNot.NotCod,
+//					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
+//	   {
+//	    /***** Mark as favourite in database *****/
+//	    DB_QueryINSERT ("can not favourite social note",
+//			    "INSERT IGNORE INTO social_notes_fav"
+//			    " (NotCod,UsrCod,TimeFav)"
+//			    " VALUES"
+//			    " (%ld,%ld,NOW())",
+//			    SocNot.NotCod,
+//			    Gbl.Usrs.Me.UsrDat.UsrCod);
+//
+//	    /* Update number of times this social note is favourited */
+//	    SocNot.NumFavs = Soc_GetNumTimesANoteHasBeenFav (&SocNot);
+//
+//	    /**** Create notification about favourite post
+//		  for the author of the post ***/
+//	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+//	    if (OriginalPubCod > 0)
+//	       Soc_CreateNotifToAuthor (SocNot.UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_FAV);
+//
+//	    /***** Show the social note just favourited *****/
+//	    Soc_WriteSocialNote (&SocNot,
+//				 Soc_TOP_MESSAGE_FAVED,Gbl.Usrs.Me.UsrDat.UsrCod,
+//				 true,true);
+//	   }
+//     }
+//   else
+//      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
+//
+//   return SocNot.NotCod;
+//  }
 
 /*****************************************************************************/
 /********************* Mark a social comment as favourite ********************/
@@ -3581,38 +3585,21 @@ void Soc_UnfavSocialNoteGbl_new (void)
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void Soc_UnfavSocialNoteGbl (void)
+void Soc_UnfavSocialNoteUsr_new (void)
   {
-   long NotCod;
-
-   /***** Stop marking as favourite a previously favourited social note *****/
-   NotCod = Soc_UnfavSocialNote ();
-
-   /***** Write updated timeline after unfav (global) *****/
-   Soc_ShowTimelineGblHighlightingNot (NotCod);
-  }
-
-void Soc_UnfavSocialNoteUsr (void)
-  {
-   long NotCod;
+   struct SocialNote SocNot;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
-
-   /***** Start section *****/
-   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
-
    /***** Unfav a social note previously marked as favourite *****/
-   NotCod = Soc_UnfavSocialNote ();
+   Soc_UnfavSocialNote_new (&SocNot);
 
-   /***** Write updated timeline after unfav (user) *****/
-   Soc_ShowTimelineUsrHighlightingNot (NotCod);
+   /***** Write HTML inside DIV with form to fav *****/
+   Soc_PutFormToFavSocialNote_new (&SocNot);
 
-   /***** End section *****/
-   Lay_EndSection ();
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 static void Soc_UnfavSocialNote_new (struct SocialNote *SocNot)
@@ -3648,52 +3635,6 @@ static void Soc_UnfavSocialNote_new (struct SocialNote *SocNot)
 	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
 	   }
      }
-  }
-
-static long Soc_UnfavSocialNote (void)
-  {
-   extern const char *Txt_The_original_post_no_longer_exists;
-   struct SocialNote SocNot;
-   long OriginalPubCod;
-   bool ItsMe;
-
-   /***** Get data of social note *****/
-   SocNot.NotCod = Soc_GetParamNotCod ();
-   Soc_GetDataOfSocialNotByCod (&SocNot);
-
-   if (SocNot.NotCod > 0)
-     {
-      ItsMe = Usr_ItsMe (SocNot.UsrCod);
-      if (SocNot.NumFavs &&
-	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (Soc_CheckIfNoteIsFavedByUsr (SocNot.NotCod,
-					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
-	   {
-	    /***** Delete the mark as favourite from database *****/
-	    DB_QueryDELETE ("can not unfavourite social note",
-			    "DELETE FROM social_notes_fav"
-			    " WHERE NotCod=%ld AND UsrCod=%ld",
-			    SocNot.NotCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	    /***** Update number of times this social note is favourited *****/
-	    SocNot.NumFavs = Soc_GetNumTimesANoteHasBeenFav (&SocNot);
-
-            /***** Mark possible notifications on this social note as removed *****/
-	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
-	    if (OriginalPubCod > 0)
-	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
-
-	    /***** Show the social note just unfavourited *****/
-	    Soc_WriteSocialNote (&SocNot,
-				 Soc_TOP_MESSAGE_UNFAVED,Gbl.Usrs.Me.UsrDat.UsrCod,
-				 true,true);
-	   }
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
-
-   return SocNot.NotCod;
   }
 
 /*****************************************************************************/
