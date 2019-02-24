@@ -471,11 +471,11 @@ function refreshOldTimeline () {
 	if (objXMLHttpReqSoc) {
 		var RefreshParams = RefreshParamNxtActOldPub + '&' +
 							RefreshParamIdSes;
-		if (RefreshParamUsr) {
+		if (typeof RefreshParamUsr !== 'undefined') {
 			if (RefreshParamUsr.length)
 				RefreshParams += '&' + RefreshParamUsr;
 		}
-		else {
+		if (typeof RefreshParamWhichUsrs !== 'undefined') {
 			if (RefreshParamWhichUsrs.length)
 				RefreshParams += '&' + RefreshParamWhichUsrs;
 		}
