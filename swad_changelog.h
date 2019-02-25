@@ -429,10 +429,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.58.1 (2019-02-24)"
+#define Log_PLATFORM_VERSION	"SWAD 18.59 (2019-02-25)"
 #define CSS_FILE		"swad18.57.css"
-#define JS_FILE			"swad18.58.js"
+#define JS_FILE			"swad18.59.js"
 /*
+	Version 18.59:    Feb 25, 2019 	Shared in social notes are made in AJAX without reloading page. (237809 lines)
 	Version 18.58.1:  Feb 24, 2019 	Code cleaning related to AJAX and timeline.
 					Fixed bug in recent clicks. (237768 lines)
 					9 changes necessary in database:

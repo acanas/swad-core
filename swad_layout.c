@@ -726,8 +726,6 @@ static void Lay_WriteScriptParamsAJAX (void)
       case ActSeeSocTmlGbl:
       case ActRcvSocPstGbl:
       case ActRcvSocComGbl:
-      case ActShaSocNotGbl:
-      case ActUnsSocNotGbl:
       case ActReqRemSocPubGbl:
       case ActRemSocPubGbl:
       case ActReqRemSocComGbl:
@@ -746,8 +744,6 @@ static void Lay_WriteScriptParamsAJAX (void)
       case ActSeeOthPubPrf:
       case ActRcvSocPstUsr:
       case ActRcvSocComUsr:
-      case ActShaSocNotUsr:
-      case ActUnsSocNotUsr:
       case ActReqRemSocPubUsr:
       case ActRemSocPubUsr:
       case ActReqRemSocComUsr:

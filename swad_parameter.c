@@ -735,6 +735,8 @@ void Par_GetMainParameters (void)
        Gbl.Action.IsAJAXAutoRefresh = true;
       }
    else if (Gbl.Action.Act == ActRefOldSocPubGbl || Gbl.Action.Act == ActRefOldSocPubUsr ||
+	    Gbl.Action.Act == ActShaSocNotGbl    || Gbl.Action.Act == ActShaSocNotUsr    ||
+	    Gbl.Action.Act == ActUnsSocNotGbl    || Gbl.Action.Act == ActUnsSocNotUsr    ||
             Gbl.Action.Act == ActFavSocNotGbl    || Gbl.Action.Act == ActFavSocNotUsr    ||
             Gbl.Action.Act == ActUnfSocNotGbl    || Gbl.Action.Act == ActUnfSocNotUsr    ||
             Gbl.Action.Act == ActFavSocComGbl    || Gbl.Action.Act == ActFavSocComUsr    ||

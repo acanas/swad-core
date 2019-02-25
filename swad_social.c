@@ -198,8 +198,8 @@ static void Soc_PutFormToRemoveComment (long PubCod);
 static void Soc_PutDisabledIconShare (unsigned NumShared);
 static void Soc_PutDisabledIconFav (unsigned NumFavs);
 
-static void Soc_PutFormToShareSocialNote (long NotCod);
-static void Soc_PutFormToUnshareSocialNote (long NotCod);
+static void Soc_PutFormToShareSocialNote (const struct SocialNote *SocNot);
+static void Soc_PutFormToUnshareSocialNote (const struct SocialNote *SocNot);
 static void Soc_PutFormToFavSocialNote (const struct SocialNote *SocNot);
 static void Soc_PutFormToUnfavSocialNote (const struct SocialNote *SocNot);
 static void Soc_PutFormToFavSocialComment (struct SocialComment *SocCom);
@@ -213,13 +213,13 @@ static long Soc_GetParamPubCod (void);
 
 static long Soc_ReceiveComment (void);
 
-static long Soc_ShareSocialNote (void);
+static void Soc_ShareSocialNote (struct SocialNote *SocNot);
 static void Soc_FavSocialNote (struct SocialNote *SocNot);
 static void Soc_FavSocialComment (struct SocialComment *SocCom);
 static void Soc_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                      Ntf_NotifyEvent_t NotifyEvent);
 
-static long Soc_UnshareSocialNote (void);
+static void Soc_UnshareSocialNote (struct SocialNote *SocNot);
 static void Soc_UnfavSocialNote (struct SocialNote *SocNot);
 static void Soc_UnfavSocialComment (struct SocialComment *SocCom);
 
@@ -242,7 +242,7 @@ static bool Soc_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
 static bool Soc_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
 static bool Soc_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
 
-static unsigned Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot);
+static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot);
 static void Soc_GetNumTimesANoteHasBeenFav (struct SocialNote *SocNot);
 static void Soc_GetNumTimesACommHasBeenFav (struct SocialComment *SocCom);
 
@@ -1374,7 +1374,9 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    unsigned NumComments;
    char IdNewComment[Frm_MAX_BYTES_ID + 1];
-   static unsigned Num = 0;
+   static unsigned NumDiv = 0;	// Used to create unique div id for fav and shared
+
+   NumDiv++;
 
    /***** Start box ****/
    if (ShowNoteAlone)
@@ -1565,51 +1567,50 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	                 "<div class=\"SOCIAL_ICOS_FAV_SHA_REM\">");
 
       /* Put icon to mark this social note as favourite */
-      if (SocNot->Unavailable)		// Unavailable social notes can not be favourited
-        {
-	 /* Put disabled icon */
-	 Soc_PutDisabledIconFav (SocNot->NumFavs);
-	 // Don't show who have marked this social note as favourite
-        }
-      else if (IAmTheAuthor)		// I am the author
+      if (SocNot->Unavailable ||	// Unavailable social notes can not be favourited
+          IAmTheAuthor)			// I am the author
         {
 	 /* Put disabled icon and list of users
-	    who have marked this social note as favourite*/
+	    who have marked this social note as favourite */
 	 Soc_PutDisabledIconFav (SocNot->NumFavs);
          Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (SocNot);
         }
-      else				// I am not the author
+      else				// Available and I am not the author
 	{
 	 fprintf (Gbl.F.Out,"<div id=\"fav_not_%s_%u\""
 	                    " class=\"SOCIAL_ICO_FAV\">",
-	          Gbl.UniqueNameEncrypted,++Num);
+	          Gbl.UniqueNameEncrypted,NumDiv);
 	 if (IAmAFaverOfThisSocNot)	// I have favourited this social note
 	    /* Put icon to unfav this publishing and list of users */
 	    Soc_PutFormToUnfavSocialNote (SocNot);
-	 else				//  I am not a faver
+	 else				//  I am not a faver of this social note
 	    /* Put icon to fav this publishing and list of users */
 	    Soc_PutFormToFavSocialNote (SocNot);
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 
-      /* Put icons to share/unshare */
-      if (IAmTheAuthor)				// I am the author
+      /* Put icon to share/unshare */
+      if (SocNot->Unavailable ||	// Unavailable social notes can not be shared
+          IAmTheAuthor)			// I am the author
+        {
+	 /* Put disabled icon and list of users
+	    who have shared this social note */
 	 Soc_PutDisabledIconShare (SocNot->NumShared);
-      else if (IAmASharerOfThisSocNot)	// I am a sharer of this social note,
-					// but not the author ==> I have shared this social note
-	 /* Put icon to unshare this publishing */
-	 Soc_PutFormToUnshareSocialNote (SocNot->NotCod);
-      else					// I am not the author and I am not a sharer
-	{
-	 if (SocNot->Unavailable)		// Unavailable social notes can not be shared
-	    Soc_PutDisabledIconShare (SocNot->NumShared);
-	 else
-	    /* Put icon to share this publishing */
-	    Soc_PutFormToShareSocialNote (SocNot->NotCod);
-	}
-
-      /* Show who have shared this social note */
-      Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
+         Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
+        }
+      else				// Available and I am not the author
+        {
+	 fprintf (Gbl.F.Out,"<div id=\"sha_not_%s_%u\""
+			    " class=\"SOCIAL_ICO_SHARE\">",
+		  Gbl.UniqueNameEncrypted,NumDiv);
+	 if (IAmASharerOfThisSocNot)	// I am a sharer of this social note
+	    /* Put icon to unshare this publishing and list of users */
+	    Soc_PutFormToUnshareSocialNote (SocNot);
+	 else				// I am not a sharer of this social note
+	    /* Put icon to share this publishing and list of users */
+	    Soc_PutFormToShareSocialNote (SocNot);
+	 fprintf (Gbl.F.Out,"</div>");
+        }
 
       /* Put icon to remove this social note */
       if (IAmTheAuthor)
@@ -2626,7 +2627,9 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
    bool IAmAFaverOfThisSocCom = false;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
-   static unsigned Num = 0;
+   static unsigned NumDiv = 0;	// Used to create unique div id for fav
+
+   NumDiv++;
 
    if (ShowCommentAlone)
      {
@@ -2701,7 +2704,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
 	{
 	 fprintf (Gbl.F.Out,"<div id=\"fav_com_%s_%u\""
 	                    " class=\"SOCIAL_ICO_FAV\">",
-	          Gbl.UniqueNameEncrypted,++Num);
+	          Gbl.UniqueNameEncrypted,NumDiv);
 	 if (IAmAFaverOfThisSocCom)	// I have favourited this social comment
 	    /* Put icon to unfav this publishing and list of users */
 	    Soc_PutFormToUnfavSocialComment (SocCom);
@@ -2830,16 +2833,44 @@ static void Soc_PutDisabledIconFav (unsigned NumFavs)
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToShareSocialNote (long NotCod)
+static void Soc_PutFormToShareSocialNote (const struct SocialNote *SocNot)
   {
    extern const char *Txt_Share;
+   char *OnSubmit;
 
-   /***** Form to share social note *****/
-   Soc_FormStart (ActShaSocNotGbl,ActShaSocNotUsr);
-   Soc_PutHiddenParamNotCod (NotCod);
-   Ico_PutDivIconLink ("SOCIAL_ICO_SHARE",
-		       "share-alt.svg",Txt_Share);
+   /***** Form and icon to mark social note as favourite *****/
+   /* Form with icon */
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      if (asprintf (&OnSubmit,"refreshSha(this,"
+			      "'act=%ld&ses=%s&NotCod=%ld&OtherUsrCod=%s');"
+			      " return false;",	// return false is necessary to not submit form
+		    Act_GetActCod (ActShaSocNotUsr),
+		    Gbl.Session.Id,
+		    SocNot->NotCod,
+		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
+     }
+   else
+     {
+      if (asprintf (&OnSubmit,"refreshSha(this,"
+			      "'act=%ld&ses=%s&NotCod=%ld');"
+			      " return false;",	// return false is necessary to not submit form
+		    Act_GetActCod (ActShaSocNotGbl),
+		    Gbl.Session.Id,
+		    SocNot->NotCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+     }
+   Ico_PutIconLink ("share-alt.svg",Txt_Share);
    Frm_EndForm ();
+
+   /* Free allocated memory for subquery */
+   free ((void *) OnSubmit);
+
+   /***** Who have shared this social note *****/
+   Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
   }
 
 /*****************************************************************************/
@@ -2847,16 +2878,44 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToUnshareSocialNote (long NotCod)
+static void Soc_PutFormToUnshareSocialNote (const struct SocialNote *SocNot)
   {
    extern const char *Txt_SOCIAL_NOTE_Shared;
+   char *OnSubmit;
 
-   /***** Form to share social publishing *****/
-   Soc_FormStart (ActUnsSocNotGbl,ActUnsSocNotUsr);
-   Soc_PutHiddenParamNotCod (NotCod);
-   Ico_PutDivIconLink ("SOCIAL_ICO_SHARE",
-		       "share-alt-green.svg",Txt_SOCIAL_NOTE_Shared);
+   /***** Form and icon to mark social note as favourite *****/
+   /* Form with icon */
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      if (asprintf (&OnSubmit,"refreshSha(this,"
+			      "'act=%ld&ses=%s&NotCod=%ld&OtherUsrCod=%s');"
+			      " return false;",	// return false is necessary to not submit form
+		    Act_GetActCod (ActUnsSocNotUsr),
+		    Gbl.Session.Id,
+		    SocNot->NotCod,
+		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
+     }
+   else
+     {
+      if (asprintf (&OnSubmit,"refreshSha(this,"
+			      "'act=%ld&ses=%s&NotCod=%ld');"
+			      " return false;",	// return false is necessary to not submit form
+		    Act_GetActCod (ActUnsSocNotGbl),
+		    Gbl.Session.Id,
+		    SocNot->NotCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+     }
+   Ico_PutIconLink ("share-alt-green.svg",Txt_SOCIAL_NOTE_Shared);
    Frm_EndForm ();
+
+   /* Free allocated memory for subquery */
+   free ((void *) OnSubmit);
+
+   /***** Who have shared this social note *****/
+   Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
   }
 
 /*****************************************************************************/
@@ -2948,7 +3007,6 @@ static void Soc_PutFormToUnfavSocialNote (const struct SocialNote *SocNot)
    /***** Who have marked this social note as favourite *****/
    Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (SocNot);
   }
-
 
 /*****************************************************************************/
 /***************** Form to mark a social comment as favourite ****************/
@@ -3217,77 +3275,69 @@ static long Soc_ReceiveComment (void)
 
 void Soc_ShareSocialNoteGbl (void)
   {
-   long NotCod;
+   struct SocialNote SocNot;
 
-   /***** Share social note *****/
-   NotCod = Soc_ShareSocialNote ();
+   /***** Mark social note as favourite *****/
+   Soc_ShareSocialNote (&SocNot);
 
-   /***** Write updated timeline after sharing (global) *****/
-   Soc_ShowTimelineGblHighlightingNot (NotCod);
+   /***** Write HTML inside DIV with form to unshare *****/
+   Soc_PutFormToUnshareSocialNote (&SocNot);
+
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 void Soc_ShareSocialNoteUsr (void)
   {
-   long NotCod;
+   struct SocialNote SocNot;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
-
-   /***** Start section *****/
-   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
-
    /***** Share social note *****/
-   NotCod = Soc_ShareSocialNote ();
+   Soc_ShareSocialNote (&SocNot);
 
-   /***** Write updated timeline after sharing (user) *****/
-   Soc_ShowTimelineUsrHighlightingNot (NotCod);
+   /***** Write HTML inside DIV with form to unshare *****/
+   Soc_PutFormToUnshareSocialNote (&SocNot);
 
-   /***** End section *****/
-   Lay_EndSection ();
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-static long Soc_ShareSocialNote (void)
+static void Soc_ShareSocialNote (struct SocialNote *SocNot)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
-   struct SocialNote SocNot;
    struct SocialPublishing SocPub;
    bool ItsMe;
    long OriginalPubCod;
 
    /***** Get data of social note *****/
-   SocNot.NotCod = Soc_GetParamNotCod ();
-   Soc_GetDataOfSocialNotByCod (&SocNot);
+   SocNot->NotCod = Soc_GetParamNotCod ();
+   Soc_GetDataOfSocialNotByCod (SocNot);
 
-   if (SocNot.NotCod > 0)
+   if (SocNot->NotCod > 0)
      {
-      ItsMe = Usr_ItsMe (SocNot.UsrCod);
+      ItsMe = Usr_ItsMe (SocNot->UsrCod);
       if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-         if (!Soc_CheckIfNoteIsSharedByUsr (SocNot.NotCod,
+         if (!Soc_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
 					    Gbl.Usrs.Me.UsrDat.UsrCod))	// Not yet shared by me
 	   {
 	    /***** Share (publish social note in timeline) *****/
-	    SocPub.NotCod       = SocNot.NotCod;
+	    SocPub.NotCod       = SocNot->NotCod;
 	    SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 	    SocPub.PubType      = Soc_PUB_SHARED_NOTE;
 	    Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
 	    /* Update number of times this social note is shared */
-	    SocNot.NumShared = Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
+	    Soc_UpdateNumTimesANoteHasBeenShared (SocNot);
 
 	    /**** Create notification about shared post
 		  for the author of the post ***/
-	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
 	    if (OriginalPubCod > 0)
-	       Soc_CreateNotifToAuthor (SocNot.UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
+	       Soc_CreateNotifToAuthor (SocNot->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
 	   }
      }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
-
-   return SocNot.NotCod;
   }
 
 /*****************************************************************************/
@@ -3478,55 +3528,51 @@ static void Soc_CreateNotifToAuthor (long AuthorCod,long PubCod,
 
 void Soc_UnshareSocialNoteGbl (void)
   {
-   long NotCod;
+   struct SocialNote SocNot;
 
-   /***** Unshare a previously shared social note *****/
-   NotCod = Soc_UnshareSocialNote ();
+   /***** Unshare social note *****/
+   Soc_UnshareSocialNote (&SocNot);
 
-   /***** Write updated timeline after unsharing (global) *****/
-   Soc_ShowTimelineGblHighlightingNot (NotCod);
+   /***** Write HTML inside DIV with form to share *****/
+   Soc_PutFormToShareSocialNote (&SocNot);
+
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 void Soc_UnshareSocialNoteUsr (void)
   {
-   long NotCod;
+   struct SocialNote SocNot;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Show user's profile *****/
-   Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
+   /***** Share social note *****/
+   Soc_UnshareSocialNote (&SocNot);
 
-   /***** Start section *****/
-   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
+   /***** Write HTML inside DIV with form to share *****/
+   Soc_PutFormToShareSocialNote (&SocNot);
 
-   /***** Unshare a previously shared social note *****/
-   NotCod = Soc_UnshareSocialNote ();
-
-   /***** Write updated timeline after unsharing (user) *****/
-   Soc_ShowTimelineUsrHighlightingNot (NotCod);
-
-   /***** End section *****/
-   Lay_EndSection ();
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-static long Soc_UnshareSocialNote (void)
+static void Soc_UnshareSocialNote (struct SocialNote *SocNot)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
-   struct SocialNote SocNot;
    long OriginalPubCod;
    bool ItsMe;
 
    /***** Get data of social note *****/
-   SocNot.NotCod = Soc_GetParamNotCod ();
-   Soc_GetDataOfSocialNotByCod (&SocNot);
+   SocNot->NotCod = Soc_GetParamNotCod ();
+   Soc_GetDataOfSocialNotByCod (SocNot);
 
-   if (SocNot.NotCod > 0)
+   if (SocNot->NotCod > 0)
      {
-      ItsMe = Usr_ItsMe (SocNot.UsrCod);
-      if (SocNot.NumShared &&
+      ItsMe = Usr_ItsMe (SocNot->UsrCod);
+      if (SocNot->NumShared &&
 	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (Soc_CheckIfNoteIsSharedByUsr (SocNot.NotCod,
+	 if (Soc_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
 	    /***** Delete social publishing from database *****/
@@ -3535,29 +3581,19 @@ static long Soc_UnshareSocialNote (void)
 	                    " WHERE NotCod=%ld"
 	                    " AND PublisherCod=%ld"
 	                    " AND PubType=%u",
-			    SocNot.NotCod,
+			    SocNot->NotCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod,
 			    (unsigned) Soc_PUB_SHARED_NOTE);
 
 	    /***** Update number of times this social note is shared *****/
-	    SocNot.NumShared = Soc_UpdateNumTimesANoteHasBeenShared (&SocNot);
+	    Soc_UpdateNumTimesANoteHasBeenShared (SocNot);
 
             /***** Mark possible notifications on this social note as removed *****/
-	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot.NotCod);
+	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
 	    if (OriginalPubCod > 0)
 	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,OriginalPubCod);
-
-	    /***** Show the social note corresponding
-		   to the publishing just unshared *****/
-	    Soc_WriteSocialNote (&SocNot,
-				 Soc_TOP_MESSAGE_UNSHARED,Gbl.Usrs.Me.UsrDat.UsrCod,
-				 true,true);
 	   }
      }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
-
-   return SocNot.NotCod;
   }
 
 /*****************************************************************************/
@@ -4407,10 +4443,10 @@ static bool Soc_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
 /******* Get number of times a social note has been shared in timeline *******/
 /*****************************************************************************/
 
-static unsigned Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot)
+static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot)
   {
    /***** Get number of times (users) this note has been shared *****/
-   return
+   SocNot->NumShared =
    (unsigned) DB_QueryCOUNT ("can not get number of times"
 			     " a note has been shared",
 			     "SELECT COUNT(*) FROM social_pubs"
@@ -4759,7 +4795,7 @@ static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc
    SocNot->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
 
    /***** Get number of times this social note has been shared *****/
-   SocNot->NumShared   = Soc_UpdateNumTimesANoteHasBeenShared (SocNot);
+   Soc_UpdateNumTimesANoteHasBeenShared (SocNot);
 
    /***** Get number of times this social note has been favourited *****/
    Soc_GetNumTimesANoteHasBeenFav (SocNot);

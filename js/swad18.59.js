@@ -715,9 +715,42 @@ function readAndUpdateFav () {
 	if (objXMLHttpReqFavSoc.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqFavSoc.status == 200)
 			if (idDivFav) {
-				var divFav = document.getElementById(idDivFav);			// Access to last click DIV
+				var divFav = document.getElementById(idDivFav);				// Access to DIV
 				if (divFav)
 					divFav.innerHTML = objXMLHttpReqFavSoc.responseText;	// Update fav area DIV
+			}
+	}
+}
+
+/*****************************************************************************/
+/************* Update share area in social timeline using AJAX ***************/
+/*****************************************************************************/
+
+var objXMLHttpReqShaSoc = false;
+var idDivSha = null;
+
+// This function is called when user clicks in icon to share/unshare in timeline
+function refreshSha (elem,Params) {
+	idDivSha = elem.parentNode.id;
+
+	objXMLHttpReqShaSoc = AJAXCreateObject ();
+	if (objXMLHttpReqShaSoc) {
+		/* Send request to server */
+		objXMLHttpReqShaSoc.onreadystatechange = readAndUpdateSha;	// onreadystatechange must be lowercase
+		objXMLHttpReqShaSoc.open('POST',ActionAJAX,true);
+		objXMLHttpReqShaSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqShaSoc.send(Params);
+	}
+}
+
+// Receives and shows share area: icon and users who have shared a social note or comment in timeline
+function readAndUpdateSha () {
+	if (objXMLHttpReqShaSoc.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqShaSoc.status == 200)
+			if (idDivSha) {
+				var divSha = document.getElementById(idDivSha);				// Access to DIV
+				if (divSha)
+					divSha.innerHTML = objXMLHttpReqShaSoc.responseText;	// Update share area DIV
 			}
 	}
 }
@@ -1460,33 +1493,5 @@ function ContractChildren (idParent) {
 			if (row.id.indexOf(idParent) == 0)		// row.id starts by idParent, so it's a child
 				/* Unhide row */
 				row.style.display = 'none';			// hide
-	}
-}
-
-/*****************************************************************************/
-/**************** Animate icon "recycle" when click on a link ****************/
-/*****************************************************************************/
-
-function FavSocial (idParent) {
-	var parent				= document.getElementById(idParent);
-	var iconToFav			= document.getElementById('fav_'	+ idParent);
-	var iconToUnfav			= document.getElementById('unfav_'	+ idParent);
-
-	if (parent.dataset.status == 'unfaved') {
-		parent.dataset.status = 'faved';
-		iconToFav.style.display		= 'none';
-		iconToUnfav.style.display	= '';
-	}
-}
-
-function UnfavSocial (idParent) {
-	var parent				= document.getElementById(idParent);
-	var iconToFav			= document.getElementById('fav_'	+ idParent);
-	var iconToUnfav			= document.getElementById('unfav_'	+ idParent);
-
-	if (parent.dataset.status == 'faved') {
-		parent.dataset.status = 'unfaved';
-		iconToUnfav.style.display	= 'none';
-		iconToFav.style.display		= '';
 	}
 }
