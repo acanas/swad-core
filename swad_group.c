@@ -40,6 +40,7 @@
 #include "swad_group.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_preference.h"
 #include "swad_project.h"
 #include "swad_table.h"
 
