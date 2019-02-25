@@ -45,6 +45,7 @@
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_preference.h"
 #include "swad_profile.h"
 #include "swad_social.h"
 
@@ -995,7 +996,7 @@ static void Soc_ShowTimeline (char *Query,
      }
 
    /***** List recent publishings in timeline *****/
-   fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<ul id=\"timeline_list\">");
 
    for (NumPub = 0, SocPub.PubCod = 0;
 	NumPub < NumPubsGot;

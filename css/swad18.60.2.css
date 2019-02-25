@@ -2802,17 +2802,269 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0;
 	padding:0;
 	}
+#timeline_list
+	{
+	list-style-type:none;
+	padding:0;
+	margin:0;
+	text-align:left;
+	vertical-align:middle;
+	}
 #old_timeline_list
 	{
 	margin:0;
 	padding:0;
 	}
 
-.SOCIAL_PUB
-	{
-	width:536px;
-	border-top:1px solid silver;
+@media only screen and (max-width: 800px)
+	{	/* For mobile-phones */
+	.SOCIAL_PUB
+		{
+		width:386px;	/* 536-150 */
+		border-top:1px solid silver;
+		}
+	.SOCIAL_TOP_CONTAINER
+		{
+		box-sizing:border-box;
+		width:386px;	/* 536-150 */
+		padding-top:10px;
+		text-align:left;
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		}
+	.SOCIAL_NOTE_RIGHT_CONTAINER
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		width:330px;	/* 480-150 */
+		padding-top:10px;
+		}
+	.SOCIAL_FORM_NEW_POST
+		{
+		padding:10px 0;
+		width:330px;	/* 480-150 */
+		text-align:center;
+		}
+	.SOCIAL_RIGHT_AUTHOR
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		width:170px;	/* 320-150 */
+		text-align:left;
+		vertical-align:top;
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		}
+	.SOCIAL_TEXTAREA_POST
+		{
+		box-sizing:border-box;
+		width:330px;	/* 480-150 */
+		margin:0;
+		resize:none;
+		}
+	.SOCIAL_BOTTOM_RIGHT	/* Container for fav, share, remove and comments */
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		width:330px;	/* 480-150 */
+		vertical-align:top;
+		}
+	.SOCIAL_POST_IMG_CONTAINER
+		{
+		box-sizing:border-box;
+		width:330px;	/* 480-150 */
+		margin:10px 0;
+		}
+	.SOCIAL_POST_IMG
+		{
+		box-sizing:border-box;
+		width:330px;	/* 480-150 */
+		border-radius:4px;
+		}
+	.SOCIAL_POST_IMG_TIT_URL
+		{
+		box-sizing:border-box;
+		width:290px;	/* 440-150 */
+		}
+	.SOCIAL_COMMENT_RIGHT_CONTAINER
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		width:290px;	/* 440-150 */
+		padding:10px 0;
+		}
+	.SOCIAL_COMMENT_RIGHT_AUTHOR
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		width:130px;	/* 280-150 */
+		text-align:left;
+		vertical-align:top;
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		}
+	.SOCIAL_FORM_NEW_COMMENT
+		{
+		display:inline-block;
+		margin-left:56px;
+		border-top:1px solid silver;
+		padding-bottom:10px;
+		width:330px;	/* 480-150 */
+		text-align:center;
+		}
+	.SOCIAL_TEXTAREA_COMMENT
+		{
+		box-sizing:border-box;
+		width:290px;	/* 440-150 */
+		margin:0;
+		resize:none;
+		}
+	.SOCIAL_COMMENT_IMG_CONTAINER
+		{
+		box-sizing:border-box;
+		width:290px;	/* 440-150 */
+		margin:10px 0;
+		}
+	.SOCIAL_COMMENT_IMG
+		{
+		box-sizing:border-box;
+		width:290px;	/* 440-150 */
+		border-radius:4px;
+		}
+	.SOCIAL_COMMENT_IMG_TIT_URL
+		{
+		box-sizing:border-box;
+		width:290px;	/* 440-150 */
+		}
 	}
+@media only screen and (min-width: 800px)
+	{	/* For tablets and desktop */
+	.SOCIAL_PUB
+		{
+		width:536px;
+		border-top:1px solid silver;
+		}
+	.SOCIAL_TOP_CONTAINER
+		{
+		box-sizing:border-box;
+		width:536px;
+		padding-top:10px;
+		text-align:left;
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		}
+	.SOCIAL_NOTE_RIGHT_CONTAINER
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		width:480px;
+		padding-top:10px;
+		}
+	.SOCIAL_FORM_NEW_POST
+		{
+		padding:10px 0;
+		width:480px;
+		text-align:center;
+		}
+	.SOCIAL_RIGHT_AUTHOR
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		width:320px;
+		text-align:left;
+		vertical-align:top;
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		}
+	.SOCIAL_TEXTAREA_POST
+		{
+		box-sizing:border-box;
+		width:480px;
+		margin:0;
+		resize:none;
+		}
+	.SOCIAL_BOTTOM_RIGHT	/* Container for fav, share, remove and comments */
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		width:480px;
+		vertical-align:top;
+		}
+	.SOCIAL_POST_IMG_CONTAINER
+		{
+		box-sizing:border-box;
+		width:480px;
+		margin:10px 0;
+		}
+	.SOCIAL_POST_IMG
+		{
+		box-sizing:border-box;
+		width:480px;
+		border-radius:4px;
+		}
+	.SOCIAL_POST_IMG_TIT_URL
+		{
+		box-sizing:border-box;
+		width:440px;
+		}
+	.SOCIAL_COMMENT_RIGHT_CONTAINER
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		width:440px;
+		padding:10px 0;
+		}
+	.SOCIAL_COMMENT_RIGHT_AUTHOR
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		width:280px;
+		text-align:left;
+		vertical-align:top;
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		}
+	.SOCIAL_FORM_NEW_COMMENT
+		{
+		display:inline-block;
+		margin-left:56px;
+		border-top:1px solid silver;
+		padding-bottom:10px;
+		width:480px;
+		text-align:center;
+		}
+	.SOCIAL_TEXTAREA_COMMENT
+		{
+		box-sizing:border-box;
+		width:440px;
+		margin:0;
+		resize:none;
+		}
+	.SOCIAL_COMMENT_IMG_CONTAINER
+		{
+		box-sizing:border-box;
+		width:440px;
+		margin:10px 0;
+		}
+	.SOCIAL_COMMENT_IMG
+		{
+		box-sizing:border-box;
+		width:440px;
+		border-radius:4px;
+		}
+	.SOCIAL_COMMENT_IMG_TIT_URL
+		{
+		box-sizing:border-box;
+		width:440px;
+		}
+	}
+
 .SOCIAL_NEW_PUB
 	{
 	background-color:#DDECF1;
@@ -2823,22 +3075,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	to {background-color:white;}
 	}
 
-.SOCIAL_FORM_NEW_POST
-	{
-	padding:10px 0;
-	width:480px;
-	text-align:center;
-	}
-.SOCIAL_TOP_CONTAINER
-	{
-	box-sizing:border-box;
-	width:536px;
-	padding-top:10px;
-	text-align:left;
-	white-space:nowrap;
-	overflow:hidden;
-	text-overflow:ellipsis;
-	}
 .SOCIAL_TOP_PUBLISHER
 	{
 	color:#808080;
@@ -2855,32 +3091,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:top;
 	}
-.SOCIAL_NOTE_RIGHT_CONTAINER
-	{
-	display:inline-block;
-	box-sizing:border-box;
-	width:480px;
-	padding-top:10px;
-	}
-.SOCIAL_RIGHT_AUTHOR
-	{
-        display:inline-block;
-	box-sizing:border-box;
-        width:320px;
-	text-align:left;
-	vertical-align:top;
-	white-space:nowrap;
-	overflow:hidden;
-	text-overflow:ellipsis;
-        }
-.SOCIAL_RIGHT_TIME
-	{
-        display:inline-block;
-	box-sizing:border-box;
-        width:160px;
-        text-align:right;
-	vertical-align:top;
-        }
 .SOCIAL_BOTTOM_LEFT	/* Container for button used to toggle new comment form */
 	{
 	display:inline-block;
@@ -2888,23 +3098,18 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:56px;
 	vertical-align:bottom;
 	}
-.SOCIAL_BOTTOM_RIGHT	/* Container for fav, share, remove and comments */
+.SOCIAL_RIGHT_TIME
 	{
 	display:inline-block;
 	box-sizing:border-box;
-	width:480px;
+	width:160px;
+	text-align:right;
 	vertical-align:top;
 	}
+
 .SOCIAL_ICOS_FAV_SHA_REM	/* Container for fav, share and remove */
 	{
 	padding-bottom:10px;
-	}
-.SOCIAL_TEXTAREA_POST
-	{
-	box-sizing:border-box;
-	width:480px;
-	margin:0;
-	resize:none;
 	}
 .SOCIAL_TXT
 	{
@@ -2912,23 +3117,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	color:#404040;
 	font-size:13pt;
 	}
-.SOCIAL_POST_IMG_CONTAINER
-	{
-	box-sizing:border-box;
-	width:480px;
-	margin:10px 0;
-	}
-.SOCIAL_POST_IMG
-	{
-	box-sizing:border-box;
-	width:480px;
-	border-radius:4px;
-	}
-.SOCIAL_POST_IMG_TIT_URL
-	{
-	box-sizing:border-box;
-	width:440px;
-	}
+
 .SOCIAL_ICO_COMMENT
 	{
 	display:inline-block;
@@ -2994,57 +3183,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	padding:10px 0;
 	text-align:left;
 	vertical-align:top;
-	}
-.SOCIAL_COMMENT_RIGHT_CONTAINER
-	{
-	display:inline-block;
-	box-sizing:border-box;
-	width:440px;
-	padding:10px 0;
-	}
-.SOCIAL_COMMENT_RIGHT_AUTHOR
-	{
-        display:inline-block;
-	box-sizing:border-box;
-        width:280px;
-	text-align:left;
-	vertical-align:top;
-	white-space:nowrap;
-	overflow:hidden;
-	text-overflow:ellipsis;
-        }
-.SOCIAL_FORM_NEW_COMMENT
-	{
-	display:inline-block;
-	margin-left:56px;
-	border-top:1px solid silver;
-	padding-bottom:10px;
-	width:480px;
-	text-align:center;
-	}
-.SOCIAL_TEXTAREA_COMMENT
-	{
-	box-sizing:border-box;
-	width:440px;
-	margin:0;
-	resize:none;
-	}
-.SOCIAL_COMMENT_IMG_CONTAINER
-	{
-	box-sizing:border-box;
-	width:440px;
-	margin:10px 0;
-	}
-.SOCIAL_COMMENT_IMG
-	{
-	box-sizing:border-box;
-	width:440px;
-	border-radius:4px;
-	}
-.SOCIAL_COMMENT_IMG_TIT_URL
-	{
-	box-sizing:border-box;
-	width:440px;
 	}
 
 /************************************ Forum **********************************/
