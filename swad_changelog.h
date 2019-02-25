@@ -429,10 +429,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.60.2 (2019-02-25)"
-#define CSS_FILE		"swad18.60.2.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.60.3 (2019-02-25)"
+#define CSS_FILE		"swad18.60.3.css"
 #define JS_FILE			"swad18.60.js"
 /*
+	Version 18.60.3:  Feb 25, 2019 	Changes in CSS for responsive design in timeline. (237908 lines)
 	Version 18.60.2:  Feb 25, 2019 	Responsive design in timeline. (237909 lines)
 	Version 18.60.1:  Feb 25, 2019 	Changes in CSS related to preferences. (237772 lines)
 	Version 18.60:    Feb 25, 2019 	Code refactoring in JavaScript code related to favs and shared. (237709 lines)

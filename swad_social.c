@@ -989,14 +989,14 @@ static void Soc_ShowTimeline (char *Query,
       Soc_PutLinkToViewNewPublishings ();
 
       /* Hidden list where insert just received (not visible) publishings via AJAX */
-      fprintf (Gbl.F.Out,"<ul id=\"just_now_timeline_list\"></ul>");
+      fprintf (Gbl.F.Out,"<ul id=\"just_now_timeline_list\" class=\"TIMELINE_LIST\"></ul>");
 
       /* Hidden list where insert new (not visible) publishings via AJAX */
-      fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\"></ul>");
+      fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\" class=\"TIMELINE_LIST\"></ul>");
      }
 
    /***** List recent publishings in timeline *****/
-   fprintf (Gbl.F.Out,"<ul id=\"timeline_list\">");
+   fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"TIMELINE_LIST\">");
 
    for (NumPub = 0, SocPub.PubCod = 0;
 	NumPub < NumPubsGot;
@@ -1030,7 +1030,7 @@ static void Soc_ShowTimeline (char *Query,
       Soc_PutLinkToViewOldPublishings ();
 
       /***** Hidden list where insert old publishings via AJAX *****/
-      fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\"></ul>");
+      fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\" class=\"TIMELINE_LIST\"></ul>");
      }
 
    /***** End box *****/
@@ -1352,7 +1352,7 @@ static void Soc_PutLinkToViewNewPublishings (void)
    /***** Link to view (show hidden) new publishings *****/
    // div is hidden. When new posts arrive to the client via AJAX, div is shown
    fprintf (Gbl.F.Out,"<div id=\"view_new_posts_container\""
-	              " class=\"SOCIAL_PUB VERY_LIGHT_BLUE\""
+	              " class=\"SOCIAL_PUB SOCIAL_SEP VERY_LIGHT_BLUE\""
 	              " style=\"display:none;\">"
                       "<a href=\"\" class=\"%s\""
                       " onclick=\"moveNewTimelineToTimeline(); return false;\" />"
@@ -1374,7 +1374,7 @@ static void Soc_PutLinkToViewOldPublishings (void)
 
    /***** Animated link to view old publishings *****/
    fprintf (Gbl.F.Out,"<div id=\"view_old_posts_container\""
-	              " class=\"SOCIAL_PUB VERY_LIGHT_BLUE\">"
+	              " class=\"SOCIAL_PUB SOCIAL_SEP VERY_LIGHT_BLUE\">"
                       "<a href=\"\" class=\"%s\" onclick=\""
    		      "document.getElementById('get_old_timeline').style.display='none';"	// Icon to be hidden on click
 		      "document.getElementById('getting_old_timeline').style.display='';"	// Icon to be shown on click
@@ -1432,23 +1432,18 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    /***** Start box ****/
    if (ShowNoteAlone)
      {
-      Box_StartBox (Soc_WIDTH_TIMELINE,NULL,NULL,
+      Box_StartBox (NULL,NULL,NULL,
                     NULL,Box_CLOSABLE);
-      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+      fprintf (Gbl.F.Out,"<ul class=\"TIMELINE_LIST\">");
      }
 
    /***** Start list item *****/
-   fprintf (Gbl.F.Out,"<li");
-   if (!ShowNoteAlone || Highlight)
-     {
-      fprintf (Gbl.F.Out," class=\"");
-      if (!ShowNoteAlone)
-	 fprintf (Gbl.F.Out," SOCIAL_PUB");
-      if (Highlight)
-	 fprintf (Gbl.F.Out," SOCIAL_NEW_PUB");
-      fprintf (Gbl.F.Out,"\"");
-     }
-   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB");
+   if (!ShowNoteAlone)
+      fprintf (Gbl.F.Out," SOCIAL_SEP");
+   if (Highlight)
+      fprintf (Gbl.F.Out," SOCIAL_NEW_PUB");
+   fprintf (Gbl.F.Out,"\">");
 
    if (SocNot->NotCod   <= 0 ||
        SocNot->NoteType == Soc_NOTE_UNKNOWN ||
@@ -2307,8 +2302,8 @@ static void Soc_PutFormToWriteNewPost (void)
    char PhotoURL[PATH_MAX + 1];
 
    /***** Start list *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">"
-                      "<li>");
+   fprintf (Gbl.F.Out,"<ul class=\"TIMELINE_LIST\">"
+                      "<li class=\"SOCIAL_PUB\">");
 
    /***** Left: write author's photo (my photo) *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_LEFT_PHOTO\">");

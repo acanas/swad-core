@@ -2802,7 +2802,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0;
 	padding:0;
 	}
-#timeline_list
+#old_timeline_list
+	{
+	margin:0;
+	padding:0;
+	}
+
+.TIMELINE_LIST
 	{
 	list-style-type:none;
 	padding:0;
@@ -2810,18 +2816,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:middle;
 	}
-#old_timeline_list
-	{
-	margin:0;
-	padding:0;
-	}
 
 @media only screen and (max-width: 800px)
 	{	/* For mobile-phones */
 	.SOCIAL_PUB
 		{
 		width:316px;	/* 536-220 */
-		border-top:1px solid silver;
 		}
 	.SOCIAL_TOP_CONTAINER
 		{
@@ -2945,7 +2945,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	.SOCIAL_PUB
 		{
 		width:536px;
-		border-top:1px solid silver;
 		}
 	.SOCIAL_TOP_CONTAINER
 		{
@@ -3073,6 +3072,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 @keyframes fadein
 	{
 	to {background-color:white;}
+	}
+
+.SOCIAL_SEP	/* Separator (upper line between publications) */
+	{
+	border-top:1px solid silver;
 	}
 
 .SOCIAL_TOP_PUBLISHER
