@@ -146,6 +146,9 @@ static void Soc_ShowTimeline (char *Query,
 static void Soc_PutIconsTimeline (void);
 
 static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr);
+static void Soc_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+			    const char *ParamCod,
+			    const char *Icon,const char *Title);
 
 static void Soc_PutFormWhichUsrs (void);
 static void Soc_PutParamWhichUsrs (void);
@@ -1058,6 +1061,48 @@ static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
       Frm_StartForm (ActionGbl);
       Soc_PutParamWhichUsrs ();
      }
+  }
+
+/*****************************************************************************/
+/******* Form to fav/unfav or share/unshare in global or user timeline *******/
+/*****************************************************************************/
+
+static void Soc_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+			    const char *ParamCod,
+			    const char *Icon,const char *Title)
+  {
+   char *OnSubmit;
+
+   /***** Form and icon to mark social note as favourite *****/
+   /* Form with icon */
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
+			      "'act=%ld&ses=%s&%s&OtherUsrCod=%s');"
+			      " return false;",	// return false is necessary to not submit form
+		    Act_GetActCod (ActionUsr),
+		    Gbl.Session.Id,
+		    ParamCod,
+		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
+     }
+   else
+     {
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
+			      "'act=%ld&ses=%s&%s');"
+			      " return false;",	// return false is necessary to not submit form
+		    Act_GetActCod (ActionGbl),
+		    Gbl.Session.Id,
+		    ParamCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
+     }
+   Ico_PutIconLink (Icon,Title);
+   Frm_EndForm ();
+
+   /* Free allocated memory for subquery */
+   free ((void *) OnSubmit);
   }
 
 /*****************************************************************************/
@@ -2836,38 +2881,12 @@ static void Soc_PutDisabledIconFav (unsigned NumFavs)
 static void Soc_PutFormToShareSocialNote (const struct SocialNote *SocNot)
   {
    extern const char *Txt_Share;
-   char *OnSubmit;
+   char ParamCod[6 + 1 + 10 + 1];
 
    /***** Form and icon to mark social note as favourite *****/
-   /* Form with icon */
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld&OtherUsrCod=%s');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActShaSocNotUsr),
-		    Gbl.Session.Id,
-		    SocNot->NotCod,
-		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
-     }
-   else
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActShaSocNotGbl),
-		    Gbl.Session.Id,
-		    SocNot->NotCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-     }
-   Ico_PutIconLink ("share-alt.svg",Txt_Share);
-   Frm_EndForm ();
-
-   /* Free allocated memory for subquery */
-   free ((void *) OnSubmit);
+   sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
+   Soc_FormFavSha (ActShaSocNotGbl,ActShaSocNotUsr,ParamCod,
+	           "share-alt.svg",Txt_Share);
 
    /***** Who have shared this social note *****/
    Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
@@ -2881,38 +2900,12 @@ static void Soc_PutFormToShareSocialNote (const struct SocialNote *SocNot)
 static void Soc_PutFormToUnshareSocialNote (const struct SocialNote *SocNot)
   {
    extern const char *Txt_SOCIAL_NOTE_Shared;
-   char *OnSubmit;
+   char ParamCod[6 + 1 + 10 + 1];
 
    /***** Form and icon to mark social note as favourite *****/
-   /* Form with icon */
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld&OtherUsrCod=%s');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActUnsSocNotUsr),
-		    Gbl.Session.Id,
-		    SocNot->NotCod,
-		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
-     }
-   else
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActUnsSocNotGbl),
-		    Gbl.Session.Id,
-		    SocNot->NotCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-     }
-   Ico_PutIconLink ("share-alt-green.svg",Txt_SOCIAL_NOTE_Shared);
-   Frm_EndForm ();
-
-   /* Free allocated memory for subquery */
-   free ((void *) OnSubmit);
+   sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
+   Soc_FormFavSha (ActUnsSocNotGbl,ActUnsSocNotUsr,ParamCod,
+	           "share-alt-green.svg",Txt_SOCIAL_NOTE_Shared);
 
    /***** Who have shared this social note *****/
    Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
@@ -2926,38 +2919,12 @@ static void Soc_PutFormToUnshareSocialNote (const struct SocialNote *SocNot)
 static void Soc_PutFormToFavSocialNote (const struct SocialNote *SocNot)
   {
    extern const char *Txt_Mark_as_favourite;
-   char *OnSubmit;
+   char ParamCod[6 + 1 + 10 + 1];
 
    /***** Form and icon to mark social note as favourite *****/
-   /* Form with icon */
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld&OtherUsrCod=%s');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActFavSocNotUsr),
-		    Gbl.Session.Id,
-		    SocNot->NotCod,
-		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
-     }
-   else
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActFavSocNotGbl),
-		    Gbl.Session.Id,
-		    SocNot->NotCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-     }
-   Ico_PutIconLink ("heart.svg",Txt_Mark_as_favourite);
-   Frm_EndForm ();
-
-   /* Free allocated memory for subquery */
-   free ((void *) OnSubmit);
+   sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
+   Soc_FormFavSha (ActFavSocNotGbl,ActFavSocNotUsr,ParamCod,
+	           "heart.svg",Txt_Mark_as_favourite);
 
    /***** Who have marked this social note as favourite *****/
    Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (SocNot);
@@ -2971,38 +2938,12 @@ static void Soc_PutFormToFavSocialNote (const struct SocialNote *SocNot)
 static void Soc_PutFormToUnfavSocialNote (const struct SocialNote *SocNot)
   {
    extern const char *Txt_SOCIAL_NOTE_Favourite;
-   char *OnSubmit;
+   char ParamCod[6 + 1 + 10 + 1];
 
-   /***** Form and icon to mark social note as favourite *****/
-   /* Form with icon */
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld&OtherUsrCod=%s');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActUnfSocNotUsr),
-		    Gbl.Session.Id,
-		    SocNot->NotCod,
-		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
-     }
-   else
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&NotCod=%ld');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActUnfSocNotGbl),
-		    Gbl.Session.Id,
-		    SocNot->NotCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-     }
-   Ico_PutIconLink ("heart-red.svg",Txt_SOCIAL_NOTE_Favourite);
-   Frm_EndForm ();
-
-   /* Free allocated memory for subquery */
-   free ((void *) OnSubmit);
+   /***** Form and icon to unfav (remove mark as favourite) social note *****/
+   sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
+   Soc_FormFavSha (ActUnfSocNotGbl,ActUnfSocNotUsr,ParamCod,
+	           "heart-red.svg",Txt_SOCIAL_NOTE_Favourite);
 
    /***** Who have marked this social note as favourite *****/
    Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (SocNot);
@@ -3016,38 +2957,12 @@ static void Soc_PutFormToUnfavSocialNote (const struct SocialNote *SocNot)
 static void Soc_PutFormToFavSocialComment (struct SocialComment *SocCom)
   {
    extern const char *Txt_Mark_as_favourite;
-   char *OnSubmit;
+   char ParamCod[6 + 1 + 10 + 1];
 
-   /***** Form and icon to mark social note as favourite *****/
-   /* Form with icon */
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&PubCod=%ld&OtherUsrCod=%s');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActFavSocComUsr),
-		    Gbl.Session.Id,
-		    SocCom->PubCod,
-		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
-     }
-   else
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&PubCod=%ld');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActFavSocComGbl),
-		    Gbl.Session.Id,
-		    SocCom->PubCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-     }
-   Ico_PutIconLink ("heart.svg",Txt_Mark_as_favourite);
-   Frm_EndForm ();
-
-   /* Free allocated memory for subquery */
-   free ((void *) OnSubmit);
+   /***** Form and icon to mark social comment as favourite *****/
+   sprintf (ParamCod,"PubCod=%ld",SocCom->PubCod);
+   Soc_FormFavSha (ActFavSocComGbl,ActFavSocComUsr,ParamCod,
+	           "heart.svg",Txt_Mark_as_favourite);
 
    /***** Show who have marked this social comment as favourite *****/
    Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (SocCom);
@@ -3061,38 +2976,12 @@ static void Soc_PutFormToFavSocialComment (struct SocialComment *SocCom)
 static void Soc_PutFormToUnfavSocialComment (struct SocialComment *SocCom)
   {
    extern const char *Txt_SOCIAL_NOTE_Favourite;
-   char *OnSubmit;
+   char ParamCod[6 + 1 + 10 + 1];
 
-   /***** Form and icon to mark social note as favourite *****/
-   /* Form with icon */
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&PubCod=%ld&OtherUsrCod=%s');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActUnfSocComUsr),
-		    Gbl.Session.Id,
-		    SocCom->PubCod,
-		    Gbl.Usrs.Other.UsrDat.EncryptedUsrCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,"timeline",OnSubmit);
-     }
-   else
-     {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
-			      "'act=%ld&ses=%s&PubCod=%ld');"
-			      " return false;",	// return false is necessary to not submit form
-		    Act_GetActCod (ActUnfSocComGbl),
-		    Gbl.Session.Id,
-		    SocCom->PubCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      Frm_StartFormUniqueAnchorOnSubmit (ActUnk,NULL,OnSubmit);
-     }
-   Ico_PutIconLink ("heart-red.svg",Txt_SOCIAL_NOTE_Favourite);
-   Frm_EndForm ();
-
-   /* Free allocated memory for subquery */
-   free ((void *) OnSubmit);
+   /***** Form and icon to unfav (remove mark as favourite) social comment *****/
+   sprintf (ParamCod,"PubCod=%ld",SocCom->PubCod);
+   Soc_FormFavSha (ActUnfSocComGbl,ActUnfSocComUsr,ParamCod,
+	           "heart-red.svg",Txt_SOCIAL_NOTE_Favourite);
 
    /***** Show who have marked this social comment as favourite *****/
    Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (SocCom);
