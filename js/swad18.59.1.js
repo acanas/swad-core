@@ -690,70 +690,41 @@ function expandTextarea (textareaElem,idButton,rows) {
 }
 
 /*****************************************************************************/
-/************** Update fav area in social timeline using AJAX ****************/
+/********** Update fav or share area in social timeline using AJAX ***********/
 /*****************************************************************************/
 
-var objXMLHttpReqFavSoc = false;
-var idDivFav = null;
+var objXMLHttpReqFavShaSoc = false;
+var idDivFavSha = null;
 
 // This function is called when user clicks in icon to fav/unfav in timeline
-function refreshFav (elem,Params) {
-	idDivFav = elem.parentNode.id;
+function refreshFavSha (elem,Params) {
+	idDivFavSha = elem.parentNode.id;
 
-	objXMLHttpReqFavSoc = AJAXCreateObject ();
-	if (objXMLHttpReqFavSoc) {
+	objXMLHttpReqFavShaSoc = AJAXCreateObject ();
+	if (objXMLHttpReqFavShaSoc) {
 		/* Send request to server */
-		objXMLHttpReqFavSoc.onreadystatechange = readAndUpdateFav;	// onreadystatechange must be lowercase
-		objXMLHttpReqFavSoc.open('POST',ActionAJAX,true);
-		objXMLHttpReqFavSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		objXMLHttpReqFavSoc.send(Params);
+		objXMLHttpReqFavShaSoc.onreadystatechange = readAndUpdateFavSha;	// onreadystatechange must be lowercase
+		objXMLHttpReqFavShaSoc.open('POST',ActionAJAX,true);
+		objXMLHttpReqFavShaSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqFavShaSoc.send(Params);
 	}
 }
 
 // Receives and shows fav area: icon and users who have faved a social note or comment in timeline
-function readAndUpdateFav () {
-	if (objXMLHttpReqFavSoc.readyState == 4) {	// Check if data have been received
-		if (objXMLHttpReqFavSoc.status == 200)
-			if (idDivFav) {
-				var divFav = document.getElementById(idDivFav);				// Access to DIV
-				if (divFav)
-					divFav.innerHTML = objXMLHttpReqFavSoc.responseText;	// Update fav area DIV
+function readAndUpdateFavSha () {
+	if (objXMLHttpReqFavShaSoc.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqFavShaSoc.status == 200)
+			if (idDivFavSha) {
+				var divFavSha = document.getElementById(idDivFavSha);				// Access to DIV
+				if (divFavSha)
+					divFavSha.innerHTML = objXMLHttpReqFavShaSoc.responseText;	// Update fav area DIV
 			}
 	}
 }
 
 /*****************************************************************************/
-/************* Update share area in social timeline using AJAX ***************/
+/*************************** Read last clicks data ***************************/
 /*****************************************************************************/
-
-var objXMLHttpReqShaSoc = false;
-var idDivSha = null;
-
-// This function is called when user clicks in icon to share/unshare in timeline
-function refreshSha (elem,Params) {
-	idDivSha = elem.parentNode.id;
-
-	objXMLHttpReqShaSoc = AJAXCreateObject ();
-	if (objXMLHttpReqShaSoc) {
-		/* Send request to server */
-		objXMLHttpReqShaSoc.onreadystatechange = readAndUpdateSha;	// onreadystatechange must be lowercase
-		objXMLHttpReqShaSoc.open('POST',ActionAJAX,true);
-		objXMLHttpReqShaSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		objXMLHttpReqShaSoc.send(Params);
-	}
-}
-
-// Receives and shows share area: icon and users who have shared a social note or comment in timeline
-function readAndUpdateSha () {
-	if (objXMLHttpReqShaSoc.readyState == 4) {	// Check if data have been received
-		if (objXMLHttpReqShaSoc.status == 200)
-			if (idDivSha) {
-				var divSha = document.getElementById(idDivSha);				// Access to DIV
-				if (divSha)
-					divSha.innerHTML = objXMLHttpReqShaSoc.responseText;	// Update share area DIV
-			}
-	}
-}
 
 function readLastClicksData () {
 	if (objXMLHttpReqLog.readyState == 4) {	// Check if data have been received

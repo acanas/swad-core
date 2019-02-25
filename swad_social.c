@@ -2842,7 +2842,7 @@ static void Soc_PutFormToShareSocialNote (const struct SocialNote *SocNot)
    /* Form with icon */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      if (asprintf (&OnSubmit,"refreshSha(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&NotCod=%ld&OtherUsrCod=%s');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActShaSocNotUsr),
@@ -2854,7 +2854,7 @@ static void Soc_PutFormToShareSocialNote (const struct SocialNote *SocNot)
      }
    else
      {
-      if (asprintf (&OnSubmit,"refreshSha(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&NotCod=%ld');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActShaSocNotGbl),
@@ -2887,7 +2887,7 @@ static void Soc_PutFormToUnshareSocialNote (const struct SocialNote *SocNot)
    /* Form with icon */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      if (asprintf (&OnSubmit,"refreshSha(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&NotCod=%ld&OtherUsrCod=%s');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActUnsSocNotUsr),
@@ -2899,7 +2899,7 @@ static void Soc_PutFormToUnshareSocialNote (const struct SocialNote *SocNot)
      }
    else
      {
-      if (asprintf (&OnSubmit,"refreshSha(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&NotCod=%ld');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActUnsSocNotGbl),
@@ -2932,7 +2932,7 @@ static void Soc_PutFormToFavSocialNote (const struct SocialNote *SocNot)
    /* Form with icon */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      if (asprintf (&OnSubmit,"refreshFav(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&NotCod=%ld&OtherUsrCod=%s');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActFavSocNotUsr),
@@ -2944,7 +2944,7 @@ static void Soc_PutFormToFavSocialNote (const struct SocialNote *SocNot)
      }
    else
      {
-      if (asprintf (&OnSubmit,"refreshFav(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&NotCod=%ld');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActFavSocNotGbl),
@@ -2977,7 +2977,7 @@ static void Soc_PutFormToUnfavSocialNote (const struct SocialNote *SocNot)
    /* Form with icon */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      if (asprintf (&OnSubmit,"refreshFav(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&NotCod=%ld&OtherUsrCod=%s');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActUnfSocNotUsr),
@@ -2989,7 +2989,7 @@ static void Soc_PutFormToUnfavSocialNote (const struct SocialNote *SocNot)
      }
    else
      {
-      if (asprintf (&OnSubmit,"refreshFav(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&NotCod=%ld');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActUnfSocNotGbl),
@@ -3022,7 +3022,7 @@ static void Soc_PutFormToFavSocialComment (struct SocialComment *SocCom)
    /* Form with icon */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      if (asprintf (&OnSubmit,"refreshFav(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&PubCod=%ld&OtherUsrCod=%s');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActFavSocComUsr),
@@ -3034,7 +3034,7 @@ static void Soc_PutFormToFavSocialComment (struct SocialComment *SocCom)
      }
    else
      {
-      if (asprintf (&OnSubmit,"refreshFav(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&PubCod=%ld');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActFavSocComGbl),
@@ -3067,7 +3067,7 @@ static void Soc_PutFormToUnfavSocialComment (struct SocialComment *SocCom)
    /* Form with icon */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      if (asprintf (&OnSubmit,"refreshFav(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&PubCod=%ld&OtherUsrCod=%s');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActUnfSocComUsr),
@@ -3079,7 +3079,7 @@ static void Soc_PutFormToUnfavSocialComment (struct SocialComment *SocCom)
      }
    else
      {
-      if (asprintf (&OnSubmit,"refreshFav(this,"
+      if (asprintf (&OnSubmit,"refreshFavSha(this,"
 			      "'act=%ld&ses=%s&PubCod=%ld');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActUnfSocComGbl),
