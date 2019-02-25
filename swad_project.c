@@ -41,6 +41,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_preference.h"
 #include "swad_project.h"
 #include "swad_string.h"
 #include "swad_table.h"
@@ -266,6 +267,8 @@ static void Prj_ShowProjectsInCurrentPage (void)
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
    /***** Put forms to choice which projects to show *****/
+   /* 1st. row */
+   Pre_StartPrefsHead ();
    Prj_ShowFormToFilterByMy_All ();
    Prj_ShowFormToFilterByPreassignedNonPreassig ();
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -278,6 +281,8 @@ static void Prj_ShowProjectsInCurrentPage (void)
       default:	// Students will see only visible projects
          break;
      }
+   Pre_EndPrefsHead ();
+   /* 2nd. row */
    Prj_ShowFormToFilterByDpt ();
 
    if (Gbl.Prjs.Num)
@@ -363,7 +368,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
       "sitemap.svg",	// Prj_ALL_PROJECTS
      };
 
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartOnePrefSelector ();
    for (My_All =  (Prj_WhoseProjects_t) 0;
 	My_All <= (Prj_WhoseProjects_t) (Prj_NUM_WHOSE_PROJECTS - 1);
 	My_All++)
@@ -385,7 +390,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
   }
 
 /*****************************************************************************/
@@ -398,7 +403,7 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
    struct Prj_Filter Filter;
    Prj_PreassignedNonpreassig_t PreNon;
 
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartOnePrefSelector ();
    for (PreNon =  (Prj_PreassignedNonpreassig_t) 0;
 	PreNon <= (Prj_PreassignedNonpreassig_t) (Prj_NUM_PREASSIGNED_NONPREASSIG - 1);
 	PreNon++)
@@ -420,7 +425,7 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
   }
 
 /*****************************************************************************/
@@ -438,7 +443,7 @@ static void Prj_ShowFormToFilterByHidden (void)
       "eye.svg",	// Prj_VISIBL
      };
 
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartOnePrefSelector ();
    for (HidVis =  (Prj_HiddenVisibl_t) 0;
 	HidVis <= (Prj_HiddenVisibl_t) (Prj_NUM_HIDDEN_VISIBL - 1);
 	HidVis++)
@@ -460,7 +465,7 @@ static void Prj_ShowFormToFilterByHidden (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
   }
 
 /*****************************************************************************/

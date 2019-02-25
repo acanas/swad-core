@@ -40,6 +40,7 @@
 #include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_preference.h"
 #include "swad_role.h"
 #include "swad_survey.h"
 #include "swad_table.h"
@@ -98,7 +99,6 @@ static void Svy_PutIconsListSurveys (void);
 static void Svy_PutIconToCreateNewSvy (void);
 static void Svy_PutButtonToCreateNewSvy (void);
 static void Svy_PutParamsToCreateNewSvy (void);
-static void Svy_PutFormToSelectWhichGroupsToShow (void);
 static void Svy_ParamsWhichGroupsToShow (void);
 static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
                                bool ShowOnlyThisSvyComplete);
@@ -229,7 +229,11 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
-      Svy_PutFormToSelectWhichGroupsToShow ();
+     {
+      Pre_StartPrefsHead ();
+      Grp_ShowFormToSelWhichGrps (ActSeeAllSvy,Svy_ParamsWhichGroupsToShow);
+      Pre_EndPrefsHead ();
+     }
 
    if (Gbl.Svys.Num)
      {
@@ -375,15 +379,8 @@ static void Svy_PutParamsToCreateNewSvy (void)
   }
 
 /*****************************************************************************/
-/***************** Put form to select which groups to show *******************/
+/**************** Put params to select which groups to show ******************/
 /*****************************************************************************/
-
-static void Svy_PutFormToSelectWhichGroupsToShow (void)
-  {
-   fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
-   Grp_ShowFormToSelWhichGrps (ActSeeAllSvy,Svy_ParamsWhichGroupsToShow);
-   fprintf (Gbl.F.Out,"</div>");
-  }
 
 static void Svy_ParamsWhichGroupsToShow (void)
   {

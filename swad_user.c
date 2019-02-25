@@ -5859,7 +5859,8 @@ void Usr_FreeListOtherRecipients (void)
 
 void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
   {
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartPrefsHead ();
+   Pre_StartOnePrefSelector ();
 
    /***** Select Usr_LIST_AS_CLASS_PHOTO *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
@@ -5892,7 +5893,8 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
+   Pre_EndPrefsHead ();
   }
 
 /*****************************************************************************/

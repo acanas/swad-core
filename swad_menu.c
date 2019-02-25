@@ -411,7 +411,8 @@ void Mnu_PutIconsToSelectMenu (void)
 
    Box_StartBox (NULL,Txt_Menu,Mnu_PutIconsMenu,
                  Hlp_PROFILE_Preferences_menu,Box_NOT_CLOSABLE);
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartPrefsHead ();
+   Pre_StartOnePrefSelector ();
    for (Menu = (Mnu_Menu_t) 0;
 	Menu < Mnu_NUM_MENUS;
 	Menu++)
@@ -425,7 +426,8 @@ void Mnu_PutIconsToSelectMenu (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
+   Pre_EndPrefsHead ();
    Box_EndBox ();
   }
 

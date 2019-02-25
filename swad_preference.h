@@ -52,4 +52,9 @@ void Pre_ShowLeftCol (void);
 void Pre_ShowRightCol (void);
 unsigned Pre_GetParamSideCols (void);
 
+void Pre_StartPrefsHead (void);
+void Pre_EndPrefsHead (void);
+void Pre_StartOnePrefSelector (void);
+void Pre_EndOnePrefSelector (void);
+
 #endif

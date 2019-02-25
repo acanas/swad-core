@@ -41,6 +41,7 @@
 #include "swad_group.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_preference.h"
 #include "swad_role.h"
 #include "swad_table.h"
 #include "swad_test.h"
@@ -89,7 +90,6 @@ static void Gam_PutIconsListGames (void);
 static void Gam_PutIconToCreateNewGame (void);
 static void Gam_PutButtonToCreateNewGame (void);
 static void Gam_PutParamsToCreateNewGame (void);
-static void Gam_PutFormToSelectWhichGroupsToShow (void);
 static void Gam_ParamsWhichGroupsToShow (void);
 static void Gam_ShowOneGame (long GamCod,
                              bool ShowOnlyThisGame,
@@ -224,7 +224,11 @@ static void Gam_ListAllGames (void)
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
-      Gam_PutFormToSelectWhichGroupsToShow ();
+     {
+      Pre_StartPrefsHead ();
+      Grp_ShowFormToSelWhichGrps (ActSeeAllGam,Gam_ParamsWhichGroupsToShow);
+      Pre_EndPrefsHead ();
+     }
 
    if (Gbl.Games.Num)
      {
@@ -373,15 +377,8 @@ static void Gam_PutParamsToCreateNewGame (void)
   }
 
 /*****************************************************************************/
-/***************** Put form to select which groups to show *******************/
+/**************** Put params to select which groups to show ******************/
 /*****************************************************************************/
-
-static void Gam_PutFormToSelectWhichGroupsToShow (void)
-  {
-   fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
-   Grp_ShowFormToSelWhichGrps (ActSeeAllGam,Gam_ParamsWhichGroupsToShow);
-   fprintf (Gbl.F.Out,"</div>");
-  }
 
 static void Gam_ParamsWhichGroupsToShow (void)
   {

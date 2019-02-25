@@ -42,6 +42,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_preference.h"
 #include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_string.h"
@@ -157,9 +158,11 @@ void Agd_ShowMyAgenda (void)
 		 Hlp_PROFILE_Agenda,Box_NOT_CLOSABLE);
 
    /***** Put forms to choice which events to show *****/
+   Pre_StartPrefsHead ();
    Agd_ShowFormToSelPast__FutureEvents ();
    Agd_ShowFormToSelPrivatPublicEvents ();
    Agd_ShowFormToSelHiddenVisiblEvents ();
+   Pre_EndPrefsHead ();
 
    /***** Show the current events in the user's agenda *****/
    Agd_ShowEventsToday (Agd_MY_AGENDA_TODAY);
@@ -185,7 +188,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
       "calendar-plus.svg",	// Agd_FUTURE_EVENTS
      };
 
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartOnePrefSelector ();
    for (PstFut = Agd_PAST___EVENTS;
 	PstFut <= Agd_FUTURE_EVENTS;
 	PstFut++)
@@ -204,7 +207,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
   }
 
 /*****************************************************************************/
@@ -221,7 +224,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
       "unlock.svg",	// Agd_PUBLIC_EVENTS
      };
 
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartOnePrefSelector ();
    for (PrvPub = Agd_PRIVAT_EVENTS;
 	PrvPub <= Agd_PUBLIC_EVENTS;
 	PrvPub++)
@@ -240,7 +243,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
   }
 
 /*****************************************************************************/
@@ -257,7 +260,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
       "eye.svg",	// Agd_VISIBL_EVENTS
      };
 
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartOnePrefSelector ();
    for (HidVis = Agd_HIDDEN_EVENTS;
 	HidVis <= Agd_VISIBL_EVENTS;
 	HidVis++)
@@ -276,7 +279,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
   }
 
 /*****************************************************************************/

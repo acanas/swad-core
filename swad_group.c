@@ -5010,7 +5010,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;
 
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartOnePrefSelector ();
    for (WhichGrps = Grp_ONLY_MY_GROUPS;
 	WhichGrps <= Grp_ALL_GROUPS;
 	WhichGrps++)
@@ -5028,7 +5028,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
   }
 
 /*****************************************************************************/

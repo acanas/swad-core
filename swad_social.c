@@ -968,7 +968,9 @@ static void Soc_ShowTimeline (char *Query,
 				Query);
 
    /***** Start box *****/
-   Box_StartBox (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline,
+   // Box_StartBox (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline,
+   //               Hlp_SOCIAL_Timeline,Box_NOT_CLOSABLE);
+   Box_StartBox (NULL,Title,Soc_PutIconsTimeline,
                  Hlp_SOCIAL_Timeline,Box_NOT_CLOSABLE);
 
    /***** Put form to select users whom public activity is displayed *****/
@@ -1120,7 +1122,9 @@ static void Soc_PutFormWhichUsrs (void)
       "users.svg",	// Soc_USRS_ALL
      };
 
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   /***** Preference selector for which users *****/
+   Pre_StartPrefsHead ();
+   Pre_StartOnePrefSelector ();
    for (WhichUsrs = (Soc_WhichUsrs_t) 1;
 	WhichUsrs < Soc_NUM_WHICH_USRS;
 	WhichUsrs++)
@@ -1134,7 +1138,8 @@ static void Soc_PutFormWhichUsrs (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
+   Pre_EndPrefsHead ();
 
    /***** Show warning if I do not follow anyone *****/
    if (Gbl.Social.WhichUsrs == Soc_USRS_FOLLOWED)

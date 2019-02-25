@@ -41,6 +41,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_preference.h"
 #include "swad_string.h"
 #include "swad_table.h"
 
@@ -72,7 +73,6 @@ static bool Asg_CheckIfICanCreateAssignments (void);
 static void Asg_PutIconsListAssignments (void);
 static void Asg_PutIconToCreateNewAsg (void);
 static void Asg_PutButtonToCreateNewAsg (void);
-static void Asg_PutFormToSelectWhichGroupsToShow (void);
 static void Asg_ParamsWhichGroupsToShow (void);
 static void Asg_ShowOneAssignment (long AsgCod,bool PrintView);
 static void Asg_WriteAsgAuthor (struct Assignment *Asg);
@@ -146,7 +146,11 @@ static void Asg_ShowAllAssignments (void)
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
-      Asg_PutFormToSelectWhichGroupsToShow ();
+     {
+      Pre_StartPrefsHead ();
+      Grp_ShowFormToSelWhichGrps (ActSeeAsg,Asg_ParamsWhichGroupsToShow);
+      Pre_EndPrefsHead ();
+     }
 
    if (Gbl.Asgs.Num)
      {
@@ -291,15 +295,8 @@ static void Asg_PutButtonToCreateNewAsg (void)
   }
 
 /*****************************************************************************/
-/***************** Put form to select which groups to show *******************/
+/**************** Put params to select which groups to show ******************/
 /*****************************************************************************/
-
-static void Asg_PutFormToSelectWhichGroupsToShow (void)
-  {
-   fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
-   Grp_ShowFormToSelWhichGrps (ActSeeAsg,Asg_ParamsWhichGroupsToShow);
-   fprintf (Gbl.F.Out,"</div>");
-  }
 
 static void Asg_ParamsWhichGroupsToShow (void)
   {

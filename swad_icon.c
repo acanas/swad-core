@@ -117,7 +117,8 @@ void Ico_PutIconsToSelectIconSet (void)
 
    Box_StartBox (NULL,Txt_Icons,Ico_PutIconsIconSet,
                  Hlp_PROFILE_Preferences_icons,Box_NOT_CLOSABLE);
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartPrefsHead ();
+   Pre_StartOnePrefSelector ();
    for (IconSet = (Ico_IconSet_t) 0;
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
@@ -135,7 +136,8 @@ void Ico_PutIconsToSelectIconSet (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
+   Pre_EndPrefsHead ();
    Box_EndBox ();
   }
 

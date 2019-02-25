@@ -82,7 +82,9 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
 
    Box_StartBox (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek,
                  Hlp_PROFILE_Preferences_calendar,Box_NOT_CLOSABLE);
+   Pre_StartPrefsHead ();
    Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL);
+   Pre_EndPrefsHead ();
    Box_EndBox ();
   }
 
@@ -108,7 +110,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) ())
    unsigned FirstDayOfWeek;
    char Icon[32 + 1];
 
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartOnePrefSelector ();
    for (FirstDayOfWeek = 0;	// Monday
 	FirstDayOfWeek <= 6;	// Sunday
 	FirstDayOfWeek++)
@@ -131,7 +133,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) ())
 	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</div>");
         }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
   }
 
 /*****************************************************************************/
@@ -265,11 +267,15 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 			      Gbl.CurrentDeg.Deg.DegCod,
 			      Gbl.CurrentCrs.Crs.CrsCod);
 
-   /***** Draw several months *****/
-   /* Show form to change first day of week */
+   /***** Preference selector to change first day of week *****/
    if (!PrintView)
+     {
+      Pre_StartPrefsHead ();
       Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,NULL);
+      Pre_EndPrefsHead ();
+     }
 
+   /***** Draw several months *****/
    /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<div id=\"calendar\">"
 	              "</div>");

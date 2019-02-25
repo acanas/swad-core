@@ -235,7 +235,8 @@ static void Pre_PutIconsToSelectSideCols (void)
 
    Box_StartBox (NULL,Txt_Columns,Pre_PutIconsSideColumns,
                  Hlp_PROFILE_Preferences_columns,Box_NOT_CLOSABLE);
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   Pre_StartPrefsHead ();
+   Pre_StartOnePrefSelector ();
    for (SideCols = 0;
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
@@ -252,7 +253,8 @@ static void Pre_PutIconsToSelectSideCols (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</div>");
+   Pre_EndOnePrefSelector ();
+   Pre_EndPrefsHead ();
    Box_EndBox ();
   }
 
@@ -362,4 +364,37 @@ unsigned Pre_GetParamSideCols (void)
                                                0,
                                                Lay_SHOW_BOTH_COLUMNS,
                                                Cfg_DEFAULT_COLUMNS);
+  }
+
+/*****************************************************************************/
+/********** Head to select one or several preferences using icons ************/
+/*****************************************************************************/
+/*
+                +-- Container for several pref. selectors ---+
+                |  +One pref.selector+  +One pref.selector+  |
+                |  | +-----+ +-----+ |  | +-----+ +-----+ |  |
+                |  | |Icon | |Icon | |  | |Icon | |Icon | |  |
+                |  | |opt.A| |opt.B| |  | |opt.A| |opt.B| |  |
+                |  | +-----+ +-----+ |  | +-----+ +-----+ |  |
+                |  +-----------------+  +-----------------+  |
+                +--------------------------------------------+
+*/
+void Pre_StartPrefsHead (void)
+  {
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINERS\">");
+  }
+
+void Pre_EndPrefsHead (void)
+  {
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+void Pre_StartOnePrefSelector (void)
+  {
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+  }
+
+void Pre_EndOnePrefSelector (void)
+  {
+   fprintf (Gbl.F.Out,"</div>");
   }

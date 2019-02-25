@@ -2614,6 +2614,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TT_TUTO	{box-sizing:border-box; height:16px; background-color:#D6E9C3; border:solid 2px; border-color:#E8FCD3 #C2D4B1 #C2D4B1 #E8FCD3;}
 
 /********************************* Preference ********************************/
+
+.PREF_CONTAINERS
+	{
+	margin:0 auto;
+	}
 .PREF_CONTAINER
 	{
 	display:inline-block;

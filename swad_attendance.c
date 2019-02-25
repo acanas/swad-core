@@ -41,6 +41,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_preference.h"
 #include "swad_QR.h"
 #include "swad_table.h"
 
@@ -77,7 +78,6 @@ typedef enum
 /*****************************************************************************/
 
 static void Att_ShowAllAttEvents (void);
-static void Att_PutFormToSelectWhichGroupsToShow (void);
 static void Att_ParamsWhichGroupsToShow (void);
 static void Att_PutIconsInListOfAttEvents (void);
 static void Att_PutIconToCreateNewAttEvent (void);
@@ -227,7 +227,11 @@ static void Att_ShowAllAttEvents (void)
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
-      Att_PutFormToSelectWhichGroupsToShow ();
+     {
+      Pre_StartPrefsHead ();
+      Grp_ShowFormToSelWhichGrps (ActSeeAtt,Att_ParamsWhichGroupsToShow);
+      Pre_EndPrefsHead ();
+     }
 
    if (Gbl.AttEvents.Num)
      {
@@ -294,15 +298,8 @@ static void Att_ShowAllAttEvents (void)
   }
 
 /*****************************************************************************/
-/***************** Put form to select which groups to show *******************/
+/***************** Put params to select which groups to show *****************/
 /*****************************************************************************/
-
-static void Att_PutFormToSelectWhichGroupsToShow (void)
-  {
-   fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
-   Grp_ShowFormToSelWhichGrps (ActSeeAtt,Att_ParamsWhichGroupsToShow);
-   fprintf (Gbl.F.Out,"</div>");
-  }
 
 static void Att_ParamsWhichGroupsToShow (void)
   {
