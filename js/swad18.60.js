@@ -28,15 +28,9 @@ var Gbl_HTMLContent;
 // Global variable used to call SWAD via AJAX
 var ActionAJAX;
 
-// Global variables used in writeLocalClock()
-var secondsSince1970UTC;
-
-// Global variables used in writeClockConnected()
-var NumUsrsCon;
-var ListSeconds = [];
-var countClockConnected = 0;
-
+/*****************************************************************************/
 /*************** Write a date-time in client local time **********************/
+/*****************************************************************************/
 // id is the id of the HTML element in which date-time will be written
 // TimeUTC is the date-time to write in UTC UNIX time format
 // DateFormat:
@@ -155,7 +149,10 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 	document.getElementById(id).innerHTML = StrDate + StrHou + StrMin + StrSec;
 }
 
-// Set local date-time form fields from UTC time
+/*****************************************************************************/
+/************** Set local date-time form fields from UTC time ****************/
+/*****************************************************************************/
+
 function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 	var FormYea = document.getElementById(id+'Year'  );
 	var FormMon = document.getElementById(id+'Month' );
@@ -211,7 +208,10 @@ function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 	}
 }
 
-// Set UTC time from local date-time form fields 
+/*****************************************************************************/
+/************** Set UTC time from local date-time form fields ****************/
+/*****************************************************************************/
+
 function setUTCFromLocalDateTimeForm (id) {
 	var Seconds = 0;
 	var idSecond = document.getElementById(id+'Second');
@@ -228,6 +228,10 @@ function setUTCFromLocalDateTimeForm (id) {
 	document.getElementById(id+'TimeUTC').value = d.getTime() / 1000;
 }
 
+/*****************************************************************************/
+/******************* Set form params related to time zones *******************/
+/*****************************************************************************/
+
 // Set form param with time difference between UTC time and client local time, in minutes
 // For example, if your time zone is GMT+2, -120 will be returned
 function setTZ (id) {
@@ -237,20 +241,17 @@ function setTZ (id) {
 	FormTZ.value = d.getTimezoneOffset();
 }
 
-// Set form param with time difference between UTC time and client local time, in minutes
-// For example, if your time zone is GMT+2, -120 will be returned
+// Set form param with the name of the time zone
 function setTZname (id) {
 	var FormTZname = document.getElementById(id);
 	var tz = jstz.determine();		// Determines the time zone of the browser client
 	FormTZname.value = tz.name();	// Returns the name of the time zone eg "Europe/Berlin"
 }
 
-// Get number of days in a month
-function daysInMonth (month, year) {	//Month is 1 based
-	  return new Date(year, month, 0).getDate();	// 0 is the last day of previous month
-}
+/*****************************************************************************/
+/********* Adjust a date form correcting selector days in the month **********/
+/*****************************************************************************/
 
-// Adjust a date form correcting selector days in the month
 // The selector of days can start by 1, 2, 3... or by -, 1, 2, 3...
 function adjustDateForm (id) {
 	var FormYea = document.getElementById(id+'Year' );
@@ -290,6 +291,18 @@ function adjustDateForm (id) {
 	}
 }
 
+/*****************************************************************************/
+/*********************** Get number of days in a month ***********************/
+/*****************************************************************************/
+
+function daysInMonth (month, year) {	// Month is 1 based
+	  return new Date(year, month, 0).getDate();	// 0 is the last day of previous month
+}
+
+/*****************************************************************************/
+/****************** Set a date range form to a specific day ******************/
+/*****************************************************************************/
+
 // Set a date range form to yesterday
 function setDateToYesterday (idStart,idEnd) {
 	var d = new Date();
@@ -305,7 +318,6 @@ function setDateToToday (idStart,idEnd) {
 	setDateRange(idStart,idEnd,d);
 }
 
-// Set a date range form to a specific day
 function setDateRange (idStart,idEnd,d) {
 	var FormYea;
 	var Yea = d.getFullYear();
@@ -335,7 +347,10 @@ function setDateRange (idStart,idEnd,d) {
 	setHMSTo235959(idEnd);
 }
 
-// Set hour, minute and second in a form to 00:00:00
+/*****************************************************************************/
+/************ Set hour, minute and second in a form to 00:00:00 **************/
+/*****************************************************************************/
+
 function setHMSTo000000 (id) {
 	document.getElementById(id+'Hour'  ).options[0].selected = true;
 	document.getElementById(id+'Minute').options[0].selected = true;
@@ -343,7 +358,10 @@ function setHMSTo000000 (id) {
 	setUTCFromLocalDateTimeForm(id);
 }
 
-//Set hour, minute and second in a form to 23:59:59
+/*****************************************************************************/
+/************ Set hour, minute and second in a form to 23:59:59 **************/
+/*****************************************************************************/
+
 function setHMSTo235959 (id) {
 	document.getElementById(id+'Hour'  ).options[23].selected = true;
 	document.getElementById(id+'Minute').options[59].selected = true;
@@ -351,7 +369,13 @@ function setHMSTo235959 (id) {
 	setUTCFromLocalDateTimeForm(id);
 }
 
-// Write clock in client local time updated every minute
+/*****************************************************************************/
+/********** Write clock in client local time updated every minute ************/
+/*****************************************************************************/
+
+// Global variables used in writeLocalClock()
+var secondsSince1970UTC;
+
 function writeLocalClock () {
 	var d;
 	var Mon;
@@ -376,7 +400,12 @@ function writeLocalClock () {
 	document.getElementById('current_day_txt').innerHTML = Day;
 	document.getElementById('current_time').innerHTML = Hou + ':' + StrMin;
 }
-      
+
+// Global variables used in writeClockConnected()
+var NumUsrsCon;
+var ListSeconds = [];
+var countClockConnected = 0;
+   
 function writeClockConnected () {
 	var BoxClock;
 	var H;
@@ -416,7 +445,11 @@ function writeClockConnected () {
 	setTimeout('writeClockConnected()',1000);	// refresh after 1 second
 }
 
-// Automatic refresh of connected users using AJAX. This function must be called from time to time
+/*****************************************************************************/
+/************* Automatic refresh of connected users using AJAX ***************/
+/*****************************************************************************/
+
+// This function must be called from time to time
 var objXMLHttpReqCon = false;
 function refreshConnected () {
 	objXMLHttpReqCon = AJAXCreateObject();
@@ -430,78 +463,6 @@ function refreshConnected () {
 		objXMLHttpReqCon.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		objXMLHttpReqCon.send(RefreshParams);
 	}
-}
-
-// Automatic refresh of last clicks using AJAX. This function must be called from time to time
-var objXMLHttpReqLog = false;
-function refreshLastClicks () {
-	objXMLHttpReqLog = AJAXCreateObject();
-	if (objXMLHttpReqLog) {
-		var RefreshParams = RefreshParamNxtActLog + '&' +
-							RefreshParamIdSes + '&' +
-							RefreshParamCrsCod;
-
-		objXMLHttpReqLog.onreadystatechange = readLastClicksData;	// onreadystatechange must be lowercase
-		objXMLHttpReqLog.open('POST',ActionAJAX,true);
-		objXMLHttpReqLog.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		objXMLHttpReqLog.send(RefreshParams);
-	}
-}
-
-// Automatic refresh of new publishings in social timeline using AJAX. This function must be called from time to time
-var objXMLHttpReqSoc = false;
-function refreshNewTimeline () {
-	objXMLHttpReqSoc = AJAXCreateObject();
-	if (objXMLHttpReqSoc) {
-		var RefreshParams = RefreshParamNxtActNewPub + '&' +
-							RefreshParamIdSes + '&' +
-							RefreshParamWhichUsrs;
-
-		objXMLHttpReqSoc.onreadystatechange = readNewTimelineData;	// onreadystatechange must be lowercase
-		objXMLHttpReqSoc.open('POST',ActionAJAX,true);
-		objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		objXMLHttpReqSoc.send(RefreshParams);
-	}
-}
-
-// Refresh of old publishings in social timeline using AJAX. This function is called when user clicks in link
-var objXMLHttpReqSoc = false;
-function refreshOldTimeline () {
-	objXMLHttpReqSoc = AJAXCreateObject ();
-	if (objXMLHttpReqSoc) {
-		var RefreshParams = RefreshParamNxtActOldPub + '&' +
-							RefreshParamIdSes;
-		if (typeof RefreshParamUsr !== 'undefined') {
-			if (RefreshParamUsr.length)
-				RefreshParams += '&' + RefreshParamUsr;
-		}
-		if (typeof RefreshParamWhichUsrs !== 'undefined') {
-			if (RefreshParamWhichUsrs.length)
-				RefreshParams += '&' + RefreshParamWhichUsrs;
-		}
-
-		objXMLHttpReqSoc.onreadystatechange = readOldTimelineData;	// onreadystatechange must be lowercase
-		objXMLHttpReqSoc.open('POST',ActionAJAX,true);
-		objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		objXMLHttpReqSoc.send(RefreshParams);
-	}
-}
-
-// Create AJAX object	(try is unknown in earlier versions of Netscape, but works in IE5)
-function AJAXCreateObject () {
-	var obj = false;
-	if (window.XMLHttpRequest) {	// Mozilla, Safari,...
-		obj = new XMLHttpRequest();
-	} else if (window.ActiveXObject) {	// IE
-		try {
-			obj = new ActiveXObject('Msxml2.XMLHTTP');
-		} catch (e) {
-			try {
-				obj = new ActiveXObject('Microsoft.XMLHTTP');
-			} catch (e) {}
-		}
-	}
-	return obj;
 }
 
 // Receives and show connected users data
@@ -551,7 +512,26 @@ function readConnUsrsData () {
 	}
 }
 
-// Receives and show last clicks data
+/*****************************************************************************/
+/**************** Automatic refresh of last clicks using AJAX ****************/
+/*****************************************************************************/
+
+//  This function must be called from time to time
+var objXMLHttpReqLog = false;
+function refreshLastClicks () {
+	objXMLHttpReqLog = AJAXCreateObject();
+	if (objXMLHttpReqLog) {
+		var RefreshParams = RefreshParamNxtActLog + '&' +
+							RefreshParamIdSes + '&' +
+							RefreshParamCrsCod;
+
+		objXMLHttpReqLog.onreadystatechange = readLastClicksData;	// onreadystatechange must be lowercase
+		objXMLHttpReqLog.open('POST',ActionAJAX,true);
+		objXMLHttpReqLog.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqLog.send(RefreshParams);
+	}
+}
+
 function readLastClicksData () {
 	if (objXMLHttpReqLog.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqLog.status == 200) {
@@ -566,6 +546,26 @@ function readLastClicksData () {
 			if (delay > 200)	// If refresh slower than 1 time each 0.2 seconds, do refresh; else abort
 				setTimeout('refreshLastClicks()',delay);
 		}
+	}
+}
+
+/*****************************************************************************/
+/**** Automatic refresh of new publishings in social timeline using AJAX *****/
+/*****************************************************************************/
+
+// This function must be called from time to time
+var objXMLHttpReqSoc = false;
+function refreshNewTimeline () {
+	objXMLHttpReqSoc = AJAXCreateObject();
+	if (objXMLHttpReqSoc) {
+		var RefreshParams = RefreshParamNxtActNewPub + '&' +
+							RefreshParamIdSes + '&' +
+							RefreshParamWhichUsrs;
+
+		objXMLHttpReqSoc.onreadystatechange = readNewTimelineData;	// onreadystatechange must be lowercase
+		objXMLHttpReqSoc.open('POST',ActionAJAX,true);
+		objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqSoc.send(RefreshParams);
 	}
 }
 
@@ -612,6 +612,58 @@ function readNewTimelineData () {
 	}
 }
 
+/*****************************************************************************/
+/* View new publishing in timeline by moving new timeline to top of timeline */
+/*****************************************************************************/
+
+function moveNewTimelineToTimeline () {
+	// Move all the LI elements in UL 'new_timeline_list' to the top of UL 'timeline_list'
+	var newTimeline = document.getElementById('new_timeline_list');
+	var countNewTimeline = newTimeline.childNodes.length;
+	if (countNewTimeline) {
+		var timeline = document.getElementById("timeline_list");
+		for (var i=0; i<countNewTimeline; i++) {
+			timeline.insertBefore(newTimeline.lastChild, timeline.childNodes[0]);
+			timeline.childNodes[0].className += " SOCIAL_NEW_PUB";
+		}
+    }
+
+	// Reset number of new posts after moving
+	var viewNewPostsCount = document.getElementById('view_new_posts_count');
+	viewNewPostsCount.innerHTML = 0;
+
+	// Hide link to view new posts after moving
+	var viewNewPostsContainer = document.getElementById('view_new_posts_container');
+	viewNewPostsContainer.style.display = 'none';
+}
+
+/*****************************************************************************/
+/********* Refresh of old publishings in social timeline using AJAX **********/
+/*****************************************************************************/
+
+// This function is called when user clicks in link
+var objXMLHttpReqSoc = false;
+function refreshOldTimeline () {
+	objXMLHttpReqSoc = AJAXCreateObject ();
+	if (objXMLHttpReqSoc) {
+		var RefreshParams = RefreshParamNxtActOldPub + '&' +
+							RefreshParamIdSes;
+		if (typeof RefreshParamUsr !== 'undefined') {
+			if (RefreshParamUsr.length)
+				RefreshParams += '&' + RefreshParamUsr;
+		}
+		if (typeof RefreshParamWhichUsrs !== 'undefined') {
+			if (RefreshParamWhichUsrs.length)
+				RefreshParams += '&' + RefreshParamWhichUsrs;
+		}
+
+		objXMLHttpReqSoc.onreadystatechange = readOldTimelineData;	// onreadystatechange must be lowercase
+		objXMLHttpReqSoc.open('POST',ActionAJAX,true);
+		objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqSoc.send(RefreshParams);
+	}
+}
+
 // Receives and show old social timeline data
 function readOldTimelineData () {
 	if (objXMLHttpReqSoc.readyState == 4) {	// Check if data have been received
@@ -651,29 +703,10 @@ function readOldTimelineData () {
 	}
 }
 
-// Move new timeline to top of timeline
-function moveNewTimelineToTimeline () {
-	// Move all the LI elements in UL 'new_timeline_list' to the top of UL 'timeline_list'
-	var newTimeline = document.getElementById('new_timeline_list');
-	var countNewTimeline = newTimeline.childNodes.length;
-	if (countNewTimeline) {
-		var timeline = document.getElementById("timeline_list");
-		for (var i=0; i<countNewTimeline; i++) {
-			timeline.insertBefore(newTimeline.lastChild, timeline.childNodes[0]);
-			timeline.childNodes[0].className += " SOCIAL_NEW_PUB";
-		}
-    }
+/*****************************************************************************/
+/********** Scripts got via AJAX are not executed ==> execute them ***********/
+/*****************************************************************************/
 
-	// Reset number of new posts after moving
-	var viewNewPostsCount = document.getElementById('view_new_posts_count');
-	viewNewPostsCount.innerHTML = 0;
-
-	// Hide link to view new posts after moving
-	var viewNewPostsContainer = document.getElementById('view_new_posts_container');
-	viewNewPostsContainer.style.display = 'none';
-}
-
-// Scripts got via AJAX are not executed ==> execute them
 function evalScriptsInElem (elem) {
 	var scrs = elem.getElementsByTagName("script");
 	var s;
@@ -683,64 +716,63 @@ function evalScriptsInElem (elem) {
 	}
 }
 
-// Expand textarea when focus. Called from a textarea onfocus
+/*****************************************************************************/
+/********** Update fav or share area in social timeline using AJAX ***********/
+/*****************************************************************************/
+
+// This function is called when user submit a form just inside a parent div
+function updateParentDiv (elem,Params) {
+    var objXMLHttp = false;
+	var idDiv = elem.parentNode.id;
+
+	objXMLHttp = AJAXCreateObject ();
+	if (objXMLHttp) {
+		/* Send request to server */
+		objXMLHttp.onreadystatechange = function() {	// onreadystatechange must be lowercase
+			if (objXMLHttp.readyState == 4) {			// Check if data have been received
+				if (objXMLHttp.status == 200)
+					if (idDiv) {
+						var div = document.getElementById(idDiv);		// Access to DIV
+						if (div)
+							div.innerHTML = objXMLHttp.responseText;	// Update DIV content
+					}
+			}
+		};
+		objXMLHttp.open('POST',ActionAJAX,true);
+		objXMLHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttp.send(Params);
+	}
+}
+
+/*****************************************************************************/
+/*********************** Expand textarea when focus **************************/
+/*****************************************************************************/
+
+// Called from a textarea onfocus
 function expandTextarea (textareaElem,idButton,rows) {
 	textareaElem.rows = rows;
 	document.getElementById(idButton).style.display = '';
 }
 
 /*****************************************************************************/
-/********** Update fav or share area in social timeline using AJAX ***********/
+/**************************** Create AJAX object *****************************/
 /*****************************************************************************/
 
-var objXMLHttpReqFavShaSoc = false;
-var idDivFavSha = null;
-
-// This function is called when user clicks in icon to fav/unfav in timeline
-function refreshFavSha (elem,Params) {
-	idDivFavSha = elem.parentNode.id;
-
-	objXMLHttpReqFavShaSoc = AJAXCreateObject ();
-	if (objXMLHttpReqFavShaSoc) {
-		/* Send request to server */
-		objXMLHttpReqFavShaSoc.onreadystatechange = readAndUpdateFavSha;	// onreadystatechange must be lowercase
-		objXMLHttpReqFavShaSoc.open('POST',ActionAJAX,true);
-		objXMLHttpReqFavShaSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		objXMLHttpReqFavShaSoc.send(Params);
-	}
-}
-
-// Receives and shows fav area: icon and users who have faved a social note or comment in timeline
-function readAndUpdateFavSha () {
-	if (objXMLHttpReqFavShaSoc.readyState == 4) {	// Check if data have been received
-		if (objXMLHttpReqFavShaSoc.status == 200)
-			if (idDivFavSha) {
-				var divFavSha = document.getElementById(idDivFavSha);				// Access to DIV
-				if (divFavSha)
-					divFavSha.innerHTML = objXMLHttpReqFavShaSoc.responseText;	// Update fav area DIV
-			}
-	}
-}
-
-/*****************************************************************************/
-/*************************** Read last clicks data ***************************/
-/*****************************************************************************/
-
-function readLastClicksData () {
-	if (objXMLHttpReqLog.readyState == 4) {	// Check if data have been received
-		if (objXMLHttpReqLog.status == 200) {
-			var endOfDelay = objXMLHttpReqLog.responseText.indexOf('|',0);	// Get separator position
-
-			var delay = parseInt(objXMLHttpReqLog.responseText.substring(0,endOfDelay));	// Get refresh delay
-			var htmlLastClicks = objXMLHttpReqLog.responseText.substring(endOfDelay + 1);	// Get HTML code for last clicks
-
-			var divLastClicks = document.getElementById('lastclicks');			// Access to last click DIV
-			if (divLastClicks)
-				divLastClicks.innerHTML = htmlLastClicks;				// Update global connected DIV
-			if (delay > 200)	// If refresh slower than 1 time each 0.2 seconds, do refresh; else abort
-				setTimeout('refreshLastClicks()',delay);
+// try is unknown in earlier versions of Netscape, but works in IE5
+function AJAXCreateObject () {
+	var obj = false;
+	if (window.XMLHttpRequest) {	// Mozilla, Safari,...
+		obj = new XMLHttpRequest();
+	} else if (window.ActiveXObject) {	// IE
+		try {
+			obj = new ActiveXObject('Msxml2.XMLHTTP');
+		} catch (e) {
+			try {
+				obj = new ActiveXObject('Microsoft.XMLHTTP');
+			} catch (e) {}
 		}
 	}
+	return obj;
 }
 
 /*****************************************************************************/
@@ -776,7 +808,10 @@ function toggleDisplay (elementID) {
 	stl.display = (stl.display === 'none') ? '' : 'none';
 }
 
-// Zoom a user's photograph
+/*****************************************************************************/
+/************************ Zoom a user's photograph ***************************/
+/*****************************************************************************/
+
 // idCaption must be the id of a hidden div with the caption in innerHTML
 // (this allows showing &#39; and &quot;)
 function zoom (img,urlPhoto,idCaption) {
@@ -814,6 +849,10 @@ function noZoom () {
 	document.getElementById('zoomLyr').style.left = xPos + 'px';
 	document.getElementById('zoomLyr').style.top = yPos + 'px';
 }
+
+/*****************************************************************************/
+/****************** Related to radio and checkbox elements *******************/
+/*****************************************************************************/
 
 // Select or unselect a radio element in a form
 function selectUnselectRadio (radio,groupRadios,numRadiosInGroup){
@@ -857,14 +896,18 @@ function uncheckChildren (MainCheckbox, GroupCheckboxes) {
 			if (Formul.elements[i].name == GroupCheckboxes) Formul.elements[i].checked = false;
 }
 
-// Change text of a test descriptor
+/*****************************************************************************/
+/******************************* Related to tests ****************************/
+/*****************************************************************************/
+
+// Change text of a test tag
 function changeTxtTag (NumTag) {
 	var Sel = document.getElementById('SelDesc' + NumTag);
 
 	document.getElementById('TagTxt' + NumTag).value = Sel.options[Sel.selectedIndex].value;
 }
 
-// Change selectors of test descriptors
+// Change selectors of test tags
 function changeSelTag (NumTag) {
 	var Sel = document.getElementById('SelDesc'+NumTag);
 	var Txt = document.getElementById('TagTxt' +NumTag);
@@ -1006,7 +1049,10 @@ function enableDisableImgAns (elem, isDisabled) {
 			elem.disabled = isDisabled;
 }
 
-// Selection of statistics of current course ****/
+/*****************************************************************************/
+/********** Selection of statistics about hits in current course *************/
+/*****************************************************************************/
+
 function enableDetailedClicks () {
 	document.getElementById('CountType').disabled = true;
 	document.getElementById('GroupedBy').disabled = true;

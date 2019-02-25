@@ -1077,7 +1077,7 @@ static void Soc_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
    /* Form with icon */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
+      if (asprintf (&OnSubmit,"updateParentDiv(this,"
 			      "'act=%ld&ses=%s&%s&OtherUsrCod=%s');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActionUsr),
@@ -1089,7 +1089,7 @@ static void Soc_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
      }
    else
      {
-      if (asprintf (&OnSubmit,"refreshFavSha(this,"
+      if (asprintf (&OnSubmit,"updateParentDiv(this,"
 			      "'act=%ld&ses=%s&%s');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActionGbl),
@@ -1349,7 +1349,7 @@ static void Soc_PutLinkToViewNewPublishings (void)
 	              " class=\"SOCIAL_PUB VERY_LIGHT_BLUE\""
 	              " style=\"display:none;\">"
                       "<a href=\"\" class=\"%s\""
-                      " onclick=\"moveNewTimelineToTimeline();return false;\" />"
+                      " onclick=\"moveNewTimelineToTimeline(); return false;\" />"
                       "%s (<span id=\"view_new_posts_count\">0</span>)"
 	              "</a>"
 	              "</div>",
