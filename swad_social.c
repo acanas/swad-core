@@ -84,8 +84,8 @@ typedef enum
 // - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
 #define Soc_IMAGE_SAVED_MAX_WIDTH	768
 #define Soc_IMAGE_SAVED_MAX_HEIGHT	512
-#define Soc_IMAGE_SAVED_QUALITY		 50	// 1 to 100
-// in social posts, the quality is low in order to speed up the loading of images
+#define Soc_IMAGE_SAVED_QUALITY		 75	// 1 to 100
+// in social posts, the quality should not be high in order to speed up the loading of images
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
@@ -989,14 +989,14 @@ static void Soc_ShowTimeline (char *Query,
       Soc_PutLinkToViewNewPublishings ();
 
       /* Hidden list where insert just received (not visible) publishings via AJAX */
-      fprintf (Gbl.F.Out,"<ul id=\"just_now_timeline_list\" class=\"TIMELINE_LIST\"></ul>");
+      fprintf (Gbl.F.Out,"<ul id=\"just_now_timeline_list\" class=\"TL_LIST\"></ul>");
 
       /* Hidden list where insert new (not visible) publishings via AJAX */
-      fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\" class=\"TIMELINE_LIST\"></ul>");
+      fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\" class=\"TL_LIST\"></ul>");
      }
 
    /***** List recent publishings in timeline *****/
-   fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"TIMELINE_LIST\">");
+   fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"TL_LIST\">");
 
    for (NumPub = 0, SocPub.PubCod = 0;
 	NumPub < NumPubsGot;
@@ -1030,7 +1030,7 @@ static void Soc_ShowTimeline (char *Query,
       Soc_PutLinkToViewOldPublishings ();
 
       /***** Hidden list where insert old publishings via AJAX *****/
-      fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\" class=\"TIMELINE_LIST\"></ul>");
+      fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\" class=\"TL_LIST\"></ul>");
      }
 
    /***** End box *****/
@@ -1352,7 +1352,7 @@ static void Soc_PutLinkToViewNewPublishings (void)
    /***** Link to view (show hidden) new publishings *****/
    // div is hidden. When new posts arrive to the client via AJAX, div is shown
    fprintf (Gbl.F.Out,"<div id=\"view_new_posts_container\""
-	              " class=\"SOCIAL_PUB SOCIAL_SEP VERY_LIGHT_BLUE\""
+	              " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\""
 	              " style=\"display:none;\">"
                       "<a href=\"\" class=\"%s\""
                       " onclick=\"moveNewTimelineToTimeline(); return false;\" />"
@@ -1374,7 +1374,7 @@ static void Soc_PutLinkToViewOldPublishings (void)
 
    /***** Animated link to view old publishings *****/
    fprintf (Gbl.F.Out,"<div id=\"view_old_posts_container\""
-	              " class=\"SOCIAL_PUB SOCIAL_SEP VERY_LIGHT_BLUE\">"
+	              " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\">"
                       "<a href=\"\" class=\"%s\" onclick=\""
    		      "document.getElementById('get_old_timeline').style.display='none';"	// Icon to be hidden on click
 		      "document.getElementById('getting_old_timeline').style.display='';"	// Icon to be shown on click
@@ -1434,15 +1434,15 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
      {
       Box_StartBox (NULL,NULL,NULL,
                     NULL,Box_CLOSABLE);
-      fprintf (Gbl.F.Out,"<ul class=\"TIMELINE_LIST\">");
+      fprintf (Gbl.F.Out,"<ul class=\"TL_LIST\">");
      }
 
    /***** Start list item *****/
-   fprintf (Gbl.F.Out,"<li class=\"SOCIAL_PUB");
+   fprintf (Gbl.F.Out,"<li class=\"TL_WIDTH");
    if (!ShowNoteAlone)
-      fprintf (Gbl.F.Out," SOCIAL_SEP");
+      fprintf (Gbl.F.Out," TL_SEP");
    if (Highlight)
-      fprintf (Gbl.F.Out," SOCIAL_NEW_PUB");
+      fprintf (Gbl.F.Out," TL_NEW_PUB");
    fprintf (Gbl.F.Out,"\">");
 
    if (SocNot->NotCod   <= 0 ||
@@ -1480,7 +1480,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	}
 
       /***** Left: write author's photo *****/
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_LEFT_PHOTO\">");
+      fprintf (Gbl.F.Out,"<div class=\"TL_LEFT_PHOTO\">");
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
@@ -1488,7 +1488,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Right: author's name, time, summary and buttons *****/
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_RIGHT_CONTAINER\">");
+      fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_CONTAINER TL_RIGHT_WIDTH\">");
 
       /* Write author's full name and nickname */
       Soc_WriteAuthorNote (&UsrDat);
@@ -1592,7 +1592,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       /* End of right part */
       fprintf (Gbl.F.Out,"</div>");
 
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_BOTTOM_LEFT\">");
+      fprintf (Gbl.F.Out,"<div class=\"TL_BOTTOM_LEFT\">");
 
       /* Create unique id for new comment */
       Frm_SetUniqueId (IdNewComment);
@@ -1609,8 +1609,8 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 
       fprintf (Gbl.F.Out,"</div>");
 
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_BOTTOM_RIGHT\">"
-	                 "<div class=\"SOCIAL_ICOS_FAV_SHA_REM\">");
+      fprintf (Gbl.F.Out,"<div class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\">"
+	                 "<div class=\"TL_ICO_FAV_SHA_REM\">");
 
       /* Put icon to mark this social note as favourite */
       if (SocNot->Unavailable ||	// Unavailable social notes can not be favourited
@@ -1624,7 +1624,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       else				// Available and I am not the author
 	{
 	 fprintf (Gbl.F.Out,"<div id=\"fav_not_%s_%u\""
-	                    " class=\"SOCIAL_ICO_FAV\">",
+	                    " class=\"TL_ICO_FAV\">",
 	          Gbl.UniqueNameEncrypted,NumDiv);
 	 if (IAmAFaverOfThisSocNot)	// I have favourited this social note
 	    /* Put icon to unfav this publishing and list of users */
@@ -1647,7 +1647,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       else				// Available and I am not the author
         {
 	 fprintf (Gbl.F.Out,"<div id=\"sha_not_%s_%u\""
-			    " class=\"SOCIAL_ICO_SHARE\">",
+			    " class=\"TL_ICO_SHA\">",
 		  Gbl.UniqueNameEncrypted,NumDiv);
 	 if (IAmASharerOfThisSocNot)	// I am a sharer of this social note
 	    /* Put icon to unshare this publishing and list of users */
@@ -1712,14 +1712,15 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
       UsrDat.UsrCod = UsrCod;
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Really we only need EncryptedUsrCod and FullName
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TOP_CONTAINER SOCIAL_TOP_PUBLISHER\">");
+	 fprintf (Gbl.F.Out,"<div class=\"TL_TOP_CONTAINER"
+	                    " TL_TOP_PUBLISHER TL_WIDTH\">");
 
 	 /***** Show user's name inside form to go to user's public profile *****/
 	 Frm_StartFormUnique (ActSeeOthPubPrf);
 	 Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	 Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 					   Txt_Another_user_s_profile,
-				   "SOCIAL_TOP_PUBLISHER");
+				   "TL_TOP_PUBLISHER");
 	 fprintf (Gbl.F.Out,"%s</a>",UsrDat.FullName);
 	 Frm_EndForm ();
 
@@ -1744,7 +1745,7 @@ static void Soc_WriteAuthorNote (const struct UsrData *UsrDat)
    extern const char *Txt_Another_user_s_profile;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">");
+   fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\">");
 
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
@@ -1781,7 +1782,7 @@ static void Soc_WriteDateTime (time_t TimeUTC)
    Frm_SetUniqueId (IdDateTime);
 
    /***** Container where the date-time is written *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"SOCIAL_RIGHT_TIME DAT_LIGHT\">"
+   fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"TL_RIGHT_TIME DAT_LIGHT\">"
 	              "</div>",
             IdDateTime);
 
@@ -1839,13 +1840,14 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    /***** Write content *****/
    if (Content[0])
      {
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TXT\">");
+      fprintf (Gbl.F.Out,"<div class=\"TL_TXT\">");
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
       fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Show image *****/
-   Img_ShowImage (&Image,"SOCIAL_POST_IMG_CONTAINER","SOCIAL_POST_IMG");
+   Img_ShowImage (&Image,"TL_POST_IMG_CONTAINER TL_RIGHT_WIDTH",
+	                 "TL_POST_IMG TL_RIGHT_WIDTH");
 
    /***** Free image *****/
    Img_ImageDestructor (&Image);
@@ -2302,11 +2304,11 @@ static void Soc_PutFormToWriteNewPost (void)
    char PhotoURL[PATH_MAX + 1];
 
    /***** Start list *****/
-   fprintf (Gbl.F.Out,"<ul class=\"TIMELINE_LIST\">"
-                      "<li class=\"SOCIAL_PUB\">");
+   fprintf (Gbl.F.Out,"<ul class=\"TL_LIST\">"
+                      "<li class=\"TL_WIDTH\">");
 
    /***** Left: write author's photo (my photo) *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_LEFT_PHOTO\">");
+   fprintf (Gbl.F.Out,"<div class=\"TL_LEFT_PHOTO\">");
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
 						     NULL,
@@ -2314,10 +2316,10 @@ static void Soc_PutFormToWriteNewPost (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Right: author's name, time, summary and buttons *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_RIGHT_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_CONTAINER TL_RIGHT_WIDTH\">");
 
    /* Write author's full name and nickname */
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
+   fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\">"
 		      "<span class=\"DAT_N_BOLD\">%s</span>"
 		      "<span class=\"DAT_LIGHT\"> @%s</span>"
 		      "</div>",
@@ -2325,14 +2327,15 @@ static void Soc_PutFormToWriteNewPost (void)
 
    /***** Form to write the post *****/
    /* Start container */
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_FORM_NEW_POST\">");
+   fprintf (Gbl.F.Out,"<div class=\"TL_FORM_NEW_POST TL_RIGHT_WIDTH\">");
 
    /* Start form to write the post */
    Soc_FormStart (ActRcvSocPstGbl,ActRcvSocPstUsr);
 
    /* Textarea and button */
    Soc_PutTextarea (Txt_New_SOCIAL_post,
-                    "SOCIAL_TEXTAREA_POST","SOCIAL_POST_IMG_TIT_URL");
+                    "TL_POST_TEXTAREA TL_RIGHT_WIDTH",
+		    "TL_POST_IMG_TIT_URL TL_POST_IMG_WIDTH");
 
    /* End form */
    Frm_EndForm ();
@@ -2496,7 +2499,7 @@ static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Frm_MAX_BY
    extern const char *Txt_Comment;
 
    /***** Link to toggle on/off the form to comment a social note *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_COMMENT ICO_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"TL_ICO_COMMENT ICO_HIGHLIGHT\">"
                       "<a href=\"\""
                       " onclick=\"toggleDisplay('%s');return false;\" />"
                       "<img src=\"%s/edit.svg\""
@@ -2518,7 +2521,7 @@ static void Soc_PutIconCommentDisabled (void)
    extern const char *Txt_Comment;
 
    /***** Disabled icon to comment a social note *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_COMMENT_DISABLED\">"
+   fprintf (Gbl.F.Out,"<div class=\"TL_ICO_COMMENT_DISABLED\">"
  		      "<img src=\"%s/edit.svg\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO16x16\" />"
@@ -2541,12 +2544,12 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\""
-		      " class=\"SOCIAL_FORM_NEW_COMMENT\""
+		      " class=\"TL_FORM_NEW_COMMENT TL_RIGHT_WIDTH\""
 		      " style=\"display:none;\">",
 	    IdNewComment);
 
    /***** Left: write author's photo (my photo) *****/
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
+   fprintf (Gbl.F.Out,"<div class=\"TL_COMMENT_PHOTO\">");
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
 					             NULL,
@@ -2555,7 +2558,7 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
 
    /***** Right: form to write the comment *****/
    /* Start right container */
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"TL_COMMENT_CONTAINER TL_COMMENT_WIDTH\">");
 
    /* Start form to write the post */
    Soc_FormStart (ActRcvSocComGbl,ActRcvSocComUsr);
@@ -2563,7 +2566,8 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
 
    /* Textarea and button */
    Soc_PutTextarea (Txt_New_SOCIAL_comment,
-                    "SOCIAL_TEXTAREA_COMMENT","SOCIAL_COMMENT_IMG_TIT_URL");
+                    "TL_COMMENT_TEXTAREA TL_COMMENT_WIDTH",
+		    "TL_COMMENT_IMG_TIT_URL TL_COMMENT_WIDTH");
 
    /* End form */
    Frm_EndForm ();
@@ -2685,16 +2689,16 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       /***** Write sharer/commenter if distinct to author *****/
       Soc_WriteTopMessage (TopMessage,UsrCod);
 
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_LEFT_PHOTO\">"
+      fprintf (Gbl.F.Out,"<div class=\"TL_LEFT_PHOTO\">"
                          "</div>"
-                         "<div class=\"SOCIAL_NOTE_RIGHT_CONTAINER\">"
+                         "<div class=\"TL_RIGHT_CONTAINER TL_RIGHT_WIDTH\">"
                          "<ul class=\"LIST_LEFT\">");
      }
 
    /***** Start list item *****/
    fprintf (Gbl.F.Out,"<li");
    if (!ShowCommentAlone)
-      fprintf (Gbl.F.Out," class=\"SOCIAL_COMMENT\"");
+      fprintf (Gbl.F.Out," class=\"TL_COMMENT\"");
    fprintf (Gbl.F.Out,">");
 
    if (SocCom->PubCod <= 0 ||
@@ -2714,7 +2718,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
 							      Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Left: write author's photo *****/
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
+      fprintf (Gbl.F.Out,"<div class=\"TL_COMMENT_PHOTO\">");
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
@@ -2722,7 +2726,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Right: author's name, time, content, image and buttons *****/
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
+      fprintf (Gbl.F.Out,"<div class=\"TL_COMMENT_CONTAINER TL_COMMENT_WIDTH\">");
 
       /* Write author's full name and nickname */
       Soc_WriteAuthorComment (&UsrDat);
@@ -2731,12 +2735,13 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       Soc_WriteDateTime (SocCom->DateTimeUTC);
 
       /* Write content of the social comment */
-      fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TXT\">");
+      fprintf (Gbl.F.Out,"<div class=\"TL_TXT\">");
       Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show image */
-      Img_ShowImage (&SocCom->Image,"SOCIAL_COMMENT_IMG_CONTAINER","SOCIAL_COMMENT_IMG");
+      Img_ShowImage (&SocCom->Image,"TL_COMMENT_IMG_CONTAINER TL_COMMENT_WIDTH",
+	                            "TL_COMMENT_IMG TL_COMMENT_WIDTH");
 
       /* Put icon to mark this social comment as favourite */
       if (IAmTheAuthor)			// I am the author
@@ -2749,7 +2754,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       else				// I am not the author
 	{
 	 fprintf (Gbl.F.Out,"<div id=\"fav_com_%s_%u\""
-	                    " class=\"SOCIAL_ICO_FAV\">",
+	                    " class=\"TL_ICO_FAV\">",
 	          Gbl.UniqueNameEncrypted,NumDiv);
 	 if (IAmAFaverOfThisSocCom)	// I have favourited this social comment
 	    /* Put icon to unfav this publishing and list of users */
@@ -2774,7 +2779,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
    if (ShowCommentAlone)
      {
       fprintf (Gbl.F.Out,"</ul>"
-                         "</div>");	// SOCIAL_NOTE_RIGHT_CONTAINER
+                         "</div>");
       Box_EndBox ();
      }
   }
@@ -2790,7 +2795,7 @@ static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
    extern const char *Txt_Another_user_s_profile;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
-   fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">");
+   fprintf (Gbl.F.Out,"<div class=\"TL_COMMENT_AUTHOR TL_COMMENT_AUTHOR_WIDTH\">");
 
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
@@ -2825,7 +2830,7 @@ static void Soc_PutFormToRemoveComment (long PubCod)
    /***** Form to remove social publishing *****/
    Soc_FormStart (ActReqRemSocComGbl,ActReqRemSocComUsr);
    Soc_PutHiddenParamPubCod (PubCod);
-   Ico_PutDivIconLink ("SOCIAL_ICO_REMOVE",
+   Ico_PutDivIconLink ("TL_ICO_REM",
 		       "trash.svg",Txt_Remove);
    Frm_EndForm ();
   }
@@ -2848,7 +2853,7 @@ static void Soc_PutDisabledIconShare (unsigned NumShared)
                 Lay_MAX_BYTES_TITLE);
 
    /***** Disabled icon to share *****/
-   Ico_PutDivIcon ("SOCIAL_ICO_SHARE_DISABLED",
+   Ico_PutDivIcon ("TL_ICO_SHA_DISABLED",
 		   "share-alt.svg",Gbl.Title);
   }
 
@@ -2870,7 +2875,7 @@ static void Soc_PutDisabledIconFav (unsigned NumFavs)
                 Lay_MAX_BYTES_TITLE);
 
    /***** Disabled icon to mark as favourite *****/
-   Ico_PutDivIcon ("SOCIAL_ICO_FAV_DISABLED",
+   Ico_PutDivIcon ("TL_ICO_FAV_DISABLED",
 		   "heart.svg",Gbl.Title);
   }
 
@@ -3000,7 +3005,7 @@ static void Soc_PutFormToRemoveSocialPublishing (long NotCod)
    /***** Form to remove social publishing *****/
    Soc_FormStart (ActReqRemSocPubGbl,ActReqRemSocPubUsr);
    Soc_PutHiddenParamNotCod (NotCod);
-   Ico_PutDivIconLink ("SOCIAL_ICO_REMOVE",
+   Ico_PutDivIconLink ("TL_ICO_REM",
 		       "trash.svg",Txt_Remove);
    Frm_EndForm ();
   }
@@ -4491,7 +4496,7 @@ static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
    char PhotoURL[PATH_MAX + 1];
 
    /***** Show number of users who have marked this social note as favourite *****/
-   fprintf (Gbl.F.Out,"<span class=\"SOCIAL_NUM_SHARES_FAVS\"> %u</span>",
+   fprintf (Gbl.F.Out,"<span class=\"TL_NUM_SHA_FAV\"> %u</span>",
             NumUsrs);
 
    if (NumUsrs)
@@ -4516,7 +4521,7 @@ static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 	    /***** Get user's data and show user's photo *****/
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
 	      {
-               fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">");
+               fprintf (Gbl.F.Out,"<div class=\"TL_SHARER\">");
 	       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 	                                             NULL,
@@ -4532,7 +4537,7 @@ static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 	}
 
       if (NumUsrs > NumUsrsShown)
-	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">"
+	 fprintf (Gbl.F.Out,"<div class=\"TL_SHARER\">"
 	                    "<img src=\"%s/ellipsis-h.svg\""
 			    " alt=\"%u\" title=\"%u\""
 			    " class=\"ICO16x16\" />"

@@ -624,7 +624,7 @@ function moveNewTimelineToTimeline () {
 		var timeline = document.getElementById("timeline_list");
 		for (var i=0; i<countNewTimeline; i++) {
 			timeline.insertBefore(newTimeline.lastChild, timeline.childNodes[0]);
-			timeline.childNodes[0].className += " SOCIAL_NEW_PUB";
+			timeline.childNodes[0].className += " TL_NEW_PUB";
 		}
     }
 

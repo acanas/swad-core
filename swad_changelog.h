@@ -429,10 +429,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.60.3 (2019-02-25)"
-#define CSS_FILE		"swad18.60.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.60.5 (2019-02-26)"
+#define CSS_FILE		"swad18.60.5.css"
 #define JS_FILE			"swad18.60.js"
 /*
+	Version 18.60.5:  Feb 26, 2019 	Changes in CSS for responsive design in timeline. (237788 lines)
+	Version 18.60.4:  Feb 26, 2019 	Images lazy load using attribute lazyload in timeline.
+					Image quality in timeline improved from 50 to 75. (237910 lines)
 	Version 18.60.3:  Feb 25, 2019 	Changes in CSS for responsive design in timeline. (237908 lines)
 	Version 18.60.2:  Feb 25, 2019 	Responsive design in timeline. (237909 lines)
 	Version 18.60.1:  Feb 25, 2019 	Changes in CSS related to preferences. (237772 lines)

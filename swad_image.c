@@ -567,7 +567,7 @@ void Img_MoveImageToDefinitiveDirectory (struct Image *Image)
   }
 
 /*****************************************************************************/
-/******************** Write the image of a test question *********************/
+/****** Show a user uploaded image (in a test question, timeline, etc.) ******/
 /*****************************************************************************/
 
 void Img_ShowImage (struct Image *Image,
@@ -634,7 +634,7 @@ void Img_ShowImage (struct Image *Image,
       if (Image->Title)
          if (Image->Title[0])
 	    fprintf (Gbl.F.Out," title=\"%s\"",Image->Title);
-      fprintf (Gbl.F.Out," />");
+      fprintf (Gbl.F.Out," lazyload=\"on\" />");	// Lazy load of the image
 
       /* End optional link to external URL */
       if (PutLink)
