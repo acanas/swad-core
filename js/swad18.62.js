@@ -780,9 +780,9 @@ function AJAXCreateObject () {
 /*****************************************************************************/
 
 function toggleComments (notID) {
-	toggleDisplay('exp_' + notID);
 	toggleDisplay('con_' + notID);
 	toggleDisplay('com_' + notID);
+	toggleDisplay('exp_' + notID);
 }
 
 /*****************************************************************************/

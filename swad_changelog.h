@@ -49,6 +49,7 @@
 /*********************************** TODO ************************************/
 /*****************************************************************************/
 
+// TODO: Víctor Cabrita Gómez, 2019-02-27: "Para cuando un tema oscuro de SWAD?"
 // TODO: Is it necessary FileType in table "files"?
 // TODO: When notifications are marked as seen, do it in a priori function
 // TODO: Use the library http://fukuchi.org/works/qrencode/index.html.en instead Google QR
@@ -408,7 +409,7 @@ Antonio
 
 // TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
 
-// TODO: Chequear negritas en lista de foros, en color rosa por ej. Habrá que cambiar clases
+// TODO: Chequear "Imagen no encontrada" en timeline. Mensaje de Víctor González Argudo
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -429,10 +430,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.61 (2019-02-27)"
+#define Log_PLATFORM_VERSION	"SWAD 18.62 (2019-02-27)"
 #define CSS_FILE		"swad18.61.css"
-#define JS_FILE			"swad18.61.js"
+#define JS_FILE			"swad18.62.js"
 /*
+	Version 18.62:    Feb 27, 2019 	By default show only the last comments in a social publishing. (237901 lines)
 	Version 18.61:    Feb 27, 2019 	Hide/show comments in a social publishing. (237855 lines)
 	Version 18.60.5:  Feb 26, 2019 	Changes in CSS for responsive design in timeline. (237788 lines)
 	Version 18.60.4:  Feb 26, 2019 	Images lazy load using attribute lazyload in timeline.

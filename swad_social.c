@@ -192,8 +192,7 @@ static void Soc_PutIconCommentDisabled (void);
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
                                                             const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
-static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot,
-					   bool ShowNoteAlone);
+static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot);
 static void Soc_WriteOneSocialCommentInList (MYSQL_RES *mysql_res);
 static void Soc_PutIconToToggleComments (const char *UniqueId,
                                          const char *Icon,const char *Text);
@@ -1670,7 +1669,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 
       /* Show comments */
       if (NumComments)
-	 Soc_WriteCommentsInSocialNote (SocNot,ShowNoteAlone);
+	 Soc_WriteCommentsInSocialNote (SocNot);
 
       /* End of bottom right */
       fprintf (Gbl.F.Out,"</div>");
@@ -2599,14 +2598,13 @@ static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot,
-					   bool ShowNoteAlone)
+static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
   {
-   extern const char *Txt_See_more;
-   extern const char *Txt_See_less;
+   extern const char *Txt_See_the_previous_X_COMMENTS;
+   extern const char *Txt_See_only_the_latest_COMMENTS;
    MYSQL_RES *mysql_res;
    unsigned long NumComments;
-   unsigned long NumCommentsInitiallyVisible;
+   unsigned long NumCommentsInitiallyHidden;
    unsigned long NumCom;
    char IdComments[Frm_MAX_BYTES_ID + 1];
 
@@ -2631,46 +2629,52 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot,
    /***** List comments *****/
    if (NumComments)	// Comments to this social note found
      {
-      /***** First list with comments initially visible *****/
-      NumCommentsInitiallyVisible = (ShowNoteAlone ||
-	                             NumComments < Soc_NUM_VISIBLE_COMMENTS) ? NumComments :
-	                                                                       Soc_NUM_VISIBLE_COMMENTS;
-      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
-      for (NumCom = 0;
-	   NumCom < NumCommentsInitiallyVisible;
-	   NumCom++)
-	 Soc_WriteOneSocialCommentInList (mysql_res);
-      fprintf (Gbl.F.Out,"</ul>");
-
-      if (NumComments > NumCommentsInitiallyVisible)
+      // Never hide only one comment
+      // So, the number of comments initially hidden must be 0 or >= 2
+      NumCommentsInitiallyHidden = (NumComments <= Soc_NUM_VISIBLE_COMMENTS + 1) ? 0 :	// Show all
+	                        					           NumComments - Soc_NUM_VISIBLE_COMMENTS;
+      if (NumCommentsInitiallyHidden)
         {
-	 /***** Create unique id for new comment *****/
+	 /***** Create unique id for list of hidden comments *****/
 	 Frm_SetUniqueId (IdComments);
+
+	 /***** Link to toggle on/off comments *****/
+	 fprintf (Gbl.F.Out,"<div id=\"con_%s\""
+			    " class=\"TL_EXPAND_COMMENTS TL_RIGHT_WIDTH\""
+			    " style=\"display:none;\">",	// Initially hidden
+		  IdComments);
+	 Soc_PutIconToToggleComments (IdComments,"angle-down.svg",
+	                              Txt_See_only_the_latest_COMMENTS);
+	 fprintf (Gbl.F.Out,"</div>");
+
+	 /***** First list with comments initially hidden *****/
+	 fprintf (Gbl.F.Out,"<ul id=\"com_%s\" class=\"LIST_LEFT\""
+			    " style=\"display:none;\">",	// Initially hidden
+		  IdComments);
+	 for (NumCom = 0;
+	      NumCom < NumCommentsInitiallyHidden;
+	      NumCom++)
+	    Soc_WriteOneSocialCommentInList (mysql_res);
+	 fprintf (Gbl.F.Out,"</ul>");
 
 	 /***** Link to toggle on/off comments *****/
 	 fprintf (Gbl.F.Out,"<div id=\"exp_%s\""
 			    " class=\"TL_EXPAND_COMMENTS TL_RIGHT_WIDTH\">",
 		  IdComments);
-	 Soc_PutIconToToggleComments (IdComments,"angle-down.svg",Txt_See_more);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+		   Txt_See_the_previous_X_COMMENTS,
+		   NumCommentsInitiallyHidden);
+	 Soc_PutIconToToggleComments (IdComments,"angle-up.svg",Gbl.Title);
 	 fprintf (Gbl.F.Out,"</div>");
-
-	 fprintf (Gbl.F.Out,"<div id=\"con_%s\""
-			    " class=\"TL_EXPAND_COMMENTS TL_RIGHT_WIDTH\""
-			    " style=\"display:none;\">",	// Initially hidden
-		  IdComments);
-	 Soc_PutIconToToggleComments (IdComments,"angle-up.svg",Txt_See_less);
-	 fprintf (Gbl.F.Out,"</div>");
-
-         /***** Second list with comments initially hidden *****/
-	 fprintf (Gbl.F.Out,"<ul id=\"com_%s\" class=\"LIST_LEFT\""
-			    " style=\"display:none;\">",	// Initially hidden
-		  IdComments);
-	 for (NumCom = NumCommentsInitiallyVisible;
-	      NumCom < NumComments;
-	      NumCom++)
-	    Soc_WriteOneSocialCommentInList (mysql_res);
-	 fprintf (Gbl.F.Out,"</ul>");
         }
+
+      /***** Second list with comments initially visible *****/
+      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+      for (NumCom = NumCommentsInitiallyHidden;
+	   NumCom < NumComments;
+	   NumCom++)
+	 Soc_WriteOneSocialCommentInList (mysql_res);
+      fprintf (Gbl.F.Out,"</ul>");
      }
 
    /***** Free structure that stores the query result *****/

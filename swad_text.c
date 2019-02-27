@@ -37129,7 +37129,7 @@ const char *Txt_See_less =
 #elif L==6	// gn
 	 "Ver menos";	// Okoteve traducción
 #elif L==7	// it
-	 "Vedere meno";
+	 "Vedi meno";
 #elif L==8	// pl
 	 "Zobacz mniej";
 #elif L==9	// pt
@@ -37182,7 +37182,7 @@ const char *Txt_See_more =
 #if   L==1	// ca
 	 "Veure m&eacute;s";
 #elif L==2	// de
-	 "Zeige mehr";
+	 "Siehe mehr";
 #elif L==3	// en
 	 "See more";
 #elif L==4	// es
@@ -37192,7 +37192,7 @@ const char *Txt_See_more =
 #elif L==6	// gn
 	 "Ver m&aacute;s";	// Okoteve traducción
 #elif L==7	// it
-	 "Vedere pi&ugrave;";
+	 "Vedi pi&ugrave;";
 #elif L==8	// pl
 	 "Zobacz wi&eogon;cej";
 #elif L==9	// pt
@@ -37213,7 +37213,7 @@ const char *Txt_See_new_activity =
 #elif L==6	// gn
 	 "Ver nueva actividad";	// Okoteve traducción
 #elif L==7	// it
-	 "Vedere nuova attivit&agrave;";
+	 "Vedi nuova attivit&agrave;";
 #elif L==8	// pl
 	 "Zobacz now&aogon; aktywno&sacute;&cacute;";
 #elif L==9	// pt
@@ -37239,6 +37239,48 @@ const char *Txt_See_notifications =
 	"See notifications";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Veja notifica&ccedil;&otilde;es";
+#endif
+
+const char *Txt_See_only_the_latest_COMMENTS =
+#if   L==1	// ca
+	 "Veure nom&eacute;s els &uacute;ltims";
+#elif L==2	// de
+	 "Nur die neuesten anzeigen";
+#elif L==3	// en
+	 "See only the latest";
+#elif L==4	// es
+	 "Ver s&oacute;lo los &uacute;ltimos";
+#elif L==5	// fr
+	 "Voir seulement les derni&egrave;res";
+#elif L==6	// gn
+	 "Ver s&oacute;lo los &uacute;ltimos";	// Okoteve traducción
+#elif L==7	// it
+	 "Vedi solo le ultime";
+#elif L==8	// pl
+	 "Zobacz tylko najnowsze";
+#elif L==9	// pt
+	 "Veja apenas os &uacute;ltimos";
+#endif
+
+const char *Txt_See_the_previous_X_COMMENTS =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	 "Veure els %u anteriors";
+#elif L==2	// de
+	 "Siehe die vorherigen %u";
+#elif L==3	// en
+	 "See the previous %u";
+#elif L==4	// es
+	 "Ver los %u anteriores";
+#elif L==5	// fr
+	 "Voir les %u pr&eacute;c&eacute;dents";
+#elif L==6	// gn
+	 "Ver los %u anteriores";	// Okoteve traducción
+#elif L==7	// it
+	 "Vedi i precedente %u";
+#elif L==8	// pl
+	 "Zobacz poprzednie %u";
+#elif L==9	// pt
+	 "Veja os %u anteriores";
 #endif
 
 const char *Txt_Select_another_country =
