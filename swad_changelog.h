@@ -429,10 +429,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.60.5 (2019-02-26)"
-#define CSS_FILE		"swad18.60.5.css"
-#define JS_FILE			"swad18.60.js"
+#define Log_PLATFORM_VERSION	"SWAD 18.61 (2019-02-27)"
+#define CSS_FILE		"swad18.61.css"
+#define JS_FILE			"swad18.61.js"
 /*
+	Version 18.61:    Feb 27, 2019 	Hide/show comments in a social publishing. (237855 lines)
 	Version 18.60.5:  Feb 26, 2019 	Changes in CSS for responsive design in timeline. (237788 lines)
 	Version 18.60.4:  Feb 26, 2019 	Images lazy load using attribute lazyload in timeline.
 					Image quality in timeline improved from 50 to 75. (237910 lines)

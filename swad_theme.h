@@ -47,7 +47,7 @@ typedef enum
    The_THEME_PINK    = 5,
    The_THEME_UNKNOWN = 6,
    } The_Theme_t;
-#define The_THEME_DEFAULT The_THEME_GREY
+#define The_THEME_DEFAULT The_THEME_PINK
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

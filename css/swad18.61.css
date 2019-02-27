@@ -2988,6 +2988,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	color:#202020;
 	font-size:13pt;
 	}
+.TL_EXPAND_COMMENTS
+	{
+	text-align:center;
+	vertical-align:top;
+	padding-bottom:10px;
+	}
 .TL_ICO_COMMENT
 	{
 	display:inline-block;

@@ -57,7 +57,8 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Soc_WIDTH_TIMELINE		"560px"
+#define Soc_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
+
 #define Soc_MAX_SHARERS_FAVERS_SHOWN	7	// Maximum number of users shown who have share/fav a social note
 
 #define Soc_MAX_CHARS_IN_POST	1000
@@ -191,7 +192,11 @@ static void Soc_PutIconCommentDisabled (void);
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
                                                             const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
-static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot);
+static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot,
+					   bool ShowNoteAlone);
+static void Soc_WriteOneSocialCommentInList (MYSQL_RES *mysql_res);
+static void Soc_PutIconToToggleComments (const char *UniqueId,
+                                         const char *Icon,const char *Text);
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
                                     Soc_TopMessage_t TopMessage,long UsrCod,
                                     bool ShowCommentAlone);
@@ -969,8 +974,6 @@ static void Soc_ShowTimeline (char *Query,
 				Query);
 
    /***** Start box *****/
-   // Box_StartBox (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline,
-   //               Hlp_SOCIAL_Timeline,Box_NOT_CLOSABLE);
    Box_StartBox (NULL,Title,Soc_PutIconsTimeline,
                  Hlp_SOCIAL_Timeline,Box_NOT_CLOSABLE);
 
@@ -1667,7 +1670,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 
       /* Show comments */
       if (NumComments)
-	 Soc_WriteCommentsInSocialNote (SocNot);
+	 Soc_WriteCommentsInSocialNote (SocNot,ShowNoteAlone);
 
       /* End of bottom right */
       fprintf (Gbl.F.Out,"</div>");
@@ -2592,17 +2595,20 @@ static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
   }
 
 /*****************************************************************************/
-/******************* Form to comment a social publishing *********************/
+/********************* Write comments in a social note ***********************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
+static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot,
+					   bool ShowNoteAlone)
   {
+   extern const char *Txt_See_more;
+   extern const char *Txt_See_less;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned long NumComments;
+   unsigned long NumCommentsInitiallyVisible;
    unsigned long NumCom;
-   struct SocialComment SocCom;
+   char IdComments[Frm_MAX_BYTES_ID + 1];
 
    /***** Get comments of this social note from database *****/
    NumComments = DB_QuerySELECT (&mysql_res,"can not get social comments",
@@ -2625,36 +2631,90 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
    /***** List comments *****/
    if (NumComments)	// Comments to this social note found
      {
-      /***** Start list *****/
+      /***** First list with comments initially visible *****/
+      NumCommentsInitiallyVisible = (ShowNoteAlone ||
+	                             NumComments < Soc_NUM_VISIBLE_COMMENTS) ? NumComments :
+	                                                                       Soc_NUM_VISIBLE_COMMENTS;
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
-
-      /***** List comments one by one *****/
       for (NumCom = 0;
-	   NumCom < NumComments;
+	   NumCom < NumCommentsInitiallyVisible;
 	   NumCom++)
-	{
-	 /* Initialize image */
-	 Img_ImageConstructor (&SocCom.Image);
-
-	 /* Get data of social comment */
-	 row = mysql_fetch_row (mysql_res);
-	 Soc_GetDataOfSocialCommentFromRow (row,&SocCom);
-
-	 /* Write social comment */
-	 Soc_WriteSocialComment (&SocCom,
-	                         Soc_TOP_MESSAGE_NONE,-1L,
-	                         false);
-
-	 /* Free image */
-	 Img_ImageDestructor (&SocCom.Image);
-	}
-
-      /***** End list *****/
+	 Soc_WriteOneSocialCommentInList (mysql_res);
       fprintf (Gbl.F.Out,"</ul>");
+
+      if (NumComments > NumCommentsInitiallyVisible)
+        {
+	 /***** Create unique id for new comment *****/
+	 Frm_SetUniqueId (IdComments);
+
+	 /***** Link to toggle on/off comments *****/
+	 fprintf (Gbl.F.Out,"<div id=\"exp_%s\""
+			    " class=\"TL_EXPAND_COMMENTS TL_RIGHT_WIDTH\">",
+		  IdComments);
+	 Soc_PutIconToToggleComments (IdComments,"angle-down.svg",Txt_See_more);
+	 fprintf (Gbl.F.Out,"</div>");
+
+	 fprintf (Gbl.F.Out,"<div id=\"con_%s\""
+			    " class=\"TL_EXPAND_COMMENTS TL_RIGHT_WIDTH\""
+			    " style=\"display:none;\">",	// Initially hidden
+		  IdComments);
+	 Soc_PutIconToToggleComments (IdComments,"angle-up.svg",Txt_See_less);
+	 fprintf (Gbl.F.Out,"</div>");
+
+         /***** Second list with comments initially hidden *****/
+	 fprintf (Gbl.F.Out,"<ul id=\"com_%s\" class=\"LIST_LEFT\""
+			    " style=\"display:none;\">",	// Initially hidden
+		  IdComments);
+	 for (NumCom = NumCommentsInitiallyVisible;
+	      NumCom < NumComments;
+	      NumCom++)
+	    Soc_WriteOneSocialCommentInList (mysql_res);
+	 fprintf (Gbl.F.Out,"</ul>");
+        }
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void Soc_WriteOneSocialCommentInList (MYSQL_RES *mysql_res)
+  {
+   MYSQL_ROW row;
+   struct SocialComment SocCom;
+
+   /***** Initialize image *****/
+   Img_ImageConstructor (&SocCom.Image);
+
+   /***** Get data of social comment *****/
+   row = mysql_fetch_row (mysql_res);
+   Soc_GetDataOfSocialCommentFromRow (row,&SocCom);
+
+   /***** Write social comment *****/
+   Soc_WriteSocialComment (&SocCom,
+			   Soc_TOP_MESSAGE_NONE,-1L,
+			   false);
+
+   /***** Free image *****/
+   Img_ImageDestructor (&SocCom.Image);
+  }
+
+/*****************************************************************************/
+/******* Put an icon to toggle on/off comments in a social publishing ********/
+/*****************************************************************************/
+
+static void Soc_PutIconToToggleComments (const char *UniqueId,
+                                         const char *Icon,const char *Text)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+
+   /***** Link to toggle on/off some fields of project *****/
+   fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"%s\""
+                      " onclick=\"toggleComments('%s');"
+                                 "return false;\" />",
+            Text,The_ClassFormInBox[Gbl.Prefs.Theme],
+            UniqueId);
+   Ico_PutIconTextLink (Icon,Text);
+   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/
@@ -2683,7 +2743,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
 
    if (ShowCommentAlone)
      {
-      Box_StartBox (Soc_WIDTH_TIMELINE,NULL,NULL,
+      Box_StartBox (NULL,NULL,NULL,
                     NULL,Box_NOT_CLOSABLE);
 
       /***** Write sharer/commenter if distinct to author *****/
