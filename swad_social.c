@@ -40,8 +40,8 @@
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_image.h"
 #include "swad_layout.h"
+#include "swad_media.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
@@ -113,7 +113,7 @@ struct SocialComment
    time_t DateTimeUTC;
    unsigned NumFavs;	// Number of times (users) this comment has been favourited
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Image Image;
+   struct Media Media;
   };
 
 /*****************************************************************************/
@@ -523,7 +523,6 @@ void Soc_MarkMyNotifAsSeen (void)
 /*****************************************************************************/
 /************************ Build query to get timeline ************************/
 /*****************************************************************************/
-// Query must have space for at least 1024 chars
 
 #define Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS (256 - 1)
 
@@ -1809,15 +1808,19 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    MYSQL_ROW row;
    unsigned long NumRows;
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Image Image;
+   struct Media Media;
 
    /***** Initialize image *****/
-   Img_ImageConstructor (&Image);
+   Med_MediaConstructor (&Media);
 
    /***** Get social post from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the content"
 					" of a social post",
-			     "SELECT Content,ImageName,ImageTitle,ImageURL"
+			     "SELECT Content,"		// row[0]
+			            "MediaName,"	// row[1]
+			            "MediaType,"	// row[2]
+			            "MediaTitle,"	// row[3]
+			            "MediaURL"		// row[4]
 			     " FROM social_posts WHERE PstCod=%ld",
 			     PstCod);
 
@@ -1830,8 +1833,8 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
       Str_Copy (Content,row[0],
                 Cns_MAX_BYTES_LONG_TEXT);
 
-      /****** Get image name (row[1]), title (row[2]) and URL (row[3]) *****/
-      Img_GetImageNameTitleAndURLFromRow (row[1],row[2],row[3],&Image);
+      /****** Get image name (row[1]), type (row[2]), title (row[3]) and URL (row[4]) *****/
+      Med_GetMediaNameTitleAndURLFromRow (row[1],row[2],row[3],row[4],&Media);
      }
    else
       Content[0] = '\0';
@@ -1848,11 +1851,11 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
      }
 
    /***** Show image *****/
-   Img_ShowImage (&Image,"TL_POST_IMG_CONTAINER TL_RIGHT_WIDTH",
+   Med_ShowMedia (&Media,"TL_POST_IMG_CONTAINER TL_RIGHT_WIDTH",
 	                 "TL_POST_IMG TL_RIGHT_WIDTH");
 
    /***** Free image *****/
-   Img_ImageDestructor (&Image);
+   Med_MediaDestructor (&Media);
   }
 
 /*****************************************************************************/
@@ -2381,7 +2384,7 @@ static void Soc_PutTextarea (const char *Placeholder,
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   Img_PutImageUploader (-1,ClassImgTit);
+   Med_PutMediaUploader (-1,ClassImgTit);
 
    /***** Submit button *****/
    fprintf (Gbl.F.Out,"<button type=\"submit\""
@@ -2436,7 +2439,7 @@ void Soc_ReceiveSocialPostUsr (void)
 static long Soc_ReceiveSocialPost (void)
   {
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Image Image;
+   struct Media Media;
    long PstCod;
    struct SocialPublishing SocPub;
 
@@ -2445,37 +2448,38 @@ static long Soc_ReceiveSocialPost (void)
                               Str_TO_RIGOROUS_HTML,true);
 
    /***** Initialize image *****/
-   Img_ImageConstructor (&Image);
+   Med_MediaConstructor (&Media);
 
    /***** Get attached image (action, file and title) *****/
-   Image.Width   = Soc_IMAGE_SAVED_MAX_WIDTH;
-   Image.Height  = Soc_IMAGE_SAVED_MAX_HEIGHT;
-   Image.Quality = Soc_IMAGE_SAVED_QUALITY;
-   Img_GetImageFromForm (-1,&Image,NULL);
+   Media.Width   = Soc_IMAGE_SAVED_MAX_WIDTH;
+   Media.Height  = Soc_IMAGE_SAVED_MAX_HEIGHT;
+   Media.Quality = Soc_IMAGE_SAVED_QUALITY;
+   Med_GetMediaFromForm (-1,&Media,NULL);
 
    if (Content[0] ||	// Text not empty
-       Image.Name[0])	// An image is attached
+       Media.Name[0])	// An image is attached
      {
       /***** Check if image is received and processed *****/
-      if (Image.Action == Img_ACTION_NEW_IMAGE &&	// Upload new image
-	  Image.Status == Img_FILE_PROCESSED)	// The new image received has been processed
+      if (Media.Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
+	  Media.Status == Med_FILE_PROCESSED)	// The new image received has been processed
 	 /* Move processed image to definitive directory */
-	 Img_MoveImageToDefinitiveDirectory (&Image);
+	 Med_MoveMediaToDefinitiveDirectory (&Media);
 
       /***** Publish *****/
       /* Insert post content in the database */
       PstCod =
       DB_QueryINSERTandReturnCode ("can not create post",
 				   "INSERT INTO social_posts"
-				   " (Content,ImageName,ImageTitle,ImageURL)"
+				   " (Content,MediaName,MediaType,MediaTitle,MediaURL)"
 				   " VALUES"
-				   " ('%s','%s','%s','%s')",
+				   " ('%s','%s','%s','%s','%s')",
 				   Content,
-				   Image.Name,
-				   (Image.Name[0] &&	// Save image title only if image attached
-				    Image.Title) ? Image.Title : "",
-				   (Image.Name[0] &&	// Save image URL   only if image attached
-				    Image.URL  ) ? Image.URL   : "");
+				   Media.Name,
+				   Med_GetStringTypeForDB (Media.Type),
+				   (Media.Name[0] &&	// Save image title only if image attached
+				    Media.Title) ? Media.Title : "",
+				   (Media.Name[0] &&	// Save image URL   only if image attached
+				    Media.URL  ) ? Media.URL   : "");
 
       /* Insert post in social notes */
       Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod,&SocPub);
@@ -2487,7 +2491,7 @@ static long Soc_ReceiveSocialPost (void)
       SocPub.NotCod = -1L;
 
    /***** Free image *****/
-   Img_ImageDestructor (&Image);
+   Med_MediaDestructor (&Media);
 
    return SocPub.NotCod;
   }
@@ -2616,9 +2620,10 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
 				        "UNIX_TIMESTAMP("
 				        "social_pubs.TimePublish),"	// row[3]
 					"social_comments.Content,"	// row[4]
-				        "social_comments.ImageName,"	// row[5]
-					"social_comments.ImageTitle,"	// row[6]
-				        "social_comments.ImageURL"	// row[7]
+				        "social_comments.MediaName,"	// row[5]
+				        "social_comments.MediaType,"	// row[6]
+					"social_comments.MediaTitle,"	// row[7]
+				        "social_comments.MediaURL"	// row[8]
 				 " FROM social_pubs,social_comments"
 				 " WHERE social_pubs.NotCod=%ld"
 				 " AND social_pubs.PubType=%u"
@@ -2687,7 +2692,7 @@ static void Soc_WriteOneSocialCommentInList (MYSQL_RES *mysql_res)
    struct SocialComment SocCom;
 
    /***** Initialize image *****/
-   Img_ImageConstructor (&SocCom.Image);
+   Med_MediaConstructor (&SocCom.Media);
 
    /***** Get data of social comment *****/
    row = mysql_fetch_row (mysql_res);
@@ -2699,7 +2704,7 @@ static void Soc_WriteOneSocialCommentInList (MYSQL_RES *mysql_res)
 			   false);
 
    /***** Free image *****/
-   Img_ImageDestructor (&SocCom.Image);
+   Med_MediaDestructor (&SocCom.Media);
   }
 
 /*****************************************************************************/
@@ -2711,7 +2716,7 @@ static void Soc_PutIconToToggleComments (const char *UniqueId,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
-   /***** Link to toggle on/off some fields of project *****/
+   /***** Link to toggle on/off some divs *****/
    fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"%s\""
                       " onclick=\"toggleComments('%s');"
                                  "return false;\" />",
@@ -2804,7 +2809,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show image */
-      Img_ShowImage (&SocCom->Image,"TL_COMMENT_IMG_CONTAINER TL_COMMENT_WIDTH",
+      Med_ShowMedia (&SocCom->Media,"TL_COMMENT_IMG_CONTAINER TL_COMMENT_WIDTH",
 	                            "TL_COMMENT_IMG TL_COMMENT_WIDTH");
 
       /* Put icon to mark this social comment as favourite */
@@ -3154,7 +3159,7 @@ static long Soc_ReceiveComment (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Image Image;
+   struct Media Media;
    struct SocialNote SocNot;
    struct SocialPublishing SocPub;
 
@@ -3169,22 +3174,22 @@ static long Soc_ReceiveComment (void)
 				 Str_TO_RIGOROUS_HTML,true);
 
       /***** Initialize image *****/
-      Img_ImageConstructor (&Image);
+      Med_MediaConstructor (&Media);
 
       /***** Get attached image (action, file and title) *****/
-      Image.Width   = Soc_IMAGE_SAVED_MAX_WIDTH;
-      Image.Height  = Soc_IMAGE_SAVED_MAX_HEIGHT;
-      Image.Quality = Soc_IMAGE_SAVED_QUALITY;
-      Img_GetImageFromForm (-1,&Image,NULL);
+      Media.Width   = Soc_IMAGE_SAVED_MAX_WIDTH;
+      Media.Height  = Soc_IMAGE_SAVED_MAX_HEIGHT;
+      Media.Quality = Soc_IMAGE_SAVED_QUALITY;
+      Med_GetMediaFromForm (-1,&Media,NULL);
 
       if (Content[0] ||		// Text not empty
-	  Image.Name[0])	// An image is attached
+	  Media.Name[0])	// An image is attached
 	{
 	 /***** Check if image is received and processed *****/
-	 if (Image.Action == Img_ACTION_NEW_IMAGE &&	// Upload new image
-	     Image.Status == Img_FILE_PROCESSED)	// The new image received has been processed
+	 if (Media.Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
+	     Media.Status == Med_FILE_PROCESSED)	// The new image received has been processed
 	    /* Move processed image to definitive directory */
-	    Img_MoveImageToDefinitiveDirectory (&Image);
+	    Med_MoveMediaToDefinitiveDirectory (&Media);
 
 	 /***** Publish *****/
 	 /* Insert into publishings */
@@ -3196,16 +3201,17 @@ static long Soc_ReceiveComment (void)
 	 /* Insert comment content in the database */
 	 DB_QueryINSERT ("can not store comment content",
 			 "INSERT INTO social_comments"
-	                 " (PubCod,Content,ImageName,ImageTitle,ImageURL)"
+	                 " (PubCod,Content,MediaName,MediaType,MediaTitle,MediaURL)"
 			 " VALUES"
-			 " (%ld,'%s','%s','%s','%s')",
+			 " (%ld,'%s','%s','%s','%s','%s')",
 			 SocPub.PubCod,
 			 Content,
-			 Image.Name,
-			 (Image.Name[0] &&	// Save image title only if image attached
-			  Image.Title) ? Image.Title : "",
-			 (Image.Name[0] &&	// Save image URL   only if image attached
-			  Image.URL  ) ? Image.URL   : "");
+			 Media.Name,
+			 Med_GetStringTypeForDB (Media.Type),
+			 (Media.Name[0] &&	// Save image title only if image attached
+			  Media.Title) ? Media.Title : "",
+			 (Media.Name[0] &&	// Save image URL   only if image attached
+			  Media.URL  ) ? Media.URL   : "");
 
 	 /***** Store notifications about the new comment *****/
 	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,SocPub.PubCod);
@@ -3220,7 +3226,7 @@ static long Soc_ReceiveComment (void)
 	}
 
       /***** Free image *****/
-      Img_ImageDestructor (&Image);
+      Med_MediaDestructor (&Media);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_The_original_post_no_longer_exists);
@@ -3411,7 +3417,7 @@ static void Soc_FavSocialComment (struct SocialComment *SocCom)
    bool ItsMe;
 
    /***** Initialize image *****/
-   Img_ImageConstructor (&SocCom->Image);
+   Med_MediaConstructor (&SocCom->Media);
 
    /***** Get data of social comment *****/
    SocCom->PubCod = Soc_GetParamPubCod ();
@@ -3443,7 +3449,7 @@ static void Soc_FavSocialComment (struct SocialComment *SocCom)
      }
 
    /***** Free image *****/
-   Img_ImageDestructor (&SocCom->Image);
+   Med_MediaDestructor (&SocCom->Media);
   }
 
 /*****************************************************************************/
@@ -3665,7 +3671,7 @@ static void Soc_UnfavSocialComment (struct SocialComment *SocCom)
    bool ItsMe;
 
    /***** Initialize image *****/
-   Img_ImageConstructor (&SocCom->Image);
+   Med_MediaConstructor (&SocCom->Media);
 
    /***** Get data of social comment *****/
    SocCom->PubCod = Soc_GetParamPubCod ();
@@ -3695,7 +3701,7 @@ static void Soc_UnfavSocialComment (struct SocialComment *SocCom)
      }
 
    /***** Free image *****/
-   Img_ImageDestructor (&SocCom->Image);
+   Med_MediaDestructor (&SocCom->Media);
   }
 
 /*****************************************************************************/
@@ -3859,19 +3865,16 @@ static void Soc_RemoveSocialNote (void)
 static void Soc_RemoveImgFileFromSocialPost (long PstCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
    /***** Get name of image associated to a social post from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get image",
-		       "SELECT ImageName FROM social_posts WHERE PstCod=%ld",
+		       "SELECT MediaName,"	// row[0]
+		              "MediaType"	// row[1]
+		       " FROM social_posts"
+		       " WHERE PstCod=%ld",
 		       PstCod))
-     {
-      /***** Get image name (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Remove image file *****/
-      Img_RemoveImageFile (row[0]);
-     }
+      /***** Remove media file *****/
+      Med_RemoveMediaFileFromRow (mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4072,7 +4075,7 @@ static void Soc_RequestRemovalSocialComment (void)
    bool ItsMe;
 
    /***** Initialize image *****/
-   Img_ImageConstructor (&SocCom.Image);
+   Med_MediaConstructor (&SocCom.Media);
 
    /***** Get data of social comment *****/
    SocCom.PubCod = Soc_GetParamPubCod ();
@@ -4108,7 +4111,7 @@ static void Soc_RequestRemovalSocialComment (void)
       Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
 
    /***** Free image *****/
-   Img_ImageDestructor (&SocCom.Image);
+   Med_MediaDestructor (&SocCom.Media);
   }
 
 /*****************************************************************************/
@@ -4166,7 +4169,7 @@ static void Soc_RemoveSocialComment (void)
    bool ItsMe;
 
    /***** Initialize image *****/
-   Img_ImageConstructor (&SocCom.Image);
+   Med_MediaConstructor (&SocCom.Media);
 
    /***** Get data of social comment *****/
    SocCom.PubCod = Soc_GetParamPubCod ();
@@ -4191,7 +4194,7 @@ static void Soc_RemoveSocialComment (void)
       Ale_ShowAlert (Ale_WARNING,Txt_The_comment_no_longer_exists);
 
    /***** Free image *****/
-   Img_ImageDestructor (&SocCom.Image);
+   Med_MediaDestructor (&SocCom.Media);
   }
 
 /*****************************************************************************/
@@ -4201,20 +4204,16 @@ static void Soc_RemoveSocialComment (void)
 static void Soc_RemoveImgFileFromSocialComment (long PubCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
-   /***** Get name of image associated to a social post from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get image",
-		       "SELECT ImageName FROM social_comments"
+   /***** Get name of media associated to a social post from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get media",
+		       "SELECT MediaName,"	// row[0]
+		              "MediaType"	// row[1]
+		       " FROM social_comments"
 		       " WHERE PubCod=%ld",
 		       PubCod))
-     {
-      /***** Get image name (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Remove image file *****/
-      Img_RemoveImageFile (row[0]);
-     }
+      /***** Remove media file *****/
+      Med_RemoveMediaFileFromRow (mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4670,9 +4669,10 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
 				 "social_pubs.NotCod,"				// row[2]
 				 "UNIX_TIMESTAMP(social_pubs.TimePublish),"	// row[3]
 				 "social_comments.Content,"			// row[4]
-				 "social_comments.ImageName,"			// row[5]
-				 "social_comments.ImageTitle,"			// row[6]
-				 "social_comments.ImageURL"			// row[7]
+				 "social_comments.MediaName,"			// row[5]
+				 "social_comments.MediaType,"			// row[6]
+				 "social_comments.MediaTitle,"			// row[7]
+				 "social_comments.MediaURL"			// row[8]
 			  " FROM social_pubs,social_comments"
 			  " WHERE social_pubs.PubCod=%ld"
 			  " AND social_pubs.PubType=%u"
@@ -4802,9 +4802,10 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
    row[2]: NotCod
    row[3]: TimePublish
    row[4]: Content
-   row[5]: ImageName
-   row[6]: ImageTitle
-   row[7]: ImageURL
+   row[5]: MediaName
+   row[6]: MediaType
+   row[7]: MediaTitle
+   row[8]: MediaURL
     */
    /***** Get code of social comment (row[0]) *****/
    SocCom->PubCod      = Str_ConvertStrCodToLongCod (row[0]);
@@ -4825,8 +4826,9 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
    /***** Get number of times this comment has been favourited *****/
    Soc_GetNumTimesACommHasBeenFav (SocCom);
 
-   /****** Get image name (row[5]), title (row[6]) and URL (row[7]) *****/
-   Img_GetImageNameTitleAndURLFromRow (row[5],row[6],row[7],&SocCom->Image);
+   /****** Get image name (row[5]), type (row[6]), title (row[7]) and URL (row[8]) *****/
+   Med_GetMediaNameTitleAndURLFromRow (row[5],row[6],row[7],row[8],
+	                               &SocCom->Media);
   }
 
 /*****************************************************************************/

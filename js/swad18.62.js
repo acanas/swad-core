@@ -1052,10 +1052,10 @@ function enableDisableImgAns (elem, isDisabled) {
 	var Tst_MAX_OPTIONS_PER_QUESTION = 10;
 
 	for (var i = 0; i < Tst_MAX_OPTIONS_PER_QUESTION; i++)
-		if (elem.name == ('ImgAct' + i) ||
-			elem.name == ('ImgFil' + i) ||
-			elem.name == ('ImgTit' + i) ||
-			elem.name == ('ImgURL' + i))
+		if (elem.name == ('MedAct' + i) ||
+			elem.name == ('MedFil' + i) ||
+			elem.name == ('MedTit' + i) ||
+			elem.name == ('MedURL' + i))
 			elem.disabled = isDisabled;
 }
 
@@ -1079,7 +1079,7 @@ function disableDetailedClicks () {
 /************************** Upload images in a form **************************/
 /*****************************************************************************/
 
-function imageUploadOnSelectFile (inputFile,id) {
+function mediaUploadOnSelectFile (inputFile,id) {
 	document.getElementById(id + '_fil').innerHTML = inputFile.value;	// Display image filename
 	document.getElementById(id + '_tit_url').style.display = '';		// Show hidden fields
 }

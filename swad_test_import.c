@@ -200,12 +200,13 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
       row[ 3] Shuffle
       row[ 4] Stem
       row[ 5] Feedback
-      row[ 6] ImageName
-      row[ 7] ImageTitle
-      row[ 8] ImageURL
-      row[ 9] NumHits
-      row[10] NumHitsNotBlank
-      row[11] Score
+      row[ 6] MediaName
+      row[ 7] MediaType
+      row[ 8] MediaTitle
+      row[ 9] MediaURL
+      row[10] NumHits
+      row[11] NumHitsNotBlank
+      row[12] Score
       */
       /* row[0] holds the code of the question */
       if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
@@ -309,13 +310,14 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
 
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);	// Result: AnsInd,Answer,Correct
    /*
-   row[ 0] AnsInd
-   row[ 1] Answer
-   row[ 2] Feedback
-   row[ 3] ImageName
-   row[ 4] ImageTitle
-   row[ 5] ImageURL
-   row[ 6] Correct
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MediaName
+   row[4] MediaType
+   row[5] MediaTitle
+   row[6] MediaURL
+   row[7] Correct
    */
    /***** Write the answers *****/
    switch (Gbl.Test.AnswerType)
@@ -365,7 +367,7 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
             fprintf (Gbl.Test.XML.FileXML,"<option");
             if (Gbl.Test.AnswerType != Tst_ANS_TEXT)
                fprintf (Gbl.Test.XML.FileXML," correct=\"%s\"",
-                        (row[6][0] == 'Y') ? "yes" :
+                        (row[7][0] == 'Y') ? "yes" :
                                              "no");
             fprintf (Gbl.Test.XML.FileXML,">%s"
         	                          "<text>%s</text>%s",

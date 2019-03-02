@@ -430,10 +430,48 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.62 (2019-02-27)"
+#define Log_PLATFORM_VERSION	"SWAD 18.63 (2019-03-02)"
 #define CSS_FILE		"swad18.61.css"
 #define JS_FILE			"swad18.62.js"
 /*
+	Version 18.63:    Mar 02, 2019 	Allowing animated GIFs. Not finished. (238125 lines)
+					Rename the following directory:
+sudo mv /var/www/swad/img /var/www/swad/med
+
+					28 changes necessary in database:
+ALTER TABLE forum_post CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
+ALTER TABLE games CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
+ALTER TABLE msg_content CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
+ALTER TABLE msg_content_deleted CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
+ALTER TABLE social_comments CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
+ALTER TABLE social_posts CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
+ALTER TABLE tst_answers CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
+ALTER TABLE tst_questions CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
+
+ALTER TABLE forum_post ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
+ALTER TABLE msg_content ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
+ALTER TABLE msg_content_deleted ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
+ALTER TABLE social_comments ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
+ALTER TABLE social_posts ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
+ALTER TABLE tst_answers ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
+ALTER TABLE tst_questions ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
+
+ALTER TABLE forum_post CHANGE COLUMN ImageTitle MediaTitle VARCHAR(2047) NOT NULL DEFAULT '';
+ALTER TABLE msg_content CHANGE COLUMN ImageTitle MediaTitle VARCHAR(2047) NOT NULL DEFAULT '';
+ALTER TABLE msg_content_deleted CHANGE COLUMN ImageTitle MediaTitle VARCHAR(2047) NOT NULL DEFAULT '';
+ALTER TABLE social_comments CHANGE COLUMN ImageTitle MediaTitle VARCHAR(2047) NOT NULL DEFAULT '';
+ALTER TABLE social_posts CHANGE COLUMN ImageTitle MediaTitle VARCHAR(2047) NOT NULL DEFAULT '';
+ALTER TABLE tst_answers CHANGE COLUMN ImageTitle MediaTitle VARCHAR(2047) NOT NULL DEFAULT '';
+ALTER TABLE tst_questions CHANGE COLUMN ImageTitle MediaTitle VARCHAR(2047) NOT NULL DEFAULT '';
+
+ALTER TABLE forum_post CHANGE COLUMN ImageURL MediaURL VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE msg_content CHANGE COLUMN ImageURL MediaURL VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE msg_content_deleted CHANGE COLUMN ImageURL MediaURL VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE social_comments CHANGE COLUMN ImageURL MediaURL VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE social_posts CHANGE COLUMN ImageURL MediaURL VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE tst_answers CHANGE COLUMN ImageURL MediaURL VARCHAR(255) NOT NULL DEFAULT '';
+ALTER TABLE tst_questions CHANGE COLUMN ImageURL MediaURL VARCHAR(255) NOT NULL DEFAULT '';
+
 	Version 18.62:    Feb 27, 2019 	By default show only the last comments in a social publishing. (237901 lines)
 	Version 18.61:    Feb 27, 2019 	Hide/show comments in a social publishing. (237855 lines)
 	Version 18.60.5:  Feb 26, 2019 	Changes in CSS for responsive design in timeline. (237788 lines)

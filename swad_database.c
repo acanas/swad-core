@@ -442,7 +442,7 @@ mysql> DESCRIBE centres;
 			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
-			"PhotoAttribution TEXT NOT NULL,"				// Img_MAX_BYTES_ATTRIBUTION
+			"PhotoAttribution TEXT NOT NULL,"				// Med_MAX_BYTES_ATTRIBUTION
 		   "UNIQUE INDEX(CtrCod),"
 		   "INDEX(InsCod),"
 		   "INDEX(PlcCod),"
@@ -588,7 +588,7 @@ mysql> DESCRIBE countries;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS countries ("
 			"CtyCod INT NOT NULL,"
 			"Alpha2 CHAR(2) NOT NULL,"
-			"MapAttribution TEXT NOT NULL,"		// Img_MAX_BYTES_ATTRIBUTION
+			"MapAttribution TEXT NOT NULL,"		// Med_MAX_BYTES_ATTRIBUTION
 			"Name_ca VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
 			"Name_de VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
 			"Name_en VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
@@ -1207,22 +1207,23 @@ mysql> DESCRIBE forum_disabled_post;
    /***** Table forum_post *****/
 /*
 mysql> DESCRIBE forum_post;
-+------------+---------------+------+-----+---------+----------------+
-| Field      | Type          | Null | Key | Default | Extra          |
-+------------+---------------+------+-----+---------+----------------+
-| PstCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
-| ThrCod     | int(11)       | NO   | MUL | NULL    |                |
-| UsrCod     | int(11)       | NO   | MUL | NULL    |                |
-| CreatTime  | datetime      | NO   | MUL | NULL    |                |
-| ModifTime  | datetime      | NO   | MUL | NULL    |                |
-| NumNotif   | int(11)       | NO   |     | 0       |                |
-| Subject    | text          | NO   |     | NULL    |                |
-| Content    | longtext      | NO   |     | NULL    |                |
-| ImageName  | varchar(43)   | NO   |     | NULL    |                |
-| ImageTitle | varchar(2047) | NO   |     | NULL    |                |
-| ImageURL   | varchar(255)  | NO   |     | NULL    |                |
-+------------+---------------+------+-----+---------+----------------+
-11 rows in set (0,00 sec)
++------------+-------------------+------+-----+---------+----------------+
+| Field      | Type              | Null | Key | Default | Extra          |
++------------+-------------------+------+-----+---------+----------------+
+| PstCod     | int(11)           | NO   | PRI | NULL    | auto_increment |
+| ThrCod     | int(11)           | NO   | MUL | NULL    |                |
+| UsrCod     | int(11)           | NO   | MUL | NULL    |                |
+| CreatTime  | datetime          | NO   | MUL | NULL    |                |
+| ModifTime  | datetime          | NO   | MUL | NULL    |                |
+| NumNotif   | int(11)           | NO   |     | 0       |                |
+| Subject    | text              | NO   |     | NULL    |                |
+| Content    | longtext          | NO   |     | NULL    |                |
+| MediaName  | varchar(43)       | NO   |     |         |                |
+| MediaType  | enum('jpg','gif') | NO   |     | jpg     |                |
+| MediaTitle | varchar(2047)     | NO   |     |         |                |
+| MediaURL   | varchar(255)      | NO   |     |         |                |
++------------+-------------------+------+-----+---------+----------------+
+12 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_post ("
 			"PstCod INT NOT NULL AUTO_INCREMENT,"
@@ -1231,11 +1232,12 @@ mysql> DESCRIBE forum_post;
 			"CreatTime DATETIME NOT NULL,"
 			"ModifTime DATETIME NOT NULL,"
 			"NumNotif INT NOT NULL DEFAULT 0,"
-			"Subject TEXT NOT NULL,"		// Cns_MAX_BYTES_SUBJECT
-			"Content LONGTEXT NOT NULL,"		// Cns_MAX_BYTES_LONG_TEXT
-			"ImageName VARCHAR(43) NOT NULL,"	// Img_BYTES_NAME
-			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
-			"ImageURL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+			"Subject TEXT NOT NULL,"			// Cns_MAX_BYTES_SUBJECT
+			"Content LONGTEXT NOT NULL,"			// Cns_MAX_BYTES_LONG_TEXT
+			"MediaName VARCHAR(43) NOT NULL DEFAULT '',"	// Med_BYTES_NAME
+			"MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg',"
+			"MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE
+			"MediaURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(PstCod),"
 		   "INDEX(ThrCod),"
 		   "INDEX(UsrCod),"
@@ -1731,50 +1733,54 @@ mysql> DESCRIBE msg_banned;
    /***** Table msg_content *****/
 /*
 mysql> DESCRIBE msg_content;
-+------------+---------------+------+-----+---------+----------------+
-| Field      | Type          | Null | Key | Default | Extra          |
-+------------+---------------+------+-----+---------+----------------+
-| MsgCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
-| Subject    | text          | NO   | MUL | NULL    |                |
-| Content    | longtext      | NO   |     | NULL    |                |
-| ImageName  | varchar(43)   | NO   |     |         |                |
-| ImageTitle | varchar(2047) | NO   |     |         |                |
-| ImageURL   | varchar(255)  | NO   |     |         |                |
-+------------+---------------+------+-----+---------+----------------+
-6 rows in set (0,00 sec)
++------------+-------------------+------+-----+---------+----------------+
+| Field      | Type              | Null | Key | Default | Extra          |
++------------+-------------------+------+-----+---------+----------------+
+| MsgCod     | int(11)           | NO   | PRI | NULL    | auto_increment |
+| Subject    | text              | NO   | MUL | NULL    |                |
+| Content    | longtext          | NO   |     | NULL    |                |
+| MediaName  | varchar(43)       | NO   |     |         |                |
+| MediaType  | enum('jpg','gif') | NO   |     | jpg     |                |
+| MediaTitle | varchar(2047)     | NO   |     |         |                |
+| MediaURL   | varchar(255)      | NO   |     |         |                |
++------------+-------------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_content ("
 			"MsgCod INT NOT NULL AUTO_INCREMENT,"
 			"Subject TEXT NOT NULL,"
 			"Content LONGTEXT NOT NULL,"
-			"ImageName VARCHAR(43) NOT NULL DEFAULT '',"	// Img_BYTES_NAME
-			"ImageTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Img_MAX_BYTES_TITLE
-			"ImageURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
+			"MediaName VARCHAR(43) NOT NULL DEFAULT '',"	// Med_BYTES_NAME
+			"MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg',"
+			"MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE
+			"MediaURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(MsgCod),"
 		   "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 
    /***** Table msg_content_deleted *****/
 /*
 mysql> DESCRIBE msg_content_deleted;
-+------------+---------------+------+-----+---------+-------+
-| Field      | Type          | Null | Key | Default | Extra |
-+------------+---------------+------+-----+---------+-------+
-| MsgCod     | int(11)       | NO   | PRI | NULL    |       |
-| Subject    | text          | NO   | MUL | NULL    |       |
-| Content    | longtext      | NO   |     | NULL    |       |
-| ImageName  | varchar(43)   | NO   |     |         |       |
-| ImageTitle | varchar(2047) | NO   |     |         |       |
-| ImageURL   | varchar(255)  | NO   |     |         |       |
-+------------+---------------+------+-----+---------+-------+
-6 rows in set (0,00 sec)
++------------+-------------------+------+-----+---------+-------+
+| Field      | Type              | Null | Key | Default | Extra |
++------------+-------------------+------+-----+---------+-------+
+| MsgCod     | int(11)           | NO   | PRI | NULL    |       |
+| Subject    | text              | NO   | MUL | NULL    |       |
+| Content    | longtext          | NO   |     | NULL    |       |
+| MediaName  | varchar(43)       | NO   |     |         |       |
+| MediaType  | enum('jpg','gif') | NO   |     | jpg     |       |
+| MediaTitle | varchar(2047)     | NO   |     |         |       |
+| MediaURL   | varchar(255)      | NO   |     |         |       |
++------------+-------------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_content_deleted ("
 			"MsgCod INT NOT NULL,"
 			"Subject TEXT NOT NULL,"
 			"Content LONGTEXT NOT NULL,"
-			"ImageName VARCHAR(43) NOT NULL DEFAULT '',"	// Img_BYTES_NAME
-			"ImageTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Img_MAX_BYTES_TITLE
-			"ImageURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
+			"MediaName VARCHAR(43) NOT NULL DEFAULT '',"	// Med_BYTES_NAME
+			"MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg',"
+			"MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE
+			"MediaURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(MsgCod),"
 		   "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 
@@ -2170,23 +2176,25 @@ mysql> DESCRIBE sessions;
    /***** Table social_comments *****/
 /*
 mysql> DESCRIBE social_comments;
-+------------+---------------+------+-----+---------+-------+
-| Field      | Type          | Null | Key | Default | Extra |
-+------------+---------------+------+-----+---------+-------+
-| PubCod     | bigint(20)    | NO   | PRI | NULL    |       |
-| Content    | longtext      | NO   | MUL | NULL    |       |
-| ImageName  | varchar(43)   | NO   |     | NULL    |       |
-| ImageTitle | varchar(2047) | NO   |     | NULL    |       |
-| ImageURL   | varchar(255)  | NO   |     | NULL    |       |
-+------------+---------------+------+-----+---------+-------+
-5 rows in set (0,00 sec)
++------------+-------------------+------+-----+---------+-------+
+| Field      | Type              | Null | Key | Default | Extra |
++------------+-------------------+------+-----+---------+-------+
+| PubCod     | bigint(20)        | NO   | PRI | NULL    |       |
+| Content    | longtext          | NO   | MUL | NULL    |       |
+| MediaName  | varchar(43)       | NO   |     |         |       |
+| MediaType  | enum('jpg','gif') | NO   |     | jpg     |       |
+| MediaTitle | varchar(2047)     | NO   |     |         |       |
+| MediaURL   | varchar(255)      | NO   |     |         |       |
++------------+-------------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments ("
 			"PubCod BIGINT NOT NULL,"
 			"Content LONGTEXT NOT NULL,"
-			"ImageName VARCHAR(43) NOT NULL,"	// Img_BYTES_NAME
-			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
-			"ImageURL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+			"MediaName VARCHAR(43) NOT NULL DEFAULT '',"	// Med_BYTES_NAME
+			"MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg',"
+			"MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE
+			"MediaURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(PubCod),"
 		   "FULLTEXT(Content)) ENGINE = MYISAM;");
 
@@ -2266,23 +2274,25 @@ mysql> DESCRIBE social_notes_fav;
    /***** Table social_posts *****/
 /*
 mysql> DESCRIBE social_posts;
-+------------+---------------+------+-----+---------+----------------+
-| Field      | Type          | Null | Key | Default | Extra          |
-+------------+---------------+------+-----+---------+----------------+
-| PstCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
-| Content    | longtext      | NO   | MUL | NULL    |                |
-| ImageName  | varchar(43)   | NO   |     | NULL    |                |
-| ImageTitle | varchar(2047) | NO   |     | NULL    |                |
-| ImageURL   | varchar(255)  | NO   |     | NULL    |                |
-+------------+---------------+------+-----+---------+----------------+
-5 rows in set (0,00 sec)
++------------+-------------------+------+-----+---------+----------------+
+| Field      | Type              | Null | Key | Default | Extra          |
++------------+-------------------+------+-----+---------+----------------+
+| PstCod     | int(11)           | NO   | PRI | NULL    | auto_increment |
+| Content    | longtext          | NO   | MUL | NULL    |                |
+| MediaName  | varchar(43)       | NO   |     |         |                |
+| MediaType  | enum('jpg','gif') | NO   |     | jpg     |                |
+| MediaTitle | varchar(2047)     | NO   |     |         |                |
+| MediaURL   | varchar(255)      | NO   |     |         |                |
++------------+-------------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_posts ("
 			"PubCod INT NOT NULL AUTO_INCREMENT,"
 			"Content LONGTEXT NOT NULL,"
-			"ImageName VARCHAR(43) NOT NULL,"	// Img_BYTES_NAME
-			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
-			"ImageURL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+			"MediaName VARCHAR(43) NOT NULL DEFAULT '',"	// Med_BYTES_NAME
+			"MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg',"
+			"MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE
+			"MediaURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(PubCod),"
 		   "FULLTEXT(Content)) ENGINE = MYISAM;");
 
@@ -2537,28 +2547,30 @@ mysql> DESCRIBE timetable_tut;
    /***** Table tst_answers *****/
 /*
 mysql> DESCRIBE tst_answers;
-+------------+---------------+------+-----+---------+-------+
-| Field      | Type          | Null | Key | Default | Extra |
-+------------+---------------+------+-----+---------+-------+
-| QstCod     | int(11)       | NO   | MUL | NULL    |       |
-| AnsInd     | tinyint(4)    | NO   |     | NULL    |       |
-| Answer     | text          | NO   |     | NULL    |       |
-| Feedback   | text          | NO   |     | NULL    |       |
-| ImageName  | varchar(43)   | NO   |     | NULL    |       |
-| ImageTitle | varchar(2047) | NO   |     | NULL    |       |
-| ImageURL   | varchar(255)  | NO   |     | NULL    |       |
-| Correct    | enum('N','Y') | NO   |     | NULL    |       |
-+------------+---------------+------+-----+---------+-------+
-8 rows in set (0,00 sec)
++------------+-------------------+------+-----+---------+-------+
+| Field      | Type              | Null | Key | Default | Extra |
++------------+-------------------+------+-----+---------+-------+
+| QstCod     | int(11)           | NO   | MUL | NULL    |       |
+| AnsInd     | tinyint(4)        | NO   |     | NULL    |       |
+| Answer     | text              | NO   |     | NULL    |       |
+| Feedback   | text              | NO   |     | NULL    |       |
+| MediaName  | varchar(43)       | NO   |     |         |       |
+| MediaType  | enum('jpg','gif') | NO   |     | jpg     |       |
+| MediaTitle | varchar(2047)     | NO   |     |         |       |
+| MediaURL   | varchar(255)      | NO   |     |         |       |
+| Correct    | enum('N','Y')     | NO   |     | NULL    |       |
++------------+-------------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_answers ("
 			"QstCod INT NOT NULL,"
 			"AnsInd TINYINT NOT NULL,"
-			"Answer TEXT NOT NULL,"			// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
-			"Feedback TEXT NOT NULL,"		// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
-			"ImageName VARCHAR(43) NOT NULL,"	// Img_BYTES_NAME
-			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
-			"ImageURL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+			"Answer TEXT NOT NULL,"				// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
+			"Feedback TEXT NOT NULL,"			// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
+			"MediaName VARCHAR(43) NOT NULL DEFAULT '',"	// Med_BYTES_NAME
+			"MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg',"
+			"MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE
+			"MediaURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
 			"Correct ENUM('N','Y') NOT NULL,"
 		   "INDEX(QstCod))");
 
@@ -2672,14 +2684,15 @@ mysql> DESCRIBE tst_questions;
 | Shuffle         | enum('N','Y')                                                             | NO   |     | NULL    |                |
 | Stem            | text                                                                      | NO   |     | NULL    |                |
 | Feedback        | text                                                                      | NO   |     | NULL    |                |
-| ImageName       | varchar(43)                                                               | NO   |     | NULL    |                |
-| ImageTitle      | varchar(2047)                                                             | NO   |     | NULL    |                |
-| ImageURL        | varchar(255)                                                              | NO   |     | NULL    |                |
+| MediaName       | varchar(43)                                                               | NO   |     |         |                |
+| MediaType       | enum('jpg','gif')                                                         | NO   |     | jpg     |                |
+| MediaTitle      | varchar(2047)                                                             | NO   |     |         |                |
+| MediaURL        | varchar(255)                                                              | NO   |     |         |                |
 | NumHits         | int(11)                                                                   | NO   |     | 0       |                |
 | NumHitsNotBlank | int(11)                                                                   | NO   |     | 0       |                |
 | Score           | double                                                                    | NO   |     | 0       |                |
 +-----------------+---------------------------------------------------------------------------+------+-----+---------+----------------+
-13 rows in set (0,00 sec)
+14 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_questions ("
 			"QstCod INT NOT NULL AUTO_INCREMENT,"
@@ -2687,11 +2700,12 @@ mysql> DESCRIBE tst_questions;
 			"EditTime DATETIME NOT NULL,"
 			"AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL,"
 			"Shuffle ENUM('N','Y') NOT NULL,"
-			"Stem TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
-			"Feedback TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
-			"ImageName VARCHAR(43) NOT NULL,"	// Img_BYTES_NAME
-			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
-			"ImageURL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+			"Stem TEXT NOT NULL,"				// Cns_MAX_BYTES_TEXT
+			"Feedback TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
+			"MediaName VARCHAR(43) NOT NULL DEFAULT '',"	// Med_BYTES_NAME
+			"MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg',"
+			"MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE
+			"MediaURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
 			"NumHits INT NOT NULL DEFAULT 0,"
 			"NumHitsNotBlank INT NOT NULL DEFAULT 0,"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"

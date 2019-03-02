@@ -54,7 +54,6 @@
 #include "swad_forum.h"
 #include "swad_game.h"
 #include "swad_holiday.h"
-#include "swad_image.h"
 #include "swad_icon.h"
 #include "swad_indicator.h"
 #include "swad_institution.h"
@@ -62,8 +61,9 @@
 #include "swad_link.h"
 #include "swad_mail.h"
 #include "swad_mark.h"
-#include "swad_message.h"
+#include "swad_media.h"
 #include "swad_menu.h"
+#include "swad_message.h"
 #include "swad_parameter.h"
 #include "swad_password.h"
 #include "swad_photo.h"
@@ -702,7 +702,7 @@ struct Globals
          char *Text;
          size_t Length;
         } Stem, Feedback;
-      struct Image Image;
+      struct Media Media;
       bool Shuffle;
       struct
         {
@@ -713,7 +713,7 @@ struct Globals
             bool Correct;
             char *Text;
             char *Feedback;
-            struct Image Image;
+            struct Media Media;
            } Options[Tst_MAX_OPTIONS_PER_QUESTION];
          long Integer;
          double FloatingPoint[2];

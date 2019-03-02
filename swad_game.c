@@ -2729,23 +2729,15 @@ static void Gam_ListGameQuestions (struct Game *Game)
       ActionToDoWithQuestions = Tst_SHOW_GAME_RESULT;
 
    /***** Get data of questions from database *****/
-   /*
-   row[0] QstCod
-   row[1] AnsType
-   row[2] Stem
-   row[3] Feedback
-   row[4] ImageName
-   row[5] ImageTitle
-   row[6] ImageURL
-   */
    NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get data of a question",
-				        "SELECT tst_questions.QstCod,"
-					"tst_questions.AnsType,"
-					"tst_questions.Stem,"
-					"tst_questions.Feedback,"
-					"tst_questions.ImageName,"
-					"tst_questions.ImageTitle,"
-					"tst_questions.ImageURL"
+				        "SELECT tst_questions.QstCod,"		// row[0]
+					       "tst_questions.AnsType,"		// row[1]
+					       "tst_questions.Stem,"		// row[2]
+					       "tst_questions.Feedback,"	// row[3]
+					       "tst_questions.MediaName,"	// row[4]
+					       "tst_questions.MediaType,"	// row[5]
+					       "tst_questions.MediaTitle,"	// row[6]
+					       "tst_questions.MediaURL"		// row[7]
 					" FROM gam_questions,tst_questions"
 					" WHERE gam_questions.GamCod=%ld"
 					" AND gam_questions.QstCod=tst_questions.QstCod"
@@ -2850,9 +2842,10 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       row[1] AnsType
       row[2] Stem
       row[3] Feedback
-      row[4] ImageName
-      row[5] ImageTitle
-      row[6] ImageURL
+      row[4] MediaName
+      row[5] MediaType
+      row[6] MediaTitle
+      row[7] MediaURL
       */
       /***** Create test question *****/
       Tst_QstConstructor ();
@@ -2930,13 +2923,14 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Write the stem (row[2]), the image (row[4], row[5], row[6]),
+      /* Write the stem (row[2]), the image (row[4], row[5], row[6], row[7]),
          the feedback (row[3]) and the answers */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[2],"TEST_EDI");
-      Img_GetImageNameTitleAndURLFromRow (row[4],row[5],row[6],&Gbl.Test.Image);
-      Img_ShowImage (&Gbl.Test.Image,
+      Med_GetMediaNameTitleAndURLFromRow (row[4],row[5],row[6],row[7],
+					  &Gbl.Test.Media);
+      Med_ShowMedia (&Gbl.Test.Media,
                      "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
                      "TEST_IMG_EDIT_LIST_STEM");
       Tst_WriteQstFeedback (row[3],"TEST_EDI_LIGHT");
@@ -3534,22 +3528,14 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
    QstInd = Gam_GetParamQstInd ();
 
    /***** Get data of question from database *****/
-   /*
-   row[0] AnsType
-   row[1] QstCod
-   row[2] Stem
-   row[3] ImageName
-   row[4] ImageTitle
-   row[5] ImageURL
-   */
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
-			"SELECT "
-			"tst_questions.QstCod,"
-			"tst_questions.AnsType,"
-			"tst_questions.Stem,"
-			"tst_questions.ImageName,"
-			"tst_questions.ImageTitle,"
-			"tst_questions.ImageURL"
+			"SELECT tst_questions.QstCod,"		// row[0]
+			       "tst_questions.AnsType,"		// row[1]
+			       "tst_questions.Stem,"		// row[2]
+			       "tst_questions.MediaName,"	// row[3]
+			       "tst_questions.MediaType,"	// row[4]
+			       "tst_questions.MediaTitle,"	// row[5]
+			       "tst_questions.MediaURL"		// row[6]
 			" FROM gam_questions,tst_questions"
 			" WHERE gam_questions.GamCod=%ld"
 			" AND gam_questions.QstInd=%u"
@@ -3568,10 +3554,11 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
 
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_QST_CONTAINER\">");
 
-   /* Write the stem (row[2]) and the image (row[3], row[4], row[5]) */
+   /* Write the stem (row[2]) and the image (row[3], row[4], row[5], row[6]) */
    Tst_WriteQstStem (row[2],"GAM_PLAY_QST");
-   Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Image);
-   Img_ShowImage (&Gbl.Test.Image,
+   Med_GetMediaNameTitleAndURLFromRow (row[3],row[4],row[5],row[6],
+				       &Gbl.Test.Media);
+   Med_ShowMedia (&Gbl.Test.Media,
 		  "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
 		  "TEST_IMG_EDIT_LIST_STEM");
 

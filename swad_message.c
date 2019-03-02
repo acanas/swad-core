@@ -121,7 +121,7 @@ static void Msg_ContractSentMsg (long MsgCod);
 static void Msg_ContractReceivedMsg (long MsgCod);
 
 static long Msg_InsertNewMsg (const char *Subject,const char *Content,
-                              struct Image *Image);
+                              struct Media *Media);
 
 static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
                                                  long FilterCrsCod,const char *FilterFromToSubquery);
@@ -139,7 +139,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
                                char Subject[Cns_MAX_BYTES_SUBJECT + 1],
                                bool *Deleted);
 static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
-                               struct Image *Image);
+                               struct Media *Media);
 
 static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,bool Open,bool Expanded);
 static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
@@ -325,7 +325,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   Img_PutImageUploader (-1,"MSG_IMG_TIT_URL");
+   Med_PutMediaUploader (-1,"MSG_IMG_TIT_URL");
 
    /***** Send button *****/
    Btn_PutCreateButton (Txt_Send_message);
@@ -669,7 +669,7 @@ void Msg_RecMsgFromUsr (void)
    bool CreateNotif;
    bool NotifyByEmail;
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Image Image;
+   struct Media Media;
    bool Error = false;
 
    /***** Get data from form *****/
@@ -727,13 +727,13 @@ void Msg_RecMsgFromUsr (void)
    Usr_UsrDataConstructor (&UsrDstData);
 
    /***** Initialize image *****/
-   Img_ImageConstructor (&Image);
+   Med_MediaConstructor (&Media);
 
    /***** Get attached image (action, file and title) *****/
-   Image.Width   = Msg_IMAGE_SAVED_MAX_WIDTH;
-   Image.Height  = Msg_IMAGE_SAVED_MAX_HEIGHT;
-   Image.Quality = Msg_IMAGE_SAVED_QUALITY;
-   Img_GetImageFromForm (-1,&Image,NULL);
+   Media.Width   = Msg_IMAGE_SAVED_MAX_WIDTH;
+   Media.Height  = Msg_IMAGE_SAVED_MAX_HEIGHT;
+   Media.Quality = Msg_IMAGE_SAVED_QUALITY;
+   Med_GetMediaFromForm (-1,&Media,NULL);
 
    /***** Loop over the list Gbl.Usrs.Select[Rol_UNK], that holds the list of the
 	  recipients, creating a received message for each recipient *****/
@@ -761,7 +761,7 @@ void Msg_RecMsgFromUsr (void)
             if (!MsgAlreadyInserted)
               {
                // The message is inserted only once in the table of messages sent
-               NewMsgCod = Msg_InsertNewMsg (Gbl.Msg.Subject,Content,&Image);
+               NewMsgCod = Msg_InsertNewMsg (Gbl.Msg.Subject,Content,&Media);
                MsgAlreadyInserted = true;
               }
 
@@ -806,7 +806,7 @@ void Msg_RecMsgFromUsr (void)
      }
 
    /***** Free image *****/
-   Img_ImageDestructor (&Image);
+   Med_MediaDestructor (&Media);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDstData);
@@ -1277,27 +1277,28 @@ void Msg_SetReceivedMsgAsOpen (long MsgCod,long UsrCod)
 // Return the code of the new inserted message
 
 static long Msg_InsertNewMsg (const char *Subject,const char *Content,
-                              struct Image *Image)
+                              struct Media *Media)
   {
    long MsgCod;
 
    /***** Check if image is received and processed *****/
-   if (Image->Action == Img_ACTION_NEW_IMAGE &&	// Upload new image
-       Image->Status == Img_FILE_PROCESSED)	// The new image received has been processed
+   if (Media->Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
+       Media->Status == Med_FILE_PROCESSED)	// The new image received has been processed
       /* Move processed image to definitive directory */
-      Img_MoveImageToDefinitiveDirectory (Image);
+      Med_MoveMediaToDefinitiveDirectory (Media);
 
    /***** Insert message subject and content in the database *****/
    MsgCod =
    DB_QueryINSERTandReturnCode ("can not create message",
 				"INSERT INTO msg_content"
-				" (Subject,Content,ImageName,ImageTitle,ImageURL)"
+				" (Subject,Content,MediaName,MediaType,MediaTitle,MediaURL)"
 				" VALUES"
-				" ('%s','%s','%s','%s','%s')",
+				" ('%s','%s','%s','%s','%s','%s')",
 				Subject,Content,
-				Image->Name,
-				Image->Title ? Image->Title : "",
-				Image->URL   ? Image->URL   : "");
+				Media->Name,
+				Med_GetStringTypeForDB (Media->Type),
+				Media->Title ? Media->Title : "",
+				Media->URL   ? Media->URL   : "");
 
    /***** Insert message in sent messages *****/
    DB_QueryINSERT ("can not create message",
@@ -1490,8 +1491,8 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
    /* Insert message content into msg_content_deleted */
    DB_QueryINSERT ("can not remove the content of a message",
 		   "INSERT IGNORE INTO msg_content_deleted"
-		   " (MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL)"
-		   " SELECT MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL"
+		         " (MsgCod,Subject,Content,MediaName,MediaType,MediaTitle,MediaURL)"
+		   " SELECT MsgCod,Subject,Content,MediaName,MediaType,MediaTitle,MediaURL"
 		   " FROM msg_content WHERE MsgCod=%ld",
                    MsgCod);
 
@@ -2774,7 +2775,7 @@ void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
 /*****************************************************************************/
 
 static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
-                               struct Image *Image)
+                               struct Media *Media)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2782,7 +2783,11 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
 
    /***** Get content of message from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the content of a message",
-			     "SELECT Content,ImageName,ImageTitle,ImageURL"
+			     "SELECT Content,"		// row[0]
+				    "MediaName,"	// row[1]
+				    "MediaType,"	// row[2]
+				    "MediaTitle,"	// row[3]
+				    "MediaURL"		// row[4]
 			     " FROM msg_content WHERE MsgCod=%ld",
 			     MsgCod);
 
@@ -2797,8 +2802,8 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
    Str_Copy (Content,row[0],
              Cns_MAX_BYTES_LONG_TEXT);
 
-   /****** Get image name (row[1]), title (row[2]) and URL (row[3]) *****/
-   Img_GetImageNameTitleAndURLFromRow (row[1],row[2],row[3],Image);
+   /****** Get image name (row[1]), type (row[2]), title (row[3]) and URL (row[4]) *****/
+   Med_GetMediaNameTitleAndURLFromRow (row[1],row[2],row[3],row[4],Media);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2897,7 +2902,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    long CrsCod;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Image Image;
+   struct Media Media;
    bool Deleted;
    bool Open = true;
    bool Replied = false;	// Initialized to avoid warning
@@ -3030,21 +3035,21 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
                Txt_MSG_Content);
 
       /***** Initialize image *****/
-      Img_ImageConstructor (&Image);
+      Med_MediaConstructor (&Media);
 
       /***** Get message content and optional image *****/
-      Msg_GetMsgContent (MsgCod,Content,&Image);
+      Msg_GetMsgContent (MsgCod,Content,&Media);
 
       /***** Show content and image *****/
       fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"MSG_TXT LEFT_TOP\">");
       if (Content[0])
          Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
-      Img_ShowImage (&Image,"MSG_IMG_CONTAINER","MSG_IMG");
+      Med_ShowMedia (&Media,"MSG_IMG_CONTAINER","MSG_IMG");
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
       /***** Free image *****/
-      Img_ImageDestructor (&Image);
+      Med_MediaDestructor (&Media);
      }
 
    /***** Free memory used for user's data *****/

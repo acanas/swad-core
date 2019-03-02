@@ -282,8 +282,8 @@ static void For_InsertPstIntoBannedPstTable (long PstCod);
 
 static long For_InsertForumPst (long ThrCod,long UsrCod,
                                 const char *Subject,const char *Content,
-                                struct Image *Image);
-static bool For_RemoveForumPst (long PstCod,struct Image *Image);
+                                struct Media *Media);
+static bool For_RemoveForumPst (long PstCod,struct Media *Media);
 static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod);
 
 static long For_InsertForumThread (long FirstPstCod);
@@ -313,7 +313,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
                             char Subject[Cns_MAX_BYTES_SUBJECT + 1],
                             char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
-                            struct Image *Image);
+                            struct Media *Media);
 static void For_WriteNumberOfPosts (long UsrCod);
 
 static void For_PutParamForumSet (For_ForumSet_t ForumSet);
@@ -496,30 +496,30 @@ static void For_InsertPstIntoBannedPstTable (long PstCod)
 
 static long For_InsertForumPst (long ThrCod,long UsrCod,
                                 const char *Subject,const char *Content,
-                                struct Image *Image)
+                                struct Media *Media)
   {
    long PstCod;
 
    /***** Check if image is received and processed *****/
-   if (Image->Action == Img_ACTION_NEW_IMAGE &&	// Upload new image
-       Image->Status == Img_FILE_PROCESSED)	// The new image received has been processed
+   if (Media->Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
+       Media->Status == Med_FILE_PROCESSED)	// The new image received has been processed
       /* Move processed image to definitive directory */
-      Img_MoveImageToDefinitiveDirectory (Image);
+      Med_MoveMediaToDefinitiveDirectory (Media);
 
    /***** Insert forum post in the database *****/
    PstCod =
    DB_QueryINSERTandReturnCode ("can not create a new post in a forum",
 				"INSERT INTO forum_post"
 				" (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
-				"Subject,Content,ImageName,ImageTitle,ImageURL)"
+				"Subject,Content,MediaName,MediaTitle,MediaURL)"
 				" VALUES"
 				" (%ld,%ld,NOW(),NOW(),0,"
 				"'%s','%s','%s','%s','%s')",
 				ThrCod,UsrCod,
 				Subject,Content,
-				Image->Name,
-				Image->Title ? Image->Title : "",
-				Image->URL   ? Image->URL   : "");
+				Media->Name,
+				Media->Title ? Media->Title : "",
+				Media->URL   ? Media->URL   : "");
 
    return PstCod;
   }
@@ -529,13 +529,13 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
 /*****************************************************************************/
 // Return true if the post thread is deleted
 
-static bool For_RemoveForumPst (long PstCod,struct Image *Image)
+static bool For_RemoveForumPst (long PstCod,struct Media *Media)
   {
    long ThrCod;
    bool ThreadDeleted = false;
 
-   /***** Remove image file attached to forum post *****/
-   Img_RemoveImageFile (Image->Name);
+   /***** Remove media file attached to forum post *****/
+   Med_RemoveMediaFile (Media->Name,Media->Type);
 
    /***** If the post is the only one in its thread, delete that thread *****/
    if (For_NumPstsInThrWithPstCod (PstCod,&ThrCod) < 2)
@@ -1157,7 +1157,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT + 1];
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Image Image;
+   struct Media Media;
    bool Enabled;
    bool ItsMe;
 
@@ -1165,14 +1165,14 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Initialize image *****/
-   Img_ImageConstructor (&Image);
+   Med_MediaConstructor (&Media);
 
    /***** Check if post is enabled *****/
    Enabled = For_GetIfPstIsEnabled (PstCod);
 
    /***** Get data of post *****/
    For_GetPstData (PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
-                   Subject,OriginalContent,&Image);
+                   Subject,OriginalContent,&Media);
 
    if (Enabled)
       /* Return this subject as last subject */
@@ -1308,7 +1308,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
 
       /***** Show image *****/
-      Img_ShowImage (&Image,"FOR_IMG_CONTAINER","FOR_IMG");
+      Med_ShowMedia (&Media,"FOR_IMG_CONTAINER","FOR_IMG");
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
@@ -1316,7 +1316,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 	              "</tr>");
 
    /***** Free image *****/
-   Img_ImageDestructor (&Image);
+   Med_MediaDestructor (&Media);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -1329,7 +1329,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
                             char Subject[Cns_MAX_BYTES_SUBJECT + 1],
                             char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
-                            struct Image *Image)
+                            struct Media *Media)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1337,8 +1337,14 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 
    /***** Get data of a post from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a post",
-			     "SELECT UsrCod,UNIX_TIMESTAMP(CreatTime),"
-			     "Subject,Content,ImageName,ImageTitle,ImageURL"
+			     "SELECT UsrCod,"				// row[0]
+			            "UNIX_TIMESTAMP(CreatTime),"	// row[1]
+			            "Subject,"				// row[2]
+			            "Content,"				// row[3]
+			            "MediaName,"			// row[4]
+			            "MediaType,"			// row[5]
+			            "MediaTitle,"			// row[6]
+			            "MediaURL"				// row[7]
 			     " FROM forum_post WHERE PstCod=%ld",
 			     PstCod);
 
@@ -1363,8 +1369,9 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    Str_Copy (Content,row[3],
              Cns_MAX_BYTES_LONG_TEXT);
 
-   /****** Get image name (row[4]), title (row[5]) and URL (row[6]) *****/
-   Img_GetImageNameTitleAndURLFromRow (row[4],row[5],row[6],Image);
+   /****** Get media name (row[4]), type (row[5]),
+           title (row[6]) and URL (row[7]) *****/
+   Med_GetMediaNameTitleAndURLFromRow (row[4],row[5],row[6],row[7],Media);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3999,7 +4006,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   Img_PutImageUploader (-1,"FOR_IMG_TIT_URL");
+   Med_PutMediaUploader (-1,"FOR_IMG_TIT_URL");
 
    /***** Send button *****/
    Btn_PutCreateButton (Txt_Send);
@@ -4023,7 +4030,7 @@ void For_ReceiveForumPost (void)
    unsigned NumUsrsToBeNotifiedByEMail;
    struct SocialPublishing SocPub;
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Image Image;
+   struct Media Media;
 
    /***** Get parameters related to forum *****/
    For_GetParamsForum ();
@@ -4045,13 +4052,13 @@ void For_ReceiveForumPost (void)
                               Str_TO_RIGOROUS_HTML,false);
 
    /***** Initialize image *****/
-   Img_ImageConstructor (&Image);
+   Med_MediaConstructor (&Media);
 
    /***** Get attached image (action, file and title) *****/
-   Image.Width   = For_IMAGE_SAVED_MAX_WIDTH;
-   Image.Height  = For_IMAGE_SAVED_MAX_HEIGHT;
-   Image.Quality = For_IMAGE_SAVED_QUALITY;
-   Img_GetImageFromForm (-1,&Image,NULL);
+   Media.Width   = For_IMAGE_SAVED_MAX_WIDTH;
+   Media.Height  = For_IMAGE_SAVED_MAX_HEIGHT;
+   Media.Quality = For_IMAGE_SAVED_QUALITY;
+   Med_GetMediaFromForm (-1,&Media,NULL);
 
    /***** Create a new message *****/
    if (IsReply)	// This post is a reply to another posts in the thread
@@ -4060,7 +4067,7 @@ void For_ReceiveForumPost (void)
 
       /***** Create last message of the thread *****/
       PstCod = For_InsertForumPst (Gbl.Forum.ForumSelected.ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-                                   Gbl.Msg.Subject,Content,&Image);
+                                   Gbl.Msg.Subject,Content,&Media);
 
       /***** Modify last message of the thread *****/
       For_UpdateThrLastPst (Gbl.Forum.ForumSelected.ThrCod,PstCod);
@@ -4072,14 +4079,14 @@ void For_ReceiveForumPost (void)
 
       /***** Create first (and last) message of the thread *****/
       PstCod = For_InsertForumPst (Gbl.Forum.ForumSelected.ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-                                   Gbl.Msg.Subject,Content,&Image);
+                                   Gbl.Msg.Subject,Content,&Media);
 
       /***** Update first and last posts of new thread *****/
       For_UpdateThrFirstAndLastPst (Gbl.Forum.ForumSelected.ThrCod,PstCod,PstCod);
      }
 
    /***** Free image *****/
-   Img_ImageDestructor (&Image);
+   Med_MediaDestructor (&Media);
 
    /***** Increment number of forum posts in my user's figures *****/
    Prf_IncrementNumForPstUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -4148,7 +4155,7 @@ void For_RemovePost (void)
    time_t CreatTimeUTC;	// Creation time of a message
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char OriginalContent[Cns_MAX_BYTES_LONG_TEXT + 1];
-   struct Image Image;
+   struct Media Media;
    bool ItsMe;
    bool ThreadDeleted = false;
 
@@ -4156,11 +4163,11 @@ void For_RemovePost (void)
    For_GetParamsForum ();
 
    /***** Initialize image *****/
-   Img_ImageConstructor (&Image);
+   Med_MediaConstructor (&Media);
 
    /***** Get forum post data *****/
    For_GetPstData (Gbl.Forum.ForumSelected.PstCod,&UsrDat.UsrCod,&CreatTimeUTC,
-                   Subject,OriginalContent,&Image);
+                   Subject,OriginalContent,&Media);
 
    /***** Check if I can remove the post *****/
    /* Check if the message really exists, if it has not been removed */
@@ -4177,10 +4184,10 @@ void For_RemovePost (void)
       Lay_ShowErrorAndExit ("You can not remove post because it is not the last of the thread.");
 
    /***** Remove the post *****/
-   ThreadDeleted = For_RemoveForumPst (Gbl.Forum.ForumSelected.PstCod,&Image);
+   ThreadDeleted = For_RemoveForumPst (Gbl.Forum.ForumSelected.PstCod,&Media);
 
    /***** Free image *****/
-   Img_ImageDestructor (&Image);
+   Med_MediaDestructor (&Media);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_FORUM_POST_COURSE,Gbl.Forum.ForumSelected.PstCod);

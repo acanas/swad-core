@@ -2381,13 +2381,13 @@ void Ctr_ReceivePhoto (void)
    /* Create private directory for images if it does not exist */
    snprintf (PathImgPriv,sizeof (PathImgPriv),
 	     "%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG);
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA);
    Fil_CreateDirIfNotExists (PathImgPriv);
 
    /* Create temporary private directory for images if it does not exist */
    snprintf (PathImgPriv,sizeof (PathImgPriv),
 	     "%s/%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP);
+	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP);
    Fil_CreateDirIfNotExists (PathImgPriv);
 
    /* Get filename extension */
@@ -2407,7 +2407,7 @@ void Ctr_ReceivePhoto (void)
    /* End the reception of image in a temporary file */
    snprintf (FileNameImgTmp,sizeof (FileNameImgTmp),
 	     "%s/%s/%s/%s.%s",
-             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_IMG,Cfg_FOLDER_IMG_TMP,
+             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP,
              Gbl.UniqueNameEncrypted,PtrExtension);
    if (!Fil_EndReceptionOfFile (FileNameImgTmp,Param))
      {
@@ -2476,11 +2476,11 @@ void Ctr_ReceivePhoto (void)
 
 void Ctr_ChangeCtrPhotoAttribution (void)
   {
-   char NewPhotoAttribution[Img_MAX_BYTES_ATTRIBUTION + 1];
+   char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1];
 
    /***** Get parameters from form *****/
    /* Get the new photo attribution for the centre */
-   Par_GetParToText ("Attribution",NewPhotoAttribution,Img_MAX_BYTES_ATTRIBUTION);
+   Par_GetParToText ("Attribution",NewPhotoAttribution,Med_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
    DB_QueryUPDATE ("can not update the photo attribution"

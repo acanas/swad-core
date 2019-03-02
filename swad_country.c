@@ -1940,11 +1940,11 @@ void Cty_ChangeCtyWWW (void)
 
 void Cty_ChangeCtyMapAttribution (void)
   {
-   char NewMapAttribution[Img_MAX_BYTES_ATTRIBUTION + 1];
+   char NewMapAttribution[Med_MAX_BYTES_ATTRIBUTION + 1];
 
    /***** Get parameters from form *****/
    /* Get the new map attribution for the country */
-   Par_GetParToText ("Attribution",NewMapAttribution,Img_MAX_BYTES_ATTRIBUTION);
+   Par_GetParToText ("Attribution",NewMapAttribution,Med_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
    DB_QueryUPDATE ("can not update the map attribution of a country",

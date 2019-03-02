@@ -2676,28 +2676,28 @@ a:hover img.CENTRE_PHOTO_SHOW
 	opacity:0.3;
 	}
 
-/****************************** Image uploading ******************************/
-.IMG_UPLOAD_CONTAINER
+/*********************** Media (image/video) uploading ***********************/
+.MED_UPL_CON	/* Upload container */
 	{
 	vertical-align:top;
 	margin-bottom:10px;
 	}
-.IMG_UPLOAD_BUTTON
+.MED_UPL_BUT	/* Upload button _*/
 	{
 	cursor:pointer;
 	}
-.IMG_UPLOAD_ICO
+.MED_UPL_ICO	/* Upload icon */
 	{
 	width:16px;
 	height:16px;
 	margin:0 5px;
 	vertical-align:middle;
 	}
-.IMG_UPLOAD_FILE
+.MED_UPL_FIL	/* Upload file */
 	{
 	display:none;
 	}
-.IMG_UPLOAD_FILENAME
+.MED_UPL_NAM	/* Upload filename */
 	{
 	color:#808080;
 	font-size:12pt;

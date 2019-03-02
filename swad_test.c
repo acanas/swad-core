@@ -42,8 +42,8 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
-#include "swad_image.h"
 #include "swad_language.h"
+#include "swad_media.h"
 #include "swad_parameter.h"
 #include "swad_table.h"
 #include "swad_theme.h"
@@ -155,10 +155,10 @@ static Tst_Status_t Tst_GetTstStatus (unsigned NumTst);
 static unsigned Tst_GetNumAccessesTst (void);
 static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
 static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
-static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
+static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
                                        const char *ClassContainer,
-                                       const char *ClassImg,
-                                       const char *ClassImgTitURL,
+                                       const char *ClassMedia,
+                                       const char *ClassMediaTitURL,
                                        bool OptionsDisabled);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
@@ -247,16 +247,16 @@ static void Tst_PutTFInputField (const char *Label,char Value);
 static void Tst_FreeTextChoiceAnswers (void);
 static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
 
-static void Tst_InitImagesOfQuestion (void);
-static void Tst_FreeImagesOfQuestion (void);
+static void Tst_InitMediaOfQuestion (void);
+static void Tst_FreeMediaOfQuestion (void);
 
 static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
                                   char Feedback[Cns_MAX_BYTES_TEXT + 1]);
-static void Tst_GetImageFromDB (int NumOpt,struct Image *Image);
+static void Tst_GetMediaFromDB (int NumOpt,struct Media *Media);
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 static void Tst_GetQstFromForm (char *Stem,char *Feedback);
-static void Tst_MoveImagesToDefinitiveDirectories (void);
+static void Tst_MoveMediaToDefinitiveDirectories (void);
 
 static long Tst_GetTagCodFromTagTxt (const char *TagTxt);
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt);
@@ -939,12 +939,13 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 	 row[ 3] Shuffle
 	 row[ 4] Stem
 	 row[ 5] Feedback
-	 row[ 6] ImageName
-	 row[ 7] ImageTitle
-	 row[ 8] ImageURL
-	 row[ 9] NumHits
-	 row[10] NumHitsNotBlank
-	 row[11] Score
+	 row[ 6] MediaName
+	 row[ 7] MediaType
+	 row[ 8] MediaTitle
+	 row[ 9] MediaURL
+	 row[10] NumHits
+	 row[11] NumHitsNotBlank
+	 row[12] Score
 	 */
 
 	 /***** Get the code of question (row[0]) *****/
@@ -1007,12 +1008,13 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
    row[ 3] Shuffle
    row[ 4] Stem
    row[ 5] Feedback
-   row[ 6] ImageName
-   row[ 7] ImageTitle
-   row[ 8] ImageURL
-   row[ 9] NumHits
-   row[10] NumHitsNotBlank
-   row[11] Score
+   row[ 6] MediaName
+   row[ 7] MediaType
+   row[ 8] MediaTitle
+   row[ 9] MediaURL
+   row[10] NumHits
+   row[11] NumHitsNotBlank
+   row[12] Score
    */
 
    /***** Create test question *****/
@@ -1032,13 +1034,14 @@ void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestio
 	              "</td>",
             Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
 
-   /***** Write stem (row[4]), image (row[6], row[7], row[8]),
+   /***** Write stem (row[4]), media (row[6], row[7], row[8], row[9]),
           answers depending on shuffle (row[3]) and feedback (row[5])  *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
    Tst_WriteQstStem (row[4],"TEST_EXA");
-   Img_GetImageNameTitleAndURLFromRow (row[6],row[7],row[8],&Gbl.Test.Image);
-   Img_ShowImage (&Gbl.Test.Image,
+   Med_GetMediaNameTitleAndURLFromRow (row[6],row[7],row[8],row[9],
+	                               &Gbl.Test.Media);
+   Med_ShowMedia (&Gbl.Test.Media,
                   "TEST_IMG_SHOW_STEM_CONTAINER",
                   "TEST_IMG_SHOW_STEM");
 
@@ -1106,10 +1109,10 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 /************* Put form to upload a new image for a test question ************/
 /*****************************************************************************/
 
-static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
+static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
                                        const char *ClassContainer,
-                                       const char *ClassImg,
-                                       const char *ClassImgTitURL,
+                                       const char *ClassMedia,
+                                       const char *ClassMediaTitURL,
                                        bool OptionsDisabled)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -1120,12 +1123,12 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
    extern const char *Txt_Link;
    extern const char *Txt_optional;
    static unsigned UniqueId = 0;
-   struct ParamUploadImg ParamUploadImg;
+   struct ParamUploadMedia ParamUploadMedia;
 
-   if (Image->Name[0])
+   if (Media->Name[0])
      {
       /***** Set names of parameters depending on number of image in form *****/
-      Img_SetParamNames (&ParamUploadImg,NumImgInForm);
+      Med_SetParamNames (&ParamUploadMedia,NumMediaInForm);
 
       /***** Start container *****/
       fprintf (Gbl.F.Out,"<div class=\"TEST_FORM_EDIT_IMG\">");
@@ -1134,7 +1137,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
       fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	                 "<input type=\"radio\" name=\"%s\" value=\"%u\"",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       ParamUploadImg.Action,Img_ACTION_NO_IMAGE);
+	       ParamUploadMedia.Action,Med_ACTION_NO_MEDIA);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
@@ -1147,14 +1150,14 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
 	                 "<input type=\"radio\" name=\"%s\" value=\"%u\""
 	                 " checked=\"checked\"",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       ParamUploadImg.Action,Img_ACTION_KEEP_IMAGE);
+	       ParamUploadMedia.Action,Med_ACTION_KEEP_MEDIA);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
 			 "%s"
 			 "</label>",
 	       Txt_Current_image);
-      Img_ShowImage (Image,ClassContainer,ClassImg);
+      Med_ShowMedia (Media,ClassContainer,ClassMedia);
 
       /***** Choice 3: Change/new image *****/
       UniqueId++;
@@ -1162,8 +1165,8 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
 	                 "<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
 			 " value=\"%u\"",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       UniqueId,ParamUploadImg.Action,
-	       Img_ACTION_CHANGE_IMAGE);	// Replace existing image by new image
+	       UniqueId,ParamUploadMedia.Action,
+	       Med_ACTION_CHANGE_MEDIA);	// Replace existing image by new image
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
@@ -1171,30 +1174,30 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
 			 "</label>"
                          "<input type=\"file\" name=\"%s\" accept=\"image/*\"",
 	       Txt_Change_image,
-	       ParamUploadImg.File);
+	       ParamUploadMedia.File);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('chg_img_%u').checked = true;\" />",
 	       UniqueId);
 
-      /***** Image title/attribution *****/
+      /***** Media title/attribution *****/
       fprintf (Gbl.F.Out,"<br />"
 			 "<input type=\"text\" name=\"%s\""
 			 " placeholder=\"%s (%s)\""
 			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
-	       ParamUploadImg.Title,Txt_Image_title_attribution,Txt_optional,
-	       ClassImgTitURL,Img_MAX_CHARS_TITLE,
-	       Image->Title ? Image->Title :
+	       ParamUploadMedia.Title,Txt_Image_title_attribution,Txt_optional,
+	       ClassMediaTitURL,Med_MAX_CHARS_TITLE,
+	       Media->Title ? Media->Title :
 		              "");
 
-      /***** Image URL *****/
+      /***** Media URL *****/
       fprintf (Gbl.F.Out,"<br />"
 			 "<input type=\"text\" name=\"%s\""
 			 " placeholder=\"%s (%s)\""
 			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
-	       ParamUploadImg.URL,Txt_Link,Txt_optional,
-	       ClassImgTitURL,Cns_MAX_CHARS_WWW,
-	       Image->URL ? Image->URL :
+	       ParamUploadMedia.URL,Txt_Link,Txt_optional,
+	       ClassMediaTitURL,Cns_MAX_CHARS_WWW,
+	       Media->URL ? Media->URL :
 		            "");
 
       /***** End container *****/
@@ -1202,7 +1205,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
      }
    else	// No current image
       /***** Attached image (optional) *****/
-      Img_PutImageUploader (NumImgInForm,ClassImgTitURL);
+      Med_PutMediaUploader (NumMediaInForm,ClassMediaTitURL);
   }
 
 /*****************************************************************************/
@@ -2471,30 +2474,20 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
 
    /***** Select questions *****/
    /* Start query */
-   /*
-   row[ 0] QstCod
-   row[ 1] UNIX_TIMESTAMP(EditTime)
-   row[ 2] AnsType
-   row[ 3] Shuffle
-   row[ 4] Stem
-   row[ 5] Feedback
-   row[ 6] ImageName
-   row[ 7] ImageTitle
-   row[ 8] ImageURL
-   row[ 9] NumHits
-   row[10] NumHitsNotBlank
-   row[11] Score
-   */
    snprintf (Query,Tst_MAX_BYTES_QUERY_TEST + 1,
-	     "SELECT tst_questions.QstCod,"
-	     "UNIX_TIMESTAMP(tst_questions.EditTime) AS F,"
-	     "tst_questions.AnsType,tst_questions.Shuffle,"
-	     "tst_questions.Stem,tst_questions.Feedback,"
-	     "tst_questions.ImageName,"
-	     "tst_questions.ImageTitle,"
-	     "tst_questions.ImageURL,"
-	     "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
-	     "tst_questions.Score"
+	     "SELECT tst_questions.QstCod,"				// row[ 0]
+	            "UNIX_TIMESTAMP(tst_questions.EditTime) AS F,"	// row[ 1]
+	            "tst_questions.AnsType,"				// row[ 2]
+	            "tst_questions.Shuffle,"				// row[ 3]
+	            "tst_questions.Stem,"				// row[ 4]
+	            "tst_questions.Feedback,"				// row[ 5]
+	            "tst_questions.MediaName,"				// row[ 6]
+	            "tst_questions.MediaType,"				// row[ 7]
+	            "tst_questions.MediaTitle,"				// row[ 8]
+	            "tst_questions.MediaURL,"				// row[ 9]
+	            "tst_questions.NumHits,"				// row[10]
+	            "tst_questions.NumHitsNotBlank,"			// row[11]
+	            "tst_questions.Score"				// row[12]
 	     " FROM tst_questions");
    if (!Gbl.Test.Tags.All)
       Str_Concat (Query,",tst_question_tags,tst_tags",
@@ -2650,34 +2643,24 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
       Lay_NotEnoughMemoryExit ();
 
    /***** Select questions without hidden tags *****/
-   /*
-   row[ 0] QstCod
-   row[ 1] UNIX_TIMESTAMP(EditTime)
-   row[ 2] AnsType
-   row[ 3] Shuffle
-   row[ 4] Stem
-   row[ 5] Feedback
-   row[ 6] ImageName
-   row[ 7] ImageTitle
-   row[ 8] ImageURL
-   row[ 9] NumHits
-   row[10] NumHitsNotBlank
-   row[11] Score
-   */
    /* Start query */
    // Reject questions with any tag hidden
    // Select only questions with tags
    // DISTINCTROW is necessary to not repeat questions
    snprintf (Query,Tst_MAX_BYTES_QUERY_TEST + 1,
-	     "SELECT DISTINCTROW tst_questions.QstCod,"
-	     "UNIX_TIMESTAMP(tst_questions.EditTime),"
-	     "tst_questions.AnsType,tst_questions.Shuffle,"
-	     "tst_questions.Stem,tst_questions.Feedback,"
-	     "tst_questions.ImageName,"
-	     "tst_questions.ImageTitle,"
-	     "tst_questions.ImageURL,"
-	     "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
-	     "tst_questions.Score"
+	     "SELECT DISTINCTROW tst_questions.QstCod,"				// row[ 0]
+	                        "UNIX_TIMESTAMP(tst_questions.EditTime),"	// row[ 1]
+	                        "tst_questions.AnsType,"			// row[ 2]
+	                        "tst_questions.Shuffle,"			// row[ 3]
+	                        "tst_questions.Stem,"				// row[ 4]
+	                        "tst_questions.Feedback,"			// row[ 5]
+	                        "tst_questions.MediaName,"			// row[ 6]
+	                        "tst_questions.MediaType,"			// row[ 7]
+	                        "tst_questions.MediaTitle,"			// row[ 8]
+	                        "tst_questions.MediaURL,"			// row[ 9]
+	                        "tst_questions.NumHits,"			// row[10]
+	                        "tst_questions.NumHitsNotBlank,"		// row[11]
+	                        "tst_questions.Score"				// row[12]
 	     " FROM tst_questions,tst_question_tags,tst_tags"
 	     " WHERE tst_questions.CrsCod=%ld"
 	     " AND tst_questions.QstCod NOT IN"
@@ -2790,25 +2773,20 @@ static void Tst_ListOneQstToEdit (void)
 bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
   {
    /***** Get data of a question from database *****/
-   /*
-   row[ 0] QstCod
-   row[ 1] UNIX_TIMESTAMP(EditTime)
-   row[ 2] AnsType
-   row[ 3] Shuffle
-   row[ 4] Stem
-   row[ 5] Feedback
-   row[ 6] ImageName
-   row[ 7] ImageTitle
-   row[ 8] ImageURL
-   row[ 9] NumHits
-   row[10] NumHitsNotBlank
-   row[11] Score
-   */
    return (DB_QuerySELECT (mysql_res,"can not get data of a question",
-			   "SELECT QstCod,UNIX_TIMESTAMP(EditTime),"
-			   "AnsType,Shuffle,Stem,Feedback,"
-			   "ImageName,ImageTitle,ImageURL,"
-			   "NumHits,NumHitsNotBlank,Score"
+			   "SELECT QstCod,"			// row[ 0]
+			          "UNIX_TIMESTAMP(EditTime),"	// row[ 1]
+			          "AnsType,"			// row[ 2]
+			          "Shuffle,"			// row[ 3]
+			          "Stem,"			// row[ 4]
+			          "Feedback,"			// row[ 5]
+			          "MediaName,"			// row[ 6]
+			          "MediaType,"			// row[ 7]
+			          "MediaTitle,"			// row[ 8]
+			          "MediaURL,"			// row[ 9]
+			          "NumHits,"			// row[10]
+			          "NumHitsNotBlank,"		// row[11]
+			          "Score"			// row[12]
 			   " FROM tst_questions"
 			   " WHERE QstCod=%ld",
 			   QstCod) == 1);
@@ -2916,12 +2894,13 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       row[ 3] Shuffle
       row[ 4] Stem
       row[ 5] Feedback
-      row[ 6] ImageName
-      row[ 7] ImageTitle
-      row[ 8] ImageURL
-      row[ 9] NumHits
-      row[10] NumHitsNotBlank
-      row[11] Score
+      row[ 6] MediaName
+      row[ 7] MediaType
+      row[ 8] MediaTitle
+      row[ 9] MediaURL
+      row[10] NumHits
+      row[11] NumHitsNotBlank
+      row[12] Score
       */
       /***** Create test question *****/
       Tst_QstConstructor ();
@@ -3008,13 +2987,14 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
         }
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Write the stem (row[4]), the image (row[6], row[7], row[8]),
+      /* Write the stem (row[4]), the media (row[6], row[7], row[8], row[9]),
          the feedback (row[5]) and the answers */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
-      Img_GetImageNameTitleAndURLFromRow (row[6],row[7],row[8],&Gbl.Test.Image);
-      Img_ShowImage (&Gbl.Test.Image,
+      Med_GetMediaNameTitleAndURLFromRow (row[6],row[7],row[8],row[9],
+	                                  &Gbl.Test.Media);
+      Med_ShowMedia (&Gbl.Test.Media,
                      "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
                      "TEST_IMG_EDIT_LIST_STEM");
       Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
@@ -3023,19 +3003,19 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
       /* Get number of hits
          (number of times that the question has been answered,
-         including blank answers) (row[9]) */
-      if (sscanf (row[9],"%lu",&NumHitsThisQst) != 1)
+         including blank answers) (row[10]) */
+      if (sscanf (row[10],"%lu",&NumHitsThisQst) != 1)
          Lay_ShowErrorAndExit ("Wrong number of hits to a question.");
 
       /* Get number of hits not blank
          (number of times that the question has been answered
-         with a not blank answer) (row[10]) */
-      if (sscanf (row[10],"%lu",&NumHitsNotBlankThisQst) != 1)
+         with a not blank answer) (row[11]) */
+      if (sscanf (row[11],"%lu",&NumHitsNotBlankThisQst) != 1)
          Lay_ShowErrorAndExit ("Wrong number of hits not blank to a question.");
 
-      /* Get the acumulated score of the question (row[11]) */
+      /* Get the acumulated score of the question (row[12]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[11],"%lf",&TotalScoreThisQst) != 1)
+      if (sscanf (row[12],"%lf",&TotalScoreThisQst) != 1)
          Lay_ShowErrorAndExit ("Wrong score of a question.");
       Str_SetDecimalPointToLocal ();	// Return to local system
 
@@ -3169,12 +3149,13 @@ static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
       row[ 3] Shuffle
       row[ 4] Stem
       row[ 5] Feedback
-      row[ 6] ImageName
-      row[ 7] ImageTitle
-      row[ 8] ImageURL
-      row[ 9] NumHits
-      row[10] NumHitsNotBlank
-      row[11] Score
+      row[ 6] MediaName
+      row[ 7] MediaType
+      row[ 8] MediaTitle
+      row[ 9] MediaURL
+      row[10] NumHits
+      row[11] NumHitsNotBlank
+      row[12] Score
       */
       /***** Create test question *****/
       Tst_QstConstructor ();
@@ -3242,13 +3223,14 @@ static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
 
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Write the stem (row[4]), the image (row[6], row[7], row[8]),
+      /* Write the stem (row[4]), the image (row[6], row[7], row[8], row[9]),
          the feedback (row[5]) and the answers */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
-      Img_GetImageNameTitleAndURLFromRow (row[6],row[7],row[8],&Gbl.Test.Image);
-      Img_ShowImage (&Gbl.Test.Image,
+      Med_GetMediaNameTitleAndURLFromRow (row[6],row[7],row[8],row[9],
+	                                  &Gbl.Test.Media);
+      Med_ShowMedia (&Gbl.Test.Media,
                      "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
                      "TEST_IMG_EDIT_LIST_STEM");
       Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
@@ -3301,8 +3283,14 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
 
    /***** Get answers of a question from database *****/
    NumRows = DB_QuerySELECT (mysql_res,"can not get answers of a question",
-			     "SELECT AnsInd,Answer,Feedback,"
-			     "ImageName,ImageTitle,ImageURL,Correct"
+			     "SELECT AnsInd,"		// row[0]
+			            "Answer,"		// row[1]
+			            "Feedback,"		// row[2]
+			            "MediaName,"	// row[3]
+			            "MediaType,"	// row[4]
+			            "MediaTitle,"	// row[5]
+			            "MediaURL,"		// row[6]
+			            "Correct"		// row[7]
 			     " FROM tst_answers WHERE QstCod=%ld ORDER BY %s",
 			     QstCod,
 			     Shuffle ? "RAND(NOW())" :
@@ -3335,10 +3323,11 @@ static void Tst_WriteAnswersEdit (long QstCod)
    row[ 0] AnsInd
    row[ 1] Answer
    row[ 2] Feedback
-   row[ 3] ImageName
-   row[ 4] ImageTitle
-   row[ 5] ImageURL
-   row[ 6] Correct
+   row[ 3] MediaName
+   row[ 4] MediaType
+   row[ 5] MediaTitle
+   row[ 6] MediaURL
+   row[ 7] Correct
    */
    /***** Write the answers *****/
    switch (Gbl.Test.AnswerType)
@@ -3405,13 +3394,14 @@ static void Tst_WriteAnswersEdit (long QstCod)
         	 }
 
             /* Copy image */
-	    Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
+	    Med_GetMediaNameTitleAndURLFromRow (row[3],row[4],row[5],row[6],
+		                                &Gbl.Test.Answer.Options[NumOpt].Media);
 
             /* Put an icon that indicates whether the answer is correct or wrong */
             fprintf (Gbl.F.Out,"<tr>"
         	               "<td class=\"BT%u\">",
         	     Gbl.RowEvenOdd);
-            if (row[6][0] == 'Y')
+            if (row[7][0] == 'Y')
                fprintf (Gbl.F.Out,"<img src=\"%s/check.svg\""
         	                  " alt=\"%s\" title=\"%s\""
         	                  " class=\"CONTEXT_ICO_16x16\" />",
@@ -3431,7 +3421,7 @@ static void Tst_WriteAnswersEdit (long QstCod)
         	               "<div class=\"TEST_EDI\">"
         	               "%s",
                      Answer);
-	    Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,
+	    Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
 	                   "TEST_IMG_EDIT_LIST_ANS_CONTAINER",
 	                   "TEST_IMG_EDIT_LIST_ANS");
             fprintf (Gbl.F.Out,"</div>");
@@ -3508,10 +3498,11 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
    row[ 0] AnsInd
    row[ 1] Answer
    row[ 2] Feedback
-   row[ 3] ImageName
-   row[ 4] ImageTitle
-   row[ 5] ImageURL
-   row[ 6] Correct
+   row[ 3] MediaName
+   row[ 4] MediaType
+   row[ 5] MediaTitle
+   row[ 6] MediaURL
+   row[ 7] Correct
    */
    /***** Write answer depending on type *****/
    switch (Gbl.Test.AnswerType)
@@ -3622,13 +3613,14 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
    MYSQL_ROW row;
    char AnsTF;
    /*
-   row[ 0] AnsInd
-   row[ 1] Answer
-   row[ 2] Feedback
-   row[ 3] ImageName
-   row[ 4] ImageTitle
-   row[ 5] ImageURL
-   row[ 6] Correct
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MediaName
+   row[4] MediaType
+   row[5] MediaTitle
+   row[6] MediaURL
+   row[7] Correct
    */
    /***** Check if number of rows is correct *****/
    Tst_CheckIfNumberOfAnswersIsOne ();
@@ -3716,10 +3708,11 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
    row[ 0] AnsInd
    row[ 1] Answer
    row[ 2] Feedback
-   row[ 3] ImageName
-   row[ 4] ImageTitle
-   row[ 5] ImageURL
-   row[ 6] Correct
+   row[ 3] MediaName
+   row[ 4] MediaType
+   row[ 5] MediaTitle
+   row[ 6] MediaURL
+   row[ 7] Correct
    */
 
    /***** Start table *****/
@@ -3757,7 +3750,8 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy image *****/
-      Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
+      Med_GetMediaNameTitleAndURLFromRow (row[3],row[4],row[5],row[6],
+	                                  &Gbl.Test.Answer.Options[NumOpt].Media);
 
       /***** Write selectors and letter of this option *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -3792,7 +3786,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 	                 "</label>",
                NumQst,NumOpt,
                Gbl.Test.Answer.Options[NumOpt].Text);
-      Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,
+      Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
                      "TEST_IMG_SHOW_ANS_CONTAINER",
                      "TEST_IMG_SHOW_ANS");
       fprintf (Gbl.F.Out,"</td>"
@@ -3836,13 +3830,14 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
    /***** Get text and correctness of answers for this question
           from database (one row per answer) *****/
    /*
-   row[ 0] AnsInd
-   row[ 1] Answer
-   row[ 2] Feedback
-   row[ 3] ImageName
-   row[ 4] ImageTitle
-   row[ 5] ImageURL
-   row[ 6] Correct
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MediaName
+   row[4] MediaType
+   row[5] MediaTitle
+   row[6] MediaURL
+   row[7] Correct
    */
    for (NumOpt = 0;
 	NumOpt < Gbl.Test.Answer.NumOptions;
@@ -3877,10 +3872,11 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 	      }
 
       /***** Copy image *****/
-      Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
+      Med_GetMediaNameTitleAndURLFromRow (row[3],row[4],row[5],row[6],
+	                                  &Gbl.Test.Answer.Options[NumOpt].Media);
 
-      /***** Assign correctness (row[6]) of this answer (this option) *****/
-      Gbl.Test.Answer.Options[NumOpt].Correct = (row[6][0] == 'Y');
+      /***** Assign correctness (row[7]) of this answer (this option) *****/
+      Gbl.Test.Answer.Options[NumOpt].Correct = (row[7][0] == 'Y');
      }
 
    /***** Get indexes for this question from string *****/
@@ -3979,7 +3975,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 	                 "<div class=\"ANS_TXT\">"
 	                 "%s",
                Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
-      Img_ShowImage (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Image,
+      Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
                      "TEST_IMG_SHOW_ANS_CONTAINER",
                      "TEST_IMG_SHOW_ANS");
       fprintf (Gbl.F.Out,"</div>");
@@ -4080,13 +4076,14 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
    /*
-   row[ 0] AnsInd
-   row[ 1] Answer
-   row[ 2] Feedback
-   row[ 3] ImageName
-   row[ 4] ImageTitle
-   row[ 5] ImageURL
-   row[ 6] Correct
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MediaName
+   row[4] MediaType
+   row[5] MediaTitle
+   row[6] MediaURL
+   row[7] Correct
    */
 
    /***** Start table *****/
@@ -4124,7 +4121,8 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy image *****/
-      Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
+      Med_GetMediaNameTitleAndURLFromRow (row[3],row[4],row[5],row[6],
+	                                  &Gbl.Test.Answer.Options[NumOpt].Media);
 
       /***** Write letter of this option *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -4143,7 +4141,7 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
 	                 "</label>",
                NumQst,NumOpt,Class,
                Gbl.Test.Answer.Options[NumOpt].Text);
-      Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,
+      Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
                      "TEST_IMG_SHOW_ANS_CONTAINER",
                      "TEST_IMG_SHOW_ANS");
       fprintf (Gbl.F.Out,"</td>"
@@ -4198,10 +4196,11 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    row[ 0] AnsInd
    row[ 1] Answer
    row[ 2] Feedback
-   row[ 3] ImageName
-   row[ 4] ImageTitle
-   row[ 5] ImageURL
-   row[ 6] Correct
+   row[ 3] MediaName
+   row[ 4] MediaType
+   row[ 5] MediaTitle
+   row[ 6] MediaURL
+   row[ 7] Correct
    */
    /***** Get text and correctness of answers for this question from database (one row per answer) *****/
    for (NumOpt = 0;
@@ -4234,8 +4233,8 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 	                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 	      }
 
-      /***** Assign correctness (row[6]) of this answer (this option) *****/
-      Gbl.Test.Answer.Options[NumOpt].Correct = (row[6][0] == 'Y');
+      /***** Assign correctness (row[7]) of this answer (this option) *****/
+      Gbl.Test.Answer.Options[NumOpt].Correct = (row[7][0] == 'Y');
      }
 
    /***** Header with the title of each column *****/
@@ -4387,13 +4386,14 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
    long IntAnswerUsr;
    long IntAnswerCorr;
    /*
-   row[ 0] AnsInd
-   row[ 1] Answer
-   row[ 2] Feedback
-   row[ 3] ImageName
-   row[ 4] ImageTitle
-   row[ 5] ImageURL
-   row[ 6] Correct
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MediaName
+   row[4] MediaType
+   row[5] MediaTitle
+   row[6] MediaURL
+   row[7] Correct
    */
    /***** Check if number of rows is correct *****/
    Tst_CheckIfNumberOfAnswersIsOne ();
@@ -4502,13 +4502,14 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
    double FloatAnsUsr = 0.0,Tmp;
    double FloatAnsCorr[2];
    /*
-   row[ 0] AnsInd
-   row[ 1] Answer
-   row[ 2] Feedback
-   row[ 3] ImageName
-   row[ 4] ImageTitle
-   row[ 5] ImageURL
-   row[ 6] Correct
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MediaName
+   row[4] MediaType
+   row[5] MediaTitle
+   row[6] MediaURL
+   row[7] Correct
    */
    /***** Check if number of rows is correct *****/
    if (Gbl.Test.Answer.NumOptions != 2)
@@ -5085,7 +5086,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Stem,
             Stem);
-   Tst_PutFormToEditQstImage (&Gbl.Test.Image,-1,
+   Tst_PutFormToEditQstMedia (&Gbl.Test.Media,-1,
                               "TEST_IMG_EDIT_ONE_STEM_CONTAINER",
                               "TEST_IMG_EDIT_ONE_STEM",
                               "STEM",	// Title / attribution
@@ -5297,8 +5298,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
          fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
       fprintf (Gbl.F.Out,"</textarea>");
 
-      /* Image */
-      Tst_PutFormToEditQstImage (&Gbl.Test.Answer.Options[NumOpt].Image,
+      /* Media */
+      Tst_PutFormToEditQstMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
                                  (int) NumOpt,
                                  "TEST_IMG_EDIT_ONE_ANS_CONTAINER",
                                  "TEST_IMG_EDIT_ONE_ANS",
@@ -5407,7 +5408,7 @@ void Tst_QstConstructor (void)
    Gbl.Test.Answer.TF = ' ';
 
    /***** Initialize image attached to stem *****/
-   Img_ImageConstructor (&Gbl.Test.Image);
+   Med_MediaConstructor (&Gbl.Test.Media);
 
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
@@ -5418,7 +5419,7 @@ void Tst_QstConstructor (void)
       Gbl.Test.Answer.Options[NumOpt].Feedback = NULL;
 
       /***** Initialize image attached to option *****/
-      Img_ImageConstructor (&Gbl.Test.Answer.Options[NumOpt].Image);
+      Med_MediaConstructor (&Gbl.Test.Answer.Options[NumOpt].Media);
      }
    Gbl.Test.Answer.Integer = 0;
    Gbl.Test.Answer.FloatingPoint[0] =
@@ -5432,7 +5433,7 @@ void Tst_QstConstructor (void)
 void Tst_QstDestructor (void)
   {
    Tst_FreeTextChoiceAnswers ();
-   Tst_FreeImagesOfQuestion ();
+   Tst_FreeMediaOfQuestion ();
   }
 
 /*****************************************************************************/
@@ -5501,23 +5502,23 @@ static void Tst_FreeTextChoiceAnswer (unsigned NumOpt)
 /***************** Initialize images of a question to zero *******************/
 /*****************************************************************************/
 
-static void Tst_InitImagesOfQuestion (void)
+static void Tst_InitMediaOfQuestion (void)
   {
    unsigned NumOpt;
 
    /***** Initialize image *****/
-   Img_ResetImageExceptTitleAndURL (&Gbl.Test.Image);
-   Img_FreeImageTitle (&Gbl.Test.Image);
-   Img_FreeImageURL (&Gbl.Test.Image);
+   Med_ResetMediaExceptTitleAndURL (&Gbl.Test.Media);
+   Med_FreeMediaTitle (&Gbl.Test.Media);
+   Med_FreeMediaURL (&Gbl.Test.Media);
 
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
      {
       /***** Initialize image *****/
-      Img_ResetImageExceptTitleAndURL (&Gbl.Test.Answer.Options[NumOpt].Image);
-      Img_FreeImageTitle (&Gbl.Test.Image);
-      Img_FreeImageURL (&Gbl.Test.Image);
+      Med_ResetMediaExceptTitleAndURL (&Gbl.Test.Answer.Options[NumOpt].Media);
+      Med_FreeMediaTitle (&Gbl.Test.Media);
+      Med_FreeMediaURL (&Gbl.Test.Media);
      }
   }
 
@@ -5525,15 +5526,15 @@ static void Tst_InitImagesOfQuestion (void)
 /*********************** Free images of a question ***************************/
 /*****************************************************************************/
 
-static void Tst_FreeImagesOfQuestion (void)
+static void Tst_FreeMediaOfQuestion (void)
   {
    unsigned NumOpt;
 
-   Img_ImageDestructor (&Gbl.Test.Image);
+   Med_MediaDestructor (&Gbl.Test.Media);
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-      Img_ImageDestructor (&Gbl.Test.Answer.Options[NumOpt].Image);
+      Med_MediaDestructor (&Gbl.Test.Answer.Options[NumOpt].Media);
   }
 
 /*****************************************************************************/
@@ -5552,22 +5553,19 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Get the type of answer and the stem from the database *****/
    /* Get the question from database */
    DB_QuerySELECT (&mysql_res,"can not get a question",
-		   "SELECT AnsType,Shuffle,Stem,Feedback,"
-	           "ImageName,ImageTitle,ImageURL"
+		   "SELECT AnsType,"		// row[0]
+		          "Shuffle,"		// row[1]
+		          "Stem,"		// row[2]
+		          "Feedback,"		// row[3]
+	                  "MediaName,"		// row[4]
+	                  "MediaType,"		// row[5]
+	                  "MediaTitle,"		// row[6]
+	                  "MediaURL"		// row[7]
 		   " FROM tst_questions"
 		   " WHERE QstCod=%ld AND CrsCod=%ld",
 		   Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-
    row = mysql_fetch_row (mysql_res);
-   /*
-   row[ 0] AnsType
-   row[ 1] Shuffle
-   row[ 2] Stem
-   row[ 3] Feedback
-   row[ 4] ImageName
-   row[ 5] ImageTitle
-   row[ 6] ImageURL
-   */
+
    /* Get the type of answer */
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
 
@@ -5586,8 +5584,9 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	           Cns_MAX_BYTES_TEXT);
 
    /* Get the image name, title and URL of the question
-      from the database (row[4], row[5], row[6]) */
-   Img_GetImageNameTitleAndURLFromRow (row[4],row[5],row[6],&Gbl.Test.Image);
+      from the database (row[4], row[5], row[6], row[7]) */
+   Med_GetMediaNameTitleAndURLFromRow (row[4],row[5],row[6],row[7],
+	                               &Gbl.Test.Media);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -5609,13 +5608,14 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Get the answers from the database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (Gbl.Test.QstCod,&mysql_res,false);
    /*
-   row[ 0] AnsInd
-   row[ 1] Answer
-   row[ 2] Feedback
-   row[ 3] ImageName
-   row[ 4] ImageTitle
-   row[ 5] ImageURL
-   row[ 6] Correct
+   row[0] AnsInd
+   row[1] Answer
+   row[2] Feedback
+   row[3] MediaName
+   row[4] MediaType
+   row[5] MediaTitle
+   row[6] MediaURL
+   row[7] Correct
    */
    for (NumOpt = 0;
 	NumOpt < Gbl.Test.Answer.NumOptions;
@@ -5657,9 +5657,10 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 		            Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	    /* Copy image */
-            Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
+            Med_GetMediaNameTitleAndURLFromRow (row[3],row[4],row[5],row[6],
+        	                                &Gbl.Test.Answer.Options[NumOpt].Media);
 
-	    Gbl.Test.Answer.Options[NumOpt].Correct = (row[6][0] == 'Y');
+	    Gbl.Test.Answer.Options[NumOpt].Correct = (row[7][0] == 'Y');
 	    break;
 	 default:
 	    break;
@@ -5675,7 +5676,7 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 // NumOpt <  0 ==> image associated to stem
 // NumOpt >= 0 ==> image associated to answer
 
-static void Tst_GetImageFromDB (int NumOpt,struct Image *Image)
+static void Tst_GetMediaFromDB (int NumOpt,struct Media *Media)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -5684,20 +5685,30 @@ static void Tst_GetImageFromDB (int NumOpt,struct Image *Image)
    if (NumOpt < 0)
       // Get image associated to stem
       DB_QuerySELECT (&mysql_res,"can not get image name",
-		      "SELECT ImageName,ImageTitle,ImageURL FROM tst_questions"
+		      "SELECT MediaName,"	// row[0]
+	                     "MediaType,"	// row[1]
+		             "MediaTitle,"	// row[2]
+		             "MediaURL"		// row[3]
+		      " FROM tst_questions"
 		      " WHERE QstCod=%ld AND CrsCod=%ld",
 		      Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
    else
       // Get image associated to answer
       DB_QuerySELECT (&mysql_res,"can not get image name",
-		      "SELECT ImageName,ImageTitle,ImageURL FROM tst_answers"
+		      "SELECT MediaName,"	// row[0]
+	                     "MediaType,"	// row[1]
+		             "MediaTitle,"	// row[2]
+		             "MediaURL"		// row[3]
+		      " FROM tst_answers"
 		      " WHERE QstCod=%ld AND AnsInd=%u",
 		      Gbl.Test.QstCod,(unsigned) NumOpt);
 
    row = mysql_fetch_row (mysql_res);
 
-   /***** Get the image name, title and URL (row[0], row[1], row[2]) *****/
-   Img_GetImageNameTitleAndURLFromRow (row[0],row[1],row[2],Image);
+   /***** Get the image name, type, title and URL
+          (row[0], row[1], row[2], row[3]) *****/
+   Med_GetMediaNameTitleAndURLFromRow (row[0],row[1],row[2],row[3],
+	                               Media);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -5757,7 +5768,7 @@ void Tst_ReceiveQst (void)
    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions ())
      {
       /***** Move images to definitive directories *****/
-      Tst_MoveImagesToDefinitiveDirectories ();
+      Tst_MoveMediaToDefinitiveDirectories ();
 
       /***** Insert or update question, tags and answer in the database *****/
       Tst_InsertOrUpdateQstTagsAnsIntoDB ();
@@ -5768,7 +5779,7 @@ void Tst_ReceiveQst (void)
    else	// Question is wrong
      {
       /***** Whether images has been received or not, reset images *****/
-      Tst_InitImagesOfQuestion ();
+      Tst_InitMediaOfQuestion ();
 
       /***** Put form to edit question again *****/
       Tst_PutFormEditOneQst (Stem,Feedback);
@@ -5841,11 +5852,11 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
    /***** Get image associated to the stem (action, file and title) *****/
-   Gbl.Test.Image.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
-   Gbl.Test.Image.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
-   Gbl.Test.Image.Quality = Tst_IMAGE_SAVED_QUALITY;
-   Img_GetImageFromForm (-1,	// < 0 ==> the image associated to the stem
-                         &Gbl.Test.Image,Tst_GetImageFromDB);
+   Gbl.Test.Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
+   Gbl.Test.Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
+   Gbl.Test.Media.Quality = Tst_IMAGE_SAVED_QUALITY;
+   Med_GetMediaFromForm (-1,	// < 0 ==> the image associated to the stem
+                         &Gbl.Test.Media,Tst_GetMediaFromDB);
 
    /***** Get answers *****/
    Gbl.Test.Shuffle = false;
@@ -5909,12 +5920,12 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
 		Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
 	      {
-	       Gbl.Test.Answer.Options[NumOpt].Image.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
-	       Gbl.Test.Answer.Options[NumOpt].Image.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
-	       Gbl.Test.Answer.Options[NumOpt].Image.Quality = Tst_IMAGE_SAVED_QUALITY;
-	       Img_GetImageFromForm ((int) NumOpt,	// >= 0 ==> the image associated to an answer
-	                             &Gbl.Test.Answer.Options[NumOpt].Image,
-				     Tst_GetImageFromDB);
+	       Gbl.Test.Answer.Options[NumOpt].Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
+	       Gbl.Test.Answer.Options[NumOpt].Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
+	       Gbl.Test.Answer.Options[NumOpt].Media.Quality = Tst_IMAGE_SAVED_QUALITY;
+	       Med_GetMediaFromForm ((int) NumOpt,	// >= 0 ==> the image associated to an answer
+	                             &Gbl.Test.Answer.Options[NumOpt].Media,
+				     Tst_GetMediaFromDB);
 	      }
            }
 
@@ -5989,9 +6000,9 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
    bool ThereIsEndOfAnswers;
    unsigned i;
 
-   if ((Gbl.Test.Image.Action == Img_ACTION_NEW_IMAGE ||	// Upload new image
-        Gbl.Test.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
-       Gbl.Test.Image.Status != Img_FILE_PROCESSED)
+   if ((Gbl.Test.Media.Action == Med_ACTION_NEW_MEDIA ||	// Upload new image
+        Gbl.Test.Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
+       Gbl.Test.Media.Status != Med_FILE_PROCESSED)
      {
       Ale_ShowAlert (Ale_WARNING,Txt_Error_receiving_or_processing_image);
       return false;
@@ -6159,23 +6170,23 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
 /* Move images associates to a test question to their definitive directories */
 /*****************************************************************************/
 
-static void Tst_MoveImagesToDefinitiveDirectories (void)
+static void Tst_MoveMediaToDefinitiveDirectories (void)
   {
    unsigned NumOpt;
 
    /****** Move image associated to question stem *****/
    if (Gbl.Test.QstCod > 0 &&				// Question already exists
-       Gbl.Test.Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
+       Gbl.Test.Media.Action != Med_ACTION_KEEP_MEDIA)	// Don't keep the current image
       /* Remove possible file with the old image
 	 (the new image file is already processed
 	  and moved to the definitive directory) */
       Tst_RemoveImgFileFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
-   if ((Gbl.Test.Image.Action == Img_ACTION_NEW_IMAGE ||	// Upload new image
-	Gbl.Test.Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
-        Gbl.Test.Image.Status == Img_FILE_PROCESSED)		// The new image received has been processed
+   if ((Gbl.Test.Media.Action == Med_ACTION_NEW_MEDIA ||	// Upload new image
+	Gbl.Test.Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
+        Gbl.Test.Media.Status == Med_FILE_PROCESSED)		// The new image received has been processed
       /* Move processed image to definitive directory */
-      Img_MoveImageToDefinitiveDirectory (&Gbl.Test.Image);
+      Med_MoveMediaToDefinitiveDirectory (&Gbl.Test.Media);
 
    /****** Move images associated to answers *****/
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
@@ -6185,17 +6196,17 @@ static void Tst_MoveImagesToDefinitiveDirectories (void)
 	   NumOpt++)
 	{
 	 if (Gbl.Test.QstCod > 0 &&							// Question already exists
-             Gbl.Test.Answer.Options[NumOpt].Image.Action != Img_ACTION_KEEP_IMAGE)	// Don't keep the current image
+             Gbl.Test.Answer.Options[NumOpt].Media.Action != Med_ACTION_KEEP_MEDIA)	// Don't keep the current image
 	    /* Remove possible file with the old image
 	       (the new image file is already processed
 		and moved to the definitive directory) */
 	    Tst_RemoveImgFileFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
 
-	 if ((Gbl.Test.Answer.Options[NumOpt].Image.Action == Img_ACTION_NEW_IMAGE ||		// Upload new image
-	      Gbl.Test.Answer.Options[NumOpt].Image.Action == Img_ACTION_CHANGE_IMAGE) &&	// Replace existing image by new image
-	      Gbl.Test.Answer.Options[NumOpt].Image.Status == Img_FILE_PROCESSED)		// The new image received has been processed
+	 if ((Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_NEW_MEDIA ||		// Upload new image
+	      Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
+	      Gbl.Test.Answer.Options[NumOpt].Media.Status == Med_FILE_PROCESSED)		// The new image received has been processed
 	    /* Move processed image to definitive directory */
-	    Img_MoveImageToDefinitiveDirectory (&Gbl.Test.Answer.Options[NumOpt].Image);
+	    Med_MoveMediaToDefinitiveDirectory (&Gbl.Test.Answer.Options[NumOpt].Media);
 	}
   }
 
@@ -6534,11 +6545,13 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
       DB_QueryINSERTandReturnCode ("can not create question",
 				   "INSERT INTO tst_questions"
 				   " (CrsCod,EditTime,AnsType,Shuffle,"
-				   "Stem,Feedback,ImageName,ImageTitle,ImageURL,"
+				   "Stem,Feedback,"
+				   "MediaName,MediaType,MediaTitle,MediaURL,"
 				   "NumHits,Score)"
 				   " VALUES"
 				   " (%ld,NOW(),'%s','%c',"
-				   "'%s','%s','%s','%s','%s',"
+				   "'%s','%s',"
+				   "'%s','%s','%s','%s',"
 				   "0,0)",
 				   Gbl.CurrentCrs.Crs.CrsCod,
 				   Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
@@ -6546,13 +6559,14 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 						      'N',
 				   Gbl.Test.Stem.Text,
 				   Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
-				   Gbl.Test.Image.Name,
-				   Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "",
-				   Gbl.Test.Image.URL   ? Gbl.Test.Image.URL   : "");
+				   Gbl.Test.Media.Name,
+				   Med_GetStringTypeForDB (Gbl.Test.Media.Type),
+				   Gbl.Test.Media.Title ? Gbl.Test.Media.Title : "",
+				   Gbl.Test.Media.URL   ? Gbl.Test.Media.URL   : "");
 
       /* Update image status */
-      if (Gbl.Test.Image.Name[0])
-	 Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
+      if (Gbl.Test.Media.Name[0])
+	 Gbl.Test.Media.Status = Med_NAME_STORED_IN_DB;
      }
    else				// It's an existing question
      {
@@ -6562,21 +6576,22 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 		      "UPDATE tst_questions"
 		      " SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
 		      "Stem='%s',Feedback='%s',"
-		      "ImageName='%s',ImageTitle='%s',ImageURL='%s'"
+		      "MediaName='%s',MediaType='%s',MediaTitle='%s',MediaURL='%s'"
 		      " WHERE QstCod=%ld AND CrsCod=%ld",
 		      Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
 		      Gbl.Test.Shuffle ? 'Y' :
 					 'N',
 		      Gbl.Test.Stem.Text,
 		      Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
-		      Gbl.Test.Image.Name,
-		      Gbl.Test.Image.Title ? Gbl.Test.Image.Title : "",
-		      Gbl.Test.Image.URL   ? Gbl.Test.Image.URL   : "",
+		      Gbl.Test.Media.Name,
+		      Med_GetStringTypeForDB (Gbl.Test.Media.Type),
+		      Gbl.Test.Media.Title ? Gbl.Test.Media.Title : "",
+		      Gbl.Test.Media.URL   ? Gbl.Test.Media.URL   : "",
 		      Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /* Update image status */
-      if (Gbl.Test.Image.Name[0])
-	 Gbl.Test.Image.Status = Img_NAME_STORED_IN_DB;
+      if (Gbl.Test.Media.Name[0])
+	 Gbl.Test.Media.Status = Med_NAME_STORED_IN_DB;
 
       /* Remove answers and tags from this test question */
       Tst_RemAnsFromQst ();
@@ -6630,8 +6645,8 @@ static void Tst_InsertAnswersIntoDB (void)
    /***** Allocate space for query *****/
    if ((Query = (char *) malloc (256 +
                                  Tst_MAX_BYTES_ANSWER_OR_FEEDBACK * 2 +
-                                 Img_BYTES_NAME +
-                                 Img_MAX_BYTES_TITLE +
+                                 Med_BYTES_NAME +
+                                 Med_MAX_BYTES_TITLE +
                                  Cns_MAX_BYTES_WWW)) == NULL)
       Lay_NotEnoughMemoryExit ();
 
@@ -6642,9 +6657,10 @@ static void Tst_InsertAnswersIntoDB (void)
          DB_QueryINSERT ("can not create answer",
 			 "INSERT INTO tst_answers"
                          " (QstCod,AnsInd,Answer,Feedback,"
-                         "ImageName,ImageTitle,ImageURL,Correct)"
+                         "MediaName,MediaType,MediaTitle,MediaURL,Correct)"
                          " VALUES"
-                         " (%ld,0,%ld,'','','','','Y')",
+                         " (%ld,0,%ld,'',"
+                         "'','','','','Y')",
 			 Gbl.Test.QstCod,
 			 Gbl.Test.Answer.Integer);
          break;
@@ -6656,9 +6672,10 @@ static void Tst_InsertAnswersIntoDB (void)
             DB_QueryINSERT ("can not create answer",
         		    "INSERT INTO tst_answers"
                             " (QstCod,AnsInd,Answer,Feedback,"
-                            "ImageName,ImageTitle,ImageURL,Correct)"
+                            "MediaName,MediaType,MediaTitle,MediaURL,Correct)"
                             " VALUES"
-                            " (%ld,%u,'%lg','','','','','Y')",
+                            " (%ld,%u,'%lg','',"
+                            "'','','','','Y')",
 			    Gbl.Test.QstCod,i,
 			    Gbl.Test.Answer.FloatingPoint[i]);
          Str_SetDecimalPointToLocal ();	// Return to local system
@@ -6667,9 +6684,10 @@ static void Tst_InsertAnswersIntoDB (void)
          DB_QueryINSERT ("can not create answer",
 			 "INSERT INTO tst_answers"
                          " (QstCod,AnsInd,Answer,Feedback,"
-                         "ImageName,ImageTitle,ImageURL,Correct)"
+                         "MediaName,Mediatype,MediaTitle,MediaURL,Correct)"
                          " VALUES"
-                         " (%ld,0,'%c','','','','','Y')",
+                         " (%ld,0,'%c','',"
+                         "'','','','','Y')",
 			 Gbl.Test.QstCod,
 			 Gbl.Test.Answer.TF);
          break;
@@ -6684,21 +6702,23 @@ static void Tst_InsertAnswersIntoDB (void)
                DB_QueryINSERT ("can not create answer",
         		       "INSERT INTO tst_answers"
                                " (QstCod,AnsInd,Answer,Feedback,"
-                               "ImageName,ImageTitle,ImageURL,Correct)"
+                               "MediaName,MediaType,MediaTitle,MediaURL,Correct)"
                                " VALUES"
-                               " (%ld,%u,'%s','%s','%s','%s','%s','%c')",
+                               " (%ld,%u,'%s','%s',"
+                               "'%s','%s','%s','%s','%c')",
 			       Gbl.Test.QstCod,NumOpt,
 			       Gbl.Test.Answer.Options[NumOpt].Text,
 			       Gbl.Test.Answer.Options[NumOpt].Feedback ? Gbl.Test.Answer.Options[NumOpt].Feedback : "",
-			       Gbl.Test.Answer.Options[NumOpt].Image.Name,
-			       Gbl.Test.Answer.Options[NumOpt].Image.Title ? Gbl.Test.Answer.Options[NumOpt].Image.Title : "",
-			       Gbl.Test.Answer.Options[NumOpt].Image.URL   ? Gbl.Test.Answer.Options[NumOpt].Image.URL   : "",
+			       Gbl.Test.Answer.Options[NumOpt].Media.Name,
+			       Med_GetStringTypeForDB (Gbl.Test.Answer.Options[NumOpt].Media.Type),
+			       Gbl.Test.Answer.Options[NumOpt].Media.Title ? Gbl.Test.Answer.Options[NumOpt].Media.Title : "",
+			       Gbl.Test.Answer.Options[NumOpt].Media.URL   ? Gbl.Test.Answer.Options[NumOpt].Media.URL   : "",
 			       Gbl.Test.Answer.Options[NumOpt].Correct ? 'Y' :
 									 'N');
 
                /* Update image status */
-	       if (Gbl.Test.Answer.Options[NumOpt].Image.Name[0])
-		  Gbl.Test.Answer.Options[NumOpt].Image.Status = Img_NAME_STORED_IN_DB;
+	       if (Gbl.Test.Answer.Options[NumOpt].Media.Name[0])
+		  Gbl.Test.Answer.Options[NumOpt].Media.Status = Med_NAME_STORED_IN_DB;
               }
 	 break;
       default:
@@ -6758,20 +6778,16 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
 static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
-   /***** Get names of images associated to stems of test questions from database *****/
+   /***** Get names of media files associated to stems of test questions from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get image",
-		       "SELECT ImageName FROM tst_questions"
+		       "SELECT MediaName,"	// row[0]
+		              "MediaType"	// row[1]
+		       " FROM tst_questions"
 		       " WHERE QstCod=%ld AND CrsCod=%ld",
 		       QstCod,CrsCod))
-     {
-      /***** Get image name (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Remove image file *****/
-      Img_RemoveImageFile (row[0]);
-     }
+      /***** Remove media file *****/
+      Med_RemoveMediaFileFromRow (mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -6785,28 +6801,19 @@ static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
 static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumImages;
-   unsigned NumImg;
+   unsigned NumMedia;
 
    /***** Get names of images associated to stems of test questions from database *****/
-   NumImages =
+   NumMedia =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get images",
-			      "SELECT ImageName FROM tst_questions"
+			      "SELECT MediaName,"	// row[0]
+			             "MediaType"	// row[1]
+			      " FROM tst_questions"
 			      " WHERE CrsCod=%ld",
 			      CrsCod);
 
-   /***** Go over result removing image files *****/
-   for (NumImg = 0;
-	NumImg < NumImages;
-	NumImg++)
-     {
-      /***** Get image name (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Remove image file *****/
-      Img_RemoveImageFile (row[0]);
-     }
+   /***** Go over result removing media files *****/
+   Med_RemoveMediaFilesFromAllRows (NumMedia,mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -6819,11 +6826,11 @@ static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod)
 static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
 
-   /***** Get names of images associated to answers of test questions from database *****/
+   /***** Get names of media files associated to answers of test questions from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get images",
-		       "SELECT tst_answers.ImageName"
+		       "SELECT tst_answers.MediaName,"	// row[0]
+		              "tst_answers.MediaType"	// row[1]
 		       " FROM tst_questions,tst_answers"
 		       " WHERE tst_questions.CrsCod=%ld"	// Extra check
 		       " AND tst_questions.QstCod=%ld"	// Extra check
@@ -6831,13 +6838,8 @@ static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsI
 		       " AND tst_answers.QstCod=%ld"
 		       " AND tst_answers.AnsInd=%u",
 		       CrsCod,QstCod,QstCod,AnsInd))
-     {
-      /***** Get image name (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Remove image file *****/
-      Img_RemoveImageFile (row[0]);
-     }
+      /***** Remove media file *****/
+      Med_RemoveMediaFileFromRow (mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -6850,14 +6852,13 @@ static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsI
 static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumImages;
-   unsigned NumImg;
+   unsigned NumMedia;
 
-   /***** Get names of images associated to answers of test questions from database *****/
-   NumImages =
+   /***** Get names of media files associated to answers of test questions from database *****/
+   NumMedia =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get images",
-			      "SELECT tst_answers.ImageName"
+			      "SELECT tst_answers.MediaName,"	// row[0]
+			             "tst_answers.MediaType"	// row[1]
 			      " FROM tst_questions,tst_answers"
 			      " WHERE tst_questions.CrsCod=%ld"	// Extra check
 			      " AND tst_questions.QstCod=%ld"	// Extra check
@@ -6865,54 +6866,35 @@ static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod)
 			      " AND tst_answers.QstCod=%ld",
 			      CrsCod,QstCod,QstCod);
 
-   /***** Go over result removing image files *****/
-   for (NumImg = 0;
-	NumImg < NumImages;
-	NumImg++)
-     {
-      /***** Get image name (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Remove image file *****/
-      Img_RemoveImageFile (row[0]);
-     }
+   /***** Go over result removing media files *****/
+   Med_RemoveMediaFilesFromAllRows (NumMedia,mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
-/** Remove all image files associated to all answers of all test questions ***/
+/** Remove all media files associated to all answers of all test questions ***/
 /** in a course                                                            ***/
 /*****************************************************************************/
 
 static void Tst_RemoveAllImgFilesFromAnsOfAllQstsInCrs (long CrsCod)
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumImages;
-   unsigned NumImg;
+   unsigned NumMedia;
 
-   /***** Get names of images associated to answers of test questions from database *****/
-   NumImages =
+   /***** Get names of media files associated to answers of test questions from database *****/
+   NumMedia =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get images",
-			      "SELECT tst_answers.ImageName"
+			      "SELECT tst_answers.MediaName,"	// row[0]
+			             "tst_answers.MediaType"	// row[1]
 			      " FROM tst_questions,tst_answers"
 			      " WHERE tst_questions.CrsCod=%ld"
 			      " AND tst_questions.QstCod=tst_answers.QstCod",
 			      CrsCod);
 
-   /***** Go over result removing image files *****/
-   for (NumImg = 0;
-	NumImg < NumImages;
-	NumImg++)
-     {
-      /***** Get image name (row[0]) *****/
-      row = mysql_fetch_row (mysql_res);
-
-      /***** Remove image file *****/
-      Img_RemoveImageFile (row[0]);
-     }
+   /***** Go over result removing media files *****/
+   Med_RemoveMediaFilesFromAllRows (NumMedia,mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -8363,12 +8345,13 @@ static void Tst_ShowTestResult (time_t TstTimeUTC)
 	 row[ 3] Shuffle
 	 row[ 4] Stem
 	 row[ 5] Feedback
-	 row[ 6] ImageName
-	 row[ 7] ImageTitle
-	 row[ 8] ImageURL
-	 row[ 9] NumHits
-	 row[10] NumHitsNotBlank
-	 row[11] Score
+	 row[ 6] MediaName
+	 row[ 7] MediaType
+	 row[ 8] MediaTitle
+	 row[ 9] MediaURL
+	 row[10] NumHits
+	 row[11] NumHitsNotBlank
+	 row[12] Score
 	 */
 	 /***** If this question has been edited later than test time
 	        ==> don't show question ****/

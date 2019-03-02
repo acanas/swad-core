@@ -273,7 +273,6 @@ struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
 
 bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param)
   {
-   extern const char *Txt_UPLOAD_FILE_File_too_large_maximum_X_MiB_NO_HTML;
    FILE *FileDataTmp;
    unsigned char Bytes[NUM_BYTES_PER_CHUNK];
    size_t RemainingBytesToCopy;

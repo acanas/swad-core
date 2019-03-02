@@ -3446,9 +3446,11 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
       NewMsgCod =
       DB_QueryINSERTandReturnCode ("can not create message",
 				   "INSERT INTO msg_content"
-				   " (Subject,Content,ImageName,ImageTitle,ImageURL)"
+				   " (Subject,Content,"
+				   "MediaName,MediaType,MediaTitle,MediaURL)"
 				   " VALUES"
-				   " ('%s','%s','','','')",
+				   " ('%s','%s',"
+				   "'','','','')",
 				   Subject,Content);
 
       /* Insert message in sent messages */
