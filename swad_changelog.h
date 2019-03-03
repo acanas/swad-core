@@ -411,6 +411,8 @@ Antonio
 
 // TODO: Chequear "Imagen no encontrada" en timeline. Mensaje de Víctor González Argudo
 
+// TODO: Comprobar "Error when getting publishing code from session." tras horas de inactividad.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -430,10 +432,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.63 (2019-03-02)"
+#define Log_PLATFORM_VERSION	"SWAD 18.63.1 (2019-03-03)"
 #define CSS_FILE		"swad18.61.css"
 #define JS_FILE			"swad18.62.js"
 /*
+	Version 18.63.1:  Mar 02, 2019 	Allowing animated GIFs. Not finished. (238162 lines)
 	Version 18.63:    Mar 02, 2019 	Allowing animated GIFs. Not finished. (238125 lines)
 					Rename the following directory:
 sudo mv /var/www/swad/img /var/www/swad/med

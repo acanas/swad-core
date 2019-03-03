@@ -46871,6 +46871,36 @@ const char *Txt_The_session_has_expired =
 	"A sess&atilde;o expirou.";
 #endif
 
+const char *Txt_The_size_of_the_gif_file_exceeds_the_maximum_allowed_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"La mida del fitxer <em>GIF</em>"
+	" supera el m&agrave;xim perm&egrave;s (%s).";
+#elif L==2	// de
+	"Die Gr&ouml;&szlig;e der <em>GIF</em>-Datei"
+	" &uuml;berschreitet den zul&auml;ssigen H&ouml;chstwert (%s).";
+#elif L==3	// en
+	"The size of the <em>GIF</em> file"
+	" exceeds the maximum allowed (%s).";
+#elif L==4	// es
+	"El tama&ntilde;o del archivo <em>GIF</em>"
+	" excede el m&aacute;ximo permitido (%s).";
+#elif L==5	// fr
+	"La taille du fichier <em>GIF</em>"
+	" d&eacute;passe le maximum autoris&eacute; (%s).";
+#elif L==6	// gn
+	"El tama&ntilde;o del archivo <em>GIF</em>"
+	" excede el m&aacute;ximo permitido (%s).";	// Okoteve traducción
+#elif L==7	// it
+	"La dimensione del file <em>GIF</em>"
+	" supera il massimo consentito (%s).";
+#elif L==8	// pl
+	"Rozmiar pliku <em>GIF</em>"
+	" przekracza maksymalne dozwolone (%s).";
+#elif L==9	// pt
+	"O tamanho do arquivo <em>GIF</em>"
+	" excede o m&aacute;ximo permitido (%s).";
+#endif
+
 const char *Txt_The_status_of_the_centre_X_has_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El estado del centro <strong>%s</strong> ha cambiado.";	// Necessita traduccio

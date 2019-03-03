@@ -133,11 +133,11 @@ void Med_MediaDestructor (struct Media *Media);
 void Med_FreeMediaTitle (struct Media *Media);
 void Med_FreeMediaURL (struct Media *Media);
 
-void Med_GetMediaNameTitleAndURLFromRow (const char *Name,
-					 const char *TypeStr,
-                                         const char *Title,
-                                         const char *URL,
-                                         struct Media *Media);
+void Med_GetMediaDataFromRow (const char *Name,
+			      const char *TypeStr,
+                              const char *Title,
+                              const char *URL,
+                              struct Media *Media);
 
 void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL);
 void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,

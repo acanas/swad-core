@@ -2923,13 +2923,12 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Write the stem (row[2]), the image (row[4], row[5], row[6], row[7]),
-         the feedback (row[3]) and the answers */
+      /* Write stem (row[2]), media data (row[4], row[5], row[6], row[7]),
+         feedback (row[3]) and answers */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[2],"TEST_EDI");
-      Med_GetMediaNameTitleAndURLFromRow (row[4],row[5],row[6],row[7],
-					  &Gbl.Test.Media);
+      Med_GetMediaDataFromRow (row[4],row[5],row[6],row[7],&Gbl.Test.Media);
       Med_ShowMedia (&Gbl.Test.Media,
                      "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
                      "TEST_IMG_EDIT_LIST_STEM");
@@ -3554,10 +3553,9 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
 
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_QST_CONTAINER\">");
 
-   /* Write the stem (row[2]) and the image (row[3], row[4], row[5], row[6]) */
+   /* Write stem (row[2]) and media data (row[3], row[4], row[5], row[6]) */
    Tst_WriteQstStem (row[2],"GAM_PLAY_QST");
-   Med_GetMediaNameTitleAndURLFromRow (row[3],row[4],row[5],row[6],
-				       &Gbl.Test.Media);
+   Med_GetMediaDataFromRow (row[3],row[4],row[5],row[6],&Gbl.Test.Media);
    Med_ShowMedia (&Gbl.Test.Media,
 		  "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
 		  "TEST_IMG_EDIT_LIST_STEM");

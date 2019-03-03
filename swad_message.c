@@ -1291,9 +1291,11 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    MsgCod =
    DB_QueryINSERTandReturnCode ("can not create message",
 				"INSERT INTO msg_content"
-				" (Subject,Content,MediaName,MediaType,MediaTitle,MediaURL)"
+				" (Subject,Content,"
+				"MediaName,MediaType,MediaTitle,MediaURL)"
 				" VALUES"
-				" ('%s','%s','%s','%s','%s','%s')",
+				" ('%s','%s',"
+				"'%s','%s','%s','%s')",
 				Subject,Content,
 				Media->Name,
 				Med_GetStringTypeForDB (Media->Type),
@@ -1491,8 +1493,10 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
    /* Insert message content into msg_content_deleted */
    DB_QueryINSERT ("can not remove the content of a message",
 		   "INSERT IGNORE INTO msg_content_deleted"
-		         " (MsgCod,Subject,Content,MediaName,MediaType,MediaTitle,MediaURL)"
-		   " SELECT MsgCod,Subject,Content,MediaName,MediaType,MediaTitle,MediaURL"
+		   " (MsgCod,Subject,Content,"
+		   "MediaName,MediaType,MediaTitle,MediaURL)"
+		   " SELECT MsgCod,Subject,Content,"
+		   "MediaName,MediaType,MediaTitle,MediaURL"
 		   " FROM msg_content WHERE MsgCod=%ld",
                    MsgCod);
 
@@ -2802,8 +2806,8 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
    Str_Copy (Content,row[0],
              Cns_MAX_BYTES_LONG_TEXT);
 
-   /****** Get image name (row[1]), type (row[2]), title (row[3]) and URL (row[4]) *****/
-   Med_GetMediaNameTitleAndURLFromRow (row[1],row[2],row[3],row[4],Media);
+   /****** Get media data (row[1], row[2], row[3], row[4]) *****/
+   Med_GetMediaDataFromRow (row[1],row[2],row[3],row[4],Media);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

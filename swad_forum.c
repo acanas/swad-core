@@ -511,13 +511,16 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
    DB_QueryINSERTandReturnCode ("can not create a new post in a forum",
 				"INSERT INTO forum_post"
 				" (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
-				"Subject,Content,MediaName,MediaTitle,MediaURL)"
+				"Subject,Content,"
+				"MediaName,MediaType,MediaTitle,MediaURL)"
 				" VALUES"
 				" (%ld,%ld,NOW(),NOW(),0,"
-				"'%s','%s','%s','%s','%s')",
+				"'%s','%s',"
+				"'%s','%s','%s','%s')",
 				ThrCod,UsrCod,
 				Subject,Content,
 				Media->Name,
+				Med_GetStringTypeForDB (Media->Type),
 				Media->Title ? Media->Title : "",
 				Media->URL   ? Media->URL   : "");
 
@@ -1369,9 +1372,8 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    Str_Copy (Content,row[3],
              Cns_MAX_BYTES_LONG_TEXT);
 
-   /****** Get media name (row[4]), type (row[5]),
-           title (row[6]) and URL (row[7]) *****/
-   Med_GetMediaNameTitleAndURLFromRow (row[4],row[5],row[6],row[7],Media);
+   /****** Get media data (row[4], row[5], row[6], row[7]) *****/
+   Med_GetMediaDataFromRow (row[4],row[5],row[6],row[7],Media);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

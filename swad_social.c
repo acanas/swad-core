@@ -1833,8 +1833,8 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
       Str_Copy (Content,row[0],
                 Cns_MAX_BYTES_LONG_TEXT);
 
-      /****** Get image name (row[1]), type (row[2]), title (row[3]) and URL (row[4]) *****/
-      Med_GetMediaNameTitleAndURLFromRow (row[1],row[2],row[3],row[4],&Media);
+      /****** Get media data (row[1], row[2], row[3], row[4]) *****/
+      Med_GetMediaDataFromRow (row[1],row[2],row[3],row[4],&Media);
      }
    else
       Content[0] = '\0';
@@ -2470,9 +2470,11 @@ static long Soc_ReceiveSocialPost (void)
       PstCod =
       DB_QueryINSERTandReturnCode ("can not create post",
 				   "INSERT INTO social_posts"
-				   " (Content,MediaName,MediaType,MediaTitle,MediaURL)"
+				   " (Content,"
+				   "MediaName,MediaType,MediaTitle,MediaURL)"
 				   " VALUES"
-				   " ('%s','%s','%s','%s','%s')",
+				   " ('%s',"
+				   "'%s','%s','%s','%s')",
 				   Content,
 				   Media.Name,
 				   Med_GetStringTypeForDB (Media.Type),
@@ -3201,9 +3203,11 @@ static long Soc_ReceiveComment (void)
 	 /* Insert comment content in the database */
 	 DB_QueryINSERT ("can not store comment content",
 			 "INSERT INTO social_comments"
-	                 " (PubCod,Content,MediaName,MediaType,MediaTitle,MediaURL)"
+	                 " (PubCod,Content,"
+	                 "MediaName,MediaType,MediaTitle,MediaURL)"
 			 " VALUES"
-			 " (%ld,'%s','%s','%s','%s','%s')",
+			 " (%ld,'%s',"
+			 "'%s','%s','%s','%s')",
 			 SocPub.PubCod,
 			 Content,
 			 Media.Name,
@@ -4826,9 +4830,8 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
    /***** Get number of times this comment has been favourited *****/
    Soc_GetNumTimesACommHasBeenFav (SocCom);
 
-   /****** Get image name (row[5]), type (row[6]), title (row[7]) and URL (row[8]) *****/
-   Med_GetMediaNameTitleAndURLFromRow (row[5],row[6],row[7],row[8],
-	                               &SocCom->Media);
+   /****** Get media data (row[5], row[6], row[7], row[8]) *****/
+   Med_GetMediaDataFromRow (row[5],row[6],row[7],row[8],&SocCom->Media);
   }
 
 /*****************************************************************************/

@@ -56,6 +56,8 @@ const char *Med_StringsTypeDB[Med_NUM_TYPES] =
    "gif",	// Med_GIF
    };
 
+#define Med_MAX_SIZE_GIF (5UL * 1024UL * 1024UL)	// 5 MiB
+
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -78,7 +80,7 @@ static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction);
 static void Med_GetAndProcessFileFromForm (struct Media *Media,
 					   const char *ParamFile);
 
-static int Med_ProcessMedia (struct Media *Media,
+static int Med_ConvertImage (struct Media *Media,
                              const char *FileNameOriginal,
                              const char *FileNameProcessed);
 
@@ -152,11 +154,11 @@ void Med_FreeMediaURL (struct Media *Media)
 /**** Get media name, title and URL from a query result and copy to struct ***/
 /*****************************************************************************/
 
-void Med_GetMediaNameTitleAndURLFromRow (const char *Name,
-					 const char *TypeStr,
-                                         const char *Title,
-                                         const char *URL,
-                                         struct Media *Media)
+void Med_GetMediaDataFromRow (const char *Name,
+			      const char *TypeStr,
+                              const char *Title,
+                              const char *URL,
+                              struct Media *Media)
   {
    size_t Length;
 
@@ -421,6 +423,7 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
 					   const char *ParamFile)
   {
    extern const char *Txt_The_image_could_not_be_processed_successfully;
+   extern const char *Txt_The_size_of_the_gif_file_exceeds_the_maximum_allowed_X;
    struct Param *Param;
    char FileNameImgSrc[PATH_MAX + 1];
    char *PtrExtension;
@@ -430,6 +433,7 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
    char FileNameOrig[PATH_MAX + 1];	// Full name of original uploaded file
    char FileNameTmp[PATH_MAX + 1];	// Full name of temporary processed file
    struct stat FileStatus;
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    bool WrongType = false;
 
    /***** Set media file status *****/
@@ -502,18 +506,18 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
       switch (Media->Type)
         {
          case Med_JPG:
-	    /***** Convert original media to temporary JPEG processed file
+	    /***** Convert original media to temporary JPG processed file
 		   by calling to program that makes the conversion *****/
 	    snprintf (FileNameTmp,sizeof (FileNameTmp),
 		      "%s/%s/%s/%s.jpg",
 		      Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP,
 		      Media->Name);
-	    if (Med_ProcessMedia (Media,FileNameOrig,FileNameTmp) == 0)	// Return 0 on success
+	    if (Med_ConvertImage (Media,FileNameOrig,FileNameTmp) == 0)	// On success ==> 0 is returned
 	       /* Success */
 	       Media->Status = Med_FILE_PROCESSED;
 	    else // Error processing media
 	      {
-	       /* Error ==> remove temporary destination media file */
+	       /* Remove temporary destination media file */
 	       if (Fil_CheckIfPathExists (FileNameTmp))
 		  unlink (FileNameTmp);
 
@@ -526,15 +530,10 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
             break;
          case Med_GIF:
 	    /***** Check size of media file *****/
-	    if (lstat (FileNameOrig,&FileStatus))	// On success ==> 0 is returned
+	    if (lstat (FileNameOrig,&FileStatus) == 0)	// On success ==> 0 is returned
 	      {
-	       // Error on lstat
-	       /* Show error alert */
-	       Ale_ShowAlert (Ale_ERROR,"Can not check gif file.");
-	      }
-	    else
-	      {
-	       if (FileStatus.st_size <= 5*1024*1024)
+	       /* Success */
+	       if (FileStatus.st_size <= (__off_t) Med_MAX_SIZE_GIF)
 		 {
 		  /***** Move original file to temporary file *****/
 		  snprintf (FileNameTmp,sizeof (FileNameTmp),
@@ -542,13 +541,20 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
 			    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP,
 			    Media->Name);
 		  if (rename (FileNameOrig,FileNameTmp))	// Fail
-		     Ale_ShowAlert (Ale_ERROR,"No se puede cambiar el nombre...");				// TODO: Need translation!!!!
+		     Ale_ShowAlert (Ale_ERROR,"Can not change file name.");
 		  else						// Success
 		     Media->Status = Med_FILE_PROCESSED;
 		 }
-	       else
-		  Ale_ShowAlert (Ale_WARNING,"El tama&ntilde;o del archivo excede el l&iacute;mite...");	// TODO: Need translation!!!!
+	       else	// Size exceeded
+	         {
+		  Fil_WriteFileSizeBrief ((double) Med_MAX_SIZE_GIF,FileSizeStr);
+		  Ale_ShowAlert (Ale_WARNING,Txt_The_size_of_the_gif_file_exceeds_the_maximum_allowed_X,
+			         FileSizeStr);
+	         }
 	      }
+	    else // Error getting file data
+	       /* Show error alert */
+	       Ale_ShowAlert (Ale_ERROR,"Can not get file size.");
 
 	    /***** Remove temporary original file *****/
 	    unlink (FileNameOrig);
@@ -565,7 +571,7 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
 // Return 0 on success
 // Return != 0 on error
 
-static int Med_ProcessMedia (struct Media *Media,
+static int Med_ConvertImage (struct Media *Media,
                              const char *FileNameOriginal,
                              const char *FileNameProcessed)
   {
