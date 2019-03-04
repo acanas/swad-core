@@ -409,8 +409,6 @@ Antonio
 
 // TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
 
-// TODO: Chequear "Imagen no encontrada" en timeline. Mensaje de Víctor González Argudo
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -430,10 +428,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.64.3 (2019-03-04)"
+#define Log_PLATFORM_VERSION	"SWAD 18.64.4 (2019-03-04)"
 #define CSS_FILE		"swad18.64.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.64.4:  Mar 04, 2019 	Last database changes updated in swad.sql. (238473 lines)
 	Version 18.64.3:  Mar 04, 2019 	Fixed bugs in media. (238467 lines)
 	Version 18.64.2:  Mar 04, 2019 	Detect if a GIF image is animated. (238451 lines)
 	Version 18.64.1:  Mar 04, 2019 	Code refactoring in media. (238408 lines)
@@ -445,7 +444,6 @@ sudo mv /var/www/swad/img /var/www/swad/med
 
 					42 changes necessary in database:
 ALTER TABLE forum_post CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
-ALTER TABLE games CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
 ALTER TABLE msg_content CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
 ALTER TABLE msg_content_deleted CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
 ALTER TABLE social_comments CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
