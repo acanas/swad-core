@@ -80,9 +80,11 @@ static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction);
 static void Med_GetAndProcessFileFromForm (struct Media *Media,
 					   const char *ParamFile);
 
-static int Med_ConvertImage (struct Media *Media,
-                             const char *FileNameOriginal,
-                             const char *FileNameProcessed);
+static int Med_ResizeImage (struct Media *Media,
+                            const char *FileNameOriginal,
+                            const char *FileNameProcessed);
+static int Med_GetFirstFrame (const char *FileNameOriginal,
+                              const char *FileNameProcessed);
 
 static Med_Type_t Med_GetTypeFromExtension (const char *Extension);
 
@@ -431,7 +433,9 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char PathImgPriv[PATH_MAX + 1];
    char FileNameOrig[PATH_MAX + 1];	// Full name of original uploaded file
-   char FileNameTmp[PATH_MAX + 1];	// Full name of temporary processed file
+   char FileNameJPGTmp[PATH_MAX + 1];	// Full name of temporary processed file
+   char FileNamePNGTmp[PATH_MAX + 1];	// Full name of temporary processed file
+   char FileNameGIFTmp[PATH_MAX + 1];	// Full name of temporary processed file
    struct stat FileStatus;
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    bool WrongType = false;
@@ -508,18 +512,18 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
          case Med_JPG:
 	    /***** Convert original media to temporary JPG processed file
 		   by calling to program that makes the conversion *****/
-	    snprintf (FileNameTmp,sizeof (FileNameTmp),
+	    snprintf (FileNameJPGTmp,sizeof (FileNameJPGTmp),
 		      "%s/%s/%s/%s.jpg",
 		      Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP,
 		      Media->Name);
-	    if (Med_ConvertImage (Media,FileNameOrig,FileNameTmp) == 0)	// On success ==> 0 is returned
+	    if (Med_ResizeImage (Media,FileNameOrig,FileNameJPGTmp) == 0)	// On success ==> 0 is returned
 	       /* Success */
 	       Media->Status = Med_FILE_PROCESSED;
 	    else // Error processing media
 	      {
 	       /* Remove temporary destination media file */
-	       if (Fil_CheckIfPathExists (FileNameTmp))
-		  unlink (FileNameTmp);
+	       if (Fil_CheckIfPathExists (FileNameJPGTmp))
+		  unlink (FileNameJPGTmp);
 
 	       /* Show error alert */
 	       Ale_ShowAlert (Ale_ERROR,Txt_The_image_could_not_be_processed_successfully);
@@ -535,18 +539,46 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
 	       /* Success */
 	       if (FileStatus.st_size <= (__off_t) Med_MAX_SIZE_GIF)
 		 {
-		  /***** Move original file to temporary file *****/
-		  snprintf (FileNameTmp,sizeof (FileNameTmp),
-			    "%s/%s/%s/%s.gif",
+		  /* File size correct */
+		  /***** Get first frame of orifinal GIF file
+		         and save it on temporary PNG file */
+		  snprintf (FileNamePNGTmp,sizeof (FileNamePNGTmp),
+			    "%s/%s/%s/%s.png",
 			    Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP,
 			    Media->Name);
-		  if (rename (FileNameOrig,FileNameTmp))	// Fail
-		     Ale_ShowAlert (Ale_ERROR,"Can not change file name.");
-		  else						// Success
-		     Media->Status = Med_FILE_PROCESSED;
+		  if (Med_GetFirstFrame (FileNameOrig,FileNamePNGTmp) == 0)	// On success ==> 0 is returned
+		    {
+		     /* Success */
+		     /***** Move original GIF file to temporary GIF file *****/
+		     snprintf (FileNameGIFTmp,sizeof (FileNameGIFTmp),
+			       "%s/%s/%s/%s.gif",
+			       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP,
+			       Media->Name);
+		     if (rename (FileNameOrig,FileNameGIFTmp))	// Fail
+		       {
+			/* Remove temporary PNG file */
+			if (Fil_CheckIfPathExists (FileNamePNGTmp))
+			   unlink (FileNamePNGTmp);
+
+		        /* Show error alert */
+			Ale_ShowAlert (Ale_ERROR,Txt_The_image_could_not_be_processed_successfully);
+		       }
+		     else					// Success
+			Media->Status = Med_FILE_PROCESSED;
+		    }
+		  else // Error processing media
+		    {
+		     /* Remove temporary PNG file */
+		     if (Fil_CheckIfPathExists (FileNamePNGTmp))
+			unlink (FileNamePNGTmp);
+
+		     /* Show error alert */
+		     Ale_ShowAlert (Ale_ERROR,Txt_The_image_could_not_be_processed_successfully);
+		    }
 		 }
 	       else	// Size exceeded
 	         {
+		  /* Show warning alert */
 		  Fil_WriteFileSizeBrief ((double) Med_MAX_SIZE_GIF,FileSizeStr);
 		  Ale_ShowAlert (Ale_WARNING,Txt_The_size_of_the_gif_file_exceeds_the_maximum_allowed_X,
 			         FileSizeStr);
@@ -554,7 +586,7 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
 	      }
 	    else // Error getting file data
 	       /* Show error alert */
-	       Ale_ShowAlert (Ale_ERROR,"Can not get file size.");
+	       Ale_ShowAlert (Ale_ERROR,Txt_The_image_could_not_be_processed_successfully);
 
 	    /***** Remove temporary original file *****/
 	    unlink (FileNameOrig);
@@ -571,11 +603,11 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
 // Return 0 on success
 // Return != 0 on error
 
-static int Med_ConvertImage (struct Media *Media,
-                             const char *FileNameOriginal,
-                             const char *FileNameProcessed)
+static int Med_ResizeImage (struct Media *Media,
+                            const char *FileNameOriginal,
+                            const char *FileNameProcessed)
   {
-   char Command[1024 + PATH_MAX * 2];
+   char Command[256 + PATH_MAX * 2];
    int ReturnCode;
 
    snprintf (Command,sizeof (Command),
@@ -595,14 +627,43 @@ static int Med_ConvertImage (struct Media *Media,
   }
 
 /*****************************************************************************/
+/************ Process original media generating processed media **************/
+/*****************************************************************************/
+// Return 0 on success
+// Return != 0 on error
+
+static int Med_GetFirstFrame (const char *FileNameOriginal,
+                              const char *FileNameProcessed)
+  {
+   char Command[128 + PATH_MAX * 2];
+   int ReturnCode;
+
+   snprintf (Command,sizeof (Command),
+	     "convert '%s[0]' %s",
+             FileNameOriginal,
+             FileNameProcessed);
+   ReturnCode = system (Command);
+   if (ReturnCode == -1)
+      Lay_ShowErrorAndExit ("Error when running command to process media.");
+
+   ReturnCode = WEXITSTATUS(ReturnCode);
+
+   return ReturnCode;
+  }
+
+/*****************************************************************************/
 /**** Move temporary processed media file to definitive private directory ****/
 /*****************************************************************************/
 
 void Med_MoveMediaToDefinitiveDirectory (struct Media *Media)
   {
    char PathImgPriv[PATH_MAX + 1];
-   char FileNameImgTmp[PATH_MAX + 1];	// Full name of temporary processed file
-   char FileNameImg[PATH_MAX + 1];	// Full name of definitive processed file
+   char FileNameJPGTmp[PATH_MAX + 1];	// Full name of temporary processed file
+   char FileNameJPG[PATH_MAX + 1];	// Full name of definitive processed file
+   char FileNameGIFTmp[PATH_MAX + 1];	// Full name of temporary processed file
+   char FileNameGIF[PATH_MAX + 1];	// Full name of definitive processed file
+   char FileNamePNGTmp[PATH_MAX + 1];	// Full name of temporary processed file
+   char FileNamePNG[PATH_MAX + 1];	// Full name of definitive processed file
 
    /***** Create subdirectory if it does not exist *****/
    snprintf (PathImgPriv,sizeof (PathImgPriv),
@@ -616,44 +677,74 @@ void Med_MoveMediaToDefinitiveDirectory (struct Media *Media)
      {
       case Med_JPG:
 	 /***** Temporary processed file *****/
-	 snprintf (FileNameImgTmp,sizeof (FileNameImgTmp),
+	 snprintf (FileNameJPGTmp,sizeof (FileNameJPGTmp),
 		   "%s/%s/%s/%s.jpg",
 		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP,
 		   Media->Name);
 
 	 /***** Definitive processed file *****/
-	 snprintf (FileNameImg,sizeof (FileNameImg),
+	 snprintf (FileNameJPG,sizeof (FileNameJPG),
 		   "%s/%s/%c%c/%s.jpg",
 		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
 		   Media->Name[0],
 		   Media->Name[1],
 		   Media->Name);
+
+	 /***** Move file *****/
+	 if (rename (FileNameJPGTmp,FileNameJPG))	// Fail
+	    Ale_ShowAlert (Ale_ERROR,"Can not move file.");
+	 else						// Success
+	    Media->Status = Med_FILE_MOVED;
 	 break;
       case Med_GIF:
-	 /***** Temporary processed file *****/
-	 snprintf (FileNameImgTmp,sizeof (FileNameImgTmp),
+	 /***** Temporary PNG file *****/
+	 snprintf (FileNamePNGTmp,sizeof (FileNamePNGTmp),
+		   "%s/%s/%s/%s.png",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP,
+		   Media->Name);
+
+	 /***** Definitive PNG file *****/
+	 snprintf (FileNamePNG,sizeof (FileNamePNG),
+		   "%s/%s/%c%c/%s.png",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
+		   Media->Name[0],
+		   Media->Name[1],
+		   Media->Name);
+
+	 /***** Move PNG file *****/
+	 if (rename (FileNamePNGTmp,FileNamePNG))	// Fail
+	   {
+	    Ale_ShowAlert (Ale_ERROR,"Can not move file.");
+	    return;
+	   }
+
+	 /***** Temporary GIF file *****/
+	 snprintf (FileNameGIFTmp,sizeof (FileNameGIFTmp),
 		   "%s/%s/%s/%s.gif",
 		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP,
 		   Media->Name);
 
-	 /***** Definitive processed file *****/
-	 snprintf (FileNameImg,sizeof (FileNameImg),
+	 /***** Definitive GIF file *****/
+	 snprintf (FileNameGIF,sizeof (FileNameGIF),
 		   "%s/%s/%c%c/%s.gif",
 		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
 		   Media->Name[0],
 		   Media->Name[1],
 		   Media->Name);
+
+	 /***** Move GIF file *****/
+	 if (rename (FileNameGIFTmp,FileNameGIF))	// Fail
+	   {
+	    Ale_ShowAlert (Ale_ERROR,"Can not move file.");
+	    return;
+	   }
+
+         Media->Status = Med_FILE_MOVED;
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong media type.");
 	 break;
      }
-
-   /***** Move file *****/
-   if (rename (FileNameImgTmp,FileNameImg))	// Fail
-      Ale_ShowAlert (Ale_ERROR,"Can not move file.");
-   else						// Success
-      Media->Status = Med_FILE_MOVED;
   }
 
 /*****************************************************************************/
@@ -666,7 +757,9 @@ void Med_ShowMedia (struct Media *Media,
    extern const char *Txt_Image_not_found;
    char FileNameImgPriv[NAME_MAX + 1];
    char FullPathMediaPriv[PATH_MAX + 1];
-   char URL[PATH_MAX + 1];
+   char URL_JPG[PATH_MAX + 1];
+   char URL_GIF[PATH_MAX + 1];
+   char URL_PNG[PATH_MAX + 1];
    bool PutLink;
 
    /***** If no media to show ==> nothing to do *****/
@@ -679,76 +772,160 @@ void Med_ShowMedia (struct Media *Media,
    if (Media->Status != Med_NAME_STORED_IN_DB)
       return;
 
+   /***** Check if optional link is present *****/
+   PutLink = false;
+   if (Media->URL)
+      if (Media->URL[0])
+	 PutLink = true;
+
+   /***** Start media container *****/
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassContainer);
+
+   /***** Start optional link to external URL *****/
+   if (PutLink)
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Media->URL);
+
    /***** Create a temporary public directory used to show the media *****/
    Brw_CreateDirDownloadTmp ();
 
-   /***** Build private path to media *****/
    switch (Media->Type)
      {
       case Med_JPG:
+         /***** Build private path to JPG *****/
 	 snprintf (FileNameImgPriv,sizeof (FileNameImgPriv),
 		   "%s.jpg",
 		   Media->Name);
+	 snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		   "%s/%s/%c%c/%s",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
+		   Media->Name[0],
+		   Media->Name[1],
+		   FileNameImgPriv);
+
+	 /***** Check if private media file exists *****/
+	 if (Fil_CheckIfPathExists (FullPathMediaPriv))
+	   {
+	    /***** Create symbolic link from temporary public directory to private file
+		   in order to gain access to it for showing/downloading *****/
+	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameImgPriv);
+
+	    /***** Create URL pointing to symbolic link *****/
+	    snprintf (URL_JPG,sizeof (URL_JPG),
+		      "%s/%s/%s/%s",
+		      Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+		      Gbl.FileBrowser.TmpPubDir,
+		      FileNameImgPriv);
+
+	    /***** Show media *****/
+	    fprintf (Gbl.F.Out,"<img src=\"%s\" class=\"%s\" alt=\"\"",URL_JPG,ClassMedia);
+	    if (Media->Title)
+	       if (Media->Title[0])
+		  fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
+	    fprintf (Gbl.F.Out," lazyload=\"on\" />");	// Lazy load of the media
+	   }
+	 else
+	    fprintf (Gbl.F.Out,"%s",Txt_Image_not_found);
 	 break;
       case Med_GIF:
+         /***** Build private path to animated GIF image *****/
 	 snprintf (FileNameImgPriv,sizeof (FileNameImgPriv),
 		   "%s.gif",
 		   Media->Name);
+	 snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		   "%s/%s/%c%c/%s",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
+		   Media->Name[0],
+		   Media->Name[1],
+		   FileNameImgPriv);
+
+	 /***** Check if private media file exists *****/
+	 if (Fil_CheckIfPathExists (FullPathMediaPriv))
+	   {
+	    /***** Create symbolic link from temporary public directory to private file
+		   in order to gain access to it for showing/downloading *****/
+	    Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameImgPriv);
+
+	    /***** Create URL pointing to symbolic link *****/
+	    snprintf (URL_GIF,sizeof (URL_GIF),
+		      "%s/%s/%s/%s",
+		      Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+		      Gbl.FileBrowser.TmpPubDir,
+		      FileNameImgPriv);
+
+	    /***** Show animated GIF *****/
+	    /*
+	    fprintf (Gbl.F.Out,"<img id=\"%s\" src=\"%s\""
+		               " class=\"%s\" alt=\"\"",
+		     UniqueId,URL_GIF,ClassMedia);
+	    if (Media->Title)
+	       if (Media->Title[0])
+		  fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
+	    fprintf (Gbl.F.Out," style=\"display:none;\""	// Initially hidden
+		               " lazyload=\"on\" />");		// Lazy load of the media
+	    */
+
+	    /***** Build private path to static PNG image *****/
+	    snprintf (FileNameImgPriv,sizeof (FileNameImgPriv),
+		      "%s.png",
+		      Media->Name);
+	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		      "%s/%s/%c%c/%s",
+		      Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
+		      Media->Name[0],
+		      Media->Name[1],
+		      FileNameImgPriv);
+
+	    /***** Check if private media file exists *****/
+	    if (Fil_CheckIfPathExists (FullPathMediaPriv))
+	      {
+	       /***** Create symbolic link from temporary public directory to private file
+		      in order to gain access to it for showing/downloading *****/
+	       Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameImgPriv);
+
+	       /***** Create URL pointing to symbolic link *****/
+	       snprintf (URL_PNG,sizeof (URL_PNG),
+			 "%s/%s/%s/%s",
+			 Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+			 Gbl.FileBrowser.TmpPubDir,
+			 FileNameImgPriv);
+
+	       /***** Show static PNG *****/
+	       fprintf (Gbl.F.Out,"<div class=\"MED_PLAY\""
+				  " onmouseover=\"toggleOnGIF(this,'%s');\""
+				  " onmouseout=\"toggleOffGIF(this,'%s');\">",
+			URL_GIF,
+			URL_PNG);
+
+	       fprintf (Gbl.F.Out,"<img src=\"%s\" class=\"%s\" alt=\"\"",
+
+			URL_PNG,
+			ClassMedia);
+	       if (Media->Title)
+		  if (Media->Title[0])
+		     fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
+	       fprintf (Gbl.F.Out," lazyload=\"on\" />");	// Lazy load of the media
+
+	       fprintf (Gbl.F.Out,"<span class=\"MED_PLAY_ICO\">"
+				  "GIF"
+		                  "</span>"
+		                  "</div>");
+	      }
+	    else
+	       fprintf (Gbl.F.Out,"%s",Txt_Image_not_found);
+	   }
+	 else
+	    fprintf (Gbl.F.Out,"%s",Txt_Image_not_found);
 	 break;
       default:
 	 return;
      }
-   snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-	     "%s/%s/%c%c/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
-	     Media->Name[0],
-	     Media->Name[1],
-	     FileNameImgPriv);
 
-   /***** Check if private media file exists *****/
-   if (Fil_CheckIfPathExists (FullPathMediaPriv))
-     {
-      /***** Create symbolic link from temporary public directory to private file
-	     in order to gain access to it for showing/downloading *****/
-      Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameImgPriv);
+   /***** End optional link to external URL *****/
+   if (PutLink)
+      fprintf (Gbl.F.Out,"</a>");
 
-      /***** Create URL pointing to symbolic link *****/
-      snprintf (URL,sizeof (URL),
-	        "%s/%s/%s/%s",
-	        Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
-	        Gbl.FileBrowser.TmpPubDir,
-	        FileNameImgPriv);
-
-      /***** Show media *****/
-      /* Check if optional link is present */
-      PutLink = false;
-      if (Media->URL)
-         if (Media->URL[0])
-            PutLink = true;
-
-      /* Start media container */
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassContainer);
-
-      /* Start optional link to external URL */
-      if (PutLink)
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Media->URL);
-
-      /* Media */
-      fprintf (Gbl.F.Out,"<img src=\"%s\" class=\"%s\" alt=\"\"",URL,ClassMedia);
-      if (Media->Title)
-         if (Media->Title[0])
-	    fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
-      fprintf (Gbl.F.Out," lazyload=\"on\" />");	// Lazy load of the media
-
-      /* End optional link to external URL */
-      if (PutLink)
-         fprintf (Gbl.F.Out,"</a>");
-
-      /* End media container */
-      fprintf (Gbl.F.Out,"</div>");
-     }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_Image_not_found);
+   /***** End media container *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -799,9 +976,20 @@ void Med_RemoveMediaFile (const char *Name,Med_Type_t Type)
 
 	    break;
          case Med_GIF:
-	    /***** Build path to private file *****/
+	    /***** Build path to private GIF file *****/
 	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
 		      "%s/%s/%c%c/%s.gif",
+		      Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
+		      Name[0],
+		      Name[1],
+		      Name);
+
+	    /***** Remove private file *****/
+	    unlink (FullPathMediaPriv);
+
+	    /***** Build path to private PNG file *****/
+	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		      "%s/%s/%c%c/%s.png",
 		      Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
 		      Name[0],
 		      Name[1],

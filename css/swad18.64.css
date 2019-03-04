@@ -2702,6 +2702,29 @@ a:hover img.CENTRE_PHOTO_SHOW
 	color:#808080;
 	font-size:12pt;
 	}
+	
+.MED_PLAY
+	{
+	position:relative;
+	}
+/*
+.MED_PLAY:hover .MED_PLAY_ICO
+	{
+	opacity:0;
+	}
+*/
+/* The icon inside the overlay is positioned in the middle vertically and horizontally */
+.MED_PLAY_ICO
+	{
+	position:absolute;
+	left:50%;
+	top:50%;
+	transform:translate(-50%,-50%);
+	font-size:24pt;
+	font-weight:bold;
+	color:white;
+	text-shadow: 0 0 8px black;
+	}
 
 /********** Author of assignments, attendance, messages, surveys... **********/
 .AUTHOR_1_LINE

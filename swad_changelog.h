@@ -432,10 +432,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.63.1 (2019-03-03)"
-#define CSS_FILE		"swad18.61.css"
-#define JS_FILE			"swad18.62.js"
+#define Log_PLATFORM_VERSION	"SWAD 18.64 (2019-03-04)"
+#define CSS_FILE		"swad18.64.css"
+#define JS_FILE			"swad18.64.js"
 /*
+	Version 18.64:    Mar 04, 2019 	Allowing animated GIFs. Not finished. (238378 lines)
 	Version 18.63.1:  Mar 02, 2019 	Allowing animated GIFs. Not finished. (238162 lines)
 	Version 18.63:    Mar 02, 2019 	Allowing animated GIFs. Not finished. (238125 lines)
 					Rename the following directory:

@@ -776,6 +776,41 @@ function AJAXCreateObject () {
 }
 
 /*****************************************************************************/
+/********************** Change display of animated GIF ***********************/
+/*****************************************************************************/
+// elem should be a DIV with two children: IMG and SPAN
+
+function toggleOnGIF (elem, animatedURL) {
+	var c = elem.children;
+
+	for (var i = 0; i < c.length; i++) {
+		var child = c[i];
+
+		if (child.nodeName == 'IMG')
+			/* Display animated image */
+			child.src = animatedURL;
+		else if (child.nodeName == 'SPAN')
+			/* Hide the span element showing "GIF" */
+			child.style.display = 'none';
+	}
+}
+
+function toggleOffGIF (elem, staticURL) {
+	var c = elem.children;
+
+	for (var i = 0; i < c.length; i++) {
+		var child = c[i];
+
+		if (child.nodeName == 'IMG')
+			/* Display static image */
+			child.src = staticURL;
+		else if (child.nodeName == 'SPAN')
+			/* Make visible the span element showing "GIF" */
+			child.style.display = '';
+	}
+}
+
+/*****************************************************************************/
 /*************** Change display of comments in a social note *****************/
 /*****************************************************************************/
 
