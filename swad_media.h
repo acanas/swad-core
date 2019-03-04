@@ -144,7 +144,7 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
                            void (*GetMediaFromDB) (int NumMediaInForm,struct Media *Media));
 void Med_SetParamNames (struct ParamUploadMedia *ParamUploadMedia,int NumMediaInForm);
 
-void Med_MoveMediaToDefinitiveDirectory (struct Media *Media);
+void Med_MoveMediaToDefinitiveDir (struct Media *Media);
 void Med_ShowMedia (struct Media *Media,
                     const char *ClassContainer,const char *ClassMedia);
 

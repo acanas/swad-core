@@ -2354,8 +2354,9 @@ void Ctr_ReceivePhoto (void)
    size_t LengthExtension;
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char PathImgPriv[PATH_MAX + 1];
-   char FileNameImgTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination temporary file
-   char FileNameImg[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination file
+   char PathImgPrivTmp[PATH_MAX + 1];
+   char PathFileImgTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination temporary file
+   char PathFileImg[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination file
    bool WrongType = false;
    char Command[1024 + PATH_MAX * 2];
    int ReturnCode;
@@ -2385,10 +2386,10 @@ void Ctr_ReceivePhoto (void)
    Fil_CreateDirIfNotExists (PathImgPriv);
 
    /* Create temporary private directory for images if it does not exist */
-   snprintf (PathImgPriv,sizeof (PathImgPriv),
-	     "%s/%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP);
-   Fil_CreateDirIfNotExists (PathImgPriv);
+   snprintf (PathImgPrivTmp,sizeof (PathImgPrivTmp),
+	     "%s/%s",
+	     PathImgPriv,Cfg_FOLDER_IMG_TMP);
+   Fil_CreateDirIfNotExists (PathImgPrivTmp);
 
    /* Get filename extension */
    if ((PtrExtension = strrchr (FileNameImgSrc,(int) '.')) == NULL)
@@ -2405,11 +2406,10 @@ void Ctr_ReceivePhoto (void)
      }
 
    /* End the reception of image in a temporary file */
-   snprintf (FileNameImgTmp,sizeof (FileNameImgTmp),
-	     "%s/%s/%s/%s.%s",
-             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP,
-             Gbl.UniqueNameEncrypted,PtrExtension);
-   if (!Fil_EndReceptionOfFile (FileNameImgTmp,Param))
+   snprintf (PathFileImgTmp,sizeof (PathFileImgTmp),
+	     "%s/%s.%s",
+             PathImgPrivTmp,Gbl.UniqueNameEncrypted,PtrExtension);
+   if (!Fil_EndReceptionOfFile (PathFileImgTmp,Param))
      {
       Ale_ShowAlert (Ale_WARNING,"Error copying file.");
       return;
@@ -2433,7 +2433,7 @@ void Ctr_ReceivePhoto (void)
    Fil_CreateDirIfNotExists (Path);
 
    /***** Convert temporary file to public JPEG file *****/
-   snprintf (FileNameImg,sizeof (FileNameImg),
+   snprintf (PathFileImg,sizeof (PathFileImg),
 	     "%s/%s/%02u/%u/%u.jpg",
 	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
 	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
@@ -2443,11 +2443,11 @@ void Ctr_ReceivePhoto (void)
    /* Call to program that makes the conversion */
    snprintf (Command,sizeof (Command),
 	     "convert %s -resize '%ux%u>' -quality %u %s",
-             FileNameImgTmp,
+             PathFileImgTmp,
              Ctr_PHOTO_SAVED_MAX_WIDTH,
              Ctr_PHOTO_SAVED_MAX_HEIGHT,
              Ctr_PHOTO_SAVED_QUALITY,
-             FileNameImg);
+             PathFileImg);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
       Lay_ShowErrorAndExit ("Error when running command to process image.");
@@ -2464,7 +2464,7 @@ void Ctr_ReceivePhoto (void)
      }
 
    /***** Remove temporary file *****/
-   unlink (FileNameImgTmp);
+   unlink (PathFileImgTmp);
 
    /***** Show the centre information again *****/
    Ctr_ShowConfiguration ();

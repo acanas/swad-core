@@ -504,7 +504,7 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
    if (Media->Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
        Media->Status == Med_FILE_PROCESSED)	// The new image received has been processed
       /* Move processed image to definitive directory */
-      Med_MoveMediaToDefinitiveDirectory (Media);
+      Med_MoveMediaToDefinitiveDir (Media);
 
    /***** Insert forum post in the database *****/
    PstCod =

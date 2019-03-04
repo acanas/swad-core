@@ -6180,7 +6180,7 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
 	Gbl.Test.Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
         Gbl.Test.Media.Status == Med_FILE_PROCESSED)		// The new image received has been processed
       /* Move processed image to definitive directory */
-      Med_MoveMediaToDefinitiveDirectory (&Gbl.Test.Media);
+      Med_MoveMediaToDefinitiveDir (&Gbl.Test.Media);
 
    /****** Move images associated to answers *****/
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
@@ -6200,7 +6200,7 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
 	      Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
 	      Gbl.Test.Answer.Options[NumOpt].Media.Status == Med_FILE_PROCESSED)		// The new image received has been processed
 	    /* Move processed image to definitive directory */
-	    Med_MoveMediaToDefinitiveDirectory (&Gbl.Test.Answer.Options[NumOpt].Media);
+	    Med_MoveMediaToDefinitiveDir (&Gbl.Test.Answer.Options[NumOpt].Media);
 	}
   }
 

@@ -2463,7 +2463,7 @@ static long Soc_ReceiveSocialPost (void)
       if (Media.Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
 	  Media.Status == Med_FILE_PROCESSED)	// The new image received has been processed
 	 /* Move processed image to definitive directory */
-	 Med_MoveMediaToDefinitiveDirectory (&Media);
+	 Med_MoveMediaToDefinitiveDir (&Media);
 
       /***** Publish *****/
       /* Insert post content in the database */
@@ -3191,7 +3191,7 @@ static long Soc_ReceiveComment (void)
 	 if (Media.Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
 	     Media.Status == Med_FILE_PROCESSED)	// The new image received has been processed
 	    /* Move processed image to definitive directory */
-	    Med_MoveMediaToDefinitiveDirectory (&Media);
+	    Med_MoveMediaToDefinitiveDir (&Media);
 
 	 /***** Publish *****/
 	 /* Insert into publishings */
