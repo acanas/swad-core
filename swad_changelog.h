@@ -411,8 +411,6 @@ Antonio
 
 // TODO: Chequear "Imagen no encontrada" en timeline. Mensaje de Víctor González Argudo
 
-// TODO: Comprobar "Error when getting publishing code from session." tras horas de inactividad.
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -432,10 +430,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.64.1 (2019-03-04)"
+#define Log_PLATFORM_VERSION	"SWAD 18.64.3 (2019-03-04)"
 #define CSS_FILE		"swad18.64.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.64.3:  Mar 04, 2019 	Fixed bugs in media. (238467 lines)
+	Version 18.64.2:  Mar 04, 2019 	Detect if a GIF image is animated. (238451 lines)
 	Version 18.64.1:  Mar 04, 2019 	Code refactoring in media. (238408 lines)
 	Version 18.64:    Mar 04, 2019 	Allowing animated GIFs. Not finished. (238378 lines)
 	Version 18.63.1:  Mar 02, 2019 	Allowing animated GIFs. Not finished. (238162 lines)
@@ -443,7 +443,7 @@ ps2pdf source.ps destination.pdf
 					Rename the following directory:
 sudo mv /var/www/swad/img /var/www/swad/med
 
-					28 changes necessary in database:
+					42 changes necessary in database:
 ALTER TABLE forum_post CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
 ALTER TABLE games CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
 ALTER TABLE msg_content CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
@@ -453,13 +453,13 @@ ALTER TABLE social_posts CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL 
 ALTER TABLE tst_answers CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
 ALTER TABLE tst_questions CHANGE COLUMN ImageName MediaName VARCHAR(43) NOT NULL DEFAULT '';
 
-ALTER TABLE forum_post ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
-ALTER TABLE msg_content ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
-ALTER TABLE msg_content_deleted ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
-ALTER TABLE social_comments ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
-ALTER TABLE social_posts ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
-ALTER TABLE tst_answers ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
-ALTER TABLE tst_questions ADD COLUMN MediaType ENUM('jpg','gif') NOT NULL DEFAULT 'jpg' AFTER MediaName;
+ALTER TABLE forum_post ADD COLUMN MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none' AFTER MediaName;
+ALTER TABLE msg_content ADD COLUMN MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none' AFTER MediaName;
+ALTER TABLE msg_content_deleted ADD COLUMN MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none' AFTER MediaName;
+ALTER TABLE social_comments ADD COLUMN MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none' AFTER MediaName;
+ALTER TABLE social_posts ADD COLUMN MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none' AFTER MediaName;
+ALTER TABLE tst_answers ADD COLUMN MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none' AFTER MediaName;
+ALTER TABLE tst_questions ADD COLUMN MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none' AFTER MediaName;
 
 ALTER TABLE forum_post CHANGE COLUMN ImageTitle MediaTitle VARCHAR(2047) NOT NULL DEFAULT '';
 ALTER TABLE msg_content CHANGE COLUMN ImageTitle MediaTitle VARCHAR(2047) NOT NULL DEFAULT '';
@@ -476,6 +476,22 @@ ALTER TABLE social_comments CHANGE COLUMN ImageURL MediaURL VARCHAR(255) NOT NUL
 ALTER TABLE social_posts CHANGE COLUMN ImageURL MediaURL VARCHAR(255) NOT NULL DEFAULT '';
 ALTER TABLE tst_answers CHANGE COLUMN ImageURL MediaURL VARCHAR(255) NOT NULL DEFAULT '';
 ALTER TABLE tst_questions CHANGE COLUMN ImageURL MediaURL VARCHAR(255) NOT NULL DEFAULT '';
+
+UPDATE forum_post SET MediaType='none' WHERE MediaName='';
+UPDATE msg_content SET MediaType='none' WHERE MediaName='';
+UPDATE msg_content_deleted SET MediaType='none' WHERE MediaName='';
+UPDATE social_comments SET MediaType='none' WHERE MediaName='';
+UPDATE social_posts SET MediaType='none' WHERE MediaName='';
+UPDATE tst_answers SET MediaType='none' WHERE MediaName='';
+UPDATE tst_questions SET MediaType='none' WHERE MediaName='';
+
+UPDATE forum_post SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE msg_content SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE msg_content_deleted SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE social_comments SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE social_posts SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE tst_answers SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE tst_questions SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
 
 	Version 18.62:    Feb 27, 2019 	By default show only the last comments in a social publishing. (237901 lines)
 	Version 18.61:    Feb 27, 2019 	Hide/show comments in a social publishing. (237855 lines)

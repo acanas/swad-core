@@ -862,6 +862,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 
 static long Soc_GetPubCodFromSession (const char *FieldName)
   {
+   extern const char *Txt_The_session_has_expired;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long PubCod;
@@ -870,7 +871,7 @@ static long Soc_GetPubCodFromSession (const char *FieldName)
    if (DB_QuerySELECT (&mysql_res,"can not get publishing code from session",
 		       "SELECT %s FROM sessions WHERE SessionId='%s'",
 		       FieldName,Gbl.Session.Id) != 1)
-      Lay_ShowErrorAndExit ("Error when getting publishing code from session.");
+      Lay_ShowErrorAndExit (Txt_The_session_has_expired);
 
    /***** Get last publishing code *****/
    row = mysql_fetch_row (mysql_res);
@@ -2456,12 +2457,12 @@ static long Soc_ReceiveSocialPost (void)
    Media.Quality = Soc_IMAGE_SAVED_QUALITY;
    Med_GetMediaFromForm (-1,&Media,NULL);
 
-   if (Content[0] ||	// Text not empty
-       Media.Name[0])	// An image is attached
+   if (Content[0] ||					// Text not empty
+       (Media.Name[0] && Media.Type != Med_NONE))	// A media is attached
      {
       /***** Check if image is received and processed *****/
       if (Media.Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
-	  Media.Status == Med_FILE_PROCESSED)	// The new image received has been processed
+	  Media.Status == Med_FILE_PROCESSED)		// The new image received has been processed
 	 /* Move processed image to definitive directory */
 	 Med_MoveMediaToDefinitiveDir (&Media);
 
@@ -3184,8 +3185,8 @@ static long Soc_ReceiveComment (void)
       Media.Quality = Soc_IMAGE_SAVED_QUALITY;
       Med_GetMediaFromForm (-1,&Media,NULL);
 
-      if (Content[0] ||		// Text not empty
-	  Media.Name[0])	// An image is attached
+      if (Content[0] ||					// Text not empty
+          (Media.Name[0] && Media.Type != Med_NONE))	// A media is attached
 	{
 	 /***** Check if image is received and processed *****/
 	 if (Media.Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
@@ -3878,7 +3879,7 @@ static void Soc_RemoveImgFileFromSocialPost (long PstCod)
 		       " WHERE PstCod=%ld",
 		       PstCod))
       /***** Remove media file *****/
-      Med_RemoveMediaFileFromRow (mysql_res);
+      Med_RemoveMediaFilesFromRow (mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4217,7 +4218,7 @@ static void Soc_RemoveImgFileFromSocialComment (long PubCod)
 		       " WHERE PubCod=%ld",
 		       PubCod))
       /***** Remove media file *****/
-      Med_RemoveMediaFileFromRow (mysql_res);
+      Med_RemoveMediaFilesFromRow (mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

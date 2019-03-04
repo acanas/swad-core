@@ -12616,3 +12616,27 @@ SELECT CAST(~0 AS UNSIGNED);
 SELECT last_logs.LogCod,last_logs.ActCod,last_logs.Dif,last_logs.Role,last_logs.CtyCod,last_logs.InsCod,last_logs.CtrCod,last_logs.DegCod,actions.Txt FROM (SELECT LogCod,ActCod,UNIX_TIMESTAMP()-UNIX_TIMESTAMP(ClickTime) AS Dif,Role,CtyCod,InsCod,CtrCod,DegCod FROM log_recent ORDER BY LogCod DESC LIMIT 20) AS last_logs LEFT JOIN actions ON last_logs.ActCod=actions.ActCod WHERE actions.Language='es';
 
 
+ALTER TABLE forum_post CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none';
+ALTER TABLE msg_content CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none';
+ALTER TABLE msg_content_deleted CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none';
+ALTER TABLE social_comments CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none';
+ALTER TABLE social_posts CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none';
+ALTER TABLE tst_answers CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none';
+ALTER TABLE tst_questions CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif') NOT NULL DEFAULT 'none';
+
+UPDATE forum_post SET MediaType='none' WHERE MediaName='';
+UPDATE msg_content SET MediaType='none' WHERE MediaName='';
+UPDATE msg_content_deleted SET MediaType='none' WHERE MediaName='';
+UPDATE social_comments SET MediaType='none' WHERE MediaName='';
+UPDATE social_posts SET MediaType='none' WHERE MediaName='';
+UPDATE tst_answers SET MediaType='none' WHERE MediaName='';
+UPDATE tst_questions SET MediaType='none' WHERE MediaName='';
+
+UPDATE forum_post SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE msg_content SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE msg_content_deleted SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE social_comments SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE social_posts SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE tst_answers SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+UPDATE tst_questions SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
+

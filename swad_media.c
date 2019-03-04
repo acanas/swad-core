@@ -51,7 +51,7 @@
 
 const char *Med_StringsTypeDB[Med_NUM_TYPES] =
   {
-   "",		// Med_UNKNOWN
+   "none",	// Med_NONE
    "jpg",	// Med_JPG
    "gif",	// Med_GIF
    };
@@ -79,6 +79,9 @@ extern struct Globals Gbl;
 static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction);
 static void Med_GetAndProcessFileFromForm (struct Media *Media,
 					   const char *ParamFile);
+static bool Med_DetectIfAnimated (struct Media *Media,
+			          const char PathMedPrivTmp[PATH_MAX + 1],
+			          const char PathFileOrg[PATH_MAX + 1]);
 
 static void Med_ProcessJPG (struct Media *Media,
 			    const char PathMedPrivTmp[PATH_MAX + 1],
@@ -129,7 +132,7 @@ void Med_ResetMediaExceptTitleAndURL (struct Media *Media)
    Media->Action = Med_ACTION_NO_MEDIA;
    Media->Status = Med_FILE_NONE;
    Media->Name[0] = '\0';
-   Media->Type = Med_UNKNOWN;
+   Media->Type = Med_NONE;
   }
 
 /*****************************************************************************/
@@ -190,9 +193,10 @@ void Med_GetMediaDataFromRow (const char *Name,
    /***** Convert type string to type *****/
    Media->Type = Med_GetTypeFromStrInDB (TypeStr);
 
-   /***** Set status of image file *****/
-   Media->Status = Media->Name[0] ? Med_NAME_STORED_IN_DB :
-	                            Med_FILE_NONE;
+   /***** Set status of media file *****/
+   Media->Status = (Media->Name[0] &&
+	            Media->Type != Med_NONE) ? Med_NAME_STORED_IN_DB :
+	                                       Med_FILE_NONE;
 
    /***** Copy image title to struct *****/
    // Media->Title can be empty or filled with previous value
@@ -314,7 +318,7 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
    Media->Action = Med_GetMediaActionFromForm (ParamUploadMedia.Action);
    Media->Status = Med_FILE_NONE;
    Media->Name[0] = '\0';
-   Media->Type = Med_UNKNOWN;
+   Media->Type = Med_NONE;
 
    /***** Secondly, get the media (image/video) name and the file *****/
    switch (Media->Action)
@@ -327,12 +331,12 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
 	    case Med_FILE_NONE:		// No new image/video received
 	       Media->Action = Med_ACTION_NO_MEDIA;
                Media->Name[0] = '\0';
-               Media->Type = Med_UNKNOWN;
+               Media->Type = Med_NONE;
 	       break;
 	    case Med_FILE_RECEIVED:	// New image/video received, but not processed
 	       Media->Status = Med_FILE_NONE;
 	       Media->Name[0] = '\0';
-               Media->Type = Med_UNKNOWN;
+               Media->Type = Med_NONE;
 	       break;
 	    default:
 	       break;
@@ -476,7 +480,7 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
 
    /* Check extension */
    Media->Type = Med_GetTypeFromExtension (PtrExtension);
-   if (Media->Type == Med_UNKNOWN)
+   if (Media->Type == Med_NONE)
       return;
 
    /* Check if the file type is image/ or application/octet-stream */
@@ -518,6 +522,11 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
      {
       Media->Status = Med_FILE_RECEIVED;
 
+      /***** Detect if amnimated gif *****/
+      if (Media->Type == Med_GIF)
+	 if (!Med_DetectIfAnimated (Media,PathMedPrivTmp,PathFileOrg))
+            Media->Type = Med_JPG;
+
       /***** Process media depending on the media file extension *****/
       switch (Media->Type)
         {
@@ -535,6 +544,51 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
    /***** Remove temporary original file *****/
    if (Fil_CheckIfPathExists (PathFileOrg))
       unlink (PathFileOrg);
+  }
+
+/*****************************************************************************/
+/********************* Detect if a GIF image is animated *********************/
+/*****************************************************************************/
+// Return true if animated
+// Return false if static or error
+
+static bool Med_DetectIfAnimated (struct Media *Media,
+			          const char PathMedPrivTmp[PATH_MAX + 1],
+			          const char PathFileOrg[PATH_MAX + 1])
+  {
+   char PathFileTxtTmp[PATH_MAX + 1];
+   char Command[128 + PATH_MAX * 2];
+   int ReturnCode;
+   FILE *FileTxtTmp;	// Temporary file with the output of the command
+   int NumFrames = 0;
+
+   /***** Build path to temporary text file *****/
+   snprintf (PathFileTxtTmp,sizeof (PathFileTxtTmp),
+	     "%s/%s.txt",
+             PathMedPrivTmp,Media->Name);
+
+   /***** Execute system command to get number of frames in GIF *****/
+   snprintf (Command,sizeof (Command),
+	     "identify -format '%%n\n' %s | head -1 > %s",
+             PathFileOrg,PathFileTxtTmp);
+   ReturnCode = system (Command);
+   if (ReturnCode == -1)
+      return false;		// Error
+   ReturnCode = WEXITSTATUS(ReturnCode);
+   if (ReturnCode != 0)
+      return false;		// Error
+
+   /***** Read temporary file *****/
+   if ((FileTxtTmp = fopen (PathFileTxtTmp,"rb")) == NULL)
+      return false;		// Error
+   if (fscanf (FileTxtTmp,"%d",&NumFrames) != 1)
+      return false;		// Error
+   fclose (FileTxtTmp);
+
+   /***** Remove temporary file *****/
+   unlink (PathFileTxtTmp);
+
+   return (NumFrames > 1);	// NumFrames > 1 ==> Animated
   }
 
 /*****************************************************************************/
@@ -576,7 +630,7 @@ static void Med_ProcessGIF (struct Media *Media,
 			    const char PathFileOrg[PATH_MAX + 1])
   {
    extern const char *Txt_The_image_could_not_be_processed_successfully;
-   extern const char *Txt_The_size_of_the_gif_file_exceeds_the_maximum_allowed_X;
+   extern const char *Txt_The_size_of_the_GIF_file_exceeds_the_maximum_allowed_X;
    struct stat FileStatus;
    char PathFilePNGTmp[PATH_MAX + 1];	// Full name of temporary processed file
    char PathFileGIFTmp[PATH_MAX + 1];	// Full name of temporary processed file
@@ -627,7 +681,7 @@ static void Med_ProcessGIF (struct Media *Media,
 	{
 	 /* Show warning alert */
 	 Fil_WriteFileSizeBrief ((double) Med_MAX_SIZE_GIF,FileSizeStr);
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_size_of_the_gif_file_exceeds_the_maximum_allowed_X,
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_size_of_the_GIF_file_exceeds_the_maximum_allowed_X,
 			FileSizeStr);
 	}
      }
@@ -785,7 +839,7 @@ void Med_ShowMedia (struct Media *Media,
       return;
    if (!Media->Name[0])
       return;
-   if (Media->Type == Med_UNKNOWN)
+   if (Media->Type == Med_NONE)
       return;
    if (Media->Status != Med_NAME_STORED_IN_DB)
       return;
@@ -976,7 +1030,7 @@ static void Med_ShowGIF (struct Media *Media,
   }
 
 /*****************************************************************************/
-/**** Remove private file with an image/video, given the image/video name ****/
+/*** Remove private files with an image/video, given the image/video name ****/
 /*****************************************************************************/
 
 void Med_RemoveMediaFilesFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res)
@@ -987,10 +1041,10 @@ void Med_RemoveMediaFilesFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res)
    for (NumMed = 0;
 	NumMed < NumMedia;
 	NumMed++)
-      Med_RemoveMediaFileFromRow (mysql_res);
+      Med_RemoveMediaFilesFromRow (mysql_res);
   }
 
-void Med_RemoveMediaFileFromRow (MYSQL_RES *mysql_res)
+void Med_RemoveMediaFilesFromRow (MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
 
@@ -998,10 +1052,10 @@ void Med_RemoveMediaFileFromRow (MYSQL_RES *mysql_res)
    row = mysql_fetch_row (mysql_res);
 
    /***** Remove image file *****/
-   Med_RemoveMediaFile (row[0],Med_GetTypeFromStrInDB (row[1]));
+   Med_RemoveMediaFiles (row[0],Med_GetTypeFromStrInDB (row[1]));
   }
 
-void Med_RemoveMediaFile (const char *Name,Med_Type_t Type)
+void Med_RemoveMediaFiles (const char *Name,Med_Type_t Type)
   {
    char PathMedPriv[PATH_MAX + 1];
    char FullPathMediaPriv[PATH_MAX + 1];
@@ -1018,34 +1072,28 @@ void Med_RemoveMediaFile (const char *Name,Med_Type_t Type)
       switch (Type)
         {
          case Med_JPG:
-	    /***** Build path to private file *****/
+	    /***** Remove private JPG file *****/
 	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
 		      "%s/%s.jpg",
 		      PathMedPriv,Name);
-
-	    /***** Remove private file *****/
 	    unlink (FullPathMediaPriv);
 
 	    break;
          case Med_GIF:
-	    /***** Build path to private GIF file *****/
+	    /***** Remove private GIF file *****/
 	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
 		      "%s/%s.gif",
 		      PathMedPriv,Name);
-
-	    /***** Remove private file *****/
 	    unlink (FullPathMediaPriv);
 
-	    /***** Build path to private PNG file *****/
+	    /***** Remove private PNG file *****/
 	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
 		      "%s//%s.png",
 		      PathMedPriv,Name);
-
-	    /***** Remove private file *****/
 	    unlink (FullPathMediaPriv);
 
 	    break;
-         case Med_UNKNOWN:
+         case Med_NONE:
             Lay_ShowErrorAndExit ("Wrong media type.");
             break;
         }
@@ -1062,13 +1110,13 @@ Med_Type_t Med_GetTypeFromStrInDB (const char *Str)
   {
    Med_Type_t Type;
 
-   for (Type = (Med_Type_t) 1;	// Skip unknown type
+   for (Type = (Med_Type_t) 0;
         Type < Med_NUM_TYPES;
         Type++)
       if (!strcasecmp (Str,Med_StringsTypeDB[Type]))
          return Type;
 
-   return Med_UNKNOWN;
+   return Med_NONE;
   }
 
 /*****************************************************************************/
@@ -1089,7 +1137,7 @@ static Med_Type_t Med_GetTypeFromExtension (const char *Extension)
    if (!strcasecmp (Extension,"gif"))
       return Med_GIF;
 
-   return Med_UNKNOWN;
+   return Med_NONE;
   }
 
 /*****************************************************************************/
@@ -1099,9 +1147,8 @@ static Med_Type_t Med_GetTypeFromExtension (const char *Extension)
 const char *Med_GetStringTypeForDB (Med_Type_t Type)
   {
    /***** Check if type is out of valid range *****/
-   if (Type < (Med_Type_t) 1 ||
-       Type > (Med_Type_t) (Med_NUM_TYPES - 1))
-      return Med_StringsTypeDB[Med_UNKNOWN];
+   if (Type > (Med_Type_t) (Med_NUM_TYPES - 1))
+      return Med_StringsTypeDB[Med_NONE];
 
    /***** Get string from type *****/
    return Med_StringsTypeDB[Type];

@@ -3450,8 +3450,9 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
 				   "MediaName,MediaType,MediaTitle,MediaURL)"
 				   " VALUES"
 				   " ('%s','%s',"
-				   "'','','','')",
-				   Subject,Content);
+				   "'','%s','','')",
+				   Subject,Content,
+				   Med_GetStringTypeForDB (Med_NONE));
 
       /* Insert message in sent messages */
       DB_QueryINSERT ("can not create message",

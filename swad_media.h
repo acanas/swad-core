@@ -91,7 +91,7 @@ typedef enum
 #define Med_NUM_TYPES 3
 typedef enum
   {
-   Med_UNKNOWN,
+   Med_NONE,
    Med_JPG,
    Med_GIF,
   } Med_Type_t;
@@ -149,8 +149,8 @@ void Med_ShowMedia (struct Media *Media,
                     const char *ClassContainer,const char *ClassMedia);
 
 void Med_RemoveMediaFilesFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res);
-void Med_RemoveMediaFileFromRow (MYSQL_RES *mysql_res);
-void Med_RemoveMediaFile (const char *Name,Med_Type_t Type);
+void Med_RemoveMediaFilesFromRow (MYSQL_RES *mysql_res);
+void Med_RemoveMediaFiles (const char *Name,Med_Type_t Type);
 
 Med_Type_t Med_GetTypeFromStrInDB (const char *Str);
 const char *Med_GetStringTypeForDB (Med_Type_t Type);

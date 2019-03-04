@@ -46871,7 +46871,7 @@ const char *Txt_The_session_has_expired =
 	"A sess&atilde;o expirou.";
 #endif
 
-const char *Txt_The_size_of_the_gif_file_exceeds_the_maximum_allowed_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_size_of_the_GIF_file_exceeds_the_maximum_allowed_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"La mida del fitxer <em>GIF</em>"
 	" supera el m&agrave;xim perm&egrave;s (%s).";

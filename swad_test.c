@@ -6559,7 +6559,8 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 				   Gbl.Test.Media.URL   ? Gbl.Test.Media.URL   : "");
 
       /* Update image status */
-      if (Gbl.Test.Media.Name[0])
+      if (Gbl.Test.Media.Name[0] &&
+	  Gbl.Test.Media.Type != Med_NONE)
 	 Gbl.Test.Media.Status = Med_NAME_STORED_IN_DB;
      }
    else				// It's an existing question
@@ -6584,7 +6585,8 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 		      Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /* Update image status */
-      if (Gbl.Test.Media.Name[0])
+      if (Gbl.Test.Media.Name[0] &&
+	  Gbl.Test.Media.Type != Med_NONE)
 	 Gbl.Test.Media.Status = Med_NAME_STORED_IN_DB;
 
       /* Remove answers and tags from this test question */
@@ -6654,9 +6656,10 @@ static void Tst_InsertAnswersIntoDB (void)
                          "MediaName,MediaType,MediaTitle,MediaURL,Correct)"
                          " VALUES"
                          " (%ld,0,%ld,'',"
-                         "'','','','','Y')",
+                         "'','%s','','','Y')",
 			 Gbl.Test.QstCod,
-			 Gbl.Test.Answer.Integer);
+			 Gbl.Test.Answer.Integer,
+			 Med_GetStringTypeForDB (Med_NONE));
          break;
       case Tst_ANS_FLOAT:
 	 Str_SetDecimalPointToUS ();		// To print the floating point as a dot
@@ -6669,9 +6672,10 @@ static void Tst_InsertAnswersIntoDB (void)
                             "MediaName,MediaType,MediaTitle,MediaURL,Correct)"
                             " VALUES"
                             " (%ld,%u,'%lg','',"
-                            "'','','','','Y')",
+                            "'','%s','','','Y')",
 			    Gbl.Test.QstCod,i,
-			    Gbl.Test.Answer.FloatingPoint[i]);
+			    Gbl.Test.Answer.FloatingPoint[i],
+			    Med_GetStringTypeForDB (Med_NONE));
          Str_SetDecimalPointToLocal ();	// Return to local system
          break;
       case Tst_ANS_TRUE_FALSE:
@@ -6681,9 +6685,10 @@ static void Tst_InsertAnswersIntoDB (void)
                          "MediaName,Mediatype,MediaTitle,MediaURL,Correct)"
                          " VALUES"
                          " (%ld,0,'%c','',"
-                         "'','','','','Y')",
+                         "'','%s','','','Y')",
 			 Gbl.Test.QstCod,
-			 Gbl.Test.Answer.TF);
+			 Gbl.Test.Answer.TF,
+			 Med_GetStringTypeForDB (Med_NONE));
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -6711,7 +6716,8 @@ static void Tst_InsertAnswersIntoDB (void)
 									 'N');
 
                /* Update image status */
-	       if (Gbl.Test.Answer.Options[NumOpt].Media.Name[0])
+	       if (Gbl.Test.Answer.Options[NumOpt].Media.Name[0] &&
+	           Gbl.Test.Answer.Options[NumOpt].Media.Type != Med_NONE)
 		  Gbl.Test.Answer.Options[NumOpt].Media.Status = Med_NAME_STORED_IN_DB;
               }
 	 break;
@@ -6781,7 +6787,7 @@ static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
 		       " WHERE QstCod=%ld AND CrsCod=%ld",
 		       QstCod,CrsCod))
       /***** Remove media file *****/
-      Med_RemoveMediaFileFromRow (mysql_res);
+      Med_RemoveMediaFilesFromRow (mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -6833,7 +6839,7 @@ static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsI
 		       " AND tst_answers.AnsInd=%u",
 		       CrsCod,QstCod,QstCod,AnsInd))
       /***** Remove media file *****/
-      Med_RemoveMediaFileFromRow (mysql_res);
+      Med_RemoveMediaFilesFromRow (mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

@@ -3737,7 +3737,7 @@ static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
   {
    /***** Increase number of users who have selected
           the answer AnsInd in the question QstCod *****/
-   DB_QueryINSERT ("can not register your answer to the game",
+   DB_QueryUPDATE ("can not register your answer to the game",
 		   "UPDATE gam_answers SET NumUsrs=NumUsrs+1"
 		   " WHERE QstCod=%ld AND AnsInd=%u",
                    QstCod,AnsInd);

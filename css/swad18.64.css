@@ -2707,12 +2707,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	position:relative;
 	}
-/*
-.MED_PLAY:hover .MED_PLAY_ICO
-	{
-	opacity:0;
-	}
-*/
+
 /* The icon inside the overlay is positioned in the middle vertically and horizontally */
 .MED_PLAY_ICO
 	{
@@ -2720,7 +2715,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	left:50%;
 	top:50%;
 	transform:translate(-50%,-50%);
-	font-size:24pt;
+	font-size:20pt;
 	font-weight:bold;
 	color:white;
 	text-shadow: 0 0 8px black;

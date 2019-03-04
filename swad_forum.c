@@ -538,7 +538,7 @@ static bool For_RemoveForumPst (long PstCod,struct Media *Media)
    bool ThreadDeleted = false;
 
    /***** Remove media file attached to forum post *****/
-   Med_RemoveMediaFile (Media->Name,Media->Type);
+   Med_RemoveMediaFiles (Media->Name,Media->Type);
 
    /***** If the post is the only one in its thread, delete that thread *****/
    if (For_NumPstsInThrWithPstCod (PstCod,&ThrCod) < 2)
