@@ -259,7 +259,7 @@ unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
 unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role);
 
 unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
-                                     Rol_Role_t OthersRole);
+                                     unsigned OthersRoles);
 
 void Usr_FlushCacheUsrBelongsToCurrentCrs (void);
 bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat);

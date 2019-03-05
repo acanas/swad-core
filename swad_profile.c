@@ -353,7 +353,6 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_courses_ABBREVIATION;
    extern const char *Txt_teachers_ABBREVIATION;
-   extern const char *Txt_non_editing_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_Files_uploaded;
    extern const char *Txt_file;
@@ -397,12 +396,13 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    NumCrssUsrIsTch,
 	    Txt_courses_ABBREVIATION);
    if (NumCrssUsrIsTch)
-      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s/%u&nbsp;%s)",
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,Rol_TCH),
+      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,
+		                           (1 << Rol_NET) |
+		                           (1 << Rol_TCH)),
 	       Txt_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,Rol_NET),
-	       Txt_non_editing_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,Rol_STD),
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,
+					   (1 << Rol_STD)),
 	       Txt_students_ABBREVIATION);
    fprintf (Gbl.F.Out,"</li>");
 
@@ -416,12 +416,13 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    NumCrssUsrIsNET,
 	    Txt_courses_ABBREVIATION);
    if (NumCrssUsrIsNET)
-      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s/%u&nbsp;%s)",
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_NET,Rol_TCH),
+      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_NET,
+		                           (1 << Rol_NET) |
+		                           (1 << Rol_TCH)),
 	       Txt_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_NET,Rol_NET),
-	       Txt_non_editing_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_NET,Rol_STD),
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_NET,
+					   (1 << Rol_STD)),
 	       Txt_students_ABBREVIATION);
    fprintf (Gbl.F.Out,"</li>");
 
@@ -435,12 +436,13 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    NumCrssUsrIsStd,
 	    Txt_courses_ABBREVIATION);
    if (NumCrssUsrIsStd)
-      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s/%u&nbsp;%s)",
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,Rol_TCH),
+      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,
+		                           (1 << Rol_NET) |
+		                           (1 << Rol_TCH)),
 	       Txt_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,Rol_NET),
-	       Txt_non_editing_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,Rol_STD),
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,
+					   (1 << Rol_STD)),
 	       Txt_students_ABBREVIATION);
    fprintf (Gbl.F.Out,"</li>");
 

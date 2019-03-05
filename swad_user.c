@@ -1022,12 +1022,16 @@ unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role)
   }
 
 /*****************************************************************************/
-/******* Get number of users with different role in courses of a user ********/
+/****** Get number of users with some given roles in courses of a user *******/
 /*****************************************************************************/
 
+#define Usr_MAX_BYTES_ROLES_STR (Rol_NUM_ROLES * (10 + 1))
 unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
-                                     Rol_Role_t OthersRole)
+                                     unsigned OthersRoles)
   {
+   Rol_Role_t Role;
+   char UnsignedStr[10 + 1];
+   char OthersRolesStr[Usr_MAX_BYTES_ROLES_STR + 1];
    char SubQueryRole[64];
    unsigned NumUsrs;
    // This query can be made in a unique, but slower, query
@@ -1068,32 +1072,26 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	     UsrCod,SubQueryRole);
 
    /***** Get the number of students/teachers in a course from database ******/
-   switch (OthersRole)
-     {
-      case Rol_STD:	// Student
-	 sprintf (SubQueryRole," AND crs_usr.Role=%u",
-	          (unsigned) Rol_STD);
-	 break;
-      case Rol_NET:	// Non-editing teacher
-	 sprintf (SubQueryRole," AND crs_usr.Role=%u",
-	          (unsigned) Rol_NET);
-	 break;
-      case Rol_TCH:	// or teacher
-	 sprintf (SubQueryRole," AND crs_usr.Role=%u",
-	          (unsigned) Rol_TCH);
-	 break;
-      default:
-	 SubQueryRole[0] = '\0';
-	 Lay_ShowErrorAndExit ("Wrong role.");
-	 break;
-     }
+   OthersRolesStr[0] = '\0';
+   for (Role =  Rol_STD;
+	Role <= Rol_TCH;
+	Role++)
+      if ((OthersRoles & (1 << Role)))
+        {
+         sprintf (UnsignedStr,"%u",(unsigned) Role);
+         if (OthersRolesStr[0])	// Not empty
+	    Str_Concat (OthersRolesStr,",",
+			Usr_MAX_BYTES_ROLES_STR);
+	 Str_Concat (OthersRolesStr,UnsignedStr,
+		     Usr_MAX_BYTES_ROLES_STR);
+        }
    NumUsrs =
    (unsigned) DB_QueryCOUNT ("can not get the number of users",
 			     "SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 			     " FROM crs_usr,usr_courses_tmp"
 			     " WHERE crs_usr.CrsCod=usr_courses_tmp.CrsCod"
-			     "%s",
-			     SubQueryRole);
+			     " AND crs_usr.Role IN (%s)",
+			     OthersRolesStr);
 
    /***** Remove temporary table *****/
    DB_Query ("can not remove temporary tables",
