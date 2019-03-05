@@ -25385,6 +25385,27 @@ const char *Txt_Non_blank_BR_questions =
 	"Quest&otilde;es<br />respondidas";
 #endif
 
+const char *Txt_non_editing_teachers_ABBREVIATION =	// Abbreviation of "non-editing teachers"
+#if   L==1	// ca
+	"prf.n.e.";
+#elif L==2	// de
+	"n.b.Leh.";
+#elif L==3	// en
+	"n-e.tch.";
+#elif L==4	// es
+	"prf.n.e.";
+#elif L==5	// fr
+	"ens.n-&eacute;";
+#elif L==6	// gn
+	"prf.n.e.";	// Okoteve traducción
+#elif L==7	// it
+	"prf.n-e.";
+#elif L==8	// pl
+	"nau.n.e.";
+#elif L==9	// pt
+	"prf.n.e.";
+#endif
+
 const char *Txt_Not_applicable =
 #if   L==1	// ca
 	"No aplicable";
@@ -41345,23 +41366,23 @@ const char *Txt_Student_comment =
 
 const char *Txt_students_ABBREVIATION =	// Abbreviation of "students"
 #if   L==1	// ca
-	"estu.";
+	"est.";
 #elif L==2	// de
-	"Stud.";
+	"Stu.";
 #elif L==3	// en
-	"stud.";
+	"stu.";
 #elif L==4	// es
-	"estu.";
+	"est.";
 #elif L==5	// fr
-	"&eacute;tu.";
+	"&eacute;t.";
 #elif L==6	// gn
-	"Temi.";
+	"Tem.";
 #elif L==7	// it
-	"stud.";
+	"stu.";
 #elif L==8	// pl
-	"stud.";	// Potrzebujesz tlumaczenie
+	"stu.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"estu.";
+	"est.";
 #endif
 
 const char *Txt_Student_record_card_in_this_course_has_been_updated =
@@ -42601,23 +42622,23 @@ const char *Txt_Take_a_test =
 
 const char *Txt_teachers_ABBREVIATION =	// Abbreviation of "Teachers"
 #if   L==1	// ca
-	"prof.";
+	"prf.";
 #elif L==2	// de
-	"Lehr.";
+	"Leh.";
 #elif L==3	// en
-	"teac.";
+	"tch.";
 #elif L==4	// es
-	"prof.";
+	"prf.";
 #elif L==5	// fr
-	"ense.";
+	"ens.";
 #elif L==6	// gn
-	"prof.";	// Okoteve traducción
+	"prf.";	// Okoteve traducción
 #elif L==7	// it
-	"prof.";
+	"prf.";
 #elif L==8	// pl
-	"nauc.";
+	"nau.";
 #elif L==9	// pt
-	"prof.";
+	"prf.";
 #endif
 
 const char *Txt_Teachers_files_area =

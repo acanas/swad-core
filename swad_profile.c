@@ -353,6 +353,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_courses_ABBREVIATION;
    extern const char *Txt_teachers_ABBREVIATION;
+   extern const char *Txt_non_editing_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_Files_uploaded;
    extern const char *Txt_file;
@@ -375,8 +376,9 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_messages;
    bool UsrIsBannedFromRanking;
    struct UsrFigures UsrFigures;
-   unsigned NumCrssUsrIsTeacher;
-   unsigned NumCrssUsrIsStudent;
+   unsigned NumCrssUsrIsTch;
+   unsigned NumCrssUsrIsNET;
+   unsigned NumCrssUsrIsStd;
    unsigned NumFiles;
    unsigned NumPublicFiles;
    char IdFirstClickTime[Frm_MAX_BYTES_ID + 1];
@@ -386,35 +388,58 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 
    /***** Number of courses in which the user is teacher *****/
-   NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TCH);
+   NumCrssUsrIsTch = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TCH);
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 	              " style=\"background-image:url('%s/user-tie.svg');\">"
 		      "%u&nbsp;%s",
 	    Txt_ROLES_SINGUL_Abc[Rol_TCH][UsrDat->Sex],
 	    Gbl.Prefs.URLIcons,
-	    NumCrssUsrIsTeacher,
+	    NumCrssUsrIsTch,
 	    Txt_courses_ABBREVIATION);
-   if (NumCrssUsrIsTeacher)
-      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
+   if (NumCrssUsrIsTch)
+      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s/%u&nbsp;%s)",
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,Rol_TCH),
 	       Txt_teachers_ABBREVIATION,
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,Rol_NET),
+	       Txt_non_editing_teachers_ABBREVIATION,
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,Rol_STD),
 	       Txt_students_ABBREVIATION);
    fprintf (Gbl.F.Out,"</li>");
 
+   /***** Number of courses in which the user is non-editing teacher *****/
+   NumCrssUsrIsNET = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_NET);
+   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	              " style=\"background-image:url('%s/user-tie.svg');\">"
+		      "%u&nbsp;%s",
+	    Txt_ROLES_SINGUL_Abc[Rol_NET][UsrDat->Sex],
+	    Gbl.Prefs.URLIcons,
+	    NumCrssUsrIsNET,
+	    Txt_courses_ABBREVIATION);
+   if (NumCrssUsrIsNET)
+      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s/%u&nbsp;%s)",
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_NET,Rol_TCH),
+	       Txt_teachers_ABBREVIATION,
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_NET,Rol_NET),
+	       Txt_non_editing_teachers_ABBREVIATION,
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_NET,Rol_STD),
+	       Txt_students_ABBREVIATION);
+   fprintf (Gbl.F.Out,"</li>");
+
    /***** Number of courses in which the user is student *****/
-   NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_STD);
+   NumCrssUsrIsStd = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_STD);
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 	              " style=\"background-image:url('%s/user.svg');\">"
 		      "%u&nbsp;%s",
 	    Txt_ROLES_SINGUL_Abc[Rol_STD][UsrDat->Sex],
 	    Gbl.Prefs.URLIcons,
-	    NumCrssUsrIsStudent,
+	    NumCrssUsrIsStd,
 	    Txt_courses_ABBREVIATION);
-   if (NumCrssUsrIsStudent)
-      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
+   if (NumCrssUsrIsStd)
+      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s/%u&nbsp;%s)",
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,Rol_TCH),
 	       Txt_teachers_ABBREVIATION,
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,Rol_NET),
+	       Txt_non_editing_teachers_ABBREVIATION,
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,Rol_STD),
 	       Txt_students_ABBREVIATION);
    fprintf (Gbl.F.Out,"</li>");
@@ -445,7 +470,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
             Gbl.Prefs.URLIcons);
    if (UsrFigures.FirstClickTimeUTC)
      {
-      /* Create unique id for new comment */
+      /* Create unique id */
       Frm_SetUniqueId (IdFirstClickTime);
 
       fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",IdFirstClickTime);

@@ -428,10 +428,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.64.5 (2019-03-05)"
+#define Log_PLATFORM_VERSION	"SWAD 18.64.6 (2019-03-05)"
 #define CSS_FILE		"swad18.64.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.64.6:  Mar 05, 2019 	Added non-editing teachers in user's figures. (238525 lines)
 	Version 18.64.5:  Mar 05, 2019 	Changes writing floating point numbers.
 					For load speed issues, the number of publications by default in the timeline becomes 20 again.
 					The actions in buttons to calculate user's figures are merged in one. (238471 lines)

@@ -993,6 +993,7 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
    extern const char *Txt_course;
    extern const char *Txt_courses;
    extern const char *Txt_teachers_ABBREVIATION;
+   extern const char *Txt_non_editing_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1011,9 +1012,11 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 			   Txt_courses);
    if (NumCrss)
      {
-      fprintf (Gbl.F.Rep," (%u %s / %u %s):",
+      fprintf (Gbl.F.Rep," (%u %s / %u %s / %u %s):",
 	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_TCH),
 	       Txt_teachers_ABBREVIATION,
+	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_NET),
+	       Txt_non_editing_teachers_ABBREVIATION,
 	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_STD),
 	       Txt_students_ABBREVIATION);
 

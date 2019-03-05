@@ -1037,7 +1037,8 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    DB_Query ("can not remove temporary tables",
 	     "DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");
 
-   /***** Create temporary table with all user's courses as student/teacher *****/
+   /***** Create temporary table with all user's courses
+          as student/non-editing teacher/teacher *****/
    switch (UsrRole)
      {
       case Rol_STD:	// Student
@@ -1045,9 +1046,12 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	          (unsigned) Rol_STD);
 	 break;
       case Rol_NET:	// Non-editing teacher
+	 sprintf (SubQueryRole," AND Role=%u",
+	          (unsigned) Rol_NET);
+	 break;
       case Rol_TCH:	// or teacher
-	 sprintf (SubQueryRole," AND (Role=%u OR Role=%u)",
-	          (unsigned) Rol_NET,(unsigned) Rol_TCH);
+	 sprintf (SubQueryRole," AND Role=%u",
+	          (unsigned) Rol_TCH);
 	 break;
       default:
 	 SubQueryRole[0] = '\0';
@@ -1071,9 +1075,12 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	          (unsigned) Rol_STD);
 	 break;
       case Rol_NET:	// Non-editing teacher
+	 sprintf (SubQueryRole," AND crs_usr.Role=%u",
+	          (unsigned) Rol_NET);
+	 break;
       case Rol_TCH:	// or teacher
-	 sprintf (SubQueryRole," AND (crs_usr.Role=%u OR crs_usr.Role=%u)",
-	          (unsigned) Rol_NET,(unsigned) Rol_TCH);
+	 sprintf (SubQueryRole," AND crs_usr.Role=%u",
+	          (unsigned) Rol_TCH);
 	 break;
       default:
 	 SubQueryRole[0] = '\0';
