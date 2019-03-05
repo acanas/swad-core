@@ -35,8 +35,8 @@
 
 // Number of recent publishings got and shown the first time, before refreshing
 #define Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// Unlimited
-#define Soc_MAX_REC_PUBS_TO_GET_AND_SHOW	50	// Recent publishings to show (first time)
-#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW	50	// Old publishings are retrieved in packs of this size
+#define Soc_MAX_REC_PUBS_TO_GET_AND_SHOW	20	// Recent publishings to show (first time)
+#define Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW	20	// Old publishings are retrieved in packs of this size
 							// This constant is also used in JavaScript function readOldTimelineData
 
 /*****************************************************************************/

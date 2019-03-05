@@ -87,7 +87,7 @@ extern struct Globals Gbl;
 /************************ Internal global variables **************************/
 /*****************************************************************************/
 /*
-1332 actions in one CGI:
+1328 actions in one CGI:
 	  0. ActAll			Any action (used for statistics)
 	  1. ActUnk			Unknown action
 	  2. ActMnu			Show menu of a tab
@@ -144,11 +144,7 @@ Start:
          46. ActReqRemSocComUsr		Request the removal of a comment in a social note (user)
          47. ActRemSocComUsr		Remove of a comment in a social note (user)
 
-         48. ActCal1stClkTim		Calculate first click time from log and store into user's figures
-         49. ActCalNumClk		Calculate number of clicks from log and store into user's figures
-         50. ActCalNumFileViews		Calculate number of file views and store into user's figures
-         51. ActCalNumForPst		Calculate number of forum posts and store into user's figures
-         52. ActCalNumMsgSnt		Calculate number of messages sent from log and store into user's figures
+         48. ActCalFig			Calculate user's figures and store into user's figures
 
          53. ActFolUsr			Follow another user
          54. ActUnfUsr			Unfollow another user
@@ -1640,11 +1636,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemSocComGbl	*/{1508,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Soc_RemoveSocialComUsr		,NULL},
 
    /* ActSeeOthPubPrf	*/{1402,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_GetUsrDatAndShowUserProfile,NULL},
-   /* ActCal1stClkTim	*/{1405,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
-   /* ActCalNumClk	*/{1406,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
-   /* ActCalNumFilVie	*/{1409,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
-   /* ActCalNumForPst	*/{1408,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
-   /* ActCalNumMsgSnt	*/{1407,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
+
+   /* ActCalFig		*/{1405,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
+// /* ActCalNumMsgSnt	*/{1407,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_CalculateFigures		,NULL},
 
    /* ActFolUsr		*/{1410,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Fol_FollowUsr1			,Fol_FollowUsr2			,NULL},
    /* ActUnfUsr		*/{1411,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Fol_UnfollowUsr1		,Fol_UnfollowUsr2		,NULL},
@@ -4542,11 +4536,11 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeOthPubPrf,	// #1402
 	-1,			// #1403 (obsolete action)
 	ActChgPriPrf,		// #1404
-	ActCal1stClkTim,	// #1405
-	ActCalNumClk,		// #1406
-	ActCalNumMsgSnt,	// #1407
-	ActCalNumForPst,	// #1408
-	ActCalNumFilVie,	// #1409
+	ActCalFig,		// #1405
+	-1,			// #1406 (obsolete action)
+	-1,			// #1407 (obsolete action)
+	-1,			// #1408 (obsolete action)
+	-1,			// #1409 (obsolete action)
 	ActFolUsr,		// #1410
 	ActUnfUsr,		// #1411
 	ActSeeFlg,		// #1412

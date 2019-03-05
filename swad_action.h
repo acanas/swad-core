@@ -61,7 +61,7 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 8 + 59 + 38 + 12 + 42 + 36 + 19 + 110 + 157 + 437 + 165 + 168 + 15 + 65)
+#define Act_NUM_ACTIONS	(1 + 8 + 55 + 38 + 12 + 42 + 36 + 19 + 110 + 157 + 437 + 165 + 168 + 15 + 65)
 
 #define Act_MAX_ACTION_COD 1752
 
@@ -135,28 +135,24 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRemSocComUsr		(ActWebSvc +  39)
 
 #define ActSeeOthPubPrf		(ActWebSvc +  40)
-#define ActCal1stClkTim		(ActWebSvc +  41)
-#define ActCalNumClk		(ActWebSvc +  42)
-#define ActCalNumFilVie		(ActWebSvc +  43)
-#define ActCalNumForPst		(ActWebSvc +  44)
-#define ActCalNumMsgSnt		(ActWebSvc +  45)
+#define ActCalFig		(ActWebSvc +  41)
 
-#define ActFolUsr		(ActWebSvc +  46)
-#define ActUnfUsr		(ActWebSvc +  47)
-#define ActSeeFlg		(ActWebSvc +  48)
-#define ActSeeFlr		(ActWebSvc +  49)
+#define ActFolUsr		(ActWebSvc +  42)
+#define ActUnfUsr		(ActWebSvc +  43)
+#define ActSeeFlg		(ActWebSvc +  44)
+#define ActSeeFlr		(ActWebSvc +  45)
 
-#define ActPrnCal		(ActWebSvc +  50)
-#define ActChgCal1stDay		(ActWebSvc +  51)
+#define ActPrnCal		(ActWebSvc +  46)
+#define ActChgCal1stDay		(ActWebSvc +  47)
 
-#define ActSeeNewNtf		(ActWebSvc +  52)
-#define ActMrkNtfSee		(ActWebSvc +  53)
-#define ActSeeMai		(ActWebSvc +  54)
-#define ActEdiMai		(ActWebSvc +  55)
-#define ActNewMai		(ActWebSvc +  56)
-#define ActRemMai		(ActWebSvc +  57)
-#define ActRenMaiSho		(ActWebSvc +  58)
-#define ActRenMaiFul		(ActWebSvc +  59)
+#define ActSeeNewNtf		(ActWebSvc +  48)
+#define ActMrkNtfSee		(ActWebSvc +  49)
+#define ActSeeMai		(ActWebSvc +  50)
+#define ActEdiMai		(ActWebSvc +  51)
+#define ActNewMai		(ActWebSvc +  52)
+#define ActRemMai		(ActWebSvc +  53)
+#define ActRenMaiSho		(ActWebSvc +  54)
+#define ActRenMaiFul		(ActWebSvc +  55)
 
 /*****************************************************************************/
 /******************************** System tab *********************************/

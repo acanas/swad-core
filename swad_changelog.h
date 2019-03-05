@@ -428,10 +428,18 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.64.4 (2019-03-04)"
+#define Log_PLATFORM_VERSION	"SWAD 18.64.5 (2019-03-05)"
 #define CSS_FILE		"swad18.64.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.64.5:  Mar 05, 2019 	Changes writing floating point numbers.
+					For load speed issues, the number of publications by default in the timeline becomes 20 again.
+					The actions in buttons to calculate user's figures are merged in one. (238471 lines)
+					2 changes necessary in database:
+					Calcular fecha del primer clic
+UPDATE actions SET Txt='Calcular cifras de un usuario' WHERE ActCod='1405' AND Language='es';
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN (1406,1407,1408,1409);
+
 	Version 18.64.4:  Mar 04, 2019 	Last database changes updated in swad.sql. (238473 lines)
 	Version 18.64.3:  Mar 04, 2019 	Fixed bugs in media. (238467 lines)
 	Version 18.64.2:  Mar 04, 2019 	Detect if a GIF image is animated. (238451 lines)

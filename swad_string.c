@@ -892,18 +892,20 @@ void Str_WriteFloatNum (FILE *FileDst,float Number)
       fprintf (FileDst,"%.0f",IntegerPart);
    else
      {
-      if (IntegerPart != 0.0 || FractionaryPart >= 0.1)
-         Format = "%.2f";
+      if (IntegerPart != 0.0)
+         Format = "%.1f";
+      else if (FractionaryPart >= 0.1)
+         Format = "%.1f";
       else if (FractionaryPart >= 0.01)
-         Format = "%.3f";
+         Format = "%.2f";
       else if (FractionaryPart >= 0.001)
-         Format = "%.4f";
+         Format = "%.3f";
       else if (FractionaryPart >= 0.0001)
-         Format = "%.5f";
+         Format = "%.4f";
       else if (FractionaryPart >= 0.00001)
-         Format = "%.6f";
+         Format = "%.5f";
       else if (FractionaryPart >= 0.000001)
-         Format = "%.7f";
+         Format = "%.6f";
       else
          Format = "%e";
       fprintf (FileDst,Format,Number);

@@ -462,8 +462,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
      }
    else	// First click time is unknown or user never logged
-      /***** Button to fetch and store first click time *****/
-      Prf_PutLinkCalculateFigures (ActCal1stClkTim,UsrDat->EncryptedUsrCod);
+      /***** Button to fetch and store user's figures *****/
+      Prf_PutLinkCalculateFigures (ActCalFig,UsrDat->EncryptedUsrCod);
    fprintf (Gbl.F.Out,"</li>");
 
    /***** End left list *****/
@@ -502,8 +502,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	   }
 	}
       else	// Number of clicks is unknown
-	 /***** Button to fetch and store number of clicks *****/
-         Prf_PutLinkCalculateFigures (ActCalNumClk,UsrDat->EncryptedUsrCod);
+	 /***** Button to fetch and store user's figures *****/
+         Prf_PutLinkCalculateFigures (ActCalFig,UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Number of file views *****/
@@ -529,8 +529,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	   }
 	}
       else	// Number of file views is unknown
-	 /***** Button to fetch and store number of file views *****/
-         Prf_PutLinkCalculateFigures (ActCalNumFilVie,UsrDat->EncryptedUsrCod);
+	 /***** Button to fetch and store user's figures *****/
+         Prf_PutLinkCalculateFigures (ActCalFig,UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Number of posts in forums *****/
@@ -556,9 +556,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	   }
 	}
       else	// Number of forum posts is unknown
-	 /***** Button to fetch and store number of forum posts *****/
-         Prf_PutLinkCalculateFigures (ActCalNumForPst,UsrDat->EncryptedUsrCod);
-
+	 /***** Button to fetch and store user's figures *****/
+         Prf_PutLinkCalculateFigures (ActCalFig,UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
 
       /***** Number of messages sent *****/
@@ -584,8 +583,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	   }
 	}
       else	// Number of messages sent is unknown
-	 /***** Button to fetch and store number of messages sent *****/
-         Prf_PutLinkCalculateFigures (ActCalNumMsgSnt,UsrDat->EncryptedUsrCod);
+	 /***** Button to fetch and store user's figures *****/
+         Prf_PutLinkCalculateFigures (ActCalFig,UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
      }
 
