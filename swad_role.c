@@ -36,6 +36,21 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
+#define Rol_NUM_ROLES 10
+const char *Rol_Icons[Rol_NUM_ROLES] =
+  {
+   "user.svg",		// Rol_UNK
+   "user.svg",		// Rol_GST
+   "user.svg",		// Rol_USR
+   "user.svg",		// Rol_STD
+   "user-tie.svg",	// Rol_NET
+   "user-tie.svg",	// Rol_TCH
+   "user-tie.svg",	// Rol_DEG_ADM
+   "user-tie.svg",	// Rol_CTR_ADM
+   "user-tie.svg",	// Rol_INS_ADM
+   "user-tie.svg",	// Rol_SYS_ADM
+  };
+
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/

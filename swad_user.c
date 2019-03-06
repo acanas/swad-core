@@ -7470,11 +7470,12 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
 
 static void Usr_PutLinkToSeeAdmins (void)
   {
+   extern const char *Rol_Icons[Rol_NUM_ROLES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list admins *****/
    Lay_PutContextualLinkIconText (ActLstOth,NULL,NULL,
-				  "user-tie.svg",
+				  Rol_Icons[Rol_DEG_ADM],
 				  Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN]);
   }
 

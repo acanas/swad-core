@@ -428,10 +428,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.66.3 (2019-03-06)"
+#define Log_PLATFORM_VERSION	"SWAD 18.66.4 (2019-03-06)"
 #define CSS_FILE		"swad18.66.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.66.4:  Mar 06, 2019 	Code refactoring in user's figures. (238678 lines)
 	Version 18.66.3:  Mar 06, 2019 	Changed order of figures in user's profile. (238674 lines)
 	Version 18.66.2:  Mar 06, 2019 	Fixed bug while sending a new password, reported by Rosa María Cantarero López. (238672 lines)
 	Version 18.66.1:  Mar 06, 2019 	Changed order of figures in user's profile. (238671 lines)

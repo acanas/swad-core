@@ -74,6 +74,10 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Prf_ShowTimeSinceFirstClick (const struct UsrFigures *UsrFigures,
+				         const struct UsrData *UsrDat);
+static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
+				     Rol_Role_t Role);
 static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod);
 
 static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName);
@@ -352,18 +356,10 @@ void Prf_ChangeProfileVisibility (void)
 
 void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
-   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_courses_ABBREVIATION;
-   extern const char *Txt_teachers_ABBREVIATION;
-   extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_Files_uploaded;
    extern const char *Txt_file;
    extern const char *Txt_files;
    extern const char *Txt_public_FILES;
-   extern const char *Txt_TIME_Since;
-   extern const char *Txt_day;
-   extern const char *Txt_days;
-   extern const char *Txt_Today;
    extern const char *Txt_Clicks;
    extern const char *Txt_clicks;
    extern const char *Txt_Timeline;
@@ -378,14 +374,12 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_Messages;
    extern const char *Txt_message;
    extern const char *Txt_messages;
+   extern const char *Txt_day;
    bool UsrIsBannedFromRanking;
    struct UsrFigures UsrFigures;
-   unsigned NumCrssUsrIsTch;
-   unsigned NumCrssUsrIsNET;
-   unsigned NumCrssUsrIsStd;
+   Rol_Role_t Role;
    unsigned NumFiles;
    unsigned NumPublicFiles;
-   char IdFirstClickTime[Frm_MAX_BYTES_ID + 1];
 
    /***** Get figures *****/
    Prf_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
@@ -394,93 +388,14 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_LEFT_CONTAINER\">"
 	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 
-   /* Time since first click */
-   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/clock.svg');\">",
-	    Txt_TIME_Since,
-            Gbl.Prefs.URLIcons);
-   if (UsrFigures.FirstClickTimeUTC)
-     {
-      /* Create unique id */
-      Frm_SetUniqueId (IdFirstClickTime);
+   /***** Time since first click *****/
+   Prf_ShowTimeSinceFirstClick (&UsrFigures,UsrDat);
 
-      fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",IdFirstClickTime);
-      if (UsrFigures.NumDays > 0)
-	 fprintf (Gbl.F.Out,"&nbsp;(%d&nbsp;%s)",
-		  UsrFigures.NumDays,
-		  (UsrFigures.NumDays == 1) ? Txt_day :
-					      Txt_days);
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('%s',%ld,"
-			 "%u,',&nbsp;','%s',true,false,0x6);"
-			 "</script>",
-	       IdFirstClickTime,(long) UsrFigures.FirstClickTimeUTC,
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-     }
-   else	// First click time is unknown or user never logged
-      /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
-   fprintf (Gbl.F.Out,"</li>");
-
-   /***** Number of courses in which the user is teacher *****/
-   NumCrssUsrIsTch = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TCH);
-   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/user-tie.svg');\">"
-		      "%u&nbsp;%s",
-	    Txt_ROLES_SINGUL_Abc[Rol_TCH][UsrDat->Sex],
-	    Gbl.Prefs.URLIcons,
-	    NumCrssUsrIsTch,
-	    Txt_courses_ABBREVIATION);
-   if (NumCrssUsrIsTch)
-      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,
-		                           (1 << Rol_NET) |
-		                           (1 << Rol_TCH)),
-	       Txt_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,
-					   (1 << Rol_STD)),
-	       Txt_students_ABBREVIATION);
-   fprintf (Gbl.F.Out,"</li>");
-
-   /***** Number of courses in which the user is non-editing teacher *****/
-   NumCrssUsrIsNET = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_NET);
-   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/user-tie.svg');\">"
-		      "%u&nbsp;%s",
-	    Txt_ROLES_SINGUL_Abc[Rol_NET][UsrDat->Sex],
-	    Gbl.Prefs.URLIcons,
-	    NumCrssUsrIsNET,
-	    Txt_courses_ABBREVIATION);
-   if (NumCrssUsrIsNET)
-      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_NET,
-		                           (1 << Rol_NET) |
-		                           (1 << Rol_TCH)),
-	       Txt_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_NET,
-					   (1 << Rol_STD)),
-	       Txt_students_ABBREVIATION);
-   fprintf (Gbl.F.Out,"</li>");
-
-   /***** Number of courses in which the user is student *****/
-   NumCrssUsrIsStd = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_STD);
-   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/user.svg');\">"
-		      "%u&nbsp;%s",
-	    Txt_ROLES_SINGUL_Abc[Rol_STD][UsrDat->Sex],
-	    Gbl.Prefs.URLIcons,
-	    NumCrssUsrIsStd,
-	    Txt_courses_ABBREVIATION);
-   if (NumCrssUsrIsStd)
-      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,
-		                           (1 << Rol_NET) |
-		                           (1 << Rol_TCH)),
-	       Txt_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,
-					   (1 << Rol_STD)),
-	       Txt_students_ABBREVIATION);
-   fprintf (Gbl.F.Out,"</li>");
+   /***** Number of courses in which the user has a role *****/
+   for (Role = Rol_TCH;
+	Role >= Rol_STD;
+	Role--)
+      Prf_ShowNumCrssWithRole (UsrDat,Role);
 
    /***** Number of files currently published *****/
    if ((NumFiles = Brw_GetNumFilesUsr (UsrDat->UsrCod)))
@@ -650,6 +565,83 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** End right list *****/
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
+  }
+
+/*****************************************************************************/
+/************** Show time since first click in user's profile ****************/
+/*****************************************************************************/
+
+static void Prf_ShowTimeSinceFirstClick (const struct UsrFigures *UsrFigures,
+				         const struct UsrData *UsrDat)
+  {
+   extern const char *Txt_TIME_Since;
+   extern const char *Txt_day;
+   extern const char *Txt_days;
+   extern const char *Txt_Today;
+   char IdFirstClickTime[Frm_MAX_BYTES_ID + 1];
+
+   /* Time since first click */
+   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	              " style=\"background-image:url('%s/clock.svg');\">",
+	    Txt_TIME_Since,
+            Gbl.Prefs.URLIcons);
+   if (UsrFigures->FirstClickTimeUTC)
+     {
+      /* Create unique id */
+      Frm_SetUniqueId (IdFirstClickTime);
+
+      fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",IdFirstClickTime);
+      if (UsrFigures->NumDays > 0)
+	 fprintf (Gbl.F.Out,"&nbsp;(%d&nbsp;%s)",
+		  UsrFigures->NumDays,
+		  (UsrFigures->NumDays == 1) ? Txt_day :
+					       Txt_days);
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('%s',%ld,"
+			 "%u,',&nbsp;','%s',true,false,0x6);"
+			 "</script>",
+	       IdFirstClickTime,(long) UsrFigures->FirstClickTimeUTC,
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+     }
+   else	// First click time is unknown or user never logged
+      /***** Button to fetch and store user's figures *****/
+      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+   fprintf (Gbl.F.Out,"</li>");
+  }
+
+/*****************************************************************************/
+/************** Show time since first click in user's profile ****************/
+/*****************************************************************************/
+
+static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
+				     Rol_Role_t Role)
+  {
+   extern const char *Rol_Icons[Rol_NUM_ROLES];
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_courses_ABBREVIATION;
+   extern const char *Txt_teachers_ABBREVIATION;
+   extern const char *Txt_students_ABBREVIATION;
+   unsigned NumCrss;
+
+   /***** Number of courses in which the user has a given role *****/
+   NumCrss = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Role);
+   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	              " style=\"background-image:url('%s/%s');\">"
+		      "%u&nbsp;%s",
+	    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex],
+	    Gbl.Prefs.URLIcons,Rol_Icons[Role],
+	    NumCrss,
+	    Txt_courses_ABBREVIATION);
+   if (NumCrss)
+      fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
+		                           (1 << Rol_NET) |
+		                           (1 << Rol_TCH)),
+	       Txt_teachers_ABBREVIATION,
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
+					   (1 << Rol_STD)),
+	       Txt_students_ABBREVIATION);
+   fprintf (Gbl.F.Out,"</li>");
   }
 
 /*****************************************************************************/
