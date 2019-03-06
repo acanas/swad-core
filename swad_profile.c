@@ -74,10 +74,23 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prf_ShowTimeSinceFirstClick (const struct UsrFigures *UsrFigures,
-				         const struct UsrData *UsrDat);
+static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
+                                         const struct UsrFigures *UsrFigures);
 static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
 				     Rol_Role_t Role);
+static void Prf_ShowNumFilesCurrentlyPublished (const struct UsrData *UsrDat);
+static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
+                               const struct UsrFigures *UsrFigures);
+static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
+                                  const struct UsrFigures *UsrFigures);
+static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
+                                           const struct UsrFigures *UsrFigures);
+static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
+                                   const struct UsrFigures *UsrFigures);
+static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
+                                     const struct UsrFigures *UsrFigures);
+static void Prf_StartListItem (const char *Title,const char *Icon);
+static void Prf_EndListItem (void);
 static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod);
 
 static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName);
@@ -356,223 +369,71 @@ void Prf_ChangeProfileVisibility (void)
 
 void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
   {
-   extern const char *Txt_Files_uploaded;
-   extern const char *Txt_file;
-   extern const char *Txt_files;
-   extern const char *Txt_public_FILES;
-   extern const char *Txt_Clicks;
-   extern const char *Txt_clicks;
-   extern const char *Txt_Timeline;
-   extern const char *Txt_SOCIAL_post;
-   extern const char *Txt_SOCIAL_posts;
-   extern const char *Txt_Downloads;
-   extern const char *Txt_download;
-   extern const char *Txt_downloads;
-   extern const char *Txt_Forums;
-   extern const char *Txt_FORUM_post;
-   extern const char *Txt_FORUM_posts;
-   extern const char *Txt_Messages;
-   extern const char *Txt_message;
-   extern const char *Txt_messages;
-   extern const char *Txt_day;
    bool UsrIsBannedFromRanking;
    struct UsrFigures UsrFigures;
    Rol_Role_t Role;
-   unsigned NumFiles;
-   unsigned NumPublicFiles;
 
    /***** Get figures *****/
    Prf_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
 
-   /***** Start left list *****/
+   /***** Left list *****/
+   /* Start left list */
    fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_LEFT_CONTAINER\">"
 	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 
-   /***** Time since first click *****/
-   Prf_ShowTimeSinceFirstClick (&UsrFigures,UsrDat);
+   /* Time since first click */
+   Prf_ShowTimeSinceFirstClick (UsrDat,&UsrFigures);
 
-   /***** Number of courses in which the user has a role *****/
+   /* Number of courses in which the user has a role */
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
       Prf_ShowNumCrssWithRole (UsrDat,Role);
 
-   /***** Number of files currently published *****/
-   if ((NumFiles = Brw_GetNumFilesUsr (UsrDat->UsrCod)))
-      NumPublicFiles = Brw_GetNumPublicFilesUsr (UsrDat->UsrCod);
-   else
-      NumPublicFiles = 0;
-   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/file.svg');\">"
-		      "%u&nbsp;%s&nbsp;(%u&nbsp;%s)"
-		      "</li>",
-	    Txt_Files_uploaded,
-            Gbl.Prefs.URLIcons,
-	    NumFiles,
-	    (NumFiles == 1) ? Txt_file :
-		              Txt_files,
-	    NumPublicFiles,Txt_public_FILES);
+   /* Number of files currently published */
+   Prf_ShowNumFilesCurrentlyPublished (UsrDat);
 
-   /***** End left list *****/
+   /* End left list */
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
 
-   /***** Start right list *****/
-   fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_RIGHT_CONTAINER\">"
-	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
+   /***** Right list *****/
+   fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_RIGHT_CONTAINER\">");
 
    UsrIsBannedFromRanking = Usr_CheckIfUsrBanned (UsrDat->UsrCod);
    if (!UsrIsBannedFromRanking)
      {
+      /* Start right list */
+      fprintf (Gbl.F.Out,"<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
+
       /* Number of clicks */
-      fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/mouse-pointer.svg');\">",
-	       Txt_Clicks,
-	       Gbl.Prefs.URLIcons);
+      Prf_ShowNumClicks (UsrDat,&UsrFigures);
 
-      if (UsrFigures.NumClicks >= 0)
-	{
-	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
-		  UsrFigures.NumClicks,Txt_clicks);
-	 Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumClicks"),
-			  Prf_GetNumUsrsWithFigure ("NumClicks"));
-	 if (UsrFigures.NumDays > 0)
-	   {
-	    fprintf (Gbl.F.Out,"&nbsp;(");
-	    Str_WriteFloatNum (Gbl.F.Out,
-	                       (float) UsrFigures.NumClicks /
-			       (float) UsrFigures.NumDays);
-	    fprintf (Gbl.F.Out,"/%s&nbsp;",Txt_day);
-	    Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
-			     Prf_GetNumUsrsWithNumClicksPerDay ());
-	    fprintf (Gbl.F.Out,")");
-	   }
-	}
-      else	// Number of clicks is unknown
-	 /***** Button to fetch and store user's figures *****/
-         Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"</li>");
+      /* Number of file views */
+      Prf_ShowNumFileViews (UsrDat,&UsrFigures);
 
-      /***** Number of file views *****/
-      fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/download.svg');\">",
-	       Txt_Downloads,
-	       Gbl.Prefs.URLIcons);
-      if (UsrFigures.NumFileViews >= 0)
-	{
-	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
-		  UsrFigures.NumFileViews,
-		  (UsrFigures.NumFileViews == 1) ? Txt_download :
-						   Txt_downloads);
-	 Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumFileViews"),
-			  Prf_GetNumUsrsWithFigure ("NumFileViews"));
-	 if (UsrFigures.NumDays > 0)
-	   {
-	    fprintf (Gbl.F.Out,"&nbsp;(");
-	    Str_WriteFloatNum (Gbl.F.Out,
-	                       (float) UsrFigures.NumFileViews /
-			       (float) UsrFigures.NumDays);
-	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
-	   }
-	}
-      else	// Number of file views is unknown
-	 /***** Button to fetch and store user's figures *****/
-         Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"</li>");
+      /* Number of social publications */
+      Prf_ShowNumSocialPublications (UsrDat,&UsrFigures);
 
-      /***** Number of social publications *****/
-      fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/comment-dots.svg');\">",
-	       Txt_Timeline,
-	       Gbl.Prefs.URLIcons);
-      if (UsrFigures.NumSocPub >= 0)
-	{
-	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
-		  UsrFigures.NumSocPub,
-		  (UsrFigures.NumSocPub == 1) ? Txt_SOCIAL_post :
-						Txt_SOCIAL_posts);
-	 Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumSocPub"),
-			  Prf_GetNumUsrsWithFigure ("NumSocPub"));
-	 if (UsrFigures.NumDays > 0)
-	   {
-	    fprintf (Gbl.F.Out,"&nbsp;(");
-	    Str_WriteFloatNum (Gbl.F.Out,
-	                       (float) UsrFigures.NumSocPub /
-			       (float) UsrFigures.NumDays);
-	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
-	   }
-	}
-      else	// Number of social publications is unknown
-	 /***** Button to fetch and store user's figures *****/
-         Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"</li>");
+      /* Number of posts in forums */
+      Prf_ShowNumForumPosts (UsrDat,&UsrFigures);
 
-      /***** Number of posts in forums *****/
-      fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/comments.svg');\">",
-	       Txt_Forums,
-	       Gbl.Prefs.URLIcons);
-      if (UsrFigures.NumForPst >= 0)
-	{
-	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
-		  UsrFigures.NumForPst,
-		  (UsrFigures.NumForPst == 1) ? Txt_FORUM_post :
-						Txt_FORUM_posts);
-	 Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumForPst"),
-			  Prf_GetNumUsrsWithFigure ("NumForPst"));
-	 if (UsrFigures.NumDays > 0)
-	   {
-	    fprintf (Gbl.F.Out,"&nbsp;(");
-	    Str_WriteFloatNum (Gbl.F.Out,
-	                       (float) UsrFigures.NumForPst /
-			       (float) UsrFigures.NumDays);
-	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
-	   }
-	}
-      else	// Number of forum posts is unknown
-	 /***** Button to fetch and store user's figures *****/
-         Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"</li>");
+      /* Number of messages sent */
+      Prf_ShowNumMessagesSent (UsrDat,&UsrFigures);
 
-      /***** Number of messages sent *****/
-      fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/envelope.svg');\">",
-	       Txt_Messages,
-	       Gbl.Prefs.URLIcons);
-      if (UsrFigures.NumMsgSnt >= 0)
-	{
-	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
-		  UsrFigures.NumMsgSnt,
-		  (UsrFigures.NumMsgSnt == 1) ? Txt_message :
-						Txt_messages);
-	 Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
-			  Prf_GetNumUsrsWithFigure ("NumMsgSnt"));
-	 if (UsrFigures.NumDays > 0)
-	   {
-	    fprintf (Gbl.F.Out,"&nbsp;(");
-	    Str_WriteFloatNum (Gbl.F.Out,
-	                       (float) UsrFigures.NumMsgSnt /
-			       (float) UsrFigures.NumDays);
-	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
-	   }
-	}
-      else	// Number of messages sent is unknown
-	 /***** Button to fetch and store user's figures *****/
-         Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"</li>");
+      /* End right list */
+      fprintf (Gbl.F.Out,"</ul>");
      }
 
-   /***** End right list *****/
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
 /************** Show time since first click in user's profile ****************/
 /*****************************************************************************/
 
-static void Prf_ShowTimeSinceFirstClick (const struct UsrFigures *UsrFigures,
-				         const struct UsrData *UsrDat)
+static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
+                                         const struct UsrFigures *UsrFigures)
   {
    extern const char *Txt_TIME_Since;
    extern const char *Txt_day;
@@ -580,11 +441,9 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrFigures *UsrFigures,
    extern const char *Txt_Today;
    char IdFirstClickTime[Frm_MAX_BYTES_ID + 1];
 
-   /* Time since first click */
-   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/clock.svg');\">",
-	    Txt_TIME_Since,
-            Gbl.Prefs.URLIcons);
+   /***** Time since first click *****/
+   Prf_StartListItem (Txt_TIME_Since,"clock.svg");
+
    if (UsrFigures->FirstClickTimeUTC)
      {
       /* Create unique id */
@@ -606,11 +465,12 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrFigures *UsrFigures,
    else	// First click time is unknown or user never logged
       /***** Button to fetch and store user's figures *****/
       Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
-   fprintf (Gbl.F.Out,"</li>");
+
+   Prf_EndListItem ();
   }
 
 /*****************************************************************************/
-/************** Show time since first click in user's profile ****************/
+/*** Show number of courses in which the user has a role in user's profile ***/
 /*****************************************************************************/
 
 static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
@@ -625,13 +485,12 @@ static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
 
    /***** Number of courses in which the user has a given role *****/
    NumCrss = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Role);
-   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/%s');\">"
-		      "%u&nbsp;%s",
-	    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex],
-	    Gbl.Prefs.URLIcons,Rol_Icons[Role],
-	    NumCrss,
-	    Txt_courses_ABBREVIATION);
+
+   Prf_StartListItem (Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex],Rol_Icons[Role]);
+
+   fprintf (Gbl.F.Out,"%u&nbsp;%s",
+	    NumCrss,Txt_courses_ABBREVIATION);
+
    if (NumCrss)
       fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
@@ -641,6 +500,248 @@ static void Prf_ShowNumCrssWithRole (const struct UsrData *UsrDat,
 	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Role,
 					   (1 << Rol_STD)),
 	       Txt_students_ABBREVIATION);
+
+   Prf_EndListItem ();
+  }
+
+/*****************************************************************************/
+/******** Show number of files currently published in user's profile *********/
+/*****************************************************************************/
+
+static void Prf_ShowNumFilesCurrentlyPublished (const struct UsrData *UsrDat)
+  {
+   extern const char *Txt_Files_uploaded;
+   extern const char *Txt_file;
+   extern const char *Txt_files;
+   extern const char *Txt_public_FILES;
+   unsigned NumFiles;
+   unsigned NumPublicFiles;
+
+   /***** Number of files currently published *****/
+   if ((NumFiles = Brw_GetNumFilesUsr (UsrDat->UsrCod)))
+      NumPublicFiles = Brw_GetNumPublicFilesUsr (UsrDat->UsrCod);
+   else
+      NumPublicFiles = 0;
+
+   Prf_StartListItem (Txt_Files_uploaded,"file.svg");
+
+   fprintf (Gbl.F.Out,"%u&nbsp;%s&nbsp;(%u&nbsp;%s)",
+	    NumFiles,(NumFiles == 1) ? Txt_file :
+		                       Txt_files,
+	    NumPublicFiles,Txt_public_FILES);
+
+   Prf_EndListItem ();
+  }
+
+/*****************************************************************************/
+/****************** Show number of clicks in user's profile ******************/
+/*****************************************************************************/
+
+static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
+                               const struct UsrFigures *UsrFigures)
+  {
+   extern const char *Txt_Clicks;
+   extern const char *Txt_clicks;
+   extern const char *Txt_day;
+
+   /***** Number of clicks *****/
+   Prf_StartListItem (Txt_Clicks,"mouse-pointer.svg");
+
+   if (UsrFigures->NumClicks >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
+	       UsrFigures->NumClicks,Txt_clicks);
+      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumClicks"),
+		       Prf_GetNumUsrsWithFigure ("NumClicks"));
+      if (UsrFigures->NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out,"&nbsp;(");
+	 Str_WriteFloatNum (Gbl.F.Out,
+			    (float) UsrFigures->NumClicks /
+			    (float) UsrFigures->NumDays);
+	 fprintf (Gbl.F.Out,"/%s&nbsp;",Txt_day);
+	 Prf_ShowRanking (Prf_GetRankingNumClicksPerDay (UsrDat->UsrCod),
+			  Prf_GetNumUsrsWithNumClicksPerDay ());
+	 fprintf (Gbl.F.Out,")");
+	}
+     }
+   else	// Number of clicks is unknown
+      /***** Button to fetch and store user's figures *****/
+      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+
+   Prf_EndListItem ();
+  }
+
+/*****************************************************************************/
+/*************** Show number of file views in user's profile *****************/
+/*****************************************************************************/
+
+static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
+                                  const struct UsrFigures *UsrFigures)
+  {
+   extern const char *Txt_Downloads;
+   extern const char *Txt_download;
+   extern const char *Txt_downloads;
+   extern const char *Txt_day;
+
+   /***** Number of file views *****/
+   Prf_StartListItem (Txt_Downloads,"download.svg");
+
+   if (UsrFigures->NumFileViews >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
+	       UsrFigures->NumFileViews,
+	       (UsrFigures->NumFileViews == 1) ? Txt_download :
+						 Txt_downloads);
+      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumFileViews"),
+		       Prf_GetNumUsrsWithFigure ("NumFileViews"));
+      if (UsrFigures->NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out,"&nbsp;(");
+	 Str_WriteFloatNum (Gbl.F.Out,
+			    (float) UsrFigures->NumFileViews /
+			    (float) UsrFigures->NumDays);
+	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	}
+     }
+   else	// Number of file views is unknown
+      /***** Button to fetch and store user's figures *****/
+      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+
+   Prf_EndListItem ();
+  }
+
+/*****************************************************************************/
+/*********** Show number of social publications in user's profile ************/
+/*****************************************************************************/
+
+static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
+                                           const struct UsrFigures *UsrFigures)
+  {
+   extern const char *Txt_Timeline;
+   extern const char *Txt_SOCIAL_post;
+   extern const char *Txt_SOCIAL_posts;
+   extern const char *Txt_day;
+
+   /***** Number of social publications *****/
+   Prf_StartListItem (Txt_Timeline,"comment-dots.svg");
+
+   if (UsrFigures->NumSocPub >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
+	       UsrFigures->NumSocPub,
+	       (UsrFigures->NumSocPub == 1) ? Txt_SOCIAL_post :
+					      Txt_SOCIAL_posts);
+      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumSocPub"),
+		       Prf_GetNumUsrsWithFigure ("NumSocPub"));
+      if (UsrFigures->NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out,"&nbsp;(");
+	 Str_WriteFloatNum (Gbl.F.Out,
+			    (float) UsrFigures->NumSocPub /
+			    (float) UsrFigures->NumDays);
+	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	}
+     }
+   else	// Number of social publications is unknown
+      /***** Button to fetch and store user's figures *****/
+      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+
+   Prf_EndListItem ();
+  }
+
+/*****************************************************************************/
+/*********** Show number of social publications in user's profile ************/
+/*****************************************************************************/
+
+static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
+                                   const struct UsrFigures *UsrFigures)
+  {
+   extern const char *Txt_Forums;
+   extern const char *Txt_FORUM_post;
+   extern const char *Txt_FORUM_posts;
+   extern const char *Txt_day;
+
+   /***** Number of posts in forums *****/
+   Prf_StartListItem (Txt_Forums,"comments.svg");
+
+   if (UsrFigures->NumForPst >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
+	       UsrFigures->NumForPst,
+	       (UsrFigures->NumForPst == 1) ? Txt_FORUM_post :
+					      Txt_FORUM_posts);
+      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumForPst"),
+		       Prf_GetNumUsrsWithFigure ("NumForPst"));
+      if (UsrFigures->NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out,"&nbsp;(");
+	 Str_WriteFloatNum (Gbl.F.Out,
+			    (float) UsrFigures->NumForPst /
+			    (float) UsrFigures->NumDays);
+	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	}
+     }
+   else	// Number of forum posts is unknown
+      /***** Button to fetch and store user's figures *****/
+      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+
+   Prf_EndListItem ();
+  }
+
+/*****************************************************************************/
+/************** Show number of messages sent in user's profile ***************/
+/*****************************************************************************/
+
+static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
+                                     const struct UsrFigures *UsrFigures)
+  {
+   extern const char *Txt_Messages;
+   extern const char *Txt_message;
+   extern const char *Txt_messages;
+   extern const char *Txt_day;
+
+   /***** Number of messages sent *****/
+   Prf_StartListItem (Txt_Messages,"envelope.svg");
+
+   if (UsrFigures->NumMsgSnt >= 0)
+     {
+      fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
+	       UsrFigures->NumMsgSnt,
+	       (UsrFigures->NumMsgSnt == 1) ? Txt_message :
+					      Txt_messages);
+      Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
+		       Prf_GetNumUsrsWithFigure ("NumMsgSnt"));
+      if (UsrFigures->NumDays > 0)
+	{
+	 fprintf (Gbl.F.Out,"&nbsp;(");
+	 Str_WriteFloatNum (Gbl.F.Out,
+			    (float) UsrFigures->NumMsgSnt /
+			    (float) UsrFigures->NumDays);
+	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	}
+     }
+   else	// Number of messages sent is unknown
+      /***** Button to fetch and store user's figures *****/
+      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+
+   Prf_EndListItem ();
+  }
+
+/*****************************************************************************/
+/****************** Start/end list item in user's profile ********************/
+/*****************************************************************************/
+
+static void Prf_StartListItem (const char *Title,const char *Icon)
+  {
+   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+		      " style=\"background-image:url('%s/%s');\">",
+	    Title,
+	    Gbl.Prefs.URLIcons,Icon);
+  }
+
+static void Prf_EndListItem (void)
+  {
    fprintf (Gbl.F.Out,"</li>");
   }
 
