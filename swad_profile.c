@@ -538,33 +538,6 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
          Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
 
-      /***** Number of social publications *****/
-      fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	                 " style=\"background-image:url('%s/comment-dots.svg');\">",
-	       Txt_Timeline,
-	       Gbl.Prefs.URLIcons);
-      if (UsrFigures.NumSocPub >= 0)
-	{
-	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
-		  UsrFigures.NumSocPub,
-		  (UsrFigures.NumSocPub == 1) ? Txt_SOCIAL_post :
-						Txt_SOCIAL_posts);
-	 Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumSocPub"),
-			  Prf_GetNumUsrsWithFigure ("NumSocPub"));
-	 if (UsrFigures.NumDays > 0)
-	   {
-	    fprintf (Gbl.F.Out,"&nbsp;(");
-	    Str_WriteFloatNum (Gbl.F.Out,
-	                       (float) UsrFigures.NumSocPub /
-			       (float) UsrFigures.NumDays);
-	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
-	   }
-	}
-      else	// Number of social publications is unknown
-	 /***** Button to fetch and store user's figures *****/
-         Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"</li>");
-
       /***** Number of file views *****/
       fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 	                 " style=\"background-image:url('%s/download.svg');\">",
@@ -588,6 +561,33 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	   }
 	}
       else	// Number of file views is unknown
+	 /***** Button to fetch and store user's figures *****/
+         Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+      fprintf (Gbl.F.Out,"</li>");
+
+      /***** Number of social publications *****/
+      fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	                 " style=\"background-image:url('%s/comment-dots.svg');\">",
+	       Txt_Timeline,
+	       Gbl.Prefs.URLIcons);
+      if (UsrFigures.NumSocPub >= 0)
+	{
+	 fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
+		  UsrFigures.NumSocPub,
+		  (UsrFigures.NumSocPub == 1) ? Txt_SOCIAL_post :
+						Txt_SOCIAL_posts);
+	 Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumSocPub"),
+			  Prf_GetNumUsrsWithFigure ("NumSocPub"));
+	 if (UsrFigures.NumDays > 0)
+	   {
+	    fprintf (Gbl.F.Out,"&nbsp;(");
+	    Str_WriteFloatNum (Gbl.F.Out,
+	                       (float) UsrFigures.NumSocPub /
+			       (float) UsrFigures.NumDays);
+	    fprintf (Gbl.F.Out,"/%s)",Txt_day);
+	   }
+	}
+      else	// Number of social publications is unknown
 	 /***** Button to fetch and store user's figures *****/
          Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
       fprintf (Gbl.F.Out,"</li>");
