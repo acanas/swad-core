@@ -5137,7 +5137,7 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 unsigned long Soc_GetNumPubsUsr (long UsrCod)
   {
    /***** Get number of posts from a user from database *****/
-   return DB_QueryCOUNT ("can not number of social publications from a user",
+   return DB_QueryCOUNT ("can not get number of social publications from a user",
 			 "SELECT COUNT(*) FROM social_pubs"
 			 " WHERE PublisherCod=%ld",
 			 UsrCod);

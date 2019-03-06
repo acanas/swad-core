@@ -3394,7 +3394,7 @@ a.PAG:hover, .PAG_CUR
 .RANK_USR
 	{
 	box-sizing:border-box;
-	max-width:50px;
+	max-width:48px;
 	text-align:left;
 	vertical-align:middle;
 	white-space:nowrap;

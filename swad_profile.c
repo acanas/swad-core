@@ -95,6 +95,7 @@ static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigure
 static bool Prf_CheckIfUsrFiguresExists (long UsrCod);
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName);
+static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank);
 
 /*****************************************************************************/
 /************* Suggest who to follow or request user's profile ***************/
@@ -1251,6 +1252,11 @@ void Prf_GetAndShowRankingClicks (void)
    Prf_GetAndShowRankingFigure ("NumClicks");
   }
 
+void Prf_GetAndShowRankingSocPub (void)
+  {
+   Prf_GetAndShowRankingFigure ("NumSocPub");
+  }
+
 void Prf_GetAndShowRankingFileViews (void)
   {
    Prf_GetAndShowRankingFigure ("NumFileViews");
@@ -1279,7 +1285,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT UsrCod,%s"
 				    " FROM usr_figures"
-				    " WHERE %s>=0"
+				    " WHERE %s>0"
 				    " AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY %s DESC,UsrCod LIMIT 100",
 				    FieldName,
@@ -1296,7 +1302,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    " AND degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=crs_usr.CrsCod"
 				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
-				    " AND usr_figures.%s>=0"
+				    " AND usr_figures.%s>0"
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 				    FieldName,
@@ -1313,7 +1319,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    " AND degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=crs_usr.CrsCod"
 				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
-				    " AND usr_figures.%s>=0"
+				    " AND usr_figures.%s>0"
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 				    FieldName,
@@ -1329,7 +1335,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    " AND degrees.DegCod=courses.DegCod"
 				    " AND courses.CrsCod=crs_usr.CrsCod"
 				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
-				    " AND usr_figures.%s>=0"
+				    " AND usr_figures.%s>0"
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 				    FieldName,
@@ -1344,7 +1350,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    " WHERE courses.DegCod=%ld"
 				    " AND courses.CrsCod=crs_usr.CrsCod"
 				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
-				    " AND usr_figures.%s>=0"
+				    " AND usr_figures.%s>0"
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 				    FieldName,
@@ -1358,7 +1364,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    " FROM crs_usr,usr_figures"
 				    " WHERE crs_usr.CrsCod=%ld"
 				    " AND crs_usr.UsrCod=usr_figures.UsrCod"
-				    " AND usr_figures.%s>=0"
+				    " AND usr_figures.%s>0"
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 				    FieldName,
@@ -1602,7 +1608,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 /************** Show user's photo and nickname in ranking list ***************/
 /*****************************************************************************/
 
-void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
+static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
   {
    extern const char *Txt_Another_user_s_profile;
    bool ShowPhoto;

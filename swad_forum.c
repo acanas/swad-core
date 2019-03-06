@@ -872,7 +872,7 @@ static unsigned For_GetNumMyPstInThr (long ThrCod)
 unsigned long For_GetNumPostsUsr (long UsrCod)
   {
    /***** Get number of posts from a user from database *****/
-   return DB_QueryCOUNT ("can not number of forum posts from a user",
+   return DB_QueryCOUNT ("can not get number of forum posts from a user",
 			 "SELECT COUNT(*) FROM forum_post"
 			 " WHERE UsrCod=%ld",
 			 UsrCod);

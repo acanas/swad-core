@@ -490,6 +490,7 @@ static void Fig_GetAndShowUsersRanking (void)
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    extern const char *Txt_Clicks;
    extern const char *Txt_Clicks_per_day;
+   extern const char *Txt_Timeline;
    extern const char *Txt_Downloads;
    extern const char *Txt_Forums;
    extern const char *Txt_Messages;
@@ -519,13 +520,17 @@ static void Fig_GetAndShowUsersRanking (void)
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
+                      "<th class=\"CENTER_MIDDLE\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_Clicks,
             Txt_Clicks_per_day,
+            Txt_Timeline,
+            Txt_Followers,
             Txt_Downloads,
             Txt_Forums,
-            Txt_Messages,
-            Txt_Followers);
+            Txt_Messages);
 
    /***** Rankings *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -536,6 +541,12 @@ static void Fig_GetAndShowUsersRanking (void)
    Prf_GetAndShowRankingClicksPerDay ();
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"DAT LEFT_TOP\">");
+   Prf_GetAndShowRankingSocPub ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td class=\"DAT LEFT_TOP\">");
+   Fol_GetAndShowRankingFollowers ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "<td class=\"DAT LEFT_TOP\">");
    Prf_GetAndShowRankingFileViews ();
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"DAT LEFT_TOP\">");
@@ -543,9 +554,6 @@ static void Fig_GetAndShowUsersRanking (void)
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"DAT LEFT_TOP\">");
    Prf_GetAndShowRankingMsgSnt ();
-   fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"DAT LEFT_TOP\">");
-   Fol_GetAndShowRankingFollowers ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 

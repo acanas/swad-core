@@ -12640,3 +12640,30 @@ UPDATE social_posts SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>''
 UPDATE tst_answers SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
 UPDATE tst_questions SET MediaType='jpg' WHERE MediaType<>'gif' AND MediaName<>'';
 
+------------
+
+
+
+UPDATE usr_figures 
+SET NumSocPub = T.NumSocPub
+FROM (
+    SELECT PublisherCod,COUNT(*) AS NumSocPub FROM social_pubs GROUP BY PublisherCod) AS T
+WHERE 
+    usr_figures.UsrCod = T.PublisherCod;
+
+
+------------
+
+
+
+UPDATE usr_figures,(SELECT PublisherCod,COUNT(*) AS NumSocPub FROM social_pubs GROUP BY PublisherCod) AS publishers SET usr_figures.NumSocPub=publishers.NumSocPub WHERE usr_figures.NumSocPub<0 AND usr_figures.UsrCod=publishers.PublisherCod;
+UPDATE usr_figures SET NumSocPub=0 WHERE NumSocPub<0;
+
+UPDATE usr_figures,(SELECT UsrCod,COUNT(*) AS NumForPst FROM forum_post GROUP BY UsrCod) AS posters SET usr_figures.NumForPst=posters.NumForPst WHERE usr_figures.NumForPst<0 AND usr_figures.UsrCod=posters.UsrCod;
+UPDATE usr_figures SET NumForPst=0 WHERE NumForPst<0;
+
+UPDATE usr_figures,(SELECT UsrCod,SUM(NMS) AS NumMsgSnt FROM (SELECT UsrCod,COUNT(*) AS NMS FROM msg_snt GROUP BY UsrCod UNION SELECT Usrcod,COUNT(*) AS NMS FROM msg_snt_deleted GROUP BY UsrCod) AS MS GROUP BY UsrCod) AS senders SET usr_figures.NumMsgSnt=senders.NumMsgSnt WHERE usr_figures.NumMsgSnt<0 AND usr_figures.UsrCod=senders.UsrCod;
+UPDATE usr_figures SET NumMsgSnt=0 WHERE NumMsgSnt<0;
+
+UPDATE usr_figures,(SELECT UsrCod,SUM(NumViews) AS NumFileViews FROM file_view WHERE UsrCod>0 GROUP BY UsrCod) AS viewers SET usr_figures.NumFileViews=viewers.NumFileViews WHERE usr_figures.NumFileViews<0 AND usr_figures.UsrCod=viewers.UsrCod;
+UPDATE usr_figures SET NumFileViews=0 WHERE NumFileViews<0;

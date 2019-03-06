@@ -428,10 +428,22 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.65 (2019-03-06)"
-#define CSS_FILE		"swad18.64.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.66 (2019-03-06)"
+#define CSS_FILE		"swad18.66.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.66:    Mar 06, 2019 	Number of social posts is added as a new column in users' ranking.
+					Only figures greater than 0 are shown in users' ranking. (238671 lines)
+					8 changes necessary in database:
+UPDATE usr_figures,(SELECT PublisherCod,COUNT(*) AS NumSocPub FROM social_pubs GROUP BY PublisherCod) AS publishers SET usr_figures.NumSocPub=publishers.NumSocPub WHERE usr_figures.NumSocPub<0 AND usr_figures.UsrCod=publishers.PublisherCod;
+UPDATE usr_figures SET NumSocPub=0 WHERE NumSocPub<0;
+UPDATE usr_figures,(SELECT UsrCod,SUM(NumViews) AS NumFileViews FROM file_view WHERE UsrCod>0 GROUP BY UsrCod) AS viewers SET usr_figures.NumFileViews=viewers.NumFileViews WHERE usr_figures.NumFileViews<0 AND usr_figures.UsrCod=viewers.UsrCod;
+UPDATE usr_figures SET NumFileViews=0 WHERE NumFileViews<0;
+UPDATE usr_figures,(SELECT UsrCod,COUNT(*) AS NumForPst FROM forum_post GROUP BY UsrCod) AS posters SET usr_figures.NumForPst=posters.NumForPst WHERE usr_figures.NumForPst<0 AND usr_figures.UsrCod=posters.UsrCod;
+UPDATE usr_figures SET NumForPst=0 WHERE NumForPst<0;
+UPDATE usr_figures,(SELECT UsrCod,SUM(NMS) AS NumMsgSnt FROM (SELECT UsrCod,COUNT(*) AS NMS FROM msg_snt GROUP BY UsrCod UNION SELECT Usrcod,COUNT(*) AS NMS FROM msg_snt_deleted GROUP BY UsrCod) AS MS GROUP BY UsrCod) AS senders SET usr_figures.NumMsgSnt=senders.NumMsgSnt WHERE usr_figures.NumMsgSnt<0 AND usr_figures.UsrCod=senders.UsrCod;
+UPDATE usr_figures SET NumMsgSnt=0 WHERE NumMsgSnt<0;
+
 	Version 18.65:    Mar 06, 2019 	New user's figure: number of social posts. (238648 lines)
 					1 change necessary in database:
 ALTER TABLE usr_figures ADD COLUMN NumSocPub INT NOT NULL DEFAULT -1 AFTER NumClicks;
