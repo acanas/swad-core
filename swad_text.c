@@ -22025,7 +22025,7 @@ const char *Txt_Modify_user_in_the_course_X =	// Warning: it is very important t
 
 const char *Txt_Month =
 #if   L==1	// ca
-	"Mes";		// Necessita traduccio
+	"Mes";
 #elif L==2	// de
 	"Monat";
 #elif L==3	// en
@@ -22039,9 +22039,51 @@ const char *Txt_Month =
 #elif L==7	// it
 	"Mese";
 #elif L==8	// pl
-	"Miesiac";
+	"Miesi&aogon;c";
 #elif L==9	// pt
 	"M&ecirc;s";
+#endif
+
+const char *Txt_month =
+#if   L==1	// ca
+	"mes";
+#elif L==2	// de
+	"Monat";
+#elif L==3	// en
+	"month";
+#elif L==4	// es
+	"mes";
+#elif L==5	// fr
+	"mois";
+#elif L==6	// gn
+	"jasy";
+#elif L==7	// it
+	"mese";
+#elif L==8	// pl
+	"miesi&aogon;c";
+#elif L==9	// pt
+	"m&ecirc;s";
+#endif
+
+const char *Txt_months =
+#if   L==1	// ca
+	"mesos";
+#elif L==2	// de
+	"Monate";
+#elif L==3	// en
+	"months";
+#elif L==4	// es
+	"meses";
+#elif L==5	// fr
+	"mois";
+#elif L==6	// gn
+	"meses";	// Okoteve traducción
+#elif L==7	// it
+	"mesi";
+#elif L==8	// pl
+	"miesi&aogon;ce";
+#elif L==9	// pt
+	"meses";
 #endif
 
 const char *Txt_MONTHS_SMALL[12] =
@@ -52731,6 +52773,27 @@ const char *Txt_Year =	// 1984, 2011...
 	"Ano";
 #endif
 
+const char *Txt_year =	// 1984, 2011...
+#if   L==1	// ca
+	"any";
+#elif L==2	// de
+	"Jahr";
+#elif L==3	// en
+	"year";
+#elif L==4	// es
+	"a&ntilde;o";
+#elif L==5	// fr
+	"ann&eacute;e";
+#elif L==6	// gn
+	"ary";
+#elif L==7	// it
+	"anno";
+#elif L==8	// pl
+	"rok";
+#elif L==9	// pt
+	"ano";
+#endif
+
 const char *Txt_Year_OF_A_DEGREE =	// 1, 2, 3..., not 1984, 2011...
 #if   L==1	// ca
 	"Any o semestre";
@@ -53014,6 +53077,27 @@ const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE] =
 	 "12&ordm;"
 #endif
 	};
+
+const char *Txt_years =
+#if   L==1	// ca
+	"anys";
+#elif L==2	// de
+	"Jahre";
+#elif L==3	// en
+	"years";
+#elif L==4	// es
+	"a&ntilde;os";
+#elif L==5	// fr
+	"ann&eacute;es";
+#elif L==6	// gn
+	"ary";
+#elif L==7	// it
+	"anni";
+#elif L==8	// pl
+	"lat";
+#elif L==9	// pt
+	"anos";
+#endif
 
 const char *Txt_YES =
 #if   L==1	// ca

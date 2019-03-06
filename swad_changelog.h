@@ -428,10 +428,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.66.5 (2019-03-06)"
+#define Log_PLATFORM_VERSION	"SWAD 18.66.6 (2019-03-07)"
 #define CSS_FILE		"swad18.66.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.66.6:  Mar 07, 2019 	Number of days printed as months or years in user's figures. (238846 lines)
 	Version 18.66.5:  Mar 06, 2019 	Code refactoring in user's figures. (238739 lines)
 	Version 18.66.4:  Mar 06, 2019 	Code refactoring in user's figures. (238678 lines)
 	Version 18.66.3:  Mar 06, 2019 	Changed order of figures in user's profile. (238674 lines)

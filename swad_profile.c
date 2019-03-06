@@ -436,10 +436,16 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
                                          const struct UsrFigures *UsrFigures)
   {
    extern const char *Txt_TIME_Since;
+   extern const char *Txt_year;
+   extern const char *Txt_years;
+   extern const char *Txt_month;
+   extern const char *Txt_months;
    extern const char *Txt_day;
    extern const char *Txt_days;
    extern const char *Txt_Today;
    char IdFirstClickTime[Frm_MAX_BYTES_ID + 1];
+   int NumYears;
+   int NumMonths;
 
    /***** Time since first click *****/
    Prf_StartListItem (Txt_TIME_Since,"clock.svg");
@@ -451,10 +457,30 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
 
       fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",IdFirstClickTime);
       if (UsrFigures->NumDays > 0)
-	 fprintf (Gbl.F.Out,"&nbsp;(%d&nbsp;%s)",
-		  UsrFigures->NumDays,
-		  (UsrFigures->NumDays == 1) ? Txt_day :
-					       Txt_days);
+        {
+	 fprintf (Gbl.F.Out,"&nbsp;(");
+	 NumYears = UsrFigures->NumDays / 365;
+	 if (NumYears)
+	    fprintf (Gbl.F.Out,"%d&nbsp;%s",
+		     NumYears,
+		     (NumYears == 1) ? Txt_year :
+				       Txt_years);
+	 else		// Less than one year
+	   {
+	    NumMonths = UsrFigures->NumDays / 30;
+	    if (NumMonths)
+	       fprintf (Gbl.F.Out,"%d&nbsp;%s",
+			NumMonths,
+			(NumMonths == 1) ? Txt_month :
+					   Txt_months);
+	    else	// Less than one month
+	       fprintf (Gbl.F.Out,"%d&nbsp;%s",
+			UsrFigures->NumDays,
+			(UsrFigures->NumDays == 1) ? Txt_day :
+						     Txt_days);
+	   }
+	 fprintf (Gbl.F.Out,")");
+        }
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('%s',%ld,"
 			 "%u,',&nbsp;','%s',true,false,0x6);"
