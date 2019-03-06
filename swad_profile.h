@@ -40,6 +40,7 @@ struct UsrFigures
    time_t FirstClickTimeUTC;	//   0 ==> unknown first click time of user never logged
    int NumDays;			//  -1 ==> not applicable
    long NumClicks;		// -1L ==> unknown number of clicks
+   long NumSocPub;		// -1L ==> unknown number of social publications
    long NumFileViews;		// -1L ==> unknown number of file views
    long NumForPst;		// -1L ==> unknown number of forum posts
    long NumMsgSnt;		// -1L ==> unknown number of messages sent
@@ -69,6 +70,7 @@ bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount);
 void Prf_RemoveUsrFigures (long UsrCod);
 void Prf_IncrementNumClicksUsr (long UsrCod);
+void Prf_IncrementNumSocPubUsr (long UsrCod);
 void Prf_IncrementNumFileViewsUsr (long UsrCod);
 void Prf_IncrementNumForPstUsr (long UsrCod);
 void Prf_IncrementNumMsgSntUsr (long UsrCod);

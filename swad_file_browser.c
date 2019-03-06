@@ -10403,7 +10403,7 @@ void Brw_ChgFileMetadata (void)
    bool PublicFileBeforeEdition;
    bool PublicFileAfterEdition;
    Brw_License_t License;
-   struct SocialPublishing SocPub;
+   struct SocialPublication SocPub;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();

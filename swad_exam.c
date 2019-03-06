@@ -292,7 +292,7 @@ void Exa_ReceiveExamAnnouncement2 (void)
    extern const char *Txt_Created_new_announcement_of_exam;
    extern const char *Txt_The_announcement_of_exam_has_been_successfully_updated;
    unsigned NumUsrsToBeNotifiedByEMail;
-   struct SocialPublishing SocPub;
+   struct SocialPublication SocPub;
 
    /***** Show message *****/
    Ale_ShowAlert (Ale_SUCCESS,

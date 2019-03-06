@@ -385,7 +385,7 @@ static void For_RemoveThrCodFromThrClipboard (long ThrCod);
 
 void For_EnablePost (void)
   {
-   extern const char *Txt_Post_unbanned;
+   extern const char *Txt_FORUM_Post_unbanned;
 
    /***** Get parameters related to forum *****/
    For_GetParamsForum ();
@@ -401,7 +401,7 @@ void For_EnablePost (void)
                                               Ale_SUCCESS,NULL);
 
    /***** Show the posts again *****/
-   For_ShowPostsOfAThread (Ale_SUCCESS,Txt_Post_unbanned);
+   For_ShowPostsOfAThread (Ale_SUCCESS,Txt_FORUM_Post_unbanned);
   }
 
 /*****************************************************************************/
@@ -410,7 +410,7 @@ void For_EnablePost (void)
 
 void For_DisablePost (void)
   {
-   extern const char *Txt_Post_banned;
+   extern const char *Txt_FORUM_Post_banned;
 
    /***** Get parameters related to forum *****/
    For_GetParamsForum ();
@@ -429,7 +429,7 @@ void For_DisablePost (void)
 						 Ale_SUCCESS,NULL);
 
       /***** Show the posts again *****/
-      For_ShowPostsOfAThread (Ale_SUCCESS,Txt_Post_banned);
+      For_ShowPostsOfAThread (Ale_SUCCESS,Txt_FORUM_Post_banned);
      }
    else
       Lay_ShowErrorAndExit ("The post to be banned no longer exists.");
@@ -872,7 +872,7 @@ static unsigned For_GetNumMyPstInThr (long ThrCod)
 unsigned long For_GetNumPostsUsr (long UsrCod)
   {
    /***** Get number of posts from a user from database *****/
-   return DB_QueryCOUNT ("can not number of posts from a user",
+   return DB_QueryCOUNT ("can not number of forum posts from a user",
 			 "SELECT COUNT(*) FROM forum_post"
 			 " WHERE UsrCod=%ld",
 			 UsrCod);
@@ -1149,11 +1149,11 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    extern const char *Txt_MSG_New;
    extern const char *Txt_MSG_Open;
    extern const char *Txt_no_subject;
-   extern const char *Txt_Post_X_allowed;
-   extern const char *Txt_Post_banned;
-   extern const char *Txt_Post_X_banned;
-   extern const char *Txt_Post_X_allowed_Click_to_ban_it;
-   extern const char *Txt_Post_X_banned_Click_to_unban_it;
+   extern const char *Txt_FORUM_Post_X_allowed;
+   extern const char *Txt_FORUM_Post_banned;
+   extern const char *Txt_FORUM_Post_X_banned;
+   extern const char *Txt_FORUM_Post_X_allowed_Click_to_ban_it;
+   extern const char *Txt_FORUM_Post_X_banned_Click_to_unban_it;
    extern const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums;
    struct UsrData UsrDat;
    time_t CreatTimeUTC;	// Creation time of a post
@@ -1218,7 +1218,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
          fprintf (Gbl.F.Out,"[%s]",Txt_no_subject);
      }
    else
-      fprintf (Gbl.F.Out,"[%s]",Txt_Post_banned);
+      fprintf (Gbl.F.Out,"[%s]",Txt_FORUM_Post_banned);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -1239,8 +1239,8 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 				   PstCod);
 
       snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Enabled ? Txt_Post_X_allowed_Click_to_ban_it :
-			  Txt_Post_X_banned_Click_to_unban_it,
+	        Enabled ? Txt_FORUM_Post_X_allowed_Click_to_ban_it :
+			  Txt_FORUM_Post_X_banned_Click_to_unban_it,
 	        PstNum);
       Ico_PutIconLink (Enabled ? "eye.svg" :
 			         "eye-slash.svg",
@@ -1250,8 +1250,8 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    else
      {
       snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Enabled ? Txt_Post_X_allowed :
-			  Txt_Post_X_banned,
+	        Enabled ? Txt_FORUM_Post_X_allowed :
+			  Txt_FORUM_Post_X_banned,
 	        PstNum);
       fprintf (Gbl.F.Out,"<span title=\"%s\">"
 			 "<img src=\"%s/%s\""
@@ -1445,8 +1445,8 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
 
 static void For_WriteNumberOfPosts (long UsrCod)
   {
-   extern const char *Txt_post;
-   extern const char *Txt_posts;
+   extern const char *Txt_FORUM_post;
+   extern const char *Txt_FORUM_posts;
    char SubQuery[256];
    unsigned NumPsts;
 
@@ -1471,9 +1471,9 @@ static void For_WriteNumberOfPosts (long UsrCod)
 
    /***** Write number of threads and number of posts *****/
    if (NumPsts == 1)
-      fprintf (Gbl.F.Out,"[1 %s]",Txt_post);
+      fprintf (Gbl.F.Out,"[1 %s]",Txt_FORUM_post);
    else
-      fprintf (Gbl.F.Out,"[%u %s]",NumPsts,Txt_posts);
+      fprintf (Gbl.F.Out,"[%u %s]",NumPsts,Txt_FORUM_posts);
 
    /***** End table cell *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -2397,8 +2397,8 @@ static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPos
   {
    extern const char *Txt_thread;
    extern const char *Txt_threads;
-   extern const char *Txt_post;
-   extern const char *Txt_posts;
+   extern const char *Txt_FORUM_post;
+   extern const char *Txt_FORUM_posts;
    extern const char *Txt_with_new_posts;
 
    /***** Write number of threads and number of posts *****/
@@ -2410,16 +2410,16 @@ static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPos
          fprintf (Gbl.F.Out,", 1 %s",Txt_with_new_posts);
       fprintf (Gbl.F.Out,"; ");
       if (NumPosts == 1)
-         fprintf (Gbl.F.Out,"1 %s",Txt_post);
+         fprintf (Gbl.F.Out,"1 %s",Txt_FORUM_post);
       else
-         fprintf (Gbl.F.Out,"%u %s",NumPosts,Txt_posts);
+         fprintf (Gbl.F.Out,"%u %s",NumPosts,Txt_FORUM_posts);
      }
    else
      {
       fprintf (Gbl.F.Out,"%u %s",NumThrs,Txt_threads);
       if (NumThrsWithNewPosts)
          fprintf (Gbl.F.Out,", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
-      fprintf (Gbl.F.Out,"; %u %s",NumPosts,Txt_posts);
+      fprintf (Gbl.F.Out,"; %u %s",NumPosts,Txt_FORUM_posts);
      }
    fprintf (Gbl.F.Out,"]");
   }
@@ -4026,11 +4026,11 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 
 void For_ReceiveForumPost (void)
   {
-   extern const char *Txt_Post_sent;
+   extern const char *Txt_FORUM_Post_sent;
    bool IsReply = false;
    long PstCod = 0;
    unsigned NumUsrsToBeNotifiedByEMail;
-   struct SocialPublishing SocPub;
+   struct SocialPublication SocPub;
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Media Media;
 
@@ -4129,7 +4129,7 @@ void For_ReceiveForumPost (void)
                                               Ale_SUCCESS,NULL);
 
    /***** Show again the posts of this thread of the forum *****/
-   For_ShowPostsOfAThread (Ale_SUCCESS,Txt_Post_sent);
+   For_ShowPostsOfAThread (Ale_SUCCESS,Txt_FORUM_Post_sent);
   }
 
 /*****************************************************************************/
@@ -4151,8 +4151,8 @@ static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumU
 
 void For_RemovePost (void)
   {
-   extern const char *Txt_Post_and_thread_removed;
-   extern const char *Txt_Post_removed;
+   extern const char *Txt_FORUM_Post_and_thread_removed;
+   extern const char *Txt_FORUM_Post_removed;
    struct UsrData UsrDat;
    time_t CreatTimeUTC;	// Creation time of a message
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
@@ -4212,14 +4212,14 @@ void For_RemovePost (void)
    if (ThreadDeleted)
       /***** Show the remaining threads *****/
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-                                                 Ale_SUCCESS,Txt_Post_and_thread_removed);
+                                                 Ale_SUCCESS,Txt_FORUM_Post_and_thread_removed);
    else
      {
       /***** Show threads again *****/
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 						 Ale_SUCCESS,NULL);
       /***** Show the remaining posts *****/
-      For_ShowPostsOfAThread (Ale_SUCCESS,Txt_Post_removed);
+      For_ShowPostsOfAThread (Ale_SUCCESS,Txt_FORUM_Post_removed);
      }
   }
 

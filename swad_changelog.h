@@ -428,17 +428,20 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.64.7 (2019-03-05)"
+#define Log_PLATFORM_VERSION	"SWAD 18.65 (2019-03-06)"
 #define CSS_FILE		"swad18.64.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.65:    Mar 06, 2019 	New user's figure: number of social posts. (238648 lines)
+					1 change necessary in database:
+ALTER TABLE usr_figures ADD COLUMN NumSocPub INT NOT NULL DEFAULT -1 AFTER NumClicks;
+
 	Version 18.64.7:  Mar 05, 2019 	Changes in user's figures. (238506 lines)
 	Version 18.64.6:  Mar 05, 2019 	Added non-editing teachers in user's figures. (238525 lines)
 	Version 18.64.5:  Mar 05, 2019 	Changes writing floating point numbers.
 					For load speed issues, the number of publications by default in the timeline becomes 20 again.
 					The actions in buttons to calculate user's figures are merged in one. (238471 lines)
 					2 changes necessary in database:
-					Calcular fecha del primer clic
 UPDATE actions SET Txt='Calcular cifras de un usuario' WHERE ActCod='1405' AND Language='es';
 UPDATE actions SET Obsolete='Y' WHERE ActCod IN (1406,1407,1408,1409);
 

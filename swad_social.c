@@ -71,11 +71,11 @@ typedef enum
 
 typedef enum
   {
-   Soc_GET_ONLY_NEW_PUBS,	// New publishings are retrieved via AJAX
+   Soc_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
 				// automatically from time to time
    Soc_GET_RECENT_TIMELINE,	// Recent timeline is shown when user clicks on action menu,...
 				// or after editing timeline
-   Soc_GET_ONLY_OLD_PUBS,	// Old publishings are retrieved via AJAX
+   Soc_GET_ONLY_OLD_PUBS,	// Old publications are retrieved via AJAX
 				// when user clicks on link at bottom of timeline
   } Soc_WhatToGetFromTimeline_t;
 
@@ -163,10 +163,10 @@ static void Soc_ShowWarningYouDontFollowAnyUser (void);
 static void Soc_InsertNewPubsInTimeline (char *Query);
 static void Soc_ShowOldPubsInTimeline (char *Query);
 
-static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
+static void Soc_GetDataOfSocialPublicationFromRow (MYSQL_ROW row,struct SocialPublication *SocPub);
 
-static void Soc_PutLinkToViewNewPublishings (void);
-static void Soc_PutLinkToViewOldPublishings (void);
+static void Soc_PutLinkToViewNewPublications (void);
+static void Soc_PutLinkToViewOldPublications (void);
 
 static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  Soc_TopMessage_t TopMessage,long UsrCod,
@@ -179,7 +179,7 @@ static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
                                 char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
-static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
+static void Soc_PublishSocialNoteInTimeline (struct SocialPublication *SocPub);
 
 static void Soc_PutFormToWriteNewPost (void);
 static void Soc_PutTextarea (const char *Placeholder,
@@ -213,7 +213,7 @@ static void Soc_PutFormToUnfavSocialNote (const struct SocialNote *SocNot);
 static void Soc_PutFormToFavSocialComment (struct SocialComment *SocCom);
 static void Soc_PutFormToUnfavSocialComment (struct SocialComment *SocCom);
 
-static void Soc_PutFormToRemoveSocialPublishing (long NotCod);
+static void Soc_PutFormToRemoveSocialPublication (long NotCod);
 
 static void Soc_PutHiddenParamNotCod (long NotCod);
 static long Soc_GetParamNotCod (void);
@@ -237,7 +237,7 @@ static void Soc_RemoveSocialNote (void);
 static void Soc_RemoveImgFileFromSocialPost (long PstCod);
 static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot);
 
-static long Soc_GetNotCodOfSocialPublishing (long PubCod);
+static long Soc_GetNotCodOfSocialPublication (long PubCod);
 static long Soc_GetPubCodOfOriginalSocialNote (long NotCod);
 
 static void Soc_RequestRemovalSocialComment (void);
@@ -263,7 +263,7 @@ static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 static void Soc_GetDataOfSocialNotByCod (struct SocialNote *SocNot);
 static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom);
 
-static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub);
+static void Soc_GetDataOfSocialPublicationFromRow (MYSQL_ROW row,struct SocialPublication *SocPub);
 static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *SocNot);
 static Soc_PubType_t Soc_GetPubTypeFromStr (const char *Str);
 static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str);
@@ -357,13 +357,13 @@ void Soc_ShowTimelineGbl2 (void)
    /***** Initialize social note code to -1 ==> no highlighted note *****/
    SocNot.NotCod = -1L;
 
-   /***** Get parameter with the code of a social publishing *****/
+   /***** Get parameter with the code of a social publication *****/
    // This parameter is optional. It can be provided by a notification.
    // If > 0 ==> the social note is shown highlighted above the timeline
    PubCod = Soc_GetParamPubCod ();
    if (PubCod > 0)
       /***** Get code of social note from database *****/
-      SocNot.NotCod = Soc_GetNotCodOfSocialPublishing (PubCod);
+      SocNot.NotCod = Soc_GetNotCodOfSocialPublication (PubCod);
 
    if (SocNot.NotCod > 0)
      {
@@ -415,7 +415,7 @@ static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
    extern const char *Txt_Timeline_OF_A_USER;
    char *Query = NULL;
 
-   /***** Build query to show timeline with publishings of a unique user *****/
+   /***** Build query to show timeline with publications of a unique user *****/
    Soc_BuildQueryToGetTimeline (&Query,
 	                        Soc_TIMELINE_USR,
                                 Soc_GET_RECENT_TIMELINE);
@@ -431,7 +431,7 @@ static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
   }
 
 /*****************************************************************************/
-/********** Refresh new publishings in social timeline via AJAX **************/
+/********** Refresh new publications in social timeline via AJAX *************/
 /*****************************************************************************/
 
 void Soc_RefreshNewTimelineGbl (void)
@@ -464,7 +464,7 @@ void Soc_RefreshNewTimelineGbl (void)
   }
 
 /*****************************************************************************/
-/************ View old publishings in social timeline via AJAX ***************/
+/************ View old publications in social timeline via AJAX **************/
 /*****************************************************************************/
 
 void Soc_RefreshOldTimelineGbl (void)
@@ -472,7 +472,7 @@ void Soc_RefreshOldTimelineGbl (void)
    /***** Get which users *****/
    Soc_GetParamsWhichUsrs ();
 
-   /***** Show old publishings *****/
+   /***** Show old publications *****/
    Soc_GetAndShowOldTimeline (Soc_TIMELINE_GBL);
   }
 
@@ -480,12 +480,12 @@ void Soc_RefreshOldTimelineUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())	// Existing user
-      /***** If user exists, show old publishings *****/
+      /***** If user exists, show old publications *****/
       Soc_GetAndShowOldTimeline (Soc_TIMELINE_USR);
   }
 
 /*****************************************************************************/
-/**************** Get and show old publishings in timeline *******************/
+/**************** Get and show old publications in timeline ******************/
 /*****************************************************************************/
 
 static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
@@ -559,7 +559,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
 
-   /***** Create temporary table with publishing codes *****/
+   /***** Create temporary table with publication codes *****/
    DB_Query ("can not create temporary table",
 	     "CREATE TEMPORARY TABLE pub_codes "
 	     "(PubCod BIGINT NOT NULL,UNIQUE INDEX(PubCod)) ENGINE=MEMORY");
@@ -650,7 +650,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 	 break;
      }
 
-   /***** Get the publishings in timeline *****/
+   /***** Get the publications in timeline *****/
    /* Initialize range of pubs:
 
             social_pubs
@@ -672,33 +672,33 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
    RangePubsToGet.Bottom = 0;	// -Infinite
    switch (WhatToGetFromTimeline)
      {
-      case Soc_GET_ONLY_NEW_PUBS:	 // Get the publishings (without limit) newer than LastPubCod
+      case Soc_GET_ONLY_NEW_PUBS:	 // Get the publications (without limit) newer than LastPubCod
 	 /* This query is made via AJAX automatically from time to time */
 	 RangePubsToGet.Bottom = Soc_GetPubCodFromSession ("LastPubCod");
 	 break;
-      case Soc_GET_RECENT_TIMELINE:	 // Get some limited recent publishings
+      case Soc_GET_RECENT_TIMELINE:	 // Get some limited recent publications
 	 /* This is the first query to get initial timeline shown
 	    ==> no notes yet in current timeline table */
 	 break;
-      case Soc_GET_ONLY_OLD_PUBS:	 // Get some limited publishings older than FirstPubCod
+      case Soc_GET_ONLY_OLD_PUBS:	 // Get some limited publications older than FirstPubCod
 	 /* This query is made via AJAX
-	    when I click in link to get old publishings */
+	    when I click in link to get old publications */
 	 RangePubsToGet.Top    = Soc_GetPubCodFromSession ("FirstPubCod");
 	 break;
      }
 
    /*
       With the current approach, we select one by one
-      the publishings and notes in a loop. In each iteration,
-      we get the more recent publishing (original, shared or commment)
-      of every set of publishings corresponding to the same note,
+      the publications and notes in a loop. In each iteration,
+      we get the more recent publication (original, shared or commment)
+      of every set of publications corresponding to the same note,
       checking that the note is not already retrieved.
-      After getting a publishing, its note code is stored
+      After getting a publication, its note code is stored
       in order to not get it again.
 
       As an alternative, we tried to get the maximum PubCod,
-      i.e more recent publishing (original, shared or commment),
-      of every set of publishings corresponding to the same note:
+      i.e more recent publication (original, shared or commment),
+      of every set of publications corresponding to the same note:
       "SELECT MAX(PubCod) AS NewestPubCod FROM social_pubs ...
       " GROUP BY NotCod ORDER BY NewestPubCod DESC LIMIT ..."
       but this query is slow (several seconds) with a big table.
@@ -707,7 +707,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 	NumPub < MaxPubsToGet[WhatToGetFromTimeline];
 	NumPub++)
      {
-      /* Create subqueries with range of publishings to get from social_pubs */
+      /* Create subqueries with range of publications to get from social_pubs */
       if (RangePubsToGet.Bottom > 0)
 	 switch (TimelineUsrOrGbl)
 	   {
@@ -756,13 +756,13 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
       else
 	 SubQueryRangeTop[0] = '\0';
 
-      /* Select the most recent publishing from social_pubs */
+      /* Select the most recent publication from social_pubs */
       NumPubs = 0;	// Initialized to avoid warning
       switch (TimelineUsrOrGbl)
 	{
 	 case Soc_TIMELINE_USR:	// Show the timeline of a user
 	    NumPubs =
-	    (unsigned) DB_QuerySELECT (&mysql_res,"can not get publishing",
+	    (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
 				       "SELECT PubCod,NotCod FROM social_pubs"
 				       " WHERE %s%s%s%s"
 				       " ORDER BY PubCod DESC LIMIT 1",
@@ -775,7 +775,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 	      {
 	       case Soc_USRS_FOLLOWED:	// Show the timeline of the users I follow
 		  NumPubs =
-		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publishing",
+		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
 				             "SELECT PubCod,NotCod FROM social_pubs,publishers"
 					     " WHERE %s%s%s%s"
 					     " ORDER BY social_pubs.PubCod DESC LIMIT 1",
@@ -785,7 +785,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 		  break;
 	       case Soc_USRS_ALL:	// Show the timeline of all users
 		  NumPubs =
-		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publishing",
+		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
 				             "SELECT PubCod,NotCod FROM social_pubs"
 					     " WHERE %s%s%s"
 					     " ORDER BY PubCod DESC LIMIT 1",
@@ -801,7 +801,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 
       if (NumPubs == 1)
 	{
-	 /* Get code of social publishing */
+	 /* Get code of social publication */
 	 row = mysql_fetch_row (mysql_res);
 	 PubCod = Str_ConvertStrCodToLongCod (row[0]);
 	}
@@ -816,7 +816,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 
       if (PubCod > 0)
 	{
-	 DB_QueryINSERT ("can not store publishing code",
+	 DB_QueryINSERT ("can not store publication code",
 			 "INSERT INTO pub_codes SET PubCod=%ld",
 			 PubCod);
 	 RangePubsToGet.Top = PubCod;	// Narrow the range for the next iteration
@@ -834,12 +834,12 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 	   }
 	}
       else	// Nothing got ==> abort loop
-         break;	// Last publishing
+         break;	// Last publication
      }
 
-   /***** Update last publishing code into session for next refresh *****/
-   // Do this inmediately after getting the publishings codes...
-   // ...in order to not lose publishings
+   /***** Update last publication code into session for next refresh *****/
+   // Do this inmediately after getting the publications codes...
+   // ...in order to not lose publications
    Soc_UpdateLastPubCodIntoSession ();
 
    /***** Add notes just retrieved to current timeline for this session *****/
@@ -854,7 +854,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
   }
 
 /*****************************************************************************/
-/********* Get last/first social publishing code stored in session ***********/
+/********* Get last/first social publication code stored in session **********/
 /*****************************************************************************/
 // FieldName can be:
 // "LastPubCod"
@@ -867,13 +867,13 @@ static long Soc_GetPubCodFromSession (const char *FieldName)
    MYSQL_ROW row;
    long PubCod;
 
-   /***** Get last publishing code from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get publishing code from session",
+   /***** Get last publication code from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get publication code from session",
 		       "SELECT %s FROM sessions WHERE SessionId='%s'",
 		       FieldName,Gbl.Session.Id) != 1)
       Lay_ShowErrorAndExit (Txt_The_session_has_expired);
 
-   /***** Get last publishing code *****/
+   /***** Get last publication code *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%ld",&PubCod) != 1)
       PubCod = 0;
@@ -885,13 +885,13 @@ static long Soc_GetPubCodFromSession (const char *FieldName)
   }
 
 /*****************************************************************************/
-/*********************** Update last publishing code *************************/
+/*********************** Update last publication code ************************/
 /*****************************************************************************/
 
 static void Soc_UpdateLastPubCodIntoSession (void)
   {
-   /***** Update last publishing code *****/
-   DB_QueryUPDATE ("can not update last publishing code into session",
+   /***** Update last publication code *****/
+   DB_QueryUPDATE ("can not update last publication code into session",
 		   "UPDATE sessions"
 	           " SET LastPubCod="
 	           "(SELECT IFNULL(MAX(PubCod),0) FROM social_pubs)"
@@ -900,13 +900,13 @@ static void Soc_UpdateLastPubCodIntoSession (void)
   }
 
 /*****************************************************************************/
-/*********************** Update first publishing code ************************/
+/*********************** Update first publication code ***********************/
 /*****************************************************************************/
 
 static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod)
   {
-   /***** Update last publishing code *****/
-   DB_QueryUPDATE ("can not update first publishing code into session",
+   /***** Update last publication code *****/
+   DB_QueryUPDATE ("can not update first publication code into session",
 		   "UPDATE sessions SET FirstPubCod=%ld WHERE SessionId='%s'",
 		   FirstPubCod,Gbl.Session.Id);
   }
@@ -962,12 +962,12 @@ static void Soc_ShowTimeline (char *Query,
    MYSQL_ROW row;
    unsigned long NumPubsGot;
    unsigned long NumPub;
-   struct SocialPublishing SocPub;
+   struct SocialPublication SocPub;
    struct SocialNote SocNot;
    bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
    bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
-   /***** Get publishings from database *****/
+   /***** Get publications from database *****/
    NumPubsGot = DB_QuerySELECT (&mysql_res,"can not get timeline",
 				"%s",
 				Query);
@@ -984,29 +984,29 @@ static void Soc_ShowTimeline (char *Query,
    if (GlobalTimeline || ItsMe)
       Soc_PutFormToWriteNewPost ();
 
-   /***** New publishings refreshed dynamically via AJAX *****/
+   /***** New publications refreshed dynamically via AJAX *****/
    if (GlobalTimeline)
      {
-      /* Link to view new publishings via AJAX */
-      Soc_PutLinkToViewNewPublishings ();
+      /* Link to view new publications via AJAX */
+      Soc_PutLinkToViewNewPublications ();
 
-      /* Hidden list where insert just received (not visible) publishings via AJAX */
+      /* Hidden list where insert just received (not visible) publications via AJAX */
       fprintf (Gbl.F.Out,"<ul id=\"just_now_timeline_list\" class=\"TL_LIST\"></ul>");
 
-      /* Hidden list where insert new (not visible) publishings via AJAX */
+      /* Hidden list where insert new (not visible) publications via AJAX */
       fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\" class=\"TL_LIST\"></ul>");
      }
 
-   /***** List recent publishings in timeline *****/
+   /***** List recent publications in timeline *****/
    fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"TL_LIST\">");
 
    for (NumPub = 0, SocPub.PubCod = 0;
 	NumPub < NumPubsGot;
 	NumPub++)
      {
-      /* Get data of social publishing */
+      /* Get data of social publication */
       row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
+      Soc_GetDataOfSocialPublicationFromRow (row,&SocPub);
 
       /* Get data of social note */
       SocNot.NotCod = SocPub.NotCod;
@@ -1023,15 +1023,15 @@ static void Soc_ShowTimeline (char *Query,
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Store first publishing code into session *****/
+   /***** Store first publication code into session *****/
    Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
 
    if (NumPubsGot == Soc_MAX_REC_PUBS_TO_GET_AND_SHOW)
      {
-      /***** Link to view old publishings via AJAX *****/
-      Soc_PutLinkToViewOldPublishings ();
+      /***** Link to view old publications via AJAX *****/
+      Soc_PutLinkToViewOldPublications ();
 
-      /***** Hidden list where insert old publishings via AJAX *****/
+      /***** Hidden list where insert old publications via AJAX *****/
       fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\" class=\"TL_LIST\"></ul>");
      }
 
@@ -1256,9 +1256,9 @@ static void Soc_ShowWarningYouDontFollowAnyUser (void)
   }
 
 /*****************************************************************************/
-/********** Show new social activity (new publishings in timeline) ***********/
+/********** Show new social activity (new publications in timeline) **********/
 /*****************************************************************************/
-// The publishings are inserted as list elements of a hidden list
+// The publications are inserted as list elements of a hidden list
 
 static void Soc_InsertNewPubsInTimeline (char *Query)
   {
@@ -1266,22 +1266,22 @@ static void Soc_InsertNewPubsInTimeline (char *Query)
    MYSQL_ROW row;
    unsigned long NumPubsGot;
    unsigned long NumPub;
-   struct SocialPublishing SocPub;
+   struct SocialPublication SocPub;
    struct SocialNote SocNot;
 
-   /***** Get new publishings timeline from database *****/
+   /***** Get new publications timeline from database *****/
    NumPubsGot = DB_QuerySELECT (&mysql_res,"can not get timeline",
 				"%s",
 				Query);
 
-   /***** List new publishings timeline *****/
+   /***** List new publications timeline *****/
    for (NumPub = 0;
 	NumPub < NumPubsGot;
 	NumPub++)
      {
-      /* Get data of social publishing */
+      /* Get data of social publication */
       row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
+      Soc_GetDataOfSocialPublicationFromRow (row,&SocPub);
 
       /* Get data of social note */
       SocNot.NotCod = SocPub.NotCod;
@@ -1298,9 +1298,9 @@ static void Soc_InsertNewPubsInTimeline (char *Query)
   }
 
 /*****************************************************************************/
-/********** Show old social activity (old publishings in timeline) ***********/
+/********** Show old social activity (old publications in timeline) **********/
 /*****************************************************************************/
-// The publishings are inserted as list elements of a hidden list
+// The publications are inserted as list elements of a hidden list
 
 static void Soc_ShowOldPubsInTimeline (char *Query)
   {
@@ -1308,22 +1308,22 @@ static void Soc_ShowOldPubsInTimeline (char *Query)
    MYSQL_ROW row;
    unsigned long NumPubsGot;
    unsigned long NumPub;
-   struct SocialPublishing SocPub;
+   struct SocialPublication SocPub;
    struct SocialNote SocNot;
 
-   /***** Get old publishings timeline from database *****/
+   /***** Get old publications timeline from database *****/
    NumPubsGot = DB_QuerySELECT (&mysql_res,"can not get timeline",
 				"%s",
 				Query);
 
-   /***** List old publishings in timeline *****/
+   /***** List old publications in timeline *****/
    for (NumPub = 0, SocPub.PubCod = 0;
 	NumPub < NumPubsGot;
 	NumPub++)
      {
-      /* Get data of social publishing */
+      /* Get data of social publication */
       row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
+      Soc_GetDataOfSocialPublicationFromRow (row,&SocPub);
 
       /* Get data of social note */
       SocNot.NotCod = SocPub.NotCod;
@@ -1338,20 +1338,20 @@ static void Soc_ShowOldPubsInTimeline (char *Query)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Store first publishing code into session *****/
+   /***** Store first publication code into session *****/
    Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
   }
 
 /*****************************************************************************/
-/***************** Put link to view new publishings in timeline **************/
+/***************** Put link to view new publications in timeline *************/
 /*****************************************************************************/
 
-static void Soc_PutLinkToViewNewPublishings (void)
+static void Soc_PutLinkToViewNewPublications (void)
   {
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_See_new_activity;
 
-   /***** Link to view (show hidden) new publishings *****/
+   /***** Link to view (show hidden) new publications *****/
    // div is hidden. When new posts arrive to the client via AJAX, div is shown
    fprintf (Gbl.F.Out,"<div id=\"view_new_posts_container\""
 	              " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\""
@@ -1366,15 +1366,15 @@ static void Soc_PutLinkToViewNewPublishings (void)
   }
 
 /*****************************************************************************/
-/***************** Put link to view old publishings in timeline **************/
+/***************** Put link to view old publications in timeline *************/
 /*****************************************************************************/
 
-static void Soc_PutLinkToViewOldPublishings (void)
+static void Soc_PutLinkToViewOldPublications (void)
   {
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_See_more;
 
-   /***** Animated link to view old publishings *****/
+   /***** Animated link to view old publications *****/
    fprintf (Gbl.F.Out,"<div id=\"view_old_posts_container\""
 	              " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\">"
                       "<a href=\"\" class=\"%s\" onclick=\""
@@ -1629,10 +1629,10 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	                    " class=\"TL_ICO_FAV\">",
 	          Gbl.UniqueNameEncrypted,NumDiv);
 	 if (IAmAFaverOfThisSocNot)	// I have favourited this social note
-	    /* Put icon to unfav this publishing and list of users */
+	    /* Put icon to unfav this publication and list of users */
 	    Soc_PutFormToUnfavSocialNote (SocNot);
 	 else				//  I am not a faver of this social note
-	    /* Put icon to fav this publishing and list of users */
+	    /* Put icon to fav this publication and list of users */
 	    Soc_PutFormToFavSocialNote (SocNot);
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -1652,17 +1652,17 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 			    " class=\"TL_ICO_SHA\">",
 		  Gbl.UniqueNameEncrypted,NumDiv);
 	 if (IAmASharerOfThisSocNot)	// I am a sharer of this social note
-	    /* Put icon to unshare this publishing and list of users */
+	    /* Put icon to unshare this publication and list of users */
 	    Soc_PutFormToUnshareSocialNote (SocNot);
 	 else				// I am not a sharer of this social note
-	    /* Put icon to share this publishing and list of users */
+	    /* Put icon to share this publication and list of users */
 	    Soc_PutFormToShareSocialNote (SocNot);
 	 fprintf (Gbl.F.Out,"</div>");
         }
 
       /* Put icon to remove this social note */
       if (IAmTheAuthor)
-	 Soc_PutFormToRemoveSocialPublishing (SocNot->NotCod);
+	 Soc_PutFormToRemoveSocialPublication (SocNot->NotCod);
 
       /* End of icon bar */
       fprintf (Gbl.F.Out,"</div>");
@@ -2084,7 +2084,7 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
 /*****************************************************************************/
 // Return the code of the new note just created
 
-void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct SocialPublishing *SocPub)
+void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct SocialPublication *SocPub)
   {
    long HieCod;	// Hierarchy code (institution/centre/degree/course)
 
@@ -2281,11 +2281,11 @@ void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path)
   }
 
 /*****************************************************************************/
-/***************** Put contextual link to write a new post *******************/
+/********************** Publish social note in timeline **********************/
 /*****************************************************************************/
-// SocPub->PubCod is set
+// SocPub->PubCod is set by the function
 
-static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
+static void Soc_PublishSocialNoteInTimeline (struct SocialPublication *SocPub)
   {
    /***** Publish social note in timeline *****/
    SocPub->PubCod =
@@ -2297,10 +2297,13 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub)
 				SocPub->NotCod,
 				SocPub->PublisherCod,
 				(unsigned) SocPub->PubType);
+
+   /***** Increment number of social publications in user's figures *****/
+   Prf_IncrementNumSocPubUsr (SocPub->PublisherCod);
   }
 
 /*****************************************************************************/
-/****************** Form to write a new social publishing ********************/
+/****************** Form to write a new social publication *******************/
 /*****************************************************************************/
 
 static void Soc_PutFormToWriteNewPost (void)
@@ -2409,7 +2412,7 @@ void Soc_ReceiveSocialPostGbl (void)
    /***** Receive and store social post *****/
    NotCod = Soc_ReceiveSocialPost ();
 
-   /***** Write updated timeline after publishing (global) *****/
+   /***** Write updated timeline after publication (global) *****/
    Soc_ShowTimelineGblHighlightingNot (NotCod);
   }
 
@@ -2429,7 +2432,7 @@ void Soc_ReceiveSocialPostUsr (void)
    /***** Receive and store social post *****/
    NotCod = Soc_ReceiveSocialPost ();
 
-   /***** Write updated timeline after publishing (user) *****/
+   /***** Write updated timeline after publication (user) *****/
    Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
@@ -2442,7 +2445,7 @@ static long Soc_ReceiveSocialPost (void)
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Media Media;
    long PstCod;
-   struct SocialPublishing SocPub;
+   struct SocialPublication SocPub;
 
    /***** Get the content of the new post *****/
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
@@ -2540,7 +2543,7 @@ static void Soc_PutIconCommentDisabled (void)
   }
 
 /*****************************************************************************/
-/******************* Form to comment a social publishing *********************/
+/******************* Form to comment a social oublication ********************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
@@ -2711,7 +2714,7 @@ static void Soc_WriteOneSocialCommentInList (MYSQL_RES *mysql_res)
   }
 
 /*****************************************************************************/
-/******* Put an icon to toggle on/off comments in a social publishing ********/
+/******* Put an icon to toggle on/off comments in a social publication *******/
 /*****************************************************************************/
 
 static void Soc_PutIconToToggleComments (const char *UniqueId,
@@ -2829,10 +2832,10 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
 	                    " class=\"TL_ICO_FAV\">",
 	          Gbl.UniqueNameEncrypted,NumDiv);
 	 if (IAmAFaverOfThisSocCom)	// I have favourited this social comment
-	    /* Put icon to unfav this publishing and list of users */
+	    /* Put icon to unfav this publication and list of users */
 	    Soc_PutFormToUnfavSocialComment (SocCom);
 	 else				// I am not a favouriter
-	    /* Put icon to fav this publishing and list of users */
+	    /* Put icon to fav this publication and list of users */
 	    Soc_PutFormToFavSocialComment (SocCom);
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -2899,7 +2902,7 @@ static void Soc_PutFormToRemoveComment (long PubCod)
   {
    extern const char *Txt_Remove;
 
-   /***** Form to remove social publishing *****/
+   /***** Form to remove social publication *****/
    Soc_FormStart (ActReqRemSocComGbl,ActReqRemSocComUsr);
    Soc_PutHiddenParamPubCod (PubCod);
    Ico_PutDivIconLink ("TL_ICO_REM",
@@ -3066,15 +3069,15 @@ static void Soc_PutFormToUnfavSocialComment (struct SocialComment *SocCom)
   }
 
 /*****************************************************************************/
-/******************** Form to remove social publishing ***********************/
+/******************** Form to remove social publication **********************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToRemoveSocialPublishing (long NotCod)
+static void Soc_PutFormToRemoveSocialPublication (long NotCod)
   {
    extern const char *Txt_Remove;
 
-   /***** Form to remove social publishing *****/
+   /***** Form to remove social publication *****/
    Soc_FormStart (ActReqRemSocPubGbl,ActReqRemSocPubUsr);
    Soc_PutHiddenParamNotCod (NotCod);
    Ico_PutDivIconLink ("TL_ICO_REM",
@@ -3092,7 +3095,7 @@ static void Soc_PutHiddenParamNotCod (long NotCod)
   }
 
 /*****************************************************************************/
-/*********** Put parameter with the code of a social publishing **************/
+/*********** Put parameter with the code of a social publication *************/
 /*****************************************************************************/
 
 void Soc_PutHiddenParamPubCod (long PubCod)
@@ -3111,7 +3114,7 @@ static long Soc_GetParamNotCod (void)
   }
 
 /*****************************************************************************/
-/************ Get parameter with the code of a social publishing *************/
+/************ Get parameter with the code of a social publication ************/
 /*****************************************************************************/
 
 static long Soc_GetParamPubCod (void)
@@ -3164,7 +3167,7 @@ static long Soc_ReceiveComment (void)
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Media Media;
    struct SocialNote SocNot;
-   struct SocialPublishing SocPub;
+   struct SocialPublication SocPub;
 
    /***** Get data of social note *****/
    SocNot.NotCod = Soc_GetParamNotCod ();
@@ -3195,7 +3198,7 @@ static long Soc_ReceiveComment (void)
 	    Med_MoveMediaToDefinitiveDir (&Media);
 
 	 /***** Publish *****/
-	 /* Insert into publishings */
+	 /* Insert into publications */
 	 SocPub.NotCod       = SocNot.NotCod;
 	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 	 SocPub.PubType      = Soc_PUB_COMMENT_TO_NOTE;
@@ -3277,7 +3280,7 @@ void Soc_ShareSocialNoteUsr (void)
 static void Soc_ShareSocialNote (struct SocialNote *SocNot)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
-   struct SocialPublishing SocPub;
+   struct SocialPublication SocPub;
    bool ItsMe;
    long OriginalPubCod;
 
@@ -3545,8 +3548,8 @@ static void Soc_UnshareSocialNote (struct SocialNote *SocNot)
 	 if (Soc_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
-	    /***** Delete social publishing from database *****/
-	    DB_QueryDELETE ("can not remove a social publishing",
+	    /***** Delete social publication from database *****/
+	    DB_QueryDELETE ("can not remove a social publication",
 			    "DELETE FROM social_pubs"
 	                    " WHERE NotCod=%ld"
 	                    " AND PublisherCod=%ld"
@@ -3835,7 +3838,7 @@ void Soc_RemoveSocialNoteUsr (void)
 static void Soc_RemoveSocialNote (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
-   extern const char *Txt_Post_removed;
+   extern const char *Txt_FORUM_Post_removed;
    struct SocialNote SocNot;
    bool ItsMe;
 
@@ -3856,7 +3859,7 @@ static void Soc_RemoveSocialNote (void)
 	 Soc_RemoveASocialNoteFromDB (&SocNot);
 
 	 /***** Message of success *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_Post_removed);
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_FORUM_Post_removed);
 	}
      }
    else
@@ -3897,7 +3900,7 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
    unsigned long NumComments;
    unsigned long NumCom;
 
-   /***** Mark possible notifications on the publishings
+   /***** Mark possible notifications on the publications
           of this social note as removed *****/
    /* Mark notifications of the original social note as removed */
    PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
@@ -3961,8 +3964,8 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
 	           " AND social_pubs.PubCod=social_comments.PubCod",
 		   SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
 
-   /***** Remove all the social publishings of this note *****/
-   DB_QueryDELETE ("can not remove a social publishing",
+   /***** Remove all the social publications of this note *****/
+   DB_QueryDELETE ("can not remove a social publication",
 		   "DELETE FROM social_pubs WHERE NotCod=%ld",
 		   SocNot->NotCod);
 
@@ -3985,10 +3988,10 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
   }
 
 /*****************************************************************************/
-/******************* Get code of social note of a publishing *****************/
+/******************* Get code of social note of a publication ****************/
 /*****************************************************************************/
 
-static long Soc_GetNotCodOfSocialPublishing (long PubCod)
+static long Soc_GetNotCodOfSocialPublication (long PubCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4011,7 +4014,7 @@ static long Soc_GetNotCodOfSocialPublishing (long PubCod)
   }
 
 /*****************************************************************************/
-/************ Get code of social publishing of the original note *************/
+/************ Get code of social publication of the original note ************/
 /*****************************************************************************/
 
 static long Soc_GetPubCodOfOriginalSocialNote (long NotCod)
@@ -4020,13 +4023,13 @@ static long Soc_GetPubCodOfOriginalSocialNote (long NotCod)
    MYSQL_ROW row;
    long OriginalPubCod = -1L;
 
-   /***** Get code of social publishing of the original note *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get code of social publishing",
+   /***** Get code of social publication of the original note *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get code of social publication",
 		       "SELECT PubCod FROM social_pubs"
 		       " WHERE NotCod=%ld AND PubType=%u",
 		       NotCod,(unsigned) Soc_PUB_ORIGINAL_NOTE) == 1)   // Result should have a unique row
      {
-      /* Get code of social publishing (row[0]) */
+      /* Get code of social publication (row[0]) */
       row = mysql_fetch_row (mysql_res);
       OriginalPubCod = Str_ConvertStrCodToLongCod (row[0]);
      }
@@ -4101,7 +4104,7 @@ static void Soc_RequestRemovalSocialComment (void)
 				 true);
 
 	 /* End alert */
-	 Gbl.Social.PubCod = SocCom.PubCod;	// Social publishing to be removed
+	 Gbl.Social.PubCod = SocCom.PubCod;	// Social publication to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",NULL,
 	                             Soc_PutParamsRemoveSocialCommment,
@@ -4341,16 +4344,16 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 	           " WHERE UsrCod=%ld AND NoteType=%u)",
 		   UsrCod,(unsigned) Soc_NOTE_SOCIAL_POST);
 
-   /***** Remove all the social publishings of any user authored by the user *****/
-   DB_QueryDELETE ("can not remove social publishings",
+   /***** Remove all the social publications of any user authored by the user *****/
+   DB_QueryDELETE ("can not remove social publications",
 		   "DELETE FROM social_pubs"
                    " USING social_notes,social_pubs"
 	           " WHERE social_notes.UsrCod=%ld"
                    " AND social_notes.NotCod=social_pubs.NotCod",
 		   UsrCod);
 
-   /***** Remove all the social publishings of the user *****/
-   DB_QueryDELETE ("can not remove social publishings",
+   /***** Remove all the social publications of the user *****/
+   DB_QueryDELETE ("can not remove social publications",
 		   "DELETE FROM social_pubs WHERE PublisherCod=%ld",
 		   UsrCod);
 
@@ -4701,10 +4704,10 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
   }
 
 /*****************************************************************************/
-/************** Get data of social publishing using its code *****************/
+/************** Get data of social publication using its code ****************/
 /*****************************************************************************/
 
-static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPublishing *SocPub)
+static void Soc_GetDataOfSocialPublicationFromRow (MYSQL_ROW row,struct SocialPublication *SocPub)
   {
    const Soc_TopMessage_t TopMessages[Soc_NUM_PUB_TYPES] =
      {
@@ -4714,7 +4717,7 @@ static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPub
       Soc_TOP_MESSAGE_COMMENTED,	// Soc_PUB_COMMENT_TO_NOTE
      };
 
-   /***** Get code of social publishing (row[0]) *****/
+   /***** Get code of social publication (row[0]) *****/
    SocPub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get social note code (row[1]) *****/
@@ -4723,7 +4726,7 @@ static void Soc_GetDataOfSocialPublishingFromRow (MYSQL_ROW row,struct SocialPub
    /***** Get publisher's code (row[2]) *****/
    SocPub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
 
-   /***** Get type of publishing (row[3]) *****/
+   /***** Get type of publication (row[3]) *****/
    SocPub->PubType      = Soc_GetPubTypeFromStr ((const char *) row[3]);
    SocPub->TopMessage   = TopMessages[SocPub->PubType];
 
@@ -4766,7 +4769,7 @@ static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc
   }
 
 /*****************************************************************************/
-/**** Get social publishing type from string number coming from database *****/
+/**** Get social publication type from string number coming from database ****/
 /*****************************************************************************/
 
 static Soc_PubType_t Soc_GetPubTypeFromStr (const char *Str)
@@ -4902,16 +4905,16 @@ static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
   }
 
 /*****************************************************************************/
-/******************* Get notification of a new social post *******************/
+/*************** Get notification of a new social publication ****************/
 /*****************************************************************************/
 
-void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                   char **ContentStr,
-                                   long PubCod,bool GetContent)
+void Soc_GetNotifSocialPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                                    char **ContentStr,
+                                    long PubCod,bool GetContent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct SocialPublishing SocPub;
+   struct SocialPublication SocPub;
    struct SocialNote SocNot;
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    size_t Length;
@@ -4923,7 +4926,7 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    Content[0] = '\0';
 
    /***** Get summary and content from social post from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of social publishing",
+   if (DB_QuerySELECT (&mysql_res,"can not get data of social publication",
 		       "SELECT PubCod,"				// row[0]
 			      "NotCod,"				// row[1]
 			      "PublisherCod,"			// row[2]
@@ -4932,9 +4935,9 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		       " FROM social_pubs WHERE PubCod=%ld",
 		       PubCod) == 1)   // Result should have a unique row
      {
-      /* Get data of social publishing */
+      /* Get data of social publication */
       row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialPublishingFromRow (row,&SocPub);
+      Soc_GetDataOfSocialPublicationFromRow (row,&SocPub);
      }
 
    /***** Free structure that stores the query result *****/
@@ -5038,7 +5041,7 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
   }
 
 /*****************************************************************************/
-/*** Create a notification about mention for any nickname in a publishing ****/
+/*** Create a notification about mention for any nickname in a publication ***/
 /*****************************************************************************/
 /*
  Example: "The user @rms says..."
@@ -5125,4 +5128,17 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
+  }
+
+/*****************************************************************************/
+/*************** Get number of social publications from a user ***************/
+/*****************************************************************************/
+
+unsigned long Soc_GetNumPubsUsr (long UsrCod)
+  {
+   /***** Get number of posts from a user from database *****/
+   return DB_QueryCOUNT ("can not number of social publications from a user",
+			 "SELECT COUNT(*) FROM social_pubs"
+			 " WHERE PublisherCod=%ld",
+			 UsrCod);
   }

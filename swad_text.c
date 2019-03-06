@@ -12701,6 +12701,237 @@ const char *Txt_Forum_posts =
 	"Posts de f&oacute;rum";
 #endif
 
+const char *Txt_FORUM_post =
+#if   L==1	// ca
+	"comentari";
+#elif L==2	// de
+	"Post";
+#elif L==3	// en
+	"post";
+#elif L==4	// es
+	"comentario";
+#elif L==5	// fr
+	"post";
+#elif L==6	// gn
+	"marandu";
+#elif L==7	// it
+	"post";
+#elif L==8	// pl
+	"post";
+#elif L==9	// pt
+	"post";
+#endif
+
+const char *Txt_FORUM_posts =
+#if   L==1	// ca
+	"comentaris";
+#elif L==2	// de
+	"Nachrichten";
+#elif L==3	// en
+	"posts";
+#elif L==4	// es
+	"comentarios";
+#elif L==5	// fr
+	"posts";
+#elif L==6	// gn
+	"marandu";
+#elif L==7	// it
+	"post";
+#elif L==8	// pl
+	"posty";
+#elif L==9	// pt
+	"posts";
+#endif
+
+const char *Txt_FORUM_Post_X_allowed =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Comentario %u permitido.";	// Necessita traduccio
+#elif L==2	// de
+	"Post %u allowed.";		// Need Übersetzung
+#elif L==3	// en
+	"Post %u allowed.";
+#elif L==4	// es
+	"Comentario %u permitido.";
+#elif L==5	// fr
+	"Post %u allowed.";		// Besoin de traduction
+#elif L==6	// gn
+	"Comentario %u permitido.";	// Okoteve traducción
+#elif L==7	// it
+	"Post %u autorizzato.";
+#elif L==8	// pl
+	"Post %u dozwolone.";
+#elif L==9	// pt
+	"Post %u permitido.";
+#endif
+
+const char *Txt_FORUM_Post_X_allowed_Click_to_ban_it =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Comentario %u permitido. Pulse para censurarlo.";	// Necessita traduccio
+#elif L==2	// de
+	"Post %u allowed. Click to ban it.";			// Need Übersetzung
+#elif L==3	// en
+	"Post %u allowed. Click to ban it.";
+#elif L==4	// es
+	"Comentario %u permitido. Pulse para censurarlo.";
+#elif L==5	// fr
+	"Post %u allowed. Click to ban it.";			// Besoin de traduction
+#elif L==6	// gn
+	"Comentario %u permitido. Pulse para censurarlo.";	// Okoteve traducción
+#elif L==7	// it
+	"Post %u autorizzato. Clicca per censurarlo.";
+#elif L==8	// pl
+	"Post% u dozwolone. Kliknij, aby to zakazac.";
+#elif L==9	// pt
+	"Post %u permitido. Clique para censur&aacute;-lo.";
+#endif
+
+const char *Txt_FORUM_Post_and_thread_removed =
+#if   L==1	// ca
+	"Comentario y discusi&oacute;n eliminados.";	// Necessita traduccio
+#elif L==2	// de
+	"Nachricht und Faden entfernt.";
+#elif L==3	// en
+	"Post and thread removed.";
+#elif L==4	// es
+	"Comentario y discusi&oacute;n eliminados.";
+#elif L==5	// fr
+	"Post and thread removed.";			// Besoin de traduction
+#elif L==6	// gn
+	"Comentario y discusi&oacute;n eliminados.";	// Okoteve traducción
+#elif L==7	// it
+	"Post e discussione rimossi.";
+#elif L==8	// pl
+	"Post watku usuniety.";
+#elif L==9	// pt
+	"Post e discuss&atilde;o removidos.";
+#endif
+
+const char *Txt_FORUM_Post_banned =
+#if   L==1	// ca
+	"Comentario no permitido";	// Necessita traduccio
+#elif L==2	// de
+	"Post banned.";			// Need Übersetzung
+#elif L==3	// en
+	"Post banned.";
+#elif L==4	// es
+	"Comentario no permitido";
+#elif L==5	// fr
+	"Post banned.";			// Besoin de traduction
+#elif L==6	// gn
+	"Comentario no permitido";	// Okoteve traducción
+#elif L==7	// it
+	"Post censurato.";
+#elif L==8	// pl
+	"Post zakazany.";
+#elif L==9	// pt
+	"Post n&atilde;o permitido.";
+#endif
+
+const char *Txt_FORUM_Post_X_banned =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Comentario %u no permitido";	// Necessita traduccio
+#elif L==2	// de
+	"Post %u banned.";		// Need Übersetzung
+#elif L==3	// en
+	"Post %u banned.";
+#elif L==4	// es
+	"Comentario %u no permitido";
+#elif L==5	// fr
+	"Post %u banned.";		// Besoin de traduction
+#elif L==6	// gn
+	"Comentario %u no permitido";	// Okoteve traducción
+#elif L==7	// it
+	"Post %u censurato.";
+#elif L==8	// pl
+	"Post %u zakazany.";
+#elif L==9	// pt
+	"Post %u n&atilde;o permitido.";
+#endif
+
+const char *Txt_FORUM_Post_X_banned_Click_to_unban_it =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Comentario %u no permitido. Pulse para permitirlo.";	// Necessita traduccio
+#elif L==2	// de
+	"Post %u banned. Click to unban it.";			// Need Übersetzung
+#elif L==3	// en
+	"Post %u banned. Click to unban it.";
+#elif L==4	// es
+	"Comentario %u no permitido. Pulse para permitirlo.";
+#elif L==5	// fr
+	"Post %u banned. Click to unban it.";			// Besoin de traduction
+#elif L==6	// gn
+	"Comentario %u no permitido. Pulse para permitirlo.";	// Okoteve traducción
+#elif L==7	// it
+	"Post %u censurato. Clicca per autorizzarlo.";
+#elif L==8	// pl
+	"Post %u zakazany.Kliknij, aby to odbanowac.";
+#elif L==9	// pt
+	"Post %u n&atilde;o permitido. Clique para permiti-lo.";
+#endif
+
+const char *Txt_FORUM_Post_sent =
+#if   L==1	// ca
+	"Comentario enviado.";	// Necessita traduccio
+#elif L==2	// de
+	"Post sent.";		// Need Übersetzung
+#elif L==3	// en
+	"Post sent.";
+#elif L==4	// es
+	"Comentario enviado.";
+#elif L==5	// fr
+	"Post sent.";		// Besoin de traduction
+#elif L==6	// gn
+	"Comentario enviado.";	// Okoteve traducción
+#elif L==7	// it
+	"Post inviato.";
+#elif L==8	// pl
+	"Post wyslany.";
+#elif L==9	// pt
+	"Post enviado.";
+#endif
+
+const char *Txt_FORUM_Post_removed =
+#if   L==1	// ca
+	"Comentari eliminat.";
+#elif L==2	// de
+	"Nachricht entfernt.";
+#elif L==3	// en
+	"Post removed.";
+#elif L==4	// es
+	"Comentario eliminado.";
+#elif L==5	// fr
+	"Message supprim&eacute;.";
+#elif L==6	// gn
+	"Comentario eliminado.";		// Okoteve traducción
+#elif L==7	// it
+	"Post rimosso.";
+#elif L==8	// pl
+	"Post usuniety.";
+#elif L==9	// pt
+	"Post removido.";
+#endif
+
+const char *Txt_FORUM_Post_unbanned =
+#if   L==1	// ca
+	"Comentario permitido";		// Necessita traduccio
+#elif L==2	// de
+	"Post unbanned.";		// Need Übersetzung
+#elif L==3	// en
+	"Post unbanned";
+#elif L==4	// es
+	"Comentario permitido";
+#elif L==5	// fr
+	"Post unbanned.";		// Besoin de traduction
+#elif L==6	// gn
+	"Comentario permitido";		// Okoteve traducción
+#elif L==7	// it
+	"Post autorizzato.";
+#elif L==8	// pl
+	"Post odbanowany";
+#elif L==9	// pt
+	"Post permitido.";
+#endif
+
 const char *Txt_Forum_threads =
 #if   L==1	// ca
 	"Discusiones de foro";	// Necessita traduccio
@@ -28994,237 +29225,6 @@ const char *Txt_Post =	// Publish (verb)
 	"Publicar";
 #endif
 
-const char *Txt_post =
-#if   L==1	// ca
-	"comentari";
-#elif L==2	// de
-	"Post";
-#elif L==3	// en
-	"post";
-#elif L==4	// es
-	"comentario";
-#elif L==5	// fr
-	"post";
-#elif L==6	// gn
-	"marandu";
-#elif L==7	// it
-	"post";
-#elif L==8	// pl
-	"post";
-#elif L==9	// pt
-	"post";
-#endif
-
-const char *Txt_posts =
-#if   L==1	// ca
-	"comentaris";
-#elif L==2	// de
-	"Nachrichten";
-#elif L==3	// en
-	"posts";
-#elif L==4	// es
-	"comentarios";
-#elif L==5	// fr
-	"posts";
-#elif L==6	// gn
-	"marandu";
-#elif L==7	// it
-	"post";
-#elif L==8	// pl
-	"posty";
-#elif L==9	// pt
-	"posts";
-#endif
-
-const char *Txt_Post_X_allowed =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Comentario %u permitido.";	// Necessita traduccio
-#elif L==2	// de
-	"Post %u allowed.";		// Need Übersetzung
-#elif L==3	// en
-	"Post %u allowed.";
-#elif L==4	// es
-	"Comentario %u permitido.";
-#elif L==5	// fr
-	"Post %u allowed.";		// Besoin de traduction
-#elif L==6	// gn
-	"Comentario %u permitido.";	// Okoteve traducción
-#elif L==7	// it
-	"Post %u autorizzato.";
-#elif L==8	// pl
-	"Post %u dozwolone.";
-#elif L==9	// pt
-	"Post %u permitido.";
-#endif
-
-const char *Txt_Post_X_allowed_Click_to_ban_it =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Comentario %u permitido. Pulse para censurarlo.";	// Necessita traduccio
-#elif L==2	// de
-	"Post %u allowed. Click to ban it.";			// Need Übersetzung
-#elif L==3	// en
-	"Post %u allowed. Click to ban it.";
-#elif L==4	// es
-	"Comentario %u permitido. Pulse para censurarlo.";
-#elif L==5	// fr
-	"Post %u allowed. Click to ban it.";			// Besoin de traduction
-#elif L==6	// gn
-	"Comentario %u permitido. Pulse para censurarlo.";	// Okoteve traducción
-#elif L==7	// it
-	"Post %u autorizzato. Clicca per censurarlo.";
-#elif L==8	// pl
-	"Post% u dozwolone. Kliknij, aby to zakazac.";
-#elif L==9	// pt
-	"Post %u permitido. Clique para censur&aacute;-lo.";
-#endif
-
-const char *Txt_Post_and_thread_removed =
-#if   L==1	// ca
-	"Comentario y discusi&oacute;n eliminados.";	// Necessita traduccio
-#elif L==2	// de
-	"Nachricht und Faden entfernt.";
-#elif L==3	// en
-	"Post and thread removed.";
-#elif L==4	// es
-	"Comentario y discusi&oacute;n eliminados.";
-#elif L==5	// fr
-	"Post and thread removed.";			// Besoin de traduction
-#elif L==6	// gn
-	"Comentario y discusi&oacute;n eliminados.";	// Okoteve traducción
-#elif L==7	// it
-	"Post e discussione rimossi.";
-#elif L==8	// pl
-	"Post watku usuniety.";
-#elif L==9	// pt
-	"Post e discuss&atilde;o removidos.";
-#endif
-
-const char *Txt_Post_banned =
-#if   L==1	// ca
-	"Comentario no permitido";	// Necessita traduccio
-#elif L==2	// de
-	"Post banned.";			// Need Übersetzung
-#elif L==3	// en
-	"Post banned.";
-#elif L==4	// es
-	"Comentario no permitido";
-#elif L==5	// fr
-	"Post banned.";			// Besoin de traduction
-#elif L==6	// gn
-	"Comentario no permitido";	// Okoteve traducción
-#elif L==7	// it
-	"Post censurato.";
-#elif L==8	// pl
-	"Post zakazany.";
-#elif L==9	// pt
-	"Post n&atilde;o permitido.";
-#endif
-
-const char *Txt_Post_X_banned =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Comentario %u no permitido";	// Necessita traduccio
-#elif L==2	// de
-	"Post %u banned.";		// Need Übersetzung
-#elif L==3	// en
-	"Post %u banned.";
-#elif L==4	// es
-	"Comentario %u no permitido";
-#elif L==5	// fr
-	"Post %u banned.";		// Besoin de traduction
-#elif L==6	// gn
-	"Comentario %u no permitido";	// Okoteve traducción
-#elif L==7	// it
-	"Post %u censurato.";
-#elif L==8	// pl
-	"Post %u zakazany.";
-#elif L==9	// pt
-	"Post %u n&atilde;o permitido.";
-#endif
-
-const char *Txt_Post_X_banned_Click_to_unban_it =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Comentario %u no permitido. Pulse para permitirlo.";	// Necessita traduccio
-#elif L==2	// de
-	"Post %u banned. Click to unban it.";			// Need Übersetzung
-#elif L==3	// en
-	"Post %u banned. Click to unban it.";
-#elif L==4	// es
-	"Comentario %u no permitido. Pulse para permitirlo.";
-#elif L==5	// fr
-	"Post %u banned. Click to unban it.";			// Besoin de traduction
-#elif L==6	// gn
-	"Comentario %u no permitido. Pulse para permitirlo.";	// Okoteve traducción
-#elif L==7	// it
-	"Post %u censurato. Clicca per autorizzarlo.";
-#elif L==8	// pl
-	"Post %u zakazany.Kliknij, aby to odbanowac.";
-#elif L==9	// pt
-	"Post %u n&atilde;o permitido. Clique para permiti-lo.";
-#endif
-
-const char *Txt_Post_sent =
-#if   L==1	// ca
-	"Comentario enviado.";	// Necessita traduccio
-#elif L==2	// de
-	"Post sent.";		// Need Übersetzung
-#elif L==3	// en
-	"Post sent.";
-#elif L==4	// es
-	"Comentario enviado.";
-#elif L==5	// fr
-	"Post sent.";		// Besoin de traduction
-#elif L==6	// gn
-	"Comentario enviado.";	// Okoteve traducción
-#elif L==7	// it
-	"Post inviato.";
-#elif L==8	// pl
-	"Post wyslany.";
-#elif L==9	// pt
-	"Post enviado.";
-#endif
-
-const char *Txt_Post_removed =
-#if   L==1	// ca
-	"Comentari eliminat.";
-#elif L==2	// de
-	"Nachricht entfernt.";
-#elif L==3	// en
-	"Post removed.";
-#elif L==4	// es
-	"Comentario eliminado.";
-#elif L==5	// fr
-	"Message supprim&eacute;.";
-#elif L==6	// gn
-	"Comentario eliminado.";		// Okoteve traducción
-#elif L==7	// it
-	"Post rimosso.";
-#elif L==8	// pl
-	"Post usuniety.";
-#elif L==9	// pt
-	"Post removido.";
-#endif
-
-const char *Txt_Post_unbanned =
-#if   L==1	// ca
-	"Comentario permitido";		// Necessita traduccio
-#elif L==2	// de
-	"Post unbanned.";		// Need Übersetzung
-#elif L==3	// en
-	"Post unbanned";
-#elif L==4	// es
-	"Comentario permitido";
-#elif L==5	// fr
-	"Post unbanned.";		// Besoin de traduction
-#elif L==6	// gn
-	"Comentario permitido";		// Okoteve traducción
-#elif L==7	// it
-	"Post autorizzato.";
-#elif L==8	// pl
-	"Post odbanowany";
-#elif L==9	// pt
-	"Post permitido.";
-#endif
-
 const char *Txt_Preassigned_QUESTION =
 #if   L==1	// ca
 	"Preassignat?";
@@ -39324,6 +39324,48 @@ const char *Txt_SOCIAL_NOTE_TOP_MESSAGES[Soc_NUM_TOP_MESSAGES] =
 	"mencionou voc&ecirc;"
 #endif
 	};
+
+const char *Txt_SOCIAL_post =
+#if   L==1	// ca
+	"publicaci&oacute;";
+#elif L==2	// de
+	"Publikation";
+#elif L==3	// en
+	"post";
+#elif L==4	// es
+	"publicaci&oacute;n";
+#elif L==5	// fr
+	"publication";
+#elif L==6	// gn
+	"marandu";
+#elif L==7	// it
+	"pubblicazione";
+#elif L==8	// pl
+	"publikacja";
+#elif L==9	// pt
+	"publica&ccedil;&atilde;o";
+#endif
+
+const char *Txt_SOCIAL_posts =
+#if   L==1	// ca
+	"publicacions";
+#elif L==2	// de
+	"Publikationen";
+#elif L==3	// en
+	"posts";
+#elif L==4	// es
+	"publicaciones";
+#elif L==5	// fr
+	"publications";
+#elif L==6	// gn
+	"marandu";
+#elif L==7	// it
+	"pubblicazioni";
+#elif L==8	// pl
+	"publikacje";
+#elif L==9	// pt
+	"publica&ccedil;&otilde;es";
+#endif
 
 const char *Txt_Sort_degrees_by =
 #if   L==1	// ca

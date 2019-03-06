@@ -116,7 +116,7 @@ typedef enum
    Soc_TOP_MESSAGE_MENTIONED	= 6,
   } Soc_TopMessage_t;
 
-struct SocialPublishing
+struct SocialPublication
   {
    long PubCod;
    long NotCod;
@@ -141,7 +141,7 @@ void Soc_RefreshOldTimelineUsr (void);
 
 void Soc_MarkMyNotifAsSeen (void);
 
-void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct SocialPublishing *SocPub);
+void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct SocialPublication *SocPub);
 void Soc_MarkSocialNoteAsUnavailableUsingNotCod (long NotCod);
 void Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NoteType_t NoteType,long Cod);
 void Soc_MarkSocialNoteOneFileAsUnavailable (const char *Path);
@@ -183,8 +183,10 @@ void Soc_RemoveUsrSocialContent (long UsrCod);
 
 void Soc_ClearOldTimelinesDB (void);
 
-void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                   char **ContentStr,
-                                   long PubCod,bool GetContent);
+void Soc_GetNotifSocialPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                                    char **ContentStr,
+                                    long PubCod,bool GetContent);
+
+unsigned long Soc_GetNumPubsUsr (long UsrCod);
 
 #endif

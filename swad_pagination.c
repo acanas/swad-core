@@ -145,7 +145,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                             bool LinkToPagCurrent)
   {
    extern const char *Txt_Page_X_of_Y;
-   extern const char *Txt_Post_banned;
+   extern const char *Txt_FORUM_Post_banned;
    unsigned NumPage;
    char LinkStyle[64];
 
@@ -245,7 +245,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
       if (FirstMsgEnabled)
          fprintf (Gbl.F.Out,"%s",Subject);
       else
-         fprintf (Gbl.F.Out,"[%s]",Txt_Post_banned);
+         fprintf (Gbl.F.Out,"[%s]",Txt_FORUM_Post_banned);
       if (LinkToPagCurrent)
 	{
 	 fprintf (Gbl.F.Out,"</a>");

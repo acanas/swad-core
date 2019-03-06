@@ -600,8 +600,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
    extern const char *Txt_download;
    extern const char *Txt_downloads;
    extern const char *Txt_Forum_posts;
-   extern const char *Txt_post;
-   extern const char *Txt_posts;
+   extern const char *Txt_FORUM_post;
+   extern const char *Txt_FORUM_posts;
    extern const char *Txt_Messages_sent;
    extern const char *Txt_message;
    extern const char *Txt_messages;
@@ -705,8 +705,8 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
      {
       fprintf (Gbl.F.Rep,"%ld %s",
 	       Report->UsrFigures.NumForPst,
-	       (Report->UsrFigures.NumForPst == 1) ? Txt_post :
-					             Txt_posts);
+	       (Report->UsrFigures.NumForPst == 1) ? Txt_FORUM_post :
+					             Txt_FORUM_posts);
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");

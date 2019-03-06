@@ -130,7 +130,7 @@ void Not_ReceiveNotice (void)
    extern const char *Txt_Notice_created;
    long NotCod;
    unsigned NumUsrsToBeNotifiedByEMail;
-   struct SocialPublishing SocPub;
+   struct SocialPublication SocPub;
    char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the text of the notice *****/

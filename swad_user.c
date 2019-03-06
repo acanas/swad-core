@@ -1073,8 +1073,8 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 
    /***** Get the number of students/teachers in a course from database ******/
    OthersRolesStr[0] = '\0';
-   for (Role =  Rol_STD;
-	Role <= Rol_TCH;
+   for (Role =  Rol_STD;	// First possible role in a course
+	Role <= Rol_TCH;	// Last possible role in a course
 	Role++)
       if ((OthersRoles & (1 << Role)))
         {
