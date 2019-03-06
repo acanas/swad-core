@@ -344,7 +344,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
          /* Get user's data */
 	 ListUsrCods.NumUsrs = 1;
 	 Usr_AllocateListUsrCods (&ListUsrCods);
-	 ListUsrCods.Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
+	 ListUsrCods.Lst[0] = Gbl.Usrs.Me.UsrDat.UsrCod;
 	}
      }
    else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
@@ -354,7 +354,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
          /* Get user's data */
 	 ListUsrCods.NumUsrs = 1;
 	 Usr_AllocateListUsrCods (&ListUsrCods);
-	 ListUsrCods.Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
+	 ListUsrCods.Lst[0] = Gbl.Usrs.Me.UsrDat.UsrCod;
         }
      }
    else									// 3: It's not a nickname nor email
@@ -391,7 +391,6 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	   {
 	    case 0: // Message sent successfully
 	       Pwd_SetMyPendingPassword (NewRandomPlainPassword);
-	       Ale_ShowAlert (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
 	       break;
 	    case 1:
 	       Lay_ShowErrorAndExit (Txt_There_was_a_problem_sending_an_email_automatically);
