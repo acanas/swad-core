@@ -387,9 +387,40 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    unsigned NumPublicFiles;
    char IdFirstClickTime[Frm_MAX_BYTES_ID + 1];
 
+   /***** Get figures *****/
+   Prf_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
+
    /***** Start left list *****/
    fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_LEFT_CONTAINER\">"
 	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
+
+   /* Time since first click */
+   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
+	              " style=\"background-image:url('%s/clock.svg');\">",
+	    Txt_TIME_Since,
+            Gbl.Prefs.URLIcons);
+   if (UsrFigures.FirstClickTimeUTC)
+     {
+      /* Create unique id */
+      Frm_SetUniqueId (IdFirstClickTime);
+
+      fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",IdFirstClickTime);
+      if (UsrFigures.NumDays > 0)
+	 fprintf (Gbl.F.Out,"&nbsp;(%d&nbsp;%s)",
+		  UsrFigures.NumDays,
+		  (UsrFigures.NumDays == 1) ? Txt_day :
+					      Txt_days);
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('%s',%ld,"
+			 "%u,',&nbsp;','%s',true,false,0x6);"
+			 "</script>",
+	       IdFirstClickTime,(long) UsrFigures.FirstClickTimeUTC,
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+     }
+   else	// First click time is unknown or user never logged
+      /***** Button to fetch and store user's figures *****/
+      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
+   fprintf (Gbl.F.Out,"</li>");
 
    /***** Number of courses in which the user is teacher *****/
    NumCrssUsrIsTch = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TCH);
@@ -466,37 +497,6 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	    (NumFiles == 1) ? Txt_file :
 		              Txt_files,
 	    NumPublicFiles,Txt_public_FILES);
-
-   /***** Get figures *****/
-   Prf_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
-
-   /* Time since first click */
-   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-	              " style=\"background-image:url('%s/clock.svg');\">",
-	    Txt_TIME_Since,
-            Gbl.Prefs.URLIcons);
-   if (UsrFigures.FirstClickTimeUTC)
-     {
-      /* Create unique id */
-      Frm_SetUniqueId (IdFirstClickTime);
-
-      fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",IdFirstClickTime);
-      if (UsrFigures.NumDays > 0)
-	 fprintf (Gbl.F.Out,"&nbsp;(%d&nbsp;%s)",
-		  UsrFigures.NumDays,
-		  (UsrFigures.NumDays == 1) ? Txt_day :
-					      Txt_days);
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('%s',%ld,"
-			 "%u,',&nbsp;','%s',true,false,0x6);"
-			 "</script>",
-	       IdFirstClickTime,(long) UsrFigures.FirstClickTimeUTC,
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-     }
-   else	// First click time is unknown or user never logged
-      /***** Button to fetch and store user's figures *****/
-      Prf_PutLinkCalculateFigures (UsrDat->EncryptedUsrCod);
-   fprintf (Gbl.F.Out,"</li>");
 
    /***** End left list *****/
    fprintf (Gbl.F.Out,"</ul>"
