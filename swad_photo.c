@@ -1184,6 +1184,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                        const char *ClassPhoto,Pho_Zoom_t Zoom,
                        bool FormUnique)
   {
+   extern const char *Rol_Icons[Rol_NUM_ROLES];
    extern const char *Txt_Following;
    extern const char *Txt_Followers;
    unsigned NumFollowing;
@@ -1195,6 +1196,8 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    bool PutZoomCode = (Zoom == Pho_ZOOM) &&		// Make zoom
                       BrowserTabIs1stTab;		// Only in main browser tab
    char IdCaption[Frm_MAX_BYTES_ID + 1];
+   char MainDegreeShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
+   Rol_Role_t MaxRole;	// Maximum user's role in his/her main degree
 
    /***** Start form to go to public profile *****/
    if (PutLinkToPublicProfile)
@@ -1221,9 +1224,17 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       	       IdCaption);
 
       /* First name and surnames */
-      fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_N\">");	// Limited width
+      fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_N_BOLD\">");	// Limited width
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</div>");
+
+      /* Nickname */
+      if (UsrDat->Nickname[0])
+	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_N\">"
+			    "@%s"
+			    "</div>",
+		  UsrDat->Nickname);
+
 
       /* Institution full name and institution country */
       if (UsrDat->InsCod > 0)
@@ -1237,20 +1248,35 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">");
 	 Cty_WriteCountryName (UsrDat->CtyCod,
-	                       NULL);	// Don't put link to country
+			       NULL);	// Don't put link to country
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 
+      /* Main degree (in which the user has more courses) short name */
+      Usr_GetMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
+      if (MainDegreeShrtName[0])
+	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
+		            "<div class=\"ZOOM_DEG\""
+		            " style=\"background-image:url('%s/%s');\">"
+			    "%s"
+			    "</div>"
+			    "</div>",
+		  Gbl.Prefs.URLIcons,Rol_Icons[MaxRole],
+		  MainDegreeShrtName);
+
       /* Following and followers */
-      Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
-      fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE\">"
-			 "<span class=\"DAT_N_BOLD\">%u</span>"
-	                 "<span class=\"DAT_SMALL\">&nbsp;%s&nbsp;</span>"
-			 "<span class=\"DAT_N_BOLD\">%u</span>"
-	                 "<span class=\"DAT_SMALL\">&nbsp;%s</span>"
-	                 "</div>",
-	       NumFollowing,Txt_Following,
-	       NumFollowers,Txt_Followers);
+      if (UsrDat->Nickname[0])	// Get social data only if nickname is retrieved (in some actions)
+        {
+	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
+	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE\">"
+			    "<span class=\"DAT_N_BOLD\">%u</span>"
+			    "<span class=\"DAT_SMALL\">&nbsp;%s&nbsp;</span>"
+			    "<span class=\"DAT_N_BOLD\">%u</span>"
+			    "<span class=\"DAT_SMALL\">&nbsp;%s</span>"
+			    "</div>",
+		  NumFollowing,Txt_Following,
+		  NumFollowers,Txt_Followers);
+        }
 
       fprintf (Gbl.F.Out,"</div>");
      }

@@ -2356,6 +2356,57 @@ unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
   }
 
 /*****************************************************************************/
+/********* Get the degree in which a user is enroled in more courses *********/
+/*****************************************************************************/
+
+void Usr_GetMainDeg (long UsrCod,
+		     char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
+		     Rol_Role_t *MaxRole)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Get a random student from current course from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get user's main degree",
+		       "SELECT degrees.ShortName,"	// row[0]
+		              "main_degree.MaxRole"	// row[1]
+		       " FROM degrees,"
+
+		       // The second table contain only one row with the main degree
+		       " (SELECT courses.DegCod AS DegCod,"
+		                "MAX(crs_usr.Role) AS MaxRole,"
+		                "COUNT(*) AS N"
+		       " FROM crs_usr,courses"
+		       " WHERE crs_usr.UsrCod=%ld"
+		       " AND crs_usr.CrsCod=courses.CrsCod"
+		       " GROUP BY courses.DegCod"
+		       " ORDER BY N DESC"	// Ordered by number of courses in which user is enroled
+		       " LIMIT 1)"		// We need only the main degree
+		       " AS main_degree"
+
+		       " WHERE degrees.DegCod=main_degree.DegCod",
+		       UsrCod))
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get degree name (row[0]) */
+      Str_Copy (ShrtName,row[0],
+                Hie_MAX_BYTES_SHRT_NAME);
+
+      /* Get maximum role (row[1]) */
+      *MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+     }
+   else	// User is not enroled in any course
+     {
+      ShrtName[0] = '\0';
+      *MaxRole = Rol_UNK;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
 /******** Check if a user exists with a given encrypted user's code **********/
 /*****************************************************************************/
 

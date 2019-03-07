@@ -409,6 +409,10 @@ Antonio
 
 // TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
 
+// TODO: Change in usability of Announcements of exams, suggested by Javier Fernández Baldomero.
+
+// TODO: "Se podría poner un botón para seguir a todos los relacionados contigo en las asignaturas, en lugar de tener que agregarlos uno a uno" Suggested by José María girao Miras.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -428,10 +432,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.66.6 (2019-03-07)"
-#define CSS_FILE		"swad18.66.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.67 (2019-03-07)"
+#define CSS_FILE		"swad18.67.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.67:    Mar 07, 2019 	Nickname shown in photo zoom. (238927 lines)
 	Version 18.66.6:  Mar 07, 2019 	Number of days printed as months or years in user's figures. (238846 lines)
 	Version 18.66.5:  Mar 06, 2019 	Code refactoring in user's figures. (238739 lines)
 	Version 18.66.4:  Mar 06, 2019 	Code refactoring in user's figures. (238678 lines)

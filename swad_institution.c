@@ -82,7 +82,7 @@ static void Ins_GetParamInsOrder (void);
 static void Ins_PutIconsEditingInstitutions (void);
 static void Ins_PutIconToViewInstitutions (void);
 
-static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
+static void Ins_GetShrtNameAndCtyOfInstitution (struct Instit *Ins,
                                                 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1]);
 
 static void Ins_ListInstitutionsForEdition (void);
@@ -1129,12 +1129,12 @@ void Ins_WriteInstitutionNameAndCty (long InsCod)
    struct Instit Ins;
    char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
 
-   /***** Get institution full name *****/
+   /***** Get institution short name and country name *****/
    Ins.InsCod = InsCod;
-   Ins_GetFullNameAndCtyOfInstitution (&Ins,CtyName);
+   Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
 
-   /***** Write institution full name *****/
-   fprintf (Gbl.F.Out,"%s<br />%s",Ins.FullName,CtyName);
+   /***** Write institution short name and country name *****/
+   fprintf (Gbl.F.Out,"%s (%s)",Ins.ShrtName,CtyName);
   }
 
 /*****************************************************************************/
@@ -1281,12 +1281,12 @@ void Ins_GetShortNameOfInstitution (struct Instit *Ins)
 
 void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
   {
-   Gbl.Cache.InstitutionFullNameAndCty.InsCod = -1L;
-   Gbl.Cache.InstitutionFullNameAndCty.FullName[0] = '\0';
-   Gbl.Cache.InstitutionFullNameAndCty.CtyName[0] = '\0';
+   Gbl.Cache.InstitutionShrtNameAndCty.InsCod = -1L;
+   Gbl.Cache.InstitutionShrtNameAndCty.ShrtName[0] = '\0';
+   Gbl.Cache.InstitutionShrtNameAndCty.CtyName[0] = '\0';
   }
 
-static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
+static void Ins_GetShrtNameAndCtyOfInstitution (struct Instit *Ins,
                                                 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1])
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
@@ -1296,27 +1296,27 @@ static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
    /***** 1. Fast check: Trivial case *****/
    if (Ins->InsCod <= 0)
      {
-      Ins->FullName[0] = '\0';	// Empty name
+      Ins->ShrtName[0] = '\0';	// Empty name
       CtyName[0] = '\0';	// Empty name
       return;
      }
 
    /***** 2. Fast check: If cached... *****/
-   if (Ins->InsCod == Gbl.Cache.InstitutionFullNameAndCty.InsCod)
+   if (Ins->InsCod == Gbl.Cache.InstitutionShrtNameAndCty.InsCod)
      {
-      Str_Copy (Ins->FullName,Gbl.Cache.InstitutionFullNameAndCty.FullName,
-		Hie_MAX_BYTES_FULL_NAME);
-      Str_Copy (CtyName,Gbl.Cache.InstitutionFullNameAndCty.CtyName,
+      Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
+		Hie_MAX_BYTES_SHRT_NAME);
+      Str_Copy (CtyName,Gbl.Cache.InstitutionShrtNameAndCty.CtyName,
 		Hie_MAX_BYTES_FULL_NAME);
       return;
      }
 
-   /***** 3. Slow: get full name and country of institution from database *****/
-   Gbl.Cache.InstitutionFullNameAndCty.InsCod = Ins->InsCod;
+   /***** 3. Slow: get short name and country of institution from database *****/
+   Gbl.Cache.InstitutionShrtNameAndCty.InsCod = Ins->InsCod;
 
-   if (DB_QuerySELECT (&mysql_res,"can not get the full name"
+   if (DB_QuerySELECT (&mysql_res,"can not get short name and country"
 				  " of an institution",
-		       "SELECT institutions.FullName,countries.Name_%s"
+		       "SELECT institutions.ShortName,countries.Name_%s"
 		       " FROM institutions,countries"
 		       " WHERE institutions.InsCod=%ld"
 		       " AND institutions.CtyCod=countries.CtyCod",
@@ -1325,26 +1325,26 @@ static void Ins_GetFullNameAndCtyOfInstitution (struct Instit *Ins,
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get the full name of this institution (row[0]) */
-      Str_Copy (Gbl.Cache.InstitutionFullNameAndCty.FullName,row[0],
-		Hie_MAX_BYTES_FULL_NAME);
+      /* Get the short name of this institution (row[0]) */
+      Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,row[0],
+		Hie_MAX_BYTES_SHRT_NAME);
 
       /* Get the name of the country (row[1]) */
-      Str_Copy (Gbl.Cache.InstitutionFullNameAndCty.CtyName,row[1],
+      Str_Copy (Gbl.Cache.InstitutionShrtNameAndCty.CtyName,row[1],
 		Hie_MAX_BYTES_FULL_NAME);
      }
    else
      {
-      Gbl.Cache.InstitutionFullNameAndCty.FullName[0] = '\0';
-      Gbl.Cache.InstitutionFullNameAndCty.CtyName[0] = '\0';
+      Gbl.Cache.InstitutionShrtNameAndCty.ShrtName[0] = '\0';
+      Gbl.Cache.InstitutionShrtNameAndCty.CtyName[0] = '\0';
      }
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
 
-   Str_Copy (Ins->FullName,Gbl.Cache.InstitutionFullNameAndCty.FullName,
-	     Hie_MAX_BYTES_FULL_NAME);
-   Str_Copy (CtyName,Gbl.Cache.InstitutionFullNameAndCty.CtyName,
+   Str_Copy (Ins->ShrtName,Gbl.Cache.InstitutionShrtNameAndCty.ShrtName,
+	     Hie_MAX_BYTES_SHRT_NAME);
+   Str_Copy (CtyName,Gbl.Cache.InstitutionShrtNameAndCty.CtyName,
 	     Hie_MAX_BYTES_FULL_NAME);
   }
 

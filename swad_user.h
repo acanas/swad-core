@@ -133,7 +133,7 @@ struct UsrData
      {
       struct
         {
-	 bool Valid;	// Role is not valid (for examples, it has not been trtriev
+	 bool Valid;	// Role is valid (is already filled)?
 	 Rol_Role_t Role;
         } InCurrentCrs;	// Role in current course (Rol_UNK is no course selected)
       int InCrss;	// Roles in all his/her courses
@@ -310,6 +310,9 @@ unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
 unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res);
 unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res);
 unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res);
+void Usr_GetMainDeg (long UsrCod,
+		     char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1],
+		     Rol_Role_t *MaxRole);
 
 bool Usr_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64]);
 

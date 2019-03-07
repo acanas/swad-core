@@ -12667,3 +12667,26 @@ UPDATE usr_figures SET NumMsgSnt=0 WHERE NumMsgSnt<0;
 
 UPDATE usr_figures,(SELECT UsrCod,SUM(NumViews) AS NumFileViews FROM file_view WHERE UsrCod>0 GROUP BY UsrCod) AS viewers SET usr_figures.NumFileViews=viewers.NumFileViews WHERE usr_figures.NumFileViews<0 AND usr_figures.UsrCod=viewers.UsrCod;
 UPDATE usr_figures SET NumFileViews=0 WHERE NumFileViews<0;
+
+
+
+
+
+--------------------
+
+
+SELECT degrees.ShortName,main_degree.MaxRole
+ FROM degrees,
+ (SELECT courses.DegCod AS DegCod,MAX(crs_usr.Role) AS MaxRole,COUNT(*) AS N
+ FROM crs_usr,courses
+ WHERE crs_usr.UsrCod=1
+ AND crs_usr.CrsCod=courses.CrsCod
+ GROUP BY courses.DegCod
+ ORDER BY N DESC LIMIT 1)
+ AS main_degree
+ WHERE degrees.DegCod=main_degree.DegCod;
+			     
+			     
+			     
+			     
+			     

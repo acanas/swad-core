@@ -801,9 +801,9 @@ struct Globals
       struct
 	{
 	 long InsCod;
-	 char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
+	 char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
 	 char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
-	} InstitutionFullNameAndCty;
+	} InstitutionShrtNameAndCty;
       struct
 	{
 	 long UsrCod;

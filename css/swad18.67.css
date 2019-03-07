@@ -1967,6 +1967,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
+.ZOOM_DEG
+	{
+	display:inline-block;
+	margin:0 auto;
+    padding:0 0 0 20px;
+	background-size:16px 16px;
+	background-repeat:no-repeat;
+	background-position:left center;
+	}
 
 .NO_BR	{white-space:nowrap;}
 
