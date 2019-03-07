@@ -1327,7 +1327,8 @@ static void Rec_ShowRecordOneTchCrs (void)
    Frm_StartForm (ActPrnRecSevTch);
    Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
-   Par_PutHiddenParamChar ("ShowOfficeHours",'Y');
+   Par_PutHiddenParamChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
+	                                                       'N');
    Rec_ShowLinkToPrintPreviewOfRecords ();
    Frm_EndForm ();
 
@@ -1441,7 +1442,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
          if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
            {
             /* Check if this user has accepted
@@ -1488,6 +1489,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
             NumUsr++;
            }
      }
+
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
 
@@ -2742,7 +2744,7 @@ static void Rec_ShowPhoto (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"REC_C3_TOP CENTER_TOP\">");
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
-		     "PHOTO186x248",Pho_NO_ZOOM,false);
+		     "PHOTO186x248",Pho_ZOOM,false);
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -2919,7 +2921,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:			// I want to apply for enrolment
             /***** Set default role *****/
 	    if (UsrDat->UsrCod == Gbl.CurrentCrs.Crs.RequesterUsrCod ||	// Creator of the course
-		(UsrDat->Roles.InCrss & (1 << Rol_TCH)))			// Teacher in other courses
+		(UsrDat->Roles.InCrss & (1 << Rol_TCH)))		// Teacher in other courses
 	       DefaultRoleInForm = Rol_TCH;	// Request sign up as a teacher
 	    else if ((UsrDat->Roles.InCrss & (1 << Rol_NET)))			// Non-editing teacher in other courses
 	       DefaultRoleInForm = Rol_NET;	// Request sign up as a non-editing teacher
@@ -3027,9 +3029,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	      {
                /***** Set default role *****/
 	       DefaultRoleInForm = (UsrDat->Roles.InCrss & ((1 << Rol_STD) |
-		                                     (1 << Rol_NET) |
-						     (1 << Rol_TCH))) ? Rol_USR :	// If user belongs to any course
-								        Rol_GST;	// If user don't belong to any course
+		                                            (1 << Rol_NET) |
+						            (1 << Rol_TCH))) ? Rol_USR :	// If user belongs to any course
+								               Rol_GST;		// If user don't belong to any course
 
 	       /***** Selector of role *****/
 	       fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">"

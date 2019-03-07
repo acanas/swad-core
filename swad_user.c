@@ -304,7 +304,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Roles.InCurrentCrs.Role = Rol_UNK;
    UsrDat->Roles.InCurrentCrs.Valid = false;
    UsrDat->Roles.InCrss = -1;	// < 0 ==> not yet got from database
-   UsrDat->Accepted = true;
+   UsrDat->Accepted = false;
 
    UsrDat->Sex = Usr_SEX_UNKNOWN;
    UsrDat->Surname1[0]  = '\0';
@@ -1163,8 +1163,6 @@ bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
 
 bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
   {
-   bool ItsMe;
-
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
       return false;
@@ -1173,37 +1171,13 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
    if (UsrDat->UsrCod <= 0)
       return false;
 
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
-     {
-      /***** 3. Fast check: Is he/she a non-editing teacher or a teacher? *****/
-      if (UsrDat->Roles.InCurrentCrs.Role != Rol_NET &&
-	  UsrDat->Roles.InCurrentCrs.Role != Rol_TCH)
-	 return false;
+   /***** 3. Fast check: Is it a course selected? *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      return false;
 
-      // He/she is a non-editing teacher or a teacher in this course
-     }
-   else					// No course selected
-     {
-      /***** 3. Fast/slow check: Is he/she a non-editing teacher or a teacher in any course? *****/
-      Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-      if ((UsrDat->Roles.InCrss & ((1 << Rol_NET) |
-				   (1 << Rol_TCH))) == 0)
-	 return false;
-
-      // He/she is a non-editing teacher or a teacher in any course
-     }
-
-   /***** 4. Fast check: It's me? *****/
-   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-   if (ItsMe)
-      return true;
-
-   /***** 5. Fast check: Am I a system admin? *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return true;
-
-   /***** 6. Slow check: Get if user shares any course with me from database *****/
-   return Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);
+   /***** 4. Fast check: Is he/she a non-editing teacher or a teacher? *****/
+   return (UsrDat->Roles.InCurrentCrs.Role == Rol_NET ||
+           UsrDat->Roles.InCurrentCrs.Role == Rol_TCH);
   }
 
 /*****************************************************************************/
@@ -1858,7 +1832,7 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
 		      "SELECT COUNT(DISTINCT centres.InsCod)"
 		      " FROM crs_usr,courses,degrees,centres"
 		      " WHERE crs_usr.UsrCod=%ld"
-		      " AND crs_usr.Accepted='Y'"
+		      " AND crs_usr.Accepted='Y'"	// Only if user accepted
 		      " AND crs_usr.CrsCod=courses.CrsCod"
 		      " AND courses.DegCod=degrees.DegCod"
 		      " AND degrees.CtrCod=centres.CtrCod"
@@ -1973,7 +1947,7 @@ bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
       return Gbl.Cache.UsrBelongsToCrs.Belongs;
 
    /***** 3. Slow check: Get if user belongs to course from database *****/
-   SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
+   SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :	// Only if user accepted
 	                                  "");
    Gbl.Cache.UsrBelongsToCrs.UsrCod = UsrCod;
    Gbl.Cache.UsrBelongsToCrs.CrsCod = CrsCod;

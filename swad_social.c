@@ -4988,7 +4988,7 @@ void Soc_GetNotifSocialPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	      }
 
 	    /***** Copy summary string *****/
-	    Str_LimitLengthHTMLStr (Content,Ntf_MAX_BYTES_SUMMARY);
+	    Str_LimitLengthHTMLStr (Content,Ntf_MAX_CHARS_SUMMARY);
 	    Str_Copy (SummaryStr,Content,
 	              Ntf_MAX_BYTES_SUMMARY);
 	   }
@@ -5028,7 +5028,7 @@ void Soc_GetNotifSocialPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	   }
 
 	 /***** Copy summary string *****/
-	 Str_LimitLengthHTMLStr (Content,Ntf_MAX_BYTES_SUMMARY);
+	 Str_LimitLengthHTMLStr (Content,Ntf_MAX_CHARS_SUMMARY);
 	 Str_Copy (SummaryStr,Content,
 	           Ntf_MAX_BYTES_SUMMARY);
 	 break;

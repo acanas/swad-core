@@ -375,6 +375,21 @@ Saludos,
 Antonio
  */
 
+/* Sugerencias de Atanasio José Rubio Gil (marzo de 2019):
+
+Te escribo por aquí porque no hay notificaciones para los comentarios o posibilidad de seguir hilo. Ahí van dos mejoras chulas. Las otras que se me ocurren son ver sólo posts de estudiantes o mutear anuncios oficiales y hostear las imágenes en un servicio externo (como imgur, que permite subida y enlazado automático) para que no pierdan calidad.
+
+¡Muchas gracias por esta pedazo de plataforma!
+
+Respuesta:
+
+Pues la verdad es que notificaciones de comentarios sí hay (lo puedes comprobar en Perfil > Ajustes), lo que pasa es que desde que he puesto el timeline nada más entrar, la notificación se marca como vista por el hecho de ver el timeline. Quiero decir, que si estás en otra opción verás la notificación, pero si te acabas de identificar, como lo primero que se hace es ir al timeline, se elimina la notificación. Pensaré a ver si hay alguna solución.
+
+Lo de la calidad de las imágenes es cuestión de aumentarla un poco al comprimirlas, aunque ocuparán más. Lo veré.
+
+Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masivamente a usuarios de asignaturas y que la gente use preferiblemente la opción de ver sólo los mensajes de los que sigues.
+ */
+
 // TODO: Eliminar todas las preguntas de test de un golpe
 // TODO: URGENTE: Cuando se cree un descriptor nuevo TIENE QUE ESTAR INHABILITADO porque si no los alumnos pueden ver el examen (Miguel Damas)
 
@@ -432,10 +447,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.67 (2019-03-07)"
+#define Log_PLATFORM_VERSION	"SWAD 18.68 (2019-03-07)"
 #define CSS_FILE		"swad18.67.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.68:    Mar 07, 2019 	Photo is zoomed even in record card.
+					Teachers record cards are only visible inside courses.
+					Fixed bug in notifications. (238918 lines)
 	Version 18.67:    Mar 07, 2019 	Nickname shown in photo zoom. (238927 lines)
 	Version 18.66.6:  Mar 07, 2019 	Number of days printed as months or years in user's figures. (238846 lines)
 	Version 18.66.5:  Mar 06, 2019 	Code refactoring in user's figures. (238739 lines)

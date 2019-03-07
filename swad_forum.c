@@ -1807,7 +1807,7 @@ static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
    ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 	                 (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
-	                                              (1 << Rol_TCH)));
+	                                                     (1 << Rol_TCH)));
 
    /***** Link to forum global *****/
    Forum.Type = For_FORUM_GLOBAL_USRS;
@@ -1843,7 +1843,7 @@ static void For_WriteLinksToPlatformForums (bool IsLastForum,
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
    ICanSeeTeacherForum = Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ||
 	                 (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
-	                                              (1 << Rol_TCH)));
+	                                                     (1 << Rol_TCH)));
 
    /***** Link to forum of users about the platform *****/
    Forum.Type = For_FORUM__SWAD__USRS;
@@ -3868,7 +3868,7 @@ static void For_RestrictAccess (void)
       case For_FORUM__SWAD__TCHS:
          Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
          ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Roles.InCrss & ((1 << Rol_NET) |
-                                                     (1 << Rol_TCH)));
+                                                            (1 << Rol_TCH)));
          break;
       case For_FORUM_INSTIT_USRS:
 	 MaxRole = Rol_GetMyMaxRoleInIns (Gbl.Forum.ForumSelected.Location);
