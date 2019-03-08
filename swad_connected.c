@@ -788,8 +788,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    extern const char *Txt_View_record_for_this_course;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   const char *Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_CRS" :
-	                                                                           "CON_NO_CRS");
+   const char *Font;
    long UsrCod;
    bool ItsMe;
    struct UsrData *UsrDat;
@@ -815,8 +814,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 
    /***** Show photo *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"LEFT_MIDDLE COLOR%u\""
-	              " style=\"width:22px;\">",
+	              "<td class=\"CON_PHOTO COLOR%u\">",
 	    Gbl.RowEvenOdd);
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
@@ -825,7 +823,9 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write full name and link *****/
-   fprintf (Gbl.F.Out,"<td class=\"CON_USR_NARROW %s COLOR%u\">",
+   Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_NAME_NARROW CON_CRS" :
+	                                                               "CON_NAME_NARROW CON_NO_CRS");
+   fprintf (Gbl.F.Out,"<td class=\"%s COLOR%u\">",
 	    Font,Gbl.RowEvenOdd);
    // The form must be unique because
    // the list of connected users
@@ -848,13 +848,15 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    Frm_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
    Usr_WriteFirstNameBRSurnames (UsrDat);
    fprintf (Gbl.F.Out,"</a>"
-                      "</div>");
+	              "</div>");
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write time from last access *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\""
-	              " style=\"width:48px;\">",
+   Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
+	                                                               "CON_SINCE CON_NO_CRS");
+
+   fprintf (Gbl.F.Out,"<td class=\"%s COLOR%u\">",
             Font,Gbl.RowEvenOdd);
 
    fprintf (Gbl.F.Out,"<div id=\"hm%u\">",
@@ -1024,8 +1026,6 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
            {
 	    /* Get course code (row[1]) */
 	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.CurrentCrs.Crs.CrsCod);
-	    Font = (ThisCrs ? "CON_CRS" :
-			      "CON_NO_CRS");
 
 	    /* Compute time from last access */
 	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)
@@ -1033,8 +1033,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 	    /***** Show photo *****/
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"LEFT_MIDDLE COLOR%u\""
-			       " style=\"width:22px;\">",
+			       "<td class=\"CON_PHOTO COLOR%u\">",
 		     Gbl.RowEvenOdd);
 	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
@@ -1043,7 +1042,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    fprintf (Gbl.F.Out,"</td>");
 
 	    /***** Write full name and link *****/
-	    fprintf (Gbl.F.Out,"<td class=\"CON_USR_WIDE %s COLOR%u\">",
+	    Font = (ThisCrs ? "CON_NAME_WIDE CON_CRS" :
+			      "CON_NAME_WIDE CON_NO_CRS");
+	    fprintf (Gbl.F.Out,"<td class=\"%s COLOR%u\">",
 		     Font,Gbl.RowEvenOdd);
 	    if (PutLinkToRecord)
 	      {
@@ -1073,8 +1074,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    fprintf (Gbl.F.Out,"</td>");
 
 	    /***** Write time from last access *****/
-	    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\""
-			       " style=\"width:48px;\">",
+	    Font = (ThisCrs ? "CON_SINCE CON_CRS" :
+			      "CON_SINCE CON_NO_CRS");
+	    fprintf (Gbl.F.Out,"<td class=\"%s COLOR%u\">",
 		     Font,Gbl.RowEvenOdd);
 	    Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
 	    fprintf (Gbl.F.Out,"</td>"

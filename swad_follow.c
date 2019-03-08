@@ -891,8 +891,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 
    /***** Show user's photo *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"LEFT_MIDDLE COLOR%u\""
-	              " style=\"width:22px;\">",
+	              "<td class=\"CON_PHOTO COLOR%u\">",
 	    Gbl.RowEvenOdd);
    if (Visible)
      {
@@ -904,14 +903,14 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** User's name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CON_USR_NARROW CON_CRS COLOR%u\">",
+   fprintf (Gbl.F.Out,"<td class=\"CON_NAME_FOLLOW CON_CRS COLOR%u\">",
 	    Gbl.RowEvenOdd);
    if (Visible)
      {
       /* Put form to go to public profile */
       Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// Limited width
+      fprintf (Gbl.F.Out,"<div class=\"CON_NAME_FOLLOW\">");	// Limited width
       Frm_LinkFormSubmit (Txt_Another_user_s_profile,"CON_CRS",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</a>"
@@ -921,8 +920,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Icon to follow *****/
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
-	              " style=\"width:48px;\">",
+   fprintf (Gbl.F.Out,"<td class=\"CON_ICON_FOLLOW RIGHT_MIDDLE COLOR%u\">",
             Gbl.RowEvenOdd);
    if (!Gbl.Usrs.Me.Logged ||	// Not logged
        ItsMe)			// It's me

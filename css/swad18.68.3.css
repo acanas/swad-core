@@ -1179,40 +1179,68 @@ a:hover						/* Default ==> underlined */
 .CON_USR_NARROW_TIT
 	{
 	max-width:136px;
+	text-align:center;
+	vertical-align:middle;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
-	text-align:center;
-	vertical-align:middle;
 	}
-.CON_USR_NARROW
+
+/* Connected to the current course? */
+.CON_NO_CRS	{color:#B8D070; font-size:11pt; line-height:110%; white-space:nowrap;}
+.CON_CRS	{color:#398000; font-size:11pt; line-height:110%; white-space:nowrap;}
+
+/* 1st. column */
+.CON_PHOTO
 	{
-	width:68px;
+	width:22px;
 	text-align:left;
 	vertical-align:middle;
 	}
-.CON_USR_WIDE
-	{
-	width:360px;
-	text-align:left;
-	vertical-align:middle;
-	}
+
+/* 2nd. column */
 .CON_NAME_NARROW
 	{
-	max-width:68px;
+	width:66px;
+	text-align:left;
+	vertical-align:middle;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.CON_NAME_FOLLOW
+	{
+	width:90px;
+	text-align:left;
+	vertical-align:middle;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
 .CON_NAME_WIDE
 	{
-	max-width:360px;
+	width:360px;
+	text-align:left;
+	vertical-align:middle;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
-.CON_NO_CRS	{color:#B8D070; font-size:11pt; line-height:110%; white-space:nowrap;}
-.CON_CRS	{color:#398000; font-size:11pt; line-height:110%; white-space:nowrap;}
+
+/* 3rd. column */
+.CON_SINCE
+	{
+	width:48px;
+	text-align:right;
+	vertical-align:middle;
+	white-space:nowrap;
+	overflow:hidden;
+	}
+.CON_ICON_FOLLOW
+	{
+	width:24px;
+	vertical-align:middle;
+	}
 
 /*************************** Most frequent actions ***************************/
 #MFU_actions
@@ -1925,15 +1953,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /******************************* User's photo ********************************/
-.PHOTO12x16	{width: 12px; height: 16px; border-radius:1px; vertical-align:middle; margin-top:-2px;}
-.PHOTO15x20	{width: 15px; height: 20px; border-radius:2px; vertical-align:middle;}
+.PHOTO12x16		{width: 12px; height: 16px; border-radius:1px; vertical-align:middle; margin-top:-2px;}
+.PHOTO15x20		{width: 15px; height: 20px; border-radius:2px; vertical-align:middle;}
 .PHOTO15x20B	{width: 15px; height: 20px; border-radius:2px; display:block; margin:0 auto;}
-.PHOTO18x24	{width: 18px; height: 24px; border-radius:2px; vertical-align:middle;}
-.PHOTO21x28	{width: 21px; height: 28px; border-radius:2px; vertical-align:middle;}
-.PHOTO30x40	{width: 30px; height: 40px; border-radius:2px; vertical-align:middle;}
-.PHOTO42x56	{width: 42px; height: 56px; border-radius:3px; vertical-align:middle;}
-.PHOTO45x60	{width: 45px; height: 60px; border-radius:3px; vertical-align:middle;}
-.PHOTO60x80	{width: 60px; height: 80px; border-radius:3px; vertical-align:middle;}
+.PHOTO18x24		{width: 18px; height: 24px; border-radius:2px; vertical-align:middle;}
+.PHOTO21x28		{width: 21px; height: 28px; border-radius:2px; vertical-align:middle;}
+.PHOTO30x40		{width: 30px; height: 40px; border-radius:2px; vertical-align:middle;}
+.PHOTO42x56		{width: 42px; height: 56px; border-radius:3px; vertical-align:middle;}
+.PHOTO45x60		{width: 45px; height: 60px; border-radius:3px; vertical-align:middle;}
+.PHOTO60x80		{width: 60px; height: 80px; border-radius:3px; vertical-align:middle;}
 .PHOTO186x248	{width:186px; height:248px; border-radius:8px; vertical-align:middle;}
 .IMG_USR
 	{
@@ -3014,6 +3042,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	padding:5px 0;
 	color:#202020;
 	font-size:13pt;
+ 	line-height:1.4;
 	}
 .TL_EXPAND_COMMENTS
 	{
@@ -3132,7 +3161,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	box-sizing:border-box;
 	width:480px;
 	}
-.MSG_TXT		{color:#202020; font-size:13pt;}
+.MSG_TXT
+	{
+	color:#202020;
+	font-size:13pt;
+ 	line-height:1.4;
+	}
 .MSG_TIT		{color:#4D88A1; font-size:13pt;}
 .MSG_TIT_NEW	{color:#4D88A1; font-size:13pt; font-weight:bold;}
 .MSG_TIT_REM	{color:#AFC4CC; font-size:13pt;}
