@@ -2085,7 +2085,7 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 /*****************************************************************************/
 /*************** Show list of groups to register/remove users ****************/
 /*****************************************************************************/
-// If UsrCod > 0 ==> mark her/his groups as checked
+// If UsrCod  > 0 ==> mark her/his groups as checked
 // If UsrCod <= 0 ==> do not mark any group as checked
 
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
@@ -2118,26 +2118,20 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 /*****************************************************************************/
 /*************** List groups of a type to add or remove users ****************/
 /*****************************************************************************/
-// If UsrCod > 0 ==> mark her/his groups as checked
+// If UsrCod  > 0 ==> mark her/his groups as checked
 // If UsrCod <= 0 ==> do not mark any group as checked
 
 static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
   {
-   struct ListCodGrps LstGrpsIBelong;
    struct ListCodGrps LstGrpsUsrBelongs;
    unsigned NumGrpThisType;
-   bool IBelongToThisGroup;
    bool UsrBelongsToThisGroup;
    struct Group *Grp;
 
    /***** Write heading *****/
    Grp_WriteGrpHead (GrpTyp);
 
-   /***** Query from the database the groups of this type which I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,GrpTyp->GrpTypCod,
-	                        Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
-
-   /***** Query from the database the groups of this type which I belong to *****/
+   /***** Query the groups of this type which the user belongs to *****/
    if (UsrCod > 0)
       Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,GrpTyp->GrpTypCod,
 				   Gbl.Usrs.Other.UsrDat.UsrCod,&LstGrpsUsrBelongs);
@@ -2148,7 +2142,6 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 	NumGrpThisType++)
      {
       Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
-      IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
       UsrBelongsToThisGroup = (UsrCod > 0) ? Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsUsrBelongs) :
 	                                     false;
 
@@ -2164,10 +2157,8 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
                Grp->GrpCod);
       if (UsrBelongsToThisGroup)
       	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      if (!(IBelongToThisGroup ||
-            Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," /></td>");
+      fprintf (Gbl.F.Out," />"
+	                 "</td>");
 
       Grp_WriteRowGrp (Grp,UsrBelongsToThisGroup);
 
@@ -2177,7 +2168,6 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
    /***** Free memory with the lists of groups *****/
    if (UsrCod > 0)
       Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
-   Grp_FreeListCodGrp (&LstGrpsIBelong);
   }
 
 /*****************************************************************************/

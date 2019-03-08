@@ -447,10 +447,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.68 (2019-03-07)"
+#define Log_PLATFORM_VERSION	"SWAD 18.68.1 (2019-03-08)"
 #define CSS_FILE		"swad18.67.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.68.1:  Mar 08, 2019 	A teacher can register students in groups, even if he/she doesn't belong to them. (238910 lines)
 	Version 18.68:    Mar 07, 2019 	Photo is zoomed even in record card.
 					Teachers record cards are only visible inside courses.
 					Fixed bug in notifications. (238918 lines)
