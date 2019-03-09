@@ -2091,6 +2091,17 @@ void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t Default
   }
 
 /*****************************************************************************/
+/********* Show other existing user's shared record to be edited *************/
+/*****************************************************************************/
+
+void Rec_ShowOtherSharedRecordEditable (void)
+  {
+   /***** User's record *****/
+   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_EXISTING_USR_FORM,
+                            &Gbl.Usrs.Other.UsrDat,NULL);
+  }
+
+/*****************************************************************************/
 /*********************** Show my record after update *************************/
 /*****************************************************************************/
 

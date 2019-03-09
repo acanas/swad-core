@@ -3230,10 +3230,6 @@ static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
 static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
   {
    extern const char *Txt_There_are_X_users_with_the_ID_Y;
-   extern const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y;
-   extern const char *Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrolment;
-   extern const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z;
-   extern const char *Txt_THE_USER_X_already_exists_in_Y;
    extern const char *Txt_The_user_is_new_not_yet_in_X;
    extern const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID;
    unsigned NumUsr;
@@ -3255,37 +3251,8 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
          Gbl.Usrs.Other.UsrDat.UsrCod = ListUsrCods->Lst[NumUsr];
          Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
-	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
-	   {
-	    /* Check if this user belongs to the current course */
-	    if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
-	      {
-	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-	       if (Gbl.Usrs.Other.UsrDat.Accepted)
-	          Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
-			         Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
-	       else        // Enrolment not yet accepted
-	          Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
-			         Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
-
-	       Enr_ShowFormToEditOtherUsr ();
-	      }
-	    else        // User does not belong to the current course
-	      {
-	       Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z,
-			      Gbl.Usrs.Other.UsrDat.FullName,
-			      Cfg_PLATFORM_SHORT_NAME,Gbl.CurrentCrs.Crs.FullName);
-
-	       Enr_ShowFormToEditOtherUsr ();
-	      }
-	   }
-	 else	// No course selected
-	   {
-	    Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_already_exists_in_Y,
-		           Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME);
-
-	    Enr_ShowFormToEditOtherUsr ();
-	   }
+         /* Show form to edit user */
+	 Enr_ShowFormToEditOtherUsr ();
 	}
 
       /***** Free list of users' codes *****/
@@ -3318,14 +3285,54 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
   }
 
 /*****************************************************************************/
-/************ Show form to edit the record of an existing user ***************/
+/********* Show other existing user's shared record to be edited *************/
 /*****************************************************************************/
 
 static void Enr_ShowFormToEditOtherUsr (void)
   {
-   /***** User's record *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_EXISTING_USR_FORM,
-                            &Gbl.Usrs.Other.UsrDat,NULL);
+   extern const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y;
+   extern const char *Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment;
+   extern const char *Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z;
+   extern const char *Txt_THE_USER_X_already_exists_in_Y;
+
+   /***** If user exists... *****/
+   if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
+     {
+      /***** Show form to edit user *****/
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+	{
+	 /* Check if this user belongs to the current course */
+	 if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	    if (Gbl.Usrs.Other.UsrDat.Accepted)
+	       Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
+			      Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+	    else        // Enrolment not yet accepted
+	       Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
+			      Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+
+	    Rec_ShowOtherSharedRecordEditable ();
+	   }
+	 else        // User does not belong to the current course
+	   {
+	    Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z,
+			   Gbl.Usrs.Other.UsrDat.FullName,
+			   Cfg_PLATFORM_SHORT_NAME,Gbl.CurrentCrs.Crs.FullName);
+
+	    Rec_ShowOtherSharedRecordEditable ();
+	   }
+	}
+      else	// No course selected
+	{
+	 Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_already_exists_in_Y,
+			Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME);
+
+	 Rec_ShowOtherSharedRecordEditable ();
+	}
+     }
+   else
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -3469,7 +3476,11 @@ void Enr_RemUsrFromCrs1 (void)
 
 void Enr_RemUsrFromCrs2 (void)
   {
+   /* Show possible alerts */
    Ale_ShowAlerts (NULL);
+
+   /* Show form to edit user again */
+   Enr_ShowFormToEditOtherUsr ();
   }
 
 /*****************************************************************************/
@@ -3968,17 +3979,23 @@ void Enr_ModifyUsr1 (void)
 void Enr_ModifyUsr2 (void)
   {
    if (Ale_GetTypeOfLastAlert () == Ale_WARNING)
+     {
+      /* Show possible alerts */
       Ale_ShowAlerts (NULL);
+
+      /* Show form to edit user again */
+      Enr_ShowFormToEditOtherUsr ();
+     }
    else // No error
       switch (Gbl.Usrs.RegRemAction)
 	{
 	 case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
-	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-               /***** Show optional alert *****/
-               Ale_ShowAlerts (NULL);
+	    // if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+            /* Show possible alerts */
+            Ale_ShowAlerts (NULL);
 
-	    /***** Show user's record *****/
-	    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+            /* Show form to edit user again */
+	    Enr_ShowFormToEditOtherUsr ();
 	    break;
 	 case Enr_REGISTER_ONE_DEGREE_ADMIN:
 	    Enr_ReqAddAdm (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
@@ -4158,6 +4175,13 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
 
 	 Rol_SetMyRoles ();
 	}
+      else	// Not me
+       {
+         /* Now he/she doesn't belong to current course */
+         UsrDat->Accepted                 = false;
+	 UsrDat->Roles.InCurrentCrs.Role  = Rol_USR;
+	 UsrDat->Roles.InCurrentCrs.Valid = false;
+        }
 
       if (QuietOrVerbose == Cns_VERBOSE)
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,

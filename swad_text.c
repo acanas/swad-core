@@ -37588,64 +37588,55 @@ const char *Txt_Select_questions =
 
 const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_ =
 #if   L==1	// ca
-	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios."
-	" Solo puede seleccionar aquellos grupos a los que usted pertenezca.<br />"
+	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios.<br />"
 	"Si selecciona grupos, los usuarios ser&aacute;n inscritos en la asignatura y en los grupos seleccionados,"
 	" o bien eliminados de los grupos seleccionados pero no de la asignatura.<br />"
 	"Si no selecciona ning&uacute;n grupo, los usuarios ser&aacute;n inscritos en la asignatura pero no en grupos concretos,"
 	" o bien eliminados de la asignatura y de todos los grupos.";	// Necessita traduccio
 #elif L==2	// de
-	"Select the groups in/from which you want to register/remove users."
-	" You can only select those groups to which you belong.<br />"
+	"Select the groups in/from which you want to register/remove users.<br />"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
-	" or removed from the course and from all groups.";	// Need Übersetzung
+	" or removed from the course and from all groups.";		// Need Übersetzung
 #elif L==3	// en
-	"Select the groups in/from which you want to register/remove users."
-	" You can only select those groups to which you belong.<br />"
+	"Select the groups in/from which you want to register/remove users.<br />"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";
 #elif L==4	// es
-	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios."
-	" Solo puede seleccionar aquellos grupos a los que usted pertenezca.<br />"
+	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios.<br />"
 	"Si selecciona grupos, los usuarios ser&aacute;n inscritos en la asignatura y en los grupos seleccionados,"
 	" o bien eliminados de los grupos seleccionados pero no de la asignatura.<br />"
 	"Si no selecciona ning&uacute;n grupo, los usuarios ser&aacute;n inscritos en la asignatura pero no en grupos concretos,"
 	" o bien eliminados de la asignatura y de todos los grupos.";
 #elif L==5	// fr
-	"Select the groups in/from which you want to register/remove users."
-	" You can only select those groups to which you belong.<br />"
+	"Select the groups in/from which you want to register/remove users.<br />"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
-	" or removed from the course and from all groups.";	// Besoin de traduction
+	" or removed from the course and from all groups.";		// Besoin de traduction
 #elif L==6	// gn
-	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios."
-	" Solo puede seleccionar aquellos grupos a los que usted pertenezca.<br />"
+	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios.<br />"
 	"Si selecciona grupos, los usuarios ser&aacute;n inscritos en la asignatura y en los grupos seleccionados,"
 	" o bien eliminados de los grupos seleccionados pero no de la asignatura.<br />"
 	"Si no selecciona ning&uacute;n grupo, los usuarios ser&aacute;n inscritos en la asignatura pero no en grupos concretos,"
 	" o bien eliminados de la asignatura y de todos los grupos.";	// Okoteve traducción
 #elif L==7	// it
-	"Seleziona i gruppi nel/dal quale vuoi registrare/rimuovere utenti."
-	" Puoi solo selezionare quei gruppi ai quali appartieni.<br />"
+	"Seleziona i gruppi nel/dal quale vuoi registrare/rimuovere utenti.<br />"
 	"Se selezioni qualche gruppo, gli utenti saranno registrati nel corso e nel gruppo selezionato,"
 	" o rimossi dai gruppi selezionati ma non dal corso.<br />"
 	"Se non selezioni alcun gruppo, gli utenti saranno registrati nel corso ma non in gruppi specifici,"
 	" o rimossi dal corso e da tutti i gruppi.";
 #elif L==8	// pl
-	"Select the groups in/from which you want to register/remove users."
-	" You can only select those groups to which you belong.<br />"
+	"Select the groups in/from which you want to register/remove users.<br />"
 	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
 	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
-	" or removed from the course and from all groups.";	// Potrzebujesz tlumaczenie
+	" or removed from the course and from all groups.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Selecione os grupos em/dos quais voc&ecirc; deseja registrar/remover usu&aacute;rios."
-	" Voc&ecirc; s&oacute; pode selecionar os grupos aos quais voc&ecirc; pertence.<br />"
+	"Selecione os grupos em/dos quais voc&ecirc; deseja registrar/remover usu&aacute;rios.<br />"
 	"Se voc&ecirc; selecionar grupos, os usu&aacute;rios ser&atilde;o inscritos na disciplina e nos grupos selecionados"
 	" ou removidos dos grupos selecionados, mas n&atilde;o da disciplina.<br />"
 	"Se voc&ecirc; n&atilde;o selecionar nenhum grupo, os usu&aacute;rios ser&atilde;o inscritos na disciplina, mas n&atilde;o em grupos espec&iacute;ficos,"
@@ -47498,42 +47489,42 @@ const char *Txt_THE_USER_X_already_exists_in_Y =	// Warning: it is very importan
 	"<strong>%s</strong> j&aacute; existe em %s.";
 #endif
 
-const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z =	// Warning: it is very important to include three %s in the following sentences
+const char *Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z =	// Warning: it is very important to include three %s in the following sentences
 #if   L==1	// ca
-	"<strong>%s</strong> ya existe en %s,"
-	" pero a&uacute;n no est&aacute; inscrito"
+	"<strong>%s</strong> existe en %s,"
+	" pero <strong>no</strong> est&aacute; inscrito"
 	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"<strong>%s</strong> already exists in %s,"
-	" but is not yet enroled"
+	"<strong>%s</strong> exists in %s,"
+	" but is <strong>not</strong> enroled"
 	" in the course <strong>%s</strong>.";		// Need Übersetzung
 #elif L==3	// en
-	"<strong>%s</strong> already exists in %s,"
-	" but is not yet enroled"
+	"<strong>%s</strong> exists in %s,"
+	" but is <strong>not</strong> enroled"
 	" in the course <strong>%s</strong>.";
 #elif L==4	// es
-	"<strong>%s</strong> ya existe en %s,"
-	" pero a&uacute;n no est&aacute; inscrito"
+	"<strong>%s</strong> existe en %s,"
+	" pero <strong>no</strong> est&aacute; inscrito"
 	" en la asignatura <strong>%s</strong>.";
 #elif L==5	// fr
-	"<strong>%s</strong> already exists in %s,"
-	" but is not yet enroled"
+	"<strong>%s</strong> exists in %s,"
+	" but is <strong>not</strong> enroled"
 	" in the course <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6	// gn
-	"<strong>%s</strong> ya existe en %s,"
-	" pero a&uacute;n no est&aacute; inscrito"
+	"<strong>%s</strong> existe en %s,"
+	" pero <strong>no</strong> est&aacute; inscrito"
 	" en la asignatura <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"<strong>%s</strong> esiste gi&agrave; in %s,"
-	" ma non &egrave; ancora registrato"
+	"<strong>%s</strong> esiste in %s,"
+	" ma <strong>non</strong> &egrave; registrato"
 	" al corso <strong>%s</strong>.";
 #elif L==8	// pl
-	"<strong>%s</strong> already exists in %s,"
-	" but is not yet enroled"
+	"<strong>%s</strong> exists in %s,"
+	" but is <strong>not</strong> enroled"
 	" in the course <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"<strong>%s</strong> j&aacute; existe em %s,"
-	" mas ainda n&atilde;o est&aacute; inscrito"
+	"<strong>%s</strong> existe em %s,"
+	" mas <strong>n&atilde;o</strong> est&aacute; inscrito"
 	" na disciplina <strong>%s</strong>.";
 #endif
 
@@ -47912,72 +47903,72 @@ const char *Txt_THE_USER_X_is_already_an_administrator_of_Y =	// Warning: it is 
 	"<strong>%s</strong> j&aacute; &eacute; um administrador de <strong>%s</strong>.";
 #endif
 
-const char *Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrolment =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_THE_USER_X_is_in_the_course_Y_but_has_not_yet_accepted_the_enrolment =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"<strong>%s</strong> ya est&aacute;"
+	"<strong>%s</strong> est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>,"
 	" pero a&uacute;n no ha aceptado la inscripci&oacute;n.";	// Necessita traduccio
 #elif L==2	// de
-	"<strong>%s</strong> is already"
+	"<strong>%s</strong> is enroled"
 	" in the course <strong>%s</strong>,"
 	" but has not yet accepted the enrolment.";			// Übersetzung notwendig
 #elif L==3	// en
-	"<strong>%s</strong> is already"
+	"<strong>%s</strong> is enroled"
 	" in the course <strong>%s</strong>,"
 	" but has not yet accepted the enrolment.";
 #elif L==4	// es
-	"<strong>%s</strong> ya est&aacute;"
+	"<strong>%s</strong> est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>,"
 	" pero a&uacute;n no ha aceptado la inscripci&oacute;n.";
 #elif L==5	// fr
-	"<strong>%s</strong> is already"
+	"<strong>%s</strong> is enroled"
 	" in the course <strong>%s</strong>,"
 	" but has not yet accepted the enrolment.";			// Besoin de traduction
 #elif L==6	// gn
-	"<strong>%s</strong> ya est&aacute;"
+	"<strong>%s</strong> est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>,"
 	" pero a&uacute;n no ha aceptado la inscripci&oacute;n.";	// Okoteve traducción
 #elif L==7	// it
-	"<strong>%s</strong> &egrave; gi&agrave;"
+	"<strong>%s</strong> &egrave; registrato/a"
 	" nel corso <strong>%s</strong>,"
 	" ma non ha ancora accettato la registrazione.";
 #elif L==8	// pl
-	"<strong>%s</strong> is already"
+	"<strong>%s</strong> is enroled"
 	" in the course <strong>%s</strong>,"
 	" but has not yet accepted the enrolment.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"<strong>%s</strong> j&aacute; est&aacute;"
+	"<strong>%s</strong> est&aacute; inscrito/a"
 	" na disciplina <strong>%s</strong>,"
 	" mas ainda n&atilde;o aceitou a inscri&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
-	"<strong>%s</strong> ya est&aacute; inscrito/a"
+	"<strong>%s</strong> est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2	// de
-	"<strong>%s</strong> is already enroled"
+	"<strong>%s</strong> is enroled"
 	" in the course <strong>%s</strong>.";		// Übersetzung notwendig
 #elif L==3	// en
-	"<strong>%s</strong> is already enroled"
+	"<strong>%s</strong> is enroled"
 	" in the course <strong>%s</strong>.";
 #elif L==4	// es
-	"<strong>%s</strong> ya est&aacute; inscrito/a"
+	"<strong>%s</strong> est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>.";
 #elif L==5	// fr
-	"<strong>%s</strong> is already enroled"
+	"<strong>%s</strong> is enroled"
 	" in the course <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6	// gn
-	"<strong>%s</strong> ya est&aacute; inscrito/a"
+	"<strong>%s</strong> est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7	// it
-	"<strong>%s</strong> &egrave; gi&agrave; registrato/a"
+	"<strong>%s</strong> &egrave; registrato/a"
 	" nel corso <strong>%s</strong>.";
 #elif L==8	// pl
-	"<strong>%s</strong> is already enroled"
+	"<strong>%s</strong> is already"
 	" in the course <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"<strong>%s</strong> j&aacute; est&aacute; inscrito/a"
+	"<strong>%s</strong> est&aacute; inscrito/a"
 	" na disciplina <strong>%s</strong>.";
 #endif
 

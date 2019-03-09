@@ -2019,27 +2019,25 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 	                 "<td class=\"LEFT_MIDDLE");
       if (IBelongToThisGroup)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
-      fprintf (Gbl.F.Out,"\">"
-	                 "<input type=\"");
+      fprintf (Gbl.F.Out,"\">");
+
       if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
           !GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
           GrpTyp->NumGrps > 1)			// ...and there are more than one group
 	{
 	 /* Put a radio item */
-         fprintf (Gbl.F.Out,"radio\" id=\"Grp%ld\" name=\"GrpCod%ld\""
-                            " value=\"%ld\"",
-                  Grp->GrpCod,GrpTyp->GrpTypCod,
-                  Grp->GrpCod);
+         fprintf (Gbl.F.Out,"<input type=\"radio\""
+                            " id=\"Grp%ld\" name=\"GrpCod%ld\" value=\"%ld\"",
+                  Grp->GrpCod,GrpTyp->GrpTypCod,Grp->GrpCod);
          if (!GrpTyp->MandatoryEnrolment)	// If the enrolment is not mandatory, I can select no groups
             fprintf (Gbl.F.Out," onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
                      GrpTyp->GrpTypCod,GrpTyp->NumGrps);
 	}
       else
 	 /* Put a checkbox item */
-         fprintf (Gbl.F.Out,"checkbox\" id=\"Grp%ld\" name=\"GrpCod%ld\""
-                            " value=\"%ld\"",
-                  Grp->GrpCod,GrpTyp->GrpTypCod,
-                  Grp->GrpCod);
+         fprintf (Gbl.F.Out,"<input type=\"checkbox\""
+                            " id=\"Grp%ld\" name=\"GrpCod%ld\" value=\"%ld\"",
+                  Grp->GrpCod,GrpTyp->GrpTypCod,Grp->GrpCod);
 
       /* Group checked? */
       if (IBelongToThisGroup)
@@ -2145,23 +2143,32 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       UsrBelongsToThisGroup = (UsrCod > 0) ? Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsUsrBelongs) :
 	                                     false;
 
-      /* Put checkbox to select the group */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_MIDDLE");
+      /* Start row */
+      fprintf (Gbl.F.Out,"<tr>");
+
+      /* Start cell for checkbox */
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
       if (UsrBelongsToThisGroup)
 	 fprintf (Gbl.F.Out," LIGHT_BLUE");
-      fprintf (Gbl.F.Out,"\">"
-	                 "<input type=\"checkbox\""
+      fprintf (Gbl.F.Out,"\">");
+
+      /* Put checkbox to select the group */
+      // Always checkbox, not radio, because the role in the form may be teacher,
+      // so if he/she is registered as teacher, he/she can belong to several groups
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
 	                 " id=\"Grp%ld\" name=\"GrpCod%ld\" value=\"%ld\"",
-               Grp->GrpCod,GrpTyp->GrpTypCod,
-               Grp->GrpCod);
+               Grp->GrpCod,GrpTyp->GrpTypCod,Grp->GrpCod);
       if (UsrBelongsToThisGroup)
       	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />"
-	                 "</td>");
+      fprintf (Gbl.F.Out," />");
 
+      /* End cell for checkbox */
+      fprintf (Gbl.F.Out,"</td>");
+
+      /* Write cell for group */
       Grp_WriteRowGrp (Grp,UsrBelongsToThisGroup);
 
+      /* End row */
       fprintf (Gbl.F.Out,"</tr>");
      }
 

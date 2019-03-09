@@ -161,6 +161,7 @@ void Rec_FreeMemFieldsRecordsCrs (void);
 
 void Rec_ShowFormSignUpInCrsWithMySharedRecord (void);
 void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t DefaultRole);
+void Rec_ShowOtherSharedRecordEditable (void);
 void Rec_ShowMySharedRecordUpd (void);
 void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat);
 void Rec_ShowPublicSharedRecordOtherUsr (void);
