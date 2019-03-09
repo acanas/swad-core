@@ -101,10 +101,10 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
          Ale_ShowAlert (Ale_SUCCESS,Txt_Thank_you_for_reporting_a_possible_duplicate_user);
 	}
       else
-         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -244,7 +244,7 @@ void Dup_GetUsrCodAndListSimilarUsrs (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
       Dup_ListSimilarUsrs ();
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 static void Dup_ListSimilarUsrs (void)
@@ -451,7 +451,7 @@ void Dup_RemoveUsrFromListDupUsrs (void)
       Dup_ListDuplicateUsrs ();
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

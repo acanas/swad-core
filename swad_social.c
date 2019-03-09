@@ -846,11 +846,17 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
    Soc_AddNotesJustRetrievedToTimelineThisSession ();
 
    /***** Build query to show timeline including the users I am following *****/
-   DB_BuildQuery_old (Query,
-	              "SELECT PubCod,NotCod,PublisherCod,PubType,UNIX_TIMESTAMP(TimePublish)"
-		      " FROM social_pubs WHERE PubCod IN "
-		      "(SELECT PubCod FROM pub_codes)"
-		      " ORDER BY PubCod DESC");
+   DB_BuildQuery (Query,
+	          "SELECT PubCod,"			// row[0]
+	                 "NotCod,"			// row[1]
+	                 "PublisherCod,"		// row[2]
+	                 "PubType,"			// row[3]
+	                 "UNIX_TIMESTAMP(TimePublish)"	// row[4]
+		  " FROM social_pubs"
+		  " WHERE PubCod IN "
+		  "(SELECT PubCod"
+		  " FROM pub_codes)"
+		  " ORDER BY PubCod DESC");
   }
 
 /*****************************************************************************/

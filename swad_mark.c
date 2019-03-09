@@ -304,7 +304,6 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
   {
    extern const char *Txt_There_are_more_than_one_table_in_the_file_of_marks;
    extern const char *Txt_Table_not_found_in_the_file_of_marks;
-   // extern const char *Txt_X_header_rows_Y_student_rows_and_Z_footer_rows_found;
    char CellContent[Mrk_MAX_BYTES_IN_CELL_CONTENT + 1];
    FILE *FileAllMarks;
    bool EndOfHead = false;
@@ -326,9 +325,8 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
          // Only one table is allowed
          if (Str_FindStrInFile (FileAllMarks,"<table",Str_NO_SKIP_HTML_COMMENTS))
            {
-            Gbl.DelayedAlert.Type = Ale_WARNING;
-            Str_Copy (Gbl.DelayedAlert.Txt,Txt_There_are_more_than_one_table_in_the_file_of_marks,
-		      Ale_MAX_BYTES_ALERT);
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        		     Txt_There_are_more_than_one_table_in_the_file_of_marks);
             FileIsCorrect = false;
            }
          else
@@ -389,21 +387,14 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
         }
       else
         {
-         Gbl.DelayedAlert.Type = Ale_WARNING;
-	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_Table_not_found_in_the_file_of_marks,
-		   Ale_MAX_BYTES_ALERT);
+         Ale_CreateAlert (Ale_WARNING,NULL,
+			  Txt_Table_not_found_in_the_file_of_marks);
          FileIsCorrect = false;
         }
 
       /***** The file of marks is no more necessary. Close it. *****/
       fclose (FileAllMarks);
      }
-   /*
-   if (FileIsCorrect)
-      snprintf (Gbl.Alert.Txt,sizeof (Gbl.Alert.Txt),
-	        Txt_X_header_rows_Y_student_rows_and_Z_footer_rows_found,
-                Marks->Header,NumRowsStds,Marks->Footer);
-   */
 
    return FileIsCorrect;
   }
@@ -464,9 +455,8 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
    /***** Open HTML file with the table of marks *****/
    if (!(FileAllMarks = fopen (PathFileAllMarks,"rb")))
      {  // Can't open the file with the table of marks
-      Gbl.DelayedAlert.Type = Ale_ERROR;
-      Str_Copy (Gbl.DelayedAlert.Txt,"Can not open file of marks.",
-		Ale_MAX_BYTES_ALERT);
+      Ale_CreateAlert (Ale_ERROR,NULL,
+		       "Can not open file of marks.");
       return false;
      }
 
@@ -601,10 +591,9 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 
    /***** User's ID not found in table *****/
    fclose (FileAllMarks);
-   Gbl.DelayedAlert.Type = Ale_WARNING;
-   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	     Txt_THE_USER_X_is_not_found_in_the_file_of_marks,
-	     UsrDat->FullName);
+   Ale_CreateAlert (Ale_WARNING,NULL,
+		    Txt_THE_USER_X_is_not_found_in_the_file_of_marks,
+		    UsrDat->FullName);
    return false;
   }
 
@@ -714,7 +703,7 @@ void Mrk_ShowMyMarks (void)
       else	// Problems in table of marks or user's ID not found
         {
          fclose (FileUsrMarks);
-	 Ale_ShowDelayedAlert ();
+	 Ale_ShowAlerts (NULL);
         }
 
       unlink (FileNameUsrMarks);	// File with marks is no longer necessary
@@ -874,28 +863,23 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		 {
 		  fclose (FileUsrMarks);
 		  if (asprintf (ContentStr,"<![CDATA[%s]]>",
-				Gbl.DelayedAlert.Txt) < 0)
+				Ale_GetTextOfLastAlert ()) < 0)
 		     Lay_NotEnoughMemoryExit ();
+	          Ale_ResetAllAlerts ();
 		 }
 	      }
 	    else
 	      {
-	       Gbl.DelayedAlert.Type = Ale_ERROR;
-	       Str_Copy (Gbl.DelayedAlert.Txt,"Can not open file of marks.",
-			 Ale_MAX_BYTES_ALERT);
 	       if (asprintf (ContentStr,"<![CDATA[%s]]>",
-			     Gbl.DelayedAlert.Txt) < 0)
+			     "Can not open file of marks.") < 0)
 		  Lay_NotEnoughMemoryExit ();
 	      }
 	    unlink (FileNameUsrMarks);	// File with marks is no longer necessary
 	   }
 	 else
 	   {
-	    Gbl.DelayedAlert.Type = Ale_ERROR;
-	    Str_Copy (Gbl.DelayedAlert.Txt,"User's IDs not found!",
-		      Ale_MAX_BYTES_ALERT);
 	    if (asprintf (ContentStr,"<![CDATA[%s]]>",
-			  Gbl.DelayedAlert.Txt) < 0)
+		          "User's IDs not found!") < 0)
 	       Lay_NotEnoughMemoryExit ();
 	   }
 	}

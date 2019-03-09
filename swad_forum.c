@@ -4285,6 +4285,7 @@ void For_RemoveThread (void)
    extern const char *Txt_Thread_X_removed;
    extern const char *Txt_Thread_removed;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   char Message[256 + Cns_MAX_BYTES_SUBJECT + 1];
 
    /***** Get parameters related to forum *****/
    For_GetParamsForum ();
@@ -4304,10 +4305,10 @@ void For_RemoveThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
       	{
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
+         snprintf (Message,sizeof (Message),
 	           Txt_Thread_X_removed,Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-	                                            Ale_SUCCESS,Gbl.DelayedAlert.Txt);
+	                                            Ale_SUCCESS,Message);
       	}
       else
 	 For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
@@ -4326,6 +4327,7 @@ void For_CutThread (void)
    extern const char *Txt_Thread_X_marked_to_be_moved;
    extern const char *Txt_Thread_marked_to_be_moved;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   char Message[256 + Cns_MAX_BYTES_SUBJECT + 1];
 
    /***** Get parameters related to forum *****/
    For_GetParamsForum ();
@@ -4342,10 +4344,10 @@ void For_CutThread (void)
    /***** Show the threads again *****/
    if (Subject[0])
      {
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
+      snprintf (Message,sizeof (Message),
 	        Txt_Thread_X_marked_to_be_moved,Subject);
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-						 Ale_SUCCESS,Gbl.DelayedAlert.Txt);
+						 Ale_SUCCESS,Message);
      }
    else
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
@@ -4364,6 +4366,7 @@ void For_PasteThread (void)
    extern const char *Txt_Thread_X_moved_to_this_forum;
    extern const char *Txt_Thread_moved_to_this_forum;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   char Message[256 + Cns_MAX_BYTES_SUBJECT + 1];
 
    /***** Get parameters related to forum *****/
    For_GetParamsForum ();
@@ -4380,11 +4383,11 @@ void For_PasteThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
 	{
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
+         snprintf (Message,sizeof (Message),
 	           Txt_The_thread_X_is_already_in_this_forum,
                    Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-						    Ale_WARNING,Gbl.DelayedAlert.Txt);
+						    Ale_WARNING,Message);
         }
       else
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
@@ -4401,11 +4404,11 @@ void For_PasteThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
 	{
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
+         snprintf (Message,sizeof (Message),
 	           Txt_Thread_X_moved_to_this_forum,
                    Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-						    Ale_SUCCESS,Gbl.DelayedAlert.Txt);
+						    Ale_SUCCESS,Message);
 	}
       else
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,

@@ -681,16 +681,15 @@ void Hld_RemoveHoliday1 (void)
 		   Hld.HldCod);
 
    /***** Write message to show the change made *****/
-   Gbl.DelayedAlert.Type = Ale_SUCCESS;
-   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	     Txt_Holiday_X_removed,
-	     Hld.Name);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_Holiday_X_removed,
+	            Hld.Name);
   }
 
 void Hld_RemoveHoliday2 (void)
   {
    /***** Show success message *****/
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -731,16 +730,15 @@ void Hld_ChangeHolidayPlace1 (void)
              Plc_MAX_BYTES_PLACE_FULL_NAME);
 
    /***** Write message to show the change made *****/
-   Gbl.DelayedAlert.Type = Ale_SUCCESS;
-   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	     Txt_The_place_of_the_holiday_X_has_changed_to_Y,
-             Hld->Name,NewPlace.FullName);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_The_place_of_the_holiday_X_has_changed_to_Y,
+                    Hld->Name,NewPlace.FullName);
   }
 
 void Hld_ChangeHolidayPlace2 (void)
   {
    /***** Show success message *****/
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -775,16 +773,15 @@ void Hld_ChangeHolidayType1 (void)
 	           (unsigned) Hld->HldTyp,Hld->HldCod);
 
    /***** Write message to show the change made *****/
-   Gbl.DelayedAlert.Type = Ale_SUCCESS;
-   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	     Txt_The_type_of_the_holiday_X_has_changed,
-             Hld->Name);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_The_type_of_the_holiday_X_has_changed,
+                    Hld->Name);
   }
 
 void Hld_ChangeHolidayType2 (void)
   {
    /***** Show success message *****/
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -874,11 +871,10 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    Dat_AssignDate (PtrDate,&NewDate);
 
    /***** Write message to show the change made *****/
-   Gbl.DelayedAlert.Type = Ale_SUCCESS;
    Dat_ConvDateToDateStr (&NewDate,StrDate);
-   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	     Txt_The_date_of_the_holiday_X_has_changed_to_Y,
-             Hld->Name,StrDate);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_The_date_of_the_holiday_X_has_changed_to_Y,
+                    Hld->Name,StrDate);
   }
 
 /*****************************************************************************/
@@ -888,7 +884,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
 void Hld_ChangeDate2 (void)
   {
    /***** Show success message *****/
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -921,12 +917,9 @@ void Hld_RenameHoliday1 (void)
 
    /***** Check if new name is empty *****/
    if (!NewHldName[0])
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_You_can_not_leave_the_name_of_the_holiday_X_empty,
-                Hld->Name);
-     }
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_name_of_the_holiday_X_empty,
+                       Hld->Name);
    else
      {
       /***** Check if old and new names are the same
@@ -942,25 +935,21 @@ void Hld_RenameHoliday1 (void)
 		   Hld_MAX_BYTES_HOLIDAY_NAME);
 
 	 /***** Write message to show the change made *****/
-         Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_name_of_the_holiday_X_has_changed_to_Y,
-		   Hld->Name,NewHldName);
+         Ale_CreateAlert (Ale_SUCCESS,NULL,
+                          Txt_The_name_of_the_holiday_X_has_changed_to_Y,
+		          Hld->Name,NewHldName);
         }
       else	// The same name
-        {
-         Gbl.DelayedAlert.Type = Ale_INFO;
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_name_of_the_holiday_X_has_not_changed,
-                   Hld->Name);
-        }
+         Ale_CreateAlert (Ale_INFO,NULL,
+                          Txt_The_name_of_the_holiday_X_has_not_changed,
+                          Hld->Name);
      }
   }
 
 void Hld_RenameHoliday2 (void)
   {
    /***** Write error/success message *****/
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -1181,24 +1170,20 @@ void Hld_RecFormNewHoliday1 (void)
       Hld_CreateHoliday (Hld);
 
       /* Success message */
-      Gbl.DelayedAlert.Type = Ale_SUCCESS;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_Created_new_holiday_X,
-		Hld->Name);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_Created_new_holiday_X,
+		       Hld->Name);
      }
    else	// If there is not a holiday name
-     {
       /* Error message */
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_You_must_specify_the_name_of_the_new_holiday,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_name_of_the_new_holiday);
   }
 
 void Hld_RecFormNewHoliday2 (void)
   {
    /***** Write error/success message *****/
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
    Hld_EditHolidays ();

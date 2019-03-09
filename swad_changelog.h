@@ -447,13 +447,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.68.3 (2019-03-08)"
+#define Log_PLATFORM_VERSION	"SWAD 18.69 (2019-03-09)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
- * Mostrar "En un tipo de grupo de adscripción única no es posible apuntar estudiantes a más de un grupo"
- * también cuando se intenta hacer con un usuario único desde su ficha
- *
+	Version 18.69:    Mar 09, 2019 	Code refactoring related to alerts. (238779 lines)
 	Version 18.68.3:  Mar 08, 2019 	Changes in styles of connected users.
 					Increased line height in timeline, forums and messages. (238945 lines)
 	Version 18.68.2:  Mar 08, 2019 	Register several students in groups, even if he/she doesn't belong to them. (? lines)

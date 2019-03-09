@@ -2708,7 +2708,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
 /****** Convert invalid characters in a file name to valid characters ********/
 /*****************************************************************************/
 // Return true if the name of the file o folder is valid
-// If the name is not valid, Gbl.DelayedAlert.Txt will contain feedback text
+// If the name is not valid, an alert will contain feedback text
 // File names with heading and trailing spaces are allowed
 
 bool Str_ConvertFilFolLnkNameToValid (char *FileName)
@@ -2799,22 +2799,15 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName)
       if (NumAlfanum)
          FileNameIsOK = true;
       else
-        {
-	 Gbl.DelayedAlert.Type = Ale_WARNING;
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-                   Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_X_invalid_name_NO_HTML :
-                	                                   Txt_UPLOAD_FILE_X_invalid_name,
-		   FileName);
-        }
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+			  Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_X_invalid_name_NO_HTML :
+								  Txt_UPLOAD_FILE_X_invalid_name,
+			  FileName);
      }
    else	// FileName is empty
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Str_Copy (Gbl.DelayedAlert.Txt,
-	        Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
-						        Txt_UPLOAD_FILE_Invalid_name,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlert (Ale_WARNING,NULL,
+		       Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
+							       Txt_UPLOAD_FILE_Invalid_name);
 
    return FileNameIsOK;
   }

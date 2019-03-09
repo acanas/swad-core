@@ -520,10 +520,10 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	 fprintf (Gbl.F.Out,"</div>");
 	}
       else
-	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -684,7 +684,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
      {
       Error = true;
-      Ale_ShowDelayedAlert ();	// Error message is set in Pwd_SlowCheckIfPasswordIsGood
+      Ale_ShowAlerts (NULL);	// Error message is set in Pwd_SlowCheckIfPasswordIsGood
      }
 
    return !Error;
@@ -857,7 +857,7 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
       Error = true;
 
    if (Error)
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -966,7 +966,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

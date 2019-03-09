@@ -254,7 +254,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
    if (!ProfileShown)
      {
       /* Show error message */
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
       /* Request a user's profile */
       Prf_RequestUserProfile ();

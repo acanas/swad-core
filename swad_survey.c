@@ -2645,7 +2645,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
             if (NumAnswers > Svy_MAX_ANSWERS_PER_QUESTION)
                Lay_ShowErrorAndExit ("Wrong answer.");
             if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
-               Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+	       /* Abort on error */
+	       Ale_ShowAlertsAndExit ();
 
             Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],
                       Svy_MAX_BYTES_ANSWER);
@@ -2883,9 +2884,8 @@ static bool Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,
    Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
    if ((SvyQst->AnsChoice[NumAns].Text = (char *) malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
      {
-      Gbl.DelayedAlert.Type = Ale_ERROR;
-      Str_Copy (Gbl.DelayedAlert.Txt,"Not enough memory to store answer.",
-	        Ale_MAX_BYTES_ALERT);
+      Ale_CreateAlert (Ale_ERROR,NULL,
+	               "Not enough memory to store answer.");
       return false;
      }
    SvyQst->AnsChoice[NumAns].Text[0] = '\0';
@@ -2965,7 +2965,8 @@ void Svy_ReceiveQst (void)
 	NumAns++)
      {
       if (!Svy_AllocateTextChoiceAnswer (&SvyQst,NumAns))
-	 Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+	 /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
       snprintf (AnsStr,sizeof (AnsStr),
 	        "AnsStr%u",
 		NumAns);
@@ -3396,7 +3397,9 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 
 	 /* Convert the answer (row[2]), that is in HTML, to rigorous HTML */
 	 if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
-            Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+	    /* Abort on error */
+	    Ale_ShowAlertsAndExit ();
+
 	 Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],
 	           Svy_MAX_BYTES_ANSWER);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,

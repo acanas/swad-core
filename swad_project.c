@@ -1976,7 +1976,7 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
       Usr_FreeListUsrCods (&ListUsrCods);
      }
    else	// No users found
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Put form to edit project again *****/
    Prj_RequestCreatOrEditPrj (PrjCod);
@@ -2058,10 +2058,10 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
 	}
       else
-         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2133,10 +2133,10 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 		        Prj.Title);
 	}
       else
-         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);

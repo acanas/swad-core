@@ -2151,7 +2151,7 @@ void Enr_AskIfRejectSignUp (void)
         }
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -2184,7 +2184,7 @@ void Enr_RejectSignUp (void)
                      Gbl.Usrs.Other.UsrDat.FullName);
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /* Show again the rest of registrarion requests */
    Enr_ShowEnrolmentRequests ();
@@ -3382,10 +3382,10 @@ static void Enr_AddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
             Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
            }
          else
-            Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+            Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
         }
       else
-         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
   }
 
@@ -3439,10 +3439,10 @@ void Enr_ReqRemUsrFromCrs (void)
       if (Enr_CheckIfICanRemUsrFromCrs ())
 	 Enr_AskIfRemoveUsrFromCrs (&Gbl.Usrs.Other.UsrDat);
       else
-         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -3451,8 +3451,6 @@ void Enr_ReqRemUsrFromCrs (void)
 
 void Enr_RemUsrFromCrs1 (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    if (Pwd_GetConfirmationOnDangerousAction ())
      {
       /***** Get user to be removed *****/
@@ -3462,24 +3460,16 @@ void Enr_RemUsrFromCrs1 (void)
 	    Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,&Gbl.CurrentCrs.Crs,
 					  Enr_REMOVE_WORKS,Cns_VERBOSE);
 	 else
-	   {
-	    Gbl.DelayedAlert.Type = Ale_WARNING;
-	    Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
-		      Ale_MAX_BYTES_ALERT);
-	   }
+	    Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	}
       else
-	{
-	 Gbl.DelayedAlert.Type = Ale_WARNING;
-	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
-		   Ale_MAX_BYTES_ALERT);
-	}
+	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
      }
   }
 
 void Enr_RemUsrFromCrs2 (void)
   {
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
   }
 
 /*****************************************************************************/
@@ -3612,10 +3602,10 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Sco_Scope_t 
                               Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
            }
          else
-            Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+            Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
         }
       else
-         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
   }
 
@@ -3674,10 +3664,10 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
               }
            }
          else
-            Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+            Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
         }
       else
-         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
   }
 
@@ -3720,9 +3710,6 @@ void Enr_CreateNewUsr1 (void)
    /***** Get user's ID from form *****/
    ID_GetParamOtherUsrIDPlain ();	// User's ID was already modified and passed as a hidden parameter
 
-   /***** Initialize alert type and message *****/
-   Gbl.DelayedAlert.Type = Ale_NONE;	// Do not show alert
-
    if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))        // User's ID valid
      {
       Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
@@ -3750,13 +3737,12 @@ void Enr_CreateNewUsr1 (void)
 	       Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
 
 	       /* Success message */
-               Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	       snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                 Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
-			 Gbl.Usrs.Other.UsrDat.FullName,
-			 Gbl.CurrentCrs.Crs.FullName,
-			 Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
-			 Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
+               Ale_CreateAlert (Ale_SUCCESS,NULL,
+        	                Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+				Gbl.Usrs.Other.UsrDat.FullName,
+				Gbl.CurrentCrs.Crs.FullName,
+				Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
+				Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
 	      }
 	   }
 	 else      // User does not belong to current course
@@ -3766,11 +3752,10 @@ void Enr_CreateNewUsr1 (void)
 	                                 Enr_SET_ACCEPTED_TO_FALSE);
 
 	    /* Success message */
-            Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
-		      Gbl.Usrs.Other.UsrDat.FullName,
-		      Gbl.CurrentCrs.Crs.FullName);
+            Ale_CreateAlert (Ale_SUCCESS,NULL,
+        	             Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
+		             Gbl.Usrs.Other.UsrDat.FullName,
+		             Gbl.CurrentCrs.Crs.FullName);
 	   }
 
 	 /***** Change user's groups *****/
@@ -3800,24 +3785,20 @@ void Enr_CreateNewUsr1 (void)
       Tab_SetCurrentTab ();
      }
    else        // User's ID not valid
-     {
       /***** Error message *****/
-      Gbl.DelayedAlert.Type = Ale_ERROR;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_The_ID_X_is_not_valid,
-                Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
-     }
+      Ale_CreateAlert (Ale_ERROR,NULL,
+	               Txt_The_ID_X_is_not_valid,
+                       Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
   }
 
 void Enr_CreateNewUsr2 (void)
   {
-   if (Gbl.DelayedAlert.Type == Ale_ERROR)	// User's ID not valid
-      Ale_ShowDelayedAlert ();
-   else					// User's ID valid
+   if (Ale_GetTypeOfLastAlert () == Ale_ERROR)	// User's ID not valid
+      Ale_ShowAlerts (NULL);
+   else						// User's ID valid
      {
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
-	 /***** Show optional alert *****/
-         Ale_ShowDelayedAlert ();
+         Ale_ShowAlerts (NULL);
 
       /***** Show user's record *****/
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -3836,9 +3817,6 @@ void Enr_ModifyUsr1 (void)
    bool ItsMe;
    Rol_Role_t OldRole;
    Rol_Role_t NewRole;
-
-   /***** Initialize alert type and message *****/
-   Gbl.DelayedAlert.Type = Ale_NONE;	// Do not show alert
 
    /***** Get user from form *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -3878,13 +3856,12 @@ void Enr_ModifyUsr1 (void)
 			Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
 
 			/* Set success message */
-			Gbl.DelayedAlert.Type = Ale_SUCCESS;
-			snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                          Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
-				  Gbl.Usrs.Other.UsrDat.FullName,
-				  Gbl.CurrentCrs.Crs.FullName,
-				  Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
-				  Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
+			Ale_CreateAlert (Ale_SUCCESS,NULL,
+			                 Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+					 Gbl.Usrs.Other.UsrDat.FullName,
+					 Gbl.CurrentCrs.Crs.FullName,
+					 Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
+					 Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
 		       }
 		    }
 		  else	      // User does not belong to current course
@@ -3894,10 +3871,10 @@ void Enr_ModifyUsr1 (void)
 						  Enr_SET_ACCEPTED_TO_FALSE);
 
 		     /* Set success message */
-	             Gbl.DelayedAlert.Type = Ale_SUCCESS;
-		     snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                       Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
-			       Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+	             Ale_CreateAlert (Ale_SUCCESS,NULL,
+	        	              Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
+			              Gbl.Usrs.Other.UsrDat.FullName,
+				      Gbl.CurrentCrs.Crs.FullName);
 		    }
 
 		  /***** Change user's groups *****/
@@ -3941,64 +3918,64 @@ void Enr_ModifyUsr1 (void)
 		 }
 	      }
 	    else
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REGISTER_ONE_DEGREE_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REGISTER_ONE_CENTRE_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REGISTER_ONE_INSTITUTION_ADMIN:
 	    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
 	    if (ItsMe || Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REMOVE_ONE_USR_FROM_CRS:
 	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REMOVE_ONE_DEGREE_ADMIN:
 	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REMOVE_ONE_CENTRE_ADMIN:
 	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_REMOVE_ONE_INSTITUTION_ADMIN:
 	    if (!ItsMe && Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
 	    if (!Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
+	       Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	 default:
-	    Gbl.DelayedAlert.Type = Ale_WARNING;
+	    Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	    break;
 	}
      }
    else
-      Gbl.DelayedAlert.Type = Ale_WARNING;
+      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 void Enr_ModifyUsr2 (void)
   {
-   if (Gbl.DelayedAlert.Type == Ale_WARNING)
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+   if (Ale_GetTypeOfLastAlert () == Ale_WARNING)
+      Ale_ShowAlerts (NULL);
    else // No error
       switch (Gbl.Usrs.RegRemAction)
 	{
 	 case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
 	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
                /***** Show optional alert *****/
-               Ale_ShowDelayedAlert ();
+               Ale_ShowAlerts (NULL);
 
 	    /***** Show user's record *****/
 	    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -4105,7 +4082,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
       Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
      }
    else	      // User does not belong to current course
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -4116,7 +4093,6 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
                                           Enr_RemoveUsrWorks_t RemoveUsrWorks,Cns_QuietOrVerbose_t QuietOrVerbose)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    if (Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
@@ -4184,20 +4160,13 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
 	}
 
       if (QuietOrVerbose == Cns_VERBOSE)
-        {
-	 Gbl.DelayedAlert.Type = Ale_SUCCESS;
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_THE_USER_X_has_been_removed_from_the_course_Y,
-                   UsrDat->FullName,Crs->FullName);
-        }
+	 Ale_CreateAlert (Ale_SUCCESS,NULL,
+	                  Txt_THE_USER_X_has_been_removed_from_the_course_Y,
+                          UsrDat->FullName,Crs->FullName);
      }
    else        // User does not belong to course
       if (QuietOrVerbose == Cns_VERBOSE)
-	{
-	 Gbl.DelayedAlert.Type = Ale_WARNING;
-	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
-		   Ale_MAX_BYTES_ALERT);
-	}
+	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/

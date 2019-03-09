@@ -1019,12 +1019,11 @@ void DT_ChangeDegreeType (void)
 		   "UPDATE degrees SET DegTypCod=%ld WHERE DegCod=%ld",
 	           NewDegTypCod,Gbl.Degs.EditingDeg.DegCod);
 
-   /***** Write message to show the change made
+   /***** Write alert to show the change made
           and put button to go to degree changed *****/
-   Gbl.DelayedAlert.Type = Ale_SUCCESS;
-   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	     Txt_The_type_of_degree_of_the_degree_X_has_changed,
-	     Gbl.Degs.EditingDeg.FullName);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_The_type_of_degree_of_the_degree_X_has_changed,
+	            Gbl.Degs.EditingDeg.FullName);
    Deg_ShowAlertAndButtonToGoToDeg ();
 
    /***** Show the form again *****/

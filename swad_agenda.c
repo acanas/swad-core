@@ -373,7 +373,7 @@ void Agd_ShowUsrAgenda (void)
 	}
 
    if (Error)
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -416,7 +416,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Box_EndBox ();
            }
 	 else
-	    Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
        }
       else
 	 /* The current language is not my preferred language

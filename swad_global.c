@@ -125,7 +125,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Form.Num = -1;		// Number of form. It's increased by 1 at the begin of each form
    Gbl.Form.Inside = false;	// Set to true inside a form to avoid nested forms
 
-   Ale_ResetDelayedAlert ();
+   Gbl.Alerts.Num = 0;	// No pending alerts to be shown
 
    Gbl.DB.DatabaseIsOpen = false;
    Gbl.DB.LockedTables = false;
@@ -540,4 +540,5 @@ void Gbl_Cleanup (void)
    Fil_CloseXMLFile ();
    Fil_CloseReportFile ();
    Par_FreeParams ();
+   Ale_ResetAllAlerts ();
   }

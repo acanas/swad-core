@@ -250,9 +250,8 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    Box_StartBox (StrRecordWidth,Txt_Nickname,Acc_PutLinkToRemoveMyAccount,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
-   /***** Show possible alert *****/
-   if (Gbl.DelayedAlert.Section == (const char *) Nck_NICKNAME_SECTION_ID)
-      Ale_ShowDelayedAlert ();
+   /***** Show possible alerts *****/
+   Ale_ShowAlerts (Nck_NICKNAME_SECTION_ID);
 
    /***** Help message *****/
    if (IMustFillNickname)
@@ -434,19 +433,13 @@ void Nck_RemoveMyNick (void)
       Nck_RemoveNicknameFromDB (Gbl.Usrs.Me.UsrDat.UsrCod,NicknameWithoutArroba);
 
       /***** Show message *****/
-      Gbl.DelayedAlert.Type = Ale_SUCCESS;
-      Gbl.DelayedAlert.Section = Nck_NICKNAME_SECTION_ID;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_Nickname_X_removed,
-		NicknameWithoutArroba);
+      Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
+	               Txt_Nickname_X_removed,
+		       NicknameWithoutArroba);
      }
    else
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = Nck_NICKNAME_SECTION_ID;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_You_can_not_delete_your_current_nickname,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
+	               Txt_You_can_not_delete_your_current_nickname);
 
    /***** Show my account again *****/
    Acc_ShowFormChgMyAccount ();
@@ -474,20 +467,18 @@ void Nck_RemoveOtherUsrNick (void)
 	 Nck_RemoveNicknameFromDB (Gbl.Usrs.Other.UsrDat.UsrCod,NicknameWithoutArroba);
 
 	 /***** Show message *****/
-	 Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	 Gbl.DelayedAlert.Section = Nck_NICKNAME_SECTION_ID;
-	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_Nickname_X_removed,
-		   NicknameWithoutArroba);
+	 Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
+	                  Txt_Nickname_X_removed,
+		          NicknameWithoutArroba);
 
 	 /***** Show user's account again *****/
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -534,10 +525,10 @@ void Nck_UpdateOtherUsrNick (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -565,13 +556,9 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
 
       /***** Check if new nickname exists in database *****/
       if (!strcmp (UsrDat->Nickname,NewNicknameWithoutArroba))		// User's nickname match exactly the new nickname
-        {
-         Gbl.DelayedAlert.Type = Ale_WARNING;
-         Gbl.DelayedAlert.Section = Nck_NICKNAME_SECTION_ID;
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_nickname_X_matches_the_one_you_had_previously_registered,
-                   NewNicknameWithoutArroba);
-        }
+         Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
+                          Txt_The_nickname_X_matches_the_one_you_had_previously_registered,
+                          NewNicknameWithoutArroba);
       else if (strcasecmp (UsrDat->Nickname,NewNicknameWithoutArroba))	// User's nickname does not match, not even case insensitive, the new nickname
         {
          /***** Check if the new nickname matches any of my old nicknames *****/
@@ -584,15 +571,11 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
         		       "SELECT COUNT(*) FROM usr_nicknames"
 			       " WHERE Nickname='%s' AND UsrCod<>%ld",
 			       NewNicknameWithoutArroba,UsrDat->UsrCod))	// A nickname of another user is the same that user's nickname
-              {
-               Gbl.DelayedAlert.Type = Ale_WARNING;
-               Gbl.DelayedAlert.Section = Nck_NICKNAME_SECTION_ID;
-               snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                 Txt_The_nickname_X_had_been_registered_by_another_user,
-                         NewNicknameWithoutArroba);
-              }
+               Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
+        	                Txt_The_nickname_X_had_been_registered_by_another_user,
+                                NewNicknameWithoutArroba);
         }
-      if (Gbl.DelayedAlert.Type == Ale_NONE)
+      if (Ale_GetNumAlerts () == 0)	// No problems
         {
          // Now we know the new nickname is not already in database
 	 // and is diffent to the current one
@@ -600,23 +583,17 @@ static void Nck_UpdateUsrNick (struct UsrData *UsrDat)
          Str_Copy (UsrDat->Nickname,NewNicknameWithoutArroba,
                    Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
-         Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	 Gbl.DelayedAlert.Section = Nck_NICKNAME_SECTION_ID;
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_nickname_X_has_been_registered_successfully,
-                   NewNicknameWithoutArroba);
+         Ale_CreateAlert (Ale_SUCCESS,Nck_NICKNAME_SECTION_ID,
+                          Txt_The_nickname_X_has_been_registered_successfully,
+                          NewNicknameWithoutArroba);
         }
      }
    else        // New nickname is not valid
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = Nck_NICKNAME_SECTION_ID;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_The_nickname_entered_X_is_not_valid_,
-                NewNicknameWithArroba,
-                Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
-                Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
-     }
+      Ale_CreateAlert (Ale_WARNING,Nck_NICKNAME_SECTION_ID,
+	               Txt_The_nickname_entered_X_is_not_valid_,
+		       NewNicknameWithArroba,
+		       Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
+		       Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
   }
 
 /*****************************************************************************/

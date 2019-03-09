@@ -3724,7 +3724,8 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 
       /***** Allocate memory for text in this choice answer *****/
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-         Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+         /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
 
       /***** Assign index (row[0]).
              Index is 0,1,2,3... if no shuffle
@@ -3845,7 +3846,8 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 
       /***** Allocate memory for text in this choice option *****/
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-         Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+	 /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
 
       /***** Copy answer text (row[1]) and convert it,
              that is in HTML, to rigorous HTML ******/
@@ -4095,7 +4097,8 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
 
       /***** Allocate memory for text in this choice answer *****/
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-         Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+	 /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
 
       /***** Assign index (row[0]).
              Index is 0,1,2,3... if no shuffle
@@ -4209,7 +4212,8 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 
       /***** Allocate memory for text in this choice answer *****/
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-         Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+	 /* Abort on error */
+	 Ale_ShowAlertsAndExit ();
 
       /***** Copy answer text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
       Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
@@ -5444,17 +5448,15 @@ int Tst_AllocateTextChoiceAnswer (unsigned NumOpt)
    if ((Gbl.Test.Answer.Options[NumOpt].Text =
 	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
-      Gbl.DelayedAlert.Type = Ale_ERROR;
-      Str_Copy (Gbl.DelayedAlert.Txt,"Not enough memory to store answer.",
-	        Ale_MAX_BYTES_ALERT);
+      Ale_CreateAlert (Ale_ERROR,NULL,
+		       "Not enough memory to store answer.");
       return 0;
      }
    if ((Gbl.Test.Answer.Options[NumOpt].Feedback =
 	(char *) malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
-      Gbl.DelayedAlert.Type = Ale_ERROR;
-      Str_Copy (Gbl.DelayedAlert.Txt,"Not enough memory to store feedback.",
-	        Ale_MAX_BYTES_ALERT);
+      Ale_CreateAlert (Ale_ERROR,NULL,
+		       "Not enough memory to store feedback.");
       return 0;
      }
 
@@ -5640,7 +5642,8 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	    if (Gbl.Test.Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
 	       Lay_ShowErrorAndExit ("Wrong answer.");
 	    if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-	       Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+	       /* Abort on error */
+	       Ale_ShowAlertsAndExit ();
 
 	    Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
 	              Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
@@ -5858,18 +5861,23 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
      {
       case Tst_ANS_INT:
          if (!Tst_AllocateTextChoiceAnswer (0))
-            Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+	    /* Abort on error */
+	    Ale_ShowAlertsAndExit ();
 
 	 Par_GetParToText ("AnsInt",Gbl.Test.Answer.Options[0].Text,1 + 10);
 	 break;
       case Tst_ANS_FLOAT:
          if (!Tst_AllocateTextChoiceAnswer (0))
-            Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+	    /* Abort on error */
+	    Ale_ShowAlertsAndExit ();
+
 	 Par_GetParToText ("AnsFloatMin",Gbl.Test.Answer.Options[0].Text,
 	                   Tst_MAX_BYTES_FLOAT_ANSWER);
 
          if (!Tst_AllocateTextChoiceAnswer (1))
-            Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+	    /* Abort on error */
+	    Ale_ShowAlertsAndExit ();
+
 	 Par_GetParToText ("AnsFloatMax",Gbl.Test.Answer.Options[1].Text,
 	                   Tst_MAX_BYTES_FLOAT_ANSWER);
 	 break;
@@ -5890,7 +5898,8 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
               NumOpt++)
            {
             if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-               Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+	       /* Abort on error */
+	       Ale_ShowAlertsAndExit ();
 
             /* Get answer */
             snprintf (AnsStr,sizeof (AnsStr),
@@ -6267,31 +6276,24 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
 			     "SELECT TagCod FROM tst_tags"
 			     " WHERE CrsCod=%ld AND TagTxt='%s'",
 			     Gbl.CurrentCrs.Crs.CrsCod,TagTxt);
-
-   Gbl.DelayedAlert.Type = Ale_NONE;
    if (NumRows == 1)
      {
       /***** Get tag code *****/
       row = mysql_fetch_row (mysql_res);
       if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-        {
-         Gbl.DelayedAlert.Type = Ale_ERROR;
-	 Str_Copy (Gbl.DelayedAlert.Txt,"Wrong code of tag.",
-		   Ale_MAX_BYTES_ALERT);
-        }
+         Ale_CreateAlert (Ale_ERROR,NULL,
+                          "Wrong code of tag.");
      }
    else if (NumRows > 1)
-     {
-      Gbl.DelayedAlert.Type = Ale_ERROR;
-      Str_Copy (Gbl.DelayedAlert.Txt,"Duplicated tag.",
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlert (Ale_ERROR,NULL,
+	               "Duplicated tag.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   if (Gbl.DelayedAlert.Type == Ale_ERROR)
-      Lay_ShowErrorAndExit (Gbl.DelayedAlert.Txt);
+   /***** Abort on error *****/
+   if (Ale_GetTypeOfLastAlert () == Ale_ERROR)
+      Ale_ShowAlertsAndExit ();
 
    return TagCod;
   }

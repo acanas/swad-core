@@ -3148,7 +3148,11 @@ void DB_CloseDBConnection (void)
      }
   }
 
-void DB_BuildQuery_old (char **Query,const char *fmt,...)
+/*****************************************************************************/
+/********************** Build a query to be used later ***********************/
+/*****************************************************************************/
+
+void DB_BuildQuery (char **Query,const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;

@@ -68,31 +68,164 @@ static const char *Ale_AlertIcons[Ale_NUM_ALERT_TYPES] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Ale_ResetLastAlert (void);
+static void Ale_ResetAlert (size_t i);
+
 static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt);
 
 static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt);
 
 /*****************************************************************************/
-/*************************** Reset delayed alert *****************************/
+/**************************** Create a new alert *****************************/
 /*****************************************************************************/
 
-void Ale_ResetDelayedAlert (void)
+void Ale_CreateAlert (Ale_AlertType_t Type,const char *Section,
+                      const char *fmt,...)
   {
-   Gbl.DelayedAlert.Type = Ale_NONE;	// Reset alert
-   Gbl.DelayedAlert.Section = NULL;
-   Gbl.DelayedAlert.Txt[0] = '\0';
+   va_list ap;
+   int NumBytesPrinted;
+
+   if (Gbl.Alerts.Num + 1 > Ale_MAX_ALERTS)
+      Lay_ShowErrorAndExit ("Too many alerts.");
+
+   Gbl.Alerts.Num++;
+
+   Gbl.Alerts.List[Gbl.Alerts.Num - 1].Type = Type;
+
+   Gbl.Alerts.List[Gbl.Alerts.Num - 1].Section = NULL;
+   if (Section)
+      if (Section[0])
+         Gbl.Alerts.List[Gbl.Alerts.Num - 1].Section = Section;
+
+   va_start (ap,fmt);
+   NumBytesPrinted = vasprintf (&Gbl.Alerts.List[Gbl.Alerts.Num - 1].Text,fmt,ap);
+   va_end (ap);
+
+   if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				// or some other error occurs,
+				// vasprintf will return -1
+      Lay_NotEnoughMemoryExit ();
   }
 
 /*****************************************************************************/
-/******************** Show an alert message to the user **********************/
+/***************** Get current number of delayed alerts **********************/
 /*****************************************************************************/
 
-void Ale_ShowDelayedAlert (void)
+unsigned Ale_GetNumAlerts (void)
   {
-   if (Gbl.DelayedAlert.Type != Ale_NONE)
-      Ale_ShowFixAlert (Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
+   return Gbl.Alerts.Num;
+  }
 
-   Ale_ResetDelayedAlert ();
+/*****************************************************************************/
+/********************** Get type of last delayed alert ***********************/
+/*****************************************************************************/
+
+Ale_AlertType_t Ale_GetTypeOfLastAlert (void)
+  {
+   return Gbl.Alerts.Num ? Gbl.Alerts.List[Gbl.Alerts.Num - 1].Type :
+			   Ale_NONE;
+  }
+
+/*****************************************************************************/
+/********************** Get text of last delayed alert ***********************/
+/*****************************************************************************/
+
+const char *Ale_GetTextOfLastAlert (void)
+  {
+   return Gbl.Alerts.Num ? Gbl.Alerts.List[Gbl.Alerts.Num - 1].Text :
+			   NULL;
+  }
+
+/*****************************************************************************/
+/******************************* Reset alerts ********************************/
+/*****************************************************************************/
+
+void Ale_ResetAllAlerts (void)
+  {
+   size_t i;
+
+   for (i = 0;
+	i < Gbl.Alerts.Num;
+	i++)
+      Ale_ResetAlert (i);
+  }
+
+static void Ale_ResetLastAlert (void)
+  {
+   if (Gbl.Alerts.Num)	// There are pending alerts no shown
+      Ale_ResetAlert (Gbl.Alerts.Num - 1);	// Reset the last one
+  }
+
+static void Ale_ResetAlert (size_t i)
+  {
+   bool NoMoreAlertsPending;
+   size_t j;
+
+   if (i < Gbl.Alerts.Num)
+      if (Gbl.Alerts.List[i].Type != Ale_NONE)
+	{
+	 /***** Reset i-esim alert *****/
+	 Gbl.Alerts.List[i].Type = Ale_NONE;	// Reset alert
+	 Gbl.Alerts.List[i].Section = NULL;
+
+	 /***** Free memory allocated for text *****/
+	 if (Gbl.Alerts.List[i].Text)
+	   {
+	    free ((void *) Gbl.Alerts.List[i].Text);
+	    Gbl.Alerts.List[i].Text = NULL;
+	   }
+	}
+
+   /***** Set number of alerts to 0
+          if there are no more alerts
+          pending to be shown *****/
+   NoMoreAlertsPending = true;
+   for (j = 0;
+	NoMoreAlertsPending && j < Gbl.Alerts.Num;
+	j++)
+      if (Gbl.Alerts.List[j].Type != Ale_NONE)
+	 NoMoreAlertsPending = false;
+
+   if (NoMoreAlertsPending)
+      Gbl.Alerts.Num = 0;
+  }
+
+/*****************************************************************************/
+/************************ Show alert messages and exit ***********************/
+/*****************************************************************************/
+
+void Ale_ShowAlertsAndExit ()
+  {
+   Ale_ShowAlerts (NULL);
+   Lay_ShowErrorAndExit (NULL);
+  }
+
+/*****************************************************************************/
+/**************************** Show alert messages ****************************/
+/*****************************************************************************/
+// If Section == NULL ==> show all alerts
+// If Section != NULL ==> shown only the alerts assigned to Section
+
+void Ale_ShowAlerts (const char *Section)
+  {
+   size_t i;
+   bool ShowAlert;
+
+   for (i = 0;
+	i < Gbl.Alerts.Num;
+	i++)
+      if (Gbl.Alerts.List[i].Type != Ale_NONE)
+        {
+	 ShowAlert = Section ? (Gbl.Alerts.List[i].Section == Section) :
+		               true;
+
+	 if (ShowAlert)
+	   {
+	    Ale_ShowFixAlert (Gbl.Alerts.List[i].Type,
+			      Gbl.Alerts.List[i].Text);
+	    Ale_ResetAlert (i);
+	   }
+        }
   }
 
 void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
@@ -131,8 +264,20 @@ static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
      }
   }
 
-void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                             void (*FuncParams) (),
+void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,
+                                 const char *OnSubmit,void (*FuncParams) (),
+				 Btn_Button_t Button,const char *TxtButton)
+  {
+   /***** Show last alert and then reset it *****/
+   Ale_ShowLastAlertAndButton1 ();
+
+   /***** Show button *****/
+   Ale_ShowAlertAndButton2 (NextAction,Anchor,OnSubmit,
+                            FuncParams,Button,TxtButton);
+  }
+
+void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,
+                             const char *OnSubmit,void (*FuncParams) (),
                              Btn_Button_t Button,const char *TxtButton,
 			     Ale_AlertType_t AlertType,const char *fmt,...)
   {
@@ -156,6 +301,15 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const ch
 
    /***** Free text *****/
    free ((void *) Txt);
+  }
+
+void Ale_ShowLastAlertAndButton1 (void)
+  {
+   /***** Show last alert *****/
+   Ale_ShowFixAlertAndButton1 (Ale_GetTypeOfLastAlert (),Ale_GetTextOfLastAlert ());
+
+   /***** Reset last alert *****/
+   Ale_ResetLastAlert ();
   }
 
 void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
@@ -263,12 +417,25 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
   }
 
 /*****************************************************************************/
+/** Create alert when user not found or no permission to perform an action ***/
+/*****************************************************************************/
+
+void Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   Ale_CreateAlert (Ale_WARNING,NULL,
+		    Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
 /*** Show alert when user not found or no permission to perform an action ****/
 /*****************************************************************************/
 
-void Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission (void)
+void Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
+

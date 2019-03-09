@@ -178,12 +178,8 @@ void Pwd_UpdateMyPwd (void)
       /***** Check and update new password *****/
       Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Me.UsrDat);
    else
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_You_have_not_entered_your_password_correctly,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
+		       Txt_You_have_not_entered_your_password_correctly);
   }
 
 /*****************************************************************************/
@@ -199,10 +195,10 @@ void Pwd_UpdateOtherUsrPwd (void)
          /***** Check and update password *****/
 	 Pwd_CheckAndUpdateNewPwd (&Gbl.Usrs.Other.UsrDat);
       else
-	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -221,13 +217,9 @@ static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat)
 
    /***** Check if I have written twice the same password *****/
    if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
-     {
       // Passwords don't match
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_You_have_not_written_twice_the_same_new_password,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
+	               Txt_You_have_not_written_twice_the_same_new_password);
    else
      {
       Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
@@ -241,10 +233,8 @@ static void Pwd_CheckAndUpdateNewPwd (struct UsrData *UsrDat)
 	 Ses_UpdateSessionDataInDB ();
 	 Enr_UpdateUsrData (UsrDat);
 
-	 Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	 Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
-	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_The_password_has_been_changed_successfully,
-		   Ale_MAX_BYTES_ALERT);
+	 Ale_CreateAlert (Ale_SUCCESS,Pwd_PASSWORD_SECTION_ID,
+	                  Txt_The_password_has_been_changed_successfully);
 	}
      }
   }
@@ -525,10 +515,8 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    /***** Check if password is found in user's ID, first name or surnames of anybody *****/
    if (Pwd_CheckIfPasswdIsUsrIDorName (PlainPassword))        // PlainPassword is a user's ID, name or surname
      {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_The_password_is_too_trivial_,
-		Ale_MAX_BYTES_ALERT);
+      Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
+	               Txt_The_password_is_too_trivial_);
       return false;
      }
 
@@ -536,10 +524,8 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    if (Pwd_GetNumOtherUsrsWhoUseThisPassword (EncryptedPassword,UsrCod) >
        Pwd_MAX_OTHER_USERS_USING_THE_SAME_PASSWORD)
      {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_The_password_is_too_trivial_,
-		Ale_MAX_BYTES_ALERT);
+      Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
+		       Txt_The_password_is_too_trivial_);
       return false;
      }
 
@@ -620,21 +606,17 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    /***** Check length of password *****/
    if (LengthPassword < Pwd_MIN_BYTES_PLAIN_PASSWORD)	// PlainPassword too short
      {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_The_password_must_be_at_least_X_characters,
-                Pwd_MIN_CHARS_PLAIN_PASSWORD);
+      Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
+		       Txt_The_password_must_be_at_least_X_characters,
+		       Pwd_MIN_CHARS_PLAIN_PASSWORD);
       return false;
      }
 
    /***** Check spaces in password *****/
    if (strchr (PlainPassword,(int) ' ') != NULL)        // PlainPassword with spaces
      {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_The_password_can_not_contain_spaces,
-		Ale_MAX_BYTES_ALERT);
+      Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
+	               Txt_The_password_can_not_contain_spaces);
       return false;
      }
 
@@ -646,10 +628,8 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
          ItsANumber = false;
    if (ItsANumber)
      {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = Pwd_PASSWORD_SECTION_ID;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_The_password_can_not_consist_only_of_digits,
-		Ale_MAX_BYTES_ALERT);
+      Ale_CreateAlert (Ale_WARNING,Pwd_PASSWORD_SECTION_ID,
+		       Txt_The_password_can_not_consist_only_of_digits);
       return false;
      }
 
@@ -687,9 +667,8 @@ void Pwd_ShowFormChgMyPwd (void)
    Box_StartBox (StrRecordWidth,Txt_Password,NULL,
 		 Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
-   /***** Show possible alert *****/
-   if (Gbl.DelayedAlert.Section == Pwd_PASSWORD_SECTION_ID)
-      Ale_ShowDelayedAlert ();
+   /***** Show possible alerts *****/
+   Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);
 
    /***** Help message *****/
    if (!IHaveAPasswordInDB) // If I don't have a password in database...
@@ -851,9 +830,8 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    /***** Start section *****/
    Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
 
-   /***** Show possible alert *****/
-   if (Gbl.DelayedAlert.Section == (const char *) Pwd_PASSWORD_SECTION_ID)
-      Ale_ShowDelayedAlert ();
+   /***** Show possible alerts *****/
+   Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);
 
    /***** Form to change password *****/
    /* Start form */

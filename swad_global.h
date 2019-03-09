@@ -107,10 +107,14 @@ struct Globals
      } Form;
    struct
      {
-      Ale_AlertType_t Type;
-      char Txt[Ale_MAX_BYTES_ALERT + 1];
-      const char *Section;	// Where to display the alert
-     } DelayedAlert;		// Alert message created in a function and printed in a subsequent function.
+      unsigned Num;		// Number of alert
+      struct
+        {
+	 Ale_AlertType_t Type;
+	 char *Text;
+	 const char *Section;	// Where to display the alert
+        } List[Ale_MAX_ALERTS];
+     } Alerts;		// Alert message created in a function and printed in a subsequent function.
    struct
      {
       size_t ContentLength;

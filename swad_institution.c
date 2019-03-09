@@ -94,7 +94,10 @@ static void Ins_PutParamOtherInsCod (long InsCod);
 static long Ins_GetParamOtherInsCod (void);
 
 static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
-static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod);
+static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,
+                                           const char *Name,
+					   long InsCod,
+					   long CtyCod);
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
 
 static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod);
@@ -1837,12 +1840,9 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
 
    /***** Check if new name is empty *****/
    if (!NewInsName[0])
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_You_can_not_leave_the_name_of_the_institution_X_empty,
-                CurrentInsName);
-     }
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_name_of_the_institution_X_empty,
+                       CurrentInsName);
    else
      {
       /***** Check if old and new names are the same
@@ -1850,23 +1850,20 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
       if (strcmp (CurrentInsName,NewInsName))	// Different names
         {
          /***** If institution was in database... *****/
-         if (Ins_CheckIfInsNameExistsInCty (ParamName,NewInsName,Ins->InsCod,Gbl.CurrentCty.Cty.CtyCod))
-           {
-            Gbl.DelayedAlert.Type = Ale_WARNING;
-            snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_The_institution_X_already_exists,
-                      NewInsName);
-           }
+         if (Ins_CheckIfInsNameExistsInCty (ParamName,NewInsName,Ins->InsCod,
+                                            Gbl.CurrentCty.Cty.CtyCod))
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_institution_X_already_exists,
+                             NewInsName);
          else
            {
             /* Update the table changing old name by new name */
             Ins_UpdateInsNameDB (Ins->InsCod,FieldName,NewInsName);
 
             /* Create message to show the change made */
-            Gbl.DelayedAlert.Type = Ale_SUCCESS;
-            snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_The_institution_X_has_been_renamed_as_Y,
-                      CurrentInsName,NewInsName);
+            Ale_CreateAlert (Ale_SUCCESS,NULL,
+        	             Txt_The_institution_X_has_been_renamed_as_Y,
+                             CurrentInsName,NewInsName);
 
 	    /* Change current institution name in order to display it properly */
 	    Str_Copy (CurrentInsName,NewInsName,
@@ -1874,12 +1871,9 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
            }
         }
       else	// The same name
-	{
-         Gbl.DelayedAlert.Type = Ale_INFO;
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_name_of_the_institution_X_has_not_changed,
-                   CurrentInsName);
-	}
+         Ale_CreateAlert (Ale_INFO,NULL,
+                          Txt_The_name_of_the_institution_X_has_not_changed,
+                          CurrentInsName);
      }
   }
 
@@ -1887,7 +1881,10 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
 /****** Check if the name of institution exists in the current country *******/
 /*****************************************************************************/
 
-static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod)
+static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,
+                                           const char *Name,
+					   long InsCod,
+					   long CtyCod)
   {
    /***** Get number of institutions in current country with a name from database *****/
    return (DB_QueryCOUNT ("can not check if the name of an institution"
@@ -1934,19 +1931,13 @@ void Ins_ChangeInsCtyInConfig (void)
 
       /***** Check if it already exists an institution with the same name in the new country *****/
       if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.CurrentIns.Ins.ShrtName,-1L,NewCty.CtyCod))
-	{
-         Gbl.DelayedAlert.Type = Ale_WARNING;
-	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_institution_X_already_exists,
-		   Gbl.CurrentIns.Ins.ShrtName);
-	}
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_The_institution_X_already_exists,
+		          Gbl.CurrentIns.Ins.ShrtName);
       else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.CurrentIns.Ins.FullName,-1L,NewCty.CtyCod))
-	{
-         Gbl.DelayedAlert.Type = Ale_WARNING;
-	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_institution_X_already_exists,
-		   Gbl.CurrentIns.Ins.FullName);
-	}
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_The_institution_X_already_exists,
+		          Gbl.CurrentIns.Ins.FullName);
       else
 	{
 	 /***** Update the table changing the country of the institution *****/
@@ -1958,10 +1949,9 @@ void Ins_ChangeInsCtyInConfig (void)
 	 Hie_InitHierarchy ();
 
 	 /***** Write message to show the change made *****/
-         Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_country_of_the_institution_X_has_changed_to_Y,
-		   Gbl.CurrentIns.Ins.FullName,NewCty.Name[Gbl.Prefs.Language]);
+         Ale_CreateAlert (Ale_SUCCESS,NULL,
+                          Txt_The_country_of_the_institution_X_has_changed_to_Y,
+		          Gbl.CurrentIns.Ins.FullName,NewCty.Name[Gbl.Prefs.Language]);
 	}
      }
   }
@@ -1973,7 +1963,7 @@ void Ins_ChangeInsCtyInConfig (void)
 void Ins_ContEditAfterChgInsInConfig (void)
   {
    /***** Write success / warning message *****/
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
    Ins_ShowConfiguration ();
@@ -2021,10 +2011,9 @@ void Ins_ChangeInsWWW (void)
 
       /***** Write message to show the change made
 	     and put button to go to institution changed *****/
-      Gbl.DelayedAlert.Type = Ale_SUCCESS;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_The_new_web_address_is_X,
-		NewWWW);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+		       Txt_The_new_web_address_is_X,
+		       NewWWW);
       Ins_ShowAlertAndButtonToGoToIns ();
      }
    else
@@ -2111,10 +2100,9 @@ void Ins_ChangeInsStatus (void)
 
    /***** Write message to show the change made
 	  and put button to go to institution changed *****/
-   Gbl.DelayedAlert.Type = Ale_SUCCESS;
-   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	     Txt_The_status_of_the_institution_X_has_changed,
-             Gbl.Inss.EditingIns.ShrtName);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+		    Txt_The_status_of_the_institution_X_has_changed,
+		    Gbl.Inss.EditingIns.ShrtName);
    Ins_ShowAlertAndButtonToGoToIns ();
 
    /***** Show the form again *****/
@@ -2149,12 +2137,11 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
    // If the institution beeing edited is different to the current one...
    if (Gbl.Inss.EditingIns.InsCod != Gbl.CurrentIns.Ins.InsCod)
       /***** Alert with button to go to degree *****/
-      Ale_ShowAlertAndButton (ActSeeCtr,NULL,NULL,Ins_PutParamGoToIns,
-                              Btn_CONFIRM_BUTTON,Gbl.Title,
-			      Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
+      Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,Ins_PutParamGoToIns,
+                                  Btn_CONFIRM_BUTTON,Gbl.Title);
    else
       /***** Alert *****/
-      Ale_ShowDelayedAlert ();
+      Ale_ShowAlerts (NULL);
   }
 
 static void Ins_PutParamGoToIns (void)
@@ -2431,10 +2418,9 @@ static void Ins_CreateInstitution (unsigned Status)
 
    /***** Write message to show the change made
 	  and put button to go to institution created *****/
-   Gbl.DelayedAlert.Type = Ale_SUCCESS;
-   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	     Txt_Created_new_institution_X,
-             Gbl.Inss.EditingIns.FullName);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+		    Txt_Created_new_institution_X,
+		    Gbl.Inss.EditingIns.FullName);
    Ins_ShowAlertAndButtonToGoToIns ();
   }
 

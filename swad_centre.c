@@ -1825,22 +1825,18 @@ void Ctr_ChangeCtrInsInConfig (void)
                                          Gbl.CurrentCtr.Ctr.ShrtName,
                                          Gbl.CurrentCtr.Ctr.CtrCod,
                                          NewIns.InsCod))
-	{
-	 Gbl.DelayedAlert.Type = Ale_WARNING;
-	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_centre_X_already_exists,
-		   Gbl.CurrentCtr.Ctr.ShrtName);
-	}
+	 /***** Create warning message *****/
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_The_centre_X_already_exists,
+		          Gbl.CurrentCtr.Ctr.ShrtName);
       else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",
                                               Gbl.CurrentCtr.Ctr.FullName,
                                               Gbl.CurrentCtr.Ctr.CtrCod,
                                               NewIns.InsCod))
-	{
-	 Gbl.DelayedAlert.Type = Ale_WARNING;
-	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_centre_X_already_exists,
-		   Gbl.CurrentCtr.Ctr.FullName);
-	}
+	 /***** Create warning message *****/
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_The_centre_X_already_exists,
+		          Gbl.CurrentCtr.Ctr.FullName);
       else
 	{
 	 /***** Update institution in table of centres *****/
@@ -1851,11 +1847,10 @@ void Ctr_ChangeCtrInsInConfig (void)
 	 /***** Initialize again current course, degree, centre... *****/
 	 Hie_InitHierarchy ();
 
-	 /***** Write message to show the change made *****/
-         Gbl.DelayedAlert.Type = Ale_SUCCESS;
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_centre_X_has_been_moved_to_the_institution_Y,
-		   Gbl.CurrentCtr.Ctr.FullName,NewIns.FullName);
+	 /***** Create message to show the change made *****/
+         Ale_CreateAlert (Ale_SUCCESS,NULL,
+                          Txt_The_centre_X_has_been_moved_to_the_institution_Y,
+		          Gbl.CurrentCtr.Ctr.FullName,NewIns.FullName);
 	}
      }
   }
@@ -1867,7 +1862,7 @@ void Ctr_ChangeCtrInsInConfig (void)
 void Ctr_ContEditAfterChgCtrInConfig (void)
   {
    /***** Write error/success message *****/
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
    Ctr_ShowConfiguration ();
@@ -1907,11 +1902,10 @@ void Ctr_ChangeCtrPlc (void)
    Ctr_UpdateCtrPlcDB (Gbl.Ctrs.EditingCtr.CtrCod,NewPlcCod);
    Gbl.Ctrs.EditingCtr.PlcCod = NewPlcCod;
 
-   /***** Write message to show the change made
+   /***** Create alert to show the change made
 	  and put button to go to centre changed *****/
-   Gbl.DelayedAlert.Type = Ale_SUCCESS;
-   Str_Copy (Gbl.DelayedAlert.Txt,Txt_The_place_of_the_centre_has_changed,
-	     Ale_MAX_BYTES_ALERT);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_The_place_of_the_centre_has_changed);
    Ctr_ShowAlertAndButtonToGoToCtr ();
 
    /***** Show the form again *****/
@@ -2019,12 +2013,9 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
 
    /***** Check if new name is empty *****/
    if (!NewCtrName[0])
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_You_can_not_leave_the_name_of_the_centre_X_empty,
-                CurrentCtrName);
-     }
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_name_of_the_centre_X_empty,
+                       CurrentCtrName);
    else
      {
       /***** Check if old and new names are the same
@@ -2033,21 +2024,18 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
         {
          /***** If degree was in database... *****/
          if (Ctr_CheckIfCtrNameExistsInIns (ParamName,NewCtrName,Ctr->CtrCod,Gbl.CurrentIns.Ins.InsCod))
-           {
-            Gbl.DelayedAlert.Type = Ale_WARNING;
-            snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_The_centre_X_already_exists,NewCtrName);
-           }
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_centre_X_already_exists,
+			     NewCtrName);
          else
            {
             /* Update the table changing old name by new name */
             Ctr_UpdateInsNameDB (Ctr->CtrCod,FieldName,NewCtrName);
 
             /* Write message to show the change made */
-            Gbl.DelayedAlert.Type = Ale_SUCCESS;
-            snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_The_centre_X_has_been_renamed_as_Y,
-                      CurrentCtrName,NewCtrName);
+            Ale_CreateAlert (Ale_SUCCESS,NULL,
+        	             Txt_The_centre_X_has_been_renamed_as_Y,
+                             CurrentCtrName,NewCtrName);
 
 	    /* Change current centre name in order to display it properly */
 	    Str_Copy (CurrentCtrName,NewCtrName,
@@ -2055,12 +2043,9 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
            }
         }
       else	// The same name
-	{
-         Gbl.DelayedAlert.Type = Ale_INFO;
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_name_of_the_centre_X_has_not_changed,
-                   CurrentCtrName);
-	}
+         Ale_CreateAlert (Ale_INFO,NULL,
+                          Txt_The_name_of_the_centre_X_has_not_changed,
+                          CurrentCtrName);
      }
   }
 
@@ -2119,10 +2104,9 @@ void Ctr_ChangeCtrWWW (void)
 
       /***** Write message to show the change made
 	     and put button to go to centre changed *****/
-      Gbl.DelayedAlert.Type = Ale_SUCCESS;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_The_new_web_address_is_X,
-		NewWWW);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_The_new_web_address_is_X,
+		       NewWWW);
       Ctr_ShowAlertAndButtonToGoToCtr ();
      }
    else
@@ -2209,10 +2193,9 @@ void Ctr_ChangeCtrStatus (void)
 
    /***** Write message to show the change made
 	  and put button to go to centre changed *****/
-   Gbl.DelayedAlert.Type = Ale_SUCCESS;
-   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	     Txt_The_status_of_the_centre_X_has_changed,
-	     Gbl.Ctrs.EditingCtr.ShrtName);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_The_status_of_the_centre_X_has_changed,
+	            Gbl.Ctrs.EditingCtr.ShrtName);
    Ctr_ShowAlertAndButtonToGoToCtr ();
 
    /***** Show the form again *****/
@@ -2251,13 +2234,12 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Go_to_X,
 		Gbl.Ctrs.EditingCtr.ShrtName);
-      Ale_ShowAlertAndButton (ActSeeDeg,NULL,NULL,Ctr_PutParamGoToCtr,
-                              Btn_CONFIRM_BUTTON,Gbl.Title,
-			      Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
+      Ale_ShowLastAlertAndButton (ActSeeDeg,NULL,NULL,Ctr_PutParamGoToCtr,
+                                  Btn_CONFIRM_BUTTON,Gbl.Title);
      }
    else
       /***** Alert *****/
-      Ale_ShowDelayedAlert ();
+      Ale_ShowAlerts (NULL);
   }
 
 static void Ctr_PutParamGoToCtr (void)
@@ -2830,10 +2812,9 @@ static void Ctr_CreateCentre (unsigned Status)
 
    /***** Write message to show the change made
 	  and put button to go to centre created *****/
-   Gbl.DelayedAlert.Type = Ale_SUCCESS;
-   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	     Txt_Created_new_centre_X,
-             Gbl.Ctrs.EditingCtr.FullName);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_Created_new_centre_X,
+                    Gbl.Ctrs.EditingCtr.FullName);
    Ctr_ShowAlertAndButtonToGoToCtr ();
   }
 

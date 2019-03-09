@@ -1029,7 +1029,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
 	 /* Show optional alert */
 	 if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-	    Ale_ShowDelayedAlert ();
+	    Ale_ShowAlerts (NULL);
 
 	 /* Shared record */
 	 fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
@@ -1097,7 +1097,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Show optional alert (result of editing data in course record) *****/
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
 
    /***** Start container for this user *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
@@ -1236,7 +1236,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
 	    /* Show optional alert */
 	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-               Ale_ShowDelayedAlert ();
+               Ale_ShowAlerts (NULL);
 
             /* Shared record */
             fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
@@ -1463,7 +1463,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
 	    /* Show optional alert */
 	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-	       Ale_ShowDelayedAlert ();
+	       Ale_ShowAlerts (NULL);
 
 	    /* Shared record */
             fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
@@ -1628,9 +1628,6 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
    long OriginalActCod;
 
-   /***** Initialize alert type *****/
-   Gbl.DelayedAlert.Type = Ale_NONE;	// Do not show alert
-
    /***** Get where we came from *****/
    OriginalActCod = Par_GetParToLong ("OriginalActCod");
    Gbl.Action.Original = Act_GetActionFromActCod (OriginalActCod);
@@ -1650,9 +1647,8 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 
    /***** Update the record *****/
    Rec_UpdateCrsRecord (Gbl.Usrs.Other.UsrDat.UsrCod);
-   Gbl.DelayedAlert.Type = Ale_SUCCESS;
-   Str_Copy (Gbl.DelayedAlert.Txt,Txt_Student_record_card_in_this_course_has_been_updated,
-	     Ale_MAX_BYTES_ALERT);
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_Student_record_card_in_this_course_has_been_updated);
 
    /***** Show one or multiple records *****/
    switch (Gbl.Action.Original)

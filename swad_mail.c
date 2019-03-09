@@ -627,13 +627,9 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Check if new name is empty *****/
    if (!NewMaiName[0])
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty,
-                CurrentMaiName);
-     }
+      Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
+	               Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty,
+		       CurrentMaiName);
    else
      {
       /***** Check if old and new names are the same
@@ -642,34 +638,24 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
         {
          /***** If mail was in database... *****/
          if (Mai_CheckIfMailDomainNameExists (ParamName,NewMaiName,Mai->MaiCod))
-           {
-	    Gbl.DelayedAlert.Type = Ale_WARNING;
-	    Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-            snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_The_email_domain_X_already_exists,
-                      NewMaiName);
-           }
+	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
+		             Txt_The_email_domain_X_already_exists,
+                             NewMaiName);
          else
            {
             /* Update the table changing old name by new name */
             Mai_UpdateMailDomainNameDB (Mai->MaiCod,FieldName,NewMaiName);
 
             /* Write message to show the change made */
-	    Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	    Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-            snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_The_email_domain_X_has_been_renamed_as_Y,
-                      CurrentMaiName,NewMaiName);
+	    Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
+		             Txt_The_email_domain_X_has_been_renamed_as_Y,
+                             CurrentMaiName,NewMaiName);
            }
         }
       else	// The same name
-        {
-	 Gbl.DelayedAlert.Type = Ale_INFO;
-	 Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_email_domain_X_has_not_changed,
-                   CurrentMaiName);
-        }
+	 Ale_CreateAlert (Ale_INFO,Mai_EMAIL_SECTION_ID,
+	                  Txt_The_email_domain_X_has_not_changed,
+                          CurrentMaiName);
      }
 
    /***** Show the form again *****/
@@ -1215,9 +1201,8 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    bool Confirmed;
    Act_Action_t NextAction;
 
-   /***** Show possible alert *****/
-   if (Gbl.DelayedAlert.Section == (const char *) Mai_EMAIL_SECTION_ID)
-      Ale_ShowDelayedAlert ();
+   /***** Show possible alerts *****/
+   Ale_ShowAlerts (Mai_EMAIL_SECTION_ID);
 
    /***** Help message *****/
    if (IMustFillInEmail)
@@ -1427,10 +1412,10 @@ void Mai_RemoveOtherUsrEmail (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -1450,18 +1435,16 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
       /***** Remove one of user's old email addresses *****/
       Mai_RemoveEmailFromDB (UsrDat->UsrCod,Email);
 
-      /***** Show message *****/
-      Gbl.DelayedAlert.Type = Ale_SUCCESS;
-      Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	        Txt_Email_X_removed,
-		Email);
+      /***** Create alert *****/
+      Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
+	               Txt_Email_X_removed,
+		       Email);
 
       /***** Update list of emails *****/
       Mai_GetEmailFromUsrCod (UsrDat);
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -1512,10 +1495,10 @@ void Mai_NewOtherUsrEmail (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -1528,7 +1511,6 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_The_email_address_X_has_been_registered_successfully;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
 
    if (Usr_ICanEditOtherUsr (UsrDat))
@@ -1541,23 +1523,17 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	 /***** Check if new email exists in database *****/
 	 if (UsrDat->EmailConfirmed &&
 	     !strcmp (UsrDat->Email,NewEmail)) // User's current confirmed email match exactly the new email
-	   {
-	    Gbl.DelayedAlert.Type = Ale_WARNING;
-	    Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_The_email_address_X_matches_one_previously_registered,
-		      NewEmail);
-	   }
+	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
+		             Txt_The_email_address_X_matches_one_previously_registered,
+			     NewEmail);
 	 else
 	   {
 	    if (Mai_UpdateEmailInDB (UsrDat,NewEmail))
 	      {
 	       /***** Email updated sucessfully *****/
-	       Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	       Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-	       snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                 Txt_The_email_address_X_has_been_registered_successfully,
-			 NewEmail);
+	       Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
+		                Txt_The_email_address_X_has_been_registered_successfully,
+			        NewEmail);
 
 	       /***** Update list of emails *****/
 	       Mai_GetEmailFromUsrCod (UsrDat);
@@ -1568,31 +1544,18 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 		  Mai_SendMailMsgToConfirmEmail ();
 	      }
 	    else
-	      {
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
-	       Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-	       snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                 Txt_The_email_address_X_had_been_registered_by_another_user,
-			 NewEmail);
-	      }
+	       Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
+		                Txt_The_email_address_X_had_been_registered_by_another_user,
+				NewEmail);
 	   }
 	}
       else	// New email is not valid
-	{
-         Gbl.DelayedAlert.Type = Ale_WARNING;
-         Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_email_address_entered_X_is_not_valid,
-		   NewEmail);
-	}
+         Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
+                          Txt_The_email_address_entered_X_is_not_valid,
+		          NewEmail);
      }
    else
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -1698,25 +1661,19 @@ bool Mai_SendMailMsgToConfirmEmail (void)
      {
       case 0: // Message sent successfully
          Gbl.Usrs.Me.ConfirmEmailJustSent = true;
-	 Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	 Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
-	   	   Gbl.Usrs.Me.UsrDat.Email);
+	 Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
+	                  Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
+	   	          Gbl.Usrs.Me.UsrDat.Email);
          return true;
       case 1:
-	 Gbl.DelayedAlert.Type = Ale_ERROR;
-	 Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_There_was_a_problem_sending_an_email_automatically,
-		   Ale_MAX_BYTES_ALERT);
+	 Ale_CreateAlert (Ale_ERROR,Mai_EMAIL_SECTION_ID,
+	                  Txt_There_was_a_problem_sending_an_email_automatically);
          return false;
       default:
-	 Gbl.DelayedAlert.Type = Ale_ERROR;
-	 Gbl.DelayedAlert.Section = Mai_EMAIL_SECTION_ID;
-         snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           "Internal error: an email message has not been sent successfully."
-                   " Error code returned by the script: %d",
-                   ReturnCode);
+	 Ale_CreateAlert (Ale_ERROR,Mai_EMAIL_SECTION_ID,
+	                  "Internal error: an email message has not been sent successfully."
+			  " Error code returned by the script: %d",
+			  ReturnCode);
          return false;
      }
   }

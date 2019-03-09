@@ -35,8 +35,7 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Ale_MAX_BYTES_ALERT (16 * 1024 - 1)	// Max. size for alert message
-// Important: the size of alert message must be enough large to store the longest message.
+#define Ale_MAX_ALERTS	10		// Max. number of alerts stored before of beeing shown
 
 /*****************************************************************************/
 /********************************* Public types ******************************/
@@ -58,19 +57,32 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Ale_ResetDelayedAlert (void);
+void Ale_CreateAlert (Ale_AlertType_t Type,const char *Section,
+                      const char *fmt,...);
 
-void Ale_ShowDelayedAlert (void);
+unsigned Ale_GetNumAlerts (void);
+Ale_AlertType_t Ale_GetTypeOfLastAlert (void);
+const char *Ale_GetTextOfLastAlert (void);
+
+void Ale_ResetAllAlerts (void);
+
+void Ale_ShowAlertsAndExit ();
+void Ale_ShowAlerts (const char *Section);
 void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...);
-void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                             void (*FuncParams) (),
+void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,
+                                 const char *OnSubmit,void (*FuncParams) (),
+				 Btn_Button_t Button,const char *TxtButton);
+void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,
+                             const char *OnSubmit,void (*FuncParams) (),
                              Btn_Button_t Button,const char *TxtButton,
 			     Ale_AlertType_t AlertType,const char *fmt,...);
+void Ale_ShowLastAlertAndButton1 (void);
 void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...);
 void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
                               void (*FuncParams) (),
                               Btn_Button_t Button,const char *TxtButton);
 
-void Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission (void);
+void Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission (void);
+void Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission (void);
 
 #endif

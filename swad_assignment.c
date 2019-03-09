@@ -1348,7 +1348,7 @@ void Asg_RecFormAssignment (void)
             else	// Folder name not valid
               {
                NewAssignmentIsCorrect = false;
-               Ale_ShowDelayedAlert ();
+               Ale_ShowAlerts (NULL);
               }
            }
          else	// NewAsg.SendWork == Asg_DO_NOT_SEND_WORK

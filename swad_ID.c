@@ -588,9 +588,8 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
    unsigned NumID;
    Act_Action_t NextAction;
 
-   /***** Show possible alert *****/
-   if (Gbl.DelayedAlert.Section == (const char *) ID_ID_SECTION_ID)
-      Ale_ShowDelayedAlert ();
+   /***** Show possible alerts *****/
+   Ale_ShowAlerts (ID_ID_SECTION_ID);
 
    /***** Help message *****/
    if (IShouldFillInID)
@@ -764,10 +763,10 @@ void ID_RemoveOtherUsrID (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -778,7 +777,6 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
   {
    extern const char *Txt_ID_X_removed;
    extern const char *Txt_You_can_not_delete_this_ID;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
    bool ICanRemove;
 
@@ -804,27 +802,16 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 ID_RemoveUsrIDFromDB (UsrDat->UsrCod,UsrID);
 
 	 /***** Show message *****/
-	 Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	 Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_ID_X_removed,
-		   UsrID);
+	 Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+	                  Txt_ID_X_removed,
+		          UsrID);
 	}
       else
-        {
-	 Gbl.DelayedAlert.Type = Ale_WARNING;
-	 Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_You_can_not_delete_this_ID,
-		   Ale_MAX_BYTES_ALERT);
-        }
+	 Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+	                  Txt_You_can_not_delete_this_ID);
      }
    else
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -876,7 +863,6 @@ void ID_NewMyUsrID (void)
 
 void ID_NewOtherUsrID (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
 
    /***** Get other user's code from form and get user's data *****/
@@ -895,10 +881,10 @@ void ID_NewOtherUsrID (void)
 	 Acc_ShowFormChgOtherUsrAccount ();
 	}
       else
-	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -912,7 +898,6 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_A_user_can_not_have_more_than_X_IDs;
    extern const char *Txt_The_ID_X_has_been_registered_successfully;
    extern const char *Txt_The_ID_X_is_not_valid;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char NewID[ID_MAX_BYTES_USR_ID + 1];
    unsigned NumID;
    bool AlreadyExists;
@@ -941,33 +926,23 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 if (AlreadyExists)	// This new ID was already associated to this user
 	   {
 	    if (ItsMe || UsrDat->IDs.List[NumIDFound].Confirmed)
-	      {
-	       Gbl.DelayedAlert.Type = Ale_WARNING;
-	       Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-	       snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                 Txt_The_ID_X_matches_one_of_the_existing,
-			 NewID);
-	      }
+	       Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+		                Txt_The_ID_X_matches_one_of_the_existing,
+			        NewID);
 	    else	// It's not me && !Confirmed
 	      {
 	       /***** Mark this ID as confirmed *****/
 	       ID_ConfirmUsrID (UsrDat,NewID);
 
-	       Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	       Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-	       snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                 Txt_The_ID_X_has_been_confirmed,
-			 NewID);
+	       Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+		                Txt_The_ID_X_has_been_confirmed,
+			        NewID);
 	      }
 	   }
 	 else if (UsrDat->IDs.Num >= ID_MAX_IDS_PER_USER)
-	   {
-	    Gbl.DelayedAlert.Type = Ale_WARNING;
-	    Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_A_user_can_not_have_more_than_X_IDs,
-		      ID_MAX_IDS_PER_USER);
-	   }
+	    Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+		             Txt_A_user_can_not_have_more_than_X_IDs,
+		             ID_MAX_IDS_PER_USER);
 	 else	// OK ==> add this new ID to my list of IDs
 	   {
 	    /***** Save this new ID *****/
@@ -975,29 +950,18 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	    // Not me  ==> ID confirmed
 	    ID_InsertANewUsrIDInDB (UsrDat->UsrCod,NewID,!ItsMe);
 
-	    Gbl.DelayedAlert.Type = Ale_SUCCESS;
-	    Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_The_ID_X_has_been_registered_successfully,
-		      NewID);
+	    Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+		             Txt_The_ID_X_has_been_registered_successfully,
+		             NewID);
 	   }
 	}
       else        // New ID is not valid
-	{
-	 Gbl.DelayedAlert.Type = Ale_WARNING;
-	 Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-	 snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	           Txt_The_ID_X_is_not_valid,
-		   NewID);
-	}
+	 Ale_CreateAlert (Ale_WARNING,ID_ID_SECTION_ID,
+	                  Txt_The_ID_X_is_not_valid,
+		          NewID);
      }
    else
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -1025,7 +989,6 @@ void ID_ConfirmOtherUsrID (void)
   {
    extern const char *Txt_ID_X_had_already_been_confirmed;
    extern const char *Txt_The_ID_X_has_been_confirmed;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    long OriginalActCod;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
    bool ICanConfirm;
@@ -1068,14 +1031,10 @@ void ID_ConfirmOtherUsrID (void)
       if (Found)	// Found
 	{
 	 if (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
-	   {
 	    /***** ID found and already confirmed *****/
-            Gbl.DelayedAlert.Type = Ale_INFO;
-            Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_ID_X_had_already_been_confirmed,
-		      Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-	   }
+            Ale_CreateAlert (Ale_INFO,ID_ID_SECTION_ID,
+        	             Txt_ID_X_had_already_been_confirmed,
+		             Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	 else
 	   {
 	    /***** Mark this ID as confirmed *****/
@@ -1084,28 +1043,16 @@ void ID_ConfirmOtherUsrID (void)
 	    Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
 
 	    /***** Write success message *****/
-	    Gbl.DelayedAlert.Type = Ale_SUCCESS;
-            Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_The_ID_X_has_been_confirmed,
-		      Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+	    Ale_CreateAlert (Ale_SUCCESS,ID_ID_SECTION_ID,
+		             Txt_The_ID_X_has_been_confirmed,
+		             Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	   }
 	}
       else	// User's ID not found
-	{
-	 Gbl.DelayedAlert.Type = Ale_WARNING;
-         Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
-		   Ale_MAX_BYTES_ALERT);
-	}
+	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else	// I can not confirm
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Gbl.DelayedAlert.Section = ID_ID_SECTION_ID;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_User_not_found_or_you_do_not_have_permission_,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Show one or multiple records *****/
    switch (Gbl.Action.Original)
@@ -1124,7 +1071,7 @@ void ID_ConfirmOtherUsrID (void)
 	 break;
       default:
 	 /* Show optional alert */
-	 Ale_ShowDelayedAlert ();
+	 Ale_ShowAlerts (NULL);
 
 	 /* Show only the updated record of this user */
 	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,

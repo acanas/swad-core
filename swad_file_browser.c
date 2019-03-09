@@ -8865,7 +8865,7 @@ void Brw_RecFolderFileBrowser (void)
 	   }
         }
       else	// Folder name not valid
-         Ale_ShowDelayedAlert ();
+         Ale_ShowAlerts (NULL);
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_create_folders_here);	// It's difficult, but not impossible that a user sees this message
@@ -8978,7 +8978,7 @@ void Brw_RenFolderFileBrowser (void)
                            Gbl.FileBrowser.FilFolLnkName);
         }
       else	// Folder name not valid
-         Ale_ShowDelayedAlert ();
+         Ale_ShowAlerts (NULL);
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_rename_this_folder);
@@ -9014,7 +9014,7 @@ void Brw_RcvFileInFileBrwDropzone (void)
    else
       fprintf (stdout,"Status: 501 Not Implemented\r\n\r\n"
 		      "%s\n",
-	       Gbl.DelayedAlert.Txt);
+	       Ale_GetTextOfLastAlert ());
   }
 
 /*****************************************************************************/
@@ -9027,7 +9027,7 @@ void Brw_RcvFileInFileBrwClassic (void)
    Brw_RcvFileInFileBrw (Brw_CLASSIC_UPLOAD);
 
    /***** Show possible alert *****/
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
@@ -9082,7 +9082,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
          /***** Check if uploading this kind of file is allowed *****/
 	 if (Brw_CheckIfUploadIsAllowed (MIMEType))	// Gbl.Alert.Txt contains feedback text
            {
-            if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))	// Gbl.DelayedAlert.Txt contains feedback text
+            if (Str_ConvertFilFolLnkNameToValid (Gbl.FileBrowser.NewFilFolLnkName))
               {
                /* Gbl.FileBrowser.NewFilFolLnkName holds the name of the new file */
                snprintf (Path,sizeof (Path),
@@ -9100,12 +9100,9 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
 
                /* Check if the destination file exists */
                if (Fil_CheckIfPathExists (Path))
-                 {
-        	  Gbl.DelayedAlert.Type = Ale_WARNING;
-                  snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                    Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML,
-                            Gbl.FileBrowser.NewFilFolLnkName);
-                 }
+        	  Ale_CreateAlert (Ale_WARNING,NULL,
+        		           Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML,
+                                   Gbl.FileBrowser.NewFilFolLnkName);
                else	// Destination file does not exist
                  {
                   /* End receiving the file */
@@ -9126,10 +9123,9 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                      if (rename (PathTmp,Path))	// Fail
 	               {
 	                Fil_RemoveTree (PathTmp);
-        	        Gbl.DelayedAlert.Type = Ale_WARNING;
-                        snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                          Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
-                                  Gbl.FileBrowser.NewFilFolLnkName);
+        	        Ale_CreateAlert (Ale_WARNING,NULL,
+        	                         Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
+                                         Gbl.FileBrowser.NewFilFolLnkName);
 	               }
                      else			// Success
 	               {
@@ -9139,10 +9135,9 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                         if (Brw_CheckIfQuotaExceded ())
 	                  {
 	                   Fil_RemoveTree (Path);
-        	           Gbl.DelayedAlert.Type = Ale_WARNING;
-	                   snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                             Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
-		                     Gbl.FileBrowser.NewFilFolLnkName);
+        	           Ale_CreateAlert (Ale_WARNING,NULL,
+        	        	            Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
+		                            Gbl.FileBrowser.NewFilFolLnkName);
 	                  }
 	                else
                           {
@@ -9171,11 +9166,10 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
 			                                             Brw_IS_FOLDER,
 			                                             Gbl.FileBrowser.FilFolLnkName,
 			                                             FileNameToShow);
-        	              Gbl.DelayedAlert.Type = Ale_SUCCESS;
-			      snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	                                Txt_The_file_X_has_been_placed_inside_the_folder_Y,
-			                Gbl.FileBrowser.NewFilFolLnkName,
-			                FileNameToShow);
+        	              Ale_CreateAlert (Ale_SUCCESS,NULL,
+        	        	               Txt_The_file_X_has_been_placed_inside_the_folder_Y,
+			                       Gbl.FileBrowser.NewFilFolLnkName,
+			                       FileNameToShow);
                              }
 			   UploadSucessful = true;
 
@@ -9219,18 +9213,12 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
            }
         }
       else	// Empty filename
-        {
-	 Gbl.DelayedAlert.Type = Ale_WARNING;
-	 Str_Copy (Gbl.DelayedAlert.Txt,Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML,
-		   Ale_MAX_BYTES_ALERT);
-        }
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML);
      }
    else		// I do not have permission to create files here
-     {
-      Gbl.DelayedAlert.Type = Ale_WARNING;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_UPLOAD_FILE_Forbidden_NO_HTML,
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_UPLOAD_FILE_Forbidden_NO_HTML);
 
    return UploadSucessful;
   }
@@ -9414,7 +9402,7 @@ void Brw_RecLinkFileBrowser (void)
 /*****************************************************************************/
 // Returns true if file type is allowed
 // Returns false if MIME type or extension are not allowed
-// On error, Gbl.Alert.Txt will contain feedback text
+// On error, delayed alerts will contain feedback text
 
 static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
   {
@@ -9429,9 +9417,9 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 	 /* Check file extension */
 	 if (!Str_FileIsHTML (Gbl.FileBrowser.NewFilFolLnkName))
 	   {
-	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_UPLOAD_FILE_X_not_HTML_NO_HTML,
-		      Gbl.FileBrowser.NewFilFolLnkName);
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+		             Txt_UPLOAD_FILE_X_not_HTML_NO_HTML,
+		             Gbl.FileBrowser.NewFilFolLnkName);
 	    return false;
 	   }
 
@@ -9442,9 +9430,9 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 		  if (strcmp (MIMEType,"application/octetstream"))
 		     if (strcmp (MIMEType,"application/octet"))
 		       {	// MIME type forbidden
-			snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-				  Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
-				  Gbl.FileBrowser.NewFilFolLnkName,MIMEType);
+			Ale_CreateAlert (Ale_WARNING,NULL,
+		                         Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
+				         Gbl.FileBrowser.NewFilFolLnkName,MIMEType);
 			return false;
 		       }
 	 break;
@@ -9452,18 +9440,18 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 	 /* Check file extension */
 	 if (!Ext_CheckIfFileExtensionIsAllowed (Gbl.FileBrowser.NewFilFolLnkName))
 	   {
-	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-	              Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML,
-		      Gbl.FileBrowser.NewFilFolLnkName);
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML,
+		             Gbl.FileBrowser.NewFilFolLnkName);
 	    return false;
 	   }
 
 	 /* Check MIME type*/
 	 if (!MIM_CheckIfMIMETypeIsAllowed (MIMEType))
 	   {
-	    snprintf (Gbl.DelayedAlert.Txt,sizeof (Gbl.DelayedAlert.Txt),
-		      Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
-		      Gbl.FileBrowser.NewFilFolLnkName,MIMEType);
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+			     Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
+		             Gbl.FileBrowser.NewFilFolLnkName,MIMEType);
 	    return false;
 	   }
 	 break;

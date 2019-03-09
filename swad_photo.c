@@ -373,10 +373,10 @@ void Pho_SendPhotoUsr (void)
 	    Pho_ReqOtherUsrPhoto ();
 	}
       else
-         Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+         Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else		// User not found
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -413,7 +413,7 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
       Rec_ShowPublicSharedRecordOtherUsr ();
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 /*****************************************************************************/
@@ -464,7 +464,7 @@ void Pho_RemoveMyPhoto1 (void)
 void Pho_RemoveMyPhoto2 (void)
   {
    /***** Write success / warning message *****/
-   Ale_ShowDelayedAlert ();
+   Ale_ShowAlerts (NULL);
 
    /***** Show my record and other data *****/
    Rec_ShowMySharedRecordAndMore ();
@@ -525,10 +525,10 @@ void Pho_ReqRemoveUsrPhoto (void)
 	    Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
 	}
       else
-	 Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Show another user's record card *****/
    Rec_ShowPublicSharedRecordOtherUsr ();
@@ -548,10 +548,10 @@ void Pho_RemoveUsrPhoto (void)
      {
       /***** Remove photo *****/
       if (Pho_RemovePhoto (&Gbl.Usrs.Other.UsrDat))
-         Ale_ShowDelayedAlert ();
+         Ale_ShowAlerts (NULL);
      }
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
 
    /***** Show another user's record card *****/
    Rec_ShowPublicSharedRecordOtherUsr ();
@@ -843,7 +843,7 @@ void Pho_UpdateUsrPhoto1 (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
       Pho_UpdatePhoto1 (&Gbl.Usrs.Other.UsrDat);
    else
-      Acc_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+      Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
   }
 
 void Pho_UpdateUsrPhoto2 (void)
@@ -886,16 +886,12 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
       /* Remove the user from the list of users without photo */
       Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
-      Gbl.DelayedAlert.Type = Ale_SUCCESS;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_Photo_has_been_updated,
-		Ale_MAX_BYTES_ALERT);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+		       Txt_Photo_has_been_updated);
      }
    else
-     {
-      Gbl.DelayedAlert.Type = Ale_ERROR;
-      Str_Copy (Gbl.DelayedAlert.Txt,"Error updating photo.",
-		Ale_MAX_BYTES_ALERT);
-     }
+      Ale_CreateAlert (Ale_ERROR,NULL,
+	               "Error updating photo.");
   }
 
 static void Pho_UpdatePhoto2 (void)
@@ -904,7 +900,7 @@ static void Pho_UpdatePhoto2 (void)
    unsigned NumPhoto;
 
    /***** Start alert *****/
-   Ale_ShowAlertAndButton1 (Gbl.DelayedAlert.Type,Gbl.DelayedAlert.Txt);
+   Ale_ShowLastAlertAndButton1 ();
 
    /***** Show the three images resulting of the processing *****/
    Tbl_StartTableWide (0);
@@ -1126,16 +1122,14 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
 
    if (NumErrors)
      {
-      Gbl.DelayedAlert.Type = Ale_ERROR;
-      Str_Copy (Gbl.DelayedAlert.Txt,"Error removing photo.",
-		Ale_MAX_BYTES_ALERT);
+      Ale_CreateAlert (Ale_ERROR,NULL,
+		       "Error removing photo.");
       return false;
      }
    else
      {
-      Gbl.DelayedAlert.Type = Ale_SUCCESS;
-      Str_Copy (Gbl.DelayedAlert.Txt,Txt_Photo_removed,
-	        Ale_MAX_BYTES_ALERT);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_Photo_removed);
       return true;
      }
   }
