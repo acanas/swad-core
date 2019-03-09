@@ -447,10 +447,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.69.1 (2019-03-09)"
+#define Log_PLATFORM_VERSION	"SWAD 18.69.2 (2019-03-10)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.69.2:  Mar 10, 2019 	Changes related to alerts. (238842 lines)
 	Version 18.69.1:  Mar 09, 2019 	Changes in forms to register/remove users. (238805 lines)
 	Version 18.69:    Mar 09, 2019 	Code refactoring related to alerts. (238779 lines)
 	Version 18.68.3:  Mar 08, 2019 	Changes in styles of connected users.

@@ -1054,11 +1054,15 @@ void Fol_FollowUsr1 (void)
 void Fol_FollowUsr2 (void)
   {
    if (Ale_GetTypeOfLastAlert () == Ale_SUCCESS)
+     {
       /***** Show user's profile again *****/
       if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
-	 Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
-
-   if (Ale_GetTypeOfLastAlert () != Ale_SUCCESS)
+	 /* 1) I had permission to follow the user and I've just follow him/her
+	    2) User restricted permission, so now I can not view his/her profile
+	    3) Now I can not view his/her profile ==> show users I follow */
+	 Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);		// List users I follow
+     }
+   else
       Ale_ShowAlerts (NULL);
   }
 

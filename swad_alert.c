@@ -137,7 +137,7 @@ const char *Ale_GetTextOfLastAlert (void)
   }
 
 /*****************************************************************************/
-/******************************* Reset alerts ********************************/
+/***************************** Reset all alerts ******************************/
 /*****************************************************************************/
 
 void Ale_ResetAllAlerts (void)
@@ -150,11 +150,19 @@ void Ale_ResetAllAlerts (void)
       Ale_ResetAlert (i);
   }
 
+/*****************************************************************************/
+/************************* Reset more recent alert ***************************/
+/*****************************************************************************/
+
 static void Ale_ResetLastAlert (void)
   {
    if (Gbl.Alerts.Num)	// There are pending alerts no shown
       Ale_ResetAlert (Gbl.Alerts.Num - 1);	// Reset the last one
   }
+
+/*****************************************************************************/
+/********************* Reset one alert given its index ***********************/
+/*****************************************************************************/
 
 static void Ale_ResetAlert (size_t i)
   {
@@ -201,7 +209,7 @@ void Ale_ShowAlertsAndExit ()
   }
 
 /*****************************************************************************/
-/**************************** Show alert messages ****************************/
+/****** Show several alert messages stored in vector of delayed alerts *******/
 /*****************************************************************************/
 // If Section == NULL ==> show all alerts
 // If Section != NULL ==> shown only the alerts assigned to Section
@@ -228,6 +236,10 @@ void Ale_ShowAlerts (const char *Section)
         }
   }
 
+/*****************************************************************************/
+/****************** Show one formatted-text alert message ********************/
+/*****************************************************************************/
+
 void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
   {
    va_list ap;
@@ -253,6 +265,10 @@ void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...)
      }
   }
 
+/*****************************************************************************/
+/********************** Show one fix-text alert message **********************/
+/*****************************************************************************/
+
 static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
   {
    if (AlertType != Ale_NONE)
@@ -263,6 +279,10 @@ static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
 			       NULL,Btn_NO_BUTTON,NULL);
      }
   }
+
+/*****************************************************************************/
+/**************** Show the more recent alert with a button *******************/
+/*****************************************************************************/
 
 void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,
                                  const char *OnSubmit,void (*FuncParams) (),
@@ -275,6 +295,23 @@ void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,
    Ale_ShowAlertAndButton2 (NextAction,Anchor,OnSubmit,
                             FuncParams,Button,TxtButton);
   }
+
+/*****************************************************************************/
+/********** Show the first part of more recent alert with a button ***********/
+/*****************************************************************************/
+
+void Ale_ShowLastAlertAndButton1 (void)
+  {
+   /***** Show last alert *****/
+   Ale_ShowFixAlertAndButton1 (Ale_GetTypeOfLastAlert (),Ale_GetTextOfLastAlert ());
+
+   /***** Reset last alert *****/
+   Ale_ResetLastAlert ();
+  }
+
+/*****************************************************************************/
+/*********************** Show an alert with a button *************************/
+/*****************************************************************************/
 
 void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,
                              const char *OnSubmit,void (*FuncParams) (),
@@ -303,14 +340,9 @@ void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,
    free ((void *) Txt);
   }
 
-void Ale_ShowLastAlertAndButton1 (void)
-  {
-   /***** Show last alert *****/
-   Ale_ShowFixAlertAndButton1 (Ale_GetTypeOfLastAlert (),Ale_GetTextOfLastAlert ());
-
-   /***** Reset last alert *****/
-   Ale_ResetLastAlert ();
-  }
+/*****************************************************************************/
+/******** Show the first part of a formatted-text alert with a button ********/
+/*****************************************************************************/
 
 void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
   {
@@ -333,6 +365,10 @@ void Ale_ShowAlertAndButton1 (Ale_AlertType_t AlertType,const char *fmt,...)
    /***** Free text *****/
    free ((void *) Txt);
   }
+
+/*****************************************************************************/
+/*********** Show the first part of a fix-text alert with a button ***********/
+/*****************************************************************************/
 
 static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Txt)
   {
@@ -388,6 +424,10 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
             Txt);
   }
 
+/*****************************************************************************/
+/*************** Show the second part of an alert with a button **************/
+/*****************************************************************************/
+
 void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
                               void (*FuncParams) (),
                               Btn_Button_t Button,const char *TxtButton)
@@ -438,4 +478,3 @@ void Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission (void)
 
    Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
-

@@ -3808,8 +3808,9 @@ void Enr_CreateNewUsr2 (void)
       Ale_ShowAlerts (NULL);
    else						// User's ID valid
      {
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
-         Ale_ShowAlerts (NULL);
+      // if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+      /***** Show possible alerts *****/
+      Ale_ShowAlerts (NULL);
 
       /***** Show user's record *****/
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -3980,10 +3981,10 @@ void Enr_ModifyUsr2 (void)
   {
    if (Ale_GetTypeOfLastAlert () == Ale_WARNING)
      {
-      /* Show possible alerts */
+      /***** Show possible alerts *****/
       Ale_ShowAlerts (NULL);
 
-      /* Show form to edit user again */
+      /***** Show form to edit user again *****/
       Enr_ShowFormToEditOtherUsr ();
      }
    else // No error
@@ -3991,10 +3992,10 @@ void Enr_ModifyUsr2 (void)
 	{
 	 case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
 	    // if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-            /* Show possible alerts */
+            /***** Show possible alerts *****/
             Ale_ShowAlerts (NULL);
 
-            /* Show form to edit user again */
+            /***** Show form to edit user again *****/
 	    Enr_ShowFormToEditOtherUsr ();
 	    break;
 	 case Enr_REGISTER_ONE_DEGREE_ADMIN:
