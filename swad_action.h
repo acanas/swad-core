@@ -1160,9 +1160,9 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 
 #define ActSeeRecOneStd		(ActRemOldBrf +  36)
 #define ActSeeRecOneTch		(ActRemOldBrf +  37)
-#define ActSeeRecSevGst		(ActRemOldBrf +  38)
-#define ActSeeRecSevStd		(ActRemOldBrf +  39)
-#define ActSeeRecSevTch		(ActRemOldBrf +  40)
+#define ActDoActOnSevGst		(ActRemOldBrf +  38)
+#define ActDoActOnSevStd		(ActRemOldBrf +  39)
+#define ActDoActOnSevTch		(ActRemOldBrf +  40)
 #define ActPrnRecSevGst		(ActRemOldBrf +  41)
 #define ActPrnRecSevStd		(ActRemOldBrf +  42)
 #define ActPrnRecSevTch		(ActRemOldBrf +  43)

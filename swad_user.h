@@ -101,8 +101,7 @@ typedef enum
 typedef enum
   {
    Usr_CLASS_PHOTO_SEL,		// Only for selection of users
-   Usr_CLASS_PHOTO_SEL_SEE,	// Selection and seeing of users
-   Usr_CLASS_PHOTO_SEE,		// Only seeing users
+   Usr_CLASS_PHOTO_SEL_SEE,	// Selecting and seeing users
    Usr_CLASS_PHOTO_PRN,		// Only print users
   } Usr_ClassPhotoType_t;
 
@@ -412,6 +411,9 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void);
 
 void Usr_SeeGuests (void);
 void Usr_SeeStudents (void);
+
+void Usr_DoActionOnSeveralStds (void);
+
 void Usr_SeeTeachers (void);
 void Usr_SeeGstClassPhotoPrn (void);
 void Usr_SeeStdClassPhotoPrn (void);

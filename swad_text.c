@@ -8522,7 +8522,7 @@ const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z
 #elif L==2	// de
 	"Do you really want to remove the field <strong>%s</strong>"
 	" from the records of <strong>%s</strong>"
-	" (this field is filled in the records of %u student(s))?";		// Need Übersetzung
+	" (this field is filled in the records of %u student(s))?";			// Need Übersetzung
 #elif L==3	// en
 	"Do you really want to remove the field <strong>%s</strong>"
 	" from the records of <strong>%s</strong>"
@@ -38692,7 +38692,7 @@ const char *Txt_Show_questions =
 
 const char *Txt_Show_records =
 #if   L==1	// ca
-	"Mostrar fichas";	// Necessita traduccio
+	"Mostrar fitxes";
 #elif L==2	// de
 	"Zeige Profile";
 #elif L==3	// en
@@ -38706,7 +38706,7 @@ const char *Txt_Show_records =
 #elif L==7	// it
 	"Visualizza le schede";
 #elif L==8	// pl
-	"Show records";		// Potrzebujesz tlumaczenie
+	"Poka&zdot; rekordy";
 #elif L==9	// pt
 	"Mostrar cart&otilde;es";
 #endif
@@ -55036,27 +55036,6 @@ const char *Txt_You_must_select_one_ore_more_recipients =
 	"Voc&ecirc; deve selecionar um ou mais destinat&aacute;rios.";
 #endif
 
-const char *Txt_You_must_select_one_ore_more_students =
-#if   L==1	// ca
-	"Debe seleccionar uno o m&aacute;s estudiantes.";	// Necessita traduccio
-#elif L==2	// de
-	"Es muss mindestens ein Student ausgew&auml;hlt werden.";
-#elif L==3	// en
-	"You must select one or more students.";
-#elif L==4	// es
-	"Debe seleccionar uno o m&aacute;s estudiantes.";
-#elif L==5	// fr
-	"You must select one or more students.";		// Besoin de traduction
-#elif L==6	// gn
-	"Debe seleccionar uno o m&aacute;s estudiantes.";	// Okoteve traducción
-#elif L==7	// it
-	"Devi selezionare uno o pi&ugrave; studenti.";
-#elif L==8	// pl
-	"You must select one or more students.";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve selecionar um ou mais estudantes.";
-#endif
-
 const char *Txt_You_must_select_one_ore_more_tags =
 #if   L==1	// ca
 	"Debe seleccionar uno o m&aacute;s descriptores.";	// Necessita traduccio
@@ -55076,27 +55055,6 @@ const char *Txt_You_must_select_one_ore_more_tags =
 	"You must select one or more tags.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar uma ou mais descritores.";
-#endif
-
-const char *Txt_You_must_select_one_ore_more_teachers =
-#if   L==1	// ca
-	"Debe seleccionar uno o m&aacute;s profesores.";		// Necessita traduccio
-#elif L==2	// de
-	"Es muss mindestens ein Lehrer ausgew&auml;hlt werden.";
-#elif L==3	// en
-	"You must select one or more teachers.";
-#elif L==4	// es
-	"Debe seleccionar uno o m&aacute;s profesores.";
-#elif L==5	// fr
-	"You must select one or more teachers.";			// Besoin de traduction
-#elif L==6	// gn
-	"Debe seleccionar uno o m&aacute;s profesores.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi selezionare uno o pi&ugrave; professori.";
-#elif L==8	// pl
-	"You must select one or more teachers.";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; deve selecionar um ou mais professores.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_types_of_answer =

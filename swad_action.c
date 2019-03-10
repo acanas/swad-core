@@ -1140,9 +1140,9 @@ Users:
 
 	957. ActSeeRecOneStd		Show record of one selected student
 	958. ActSeeRecOneTch		Show record of one selected teacher
-	959. ActSeeRecSevGst		Show records of several selected guests
-	960. ActSeeRecSevStd		Show records of several selected students
-	961. ActSeeRecSevTch		Show records of several selected teachers
+	959. ActDoActOnSevGst		Do action on several selected guests
+	960. ActDoActOnSevStd		Do action on several selected students
+	961. ActDoActOnSevTch		Do action on several selected teachers
 	962. ActPrnRecSevGst		Show records of several selected guests ready to be printed
 	963. ActPrnRecSevStd		Show records of several selected students ready to be printed
 	964. ActPrnRecSevTch		Show records of several selected teachers ready to be printed
@@ -2671,9 +2671,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeRecOneStd	*/{1174,-1,TabUnk,ActLstStd		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_GetUsrAndShowRecOneStdCrs	,NULL},
    /* ActSeeRecOneTch	*/{1175,-1,TabUnk,ActLstTch		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_GetUsrAndShowRecOneTchCrs	,NULL},
 
-   /* ActSeeRecSevGst	*/{1187,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ListRecordsGstsShow	,NULL},
-   /* ActSeeRecSevStd	*/{  89,-1,TabUnk,ActLstStd		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ListRecordsStdsShow	,NULL},
-   /* ActSeeRecSevTch	*/{  22,-1,TabUnk,ActLstTch		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ListRecordsTchsShow	,NULL},
+   /* ActDoActOnSevGst	*/{1187,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_DoActionOnSeveralStds	,NULL},
+   /* ActDoActOnSevStd	*/{  89,-1,TabUnk,ActLstStd		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_DoActionOnSeveralStds	,NULL},
+   /* ActDoActOnSevTch	*/{  22,-1,TabUnk,ActLstTch		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_DoActionOnSeveralStds	,NULL},
    /* ActPrnRecSevGst	*/{1188,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Rec_ListRecordsGstsPrint	,NULL},
    /* ActPrnRecSevStd	*/{ 111,-1,TabUnk,ActLstStd		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Rec_ListRecordsStdsPrint	,NULL},
    /* ActPrnRecSevTch	*/{ 127,-1,TabUnk,ActLstTch		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Rec_ListRecordsTchsPrint	,NULL},
@@ -3151,7 +3151,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #19 (obsolete action)
 	ActSeeSylPra,		// #20
 	-1,			// #21 (obsolete action)
-	ActSeeRecSevTch,	// #22
+	ActDoActOnSevTch,	// #22
 	ActAdmBrf,		// #23
 	-1,			// #24 (obsolete action)
 	ActSeeCrsTT,		// #25
@@ -3218,7 +3218,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #86 (obsolete action)
 	ActRemAllStdCrs,	// #87
 	ActReqRemAllStdCrs,	// #88
-	ActSeeRecSevStd,	// #89
+	ActDoActOnSevStd,	// #89
 	ActDelSntMsg,		// #90
 	ActEdiExaAnn,		// #91
 	-1,			// #92 (obsolete action)
@@ -4316,7 +4316,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #1184 (obsolete action)
 	-1,			// #1185 (obsolete action)
 	ActLstOth,		// #1186
-	ActSeeRecSevGst,	// #1187
+	ActDoActOnSevGst,	// #1187
 	ActPrnRecSevGst,	// #1188
 	ActLstGstAll,		// #1189
 	ActPrnGstPho,		// #1190

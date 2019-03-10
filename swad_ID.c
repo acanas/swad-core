@@ -480,13 +480,13 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                               Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
       switch (Gbl.Action.Original)
 	{
-	 case ActSeeRecSevGst:
+	 case ActDoActOnSevGst:
 	    Usr_PutHiddenParUsrCodAll (ActCnfID_Oth,Gbl.Usrs.Select[Rol_UNK]);
 	    break;
-	 case ActSeeRecSevStd:
+	 case ActDoActOnSevStd:
 	    Usr_PutHiddenParUsrCodAll (ActCnfID_Std,Gbl.Usrs.Select[Rol_UNK]);
 	    break;
-	 case ActSeeRecSevTch:
+	 case ActDoActOnSevTch:
 	    Usr_PutHiddenParUsrCodAll (ActCnfID_Tch,Gbl.Usrs.Select[Rol_UNK]);
 	    break;
 	}
@@ -1057,15 +1057,15 @@ void ID_ConfirmOtherUsrID (void)
    /***** Show one or multiple records *****/
    switch (Gbl.Action.Original)
      {
-      case ActSeeRecSevGst:
+      case ActDoActOnSevGst:
 	 /* Show multiple records of guests again (including the updated one) */
 	 Rec_ListRecordsGstsShow ();
 	 break;
-      case ActSeeRecSevStd:
+      case ActDoActOnSevStd:
 	 /* Show multiple records of students again (including the updated one) */
 	 Rec_ListRecordsStdsShow ();
 	 break;
-      case ActSeeRecSevTch:
+      case ActDoActOnSevTch:
 	 /* Show multiple records of teachers again (including the updated one) */
 	 Rec_ListRecordsTchsShow ();
 	 break;

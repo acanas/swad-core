@@ -496,7 +496,7 @@ void TT_ShowTimeTable (long UsrCod)
       case ActSeeMyTT:		case ActPrnMyTT:	case ActChgMyTT1stDay:
 	 Gbl.TimeTable.View = TT_CRS_VIEW;
 	 break;
-      case ActSeeRecOneTch:	case ActSeeRecSevTch:
+      case ActSeeRecOneTch:	case ActDoActOnSevTch:
 	 Gbl.TimeTable.View = TT_TUT_VIEW;
 	 break;
       case ActEdiCrsTT:		case ActChgCrsTT:

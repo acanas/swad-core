@@ -953,18 +953,24 @@ void Rec_PutLinkToEditRecordFields (void)
 
 void Rec_ListRecordsGstsShow (void)
   {
-   Gbl.Action.Original = ActSeeRecSevGst;	// Used to know where to go when confirming ID
+   Gbl.Action.Original = ActDoActOnSevGst;	// Used to know where to go when confirming ID
    Rec_ListRecordsGsts (Rec_SHA_RECORD_LIST);
   }
 
 void Rec_ListRecordsGstsPrint (void)
   {
+   /***** Get list of selected users *****/
+   Usr_GetListsSelectedUsrsCods ();
+
+   /***** List records ready to be printed *****/
    Rec_ListRecordsGsts (Rec_SHA_RECORD_PRINT);
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
   {
-   extern const char *Txt_You_must_select_one_ore_more_users;
    unsigned NumUsr = 0;
    const char *Ptr;
    struct UsrData UsrDat;
@@ -976,17 +982,6 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (TypeOfView == Rec_SHA_RECORD_PRINT)
       Rec_GetParamRecordsPerPage ();
-
-   /***** Get list of selected users *****/
-   Usr_GetListsSelectedUsrsCods ();
-
-   /* Check the number of students to show */
-   if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no students selected...
-     {						// ...write warning notice
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
-      Usr_SeeGuests ();			// ...show again the form
-      return;
-     }
 
    if (TypeOfView == Rec_SHA_RECORD_LIST)	// Listing several records
      {
@@ -1045,9 +1040,6 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
      }
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -1146,7 +1138,7 @@ static void Rec_ShowRecordOneStdCrs (void)
 
 void Rec_ListRecordsStdsShow (void)
   {
-   Gbl.Action.Original = ActSeeRecSevStd;	// Used to know where to go when confirming ID...
+   Gbl.Action.Original = ActDoActOnSevStd;	// Used to know where to go when confirming ID...
 						// ...or changing course record
    Rec_ListRecordsStds (Rec_SHA_RECORD_LIST,
                         Rec_CRS_LIST_SEVERAL_RECORDS);
@@ -1154,14 +1146,20 @@ void Rec_ListRecordsStdsShow (void)
 
 void Rec_ListRecordsStdsPrint (void)
   {
+   /***** Get list of selected users *****/
+   Usr_GetListsSelectedUsrsCods ();
+
+   /***** List records ready to be printed *****/
    Rec_ListRecordsStds (Rec_SHA_RECORD_PRINT,
                         Rec_CRS_PRINT_SEVERAL_RECORDS);
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
                                  Rec_CourseRecordViewType_t CrsTypeOfView)
   {
-   extern const char *Txt_You_must_select_one_ore_more_students;
    unsigned NumUsr = 0;
    const char *Ptr;
    struct UsrData UsrDat;
@@ -1174,17 +1172,6 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    /***** Get parameter with number of user records per page (only for printing) *****/
    if (ShaTypeOfView == Rec_SHA_RECORD_PRINT)
       Rec_GetParamRecordsPerPage ();
-
-   /***** Get list of selected students *****/
-   Usr_GetListsSelectedUsrsCods ();
-
-   /* Check the number of students to show */
-   if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no students selected...
-     {						// ...write warning notice
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_students);
-      Usr_SeeStudents ();			// ...show again the form
-      return;
-     }
 
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
@@ -1272,9 +1259,6 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
    /***** Free list of fields of records *****/
    Rec_FreeListFields ();
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -1364,19 +1348,25 @@ static void Rec_ShowRecordOneTchCrs (void)
 
 void Rec_ListRecordsTchsShow (void)
   {
-   Gbl.Action.Original = ActSeeRecSevTch;	// Used to know where to go when confirming ID
+   Gbl.Action.Original = ActDoActOnSevTch;	// Used to know where to go when confirming ID
    Rec_ListRecordsTchs (Rec_SHA_RECORD_LIST);
   }
 
 void Rec_ListRecordsTchsPrint (void)
   {
+   /***** Get list of selected users *****/
+   Usr_GetListsSelectedUsrsCods ();
+
+   /***** List records ready to be printed *****/
    Rec_ListRecordsTchs (Rec_SHA_RECORD_PRINT);
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
   {
    extern const char *Hlp_USERS_Teachers_timetable;
-   extern const char *Txt_You_must_select_one_ore_more_teachers;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    unsigned NumUsr = 0;
    const char *Ptr;
@@ -1400,18 +1390,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    if (Gbl.Action.Act == ActPrnRecSevTch)
       Rec_GetParamRecordsPerPage ();
 
-   /***** Get list of selected teachers *****/
-   Usr_GetListsSelectedUsrsCods ();
-
-   /* Check the number of teachers to show */
-   if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no teachers selected...
-     {						// ...write warning notice
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_teachers);
-      Usr_SeeTeachers ();			// ...show again the form
-      return;
-     }
-
-   if (Gbl.Action.Act == ActSeeRecSevTch)
+   if (Gbl.Action.Act == ActDoActOnSevTch)
      {
       /***** Show contextual menu *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -1492,9 +1471,6 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -1562,7 +1538,7 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
   {
    extern const char *Txt_Show_office_hours;
 
-   Lay_PutContextualCheckbox (ActSeeRecSevTch,Rec_PutParamsShowOfficeHoursSeveralTchs,
+   Lay_PutContextualCheckbox (ActDoActOnSevTch,Rec_PutParamsShowOfficeHoursSeveralTchs,
                               "ShowOfficeHours",
                               ShowOfficeHours,false,
                               Txt_Show_office_hours,
@@ -1577,7 +1553,7 @@ static void Rec_PutParamsShowOfficeHoursOneTch (void)
 
 static void Rec_PutParamsShowOfficeHoursSeveralTchs (void)
   {
-   Usr_PutHiddenParUsrCodAll (ActSeeRecSevTch,Gbl.Usrs.Select[Rol_UNK]);
+   Usr_PutHiddenParUsrCodAll (ActDoActOnSevTch,Gbl.Usrs.Select[Rol_UNK]);
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
   }
 
@@ -1653,7 +1629,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    /***** Show one or multiple records *****/
    switch (Gbl.Action.Original)
      {
-      case ActSeeRecSevStd:
+      case ActDoActOnSevStd:
 	 /* Show multiple records again (including the updated one) */
 	 Rec_ListRecordsStdsShow ();
 	 break;
@@ -1748,7 +1724,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    ICanEdit = true;
 	    Frm_StartFormAnchor (ActRcvRecOthUsr,Anchor);
 	    Par_PutHiddenParamLong ("OriginalActCod",
-				    Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
+				    Act_GetActCod (ActDoActOnSevStd));	// Original action, used to know where we came from
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	    if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
 	       Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select[Rol_UNK]);

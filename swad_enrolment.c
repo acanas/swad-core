@@ -1665,8 +1665,7 @@ static void Enr_PutActionRepUsrAsDup (bool *OptionChecked)
    extern const char *Txt_Report_possible_duplicate_user;
 
    Enr_StartRegRemOneUsrAction (Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,OptionChecked);
-   fprintf (Gbl.F.Out,"%s",
-	    Txt_Report_possible_duplicate_user);
+   fprintf (Gbl.F.Out,"%s",Txt_Report_possible_duplicate_user);
    Enr_EndRegRemOneUsrAction ();
   }
 

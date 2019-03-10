@@ -140,6 +140,14 @@ const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
 
 #define Usr_MAX_BYTES_QUERY_GET_LIST_USRS (16 * 1024 - 1)
 
+#define Usr_LIST_USRS_NUM_ACTIONS 3
+typedef enum
+  {
+   Usr_LIST_USRS_UNKNOWN_ACTION	=  0,
+   Usr_SHOW_RECORDS		=  1,
+   Usr_FOLLOW_USERS		=  2,
+  } Usr_ListUsrsAction_t;
+
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -235,6 +243,14 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void);
 
 static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
+
+static bool Usr_PutActionsSeveralUsrs (Rol_Role_t Role);
+static void Usr_PutActionShowRecords (bool *OptionChecked);
+static void Usr_PutActionFollowUsers (bool *OptionChecked);
+static void Usr_StartListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction,
+                                     bool *OptionChecked);
+static void Usr_EndListUsrsAction (void);
+
 
 static void Usr_PutIconsListGsts (void);
 static void Usr_PutIconsListStds (void);
@@ -7528,7 +7544,7 @@ void Usr_SeeGuests (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   extern const char *Txt_Show_records;
+   extern const char *Txt_Continue;
 
    /***** Put contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -7598,7 +7614,7 @@ void Usr_SeeGuests (void)
 				       -1L);
 
          /* Start form */
-	 Frm_StartForm (ActSeeRecSevGst);
+	 Frm_StartForm (ActDoActOnSevGst);
 
          /* Start table */
 	 Tbl_StartTableWide (0);
@@ -7608,10 +7624,11 @@ void Usr_SeeGuests (void)
            {
             case Usr_LIST_AS_CLASS_PHOTO:
                Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
-        	                   Rol_GST,true);
+        	                   Rol_GST,
+				   true);	// Put checkbox to select users
                break;
             case Usr_LIST_AS_LISTING:
-               Usr_ListMainDataGsts (true);
+               Usr_ListMainDataGsts (true);	// Put checkbox to select users
                break;
             default:
                break;
@@ -7620,8 +7637,10 @@ void Usr_SeeGuests (void)
          /* End table */
          Tbl_EndTable ();
 
-         /* Send button */
-	 Btn_PutConfirmButton (Txt_Show_records);
+	 /***** Which action, show records, follow...? *****/
+	 if (Usr_PutActionsSeveralUsrs (Rol_GST))
+            /* Send button */
+	    Btn_PutConfirmButton (Txt_Continue);
 
          /* End form */
          Frm_EndForm ();
@@ -7651,8 +7670,7 @@ void Usr_SeeStudents (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   extern const char *Txt_Show_records;
-   bool ICanViewRecords;
+   extern const char *Txt_Continue;
 
    /***** Put contextual links *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -7692,9 +7710,6 @@ void Usr_SeeStudents (void)
    /***** Get scope *****/
    Sco_SetScopesForListingStudents ();
    Sco_GetScope ("ScopeUsr");
-   ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
-	              (Gbl.Usrs.Me.IBelongToCurrentCrs ||
-	               Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
 
    /***** Get groups to show ******/
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
@@ -7759,12 +7774,10 @@ void Usr_SeeStudents (void)
 					Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 									      -1L);
 
+
          /* Start form */
-         if (ICanViewRecords)
-           {
-	    Frm_StartForm (ActSeeRecSevStd);
-	    Grp_PutParamsCodGrps ();
-           }
+	 Frm_StartForm (ActDoActOnSevStd);
+	 Grp_PutParamsCodGrps ();
 
          /* Start table */
          Tbl_StartTableWide (0);
@@ -7773,12 +7786,12 @@ void Usr_SeeStudents (void)
          switch (Gbl.Usrs.Me.ListType)
            {
             case Usr_LIST_AS_CLASS_PHOTO:
-               Usr_DrawClassPhoto (ICanViewRecords ? Usr_CLASS_PHOTO_SEL_SEE :
-        	                                     Usr_CLASS_PHOTO_SEE,
-        	                   Rol_STD,ICanViewRecords);
+               Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
+        	                   Rol_STD,
+				   true);	// Put checkbox to select users
                break;
             case Usr_LIST_AS_LISTING:
-               Usr_ListMainDataStds (ICanViewRecords);
+               Usr_ListMainDataStds (true);	// Put checkbox to select users
                break;
             default:
                break;
@@ -7787,15 +7800,14 @@ void Usr_SeeStudents (void)
          /* End table */
          Tbl_EndTable ();
 
-         if (ICanViewRecords)
-           {
+	 /***** Which action, show records, follow...? *****/
+	 if (Usr_PutActionsSeveralUsrs (Rol_STD))
             /* Send button */
-	    Btn_PutConfirmButton (Txt_Show_records);
+	    Btn_PutConfirmButton (Txt_Continue);
 
-	    /* End form */
-	    Frm_EndForm ();
-           }
-	}
+	 /* End form */
+	 Frm_EndForm ();
+        }
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
       /***** Show warning indicating no students found *****/
@@ -7824,8 +7836,7 @@ void Usr_SeeTeachers (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   extern const char *Txt_Show_records;
-   bool ICanViewRecords;
+   extern const char *Txt_Continue;
    unsigned NumUsrs;
 
    /***** Put contextual links *****/
@@ -7871,7 +7882,6 @@ void Usr_SeeTeachers (void)
                        1 << Sco_SCOPE_CRS;
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ("ScopeUsr");
-   ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
    /***** Get groups to show ******/
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
@@ -7932,8 +7942,7 @@ void Usr_SeeTeachers (void)
 									      -1L);
 
          /* Start form */
-         if (ICanViewRecords)
-            Frm_StartForm (ActSeeRecSevTch);
+         Frm_StartForm (ActDoActOnSevTch);
 
          /* Start table */
          Tbl_StartTableWide (0);
@@ -7943,20 +7952,22 @@ void Usr_SeeTeachers (void)
            {
             case Usr_LIST_AS_CLASS_PHOTO:
                /* List teachers and non-editing teachers */
-               Usr_DrawClassPhoto (ICanViewRecords ? Usr_CLASS_PHOTO_SEL_SEE :
-        	                                     Usr_CLASS_PHOTO_SEE,
-        	                   Rol_TCH,ICanViewRecords);
-               Usr_DrawClassPhoto (ICanViewRecords ? Usr_CLASS_PHOTO_SEL_SEE :
-        	                                     Usr_CLASS_PHOTO_SEE,
-        	                   Rol_NET,ICanViewRecords);
+               Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
+        	                   Rol_TCH,
+				   true);	// Put checkbox to select users
+               Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
+        	                   Rol_NET,
+				   true);	// Put checkbox to select users
                break;
             case Usr_LIST_AS_LISTING:
 	       /* Initialize field names */
 	       Usr_SetUsrDatMainFieldNames ();
 
 	       /* List teachers and non-editing teachers */
-               Usr_ListMainDataTchs (Rol_TCH,ICanViewRecords);
-               Usr_ListMainDataTchs (Rol_NET,ICanViewRecords);
+               Usr_ListMainDataTchs (Rol_TCH,
+        			     true);	// Put checkbox to select users
+               Usr_ListMainDataTchs (Rol_NET,
+        			     true);	// Put checkbox to select users
                break;
             default:
                break;
@@ -7965,14 +7976,13 @@ void Usr_SeeTeachers (void)
          /* End table */
          Tbl_EndTable ();
 
-         if (ICanViewRecords)
-           {
+	 /***** Which action, show records, follow...? *****/
+	 if (Usr_PutActionsSeveralUsrs (Rol_TCH))
             /* Send button */
-	    Btn_PutConfirmButton (Txt_Show_records);
+	    Btn_PutConfirmButton (Txt_Continue);
 
-	    /* End form */
-	    Frm_EndForm ();
-           }
+	 /* End form */
+	 Frm_EndForm ();
 	}
      }
    else	// NumUsrs == 0
@@ -7991,6 +8001,182 @@ void Usr_SeeTeachers (void)
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
+  }
+
+/*****************************************************************************/
+/*************** Put different actions to do with several users **************/
+/*****************************************************************************/
+// Returns true if at least one action can be shown
+
+static bool Usr_PutActionsSeveralUsrs (Rol_Role_t Role)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   bool ICanViewRecords;
+   bool ICanFollow;
+   bool OptionsShown = false;
+   bool OptionChecked = false;
+
+   switch (Role)
+     {
+      case Rol_GST:
+	 ICanViewRecords = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+	 ICanFollow = false;
+	 break;
+      case Rol_STD:
+	 ICanViewRecords = ICanFollow =
+	    (Gbl.Scope.Current == Sco_SCOPE_CRS &&
+	     (Gbl.Usrs.Me.IBelongToCurrentCrs ||
+	      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
+	 break;
+      case Rol_TCH:
+	 ICanViewRecords = ICanFollow =
+	    (Gbl.Scope.Current == Sco_SCOPE_CRS);
+	 break;
+      default:
+         ICanViewRecords = ICanFollow = false;
+         break;
+     }
+
+   /***** Start list of options *****/
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+
+   /***** View records *****/
+   if (ICanViewRecords)
+     {	// I can view users records
+      Usr_PutActionShowRecords (&OptionChecked);
+      OptionsShown = true;
+     }
+
+   /***** Follow *****/
+   if (ICanFollow)
+     {	// I can follow users
+      Usr_PutActionFollowUsers (&OptionChecked);
+      OptionsShown = true;
+     }
+
+   /***** End list of options *****/
+   fprintf (Gbl.F.Out,"</ul>");
+
+   return OptionsShown;
+  }
+
+/*****************************************************************************/
+/******************** Put action to show users' records **********************/
+/*****************************************************************************/
+
+static void Usr_PutActionShowRecords (bool *OptionChecked)
+  {
+   extern const char *Txt_Show_records;
+
+   Usr_StartListUsrsAction (Usr_SHOW_RECORDS,OptionChecked);
+   fprintf (Gbl.F.Out,"%s",Txt_Show_records);
+   Usr_EndListUsrsAction ();
+  }
+
+/*****************************************************************************/
+/*********************** Put action to follow users **************************/
+/*****************************************************************************/
+
+static void Usr_PutActionFollowUsers (bool *OptionChecked)
+  {
+   extern const char *Txt_Follow;
+
+   Usr_StartListUsrsAction (Usr_FOLLOW_USERS,OptionChecked);
+   fprintf (Gbl.F.Out,"%s",Txt_Follow);
+   Usr_EndListUsrsAction ();
+  }
+
+/*****************************************************************************/
+/************ Put start/end of action to register/remove one user ************/
+/*****************************************************************************/
+
+static void Usr_StartListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction,
+                                     bool *OptionChecked)
+  {
+   fprintf (Gbl.F.Out,"<li>"
+		      "<input type=\"radio\" id=\"ListUsrsAction%u\""
+		      " name=\"ListUsrsAction\" value=\"%u\"",
+	    (unsigned) ListUsrsAction,
+	    (unsigned) ListUsrsAction);
+   if (!*OptionChecked)
+     {
+      fprintf (Gbl.F.Out," checked=\"checked\"");
+      *OptionChecked = true;
+     }
+   fprintf (Gbl.F.Out," />"
+		      "<label for=\"ListUsrsAction%u\">",
+	    (unsigned) ListUsrsAction);
+  }
+
+static void Usr_EndListUsrsAction (void)
+  {
+   fprintf (Gbl.F.Out,"</label>"
+		      "</li>");
+  }
+
+/*****************************************************************************/
+/********************** Do action on several students ************************/
+/*****************************************************************************/
+
+void Usr_DoActionOnSeveralStds (void)
+  {
+   extern const char *Txt_You_must_select_one_ore_more_users;
+   Usr_ListUsrsAction_t ListUsrsAction;
+   // Rol_Role_t Role;
+
+   /***** Get parameters from form *****/
+   /* Get list of selected users */
+   Usr_GetListsSelectedUsrsCods ();
+
+   /* Check the number of users */
+   if (!Usr_CountNumUsrsInListOfSelectedUsrs ())// If no users selected...
+     {						// ...write warning notice
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+      Usr_SeeStudents ();			// ...show again the form
+      return;
+     }
+
+   /* Get the action to do */
+   ListUsrsAction = (Usr_ListUsrsAction_t)
+		    Par_GetParToUnsignedLong ("ListUsrsAction",
+					      0,
+					      Usr_LIST_USRS_NUM_ACTIONS - 1,
+					      (unsigned long) Usr_LIST_USRS_UNKNOWN_ACTION);
+   /* Get role */
+   /* Role = (Rol_Role_t) Par_GetParToUnsignedLong ("Role",
+						 0,
+						 Rol_NUM_ROLES - 1,
+						 (unsigned long) Rol_UNK); */
+
+   /***** Do actions *****/
+   switch (ListUsrsAction)
+     {
+      case Usr_SHOW_RECORDS:
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActDoActOnSevGst:
+	       Rec_ListRecordsGstsShow ();
+	       break;
+	    case ActDoActOnSevStd:
+	       Rec_ListRecordsStdsShow ();
+	       break;
+	    case ActDoActOnSevTch:
+	       Rec_ListRecordsTchsShow ();
+	       break;
+	   }
+	 break;
+      case Usr_FOLLOW_USERS:
+         Ale_ShowAlert (Ale_WARNING,"Not implemented.");
+	 break;
+      default:
+         Ale_ShowAlert (Ale_ERROR,"Wrong action.");
+         Usr_SeeStudents ();			// Show again the form
+         break;
+     }
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -8328,7 +8514,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	    ClassPhoto = "PHOTO21x28";
 	    break;
 	 case Usr_CLASS_PHOTO_SEL_SEE:
-	 case Usr_CLASS_PHOTO_SEE:
 	    ClassPhoto = "PHOTO45x60";
 	    break;
 	 case Usr_CLASS_PHOTO_PRN:

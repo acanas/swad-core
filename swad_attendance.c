@@ -2853,7 +2853,7 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
   {
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance;
-   extern const char *Txt_You_must_select_one_ore_more_students;
+   extern const char *Txt_You_must_select_one_ore_more_users;
    unsigned NumStdsInList;
    long *LstSelectedUsrCods;
    unsigned NumAttEvent;
@@ -2922,7 +2922,7 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
      }
    else	// No students selected
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_students);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
       Usr_ReqListStdsAttendanceCrs ();		// ...show again the form
      }
 
