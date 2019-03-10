@@ -115,11 +115,25 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
 
 static void Enr_ReqAdminUsrs (Rol_Role_t Role);
 static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role);
-
 static void Enr_PutAreaToEnterUsrsIDs (void);
 static void Enr_PutActionsRegRemSeveralUsrs (void);
 
 static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role);
+
+static void Enr_PutActionModifyOneUsr (bool *OptionChecked,
+                                       bool UsrBelongsToCrs,bool ItsMe);
+static void Enr_PutActionRegOneDegAdm (bool *OptionChecked);
+static void Enr_PutActionRegOneCtrAdm (bool *OptionChecked);
+static void Enr_PutActionRegOneInsAdm (bool *OptionChecked);
+static void Enr_PutActionRepUsrAsDup (bool *OptionChecked);
+static void Enr_PutActionRemUsrFromCrs (bool *OptionChecked,bool ItsMe);
+static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,bool ItsMe);
+static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,bool ItsMe);
+static void Enr_PutActionRemUsrAsInsAdm (bool *OptionChecked,bool ItsMe);
+static void Enr_PutActionRemUsrAcc (bool *OptionChecked,bool ItsMe);
+static void Enr_StartRegRemOneUsrAction (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
+                                         bool *OptionChecked);
+static void Enr_EndRegRemOneUsrAction (void);
 
 static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
                              struct ListCodGrps *LstGrps,unsigned *NumUsrsRegistered);
@@ -929,349 +943,6 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 /*****************************************************************************/
 /*** Put different actions to register/remove users to/from current course ***/
 /*****************************************************************************/
-// Returns true if at least one action can be shown
-
-bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
-  {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Modify_me_in_the_course_X;
-   extern const char *Txt_Modify_user_in_the_course_X;
-   extern const char *Txt_Register_me_in_X;
-   extern const char *Txt_Register_USER_in_the_course_X;
-   extern const char *Txt_Report_possible_duplicate_user;
-   extern const char *Txt_Register_USER_as_an_administrator_of_the_degree_X;
-   extern const char *Txt_Register_USER_as_an_administrator_of_the_centre_X;
-   extern const char *Txt_Register_USER_as_an_administrator_of_the_institution_X;
-   extern const char *Txt_Remove_me_from_THE_COURSE_X;
-   extern const char *Txt_Remove_USER_from_THE_COURSE_X;
-   extern const char *Txt_Remove_me_as_an_administrator_of_the_degree_X;
-   extern const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X;
-   extern const char *Txt_Remove_me_as_an_administrator_of_the_centre_X;
-   extern const char *Txt_Remove_USER_as_an_administrator_of_the_centre_X;
-   extern const char *Txt_Remove_me_as_an_administrator_of_the_institution_X;
-   extern const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X;
-   extern const char *Txt_Eliminate_my_user_account;
-   extern const char *Txt_Eliminate_user_account;
-   unsigned NumOptionsShown = 0;
-   bool UsrBelongsToCrs = false;
-   bool UsrIsDegAdmin = false;
-   bool UsrIsCtrAdmin = false;
-   bool UsrIsInsAdmin = false;
-   bool OptionChecked = false;
-
-   /***** Check if the other user belongs to the current course *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-      UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat);
-
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
-     {
-      /***** Check if the other user is administrator of the current institution *****/
-      UsrIsInsAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-					   Sco_SCOPE_INS,
-					   Gbl.CurrentIns.Ins.InsCod);
-
-      if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	{
-	 /***** Check if the other user is administrator of the current centre *****/
-	 UsrIsCtrAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-					      Sco_SCOPE_CTR,
-					      Gbl.CurrentCtr.Ctr.CtrCod);
-
-	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	    /***** Check if the other user is administrator of the current degree *****/
-	    UsrIsDegAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
-						 Sco_SCOPE_DEG,
-						 Gbl.CurrentDeg.Deg.DegCod);
-	}
-     }
-
-   /***** Start list of options *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
-
-   /***** Register user in course / Modify user's data *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-       Gbl.Usrs.Me.Role.Logged >= Rol_STD)
-     {
-      fprintf (Gbl.F.Out,"<li>"
-			 "<input type=\"radio\" id=\"RegRemAction%u\""
-			 " name=\"RegRemAction\" value=\"%u\"",
-               (unsigned) Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,
-               (unsigned) Enr_REGISTER_MODIFY_ONE_USR_IN_CRS);
-      if (!OptionChecked)
-	{
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-         OptionChecked = true;
-	}
-      fprintf (Gbl.F.Out," />"
-                         "<label for=\"RegRemAction%u\">",
-	       (unsigned) Enr_REGISTER_MODIFY_ONE_USR_IN_CRS);
-      fprintf (Gbl.F.Out,
-	       UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
-		                          Txt_Modify_user_in_the_course_X) :
-	                         (ItsMe ? Txt_Register_me_in_X :
-		                          Txt_Register_USER_in_the_course_X),
-	       Gbl.CurrentCrs.Crs.ShrtName);
-      fprintf (Gbl.F.Out,"</label>"
-	                 "</li>");
-
-      NumOptionsShown++;
-     }
-
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
-     {
-      if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	{
-	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	    /***** Register user as administrator of degree *****/
-	    if (!UsrIsDegAdmin &&
-		Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-	      {
-	       fprintf (Gbl.F.Out,"<li>"
-				  "<input type=\"radio\" id=\"RegRemAction%u\""
-				  " name=\"RegRemAction\" value=\"%u\"",
-			(unsigned) Enr_REGISTER_ONE_DEGREE_ADMIN,
-			(unsigned) Enr_REGISTER_ONE_DEGREE_ADMIN);
-	       if (!OptionChecked)
-		 {
-		  fprintf (Gbl.F.Out," checked=\"checked\"");
-		  OptionChecked = true;
-		 }
-	       fprintf (Gbl.F.Out," />"
-                                  "<label for=\"RegRemAction%u\">",
-			(unsigned) Enr_REGISTER_ONE_DEGREE_ADMIN);
-	       fprintf (Gbl.F.Out,
-		        Txt_Register_USER_as_an_administrator_of_the_degree_X,
-			Gbl.CurrentDeg.Deg.ShrtName);
-	       fprintf (Gbl.F.Out,"</label>"
-		                  "</li>");
-
-	       NumOptionsShown++;
-	      }
-
-	 /***** Register user as administrator of centre *****/
-	 if (!UsrIsCtrAdmin &&
-	     Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-	   {
-	    fprintf (Gbl.F.Out,"<li>"
-			       "<input type=\"radio\" id=\"RegRemAction%u\""
-			       " name=\"RegRemAction\" value=\"%u\"",
-		     (unsigned) Enr_REGISTER_ONE_CENTRE_ADMIN,
-		     (unsigned) Enr_REGISTER_ONE_CENTRE_ADMIN);
-	    if (!OptionChecked)
-	      {
-	       fprintf (Gbl.F.Out," checked=\"checked\"");
-	       OptionChecked = true;
-	      }
-	    fprintf (Gbl.F.Out," />"
-	                       "<label for=\"RegRemAction%u\">",
-		     (unsigned) Enr_REGISTER_ONE_CENTRE_ADMIN);
-	    fprintf (Gbl.F.Out,
-	             Txt_Register_USER_as_an_administrator_of_the_centre_X,
-		     Gbl.CurrentCtr.Ctr.ShrtName);
-	    fprintf (Gbl.F.Out,"</label>"
-		               "</li>");
-
-	    NumOptionsShown++;
-	   }
-	}
-
-      /***** Register user as administrator of institution *****/
-      if (!UsrIsInsAdmin &&
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	{
-	 fprintf (Gbl.F.Out,"<li>"
-			    "<input type=\"radio\" id=\"RegRemAction%u\""
-			    " name=\"RegRemAction\" value=\"%u\"",
-		  (unsigned) Enr_REGISTER_ONE_INSTITUTION_ADMIN,
-		  (unsigned) Enr_REGISTER_ONE_INSTITUTION_ADMIN);
-	 if (!OptionChecked)
-	   {
-	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	    OptionChecked = true;
-	   }
-	 fprintf (Gbl.F.Out," />"
-	                    "<label for=\"RegRemAction%u\">",
-		  (unsigned) Enr_REGISTER_ONE_INSTITUTION_ADMIN);
-	 fprintf (Gbl.F.Out,Txt_Register_USER_as_an_administrator_of_the_institution_X,
-		  Gbl.CurrentIns.Ins.ShrtName);
-	 fprintf (Gbl.F.Out,"</label>"
-	                    "</li>");
-
-	 NumOptionsShown++;
-	}
-     }
-
-   /***** Report user as possible duplicate *****/
-   if (!ItsMe && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
-     {
-      fprintf (Gbl.F.Out,"<li>"
-			 "<input type=\"radio\" id=\"RegRemAction%u\""
-			 " name=\"RegRemAction\" value=\"%u\"",
-	       (unsigned) Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,
-	       (unsigned) Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE);
-      if (!OptionChecked)
-	{
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-	 OptionChecked = true;
-	}
-      fprintf (Gbl.F.Out," />"
-                         "<label for=\"RegRemAction%u\">"
-	                 "%s"
-                         "</label>"
-	                 "</li>",
-	       (unsigned) Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,
-	       Txt_Report_possible_duplicate_user);
-
-      NumOptionsShown++;
-     }
-
-   /***** Remove user from the course *****/
-   if (UsrBelongsToCrs)
-     {
-      fprintf (Gbl.F.Out,"<li>"
-			 "<input type=\"radio\" id=\"RegRemAction%u\""
-			 " name=\"RegRemAction\" value=\%u\"",
-	       (unsigned) Enr_REMOVE_ONE_USR_FROM_CRS,
-	       (unsigned) Enr_REMOVE_ONE_USR_FROM_CRS);
-      if (!OptionChecked)
-	{
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-	 OptionChecked = true;
-	}
-      fprintf (Gbl.F.Out," />"
-                         "<label for=\"RegRemAction%u\">",
-	       (unsigned) Enr_REMOVE_ONE_USR_FROM_CRS);
-      fprintf (Gbl.F.Out,
-	       ItsMe ? Txt_Remove_me_from_THE_COURSE_X :
-		       Txt_Remove_USER_from_THE_COURSE_X,
-	       Gbl.CurrentCrs.Crs.ShrtName);
-      fprintf (Gbl.F.Out,"</label>"
-	                 "</li>");
-
-      NumOptionsShown++;
-     }
-
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
-     {
-      if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	{
-	 if (Gbl.CurrentIns.Ins.InsCod > 0)
-	    /***** Remove user as an administrator of the degree *****/
-	    if (UsrIsDegAdmin &&
-		(ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM))
-	      {
-	       fprintf (Gbl.F.Out,"<li>"
-				  "<input type=\"radio\" id=\"RegRemAction%u\" "
-				  " name=\"RegRemAction\" value=\"%u\"",
-			(unsigned) Enr_REMOVE_ONE_DEGREE_ADMIN,
-			(unsigned) Enr_REMOVE_ONE_DEGREE_ADMIN);
-	       if (!OptionChecked)
-		 {
-		  fprintf (Gbl.F.Out," checked=\"checked\"");
-		  OptionChecked = true;
-		 }
-	       fprintf (Gbl.F.Out," />"
-	                          "<label for=\"RegRemAction%u\">",
-			(unsigned) Enr_REMOVE_ONE_DEGREE_ADMIN);
-	       fprintf (Gbl.F.Out,
-			ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
-				Txt_Remove_USER_as_an_administrator_of_the_degree_X,
-			Gbl.CurrentDeg.Deg.ShrtName);
-	       fprintf (Gbl.F.Out,"</label>"
-		                  "</li>");
-
-	       NumOptionsShown++;
-	      }
-
-          /***** Remove user as an administrator of the centre *****/
-	  if (UsrIsCtrAdmin &&
-	     (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
-	   {
-	    fprintf (Gbl.F.Out,"<li>"
-			       "<input type=\"radio\" id=\"RegRemAction%u\""
-			       " name=\"RegRemAction\" value=\"%u\"",
-		     (unsigned) Enr_REMOVE_ONE_CENTRE_ADMIN,
-		     (unsigned) Enr_REMOVE_ONE_CENTRE_ADMIN);
-	    if (!OptionChecked)
-	      {
-	       fprintf (Gbl.F.Out," checked=\"checked\"");
-	       OptionChecked = true;
-	      }
-	    fprintf (Gbl.F.Out," />"
-	                       "<label for=\"RegRemAction%u\">",
-		     (unsigned) Enr_REMOVE_ONE_CENTRE_ADMIN);
-	    fprintf (Gbl.F.Out,
-		     ItsMe ? Txt_Remove_me_as_an_administrator_of_the_centre_X :
-			     Txt_Remove_USER_as_an_administrator_of_the_centre_X,
-		     Gbl.CurrentCtr.Ctr.ShrtName);
-	    fprintf (Gbl.F.Out,"</label>"
-		               "</li>");
-
-	    NumOptionsShown++;
-	   }
-	}
-
-      /***** Remove user as an administrator of the institution *****/
-      if (UsrIsInsAdmin &&
-	  (ItsMe || Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
-	{
-	 fprintf (Gbl.F.Out,"<li>"
-			    "<input type=\"radio\" id=\"RegRemAction%u\""
-			    " name=\"RegRemAction\" value=\"%u\"",
-		  (unsigned) Enr_REMOVE_ONE_INSTITUTION_ADMIN,
-		  (unsigned) Enr_REMOVE_ONE_INSTITUTION_ADMIN);
-	 if (!OptionChecked)
-	   {
-	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	    OptionChecked = true;
-	   }
-	 fprintf (Gbl.F.Out," />"
-	                    "<label for=\"RegRemAction%u\">",
-		  (unsigned) Enr_REMOVE_ONE_INSTITUTION_ADMIN);
-	 fprintf (Gbl.F.Out,
-		  ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
-			  Txt_Remove_USER_as_an_administrator_of_the_institution_X,
-		  Gbl.CurrentIns.Ins.ShrtName);
-	 fprintf (Gbl.F.Out,"</label>"
-	                    "</li>");
-
-	 NumOptionsShown++;
-	}
-     }
-
-   /***** Eliminate user completely from platform *****/
-   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
-     {
-      fprintf (Gbl.F.Out,"<li>"
-                         "<input type=\"radio\" id=\"RegRemAction%u\""
-                         " name=\"RegRemAction\" value=\"%u\"",
-               (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,
-               (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
-      if (!OptionChecked)
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />"
-                         "<label for=\"RegRemAction%u\">"
-	                 "%s"
-                         "</label>"
-	                 "</li>",
-               (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,
-               ItsMe ? Txt_Eliminate_my_user_account :
-        	       Txt_Eliminate_user_account);
-
-      NumOptionsShown++;
-     }
-
-   /***** End list of options *****/
-   fprintf (Gbl.F.Out,"</ul>");
-
-   return (NumOptionsShown ? true :
-	                     false);
-  }
-
-/*****************************************************************************/
-/*** Put different actions to register/remove users to/from current course ***/
-/*****************************************************************************/
 
 static void Enr_PutActionsRegRemSeveralUsrs (void)
   {
@@ -1782,6 +1453,333 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
    /***** Free list of groups types and groups in current course *****/
    Grp_FreeListGrpTypesAndGrps ();
+  }
+
+/*****************************************************************************/
+/*** Put different actions to register/remove users to/from current course ***/
+/*****************************************************************************/
+// Returns true if at least one action can be shown
+
+bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   bool OptionsShown = false;
+   bool UsrBelongsToCrs = false;
+   bool UsrIsDegAdmin = false;
+   bool UsrIsCtrAdmin = false;
+   bool UsrIsInsAdmin = false;
+   bool OptionChecked = false;
+
+   /***** Check if the other user belongs to the current course *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+      UsrBelongsToCrs = Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
+     {
+      /***** Check if the other user is administrator of the current institution *****/
+      UsrIsInsAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+					   Sco_SCOPE_INS,
+					   Gbl.CurrentIns.Ins.InsCod);
+
+      if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	{
+	 /***** Check if the other user is administrator of the current centre *****/
+	 UsrIsCtrAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+					      Sco_SCOPE_CTR,
+					      Gbl.CurrentCtr.Ctr.CtrCod);
+
+	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	    /***** Check if the other user is administrator of the current degree *****/
+	    UsrIsDegAdmin = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,
+						 Sco_SCOPE_DEG,
+						 Gbl.CurrentDeg.Deg.DegCod);
+	}
+     }
+
+   /***** Start list of options *****/
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+
+   /***** Register user in course / Modify user's data *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0 && Gbl.Usrs.Me.Role.Logged >= Rol_STD)
+     {
+      Enr_PutActionModifyOneUsr (&OptionChecked,UsrBelongsToCrs,ItsMe);
+      OptionsShown = true;
+     }
+
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
+     {
+      if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	{
+	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	    /***** Register user as administrator of degree *****/
+	    if (!UsrIsDegAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+	      {
+	       Enr_PutActionRegOneDegAdm (&OptionChecked);
+	       OptionsShown = true;
+	      }
+
+	 /***** Register user as administrator of centre *****/
+	 if (!UsrIsCtrAdmin && Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+	   {
+	    Enr_PutActionRegOneCtrAdm (&OptionChecked);
+	    OptionsShown = true;
+	   }
+	}
+
+      /***** Register user as administrator of institution *****/
+      if (!UsrIsInsAdmin && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	{
+	 Enr_PutActionRegOneInsAdm (&OptionChecked);
+	 OptionsShown = true;
+	}
+     }
+
+   /***** Report user as possible duplicate *****/
+   if (!ItsMe && Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
+     {
+      Enr_PutActionRepUsrAsDup (&OptionChecked);
+      OptionsShown = true;
+     }
+
+   /***** Remove user from the course *****/
+   if (UsrBelongsToCrs)
+     {
+      Enr_PutActionRemUsrFromCrs (&OptionChecked,ItsMe);
+      OptionsShown = true;
+     }
+
+   if (Gbl.CurrentIns.Ins.InsCod > 0)
+     {
+      if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	{
+	 if (Gbl.CurrentIns.Ins.InsCod > 0)
+	    /***** Remove user as an administrator of the degree *****/
+	    if (UsrIsDegAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM))
+	      {
+	       Enr_PutActionRemUsrAsDegAdm (&OptionChecked,ItsMe);
+	       OptionsShown = true;
+	      }
+
+          /***** Remove user as an administrator of the centre *****/
+	  if (UsrIsCtrAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))
+	   {
+	    Enr_PutActionRemUsrAsCtrAdm (&OptionChecked,ItsMe);
+	    OptionsShown = true;
+	   }
+	}
+
+      /***** Remove user as an administrator of the institution *****/
+      if (UsrIsInsAdmin && (ItsMe || Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
+	{
+	 Enr_PutActionRemUsrAsInsAdm (&OptionChecked,ItsMe);
+	 OptionsShown = true;
+	}
+     }
+
+   /***** Eliminate user completely from platform *****/
+   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
+     {
+      Enr_PutActionRemUsrAcc (&OptionChecked,ItsMe);
+      OptionsShown = true;
+     }
+
+   /***** End list of options *****/
+   fprintf (Gbl.F.Out,"</ul>");
+
+   return OptionsShown;
+  }
+
+/*****************************************************************************/
+/**************** Put action to modify user in current course ****************/
+/*****************************************************************************/
+
+static void Enr_PutActionModifyOneUsr (bool *OptionChecked,
+                                       bool UsrBelongsToCrs,bool ItsMe)
+  {
+   extern const char *Txt_Modify_me_in_the_course_X;
+   extern const char *Txt_Modify_user_in_the_course_X;
+   extern const char *Txt_Register_me_in_X;
+   extern const char *Txt_Register_USER_in_the_course_X;
+
+   Enr_StartRegRemOneUsrAction (Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,OptionChecked);
+   fprintf (Gbl.F.Out,
+	    UsrBelongsToCrs ? (ItsMe ? Txt_Modify_me_in_the_course_X :
+				       Txt_Modify_user_in_the_course_X) :
+			      (ItsMe ? Txt_Register_me_in_X :
+				       Txt_Register_USER_in_the_course_X),
+	    Gbl.CurrentCrs.Crs.ShrtName);
+   Enr_EndRegRemOneUsrAction ();
+  }
+
+/*****************************************************************************/
+/**************** Put action to register user as degree admin ****************/
+/*****************************************************************************/
+
+static void Enr_PutActionRegOneDegAdm (bool *OptionChecked)
+  {
+   extern const char *Txt_Register_USER_as_an_administrator_of_the_degree_X;
+
+   Enr_StartRegRemOneUsrAction (Enr_REGISTER_ONE_DEGREE_ADMIN,OptionChecked);
+   fprintf (Gbl.F.Out,
+	    Txt_Register_USER_as_an_administrator_of_the_degree_X,
+	    Gbl.CurrentDeg.Deg.ShrtName);
+   Enr_EndRegRemOneUsrAction ();
+  }
+
+/*****************************************************************************/
+/**************** Put action to register user as centre admin ****************/
+/*****************************************************************************/
+
+static void Enr_PutActionRegOneCtrAdm (bool *OptionChecked)
+  {
+   extern const char *Txt_Register_USER_as_an_administrator_of_the_centre_X;
+
+   Enr_StartRegRemOneUsrAction (Enr_REGISTER_ONE_CENTRE_ADMIN,OptionChecked);
+   fprintf (Gbl.F.Out,
+	    Txt_Register_USER_as_an_administrator_of_the_centre_X,
+	    Gbl.CurrentCtr.Ctr.ShrtName);
+   Enr_EndRegRemOneUsrAction ();
+  }
+
+/*****************************************************************************/
+/************* Put action to register user as institution admin **************/
+/*****************************************************************************/
+
+static void Enr_PutActionRegOneInsAdm (bool *OptionChecked)
+  {
+   extern const char *Txt_Register_USER_as_an_administrator_of_the_institution_X;
+
+   Enr_StartRegRemOneUsrAction (Enr_REGISTER_ONE_INSTITUTION_ADMIN,OptionChecked);
+   fprintf (Gbl.F.Out,Txt_Register_USER_as_an_administrator_of_the_institution_X,
+	    Gbl.CurrentIns.Ins.ShrtName);
+   Enr_EndRegRemOneUsrAction ();
+  }
+
+/*****************************************************************************/
+/****************** Put action to report user as duplicate *******************/
+/*****************************************************************************/
+
+static void Enr_PutActionRepUsrAsDup (bool *OptionChecked)
+  {
+   extern const char *Txt_Report_possible_duplicate_user;
+
+   Enr_StartRegRemOneUsrAction (Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE,OptionChecked);
+   fprintf (Gbl.F.Out,"%s",
+	    Txt_Report_possible_duplicate_user);
+   Enr_EndRegRemOneUsrAction ();
+  }
+
+/*****************************************************************************/
+/****************** Put action to remove user from course ********************/
+/*****************************************************************************/
+
+static void Enr_PutActionRemUsrFromCrs (bool *OptionChecked,bool ItsMe)
+  {
+   extern const char *Txt_Remove_me_from_THE_COURSE_X;
+   extern const char *Txt_Remove_USER_from_THE_COURSE_X;
+
+   Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_USR_FROM_CRS,OptionChecked);
+   fprintf (Gbl.F.Out,
+	    ItsMe ? Txt_Remove_me_from_THE_COURSE_X :
+		    Txt_Remove_USER_from_THE_COURSE_X,
+	    Gbl.CurrentCrs.Crs.ShrtName);
+   Enr_EndRegRemOneUsrAction ();
+  }
+
+/*****************************************************************************/
+/***************** Put action to remove user as degree admin *****************/
+/*****************************************************************************/
+
+static void Enr_PutActionRemUsrAsDegAdm (bool *OptionChecked,bool ItsMe)
+  {
+   extern const char *Txt_Remove_me_as_an_administrator_of_the_degree_X;
+   extern const char *Txt_Remove_USER_as_an_administrator_of_the_degree_X;
+
+   Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_DEGREE_ADMIN,OptionChecked);
+   fprintf (Gbl.F.Out,
+	    ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
+		    Txt_Remove_USER_as_an_administrator_of_the_degree_X,
+	    Gbl.CurrentDeg.Deg.ShrtName);
+   Enr_EndRegRemOneUsrAction ();
+  }
+
+/*****************************************************************************/
+/***************** Put action to remove user as centre admin *****************/
+/*****************************************************************************/
+
+static void Enr_PutActionRemUsrAsCtrAdm (bool *OptionChecked,bool ItsMe)
+  {
+   extern const char *Txt_Remove_me_as_an_administrator_of_the_centre_X;
+   extern const char *Txt_Remove_USER_as_an_administrator_of_the_centre_X;
+
+   Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_CENTRE_ADMIN,OptionChecked);
+   fprintf (Gbl.F.Out,
+	    ItsMe ? Txt_Remove_me_as_an_administrator_of_the_centre_X :
+		    Txt_Remove_USER_as_an_administrator_of_the_centre_X,
+	    Gbl.CurrentCtr.Ctr.ShrtName);
+   Enr_EndRegRemOneUsrAction ();
+  }
+
+/*****************************************************************************/
+/************** Put action to remove user as institution admin ***************/
+/*****************************************************************************/
+
+static void Enr_PutActionRemUsrAsInsAdm (bool *OptionChecked,bool ItsMe)
+  {
+   extern const char *Txt_Remove_me_as_an_administrator_of_the_institution_X;
+   extern const char *Txt_Remove_USER_as_an_administrator_of_the_institution_X;
+
+   Enr_StartRegRemOneUsrAction (Enr_REMOVE_ONE_INSTITUTION_ADMIN,OptionChecked);
+   fprintf (Gbl.F.Out,
+	    ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
+		    Txt_Remove_USER_as_an_administrator_of_the_institution_X,
+	    Gbl.CurrentIns.Ins.ShrtName);
+   Enr_EndRegRemOneUsrAction ();
+  }
+
+/*****************************************************************************/
+/********************* Put action to remove user account *********************/
+/*****************************************************************************/
+
+static void Enr_PutActionRemUsrAcc (bool *OptionChecked,bool ItsMe)
+  {
+   extern const char *Txt_Eliminate_my_user_account;
+   extern const char *Txt_Eliminate_user_account;
+
+   Enr_StartRegRemOneUsrAction (Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,OptionChecked);
+   fprintf (Gbl.F.Out,"%s",
+	    ItsMe ? Txt_Eliminate_my_user_account :
+		    Txt_Eliminate_user_account);
+   Enr_EndRegRemOneUsrAction ();
+  }
+
+/*****************************************************************************/
+/************ Put start/end of action to register/remove one user ************/
+/*****************************************************************************/
+
+static void Enr_StartRegRemOneUsrAction (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
+                                         bool *OptionChecked)
+  {
+   fprintf (Gbl.F.Out,"<li>"
+		      "<input type=\"radio\" id=\"RegRemAction%u\""
+		      " name=\"RegRemAction\" value=\"%u\"",
+	    (unsigned) RegRemOneUsrAction,
+	    (unsigned) RegRemOneUsrAction);
+   if (!*OptionChecked)
+     {
+      fprintf (Gbl.F.Out," checked=\"checked\"");
+      *OptionChecked = true;
+     }
+   fprintf (Gbl.F.Out," />"
+		      "<label for=\"RegRemAction%u\">",
+	    (unsigned) RegRemOneUsrAction);
+  }
+
+static void Enr_EndRegRemOneUsrAction (void)
+  {
+   fprintf (Gbl.F.Out,"</label>"
+		      "</li>");
   }
 
 /*****************************************************************************/

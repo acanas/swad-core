@@ -426,6 +426,8 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Change in usability of Announcements of exams, suggested by Javier Fernández Baldomero.
 
+// TODO: Los usuarios que no tienes permiso para ver su perfil público, se debería mostrar algo, una mínima ficha sin tinmeline o algo así
+
 // TODO: "Se podría poner un botón para seguir a todos los relacionados contigo en las asignaturas, en lugar de tener que agregarlos uno a uno" Suggested by José María girao Miras.
 
 /*****************************************************************************/
@@ -447,10 +449,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.69.2 (2019-03-10)"
+#define Log_PLATFORM_VERSION	"SWAD 18.70 (2019-03-10)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.70:    Mar 10, 2019 	Code refactoring in one user administration. (238819 lines)
 	Version 18.69.2:  Mar 10, 2019 	Changes related to alerts. (238842 lines)
 	Version 18.69.1:  Mar 09, 2019 	Changes in forms to register/remove users. (238805 lines)
 	Version 18.69:    Mar 09, 2019 	Code refactoring related to alerts. (238779 lines)

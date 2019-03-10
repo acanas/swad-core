@@ -96,11 +96,11 @@ void Enr_PutLinkToRemOldUsrs (void);
 void Enr_AskRemoveOldUsrs (void);
 void Enr_RemoveOldUsrs (void);
 
-bool Enr_PutActionsRegRemOneUsr (bool ItsMe);
-
 void Enr_ReceiveFormAdminStds (void);
 void Enr_ReceiveFormAdminNonEditTchs (void);
 void Enr_ReceiveFormAdminTchs (void);
+
+bool Enr_PutActionsRegRemOneUsr (bool ItsMe);
 
 void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role);
 void Enr_AskRemAllStdsThisCrs (void);
