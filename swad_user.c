@@ -236,9 +236,10 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void);
 static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
-static bool Usr_PutActionsSeveralUsrs (Rol_Role_t Role);
+static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole);
 static void Usr_PutActionShowRecords (void);
 static void Usr_PutActionShowHomework (void);
+static void Usr_PutActionShowAttendance (void);
 static void Usr_PutActionFollowUsers (void);
 static void Usr_StartListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction);
 static void Usr_EndListUsrsAction (void);
@@ -8016,46 +8017,53 @@ void Usr_SeeTeachers (void)
 /*****************************************************************************/
 // Returns true if at least one action can be shown
 
-static bool Usr_PutActionsSeveralUsrs (Rol_Role_t Role)
+static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    bool ICanViewRecords;
    bool ICanViewHomework;
+   bool ICanViewAttendance;
    bool ICanFollow;
    bool OptionsShown = false;
 
    /***** Get the action to do *****/
    Gbl.Usrs.Selected.Action = Usr_ListUsrsAction (Usr_LIST_USRS_DEFAULT_ACTION);
 
-   switch (Role)
+   switch (UsrsRole)
      {
       case Rol_GST:
-	 ICanViewRecords  = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-	 ICanViewHomework = false;
-	 ICanFollow       = false;
+	 ICanViewRecords    = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+
+	 ICanViewHomework   =
+	 ICanViewAttendance =
+	 ICanFollow         = false;
 	 break;
       case Rol_STD:
-	 ICanViewRecords  =
-	 ICanFollow       =
-	    (Gbl.Scope.Current == Sco_SCOPE_CRS &&
-	     (Gbl.Usrs.Me.IBelongToCurrentCrs ||
-	      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
-         ICanViewHomework = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-                             Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                             Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+	 ICanViewRecords    =
+	 ICanFollow         = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
+			       (Gbl.Usrs.Me.IBelongToCurrentCrs ||
+				Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
+
+         ICanViewHomework   =
+         ICanViewAttendance = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+                               Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                               Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 	 break;
       case Rol_TCH:
-	 ICanViewRecords  =
-	 ICanFollow       =
-	    (Gbl.Scope.Current == Sco_SCOPE_CRS);
-         ICanViewHomework = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-                             Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                             Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+	 ICanViewRecords    =
+	 ICanFollow         = (Gbl.Scope.Current == Sco_SCOPE_CRS);
+
+         ICanViewHomework   = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+                               Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                               Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+
+         ICanViewAttendance = false;
 	 break;
       default:
-         ICanViewRecords  =
-         ICanViewHomework =
-         ICanFollow       = false;
+         ICanViewRecords    =
+         ICanViewHomework   =
+         ICanViewAttendance =
+         ICanFollow         = false;
          break;
      }
 
@@ -8074,6 +8082,13 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t Role)
    if (ICanViewHomework)
      {	// I can view users' homework
       Usr_PutActionShowHomework ();
+      OptionsShown = true;
+     }
+
+   /***** Attendance *****/
+   if (ICanViewAttendance)
+     {	// I can view users' attendance
+      Usr_PutActionShowAttendance ();
       OptionsShown = true;
      }
 
@@ -8113,6 +8128,19 @@ static void Usr_PutActionShowHomework (void)
 
    Usr_StartListUsrsAction (Usr_VIEW_HOMEWORK);
    fprintf (Gbl.F.Out,"%s",Txt_View_homework);
+   Usr_EndListUsrsAction ();
+  }
+
+/*****************************************************************************/
+/******************** Put action to show users' attendance *******************/
+/*****************************************************************************/
+
+static void Usr_PutActionShowAttendance (void)
+  {
+   extern const char *Txt_Show_attendance;
+
+   Usr_StartListUsrsAction (Usr_SHOW_ATTENDANCE);
+   fprintf (Gbl.F.Out,"%s",Txt_Show_attendance);
    Usr_EndListUsrsAction ();
   }
 
@@ -8185,17 +8213,14 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	    case ActDoActOnSevGst:
 	       Gbl.Action.Act = ActSeeRecSevGst;
                Tab_SetCurrentTab ();
-	       // Rec_ListRecordsGstsShow ();
 	       break;
 	    case ActDoActOnSevStd:
 	       Gbl.Action.Act = ActSeeRecSevStd;
                Tab_SetCurrentTab ();
-	       // Rec_ListRecordsStdsShow ();
 	       break;
 	    case ActDoActOnSevTch:
 	       Gbl.Action.Act = ActSeeRecSevTch;
                Tab_SetCurrentTab ();
-	       // Rec_ListRecordsTchsShow ();
 	       break;
 	    default:
                Ale_CreateAlert (Ale_ERROR,NULL,
@@ -8210,7 +8235,19 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	    case ActDoActOnSevTch:
 	       Gbl.Action.Act = ActAdmAsgWrkCrs;
                Tab_SetCurrentTab ();
-	       // Brw_ShowFileBrowserOrWorks ();
+	       break;
+	    default:
+               Ale_CreateAlert (Ale_ERROR,NULL,
+        	                "Wrong action.");
+               break;
+	   }
+	 break;
+      case Usr_SHOW_ATTENDANCE:
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActDoActOnSevStd:
+	       Gbl.Action.Act = ActSeeLstStdAtt;
+               Tab_SetCurrentTab ();
 	       break;
 	    default:
                Ale_CreateAlert (Ale_ERROR,NULL,

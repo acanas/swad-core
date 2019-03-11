@@ -38501,6 +38501,27 @@ const char *Txt_Show_anyway =
 	"Mostrar de qualquer maneira";
 #endif
 
+const char *Txt_Show_attendance =
+#if   L==1	// ca
+	"Mostrar assist&egrave;ncia.";
+#elif L==2	// de
+	"Anwesenheit zeigen";
+#elif L==3	// en
+	"Show attendance";
+#elif L==4	// es
+	"Ver asistencia";
+#elif L==5	// fr
+	"Montrer la pr&eacute;sence.";
+#elif L==6	// gn
+	"Ver asistencia";	// Okoteve traducción
+#elif L==7	// it
+	"Mostra presenze";
+#elif L==8	// pl
+	"Poka&zdot; frekwencj&eogon;";
+#elif L==9	// pt
+	"Mostrar atendimento";
+#endif
+
 const char *Txt_Show_calendar =
 #if   L==1	// ca
 	"Mostra calendari";
@@ -38541,27 +38562,6 @@ const char *Txt_Show_hits =	// hits = visits, clicks, page views...
 	"Show hits";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Mostrar visitas";
-#endif
-
-const char *Txt_Show_list =
-#if   L==1	// ca
-	"Mostra la llista";
-#elif L==2	// de
-	"Liste anzeigen";
-#elif L==3	// en
-	"Show list";
-#elif L==4	// es
-	"Ver lista";
-#elif L==5	// fr
-	"Afficher la liste";
-#elif L==6	// gn
-	"Ver lista";	// Okoteve traducción
-#elif L==7	// it
-	"Mostra elenco";
-#elif L==8	// pl
-	"Poka&zdot; list&eogon;";
-#elif L==9	// pt
-	"Mostrar lista";
 #endif
 
 const char *Txt_Show_more_details =

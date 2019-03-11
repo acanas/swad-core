@@ -430,6 +430,8 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Al pulsar sobre una convocatoria de examen / aviso --> ir a la sección de esa convocatoria/aviso en lugar de mostrarlo repetido y destacado arriba
 
+// TODO: Intentar aumentar la velocidad de carga del timeline (comprobar ralentización al mostrar la titulación de cada usuario)
+
 // TODO: "Se podría poner un botón para seguir a todos los relacionados contigo en las asignaturas, en lugar de tener que agregarlos uno a uno" Suggested by José María girao Miras.
 
 /*****************************************************************************/
@@ -451,10 +453,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.72 (2019-03-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.72.1 (2019-03-11)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.72.1:  Mar 11, 2019 	Show attendance list from list of students. (239075 lines)
 	Version 18.72:    Mar 11, 2019 	Show homework from list of students and teachers. (239043 lines)
 	Version 18.71:    Mar 11, 2019 	Listing of users now allow to do several actions. Not finished. (238920 lines)
 					3 changes necessary in database:

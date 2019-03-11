@@ -115,13 +115,14 @@ typedef enum
   } Usr_ShowUsrsType_t;
 #define Usr_SHOW_USRS_TYPE_DEFAULT Usr_LIST_AS_CLASS_PHOTO
 
-#define Usr_LIST_USRS_NUM_ACTIONS 4
+#define Usr_LIST_USRS_NUM_ACTIONS 5
 typedef enum
   {
-   Usr_LIST_USRS_UNKNOWN_ACTION	=  0,
-   Usr_SHOW_RECORDS		=  1,
-   Usr_VIEW_HOMEWORK		=  2,
-   Usr_FOLLOW_USERS		=  3,
+   Usr_LIST_USRS_UNKNOWN_ACTION	= 0,
+   Usr_SHOW_RECORDS		= 1,
+   Usr_VIEW_HOMEWORK		= 2,
+   Usr_SHOW_ATTENDANCE		= 3,
+   Usr_FOLLOW_USERS		= 4,
   } Usr_ListUsrsAction_t;
 #define Usr_LIST_USRS_DEFAULT_ACTION Usr_SHOW_RECORDS
 

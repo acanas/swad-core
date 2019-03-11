@@ -2678,7 +2678,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Show_list;
+   extern const char *Txt_Show_attendance;
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_OLDEST_FIRST);
@@ -2729,7 +2729,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 Tbl_EndTable ();
 
 	 /* Send button */
-	 Btn_PutConfirmButton (Txt_Show_list);
+	 Btn_PutConfirmButton (Txt_Show_attendance);
 
 	 /* End form */
 	 Frm_EndForm ();
@@ -2861,7 +2861,7 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_OLDEST_FIRST);
 
-   /***** Get list of selected students *****/
+   /***** Get list of selected students if not already got *****/
    Usr_GetListsSelectedUsrsCods ();
 
    /* Check the number of students to list */
