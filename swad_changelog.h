@@ -453,11 +453,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.72.1 (2019-03-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.72.2 (2019-03-11)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
-	Version 18.72.1:  Mar 11, 2019 	Show attendance list from list of students. (239075 lines)
+	Version 18.72.2:  Mar 11, 2019 	Create new message from list of users. (239114 lines)
+	Version 18.72.1:  Mar 11, 2019 	Show attendance list from list of users. (239075 lines)
 	Version 18.72:    Mar 11, 2019 	Show homework from list of students and teachers. (239043 lines)
 	Version 18.71:    Mar 11, 2019 	Listing of users now allow to do several actions. Not finished. (238920 lines)
 					3 changes necessary in database:

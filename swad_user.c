@@ -240,6 +240,7 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole);
 static void Usr_PutActionShowRecords (void);
 static void Usr_PutActionShowHomework (void);
 static void Usr_PutActionShowAttendance (void);
+static void Usr_PutActionNewMessage (void);
 static void Usr_PutActionFollowUsers (void);
 static void Usr_StartListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction);
 static void Usr_EndListUsrsAction (void);
@@ -7952,6 +7953,7 @@ void Usr_SeeTeachers (void)
 
          /* Start form */
          Frm_StartForm (ActDoActOnSevTch);
+	 Grp_PutParamsCodGrps ();
 
          /* Start table */
          Tbl_StartTableWide (0);
@@ -8023,6 +8025,7 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
    bool ICanViewRecords;
    bool ICanViewHomework;
    bool ICanViewAttendance;
+   bool ICanSendMessage;
    bool ICanFollow;
    bool OptionsShown = false;
 
@@ -8036,10 +8039,12 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
 
 	 ICanViewHomework   =
 	 ICanViewAttendance =
+	 ICanSendMessage    =
 	 ICanFollow         = false;
 	 break;
       case Rol_STD:
 	 ICanViewRecords    =
+	 ICanSendMessage    =
 	 ICanFollow         = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
 			       (Gbl.Usrs.Me.IBelongToCurrentCrs ||
 				Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
@@ -8051,6 +8056,7 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
 	 break;
       case Rol_TCH:
 	 ICanViewRecords    =
+	 ICanSendMessage    =
 	 ICanFollow         = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
          ICanViewHomework   = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
@@ -8063,6 +8069,7 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
          ICanViewRecords    =
          ICanViewHomework   =
          ICanViewAttendance =
+	 ICanSendMessage    =
          ICanFollow         = false;
          break;
      }
@@ -8089,6 +8096,13 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
    if (ICanViewAttendance)
      {	// I can view users' attendance
       Usr_PutActionShowAttendance ();
+      OptionsShown = true;
+     }
+
+   /***** New message *****/
+   if (ICanSendMessage)
+     {	// I can write and send a new message to users
+      Usr_PutActionNewMessage ();
       OptionsShown = true;
      }
 
@@ -8141,6 +8155,19 @@ static void Usr_PutActionShowAttendance (void)
 
    Usr_StartListUsrsAction (Usr_SHOW_ATTENDANCE);
    fprintf (Gbl.F.Out,"%s",Txt_Show_attendance);
+   Usr_EndListUsrsAction ();
+  }
+
+/*****************************************************************************/
+/*************** Put action to write a new message to users ******************/
+/*****************************************************************************/
+
+static void Usr_PutActionNewMessage (void)
+  {
+   extern const char *Txt_Send_message;
+
+   Usr_StartListUsrsAction (Usr_NEW_MESSAGE);
+   fprintf (Gbl.F.Out,"%s",Txt_Send_message);
    Usr_EndListUsrsAction ();
   }
 
@@ -8247,6 +8274,20 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	   {
 	    case ActDoActOnSevStd:
 	       Gbl.Action.Act = ActSeeLstStdAtt;
+               Tab_SetCurrentTab ();
+	       break;
+	    default:
+               Ale_CreateAlert (Ale_ERROR,NULL,
+        	                "Wrong action.");
+               break;
+	   }
+	 break;
+      case Usr_NEW_MESSAGE:
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActDoActOnSevStd:
+	    case ActDoActOnSevTch:
+	       Gbl.Action.Act = ActReqMsgUsr;
                Tab_SetCurrentTab ();
 	       break;
 	    default:
