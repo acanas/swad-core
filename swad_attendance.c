@@ -2302,8 +2302,8 @@ void Att_RegisterMeAsStdInAttEvent (void)
 /* Algorithm:
    1. Get list of students in the groups selected: Gbl.Usrs.LstUsrs[Rol_STD]
    2. Mark all students in the groups selected setting Remove=true
-   3. Get list of students marked as present by me: Gbl.Usrs.Select[Rol_STD]
-   4. Loop over the list Gbl.Usrs.Select[Rol_STD],
+   3. Get list of students marked as present by me: Gbl.Usrs.Selected.List[Rol_STD]
+   4. Loop over the list Gbl.Usrs.Selected.List[Rol_STD],
       that holds the list of the students marked as present,
       marking the students in Gbl.Usrs.LstUsrs[Rol_STD].Lst as Remove=false
    5. Delete from att_usr all the students marked as Remove=true
@@ -2344,16 +2344,16 @@ void Att_RegisterStudentsInAttEvent (void)
            NumStd++)
          Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumStd].Remove = true;
 
-      /***** 3. Get list of students marked as present by me: Gbl.Usrs.Select[Rol_STD] *****/
+      /***** 3. Get list of students marked as present by me: Gbl.Usrs.Selected.List[Rol_STD] *****/
       Usr_GetListsSelectedUsrsCods ();
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrData);
 
-      /***** 4. Loop over the list Gbl.Usrs.Select[Rol_STD],
+      /***** 4. Loop over the list Gbl.Usrs.Selected.List[Rol_STD],
                 that holds the list of the students marked as present,
                 marking the students in Gbl.Usrs.LstUsrs[Rol_STD].Lst as Remove=false *****/
-      Ptr = Gbl.Usrs.Select[Rol_STD];
+      Ptr = Gbl.Usrs.Selected.List[Rol_STD];
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,UsrData.EncryptedUsrCod,
@@ -2950,8 +2950,8 @@ static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelecte
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Loop over the list Gbl.Usrs.Select[Rol_UNK] getting users' codes *****/
-   for (NumStd = 0, Ptr = Gbl.Usrs.Select[Rol_UNK];
+   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK] getting users' codes *****/
+   for (NumStd = 0, Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
 	NumStd < NumStdsInList && *Ptr;
 	NumStd++)
      {
@@ -3114,7 +3114,7 @@ static void Att_PutParamsToPrintStdsList (void)
    if (Gbl.AttEvents.ShowDetails)
       Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParUsrCodAll (ActPrnLstStdAtt,Gbl.Usrs.Select[Rol_UNK]);
+   Usr_PutHiddenParUsrCodAll (ActPrnLstStdAtt,Gbl.Usrs.Selected.List[Rol_UNK]);
    if (Gbl.AttEvents.StrAttCodsSelected)
       if (Gbl.AttEvents.StrAttCodsSelected[0])
 	 Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
@@ -3132,7 +3132,7 @@ static void Att_PutButtonToShowDetails (void)
    Frm_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_DETAILS_ID);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select[Rol_UNK]);
+   Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Selected.List[Rol_UNK]);
    if (Gbl.AttEvents.StrAttCodsSelected)
       if (Gbl.AttEvents.StrAttCodsSelected[0])
 	 Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
@@ -3171,7 +3171,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
      {
       Frm_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_TABLE_ID);
       Grp_PutParamsCodGrps ();
-      Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select[Rol_UNK]);
+      Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Selected.List[Rol_UNK]);
      }
 
    /***** Start table *****/

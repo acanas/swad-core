@@ -195,13 +195,15 @@ void Gbl_InitializeGlobals (void)
    Gbl.Action.IsAJAXAutoRefresh = false;
    Gbl.Action.Tab = TabUnk;
 
+   Gbl.Usrs.Selected.Filled = false;	// Lists of encrypted codes of users selected from form are not filled
+   Gbl.Usrs.Selected.Action = Usr_LIST_USRS_UNKNOWN_ACTION;
    for (Role = (Rol_Role_t) 0;
 	Role < Rol_NUM_ROLES;
 	Role++)
      {
       Gbl.Usrs.LstUsrs[Role].Lst = NULL;
       Gbl.Usrs.LstUsrs[Role].NumUsrs = 0;
-      Gbl.Usrs.Select[Role] = NULL;
+      Gbl.Usrs.Selected.List[Role] = NULL;
      }
    Gbl.Usrs.ListOtherRecipients = NULL;
 

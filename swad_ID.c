@@ -480,14 +480,14 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                               Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
       switch (Gbl.Action.Original)
 	{
-	 case ActDoActOnSevGst:
-	    Usr_PutHiddenParUsrCodAll (ActCnfID_Oth,Gbl.Usrs.Select[Rol_UNK]);
+	 case ActSeeRecSevGst:
+	    Usr_PutHiddenParUsrCodAll (ActCnfID_Oth,Gbl.Usrs.Selected.List[Rol_UNK]);
 	    break;
-	 case ActDoActOnSevStd:
-	    Usr_PutHiddenParUsrCodAll (ActCnfID_Std,Gbl.Usrs.Select[Rol_UNK]);
+	 case ActSeeRecSevStd:
+	    Usr_PutHiddenParUsrCodAll (ActCnfID_Std,Gbl.Usrs.Selected.List[Rol_UNK]);
 	    break;
-	 case ActDoActOnSevTch:
-	    Usr_PutHiddenParUsrCodAll (ActCnfID_Tch,Gbl.Usrs.Select[Rol_UNK]);
+	 case ActSeeRecSevTch:
+	    Usr_PutHiddenParUsrCodAll (ActCnfID_Tch,Gbl.Usrs.Selected.List[Rol_UNK]);
 	    break;
 	}
      }
@@ -1007,8 +1007,18 @@ void ID_ConfirmOtherUsrID (void)
      {
       ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
       if (!ItsMe)	// Not me
+        {
+	 /* If user is a student in current course,
+	    check if he/she has accepted */
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD)
+	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
+									    Gbl.CurrentCrs.Crs.CrsCod,
+									    true);
+
 	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))
 	    ICanConfirm = true;
+        }
      }
 
    if (ICanConfirm)
@@ -1057,15 +1067,15 @@ void ID_ConfirmOtherUsrID (void)
    /***** Show one or multiple records *****/
    switch (Gbl.Action.Original)
      {
-      case ActDoActOnSevGst:
+      case ActSeeRecSevGst:
 	 /* Show multiple records of guests again (including the updated one) */
 	 Rec_ListRecordsGstsShow ();
 	 break;
-      case ActDoActOnSevStd:
+      case ActSeeRecSevStd:
 	 /* Show multiple records of students again (including the updated one) */
 	 Rec_ListRecordsStdsShow ();
 	 break;
-      case ActDoActOnSevTch:
+      case ActSeeRecSevTch:
 	 /* Show multiple records of teachers again (including the updated one) */
 	 Rec_ListRecordsTchsShow ();
 	 break;

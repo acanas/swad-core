@@ -7626,7 +7626,7 @@ void Tst_ShowUsrsTestResults (void)
       Tst_ShowHeaderTestResults ();
 
       /***** List the test exams of the selected users *****/
-      Ptr = Gbl.Usrs.Select[Rol_UNK];
+      Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,

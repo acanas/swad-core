@@ -953,20 +953,14 @@ void Rec_PutLinkToEditRecordFields (void)
 
 void Rec_ListRecordsGstsShow (void)
   {
-   Gbl.Action.Original = ActDoActOnSevGst;	// Used to know where to go when confirming ID
+   Gbl.Action.Original = ActSeeRecSevGst;	// Used to know where to go when confirming ID
    Rec_ListRecordsGsts (Rec_SHA_RECORD_LIST);
   }
 
 void Rec_ListRecordsGstsPrint (void)
   {
-   /***** Get list of selected users *****/
-   Usr_GetListsSelectedUsrsCods ();
-
    /***** List records ready to be printed *****/
    Rec_ListRecordsGsts (Rec_SHA_RECORD_PRINT);
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
   }
 
 static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
@@ -975,6 +969,9 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    const char *Ptr;
    struct UsrData UsrDat;
    char RecordSectionId[32];
+
+   /***** Get list of selected users if not already got *****/
+   Usr_GetListsSelectedUsrsCods ();
 
    /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_GUESTS;
@@ -989,7 +986,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
       /* Link to print view */
       Frm_StartForm (ActPrnRecSevGst);
-      Usr_PutHiddenParUsrCodAll (ActPrnRecSevGst,Gbl.Usrs.Select[Rol_UNK]);
+      Usr_PutHiddenParUsrCodAll (ActPrnRecSevGst,Gbl.Usrs.Selected.List[Rol_UNK]);
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
@@ -1002,7 +999,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 				// ...inscription in any course
 
    /***** List the records *****/
-   Ptr = Gbl.Usrs.Select[Rol_UNK];
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
@@ -1038,8 +1035,12 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 	 NumUsr++;
 	}
      }
+
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -1138,7 +1139,7 @@ static void Rec_ShowRecordOneStdCrs (void)
 
 void Rec_ListRecordsStdsShow (void)
   {
-   Gbl.Action.Original = ActDoActOnSevStd;	// Used to know where to go when confirming ID...
+   Gbl.Action.Original = ActSeeRecSevStd;	// Used to know where to go when confirming ID...
 						// ...or changing course record
    Rec_ListRecordsStds (Rec_SHA_RECORD_LIST,
                         Rec_CRS_LIST_SEVERAL_RECORDS);
@@ -1146,15 +1147,9 @@ void Rec_ListRecordsStdsShow (void)
 
 void Rec_ListRecordsStdsPrint (void)
   {
-   /***** Get list of selected users *****/
-   Usr_GetListsSelectedUsrsCods ();
-
    /***** List records ready to be printed *****/
    Rec_ListRecordsStds (Rec_SHA_RECORD_PRINT,
                         Rec_CRS_PRINT_SEVERAL_RECORDS);
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
   }
 
 static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
@@ -1165,6 +1160,9 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    struct UsrData UsrDat;
    bool ItsMe;
    char RecordSectionId[32];
+
+   /***** Get list of selected users if not already got *****/
+   Usr_GetListsSelectedUsrsCods ();
 
    /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
@@ -1186,7 +1184,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
       /* Link to print view */
       Frm_StartForm (ActPrnRecSevStd);
-      Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Select[Rol_UNK]);
+      Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Selected.List[Rol_UNK]);
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
@@ -1196,7 +1194,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** List the records *****/
-   Ptr = Gbl.Usrs.Select[Rol_UNK];
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
@@ -1259,6 +1257,9 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
    /***** Free list of fields of records *****/
    Rec_FreeListFields ();
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -1348,20 +1349,14 @@ static void Rec_ShowRecordOneTchCrs (void)
 
 void Rec_ListRecordsTchsShow (void)
   {
-   Gbl.Action.Original = ActDoActOnSevTch;	// Used to know where to go when confirming ID
+   Gbl.Action.Original = ActSeeRecSevTch;	// Used to know where to go when confirming ID
    Rec_ListRecordsTchs (Rec_SHA_RECORD_LIST);
   }
 
 void Rec_ListRecordsTchsPrint (void)
   {
-   /***** Get list of selected users *****/
-   Usr_GetListsSelectedUsrsCods ();
-
    /***** List records ready to be printed *****/
    Rec_ListRecordsTchs (Rec_SHA_RECORD_PRINT);
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
   }
 
 static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
@@ -1374,6 +1369,9 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    char RecordSectionId[32];
    bool ShowOfficeHours;
    char Width[10 + 2 + 1];
+
+   /***** Get list of selected users if not already got *****/
+   Usr_GetListsSelectedUsrsCods ();
 
    /***** Width for office hours *****/
    snprintf (Width,sizeof (Width),
@@ -1390,7 +1388,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    if (Gbl.Action.Act == ActPrnRecSevTch)
       Rec_GetParamRecordsPerPage ();
 
-   if (Gbl.Action.Act == ActDoActOnSevTch)
+   if (Gbl.Action.Act == ActSeeRecSevTch)
      {
       /***** Show contextual menu *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -1400,7 +1398,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
       /* Link to print view */
       Frm_StartForm (ActPrnRecSevTch);
-      Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Select[Rol_UNK]);
+      Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
       Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
       Par_PutHiddenParamChar ("ShowOfficeHours",
                               ShowOfficeHours ? 'Y' :
@@ -1415,7 +1413,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** List the records *****/
-   Ptr = Gbl.Usrs.Select[Rol_UNK];
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
@@ -1471,6 +1469,9 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -1538,7 +1539,7 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
   {
    extern const char *Txt_Show_office_hours;
 
-   Lay_PutContextualCheckbox (ActDoActOnSevTch,Rec_PutParamsShowOfficeHoursSeveralTchs,
+   Lay_PutContextualCheckbox (ActSeeRecSevTch,Rec_PutParamsShowOfficeHoursSeveralTchs,
                               "ShowOfficeHours",
                               ShowOfficeHours,false,
                               Txt_Show_office_hours,
@@ -1553,7 +1554,7 @@ static void Rec_PutParamsShowOfficeHoursOneTch (void)
 
 static void Rec_PutParamsShowOfficeHoursSeveralTchs (void)
   {
-   Usr_PutHiddenParUsrCodAll (ActDoActOnSevTch,Gbl.Usrs.Select[Rol_UNK]);
+   Usr_PutHiddenParUsrCodAll (ActSeeRecSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
   }
 
@@ -1629,7 +1630,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    /***** Show one or multiple records *****/
    switch (Gbl.Action.Original)
      {
-      case ActDoActOnSevStd:
+      case ActSeeRecSevStd:
 	 /* Show multiple records again (including the updated one) */
 	 Rec_ListRecordsStdsShow ();
 	 break;
@@ -1724,10 +1725,10 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    ICanEdit = true;
 	    Frm_StartFormAnchor (ActRcvRecOthUsr,Anchor);
 	    Par_PutHiddenParamLong ("OriginalActCod",
-				    Act_GetActCod (ActDoActOnSevStd));	// Original action, used to know where we came from
+				    Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	    if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
-	       Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select[Rol_UNK]);
+	       Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Selected.List[Rol_UNK]);
 	   }
 	 break;
       default:

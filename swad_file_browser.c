@@ -2042,7 +2042,7 @@ void Brw_GetParAndInitFileBrowser (void)
       Gbl.Prjs.PrjCod = Prj_GetParamPrjCod ();
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      /* Get lists of the selected users */
+      /* Get lists of the selected users if not already got */
       Usr_GetListsSelectedUsrsCods ();
       /* Get user whose folder will be used to make any operation */
       Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -2284,7 +2284,7 @@ void Brw_PutParamsFileBrowser (Act_Action_t NextAction,
       if (Brw_GetIfCrsAssigWorksFileBrowser ())
 	{
 	 /***** Users selected *****/
-	 Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Select[Rol_UNK]);
+	 Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Selected.List[Rol_UNK]);
 	 Usr_PutParamOtherUsrCodEncrypted ();
 	}
      }
@@ -3223,65 +3223,53 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
   {
    extern const char *Hlp_FILES_Homework_for_teachers;
    extern const char *Txt_Assignments_and_other_works;
-   extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
 
-   /***** Check the number of users whose works will be shown *****/
-   if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
+   /***** Create the zip file and put a link to download it *****/
+   if (Gbl.FileBrowser.ZIP.CreateZIP)
+      ZIP_CreateZIPAsgWrk ();
+
+   /***** Write top before showing file browser *****/
+   Brw_WriteTopBeforeShowingFileBrowser ();
+
+   /***** Start box and table *****/
+   Box_StartBoxTable ("100%",Txt_Assignments_and_other_works,
+		      Brw_PutIconShowFigure,
+		      Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE,0);
+
+   /***** List the assignments and works of the selected users *****/
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   while (*Ptr)
      {
-      /***** Create the zip file and put a link to download it *****/
-      if (Gbl.FileBrowser.ZIP.CreateZIP)
-	 ZIP_CreateZIPAsgWrk ();
+      Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get of the database the data of the user
+	 if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
+	   {
+	    /***** Show a row with the data of the owner of the works *****/
+	    fprintf (Gbl.F.Out,"<tr>");
+	    Brw_ShowDataOwnerAsgWrk (&Gbl.Usrs.Other.UsrDat);
 
-      /***** Write top before showing file browser *****/
-      Brw_WriteTopBeforeShowingFileBrowser ();
+	    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
 
-      /***** Start box and table *****/
-      Box_StartBoxTable ("100%",Txt_Assignments_and_other_works,
-                         Brw_PutIconShowFigure,
-                         Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE,0);
+	    /***** Show the tree with the assignments *****/
+	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;
+	    Brw_InitializeFileBrowser ();
+	    Brw_ShowFileBrowser ();
 
-      /***** List the assignments and works of the selected users *****/
-      Ptr = Gbl.Usrs.Select[Rol_UNK];
-      while (*Ptr)
-	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
-	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get of the database the data of the user
-	    if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
-	      {
-	       /***** Show a row with the data of the owner of the works *****/
-	       fprintf (Gbl.F.Out,"<tr>");
-	       Brw_ShowDataOwnerAsgWrk (&Gbl.Usrs.Other.UsrDat);
+	    /***** Show the tree with the works *****/
+	    Gbl.FileBrowser.Type = Brw_ADMI_WRK_CRS;
+	    Brw_InitializeFileBrowser ();
+	    Brw_ShowFileBrowser ();
 
-	       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
-
-	       /***** Show the tree with the assignments *****/
-	       Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;
-	       Brw_InitializeFileBrowser ();
-	       Brw_ShowFileBrowser ();
-
-	       /***** Show the tree with the works *****/
-	       Gbl.FileBrowser.Type = Brw_ADMI_WRK_CRS;
-	       Brw_InitializeFileBrowser ();
-	       Brw_ShowFileBrowser ();
-
-	       fprintf (Gbl.F.Out,"</td>"
-				  "</tr>");
-	      }
-	}
-
-      /***** End table and box *****/
-      Box_EndBoxTable ();
+	    fprintf (Gbl.F.Out,"</td>"
+			       "</tr>");
+	   }
      }
-   else	// If no users are selected...
-     {
-      // ...write warning alert
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
-      // ...and show again the form
-      Brw_AskEditWorksCrs ();
-     }
+
+   /***** End table and box *****/
+   Box_EndBoxTable ();
 
    /***** Free memory used by list of selected users' codes *****/
    Usr_FreeListsSelectedUsrsCods ();
@@ -3498,7 +3486,33 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/******************* Show a file browser or students' works  *****************/
+/******* Get and check list of selected users, and show users' works  ********/
+/*****************************************************************************/
+
+void Brw_GetSelectedUsrsAndShowWorks (void)
+  {
+   extern const char *Txt_You_must_select_one_ore_more_users;
+
+   /***** Get lists of the selected users if not already got *****/
+   Usr_GetListsSelectedUsrsCods ();
+
+   /***** Check the number of users whose works will be shown *****/
+   if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
+      Brw_ShowFileBrowserOrWorks ();
+   else	// If no users are selected...
+     {
+      // ...write warning alert
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+      // ...and show again the form
+      Brw_AskEditWorksCrs ();
+     }
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
+  }
+
+/*****************************************************************************/
+/******************** Show a file browser or users' works  *******************/
 /*****************************************************************************/
 
 void Brw_ShowFileBrowserOrWorks (void)
@@ -5008,7 +5022,7 @@ static void Brw_PutParamsFullTree (void)
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCod);
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
       Usr_PutHiddenParUsrCodAll (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
-                                 Gbl.Usrs.Select[Rol_UNK]);
+                                 Gbl.Usrs.Selected.List[Rol_UNK]);
   }
 
 /*****************************************************************************/

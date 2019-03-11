@@ -140,14 +140,6 @@ const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
 
 #define Usr_MAX_BYTES_QUERY_GET_LIST_USRS (16 * 1024 - 1)
 
-#define Usr_LIST_USRS_NUM_ACTIONS 3
-typedef enum
-  {
-   Usr_LIST_USRS_UNKNOWN_ACTION	=  0,
-   Usr_SHOW_RECORDS		=  1,
-   Usr_FOLLOW_USERS		=  2,
-  } Usr_ListUsrsAction_t;
-
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -245,12 +237,12 @@ static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
 static bool Usr_PutActionsSeveralUsrs (Rol_Role_t Role);
-static void Usr_PutActionShowRecords (bool *OptionChecked);
-static void Usr_PutActionFollowUsers (bool *OptionChecked);
-static void Usr_StartListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction,
-                                     bool *OptionChecked);
+static void Usr_PutActionShowRecords (void);
+static void Usr_PutActionShowHomework (void);
+static void Usr_PutActionFollowUsers (void);
+static void Usr_StartListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction);
 static void Usr_EndListUsrsAction (void);
-
+static Usr_ListUsrsAction_t Usr_ListUsrsAction (Usr_ListUsrsAction_t DefaultAction);
 
 static void Usr_PutIconsListGsts (void);
 static void Usr_PutIconsListStds (void);
@@ -5573,45 +5565,51 @@ void Usr_GetListsSelectedUsrsCods (void)
    unsigned Length;
    Rol_Role_t Role;
 
-   /***** Get possible list of all selected users *****/
-   Usr_AllocateListSelectedUsrCod (Rol_UNK);
-   if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
+   if (!Gbl.Usrs.Selected.Filled)	// Get list only if not already got
      {
-      Ses_GetHiddenParFromDB (Gbl.Action.Act,Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Select[Rol_UNK],
-			      Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-      Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,Gbl.Usrs.Select[Rol_UNK],
-			Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
-     }
-   else
-      Par_GetParMultiToText (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Select[Rol_UNK],
-			     Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-
-   /***** Get list of selected users for each possible role *****/
-   for (Role = Rol_TCH;		// From the highest possible role of selected users...
-	Role >= Rol_GST;	// ...downto the lowest possible role of selected users
-	Role--)
-      if (Usr_ParamUsrCod[Role])
+      /***** Get possible list of all selected users *****/
+      Usr_AllocateListSelectedUsrCod (Rol_UNK);
+      if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
 	{
-	 /* Get parameter with selected users with this role */
-	 Usr_AllocateListSelectedUsrCod (Role);
-	 Par_GetParMultiToText (Usr_ParamUsrCod[Role],Gbl.Usrs.Select[Role],
+	 Ses_GetHiddenParFromDB (Gbl.Action.Act,Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK],
+				 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,Gbl.Usrs.Selected.List[Rol_UNK],
+			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
+	}
+      else
+	 Par_GetParMultiToText (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK],
 				Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
-	 /* Add selected users with this role
-	    to the list with all selected users */
-	 if (Gbl.Usrs.Select[Role][0])
+      /***** Get list of selected users for each possible role *****/
+      for (Role = Rol_TCH;		// From the highest possible role of selected users...
+	   Role >= Rol_GST;	// ...downto the lowest possible role of selected users
+	   Role--)
+	 if (Usr_ParamUsrCod[Role])
 	   {
-	    if (Gbl.Usrs.Select[Rol_UNK][0])
-	       if ((Length = strlen (Gbl.Usrs.Select[Rol_UNK])) <
-		   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
-		 {
-		  Gbl.Usrs.Select[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
-		  Gbl.Usrs.Select[Rol_UNK][Length + 1] = '\0';
-		 }
-	    Str_Concat (Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select[Role],
-			Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+	    /* Get parameter with selected users with this role */
+	    Usr_AllocateListSelectedUsrCod (Role);
+	    Par_GetParMultiToText (Usr_ParamUsrCod[Role],Gbl.Usrs.Selected.List[Role],
+				   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+
+	    /* Add selected users with this role
+	       to the list with all selected users */
+	    if (Gbl.Usrs.Selected.List[Role][0])
+	      {
+	       if (Gbl.Usrs.Selected.List[Rol_UNK][0])
+		  if ((Length = strlen (Gbl.Usrs.Selected.List[Rol_UNK])) <
+		      Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
+		    {
+		     Gbl.Usrs.Selected.List[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
+		     Gbl.Usrs.Selected.List[Rol_UNK][Length + 1] = '\0';
+		    }
+	       Str_Concat (Gbl.Usrs.Selected.List[Rol_UNK],Gbl.Usrs.Selected.List[Role],
+			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+	      }
 	   }
-	}
+
+      /***** List is filled *****/
+      Gbl.Usrs.Selected.Filled = true;
+     }
   }
 
 /*****************************************************************************/
@@ -5634,9 +5632,10 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    struct ListUsrCods ListUsrCods;
    bool Error = false;
 
-   /***** Allocate memory for the lists of users's IDs *****/
-   Usr_AllocateListSelectedUsrCod (Rol_UNK);
-   LengthSelectedUsrsCods = strlen (Gbl.Usrs.Select[Rol_UNK]);
+   /***** Get list of selected encrypted users's codes if not already got.
+          This list is necessary to add encrypted user's codes at the end. *****/
+   Usr_GetListsSelectedUsrsCods ();
+   LengthSelectedUsrsCods = strlen (Gbl.Usrs.Selected.List[Rol_UNK]);
 
    /***** Allocate memory for the lists of recipients written explicetely *****/
    Usr_AllocateListOtherRecipients ();
@@ -5755,7 +5754,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
                      if (LengthUsrCod < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
                        {
                         /* Add user */
-                        Str_Copy (Gbl.Usrs.Select[Rol_UNK],
+                        Str_Copy (Gbl.Usrs.Selected.List[Rol_UNK],
                                   UsrDat.EncryptedUsrCod,
                                   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
                         LengthSelectedUsrsCods = LengthUsrCod;
@@ -5767,11 +5766,11 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
                 	 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
                        {
                         /* Add separator */
-                        Gbl.Usrs.Select[Rol_UNK][LengthSelectedUsrsCods] = Par_SEPARATOR_PARAM_MULTIPLE;
+                        Gbl.Usrs.Selected.List[Rol_UNK][LengthSelectedUsrsCods] = Par_SEPARATOR_PARAM_MULTIPLE;
                         LengthSelectedUsrsCods++;
 
                         /* Add user */
-                        Str_Copy (Gbl.Usrs.Select[Rol_UNK] + LengthSelectedUsrsCods,
+                        Str_Copy (Gbl.Usrs.Selected.List[Rol_UNK] + LengthSelectedUsrsCods,
                                   UsrDat.EncryptedUsrCod,
                                   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
                         LengthSelectedUsrsCods += LengthUsrCod;
@@ -5794,16 +5793,16 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 /*****************************************************************************/
 /************** Find if encrypted user's code is yet in list *****************/
 /*****************************************************************************/
-// Returns true if EncryptedUsrCodToFind is in Gbl.Usrs.Select[Rol_UNK]
+// Returns true if EncryptedUsrCodToFind is in Gbl.Usrs.Selected.List[Rol_UNK]
 
 bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind)
   {
    const char *Ptr;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
 
-   if (Gbl.Usrs.Select[Rol_UNK])
+   if (Gbl.Usrs.Selected.List[Rol_UNK])
      {
-      Ptr = Gbl.Usrs.Select[Rol_UNK];
+      Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,EncryptedUsrCod,
@@ -5825,8 +5824,8 @@ unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void)
    unsigned NumUsrs = 0;
    struct UsrData UsrDat;
 
-   /***** Loop over the list Gbl.Usrs.Select[Rol_UNK] to count the number of users *****/
-   Ptr = Gbl.Usrs.Select[Rol_UNK];
+   /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK] to count the number of users *****/
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
@@ -5845,16 +5844,16 @@ unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void)
 
 static void Usr_AllocateListSelectedUsrCod (Rol_Role_t Role)
   {
-   if (!Gbl.Usrs.Select[Role])
+   if (!Gbl.Usrs.Selected.List[Role])
      {
-      if ((Gbl.Usrs.Select[Role] = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
+      if ((Gbl.Usrs.Selected.List[Role] = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
          Lay_NotEnoughMemoryExit ();
-      Gbl.Usrs.Select[Role][0] = '\0';
+      Gbl.Usrs.Selected.List[Role][0] = '\0';
      }
   }
 
 /*****************************************************************************/
-/************ Free memory used by list of selected users' codes **************/
+/*********** Free memory used by lists of selected users' codes **************/
 /*****************************************************************************/
 // Role = Rol_UNK here means all users
 
@@ -5862,14 +5861,23 @@ void Usr_FreeListsSelectedUsrsCods (void)
   {
    Rol_Role_t Role;
 
-   for (Role = (Rol_Role_t) 0;
-	Role < Rol_NUM_ROLES;
-	Role++)
-      if (Gbl.Usrs.Select[Role])
-	{
-	 free ((void *) Gbl.Usrs.Select[Role]);
-	 Gbl.Usrs.Select[Role] = NULL;
-	}
+   if (Gbl.Usrs.Selected.Filled)	// Only if lists are filled
+     {
+      /***** Free lists *****/
+      for (Role = (Rol_Role_t) 0;
+	   Role < Rol_NUM_ROLES;
+	   Role++)
+	 if (Gbl.Usrs.Selected.List[Role])
+	   {
+	    free ((void *) Gbl.Usrs.Selected.List[Role]);
+	    Gbl.Usrs.Selected.List[Role] = NULL;
+	   }
+
+      /***** Mark lists as empty *****/
+      Gbl.Usrs.Selected.Filled = false;
+      // Lists of encrypted codes of users selected from form
+      // are now marked as not filled
+     }
   }
 
 /*****************************************************************************/
@@ -5996,7 +6004,7 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
          Att_PutParamAttCod (Gbl.AttEvents.AttCod);
          break;
       case ActReqMsgUsr:
-         Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Select[Rol_UNK]);
+         Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Selected.List[Rol_UNK]);
          Msg_PutHiddenParamOtherRecipients ();
          Msg_PutHiddenParamsSubjectAndContent ();
          if (Gbl.Msg.Reply.IsReply)
@@ -8012,28 +8020,42 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t Role)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    bool ICanViewRecords;
+   bool ICanViewHomework;
    bool ICanFollow;
    bool OptionsShown = false;
-   bool OptionChecked = false;
+
+   /***** Get the action to do *****/
+   Gbl.Usrs.Selected.Action = Usr_ListUsrsAction (Usr_LIST_USRS_DEFAULT_ACTION);
 
    switch (Role)
      {
       case Rol_GST:
-	 ICanViewRecords = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-	 ICanFollow = false;
+	 ICanViewRecords  = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+	 ICanViewHomework = false;
+	 ICanFollow       = false;
 	 break;
       case Rol_STD:
-	 ICanViewRecords = ICanFollow =
+	 ICanViewRecords  =
+	 ICanFollow       =
 	    (Gbl.Scope.Current == Sco_SCOPE_CRS &&
 	     (Gbl.Usrs.Me.IBelongToCurrentCrs ||
 	      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
+         ICanViewHomework = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+                             Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                             Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 	 break;
       case Rol_TCH:
-	 ICanViewRecords = ICanFollow =
+	 ICanViewRecords  =
+	 ICanFollow       =
 	    (Gbl.Scope.Current == Sco_SCOPE_CRS);
+         ICanViewHomework = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+                             Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+                             Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 	 break;
       default:
-         ICanViewRecords = ICanFollow = false;
+         ICanViewRecords  =
+         ICanViewHomework =
+         ICanFollow       = false;
          break;
      }
 
@@ -8043,15 +8065,22 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t Role)
 
    /***** View records *****/
    if (ICanViewRecords)
-     {	// I can view users records
-      Usr_PutActionShowRecords (&OptionChecked);
+     {	// I can view users' records
+      Usr_PutActionShowRecords ();
+      OptionsShown = true;
+     }
+
+   /***** Homework *****/
+   if (ICanViewHomework)
+     {	// I can view users' homework
+      Usr_PutActionShowHomework ();
       OptionsShown = true;
      }
 
    /***** Follow *****/
    if (ICanFollow)
      {	// I can follow users
-      Usr_PutActionFollowUsers (&OptionChecked);
+      Usr_PutActionFollowUsers ();
       OptionsShown = true;
      }
 
@@ -8065,12 +8094,25 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t Role)
 /******************** Put action to show users' records **********************/
 /*****************************************************************************/
 
-static void Usr_PutActionShowRecords (bool *OptionChecked)
+static void Usr_PutActionShowRecords (void)
   {
    extern const char *Txt_Show_records;
 
-   Usr_StartListUsrsAction (Usr_SHOW_RECORDS,OptionChecked);
+   Usr_StartListUsrsAction (Usr_SHOW_RECORDS);
    fprintf (Gbl.F.Out,"%s",Txt_Show_records);
+   Usr_EndListUsrsAction ();
+  }
+
+/*****************************************************************************/
+/******************** Put action to show users' homework *********************/
+/*****************************************************************************/
+
+static void Usr_PutActionShowHomework (void)
+  {
+   extern const char *Txt_View_homework;
+
+   Usr_StartListUsrsAction (Usr_VIEW_HOMEWORK);
+   fprintf (Gbl.F.Out,"%s",Txt_View_homework);
    Usr_EndListUsrsAction ();
   }
 
@@ -8078,11 +8120,11 @@ static void Usr_PutActionShowRecords (bool *OptionChecked)
 /*********************** Put action to follow users **************************/
 /*****************************************************************************/
 
-static void Usr_PutActionFollowUsers (bool *OptionChecked)
+static void Usr_PutActionFollowUsers (void)
   {
    extern const char *Txt_Follow;
 
-   Usr_StartListUsrsAction (Usr_FOLLOW_USERS,OptionChecked);
+   Usr_StartListUsrsAction (Usr_FOLLOW_USERS);
    fprintf (Gbl.F.Out,"%s",Txt_Follow);
    Usr_EndListUsrsAction ();
   }
@@ -8091,19 +8133,15 @@ static void Usr_PutActionFollowUsers (bool *OptionChecked)
 /************ Put start/end of action to register/remove one user ************/
 /*****************************************************************************/
 
-static void Usr_StartListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction,
-                                     bool *OptionChecked)
+static void Usr_StartListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction)
   {
    fprintf (Gbl.F.Out,"<li>"
 		      "<input type=\"radio\" id=\"ListUsrsAction%u\""
 		      " name=\"ListUsrsAction\" value=\"%u\"",
 	    (unsigned) ListUsrsAction,
 	    (unsigned) ListUsrsAction);
-   if (!*OptionChecked)
-     {
+   if (ListUsrsAction == Gbl.Usrs.Selected.Action)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-      *OptionChecked = true;
-     }
    fprintf (Gbl.F.Out," />"
 		      "<label for=\"ListUsrsAction%u\">",
 	    (unsigned) ListUsrsAction);
@@ -8119,11 +8157,9 @@ static void Usr_EndListUsrsAction (void)
 /********************** Do action on several students ************************/
 /*****************************************************************************/
 
-void Usr_DoActionOnSeveralStds (void)
+void Usr_DoActionOnSeveralUsrs1 (void)
   {
    extern const char *Txt_You_must_select_one_ore_more_users;
-   Usr_ListUsrsAction_t ListUsrsAction;
-   // Rol_Role_t Role;
 
    /***** Get parameters from form *****/
    /* Get list of selected users */
@@ -8132,51 +8168,97 @@ void Usr_DoActionOnSeveralStds (void)
    /* Check the number of users */
    if (!Usr_CountNumUsrsInListOfSelectedUsrs ())// If no users selected...
      {						// ...write warning notice
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
-      Usr_SeeStudents ();			// ...show again the form
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_select_one_ore_more_users);
       return;
      }
 
    /* Get the action to do */
-   ListUsrsAction = (Usr_ListUsrsAction_t)
-		    Par_GetParToUnsignedLong ("ListUsrsAction",
-					      0,
-					      Usr_LIST_USRS_NUM_ACTIONS - 1,
-					      (unsigned long) Usr_LIST_USRS_UNKNOWN_ACTION);
-   /* Get role */
-   /* Role = (Rol_Role_t) Par_GetParToUnsignedLong ("Role",
-						 0,
-						 Rol_NUM_ROLES - 1,
-						 (unsigned long) Rol_UNK); */
+   Gbl.Usrs.Selected.Action = Usr_ListUsrsAction (Usr_LIST_USRS_UNKNOWN_ACTION);
 
    /***** Do actions *****/
-   switch (ListUsrsAction)
+   switch (Gbl.Usrs.Selected.Action)
      {
       case Usr_SHOW_RECORDS:
 	 switch (Gbl.Action.Act)
 	   {
 	    case ActDoActOnSevGst:
-	       Rec_ListRecordsGstsShow ();
+	       Gbl.Action.Act = ActSeeRecSevGst;
+               Tab_SetCurrentTab ();
+	       // Rec_ListRecordsGstsShow ();
 	       break;
 	    case ActDoActOnSevStd:
-	       Rec_ListRecordsStdsShow ();
+	       Gbl.Action.Act = ActSeeRecSevStd;
+               Tab_SetCurrentTab ();
+	       // Rec_ListRecordsStdsShow ();
 	       break;
 	    case ActDoActOnSevTch:
-	       Rec_ListRecordsTchsShow ();
+	       Gbl.Action.Act = ActSeeRecSevTch;
+               Tab_SetCurrentTab ();
+	       // Rec_ListRecordsTchsShow ();
 	       break;
+	    default:
+               Ale_CreateAlert (Ale_ERROR,NULL,
+        	                "Wrong action.");
+               break;
+	   }
+	 break;
+      case Usr_VIEW_HOMEWORK:
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActDoActOnSevStd:
+	    case ActDoActOnSevTch:
+	       Gbl.Action.Act = ActAdmAsgWrkCrs;
+               Tab_SetCurrentTab ();
+	       // Brw_ShowFileBrowserOrWorks ();
+	       break;
+	    default:
+               Ale_CreateAlert (Ale_ERROR,NULL,
+        	                "Wrong action.");
+               break;
 	   }
 	 break;
       case Usr_FOLLOW_USERS:
-         Ale_ShowAlert (Ale_WARNING,"Not implemented.");
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          "Not implemented.");
 	 break;
       default:
-         Ale_ShowAlert (Ale_ERROR,"Wrong action.");
-         Usr_SeeStudents ();			// Show again the form
-         break;
+	 Ale_CreateAlert (Ale_ERROR,NULL,
+			  "Wrong action.");
+	 break;
      }
+  }
 
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+void Usr_DoActionOnSeveralUsrs2 (void)
+  {
+   /***** Show possible alerts *****/
+   Ale_ShowAlerts (NULL);
+
+   /***** If action has not changed, show again the form *****/
+   switch (Gbl.Action.Act)
+     {
+      case ActDoActOnSevGst:
+	 Usr_SeeGuests ();
+	 break;
+      case ActDoActOnSevStd:
+	 Usr_SeeStudents ();
+	 break;
+      case ActDoActOnSevTch:
+	 Usr_SeeTeachers ();
+	 break;
+     }
+  }
+
+/*****************************************************************************/
+/*************** Get action to do with list of selected users ****************/
+/*****************************************************************************/
+
+static Usr_ListUsrsAction_t Usr_ListUsrsAction (Usr_ListUsrsAction_t DefaultAction)
+  {
+   return (Usr_ListUsrsAction_t) Par_GetParToUnsignedLong ("ListUsrsAction",
+							   0,
+							   Usr_LIST_USRS_NUM_ACTIONS - 1,
+							   (unsigned long) DefaultAction);
   }
 
 /*****************************************************************************/

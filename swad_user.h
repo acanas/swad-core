@@ -115,6 +115,16 @@ typedef enum
   } Usr_ShowUsrsType_t;
 #define Usr_SHOW_USRS_TYPE_DEFAULT Usr_LIST_AS_CLASS_PHOTO
 
+#define Usr_LIST_USRS_NUM_ACTIONS 4
+typedef enum
+  {
+   Usr_LIST_USRS_UNKNOWN_ACTION	=  0,
+   Usr_SHOW_RECORDS		=  1,
+   Usr_VIEW_HOMEWORK		=  2,
+   Usr_FOLLOW_USERS		=  3,
+  } Usr_ListUsrsAction_t;
+#define Usr_LIST_USRS_DEFAULT_ACTION Usr_SHOW_RECORDS
+
 // Related with user's data
 struct UsrData
   {
@@ -411,10 +421,11 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void);
 
 void Usr_SeeGuests (void);
 void Usr_SeeStudents (void);
-
-void Usr_DoActionOnSeveralStds (void);
-
 void Usr_SeeTeachers (void);
+
+void Usr_DoActionOnSeveralUsrs1 (void);
+void Usr_DoActionOnSeveralUsrs2 (void);
+
 void Usr_SeeGstClassPhotoPrn (void);
 void Usr_SeeStdClassPhotoPrn (void);
 void Usr_SeeTchClassPhotoPrn (void);

@@ -175,6 +175,8 @@ void Brw_InitializeFileBrowser (void);
 bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName);
 bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,const char *NewFolderName);
 void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName);
+
+void Brw_GetSelectedUsrsAndShowWorks (void);
 void Brw_ShowFileBrowserOrWorks (void);
 void Brw_ShowAgainFileBrowserOrWorks (void);
 
