@@ -196,7 +196,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Action.Tab = TabUnk;
 
    Gbl.Usrs.Selected.Filled = false;	// Lists of encrypted codes of users selected from form are not filled
-   Gbl.Usrs.Selected.Action = Usr_LIST_USRS_UNKNOWN_ACTION;
+   Gbl.Usrs.Selected.Option = Usr_OPTION_UNKNOWN;
    for (Role = (Rol_Role_t) 0;
 	Role < Rol_NUM_ROLES;
 	Role++)

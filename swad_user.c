@@ -237,15 +237,9 @@ static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
 static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole);
-static void Usr_PutActionShowRecords (void);
-static void Usr_PutActionShowHomework (void);
-static void Usr_PutActionShowAttendance (void);
-static void Usr_PutActionNewMessage (void);
-static void Usr_PutActionFollowUsers (void);
-static void Usr_PutActionUnfollowUsers (void);
-static void Usr_StartListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction);
-static void Usr_EndListUsrsAction (void);
-static Usr_ListUsrsAction_t Usr_ListUsrsAction (Usr_ListUsrsAction_t DefaultAction);
+static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
+                                       const char *Label);
+static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction);
 
 static void Usr_PutIconsListGsts (void);
 static void Usr_PutIconsListStds (void);
@@ -8023,215 +8017,112 @@ void Usr_SeeTeachers (void)
 static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   bool ICanViewRecords;
-   bool ICanViewHomework;
-   bool ICanViewAttendance;
-   bool ICanSendMessage;
-   bool ICanFollow;
-   bool ICanUnfollow;
-   bool OptionsShown = false;
+   extern const char *Txt_Show_records;
+   extern const char *Txt_View_homework;
+   extern const char *Txt_Show_attendance;
+   extern const char *Txt_Send_message;
+   extern const char *Txt_Follow;
+   extern const char *Txt_Unfollow;
+   const char *Label[Usr_LIST_USRS_NUM_OPTIONS] =
+     {
+      NULL,			// Usr_OPTION_UNKNOWN
+      Txt_Show_records,		// Usr_OPTION_RECORDS
+      Txt_View_homework,	// Usr_OPTION_HOMEWORK
+      Txt_Show_attendance,	// Usr_OPTION_ATTENDANCE
+      Txt_Send_message,		// Usr_OPTION_MESSAGE
+      Txt_Follow,		// Usr_OPTION_FOLLOW
+      Txt_Unfollow,		// Usr_OPTION_UNFOLLOW
+     };
+   bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
+   Usr_ListUsrsOption_t Opt;
+   bool OptionsShown;
 
-   /***** Get the action to do *****/
-   Gbl.Usrs.Selected.Action = Usr_ListUsrsAction (Usr_LIST_USRS_DEFAULT_ACTION);
+   /***** Get the selected option from form *****/
+   Gbl.Usrs.Selected.Option = Usr_GetListUsrsOption (Usr_LIST_USRS_DEFAULT_OPTION);
 
+   /***** Check which options I can choose *****/
+   /* Set default (I can not choose options) */
+   for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
+	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
+	Opt++)
+      ICanChooseOption[Opt] = false;
+
+   /* Activate some options depending on users' role, on my role, etc. */
    switch (UsrsRole)
      {
       case Rol_GST:
-	 ICanViewRecords    = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-
-	 ICanViewHomework   =
-	 ICanViewAttendance =
-	 ICanSendMessage    =
-	 ICanFollow         =
-	 ICanUnfollow	    = false;
+	 ICanChooseOption[Usr_OPTION_RECORDS]    = (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 	 break;
       case Rol_STD:
-	 ICanViewRecords    =
-	 ICanSendMessage    =
-	 ICanFollow         = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
-			       (Gbl.Usrs.Me.IBelongToCurrentCrs ||
-				Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
+	 ICanChooseOption[Usr_OPTION_RECORDS]    =
+	 ICanChooseOption[Usr_OPTION_MESSAGE]    =
+	 ICanChooseOption[Usr_OPTION_FOLLOW]     = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
+						    (Gbl.Usrs.Me.IBelongToCurrentCrs ||
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
 
-         ICanViewHomework   =
-         ICanViewAttendance = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-                               Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                               Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-	 ICanUnfollow	    = true;
+         ICanChooseOption[Usr_OPTION_HOMEWORK]   =
+         ICanChooseOption[Usr_OPTION_ATTENDANCE] = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+						    Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+						    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW]	 = true;
 	 break;
       case Rol_TCH:
-	 ICanViewRecords    =
-	 ICanSendMessage    =
-	 ICanFollow         = (Gbl.Scope.Current == Sco_SCOPE_CRS);
+	 ICanChooseOption[Usr_OPTION_RECORDS]    =
+	 ICanChooseOption[Usr_OPTION_MESSAGE]    =
+	 ICanChooseOption[Usr_OPTION_FOLLOW]     = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
-         ICanViewHomework   = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-                               Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                               Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-
-         ICanViewAttendance = false;
-	 ICanUnfollow	    = true;
+         ICanChooseOption[Usr_OPTION_HOMEWORK]   = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+						    Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+						    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW]	 = true;
 	 break;
       default:
-         ICanViewRecords    =
-         ICanViewHomework   =
-         ICanViewAttendance =
-	 ICanSendMessage    =
-         ICanFollow         =
-	 ICanUnfollow	    = false;
-         break;
+	 return false;
      }
 
-   /***** Start list of options *****/
+   /***** Write list of options *****/
+   /* Start list of options */
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
 	    The_ClassFormInBox[Gbl.Prefs.Theme]);
 
-   /***** View records *****/
-   if (ICanViewRecords)
-     {	// I can view users' records
-      Usr_PutActionShowRecords ();
-      OptionsShown = true;
-     }
+   /* Show option items */
+   OptionsShown = false;
+   for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
+	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
+	Opt++)
+      if (ICanChooseOption[Opt])
+	{
+	 Usr_ShowOneListUsrsOption (Opt,Label[Opt]);
+	 OptionsShown = true;
+	}
 
-   /***** Homework *****/
-   if (ICanViewHomework)
-     {	// I can view users' homework
-      Usr_PutActionShowHomework ();
-      OptionsShown = true;
-     }
-
-   /***** Attendance *****/
-   if (ICanViewAttendance)
-     {	// I can view users' attendance
-      Usr_PutActionShowAttendance ();
-      OptionsShown = true;
-     }
-
-   /***** New message *****/
-   if (ICanSendMessage)
-     {	// I can write and send a new message to users
-      Usr_PutActionNewMessage ();
-      OptionsShown = true;
-     }
-
-   /***** Follow *****/
-   if (ICanFollow)
-     {	// I can follow users
-      Usr_PutActionFollowUsers ();
-      OptionsShown = true;
-     }
-
-   /***** Unfollow *****/
-   if (ICanUnfollow)
-     {	// I can unfollow users
-      Usr_PutActionUnfollowUsers ();
-      OptionsShown = true;
-     }
-
-   /***** End list of options *****/
+   /* End list of options */
    fprintf (Gbl.F.Out,"</ul>");
 
    return OptionsShown;
   }
 
 /*****************************************************************************/
-/******************** Put action to show users' records **********************/
-/*****************************************************************************/
-
-static void Usr_PutActionShowRecords (void)
-  {
-   extern const char *Txt_Show_records;
-
-   Usr_StartListUsrsAction (Usr_SHOW_RECORDS);
-   fprintf (Gbl.F.Out,"%s",Txt_Show_records);
-   Usr_EndListUsrsAction ();
-  }
-
-/*****************************************************************************/
-/******************** Put action to show users' homework *********************/
-/*****************************************************************************/
-
-static void Usr_PutActionShowHomework (void)
-  {
-   extern const char *Txt_View_homework;
-
-   Usr_StartListUsrsAction (Usr_VIEW_HOMEWORK);
-   fprintf (Gbl.F.Out,"%s",Txt_View_homework);
-   Usr_EndListUsrsAction ();
-  }
-
-/*****************************************************************************/
-/******************** Put action to show users' attendance *******************/
-/*****************************************************************************/
-
-static void Usr_PutActionShowAttendance (void)
-  {
-   extern const char *Txt_Show_attendance;
-
-   Usr_StartListUsrsAction (Usr_SHOW_ATTENDANCE);
-   fprintf (Gbl.F.Out,"%s",Txt_Show_attendance);
-   Usr_EndListUsrsAction ();
-  }
-
-/*****************************************************************************/
-/*************** Put action to write a new message to users ******************/
-/*****************************************************************************/
-
-static void Usr_PutActionNewMessage (void)
-  {
-   extern const char *Txt_Send_message;
-
-   Usr_StartListUsrsAction (Usr_NEW_MESSAGE);
-   fprintf (Gbl.F.Out,"%s",Txt_Send_message);
-   Usr_EndListUsrsAction ();
-  }
-
-/*****************************************************************************/
-/*********************** Put action to follow users **************************/
-/*****************************************************************************/
-
-static void Usr_PutActionFollowUsers (void)
-  {
-   extern const char *Txt_Follow;
-
-   Usr_StartListUsrsAction (Usr_FOLLOW_USERS);
-   fprintf (Gbl.F.Out,"%s",Txt_Follow);
-   Usr_EndListUsrsAction ();
-  }
-
-/*****************************************************************************/
-/*********************** Put action to follow users **************************/
-/*****************************************************************************/
-
-static void Usr_PutActionUnfollowUsers (void)
-  {
-   extern const char *Txt_Unfollow;
-
-   Usr_StartListUsrsAction (Usr_UNFOLLOW_USERS);
-   fprintf (Gbl.F.Out,"%s",Txt_Unfollow);
-   Usr_EndListUsrsAction ();
-  }
-
-/*****************************************************************************/
 /************ Put start/end of action to register/remove one user ************/
 /*****************************************************************************/
 
-static void Usr_StartListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction)
+static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
+                                       const char *Label)
   {
    fprintf (Gbl.F.Out,"<li>"
 		      "<input type=\"radio\" id=\"ListUsrsAction%u\""
 		      " name=\"ListUsrsAction\" value=\"%u\"",
 	    (unsigned) ListUsrsAction,
 	    (unsigned) ListUsrsAction);
-   if (ListUsrsAction == Gbl.Usrs.Selected.Action)
+   if (ListUsrsAction == Gbl.Usrs.Selected.Option)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," />"
-		      "<label for=\"ListUsrsAction%u\">",
-	    (unsigned) ListUsrsAction);
-  }
-
-static void Usr_EndListUsrsAction (void)
-  {
-   fprintf (Gbl.F.Out,"</label>"
-		      "</li>");
+		      "<label for=\"ListUsrsAction%u\">"
+		      "%s"
+		      "</label>"
+		      "</li>",
+	    (unsigned) ListUsrsAction,
+            Label);
   }
 
 /*****************************************************************************/
@@ -8255,14 +8146,14 @@ void Usr_DoActionOnSeveralUsrs1 (void)
      }
 
    /* Get the action to do */
-   Gbl.Usrs.Selected.Action = Usr_ListUsrsAction (Usr_LIST_USRS_UNKNOWN_ACTION);
+   Gbl.Usrs.Selected.Option = Usr_GetListUsrsOption (Usr_OPTION_UNKNOWN);
 
    /***** Change action depending on my selection *****/
-   Gbl.Action.Original = Gbl.Action.Act;
+   Gbl.Action.Original = Gbl.Action.Act;	// To check if action changes
 
-   switch (Gbl.Usrs.Selected.Action)
+   switch (Gbl.Usrs.Selected.Option)
      {
-      case Usr_SHOW_RECORDS:
+      case Usr_OPTION_RECORDS:
 	 switch (Gbl.Action.Act)
 	   {
 	    case ActDoActOnSevGst:
@@ -8275,11 +8166,10 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	       Gbl.Action.Act = ActSeeRecSevTch;
 	       break;
 	    default:
-               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
                break;
 	   }
 	 break;
-      case Usr_VIEW_HOMEWORK:
+      case Usr_OPTION_HOMEWORK:
 	 switch (Gbl.Action.Act)
 	   {
 	    case ActDoActOnSevStd:
@@ -8287,22 +8177,20 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	       Gbl.Action.Act = ActAdmAsgWrkCrs;
 	       break;
 	    default:
-               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
                break;
 	   }
 	 break;
-      case Usr_SHOW_ATTENDANCE:
+      case Usr_OPTION_ATTENDANCE:
 	 switch (Gbl.Action.Act)
 	   {
 	    case ActDoActOnSevStd:
 	       Gbl.Action.Act = ActSeeLstStdAtt;
 	       break;
 	    default:
-               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
                break;
 	   }
 	 break;
-      case Usr_NEW_MESSAGE:
+      case Usr_OPTION_MESSAGE:
 	 switch (Gbl.Action.Act)
 	   {
 	    case ActDoActOnSevStd:
@@ -8310,11 +8198,10 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	       Gbl.Action.Act = ActReqMsgUsr;
 	       break;
 	    default:
-               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
                break;
 	   }
 	 break;
-      case Usr_FOLLOW_USERS:
+      case Usr_OPTION_FOLLOW:
 	 switch (Gbl.Action.Act)
 	   {
 	    case ActDoActOnSevStd:
@@ -8324,11 +8211,10 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	       Gbl.Action.Act = ActReqFolSevTch;
 	       break;
 	    default:
-               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
                break;
 	   }
 	 break;
-      case Usr_UNFOLLOW_USERS:
+      case Usr_OPTION_UNFOLLOW:
 	 switch (Gbl.Action.Act)
 	   {
 	    case ActDoActOnSevStd:
@@ -8338,16 +8224,16 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	       Gbl.Action.Act = ActReqUnfSevTch;
 	       break;
 	    default:
-               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
                break;
 	   }
 	 break;
       default:
-         Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
 	 break;
      }
 
-   if (Gbl.Action.Act != Gbl.Action.Original)	// Action has changed
+   if (Gbl.Action.Act == Gbl.Action.Original)	// Fail, no change in action
+      Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
+   else						// Success, action has changed
       Tab_SetCurrentTab ();
   }
 
@@ -8356,7 +8242,9 @@ void Usr_DoActionOnSeveralUsrs2 (void)
    /***** Show possible alerts *****/
    Ale_ShowAlerts (NULL);
 
-   /***** If action has not changed, show again the form *****/
+   /***** If success, action has changed.
+          No change in action means an error in form has happened,
+          so show again the form to selected users *****/
    switch (Gbl.Action.Act)
      {
       case ActDoActOnSevGst:
@@ -8368,6 +8256,8 @@ void Usr_DoActionOnSeveralUsrs2 (void)
       case ActDoActOnSevTch:
 	 Usr_SeeTeachers ();
 	 break;
+      default:
+	 break;
      }
   }
 
@@ -8375,11 +8265,11 @@ void Usr_DoActionOnSeveralUsrs2 (void)
 /*************** Get action to do with list of selected users ****************/
 /*****************************************************************************/
 
-static Usr_ListUsrsAction_t Usr_ListUsrsAction (Usr_ListUsrsAction_t DefaultAction)
+static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction)
   {
-   return (Usr_ListUsrsAction_t) Par_GetParToUnsignedLong ("ListUsrsAction",
+   return (Usr_ListUsrsOption_t) Par_GetParToUnsignedLong ("ListUsrsAction",
 							   0,
-							   Usr_LIST_USRS_NUM_ACTIONS - 1,
+							   Usr_LIST_USRS_NUM_OPTIONS - 1,
 							   (unsigned long) DefaultAction);
   }
 

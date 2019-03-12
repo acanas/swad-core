@@ -115,18 +115,18 @@ typedef enum
   } Usr_ShowUsrsType_t;
 #define Usr_SHOW_USRS_TYPE_DEFAULT Usr_LIST_AS_CLASS_PHOTO
 
-#define Usr_LIST_USRS_NUM_ACTIONS 7
+#define Usr_LIST_USRS_NUM_OPTIONS 7
 typedef enum
   {
-   Usr_LIST_USRS_UNKNOWN_ACTION	= 0,
-   Usr_SHOW_RECORDS		= 1,
-   Usr_VIEW_HOMEWORK		= 2,
-   Usr_SHOW_ATTENDANCE		= 3,
-   Usr_NEW_MESSAGE		= 4,
-   Usr_FOLLOW_USERS		= 5,
-   Usr_UNFOLLOW_USERS		= 6,
-  } Usr_ListUsrsAction_t;
-#define Usr_LIST_USRS_DEFAULT_ACTION Usr_SHOW_RECORDS
+   Usr_OPTION_UNKNOWN		= 0,
+   Usr_OPTION_RECORDS		= 1,
+   Usr_OPTION_HOMEWORK		= 2,
+   Usr_OPTION_ATTENDANCE	= 3,
+   Usr_OPTION_MESSAGE		= 4,
+   Usr_OPTION_FOLLOW		= 5,
+   Usr_OPTION_UNFOLLOW		= 6,
+  } Usr_ListUsrsOption_t;
+#define Usr_LIST_USRS_DEFAULT_OPTION Usr_OPTION_RECORDS
 
 // Related with user's data
 struct UsrData

@@ -397,7 +397,7 @@ struct Globals
         {
          char *List[Rol_NUM_ROLES];	// Lists of encrypted codes of users selected from a form
          bool Filled;			// If lists are already filled/readed
-         Usr_ListUsrsAction_t Action;	// What action I want to do with these selected users
+         Usr_ListUsrsOption_t Option;	// What option I have selected to do with these selected users
         } Selected;
       char *ListOtherRecipients;	// List of ID or nicks of users written explicitely on a form
       struct

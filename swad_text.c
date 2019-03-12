@@ -54999,11 +54999,11 @@ const char *Txt_You_have_stopped_following_X_users =	// Warning: it is very impo
 #elif L==3	// en
 	"You have stopped following %u users.";
 #elif L==4	// es
-	"Ha seguido a %u usuarios.";
+	"Ha dejado de seguir a %u usuarios.";
 #elif L==5	// fr
 	"Vous avez cess&eacute; de suivre %u utilisateurs.";
 #elif L==6	// gn
-	"Ha seguido a %u usuarios.";	// Okoteve traducción
+	"Ha dejado de seguir a %u usuarios.";	// Okoteve traducción
 #elif L==7	// it
 	"Hai smesso di seguire %u utenti.";
 #elif L==8	// pl

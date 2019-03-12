@@ -432,8 +432,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Intentar aumentar la velocidad de carga del timeline (comprobar ralentización al mostrar la titulación de cada usuario)
 
-// TODO: "Se podría poner un botón para seguir a todos los relacionados contigo en las asignaturas, en lugar de tener que agregarlos uno a uno" Suggested by José María girao Miras.
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -453,14 +451,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.73 (2019-03-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.73.1 (2019-03-12)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
-Arreglar BUG: RMS no debería poder seleccionar todos los grupos al redactar mensajes
-Arreglar BUG: A RMS le sale ACV al listar profesores, pero no al redactar mensajes
+Arreglar BUG: RMS no debería poder seleccionar todos los grupos al redactar mensajes !!!!!!!!!!!
+Arreglar BUG: A RMS le sale ACV al listar profesores, pero no al redactar mensajes   !!!!!!!!!!!
 
-	Version 18.73:    Mar 12, 2019 	New actions to follow/unfollow several users. (239658 lines)
+	Version 18.73.1:  Mar 12, 2019 	Code refactoring in list of options when listing several users. (239569 lines)
+	Version 18.73:    Mar 12, 2019 	New actions to follow/unfollow several users. Suggested by José María Guirao Miras. (239658 lines)
 					14 changes necessary in database:
 UPDATE actions SET Txt='Ver fichas profesores' WHERE ActCod='22' AND Language='es';
 UPDATE actions SET Txt='Ver fichas estudiantes' WHERE ActCod='89' AND Language='es';
@@ -481,11 +480,6 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1763','es','N','Deja
 	Version 18.72.1:  Mar 11, 2019 	Show attendance list from list of users. (239075 lines)
 	Version 18.72:    Mar 11, 2019 	Show homework from list of students and teachers. (239043 lines)
 	Version 18.71:    Mar 11, 2019 	Listing of users now allow to do several actions. Not finished. (238920 lines)
-					3 changes necessary in database:
-UPDATE actions SET Txt='Realizar acci&oacute;n con varios profesores' WHERE ActCod='22' AND Language='es';
-UPDATE actions SET Txt='Realizar acci&oacute;n con varios estudiantes' WHERE ActCod='89' AND Language='es';
-UPDATE actions SET Txt='Realizar acci&oacute;n con varios invitados' WHERE ActCod='1187' AND Language='es';
-
 	Version 18.70:    Mar 10, 2019 	Code refactoring in one user administration. (238819 lines)
 	Version 18.69.2:  Mar 10, 2019 	Changes related to alerts. (238842 lines)
 	Version 18.69.1:  Mar 09, 2019 	Changes in forms to register/remove users. (238805 lines)
