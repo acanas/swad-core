@@ -9129,6 +9129,90 @@ const char *Txt_Do_you_think_you_are_this_user =
 	"Voc&ecirc; acha que voc&ecirc; &eacute; deste usu&aacute;rio?";
 #endif
 
+const char *Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet =
+#if   L==1	// ca
+	"Voleu seguir a l'usuari seleccionat a qui encara no segueix?";
+#elif L==2	// de
+	"M&ouml;chten Sie dem ausgew&auml;hlten Benutzer folgen, dem Sie noch nicht folgen?";
+#elif L==3	// en
+	"Do you want to follow the selected user whom you do not follow yet?";
+#elif L==4	// es
+	"&iquest;Desea seguir al usuario seleccionado que a&uacute;n no sigue?";
+#elif L==5	// fr
+	"Voulez-vous suivre l'utilisateur s&eacute;lectionn&eacute; que vous ne suivez pas encore?";
+#elif L==6	// gn
+	"&iquest;Desea seguir al usuario seleccionado que a&uacute;n no sigue?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi seguire l'utente selezionato che non segui ancora?";
+#elif L==8	// pl
+	"Czy chcesz &sacute;ledzi&cacute; wybranego u&zdot;ytkownika, kt&oacute;rego jeszcze nie &sacute;ledzisz?";
+#elif L==9	// pt
+	"Voc&ecirc; quer seguir o usu&aacute;rio selecionado que voc&ecirc; n&atilde;o segue ainda?";
+#endif
+
+const char *Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Voleu seguir als %u usuaris seleccionats als que encara no segueix?";
+#elif L==2	// de
+	"M&ouml;chten Sie den %u ausgew&auml;hlten Benutzern folgen, denen Sie noch nicht folgen?";
+#elif L==3	// en
+	"Do you want to follow the %u selected users whom you do not follow yet?";
+#elif L==4	// es
+	"&iquest;Desea seguir a los %u usuarios seleccionados que a&uacute;n no sigue?";
+#elif L==5	// fr
+	"Voulez-vous suivre les %u utilisateurs s&eacute;lectionn&eacute;s que vous ne suivez pas encore?";
+#elif L==6	// gn
+	"&iquest;Desea seguir a los %u usuarios seleccionados que a&uacute;n no sigue?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi seguire i %u utenti selezionati che non segui ancora?";
+#elif L==8	// pl
+	"Czy chcesz &sacute;ledzi&cacute; %u wybranych u&zdot;ytkownik&oacute;w, kt&oacute;rych jeszcze nie &sacute;ledzisz?";
+#elif L==9	// pt
+	"Voc&ecirc; quer seguir os %u usu&aacute;rios selecionados que voc&ecirc; n&atilde;o segue ainda?";
+#endif
+
+const char *Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow =
+#if   L==1	// ca
+	"Voleu deixar de seguir a l'usuari seleccionat a qui segueix?";
+#elif L==2	// de
+	"M&ouml;chten Sie dem ausgew&auml;hlten Benutzer, dem Sie folgen, nicht mehr folgen?";
+#elif L==3	// en
+	"Do you want to stop following the selected user whom you follow?";
+#elif L==4	// es
+	"&iquest;Desea dejar de seguir al usuario seleccionado que sigue?";
+#elif L==5	// fr
+	"Voulez-vous arr&ecirc;ter de suivre l'utilisateur s&eacute;lectionn&eacute; que vous suivez?";
+#elif L==6	// gn
+	"&iquest;Desea dejar de seguir al usuario seleccionado que sigue?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi smettere di seguire l'utente selezionato che segui?";
+#elif L==8	// pl
+	"Czy chcesz przesta&cacute; &sacute;ledzi&cacute; wybranego u&zdot;ytkownika, kt&oacute;rego &sacute;ledzisz?";
+#elif L==9	// pt
+	"Voc&ecirc; quer parar de seguir o usu&aacute;rio selecionado que voc&ecirc; segue?";
+#endif
+
+const char *Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Voleu deixar de seguir als %u usuaris seleccionats als que segueix?";
+#elif L==2	// de
+	"M&ouml;chten Sie nicht mehr den %u ausgew&auml;hlten Nutzern folgen, denen Sie folgen?";
+#elif L==3	// en
+	"Do you want to stop following the %u selected users whom you follow?";
+#elif L==4	// es
+	"&iquest;Desea dejar de seguir a los %u usuarios seleccionados que sigue?";
+#elif L==5	// fr
+	"Voulez-vous arr&ecirc;ter de suivre les %u utilisateurs s&eacute;lectionn&eacute;s que vous suivez?";
+#elif L==6	// gn
+	"&iquest;Desea dejar de seguir a los %u usuarios seleccionados que sigue?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi smettere di seguire i %u utenti selezionati che segui?";
+#elif L==8	// pl
+	"Czy chcesz przesta&cacute; &sacute;ledzi&cacute; %u wybranych u&zdot;ytkownik&oacute;w, kt&oacute;rych &sacute;ledzisz?";
+#elif L==9	// pt
+	"Voc&ecirc; quer parar de seguir os %u usu&aacute;rios selecionados que voc&ecirc; segue?";
+#endif
+
 const char *Txt_Document =
 #if   L==1	// ca
 	"Document";
@@ -37643,6 +37727,45 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	" ou ser&atilde;o removidos da disciplina e de todos os grupos.";
 #endif
 
+const char *Txt_Select_users_X_Followed_Y_Not_followed_Z =	// Warning: it is very important to include three %u in the following sentences
+#if   L==1	// ca
+	"Usuaris seleccionats: %u<br />"
+	"&bull; Seguits: %u<br />"
+	"&bull; No seguits: %u";
+#elif L==2	// de
+	"Ausgew&auml;hlte Benutzer: %u<br />"
+	"&bull; Gefolgt: %u<br />"
+	"&bull; Nicht gefolgt: %u";
+#elif L==3	// en
+	"Selected users: %u<br />"
+	"&bull; Followed: %u<br />"
+	"&bull; Not followed: %u";
+#elif L==4	// es
+	"Usuarios seleccionados: %u<br />"
+	"&bull; Seguidos: %u<br />"
+	"&bull; No seguidos: %u";
+#elif L==5	// fr
+	"Utilisateurs s&eacute;lectionn&eacute;s: %u<br />"
+	"&bull; Suivis: %u<br />"
+	"&bull; Non suivis: %u";
+#elif L==6	// gn
+	"Usuarios seleccionados: %u<br />"
+	"&bull; Seguidos: %u<br />"
+	"&bull; No seguidos: %u";	// Okoteve traducción
+#elif L==7	// it
+	"Utenti selezionati: %u<br />"
+	"&bull; Seguiti: %u<br />"
+	"&bull; Non seguiti: %u";
+#elif L==8	// pl
+	"Wybrani u&zdot;ytkownicy: %u<br />"
+	"&bull; Nast&eogon;pnie: %u<br />"
+	"&bull; Nie przestrzegano: %u";
+#elif L==9	// pt
+	"Usu&aacute;rios selecionados: %u<br />"
+	"&bull; Seguidos: %u<br />"
+	"&bull; N&atilde;o seguidos: %u";
+#endif
+
 const char *Txt_Send =
 #if   L==1	// ca
 	"Enviar";
@@ -54679,6 +54802,48 @@ const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_inf
 	" de que leu esta informa&ccedil;&atilde;o.";
 #endif
 
+const char *Txt_You_have_followed_one_user =
+#if   L==1	// ca
+	"Ha seguit a un usuari.";
+#elif L==2	// de
+	"Sie haben einen Benutzer verfolgt.";
+#elif L==3	// en
+	"You have followed one user.";
+#elif L==4	// es
+	"Ha seguido a un usuario.";
+#elif L==5	// fr
+	"Vous avez suivi un utilisateur.";
+#elif L==6	// gn
+	"Ha seguido a un usuario.";	// Okoteve traducción
+#elif L==7	// it
+	"Hai seguito un utente.";
+#elif L==8	// pl
+	"&Sacute;ledzi&lstrok;e&sacute; jednego u&zdot;ytkownika.";
+#elif L==9	// pt
+	"Voc&ecirc; seguiu um usu&aacute;rio.";
+#endif
+
+const char *Txt_You_have_followed_X_users =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Ha seguit a %u usuaris.";
+#elif L==2	// de
+	"Sie haben %u Benutzer verfolgt.";
+#elif L==3	// en
+	"You have followed %u users.";
+#elif L==4	// es
+	"Ha seguido a %u usuarios.";
+#elif L==5	// fr
+	"Vous avez suivi %u utilisateurs.";
+#elif L==6	// gn
+	"Ha seguido a %u usuarios.";	// Okoteve traducción
+#elif L==7	// it
+	"Hai seguito %u utenti.";
+#elif L==8	// pl
+	"&Sacute;ledzi&lstrok;e&sacute; %u u&zdot;ytkownik&oacute;w.";
+#elif L==9	// pt
+	"Voc&ecirc; seguiu %u usu&aacute;rios.";
+#endif
+
 const char *Txt_You_have_no_notifications =
 #if   L==1	// ca
 	"No tens notificacions.";
@@ -54803,6 +54968,48 @@ const char *Txt_You_have_not_written_twice_the_same_new_password =
 	"You have not written twice the same new password.";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o escreveu duas vezes a mesma nova senha.";
+#endif
+
+const char *Txt_You_have_stopped_following_one_user =
+#if   L==1	// ca
+	"Ha deixat de seguir a un usuari.";
+#elif L==2	// de
+	"Sie haben aufgeh&ouml;rt, einem Benutzer zu folgen.";
+#elif L==3	// en
+	"You have stopped following one user.";
+#elif L==4	// es
+	"Ha dejado de seguir a un usuario.";
+#elif L==5	// fr
+	"Vous avez arr&ecirc;t&eacute; de suivre un utilisateur.";
+#elif L==6	// gn
+	"Ha dejado de seguir a un usuario.";	// Okoteve traducción
+#elif L==7	// it
+	"Hai smesso di seguire un utente.";
+#elif L==8	// pl
+	"Przesta&lstrok;e&sacute; obserwowa&cacute; u&zdot;ytkownika.";
+#elif L==9	// pt
+	"Voc&ecirc; parou de seguir um usu&aacute;rio.";
+#endif
+
+const char *Txt_You_have_stopped_following_X_users =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Ha deixat de seguir a %u usuaris.";
+#elif L==2	// de
+	"Sie haben aufgeh&ouml;rt, %u Benutzern zu folgen.";
+#elif L==3	// en
+	"You have stopped following %u users.";
+#elif L==4	// es
+	"Ha seguido a %u usuarios.";
+#elif L==5	// fr
+	"Vous avez cess&eacute; de suivre %u utilisateurs.";
+#elif L==6	// gn
+	"Ha seguido a %u usuarios.";	// Okoteve traducción
+#elif L==7	// it
+	"Hai smesso di seguire %u utenti.";
+#elif L==8	// pl
+	"Zatrzyma&lstrok;e&sacute; &sacute;ledzenie %u u&zdot;ytkownik&oacute;w.";
+#elif L==9	// pt
+	"Voc&ecirc; parou de seguir %u usu&aacute;rios.";
 #endif
 
 const char *Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences

@@ -1287,6 +1287,15 @@ Users:
        1085. ActLstSimUsr		List users similar to a given one (possible duplicates)
        1086. ActRemDupUsr		Remove user from list of possible duplicate users
 
+       NEW.  ActReqFolSevStd		Request follow several students
+       NEW.  ActReqFolSevTch		Request follow several teachers
+       NEW.  ActReqUnfSevStd		Request unfollow several students
+       NEW.  ActReqUnfSevTch		Request unfollow several teachers
+       NEW.  ActFolSevStd		Follow several students
+       NEW.  ActFolSevTch		Follow several teachers
+       NEW.  ActUnfSevStd		Unfollow several students
+       NEW.  ActUnfSevTch		Unfollow several teachers
+
 Messages:
        1087. ActSeeAnn			Show global announcements
        1088. ActSeeAllNot		Show all notices
@@ -2835,6 +2844,15 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstDupUsr	*/{1578,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dup_ListDuplicateUsrs		,NULL},
    /* ActLstSimUsr	*/{1579,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dup_GetUsrCodAndListSimilarUsrs,NULL},
    /* ActRemDupUsr	*/{1580,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Dup_RemoveUsrFromListDupUsrs	,NULL},
+
+   /* ActReqFolSevStd	*/{1756,-1,TabUnk,ActLstStd		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_RequestFollowStds		,NULL},
+   /* ActReqFolSevTch	*/{1757,-1,TabUnk,ActLstTch		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_RequestFollowTchs		,NULL},
+   /* ActReqUnfSevStd	*/{1758,-1,TabUnk,ActLstStd		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_RequestUnfollowStds	,NULL},
+   /* ActReqUnfSevTch	*/{1759,-1,TabUnk,ActLstTch		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_RequestUnfollowTchs	,NULL},
+   /* ActFolSevStd	*/{1760,-1,TabUnk,ActLstStd		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_FollowUsrs			,NULL},
+   /* ActFolSevTch	*/{1761,-1,TabUnk,ActLstTch		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_FollowUsrs			,NULL},
+   /* ActUnfSevStd	*/{1762,-1,TabUnk,ActLstStd		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_UnfollowUsrs		,NULL},
+   /* ActUnfSevTch	*/{1763,-1,TabUnk,ActLstTch		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Fol_UnfollowUsrs		,NULL},
 
    // TabMsg ******************************************************************
    // Actions in menu:
@@ -4892,6 +4910,14 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActDoActOnSevGst,	// #1753
 	ActDoActOnSevStd,	// #1754
 	ActDoActOnSevTch,	// #1755
+	ActReqFolSevStd,	// #1756
+	ActReqFolSevTch,	// #1757
+	ActReqUnfSevStd,	// #1758
+	ActReqUnfSevTch,	// #1759
+	ActFolSevStd,		// #1760
+	ActFolSevTch,		// #1761
+	ActUnfSevStd,		// #1762
+	ActUnfSevTch,		// #1763
 	};
 
 /*****************************************************************************/

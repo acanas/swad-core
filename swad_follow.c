@@ -89,6 +89,18 @@ static void Fol_PutInactiveIconToFollowUnfollow (void);
 static void Fol_PutIconToFollow (struct UsrData *UsrDat);
 static void Fol_PutIconToUnfollow (struct UsrData *UsrDat);
 
+static void Fol_RequestFollowUsrs (Act_Action_t NextAction,void (*FuncParams) ());
+static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction,void (*FuncParams) ());
+static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
+                                             unsigned *NumNotFollowed);
+static void Fol_PutParamsFollowSelectedStds (void);
+static void Fol_PutParamsFollowSelectedTchs (void);
+static void Fol_PutParamsUnfollowSelectedStds (void);
+static void Fol_PutParamsUnfollowSelectedTchs (void);
+
+static void Fol_FollowUsr (struct UsrData *UsrDat);
+static void Fol_UnfollowUsr (struct UsrData *UsrDat);
+
 /*****************************************************************************/
 /********************** Put link to show users to follow **********************/
 /*****************************************************************************/
@@ -1009,42 +1021,14 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
 
 void Fol_FollowUsr1 (void)
   {
-   bool CreateNotif;
-   bool NotifyByEmail;
-
    /***** Get user to be followed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      // Follow only if I can view his/her public profile
-      if (Pri_ShowingIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,&Gbl.Usrs.Other.UsrDat))
-         // Follow only if I do not follow him/her
-	 if (!Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-					Gbl.Usrs.Other.UsrDat.UsrCod))
-	   {
-	    /***** Follow user in database *****/
-	    DB_QueryREPLACE ("can not follow user",
-			     "REPLACE INTO usr_follow"
-			     " (FollowerCod,FollowedCod,FollowTime)"
-			     " VALUES"
-			     " (%ld,%ld,NOW())",
-			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     Gbl.Usrs.Other.UsrDat.UsrCod);
+      // Follow only if I do not follow him/her
+      if (!Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+				     Gbl.Usrs.Other.UsrDat.UsrCod))
+	 Fol_FollowUsr (&Gbl.Usrs.Other.UsrDat);
 
-	    /***** Flush cache *****/
-	    Fol_FlushCacheFollow ();
-
-	    /***** This follow must be notified by email? *****/
-            CreateNotif = (Gbl.Usrs.Other.UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
-            NotifyByEmail = CreateNotif &&
-        	            (Gbl.Usrs.Other.UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
-
-            /***** Create notification for this followed.
-                   If this followed wants to receive notifications by email, activate the sending of a notification *****/
-            if (CreateNotif)
-               Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_FOLLOWER,&Gbl.Usrs.Other.UsrDat,Gbl.Usrs.Me.UsrDat.UsrCod,
-                                              (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
-                                        	                              0));
-	   }
       Ale_CreateAlert (Ale_SUCCESS,NULL,"");	// Txt not used
      }
    else
@@ -1078,17 +1062,8 @@ void Fol_UnfollowUsr1 (void)
       // Unfollow only if I follow him/her
       if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
                                     Gbl.Usrs.Other.UsrDat.UsrCod))
-        {
-	 /***** Unfollow user in database *****/
-	 DB_QueryREPLACE ("can not unfollow user",
-			  "DELETE FROM usr_follow"
-			  " WHERE FollowerCod=%ld AND FollowedCod=%ld",
-		          Gbl.Usrs.Me.UsrDat.UsrCod,
-                          Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Fol_UnfollowUsr (&Gbl.Usrs.Other.UsrDat);
 
-	 /***** Flush cache *****/
-	 Fol_FlushCacheFollow ();
-        }
       Ale_CreateAlert (Ale_SUCCESS,NULL,"");	// Txt not used
      }
    else
@@ -1109,6 +1084,336 @@ void Fol_UnfollowUsr2 (void)
      }
    else
       Ale_ShowAlerts (NULL);
+  }
+
+/*****************************************************************************/
+/***************** Request follow/unfollow several users *********************/
+/*****************************************************************************/
+
+void Fol_RequestFollowStds (void)
+  {
+   Fol_RequestFollowUsrs (ActFolSevStd,Fol_PutParamsFollowSelectedStds);
+  }
+
+void Fol_RequestFollowTchs (void)
+  {
+   Fol_RequestFollowUsrs (ActFolSevTch,Fol_PutParamsFollowSelectedTchs);
+  }
+
+static void Fol_RequestFollowUsrs (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Follow;
+   extern const char *Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet;
+   extern const char *Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet;
+   unsigned NumFollowed;
+   unsigned NumNotFollowed;
+
+   // List of selected users is already got
+
+   /***** Go through list of selected users
+          getting the number of followed and not followed ****/
+   Fol_GetFollowedFromSelectedUsrs (&NumFollowed,&NumNotFollowed);
+
+   /***** Show question to confirm ****/
+   if (NumNotFollowed)
+     {
+      if (NumNotFollowed == 1)
+         Ale_ShowAlertAndButton (NextAction,NULL,NULL,
+				 FuncParams,
+				 Btn_CREATE_BUTTON,Txt_Follow,
+				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet);
+      else
+         Ale_ShowAlertAndButton (NextAction,NULL,NULL,
+				 FuncParams,
+				 Btn_CREATE_BUTTON,Txt_Follow,
+				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet,
+				 NumNotFollowed);
+     }
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
+  }
+
+void Fol_RequestUnfollowStds (void)
+  {
+   Fol_RequestUnfollowUsrs (ActUnfSevStd,Fol_PutParamsUnfollowSelectedStds);
+  }
+
+void Fol_RequestUnfollowTchs (void)
+  {
+   Fol_RequestUnfollowUsrs (ActUnfSevTch,Fol_PutParamsUnfollowSelectedTchs);
+  }
+
+static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow;
+   extern const char *Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow;
+   extern const char *Txt_Unfollow;
+   unsigned NumFollowed;
+   unsigned NumNotFollowed;
+
+   // List of selected users is already got
+
+   /***** Go through list of selected users
+          getting the number of followed and not followed ****/
+   Fol_GetFollowedFromSelectedUsrs (&NumFollowed,&NumNotFollowed);
+
+   /***** Show question to confirm ****/
+   if (NumFollowed)
+     {
+      if (NumFollowed == 1)
+         Ale_ShowAlertAndButton (NextAction,NULL,NULL,
+				 FuncParams,
+				 Btn_CREATE_BUTTON,Txt_Unfollow,
+				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow);
+      else
+         Ale_ShowAlertAndButton (NextAction,NULL,NULL,
+				 FuncParams,
+				 Btn_CREATE_BUTTON,Txt_Unfollow,
+				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow,
+				 NumFollowed);
+     }
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
+  }
+
+/*****************************************************************************/
+/**** Go through the list getting the number of followed and not followed ****/
+/*****************************************************************************/
+
+static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
+                                             unsigned *NumNotFollowed)
+  {
+   extern const char *Txt_Select_users_X_Followed_Y_Not_followed_Z;
+   struct UsrData UsrDat;
+   const char *Ptr;
+   bool IFollowUsr;
+   unsigned NumUsrs = 0;
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Check users to know if I follow them *****/
+   *NumFollowed = 0;
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
+      if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
+	    if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+	      {
+	       /* Check if I follow this user */
+	       IFollowUsr = Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+						      UsrDat.UsrCod);
+
+	       /* Update number of users */
+	       if (IFollowUsr)
+		  (*NumFollowed)++;
+	       NumUsrs++;
+	      }
+     }
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+
+   /***** Show alert ****/
+   *NumNotFollowed = NumUsrs - *NumFollowed;
+   Ale_ShowAlert (Ale_INFO,Txt_Select_users_X_Followed_Y_Not_followed_Z,
+	          NumUsrs,*NumFollowed,*NumNotFollowed);
+  }
+
+/*****************************************************************************/
+/********************** Follow/unfollow several users ************************/
+/*****************************************************************************/
+
+void Fol_FollowUsrs ()
+  {
+   extern const char *Txt_You_have_followed_one_user;
+   extern const char *Txt_You_have_followed_X_users;
+   const char *Ptr;
+   struct UsrData UsrDat;
+   unsigned NumFollowed = 0;
+
+   /***** Get list of selected users if not already got *****/
+   Usr_GetListsSelectedUsrsCods ();
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Check users to know if I follow them *****/
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
+      if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
+	    if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+	       /* If I don't follow this user ==> follow him/her */
+	       if (!Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					      UsrDat.UsrCod))
+		 {
+		  Fol_FollowUsr (&UsrDat);
+		  NumFollowed++;
+		 }
+     }
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
+
+   /***** Show alert *****/
+   if (NumFollowed == 1)
+      Ale_ShowAlert (Ale_SUCCESS,Txt_You_have_followed_one_user);
+   else
+      Ale_ShowAlert (Ale_SUCCESS,Txt_You_have_followed_X_users,
+	             NumFollowed);
+  }
+
+void Fol_UnfollowUsrs (void)
+  {
+   extern const char *Txt_You_have_stopped_following_one_user;
+   extern const char *Txt_You_have_stopped_following_X_users;
+   const char *Ptr;
+   struct UsrData UsrDat;
+   unsigned NumUnfollowed = 0;
+
+   /***** Get list of selected users if not already got *****/
+   Usr_GetListsSelectedUsrsCods ();
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Check users to know if I follow them *****/
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
+      if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
+	    if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
+	       /* If I follow this user ==> unfollow him/her */
+	       if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+					     UsrDat.UsrCod))
+		 {
+		  Fol_UnfollowUsr (&UsrDat);
+		  NumUnfollowed++;
+		 }
+     }
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
+
+   /***** Show alert *****/
+   if (NumUnfollowed == 1)
+      Ale_ShowAlert (Ale_SUCCESS,Txt_You_have_stopped_following_one_user);
+   else
+      Ale_ShowAlert (Ale_SUCCESS,Txt_You_have_stopped_following_X_users,
+	             NumUnfollowed);
+  }
+
+/*****************************************************************************/
+/**************** Put parameter with list of selected users ******************/
+/*****************************************************************************/
+
+static void Fol_PutParamsFollowSelectedStds (void)
+  {
+   /***** Hidden parameter with the encrypted codes of users selected *****/
+   Usr_PutHiddenParUsrCodAll (ActFolSevStd,Gbl.Usrs.Selected.List[Rol_UNK]);
+  }
+
+static void Fol_PutParamsFollowSelectedTchs (void)
+  {
+   /***** Hidden parameter with the encrypted codes of users selected *****/
+   Usr_PutHiddenParUsrCodAll (ActFolSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
+  }
+
+static void Fol_PutParamsUnfollowSelectedStds (void)
+  {
+   /***** Hidden parameter with the encrypted codes of users selected *****/
+   Usr_PutHiddenParUsrCodAll (ActUnfSevStd,Gbl.Usrs.Selected.List[Rol_UNK]);
+  }
+
+static void Fol_PutParamsUnfollowSelectedTchs (void)
+  {
+   /***** Hidden parameter with the encrypted codes of users selected *****/
+   Usr_PutHiddenParUsrCodAll (ActUnfSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
+  }
+
+/*****************************************************************************/
+/******************************** Follow user ********************************/
+/*****************************************************************************/
+
+static void Fol_FollowUsr (struct UsrData *UsrDat)
+  {
+   bool CreateNotif;
+   bool NotifyByEmail;
+
+   /***** Avoid wrong cases *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0 ||
+       UsrDat->UsrCod <= 0            ||
+       Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)	// Skip me
+      return;
+
+   /***** Follow user in database *****/
+   DB_QueryREPLACE ("can not follow user",
+		    "REPLACE INTO usr_follow"
+		    " (FollowerCod,FollowedCod,FollowTime)"
+		    " VALUES"
+		    " (%ld,%ld,NOW())",
+		    Gbl.Usrs.Me.UsrDat.UsrCod,
+		    UsrDat->UsrCod);
+
+   /***** Flush cache *****/
+   Fol_FlushCacheFollow ();
+
+   /***** This follow must be notified by email? *****/
+   CreateNotif = (UsrDat->Prefs.NotifNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
+   NotifyByEmail = CreateNotif &&
+		   (UsrDat->Prefs.EmailNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
+
+   /***** Create notification for this followed.
+	  If this followed wants to receive notifications by email,
+	  activate the sending of a notification *****/
+   if (CreateNotif)
+      Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_FOLLOWER,UsrDat,Gbl.Usrs.Me.UsrDat.UsrCod,
+				     (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
+								     0));
+  }
+
+/*****************************************************************************/
+/******************************* Unfollow user *******************************/
+/*****************************************************************************/
+
+static void Fol_UnfollowUsr (struct UsrData *UsrDat)
+  {
+   /***** Avoid wrong cases *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0 ||
+       UsrDat->UsrCod <= 0            ||
+       Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)	// Skip me
+      return;
+
+   /***** Unfollow user in database *****/
+   DB_QueryDELETE ("can not unfollow user",
+		   "DELETE FROM usr_follow"
+		   " WHERE FollowerCod=%ld AND FollowedCod=%ld",
+		   Gbl.Usrs.Me.UsrDat.UsrCod,
+		   UsrDat->UsrCod);
+
+   /***** Flush cache *****/
+   Fol_FlushCacheFollow ();
   }
 
 /*****************************************************************************/

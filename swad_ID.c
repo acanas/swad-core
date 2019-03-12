@@ -1012,9 +1012,7 @@ void ID_ConfirmOtherUsrID (void)
 	    check if he/she has accepted */
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD)
-	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
-									    Gbl.CurrentCrs.Crs.CrsCod,
-									    true);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 
 	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))
 	    ICanConfirm = true;

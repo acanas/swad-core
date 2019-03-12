@@ -64,6 +64,13 @@ void Fol_FollowUsr2 (void);
 void Fol_UnfollowUsr1 (void);
 void Fol_UnfollowUsr2 (void);
 
+void Fol_RequestFollowStds (void);
+void Fol_RequestFollowTchs (void);
+void Fol_RequestUnfollowStds (void);
+void Fol_RequestUnfollowTchs (void);
+void Fol_FollowUsrs (void);
+void Fol_UnfollowUsrs (void);
+
 void Fol_GetAndShowRankingFollowers (void);
 
 void Fol_GetNotifFollower (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],

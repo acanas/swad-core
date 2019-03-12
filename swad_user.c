@@ -242,6 +242,7 @@ static void Usr_PutActionShowHomework (void);
 static void Usr_PutActionShowAttendance (void);
 static void Usr_PutActionNewMessage (void);
 static void Usr_PutActionFollowUsers (void);
+static void Usr_PutActionUnfollowUsers (void);
 static void Usr_StartListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction);
 static void Usr_EndListUsrsAction (void);
 static Usr_ListUsrsAction_t Usr_ListUsrsAction (Usr_ListUsrsAction_t DefaultAction);
@@ -8027,6 +8028,7 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
    bool ICanViewAttendance;
    bool ICanSendMessage;
    bool ICanFollow;
+   bool ICanUnfollow;
    bool OptionsShown = false;
 
    /***** Get the action to do *****/
@@ -8040,7 +8042,8 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
 	 ICanViewHomework   =
 	 ICanViewAttendance =
 	 ICanSendMessage    =
-	 ICanFollow         = false;
+	 ICanFollow         =
+	 ICanUnfollow	    = false;
 	 break;
       case Rol_STD:
 	 ICanViewRecords    =
@@ -8053,6 +8056,7 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
          ICanViewAttendance = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
                                Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
                                Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+	 ICanUnfollow	    = true;
 	 break;
       case Rol_TCH:
 	 ICanViewRecords    =
@@ -8064,13 +8068,15 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
                                Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
          ICanViewAttendance = false;
+	 ICanUnfollow	    = true;
 	 break;
       default:
          ICanViewRecords    =
          ICanViewHomework   =
          ICanViewAttendance =
 	 ICanSendMessage    =
-         ICanFollow         = false;
+         ICanFollow         =
+	 ICanUnfollow	    = false;
          break;
      }
 
@@ -8110,6 +8116,13 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
    if (ICanFollow)
      {	// I can follow users
       Usr_PutActionFollowUsers ();
+      OptionsShown = true;
+     }
+
+   /***** Unfollow *****/
+   if (ICanUnfollow)
+     {	// I can unfollow users
+      Usr_PutActionUnfollowUsers ();
       OptionsShown = true;
      }
 
@@ -8185,6 +8198,19 @@ static void Usr_PutActionFollowUsers (void)
   }
 
 /*****************************************************************************/
+/*********************** Put action to follow users **************************/
+/*****************************************************************************/
+
+static void Usr_PutActionUnfollowUsers (void)
+  {
+   extern const char *Txt_Unfollow;
+
+   Usr_StartListUsrsAction (Usr_UNFOLLOW_USERS);
+   fprintf (Gbl.F.Out,"%s",Txt_Unfollow);
+   Usr_EndListUsrsAction ();
+  }
+
+/*****************************************************************************/
 /************ Put start/end of action to register/remove one user ************/
 /*****************************************************************************/
 
@@ -8231,7 +8257,9 @@ void Usr_DoActionOnSeveralUsrs1 (void)
    /* Get the action to do */
    Gbl.Usrs.Selected.Action = Usr_ListUsrsAction (Usr_LIST_USRS_UNKNOWN_ACTION);
 
-   /***** Do actions *****/
+   /***** Change action depending on my selection *****/
+   Gbl.Action.Original = Gbl.Action.Act;
+
    switch (Gbl.Usrs.Selected.Action)
      {
       case Usr_SHOW_RECORDS:
@@ -8239,19 +8267,15 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	   {
 	    case ActDoActOnSevGst:
 	       Gbl.Action.Act = ActSeeRecSevGst;
-               Tab_SetCurrentTab ();
 	       break;
 	    case ActDoActOnSevStd:
 	       Gbl.Action.Act = ActSeeRecSevStd;
-               Tab_SetCurrentTab ();
 	       break;
 	    case ActDoActOnSevTch:
 	       Gbl.Action.Act = ActSeeRecSevTch;
-               Tab_SetCurrentTab ();
 	       break;
 	    default:
-               Ale_CreateAlert (Ale_ERROR,NULL,
-        	                "Wrong action.");
+               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
                break;
 	   }
 	 break;
@@ -8261,11 +8285,9 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	    case ActDoActOnSevStd:
 	    case ActDoActOnSevTch:
 	       Gbl.Action.Act = ActAdmAsgWrkCrs;
-               Tab_SetCurrentTab ();
 	       break;
 	    default:
-               Ale_CreateAlert (Ale_ERROR,NULL,
-        	                "Wrong action.");
+               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
                break;
 	   }
 	 break;
@@ -8274,11 +8296,9 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	   {
 	    case ActDoActOnSevStd:
 	       Gbl.Action.Act = ActSeeLstStdAtt;
-               Tab_SetCurrentTab ();
 	       break;
 	    default:
-               Ale_CreateAlert (Ale_ERROR,NULL,
-        	                "Wrong action.");
+               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
                break;
 	   }
 	 break;
@@ -8288,23 +8308,47 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	    case ActDoActOnSevStd:
 	    case ActDoActOnSevTch:
 	       Gbl.Action.Act = ActReqMsgUsr;
-               Tab_SetCurrentTab ();
 	       break;
 	    default:
-               Ale_CreateAlert (Ale_ERROR,NULL,
-        	                "Wrong action.");
+               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
                break;
 	   }
 	 break;
       case Usr_FOLLOW_USERS:
-         Ale_CreateAlert (Ale_WARNING,NULL,
-                          "Not implemented.");
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActDoActOnSevStd:
+	       Gbl.Action.Act = ActReqFolSevStd;
+               break;
+	    case ActDoActOnSevTch:
+	       Gbl.Action.Act = ActReqFolSevTch;
+	       break;
+	    default:
+               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
+               break;
+	   }
+	 break;
+      case Usr_UNFOLLOW_USERS:
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActDoActOnSevStd:
+	       Gbl.Action.Act = ActReqUnfSevStd;
+               break;
+	    case ActDoActOnSevTch:
+	       Gbl.Action.Act = ActReqUnfSevTch;
+	       break;
+	    default:
+               Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
+               break;
+	   }
 	 break;
       default:
-	 Ale_CreateAlert (Ale_ERROR,NULL,
-			  "Wrong action.");
+         Ale_CreateAlert (Ale_ERROR,NULL,"Wrong action.");
 	 break;
      }
+
+   if (Gbl.Action.Act != Gbl.Action.Original)	// Action has changed
+      Tab_SetCurrentTab ();
   }
 
 void Usr_DoActionOnSeveralUsrs2 (void)

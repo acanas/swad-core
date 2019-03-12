@@ -453,10 +453,30 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.72.2 (2019-03-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.73 (2019-03-12)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
+Arreglar BUG: RMS no debería poder seleccionar todos los grupos al redactar mensajes
+Arreglar BUG: A RMS le sale ACV al listar profesores, pero no al redactar mensajes
+
+	Version 18.73:    Mar 12, 2019 	New actions to follow/unfollow several users. (239658 lines)
+					14 changes necessary in database:
+UPDATE actions SET Txt='Ver fichas profesores' WHERE ActCod='22' AND Language='es';
+UPDATE actions SET Txt='Ver fichas estudiantes' WHERE ActCod='89' AND Language='es';
+UPDATE actions SET Txt='Ver fichas invitados' WHERE ActCod='1187' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1753','es','N','Realizar acci&oacute;n invitados');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1754','es','N','Realizar acci&oacute;n estudiantes');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1755','es','N','Realizar acci&oacute;n profesores');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1756','es','N','Solicitar seguir a estudiantes');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1757','es','N','Solicitar seguir a profesores');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1758','es','N','Solicitar dejar de seguir a estudiantes');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1759','es','N','Solicitar dejar de seguir a profesores');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1760','es','N','Seguir a estudiantes');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1761','es','N','Seguir a profesores');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1762','es','N','Dejar de seguir a estudiantes');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1763','es','N','Dejar de seguir a profesores');
+
 	Version 18.72.2:  Mar 11, 2019 	Create new message from list of users. (239114 lines)
 	Version 18.72.1:  Mar 11, 2019 	Show attendance list from list of users. (239075 lines)
 	Version 18.72:    Mar 11, 2019 	Show homework from list of students and teachers. (239043 lines)
