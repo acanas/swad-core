@@ -2678,7 +2678,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
    extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Show_attendance;
+   extern const char *Txt_View_attendance;
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_OLDEST_FIRST);
@@ -2729,7 +2729,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 Tbl_EndTable ();
 
 	 /* Send button */
-	 Btn_PutConfirmButton (Txt_Show_attendance);
+	 Btn_PutConfirmButton (Txt_View_attendance);
 
 	 /* End form */
 	 Frm_EndForm ();

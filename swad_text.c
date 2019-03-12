@@ -12506,7 +12506,7 @@ const char *Txt_Follow =
 #elif L==7	// it
 	"Seguire";
 #elif L==8	// pl
-	"&Sacute;ledzi&cacute;";
+	"&Sacute;led&zacute;";
 #elif L==9	// pt
 	"Seguir";
 #endif
@@ -37238,7 +37238,7 @@ const char *Txt_See_full_notice =
 #elif L==8	// pl
 	"Wiadomo&sacute;ci ca&lstrok;y obwieszczenie";
 #elif L==9	// pt
-	"Veja aviso completo";
+	"Ver aviso completo";
 #endif
 
 const char *Txt_See_less =
@@ -37259,7 +37259,7 @@ const char *Txt_See_less =
 #elif L==8	// pl
 	 "Zobacz mniej";
 #elif L==9	// pt
-	 "Veja menos";
+	 "Ver menos";
 #endif
 
 const char *Txt_See_message =
@@ -37280,7 +37280,7 @@ const char *Txt_See_message =
 #elif L==8	// pl
 	"See message";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Veja mensagem";
+	"Ver mensagem";
 #endif
 
 const char *Txt_See_messages_received =
@@ -37301,7 +37301,7 @@ const char *Txt_See_messages_received =
 #elif L==8	// pl
 	"Wiadomo&sacute;ci odebrane";
 #elif L==9	// pt
-	"Veja mensagens recebidas";
+	"Ver mensagens recebidas";
 #endif
 
 const char *Txt_See_more =
@@ -37322,7 +37322,7 @@ const char *Txt_See_more =
 #elif L==8	// pl
 	 "Zobacz wi&eogon;cej";
 #elif L==9	// pt
-	 "Veja mais";
+	 "Ver mais";
 #endif
 
 const char *Txt_See_new_activity =
@@ -37343,7 +37343,7 @@ const char *Txt_See_new_activity =
 #elif L==8	// pl
 	 "Zobacz now&aogon; aktywno&sacute;&cacute;";
 #elif L==9	// pt
-	 "Veja nova atividade";
+	 "Ver nova atividade";
 #endif
 
 const char *Txt_See_notifications =
@@ -37364,7 +37364,7 @@ const char *Txt_See_notifications =
 #elif L==8	// pl
 	"See notifications";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Veja notifica&ccedil;&otilde;es";
+	"Ver notifica&ccedil;&otilde;es";
 #endif
 
 const char *Txt_See_only_the_latest_COMMENTS =
@@ -37385,7 +37385,7 @@ const char *Txt_See_only_the_latest_COMMENTS =
 #elif L==8	// pl
 	 "Zobacz tylko najnowsze";
 #elif L==9	// pt
-	 "Veja apenas os &uacute;ltimos";
+	 "Ver apenas os &uacute;ltimos";
 #endif
 
 const char *Txt_See_the_previous_X_COMMENTS =	// Warning: it is very important to include %u in the following sentences
@@ -37406,7 +37406,7 @@ const char *Txt_See_the_previous_X_COMMENTS =	// Warning: it is very important t
 #elif L==8	// pl
 	 "Zobacz poprzednie %u";
 #elif L==9	// pt
-	 "Veja os %u anteriores";
+	 "Ver os %u anteriores";
 #endif
 
 const char *Txt_Select_another_country =
@@ -38624,27 +38624,6 @@ const char *Txt_Show_anyway =
 	"Mostrar de qualquer maneira";
 #endif
 
-const char *Txt_Show_attendance =
-#if   L==1	// ca
-	"Mostrar assist&egrave;ncia.";
-#elif L==2	// de
-	"Anwesenheit zeigen";
-#elif L==3	// en
-	"Show attendance";
-#elif L==4	// es
-	"Ver asistencia";
-#elif L==5	// fr
-	"Montrer la pr&eacute;sence.";
-#elif L==6	// gn
-	"Ver asistencia";	// Okoteve traducción
-#elif L==7	// it
-	"Mostra presenze";
-#elif L==8	// pl
-	"Poka&zdot; frekwencj&eogon;";
-#elif L==9	// pt
-	"Mostrar atendimento";
-#endif
-
 const char *Txt_Show_calendar =
 #if   L==1	// ca
 	"Mostra calendari";
@@ -38811,27 +38790,6 @@ const char *Txt_Show_questions =
 	"Show questions";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Mostrar quest&otilde;es";
-#endif
-
-const char *Txt_Show_records =
-#if   L==1	// ca
-	"Mostrar fitxes";
-#elif L==2	// de
-	"Zeige Profile";
-#elif L==3	// en
-	"Show records";
-#elif L==4	// es
-	"Mostrar fichas";
-#elif L==5	// fr
-	"Voir les cartes";
-#elif L==6	// gn
-	"Mostrar fichas";	// Okoteve traducción
-#elif L==7	// it
-	"Visualizza le schede";
-#elif L==8	// pl
-	"Poka&zdot; rekordy";
-#elif L==9	// pt
-	"Mostrar cart&otilde;es";
 #endif
 
 const char *Txt_Show_statistic =
@@ -52051,7 +52009,7 @@ const char *Txt_View_attendance =
 #if   L==1	// ca
 	"Veure assist&egrave;ncia";
 #elif L==2	// de
-	"Siehe Anwesenheit";
+	"Anzeigen Anwesenheit";
 #elif L==3	// en
 	"View attendance";
 #elif L==4	// es
@@ -52063,9 +52021,9 @@ const char *Txt_View_attendance =
 #elif L==7	// it
 	"Vedi presenza";
 #elif L==8	// pl
-	"Wiadomo&sacute;ci bytno&sacute;&cacute;";
+	"Zobacz obecno&sacute;&cacute;";
 #elif L==9	// pt
-	"Veja presen&ccedil;a";
+	"Ver presen&ccedil;a";
 #endif
 
 const char *Txt_View_data_of_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
@@ -52086,7 +52044,7 @@ const char *Txt_View_data_of_FILE_OR_LINK_X =	// Warning: it is very important t
 #elif L==8	// pl
 	"Zobacz dane z %s";
 #elif L==9	// pt
-	"Veja os dados de %s";
+	"Ver os dados de %s";
 #endif
 
 const char *Txt_View_event =
@@ -52215,6 +52173,27 @@ const char *Txt_View_record_for_this_course =
 	"Ver cart&atilde;o em disciplina";
 #endif
 
+const char *Txt_View_records =
+#if   L==1	// ca
+	"Veure fitxes";
+#elif L==2	// de
+	"Anzeigen Profile";
+#elif L==3	// en
+	"View records";
+#elif L==4	// es
+	"Ver fichas";
+#elif L==5	// fr
+	"Voir cartes";
+#elif L==6	// gn
+	"Ver fichas";	// Okoteve traducción
+#elif L==7	// it
+	"Vedi schede";
+#elif L==8	// pl
+	"Zobacz rekordy";
+#elif L==9	// pt
+	"Ver cart&otilde;es";
+#endif
+
 const char *Txt_View_survey =
 #if   L==1	// ca
 	"Veure enquesta";
@@ -52275,7 +52254,7 @@ const char *Txt_View_test =
 #elif L==8	// pl
 	"Wiadomo&sacute;ci test";
 #elif L==9	// pt
-	"Veja teste";
+	"Ver teste";
 #endif
 
 const char *Txt_View_test_results =
@@ -52315,7 +52294,7 @@ const char *Txt_View_homework =
 #elif L==7	// it
 	"Vedi lavori";
 #elif L==8	// pl
-	"View homework";	// Potrzebujesz tlumaczenie
+	"Zobacz prac&eogon; domow&aogon;";
 #elif L==9	// pt
 	"Ver trabalhos";
 #endif

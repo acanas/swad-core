@@ -8017,18 +8017,18 @@ void Usr_SeeTeachers (void)
 static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Show_records;
+   extern const char *Txt_View_records;
    extern const char *Txt_View_homework;
-   extern const char *Txt_Show_attendance;
+   extern const char *Txt_View_attendance;
    extern const char *Txt_Send_message;
    extern const char *Txt_Follow;
    extern const char *Txt_Unfollow;
    const char *Label[Usr_LIST_USRS_NUM_OPTIONS] =
      {
       NULL,			// Usr_OPTION_UNKNOWN
-      Txt_Show_records,		// Usr_OPTION_RECORDS
+      Txt_View_records,		// Usr_OPTION_RECORDS
       Txt_View_homework,	// Usr_OPTION_HOMEWORK
-      Txt_Show_attendance,	// Usr_OPTION_ATTENDANCE
+      Txt_View_attendance,	// Usr_OPTION_ATTENDANCE
       Txt_Send_message,		// Usr_OPTION_MESSAGE
       Txt_Follow,		// Usr_OPTION_FOLLOW
       Txt_Unfollow,		// Usr_OPTION_UNFOLLOW
