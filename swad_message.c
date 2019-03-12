@@ -151,7 +151,6 @@ static void Msg_WriteMsgTo (long MsgCod);
 static void Msg_PutFormToBanSender (struct UsrData *UsrDat);
 static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat);
 static void Msg_UnbanSender (void);
-static bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod);
 
 /*****************************************************************************/
 /***************** Put a form to write a new message to users ****************/
@@ -3763,7 +3762,7 @@ static void Msg_UnbanSender (void)
 /**************** Chech if a user is banned by another user ******************/
 /*****************************************************************************/
 
-static bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
+bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
   {
    /***** Get if FromUsrCod is banned by ToUsrCod *****/
    return (DB_QueryCOUNT ("can not check if a user is banned",

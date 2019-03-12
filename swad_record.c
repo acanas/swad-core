@@ -2467,6 +2467,7 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_Follow;
    bool ItsMe = Usr_ItsMe (Gbl.Record.UsrDat->UsrCod);
    bool ICanViewUsrProfile;
+   bool RecipientHasBannedMe;
    Act_Action_t NextAction;
 
    if (!Gbl.Form.Inside &&					// Only if not inside another form
@@ -2598,9 +2599,12 @@ static void Rec_PutIconsCommands (void)
       QR_PutLinkToPrintQRCode (ActPrnUsrQR,Rec_PutParamUsrCodEncrypted);
 
       /***** Button to send a message *****/
-      Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,Rec_PutParamsMsgUsr,
-				     "envelope.svg",
-				     Txt_Write_a_message);
+      RecipientHasBannedMe = Msg_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,		// From:
+	                                             Gbl.Record.UsrDat->UsrCod);	// To:
+      if (!RecipientHasBannedMe)
+	 Lay_PutContextualLinkOnlyIcon (ActReqMsgUsr,NULL,Rec_PutParamsMsgUsr,
+					"envelope.svg",
+					Txt_Write_a_message);
 
       /***** Button to follow / unfollow *****/
       if (!ItsMe)	// Not me

@@ -110,6 +110,7 @@ void Msg_PutHiddenParamMsgCod (long MsgCod);
 void Msg_BanSenderWhenShowingMsgs (void);
 void Msg_UnbanSenderWhenShowingMsgs (void);
 void Msg_UnbanSenderWhenListingUsrs (void);
+bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod);
 void Msg_RemoveUsrFromBanned (long UsrCod);
 void Msg_ListBannedUsrs (void);
 
