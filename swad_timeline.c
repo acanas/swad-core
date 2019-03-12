@@ -109,7 +109,7 @@ struct TL_Comment
   {
    long PubCod;
    long UsrCod;
-   long NotCod;		// Note code
+   long NotCod;		// Note code to which this comment belongs
    time_t DateTimeUTC;
    unsigned NumFavs;	// Number of times (users) this comment has been favourited
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
@@ -136,8 +136,8 @@ static void TL_ShowTimelineUsrHighlightingNot (long NotCod);
 static void TL_GetAndShowOldTimeline (TL_TimelineUsrOrGbl_t TimelineUsrOrGbl);
 
 static void TL_BuildQueryToGetTimeline (char **Query,
-                                         TL_TimelineUsrOrGbl_t TimelineUsrOrGbl,
-                                         TL_WhatToGetFromTimeline_t WhatToGetFromTimeline);
+                                        TL_TimelineUsrOrGbl_t TimelineUsrOrGbl,
+                                        TL_WhatToGetFromTimeline_t WhatToGetFromTimeline);
 static long TL_GetPubCodFromSession (const char *FieldName);
 static void TL_UpdateLastPubCodIntoSession (void);
 static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod);
@@ -376,8 +376,8 @@ void TL_ShowTimelineGbl2 (void)
       /***** Show the note highlighted *****/
       TL_GetDataOfNoteByCod (&SocNot);
       TL_WriteNote (&SocNot,
-			   TopMessages[NotifyEvent],UsrDat.UsrCod,
-			   true,true);
+		    TopMessages[NotifyEvent],UsrDat.UsrCod,
+		    true,true);
      }
 
    /***** Show timeline with possible highlighted note *****/
@@ -391,8 +391,8 @@ static void TL_ShowTimelineGblHighlightingNot (long NotCod)
 
    /***** Build query to get timeline *****/
    TL_BuildQueryToGetTimeline (&Query,
-	                        TL_TIMELINE_GBL,
-                                TL_GET_RECENT_TIMELINE);
+	                       TL_TIMELINE_GBL,
+                               TL_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
    TL_ShowTimeline (Query,Txt_Timeline,NotCod);
@@ -417,8 +417,8 @@ static void TL_ShowTimelineUsrHighlightingNot (long NotCod)
 
    /***** Build query to show timeline with publications of a unique user *****/
    TL_BuildQueryToGetTimeline (&Query,
-	                        TL_TIMELINE_USR,
-                                TL_GET_RECENT_TIMELINE);
+	                       TL_TIMELINE_USR,
+                               TL_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -449,8 +449,8 @@ void TL_RefreshNewTimelineGbl (void)
 
       /***** Build query to get timeline *****/
       TL_BuildQueryToGetTimeline (&Query,
-	                           TL_TIMELINE_GBL,
-				   TL_GET_ONLY_NEW_PUBS);
+	                          TL_TIMELINE_GBL,
+				  TL_GET_ONLY_NEW_PUBS);
 
       /***** Show new timeline *****/
       TL_InsertNewPubsInTimeline (Query);
@@ -494,8 +494,8 @@ static void TL_GetAndShowOldTimeline (TL_TimelineUsrOrGbl_t TimelineUsrOrGbl)
 
    /***** Build query to get timeline *****/
    TL_BuildQueryToGetTimeline (&Query,
-	                        TimelineUsrOrGbl,
-                                TL_GET_ONLY_OLD_PUBS);
+	                       TimelineUsrOrGbl,
+                               TL_GET_ONLY_OLD_PUBS);
 
    /***** Show old timeline *****/
    TL_ShowOldPubsInTimeline (Query);
@@ -527,8 +527,8 @@ void TL_MarkMyNotifAsSeen (void)
 #define TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS (256 - 1)
 
 static void TL_BuildQueryToGetTimeline (char **Query,
-                                         TL_TimelineUsrOrGbl_t TimelineUsrOrGbl,
-                                         TL_WhatToGetFromTimeline_t WhatToGetFromTimeline)
+                                        TL_TimelineUsrOrGbl_t TimelineUsrOrGbl,
+                                        TL_WhatToGetFromTimeline_t WhatToGetFromTimeline)
   {
    char SubQueryPublishers[128];
    char SubQueryRangeBottom[128];
@@ -712,7 +712,8 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 	 switch (TimelineUsrOrGbl)
 	   {
 	    case TL_TIMELINE_USR:	// Show the timeline of a user
-	       sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",RangePubsToGet.Bottom);
+	       sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
+		        RangePubsToGet.Bottom);
 	       break;
 	    case TL_TIMELINE_GBL:	// Show the global timeline
 	       switch (Gbl.Timeline.WhichUsrs)
@@ -721,7 +722,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 		     sprintf (SubQueryRangeBottom,"social_pubs.PubCod>%ld AND ",
 			      RangePubsToGet.Bottom);
 		     break;
-		  case TL_USRS_ALL:	// Show the timeline of all users
+		  case TL_USRS_ALL:		// Show the timeline of all users
 		     sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
 			      RangePubsToGet.Bottom);
 		     break;
@@ -738,7 +739,8 @@ static void TL_BuildQueryToGetTimeline (char **Query,
 	 switch (TimelineUsrOrGbl)
 	   {
 	    case TL_TIMELINE_USR:	// Show the timeline of a user
-	       sprintf (SubQueryRangeTop,"PubCod<%ld AND ",RangePubsToGet.Top);
+	       sprintf (SubQueryRangeTop,"PubCod<%ld AND ",
+		        RangePubsToGet.Top);
 	       break;
 	    case TL_TIMELINE_GBL:	// Show the global timeline
 	       switch (Gbl.Timeline.WhichUsrs)
@@ -882,7 +884,8 @@ static long TL_GetPubCodFromSession (const char *FieldName)
 
    /***** Get last publication code from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get publication code from session",
-		       "SELECT %s FROM sessions WHERE SessionId='%s'",
+		       "SELECT %s FROM sessions"
+		       " WHERE SessionId='%s'",
 		       FieldName,Gbl.Session.Id) != 1)
       Lay_ShowErrorAndExit (Txt_The_session_has_expired);
 
@@ -1027,9 +1030,9 @@ static void TL_ShowTimeline (char *Query,
 
       /* Write note */
       TL_WriteNote (&SocNot,
-                           SocPub.TopMessage,SocPub.PublisherCod,
-			   SocNot.NotCod == NotCodToHighlight,
-			   false);
+                    SocPub.TopMessage,SocPub.PublisherCod,
+		    SocNot.NotCod == NotCodToHighlight,
+		    false);
      }
    fprintf (Gbl.F.Out,"</ul>");
 
@@ -1302,8 +1305,8 @@ static void TL_InsertNewPubsInTimeline (char *Query)
 
       /* Write note */
       TL_WriteNote (&SocNot,
-                           SocPub.TopMessage,SocPub.PublisherCod,
-                           false,false);
+                    SocPub.TopMessage,SocPub.PublisherCod,
+                    false,false);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1344,8 +1347,8 @@ static void TL_ShowOldPubsInTimeline (char *Query)
 
       /* Write note */
       TL_WriteNote (&SocNot,
-                           SocPub.TopMessage,SocPub.PublisherCod,
-                           false,false);
+                    SocPub.TopMessage,SocPub.PublisherCod,
+                    false,false);
      }
 
    /***** Free structure that stores the query result *****/
@@ -3242,8 +3245,8 @@ static long TL_ReceiveComment (void)
 
 	 /***** Show the note just commented *****/
 	 TL_WriteNote (&SocNot,
-	                      TL_TOP_MESSAGE_COMMENTED,Gbl.Usrs.Me.UsrDat.UsrCod,
-	                      true,true);
+	               TL_TOP_MESSAGE_COMMENTED,Gbl.Usrs.Me.UsrDat.UsrCod,
+	               true,true);
 	}
 
       /***** Free image *****/
@@ -3782,8 +3785,8 @@ static void TL_RequestRemovalNote (void)
 
 	 /* Show note */
 	 TL_WriteNote (&SocNot,
-			      TL_TOP_MESSAGE_NONE,-1L,
-			      false,true);
+		       TL_TOP_MESSAGE_NONE,-1L,
+		       false,true);
 
 	 /* End alert */
 	 Gbl.Timeline.NotCod = SocNot.NotCod;	// Note to be removed

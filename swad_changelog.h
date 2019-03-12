@@ -429,8 +429,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 // TODO: Change in usability of Announcements of exams, suggested by Javier Fernández Baldomero.
 // TODO: Al pulsar sobre una convocatoria de examen / aviso --> ir a la sección de esa convocatoria/aviso en lugar de mostrarlo repetido y destacado arriba
 
-// TODO: Fix important bug: Cuando se baja varias veces el timeline pulsando en "Ver más", se para aleatoriamente tras varias actualizaciones hacia abajo, no siempre llega hasta la primera publicación
-
 // TODO: Los usuarios que no tienes permiso para ver su perfil público, se debería mostrar algo, una mínima ficha sin tinmeline o algo así
 
 /*****************************************************************************/
@@ -452,10 +450,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.74 (2019-03-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.74.4 (2019-03-13)"
 #define CSS_FILE		"swad18.68.3.css"
-#define JS_FILE			"swad18.64.js"
+#define JS_FILE			"swad18.74.4.js"
 /*
+	Version 18.74.4:  Mar 13, 2019 	Fixed bug in JavaScript related to timeline. (239628 lines)
+	Version 18.74.3:  Mar 13, 2019 	Fixed bug in JavaScript related to timeline. (239628 lines)
+	Version 18.74.2:  Mar 13, 2019 	Fixed bug in JavaScript related to timeline. (239628 lines)
+	Version 18.74.1:  Mar 12, 2019 	Changes in JavaScript related to timeline. (239630 lines)
 	Version 18.74:    Mar 12, 2019 	Module swad_social is renamed swad_timeline. (239633 lines)
 	Version 18.73.7:  Mar 12, 2019 	Code refactoring related to list of users and options. (239614 lines)
 	Version 18.73.6:  Mar 12, 2019 	Create new email message from list of users. This option will be active when email action allows selecting individual users. (239580 lines)

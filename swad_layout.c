@@ -734,11 +734,9 @@ static void Lay_WriteScriptParamsAJAX (void)
 	    put parameters used by AJAX */
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
 			    "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-			    "var RefreshParamMaxOldPubsToGetAndShow = \"%u\";\n"
 			    "var RefreshParamWhichUsrs = \"WhichUsrs=%u\";\n",
 		  Act_GetActCod (ActRefNewSocPubGbl),
 		  Act_GetActCod (ActRefOldSocPubGbl),
-		  TL_MAX_OLD_PUBS_TO_GET_AND_SHOW,
 		  (unsigned) Gbl.Timeline.WhichUsrs);
 	 break;
       case ActSeeOthPubPrf:
@@ -756,10 +754,8 @@ static void Lay_WriteScriptParamsAJAX (void)
 	    Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,
 				       Gbl.Usrs.Other.UsrDat.Nickname);
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-			    "var RefreshParamMaxOldPubsToGetAndShow = \"%u\";\n"
 			    "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
 		  Act_GetActCod (ActRefOldSocPubUsr),
-		  TL_MAX_OLD_PUBS_TO_GET_AND_SHOW,
 		  Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
       default:

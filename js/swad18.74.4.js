@@ -550,36 +550,36 @@ function readLastClicksData () {
 }
 
 /*****************************************************************************/
-/**** Automatic refresh of new publishings in social timeline using AJAX *****/
+/**** Automatic refresh of new publications in social timeline using AJAX ****/
 /*****************************************************************************/
 
 // This function must be called from time to time
-var objXMLHttpReqSoc = false;
+var objXMLHttpReqNewTL = false;
 function refreshNewTimeline () {
-	objXMLHttpReqSoc = AJAXCreateObject();
-	if (objXMLHttpReqSoc) {
+	objXMLHttpReqNewTL = AJAXCreateObject();
+	if (objXMLHttpReqNewTL) {
 		var RefreshParams = RefreshParamNxtActNewPub + '&' +
 							RefreshParamIdSes + '&' +
 							RefreshParamWhichUsrs;
 
-		objXMLHttpReqSoc.onreadystatechange = readNewTimelineData;	// onreadystatechange must be lowercase
-		objXMLHttpReqSoc.open('POST',ActionAJAX,true);
-		objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		objXMLHttpReqSoc.send(RefreshParams);
+		objXMLHttpReqNewTL.onreadystatechange = readNewTimelineData;	// onreadystatechange must be lowercase
+		objXMLHttpReqNewTL.open('POST',ActionAJAX,true);
+		objXMLHttpReqNewTL.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqNewTL.send(RefreshParams);
 	}
 }
 
 // Receives and show new social timeline data
 function readNewTimelineData () {
-	if (objXMLHttpReqSoc.readyState == 4) {	// Check if data have been received
-		if (objXMLHttpReqSoc.status == 200) {
-			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);						// Get separator position
-			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));		// Get refresh delay
-			var htmlJustNowTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay + 1);	// Get HTML code for social timeline
+	if (objXMLHttpReqNewTL.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqNewTL.status == 200) {
+			var endOfDelay = objXMLHttpReqNewTL.responseText.indexOf('|',0);						// Get separator position
+			var delay = parseInt(objXMLHttpReqNewTL.responseText.substring(0,endOfDelay));		// Get refresh delay
+			var htmlJustNowTimeline = objXMLHttpReqNewTL.responseText.substring(endOfDelay + 1);	// Get HTML code for timeline
 
 			var justNowTimeline = document.getElementById('just_now_timeline_list');// Access to UL for the just received timeline
 			if (justNowTimeline) {
-				justNowTimeline.innerHTML = htmlJustNowTimeline;	// Update list of publishings in just now timeline		
+				justNowTimeline.innerHTML = htmlJustNowTimeline;	// Update list of publications in just now timeline		
 				var countJustNowTimeline = justNowTimeline.childNodes.length;
 
 				if (countJustNowTimeline) {	// New pubs just retrieved
@@ -613,7 +613,7 @@ function readNewTimelineData () {
 }
 
 /*****************************************************************************/
-/* View new publishing in timeline by moving new timeline to top of timeline */
+/* View new publication in timeline by moving new timeline to top of timeline */
 /*****************************************************************************/
 
 function moveNewTimelineToTimeline () {
@@ -638,14 +638,14 @@ function moveNewTimelineToTimeline () {
 }
 
 /*****************************************************************************/
-/********* Refresh of old publishings in social timeline using AJAX **********/
+/******** Refresh of old publications in social timeline using AJAX **********/
 /*****************************************************************************/
 
 // This function is called when user clicks in link
-var objXMLHttpReqSoc = false;
+var objXMLHttpReqOldTL = false;
 function refreshOldTimeline () {
-	objXMLHttpReqSoc = AJAXCreateObject ();
-	if (objXMLHttpReqSoc) {
+	objXMLHttpReqOldTL = AJAXCreateObject ();
+	if (objXMLHttpReqOldTL) {
 		var RefreshParams = RefreshParamNxtActOldPub + '&' +
 							RefreshParamIdSes;
 		if (typeof RefreshParamUsr !== 'undefined') {
@@ -657,26 +657,22 @@ function refreshOldTimeline () {
 				RefreshParams += '&' + RefreshParamWhichUsrs;
 		}
 
-		objXMLHttpReqSoc.onreadystatechange = readOldTimelineData;	// onreadystatechange must be lowercase
-		objXMLHttpReqSoc.open('POST',ActionAJAX,true);
-		objXMLHttpReqSoc.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		objXMLHttpReqSoc.send(RefreshParams);
+		objXMLHttpReqOldTL.onreadystatechange = readOldTimelineData;	// onreadystatechange must be lowercase
+		objXMLHttpReqOldTL.open('POST',ActionAJAX,true);
+		objXMLHttpReqOldTL.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqOldTL.send(RefreshParams);
 	}
 }
 
 // Receives and show old social timeline data
 function readOldTimelineData () {
-	if (objXMLHttpReqSoc.readyState == 4) {	// Check if data have been received
-		if (objXMLHttpReqSoc.status == 200) {
-			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);					// Get separator position
-			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));	// Get refresh delay
-			var htmlOldTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay + 1);	// Get HTML code for social timeline
-
-			var oldTimeline = document.getElementById('old_timeline_list');	// Access to UL with the recent timeline
+	if (objXMLHttpReqOldTL.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqOldTL.status == 200) {
+			var oldTimeline = document.getElementById('old_timeline_list');	// Access to UL with the old timeline
 			if (oldTimeline) {
-				oldTimeline.innerHTML = htmlOldTimeline;	// Fill list of publishings in old timeline
+				oldTimeline.innerHTML = objXMLHttpReqOldTL.responseText;		// Fill list of publications in old timeline
+
 				var countOldTimeline = oldTimeline.childNodes.length;
-				
 				if (countOldTimeline) {
 					// Scripts in timeline got via AJAX are not executed ==> execute them
 					evalScriptsInElem (oldTimeline);
@@ -688,16 +684,14 @@ function readOldTimelineData () {
 					var timeline = document.getElementById("timeline_list");
 					for (var i=0; i<countOldTimeline; i++)
 						timeline.appendChild(oldTimeline.firstChild);
-				}
-				
-				if (countOldTimeline < RefreshParamMaxOldPubsToGetAndShow)	// Set to TL_MAX_OLD_PUBS_TO_GET_AND_SHOW
-					// No more old publishings
-					document.getElementById("view_old_posts_container").style.display = 'none';
-				else {
-					// There may be more publishings
+						
+					// There may be more publications
 					document.getElementById('get_old_timeline').style.display='';			// Show icon to be hidden on click
 					document.getElementById('getting_old_timeline').style.display='none';	// Hide icon to be shown on click
 				}
+				else	// No old publications retrieved, so we have reached the oldest publication
+						// Hide container with link to get old publications
+					document.getElementById("view_old_posts_container").style.display = 'none';
 			}
 		}
 	}

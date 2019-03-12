@@ -35,9 +35,8 @@
 
 // Number of recent publishings got and shown the first time, before refreshing
 #define TL_MAX_NEW_PUBS_TO_GET_AND_SHOW	10000	// Unlimited
-#define TL_MAX_REC_PUBS_TO_GET_AND_SHOW	10	// Recent publishings to show (first time)
-#define TL_MAX_OLD_PUBS_TO_GET_AND_SHOW	10	// Old publishings are retrieved in packs of this size
-						// This constant is also used in JavaScript function readOldTimelineData
+#define TL_MAX_REC_PUBS_TO_GET_AND_SHOW	   10	// Recent publishings to show (first time)
+#define TL_MAX_OLD_PUBS_TO_GET_AND_SHOW	   20	// Old publishings are retrieved in packs of this size
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
