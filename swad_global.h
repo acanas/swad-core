@@ -73,10 +73,10 @@
 #include "swad_record.h"
 #include "swad_search.h"
 #include "swad_session.h"
-#include "swad_social.h"
 #include "swad_survey.h"
 #include "swad_syllabus.h"
 #include "swad_test.h"
+#include "swad_timeline.h"
 #include "swad_timetable.h"
 #include "swad_web_service.h"
 
@@ -613,10 +613,10 @@ struct Globals
      } AttEvents;
    struct
      {
-      Soc_WhichUsrs_t WhichUsrs;
+      TL_WhichUsrs_t WhichUsrs;
       long NotCod;		// Used as parameter about social note to be edited, removed...
       long PubCod;		// Used as parameter about social publishing to be edited, removed...
-     } Social;
+     } Timeline;
    struct
      {
       For_ForumSet_t ForumSet;

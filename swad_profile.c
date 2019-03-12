@@ -44,8 +44,8 @@
 #include "swad_profile.h"
 #include "swad_role.h"
 #include "swad_role_type.h"
-#include "swad_social.h"
 #include "swad_theme.h"
+#include "swad_timeline.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -178,7 +178,7 @@ void Prf_PutLinkRequestAnotherUserProfile (void)
 
 void Prf_RequestUserProfile (void)
   {
-   extern const char *Hlp_SOCIAL_Profiles_view_public_profile;
+   extern const char *Hlp_START_Profiles_view_public_profile;
    extern const char *Txt_Another_user_s_profile;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Nickname;
@@ -198,7 +198,7 @@ void Prf_RequestUserProfile (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Another_user_s_profile,NULL,
-                 Hlp_SOCIAL_Profiles_view_public_profile,Box_NOT_CLOSABLE);
+                 Hlp_START_Profiles_view_public_profile,Box_NOT_CLOSABLE);
 
    /***** Form to request user's @nickname *****/
    /* By default, the nickname is filled with my nickname
@@ -244,8 +244,8 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 	 if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
 	   {
 	    /* Show timeline */
-	    Lay_StartSection (Soc_TIMELINE_SECTION_ID);
-   	    Soc_ShowTimelineUsr ();
+	    Lay_StartSection (TL_TIMELINE_SECTION_ID);
+   	    TL_ShowTimelineUsr ();
 	    Lay_EndSection ();
 	   }
 	}
@@ -645,8 +645,8 @@ static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
                                            const struct UsrFigures *UsrFigures)
   {
    extern const char *Txt_Timeline;
-   extern const char *Txt_SOCIAL_post;
-   extern const char *Txt_SOCIAL_posts;
+   extern const char *Txt_TIMELINE_post;
+   extern const char *Txt_TIMELINE_posts;
    extern const char *Txt_day;
 
    /***** Number of social publications *****/
@@ -656,8 +656,8 @@ static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
      {
       fprintf (Gbl.F.Out,"%ld&nbsp;%s&nbsp;",
 	       UsrFigures->NumSocPub,
-	       (UsrFigures->NumSocPub == 1) ? Txt_SOCIAL_post :
-					      Txt_SOCIAL_posts);
+	       (UsrFigures->NumSocPub == 1) ? Txt_TIMELINE_post :
+					      Txt_TIMELINE_posts);
       Prf_ShowRanking (Prf_GetRankingFigure (UsrDat->UsrCod,"NumSocPub"),
 		       Prf_GetNumUsrsWithFigure ("NumSocPub"));
       if (UsrFigures->NumDays > 0)
@@ -1105,7 +1105,7 @@ static void Prf_GetNumSocialPubsAndStoreAsUsrFigure (long UsrCod)
       Prf_ResetUsrFigures (&UsrFigures);
 
       /***** Get number of forum posts from database *****/
-      UsrFigures.NumSocPub = Soc_GetNumPubsUsr (UsrCod);
+      UsrFigures.NumSocPub = TL_GetNumPubsUsr (UsrCod);
 
       /***** Update number of forum posts in user's figures *****/
       if (Prf_CheckIfUsrFiguresExists (UsrCod))

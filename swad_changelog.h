@@ -429,7 +429,7 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 // TODO: Change in usability of Announcements of exams, suggested by Javier Fernández Baldomero.
 // TODO: Al pulsar sobre una convocatoria de examen / aviso --> ir a la sección de esa convocatoria/aviso en lugar de mostrarlo repetido y destacado arriba
 
-// TODO: Intentar aumentar la velocidad de carga del timeline (comprobar ralentización al mostrar la titulación de cada usuario)
+// TODO: Fix important bug: Cuando se baja varias veces el timeline pulsando en "Ver más", se para aleatoriamente tras varias actualizaciones hacia abajo, no siempre llega hasta la primera publicación
 
 // TODO: Los usuarios que no tienes permiso para ver su perfil público, se debería mostrar algo, una mínima ficha sin tinmeline o algo así
 
@@ -452,11 +452,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.73.7 (2019-03-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.74 (2019-03-12)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
-	Version 18.73.7:  Mar 12, 2019 	Code refactoring irelated to list of users and options. (239614 lines)
+	Version 18.74:    Mar 12, 2019 	Module swad_social is renamed swad_timeline. (239633 lines)
+	Version 18.73.7:  Mar 12, 2019 	Code refactoring related to list of users and options. (239614 lines)
 	Version 18.73.6:  Mar 12, 2019 	Create new email message from list of users. This option will be active when email action allows selecting individual users. (239580 lines)
 					Copy the following icon to icon public directory:
 sudo cp icon/marker.svg /var/www/html/swad/icon/
@@ -4570,7 +4571,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1511','es','N','Carg
         Version 15.111:   Jan 14, 2016	Fixed bug in user's timeline.
 					Code refactoring related with social timeline. (192622 lines)
         Version 15.110.18:Jan 13, 2016	Optimization in query to get initial recent timeline. (192564 lines)
-        Version 15.110.17:Jan 13, 2016	Reviewed code related to Soc_MAX_RECENT_PUBS_TO_GET. (192568 lines)
+        Version 15.110.17:Jan 13, 2016	Reviewed code related to TL_MAX_RECENT_PUBS_TO_GET. (192568 lines)
         Version 15.110.16:Jan 13, 2016	Form to go to public profile of author of comment in timeline. (192563 lines)
         Version 15.110.15:Jan 13, 2016	Form to go to public profile of author of note in timeline.
 					Extensions '.exe' and '.com' not allowed (Google reported malware). (192543 lines)

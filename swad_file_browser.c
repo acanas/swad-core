@@ -53,9 +53,9 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
-#include "swad_social.h"
 #include "swad_string.h"
 #include "swad_table.h"
+#include "swad_timeline.h"
 #include "swad_zip.h"
 
 /*****************************************************************************/
@@ -10405,7 +10405,7 @@ void Brw_ChgFileMetadata (void)
    bool PublicFileBeforeEdition;
    bool PublicFileAfterEdition;
    Brw_License_t License;
-   struct SocialPublication SocPub;
+   struct TL_Publication SocPub;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -10476,28 +10476,28 @@ void Brw_ChgFileMetadata (void)
 	 switch (Gbl.FileBrowser.Type)
 	   {
 	    case Brw_ADMI_DOC_INS:
-	       Soc_StoreAndPublishSocialNote (Soc_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+	       TL_StoreAndPublishNote (TL_NOTE_INS_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
 	       break;
 	    case Brw_ADMI_SHR_INS:
-	       Soc_StoreAndPublishSocialNote (Soc_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+	       TL_StoreAndPublishNote (TL_NOTE_INS_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
 	       break;
 	    case Brw_ADMI_DOC_CTR:
-	       Soc_StoreAndPublishSocialNote (Soc_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+	       TL_StoreAndPublishNote (TL_NOTE_CTR_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
 	       break;
 	    case Brw_ADMI_SHR_CTR:
-	       Soc_StoreAndPublishSocialNote (Soc_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+	       TL_StoreAndPublishNote (TL_NOTE_CTR_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
 	       break;
 	    case Brw_ADMI_DOC_DEG:
-	       Soc_StoreAndPublishSocialNote (Soc_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+	       TL_StoreAndPublishNote (TL_NOTE_DEG_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
 	       break;
 	    case Brw_ADMI_SHR_DEG:
-	       Soc_StoreAndPublishSocialNote (Soc_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+	       TL_StoreAndPublishNote (TL_NOTE_DEG_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
-	       Soc_StoreAndPublishSocialNote (Soc_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
+	       TL_StoreAndPublishNote (TL_NOTE_CRS_DOC_PUB_FILE,FileMetadata.FilCod,&SocPub);
 	       break;
 	    case Brw_ADMI_SHR_CRS:
-	       Soc_StoreAndPublishSocialNote (Soc_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
+	       TL_StoreAndPublishNote (TL_NOTE_CRS_SHA_PUB_FILE,FileMetadata.FilCod,&SocPub);
 	       break;
 	    default:
 	       break;
@@ -11394,7 +11394,7 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
           Set possible social note as unavailable.
           Important: do this before removing from files *****/
    Ntf_MarkNotifOneFileAsRemoved (Path);
-   Soc_MarkSocialNoteOneFileAsUnavailable (Path);
+   TL_MarkNoteOneFileAsUnavailable (Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MRK_CRS ||
@@ -11438,7 +11438,7 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
           Set possible social notes as unavailable.
           Important: do this before removing from files *****/
    Ntf_MarkNotifChildrenOfFolderAsRemoved (Path);
-   Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (Path);
+   TL_MarkNotesChildrenOfFolderAsUnavailable (Path);
 
    /***** Remove from database the entries that store the marks properties *****/
    if (FileBrowser == Brw_ADMI_MRK_CRS ||

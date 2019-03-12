@@ -44,7 +44,7 @@
 #include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_report.h"
-#include "swad_social.h"
+#include "swad_timeline.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -1084,7 +1084,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 		   UsrDat->UsrCod);
 
    /***** Remove social content associated to the user *****/
-   Soc_RemoveUsrSocialContent (UsrDat->UsrCod);
+   TL_RemoveUsrContent (UsrDat->UsrCod);
 
    /***** Remove user's figures *****/
    Prf_RemoveUsrFigures (UsrDat->UsrCod);

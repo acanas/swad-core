@@ -46,8 +46,8 @@
 #include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_role.h"
-#include "swad_social.h"
 #include "swad_table.h"
+#include "swad_timeline.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -942,7 +942,7 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
 
 static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Message)
   {
-   extern const char *Hlp_SOCIAL_Forums_posts;
+   extern const char *Hlp_MESSAGES_Forums_posts;
    extern const char *Txt_Thread;
    struct ForumThread Thr;
    char LastSubject[Cns_MAX_BYTES_SUBJECT + 1];
@@ -982,7 +982,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
 	     "%s: %s",
 	     Txt_Thread,Thr.Subject);
    Box_StartBox (NULL,FrameTitle,For_PutIconNewPost,
-                 Hlp_SOCIAL_Forums_posts,Box_NOT_CLOSABLE);
+                 Hlp_MESSAGES_Forums_posts,Box_NOT_CLOSABLE);
 
    /***** Get posts of a thread from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get posts of a thread",
@@ -1557,7 +1557,7 @@ static void For_PutHiddenParamPstCod (long PstCod)
 
 static void For_ShowForumList (void)
   {
-   extern const char *Hlp_SOCIAL_Forums;
+   extern const char *Hlp_MESSAGES_Forums;
    extern const char *Txt_Forums;
    bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS];
    MYSQL_RES *mysql_resCtr;
@@ -1588,7 +1588,7 @@ static void For_ShowForumList (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Forums,For_PutIconsForums,
-                 Hlp_SOCIAL_Forums,Box_NOT_CLOSABLE);
+                 Hlp_MESSAGES_Forums,Box_NOT_CLOSABLE);
 
    /***** Put a form to select which forums *****/
    For_PutFormWhichForums ();
@@ -2468,7 +2468,7 @@ void For_ShowForumTheads (void)
 static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
                                                        Ale_AlertType_t AlertType,const char *Message)
   {
-   extern const char *Hlp_SOCIAL_Forums_threads;
+   extern const char *Hlp_MESSAGES_Forums_threads;
    extern const char *Txt_Forum;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_FORUM_THREAD_HELP_ORDER[2];
@@ -2557,7 +2557,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 	     "%s: %s",
 	     Txt_Forum,ForumName);
    Box_StartBox (NULL,FrameTitle,For_PutIconNewThread,
-		 Hlp_SOCIAL_Forums_threads,Box_NOT_CLOSABLE);
+		 Hlp_MESSAGES_Forums_threads,Box_NOT_CLOSABLE);
 
    /***** List the threads *****/
    if (NumThrs)
@@ -3936,8 +3936,8 @@ static void For_RestrictAccess (void)
 
 static void For_WriteFormForumPst (bool IsReply,const char *Subject)
   {
-   extern const char *Hlp_SOCIAL_Forums_new_post;
-   extern const char *Hlp_SOCIAL_Forums_new_thread;
+   extern const char *Hlp_MESSAGES_Forums_new_post;
+   extern const char *Hlp_MESSAGES_Forums_new_thread;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_post;
    extern const char *Txt_New_thread;
@@ -3948,10 +3948,10 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /***** Start box *****/
    if (IsReply)
       Box_StartBox (NULL,Txt_New_post,NULL,
-		    Hlp_SOCIAL_Forums_new_post,Box_NOT_CLOSABLE);
+		    Hlp_MESSAGES_Forums_new_post,Box_NOT_CLOSABLE);
    else
       Box_StartBox (NULL,Txt_New_thread,NULL,
-		    Hlp_SOCIAL_Forums_new_thread,Box_NOT_CLOSABLE);
+		    Hlp_MESSAGES_Forums_new_thread,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
    if (IsReply)	// Form to write a reply to a post of an existing thread
@@ -4030,7 +4030,7 @@ void For_ReceiveForumPost (void)
    bool IsReply = false;
    long PstCod = 0;
    unsigned NumUsrsToBeNotifiedByEMail;
-   struct SocialPublication SocPub;
+   struct TL_Publication SocPub;
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Media Media;
 
@@ -4115,7 +4115,7 @@ void For_ReceiveForumPost (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         Soc_StoreAndPublishSocialNote (Soc_NOTE_FORUM_POST,PstCod,&SocPub);
+         TL_StoreAndPublishNote (TL_NOTE_FORUM_POST,PstCod,&SocPub);
          break;
       default:
 	 break;
@@ -4200,7 +4200,7 @@ void For_RemovePost (void)
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM__SWAD__USRS:
-         Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NOTE_FORUM_POST,Gbl.Forum.ForumSelected.PstCod);
+         TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NOTE_FORUM_POST,Gbl.Forum.ForumSelected.PstCod);
          break;
       default:
 	 break;

@@ -46,7 +46,7 @@ typedef enum
    Fig_TESTS,			// Number of test questions
    Fig_GAMES,			// Number of games
    Fig_SURVEYS,			// Number of surveys
-   Fig_SOCIAL_ACTIVITY,		// Number of social notes
+   Fig_TIMELINE,		// Number of timeline notes
    Fig_FOLLOW,			// Number of following and followers
    Fig_FORUMS,			// Number of forums, threads and posts
    Fig_NOTIFY_EVENTS,		// Number of users per notify event

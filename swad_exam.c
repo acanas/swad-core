@@ -47,8 +47,8 @@
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_RSS.h"
-#include "swad_social.h"
 #include "swad_string.h"
+#include "swad_timeline.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -292,7 +292,7 @@ void Exa_ReceiveExamAnnouncement2 (void)
    extern const char *Txt_Created_new_announcement_of_exam;
    extern const char *Txt_The_announcement_of_exam_has_been_successfully_updated;
    unsigned NumUsrsToBeNotifiedByEMail;
-   struct SocialPublication SocPub;
+   struct TL_Publication SocPub;
 
    /***** Show message *****/
    Ale_ShowAlert (Ale_SUCCESS,
@@ -304,7 +304,7 @@ void Exa_ReceiveExamAnnouncement2 (void)
       Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (Gbl.ExamAnns.ExaDat.ExaCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new exam announcement *****/
-   Soc_StoreAndPublishSocialNote (Soc_NOTE_EXAM_ANNOUNCEMENT,Gbl.ExamAnns.ExaDat.ExaCod,&SocPub);
+   TL_StoreAndPublishNote (TL_NOTE_EXAM_ANNOUNCEMENT,Gbl.ExamAnns.ExaDat.ExaCod,&SocPub);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
@@ -403,7 +403,7 @@ void Exa_RemoveExamAnnouncement1 (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Mark possible social note as unavailable *****/
-   Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
+   TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);

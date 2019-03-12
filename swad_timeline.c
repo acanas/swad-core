@@ -1,4 +1,4 @@
-// swad_social.c: social networking (timeline)
+// swad_timeline.c: social timeline
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -47,7 +47,7 @@
 #include "swad_parameter.h"
 #include "swad_preference.h"
 #include "swad_profile.h"
-#include "swad_social.h"
+#include "swad_timeline.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -57,45 +57,45 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Soc_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
+#define TL_NUM_VISIBLE_COMMENTS		3	// Maximum number of comments visible before expanding them
 
-#define Soc_MAX_SHARERS_FAVERS_SHOWN	7	// Maximum number of users shown who have share/fav a social note
+#define TL_MAX_SHARERS_FAVERS_SHOWN	5	// Maximum number of users shown who have share/fav a note
 
-#define Soc_MAX_CHARS_IN_POST	1000
-
-typedef enum
-  {
-   Soc_TIMELINE_USR,	// Show the timeline of a user
-   Soc_TIMELINE_GBL,	// Show the timeline of the users follwed by me
-  } Soc_TimelineUsrOrGbl_t;
+#define TL_MAX_CHARS_IN_POST		1000
 
 typedef enum
   {
-   Soc_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
+   TL_TIMELINE_USR,	// Show the timeline of a user
+   TL_TIMELINE_GBL,	// Show the timeline of the users follwed by me
+  } TL_TimelineUsrOrGbl_t;
+
+typedef enum
+  {
+   TL_GET_ONLY_NEW_PUBS,	// New publications are retrieved via AJAX
 				// automatically from time to time
-   Soc_GET_RECENT_TIMELINE,	// Recent timeline is shown when user clicks on action menu,...
+   TL_GET_RECENT_TIMELINE,	// Recent timeline is shown when user clicks on action menu,...
 				// or after editing timeline
-   Soc_GET_ONLY_OLD_PUBS,	// Old publications are retrieved via AJAX
+   TL_GET_ONLY_OLD_PUBS,	// Old publications are retrieved via AJAX
 				// when user clicks on link at bottom of timeline
-  } Soc_WhatToGetFromTimeline_t;
+  } TL_WhatToGetFromTimeline_t;
 
-// Social images will be saved with:
-// - maximum width of Soc_IMAGE_SAVED_MAX_HEIGHT
-// - maximum height of Soc_IMAGE_SAVED_MAX_HEIGHT
+// Timeline images will be saved with:
+// - maximum width of TL_IMAGE_SAVED_MAX_HEIGHT
+// - maximum height of TL_IMAGE_SAVED_MAX_HEIGHT
 // - maintaining the original aspect ratio (aspect ratio recommended: 3:2)
-#define Soc_IMAGE_SAVED_MAX_WIDTH	768
-#define Soc_IMAGE_SAVED_MAX_HEIGHT	512
-#define Soc_IMAGE_SAVED_QUALITY		 75	// 1 to 100
-// in social posts, the quality should not be high in order to speed up the loading of images
+#define TL_IMAGE_SAVED_MAX_WIDTH	768
+#define TL_IMAGE_SAVED_MAX_HEIGHT	512
+#define TL_IMAGE_SAVED_QUALITY		 75	// 1 to 100
+// in timeline posts, the quality should not be high in order to speed up the loading of images
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
 
-struct SocialNote
+struct TL_Note
   {
    long NotCod;
-   Soc_NoteType_t NoteType;
+   TL_NoteType_t NoteType;
    long UsrCod;
    long HieCod;		// Hierarchy code (institution/centre/degree/course)
    long Cod;		// Code of file, forum post, notice,...
@@ -105,7 +105,7 @@ struct SocialNote
    unsigned NumFavs;	// Number of times (users) this note has been favourited
   };
 
-struct SocialComment
+struct TL_Comment
   {
    long PubCod;
    long UsrCod;
@@ -130,214 +130,214 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Soc_ShowTimelineGblHighlightingNot (long NotCod);
-static void Soc_ShowTimelineUsrHighlightingNot (long NotCod);
+static void TL_ShowTimelineGblHighlightingNot (long NotCod);
+static void TL_ShowTimelineUsrHighlightingNot (long NotCod);
 
-static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
+static void TL_GetAndShowOldTimeline (TL_TimelineUsrOrGbl_t TimelineUsrOrGbl);
 
-static void Soc_BuildQueryToGetTimeline (char **Query,
-                                         Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
-                                         Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline);
-static long Soc_GetPubCodFromSession (const char *FieldName);
-static void Soc_UpdateLastPubCodIntoSession (void);
-static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod);
-static void Soc_DropTemporaryTablesUsedToQueryTimeline (void);
+static void TL_BuildQueryToGetTimeline (char **Query,
+                                         TL_TimelineUsrOrGbl_t TimelineUsrOrGbl,
+                                         TL_WhatToGetFromTimeline_t WhatToGetFromTimeline);
+static long TL_GetPubCodFromSession (const char *FieldName);
+static void TL_UpdateLastPubCodIntoSession (void);
+static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod);
+static void TL_DropTemporaryTablesUsedToQueryTimeline (void);
 
-static void Soc_ShowTimeline (char *Query,
+static void TL_ShowTimeline (char *Query,
                               const char *Title,long NotCodToHighlight);
-static void Soc_PutIconsTimeline (void);
+static void TL_PutIconsTimeline (void);
 
-static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr);
-static void Soc_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr);
+static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 			    const char *ParamCod,
 			    const char *Icon,const char *Title);
 
-static void Soc_PutFormWhichUsrs (void);
-static void Soc_PutParamWhichUsrs (void);
-static void Soc_GetParamsWhichUsrs (void);
-static Soc_WhichUsrs_t Soc_GetWhichUsrsFromDB (void);
-static void Soc_SaveWhichUsersInDB (void);
+static void TL_PutFormWhichUsrs (void);
+static void TL_PutParamWhichUsrs (void);
+static void TL_GetParamsWhichUsrs (void);
+static TL_WhichUsrs_t TL_GetWhichUsrsFromDB (void);
+static void TL_SaveWhichUsersInDB (void);
 
-static void Soc_ShowWarningYouDontFollowAnyUser (void);
+static void TL_ShowWarningYouDontFollowAnyUser (void);
 
-static void Soc_InsertNewPubsInTimeline (char *Query);
-static void Soc_ShowOldPubsInTimeline (char *Query);
+static void TL_InsertNewPubsInTimeline (char *Query);
+static void TL_ShowOldPubsInTimeline (char *Query);
 
-static void Soc_GetDataOfSocialPublicationFromRow (MYSQL_ROW row,struct SocialPublication *SocPub);
+static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication *SocPub);
 
-static void Soc_PutLinkToViewNewPublications (void);
-static void Soc_PutLinkToViewOldPublications (void);
+static void TL_PutLinkToViewNewPublications (void);
+static void TL_PutLinkToViewOldPublications (void);
 
-static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
-                                 Soc_TopMessage_t TopMessage,long UsrCod,
-                                 bool Highlight,
-                                 bool ShowNoteAlone);
-static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod);
-static void Soc_WriteAuthorNote (const struct UsrData *UsrDat);
-static void Soc_WriteDateTime (time_t TimeUTC);
-static void Soc_GetAndWriteSocialPost (long PstCod);
-static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
-static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
-                                char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
-static void Soc_PublishSocialNoteInTimeline (struct SocialPublication *SocPub);
+static void TL_WriteNote (const struct TL_Note *SocNot,
+                          TL_TopMessage_t TopMessage,long UsrCod,
+                          bool Highlight,
+                          bool ShowNoteAlone);
+static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod);
+static void TL_WriteAuthorNote (const struct UsrData *UsrDat);
+static void TL_WriteDateTime (time_t TimeUTC);
+static void TL_GetAndWritePost (long PstCod);
+static void TL_PutFormGoToAction (const struct TL_Note *SocNot);
+static void TL_GetNoteSummary (const struct TL_Note *SocNot,
+                               char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
+static void TL_PublishNoteInTimeline (struct TL_Publication *SocPub);
 
-static void Soc_PutFormToWriteNewPost (void);
-static void Soc_PutTextarea (const char *Placeholder,
+static void TL_PutFormToWriteNewPost (void);
+static void TL_PutTextarea (const char *Placeholder,
                              const char *ClassTextArea,const char *ClassImgTit);
 
-static long Soc_ReceiveSocialPost (void);
+static long TL_ReceivePost (void);
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
-static void Soc_PutIconCommentDisabled (void);
-static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
-static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
-static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot);
-static void Soc_WriteOneSocialCommentInList (MYSQL_RES *mysql_res);
-static void Soc_PutIconToToggleComments (const char *UniqueId,
+static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID + 1]);
+static void TL_PutIconCommentDisabled (void);
+static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
+                                                     const char IdNewComment[Frm_MAX_BYTES_ID + 1]);
+static unsigned long TL_GetNumCommentsInNote (long NotCod);
+static void TL_WriteCommentsInNote (const struct TL_Note *SocNot);
+static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res);
+static void TL_PutIconToToggleComments (const char *UniqueId,
                                          const char *Icon,const char *Text);
-static void Soc_WriteSocialComment (struct SocialComment *SocCom,
-                                    Soc_TopMessage_t TopMessage,long UsrCod,
-                                    bool ShowCommentAlone);
-static void Soc_WriteAuthorComment (struct UsrData *UsrDat);
+static void TL_WriteComment (struct TL_Comment *SocCom,
+                             TL_TopMessage_t TopMessage,long UsrCod,
+                             bool ShowCommentAlone);
+static void TL_WriteAuthorComment (struct UsrData *UsrDat);
 
-static void Soc_PutFormToRemoveComment (long PubCod);
+static void TL_PutFormToRemoveComment (long PubCod);
 
-static void Soc_PutDisabledIconShare (unsigned NumShared);
-static void Soc_PutDisabledIconFav (unsigned NumFavs);
+static void TL_PutDisabledIconShare (unsigned NumShared);
+static void TL_PutDisabledIconFav (unsigned NumFavs);
 
-static void Soc_PutFormToShareSocialNote (const struct SocialNote *SocNot);
-static void Soc_PutFormToUnshareSocialNote (const struct SocialNote *SocNot);
-static void Soc_PutFormToFavSocialNote (const struct SocialNote *SocNot);
-static void Soc_PutFormToUnfavSocialNote (const struct SocialNote *SocNot);
-static void Soc_PutFormToFavSocialComment (struct SocialComment *SocCom);
-static void Soc_PutFormToUnfavSocialComment (struct SocialComment *SocCom);
+static void TL_PutFormToShareNote (const struct TL_Note *SocNot);
+static void TL_PutFormToUnshareNote (const struct TL_Note *SocNot);
+static void TL_PutFormToFavNote (const struct TL_Note *SocNot);
+static void TL_PutFormToUnfavNote (const struct TL_Note *SocNot);
+static void TL_PutFormToFavComment (struct TL_Comment *SocCom);
+static void TL_PutFormToUnfavComment (struct TL_Comment *SocCom);
 
-static void Soc_PutFormToRemoveSocialPublication (long NotCod);
+static void TL_PutFormToRemovePublication (long NotCod);
 
-static void Soc_PutHiddenParamNotCod (long NotCod);
-static long Soc_GetParamNotCod (void);
-static long Soc_GetParamPubCod (void);
+static void TL_PutHiddenParamNotCod (long NotCod);
+static long TL_GetParamNotCod (void);
+static long TL_GetParamPubCod (void);
 
-static long Soc_ReceiveComment (void);
+static long TL_ReceiveComment (void);
 
-static void Soc_ShareSocialNote (struct SocialNote *SocNot);
-static void Soc_FavSocialNote (struct SocialNote *SocNot);
-static void Soc_FavSocialComment (struct SocialComment *SocCom);
-static void Soc_CreateNotifToAuthor (long AuthorCod,long PubCod,
+static void TL_ShareNote (struct TL_Note *SocNot);
+static void TL_FavNote (struct TL_Note *SocNot);
+static void TL_FavComment (struct TL_Comment *SocCom);
+static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                      Ntf_NotifyEvent_t NotifyEvent);
 
-static void Soc_UnshareSocialNote (struct SocialNote *SocNot);
-static void Soc_UnfavSocialNote (struct SocialNote *SocNot);
-static void Soc_UnfavSocialComment (struct SocialComment *SocCom);
+static void TL_UnshareNote (struct TL_Note *SocNot);
+static void TL_UnfavNote (struct TL_Note *SocNot);
+static void TL_UnfavComment (struct TL_Comment *SocCom);
 
-static void Soc_RequestRemovalSocialNote (void);
-static void Soc_PutParamsRemoveSocialNote (void);
-static void Soc_RemoveSocialNote (void);
-static void Soc_RemoveImgFileFromSocialPost (long PstCod);
-static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot);
+static void TL_RequestRemovalNote (void);
+static void TL_PutParamsRemoveNote (void);
+static void TL_RemoveNote (void);
+static void TL_RemoveImgFileFromPost (long PstCod);
+static void TL_RemoveANoteFromDB (struct TL_Note *SocNot);
 
-static long Soc_GetNotCodOfSocialPublication (long PubCod);
-static long Soc_GetPubCodOfOriginalSocialNote (long NotCod);
+static long TL_GetNotCodOfPublication (long PubCod);
+static long TL_GetPubCodOfOriginalNote (long NotCod);
 
-static void Soc_RequestRemovalSocialComment (void);
-static void Soc_PutParamsRemoveSocialCommment (void);
-static void Soc_RemoveSocialComment (void);
-static void Soc_RemoveImgFileFromSocialComment (long PubCod);
-static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom);
+static void TL_RequestRemovalComment (void);
+static void TL_PutParamsRemoveCommment (void);
+static void TL_RemoveComment (void);
+static void TL_RemoveImgFileFromComment (long PubCod);
+static void TL_RemoveACommentFromDB (struct TL_Comment *SocCom);
 
-static bool Soc_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
-static bool Soc_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
-static bool Soc_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
+static bool TL_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
+static bool TL_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
+static bool TL_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod);
 
-static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot);
-static void Soc_GetNumTimesANoteHasBeenFav (struct SocialNote *SocNot);
-static void Soc_GetNumTimesACommHasBeenFav (struct SocialComment *SocCom);
+static void TL_UpdateNumTimesANoteHasBeenShared (struct TL_Note *SocNot);
+static void TL_GetNumTimesANoteHasBeenFav (struct TL_Note *SocNot);
+static void TL_GetNumTimesACommHasBeenFav (struct TL_Comment *SocCom);
 
-static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot);
-static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *SocNot);
-static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment *SocCom);
-static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
+static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot);
+static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot);
+static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom);
+static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 				     unsigned NumUsrs,unsigned NumFirstUsrs);
 
-static void Soc_GetDataOfSocialNotByCod (struct SocialNote *SocNot);
-static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom);
+static void TL_GetDataOfNoteByCod (struct TL_Note *SocNot);
+static void TL_GetDataOfCommByCod (struct TL_Comment *SocCom);
 
-static void Soc_GetDataOfSocialPublicationFromRow (MYSQL_ROW row,struct SocialPublication *SocPub);
-static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *SocNot);
-static Soc_PubType_t Soc_GetPubTypeFromStr (const char *Str);
-static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str);
-static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialComment *SocCom);
+static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication *SocPub);
+static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *SocNot);
+static TL_PubType_t TL_GetPubTypeFromStr (const char *Str);
+static TL_NoteType_t TL_GetNoteTypeFromStr (const char *Str);
+static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom);
 
-static void Soc_ResetSocialNote (struct SocialNote *SocNot);
-static void Soc_ResetSocialComment (struct SocialComment *SocCom);
+static void TL_ResetNote (struct TL_Note *SocNot);
+static void TL_ResetComment (struct TL_Comment *SocCom);
 
-static void Soc_ClearTimelineThisSession (void);
-static void Soc_AddNotesJustRetrievedToTimelineThisSession (void);
+static void TL_ClearTimelineThisSession (void);
+static void TL_AddNotesJustRetrievedToTimelineThisSession (void);
 
 static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *Txt);
 
 /*****************************************************************************/
-/***** Show social activity (timeline) including all the users I follow ******/
+/************** Show timeline including all the users I follow ***************/
 /*****************************************************************************/
 
-void Soc_ShowTimelineGbl1 (void)
+void TL_ShowTimelineGbl1 (void)
   {
    /***** Mark all my notifications about timeline as seen *****/
-   Soc_MarkMyNotifAsSeen ();
+   TL_MarkMyNotifAsSeen ();
 
    /***** Get which users *****/
-   Soc_GetParamsWhichUsrs ();
+   TL_GetParamsWhichUsrs ();
 
    /***** Save which users in database *****/
    if (Gbl.Action.Act == ActSeeSocTmlGbl)	// Only in action to see global timeline
-      Soc_SaveWhichUsersInDB ();
+      TL_SaveWhichUsersInDB ();
   }
 
-void Soc_ShowTimelineGbl2 (void)
+void TL_ShowTimelineGbl2 (void)
   {
    long PubCod;
-   struct SocialNote SocNot;
+   struct TL_Note SocNot;
    struct UsrData UsrDat;
    Ntf_NotifyEvent_t NotifyEvent;
-   const Soc_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
+   const TL_TopMessage_t TopMessages[Ntf_NUM_NOTIFY_EVENTS] =
      {
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_UNKNOWN
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_UNKNOWN
 
       /* Course tab */
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_DOCUMENT_FILE
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_TEACHERS_FILE
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_SHARED_FILE
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_DOCUMENT_FILE
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_TEACHERS_FILE
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_SHARED_FILE
 
       /* Assessment tab */
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ASSIGNMENT
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_EXAM_ANNOUNCEMENT
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_MARKS_FILE
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_ASSIGNMENT
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_EXAM_ANNOUNCEMENT
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_MARKS_FILE
 
       /* Users tab */
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_STD
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_TCH
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_REQUEST
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_ENROLMENT_STD
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_ENROLMENT_TCH
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_ENROLMENT_REQUEST
 
-      /* Social tab */
-      Soc_TOP_MESSAGE_COMMENTED,	// Ntf_EVENT_TIMELINE_COMMENT
-      Soc_TOP_MESSAGE_FAVED,		// Ntf_EVENT_TIMELINE_FAV
-      Soc_TOP_MESSAGE_SHARED,		// Ntf_EVENT_TIMELINE_SHARE
-      Soc_TOP_MESSAGE_MENTIONED,	// Ntf_EVENT_TIMELINE_MENTION
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_FOLLOWER
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_FORUM_POST_COURSE
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_FORUM_REPLY
+      /* Start tab */	// TODO: Move to top
+      TL_TOP_MESSAGE_COMMENTED,	// Ntf_EVENT_TIMELINE_COMMENT
+      TL_TOP_MESSAGE_FAVED,	// Ntf_EVENT_TIMELINE_FAV
+      TL_TOP_MESSAGE_SHARED,	// Ntf_EVENT_TIMELINE_SHARE
+      TL_TOP_MESSAGE_MENTIONED,	// Ntf_EVENT_TIMELINE_MENTION
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_FOLLOWER
 
       /* Messages tab */
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_NOTICE
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_MESSAGE
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_FORUM_POST_COURSE
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_FORUM_REPLY
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_NOTICE
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_MESSAGE
 
       /* Statistics tab */
 
       /* Profile tab */
 
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+      TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
      };
 
    /***** If I am been redirected from another action... *****/
@@ -354,16 +354,16 @@ void Soc_ShowTimelineGbl2 (void)
          break;
      }
 
-   /***** Initialize social note code to -1 ==> no highlighted note *****/
+   /***** Initialize note code to -1 ==> no highlighted note *****/
    SocNot.NotCod = -1L;
 
-   /***** Get parameter with the code of a social publication *****/
+   /***** Get parameter with the code of a publication *****/
    // This parameter is optional. It can be provided by a notification.
-   // If > 0 ==> the social note is shown highlighted above the timeline
-   PubCod = Soc_GetParamPubCod ();
+   // If > 0 ==> the note is shown highlighted above the timeline
+   PubCod = TL_GetParamPubCod ();
    if (PubCod > 0)
-      /***** Get code of social note from database *****/
-      SocNot.NotCod = Soc_GetNotCodOfSocialPublication (PubCod);
+      /***** Get code of note from database *****/
+      SocNot.NotCod = TL_GetNotCodOfPublication (PubCod);
 
    if (SocNot.NotCod > 0)
      {
@@ -373,68 +373,68 @@ void Soc_ShowTimelineGbl2 (void)
       /* Get what he/she did */
       NotifyEvent = Ntf_GetParamNotifyEvent ();
 
-      /***** Show the social note highlighted *****/
-      Soc_GetDataOfSocialNotByCod (&SocNot);
-      Soc_WriteSocialNote (&SocNot,
+      /***** Show the note highlighted *****/
+      TL_GetDataOfNoteByCod (&SocNot);
+      TL_WriteNote (&SocNot,
 			   TopMessages[NotifyEvent],UsrDat.UsrCod,
 			   true,true);
      }
 
    /***** Show timeline with possible highlighted note *****/
-   Soc_ShowTimelineGblHighlightingNot (SocNot.NotCod);
+   TL_ShowTimelineGblHighlightingNot (SocNot.NotCod);
   }
 
-static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
+static void TL_ShowTimelineGblHighlightingNot (long NotCod)
   {
    extern const char *Txt_Timeline;
    char *Query = NULL;
 
    /***** Build query to get timeline *****/
-   Soc_BuildQueryToGetTimeline (&Query,
-	                        Soc_TIMELINE_GBL,
-                                Soc_GET_RECENT_TIMELINE);
+   TL_BuildQueryToGetTimeline (&Query,
+	                        TL_TIMELINE_GBL,
+                                TL_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
-   Soc_ShowTimeline (Query,Txt_Timeline,NotCod);
+   TL_ShowTimeline (Query,Txt_Timeline,NotCod);
 
    /***** Drop temporary tables *****/
-   Soc_DropTemporaryTablesUsedToQueryTimeline ();
+   TL_DropTemporaryTablesUsedToQueryTimeline ();
   }
 
 /*****************************************************************************/
-/*********** Show social activity (timeline) of a selected user **************/
+/********************* Show timeline of a selected user **********************/
 /*****************************************************************************/
 
-void Soc_ShowTimelineUsr (void)
+void TL_ShowTimelineUsr (void)
   {
-   Soc_ShowTimelineUsrHighlightingNot (-1L);
+   TL_ShowTimelineUsrHighlightingNot (-1L);
   }
 
-static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
+static void TL_ShowTimelineUsrHighlightingNot (long NotCod)
   {
    extern const char *Txt_Timeline_OF_A_USER;
    char *Query = NULL;
 
    /***** Build query to show timeline with publications of a unique user *****/
-   Soc_BuildQueryToGetTimeline (&Query,
-	                        Soc_TIMELINE_USR,
-                                Soc_GET_RECENT_TIMELINE);
+   TL_BuildQueryToGetTimeline (&Query,
+	                        TL_TIMELINE_USR,
+                                TL_GET_RECENT_TIMELINE);
 
    /***** Show timeline *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Timeline_OF_A_USER,
 	     Gbl.Usrs.Other.UsrDat.FirstName);
-   Soc_ShowTimeline (Query,Gbl.Title,NotCod);
+   TL_ShowTimeline (Query,Gbl.Title,NotCod);
 
    /***** Drop temporary tables *****/
-   Soc_DropTemporaryTablesUsedToQueryTimeline ();
+   TL_DropTemporaryTablesUsedToQueryTimeline ();
   }
 
 /*****************************************************************************/
-/********** Refresh new publications in social timeline via AJAX *************/
+/************** Refresh new publications in timeline via AJAX ****************/
 /*****************************************************************************/
 
-void Soc_RefreshNewTimelineGbl (void)
+void TL_RefreshNewTimelineGbl (void)
   {
    char *Query = NULL;
 
@@ -442,21 +442,21 @@ void Soc_RefreshNewTimelineGbl (void)
      {
       /***** Send, before the HTML, the refresh time *****/
       fprintf (Gbl.F.Out,"%lu|",
-	       Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
+	       Cfg_TIME_TO_REFRESH_TIMELINE);
 
       /***** Get which users *****/
-      Soc_GetParamsWhichUsrs ();
+      TL_GetParamsWhichUsrs ();
 
       /***** Build query to get timeline *****/
-      Soc_BuildQueryToGetTimeline (&Query,
-	                           Soc_TIMELINE_GBL,
-				   Soc_GET_ONLY_NEW_PUBS);
+      TL_BuildQueryToGetTimeline (&Query,
+	                           TL_TIMELINE_GBL,
+				   TL_GET_ONLY_NEW_PUBS);
 
       /***** Show new timeline *****/
-      Soc_InsertNewPubsInTimeline (Query);
+      TL_InsertNewPubsInTimeline (Query);
 
       /***** Drop temporary tables *****/
-      Soc_DropTemporaryTablesUsedToQueryTimeline ();
+      TL_DropTemporaryTablesUsedToQueryTimeline ();
      }
 
    /***** All the output is made, so don't write anymore *****/
@@ -464,44 +464,44 @@ void Soc_RefreshNewTimelineGbl (void)
   }
 
 /*****************************************************************************/
-/************ View old publications in social timeline via AJAX **************/
+/**************** View old publications in timeline via AJAX *****************/
 /*****************************************************************************/
 
-void Soc_RefreshOldTimelineGbl (void)
+void TL_RefreshOldTimelineGbl (void)
   {
    /***** Get which users *****/
-   Soc_GetParamsWhichUsrs ();
+   TL_GetParamsWhichUsrs ();
 
    /***** Show old publications *****/
-   Soc_GetAndShowOldTimeline (Soc_TIMELINE_GBL);
+   TL_GetAndShowOldTimeline (TL_TIMELINE_GBL);
   }
 
-void Soc_RefreshOldTimelineUsr (void)
+void TL_RefreshOldTimelineUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())	// Existing user
       /***** If user exists, show old publications *****/
-      Soc_GetAndShowOldTimeline (Soc_TIMELINE_USR);
+      TL_GetAndShowOldTimeline (TL_TIMELINE_USR);
   }
 
 /*****************************************************************************/
 /**************** Get and show old publications in timeline ******************/
 /*****************************************************************************/
 
-static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
+static void TL_GetAndShowOldTimeline (TL_TimelineUsrOrGbl_t TimelineUsrOrGbl)
   {
    char *Query = NULL;
 
    /***** Build query to get timeline *****/
-   Soc_BuildQueryToGetTimeline (&Query,
+   TL_BuildQueryToGetTimeline (&Query,
 	                        TimelineUsrOrGbl,
-                                Soc_GET_ONLY_OLD_PUBS);
+                                TL_GET_ONLY_OLD_PUBS);
 
    /***** Show old timeline *****/
-   Soc_ShowOldPubsInTimeline (Query);
+   TL_ShowOldPubsInTimeline (Query);
 
    /***** Drop temporary tables *****/
-   Soc_DropTemporaryTablesUsedToQueryTimeline ();
+   TL_DropTemporaryTablesUsedToQueryTimeline ();
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -512,7 +512,7 @@ static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
 /*****************************************************************************/
 // Must be executed as a priori function
 
-void Soc_MarkMyNotifAsSeen (void)
+void TL_MarkMyNotifAsSeen (void)
   {
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_COMMENT,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
    Ntf_MarkNotifAsSeen (Ntf_EVENT_TIMELINE_FAV    ,-1L,-1L,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -524,16 +524,16 @@ void Soc_MarkMyNotifAsSeen (void)
 /************************ Build query to get timeline ************************/
 /*****************************************************************************/
 
-#define Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS (256 - 1)
+#define TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS (256 - 1)
 
-static void Soc_BuildQueryToGetTimeline (char **Query,
-                                         Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
-                                         Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline)
+static void TL_BuildQueryToGetTimeline (char **Query,
+                                         TL_TimelineUsrOrGbl_t TimelineUsrOrGbl,
+                                         TL_WhatToGetFromTimeline_t WhatToGetFromTimeline)
   {
    char SubQueryPublishers[128];
    char SubQueryRangeBottom[128];
    char SubQueryRangeTop[128];
-   char SubQueryAlreadyExists[Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS + 1];
+   char SubQueryAlreadyExists[TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS + 1];
    struct
      {
       long Top;
@@ -547,17 +547,17 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
    long NotCod;
    const unsigned MaxPubsToGet[3] =
      {
-      Soc_MAX_NEW_PUBS_TO_GET_AND_SHOW,	// Soc_GET_ONLY_NEW_PUBS
-      Soc_MAX_REC_PUBS_TO_GET_AND_SHOW,	// Soc_GET_RECENT_TIMELINE
-      Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW,	// Soc_GET_ONLY_OLD_PUBS
+      TL_MAX_NEW_PUBS_TO_GET_AND_SHOW,	// TL_GET_ONLY_NEW_PUBS
+      TL_MAX_REC_PUBS_TO_GET_AND_SHOW,	// TL_GET_RECENT_TIMELINE
+      TL_MAX_OLD_PUBS_TO_GET_AND_SHOW,	// TL_GET_ONLY_OLD_PUBS
      };
 
-   /***** Clear social timeline for this session in database *****/
-   if (WhatToGetFromTimeline == Soc_GET_RECENT_TIMELINE)
-      Soc_ClearTimelineThisSession ();
+   /***** Clear timeline for this session in database *****/
+   if (WhatToGetFromTimeline == TL_GET_RECENT_TIMELINE)
+      TL_ClearTimelineThisSession ();
 
    /***** Drop temporary tables *****/
-   Soc_DropTemporaryTablesUsedToQueryTimeline ();
+   TL_DropTemporaryTablesUsedToQueryTimeline ();
 
    /***** Create temporary table with publication codes *****/
    DB_Query ("can not create temporary table",
@@ -579,14 +579,14 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
    /***** Create temporary table and subquery with potential publishers *****/
    switch (TimelineUsrOrGbl)
      {
-      case Soc_TIMELINE_USR:	// Show the timeline of a user
+      case TL_TIMELINE_USR:	// Show the timeline of a user
 	 sprintf (SubQueryPublishers,"PublisherCod=%ld AND ",
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
 	 break;
-      case Soc_TIMELINE_GBL:	// Show the global timeline
-	 switch (Gbl.Social.WhichUsrs)
+      case TL_TIMELINE_GBL:	// Show the global timeline
+	 switch (Gbl.Timeline.WhichUsrs)
 	   {
-	    case Soc_USRS_FOLLOWED:	// Show the timeline of the users I follow
+	    case TL_USRS_FOLLOWED:	// Show the timeline of the users I follow
 	       DB_Query ("can not create temporary table",
 		         "CREATE TEMPORARY TABLE publishers "
 			 "(UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
@@ -599,7 +599,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 
 	       sprintf (SubQueryPublishers,"social_pubs.PublisherCod=publishers.UsrCod AND ");
 	       break;
-	    case Soc_USRS_ALL:	// Show the timeline of all users
+	    case TL_USRS_ALL:	// Show the timeline of all users
 	       SubQueryPublishers[0] = '\0';
 	       break;
 	    default:
@@ -612,39 +612,39 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
    /***** Create subquery to get only notes not present in timeline *****/
    switch (TimelineUsrOrGbl)
      {
-      case Soc_TIMELINE_USR:	// Show the timeline of a user
+      case TL_TIMELINE_USR:	// Show the timeline of a user
 	 switch (WhatToGetFromTimeline)
            {
-            case Soc_GET_ONLY_NEW_PUBS:
-            case Soc_GET_RECENT_TIMELINE:
+            case TL_GET_ONLY_NEW_PUBS:
+            case TL_GET_RECENT_TIMELINE:
 	       Str_Copy (SubQueryAlreadyExists,
 	                 " NotCod NOT IN"
 			 " (SELECT NotCod FROM not_codes)",
-			 Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
+			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
-            case Soc_GET_ONLY_OLD_PUBS:
+            case TL_GET_ONLY_OLD_PUBS:
 	       Str_Copy (SubQueryAlreadyExists,
 	                 " NotCod NOT IN"
 			 " (SELECT NotCod FROM current_timeline)",
-			 Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
+			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
            }
 	 break;
-      case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
+      case TL_TIMELINE_GBL:	// Show the timeline of the users I follow
 	 switch (WhatToGetFromTimeline)
            {
-            case Soc_GET_ONLY_NEW_PUBS:
-            case Soc_GET_RECENT_TIMELINE:
+            case TL_GET_ONLY_NEW_PUBS:
+            case TL_GET_RECENT_TIMELINE:
 	       Str_Copy (SubQueryAlreadyExists,
 	                 " social_pubs.NotCod NOT IN"
 			 " (SELECT NotCod FROM not_codes)",
-			 Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
+			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
-            case Soc_GET_ONLY_OLD_PUBS:
+            case TL_GET_ONLY_OLD_PUBS:
 	       Str_Copy (SubQueryAlreadyExists,
 	                 " social_pubs.NotCod NOT IN"
 			 " (SELECT NotCod FROM current_timeline)",
-			 Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
+			 TL_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
            }
 	 break;
@@ -672,18 +672,18 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
    RangePubsToGet.Bottom = 0;	// -Infinite
    switch (WhatToGetFromTimeline)
      {
-      case Soc_GET_ONLY_NEW_PUBS:	 // Get the publications (without limit) newer than LastPubCod
+      case TL_GET_ONLY_NEW_PUBS:	 // Get the publications (without limit) newer than LastPubCod
 	 /* This query is made via AJAX automatically from time to time */
-	 RangePubsToGet.Bottom = Soc_GetPubCodFromSession ("LastPubCod");
+	 RangePubsToGet.Bottom = TL_GetPubCodFromSession ("LastPubCod");
 	 break;
-      case Soc_GET_RECENT_TIMELINE:	 // Get some limited recent publications
+      case TL_GET_RECENT_TIMELINE:	 // Get some limited recent publications
 	 /* This is the first query to get initial timeline shown
 	    ==> no notes yet in current timeline table */
 	 break;
-      case Soc_GET_ONLY_OLD_PUBS:	 // Get some limited publications older than FirstPubCod
+      case TL_GET_ONLY_OLD_PUBS:	 // Get some limited publications older than FirstPubCod
 	 /* This query is made via AJAX
 	    when I click in link to get old publications */
-	 RangePubsToGet.Top    = Soc_GetPubCodFromSession ("FirstPubCod");
+	 RangePubsToGet.Top    = TL_GetPubCodFromSession ("FirstPubCod");
 	 break;
      }
 
@@ -711,17 +711,19 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
       if (RangePubsToGet.Bottom > 0)
 	 switch (TimelineUsrOrGbl)
 	   {
-	    case Soc_TIMELINE_USR:	// Show the timeline of a user
+	    case TL_TIMELINE_USR:	// Show the timeline of a user
 	       sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",RangePubsToGet.Bottom);
 	       break;
-	    case Soc_TIMELINE_GBL:	// Show the global timeline
-	       switch (Gbl.Social.WhichUsrs)
+	    case TL_TIMELINE_GBL:	// Show the global timeline
+	       switch (Gbl.Timeline.WhichUsrs)
 		 {
-		  case Soc_USRS_FOLLOWED:	// Show the timeline of the users I follow
-		     sprintf (SubQueryRangeBottom,"social_pubs.PubCod>%ld AND ",RangePubsToGet.Bottom);
+		  case TL_USRS_FOLLOWED:	// Show the timeline of the users I follow
+		     sprintf (SubQueryRangeBottom,"social_pubs.PubCod>%ld AND ",
+			      RangePubsToGet.Bottom);
 		     break;
-		  case Soc_USRS_ALL:	// Show the timeline of all users
-		     sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",RangePubsToGet.Bottom);
+		  case TL_USRS_ALL:	// Show the timeline of all users
+		     sprintf (SubQueryRangeBottom,"PubCod>%ld AND ",
+			      RangePubsToGet.Bottom);
 		     break;
 		  default:
 		     Lay_ShowErrorAndExit ("Wrong parameter which users.");
@@ -735,17 +737,19 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
       if (RangePubsToGet.Top > 0)
 	 switch (TimelineUsrOrGbl)
 	   {
-	    case Soc_TIMELINE_USR:	// Show the timeline of a user
+	    case TL_TIMELINE_USR:	// Show the timeline of a user
 	       sprintf (SubQueryRangeTop,"PubCod<%ld AND ",RangePubsToGet.Top);
 	       break;
-	    case Soc_TIMELINE_GBL:	// Show the global timeline
-	       switch (Gbl.Social.WhichUsrs)
+	    case TL_TIMELINE_GBL:	// Show the global timeline
+	       switch (Gbl.Timeline.WhichUsrs)
 		 {
-		  case Soc_USRS_FOLLOWED:	// Show the timeline of the users I follow
-		     sprintf (SubQueryRangeTop,"social_pubs.PubCod<%ld AND ",RangePubsToGet.Top);
+		  case TL_USRS_FOLLOWED:	// Show the timeline of the users I follow
+		     sprintf (SubQueryRangeTop,"social_pubs.PubCod<%ld AND ",
+			      RangePubsToGet.Top);
 		     break;
-		  case Soc_USRS_ALL:	// Show the timeline of all users
-		     sprintf (SubQueryRangeTop,"PubCod<%ld AND ",RangePubsToGet.Top);
+		  case TL_USRS_ALL:	// Show the timeline of all users
+		     sprintf (SubQueryRangeTop,"PubCod<%ld AND ",
+			      RangePubsToGet.Top);
 		     break;
 		  default:
 		     Lay_ShowErrorAndExit ("Wrong parameter which users.");
@@ -760,33 +764,36 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
       NumPubs = 0;	// Initialized to avoid warning
       switch (TimelineUsrOrGbl)
 	{
-	 case Soc_TIMELINE_USR:	// Show the timeline of a user
+	 case TL_TIMELINE_USR:	// Show the timeline of a user
 	    NumPubs =
 	    (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
-				       "SELECT PubCod,NotCod FROM social_pubs"
+				       "SELECT PubCod,NotCod"
+				       " FROM social_pubs"
 				       " WHERE %s%s%s%s"
 				       " ORDER BY PubCod DESC LIMIT 1",
 				       SubQueryRangeBottom,SubQueryRangeTop,
 				       SubQueryPublishers,
 				       SubQueryAlreadyExists);
 	    break;
-	 case Soc_TIMELINE_GBL:	// Show the global timeline
-	    switch (Gbl.Social.WhichUsrs)
+	 case TL_TIMELINE_GBL:	// Show the global timeline
+	    switch (Gbl.Timeline.WhichUsrs)
 	      {
-	       case Soc_USRS_FOLLOWED:	// Show the timeline of the users I follow
+	       case TL_USRS_FOLLOWED:	// Show the timeline of the users I follow
 		  NumPubs =
 		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
-				             "SELECT PubCod,NotCod FROM social_pubs,publishers"
+				             "SELECT PubCod,NotCod"
+				             " FROM social_pubs,publishers"
 					     " WHERE %s%s%s%s"
 					     " ORDER BY social_pubs.PubCod DESC LIMIT 1",
 					     SubQueryRangeBottom,SubQueryRangeTop,
 					     SubQueryPublishers,
 					     SubQueryAlreadyExists);
 		  break;
-	       case Soc_USRS_ALL:	// Show the timeline of all users
+	       case TL_USRS_ALL:	// Show the timeline of all users
 		  NumPubs =
 		  (unsigned) DB_QuerySELECT (&mysql_res,"can not get publication",
-				             "SELECT PubCod,NotCod FROM social_pubs"
+				             "SELECT PubCod,NotCod"
+				             " FROM social_pubs"
 					     " WHERE %s%s%s"
 					     " ORDER BY PubCod DESC LIMIT 1",
 					     SubQueryRangeBottom,SubQueryRangeTop,
@@ -801,7 +808,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 
       if (NumPubs == 1)
 	{
-	 /* Get code of social publication */
+	 /* Get code of publication */
 	 row = mysql_fetch_row (mysql_res);
 	 PubCod = Str_ConvertStrCodToLongCod (row[0]);
 	}
@@ -821,7 +828,7 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
 			 PubCod);
 	 RangePubsToGet.Top = PubCod;	// Narrow the range for the next iteration
 
-	 /* Get social note code (row[1]) */
+	 /* Get note code (row[1]) */
 	 if (row)
 	   {
 	    NotCod = Str_ConvertStrCodToLongCod (row[1]);
@@ -840,10 +847,10 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
    /***** Update last publication code into session for next refresh *****/
    // Do this inmediately after getting the publications codes...
    // ...in order to not lose publications
-   Soc_UpdateLastPubCodIntoSession ();
+   TL_UpdateLastPubCodIntoSession ();
 
    /***** Add notes just retrieved to current timeline for this session *****/
-   Soc_AddNotesJustRetrievedToTimelineThisSession ();
+   TL_AddNotesJustRetrievedToTimelineThisSession ();
 
    /***** Build query to show timeline including the users I am following *****/
    DB_BuildQuery (Query,
@@ -860,13 +867,13 @@ static void Soc_BuildQueryToGetTimeline (char **Query,
   }
 
 /*****************************************************************************/
-/********* Get last/first social publication code stored in session **********/
+/************* Get last/first publication code stored in session *************/
 /*****************************************************************************/
 // FieldName can be:
 // "LastPubCod"
 // "FirstPubCod"
 
-static long Soc_GetPubCodFromSession (const char *FieldName)
+static long TL_GetPubCodFromSession (const char *FieldName)
   {
    extern const char *Txt_The_session_has_expired;
    MYSQL_RES *mysql_res;
@@ -894,7 +901,7 @@ static long Soc_GetPubCodFromSession (const char *FieldName)
 /*********************** Update last publication code ************************/
 /*****************************************************************************/
 
-static void Soc_UpdateLastPubCodIntoSession (void)
+static void TL_UpdateLastPubCodIntoSession (void)
   {
    /***** Update last publication code *****/
    DB_QueryUPDATE ("can not update last publication code into session",
@@ -909,7 +916,7 @@ static void Soc_UpdateLastPubCodIntoSession (void)
 /*********************** Update first publication code ***********************/
 /*****************************************************************************/
 
-static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod)
+static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod)
   {
    /***** Update last publication code *****/
    DB_QueryUPDATE ("can not update first publication code into session",
@@ -921,7 +928,7 @@ static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod)
 /*************** Drop temporary tables used to query timeline ****************/
 /*****************************************************************************/
 
-static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
+static void TL_DropTemporaryTablesUsedToQueryTimeline (void)
   {
    DB_Query ("can not remove temporary tables",
 	     "DROP TEMPORARY TABLE IF EXISTS"
@@ -929,7 +936,7 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
   }
 
 /*****************************************************************************/
-/*********************** Show social activity (timeline) *********************/
+/******************************* Show timeline *******************************/
 /*****************************************************************************/
 /*             _____
             / |_____| just_now_timeline_list (Posts retrieved automatically
@@ -960,16 +967,16 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
            |  |_____|
             \ |_____|
 */
-static void Soc_ShowTimeline (char *Query,
+static void TL_ShowTimeline (char *Query,
                               const char *Title,long NotCodToHighlight)
   {
-   extern const char *Hlp_SOCIAL_Timeline;
+   extern const char *Hlp_START_Timeline;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumPubsGot;
    unsigned long NumPub;
-   struct SocialPublication SocPub;
-   struct SocialNote SocNot;
+   struct TL_Publication SocPub;
+   struct TL_Note SocNot;
    bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
    bool ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
@@ -979,22 +986,22 @@ static void Soc_ShowTimeline (char *Query,
 				Query);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Title,Soc_PutIconsTimeline,
-                 Hlp_SOCIAL_Timeline,Box_NOT_CLOSABLE);
+   Box_StartBox (NULL,Title,TL_PutIconsTimeline,
+                 Hlp_START_Timeline,Box_NOT_CLOSABLE);
 
    /***** Put form to select users whom public activity is displayed *****/
    if (GlobalTimeline)
-      Soc_PutFormWhichUsrs ();
+      TL_PutFormWhichUsrs ();
 
    /***** Form to write a new post *****/
    if (GlobalTimeline || ItsMe)
-      Soc_PutFormToWriteNewPost ();
+      TL_PutFormToWriteNewPost ();
 
    /***** New publications refreshed dynamically via AJAX *****/
    if (GlobalTimeline)
      {
       /* Link to view new publications via AJAX */
-      Soc_PutLinkToViewNewPublications ();
+      TL_PutLinkToViewNewPublications ();
 
       /* Hidden list where insert just received (not visible) publications via AJAX */
       fprintf (Gbl.F.Out,"<ul id=\"just_now_timeline_list\" class=\"TL_LIST\"></ul>");
@@ -1010,16 +1017,16 @@ static void Soc_ShowTimeline (char *Query,
 	NumPub < NumPubsGot;
 	NumPub++)
      {
-      /* Get data of social publication */
+      /* Get data of publication */
       row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialPublicationFromRow (row,&SocPub);
+      TL_GetDataOfPublicationFromRow (row,&SocPub);
 
-      /* Get data of social note */
+      /* Get data of note */
       SocNot.NotCod = SocPub.NotCod;
-      Soc_GetDataOfSocialNotByCod (&SocNot);
+      TL_GetDataOfNoteByCod (&SocNot);
 
-      /* Write social note */
-      Soc_WriteSocialNote (&SocNot,
+      /* Write note */
+      TL_WriteNote (&SocNot,
                            SocPub.TopMessage,SocPub.PublisherCod,
 			   SocNot.NotCod == NotCodToHighlight,
 			   false);
@@ -1030,12 +1037,12 @@ static void Soc_ShowTimeline (char *Query,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Store first publication code into session *****/
-   Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
+   TL_UpdateFirstPubCodIntoSession (SocPub.PubCod);
 
-   if (NumPubsGot == Soc_MAX_REC_PUBS_TO_GET_AND_SHOW)
+   if (NumPubsGot == TL_MAX_REC_PUBS_TO_GET_AND_SHOW)
      {
       /***** Link to view old publications via AJAX *****/
-      Soc_PutLinkToViewOldPublications ();
+      TL_PutLinkToViewOldPublications ();
 
       /***** Hidden list where insert old publications via AJAX *****/
       fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\" class=\"TL_LIST\"></ul>");
@@ -1049,10 +1056,10 @@ static void Soc_ShowTimeline (char *Query,
 /********************* Put contextual icons in timeline **********************/
 /*****************************************************************************/
 
-static void Soc_PutIconsTimeline (void)
+static void TL_PutIconsTimeline (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Figures.FigureType = Fig_SOCIAL_ACTIVITY;
+   Gbl.Figures.FigureType = Fig_TIMELINE;
    Fig_PutIconToShowFigure ();
   }
 
@@ -1060,7 +1067,7 @@ static void Soc_PutIconsTimeline (void)
 /***************** Start a form in global or user timeline *******************/
 /*****************************************************************************/
 
-static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
+static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
@@ -1070,7 +1077,7 @@ static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
    else
      {
       Frm_StartForm (ActionGbl);
-      Soc_PutParamWhichUsrs ();
+      TL_PutParamWhichUsrs ();
      }
   }
 
@@ -1078,13 +1085,13 @@ static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
 /******* Form to fav/unfav or share/unshare in global or user timeline *******/
 /*****************************************************************************/
 
-static void Soc_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
+static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 			    const char *ParamCod,
 			    const char *Icon,const char *Title)
   {
    char *OnSubmit;
 
-   /***** Form and icon to mark social note as favourite *****/
+   /***** Form and icon to mark note as favourite *****/
    /* Form with icon */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
@@ -1120,26 +1127,26 @@ static void Soc_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
 /******** Show form to select users whom public activity is displayed ********/
 /*****************************************************************************/
 
-static void Soc_PutFormWhichUsrs (void)
+static void TL_PutFormWhichUsrs (void)
   {
-   extern const char *Txt_TIMELINE_WHICH_USERS[Soc_NUM_WHICH_USRS];
-   Soc_WhichUsrs_t WhichUsrs;
-   static const char *Icon[Soc_NUM_WHICH_USRS] =
+   extern const char *Txt_TIMELINE_WHICH_USERS[TL_NUM_WHICH_USRS];
+   TL_WhichUsrs_t WhichUsrs;
+   static const char *Icon[TL_NUM_WHICH_USRS] =
      {
-      NULL,		// Soc_USRS_UNKNOWN
-      "user-check.svg",	// Soc_USRS_FOLLOWED
-      "users.svg",	// Soc_USRS_ALL
+      NULL,		// TL_USRS_UNKNOWN
+      "user-check.svg",	// TL_USRS_FOLLOWED
+      "users.svg",	// TL_USRS_ALL
      };
 
    /***** Preference selector for which users *****/
    Pre_StartPrefsHead ();
    Pre_StartOnePrefSelector ();
-   for (WhichUsrs = (Soc_WhichUsrs_t) 1;
-	WhichUsrs < Soc_NUM_WHICH_USRS;
+   for (WhichUsrs = (TL_WhichUsrs_t) 1;
+	WhichUsrs < TL_NUM_WHICH_USRS;
 	WhichUsrs++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       WhichUsrs == Gbl.Social.WhichUsrs ? "PREF_ON" :
+	       WhichUsrs == Gbl.Timeline.WhichUsrs ? "PREF_ON" :
 						   "PREF_OFF");
       Frm_StartForm (ActSeeSocTmlGbl);
       Par_PutHiddenParamUnsigned ("WhichUsrs",WhichUsrs);
@@ -1151,51 +1158,51 @@ static void Soc_PutFormWhichUsrs (void)
    Pre_EndPrefsHead ();
 
    /***** Show warning if I do not follow anyone *****/
-   if (Gbl.Social.WhichUsrs == Soc_USRS_FOLLOWED)
-      Soc_ShowWarningYouDontFollowAnyUser ();
+   if (Gbl.Timeline.WhichUsrs == TL_USRS_FOLLOWED)
+      TL_ShowWarningYouDontFollowAnyUser ();
   }
 
 /*****************************************************************************/
 /***** Put hidden parameter with which users to view in global timeline ******/
 /*****************************************************************************/
 
-static void Soc_PutParamWhichUsrs (void)
+static void TL_PutParamWhichUsrs (void)
   {
-   Par_PutHiddenParamUnsigned ("WhichUsrs",Gbl.Social.WhichUsrs);
+   Par_PutHiddenParamUnsigned ("WhichUsrs",Gbl.Timeline.WhichUsrs);
   }
 
 /*****************************************************************************/
 /********* Get parameter with which users to view in global timeline *********/
 /*****************************************************************************/
 
-static void Soc_GetParamsWhichUsrs (void)
+static void TL_GetParamsWhichUsrs (void)
   {
    /***** Get which users I want to see *****/
-   Gbl.Social.WhichUsrs = (Soc_WhichUsrs_t)
+   Gbl.Timeline.WhichUsrs = (TL_WhichUsrs_t)
 	                   Par_GetParToUnsignedLong ("WhichUsrs",
                                                      1,
-                                                     Soc_NUM_WHICH_USRS - 1,
-                                                     (unsigned long) Soc_USRS_UNKNOWN);
+                                                     TL_NUM_WHICH_USRS - 1,
+                                                     (unsigned long) TL_USRS_UNKNOWN);
 
    /***** If parameter WhichUsrs is not present, get it from database *****/
-   if (Gbl.Social.WhichUsrs == Soc_USRS_UNKNOWN)
-      Gbl.Social.WhichUsrs = Soc_GetWhichUsrsFromDB ();
+   if (Gbl.Timeline.WhichUsrs == TL_USRS_UNKNOWN)
+      Gbl.Timeline.WhichUsrs = TL_GetWhichUsrsFromDB ();
 
    /***** If parameter WhichUsrs is unknown, set it to default *****/
-   if (Gbl.Social.WhichUsrs == Soc_USRS_UNKNOWN)
-      Gbl.Social.WhichUsrs = Soc_DEFAULT_WHICH_USRS;
+   if (Gbl.Timeline.WhichUsrs == TL_USRS_UNKNOWN)
+      Gbl.Timeline.WhichUsrs = TL_DEFAULT_WHICH_USRS;
   }
 
 /*****************************************************************************/
 /********** Get user's last data from database giving a user's code **********/
 /*****************************************************************************/
 
-static Soc_WhichUsrs_t Soc_GetWhichUsrsFromDB (void)
+static TL_WhichUsrs_t TL_GetWhichUsrsFromDB (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned UnsignedNum;
-   Soc_WhichUsrs_t WhichUsrs = Soc_USRS_UNKNOWN;
+   TL_WhichUsrs_t WhichUsrs = TL_USRS_UNKNOWN;
 
    /***** Get which users from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get timeline users from user's last data",
@@ -1207,8 +1214,8 @@ static Soc_WhichUsrs_t Soc_GetWhichUsrsFromDB (void)
 
       /* Get which users */
       if (sscanf (row[0],"%u",&UnsignedNum) == 1)
-         if (UnsignedNum < Soc_NUM_WHICH_USRS)
-            WhichUsrs = (Soc_WhichUsrs_t) UnsignedNum;
+         if (UnsignedNum < TL_NUM_WHICH_USRS)
+            WhichUsrs = (TL_WhichUsrs_t) UnsignedNum;
      }
 
    /***** Free structure that stores the query result *****/
@@ -1221,18 +1228,18 @@ static Soc_WhichUsrs_t Soc_GetWhichUsrsFromDB (void)
 /********************** Save which users into database ***********************/
 /*****************************************************************************/
 
-static void Soc_SaveWhichUsersInDB (void)
+static void TL_SaveWhichUsersInDB (void)
   {
    if (Gbl.Usrs.Me.Logged)
      {
-      if (Gbl.Social.WhichUsrs == Soc_USRS_UNKNOWN)
-	 Gbl.Social.WhichUsrs = Soc_DEFAULT_WHICH_USRS;
+      if (Gbl.Timeline.WhichUsrs == TL_USRS_UNKNOWN)
+	 Gbl.Timeline.WhichUsrs = TL_DEFAULT_WHICH_USRS;
 
       /***** Update which users in database *****/
       // WhichUsrs is stored in usr_last for next time I log in
       DB_QueryUPDATE ("can not update timeline users in user's last data",
 		      "UPDATE usr_last SET TimelineUsrs=%u WHERE UsrCod=%ld",
-		      (unsigned) Gbl.Social.WhichUsrs,
+		      (unsigned) Gbl.Timeline.WhichUsrs,
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
      }
   }
@@ -1241,7 +1248,7 @@ static void Soc_SaveWhichUsersInDB (void)
 /********* Get parameter with which users to view in global timeline *********/
 /*****************************************************************************/
 
-static void Soc_ShowWarningYouDontFollowAnyUser (void)
+static void TL_ShowWarningYouDontFollowAnyUser (void)
   {
    extern const char *Txt_You_dont_follow_any_user;
    unsigned NumFollowing;
@@ -1262,18 +1269,18 @@ static void Soc_ShowWarningYouDontFollowAnyUser (void)
   }
 
 /*****************************************************************************/
-/********** Show new social activity (new publications in timeline) **********/
+/******************* Show new publications in timeline ***********************/
 /*****************************************************************************/
 // The publications are inserted as list elements of a hidden list
 
-static void Soc_InsertNewPubsInTimeline (char *Query)
+static void TL_InsertNewPubsInTimeline (char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumPubsGot;
    unsigned long NumPub;
-   struct SocialPublication SocPub;
-   struct SocialNote SocNot;
+   struct TL_Publication SocPub;
+   struct TL_Note SocNot;
 
    /***** Get new publications timeline from database *****/
    NumPubsGot = DB_QuerySELECT (&mysql_res,"can not get timeline",
@@ -1285,16 +1292,16 @@ static void Soc_InsertNewPubsInTimeline (char *Query)
 	NumPub < NumPubsGot;
 	NumPub++)
      {
-      /* Get data of social publication */
+      /* Get data of publication */
       row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialPublicationFromRow (row,&SocPub);
+      TL_GetDataOfPublicationFromRow (row,&SocPub);
 
-      /* Get data of social note */
+      /* Get data of note */
       SocNot.NotCod = SocPub.NotCod;
-      Soc_GetDataOfSocialNotByCod (&SocNot);
+      TL_GetDataOfNoteByCod (&SocNot);
 
-      /* Write social note */
-      Soc_WriteSocialNote (&SocNot,
+      /* Write note */
+      TL_WriteNote (&SocNot,
                            SocPub.TopMessage,SocPub.PublisherCod,
                            false,false);
      }
@@ -1304,18 +1311,18 @@ static void Soc_InsertNewPubsInTimeline (char *Query)
   }
 
 /*****************************************************************************/
-/********** Show old social activity (old publications in timeline) **********/
+/********************* Show old publications in timeline *********************/
 /*****************************************************************************/
 // The publications are inserted as list elements of a hidden list
 
-static void Soc_ShowOldPubsInTimeline (char *Query)
+static void TL_ShowOldPubsInTimeline (char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumPubsGot;
    unsigned long NumPub;
-   struct SocialPublication SocPub;
-   struct SocialNote SocNot;
+   struct TL_Publication SocPub;
+   struct TL_Note SocNot;
 
    /***** Get old publications timeline from database *****/
    NumPubsGot = DB_QuerySELECT (&mysql_res,"can not get timeline",
@@ -1327,16 +1334,16 @@ static void Soc_ShowOldPubsInTimeline (char *Query)
 	NumPub < NumPubsGot;
 	NumPub++)
      {
-      /* Get data of social publication */
+      /* Get data of publication */
       row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialPublicationFromRow (row,&SocPub);
+      TL_GetDataOfPublicationFromRow (row,&SocPub);
 
-      /* Get data of social note */
+      /* Get data of note */
       SocNot.NotCod = SocPub.NotCod;
-      Soc_GetDataOfSocialNotByCod (&SocNot);
+      TL_GetDataOfNoteByCod (&SocNot);
 
-      /* Write social note */
-      Soc_WriteSocialNote (&SocNot,
+      /* Write note */
+      TL_WriteNote (&SocNot,
                            SocPub.TopMessage,SocPub.PublisherCod,
                            false,false);
      }
@@ -1345,14 +1352,14 @@ static void Soc_ShowOldPubsInTimeline (char *Query)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Store first publication code into session *****/
-   Soc_UpdateFirstPubCodIntoSession (SocPub.PubCod);
+   TL_UpdateFirstPubCodIntoSession (SocPub.PubCod);
   }
 
 /*****************************************************************************/
 /***************** Put link to view new publications in timeline *************/
 /*****************************************************************************/
 
-static void Soc_PutLinkToViewNewPublications (void)
+static void TL_PutLinkToViewNewPublications (void)
   {
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_See_new_activity;
@@ -1375,7 +1382,7 @@ static void Soc_PutLinkToViewNewPublications (void)
 /***************** Put link to view old publications in timeline *************/
 /*****************************************************************************/
 
-static void Soc_PutLinkToViewOldPublications (void)
+static void TL_PutLinkToViewOldPublications (void)
   {
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_See_more;
@@ -1404,14 +1411,14 @@ static void Soc_PutLinkToViewOldPublications (void)
   }
 
 /*****************************************************************************/
-/***************************** Write social note *****************************/
+/******************************** Write note *********************************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
-                                 Soc_TopMessage_t TopMessage,long UsrCod,
-                                 bool Highlight,	// Highlight social note
-                                 bool ShowNoteAlone)	// Social note is shown alone, not in a list
+static void TL_WriteNote (const struct TL_Note *SocNot,
+                          TL_TopMessage_t TopMessage,long UsrCod,
+                          bool Highlight,	// Highlight note
+                          bool ShowNoteAlone)	// Note is shown alone, not in a list
   {
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
@@ -1454,9 +1461,9 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    fprintf (Gbl.F.Out,"\">");
 
    if (SocNot->NotCod   <= 0 ||
-       SocNot->NoteType == Soc_NOTE_UNKNOWN ||
+       SocNot->NoteType == TL_NOTE_UNKNOWN ||
        SocNot->UsrCod   <= 0)
-      Ale_ShowAlert (Ale_ERROR,"Error in social note.");
+      Ale_ShowAlert (Ale_ERROR,"Error in note.");
    else
      {
       /***** Initialize location in hierarchy *****/
@@ -1466,7 +1473,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       Crs.CrsCod = -1L;
 
       /***** Write sharer/commenter if distinct to author *****/
-      Soc_WriteTopMessage (TopMessage,UsrCod);
+      TL_WriteTopMessage (TopMessage,UsrCod);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -1480,9 +1487,9 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	 IAmTheAuthor = ItsMe;
 	 if (!IAmTheAuthor)
 	   {
-	    IAmASharerOfThisSocNot = Soc_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
+	    IAmASharerOfThisSocNot = TL_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
 								   Gbl.Usrs.Me.UsrDat.UsrCod);
-	    IAmAFaverOfThisSocNot  = Soc_CheckIfNoteIsFavedByUsr  (SocNot->NotCod,
+	    IAmAFaverOfThisSocNot  = TL_CheckIfNoteIsFavedByUsr  (SocNot->NotCod,
 								   Gbl.Usrs.Me.UsrDat.UsrCod);
 	   }
 	}
@@ -1499,48 +1506,48 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_CONTAINER TL_RIGHT_WIDTH\">");
 
       /* Write author's full name and nickname */
-      Soc_WriteAuthorNote (&UsrDat);
+      TL_WriteAuthorNote (&UsrDat);
 
       /* Write date and time */
-      Soc_WriteDateTime (SocNot->DateTimeUTC);
+      TL_WriteDateTime (SocNot->DateTimeUTC);
 
       /* Write content of the note */
-      if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
+      if (SocNot->NoteType == TL_NOTE_POST)
 	 /* Write post content */
-	 Soc_GetAndWriteSocialPost (SocNot->Cod);
+	 TL_GetAndWritePost (SocNot->Cod);
       else
 	{
 	 /* Get location in hierarchy */
 	 if (!SocNot->Unavailable)
 	    switch (SocNot->NoteType)
 	      {
-	       case Soc_NOTE_INS_DOC_PUB_FILE:
-	       case Soc_NOTE_INS_SHA_PUB_FILE:
+	       case TL_NOTE_INS_DOC_PUB_FILE:
+	       case TL_NOTE_INS_SHA_PUB_FILE:
 		  /* Get institution data */
 		  Ins.InsCod = SocNot->HieCod;
 		  Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 		  break;
-	       case Soc_NOTE_CTR_DOC_PUB_FILE:
-	       case Soc_NOTE_CTR_SHA_PUB_FILE:
+	       case TL_NOTE_CTR_DOC_PUB_FILE:
+	       case TL_NOTE_CTR_SHA_PUB_FILE:
 		  /* Get centre data */
 		  Ctr.CtrCod = SocNot->HieCod;
 		  Ctr_GetDataOfCentreByCod (&Ctr);
 		  break;
-	       case Soc_NOTE_DEG_DOC_PUB_FILE:
-	       case Soc_NOTE_DEG_SHA_PUB_FILE:
+	       case TL_NOTE_DEG_DOC_PUB_FILE:
+	       case TL_NOTE_DEG_SHA_PUB_FILE:
 		  /* Get degree data */
 		  Deg.DegCod = SocNot->HieCod;
 		  Deg_GetDataOfDegreeByCod (&Deg);
 		  break;
-	       case Soc_NOTE_CRS_DOC_PUB_FILE:
-	       case Soc_NOTE_CRS_SHA_PUB_FILE:
-	       case Soc_NOTE_EXAM_ANNOUNCEMENT:
-	       case Soc_NOTE_NOTICE:
+	       case TL_NOTE_CRS_DOC_PUB_FILE:
+	       case TL_NOTE_CRS_SHA_PUB_FILE:
+	       case TL_NOTE_EXAM_ANNOUNCEMENT:
+	       case TL_NOTE_NOTICE:
 		  /* Get course data */
 		  Crs.CrsCod = SocNot->HieCod;
 		  Crs_GetDataOfCourseByCod (&Crs);
 		  break;
-	       case Soc_NOTE_FORUM_POST:
+	       case TL_NOTE_FORUM_POST:
 		  /* Get forum type of the post */
 		  For_GetForumTypeAndLocationOfAPost (SocNot->Cod,&Gbl.Forum.ForumSelected);
 		  For_SetForumName (&Gbl.Forum.ForumSelected,
@@ -1551,39 +1558,39 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	      }
 
 	 /* Write note type */
-	 Soc_PutFormGoToAction (SocNot);
+	 TL_PutFormGoToAction (SocNot);
 
 	 /* Write location in hierarchy */
 	 if (!SocNot->Unavailable)
 	    switch (SocNot->NoteType)
 	      {
-	       case Soc_NOTE_INS_DOC_PUB_FILE:
-	       case Soc_NOTE_INS_SHA_PUB_FILE:
+	       case TL_NOTE_INS_DOC_PUB_FILE:
+	       case TL_NOTE_INS_SHA_PUB_FILE:
 		  /* Write location (institution) in hierarchy */
 		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 			   Txt_Institution,Ins.ShrtName);
 		  break;
-	       case Soc_NOTE_CTR_DOC_PUB_FILE:
-	       case Soc_NOTE_CTR_SHA_PUB_FILE:
+	       case TL_NOTE_CTR_DOC_PUB_FILE:
+	       case TL_NOTE_CTR_SHA_PUB_FILE:
 		  /* Write location (centre) in hierarchy */
 		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 			   Txt_Centre,Ctr.ShrtName);
 		  break;
-	       case Soc_NOTE_DEG_DOC_PUB_FILE:
-	       case Soc_NOTE_DEG_SHA_PUB_FILE:
+	       case TL_NOTE_DEG_DOC_PUB_FILE:
+	       case TL_NOTE_DEG_SHA_PUB_FILE:
 		  /* Write location (degree) in hierarchy */
 		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 			   Txt_Degree,Deg.ShrtName);
 		  break;
-	       case Soc_NOTE_CRS_DOC_PUB_FILE:
-	       case Soc_NOTE_CRS_SHA_PUB_FILE:
-	       case Soc_NOTE_EXAM_ANNOUNCEMENT:
-	       case Soc_NOTE_NOTICE:
+	       case TL_NOTE_CRS_DOC_PUB_FILE:
+	       case TL_NOTE_CRS_SHA_PUB_FILE:
+	       case TL_NOTE_EXAM_ANNOUNCEMENT:
+	       case TL_NOTE_NOTICE:
 		  /* Write location (course) in hierarchy */
 		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 			   Txt_Course,Crs.ShrtName);
 		  break;
-	       case Soc_NOTE_FORUM_POST:
+	       case TL_NOTE_FORUM_POST:
 		  /* Write forum name */
 		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
 			   Txt_Forum,ForumName);
@@ -1593,7 +1600,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	      }
 
 	 /* Write note summary */
-	 Soc_GetNoteSummary (SocNot,SummaryStr);
+	 TL_GetNoteSummary (SocNot,SummaryStr);
 	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
 	}
 
@@ -1605,83 +1612,82 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
       /* Create unique id for new comment */
       Frm_SetUniqueId (IdNewComment);
 
-      /* Get number of comments in this social note */
-      NumComments = Soc_GetNumCommentsInSocialNote (SocNot->NotCod);
+      /* Get number of comments in this note */
+      NumComments = TL_GetNumCommentsInNote (SocNot->NotCod);
 
       /* Put icon to add a comment */
-      // if (NumComments || SocNot->Unavailable)	// Unavailable social notes can not be commented
-      if (SocNot->Unavailable)	// Unavailable social notes can not be commented
-	 Soc_PutIconCommentDisabled ();
+      if (SocNot->Unavailable)		// Unavailable notes can not be commented
+	 TL_PutIconCommentDisabled ();
       else
-         Soc_PutIconToToggleCommentSocialNote (IdNewComment);
+         TL_PutIconToToggleCommentNote (IdNewComment);
 
       fprintf (Gbl.F.Out,"</div>");
 
       fprintf (Gbl.F.Out,"<div class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\">"
 	                 "<div class=\"TL_ICO_FAV_SHA_REM\">");
 
-      /* Put icon to mark this social note as favourite */
-      if (SocNot->Unavailable ||	// Unavailable social notes can not be favourited
+      /* Put icon to mark this note as favourite */
+      if (SocNot->Unavailable ||	// Unavailable notes can not be favourited
           IAmTheAuthor)			// I am the author
         {
 	 /* Put disabled icon and list of users
-	    who have marked this social note as favourite */
-	 Soc_PutDisabledIconFav (SocNot->NumFavs);
-         Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (SocNot);
+	    who have marked this note as favourite */
+	 TL_PutDisabledIconFav (SocNot->NumFavs);
+         TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot);
         }
       else				// Available and I am not the author
 	{
 	 fprintf (Gbl.F.Out,"<div id=\"fav_not_%s_%u\""
 	                    " class=\"TL_ICO_FAV\">",
 	          Gbl.UniqueNameEncrypted,NumDiv);
-	 if (IAmAFaverOfThisSocNot)	// I have favourited this social note
+	 if (IAmAFaverOfThisSocNot)	// I have favourited this note
 	    /* Put icon to unfav this publication and list of users */
-	    Soc_PutFormToUnfavSocialNote (SocNot);
-	 else				//  I am not a faver of this social note
+	    TL_PutFormToUnfavNote (SocNot);
+	 else				//  I am not a faver of this note
 	    /* Put icon to fav this publication and list of users */
-	    Soc_PutFormToFavSocialNote (SocNot);
+	    TL_PutFormToFavNote (SocNot);
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 
       /* Put icon to share/unshare */
-      if (SocNot->Unavailable ||	// Unavailable social notes can not be shared
+      if (SocNot->Unavailable ||	// Unavailable notes can not be shared
           IAmTheAuthor)			// I am the author
         {
 	 /* Put disabled icon and list of users
-	    who have shared this social note */
-	 Soc_PutDisabledIconShare (SocNot->NumShared);
-         Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
+	    who have shared this note */
+	 TL_PutDisabledIconShare (SocNot->NumShared);
+         TL_ShowUsrsWhoHaveSharedNote (SocNot);
         }
       else				// Available and I am not the author
         {
 	 fprintf (Gbl.F.Out,"<div id=\"sha_not_%s_%u\""
 			    " class=\"TL_ICO_SHA\">",
 		  Gbl.UniqueNameEncrypted,NumDiv);
-	 if (IAmASharerOfThisSocNot)	// I am a sharer of this social note
+	 if (IAmASharerOfThisSocNot)	// I am a sharer of this note
 	    /* Put icon to unshare this publication and list of users */
-	    Soc_PutFormToUnshareSocialNote (SocNot);
-	 else				// I am not a sharer of this social note
+	    TL_PutFormToUnshareNote (SocNot);
+	 else				// I am not a sharer of this note
 	    /* Put icon to share this publication and list of users */
-	    Soc_PutFormToShareSocialNote (SocNot);
+	    TL_PutFormToShareNote (SocNot);
 	 fprintf (Gbl.F.Out,"</div>");
         }
 
-      /* Put icon to remove this social note */
+      /* Put icon to remove this note */
       if (IAmTheAuthor)
-	 Soc_PutFormToRemoveSocialPublication (SocNot->NotCod);
+	 TL_PutFormToRemovePublication (SocNot->NotCod);
 
       /* End of icon bar */
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show comments */
       if (NumComments)
-	 Soc_WriteCommentsInSocialNote (SocNot);
+	 TL_WriteCommentsInNote (SocNot);
 
       /* End of bottom right */
       fprintf (Gbl.F.Out,"</div>");
 
       /* Put hidden form to write a new comment */
-      Soc_PutHiddenFormToWriteNewCommentToSocialNote (SocNot->NotCod,IdNewComment);
+      TL_PutHiddenFormToWriteNewCommentToNote (SocNot->NotCod,IdNewComment);
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1703,15 +1709,15 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
+static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
-   extern const char *Txt_SOCIAL_NOTE_TOP_MESSAGES[Soc_NUM_TOP_MESSAGES];
+   extern const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES];
    struct UsrData UsrDat;
    bool ItsMe = Usr_ItsMe (UsrCod);
 
-   if (TopMessage != Soc_TOP_MESSAGE_NONE)
+   if (TopMessage != TL_TOP_MESSAGE_NONE)
      {
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -1734,7 +1740,7 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
 
 	 /***** Show action made *****/
          fprintf (Gbl.F.Out," %s:</div>",
-                  Txt_SOCIAL_NOTE_TOP_MESSAGES[TopMessage]);
+                  Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]);
 	}
 
       /***** Free memory used for user's data *****/
@@ -1743,11 +1749,11 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
   }
 
 /*****************************************************************************/
-/************ Write name and nickname of author of a social note *************/
+/*************** Write name and nickname of author of a note *****************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_WriteAuthorNote (const struct UsrData *UsrDat)
+static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -1777,11 +1783,11 @@ static void Soc_WriteAuthorNote (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/**************** Write the date of creation of a social note ****************/
+/******************* Write the date of creation of a note ********************/
 /*****************************************************************************/
 // TimeUTC holds UTC date and time in UNIX format (seconds since 1970)
 
-static void Soc_WriteDateTime (time_t TimeUTC)
+static void TL_WriteDateTime (time_t TimeUTC)
   {
    extern const char *Txt_Today;
    char IdDateTime[Frm_MAX_BYTES_ID + 1];
@@ -1809,7 +1815,7 @@ static void Soc_WriteDateTime (time_t TimeUTC)
 /***************** Get from database and write public post *******************/
 /*****************************************************************************/
 
-static void Soc_GetAndWriteSocialPost (long PstCod)
+static void TL_GetAndWritePost (long PstCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1820,15 +1826,16 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    /***** Initialize image *****/
    Med_MediaConstructor (&Media);
 
-   /***** Get social post from database *****/
+   /***** Get post from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the content"
-					" of a social post",
+					" of a post",
 			     "SELECT Content,"		// row[0]
 			            "MediaName,"	// row[1]
 			            "MediaType,"	// row[2]
 			            "MediaTitle,"	// row[3]
 			            "MediaURL"		// row[4]
-			     " FROM social_posts WHERE PstCod=%ld",
+			     " FROM social_posts"
+			     " WHERE PstCod=%ld",
 			     PstCod);
 
    /***** Result should have a unique row *****/
@@ -1866,85 +1873,85 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
   }
 
 /*****************************************************************************/
-/********* Put form to go to an action depending on the social note **********/
+/************* Put form to go to an action depending on the note *************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
+static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
-   extern const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES];
+   extern const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
    char Class[64];
-   const Act_Action_t Soc_DefaultActions[Soc_NUM_NOTE_TYPES] =
+   const Act_Action_t TL_DefaultActions[TL_NUM_NOTE_TYPES] =
      {
-      ActUnk,			// Soc_NOTE_UNKNOWN
+      ActUnk,			// TL_NOTE_UNKNOWN
 
       /* Institution tab */
-      ActReqDatSeeDocIns,	// Soc_NOTE_INS_DOC_PUB_FILE
-      ActReqDatShaIns,		// Soc_NOTE_INS_SHA_PUB_FILE
+      ActReqDatSeeDocIns,	// TL_NOTE_INS_DOC_PUB_FILE
+      ActReqDatShaIns,		// TL_NOTE_INS_SHA_PUB_FILE
 
       /* Centre tab */
-      ActReqDatSeeDocCtr,	// Soc_NOTE_CTR_DOC_PUB_FILE
-      ActReqDatShaCtr,		// Soc_NOTE_CTR_SHA_PUB_FILE
+      ActReqDatSeeDocCtr,	// TL_NOTE_CTR_DOC_PUB_FILE
+      ActReqDatShaCtr,		// TL_NOTE_CTR_SHA_PUB_FILE
 
       /* Degree tab */
-      ActReqDatSeeDocDeg,	// Soc_NOTE_DEG_DOC_PUB_FILE
-      ActReqDatShaDeg,		// Soc_NOTE_DEG_SHA_PUB_FILE
+      ActReqDatSeeDocDeg,	// TL_NOTE_DEG_DOC_PUB_FILE
+      ActReqDatShaDeg,		// TL_NOTE_DEG_SHA_PUB_FILE
 
       /* Course tab */
-      ActReqDatSeeDocCrs,	// Soc_NOTE_CRS_DOC_PUB_FILE
-      ActReqDatShaCrs,		// Soc_NOTE_CRS_SHA_PUB_FILE
+      ActReqDatSeeDocCrs,	// TL_NOTE_CRS_DOC_PUB_FILE
+      ActReqDatShaCrs,		// TL_NOTE_CRS_SHA_PUB_FILE
 
       /* Assessment tab */
-      ActSeeOneExaAnn,		// Soc_NOTE_EXAM_ANNOUNCEMENT
+      ActSeeOneExaAnn,		// TL_NOTE_EXAM_ANNOUNCEMENT
 
       /* Users tab */
 
-      /* Social tab */
-      ActUnk,			// Soc_NOTE_SOCIAL_POST (action not used)	// TODO: Move to start tab
-      ActSeeFor,		// Soc_NOTE_FORUM_POST				// TODO: Move to messages tab
+      /* Start tab */
+      ActUnk,			// TL_NOTE_SOCIAL_POST (action not used)	// TODO: Move to start tab
+      ActSeeFor,		// TL_NOTE_FORUM_POST				// TODO: Move to messages tab
 
       /* Messages tab */
-      ActSeeOneNot,		// Soc_NOTE_NOTICE
+      ActSeeOneNot,		// TL_NOTE_NOTICE
 
       /* Statistics tab */
 
       /* Profile tab */
 
      };
-   const char *Soc_Icons[Soc_NUM_NOTE_TYPES] =
+   const char *TL_Icons[TL_NUM_NOTE_TYPES] =
      {
-      NULL,			// Soc_NOTE_UNKNOWN
+      NULL,			// TL_NOTE_UNKNOWN
 
       /* Institution tab */
-      "file.svg",		// Soc_NOTE_INS_DOC_PUB_FILE
-      "file.svg",		// Soc_NOTE_INS_SHA_PUB_FILE
+      "file.svg",		// TL_NOTE_INS_DOC_PUB_FILE
+      "file.svg",		// TL_NOTE_INS_SHA_PUB_FILE
 
       /* Centre tab */
-      "file.svg",		// Soc_NOTE_CTR_DOC_PUB_FILE
-      "file.svg",		// Soc_NOTE_CTR_SHA_PUB_FILE
+      "file.svg",		// TL_NOTE_CTR_DOC_PUB_FILE
+      "file.svg",		// TL_NOTE_CTR_SHA_PUB_FILE
 
       /* Degree tab */
-      "file.svg",		// Soc_NOTE_DEG_DOC_PUB_FILE
-      "file.svg",		// Soc_NOTE_DEG_SHA_PUB_FILE
+      "file.svg",		// TL_NOTE_DEG_DOC_PUB_FILE
+      "file.svg",		// TL_NOTE_DEG_SHA_PUB_FILE
 
       /* Course tab */
-      "file.svg",		// Soc_NOTE_CRS_DOC_PUB_FILE
-      "file.svg",		// Soc_NOTE_CRS_SHA_PUB_FILE
+      "file.svg",		// TL_NOTE_CRS_DOC_PUB_FILE
+      "file.svg",		// TL_NOTE_CRS_SHA_PUB_FILE
 
       /* Assessment tab */
-      "bullhorn.svg",		// Soc_NOTE_EXAM_ANNOUNCEMENT
+      "bullhorn.svg",		// TL_NOTE_EXAM_ANNOUNCEMENT
 
       /* Users tab */
 
-      /* Social tab */
-      NULL,			// Soc_NOTE_SOCIAL_POST (icon not used)
-      "comments.svg",		// Soc_NOTE_FORUM_POST
+      /* Start tab */
+      NULL,			// TL_NOTE_SOCIAL_POST (icon not used)
 
       /* Messages tab */
-      "sticky-note.svg",	// Soc_NOTE_NOTICE
+      "comments.svg",		// TL_NOTE_FORUM_POST	// TODO: Move down
+      "sticky-note.svg",	// TL_NOTE_NOTICE
 
       /* Statistics tab */
 
@@ -1952,12 +1959,12 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 
      };
 
-   if (SocNot->Unavailable ||	// File/notice... pointed by this social note is unavailable
+   if (SocNot->Unavailable ||	// File/notice... pointed by this note is unavailable
        Gbl.Form.Inside)		// Inside another form
      {
       /***** Do not put form *****/
       fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">%s",
-               Txt_SOCIAL_NOTE[SocNot->NoteType]);
+               Txt_TIMELINE_NOTE[SocNot->NoteType]);
       if (SocNot->Unavailable)
          fprintf (Gbl.F.Out," (%s)",Txt_not_available);
       fprintf (Gbl.F.Out,"</div>");
@@ -1969,43 +1976,43 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       /***** Parameters depending on the type of note *****/
       switch (SocNot->NoteType)
 	{
-	 case Soc_NOTE_INS_DOC_PUB_FILE:
-	 case Soc_NOTE_INS_SHA_PUB_FILE:
-	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	 case TL_NOTE_INS_DOC_PUB_FILE:
+	 case TL_NOTE_INS_SHA_PUB_FILE:
+	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
 	       Ins_PutParamInsCod (SocNot->HieCod);		// Go to another institution
 	    break;
-	 case Soc_NOTE_CTR_DOC_PUB_FILE:
-	 case Soc_NOTE_CTR_SHA_PUB_FILE:
-	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	 case TL_NOTE_CTR_DOC_PUB_FILE:
+	 case TL_NOTE_CTR_SHA_PUB_FILE:
+	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
 	       Ctr_PutParamCtrCod (SocNot->HieCod);		// Go to another centre
 	    break;
-	 case Soc_NOTE_DEG_DOC_PUB_FILE:
-	 case Soc_NOTE_DEG_SHA_PUB_FILE:
-	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	 case TL_NOTE_DEG_DOC_PUB_FILE:
+	 case TL_NOTE_DEG_SHA_PUB_FILE:
+	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
 	       Deg_PutParamDegCod (SocNot->HieCod);		// Go to another degree
 	    break;
-	 case Soc_NOTE_CRS_DOC_PUB_FILE:
-	 case Soc_NOTE_CRS_SHA_PUB_FILE:
-	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	 case TL_NOTE_CRS_DOC_PUB_FILE:
+	 case TL_NOTE_CRS_SHA_PUB_FILE:
+	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
-	 case Soc_NOTE_EXAM_ANNOUNCEMENT:
-	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	 case TL_NOTE_EXAM_ANNOUNCEMENT:
+	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
 	    Exa_PutHiddenParamExaCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
-	 case Soc_NOTE_SOCIAL_POST:	// Not applicable
+	 case TL_NOTE_POST:	// Not applicable
 	    return;
-	 case Soc_NOTE_FORUM_POST:
+	 case TL_NOTE_FORUM_POST:
 	    Frm_StartFormUnique (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type]);
 	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                          1,	// Page of posts   = first
@@ -2017,8 +2024,8 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
-	 case Soc_NOTE_NOTICE:
-	    Frm_StartFormUnique (Soc_DefaultActions[SocNot->NoteType]);
+	 case TL_NOTE_NOTICE:
+	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
 	    Not_PutHiddenParamNotCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
@@ -2031,16 +2038,16 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       snprintf (Class,sizeof (Class),
 	        "%s ICO_HIGHLIGHT",
 		The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
-      Frm_LinkFormSubmitUnique (Txt_SOCIAL_NOTE[SocNot->NoteType],Class);
+      Frm_LinkFormSubmitUnique (Txt_TIMELINE_NOTE[SocNot->NoteType],Class);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"CONTEXT_ICO_x16\" />"
 	                 "&nbsp;%s"
 	                 "</a>",
-            Gbl.Prefs.URLIcons,Soc_Icons[SocNot->NoteType],
-            Txt_SOCIAL_NOTE[SocNot->NoteType],
-            Txt_SOCIAL_NOTE[SocNot->NoteType],
-            Txt_SOCIAL_NOTE[SocNot->NoteType]);
+            Gbl.Prefs.URLIcons,TL_Icons[SocNot->NoteType],
+            Txt_TIMELINE_NOTE[SocNot->NoteType],
+            Txt_TIMELINE_NOTE[SocNot->NoteType],
+            Txt_TIMELINE_NOTE[SocNot->NoteType]);
       Frm_EndForm ();
 
       fprintf (Gbl.F.Out,"</div>");
@@ -2048,70 +2055,70 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
   }
 
 /*****************************************************************************/
-/******************* Get social note summary and content *********************/
+/********************** Get note summary and content *************************/
 /*****************************************************************************/
 
-static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
-                                char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1])
+static void TL_GetNoteSummary (const struct TL_Note *SocNot,
+                               char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1])
   {
    SummaryStr[0] = '\0';
 
    switch (SocNot->NoteType)
      {
-      case Soc_NOTE_UNKNOWN:
+      case TL_NOTE_UNKNOWN:
           break;
-      case Soc_NOTE_INS_DOC_PUB_FILE:
-      case Soc_NOTE_INS_SHA_PUB_FILE:
-      case Soc_NOTE_CTR_DOC_PUB_FILE:
-      case Soc_NOTE_CTR_SHA_PUB_FILE:
-      case Soc_NOTE_DEG_DOC_PUB_FILE:
-      case Soc_NOTE_DEG_SHA_PUB_FILE:
-      case Soc_NOTE_CRS_DOC_PUB_FILE:
-      case Soc_NOTE_CRS_SHA_PUB_FILE:
+      case TL_NOTE_INS_DOC_PUB_FILE:
+      case TL_NOTE_INS_SHA_PUB_FILE:
+      case TL_NOTE_CTR_DOC_PUB_FILE:
+      case TL_NOTE_CTR_SHA_PUB_FILE:
+      case TL_NOTE_DEG_DOC_PUB_FILE:
+      case TL_NOTE_DEG_SHA_PUB_FILE:
+      case TL_NOTE_CRS_DOC_PUB_FILE:
+      case TL_NOTE_CRS_SHA_PUB_FILE:
 	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,SocNot->Cod,false);
          break;
-      case Soc_NOTE_EXAM_ANNOUNCEMENT:
+      case TL_NOTE_EXAM_ANNOUNCEMENT:
          Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,NULL,SocNot->Cod,false);
          break;
-      case Soc_NOTE_SOCIAL_POST:
+      case TL_NOTE_POST:
 	 // Not applicable
          break;
-      case Soc_NOTE_FORUM_POST:
+      case TL_NOTE_FORUM_POST:
          For_GetSummaryAndContentForumPst (SummaryStr,NULL,SocNot->Cod,false);
          break;
-      case Soc_NOTE_NOTICE:
+      case TL_NOTE_NOTICE:
          Not_GetSummaryAndContentNotice (SummaryStr,NULL,SocNot->Cod,false);
          break;
      }
   }
 
 /*****************************************************************************/
-/************** Store and publish a social note into database ****************/
+/***************** Store and publish a note into database ********************/
 /*****************************************************************************/
 // Return the code of the new note just created
 
-void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct SocialPublication *SocPub)
+void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod,struct TL_Publication *SocPub)
   {
    long HieCod;	// Hierarchy code (institution/centre/degree/course)
 
    switch (NoteType)
      {
-      case Soc_NOTE_INS_DOC_PUB_FILE:
-      case Soc_NOTE_INS_SHA_PUB_FILE:
+      case TL_NOTE_INS_DOC_PUB_FILE:
+      case TL_NOTE_INS_SHA_PUB_FILE:
 	 HieCod = Gbl.CurrentIns.Ins.InsCod;
 	 break;
-      case Soc_NOTE_CTR_DOC_PUB_FILE:
-      case Soc_NOTE_CTR_SHA_PUB_FILE:
+      case TL_NOTE_CTR_DOC_PUB_FILE:
+      case TL_NOTE_CTR_SHA_PUB_FILE:
 	 HieCod = Gbl.CurrentCtr.Ctr.CtrCod;
 	 break;
-      case Soc_NOTE_DEG_DOC_PUB_FILE:
-      case Soc_NOTE_DEG_SHA_PUB_FILE:
+      case TL_NOTE_DEG_DOC_PUB_FILE:
+      case TL_NOTE_DEG_SHA_PUB_FILE:
 	 HieCod = Gbl.CurrentDeg.Deg.DegCod;
 	 break;
-      case Soc_NOTE_CRS_DOC_PUB_FILE:
-      case Soc_NOTE_CRS_SHA_PUB_FILE:
-      case Soc_NOTE_EXAM_ANNOUNCEMENT:
-      case Soc_NOTE_NOTICE:
+      case TL_NOTE_CRS_DOC_PUB_FILE:
+      case TL_NOTE_CRS_SHA_PUB_FILE:
+      case TL_NOTE_EXAM_ANNOUNCEMENT:
+      case TL_NOTE_NOTICE:
 	 HieCod = Gbl.CurrentCrs.Crs.CrsCod;
 	 break;
       default:
@@ -2119,9 +2126,9 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct Soci
          break;
      }
 
-   /***** Store social note *****/
+   /***** Store note *****/
    SocPub->NotCod =
-   DB_QueryINSERTandReturnCode ("can not create new social note",
+   DB_QueryINSERTandReturnCode ("can not create new note",
 				"INSERT INTO social_notes"
 				" (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
 				" VALUES"
@@ -2129,44 +2136,44 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct Soci
 				(unsigned) NoteType,
 				Cod,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod);
 
-   /***** Publish social note in timeline *****/
+   /***** Publish note in timeline *****/
    SocPub->PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   SocPub->PubType      = Soc_PUB_ORIGINAL_NOTE;
-   Soc_PublishSocialNoteInTimeline (SocPub);
+   SocPub->PubType      = TL_PUB_ORIGINAL_NOTE;
+   TL_PublishNoteInTimeline (SocPub);
   }
 
 /*****************************************************************************/
-/********************** Mark a social note as unavailable ********************/
+/************************* Mark a note as unavailable ************************/
 /*****************************************************************************/
 
-void Soc_MarkSocialNoteAsUnavailableUsingNotCod (long NotCod)
+void TL_MarkNoteAsUnavailableUsingNotCod (long NotCod)
   {
-   /***** Mark the social note as unavailable *****/
-   DB_QueryUPDATE ("can not mark social note as unavailable",
+   /***** Mark the note as unavailable *****/
+   DB_QueryUPDATE ("can not mark note as unavailable",
 		   "UPDATE social_notes SET Unavailable='Y'"
 		   " WHERE NotCod=%ld",
 		   NotCod);
   }
 
-void Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NoteType_t NoteType,long Cod)
+void TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NoteType_t NoteType,long Cod)
   {
-   /***** Mark the social note as unavailable *****/
-   DB_QueryUPDATE ("can not mark social note as unavailable",
+   /***** Mark the note as unavailable *****/
+   DB_QueryUPDATE ("can not mark note as unavailable",
 		   "UPDATE social_notes SET Unavailable='Y'"
 		   " WHERE NoteType=%u AND Cod=%ld",
 		   (unsigned) NoteType,Cod);
   }
 
 /*****************************************************************************/
-/************** Mark social notes of one file as unavailable *****************/
+/****************** Mark notes of one file as unavailable ********************/
 /*****************************************************************************/
 
-void Soc_MarkSocialNoteOneFileAsUnavailable (const char *Path)
+void TL_MarkNoteOneFileAsUnavailable (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    long FilCod;
-   Soc_NoteType_t NoteType;
+   TL_NoteType_t NoteType;
 
    switch (FileBrowser)
      {
@@ -2182,37 +2189,37 @@ void Soc_MarkSocialNoteOneFileAsUnavailable (const char *Path)
 	 FilCod = Brw_GetFilCodByPath (Path,true);	// Only if file is public
 	 if (FilCod > 0)
 	   {
-	    /***** Mark possible social note as unavailable *****/
+	    /***** Mark possible note as unavailable *****/
 	    switch (FileBrowser)
 	      {
 	       case Brw_ADMI_DOC_INS:
-		  NoteType = Soc_NOTE_INS_DOC_PUB_FILE;
+		  NoteType = TL_NOTE_INS_DOC_PUB_FILE;
 		  break;
 	       case Brw_ADMI_SHR_INS:
-		  NoteType = Soc_NOTE_INS_SHA_PUB_FILE;
+		  NoteType = TL_NOTE_INS_SHA_PUB_FILE;
 		  break;
 	       case Brw_ADMI_DOC_CTR:
-		  NoteType = Soc_NOTE_CTR_DOC_PUB_FILE;
+		  NoteType = TL_NOTE_CTR_DOC_PUB_FILE;
 		  break;
 	       case Brw_ADMI_SHR_CTR:
-		  NoteType = Soc_NOTE_CTR_SHA_PUB_FILE;
+		  NoteType = TL_NOTE_CTR_SHA_PUB_FILE;
 		  break;
 	       case Brw_ADMI_DOC_DEG:
-		  NoteType = Soc_NOTE_DEG_DOC_PUB_FILE;
+		  NoteType = TL_NOTE_DEG_DOC_PUB_FILE;
 		  break;
 	       case Brw_ADMI_SHR_DEG:
-		  NoteType = Soc_NOTE_DEG_SHA_PUB_FILE;
+		  NoteType = TL_NOTE_DEG_SHA_PUB_FILE;
 		  break;
 	       case Brw_ADMI_DOC_CRS:
-		  NoteType = Soc_NOTE_CRS_DOC_PUB_FILE;
+		  NoteType = TL_NOTE_CRS_DOC_PUB_FILE;
 		  break;
 	       case Brw_ADMI_SHR_CRS:
-		  NoteType = Soc_NOTE_CRS_SHA_PUB_FILE;
+		  NoteType = TL_NOTE_CRS_SHA_PUB_FILE;
 		  break;
 	       default:
 		  return;
 	      }
-	    Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (NoteType,FilCod);
+	    TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (NoteType,FilCod);
 	   }
          break;
       default:
@@ -2221,15 +2228,15 @@ void Soc_MarkSocialNoteOneFileAsUnavailable (const char *Path)
   }
 
 /*****************************************************************************/
-/** Mark possible social notes involving children of a folder as unavailable */
+/***** Mark possible notes involving children of a folder as unavailable *****/
 /*****************************************************************************/
 
-void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path)
+void TL_MarkNotesChildrenOfFolderAsUnavailable (const char *Path)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
    long Cod = Brw_GetCodForFiles ();
-   Soc_NoteType_t NoteType;
+   TL_NoteType_t NoteType;
 
    switch (FileBrowser)
      {
@@ -2241,37 +2248,37 @@ void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path)
       case Brw_ADMI_SHR_DEG:
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_SHR_CRS:
-	 /***** Mark possible social note as unavailable *****/
+	 /***** Mark possible note as unavailable *****/
 	 switch (FileBrowser)
 	   {
 	    case Brw_ADMI_DOC_INS:
-	       NoteType = Soc_NOTE_INS_DOC_PUB_FILE;
+	       NoteType = TL_NOTE_INS_DOC_PUB_FILE;
 	       break;
 	    case Brw_ADMI_SHR_INS:
-	       NoteType = Soc_NOTE_INS_SHA_PUB_FILE;
+	       NoteType = TL_NOTE_INS_SHA_PUB_FILE;
 	       break;
 	    case Brw_ADMI_DOC_CTR:
-	       NoteType = Soc_NOTE_CTR_DOC_PUB_FILE;
+	       NoteType = TL_NOTE_CTR_DOC_PUB_FILE;
 	       break;
 	    case Brw_ADMI_SHR_CTR:
-	       NoteType = Soc_NOTE_CTR_SHA_PUB_FILE;
+	       NoteType = TL_NOTE_CTR_SHA_PUB_FILE;
 	       break;
 	    case Brw_ADMI_DOC_DEG:
-	       NoteType = Soc_NOTE_DEG_DOC_PUB_FILE;
+	       NoteType = TL_NOTE_DEG_DOC_PUB_FILE;
 	       break;
 	    case Brw_ADMI_SHR_DEG:
-	       NoteType = Soc_NOTE_DEG_SHA_PUB_FILE;
+	       NoteType = TL_NOTE_DEG_SHA_PUB_FILE;
 	       break;
 	    case Brw_ADMI_DOC_CRS:
-	       NoteType = Soc_NOTE_CRS_DOC_PUB_FILE;
+	       NoteType = TL_NOTE_CRS_DOC_PUB_FILE;
 	       break;
 	    case Brw_ADMI_SHR_CRS:
-	       NoteType = Soc_NOTE_CRS_SHA_PUB_FILE;
+	       NoteType = TL_NOTE_CRS_SHA_PUB_FILE;
 	       break;
 	    default:
 	       return;
 	   }
-         DB_QueryUPDATE ("can not mark social notes as unavailable",
+         DB_QueryUPDATE ("can not mark notes as unavailable",
 			 "UPDATE social_notes SET Unavailable='Y'"
 		         " WHERE NoteType=%u AND Cod IN"
 	                 " (SELECT FilCod FROM files"
@@ -2287,15 +2294,15 @@ void Soc_MarkSocialNotesChildrenOfFolderAsUnavailable (const char *Path)
   }
 
 /*****************************************************************************/
-/********************** Publish social note in timeline **********************/
+/************************* Publish note in timeline **************************/
 /*****************************************************************************/
 // SocPub->PubCod is set by the function
 
-static void Soc_PublishSocialNoteInTimeline (struct SocialPublication *SocPub)
+static void TL_PublishNoteInTimeline (struct TL_Publication *SocPub)
   {
-   /***** Publish social note in timeline *****/
+   /***** Publish note in timeline *****/
    SocPub->PubCod =
-   DB_QueryINSERTandReturnCode ("can not publish social note",
+   DB_QueryINSERTandReturnCode ("can not publish note",
 				"INSERT INTO social_pubs"
 				" (NotCod,PublisherCod,PubType,TimePublish)"
 				" VALUES"
@@ -2304,17 +2311,17 @@ static void Soc_PublishSocialNoteInTimeline (struct SocialPublication *SocPub)
 				SocPub->PublisherCod,
 				(unsigned) SocPub->PubType);
 
-   /***** Increment number of social publications in user's figures *****/
+   /***** Increment number of publications in user's figures *****/
    Prf_IncrementNumSocPubUsr (SocPub->PublisherCod);
   }
 
 /*****************************************************************************/
-/****************** Form to write a new social publication *******************/
+/********************** Form to write a new publication **********************/
 /*****************************************************************************/
 
-static void Soc_PutFormToWriteNewPost (void)
+static void TL_PutFormToWriteNewPost (void)
   {
-   extern const char *Txt_New_SOCIAL_post;
+   extern const char *Txt_New_TIMELINE_post;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
 
@@ -2345,10 +2352,10 @@ static void Soc_PutFormToWriteNewPost (void)
    fprintf (Gbl.F.Out,"<div class=\"TL_FORM_NEW_POST TL_RIGHT_WIDTH\">");
 
    /* Start form to write the post */
-   Soc_FormStart (ActRcvSocPstGbl,ActRcvSocPstUsr);
+   TL_FormStart (ActRcvSocPstGbl,ActRcvSocPstUsr);
 
    /* Textarea and button */
-   Soc_PutTextarea (Txt_New_SOCIAL_post,
+   TL_PutTextarea (Txt_New_TIMELINE_post,
                     "TL_POST_TEXTAREA TL_RIGHT_WIDTH",
 		    "TL_POST_IMG_TIT_URL TL_POST_IMG_WIDTH");
 
@@ -2367,7 +2374,7 @@ static void Soc_PutFormToWriteNewPost (void)
 /*** Put textarea and button inside a form to submit a new post or comment ***/
 /*****************************************************************************/
 
-static void Soc_PutTextarea (const char *Placeholder,
+static void TL_PutTextarea (const char *Placeholder,
                              const char *ClassTextArea,const char *ClassImgTit)
   {
    extern const char *Txt_Post;
@@ -2382,7 +2389,7 @@ static void Soc_PutTextarea (const char *Placeholder,
 	              " class=\"%s\""
 	              " onfocus=\"expandTextarea(this,'%s','5');\">"
 		      "</textarea>",
-            Soc_MAX_CHARS_IN_POST,
+            TL_MAX_CHARS_IN_POST,
             Placeholder,ClassTextArea,
             IdDivImgButton);
 
@@ -2411,18 +2418,18 @@ static void Soc_PutTextarea (const char *Placeholder,
 /******************* Receive and store a new public post *********************/
 /*****************************************************************************/
 
-void Soc_ReceiveSocialPostGbl (void)
+void TL_ReceivePostGbl (void)
   {
    long NotCod;
 
-   /***** Receive and store social post *****/
-   NotCod = Soc_ReceiveSocialPost ();
+   /***** Receive and store post *****/
+   NotCod = TL_ReceivePost ();
 
    /***** Write updated timeline after publication (global) *****/
-   Soc_ShowTimelineGblHighlightingNot (NotCod);
+   TL_ShowTimelineGblHighlightingNot (NotCod);
   }
 
-void Soc_ReceiveSocialPostUsr (void)
+void TL_ReceivePostUsr (void)
   {
    long NotCod;
 
@@ -2433,25 +2440,25 @@ void Soc_ReceiveSocialPostUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
+   Lay_StartSection (TL_TIMELINE_SECTION_ID);
 
-   /***** Receive and store social post *****/
-   NotCod = Soc_ReceiveSocialPost ();
+   /***** Receive and store post *****/
+   NotCod = TL_ReceivePost ();
 
    /***** Write updated timeline after publication (user) *****/
-   Soc_ShowTimelineUsrHighlightingNot (NotCod);
+   TL_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
    Lay_EndSection ();
   }
 
-// Returns the code of the social note just created
-static long Soc_ReceiveSocialPost (void)
+// Returns the code of the note just created
+static long TL_ReceivePost (void)
   {
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Media Media;
    long PstCod;
-   struct SocialPublication SocPub;
+   struct TL_Publication SocPub;
 
    /***** Get the content of the new post *****/
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
@@ -2461,9 +2468,9 @@ static long Soc_ReceiveSocialPost (void)
    Med_MediaConstructor (&Media);
 
    /***** Get attached image (action, file and title) *****/
-   Media.Width   = Soc_IMAGE_SAVED_MAX_WIDTH;
-   Media.Height  = Soc_IMAGE_SAVED_MAX_HEIGHT;
-   Media.Quality = Soc_IMAGE_SAVED_QUALITY;
+   Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
+   Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
+   Media.Quality = TL_IMAGE_SAVED_QUALITY;
    Med_GetMediaFromForm (-1,&Media,NULL);
 
    if (Content[0] ||					// Text not empty
@@ -2493,8 +2500,8 @@ static long Soc_ReceiveSocialPost (void)
 				   (Media.Name[0] &&	// Save image URL   only if image attached
 				    Media.URL  ) ? Media.URL   : "");
 
-      /* Insert post in social notes */
-      Soc_StoreAndPublishSocialNote (Soc_NOTE_SOCIAL_POST,PstCod,&SocPub);
+      /* Insert post in notes */
+      TL_StoreAndPublishNote (TL_NOTE_POST,PstCod,&SocPub);
 
       /***** Analyze content and store notifications about mentions *****/
       Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content);
@@ -2509,14 +2516,14 @@ static long Soc_ReceiveSocialPost (void)
   }
 
 /*****************************************************************************/
-/****** Put an icon to toggle on/off the form to comment a social note *******/
+/********* Put an icon to toggle on/off the form to comment a note ***********/
 /*****************************************************************************/
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Frm_MAX_BYTES_ID + 1])
+static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID + 1])
   {
    extern const char *Txt_Comment;
 
-   /***** Link to toggle on/off the form to comment a social note *****/
+   /***** Link to toggle on/off the form to comment a note *****/
    fprintf (Gbl.F.Out,"<div class=\"TL_ICO_COMMENT ICO_HIGHLIGHT\">"
                       "<a href=\"\""
                       " onclick=\"toggleDisplay('%s');return false;\" />"
@@ -2531,14 +2538,14 @@ static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Frm_MAX_BY
   }
 
 /*****************************************************************************/
-/****** Put an icon to toggle on/off the form to comment a social note *******/
+/********** Put an icon to toggle on/off the form to comment a note **********/
 /*****************************************************************************/
 
-static void Soc_PutIconCommentDisabled (void)
+static void TL_PutIconCommentDisabled (void)
   {
    extern const char *Txt_Comment;
 
-   /***** Disabled icon to comment a social note *****/
+   /***** Disabled icon to comment a note *****/
    fprintf (Gbl.F.Out,"<div class=\"TL_ICO_COMMENT_DISABLED\">"
  		      "<img src=\"%s/edit.svg\""
 		      " alt=\"%s\" title=\"%s\""
@@ -2549,14 +2556,14 @@ static void Soc_PutIconCommentDisabled (void)
   }
 
 /*****************************************************************************/
-/******************* Form to comment a social oublication ********************/
+/********************** Form to comment a publication ************************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char IdNewComment[Frm_MAX_BYTES_ID + 1])
+static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
+                                                     const char IdNewComment[Frm_MAX_BYTES_ID + 1])
   {
-   extern const char *Txt_New_SOCIAL_comment;
+   extern const char *Txt_New_TIMELINE_comment;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
 
@@ -2579,11 +2586,11 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
    fprintf (Gbl.F.Out,"<div class=\"TL_COMMENT_CONTAINER TL_COMMENT_WIDTH\">");
 
    /* Start form to write the post */
-   Soc_FormStart (ActRcvSocComGbl,ActRcvSocComUsr);
-   Soc_PutHiddenParamNotCod (NotCod);
+   TL_FormStart (ActRcvSocComGbl,ActRcvSocComUsr);
+   TL_PutHiddenParamNotCod (NotCod);
 
    /* Textarea and button */
-   Soc_PutTextarea (Txt_New_SOCIAL_comment,
+   TL_PutTextarea (Txt_New_TIMELINE_comment,
                     "TL_COMMENT_TEXTAREA TL_COMMENT_WIDTH",
 		    "TL_COMMENT_IMG_TIT_URL TL_COMMENT_WIDTH");
 
@@ -2598,23 +2605,23 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
   }
 
 /*****************************************************************************/
-/****************** Get number of comments in a social note ******************/
+/********************* Get number of comments in a note **********************/
 /*****************************************************************************/
 
-static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
+static unsigned long TL_GetNumCommentsInNote (long NotCod)
   {
-   return DB_QueryCOUNT ("can not get number of comments in a social note",
+   return DB_QueryCOUNT ("can not get number of comments in a note",
 			 "SELECT COUNT(*) FROM social_pubs"
 			 " WHERE NotCod=%ld AND PubType=%u",
-			 NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+			 NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
   }
 
 /*****************************************************************************/
-/********************* Write comments in a social note ***********************/
+/*********************** Write comments in a note ****************************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
+static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
   {
    extern const char *Txt_See_the_previous_X_COMMENTS;
    extern const char *Txt_See_only_the_latest_COMMENTS;
@@ -2624,8 +2631,8 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
    unsigned long NumCom;
    char IdComments[Frm_MAX_BYTES_ID + 1];
 
-   /***** Get comments of this social note from database *****/
-   NumComments = DB_QuerySELECT (&mysql_res,"can not get social comments",
+   /***** Get comments of this note from database *****/
+   NumComments = DB_QuerySELECT (&mysql_res,"can not get comments",
 				 "SELECT social_pubs.PubCod,"		// row[0]
 				        "social_pubs.PublisherCod,"	// row[1]
 				        "social_pubs.NotCod,"		// row[2]
@@ -2641,15 +2648,15 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
 				 " AND social_pubs.PubType=%u"
 				 " AND social_pubs.PubCod=social_comments.PubCod"
 				 " ORDER BY social_pubs.PubCod",
-				 SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+				 SocNot->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
    /***** List comments *****/
-   if (NumComments)	// Comments to this social note found
+   if (NumComments)	// Comments to this note found
      {
       // Never hide only one comment
       // So, the number of comments initially hidden must be 0 or >= 2
-      NumCommentsInitiallyHidden = (NumComments <= Soc_NUM_VISIBLE_COMMENTS + 1) ? 0 :	// Show all
-	                        					           NumComments - Soc_NUM_VISIBLE_COMMENTS;
+      NumCommentsInitiallyHidden = (NumComments <= TL_NUM_VISIBLE_COMMENTS + 1) ? 0 :	// Show all
+	                        					           NumComments - TL_NUM_VISIBLE_COMMENTS;
       if (NumCommentsInitiallyHidden)
         {
 	 /***** Create unique id for list of hidden comments *****/
@@ -2660,7 +2667,7 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
 			    " class=\"TL_EXPAND_COMMENTS TL_RIGHT_WIDTH\""
 			    " style=\"display:none;\">",	// Initially hidden
 		  IdComments);
-	 Soc_PutIconToToggleComments (IdComments,"angle-down.svg",
+	 TL_PutIconToToggleComments (IdComments,"angle-down.svg",
 	                              Txt_See_only_the_latest_COMMENTS);
 	 fprintf (Gbl.F.Out,"</div>");
 
@@ -2671,7 +2678,7 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
 	 for (NumCom = 0;
 	      NumCom < NumCommentsInitiallyHidden;
 	      NumCom++)
-	    Soc_WriteOneSocialCommentInList (mysql_res);
+	    TL_WriteOneCommentInList (mysql_res);
 	 fprintf (Gbl.F.Out,"</ul>");
 
 	 /***** Link to toggle on/off comments *****/
@@ -2681,7 +2688,7 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 		   Txt_See_the_previous_X_COMMENTS,
 		   NumCommentsInitiallyHidden);
-	 Soc_PutIconToToggleComments (IdComments,"angle-up.svg",Gbl.Title);
+	 TL_PutIconToToggleComments (IdComments,"angle-up.svg",Gbl.Title);
 	 fprintf (Gbl.F.Out,"</div>");
         }
 
@@ -2690,7 +2697,7 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
       for (NumCom = NumCommentsInitiallyHidden;
 	   NumCom < NumComments;
 	   NumCom++)
-	 Soc_WriteOneSocialCommentInList (mysql_res);
+	 TL_WriteOneCommentInList (mysql_res);
       fprintf (Gbl.F.Out,"</ul>");
      }
 
@@ -2698,21 +2705,21 @@ static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
    DB_FreeMySQLResult (&mysql_res);
   }
 
-static void Soc_WriteOneSocialCommentInList (MYSQL_RES *mysql_res)
+static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
-   struct SocialComment SocCom;
+   struct TL_Comment SocCom;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&SocCom.Media);
 
-   /***** Get data of social comment *****/
+   /***** Get data of comment *****/
    row = mysql_fetch_row (mysql_res);
-   Soc_GetDataOfSocialCommentFromRow (row,&SocCom);
+   TL_GetDataOfCommentFromRow (row,&SocCom);
 
-   /***** Write social comment *****/
-   Soc_WriteSocialComment (&SocCom,
-			   Soc_TOP_MESSAGE_NONE,-1L,
+   /***** Write comment *****/
+   TL_WriteComment (&SocCom,
+			   TL_TOP_MESSAGE_NONE,-1L,
 			   false);
 
    /***** Free image *****/
@@ -2720,10 +2727,10 @@ static void Soc_WriteOneSocialCommentInList (MYSQL_RES *mysql_res)
   }
 
 /*****************************************************************************/
-/******* Put an icon to toggle on/off comments in a social publication *******/
+/********** Put an icon to toggle on/off comments in a publication ***********/
 /*****************************************************************************/
 
-static void Soc_PutIconToToggleComments (const char *UniqueId,
+static void TL_PutIconToToggleComments (const char *UniqueId,
                                          const char *Icon,const char *Text)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -2739,13 +2746,13 @@ static void Soc_PutIconToToggleComments (const char *UniqueId,
   }
 
 /*****************************************************************************/
-/**************************** Write social comment ***************************/
+/******************************** Write comment ******************************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_WriteSocialComment (struct SocialComment *SocCom,
-                                    Soc_TopMessage_t TopMessage,long UsrCod,
-                                    bool ShowCommentAlone)	// Social comment is shown alone, not in a list
+static void TL_WriteComment (struct TL_Comment *SocCom,
+                             TL_TopMessage_t TopMessage,long UsrCod,
+                             bool ShowCommentAlone)	// Comment is shown alone, not in a list
   {
    extern const char *Txt_Forum;
    extern const char *Txt_Course;
@@ -2768,7 +2775,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
                     NULL,Box_NOT_CLOSABLE);
 
       /***** Write sharer/commenter if distinct to author *****/
-      Soc_WriteTopMessage (TopMessage,UsrCod);
+      TL_WriteTopMessage (TopMessage,UsrCod);
 
       fprintf (Gbl.F.Out,"<div class=\"TL_LEFT_PHOTO\">"
                          "</div>"
@@ -2785,7 +2792,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
    if (SocCom->PubCod <= 0 ||
        SocCom->NotCod <= 0 ||
        SocCom->UsrCod <= 0)
-      Ale_ShowAlert (Ale_ERROR,"Error in social comment.");
+      Ale_ShowAlert (Ale_ERROR,"Error in comment.");
    else
      {
       /***** Get author's data *****/
@@ -2795,7 +2802,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       ItsMe = Usr_ItsMe (UsrDat.UsrCod);
       IAmTheAuthor = ItsMe;
       if (!IAmTheAuthor)
-	 IAmAFaverOfThisSocCom = Soc_CheckIfCommIsFavedByUsr (SocCom->PubCod,
+	 IAmAFaverOfThisSocCom = TL_CheckIfCommIsFavedByUsr (SocCom->PubCod,
 							      Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Left: write author's photo *****/
@@ -2810,12 +2817,12 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       fprintf (Gbl.F.Out,"<div class=\"TL_COMMENT_CONTAINER TL_COMMENT_WIDTH\">");
 
       /* Write author's full name and nickname */
-      Soc_WriteAuthorComment (&UsrDat);
+      TL_WriteAuthorComment (&UsrDat);
 
       /* Write date and time */
-      Soc_WriteDateTime (SocCom->DateTimeUTC);
+      TL_WriteDateTime (SocCom->DateTimeUTC);
 
-      /* Write content of the social comment */
+      /* Write content of the comment */
       fprintf (Gbl.F.Out,"<div class=\"TL_TXT\">");
       Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
       fprintf (Gbl.F.Out,"</div>");
@@ -2824,31 +2831,31 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
       Med_ShowMedia (&SocCom->Media,"TL_COMMENT_IMG_CONTAINER TL_COMMENT_WIDTH",
 	                            "TL_COMMENT_IMG TL_COMMENT_WIDTH");
 
-      /* Put icon to mark this social comment as favourite */
+      /* Put icon to mark this comment as favourite */
       if (IAmTheAuthor)			// I am the author
         {
 	 /* Put disabled icon and list of users
-	    who have marked this social comment as favourite */
-	 Soc_PutDisabledIconFav (SocCom->NumFavs);
-         Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (SocCom);
+	    who have marked this comment as favourite */
+	 TL_PutDisabledIconFav (SocCom->NumFavs);
+         TL_ShowUsrsWhoHaveMarkedCommAsFav (SocCom);
         }
       else				// I am not the author
 	{
 	 fprintf (Gbl.F.Out,"<div id=\"fav_com_%s_%u\""
 	                    " class=\"TL_ICO_FAV\">",
 	          Gbl.UniqueNameEncrypted,NumDiv);
-	 if (IAmAFaverOfThisSocCom)	// I have favourited this social comment
+	 if (IAmAFaverOfThisSocCom)	// I have favourited this comment
 	    /* Put icon to unfav this publication and list of users */
-	    Soc_PutFormToUnfavSocialComment (SocCom);
+	    TL_PutFormToUnfavComment (SocCom);
 	 else				// I am not a favouriter
 	    /* Put icon to fav this publication and list of users */
-	    Soc_PutFormToFavSocialComment (SocCom);
+	    TL_PutFormToFavComment (SocCom);
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 
-      /* Put icon to remove this social comment */
+      /* Put icon to remove this comment */
       if (IAmTheAuthor && !ShowCommentAlone)
-	 Soc_PutFormToRemoveComment (SocCom->PubCod);
+	 TL_PutFormToRemoveComment (SocCom->PubCod);
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -2866,11 +2873,11 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
   }
 
 /*****************************************************************************/
-/****** Write name and nickname of author of a comment to a social note ******/
+/********* Write name and nickname of author of a comment to a note **********/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
+static void TL_WriteAuthorComment (struct UsrData *UsrDat)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -2900,17 +2907,17 @@ static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/********************** Form to remove social comment ************************/
+/************************* Form to remove comment ****************************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToRemoveComment (long PubCod)
+static void TL_PutFormToRemoveComment (long PubCod)
   {
    extern const char *Txt_Remove;
 
-   /***** Form to remove social publication *****/
-   Soc_FormStart (ActReqRemSocComGbl,ActReqRemSocComUsr);
-   Soc_PutHiddenParamPubCod (PubCod);
+   /***** Form to remove publication *****/
+   TL_FormStart (ActReqRemSocComGbl,ActReqRemSocComUsr);
+   TL_PutHiddenParamPubCod (PubCod);
    Ico_PutDivIconLink ("TL_ICO_REM",
 		       "trash.svg",Txt_Remove);
    Frm_EndForm ();
@@ -2920,17 +2927,17 @@ static void Soc_PutFormToRemoveComment (long PubCod)
 /*********************** Put disabled icon to share **************************/
 /*****************************************************************************/
 
-static void Soc_PutDisabledIconShare (unsigned NumShared)
+static void TL_PutDisabledIconShare (unsigned NumShared)
   {
-   extern const char *Txt_SOCIAL_NOTE_Shared_by_X_USERS;
-   extern const char *Txt_SOCIAL_NOTE_Not_shared_by_anyone;
+   extern const char *Txt_TIMELINE_NOTE_Shared_by_X_USERS;
+   extern const char *Txt_TIMELINE_NOTE_Not_shared_by_anyone;
 
    if (NumShared)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_SOCIAL_NOTE_Shared_by_X_USERS,
+	        Txt_TIMELINE_NOTE_Shared_by_X_USERS,
 		NumShared);
    else
-      Str_Copy (Gbl.Title,Txt_SOCIAL_NOTE_Not_shared_by_anyone,
+      Str_Copy (Gbl.Title,Txt_TIMELINE_NOTE_Not_shared_by_anyone,
                 Lay_MAX_BYTES_TITLE);
 
    /***** Disabled icon to share *****/
@@ -2942,17 +2949,17 @@ static void Soc_PutDisabledIconShare (unsigned NumShared)
 /****************** Put disabled icon to mark as favourite *******************/
 /*****************************************************************************/
 
-static void Soc_PutDisabledIconFav (unsigned NumFavs)
+static void TL_PutDisabledIconFav (unsigned NumFavs)
   {
-   extern const char *Txt_SOCIAL_NOTE_Favourited_by_X_USERS;
-   extern const char *Txt_SOCIAL_NOTE_Not_favourited_by_anyone;
+   extern const char *Txt_TIMELINE_NOTE_Favourited_by_X_USERS;
+   extern const char *Txt_TIMELINE_NOTE_Not_favourited_by_anyone;
 
    if (NumFavs)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_SOCIAL_NOTE_Favourited_by_X_USERS,
+	        Txt_TIMELINE_NOTE_Favourited_by_X_USERS,
 		NumFavs);
    else
-      Str_Copy (Gbl.Title,Txt_SOCIAL_NOTE_Not_favourited_by_anyone,
+      Str_Copy (Gbl.Title,Txt_TIMELINE_NOTE_Not_favourited_by_anyone,
                 Lay_MAX_BYTES_TITLE);
 
    /***** Disabled icon to mark as favourite *****/
@@ -2961,190 +2968,190 @@ static void Soc_PutDisabledIconFav (unsigned NumFavs)
   }
 
 /*****************************************************************************/
-/************************* Form to share social note *************************/
+/***************************** Form to share note ****************************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToShareSocialNote (const struct SocialNote *SocNot)
+static void TL_PutFormToShareNote (const struct TL_Note *SocNot)
   {
    extern const char *Txt_Share;
    char ParamCod[6 + 1 + 10 + 1];
 
-   /***** Form and icon to mark social note as favourite *****/
+   /***** Form and icon to mark note as favourite *****/
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
-   Soc_FormFavSha (ActShaSocNotGbl,ActShaSocNotUsr,ParamCod,
+   TL_FormFavSha (ActShaSocNotGbl,ActShaSocNotUsr,ParamCod,
 	           "share-alt.svg",Txt_Share);
 
-   /***** Who have shared this social note *****/
-   Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
+   /***** Who have shared this note *****/
+   TL_ShowUsrsWhoHaveSharedNote (SocNot);
   }
 
 /*****************************************************************************/
-/*************** Form to unshare (stop sharing) social note ******************/
+/****************** Form to unshare (stop sharing) note **********************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToUnshareSocialNote (const struct SocialNote *SocNot)
+static void TL_PutFormToUnshareNote (const struct TL_Note *SocNot)
   {
-   extern const char *Txt_SOCIAL_NOTE_Shared;
+   extern const char *Txt_TIMELINE_NOTE_Shared;
    char ParamCod[6 + 1 + 10 + 1];
 
-   /***** Form and icon to mark social note as favourite *****/
+   /***** Form and icon to mark note as favourite *****/
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
-   Soc_FormFavSha (ActUnsSocNotGbl,ActUnsSocNotUsr,ParamCod,
-	           "share-alt-green.svg",Txt_SOCIAL_NOTE_Shared);
+   TL_FormFavSha (ActUnsSocNotGbl,ActUnsSocNotUsr,ParamCod,
+	           "share-alt-green.svg",Txt_TIMELINE_NOTE_Shared);
 
-   /***** Who have shared this social note *****/
-   Soc_ShowUsrsWhoHaveSharedSocialNote (SocNot);
+   /***** Who have shared this note *****/
+   TL_ShowUsrsWhoHaveSharedNote (SocNot);
   }
 
 /*****************************************************************************/
-/*************** Form to fav (mark as favourite) social note *****************/
+/******************* Form to fav (mark as favourite) note ********************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToFavSocialNote (const struct SocialNote *SocNot)
+static void TL_PutFormToFavNote (const struct TL_Note *SocNot)
   {
    extern const char *Txt_Mark_as_favourite;
    char ParamCod[6 + 1 + 10 + 1];
 
-   /***** Form and icon to mark social note as favourite *****/
+   /***** Form and icon to mark note as favourite *****/
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
-   Soc_FormFavSha (ActFavSocNotGbl,ActFavSocNotUsr,ParamCod,
+   TL_FormFavSha (ActFavSocNotGbl,ActFavSocNotUsr,ParamCod,
 	           "heart.svg",Txt_Mark_as_favourite);
 
-   /***** Who have marked this social note as favourite *****/
-   Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (SocNot);
+   /***** Who have marked this note as favourite *****/
+   TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot);
   }
 
 /*****************************************************************************/
-/*********** Form to unfav (remove mark as favourite) social note ************/
+/*************** Form to unfav (remove mark as favourite) note ***************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToUnfavSocialNote (const struct SocialNote *SocNot)
+static void TL_PutFormToUnfavNote (const struct TL_Note *SocNot)
   {
-   extern const char *Txt_SOCIAL_NOTE_Favourite;
+   extern const char *Txt_TIMELINE_NOTE_Favourite;
    char ParamCod[6 + 1 + 10 + 1];
 
-   /***** Form and icon to unfav (remove mark as favourite) social note *****/
+   /***** Form and icon to unfav (remove mark as favourite) note *****/
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
-   Soc_FormFavSha (ActUnfSocNotGbl,ActUnfSocNotUsr,ParamCod,
-	           "heart-red.svg",Txt_SOCIAL_NOTE_Favourite);
+   TL_FormFavSha (ActUnfSocNotGbl,ActUnfSocNotUsr,ParamCod,
+	           "heart-red.svg",Txt_TIMELINE_NOTE_Favourite);
 
-   /***** Who have marked this social note as favourite *****/
-   Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (SocNot);
+   /***** Who have marked this note as favourite *****/
+   TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot);
   }
 
 /*****************************************************************************/
-/***************** Form to mark a social comment as favourite ****************/
+/********************* Form to mark a comment as favourite *******************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToFavSocialComment (struct SocialComment *SocCom)
+static void TL_PutFormToFavComment (struct TL_Comment *SocCom)
   {
    extern const char *Txt_Mark_as_favourite;
    char ParamCod[6 + 1 + 10 + 1];
 
-   /***** Form and icon to mark social comment as favourite *****/
+   /***** Form and icon to mark comment as favourite *****/
    sprintf (ParamCod,"PubCod=%ld",SocCom->PubCod);
-   Soc_FormFavSha (ActFavSocComGbl,ActFavSocComUsr,ParamCod,
+   TL_FormFavSha (ActFavSocComGbl,ActFavSocComUsr,ParamCod,
 	           "heart.svg",Txt_Mark_as_favourite);
 
-   /***** Show who have marked this social comment as favourite *****/
-   Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (SocCom);
+   /***** Show who have marked this comment as favourite *****/
+   TL_ShowUsrsWhoHaveMarkedCommAsFav (SocCom);
   }
 
 /*****************************************************************************/
-/********* Form to unfav (remove mark as favourite) social comment ***********/
+/************* Form to unfav (remove mark as favourite) comment **************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToUnfavSocialComment (struct SocialComment *SocCom)
+static void TL_PutFormToUnfavComment (struct TL_Comment *SocCom)
   {
-   extern const char *Txt_SOCIAL_NOTE_Favourite;
+   extern const char *Txt_TIMELINE_NOTE_Favourite;
    char ParamCod[6 + 1 + 10 + 1];
 
-   /***** Form and icon to unfav (remove mark as favourite) social comment *****/
+   /***** Form and icon to unfav (remove mark as favourite) comment *****/
    sprintf (ParamCod,"PubCod=%ld",SocCom->PubCod);
-   Soc_FormFavSha (ActUnfSocComGbl,ActUnfSocComUsr,ParamCod,
-	           "heart-red.svg",Txt_SOCIAL_NOTE_Favourite);
+   TL_FormFavSha (ActUnfSocComGbl,ActUnfSocComUsr,ParamCod,
+	           "heart-red.svg",Txt_TIMELINE_NOTE_Favourite);
 
-   /***** Show who have marked this social comment as favourite *****/
-   Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (SocCom);
+   /***** Show who have marked this comment as favourite *****/
+   TL_ShowUsrsWhoHaveMarkedCommAsFav (SocCom);
   }
 
 /*****************************************************************************/
-/******************** Form to remove social publication **********************/
+/************************ Form to remove publication *************************/
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_PutFormToRemoveSocialPublication (long NotCod)
+static void TL_PutFormToRemovePublication (long NotCod)
   {
    extern const char *Txt_Remove;
 
-   /***** Form to remove social publication *****/
-   Soc_FormStart (ActReqRemSocPubGbl,ActReqRemSocPubUsr);
-   Soc_PutHiddenParamNotCod (NotCod);
+   /***** Form to remove publication *****/
+   TL_FormStart (ActReqRemSocPubGbl,ActReqRemSocPubUsr);
+   TL_PutHiddenParamNotCod (NotCod);
    Ico_PutDivIconLink ("TL_ICO_REM",
 		       "trash.svg",Txt_Remove);
    Frm_EndForm ();
   }
 
 /*****************************************************************************/
-/************** Put parameter with the code of a social note *****************/
+/****************** Put parameter with the code of a note ********************/
 /*****************************************************************************/
 
-static void Soc_PutHiddenParamNotCod (long NotCod)
+static void TL_PutHiddenParamNotCod (long NotCod)
   {
    Par_PutHiddenParamLong ("NotCod",NotCod);
   }
 
 /*****************************************************************************/
-/*********** Put parameter with the code of a social publication *************/
+/*************** Put parameter with the code of a publication ****************/
 /*****************************************************************************/
 
-void Soc_PutHiddenParamPubCod (long PubCod)
+void TL_PutHiddenParamPubCod (long PubCod)
   {
    Par_PutHiddenParamLong ("PubCod",PubCod);
   }
 
 /*****************************************************************************/
-/************** Get parameter with the code of a social note *****************/
+/****************** Get parameter with the code of a note ********************/
 /*****************************************************************************/
 
-static long Soc_GetParamNotCod (void)
+static long TL_GetParamNotCod (void)
   {
-   /***** Get social note code *****/
+   /***** Get note code *****/
    return Par_GetParToLong ("NotCod");
   }
 
 /*****************************************************************************/
-/************ Get parameter with the code of a social publication ************/
+/**************** Get parameter with the code of a publication ***************/
 /*****************************************************************************/
 
-static long Soc_GetParamPubCod (void)
+static long TL_GetParamPubCod (void)
   {
-   /***** Get social comment code *****/
+   /***** Get comment code *****/
    return Par_GetParToLong ("PubCod");
   }
 
 /*****************************************************************************/
-/*************************** Comment a social note ***************************/
+/******************************* Comment a note ******************************/
 /*****************************************************************************/
 
-void Soc_ReceiveCommentGbl (void)
+void TL_ReceiveCommentGbl (void)
   {
    long NotCod;
 
-   /***** Receive comment in a social note *****/
-   NotCod = Soc_ReceiveComment ();
+   /***** Receive comment in a note *****/
+   NotCod = TL_ReceiveComment ();
 
    /***** Write updated timeline after commenting (global) *****/
-   Soc_ShowTimelineGblHighlightingNot (NotCod);
+   TL_ShowTimelineGblHighlightingNot (NotCod);
   }
 
-void Soc_ReceiveCommentUsr (void)
+void TL_ReceiveCommentUsr (void)
   {
    long NotCod;
 
@@ -3155,29 +3162,29 @@ void Soc_ReceiveCommentUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
+   Lay_StartSection (TL_TIMELINE_SECTION_ID);
 
-   /***** Receive comment in a social note *****/
-   NotCod = Soc_ReceiveComment ();
+   /***** Receive comment in a note *****/
+   NotCod = TL_ReceiveComment ();
 
    /***** Write updated timeline after commenting (user) *****/
-   Soc_ShowTimelineUsrHighlightingNot (NotCod);
+   TL_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
    Lay_EndSection ();
   }
 
-static long Soc_ReceiveComment (void)
+static long TL_ReceiveComment (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Media Media;
-   struct SocialNote SocNot;
-   struct SocialPublication SocPub;
+   struct TL_Note SocNot;
+   struct TL_Publication SocPub;
 
-   /***** Get data of social note *****/
-   SocNot.NotCod = Soc_GetParamNotCod ();
-   Soc_GetDataOfSocialNotByCod (&SocNot);
+   /***** Get data of note *****/
+   SocNot.NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (&SocNot);
 
    if (SocNot.NotCod > 0)
      {
@@ -3189,9 +3196,9 @@ static long Soc_ReceiveComment (void)
       Med_MediaConstructor (&Media);
 
       /***** Get attached image (action, file and title) *****/
-      Media.Width   = Soc_IMAGE_SAVED_MAX_WIDTH;
-      Media.Height  = Soc_IMAGE_SAVED_MAX_HEIGHT;
-      Media.Quality = Soc_IMAGE_SAVED_QUALITY;
+      Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
+      Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
+      Media.Quality = TL_IMAGE_SAVED_QUALITY;
       Med_GetMediaFromForm (-1,&Media,NULL);
 
       if (Content[0] ||					// Text not empty
@@ -3207,8 +3214,8 @@ static long Soc_ReceiveComment (void)
 	 /* Insert into publications */
 	 SocPub.NotCod       = SocNot.NotCod;
 	 SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	 SocPub.PubType      = Soc_PUB_COMMENT_TO_NOTE;
-	 Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
+	 SocPub.PubType      = TL_PUB_COMMENT_TO_NOTE;
+	 TL_PublishNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
 	 /* Insert comment content in the database */
 	 DB_QueryINSERT ("can not store comment content",
@@ -3233,9 +3240,9 @@ static long Soc_ReceiveComment (void)
 	 /***** Analyze content and store notifications about mentions *****/
 	 Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content);
 
-	 /***** Show the social note just commented *****/
-	 Soc_WriteSocialNote (&SocNot,
-	                      Soc_TOP_MESSAGE_COMMENTED,Gbl.Usrs.Me.UsrDat.UsrCod,
+	 /***** Show the note just commented *****/
+	 TL_WriteNote (&SocNot,
+	                      TL_TOP_MESSAGE_COMMENTED,Gbl.Usrs.Me.UsrDat.UsrCod,
 	                      true,true);
 	}
 
@@ -3249,129 +3256,129 @@ static long Soc_ReceiveComment (void)
   }
 
 /*****************************************************************************/
-/**************************** Share a social note ****************************/
+/******************************** Share a note *******************************/
 /*****************************************************************************/
 
-void Soc_ShareSocialNoteGbl (void)
+void TL_ShareNoteGbl (void)
   {
-   struct SocialNote SocNot;
+   struct TL_Note SocNot;
 
-   /***** Mark social note as favourite *****/
-   Soc_ShareSocialNote (&SocNot);
+   /***** Share note *****/
+   TL_ShareNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   Soc_PutFormToUnshareSocialNote (&SocNot);
+   TL_PutFormToUnshareNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void Soc_ShareSocialNoteUsr (void)
+void TL_ShareNoteUsr (void)
   {
-   struct SocialNote SocNot;
+   struct TL_Note SocNot;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Share social note *****/
-   Soc_ShareSocialNote (&SocNot);
+   /***** Share note *****/
+   TL_ShareNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   Soc_PutFormToUnshareSocialNote (&SocNot);
+   TL_PutFormToUnshareNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-static void Soc_ShareSocialNote (struct SocialNote *SocNot)
+static void TL_ShareNote (struct TL_Note *SocNot)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
-   struct SocialPublication SocPub;
+   struct TL_Publication SocPub;
    bool ItsMe;
    long OriginalPubCod;
 
-   /***** Get data of social note *****/
-   SocNot->NotCod = Soc_GetParamNotCod ();
-   Soc_GetDataOfSocialNotByCod (SocNot);
+   /***** Get data of note *****/
+   SocNot->NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (SocNot);
 
    if (SocNot->NotCod > 0)
      {
       ItsMe = Usr_ItsMe (SocNot->UsrCod);
       if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-         if (!Soc_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
+         if (!TL_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
 					    Gbl.Usrs.Me.UsrDat.UsrCod))	// Not yet shared by me
 	   {
-	    /***** Share (publish social note in timeline) *****/
+	    /***** Share (publish note in timeline) *****/
 	    SocPub.NotCod       = SocNot->NotCod;
 	    SocPub.PublisherCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-	    SocPub.PubType      = Soc_PUB_SHARED_NOTE;
-	    Soc_PublishSocialNoteInTimeline (&SocPub);	// Set SocPub.PubCod
+	    SocPub.PubType      = TL_PUB_SHARED_NOTE;
+	    TL_PublishNoteInTimeline (&SocPub);	// Set SocPub.PubCod
 
-	    /* Update number of times this social note is shared */
-	    Soc_UpdateNumTimesANoteHasBeenShared (SocNot);
+	    /* Update number of times this note is shared */
+	    TL_UpdateNumTimesANoteHasBeenShared (SocNot);
 
 	    /**** Create notification about shared post
 		  for the author of the post ***/
-	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
+	    OriginalPubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
 	    if (OriginalPubCod > 0)
-	       Soc_CreateNotifToAuthor (SocNot->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
+	       TL_CreateNotifToAuthor (SocNot->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_SHARE);
 	   }
      }
   }
 
 /*****************************************************************************/
-/********************** Mark a social note as favourite **********************/
+/************************** Mark a note as favourite *************************/
 /*****************************************************************************/
 
-void Soc_FavSocialNoteGbl (void)
+void TL_FavNoteGbl (void)
   {
-   struct SocialNote SocNot;
+   struct TL_Note SocNot;
 
-   /***** Mark social note as favourite *****/
-   Soc_FavSocialNote (&SocNot);
+   /***** Mark note as favourite *****/
+   TL_FavNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   Soc_PutFormToUnfavSocialNote (&SocNot);
+   TL_PutFormToUnfavNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void Soc_FavSocialNoteUsr (void)
+void TL_FavNoteUsr (void)
   {
-   struct SocialNote SocNot;
+   struct TL_Note SocNot;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Mark social note as favourite *****/
-   Soc_FavSocialNote (&SocNot);
+   /***** Mark note as favourite *****/
+   TL_FavNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   Soc_PutFormToUnfavSocialNote (&SocNot);
+   TL_PutFormToUnfavNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-static void Soc_FavSocialNote (struct SocialNote *SocNot)
+static void TL_FavNote (struct TL_Note *SocNot)
   {
    bool ItsMe;
    long OriginalPubCod;
 
-   /***** Get data of social note *****/
-   SocNot->NotCod = Soc_GetParamNotCod ();
-   Soc_GetDataOfSocialNotByCod (SocNot);
+   /***** Get data of note *****/
+   SocNot->NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (SocNot);
 
    if (SocNot->NotCod > 0)
      {
       ItsMe = Usr_ItsMe (SocNot->UsrCod);
       if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (!Soc_CheckIfNoteIsFavedByUsr (SocNot->NotCod,
+	 if (!TL_CheckIfNoteIsFavedByUsr (SocNot->NotCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I have not yet favourited the note
 	   {
 	    /***** Mark as favourite in database *****/
-	    DB_QueryINSERT ("can not favourite social note",
+	    DB_QueryINSERT ("can not favourite note",
 			    "INSERT IGNORE INTO social_notes_fav"
 			    " (NotCod,UsrCod,TimeFav)"
 			    " VALUES"
@@ -3379,73 +3386,73 @@ static void Soc_FavSocialNote (struct SocialNote *SocNot)
 			    SocNot->NotCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
-	    /***** Update number of times this social note is favourited**** */
-	    Soc_GetNumTimesANoteHasBeenFav (SocNot);
+	    /***** Update number of times this note is favourited *****/
+	    TL_GetNumTimesANoteHasBeenFav (SocNot);
 
 	    /***** Create notification about favourite post
 		   for the author of the post *****/
-	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
+	    OriginalPubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
 	    if (OriginalPubCod > 0)
-	       Soc_CreateNotifToAuthor (SocNot->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_FAV);
+	       TL_CreateNotifToAuthor (SocNot->UsrCod,OriginalPubCod,Ntf_EVENT_TIMELINE_FAV);
 	   }
      }
   }
 
 /*****************************************************************************/
-/********************* Mark a social comment as favourite ********************/
+/************************ Mark a comment as favourite ************************/
 /*****************************************************************************/
 
-void Soc_FavSocialCommentGbl (void)
+void TL_FavCommentGbl (void)
   {
-   struct SocialComment SocCom;
+   struct TL_Comment SocCom;
 
-   /***** Mark social comment as favourite *****/
-   Soc_FavSocialComment (&SocCom);
+   /***** Mark comment as favourite *****/
+   TL_FavComment (&SocCom);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   Soc_PutFormToUnfavSocialComment (&SocCom);
+   TL_PutFormToUnfavComment (&SocCom);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void Soc_FavSocialCommentUsr (void)
+void TL_FavCommentUsr (void)
   {
-   struct SocialComment SocCom;
+   struct TL_Comment SocCom;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Mark social comment as favourite *****/
-   Soc_FavSocialComment (&SocCom);
+   /***** Mark comment as favourite *****/
+   TL_FavComment (&SocCom);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   Soc_PutFormToUnfavSocialComment (&SocCom);
+   TL_PutFormToUnfavComment (&SocCom);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-static void Soc_FavSocialComment (struct SocialComment *SocCom)
+static void TL_FavComment (struct TL_Comment *SocCom)
   {
    bool ItsMe;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&SocCom->Media);
 
-   /***** Get data of social comment *****/
-   SocCom->PubCod = Soc_GetParamPubCod ();
-   Soc_GetDataOfSocialComByCod (SocCom);
+   /***** Get data of comment *****/
+   SocCom->PubCod = TL_GetParamPubCod ();
+   TL_GetDataOfCommByCod (SocCom);
 
    if (SocCom->PubCod > 0)
      {
       ItsMe = Usr_ItsMe (SocCom->UsrCod);
       if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (!Soc_CheckIfCommIsFavedByUsr (SocCom->PubCod,
+	 if (!TL_CheckIfCommIsFavedByUsr (SocCom->PubCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
 	   {
 	    /***** Mark as favourite in database *****/
-	    DB_QueryINSERT ("can not favourite social comment",
+	    DB_QueryINSERT ("can not favourite comment",
 			    "INSERT IGNORE INTO social_comments_fav"
 			    " (PubCod,UsrCod,TimeFav)"
 			    " VALUES"
@@ -3453,12 +3460,12 @@ static void Soc_FavSocialComment (struct SocialComment *SocCom)
 			    SocCom->PubCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
-	    /* Update number of times this social comment is favourited */
-	    Soc_GetNumTimesACommHasBeenFav (SocCom);
+	    /* Update number of times this comment is favourited */
+	    TL_GetNumTimesACommHasBeenFav (SocCom);
 
 	    /**** Create notification about favourite post
 		  for the author of the post ***/
-	    Soc_CreateNotifToAuthor (SocCom->UsrCod,SocCom->PubCod,Ntf_EVENT_TIMELINE_FAV);
+	    TL_CreateNotifToAuthor (SocCom->UsrCod,SocCom->PubCod,Ntf_EVENT_TIMELINE_FAV);
 	   }
      }
 
@@ -3470,7 +3477,7 @@ static void Soc_FavSocialComment (struct SocialComment *SocCom)
 /*********** Create a notification for the author of a post/comment **********/
 /*****************************************************************************/
 
-static void Soc_CreateNotifToAuthor (long AuthorCod,long PubCod,
+static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                      Ntf_NotifyEvent_t NotifyEvent)
   {
    struct UsrData UsrDat;
@@ -3502,73 +3509,73 @@ static void Soc_CreateNotifToAuthor (long AuthorCod,long PubCod,
   }
 
 /*****************************************************************************/
-/***************** Unshare a previously shared social note *******************/
+/******************** Unshare a previously shared note ***********************/
 /*****************************************************************************/
 
-void Soc_UnshareSocialNoteGbl (void)
+void TL_UnshareNoteGbl (void)
   {
-   struct SocialNote SocNot;
+   struct TL_Note SocNot;
 
-   /***** Unshare social note *****/
-   Soc_UnshareSocialNote (&SocNot);
+   /***** Unshare note *****/
+   TL_UnshareNote (&SocNot);
 
    /***** Write HTML inside DIV with form to share *****/
-   Soc_PutFormToShareSocialNote (&SocNot);
+   TL_PutFormToShareNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void Soc_UnshareSocialNoteUsr (void)
+void TL_UnshareNoteUsr (void)
   {
-   struct SocialNote SocNot;
+   struct TL_Note SocNot;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Share social note *****/
-   Soc_UnshareSocialNote (&SocNot);
+   /***** Share note *****/
+   TL_UnshareNote (&SocNot);
 
    /***** Write HTML inside DIV with form to share *****/
-   Soc_PutFormToShareSocialNote (&SocNot);
+   TL_PutFormToShareNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-static void Soc_UnshareSocialNote (struct SocialNote *SocNot)
+static void TL_UnshareNote (struct TL_Note *SocNot)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    long OriginalPubCod;
    bool ItsMe;
 
-   /***** Get data of social note *****/
-   SocNot->NotCod = Soc_GetParamNotCod ();
-   Soc_GetDataOfSocialNotByCod (SocNot);
+   /***** Get data of note *****/
+   SocNot->NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (SocNot);
 
    if (SocNot->NotCod > 0)
      {
       ItsMe = Usr_ItsMe (SocNot->UsrCod);
       if (SocNot->NumShared &&
 	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (Soc_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
+	 if (TL_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
 					   Gbl.Usrs.Me.UsrDat.UsrCod))	// I am a sharer
 	   {
-	    /***** Delete social publication from database *****/
-	    DB_QueryDELETE ("can not remove a social publication",
+	    /***** Delete publication from database *****/
+	    DB_QueryDELETE ("can not remove a publication",
 			    "DELETE FROM social_pubs"
 	                    " WHERE NotCod=%ld"
 	                    " AND PublisherCod=%ld"
 	                    " AND PubType=%u",
 			    SocNot->NotCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod,
-			    (unsigned) Soc_PUB_SHARED_NOTE);
+			    (unsigned) TL_PUB_SHARED_NOTE);
 
-	    /***** Update number of times this social note is shared *****/
-	    Soc_UpdateNumTimesANoteHasBeenShared (SocNot);
+	    /***** Update number of times this note is shared *****/
+	    TL_UpdateNumTimesANoteHasBeenShared (SocNot);
 
-            /***** Mark possible notifications on this social note as removed *****/
-	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
+            /***** Mark possible notifications on this note as removed *****/
+	    OriginalPubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
 	    if (OriginalPubCod > 0)
 	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE,OriginalPubCod);
 	   }
@@ -3576,69 +3583,69 @@ static void Soc_UnshareSocialNote (struct SocialNote *SocNot)
   }
 
 /*****************************************************************************/
-/******* Stop marking as favourite a previously favourited social note *******/
+/*********** Stop marking as favourite a previously favourited note **********/
 /*****************************************************************************/
 
-void Soc_UnfavSocialNoteGbl (void)
+void TL_UnfavNoteGbl (void)
   {
-   struct SocialNote SocNot;
+   struct TL_Note SocNot;
 
-   /***** Stop marking as favourite a previously favourited social note *****/
-   Soc_UnfavSocialNote (&SocNot);
+   /***** Stop marking as favourite a previously favourited note *****/
+   TL_UnfavNote (&SocNot);
 
    /***** Write HTML inside DIV with form to fav *****/
-   Soc_PutFormToFavSocialNote (&SocNot);
+   TL_PutFormToFavNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void Soc_UnfavSocialNoteUsr (void)
+void TL_UnfavNoteUsr (void)
   {
-   struct SocialNote SocNot;
+   struct TL_Note SocNot;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Unfav a social note previously marked as favourite *****/
-   Soc_UnfavSocialNote (&SocNot);
+   /***** Unfav a note previously marked as favourite *****/
+   TL_UnfavNote (&SocNot);
 
    /***** Write HTML inside DIV with form to fav *****/
-   Soc_PutFormToFavSocialNote (&SocNot);
+   TL_PutFormToFavNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-static void Soc_UnfavSocialNote (struct SocialNote *SocNot)
+static void TL_UnfavNote (struct TL_Note *SocNot)
   {
    long OriginalPubCod;
    bool ItsMe;
 
-   /***** Get data of social note *****/
-   SocNot->NotCod = Soc_GetParamNotCod ();
-   Soc_GetDataOfSocialNotByCod (SocNot);
+   /***** Get data of note *****/
+   SocNot->NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (SocNot);
 
    if (SocNot->NotCod > 0)
      {
       ItsMe = Usr_ItsMe (SocNot->UsrCod);
       if (SocNot->NumFavs &&
 	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (Soc_CheckIfNoteIsFavedByUsr (SocNot->NotCod,
+	 if (TL_CheckIfNoteIsFavedByUsr (SocNot->NotCod,
 					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the note
 	   {
 	    /***** Delete the mark as favourite from database *****/
-	    DB_QueryDELETE ("can not unfavourite social note",
+	    DB_QueryDELETE ("can not unfavourite note",
 			    "DELETE FROM social_notes_fav"
 			    " WHERE NotCod=%ld AND UsrCod=%ld",
 			    SocNot->NotCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
-	    /***** Update number of times this social note is favourited *****/
-	    Soc_GetNumTimesANoteHasBeenFav (SocNot);
+	    /***** Update number of times this note is favourited *****/
+	    TL_GetNumTimesANoteHasBeenFav (SocNot);
 
-            /***** Mark possible notifications on this social note as removed *****/
-	    OriginalPubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
+            /***** Mark possible notifications on this note as removed *****/
+	    OriginalPubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
 	    if (OriginalPubCod > 0)
 	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
 	   }
@@ -3646,70 +3653,70 @@ static void Soc_UnfavSocialNote (struct SocialNote *SocNot)
   }
 
 /*****************************************************************************/
-/***** Stop marking as favourite a previously favourited social comment *****/
+/********* Stop marking as favourite a previously favourited comment *********/
 /*****************************************************************************/
 
-void Soc_UnfavSocialCommentGbl (void)
+void TL_UnfavCommentGbl (void)
   {
-   struct SocialComment SocCom;
+   struct TL_Comment SocCom;
 
-   /***** Stop marking as favourite a previously favourited social comment *****/
-   Soc_UnfavSocialComment (&SocCom);
+   /***** Stop marking as favourite a previously favourited comment *****/
+   TL_UnfavComment (&SocCom);
 
    /***** Write HTML inside DIV with form to fav *****/
-   Soc_PutFormToFavSocialComment (&SocCom);
+   TL_PutFormToFavComment (&SocCom);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void Soc_UnfavSocialCommentUsr (void)
+void TL_UnfavCommentUsr (void)
   {
-   struct SocialComment SocCom;
+   struct TL_Comment SocCom;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Unfav a social comment previously marked as favourite *****/
-   Soc_UnfavSocialComment (&SocCom);
+   /***** Unfav a comment previously marked as favourite *****/
+   TL_UnfavComment (&SocCom);
 
    /***** Write HTML inside DIV with form to fav *****/
-   Soc_PutFormToFavSocialComment (&SocCom);
+   TL_PutFormToFavComment (&SocCom);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-static void Soc_UnfavSocialComment (struct SocialComment *SocCom)
+static void TL_UnfavComment (struct TL_Comment *SocCom)
   {
    bool ItsMe;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&SocCom->Media);
 
-   /***** Get data of social comment *****/
-   SocCom->PubCod = Soc_GetParamPubCod ();
-   Soc_GetDataOfSocialComByCod (SocCom);
+   /***** Get data of comment *****/
+   SocCom->PubCod = TL_GetParamPubCod ();
+   TL_GetDataOfCommByCod (SocCom);
 
    if (SocCom->PubCod > 0)
      {
       ItsMe = Usr_ItsMe (SocCom->UsrCod);
       if (SocCom->NumFavs &&
 	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (Soc_CheckIfCommIsFavedByUsr (SocCom->PubCod,
+	 if (TL_CheckIfCommIsFavedByUsr (SocCom->PubCod,
 					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
 	   {
 	    /***** Delete the mark as favourite from database *****/
-	    DB_QueryDELETE ("can not unfavourite social comment",
+	    DB_QueryDELETE ("can not unfavourite comment",
 			    "DELETE FROM social_comments_fav"
 			    " WHERE PubCod=%ld AND UsrCod=%ld",
 			    SocCom->PubCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod);
 
-	    /***** Update number of times this social comment is favourited *****/
-	    Soc_GetNumTimesACommHasBeenFav (SocCom);
+	    /***** Update number of times this comment is favourited *****/
+	    TL_GetNumTimesACommHasBeenFav (SocCom);
 
-            /***** Mark possible notifications on this social comment as removed *****/
+            /***** Mark possible notifications on this comment as removed *****/
             Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,SocCom->PubCod);
 	   }
      }
@@ -3719,19 +3726,19 @@ static void Soc_UnfavSocialComment (struct SocialComment *SocCom)
   }
 
 /*****************************************************************************/
-/******************* Request the removal of a social note ********************/
+/*********************** Request the removal of a note ***********************/
 /*****************************************************************************/
 
-void Soc_RequestRemSocialNoteGbl (void)
+void TL_RequestRemNoteGbl (void)
   {
-   /***** Request the removal of social note *****/
-   Soc_RequestRemovalSocialNote ();
+   /***** Request the removal of note *****/
+   TL_RequestRemovalNote ();
 
    /***** Write timeline again (global) *****/
-   Soc_ShowTimelineGbl2 ();
+   TL_ShowTimelineGbl2 ();
   }
 
-void Soc_RequestRemSocialNoteUsr (void)
+void TL_RequestRemNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
@@ -3740,53 +3747,53 @@ void Soc_RequestRemSocialNoteUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
+   Lay_StartSection (TL_TIMELINE_SECTION_ID);
 
-   /***** Request the removal of social note *****/
-   Soc_RequestRemovalSocialNote ();
+   /***** Request the removal of note *****/
+   TL_RequestRemovalNote ();
 
    /***** Write timeline again (user) *****/
-   Soc_ShowTimelineUsr ();
+   TL_ShowTimelineUsr ();
 
    /***** End section *****/
    Lay_EndSection ();
   }
 
-static void Soc_RequestRemovalSocialNote (void)
+static void TL_RequestRemovalNote (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_post;
    extern const char *Txt_Remove;
-   struct SocialNote SocNot;
+   struct TL_Note SocNot;
    bool ItsMe;
 
-   /***** Get data of social note *****/
-   SocNot.NotCod = Soc_GetParamNotCod ();
-   Soc_GetDataOfSocialNotByCod (&SocNot);
+   /***** Get data of note *****/
+   SocNot.NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (&SocNot);
 
    if (SocNot.NotCod > 0)
      {
       ItsMe = Usr_ItsMe (SocNot.UsrCod);
       if (ItsMe)	// I am the author of this note
 	{
-	 /***** Show question and button to remove social note *****/
+	 /***** Show question and button to remove note *****/
 	 /* Start alert */
 	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_post);
 
-	 /* Show social note */
-	 Soc_WriteSocialNote (&SocNot,
-			      Soc_TOP_MESSAGE_NONE,-1L,
+	 /* Show note */
+	 TL_WriteNote (&SocNot,
+			      TL_TOP_MESSAGE_NONE,-1L,
 			      false,true);
 
 	 /* End alert */
-	 Gbl.Social.NotCod = SocNot.NotCod;	// Social note to be removed
+	 Gbl.Timeline.NotCod = SocNot.NotCod;	// Note to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocPubUsr,"timeline",NULL,
-	                             Soc_PutParamsRemoveSocialNote,
+	                             TL_PutParamsRemoveNote,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocPubGbl,NULL,NULL,
-	                             Soc_PutParamsRemoveSocialNote,
+	                             TL_PutParamsRemoveNote,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
@@ -3795,32 +3802,32 @@ static void Soc_RequestRemovalSocialNote (void)
   }
 
 /*****************************************************************************/
-/****************** Put parameters to remove a social note *******************/
+/********************* Put parameters to remove a note ***********************/
 /*****************************************************************************/
 
-static void Soc_PutParamsRemoveSocialNote (void)
+static void TL_PutParamsRemoveNote (void)
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Usr_PutParamOtherUsrCodEncrypted ();
    else
-      Soc_PutParamWhichUsrs ();
-   Soc_PutHiddenParamNotCod (Gbl.Social.NotCod);
+      TL_PutParamWhichUsrs ();
+   TL_PutHiddenParamNotCod (Gbl.Timeline.NotCod);
   }
 
 /*****************************************************************************/
-/*************************** Remove a social note ****************************/
+/******************************* Remove a note *******************************/
 /*****************************************************************************/
 
-void Soc_RemoveSocialNoteGbl (void)
+void TL_RemoveNoteGbl (void)
   {
-   /***** Remove a social note *****/
-   Soc_RemoveSocialNote ();
+   /***** Remove a note *****/
+   TL_RemoveNote ();
 
    /***** Write updated timeline after removing (global) *****/
-   Soc_ShowTimelineGbl2 ();
+   TL_ShowTimelineGbl2 ();
   }
 
-void Soc_RemoveSocialNoteUsr (void)
+void TL_RemoveNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
@@ -3829,40 +3836,40 @@ void Soc_RemoveSocialNoteUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
+   Lay_StartSection (TL_TIMELINE_SECTION_ID);
 
-   /***** Remove a social note *****/
-   Soc_RemoveSocialNote ();
+   /***** Remove a note *****/
+   TL_RemoveNote ();
 
    /***** Write updated timeline after removing (user) *****/
-   Soc_ShowTimelineUsr ();
+   TL_ShowTimelineUsr ();
 
    /***** End section *****/
    Lay_EndSection ();
   }
 
-static void Soc_RemoveSocialNote (void)
+static void TL_RemoveNote (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
    extern const char *Txt_FORUM_Post_removed;
-   struct SocialNote SocNot;
+   struct TL_Note SocNot;
    bool ItsMe;
 
-   /***** Get data of social note *****/
-   SocNot.NotCod = Soc_GetParamNotCod ();
-   Soc_GetDataOfSocialNotByCod (&SocNot);
+   /***** Get data of note *****/
+   SocNot.NotCod = TL_GetParamNotCod ();
+   TL_GetDataOfNoteByCod (&SocNot);
 
    if (SocNot.NotCod > 0)
      {
       ItsMe = Usr_ItsMe (SocNot.UsrCod);
       if (ItsMe)	// I am the author of this note
 	{
-	 if (SocNot.NoteType == Soc_NOTE_SOCIAL_POST)
-            /***** Remove image file associated to social post *****/
-            Soc_RemoveImgFileFromSocialPost (SocNot.Cod);
+	 if (SocNot.NoteType == TL_NOTE_POST)
+            /***** Remove image file associated to post *****/
+            TL_RemoveImgFileFromPost (SocNot.Cod);
 
-	 /***** Delete social note from database *****/
-	 Soc_RemoveASocialNoteFromDB (&SocNot);
+	 /***** Delete note from database *****/
+	 TL_RemoveANoteFromDB (&SocNot);
 
 	 /***** Message of success *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_FORUM_Post_removed);
@@ -3873,14 +3880,14 @@ static void Soc_RemoveSocialNote (void)
   }
 
 /*****************************************************************************/
-/************** Remove one file associated to a social post ******************/
+/***************** Remove one file associated to a post **********************/
 /*****************************************************************************/
 
-static void Soc_RemoveImgFileFromSocialPost (long PstCod)
+static void TL_RemoveImgFileFromPost (long PstCod)
   {
    MYSQL_RES *mysql_res;
 
-   /***** Get name of image associated to a social post from database *****/
+   /***** Get name of image associated to a post from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get image",
 		       "SELECT MediaName,"	// row[0]
 		              "MediaType"	// row[1]
@@ -3895,10 +3902,10 @@ static void Soc_RemoveImgFileFromSocialPost (long PstCod)
   }
 
 /*****************************************************************************/
-/******************* Remove a social note from database **********************/
+/*********************** Remove a note from database *************************/
 /*****************************************************************************/
 
-static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
+static void TL_RemoveANoteFromDB (struct TL_Note *SocNot)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3907,9 +3914,9 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
    unsigned long NumCom;
 
    /***** Mark possible notifications on the publications
-          of this social note as removed *****/
-   /* Mark notifications of the original social note as removed */
-   PubCod = Soc_GetPubCodOfOriginalSocialNote (SocNot->NotCod);
+          of this note as removed *****/
+   /* Mark notifications of the original note as removed */
+   PubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
    if (PubCod > 0)
      {
       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
@@ -3918,19 +3925,20 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
      }
 
-   /* Get comments of this social note */
-   NumComments = DB_QuerySELECT (&mysql_res,"can not get social comments",
-				 "SELECT PubCod FROM social_pubs"
+   /* Get comments of this note */
+   NumComments = DB_QuerySELECT (&mysql_res,"can not get comments",
+				 "SELECT PubCod"
+				 " FROM social_pubs"
 				 " WHERE NotCod=%ld AND PubType=%u",
 				 SocNot->NotCod,
-				 (unsigned) Soc_PUB_COMMENT_TO_NOTE);
+				 (unsigned) TL_PUB_COMMENT_TO_NOTE);
 
    /* For each comment... */
    for (NumCom = 0;
 	NumCom < NumComments;
 	NumCom++)
      {
-      /* Get code of social comment **/
+      /* Get code of comment **/
       row = mysql_fetch_row (mysql_res);
       PubCod = Str_ConvertStrCodToLongCod (row[0]);
 
@@ -3948,67 +3956,71 @@ static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot)
 
    /***** Remove favs *****/
    /* Remove favs for all comments in this note */
-   DB_QueryDELETE ("can not remove favs for social note",
+   DB_QueryDELETE ("can not remove favs for note",
 		   "DELETE FROM social_comments_fav"
                    " USING social_pubs,social_comments_fav"
 	           " WHERE social_pubs.NotCod=%ld"
                    " AND social_pubs.PubType=%u"
 	           " AND social_pubs.PubCod=social_comments_fav.PubCod",
-		   SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+		   SocNot->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
    /* Remove favs for this note */
-   DB_QueryDELETE ("can not remove favs for social note",
-		   "DELETE FROM social_notes_fav WHERE NotCod=%ld",
+   DB_QueryDELETE ("can not remove favs for note",
+		   "DELETE FROM social_notes_fav"
+		   " WHERE NotCod=%ld",
 		   SocNot->NotCod);
 
-   /***** Remove content of the comments of this social note *****/
-   DB_QueryDELETE ("can not remove social comments",
+   /***** Remove content of the comments of this note *****/
+   DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM social_comments"
 	           " USING social_pubs,social_comments"
 	           " WHERE social_pubs.NotCod=%ld"
                    " AND social_pubs.PubType=%u"
 	           " AND social_pubs.PubCod=social_comments.PubCod",
-		   SocNot->NotCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+		   SocNot->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
-   /***** Remove all the social publications of this note *****/
-   DB_QueryDELETE ("can not remove a social publication",
-		   "DELETE FROM social_pubs WHERE NotCod=%ld",
+   /***** Remove all the publications of this note *****/
+   DB_QueryDELETE ("can not remove a publication",
+		   "DELETE FROM social_pubs"
+		   " WHERE NotCod=%ld",
 		   SocNot->NotCod);
 
-   /***** Remove social note *****/
-   DB_QueryDELETE ("can not remove a social note",
+   /***** Remove note *****/
+   DB_QueryDELETE ("can not remove a note",
 		   "DELETE FROM social_notes"
 	           " WHERE NotCod=%ld"
 	           " AND UsrCod=%ld",		// Extra check: I am the author
 		   SocNot->NotCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   if (SocNot->NoteType == Soc_NOTE_SOCIAL_POST)
-      /***** Remove social post *****/
-      DB_QueryDELETE ("can not remove a social post",
-		      "DELETE FROM social_posts WHERE PstCod=%ld",
+   if (SocNot->NoteType == TL_NOTE_POST)
+      /***** Remove post *****/
+      DB_QueryDELETE ("can not remove a post",
+		      "DELETE FROM social_posts"
+		      " WHERE PstCod=%ld",
 		      SocNot->Cod);
 
-   /***** Reset social note *****/
-   Soc_ResetSocialNote (SocNot);
+   /***** Reset note *****/
+   TL_ResetNote (SocNot);
   }
 
 /*****************************************************************************/
-/******************* Get code of social note of a publication ****************/
+/*********************** Get code of note of a publication *******************/
 /*****************************************************************************/
 
-static long Soc_GetNotCodOfSocialPublication (long PubCod)
+static long TL_GetNotCodOfPublication (long PubCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long NotCod = -1L;
 
-   /***** Get code of social note from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get code of social note",
-		       "SELECT NotCod FROM social_pubs WHERE PubCod=%ld",
+   /***** Get code of note from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get code of note",
+		       "SELECT NotCod FROM social_pubs"
+		       " WHERE PubCod=%ld",
 		       PubCod) == 1)   // Result should have a unique row
      {
-      /* Get code of social note */
+      /* Get code of note */
       row = mysql_fetch_row (mysql_res);
       NotCod = Str_ConvertStrCodToLongCod (row[0]);
      }
@@ -4020,22 +4032,22 @@ static long Soc_GetNotCodOfSocialPublication (long PubCod)
   }
 
 /*****************************************************************************/
-/************ Get code of social publication of the original note ************/
+/*************** Get code of publication of the original note ****************/
 /*****************************************************************************/
 
-static long Soc_GetPubCodOfOriginalSocialNote (long NotCod)
+static long TL_GetPubCodOfOriginalNote (long NotCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long OriginalPubCod = -1L;
 
-   /***** Get code of social publication of the original note *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get code of social publication",
+   /***** Get code of publication of the original note *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get code of publication",
 		       "SELECT PubCod FROM social_pubs"
 		       " WHERE NotCod=%ld AND PubType=%u",
-		       NotCod,(unsigned) Soc_PUB_ORIGINAL_NOTE) == 1)   // Result should have a unique row
+		       NotCod,(unsigned) TL_PUB_ORIGINAL_NOTE) == 1)   // Result should have a unique row
      {
-      /* Get code of social publication (row[0]) */
+      /* Get code of publication (row[0]) */
       row = mysql_fetch_row (mysql_res);
       OriginalPubCod = Str_ConvertStrCodToLongCod (row[0]);
      }
@@ -4047,19 +4059,19 @@ static long Soc_GetPubCodOfOriginalSocialNote (long NotCod)
   }
 
 /*****************************************************************************/
-/************* Request the removal of a comment in a social note *************/
+/**************** Request the removal of a comment in a note *****************/
 /*****************************************************************************/
 
-void Soc_RequestRemSocialComGbl (void)
+void TL_RequestRemComGbl (void)
   {
-   /***** Request the removal of comment in social note *****/
-   Soc_RequestRemovalSocialComment ();
+   /***** Request the removal of comment in note *****/
+   TL_RequestRemovalComment ();
 
    /***** Write timeline again (global) *****/
-   Soc_ShowTimelineGbl2 ();
+   TL_ShowTimelineGbl2 ();
   }
 
-void Soc_RequestRemSocialComUsr (void)
+void TL_RequestRemComUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
@@ -4068,56 +4080,56 @@ void Soc_RequestRemSocialComUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
+   Lay_StartSection (TL_TIMELINE_SECTION_ID);
 
-   /***** Request the removal of comment in social note *****/
-   Soc_RequestRemovalSocialComment ();
+   /***** Request the removal of comment in note *****/
+   TL_RequestRemovalComment ();
 
    /***** Write timeline again (user) *****/
-   Soc_ShowTimelineUsr ();
+   TL_ShowTimelineUsr ();
 
    /***** End section *****/
    Lay_EndSection ();
   }
 
-static void Soc_RequestRemovalSocialComment (void)
+static void TL_RequestRemovalComment (void)
   {
    extern const char *Txt_The_comment_no_longer_exists;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_comment;
    extern const char *Txt_Remove;
-   struct SocialComment SocCom;
+   struct TL_Comment SocCom;
    bool ItsMe;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&SocCom.Media);
 
-   /***** Get data of social comment *****/
-   SocCom.PubCod = Soc_GetParamPubCod ();
-   Soc_GetDataOfSocialComByCod (&SocCom);
+   /***** Get data of comment *****/
+   SocCom.PubCod = TL_GetParamPubCod ();
+   TL_GetDataOfCommByCod (&SocCom);
 
    if (SocCom.PubCod > 0)
      {
       ItsMe = Usr_ItsMe (SocCom.UsrCod);
       if (ItsMe)	// I am the author of this comment
 	{
-	 /***** Show question and button to remove social comment *****/
+	 /***** Show question and button to remove comment *****/
 	 /* Start alert */
 	 Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_comment);
 
-	 /* Show social comment */
-	 Soc_WriteSocialComment (&SocCom,
-				 Soc_TOP_MESSAGE_NONE,-1L,
+	 /* Show comment */
+	 TL_WriteComment (&SocCom,
+				 TL_TOP_MESSAGE_NONE,-1L,
 				 true);
 
 	 /* End alert */
-	 Gbl.Social.PubCod = SocCom.PubCod;	// Social publication to be removed
+	 Gbl.Timeline.PubCod = SocCom.PubCod;	// Publication to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Ale_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",NULL,
-	                             Soc_PutParamsRemoveSocialCommment,
+	                             TL_PutParamsRemoveCommment,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	 else
 	    Ale_ShowAlertAndButton2 (ActRemSocComGbl,NULL,NULL,
-	                             Soc_PutParamsRemoveSocialCommment,
+	                             TL_PutParamsRemoveCommment,
 				     Btn_REMOVE_BUTTON,Txt_Remove);
 	}
      }
@@ -4129,32 +4141,32 @@ static void Soc_RequestRemovalSocialComment (void)
   }
 
 /*****************************************************************************/
-/***************** Put parameters to remove a social comment *****************/
+/******************** Put parameters to remove a comment *********************/
 /*****************************************************************************/
 
-static void Soc_PutParamsRemoveSocialCommment (void)
+static void TL_PutParamsRemoveCommment (void)
   {
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
       Usr_PutParamOtherUsrCodEncrypted ();
    else
-      Soc_PutParamWhichUsrs ();
-   Soc_PutHiddenParamPubCod (Gbl.Social.PubCod);
+      TL_PutParamWhichUsrs ();
+   TL_PutHiddenParamPubCod (Gbl.Timeline.PubCod);
   }
 
 /*****************************************************************************/
-/************************** Remove a social comment **************************/
+/***************************** Remove a comment ******************************/
 /*****************************************************************************/
 
-void Soc_RemoveSocialComGbl (void)
+void TL_RemoveComGbl (void)
   {
-   /***** Remove a social comment *****/
-   Soc_RemoveSocialComment ();
+   /***** Remove a comment *****/
+   TL_RemoveComment ();
 
    /***** Write updated timeline after removing (global) *****/
-   Soc_ShowTimelineGbl2 ();
+   TL_ShowTimelineGbl2 ();
   }
 
-void Soc_RemoveSocialComUsr (void)
+void TL_RemoveComUsr (void)
   {
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
@@ -4163,42 +4175,42 @@ void Soc_RemoveSocialComUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
+   Lay_StartSection (TL_TIMELINE_SECTION_ID);
 
-   /***** Remove a social comment *****/
-   Soc_RemoveSocialComment ();
+   /***** Remove a comment *****/
+   TL_RemoveComment ();
 
    /***** Write updated timeline after removing (user) *****/
-   Soc_ShowTimelineUsr ();
+   TL_ShowTimelineUsr ();
 
    /***** End section *****/
    Lay_EndSection ();
   }
 
-static void Soc_RemoveSocialComment (void)
+static void TL_RemoveComment (void)
   {
    extern const char *Txt_The_comment_no_longer_exists;
    extern const char *Txt_Comment_removed;
-   struct SocialComment SocCom;
+   struct TL_Comment SocCom;
    bool ItsMe;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&SocCom.Media);
 
-   /***** Get data of social comment *****/
-   SocCom.PubCod = Soc_GetParamPubCod ();
-   Soc_GetDataOfSocialComByCod (&SocCom);
+   /***** Get data of comment *****/
+   SocCom.PubCod = TL_GetParamPubCod ();
+   TL_GetDataOfCommByCod (&SocCom);
 
    if (SocCom.PubCod > 0)
      {
       ItsMe = Usr_ItsMe (SocCom.UsrCod);
       if (ItsMe)	// I am the author of this comment
 	{
-	 /***** Remove image file associated to social post *****/
-	 Soc_RemoveImgFileFromSocialComment (SocCom.PubCod);
+	 /***** Remove image file associated to post *****/
+	 TL_RemoveImgFileFromComment (SocCom.PubCod);
 
-	 /***** Delete social comment from database *****/
-	 Soc_RemoveASocialCommentFromDB (&SocCom);
+	 /***** Delete comment from database *****/
+	 TL_RemoveACommentFromDB (&SocCom);
 
 	 /***** Message of success *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_Comment_removed);
@@ -4212,14 +4224,14 @@ static void Soc_RemoveSocialComment (void)
   }
 
 /*****************************************************************************/
-/************* Remove one file associated to a social comment ****************/
+/**************** Remove one file associated to a comment ********************/
 /*****************************************************************************/
 
-static void Soc_RemoveImgFileFromSocialComment (long PubCod)
+static void TL_RemoveImgFileFromComment (long PubCod)
   {
    MYSQL_RES *mysql_res;
 
-   /***** Get name of media associated to a social post from database *****/
+   /***** Get name of media associated to a post from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get media",
 		       "SELECT MediaName,"	// row[0]
 		              "MediaType"	// row[1]
@@ -4234,10 +4246,10 @@ static void Soc_RemoveImgFileFromSocialComment (long PubCod)
   }
 
 /*****************************************************************************/
-/****************** Remove a social comment from database ********************/
+/********************* Remove a comment from database ************************/
 /*****************************************************************************/
 
-static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
+static void TL_RemoveACommentFromDB (struct TL_Comment *SocCom)
   {
    /***** Mark possible notifications on this comment as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,SocCom->PubCod);
@@ -4245,39 +4257,42 @@ static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,SocCom->PubCod);
 
    /***** Remove favs for this comment *****/
-   DB_QueryDELETE ("can not remove favs for social comment",
-		   "DELETE FROM social_comments_fav WHERE PubCod=%ld",
+   DB_QueryDELETE ("can not remove favs for comment",
+		   "DELETE FROM social_comments_fav"
+		   " WHERE PubCod=%ld",
 		   SocCom->PubCod);
 
-   /***** Remove content of this social comment *****/
-   DB_QueryDELETE ("can not remove a social comment",
-		   "DELETE FROM social_comments WHERE PubCod=%ld",
+   /***** Remove content of this comment *****/
+   DB_QueryDELETE ("can not remove a comment",
+		   "DELETE FROM social_comments"
+		   " WHERE PubCod=%ld",
 		   SocCom->PubCod);
 
-   /***** Remove this social comment *****/
-   DB_QueryDELETE ("can not remove a social comment",
+   /***** Remove this comment *****/
+   DB_QueryDELETE ("can not remove a comment",
 		   "DELETE FROM social_pubs"
 	           " WHERE PubCod=%ld"
 	           " AND PublisherCod=%ld"	// Extra check: I am the author
 	           " AND PubType=%u",		// Extra check: it's a comment
 		   SocCom->PubCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) Soc_PUB_COMMENT_TO_NOTE);
+		   (unsigned) TL_PUB_COMMENT_TO_NOTE);
 
-   /***** Reset social comment *****/
-   Soc_ResetSocialComment (SocCom);
+   /***** Reset comment *****/
+   TL_ResetComment (SocCom);
   }
 
 /*****************************************************************************/
-/********** Remove all the social content of a user from database ************/
+/************* Remove all the content of a user from database ****************/
 /*****************************************************************************/
 
-void Soc_RemoveUsrSocialContent (long UsrCod)
+void TL_RemoveUsrContent (long UsrCod)
   {
    /***** Remove favs for comments *****/
-   /* Remove all favs made by this user in any social comment */
+   /* Remove all favs made by this user in any comment */
    DB_QueryDELETE ("can not remove favs",
-		   "DELETE FROM social_comments_fav WHERE UsrCod=%ld",
+		   "DELETE FROM social_comments_fav"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
 
    /* Remove all favs for all comments of this user */
@@ -4287,22 +4302,23 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 	           " WHERE social_pubs.PublisherCod=%ld"	// Author of the comment
                    " AND social_pubs.PubType=%u"
 	           " AND social_pubs.PubCod=social_comments_fav.PubCod",
-		   UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
-   /* Remove all favs for all comments in all the social notes of the user */
-   DB_QueryDELETE ("can not remove social comments",
+   /* Remove all favs for all comments in all the notes of the user */
+   DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM social_comments_fav"
 	           " USING social_notes,social_pubs,social_comments_fav"
 	           " WHERE social_notes.UsrCod=%ld"	// Author of the note
 	           " AND social_notes.NotCod=social_pubs.NotCod"
                    " AND social_pubs.PubType=%u"
 	           " AND social_pubs.PubCod=social_comments_fav.PubCod",
-		   UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
    /***** Remove favs for notes *****/
-   /* Remove all favs made by this user in any social note */
+   /* Remove all favs made by this user in any note */
    DB_QueryDELETE ("can not remove favs",
-		   "DELETE FROM social_notes_fav WHERE UsrCod=%ld",
+		   "DELETE FROM social_notes_fav"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
 
    /* Remove all favs for all notes of this user */
@@ -4313,109 +4329,111 @@ void Soc_RemoveUsrSocialContent (long UsrCod)
 	           " AND social_notes.NotCod=social_notes_fav.NotCod",
 		   UsrCod);
 
-   /***** Remove social comments *****/
-   /* Remove content of all the comments in all the social notes of the user */
-   DB_QueryDELETE ("can not remove social comments",
+   /***** Remove comments *****/
+   /* Remove content of all the comments in all the notes of the user */
+   DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM social_comments"
 	           " USING social_notes,social_pubs,social_comments"
 	           " WHERE social_notes.UsrCod=%ld"
 		   " AND social_notes.NotCod=social_pubs.NotCod"
                    " AND social_pubs.PubType=%u"
 	           " AND social_pubs.PubCod=social_comments.PubCod",
-		   UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
-   /* Remove all the comments from any user in any social note of the user */
-   DB_QueryDELETE ("can not remove social comments",
+   /* Remove all the comments from any user in any note of the user */
+   DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM social_pubs"
 	           " USING social_notes,social_pubs"
 	           " WHERE social_notes.UsrCod=%ld"
 		   " AND social_notes.NotCod=social_pubs.NotCod"
                    " AND social_pubs.PubType=%u",
-		   UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
-   /* Remove content of all the comments of the user in any social note */
-   DB_QueryDELETE ("can not remove social comments",
+   /* Remove content of all the comments of the user in any note */
+   DB_QueryDELETE ("can not remove comments",
 		   "DELETE FROM social_comments"
 	           " USING social_pubs,social_comments"
 	           " WHERE social_pubs.PublisherCod=%ld"
 	           " AND social_pubs.PubType=%u"
 	           " AND social_pubs.PubCod=social_comments.PubCod",
-		   UsrCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE);
+		   UsrCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
-   /***** Remove all the social posts of the user *****/
-   DB_QueryDELETE ("can not remove social posts",
+   /***** Remove all the posts of the user *****/
+   DB_QueryDELETE ("can not remove posts",
 		   "DELETE FROM social_posts"
 		   " WHERE PstCod IN"
 		   " (SELECT Cod FROM social_notes"
 	           " WHERE UsrCod=%ld AND NoteType=%u)",
-		   UsrCod,(unsigned) Soc_NOTE_SOCIAL_POST);
+		   UsrCod,(unsigned) TL_NOTE_POST);
 
-   /***** Remove all the social publications of any user authored by the user *****/
-   DB_QueryDELETE ("can not remove social publications",
+   /***** Remove all the publications of any user authored by the user *****/
+   DB_QueryDELETE ("can not remove publications",
 		   "DELETE FROM social_pubs"
                    " USING social_notes,social_pubs"
 	           " WHERE social_notes.UsrCod=%ld"
                    " AND social_notes.NotCod=social_pubs.NotCod",
 		   UsrCod);
 
-   /***** Remove all the social publications of the user *****/
-   DB_QueryDELETE ("can not remove social publications",
-		   "DELETE FROM social_pubs WHERE PublisherCod=%ld",
+   /***** Remove all the publications of the user *****/
+   DB_QueryDELETE ("can not remove publications",
+		   "DELETE FROM social_pubs"
+		   " WHERE PublisherCod=%ld",
 		   UsrCod);
 
-   /***** Remove all the social notes of the user *****/
-   DB_QueryDELETE ("can not remove social notes",
-		   "DELETE FROM social_notes WHERE UsrCod=%ld",
+   /***** Remove all the notes of the user *****/
+   DB_QueryDELETE ("can not remove notes",
+		   "DELETE FROM social_notes"
+		   " WHERE UsrCod=%ld",
 		   UsrCod);
   }
 
 /*****************************************************************************/
-/**************** Check if a user has published a social note ****************/
+/****************** Check if a user has published a note *********************/
 /*****************************************************************************/
 
-static bool Soc_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
+static bool TL_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod)
   {
-   return (DB_QueryCOUNT ("can not check if a user has shared a social note",
+   return (DB_QueryCOUNT ("can not check if a user has shared a note",
 			  "SELECT COUNT(*) FROM social_pubs"
 			  " WHERE NotCod=%ld"
 			  " AND PublisherCod=%ld"
 			  " AND PubType=%u",
 			  NotCod,
 			  UsrCod,
-			  (unsigned) Soc_PUB_SHARED_NOTE) != 0);
+			  (unsigned) TL_PUB_SHARED_NOTE) != 0);
   }
 
 /*****************************************************************************/
-/*************** Check if a user has favourited a social note ****************/
+/****************** Check if a user has favourited a note ********************/
 /*****************************************************************************/
 
-static bool Soc_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod)
+static bool TL_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if a user"
-			  " has favourited a social note",
+			  " has favourited a note",
 			  "SELECT COUNT(*) FROM social_notes_fav"
 			  " WHERE NotCod=%ld AND UsrCod=%ld",
 			  NotCod,UsrCod) != 0);
   }
 
 /*****************************************************************************/
-/************* Check if a user has favourited a social comment ***************/
+/**************** Check if a user has favourited a comment *******************/
 /*****************************************************************************/
 
-static bool Soc_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
+static bool TL_CheckIfCommIsFavedByUsr (long PubCod,long UsrCod)
   {
    return (DB_QueryCOUNT ("can not check if a user"
-			  " has favourited a social comment",
+			  " has favourited a comment",
 			  "SELECT COUNT(*) FROM social_comments_fav"
 			  " WHERE PubCod=%ld AND UsrCod=%ld",
 			  PubCod,UsrCod) != 0);
   }
 
 /*****************************************************************************/
-/******* Get number of times a social note has been shared in timeline *******/
+/********** Get number of times a note has been shared in timeline ***********/
 /*****************************************************************************/
 
-static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot)
+static void TL_UpdateNumTimesANoteHasBeenShared (struct TL_Note *SocNot)
   {
    /***** Get number of times (users) this note has been shared *****/
    SocNot->NumShared =
@@ -4427,14 +4445,14 @@ static void Soc_UpdateNumTimesANoteHasBeenShared (struct SocialNote *SocNot)
 			     " AND PubType=%u",
 			     SocNot->NotCod,
 			     SocNot->UsrCod,	// The author
-			     (unsigned) Soc_PUB_SHARED_NOTE);
+			     (unsigned) TL_PUB_SHARED_NOTE);
   }
 
 /*****************************************************************************/
-/*********** Get number of times a social note has been favourited ***********/
+/*************** Get number of times a note has been favourited **************/
 /*****************************************************************************/
 
-static void Soc_GetNumTimesANoteHasBeenFav (struct SocialNote *SocNot)
+static void TL_GetNumTimesANoteHasBeenFav (struct TL_Note *SocNot)
   {
    /***** Get number of times (users) this note has been favourited *****/
    SocNot->NumFavs =
@@ -4448,10 +4466,10 @@ static void Soc_GetNumTimesANoteHasBeenFav (struct SocialNote *SocNot)
   }
 
 /*****************************************************************************/
-/********* Get number of times a social comment has been favourited **********/
+/************ Get number of times a comment has been favourited **************/
 /*****************************************************************************/
 
-static void Soc_GetNumTimesACommHasBeenFav (struct SocialComment *SocCom)
+static void TL_GetNumTimesACommHasBeenFav (struct TL_Comment *SocCom)
   {
    /***** Get number of times (users) this comment has been favourited *****/
    SocCom->NumFavs =
@@ -4465,10 +4483,10 @@ static void Soc_GetNumTimesACommHasBeenFav (struct SocialComment *SocCom)
   }
 
 /*****************************************************************************/
-/**************** Show users who have shared this social note ****************/
+/******************* Show users who have shared this note ********************/
 /*****************************************************************************/
 
-static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot)
+static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs = 0;
@@ -4484,11 +4502,11 @@ static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot
 				 " ORDER BY PubCod LIMIT %u",
 				 SocNot->NotCod,
 				 SocNot->UsrCod,
-				 (unsigned) Soc_PUB_SHARED_NOTE,
-				 Soc_MAX_SHARERS_FAVERS_SHOWN);
+				 (unsigned) TL_PUB_SHARED_NOTE,
+				 TL_MAX_SHARERS_FAVERS_SHOWN);
 
    /***** Show users *****/
-   Soc_ShowSharersOrFavers (&mysql_res,SocNot->NumShared,NumFirstUsrs);
+   TL_ShowSharersOrFavers (&mysql_res,SocNot->NumShared,NumFirstUsrs);
 
    /***** Free structure that stores the query result *****/
    if (SocNot->NumShared)
@@ -4496,10 +4514,10 @@ static void Soc_ShowUsrsWhoHaveSharedSocialNote (const struct SocialNote *SocNot
   }
 
 /*****************************************************************************/
-/********* Show users who have marked this social note as favourite **********/
+/************ Show users who have marked this note as favourite **************/
 /*****************************************************************************/
 
-static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *SocNot)
+static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs = 0;
@@ -4516,11 +4534,11 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *S
 				 " ORDER BY FavCod LIMIT %u",
 				 SocNot->NotCod,
 				 SocNot->UsrCod,
-				 Soc_MAX_SHARERS_FAVERS_SHOWN);
+				 TL_MAX_SHARERS_FAVERS_SHOWN);
      }
 
    /***** Show users *****/
-   Soc_ShowSharersOrFavers (&mysql_res,SocNot->NumFavs,NumFirstUsrs);
+   TL_ShowSharersOrFavers (&mysql_res,SocNot->NumFavs,NumFirstUsrs);
 
    /***** Free structure that stores the query result *****/
    if (SocNot->NumFavs)
@@ -4528,10 +4546,10 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialNoteAsFav (const struct SocialNote *S
   }
 
 /*****************************************************************************/
-/********* Show users who have marked this social note as favourite **********/
+/************ Show users who have marked this note as favourite **************/
 /*****************************************************************************/
 
-static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment *SocCom)
+static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom)
   {
    MYSQL_RES *mysql_res;
    unsigned NumFirstUsrs = 0;
@@ -4547,10 +4565,10 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment
 				 " ORDER BY FavCod LIMIT %u",
 				 SocCom->PubCod,
 				 SocCom->UsrCod,
-				 Soc_MAX_SHARERS_FAVERS_SHOWN);
+				 TL_MAX_SHARERS_FAVERS_SHOWN);
 
    /***** Show users *****/
-   Soc_ShowSharersOrFavers (&mysql_res,SocCom->NumFavs,NumFirstUsrs);
+   TL_ShowSharersOrFavers (&mysql_res,SocCom->NumFavs,NumFirstUsrs);
 
    /***** Free structure that stores the query result *****/
    if (SocCom->NumFavs)
@@ -4562,7 +4580,7 @@ static void Soc_ShowUsrsWhoHaveMarkedSocialCommAsFav (const struct SocialComment
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
+static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 				     unsigned NumUsrs,unsigned NumFirstUsrs)
   {
    MYSQL_ROW row;
@@ -4572,7 +4590,7 @@ static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
 
-   /***** Show number of users who have marked this social note as favourite *****/
+   /***** Show number of users who have marked this note as favourite *****/
    fprintf (Gbl.F.Out,"<span class=\"TL_NUM_SHA_FAV\"> %u</span>",
             NumUsrs);
 
@@ -4626,18 +4644,18 @@ static void Soc_ShowSharersOrFavers (MYSQL_RES **mysql_res,
   }
 
 /*****************************************************************************/
-/**************** Get data of social note using its code *********************/
+/******************** Get data of note using its code ************************/
 /*****************************************************************************/
 
-static void Soc_GetDataOfSocialNotByCod (struct SocialNote *SocNot)
+static void TL_GetDataOfNoteByCod (struct TL_Note *SocNot)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    if (SocNot->NotCod > 0)
      {
-      /***** Get data of social note from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of social note",
+      /***** Get data of note from database *****/
+      if (DB_QuerySELECT (&mysql_res,"can not get data of note",
 			  "SELECT NotCod,"			// row[0]
 				 "NoteType,"			// row[1]
 				 "Cod,"				// row[2]
@@ -4649,35 +4667,35 @@ static void Soc_GetDataOfSocialNotByCod (struct SocialNote *SocNot)
 			  " WHERE NotCod=%ld",
 			  SocNot->NotCod))
 	{
-	 /***** Get data of social note *****/
+	 /***** Get data of note *****/
 	 row = mysql_fetch_row (mysql_res);
-	 Soc_GetDataOfSocialNoteFromRow (row,SocNot);
+	 TL_GetDataOfNoteFromRow (row,SocNot);
 	}
       else
-	 /***** Reset fields of social note *****/
-	 Soc_ResetSocialNote (SocNot);
+	 /***** Reset fields of note *****/
+	 TL_ResetNote (SocNot);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
-      /***** Reset fields of social note *****/
-      Soc_ResetSocialNote (SocNot);
+      /***** Reset fields of note *****/
+      TL_ResetNote (SocNot);
   }
 
 /*****************************************************************************/
-/*************** Get data of social comment using its code *******************/
+/******************* Get data of comment using its code **********************/
 /*****************************************************************************/
 
-static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
+static void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
    if (SocCom->PubCod > 0)
      {
-      /***** Get data of social comment from database *****/
-      if (DB_QuerySELECT (&mysql_res,"can not get data of social comment",
+      /***** Get data of comment from database *****/
+      if (DB_QuerySELECT (&mysql_res,"can not get data of comment",
 			  "SELECT social_pubs.PubCod,"				// row[0]
 				 "social_pubs.PublisherCod,"			// row[1]
 				 "social_pubs.NotCod,"				// row[2]
@@ -4691,49 +4709,49 @@ static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
 			  " WHERE social_pubs.PubCod=%ld"
 			  " AND social_pubs.PubType=%u"
 			  " AND social_pubs.PubCod=social_comments.PubCod",
-			  SocCom->PubCod,(unsigned) Soc_PUB_COMMENT_TO_NOTE))
+			  SocCom->PubCod,(unsigned) TL_PUB_COMMENT_TO_NOTE))
 	{
-	 /***** Get data of social comment *****/
+	 /***** Get data of comment *****/
 	 row = mysql_fetch_row (mysql_res);
-	 Soc_GetDataOfSocialCommentFromRow (row,SocCom);
+	 TL_GetDataOfCommentFromRow (row,SocCom);
 	}
       else
-	 /***** Reset fields of social comment *****/
-	 Soc_ResetSocialComment (SocCom);
+	 /***** Reset fields of comment *****/
+	 TL_ResetComment (SocCom);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
-      /***** Reset fields of social comment *****/
-      Soc_ResetSocialComment (SocCom);
+      /***** Reset fields of comment *****/
+      TL_ResetComment (SocCom);
   }
 
 /*****************************************************************************/
-/************** Get data of social publication using its code ****************/
+/****************** Get data of publication using its code *******************/
 /*****************************************************************************/
 
-static void Soc_GetDataOfSocialPublicationFromRow (MYSQL_ROW row,struct SocialPublication *SocPub)
+static void TL_GetDataOfPublicationFromRow (MYSQL_ROW row,struct TL_Publication *SocPub)
   {
-   const Soc_TopMessage_t TopMessages[Soc_NUM_PUB_TYPES] =
+   const TL_TopMessage_t TopMessages[TL_NUM_PUB_TYPES] =
      {
-      Soc_TOP_MESSAGE_NONE,		// Soc_PUB_UNKNOWN
-      Soc_TOP_MESSAGE_NONE,		// Soc_PUB_ORIGINAL_NOTE
-      Soc_TOP_MESSAGE_SHARED,		// Soc_PUB_SHARED_NOTE
-      Soc_TOP_MESSAGE_COMMENTED,	// Soc_PUB_COMMENT_TO_NOTE
+      TL_TOP_MESSAGE_NONE,		// TL_PUB_UNKNOWN
+      TL_TOP_MESSAGE_NONE,		// TL_PUB_ORIGINAL_NOTE
+      TL_TOP_MESSAGE_SHARED,		// TL_PUB_SHARED_NOTE
+      TL_TOP_MESSAGE_COMMENTED,	// TL_PUB_COMMENT_TO_NOTE
      };
 
-   /***** Get code of social publication (row[0]) *****/
+   /***** Get code of publication (row[0]) *****/
    SocPub->PubCod       = Str_ConvertStrCodToLongCod (row[0]);
 
-   /***** Get social note code (row[1]) *****/
+   /***** Get note code (row[1]) *****/
    SocPub->NotCod       = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get publisher's code (row[2]) *****/
    SocPub->PublisherCod = Str_ConvertStrCodToLongCod (row[2]);
 
    /***** Get type of publication (row[3]) *****/
-   SocPub->PubType      = Soc_GetPubTypeFromStr ((const char *) row[3]);
+   SocPub->PubType      = TL_GetPubTypeFromStr ((const char *) row[3]);
    SocPub->TopMessage   = TopMessages[SocPub->PubType];
 
    /***** Get time of the note (row[4]) *****/
@@ -4741,16 +4759,16 @@ static void Soc_GetDataOfSocialPublicationFromRow (MYSQL_ROW row,struct SocialPu
   }
 
 /*****************************************************************************/
-/******************** Get data of social note from row ***********************/
+/************************ Get data of note from row **************************/
 /*****************************************************************************/
 
-static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *SocNot)
+static void TL_GetDataOfNoteFromRow (MYSQL_ROW row,struct TL_Note *SocNot)
   {
-   /***** Get social code (row[0]) *****/
+   /***** Get code (row[0]) *****/
    SocNot->NotCod      = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get note type (row[1]) *****/
-   SocNot->NoteType    = Soc_GetNoteTypeFromStr ((const char *) row[1]);
+   SocNot->NoteType    = TL_GetNoteTypeFromStr ((const char *) row[1]);
 
    /***** Get file/post... code (row[2]) *****/
    SocNot->Cod         = Str_ConvertStrCodToLongCod (row[2]);
@@ -4767,48 +4785,48 @@ static void Soc_GetDataOfSocialNoteFromRow (MYSQL_ROW row,struct SocialNote *Soc
    /***** Get time of the note (row[6]) *****/
    SocNot->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[6]);
 
-   /***** Get number of times this social note has been shared *****/
-   Soc_UpdateNumTimesANoteHasBeenShared (SocNot);
+   /***** Get number of times this note has been shared *****/
+   TL_UpdateNumTimesANoteHasBeenShared (SocNot);
 
-   /***** Get number of times this social note has been favourited *****/
-   Soc_GetNumTimesANoteHasBeenFav (SocNot);
+   /***** Get number of times this note has been favourited *****/
+   TL_GetNumTimesANoteHasBeenFav (SocNot);
   }
 
 /*****************************************************************************/
-/**** Get social publication type from string number coming from database ****/
+/******** Get publication type from string number coming from database *******/
 /*****************************************************************************/
 
-static Soc_PubType_t Soc_GetPubTypeFromStr (const char *Str)
+static TL_PubType_t TL_GetPubTypeFromStr (const char *Str)
   {
    unsigned UnsignedNum;
 
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Soc_NUM_PUB_TYPES)
-         return (Soc_PubType_t) UnsignedNum;
+      if (UnsignedNum < TL_NUM_PUB_TYPES)
+         return (TL_PubType_t) UnsignedNum;
 
-   return Soc_PUB_UNKNOWN;
+   return TL_PUB_UNKNOWN;
   }
 
 /*****************************************************************************/
-/****** Get social note type from string number coming from database *********/
+/********* Get note type from string number coming from database *************/
 /*****************************************************************************/
 
-static Soc_NoteType_t Soc_GetNoteTypeFromStr (const char *Str)
+static TL_NoteType_t TL_GetNoteTypeFromStr (const char *Str)
   {
    unsigned UnsignedNum;
 
    if (sscanf (Str,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Soc_NUM_NOTE_TYPES)
-         return (Soc_NoteType_t) UnsignedNum;
+      if (UnsignedNum < TL_NUM_NOTE_TYPES)
+         return (TL_NoteType_t) UnsignedNum;
 
-   return Soc_NOTE_UNKNOWN;
+   return TL_NOTE_UNKNOWN;
   }
 
 /*****************************************************************************/
-/****************** Get data of social comment from row **********************/
+/********************** Get data of comment from row *************************/
 /*****************************************************************************/
 
-static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialComment *SocCom)
+static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom)
   {
    /*
    row[0]: PubCod
@@ -4821,13 +4839,13 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
    row[7]: MediaTitle
    row[8]: MediaURL
     */
-   /***** Get code of social comment (row[0]) *****/
+   /***** Get code of comment (row[0]) *****/
    SocCom->PubCod      = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get (from) user code (row[1]) *****/
    SocCom->UsrCod      = Str_ConvertStrCodToLongCod (row[1]);
 
-   /***** Get code of social note (row[2]) *****/
+   /***** Get code of note (row[2]) *****/
    SocCom->NotCod      = Str_ConvertStrCodToLongCod (row[2]);
 
    /***** Get time of the note (row[3]) *****/
@@ -4838,20 +4856,20 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
              Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Get number of times this comment has been favourited *****/
-   Soc_GetNumTimesACommHasBeenFav (SocCom);
+   TL_GetNumTimesACommHasBeenFav (SocCom);
 
    /****** Get media data (row[5], row[6], row[7], row[8]) *****/
    Med_GetMediaDataFromRow (row[5],row[6],row[7],row[8],&SocCom->Media);
   }
 
 /*****************************************************************************/
-/*********************** Reset fields of social note *************************/
+/*************************** Reset fields of note ****************************/
 /*****************************************************************************/
 
-static void Soc_ResetSocialNote (struct SocialNote *SocNot)
+static void TL_ResetNote (struct TL_Note *SocNot)
   {
    SocNot->NotCod      = -1L;
-   SocNot->NoteType    = Soc_NOTE_UNKNOWN;
+   SocNot->NoteType    = TL_NOTE_UNKNOWN;
    SocNot->UsrCod      = -1L;
    SocNot->HieCod      = -1L;
    SocNot->Cod         = -1L;
@@ -4861,10 +4879,10 @@ static void Soc_ResetSocialNote (struct SocialNote *SocNot)
   }
 
 /*****************************************************************************/
-/********************** Reset fields of social comment ***********************/
+/************************** Reset fields of comment **************************/
 /*****************************************************************************/
 
-static void Soc_ResetSocialComment (struct SocialComment *SocCom)
+static void TL_ResetComment (struct TL_Comment *SocCom)
   {
    SocCom->PubCod      = -1L;
    SocCom->UsrCod      = -1L;
@@ -4874,26 +4892,27 @@ static void Soc_ResetSocialComment (struct SocialComment *SocCom)
   }
 
 /*****************************************************************************/
-/**************** Clear unused old social timelines in database **************/
+/******************* Clear unused old timelines in database ******************/
 /*****************************************************************************/
 
-void Soc_ClearOldTimelinesDB (void)
+void TL_ClearOldTimelinesDB (void)
   {
-   /***** Remove social timelines for expired sessions *****/
-   DB_QueryDELETE ("can not remove old social timelines",
+   /***** Remove timelines for expired sessions *****/
+   DB_QueryDELETE ("can not remove old timelines",
 		   "DELETE LOW_PRIORITY FROM social_timelines"
                    " WHERE SessionId NOT IN (SELECT SessionId FROM sessions)");
   }
 
 /*****************************************************************************/
-/************* Clear social timeline for this session in database ************/
+/**************** Clear timeline for this session in database ****************/
 /*****************************************************************************/
 
-static void Soc_ClearTimelineThisSession (void)
+static void TL_ClearTimelineThisSession (void)
   {
-   /***** Remove social timeline for this session *****/
-   DB_QueryDELETE ("can not remove social timeline",
-		   "DELETE FROM social_timelines WHERE SessionId='%s'",
+   /***** Remove timeline for this session *****/
+   DB_QueryDELETE ("can not remove timeline",
+		   "DELETE FROM social_timelines"
+		   " WHERE SessionId='%s'",
 		   Gbl.Session.Id);
   }
 
@@ -4901,9 +4920,9 @@ static void Soc_ClearTimelineThisSession (void)
 /****** Add just retrieved notes to current timeline for this session ********/
 /*****************************************************************************/
 
-static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
+static void TL_AddNotesJustRetrievedToTimelineThisSession (void)
   {
-   DB_QueryINSERT ("can not insert social notes in timeline",
+   DB_QueryINSERT ("can not insert notes in timeline",
 		   "INSERT IGNORE INTO social_timelines"
 	           " (SessionId,NotCod)"
 	           " SELECT DISTINCTROW '%s',NotCod FROM not_codes",
@@ -4911,28 +4930,28 @@ static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
   }
 
 /*****************************************************************************/
-/*************** Get notification of a new social publication ****************/
+/****************** Get notification of a new publication ********************/
 /*****************************************************************************/
 
-void Soc_GetNotifSocialPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                    char **ContentStr,
-                                    long PubCod,bool GetContent)
+void TL_GetNotifPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                             char **ContentStr,
+                             long PubCod,bool GetContent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct SocialPublication SocPub;
-   struct SocialNote SocNot;
+   struct TL_Publication SocPub;
+   struct TL_Note SocNot;
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    size_t Length;
    bool ContentCopied = false;
 
    /***** Return nothing on error *****/
-   SocPub.PubType = Soc_PUB_UNKNOWN;
+   SocPub.PubType = TL_PUB_UNKNOWN;
    SummaryStr[0] = '\0';	// Return nothing on error
    Content[0] = '\0';
 
-   /***** Get summary and content from social post from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get data of social publication",
+   /***** Get summary and content from post from database *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get data of publication",
 		       "SELECT PubCod,"				// row[0]
 			      "NotCod,"				// row[1]
 			      "PublisherCod,"			// row[2]
@@ -4941,9 +4960,9 @@ void Soc_GetNotifSocialPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 		       " FROM social_pubs WHERE PubCod=%ld",
 		       PubCod) == 1)   // Result should have a unique row
      {
-      /* Get data of social publication */
+      /* Get data of publication */
       row = mysql_fetch_row (mysql_res);
-      Soc_GetDataOfSocialPublicationFromRow (row,&SocPub);
+      TL_GetDataOfPublicationFromRow (row,&SocPub);
      }
 
    /***** Free structure that stores the query result *****/
@@ -4952,20 +4971,19 @@ void Soc_GetNotifSocialPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /***** Get summary and content *****/
    switch (SocPub.PubType)
      {
-      case Soc_PUB_UNKNOWN:
+      case TL_PUB_UNKNOWN:
 	 break;
-      case Soc_PUB_ORIGINAL_NOTE:
-      case Soc_PUB_SHARED_NOTE:
-	 /* Get data of social note */
+      case TL_PUB_ORIGINAL_NOTE:
+      case TL_PUB_SHARED_NOTE:
+	 /* Get data of note */
 	 SocNot.NotCod = SocPub.NotCod;
-	 Soc_GetDataOfSocialNotByCod (&SocNot);
+	 TL_GetDataOfNoteByCod (&SocNot);
 
-	 if (SocNot.NoteType == Soc_NOTE_SOCIAL_POST)
+	 if (SocNot.NoteType == TL_NOTE_POST)
 	   {
-	    /***** Get content of social post from database *****/
+	    /***** Get content of post from database *****/
 	    // TODO: What happens if content is empty and an image is attached?
-	    if (DB_QuerySELECT (&mysql_res,"can not get the content"
-					   " of a social post",
+	    if (DB_QuerySELECT (&mysql_res,"can not get the content of a post",
 			        "SELECT Content FROM social_posts"
 				" WHERE PstCod=%ld",
 				SocNot.Cod) == 1)   // Result should have a unique row
@@ -4999,13 +5017,13 @@ void Soc_GetNotifSocialPublication (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	              Ntf_MAX_BYTES_SUMMARY);
 	   }
 	 else
-	    Soc_GetNoteSummary (&SocNot,SummaryStr);
+	    TL_GetNoteSummary (&SocNot,SummaryStr);
 	 break;
-      case Soc_PUB_COMMENT_TO_NOTE:
-	 /***** Get content of social post from database *****/
+      case TL_PUB_COMMENT_TO_NOTE:
+	 /***** Get content of post from database *****/
 	 // TODO: What happens if content is empty and an image is attached?
 	 if (DB_QuerySELECT (&mysql_res,"can not get the content"
-				        " of a comment to a social note",
+				        " of a comment to a note",
 			     "SELECT Content FROM social_comments"
 			     " WHERE PubCod=%ld",
 			     SocPub.PubCod) == 1)   // Result should have a unique row
@@ -5137,13 +5155,13 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
   }
 
 /*****************************************************************************/
-/*************** Get number of social publications from a user ***************/
+/****************** Get number of publications from a user *******************/
 /*****************************************************************************/
 
-unsigned long Soc_GetNumPubsUsr (long UsrCod)
+unsigned long TL_GetNumPubsUsr (long UsrCod)
   {
    /***** Get number of posts from a user from database *****/
-   return DB_QueryCOUNT ("can not get number of social publications from a user",
+   return DB_QueryCOUNT ("can not get number of publications from a user",
 			 "SELECT COUNT(*) FROM social_pubs"
 			 " WHERE PublisherCod=%ld",
 			 UsrCod);

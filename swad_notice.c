@@ -38,7 +38,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_RSS.h"
-#include "swad_social.h"
+#include "swad_timeline.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -130,7 +130,7 @@ void Not_ReceiveNotice (void)
    extern const char *Txt_Notice_created;
    long NotCod;
    unsigned NumUsrsToBeNotifiedByEMail;
-   struct SocialPublication SocPub;
+   struct TL_Publication SocPub;
    char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the text of the notice *****/
@@ -151,7 +151,7 @@ void Not_ReceiveNotice (void)
       Not_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new notice *****/
-   Soc_StoreAndPublishSocialNote (Soc_NOTE_NOTICE,NotCod,&SocPub);
+   TL_StoreAndPublishNote (TL_NOTE_NOTICE,NotCod,&SocPub);
   }
 
 /*****************************************************************************/
@@ -316,7 +316,7 @@ void Not_RemoveNotice (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
 
    /***** Mark possible social note as unavailable *****/
-   Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NOTE_NOTICE,NotCod);
+   TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NOTE_NOTICE,NotCod);
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);

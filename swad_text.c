@@ -83,12 +83,12 @@
 #include "swad_project.h"
 #include "swad_record.h"
 #include "swad_role.h"
-#include "swad_social.h"
 #include "swad_statistic.h"
 #include "swad_survey.h"
 #include "swad_syllabus.h"
 #include "swad_tab.h"
 #include "swad_test.h"
+#include "swad_timeline.h"
 #include "swad_timetable.h"
 #include "swad_user.h"
 
@@ -23958,7 +23958,7 @@ const char *Txt_New_record_field =
 	"Novo campo de cart&atilde;o";
 #endif
 
-const char *Txt_New_SOCIAL_comment =
+const char *Txt_New_TIMELINE_comment =
 #if   L==1	// ca
 	"Nou comentari";
 #elif L==2	// de
@@ -23979,7 +23979,7 @@ const char *Txt_New_SOCIAL_comment =
 	"Novo coment&aacute;rio";
 #endif
 
-const char *Txt_New_SOCIAL_post =
+const char *Txt_New_TIMELINE_post =
 #if   L==1	// ca
 	"Nova publicaci&oacute;";
 #elif L==2	// de
@@ -38918,569 +38918,6 @@ const char *Txt_Size_of_photos =
 	"Tamanho das fotos";
 #endif
 
-const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES] =
-	{
-#if   L==1	// ca	// Soc_NOTE_UNKNOWN
-	 "Esdeveniment desconegut"
-#elif L==2	// de
-	 "Unbekannt Ereignis"
-#elif L==3	// en
-	 "Unknown event"
-#elif L==4	// es
-	 "Evento desconocido"
-#elif L==5	// fr
-	 "&Eacute;v&eacute;nement inconnu"
-#elif L==6	// gn
-	 "Evento desconocido"	// Okoteve traducción
-#elif L==7	// it
-	 "Evento sconosciuto"
-#elif L==8	// pl
-	 "Nieznane zdarzenia"
-#elif L==9	// pt
-	 "Evento desconhecido"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_INS_DOC_PUB_FILE
-	 "Document p&uacute;blic (instituci&oacute;)"
-#elif L==2	// de
-	 "&Ouml;ffentliche Dokumentdatei (Hochschule)"
-#elif L==3	// en
-	 "Public document file (institution)"
-#elif L==4	// es
-	 "Documento p&uacute;blico (instituci&oacute;n)"
-#elif L==5	// fr
-	 "Fichier de document public (&eacute;tablissement)"
-#elif L==6	// gn
-	 "Documento p&uacute;blico (instituci&oacute;n)"	// Okoteve traducción
-#elif L==7	// it
-	 "Documento pubblico (istituzione)"
-#elif L==8	// pl
-	 "Plik dokumentu publiczne (instytucji)"
-#elif L==9	// pt
-	 "Arquivo de documento p&uacute;blico (institu&ccedil;&atilde;o)"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_INS_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic (instituci&oacute;)"
-#elif L==2	// de
-	 "&Ouml;ffentliche Freigegebene Datei (Hochschule)"
-#elif L==3	// en
-	 "Public shared file (institution)"
-#elif L==4	// es
-	 "Archivo compartido p&uacute;blico (instituci&oacute;n)"
-#elif L==5	// fr
-	 "Fichier partag&eacute; public (&eacute;tablissement)"
-#elif L==6	// gn
-	 "Archivo compartido p&uacute;blico (instituci&oacute;n)"	// Okoteve traducción
-#elif L==7	// it
-	 "File condiviso pubblico (istituzione)"
-#elif L==8	// pl
-	 "Udost&eogon;pniony plik publiczne (instytucji)"
-#elif L==9	// pt
-	 "Arquivo compartilhado p&uacute;blico (institu&ccedil;&atilde;o)"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_CTR_DOC_PUB_FILE
-	 "Document p&uacute;blic (centre)"
-#elif L==2	// de
-	 "&Ouml;ffentliche Dokumentdatei (Lehrinstitut)"
-#elif L==3	// en
-	 "Public document file (centre)"
-#elif L==4	// es
-	 "Documento p&uacute;blico (centro)"
-#elif L==5	// fr
-	 "Fichier de document public (centre)"
-#elif L==6	// gn
-	 "Documento p&uacute;blico (centro)"	// Okoteve traducción
-#elif L==7	// it
-	 "Documento pubblico (centro)"
-#elif L==8	// pl
-	 "Plik dokumentu publiczne (centrum)"
-#elif L==9	// pt
-	 "Arquivo de documento p&uacute;blico (centro)"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_CTR_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic (centre)"
-#elif L==2	// de
-	 "&Ouml;ffentliche Freigegebene Datei (Lehrinstitut)"
-#elif L==3	// en
-	 "Public shared file (centre)"
-#elif L==4	// es
-	 "Archivo compartido p&uacute;blico (centro)"
-#elif L==5	// fr
-	 "Fichier partag&eacute; public (centre)"
-#elif L==6	// gn
-	 "Archivo compartido p&uacute;blico (centro)"	// Okoteve traducción
-#elif L==7	// it
-	 "File condiviso pubblico (centro)"
-#elif L==8	// pl
-	 "Udost&eogon;pniony plik publiczne (centrum)"
-#elif L==9	// pt
-	 "Arquivo compartilhado p&uacute;blico (centro)"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_DEG_DOC_PUB_FILE
-	 "Document p&uacute;blic (titulaci&oacute;)"
-#elif L==2	// de
-	 "&Ouml;ffentliche Dokumentdatei (Studiengang)"
-#elif L==3	// en
-	 "Public document file (degree)"
-#elif L==4	// es
-	 "Documento p&uacute;blico (titulaci&oacute;n)"
-#elif L==5	// fr
-	 "Fichier de document public (&eacute;tude)"
-#elif L==6	// gn
-	 "Documento p&uacute;blico (titulaci&oacute;n)"	// Okoteve traducción
-#elif L==7	// it
-	 "Documento pubblico (laurea)"
-#elif L==8	// pl
-	 "Plik dokumentu publiczne (stopie&nacute;)"
-#elif L==9	// pt
-	 "Arquivo de documento p&uacute;blico (grau)"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_DEG_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic (titulaci&oacute;)"
-#elif L==2	// de
-	 "&Ouml;ffentliche Freigegebene Datei (Studiengang)"
-#elif L==3	// en
-	 "Public shared file (degree)"
-#elif L==4	// es
-	 "Archivo compartido p&uacute;blico (titulaci&oacute;n)"
-#elif L==5	// fr
-	 "Fichier partag&eacute; public (&eacute;tude)"
-#elif L==6	// gn
-	 "Archivo compartido p&uacute;blico (titulaci&oacute;n)"	// Okoteve traducción
-#elif L==7	// it
-	 "File condiviso pubblico (laurea)"
-#elif L==8	// pl
-	 "Udost&eogon;pniony plik publiczne (stopie&nacute;)"
-#elif L==9	// pt
-	 "Arquivo compartilhado p&uacute;blico (grau)"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_CRS_DOC_PUB_FILE
-	 "Document p&uacute;blic (assignatura)"
-#elif L==2	// de
-	 "&Ouml;ffentliche Dokumentdatei (Kurs)"
-#elif L==3	// en
-	 "Public document file (course)"
-#elif L==4	// es
-	 "Documento p&uacute;blico (asignatura)"
-#elif L==5	// fr
-	 "Fichier de document public (mati&egrave;re)"
-#elif L==6	// gn
-	 "Documento p&uacute;blico (asignatura)"	// Okoteve traducción
-#elif L==7	// it
-	 "Documento pubblico (corso)"
-#elif L==8	// pl
-	 "Plik dokumentu publiczne (kurs)"
-#elif L==9	// pt
-	 "Arquivo de documento p&uacute;blico (disciplina)"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_CRS_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic (assignatura)"
-#elif L==2	// de
-	 "&Ouml;ffentliche Freigegebene Datei (Kurs)"
-#elif L==3	// en
-	 "Public shared file (course)"
-#elif L==4	// es
-	 "Archivo compartido p&uacute;blico (asignatura)"
-#elif L==5	// fr
-	 "Fichier partag&eacute; public (mati&egrave;re)"
-#elif L==6	// gn
-	 "Archivo compartido p&uacute;blico (asignatura)"	// Okoteve traducción
-#elif L==7	// it
-	 "File condiviso pubblico (corso)"
-#elif L==8	// pl
-	 "Udost&eogon;pniony plik publiczne (kurs)"
-#elif L==9	// pt
-	 "Arquivo compartilhado p&uacute;blico (disciplina)"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_EXAM_ANNOUNCEMENT
-	 "Convocat&ograve;ria d'examen"
-#elif L==2	// de
-	 "Aufrufe für Pr&uuml;fung"
-#elif L==3	// en
-	 "Announcement of exam"
-#elif L==4	// es
-	 "Convocatoria de examen"
-#elif L==5	// fr
-	 "Convocation &agrave; un examen"
-#elif L==6	// gn
-	 "Convocatoria de examen"	// Okoteve traducción
-#elif L==7	// it
-	 "Appello d'esame"
-#elif L==8	// pl
-	 "Ogloszenie egzamin"
-#elif L==9	// pt
-	 "Chamada para exame"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_SOCIAL_POST
-	 "Missatge social"
-#elif L==2	// de
-	 "Social Beitrag"
-#elif L==3	// en
-	 "Social post"
-#elif L==4	// es
-	 "Mensaje social"
-#elif L==5	// fr
-	 "Message social"
-#elif L==6	// gn
-	 "Mensaje social"	// Okoteve traducción
-#elif L==7	// it
-	 "Post sociale"
-#elif L==8	// pl
-	 "Post spo&lstrok;ecznej"
-#elif L==9	// pt
-	 "Post sociais"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_FORUM_POST
-	 "Comentari en un f&ograve;rum"
-#elif L==2	// de
-	 "Beitr&auml;ge in einem Forum"
-#elif L==3	// en
-	 "Post in a forum"
-#elif L==4	// es
-	 "Comentario en un foro"
-#elif L==5	// fr
-	 "Post dans un forum"
-#elif L==6	// gn
-	 "Comentario en un foro"	// Okoteve traducción
-#elif L==7	// it
-	 "Post in un forum"
-#elif L==8	// pl
-	 "Post na forum"
-#elif L==9	// pt
-	 "Post em um f&oacute;rum"
-#endif
-	 ,
-#if   L==1	// ca	// Soc_NOTE_NOTICE
-	 "Av&iacute;s"
-#elif L==2	// de
-	 "Ank&uuml;ndigungen"
-#elif L==3	// en
-	 "Notice"
-#elif L==4	// es
-	 "Aviso"
-#elif L==5	// fr
-	 "Avis"
-#elif L==6	// gn
-	 "Marandu"
-#elif L==7	// it
-	 "Avviso"
-#elif L==8	// pl
-	 "Informacja"
-#elif L==9	// pt
-	 "An&uacute;ncio"
-#endif
-	};
-
-const char *Txt_SOCIAL_NOTE_Favourite =
-#if   L==1	// ca
-	"Favorit";
-#elif L==2	// de
-	"Favorit";
-#elif L==3	// en
-	"Favourite";
-#elif L==4	// es
-	"Favorito";
-#elif L==5	// fr
-	"Favori";
-#elif L==6	// gn
-	"Favorito";	// Okoteve traducción
-#elif L==7	// it
-	"Preferito";
-#elif L==8	// pl
-	"Ulubiony";
-#elif L==9	// pt
-	"Favorito";
-#endif
-
-const char *Txt_SOCIAL_NOTE_Favourited_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Marcat com favorit per %u";
-#elif L==2	// de
-	"Von %u vorgemerkt";
-#elif L==3	// en
-	"Favourited by %u";
-#elif L==4	// es
-	"Marcado como favorito por %u";
-#elif L==5	// fr
-	"Ajout&eacute; aux favoris par %u";
-#elif L==6	// gn
-	"Marcado como favorito por %u";	// Okoteve traducción
-#elif L==7	// it
-	"Preferiti da %u";
-#elif L==8	// pl
-	"Dodane do ulubionych przez %u";
-#elif L==9	// pt
-	"Marcado como favorito por %u";
-#endif
-
-const char *Txt_SOCIAL_NOTE_Shared =
-#if   L==1	// ca
-	"Compartit";
-#elif L==2	// de
-	"Geteilt";
-#elif L==3	// en
-	"Shared";
-#elif L==4	// es
-	"Compartido";
-#elif L==5	// fr
-	"Partag&eacute;";
-#elif L==6	// gn
-	"Compartido";	// Okoteve traducción
-#elif L==7	// it
-	"Condiviso";
-#elif L==8	// pl
-	"Udost&eogon;pnione";
-#elif L==9	// pt
-	"Compartilhado";
-#endif
-
-const char *Txt_SOCIAL_NOTE_Shared_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Compartit per %u";
-#elif L==2	// de
-	"Von %u geteilt";
-#elif L==3	// en
-	"Shared by %u";
-#elif L==4	// es
-	"Compartido por %u";
-#elif L==5	// fr
-	"Partag&eacute; par %u";
-#elif L==6	// gn
-	"Compartido por %u";	// Okoteve traducción
-#elif L==7	// it
-	"Condiviso da %u";
-#elif L==8	// pl
-	"Udost&eogon;pnione przez %u";
-#elif L==9	// pt
-	"Compartilhado por %u";
-#endif
-
-const char *Txt_SOCIAL_NOTE_Not_favourited_by_anyone =	// No longer shared
-#if   L==1	// ca
-	"No marcat com favorit per ning&uacute;";
-#elif L==2	// de
-	"Niemand hat sie als Favorit markiert";
-#elif L==3	// en
-	"Not favourited by anyone";
-#elif L==4	// es
-	"No marcado como favorito por nadie";
-#elif L==5	// fr
-	"Personne n'a marqu&eacute; comme favori";
-#elif L==6	// gn
-	"No marcado como favorito por nadie";	// Okoteve traducción
-#elif L==7	// it
-	"Non preferiti da chiunque";
-#elif L==8	// pl
-	"Nie przez nikogo ulubionych";
-#elif L==9	// pt
-	"N&atilde;o marcado como favorito por qualquer pessoa";
-#endif
-
-const char *Txt_SOCIAL_NOTE_Not_shared_by_anyone =	// No longer shared
-#if   L==1	// ca
-	"No compartit per ning&uacute;";
-#elif L==2	// de
-	"Nicht durch Dritte freigegebenen";
-#elif L==3	// en
-	"Not shared by anyone";
-#elif L==4	// es
-	"No compartido por nadie";
-#elif L==5	// fr
-	"Personne n'a partag&eacute;";
-#elif L==6	// gn
-	"No compartido por nadie";	// Okoteve traducción
-#elif L==7	// it
-	"Non condiviso da chiunque";
-#elif L==8	// pl
-	"Nie jest dzielona przez nikogo";
-#elif L==9	// pt
-	"N&atilde;o compartilhado por qualquer pessoa";
-#endif
-
-const char *Txt_SOCIAL_NOTE_TOP_MESSAGES[Soc_NUM_TOP_MESSAGES] =
-	{
-	// Soc_TOP_MESSAGE_NONE
-	""
-	,
-	// Soc_TOP_MESSAGE_COMMENTED:
-#if   L==1	// ca
-	"ha comentat"
-#elif L==2	// de
-	"hat kommentiert"
-#elif L==3	// en
-	"has commented"
-#elif L==4	// es
-	"ha comentado"
-#elif L==5	// fr
-	"a comment&eacute;"
-#elif L==6	// gn
-	"ha comentado"	// Okoteve traducción
-#elif L==7	// it
-	"ha commentato"
-#elif L==8	// pl
-	"skomentowa&lstrok;"
-#elif L==9	// pt
-	"comentou"
-#endif
-	,
-	// Soc_TOP_MESSAGE_FAVED:
-#if   L==1	// ca
-	"ha marcat com favorit"
-#elif L==2	// de
-	"hat als Favorit markiert"
-#elif L==3	// en
-	"has marked as favourite"
-#elif L==4	// es
-	"ha marcado como favorito"
-#elif L==5	// fr
-	"a marqu&eacute; en tant que favori"
-#elif L==6	// gn
-	"ha marcado como favorito"	// Okoteve traducción
-#elif L==7	// it
-	"ha segnato come preferito"
-#elif L==8	// pl
-	"oznaczone jako ulubiony"
-#elif L==9	// pt
-	"marcou como favorito"
-#endif
-	,
-	// Soc_TOP_MESSAGE_UNFAVED:
-#if   L==1	// ca
-	"ha desmarcat com favorit"
-#elif L==2	// de
-	"hat als Favorit unmarkiert"
-#elif L==3	// en
-	"has unmarked as favourite"
-#elif L==4	// es
-	"ha desmarcado como favorito"
-#elif L==5	// fr
-	"a pas marqu&eacute; en tant que favori"
-#elif L==6	// gn
-	"ha desmarcado como favorito"	// Okoteve traducción
-#elif L==7	// it
-	"ha smarcato come preferito"
-#elif L==8	// pl
-	"nieoznaczonych jako ulubiony"
-#elif L==9	// pt
-	"desmarcou como favorito"
-#endif
-	,
-	// Soc_TOP_MESSAGE_SHARED:
-#if   L==1	// ca
-	"ha compartit"
-#elif L==2	// de
-	"hat sich geteilt"
-#elif L==3	// en
-	"has shared"
-#elif L==4	// es
-	"ha compartido"
-#elif L==5	// fr
-	"a partag&eacute;"
-#elif L==6	// gn
-	"ha compartido"	// Okoteve traducción
-#elif L==7	// it
-	"ha condiviso"
-#elif L==8	// pl
-	"podzieli&lstrok;"
-#elif L==9	// pt
-	"compartilhou"
-#endif
-	,
-	// Soc_TOP_MESSAGE_UNSHARED:
-#if   L==1	// ca
-	"ha deixat de compartir"
-#elif L==2	// de
-	"hat Sharing gestoppt"
-#elif L==3	// en
-	"has stopped sharing"
-#elif L==4	// es
-	"ha dejado de compartir"
-#elif L==5	// fr
-	"a cess&eacute; de partage"
-#elif L==6	// gn
-	"ha dejado de compartir"	// Okoteve traducción
-#elif L==7	// it
-	"ha smesso di condividere"
-#elif L==8	// pl
-	"przesta&lstrok; udost&eogon;pniania"
-#elif L==9	// pt
-	"parou compartilhar"
-#endif
-	,
-	// Soc_TOP_MESSAGE_MENTIONED:
-#if   L==1	// ca
-	"li ha esmentat"
-#elif L==2	// de
-	"hat Sie erw&auml;hnt"
-#elif L==3	// en
-	"has mentioned you"
-#elif L==4	// es
-	"le ha mencionado"
-#elif L==5	// fr
-	"vous a mentionn&eacute;"
-#elif L==6	// gn
-	"le ha mencionado"	// Okoteve traducción
-#elif L==7	// it
-	"ti ha menzionato"
-#elif L==8	// pl
-	"wspomnia&lstrok; o Tobie"
-#elif L==9	// pt
-	"mencionou voc&ecirc;"
-#endif
-	};
-
-const char *Txt_SOCIAL_post =
-#if   L==1	// ca
-	"publicaci&oacute;";
-#elif L==2	// de
-	"Publikation";
-#elif L==3	// en
-	"post";
-#elif L==4	// es
-	"publicaci&oacute;n";
-#elif L==5	// fr
-	"publication";
-#elif L==6	// gn
-	"marandu";
-#elif L==7	// it
-	"pubblicazione";
-#elif L==8	// pl
-	"publikacja";
-#elif L==9	// pt
-	"publica&ccedil;&atilde;o";
-#endif
-
-const char *Txt_SOCIAL_posts =
-#if   L==1	// ca
-	"publicacions";
-#elif L==2	// de
-	"Publikationen";
-#elif L==3	// en
-	"posts";
-#elif L==4	// es
-	"publicaciones";
-#elif L==5	// fr
-	"publications";
-#elif L==6	// gn
-	"marandu";
-#elif L==7	// it
-	"pubblicazioni";
-#elif L==8	// pl
-	"publikacje";
-#elif L==9	// pt
-	"publica&ccedil;&otilde;es";
-#endif
-
 const char *Txt_Sort_degrees_by =
 #if   L==1	// ca
 	"Ordenar titulacions per";
@@ -49280,12 +48717,576 @@ const char *Txt_Timeline_OF_A_USER =	// Warning: it is very important to include
 	 "Timeline de %s";
 #endif
 
-const char *Txt_TIMELINE_WHICH_USERS[Soc_NUM_WHICH_USRS] =
+
+const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES] =
+	{
+#if   L==1	// ca	// TL_NOTE_UNKNOWN
+	 "Esdeveniment desconegut"
+#elif L==2	// de
+	 "Unbekannt Ereignis"
+#elif L==3	// en
+	 "Unknown event"
+#elif L==4	// es
+	 "Evento desconocido"
+#elif L==5	// fr
+	 "&Eacute;v&eacute;nement inconnu"
+#elif L==6	// gn
+	 "Evento desconocido"	// Okoteve traducción
+#elif L==7	// it
+	 "Evento sconosciuto"
+#elif L==8	// pl
+	 "Nieznane zdarzenia"
+#elif L==9	// pt
+	 "Evento desconhecido"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_INS_DOC_PUB_FILE
+	 "Document p&uacute;blic (instituci&oacute;)"
+#elif L==2	// de
+	 "&Ouml;ffentliche Dokumentdatei (Hochschule)"
+#elif L==3	// en
+	 "Public document file (institution)"
+#elif L==4	// es
+	 "Documento p&uacute;blico (instituci&oacute;n)"
+#elif L==5	// fr
+	 "Fichier de document public (&eacute;tablissement)"
+#elif L==6	// gn
+	 "Documento p&uacute;blico (instituci&oacute;n)"	// Okoteve traducción
+#elif L==7	// it
+	 "Documento pubblico (istituzione)"
+#elif L==8	// pl
+	 "Plik dokumentu publiczne (instytucji)"
+#elif L==9	// pt
+	 "Arquivo de documento p&uacute;blico (institu&ccedil;&atilde;o)"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_INS_SHA_PUB_FILE
+	 "Arxiu compartit p&uacute;blic (instituci&oacute;)"
+#elif L==2	// de
+	 "&Ouml;ffentliche Freigegebene Datei (Hochschule)"
+#elif L==3	// en
+	 "Public shared file (institution)"
+#elif L==4	// es
+	 "Archivo compartido p&uacute;blico (instituci&oacute;n)"
+#elif L==5	// fr
+	 "Fichier partag&eacute; public (&eacute;tablissement)"
+#elif L==6	// gn
+	 "Archivo compartido p&uacute;blico (instituci&oacute;n)"	// Okoteve traducción
+#elif L==7	// it
+	 "File condiviso pubblico (istituzione)"
+#elif L==8	// pl
+	 "Udost&eogon;pniony plik publiczne (instytucji)"
+#elif L==9	// pt
+	 "Arquivo compartilhado p&uacute;blico (institu&ccedil;&atilde;o)"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_CTR_DOC_PUB_FILE
+	 "Document p&uacute;blic (centre)"
+#elif L==2	// de
+	 "&Ouml;ffentliche Dokumentdatei (Lehrinstitut)"
+#elif L==3	// en
+	 "Public document file (centre)"
+#elif L==4	// es
+	 "Documento p&uacute;blico (centro)"
+#elif L==5	// fr
+	 "Fichier de document public (centre)"
+#elif L==6	// gn
+	 "Documento p&uacute;blico (centro)"	// Okoteve traducción
+#elif L==7	// it
+	 "Documento pubblico (centro)"
+#elif L==8	// pl
+	 "Plik dokumentu publiczne (centrum)"
+#elif L==9	// pt
+	 "Arquivo de documento p&uacute;blico (centro)"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_CTR_SHA_PUB_FILE
+	 "Arxiu compartit p&uacute;blic (centre)"
+#elif L==2	// de
+	 "&Ouml;ffentliche Freigegebene Datei (Lehrinstitut)"
+#elif L==3	// en
+	 "Public shared file (centre)"
+#elif L==4	// es
+	 "Archivo compartido p&uacute;blico (centro)"
+#elif L==5	// fr
+	 "Fichier partag&eacute; public (centre)"
+#elif L==6	// gn
+	 "Archivo compartido p&uacute;blico (centro)"	// Okoteve traducción
+#elif L==7	// it
+	 "File condiviso pubblico (centro)"
+#elif L==8	// pl
+	 "Udost&eogon;pniony plik publiczne (centrum)"
+#elif L==9	// pt
+	 "Arquivo compartilhado p&uacute;blico (centro)"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_DEG_DOC_PUB_FILE
+	 "Document p&uacute;blic (titulaci&oacute;)"
+#elif L==2	// de
+	 "&Ouml;ffentliche Dokumentdatei (Studiengang)"
+#elif L==3	// en
+	 "Public document file (degree)"
+#elif L==4	// es
+	 "Documento p&uacute;blico (titulaci&oacute;n)"
+#elif L==5	// fr
+	 "Fichier de document public (&eacute;tude)"
+#elif L==6	// gn
+	 "Documento p&uacute;blico (titulaci&oacute;n)"	// Okoteve traducción
+#elif L==7	// it
+	 "Documento pubblico (laurea)"
+#elif L==8	// pl
+	 "Plik dokumentu publiczne (stopie&nacute;)"
+#elif L==9	// pt
+	 "Arquivo de documento p&uacute;blico (grau)"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_DEG_SHA_PUB_FILE
+	 "Arxiu compartit p&uacute;blic (titulaci&oacute;)"
+#elif L==2	// de
+	 "&Ouml;ffentliche Freigegebene Datei (Studiengang)"
+#elif L==3	// en
+	 "Public shared file (degree)"
+#elif L==4	// es
+	 "Archivo compartido p&uacute;blico (titulaci&oacute;n)"
+#elif L==5	// fr
+	 "Fichier partag&eacute; public (&eacute;tude)"
+#elif L==6	// gn
+	 "Archivo compartido p&uacute;blico (titulaci&oacute;n)"	// Okoteve traducción
+#elif L==7	// it
+	 "File condiviso pubblico (laurea)"
+#elif L==8	// pl
+	 "Udost&eogon;pniony plik publiczne (stopie&nacute;)"
+#elif L==9	// pt
+	 "Arquivo compartilhado p&uacute;blico (grau)"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_CRS_DOC_PUB_FILE
+	 "Document p&uacute;blic (assignatura)"
+#elif L==2	// de
+	 "&Ouml;ffentliche Dokumentdatei (Kurs)"
+#elif L==3	// en
+	 "Public document file (course)"
+#elif L==4	// es
+	 "Documento p&uacute;blico (asignatura)"
+#elif L==5	// fr
+	 "Fichier de document public (mati&egrave;re)"
+#elif L==6	// gn
+	 "Documento p&uacute;blico (asignatura)"	// Okoteve traducción
+#elif L==7	// it
+	 "Documento pubblico (corso)"
+#elif L==8	// pl
+	 "Plik dokumentu publiczne (kurs)"
+#elif L==9	// pt
+	 "Arquivo de documento p&uacute;blico (disciplina)"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_CRS_SHA_PUB_FILE
+	 "Arxiu compartit p&uacute;blic (assignatura)"
+#elif L==2	// de
+	 "&Ouml;ffentliche Freigegebene Datei (Kurs)"
+#elif L==3	// en
+	 "Public shared file (course)"
+#elif L==4	// es
+	 "Archivo compartido p&uacute;blico (asignatura)"
+#elif L==5	// fr
+	 "Fichier partag&eacute; public (mati&egrave;re)"
+#elif L==6	// gn
+	 "Archivo compartido p&uacute;blico (asignatura)"	// Okoteve traducción
+#elif L==7	// it
+	 "File condiviso pubblico (corso)"
+#elif L==8	// pl
+	 "Udost&eogon;pniony plik publiczne (kurs)"
+#elif L==9	// pt
+	 "Arquivo compartilhado p&uacute;blico (disciplina)"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_EXAM_ANNOUNCEMENT
+	 "Convocat&ograve;ria d'examen"
+#elif L==2	// de
+	 "Aufrufe für Pr&uuml;fung"
+#elif L==3	// en
+	 "Announcement of exam"
+#elif L==4	// es
+	 "Convocatoria de examen"
+#elif L==5	// fr
+	 "Convocation &agrave; un examen"
+#elif L==6	// gn
+	 "Convocatoria de examen"	// Okoteve traducción
+#elif L==7	// it
+	 "Appello d'esame"
+#elif L==8	// pl
+	 "Ogloszenie egzamin"
+#elif L==9	// pt
+	 "Chamada para exame"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_SOCIAL_POST
+	 "Missatge social"
+#elif L==2	// de
+	 "Social Beitrag"
+#elif L==3	// en
+	 "Social post"
+#elif L==4	// es
+	 "Mensaje social"
+#elif L==5	// fr
+	 "Message social"
+#elif L==6	// gn
+	 "Mensaje social"	// Okoteve traducción
+#elif L==7	// it
+	 "Post sociale"
+#elif L==8	// pl
+	 "Post spo&lstrok;ecznej"
+#elif L==9	// pt
+	 "Post sociais"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_FORUM_POST
+	 "Comentari en un f&ograve;rum"
+#elif L==2	// de
+	 "Beitr&auml;ge in einem Forum"
+#elif L==3	// en
+	 "Post in a forum"
+#elif L==4	// es
+	 "Comentario en un foro"
+#elif L==5	// fr
+	 "Post dans un forum"
+#elif L==6	// gn
+	 "Comentario en un foro"	// Okoteve traducción
+#elif L==7	// it
+	 "Post in un forum"
+#elif L==8	// pl
+	 "Post na forum"
+#elif L==9	// pt
+	 "Post em um f&oacute;rum"
+#endif
+	 ,
+#if   L==1	// ca	// TL_NOTE_NOTICE
+	 "Av&iacute;s"
+#elif L==2	// de
+	 "Ank&uuml;ndigungen"
+#elif L==3	// en
+	 "Notice"
+#elif L==4	// es
+	 "Aviso"
+#elif L==5	// fr
+	 "Avis"
+#elif L==6	// gn
+	 "Marandu"
+#elif L==7	// it
+	 "Avviso"
+#elif L==8	// pl
+	 "Informacja"
+#elif L==9	// pt
+	 "An&uacute;ncio"
+#endif
+	};
+
+const char *Txt_TIMELINE_NOTE_Favourite =
+#if   L==1	// ca
+	"Favorit";
+#elif L==2	// de
+	"Favorit";
+#elif L==3	// en
+	"Favourite";
+#elif L==4	// es
+	"Favorito";
+#elif L==5	// fr
+	"Favori";
+#elif L==6	// gn
+	"Favorito";	// Okoteve traducción
+#elif L==7	// it
+	"Preferito";
+#elif L==8	// pl
+	"Ulubiony";
+#elif L==9	// pt
+	"Favorito";
+#endif
+
+const char *Txt_TIMELINE_NOTE_Favourited_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Marcat com favorit per %u";
+#elif L==2	// de
+	"Von %u vorgemerkt";
+#elif L==3	// en
+	"Favourited by %u";
+#elif L==4	// es
+	"Marcado como favorito por %u";
+#elif L==5	// fr
+	"Ajout&eacute; aux favoris par %u";
+#elif L==6	// gn
+	"Marcado como favorito por %u";	// Okoteve traducción
+#elif L==7	// it
+	"Preferiti da %u";
+#elif L==8	// pl
+	"Dodane do ulubionych przez %u";
+#elif L==9	// pt
+	"Marcado como favorito por %u";
+#endif
+
+const char *Txt_TIMELINE_NOTE_Shared =
+#if   L==1	// ca
+	"Compartit";
+#elif L==2	// de
+	"Geteilt";
+#elif L==3	// en
+	"Shared";
+#elif L==4	// es
+	"Compartido";
+#elif L==5	// fr
+	"Partag&eacute;";
+#elif L==6	// gn
+	"Compartido";	// Okoteve traducción
+#elif L==7	// it
+	"Condiviso";
+#elif L==8	// pl
+	"Udost&eogon;pnione";
+#elif L==9	// pt
+	"Compartilhado";
+#endif
+
+const char *Txt_TIMELINE_NOTE_Shared_by_X_USERS =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Compartit per %u";
+#elif L==2	// de
+	"Von %u geteilt";
+#elif L==3	// en
+	"Shared by %u";
+#elif L==4	// es
+	"Compartido por %u";
+#elif L==5	// fr
+	"Partag&eacute; par %u";
+#elif L==6	// gn
+	"Compartido por %u";	// Okoteve traducción
+#elif L==7	// it
+	"Condiviso da %u";
+#elif L==8	// pl
+	"Udost&eogon;pnione przez %u";
+#elif L==9	// pt
+	"Compartilhado por %u";
+#endif
+
+const char *Txt_TIMELINE_NOTE_Not_favourited_by_anyone =	// No longer shared
+#if   L==1	// ca
+	"No marcat com favorit per ning&uacute;";
+#elif L==2	// de
+	"Niemand hat sie als Favorit markiert";
+#elif L==3	// en
+	"Not favourited by anyone";
+#elif L==4	// es
+	"No marcado como favorito por nadie";
+#elif L==5	// fr
+	"Personne n'a marqu&eacute; comme favori";
+#elif L==6	// gn
+	"No marcado como favorito por nadie";	// Okoteve traducción
+#elif L==7	// it
+	"Non preferiti da chiunque";
+#elif L==8	// pl
+	"Nie przez nikogo ulubionych";
+#elif L==9	// pt
+	"N&atilde;o marcado como favorito por qualquer pessoa";
+#endif
+
+const char *Txt_TIMELINE_NOTE_Not_shared_by_anyone =	// No longer shared
+#if   L==1	// ca
+	"No compartit per ning&uacute;";
+#elif L==2	// de
+	"Nicht durch Dritte freigegebenen";
+#elif L==3	// en
+	"Not shared by anyone";
+#elif L==4	// es
+	"No compartido por nadie";
+#elif L==5	// fr
+	"Personne n'a partag&eacute;";
+#elif L==6	// gn
+	"No compartido por nadie";	// Okoteve traducción
+#elif L==7	// it
+	"Non condiviso da chiunque";
+#elif L==8	// pl
+	"Nie jest dzielona przez nikogo";
+#elif L==9	// pt
+	"N&atilde;o compartilhado por qualquer pessoa";
+#endif
+
+const char *Txt_TIMELINE_NOTE_TOP_MESSAGES[TL_NUM_TOP_MESSAGES] =
+	{
+	// TL_TOP_MESSAGE_NONE
+	""
+	,
+	// TL_TOP_MESSAGE_COMMENTED:
+#if   L==1	// ca
+	"ha comentat"
+#elif L==2	// de
+	"hat kommentiert"
+#elif L==3	// en
+	"has commented"
+#elif L==4	// es
+	"ha comentado"
+#elif L==5	// fr
+	"a comment&eacute;"
+#elif L==6	// gn
+	"ha comentado"	// Okoteve traducción
+#elif L==7	// it
+	"ha commentato"
+#elif L==8	// pl
+	"skomentowa&lstrok;"
+#elif L==9	// pt
+	"comentou"
+#endif
+	,
+	// TL_TOP_MESSAGE_FAVED:
+#if   L==1	// ca
+	"ha marcat com favorit"
+#elif L==2	// de
+	"hat als Favorit markiert"
+#elif L==3	// en
+	"has marked as favourite"
+#elif L==4	// es
+	"ha marcado como favorito"
+#elif L==5	// fr
+	"a marqu&eacute; en tant que favori"
+#elif L==6	// gn
+	"ha marcado como favorito"	// Okoteve traducción
+#elif L==7	// it
+	"ha segnato come preferito"
+#elif L==8	// pl
+	"oznaczone jako ulubiony"
+#elif L==9	// pt
+	"marcou como favorito"
+#endif
+	,
+	// TL_TOP_MESSAGE_UNFAVED:
+#if   L==1	// ca
+	"ha desmarcat com favorit"
+#elif L==2	// de
+	"hat als Favorit unmarkiert"
+#elif L==3	// en
+	"has unmarked as favourite"
+#elif L==4	// es
+	"ha desmarcado como favorito"
+#elif L==5	// fr
+	"a pas marqu&eacute; en tant que favori"
+#elif L==6	// gn
+	"ha desmarcado como favorito"	// Okoteve traducción
+#elif L==7	// it
+	"ha smarcato come preferito"
+#elif L==8	// pl
+	"nieoznaczonych jako ulubiony"
+#elif L==9	// pt
+	"desmarcou como favorito"
+#endif
+	,
+	// TL_TOP_MESSAGE_SHARED:
+#if   L==1	// ca
+	"ha compartit"
+#elif L==2	// de
+	"hat sich geteilt"
+#elif L==3	// en
+	"has shared"
+#elif L==4	// es
+	"ha compartido"
+#elif L==5	// fr
+	"a partag&eacute;"
+#elif L==6	// gn
+	"ha compartido"	// Okoteve traducción
+#elif L==7	// it
+	"ha condiviso"
+#elif L==8	// pl
+	"podzieli&lstrok;"
+#elif L==9	// pt
+	"compartilhou"
+#endif
+	,
+	// TL_TOP_MESSAGE_UNSHARED:
+#if   L==1	// ca
+	"ha deixat de compartir"
+#elif L==2	// de
+	"hat Sharing gestoppt"
+#elif L==3	// en
+	"has stopped sharing"
+#elif L==4	// es
+	"ha dejado de compartir"
+#elif L==5	// fr
+	"a cess&eacute; de partage"
+#elif L==6	// gn
+	"ha dejado de compartir"	// Okoteve traducción
+#elif L==7	// it
+	"ha smesso di condividere"
+#elif L==8	// pl
+	"przesta&lstrok; udost&eogon;pniania"
+#elif L==9	// pt
+	"parou compartilhar"
+#endif
+	,
+	// TL_TOP_MESSAGE_MENTIONED:
+#if   L==1	// ca
+	"li ha esmentat"
+#elif L==2	// de
+	"hat Sie erw&auml;hnt"
+#elif L==3	// en
+	"has mentioned you"
+#elif L==4	// es
+	"le ha mencionado"
+#elif L==5	// fr
+	"vous a mentionn&eacute;"
+#elif L==6	// gn
+	"le ha mencionado"	// Okoteve traducción
+#elif L==7	// it
+	"ti ha menzionato"
+#elif L==8	// pl
+	"wspomnia&lstrok; o Tobie"
+#elif L==9	// pt
+	"mencionou voc&ecirc;"
+#endif
+	};
+
+const char *Txt_TIMELINE_post =
+#if   L==1	// ca
+	"publicaci&oacute;";
+#elif L==2	// de
+	"Publikation";
+#elif L==3	// en
+	"post";
+#elif L==4	// es
+	"publicaci&oacute;n";
+#elif L==5	// fr
+	"publication";
+#elif L==6	// gn
+	"marandu";
+#elif L==7	// it
+	"pubblicazione";
+#elif L==8	// pl
+	"publikacja";
+#elif L==9	// pt
+	"publica&ccedil;&atilde;o";
+#endif
+
+const char *Txt_TIMELINE_posts =
+#if   L==1	// ca
+	"publicacions";
+#elif L==2	// de
+	"Publikationen";
+#elif L==3	// en
+	"posts";
+#elif L==4	// es
+	"publicaciones";
+#elif L==5	// fr
+	"publications";
+#elif L==6	// gn
+	"marandu";
+#elif L==7	// it
+	"pubblicazioni";
+#elif L==8	// pl
+	"publikacje";
+#elif L==9	// pt
+	"publica&ccedil;&otilde;es";
+#endif
+
+const char *Txt_TIMELINE_WHICH_USERS[TL_NUM_WHICH_USRS] =
    {
-	 // Soc_USRS_UNKNOWN
+	 // TL_USRS_UNKNOWN
 	 NULL
 	 ,
-	 // Soc_USRS_FOLLOWED
+	 // TL_USRS_FOLLOWED
 #if   L==1	// ca
 	"Usuaris que segueixo"
 #elif L==2	// de
@@ -49306,7 +49307,7 @@ const char *Txt_TIMELINE_WHICH_USERS[Soc_NUM_WHICH_USRS] =
 	"Usu&aacute;rios que estou seguindo"
 #endif
 	 ,
-	 // Soc_USRS_ALL
+	 // TL_USRS_ALL
 #if   L==1	// ca
 	 "Tots els usuaris"
 #elif L==2	// de

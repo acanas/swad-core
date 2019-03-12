@@ -45,8 +45,8 @@
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
-#include "swad_social.h"
 #include "swad_table.h"
+#include "swad_timeline.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -299,7 +299,7 @@ static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void);
 
 void Ntf_ShowMyNotifications (void)
   {
-   extern const char *Hlp_MESSAGES_Notifications;
+   extern const char *Hlp_START_Notifications;
    extern const char *Txt_Settings;
    extern const char *Txt_Domains;
    extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
@@ -384,7 +384,7 @@ void Ntf_ShowMyNotifications (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
-                 Hlp_MESSAGES_Notifications,Box_NOT_CLOSABLE);
+                 Hlp_START_Notifications,Box_NOT_CLOSABLE);
 
    /***** List my notifications *****/
    if (NumNotifications)	// Notifications found
@@ -744,7 +744,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_TIMELINE_MENTION:
 	 // Cod is the code of the social publishing
          Frm_StartForm (ActSeeSocTmlGbl);
-	 Soc_PutHiddenParamPubCod (Cod);
+	 TL_PutHiddenParamPubCod (Cod);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
          Ntf_PutHiddenParamNotifyEvent (NotifyEvent);
 	 break;
@@ -896,7 +896,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       case Ntf_EVENT_TIMELINE_SHARE:
       case Ntf_EVENT_TIMELINE_MENTION:
 	 // Cod is the code of the social publishing
-	 Soc_GetNotifSocialPublication (SummaryStr,ContentStr,Cod,GetContent);
+	 TL_GetNotifPublication (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_FOLLOWER:
          Fol_GetNotifFollower (SummaryStr,ContentStr);

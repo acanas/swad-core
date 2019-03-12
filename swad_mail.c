@@ -101,7 +101,7 @@ static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]
 
 void Mai_SeeMailDomains (void)
   {
-   extern const char *Hlp_MESSAGES_Domains;
+   extern const char *Hlp_START_Domains;
    extern const char *Txt_Email_domains_allowed_for_notifications;
    extern const char *Txt_EMAIL_DOMAIN_HELP_ORDER[3];
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
@@ -118,7 +118,7 @@ void Mai_SeeMailDomains (void)
    Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,
                       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
                                                                NULL,
-                      Hlp_MESSAGES_Domains,Box_NOT_CLOSABLE,2);
+                      Hlp_START_Domains,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -444,14 +444,14 @@ void Mai_FreeListMailDomains (void)
 
 static void Mai_ListMailDomainsForEdition (void)
   {
-   extern const char *Hlp_MESSAGES_Domains_edit;
+   extern const char *Hlp_START_Domains_edit;
    extern const char *Txt_Email_domains_allowed_for_notifications;
    unsigned NumMai;
    struct Mail *Mai;
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,NULL,
-                      Hlp_MESSAGES_Domains_edit,Box_NOT_CLOSABLE,2);
+                      Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    Mai_PutHeadMailDomains ();
@@ -696,7 +696,7 @@ static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const 
 
 static void Mai_PutFormToCreateMailDomain (void)
   {
-   extern const char *Hlp_MESSAGES_Domains_edit;
+   extern const char *Hlp_START_Domains_edit;
    extern const char *Txt_New_email_domain;
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
    extern const char *Txt_Create_email_domain;
@@ -709,7 +709,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_email_domain,NULL,
-                      Hlp_MESSAGES_Domains_edit,Box_NOT_CLOSABLE,2);
+                      Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

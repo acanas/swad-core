@@ -434,7 +434,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Games.ListQuestions = NULL;
 
    /* Public activity */
-   Gbl.Social.WhichUsrs = Soc_DEFAULT_WHICH_USRS;
+   Gbl.Timeline.WhichUsrs = TL_DEFAULT_WHICH_USRS;
 
    /* Forums */
    Gbl.Forum.ForumSet = For_DEFAULT_FORUM_SET;

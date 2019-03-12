@@ -2128,7 +2128,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
   {
    extern const char *Hlp_USERS_SignUp;
    extern const char *Hlp_PROFILE_Record;
-   extern const char *Hlp_SOCIAL_Profiles_view_public_profile;
+   extern const char *Hlp_START_Profiles_view_public_profile;
    extern const char *Hlp_USERS_Guests;
    extern const char *Hlp_USERS_Students_shared_record_card;
    extern const char *Hlp_USERS_Teachers_shared_record_card;
@@ -2149,7 +2149,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
       NULL,					// Rec_SHA_RECORD_LIST
       NULL,					// Rec_SHA_RECORD_PRINT
-      Hlp_SOCIAL_Profiles_view_public_profile,	// Rec_SHA_RECORD_PUBLIC
+      Hlp_START_Profiles_view_public_profile,	// Rec_SHA_RECORD_PUBLIC
      };
    const char *Rec_RecordListHelp[Rol_NUM_ROLES] =
      {

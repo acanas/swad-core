@@ -50,9 +50,9 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
-#include "swad_social.h"
 #include "swad_tab.h"
 #include "swad_theme.h"
+#include "swad_timeline.h"
 #include "swad_web_service.h"
 
 /*****************************************************************************/
@@ -685,7 +685,7 @@ static void Lay_WriteScriptInit (void)
 	 case ActRemSocComGbl:
 	    // Refresh timeline via AJAX
 	    fprintf (Gbl.F.Out,"	setTimeout(\"refreshNewTimeline()\",%lu);\n",
-		     Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
+		     Cfg_TIME_TO_REFRESH_TIMELINE);
             break;
 	 default:
 	    break;
@@ -738,8 +738,8 @@ static void Lay_WriteScriptParamsAJAX (void)
 			    "var RefreshParamWhichUsrs = \"WhichUsrs=%u\";\n",
 		  Act_GetActCod (ActRefNewSocPubGbl),
 		  Act_GetActCod (ActRefOldSocPubGbl),
-		  Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW,
-		  (unsigned) Gbl.Social.WhichUsrs);
+		  TL_MAX_OLD_PUBS_TO_GET_AND_SHOW,
+		  (unsigned) Gbl.Timeline.WhichUsrs);
 	 break;
       case ActSeeOthPubPrf:
       case ActRcvSocPstUsr:
@@ -759,7 +759,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 			    "var RefreshParamMaxOldPubsToGetAndShow = \"%u\";\n"
 			    "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
 		  Act_GetActCod (ActRefOldSocPubUsr),
-		  Soc_MAX_OLD_PUBS_TO_GET_AND_SHOW,
+		  TL_MAX_OLD_PUBS_TO_GET_AND_SHOW,
 		  Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
       default:

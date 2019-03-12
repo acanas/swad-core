@@ -3343,18 +3343,18 @@ static void Fig_GetAndShowSocialActivityStats (void)
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_No_of_posts_BR_per_user;
-   extern const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES];
+   extern const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES];
    extern const char *Txt_Total;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Soc_NoteType_t NoteType;
+   TL_NoteType_t NoteType;
    unsigned long NumSocialNotes;
    unsigned long NumRows;
    unsigned NumUsrs;
    unsigned NumUsrsTotal;
 
    /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_SOCIAL_ACTIVITY],NULL,
+   Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_TIMELINE],NULL,
                       Hlp_ANALYTICS_Figures_timeline,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
@@ -3389,8 +3389,8 @@ static void Fig_GetAndShowSocialActivityStats (void)
                                                                                              1 << Rol_TCH);
 
    /***** Get total number of following/followers from database *****/
-   for (NoteType = (Soc_NoteType_t) 0;
-	NoteType < Soc_NUM_NOTE_TYPES;
+   for (NoteType = (TL_NoteType_t) 0;
+	NoteType < TL_NUM_NOTE_TYPES;
 	NoteType++)
      {
       switch (Gbl.Scope.Current)
@@ -3512,7 +3512,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
                          "%.2f"
                          "</td>"
                          "</tr>",
-               Txt_SOCIAL_NOTE[NoteType],
+               Txt_TIMELINE_NOTE[NoteType],
                NumSocialNotes,
                NumUsrs,
                NumUsrsTotal ? (float) NumUsrs * 100.0 / (float) NumUsrsTotal :

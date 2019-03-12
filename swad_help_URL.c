@@ -2024,7 +2024,7 @@ const char *Hlp_USERS_Connected_last_clicks =
 
 /***** SOCIAL tab *****/
 
-const char *Hlp_SOCIAL_Timeline =
+const char *Hlp_START_Timeline =
 #if   L==1
 	"SOCIAL.Timeline.es";
 #elif L==2
@@ -2045,7 +2045,7 @@ const char *Hlp_SOCIAL_Timeline =
 	"SOCIAL.Timeline.en";
 #endif
 
-const char *Hlp_SOCIAL_Profiles_view_public_profile =
+const char *Hlp_START_Profiles_view_public_profile =
 #if   L==1
 	"SOCIAL.Profiles.es#ver-perfil-p%C3%BAblico";
 #elif L==2
@@ -2066,7 +2066,7 @@ const char *Hlp_SOCIAL_Profiles_view_public_profile =
 	"SOCIAL.Profiles.en#view-public-profile";
 #endif
 
-const char *Hlp_SOCIAL_Profiles_who_to_follow =
+const char *Hlp_START_Profiles_who_to_follow =
 #if   L==1
 	"SOCIAL.Profiles.es#a-qui%C3%A9n-seguir";
 #elif L==2
@@ -2087,7 +2087,7 @@ const char *Hlp_SOCIAL_Profiles_who_to_follow =
 	"SOCIAL.Profiles.en#who-to-follow";
 #endif
 
-const char *Hlp_SOCIAL_Forums =
+const char *Hlp_MESSAGES_Forums =
 #if   L==1
 	"SOCIAL.Forums.es";
 #elif L==2
@@ -2108,7 +2108,7 @@ const char *Hlp_SOCIAL_Forums =
 	"SOCIAL.Forums.en";
 #endif
 
-const char *Hlp_SOCIAL_Forums_threads =
+const char *Hlp_MESSAGES_Forums_threads =
 #if   L==1
 	"SOCIAL.Forums.es#discusiones";
 #elif L==2
@@ -2129,7 +2129,7 @@ const char *Hlp_SOCIAL_Forums_threads =
 	"SOCIAL.Forums.en#threads";
 #endif
 
-const char *Hlp_SOCIAL_Forums_new_thread =
+const char *Hlp_MESSAGES_Forums_new_thread =
 #if   L==1
 	"SOCIAL.Forums.es#nueva-discusi%C3%B3n";
 #elif L==2
@@ -2150,7 +2150,7 @@ const char *Hlp_SOCIAL_Forums_new_thread =
 	"SOCIAL.Forums.en#new-thread";
 #endif
 
-const char *Hlp_SOCIAL_Forums_posts =
+const char *Hlp_MESSAGES_Forums_posts =
 #if   L==1
 	"SOCIAL.Forums.es#comentarios";
 #elif L==2
@@ -2171,7 +2171,7 @@ const char *Hlp_SOCIAL_Forums_posts =
 	"SOCIAL.Forums.en#posts";
 #endif
 
-const char *Hlp_SOCIAL_Forums_new_post =
+const char *Hlp_MESSAGES_Forums_new_post =
 #if   L==1
 	"SOCIAL.Forums.es#nuevo-comentario";
 #elif L==2
@@ -2194,7 +2194,7 @@ const char *Hlp_SOCIAL_Forums_new_post =
 
 /***** MESSAGES tab *****/
 
-const char *Hlp_MESSAGES_Notifications =
+const char *Hlp_START_Notifications =
 #if   L==1
 	"MESSAGES.Notifications.es";
 #elif L==2
@@ -2215,7 +2215,7 @@ const char *Hlp_MESSAGES_Notifications =
 	"MESSAGES.Notifications.en";
 #endif
 
-const char *Hlp_MESSAGES_Domains =
+const char *Hlp_START_Domains =
 #if   L==1
 	"MESSAGES.Domains.es";
 #elif L==2
@@ -2236,7 +2236,7 @@ const char *Hlp_MESSAGES_Domains =
 	"MESSAGES.Domains.en";
 #endif
 
-const char *Hlp_MESSAGES_Domains_edit =
+const char *Hlp_START_Domains_edit =
 #if   L==1
 	"MESSAGES.Domains.es#editar";
 #elif L==2
