@@ -236,7 +236,9 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void);
 static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
-static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole);
+static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
+                                           bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
+static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS]);
 static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label);
 static Usr_ListUsrsOption_t Usr_GetListUsrsOption (Usr_ListUsrsOption_t DefaultAction);
@@ -7549,7 +7551,8 @@ void Usr_SeeGuests (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   extern const char *Txt_Continue;
+   bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
+   bool PutForm;
 
    /***** Put contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -7618,8 +7621,12 @@ void Usr_SeeGuests (void)
 				       -1L,
 				       -1L);
 
+         /* Set options allowed */
+         PutForm = Usr_SetOptionsListUsrsAllowed (Rol_GST,ICanChooseOption);
+
          /* Start form */
-	 Frm_StartForm (ActDoActOnSevGst);
+         if (PutForm)
+	    Frm_StartForm (ActDoActOnSevGst);
 
          /* Start table */
 	 Tbl_StartTableWide (0);
@@ -7630,10 +7637,10 @@ void Usr_SeeGuests (void)
             case Usr_LIST_AS_CLASS_PHOTO:
                Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
         	                   Rol_GST,
-				   true);	// Put checkbox to select users
+				   PutForm);	// Put checkbox to select users?
                break;
             case Usr_LIST_AS_LISTING:
-               Usr_ListMainDataGsts (true);	// Put checkbox to select users
+               Usr_ListMainDataGsts (PutForm);	// Put checkbox to select users?
                break;
             default:
                break;
@@ -7643,12 +7650,11 @@ void Usr_SeeGuests (void)
          Tbl_EndTable ();
 
 	 /***** Which action, show records, follow...? *****/
-	 if (Usr_PutActionsSeveralUsrs (Rol_GST))
-            /* Send button */
-	    Btn_PutConfirmButton (Txt_Continue);
-
-         /* End form */
-         Frm_EndForm ();
+         if (PutForm)
+           {
+	    Usr_PutOptionsListUsrs (ICanChooseOption);
+	    Frm_EndForm ();
+           }
 	}
      }
    else	// Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs == 0
@@ -7675,7 +7681,8 @@ void Usr_SeeStudents (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   extern const char *Txt_Continue;
+   bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
+   bool PutForm;
 
    /***** Put contextual links *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -7779,10 +7786,15 @@ void Usr_SeeStudents (void)
 					Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 									      -1L);
 
+         /* Set options allowed */
+         PutForm = Usr_SetOptionsListUsrsAllowed (Rol_STD,ICanChooseOption);
 
          /* Start form */
-	 Frm_StartForm (ActDoActOnSevStd);
-	 Grp_PutParamsCodGrps ();
+         if (PutForm)
+           {
+	    Frm_StartForm (ActDoActOnSevStd);
+	    Grp_PutParamsCodGrps ();
+           }
 
          /* Start table */
          Tbl_StartTableWide (0);
@@ -7793,10 +7805,10 @@ void Usr_SeeStudents (void)
             case Usr_LIST_AS_CLASS_PHOTO:
                Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
         	                   Rol_STD,
-				   true);	// Put checkbox to select users
+				   PutForm);	// Put checkbox to select users?
                break;
             case Usr_LIST_AS_LISTING:
-               Usr_ListMainDataStds (true);	// Put checkbox to select users
+               Usr_ListMainDataStds (PutForm);	// Put checkbox to select users?
                break;
             default:
                break;
@@ -7806,12 +7818,11 @@ void Usr_SeeStudents (void)
          Tbl_EndTable ();
 
 	 /***** Which action, show records, follow...? *****/
-	 if (Usr_PutActionsSeveralUsrs (Rol_STD))
-            /* Send button */
-	    Btn_PutConfirmButton (Txt_Continue);
-
-	 /* End form */
-	 Frm_EndForm ();
+         if (PutForm)
+           {
+	    Usr_PutOptionsListUsrs (ICanChooseOption);
+	    Frm_EndForm ();
+           }
         }
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
@@ -7841,8 +7852,9 @@ void Usr_SeeTeachers (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
-   extern const char *Txt_Continue;
    unsigned NumUsrs;
+   bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
+   bool PutForm;
 
    /***** Put contextual links *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -7946,9 +7958,15 @@ void Usr_SeeTeachers (void)
 					Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 									      -1L);
 
+         /* Set options allowed */
+         PutForm = Usr_SetOptionsListUsrsAllowed (Rol_TCH,ICanChooseOption);
+
          /* Start form */
-         Frm_StartForm (ActDoActOnSevTch);
-	 Grp_PutParamsCodGrps ();
+         if (PutForm)
+           {
+            Frm_StartForm (ActDoActOnSevTch);
+	    Grp_PutParamsCodGrps ();
+           }
 
          /* Start table */
          Tbl_StartTableWide (0);
@@ -7960,10 +7978,10 @@ void Usr_SeeTeachers (void)
                /* List teachers and non-editing teachers */
                Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
         	                   Rol_TCH,
-				   true);	// Put checkbox to select users
+				   PutForm);	// Put checkbox to select users?
                Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
         	                   Rol_NET,
-				   true);	// Put checkbox to select users
+				   PutForm);	// Put checkbox to select users?
                break;
             case Usr_LIST_AS_LISTING:
 	       /* Initialize field names */
@@ -7971,9 +7989,9 @@ void Usr_SeeTeachers (void)
 
 	       /* List teachers and non-editing teachers */
                Usr_ListMainDataTchs (Rol_TCH,
-        			     true);	// Put checkbox to select users
+        			     PutForm);	// Put checkbox to select users?
                Usr_ListMainDataTchs (Rol_NET,
-        			     true);	// Put checkbox to select users
+        			     PutForm);	// Put checkbox to select users?
                break;
             default:
                break;
@@ -7983,12 +8001,11 @@ void Usr_SeeTeachers (void)
          Tbl_EndTable ();
 
 	 /***** Which action, show records, follow...? *****/
-	 if (Usr_PutActionsSeveralUsrs (Rol_TCH))
-            /* Send button */
-	    Btn_PutConfirmButton (Txt_Continue);
-
-	 /* End form */
-	 Frm_EndForm ();
+         if (PutForm)
+           {
+	    Usr_PutOptionsListUsrs (ICanChooseOption);
+	    Frm_EndForm ();
+           }
 	}
      }
    else	// NumUsrs == 0
@@ -8010,37 +8027,15 @@ void Usr_SeeTeachers (void)
   }
 
 /*****************************************************************************/
-/*************** Put different actions to do with several users **************/
+/**************** Set allowed options to do with several users ***************/
 /*****************************************************************************/
-// Returns true if at least one action can be shown
+// Returns true if any option is allowed
 
-static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
+static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
+                                           bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
   {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_View_records;
-   extern const char *Txt_View_homework;
-   extern const char *Txt_View_attendance;
-   extern const char *Txt_Send_message;
-   extern const char *Txt_Create_email_message;
-   extern const char *Txt_Follow;
-   extern const char *Txt_Unfollow;
-   const char *Label[Usr_LIST_USRS_NUM_OPTIONS] =
-     {
-      NULL,			// Usr_OPTION_UNKNOWN
-      Txt_View_records,		// Usr_OPTION_RECORDS
-      Txt_View_homework,	// Usr_OPTION_HOMEWORK
-      Txt_View_attendance,	// Usr_OPTION_ATTENDANCE
-      Txt_Send_message,		// Usr_OPTION_MESSAGE
-      Txt_Create_email_message,	// Usr_OPTION_EMAIL	// TODO: Not activated. Active it when email to users allows selecting individual users
-      Txt_Follow,		// Usr_OPTION_FOLLOW
-      Txt_Unfollow,		// Usr_OPTION_UNFOLLOW
-     };
-   bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
    Usr_ListUsrsOption_t Opt;
-   bool OptionsShown;
-
-   /***** Get the selected option from form *****/
-   Gbl.Usrs.Selected.Option = Usr_GetListUsrsOption (Usr_LIST_USRS_DEFAULT_OPTION);
+   bool OptionsAllowed;
 
    /***** Check which options I can choose *****/
    /* Set default (I can not choose options) */
@@ -8089,26 +8084,67 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
 	 return false;
      }
 
+   /***** Count allowed options *****/
+   OptionsAllowed = false;
+   for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
+	!OptionsAllowed &&
+	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
+	Opt++)
+      if (ICanChooseOption[Opt])
+	 OptionsAllowed = true;
+
+   return OptionsAllowed;
+  }
+
+/*****************************************************************************/
+/*************** Put different options to do with several users **************/
+/*****************************************************************************/
+// Returns true if at least one action can be shown
+
+static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS])
+  {
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_View_records;
+   extern const char *Txt_View_homework;
+   extern const char *Txt_View_attendance;
+   extern const char *Txt_Send_message;
+   extern const char *Txt_Create_email_message;
+   extern const char *Txt_Follow;
+   extern const char *Txt_Unfollow;
+   extern const char *Txt_Continue;
+   const char *Label[Usr_LIST_USRS_NUM_OPTIONS] =
+     {
+      NULL,			// Usr_OPTION_UNKNOWN
+      Txt_View_records,		// Usr_OPTION_RECORDS
+      Txt_View_homework,	// Usr_OPTION_HOMEWORK
+      Txt_View_attendance,	// Usr_OPTION_ATTENDANCE
+      Txt_Send_message,		// Usr_OPTION_MESSAGE
+      Txt_Create_email_message,	// Usr_OPTION_EMAIL	// TODO: Not activated. Active it when email to users allows selecting individual users
+      Txt_Follow,		// Usr_OPTION_FOLLOW
+      Txt_Unfollow,		// Usr_OPTION_UNFOLLOW
+     };
+   Usr_ListUsrsOption_t Opt;
+
+   /***** Get the selected option from form *****/
+   Gbl.Usrs.Selected.Option = Usr_GetListUsrsOption (Usr_LIST_USRS_DEFAULT_OPTION);
+
    /***** Write list of options *****/
    /* Start list of options */
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
 	    The_ClassFormInBox[Gbl.Prefs.Theme]);
 
    /* Show option items */
-   OptionsShown = false;
    for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option
 	Opt <= (Usr_ListUsrsOption_t) (Usr_LIST_USRS_NUM_OPTIONS - 1);
 	Opt++)
       if (ICanChooseOption[Opt])
-	{
 	 Usr_ShowOneListUsrsOption (Opt,Label[Opt]);
-	 OptionsShown = true;
-	}
 
    /* End list of options */
    fprintf (Gbl.F.Out,"</ul>");
 
-   return OptionsShown;
+   /***** Put button to confirm *****/
+   Btn_PutConfirmButton (Txt_Continue);
   }
 
 /*****************************************************************************/

@@ -422,17 +422,16 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 // Para bloquear/desbloquear se usará un icono candado
 // Para preasignado/no preasignado usar otro icono (usuario/usuario tachado, por ej.)
 
+// TODO: Select users individually in action to send email
+
 // TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
 
 // TODO: Change in usability of Announcements of exams, suggested by Javier Fernández Baldomero.
-
-// TODO: Los usuarios que no tienes permiso para ver su perfil público, se debería mostrar algo, una mínima ficha sin tinmeline o algo así
-
 // TODO: Al pulsar sobre una convocatoria de examen / aviso --> ir a la sección de esa convocatoria/aviso en lugar de mostrarlo repetido y destacado arriba
 
 // TODO: Intentar aumentar la velocidad de carga del timeline (comprobar ralentización al mostrar la titulación de cada usuario)
 
-// TODO: Poner opción en lista de estudiantes para enviar correo electrónico
+// TODO: Los usuarios que no tienes permiso para ver su perfil público, se debería mostrar algo, una mínima ficha sin tinmeline o algo así
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -453,10 +452,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.73.6 (2019-03-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.73.7 (2019-03-12)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.73.7:  Mar 12, 2019 	Code refactoring irelated to list of users and options. (239614 lines)
 	Version 18.73.6:  Mar 12, 2019 	Create new email message from list of users. This option will be active when email action allows selecting individual users. (239580 lines)
 					Copy the following icon to icon public directory:
 sudo cp icon/marker.svg /var/www/html/swad/icon/
