@@ -453,10 +453,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.73.4 (2019-03-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.73.6 (2019-03-12)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.64.js"
 /*
+	Version 18.73.6:  Mar 12, 2019 	Create new email message from list of users. This option will be active when email action allows selecting individual users. (239580 lines)
+					Copy the following icon to icon public directory:
+sudo cp icon/marker.svg /var/www/html/swad/icon/
+
+	Version 18.73.5:  Mar 12, 2019 	Non-editing teachers can select users who don't belong to any group. (? lines)
 	Version 18.73.4:  Mar 12, 2019 	Non-editing teachers can send email to students. (239555 lines)
 	Version 18.73.3:  Mar 12, 2019 	Don't show icon in record to send a message is user has banned me. (239553 lines)
 	Version 18.73.2:  Mar 12, 2019 	Only user's groups are selectable when sending a message. (239549 lines)

@@ -884,7 +884,7 @@ void Mai_ListEmails (void)
          Usr_UsrDataConstructor (&UsrDat);
 
          /***** List the students' email addresses *****/
-         fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL LEFT_MIDDLE\">");
+         fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CENTER_MIDDLE\">");
          for (NumUsr = 0, NumStdsWithEmail = 0, NumAcceptedStdsWithEmail = 0,
               StrAddresses[0] = '\0';
               NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
@@ -955,7 +955,7 @@ void Mai_ListEmails (void)
 	          StrAddresses,
                   Txt_Create_email_message,
                   The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
-         Ico_PutIconTextLink ("pen.svg",
+         Ico_PutIconTextLink ("marker.svg",
                               Txt_Create_email_message);
          fprintf (Gbl.F.Out,"</a>"
                             "</div>");

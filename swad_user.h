@@ -115,7 +115,7 @@ typedef enum
   } Usr_ShowUsrsType_t;
 #define Usr_SHOW_USRS_TYPE_DEFAULT Usr_LIST_AS_CLASS_PHOTO
 
-#define Usr_LIST_USRS_NUM_OPTIONS 7
+#define Usr_LIST_USRS_NUM_OPTIONS 8
 typedef enum
   {
    Usr_OPTION_UNKNOWN		= 0,
@@ -123,8 +123,9 @@ typedef enum
    Usr_OPTION_HOMEWORK		= 2,
    Usr_OPTION_ATTENDANCE	= 3,
    Usr_OPTION_MESSAGE		= 4,
-   Usr_OPTION_FOLLOW		= 5,
-   Usr_OPTION_UNFOLLOW		= 6,
+   Usr_OPTION_EMAIL		= 5,	// TODO: Not activated. Active it when email to users allows selecting individual users
+   Usr_OPTION_FOLLOW		= 6,
+   Usr_OPTION_UNFOLLOW		= 7,
   } Usr_ListUsrsOption_t;
 #define Usr_LIST_USRS_DEFAULT_OPTION Usr_OPTION_RECORDS
 

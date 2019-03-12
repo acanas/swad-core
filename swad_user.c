@@ -8021,6 +8021,7 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
    extern const char *Txt_View_homework;
    extern const char *Txt_View_attendance;
    extern const char *Txt_Send_message;
+   extern const char *Txt_Create_email_message;
    extern const char *Txt_Follow;
    extern const char *Txt_Unfollow;
    const char *Label[Usr_LIST_USRS_NUM_OPTIONS] =
@@ -8030,6 +8031,7 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
       Txt_View_homework,	// Usr_OPTION_HOMEWORK
       Txt_View_attendance,	// Usr_OPTION_ATTENDANCE
       Txt_Send_message,		// Usr_OPTION_MESSAGE
+      Txt_Create_email_message,	// Usr_OPTION_EMAIL	// TODO: Not activated. Active it when email to users allows selecting individual users
       Txt_Follow,		// Usr_OPTION_FOLLOW
       Txt_Unfollow,		// Usr_OPTION_UNFOLLOW
      };
@@ -8056,25 +8058,32 @@ static bool Usr_PutActionsSeveralUsrs (Rol_Role_t UsrsRole)
       case Rol_STD:
 	 ICanChooseOption[Usr_OPTION_RECORDS]    =
 	 ICanChooseOption[Usr_OPTION_MESSAGE]    =
-	 ICanChooseOption[Usr_OPTION_FOLLOW]     = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
-						    (Gbl.Usrs.Me.IBelongToCurrentCrs ||
+	 ICanChooseOption[Usr_OPTION_FOLLOW]     =
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW]   = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
+						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
+						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
 
          ICanChooseOption[Usr_OPTION_HOMEWORK]   =
-         ICanChooseOption[Usr_OPTION_ATTENDANCE] = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-						    Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW]	 = true;
+         ICanChooseOption[Usr_OPTION_ATTENDANCE] = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
+						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
 	 break;
       case Rol_TCH:
 	 ICanChooseOption[Usr_OPTION_RECORDS]    =
 	 ICanChooseOption[Usr_OPTION_MESSAGE]    =
-	 ICanChooseOption[Usr_OPTION_FOLLOW]     = (Gbl.Scope.Current == Sco_SCOPE_CRS);
-
-         ICanChooseOption[Usr_OPTION_HOMEWORK]   = (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
-						    Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-						    Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-	 ICanChooseOption[Usr_OPTION_UNFOLLOW]	 = true;
+	 ICanChooseOption[Usr_OPTION_FOLLOW]     =
+	 ICanChooseOption[Usr_OPTION_UNFOLLOW]   = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
+						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
+						     Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
+         ICanChooseOption[Usr_OPTION_HOMEWORK]   = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
+						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
+						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
 	 break;
       default:
 	 return false;
@@ -8196,6 +8205,16 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	    case ActDoActOnSevStd:
 	    case ActDoActOnSevTch:
 	       Gbl.Action.Act = ActReqMsgUsr;
+	       break;
+	    default:
+               break;
+	   }
+	 break;
+      case Usr_OPTION_EMAIL:		// TODO: Not activated. Active it when email to users allows selecting individual users
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActDoActOnSevStd:
+	       Gbl.Action.Act = ActMaiStd;
 	       break;
 	    default:
                break;
