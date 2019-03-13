@@ -440,10 +440,6 @@ void TL_RefreshNewTimelineGbl (void)
 
    if (Gbl.Session.IsOpen)	// If session has been closed, do not write anything
      {
-      /***** Send, before the HTML, the refresh time *****/
-      fprintf (Gbl.F.Out,"%lu|",
-	       Cfg_TIME_TO_REFRESH_TIMELINE);
-
       /***** Get which users *****/
       TL_GetParamsWhichUsrs ();
 

@@ -465,7 +465,7 @@ function refreshConnected () {
 	}
 }
 
-// Receives and show connected users data
+// Receive and show connected users data
 function readConnUsrsData () {
 	if (objXMLHttpReqCon.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqCon.status == 200) {
@@ -550,7 +550,7 @@ function readLastClicksData () {
 }
 
 /*****************************************************************************/
-/**** Automatic refresh of new publications in social timeline using AJAX ****/
+/*** Automatically refresh new publications in social timeline using AJAX ****/
 /*****************************************************************************/
 
 // This function must be called from time to time
@@ -569,19 +569,16 @@ function refreshNewTimeline () {
 	}
 }
 
-// Receives and show new social timeline data
+// Receive and show new social timeline data
 function readNewTimelineData () {
 	if (objXMLHttpReqNewTL.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqNewTL.status == 200) {
-			var endOfDelay = objXMLHttpReqNewTL.responseText.indexOf('|',0);						// Get separator position
-			var delay = parseInt(objXMLHttpReqNewTL.responseText.substring(0,endOfDelay));		// Get refresh delay
-			var htmlJustNowTimeline = objXMLHttpReqNewTL.responseText.substring(endOfDelay + 1);	// Get HTML code for timeline
 
 			var justNowTimeline = document.getElementById('just_now_timeline_list');// Access to UL for the just received timeline
 			if (justNowTimeline) {
-				justNowTimeline.innerHTML = htmlJustNowTimeline;	// Update list of publications in just now timeline		
-				var countJustNowTimeline = justNowTimeline.childNodes.length;
+				justNowTimeline.innerHTML = objXMLHttpReqNewTL.responseText;	// Update list of publications in just now timeline		
 
+				var countJustNowTimeline = justNowTimeline.childNodes.length;
 				if (countJustNowTimeline) {	// New pubs just retrieved
 					// Scripts in timeline got via AJAX are not executed ==> execute them
 					evalScriptsInElem (justNowTimeline);
@@ -605,9 +602,10 @@ function readNewTimelineData () {
 					viewNewPostsContainer.style.display = '';
 				}
 			}
-
-			if (delay >= 10000)	// If refresh slower than 1 time each 10 seconds, do refresh; else abort
-				setTimeout('refreshNewTimeline()',delay);
+			
+			// Global delay variable is set initially in swad-core
+			delayNewTimeline += 1000;	// Increase 1 second
+			setTimeout('refreshNewTimeline()',delayNewTimeline);
 		}
 	}
 }
@@ -638,7 +636,7 @@ function moveNewTimelineToTimeline () {
 }
 
 /*****************************************************************************/
-/******** Refresh of old publications in social timeline using AJAX **********/
+/********** Refresh old publications in social timeline using AJAX ***********/
 /*****************************************************************************/
 
 // This function is called when user clicks in link
@@ -664,7 +662,7 @@ function refreshOldTimeline () {
 	}
 }
 
-// Receives and show old social timeline data
+// Receive and show old social timeline data
 function readOldTimelineData () {
 	if (objXMLHttpReqOldTL.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqOldTL.status == 200) {

@@ -651,10 +651,36 @@ static void Lay_WriteScriptMathJax (void)
 static void Lay_WriteScriptInit (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   bool RefreshLastClicks  = false;
+   bool RefreshNewTimeline = false;
+
+   switch (Gbl.Action.Act)
+     {
+      case ActLstClk:
+	 RefreshLastClicks = true;
+	 break;
+      case ActSeeSocTmlGbl:
+      case ActRcvSocPstGbl:
+      case ActRcvSocComGbl:
+      case ActShaSocNotGbl:
+      case ActUnsSocNotGbl:
+      case ActReqRemSocPubGbl:
+      case ActRemSocPubGbl:
+      case ActReqRemSocComGbl:
+      case ActRemSocComGbl:
+	 RefreshNewTimeline = true;
+	 break;
+      default:
+	 break;
+     }
 
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
    Dat_WriteScriptMonths ();
+
+   if (RefreshNewTimeline)
+      fprintf (Gbl.F.Out,"var delayNewTimeline = %lu;\n",
+	       Cfg_TIME_TO_REFRESH_TIMELINE);
 
    fprintf (Gbl.F.Out,"function init(){\n");
 
@@ -667,29 +693,12 @@ static void Lay_WriteScriptInit (void)
             Lan_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Usrs.Connected.TimeToRefreshInMs);
 
-   if (Gbl.Action.Act == ActLstClk)
-      // Refresh fav button via AJAX
+   if (RefreshLastClicks)	// Refresh last clicks via AJAX
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-   else
-      switch (Gbl.Action.Act)
-        {
-	 case ActSeeSocTmlGbl:
-	 case ActRcvSocPstGbl:
-	 case ActRcvSocComGbl:
-	 case ActShaSocNotGbl:
-	 case ActUnsSocNotGbl:
-	 case ActReqRemSocPubGbl:
-	 case ActRemSocPubGbl:
-	 case ActReqRemSocComGbl:
-	 case ActRemSocComGbl:
-	    // Refresh timeline via AJAX
-	    fprintf (Gbl.F.Out,"	setTimeout(\"refreshNewTimeline()\",%lu);\n",
-		     Cfg_TIME_TO_REFRESH_TIMELINE);
-            break;
-	 default:
-	    break;
-        }
+   else if (RefreshNewTimeline)	// Refresh timeline via AJAX
+      fprintf (Gbl.F.Out,"	setTimeout(\"refreshNewTimeline()\",delayNewTimeline);\n");
+
    fprintf (Gbl.F.Out,"}\n"
                       "</script>\n");
   }

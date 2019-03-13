@@ -431,6 +431,8 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Los usuarios que no tienes permiso para ver su perfil público, se debería mostrar algo, una mínima ficha sin tinmeline o algo así
 
+// TODO: En Timeline cambiar "Comentario eliminado" para los posts por "Publicación eliminada"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -450,10 +452,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.74.4 (2019-03-13)"
+#define Log_PLATFORM_VERSION	"SWAD 18.75 (2019-03-13)"
 #define CSS_FILE		"swad18.68.3.css"
-#define JS_FILE			"swad18.74.4.js"
+#define JS_FILE			"swad18.75.js"
 /*
+	Version 18.75:    Mar 13, 2019 	Timeline refresh rate is increased on each refresh. (239633 lines)
 	Version 18.74.4:  Mar 13, 2019 	Fixed bug in JavaScript related to timeline. (239628 lines)
 	Version 18.74.3:  Mar 13, 2019 	Fixed bug in JavaScript related to timeline. (239628 lines)
 	Version 18.74.2:  Mar 13, 2019 	Fixed bug in JavaScript related to timeline. (239628 lines)

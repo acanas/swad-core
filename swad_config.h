@@ -455,7 +455,8 @@
 
 #define Cfg_TIME_TO_REFRESH_LAST_CLICKS			((time_t)(             1UL * 1000UL))	// Refresh period of last clicks in miliseconds
 
-#define Cfg_TIME_TO_REFRESH_TIMELINE		((time_t)(            10UL * 1000UL))	// Refresh period of social timeline in miliseconds
+#define Cfg_TIME_TO_REFRESH_TIMELINE			((time_t)(             1UL * 1000UL))	// Initial refresh period of social timeline in miliseconds
+												// This delay is increased 1 second on each refresh
 
 #define Cfg_TIME_TO_CHANGE_BANNER			((time_t)(               2UL * 60UL))	// After these seconds, change banner
 #define Cfg_NUMBER_OF_BANNERS				1					// Number of banners to show simultaneously
