@@ -1147,21 +1147,15 @@ static void Med_ShowVideo (struct Media *Media,
 		URLTmp,FileNameMediaPriv);
 
       /***** Show media *****/
-      /*
-      <video width="400" controls>
-      <source src="mov_bbb.mp4" type="video/mp4">
-      <source src="mov_bbb.ogg" type="video/ogg">
-      Your browser does not support HTML5 video.
-      </video>
-      */
-      fprintf (Gbl.F.Out,"<video controls=\"controls\" class=\"%s\"",ClassMedia);
+      fprintf (Gbl.F.Out,"<video src=\"%s\""
+			 " preload=\"metadata\" controls=\"controls\""
+			 " class=\"%s\"",
+	       URL_Video,ClassMedia);
       if (Media->Title)
 	 if (Media->Title[0])
 	    fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
-      fprintf (Gbl.F.Out," lazyload=\"on\">");	// Lazy load of the media
-
-      fprintf (Gbl.F.Out,"<source src=\"%s\" type=\"video/mp4\">"
-	                 "Your browser does not support HTML5 video."
+      fprintf (Gbl.F.Out," lazyload=\"on\">"	// Lazy load of the media
+                         "Your browser does not support HTML5 video."
 	                 "</video>",
 	       URL_Video);
      }

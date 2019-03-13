@@ -452,10 +452,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.76 (2019-03-13)"
+#define Log_PLATFORM_VERSION	"SWAD 18.76.1 (2019-03-13)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.75.js"
 /*
+	Version 18.76.1:  Mar 13, 2019 	Changes in video tag. (239810 lines)
 	Version 18.76:    Mar 13, 2019 	Video allowed as multimedia. (239814 lines)
 					7 changes necessary in database:
 ALTER TABLE forum_post          CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif','mp4','webm','ogg') NOT NULL DEFAULT 'none';
