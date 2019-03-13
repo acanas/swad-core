@@ -11584,7 +11584,7 @@ const char *Txt_Figures =
 
 const char *Txt_File =
 #if   L==1	// ca
-	"Fitxer";
+	"Arxiu";
 #elif L==2	// de
 	"Datei";
 #elif L==3	// en
@@ -11605,7 +11605,7 @@ const char *Txt_File =
 
 const char *Txt_file =
 #if   L==1	// ca
-	"fitxer";
+	"arxiu";
 #elif L==2	// de
 	"Datei";
 #elif L==3	// en
@@ -11626,7 +11626,7 @@ const char *Txt_file =
 
 const char *Txt_X_file =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Fitxer %s";
+	"Arxiu %s";
 #elif L==2	// de
 	"%s-Datei";
 #elif L==3	// en
@@ -11643,6 +11643,27 @@ const char *Txt_X_file =	// Warning: it is very important to include %s in the f
 	"Plik %s";
 #elif L==9	// pt
 	"Arquivo %s";
+#endif
+
+const char *Txt_File_not_found =
+#if   L==1	// ca
+	"Arxiu no trobat";
+#elif L==2	// de
+	"Datei nicht gefunden";
+#elif L==3	// en
+	"File not found";
+#elif L==4	// es
+	"Archivo no encontrado";
+#elif L==5	// fr
+	"Fichier non trouv&eacute;";
+#elif L==6	// gn
+	"Archivo no encontrado";	// Okoteve traducción
+#elif L==7	// it
+	"File non trovato";
+#elif L==8	// pl
+	"Nie znaleziono pliku";
+#elif L==9	// pt
+	"Arquivo n&atilde;o encontrado";
 #endif
 
 const char *Txt_FILE_uncompressed =
@@ -11668,7 +11689,7 @@ const char *Txt_FILE_uncompressed =
 
 const char *Txt_Filename =
 #if   L==1	// ca
-	"Nom del fitxer";
+	"Nom del arxiu";
 #elif L==2	// de
 	"Dateiname";
 #elif L==3	// en
@@ -11689,7 +11710,7 @@ const char *Txt_Filename =
 
 const char *Txt_file_folder =
 #if   L==1	// ca
-	"fitxer/carpeta";
+	"arxiu/carpeta";
 #elif L==2	// de
 	"Datei/Verzeichnis";
 #elif L==3	// en
@@ -15355,27 +15376,6 @@ const char *Txt_Image_title_attribution =
 	"Tytu&lstrok;/przypisanie obrazu";
 #elif L==9	// pt
 	"T&iacute;tulo/atribui&ccedil;&atilde;o da imagem";
-#endif
-
-const char *Txt_Image_not_found =
-#if   L==1	// ca
-	"Imatge no trobat";
-#elif L==2	// de
-	"Abbild nicht gefunden";
-#elif L==3	// en
-	"Image not found";
-#elif L==4	// es
-	"Imagen no encontrada";
-#elif L==5	// fr
-	"Image non trouv&eacute;e";
-#elif L==6	// gn
-	"Ta'&atilde;nga nah&aacute;niri juhupapyre";
-#elif L==7	// it
-	"Immagine non trovata";
-#elif L==8	// pl
-	"Obraz nie znaleziono";
-#elif L==9	// pt
-	"Imagem n&atilde;o encontrada";
 #endif
 
 const char *Txt_Import_questions =
@@ -43899,6 +43899,27 @@ const char *Txt_The_event_has_been_modified =
 	"O evento foi modificado.";
 #endif
 
+const char *Txt_The_file_could_not_be_processed_successfully =
+#if   L==1	// ca
+	"El fitxer no s'ha pogut processar correctament.";
+#elif L==2	// de
+	"Die Datei konnte nicht erfolgreich verarbeitet werden.";
+#elif L==3	// en
+	"The file could not be processed successfully.";
+#elif L==4	// es
+	"El archivo no ha podido procesarse correctamente.";
+#elif L==5	// fr
+	"Le fichier n'a pas pu &ecirc;tre trait&eacute; avec succ&egrave;s.";
+#elif L==6	// gn
+	"El archivo no ha podido procesarse correctamente.";	// Okoteve traducción
+#elif L==7	// it
+	"Il file non pu&ograve; essere elaborato con successo.";
+#elif L==8	// pl
+	"Plik nie m&oacute;g&lstrok; zosta&cacute; pomy&sacute;lnie przetworzony.";
+#elif L==9	// pt
+	"O arquivo n&atilde;o p&ocirc;de ser processado com sucesso.";
+#endif
+
 const char *Txt_The_file_X_has_been_placed_inside_the_folder_Y =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El archivo <strong>%s</strong> se ha almacenado"
@@ -44521,27 +44542,6 @@ const char *Txt_The_ID_X_matches_one_of_the_existing =	// Warning: it is very im
 #elif L==9	// pt
 	"O ID <strong>%s</strong>"
 	" corresponde a um dos existentes.";
-#endif
-
-const char *Txt_The_image_could_not_be_processed_successfully =
-#if   L==1	// ca
-	"La imatge no s'ha pogut processar correctament.";
-#elif L==2	// de
-	"Das Bild konnte nicht erfolgreich verarbeitet werden.";
-#elif L==3	// en
-	"The image could not be processed successfully.";
-#elif L==4	// es
-	"La imagen no ha podido procesarse correctamente.";
-#elif L==5	// fr
-	"L'image n'a pas pu &ecirc;tre trait&eacute;e avec succ&egrave;s.";
-#elif L==6	// gn
-	"La imagen no ha podido procesarse correctamente.";	// Okoteve traducción
-#elif L==7	// it
-	"L'immagine non pu&ograve; essere elaborata con successo.";
-#elif L==8	// pl
-	"Obraz nie m&oacute;g&lstrok; zosta&cacute; pomy&sacute;lnie przetworzony.";
-#elif L==9	// pt
-	"A imagem n&atilde;o p&ocirc;de ser processada com sucesso.";
 #endif
 
 const char *Txt_The_institution_X_already_exists =	// Warning: it is very important to include %s in the following sentences
@@ -46464,33 +46464,33 @@ const char *Txt_The_session_has_expired =
 	"A sess&atilde;o expirou.";
 #endif
 
-const char *Txt_The_size_of_the_GIF_file_exceeds_the_maximum_allowed_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"La mida del fitxer <em>GIF</em>"
+	"La mida del fitxer"
 	" supera el m&agrave;xim perm&egrave;s (%s).";
 #elif L==2	// de
-	"Die Gr&ouml;&szlig;e der <em>GIF</em>-Datei"
+	"Die Gr&ouml;&szlig;e der Datei"
 	" &uuml;berschreitet den zul&auml;ssigen H&ouml;chstwert (%s).";
 #elif L==3	// en
-	"The size of the <em>GIF</em> file"
+	"The size of the file"
 	" exceeds the maximum allowed (%s).";
 #elif L==4	// es
-	"El tama&ntilde;o del archivo <em>GIF</em>"
+	"El tama&ntilde;o del archivo"
 	" excede el m&aacute;ximo permitido (%s).";
 #elif L==5	// fr
-	"La taille du fichier <em>GIF</em>"
+	"La taille du fichier"
 	" d&eacute;passe le maximum autoris&eacute; (%s).";
 #elif L==6	// gn
-	"El tama&ntilde;o del archivo <em>GIF</em>"
+	"El tama&ntilde;o del archivo"
 	" excede el m&aacute;ximo permitido (%s).";	// Okoteve traducción
 #elif L==7	// it
-	"La dimensione del file <em>GIF</em>"
+	"La dimensione del file"
 	" supera il massimo consentito (%s).";
 #elif L==8	// pl
-	"Rozmiar pliku <em>GIF</em>"
+	"Rozmiar pliku"
 	" przekracza maksymalne dozwolone (%s).";
 #elif L==9	// pt
-	"O tamanho do arquivo <em>GIF</em>"
+	"O tamanho do arquivo"
 	" excede o m&aacute;ximo permitido (%s).";
 #endif
 

@@ -54,9 +54,23 @@ const char *Med_StringsTypeDB[Med_NUM_TYPES] =
    "none",	// Med_NONE
    "jpg",	// Med_JPG
    "gif",	// Med_GIF
+   "mp4",	// Med_MP4
+   "webm",	// Med_WEBM
+   "ogg",	// Med_OGG
+   };
+
+const char *Med_Extensions[Med_NUM_TYPES] =
+  {
+   "",		// Med_NONE
+   "jpg",	// Med_JPG
+   "gif",	// Med_GIF
+   "mp4",	// Med_MP4
+   "webm",	// Med_WEBM
+   "ogg",	// Med_OGG
    };
 
 #define Med_MAX_SIZE_GIF (5UL * 1024UL * 1024UL)	// 5 MiB
+#define Med_MAX_SIZE_MP4 (5UL * 1024UL * 1024UL)	// 5 MiB
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
@@ -89,6 +103,9 @@ static void Med_ProcessJPG (struct Media *Media,
 static void Med_ProcessGIF (struct Media *Media,
 			    const char PathMedPrivTmp[PATH_MAX + 1],
 			    const char PathFileOrg[PATH_MAX + 1]);
+static void Med_ProcessVideo (struct Media *Media,
+			      const char PathMedPrivTmp[PATH_MAX + 1],
+			      const char PathFileOrg[PATH_MAX + 1]);
 
 static int Med_ResizeImage (struct Media *Media,
                             const char PathFileOriginal[PATH_MAX + 1],
@@ -107,8 +124,12 @@ static void Med_ShowJPG (struct Media *Media,
 static void Med_ShowGIF (struct Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia);
+static void Med_ShowVideo (struct Media *Media,
+			   const char PathMedPriv[PATH_MAX + 1],
+			   const char *ClassMedia);
 
-static Med_Type_t Med_GetTypeFromExtension (const char *Extension);
+static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
+                                             const char *MIMEType);
 
 /*****************************************************************************/
 /********************* Reset media (image/video) fields **********************/
@@ -263,7 +284,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
 	              "<img src=\"%s/camera.svg\""
 	              " alt=\"%s\" title=\"%s (%s)\""
 	              " class=\"MED_UPL_ICO\" />"
-	              "<input type=\"file\" name=\"%s\" accept=\"image/*\""
+	              "<input type=\"file\" name=\"%s\""
+	              " accept=\"image/,video/\""
 	              " class=\"MED_UPL_FIL\""
 	              " onchange=\"mediaUploadOnSelectFile (this,'%s');\" />"
                       "<span id=\"%s_fil\" class=\"MED_UPL_NAM\" />"
@@ -455,7 +477,6 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
    char PathMedPriv[PATH_MAX + 1];
    char PathMedPrivTmp[PATH_MAX + 1];
    char PathFileOrg[PATH_MAX + 1];	// Full name of original uploaded file
-   bool WrongType = false;
 
    /***** Set media file status *****/
    Media->Status = Med_FILE_NONE;
@@ -479,17 +500,8 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
       return;
 
    /* Check extension */
-   Media->Type = Med_GetTypeFromExtension (PtrExtension);
+   Media->Type = Med_GetTypeFromExtAndMIME (PtrExtension,MIMEType);
    if (Media->Type == Med_NONE)
-      return;
-
-   /* Check if the file type is image/ or application/octet-stream */
-   if (strncmp (MIMEType,"image/",strlen ("image/")))
-      if (strcmp (MIMEType,"application/octet-stream"))
-	 if (strcmp (MIMEType,"application/octetstream"))
-	    if (strcmp (MIMEType,"application/octet"))
-	       WrongType = true;
-   if (WrongType)
       return;
 
    /***** Assign a unique name for the media *****/
@@ -522,7 +534,7 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
      {
       Media->Status = Med_FILE_RECEIVED;
 
-      /***** Detect if amnimated gif *****/
+      /***** Detect if animated GIF *****/
       if (Media->Type == Med_GIF)
 	 if (!Med_DetectIfAnimated (Media,PathMedPrivTmp,PathFileOrg))
             Media->Type = Med_JPG;
@@ -535,6 +547,11 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
             break;
          case Med_GIF:
             Med_ProcessGIF (Media,PathMedPrivTmp,PathFileOrg);
+            break;
+         case Med_MP4:
+         case Med_WEBM:
+         case Med_OGG:
+            Med_ProcessVideo (Media,PathMedPrivTmp,PathFileOrg);
             break;
          default:
             break;
@@ -599,14 +616,14 @@ static void Med_ProcessJPG (struct Media *Media,
 			    const char PathMedPrivTmp[PATH_MAX + 1],
 			    const char PathFileOrg[PATH_MAX + 1])
   {
-   extern const char *Txt_The_image_could_not_be_processed_successfully;
+   extern const char *Txt_The_file_could_not_be_processed_successfully;
    char PathFileJPGTmp[PATH_MAX + 1];	// Full name of temporary processed file
 
    /***** Convert original media to temporary JPG processed file
 	  by calling to program that makes the conversion *****/
    snprintf (PathFileJPGTmp,sizeof (PathFileJPGTmp),
-	     "%s/%s.jpg",
-	     PathMedPrivTmp,Media->Name);
+	     "%s/%s.%s",
+	     PathMedPrivTmp,Media->Name,Med_Extensions[Med_JPG]);
    if (Med_ResizeImage (Media,PathFileOrg,PathFileJPGTmp) == 0)	// On success ==> 0 is returned
       /* Success */
       Media->Status = Med_FILE_PROCESSED;
@@ -617,7 +634,7 @@ static void Med_ProcessJPG (struct Media *Media,
 	 unlink (PathFileJPGTmp);
 
       /* Show error alert */
-      Ale_ShowAlert (Ale_ERROR,Txt_The_image_could_not_be_processed_successfully);
+      Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
      }
   }
 
@@ -629,8 +646,8 @@ static void Med_ProcessGIF (struct Media *Media,
 			    const char PathMedPrivTmp[PATH_MAX + 1],
 			    const char PathFileOrg[PATH_MAX + 1])
   {
-   extern const char *Txt_The_image_could_not_be_processed_successfully;
-   extern const char *Txt_The_size_of_the_GIF_file_exceeds_the_maximum_allowed_X;
+   extern const char *Txt_The_file_could_not_be_processed_successfully;
+   extern const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X;
    struct stat FileStatus;
    char PathFilePNGTmp[PATH_MAX + 1];	// Full name of temporary processed file
    char PathFileGIFTmp[PATH_MAX + 1];	// Full name of temporary processed file
@@ -653,8 +670,8 @@ static void Med_ProcessGIF (struct Media *Media,
 	    /* Success */
 	    /***** Move original GIF file to temporary GIF file *****/
 	    snprintf (PathFileGIFTmp,sizeof (PathFileGIFTmp),
-		      "%s/%s.gif",
-		      PathMedPrivTmp,Media->Name);
+		      "%s/%s.%s",
+		      PathMedPrivTmp,Media->Name,Med_Extensions[Med_GIF]);
 	    if (rename (PathFileOrg,PathFileGIFTmp))	// Fail
 	      {
 	       /* Remove temporary PNG file */
@@ -662,7 +679,7 @@ static void Med_ProcessGIF (struct Media *Media,
 		  unlink (PathFilePNGTmp);
 
 	       /* Show error alert */
-	       Ale_ShowAlert (Ale_ERROR,Txt_The_image_could_not_be_processed_successfully);
+	       Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
 	      }
 	    else					// Success
 	       Media->Status = Med_FILE_PROCESSED;
@@ -674,24 +691,68 @@ static void Med_ProcessGIF (struct Media *Media,
 	       unlink (PathFilePNGTmp);
 
 	    /* Show error alert */
-	    Ale_ShowAlert (Ale_ERROR,Txt_The_image_could_not_be_processed_successfully);
+	    Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
 	   }
 	}
       else	// Size exceeded
 	{
 	 /* Show warning alert */
 	 Fil_WriteFileSizeBrief ((double) Med_MAX_SIZE_GIF,FileSizeStr);
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_size_of_the_GIF_file_exceeds_the_maximum_allowed_X,
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X,
 			FileSizeStr);
 	}
      }
    else // Error getting file data
       /* Show error alert */
-      Ale_ShowAlert (Ale_ERROR,Txt_The_image_could_not_be_processed_successfully);
+      Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
   }
 
 /*****************************************************************************/
-/************ Process original media generating processed media **************/
+/*********** Process original MP4 video generating processed MP4 *************/
+/*****************************************************************************/
+
+static void Med_ProcessVideo (struct Media *Media,
+			      const char PathMedPrivTmp[PATH_MAX + 1],
+			      const char PathFileOrg[PATH_MAX + 1])
+  {
+   extern const char *Txt_The_file_could_not_be_processed_successfully;
+   extern const char *Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X;
+   struct stat FileStatus;
+   char PathFileTmp[PATH_MAX + 1];	// Full name of temporary processed file
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
+
+   /***** Check size of media file *****/
+   if (lstat (PathFileOrg,&FileStatus) == 0)	// On success ==> 0 is returned
+     {
+      /* Success */
+      if (FileStatus.st_size <= (__off_t) Med_MAX_SIZE_MP4)
+	{
+	 /* File size correct */
+	 /***** Move original video file to temporary MP4 file *****/
+	 snprintf (PathFileTmp,sizeof (PathFileTmp),
+		   "%s/%s.%s",
+		   PathMedPrivTmp,Media->Name,Med_Extensions[Media->Type]);
+	 if (rename (PathFileOrg,PathFileTmp))	// Fail
+	    /* Show error alert */
+	    Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
+	 else						// Success
+	    Media->Status = Med_FILE_PROCESSED;
+	}
+      else	// Size exceeded
+	{
+	 /* Show warning alert */
+	 Fil_WriteFileSizeBrief ((double) Med_MAX_SIZE_MP4,FileSizeStr);
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X,
+			FileSizeStr);
+	}
+     }
+   else // Error getting file data
+      /* Show error alert */
+      Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
+  }
+
+/*****************************************************************************/
+/****************************** Resize image *********************************/
 /*****************************************************************************/
 // Return 0 on success
 // Return != 0 on error
@@ -771,15 +832,26 @@ void Med_MoveMediaToDefinitiveDir (struct Media *Media)
      {
       case Med_JPG:
 	 /* Move JPG */
-	 if (!Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,"jpg"))
+	 if (!Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
+	                               Med_Extensions[Med_JPG]))
 	    return;			// Fail
 	 break;
       case Med_GIF:
 	 /* Move PNG */
-	 if (!Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,"png"))
+	 if (!Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
+	                               "png"))
 	    return;			// Fail
 	 /* Move GIF */
-	 if (!Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,"gif"))
+	 if (!Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
+	                               Med_Extensions[Med_GIF]))
+	    return;			// Fail
+	 break;
+      case Med_MP4:
+      case Med_WEBM:
+      case Med_OGG:
+	 /* Move MP4 or WEBM or OGG */
+	 if (!Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
+	                               Med_Extensions[Media->Type]))
 	    return;			// Fail
 	 break;
       default:
@@ -874,6 +946,11 @@ void Med_ShowMedia (struct Media *Media,
       case Med_GIF:
 	 Med_ShowGIF (Media,PathMedPriv,ClassMedia);
 	 break;
+      case Med_MP4:
+      case Med_WEBM:
+      case Med_OGG:
+	 Med_ShowVideo (Media,PathMedPriv,ClassMedia);
+	 break;
       default:
 	 break;
      }
@@ -894,26 +971,26 @@ static void Med_ShowJPG (struct Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia)
   {
-   extern const char *Txt_Image_not_found;
-   char FileNameImgPriv[NAME_MAX + 1];
+   extern const char *Txt_File_not_found;
+   char FileNameMediaPriv[NAME_MAX + 1];
    char FullPathMediaPriv[PATH_MAX + 1];
    char URLTmp[PATH_MAX + 1];
    char URL_JPG[PATH_MAX + 1];
 
    /***** Build private path to JPG *****/
-   snprintf (FileNameImgPriv,sizeof (FileNameImgPriv),
-	     "%s.jpg",
-	     Media->Name);
+   snprintf (FileNameMediaPriv,sizeof (FileNameMediaPriv),
+	     "%s.%s",
+	     Media->Name,Med_Extensions[Med_JPG]);
    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
 	     "%s/%s",
-	     PathMedPriv,FileNameImgPriv);
+	     PathMedPriv,FileNameMediaPriv);
 
    /***** Check if private media file exists *****/
    if (Fil_CheckIfPathExists (FullPathMediaPriv))
      {
       /***** Create symbolic link from temporary public directory to private file
 	     in order to gain access to it for showing/downloading *****/
-      Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameImgPriv);
+      Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMediaPriv);
 
       /***** Build temporary public URL *****/
       snprintf (URLTmp,sizeof (URLTmp),
@@ -924,7 +1001,7 @@ static void Med_ShowJPG (struct Media *Media,
       /***** Create URL pointing to symbolic link *****/
       snprintf (URL_JPG,sizeof (URL_JPG),
 		"%s/%s",
-		URLTmp,FileNameImgPriv);
+		URLTmp,FileNameMediaPriv);
 
       /***** Show media *****/
       fprintf (Gbl.F.Out,"<img src=\"%s\" class=\"%s\" alt=\"\"",URL_JPG,ClassMedia);
@@ -934,7 +1011,7 @@ static void Med_ShowJPG (struct Media *Media,
       fprintf (Gbl.F.Out," lazyload=\"on\" />");	// Lazy load of the media
      }
    else
-      fprintf (Gbl.F.Out,"%s",Txt_Image_not_found);
+      fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
   }
 
 /*****************************************************************************/
@@ -945,27 +1022,27 @@ static void Med_ShowGIF (struct Media *Media,
 			 const char PathMedPriv[PATH_MAX + 1],
 			 const char *ClassMedia)
   {
-   extern const char *Txt_Image_not_found;
-   char FileNameImgPriv[NAME_MAX + 1];
+   extern const char *Txt_File_not_found;
+   char FileNameMediaPriv[NAME_MAX + 1];
    char FullPathMediaPriv[PATH_MAX + 1];
    char URLTmp[PATH_MAX + 1];
    char URL_GIF[PATH_MAX + 1];
    char URL_PNG[PATH_MAX + 1];
 
    /***** Build private path to animated GIF image *****/
-   snprintf (FileNameImgPriv,sizeof (FileNameImgPriv),
-	     "%s.gif",
-	     Media->Name);
+   snprintf (FileNameMediaPriv,sizeof (FileNameMediaPriv),
+	     "%s.%s",
+	     Media->Name,Med_Extensions[Med_GIF]);
    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
 	     "%s/%s",
-	     PathMedPriv,FileNameImgPriv);
+	     PathMedPriv,FileNameMediaPriv);
 
    /***** Check if private media file exists *****/
    if (Fil_CheckIfPathExists (FullPathMediaPriv))
      {
       /***** Create symbolic link from temporary public directory to private file
 	     in order to gain access to it for showing/downloading *****/
-      Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameImgPriv);
+      Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMediaPriv);
 
       /***** Build temporary public URL *****/
       snprintf (URLTmp,sizeof (URLTmp),
@@ -976,27 +1053,27 @@ static void Med_ShowGIF (struct Media *Media,
       /***** Create URL pointing to symbolic link *****/
       snprintf (URL_GIF,sizeof (URL_GIF),
 		"%s/%s",
-		URLTmp,FileNameImgPriv);
+		URLTmp,FileNameMediaPriv);
 
       /***** Build private path to static PNG image *****/
-      snprintf (FileNameImgPriv,sizeof (FileNameImgPriv),
+      snprintf (FileNameMediaPriv,sizeof (FileNameMediaPriv),
 		"%s.png",
 		Media->Name);
       snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
 		"%s/%s",
-		PathMedPriv,FileNameImgPriv);
+		PathMedPriv,FileNameMediaPriv);
 
       /***** Check if private media file exists *****/
       if (Fil_CheckIfPathExists (FullPathMediaPriv))
 	{
 	 /***** Create symbolic link from temporary public directory to private file
 		in order to gain access to it for showing/downloading *****/
-	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameImgPriv);
+	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMediaPriv);
 
 	 /***** Create URL pointing to symbolic link *****/
 	 snprintf (URL_PNG,sizeof (URL_PNG),
 		   "%s/%s",
-		   URLTmp,FileNameImgPriv);
+		   URLTmp,FileNameMediaPriv);
 
 	 /***** Show static PNG and animated GIF *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MED_PLAY\""
@@ -1023,10 +1100,73 @@ static void Med_ShowGIF (struct Media *Media,
 	 fprintf (Gbl.F.Out,"</div>");
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Txt_Image_not_found);
+	 fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
      }
    else
-      fprintf (Gbl.F.Out,"%s",Txt_Image_not_found);
+      fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
+  }
+
+/*****************************************************************************/
+/************************** Show a user uploaded MP4 *************************/
+/*****************************************************************************/
+
+static void Med_ShowVideo (struct Media *Media,
+			   const char PathMedPriv[PATH_MAX + 1],
+			   const char *ClassMedia)
+  {
+   extern const char *Txt_File_not_found;
+   char FileNameMediaPriv[NAME_MAX + 1];
+   char FullPathMediaPriv[PATH_MAX + 1];
+   char URLTmp[PATH_MAX + 1];
+   char URL_Video[PATH_MAX + 1];
+
+   /***** Build private path to video *****/
+   snprintf (FileNameMediaPriv,sizeof (FileNameMediaPriv),
+	     "%s.%s",
+	     Media->Name,Med_Extensions[Media->Type]);
+   snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+	     "%s/%s",
+	     PathMedPriv,FileNameMediaPriv);
+
+   /***** Check if private media file exists *****/
+   if (Fil_CheckIfPathExists (FullPathMediaPriv))
+     {
+      /***** Create symbolic link from temporary public directory to private file
+	     in order to gain access to it for showing/downloading *****/
+      Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMediaPriv);
+
+      /***** Build temporary public URL *****/
+      snprintf (URLTmp,sizeof (URLTmp),
+		"%s/%s/%s",
+		Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+		Gbl.FileBrowser.TmpPubDir);
+
+      /***** Create URL pointing to symbolic link *****/
+      snprintf (URL_Video,sizeof (URL_Video),
+		"%s/%s",
+		URLTmp,FileNameMediaPriv);
+
+      /***** Show media *****/
+      /*
+      <video width="400" controls>
+      <source src="mov_bbb.mp4" type="video/mp4">
+      <source src="mov_bbb.ogg" type="video/ogg">
+      Your browser does not support HTML5 video.
+      </video>
+      */
+      fprintf (Gbl.F.Out,"<video controls=\"controls\" class=\"%s\"",ClassMedia);
+      if (Media->Title)
+	 if (Media->Title[0])
+	    fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
+      fprintf (Gbl.F.Out," lazyload=\"on\">");	// Lazy load of the media
+
+      fprintf (Gbl.F.Out,"<source src=\"%s\" type=\"video/mp4\">"
+	                 "Your browser does not support HTML5 video."
+	                 "</video>",
+	       URL_Video);
+     }
+   else
+      fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
   }
 
 /*****************************************************************************/
@@ -1074,22 +1214,32 @@ void Med_RemoveMediaFiles (const char *Name,Med_Type_t Type)
          case Med_JPG:
 	    /***** Remove private JPG file *****/
 	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		      "%s/%s.jpg",
-		      PathMedPriv,Name);
+		      "%s/%s.%s",
+		      PathMedPriv,Name,Med_Extensions[Med_JPG]);
 	    unlink (FullPathMediaPriv);
 
 	    break;
          case Med_GIF:
 	    /***** Remove private GIF file *****/
 	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		      "%s/%s.gif",
-		      PathMedPriv,Name);
+		      "%s/%s.%s",
+		      PathMedPriv,Name,Med_Extensions[Med_GIF]);
 	    unlink (FullPathMediaPriv);
 
 	    /***** Remove private PNG file *****/
 	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		      "%s//%s.png",
+		      "%s/%s.png",
 		      PathMedPriv,Name);
+	    unlink (FullPathMediaPriv);
+
+	    break;
+         case Med_MP4:
+         case Med_WEBM:
+         case Med_OGG:
+	    /***** Remove private video file *****/
+	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		      "%s/%s.%s",
+		      PathMedPriv,Name,Med_Extensions[Type]);
 	    unlink (FullPathMediaPriv);
 
 	    break;
@@ -1123,19 +1273,56 @@ Med_Type_t Med_GetTypeFromStrInDB (const char *Str)
 /************************ Get media type from extension **********************/
 /*****************************************************************************/
 
-static Med_Type_t Med_GetTypeFromExtension (const char *Extension)
+static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
+                                             const char *MIMEType)
   {
-   /***** Extensions allowed to convert to JPG *****/
-   if (!strcasecmp (Extension,"jpg"))
-      return Med_JPG;
-   if (!strcasecmp (Extension,"jpeg"))
-      return Med_JPG;
-   if (!strcasecmp (Extension,"png"))
-      return Med_JPG;
+   /***** Extensions and MIME types allowed to convert to JPG *****/
+   if (!strcasecmp (Extension,"jpg" ) ||
+       !strcasecmp (Extension,"jpeg") ||
+       !strcasecmp (Extension,"png" ) ||
+       !strcasecmp (Extension,"tif" ) ||
+       !strcasecmp (Extension,"tiff"))
+      if (!strcmp (MIMEType,"image/jpeg"              ) ||
+          !strcmp (MIMEType,"image/pjpeg"             ) ||
+          !strcmp (MIMEType,"image/png"               ) ||
+          !strcmp (MIMEType,"image/x-png"             ) ||
+	  !strcmp (MIMEType,"image/tiff"              ) ||
+          !strcmp (MIMEType,"application/octet-stream") ||
+	  !strcmp (MIMEType,"application/octetstream" ) ||
+	  !strcmp (MIMEType,"application/octet"       ))
+	 return Med_JPG;
 
-   /***** Extensions allowed to convert to GIF *****/
+   /***** Extensions and MIME types allowed to convert to GIF *****/
    if (!strcasecmp (Extension,"gif"))
-      return Med_GIF;
+      if (!strcmp (MIMEType,"image/gif"               ) ||
+          !strcmp (MIMEType,"application/octet-stream") ||
+	  !strcmp (MIMEType,"application/octetstream" ) ||
+	  !strcmp (MIMEType,"application/octet"       ))
+	 return Med_GIF;
+
+   /***** Extensions and MIME types allowed to convert to MP4 *****/
+   if (!strcasecmp (Extension,"mp4"))
+      if (!strcmp (MIMEType,"video/mp4"               ) ||
+          !strcmp (MIMEType,"application/octet-stream") ||
+	  !strcmp (MIMEType,"application/octetstream" ) ||
+	  !strcmp (MIMEType,"application/octet"       ))
+	 return Med_MP4;
+
+   /***** Extensions and MIME types allowed to convert to WEBM *****/
+   if (!strcasecmp (Extension,"webm"))
+      if (!strcmp (MIMEType,"video/webm"              ) ||
+          !strcmp (MIMEType,"application/octet-stream") ||
+	  !strcmp (MIMEType,"application/octetstream" ) ||
+	  !strcmp (MIMEType,"application/octet"       ))
+	 return Med_WEBM;
+
+   /***** Extensions and MIME types allowed to convert to OGG *****/
+   if (!strcasecmp (Extension,"ogg"))
+      if (!strcmp (MIMEType,"video/ogg"               ) ||
+          !strcmp (MIMEType,"application/octet-stream") ||
+	  !strcmp (MIMEType,"application/octetstream" ) ||
+	  !strcmp (MIMEType,"application/octet"       ))
+	 return Med_OGG;
 
    return Med_NONE;
   }

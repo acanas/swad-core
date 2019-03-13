@@ -88,12 +88,15 @@ typedef enum
    Med_NAME_STORED_IN_DB,
   } Med_FileStatus_t;
 
-#define Med_NUM_TYPES 3
+#define Med_NUM_TYPES 6
 typedef enum
   {
    Med_NONE,
    Med_JPG,
    Med_GIF,
+   Med_MP4,
+   Med_WEBM,
+   Med_OGG,
   } Med_Type_t;
 
 /***** Struct used to get images/videos from forms *****/
