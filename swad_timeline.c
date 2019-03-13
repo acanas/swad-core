@@ -144,13 +144,13 @@ static void TL_UpdateFirstPubCodIntoSession (long FirstPubCod);
 static void TL_DropTemporaryTablesUsedToQueryTimeline (void);
 
 static void TL_ShowTimeline (char *Query,
-                              const char *Title,long NotCodToHighlight);
+                             const char *Title,long NotCodToHighlight);
 static void TL_PutIconsTimeline (void);
 
 static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr);
 static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-			    const char *ParamCod,
-			    const char *Icon,const char *Title);
+			   const char *ParamCod,
+			   const char *Icon,const char *Title);
 
 static void TL_PutFormWhichUsrs (void);
 static void TL_PutParamWhichUsrs (void);
@@ -183,7 +183,7 @@ static void TL_PublishNoteInTimeline (struct TL_Publication *SocPub);
 
 static void TL_PutFormToWriteNewPost (void);
 static void TL_PutTextarea (const char *Placeholder,
-                             const char *ClassTextArea,const char *ClassImgTit);
+                            const char *ClassTextArea,const char *ClassImgTit);
 
 static long TL_ReceivePost (void);
 
@@ -195,7 +195,7 @@ static unsigned long TL_GetNumCommentsInNote (long NotCod);
 static void TL_WriteCommentsInNote (const struct TL_Note *SocNot);
 static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res);
 static void TL_PutIconToToggleComments (const char *UniqueId,
-                                         const char *Icon,const char *Text);
+                                        const char *Icon,const char *Text);
 static void TL_WriteComment (struct TL_Comment *SocCom,
                              TL_TopMessage_t TopMessage,long UsrCod,
                              bool ShowCommentAlone);
@@ -225,7 +225,7 @@ static void TL_ShareNote (struct TL_Note *SocNot);
 static void TL_FavNote (struct TL_Note *SocNot);
 static void TL_FavComment (struct TL_Comment *SocCom);
 static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                                     Ntf_NotifyEvent_t NotifyEvent);
+                                    Ntf_NotifyEvent_t NotifyEvent);
 
 static void TL_UnshareNote (struct TL_Note *SocNot);
 static void TL_UnfavNote (struct TL_Note *SocNot);
@@ -258,7 +258,7 @@ static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot);
 static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot);
 static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom);
 static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
-				     unsigned NumUsrs,unsigned NumFirstUsrs);
+				    unsigned NumUsrs,unsigned NumFirstUsrs);
 
 static void TL_GetDataOfNoteByCod (struct TL_Note *SocNot);
 static void TL_GetDataOfCommByCod (struct TL_Comment *SocCom);
@@ -967,7 +967,7 @@ static void TL_DropTemporaryTablesUsedToQueryTimeline (void)
             \ |_____|
 */
 static void TL_ShowTimeline (char *Query,
-                              const char *Title,long NotCodToHighlight)
+                             const char *Title,long NotCodToHighlight)
   {
    extern const char *Hlp_START_Timeline;
    MYSQL_RES *mysql_res;
@@ -1085,8 +1085,8 @@ static void TL_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
 /*****************************************************************************/
 
 static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
-			    const char *ParamCod,
-			    const char *Icon,const char *Title)
+			   const char *ParamCod,
+			   const char *Icon,const char *Title)
   {
    char *OnSubmit;
 
@@ -2374,7 +2374,7 @@ static void TL_PutFormToWriteNewPost (void)
 /*****************************************************************************/
 
 static void TL_PutTextarea (const char *Placeholder,
-                             const char *ClassTextArea,const char *ClassImgTit)
+                            const char *ClassTextArea,const char *ClassImgTit)
   {
    extern const char *Txt_Post;
    char IdDivImgButton[Frm_MAX_BYTES_ID + 1];
@@ -2730,7 +2730,7 @@ static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res)
 /*****************************************************************************/
 
 static void TL_PutIconToToggleComments (const char *UniqueId,
-                                         const char *Icon,const char *Text)
+                                        const char *Icon,const char *Text)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
@@ -3238,11 +3238,6 @@ static long TL_ReceiveComment (void)
 
 	 /***** Analyze content and store notifications about mentions *****/
 	 Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (SocPub.PubCod,Content);
-
-	 /***** Show the note just commented *****/
-	 TL_WriteNote (&SocNot,
-	               TL_TOP_MESSAGE_COMMENTED,Gbl.Usrs.Me.UsrDat.UsrCod,
-	               true,true);
 	}
 
       /***** Free image *****/
@@ -3477,7 +3472,7 @@ static void TL_FavComment (struct TL_Comment *SocCom)
 /*****************************************************************************/
 
 static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
-                                     Ntf_NotifyEvent_t NotifyEvent)
+                                    Ntf_NotifyEvent_t NotifyEvent)
   {
    struct UsrData UsrDat;
    bool CreateNotif;
@@ -4580,7 +4575,7 @@ static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom)
 // All forms in this function and nested functions must have unique identifiers
 
 static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
-				     unsigned NumUsrs,unsigned NumFirstUsrs)
+				    unsigned NumUsrs,unsigned NumFirstUsrs)
   {
    MYSQL_ROW row;
    unsigned NumUsr;

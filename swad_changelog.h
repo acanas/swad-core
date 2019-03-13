@@ -452,11 +452,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.75 (2019-03-13)"
+#define Log_PLATFORM_VERSION	"SWAD 18.75.1 (2019-03-13)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.75.js"
 /*
-	Version 18.75:    Mar 13, 2019 	Timeline refresh rate is increased on each refresh. (239633 lines)
+	Version 18.75.1:  Mar 13, 2019 	Timeline note is not shown apart on top of timeline when commenting. (239630 lines)
+	Version 18.75:    Mar 13, 2019 	Timeline refresh rate start with 2 s and is increased 1 s on each refresh. (239633 lines)
 	Version 18.74.4:  Mar 13, 2019 	Fixed bug in JavaScript related to timeline. (239628 lines)
 	Version 18.74.3:  Mar 13, 2019 	Fixed bug in JavaScript related to timeline. (239628 lines)
 	Version 18.74.2:  Mar 13, 2019 	Fixed bug in JavaScript related to timeline. (239628 lines)
