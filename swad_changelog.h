@@ -431,8 +431,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Los usuarios que no tienes permiso para ver su perfil público, se debería mostrar algo, una mínima ficha sin tinmeline o algo así
 
-// TODO: En Timeline cambiar "Comentario eliminado" para los posts por "Publicación eliminada"
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -452,10 +450,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.76.1 (2019-03-13)"
+#define Log_PLATFORM_VERSION	"SWAD 18.76.2 (2019-03-14)"
 #define CSS_FILE		"swad18.68.3.css"
 #define JS_FILE			"swad18.75.js"
 /*
+	Version 18.76.2:  Mar 14, 2019 	Changes in translation of several messages related to media. (239849 lines)
 	Version 18.76.1:  Mar 13, 2019 	Changes in video tag. (239810 lines)
 	Version 18.76:    Mar 13, 2019 	Video allowed as multimedia. (239814 lines)
 					7 changes necessary in database:

@@ -1118,7 +1118,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
    extern const char *Txt_No_image;
    extern const char *Txt_Current_image;
    extern const char *Txt_Change_image;
-   extern const char *Txt_Image_title_attribution;
+   extern const char *Txt_Title_attribution;
    extern const char *Txt_Link;
    extern const char *Txt_optional;
    static unsigned UniqueId = 0;
@@ -1184,7 +1184,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 			 "<input type=\"text\" name=\"%s\""
 			 " placeholder=\"%s (%s)\""
 			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
-	       ParamUploadMedia.Title,Txt_Image_title_attribution,Txt_optional,
+	       ParamUploadMedia.Title,Txt_Title_attribution,Txt_optional,
 	       ClassMediaTitURL,Med_MAX_CHARS_TITLE,
 	       Media->Title ? Media->Title :
 		              "");

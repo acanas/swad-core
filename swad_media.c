@@ -260,9 +260,9 @@ void Med_GetMediaDataFromRow (const char *Name,
 
 void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
   {
-   extern const char *Txt_Image;
+   extern const char *Txt_Image_video;
    extern const char *Txt_optional;
-   extern const char *Txt_Image_title_attribution;
+   extern const char *Txt_Title_attribution;
    extern const char *Txt_Link;
    struct ParamUploadMedia ParamUploadMedia;
    char Id[Frm_MAX_BYTES_ID + 1];
@@ -292,7 +292,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
                       "</span>"
 	              "</label>",
             Gbl.Prefs.URLIcons,
-            Txt_Image,Txt_Image,Txt_optional,
+            Txt_Image_video,Txt_Image_video,Txt_optional,
             ParamUploadMedia.File,
             Id,Id);
 
@@ -303,7 +303,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
                       " placeholder=\"%s (%s)\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\" />",
             ParamUploadMedia.Title,
-            Txt_Image_title_attribution,Txt_optional,
+            Txt_Title_attribution,Txt_optional,
             ClassMediaTitURL,Med_MAX_CHARS_TITLE);
    fprintf (Gbl.F.Out,"<br />"
                       "<input type=\"url\" name=\"%s\""
@@ -1156,8 +1156,7 @@ static void Med_ShowVideo (struct Media *Media,
 	    fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
       fprintf (Gbl.F.Out," lazyload=\"on\">"	// Lazy load of the media
                          "Your browser does not support HTML5 video."
-	                 "</video>",
-	       URL_Video);
+	                 "</video>");
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_File_not_found);

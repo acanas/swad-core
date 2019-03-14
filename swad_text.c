@@ -15357,25 +15357,25 @@ const char *Txt_Image =
 	"Imagem";
 #endif
 
-const char *Txt_Image_title_attribution =
+const char *Txt_Image_video =
 #if   L==1	// ca
-	"T&iacute;tol/atribuci&oacute; de la imatge";
+	"Imatge / v&iacute;deo";
 #elif L==2	// de
-	"Bildtitel / Namensnennung";
+	"Abbild / Video";
 #elif L==3	// en
-	"Image title/attribution";
+	"Image / video";
 #elif L==4	// es
-	"T&iacute;tulo/atribuci&oacute;n de la imagen";
+	"Imagen / v&iacute;deo";
 #elif L==5	// fr
-	"Titre/attribution de l'image";
+	"Image / vid&eacute;o";
 #elif L==6	// gn
-	"T&iacute;tulo/atribuci&oacute;n de la imagen";	// Okoteve traducción
+	"Ta'&atilde;nga / video";
 #elif L==7	// it
-	"Titolo/attribuzione delle immagine";
+	"Immagine / video";
 #elif L==8	// pl
-	"Tytu&lstrok;/przypisanie obrazu";
+	"Obraz / wideo";
 #elif L==9	// pt
-	"T&iacute;tulo/atribui&ccedil;&atilde;o da imagem";
+	"Imagem / v&iacute;deo";
 #endif
 
 const char *Txt_Import_questions =
@@ -49260,6 +49260,27 @@ const char *Txt_TIMELINE_post =
 	"publica&ccedil;&atilde;o";
 #endif
 
+const char *Txt_TIMELINE_Post_removed =
+#if   L==1	// ca
+	"Publicaci&oacute; eliminada.";
+#elif L==2	// de
+	"Publikation entfernt.";
+#elif L==3	// en
+	"Post removed.";
+#elif L==4	// es
+	"Publicaci&oacute;n eliminada";
+#elif L==5	// fr
+	"Publication supprim&eacute;e.";
+#elif L==6	// gn
+	"Publicaci&oacute;n eliminada";		// Okoteve traducción
+#elif L==7	// it
+	"Pubblicazione rimossa.";
+#elif L==8	// pl
+	"Publikacja usuni&eogon;ta.";
+#elif L==9	// pt
+	"Publica&ccedil;&atilde;o removida.";
+#endif
+
 const char *Txt_TIMELINE_posts =
 #if   L==1	// ca
 	"publicacions";
@@ -49501,6 +49522,27 @@ const char *Txt_Title =
 	"Tytu&lstrok;";
 #elif L==9	// pt
 	"T&iacute;tulo";
+#endif
+
+const char *Txt_Title_attribution =
+#if   L==1	// ca
+	"T&iacute;tol/atribuci&oacute;";
+#elif L==2	// de
+	"Titel / Namensnennung";
+#elif L==3	// en
+	"Title/attribution";
+#elif L==4	// es
+	"T&iacute;tulo/atribuci&oacute;n";
+#elif L==5	// fr
+	"Titre/attribution";
+#elif L==6	// gn
+	"T&iacute;tulo/atribuci&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Titolo/attribuzione";
+#elif L==8	// pl
+	"Tytu&lstrok;/przypisanie";
+#elif L==9	// pt
+	"T&iacute;tulo/atribui&ccedil;&atilde;o";
 #endif
 
 const char *Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre =

@@ -3845,7 +3845,7 @@ void TL_RemoveNoteUsr (void)
 static void TL_RemoveNote (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
-   extern const char *Txt_FORUM_Post_removed;
+   extern const char *Txt_TIMELINE_Post_removed;
    struct TL_Note SocNot;
    bool ItsMe;
 
@@ -3866,7 +3866,7 @@ static void TL_RemoveNote (void)
 	 TL_RemoveANoteFromDB (&SocNot);
 
 	 /***** Message of success *****/
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_FORUM_Post_removed);
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_TIMELINE_Post_removed);
 	}
      }
    else
