@@ -2725,7 +2725,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .MED_UPL_ICO	/* Upload icon */
 	{
-	width:16px;
+	/* width:16px; */
 	height:16px;
 	margin:5px 20px;
 	vertical-align:middle;

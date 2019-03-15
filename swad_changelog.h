@@ -450,11 +450,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.77 (2019-03-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.77.1 (2019-03-15)"
 #define CSS_FILE		"swad18.77.css"
 #define JS_FILE			"swad18.77.js"
 /*
+TODO: Mejorar javascript subida media
 TODO: Fix edition of media in test edition
+	Version 18.77.1:  Mar 14, 2019 	Embedded YouTube videos. Not finished. (240217 lines)
 	Version 18.77:    Mar 14, 2019 	Embedded YouTube videos. Not finished. (240214 lines)
 					7 changes necessary in database:
 ALTER TABLE forum_post          CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none';

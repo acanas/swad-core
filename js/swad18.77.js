@@ -778,11 +778,16 @@ function mediaActivateUpload (id) {
 	    document.getElementById (id + '_par_upl').disabled = false;			// Enable upload
 
 		document.getElementById (id + '_ico_upl').style.opacity = '1';		// Highlight upload icon
-		document.getElementById (id + '_ico_emb').style.opacity = '0.2';	// Shadow embed icon
+		document.getElementById (id + '_ico_emb').style.opacity = '0.3';	// Shadow embed icon
 
-		document.getElementById (id + '_fil').style.display = '';			// Show input
-		document.getElementById (id + '_url').style.display = '';			// Show input
-		document.getElementById (id + '_tit').style.display = '';			// Show input
+		document.getElementById (id + '_fil').style.display = '';			// Show file input
+		document.getElementById (id + '_fil').disabled = false;				// Enable file input
+
+		document.getElementById (id + '_url').style.display = '';			// Show URL input
+		document.getElementById (id + '_url').disabled = false;				// Enable URL input
+
+		document.getElementById (id + '_tit').style.display = '';			// Show title input
+		document.getElementById (id + '_tit').disabled = false;				// Enable title input
 	}
 }
 
@@ -793,11 +798,16 @@ function mediaActivateEmbed (id) {
 	    document.getElementById (id + '_par_emb').disabled = false;			// Enable embed
 
 		document.getElementById (id + '_ico_emb').style.opacity = '1';		// Highlight embed icon
-		document.getElementById (id + '_ico_upl').style.opacity = '0.2';	// Shadow upload icon
+		document.getElementById (id + '_ico_upl').style.opacity = '0.3';	// Shadow upload icon
 
-		document.getElementById (id + '_fil').style.display = 'none';		// Hide input
-		document.getElementById (id + '_url').style.display = '';			// Show input
-		document.getElementById (id + '_tit').style.display = 'none';		// Hide input
+		document.getElementById (id + '_fil').style.display  = 'none';		// Hide file input
+		document.getElementById (id + '_fil').disabled = true;				// Disable file input
+
+		document.getElementById (id + '_url').style.display = '';			// Show URL input
+		document.getElementById (id + '_url').disabled = false;				// Enable URL input
+
+		document.getElementById (id + '_tit').style.display = 'none';		// Hide title input
+		document.getElementById (id + '_tit').disabled = true;				// Disable title input
 	}
 }
 

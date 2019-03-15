@@ -299,13 +299,13 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
    Par_PutHiddenParamUnsigned (ParamUploadMedia.Action,(unsigned) Med_ACTION_NEW_MEDIA);
 
    /***** Upload icon *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s_ico_upl\""		// <id>_ico_upl
+   fprintf (Gbl.F.Out,"<div id=\"%s_ico_upl\""			// <id>_ico_upl
 		      " class=\"MED_UPL_ICO_CON\">"
 		      "<img src=\"%s/file-image.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"MED_UPL_ICO ICO_HIGHLIGHT\""
 	              " onclick=\"mediaActivateUpload('%s');\" />"
-	              "</div>",				// <id>_ico_upl
+	              "</div>",					// <id>_ico_upl
             Id,
 	    Gbl.Prefs.URLIcons,
             Txt_Image_video,Txt_Image_video,
@@ -313,65 +313,60 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
 
    /***** Form type *****/
    fprintf (Gbl.F.Out,"<input type=\"hidden\""
-		      " id=\"%s_par_upl\""		// <id>_par_upl
+		      " id=\"%s_par_upl\""			// <id>_par_upl
 		      " name=\"FormType\" value=\"%u\""
 		      " disabled=\"disabled\" />",
 	    Id,
             (unsigned) Med_FORM_FILE);
 
    /***** Embed icon *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s_ico_emb\""		// <id>_ico_emb
+   fprintf (Gbl.F.Out,"<div id=\"%s_ico_emb\""			// <id>_ico_emb
 		      " class=\"MED_UPL_ICO_CON\">"
 		      "<img src=\"%s/youtube-brands.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"MED_UPL_ICO ICO_HIGHLIGHT\""
 	              " onclick=\"mediaActivateEmbed('%s');\" />"
-	              "</div>",				// <id>_ico_emb
+	              "</div>",					// <id>_ico_emb
             Id,
 	    Gbl.Prefs.URLIcons,
-            "Embed URL","Embed URL",
+            "YouTube","YouTube",
             Id);
 
    /***** Form type *****/
    fprintf (Gbl.F.Out,"<input type=\"hidden\""
-		      " id=\"%s_par_emb\""		// <id>_par_emb
+		      " id=\"%s_par_emb\""			// <id>_par_emb
 		      " name=\"FormType\" value=\"%u\""
 		      " disabled=\"disabled\" />",
 	    Id,
             (unsigned) Med_FORM_EMBED);
 
    /***** Media file *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s_fil\""		// <id>_fil
-		      " style=\"display:none;\">"
-	              "<input type=\"file\" name=\"%s\""
-	              " accept=\"image/,video/\" />"
-	              "</div>",				// <id>_fil
+   fprintf (Gbl.F.Out,"<input id=\"%s_fil\" type=\"file\""	// <id>_fil
+	              " name=\"%s\" accept=\"image/,video/\""
+	              " disabled=\"disabled\""
+	              " style=\"display:none;\" />",		// <id>_fil
 	    Id,
             ParamUploadMedia.File);
 
    /***** Media URL *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s_url\""		// <id>_url
-		      " style=\"display:none;\">"
-		      "<input type=\"url\" name=\"%s\""
-                      " placeholder=\"%s\""
-                      " class=\"%s\" maxlength=\"%u\" value=\"\" />"
-                      "</div>",				// <id>_url
+   fprintf (Gbl.F.Out,"<input id=\"%s_url\" type=\"url\""	// <id>_url
+		      " name=\"%s\" placeholder=\"%s\""
+                      " class=\"%s\" maxlength=\"%u\" value=\"\""
+	              " disabled=\"disabled\""
+	              " style=\"display:none;\" />",		// <id>_url
 	    Id,
-            ParamUploadMedia.URL,
-            Txt_Link,
+            ParamUploadMedia.URL,Txt_Link,
             ClassMediaTitURL,Cns_MAX_CHARS_WWW);
 
    /***** Media title *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s_tit\""		// <id>_tit
-		      " style=\"display:none;\">"
-		      "<input type=\"text\" name=\"%s\""
-                      " placeholder=\"%s\""
-                      " class=\"%s\" maxlength=\"%u\" value=\"\" />",
+   fprintf (Gbl.F.Out,"<input id=\"%s_tit\" type=\"text\""	// <id>_tit
+		      " name=\"%s\" placeholder=\"%s\""
+                      " class=\"%s\" maxlength=\"%u\" value=\"\""
+	              " disabled=\"disabled\""
+	              " style=\"display:none;\" />",		// <id>_tit
 	    Id,
-            ParamUploadMedia.Title,
-            Txt_Title_attribution,
+            ParamUploadMedia.Title,Txt_Title_attribution,
             ClassMediaTitURL,Med_MAX_CHARS_TITLE);
-   fprintf (Gbl.F.Out,"</div>");			// <id>_tit
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");			// container
