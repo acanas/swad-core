@@ -25,8 +25,10 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE         	// For strcasestr, asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdbool.h>		// For boolean type
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For exit, system, malloc, free, etc
 #include <string.h>		// For string functions
 #include <sys/stat.h>		// For lstat
@@ -57,6 +59,7 @@ const char *Med_StringsTypeDB[Med_NUM_TYPES] =
    "mp4",	// Med_MP4
    "webm",	// Med_WEBM
    "ogg",	// Med_OGG
+   "youtube",	// Med_YOUTUBE
    };
 
 const char *Med_Extensions[Med_NUM_TYPES] =
@@ -67,6 +70,7 @@ const char *Med_Extensions[Med_NUM_TYPES] =
    "mp4",	// Med_MP4
    "webm",	// Med_WEBM
    "ogg",	// Med_OGG
+   "",		// Med_YOUTUBE
    };
 
 #define Med_MAX_SIZE_GIF (5UL * 1024UL * 1024UL)	// 5 MiB
@@ -75,6 +79,15 @@ const char *Med_Extensions[Med_NUM_TYPES] =
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
+
+#define Med_NUM_FORM_TYPES 3
+
+typedef enum
+  {
+   Med_FORM_UNKNOWN = 0,
+   Med_FORM_FILE    = 1,
+   Med_FORM_EMBED   = 2,
+  } Med_FormType_t;
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -91,8 +104,11 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction);
-static void Med_GetAndProcessFileFromForm (struct Media *Media,
-					   const char *ParamFile);
+static Med_FormType_t Usr_GetFormTypeFromForm (void);
+static void Usr_GetURLFromForm (const char *ParamName,struct Media *Media);
+static void Usr_GetTitleFromForm (const char *ParamName,struct Media *Media);
+static void Med_GetAndProcessFileFromForm (const char *ParamFile,
+                                           struct Media *Media);
 static bool Med_DetectIfAnimated (struct Media *Media,
 			          const char PathMedPrivTmp[PATH_MAX + 1],
 			          const char PathFileOrg[PATH_MAX + 1]);
@@ -113,6 +129,9 @@ static int Med_ResizeImage (struct Media *Media,
 static int Med_GetFirstFrame (const char PathFileOriginal[PATH_MAX + 1],
                               const char PathFileProcessed[PATH_MAX + 1]);
 
+static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
+                                            struct Media *Media);
+
 static bool Med_MoveTmpFileToDefDir (struct Media *Media,
 				     const char PathMedPrivTmp[PATH_MAX + 1],
 				     const char PathMedPriv[PATH_MAX + 1],
@@ -127,6 +146,8 @@ static void Med_ShowGIF (struct Media *Media,
 static void Med_ShowVideo (struct Media *Media,
 			   const char PathMedPriv[PATH_MAX + 1],
 			   const char *ClassMedia);
+static void Med_ShowYoutube (struct Media *Media,
+			     const char *ClassMedia);
 
 static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
                                              const char *MIMEType);
@@ -151,9 +172,9 @@ void Med_MediaConstructor (struct Media *Media)
 void Med_ResetMediaExceptTitleAndURL (struct Media *Media)
   {
    Media->Action = Med_ACTION_NO_MEDIA;
-   Media->Status = Med_FILE_NONE;
+   Media->Status = Med_STATUS_NONE;
    Media->Name[0] = '\0';
-   Media->Type = Med_NONE;
+   Media->Type = Med_TYPE_NONE;
   }
 
 /*****************************************************************************/
@@ -215,9 +236,25 @@ void Med_GetMediaDataFromRow (const char *Name,
    Media->Type = Med_GetTypeFromStrInDB (TypeStr);
 
    /***** Set status of media file *****/
-   Media->Status = (Media->Name[0] &&
-	            Media->Type != Med_NONE) ? Med_NAME_STORED_IN_DB :
-	                                       Med_FILE_NONE;
+   Media->Status = (Media->Type != Med_TYPE_NONE) ? Med_STORED_IN_DB :
+	                                            Med_STATUS_NONE;
+
+   /***** Copy image URL to struct *****/
+   // Media->URL can be empty or filled with previous value
+   // If filled  ==> free it
+   Med_FreeMediaURL (Media);
+   if (URL[0])
+     {
+      /* Get and limit length of the URL */
+      Length = strlen (URL);
+      if (Length > Cns_MAX_BYTES_WWW)
+	  Length = Cns_MAX_BYTES_WWW;
+
+      if ((Media->URL = (char *) malloc (Length + 1)) == NULL)
+	 Lay_ShowErrorAndExit ("Error allocating memory for image URL.");
+      Str_Copy (Media->URL,URL,
+                Length);
+     }
 
    /***** Copy image title to struct *****/
    // Media->Title can be empty or filled with previous value
@@ -235,23 +272,6 @@ void Med_GetMediaDataFromRow (const char *Name,
       Str_Copy (Media->Title,Title,
                 Length);
      }
-
-   /***** Copy image URL to struct *****/
-   // Media->URL can be empty or filled with previous value
-   // If filled  ==> free it
-   Med_FreeMediaURL (Media);
-   if (URL[0])
-     {
-      /* Get and limit length of the URL */
-      Length = strlen (URL);
-      if (Length > Med_MAX_BYTES_TITLE)
-	  Length = Med_MAX_BYTES_TITLE;
-
-      if ((Media->URL = (char *) malloc (Length + 1)) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for image URL.");
-      Str_Copy (Media->URL,URL,
-                Length);
-     }
   }
 
 /*****************************************************************************/
@@ -261,7 +281,6 @@ void Med_GetMediaDataFromRow (const char *Name,
 void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
   {
    extern const char *Txt_Image_video;
-   extern const char *Txt_optional;
    extern const char *Txt_Title_attribution;
    extern const char *Txt_Link;
    struct ParamUploadMedia ParamUploadMedia;
@@ -274,48 +293,88 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
    Frm_SetUniqueId (Id);
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"MED_UPL_CON\">");
+   fprintf (Gbl.F.Out,"<div class=\"MED_UPL_CON\">");	// container
 
    /***** Action to perform on media *****/
    Par_PutHiddenParamUnsigned (ParamUploadMedia.Action,(unsigned) Med_ACTION_NEW_MEDIA);
 
-   /***** Media file *****/
-   fprintf (Gbl.F.Out,"<label class=\"MED_UPL_BUT\">"
-	              "<img src=\"%s/camera.svg\""
-	              " alt=\"%s\" title=\"%s (%s)\""
-	              " class=\"MED_UPL_ICO\" />"
-	              "<input type=\"file\" name=\"%s\""
-	              " accept=\"image/,video/\""
-	              " class=\"MED_UPL_FIL\""
-	              " onchange=\"mediaUploadOnSelectFile (this,'%s');\" />"
-                      "<span id=\"%s_fil\" class=\"MED_UPL_NAM\" />"
-                      "</span>"
-	              "</label>",
-            Gbl.Prefs.URLIcons,
-            Txt_Image_video,Txt_Image_video,Txt_optional,
-            ParamUploadMedia.File,
-            Id,Id);
-
-   /***** Media title/attribution and URL *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s_tit_url\" style=\"display:none;\">",
+   /***** Upload icon *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s_ico_upl\""		// <id>_ico_upl
+		      " class=\"MED_UPL_ICO_CON\">"
+		      "<img src=\"%s/file-image.svg\""
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"MED_UPL_ICO ICO_HIGHLIGHT\""
+	              " onclick=\"mediaActivateUpload('%s');\" />"
+	              "</div>",				// <id>_ico_upl
+            Id,
+	    Gbl.Prefs.URLIcons,
+            Txt_Image_video,Txt_Image_video,
             Id);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"%s\""
-                      " placeholder=\"%s (%s)\""
-                      " class=\"%s\" maxlength=\"%u\" value=\"\" />",
-            ParamUploadMedia.Title,
-            Txt_Title_attribution,Txt_optional,
-            ClassMediaTitURL,Med_MAX_CHARS_TITLE);
-   fprintf (Gbl.F.Out,"<br />"
-                      "<input type=\"url\" name=\"%s\""
-                      " placeholder=\"%s (%s)\""
-                      " class=\"%s\" maxlength=\"%u\" value=\"\" />",
+
+   /***** Form type *****/
+   fprintf (Gbl.F.Out,"<input type=\"hidden\""
+		      " id=\"%s_par_upl\""		// <id>_par_upl
+		      " name=\"FormType\" value=\"%u\""
+		      " disabled=\"disabled\" />",
+	    Id,
+            (unsigned) Med_FORM_FILE);
+
+   /***** Embed icon *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s_ico_emb\""		// <id>_ico_emb
+		      " class=\"MED_UPL_ICO_CON\">"
+		      "<img src=\"%s/youtube-brands.svg\""
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"MED_UPL_ICO ICO_HIGHLIGHT\""
+	              " onclick=\"mediaActivateEmbed('%s');\" />"
+	              "</div>",				// <id>_ico_emb
+            Id,
+	    Gbl.Prefs.URLIcons,
+            "Embed URL","Embed URL",
+            Id);
+
+   /***** Form type *****/
+   fprintf (Gbl.F.Out,"<input type=\"hidden\""
+		      " id=\"%s_par_emb\""		// <id>_par_emb
+		      " name=\"FormType\" value=\"%u\""
+		      " disabled=\"disabled\" />",
+	    Id,
+            (unsigned) Med_FORM_EMBED);
+
+   /***** Media file *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s_fil\""		// <id>_fil
+		      " style=\"display:none;\">"
+	              "<input type=\"file\" name=\"%s\""
+	              " accept=\"image/,video/\" />"
+	              "</div>",				// <id>_fil
+	    Id,
+            ParamUploadMedia.File);
+
+   /***** Media URL *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s_url\""		// <id>_url
+		      " style=\"display:none;\">"
+		      "<input type=\"url\" name=\"%s\""
+                      " placeholder=\"%s\""
+                      " class=\"%s\" maxlength=\"%u\" value=\"\" />"
+                      "</div>",				// <id>_url
+	    Id,
             ParamUploadMedia.URL,
-            Txt_Link,Txt_optional,
+            Txt_Link,
             ClassMediaTitURL,Cns_MAX_CHARS_WWW);
-   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Media title *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s_tit\""		// <id>_tit
+		      " style=\"display:none;\">"
+		      "<input type=\"text\" name=\"%s\""
+                      " placeholder=\"%s\""
+                      " class=\"%s\" maxlength=\"%u\" value=\"\" />",
+	    Id,
+            ParamUploadMedia.Title,
+            Txt_Title_attribution,
+            ClassMediaTitURL,Med_MAX_CHARS_TITLE);
+   fprintf (Gbl.F.Out,"</div>");			// <id>_tit
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,"</div>");			// container
   }
 
 /*****************************************************************************/
@@ -328,37 +387,54 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
                            void (*GetMediaFromDB) (int NumMediaInForm,struct Media *Media))
   {
    struct ParamUploadMedia ParamUploadMedia;
-   char Title[Med_MAX_BYTES_TITLE + 1];
-   char URL[Cns_MAX_BYTES_WWW + 1];
-   size_t Length;
+   Med_FormType_t FormType;
 
    /***** Set names of parameters depending on number of media in form *****/
    Med_SetParamNames (&ParamUploadMedia,NumMediaInForm);
 
-   /***** First, get action and initialize media (image/video)
+   /***** Get action and initialize media (image/video)
           (except title, that will be get after the media file) *****/
    Media->Action = Med_GetMediaActionFromForm (ParamUploadMedia.Action);
-   Media->Status = Med_FILE_NONE;
+   Media->Status = Med_STATUS_NONE;
    Media->Name[0] = '\0';
-   Media->Type = Med_NONE;
+   Media->Type = Med_TYPE_NONE;
 
-   /***** Secondly, get the media (image/video) name and the file *****/
+   /***** Get form type *****/
+   FormType = Usr_GetFormTypeFromForm ();
+
+   /***** Get the media (image/video) name and the file *****/
    switch (Media->Action)
      {
       case Med_ACTION_NEW_MEDIA:	// Upload new image/video
-         /***** Get new media (if present ==> process and create temporary file) *****/
-	 Med_GetAndProcessFileFromForm (Media,ParamUploadMedia.File);
-	 switch (Media->Status)
+         /***** Get new media *****/
+	 switch (FormType)
 	   {
-	    case Med_FILE_NONE:		// No new image/video received
-	       Media->Action = Med_ACTION_NO_MEDIA;
-               Media->Name[0] = '\0';
-               Media->Type = Med_NONE;
+	    case Med_FORM_FILE:
+	       /***** Get image/video (if present ==> process and create temporary file) *****/
+	       Med_GetAndProcessFileFromForm (ParamUploadMedia.File,Media);
+	       switch (Media->Status)
+		 {
+		  case Med_STATUS_NONE:	// No new image/video received
+		     Media->Action = Med_ACTION_NO_MEDIA;
+		     Media->Name[0] = '\0';
+		     Media->Type = Med_TYPE_NONE;
+		     break;
+		  case Med_RECEIVED:	// New image/video received, but not processed
+		     Media->Status = Med_STATUS_NONE;
+		     Media->Name[0] = '\0';
+		     Media->Type = Med_TYPE_NONE;
+		     break;
+		  case Med_PROCESSED:
+	             Usr_GetURLFromForm (ParamUploadMedia.URL,Media);
+	             Usr_GetTitleFromForm (ParamUploadMedia.Title,Media);
+	             break;
+		  default:
+		     break;
+		 }
 	       break;
-	    case Med_FILE_RECEIVED:	// New image/video received, but not processed
-	       Media->Status = Med_FILE_NONE;
-	       Media->Name[0] = '\0';
-               Media->Type = Med_NONE;
+	    case Med_FORM_EMBED:
+	       /***** Get and process embed URL from form *****/
+	       Med_GetAndProcessEmbedFromForm (ParamUploadMedia.URL,Media);
 	       break;
 	    default:
 	       break;
@@ -370,45 +446,35 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
 	    GetMediaFromDB (NumMediaInForm,Media);
 	 break;
       case Med_ACTION_CHANGE_MEDIA:	// Replace old image/video by new one
-         /***** Get new image/video (if present ==> process and create temporary file) *****/
-	 Med_GetAndProcessFileFromForm (Media,ParamUploadMedia.File);
-	 if (Media->Status != Med_FILE_PROCESSED &&	// No new media received-processed successfully
+	 switch (FormType)
+	   {
+	    case Med_FORM_FILE:
+	       /***** Get image/video (if present ==> process and create temporary file) *****/
+	       Med_GetAndProcessFileFromForm (ParamUploadMedia.File,Media);
+	       switch (Media->Status)
+		 {
+		  case Med_PROCESSED:
+	             Usr_GetURLFromForm (ParamUploadMedia.URL,Media);
+	             Usr_GetTitleFromForm (ParamUploadMedia.Title,Media);
+	             break;
+		  default:
+		     break;
+		 }
+	       break;
+	    case Med_FORM_EMBED:
+	       /***** Get and process embed URL from form *****/
+	       Med_GetAndProcessEmbedFromForm (ParamUploadMedia.URL,Media);
+	       break;
+	    default:
+	       break;
+	   }
+	 if (Media->Status != Med_PROCESSED &&	// No new media received-processed successfully
 	     GetMediaFromDB != NULL)
 	    /* Get media (image/video) name */
 	    GetMediaFromDB (NumMediaInForm,Media);
 	 break;
       case Med_ACTION_NO_MEDIA:		// Do not use image/video (remove current image/video if exists)
          break;
-     }
-
-   /***** Third, get image/video title from form *****/
-   Par_GetParToText (ParamUploadMedia.Title,Title,Med_MAX_BYTES_TITLE);
-   /* If the title coming from the form is empty, keep current media title unchanged
-      If not empty, copy it to current media title */
-   if ((Length = strlen (Title)) > 0)
-     {
-      /* Overwrite current title (empty or coming from database)
-         with the title coming from the form */
-      Med_FreeMediaTitle (Media);
-      if ((Media->Title = (char *) malloc (Length + 1)) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for media title.");
-      Str_Copy (Media->Title,Title,
-                Length);
-     }
-
-   /***** By last, get media URL from form *****/
-   Par_GetParToText (ParamUploadMedia.URL,URL,Cns_MAX_BYTES_WWW);
-   /* If the URL coming from the form is empty, keep current media URL unchanged
-      If not empty, copy it to current media URL */
-   if ((Length = strlen (URL)) > 0)
-     {
-      /* Overwrite current URL (empty or coming from database)
-         with the URL coming from the form */
-      Med_FreeMediaURL (Media);
-      if ((Media->URL = (char *) malloc (Length + 1)) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for media URL.");
-      Str_Copy (Media->URL,URL,
-                Length);
      }
   }
 
@@ -463,11 +529,73 @@ static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction)
   }
 
 /*****************************************************************************/
+/********************* Get from form the type of form ************************/
+/*****************************************************************************/
+
+static Med_FormType_t Usr_GetFormTypeFromForm (void)
+  {
+   return (Med_FormType_t) Par_GetParToUnsignedLong ("FormType",
+                                                     0,
+                                                     Med_NUM_FORM_TYPES - 1,
+                                                     (unsigned long) Med_FORM_UNKNOWN);
+  }
+
+/*****************************************************************************/
+/********************* Get from form the type of form ************************/
+/*****************************************************************************/
+
+static void Usr_GetURLFromForm (const char *ParamName,struct Media *Media)
+  {
+   char URL[Cns_MAX_BYTES_WWW + 1];
+   size_t Length;
+
+   /***** Get media URL from form *****/
+   Par_GetParToText (ParamName,URL,Cns_MAX_BYTES_WWW);
+   /* If the URL coming from the form is empty, keep current media URL unchanged
+      If not empty, copy it to current media URL */
+   if ((Length = strlen (URL)) > 0)
+     {
+      /* Overwrite current URL (empty or coming from database)
+         with the URL coming from the form */
+      Med_FreeMediaURL (Media);
+      if ((Media->URL = (char *) malloc (Length + 1)) == NULL)
+	 Lay_ShowErrorAndExit ("Error allocating memory for media URL.");
+      Str_Copy (Media->URL,URL,
+                Length);
+     }
+  }
+
+/*****************************************************************************/
+/********************* Get from form the type of form ************************/
+/*****************************************************************************/
+
+static void Usr_GetTitleFromForm (const char *ParamName,struct Media *Media)
+  {
+   char Title[Med_MAX_BYTES_TITLE + 1];
+   size_t Length;
+
+   /***** Get image/video title from form *****/
+   Par_GetParToText (ParamName,Title,Med_MAX_BYTES_TITLE);
+   /* If the title coming from the form is empty, keep current media title unchanged
+      If not empty, copy it to current media title */
+   if ((Length = strlen (Title)) > 0)
+     {
+      /* Overwrite current title (empty or coming from database)
+         with the title coming from the form */
+      Med_FreeMediaTitle (Media);
+      if ((Media->Title = (char *) malloc (Length + 1)) == NULL)
+	 Lay_ShowErrorAndExit ("Error allocating memory for media title.");
+      Str_Copy (Media->Title,Title,
+                Length);
+     }
+  }
+
+/*****************************************************************************/
 /**************************** Get media from form ****************************/
 /*****************************************************************************/
 
-static void Med_GetAndProcessFileFromForm (struct Media *Media,
-					   const char *ParamFile)
+static void Med_GetAndProcessFileFromForm (const char *ParamFile,
+                                           struct Media *Media)
   {
    struct Param *Param;
    char FileNameImgSrc[PATH_MAX + 1];
@@ -478,8 +606,8 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
    char PathMedPrivTmp[PATH_MAX + 1];
    char PathFileOrg[PATH_MAX + 1];	// Full name of original uploaded file
 
-   /***** Set media file status *****/
-   Media->Status = Med_FILE_NONE;
+   /***** Set media status *****/
+   Media->Status = Med_STATUS_NONE;
 
    /***** Get filename and MIME type *****/
    Param = Fil_StartReceptionOfFile (ParamFile,FileNameImgSrc,MIMEType);
@@ -501,7 +629,7 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
 
    /* Check extension */
    Media->Type = Med_GetTypeFromExtAndMIME (PtrExtension,MIMEType);
-   if (Media->Type == Med_NONE)
+   if (Media->Type == Med_TYPE_NONE)
       return;
 
    /***** Assign a unique name for the media *****/
@@ -525,14 +653,14 @@ static void Med_GetAndProcessFileFromForm (struct Media *Media,
 
    /***** End the reception of original not processed media
           (it may be very big) into a temporary file *****/
-   Media->Status = Med_FILE_NONE;
+   Media->Status = Med_STATUS_NONE;
    snprintf (PathFileOrg,sizeof (PathFileOrg),
 	     "%s/%s_original.%s",
 	     PathMedPrivTmp,Media->Name,PtrExtension);
 
    if (Fil_EndReceptionOfFile (PathFileOrg,Param))	// Success
      {
-      Media->Status = Med_FILE_RECEIVED;
+      Media->Status = Med_RECEIVED;
 
       /***** Detect if animated GIF *****/
       if (Media->Type == Med_GIF)
@@ -626,7 +754,7 @@ static void Med_ProcessJPG (struct Media *Media,
 	     PathMedPrivTmp,Media->Name,Med_Extensions[Med_JPG]);
    if (Med_ResizeImage (Media,PathFileOrg,PathFileJPGTmp) == 0)	// On success ==> 0 is returned
       /* Success */
-      Media->Status = Med_FILE_PROCESSED;
+      Media->Status = Med_PROCESSED;
    else // Error processing media
      {
       /* Remove temporary destination media file */
@@ -682,7 +810,7 @@ static void Med_ProcessGIF (struct Media *Media,
 	       Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
 	      }
 	    else					// Success
-	       Media->Status = Med_FILE_PROCESSED;
+	       Media->Status = Med_PROCESSED;
 	   }
 	 else // Error getting first frame
 	   {
@@ -736,7 +864,7 @@ static void Med_ProcessVideo (struct Media *Media,
 	    /* Show error alert */
 	    Ale_ShowAlert (Ale_ERROR,Txt_The_file_could_not_be_processed_successfully);
 	 else						// Success
-	    Media->Status = Med_FILE_PROCESSED;
+	    Media->Status = Med_PROCESSED;
 	}
       else	// Size exceeded
 	{
@@ -806,6 +934,187 @@ static int Med_GetFirstFrame (const char PathFileOriginal[PATH_MAX + 1],
   }
 
 /*****************************************************************************/
+/**************************** Get media from form ****************************/
+/*****************************************************************************/
+
+static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
+                                            struct Media *Media)
+  {
+   extern const char Str_BIN_TO_BASE64URL[64 + 1];
+   char *PtrHost   = NULL;
+   char *PtrPath   = NULL;
+   char *PtrParams = NULL;
+   char *PtrCode   = NULL;
+   size_t CodeLength;
+   char *Code;
+   enum
+     {
+      WRONG,	// Bad formed YouTube URL
+      SHORT,	// youtu.be
+      FULL,	// www.youtube.com/watch?
+      EMBED,	// www.youtube.com/embed/
+     } YouTube = WRONG;
+
+   /***** Set media status *****/
+   Media->Status = Med_STATUS_NONE;
+
+   /***** Get embed URL from form *****/
+   Usr_GetURLFromForm (ParamURL,Media);
+   // Ale_ShowAlert (Ale_INFO,"DEBUG: Media->URL = '%s'",Media->URL);
+
+   /***** Process URL trying to convert it to a YouTube embed URL *****/
+   if (Media->URL)
+      if (Media->URL[0])	// URL given by user is not empty
+	{
+	 /* Examples of valid YouTube URLs:
+	    https://www.youtube.com/watch?v=xu9IbeF9CBw
+	    https://www.youtube.com/watch?v=xu9IbeF9CBw&t=10
+	    https://youtu.be/xu9IbeF9CBw
+	    https://youtu.be/xu9IbeF9CBw?t=10
+	    https://www.youtube.com/embed/xu9IbeF9CBw
+	    https://www.youtube.com/embed/xu9IbeF9CBw?start=10
+	 */
+	 /***** Step 1: Skip scheme *****/
+	 if      (!strncasecmp (Media->URL,"https://",8))	// URL starts by https://
+	    PtrHost = &Media->URL[8];
+	 else if (!strncasecmp (Media->URL,"http://" ,7))	// URL starts by http://
+	    PtrHost = &Media->URL[7];
+	 else if (!strncasecmp (Media->URL,"//"      ,2))	// URL starts by //
+	    PtrHost = &Media->URL[2];
+	 else
+	    PtrHost = &Media->URL[0];
+
+	 if (PtrHost[0])
+	   {
+	    /***** Step 2: Skip host *****/
+	    // Ale_ShowAlert (Ale_INFO,"DEBUG: PtrHost = '%s'",PtrHost);
+	    if      (!strncasecmp (PtrHost,"youtu.be/"       , 9))	// Host starts by youtu.be/
+	      {
+	       YouTube = SHORT;
+	       PtrPath = &PtrHost[9];
+	      }
+	    else if (!strncasecmp (PtrHost,"www.youtube.com/",16))	// Host starts by www.youtube.com/
+	      {
+	       YouTube = FULL;
+	       PtrPath = &PtrHost[16];
+	      }
+	    else if (!strncasecmp (PtrHost,"youtube.com/"    ,12))	// Host starts by youtube.com/
+	      {
+	       YouTube = FULL;
+	       PtrPath = &PtrHost[12];
+	      }
+
+	    /* Check pointer to path */
+	    if (PtrPath)
+	      {
+	       if (!PtrPath[0])
+		  YouTube = WRONG;
+	      }
+	    else
+	       YouTube = WRONG;
+
+	    if (YouTube != WRONG)
+	      {
+	       // Ale_ShowAlert (Ale_INFO,"DEBUG: PtrPath = '%s'",PtrPath);
+	       /***** Step 3: Skip path *****/
+	       if (YouTube == FULL)
+		 {
+		  if      (!strncasecmp (PtrPath,"watch?",6))	// Path starts by watch?
+		     PtrParams = &PtrPath[6];
+		  else if (!strncasecmp (PtrPath,"embed/",6))	// Path starts by embed/
+		    {
+		     YouTube = EMBED;
+		     PtrParams = &PtrPath[6];
+		    }
+		  else
+		     YouTube = WRONG;
+		 }
+	       else
+		  PtrParams = &PtrPath[0];
+
+	       /* Check pointer to params */
+	       if (PtrParams)
+		 {
+		  if (!PtrParams[0])
+		     YouTube = WRONG;
+		 }
+	       else
+		  YouTube = WRONG;
+
+	       if (YouTube != WRONG)
+		 {
+		  // Ale_ShowAlert (Ale_INFO,"DEBUG: PtrParams = '%s'",PtrParams);
+		  /***** Step 4: Search for video code *****/
+		  switch (YouTube)
+		    {
+		     case SHORT:
+			PtrCode = PtrParams;
+			break;
+		     case FULL:
+			/* Search for v= */
+			PtrCode = strcasestr (PtrPath,"v=");
+			if (PtrCode)
+			   PtrCode += 2;
+			break;
+		     case EMBED:
+			PtrCode = PtrParams;
+			break;
+		     default:
+			PtrCode = NULL;
+			break;
+		    }
+
+		  /* Check pointer to code */
+		  if (PtrCode)
+		    {
+		     if (!PtrCode[0])
+			YouTube = WRONG;
+		    }
+		  else
+		     YouTube = WRONG;
+
+		  if (YouTube != WRONG)
+		    {
+		     // Ale_ShowAlert (Ale_INFO,"DEBUG: PtrCode = '%s'",PtrCode);
+		     /***** Step 5: Get video code *****/
+		     CodeLength = strspn (PtrCode,Str_BIN_TO_BASE64URL);
+		     if (CodeLength > 0)
+		       {
+			/* Allocate space for YouTube code */
+			if ((Code = (char *) malloc (CodeLength + 1)) == NULL)
+			   Lay_ShowErrorAndExit ("Error allocating memory for YouTube code.");
+
+			/* Copy code */
+			strncpy (Code,PtrCode,CodeLength);
+			Code[CodeLength] = '\0';
+			// Ale_ShowAlert (Ale_INFO,"DEBUG: Code = '%s'",Code);
+
+			/* Overwrite current URL with the embed URL */
+			Med_FreeMediaURL (Media);
+			if (asprintf (&Media->URL,"https://www.youtube.com/embed/%s",
+				      Code) < 0)
+			   Lay_NotEnoughMemoryExit ();
+			if (strlen (Media->URL) <= Cns_MAX_BYTES_WWW)
+			  {
+			   /***** Success! *****/
+			   // Ale_ShowAlert (Ale_INFO,"DEBUG: Media->URL = '%s'",Media->URL);
+			   Media->Type = Med_YOUTUBE;
+			   Media->Status = Med_PROCESSED;
+			  }
+			else
+			   Med_FreeMediaURL (Media);
+
+			/* Free YouTube code */
+			free ((void *) Code);
+		       }
+		    }
+		 }
+	      }
+	   }
+	}
+  }
+
+/*****************************************************************************/
 /**** Move temporary processed media file to definitive private directory ****/
 /*****************************************************************************/
 
@@ -813,6 +1122,12 @@ void Med_MoveMediaToDefinitiveDir (struct Media *Media)
   {
    char PathMedPrivTmp[PATH_MAX + 1];
    char PathMedPriv[PATH_MAX + 1];
+
+   /***** Check trivial cases *****/
+   if (Media->Type == Med_TYPE_NONE)
+      Lay_ShowErrorAndExit ("Wrong media type.");
+   if (Media->Type == Med_YOUTUBE)
+      return;	// Nothing to do with files
 
    /***** Build temporary path *****/
    snprintf (PathMedPrivTmp,sizeof (PathMedPrivTmp),
@@ -907,57 +1222,68 @@ void Med_ShowMedia (struct Media *Media,
    char PathMedPriv[PATH_MAX + 1];
 
    /***** If no media to show ==> nothing to do *****/
-   if (!Media->Name)
+   if (Media->Status != Med_STORED_IN_DB)
       return;
-   if (!Media->Name[0])
-      return;
-   if (Media->Type == Med_NONE)
-      return;
-   if (Media->Status != Med_NAME_STORED_IN_DB)
+   if (Media->Type == Med_TYPE_NONE)
       return;
 
    /***** Start media container *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassContainer);
+   fprintf (Gbl.F.Out,"<div class=\"%s",ClassContainer);
+   if (Media->Type == Med_YOUTUBE)
+      fprintf (Gbl.F.Out," MED_VIDEO_CONT");
+   fprintf (Gbl.F.Out,"\">");
 
-   /***** Start optional link to external URL *****/
-   PutLink = false;
-   if (Media->URL)
-      if (Media->URL[0])
-	 PutLink = true;
-   if (PutLink)
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Media->URL);
-
-   /***** Create a temporary public directory used to show the media *****/
-   Brw_CreateDirDownloadTmp ();
-
-   /***** Build path to private directory with the media *****/
-   snprintf (PathMedPriv,sizeof (PathMedPriv),
-	     "%s/%s/%c%c",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
-	     Media->Name[0],
-	     Media->Name[1]);
-
-   /***** Show media *****/
-   switch (Media->Type)
+   if (Media->Type == Med_YOUTUBE)
+      /***** Show media *****/
+      Med_ShowYoutube (Media,ClassMedia);
+   else	// Uploaded file
      {
-      case Med_JPG:
-	 Med_ShowJPG (Media,PathMedPriv,ClassMedia);
-	 break;
-      case Med_GIF:
-	 Med_ShowGIF (Media,PathMedPriv,ClassMedia);
-	 break;
-      case Med_MP4:
-      case Med_WEBM:
-      case Med_OGG:
-	 Med_ShowVideo (Media,PathMedPriv,ClassMedia);
-	 break;
-      default:
-	 break;
-     }
+      /***** If no media to show ==> nothing to do *****/
+      if (!Media->Name)
+	 return;
+      if (!Media->Name[0])
+	 return;
 
-   /***** End optional link to external URL *****/
-   if (PutLink)
-      fprintf (Gbl.F.Out,"</a>");
+      /***** Start optional link to external URL *****/
+      PutLink = false;
+      if (Media->URL)
+	 if (Media->URL[0])
+	    PutLink = true;
+      if (PutLink)
+	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Media->URL);
+
+      /***** Create a temporary public directory used to show the media *****/
+      Brw_CreateDirDownloadTmp ();
+
+      /***** Build path to private directory with the media *****/
+      snprintf (PathMedPriv,sizeof (PathMedPriv),
+		"%s/%s/%c%c",
+		Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
+		Media->Name[0],
+		Media->Name[1]);
+
+      /***** Show media *****/
+      switch (Media->Type)
+	{
+	 case Med_JPG:
+	    Med_ShowJPG (Media,PathMedPriv,ClassMedia);
+	    break;
+	 case Med_GIF:
+	    Med_ShowGIF (Media,PathMedPriv,ClassMedia);
+	    break;
+	 case Med_MP4:
+	 case Med_WEBM:
+	 case Med_OGG:
+	    Med_ShowVideo (Media,PathMedPriv,ClassMedia);
+	    break;
+	 default:
+	    break;
+	}
+
+      /***** End optional link to external URL *****/
+      if (PutLink)
+	 fprintf (Gbl.F.Out,"</a>");
+     }
 
    /***** End media container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -1107,7 +1433,7 @@ static void Med_ShowGIF (struct Media *Media,
   }
 
 /*****************************************************************************/
-/************************** Show a user uploaded MP4 *************************/
+/************************ Show a user uploaded video *************************/
 /*****************************************************************************/
 
 static void Med_ShowVideo (struct Media *Media,
@@ -1163,6 +1489,39 @@ static void Med_ShowVideo (struct Media *Media,
   }
 
 /*****************************************************************************/
+/*************************** Show an embed media *****************************/
+/*****************************************************************************/
+
+static void Med_ShowYoutube (struct Media *Media,
+			     const char *ClassMedia)
+  {
+   /***** Check if embed URL exists *****/
+   if (Media->URL[0])	// Embed URL
+     {
+      /***** Show linked external media *****/
+      // Example of code give by YouTube:
+      // <iframe width="560" height="315"
+      // 	src="https://www.youtube.com/embed/xu9IbeF9CBw"
+      // 	frameborder="0"
+      // 	allow="accelerometer; autoplay; encrypted-media;
+      // 	gyroscope; picture-in-picture" allowfullscreen>
+      // </iframe>
+      fprintf (Gbl.F.Out,"<iframe src=\"%s\""
+			 " frameborder=\"0\""
+			 " allow=\"accelerometer; autoplay; encrypted-media;"
+			 " gyroscope; picture-in-picture\""
+			 " allowfullscreen=\"allowfullscreen\""
+			 " class=\"%s\"",
+	       Media->URL,ClassMedia);
+      if (Media->Title)
+	 if (Media->Title[0])
+	    fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
+      fprintf (Gbl.F.Out,">"
+	                 "</iframe>");
+     }
+  }
+
+/*****************************************************************************/
 /*** Remove private files with an image/video, given the image/video name ****/
 /*****************************************************************************/
 
@@ -1192,6 +1551,12 @@ void Med_RemoveMediaFiles (const char *Name,Med_Type_t Type)
   {
    char PathMedPriv[PATH_MAX + 1];
    char FullPathMediaPriv[PATH_MAX + 1];
+
+   /***** Trivial cases *****/
+   if (Type == Med_TYPE_NONE)
+      Lay_ShowErrorAndExit ("Wrong media type.");
+   if (Type == Med_YOUTUBE)
+      return;
 
    /***** Build path to private directory with the media *****/
    snprintf (PathMedPriv,sizeof (PathMedPriv),
@@ -1236,8 +1601,7 @@ void Med_RemoveMediaFiles (const char *Name,Med_Type_t Type)
 	    unlink (FullPathMediaPriv);
 
 	    break;
-         case Med_NONE:
-            Lay_ShowErrorAndExit ("Wrong media type.");
+         default:
             break;
         }
 
@@ -1259,7 +1623,7 @@ Med_Type_t Med_GetTypeFromStrInDB (const char *Str)
       if (!strcasecmp (Str,Med_StringsTypeDB[Type]))
          return Type;
 
-   return Med_NONE;
+   return Med_TYPE_NONE;
   }
 
 /*****************************************************************************/
@@ -1317,7 +1681,7 @@ static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
 	  !strcmp (MIMEType,"application/octet"       ))
 	 return Med_OGG;
 
-   return Med_NONE;
+   return Med_TYPE_NONE;
   }
 
 /*****************************************************************************/
@@ -1328,7 +1692,7 @@ const char *Med_GetStringTypeForDB (Med_Type_t Type)
   {
    /***** Check if type is out of valid range *****/
    if (Type > (Med_Type_t) (Med_NUM_TYPES - 1))
-      return Med_StringsTypeDB[Med_NONE];
+      return Med_StringsTypeDB[Med_TYPE_NONE];
 
    /***** Get string from type *****/
    return Med_StringsTypeDB[Type];

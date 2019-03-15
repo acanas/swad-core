@@ -47,10 +47,10 @@
 #define Med_NUM_ACTIONS	4
 typedef enum
   {
-   Med_ACTION_NEW_MEDIA,	// Upload new image/video
-   Med_ACTION_KEEP_MEDIA,	// Keep current image/video unchanged
-   Med_ACTION_CHANGE_MEDIA,	// Change existing image/video by a new one
-   Med_ACTION_NO_MEDIA,		// Do not use image/video (remove current image/video if exists)
+   Med_ACTION_NEW_MEDIA,	// Upload new media
+   Med_ACTION_KEEP_MEDIA,	// Keep current media unchanged
+   Med_ACTION_CHANGE_MEDIA,	// Change existing media by a new one
+   Med_ACTION_NO_MEDIA,		// Do not use media (remove current media if exists)
   } Med_Action_t;
 #define Med_ACTION_DEFAULT Med_ACTION_NO_MEDIA
 
@@ -81,29 +81,30 @@ xx-unique-name: a unique name encrypted starting by two random chars xx
 */
 typedef enum
   {
-   Med_FILE_NONE,
-   Med_FILE_RECEIVED,
-   Med_FILE_PROCESSED,
+   Med_STATUS_NONE,
+   Med_RECEIVED,
+   Med_PROCESSED,
    Med_FILE_MOVED,
-   Med_NAME_STORED_IN_DB,
-  } Med_FileStatus_t;
+   Med_STORED_IN_DB,
+  } Med_Status_t;
 
-#define Med_NUM_TYPES 6
+#define Med_NUM_TYPES 7
 typedef enum
   {
-   Med_NONE,
+   Med_TYPE_NONE,
    Med_JPG,
    Med_GIF,
    Med_MP4,
    Med_WEBM,
    Med_OGG,
+   Med_YOUTUBE,
   } Med_Type_t;
 
 /***** Struct used to get images/videos from forms *****/
 struct Media
   {
    Med_Action_t Action;
-   Med_FileStatus_t Status;
+   Med_Status_t Status;
    char Name[Med_BYTES_NAME + 1];
    Med_Type_t Type;
    char *Title;	// Title/attribution (it must be initialized to NULL
@@ -120,10 +121,10 @@ struct Media
 #define Med_MAX_BYTES_PARAM_UPLOAD_MEDIA (16 - 1)
 struct ParamUploadMedia
   {
-   char Action[Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
-   char File  [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
-   char Title [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
-   char URL   [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
+   char Action  [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
+   char File    [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
+   char Title   [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
+   char URL     [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
   };
 
 /*****************************************************************************/

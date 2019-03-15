@@ -6005,7 +6005,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
 
    if ((Gbl.Test.Media.Action == Med_ACTION_NEW_MEDIA ||	// Upload new image
         Gbl.Test.Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
-       Gbl.Test.Media.Status != Med_FILE_PROCESSED)
+       Gbl.Test.Media.Status != Med_PROCESSED)
      {
       Ale_ShowAlert (Ale_WARNING,Txt_Error_receiving_or_processing_image);
       return false;
@@ -6187,7 +6187,7 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
 
    if ((Gbl.Test.Media.Action == Med_ACTION_NEW_MEDIA ||	// Upload new image
 	Gbl.Test.Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
-        Gbl.Test.Media.Status == Med_FILE_PROCESSED)		// The new image received has been processed
+        Gbl.Test.Media.Status == Med_PROCESSED)		// The new image received has been processed
       /* Move processed image to definitive directory */
       Med_MoveMediaToDefinitiveDir (&Gbl.Test.Media);
 
@@ -6207,7 +6207,7 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
 
 	 if ((Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_NEW_MEDIA ||		// Upload new image
 	      Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
-	      Gbl.Test.Answer.Options[NumOpt].Media.Status == Med_FILE_PROCESSED)		// The new image received has been processed
+	      Gbl.Test.Answer.Options[NumOpt].Media.Status == Med_PROCESSED)		// The new image received has been processed
 	    /* Move processed image to definitive directory */
 	    Med_MoveMediaToDefinitiveDir (&Gbl.Test.Answer.Options[NumOpt].Media);
 	}
@@ -6560,10 +6560,9 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 				   Gbl.Test.Media.Title ? Gbl.Test.Media.Title : "",
 				   Gbl.Test.Media.URL   ? Gbl.Test.Media.URL   : "");
 
-      /* Update image status */
-      if (Gbl.Test.Media.Name[0] &&
-	  Gbl.Test.Media.Type != Med_NONE)
-	 Gbl.Test.Media.Status = Med_NAME_STORED_IN_DB;
+      /* Update media status */
+      if (Gbl.Test.Media.Type != Med_TYPE_NONE)
+	 Gbl.Test.Media.Status = Med_STORED_IN_DB;
      }
    else				// It's an existing question
      {
@@ -6586,10 +6585,9 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 		      Gbl.Test.Media.URL   ? Gbl.Test.Media.URL   : "",
 		      Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
 
-      /* Update image status */
-      if (Gbl.Test.Media.Name[0] &&
-	  Gbl.Test.Media.Type != Med_NONE)
-	 Gbl.Test.Media.Status = Med_NAME_STORED_IN_DB;
+      /* Update media status */
+      if (Gbl.Test.Media.Type != Med_TYPE_NONE)
+	 Gbl.Test.Media.Status = Med_STORED_IN_DB;
 
       /* Remove answers and tags from this test question */
       Tst_RemAnsFromQst ();
@@ -6661,7 +6659,7 @@ static void Tst_InsertAnswersIntoDB (void)
                          "'','%s','','','Y')",
 			 Gbl.Test.QstCod,
 			 Gbl.Test.Answer.Integer,
-			 Med_GetStringTypeForDB (Med_NONE));
+			 Med_GetStringTypeForDB (Med_TYPE_NONE));
          break;
       case Tst_ANS_FLOAT:
 	 Str_SetDecimalPointToUS ();		// To print the floating point as a dot
@@ -6677,7 +6675,7 @@ static void Tst_InsertAnswersIntoDB (void)
                             "'','%s','','','Y')",
 			    Gbl.Test.QstCod,i,
 			    Gbl.Test.Answer.FloatingPoint[i],
-			    Med_GetStringTypeForDB (Med_NONE));
+			    Med_GetStringTypeForDB (Med_TYPE_NONE));
          Str_SetDecimalPointToLocal ();	// Return to local system
          break;
       case Tst_ANS_TRUE_FALSE:
@@ -6690,7 +6688,7 @@ static void Tst_InsertAnswersIntoDB (void)
                          "'','%s','','','Y')",
 			 Gbl.Test.QstCod,
 			 Gbl.Test.Answer.TF,
-			 Med_GetStringTypeForDB (Med_NONE));
+			 Med_GetStringTypeForDB (Med_TYPE_NONE));
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
@@ -6718,9 +6716,8 @@ static void Tst_InsertAnswersIntoDB (void)
 									 'N');
 
                /* Update image status */
-	       if (Gbl.Test.Answer.Options[NumOpt].Media.Name[0] &&
-	           Gbl.Test.Answer.Options[NumOpt].Media.Type != Med_NONE)
-		  Gbl.Test.Answer.Options[NumOpt].Media.Status = Med_NAME_STORED_IN_DB;
+	       if (Gbl.Test.Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)
+		  Gbl.Test.Answer.Options[NumOpt].Media.Status = Med_STORED_IN_DB;
               }
 	 break;
       default:

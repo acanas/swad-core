@@ -1282,7 +1282,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 
    /***** Check if image is received and processed *****/
    if (Media->Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
-       Media->Status == Med_FILE_PROCESSED)	// The new image received has been processed
+       Media->Status == Med_PROCESSED)	// The new image received has been processed
       /* Move processed image to definitive directory */
       Med_MoveMediaToDefinitiveDir (Media);
 

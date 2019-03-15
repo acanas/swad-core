@@ -450,10 +450,23 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.76.2 (2019-03-14)"
-#define CSS_FILE		"swad18.68.3.css"
-#define JS_FILE			"swad18.75.js"
+#define Log_PLATFORM_VERSION	"SWAD 18.77 (2019-03-15)"
+#define CSS_FILE		"swad18.77.css"
+#define JS_FILE			"swad18.77.js"
 /*
+TODO: Fix edition of media in test edition
+	Version 18.77:    Mar 14, 2019 	Embedded YouTube videos. Not finished. (240214 lines)
+					7 changes necessary in database:
+ALTER TABLE forum_post          CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none';
+ALTER TABLE msg_content         CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none';
+ALTER TABLE msg_content_deleted CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none';
+ALTER TABLE social_comments     CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none';
+ALTER TABLE social_posts        CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none';
+ALTER TABLE tst_answers         CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none';
+ALTER TABLE tst_questions       CHANGE COLUMN MediaType MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none';
+					Copy the following icon to icon public directory:
+sudo cp icon/file-image.svg /var/www/html/swad/icon/
+
 	Version 18.76.2:  Mar 14, 2019 	Changes in translation of several messages related to media. (239849 lines)
 	Version 18.76.1:  Mar 13, 2019 	Changes in video tag. (239810 lines)
 	Version 18.76:    Mar 13, 2019 	Video allowed as multimedia. (239814 lines)

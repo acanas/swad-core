@@ -120,7 +120,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 /*****************************************************************************/
 
 extern struct Globals Gbl;
-extern const char Str_BIN_TO_BASE64URL[64];
+extern const char Str_BIN_TO_BASE64URL[64 + 1];
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -3452,7 +3452,7 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
 				   " ('%s','%s',"
 				   "'','%s','','')",
 				   Subject,Content,
-				   Med_GetStringTypeForDB (Med_NONE));
+				   Med_GetStringTypeForDB (Med_TYPE_NONE));
 
       /* Insert message in sent messages */
       DB_QueryINSERT ("can not create message",

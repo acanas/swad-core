@@ -2472,12 +2472,12 @@ static long TL_ReceivePost (void)
    Media.Quality = TL_IMAGE_SAVED_QUALITY;
    Med_GetMediaFromForm (-1,&Media,NULL);
 
-   if (Content[0] ||					// Text not empty
-       (Media.Name[0] && Media.Type != Med_NONE))	// A media is attached
+   if (Content[0] ||			// Text not empty
+       Media.Status == Med_PROCESSED)	// A media is attached
      {
       /***** Check if image is received and processed *****/
       if (Media.Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
-	  Media.Status == Med_FILE_PROCESSED)		// The new image received has been processed
+	  Media.Status == Med_PROCESSED)		// The new image received has been processed
 	 /* Move processed image to definitive directory */
 	 Med_MoveMediaToDefinitiveDir (&Media);
 
@@ -2494,10 +2494,8 @@ static long TL_ReceivePost (void)
 				   Content,
 				   Media.Name,
 				   Med_GetStringTypeForDB (Media.Type),
-				   (Media.Name[0] &&	// Save image title only if image attached
-				    Media.Title) ? Media.Title : "",
-				   (Media.Name[0] &&	// Save image URL   only if image attached
-				    Media.URL  ) ? Media.URL   : "");
+				   Media.Title ? Media.Title : "",
+				   Media.URL   ? Media.URL   : "");
 
       /* Insert post in notes */
       TL_StoreAndPublishNote (TL_NOTE_POST,PstCod,&SocPub);
@@ -2655,7 +2653,7 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
       // Never hide only one comment
       // So, the number of comments initially hidden must be 0 or >= 2
       NumCommentsInitiallyHidden = (NumComments <= TL_NUM_VISIBLE_COMMENTS + 1) ? 0 :	// Show all
-	                        					           NumComments - TL_NUM_VISIBLE_COMMENTS;
+	                        					          NumComments - TL_NUM_VISIBLE_COMMENTS;
       if (NumCommentsInitiallyHidden)
         {
 	 /***** Create unique id for list of hidden comments *****/
@@ -3200,12 +3198,12 @@ static long TL_ReceiveComment (void)
       Media.Quality = TL_IMAGE_SAVED_QUALITY;
       Med_GetMediaFromForm (-1,&Media,NULL);
 
-      if (Content[0] ||					// Text not empty
-          (Media.Name[0] && Media.Type != Med_NONE))	// A media is attached
+      if (Content[0] ||				// Text not empty
+	  Media.Status == Med_PROCESSED)	// A media is attached
 	{
 	 /***** Check if image is received and processed *****/
 	 if (Media.Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
-	     Media.Status == Med_FILE_PROCESSED)	// The new image received has been processed
+	     Media.Status == Med_PROCESSED)	// The new image received has been processed
 	    /* Move processed image to definitive directory */
 	    Med_MoveMediaToDefinitiveDir (&Media);
 
@@ -3228,10 +3226,8 @@ static long TL_ReceiveComment (void)
 			 Content,
 			 Media.Name,
 			 Med_GetStringTypeForDB (Media.Type),
-			 (Media.Name[0] &&	// Save image title only if image attached
-			  Media.Title) ? Media.Title : "",
-			 (Media.Name[0] &&	// Save image URL   only if image attached
-			  Media.URL  ) ? Media.URL   : "");
+			 Media.Title ? Media.Title : "",
+			 Media.URL   ? Media.URL   : "");
 
 	 /***** Store notifications about the new comment *****/
 	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,SocPub.PubCod);
@@ -5118,6 +5114,7 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 	   {
 	    /* Copy nickname */
 	    strncpy (UsrDat.Nickname,Nickname.PtrStart,Nickname.Length);
+	    UsrDat.Nickname[Nickname.Length] = '\0';
 
 	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.Nickname)) > 0)
 	      {

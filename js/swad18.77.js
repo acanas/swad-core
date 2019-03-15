@@ -768,6 +768,40 @@ function AJAXCreateObject () {
 }
 
 /*****************************************************************************/
+/****************************** Media uploader *******************************/
+/*****************************************************************************/
+
+function mediaActivateUpload (id) {
+	if (document.getElementById (id + '_par_upl').disabled) {				// Upload disabled
+
+	    document.getElementById (id + '_par_emb').disabled = true;			// Disable embed
+	    document.getElementById (id + '_par_upl').disabled = false;			// Enable upload
+
+		document.getElementById (id + '_ico_upl').style.opacity = '1';		// Highlight upload icon
+		document.getElementById (id + '_ico_emb').style.opacity = '0.2';	// Shadow embed icon
+
+		document.getElementById (id + '_fil').style.display = '';			// Show input
+		document.getElementById (id + '_url').style.display = '';			// Show input
+		document.getElementById (id + '_tit').style.display = '';			// Show input
+	}
+}
+
+function mediaActivateEmbed (id) {
+	if (document.getElementById (id + '_par_emb').disabled) {				// Embed disabled
+
+	    document.getElementById (id + '_par_upl').disabled = true;			// Disable upload
+	    document.getElementById (id + '_par_emb').disabled = false;			// Enable embed
+
+		document.getElementById (id + '_ico_emb').style.opacity = '1';		// Highlight embed icon
+		document.getElementById (id + '_ico_upl').style.opacity = '0.2';	// Shadow upload icon
+
+		document.getElementById (id + '_fil').style.display = 'none';		// Hide input
+		document.getElementById (id + '_url').style.display = '';			// Show input
+		document.getElementById (id + '_tit').style.display = 'none';		// Hide input
+	}
+}
+
+/*****************************************************************************/
 /********************** Change display of animated GIF ***********************/
 /*****************************************************************************/
 // elem should be a DIV with two children: IMG and SPAN
@@ -1100,15 +1134,6 @@ function disableDetailedClicks () {
 	document.getElementById('CountType').disabled = false;
 	document.getElementById('GroupedBy').disabled = false;
 	document.getElementById('RowsPage').disabled = true;
-}
-
-/*****************************************************************************/
-/************************** Upload images in a form **************************/
-/*****************************************************************************/
-
-function mediaUploadOnSelectFile (inputFile,id) {
-	document.getElementById(id + '_fil').innerHTML = inputFile.value;	// Display image filename
-	document.getElementById(id + '_tit_url').style.display = '';		// Show hidden fields
 }
 
 /*****************************************************************************/

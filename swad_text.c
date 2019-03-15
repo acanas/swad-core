@@ -3569,23 +3569,23 @@ const char *Txt_Change_IDs =
 
 const char *Txt_Change_image =
 #if   L==1	// ca
-	"Canviar imatge";
+	"Canviar imatge / v&iacute;deo";
 #elif L==2	// de
-	"Abbild &auml;ndern";
+	"Abbild / Video &auml;ndern";
 #elif L==3	// en
-	"Change image";
+	"Change image / video";
 #elif L==4	// es
-	"Cambiar imagen";
+	"Cambiar imagen / v&iacute;deo";
 #elif L==5	// fr
-	"Changer image";
+	"Changer image / vid&eacute;o";
 #elif L==6	// gn
-	"Moambue ta'&atilde;nga";
+	"Moambue ta'&atilde;nga / video";
 #elif L==7	// it
-	"Cambiare immagine";
+	"Cambiare immagine / video";
 #elif L==8	// pl
-	"Zmie&nacute; obraz";
+	"Zmie&nacute; obraz / wideo";
 #elif L==9	// pt
-	"Alterar imagem";
+	"Alterar imagem / v&iacute;deo";
 #endif
 
 const char *Txt_Change_logo =
@@ -6616,23 +6616,23 @@ const char *Txt_Current_email =
 
 const char *Txt_Current_image =
 #if   L==1	// ca
-	"Imatge actual";
+	"Imatge / v&iacute;deo actual";
 #elif L==2	// de
-	"Aktuelles Abbild";
+	"Aktuelles Abbild / Video";
 #elif L==3	// en
-	"Current image";
+	"Current image / video";
 #elif L==4	// es
-	"Imagen actual";
+	"Imagen / v&iacute;deo actual";
 #elif L==5	// fr
-	"Image actuelle";
+	"Image / vid&eacute;o actuelle";
 #elif L==6	// gn
-	"Imagen actual";	// Okoteve traducción
+	"Imagen / v&iacute;deo actual";	// Okoteve traducción
 #elif L==7	// it
-	"Immagine corrente";
+	"Immagine / video corrente";
 #elif L==8	// pl
-	"Bie&zdot;&aogon;cy obraz";
+	"Bie&zdot;&aogon;cy obraz / wideo";
 #elif L==9	// pt
-	"Imagem atual";
+	"Imagem / v&iacute;deo atual";
 #endif
 
 const char *Txt_Current_nickname =
@@ -24650,23 +24650,23 @@ const char *Txt_No_holidays =
 
 const char *Txt_No_image =	// Without any image
 #if   L==1	// ca
-	"Sense imatge";
+	"Sense imatge / v&iacute;deo";
 #elif L==2	// de
-	"Ohne Abbild";
+	"Ohne Abbild / Video";
 #elif L==3	// en
-	"No image";
+	"No image / video";
 #elif L==4	// es
-	"Sin imagen";
+	"Sin imagen / v&iacute;deo";
 #elif L==5	// fr
-	"Pas d'image";
+	"Pas d'image / vid&eacute;o";
 #elif L==6	// gn
-	"Sin imagen";	// Okoteve traducción
+	"Sin imagen / v&iacute;deo";	// Okoteve traducción
 #elif L==7	// it
-	"Nessuna immagine";
+	"Nessuna immagine / video";
 #elif L==8	// pl
-	"Brak obrazka";
+	"Brak obrazka / wideo";
 #elif L==9	// pt
-	"Sem imagem";
+	"Sem imagem / v&iacute;deo";
 #endif
 
 const char *Txt_No_INDEX =	// Short version of "Number" (as an index)...

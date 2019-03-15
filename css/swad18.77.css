@@ -2719,32 +2719,22 @@ a:hover img.CENTRE_PHOTO_SHOW
 	vertical-align:top;
 	margin-bottom:10px;
 	}
-.MED_UPL_BUT	/* Upload button _*/
+.MED_UPL_ICO_CON	/* Upload icon container */
 	{
-	cursor:pointer;
+	display:inline-block;
 	}
 .MED_UPL_ICO	/* Upload icon */
 	{
 	width:16px;
 	height:16px;
-	margin:0 5px;
+	margin:5px 20px;
 	vertical-align:middle;
-	}
-.MED_UPL_FIL	/* Upload file */
-	{
-	display:none;
-	}
-.MED_UPL_NAM	/* Upload filename */
-	{
-	color:#808080;
-	font-size:12pt;
 	}
 	
 .MED_PLAY
 	{
 	position:relative;
 	}
-
 /* The icon inside the overlay is positioned in the middle vertically and horizontally */
 .MED_PLAY_ICO
 	{
@@ -2756,6 +2746,25 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-weight:bold;
 	color:white;
 	text-shadow: 0 0 8px black;
+	}
+	
+/* For YouTube embedded videos. See https://avexdesigns.com/responsive-youtube-embed/ */
+.MED_VIDEO_CONT	/* Adjust container height to get a 16:9 aspect ratio */
+	{
+	position:relative;
+	box-sizing:border-box;
+	margin:10px 0;
+	padding-bottom:56.25%;	/* percentage relative to width */
+	}
+.MED_VIDEO_CONT iframe,
+.MED_VIDEO_CONT object,
+.MED_VIDEO_CONT embed
+	{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
 	}
 
 /********** Author of assignments, attendance, messages, surveys... **********/
