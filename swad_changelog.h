@@ -454,8 +454,22 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad18.77.css"
 #define JS_FILE			"swad18.77.js"
 /*
-TODO: Mejorar javascript subida media
+TODO: Cookies de terceros
+Incrustar vídeos de YouTube hace que se guarden cookies de terceros,
+lo cual implica tener que poner el maldito aviso.
+Sólo se me ocurre que el usuario que quiera ver vídeos de YouTube
+tendría que aceptar las cookies de terceros, que por defecto estarían bloqueadas.
+Es decir, por defecto en vez de mostrarse un vídeo de YouTube
+se mostraría un aviso indicando que si se desea ver el vídeo
+hay que consentir las cookies de terceros.
+Si el usuario acepta, a partir de ese momento se le mostrarían los vídeos.
+Ese bloqueo o aceptación sería una opción en Perfil > Ajustes
+que el usuario podría cambiar en cualquier momento.
+
 TODO: Fix edition of media in test edition
+
+	Version 18.77.3:  Mar 16, 2019 	Embedded YouTube videos. Not finished. (240252 lines)
+	Version 18.77.2:  Mar 14, 2019 	Embedded YouTube videos. Not finished. (240267 lines)
 	Version 18.77.1:  Mar 14, 2019 	Embedded YouTube videos. Not finished. (240217 lines)
 	Version 18.77:    Mar 14, 2019 	Embedded YouTube videos. Not finished. (240214 lines)
 					7 changes necessary in database:

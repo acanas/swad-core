@@ -143,7 +143,7 @@ void Med_GetMediaDataFromRow (const char *Name,
                               const char *URL,
                               struct Media *Media);
 
-void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL);
+void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput);
 void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
                            void (*GetMediaFromDB) (int NumMediaInForm,struct Media *Media));
 void Med_SetParamNames (struct ParamUploadMedia *ParamUploadMedia,int NumMediaInForm);

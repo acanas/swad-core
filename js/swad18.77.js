@@ -771,44 +771,91 @@ function AJAXCreateObject () {
 /****************************** Media uploader *******************************/
 /*****************************************************************************/
 
-function mediaActivateUpload (id) {
-	if (document.getElementById (id + '_par_upl').disabled) {				// Upload disabled
+function mediaClickOnActivateUpload (id) {
+	var par_upl = document.getElementById (id + '_par_upl');
 
-	    document.getElementById (id + '_par_emb').disabled = true;			// Disable embed
-	    document.getElementById (id + '_par_upl').disabled = false;			// Enable upload
+	if (par_upl.disabled) {				// Click on highlighted icon
+		var par_emb	= document.getElementById (id + '_par_emb');
+		var ico_upl	= document.getElementById (id + '_ico_upl');
+		var ico_emb	= document.getElementById (id + '_ico_emb');
+		var fil		= document.getElementById (id + '_fil');
+		var url		= document.getElementById (id + '_url');
+		var tit		= document.getElementById (id + '_tit');
 
-		document.getElementById (id + '_ico_upl').style.opacity = '1';		// Highlight upload icon
-		document.getElementById (id + '_ico_emb').style.opacity = '0.3';	// Shadow embed icon
+		// Disable embed and enable upload
+	    par_emb.disabled = true;		// Disable embed
+	    par_upl.disabled = false;		// Enable upload
 
-		document.getElementById (id + '_fil').style.display = '';			// Show file input
-		document.getElementById (id + '_fil').disabled = false;				// Enable file input
+		ico_upl.style.opacity = '1';	// Highlighted upload icon
+		ico_emb.style.opacity = '0.5';	// Normal embed icon
 
-		document.getElementById (id + '_url').style.display = '';			// Show URL input
-		document.getElementById (id + '_url').disabled = false;				// Enable URL input
+		fil.style.display = '';			// Show file input
+		fil.disabled = false;			// Enable file input
 
-		document.getElementById (id + '_tit').style.display = '';			// Show title input
-		document.getElementById (id + '_tit').disabled = false;				// Enable title input
+		url.style.display = '';			// Show URL input
+		url.disabled = false;			// Enable URL input
+
+		tit.style.display = '';			// Show title input
+		tit.disabled = false;			// Enable title input
 	}
+	else								// Click on shadowed icon
+	    mediaDisableUploadAndEmbed (id);				
 }
 
-function mediaActivateEmbed (id) {
-	if (document.getElementById (id + '_par_emb').disabled) {				// Embed disabled
+function mediaClickOnActivateEmbed (id) {
+	var par_emb	= document.getElementById (id + '_par_emb');
 
-	    document.getElementById (id + '_par_upl').disabled = true;			// Disable upload
-	    document.getElementById (id + '_par_emb').disabled = false;			// Enable embed
+	if (par_emb.disabled) {				// Click on highlighted icon
+		var par_upl = document.getElementById (id + '_par_upl');
+		var ico_upl	= document.getElementById (id + '_ico_upl');
+		var ico_emb	= document.getElementById (id + '_ico_emb');
+		var fil		= document.getElementById (id + '_fil');
+		var url		= document.getElementById (id + '_url');
+		var tit		= document.getElementById (id + '_tit');
 
-		document.getElementById (id + '_ico_emb').style.opacity = '1';		// Highlight embed icon
-		document.getElementById (id + '_ico_upl').style.opacity = '0.3';	// Shadow upload icon
+		// Disable upload and enable embed
+	    par_upl.disabled = true;		// Disable upload
+	    par_emb.disabled = false;		// Enable embed
 
-		document.getElementById (id + '_fil').style.display  = 'none';		// Hide file input
-		document.getElementById (id + '_fil').disabled = true;				// Disable file input
+		ico_emb.style.opacity = '1';	// Highlighted embed icon
+		ico_upl.style.opacity = '0.5';	// Normal upload icon
 
-		document.getElementById (id + '_url').style.display = '';			// Show URL input
-		document.getElementById (id + '_url').disabled = false;				// Enable URL input
+		fil.style.display  = 'none';	// Hide file input
+		fil.disabled = true;			// Disable file input
 
-		document.getElementById (id + '_tit').style.display = 'none';		// Hide title input
-		document.getElementById (id + '_tit').disabled = true;				// Disable title input
+		url.style.display = '';			// Show URL input
+		url.disabled = false;			// Enable URL input
+
+		tit.style.display = 'none';		// Hide title input
+		tit.disabled = true;			// Disable title input
 	}
+	else								// Click on shadowed icon
+	    mediaDisableUploadAndEmbed (id);
+}
+
+function mediaDisableUploadAndEmbed (id) {
+	var par_upl = document.getElementById (id + '_par_upl');
+	var par_emb	= document.getElementById (id + '_par_emb');
+	var ico_upl	= document.getElementById (id + '_ico_upl');
+	var ico_emb	= document.getElementById (id + '_ico_emb');
+	var fil		= document.getElementById (id + '_fil');
+	var url		= document.getElementById (id + '_url');
+	var tit		= document.getElementById (id + '_tit');
+
+    par_upl.disabled = true;		// Disable upload
+    par_emb.disabled = true;		// Disable embed
+
+	ico_upl.style.opacity = '0.5';	// Normal upload icon
+	ico_emb.style.opacity = '0.5';	// Normal embed icon
+
+	fil.style.display = 'none';		// Hide file input
+	fil.disabled = true;			// Disable file input
+
+	url.style.display = 'none';		// Hide URL input
+	url.disabled = true;			// Disable URL input
+
+	tit.style.display = 'none';		// Hide title input
+	tit.disabled = true;			// Disable title input
 }
 
 /*****************************************************************************/

@@ -278,7 +278,7 @@ void Med_GetMediaDataFromRow (const char *Name,
 /********* Draw input fields to upload an image/video inside a form **********/
 /*****************************************************************************/
 
-void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
+void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
   {
    extern const char *Txt_Image_video;
    extern const char *Txt_Title_attribution;
@@ -304,7 +304,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
 		      "<img src=\"%s/file-image.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"MED_UPL_ICO ICO_HIGHLIGHT\""
-	              " onclick=\"mediaActivateUpload('%s');\" />"
+	              " onclick=\"mediaClickOnActivateUpload('%s');\" />"
 	              "</div>",					// <id>_ico_upl
             Id,
 	    Gbl.Prefs.URLIcons,
@@ -325,7 +325,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
 		      "<img src=\"%s/youtube-brands.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"MED_UPL_ICO ICO_HIGHLIGHT\""
-	              " onclick=\"mediaActivateEmbed('%s');\" />"
+	              " onclick=\"mediaClickOnActivateEmbed('%s');\" />"
 	              "</div>",					// <id>_ico_emb
             Id,
 	    Gbl.Prefs.URLIcons,
@@ -343,10 +343,11 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
    /***** Media file *****/
    fprintf (Gbl.F.Out,"<input id=\"%s_fil\" type=\"file\""	// <id>_fil
 	              " name=\"%s\" accept=\"image/,video/\""
-	              " disabled=\"disabled\""
+	              " class=\"%s\" disabled=\"disabled\""
 	              " style=\"display:none;\" />",		// <id>_fil
 	    Id,
-            ParamUploadMedia.File);
+            ParamUploadMedia.File,
+	    ClassInput);
 
    /***** Media URL *****/
    fprintf (Gbl.F.Out,"<input id=\"%s_url\" type=\"url\""	// <id>_url
@@ -356,7 +357,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
 	              " style=\"display:none;\" />",		// <id>_url
 	    Id,
             ParamUploadMedia.URL,Txt_Link,
-            ClassMediaTitURL,Cns_MAX_CHARS_WWW);
+            ClassInput,Cns_MAX_CHARS_WWW);
 
    /***** Media title *****/
    fprintf (Gbl.F.Out,"<input id=\"%s_tit\" type=\"text\""	// <id>_tit
@@ -366,7 +367,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassMediaTitURL)
 	              " style=\"display:none;\" />",		// <id>_tit
 	    Id,
             ParamUploadMedia.Title,Txt_Title_attribution,
-            ClassMediaTitURL,Med_MAX_CHARS_TITLE);
+            ClassInput,Med_MAX_CHARS_TITLE);
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");			// container
@@ -941,7 +942,6 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
    char *PtrParams = NULL;
    char *PtrCode   = NULL;
    size_t CodeLength;
-   char *Code;
    enum
      {
       WRONG,	// Bad formed YouTube URL
@@ -1073,34 +1073,17 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
 		     // Ale_ShowAlert (Ale_INFO,"DEBUG: PtrCode = '%s'",PtrCode);
 		     /***** Step 5: Get video code *****/
 		     CodeLength = strspn (PtrCode,Str_BIN_TO_BASE64URL);
-		     if (CodeLength > 0)
+		     if (CodeLength > 0 &&
+			 CodeLength <= Med_BYTES_NAME)
 		       {
-			/* Allocate space for YouTube code */
-			if ((Code = (char *) malloc (CodeLength + 1)) == NULL)
-			   Lay_ShowErrorAndExit ("Error allocating memory for YouTube code.");
-
+			/***** Success! *****/
 			/* Copy code */
-			strncpy (Code,PtrCode,CodeLength);
-			Code[CodeLength] = '\0';
-			// Ale_ShowAlert (Ale_INFO,"DEBUG: Code = '%s'",Code);
+			strncpy (Media->Name,PtrCode,CodeLength);
+			Media->Name[CodeLength] = '\0';
+			// Ale_ShowAlert (Ale_INFO,"DEBUG: Media->Name = '%s'",Media->Name);
 
-			/* Overwrite current URL with the embed URL */
-			Med_FreeMediaURL (Media);
-			if (asprintf (&Media->URL,"https://www.youtube.com/embed/%s",
-				      Code) < 0)
-			   Lay_NotEnoughMemoryExit ();
-			if (strlen (Media->URL) <= Cns_MAX_BYTES_WWW)
-			  {
-			   /***** Success! *****/
-			   // Ale_ShowAlert (Ale_INFO,"DEBUG: Media->URL = '%s'",Media->URL);
-			   Media->Type = Med_YOUTUBE;
-			   Media->Status = Med_PROCESSED;
-			  }
-			else
-			   Med_FreeMediaURL (Media);
-
-			/* Free YouTube code */
-			free ((void *) Code);
+			Media->Type = Med_YOUTUBE;
+			Media->Status = Med_PROCESSED;
 		       }
 		    }
 		 }
@@ -1501,13 +1484,13 @@ static void Med_ShowYoutube (struct Media *Media,
       // 	allow="accelerometer; autoplay; encrypted-media;
       // 	gyroscope; picture-in-picture" allowfullscreen>
       // </iframe>
-      fprintf (Gbl.F.Out,"<iframe src=\"%s\""
+      fprintf (Gbl.F.Out,"<iframe src=\"https://www.youtube.com/embed/%s\""
 			 " frameborder=\"0\""
 			 " allow=\"accelerometer; autoplay; encrypted-media;"
 			 " gyroscope; picture-in-picture\""
 			 " allowfullscreen=\"allowfullscreen\""
 			 " class=\"%s\"",
-	       Media->URL,ClassMedia);
+	       Media->Name,ClassMedia);
       if (Media->Title)
 	 if (Media->Title[0])
 	    fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
