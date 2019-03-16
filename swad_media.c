@@ -293,17 +293,21 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    Frm_SetUniqueId (Id);
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"MED_UPL_CON\">");	// container
+   fprintf (Gbl.F.Out,"<div class=\"MED_UPL_CON\">");		// container
 
    /***** Action to perform on media *****/
    Par_PutHiddenParamUnsigned (ParamUploadMedia.Action,(unsigned) Med_ACTION_NEW_MEDIA);
 
+   /***** Start icons *****/
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINERS\">"		// icons containers
+		      "<div class=\"PREF_CONTAINER\">");	// icons container
+
    /***** Upload icon *****/
    fprintf (Gbl.F.Out,"<div id=\"%s_ico_upl\""			// <id>_ico_upl
-		      " class=\"MED_UPL_ICO_CON\">"
+		      " class=\"PREF_OFF\">"
 		      "<img src=\"%s/file-image.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"MED_UPL_ICO ICO_HIGHLIGHT\""
+	              " class=\"ICO_HIGHLIGHT ICOx20\""
 	              " onclick=\"mediaClickOnActivateUpload('%s');\" />"
 	              "</div>",					// <id>_ico_upl
             Id,
@@ -321,16 +325,24 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
    /***** Embed icon *****/
    fprintf (Gbl.F.Out,"<div id=\"%s_ico_emb\""			// <id>_ico_emb
-		      " class=\"MED_UPL_ICO_CON\">"
+		      " class=\"PREF_OFF\">"
 		      "<img src=\"%s/youtube-brands.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"MED_UPL_ICO ICO_HIGHLIGHT\""
+	              " class=\"ICO_HIGHLIGHT ICOx20\""
 	              " onclick=\"mediaClickOnActivateEmbed('%s');\" />"
 	              "</div>",					// <id>_ico_emb
             Id,
 	    Gbl.Prefs.URLIcons,
             "YouTube","YouTube",
             Id);
+
+   /***** End icons *****/
+   fprintf (Gbl.F.Out,"</div>"					// icons container
+		      "</div>");				// icons containers
+
+   /***** Start input fields *****/
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",			// input fields
+	    ClassInput);
 
    /***** Form type *****/
    fprintf (Gbl.F.Out,"<input type=\"hidden\""
@@ -369,8 +381,11 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
             ParamUploadMedia.Title,Txt_Title_attribution,
             ClassInput,Med_MAX_CHARS_TITLE);
 
+   /***** End input fields *****/
+   fprintf (Gbl.F.Out,"</div>");				// input fields
+
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");			// container
+   fprintf (Gbl.F.Out,"</div>");				// container
   }
 
 /*****************************************************************************/

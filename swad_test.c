@@ -158,7 +158,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
                                        const char *ClassContainer,
                                        const char *ClassMedia,
-                                       const char *ClassMediaTitURL,
+                                       const char *ClassMediaInput,
                                        bool OptionsDisabled);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
@@ -1111,7 +1111,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
                                        const char *ClassContainer,
                                        const char *ClassMedia,
-                                       const char *ClassMediaTitURL,
+                                       const char *ClassMediaInput,
                                        bool OptionsDisabled)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -1185,7 +1185,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 			 " placeholder=\"%s (%s)\""
 			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
 	       ParamUploadMedia.Title,Txt_Title_attribution,Txt_optional,
-	       ClassMediaTitURL,Med_MAX_CHARS_TITLE,
+	       ClassMediaInput,Med_MAX_CHARS_TITLE,
 	       Media->Title ? Media->Title :
 		              "");
 
@@ -1195,7 +1195,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 			 " placeholder=\"%s (%s)\""
 			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
 	       ParamUploadMedia.URL,Txt_Link,Txt_optional,
-	       ClassMediaTitURL,Cns_MAX_CHARS_WWW,
+	       ClassMediaInput,Cns_MAX_CHARS_WWW,
 	       Media->URL ? Media->URL :
 		            "");
 
@@ -1204,7 +1204,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
      }
    else	// No current image
       /***** Attached image (optional) *****/
-      Med_PutMediaUploader (NumMediaInForm,ClassMediaTitURL);
+      Med_PutMediaUploader (NumMediaInForm,ClassMediaInput);
   }
 
 /*****************************************************************************/

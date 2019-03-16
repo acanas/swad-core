@@ -786,8 +786,8 @@ function mediaClickOnActivateUpload (id) {
 	    par_emb.disabled = true;		// Disable embed
 	    par_upl.disabled = false;		// Enable upload
 
-		ico_upl.style.opacity = '1';	// Highlighted upload icon
-		ico_emb.style.opacity = '0.5';	// Normal embed icon
+		ico_upl.className = 'PREF_ON';	// Highlighted upload icon
+		ico_emb.className = 'PREF_OFF';	// Normal embed icon
 
 		fil.style.display = '';			// Show file input
 		fil.disabled = false;			// Enable file input
@@ -817,8 +817,8 @@ function mediaClickOnActivateEmbed (id) {
 	    par_upl.disabled = true;		// Disable upload
 	    par_emb.disabled = false;		// Enable embed
 
-		ico_emb.style.opacity = '1';	// Highlighted embed icon
-		ico_upl.style.opacity = '0.5';	// Normal upload icon
+		ico_emb.className = 'PREF_ON';	// Highlighted embed icon
+		ico_upl.className = 'PREF_OFF';	// Normal upload icon
 
 		fil.style.display  = 'none';	// Hide file input
 		fil.disabled = true;			// Disable file input
@@ -845,8 +845,8 @@ function mediaDisableUploadAndEmbed (id) {
     par_upl.disabled = true;		// Disable upload
     par_emb.disabled = true;		// Disable embed
 
-	ico_upl.style.opacity = '0.5';	// Normal upload icon
-	ico_emb.style.opacity = '0.5';	// Normal embed icon
+	ico_upl.className = 'PREF_OFF';	// Normal upload icon
+	ico_emb.className = 'PREF_OFF';	// Normal embed icon
 
 	fil.style.display = 'none';		// Hide file input
 	fil.disabled = true;			// Disable file input

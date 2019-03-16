@@ -4008,7 +4008,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   Med_PutMediaUploader (-1,"FOR_IMG_TIT_URL");
+   Med_PutMediaUploader (-1,"FOR_MED_INPUT");
 
    /***** Send button *****/
    Btn_PutCreateButton (Txt_Send);

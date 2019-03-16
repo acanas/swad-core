@@ -431,6 +431,8 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Los usuarios que no tienes permiso para ver su perfil público, se debería mostrar algo, una mínima ficha sin tinmeline o algo así
 
+// TODO: Allow timeline posting only for users belonging to courses or admins to avoid user who create accounts only to post
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -468,6 +470,7 @@ que el usuario podría cambiar en cualquier momento.
 
 TODO: Fix edition of media in test edition
 
+	Version 18.77.4:  Mar 16, 2019 	Changes in form to upload media. (240256 lines)
 	Version 18.77.3:  Mar 16, 2019 	Embedded YouTube videos. Not finished. (240252 lines)
 	Version 18.77.2:  Mar 14, 2019 	Embedded YouTube videos. Not finished. (240267 lines)
 	Version 18.77.1:  Mar 14, 2019 	Embedded YouTube videos. Not finished. (240217 lines)

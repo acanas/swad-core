@@ -183,7 +183,7 @@ static void TL_PublishNoteInTimeline (struct TL_Publication *SocPub);
 
 static void TL_PutFormToWriteNewPost (void);
 static void TL_PutTextarea (const char *Placeholder,
-                            const char *ClassTextArea,const char *ClassImgTit);
+                            const char *ClassTextArea,const char *ClassMediaInput);
 
 static long TL_ReceivePost (void);
 
@@ -2355,8 +2355,8 @@ static void TL_PutFormToWriteNewPost (void)
 
    /* Textarea and button */
    TL_PutTextarea (Txt_New_TIMELINE_post,
-                    "TL_POST_TEXTAREA TL_RIGHT_WIDTH",
-		    "TL_POST_IMG_TIT_URL TL_POST_IMG_WIDTH");
+                   "TL_POST_TEXTAREA TL_RIGHT_WIDTH",
+		   "TL_POST_MED_INPUT TL_POST_MED_WIDTH");
 
    /* End form */
    Frm_EndForm ();
@@ -2374,7 +2374,7 @@ static void TL_PutFormToWriteNewPost (void)
 /*****************************************************************************/
 
 static void TL_PutTextarea (const char *Placeholder,
-                            const char *ClassTextArea,const char *ClassImgTit)
+                            const char *ClassTextArea,const char *ClassMediaInput)
   {
    extern const char *Txt_Post;
    char IdDivImgButton[Frm_MAX_BYTES_ID + 1];
@@ -2386,7 +2386,7 @@ static void TL_PutTextarea (const char *Placeholder,
    fprintf (Gbl.F.Out,"<textarea name=\"Content\" rows=\"1\" maxlength=\"%u\""
                       " placeholder=\"%s&hellip;\""
 	              " class=\"%s\""
-	              " onfocus=\"expandTextarea(this,'%s','5');\">"
+	              " onfocus=\"expandTextarea(this,'%s','6');\">"
 		      "</textarea>",
             TL_MAX_CHARS_IN_POST,
             Placeholder,ClassTextArea,
@@ -2400,7 +2400,7 @@ static void TL_PutTextarea (const char *Placeholder,
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   Med_PutMediaUploader (-1,ClassImgTit);
+   Med_PutMediaUploader (-1,ClassMediaInput);
 
    /***** Submit button *****/
    fprintf (Gbl.F.Out,"<button type=\"submit\""

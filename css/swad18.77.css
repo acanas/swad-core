@@ -2716,18 +2716,9 @@ a:hover img.CENTRE_PHOTO_SHOW
 /*********************** Media (image/video) uploading ***********************/
 .MED_UPL_CON	/* Upload container */
 	{
+	text-align:center;
 	vertical-align:top;
 	margin-bottom:10px;
-	}
-.MED_UPL_ICO_CON	/* Upload icon container */
-	{
-	display:inline-block;
-	}
-.MED_UPL_ICO	/* Upload icon */
-	{
-	height:20px;
-	margin:5px 20px;
-	vertical-align:middle;
 	}
 	
 .MED_PLAY
@@ -2884,7 +2875,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	.TL_WIDTH					{width:316px;}	/* 536-220 */
 	.TL_RIGHT_WIDTH				{width:260px;}	/* 480-220 */
 	.TL_RIGHT_AUTHOR_WIDTH		{width:100px;}	/* 320-220 */
-	.TL_POST_IMG_WIDTH			{width:220px;}	/* 440-220 */
+	.TL_POST_MED_WIDTH			{width:220px;}	/* 440-220 */
 	.TL_COMMENT_WIDTH			{width:220px;}	/* 440-220 */
 	.TL_COMMENT_AUTHOR_WIDTH	{width: 60px;}	/* 280-220 */
 	}
@@ -2893,7 +2884,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	.TL_WIDTH					{width:536px;}
 	.TL_RIGHT_WIDTH				{width:480px;}
 	.TL_RIGHT_AUTHOR_WIDTH		{width:320px;}
-	.TL_POST_IMG_WIDTH			{width:440px;}
+	.TL_POST_MED_WIDTH			{width:440px;}
 	.TL_COMMENT_WIDTH			{width:440px;}
 	.TL_COMMENT_AUTHOR_WIDTH	{width:280px;}
 	}
@@ -2970,7 +2961,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0;
 	resize:none;
 	}
-.TL_POST_IMG_TIT_URL
+.TL_POST_MED_INPUT
 	{
 	box-sizing:border-box;
 	}
@@ -3138,7 +3129,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:100%;
 	border-radius:4px;
 	}
-.FOR_IMG_TIT_URL
+.FOR_MED_INPUT
 	{
 	box-sizing:border-box;
 	width:480px;
@@ -3164,7 +3155,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:100%;
 	border-radius:4px;
 	}
-.MSG_IMG_TIT_URL
+.MSG_MED_INPUT
 	{
 	box-sizing:border-box;
 	width:480px;

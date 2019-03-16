@@ -324,7 +324,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   Med_PutMediaUploader (-1,"MSG_IMG_TIT_URL");
+   Med_PutMediaUploader (-1,"MSG_MED_INPUT");
 
    /***** Send button *****/
    Btn_PutCreateButton (Txt_Send_message);
