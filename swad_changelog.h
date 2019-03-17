@@ -457,24 +457,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.79 (2019-03-17)"
+#define Log_PLATFORM_VERSION	"SWAD 18.79.1 (2019-03-17)"
 #define CSS_FILE		"swad18.77.css"
 #define JS_FILE			"swad18.77.js"
 /*
-TODO: Cookies de terceros
-Incrustar vídeos de YouTube hace que se guarden cookies de terceros,
-lo cual implica tener que poner el maldito aviso.
-Sólo se me ocurre que el usuario que quiera ver vídeos de YouTube
-tendría que aceptar las cookies de terceros, que por defecto estarían bloqueadas.
-Es decir, por defecto en vez de mostrarse un vídeo de YouTube
-se mostraría un aviso indicando que si se desea ver el vídeo
-hay que consentir las cookies de terceros.
-Si el usuario acepta, a partir de ese momento se le mostrarían los vídeos.
-Ese bloqueo o aceptación sería una opción en Perfil > Ajustes
-que el usuario podría cambiar en cualquier momento.
-
 TODO: Crear la función para ver Fig_COOKIES
-	Version 18.79.1:  Mar 17, 2019 	YouTube videos are not shown if user doesn't accept third party cookies. (? lines)
+	Version 18.79.1:  Mar 17, 2019 	YouTube videos are not shown if user doesn't accept third party cookies. (240541 lines)
 	Version 18.79:    Mar 17, 2019 	New module swad_cookies for user's preference about cookies. (240494 lines)
 					2 changes necessary in database:
 ALTER TABLE usr_data ADD COLUMN ThirdPartyCookies ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER SideCols,ADD INDEX (ThirdPartyCookies);

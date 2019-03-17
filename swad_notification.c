@@ -371,7 +371,7 @@ void Ntf_ShowMyNotifications (void)
 				     Txt_Mark_all_NOTIFICATIONS_as_read);
 
    /* Put form to change notification preferences */
-   Lay_PutContextualLinkIconText (ActReqEdiPrf,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqEdiPrf,Ntf_NOTIFICATIONS_ID,NULL,
 				  "cog.svg",
 				  Txt_Settings);
 
@@ -1924,6 +1924,9 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    Ntf_NotifyEvent_t NotifyEvent;
 
+   /***** Start section with preferences on privacy *****/
+   Lay_StartSection (Ntf_NOTIFICATIONS_ID);
+
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
                  Hlp_PROFILE_Preferences_notifications,Box_NOT_CLOSABLE);
@@ -1988,6 +1991,9 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    /***** End box *****/
    Box_EndBox ();
+
+   /***** End section with preferences about notifications *****/
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/

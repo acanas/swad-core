@@ -37,6 +37,7 @@
 #include <unistd.h>		// For unlink, lstat
 
 #include "swad_config.h"
+#include "swad_cookie.h"
 #include "swad_global.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
@@ -150,8 +151,7 @@ static void Med_ShowGIF (struct Media *Media,
 static void Med_ShowVideo (struct Media *Media,
 			   const char PathMedPriv[PATH_MAX + 1],
 			   const char *ClassMedia);
-static void Med_ShowYoutube (struct Media *Media,
-			     const char *ClassMedia);
+static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia);
 
 static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
                                              const char *MIMEType);
@@ -1229,10 +1229,7 @@ void Med_ShowMedia (struct Media *Media,
       return;
 
    /***** Start media container *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s",ClassContainer);
-   if (Media->Type == Med_YOUTUBE)
-      fprintf (Gbl.F.Out," MED_VIDEO_CONT");
-   fprintf (Gbl.F.Out,"\">");
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassContainer);
 
    if (Media->Type == Med_YOUTUBE)
       /***** Show media *****/
@@ -1493,32 +1490,54 @@ static void Med_ShowVideo (struct Media *Media,
 /*************************** Show an embed media *****************************/
 /*****************************************************************************/
 
-static void Med_ShowYoutube (struct Media *Media,
-			     const char *ClassMedia)
+static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
   {
+   extern const char *Txt_To_watch_YouTube_videos_you_have_to_accept_third_party_cookies_in_your_personal_settings;
+   extern const char *Txt_Settings;
+
    /***** Check if embed URL exists *****/
    if (Media->URL[0])	// Embed URL
      {
-      /***** Show linked external media *****/
-      // Example of code give by YouTube:
-      // <iframe width="560" height="315"
-      // 	src="https://www.youtube.com/embed/xu9IbeF9CBw"
-      // 	frameborder="0"
-      // 	allow="accelerometer; autoplay; encrypted-media;
-      // 	gyroscope; picture-in-picture" allowfullscreen>
-      // </iframe>
-      fprintf (Gbl.F.Out,"<iframe src=\"https://www.youtube.com/embed/%s\""
-			 " frameborder=\"0\""
-			 " allow=\"accelerometer; autoplay; encrypted-media;"
-			 " gyroscope; picture-in-picture\""
-			 " allowfullscreen=\"allowfullscreen\""
-			 " class=\"%s\"",
-	       Media->Name,ClassMedia);
-      if (Media->Title)
-	 if (Media->Title[0])
-	    fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
-      fprintf (Gbl.F.Out,">"
-	                 "</iframe>");
+      if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies)
+        {
+	 /***** Show linked external media *****/
+	 // Example of code give by YouTube:
+	 // <iframe width="560" height="315"
+	 // 	src="https://www.youtube.com/embed/xu9IbeF9CBw"
+	 // 	frameborder="0"
+	 // 	allow="accelerometer; autoplay; encrypted-media;
+	 // 	gyroscope; picture-in-picture" allowfullscreen>
+	 // </iframe>
+	 fprintf (Gbl.F.Out,"<div class=\"MED_VIDEO_CONT\">"
+			    "<iframe src=\"https://www.youtube.com/embed/%s\""
+			    " frameborder=\"0\""
+			    " allow=\"accelerometer; autoplay; encrypted-media;"
+			    " gyroscope; picture-in-picture\""
+			    " allowfullscreen=\"allowfullscreen\""
+			    " class=\"%s\"",
+		  Media->Name,ClassMedia);
+	 if (Media->Title)
+	    if (Media->Title[0])
+	       fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
+	 fprintf (Gbl.F.Out,">"
+			    "</iframe>"
+			    "</div>");
+        }
+      else
+        {
+	 /***** Alert to inform about third party cookies *****/
+	 /* Start alert */
+	 Ale_ShowAlertAndButton1 (Ale_INFO,Txt_To_watch_YouTube_videos_you_have_to_accept_third_party_cookies_in_your_personal_settings);
+
+	 /* Put form to change cookies preferences */
+         if (!Gbl.Form.Inside)
+      	    Lay_PutContextualLinkIconText (ActReqEdiPrf,Coo_COOKIES_ID,NULL,
+					   "cog.svg",
+					   Txt_Settings);
+
+	 /* End alert */
+	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+        }
      }
   }
 

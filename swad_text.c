@@ -49865,6 +49865,45 @@ const char *Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_ =	
 	" &agrave; lista de sites permitidos no painel de controle Java.";
 #endif
 
+const char *Txt_To_watch_YouTube_videos_you_have_to_accept_third_party_cookies_in_your_personal_settings =
+#if   L==1	// ca
+	"Per veure v&iacute;deos de YouTube"
+	" ha d'acceptar les cookies de tercers"
+	" en les seves par&agrave;metres personals.";
+#elif L==2	// de
+	"Um YouTube-Videos anzusehen,"
+	" m&uuml;ssen Sie in Ihren pers&ouml;nlichen Einstellungen Cookies"
+	" von Drittanbietern akzeptieren.";
+#elif L==3	// en
+	"To watch YouTube videos"
+	" you have to accept third party cookies"
+	" in your personal settings.";
+#elif L==4	// es
+	"Para ver v&iacute;deos de YouTube"
+	" tiene que aceptar las cookies de terceros"
+	" en sus ajustes personales.";
+#elif L==5	// fr
+	"Pour regarder des vid&eacute;os YouTube,"
+	" vous devez accepter les cookies de tiers"
+	" dans vos r&eacute;glages personnels.";
+#elif L==6	// gn
+	"Para ver v&iacute;deos de YouTube"
+	" tiene que aceptar las cookies de terceros"
+	" en sus ajustes personales.";
+#elif L==7	// it
+	"Per guardare i video di YouTube"
+	" devi accettare i cookie di terze parti"
+	" nelle tue impostazioni personali.";
+#elif L==8	// pl
+	"Aby ogl&aogon;da&cacute; filmy z YouTube,"
+	" musisz zaakceptowa&cacute; pliki cookie innych firm"
+	" w swoich ustawieniach osobistych.";
+#elif L==9	// pt
+	"Para assistir a v&iacute;deos do YouTube,"
+	" voc&ecirc; precisa aceitar cookies de terceiros"
+	" nas suas configura&ccedil;&otilde;es pessoais.";
+#endif
+
 const char *Txt_Today =
 #if   L==1	// ca
 	"Avui";

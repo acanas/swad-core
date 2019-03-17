@@ -41,6 +41,8 @@
 #define Ntf_MAX_CHARS_SUMMARY	(256 - 1)	// 255
 #define Ntf_MAX_BYTES_SUMMARY	((Ntf_MAX_CHARS_SUMMARY + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
 
+#define Ntf_NOTIFICATIONS_ID	"notif"
+
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
