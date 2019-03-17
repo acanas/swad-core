@@ -10652,25 +10652,25 @@ const char *Txt_Error_getting_data_from_a_recipient =
 	"Erro ao obter dados de um destinat&aacute;rio.";
 #endif
 
-const char *Txt_Error_receiving_or_processing_image =
+const char *Txt_Error_sending_or_processing_image_video =
 #if   L==1	// ca
-	"Error rebent o processant imatge.";
+	"Error enviant o processant imatge / v&iacute;deo.";
 #elif L==2	// de
-	"Fehler beim Empfangen oder Verarbeiten von Abbild.";
+	"Fehler beim Senden oder Verarbeiten eines Abbild / Video.";
 #elif L==3	// en
-	"Error receiving or processing image.";
+	"Error sending or processing image / video.";
 #elif L==4	// es
-	"Error recibiendo o procesando imagen.";
+	"Error enviando o procesando imagen / v&iacute;deo.";
 #elif L==5	// fr
-	"Erreur de r&eacute;ception ou de traitement d'image.";
+	"Erreur d'envoi ou de traitement de l'image / vid&eacute;o.";
 #elif L==6	// gn
-	"Error recibiendo o procesando imagen.";	// Okoteve traducción
+	"Error enviando o procesando imagen / v&iacute;deo.";	// Okoteve traducción
 #elif L==7	// it
-	"Errore durante la ricezione o la elaborazione delle immagini.";
+	"Errore nell'invio o nell'elaborazione dell'immagine / video.";
 #elif L==8	// pl
-	"B&lstrok;&aogon;d odbioru lub przetwarzania obrazu.";
+	"B&lstrok;&aogon;d podczas wysy&lstrok;ania lub przetwarzania obrazu / wideo.";
 #elif L==9	// pt
-	"Erro no recebimento ou processamento de imagem.";
+	"Erro ao enviar ou processar imagem / v&iacute;deo.";
 #endif
 
 const char *Txt_Event =

@@ -501,9 +501,9 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
    long PstCod;
 
    /***** Check if image is received and processed *****/
-   if (Media->Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
-       Media->Status == Med_PROCESSED)	// The new image received has been processed
-      /* Move processed image to definitive directory */
+   if (Media->Action == Med_ACTION_NEW_MEDIA &&	// New media
+       Media->Status == Med_PROCESSED)		// The new media received has been processed
+      /* Move processed media to definitive directory */
       Med_MoveMediaToDefinitiveDir (Media);
 
    /***** Insert forum post in the database *****/
@@ -973,6 +973,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
 
    /***** Show alert after action *****/
    Lay_StartSection (For_FORUM_POSTS_SECTION_ID);
+   Ale_ShowAlerts (For_FORUM_POSTS_SECTION_ID);	// Possible pending alerts
    if (Message)
       if (Message[0])
          Ale_ShowAlert (AlertType,Message);
@@ -4053,14 +4054,15 @@ void For_ReceiveForumPost (void)
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_RIGOROUS_HTML,false);
 
-   /***** Initialize image *****/
+   /***** Initialize media *****/
    Med_MediaConstructor (&Media);
 
-   /***** Get attached image (action, file and title) *****/
+   /***** Get attached media *****/
    Media.Width   = For_IMAGE_SAVED_MAX_WIDTH;
    Media.Height  = For_IMAGE_SAVED_MAX_HEIGHT;
    Media.Quality = For_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (-1,&Media,NULL);
+   Med_GetMediaFromForm (-1,&Media,NULL,
+	                 For_FORUM_POSTS_SECTION_ID);	// Alerts will be shown later in posts section
 
    /***** Create a new message *****/
    if (IsReply)	// This post is a reply to another posts in the thread

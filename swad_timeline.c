@@ -2470,14 +2470,15 @@ static long TL_ReceivePost (void)
    Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
    Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
    Media.Quality = TL_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (-1,&Media,NULL);
+   Med_GetMediaFromForm (-1,&Media,NULL,NULL);
+   Ale_ShowAlerts (NULL);
 
    if (Content[0] ||			// Text not empty
        Media.Status == Med_PROCESSED)	// A media is attached
      {
-      /***** Check if image is received and processed *****/
-      if (Media.Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
-	  Media.Status == Med_PROCESSED)		// The new image received has been processed
+      /***** Check if media is received and processed *****/
+      if (Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
+	  Media.Status == Med_PROCESSED)		// The new media received has been processed
 	 /* Move processed image to definitive directory */
 	 Med_MoveMediaToDefinitiveDir (&Media);
 
@@ -3196,14 +3197,15 @@ static long TL_ReceiveComment (void)
       Media.Width   = TL_IMAGE_SAVED_MAX_WIDTH;
       Media.Height  = TL_IMAGE_SAVED_MAX_HEIGHT;
       Media.Quality = TL_IMAGE_SAVED_QUALITY;
-      Med_GetMediaFromForm (-1,&Media,NULL);
+      Med_GetMediaFromForm (-1,&Media,NULL,NULL);
+      Ale_ShowAlerts (NULL);
 
       if (Content[0] ||				// Text not empty
 	  Media.Status == Med_PROCESSED)	// A media is attached
 	{
-	 /***** Check if image is received and processed *****/
-	 if (Media.Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
-	     Media.Status == Med_PROCESSED)	// The new image received has been processed
+	 /***** Check if media is received and processed *****/
+	 if (Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
+	     Media.Status == Med_PROCESSED)		// The new media received has been processed
 	    /* Move processed image to definitive directory */
 	    Med_MoveMediaToDefinitiveDir (&Media);
 

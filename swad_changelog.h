@@ -427,6 +427,8 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 // Para bloquear/desbloquear se usará un icono candado
 // Para preasignado/no preasignado usar otro icono (usuario/usuario tachado, por ej.)
 
+// TODO: Check if Feedback is set to "(null)" when importing test questions. Change columns Feedback "(null)" to "" in test questions
+
 // TODO: Select users individually in action to send email
 
 // TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
@@ -457,7 +459,7 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.77.5 (2019-03-17)"
+#define Log_PLATFORM_VERSION	"SWAD 18.77.6 (2019-03-17)"
 #define CSS_FILE		"swad18.77.css"
 #define JS_FILE			"swad18.77.js"
 /*
@@ -473,7 +475,10 @@ Si el usuario acepta, a partir de ese momento se le mostrarían los vídeos.
 Ese bloqueo o aceptación sería una opción en Perfil > Ajustes
 que el usuario podría cambiar en cualquier momento.
 
-	Version 18.77.5:  Mar 16, 2019 	Fixed bugs in forms to upload media. (240272 lines)
+	Version 18.79:    Mar 17, 2019 	YouTube videos are not shown if user doesn't accept third party cookies. (? lines)
+	Version 18.78:    Mar 17, 2019 	Fixed bugs and code refactoring in media.
+					Code refactoring in tests. (240252 lines)
+	Version 18.77.5:  Mar 17, 2019 	Fixed bugs in forms to upload media. (240272 lines)
 	Version 18.77.4:  Mar 16, 2019 	Changes in form to upload media. (240256 lines)
 	Version 18.77.3:  Mar 16, 2019 	Embedded YouTube videos. Not finished. (240252 lines)
 	Version 18.77.2:  Mar 14, 2019 	Embedded YouTube videos. Not finished. (240267 lines)

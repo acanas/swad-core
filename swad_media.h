@@ -44,13 +44,12 @@
 /*****************************************************************************/
 
 /***** Action to perform when editing a form with an image/video *****/
-#define Med_NUM_ACTIONS	4
+#define Med_NUM_ACTIONS	3
 typedef enum
   {
-   Med_ACTION_NEW_MEDIA,	// Upload new media
-   Med_ACTION_KEEP_MEDIA,	// Keep current media unchanged
-   Med_ACTION_CHANGE_MEDIA,	// Change existing media by a new one
    Med_ACTION_NO_MEDIA,		// Do not use media (remove current media if exists)
+   Med_ACTION_KEEP_MEDIA,	// Keep current media unchanged
+   Med_ACTION_NEW_MEDIA,	// Upload new media (if current media exists, remove and change by the new one)
   } Med_Action_t;
 #define Med_ACTION_DEFAULT Med_ACTION_NO_MEDIA
 
@@ -59,22 +58,22 @@ typedef enum
 No file   Original file               Temporary          Definitive         Name of the image/video
 uploaded  uploaded by user            processed file     processed file     stored in database
 --------- --------------------------- ------------------ ------------------ ---------------------
-Med_NONE  Med_FILE_RECEIVED           Med_FILE_PROCESSED Med_FILE_MOVED     Med_NAME_STORED_IN_DB
+Med_STATUS_NONE                       Med_PROCESSED                         Med_NAME_STORED_IN_DB
 --------- --------------------------- ------------------ ------------------ ---------------------
--> upload-file ->          -> process-file ->  b -> move-file ->  -> insert-name ->
+     upload-file               process file         move file      insert in database
 --------- --------------------------- ------------------ ------------------ ---------------------
-file.ext   /                           /                  /                 xx-unique-name
-           |                           |                  |
-          var                         var                var
-           |                           |                  |
-          www                         www                www
-           |                           |                  |
-          swad                        swad               swad
-           |                           |                  |
-          med                         med                med
-           |                           |                  |
-          tmp                         tmp                xx (2 first chars)
-           |                           |                  |
+file.ext        /                           /                  /               xx-unique-name
+                |                           |                  |
+               var                         var                var
+                |                           |                  |
+               www                         www                www
+                |                           |                  |
+               swad                        swad               swad
+                |                           |                  |
+               med                         med                med
+                |                           |                  |
+               tmp                         tmp                xx (2 first chars)
+                |                           |                  |
           xx-unique-name_original.ext xx-unique-name.jpg xx-unique-name.jpg
 
 xx-unique-name: a unique name encrypted starting by two random chars xx
@@ -82,9 +81,7 @@ xx-unique-name: a unique name encrypted starting by two random chars xx
 typedef enum
   {
    Med_STATUS_NONE,
-   Med_RECEIVED,
    Med_PROCESSED,
-   Med_FILE_MOVED,
    Med_STORED_IN_DB,
   } Med_Status_t;
 
@@ -107,10 +104,12 @@ struct Media
    Med_Status_t Status;
    char Name[Med_BYTES_NAME + 1];
    Med_Type_t Type;
-   char *Title;	// Title/attribution (it must be initialized to NULL
-		// in order to not trying to free it when no memory allocated)
+   bool URLIsAllocated;
+   bool TitleIsAllocated;
    char *URL;	// URL, i.e. link to original big photo or video
 		// (it must be initialized to NULL
+		// in order to not trying to free it when no memory allocated)
+   char *Title;	// Title/attribution (it must be initialized to NULL
 		// in order to not trying to free it when no memory allocated)
    unsigned Width;
    unsigned Height;
@@ -133,10 +132,8 @@ struct ParamUploadMedia
 /*****************************************************************************/
 
 void Med_MediaConstructor (struct Media *Media);
-void Med_ResetMediaExceptTitleAndURL (struct Media *Media);
 void Med_MediaDestructor (struct Media *Media);
-void Med_FreeMediaTitle (struct Media *Media);
-void Med_FreeMediaURL (struct Media *Media);
+void Med_ResetMedia (struct Media *Media);
 
 void Med_GetMediaDataFromRow (const char *Name,
 			      const char *TypeStr,
@@ -146,7 +143,8 @@ void Med_GetMediaDataFromRow (const char *Name,
 
 void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput);
 void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
-                           void (*GetMediaFromDB) (int NumMediaInForm,struct Media *Media));
+                           void (*GetMediaFromDB) (int NumMediaInForm,struct Media *Media),
+			   const char *SectionForAlerts);
 void Med_SetParamNames (struct ParamUploadMedia *ParamUploadMedia,int NumMediaInForm);
 
 void Med_MoveMediaToDefinitiveDir (struct Media *Media);

@@ -732,7 +732,8 @@ void Msg_RecMsgFromUsr (void)
    Media.Width   = Msg_IMAGE_SAVED_MAX_WIDTH;
    Media.Height  = Msg_IMAGE_SAVED_MAX_HEIGHT;
    Media.Quality = Msg_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (-1,&Media,NULL);
+   Med_GetMediaFromForm (-1,&Media,NULL,NULL);
+   Ale_ShowAlerts (NULL);
 
    /***** Loop over the list Gbl.Usrs.Selected.List[Rol_UNK], that holds the list of the
 	  recipients, creating a received message for each recipient *****/
@@ -1281,8 +1282,8 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    long MsgCod;
 
    /***** Check if image is received and processed *****/
-   if (Media->Action == Med_ACTION_NEW_MEDIA &&	// Upload new image
-       Media->Status == Med_PROCESSED)	// The new image received has been processed
+   if (Media->Action == Med_ACTION_NEW_MEDIA &&	// New media
+       Media->Status == Med_PROCESSED)		// The new media received has been processed
       /* Move processed image to definitive directory */
       Med_MoveMediaToDefinitiveDir (Media);
 

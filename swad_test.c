@@ -247,7 +247,7 @@ static void Tst_PutTFInputField (const char *Label,char Value);
 static void Tst_FreeTextChoiceAnswers (void);
 static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
 
-static void Tst_InitMediaOfQuestion (void);
+static void Tst_ResetMediaOfQuestion (void);
 static void Tst_FreeMediaOfQuestion (void);
 
 static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
@@ -1162,7 +1162,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 			 " value=\"%u\"",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       UniqueId,ParamUploadMedia.Action,
-	       Med_ACTION_CHANGE_MEDIA);	// Replace existing image by new image
+	       Med_ACTION_NEW_MEDIA);	// Replace existing image by new image
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
@@ -5476,24 +5476,18 @@ static void Tst_FreeTextChoiceAnswer (unsigned NumOpt)
 /***************** Initialize images of a question to zero *******************/
 /*****************************************************************************/
 
-static void Tst_InitMediaOfQuestion (void)
+static void Tst_ResetMediaOfQuestion (void)
   {
    unsigned NumOpt;
 
-   /***** Initialize image *****/
-   Med_ResetMediaExceptTitleAndURL (&Gbl.Test.Media);
-   Med_FreeMediaTitle (&Gbl.Test.Media);
-   Med_FreeMediaURL (&Gbl.Test.Media);
+   /***** Reset media for stem *****/
+   Med_ResetMedia (&Gbl.Test.Media);
 
+   /***** Reset media for every answer option *****/
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
-     {
-      /***** Initialize image *****/
-      Med_ResetMediaExceptTitleAndURL (&Gbl.Test.Answer.Options[NumOpt].Media);
-      Med_FreeMediaTitle (&Gbl.Test.Media);
-      Med_FreeMediaURL (&Gbl.Test.Media);
-     }
+      Med_ResetMedia (&Gbl.Test.Answer.Options[NumOpt].Media);
   }
 
 /*****************************************************************************/
@@ -5751,7 +5745,7 @@ void Tst_ReceiveQst (void)
    else	// Question is wrong
      {
       /***** Whether images has been received or not, reset images *****/
-      Tst_InitMediaOfQuestion ();
+      Tst_ResetMediaOfQuestion ();
 
       /***** Put form to edit question again *****/
       Tst_PutFormEditOneQst (Stem,Feedback);
@@ -5828,7 +5822,9 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Gbl.Test.Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
    Gbl.Test.Media.Quality = Tst_IMAGE_SAVED_QUALITY;
    Med_GetMediaFromForm (-1,	// < 0 ==> the image associated to the stem
-                         &Gbl.Test.Media,Tst_GetMediaFromDB);
+                         &Gbl.Test.Media,Tst_GetMediaFromDB,
+			 NULL);
+   Ale_ShowAlerts (NULL);
 
    /***** Get answers *****/
    Gbl.Test.Shuffle = false;
@@ -5904,7 +5900,9 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	       Gbl.Test.Answer.Options[NumOpt].Media.Quality = Tst_IMAGE_SAVED_QUALITY;
 	       Med_GetMediaFromForm ((int) NumOpt,	// >= 0 ==> the image associated to an answer
 	                             &Gbl.Test.Answer.Options[NumOpt].Media,
-				     Tst_GetMediaFromDB);
+				     Tst_GetMediaFromDB,
+				     NULL);
+	       Ale_ShowAlerts (NULL);
 	      }
            }
 
@@ -5963,7 +5961,6 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 
 bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
   {
-   extern const char *Txt_Error_receiving_or_processing_image;
    extern const char *Txt_You_must_type_at_least_one_tag_for_the_question;
    extern const char *Txt_You_must_type_the_stem_of_the_question;
    extern const char *Txt_You_must_select_a_T_F_answer;
@@ -5978,14 +5975,6 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
    unsigned NumLastOpt;
    bool ThereIsEndOfAnswers;
    unsigned i;
-
-   if ((Gbl.Test.Media.Action == Med_ACTION_NEW_MEDIA ||	// Upload new image
-        Gbl.Test.Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
-       Gbl.Test.Media.Status != Med_PROCESSED)
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_Error_receiving_or_processing_image);
-      return false;
-     }
 
    /***** This function also counts the number of options. Initialize this number to 0. *****/
    Gbl.Test.Answer.NumOptions = 0;
@@ -6008,6 +5997,7 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
+	 /* First option should be filled */
          if (!Gbl.Test.Answer.Options[0].Text)
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
@@ -6018,10 +6008,12 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_an_integer_value_as_the_correct_answer);
             return false;
            }
+
          Gbl.Test.Answer.Integer = Tst_GetIntAnsFromStr (Gbl.Test.Answer.Options[0].Text);
          Gbl.Test.Answer.NumOptions = 1;
          break;
       case Tst_ANS_FLOAT:
+	 /* First two options should be filled */
          if (!Gbl.Test.Answer.Options[0].Text ||
              !Gbl.Test.Answer.Options[1].Text)
            {
@@ -6034,6 +6026,8 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_answer);
             return false;
            }
+
+         /* Lower limit should be <= upper limit */
          for (i = 0;
               i < 2;
               i++)
@@ -6044,30 +6038,23 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
             Ale_ShowAlert (Ale_WARNING,Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit);
             return false;
            }
+
          Gbl.Test.Answer.NumOptions = 2;
          break;
       case Tst_ANS_TRUE_FALSE:
+	 /* Answer should be 'T' or 'F' */
          if (Gbl.Test.Answer.TF != 'T' &&
              Gbl.Test.Answer.TF != 'F')
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_a_T_F_answer);
             return false;
            }
+
          Gbl.Test.Answer.NumOptions = 1;
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         if (!Gbl.Test.Answer.Options[0].Text)		// If the first answer is empty
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
-            return false;
-           }
-         if (!Gbl.Test.Answer.Options[0].Text[0])	// If the first answer is empty
-           {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
-            return false;
-           }
-
+	 /* No option should be empty before a non-empty option */
          for (NumOpt = 0, NumLastOpt = 0, ThereIsEndOfAnswers = false;
               NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
               NumOpt++)
@@ -6089,12 +6076,14 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
             else
                ThereIsEndOfAnswers = true;
 
+         /* The two first options must be filled */
          if (NumLastOpt < 1)
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
             return false;
            }
 
+         /* Its mandatory to mark at least one option as correct */
          for (NumOpt = 0;
               NumOpt <= NumLastOpt;
               NumOpt++)
@@ -6107,17 +6096,19 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
            }
          break;
       case Tst_ANS_TEXT:
+	 /* First option should be filled */
          if (!Gbl.Test.Answer.Options[0].Text)		// If the first answer is empty
            {
-            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
+            Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
             return false;
            }
-         if (!Gbl.Test.Answer.Options[0].Text[0])  // If the first answer is empty
+         if (!Gbl.Test.Answer.Options[0].Text[0])	// If the first answer is empty
            {
             Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_answer);
             return false;
            }
 
+	 /* No option should be empty before a non-empty option */
          for (NumOpt=0, ThereIsEndOfAnswers=false;
               NumOpt<Tst_MAX_OPTIONS_PER_QUESTION;
               NumOpt++)
@@ -6161,9 +6152,8 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
 	  and moved to the definitive directory) */
       Tst_RemoveMedFileFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
-   if ((Gbl.Test.Media.Action == Med_ACTION_NEW_MEDIA ||	// Upload new image
-	Gbl.Test.Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
-        Gbl.Test.Media.Status == Med_PROCESSED)		// The new image received has been processed
+   if (Gbl.Test.Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
+       Gbl.Test.Media.Status == Med_PROCESSED)		// The new media received has been processed
       /* Move processed image to definitive directory */
       Med_MoveMediaToDefinitiveDir (&Gbl.Test.Media);
 
@@ -6181,10 +6171,9 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
 		and moved to the definitive directory) */
 	    Tst_RemoveMedFileFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
 
-	 if ((Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_NEW_MEDIA ||		// Upload new image
-	      Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
-	      Gbl.Test.Answer.Options[NumOpt].Media.Status == Med_PROCESSED)		// The new image received has been processed
-	    /* Move processed image to definitive directory */
+	 if (Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
+	     Gbl.Test.Answer.Options[NumOpt].Media.Status == Med_PROCESSED)		// The new media received has been processed
+	    /* Move processed media to definitive directory */
 	    Med_MoveMediaToDefinitiveDir (&Gbl.Test.Answer.Options[NumOpt].Media);
 	}
   }

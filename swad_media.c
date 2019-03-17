@@ -103,6 +103,10 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void Med_ResetMediaExceptURLAndTitle (struct Media *Media);
+static void Med_FreeMediaURL (struct Media *Media);
+static void Med_FreeMediaTitle (struct Media *Media);
+
 static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction);
 static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUploadMedia);
 static void Usr_GetURLFromForm (const char *ParamName,struct Media *Media);
@@ -153,66 +157,77 @@ static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
                                              const char *MIMEType);
 
 /*****************************************************************************/
-/********************* Reset media (image/video) fields **********************/
+/********************** Media (image/video) constructor **********************/
 /*****************************************************************************/
 // Every struct Media must be initialized with this constructor function after it is declared
 // Every call to constructor must have a call to destructor
 
 void Med_MediaConstructor (struct Media *Media)
   {
-   Med_ResetMediaExceptTitleAndURL (Media);
-   Media->Title = NULL;
+   Med_ResetMediaExceptURLAndTitle (Media);
    Media->URL   = NULL;
+   Media->Title = NULL;
   }
 
 /*****************************************************************************/
-/***************** Reset image fields except title and URL *******************/
-/*****************************************************************************/
-
-void Med_ResetMediaExceptTitleAndURL (struct Media *Media)
-  {
-   Media->Action = Med_ACTION_NO_MEDIA;
-   Media->Status = Med_STATUS_NONE;
-   Media->Name[0] = '\0';
-   Media->Type = Med_TYPE_NONE;
-  }
-
-/*****************************************************************************/
-/************************ Free media (image/video) ***************************/
+/********************** Media (image/video) destructor ***********************/
 /*****************************************************************************/
 // Every call to constructor must have a call to destructor
 
 void Med_MediaDestructor (struct Media *Media)
   {
-   Med_FreeMediaTitle (Media);
-   Med_FreeMediaURL (Media);
+   Med_ResetMedia (Media);
   }
 
 /*****************************************************************************/
-/****************************** Free image title *****************************/
+/********************* Reset media (image/video) fields **********************/
+/*****************************************************************************/
+// Media must be constructed before calling this function
+
+void Med_ResetMedia (struct Media *Media)
+  {
+   Med_ResetMediaExceptURLAndTitle (Media);
+   Med_FreeMediaURL (Media);
+   Med_FreeMediaTitle (Media);
+  }
+
+/*****************************************************************************/
+/***************** Reset media fields except URL and title *******************/
 /*****************************************************************************/
 
-void Med_FreeMediaTitle (struct Media *Media)
+static void Med_ResetMediaExceptURLAndTitle (struct Media *Media)
   {
-   // Media->Title must be initialized to NULL after declaration
-   if (Media->Title)
-     {
-      free ((void *) Media->Title);
-      Media->Title = NULL;
-     }
+   Media->Action  = Med_ACTION_NO_MEDIA;
+   Media->Status  = Med_STATUS_NONE;
+   Media->Name[0] = '\0';
+   Media->Type    = Med_TYPE_NONE;
   }
 
 /*****************************************************************************/
 /******************************* Free image URL ******************************/
 /*****************************************************************************/
 
-void Med_FreeMediaURL (struct Media *Media)
+static void Med_FreeMediaURL (struct Media *Media)
   {
-   // Media->URL must be initialized to NULL after declaration
+   // Media->URL is initialized to NULL in constructor
    if (Media->URL)
      {
       free ((void *) Media->URL);
       Media->URL = NULL;
+     }
+  }
+
+/*****************************************************************************/
+/****************************** Free image title *****************************/
+/*****************************************************************************/
+
+static void Med_FreeMediaTitle (struct Media *Media)
+  {
+   // Media->Title is initialized to NULL in constructor
+   if (Media->Title)
+     {
+      free ((void *) Media->Title);
+      Media->Title = NULL;
      }
   }
 
@@ -391,32 +406,28 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 /*****************************************************************************/
 /******************** Get media (image/video) from form **********************/
 /*****************************************************************************/
+// Media constructor must be called before calling this function
 // If NumMediaInForm < 0, params have no suffix
 // If NumMediaInForm >= 0, the number is a suffix of the params
 
 void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
-                           void (*GetMediaFromDB) (int NumMediaInForm,struct Media *Media))
+                           void (*GetMediaFromDB) (int NumMediaInForm,struct Media *Media),
+			   const char *SectionForAlerts)
   {
+   extern const char *Txt_Error_sending_or_processing_image_video;
    struct ParamUploadMedia ParamUploadMedia;
+   Med_Action_t Action;
    Med_FormType_t FormType;
-
-   /***** Initialize media *****/
-   Media->Action  = Med_ACTION_NO_MEDIA;
-   Media->Status  = Med_STATUS_NONE;
-   Media->Name[0] = '\0';
-   Media->Type    = Med_TYPE_NONE;
-   Media->Title   = NULL;
-   Media->URL     = NULL;
 
    /***** Set names of parameters depending on number of media in form *****/
    Med_SetParamNames (&ParamUploadMedia,NumMediaInForm);
 
    /***** Get action and initialize media (image/video)
           (except title, that will be get after the media file) *****/
-   Media->Action = Med_GetMediaActionFromForm (ParamUploadMedia.Action);
+   Action = Med_GetMediaActionFromForm (ParamUploadMedia.Action);
 
    /***** Get the media (image/video) name and the file *****/
-   switch (Media->Action)
+   switch (Action)
      {
       case Med_ACTION_NEW_MEDIA:	// Upload new image/video
 	 /***** Get form type *****/
@@ -426,76 +437,59 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
 	 switch (FormType)
 	   {
 	    case Med_FORM_FILE:
+	       Media->Action = Med_ACTION_NEW_MEDIA;
+
 	       /* Get image/video (if present ==>
 	                           process and create temporary file) */
 	       Med_GetAndProcessFileFromForm (ParamUploadMedia.File,Media);
-	       switch (Media->Status)
-		 {
-		  case Med_STATUS_NONE:	// No new image/video received
-		     Media->Action = Med_ACTION_NO_MEDIA;
-		     Media->Name[0] = '\0';
-		     Media->Type = Med_TYPE_NONE;
-		     break;
-		  case Med_RECEIVED:	// New image/video received, but not processed
-		     Media->Status = Med_STATUS_NONE;
-		     Media->Name[0] = '\0';
-		     Media->Type = Med_TYPE_NONE;
-		     break;
-		  case Med_PROCESSED:
-	             Usr_GetURLFromForm (ParamUploadMedia.URL,Media);
-	             Usr_GetTitleFromForm (ParamUploadMedia.Title,Media);
-	             break;
-		  default:
-		     break;
+
+	       /* Check status of media after getting and processing it */
+	       if (Media->Status == Med_PROCESSED)
+	         {
+		  Usr_GetURLFromForm (ParamUploadMedia.URL,Media);
+		  Usr_GetTitleFromForm (ParamUploadMedia.Title,Media);
+	         }
+               else
+                 {
+		  /* Create alert with warning */
+		  Ale_CreateAlert (Ale_WARNING,SectionForAlerts,
+				   Txt_Error_sending_or_processing_image_video);
+
+		  /* Reset media (no media will be saved into database) */
+		  Med_ResetMedia (Media);
 		 }
 	       break;
 	    case Med_FORM_EMBED:
+	       Media->Action = Med_ACTION_NEW_MEDIA;
+
 	       /* Get and process embed URL from form */
 	       Med_GetAndProcessEmbedFromForm (ParamUploadMedia.URL,Media);
+
+	       /* Check status of media after getting and processing it */
+	       if (Media->Status != Med_PROCESSED)
+                 {
+		  /* Create alert with warning */
+		  Ale_CreateAlert (Ale_WARNING,SectionForAlerts,
+				   Txt_Error_sending_or_processing_image_video);
+
+		  /* Reset media (no media will be saved into database) */
+		  Med_ResetMedia (Media);
+		 }
 	       break;
-	    default:
+	    default:	// No media form selected
+	       Media->Action = Med_ACTION_NO_MEDIA;
 	       break;
 	   }
 	 break;
       case Med_ACTION_KEEP_MEDIA:	// Keep current image/video unchanged
+	 Media->Action = Med_ACTION_KEEP_MEDIA;
+
 	 /***** Get media name *****/
 	 if (GetMediaFromDB != NULL)
 	    GetMediaFromDB (NumMediaInForm,Media);
 	 break;
-      case Med_ACTION_CHANGE_MEDIA:	// Replace old image/video by new one
-	 /***** Get form type *****/
-	 FormType = Usr_GetFormTypeFromForm (&ParamUploadMedia);
-
-         /***** Get new media *****/
-	 switch (FormType)
-	   {
-	    case Med_FORM_FILE:
-	       /* Get image/video (if present ==>
-	                           process and create temporary file) */
-	       Med_GetAndProcessFileFromForm (ParamUploadMedia.File,Media);
-	       switch (Media->Status)
-		 {
-		  case Med_PROCESSED:
-	             Usr_GetURLFromForm (ParamUploadMedia.URL,Media);
-	             Usr_GetTitleFromForm (ParamUploadMedia.Title,Media);
-	             break;
-		  default:
-		     break;
-		 }
-	       break;
-	    case Med_FORM_EMBED:
-	       /* Get and process embed URL from form */
-	       Med_GetAndProcessEmbedFromForm (ParamUploadMedia.URL,Media);
-	       break;
-	    default:
-	       break;
-	   }
-	 if (Media->Status != Med_PROCESSED &&	// No new media received-processed successfully
-	     GetMediaFromDB != NULL)
-	    /* Get media (image/video) name */
-	    GetMediaFromDB (NumMediaInForm,Media);
-	 break;
-      default:
+      default:	// Unknown action
+	 Media->Action = Med_ACTION_NO_MEDIA;
          break;
      }
   }
@@ -687,8 +681,6 @@ static void Med_GetAndProcessFileFromForm (const char *ParamFile,
 
    if (Fil_EndReceptionOfFile (PathFileOrg,Param))	// Success
      {
-      Media->Status = Med_RECEIVED;
-
       /***** Detect if animated GIF *****/
       if (Media->Type == Med_GIF)
 	 if (!Med_DetectIfAnimated (Media,PathMedPrivTmp,PathFileOrg))
@@ -853,8 +845,9 @@ static void Med_ProcessGIF (struct Media *Media,
 	{
 	 /* Show warning alert */
 	 Fil_WriteFileSizeBrief ((double) Med_MAX_SIZE_GIF,FileSizeStr);
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X,
-			FileSizeStr);
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X,
+			  FileSizeStr);
 	}
      }
    else // Error getting file data
@@ -897,8 +890,9 @@ static void Med_ProcessVideo (struct Media *Media,
 	{
 	 /* Show warning alert */
 	 Fil_WriteFileSizeBrief ((double) Med_MAX_SIZE_MP4,FileSizeStr);
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X,
-			FileSizeStr);
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_The_size_of_the_file_exceeds_the_maximum_allowed_X,
+			  FileSizeStr);
 	}
      }
    else // Error getting file data
@@ -1133,8 +1127,8 @@ void Med_MoveMediaToDefinitiveDir (struct Media *Media)
    char PathMedPriv[PATH_MAX + 1];
 
    /***** Check trivial cases *****/
-   if (Media->Type == Med_TYPE_NONE)
-      Lay_ShowErrorAndExit ("Med_MoveMediaToDefinitiveDir: Wrong media type.");
+   if (Media->Status != Med_PROCESSED)
+      return;
    if (Media->Type == Med_YOUTUBE)
       return;	// Nothing to do with files
 
@@ -1182,8 +1176,6 @@ void Med_MoveMediaToDefinitiveDir (struct Media *Media)
 	 Lay_ShowErrorAndExit ("Wrong media type.");
 	 break;
      }
-
-   Media->Status = Med_FILE_MOVED;	// Success
   }
 
 /*****************************************************************************/
