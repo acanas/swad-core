@@ -3567,7 +3567,7 @@ const char *Txt_Change_IDs =
 	"Alterar n&ordm;s. identif.";
 #endif
 
-const char *Txt_Change_image =
+const char *Txt_Change_image_video =
 #if   L==1	// ca
 	"Canviar imatge / v&iacute;deo";
 #elif L==2	// de
@@ -6614,7 +6614,7 @@ const char *Txt_Current_email =
 	"Email atual";
 #endif
 
-const char *Txt_Current_image =
+const char *Txt_Current_image_video =
 #if   L==1	// ca
 	"Imatge / v&iacute;deo actual";
 #elif L==2	// de
@@ -24648,7 +24648,7 @@ const char *Txt_No_holidays =
 	"N&atilde;o h&aacute; feriados.";
 #endif
 
-const char *Txt_No_image =	// Without any image
+const char *Txt_No_image_video =	// Without any image
 #if   L==1	// ca
 	"Sense imatge / v&iacute;deo";
 #elif L==2	// de

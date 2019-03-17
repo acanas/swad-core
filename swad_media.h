@@ -122,6 +122,7 @@ struct Media
 struct ParamUploadMedia
   {
    char Action  [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
+   char FormType[Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
    char File    [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
    char Title   [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];
    char URL     [Med_MAX_BYTES_PARAM_UPLOAD_MEDIA + 1];

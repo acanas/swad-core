@@ -276,11 +276,11 @@ static void Tst_RemAnsFromQst (void);
 static void Tst_RemTagsFromQst (void);
 static void Tst_RemoveUnusedTagsFromCurrentCrs (void);
 
-static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod);
-static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod);
-static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd);
-static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod);
-static void Tst_RemoveAllImgFilesFromAnsOfAllQstsInCrs (long CrsCod);
+static void Tst_RemoveMedFileFromStemOfQst (long CrsCod,long QstCod);
+static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
+static void Tst_RemoveMedFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd);
+static void Tst_RemoveAllMedFilesFromAnsOfQst (long CrsCod,long QstCod);
+static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
 
 static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType);
@@ -1115,12 +1115,9 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_No_image;
-   extern const char *Txt_Current_image;
-   extern const char *Txt_Change_image;
-   extern const char *Txt_Title_attribution;
-   extern const char *Txt_Link;
-   extern const char *Txt_optional;
+   extern const char *Txt_No_image_video;
+   extern const char *Txt_Current_image_video;
+   extern const char *Txt_Change_image_video;
    static unsigned UniqueId = 0;
    struct ParamUploadMedia ParamUploadMedia;
 
@@ -1130,9 +1127,9 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
       Med_SetParamNames (&ParamUploadMedia,NumMediaInForm);
 
       /***** Start container *****/
-      fprintf (Gbl.F.Out,"<div class=\"TEST_FORM_EDIT_IMG\">");
+      fprintf (Gbl.F.Out,"<div class=\"TEST_FORM_EDIT_MED\">");
 
-      /***** Choice 1: No image *****/
+      /***** Choice 1: No media *****/
       fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	                 "<input type=\"radio\" name=\"%s\" value=\"%u\"",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
@@ -1142,9 +1139,9 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
       fprintf (Gbl.F.Out," />"
 			 "%s"
 			 "</label><br />",
-	       Txt_No_image);
+	       Txt_No_image_video);
 
-      /***** Choice 2: Current image *****/
+      /***** Choice 2: Current media *****/
       fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	                 "<input type=\"radio\" name=\"%s\" value=\"%u\""
 	                 " checked=\"checked\"",
@@ -1155,10 +1152,10 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
       fprintf (Gbl.F.Out," />"
 			 "%s"
 			 "</label>",
-	       Txt_Current_image);
+	       Txt_Current_image_video);
       Med_ShowMedia (Media,ClassContainer,ClassMedia);
 
-      /***** Choice 3: Change/new image *****/
+      /***** Choice 3: Change media *****/
       UniqueId++;
       fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	                 "<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
@@ -1170,40 +1167,15 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
 			 "%s: "
-			 "</label>"
-                         "<input type=\"file\" name=\"%s\" accept=\"image/*\"",
-	       Txt_Change_image,
-	       ParamUploadMedia.File);
-      if (OptionsDisabled)
-	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('chg_img_%u').checked = true;\" />",
-	       UniqueId);
-
-      /***** Media title/attribution *****/
-      fprintf (Gbl.F.Out,"<br />"
-			 "<input type=\"text\" name=\"%s\""
-			 " placeholder=\"%s (%s)\""
-			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
-	       ParamUploadMedia.Title,Txt_Title_attribution,Txt_optional,
-	       ClassMediaInput,Med_MAX_CHARS_TITLE,
-	       Media->Title ? Media->Title :
-		              "");
-
-      /***** Media URL *****/
-      fprintf (Gbl.F.Out,"<br />"
-			 "<input type=\"text\" name=\"%s\""
-			 " placeholder=\"%s (%s)\""
-			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
-	       ParamUploadMedia.URL,Txt_Link,Txt_optional,
-	       ClassMediaInput,Cns_MAX_CHARS_WWW,
-	       Media->URL ? Media->URL :
-		            "");
+			 "</label>",
+	       Txt_Change_image_video);
+      Med_PutMediaUploader (NumMediaInForm,ClassMediaInput);
 
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");
      }
    else	// No current image
-      /***** Attached image (optional) *****/
+      /***** Attached media *****/
       Med_PutMediaUploader (NumMediaInForm,ClassMediaInput);
   }
 
@@ -5081,7 +5053,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<textarea id=\"Stem\" name=\"Stem\""
-                      " class=\"STEM\" rows=\"5\" required=\"required\">"
+                      " class=\"STEM_TEXTAREA\" rows=\"5\" required=\"required\">"
                       "%s"
                       "</textarea><br />",
             The_ClassFormInBox[Gbl.Prefs.Theme],
@@ -5096,7 +5068,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "%s (%s):<br />"
-                      "<textarea name=\"Feedback\" class=\"STEM\" rows=\"2\">",
+                      "<textarea name=\"Feedback\""
+                      " class=\"STEM_TEXTAREA\" rows=\"2\">",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Feedback,Txt_optional);
    if (Feedback)
@@ -5289,7 +5262,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
       /* Answer text */
       fprintf (Gbl.F.Out,"<textarea name=\"AnsStr%u\""
-	                 " class=\"ANS_STR\" rows=\"5\"",NumOpt);
+	                 " class=\"ANSWER_TEXTAREA\" rows=\"5\"",
+	       NumOpt);
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       if (NumOpt == 0)	// First textarea required
@@ -5304,12 +5278,13 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                                  (int) NumOpt,
                                  "TEST_IMG_EDIT_ONE_ANS_CONTAINER",
                                  "TEST_IMG_EDIT_ONE_ANS",
-                                 "ANS_STR",	// Title / attribution
+                                 "ANSWER",	// Form inputs
                                  OptionsDisabled);
 
       /* Feedback */
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s (%s):<br />"
-	                 "<textarea name=\"FbStr%u\" class=\"ANS_STR\" rows=\"2\"",
+	                 "<textarea name=\"FbStr%u\""
+	                 " class=\"ANSWER_TEXTAREA\" rows=\"2\"",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Feedback,Txt_optional,
 	       NumOpt);
       if (OptionsDisabled)
@@ -5920,6 +5895,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	    /* Get image associated to the answer (action, file and title) */
+
 	    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
 		Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
 	      {
@@ -6183,7 +6159,7 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
       /* Remove possible file with the old image
 	 (the new image file is already processed
 	  and moved to the definitive directory) */
-      Tst_RemoveImgFileFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+      Tst_RemoveMedFileFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
    if ((Gbl.Test.Media.Action == Med_ACTION_NEW_MEDIA ||	// Upload new image
 	Gbl.Test.Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
@@ -6203,7 +6179,7 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
 	    /* Remove possible file with the old image
 	       (the new image file is already processed
 		and moved to the definitive directory) */
-	    Tst_RemoveImgFileFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
+	    Tst_RemoveMedFileFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
 
 	 if ((Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_NEW_MEDIA ||		// Upload new image
 	      Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_CHANGE_MEDIA) &&	// Replace existing image by new image
@@ -6421,8 +6397,8 @@ void Tst_RemoveQst (void)
    EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
 
    /***** Remove images associated to question *****/
-   Tst_RemoveAllImgFilesFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
-   Tst_RemoveImgFileFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+   Tst_RemoveAllMedFilesFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+   Tst_RemoveMedFileFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
    /***** Remove the question from all the tables *****/
    /* Remove answers and tags from this test question */
@@ -6774,7 +6750,7 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
 /******** Remove one file associated to one stem of one test question ********/
 /*****************************************************************************/
 
-static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
+static void Tst_RemoveMedFileFromStemOfQst (long CrsCod,long QstCod)
   {
    MYSQL_RES *mysql_res;
 
@@ -6797,7 +6773,7 @@ static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
 /****** in a course                                                      *****/
 /*****************************************************************************/
 
-static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod)
+static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
@@ -6822,7 +6798,7 @@ static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod)
 /**** Remove one image file associated to one answer of one test question ****/
 /*****************************************************************************/
 
-static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd)
+static void Tst_RemoveMedFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd)
   {
    MYSQL_RES *mysql_res;
 
@@ -6848,7 +6824,7 @@ static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsI
 /*** Remove all image files associated to all answers of one test question ***/
 /*****************************************************************************/
 
-static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod)
+static void Tst_RemoveAllMedFilesFromAnsOfQst (long CrsCod,long QstCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
@@ -6877,7 +6853,7 @@ static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod)
 /** in a course                                                            ***/
 /*****************************************************************************/
 
-static void Tst_RemoveAllImgFilesFromAnsOfAllQstsInCrs (long CrsCod)
+static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
@@ -8632,8 +8608,8 @@ void Tst_RemoveCrsTests (long CrsCod)
 
    /***** Remove files with images associated
           to test questions in the course *****/
-   Tst_RemoveAllImgFilesFromAnsOfAllQstsInCrs (CrsCod);
-   Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (CrsCod);
+   Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (CrsCod);
+   Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
 
    /***** Remove test questions in the course *****/
    DB_QueryDELETE ("can not remove test questions of a course",

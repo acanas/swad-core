@@ -104,7 +104,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction);
-static Med_FormType_t Usr_GetFormTypeFromForm (void);
+static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUploadMedia);
 static void Usr_GetURLFromForm (const char *ParamName,struct Media *Media);
 static void Usr_GetTitleFromForm (const char *ParamName,struct Media *Media);
 static void Med_GetAndProcessFileFromForm (const char *ParamFile,
@@ -307,7 +307,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 		      " class=\"PREF_OFF\">"
 		      "<img src=\"%s/file-image.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO_HIGHLIGHT ICOx20\""
+	              " class=\"ICO_HIGHLIGHT ICOx16\""
 	              " onclick=\"mediaClickOnActivateUpload('%s');\" />"
 	              "</div>",					// <id>_ico_upl
             Id,
@@ -318,9 +318,9 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    /***** Form type *****/
    fprintf (Gbl.F.Out,"<input type=\"hidden\""
 		      " id=\"%s_par_upl\""			// <id>_par_upl
-		      " name=\"FormType\" value=\"%u\""
+		      " name=\"%s\" value=\"%u\""
 		      " disabled=\"disabled\" />",
-	    Id,
+	    Id,ParamUploadMedia.FormType,
             (unsigned) Med_FORM_FILE);
 
    /***** Embed icon *****/
@@ -328,7 +328,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 		      " class=\"PREF_OFF\">"
 		      "<img src=\"%s/youtube-brands.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO_HIGHLIGHT ICOx20\""
+	              " class=\"ICO_HIGHLIGHT ICOx16\""
 	              " onclick=\"mediaClickOnActivateEmbed('%s');\" />"
 	              "</div>",					// <id>_ico_emb
             Id,
@@ -347,9 +347,9 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    /***** Form type *****/
    fprintf (Gbl.F.Out,"<input type=\"hidden\""
 		      " id=\"%s_par_emb\""			// <id>_par_emb
-		      " name=\"FormType\" value=\"%u\""
+		      " name=\"%s\" value=\"%u\""
 		      " disabled=\"disabled\" />",
-	    Id,
+	    Id,ParamUploadMedia.FormType,
             (unsigned) Med_FORM_EMBED);
 
    /***** Media file *****/
@@ -400,28 +400,34 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
    struct ParamUploadMedia ParamUploadMedia;
    Med_FormType_t FormType;
 
+   /***** Initialize media *****/
+   Media->Action  = Med_ACTION_NO_MEDIA;
+   Media->Status  = Med_STATUS_NONE;
+   Media->Name[0] = '\0';
+   Media->Type    = Med_TYPE_NONE;
+   Media->Title   = NULL;
+   Media->URL     = NULL;
+
    /***** Set names of parameters depending on number of media in form *****/
    Med_SetParamNames (&ParamUploadMedia,NumMediaInForm);
 
    /***** Get action and initialize media (image/video)
           (except title, that will be get after the media file) *****/
    Media->Action = Med_GetMediaActionFromForm (ParamUploadMedia.Action);
-   Media->Status = Med_STATUS_NONE;
-   Media->Name[0] = '\0';
-   Media->Type = Med_TYPE_NONE;
-
-   /***** Get form type *****/
-   FormType = Usr_GetFormTypeFromForm ();
 
    /***** Get the media (image/video) name and the file *****/
    switch (Media->Action)
      {
       case Med_ACTION_NEW_MEDIA:	// Upload new image/video
+	 /***** Get form type *****/
+	 FormType = Usr_GetFormTypeFromForm (&ParamUploadMedia);
+
          /***** Get new media *****/
 	 switch (FormType)
 	   {
 	    case Med_FORM_FILE:
-	       /***** Get image/video (if present ==> process and create temporary file) *****/
+	       /* Get image/video (if present ==>
+	                           process and create temporary file) */
 	       Med_GetAndProcessFileFromForm (ParamUploadMedia.File,Media);
 	       switch (Media->Status)
 		 {
@@ -444,7 +450,7 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
 		 }
 	       break;
 	    case Med_FORM_EMBED:
-	       /***** Get and process embed URL from form *****/
+	       /* Get and process embed URL from form */
 	       Med_GetAndProcessEmbedFromForm (ParamUploadMedia.URL,Media);
 	       break;
 	    default:
@@ -457,10 +463,15 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
 	    GetMediaFromDB (NumMediaInForm,Media);
 	 break;
       case Med_ACTION_CHANGE_MEDIA:	// Replace old image/video by new one
+	 /***** Get form type *****/
+	 FormType = Usr_GetFormTypeFromForm (&ParamUploadMedia);
+
+         /***** Get new media *****/
 	 switch (FormType)
 	   {
 	    case Med_FORM_FILE:
-	       /***** Get image/video (if present ==> process and create temporary file) *****/
+	       /* Get image/video (if present ==>
+	                           process and create temporary file) */
 	       Med_GetAndProcessFileFromForm (ParamUploadMedia.File,Media);
 	       switch (Media->Status)
 		 {
@@ -473,7 +484,7 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
 		 }
 	       break;
 	    case Med_FORM_EMBED:
-	       /***** Get and process embed URL from form *****/
+	       /* Get and process embed URL from form */
 	       Med_GetAndProcessEmbedFromForm (ParamUploadMedia.URL,Media);
 	       break;
 	    default:
@@ -484,7 +495,7 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
 	    /* Get media (image/video) name */
 	    GetMediaFromDB (NumMediaInForm,Media);
 	 break;
-      case Med_ACTION_NO_MEDIA:		// Do not use image/video (remove current image/video if exists)
+      default:
          break;
      }
   }
@@ -499,27 +510,32 @@ void Med_SetParamNames (struct ParamUploadMedia *ParamUploadMedia,int NumMediaIn
   {
    if (NumMediaInForm < 0)	// One unique media in form ==> no suffix needed
      {
-      Str_Copy (ParamUploadMedia->Action,"MedAct",
+      Str_Copy (ParamUploadMedia->Action  ,"MedAct",
                 Med_MAX_BYTES_PARAM_UPLOAD_MEDIA);
-      Str_Copy (ParamUploadMedia->File  ,"MedFil",
+      Str_Copy (ParamUploadMedia->FormType,"MedFrm",
                 Med_MAX_BYTES_PARAM_UPLOAD_MEDIA);
-      Str_Copy (ParamUploadMedia->Title ,"MedTit",
+      Str_Copy (ParamUploadMedia->File    ,"MedFil",
                 Med_MAX_BYTES_PARAM_UPLOAD_MEDIA);
-      Str_Copy (ParamUploadMedia->URL   ,"MedURL",
+      Str_Copy (ParamUploadMedia->Title   ,"MedTit",
+                Med_MAX_BYTES_PARAM_UPLOAD_MEDIA);
+      Str_Copy (ParamUploadMedia->URL     ,"MedURL",
                 Med_MAX_BYTES_PARAM_UPLOAD_MEDIA);
      }
    else				// Several video/images in form ==> add suffix
      {
-      snprintf (ParamUploadMedia->Action,sizeof (ParamUploadMedia->Action),
+      snprintf (ParamUploadMedia->Action  ,sizeof (ParamUploadMedia->Action),
 	        "MedAct%u",
 		NumMediaInForm);
-      snprintf (ParamUploadMedia->File  ,sizeof (ParamUploadMedia->File),
+      snprintf (ParamUploadMedia->FormType,sizeof (ParamUploadMedia->Action),
+	        "MedFrm%u",
+		NumMediaInForm);
+      snprintf (ParamUploadMedia->File    ,sizeof (ParamUploadMedia->File),
 	        "MedFil%u",
 		NumMediaInForm);
-      snprintf (ParamUploadMedia->Title ,sizeof (ParamUploadMedia->Title),
+      snprintf (ParamUploadMedia->Title   ,sizeof (ParamUploadMedia->Title),
 	        "MedTit%u",
 		NumMediaInForm);
-      snprintf (ParamUploadMedia->URL   ,sizeof (ParamUploadMedia->URL),
+      snprintf (ParamUploadMedia->URL     ,sizeof (ParamUploadMedia->URL),
 	        "MedURL%u",
 		NumMediaInForm);
      }
@@ -543,9 +559,9 @@ static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction)
 /********************* Get from form the type of form ************************/
 /*****************************************************************************/
 
-static Med_FormType_t Usr_GetFormTypeFromForm (void)
+static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUploadMedia)
   {
-   return (Med_FormType_t) Par_GetParToUnsignedLong ("FormType",
+   return (Med_FormType_t) Par_GetParToUnsignedLong (ParamUploadMedia->FormType,
                                                      0,
                                                      Med_NUM_FORM_TYPES - 1,
                                                      (unsigned long) Med_FORM_UNKNOWN);
@@ -1118,7 +1134,7 @@ void Med_MoveMediaToDefinitiveDir (struct Media *Media)
 
    /***** Check trivial cases *****/
    if (Media->Type == Med_TYPE_NONE)
-      Lay_ShowErrorAndExit ("Wrong media type.");
+      Lay_ShowErrorAndExit ("Med_MoveMediaToDefinitiveDir: Wrong media type.");
    if (Media->Type == Med_YOUTUBE)
       return;	// Nothing to do with files
 
@@ -1546,8 +1562,10 @@ void Med_RemoveMediaFiles (const char *Name,Med_Type_t Type)
    char FullPathMediaPriv[PATH_MAX + 1];
 
    /***** Trivial cases *****/
-   if (Type == Med_TYPE_NONE)
-      Lay_ShowErrorAndExit ("Wrong media type.");
+   if (Name == NULL)
+      return;
+   if (!Name[0])
+      return;
    if (Type == Med_YOUTUBE)
       return;
 
@@ -1558,48 +1576,46 @@ void Med_RemoveMediaFiles (const char *Name,Med_Type_t Type)
 	     Name[0],
 	     Name[1]);
 
-   if (Name[0])
+   /***** Remove files *****/
+   switch (Type)
      {
-      switch (Type)
-        {
-         case Med_JPG:
-	    /***** Remove private JPG file *****/
-	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		      "%s/%s.%s",
-		      PathMedPriv,Name,Med_Extensions[Med_JPG]);
-	    unlink (FullPathMediaPriv);
+      case Med_JPG:
+	 /***** Remove private JPG file *****/
+	 snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		   "%s/%s.%s",
+		   PathMedPriv,Name,Med_Extensions[Med_JPG]);
+	 unlink (FullPathMediaPriv);
 
-	    break;
-         case Med_GIF:
-	    /***** Remove private GIF file *****/
-	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		      "%s/%s.%s",
-		      PathMedPriv,Name,Med_Extensions[Med_GIF]);
-	    unlink (FullPathMediaPriv);
+	 break;
+      case Med_GIF:
+	 /***** Remove private GIF file *****/
+	 snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		   "%s/%s.%s",
+		   PathMedPriv,Name,Med_Extensions[Med_GIF]);
+	 unlink (FullPathMediaPriv);
 
-	    /***** Remove private PNG file *****/
-	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		      "%s/%s.png",
-		      PathMedPriv,Name);
-	    unlink (FullPathMediaPriv);
+	 /***** Remove private PNG file *****/
+	 snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		   "%s/%s.png",
+		   PathMedPriv,Name);
+	 unlink (FullPathMediaPriv);
 
-	    break;
-         case Med_MP4:
-         case Med_WEBM:
-         case Med_OGG:
-	    /***** Remove private video file *****/
-	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		      "%s/%s.%s",
-		      PathMedPriv,Name,Med_Extensions[Type]);
-	    unlink (FullPathMediaPriv);
+	 break;
+      case Med_MP4:
+      case Med_WEBM:
+      case Med_OGG:
+	 /***** Remove private video file *****/
+	 snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		   "%s/%s.%s",
+		   PathMedPriv,Name,Med_Extensions[Type]);
+	 unlink (FullPathMediaPriv);
 
-	    break;
-         default:
-            break;
-        }
-
-      // Public links are removed automatically after a period
+	 break;
+      default:
+	 break;
      }
+
+   // Public links are removed automatically after a period
   }
 
 /*****************************************************************************/

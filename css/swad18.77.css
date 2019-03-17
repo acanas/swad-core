@@ -2409,12 +2409,30 @@ a:hover img.CENTRE_PHOTO_SHOW
 /********************************** Tests ************************************/
 .TAG_SEL	{box-sizing:border-box; width:346px;}
 .TAG_TXT	{box-sizing:border-box; width:346px;}
-.STEM		{box-sizing:border-box; width:700px;}
+.STEM
+	{
+	box-sizing:border-box;
+	margin:0 auto;
+	width:700px;
+	}
+.STEM_TEXTAREA
+	{
+	width:696px;
+	}
+.ANSWER
+	{
+	box-sizing:border-box;
+	margin:0 auto;
+	width:600px;
+	}
+.ANSWER_TEXTAREA
+	{
+	width:596px;
+	}
 .ANS_TXT	{color:#202020; font-size:12pt;}
 .ANS_0		{color:#202020; font-size:12pt; font-weight:bold;}
 .ANS_OK		{color:#008000; font-size:12pt; font-weight:bold;}
 .ANS_BAD	{color:red;     font-size:12pt; font-weight:bold;}
-.ANS_STR	{box-sizing:border-box; width:600px;}
 .TEST_SUBTITLE
 	{
 	margin:10px;
@@ -2483,7 +2501,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	border-radius:2px;
 	}
 
-.TEST_FORM_EDIT_IMG
+.TEST_FORM_EDIT_MED
 	{
 	box-sizing:border-box;
 	margin:15px 0;
@@ -2517,21 +2535,21 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TEST_EDI_ANS_LEFT_COL
 	{
 	box-sizing:border-box;
-	width:50px;
+	width:48px;
 	text-align:left;
 	vertical-align:top;
 	}
 .TEST_EDI_ANS_CENTER_COL
 	{
 	box-sizing:border-box;
-	width:50px;
+	width:48px;
 	text-align:right;
 	vertical-align:top;
 	}
 .TEST_EDI_ANS_RIGHT_COL
 	{
 	box-sizing:border-box;
-	width:604px;
+	width:600px;
 	text-align:left;
 	vertical-align:top;
 	}
@@ -2675,7 +2693,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	display:table-cell;
 	box-sizing:border-box;
-        padding:6px;
+	padding:6px;
 	text-align:center;
 	vertical-align:middle;
 	border:solid 1px;
@@ -2717,8 +2735,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MED_UPL_CON	/* Upload container */
 	{
 	text-align:center;
-	vertical-align:top;
-	margin-bottom:10px;
+	margin-bottom:6px;
 	}
 	
 .MED_PLAY
@@ -2964,6 +2981,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TL_POST_MED_INPUT
 	{
 	box-sizing:border-box;
+	margin:0 auto;
 	}
 .TL_POST_IMG_CONTAINER
 	{
@@ -3132,6 +3150,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .FOR_MED_INPUT
 	{
 	box-sizing:border-box;
+	margin:0 auto;
 	width:480px;
 	}
 
@@ -3158,6 +3177,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MSG_MED_INPUT
 	{
 	box-sizing:border-box;
+	margin:0 auto;
 	width:480px;
 	}
 .MSG_TXT
