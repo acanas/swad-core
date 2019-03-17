@@ -473,6 +473,27 @@ const char *Txt_Absents =
 	"Assentes";
 #endif
 
+const char *Txt_Accept_third_party_cookies_to_watch_YouTube_videos =
+#if   L==1	// ca
+	"Accepta cookies de tercers per poder veure v&iacute;deos de YouTube";
+#elif L==2	// de
+	"Akzeptieren Sie Cookies von Drittanbietern, um YouTube-Videos anzusehen";
+#elif L==3	// en
+	"Accept third-party cookies to watch YouTube videos";
+#elif L==4	// es
+	"Aceptar cookies de terceros para poder ver v&iacute;deos de YouTube";
+#elif L==5	// fr
+	"Acceptez les cookies tiers pour regarder des vid&eacute;os YouTube";
+#elif L==6	// gn
+	"Aceptar cookies de terceros para poder ver v&iacute;deos de YouTube";	// Okoteve traducción
+#elif L==7	// it
+	"Accetta i cookie di terze parti per guardare i video di YouTube";
+#elif L==8	// pl
+	"Akceptuj pliki cookie innych firm, aby ogl&aogon;da&cacute; filmy z YouTube";
+#elif L==9	// pt
+	"Aceite cookies de terceiros para assistir a v&iacute;deos do YouTube";
+#endif
+
 const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre =
 #if   L==1	// ca
 	"accessible per a lectura i escriptura per administradors del centre";
@@ -4679,6 +4700,27 @@ const char *Txt_Control_of_class_attendance =
 	"Kontrola obecnosc na zajeciach";
 #elif L==9	// pt
 	"Controlo de assiduidade de classe";
+#endif
+
+const char *Txt_Cookies =
+#if   L==1	// ca
+	"Cookies";
+#elif L==2	// de
+	"Cookies";
+#elif L==3	// en
+	"Cookies";
+#elif L==4	// es
+	"Cookies";
+#elif L==5	// fr
+	"Cookies";
+#elif L==6	// gn
+	"Cookies";
+#elif L==7	// it
+	"Cookies";
+#elif L==8	// pl
+	"Cookies";
+#elif L==9	// pt
+	"Cookies";
 #endif
 
 const char *Txt_Copy_FOLDER_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
@@ -40702,6 +40744,26 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 	"Prywatno&sacute;&cacute;"
 #elif L==9	// pt
 	"Privacidade"
+#endif
+	 ,
+#if   L==1	// ca				// Fig_COOKIES
+	"Cookies"
+#elif L==2	// de
+	"Cookies"
+#elif L==3	// en
+	"Cookies"
+#elif L==4	// es
+	"Cookies"
+#elif L==5	// fr
+	"Cookies"
+#elif L==6	// gn
+	"Cookies"
+#elif L==7	// it
+	"Cookies"
+#elif L==8	// pl
+	"Cookies"
+#elif L==9	// pt
+	"Cookies"
 #endif
 	};
 

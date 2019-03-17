@@ -353,7 +353,8 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Prefs.IconSet        = Ico_ICON_SET_DEFAULT;
    UsrDat->Prefs.Menu           = Mnu_MENU_DEFAULT;
    UsrDat->Prefs.SideCols       = Cfg_DEFAULT_COLUMNS;
-   UsrDat->Prefs.EmailNtfEvents = 0;        // By default, don't notify anything
+   UsrDat->Prefs.AcceptThirdPartyCookies = false;	// By default, don't accept third party cookies
+   UsrDat->Prefs.EmailNtfEvents = 0;       		// By default, don't notify anything
   }
 
 /*****************************************************************************/
@@ -546,8 +547,9 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 				    "Comments,"			// row[27]
 				    "Menu,"			// row[28]
 				    "SideCols,"			// row[29]
-				    "NotifNtfEvents,"		// row[20]
-				    "EmailNtfEvents"		// row[31]
+				    "ThirdPartyCookies,"	// row[30]
+				    "NotifNtfEvents,"		// row[31]
+				    "EmailNtfEvents"		// row[32]
 			      " FROM usr_data WHERE UsrCod=%ld",
 			      UsrDat->UsrCod);
    if (NumRows != 1)
@@ -666,12 +668,15 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    else
       UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 
-   /* Get on which events I want to be notified inside the platform */
-   if (sscanf (row[30],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
+   /* Get if user accepts third party cookies */
+   UsrDat->Prefs.AcceptThirdPartyCookies = (row[30][0] == 'Y');
+
+   /* Get on which events the user wants to be notified inside the platform */
+   if (sscanf (row[31],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
       UsrDat->Prefs.NotifNtfEvents = (unsigned) -1;	// 0xFF..FF
 
-   /* Get on which events I want to be notified by email */
-   if (sscanf (row[31],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
+   /* Get on which events the user wants to be notified by email */
+   if (sscanf (row[32],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
       UsrDat->Prefs.EmailNtfEvents = 0;
    if (UsrDat->Prefs.EmailNtfEvents >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
       UsrDat->Prefs.EmailNtfEvents = 0;

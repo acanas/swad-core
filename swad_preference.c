@@ -33,6 +33,7 @@
 #include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_config.h"
+#include "swad_cookie.h"
 #include "swad_database.h"
 #include "swad_date.h"
 #include "swad_form.h"
@@ -109,6 +110,9 @@ void Pre_EditPrefs (void)
      {
       /***** Form to set my preferences on privacy *****/
       Pri_EditMyPrivacy ();
+
+      /***** Form to set my preferences on cookies *****/
+      Coo_EditMyPrefsOnCookies ();
 
       /***** Automatic email to notify of new events *****/
       Ntf_PutFormChangeNotifSentByEMail ();

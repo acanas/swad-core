@@ -31,7 +31,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Fig_NUM_FIGURES 27
+#define Fig_NUM_FIGURES 28
 typedef enum
   {
    Fig_USERS,			// Number of users
@@ -61,6 +61,7 @@ typedef enum
    Fig_THEMES,			// Number of users per theme
    Fig_SIDE_COLUMNS,		// Number of users per layout of columns
    Fig_PRIVACY,			// Number of users per privacity
+   Fig_COOKIES,			// Number of users per acceptation of cookies
   } Fig_FigureType_t;
 #define Fig_FIGURE_TYPE_DEF Fig_USERS
 

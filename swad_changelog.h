@@ -407,8 +407,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Mensajes > Anuncios cuando no estás identificado, deberían salir algunos, ¿por qué no indicar que se muestren para todos?
 
-// TODO: Chequear todas las directivas <label>
-
 // TODO: Fix bug: Al mostrar una orla con todos los profesores de SWAD, se muestran primeros los profesores y luego los no editores (repetidos algunos)
 
 // TODO: Chequear todos los iconos .gif y .png que restan, concretamente los de file_browser
@@ -459,7 +457,7 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.77.6 (2019-03-17)"
+#define Log_PLATFORM_VERSION	"SWAD 18.79 (2019-03-17)"
 #define CSS_FILE		"swad18.77.css"
 #define JS_FILE			"swad18.77.js"
 /*
@@ -475,7 +473,13 @@ Si el usuario acepta, a partir de ese momento se le mostrarían los vídeos.
 Ese bloqueo o aceptación sería una opción en Perfil > Ajustes
 que el usuario podría cambiar en cualquier momento.
 
-	Version 18.79:    Mar 17, 2019 	YouTube videos are not shown if user doesn't accept third party cookies. (? lines)
+TODO: Crear la función para ver Fig_COOKIES
+	Version 18.79.1:  Mar 17, 2019 	YouTube videos are not shown if user doesn't accept third party cookies. (? lines)
+	Version 18.79:    Mar 17, 2019 	New module swad_cookies for user's preference about cookies. (240494 lines)
+					2 changes necessary in database:
+ALTER TABLE usr_data ADD COLUMN ThirdPartyCookies ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER SideCols,ADD INDEX (ThirdPartyCookies);
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1764','es','N','Cambiar preferencia cookies');
+
 	Version 18.78:    Mar 17, 2019 	Fixed bugs and code refactoring in media.
 					Code refactoring in tests. (240252 lines)
 	Version 18.77.5:  Mar 17, 2019 	Fixed bugs in forms to upload media. (240272 lines)

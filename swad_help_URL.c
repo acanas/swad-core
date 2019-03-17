@@ -3689,6 +3689,27 @@ const char *Hlp_PROFILE_Preferences_privacy =
 	"PROFILE.Preferences.en#privacy";
 #endif
 
+const char *Hlp_PROFILE_Preferences_cookies =
+#if   L==1
+	"PROFILE.Preferences.es#cookies";
+#elif L==2
+	"PROFILE.Preferences.en#cookies";
+#elif L==3
+	"PROFILE.Preferences.en#cookies";
+#elif L==4
+	"PROFILE.Preferences.es#cookies";
+#elif L==5
+	"PROFILE.Preferences.en#cookies";
+#elif L==6
+	"PROFILE.Preferences.es#cookies";
+#elif L==7
+	"PROFILE.Preferences.en#cookies";
+#elif L==8
+	"PROFILE.Preferences.en#cookies";
+#elif L==9
+	"PROFILE.Preferences.en#cookies";
+#endif
+
 const char *Hlp_PROFILE_Preferences_notifications =
 #if   L==1
 	"PROFILE.Preferences.es#notificaciones";

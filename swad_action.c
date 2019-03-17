@@ -37,6 +37,7 @@
 #include "swad_banner.h"
 #include "swad_calendar.h"
 #include "swad_config.h"
+#include "swad_cookie.h"
 #include "swad_country.h"
 #include "swad_course.h"
 #include "swad_chat.h"
@@ -1557,6 +1558,7 @@ Profile:
        1324. ActChgMnu			Change menu
        1325. ActChgPriPho		Change privacy of my photo
        1326. ActChgPriPrf		Change privacy of my public profile
+        NEW. ActChgCooPrf		Change preference about third party cookies
        1327. ActChgNtfPrf		Change whether to notify by email new messages
        1328. ActPrnUsrQR		Show my QR code ready to print
 
@@ -3142,6 +3144,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgMnu		*/{1243,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Mnu_ChangeMenu			,Pre_EditPrefs			,NULL},
    /* ActChgPriPho	*/{ 774,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ChangePhotoVisibility	,NULL},
    /* ActChgPriPrf	*/{1404,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeProfileVisibility	,NULL},
+   /* ActChgCooPrf	*/{1764,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Coo_ChangeMyPrefsCookies	,NULL},
    /* ActChgNtfPrf	*/{ 775,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Ntf_ChangeNotifyEvents		,Pre_EditPrefs			,NULL},
 
    /* ActPrnUsrQR	*/{1022,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Usr_PrintUsrQRCode		,NULL},
@@ -4918,6 +4921,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActFolSevTch,		// #1761
 	ActUnfSevStd,		// #1762
 	ActUnfSevTch,		// #1763
+	ActChgCooPrf,		// #1764
 	};
 
 /*****************************************************************************/

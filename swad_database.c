@@ -2808,10 +2808,11 @@ mysql> DESCRIBE usr_data;
 | Comments          | text                                             | NO   |     | NULL    |                |
 | Menu              | tinyint(4)                                       | NO   | MUL | 0       |                |
 | SideCols          | tinyint(4)                                       | NO   | MUL | 3       |                |
+| ThirdPartyCookies | enum('N','Y')                                    | NO   | MUL | N       |                |
 | NotifNtfEvents    | int(11)                                          | NO   |     | 0       |                |
 | EmailNtfEvents    | int(11)                                          | NO   |     | 0       |                |
 +-------------------+--------------------------------------------------+------+-----+---------+----------------+
-33 rows in set (0,00 sec)
+34 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
 			"UsrCod INT NOT NULL AUTO_INCREMENT,"
@@ -2845,6 +2846,7 @@ mysql> DESCRIBE usr_data;
 			"Comments TEXT NOT NULL,"				// Cns_MAX_BYTES_TEXT
 			"Menu TINYINT NOT NULL DEFAULT 0,"
 			"SideCols TINYINT NOT NULL DEFAULT 3,"
+			"ThirdPartyCookies ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"NotifNtfEvents INT NOT NULL DEFAULT 0,"
 			"EmailNtfEvents INT NOT NULL DEFAULT 0,"
 		   "PRIMARY KEY(UsrCod),"
@@ -2862,7 +2864,8 @@ mysql> DESCRIBE usr_data;
 		   "INDEX(DptCod),"
 		   "INDEX(CtrCod),"
 		   "INDEX(Menu),"
-		   "INDEX(SideCols))");
+		   "INDEX(SideCols),"
+		   "INDEX(ThirdPartyCookies)");
 
    /***** Table usr_duplicated *****/
 /*

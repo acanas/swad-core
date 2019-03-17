@@ -192,6 +192,7 @@ struct UsrData
       Ico_IconSet_t IconSet;
       Mnu_Menu_t Menu;
       unsigned SideCols;
+      bool AcceptThirdPartyCookies;	// User has accepted third party cookies
       unsigned NotifNtfEvents;		// One bit activated for each type of event
       unsigned EmailNtfEvents;		// One bit activated for each type of event
      } Prefs;

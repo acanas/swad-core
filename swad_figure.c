@@ -333,6 +333,7 @@ void Fig_ShowFigures (void)
       Fig_GetAndShowNumUsrsPerTheme,		// Fig_THEMES
       Fig_GetAndShowNumUsrsPerSideColumns,	// Fig_SIDE_COLUMNS
       Fig_GetAndShowNumUsrsPerPrivacy,		// Fig_PRIVACY
+      Fig_GetAndShowNumUsrsPerPrivacy,		// Fig_COOKIES
      };
 
    /***** Get the type of figure ******/
