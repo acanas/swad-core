@@ -49876,7 +49876,7 @@ const char *Txt_To_watch_YouTube_videos_you_have_to_accept_third_party_cookies_i
 	" von Drittanbietern akzeptieren.";
 #elif L==3	// en
 	"To watch YouTube videos"
-	" you have to accept third party cookies"
+	" you have to accept third-party cookies"
 	" in your personal settings.";
 #elif L==4	// es
 	"Para ver v&iacute;deos de YouTube"

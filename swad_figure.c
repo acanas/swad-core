@@ -169,6 +169,7 @@ static void Fig_GetAndShowMsgsStats (void);
 static void Fig_GetAndShowSurveysStats (void);
 static void Fig_GetAndShowNumUsrsPerPrivacy (void);
 static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,const char *FieldName);
+static void Fig_GetAndShowNumUsrsPerCookies (void);
 static void Fig_GetAndShowNumUsrsPerLanguage (void);
 static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void);
 static void Fig_GetAndShowNumUsrsPerDateFormat (void);
@@ -333,7 +334,7 @@ void Fig_ShowFigures (void)
       Fig_GetAndShowNumUsrsPerTheme,		// Fig_THEMES
       Fig_GetAndShowNumUsrsPerSideColumns,	// Fig_SIDE_COLUMNS
       Fig_GetAndShowNumUsrsPerPrivacy,		// Fig_PRIVACY
-      Fig_GetAndShowNumUsrsPerPrivacy,		// Fig_COOKIES
+      Fig_GetAndShowNumUsrsPerCookies,		// Fig_COOKIES
      };
 
    /***** Get the type of figure ******/
@@ -4890,6 +4891,100 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
         	              (float) NumUsrsTotal :
         	              0);
    }
+
+/*****************************************************************************/
+/** Get and show number of users who have chosen a preference about cookies **/
+/*****************************************************************************/
+
+static void Fig_GetAndShowNumUsrsPerCookies (void)
+  {
+   extern const char *Hlp_ANALYTICS_Figures_cookies;
+   extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
+   extern const char *Txt_Cookies;
+   extern const char *Txt_No_of_users;
+   extern const char *Txt_PERCENT_of_users;
+   unsigned i;
+   char AcceptedInDB[2] =
+     {
+      'N',		// false
+      'Y'		// true
+     };
+   char *AcceptedClass[2] =
+     {
+      "DAT_RED",	// false
+      "DAT_GREEN"	// true
+     };
+   char *AcceptedSymbol[2] =
+     {
+      "&cross;",	// false
+      "&check;"		// true
+     };
+
+   char *SubQuery;
+   unsigned NumUsrs[Mnu_NUM_MENUS];
+   unsigned NumUsrsTotal = 0;
+
+   /***** Start box and table *****/
+   Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_COOKIES],NULL,
+                      Hlp_ANALYTICS_Figures_cookies,Box_NOT_CLOSABLE,2);
+
+   /***** Heading row *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th class=\"LEFT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Cookies,
+            Txt_No_of_users,
+            Txt_PERCENT_of_users);
+
+   /***** For each option... *****/
+   for (i = 0;
+	i < 2;
+	i++)
+     {
+      /* Get number of users who have chosen this menu from database */
+      if (asprintf (&SubQuery,"usr_data.ThirdPartyCookies='%c'",
+	            AcceptedInDB[i]) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      NumUsrs[i] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
+      free ((void *) SubQuery);
+
+      /* Update total number of users */
+      NumUsrsTotal += NumUsrs[i];
+     }
+
+   /***** Write number of users who have chosen each option *****/
+   for (i = 0;
+	i < 2;
+	i++)
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td class=\"%s CENTER_MIDDLE\">"
+                         "%s"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%u"
+                         "</td>"
+                         "<td class=\"DAT RIGHT_MIDDLE\">"
+                         "%5.2f%%"
+                         "</td>"
+                         "</tr>",
+	       AcceptedClass[i],
+               AcceptedSymbol[i],
+               NumUsrs[i],
+               NumUsrsTotal ? (float) NumUsrs[i] * 100.0 /
+        	              (float) NumUsrsTotal :
+        	              0);
+
+   /***** End table and box *****/
+   Box_EndBoxTable ();
+  }
 
 /*****************************************************************************/
 /********* Get and show number of users who have chosen a language ***********/

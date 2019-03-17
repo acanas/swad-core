@@ -3015,6 +3015,27 @@ const char *Hlp_ANALYTICS_Figures_privacy =
 	"ANALYTICS.Figures.en#privacy";
 #endif
 
+const char *Hlp_ANALYTICS_Figures_cookies =
+#if   L==1
+	"ANALYTICS.Figures.es#cookies";
+#elif L==2
+	"ANALYTICS.Figures.en#cookies";
+#elif L==3
+	"ANALYTICS.Figures.en#cookies";
+#elif L==4
+	"ANALYTICS.Figures.es#cookies";
+#elif L==5
+	"ANALYTICS.Figures.en#cookies";
+#elif L==6
+	"ANALYTICS.Figures.es#cookies";
+#elif L==7
+	"ANALYTICS.Figures.en#cookies";
+#elif L==8
+	"ANALYTICS.Figures.en#cookies";
+#elif L==9
+	"ANALYTICS.Figures.en#cookies";
+#endif
+
 const char *Hlp_ANALYTICS_Degrees =
 #if   L==1
 	"ANALYTICS.Degrees.es";

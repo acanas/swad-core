@@ -1864,8 +1864,8 @@ static void TL_GetAndWritePost (long PstCod)
      }
 
    /***** Show image *****/
-   Med_ShowMedia (&Media,"TL_POST_IMG_CONTAINER TL_RIGHT_WIDTH",
-	                 "TL_POST_IMG TL_RIGHT_WIDTH");
+   Med_ShowMedia (&Media,"TL_POST_MED_CONTAINER TL_RIGHT_WIDTH",
+	                 "TL_POST_MED TL_RIGHT_WIDTH");
 
    /***** Free image *****/
    Med_MediaDestructor (&Media);
@@ -2826,8 +2826,8 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show image */
-      Med_ShowMedia (&SocCom->Media,"TL_COMMENT_IMG_CONTAINER TL_COMMENT_WIDTH",
-	                            "TL_COMMENT_IMG TL_COMMENT_WIDTH");
+      Med_ShowMedia (&SocCom->Media,"TL_COMMENT_MED_CONTAINER TL_COMMENT_WIDTH",
+	                            "TL_COMMENT_MED TL_COMMENT_WIDTH");
 
       /* Put icon to mark this comment as favourite */
       if (IAmTheAuthor)			// I am the author

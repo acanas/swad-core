@@ -457,11 +457,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.79.1 (2019-03-17)"
-#define CSS_FILE		"swad18.77.css"
-#define JS_FILE			"swad18.77.js"
+#define Log_PLATFORM_VERSION	"SWAD 18.80 (2019-03-17)"
+#define CSS_FILE		"swad18.80.css"
+#define JS_FILE			"swad18.80.js"
 /*
-TODO: Crear la función para ver Fig_COOKIES
+	Version 18.80:    Mar 17, 2019 	Figure about cookies. (240647 lines)
 	Version 18.79.1:  Mar 17, 2019 	YouTube videos are not shown if user doesn't accept third party cookies. (240541 lines)
 	Version 18.79:    Mar 17, 2019 	New module swad_cookies for user's preference about cookies. (240494 lines)
 					2 changes necessary in database:
