@@ -234,7 +234,6 @@ static void TL_UnfavComment (struct TL_Comment *SocCom);
 static void TL_RequestRemovalNote (void);
 static void TL_PutParamsRemoveNote (void);
 static void TL_RemoveNote (void);
-static void TL_RemoveMediaFromPost (long PstCod);
 static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot);
 
 static long TL_GetNotCodOfPublication (long PubCod);
@@ -3869,27 +3868,6 @@ static void TL_RemoveNote (void)
   }
 
 /*****************************************************************************/
-/***************** Remove one file associated to a post **********************/
-/*****************************************************************************/
-
-static void TL_RemoveMediaFromPost (long PstCod)
-  {
-   MYSQL_RES *mysql_res;
-
-   /***** Get name of media associated to a post from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get image",
-		       "SELECT MedCod"	// row[0]
-		       " FROM social_posts"
-		       " WHERE PstCod=%ld",
-		       PstCod))
-      /***** Remove media file *****/
-      Med_RemoveMediaFromRow (mysql_res);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
 /*********************** Remove a note from database *************************/
 /*****************************************************************************/
 
@@ -3900,6 +3878,7 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
    long PubCod;
    unsigned long NumComments;
    unsigned long NumCom;
+   unsigned NumMedia;
 
    /***** Remove comments associated to this note *****/
    /* Get comments of this note */
@@ -3930,17 +3909,16 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
    /***** Remove media associated to post *****/
    if (SocNot->NoteType == TL_NOTE_POST)
      {
-      TL_RemoveMediaFromPost (SocNot->Cod);
-      MYSQL_RES *mysql_res;
-
       /* Get name of media associated to a post from database */
-      if (DB_QuerySELECT (&mysql_res,"can not get image",
-			  "SELECT MedCod"	// row[0]
-			  " FROM social_posts"
-			  " WHERE PstCod=%ld",
-			  SocNot->Cod))
-	 /* Remove media */
-	 Med_RemoveMediaFromRow (mysql_res);
+      NumMedia =
+      (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
+				 "SELECT MedCod"	// row[0]
+				 " FROM social_posts"
+				 " WHERE PstCod=%ld",
+				 SocNot->Cod);
+
+      /* Remove media */
+      Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
 
       /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
@@ -4212,16 +4190,19 @@ static void TL_RemoveComment (void)
 static void TL_RemoveCommentMediaAndDBEntries (long PubCod)
   {
    MYSQL_RES *mysql_res;
+   unsigned NumMedia;
 
    /***** Remove media associated to comment *****/
    /* Get name of media associated to a comment from database */
-   if (DB_QuerySELECT (&mysql_res,"can not get media",
-		       "SELECT MedCod"	// row[0]
-		       " FROM social_comments"
-		       " WHERE PubCod=%ld",
-		       PubCod))
-      /* Remove media */
-      Med_RemoveMediaFromRow (mysql_res);
+   NumMedia =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
+			      "SELECT MedCod"	// row[0]
+			      " FROM social_comments"
+			      " WHERE PubCod=%ld",
+			      PubCod);
+
+   /* Remove media */
+   Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);

@@ -152,7 +152,6 @@ void Med_ShowMedia (struct Media *Media,
                     const char *ClassContainer,const char *ClassMedia);
 
 void Med_RemoveMediaFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res);
-void Med_RemoveMediaFromRow (MYSQL_RES *mysql_res);
 void Med_RemoveMedia (long MedCod);
 
 #endif

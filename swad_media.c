@@ -1596,32 +1596,32 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
   }
 
 /*****************************************************************************/
-/**************** Remove media files and entries in database *****************/
+/********** Remove several media files and entries in database ***************/
 /*****************************************************************************/
 
 void Med_RemoveMediaFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res)
   {
+   MYSQL_ROW row;
    unsigned NumMed;
+   long MedCod;
 
    /***** Go over result removing media files *****/
    for (NumMed = 0;
 	NumMed < NumMedia;
 	NumMed++)
-      Med_RemoveMediaFromRow (mysql_res);
+     {
+      /***** Get media code (row[0]) *****/
+      row = mysql_fetch_row (mysql_res);
+      MedCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /***** Remove media files *****/
+      Med_RemoveMedia (MedCod);
+     }
   }
 
-void Med_RemoveMediaFromRow (MYSQL_RES *mysql_res)
-  {
-   MYSQL_ROW row;
-   long MedCod;
-
-   /***** Get media code (row[0]) *****/
-   row = mysql_fetch_row (mysql_res);
-   MedCod = Str_ConvertStrCodToLongCod (row[0]);
-
-   /***** Remove media files *****/
-   Med_RemoveMedia (MedCod);
-  }
+/*****************************************************************************/
+/********** Remove one media from filesystem and from database ***************/
+/*****************************************************************************/
 
 void Med_RemoveMedia (long MedCod)
   {
@@ -1636,11 +1636,11 @@ void Med_RemoveMedia (long MedCod)
    /***** Initialize media *****/
    Med_MediaConstructor (&Media);
 
-   /***** Get media *****/
+   /***** Get media data *****/
    Media.MedCod = MedCod;
    Med_GetMediaDataByCod (&Media);
 
-   /***** Step 1. Remove files *****/
+   /***** Step 1. Remove media files from filesystem *****/
    if (Media.Type != Med_TYPE_NONE &&
        Media.Type != Med_YOUTUBE &&
        Media.Name[0])

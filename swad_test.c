@@ -281,9 +281,9 @@ static void Tst_RemAnsFromQst (void);
 static void Tst_RemTagsFromQst (void);
 static void Tst_RemoveUnusedTagsFromCurrentCrs (void);
 
-static void Tst_RemoveMedFileFromStemOfQst (long CrsCod,long QstCod);
+static void Tst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod);
 static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
-static void Tst_RemoveMedFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd);
+static void Tst_RemoveMediaFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd);
 static void Tst_RemoveAllMedFilesFromAnsOfQst (long CrsCod,long QstCod);
 static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
 
@@ -6142,7 +6142,7 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
       /* Remove possible file with the old image
 	 (the new image file is already processed
 	  and moved to the definitive directory) */
-      Tst_RemoveMedFileFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+      Tst_RemoveMediaFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
    Gbl.Test.Media.MedCod = -1L;
    if (Gbl.Test.Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
@@ -6168,7 +6168,7 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
 	    /* Remove possible file with the old image
 	       (the new image file is already processed
 		and moved to the definitive directory) */
-	    Tst_RemoveMedFileFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
+	    Tst_RemoveMediaFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
 
 	 Gbl.Test.Answer.Options[NumOpt].Media.MedCod = -1L;
 	 if (Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
@@ -6393,7 +6393,7 @@ void Tst_RemoveQst (void)
 
    /***** Remove images associated to question *****/
    Tst_RemoveAllMedFilesFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
-   Tst_RemoveMedFileFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+   Tst_RemoveMediaFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
    /***** Remove the question from all the tables *****/
    /* Remove answers and tags from this test question */
@@ -6699,29 +6699,31 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
   }
 
 /*****************************************************************************/
-/******** Remove one file associated to one stem of one test question ********/
+/********** Remove media associated to one stem of one test question *********/
 /*****************************************************************************/
 
-static void Tst_RemoveMedFileFromStemOfQst (long CrsCod,long QstCod)
+static void Tst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod)
   {
    MYSQL_RES *mysql_res;
+   unsigned NumMedia;
 
-   /***** Get names of media files associated to stems of test questions from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get image",
-		       "SELECT MedCod"	// row[0]
-		       " FROM tst_questions"
-		       " WHERE QstCod=%ld AND CrsCod=%ld",
-		       QstCod,CrsCod))
-      /***** Remove media file *****/
-      Med_RemoveMediaFromRow (mysql_res);
+   /***** Get media codes associated to stem of a test question from database *****/
+   NumMedia =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
+			      "SELECT MedCod"	// row[0]
+			      " FROM tst_questions"
+			      " WHERE QstCod=%ld AND CrsCod=%ld",
+			      QstCod,CrsCod);
+
+   /***** Remove media *****/
+   Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
-/****** Remove all image files associated to stems of all test questions *****/
-/****** in a course                                                      *****/
+/** Remove all media associated to stems of all test questions in a course ***/
 /*****************************************************************************/
 
 static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
@@ -6729,7 +6731,7 @@ static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
-   /***** Get names of images associated to stems of test questions from database *****/
+   /***** Get media codes associated to stems of test questions from database *****/
    NumMedia =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
 			      "SELECT MedCod"	// row[0]
@@ -6745,32 +6747,35 @@ static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
   }
 
 /*****************************************************************************/
-/**** Remove one image file associated to one answer of one test question ****/
+/********* Remove media associated to one answer of a test question **********/
 /*****************************************************************************/
 
-static void Tst_RemoveMedFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd)
+static void Tst_RemoveMediaFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd)
   {
    MYSQL_RES *mysql_res;
+   unsigned NumMedia;
 
-   /***** Get names of media files associated to answers of test questions from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get images",
-		       "SELECT tst_answers.MedCod"	// row[0]
-		       " FROM tst_questions,tst_answers"
-		       " WHERE tst_questions.CrsCod=%ld"// Extra check
-		       " AND tst_questions.QstCod=%ld"	// Extra check
-		       " AND tst_questions.QstCod=tst_answers.QstCod"
-		       " AND tst_answers.QstCod=%ld"
-		       " AND tst_answers.AnsInd=%u",
-		       CrsCod,QstCod,QstCod,AnsInd))
-      /***** Remove media file *****/
-      Med_RemoveMediaFromRow (mysql_res);
+   /***** Get media codes associated to an answer of a test question from database *****/
+   NumMedia =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
+			      "SELECT tst_answers.MedCod"	// row[0]
+			      " FROM tst_questions,tst_answers"
+			      " WHERE tst_questions.CrsCod=%ld"// Extra check
+			      " AND tst_questions.QstCod=%ld"	// Extra check
+			      " AND tst_questions.QstCod=tst_answers.QstCod"
+			      " AND tst_answers.QstCod=%ld"
+			      " AND tst_answers.AnsInd=%u",
+			      CrsCod,QstCod,QstCod,AnsInd);
+
+   /***** Go over result removing media files *****/
+   Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
-/*** Remove all image files associated to all answers of one test question ***/
+/******* Remove all media associated to all answers of a test question *******/
 /*****************************************************************************/
 
 static void Tst_RemoveAllMedFilesFromAnsOfQst (long CrsCod,long QstCod)
@@ -6778,7 +6783,7 @@ static void Tst_RemoveAllMedFilesFromAnsOfQst (long CrsCod,long QstCod)
    MYSQL_RES *mysql_res;
    unsigned NumMedia;
 
-   /***** Get names of media files associated to answers of test questions from database *****/
+   /***** Get media codes associated to answers of test questions from database *****/
    NumMedia =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
 			      "SELECT tst_answers.MedCod"	// row[0]
@@ -6789,7 +6794,7 @@ static void Tst_RemoveAllMedFilesFromAnsOfQst (long CrsCod,long QstCod)
 			      " AND tst_answers.QstCod=%ld",
 			      CrsCod,QstCod,QstCod);
 
-   /***** Go over result removing media files *****/
+   /***** Go over result removing media *****/
    Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
 
    /***** Free structure that stores the query result *****/
@@ -6797,8 +6802,7 @@ static void Tst_RemoveAllMedFilesFromAnsOfQst (long CrsCod,long QstCod)
   }
 
 /*****************************************************************************/
-/** Remove all media files associated to all answers of all test questions ***/
-/** in a course                                                            ***/
+/* Remove media associated to all answers of all test questions in a course **/
 /*****************************************************************************/
 
 static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod)
