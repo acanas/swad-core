@@ -194,19 +194,16 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
      {
       row = mysql_fetch_row (mysql_res);
       /*
-      row[ 0] QstCod
-      row[ 1] UNIX_TIMESTAMP(EditTime)
-      row[ 2] AnsType
-      row[ 3] Shuffle
-      row[ 4] Stem
-      row[ 5] Feedback
-      row[ 6] MediaName
-      row[ 7] MediaType
-      row[ 8] MediaTitle
-      row[ 9] MediaURL
-      row[10] NumHits
-      row[11] NumHitsNotBlank
-      row[12] Score
+      row[0] QstCod
+      row[1] UNIX_TIMESTAMP(EditTime)
+      row[2] AnsType
+      row[3] Shuffle
+      row[4] Stem
+      row[5] Feedback
+      row[6] MedCod
+      row[7] NumHits
+      row[8] NumHitsNotBlank
+      row[9] Score
       */
       /* row[0] holds the code of the question */
       if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
@@ -313,12 +310,10 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
    row[0] AnsInd
    row[1] Answer
    row[2] Feedback
-   row[3] MediaName
-   row[4] MediaType
-   row[5] MediaTitle
-   row[6] MediaURL
-   row[7] Correct
+   row[3] MedCod
+   row[4] Correct
    */
+
    /***** Write the answers *****/
    switch (Gbl.Test.AnswerType)
      {

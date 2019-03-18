@@ -283,7 +283,7 @@ static void For_InsertPstIntoBannedPstTable (long PstCod);
 static long For_InsertForumPst (long ThrCod,long UsrCod,
                                 const char *Subject,const char *Content,
                                 struct Media *Media);
-static bool For_RemoveForumPst (long PstCod,struct Media *Media);
+static bool For_RemoveForumPst (long PstCod,long MedCod);
 static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod);
 
 static long For_InsertForumThread (long FirstPstCod);
@@ -501,28 +501,29 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
    long PstCod;
 
    /***** Check if image is received and processed *****/
+   Media->MedCod = -1L;
    if (Media->Action == Med_ACTION_NEW_MEDIA &&	// New media
        Media->Status == Med_PROCESSED)		// The new media received has been processed
+     {
       /* Move processed media to definitive directory */
       Med_MoveMediaToDefinitiveDir (Media);
+
+      /* Store media in database */
+      if (Media->Status == Med_MOVED)
+	 Med_StoreMediaInDB (Media);	// Set Media->MedCod
+     }
 
    /***** Insert forum post in the database *****/
    PstCod =
    DB_QueryINSERTandReturnCode ("can not create a new post in a forum",
 				"INSERT INTO forum_post"
 				" (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
-				"Subject,Content,"
-				"MediaName,MediaType,MediaTitle,MediaURL)"
+				"Subject,Content,MedCod)"
 				" VALUES"
 				" (%ld,%ld,NOW(),NOW(),0,"
-				"'%s','%s',"
-				"'%s','%s','%s','%s')",
+				"'%s','%s',%ld)",
 				ThrCod,UsrCod,
-				Subject,Content,
-				Media->Name,
-				Med_GetStringTypeForDB (Media->Type),
-				Media->Title ? Media->Title : "",
-				Media->URL   ? Media->URL   : "");
+				Subject,Content,Media->MedCod);
 
    return PstCod;
   }
@@ -532,13 +533,13 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
 /*****************************************************************************/
 // Return true if the post thread is deleted
 
-static bool For_RemoveForumPst (long PstCod,struct Media *Media)
+static bool For_RemoveForumPst (long PstCod,long MedCod)
   {
    long ThrCod;
    bool ThreadDeleted = false;
 
    /***** Remove media file attached to forum post *****/
-   Med_RemoveMediaFiles (Media->Name,Media->Type);
+   Med_RemoveMedia (MedCod);
 
    /***** If the post is the only one in its thread, delete that thread *****/
    if (For_NumPstsInThrWithPstCod (PstCod,&ThrCod) < 2)
@@ -1345,10 +1346,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 			            "UNIX_TIMESTAMP(CreatTime),"	// row[1]
 			            "Subject,"				// row[2]
 			            "Content,"				// row[3]
-			            "MediaName,"			// row[4]
-			            "MediaType,"			// row[5]
-			            "MediaTitle,"			// row[6]
-			            "MediaURL"				// row[7]
+			            "MedCod"				// row[4]
 			     " FROM forum_post WHERE PstCod=%ld",
 			     PstCod);
 
@@ -1359,22 +1357,23 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    /***** Get number of rows *****/
    row = mysql_fetch_row (mysql_res);
 
-   /****** Get author code (row[1]) *****/
+   /***** Get author code (row[1]) *****/
    *UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-   /****** Get creation time (row[1]) *****/
+   /***** Get creation time (row[1]) *****/
    *CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
-   /****** Get subject (row[2]) *****/
+   /***** Get subject (row[2]) *****/
    Str_Copy (Subject,row[2],
              Cns_MAX_BYTES_SUBJECT);
 
-   /****** Get location (row[3]) *****/
+   /***** Get location (row[3]) *****/
    Str_Copy (Content,row[3],
              Cns_MAX_BYTES_LONG_TEXT);
 
-   /****** Get media data (row[4], row[5], row[6], row[7]) *****/
-   Med_GetMediaDataFromRow (row[4],row[5],row[6],row[7],Media);
+   /***** Get media (row[4]) *****/
+   Media->MedCod = Str_ConvertStrCodToLongCod (row[4]);
+   Med_GetMediaDataByCod (Media);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -4089,7 +4088,7 @@ void For_ReceiveForumPost (void)
       For_UpdateThrFirstAndLastPst (Gbl.Forum.ForumSelected.ThrCod,PstCod,PstCod);
      }
 
-   /***** Free image *****/
+   /***** Free media *****/
    Med_MediaDestructor (&Media);
 
    /***** Increment number of forum posts in my user's figures *****/
@@ -4188,7 +4187,7 @@ void For_RemovePost (void)
       Lay_ShowErrorAndExit ("You can not remove post because it is not the last of the thread.");
 
    /***** Remove the post *****/
-   ThreadDeleted = For_RemoveForumPst (Gbl.Forum.ForumSelected.PstCod,&Media);
+   ThreadDeleted = For_RemoveForumPst (Gbl.Forum.ForumSelected.PstCod,Media.MedCod);
 
    /***** Free image *****/
    Med_MediaDestructor (&Media);

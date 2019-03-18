@@ -436,6 +436,8 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Los usuarios que no tienes permiso para ver su perfil público, se debería mostrar algo, una mínima ficha sin tinmeline o algo así
 
+// TODO: Para acelerar la carga, todas las preferencias de usuarios no deberían obtenerse siempre, sino en una llamada especial pues en general sólo interesan para el usuario identificado
+
 // TODO: Allow timeline posting only for users belonging to courses or admins to avoid user who create accounts only to post
 
 /*****************************************************************************/
@@ -457,10 +459,51 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.80 (2019-03-17)"
+#define Log_PLATFORM_VERSION	"SWAD 18.81 (2019-03-18)"
 #define CSS_FILE		"swad18.80.css"
 #define JS_FILE			"swad18.80.js"
 /*
+TODO: Remove unused fields MediaName,MediaType,MediaTitle,MediaURL,Media from tables:
+// ALTER TABLE forum_post DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+// ALTER TABLE msg_content DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+// ALTER TABLE msg_content_deleted DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+// ALTER TABLE social_comments DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+// ALTER TABLE social_posts DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+// ALTER TABLE tst_answers DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+// ALTER TABLE tst_questions DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+// ALTER TABLE media DROP COLUMN T,DROP COLUMN Cod;
+
+	Version 18.81:    Mar 18, 2019 	New database table media to store images and videos.
+					Fixed bugs in removal of publications in timeline. (240704 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS media (MedCod INT NOT NULL AUTO_INCREMENT,Type ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none',Name VARCHAR(43) NOT NULL DEFAULT '',URL VARCHAR(255) NOT NULL DEFAULT '',Title VARCHAR(2047) NOT NULL DEFAULT '',T VARCHAR (2047) NOT NULL DEFAULT '',Cod INT NOT NULL DEFAULT -1,UNIQUE INDEX(MedCod),INDEX(Type));
+Only if you use MyISAM:
+ALTER TABLE media ENGINE=MyISAM;
+					21 changes necessary in database:
+ALTER TABLE forum_post ADD COLUMN MedCod INT NOT NULL DEFAULT -1 AFTER Content,ADD INDEX (MedCod);
+ALTER TABLE msg_content ADD COLUMN MedCod INT NOT NULL DEFAULT -1 AFTER Content,ADD INDEX (MedCod);
+ALTER TABLE msg_content_deleted ADD COLUMN MedCod INT NOT NULL DEFAULT -1 AFTER Content,ADD INDEX (MedCod);
+ALTER TABLE social_comments ADD COLUMN MedCod INT NOT NULL DEFAULT -1 AFTER Content,ADD INDEX (MedCod);
+ALTER TABLE social_posts ADD COLUMN MedCod INT NOT NULL DEFAULT -1 AFTER Content,ADD INDEX (MedCod);
+ALTER TABLE tst_answers ADD COLUMN MedCod INT NOT NULL DEFAULT -1 AFTER Feedback,ADD INDEX (MedCod);
+ALTER TABLE tst_questions ADD COLUMN MedCod INT NOT NULL DEFAULT -1 AFTER Feedback,ADD INDEX (MedCod);
+
+INSERT INTO media (Type,Name,URL,Title,T,Cod) SELECT MediaType,MediaName,MediaURL,MediaTitle,'forum_post',PstCod FROM forum_post WHERE MediaType<>'none';
+INSERT INTO media (Type,Name,URL,Title,T,Cod) SELECT MediaType,MediaName,MediaURL,MediaTitle,'msg_content',MsgCod FROM msg_content WHERE MediaType<>'none';
+INSERT INTO media (Type,Name,URL,Title,T,Cod) SELECT MediaType,MediaName,MediaURL,MediaTitle,'msg_content_deleted',MsgCod FROM msg_content_deleted WHERE MediaType<>'none';
+INSERT INTO media (Type,Name,URL,Title,T,Cod) SELECT MediaType,MediaName,MediaURL,MediaTitle,'social_comments',PubCod FROM social_comments WHERE MediaType<>'none';
+INSERT INTO media (Type,Name,URL,Title,T,Cod) SELECT MediaType,MediaName,MediaURL,MediaTitle,'social_posts',PstCod FROM social_posts WHERE MediaType<>'none';
+INSERT INTO media (Type,Name,URL,Title,T,Cod) SELECT MediaType,MediaName,MediaURL,MediaTitle,'tst_answers',QstCod*10+AnsInd FROM tst_answers WHERE MediaType<>'none';
+INSERT INTO media (Type,Name,URL,Title,T,Cod) SELECT MediaType,MediaName,MediaURL,MediaTitle,'tst_questions',QstCod FROM tst_questions WHERE MediaType<>'none';
+
+UPDATE forum_post,media SET forum_post.MedCod=media.MedCod WHERE media.T='forum_post' AND forum_post.PstCod=media.Cod;
+UPDATE msg_content,media SET msg_content.MedCod=media.MedCod WHERE media.T='msg_content' AND msg_content.MsgCod=media.Cod;
+UPDATE msg_content_deleted,media SET msg_content_deleted.MedCod=media.MedCod WHERE media.T='msg_content_deleted' AND msg_content_deleted.MsgCod=media.Cod;
+UPDATE social_comments,media SET social_comments.MedCod=media.MedCod WHERE media.T='social_comments' AND social_comments.PubCod=media.Cod;
+UPDATE social_posts,media SET social_posts.MedCod=media.MedCod WHERE media.T='social_posts' AND social_posts.PstCod=media.Cod;
+UPDATE tst_answers,media SET tst_answers.MedCod=media.MedCod WHERE media.T='tst_answers' AND tst_answers.QstCod*10+AnsInd=media.Cod;
+UPDATE tst_questions,media SET tst_questions.MedCod=media.MedCod WHERE media.T='tst_questions' AND tst_questions.QstCod=media.Cod;
+
 	Version 18.80:    Mar 17, 2019 	Figure about cookies. (240647 lines)
 	Version 18.79.1:  Mar 17, 2019 	YouTube videos are not shown if user doesn't accept third party cookies. (240541 lines)
 	Version 18.79:    Mar 17, 2019 	New module swad_cookies for user's preference about cookies. (240494 lines)

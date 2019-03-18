@@ -58,7 +58,7 @@ typedef enum
 No file   Original file               Temporary          Definitive         Name of the image/video
 uploaded  uploaded by user            processed file     processed file     stored in database
 --------- --------------------------- ------------------ ------------------ ---------------------
-Med_STATUS_NONE                       Med_PROCESSED                         Med_NAME_STORED_IN_DB
+Med_STATUS_NONE                       Med_PROCESSED      Med_MOVED          Med_NAME_STORED_IN_DB
 --------- --------------------------- ------------------ ------------------ ---------------------
      upload-file               process file         move file      insert in database
 --------- --------------------------- ------------------ ------------------ ---------------------
@@ -82,6 +82,7 @@ typedef enum
   {
    Med_STATUS_NONE,
    Med_PROCESSED,
+   Med_MOVED,
    Med_STORED_IN_DB,
   } Med_Status_t;
 
@@ -100,6 +101,7 @@ typedef enum
 /***** Struct used to get images/videos from forms *****/
 struct Media
   {
+   long MedCod;
    Med_Action_t Action;
    Med_Status_t Status;
    char Name[Med_BYTES_NAME + 1];
@@ -135,11 +137,7 @@ void Med_MediaConstructor (struct Media *Media);
 void Med_MediaDestructor (struct Media *Media);
 void Med_ResetMedia (struct Media *Media);
 
-void Med_GetMediaDataFromRow (const char *Name,
-			      const char *TypeStr,
-                              const char *Title,
-                              const char *URL,
-                              struct Media *Media);
+void Med_GetMediaDataByCod (struct Media *Media);
 
 void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput);
 void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
@@ -148,14 +146,13 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
 void Med_SetParamNames (struct ParamUploadMedia *ParamUploadMedia,int NumMediaInForm);
 
 void Med_MoveMediaToDefinitiveDir (struct Media *Media);
+void Med_StoreMediaInDB (struct Media *Media);
+
 void Med_ShowMedia (struct Media *Media,
                     const char *ClassContainer,const char *ClassMedia);
 
-void Med_RemoveMediaFilesFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res);
-void Med_RemoveMediaFilesFromRow (MYSQL_RES *mysql_res);
-void Med_RemoveMediaFiles (const char *Name,Med_Type_t Type);
-
-Med_Type_t Med_GetTypeFromStrInDB (const char *Str);
-const char *Med_GetStringTypeForDB (Med_Type_t Type);
+void Med_RemoveMediaFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res);
+void Med_RemoveMediaFromRow (MYSQL_RES *mysql_res);
+void Med_RemoveMedia (long MedCod);
 
 #endif

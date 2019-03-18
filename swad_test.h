@@ -143,11 +143,6 @@ void Tst_ShowFormAskTst (void);
 void Tst_ShowNewTest (void);
 void Tst_AssessTest (void);
 
-void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
-			     struct UsrData *UsrDat,
-                             struct Game *Game,
-                             unsigned NumQst,long QstCod,MYSQL_ROW row,
-                             double *ScoreThisQst,bool *AnswerIsNotBlank);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 

@@ -2734,10 +2734,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
 					       "tst_questions.AnsType,"		// row[1]
 					       "tst_questions.Stem,"		// row[2]
 					       "tst_questions.Feedback,"	// row[3]
-					       "tst_questions.MediaName,"	// row[4]
-					       "tst_questions.MediaType,"	// row[5]
-					       "tst_questions.MediaTitle,"	// row[6]
-					       "tst_questions.MediaURL"		// row[7]
+					       "tst_questions.MedCod"		// row[4]
 					" FROM gam_questions,tst_questions"
 					" WHERE gam_questions.GamCod=%ld"
 					" AND gam_questions.QstCod=tst_questions.QstCod"
@@ -2842,10 +2839,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       row[1] AnsType
       row[2] Stem
       row[3] Feedback
-      row[4] MediaName
-      row[5] MediaType
-      row[6] MediaTitle
-      row[7] MediaURL
+      row[4] MedCod
       */
       /***** Create test question *****/
       Tst_QstConstructor ();
@@ -2923,16 +2917,24 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
       fprintf (Gbl.F.Out,"</td>");
 
-      /* Write stem (row[2]), media data (row[4], row[5], row[6], row[7]),
-         feedback (row[3]) and answers */
+      /* Write stem (row[2]) */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[2],"TEST_EDI");
-      Med_GetMediaDataFromRow (row[4],row[5],row[6],row[7],&Gbl.Test.Media);
+
+      /* Get media (row[4]) */
+      Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[4]);
+      Med_GetMediaDataByCod (&Gbl.Test.Media);
+
+      /* Show media */
       Med_ShowMedia (&Gbl.Test.Media,
                      "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
                      "TEST_IMG_EDIT_LIST_STEM");
+
+      /* Show feedback (row[3]) */
       Tst_WriteQstFeedback (row[3],"TEST_EDI_LIGHT");
+
+      /* Show answers */
       Tst_WriteAnswersGameResult (Game,NumQst,QstCod,
                                   "TEST_EDI",true);	// Show result
 
@@ -3531,10 +3533,7 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
 			"SELECT tst_questions.QstCod,"		// row[0]
 			       "tst_questions.AnsType,"		// row[1]
 			       "tst_questions.Stem,"		// row[2]
-			       "tst_questions.MediaName,"	// row[3]
-			       "tst_questions.MediaType,"	// row[4]
-			       "tst_questions.MediaTitle,"	// row[5]
-			       "tst_questions.MediaURL"		// row[6]
+			       "tst_questions.MedCod"		// row[3]
 			" FROM gam_questions,tst_questions"
 			" WHERE gam_questions.GamCod=%ld"
 			" AND gam_questions.QstInd=%u"
@@ -3553,9 +3552,14 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
 
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_QST_CONTAINER\">");
 
-   /* Write stem (row[2]) and media data (row[3], row[4], row[5], row[6]) */
+   /* Write stem (row[2]) */
    Tst_WriteQstStem (row[2],"GAM_PLAY_QST");
-   Med_GetMediaDataFromRow (row[3],row[4],row[5],row[6],&Gbl.Test.Media);
+
+   /* Get media (row[3]) */
+   Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+   Med_GetMediaDataByCod (&Gbl.Test.Media);
+
+   /* Show media */
    Med_ShowMedia (&Gbl.Test.Media,
 		  "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
 		  "TEST_IMG_EDIT_LIST_STEM");

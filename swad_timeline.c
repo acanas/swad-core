@@ -98,7 +98,7 @@ struct TL_Note
    TL_NoteType_t NoteType;
    long UsrCod;
    long HieCod;		// Hierarchy code (institution/centre/degree/course)
-   long Cod;		// Code of file, forum post, notice,...
+   long Cod;		// Code of file, forum post, notice, timeline post...
    bool Unavailable;	// File, forum post, notice,... unavailable (removed)
    time_t DateTimeUTC;
    unsigned NumShared;	// Number of times (users) this note has been shared
@@ -234,8 +234,8 @@ static void TL_UnfavComment (struct TL_Comment *SocCom);
 static void TL_RequestRemovalNote (void);
 static void TL_PutParamsRemoveNote (void);
 static void TL_RemoveNote (void);
-static void TL_RemoveImgFileFromPost (long PstCod);
-static void TL_RemoveANoteFromDB (struct TL_Note *SocNot);
+static void TL_RemoveMediaFromPost (long PstCod);
+static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot);
 
 static long TL_GetNotCodOfPublication (long PubCod);
 static long TL_GetPubCodOfOriginalNote (long NotCod);
@@ -243,8 +243,7 @@ static long TL_GetPubCodOfOriginalNote (long NotCod);
 static void TL_RequestRemovalComment (void);
 static void TL_PutParamsRemoveCommment (void);
 static void TL_RemoveComment (void);
-static void TL_RemoveImgFileFromComment (long PubCod);
-static void TL_RemoveACommentFromDB (struct TL_Comment *SocCom);
+static void TL_RemoveCommentMediaAndDBEntries (long PubCod);
 
 static bool TL_CheckIfNoteIsSharedByUsr (long NotCod,long UsrCod);
 static bool TL_CheckIfNoteIsFavedByUsr (long NotCod,long UsrCod);
@@ -1829,10 +1828,7 @@ static void TL_GetAndWritePost (long PstCod)
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the content"
 					" of a post",
 			     "SELECT Content,"		// row[0]
-			            "MediaName,"	// row[1]
-			            "MediaType,"	// row[2]
-			            "MediaTitle,"	// row[3]
-			            "MediaURL"		// row[4]
+			            "MedCod"		// row[1]
 			     " FROM social_posts"
 			     " WHERE PstCod=%ld",
 			     PstCod);
@@ -1846,8 +1842,9 @@ static void TL_GetAndWritePost (long PstCod)
       Str_Copy (Content,row[0],
                 Cns_MAX_BYTES_LONG_TEXT);
 
-      /****** Get media data (row[1], row[2], row[3], row[4]) *****/
-      Med_GetMediaDataFromRow (row[1],row[2],row[3],row[4],&Media);
+      /***** Get media (row[1]) *****/
+      Media.MedCod = Str_ConvertStrCodToLongCod (row[1]);
+      Med_GetMediaDataByCod (&Media);
      }
    else
       Content[0] = '\0';
@@ -2477,26 +2474,28 @@ static long TL_ReceivePost (void)
        Media.Status == Med_PROCESSED)	// A media is attached
      {
       /***** Check if media is received and processed *****/
+      Media.MedCod = -1L;
       if (Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
 	  Media.Status == Med_PROCESSED)		// The new media received has been processed
+        {
 	 /* Move processed image to definitive directory */
 	 Med_MoveMediaToDefinitiveDir (&Media);
+
+	 /* Store media in database */
+	 if (Media.Status == Med_MOVED)
+	    Med_StoreMediaInDB (&Media);	// Set Media.MedCod
+	}
 
       /***** Publish *****/
       /* Insert post content in the database */
       PstCod =
       DB_QueryINSERTandReturnCode ("can not create post",
 				   "INSERT INTO social_posts"
-				   " (Content,"
-				   "MediaName,MediaType,MediaTitle,MediaURL)"
+				   " (Content,MedCod)"
 				   " VALUES"
-				   " ('%s',"
-				   "'%s','%s','%s','%s')",
+				   " ('%s',%ld)",
 				   Content,
-				   Media.Name,
-				   Med_GetStringTypeForDB (Media.Type),
-				   Media.Title ? Media.Title : "",
-				   Media.URL   ? Media.URL   : "");
+				   Media.MedCod);
 
       /* Insert post in notes */
       TL_StoreAndPublishNote (TL_NOTE_POST,PstCod,&SocPub);
@@ -2637,10 +2636,7 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
 				        "UNIX_TIMESTAMP("
 				        "social_pubs.TimePublish),"	// row[3]
 					"social_comments.Content,"	// row[4]
-				        "social_comments.MediaName,"	// row[5]
-				        "social_comments.MediaType,"	// row[6]
-					"social_comments.MediaTitle,"	// row[7]
-				        "social_comments.MediaURL"	// row[8]
+				        "social_comments.MedCod"	// row[5]
 				 " FROM social_pubs,social_comments"
 				 " WHERE social_pubs.NotCod=%ld"
 				 " AND social_pubs.PubType=%u"
@@ -3204,10 +3200,17 @@ static long TL_ReceiveComment (void)
 	  Media.Status == Med_PROCESSED)	// A media is attached
 	{
 	 /***** Check if media is received and processed *****/
+	 Media.MedCod = -1L;
 	 if (Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
 	     Media.Status == Med_PROCESSED)		// The new media received has been processed
+	   {
 	    /* Move processed image to definitive directory */
 	    Med_MoveMediaToDefinitiveDir (&Media);
+
+	    /* Store media in database */
+	    if (Media.Status == Med_MOVED)
+	       Med_StoreMediaInDB (&Media);	// Set Media.MedCod
+	   }
 
 	 /***** Publish *****/
 	 /* Insert into publications */
@@ -3219,17 +3222,12 @@ static long TL_ReceiveComment (void)
 	 /* Insert comment content in the database */
 	 DB_QueryINSERT ("can not store comment content",
 			 "INSERT INTO social_comments"
-	                 " (PubCod,Content,"
-	                 "MediaName,MediaType,MediaTitle,MediaURL)"
+	                 " (PubCod,Content,MedCod)"
 			 " VALUES"
-			 " (%ld,'%s',"
-			 "'%s','%s','%s','%s')",
+			 " (%ld,'%s',%ld)",
 			 SocPub.PubCod,
 			 Content,
-			 Media.Name,
-			 Med_GetStringTypeForDB (Media.Type),
-			 Media.Title ? Media.Title : "",
-			 Media.URL   ? Media.URL   : "");
+			 Media.MedCod);
 
 	 /***** Store notifications about the new comment *****/
 	 Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TIMELINE_COMMENT,SocPub.PubCod);
@@ -3856,12 +3854,11 @@ static void TL_RemoveNote (void)
       ItsMe = Usr_ItsMe (SocNot.UsrCod);
       if (ItsMe)	// I am the author of this note
 	{
-	 if (SocNot.NoteType == TL_NOTE_POST)
-            /***** Remove image file associated to post *****/
-            TL_RemoveImgFileFromPost (SocNot.Cod);
-
 	 /***** Delete note from database *****/
-	 TL_RemoveANoteFromDB (&SocNot);
+	 TL_RemoveNoteMediaAndDBEntries (&SocNot);
+
+	 /***** Reset note *****/
+	 TL_ResetNote (&SocNot);
 
 	 /***** Message of success *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_TIMELINE_Post_removed);
@@ -3875,19 +3872,18 @@ static void TL_RemoveNote (void)
 /***************** Remove one file associated to a post **********************/
 /*****************************************************************************/
 
-static void TL_RemoveImgFileFromPost (long PstCod)
+static void TL_RemoveMediaFromPost (long PstCod)
   {
    MYSQL_RES *mysql_res;
 
-   /***** Get name of image associated to a post from database *****/
+   /***** Get name of media associated to a post from database *****/
    if (DB_QuerySELECT (&mysql_res,"can not get image",
-		       "SELECT MediaName,"	// row[0]
-		              "MediaType"	// row[1]
+		       "SELECT MedCod"	// row[0]
 		       " FROM social_posts"
 		       " WHERE PstCod=%ld",
 		       PstCod))
       /***** Remove media file *****/
-      Med_RemoveMediaFilesFromRow (mysql_res);
+      Med_RemoveMediaFromRow (mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3897,7 +3893,7 @@ static void TL_RemoveImgFileFromPost (long PstCod)
 /*********************** Remove a note from database *************************/
 /*****************************************************************************/
 
-static void TL_RemoveANoteFromDB (struct TL_Note *SocNot)
+static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3905,18 +3901,7 @@ static void TL_RemoveANoteFromDB (struct TL_Note *SocNot)
    unsigned long NumComments;
    unsigned long NumCom;
 
-   /***** Mark possible notifications on the publications
-          of this note as removed *****/
-   /* Mark notifications of the original note as removed */
-   PubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
-   if (PubCod > 0)
-     {
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE  ,PubCod);
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
-     }
-
+   /***** Remove comments associated to this note *****/
    /* Get comments of this note */
    NumComments = DB_QuerySELECT (&mysql_res,"can not get comments",
 				 "SELECT PubCod"
@@ -3934,42 +3919,49 @@ static void TL_RemoveANoteFromDB (struct TL_Note *SocNot)
       row = mysql_fetch_row (mysql_res);
       PubCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Mark notifications as removed */
-      if (PubCod > 0)
-	{
-	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
-	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
-	 Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
-	}
+      /* Remove media associated to comment
+	 and delete comment from database */
+      TL_RemoveCommentMediaAndDBEntries (PubCod);
      }
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Remove favs *****/
-   /* Remove favs for all comments in this note */
-   DB_QueryDELETE ("can not remove favs for note",
-		   "DELETE FROM social_comments_fav"
-                   " USING social_pubs,social_comments_fav"
-	           " WHERE social_pubs.NotCod=%ld"
-                   " AND social_pubs.PubType=%u"
-	           " AND social_pubs.PubCod=social_comments_fav.PubCod",
-		   SocNot->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
+   /***** Remove media associated to post *****/
+   if (SocNot->NoteType == TL_NOTE_POST)
+     {
+      TL_RemoveMediaFromPost (SocNot->Cod);
+      MYSQL_RES *mysql_res;
 
-   /* Remove favs for this note */
+      /* Get name of media associated to a post from database */
+      if (DB_QuerySELECT (&mysql_res,"can not get image",
+			  "SELECT MedCod"	// row[0]
+			  " FROM social_posts"
+			  " WHERE PstCod=%ld",
+			  SocNot->Cod))
+	 /* Remove media */
+	 Med_RemoveMediaFromRow (mysql_res);
+
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   /***** Mark possible notifications on the publications
+          of this note as removed *****/
+   /* Mark notifications of the original note as removed */
+   PubCod = TL_GetPubCodOfOriginalNote (SocNot->NotCod);
+   if (PubCod > 0)
+     {
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_SHARE  ,PubCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
+     }
+
+   /***** Remove favs for this note *****/
    DB_QueryDELETE ("can not remove favs for note",
 		   "DELETE FROM social_notes_fav"
 		   " WHERE NotCod=%ld",
 		   SocNot->NotCod);
-
-   /***** Remove content of the comments of this note *****/
-   DB_QueryDELETE ("can not remove comments",
-		   "DELETE FROM social_comments"
-	           " USING social_pubs,social_comments"
-	           " WHERE social_pubs.NotCod=%ld"
-                   " AND social_pubs.PubType=%u"
-	           " AND social_pubs.PubCod=social_comments.PubCod",
-		   SocNot->NotCod,(unsigned) TL_PUB_COMMENT_TO_NOTE);
 
    /***** Remove all the publications of this note *****/
    DB_QueryDELETE ("can not remove a publication",
@@ -3991,9 +3983,6 @@ static void TL_RemoveANoteFromDB (struct TL_Note *SocNot)
 		      "DELETE FROM social_posts"
 		      " WHERE PstCod=%ld",
 		      SocNot->Cod);
-
-   /***** Reset note *****/
-   TL_ResetNote (SocNot);
   }
 
 /*****************************************************************************/
@@ -4198,11 +4187,12 @@ static void TL_RemoveComment (void)
       ItsMe = Usr_ItsMe (SocCom.UsrCod);
       if (ItsMe)	// I am the author of this comment
 	{
-	 /***** Remove image file associated to post *****/
-	 TL_RemoveImgFileFromComment (SocCom.PubCod);
+	 /***** Remove media associated to comment
+	        and delete comment from database *****/
+	 TL_RemoveCommentMediaAndDBEntries (SocCom.PubCod);
 
-	 /***** Delete comment from database *****/
-	 TL_RemoveACommentFromDB (&SocCom);
+	 /***** Reset fields of comment *****/
+	 TL_ResetComment (&SocCom);
 
 	 /***** Message of success *****/
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_Comment_removed);
@@ -4216,49 +4206,42 @@ static void TL_RemoveComment (void)
   }
 
 /*****************************************************************************/
-/**************** Remove one file associated to a comment ********************/
+/*************** Remove comment media and database entries *******************/
 /*****************************************************************************/
 
-static void TL_RemoveImgFileFromComment (long PubCod)
+static void TL_RemoveCommentMediaAndDBEntries (long PubCod)
   {
    MYSQL_RES *mysql_res;
 
-   /***** Get name of media associated to a post from database *****/
+   /***** Remove media associated to comment *****/
+   /* Get name of media associated to a comment from database */
    if (DB_QuerySELECT (&mysql_res,"can not get media",
-		       "SELECT MediaName,"	// row[0]
-		              "MediaType"	// row[1]
+		       "SELECT MedCod"	// row[0]
 		       " FROM social_comments"
 		       " WHERE PubCod=%ld",
 		       PubCod))
-      /***** Remove media file *****/
-      Med_RemoveMediaFilesFromRow (mysql_res);
+      /* Remove media */
+      Med_RemoveMediaFromRow (mysql_res);
 
-   /***** Free structure that stores the query result *****/
+   /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
-  }
 
-/*****************************************************************************/
-/********************* Remove a comment from database ************************/
-/*****************************************************************************/
-
-static void TL_RemoveACommentFromDB (struct TL_Comment *SocCom)
-  {
    /***** Mark possible notifications on this comment as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,SocCom->PubCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,SocCom->PubCod);
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,SocCom->PubCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_COMMENT,PubCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV    ,PubCod);
+   Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_MENTION,PubCod);
 
    /***** Remove favs for this comment *****/
    DB_QueryDELETE ("can not remove favs for comment",
 		   "DELETE FROM social_comments_fav"
 		   " WHERE PubCod=%ld",
-		   SocCom->PubCod);
+		   PubCod);
 
    /***** Remove content of this comment *****/
    DB_QueryDELETE ("can not remove a comment",
 		   "DELETE FROM social_comments"
 		   " WHERE PubCod=%ld",
-		   SocCom->PubCod);
+		   PubCod);
 
    /***** Remove this comment *****/
    DB_QueryDELETE ("can not remove a comment",
@@ -4266,12 +4249,9 @@ static void TL_RemoveACommentFromDB (struct TL_Comment *SocCom)
 	           " WHERE PubCod=%ld"
 	           " AND PublisherCod=%ld"	// Extra check: I am the author
 	           " AND PubType=%u",		// Extra check: it's a comment
-		   SocCom->PubCod,
+		   PubCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) TL_PUB_COMMENT_TO_NOTE);
-
-   /***** Reset comment *****/
-   TL_ResetComment (SocCom);
   }
 
 /*****************************************************************************/
@@ -4693,10 +4673,7 @@ static void TL_GetDataOfCommByCod (struct TL_Comment *SocCom)
 				 "social_pubs.NotCod,"				// row[2]
 				 "UNIX_TIMESTAMP(social_pubs.TimePublish),"	// row[3]
 				 "social_comments.Content,"			// row[4]
-				 "social_comments.MediaName,"			// row[5]
-				 "social_comments.MediaType,"			// row[6]
-				 "social_comments.MediaTitle,"			// row[7]
-				 "social_comments.MediaURL"			// row[8]
+				 "social_comments.MedCod"			// row[5]
 			  " FROM social_pubs,social_comments"
 			  " WHERE social_pubs.PubCod=%ld"
 			  " AND social_pubs.PubType=%u"
@@ -4826,10 +4803,7 @@ static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom)
    row[2]: NotCod
    row[3]: TimePublish
    row[4]: Content
-   row[5]: MediaName
-   row[6]: MediaType
-   row[7]: MediaTitle
-   row[8]: MediaURL
+   row[5]: MedCod
     */
    /***** Get code of comment (row[0]) *****/
    SocCom->PubCod      = Str_ConvertStrCodToLongCod (row[0]);
@@ -4850,8 +4824,9 @@ static void TL_GetDataOfCommentFromRow (MYSQL_ROW row,struct TL_Comment *SocCom)
    /***** Get number of times this comment has been favourited *****/
    TL_GetNumTimesACommHasBeenFav (SocCom);
 
-   /****** Get media data (row[5], row[6], row[7], row[8]) *****/
-   Med_GetMediaDataFromRow (row[5],row[6],row[7],row[8],&SocCom->Media);
+   /***** Get media (row[5]) *****/
+   SocCom->Media.MedCod = Str_ConvertStrCodToLongCod (row[5]);
+   Med_GetMediaDataByCod (&SocCom->Media);
   }
 
 /*****************************************************************************/

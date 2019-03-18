@@ -38,6 +38,7 @@
 
 #include "swad_config.h"
 #include "swad_cookie.h"
+#include "swad_database.h"
 #include "swad_global.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
@@ -153,8 +154,10 @@ static void Med_ShowVideo (struct Media *Media,
 			   const char *ClassMedia);
 static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia);
 
+static Med_Type_t Med_GetTypeFromStrInDB (const char *Str);
 static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
                                              const char *MIMEType);
+static const char *Med_GetStringTypeForDB (Med_Type_t Type);
 
 /*****************************************************************************/
 /********************** Media (image/video) constructor **********************/
@@ -197,6 +200,7 @@ void Med_ResetMedia (struct Media *Media)
 
 static void Med_ResetMediaExceptURLAndTitle (struct Media *Media)
   {
+   Media->MedCod  = -1L;
    Media->Action  = Med_ACTION_NO_MEDIA;
    Media->Status  = Med_STATUS_NONE;
    Media->Name[0] = '\0';
@@ -235,58 +239,81 @@ static void Med_FreeMediaTitle (struct Media *Media)
 /**** Get media name, title and URL from a query result and copy to struct ***/
 /*****************************************************************************/
 
-void Med_GetMediaDataFromRow (const char *Name,
-			      const char *TypeStr,
-                              const char *Title,
-                              const char *URL,
-                              struct Media *Media)
+void Med_GetMediaDataByCod (struct Media *Media)
   {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
    size_t Length;
 
-   /***** Copy image name to struct *****/
-   Str_Copy (Media->Name,Name,
-             Med_BYTES_NAME);
+   /***** Get data of a media from database *****/
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get data of a post",
+			     "SELECT Type,"	// row[0]
+			            "Name,"	// row[1]
+			            "URL,"	// row[2]
+			            "Title"	// row[3]
+			     " FROM media WHERE MedCod=%ld",
+			     Media->MedCod);
 
-   /***** Convert type string to type *****/
-   Media->Type = Med_GetTypeFromStrInDB (TypeStr);
-
-   /***** Set status of media file *****/
-   Media->Status = (Media->Type != Med_TYPE_NONE) ? Med_STORED_IN_DB :
-	                                            Med_STATUS_NONE;
-
-   /***** Copy image URL to struct *****/
-   // Media->URL can be empty or filled with previous value
-   // If filled  ==> free it
-   Med_FreeMediaURL (Media);
-   if (URL[0])
+   /***** Result should have a unique row *****/
+   if (NumRows == 0)	// Media not found
+      /***** Reset media data *****/
+      Med_ResetMedia (Media);
+   else if (NumRows == 1)
      {
-      /* Get and limit length of the URL */
-      Length = strlen (URL);
-      if (Length > Cns_MAX_BYTES_WWW)
-	  Length = Cns_MAX_BYTES_WWW;
+      /***** Get row *****/
+      row = mysql_fetch_row (mysql_res);
 
-      if ((Media->URL = (char *) malloc (Length + 1)) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for image URL.");
-      Str_Copy (Media->URL,URL,
-                Length);
+      /***** Convert type string (row[0]) to type *****/
+      Media->Type = Med_GetTypeFromStrInDB (row[0]);
+
+      /***** Set status of media file *****/
+      Media->Status = (Media->Type != Med_TYPE_NONE) ? Med_STORED_IN_DB :
+						       Med_STATUS_NONE;
+
+      /***** Copy media name (row[1]) to struct *****/
+      Str_Copy (Media->Name,row[1],
+		Med_BYTES_NAME);
+
+      /***** Copy media URL (row[2]) to struct *****/
+      // Media->URL can be empty or filled with previous value
+      // If filled  ==> free it
+      Med_FreeMediaURL (Media);
+      if (row[2][0])
+	{
+	 /* Get and limit length of the URL */
+	 Length = strlen (row[2]);
+	 if (Length > Cns_MAX_BYTES_WWW)
+	     Length = Cns_MAX_BYTES_WWW;
+
+	 if ((Media->URL = (char *) malloc (Length + 1)) == NULL)
+	    Lay_ShowErrorAndExit ("Error allocating memory for image URL.");
+	 Str_Copy (Media->URL,row[2],
+		   Length);
+	}
+
+      /***** Copy media title (row[3]) to struct *****/
+      // Media->Title can be empty or filled with previous value
+      // If filled  ==> free it
+      Med_FreeMediaTitle (Media);
+      if (row[3][0])
+	{
+	 /* Get and limit length of the title */
+	 Length = strlen (row[3]);
+	 if (Length > Med_MAX_BYTES_TITLE)
+	     Length = Med_MAX_BYTES_TITLE;
+
+	 if ((Media->Title = (char *) malloc (Length + 1)) == NULL)
+	    Lay_ShowErrorAndExit ("Error allocating memory for image title.");
+	 Str_Copy (Media->Title,row[3],
+		   Length);
+	}
      }
+   else
+      Lay_ShowErrorAndExit ("Internal error in database when getting media data.");
 
-   /***** Copy image title to struct *****/
-   // Media->Title can be empty or filled with previous value
-   // If filled  ==> free it
-   Med_FreeMediaTitle (Media);
-   if (Title[0])
-     {
-      /* Get and limit length of the title */
-      Length = strlen (Title);
-      if (Length > Med_MAX_BYTES_TITLE)
-	  Length = Med_MAX_BYTES_TITLE;
-
-      if ((Media->Title = (char *) malloc (Length + 1)) == NULL)
-	 Lay_ShowErrorAndExit ("Error allocating memory for image title.");
-      Str_Copy (Media->Title,Title,
-                Length);
-     }
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -980,7 +1007,6 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
 
    /***** Get embed URL from form *****/
    Usr_GetURLFromForm (ParamURL,Media);
-   // Ale_ShowAlert (Ale_INFO,"DEBUG: Media->URL = '%s'",Media->URL);
 
    /***** Process URL trying to convert it to a YouTube embed URL *****/
    if (Media->URL)
@@ -1007,7 +1033,6 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
 	 if (PtrHost[0])
 	   {
 	    /***** Step 2: Skip host *****/
-	    // Ale_ShowAlert (Ale_INFO,"DEBUG: PtrHost = '%s'",PtrHost);
 	    if      (!strncasecmp (PtrHost,"youtu.be/"       , 9))	// Host starts by youtu.be/
 	      {
 	       YouTube = SHORT;
@@ -1035,7 +1060,6 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
 
 	    if (YouTube != WRONG)
 	      {
-	       // Ale_ShowAlert (Ale_INFO,"DEBUG: PtrPath = '%s'",PtrPath);
 	       /***** Step 3: Skip path *****/
 	       if (YouTube == FULL)
 		 {
@@ -1063,7 +1087,6 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
 
 	       if (YouTube != WRONG)
 		 {
-		  // Ale_ShowAlert (Ale_INFO,"DEBUG: PtrParams = '%s'",PtrParams);
 		  /***** Step 4: Search for video code *****/
 		  switch (YouTube)
 		    {
@@ -1095,7 +1118,6 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
 
 		  if (YouTube != WRONG)
 		    {
-		     // Ale_ShowAlert (Ale_INFO,"DEBUG: PtrCode = '%s'",PtrCode);
 		     /***** Step 5: Get video code *****/
 		     CodeLength = strspn (PtrCode,Str_BIN_TO_BASE64URL);
 		     if (CodeLength > 0 &&
@@ -1105,7 +1127,6 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
 			/* Copy code */
 			strncpy (Media->Name,PtrCode,CodeLength);
 			Media->Name[CodeLength] = '\0';
-			// Ale_ShowAlert (Ale_INFO,"DEBUG: Media->Name = '%s'",Media->Name);
 
 			Media->Type = Med_YOUTUBE;
 			Media->Status = Med_PROCESSED;
@@ -1126,56 +1147,63 @@ void Med_MoveMediaToDefinitiveDir (struct Media *Media)
    char PathMedPrivTmp[PATH_MAX + 1];
    char PathMedPriv[PATH_MAX + 1];
 
-   /***** Check trivial cases *****/
-   if (Media->Status != Med_PROCESSED)
-      return;
-   if (Media->Type == Med_YOUTUBE)
-      return;	// Nothing to do with files
-
-   /***** Build temporary path *****/
-   snprintf (PathMedPrivTmp,sizeof (PathMedPrivTmp),
-	     "%s/%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP);
-
-   /***** Create private subdirectory for media if it does not exist *****/
-   snprintf (PathMedPriv,sizeof (PathMedPriv),
-	     "%s/%s/%c%c",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
-	     Media->Name[0],
-	     Media->Name[1]);
-   Fil_CreateDirIfNotExists (PathMedPriv);
-
-   /***** Move files *****/
-   switch (Media->Type)
+   /***** Check trivial case *****/
+   if (Media->Status == Med_PROCESSED)
      {
-      case Med_JPG:
-	 /* Move JPG */
-	 if (!Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
-	                               Med_Extensions[Med_JPG]))
-	    return;			// Fail
-	 break;
-      case Med_GIF:
-	 /* Move PNG */
-	 if (!Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
-	                               "png"))
-	    return;			// Fail
-	 /* Move GIF */
-	 if (!Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
-	                               Med_Extensions[Med_GIF]))
-	    return;			// Fail
-	 break;
-      case Med_MP4:
-      case Med_WEBM:
-      case Med_OGG:
-	 /* Move MP4 or WEBM or OGG */
-	 if (!Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
-	                               Med_Extensions[Media->Type]))
-	    return;			// Fail
-	 break;
-      default:
-	 Lay_ShowErrorAndExit ("Wrong media type.");
-	 break;
+      if (Media->Type == Med_YOUTUBE)
+	 // Nothing to do with files ==> Processing successfully finished
+	 Media->Status = Med_MOVED;	// Success
+      else
+        {
+	 /***** Build temporary path *****/
+	 snprintf (PathMedPrivTmp,sizeof (PathMedPrivTmp),
+		   "%s/%s/%s",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,Cfg_FOLDER_IMG_TMP);
+
+	 /***** Create private subdirectory for media if it does not exist *****/
+	 snprintf (PathMedPriv,sizeof (PathMedPriv),
+		   "%s/%s/%c%c",
+		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
+		   Media->Name[0],
+		   Media->Name[1]);
+	 Fil_CreateDirIfNotExists (PathMedPriv);
+
+	 /***** Move files *****/
+	 switch (Media->Type)
+	   {
+	    case Med_JPG:
+	       /* Move JPG */
+	       if (Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
+					    Med_Extensions[Med_JPG]))
+                  Media->Status = Med_MOVED;	// Success
+	       break;
+	    case Med_GIF:
+	       /* Move PNG */
+	       if (Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
+					    "png"))
+		  /* Move GIF */
+		  if (Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
+					       Med_Extensions[Med_GIF]))
+		     Media->Status = Med_MOVED;	// Success
+	       break;
+	    case Med_MP4:
+	    case Med_WEBM:
+	    case Med_OGG:
+	       /* Move MP4 or WEBM or OGG */
+	       if (Med_MoveTmpFileToDefDir (Media,PathMedPrivTmp,PathMedPriv,
+					    Med_Extensions[Media->Type]))
+                  Media->Status = Med_MOVED;	// Success
+	       break;
+	    default:
+	       Lay_ShowErrorAndExit ("Wrong media type.");
+	       break;	// Not reached
+	   }
+        }
      }
+
+   /***** If fail ==> reset media *****/
+   if (Media->Status != Med_MOVED)	// Fail
+      Med_ResetMedia (Media);
   }
 
 /*****************************************************************************/
@@ -1210,6 +1238,32 @@ static bool Med_MoveTmpFileToDefDir (struct Media *Media,
      }
 
    return true;				// Success
+  }
+
+/*****************************************************************************/
+/************************ Store media into database **************************/
+/*****************************************************************************/
+
+void Med_StoreMediaInDB (struct Media *Media)
+  {
+   /***** Trivial case *****/
+   if (Media->Status != Med_MOVED)
+     {
+      Med_ResetMedia (Media);	// No media inserted in database
+      return;
+     }
+
+   /***** Insert media into database *****/
+   Media->MedCod = DB_QueryINSERTandReturnCode ("can not create media",
+					        "INSERT INTO media"
+					        " (Type,Name,URL,Title)"
+					        " VALUES"
+					        " ('%s','%s','%s','%s')",
+					        Med_GetStringTypeForDB (Media->Type),
+					        Media->Name,
+					        Media->URL   ? Media->URL   : "",
+					        Media->Title ? Media->Title : "");
+   Media->Status = Med_STORED_IN_DB;
   }
 
 /*****************************************************************************/
@@ -1542,10 +1596,10 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
   }
 
 /*****************************************************************************/
-/*** Remove private files with an image/video, given the image/video name ****/
+/**************** Remove media files and entries in database *****************/
 /*****************************************************************************/
 
-void Med_RemoveMediaFilesFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res)
+void Med_RemoveMediaFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res)
   {
    unsigned NumMed;
 
@@ -1553,87 +1607,106 @@ void Med_RemoveMediaFilesFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res)
    for (NumMed = 0;
 	NumMed < NumMedia;
 	NumMed++)
-      Med_RemoveMediaFilesFromRow (mysql_res);
+      Med_RemoveMediaFromRow (mysql_res);
   }
 
-void Med_RemoveMediaFilesFromRow (MYSQL_RES *mysql_res)
+void Med_RemoveMediaFromRow (MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
+   long MedCod;
 
-   /***** Get media name (row[0]) and type (row[1]) *****/
+   /***** Get media code (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
+   MedCod = Str_ConvertStrCodToLongCod (row[0]);
 
-   /***** Remove image file *****/
-   Med_RemoveMediaFiles (row[0],Med_GetTypeFromStrInDB (row[1]));
+   /***** Remove media files *****/
+   Med_RemoveMedia (MedCod);
   }
 
-void Med_RemoveMediaFiles (const char *Name,Med_Type_t Type)
+void Med_RemoveMedia (long MedCod)
   {
    char PathMedPriv[PATH_MAX + 1];
    char FullPathMediaPriv[PATH_MAX + 1];
+   struct Media Media;
 
-   /***** Trivial cases *****/
-   if (Name == NULL)
-      return;
-   if (!Name[0])
-      return;
-   if (Type == Med_YOUTUBE)
+   /***** Trivial case *****/
+   if (MedCod <= 0)
       return;
 
-   /***** Build path to private directory with the media *****/
-   snprintf (PathMedPriv,sizeof (PathMedPriv),
-	     "%s/%s/%c%c",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
-	     Name[0],
-	     Name[1]);
+   /***** Initialize media *****/
+   Med_MediaConstructor (&Media);
 
-   /***** Remove files *****/
-   switch (Type)
+   /***** Get media *****/
+   Media.MedCod = MedCod;
+   Med_GetMediaDataByCod (&Media);
+
+   /***** Step 1. Remove files *****/
+   if (Media.Type != Med_TYPE_NONE &&
+       Media.Type != Med_YOUTUBE &&
+       Media.Name[0])
      {
-      case Med_JPG:
-	 /***** Remove private JPG file *****/
-	 snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		   "%s/%s.%s",
-		   PathMedPriv,Name,Med_Extensions[Med_JPG]);
-	 unlink (FullPathMediaPriv);
+      /***** Build path to private directory with the media *****/
+      snprintf (PathMedPriv,sizeof (PathMedPriv),
+		"%s/%s/%c%c",
+		Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA,
+		Media.Name[0],
+		Media.Name[1]);
 
-	 break;
-      case Med_GIF:
-	 /***** Remove private GIF file *****/
-	 snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		   "%s/%s.%s",
-		   PathMedPriv,Name,Med_Extensions[Med_GIF]);
-	 unlink (FullPathMediaPriv);
+      /***** Remove files *****/
+      switch (Media.Type)
+	{
+	 case Med_JPG:
+	    /***** Remove private JPG file *****/
+	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		      "%s/%s.%s",
+		      PathMedPriv,Media.Name,Med_Extensions[Med_JPG]);
+	    unlink (FullPathMediaPriv);
 
-	 /***** Remove private PNG file *****/
-	 snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		   "%s/%s.png",
-		   PathMedPriv,Name);
-	 unlink (FullPathMediaPriv);
+	    break;
+	 case Med_GIF:
+	    /***** Remove private GIF file *****/
+	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		      "%s/%s.%s",
+		      PathMedPriv,Media.Name,Med_Extensions[Med_GIF]);
+	    unlink (FullPathMediaPriv);
 
-	 break;
-      case Med_MP4:
-      case Med_WEBM:
-      case Med_OGG:
-	 /***** Remove private video file *****/
-	 snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		   "%s/%s.%s",
-		   PathMedPriv,Name,Med_Extensions[Type]);
-	 unlink (FullPathMediaPriv);
+	    /***** Remove private PNG file *****/
+	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		      "%s/%s.png",
+		      PathMedPriv,Media.Name);
+	    unlink (FullPathMediaPriv);
 
-	 break;
-      default:
-	 break;
+	    break;
+	 case Med_MP4:
+	 case Med_WEBM:
+	 case Med_OGG:
+	    /***** Remove private video file *****/
+	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+		      "%s/%s.%s",
+		      PathMedPriv,Media.Name,Med_Extensions[Media.Type]);
+	    unlink (FullPathMediaPriv);
+
+	    break;
+	 default:
+	    break;
+	}
+      // Public links are removed automatically after a period
      }
 
-   // Public links are removed automatically after a period
+   /***** Step 2. Remove entry for this media from database *****/
+   DB_QueryDELETE ("can not remove media",
+		   "DELETE FROM media WHERE MedCod=%ld",
+		   MedCod);
+
+   /***** Free media *****/
+   Med_MediaDestructor (&Media);
   }
 
 /*****************************************************************************/
 /************************ Get media type from string *************************/
 /*****************************************************************************/
 
-Med_Type_t Med_GetTypeFromStrInDB (const char *Str)
+static Med_Type_t Med_GetTypeFromStrInDB (const char *Str)
   {
    Med_Type_t Type;
 
@@ -1708,7 +1781,7 @@ static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
 /*************** Get string media type in database from type *****************/
 /*****************************************************************************/
 
-const char *Med_GetStringTypeForDB (Med_Type_t Type)
+static const char *Med_GetStringTypeForDB (Med_Type_t Type)
   {
    /***** Check if type is out of valid range *****/
    if (Type > (Med_Type_t) (Med_NUM_TYPES - 1))

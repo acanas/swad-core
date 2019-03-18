@@ -2991,7 +2991,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TL_POST_MED
 	{
 	box-sizing:border-box;
-	border-radius:8px;
+	border-radius:4px;
 	}
 .TL_COMMENT_CONTAINER
 	{
@@ -3017,7 +3017,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TL_COMMENT_MED
 	{
 	box-sizing:border-box;
-	border-radius:8px;
+	border-radius:4px;
 	}
 .TL_FORM_NEW_COMMENT
 	{

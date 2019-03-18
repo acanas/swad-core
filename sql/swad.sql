@@ -1334,6 +1334,7 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	Comments TEXT NOT NULL DEFAULT '',
 	Menu TINYINT NOT NULL DEFAULT 0,
 	SideCols TINYINT NOT NULL DEFAULT 3,
+	ThirdPartyCookies ENUM('N','Y') NOT NULL DEFAULT 'N',
 	NotifNtfEvents INT NOT NULL DEFAULT 0,
 	EmailNtfEvents INT NOT NULL DEFAULT 0,
 	PRIMARY KEY(UsrCod),
@@ -1351,7 +1352,8 @@ CREATE TABLE IF NOT EXISTS usr_data (
 	INDEX(DptCod),
 	INDEX(CtrCod),
 	INDEX(Menu),
-	INDEX(SideCols));
+	INDEX(SideCols),
+	INDEX(ThirdPartyCookies));
 --
 -- Table usr_duplicated: stores informs of users possibly duplicated
 --

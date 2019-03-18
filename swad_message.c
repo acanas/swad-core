@@ -1282,25 +1282,26 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    long MsgCod;
 
    /***** Check if image is received and processed *****/
+   Media->MedCod = -1L;
    if (Media->Action == Med_ACTION_NEW_MEDIA &&	// New media
        Media->Status == Med_PROCESSED)		// The new media received has been processed
+     {
       /* Move processed image to definitive directory */
       Med_MoveMediaToDefinitiveDir (Media);
+
+      /* Store media in database */
+      if (Media->Status == Med_MOVED)
+	 Med_StoreMediaInDB (Media);	// Set Media->MedCod
+     }
 
    /***** Insert message subject and content in the database *****/
    MsgCod =
    DB_QueryINSERTandReturnCode ("can not create message",
 				"INSERT INTO msg_content"
-				" (Subject,Content,"
-				"MediaName,MediaType,MediaTitle,MediaURL)"
+				" (Subject,Content,MedCod)"
 				" VALUES"
-				" ('%s','%s',"
-				"'%s','%s','%s','%s')",
-				Subject,Content,
-				Media->Name,
-				Med_GetStringTypeForDB (Media->Type),
-				Media->Title ? Media->Title : "",
-				Media->URL   ? Media->URL   : "");
+				" ('%s','%s',%ld)",
+				Subject,Content,Media->MedCod);
 
    /***** Insert message in sent messages *****/
    DB_QueryINSERT ("can not create message",
@@ -1493,10 +1494,8 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
    /* Insert message content into msg_content_deleted */
    DB_QueryINSERT ("can not remove the content of a message",
 		   "INSERT IGNORE INTO msg_content_deleted"
-		   " (MsgCod,Subject,Content,"
-		   "MediaName,MediaType,MediaTitle,MediaURL)"
-		   " SELECT MsgCod,Subject,Content,"
-		   "MediaName,MediaType,MediaTitle,MediaURL"
+		   " (MsgCod,Subject,Content,MedCod)"
+		   " SELECT MsgCod,Subject,Content,MedCod"
 		   " FROM msg_content WHERE MsgCod=%ld",
                    MsgCod);
 
@@ -2788,10 +2787,7 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
    /***** Get content of message from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the content of a message",
 			     "SELECT Content,"		// row[0]
-				    "MediaName,"	// row[1]
-				    "MediaType,"	// row[2]
-				    "MediaTitle,"	// row[3]
-				    "MediaURL"		// row[4]
+				    "MedCod"		// row[1]
 			     " FROM msg_content WHERE MsgCod=%ld",
 			     MsgCod);
 
@@ -2806,8 +2802,9 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
    Str_Copy (Content,row[0],
              Cns_MAX_BYTES_LONG_TEXT);
 
-   /****** Get media data (row[1], row[2], row[3], row[4]) *****/
-   Med_GetMediaDataFromRow (row[1],row[2],row[3],row[4],Media);
+   /***** Get media (row[1]) *****/
+   Media->MedCod = Str_ConvertStrCodToLongCod (row[1]);
+   Med_GetMediaDataByCod (Media);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
