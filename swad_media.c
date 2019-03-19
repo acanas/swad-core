@@ -952,7 +952,6 @@ static int Med_ResizeImage (struct Media *Media,
       Lay_ShowErrorAndExit ("Error when running command to process media.");
 
    ReturnCode = WEXITSTATUS(ReturnCode);
-
    return ReturnCode;
   }
 

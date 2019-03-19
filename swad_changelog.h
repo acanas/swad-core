@@ -459,20 +459,22 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.81.1 (2019-03-18)"
+#define Log_PLATFORM_VERSION	"SWAD 18.81.3 (2019-03-19)"
 #define CSS_FILE		"swad18.80.css"
 #define JS_FILE			"swad18.80.js"
 /*
-TODO: Remove unused fields MediaName,MediaType,MediaTitle,MediaURL,Media from tables:
-// ALTER TABLE forum_post DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
-// ALTER TABLE msg_content DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
-// ALTER TABLE msg_content_deleted DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
-// ALTER TABLE social_comments DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
-// ALTER TABLE social_posts DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
-// ALTER TABLE tst_answers DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
-// ALTER TABLE tst_questions DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
-// ALTER TABLE media DROP COLUMN T,DROP COLUMN Cod;
+	Version 18.81.3:  Mar 19, 2019 	Remove unused fields MediaName,MediaType,MediaTitle,MediaURL,Media from tables. (240657 lines)
+					8 changes necessary in database:
+ALTER TABLE forum_post DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+ALTER TABLE msg_content DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+ALTER TABLE msg_content_deleted DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+ALTER TABLE social_comments DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+ALTER TABLE social_posts DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+ALTER TABLE tst_answers DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+ALTER TABLE tst_questions DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;
+ALTER TABLE media DROP COLUMN T,DROP COLUMN Cod;
 
+	Version 18.81.2:  Mar 19, 2019 	Fixed bugs in tests. (240715 lines)
 	Version 18.81.1:  Mar 18, 2019 	Code refactoring related to media. (240691 lines)
 	Version 18.81:    Mar 18, 2019 	New database table media to store images and videos.
 					Fixed bugs in removal of publications in timeline. (240704 lines)

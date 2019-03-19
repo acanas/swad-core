@@ -5185,7 +5185,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
       AnswerHasContent = false;
       if (Gbl.Test.Answer.Options[NumOpt].Text)
-	 if (Gbl.Test.Answer.Options[NumOpt].Text[0])
+	 if (Gbl.Test.Answer.Options[NumOpt].Text[0] ||				// Text
+	     Gbl.Test.Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
 	    AnswerHasContent = true;
       DisplayRightColumn = NumOpt < 2 ||	// Display at least the two first options
 	                   AnswerHasContent;
@@ -5268,8 +5269,6 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	       NumOpt);
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      if (NumOpt == 0)	// First textarea required
-         fprintf (Gbl.F.Out," required=\"required\"");
       fprintf (Gbl.F.Out,">");
       if (AnswerHasContent)
          fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
@@ -5638,8 +5637,8 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 /*****************************************************************************/
 /***** Get possible media associated with a test question from database ******/
 /*****************************************************************************/
-// NumOpt <  0 ==> image associated to stem
-// NumOpt >= 0 ==> image associated to answer
+// NumOpt <  0 ==> media associated to stem
+// NumOpt >= 0 ==> media associated to answer
 
 static void Tst_GetMediaFromDB (int NumOpt,struct Media *Media)
   {
@@ -5648,14 +5647,14 @@ static void Tst_GetMediaFromDB (int NumOpt,struct Media *Media)
 
    /***** Query depending on NumOpt *****/
    if (NumOpt < 0)
-      // Get image associated to stem
+      // Get media associated to stem
       DB_QuerySELECT (&mysql_res,"can not get media",
 		      "SELECT MedCod"		// row[0]
 		      " FROM tst_questions"
 		      " WHERE QstCod=%ld AND CrsCod=%ld",
 		      Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
    else
-      // Get image associated to answer
+      // Get media associated to answer
       DB_QuerySELECT (&mysql_res,"can not get media",
 		      "SELECT MedCod"		// row[0]
 		      " FROM tst_answers"
@@ -5809,7 +5808,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    /***** Get question feedback *****/
    Par_GetParToHTML ("Feedback",Feedback,Cns_MAX_BYTES_TEXT);
 
-   /***** Get image associated to the stem (action, file and title) *****/
+   /***** Get media associated to the stem (action, file and title) *****/
    Gbl.Test.Media.Width   = Tst_IMAGE_SAVED_MAX_WIDTH;
    Gbl.Test.Media.Height  = Tst_IMAGE_SAVED_MAX_HEIGHT;
    Gbl.Test.Media.Quality = Tst_IMAGE_SAVED_QUALITY;
@@ -5882,8 +5881,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	    Par_GetParToHTML (FbStr,Gbl.Test.Answer.Options[NumOpt].Feedback,
 	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
-	    /* Get image associated to the answer (action, file and title) */
-
+	    /* Get media associated to the answer (action, file and title) */
 	    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
 		Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
 	      {
@@ -6052,7 +6050,8 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
               NumOpt++)
             if (Gbl.Test.Answer.Options[NumOpt].Text)
               {
-               if (Gbl.Test.Answer.Options[NumOpt].Text[0])
+               if (Gbl.Test.Answer.Options[NumOpt].Text[0] ||			// Text
+        	   Gbl.Test.Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
                  {
                   if (ThereIsEndOfAnswers)
                     {
@@ -6136,50 +6135,72 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
   {
    unsigned NumOpt;
 
-   /****** Move image associated to question stem *****/
-   if (Gbl.Test.QstCod > 0 &&				// Question already exists
-       Gbl.Test.Media.Action != Med_ACTION_KEEP_MEDIA)	// Don't keep the current image
-      /* Remove possible file with the old image
-	 (the new image file is already processed
-	  and moved to the definitive directory) */
-      Tst_RemoveMediaFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
-
-   Gbl.Test.Media.MedCod = -1L;
-   if (Gbl.Test.Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
-       Gbl.Test.Media.Status == Med_PROCESSED)		// The new media received has been processed
+   /***** Media associated to question stem *****/
+   Gbl.Test.Media.MedCod = -1L;	// By default, no media is associated to question stem
+   switch (Gbl.Test.Media.Action)
      {
-      /* Move processed image to definitive directory */
-      Med_MoveMediaToDefinitiveDir (&Gbl.Test.Media);
+      case Med_ACTION_NO_MEDIA:
+	 /* Remove possible files with the old media */
+	 if (Gbl.Test.QstCod > 0)	// Question already exists
+            Tst_RemoveMediaFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+	 break;
+      case Med_ACTION_KEEP_MEDIA:
+	 /* Get current media associated to question */
+	 Tst_GetMediaFromDB (-1,&Gbl.Test.Media);
+	 break;
+      case Med_ACTION_NEW_MEDIA:
+	 /* Remove possible files with the old media */
+	 if (Gbl.Test.QstCod > 0)	// Question already exists
+            Tst_RemoveMediaFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
 
-      /* Store media in database */
-      if (Gbl.Test.Media.Status == Med_MOVED)
-	 Med_StoreMediaInDB (&Gbl.Test.Media);	// Set Gbl.Test.Media.MedCod
+	 /* New media received and processed sucessfully? */
+	 if (Gbl.Test.Media.Status == Med_PROCESSED)		// The new media received has been processed
+	   {
+	    /* Move processed media to definitive directory */
+	    Med_MoveMediaToDefinitiveDir (&Gbl.Test.Media);
+
+	    /* Store media in database */
+	    if (Gbl.Test.Media.Status == Med_MOVED)
+	       Med_StoreMediaInDB (&Gbl.Test.Media);	// Set Gbl.Test.Media.MedCod
+	   }
+	 break;
      }
 
-   /****** Move images associated to answers *****/
+   /****** Move media associated to answers *****/
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
        Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
       for (NumOpt = 0;
 	   NumOpt < Gbl.Test.Answer.NumOptions;
 	   NumOpt++)
 	{
-	 if (Gbl.Test.QstCod > 0 &&							// Question already exists
-             Gbl.Test.Answer.Options[NumOpt].Media.Action != Med_ACTION_KEEP_MEDIA)	// Don't keep the current image
-	    /* Remove possible file with the old image
-	       (the new image file is already processed
-		and moved to the definitive directory) */
-	    Tst_RemoveMediaFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
-
-	 Gbl.Test.Answer.Options[NumOpt].Media.MedCod = -1L;
-	 if (Gbl.Test.Answer.Options[NumOpt].Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
-	     Gbl.Test.Answer.Options[NumOpt].Media.Status == Med_PROCESSED)		// The new media received has been processed
+	 Gbl.Test.Answer.Options[NumOpt].Media.MedCod = -1L;	// By default, no media is associated to answer stem
+	 switch (Gbl.Test.Answer.Options[NumOpt].Media.Action)
 	   {
-	    /* Move processed media to definitive directory */
-	    Med_MoveMediaToDefinitiveDir (&Gbl.Test.Answer.Options[NumOpt].Media);
+	    case Med_ACTION_NO_MEDIA:
+	       /* Remove possible files with the old media */
+	       if (Gbl.Test.QstCod > 0)	// Question already exists
+	       	  Tst_RemoveMediaFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
+	       break;
+	    case Med_ACTION_KEEP_MEDIA:
+	       /* Get current media associated to question */
+	       Tst_GetMediaFromDB (NumOpt,&Gbl.Test.Answer.Options[NumOpt].Media);
+	       break;
+	    case Med_ACTION_NEW_MEDIA:
+	       /* Remove possible files with the old media */
+	       if (Gbl.Test.QstCod > 0)	// Question already exists
+	       	  Tst_RemoveMediaFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
 
-	    /* Store media in database */
-	    if (Gbl.Test.Media.Status == Med_MOVED)
-	       Med_StoreMediaInDB (&Gbl.Test.Answer.Options[NumOpt].Media);	// Set Gbl.Test.Answer.Options[NumOpt].Media.MedCod
+	       /* New media received and processed sucessfully? */
+	       if (Gbl.Test.Answer.Options[NumOpt].Media.Status == Med_PROCESSED)	// The new media received has been processed
+		 {
+		  /* Move processed media to definitive directory */
+		  Med_MoveMediaToDefinitiveDir (&Gbl.Test.Answer.Options[NumOpt].Media);
+
+		  /* Store media in database */
+		  if (Gbl.Test.Answer.Options[NumOpt].Media.Status == Med_MOVED)
+		     Med_StoreMediaInDB (&Gbl.Test.Answer.Options[NumOpt].Media);	// Set Gbl.Test.Answer.Options[NumOpt].Media.MedCod
+		 }
+	       break;
 	   }
 	}
   }
@@ -6632,7 +6653,8 @@ static void Tst_InsertAnswersIntoDB (void)
          for (NumOpt = 0;
               NumOpt < Gbl.Test.Answer.NumOptions;
               NumOpt++)
-            if (Gbl.Test.Answer.Options[NumOpt].Text[0])
+            if (Gbl.Test.Answer.Options[NumOpt].Text[0] ||			// Text
+        	Gbl.Test.Answer.Options[NumOpt].Media.Type != Med_TYPE_NONE)	// or media
               {
                DB_QueryINSERT ("can not create answer",
         		       "INSERT INTO tst_answers"

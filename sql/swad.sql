@@ -559,15 +559,13 @@ CREATE TABLE IF NOT EXISTS forum_post (
 	NumNotif INT NOT NULL DEFAULT 0,
 	Subject TEXT NOT NULL,
 	Content LONGTEXT NOT NULL,
-	MediaName VARCHAR(43) NOT NULL DEFAULT '',
-	MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none',
-	MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',
-	MediaURL VARCHAR(255) NOT NULL DEFAULT '',
+	MedCod INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(PstCod),
 	INDEX(ThrCod),
 	INDEX(UsrCod),
 	INDEX(CreatTime),
-	INDEX(ModifTime));
+	INDEX(ModifTime),
+	INDEX(MedCod));
 --
 -- Table forum_thr_clip: stores the clipboards used to move threads from one forum to another
 --
@@ -795,6 +793,17 @@ CREATE TABLE IF NOT EXISTS marks_properties (
 	Footer INT NOT NULL,
 	UNIQUE INDEX(FilCod));
 --
+-- Table media: stores information about media (images, videos, YouTube)
+--
+CREATE TABLE IF NOT EXISTS media (
+	MedCod INT NOT NULL AUTO_INCREMENT,
+	Type ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none',
+	Name VARCHAR(43) NOT NULL DEFAULT '',
+	URL VARCHAR(255) NOT NULL DEFAULT '',
+	Title VARCHAR(2047) NOT NULL DEFAULT '',
+	UNIQUE INDEX(MedCod),
+	INDEX(Type));
+--
 -- Table msg_banned: stores the users whose messages are banned (FromUsrCod is a recipien banned from ToUsrCod)
 --
 CREATE TABLE IF NOT EXISTS msg_banned (
@@ -808,12 +817,10 @@ CREATE TABLE IF NOT EXISTS msg_content (
 	MsgCod INT NOT NULL AUTO_INCREMENT,
 	Subject TEXT NOT NULL,
 	Content LONGTEXT NOT NULL,
-	MediaName VARCHAR(43) NOT NULL DEFAULT '',
-	MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none',
-	MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',
-	MediaURL VARCHAR(255) NOT NULL DEFAULT '',
+	MedCod INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(MsgCod),
-	FULLTEXT(Subject,Content)) ENGINE = MYISAM;
+	FULLTEXT(Subject,Content),
+	INDEX(MedCod)) ENGINE = MYISAM;
 --
 -- Table msg_content_deleted: stores the content of the sent messages that have been deleted
 --
@@ -821,12 +828,10 @@ CREATE TABLE IF NOT EXISTS msg_content_deleted (
 	MsgCod INT NOT NULL,
 	Subject TEXT NOT NULL,
 	Content LONGTEXT NOT NULL,
-	MediaName VARCHAR(43) NOT NULL DEFAULT '',
-	MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none',
-	MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',
-	MediaURL VARCHAR(255) NOT NULL DEFAULT '',
+	MedCod INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(MsgCod),
-	FULLTEXT(Subject,Content)) ENGINE = MYISAM;
+	FULLTEXT(Subject,Content),
+	INDEX(MedCod)) ENGINE = MYISAM;
 --
 -- Table msg_rcv: stores the received messages
 --
@@ -1025,12 +1030,10 @@ CREATE TABLE IF NOT EXISTS sessions (
 CREATE TABLE IF NOT EXISTS social_comments (
 	PubCod BIGINT NOT NULL,
 	Content LONGTEXT NOT NULL,
-	MediaName VARCHAR(43) NOT NULL DEFAULT '',
-	MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none',
-	MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',
-	MediaURL VARCHAR(255) NOT NULL DEFAULT '',
+	MedCod INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(PubCod),
-	FULLTEXT(Content)) ENGINE = MYISAM;
+	FULLTEXT(Content),
+	INDEX(MedCod)) ENGINE = MYISAM;
 --
 -- Table social_comments_fav: stores users who marked social comments as favourite
 --
@@ -1074,12 +1077,10 @@ CREATE TABLE IF NOT EXISTS social_notes_fav (
 CREATE TABLE IF NOT EXISTS social_posts (
 	PstCod INT NOT NULL AUTO_INCREMENT,
 	Content LONGTEXT NOT NULL,
-	MediaName VARCHAR(43) NOT NULL DEFAULT '',
-	MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none',
-	MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',
-	MediaURL VARCHAR(255) NOT NULL DEFAULT '',
+	MedCod INT NOT NULL DEFAULT -1,
 	UNIQUE INDEX(PstCod),
-	FULLTEXT(Content)) ENGINE = MYISAM;
+	FULLTEXT(Content),
+	INDEX(MedCod)) ENGINE = MYISAM;
 --
 -- Table social_pubs: stores social publishings (original notes, sharede notes or comments)
 --
@@ -1203,12 +1204,10 @@ CREATE TABLE IF NOT EXISTS tst_answers (
 	AnsInd TINYINT NOT NULL,
 	Answer TEXT NOT NULL,
 	Feedback TEXT NOT NULL,
-	MediaName VARCHAR(43) NOT NULL DEFAULT '',
-	MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none',
-	MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',
-	MediaURL VARCHAR(255) NOT NULL DEFAULT '',
+	MedCod INT NOT NULL DEFAULT -1,
 	Correct ENUM('N','Y') NOT NULL,
-	INDEX(QstCod));
+	INDEX(QstCod),
+	INDEX(MedCod));
 --
 -- Table tst_config: stores the configuration of tests for each course
 --
@@ -1264,15 +1263,13 @@ CREATE TABLE IF NOT EXISTS tst_questions (
 	Shuffle ENUM('N','Y') NOT NULL,
 	Stem TEXT NOT NULL,
 	Feedback TEXT NOT NULL,
-	MediaName VARCHAR(43) NOT NULL DEFAULT '',
-	MediaType ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none',
-	MediaTitle VARCHAR(2047) NOT NULL DEFAULT '',
-	MediaURL VARCHAR(255) NOT NULL DEFAULT '',
+	MedCod INT NOT NULL DEFAULT -1,
 	NumHits INT NOT NULL DEFAULT 0,
 	NumHitsNotBlank INT NOT NULL DEFAULT 0,
 	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
 	UNIQUE INDEX(QstCod),
-	INDEX(CrsCod,EditTime));
+	INDEX(CrsCod,EditTime),
+	INDEX(MedCod));
 --
 -- Table tst_status: stores the status of tests for each session
 --
