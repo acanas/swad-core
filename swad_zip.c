@@ -188,7 +188,7 @@ void ZIP_CreateZIPAsgWrk (void)
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
 
 
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get user's data from database
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))	// Get user's data from database
 	 if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
 	    ZIP_CreateDirCompressionUsr (&UsrDat);
      }

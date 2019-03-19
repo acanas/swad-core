@@ -430,7 +430,7 @@ void Ntf_ShowMyNotifications (void)
 
          /* Get (from) user code (row[1]) */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-         Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);		// Get user's data from the database
+         Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);		// Get user's data from the database
 
          /* Get institution code (row[2]) */
          Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -1414,10 +1414,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          /* Get user code */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))		// Get user's data from the database
-            if ((UsrDat.Prefs.NotifNtfEvents & NotifyEventMask))	// Create notification
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))		// Get user's data from the database
+            if ((UsrDat.NtfEvents.CreateNotif & NotifyEventMask))	// Create notification
               {
-	       if ((UsrDat.Prefs.EmailNtfEvents & NotifyEventMask))	// Send notification by email
+	       if ((UsrDat.NtfEvents.SendEmail & NotifyEventMask))	// Send notification by email
 		 {
 		  Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,Cod,
 						 (Ntf_Status_t) Ntf_STATUS_BIT_EMAIL);
@@ -1557,7 +1557,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get user's data */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))		// Get user's data from the database
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))		// Get user's data from the database
            {
             /* Send one email to this user */
             Ntf_SendPendingNotifByEMailToOneUsr (&UsrDat,&NumNotif,&NumMails);
@@ -1677,7 +1677,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	    /* Get origin user code (row[1]) */
 	    FromUsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FromUsrDat);		// Get origin user's data from the database
+	    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FromUsrDat,Usr_DONT_GET_PREFS);		// Get origin user's data from the database
 
 	    /* Get institution code (row[2]) */
 	    Ins.InsCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -1967,14 +1967,14 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
                The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent],
                Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent]);
-      if ((Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents & (1 << NotifyEvent)))
+      if ((Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent)))
           fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />"
 	                 "</td>"
 	                 "<td class=\"CENTER_MIDDLE\">"
                          "<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
-      if ((Gbl.Usrs.Me.UsrDat.Prefs.EmailNtfEvents & (1 << NotifyEvent)))
+      if ((Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent)))
           fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />"
 	                 "</td>"
@@ -2005,20 +2005,20 @@ static void Ntf_GetParamsNotifyEvents (void)
    Ntf_NotifyEvent_t NotifyEvent;
    bool CreateNotifForThisEvent;
 
-   Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents = 0;
-   Gbl.Usrs.Me.UsrDat.Prefs.EmailNtfEvents = 0;
+   Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif = 0;
+   Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail = 0;
    for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++)	// 0 is reserved for Ntf_EVENT_UNKNOWN
      {
       if ((CreateNotifForThisEvent = Par_GetParToBool (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent])))
-         Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents |= (1 << NotifyEvent);
+         Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif |= (1 << NotifyEvent);
 
       if (CreateNotifForThisEvent)
 	{
          Par_GetParToBool (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
          if (Par_GetParToBool (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]))
-            Gbl.Usrs.Me.UsrDat.Prefs.EmailNtfEvents |= (1 << NotifyEvent);
+            Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail |= (1 << NotifyEvent);
 	}
      }
   }
@@ -2039,8 +2039,8 @@ void Ntf_ChangeNotifyEvents (void)
 		   "UPDATE usr_data"
 		   " SET NotifNtfEvents=%u,EmailNtfEvents=%u"
 		   " WHERE UsrCod=%ld",
-	           Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents,
-	           Gbl.Usrs.Me.UsrDat.Prefs.EmailNtfEvents,
+	           Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif,
+	           Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show message *****/

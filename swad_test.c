@@ -7492,7 +7492,7 @@ void Tst_ShowUsrsTestResults (void)
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))               // Get of the database the data of the user
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
 	    if (Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
 	       /***** Show test results *****/
 	       Tst_ShowTestResults (&Gbl.Usrs.Other.UsrDat);
@@ -8073,7 +8073,7 @@ void Tst_ShowOneTestResult (void)
 
       /***** Header row *****/
       /* Get data of the user who made the test */
-      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	 Lay_ShowErrorAndExit ("User does not exists.");
       if (!Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
 	 Lay_ShowErrorAndExit ("You can not view this test result.");

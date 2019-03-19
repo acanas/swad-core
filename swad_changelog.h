@@ -436,8 +436,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Los usuarios que no tienes permiso para ver su perfil público, se debería mostrar algo, una mínima ficha sin tinmeline o algo así
 
-// TODO: Para acelerar la carga, todas las preferencias de usuarios no deberían obtenerse siempre, sino en una llamada especial pues en general sólo interesan para el usuario identificado
-
 // TODO: Allow timeline posting only for users belonging to courses or admins to avoid user who create accounts only to post
 
 /*****************************************************************************/
@@ -459,10 +457,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.81.5 (2019-03-19)"
+#define Log_PLATFORM_VERSION	"SWAD 18.82 (2019-03-19)"
 #define CSS_FILE		"swad18.80.css"
 #define JS_FILE			"swad18.80.js"
 /*
+	Version 18.82:    Mar 19, 2019 	User preferences are retrieved from database only when they are needed. (240630 lines)
 	Version 18.81.5:  Mar 19, 2019 	Code refactoring related to media. (240594 lines)
 	Version 18.81.4:  Mar 19, 2019 	Code refactoring related to media. (240586 lines)
 	Version 18.81.3:  Mar 19, 2019 	Remove unused fields MediaName,MediaType,MediaTitle,MediaURL,Media from tables. (240657 lines)

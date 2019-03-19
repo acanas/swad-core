@@ -403,7 +403,7 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
      {
       /***** Receive photo *****/
       if (!Pho_ReceivePhotoAndDetectFaces (false,&Gbl.Usrs.Other.UsrDat))
@@ -487,7 +487,7 @@ void Pho_ReqRemoveUsrPhoto (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
      {
       if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
 	{
@@ -544,7 +544,7 @@ void Pho_RemoveUsrPhoto (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
      {
       /***** Remove photo *****/
       if (Pho_RemovePhoto (&Gbl.Usrs.Other.UsrDat))

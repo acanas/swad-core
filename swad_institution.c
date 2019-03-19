@@ -1579,7 +1579,7 @@ static void Ins_ListInstitutionsForEdition (void)
 
       /* Institution requester */
       UsrDat.UsrCod = Ins->RequesterUsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
       fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
       fprintf (Gbl.F.Out,"</td>");

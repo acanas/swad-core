@@ -354,7 +354,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Prefs.Menu           = Mnu_MENU_DEFAULT;
    UsrDat->Prefs.SideCols       = Cfg_DEFAULT_COLUMNS;
    UsrDat->Prefs.AcceptThirdPartyCookies = false;	// By default, don't accept third party cookies
-   UsrDat->Prefs.EmailNtfEvents = 0;       		// By default, don't notify anything
+   UsrDat->NtfEvents.SendEmail = 0;       		// By default, don't notify anything
   }
 
 /*****************************************************************************/
@@ -391,10 +391,10 @@ void Usr_UsrDataDestructor (struct UsrData *UsrDat)
 /*****************************************************************************/
 // Input: UsrDat->UsrCod must hold user's code
 
-void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat)
+void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
   {
    ID_GetListIDsFromUsrCod (UsrDat);
-   Usr_GetUsrDataFromUsrCod (UsrDat);
+   Usr_GetUsrDataFromUsrCod (UsrDat,GetPrefs);
   }
 
 /*****************************************************************************/
@@ -464,44 +464,11 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/********* Get encrypted user's code from database using user's code *********/
-/*****************************************************************************/
-// Input: UsrDat->UsrCod must hold user's code
-
-void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)	// TODO: Remove this funcion, it's not used
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-
-   if (UsrDat->UsrCod > 0)
-     {
-      /***** Get encrypted user's code from database *****/
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get encrypted user's code",
-				"SELECT EncryptedUsrCod FROM usr_data"
-				" WHERE UsrCod=%ld",
-				UsrDat->UsrCod);
-      if (NumRows != 1)
-         Lay_ShowErrorAndExit ("Error when getting encrypted user's code.");
-
-      /***** Get encrypted user's code *****/
-      row = mysql_fetch_row (mysql_res);
-      Str_Copy (UsrDat->EncryptedUsrCod,row[0],
-                Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-     }
-   else
-      UsrDat->EncryptedUsrCod[0] = '\0';
-  }
-
-/*****************************************************************************/
 /************ Get user's data from database giving a user's code *************/
 /*****************************************************************************/
 // UsrDat->UsrCod must contain an existing user's code
 
-void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
+void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
   {
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *The_ThemeId[The_NUM_THEMES];
@@ -515,54 +482,97 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    Lan_Language_t Lan;
 
    /***** Get user's data from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get user's data",
-			     "SELECT EncryptedUsrCod,"		// row[ 0]
-				    "Password,"			// row[ 1]
-				    "Surname1,"			// row[ 2]
-				    "Surname2,"			// row[ 3]
-				    "FirstName,"		// row[ 4]
-				    "Sex,"			// row[ 5]
-				    "Theme,"			// row[ 6]
-				    "IconSet,"			// row[ 7]
-				    "Language,"			// row[ 8]
-				    "FirstDayOfWeek,"		// row[ 9]
-				    "DateFormat,"		// row[10]
-				    "Photo,"			// row[11]
-				    "PhotoVisibility,"		// row[12]
-				    "ProfileVisibility,"	// row[13]
-				    "CtyCod,"			// row[14]
-				    "InsCtyCod,"		// row[15]
-				    "InsCod,"			// row[16]
-				    "DptCod,"			// row[17]
-				    "CtrCod,"			// row[18]
-				    "Office,"			// row[19]
-				    "OfficePhone,"		// row[20]
-				    "LocalAddress,"		// row[21]
-				    "LocalPhone,"		// row[22]
-				    "FamilyAddress,"		// row[23]
-				    "FamilyPhone,"		// row[24]
-				    "OriginPlace,"		// row[25]
-				    "DATE_FORMAT(Birthday,"
-				    "'%%Y%%m%%d'),"		// row[26]
-				    "Comments,"			// row[27]
-				    "Menu,"			// row[28]
-				    "SideCols,"			// row[29]
-				    "ThirdPartyCookies,"	// row[30]
-				    "NotifNtfEvents,"		// row[31]
-				    "EmailNtfEvents"		// row[32]
-			      " FROM usr_data WHERE UsrCod=%ld",
-			      UsrDat->UsrCod);
+   switch (GetPrefs)
+     {
+      case Usr_DONT_GET_PREFS:
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get user's data",
+				   "SELECT EncryptedUsrCod,"	// row[ 0]
+					  "Password,"		// row[ 1]
+					  "Surname1,"		// row[ 2]
+					  "Surname2,"		// row[ 3]
+					  "FirstName,"		// row[ 4]
+					  "Sex,"		// row[ 5]
+					  "Photo,"		// row[ 6]
+					  "PhotoVisibility,"	// row[ 7]
+					  "ProfileVisibility,"	// row[ 8]
+					  "CtyCod,"		// row[ 9]
+					  "InsCtyCod,"		// row[10]
+					  "InsCod,"		// row[11]
+					  "DptCod,"		// row[12]
+					  "CtrCod,"		// row[13]
+					  "Office,"		// row[14]
+					  "OfficePhone,"	// row[15]
+					  "LocalAddress,"	// row[16]
+					  "LocalPhone,"		// row[17]
+					  "FamilyAddress,"	// row[18]
+					  "FamilyPhone,"	// row[19]
+					  "OriginPlace,"	// row[20]
+					  "DATE_FORMAT(Birthday,"
+					  "'%%Y%%m%%d'),"	// row[21]
+					  "Comments,"		// row[22]
+					  "NotifNtfEvents,"	// row[23]
+					  "EmailNtfEvents"	// row[24]
+				    " FROM usr_data"
+				    " WHERE UsrCod=%ld",
+				    UsrDat->UsrCod);
+	 break;
+      case Usr_GET_PREFS:
+      default:
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get user's data",
+				   "SELECT EncryptedUsrCod,"	// row[ 0]
+					  "Password,"		// row[ 1]
+					  "Surname1,"		// row[ 2]
+					  "Surname2,"		// row[ 3]
+					  "FirstName,"		// row[ 4]
+					  "Sex,"		// row[ 5]
+					  "Photo,"		// row[ 6]
+					  "PhotoVisibility,"	// row[ 7]
+					  "ProfileVisibility,"	// row[ 8]
+					  "CtyCod,"		// row[ 9]
+					  "InsCtyCod,"		// row[10]
+					  "InsCod,"		// row[11]
+					  "DptCod,"		// row[12]
+					  "CtrCod,"		// row[13]
+					  "Office,"		// row[14]
+					  "OfficePhone,"	// row[15]
+					  "LocalAddress,"	// row[16]
+					  "LocalPhone,"		// row[17]
+					  "FamilyAddress,"	// row[18]
+					  "FamilyPhone,"	// row[19]
+					  "OriginPlace,"	// row[20]
+					  "DATE_FORMAT(Birthday,"
+					  "'%%Y%%m%%d'),"	// row[21]
+					  "Comments,"		// row[22]
+					  "NotifNtfEvents,"	// row[23]
+					  "EmailNtfEvents,"	// row[24]
+
+					  // Preferences (usually not necessary
+					  // when getting another user's data)
+					  "Language,"		// row[25]
+					  "FirstDayOfWeek,"	// row[26]
+					  "DateFormat,"		// row[27]
+					  "Theme,"		// row[28]
+					  "IconSet,"		// row[29]
+					  "Menu,"		// row[30]
+					  "SideCols,"		// row[31]
+					  "ThirdPartyCookies"	// row[32]
+				    " FROM usr_data"
+				    " WHERE UsrCod=%ld",
+				    UsrDat->UsrCod);
+         break;
+     }
+
    if (NumRows != 1)
       Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
 
    /***** Read user's data *****/
    row = mysql_fetch_row (mysql_res);
 
-   /* Get encrypted user's code */
+   /* Get encrypted user's code (row[0]) */
    Str_Copy (UsrDat->EncryptedUsrCod,row[0],
             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 
-   /* Get encrypted password */
+   /* Get encrypted password (row[1]) */
    Str_Copy (UsrDat->Password,row[1],
              Pwd_BYTES_ENCRYPTED_PASSWORD);
 
@@ -573,121 +583,142 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
 
-   /* Get name */
+   /* Get name (row[2], row[3], row[4]) */
    Str_Copy (UsrDat->Surname1,row[2],
              Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_Copy (UsrDat->Surname2,row[3],
              Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_Copy (UsrDat->FirstName,row[4],
              Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
-
-   /* Get sex */
-   UsrDat->Sex = Usr_GetSexFromStr (row[5]);
-
-   /* Get theme */
-   UsrDat->Prefs.Theme = The_THEME_DEFAULT;
-   for (Theme = (The_Theme_t) 0;
-        Theme < The_NUM_THEMES;
-        Theme++)
-      if (!strcasecmp (row[6],The_ThemeId[Theme]))
-        {
-         UsrDat->Prefs.Theme = Theme;
-         break;
-        }
-
-   /* Get icon set */
-   UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
-   for (IconSet = (Ico_IconSet_t) 0;
-        IconSet < Ico_NUM_ICON_SETS;
-        IconSet++)
-      if (!strcasecmp (row[7],Ico_IconSetId[IconSet]))
-        {
-         UsrDat->Prefs.IconSet = IconSet;
-         break;
-        }
-
-   /* Get language */
-   UsrDat->Prefs.Language = Lan_LANGUAGE_UNKNOWN;	// Language unknown
-   for (Lan = (Lan_Language_t) 1;
-        Lan <= Lan_NUM_LANGUAGES;
-        Lan++)
-      if (!strcasecmp (row[8],Lan_STR_LANG_ID[Lan]))
-        {
-         UsrDat->Prefs.Language = Lan;
-         break;
-        }
-
-   /* Get first day of week */
-   UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[9]);
-
-   /* Get date format */
-   UsrDat->Prefs.DateFormat = Dat_GetDateFormatFromStr (row[10]);
-
-   /* Get rest of data */
-   Str_Copy (UsrDat->Photo,row[11],
-             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[12]);
-   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[13]);
-   UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[14]);
-   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[15]);
-   UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[16]);
-
-   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[17]);
-   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[18]);
-   Str_Copy (UsrDat->Tch.Office,row[19],
-             Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->Tch.OfficePhone,row[20],
-             Usr_MAX_BYTES_PHONE);
-
-   Str_Copy (UsrDat->LocalAddress,row[21],
-             Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->LocalPhone,row[22],
-             Usr_MAX_BYTES_PHONE);
-   Str_Copy (UsrDat->FamilyAddress,row[23],
-             Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->FamilyPhone,row[24],
-             Usr_MAX_BYTES_PHONE);
-   Str_Copy (UsrDat->OriginPlace,row[25],
-             Usr_MAX_BYTES_ADDRESS);
-
-   Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[26]);
-
-   Usr_GetUsrCommentsFromString (row[27] ? row[27] :
-	                                   "",
-	                         UsrDat);        // Get the comments comunes a todas the courses
-
-   /* Get menu */
-   UsrDat->Prefs.Menu = Mnu_GetMenuFromStr (row[28]);
-
-   /* Get if user wants to show side columns */
-   if (sscanf (row[29],"%u",&UsrDat->Prefs.SideCols) == 1)
-     {
-      if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
-         UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
-     }
-   else
-      UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
-
-   /* Get if user accepts third party cookies */
-   UsrDat->Prefs.AcceptThirdPartyCookies = (row[30][0] == 'Y');
-
-   /* Get on which events the user wants to be notified inside the platform */
-   if (sscanf (row[31],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
-      UsrDat->Prefs.NotifNtfEvents = (unsigned) -1;	// 0xFF..FF
-
-   /* Get on which events the user wants to be notified by email */
-   if (sscanf (row[32],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
-      UsrDat->Prefs.EmailNtfEvents = 0;
-   if (UsrDat->Prefs.EmailNtfEvents >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
-      UsrDat->Prefs.EmailNtfEvents = 0;
-
    Str_ConvertToTitleType (UsrDat->Surname1 );
    Str_ConvertToTitleType (UsrDat->Surname2 );
    Str_ConvertToTitleType (UsrDat->FirstName);
-   /* Create full name using FirstName, Surname1 and Surname2 */
-   Usr_BuildFullName (UsrDat);
+   Usr_BuildFullName (UsrDat);	// Create full name using FirstName, Surname1 and Surname2
 
+   /* Get sex (row[5]) */
+   UsrDat->Sex = Usr_GetSexFromStr (row[5]);
+
+   /* Get photo (row[6]) */
+   Str_Copy (UsrDat->Photo,row[6],
+             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+
+   /* Get photo visibility (row[7]) */
+   UsrDat->PhotoVisibility = Pri_GetVisibilityFromStr (row[7]);
+
+   /* Get profile visibility (row[8]) */
+   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[8]);
+
+   /* Get country (row[9]) */
+   UsrDat->CtyCod = Str_ConvertStrCodToLongCod (row[9]);
+
+   /* Get institution country (row[10]) and institution (row[11]) */
+   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[10]);
+   UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[11]);
+
+   /* Get department (row[12]) */
+   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[12]);
+
+   /* Get centre (row[13]) */
+   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[13]);
+
+   /* Get office (row[14]) and office phone (row[15]) */
+   Str_Copy (UsrDat->Tch.Office,row[14],
+             Usr_MAX_BYTES_ADDRESS);
+   Str_Copy (UsrDat->Tch.OfficePhone,row[15],
+             Usr_MAX_BYTES_PHONE);
+
+   /* Get local address (row[16]) and local phone (row[17]) */
+   Str_Copy (UsrDat->LocalAddress,row[16],
+             Usr_MAX_BYTES_ADDRESS);
+   Str_Copy (UsrDat->LocalPhone,row[17],
+             Usr_MAX_BYTES_PHONE);
+
+   /* Get local address (row[18]) and local phone (row[19]) */
+   Str_Copy (UsrDat->FamilyAddress,row[18],
+             Usr_MAX_BYTES_ADDRESS);
+   Str_Copy (UsrDat->FamilyPhone,row[19],
+             Usr_MAX_BYTES_PHONE);
+
+   /* Get origin place (row[20]) */
+   Str_Copy (UsrDat->OriginPlace,row[20],
+             Usr_MAX_BYTES_ADDRESS);
+
+   /* Get birthday (row[21]) */
+   Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[21]);
    Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
+
+   /* Get comments (row[22]) */
+   Usr_GetUsrCommentsFromString (row[22] ? row[22] :
+	                                   "",
+	                         UsrDat);
+
+   /* Get on which events the user wants to be notified inside the platform (row[23]) */
+   if (sscanf (row[23],"%u",&UsrDat->NtfEvents.CreateNotif) != 1)
+      UsrDat->NtfEvents.CreateNotif = (unsigned) -1;	// 0xFF..FF
+
+   /* Get on which events the user wants to be notified by email (row[24]) */
+   if (sscanf (row[24],"%u",&UsrDat->NtfEvents.SendEmail) != 1)
+      UsrDat->NtfEvents.SendEmail = 0;
+   if (UsrDat->NtfEvents.SendEmail >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
+      UsrDat->NtfEvents.SendEmail = 0;
+
+   /***** Get user's preferences *****/
+   if (GetPrefs == Usr_GET_PREFS)
+     {
+      /* Get language (row[25]) */
+      UsrDat->Prefs.Language = Lan_LANGUAGE_UNKNOWN;	// Language unknown
+      for (Lan = (Lan_Language_t) 1;
+	   Lan <= Lan_NUM_LANGUAGES;
+	   Lan++)
+	 if (!strcasecmp (row[25],Lan_STR_LANG_ID[Lan]))
+	   {
+	    UsrDat->Prefs.Language = Lan;
+	    break;
+	   }
+
+      /* Get first day of week (row[26]) */
+      UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[26]);
+
+      /* Get date format (row[27]) */
+      UsrDat->Prefs.DateFormat = Dat_GetDateFormatFromStr (row[27]);
+
+      /* Get theme (row[28]) */
+      UsrDat->Prefs.Theme = The_THEME_DEFAULT;
+      for (Theme = (The_Theme_t) 0;
+	   Theme < The_NUM_THEMES;
+	   Theme++)
+	 if (!strcasecmp (row[28],The_ThemeId[Theme]))
+	   {
+	    UsrDat->Prefs.Theme = Theme;
+	    break;
+	   }
+
+      /* Get icon set (row[29]) */
+      UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
+      for (IconSet = (Ico_IconSet_t) 0;
+	   IconSet < Ico_NUM_ICON_SETS;
+	   IconSet++)
+	 if (!strcasecmp (row[29],Ico_IconSetId[IconSet]))
+	   {
+	    UsrDat->Prefs.IconSet = IconSet;
+	    break;
+	   }
+
+      /* Get menu (row[30]) */
+      UsrDat->Prefs.Menu = Mnu_GetMenuFromStr (row[28]);
+
+      /* Get if user wants to show side columns (row[31]) */
+      if (sscanf (row[29],"%u",&UsrDat->Prefs.SideCols) == 1)
+	{
+	 if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
+	    UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
+	}
+      else
+	 UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
+
+      /* Get if user accepts third party cookies (row[32]) */
+      UsrDat->Prefs.AcceptThirdPartyCookies = (row[32][0] == 'Y');
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2914,7 +2945,7 @@ bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Check if user exists and get her/his data *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))        // Existing user
       return true;
 
    return false;
@@ -3022,7 +3053,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    /***** Get user's data *****/
 	    Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Me.UsrDat);
             Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Me.UsrDat);
-            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat))	// User logged in
+            if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Usr_GET_PREFS))	// User logged in
 	      {
 	       Gbl.Usrs.Me.Logged = true;
 	       Usr_SetMyPrefsAndRoles ();
@@ -3200,7 +3231,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
      }
 
    /***** Get user's data *****/
-   Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat);
+   Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Usr_GET_PREFS);
 
    /***** Check password *****/
    /* Check user's password:
@@ -3233,7 +3264,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromSession (void)
    Gbl.Usrs.Me.UsrDat.UsrCod = Gbl.Session.UsrCod;
 
    /* Check if user exists in database, and get his/her data */
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat))
+   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Usr_GET_PREFS))
      {
       Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
       return false;
@@ -3416,13 +3447,13 @@ static void Usr_PutLinkToLogOut (void)
 // Output: When true ==> UsrDat will hold all user's data
 //         When false ==> UsrDat is reset, except user's code
 
-bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat)
+bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
   {
    /***** Check if a user exists having this user's code *****/
    if (Usr_ChkIfUsrCodExists (UsrDat->UsrCod))
      {
       /* Get user's data */
-      Usr_GetAllUsrDataFromUsrCod (UsrDat);
+      Usr_GetAllUsrDataFromUsrCod (UsrDat,GetPrefs);
       return true;
      }
 
@@ -5745,7 +5776,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
             if (ListUsrCods.NumUsrs == 1)	// Only if user is valid
               {
                /* Get user's data */
-	       Usr_GetUsrDataFromUsrCod (&UsrDat);	// Really only EncryptedUsrCod is needed
+	       Usr_GetUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Really only EncryptedUsrCod is needed
 
                /* Find if encrypted user's code is already in list */
                if (!Usr_FindUsrCodInListOfSelectedUsrs (UsrDat.EncryptedUsrCod))        // If not in list ==> add it
@@ -6520,7 +6551,7 @@ void Usr_ListAllDataGsts (void)
            NumUsr < Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr].UsrCod;
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
            {
             UsrDat.Accepted = false;	// Guests have no courses,...
             	    	    	    	// ...so they have not accepted...
@@ -6722,7 +6753,7 @@ void Usr_ListAllDataStds (void)
            NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod;
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
            {
             UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Accepted;
             NumUsr++;
@@ -6784,7 +6815,7 @@ static void Usr_ListUsrsForSelection (Rol_Role_t Role)
 	   NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
 	{
 	 UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
 	   {
 	    UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
 	    Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true,Role);
@@ -6915,7 +6946,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 	NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
      {
       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
 	{
 	 UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
 	 NumUsr++;
@@ -7164,7 +7195,7 @@ void Usr_ListDataAdms (void)
            NumUsr < Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs; )
         {
          UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].UsrCod;
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
            {
             UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_DEG_ADM].Lst[NumUsr].Accepted;
             Usr_WriteRowAdmData (++NumUsr,&UsrDat);
@@ -9476,7 +9507,7 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
 
    /***** Get data of author *****/
    UsrDat.UsrCod = UsrCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 
    /***** Show photo *****/

@@ -1285,7 +1285,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write author *****/
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"AUTHOR_TXT LEFT_TOP\""
 	              " style=\"width:150px;\">");
    Msg_WriteMsgAuthor (&UsrDat,Enabled,NULL);
@@ -3502,7 +3502,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
            {
             /* Write the author of first or last message */
             UsrDat.UsrCod = Thr.UsrCod[Order];
-            Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+            Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 	    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",Style,BgColor);
             Msg_WriteMsgAuthor (&UsrDat,Thr.Enabled[Order],BgColor);
 	    fprintf (Gbl.F.Out,"</td>");

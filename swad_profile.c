@@ -235,7 +235,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
       Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Show profile and timeline *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
       /* Show profile */
       if (Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
 	{
@@ -1523,7 +1523,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
 	 /* Get user's code (row[0]) */
 	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-	 Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+	 Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
 	 /* Get figure (row[1]) */
 	 if (sscanf (row[1],"%ld",&Figure) != 1)
@@ -1692,7 +1692,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
 	 /* Get user's code (row[0]) */
 	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-	 Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+	 Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
 	 /* Get number of clicks per day (row[1]) */
 	 NumClicksPerDay = Str_GetFloatNumFromStr (row[1]);

@@ -1175,7 +1175,7 @@ int swad__getNewPassword (struct soap *soap,
       /***** Get user code (row[0]) *****/
       Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      Usr_GetUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat);	// Get my data
+      Usr_GetUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Usr_DONT_GET_PREFS);	// Get my data
 
       if (Gbl.Usrs.Me.UsrDat.Email[0])
 	 if (Pwd_SendNewPasswordByEmail (NewRandomPlainPassword) == 0) // Message sent successfully
@@ -3396,12 +3396,12 @@ int swad__sendMessage (struct soap *soap,
             /* Get user's code (row[0]) */
             if ((Gbl.Usrs.Other.UsrDat.UsrCod = (long) Str_ConvertStrCodToLongCod (row[0])) > 0)
                /* Get recipient data */
-               if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+               if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
         	 {
                   /* This received message must be notified by email? */
         	  ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
                   NotifyByEmail = (!ItsMe &&
-                                   (Gbl.Usrs.Other.UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_MESSAGE)));
+                                   (Gbl.Usrs.Other.UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE)));
 
                   /* Send message to this user */
                   if ((ReturnCode = Svc_SendMessageToUsr ((long) messageCode,Gbl.Usrs.Me.UsrDat.UsrCod,ReplyUsrCod,Gbl.Usrs.Other.UsrDat.UsrCod,NotifyByEmail,subject,body)) != SOAP_OK)
@@ -4569,7 +4569,7 @@ static bool Svc_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
 	                                        Gbl.FileBrowser.Priv.FullPathInTree,false,Brw_LICENSE_DEFAULT);
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS);
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
 
       fprintf (Gbl.F.XML,"<file name=\"%s\">"
@@ -4750,7 +4750,7 @@ int swad__getFile (struct soap *soap,
 
    if ((Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod) > 0)
       /* Get publisher's data */
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	 /* Copy publisher's data into output structure */
 	{
 	 Str_Copy (getFileOut->publisherName,Gbl.Usrs.Other.UsrDat.FullName,

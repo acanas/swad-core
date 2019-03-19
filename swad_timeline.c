@@ -1477,7 +1477,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 
       /***** Get author data *****/
       UsrDat.UsrCod = SocNot->UsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
       if (Gbl.Usrs.Me.Logged)
 	{
 	 ItsMe = Usr_ItsMe (UsrDat.UsrCod);
@@ -1721,7 +1721,7 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
 
       /***** Get user's data *****/
       UsrDat.UsrCod = UsrCod;
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Really we only need EncryptedUsrCod and FullName
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))	// Really we only need EncryptedUsrCod and FullName
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"TL_TOP_CONTAINER"
 	                    " TL_TOP_PUBLISHER TL_WIDTH\">");
@@ -2781,7 +2781,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       /***** Get author's data *****/
       Usr_UsrDataConstructor (&UsrDat);
       UsrDat.UsrCod = SocCom->UsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
       ItsMe = Usr_ItsMe (UsrDat.UsrCod);
       IAmTheAuthor = ItsMe;
       if (!IAmTheAuthor)
@@ -3457,12 +3457,12 @@ static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
    Usr_UsrDataConstructor (&UsrDat);
 
    UsrDat.UsrCod = AuthorCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
      {
       /***** This fav must be notified by email? *****/
-      CreateNotif = (UsrDat.Prefs.NotifNtfEvents & (1 << NotifyEvent));
+      CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent));
       NotifyByEmail = CreateNotif &&
-		      (UsrDat.Prefs.EmailNtfEvents & (1 << NotifyEvent));
+		      (UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent));
 
       /***** Create notification for the author of the post.
 	     If this author wants to receive notifications by email,
@@ -4555,7 +4555,7 @@ static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	    /***** Get user's data and show user's photo *****/
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
 	      {
                fprintf (Gbl.F.Out,"<div class=\"TL_SHARER\">");
 	       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
@@ -5068,13 +5068,13 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 	       if (!ItsMe)	// Not me
 		 {
 		  /* Get user's data */
-		  Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+		  Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
 		  /* Create notification for the mentioned user *****/
-		  CreateNotif = (UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_TIMELINE_MENTION));
+		  CreateNotif = (UsrDat.NtfEvents.CreateNotif & (1 << Ntf_EVENT_TIMELINE_MENTION));
 		  if (CreateNotif)
 		    {
-		     NotifyByEmail = (UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_TIMELINE_MENTION));
+		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TIMELINE_MENTION));
 		     Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_TIMELINE_MENTION,&UsrDat,PubCod,
 						    (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
 										    0));

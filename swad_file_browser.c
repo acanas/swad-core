@@ -3244,7 +3244,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
 					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get of the database the data of the user
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))	// Get of the database the data of the user
 	 if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show a row with the data of the owner of the works *****/
@@ -6676,7 +6676,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
 
       /***** Get data of file/folder publisher *****/
       UsrDat.UsrCod = UsrCod;
-      ShowUsr = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);	// Get user's data from database
+      ShowUsr = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Get user's data from database
      }
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
@@ -7168,7 +7168,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Crs);
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
-         Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+         Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_assignments_area,
@@ -7181,7 +7181,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Crs);
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
-         Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+         Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
          snprintf (TxtClipboardZone,sizeof (TxtClipboardZone),
                    "%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                    Txt_works_area,
@@ -8130,7 +8130,7 @@ static void Brw_PasteClipboard (void)
               {
                Usr_UsrDataConstructor (&UsrDat);
 	       UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
-	       Usr_GetAllUsrDataFromUsrCod (&UsrDat);	// Check that user exists
+	       Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Check that user exists
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%s/%ld/%s/%02u/%ld/%s",
                          Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_USR,
@@ -9705,7 +9705,7 @@ void Brw_ShowFileMetadata (void)
 	    Usr_UsrDataConstructor (&PublisherUsrDat);
 
 	    PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
-	    FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat);
+	    FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,Usr_DONT_GET_PREFS);
 	   }
 	 else
 	    FileHasPublisher = false;	// Get user's data from database
@@ -12014,7 +12014,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 /* Initialize structure with publisher's data */
 	 Usr_UsrDataConstructor (&PublisherUsrDat);
 	 PublisherUsrDat.UsrCod = FileMetadata.PublisherUsrCod;
-	 FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat);
+	 FileHasPublisher = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,Usr_DONT_GET_PREFS);
 	}
       else
 	 /* Unknown publisher */

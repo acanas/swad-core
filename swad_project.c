@@ -1656,7 +1656,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /* Get user's data */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	   {
 	    /* Start row for this user */
 	    fprintf (Gbl.F.Out,"<tr>");
@@ -1757,7 +1757,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /* Get user's data */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	   {
 	    /* Write user's name in "Surname1 Surname2, FirstName" format */
             fprintf (Gbl.F.Out,"<li>%s",Gbl.Usrs.Other.UsrDat.Surname1);
@@ -1950,7 +1950,7 @@ static void Prj_AddUsrToProject (Prj_RoleInProject_t RoleInProject)
 	{
 	 /* Get user's data */
          Gbl.Usrs.Other.UsrDat.UsrCod = ListUsrCods.Lst[NumUsr];
-         Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+         Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS);
 
 	 /* Add user to project */
 	 DB_QueryREPLACE ("can not add user to project",

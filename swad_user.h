@@ -86,6 +86,13 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
+// Get user's data with or without personal settings
+typedef enum
+  {
+   Usr_DONT_GET_PREFS = 0,
+   Usr_GET_PREFS      = 1,
+  } Usr_GetPrefs_t;
+
 // Related with user's sexs
 #define Usr_NUM_SEXS 4	// Unknown, female, male, all
 typedef enum
@@ -185,6 +192,11 @@ struct UsrData
      } Tch;
    struct
      {
+      unsigned CreateNotif;	// One bit activated for each type of event
+      unsigned SendEmail;	// One bit activated for each type of event
+     } NtfEvents;
+   struct
+     {
       Lan_Language_t Language;
       unsigned FirstDayOfWeek;
       Dat_Format_t DateFormat;
@@ -193,8 +205,6 @@ struct UsrData
       Mnu_Menu_t Menu;
       unsigned SideCols;
       bool AcceptThirdPartyCookies;	// User has accepted third party cookies
-      unsigned NotifNtfEvents;		// One bit activated for each type of event
-      unsigned EmailNtfEvents;		// One bit activated for each type of event
      } Prefs;
   };
 
@@ -246,13 +256,12 @@ void Usr_UsrDataConstructor (struct UsrData *UsrDat);
 void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat);
 void Usr_ResetMyLastData (void);
 void Usr_UsrDataDestructor (struct UsrData *UsrDat);
-void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat);
+void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs);
 void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods);
 void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods);
 bool Usr_ItsMe (long UsrCod);
 void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat);
-void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat);	// TODO: Remove this funcion, it's not used
-void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat);
+void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs);
 
 void Usr_BuildFullName (struct UsrData *UsrDat);
 
@@ -357,7 +366,7 @@ void Usr_ChkUsrAndGetUsrData (void);
 
 void Usr_ShowFormsLogoutAndRole (void);
 
-bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat);
+bool Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs);
 void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 

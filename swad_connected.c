@@ -807,7 +807,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       Usr_UsrDataConstructor (&OtherUsrDat);
 
       /***** Get user's data *****/
-      Usr_GetAllUsrDataFromUsrCod (&OtherUsrDat);
+      Usr_GetAllUsrDataFromUsrCod (&OtherUsrDat,Usr_DONT_GET_PREFS);
 
       UsrDat = &OtherUsrDat;
      }
@@ -1022,7 +1022,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
          /* Get user's data */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // Existing user
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // Existing user
            {
 	    /* Get course code (row[1]) */
 	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.CurrentCrs.Crs.CrsCod);

@@ -350,9 +350,9 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
    Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TCH,-1,UsrDat->UsrCod);
 
    /***** Create new notification ******/
-   CreateNotif = (UsrDat->Prefs.NotifNtfEvents & (1 << NotifyEvent));
+   CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << NotifyEvent));
    NotifyByEmail = CreateNotif && !ItsMe &&
-		   (UsrDat->Prefs.EmailNtfEvents & (1 << NotifyEvent));
+		   (UsrDat->NtfEvents.SendEmail & (1 << NotifyEvent));
    if (CreateNotif)
       Ntf_StoreNotifyEventToOneUser (NotifyEvent,UsrDat,-1L,
 				     (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
@@ -504,7 +504,7 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
       /* Get user's data */
       UsrDat.UsrCod = UsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
       /* Role (row[0]) */
       Role = Rol_ConvertUnsignedStrToRole (row[0]);
@@ -892,7 +892,7 @@ void Enr_RemoveOldUsrs (void)
         {
          row = mysql_fetch_row (mysql_res);
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
            {
             Acc_CompletelyEliminateAccount (&UsrDat,Cns_QUIET);
             NumUsrsEliminated++;
@@ -1281,7 +1281,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	    if (Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].Remove)        // If this student must be removed
 	      {
 	       UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumCurrentUsr].UsrCod;
-	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
+	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
 		 {
 		  if (WhatToDo.EliminateUsrs)                // Eliminate user completely from the platform
 		    {
@@ -1796,7 +1796,7 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
 
    /***** Check if the record of the user exists and get the type of user *****/
    if (UsrDat->UsrCod > 0)	// User exists in database
-      Usr_GetAllUsrDataFromUsrCod (UsrDat);	// Get user's data
+      Usr_GetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS);	// Get user's data
    else				// User does not exist in database, create it using his/her ID!
      {
       // Reset user's data
@@ -2071,7 +2071,7 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
       /* User's code (row[0]) */
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
       /* Role (row[1]) */
       DesiredRole = Rol_ConvertUnsignedStrToRole (row[1]);
@@ -2109,7 +2109,7 @@ void Enr_AskIfRejectSignUp (void)
    /***** Get user's code *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // If user's data exist...
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
      {
       if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
         {
@@ -2163,7 +2163,7 @@ void Enr_RejectSignUp (void)
    /***** Get user's code *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // If user's data exist...
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))        // If user's data exist...
      {
       if (Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Other.UsrDat))
         {
@@ -2837,7 +2837,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
          /* Get user code (row[2]) */
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[2]);
-         UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+         UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
 	 /***** Get requested role (row[3]) *****/
 	 DesiredRole = Rol_ConvertUnsignedStrToRole (row[3]);
@@ -3246,7 +3246,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 	{
 	 /* Get user's data */
          Gbl.Usrs.Other.UsrDat.UsrCod = ListUsrCods->Lst[NumUsr];
-         Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+         Usr_GetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS);
 
          /* Show form to edit user */
 	 Enr_ShowFormToEditOtherUsr ();

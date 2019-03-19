@@ -1005,7 +1005,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))                // Get from the database the data of the student
 	{
          /* Start container for this user */
 	 snprintf (RecordSectionId,sizeof (RecordSectionId),
@@ -1052,7 +1052,7 @@ void Rec_GetUsrAndShowRecOneStdCrs (void)
    /***** Get the selected student *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the student
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))	// Get from the database the data of the student
       if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
 	 Rec_ShowRecordOneStdCrs ();
   }
@@ -1200,7 +1200,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))                // Get from the database the data of the student
          if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
            {
             /* Check if this user has accepted
@@ -1272,7 +1272,7 @@ void Rec_GetUsrAndShowRecOneTchCrs (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Show the record *****/
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the teacher
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))	// Get from the database the data of the teacher
       if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
 	 Rec_ShowRecordOneTchCrs ();
   }
@@ -1419,7 +1419,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))	// Get from the database the data of the student
          if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
            {
             /* Check if this user has accepted
@@ -1611,7 +1611,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 
    /***** Get the user whose record we want to modify *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS);
 
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
@@ -2100,7 +2100,7 @@ void Rec_ShowMySharedRecordUpd (void)
 void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
   {
    /***** Get password, user type and user's data from database *****/
-   Usr_GetAllUsrDataFromUsrCod (UsrDat);
+   Usr_GetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS);
    UsrDat->Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 
    /***** Show user's record *****/

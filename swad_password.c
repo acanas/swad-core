@@ -374,7 +374,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	NumUsr++)
      {
       Gbl.Usrs.Me.UsrDat.UsrCod = ListUsrCods.Lst[NumUsr];
-      Usr_GetUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat);	// Get my data
+      Usr_GetUsrDataFromUsrCod (&Gbl.Usrs.Me.UsrDat,Usr_DONT_GET_PREFS);	// Get my data
 
       if (Gbl.Usrs.Me.UsrDat.Email[0])
 	 switch ((ReturnCode = Pwd_SendNewPasswordByEmail (NewRandomPlainPassword)))

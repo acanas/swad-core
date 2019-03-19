@@ -746,7 +746,7 @@ void Msg_RecMsgFromUsr (void)
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDstData.EncryptedUsrCod,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDstData);
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData))		// Get recipient's data from the database
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData,Usr_DONT_GET_PREFS))		// Get recipient's data from the database
         {
          /***** Check if recipient has banned me *****/
          RecipientHasBannedMe = Msg_CheckIfUsrIsBanned (Gbl.Usrs.Me.UsrDat.UsrCod,UsrDstData.UsrCod);
@@ -770,10 +770,10 @@ void Msg_RecMsgFromUsr (void)
         	       UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 
             /***** This received message must be notified by email? *****/
-            CreateNotif = (UsrDstData.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_MESSAGE));
+            CreateNotif = (UsrDstData.NtfEvents.CreateNotif & (1 << Ntf_EVENT_MESSAGE));
             NotifyByEmail = CreateNotif &&
         	            (UsrDstData.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
-                            (UsrDstData.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_MESSAGE));
+                            (UsrDstData.NtfEvents.SendEmail & (1 << Ntf_EVENT_MESSAGE));
 
             /***** Create the received message for this recipient
                    and increment number of new messages received by this recipient *****/
@@ -2954,7 +2954,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    Msg_WriteMsgNumber (MsgNum,!Open);
 
    /***** Write message author *****/
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
             Open ? "MSG_AUT_BG" :
@@ -3480,7 +3480,7 @@ static void Msg_WriteMsgTo (long MsgCod)
          OpenByDst = (row[2][0] == 'Y');
 
          /* Get user's data */
-	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+	 UsrValid = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
          /* Put an icon to show if user has read the message */
 	 Title = OpenByDst ? (Deleted ? Txt_MSG_Open_and_deleted :
@@ -3675,7 +3675,7 @@ void Msg_BanSenderWhenShowingMsgs (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
       Lay_ShowErrorAndExit ("Sender does not exist.");
 
    /***** Insert pair (sender's code - my code) in table of banned senders if not inserted *****/
@@ -3732,7 +3732,7 @@ static void Msg_UnbanSender (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    /***** Get password, user type and user's data from database *****/
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
       Lay_ShowErrorAndExit ("Sender does not exist.");
 
    /***** Remove pair (sender's code - my code) from table of banned senders *****/
@@ -3822,7 +3822,7 @@ void Msg_ListBannedUsrs (void)
          UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get user's data from database */
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
            {
             /* Put form to unban user */
             fprintf (Gbl.F.Out,"<tr>"

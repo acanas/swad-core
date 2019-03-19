@@ -163,7 +163,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
 	 /***** Show user *****/
 	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
 	    fprintf (Gbl.F.Out,"<tr>");
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
 	    Fol_ShowFollowedOrFollower (&UsrDat);
 	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 	     NumUsr == NumUsrs - 1)
@@ -231,7 +231,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
 	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	 /***** Show user *****/
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
 	    Fol_WriteRowUsrToFollowOnRightColumn (&UsrDat);
 	}
 
@@ -672,7 +672,7 @@ void Fol_ListFollowing (void)
 
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	 Fol_ListFollowingUsr (&Gbl.Usrs.Other.UsrDat);
       else
          Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -722,7 +722,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	    /***** Show user *****/
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
 	       fprintf (Gbl.F.Out,"<tr>");
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowingUsrDat))
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowingUsrDat,Usr_DONT_GET_PREFS))
 	       Fol_ShowFollowedOrFollower (&FollowingUsrDat);
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 		NumUsr == NumUsrs - 1)
@@ -754,7 +754,7 @@ void Fol_ListFollowers (void)
 
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	 Fol_ListFollowersUsr (&Gbl.Usrs.Other.UsrDat);
       else
          Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -805,7 +805,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	    /***** Show user *****/
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
 	       fprintf (Gbl.F.Out,"<tr>");
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowerUsrDat))
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowerUsrDat,Usr_DONT_GET_PREFS))
 	       Fol_ShowFollowedOrFollower (&FollowerUsrDat);
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 		NumUsr == NumUsrs - 1)
@@ -1203,7 +1203,7 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))	// Get from the database the data of the student
 	    if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
 	      {
 	       /* Check if I follow this user */
@@ -1252,7 +1252,7 @@ void Fol_FollowUsrs ()
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))	// Get from the database the data of the student
 	    if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
 	       /* If I don't follow this user ==> follow him/her */
 	       if (!Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -1299,7 +1299,7 @@ void Fol_UnfollowUsrs (void)
                                          Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Gbl.Usrs.Me.UsrDat.UsrCod != UsrDat.UsrCod)		// Skip me
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get from the database the data of the student
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))	// Get from the database the data of the student
 	    if (Usr_CheckIfUsrBelongsToCurrentCrs (&UsrDat))
 	       /* If I follow this user ==> unfollow him/her */
 	       if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -1380,9 +1380,9 @@ static void Fol_FollowUsr (struct UsrData *UsrDat)
    Fol_FlushCacheFollow ();
 
    /***** This follow must be notified by email? *****/
-   CreateNotif = (UsrDat->Prefs.NotifNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
+   CreateNotif = (UsrDat->NtfEvents.CreateNotif & (1 << Ntf_EVENT_FOLLOWER));
    NotifyByEmail = CreateNotif &&
-		   (UsrDat->Prefs.EmailNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
+		   (UsrDat->NtfEvents.SendEmail & (1 << Ntf_EVENT_FOLLOWER));
 
    /***** Create notification for this followed.
 	  If this followed wants to receive notifications by email,

@@ -736,7 +736,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
             AuthorClass[Status]);
    Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = UsrCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat)) // Get from the database the data of the autor
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS)) // Get from the database the data of the autor
       Usr_WriteFirstNameBRSurnames (&UsrDat);
    Usr_UsrDataDestructor (&UsrDat);
    fprintf (Gbl.F.Out,"</div>");

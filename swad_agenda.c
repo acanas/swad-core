@@ -394,7 +394,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
         {
 	 /***** Get user *****/
 	 /* If nickname is correct, user code is already got from nickname */
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))        // Existing user
 	   {
 	    /***** Start box *****/
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),

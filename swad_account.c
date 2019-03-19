@@ -230,7 +230,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	    UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	    /* Get user's data */
-            Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+            Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
             /***** Write row with data of empty account *****/
             Acc_WriteRowEmptyAccount (NumUsr,ID,&UsrDat);

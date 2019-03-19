@@ -1560,7 +1560,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
 	 /* Course requester */
 	 UsrDat.UsrCod = Crs->RequesterUsrCod;
-	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 	 fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
 	 Msg_WriteMsgAuthor (&UsrDat,true,NULL);
 	 fprintf (Gbl.F.Out,"</td>");

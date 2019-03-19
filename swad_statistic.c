@@ -1697,7 +1697,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Get user's data of the database */
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[1]);
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
       /* Get logged role */
       if (sscanf (row[2],"%u",&RoleFromLog) != 1)
@@ -1852,7 +1852,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 
       /* Get user's data from the database */
       UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);	// Get the data of the user from the database
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Get the data of the user from the database
 
       /* Write the number of row */
       fprintf (Gbl.F.Out,"<tr>"
