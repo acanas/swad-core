@@ -2472,18 +2472,8 @@ static long TL_ReceivePost (void)
    if (Content[0] ||			// Text not empty
        Media.Status == Med_PROCESSED)	// A media is attached
      {
-      /***** Check if media is received and processed *****/
-      Media.MedCod = -1L;
-      if (Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
-	  Media.Status == Med_PROCESSED)		// The new media received has been processed
-        {
-	 /* Move processed image to definitive directory */
-	 Med_MoveMediaToDefinitiveDir (&Media);
-
-	 /* Store media in database */
-	 if (Media.Status == Med_MOVED)
-	    Med_StoreMediaInDB (&Media);	// Set Media.MedCod
-	}
+      /***** Store media in filesystem and database *****/
+      Med_RemoveKeepOrStoreMedia (-1L,&Media);
 
       /***** Publish *****/
       /* Insert post content in the database */
@@ -3198,18 +3188,8 @@ static long TL_ReceiveComment (void)
       if (Content[0] ||				// Text not empty
 	  Media.Status == Med_PROCESSED)	// A media is attached
 	{
-	 /***** Check if media is received and processed *****/
-	 Media.MedCod = -1L;
-	 if (Media.Action == Med_ACTION_NEW_MEDIA &&	// New media
-	     Media.Status == Med_PROCESSED)		// The new media received has been processed
-	   {
-	    /* Move processed image to definitive directory */
-	    Med_MoveMediaToDefinitiveDir (&Media);
-
-	    /* Store media in database */
-	    if (Media.Status == Med_MOVED)
-	       Med_StoreMediaInDB (&Media);	// Set Media.MedCod
-	   }
+	 /***** Store media in filesystem and database *****/
+	 Med_RemoveKeepOrStoreMedia (-1L,&Media);
 
 	 /***** Publish *****/
 	 /* Insert into publications */

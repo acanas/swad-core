@@ -500,18 +500,8 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
   {
    long PstCod;
 
-   /***** Check if image is received and processed *****/
-   Media->MedCod = -1L;
-   if (Media->Action == Med_ACTION_NEW_MEDIA &&	// New media
-       Media->Status == Med_PROCESSED)		// The new media received has been processed
-     {
-      /* Move processed media to definitive directory */
-      Med_MoveMediaToDefinitiveDir (Media);
-
-      /* Store media in database */
-      if (Media->Status == Med_MOVED)
-	 Med_StoreMediaInDB (Media);	// Set Media->MedCod
-     }
+   /***** Store media in filesystem and database *****/
+   Med_RemoveKeepOrStoreMedia (-1L,Media);
 
    /***** Insert forum post in the database *****/
    PstCod =

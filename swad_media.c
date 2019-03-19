@@ -1138,6 +1138,50 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
   }
 
 /*****************************************************************************/
+/**** Remove media, keep media or store media, depending on media action *****/
+/*****************************************************************************/
+
+void Med_RemoveKeepOrStoreMedia (long CurrentMedCodInDB,struct Media *Media)
+  {
+   switch (Media->Action)
+     {
+      case Med_ACTION_NO_MEDIA:
+	 /* Remove possible current media */
+	 Med_RemoveMedia (Media->MedCod);
+
+	 /* Reset media data */
+	 Med_ResetMedia (Media);
+	 break;
+      case Med_ACTION_KEEP_MEDIA:
+	 /* Keep current media */
+	 Media->MedCod = CurrentMedCodInDB;
+         Med_GetMediaDataByCod (Media);
+	 break;
+      case Med_ACTION_NEW_MEDIA:
+	 /* Remove possible current media */
+	 Med_RemoveMedia (Media->MedCod);
+
+	 /* New media received and processed sucessfully? */
+	 if (Media->Status == Med_PROCESSED)		// The new media received has been processed
+	   {
+	    /* Move processed media to definitive directory */
+	    Med_MoveMediaToDefinitiveDir (Media);
+
+	    if (Media->Status == Med_MOVED)
+	       /* Store media in database */
+	       Med_StoreMediaInDB (Media);	// Set Media->MedCod
+	    else
+	       /* Reset media data */
+	       Med_ResetMedia (Media);
+	   }
+	 else
+	    /* Reset media data */
+	    Med_ResetMedia (Media);
+	 break;
+     }
+  }
+
+/*****************************************************************************/
 /**** Move temporary processed media file to definitive private directory ****/
 /*****************************************************************************/
 

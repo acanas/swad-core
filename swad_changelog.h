@@ -459,10 +459,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.81.3 (2019-03-19)"
+#define Log_PLATFORM_VERSION	"SWAD 18.81.4 (2019-03-19)"
 #define CSS_FILE		"swad18.80.css"
 #define JS_FILE			"swad18.80.js"
 /*
+	Version 18.81.4:  Mar 19, 2019 	Code refactoring related to media. (240586 lines)
 	Version 18.81.3:  Mar 19, 2019 	Remove unused fields MediaName,MediaType,MediaTitle,MediaURL,Media from tables. (240657 lines)
 					8 changes necessary in database:
 ALTER TABLE forum_post DROP COLUMN MediaName,DROP COLUMN MediaType,DROP COLUMN MediaTitle,DROP COLUMN MediaURL;

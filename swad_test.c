@@ -257,6 +257,7 @@ static void Tst_FreeMediaOfQuestion (void);
 
 static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
                                   char Feedback[Cns_MAX_BYTES_TEXT + 1]);
+static long Tst_GetMedCodFromDB (int NumOpt);
 static void Tst_GetMediaFromDB (int NumOpt,struct Media *Media);
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
@@ -281,10 +282,8 @@ static void Tst_RemAnsFromQst (void);
 static void Tst_RemTagsFromQst (void);
 static void Tst_RemoveUnusedTagsFromCurrentCrs (void);
 
-static void Tst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod);
 static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
-static void Tst_RemoveMediaFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd);
-static void Tst_RemoveAllMedFilesFromAnsOfQst (long CrsCod,long QstCod);
+static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
 static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
 
 static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
@@ -5635,15 +5634,16 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
   }
 
 /*****************************************************************************/
-/***** Get possible media associated with a test question from database ******/
+/******* Get media code associated with a test question from database ********/
 /*****************************************************************************/
 // NumOpt <  0 ==> media associated to stem
 // NumOpt >= 0 ==> media associated to answer
 
-static void Tst_GetMediaFromDB (int NumOpt,struct Media *Media)
+static long Tst_GetMedCodFromDB (int NumOpt)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   long MedCod;
 
    /***** Query depending on NumOpt *****/
    if (NumOpt < 0)
@@ -5663,12 +5663,26 @@ static void Tst_GetMediaFromDB (int NumOpt,struct Media *Media)
 
    row = mysql_fetch_row (mysql_res);
 
-   /***** Get media (row[0]) *****/
-   Media->MedCod = Str_ConvertStrCodToLongCod (row[0]);
-   Med_GetMediaDataByCod (Media);
+   /***** Get media code (row[0]) *****/
+   MedCod = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   return MedCod;
+  }
+
+/*****************************************************************************/
+/***** Get possible media associated with a test question from database ******/
+/*****************************************************************************/
+// NumOpt <  0 ==> media associated to stem
+// NumOpt >= 0 ==> media associated to an answer option
+
+static void Tst_GetMediaFromDB (int NumOpt,struct Media *Media)
+  {
+   /***** Get media *****/
+   Media->MedCod = Tst_GetMedCodFromDB (NumOpt);
+   Med_GetMediaDataByCod (Media);
   }
 
 /*****************************************************************************/
@@ -6134,37 +6148,11 @@ bool Tst_CheckIfQstFormatIsCorrectAndCountNumOptions (void)
 static void Tst_MoveMediaToDefinitiveDirectories (void)
   {
    unsigned NumOpt;
+   long CurrentMedCodInDB;
 
    /***** Media associated to question stem *****/
-   Gbl.Test.Media.MedCod = -1L;	// By default, no media is associated to question stem
-   switch (Gbl.Test.Media.Action)
-     {
-      case Med_ACTION_NO_MEDIA:
-	 /* Remove possible files with the old media */
-	 if (Gbl.Test.QstCod > 0)	// Question already exists
-            Tst_RemoveMediaFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
-	 break;
-      case Med_ACTION_KEEP_MEDIA:
-	 /* Get current media associated to question */
-	 Tst_GetMediaFromDB (-1,&Gbl.Test.Media);
-	 break;
-      case Med_ACTION_NEW_MEDIA:
-	 /* Remove possible files with the old media */
-	 if (Gbl.Test.QstCod > 0)	// Question already exists
-            Tst_RemoveMediaFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
-
-	 /* New media received and processed sucessfully? */
-	 if (Gbl.Test.Media.Status == Med_PROCESSED)		// The new media received has been processed
-	   {
-	    /* Move processed media to definitive directory */
-	    Med_MoveMediaToDefinitiveDir (&Gbl.Test.Media);
-
-	    /* Store media in database */
-	    if (Gbl.Test.Media.Status == Med_MOVED)
-	       Med_StoreMediaInDB (&Gbl.Test.Media);	// Set Gbl.Test.Media.MedCod
-	   }
-	 break;
-     }
+   CurrentMedCodInDB = Tst_GetMedCodFromDB (-1L);	// Get current media code associated to stem
+   Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Gbl.Test.Media);
 
    /****** Move media associated to answers *****/
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
@@ -6173,35 +6161,8 @@ static void Tst_MoveMediaToDefinitiveDirectories (void)
 	   NumOpt < Gbl.Test.Answer.NumOptions;
 	   NumOpt++)
 	{
-	 Gbl.Test.Answer.Options[NumOpt].Media.MedCod = -1L;	// By default, no media is associated to answer stem
-	 switch (Gbl.Test.Answer.Options[NumOpt].Media.Action)
-	   {
-	    case Med_ACTION_NO_MEDIA:
-	       /* Remove possible files with the old media */
-	       if (Gbl.Test.QstCod > 0)	// Question already exists
-	       	  Tst_RemoveMediaFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
-	       break;
-	    case Med_ACTION_KEEP_MEDIA:
-	       /* Get current media associated to question */
-	       Tst_GetMediaFromDB (NumOpt,&Gbl.Test.Answer.Options[NumOpt].Media);
-	       break;
-	    case Med_ACTION_NEW_MEDIA:
-	       /* Remove possible files with the old media */
-	       if (Gbl.Test.QstCod > 0)	// Question already exists
-	       	  Tst_RemoveMediaFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod,NumOpt);
-
-	       /* New media received and processed sucessfully? */
-	       if (Gbl.Test.Answer.Options[NumOpt].Media.Status == Med_PROCESSED)	// The new media received has been processed
-		 {
-		  /* Move processed media to definitive directory */
-		  Med_MoveMediaToDefinitiveDir (&Gbl.Test.Answer.Options[NumOpt].Media);
-
-		  /* Store media in database */
-		  if (Gbl.Test.Answer.Options[NumOpt].Media.Status == Med_MOVED)
-		     Med_StoreMediaInDB (&Gbl.Test.Answer.Options[NumOpt].Media);	// Set Gbl.Test.Answer.Options[NumOpt].Media.MedCod
-		 }
-	       break;
-	   }
+         CurrentMedCodInDB = Tst_GetMedCodFromDB (NumOpt);	// Get current media code associated to this option
+         Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Gbl.Test.Answer.Options[NumOpt].Media);
 	}
   }
 
@@ -6402,6 +6363,7 @@ void Tst_RemoveQst (void)
   {
    extern const char *Txt_Question_removed;
    bool EditingOnlyThisQst;
+   long MedCod;
 
    /***** Get the question code *****/
    Gbl.Test.QstCod = Tst_GetQstCod ();
@@ -6412,9 +6374,13 @@ void Tst_RemoveQst (void)
           to continue listing the rest of questions ******/
    EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
 
-   /***** Remove images associated to question *****/
-   Tst_RemoveAllMedFilesFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
-   Tst_RemoveMediaFromStemOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+   /***** Remove media associated to question *****/
+   /* Remove media associated to answers */
+   Tst_RemoveMediaFromAllAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+
+   /* Remove media associated to stem */
+   MedCod = Tst_GetMedCodFromDB (-1L);
+   Med_RemoveMedia (MedCod);
 
    /***** Remove the question from all the tables *****/
    /* Remove answers and tags from this test question */
@@ -6721,30 +6687,6 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
   }
 
 /*****************************************************************************/
-/********** Remove media associated to one stem of one test question *********/
-/*****************************************************************************/
-
-static void Tst_RemoveMediaFromStemOfQst (long CrsCod,long QstCod)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned NumMedia;
-
-   /***** Get media codes associated to stem of a test question from database *****/
-   NumMedia =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
-			      "SELECT MedCod"	// row[0]
-			      " FROM tst_questions"
-			      " WHERE QstCod=%ld AND CrsCod=%ld",
-			      QstCod,CrsCod);
-
-   /***** Remove media *****/
-   Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
 /** Remove all media associated to stems of all test questions in a course ***/
 /*****************************************************************************/
 
@@ -6769,38 +6711,10 @@ static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod)
   }
 
 /*****************************************************************************/
-/********* Remove media associated to one answer of a test question **********/
-/*****************************************************************************/
-
-static void Tst_RemoveMediaFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsInd)
-  {
-   MYSQL_RES *mysql_res;
-   unsigned NumMedia;
-
-   /***** Get media codes associated to an answer of a test question from database *****/
-   NumMedia =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
-			      "SELECT tst_answers.MedCod"	// row[0]
-			      " FROM tst_questions,tst_answers"
-			      " WHERE tst_questions.CrsCod=%ld"// Extra check
-			      " AND tst_questions.QstCod=%ld"	// Extra check
-			      " AND tst_questions.QstCod=tst_answers.QstCod"
-			      " AND tst_answers.QstCod=%ld"
-			      " AND tst_answers.AnsInd=%u",
-			      CrsCod,QstCod,QstCod,AnsInd);
-
-   /***** Go over result removing media files *****/
-   Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
 /******* Remove all media associated to all answers of a test question *******/
 /*****************************************************************************/
 
-static void Tst_RemoveAllMedFilesFromAnsOfQst (long CrsCod,long QstCod)
+static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumMedia;

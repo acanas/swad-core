@@ -145,6 +145,7 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
 			   const char *SectionForAlerts);
 void Med_SetParamNames (struct ParamUploadMedia *ParamUploadMedia,int NumMediaInForm);
 
+void Med_RemoveKeepOrStoreMedia (long CurrentMedCodInDB,struct Media *Media);
 void Med_MoveMediaToDefinitiveDir (struct Media *Media);
 void Med_StoreMediaInDB (struct Media *Media);
 
