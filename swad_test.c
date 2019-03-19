@@ -8498,8 +8498,7 @@ void Tst_RemoveCrsTests (long CrsCod)
                    " AND tst_questions.QstCod=tst_answers.QstCod",
 		   CrsCod);
 
-   /***** Remove files with images associated
-          to test questions in the course *****/
+   /***** Remove media associated to test questions in the course *****/
    Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (CrsCod);
    Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (CrsCod);
 

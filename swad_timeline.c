@@ -3858,7 +3858,7 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
    long PubCod;
    unsigned long NumComments;
    unsigned long NumCom;
-   unsigned NumMedia;
+   long MedCod;
 
    /***** Remove comments associated to this note *****/
    /* Get comments of this note */
@@ -3889,16 +3889,20 @@ static void TL_RemoveNoteMediaAndDBEntries (struct TL_Note *SocNot)
    /***** Remove media associated to post *****/
    if (SocNot->NoteType == TL_NOTE_POST)
      {
-      /* Get name of media associated to a post from database */
-      NumMedia =
-      (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
+      /* Remove media associated to a post from database */
+      if (DB_QuerySELECT (&mysql_res,"can not get media",
 				 "SELECT MedCod"	// row[0]
 				 " FROM social_posts"
 				 " WHERE PstCod=%ld",
-				 SocNot->Cod);
+				 SocNot->Cod) == 1)   // Result should have a unique row
+        {
+	 /* Get media code */
+	 row = mysql_fetch_row (mysql_res);
+	 MedCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Remove media */
-      Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
+	 /* Remove media */
+	 Med_RemoveMedia (MedCod);
+        }
 
       /* Free structure that stores the query result */
       DB_FreeMySQLResult (&mysql_res);
@@ -4170,19 +4174,23 @@ static void TL_RemoveComment (void)
 static void TL_RemoveCommentMediaAndDBEntries (long PubCod)
   {
    MYSQL_RES *mysql_res;
-   unsigned NumMedia;
+   MYSQL_ROW row;
+   long MedCod;;
 
    /***** Remove media associated to comment *****/
-   /* Get name of media associated to a comment from database */
-   NumMedia =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get media",
-			      "SELECT MedCod"	// row[0]
-			      " FROM social_comments"
-			      " WHERE PubCod=%ld",
-			      PubCod);
+   if (DB_QuerySELECT (&mysql_res,"can not get media",
+		       "SELECT MedCod"	// row[0]
+		       " FROM social_comments"
+		       " WHERE PubCod=%ld",
+		       PubCod) == 1)   // Result should have a unique row
+     {
+      /* Get media code */
+      row = mysql_fetch_row (mysql_res);
+      MedCod = Str_ConvertStrCodToLongCod (row[0]);
 
-   /* Remove media */
-   Med_RemoveMediaFromAllRows (NumMedia,mysql_res);
+      /* Remove media */
+      Med_RemoveMedia (MedCod);
+     }
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
