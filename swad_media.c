@@ -1738,12 +1738,14 @@ static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
        !strcasecmp (Extension,"jpeg") ||
        !strcasecmp (Extension,"png" ) ||
        !strcasecmp (Extension,"tif" ) ||
-       !strcasecmp (Extension,"tiff"))
+       !strcasecmp (Extension,"tiff") ||
+       !strcasecmp (Extension,"bmp" ))
       if (!strcmp (MIMEType,"image/jpeg"              ) ||
           !strcmp (MIMEType,"image/pjpeg"             ) ||
           !strcmp (MIMEType,"image/png"               ) ||
           !strcmp (MIMEType,"image/x-png"             ) ||
 	  !strcmp (MIMEType,"image/tiff"              ) ||
+	  !strcmp (MIMEType,"image/bmp"               ) ||
           !strcmp (MIMEType,"application/octet-stream") ||
 	  !strcmp (MIMEType,"application/octetstream" ) ||
 	  !strcmp (MIMEType,"application/octet"       ))
