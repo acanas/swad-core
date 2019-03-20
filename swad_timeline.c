@@ -1564,19 +1564,19 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_INS_DOC_PUB_FILE:
 	       case TL_NOTE_INS_SHA_PUB_FILE:
 		  /* Write location (institution) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">%s: %s</div>",
 			   Txt_Institution,Ins.ShrtName);
 		  break;
 	       case TL_NOTE_CTR_DOC_PUB_FILE:
 	       case TL_NOTE_CTR_SHA_PUB_FILE:
 		  /* Write location (centre) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">%s: %s</div>",
 			   Txt_Centre,Ctr.ShrtName);
 		  break;
 	       case TL_NOTE_DEG_DOC_PUB_FILE:
 	       case TL_NOTE_DEG_SHA_PUB_FILE:
 		  /* Write location (degree) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">%s: %s</div>",
 			   Txt_Degree,Deg.ShrtName);
 		  break;
 	       case TL_NOTE_CRS_DOC_PUB_FILE:
@@ -1584,12 +1584,12 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_EXAM_ANNOUNCEMENT:
 	       case TL_NOTE_NOTICE:
 		  /* Write location (course) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">%s: %s</div>",
 			   Txt_Course,Crs.ShrtName);
 		  break;
 	       case TL_NOTE_FORUM_POST:
 		  /* Write forum name */
-		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
+		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">%s: %s</div>",
 			   Txt_Forum,ForumName);
 		  break;
 	       default:
@@ -1598,7 +1598,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 
 	 /* Write note summary */
 	 TL_GetNoteSummary (SocNot,SummaryStr);
-	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
+	 fprintf (Gbl.F.Out,"<div class=\"TL_TXT\">%s</div>",SummaryStr);
 	}
 
       /* End of right part */
@@ -1875,7 +1875,7 @@ static void TL_GetAndWritePost (long PstCod)
 static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
   {
    extern const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
-   extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
+   extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
    extern const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
    char Class[64];
@@ -1958,7 +1958,8 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
        Gbl.Form.Inside)		// Inside another form
      {
       /***** Do not put form *****/
-      fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">%s",
+      fprintf (Gbl.F.Out,"<div class=\"TL_FORM_OFF\">"
+	                 "%s",
                Txt_TIMELINE_NOTE[SocNot->NoteType]);
       if (SocNot->Unavailable)
          fprintf (Gbl.F.Out," (%s)",Txt_not_available);
@@ -1966,7 +1967,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
      }
    else			// Not inside another form
      {
-      fprintf (Gbl.F.Out,"<div>");
+      fprintf (Gbl.F.Out,"<div class=\"TL_FORM\">");
 
       /***** Parameters depending on the type of note *****/
       switch (SocNot->NoteType)
@@ -2032,7 +2033,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
       /***** Link and end form *****/
       snprintf (Class,sizeof (Class),
 	        "%s ICO_HIGHLIGHT",
-		The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
+		The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
       Frm_LinkFormSubmitUnique (Txt_TIMELINE_NOTE[SocNot->NoteType],Class);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\""

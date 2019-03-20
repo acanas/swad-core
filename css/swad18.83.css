@@ -3054,12 +3054,29 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	padding-bottom:10px;
 	}
+.TL_FORM
+	{
+	padding-top:8px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.TL_FORM_OFF,
+.TL_LOC
+	{
+	padding-top:8px;
+	color:#808080;
+	font-size:13pt;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
 .TL_TXT
 	{
 	padding:5px 0;
 	color:#202020;
 	font-size:13pt;
  	line-height:1.4;
+	overflow:hidden;
+	text-overflow:ellipsis;
 	}
 .TL_EXPAND_COMMENTS
 	{
