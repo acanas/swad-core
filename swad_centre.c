@@ -312,8 +312,8 @@ static void Ctr_Configuration (bool PrintView)
      {
       /***** Path to photo *****/
       snprintf (PathPhoto,sizeof (PathPhoto),
-	        "%s/%s/%02u/%u/%u.jpg",
-                Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	        "%s/%02u/%u/%u.jpg",
+                Cfg_PATH_CTR_PUBLIC,
 	        (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 	        (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
 	        (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
@@ -352,10 +352,10 @@ static void Ctr_Configuration (bool PrintView)
 	 if (PutLink)
 	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
 		     Gbl.CurrentCtr.Ctr.WWW);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%02u/%u/%u.jpg\""
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%02u/%u/%u.jpg\""
 	                    " alt=\"%s\" title=\"%s\""
 	                    " class=\"%s\" />",
-		  Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+		  Cfg_URL_CTR_PUBLIC,
 		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
 		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
@@ -717,8 +717,8 @@ static void Ctr_PutIconToChangePhoto (void)
 
    /***** Link to upload photo of centre *****/
    snprintf (PathPhoto,sizeof (PathPhoto),
-	     "%s/%s/%02u/%u/%u.jpg",
-	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	     "%s/%02u/%u/%u.jpg",
+	     Cfg_PATH_CTR_PUBLIC,
 	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 	     (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod,
 	     (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod);
@@ -1781,8 +1781,8 @@ void Ctr_RemoveCentre (void)
 
       /***** Remove directories of the centre *****/
       snprintf (PathCtr,sizeof (PathCtr),
-	        "%s/%s/%02u/%u",
-	        Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	        "%s/%02u/%u",
+	        Cfg_PATH_CTR_PUBLIC,
 	        (unsigned) (Ctr.CtrCod % 100),
 	        (unsigned) Ctr.CtrCod);
       Fil_RemoveTree (PathCtr);
@@ -2335,8 +2335,6 @@ void Ctr_ReceivePhoto (void)
    char *PtrExtension;
    size_t LengthExtension;
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
-   char PathImgPriv[PATH_MAX + 1];
-   char PathImgPrivTmp[PATH_MAX + 1];
    char PathFileImgTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination temporary file
    char PathFileImg[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination file
    bool WrongType = false;
@@ -2362,16 +2360,10 @@ void Ctr_ReceivePhoto (void)
 
    /***** Create private directories if not exist *****/
    /* Create private directory for images if it does not exist */
-   snprintf (PathImgPriv,sizeof (PathImgPriv),
-	     "%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MEDIA);
-   Fil_CreateDirIfNotExists (PathImgPriv);
+   Fil_CreateDirIfNotExists (Cfg_PATH_MEDIA_PRIVATE);
 
    /* Create temporary private directory for images if it does not exist */
-   snprintf (PathImgPrivTmp,sizeof (PathImgPrivTmp),
-	     "%s/%s",
-	     PathImgPriv,Cfg_FOLDER_IMG_TMP);
-   Fil_CreateDirIfNotExists (PathImgPrivTmp);
+   Fil_CreateDirIfNotExists (Cfg_PATH_MEDIA_TMP_PRIVATE);
 
    /* Get filename extension */
    if ((PtrExtension = strrchr (FileNameImgSrc,(int) '.')) == NULL)
@@ -2390,7 +2382,7 @@ void Ctr_ReceivePhoto (void)
    /* End the reception of image in a temporary file */
    snprintf (PathFileImgTmp,sizeof (PathFileImgTmp),
 	     "%s/%s.%s",
-             PathImgPrivTmp,Gbl.UniqueNameEncrypted,PtrExtension);
+             Cfg_PATH_MEDIA_TMP_PRIVATE,Gbl.UniqueNameEncrypted,PtrExtension);
    if (!Fil_EndReceptionOfFile (PathFileImgTmp,Param))
      {
       Ale_ShowAlert (Ale_WARNING,"Error copying file.");
@@ -2398,26 +2390,23 @@ void Ctr_ReceivePhoto (void)
      }
 
    /***** Creates public directories if not exist *****/
+   Fil_CreateDirIfNotExists (Cfg_PATH_CTR_PUBLIC);
    snprintf (Path,sizeof (Path),
-	     "%s/%s",
-	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR);
-   Fil_CreateDirIfNotExists (Path);
-   snprintf (Path,sizeof (Path),
-	     "%s/%s/%02u",
-	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	     "%s/%02u",
+	     Cfg_PATH_CTR_PUBLIC,
 	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
    Fil_CreateDirIfNotExists (Path);
    snprintf (Path,sizeof (Path),
-	     "%s/%s/%02u/%u",
-	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	     "%s/%02u/%u",
+	     Cfg_PATH_CTR_PUBLIC,
 	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 	     (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
    Fil_CreateDirIfNotExists (Path);
 
    /***** Convert temporary file to public JPEG file *****/
    snprintf (PathFileImg,sizeof (PathFileImg),
-	     "%s/%s/%02u/%u/%u.jpg",
-	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CTR,
+	     "%s/%02u/%u/%u.jpg",
+	     Cfg_PATH_CTR_PUBLIC,
 	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 	     (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
 	     (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);

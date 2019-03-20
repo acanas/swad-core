@@ -658,9 +658,7 @@ void Par_GetMainParameters (void)
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    long ActCod;
    char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
-   char Path[PATH_MAX + 1 +
-             NAME_MAX + 1 +
-             NAME_MAX + 2];
+   char URL[PATH_MAX + 1];
    char LongStr[1 + 10 + 1];
 
    /***** Reset codes of country, institution, centre, degree and course *****/
@@ -806,18 +804,17 @@ void Par_GetMainParameters (void)
          Gbl.Prefs.Theme = The_THEME_DEFAULT;
 
       /***** Set path of theme *****/
-      snprintf (Path,sizeof (Path),
-	        "%s/%s/%s",
-                Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Gbl.Prefs.Theme]);
-      Str_Copy (Gbl.Prefs.URLTheme,Path,
+      snprintf (URL,sizeof (URL),
+	        "%s/%s",
+                Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
+      Str_Copy (Gbl.Prefs.URLTheme,URL,
                 PATH_MAX);
 
       /***** Set path of icon set *****/
-      snprintf (Path,sizeof (Path),
-	        "%s/%s/%s",
-                Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_ICON_SETS,
-                Ico_IconSetId[Gbl.Prefs.IconSet]);
-      Str_Copy (Gbl.Prefs.URLIconSet,Path,
+      snprintf (URL,sizeof (URL),
+	        "%s/%s",
+                Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
+      Str_Copy (Gbl.Prefs.URLIconSet,URL,
                 PATH_MAX);
      }
 

@@ -1909,7 +1909,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
                             " class=\"LEFT_TOP\""
 	                    " style=\"width:%upx; height:10px; padding-top:4px;\" />"
 	                    "&nbsp;",
-		  Gbl.Prefs.URLIcons,
+		  Cfg_URL_ICON_PUBLIC,
 		  UsrDat.Roles.InCurrentCrs.Role == Rol_STD ? 'o' :	// Student
 			                                      'r',	// Non-editing teacher or teacher
 		  BarWidth);
@@ -2409,7 +2409,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
 	                 "<img src=\"%s/tr1x14.gif\""
 	                 " alt=\"\" title=\"\" />"
 	                 "</td>",
-               R,G,B,Gbl.Prefs.URLIcons);
+               R,G,B,Cfg_URL_ICON_PUBLIC);
      }
    fprintf (Gbl.F.Out,"</tr>");
    Tbl_EndTable ();
@@ -2907,7 +2907,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
       fprintf (Gbl.F.Out,"<img src=\"%s/o1x1.png\""	// Orange background
 	                 " alt=\"\" title=\"\""
 	                 " style=\"width:10px; height:%upx;\" />",
-	       Gbl.Prefs.URLIcons,BarHeight);
+	       Cfg_URL_ICON_PUBLIC,BarHeight);
      }
    else
       fprintf (Gbl.F.Out,"0%%<br />0");
@@ -3009,7 +3009,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	                 " alt=\"\" title=\"\""
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>",
-	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons,
+	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC,
 	       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
       /* All the intermediate divisions */
       for (i = 0;
@@ -3021,7 +3021,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	                    " style=\"display:block;"
 	                    " width:%upx; height:1px;\" />"
 	                    "</td>",
-		  Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons,
+		  Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC,
 		  Sta_WIDTH_SEMIDIVISION_GRAPHIC);
       /* Last division (right) */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
@@ -3030,7 +3030,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>"
 	                 "</tr>",
-	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons,
+	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC,
 	       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
 
       /***** Write again the labels of the X axis *****/
@@ -3086,7 +3086,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                 " background-repeat:repeat;\">"
 	                 "00h"
 	                 "</td>",
-               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons);
+               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
    else if (Minute == (Sta_NUM_MINUTES_PER_DAY - 30))
       // If 23:30
       fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG LEFT_BOTTOM\""
@@ -3096,7 +3096,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                 " background-repeat:repeat;\">"
 	                 "24h"
 	                 "</td>",
-               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons);
+               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
    else if (!(Minute % 30) && (Minute % 60))
       // If minute is multiple of 30 but not of 60 (i.e.: 30, 90, 150...)
       fprintf (Gbl.F.Out,"<td rowspan=\"60\" class=\"LOG LEFT_MIDDLE\""
@@ -3106,7 +3106,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                 " background-repeat:repeat;\">"
 	                 "%02uh"
 	                 "</td>",
-               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.URLIcons,(Minute + 30) / 60);
+               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC,(Minute + 30) / 60);
 
    /***** Start cell for the graphic *****/
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LEFT_BOTTOM\""
@@ -3114,7 +3114,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	              " background-image:url('%s/malla%c48x1.gif');"
 	              " background-size:60px 1px;"
 	              " background-repeat:repeat;\">",
-	    Sta_NUM_DIVISIONS_X * 2,Sta_WIDTH_GRAPHIC,Gbl.Prefs.URLIcons,
+	    Sta_NUM_DIVISIONS_X * 2,Sta_WIDTH_GRAPHIC,Cfg_URL_ICON_PUBLIC,
 	    (Minute % 60) == 0 ? 'v' :
 		                 'h');
 
@@ -3125,7 +3125,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                    " alt=\"\" title=\"\""
 	                    " style=\"display:block;"
 	                    " width:%upx; height:1px;\" />",
-                  Gbl.Prefs.URLIcons,
+                  Cfg_URL_ICON_PUBLIC,
                   (Minute % 60) == 0 ? 'r' :	// red background
                 	               'o',	// orange background
                   BarWidth);
@@ -3360,14 +3360,14 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"LOG LEFT_TOP\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
-                         "<img src=\"%s/%s/%s\""
+                         "<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER_SMALL\""
                          " style=\"margin:0 10px 5px 0;\" />"
                          "</a>",
                Ban.WWW,
                Ban.FullName,
-               Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
+               Cfg_URL_BANNER_PUBLIC,
                Ban.Img,
                Ban.ShrtName,
                Ban.FullName);
@@ -3926,7 +3926,7 @@ static void Sta_DrawBarNumHits (char Color,
                          " class=\"LEFT_MIDDLE\""
 	                 " style=\"width:%upx; height:10px;\" />"
                          "&nbsp;",
-	       Gbl.Prefs.URLIcons,Color,BarWidth);
+	       Cfg_URL_ICON_PUBLIC,Color,BarWidth);
 
       /***** Write the number of hits *****/
       Str_WriteFloatNum (Gbl.F.Out,HitsNum);

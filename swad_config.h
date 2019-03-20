@@ -326,69 +326,108 @@
 
 /* Folders for institutions, inside public and private swad directories */
 #define Cfg_FOLDER_INS				"ins"			// If not exists, it should be created during installation inside swad private and public directory!
+#define Cfg_PATH_INS_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_INS
+#define Cfg_PATH_INS_PUBLIC			Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_INS
 
 /* Folders for centres, inside public and private swad directories */
 #define Cfg_FOLDER_CTR				"ctr"			// If not exists, it should be created during installation inside swad private and public directory!
+#define Cfg_PATH_CTR_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_CTR
+#define Cfg_PATH_CTR_PUBLIC			Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_CTR
+#define Cfg_URL_CTR_PUBLIC			Cfg_URL_SWAD_PUBLIC "/" Cfg_FOLDER_CTR
 
 /* Folders for centres, inside public and private swad directories */
 #define Cfg_FOLDER_DEG				"deg"			// If not exists, it should be created during installation inside swad private and public directory!
+#define Cfg_PATH_DEG_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_DEG
+#define Cfg_PATH_DEG_PUBLIC			Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_DEG
 
 /* Folders for courses, inside public and private swad directories */
 #define Cfg_FOLDER_CRS 				"crs"			// If not exists, it should be created during installation inside swad private and public directory!
+#define Cfg_PATH_CRS_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_CRS
+#define Cfg_PATH_CRS_PUBLIC			Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_CRS
+#define Cfg_URL_CRS_PUBLIC			Cfg_URL_SWAD_PUBLIC "/" Cfg_FOLDER_CRS
 
 /* Folders for groups, inside public and private swad directories */
 #define Cfg_FOLDER_GRP 				"grp"			// Created automatically the first time it is accessed
 
 /* Folder for users, inside private swad directory */
 #define Cfg_FOLDER_USR 				"usr"			// Created automatically the first time it is accessed
+#define Cfg_PATH_USR_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_USR
 
 /* Folders for projects, inside public and private swad directories */
 #define Cfg_FOLDER_PRJ 				"prj"			// Created automatically the first time it is accessed
 
 /* Folder for temporary HTML output of this CGI, inside private swad directory */
 #define Cfg_FOLDER_OUT 				"out"			// Created automatically the first time it is accessed
+#define Cfg_PATH_OUT_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_OUT
 
 /* Folder for temporary public links to file zones, used when displaying file browsers, inside public swad directory */
 #define Cfg_FOLDER_FILE_BROWSER_TMP		"tmp"			// Created automatically the first time it is accessed
+#define Cfg_PATH_FILE_BROWSER_TMP_PUBLIC	Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_FILE_BROWSER_TMP
+#define Cfg_URL_FILE_BROWSER_TMP_PUBLIC		Cfg_URL_SWAD_PUBLIC "/" Cfg_FOLDER_FILE_BROWSER_TMP
 
 /* Folder where temporary files are created for students' marks, inside private swad directory */
 #define Cfg_FOLDER_MARK				"mark"			// Created automatically the first time it is accessed
-
-/* Folder where temporary files are created for passing parameters to commands, inside private swad directory */
-#define Cfg_FOLDER_PARAM			"param"			// Created automatically the first time it is accessed
+#define Cfg_PATH_MARK_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_MARK
 
 /* Folder for temporary XML files received to import test questions, inside private swad directory */
 #define Cfg_FOLDER_TEST				"test"			// Created automatically the first time it is accessed
+#define Cfg_PATH_TEST_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_TEST
 
 /* Folder for compression of assignments and works into a zip files, inside private swad directory */
 #define Cfg_FOLDER_ZIP				"zip"			// Created automatically the first time it is accessed
+#define Cfg_PATH_ZIP_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_ZIP
 
 /* Folders for images/videos inside public and private swad directories */
 #define Cfg_FOLDER_MEDIA			"med"			// Created automatically the first time it is accessed
-/* Folders for temporary users' photos inside photos directories */
-#define Cfg_FOLDER_IMG_TMP			"tmp"			// Created automatically the first time it is accessed
+#define Cfg_PATH_MEDIA_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_MEDIA
+/* Folders for temporary images/videos inside media directories */
+#define Cfg_FOLDER_MEDIA_TMP			"tmp"			// Created automatically the first time it is accessed
+#define Cfg_PATH_MEDIA_TMP_PRIVATE		Cfg_PATH_MEDIA_PRIVATE "/" Cfg_FOLDER_MEDIA_TMP
 
 /* Folders for users' photos inside public and private swad directories */
 #define Cfg_FOLDER_PHOTO			"photo"			// Created automatically the first time it is accessed
+#define Cfg_PATH_PHOTO_PRIVATE			Cfg_PATH_SWAD_PRIVATE "/" Cfg_FOLDER_PHOTO
+#define Cfg_PATH_PHOTO_PUBLIC			Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_PHOTO
+#define Cfg_URL_PHOTO_PUBLIC			Cfg_URL_SWAD_PUBLIC "/" Cfg_FOLDER_PHOTO
 /* Folders for temporary users' photos inside photos directories */
 #define Cfg_FOLDER_PHOTO_TMP			"tmp"			// Created automatically the first time it is accessed
+#define Cfg_PATH_PHOTO_TMP_PRIVATE		Cfg_PATH_PHOTO_PRIVATE "/" Cfg_FOLDER_PHOTO_TMP
+#define Cfg_PATH_PHOTO_TMP_PUBLIC		Cfg_PATH_PHOTO_PUBLIC "/" Cfg_FOLDER_PHOTO_TMP
+#define Cfg_URL_PHOTO_TMP_PUBLIC		Cfg_URL_PHOTO_PUBLIC "/" Cfg_FOLDER_PHOTO_TMP
 
 /* Folder for reports, inside public swad directory */
 #define Cfg_FOLDER_REP 				"rep"			// Created automatically the first time it is accessed
+#define Cfg_PATH_REP_PUBLIC			Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_REP
+#define Cfg_URL_REP_PUBLIC			Cfg_URL_SWAD_PUBLIC "/" Cfg_FOLDER_REP
 
 /* Folder for banners, inside public swad directory */
 #define Cfg_FOLDER_BANNER			"banner"		// If not exists, it should be created during installation inside swad public directory!
+#define Cfg_URL_BANNER_PUBLIC			Cfg_URL_SWAD_PUBLIC "/" Cfg_FOLDER_BANNER
 
 #define Cfg_FOLDER_DEGREE_PHOTO_MEDIAN		"mdn_all"
 #define Cfg_FOLDER_DEGREE_PHOTO_AVERAGE		"avg_all"
 
 /* Folders with icons. They should be created with icons during installation */
 #define Cfg_FOLDER_PUBLIC_ICON			"icon"
+#define Cfg_PATH_ICON_PUBLIC			Cfg_PATH_SWAD_PUBLIC "/" Cfg_FOLDER_PUBLIC_ICON
+#define Cfg_URL_ICON_PUBLIC			Cfg_URL_SWAD_PUBLIC "/" Cfg_FOLDER_PUBLIC_ICON
+
 #define Cfg_ICON_FOLDER_THEMES			"theme"		// Directory with all the images for each theme
-#define Cfg_ICON_FOLDER_ICON_SETS		"iconset"	// Directory with all the icons for each icon set
+#define Cfg_URL_ICON_THEMES_PUBLIC		Cfg_URL_ICON_PUBLIC "/" Cfg_ICON_FOLDER_THEMES
+
+#define Cfg_ICON_FOLDER_SETS			"iconset"	// Directory with all the icons for each icon set
+#define Cfg_PATH_ICON_SETS_PUBLIC		Cfg_PATH_ICON_PUBLIC "/" Cfg_ICON_FOLDER_SETS
+#define Cfg_URL_ICON_SETS_PUBLIC		Cfg_URL_ICON_PUBLIC "/" Cfg_ICON_FOLDER_SETS
+
 #define Cfg_ICON_FOLDER_COUNTRIES		"country"	// Directory with icons for countries
+#define Cfg_PATH_ICON_COUNTRIES_PUBLIC		Cfg_PATH_ICON_PUBLIC "/" Cfg_ICON_FOLDER_COUNTRIES
+#define Cfg_URL_ICON_COUNTRIES_PUBLIC		Cfg_URL_ICON_PUBLIC "/" Cfg_ICON_FOLDER_COUNTRIES
+
 #define Cfg_ICON_FOLDER_FILEXT			"filext"	// Directory with icons for file extensions
+#define CfG_URL_ICON_FILEXT_PUBLIC		Cfg_URL_ICON_PUBLIC "/" Cfg_ICON_FOLDER_FILEXT
+
 #define Cfg_ICON_FOLDER_PLUGINS			"plugin"	// Directory with icons for plugins
+#define Cfg_URL_ICON_PLUGINS_PUBLIC		Cfg_URL_ICON_PUBLIC "/" Cfg_ICON_FOLDER_PLUGINS
 
 /* Folders and file used to store syllabus */
 #define Cfg_SYLLABUS_FOLDER_LECTURES		"lec"
@@ -413,6 +452,7 @@
 /* Data protection policy folder
    This folder, and an index.html file inside it, must be created during installation */
 #define Cfg_DATA_PROTECTION_FOLDER		"data_protection"
+#define Cfg_URL_DATA_PROTECTION_PUBLIC		Cfg_URL_SWAD_PUBLIC "/" Cfg_DATA_PROTECTION_FOLDER
 
 /* HTML file weitten at foot of page */
 #define Cfg_PATH_AND_FILE_REL_HTML_PRIVATE	"./foot.html"
@@ -476,7 +516,7 @@
 
 #define Cfg_TIME_TO_DELETE_PARAMS_TO_COMMANDS		((time_t)(              15UL * 60UL))  	// Temporary files with params to commands are deleted after these seconds
 
-#define Cfg_TIME_TO_DELETE_IMAGES_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files related to images after these seconds
+#define Cfg_TIME_TO_DELETE_MEDIA_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files related to images after these seconds
 #define Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files related to photos after these seconds
 
 #define Cfg_TIME_TO_DELETE_TEST_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files related to imported test questions after these seconds

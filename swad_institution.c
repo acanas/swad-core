@@ -1746,8 +1746,8 @@ void Ins_RemoveInstitution (void)
 
       /***** Remove directories of the institution *****/
       snprintf (PathIns,sizeof (PathIns),
-	        "%s/%s/%02u/%u",
-	        Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_INS,
+	        "%s/%02u/%u",
+	        Cfg_PATH_INS_PUBLIC,
 	        (unsigned) (Ins.InsCod % 100),
 	        (unsigned) Ins.InsCod);
       Fil_RemoveTree (PathIns);

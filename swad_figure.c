@@ -643,11 +643,11 @@ static void Fig_WriteHeadHierarchy (void)
                       "%s"
                       "</th>"
                       "</tr>",
-            Gbl.Prefs.URLIcons,Txt_Countries   ,Txt_Countries   ,Txt_Countries,
-            Gbl.Prefs.URLIcons,Txt_Institutions,Txt_Institutions,Txt_Institutions,
-            Gbl.Prefs.URLIcons,Txt_Centres     ,Txt_Centres     ,Txt_Centres,
-            Gbl.Prefs.URLIcons,Txt_Degrees     ,Txt_Degrees     ,Txt_Degrees,
-            Gbl.Prefs.URLIcons,Txt_Courses     ,Txt_Courses     ,Txt_Courses);
+            Cfg_URL_ICON_PUBLIC,Txt_Countries   ,Txt_Countries   ,Txt_Countries,
+            Cfg_URL_ICON_PUBLIC,Txt_Institutions,Txt_Institutions,Txt_Institutions,
+            Cfg_URL_ICON_PUBLIC,Txt_Centres     ,Txt_Centres     ,Txt_Centres,
+            Cfg_URL_ICON_PUBLIC,Txt_Degrees     ,Txt_Degrees     ,Txt_Degrees,
+            Cfg_URL_ICON_PUBLIC,Txt_Courses     ,Txt_Courses     ,Txt_Courses);
   }
 
 /*****************************************************************************/
@@ -3996,7 +3996,7 @@ static void Fig_GetAndShowForumStats (void)
                       "%s"
                       "</th>"
                       "</tr>",
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Txt_Scope,
             Txt_Scope,
             Txt_Forums,
@@ -4224,7 +4224,7 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
                       "%.2f"
                       "</td>"
                       "</tr>",
-            Gbl.Prefs.URLIcons,Icon,
+            Cfg_URL_ICON_PUBLIC,Icon,
             ForumName1,ForumName2,
             ForumName1,ForumName2,
             ForumName1,ForumName2,
@@ -5138,7 +5138,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 			    "%5.2f%%"
 			    "</td>"
 			    "</tr>",
-		  Gbl.Prefs.URLIcons,FirstDayOfWeek,
+		  Cfg_URL_ICON_PUBLIC,FirstDayOfWeek,
 		  Txt_DAYS_SMALL[FirstDayOfWeek],
 		  Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek],
 		  NumUsrs[FirstDayOfWeek],
@@ -5289,7 +5289,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
 	IconSet++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"LEFT_MIDDLE\">"
-                         "<img src=\"%s/%s/%s/cog.svg\""
+                         "<img src=\"%s/%s/cog.svg\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />"
                          "</td>"
@@ -5300,8 +5300,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.URLIcons,
-               Cfg_ICON_FOLDER_ICON_SETS,
+               Cfg_URL_ICON_SETS_PUBLIC,
                Ico_IconSetId[IconSet],
                Ico_IconSetNames[IconSet],
                Ico_IconSetNames[IconSet],
@@ -5385,7 +5384,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.URLIcons,Mnu_MenuIcons[Menu],
+               Cfg_URL_ICON_PUBLIC,Mnu_MenuIcons[Menu],
                Txt_MENU_NAMES[Menu],
                Txt_MENU_NAMES[Menu],
                NumUsrs[Menu],
@@ -5457,7 +5456,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
 	Theme++)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"CENTER_MIDDLE\">"
-                         "<img src=\"%s/%s/%s/theme_32x20.gif\""
+                         "<img src=\"%s/%s/theme_32x20.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:40px; height:25px;\" />"
                          "</td>"
@@ -5468,7 +5467,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_THEMES,The_ThemeId[Theme],
+               Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Theme],
                The_ThemeNames[Theme],
                The_ThemeNames[Theme],
                NumUsrs[Theme],
@@ -5550,7 +5549,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
                          "%5.2f%%"
                          "</td>"
                          "</tr>",
-               Gbl.Prefs.URLIcons,SideCols >> 1,SideCols & 1,
+               Cfg_URL_ICON_PUBLIC,SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                NumUsrs[SideCols],

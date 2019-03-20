@@ -414,7 +414,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis-h.svg\""
 			    " alt=\"%s\" title=\"%s\" class=\"ICO40x40\" />"
 			    "</a>",
-		  Gbl.Prefs.URLIcons,
+		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Connected_users,Txt_Connected_users);
 	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</td>"

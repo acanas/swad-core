@@ -3493,7 +3493,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
                       " class=\"LEFT_TOP\""
 	              " style=\"width:%upx; height:20px;\" />"
 	              "&nbsp;",
-      Gbl.Prefs.URLIcons,
+      Cfg_URL_ICON_PUBLIC,
       Gbl.Title,
       Gbl.Title,
       BarWidth);

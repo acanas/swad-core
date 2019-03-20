@@ -841,13 +841,13 @@ void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
    /***** Draw country map *****/
    fprintf (Gbl.F.Out,"<img src=\"");
    if (Cty_CheckIfCountryMapExists (Cty))
-      fprintf (Gbl.F.Out,"%s/%s/%s/%s.png",
-	       Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_COUNTRIES,
+      fprintf (Gbl.F.Out,"%s/%s/%s.png",
+	       Cfg_URL_ICON_COUNTRIES_PUBLIC,
 	       Cty->Alpha2,
 	       Cty->Alpha2);
    else
       fprintf (Gbl.F.Out,"%s/tr16x16.gif",	// TODO: Change for a 1x1 image or a generic image
-	       Gbl.Prefs.URLIcons);
+	       Cfg_URL_ICON_PUBLIC);
    fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"%s\" class=\"%s\" />",
 	    Cty->Alpha2,
 	    Cty->Name[Gbl.Prefs.Language],
@@ -863,10 +863,8 @@ bool Cty_CheckIfCountryMapExists (struct Country *Cty)
    char PathMap[PATH_MAX + 1];
 
    snprintf (PathMap,sizeof (PathMap),
-	     "%s/%s/%s/%s/%s.png",
-	     Cfg_PATH_SWAD_PUBLIC,
-	     Cfg_FOLDER_PUBLIC_ICON,
-	     Cfg_ICON_FOLDER_COUNTRIES,
+	     "%s/%s/%s.png",
+	     Cfg_PATH_ICON_COUNTRIES_PUBLIC,
 	     Cty->Alpha2,
 	     Cty->Alpha2);
    return Fil_CheckIfPathExists (PathMap);

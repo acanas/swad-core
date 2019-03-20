@@ -146,14 +146,14 @@ static void Ban_WriteListOfBanners (void)
       /* Write data of this banner */
       fprintf (Gbl.F.Out,"<li>"
 			 "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
-                         "<img src=\"%s/%s/%s\""
+                         "<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER\" />"
                          "</a>"
 			 "</li>",
                Gbl.Banners.Lst[NumBan].WWW,
                Gbl.Banners.Lst[NumBan].FullName,
-               Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
+               Cfg_URL_BANNER_PUBLIC,
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShrtName,
                Gbl.Banners.Lst[NumBan].FullName);
@@ -998,11 +998,11 @@ void Ban_WriteMenuWithBanners (void)
       Ban_PutParamBanCod (Gbl.Banners.Lst[NumBan].BanCod);
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
       Frm_LinkFormSubmit (Gbl.Banners.Lst[NumBan].FullName,"BANNER",NULL);
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER\" />"
                          "</a>",
-               Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
+               Cfg_URL_BANNER_PUBLIC,
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShrtName,
                Gbl.Banners.Lst[NumBan].FullName);

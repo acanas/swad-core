@@ -134,7 +134,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	              " class=\"ICO16x16\" />"
                       " %s"
                       "</li>",
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Txt_Chat_rooms,
             Txt_Chat_rooms,
             Txt_Chat_rooms);
@@ -149,7 +149,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO16x16\" />",
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             ThisRoomFullName,
             ThisRoomFullName);
    Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
@@ -165,7 +165,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO16x16\" />",
-		  Gbl.Prefs.URLIcons,
+		  Cfg_URL_ICON_PUBLIC,
 		  ThisRoomFullName,ThisRoomFullName);
 	 Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
          break;
@@ -178,7 +178,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO16x16\" />",
-		  Gbl.Prefs.URLIcons,
+		  Cfg_URL_ICON_PUBLIC,
 		  ThisRoomFullName,ThisRoomFullName);
 	 Cht_WriteLinkToChat2 ("GBL_TCH",ThisRoomFullName);
          break;
@@ -241,7 +241,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
                fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
         	                  " alt=\"%s\" title=\"%s\""
         	                  " class=\"ICO16x16\" />",
-                        Gbl.Prefs.URLIcons,
+                        Cfg_URL_ICON_PUBLIC,
                         ThisRoomFullName,ThisRoomFullName);
                Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 	      }
@@ -624,10 +624,10 @@ void Cht_OpenChatWindow (void)
    fprintf (Gbl.F.Out,"\n<param name=\"server_name\" value=\"%s\">",
 	    Cfg_PLATFORM_SERVER);
    fprintf (Gbl.F.Out,"\n<param name=\"port\" value=\"5000\">");
-   fprintf (Gbl.F.Out,"\n<param name=\"image_bl\" value=\"%s/%s/usr_bl.jpg\">",
-	    Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
-   fprintf (Gbl.F.Out,"\n<param name=\"image_url\" value=\"%s/%s/%s.jpg\">",
-	    Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,Gbl.Usrs.Me.UsrDat.Photo);
+   fprintf (Gbl.F.Out,"\n<param name=\"image_bl\" value=\"%s/usr_bl.jpg\">",
+	    Cfg_URL_ICON_PUBLIC);
+   fprintf (Gbl.F.Out,"\n<param name=\"image_url\" value=\"%s/%s.jpg\">",
+	    Cfg_URL_PHOTO_PUBLIC,Gbl.Usrs.Me.UsrDat.Photo);
    fprintf (Gbl.F.Out,"\n<param name=\"channel_name\" value=\"%s\">",
 	    ListRoomCodes);
    fprintf (Gbl.F.Out,"\n<param name=\"tab\" value=\"%s\">",

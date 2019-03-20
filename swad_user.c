@@ -2538,7 +2538,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
                       " value=\"%s\""
                       " autofocus=\"autofocus\" required=\"required\" />"
 	              "</div>",
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Txt_User[Usr_SEX_UNKNOWN],
             Txt_User[Usr_SEX_UNKNOWN],
             Cns_MAX_CHARS_EMAIL_ADDRESS,
@@ -2554,7 +2554,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
 		      "<input type=\"password\" id=\"UsrPwd\" name=\"UsrPwd\""
 		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />"
 	              "</div>",
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Txt_Password,
             Txt_Password,
             Pwd_MAX_CHARS_PLAIN_PASSWORD,
@@ -3317,9 +3317,7 @@ static void Usr_SetMyPrefsAndRoles (void)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   char Path[PATH_MAX + 1 +
-             NAME_MAX + 1 +
-             NAME_MAX + 1];
+   char URL[PATH_MAX + 1];
 
    // In this point I am logged
 
@@ -3334,19 +3332,17 @@ static void Usr_SetMyPrefsAndRoles (void)
    Gbl.Prefs.SideCols       = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
 
    Gbl.Prefs.Theme = Gbl.Usrs.Me.UsrDat.Prefs.Theme;
-   snprintf (Path,sizeof (Path),
-	     "%s/%s/%s",
-	     Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_THEMES,
-	     The_ThemeId[Gbl.Prefs.Theme]);
-   Str_Copy (Gbl.Prefs.URLTheme,Path,
+   snprintf (URL,sizeof (URL),
+	     "%s/%s",
+	     Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Gbl.Prefs.Theme]);
+   Str_Copy (Gbl.Prefs.URLTheme,URL,
              PATH_MAX);
 
    Gbl.Prefs.IconSet = Gbl.Usrs.Me.UsrDat.Prefs.IconSet;
-   snprintf (Path,sizeof (Path),
-	     "%s/%s/%s",
-	     Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_ICON_SETS,
-	     Ico_IconSetId[Gbl.Prefs.IconSet]);
-   Str_Copy (Gbl.Prefs.URLIconSet,Path,
+   snprintf (URL,sizeof (URL),
+	     "%s/%s",
+	     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[Gbl.Prefs.IconSet]);
+   Str_Copy (Gbl.Prefs.URLIconSet,URL,
              PATH_MAX);
 
    /***** Construct the path to my directory *****/
@@ -6011,7 +6007,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
                       " %s</a>",
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Usr_IconsClassPhotoOrList[ListType],
             Txt_USR_LIST_TYPES[ListType],
             Txt_USR_LIST_TYPES[ListType],
@@ -8828,19 +8824,15 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 
 void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
   {
-   char PathUsrs[PATH_MAX + 1];
    char PathAboveUsr[PATH_MAX + 1];
 
    /***** Path for users *****/
-   snprintf (PathUsrs,sizeof (PathUsrs),
-	     "%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_USR);
-   Fil_CreateDirIfNotExists (PathUsrs);
+   Fil_CreateDirIfNotExists (Cfg_PATH_USR_PRIVATE);
 
    /***** Path above user's ID *****/
    snprintf (PathAboveUsr,sizeof (PathAboveUsr),
 	     "%s/%02u",
-	     PathUsrs,(unsigned) (UsrCod % 100));
+	     Cfg_PATH_USR_PRIVATE,(unsigned) (UsrCod % 100));
    Fil_CreateDirIfNotExists (PathAboveUsr);
 
    /***** Path for user *****/

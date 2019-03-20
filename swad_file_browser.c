@@ -2417,24 +2417,21 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_DOC_INS:
       case Brw_ADMI_SHR_INS:
 	 /* Create a directory for institutions */
-	 snprintf (Path,sizeof (Path),
-	           "%s/%s",
-		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS);
-	 Fil_CreateDirIfNotExists (Path);
+	 Fil_CreateDirIfNotExists (Cfg_PATH_INS_PRIVATE);
 
 	 /* Create a directory for all institutions which codes end in
 	    institution-code mod 100 */
 	 snprintf (Path,sizeof (Path),
-	           "%s/%s/%02u",
-		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
+	           "%s/%02u",
+		   Cfg_PATH_INS_PRIVATE,
 		   (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current institution */
 	 snprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,
 	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
-	           "%s/%s/%02u/%u",
-		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
+	           "%s/%02u/%u",
+		   Cfg_PATH_INS_PRIVATE,
 		   (unsigned) (Gbl.CurrentIns.Ins.InsCod % 100),
 		   (unsigned) Gbl.CurrentIns.Ins.InsCod);
          break;
@@ -2442,24 +2439,21 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_DOC_CTR:
       case Brw_ADMI_SHR_CTR:
 	 /* Create a directory for centres */
-	 snprintf (Path,sizeof (Path),
-	           "%s/%s",
-		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR);
-	 Fil_CreateDirIfNotExists (Path);
+	 Fil_CreateDirIfNotExists (Cfg_PATH_CTR_PRIVATE);
 
 	 /* Create a directory for all centres which codes end in
 	    centre-code mod 100 */
 	 snprintf (Path,sizeof (Path),
-	           "%s/%s/%02u",
-		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
+	           "%s/%02u",
+		   Cfg_PATH_CTR_PRIVATE,
 		   (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current centre */
 	 snprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,
 	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
-	           "%s/%s/%02u/%u",
-		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
+	           "%s/%02u/%u",
+		   Cfg_PATH_CTR_PRIVATE,
 		   (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 		   (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
 	 break;
@@ -2467,24 +2461,21 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_DOC_DEG:
       case Brw_ADMI_SHR_DEG:
 	 /* Create a directory for degrees */
-	 snprintf (Path,sizeof (Path),
-	           "%s/%s",
-		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG);
-	 Fil_CreateDirIfNotExists (Path);
+	 Fil_CreateDirIfNotExists (Cfg_PATH_DEG_PRIVATE);
 
 	 /* Create a directory for all degrees which codes end in
 	    degree-code mod 100 */
 	 snprintf (Path,sizeof (Path),
-	           "%s/%s/%02u",
-		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
+	           "%s/%02u",
+		   Cfg_PATH_DEG_PRIVATE,
 		   (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current degree */
 	 snprintf (Gbl.FileBrowser.Priv.PathAboveRootFolder,
 	           sizeof (Gbl.FileBrowser.Priv.PathAboveRootFolder),
-	           "%s/%s/%02u/%u",
-		   Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
+	           "%s/%02u/%u",
+		   Cfg_PATH_DEG_PRIVATE,
 		   (unsigned) (Gbl.CurrentDeg.Deg.DegCod % 100),
 		   (unsigned) Gbl.CurrentDeg.Deg.DegCod);
 	 break;
@@ -3366,7 +3357,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
                   (IsGroupZone &&
                    GrpDat.GrpCod == Gbl.CurrentCrs.Grps.GrpCod) ? "BROWSER_TITLE" :
                                                                   "BROWSER_TITLE_LIGHT",
-                  Gbl.Prefs.URLIcons,
+                  Cfg_URL_ICON_PUBLIC,
                   NumGrp < LstMyGrps.NumGrps - 1 ? "submid" :
                 	                           "subend",
 	          GrpDat.GrpCod);
@@ -5130,23 +5121,13 @@ void Brw_CreateDirDownloadTmp (void)
   {
    static unsigned NumDir = 0;	// When this function is called several times in the same execution of the program, each time a new directory is created
 				// This happens when the trees of assignments and works of several users are being listed
-   char PathFileBrowserTmpPubl[PATH_MAX + 1];
+   // char PathFileBrowserTmpPubl[PATH_MAX + 1];
    char PathPubDirTmp[PATH_MAX + 1];
 
    /* Example: /var/www/html/swad/tmp/SSujCNWsy4ZOdmgMKYBe0sKPAJu6szaZOQlIlJs_QIY */
 
    /***** If the public directory does not exist, create it *****/
-   snprintf (PathFileBrowserTmpPubl,sizeof (PathFileBrowserTmpPubl),
-	     "%s/%s",
-             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP);
-   Fil_CreateDirIfNotExists (PathFileBrowserTmpPubl);
-
-   /***** First of all, we remove the oldest temporary directories.
-	  Such temporary directories have been created by me or by other users.
-	  This is a bit sloppy, but they must be removed by someone.
-	  Here "oldest" means more than x time from their creation *****/
-   if (NumDir == 0)	// Only in the first call to this function
-      Fil_RemoveOldTmpFiles (PathFileBrowserTmpPubl,Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES,false);
+   Fil_CreateDirIfNotExists (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC);
 
    /***** Create a new temporary directory.
           Important: number of directories inside a directory is limited to 32K in Linux *****/
@@ -5159,7 +5140,7 @@ void Brw_CreateDirDownloadTmp (void)
                 NAME_MAX);
    snprintf (PathPubDirTmp,sizeof (PathPubDirTmp),
 	     "%s/%s",
-	     PathFileBrowserTmpPubl,Gbl.FileBrowser.TmpPubDir);
+	     Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,Gbl.FileBrowser.TmpPubDir);
    if (mkdir (PathPubDirTmp,(mode_t) 0xFFF))
       Lay_ShowErrorAndExit ("Can not create a temporary folder for download.");
    NumDir++;
@@ -5965,7 +5946,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
 	 fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\""
 			    " alt=\"\" title=\"\""
 			    " class=\"ICO20x20\" />",
-		  Gbl.Prefs.URLIcons);
+		  Cfg_URL_ICON_PUBLIC);
 	 break;
       case Brw_ICON_TREE_EXPAND:
 	 /***** Visible icon to expand folder *****/
@@ -6014,7 +5995,7 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 	                 " class=\"ICO20x20\" />"
 	                 "</td>",
                Gbl.RowEvenOdd,
-	       Gbl.Prefs.URLIcons);
+	       Cfg_URL_ICON_PUBLIC);
   }
 
 /*****************************************************************************/
@@ -6116,7 +6097,7 @@ static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *F
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT %s CONTEXT_ICO_16x16\" />",
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Gbl.Title,
             Gbl.Title,
             Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "ICO_HIDDEN" :
@@ -6144,7 +6125,7 @@ static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *F
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT %s CONTEXT_ICO_16x16\" />",
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Gbl.Title,
             Gbl.Title,
             Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "ICO_HIDDEN" :
@@ -6273,7 +6254,7 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"CONTEXT_OPT CONTEXT_ICO_16x16\" />",
-	    Gbl.Prefs.URLIcons,
+	    Cfg_URL_ICON_PUBLIC,
 	    Open ? "folder-open-yellow.png" :
 	           "folder-yellow.png",
 	    Txt_Folder,
@@ -6335,7 +6316,7 @@ static void Brw_PutIconNewFileOrFolder (void)
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />"
 	              "</td>",
-            Gbl.RowEvenOdd,Gbl.Prefs.URLIcons,
+            Gbl.RowEvenOdd,Cfg_URL_ICON_PUBLIC,
             Txt_New_FILE_OR_FOLDER,
             Txt_New_FILE_OR_FOLDER);
   }
@@ -6390,12 +6371,12 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
    if (FileType == Brw_IS_LINK)
       fprintf (Gbl.F.Out,"<img src=\"%s/link.svg\""
 	                 " alt=\"%s\" title=\"%s\"",
-	       Gbl.Prefs.URLIcons,
+	       Cfg_URL_ICON_PUBLIC,
 	       Txt_Link,Txt_Link);
    else	// FileType == Brw_IS_FILE
      {
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s%ux%u/",
-	       Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_FILEXT,
+      fprintf (Gbl.F.Out,"<img src=\"%s%ux%u/",
+	       CfG_URL_ICON_FILEXT_PUBLIC,
 	       Size,Size);
       for (DocType = 0, NotFound = true;
 	   DocType < Ext_NUM_FILE_EXT_ALLOWED && NotFound;
@@ -6562,8 +6543,8 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
 
    /***** Create, into temporary public directory, a symbolic link to file *****/
    snprintf (Link,sizeof (Link),
-	     "%s/%s/%s/%s",
-             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+	     "%s/%s/%s",
+             Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
              Gbl.FileBrowser.TmpPubDir,FileName);
    if (symlink (FullPathIncludingFile,Link) != 0)
       Lay_ShowErrorAndExit ("Can not create temporary link.");
@@ -6692,7 +6673,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
       fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"PHOTO15x20B\" />",
-               Gbl.Prefs.URLIcons,
+               Cfg_URL_ICON_PUBLIC,
                Txt_Unknown_or_without_photo,
                Txt_Unknown_or_without_photo);
 
@@ -8060,8 +8041,8 @@ static void Brw_PasteClipboard (void)
             Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Ins_GetDataOfInstitutionByCod (&Ins,false))
 	       snprintf (PathOrg,sizeof (PathOrg),
-		         "%s/%s/%02u/%u/%s",
-		         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_INS,
+		         "%s/%02u/%u/%s",
+		         Cfg_PATH_INS_PRIVATE,
 		         (unsigned) (Ins.InsCod % 100),
 		         (unsigned) Ins.InsCod,
 			 Gbl.FileBrowser.Clipboard.Path);
@@ -8073,8 +8054,8 @@ static void Brw_PasteClipboard (void)
             Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Ctr_GetDataOfCentreByCod (&Ctr))
 	       snprintf (PathOrg,sizeof (PathOrg),
-		         "%s/%s/%02u/%u/%s",
-		         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CTR,
+		         "%s/%02u/%u/%s",
+		         Cfg_PATH_CTR_PRIVATE,
 		         (unsigned) (Ctr.CtrCod % 100),
 		         (unsigned) Ctr.CtrCod,
 			 Gbl.FileBrowser.Clipboard.Path);
@@ -8086,8 +8067,8 @@ static void Brw_PasteClipboard (void)
             Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Deg_GetDataOfDegreeByCod (&Deg))
 	       snprintf (PathOrg,sizeof (PathOrg),
-		         "%s/%s/%02u/%u/%s",
-		         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_DEG,
+		         "%s/%02u/%u/%s",
+		         Cfg_PATH_DEG_PRIVATE,
 		         (unsigned) (Deg.DegCod % 100),
 		         (unsigned) Deg.DegCod,
 			 Gbl.FileBrowser.Clipboard.Path);
@@ -8101,8 +8082,8 @@ static void Brw_PasteClipboard (void)
             Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Crs_GetDataOfCourseByCod (&Crs))
 	       snprintf (PathOrg,sizeof (PathOrg),
-		         "%s/%s/%ld/%s",
-                         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,
+		         "%s/%ld/%s",
+                         Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,
 			 Gbl.FileBrowser.Clipboard.Path);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
@@ -8116,8 +8097,8 @@ static void Brw_PasteClipboard (void)
             Crs.CrsCod = GrpDat.CrsCod;
             if (Crs_GetDataOfCourseByCod (&Crs))
 	       snprintf (PathOrg,sizeof (PathOrg),
-		         "%s/%s/%ld/%s/%ld/%s",
-                         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_GRP,
+		         "%s/%ld/%s/%ld/%s",
+                         Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_GRP,
 			 GrpDat.GrpCod,
 			 Gbl.FileBrowser.Clipboard.Path);
             else
@@ -8132,8 +8113,8 @@ static void Brw_PasteClipboard (void)
 	       UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
 	       Usr_GetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Check that user exists
 	       snprintf (PathOrg,sizeof (PathOrg),
-		         "%s/%s/%ld/%s/%02u/%ld/%s",
-                         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_USR,
+		         "%s/%ld/%s/%02u/%ld/%s",
+                         Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_USR,
 			 (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
 			 Gbl.FileBrowser.Clipboard.WorksUsrCod,
 			 Gbl.FileBrowser.Clipboard.Path);
@@ -8147,8 +8128,8 @@ static void Brw_PasteClipboard (void)
             Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
             if (Crs_GetDataOfCourseByCod (&Crs))
 	       snprintf (PathOrg,sizeof (PathOrg),
-		         "%s/%s/%ld/%s/%02u/%ld/%s",
-                         Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_USR,
+		         "%s/%ld/%s/%02u/%ld/%s",
+                         Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_USR,
 			 (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
 			 Gbl.FileBrowser.Clipboard.Path);
@@ -8161,8 +8142,8 @@ static void Brw_PasteClipboard (void)
 	    Crs.CrsCod = Prj_GetCourseOfProject (PrjCod);
 	    if (Crs_GetDataOfCourseByCod (&Crs))
 	       snprintf (PathOrg,sizeof (PathOrg),
-		         "%s/%s/%ld/%s/%02u/%ld/%s",
-			Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_FOLDER_PRJ,
+		         "%s/%ld/%s/%02u/%ld/%s",
+			Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_PRJ,
 			(unsigned) (PrjCod % 100),
 			PrjCod,
 			Gbl.FileBrowser.Clipboard.Path);
@@ -8617,7 +8598,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
                       " background:url('%s/upload320x320.gif') no-repeat center;\">",
             Cfg_URL_SWAD_CGI,
             Lan_STR_LANG_ID[Gbl.Prefs.Language],
-            Gbl.Prefs.URLIcons);
+            Cfg_URL_ICON_PUBLIC);
    Par_PutHiddenParamLong ("act",Act_GetActCod (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]));
    Par_PutHiddenParamString ("ses",Gbl.Session.Id);
    Brw_PutParamsFileBrowser (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type],
@@ -10286,7 +10267,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICO40x40\" />"
 			 "</a>",
-	       FileNameToShow,Gbl.Prefs.URLIcons,
+	       FileNameToShow,Cfg_URL_ICON_PUBLIC,
 	       Gbl.Title,Gbl.Title);
       Frm_EndForm ();
      }
@@ -10305,7 +10286,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 			 " class=\"ICO40x40\" />"
 			 "</a>",
 	       FileNameToShow,
-	       Gbl.Prefs.URLIcons,
+	       Cfg_URL_ICON_PUBLIC,
 	       Txt_Download,Txt_Download);
      }
   }
@@ -10384,8 +10365,8 @@ void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char
 
       /***** Create URL pointing to symbolic link *****/
       snprintf (URLWithSpaces,sizeof (URLWithSpaces),
-	        "%s/%s/%s/%s",
-	        Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+	        "%s/%s/%s",
+	        Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
 	        Gbl.FileBrowser.TmpPubDir,
 	        FileName);
      }
@@ -11916,8 +11897,8 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
 
    /***** Remove group zones *****/
    snprintf (PathGrpFileZones,sizeof (PathGrpFileZones),
-	     "%s/%s/%ld/grp/%ld",
-             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,GrpCod);
+	     "%s/%ld/grp/%ld",
+             Cfg_PATH_CRS_PRIVATE,CrsCod,GrpCod);
    Fil_RemoveTree (PathGrpFileZones);
   }
 
@@ -11934,8 +11915,8 @@ void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs)
 
    /***** Remove the folder for this user inside the course *****/
    snprintf (PathUsrInCrs,sizeof (PathUsrInCrs),
-	     "%s/%s/%ld/usr/%02u/%ld",
-             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Crs->CrsCod,
+	     "%s/%ld/usr/%02u/%ld",
+             Cfg_PATH_CRS_PRIVATE,Crs->CrsCod,
              (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
    Fil_RemoveTree (PathUsrInCrs);
    // If this was the last user in his/her subfolder ==> the subfolder will be empty
@@ -12382,7 +12363,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/folder-yellow.png\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"CONTEXT_ICO_16x16\" />",
-		  Gbl.Prefs.URLIcons,
+		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Folder,Txt_Folder);
       else
 	 /* Icon with file type or link */

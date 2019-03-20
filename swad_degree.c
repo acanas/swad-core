@@ -1881,8 +1881,8 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 
    /***** Remove directories of the degree *****/
    snprintf (PathDeg,sizeof (PathDeg),
-	     "%s/%s/%02u/%u",
-	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_DEG,
+	     "%s/%02u/%u",
+	     Cfg_PATH_DEG_PUBLIC,
 	     (unsigned) (DegCod % 100),
 	     (unsigned) DegCod);
    Fil_RemoveTree (PathDeg);
@@ -2460,7 +2460,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
                             " alt=\"\" title=\"\""
                             " class=\"ICO25x25\" />"
                             "</td>",
-                  Gbl.RowEvenOdd,Gbl.Prefs.URLIcons,
+                  Gbl.RowEvenOdd,Cfg_URL_ICON_PUBLIC,
                   NumRow == NumRows ? "subend" :
                 	              "submid");
 
@@ -2480,7 +2480,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
         	                  " alt=\"%s\" title=\"%s\""
                                   " class=\"ICO16x16\" />"
                                   "&nbsp;%s",
-                     Gbl.Prefs.URLIcons,
+                     Cfg_URL_ICON_PUBLIC,
                      Txt_all_degrees,
                      Txt_all_degrees,
                      Txt_all_degrees);

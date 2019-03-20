@@ -411,14 +411,14 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
 			 "</a>"
 			 "</div>",
 	       IdAlert,
-	       Gbl.Prefs.URLIcons,
+	       Cfg_URL_ICON_PUBLIC,
 	       Txt_Close,Txt_Close);
 
    /***** Write message *****/
    fprintf (Gbl.F.Out,"<div class=\"ALERT_TXT\"");
    if (AlertType != Ale_NONE)
       fprintf (Gbl.F.Out," style=\"background-image:url('%s/%s');\"",
-	       Gbl.Prefs.URLIcons,Ale_AlertIcons[AlertType]);
+	       Cfg_URL_ICON_PUBLIC,Ale_AlertIcons[AlertType]);
    fprintf (Gbl.F.Out,">%s"
 	              "</div>",
             Txt);

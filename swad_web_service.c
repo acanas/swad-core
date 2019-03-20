@@ -4324,7 +4324,6 @@ int swad__getDirectoryTree (struct soap *soap,
   {
    extern const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER];
    int ReturnCode;
-   char PathXMLPriv[PATH_MAX + 1];
    char XMLFileName[PATH_MAX + 1];
    unsigned long FileSize;
    unsigned long NumBytesRead;
@@ -4418,21 +4417,18 @@ int swad__getDirectoryTree (struct soap *soap,
 	                                          -1L;
 
    snprintf (Gbl.CurrentCrs.PathPriv,sizeof (Gbl.CurrentCrs.PathPriv),
-	     "%s/%s/%ld",
-             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
+	     "%s/%ld",
+             Cfg_PATH_CRS_PRIVATE,Gbl.CurrentCrs.Crs.CrsCod);
    Brw_InitializeFileBrowser ();
    Brw_SetFullPathInTree (Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],".");
 
    /* Check if exists the directory for HTML output. If not exists, create it */
-   snprintf (PathXMLPriv,sizeof (PathXMLPriv),
-	     "%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT);
-   Fil_CreateDirIfNotExists (PathXMLPriv);
+   Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
 
    /* Create a unique name for the file */
    snprintf (XMLFileName,sizeof (XMLFileName),
 	     "%s/%s.xml",
-             PathXMLPriv,Gbl.UniqueNameEncrypted);
+             Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
 
    /* Open file for writing and reading */
    if ((Gbl.F.XML = fopen (XMLFileName,"w+t")) == NULL)

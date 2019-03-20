@@ -3173,7 +3173,7 @@ static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
                       " class=\"LEFT_TOP\""
 	              " style=\"width:%upx; height:20px;\" />"
 	              "&nbsp;",
-      Gbl.Prefs.URLIcons,
+      Cfg_URL_ICON_PUBLIC,
       Gbl.Title,
       Gbl.Title,
       BarWidth);
@@ -3482,7 +3482,7 @@ static void Gam_PutBigButtonToStartGame (long GamCod)
    fprintf (Gbl.F.Out,"<img src=\"%s/play.svg\""
 		      " alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\" />",
-            Gbl.Prefs.URLIcons,Txt_Play,Txt_Play);
+            Cfg_URL_ICON_PUBLIC,Txt_Play,Txt_Play);
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End form *****/
@@ -3625,7 +3625,7 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
 	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
 	              "<br />"
 	              "%s",
-            Gbl.Prefs.URLIcons,Txt_Continue,Txt_Continue,
+            Cfg_URL_ICON_PUBLIC,Txt_Continue,Txt_Continue,
             Txt_Continue);
    fprintf (Gbl.F.Out,"</a>");
 

@@ -190,8 +190,8 @@ void Lay_WriteStartOfPage (void)
    /* Favicon */
    fprintf (Gbl.F.Out,"<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"icon\" />\n"
                       "<link type=\"image/x-icon\" href=\"%s/favicon.ico\" rel=\"shortcut icon\" />\n",
-	    Gbl.Prefs.URLIcons,
-	    Gbl.Prefs.URLIcons);
+	    Cfg_URL_ICON_PUBLIC,
+	    Cfg_URL_ICON_PUBLIC);
 
    /* Style sheet for SWAD */
    fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\" href=\"%s/%s\" type=\"text/css\" />\n",
@@ -261,7 +261,7 @@ void Lay_WriteStartOfPage (void)
                          "<div id=\"zoomTxt\" class=\"CENTER_MIDDLE\">"
                          "</div>"
                          "</div>",
-	       Gbl.Prefs.URLIcons);
+	       Cfg_URL_ICON_PUBLIC);
    else
      {
       fprintf (Gbl.F.Out,"<body>\n");
@@ -852,7 +852,7 @@ static void Lay_WritePageTopHeading (void)
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>",	// head_row_1_logo_small
-            Gbl.Prefs.URLIcons,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
+            Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
    fprintf (Gbl.F.Out,"</div>"
@@ -862,7 +862,7 @@ static void Lay_WritePageTopHeading (void)
                       " class=\"CENTER_MIDDLE\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>",	// head_row_1_logo_big
-            Gbl.Prefs.URLIcons,Cfg_PLATFORM_LOGO_BIG_FILENAME,
+            Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
    fprintf (Gbl.F.Out,"</div>"
@@ -1061,7 +1061,7 @@ static void Lay_ShowRightColumn (void)
 			 "</a>"
 			 "</div>",
 	       Txt_If_you_have_an_Android_device_try_SWADroid,
-	       Gbl.Prefs.URLIcons);
+	       Cfg_URL_ICON_PUBLIC);
   }
 
 /*****************************************************************************/
@@ -1355,7 +1355,7 @@ static void Lay_WriteAboutZone (void)
 		      "<div>%s</div>"
 		      "</a>",
 	    Cfg_ABOUT_URL,
-	    Gbl.Prefs.URLIcons,Cfg_ABOUT_LOGO,
+	    Cfg_URL_ICON_PUBLIC,Cfg_ABOUT_LOGO,
 	    Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
 	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
 	    Cfg_ABOUT_NAME);
@@ -1399,16 +1399,33 @@ void Lay_RefreshNotifsAndConnected (void)
 
    /***** Sometimes, someone must do this work,
           so who best than processes that refresh via AJAX? *****/
-   if (!(Gbl.PID % 11))		// Do this only one of   11 times (  11 is prime)
+   // We use (PID % prime-number) to do only one action as much
+   if      (!(Gbl.PID %  11))
       Ntf_SendPendingNotifByEMailToAllUsrs ();	// Send pending notifications by email
-   else if (!(Gbl.PID % 19))	// Do this only one of   19 times (  19 is prime)
-      FW_PurgeFirewall ();
-   else if (!(Gbl.PID % 1013))	// Do this only one of 1013 times (1013 is prime)
+   else if (!(Gbl.PID %  19))
+      FW_PurgeFirewall ();			// Remove old clicks from firewall
+   else if (!(Gbl.PID % 101))
       Brw_RemoveExpiredExpandedFolders ();	// Remove old expanded folders (from all users)
-   else if (!(Gbl.PID % 1019))	// Do this only one of 1019 times (1019 is prime)
+   else if (!(Gbl.PID % 103))
       Pre_RemoveOldPrefsFromIP ();		// Remove old preferences from IP
-   else if (!(Gbl.PID % 1021))	// Do this only one of 1021 times (1021 is prime)
+   else if (!(Gbl.PID % 107))
       Sta_RemoveOldEntriesRecentLog ();		// Remove old entries in recent log table, it's a slow query
+   else if (!(Gbl.PID % 109))
+      Fil_RemoveOldTmpFiles (Cfg_PATH_OUT_PRIVATE		,Cfg_TIME_TO_DELETE_HTML_OUTPUT		,false);
+   else if (!(Gbl.PID % 113))
+      Fil_RemoveOldTmpFiles (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC	,Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES	,false);	// Remove the oldest temporary public directories used for downloading
+   else if (!(Gbl.PID % 127))
+      Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PUBLIC		,Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES	,false);
+   else if (!(Gbl.PID % 131))
+      Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PRIVATE		,Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES	,false);
+   else if (!(Gbl.PID % 137))
+      Fil_RemoveOldTmpFiles (Cfg_PATH_MEDIA_TMP_PRIVATE		,Cfg_TIME_TO_DELETE_MEDIA_TMP_FILES	,false);
+   else if (!(Gbl.PID % 139))
+      Fil_RemoveOldTmpFiles (Cfg_PATH_ZIP_PRIVATE		,Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES	,false);
+   else if (!(Gbl.PID % 149))
+      Fil_RemoveOldTmpFiles (Cfg_PATH_MARK_PRIVATE		,Cfg_TIME_TO_DELETE_MARKS_TMP_FILES	,false);
+   else if (!(Gbl.PID % 151))
+      Fil_RemoveOldTmpFiles (Cfg_PATH_TEST_PRIVATE		,Cfg_TIME_TO_DELETE_TEST_TMP_FILES	,false);
 
    /***** Send, before the HTML, the refresh time *****/
    fprintf (Gbl.F.Out,"%lu|",Gbl.Usrs.Connected.TimeToRefreshInMs);
@@ -1601,7 +1618,7 @@ void Lay_AdvertisementMobile (void)
 	                 "</td>"
 	                 "</tr>",
                Txt_Stay_connected_with_SWADroid,
-               Gbl.Prefs.URLIcons,
+               Cfg_URL_ICON_PUBLIC,
                Txt_Stay_connected_with_SWADroid);
 
       /***** End table and box *****/
@@ -1627,7 +1644,7 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
       fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
 	                 " alt=\"\" title=\"\""
                          " class=\"ICO25x25\" />",
-		  Gbl.Prefs.URLIcons,
+		  Cfg_URL_ICON_PUBLIC,
 		  IsLastItemInLevel[i] ? "tr" :
 		                         "subleft");
 
@@ -1636,7 +1653,7 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
       fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
 			 " alt=\"\" title=\"\""
 			 " class=\"ICO25x25\" />",
-	       Gbl.Prefs.URLIcons,
+	       Cfg_URL_ICON_PUBLIC,
 	       IsLastItemInLevel[Level] ? "subend" :
 					  "submid");
   }

@@ -1297,7 +1297,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	 fprintf (Gbl.F.Out,"<img src=\"%s/check-circle.svg\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO16x16\" />",
-		  Gbl.Prefs.URLIcons,
+		  Cfg_URL_ICON_PUBLIC,
 		  Gbl.Title,Gbl.Title);
 	}
 
@@ -1805,8 +1805,8 @@ void Mai_ConfirmEmail (void)
 void Mai_CreateFileNameMail (void)
   {
    snprintf (Gbl.Msg.FileNameMail,sizeof (Gbl.Msg.FileNameMail),
-	     "%s/%s/%s_mail.txt",
-             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
+	     "%s/%s_mail.txt",
+             Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
    if ((Gbl.Msg.FileMail = fopen (Gbl.Msg.FileNameMail,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open file to send email.");
   }

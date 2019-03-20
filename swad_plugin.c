@@ -124,7 +124,7 @@ void Plg_ListPlugins (void)
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"DAT LEFT_MIDDLE\" style=\"width:45px;\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
-                         "<img src=\"%s/%s/%s24x24.gif\""
+                         "<img src=\"%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />"
                          "</a>"
@@ -136,7 +136,7 @@ void Plg_ListPlugins (void)
                          "</td>"
                          "</tr>",
                URL,Plg->Name,
-               Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_PLUGINS,Gbl.Plugins.Lst[NumPlg].Logo,
+               Cfg_URL_ICON_PLUGINS_PUBLIC,Gbl.Plugins.Lst[NumPlg].Logo,
                Plg->Name,Plg->Name,
                URL,Plg->Name,
                Plg->Name);
@@ -378,11 +378,11 @@ static void Plg_ListPluginsForEdition (void)
       /* Plugin logo */
       // TODO: Change plugin icons to 32x32
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:45px;\">"
-                         "<img src=\"%s/%s/%s24x24.gif\""
+                         "<img src=\"%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />"
                          "</td>",
-               Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_PLUGINS,
+               Cfg_URL_ICON_PLUGINS_PUBLIC,
                Gbl.Plugins.Lst[NumPlg].Logo,
                Gbl.Plugins.Lst[NumPlg].Name,
                Gbl.Plugins.Lst[NumPlg].Name);

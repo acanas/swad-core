@@ -177,8 +177,8 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
 
    /***** Create public XML file with the questions *****/
    snprintf (PathPubFile,sizeof (PathPubFile),
-	     "%s/%s/%s/test.xml",
-             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+	     "%s/%s/test.xml",
+             Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
              Gbl.FileBrowser.TmpPubDir);
    if ((Gbl.Test.XML.FileXML = fopen (PathPubFile,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open target file.");
@@ -256,8 +256,9 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
    mysql_data_seek (mysql_res,0);
 
    /***** Write the link to XML file *****/
-   fprintf (Gbl.F.Out,"<a href=\"%s/%s/%s/test.xml\" class=\"%s\" target=\"_blank\">",
-            Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_FILE_BROWSER_TMP,
+   fprintf (Gbl.F.Out,"<a href=\"%s/%s/test.xml\""
+	              " class=\"%s\" target=\"_blank\">",
+            Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
             Gbl.FileBrowser.TmpPubDir,
             The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
    Ico_PutIconTextLink ("file.svg",
@@ -393,7 +394,6 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
 void TsI_ImportQstsFromXML (void)
   {
    extern const char *Txt_The_file_is_not_X;
-   char PathTestPriv[PATH_MAX + 1];
    struct Param *Param;
    char FileNameXMLSrc[PATH_MAX + 1];
    char FileNameXMLTmp[PATH_MAX + 1];	// Full name (including path and .xml) of the destination temporary file
@@ -401,13 +401,7 @@ void TsI_ImportQstsFromXML (void)
    bool WrongType = false;
 
    /***** Creates directory if not exists *****/
-   snprintf (PathTestPriv,sizeof (PathTestPriv),
-	     "%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_TEST);
-   Fil_CreateDirIfNotExists (PathTestPriv);
-
-   /***** Remove old files *****/
-   Fil_RemoveOldTmpFiles (PathTestPriv,Cfg_TIME_TO_DELETE_TEST_TMP_FILES,false);
+   Fil_CreateDirIfNotExists (Cfg_PATH_TEST_PRIVATE);
 
    /***** First of all, copy in disk the file received from stdin (really from Gbl.F.Tmp) *****/
    Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
@@ -429,7 +423,7 @@ void TsI_ImportQstsFromXML (void)
       /* End the reception of XML in a temporary file */
       snprintf (FileNameXMLTmp,sizeof (FileNameXMLTmp),
 	        "%s/%s.xml",
-		PathTestPriv,Gbl.UniqueNameEncrypted);
+		Cfg_PATH_TEST_PRIVATE,Gbl.UniqueNameEncrypted);
       if (Fil_EndReceptionOfFile (FileNameXMLTmp,Param))
          /***** Get questions from XML file and store them in database *****/
          TsI_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);
@@ -1023,7 +1017,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                       " class=\"CONTEXT_ICO_16x16\" />"
                       "</td>",
             Gbl.RowEvenOdd,
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             QuestionExists ? "tr16x16.gif" :
         	             "check-circle.svg",
             QuestionExists ? Txt_Existing_question :
@@ -1083,7 +1077,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
          fprintf (Gbl.F.Out,"<img src=\"%s/check.svg\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"%sICO16x16\" />",
-                  Gbl.Prefs.URLIcons,
+                  Cfg_URL_ICON_PUBLIC,
                   Txt_TST_Answer_given_by_the_teachers,
                   Txt_TST_Answer_given_by_the_teachers,
                   QuestionExists ? "ICO_HIDDEN " :
@@ -1153,7 +1147,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                fprintf (Gbl.F.Out,"<img src=\"%s/check.svg\""
         	                  " alt=\"%s\" title=\"%s\""
         	                  " class=\"%sCONTEXT_ICO_16x16\" />",
-                        Gbl.Prefs.URLIcons,
+                        Cfg_URL_ICON_PUBLIC,
                         Txt_TST_Answer_given_by_the_teachers,
                         Txt_TST_Answer_given_by_the_teachers,
                         QuestionExists ? "ICO_HIDDEN " :

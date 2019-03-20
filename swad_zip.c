@@ -202,9 +202,8 @@ void ZIP_CreateZIPAsgWrk (void)
 
    /***** Relative path of the directory with the works to compress *****/
    snprintf (Path,sizeof (Path),
-	     "%s/%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,
-	     Cfg_FOLDER_ZIP,
+	     "%s/%s",
+	     Cfg_PATH_ZIP_PRIVATE,
 	     Gbl.FileBrowser.ZIP.TmpDir);
 
    /***** Change to directory of the assignments and works
@@ -217,9 +216,8 @@ void ZIP_CreateZIPAsgWrk (void)
 	     "%s.zip",
 	     Txt_works_ZIP_FILE_NAME);
    snprintf (PathFileZIP,sizeof (PathFileZIP),
-	     "%s/%s/%s/%s",
-	     Cfg_PATH_SWAD_PUBLIC,
-             Cfg_FOLDER_FILE_BROWSER_TMP,
+	     "%s/%s/%s",
+	     Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
              Gbl.FileBrowser.TmpPubDir,
              FileNameZIP);
    snprintf (StrZip,sizeof (StrZip),
@@ -241,9 +239,8 @@ void ZIP_CreateZIPAsgWrk (void)
 	{
 	 /***** Create URL pointing to ZIP file *****/
 	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),
-	           "%s/%s/%s/%s",
-		   Cfg_URL_SWAD_PUBLIC,
-		   Cfg_FOLDER_FILE_BROWSER_TMP,
+	           "%s/%s/%s",
+		   Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
 		   Gbl.FileBrowser.TmpPubDir,
 		   FileNameZIP);
 	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
@@ -265,27 +262,17 @@ void ZIP_CreateZIPAsgWrk (void)
 
 static void ZIP_CreateTmpDirForCompression (void)
   {
-   char PathZipPriv[PATH_MAX + 1];
    char PathDirTmp[PATH_MAX + 1];
 
    /***** If the private directory does not exist, create it *****/
-   snprintf (PathZipPriv,sizeof (PathZipPriv),
-	     "%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_ZIP);
-   Fil_CreateDirIfNotExists (PathZipPriv);
-
-   /***** First of all, we remove the oldest temporary directories.
-          Such temporary directories have been created by me or by other users.
-          This is a bit sloppy, but they must be removed by someone.
-          Here "oldest" means more than x time from their creation *****/
-   Fil_RemoveOldTmpFiles (PathZipPriv,Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES,false);
+   Fil_CreateDirIfNotExists (Cfg_PATH_ZIP_PRIVATE);
 
    /***** Create a new temporary directory *****/
    Str_Copy (Gbl.FileBrowser.ZIP.TmpDir,Gbl.UniqueNameEncrypted,
              NAME_MAX);
    snprintf (PathDirTmp,sizeof (PathDirTmp),
 	     "%s/%s",
-	     PathZipPriv,Gbl.FileBrowser.ZIP.TmpDir);
+	     Cfg_PATH_ZIP_PRIVATE,Gbl.FileBrowser.ZIP.TmpDir);
    if (mkdir (PathDirTmp,(mode_t) 0xFFF))
       Lay_ShowErrorAndExit ("Can not create temporary folder for compression.");
   }
@@ -341,9 +328,8 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
 	     (unsigned) (UsrDat->UsrCod % 100),
 	     UsrDat->UsrCod);
    snprintf (LinkTmpUsr,sizeof (LinkTmpUsr),
-	     "%s/%s/%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,
-	     Cfg_FOLDER_ZIP,
+	     "%s/%s/%s",
+	     Cfg_PATH_ZIP_PRIVATE,
 	     Gbl.FileBrowser.ZIP.TmpDir,
 	     FullNameAndUsrID);
 
@@ -386,7 +372,7 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO16x16\" />"
 		      "</a>",
-	 Gbl.Prefs.URLIcons,
+	 Cfg_URL_ICON_PUBLIC,
 	 Txt_Create_ZIP_file,
 	 Txt_Create_ZIP_file);
    Frm_EndForm ();
@@ -446,9 +432,8 @@ static void ZIP_CompressFolderIntoZIP (void)
 	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
 	     Gbl.FileBrowser.Priv.FullPathInTree);
    snprintf (PathCompression,sizeof (PathCompression),
-	     "%s/%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,
-	     Cfg_FOLDER_ZIP,
+	     "%s/%s",
+	     Cfg_PATH_ZIP_PRIVATE,
 	     Gbl.FileBrowser.ZIP.TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
 
    UncompressedSize = ZIP_CloneDir (Path,PathCompression,Gbl.FileBrowser.Priv.FullPathInTree);
@@ -470,9 +455,8 @@ static void ZIP_CompressFolderIntoZIP (void)
 	        strcmp (Gbl.FileBrowser.FilFolLnkName,".") ? Gbl.FileBrowser.FilFolLnkName :
 							    Txt_ROOT_FOLDER_EXTERNAL_NAMES[Gbl.FileBrowser.Type]);
       snprintf (PathFileZIP,sizeof (PathFileZIP),
-	        "%s/%s/%s/%s",
-	        Cfg_PATH_SWAD_PUBLIC,
-	        Cfg_FOLDER_FILE_BROWSER_TMP,
+	        "%s/%s/%s",
+	        Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
 	        Gbl.FileBrowser.TmpPubDir,
 	        FileNameZIP);
       snprintf (StrZip,sizeof (StrZip),
@@ -494,9 +478,8 @@ static void ZIP_CompressFolderIntoZIP (void)
 	   {
 	    /***** Create URL pointing to ZIP file *****/
 	    snprintf (URLWithSpaces,sizeof (URLWithSpaces),
-		      "%s/%s/%s/%s",
-		      Cfg_URL_SWAD_PUBLIC,
-		      Cfg_FOLDER_FILE_BROWSER_TMP,
+		      "%s/%s/%s",
+		      Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
 		      Gbl.FileBrowser.TmpPubDir,
 		      FileNameZIP);
 	    Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
@@ -640,7 +623,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td colspan=\"2\" class=\"FILENAME_TXT CENTER_MIDDLE\">"
                       "<a href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\">"
-                      "<img src=\"%s/%s32x32/zip32x32.gif\""
+                      "<img src=\"%s32x32/zip32x32.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO40x40\" />"
                       "&nbsp;%s&nbsp;"
@@ -651,11 +634,11 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      "</td>"
 		      "</tr>",
             URL,FileName,
-            Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_FILEXT,
+            CfG_URL_ICON_FILEXT_PUBLIC,
             Txt_ZIP_file,
             Txt_ZIP_file,
 	    FileName,
-	    Gbl.Prefs.URLIcons,
+	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Download,
 	    Txt_Download);
 

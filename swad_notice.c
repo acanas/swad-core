@@ -446,8 +446,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
             /***** Link to RSS file *****/
 	    /* Create RSS file if not exists */
 	    snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),
-		      "%s/%s/%ld/%s/%s",
-		      Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,
+		      "%s/%ld/%s/%s",
+		      Cfg_PATH_CRS_PUBLIC,
 		      Gbl.CurrentCrs.Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
 	    if (!Fil_CheckIfPathExists (PathRelRSSFile))
 	       RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
@@ -462,7 +462,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 			       " class=\"ICO16x16\" />"
 			       "</a>"
 			       "</div>",
-		     Gbl.Prefs.URLIcons);
+		     Cfg_URL_ICON_PUBLIC);
 	    break;
 	 case Not_LIST_FULL_NOTICES:
 	    /***** Button to add new notice *****/
@@ -671,7 +671,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                                   " class=\"ICO_HIDDEN ICO16x16\" />"
                                   "</span>",
                         Txt_NOTICE_Active_SINGULAR,
-                        Gbl.Prefs.URLIcons,
+                        Cfg_URL_ICON_PUBLIC,
                         Txt_NOTICE_Active_SINGULAR,
                         Txt_NOTICE_Active_SINGULAR);
                break;
@@ -682,7 +682,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                                   " class=\"ICO_HIDDEN ICO16x16\" />"
                                   "</span>",
                         Txt_NOTICE_Obsolete_SINGULAR,
-                        Gbl.Prefs.URLIcons,
+                        Cfg_URL_ICON_PUBLIC,
                         Txt_NOTICE_Obsolete_SINGULAR,
                         Txt_NOTICE_Obsolete_SINGULAR);
                break;

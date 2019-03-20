@@ -1370,7 +1370,7 @@ static void Grp_ListGroupTypesForEdition (void)
                          " class=\"%sCONTEXT_ICO_16x16\" />"
                          "</td>"
 	                 "<td class=\"LEFT_MIDDLE\">",
-               Gbl.Prefs.URLIcons,
+               Cfg_URL_ICON_PUBLIC,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                                                  Txt_The_groups_will_not_automatically_open,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
@@ -2576,7 +2576,7 @@ static void Grp_PutFormToCreateGroupType (void)
                       " class=\"%sCONTEXT_ICO_16x16\" />"
                       "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                      Txt_The_groups_will_not_automatically_open,
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :

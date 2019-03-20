@@ -72,21 +72,13 @@ extern struct Globals Gbl;
 
 void Fil_CreateFileForHTMLOutput (void)
   {
-   char PathHTMLOutputPriv[PATH_MAX + 1];
-
    /***** Check if exists the directory for HTML output. If not exists, create it *****/
-   snprintf (PathHTMLOutputPriv,sizeof (PathHTMLOutputPriv),
-	     "%s/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT);
-   Fil_CreateDirIfNotExists (PathHTMLOutputPriv);
-
-   /***** Remove old files *****/
-   Fil_RemoveOldTmpFiles (PathHTMLOutputPriv,Cfg_TIME_TO_DELETE_HTML_OUTPUT,false);
+   Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
 
    /***** Create a unique name for the file *****/
    snprintf (Gbl.HTMLOutput.FileName,sizeof (Gbl.HTMLOutput.FileName),
 	     "%s/%s.html",
-             PathHTMLOutputPriv,Gbl.UniqueNameEncrypted);
+             Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
 
    /***** Open file for writing and reading *****/
    if ((Gbl.F.Out = fopen (Gbl.HTMLOutput.FileName,"w+t")) == NULL)

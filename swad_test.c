@@ -1743,7 +1743,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
          TagHidden = (row[2][0] == 'Y');
          fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                             "<img src=\"%s/",
-                  Gbl.Prefs.URLIcons);
+                  Cfg_URL_ICON_PUBLIC);
          if (TagHidden)
             fprintf (Gbl.F.Out,"eye-slash.svg\" alt=\"%s\" title=\"%s",
                      Txt_Tag_not_allowed,
@@ -3395,7 +3395,7 @@ static void Tst_WriteAnswersEdit (long QstCod)
                fprintf (Gbl.F.Out,"<img src=\"%s/check.svg\""
         	                  " alt=\"%s\" title=\"%s\""
         	                  " class=\"CONTEXT_ICO_16x16\" />",
-                        Gbl.Prefs.URLIcons,
+                        Cfg_URL_ICON_PUBLIC,
                         Txt_TST_Answer_given_by_the_teachers,
                         Txt_TST_Answer_given_by_the_teachers);
             fprintf (Gbl.F.Out,"</td>");
@@ -5234,7 +5234,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                          "<img src=\"%s/caret-right.svg\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />"
 	                 "</a>",
-               NumOpt,Gbl.Prefs.URLIcons,
+               NumOpt,Cfg_URL_ICON_PUBLIC,
 	       Gbl.Title,Gbl.Title);
 
       /* Icon to contract (hide the answer) */
@@ -5248,7 +5248,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                          "<img src=\"%s/caret-down.svg\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />"
 	                 "</a>",
-               NumOpt,Gbl.Prefs.URLIcons,
+               NumOpt,Cfg_URL_ICON_PUBLIC,
 	       Gbl.Title,Gbl.Title);
 
       fprintf (Gbl.F.Out,"</td>");

@@ -606,7 +606,6 @@ void Mrk_ShowMyMarks (void)
    struct MarksProperties Marks;
    char FileNameUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
-   char PathMarksPriv[PATH_MAX + 1];
    char PathPrivate[PATH_MAX + 1 +
 		    PATH_MAX + 1];
    struct UsrData *UsrDat;
@@ -661,21 +660,12 @@ void Mrk_ShowMyMarks (void)
 
       /***** Create temporal file to store my marks (in HTML) *****/
       /* If the private directory does not exist, create it */
-      snprintf (PathMarksPriv,sizeof (PathMarksPriv),
-	        "%s/%s",
-                Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MARK);
-      Fil_CreateDirIfNotExists (PathMarksPriv);
-
-      /* First of all, we remove the oldest temporary files.
-         Such temporary files have been created by me or by other users.
-         This is a bit sloppy, but they must be removed by someone.
-         Here "oldest" means more than x time from their creation */
-      Fil_RemoveOldTmpFiles (PathMarksPriv,Cfg_TIME_TO_DELETE_MARKS_TMP_FILES,false);
+      Fil_CreateDirIfNotExists (Cfg_PATH_MARK_PRIVATE);
 
       /* Create a new temporary file *****/
       snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),
 	        "%s/%s.html",
-		PathMarksPriv,Gbl.UniqueNameEncrypted);
+		Cfg_PATH_MARK_PRIVATE,Gbl.UniqueNameEncrypted);
       if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")) == NULL)
          Lay_ShowErrorAndExit ("Can not open file for my marks.");
 
@@ -736,7 +726,6 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    char FullPathInTreeFromDBMarksTable[PATH_MAX + 1];
    char PathUntilFileName[PATH_MAX + 1];
    char FileName[NAME_MAX + 1];
-   char PathMarksPriv[PATH_MAX + 1];
    char PathMarks[PATH_MAX + 1];
    char FileNameUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
@@ -802,32 +791,23 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	   {
 	    if (GrpCod > 0)
 	       snprintf (PathMarks,sizeof (PathMarks),
-			 "%s/%s/%ld/grp/%ld/%s",
-			 Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,GrpCod,
+			 "%s/%ld/grp/%ld/%s",
+			 Cfg_PATH_CRS_PRIVATE,CrsCod,GrpCod,
 			 FullPathInTreeFromDBMarksTable);
 	    else
 	       snprintf (PathMarks,sizeof (PathMarks),
-			 "%s/%s/%ld/%s",
-			 Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
+			 "%s/%ld/%s",
+			 Cfg_PATH_CRS_PRIVATE,CrsCod,
 			 FullPathInTreeFromDBMarksTable);
 
 	    /***** Create temporal file to store my marks (in HTML) *****/
 	    /* If the private directory does not exist, create it */
-	    snprintf (PathMarksPriv,sizeof (PathMarksPriv),
-		      "%s/%s",
-		      Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_MARK);
-	    Fil_CreateDirIfNotExists (PathMarksPriv);
-
-	    /* First of all, we remove the oldest temporary files.
-	       Such temporary files have been created by me or by other users.
-	       This is a bit sloppy, but they must be removed by someone.
-	       Here "oldest" means more than x time from their creation */
-	    Fil_RemoveOldTmpFiles (PathMarksPriv,Cfg_TIME_TO_DELETE_MARKS_TMP_FILES,false);
+	    Fil_CreateDirIfNotExists (Cfg_PATH_MARK_PRIVATE);
 
 	    /* Create a new temporary file *****/
 	    snprintf (FileNameUsrMarks,sizeof (FileNameUsrMarks),
 		      "%s/%s.html",
-		      PathMarksPriv,Gbl.UniqueNameEncrypted);
+		      Cfg_PATH_MARK_PRIVATE,Gbl.UniqueNameEncrypted);
 	    if ((FileUsrMarks = fopen (FileNameUsrMarks,"wb")))
 	      {
 	       /***** Get user's marks *****/

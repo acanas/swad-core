@@ -1183,7 +1183,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
                       "</td>",
             NewPst ? "MSG_TIT_BG_NEW" :
         	     "MSG_TIT_BG",
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             NewPst ? "envelope.svg" :
         	     "envelope-open-text.svg",
             NewPst ? Txt_MSG_New :
@@ -1251,7 +1251,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 			 " class=\"ICO_HIDDEN ICO16x16\" />"
 			 "</span>",
 	       Gbl.Title,
-	       Gbl.Prefs.URLIcons,
+	       Cfg_URL_ICON_PUBLIC,
 	       Enabled ? "eye.svg" :
 			 "eye-slash.svg",
 	       Gbl.Title,
@@ -2063,7 +2063,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
          fprintf (Gbl.F.Out,"<img src=\"%s/paste.svg\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"CONTEXT_OPT ICO_HIDDEN ICO16x16\" />",
-                  Gbl.Prefs.URLIcons,
+                  Cfg_URL_ICON_PUBLIC,
                   Txt_Copy_not_allowed,Txt_Copy_not_allowed);
       else
         {
@@ -2101,14 +2101,14 @@ static void For_WriteLinkToForum (struct Forum *Forum,
          fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO16x16\" />",
-                  Gbl.Prefs.URLIcons,ForumName,ForumName);
+                  Cfg_URL_ICON_PUBLIC,ForumName,ForumName);
          break;
       case For_FORUM__SWAD__USRS:
       case For_FORUM__SWAD__TCHS:
          fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.png\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO16x16\" />",
-                  Gbl.Prefs.URLIcons,ForumName,ForumName);
+                  Cfg_URL_ICON_PUBLIC,ForumName,ForumName);
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
@@ -2127,7 +2127,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
          fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO16x16\" />",
-                  Gbl.Prefs.URLIcons,ForumName,ForumName);
+                  Cfg_URL_ICON_PUBLIC,ForumName,ForumName);
          break;
       default:
          break;
@@ -3414,7 +3414,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                      Gbl.Usrs.Me.PhotoURL);
          else
             fprintf (Gbl.F.Out,"%s/usr_bl.jpg",
-                     Gbl.Prefs.URLIcons);
+                     Cfg_URL_ICON_PUBLIC);
          fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"",
                   Txt_Thread_with_posts_from_you);
          if (Thr.NumMyPosts == 1)
@@ -3432,7 +3432,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                          " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICO16x16\" />",
                BgColor,
-	       Gbl.Prefs.URLIcons,
+	       Cfg_URL_ICON_PUBLIC,
                Thr.NumUnreadPosts ? "envelope.svg" :
         	                    "envelope-open-text.svg",
                Thr.NumUnreadPosts ? Txt_There_are_new_posts :

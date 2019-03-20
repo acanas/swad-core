@@ -2739,8 +2739,8 @@ void Prj_RemoveProject (void)
 
       /***** Remove directory of the project *****/
       snprintf (PathRelPrj,sizeof (PathRelPrj),
-	        "%s/%s/%ld/%s/%02u/%ld",
-	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Prj.CrsCod,Cfg_FOLDER_PRJ,
+	        "%s/%ld/%s/%02u/%ld",
+	        Cfg_PATH_CRS_PRIVATE,Prj.CrsCod,Cfg_FOLDER_PRJ,
 	        (unsigned) (Prj.PrjCod % 100),Prj.PrjCod);
       Fil_RemoveTree (PathRelPrj);
 

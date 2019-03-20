@@ -93,9 +93,9 @@ const char *Ico_GetIcon (const char *IconWithoutExtension)
 		"%s.%s",
 		IconWithoutExtension,Ico_IconExtensions[NumExt]);
       snprintf (PathIcon,sizeof (PathIcon),
-		"%s/%s/%s/%s/%s",
-		Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
-		Cfg_ICON_FOLDER_ICON_SETS,Ico_IconSetId[Gbl.Prefs.IconSet],
+		"%s/%s/%s",
+		Cfg_PATH_ICON_SETS_PUBLIC,
+		Ico_IconSetId[Gbl.Prefs.IconSet],
 		IconWithExtension);
       if (Fil_CheckIfPathExists (PathIcon))
 	 return IconWithExtension;
@@ -130,7 +130,7 @@ void Ico_PutIconsToSelectIconSet (void)
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
       snprintf (Icon,sizeof (Icon),
 		"%s/%s/cog.svg",
-		Cfg_ICON_FOLDER_ICON_SETS,
+		Cfg_ICON_FOLDER_SETS,
                 Ico_IconSetId[IconSet]);
       Ico_PutPrefIconLink (Icon,Ico_IconSetNames[IconSet]);
       Frm_EndForm ();
@@ -161,9 +161,8 @@ void Ico_ChangeIconSet (void)
    /***** Get param with icon set *****/
    Gbl.Prefs.IconSet = Ico_GetParamIconSet ();
    snprintf (Gbl.Prefs.URLIconSet,sizeof (Gbl.Prefs.URLIconSet),
-	     "%s/%s/%s/%s",
-             Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
-             Cfg_ICON_FOLDER_ICON_SETS,
+	     "%s/%s",
+             Cfg_URL_ICON_SETS_PUBLIC,
              Ico_IconSetId[Gbl.Prefs.IconSet]);
 
    /***** Store icon set in database *****/
@@ -301,7 +300,7 @@ void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
 		      " class=\"CONTEXT_ICO_16x16\" />"
 		      "</div>",
 	    DivClass,
-	    Gbl.Prefs.URLIcons,Icon,
+	    Cfg_URL_ICON_PUBLIC,Icon,
 	    Title,Title);
   }
 
@@ -325,7 +324,7 @@ void Ico_PutIconLink (const char *Icon,const char *Title)
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16\" />",
-	    Gbl.Prefs.URLIcons,Icon,
+	    Cfg_URL_ICON_PUBLIC,Icon,
 	    Title,Title);
   }
 
@@ -341,7 +340,7 @@ void Ico_PutIconTextLink (const char *Icon,const char *Text)
 	              " class=\"CONTEXT_ICO_x16\" />"
 	              "&nbsp;%s"
 	              "</div>",
-            Gbl.Prefs.URLIcons,Icon,Text,Text,
+            Cfg_URL_ICON_PUBLIC,Icon,Text,Text,
 	    Text);
   }
 
@@ -354,7 +353,7 @@ void Ico_PutPrefIconLink (const char *Icon,const char *Title)
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO_HIGHLIGHT ICOx20\" />",
-	    Gbl.Prefs.URLIcons,Icon,
+	    Cfg_URL_ICON_PUBLIC,Icon,
 	    Title,Title);
   }
 
@@ -366,7 +365,7 @@ void Ico_PutIconOff (const char *Icon,const char *Title)
   {
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT ICO_HIDDEN CONTEXT_ICO_16x16\" />",
-            Gbl.Prefs.URLIcons,Icon,Title,Title);
+            Cfg_URL_ICON_PUBLIC,Icon,Title,Title);
   }
 
 /*****************************************************************************/
@@ -385,8 +384,8 @@ void Ico_PutCalculateIcon (const char *Title)
 		      " class=\"CONTEXT_ICO_16x16\" style=\"display:none;\" />"	// Animated icon hidden
 		      "</div>"
 		      "</a>",
-	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Title,Title,
-	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Title,Title);
+	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Title,Title,
+	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Title,Title);
   }
 
 /*****************************************************************************/
@@ -407,8 +406,8 @@ void Ico_PutCalculateIconWithText (const char *Text)
 		      "&nbsp;%s"
 		      "</div>"
 		      "</a>",
-	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Text,Text,
-	    Gbl.Form.Num,Gbl.Prefs.URLIcons,Text,Text,
+	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Text,Text,
+	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Text,Text,
 	    Text);
   }
 

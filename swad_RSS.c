@@ -66,8 +66,8 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
 
    /***** Create RSS directory if not exists *****/
    snprintf (PathRelPublRSSDir,sizeof (PathRelPublRSSDir),
-	     "%s/%s/%ld/%s",
-	     Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,Crs->CrsCod,Cfg_RSS_FOLDER);
+	     "%s/%ld/%s",
+	     Cfg_PATH_CRS_PUBLIC,Crs->CrsCod,Cfg_RSS_FOLDER);
    Fil_CreateDirIfNotExists (PathRelPublRSSDir);
 
    /***** Create RSS file *****/
@@ -101,7 +101,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
 
    fprintf (FileRSS,"<image>\n");
    fprintf (FileRSS,"<url>%s/swad112x32.png</url>\n",
-            Gbl.Prefs.URLIcons);
+            Cfg_URL_ICON_PUBLIC);
    fprintf (FileRSS,"<title>%s: %s</title>\n",
             Cfg_PLATFORM_SHORT_NAME,Crs->ShrtName);
    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
@@ -324,6 +324,6 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 
 void RSS_WriteRSSLink (FILE *FileTgt,long CrsCod)
   {
-   fprintf (FileTgt,"%s/%s/%ld/%s/%s",
-            Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+   fprintf (FileTgt,"%s/%ld/%s/%s",
+            Cfg_URL_CRS_PUBLIC,CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
   }

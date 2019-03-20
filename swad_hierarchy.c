@@ -407,7 +407,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
       fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.png\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40 TOP_LOGO\" />",
-               Gbl.Prefs.URLIcons,
+               Cfg_URL_ICON_PUBLIC,
                Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME);
 
    /***** Text *****/
@@ -545,14 +545,14 @@ void Hie_InitHierarchy (void)
      {
       /***** Paths of course directories *****/
       snprintf (Gbl.CurrentCrs.PathPriv,sizeof (Gbl.CurrentCrs.PathPriv),
-	        "%s/%s/%ld",
-	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
+	        "%s/%ld",
+	        Cfg_PATH_CRS_PRIVATE,Gbl.CurrentCrs.Crs.CrsCod);
       snprintf (Gbl.CurrentCrs.PathRelPubl,sizeof (Gbl.CurrentCrs.PathRelPubl),
-	        "%s/%s/%ld",
-	        Cfg_PATH_SWAD_PUBLIC ,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
+	        "%s/%ld",
+	        Cfg_PATH_CRS_PUBLIC,Gbl.CurrentCrs.Crs.CrsCod);
       snprintf (Gbl.CurrentCrs.PathURLPubl,sizeof (Gbl.CurrentCrs.PathURLPubl),
-	        "%s/%s/%ld",
-	        Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
+	        "%s/%ld",
+	        Cfg_URL_CRS_PUBLIC,Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** If any of the course directories does not exist, create it *****/
       if (!Fil_CheckIfPathExists (Gbl.CurrentCrs.PathPriv))

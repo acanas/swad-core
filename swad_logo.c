@@ -95,8 +95,8 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 	    Folder = Cfg_FOLDER_DEG;
 	    DegCod = Cod;
 	    snprintf (PathLogo,sizeof (PathLogo),
-		      "%s/%s/%02u/%u/logo/%u.png",
-		      Cfg_PATH_SWAD_PUBLIC,Folder,
+		      "%s/%02u/%u/logo/%u.png",
+		      Cfg_PATH_DEG_PRIVATE,
 		      (unsigned) (DegCod % 100),
 		      (unsigned) DegCod,
 		      (unsigned) DegCod);
@@ -114,8 +114,8 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 	    else
 	       CtrCod = Cod;
 	    snprintf (PathLogo,sizeof (PathLogo),
-		      "%s/%s/%02u/%u/logo/%u.png",
-		      Cfg_PATH_SWAD_PUBLIC,Folder,
+		      "%s/%02u/%u/logo/%u.png",
+		      Cfg_PATH_CTR_PUBLIC,
 		      (unsigned) (CtrCod % 100),
 		      (unsigned) CtrCod,
 		      (unsigned) CtrCod);
@@ -135,8 +135,8 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 	    else
 	       InsCod = Cod;
 	    snprintf (PathLogo,sizeof (PathLogo),
-		      "%s/%s/%02u/%u/logo/%u.png",
-		      Cfg_PATH_SWAD_PUBLIC,Folder,
+		      "%s/%02u/%u/logo/%u.png",
+		      Cfg_PATH_INS_PUBLIC,
 		      (unsigned) (InsCod % 100),
 		      (unsigned) InsCod,
 		      (unsigned) InsCod);
@@ -157,7 +157,7 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 			(unsigned) Cod);
 	    else if (Icon[Scope])
 	       fprintf (Gbl.F.Out,"%s/%s",
-			Gbl.Prefs.URLIcons,Icon[Scope]);
+			Cfg_URL_ICON_PUBLIC,Icon[Scope]);
 	    fprintf (Gbl.F.Out,"\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICO%ux%u",

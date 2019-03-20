@@ -697,6 +697,7 @@ static void TL_BuildQueryToGetTimeline (char **Query,
       " GROUP BY NotCod ORDER BY NewestPubCod DESC LIMIT ..."
       but this query is slow (several seconds) with a big table.
     */
+
    for (NumPub = 0;
 	NumPub < MaxPubsToGet[WhatToGetFromTimeline];
 	NumPub++)
@@ -981,7 +982,6 @@ static void TL_ShowTimeline (char *Query,
    NumPubsGot = DB_QuerySELECT (&mysql_res,"can not get timeline",
 				"%s",
 				Query);
-
    /***** Start box *****/
    Box_StartBox (NULL,Title,TL_PutIconsTimeline,
                  Hlp_START_Timeline,Box_NOT_CLOSABLE);
@@ -1402,8 +1402,8 @@ static void TL_PutLinkToViewOldPublications (void)
 	              "</a>"
 	              "</div>",
 	    The_ClassFormInBoxBold[Gbl.Prefs.Theme],
-	    Gbl.Prefs.URLIcons,Txt_See_more,Txt_See_more,
-	    Gbl.Prefs.URLIcons,Txt_See_more,Txt_See_more,
+	    Cfg_URL_ICON_PUBLIC,Txt_See_more,Txt_See_more,
+	    Cfg_URL_ICON_PUBLIC,Txt_See_more,Txt_See_more,
 	    Txt_See_more);
   }
 
@@ -2039,7 +2039,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 	                 " class=\"CONTEXT_ICO_x16\" />"
 	                 "&nbsp;%s"
 	                 "</a>",
-            Gbl.Prefs.URLIcons,TL_Icons[SocNot->NoteType],
+            Cfg_URL_ICON_PUBLIC,TL_Icons[SocNot->NoteType],
             Txt_TIMELINE_NOTE[SocNot->NoteType],
             Txt_TIMELINE_NOTE[SocNot->NoteType],
             Txt_TIMELINE_NOTE[SocNot->NoteType]);
@@ -2519,7 +2519,7 @@ static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID 
                       "</a>"
                       "</div>",
             UniqueId,
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Txt_Comment,Txt_Comment);
   }
 
@@ -2537,7 +2537,7 @@ static void TL_PutIconCommentDisabled (void)
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO16x16\" />"
 		      "</div>",
-	    Gbl.Prefs.URLIcons,
+	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Comment,Txt_Comment);
   }
 
@@ -4578,7 +4578,7 @@ static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 			    " alt=\"%u\" title=\"%u\""
 			    " class=\"ICO16x16\" />"
 			    "</div>",
-		  Gbl.Prefs.URLIcons,
+		  Cfg_URL_ICON_PUBLIC,
 		  NumUsrs - NumUsrsShown,
 		  NumUsrs - NumUsrsShown);
      }

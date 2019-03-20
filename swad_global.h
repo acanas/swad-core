@@ -170,7 +170,6 @@ struct Globals
       unsigned SideCols;
       The_Theme_t Theme;
       Ico_IconSet_t IconSet;
-      char URLIcons[PATH_MAX + 1];
       char URLTheme[PATH_MAX + 1];
       char URLIconSet[PATH_MAX + 1];
      } Prefs;

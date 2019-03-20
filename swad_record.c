@@ -3719,9 +3719,9 @@ static void Rec_WriteLinkToDataProtectionClause (void)
    extern const char *Txt_DATA_PROTECTION_CLAUSE;
 
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-	              "<a class=\"TIT\" href=\"%s/%s/\" target=\"_blank\">%s</a>"
+	              "<a class=\"TIT\" href=\"%s/\" target=\"_blank\">%s</a>"
 	              "</div>",
-            Cfg_URL_SWAD_PUBLIC,Cfg_DATA_PROTECTION_FOLDER,
+            Cfg_URL_DATA_PROTECTION_PUBLIC,
             Txt_DATA_PROTECTION_CLAUSE);
   }
 

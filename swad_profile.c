@@ -763,7 +763,7 @@ static void Prf_StartListItem (const char *Title,const char *Icon)
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 		      " style=\"background-image:url('%s/%s');\">",
 	    Title,
-	    Gbl.Prefs.URLIcons,Icon);
+	    Cfg_URL_ICON_PUBLIC,Icon);
   }
 
 static void Prf_EndListItem (void)

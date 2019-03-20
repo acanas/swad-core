@@ -566,7 +566,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 			    " class=\"ICO40x40\" />"
 			    "</div>"
 			    "</a>",
-		  Gbl.Prefs.URLIcons,
+		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Unfollow,Txt_Following_unfollow);
 	 Frm_EndForm ();
 	}
@@ -582,7 +582,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 			    " class=\"ICO40x40\" />"
 			    "</div>"
 			    "</a>",
-		  Gbl.Prefs.URLIcons,
+		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Follow,Txt_Follow);
 	 Frm_EndForm ();
 	}
@@ -966,7 +966,7 @@ static void Fol_PutInactiveIconToFollowUnfollow (void)
 		      " alt=\"\""
 		      " class=\"ICO16x16\" />"
 		      "</div>",
-	    Gbl.Prefs.URLIcons);
+	    Cfg_URL_ICON_PUBLIC);
    }
 
 /*****************************************************************************/
@@ -987,7 +987,7 @@ static void Fol_PutIconToFollow (struct UsrData *UsrDat)
 		      " class=\"ICO16x16\" />"
 		      "</div>"
 		      "</a>",
-	    Gbl.Prefs.URLIcons,
+	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Follow,Txt_Follow);
    Frm_EndForm ();
   }
@@ -1010,7 +1010,7 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
 		      " class=\"ICO16x16\" />"
 		      "</div>"
 		      "</a>",
-	    Gbl.Prefs.URLIcons,
+	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Unfollow,Txt_Unfollow);
    Frm_EndForm ();
   }

@@ -461,7 +461,7 @@ static void Crs_Configuration (bool PrintView)
                          "<img src=\"%s/%s\" alt=\"%s\""
                          " class=\"ICO16x16\" />",
                Gbl.Title,
-               Gbl.Prefs.URLIcons,
+               Cfg_URL_ICON_PUBLIC,
                (Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
         	                                                  "exclamation-triangle.svg",
                Gbl.Title);
@@ -572,7 +572,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />&nbsp;%s</a>",
-	    Gbl.Prefs.URLIcons,
+	    Cfg_URL_ICON_PUBLIC,
 	    Txt_System,
 	    Txt_System,
 	    Txt_System);
@@ -607,10 +607,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			  Highlight ? ClassHighlight :
         	                      ClassNormal,NULL);
       /* Country map */
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s.png\""
 	                 " alt=\"%s\" title=\"%s\""
                          " class=\"ICO16x16\" />&nbsp;%s</a>",
-	       Gbl.Prefs.URLIcons,Cfg_ICON_FOLDER_COUNTRIES,
+	       Cfg_URL_ICON_COUNTRIES_PUBLIC,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
@@ -753,7 +753,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			             " class=\"ICO16x16\" />"
 			             "&nbsp;%s"
 			             "</a>",
-		           Gbl.Prefs.URLIcons,
+		           Cfg_URL_ICON_PUBLIC,
 		           Crs.ShrtName,
 		           Crs.FullName,
 		           Crs.FullName);
@@ -2289,12 +2289,12 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
       /***** Remove directories of the course *****/
       snprintf (PathRelCrs,sizeof (PathRelCrs),
-	        "%s/%s/%ld",
-	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod);
+	        "%s/%ld",
+	        Cfg_PATH_CRS_PRIVATE,CrsCod);
       Fil_RemoveTree (PathRelCrs);
       snprintf (PathRelCrs,sizeof (PathRelCrs),
-	        "%s/%s/%ld",
-	        Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod);
+	        "%s/%ld",
+	        Cfg_PATH_CRS_PUBLIC,CrsCod);
       Fil_RemoveTree (PathRelCrs);
      }
   }

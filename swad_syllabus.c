@@ -353,8 +353,8 @@ void Syl_LoadListItemsSyllabusIntoMemory (long CrsCod)
 
    /* Path of the private directory for the XML file with the syllabus */
    snprintf (Gbl.Syllabus.PathDir,sizeof (Gbl.Syllabus.PathDir),
-	     "%s/%s/%ld/%s",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
+	     "%s/%ld/%s",
+	     Cfg_PATH_CRS_PRIVATE,CrsCod,
 	     Gbl.Syllabus.WhichSyllabus == Syl_LECTURES ? Cfg_SYLLABUS_FOLDER_LECTURES :
 		                                          Cfg_SYLLABUS_FOLDER_PRACTICALS);
 
@@ -752,8 +752,8 @@ int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer)
      {
       /***** Create a unique name for the file *****/
       snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),
-	        "%s/%s/%s_syllabus.html",
-	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
+	        "%s/%s_syllabus.html",
+	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
 
       /***** Create a new temporary file for writing and reading *****/
       if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)

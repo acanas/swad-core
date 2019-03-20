@@ -260,7 +260,7 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 		      "</a>"
 		      "</div>",
 	    URL,Title,
-	    Gbl.Prefs.URLIcons,Icon,
+	    Cfg_URL_ICON_PUBLIC,Icon,
 	    Title,Title);
   }
 
@@ -343,7 +343,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
 			 "</tr>",
 	       (unsigned) NumURL,The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Gbl.Prefs.URLIcons,Net_WebsAndSocialNetworksIcons[NumURL],
+	       Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
@@ -606,7 +606,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			    "%.2f%%"
 			    "</td>"
 			    "</tr>",
-		  Gbl.Prefs.URLIcons,Net_WebsAndSocialNetworksIcons[Web],
+		  Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],

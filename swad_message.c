@@ -2936,7 +2936,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
         	                                                      "BG_MSG_GREEN") :
                                                               "BG_MSG_BLUE",
 
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? "reply.svg" :
         	                                                                 "envelope-open-text.svg") :
                                                                       "envelope.svg") :
@@ -3206,7 +3206,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 	                 " class=\"PHOTO30x40\" />"
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE",
-               Gbl.Prefs.URLIcons,
+               Cfg_URL_ICON_PUBLIC,
                Txt_Unknown_or_without_photo,Txt_Unknown_or_without_photo);
       if (BgColor)
          fprintf (Gbl.F.Out," %s",BgColor);
@@ -3332,7 +3332,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />"
                       "</td>",
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Deleted ? "share-red.svg" :
         	      "share.svg",
             Deleted ? Txt_MSG_Sent_and_deleted :
@@ -3493,7 +3493,7 @@ static void Msg_WriteMsgTo (long MsgCod)
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO16x16\" />"
                             "</td>",
-                  Gbl.Prefs.URLIcons,
+                  Cfg_URL_ICON_PUBLIC,
                   OpenByDst ? (Deleted ? "envelope-open-text-red.svg"   :
                 	                 "envelope-open-text.svg") :
                               (Deleted ? "envelope-red.svg" :

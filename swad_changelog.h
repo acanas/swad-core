@@ -438,6 +438,8 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Allow timeline posting only for users belonging to courses or admins to avoid user who create accounts only to post
 
+// TODO: Ver cómo recibir un fichero desde el cliente (SWADroid) en gsoap
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -457,10 +459,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.82 (2019-03-19)"
+#define Log_PLATFORM_VERSION	"SWAD 18.83 (2019-03-19)"
 #define CSS_FILE		"swad18.80.css"
 #define JS_FILE			"swad18.80.js"
 /*
+	Version 18.83:    Mar 19, 2019 	Important optimization on removing of temporary files to increase speed.
+					Code refactoring related to paths and URL.
+					Fixing in CSS to hide overflow in timeline. (240536 lines)
 	Version 18.82:    Mar 19, 2019 	User preferences are retrieved from database only when they are needed. (240630 lines)
 	Version 18.81.5:  Mar 19, 2019 	Code refactoring related to media. (240594 lines)
 	Version 18.81.4:  Mar 19, 2019 	Code refactoring related to media. (240586 lines)

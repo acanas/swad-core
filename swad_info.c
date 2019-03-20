@@ -805,8 +805,8 @@ static bool Inf_CheckAndShowPage (void)
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
       snprintf (URL,sizeof (URL),
-	        "%s/%s/%ld/%s/index.html",
-	        Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
+	        "%s/%ld/%s/index.html",
+	        Cfg_URL_CRS_PUBLIC,Gbl.CurrentCrs.Crs.CrsCod,
 	        Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
       Inf_ShowPage (URL);
 
@@ -820,8 +820,8 @@ static bool Inf_CheckAndShowPage (void)
    if (Fil_CheckIfPathExists (PathRelFileHTML))	// TODO: Check if not empty?
      {
       snprintf (URL,sizeof (URL),
-	        "%s/%s/%ld/%s/index.htm",
-	        Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod,
+	        "%s/%ld/%s/index.htm",
+	        Cfg_URL_CRS_PUBLIC,Gbl.CurrentCrs.Crs.CrsCod,
 	        Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
       Inf_ShowPage (URL);
 
@@ -838,8 +838,8 @@ static bool Inf_CheckAndShowPage (void)
 static void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char PathDir[PATH_MAX + 1])
   {
    snprintf (PathDir,PATH_MAX + 1,
-	     "%s/%s/%ld/%s",
-             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,CrsCod,
+	     "%s/%ld/%s",
+             Cfg_PATH_CRS_PUBLIC,CrsCod,
              Inf_FileNamesForInfoType[InfoType]);
   }
 
@@ -985,8 +985,8 @@ static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,
                               char PathFile[PATH_MAX + 1])
   {
    snprintf (PathFile,PATH_MAX + 1,
-	     "%s/%s/%ld/%s.url",
-	     Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,CrsCod,
+	     "%s/%ld/%s.url",
+	     Cfg_PATH_CRS_PRIVATE,CrsCod,
 	     Inf_FileNamesForInfoType[InfoType]);
   }
 
@@ -1885,11 +1885,11 @@ static bool Inf_CheckAndShowRichTxt (void)
       // TODO: change to another directory?
       /* Create a unique name for the .md file */
       snprintf (PathFileMD,sizeof (PathFileMD),
-	        "%s/%s/%s.md",
-	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
+	        "%s/%s.md",
+	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
       snprintf (PathFileHTML,sizeof (PathFileHTML),
-	        "%s/%s/%s.md.html",	// Do not use only .html because that is the output temporary file
-	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
+	        "%s/%s.md.html",	// Do not use only .html because that is the output temporary file
+	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
 
       /* Open Markdown file for writing */
       if ((FileMD = fopen (PathFileMD,"wb")) == NULL)
@@ -1976,8 +1976,8 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
      {
       /***** Create a unique name for the file *****/
       snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),
-	        "%s/%s/%s_info.html",
-	        Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
+	        "%s/%s_info.html",
+	        Cfg_PATH_OUT_PRIVATE,Gbl.UniqueNameEncrypted);
 
       /***** Create a new temporary file for writing and reading *****/
       if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)

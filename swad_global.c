@@ -138,18 +138,13 @@ void Gbl_InitializeGlobals (void)
    Gbl.Prefs.Menu           = Mnu_MENU_DEFAULT;			// Default menu
    Gbl.Prefs.Theme          = The_THEME_DEFAULT;		// Default theme
    Gbl.Prefs.IconSet        = Ico_ICON_SET_DEFAULT;		// Default icon set
-   snprintf (Gbl.Prefs.URLIcons,sizeof (Gbl.Prefs.URLIcons),
-	     "%s/%s",
-             Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
    snprintf (Gbl.Prefs.URLTheme,sizeof (Gbl.Prefs.URLTheme),
-	     "%s/%s/%s/%s",
-             Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
-             Cfg_ICON_FOLDER_THEMES,
+	     "%s/%s",
+             Cfg_URL_ICON_THEMES_PUBLIC,
 	     The_ThemeId[Gbl.Prefs.Theme]);
    snprintf (Gbl.Prefs.URLIconSet,sizeof (Gbl.Prefs.URLIconSet),
-	     "%s/%s/%s/%s",
-	     Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON,
-	     Cfg_ICON_FOLDER_ICON_SETS,
+	     "%s/%s",
+	     Cfg_URL_ICON_SETS_PUBLIC,
 	     Ico_IconSetId[Gbl.Prefs.IconSet]);
 
    Gbl.Session.NumSessions = 0;

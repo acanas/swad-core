@@ -283,7 +283,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 		      "</div>",
 	    Report->Permalink,
 	    Txt_Report,
-            Gbl.Prefs.URLIcons,
+            Cfg_URL_ICON_PUBLIC,
             Txt_Report,
 	    Report->FilenameReport);
    fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">%s</div>",
@@ -367,7 +367,6 @@ static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report)
 
 static void Rep_CreateNewReportFile (struct Rep_Report *Report)
   {
-   char PathReports[PATH_MAX + 1];
    char PathUniqueDirL[PATH_MAX + 1];
    char PathUniqueDirR[PATH_MAX + 1];
    char PathFileReport[PATH_MAX + 1];
@@ -376,16 +375,13 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
 		  NAME_MAX];
 
    /***** Path for reports *****/
-   snprintf (PathReports,sizeof (PathReports),
-	     "%s/%s",
-             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP);
-   Fil_CreateDirIfNotExists (PathReports);
+   Fil_CreateDirIfNotExists (Cfg_PATH_REP_PUBLIC);
 
    /***** Unique directory for the file with the report *****/
    /* 1. Create a directory using the leftmost 2 chars of a unique name */
    snprintf (PathUniqueDirL,sizeof (PathUniqueDirL),
-	     "%s/%s/%c%c",
-             Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP,
+	     "%s/%c%c",
+             Cfg_PATH_REP_PUBLIC,
              Gbl.UniqueNameEncrypted[0],
              Gbl.UniqueNameEncrypted[1]);
    Fil_CreateDirIfNotExists (PathUniqueDirL);
@@ -410,9 +406,8 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
 
    /***** Permalink *****/
    snprintf (Permalink,sizeof (Permalink),
-	     "%s/%s/%c%c/%s/%s",
-             Cfg_URL_SWAD_PUBLIC,
-             Cfg_FOLDER_REP,
+	     "%s/%c%c/%s/%s",
+             Cfg_URL_REP_PUBLIC,
              Gbl.UniqueNameEncrypted[0],
              Gbl.UniqueNameEncrypted[1],
              &Gbl.UniqueNameEncrypted[2],
@@ -1424,8 +1419,8 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
 
       /* Remove report directory and file */
       snprintf (PathUniqueDirReport,sizeof (PathUniqueDirReport),
-	        "%s/%s/%s/%s",
-	        Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_REP,row[0],row[1]);
+	        "%s/%s/%s",
+	        Cfg_PATH_REP_PUBLIC,row[0],row[1]);
       Fil_RemoveTree (PathUniqueDirReport);
      }
 
