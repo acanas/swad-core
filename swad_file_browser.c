@@ -5121,28 +5121,45 @@ void Brw_CreateDirDownloadTmp (void)
   {
    static unsigned NumDir = 0;	// When this function is called several times in the same execution of the program, each time a new directory is created
 				// This happens when the trees of assignments and works of several users are being listed
-   // char PathFileBrowserTmpPubl[PATH_MAX + 1];
-   char PathPubDirTmp[PATH_MAX + 1];
+   char PathUniqueDirL[PATH_MAX + 1];
+   char PathUniqueDirR[PATH_MAX + 1];
 
-   /* Example: /var/www/html/swad/tmp/SSujCNWsy4ZOdmgMKYBe0sKPAJu6szaZOQlIlJs_QIY */
+   /* Example: /var/www/html/swad/tmp/SS/ujCNWsy4ZOdmgMKYBe0sKPAJu6szaZOQlIlJs_QIY */
 
    /***** If the public directory does not exist, create it *****/
    Fil_CreateDirIfNotExists (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC);
 
-   /***** Create a new temporary directory.
-          Important: number of directories inside a directory is limited to 32K in Linux *****/
+   /***** Unique temporary directory.
+          Important: number of directories inside a directory
+          is limited to 32K in Linux ==> create directories in two levels *****/
+   /* 1. Build the name of the directory, splitted in two parts: */
+   /* 1a: 2 leftmost chars */
+   Gbl.FileBrowser.TmpPubDir.L[0] = Gbl.UniqueNameEncrypted[0];
+   Gbl.FileBrowser.TmpPubDir.L[1] = Gbl.UniqueNameEncrypted[1];
+   Gbl.FileBrowser.TmpPubDir.L[2] = '\0';
+   /* 1b: rest of chars */
    if (NumDir)
-      snprintf (Gbl.FileBrowser.TmpPubDir,sizeof (Gbl.FileBrowser.TmpPubDir),
+      snprintf (Gbl.FileBrowser.TmpPubDir.R,sizeof (Gbl.FileBrowser.TmpPubDir.R),
 	        "%s_%u",
-		Gbl.UniqueNameEncrypted,NumDir);
+		&Gbl.UniqueNameEncrypted[2],NumDir);
    else
-      Str_Copy (Gbl.FileBrowser.TmpPubDir,Gbl.UniqueNameEncrypted,
+      Str_Copy (Gbl.FileBrowser.TmpPubDir.R,&Gbl.UniqueNameEncrypted[2],
                 NAME_MAX);
-   snprintf (PathPubDirTmp,sizeof (PathPubDirTmp),
+
+   /* 2. Create the left directory */
+   snprintf (PathUniqueDirL,sizeof (PathUniqueDirL),
 	     "%s/%s",
-	     Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,Gbl.FileBrowser.TmpPubDir);
-   if (mkdir (PathPubDirTmp,(mode_t) 0xFFF))
+             Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,Gbl.FileBrowser.TmpPubDir.L);
+   Fil_CreateDirIfNotExists (PathUniqueDirL);
+
+   /* 3. Create the right directory inside the left one */
+   snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),
+	     "%s/%s",
+             PathUniqueDirL,Gbl.FileBrowser.TmpPubDir.R);
+   if (mkdir (PathUniqueDirR,(mode_t) 0xFFF))
       Lay_ShowErrorAndExit ("Can not create a temporary folder for download.");
+
+   /* 4. Increase number of directory for next call */
    NumDir++;
   }
 
@@ -6543,9 +6560,11 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
 
    /***** Create, into temporary public directory, a symbolic link to file *****/
    snprintf (Link,sizeof (Link),
-	     "%s/%s/%s",
+	     "%s/%s/%s/%s",
              Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-             Gbl.FileBrowser.TmpPubDir,FileName);
+             Gbl.FileBrowser.TmpPubDir.L,
+             Gbl.FileBrowser.TmpPubDir.R,
+	     FileName);
    if (symlink (FullPathIncludingFile,Link) != 0)
       Lay_ShowErrorAndExit ("Can not create temporary link.");
   }
@@ -10365,9 +10384,10 @@ void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char
 
       /***** Create URL pointing to symbolic link *****/
       snprintf (URLWithSpaces,sizeof (URLWithSpaces),
-	        "%s/%s/%s",
+	        "%s/%s/%s/%s",
 	        Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-	        Gbl.FileBrowser.TmpPubDir,
+	        Gbl.FileBrowser.TmpPubDir.L,
+	        Gbl.FileBrowser.TmpPubDir.R,
 	        FileName);
      }
 

@@ -568,7 +568,11 @@ struct Globals
          bool IsThisTree;		// When showing a file browser, is it that corresponding to the clipboard?
          bool IsThisFile;		// When showing a row of a file browser, are we in the path of the clipboard?
         } Clipboard;
-      char TmpPubDir[NAME_MAX + 1];
+      struct
+        {
+         char L[2 + 1];		// Left directory: 2 first chars
+         char R[NAME_MAX + 1];	// Right directory: rest of chars
+        } TmpPubDir;
       bool HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
       const char *TxtStyle;
       const char *InputStyle;

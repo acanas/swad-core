@@ -177,9 +177,10 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
 
    /***** Create public XML file with the questions *****/
    snprintf (PathPubFile,sizeof (PathPubFile),
-	     "%s/%s/test.xml",
+	     "%s/%s/%s/test.xml",
              Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-             Gbl.FileBrowser.TmpPubDir);
+             Gbl.FileBrowser.TmpPubDir.L,
+             Gbl.FileBrowser.TmpPubDir.R);
    if ((Gbl.Test.XML.FileXML = fopen (PathPubFile,"wb")) == NULL)
       Lay_ShowErrorAndExit ("Can not open target file.");
 
@@ -256,10 +257,11 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
    mysql_data_seek (mysql_res,0);
 
    /***** Write the link to XML file *****/
-   fprintf (Gbl.F.Out,"<a href=\"%s/%s/test.xml\""
+   fprintf (Gbl.F.Out,"<a href=\"%s/%s/%s/test.xml\""
 	              " class=\"%s\" target=\"_blank\">",
             Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-            Gbl.FileBrowser.TmpPubDir,
+            Gbl.FileBrowser.TmpPubDir.L,
+            Gbl.FileBrowser.TmpPubDir.R,
             The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
    Ico_PutIconTextLink ("file.svg",
 			Txt_XML_file);

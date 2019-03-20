@@ -216,9 +216,10 @@ void ZIP_CreateZIPAsgWrk (void)
 	     "%s.zip",
 	     Txt_works_ZIP_FILE_NAME);
    snprintf (PathFileZIP,sizeof (PathFileZIP),
-	     "%s/%s/%s",
+	     "%s/%s/%s/%s",
 	     Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-             Gbl.FileBrowser.TmpPubDir,
+             Gbl.FileBrowser.TmpPubDir.L,
+             Gbl.FileBrowser.TmpPubDir.R,
              FileNameZIP);
    snprintf (StrZip,sizeof (StrZip),
 	     "nice -n 19 zip -q -r '%s' *",
@@ -239,9 +240,10 @@ void ZIP_CreateZIPAsgWrk (void)
 	{
 	 /***** Create URL pointing to ZIP file *****/
 	 snprintf (URLWithSpaces,sizeof (URLWithSpaces),
-	           "%s/%s/%s",
+	           "%s/%s/%s/%s",
 		   Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		   Gbl.FileBrowser.TmpPubDir,
+		   Gbl.FileBrowser.TmpPubDir.L,
+		   Gbl.FileBrowser.TmpPubDir.R,
 		   FileNameZIP);
 	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
 
@@ -455,9 +457,10 @@ static void ZIP_CompressFolderIntoZIP (void)
 	        strcmp (Gbl.FileBrowser.FilFolLnkName,".") ? Gbl.FileBrowser.FilFolLnkName :
 							    Txt_ROOT_FOLDER_EXTERNAL_NAMES[Gbl.FileBrowser.Type]);
       snprintf (PathFileZIP,sizeof (PathFileZIP),
-	        "%s/%s/%s",
+	        "%s/%s/%s/%s",
 	        Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-	        Gbl.FileBrowser.TmpPubDir,
+	        Gbl.FileBrowser.TmpPubDir.L,
+	        Gbl.FileBrowser.TmpPubDir.R,
 	        FileNameZIP);
       snprintf (StrZip,sizeof (StrZip),
 	        "nice -n 19 zip -q -5 -r '%s' *",
@@ -478,9 +481,10 @@ static void ZIP_CompressFolderIntoZIP (void)
 	   {
 	    /***** Create URL pointing to ZIP file *****/
 	    snprintf (URLWithSpaces,sizeof (URLWithSpaces),
-		      "%s/%s/%s",
+		      "%s/%s/%s/%s",
 		      Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		      Gbl.FileBrowser.TmpPubDir,
+		      Gbl.FileBrowser.TmpPubDir.L,
+		      Gbl.FileBrowser.TmpPubDir.R,
 		      FileNameZIP);
 	    Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
 

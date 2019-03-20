@@ -459,12 +459,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.83.1 (2019-03-20)"
+#define Log_PLATFORM_VERSION	"SWAD 18.84 (2019-03-20)"
 #define CSS_FILE		"swad18.83.css"
 #define JS_FILE			"swad18.80.js"
 /*
-Cfg_PATH_FILE_BROWSER_TMP_PUBLIC crece muy rápido. Tal vez debería organizarse en una jerarquía usando las dos primeras letras
-
+	Version 18.84:    Mar 20, 2019 	Temporary directories for download are created in a two level system to avoid overflow number of directories. (240582 lines)
 	Version 18.83.1:  Mar 20, 2019 	Fixed bug in removal of old files in a directory. (240561 lines)
 	Version 18.83:    Mar 20, 2019 	Important optimization on removing of temporary files to increase speed.
 					Code refactoring related to paths and URL.

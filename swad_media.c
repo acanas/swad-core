@@ -1366,36 +1366,32 @@ static void Med_ShowJPG (struct Media *Media,
 			 const char *ClassMedia)
   {
    extern const char *Txt_File_not_found;
-   char FileNameMediaPriv[NAME_MAX + 1];
+   char FileNameMedia[NAME_MAX + 1];
    char FullPathMediaPriv[PATH_MAX + 1];
-   char URLTmp[PATH_MAX + 1];
    char URL_JPG[PATH_MAX + 1];
 
    /***** Build private path to JPG *****/
-   snprintf (FileNameMediaPriv,sizeof (FileNameMediaPriv),
+   snprintf (FileNameMedia,sizeof (FileNameMedia),
 	     "%s.%s",
 	     Media->Name,Med_Extensions[Med_JPG]);
    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
 	     "%s/%s",
-	     PathMedPriv,FileNameMediaPriv);
+	     PathMedPriv,FileNameMedia);
 
    /***** Check if private media file exists *****/
    if (Fil_CheckIfPathExists (FullPathMediaPriv))
      {
       /***** Create symbolic link from temporary public directory to private file
 	     in order to gain access to it for showing/downloading *****/
-      Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMediaPriv);
+      Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMedia);
 
-      /***** Build temporary public URL *****/
-      snprintf (URLTmp,sizeof (URLTmp),
-		"%s/%s",
-		Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		Gbl.FileBrowser.TmpPubDir);
-
-      /***** Create URL pointing to symbolic link *****/
+      /***** Build URL pointing to symbolic link *****/
       snprintf (URL_JPG,sizeof (URL_JPG),
-		"%s/%s",
-		URLTmp,FileNameMediaPriv);
+		"%s/%s/%s/%s",
+		Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
+		Gbl.FileBrowser.TmpPubDir.L,
+		Gbl.FileBrowser.TmpPubDir.R,
+		FileNameMedia);
 
       /***** Show media *****/
       fprintf (Gbl.F.Out,"<img src=\"%s\" class=\"%s\" alt=\"\"",URL_JPG,ClassMedia);
@@ -1417,57 +1413,56 @@ static void Med_ShowGIF (struct Media *Media,
 			 const char *ClassMedia)
   {
    extern const char *Txt_File_not_found;
-   char FileNameMediaPriv[NAME_MAX + 1];
+   char FileNameMedia[NAME_MAX + 1];
    char FullPathMediaPriv[PATH_MAX + 1];
-   char URLTmp[PATH_MAX + 1];
    char URL_GIF[PATH_MAX + 1];
    char URL_PNG[PATH_MAX + 1];
 
    /***** Build private path to animated GIF image *****/
-   snprintf (FileNameMediaPriv,sizeof (FileNameMediaPriv),
+   snprintf (FileNameMedia,sizeof (FileNameMedia),
 	     "%s.%s",
 	     Media->Name,Med_Extensions[Med_GIF]);
    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
 	     "%s/%s",
-	     PathMedPriv,FileNameMediaPriv);
+	     PathMedPriv,FileNameMedia);
 
    /***** Check if private media file exists *****/
-   if (Fil_CheckIfPathExists (FullPathMediaPriv))
+   if (Fil_CheckIfPathExists (FullPathMediaPriv))	// The animated GIF image
      {
       /***** Create symbolic link from temporary public directory to private file
 	     in order to gain access to it for showing/downloading *****/
-      Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMediaPriv);
-
-      /***** Build temporary public URL *****/
-      snprintf (URLTmp,sizeof (URLTmp),
-		"%s/%s",
-		Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		Gbl.FileBrowser.TmpPubDir);
+      Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMedia);
 
       /***** Create URL pointing to symbolic link *****/
       snprintf (URL_GIF,sizeof (URL_GIF),
-		"%s/%s",
-		URLTmp,FileNameMediaPriv);
+		"%s/%s/%s/%s",
+		Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
+		Gbl.FileBrowser.TmpPubDir.L,
+		Gbl.FileBrowser.TmpPubDir.R,
+		FileNameMedia);
 
       /***** Build private path to static PNG image *****/
-      snprintf (FileNameMediaPriv,sizeof (FileNameMediaPriv),
+      snprintf (FileNameMedia,sizeof (FileNameMedia),
 		"%s.png",
 		Media->Name);
       snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
 		"%s/%s",
-		PathMedPriv,FileNameMediaPriv);
+		PathMedPriv,FileNameMedia);
 
       /***** Check if private media file exists *****/
-      if (Fil_CheckIfPathExists (FullPathMediaPriv))
+      if (Fil_CheckIfPathExists (FullPathMediaPriv))	// The static PNG image
 	{
 	 /***** Create symbolic link from temporary public directory to private file
 		in order to gain access to it for showing/downloading *****/
-	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMediaPriv);
+	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMedia);
 
 	 /***** Create URL pointing to symbolic link *****/
 	 snprintf (URL_PNG,sizeof (URL_PNG),
-		   "%s/%s",
-		   URLTmp,FileNameMediaPriv);
+		   "%s/%s/%s/%s",
+		   Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
+		   Gbl.FileBrowser.TmpPubDir.L,
+		   Gbl.FileBrowser.TmpPubDir.R,
+		   FileNameMedia);
 
 	 /***** Show static PNG and animated GIF *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MED_PLAY\""
@@ -1511,7 +1506,6 @@ static void Med_ShowVideo (struct Media *Media,
    extern const char *Txt_File_not_found;
    char FileNameMediaPriv[NAME_MAX + 1];
    char FullPathMediaPriv[PATH_MAX + 1];
-   char URLTmp[PATH_MAX + 1];
    char URL_Video[PATH_MAX + 1];
 
    /***** Build private path to video *****/
@@ -1529,16 +1523,13 @@ static void Med_ShowVideo (struct Media *Media,
 	     in order to gain access to it for showing/downloading *****/
       Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMediaPriv);
 
-      /***** Build temporary public URL *****/
-      snprintf (URLTmp,sizeof (URLTmp),
-		"%s/%s",
-		Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		Gbl.FileBrowser.TmpPubDir);
-
       /***** Create URL pointing to symbolic link *****/
       snprintf (URL_Video,sizeof (URL_Video),
-		"%s/%s",
-		URLTmp,FileNameMediaPriv);
+		"%s/%s/%s/%s",
+		Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
+		Gbl.FileBrowser.TmpPubDir.L,
+		Gbl.FileBrowser.TmpPubDir.R,
+		FileNameMediaPriv);
 
       /***** Show media *****/
       fprintf (Gbl.F.Out,"<video src=\"%s\""
