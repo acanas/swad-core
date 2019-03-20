@@ -38,6 +38,7 @@
 #include <unistd.h>		// For unlink
 
 #include "swad_config.h"
+#include "swad_database.h"
 #include "swad_global.h"
 #include "swad_file.h"
 #include "swad_string.h"
@@ -383,6 +384,8 @@ void Fil_CloseUpdateFile (const char CurrentName[PATH_MAX + 1],
 
 bool Fil_CheckIfPathExists (const char *Path)
   {
+   // Important: access with a link returns
+   // if exists the file pointed by the link, not the link itself
    return access (Path,F_OK) ? false :
 	                       true;
   }
@@ -479,7 +482,8 @@ void Fil_RemoveTree (const char Path[PATH_MAX + 1])
 /********************* Remove old temporary directories **********************/
 /*****************************************************************************/
 
-void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDirectory)
+void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
+                            bool RemoveDirectory)
   {
    struct dirent **FileList;
    int NumFile;
@@ -489,45 +493,45 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDire
 
    /***** Check this path (file or directory)
           because it could have already been deleted *****/
-   if (Fil_CheckIfPathExists (Path))
-      if (!lstat (Path,&FileStatus))		// On success ==> 0 is returned
-        {
-	 if (S_ISDIR (FileStatus.st_mode))	// It's a directory
+   // Important: don't use access here to check if path exists
+   // because access with a link returns if exists
+   // the file pointed by the link, not the link itself
+   if (!lstat (Path,&FileStatus))		// On success ==> 0 is returned
+     {
+      if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+	{
+	 /***** Scan the directory and delete recursively *****/
+	 if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)	// No error
 	   {
-	    /***** Scan the directory and delete recursively *****/
-	    if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)	// No error
+	    /* Loop over files */
+	    for (NumFile = 0;
+		 NumFile < NumFiles;
+		 NumFile++)
 	      {
-	       /* Loop over files */
-	       for (NumFile = 0;
-		    NumFile < NumFiles;
-		    NumFile++)
+	       if (strcmp (FileList[NumFile]->d_name,".") &&
+		   strcmp (FileList[NumFile]->d_name,".."))		// Skip directories "." and ".."
 		 {
-		  if (strcmp (FileList[NumFile]->d_name,".") &&
-		      strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
-		    {
-		     snprintf (Path2,sizeof (Path2),
-			       "%s/%s",
-			       Path,FileList[NumFile]->d_name);
-		     Fil_RemoveOldTmpFiles (Path2,TimeToRemove,true);	// Recursive call
-		    }
-		  free ((void *) FileList[NumFile]);
+		  snprintf (Path2,sizeof (Path2),
+			    "%s/%s",
+			    Path,FileList[NumFile]->d_name);
+		  Fil_RemoveOldTmpFiles (Path2,TimeToRemove,true);	// Recursive call
 		 }
-	       free ((void *) FileList);
-
-	       if (RemoveDirectory)
-		  /* Remove the directory itself */
-		  if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
-		     rmdir (Path);
+	       free ((void *) FileList[NumFile]);
 	      }
-	    else
-	       Lay_ShowErrorAndExit ("Error while scanning directory.");
+	    free ((void *) FileList);
+
+	    if (RemoveDirectory)
+	       /* Remove the directory itself */
+	       if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
+		  rmdir (Path);
 	   }
-	 else					// Not a directory
-	   {
-	    if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
-	       unlink (Path);
-	   }
-        }
+	 else
+	    Lay_ShowErrorAndExit ("Error while scanning directory.");
+	}
+      else					// Not a directory
+	 if (FileStatus.st_mtime < Gbl.StartExecutionTimeUTC - TimeToRemove)
+	    unlink (Path);
+     }
   }
 
 /*****************************************************************************/

@@ -80,7 +80,8 @@ bool Fil_CheckIfPathExists (const char *Path);
 void Fil_CreateDirIfNotExists (const char Path[PATH_MAX + 1]);
 void Fil_RemoveTree (const char *Path);
 
-void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDirectory);
+void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,
+                            bool RemoveDirectory);
 void Fil_FastCopyOfFiles (const char *PathSrc,const char *PathTgt);
 void Fil_FastCopyOfOpenFiles (FILE *FileSrc,FILE *FileTgt);
 

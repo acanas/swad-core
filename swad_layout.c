@@ -1404,6 +1404,8 @@ void Lay_RefreshNotifsAndConnected (void)
       Ntf_SendPendingNotifByEMailToAllUsrs ();	// Send pending notifications by email
    else if (!(Gbl.PID %  19))
       FW_PurgeFirewall ();			// Remove old clicks from firewall
+   else if (!(Gbl.PID %  23))
+      Fil_RemoveOldTmpFiles (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC	,Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES	,false);	// Remove the oldest temporary public directories used for downloading
    else if (!(Gbl.PID % 101))
       Brw_RemoveExpiredExpandedFolders ();	// Remove old expanded folders (from all users)
    else if (!(Gbl.PID % 103))
@@ -1413,18 +1415,16 @@ void Lay_RefreshNotifsAndConnected (void)
    else if (!(Gbl.PID % 109))
       Fil_RemoveOldTmpFiles (Cfg_PATH_OUT_PRIVATE		,Cfg_TIME_TO_DELETE_HTML_OUTPUT		,false);
    else if (!(Gbl.PID % 113))
-      Fil_RemoveOldTmpFiles (Cfg_PATH_FILE_BROWSER_TMP_PUBLIC	,Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES	,false);	// Remove the oldest temporary public directories used for downloading
-   else if (!(Gbl.PID % 127))
       Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PUBLIC		,Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES	,false);
-   else if (!(Gbl.PID % 131))
+   else if (!(Gbl.PID % 127))
       Fil_RemoveOldTmpFiles (Cfg_PATH_PHOTO_TMP_PRIVATE		,Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES	,false);
-   else if (!(Gbl.PID % 137))
+   else if (!(Gbl.PID % 131))
       Fil_RemoveOldTmpFiles (Cfg_PATH_MEDIA_TMP_PRIVATE		,Cfg_TIME_TO_DELETE_MEDIA_TMP_FILES	,false);
-   else if (!(Gbl.PID % 139))
+   else if (!(Gbl.PID % 137))
       Fil_RemoveOldTmpFiles (Cfg_PATH_ZIP_PRIVATE		,Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES	,false);
-   else if (!(Gbl.PID % 149))
+   else if (!(Gbl.PID % 139))
       Fil_RemoveOldTmpFiles (Cfg_PATH_MARK_PRIVATE		,Cfg_TIME_TO_DELETE_MARKS_TMP_FILES	,false);
-   else if (!(Gbl.PID % 151))
+   else if (!(Gbl.PID % 149))
       Fil_RemoveOldTmpFiles (Cfg_PATH_TEST_PRIVATE		,Cfg_TIME_TO_DELETE_TEST_TMP_FILES	,false);
 
    /***** Send, before the HTML, the refresh time *****/
