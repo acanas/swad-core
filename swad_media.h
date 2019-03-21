@@ -86,7 +86,7 @@ typedef enum
    Med_STORED_IN_DB,
   } Med_Status_t;
 
-#define Med_NUM_TYPES 7
+#define Med_NUM_TYPES 8
 typedef enum
   {
    Med_TYPE_NONE,
@@ -96,6 +96,7 @@ typedef enum
    Med_WEBM,
    Med_OGG,
    Med_YOUTUBE,
+   Med_EMBED,
   } Med_Type_t;
 
 /***** Struct used to get images/videos from forms *****/

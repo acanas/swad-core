@@ -797,7 +797,7 @@ CREATE TABLE IF NOT EXISTS marks_properties (
 --
 CREATE TABLE IF NOT EXISTS media (
 	MedCod INT NOT NULL AUTO_INCREMENT,
-	Type ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none',
+	Type ENUM('none','jpg','gif','mp4','webm','ogg','youtube','embed') NOT NULL DEFAULT 'none',
 	Name VARCHAR(43) NOT NULL DEFAULT '',
 	URL VARCHAR(255) NOT NULL DEFAULT '',
 	Title VARCHAR(2047) NOT NULL DEFAULT '',

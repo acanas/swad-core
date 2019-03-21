@@ -5643,28 +5643,36 @@ static long Tst_GetMedCodFromDB (int NumOpt)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   long MedCod;
+   unsigned long NumRows;
+   long MedCod = -1L;
 
    /***** Query depending on NumOpt *****/
    if (NumOpt < 0)
       // Get media associated to stem
-      DB_QuerySELECT (&mysql_res,"can not get media",
-		      "SELECT MedCod"		// row[0]
-		      " FROM tst_questions"
-		      " WHERE QstCod=%ld AND CrsCod=%ld",
-		      Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
+			        "SELECT MedCod"		// row[0]
+			        " FROM tst_questions"
+			        " WHERE QstCod=%ld AND CrsCod=%ld",
+			        Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
    else
       // Get media associated to answer
-      DB_QuerySELECT (&mysql_res,"can not get media",
-		      "SELECT MedCod"		// row[0]
-		      " FROM tst_answers"
-		      " WHERE QstCod=%ld AND AnsInd=%u",
-		      Gbl.Test.QstCod,(unsigned) NumOpt);
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
+			        "SELECT MedCod"		// row[0]
+			         " FROM tst_answers"
+			       " WHERE QstCod=%ld AND AnsInd=%u",
+			       Gbl.Test.QstCod,(unsigned) NumOpt);
 
-   row = mysql_fetch_row (mysql_res);
-
-   /***** Get media code (row[0]) *****/
-   MedCod = Str_ConvertStrCodToLongCod (row[0]);
+   if (NumRows)
+     {
+      if (NumRows == 1)
+	{
+	 /***** Get media code (row[0]) *****/
+	 row = mysql_fetch_row (mysql_res);
+	 MedCod = Str_ConvertStrCodToLongCod (row[0]);
+	}
+      else	// NumRows > 1
+	Lay_ShowErrorAndExit ("Duplicated media in database.");
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

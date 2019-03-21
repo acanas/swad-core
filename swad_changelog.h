@@ -459,10 +459,19 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.84.1 (2019-03-20)"
-#define CSS_FILE		"swad18.83.css"
-#define JS_FILE			"swad18.80.js"
+#define Log_PLATFORM_VERSION	"SWAD 18.85 (2019-03-21)"
+#define CSS_FILE		"swad18.85.css"
+#define JS_FILE			"swad18.85.js"
 /*
+	Version 18.85:    Mar 21, 2019 	New media: other embed media.
+					Width of timeline increased 30 pixels.
+					Fixed bug in creation of a test question, reported by Javier Fernández Baldomero. (240825 lines)
+					1 change necessary in database:
+ALTER TABLE media CHANGE COLUMN Type Type ENUM('none','jpg','gif','mp4','webm','ogg','youtube','embed') NOT NULL DEFAULT 'none';
+
+					Copy the following icon to icon public directory:
+sudo cp icon/code.svg /var/www/html/swad/icon/
+
 	Version 18.84.1:  Mar 20, 2019 	Added MIME type application/vnd.wolfram.mathematica.package, reported by José Martínez Aroza.
 					Conversion of BMP images to JPG, reported by José Martínez Aroza. (240587 lines)
 	Version 18.84:    Mar 20, 2019 	Temporary directories for download are created in a two level system to avoid overflow number of directories. (240582 lines)

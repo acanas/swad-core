@@ -49330,11 +49330,11 @@ const char *Txt_TIMELINE_Post_removed =
 #elif L==3	// en
 	"Post removed.";
 #elif L==4	// es
-	"Publicaci&oacute;n eliminada";
+	"Publicaci&oacute;n eliminada.";
 #elif L==5	// fr
 	"Publication supprim&eacute;e.";
 #elif L==6	// gn
-	"Publicaci&oacute;n eliminada";		// Okoteve traducción
+	"Publicaci&oacute;n eliminada.";		// Okoteve traducción
 #elif L==7	// it
 	"Pubblicazione rimossa.";
 #elif L==8	// pl

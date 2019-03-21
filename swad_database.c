@@ -1712,20 +1712,20 @@ mysql> DESCRIBE marks_properties;
    /***** Table media *****/
 /*
 mysql> DESCRIBE media;
-+--------+-------------------------------------------------------+------+-----+---------+----------------+
-| Field  | Type                                                  | Null | Key | Default | Extra          |
-+--------+-------------------------------------------------------+------+-----+---------+----------------+
-| MedCod | int(11)                                               | NO   | PRI | NULL    | auto_increment |
-| Type   | enum('none','jpg','gif','mp4','webm','ogg','youtube') | NO   | MUL | none    |                |
-| Name   | varchar(43)                                           | NO   |     |         |                |
-| URL    | varchar(255)                                          | NO   |     |         |                |
-| Title  | varchar(2047)                                         | NO   |     |         |                |
-+--------+-------------------------------------------------------+------+-----+---------+----------------+
++--------+---------------------------------------------------------------+------+-----+---------+----------------+
+| Field  | Type                                                          | Null | Key | Default | Extra          |
++--------+---------------------------------------------------------------+------+-----+---------+----------------+
+| MedCod | int(11)                                                       | NO   | PRI | NULL    | auto_increment |
+| Type   | enum('none','jpg','gif','mp4','webm','ogg','youtube','embed') | NO   | MUL | none    |                |
+| Name   | varchar(43)                                                   | NO   |     |         |                |
+| URL    | varchar(255)                                                  | NO   |     |         |                |
+| Title  | varchar(2047)                                                 | NO   |     |         |                |
++--------+---------------------------------------------------------------+------+-----+---------+----------------+
 5 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS media ("
 			"MedCod INT NOT NULL AUTO_INCREMENT,"
-			"Type ENUM('none','jpg','gif','mp4','webm','ogg','youtube') NOT NULL DEFAULT 'none',"
+			"Type ENUM('none','jpg','gif','mp4','webm','ogg','youtube','embed') NOT NULL DEFAULT 'none',"
 			"Name VARCHAR(43) NOT NULL DEFAULT '',"		// Med_BYTES_NAME
 			"URL VARCHAR(255) NOT NULL DEFAULT '',"		// Cns_MAX_BYTES_WWW
 			"Title VARCHAR(2047) NOT NULL DEFAULT '',"	// Med_MAX_BYTES_TITLE

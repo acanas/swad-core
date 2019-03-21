@@ -772,24 +772,31 @@ function AJAXCreateObject () {
 /*****************************************************************************/
 
 function mediaClickOnActivateUpload (id) {
-	var par_upl = document.getElementById (id + '_par_upl');
+	var par_upl	= document.getElementById (id + '_par_upl');
 
 	if (par_upl.disabled) {				// Click on highlighted icon
-		var par_emb	= document.getElementById (id + '_par_emb');
+		//  par_upl already got
+		var par_you = document.getElementById (id + '_par_you');
+		var par_emb = document.getElementById (id + '_par_emb');
+
 		var ico_upl	= document.getElementById (id + '_ico_upl');
+		var ico_you	= document.getElementById (id + '_ico_you');
 		var ico_emb	= document.getElementById (id + '_ico_emb');
+
 		var fil		= document.getElementById (id + '_fil');
 		var url		= document.getElementById (id + '_url');
 		var tit		= document.getElementById (id + '_tit');
 
-		// Disable embed and enable upload
-	    par_emb.disabled = true;		// Disable embed
+		// Enable embed, disable others
 	    par_upl.disabled = false;		// Enable upload
+	    par_you.disabled = true;		// Disable youtube
+	    par_emb.disabled = true;		// Disable embed
 
 		ico_upl.className = 'PREF_ON';	// Highlighted upload icon
+		ico_you.className = 'PREF_OFF';	// Normal youtube icon
 		ico_emb.className = 'PREF_OFF';	// Normal embed icon
 
-		fil.style.display = '';			// Show file input
+		fil.style.display  = '';		// Show file input
 		fil.disabled = false;			// Enable file input
 
 		url.style.display = '';			// Show URL input
@@ -799,26 +806,33 @@ function mediaClickOnActivateUpload (id) {
 		tit.disabled = false;			// Enable title input
 	}
 	else								// Click on shadowed icon
-	    mediaDisableUploadAndEmbed (id);				
+	    mediaDisableAll (id);
 }
 
-function mediaClickOnActivateEmbed (id) {
-	var par_emb	= document.getElementById (id + '_par_emb');
+function mediaClickOnActivateYoutube (id) {
+	var par_you	= document.getElementById (id + '_par_you');
 
-	if (par_emb.disabled) {				// Click on highlighted icon
+	if (par_you.disabled) {				// Click on highlighted icon
 		var par_upl = document.getElementById (id + '_par_upl');
+		//  par_you already got
+		var par_emb = document.getElementById (id + '_par_emb');
+
 		var ico_upl	= document.getElementById (id + '_ico_upl');
+		var ico_you	= document.getElementById (id + '_ico_you');
 		var ico_emb	= document.getElementById (id + '_ico_emb');
+
 		var fil		= document.getElementById (id + '_fil');
 		var url		= document.getElementById (id + '_url');
 		var tit		= document.getElementById (id + '_tit');
 
-		// Disable upload and enable embed
+		// Enable youtube, disable others
 	    par_upl.disabled = true;		// Disable upload
-	    par_emb.disabled = false;		// Enable embed
+	    par_you.disabled = false;		// Enable youtube
+	    par_emb.disabled = true;		// Disable embed
 
-		ico_emb.className = 'PREF_ON';	// Highlighted embed icon
 		ico_upl.className = 'PREF_OFF';	// Normal upload icon
+		ico_you.className = 'PREF_ON';	// Highlighted youtube icon
+		ico_emb.className = 'PREF_OFF';	// Normal embed icon
 
 		fil.style.display  = 'none';	// Hide file input
 		fil.disabled = true;			// Disable file input
@@ -830,22 +844,66 @@ function mediaClickOnActivateEmbed (id) {
 		tit.disabled = true;			// Disable title input
 	}
 	else								// Click on shadowed icon
-	    mediaDisableUploadAndEmbed (id);
+	    mediaDisableAll (id);
 }
 
-function mediaDisableUploadAndEmbed (id) {
-	var par_upl = document.getElementById (id + '_par_upl');
+function mediaClickOnActivateEmbed (id) {
 	var par_emb	= document.getElementById (id + '_par_emb');
+
+	if (par_emb.disabled) {				// Click on highlighted icon
+		var par_upl = document.getElementById (id + '_par_upl');
+		var par_you = document.getElementById (id + '_par_you');
+		//  par_emb already got
+
+		var ico_upl	= document.getElementById (id + '_ico_upl');
+		var ico_you	= document.getElementById (id + '_ico_you');
+		var ico_emb	= document.getElementById (id + '_ico_emb');
+
+		var fil		= document.getElementById (id + '_fil');
+		var url		= document.getElementById (id + '_url');
+		var tit		= document.getElementById (id + '_tit');
+
+		// Enable embed, disable others
+	    par_upl.disabled = true;		// Disable upload
+	    par_you.disabled = true;		// Disable youtube
+	    par_emb.disabled = false;		// Enable embed
+
+		ico_upl.className = 'PREF_OFF';	// Normal upload icon
+		ico_you.className = 'PREF_OFF';	// Normal youtube icon
+		ico_emb.className = 'PREF_ON';	// Highlighted embed icon
+
+		fil.style.display  = 'none';	// Hide file input
+		fil.disabled = true;			// Disable file input
+
+		url.style.display = '';			// Show URL input
+		url.disabled = false;			// Enable URL input
+
+		tit.style.display = 'none';		// Hide title input
+		tit.disabled = true;			// Disable title input
+	}
+	else								// Click on shadowed icon
+	    mediaDisableAll (id);
+}
+
+function mediaDisableAll (id) {
+	var par_upl = document.getElementById (id + '_par_upl');
+	var par_you	= document.getElementById (id + '_par_you');
+	var par_emb	= document.getElementById (id + '_par_emb');
+
 	var ico_upl	= document.getElementById (id + '_ico_upl');
+	var ico_you	= document.getElementById (id + '_ico_you');
 	var ico_emb	= document.getElementById (id + '_ico_emb');
+
 	var fil		= document.getElementById (id + '_fil');
 	var url		= document.getElementById (id + '_url');
 	var tit		= document.getElementById (id + '_tit');
 
     par_upl.disabled = true;		// Disable upload
+    par_you.disabled = true;		// Disable youtube
     par_emb.disabled = true;		// Disable embed
 
 	ico_upl.className = 'PREF_OFF';	// Normal upload icon
+	ico_you.className = 'PREF_OFF';	// Normal youtube icon
 	ico_emb.className = 'PREF_OFF';	// Normal embed icon
 
 	fil.style.display = 'none';		// Hide file input

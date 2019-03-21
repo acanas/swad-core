@@ -2774,6 +2774,29 @@ a:hover img.CENTRE_PHOTO_SHOW
 	height:100%;
 	}
 
+ /* Slideshare:
+    487 / 599 = 0,813021703
+    422 / 514 = 0,821011673
+    357 / 429 = 0,832167832
+    292 / 344 = 0,848837209 */
+.MED_EMBED_CONT	/* Adjust container height to get a 16:9 aspect ratio */
+	{
+	position:relative;
+	box-sizing:border-box;
+	margin:10px 0;
+	padding-bottom:56.25%;	/* percentage relative to width */
+	}
+.MED_EMBED_CONT iframe,
+.MED_EMBED_CONT object,
+.MED_EMBED_CONT embed
+	{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	}
+
 /********** Author of assignments, attendance, messages, surveys... **********/
 .AUTHOR_1_LINE
 	{
@@ -2898,12 +2921,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 @media only screen and (min-width: 800px)
 	{	/* For tablets and desktop */
-	.TL_WIDTH					{width:536px;}
-	.TL_RIGHT_WIDTH				{width:480px;}
-	.TL_RIGHT_AUTHOR_WIDTH		{width:320px;}
-	.TL_POST_MED_WIDTH			{width:440px;}
-	.TL_COMMENT_WIDTH			{width:440px;}
-	.TL_COMMENT_AUTHOR_WIDTH	{width:280px;}
+	.TL_WIDTH					{width:566px;}	/* 536 -> 566 */
+	.TL_RIGHT_WIDTH				{width:510px;}	/* 480 -> 510 */
+	.TL_RIGHT_AUTHOR_WIDTH		{width:350px;}	/* 320 -> 350 */
+	.TL_POST_MED_WIDTH			{width:470px;}	/* 440 -> 470 */
+	.TL_COMMENT_WIDTH			{width:470px;}	/* 440 -> 470 */
+	.TL_COMMENT_AUTHOR_WIDTH	{width:310px;}	/* 280 -> 310 */
 	}
 
 .TL_NEW_PUB

@@ -62,6 +62,7 @@ const char *Med_StringsTypeDB[Med_NUM_TYPES] =
    "webm",	// Med_WEBM
    "ogg",	// Med_OGG
    "youtube",	// Med_YOUTUBE
+   "embed",	// Med_EMBED
    };
 
 const char *Med_Extensions[Med_NUM_TYPES] =
@@ -73,6 +74,7 @@ const char *Med_Extensions[Med_NUM_TYPES] =
    "webm",	// Med_WEBM
    "ogg",	// Med_OGG
    "",		// Med_YOUTUBE
+   "",		// Med_EMBED
    };
 
 #define Med_MAX_SIZE_GIF (5UL * 1024UL * 1024UL)	// 5 MiB
@@ -82,13 +84,14 @@ const char *Med_Extensions[Med_NUM_TYPES] =
 /****************************** Internal types *******************************/
 /*****************************************************************************/
 
-#define Med_NUM_FORM_TYPES 3
+#define Med_NUM_FORM_TYPES 4
 
 typedef enum
   {
-   Med_FORM_UNKNOWN = 0,
+   Med_FORM_NONE    = 0,
    Med_FORM_FILE    = 1,
-   Med_FORM_EMBED   = 2,
+   Med_FORM_YOUTUBE = 2,
+   Med_FORM_EMBED   = 3,
   } Med_FormType_t;
 
 /*****************************************************************************/
@@ -131,6 +134,8 @@ static int Med_ResizeImage (struct Media *Media,
 static int Med_GetFirstFrame (const char PathFileOriginal[PATH_MAX + 1],
                               const char PathFileProcessed[PATH_MAX + 1]);
 
+static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
+                                              struct Media *Media);
 static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
                                             struct Media *Media);
 
@@ -148,6 +153,7 @@ static void Med_ShowVideo (struct Media *Media,
 			   const char PathMedPriv[PATH_MAX + 1],
 			   const char *ClassMedia);
 static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia);
+static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia);
 
 static Med_Type_t Med_GetTypeFromStrInDB (const char *Str);
 static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
@@ -335,11 +341,12 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    /***** Action to perform on media *****/
    Par_PutHiddenParamUnsigned (ParamUploadMedia.Action,(unsigned) Med_ACTION_NEW_MEDIA);
 
-   /***** Start icons *****/
+   /***** Icons *****/
+   /* Start icons */
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINERS\">"		// icons containers
 		      "<div class=\"PREF_CONTAINER\">");	// icons container
 
-   /***** Upload icon *****/
+   /* Upload icon */
    fprintf (Gbl.F.Out,"<div id=\"%s_ico_upl\""			// <id>_ico_upl
 		      " class=\"PREF_OFF\">"
 		      "<img src=\"%s/file-image.svg\""
@@ -352,7 +359,38 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
             Txt_Image_video,Txt_Image_video,
             Id);
 
-   /***** Form type *****/
+   /* YouTube icon */
+   fprintf (Gbl.F.Out,"<div id=\"%s_ico_you\""			// <id>_ico_you
+		      " class=\"PREF_OFF\">"
+		      "<img src=\"%s/youtube-brands.svg\""
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICO_HIGHLIGHT ICOx16\""
+	              " onclick=\"mediaClickOnActivateYouTube('%s');\" />"
+	              "</div>",					// <id>_ico_you
+            Id,
+	    Cfg_URL_ICON_PUBLIC,
+            "YouTube","YouTube",
+            Id);
+
+   /* Embed icon */
+   fprintf (Gbl.F.Out,"<div id=\"%s_ico_emb\""			// <id>_ico_emb
+		      " class=\"PREF_OFF\">"
+		      "<img src=\"%s/code.svg\""
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICO_HIGHLIGHT ICOx16\""
+	              " onclick=\"mediaClickOnActivateEmbed('%s');\" />"
+	              "</div>",					// <id>_ico_emb
+            Id,
+	    Cfg_URL_ICON_PUBLIC,
+            "Embed","Embed",
+            Id);
+
+   /* End icons */
+   fprintf (Gbl.F.Out,"</div>"					// icons container
+		      "</div>");				// icons containers
+
+   /***** Hidden field with form type *****/
+   /* Upload file */
    fprintf (Gbl.F.Out,"<input type=\"hidden\""
 		      " id=\"%s_par_upl\""			// <id>_par_upl
 		      " name=\"%s\" value=\"%u\""
@@ -360,34 +398,25 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 	    Id,ParamUploadMedia.FormType,
             (unsigned) Med_FORM_FILE);
 
-   /***** Embed icon *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s_ico_emb\""			// <id>_ico_emb
-		      " class=\"PREF_OFF\">"
-		      "<img src=\"%s/youtube-brands.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO_HIGHLIGHT ICOx16\""
-	              " onclick=\"mediaClickOnActivateEmbed('%s');\" />"
-	              "</div>",					// <id>_ico_emb
-            Id,
-	    Cfg_URL_ICON_PUBLIC,
-            "YouTube","YouTube",
-            Id);
+   /* YouTube embedded video */
+   fprintf (Gbl.F.Out,"<input type=\"hidden\""
+		      " id=\"%s_par_you\""			// <id>_par_you
+		      " name=\"%s\" value=\"%u\""
+		      " disabled=\"disabled\" />",
+	    Id,ParamUploadMedia.FormType,
+            (unsigned) Med_FORM_YOUTUBE);
 
-   /***** End icons *****/
-   fprintf (Gbl.F.Out,"</div>"					// icons container
-		      "</div>");				// icons containers
-
-   /***** Start input fields *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",			// input fields
-	    ClassInput);
-
-   /***** Form type *****/
+   /* Other embedded media */
    fprintf (Gbl.F.Out,"<input type=\"hidden\""
 		      " id=\"%s_par_emb\""			// <id>_par_emb
 		      " name=\"%s\" value=\"%u\""
 		      " disabled=\"disabled\" />",
 	    Id,ParamUploadMedia.FormType,
             (unsigned) Med_FORM_EMBED);
+
+   /***** Start input fields *****/
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",			// input fields
+	    ClassInput);
 
    /***** Media file *****/
    fprintf (Gbl.F.Out,"<input id=\"%s_fil\" type=\"file\""	// <id>_fil
@@ -471,36 +500,34 @@ void Med_GetMediaFromForm (int NumMediaInForm,struct Media *Media,
 		  Usr_GetURLFromForm (ParamUploadMedia.URL,Media);
 		  Usr_GetTitleFromForm (ParamUploadMedia.Title,Media);
 	         }
-               else
-                 {
-		  /* Create alert with warning */
-		  Ale_CreateAlert (Ale_WARNING,SectionForAlerts,
-				   Txt_Error_sending_or_processing_image_video);
+	       break;
+	    case Med_FORM_YOUTUBE:
+	       Media->Action = Med_ACTION_NEW_MEDIA;
 
-		  /* Reset media (no media will be saved into database) */
-		  Med_ResetMedia (Media);
-		 }
+	       /* Get and process embed YouTube video from form */
+	       Med_GetAndProcessYouTubeFromForm (ParamUploadMedia.URL,Media);
 	       break;
 	    case Med_FORM_EMBED:
 	       Media->Action = Med_ACTION_NEW_MEDIA;
 
-	       /* Get and process embed URL from form */
+	       /* Get and process other embed media from form */
 	       Med_GetAndProcessEmbedFromForm (ParamUploadMedia.URL,Media);
-
-	       /* Check status of media after getting and processing it */
-	       if (Media->Status != Med_PROCESSED)
-                 {
-		  /* Create alert with warning */
-		  Ale_CreateAlert (Ale_WARNING,SectionForAlerts,
-				   Txt_Error_sending_or_processing_image_video);
-
-		  /* Reset media (no media will be saved into database) */
-		  Med_ResetMedia (Media);
-		 }
 	       break;
 	    default:	// No media form selected
 	       Media->Action = Med_ACTION_NO_MEDIA;
 	       break;
+	   }
+
+	 /***** Check status of media *****/
+	 if (FormType != Med_FORM_NONE &&	// A media form is selected
+	     Media->Status != Med_PROCESSED)	// No media successfully processed
+	   {
+	    /* Create alert with warning */
+	    Ale_CreateAlert (Ale_WARNING,SectionForAlerts,
+			     Txt_Error_sending_or_processing_image_video);
+
+	    /* Reset media (no media will be saved into database) */
+	    Med_ResetMedia (Media);
 	   }
 	 break;
       case Med_ACTION_KEEP_MEDIA:	// Keep current image/video unchanged
@@ -580,7 +607,7 @@ static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUpl
    return (Med_FormType_t) Par_GetParToUnsignedLong (ParamUploadMedia->FormType,
                                                      0,
                                                      Med_NUM_FORM_TYPES - 1,
-                                                     (unsigned long) Med_FORM_UNKNOWN);
+                                                     (unsigned long) Med_FORM_NONE);
   }
 
 /*****************************************************************************/
@@ -961,11 +988,11 @@ static int Med_GetFirstFrame (const char PathFileOriginal[PATH_MAX + 1],
   }
 
 /*****************************************************************************/
-/**************************** Get media from form ****************************/
+/************* Get link from form and transform to YouTube code **************/
 /*****************************************************************************/
 
-static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
-                                            struct Media *Media)
+static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
+                                              struct Media *Media)
   {
    extern const char Str_BIN_TO_BASE64URL[64 + 1];
    char *PtrHost   = NULL;
@@ -980,6 +1007,7 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
       FULL,	// www.youtube.com/watch?
       EMBED,	// www.youtube.com/embed/
      } YouTube = WRONG;
+   bool CodeFound = false;
 
    /***** Set media status *****/
    Media->Status = Med_STATUS_NONE;
@@ -1101,20 +1129,77 @@ static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
 		     CodeLength = strspn (PtrCode,Str_BIN_TO_BASE64URL);
 		     if (CodeLength > 0 &&
 			 CodeLength <= Med_BYTES_NAME)
-		       {
-			/***** Success! *****/
-			/* Copy code */
-			strncpy (Media->Name,PtrCode,CodeLength);
-			Media->Name[CodeLength] = '\0';
-
-			Media->Type = Med_YOUTUBE;
-			Media->Status = Med_PROCESSED;
-		       }
+			CodeFound = true;	// Success!
 		    }
 		 }
 	      }
 	   }
 	}
+
+   /***** Set or reset media *****/
+   if (CodeFound)
+     {
+      /* Copy code */
+      strncpy (Media->Name,PtrCode,CodeLength);
+      Media->Name[CodeLength] = '\0';
+
+      /* Set media type and status */
+      Media->Type   = Med_EMBED;
+      Media->Status = Med_PROCESSED;
+     }
+   else
+      /* Reset media */
+      Med_ResetMedia (Media);
+  }
+
+/*****************************************************************************/
+/************************ Get embed link from form ***************************/
+/*****************************************************************************/
+
+static void Med_GetAndProcessEmbedFromForm (const char *ParamURL,
+                                            struct Media *Media)
+  {
+   extern const char Str_BIN_TO_BASE64URL[64 + 1];
+   char *PtrHost = NULL;
+   bool URLFound = false;
+
+   /***** Set media status *****/
+   Media->Status = Med_STATUS_NONE;
+
+   /***** Get embed URL from form *****/
+   Usr_GetURLFromForm (ParamURL,Media);
+
+   /***** Process URL trying to convert it to a YouTube embed URL *****/
+   if (Media->URL)
+      if (Media->URL[0])	// URL given by user is not empty
+	{
+	 /* Examples of valid embed URLs:
+	    //www.slideshare.net/slideshow/embed_code/key/yngasD9sIZ7GQV
+	 */
+	 /***** Step 1: Skip scheme *****/
+	 if      (!strncasecmp (Media->URL,"https://",8))	// URL starts by https://
+	    PtrHost = &Media->URL[8];
+	 else if (!strncasecmp (Media->URL,"http://" ,7))	// URL starts by http://
+	    PtrHost = &Media->URL[7];
+	 else if (!strncasecmp (Media->URL,"//"      ,2))	// URL starts by //
+	    PtrHost = &Media->URL[2];
+
+	 /***** Check if a URL is found *****/
+	 if (PtrHost)
+	    if (PtrHost[0])
+	       URLFound = true;	// Success!
+	}
+
+   /***** Set or reset media *****/
+   if (URLFound)
+     {
+      /* Set media type and status */
+      Media->Type   = Med_EMBED;
+      Media->Status = Med_PROCESSED;
+     }
+   else
+      /* Reset media */
+      Med_ResetMedia (Media);
   }
 
 /*****************************************************************************/
@@ -1172,49 +1257,58 @@ void Med_MoveMediaToDefinitiveDir (struct Media *Media)
    /***** Check trivial case *****/
    if (Media->Status == Med_PROCESSED)
      {
-      if (Media->Type == Med_YOUTUBE)
-	 // Nothing to do with files ==> Processing successfully finished
-	 Media->Status = Med_MOVED;	// Success
-      else
+      switch (Media->Type)
         {
-	 /***** Create private subdirectory for media if it does not exist *****/
-	 snprintf (PathMedPriv,sizeof (PathMedPriv),
-		   "%s/%c%c",
-		   Cfg_PATH_MEDIA_PRIVATE,
-		   Media->Name[0],
-		   Media->Name[1]);
-	 Fil_CreateDirIfNotExists (PathMedPriv);
+         case Med_JPG:
+         case Med_GIF:
+         case Med_MP4:
+         case Med_WEBM:
+         case Med_OGG:
+	    /***** Create private subdirectory for media if it does not exist *****/
+	    snprintf (PathMedPriv,sizeof (PathMedPriv),
+		      "%s/%c%c",
+		      Cfg_PATH_MEDIA_PRIVATE,
+		      Media->Name[0],
+		      Media->Name[1]);
+	    Fil_CreateDirIfNotExists (PathMedPriv);
 
-	 /***** Move files *****/
-	 switch (Media->Type)
-	   {
-	    case Med_JPG:
-	       /* Move JPG */
-	       if (Med_MoveTmpFileToDefDir (Media,PathMedPriv,
-					    Med_Extensions[Med_JPG]))
-                  Media->Status = Med_MOVED;	// Success
-	       break;
-	    case Med_GIF:
-	       /* Move PNG */
-	       if (Med_MoveTmpFileToDefDir (Media,PathMedPriv,
-					    "png"))
-		  /* Move GIF */
+	    /***** Move files *****/
+	    switch (Media->Type)
+	      {
+	       case Med_JPG:
+		  /* Move JPG */
 		  if (Med_MoveTmpFileToDefDir (Media,PathMedPriv,
-					       Med_Extensions[Med_GIF]))
+					       Med_Extensions[Med_JPG]))
 		     Media->Status = Med_MOVED;	// Success
-	       break;
-	    case Med_MP4:
-	    case Med_WEBM:
-	    case Med_OGG:
-	       /* Move MP4 or WEBM or OGG */
-	       if (Med_MoveTmpFileToDefDir (Media,PathMedPriv,
-					    Med_Extensions[Media->Type]))
-                  Media->Status = Med_MOVED;	// Success
-	       break;
-	    default:
-	       Lay_ShowErrorAndExit ("Wrong media type.");
-	       break;	// Not reached
-	   }
+		  break;
+	       case Med_GIF:
+		  /* Move PNG */
+		  if (Med_MoveTmpFileToDefDir (Media,PathMedPriv,
+					       "png"))
+		     /* Move GIF */
+		     if (Med_MoveTmpFileToDefDir (Media,PathMedPriv,
+						  Med_Extensions[Med_GIF]))
+			Media->Status = Med_MOVED;	// Success
+		  break;
+	       case Med_MP4:
+	       case Med_WEBM:
+	       case Med_OGG:
+		  /* Move MP4 or WEBM or OGG */
+		  if (Med_MoveTmpFileToDefDir (Media,PathMedPriv,
+					       Med_Extensions[Media->Type]))
+		     Media->Status = Med_MOVED;	// Success
+		  break;
+	       default:
+		  break;
+	      }
+            break;
+         case Med_YOUTUBE:
+         case Med_EMBED:
+	    // Nothing to do with files ==> Processing successfully finished
+	    Media->Status = Med_MOVED;	// Success
+            break;
+         default:
+            break;
         }
      }
 
@@ -1276,7 +1370,7 @@ void Med_StoreMediaInDB (struct Media *Media)
 					        " VALUES"
 					        " ('%s','%s','%s','%s')",
 					        Med_GetStringTypeForDB (Media->Type),
-					        Media->Name,
+					        Media->Name  ? Media->Name  : "",
 					        Media->URL   ? Media->URL   : "",
 					        Media->Title ? Media->Title : "");
    Media->Status = Med_STORED_IN_DB;
@@ -1301,56 +1395,70 @@ void Med_ShowMedia (struct Media *Media,
    /***** Start media container *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassContainer);
 
-   if (Media->Type == Med_YOUTUBE)
-      /***** Show media *****/
-      Med_ShowYoutube (Media,ClassMedia);
-   else	// Uploaded file
+   switch (Media->Type)
      {
-      /***** If no media to show ==> nothing to do *****/
-      if (!Media->Name)
-	 return;
-      if (!Media->Name[0])
-	 return;
+      case Med_JPG:
+      case Med_GIF:
+      case Med_MP4:
+      case Med_WEBM:
+      case Med_OGG:
+	 /***** Show uploaded file *****/
+	 /* If no media to show ==> nothing to do */
+	 if (!Media->Name)
+	    return;
+	 if (!Media->Name[0])
+	    return;
 
-      /***** Start optional link to external URL *****/
-      PutLink = false;
-      if (Media->URL)
-	 if (Media->URL[0])
-	    PutLink = true;
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Media->URL);
+	 /* Start optional link to external URL */
+	 PutLink = false;
+	 if (Media->URL)
+	    if (Media->URL[0])
+	       PutLink = true;
+	 if (PutLink)
+	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Media->URL);
 
-      /***** Create a temporary public directory used to show the media *****/
-      Brw_CreateDirDownloadTmp ();
+	 /* Create a temporary public directory used to show the media */
+	 Brw_CreateDirDownloadTmp ();
 
-      /***** Build path to private directory with the media *****/
-      snprintf (PathMedPriv,sizeof (PathMedPriv),
-		"%s/%c%c",
-		Cfg_PATH_MEDIA_PRIVATE,
-		Media->Name[0],
-		Media->Name[1]);
+	 /* Build path to private directory with the media */
+	 snprintf (PathMedPriv,sizeof (PathMedPriv),
+		   "%s/%c%c",
+		   Cfg_PATH_MEDIA_PRIVATE,
+		   Media->Name[0],
+		   Media->Name[1]);
 
-      /***** Show media *****/
-      switch (Media->Type)
-	{
-	 case Med_JPG:
-	    Med_ShowJPG (Media,PathMedPriv,ClassMedia);
-	    break;
-	 case Med_GIF:
-	    Med_ShowGIF (Media,PathMedPriv,ClassMedia);
-	    break;
-	 case Med_MP4:
-	 case Med_WEBM:
-	 case Med_OGG:
-	    Med_ShowVideo (Media,PathMedPriv,ClassMedia);
-	    break;
-	 default:
-	    break;
-	}
+	 /* Show media */
+	 switch (Media->Type)
+	   {
+	    case Med_JPG:
+	       Med_ShowJPG (Media,PathMedPriv,ClassMedia);
+	       break;
+	    case Med_GIF:
+	       Med_ShowGIF (Media,PathMedPriv,ClassMedia);
+	       break;
+	    case Med_MP4:
+	    case Med_WEBM:
+	    case Med_OGG:
+	       Med_ShowVideo (Media,PathMedPriv,ClassMedia);
+	       break;
+	    default:
+	       break;
+	   }
 
-      /***** End optional link to external URL *****/
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"</a>");
+	 /* End optional link to external URL */
+	 if (PutLink)
+	    fprintf (Gbl.F.Out,"</a>");
+	 break;
+      case Med_YOUTUBE:
+	 /***** Show embed YouTube video *****/
+	 Med_ShowYoutube (Media,ClassMedia);
+	 break;
+      case Med_EMBED:
+	 /***** Show other embed media *****/
+	 Med_ShowEmbed (Media,ClassMedia);
+	 break;
+      default:
+	 break;
      }
 
    /***** End media container *****/
@@ -1548,7 +1656,7 @@ static void Med_ShowVideo (struct Media *Media,
   }
 
 /*****************************************************************************/
-/*************************** Show an embed media *****************************/
+/*********************** Show an embed YouTube video *************************/
 /*****************************************************************************/
 
 static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
@@ -1562,7 +1670,7 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
       if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies)
         {
 	 /***** Show linked external media *****/
-	 // Example of code give by YouTube:
+	 // Example of code given by YouTube:
 	 // <iframe width="560" height="315"
 	 // 	src="https://www.youtube.com/embed/xu9IbeF9CBw"
 	 // 	frameborder="0"
@@ -1577,6 +1685,60 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
 			    " allowfullscreen=\"allowfullscreen\""
 			    " class=\"%s\"",
 		  Media->Name,ClassMedia);
+	 if (Media->Title)
+	    if (Media->Title[0])
+	       fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
+	 fprintf (Gbl.F.Out,">"
+			    "</iframe>"
+			    "</div>");
+        }
+      else
+        {
+	 /***** Alert to inform about third party cookies *****/
+	 /* Start alert */
+	 Ale_ShowAlertAndButton1 (Ale_INFO,Txt_To_watch_YouTube_videos_you_have_to_accept_third_party_cookies_in_your_personal_settings);
+
+	 /* Put form to change cookies preferences */
+         if (!Gbl.Form.Inside)
+      	    Lay_PutContextualLinkIconText (ActReqEdiPrf,Coo_COOKIES_ID,NULL,
+					   "cog.svg",
+					   Txt_Settings);
+
+	 /* End alert */
+	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
+        }
+     }
+  }
+
+/*****************************************************************************/
+/*************************** Show an embed media *****************************/
+/*****************************************************************************/
+
+static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia)
+  {
+   extern const char *Txt_To_watch_YouTube_videos_you_have_to_accept_third_party_cookies_in_your_personal_settings;
+   extern const char *Txt_Settings;
+
+   /***** Check if embed URL exists *****/
+   if (Media->URL[0])	// Embed URL
+     {
+      if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies)
+        {
+	 /***** Show linked external media *****/
+	 // Example of code given by Slideshare:
+	 // <iframe src="//www.slideshare.net/slideshow/embed_code/key/yngasD9sIZ7GQV"
+	 // 	width="595" height="485" frameborder="0"
+	 // 	marginwidth="0" marginheight="0" scrolling="no"
+	 // 	style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;"
+	 // 	allowfullscreen>
+	 // </iframe>
+	 fprintf (Gbl.F.Out,"<div class=\"MED_EMBED_CONT\">"
+			    "<iframe src=\"%s\""
+			    " frameborder=\"0\""
+	 	            " marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\""
+			    " allowfullscreen=\"allowfullscreen\""
+			    " class=\"%s\"",
+		 Media->URL,ClassMedia);
 	 if (Media->Title)
 	    if (Media->Title[0])
 	       fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
@@ -1648,56 +1810,65 @@ void Med_RemoveMedia (long MedCod)
    Med_GetMediaDataByCod (&Media);
 
    /***** Step 1. Remove media files from filesystem *****/
-   if (Media.Type != Med_TYPE_NONE &&
-       Media.Type != Med_YOUTUBE &&
-       Media.Name[0])
+   switch (Media.Type)
      {
-      /***** Build path to private directory with the media *****/
-      snprintf (PathMedPriv,sizeof (PathMedPriv),
-		"%s/%c%c",
-		Cfg_PATH_MEDIA_PRIVATE,
-		Media.Name[0],
-		Media.Name[1]);
+      case Med_JPG:
+      case Med_GIF:
+      case Med_MP4:
+      case Med_WEBM:
+      case Med_OGG:
+	 if (Media.Name[0])
+	   {
+	    /***** Build path to private directory with the media *****/
+	    snprintf (PathMedPriv,sizeof (PathMedPriv),
+		      "%s/%c%c",
+		      Cfg_PATH_MEDIA_PRIVATE,
+		      Media.Name[0],
+		      Media.Name[1]);
 
-      /***** Remove files *****/
-      switch (Media.Type)
-	{
-	 case Med_JPG:
-	    /***** Remove private JPG file *****/
-	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		      "%s/%s.%s",
-		      PathMedPriv,Media.Name,Med_Extensions[Med_JPG]);
-	    unlink (FullPathMediaPriv);
+	    /***** Remove files *****/
+	    switch (Media.Type)
+	      {
+	       case Med_JPG:
+		  /***** Remove private JPG file *****/
+		  snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+			    "%s/%s.%s",
+			    PathMedPriv,Media.Name,Med_Extensions[Med_JPG]);
+		  unlink (FullPathMediaPriv);
 
-	    break;
-	 case Med_GIF:
-	    /***** Remove private GIF file *****/
-	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		      "%s/%s.%s",
-		      PathMedPriv,Media.Name,Med_Extensions[Med_GIF]);
-	    unlink (FullPathMediaPriv);
+		  break;
+	       case Med_GIF:
+		  /***** Remove private GIF file *****/
+		  snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+			    "%s/%s.%s",
+			    PathMedPriv,Media.Name,Med_Extensions[Med_GIF]);
+		  unlink (FullPathMediaPriv);
 
-	    /***** Remove private PNG file *****/
-	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		      "%s/%s.png",
-		      PathMedPriv,Media.Name);
-	    unlink (FullPathMediaPriv);
+		  /***** Remove private PNG file *****/
+		  snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+			    "%s/%s.png",
+			    PathMedPriv,Media.Name);
+		  unlink (FullPathMediaPriv);
 
-	    break;
-	 case Med_MP4:
-	 case Med_WEBM:
-	 case Med_OGG:
-	    /***** Remove private video file *****/
-	    snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
-		      "%s/%s.%s",
-		      PathMedPriv,Media.Name,Med_Extensions[Media.Type]);
-	    unlink (FullPathMediaPriv);
+		  break;
+	       case Med_MP4:
+	       case Med_WEBM:
+	       case Med_OGG:
+		  /***** Remove private video file *****/
+		  snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+			    "%s/%s.%s",
+			    PathMedPriv,Media.Name,Med_Extensions[Media.Type]);
+		  unlink (FullPathMediaPriv);
 
-	    break;
-	 default:
-	    break;
-	}
-      // Public links are removed automatically after a period
+		  break;
+	       default:
+		  break;
+	      }
+	    // Public links are removed automatically after a period
+	   }
+	 break;
+      default:
+	 break;
      }
 
    /***** Step 2. Remove entry for this media from database *****/
