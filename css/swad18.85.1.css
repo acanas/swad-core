@@ -2910,23 +2910,23 @@ a:hover img.CENTRE_PHOTO_SHOW
 	vertical-align:middle;
 	}
 
-@media only screen and (max-width: 800px)
-	{	/* For mobile-phones */
-	.TL_WIDTH					{width:316px;}	/* 536-220 */
-	.TL_RIGHT_WIDTH				{width:260px;}	/* 480-220 */
-	.TL_RIGHT_AUTHOR_WIDTH		{width:100px;}	/* 320-220 */
-	.TL_POST_MED_WIDTH			{width:220px;}	/* 440-220 */
-	.TL_COMMENT_WIDTH			{width:220px;}	/* 440-220 */
-	.TL_COMMENT_AUTHOR_WIDTH	{width: 60px;}	/* 280-220 */
+@media only screen and (max-width: 590px)
+	{	/* For mobile-phones (maximum width visible on Moto G4 vertical) */
+	.TL_WIDTH					{width:316px;}	/* 556-240 */
+	.TL_RIGHT_WIDTH				{width:260px;}	/* 500-240 */
+	.TL_RIGHT_AUTHOR_WIDTH		{width:100px;}	/* 340-240 */
+	.TL_POST_MED_WIDTH			{width:220px;}	/* 460-240 */
+	.TL_COMMENT_WIDTH			{width:220px;}	/* 460-240 */
+	.TL_COMMENT_AUTHOR_WIDTH	{width: 60px;}	/* 300-240 */
 	}
-@media only screen and (min-width: 800px)
-	{	/* For tablets and desktop */
-	.TL_WIDTH					{width:566px;}	/* 536 -> 566 */
-	.TL_RIGHT_WIDTH				{width:510px;}	/* 480 -> 510 */
-	.TL_RIGHT_AUTHOR_WIDTH		{width:350px;}	/* 320 -> 350 */
-	.TL_POST_MED_WIDTH			{width:470px;}	/* 440 -> 470 */
-	.TL_COMMENT_WIDTH			{width:470px;}	/* 440 -> 470 */
-	.TL_COMMENT_AUTHOR_WIDTH	{width:310px;}	/* 280 -> 310 */
+@media only screen and (min-width: 590px)
+	{	/* For tablets and desktop (maximum width visible on Moto G4 horizontal) */
+	.TL_WIDTH					{width:556px;}
+	.TL_RIGHT_WIDTH				{width:500px;}
+	.TL_RIGHT_AUTHOR_WIDTH		{width:340px;}
+	.TL_POST_MED_WIDTH			{width:460px;}
+	.TL_COMMENT_WIDTH			{width:460px;}
+	.TL_COMMENT_AUTHOR_WIDTH	{width:300px;}
 	}
 
 .TL_NEW_PUB

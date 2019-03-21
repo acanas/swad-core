@@ -365,7 +365,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 		      "<img src=\"%s/youtube-brands.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO_HIGHLIGHT ICOx16\""
-	              " onclick=\"mediaClickOnActivateYouTube('%s');\" />"
+	              " onclick=\"mediaClickOnActivateYoutube('%s');\" />"
 	              "</div>",					// <id>_ico_you
             Id,
 	    Cfg_URL_ICON_PUBLIC,

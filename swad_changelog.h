@@ -459,12 +459,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.85 (2019-03-21)"
-#define CSS_FILE		"swad18.85.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.85.1 (2019-03-21)"
+#define CSS_FILE		"swad18.85.1.css"
 #define JS_FILE			"swad18.85.js"
 /*
+	Version 18.85.1:  Mar 21, 2019 	Fixed bug in form to link YouTube videos.
+					Changes in CSS. (240827 lines)
 	Version 18.85:    Mar 21, 2019 	New media: other embed media.
-					Width of timeline increased 30 pixels.
+					Width of timeline increased 20 pixels.
 					Fixed bug in creation of a test question, reported by Javier Fernández Baldomero. (240825 lines)
 					1 change necessary in database:
 ALTER TABLE media CHANGE COLUMN Type Type ENUM('none','jpg','gif','mp4','webm','ogg','youtube','embed') NOT NULL DEFAULT 'none';
