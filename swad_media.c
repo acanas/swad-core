@@ -1661,7 +1661,7 @@ static void Med_ShowVideo (struct Media *Media,
 
 static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
   {
-   extern const char *Txt_To_watch_YouTube_videos_you_have_to_accept_third_party_cookies_in_your_personal_settings;
+   extern const char *Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings;
    extern const char *Txt_Settings;
 
    /***** Check if embed URL exists *****/
@@ -1696,7 +1696,7 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
         {
 	 /***** Alert to inform about third party cookies *****/
 	 /* Start alert */
-	 Ale_ShowAlertAndButton1 (Ale_INFO,Txt_To_watch_YouTube_videos_you_have_to_accept_third_party_cookies_in_your_personal_settings);
+	 Ale_ShowAlertAndButton1 (Ale_INFO,Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings);
 
 	 /* Put form to change cookies preferences */
          if (!Gbl.Form.Inside)
@@ -1716,7 +1716,7 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
 
 static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia)
   {
-   extern const char *Txt_To_watch_YouTube_videos_you_have_to_accept_third_party_cookies_in_your_personal_settings;
+   extern const char *Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings;
    extern const char *Txt_Settings;
 
    /***** Check if embed URL exists *****/
@@ -1750,7 +1750,7 @@ static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia)
         {
 	 /***** Alert to inform about third party cookies *****/
 	 /* Start alert */
-	 Ale_ShowAlertAndButton1 (Ale_INFO,Txt_To_watch_YouTube_videos_you_have_to_accept_third_party_cookies_in_your_personal_settings);
+	 Ale_ShowAlertAndButton1 (Ale_INFO,Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings);
 
 	 /* Put form to change cookies preferences */
          if (!Gbl.Form.Inside)

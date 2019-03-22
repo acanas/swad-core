@@ -473,25 +473,34 @@ const char *Txt_Absents =
 	"Assentes";
 #endif
 
-const char *Txt_Accept_third_party_cookies_to_watch_YouTube_videos =
+const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites =
 #if   L==1	// ca
-	"Accepta cookies de tercers per poder veure v&iacute;deos de YouTube";
+	"Accepta cookies de tercers"
+	" per veure contingut multim&iacute;dia de outros sites";
 #elif L==2	// de
-	"Akzeptieren Sie Cookies von Drittanbietern, um YouTube-Videos anzusehen";
+	"Akzeptieren Sie Cookies von Drittanbietern,"
+	" um Multimedia-Inhalte von anderen Websites anzuzeigen";
 #elif L==3	// en
-	"Accept third-party cookies to watch YouTube videos";
+	"Accept third-party cookies"
+	" to view multimedia content from other websites";
 #elif L==4	// es
-	"Aceptar cookies de terceros para poder ver v&iacute;deos de YouTube";
+	"Aceptar cookies de terceros"
+	" para ver contenido multimedia de otros sitios web";
 #elif L==5	// fr
-	"Acceptez les cookies tiers pour regarder des vid&eacute;os YouTube";
+	"Accepter les cookies de tiers"
+	" pour afficher le contenu multim&eacute;dia d'autres sites Web";
 #elif L==6	// gn
-	"Aceptar cookies de terceros para poder ver v&iacute;deos de YouTube";	// Okoteve traducción
+	"Aceptar cookies de terceros"
+	" para ver contenido multimedia de otros sitios web";	// Okoteve traducción
 #elif L==7	// it
-	"Accetta i cookie di terze parti per guardare i video di YouTube";
+	"Accetta i cookie di terze parti"
+	" per visualizzare contenuti multimediali da altri siti Web";
 #elif L==8	// pl
-	"Akceptuj pliki cookie innych firm, aby ogl&aogon;da&cacute; filmy z YouTube";
+	"Akceptuj pliki cookie innych firm,"
+	" aby wy&sacute;wietla&cacute; tre&sacute;ci multimedialne z innych stron internetowych";
 #elif L==9	// pt
-	"Aceite cookies de terceiros para assistir a v&iacute;deos do YouTube";
+	"Aceite cookies de terceiros"
+	" para visualizar conte&uacute;do multimídia de outros sites";
 #endif
 
 const char *Txt_accessible_for_reading_and_writing_by_administrators_of_the_centre =
@@ -49865,41 +49874,41 @@ const char *Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_ =	
 	" &agrave; lista de sites permitidos no painel de controle Java.";
 #endif
 
-const char *Txt_To_watch_YouTube_videos_you_have_to_accept_third_party_cookies_in_your_personal_settings =
+const char *Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings =
 #if   L==1	// ca
-	"Per veure v&iacute;deos de YouTube"
+	"Per veure contingut multim&egrave;dia d'un altre lloc web"
 	" ha d'acceptar les cookies de tercers"
 	" en les seves par&agrave;metres personals.";
 #elif L==2	// de
-	"Um YouTube-Videos anzusehen,"
+	"Um Multimedia-Inhalte von einer anderen Website anzuzeigen,"
 	" m&uuml;ssen Sie in Ihren pers&ouml;nlichen Einstellungen Cookies"
 	" von Drittanbietern akzeptieren.";
 #elif L==3	// en
-	"To watch YouTube videos"
-	" you have to accept third-party cookies"
+	"To watch multimedia content from another website"
+	" you have to accept third party cookies"
 	" in your personal settings.";
 #elif L==4	// es
-	"Para ver v&iacute;deos de YouTube"
+	"Para ver contenido multimedia de otro sitio web"
 	" tiene que aceptar las cookies de terceros"
 	" en sus ajustes personales.";
 #elif L==5	// fr
-	"Pour regarder des vid&eacute;os YouTube,"
+	"Pour regarder le contenu multim&eacute;dia d'un autre site Web,"
 	" vous devez accepter les cookies de tiers"
 	" dans vos r&eacute;glages personnels.";
 #elif L==6	// gn
-	"Para ver v&iacute;deos de YouTube"
+	"Para ver contenido multimedia de otro sitio web"
 	" tiene que aceptar las cookies de terceros"
 	" en sus ajustes personales.";
 #elif L==7	// it
-	"Per guardare i video di YouTube"
+	"Per visualizzare i contenuti multimediali di un altro sito web"
 	" devi accettare i cookie di terze parti"
 	" nelle tue impostazioni personali.";
 #elif L==8	// pl
-	"Aby ogl&aogon;da&cacute; filmy z YouTube,"
+	"Aby przegl&aogon;da&cacute; tre&sacute;ci multimedialne z innej strony,"
 	" musisz zaakceptowa&cacute; pliki cookie innych firm"
 	" w swoich ustawieniach osobistych.";
 #elif L==9	// pt
-	"Para assistir a v&iacute;deos do YouTube,"
+	"Para visualizar o conte&uacute;do multimídia de outro site,"
 	" voc&ecirc; precisa aceitar cookies de terceiros"
 	" nas suas configura&ccedil;&otilde;es pessoais.";
 #endif

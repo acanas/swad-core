@@ -459,10 +459,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.85.1 (2019-03-21)"
+#define Log_PLATFORM_VERSION	"SWAD 18.85.2 (2019-03-22)"
 #define CSS_FILE		"swad18.85.1.css"
 #define JS_FILE			"swad18.85.js"
 /*
+	Version 18.85.2:  Mar 22, 2019 	Changed text related to third-party cookies. (240837 lines)
 	Version 18.85.1:  Mar 21, 2019 	Fixed bug in form to link YouTube videos.
 					Changes in CSS. (240827 lines)
 	Version 18.85:    Mar 21, 2019 	New media: other embed media.
