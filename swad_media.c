@@ -154,6 +154,7 @@ static void Med_ShowVideo (struct Media *Media,
 			   const char *ClassMedia);
 static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia);
 static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia);
+static void Med_AlertThirdPartyCookies (void);
 
 static Med_Type_t Med_GetTypeFromStrInDB (const char *Str);
 static Med_Type_t Med_GetTypeFromExtAndMIME (const char *Extension,
@@ -1661,11 +1662,8 @@ static void Med_ShowVideo (struct Media *Media,
 
 static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
   {
-   extern const char *Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings;
-   extern const char *Txt_Settings;
-
-   /***** Check if embed URL exists *****/
-   if (Media->URL[0])	// Embed URL
+   /***** Check if YouTube code exists *****/
+   if (Media->Name[0])	// YouTube code
      {
       if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies)
         {
@@ -1693,20 +1691,8 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
 			    "</div>");
         }
       else
-        {
-	 /***** Alert to inform about third party cookies *****/
-	 /* Start alert */
-	 Ale_ShowAlertAndButton1 (Ale_INFO,Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings);
-
-	 /* Put form to change cookies preferences */
-         if (!Gbl.Form.Inside)
-      	    Lay_PutContextualLinkIconText (ActReqEdiPrf,Coo_COOKIES_ID,NULL,
-					   "cog.svg",
-					   Txt_Settings);
-
-	 /* End alert */
-	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
-        }
+         /***** Alert to inform about third party cookies *****/
+	 Med_AlertThirdPartyCookies ();
      }
   }
 
@@ -1716,9 +1702,6 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
 
 static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia)
   {
-   extern const char *Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings;
-   extern const char *Txt_Settings;
-
    /***** Check if embed URL exists *****/
    if (Media->URL[0])	// Embed URL
      {
@@ -1747,21 +1730,32 @@ static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia)
 			    "</div>");
         }
       else
-        {
-	 /***** Alert to inform about third party cookies *****/
-	 /* Start alert */
-	 Ale_ShowAlertAndButton1 (Ale_INFO,Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings);
-
-	 /* Put form to change cookies preferences */
-         if (!Gbl.Form.Inside)
-      	    Lay_PutContextualLinkIconText (ActReqEdiPrf,Coo_COOKIES_ID,NULL,
-					   "cog.svg",
-					   Txt_Settings);
-
-	 /* End alert */
-	 Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
-        }
+         /***** Alert to inform about third party cookies *****/
+	 Med_AlertThirdPartyCookies ();
      }
+  }
+
+/*****************************************************************************/
+/********** Remove several media files and entries in database ***************/
+/*****************************************************************************/
+
+static void Med_AlertThirdPartyCookies (void)
+  {
+   extern const char *Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings;
+   extern const char *Txt_Settings;
+
+   /***** Alert to inform about third party cookies *****/
+   /* Start alert */
+   Ale_ShowAlertAndButton1 (Ale_INFO,Txt_To_watch_multimedia_content_from_another_website_you_have_to_accept_third_party_cookies_in_your_personal_settings);
+
+   /* Put form to change cookies preferences */
+   if (!Gbl.Form.Inside)
+      Lay_PutContextualLinkIconText (ActReqEdiPrf,Coo_COOKIES_ID,NULL,
+				     "cog.svg",
+				     Txt_Settings);
+
+   /* End alert */
+   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
   }
 
 /*****************************************************************************/
