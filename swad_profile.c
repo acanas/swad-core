@@ -282,7 +282,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Check if I can see the public profile *****/
-   if (Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat))
+   if (Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat))
      {
       /***** Contextual links *****/
       if (Gbl.Usrs.Me.Logged)
@@ -316,24 +316,28 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	}
       Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat,NULL);
 
-      /***** Show details of user's profile *****/
-      Prf_ShowDetailsUserProfile (UsrDat);
+      /***** Extended profile *****/
+      if (Pri_ShowingIsAllowed (UsrDat->ExPrfVisibility,UsrDat))
+        {
+         /***** Show details of user's profile *****/
+         Prf_ShowDetailsUserProfile (UsrDat);
 
-      /***** Count following and followers *****/
-      Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
-      UsrFollowsMe = false;
-      if (NumFollowing)
-         UsrFollowsMe = Fol_CheckUsrIsFollowerOf (UsrDat->UsrCod,
-                                                  Gbl.Usrs.Me.UsrDat.UsrCod);
-      IFollowUsr   = false;
-      if (NumFollowers)
-         IFollowUsr   = Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                                  UsrDat->UsrCod);
+	 /***** Count following and followers *****/
+	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
+	 UsrFollowsMe = false;
+	 if (NumFollowing)
+	    UsrFollowsMe = Fol_CheckUsrIsFollowerOf (UsrDat->UsrCod,
+						     Gbl.Usrs.Me.UsrDat.UsrCod);
+	 IFollowUsr   = false;
+	 if (NumFollowers)
+	    IFollowUsr   = Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
+						     UsrDat->UsrCod);
 
-      /***** Show following and followers *****/
-      Fol_ShowFollowingAndFollowers (UsrDat,
-                                     NumFollowing,NumFollowers,
-                                     UsrFollowsMe,IFollowUsr);
+	 /***** Show following and followers *****/
+	 Fol_ShowFollowingAndFollowers (UsrDat,
+					NumFollowing,NumFollowers,
+					UsrFollowsMe,IFollowUsr);
+        }
 
       return true;
      }
@@ -344,19 +348,38 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 /******************** Change my public profile visibility ********************/
 /*****************************************************************************/
 
-void Prf_ChangeProfileVisibility (void)
+void Prf_ChangeBasicProfileVis (void)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
 
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.ProfileVisibility = Pri_GetParamVisibility ("VisPrf");
+   Gbl.Usrs.Me.UsrDat.BaPrfVisibility = Pri_GetParamVisibility ("VisBasPrf");
 
    /***** Store public/private photo in database *****/
    DB_QueryUPDATE ("can not update your preference"
 		   " about public profile visibility",
-		   "UPDATE usr_data SET ProfileVisibility='%s'"
+		   "UPDATE usr_data SET BaPrfVisibility='%s'"
 		   " WHERE UsrCod=%ld",
-                   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.ProfileVisibility],
+                   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.BaPrfVisibility],
+                   Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   /***** Show form again *****/
+   Pre_EditPrefs ();
+  }
+
+void Prf_ChangeExtendedProfileVis (void)
+  {
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+
+   /***** Get param with public/private photo *****/
+   Gbl.Usrs.Me.UsrDat.ExPrfVisibility = Pri_GetParamVisibility ("VisExtPrf");
+
+   /***** Store public/private photo in database *****/
+   DB_QueryUPDATE ("can not update your preference"
+		   " about public profile visibility",
+		   "UPDATE usr_data SET ExPrfVisibility='%s'"
+		   " WHERE UsrCod=%ld",
+                   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.ExPrfVisibility],
                    Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show form again *****/
@@ -1732,7 +1755,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    extern const char *Txt_Another_user_s_profile;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
+   bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
    fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE COLOR%u\""
 	              " style=\"height:50px;\">"

@@ -2779,7 +2779,8 @@ mysql> DESCRIBE usr_data;
 | DateFormat        | tinyint(4)                                       | NO   | MUL | 0       |                |
 | Photo             | char(43)                                         | NO   |     |         |                |
 | PhotoVisibility   | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
-| ProfileVisibility | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
+| BaPrfVisibility   | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
+| ExPrfVisibility   | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
 | CtyCod            | int(11)                                          | NO   | MUL | -1      |                |
 | InsCtyCod         | int(11)                                          | NO   | MUL | -1      |                |
 | InsCod            | int(11)                                          | NO   | MUL | -1      |                |
@@ -2800,7 +2801,7 @@ mysql> DESCRIBE usr_data;
 | NotifNtfEvents    | int(11)                                          | NO   |     | 0       |                |
 | EmailNtfEvents    | int(11)                                          | NO   |     | 0       |                |
 +-------------------+--------------------------------------------------+------+-----+---------+----------------+
-34 rows in set (0.00 sec)
+35 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
 			"UsrCod INT NOT NULL AUTO_INCREMENT,"
@@ -2817,7 +2818,8 @@ mysql> DESCRIBE usr_data;
 			"DateFormat TINYINT NOT NULL DEFAULT 0,"
 			"Photo CHAR(43) NOT NULL DEFAULT '',"					// Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
 			"PhotoVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
-			"ProfileVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
+			"BaPrfVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
+			"ExPrfVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
 			"CtyCod INT NOT NULL DEFAULT -1,"
 			"InsCtyCod INT NOT NULL DEFAULT -1,"
 			"InsCod INT NOT NULL DEFAULT -1,"
@@ -2845,7 +2847,8 @@ mysql> DESCRIBE usr_data;
 		   "INDEX(FirstDayOfWeek),"
 		   "INDEX(DateFormat),"
 		   "INDEX(PhotoVisibility),"
-		   "INDEX(ProfileVisibility),"
+		   "INDEX(BaPrfVisibility),"
+		   "INDEX(ExPrfVisibility),"
 		   "INDEX(CtyCod),"
 		   "INDEX(InsCtyCod),"
 		   "INDEX(InsCod),"

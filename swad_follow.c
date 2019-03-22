@@ -318,7 +318,7 @@ static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
 			  " WHERE usr_follow.FollowerCod=my_followed.FollowedCod"
 			  " AND usr_follow.FollowedCod<>%ld"
 			  " AND usr_follow.FollowedCod=usr_data.UsrCod"
-			  " AND usr_data.ProfileVisibility IN ('%s','%s')"
+			  " AND usr_data.BaPrfVisibility IN ('%s','%s')"
 			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
 			  " AND usr_data.FirstName<>''"	// First name not empty
 			  "%s"				// SubQuery1
@@ -336,7 +336,7 @@ static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
 			  " WHERE crs_usr.CrsCod=my_crs.CrsCod"
 			  " AND crs_usr.UsrCod<>%ld"
 			  " AND crs_usr.UsrCod=usr_data.UsrCod"
-			  " AND usr_data.ProfileVisibility IN ('%s','%s','%s')"
+			  " AND usr_data.BaPrfVisibility IN ('%s','%s','%s')"
 			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
 			  " AND usr_data.FirstName<>''"	// First name not empty
 			  "%s"				// SubQuery2
@@ -353,7 +353,7 @@ static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
 			  " WHERE crs_usr.CrsCod=my_crs_role.CrsCod"
 			  " AND crs_usr.Role<>my_crs_role.Role"
 			  " AND crs_usr.UsrCod=usr_data.UsrCod"
-			  " AND usr_data.ProfileVisibility='%s'"
+			  " AND usr_data.BaPrfVisibility='%s'"
 			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
 			  " AND usr_data.FirstName<>''"	// First name not empty
 			  "%s"				// SubQuery3
@@ -373,7 +373,7 @@ static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
 			  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
 			  "SELECT UsrCod FROM usr_data"
 			  " WHERE UsrCod<>%ld"
-			  " AND ProfileVisibility IN ('%s','%s')"
+			  " AND BaPrfVisibility IN ('%s','%s')"
 			  " AND Surname1<>''"		// Surname 1 not empty
 			  " AND FirstName<>''"		// First name not empty
 			  "%s"				// SubQuery4
@@ -842,7 +842,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    extern const char *Txt_Another_user_s_profile;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
+   bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/
@@ -898,7 +898,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    extern const char *Txt_Another_user_s_profile;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
+   bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/

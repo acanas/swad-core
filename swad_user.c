@@ -323,8 +323,9 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->EmailConfirmed = false;
 
    UsrDat->Photo[0] = '\0';
-   UsrDat->PhotoVisibility   = Pri_PHOTO_VISIBILITY_DEFAULT;
-   UsrDat->ProfileVisibility = Pri_PROFILE_VISIBILITY_DEFAULT;
+   UsrDat->PhotoVisibility = Pri_PHOTO_VIS_DEFAULT;
+   UsrDat->BaPrfVisibility = Pri_BASIC_PROFILE_VIS_DEFAULT;
+   UsrDat->ExPrfVisibility = Pri_EXTENDED_PROFILE_VIS_DEFAULT;
 
    UsrDat->CtyCod = -1L;
    UsrDat->OriginPlace[0] = '\0';
@@ -494,24 +495,25 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
 					  "Sex,"		// row[ 5]
 					  "Photo,"		// row[ 6]
 					  "PhotoVisibility,"	// row[ 7]
-					  "ProfileVisibility,"	// row[ 8]
-					  "CtyCod,"		// row[ 9]
-					  "InsCtyCod,"		// row[10]
-					  "InsCod,"		// row[11]
-					  "DptCod,"		// row[12]
-					  "CtrCod,"		// row[13]
-					  "Office,"		// row[14]
-					  "OfficePhone,"	// row[15]
-					  "LocalAddress,"	// row[16]
-					  "LocalPhone,"		// row[17]
-					  "FamilyAddress,"	// row[18]
-					  "FamilyPhone,"	// row[19]
-					  "OriginPlace,"	// row[20]
+					  "BaPrfVisibility,"	// row[ 8]
+					  "ExPrfVisibility,"	// row[ 9]
+					  "CtyCod,"		// row[10]
+					  "InsCtyCod,"		// row[11]
+					  "InsCod,"		// row[12]
+					  "DptCod,"		// row[13]
+					  "CtrCod,"		// row[14]
+					  "Office,"		// row[15]
+					  "OfficePhone,"	// row[16]
+					  "LocalAddress,"	// row[17]
+					  "LocalPhone,"		// row[18]
+					  "FamilyAddress,"	// row[19]
+					  "FamilyPhone,"	// row[20]
+					  "OriginPlace,"	// row[21]
 					  "DATE_FORMAT(Birthday,"
-					  "'%%Y%%m%%d'),"	// row[21]
-					  "Comments,"		// row[22]
-					  "NotifNtfEvents,"	// row[23]
-					  "EmailNtfEvents"	// row[24]
+					  "'%%Y%%m%%d'),"	// row[22]
+					  "Comments,"		// row[23]
+					  "NotifNtfEvents,"	// row[24]
+					  "EmailNtfEvents"	// row[25]
 				    " FROM usr_data"
 				    " WHERE UsrCod=%ld",
 				    UsrDat->UsrCod);
@@ -527,35 +529,36 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
 					  "Sex,"		// row[ 5]
 					  "Photo,"		// row[ 6]
 					  "PhotoVisibility,"	// row[ 7]
-					  "ProfileVisibility,"	// row[ 8]
-					  "CtyCod,"		// row[ 9]
-					  "InsCtyCod,"		// row[10]
-					  "InsCod,"		// row[11]
-					  "DptCod,"		// row[12]
-					  "CtrCod,"		// row[13]
-					  "Office,"		// row[14]
-					  "OfficePhone,"	// row[15]
-					  "LocalAddress,"	// row[16]
-					  "LocalPhone,"		// row[17]
-					  "FamilyAddress,"	// row[18]
-					  "FamilyPhone,"	// row[19]
-					  "OriginPlace,"	// row[20]
+					  "BaPrfVisibility,"	// row[ 8]
+					  "ExPrfVisibility,"	// row[ 9]
+					  "CtyCod,"		// row[10]
+					  "InsCtyCod,"		// row[11]
+					  "InsCod,"		// row[12]
+					  "DptCod,"		// row[13]
+					  "CtrCod,"		// row[14]
+					  "Office,"		// row[15]
+					  "OfficePhone,"	// row[16]
+					  "LocalAddress,"	// row[17]
+					  "LocalPhone,"		// row[18]
+					  "FamilyAddress,"	// row[19]
+					  "FamilyPhone,"	// row[20]
+					  "OriginPlace,"	// row[21]
 					  "DATE_FORMAT(Birthday,"
-					  "'%%Y%%m%%d'),"	// row[21]
-					  "Comments,"		// row[22]
-					  "NotifNtfEvents,"	// row[23]
-					  "EmailNtfEvents,"	// row[24]
+					  "'%%Y%%m%%d'),"	// row[22]
+					  "Comments,"		// row[23]
+					  "NotifNtfEvents,"	// row[24]
+					  "EmailNtfEvents,"	// row[25]
 
 					  // Preferences (usually not necessary
 					  // when getting another user's data)
-					  "Language,"		// row[25]
-					  "FirstDayOfWeek,"	// row[26]
-					  "DateFormat,"		// row[27]
-					  "Theme,"		// row[28]
-					  "IconSet,"		// row[29]
-					  "Menu,"		// row[30]
-					  "SideCols,"		// row[31]
-					  "ThirdPartyCookies"	// row[32]
+					  "Language,"		// row[26]
+					  "FirstDayOfWeek,"	// row[27]
+					  "DateFormat,"		// row[28]
+					  "Theme,"		// row[29]
+					  "IconSet,"		// row[30]
+					  "Menu,"		// row[31]
+					  "SideCols,"		// row[32]
+					  "ThirdPartyCookies"	// row[33]
 				    " FROM usr_data"
 				    " WHERE UsrCod=%ld",
 				    UsrDat->UsrCod);
@@ -605,59 +608,60 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    /* Get photo visibility (row[7]) */
    UsrDat->PhotoVisibility = Pri_GetVisibilityFromStr (row[7]);
 
-   /* Get profile visibility (row[8]) */
-   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[8]);
+   /* Get profile visibility (row[8], row[9]) */
+   UsrDat->BaPrfVisibility = Pri_GetVisibilityFromStr (row[8]);
+   UsrDat->ExPrfVisibility = Pri_GetVisibilityFromStr (row[9]);
 
-   /* Get country (row[9]) */
-   UsrDat->CtyCod = Str_ConvertStrCodToLongCod (row[9]);
+   /* Get country (row[10]) */
+   UsrDat->CtyCod = Str_ConvertStrCodToLongCod (row[10]);
 
-   /* Get institution country (row[10]) and institution (row[11]) */
-   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[10]);
-   UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[11]);
+   /* Get institution country (row[11]) and institution (row[12]) */
+   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[11]);
+   UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[12]);
 
-   /* Get department (row[12]) */
-   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[12]);
+   /* Get department (row[13]) */
+   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[13]);
 
-   /* Get centre (row[13]) */
-   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[13]);
+   /* Get centre (row[14]) */
+   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[14]);
 
-   /* Get office (row[14]) and office phone (row[15]) */
-   Str_Copy (UsrDat->Tch.Office,row[14],
+   /* Get office (row[15]) and office phone (row[16]) */
+   Str_Copy (UsrDat->Tch.Office,row[15],
              Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->Tch.OfficePhone,row[15],
+   Str_Copy (UsrDat->Tch.OfficePhone,row[16],
              Usr_MAX_BYTES_PHONE);
 
-   /* Get local address (row[16]) and local phone (row[17]) */
-   Str_Copy (UsrDat->LocalAddress,row[16],
+   /* Get local address (row[17]) and local phone (row[18]) */
+   Str_Copy (UsrDat->LocalAddress,row[17],
              Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->LocalPhone,row[17],
+   Str_Copy (UsrDat->LocalPhone,row[18],
              Usr_MAX_BYTES_PHONE);
 
-   /* Get local address (row[18]) and local phone (row[19]) */
-   Str_Copy (UsrDat->FamilyAddress,row[18],
+   /* Get local address (row[19]) and local phone (row[20]) */
+   Str_Copy (UsrDat->FamilyAddress,row[19],
              Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->FamilyPhone,row[19],
+   Str_Copy (UsrDat->FamilyPhone,row[20],
              Usr_MAX_BYTES_PHONE);
 
-   /* Get origin place (row[20]) */
-   Str_Copy (UsrDat->OriginPlace,row[20],
+   /* Get origin place (row[21]) */
+   Str_Copy (UsrDat->OriginPlace,row[21],
              Usr_MAX_BYTES_ADDRESS);
 
-   /* Get birthday (row[21]) */
-   Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[21]);
+   /* Get birthday (row[22]) */
+   Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[22]);
    Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
 
-   /* Get comments (row[22]) */
-   Usr_GetUsrCommentsFromString (row[22] ? row[22] :
+   /* Get comments (row[23]) */
+   Usr_GetUsrCommentsFromString (row[23] ? row[23] :
 	                                   "",
 	                         UsrDat);
 
-   /* Get on which events the user wants to be notified inside the platform (row[23]) */
-   if (sscanf (row[23],"%u",&UsrDat->NtfEvents.CreateNotif) != 1)
+   /* Get on which events the user wants to be notified inside the platform (row[24]) */
+   if (sscanf (row[24],"%u",&UsrDat->NtfEvents.CreateNotif) != 1)
       UsrDat->NtfEvents.CreateNotif = (unsigned) -1;	// 0xFF..FF
 
-   /* Get on which events the user wants to be notified by email (row[24]) */
-   if (sscanf (row[24],"%u",&UsrDat->NtfEvents.SendEmail) != 1)
+   /* Get on which events the user wants to be notified by email (row[25]) */
+   if (sscanf (row[25],"%u",&UsrDat->NtfEvents.SendEmail) != 1)
       UsrDat->NtfEvents.SendEmail = 0;
    if (UsrDat->NtfEvents.SendEmail >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
       UsrDat->NtfEvents.SendEmail = 0;
@@ -665,50 +669,50 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    /***** Get user's preferences *****/
    if (GetPrefs == Usr_GET_PREFS)
      {
-      /* Get language (row[25]) */
+      /* Get language (row[26]) */
       UsrDat->Prefs.Language = Lan_LANGUAGE_UNKNOWN;	// Language unknown
       for (Lan = (Lan_Language_t) 1;
 	   Lan <= Lan_NUM_LANGUAGES;
 	   Lan++)
-	 if (!strcasecmp (row[25],Lan_STR_LANG_ID[Lan]))
+	 if (!strcasecmp (row[26],Lan_STR_LANG_ID[Lan]))
 	   {
 	    UsrDat->Prefs.Language = Lan;
 	    break;
 	   }
 
-      /* Get first day of week (row[26]) */
-      UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[26]);
+      /* Get first day of week (row[27]) */
+      UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[27]);
 
-      /* Get date format (row[27]) */
-      UsrDat->Prefs.DateFormat = Dat_GetDateFormatFromStr (row[27]);
+      /* Get date format (row[28]) */
+      UsrDat->Prefs.DateFormat = Dat_GetDateFormatFromStr (row[28]);
 
-      /* Get theme (row[28]) */
+      /* Get theme (row[29]) */
       UsrDat->Prefs.Theme = The_THEME_DEFAULT;
       for (Theme = (The_Theme_t) 0;
 	   Theme < The_NUM_THEMES;
 	   Theme++)
-	 if (!strcasecmp (row[28],The_ThemeId[Theme]))
+	 if (!strcasecmp (row[29],The_ThemeId[Theme]))
 	   {
 	    UsrDat->Prefs.Theme = Theme;
 	    break;
 	   }
 
-      /* Get icon set (row[29]) */
+      /* Get icon set (row[30]) */
       UsrDat->Prefs.IconSet = Ico_ICON_SET_DEFAULT;
       for (IconSet = (Ico_IconSet_t) 0;
 	   IconSet < Ico_NUM_ICON_SETS;
 	   IconSet++)
-	 if (!strcasecmp (row[29],Ico_IconSetId[IconSet]))
+	 if (!strcasecmp (row[30],Ico_IconSetId[IconSet]))
 	   {
 	    UsrDat->Prefs.IconSet = IconSet;
 	    break;
 	   }
 
-      /* Get menu (row[30]) */
-      UsrDat->Prefs.Menu = Mnu_GetMenuFromStr (row[28]);
+      /* Get menu (row[31]) */
+      UsrDat->Prefs.Menu = Mnu_GetMenuFromStr (row[31]);
 
-      /* Get if user wants to show side columns (row[31]) */
-      if (sscanf (row[29],"%u",&UsrDat->Prefs.SideCols) == 1)
+      /* Get if user wants to show side columns (row[32]) */
+      if (sscanf (row[32],"%u",&UsrDat->Prefs.SideCols) == 1)
 	{
 	 if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
 	    UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
@@ -716,8 +720,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
       else
 	 UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 
-      /* Get if user accepts third party cookies (row[32]) */
-      UsrDat->Prefs.AcceptThirdPartyCookies = (row[32][0] == 'Y');
+      /* Get if user accepts third party cookies (row[33]) */
+      UsrDat->Prefs.AcceptThirdPartyCookies = (row[33][0] == 'Y');
      }
 
    /***** Free structure that stores the query result *****/

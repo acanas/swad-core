@@ -2474,7 +2474,7 @@ static void Rec_PutIconsCommands (void)
        Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&	// Only in main browser tab
        Gbl.Usrs.Me.Logged)					// Only if I am logged
      {
-      ICanViewUsrProfile = Pri_ShowingIsAllowed (Gbl.Record.UsrDat->ProfileVisibility,
+      ICanViewUsrProfile = Pri_ShowingIsAllowed (Gbl.Record.UsrDat->BaPrfVisibility,
 				                 Gbl.Record.UsrDat);
 
       /***** Start container *****/

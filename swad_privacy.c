@@ -82,15 +82,17 @@ void Pri_EditMyPrivacy (void)
    extern const char *Txt_Please_review_your_privacy_preferences;
    extern const char *Txt_Privacy;
    extern const char *Txt_Photo;
-   extern const char *Txt_Public_profile;
+   extern const char *Txt_Basic_public_profile;
+   extern const char *Txt_Extended_public_profile;
    extern const char *Txt_Timeline;
 
    /***** Start section with preferences on privacy *****/
    Lay_StartSection (Pri_PRIVACY_ID);
 
    /***** If any of my preferences about privacy is unknown *****/
-   if (Gbl.Usrs.Me.UsrDat.PhotoVisibility   == Pri_VISIBILITY_UNKNOWN ||
-       Gbl.Usrs.Me.UsrDat.ProfileVisibility == Pri_VISIBILITY_UNKNOWN)
+   if (Gbl.Usrs.Me.UsrDat.PhotoVisibility == Pri_VISIBILITY_UNKNOWN ||
+       Gbl.Usrs.Me.UsrDat.BaPrfVisibility == Pri_VISIBILITY_UNKNOWN ||
+       Gbl.Usrs.Me.UsrDat.ExPrfVisibility == Pri_VISIBILITY_UNKNOWN)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_review_your_privacy_preferences);
 
    /***** Start box and table *****/
@@ -101,25 +103,25 @@ void Pri_EditMyPrivacy (void)
    Pri_PutFormVisibility (Txt_Photo,
                           ActChgPriPho,"VisPho",
                           Gbl.Usrs.Me.UsrDat.PhotoVisibility,
-                          (1 << Pri_VISIBILITY_USER)   |
-                          (1 << Pri_VISIBILITY_COURSE) |
-                          (1 << Pri_VISIBILITY_SYSTEM) |
-                          (1 << Pri_VISIBILITY_WORLD));
+			  Pri_PHOTO_ALLOWED_VIS);
 
-   /***** Edit public profile visibility *****/
-   Pri_PutFormVisibility (Txt_Public_profile,
-                          ActChgPriPrf,"VisPrf",
-                          Gbl.Usrs.Me.UsrDat.ProfileVisibility,
-                          (1 << Pri_VISIBILITY_USER)   |
-                          (1 << Pri_VISIBILITY_COURSE) |
-                          (1 << Pri_VISIBILITY_SYSTEM) |
-                          (1 << Pri_VISIBILITY_WORLD));
+   /***** Edit basic public profile visibility *****/
+   Pri_PutFormVisibility (Txt_Basic_public_profile,
+                          ActChgBasPriPrf,"VisBasPrf",
+                          Gbl.Usrs.Me.UsrDat.BaPrfVisibility,
+                          Pri_BASIC_PROFILE_ALLOWED_VIS);
+
+   /***** Edit extended public profile visibility *****/
+   Pri_PutFormVisibility (Txt_Extended_public_profile,
+                          ActChgExtPriPrf,"VisExtPrf",
+                          Gbl.Usrs.Me.UsrDat.ExPrfVisibility,
+                          Pri_EXTENDED_PROFILE_ALLOWED_VIS);
 
    /***** Edit public activity (timeline) visibility *****/
    Pri_PutFormVisibility (Txt_Timeline,
                           ActUnk,"VisTml",
                           Pri_VISIBILITY_SYSTEM,
-                          (1 << Pri_VISIBILITY_SYSTEM));
+                          Pri_TIMELINE_ALLOWED_VIS);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -163,11 +165,11 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    /***** Form with list of options *****/
    if (Action != ActUnk)
       Frm_StartFormAnchor (Action,Pri_PRIVACY_ID);
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<ul class=\"PRI_LIST LIST_LEFT\">");
    for (Visibility = Pri_VISIBILITY_USER;
 	Visibility <= Pri_VISIBILITY_WORLD;
 	Visibility++)
-      if (MaskAllowedVisibility & 1 << Visibility)
+      if (MaskAllowedVisibility & (1 << Visibility))
 	{
 	 fprintf (Gbl.F.Out,"<li class=\"%s\">"
 	                    "<label>"
@@ -180,7 +182,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 	 if (Action == ActUnk)
 	    fprintf (Gbl.F.Out," disabled=\"disabled\"");
 	 else
-	    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\"",
+	    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
 		     Gbl.Form.Id);
 	 fprintf (Gbl.F.Out," />"
 			    "%s"

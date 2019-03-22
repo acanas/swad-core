@@ -667,7 +667,7 @@ static void Agd_PutIconsOtherPublicAgenda (void)
    extern const char *Txt_View_record_and_office_hours;
 
    /***** Button to view user's public profile *****/
-   if (Pri_ShowingIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
+   if (Pri_ShowingIsAllowed (Gbl.Usrs.Other.UsrDat.BaPrfVisibility,
 		             &Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLinkOnlyIcon (ActSeeOthPubPrf,NULL,
                                      Usr_PutParamOtherUsrCodEncrypted,

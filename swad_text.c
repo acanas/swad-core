@@ -2789,6 +2789,27 @@ const char *Txt_Banners =
 	"Banners";
 #endif
 
+const char *Txt_Basic_public_profile =
+#if   L==1	// ca
+	"Perfil p&uacute;blic b&agrave;sic";
+#elif L==2	// de
+	"Grundlegendes &ouml;ffentliches Profile";
+#elif L==3	// en
+	"Basic public profile";
+#elif L==4	// es
+	"Perfil p&uacute;blico b&aacute;sico";
+#elif L==5	// fr
+	"Profil public de base";
+#elif L==6	// gn
+	"Perfil p&uacute;blico b&aacute;sico";	// Okoteve traducción
+#elif L==7	// it
+	"Profilo pubblico di base";
+#elif L==8	// pl
+	"Podstawowy profil publiczny";
+#elif L==9	// pt
+	"Perfil p&uacute;blico b&aacute;sico";
+#endif
+
 const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered =
 #if   L==1	// ca
 	"Abans de crear un compte nou,"
@@ -11319,6 +11340,27 @@ const char *Txt_Export_questions =
 	"Export questions";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Exportar perguntas";
+#endif
+
+const char *Txt_Extended_public_profile =
+#if   L==1	// ca
+	"Perfil p&uacute;blic ampliat";
+#elif L==2	// de
+	"Erweitertes &ouml;ffentliches Profile";
+#elif L==3	// en
+	"Extended public profile";
+#elif L==4	// es
+	"Perfil p&uacute;blico extendido";
+#elif L==5	// fr
+	"Profil public &eacute;tendu";
+#elif L==6	// gn
+	"Perfil p&uacute;blico extendido";	// Okoteve traducción
+#elif L==7	// it
+	"Profilo pubblico esteso";
+#elif L==8	// pl
+	"Rozszerzony profil publiczny";
+#elif L==9	// pt
+	"Perfil p&uacute;blico estendido";
 #endif
 
 const char *Txt_X_faces_have_been_detected_in_front_position_1_Z_ =	// Warning: it is very important to include two %u in the following sentences
@@ -30589,27 +30631,6 @@ const char *Txt_Public_open_educational_resource_OER_for_everyone =
 	"Publiczne, otwarte zasoby edukacyjne (OER) dla ka&zdot;dego";
 #elif L==9	// pt
 	"P&uacute;blico, recurso educacional aberto (OER) para todos";
-#endif
-
-const char *Txt_Public_profile =
-#if   L==1	// ca
-	"Perfil p&uacute;blic";
-#elif L==2	// de
-	"&Ouml;ffentliches Benutzer-Profile";
-#elif L==3	// en
-	"Public profile";
-#elif L==4	// es
-	"Perfil p&uacute;blico";
-#elif L==5	// fr
-	"Profil public";
-#elif L==6	// gn
-	"Perfil p&uacute;blico";	// Okoteve traducción
-#elif L==7	// it
-	"Profilo pubblico";
-#elif L==8	// pl
-	"Profil publiczny";
-#elif L==9	// pt
-	"Perfil p&uacute;blico";
 #endif
 
 const char *Txt_Public_views =

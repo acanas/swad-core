@@ -35,8 +35,25 @@
 /*****************************************************************************/
 
 /***** Visibility (who can see user's photo / public profile) *****/
-#define Pri_PHOTO_VISIBILITY_DEFAULT	Pri_VISIBILITY_SYSTEM
-#define Pri_PROFILE_VISIBILITY_DEFAULT	Pri_VISIBILITY_SYSTEM
+/* Allowed visibility for photo */
+#define Pri_PHOTO_ALLOWED_VIS			(1 << Pri_VISIBILITY_USER)   | \
+						(1 << Pri_VISIBILITY_COURSE) | \
+						(1 << Pri_VISIBILITY_SYSTEM) | \
+						(1 << Pri_VISIBILITY_WORLD)
+/* Allowed visibility for basic profile */
+#define Pri_BASIC_PROFILE_ALLOWED_VIS		(1 << Pri_VISIBILITY_SYSTEM) | \
+						(1 << Pri_VISIBILITY_WORLD)
+/* Allowed visibility for extended profile */
+#define Pri_EXTENDED_PROFILE_ALLOWED_VIS	(1 << Pri_VISIBILITY_USER)   | \
+						(1 << Pri_VISIBILITY_COURSE) | \
+						(1 << Pri_VISIBILITY_SYSTEM) | \
+						(1 << Pri_VISIBILITY_WORLD)
+/* Allowed visibility for timeline */
+#define Pri_TIMELINE_ALLOWED_VIS		(1 << Pri_VISIBILITY_SYSTEM)
+
+#define Pri_PHOTO_VIS_DEFAULT			Pri_VISIBILITY_SYSTEM
+#define Pri_BASIC_PROFILE_VIS_DEFAULT		Pri_VISIBILITY_SYSTEM
+#define Pri_EXTENDED_PROFILE_VIS_DEFAULT	Pri_VISIBILITY_SYSTEM
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

@@ -168,7 +168,8 @@ static void Fig_GetAndShowMsgsStats (void);
 
 static void Fig_GetAndShowSurveysStats (void);
 static void Fig_GetAndShowNumUsrsPerPrivacy (void);
-static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,const char *FieldName);
+static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
+                                                        const char *FieldName);
 static void Fig_GetAndShowNumUsrsPerCookies (void);
 static void Fig_GetAndShowNumUsrsPerLanguage (void);
 static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void);
@@ -178,7 +179,6 @@ static void Fig_GetAndShowNumUsrsPerMenu (void);
 static void Fig_GetAndShowNumUsrsPerTheme (void);
 static void Fig_GetAndShowNumUsrsPerSideColumns (void);
 unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery);
-
 
 /*****************************************************************************/
 /************************** Show use of the platform *************************/
@@ -4807,7 +4807,8 @@ static void Fig_GetAndShowNumUsrsPerPrivacy (void)
   {
    extern const char *Hlp_ANALYTICS_Figures_privacy;
    extern const char *Txt_Photo;
-   extern const char *Txt_Public_profile;
+   extern const char *Txt_Basic_public_profile;
+   extern const char *Txt_Extended_public_profile;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
 
    /***** Start box and table *****/
@@ -4815,10 +4816,14 @@ static void Fig_GetAndShowNumUsrsPerPrivacy (void)
                       Hlp_ANALYTICS_Figures_privacy,Box_NOT_CLOSABLE,2);
 
    /***** Privacy for photo *****/
-   Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Photo,"PhotoVisibility");
+   Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Photo,
+	                                       "PhotoVisibility");
 
    /***** Privacy for public profile *****/
-   Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Public_profile,"ProfileVisibility");
+   Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Basic_public_profile,
+	                                       "BaPrfVisibility");
+   Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Extended_public_profile,
+	                                       "ExPrfVisibility");
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4828,7 +4833,8 @@ static void Fig_GetAndShowNumUsrsPerPrivacy (void)
 /********** Get and show number of users who have chosen a privacy ***********/
 /*****************************************************************************/
 
-static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,const char *FieldName)
+static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
+                                                        const char *FieldName)
   {
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;

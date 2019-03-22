@@ -732,7 +732,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 				" (EncryptedUsrCod,Password,"
 				"Surname1,Surname2,FirstName,Sex,"
 				"Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
-				"PhotoVisibility,ProfileVisibility,"
+				"PhotoVisibility,BaPrfVisibility,ExPrfVisibility,"
 				"CtyCod,"
 				"LocalAddress,LocalPhone,"
 				"FamilyAddress,FamilyPhone,"
@@ -742,7 +742,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 				" ('%s','%s',"
 				"'%s','%s','%s','%s',"
 				"'%s','%s','%s',%u,%u,"
-				"'%s','%s',"
+				"'%s','%s','%s',"
 				"%ld,"
 				"'%s','%s',"
 				"'%s','%s','%s',"
@@ -758,7 +758,8 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 				Cal_FIRST_DAY_OF_WEEK_DEFAULT,
 				(unsigned) Dat_FORMAT_DEFAULT,
 				Pri_VisibilityDB[UsrDat->PhotoVisibility],
-				Pri_VisibilityDB[UsrDat->ProfileVisibility],
+				Pri_VisibilityDB[UsrDat->BaPrfVisibility],
+				Pri_VisibilityDB[UsrDat->ExPrfVisibility],
 				UsrDat->CtyCod,
 				UsrDat->LocalAddress ,UsrDat->LocalPhone,
 				UsrDat->FamilyAddress,UsrDat->FamilyPhone,UsrDat->OriginPlace,

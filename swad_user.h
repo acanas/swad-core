@@ -171,7 +171,8 @@ struct UsrData
    bool EmailConfirmed;
    char Photo		[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;	// Who can see user's photo
-   Pri_Visibility_t ProfileVisibility;	// Who can see user's public profile
+   Pri_Visibility_t BaPrfVisibility;	// Who can see user's basic public profile (minimal record card)
+   Pri_Visibility_t ExPrfVisibility;	// Who can see user's extended public profile (figures, follow)
    long CtyCod;		// Country
    char OriginPlace	[Usr_MAX_BYTES_ADDRESS + 1];
    struct Date Birthday;

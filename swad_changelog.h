@@ -459,10 +459,20 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.85.3 (2019-03-22)"
+#define Log_PLATFORM_VERSION	"SWAD 18.86 (2019-03-22)"
 #define CSS_FILE		"swad18.85.1.css"
 #define JS_FILE			"swad18.85.js"
 /*
+	Version 18.86:    Mar 22, 2019 	Profile visibility is splitted into basic and extended.
+					Fixed bug storing media in database. (240928 lines)
+					6 changes necessary in database:
+ALTER TABLE usr_data CHANGE COLUMN ProfileVisibility BaPrfVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown';
+ALTER TABLE usr_data ADD COLUMN ExPrfVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown' AFTER BaPrfVisibility,ADD INDEX (ExPrfVisibility);
+UPDATE usr_data SET ExPrfVisibility=BaPrfVisibility;
+UPDATE usr_data SET BaPrfVisibility='system' WHERE BaPrfVisibility IN ('unknown','user','course');
+UPDATE actions SET Txt='Cambiar priv. perfil p&uacute;blico b&aacute;sico' WHERE ActCod='1404' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1765','es','N','Cambiar priv. perfil p&uacute;blico extendido');
+
 	Version 18.85.3:  Mar 22, 2019 	Code refactoring related to third-party cookies. (240833 lines)
 	Version 18.85.2:  Mar 22, 2019 	Changed text related to third-party cookies. (240837 lines)
 	Version 18.85.1:  Mar 21, 2019 	Fixed bug in form to link YouTube videos.

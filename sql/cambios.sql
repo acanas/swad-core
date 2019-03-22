@@ -12687,6 +12687,7 @@ SELECT degrees.ShortName,main_degree.MaxRole
  WHERE degrees.DegCod=main_degree.DegCod;
 			     
 			     
-			     
+ALTER TABLE usr_data CHANGE COLUMN BasicProfileVisibility BaPrfVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown';
+ALTER TABLE usr_data DROP COLUMN ExtendedProfileVisibility;
 			     
 			     

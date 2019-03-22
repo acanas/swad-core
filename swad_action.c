@@ -1557,7 +1557,8 @@ Profile:
        1323. ActChgIco			Change icon set
        1324. ActChgMnu			Change menu
        1325. ActChgPriPho		Change privacy of my photo
-       1326. ActChgPriPrf		Change privacy of my public profile
+       1326. ActChgBasPriPrf		Change privacy of my basic public profile
+        NEW. ActChgExtPriPrf		Change privacy of my extended public profile
         NEW. ActChgCooPrf		Change preference about third party cookies
        1327. ActChgNtfPrf		Change whether to notify by email new messages
        1328. ActPrnUsrQR		Show my QR code ready to print
@@ -3143,7 +3144,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgIco		*/{1092,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Ico_ChangeIconSet		,Pre_EditPrefs			,NULL},
    /* ActChgMnu		*/{1243,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Mnu_ChangeMenu			,Pre_EditPrefs			,NULL},
    /* ActChgPriPho	*/{ 774,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ChangePhotoVisibility	,NULL},
-   /* ActChgPriPrf	*/{1404,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeProfileVisibility	,NULL},
+   /* ActChgBasPriPrf	*/{1404,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeBasicProfileVis	,NULL},
+   /* ActChgExtPriPrf	*/{1765,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeExtendedProfileVis	,NULL},
    /* ActChgCooPrf	*/{1764,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Coo_ChangeMyPrefsCookies	,NULL},
    /* ActChgNtfPrf	*/{ 775,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Ntf_ChangeNotifyEvents		,Pre_EditPrefs			,NULL},
 
@@ -4561,7 +4563,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqOthPubPrf,	// #1401
 	ActSeeOthPubPrf,	// #1402
 	-1,			// #1403 (obsolete action)
-	ActChgPriPrf,		// #1404
+	ActChgBasPriPrf,	// #1404
 	ActCalFig,		// #1405
 	-1,			// #1406 (obsolete action)
 	-1,			// #1407 (obsolete action)
@@ -4922,6 +4924,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActUnfSevStd,		// #1762
 	ActUnfSevTch,		// #1763
 	ActChgCooPrf,		// #1764
+	ActChgExtPriPrf,	// #1765
 	};
 
 /*****************************************************************************/
@@ -5249,8 +5252,9 @@ void Act_AdjustCurrentAction (void)
           If any of my preferences about privacy is unknown
           the only action possible
           is to show a form to change my preferences *****/
-   if (Gbl.Usrs.Me.UsrDat.PhotoVisibility   == Pri_VISIBILITY_UNKNOWN ||
-       Gbl.Usrs.Me.UsrDat.ProfileVisibility == Pri_VISIBILITY_UNKNOWN)
+   if (Gbl.Usrs.Me.UsrDat.PhotoVisibility == Pri_VISIBILITY_UNKNOWN ||
+       Gbl.Usrs.Me.UsrDat.BaPrfVisibility == Pri_VISIBILITY_UNKNOWN ||
+       Gbl.Usrs.Me.UsrDat.ExPrfVisibility == Pri_VISIBILITY_UNKNOWN)
         {
 	 Gbl.Action.Act = ActReqEdiPrf;
 	 Tab_SetCurrentTab ();

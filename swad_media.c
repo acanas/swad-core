@@ -1145,7 +1145,7 @@ static void Med_GetAndProcessYouTubeFromForm (const char *ParamURL,
       Media->Name[CodeLength] = '\0';
 
       /* Set media type and status */
-      Media->Type   = Med_EMBED;
+      Media->Type   = Med_YOUTUBE;
       Media->Status = Med_PROCESSED;
      }
    else

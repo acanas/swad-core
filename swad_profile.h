@@ -60,7 +60,8 @@ void Prf_RequestUserProfile (void);
 void Prf_GetUsrDatAndShowUserProfile (void);
 
 bool Prf_ShowUserProfile (struct UsrData *UsrDat);
-void Prf_ChangeProfileVisibility (void);
+void Prf_ChangeBasicProfileVis (void);
+void Prf_ChangeExtendedProfileVis (void);
 
 void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat);
 void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
