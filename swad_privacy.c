@@ -220,13 +220,17 @@ Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str)
 /**************** Get parameter with visibility from form ********************/
 /*****************************************************************************/
 
-Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName)
+Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName,
+                                         unsigned MaskAllowedVisibility)
   {
-   return (Pri_Visibility_t)
-	  Par_GetParToUnsignedLong (ParamName,
-                                    0,
-                                    Pri_NUM_OPTIONS_PRIVACY - 1,
-                                    (unsigned long) Pri_VISIBILITY_UNKNOWN);
+   Pri_Visibility_t Visibility;
+
+   Visibility = (Pri_Visibility_t) Par_GetParToUnsignedLong (ParamName,
+							     0,
+							     Pri_NUM_OPTIONS_PRIVACY - 1,
+							     (unsigned long) Pri_VISIBILITY_UNKNOWN);
+   return (MaskAllowedVisibility & (1 << Visibility)) ? Visibility :
+	                                                Pri_VISIBILITY_UNKNOWN;
   }
 
 /*****************************************************************************/

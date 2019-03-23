@@ -353,7 +353,8 @@ void Prf_ChangeBasicProfileVis (void)
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
 
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.BaPrfVisibility = Pri_GetParamVisibility ("VisBasPrf");
+   Gbl.Usrs.Me.UsrDat.BaPrfVisibility = Pri_GetParamVisibility ("VisBasPrf",
+	                                                        Pri_BASIC_PROFILE_ALLOWED_VIS);
 
    /***** Store public/private photo in database *****/
    DB_QueryUPDATE ("can not update your preference"
@@ -372,7 +373,8 @@ void Prf_ChangeExtendedProfileVis (void)
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
 
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.ExPrfVisibility = Pri_GetParamVisibility ("VisExtPrf");
+   Gbl.Usrs.Me.UsrDat.ExPrfVisibility = Pri_GetParamVisibility ("VisExtPrf",
+	                                                        Pri_EXTENDED_PROFILE_ALLOWED_VIS);
 
    /***** Store public/private photo in database *****/
    DB_QueryUPDATE ("can not update your preference"

@@ -459,10 +459,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.86 (2019-03-22)"
+#define Log_PLATFORM_VERSION	"SWAD 18.86.1 (2019-03-23)"
 #define CSS_FILE		"swad18.85.1.css"
 #define JS_FILE			"swad18.85.js"
 /*
+	Version 18.86.1:  Mar 23, 2019 	Changes in writing of a floating point number.
+					Mask applied to figure about privacy.
+					Mash applied when receiving form with privacy. (240944 lines)
 	Version 18.86:    Mar 22, 2019 	Profile visibility is splitted into basic and extended.
 					Fixed bug storing media in database. (240928 lines)
 					6 changes necessary in database:

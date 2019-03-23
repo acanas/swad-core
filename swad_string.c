@@ -896,16 +896,14 @@ void Str_WriteFloatNum (FILE *FileDst,float Number)
       if (IntegerPart != 0.0)
          Format = "%.1f";
       else if (FractionaryPart >= 0.095)
-         Format = "%.1f";
-      else if (FractionaryPart >= 0.0095)
          Format = "%.2f";
-      else if (FractionaryPart >= 0.00095)
+      else if (FractionaryPart >= 0.0095)
          Format = "%.3f";
-      else if (FractionaryPart >= 0.000095)
+      else if (FractionaryPart >= 0.00095)
          Format = "%.4f";
-      else if (FractionaryPart >= 0.0000095)
+      else if (FractionaryPart >= 0.000095)
          Format = "%.5f";
-      else if (FractionaryPart >= 0.00000095)
+      else if (FractionaryPart >= 0.0000095)
          Format = "%.6f";
       else
          Format = "%e";

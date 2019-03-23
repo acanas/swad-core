@@ -1310,7 +1310,8 @@ void Pho_ChangePhotoVisibility (void)
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
 
    /***** Get param with public/private photo *****/
-   Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParamVisibility ("VisPho");
+   Gbl.Usrs.Me.UsrDat.PhotoVisibility = Pri_GetParamVisibility ("VisPho",
+	                                                        Pri_PHOTO_ALLOWED_VIS);
 
    /***** Store public/private photo in database *****/
    DB_QueryUPDATE ("can not update your preference about photo visibility",

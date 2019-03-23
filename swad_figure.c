@@ -44,6 +44,7 @@
 #include "swad_logo.h"
 #include "swad_network.h"
 #include "swad_notice.h"
+#include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_role.h"
 #include "swad_table.h"
@@ -169,7 +170,8 @@ static void Fig_GetAndShowMsgsStats (void);
 static void Fig_GetAndShowSurveysStats (void);
 static void Fig_GetAndShowNumUsrsPerPrivacy (void);
 static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
-                                                        const char *FieldName);
+                                                        const char *FieldName,
+                                                        unsigned MaskAllowedVisibility);
 static void Fig_GetAndShowNumUsrsPerCookies (void);
 static void Fig_GetAndShowNumUsrsPerLanguage (void);
 static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void);
@@ -4817,13 +4819,16 @@ static void Fig_GetAndShowNumUsrsPerPrivacy (void)
 
    /***** Privacy for photo *****/
    Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Photo,
-	                                       "PhotoVisibility");
+	                                       "PhotoVisibility",
+					       Pri_PHOTO_ALLOWED_VIS);
 
    /***** Privacy for public profile *****/
    Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Basic_public_profile,
-	                                       "BaPrfVisibility");
+	                                       "BaPrfVisibility",
+					       Pri_BASIC_PROFILE_ALLOWED_VIS);
    Fig_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Extended_public_profile,
-	                                       "ExPrfVisibility");
+	                                       "ExPrfVisibility",
+					       Pri_EXTENDED_PROFILE_ALLOWED_VIS);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4834,7 +4839,8 @@ static void Fig_GetAndShowNumUsrsPerPrivacy (void)
 /*****************************************************************************/
 
 static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
-                                                        const char *FieldName)
+                                                        const char *FieldName,
+                                                        unsigned MaskAllowedVisibility)
   {
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
@@ -4865,37 +4871,39 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
    for (Visibility = (Pri_Visibility_t) 0;
 	Visibility < Pri_NUM_OPTIONS_PRIVACY;
 	Visibility++)
-     {
-      /* Get the number of users who have chosen this privacy option from database */
-      if (asprintf (&SubQuery,"usr_data.%s='%s'",
-	            FieldName,Pri_VisibilityDB[Visibility]) < 0)
-	 Lay_NotEnoughMemoryExit ();
-      NumUsrs[Visibility] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
-      free ((void *) SubQuery);
+      if (MaskAllowedVisibility & (1 << Visibility))
+	{
+	 /* Get the number of users who have chosen this privacy option from database */
+	 if (asprintf (&SubQuery,"usr_data.%s='%s'",
+		       FieldName,Pri_VisibilityDB[Visibility]) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 NumUsrs[Visibility] = Fig_GetNumUsrsWhoChoseAnOption (SubQuery);
+	 free ((void *) SubQuery);
 
-      /* Update total number of users */
-      NumUsrsTotal += NumUsrs[Visibility];
-     }
+	 /* Update total number of users */
+	 NumUsrsTotal += NumUsrs[Visibility];
+	}
 
    /***** Write number of users who have chosen each privacy option *****/
    for (Visibility = (Pri_Visibility_t) 0;
 	Visibility < Pri_NUM_OPTIONS_PRIVACY;
 	Visibility++)
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE\">"
-                         "%s"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE\">"
-                         "%5.2f%%"
-                         "</td>"
-                         "</tr>",
-               Txt_PRIVACY_OPTIONS[Visibility],NumUsrs[Visibility],
-               NumUsrsTotal ? (float) NumUsrs[Visibility] * 100.0 /
-        	              (float) NumUsrsTotal :
-        	              0);
+      if (MaskAllowedVisibility & (1 << Visibility))
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "%s"
+			    "</td>"
+			    "<td class=\"DAT RIGHT_MIDDLE\">"
+			    "%u"
+			    "</td>"
+			    "<td class=\"DAT RIGHT_MIDDLE\">"
+			    "%5.2f%%"
+			    "</td>"
+			    "</tr>",
+		  Txt_PRIVACY_OPTIONS[Visibility],NumUsrs[Visibility],
+		  NumUsrsTotal ? (float) NumUsrs[Visibility] * 100.0 /
+				 (float) NumUsrsTotal :
+				 0);
    }
 
 /*****************************************************************************/
