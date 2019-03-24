@@ -84,6 +84,9 @@ static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned Nu
 static void Not_PutParams (void);
 static long Not_GetParamNotCod (void);
 
+static void Not_SetNotCodToEdit (long NotCod);
+static long Not_GetNotCodToEdit (void);
+
 /*****************************************************************************/
 /***************************** Write a new notice ****************************/
 /*****************************************************************************/
@@ -296,7 +299,7 @@ void Not_RequestRemNotice (void)
    Not_GetDataAndShowNotice (NotCod);
 
    /* End alert */
-   Gbl.CurrentCrs.Notices.NotCod = NotCod;	// To put parameters
+   Not_SetNotCodToEdit (NotCod);	// To be used as parameter
    Ale_ShowAlertAndButton2 (ActRemNot,NULL,NULL,Not_PutParams,
 			    Btn_REMOVE_BUTTON,Txt_Remove);
 
@@ -662,7 +665,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      {
       if (Not_CheckIfICanEditNotices ())
 	{
-	 Gbl.CurrentCrs.Notices.NotCod = NotCod;	// To put parameters
+         Not_SetNotCodToEdit (NotCod);	// To be used as parameter
 
 	 /***** Put form to remove announcement *****/
          Ico_PutContextualIconToRemove (ActReqRemNot,Not_PutParams);
@@ -745,7 +748,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
       /* Put form to view full notice */
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Gbl.CurrentCrs.Notices.NotCod = NotCod;	// To put parameters
+      Not_SetNotCodToEdit (NotCod);	// To be used as parameter
       Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,Not_PutParams,
 				     "ellipsis-h.svg",
 				     Txt_See_full_notice);
@@ -1025,7 +1028,7 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
 
 static void Not_PutParams (void)
   {
-   Not_PutHiddenParamNotCod (Gbl.CurrentCrs.Notices.NotCod);
+   Not_PutHiddenParamNotCod (Not_GetNotCodToEdit ());
   }
 
 /*****************************************************************************/
@@ -1045,4 +1048,18 @@ static long Not_GetParamNotCod (void)
   {
    /***** Get notice code *****/
    return Par_GetParToLong ("NotCod");
+  }
+
+/*****************************************************************************/
+/********** Set/get code of a notice to be removed/enable/disable ************/
+/*****************************************************************************/
+
+static void Not_SetNotCodToEdit (long NotCod)
+  {
+   Gbl.CurrentCrs.Notices.NotCod = NotCod;
+  }
+
+static long Not_GetNotCodToEdit (void)
+  {
+   return Gbl.CurrentCrs.Notices.NotCod;
   }
