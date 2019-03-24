@@ -54,6 +54,12 @@
 /****************************** Internal types *******************************/
 /*****************************************************************************/
 
+typedef enum
+  {
+   Fol_SUGGEST_ONLY_USERS_WITH_PHOTO,
+   Fol_SUGGEST_ANY_USER,
+  } Fol_WhichUsersSuggestToFollowThem_t;
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -68,9 +74,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
-					     bool OnlyUsrsWithPhotos,
-					     MYSQL_RES **mysql_res);
+static unsigned long Fol_GetUsrsToFollow (unsigned long MaxUsrsToShow,
+					  Fol_WhichUsersSuggestToFollowThem_t WhichUsersSuggestToFollowThem,
+					  MYSQL_RES **mysql_res);
 
 static void Fol_PutIconsWhoToFollow (void);
 static void Fol_PutIconToUpdateWhoToFollow (void);
@@ -138,9 +144,9 @@ void Fol_SuggestUsrsToFollowMainZone (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Get users *****/
-   if ((NumUsrs = Fol_GetUsrsWhoToFollow (Fol_MAX_USRS_TO_FOLLOW_MAIN_ZONE,
-                                          false,
-                                          &mysql_res)))
+   if ((NumUsrs = Fol_GetUsrsToFollow (Fol_MAX_USRS_TO_FOLLOW_MAIN_ZONE,
+                                       Fol_SUGGEST_ANY_USER,
+                                       &mysql_res)))
      {
       /***** Start box and table *****/
       Box_StartBoxTable ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow,
@@ -200,9 +206,9 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
    struct UsrData UsrDat;
 
    /***** Get users *****/
-   if ((NumUsrs = Fol_GetUsrsWhoToFollow (Fol_MAX_USRS_TO_FOLLOW_RIGHT_COLUMN,
-                                          true,
-                                          &mysql_res)))
+   if ((NumUsrs = Fol_GetUsrsToFollow (Fol_MAX_USRS_TO_FOLLOW_RIGHT_COLUMN,
+                                       Fol_SUGGEST_ONLY_USERS_WITH_PHOTO,
+                                       &mysql_res)))
      {
       /***** Start container *****/
       fprintf (Gbl.F.Out,"<div class=\"CONNECTED\">");
@@ -253,9 +259,9 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
 /*************************** Get users to follow *****************************/
 /*****************************************************************************/
 
-static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
-					     bool OnlyUsrsWithPhotos,
-					     MYSQL_RES **mysql_res)
+static unsigned long Fol_GetUsrsToFollow (unsigned long MaxUsrsToShow,
+					  Fol_WhichUsersSuggestToFollowThem_t WhichUsersSuggestToFollowThem,
+					  MYSQL_RES **mysql_res)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    char SubQuery1[256];
@@ -264,39 +270,40 @@ static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
    char SubQuery4[256];
 
    /***** Build subqueries related to photos *****/
-   if (OnlyUsrsWithPhotos)
+   switch (WhichUsersSuggestToFollowThem)
      {
-      // Photo visibility should be >= profile visibility in every subquery
-      sprintf (SubQuery1,
-               " AND usr_data.PhotoVisibility IN ('%s','%s')"
-               " AND usr_data.Photo<>''",
-	       Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-	       Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
-      sprintf (SubQuery2,
-               " AND usr_data.PhotoVisibility IN ('%s','%s','%s')"
-               " AND usr_data.Photo<>''",
-	       Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
-	       Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-	       Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
-      sprintf (SubQuery3,
-               " AND usr_data.PhotoVisibility IN ('%s','%s','%s','%s')"
-               " AND usr_data.Photo<>''",
-	       Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
-	       Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
-	       Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-	       Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
-      sprintf (SubQuery4,
-               " AND usr_data.PhotoVisibility IN ('%s','%s')"
-               " AND usr_data.Photo<>''",
-	       Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-               Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
-     }
-   else
-     {
-      SubQuery1[0] = '\0';
-      SubQuery2[0] = '\0';
-      SubQuery3[0] = '\0';
-      SubQuery4[0] = '\0';
+      case Fol_SUGGEST_ONLY_USERS_WITH_PHOTO:
+	 // Photo visibility should be >= profile visibility in every subquery
+	 sprintf (SubQuery1,		// 1. Users followed by my followed
+		  " AND usr_data.PhotoVisibility IN ('%s','%s')"
+		  " AND usr_data.Photo<>''",
+		  Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+		  Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
+	 sprintf (SubQuery2,		// 2. Users who share any course with me
+		  " AND usr_data.PhotoVisibility IN ('%s','%s','%s')"
+		  " AND usr_data.Photo<>''",
+		  Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+		  Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+		  Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
+	 sprintf (SubQuery3,		// 3. Users who share any course with me with another role
+		  " AND usr_data.PhotoVisibility IN ('%s','%s','%s','%s')"
+		  " AND usr_data.Photo<>''",
+		  Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
+		  Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+		  Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+		  Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
+	 sprintf (SubQuery4,		// 4. Add some likely unknown random users
+		  " AND usr_data.PhotoVisibility IN ('%s','%s')"
+		  " AND usr_data.Photo<>''",
+		  Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+		  Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
+	 break;
+      case Fol_SUGGEST_ANY_USER:
+	 SubQuery1[0] = '\0';
+	 SubQuery2[0] = '\0';
+	 SubQuery3[0] = '\0';
+	 SubQuery4[0] = '\0';
+	 break;
      }
 
    /***** Build query to get users to follow *****/
@@ -307,8 +314,7 @@ static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
 			  /***** Likely known users *****/
 			  "(SELECT DISTINCT UsrCod FROM"
 			  " ("
-			  // Users followed by my followed whose privacy is
-			  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+			  // 1. Users followed by my followed
 			  "("
 			  "SELECT DISTINCT usr_follow.FollowedCod AS UsrCod"
 			  " FROM usr_follow,"
@@ -318,15 +324,12 @@ static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
 			  " WHERE usr_follow.FollowerCod=my_followed.FollowedCod"
 			  " AND usr_follow.FollowedCod<>%ld"
 			  " AND usr_follow.FollowedCod=usr_data.UsrCod"
-			  " AND usr_data.BaPrfVisibility IN ('%s','%s')"
 			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
 			  " AND usr_data.FirstName<>''"	// First name not empty
 			  "%s"				// SubQuery1
 			  ")"
 			  " UNION "
-			  // Users who share any course with me
-			  // and whose privacy is Pri_VISIBILITY_COURSE,
-			  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+			  // 2. Users who share any course with me
 			  "("
 			  "SELECT DISTINCT crs_usr.UsrCod"
 			  " FROM crs_usr,"
@@ -336,14 +339,12 @@ static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
 			  " WHERE crs_usr.CrsCod=my_crs.CrsCod"
 			  " AND crs_usr.UsrCod<>%ld"
 			  " AND crs_usr.UsrCod=usr_data.UsrCod"
-			  " AND usr_data.BaPrfVisibility IN ('%s','%s','%s')"
 			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
 			  " AND usr_data.FirstName<>''"	// First name not empty
 			  "%s"				// SubQuery2
 			  ")"
 			  " UNION "
-			  // Users who share any course with me with another role
-			  // and whose privacy is Pri_VISIBILITY_USER
+			  // 3. Users who share any course with me with another role
 			  "("
 			  "SELECT DISTINCT crs_usr.UsrCod"
 			  " FROM crs_usr,"
@@ -353,7 +354,6 @@ static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
 			  " WHERE crs_usr.CrsCod=my_crs_role.CrsCod"
 			  " AND crs_usr.Role<>my_crs_role.Role"
 			  " AND crs_usr.UsrCod=usr_data.UsrCod"
-			  " AND usr_data.BaPrfVisibility='%s'"
 			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
 			  " AND usr_data.FirstName<>''"	// First name not empty
 			  "%s"				// SubQuery3
@@ -363,17 +363,15 @@ static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
 			  " WHERE UsrCod NOT IN"
 			  " (SELECT FollowedCod FROM usr_follow"
 			  " WHERE FollowerCod=%ld)"
-			  // Get only MaxUsrsToShow * 2 users
+			  // Get only MaxUsrsToShow * 3 users
 			  " ORDER BY RAND() LIMIT %lu"
 			  ")"
 			  " UNION "
 			  "("
 			  /***** Likely unknown users *****/
-			  // Add some likely unknown random users with privacy
-			  // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
+			  // 4. Add some likely unknown random users
 			  "SELECT UsrCod FROM usr_data"
 			  " WHERE UsrCod<>%ld"
-			  " AND BaPrfVisibility IN ('%s','%s')"
 			  " AND Surname1<>''"		// Surname 1 not empty
 			  " AND FirstName<>''"		// First name not empty
 			  "%s"				// SubQuery4
@@ -390,27 +388,19 @@ static unsigned long Fol_GetUsrsWhoToFollow (unsigned long MaxUsrsToShow,
 
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-			  Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
 			  SubQuery1,
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
-			  Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-			  Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
 			  SubQuery2,
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
 			  SubQuery3,
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  MaxUsrsToShow * 2,		// 2/3 likely known users
+			  MaxUsrsToShow * 3,		// 3/4 likely known users
 
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
-			  Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
 			  SubQuery4,
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  MaxUsrsToShow,		// 1/3 likely unknown users
+			  MaxUsrsToShow,		// 1/4 likely unknown users
 
 			  MaxUsrsToShow);
   }

@@ -459,10 +459,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.86.1 (2019-03-23)"
+#define Log_PLATFORM_VERSION	"SWAD 18.86.2 (2019-03-24)"
 #define CSS_FILE		"swad18.85.1.css"
 #define JS_FILE			"swad18.85.js"
 /*
+TODO: Comprobar consultas de usuarios a quienes seguir después de los cambios en privacidad del perfil público básico
+
+	Version 18.86.2:  Mar 24, 2019 	Optimization in suggestion of users to follow. (240935 lines)
 	Version 18.86.1:  Mar 23, 2019 	Changes in writing of a floating point number.
 					Mask applied to figure about privacy.
 					Mash applied when receiving form with privacy. (240944 lines)
