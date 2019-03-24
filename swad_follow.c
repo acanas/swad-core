@@ -368,19 +368,28 @@ static unsigned long Fol_GetUsrsToFollow (unsigned long MaxUsrsToShow,
 			  ")"
 			  " UNION "
 			  "("
-			  /***** Likely unknown users *****/
-			  // 4. Add some likely unknown random users
-			  "SELECT UsrCod FROM usr_data"
-			  " WHERE UsrCod<>%ld"
-			  " AND Surname1<>''"		// Surname 1 not empty
-			  " AND FirstName<>''"		// First name not empty
+			  /***** Likely unknown userd *****/
+			  // 4. Add some likely unknown random user
+			  // Be careful with the method to get some random users
+			  // from the big table of users.
+			  // It's much faster getting a random code and then get the first users
+			  // with codes >= that random code
+			  // that getting all users and then ordering by rand.
+			  "SELECT usr_data.UsrCod"
+			  " FROM usr_data,"
+			  "(SELECT ROUND(RAND()*(SELECT MAX(UsrCod) FROM usr_data)) AS RandomUsrCod)"	// a random user code
+			  " AS random_usr"
+			  " WHERE usr_data.UsrCod<>%ld"
+			  " AND usr_data.Surname1<>''"	// Surname 1 not empty
+			  " AND usr_data.FirstName<>''"	// First name not empty
 			  "%s"				// SubQuery4
 			  // Do not select my followed
-			  " AND UsrCod NOT IN"
+			  " AND usr_data.UsrCod NOT IN"
 			  " (SELECT FollowedCod FROM usr_follow"
 			  " WHERE FollowerCod=%ld)"
+			  " AND usr_data.UsrCod>=random_usr.RandomUsrCod"	// random user code could not exists in table of users
 			  // Get only MaxUsrsToShow users
-			  " ORDER BY RAND() LIMIT %lu"
+			  " LIMIT %lu"
 			  ")"
 			  ") AS UsrsToFollow"
 			  // Get only MaxUsrsToShow users
@@ -395,12 +404,12 @@ static unsigned long Fol_GetUsrsToFollow (unsigned long MaxUsrsToShow,
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
 			  SubQuery3,
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  MaxUsrsToShow * 3,		// 3/4 likely known users
+			  MaxUsrsToShow * 2,		// 2/3 likely known users
 
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
 			  SubQuery4,
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  MaxUsrsToShow,		// 1/4 likely unknown users
+			  MaxUsrsToShow,		// 1/3 likely unknown users
 
 			  MaxUsrsToShow);
   }

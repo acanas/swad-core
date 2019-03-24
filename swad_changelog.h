@@ -38,12 +38,24 @@
 /****************************** Debug example ********************************/
 /*****************************************************************************/
 /*
-      DB_QueryINSERT ("can not debug",
-		      "INSERT INTO debug"
-		      " (DebugTime,Txt)"
-		      " VALUES"
-		      " (NOW(),'ActCod = %ld')",
-		      Act_GetActCod (Gbl.Action.Act));
+   struct timeval tv1,tv2;
+   long tv_usecs;
+
+   gettimeofday (&tv1,NULL);
+
+   function ();
+
+   gettimeofday (&tv2,NULL);
+   tv_usecs = (tv2.tv_sec  - tv1.tv_sec ) * 1E6 +
+	      (tv2.tv_usec - tv1.tv_usec);
+*/
+/*
+   DB_QueryINSERT ("can not debug",
+		   "INSERT INTO debug"
+		   " (DebugTime,Txt)"
+		   " VALUES"
+		   " (NOW(),'ActCod = %ld')",
+		   Act_GetActCod (Gbl.Action.Act));
 */
 /*****************************************************************************/
 /*********************************** TODO ************************************/
@@ -459,12 +471,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.86.2 (2019-03-24)"
+#define Log_PLATFORM_VERSION	"SWAD 18.86.3 (2019-03-24)"
 #define CSS_FILE		"swad18.85.1.css"
 #define JS_FILE			"swad18.85.js"
 /*
-TODO: Comprobar consultas de usuarios a quienes seguir después de los cambios en privacidad del perfil público básico
-
+	Version 18.86.3:  Mar 24, 2019 	Optimization in suggestion of users to follow. (240965 lines)
 	Version 18.86.2:  Mar 24, 2019 	Optimization in suggestion of users to follow. (240935 lines)
 	Version 18.86.1:  Mar 23, 2019 	Changes in writing of a floating point number.
 					Mask applied to figure about privacy.

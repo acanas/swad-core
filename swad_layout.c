@@ -1020,6 +1020,8 @@ static void Lay_ShowLeftColumn (void)
 static void Lay_ShowRightColumn (void)
   {
    extern const char *Txt_If_you_have_an_Android_device_try_SWADroid;
+   struct timeval tv1,tv2;
+   long tv_usecs;
 
    /***** Banners *****/
    Ban_WriteMenuWithBanners ();
@@ -1044,9 +1046,23 @@ static void Lay_ShowRightColumn (void)
      }
    else if (Gbl.Usrs.Me.Logged)		// I am logged
      {
+      gettimeofday (&tv1,NULL);
+
       /***** Suggest one user to follow *****/
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
       Fol_SuggestUsrsToFollowMainZoneOnRightColumn ();
+
+      gettimeofday (&tv2,NULL);
+      tv_usecs = (tv2.tv_sec  - tv1.tv_sec ) * 1E6 +
+	         (tv2.tv_usec - tv1.tv_usec);
+
+      DB_QueryINSERT ("can not debug",
+		      "INSERT INTO debug"
+		      " (DebugTime,Txt)"
+		      " VALUES"
+		      " (NOW(),'Fol_SuggestUsrsToFollowMainZoneOnRightColumn: %ld us')",
+		      tv_usecs);
+
       fprintf (Gbl.F.Out,"</div>");
      }
 

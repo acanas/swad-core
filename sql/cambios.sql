@@ -12691,3 +12691,164 @@ ALTER TABLE usr_data CHANGE COLUMN BasicProfileVisibility BaPrfVisibility ENUM('
 ALTER TABLE usr_data DROP COLUMN ExtendedProfileVisibility;
 			     
 			     
+			     
+			     
+ SELECT DISTINCT UsrCod FROM
+ (
+ (SELECT DISTINCT UsrCod FROM
+ (
+ (
+ SELECT DISTINCT usr_follow.FollowedCod AS UsrCod
+ FROM usr_follow,
+ (SELECT FollowedCod FROM usr_follow
+ WHERE FollowerCod=1346) AS my_followed,
+ usr_data
+ WHERE usr_follow.FollowerCod=my_followed.FollowedCod
+ AND usr_follow.FollowedCod<>1346
+ AND usr_follow.FollowedCod=usr_data.UsrCod
+ AND usr_data.Surname1<>''
+ AND usr_data.FirstName<>''
+ AND usr_data.PhotoVisibility IN ('system','world')
+ AND usr_data.Photo<>''
+ )
+ UNION 
+ (
+ SELECT DISTINCT crs_usr.UsrCod
+ FROM crs_usr,
+ (SELECT CrsCod FROM crs_usr
+ WHERE UsrCod=1346) AS my_crs,
+ usr_data
+ WHERE crs_usr.CrsCod=my_crs.CrsCod
+ AND crs_usr.UsrCod<>1346
+ AND crs_usr.UsrCod=usr_data.UsrCod
+ AND usr_data.Surname1<>''
+ AND usr_data.FirstName<>''
+ AND usr_data.PhotoVisibility IN ('course','system','world')
+ AND usr_data.Photo<>''
+ )
+ UNION 
+ (
+ SELECT DISTINCT crs_usr.UsrCod
+ FROM crs_usr,
+ (SELECT CrsCod,Role FROM crs_usr
+ WHERE UsrCod=1346) AS my_crs_role,
+ usr_data
+ WHERE crs_usr.CrsCod=my_crs_role.CrsCod
+ AND crs_usr.Role<>my_crs_role.Role
+ AND crs_usr.UsrCod=usr_data.UsrCod
+ AND usr_data.Surname1<>''
+ AND usr_data.FirstName<>''
+ AND usr_data.PhotoVisibility IN ('user','course','system','world')
+ AND usr_data.Photo<>''
+ )
+ ) AS LikelyKnownUsrsToFollow
+ WHERE UsrCod NOT IN
+ (SELECT FollowedCod FROM usr_follow
+ WHERE FollowerCod=1346)
+ ORDER BY RAND() LIMIT 6
+ )
+ UNION 
+ (
+ SELECT usr_data.UsrCod FROM usr_data,
+(SELECT ROUND(RAND() * (SELECT MAX(UsrCod) FROM usr_data)) AS UsrCod) AS random_usr
+ WHERE usr_data.UsrCod<>1346
+ AND usr_data.Surname1<>''
+ AND usr_data.FirstName<>''
+ AND usr_data.PhotoVisibility IN ('system','world')
+ AND usr_data.Photo<>''
+ AND usr_data.UsrCod NOT IN
+ (SELECT FollowedCod FROM usr_follow
+ WHERE FollowerCod=1346)
+ AND usr_data.UsrCod>=random_usr.UsrCod
+ LIMIT 3
+ )
+ ) AS UsrsToFollow
+ ORDER BY RAND() LIMIT 3;
+
+
+
+
+
+
+ SELECT usr_data.UsrCod FROM usr_data,
+(SELECT ROUND(RAND() * (SELECT MAX(UsrCod) FROM usr_data)) AS UsrCod) AS random_usr
+ WHERE usr_data.UsrCod<>1346
+ AND usr_data.Surname1<>''
+ AND usr_data.FirstName<>''
+ AND usr_data.PhotoVisibility IN ('system','world')
+ AND usr_data.Photo<>''
+ AND usr_data.UsrCod NOT IN
+ (SELECT FollowedCod FROM usr_follow
+ WHERE FollowerCod=1346)
+ AND usr_data.UsrCod>=random_usr.UsrCod
+ LIMIT 3;
+
+
+
+
+
+
+
+
+
+
+
+
+			     
+ SELECT DISTINCT UsrCod FROM
+ (
+ (SELECT DISTINCT UsrCod FROM
+ (
+ (
+ SELECT DISTINCT usr_follow.FollowedCod AS UsrCod
+ FROM usr_follow,
+ (SELECT FollowedCod FROM usr_follow
+ WHERE FollowerCod=1346) AS my_followed,
+ usr_data
+ WHERE usr_follow.FollowerCod=my_followed.FollowedCod
+ AND usr_follow.FollowedCod<>1346
+ AND usr_follow.FollowedCod=usr_data.UsrCod
+ AND usr_data.Surname1<>''
+ AND usr_data.FirstName<>''
+ AND usr_data.PhotoVisibility IN ('system','world')
+ AND usr_data.Photo<>''
+ )
+ UNION 
+ (
+ SELECT DISTINCT crs_usr.UsrCod
+ FROM crs_usr,
+ (SELECT CrsCod FROM crs_usr
+ WHERE UsrCod=1346) AS my_crs,
+ usr_data
+ WHERE crs_usr.CrsCod=my_crs.CrsCod
+ AND crs_usr.UsrCod<>1346
+ AND crs_usr.UsrCod=usr_data.UsrCod
+ AND usr_data.Surname1<>''
+ AND usr_data.FirstName<>''
+ AND usr_data.PhotoVisibility IN ('course','system','world')
+ AND usr_data.Photo<>''
+ )
+ UNION 
+ (
+ SELECT DISTINCT crs_usr.UsrCod
+ FROM crs_usr,
+ (SELECT CrsCod,Role FROM crs_usr
+ WHERE UsrCod=1346) AS my_crs_role,
+ usr_data
+ WHERE crs_usr.CrsCod=my_crs_role.CrsCod
+ AND crs_usr.Role<>my_crs_role.Role
+ AND crs_usr.UsrCod=usr_data.UsrCod
+ AND usr_data.Surname1<>''
+ AND usr_data.FirstName<>''
+ AND usr_data.PhotoVisibility IN ('user','course','system','world')
+ AND usr_data.Photo<>''
+ )
+ ) AS LikelyKnownUsrsToFollow
+ WHERE UsrCod NOT IN
+ (SELECT FollowedCod FROM usr_follow
+ WHERE FollowerCod=1346)
+ ORDER BY RAND() LIMIT 6
+ )
+ ) AS UsrsToFollow
+ ORDER BY RAND() LIMIT 3;
+
