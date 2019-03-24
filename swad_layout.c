@@ -1006,7 +1006,8 @@ static void Lay_ShowLeftColumn (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
-      Not_ShowNotices (Not_LIST_BRIEF_NOTICES);
+      Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
+	               -1L);	// No notice highlighted
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -1020,8 +1021,8 @@ static void Lay_ShowLeftColumn (void)
 static void Lay_ShowRightColumn (void)
   {
    extern const char *Txt_If_you_have_an_Android_device_try_SWADroid;
-   struct timeval tv1,tv2;
-   long tv_usecs;
+   // struct timeval tv1,tv2;
+   // long tv_usecs;
 
    /***** Banners *****/
    Ban_WriteMenuWithBanners ();
@@ -1046,12 +1047,13 @@ static void Lay_ShowRightColumn (void)
      }
    else if (Gbl.Usrs.Me.Logged)		// I am logged
      {
+      /*
       gettimeofday (&tv1,NULL);
-
+      */
       /***** Suggest one user to follow *****/
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
       Fol_SuggestUsrsToFollowMainZoneOnRightColumn ();
-
+      /*
       gettimeofday (&tv2,NULL);
       tv_usecs = (tv2.tv_sec  - tv1.tv_sec ) * 1E6 +
 	         (tv2.tv_usec - tv1.tv_usec);
@@ -1062,7 +1064,7 @@ static void Lay_ShowRightColumn (void)
 		      " VALUES"
 		      " (NOW(),'Fol_SuggestUsrsToFollowMainZoneOnRightColumn: %ld us')",
 		      tv_usecs);
-
+      */
       fprintf (Gbl.F.Out,"</div>");
      }
 
@@ -1239,6 +1241,20 @@ void Lay_StartSection (const char *SectionId)
 void Lay_EndSection (void)
   {
    fprintf (Gbl.F.Out,"</section>");
+  }
+
+/*****************************************************************************/
+/****************************** Start/end article ****************************/
+/*****************************************************************************/
+
+void Lay_StartArticle (const char *ArticleId)
+  {
+   fprintf (Gbl.F.Out,"<article id=\"%s\">",ArticleId);
+  }
+
+void Lay_EndArticle (void)
+  {
+   fprintf (Gbl.F.Out,"</article>");
   }
 
 /*****************************************************************************/

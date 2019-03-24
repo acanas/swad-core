@@ -1456,6 +1456,16 @@ a:hover						/* Default ==> underlined */
 	}
 
 /********************************** Notice ***********************************/
+.NOTICE_HIGHLIGHT
+	{
+	padding:10px 0;
+	background-color:#ddecf1;
+	animation: fadein 2s linear forwards;
+	}
+@keyframes fadein
+	{
+	to {background-color:white;}
+	}
 .NOTICE_CONTAINER_ACTIVE
 	{
 	box-sizing:border-box;

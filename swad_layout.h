@@ -74,6 +74,9 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 void Lay_StartSection (const char *SectionId);
 void Lay_EndSection (void);
 
+void Lay_StartArticle (const char *ArticleId);
+void Lay_EndArticle (void);
+
 void Lay_NotEnoughMemoryExit (void);
 void Lay_WrongScopeExit (void);
 void Lay_NoPermissionExit (void);

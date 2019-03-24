@@ -74,7 +74,7 @@ static void Not_PutIconToAddNewNotice (void);
 static void Not_PutButtonToAddNewNotice (void);
 static void Not_GetDataAndShowNotice (long NotCod);
 static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
-                             long NotCod,
+                             long NotCod,bool Highlight,
                              time_t TimeUTC,
                              const char *Content,
                              long UsrCod,
@@ -118,7 +118,8 @@ void Not_ShowFormNotice (void)
    Frm_EndForm ();
 
    /***** Show all notices *****/
-   Not_ShowNotices (Not_LIST_FULL_NOTICES);
+   Not_ShowNotices (Not_LIST_FULL_NOTICES,
+	            -1L);	// No notice highlighted
   }
 
 /*****************************************************************************/
@@ -152,6 +153,9 @@ void Not_ReceiveNotice (void)
 
    /***** Create a new social note about the new notice *****/
    TL_StoreAndPublishNote (TL_NOTE_NOTICE,NotCod,&SocPub);
+
+   /***** Set notice to be highlighted *****/
+   Gbl.CurrentCrs.Notices.HighlightNotCod = NotCod;
   }
 
 /*****************************************************************************/
@@ -206,12 +210,19 @@ void Not_ListNoticesAfterRemoval (void)
 
 void Not_ListFullNotices (void)
   {
-   /***** Show highlighted notice *****/
-   if (Gbl.CurrentCrs.Notices.HighlightNotCod > 0)
-      Not_GetDataAndShowNotice (Gbl.CurrentCrs.Notices.HighlightNotCod);
-
    /***** Show all notices *****/
-   Not_ShowNotices (Not_LIST_FULL_NOTICES);
+   Not_ShowNotices (Not_LIST_FULL_NOTICES,
+	            Gbl.CurrentCrs.Notices.HighlightNotCod);	// Highlight notice
+  }
+
+/*****************************************************************************/
+/************************* Get highlighted notice code ***********************/
+/*****************************************************************************/
+
+void Not_GetHighLightedNotCod (void)
+  {
+   /***** Get notice to be highlighted *****/
+   Gbl.CurrentCrs.Notices.HighlightNotCod = Not_GetParamNotCod ();
   }
 
 /*****************************************************************************/
@@ -234,6 +245,9 @@ void Not_HideActiveNotice (void)
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
+
+   /***** Set notice to be highlighted *****/
+   Gbl.CurrentCrs.Notices.HighlightNotCod = NotCod;
   }
 
 /*****************************************************************************/
@@ -256,6 +270,9 @@ void Not_RevealHiddenNotice (void)
 
    /***** Update RSS of current course *****/
    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
+
+   /***** Set notice to be highlighted *****/
+   Gbl.CurrentCrs.Notices.HighlightNotCod = NotCod;
   }
 
 /*****************************************************************************/
@@ -266,23 +283,26 @@ void Not_RequestRemNotice (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_notice;
    extern const char *Txt_Remove;
+   long NotCod;
 
    /***** Get the code of the notice to remove *****/
-   Gbl.CurrentCrs.Notices.NotCod = Not_GetParamNotCod ();
+   NotCod = Not_GetParamNotCod ();
 
    /***** Show question and button to remove this notice *****/
    /* Start alert */
    Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_notice);
 
    /* Show notice */
-   Not_GetDataAndShowNotice (Gbl.CurrentCrs.Notices.NotCod);
+   Not_GetDataAndShowNotice (NotCod);
 
    /* End alert */
+   Gbl.CurrentCrs.Notices.NotCod = NotCod;	// To put parameters
    Ale_ShowAlertAndButton2 (ActRemNot,NULL,NULL,Not_PutParams,
 			    Btn_REMOVE_BUTTON,Txt_Remove);
 
    /***** Show all notices *****/
-   Not_ShowNotices (Not_LIST_FULL_NOTICES);
+   Not_ShowNotices (Not_LIST_FULL_NOTICES,
+	            NotCod);	// Highlight notice to be removed
   }
 
 /*****************************************************************************/
@@ -323,23 +343,12 @@ void Not_RemoveNotice (void)
   }
 
 /*****************************************************************************/
-/********************* Get notice to show highlighted ************************/
-/*****************************************************************************/
-
-void Not_GetNotCodToHighlight (void)
-  {
-   /***** Get the code of the notice to highlight *****/
-   Gbl.CurrentCrs.Notices.HighlightNotCod = Not_GetParamNotCod ();
-  }
-
-/*****************************************************************************/
 /***************************** Show the notices ******************************/
 /*****************************************************************************/
 
-void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
+void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
   {
    extern const char *Hlp_MESSAGES_Notices;
-   extern const char *Txt_All_notices;
    extern const char *Txt_Notices;
    extern const char *Txt_No_notices;
    MYSQL_RES *mysql_res;
@@ -395,8 +404,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	           "%upx",
 	           Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
 	 Box_StartBox (StrWidth,
-	               Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
-	                	                                    Txt_Notices,
+	               Txt_Notices,
 		       Not_PutIconsListNotices,
 		       Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
          if (!NumNotices)
@@ -437,6 +445,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 /* Draw the notice */
 	 Not_DrawANotice (TypeNoticesListing,
 	                  NotCod,
+			  (NotCod == HighlightNotCod),	// Highlighted?
 	                  TimeUTC,Content,UsrCod,Status);
 	}
 
@@ -581,6 +590,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
       /***** Draw the notice *****/
       Not_DrawANotice (Not_LIST_FULL_NOTICES,
 		       NotCod,
+		       false,	// Not highlighted
 		       TimeUTC,Content,UsrCod,Status);
      }
 
@@ -593,7 +603,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
 /*****************************************************************************/
 
 static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
-                             long NotCod,
+                             long NotCod,bool Highlight,
                              time_t TimeUTC,
                              const char *Content,
                              long UsrCod,
@@ -627,8 +637,19 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      };
    static unsigned UniqueId = 0;
    struct UsrData UsrDat;
+   char Anchor[16 + 10 + 1];
 
-   Gbl.CurrentCrs.Notices.NotCod = NotCod;	// Parameter for forms
+   /***** Build anchor string *****/
+   snprintf (Anchor,sizeof (Anchor),
+	     "NOT_%ld",NotCod);
+
+   /***** Start article for this notice *****/
+   if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
+     {
+      Lay_StartArticle (Anchor);
+      if (Highlight)
+	 fprintf (Gbl.F.Out,"<div class=\"NOTICE_HIGHLIGHT\">");
+     }
 
    /***** Start yellow note *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"width:%upx;\">",
@@ -641,6 +662,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      {
       if (Not_CheckIfICanEditNotices ())
 	{
+	 Gbl.CurrentCrs.Notices.NotCod = NotCod;	// To put parameters
+
 	 /***** Put form to remove announcement *****/
          Ico_PutContextualIconToRemove (ActReqRemNot,Not_PutParams);
 
@@ -648,12 +671,12 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
          switch (Status)
            {
             case Not_ACTIVE_NOTICE:
-	       Lay_PutContextualLinkOnlyIcon (ActHidNot,NULL,Not_PutParams,
+	       Lay_PutContextualLinkOnlyIcon (ActHidNot,Anchor,Not_PutParams,
 					      "eye.svg",
 					      Txt_NOTICE_Active_Mark_as_obsolete);
                break;
             case Not_OBSOLETE_NOTICE:
-	       Lay_PutContextualLinkOnlyIcon (ActRevNot,NULL,Not_PutParams,
+	       Lay_PutContextualLinkOnlyIcon (ActRevNot,Anchor,Not_PutParams,
 					      "eye-slash.svg",
 					      Txt_NOTICE_Obsolete_Mark_as_active);
                break;
@@ -696,7 +719,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       /* Form to view full notice */
-      Frm_StartForm (ActSeeOneNot);
+      Frm_StartFormAnchor (ActSeeOneNot,Anchor);
       Not_PutHiddenParamNotCod (NotCod);
       Frm_LinkFormSubmit (Txt_See_full_notice,DateClass[Status],NULL);
      }
@@ -722,7 +745,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
       /* Put form to view full notice */
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,NULL,Not_PutParams,
+      Gbl.CurrentCrs.Notices.NotCod = NotCod;	// To put parameters
+      Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,Not_PutParams,
 				     "ellipsis-h.svg",
 				     Txt_See_full_notice);
       fprintf (Gbl.F.Out,"</div>");
@@ -743,6 +767,14 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
    /***** End yellow note *****/
    fprintf (Gbl.F.Out,"</div>");
+
+   /***** End article for this notice *****/
+   if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
+     {
+      if (Highlight)
+	 fprintf (Gbl.F.Out,"</div>");
+      Lay_EndArticle ();
+     }
   }
 
 /*****************************************************************************/
@@ -1011,11 +1043,6 @@ void Not_PutHiddenParamNotCod (long NotCod)
 
 static long Not_GetParamNotCod (void)
   {
-   long NotCod;
-
    /***** Get notice code *****/
-   if ((NotCod = Par_GetParToLong ("NotCod")) <= 0)
-      Lay_ShowErrorAndExit ("Wrong code of notice.");
-
-   return NotCod;
+   return Par_GetParToLong ("NotCod");
   }

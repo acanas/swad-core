@@ -1295,27 +1295,6 @@ const char *Txt_All_groups =
 	"Todos os grupos";
 #endif
 
-const char *Txt_All_notices =
-#if   L==1	// ca
-	"Tots els avisos";
-#elif L==2	// de
-	"Alle Ank&uuml;ndigungen";
-#elif L==3	// en
-	"All notices";
-#elif L==4	// es
-	"Todos los avisos";
-#elif L==5	// fr
-	"Tous les avis";
-#elif L==6	// gn
-	"Todos los avisos";	// Okoteve traducción
-#elif L==7	// it
-	"Tutti i avvisi";
-#elif L==8	// pl
-	"Wszystkie ogloszenia";
-#elif L==9	// pt
-	"Todos os avisos";
-#endif
-
 const char *Txt_All_places =
 #if   L==1	// ca
 	"Tots els llocs";

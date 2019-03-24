@@ -59,6 +59,7 @@ void Not_ShowFormNotice (void);
 void Not_ReceiveNotice (void);
 void Not_ListNoticesAfterRemoval (void);
 void Not_ListFullNotices (void);
+void Not_GetHighLightedNotCod (void);
 
 void Not_HideActiveNotice (void);
 void Not_RevealHiddenNotice (void);
@@ -66,8 +67,7 @@ void Not_RevealHiddenNotice (void);
 void Not_RequestRemNotice (void);
 void Not_RemoveNotice (void);
 
-void Not_GetNotCodToHighlight (void);
-void Not_ShowNotices (Not_Listing_t TypeNoticesListing);
+void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod);
 void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,
                                      long NotCod,bool GetContent);

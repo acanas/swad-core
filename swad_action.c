@@ -2876,7 +2876,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRevAnn		*/{1471,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Ann_RevealHiddenAnnouncement	,Ann_ShowAllAnnouncements	,NULL},
    /* ActRemAnn		*/{1236,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_RemoveAnnouncement		,NULL},
 
-   /* ActSeeOneNot	*/{1164,-1,TabUnk,ActSeeAllNot		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_GetNotCodToHighlight	,Not_ListFullNotices		,NULL},
+   /* ActSeeOneNot	*/{1164,-1,TabUnk,ActSeeAllNot		,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_GetHighLightedNotCod	,Not_ListFullNotices		,NULL},
    /* ActWriNot		*/{  59,-1,TabUnk,ActSeeAllNot		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Not_ShowFormNotice		,NULL},
    /* ActRcvNot		*/{  60,-1,TabUnk,ActSeeAllNot		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_ReceiveNotice		,Not_ListFullNotices		,NULL},
    /* ActHidNot		*/{ 763,-1,TabUnk,ActSeeAllNot		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Not_HideActiveNotice		,Not_ListFullNotices		,NULL},

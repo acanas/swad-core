@@ -505,7 +505,7 @@ struct Globals
         } Records;
       struct
         {
-         long NotCod;		// Notice to be edited, removed...
+         long NotCod;		// Notice to be edited, removed... used as parameter
          long HighlightNotCod;	// Notice code of a notice to be highlighted
         } Notices;
      } CurrentCrs;

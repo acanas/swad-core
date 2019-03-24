@@ -446,8 +446,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 // TODO: Change in usability of Announcements of exams, suggested by Javier Fernández Baldomero.
 // TODO: Al pulsar sobre una convocatoria de examen / aviso --> ir a la sección de esa convocatoria/aviso en lugar de mostrarlo repetido y destacado arriba
 
-// TODO: Los usuarios que no tienes permiso para ver su perfil público, se debería mostrar algo, una mínima ficha sin tinmeline o algo así
-
 // TODO: Allow timeline posting only for users belonging to courses or admins to avoid user who create accounts only to post
 
 // TODO: Ver cómo recibir un fichero desde el cliente (SWADroid) en gsoap
@@ -471,10 +469,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.86.3 (2019-03-24)"
-#define CSS_FILE		"swad18.85.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.87 (2019-03-24)"
+#define CSS_FILE		"swad18.87.css"
 #define JS_FILE			"swad18.85.js"
 /*
+	Version 18.87:    Mar 24, 2019 	Change in usability of notices. (240997 lines)
 	Version 18.86.3:  Mar 24, 2019 	Optimization in suggestion of users to follow. (240965 lines)
 	Version 18.86.2:  Mar 24, 2019 	Optimization in suggestion of users to follow. (240935 lines)
 	Version 18.86.1:  Mar 23, 2019 	Changes in writing of a floating point number.
