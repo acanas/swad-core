@@ -1879,6 +1879,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
    extern const char *Txt_TIMELINE_NOTE[TL_NUM_NOTE_TYPES];
    extern const char *Txt_not_available;
    char Class[64];
+   char *Anchor = NULL;
    const Act_Action_t TL_DefaultActions[TL_NUM_NOTE_TYPES] =
      {
       ActUnk,			// TL_NOTE_UNKNOWN
@@ -2001,7 +2002,10 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case TL_NOTE_EXAM_ANNOUNCEMENT:
-	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
+            Exa_SetAnchorStr (SocNot->Cod,&Anchor);
+	    Frm_StartFormUniqueAnchor (TL_DefaultActions[SocNot->NoteType],
+		                       Anchor);	// Locate on this specific exam
+            Exa_FreeAnchorStr (Anchor);
 	    Exa_PutHiddenParamExaCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
@@ -2021,7 +2025,10 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case TL_NOTE_NOTICE:
-	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
+            Not_SetAnchorStr (SocNot->Cod,&Anchor);
+	    Frm_StartFormUniqueAnchor (TL_DefaultActions[SocNot->NoteType],
+				       Anchor);
+            Not_FreeAnchorStr (Anchor);
 	    Not_PutHiddenParamNotCod (SocNot->Cod);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course

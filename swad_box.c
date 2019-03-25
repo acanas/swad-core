@@ -58,9 +58,9 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Box_StartBoxInternal (const char *Width,const char *Title,
-                                  void (*FunctionToDrawContextualIcons) (void),
-                                  const char *HelpLink,Box_Closable_t Closable,
-                                  const char *ClassFrame);
+				  void (*FunctionToDrawContextualIcons) (void),
+				  const char *HelpLink,Box_Closable_t Closable,
+				  const char *ClassFrame);
 
 /*****************************************************************************/
 /******************* Start and end a table with rounded box ******************/
@@ -109,9 +109,9 @@ void Box_StartBoxShadow (const char *Width,const char *Title,
   }
 
 static void Box_StartBoxInternal (const char *Width,const char *Title,
-                                  void (*FunctionToDrawContextualIcons) (void),
-                                  const char *HelpLink,Box_Closable_t Closable,
-                                  const char *ClassFrame)
+				  void (*FunctionToDrawContextualIcons) (void),
+				  const char *HelpLink,Box_Closable_t Closable,
+				  const char *ClassFrame)
   {
    extern const char *Txt_Help;
    extern const char *Txt_Close;

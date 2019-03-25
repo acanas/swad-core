@@ -814,9 +814,9 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 
    /***** Put form to hide/show survey *****/
    if (Visible)
-      Ico_PutContextualIconToHide (ActHidSvy,Svy_PutParams);
+      Ico_PutContextualIconToHide (ActHidSvy,NULL,Svy_PutParams);
    else
-      Ico_PutContextualIconToUnhide (ActShoSvy,Svy_PutParams);
+      Ico_PutContextualIconToUnhide (ActShoSvy,NULL,Svy_PutParams);
 
    /***** Put form to edit survey *****/
    Ico_PutContextualIconToEdit (ActEdiOneSvy,Svy_PutParams);

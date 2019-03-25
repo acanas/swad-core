@@ -1715,9 +1715,8 @@ a:hover						/* Default ==> underlined */
 	{
 	display:inline-block;
 	box-sizing:border-box;
-	margin:5px 0 18px 0;
-	padding:12px;
-	background-color:rgba(255,255,255,0.95);
+	margin:5px 0;
+	padding:8px 12px 20px 12px;
 	border-width:1px;
 	border-style:solid;
 	border-color:#C0C0C0;
@@ -1725,6 +1724,12 @@ a:hover						/* Default ==> underlined */
 	box-shadow:2px 5px 15px #888;
 	text-align:center;
 	overflow:hidden;
+	background-color:#ddecf1;
+	animation: fadein 2s linear forwards;
+	}
+@keyframes fadein
+	{
+	to {background-color:white;}
 	}
 .FRAME_ICO
 	{

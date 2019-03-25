@@ -1211,27 +1211,6 @@ const char *Txt_all =
 	"tudo";
 #endif
 
-const char *Txt_All_announcements_of_exams =
-#if   L==1	// ca
-	 "Totes les convocat&ograve;ries d'ex&agrave;mens";
-#elif L==2	// de
-	 "Alle Aufrufe f&uuml;r Pr&uuml;fung";
-#elif L==3	// en
-	 "All announcements of exams";
-#elif L==4	// es
-	 "Todas las convocatorias de ex&aacute;menes";
-#elif L==5	// fr
-	 "Tous les convocations &agrave; examens";
-#elif L==6	// gn
-	 "Todas las convocatorias de ex&aacute;menes";	// Okoteve traducción
-#elif L==7	// it
-	 "Tutti i appelli d'esame";
-#elif L==8	// pl
-	 "Wszystkie ogloszenia egzamin&oacute;w";
-#elif L==9	// pt
-	 "Todas as chamadas para exames";
-#endif
-
 const char *Txt_all_degrees =
 #if   L==1	// ca
 	"Totes les titulacions";

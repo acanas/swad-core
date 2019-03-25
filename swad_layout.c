@@ -537,10 +537,11 @@ static void Lay_WriteScripts (void)
       for (NumExamAnnouncement = 0;
 	   NumExamAnnouncement < Gbl.ExamAnns.NumExaAnns;
 	   NumExamAnnouncement++)
-	 fprintf (Gbl.F.Out,"	LstExamAnnouncements.push({ Year: %u, Month: %u, Day: %u });\n",
-		  Gbl.ExamAnns.Lst[NumExamAnnouncement].Year,
-		  Gbl.ExamAnns.Lst[NumExamAnnouncement].Month,
-		  Gbl.ExamAnns.Lst[NumExamAnnouncement].Day);
+	 fprintf (Gbl.F.Out,"	LstExamAnnouncements.push({ ExaCod: %ld, Year: %u, Month: %u, Day: %u });\n",
+		  Gbl.ExamAnns.Lst[NumExamAnnouncement].ExaCod,
+		  Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Year,
+		  Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Month,
+		  Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Day);
 
       fprintf (Gbl.F.Out,"</script>\n");
 

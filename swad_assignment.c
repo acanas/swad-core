@@ -546,9 +546,9 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 
 	 /***** Put form to hide/show assignment *****/
 	 if (Hidden)
-	    Ico_PutContextualIconToUnhide (ActShoAsg,Asg_PutParams);
+	    Ico_PutContextualIconToUnhide (ActShoAsg,NULL,Asg_PutParams);
 	 else
-	    Ico_PutContextualIconToHide (ActHidAsg,Asg_PutParams);
+	    Ico_PutContextualIconToHide (ActHidAsg,NULL,Asg_PutParams);
 
 	 /***** Put form to edit assignment *****/
 	 Ico_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);

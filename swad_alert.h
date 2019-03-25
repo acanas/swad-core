@@ -60,7 +60,7 @@ typedef enum
 void Ale_CreateAlert (Ale_AlertType_t Type,const char *Section,
                       const char *fmt,...);
 
-unsigned Ale_GetNumAlerts (void);
+size_t Ale_GetNumAlerts (void);
 Ale_AlertType_t Ale_GetTypeOfLastAlert (void);
 const char *Ale_GetTextOfLastAlert (void);
 

@@ -2155,8 +2155,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPrnExaAnn	*/{ 179,-1,TabUnk,ActSeeAllExaAnn	,0x3F8,0x3C7,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Exa_PrintExamAnnouncement	,NULL},
    /* ActReqRemExaAnn	*/{1619,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Exa_ReqRemoveExamAnnouncement	,NULL},
    /* ActRemExaAnn	*/{ 187,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Exa_RemoveExamAnnouncement1	,Exa_RemoveExamAnnouncement2	,NULL},
-   /* ActHidExaAnn	*/{1620,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Exa_HideExamAnnouncement1	,Exa_HideExamAnnouncement2	,NULL},
-   /* ActShoExaAnn	*/{1621,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Exa_UnhideExamAnnouncement1	,Exa_UnhideExamAnnouncement2	,NULL},
+   /* ActHidExaAnn	*/{1620,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Exa_HideExamAnnouncement	,Exa_ListExamAnnouncementsEdit	,NULL},
+   /* ActShoExaAnn	*/{1621,-1,TabUnk,ActSeeAllExaAnn	,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Exa_UnhideExamAnnouncement	,Exa_ListExamAnnouncementsEdit	,NULL},
 
    // TabFil ******************************************************************
    // Actions in menu:

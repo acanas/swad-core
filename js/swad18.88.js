@@ -1346,6 +1346,7 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 	var Yea = YearToDraw;
 	var Mon = MonthToDraw;
 	var Day;
+	var ExaCod;
 	var StrMon;
 	var StrDay;
 	var StrDate;
@@ -1484,12 +1485,13 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 						Day == LstExamAnnouncements[NumExamAnnouncement].Day) {
 						ThisDayHasEvent = true;
 						if (!PrintView) {
+							ExaCod = LstExamAnnouncements[NumExamAnnouncement].ExaCod;
 							StrMon = ((Mon < 10) ? '0' : '') + Mon;
 							StrDay = ((Day < 10) ? '0' : '') + Day;
-							StrDate = Yea + '-' + StrMon + '-' + StrDay;
-							TextForDay = STR_EXAM + ': ' + StrDate;
+							StrDate = Yea + StrMon + StrDay;	// YYYYMMDD
+							TextForDay = STR_EXAM;
 						}
-						break;
+						break;	// Only last exam in the day (list is ordered from more recent to older)
 					}
 
 			/***** Write the box with the day *****/
@@ -1504,7 +1506,10 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 			if (!PrintView && ThisDayHasEvent) {
 				FormIdNum++;
 				FormId = id + '_event_' + FormIdNum;
-				Gbl_HTMLContent +=	'<form method="post" action="' + CGI + '" id="' + FormId + '">' +
+				Gbl_HTMLContent +=	'<form method="post" action="' +
+									CGI + '#' + 'exam_' +
+									ExaCod +
+									'" id="' + FormId + '">' +
 									FormEventParams +
 									'<input type="hidden" name=\"Date\" value="' +
 									StrDate +

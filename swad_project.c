@@ -2185,10 +2185,10 @@ static void Prj_PutFormsToRemEditOnePrj (long PrjCod,Prj_HiddenVisibl_t Hidden,
       switch (Hidden)
         {
 	 case Prj_HIDDEN:
-	    Ico_PutContextualIconToUnhide (ActShoPrj,Prj_PutCurrentParams);
+	    Ico_PutContextualIconToUnhide (ActShoPrj,NULL,Prj_PutCurrentParams);
 	    break;
 	 case Prj_VISIBL:
-	    Ico_PutContextualIconToHide (ActHidPrj,Prj_PutCurrentParams);
+	    Ico_PutContextualIconToHide (ActHidPrj,NULL,Prj_PutCurrentParams);
 	    break;
         }
 

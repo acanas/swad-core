@@ -59,7 +59,6 @@ typedef enum
 
 struct ExamData
   {
-   long ExaCod;
    long CrsCod;
    Exa_ExamAnnouncementStatus_t Status;
    char CrsFullName[Hie_MAX_BYTES_FULL_NAME + 1];
@@ -78,6 +77,12 @@ struct ExamData
    char *OtherInfo;
   };
 
+struct Exa_ExamCodeAndDate
+  {
+   long ExaCod;
+   struct Date ExamDate;
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -89,20 +94,23 @@ void Exa_PrintExamAnnouncement (void);
 void Exa_ReqRemoveExamAnnouncement (void);
 void Exa_RemoveExamAnnouncement1 (void);
 void Exa_RemoveExamAnnouncement2 (void);
-void Exa_HideExamAnnouncement1 (void);
-void Exa_HideExamAnnouncement2 (void);
-void Exa_UnhideExamAnnouncement1 (void);
-void Exa_UnhideExamAnnouncement2 (void);
+void Exa_HideExamAnnouncement (void);
+void Exa_UnhideExamAnnouncement (void);
 
 void Exa_FreeMemExamAnnouncement (void);
 void Exa_FreeListExamAnnouncements (void);
 void Exa_ListExamAnnouncementsSee (void);
+void Exa_ListExamAnnouncementsEdit (void);
 
 void Exa_GetExaCodToHighlight (void);
 void Exa_GetDateToHighlight (void);
 
 void Exa_CreateListDatesOfExamAnnouncements (void);
 void Exa_PutHiddenParamExaCod (long ExaCod);
+
+void Exa_SetAnchorStr (long ExaCod,char **Anchor);
+void Exa_FreeAnchorStr (char *Anchor);
+
 void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                                char **ContentStr,
                                                long ExaCod,bool GetContent);

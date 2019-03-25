@@ -107,12 +107,12 @@ struct Globals
      } Form;
    struct
      {
-      unsigned Num;		// Number of alert
+      size_t Num;		// Number of alert
       struct
         {
 	 Ale_AlertType_t Type;
-	 char *Text;
-	 const char *Section;	// Where to display the alert
+	 char *Text;		// Message to be displayed
+	 char *Section;		// Where to display the alert
         } List[Ale_MAX_ALERTS];
      } Alerts;		// Alert message created in a function and printed in a subsequent function.
    struct
@@ -519,12 +519,14 @@ struct Globals
      } Syllabus;
    struct
      {
-      struct Date *Lst;		// List of dates of exam announcements
+      struct Exa_ExamCodeAndDate *Lst;	// List of exam announcements
       unsigned NumExaAnns;	// Number of announcements of exam in the list
+      long NewExaCod;		// New exam announcement just created
       long HighlightExaCod;	// Exam announcement to be highlighted
-      char HighlightDate[4 + 1 + 2 + 1 + 2 + 1];	// Date with exam announcements to be highlighted (in YYYY-MM-DD format)
+      char HighlightDate[4 + 2 + 2 + 1];	// Date with exam announcements to be highlighted (in YYYYMMDD format)
+      long ExaCod;		// Used to put contextual icons
+      const char *Anchor;	// Used to put contextual icons
       struct ExamData ExaDat;
-      bool NewExamAnnouncement;
      } ExamAnns;
    struct
      {

@@ -827,9 +827,9 @@ static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible,
 
    /***** Put icon to hide/show game *****/
    if (Visible)
-      Ico_PutContextualIconToHide (ActHidGam,Gam_PutParams);
+      Ico_PutContextualIconToHide (ActHidGam,NULL,Gam_PutParams);
    else
-      Ico_PutContextualIconToUnhide (ActShoGam,Gam_PutParams);
+      Ico_PutContextualIconToUnhide (ActShoGam,NULL,Gam_PutParams);
 
    /***** Put icon to edit game *****/
    Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);

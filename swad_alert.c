@@ -30,6 +30,7 @@
 #include <stdarg.h>		// For va_start, va_end
 #include <stdio.h>		// For FILE, fprintf, vasprintf
 #include <stdlib.h>		// For free
+#include <string.h>		// For string functions
 
 #include "swad_alert.h"
 #include "swad_form.h"
@@ -84,21 +85,25 @@ void Ale_CreateAlert (Ale_AlertType_t Type,const char *Section,
   {
    va_list ap;
    int NumBytesPrinted;
+   size_t i;
 
    if (Gbl.Alerts.Num + 1 > Ale_MAX_ALERTS)
       Lay_ShowErrorAndExit ("Too many alerts.");
 
+   i = Gbl.Alerts.Num;
    Gbl.Alerts.Num++;
 
-   Gbl.Alerts.List[Gbl.Alerts.Num - 1].Type = Type;
+   Gbl.Alerts.List[i].Type = Type;
 
-   Gbl.Alerts.List[Gbl.Alerts.Num - 1].Section = NULL;
+   Gbl.Alerts.List[i].Section = NULL;
    if (Section)
       if (Section[0])
-         Gbl.Alerts.List[Gbl.Alerts.Num - 1].Section = Section;
+	 if (asprintf (&Gbl.Alerts.List[i].Section,"%s",
+	               Section) < 0)
+	    Lay_NotEnoughMemoryExit ();
 
    va_start (ap,fmt);
-   NumBytesPrinted = vasprintf (&Gbl.Alerts.List[Gbl.Alerts.Num - 1].Text,fmt,ap);
+   NumBytesPrinted = vasprintf (&Gbl.Alerts.List[i].Text,fmt,ap);
    va_end (ap);
 
    if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
@@ -111,7 +116,7 @@ void Ale_CreateAlert (Ale_AlertType_t Type,const char *Section,
 /***************** Get current number of delayed alerts **********************/
 /*****************************************************************************/
 
-unsigned Ale_GetNumAlerts (void)
+size_t Ale_GetNumAlerts (void)
   {
    return Gbl.Alerts.Num;
   }
@@ -174,13 +179,19 @@ static void Ale_ResetAlert (size_t i)
 	{
 	 /***** Reset i-esim alert *****/
 	 Gbl.Alerts.List[i].Type = Ale_NONE;	// Reset alert
-	 Gbl.Alerts.List[i].Section = NULL;
 
 	 /***** Free memory allocated for text *****/
 	 if (Gbl.Alerts.List[i].Text)
 	   {
 	    free ((void *) Gbl.Alerts.List[i].Text);
 	    Gbl.Alerts.List[i].Text = NULL;
+	   }
+
+	 /***** Free memory allocated for section *****/
+	 if (Gbl.Alerts.List[i].Section)
+	   {
+	    free ((void *) Gbl.Alerts.List[i].Section);
+	    Gbl.Alerts.List[i].Section = NULL;
 	   }
 	}
 
@@ -218,14 +229,17 @@ void Ale_ShowAlerts (const char *Section)
   {
    size_t i;
    bool ShowAlert;
+   size_t NumAlerts = Ale_GetNumAlerts ();
 
    for (i = 0;
-	i < Gbl.Alerts.Num;
+	i < NumAlerts;
 	i++)
       if (Gbl.Alerts.List[i].Type != Ale_NONE)
         {
-	 ShowAlert = Section ? (Gbl.Alerts.List[i].Section == Section) :
-		               true;
+	 if (Section)
+	    ShowAlert = (bool) !strcmp (Gbl.Alerts.List[i].Section,Section);
+	 else
+	    ShowAlert = false;
 
 	 if (ShowAlert)
 	   {

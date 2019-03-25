@@ -836,9 +836,9 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
 
    /***** Put form to hide/show event *****/
    if (AgdEvent->Hidden)
-      Ico_PutContextualIconToUnhide (ActShoEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
+      Ico_PutContextualIconToUnhide (ActShoEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda);
    else
-      Ico_PutContextualIconToHide (ActHidEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
+      Ico_PutContextualIconToHide (ActHidEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda);
 
    /***** Put form to edit event *****/
    Ico_PutContextualIconToEdit (ActEdiOneEvtMyAgd,Agd_PutCurrentParamsMyAgenda);

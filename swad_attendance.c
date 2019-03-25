@@ -570,9 +570,9 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
 
    /***** Put form to hide/show attendance event *****/
    if (Hidden)
-      Ico_PutContextualIconToUnhide (ActShoAtt,Att_PutParams);
+      Ico_PutContextualIconToUnhide (ActShoAtt,NULL,Att_PutParams);
    else
-      Ico_PutContextualIconToHide (ActHidAtt,Att_PutParams);
+      Ico_PutContextualIconToHide (ActHidAtt,NULL,Att_PutParams);
 
    /***** Put form to edit attendance event *****/
    Ico_PutContextualIconToEdit (ActEdiOneAtt,Att_PutParams);

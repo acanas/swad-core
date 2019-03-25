@@ -443,9 +443,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
 
-// TODO: Change in usability of Announcements of exams, suggested by Javier Fernández Baldomero.
-// TODO: Al pulsar sobre una convocatoria de examen --> ir a la sección de esa convocatoria/aviso en lugar de mostrarlo repetido y destacado arriba
-
 // TODO: Allow timeline posting only for users belonging to courses or admins to avoid user who create accounts only to post
 
 // TODO: Ver cómo recibir un fichero desde el cliente (SWADroid) en gsoap
@@ -469,10 +466,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.87.1 (2019-03-24)"
-#define CSS_FILE		"swad18.87.css"
-#define JS_FILE			"swad18.85.js"
+#define Log_PLATFORM_VERSION	"SWAD 18.88 (2019-03-25)"
+#define CSS_FILE		"swad18.88.css"
+#define JS_FILE			"swad18.88.js"
 /*
+	Version 18.88:    Mar 25, 2019 	Change in usability of exam announcements, suggested by Mancia Anguita López and Javier Fernández Baldomero. (241089 lines)
 	Version 18.87.1:  Mar 24, 2019 	Code refactoring in notices. (241011 lines)
 	Version 18.87:    Mar 24, 2019 	Change in usability of notices. (240997 lines)
 	Version 18.86.3:  Mar 24, 2019 	Optimization in suggestion of users to follow. (240965 lines)

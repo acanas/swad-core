@@ -261,20 +261,20 @@ void Ico_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) ())
 				  Txt_View);
   }
 
-void Ico_PutContextualIconToHide (Act_Action_t NextAction,void (*FuncParams) ())
+void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) ())
   {
    extern const char *Txt_Hide;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
 				  "eye.svg",
 				  Txt_Hide);
   }
 
-void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ())
+void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) ())
   {
    extern const char *Txt_Show;
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
 				  "eye-slash.svg",
 				  Txt_Show);
   }
