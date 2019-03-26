@@ -41,8 +41,8 @@
 #include "swad_group.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
 #include "swad_role.h"
+#include "swad_setting.h"
 #include "swad_table.h"
 #include "swad_test.h"
 
@@ -225,9 +225,9 @@ static void Gam_ListAllGames (void)
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
      {
-      Pre_StartPrefsHead ();
+      Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAllGam,Gam_ParamsWhichGroupsToShow);
-      Pre_EndPrefsHead ();
+      Set_EndSettingsHead ();
      }
 
    if (Gbl.Games.Num)

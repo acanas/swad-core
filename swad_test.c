@@ -7317,7 +7317,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 
    /***** Get and update type of list,
           number of columns in class photo
-          and preference about view photos *****/
+          and preference about viewing photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get groups to show ******/

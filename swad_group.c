@@ -40,8 +40,8 @@
 #include "swad_group.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
 #include "swad_project.h"
+#include "swad_setting.h"
 #include "swad_table.h"
 
 /*****************************************************************************/
@@ -5023,7 +5023,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;
 
-   Pre_StartOnePrefSelector ();
+   Set_StartOneSettingSelector ();
    for (WhichGrps = Grp_ONLY_MY_GROUPS;
 	WhichGrps <= Grp_ALL_GROUPS;
 	WhichGrps++)
@@ -5035,13 +5035,13 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
       Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) WhichGrps);
       if (FuncParams)	// Extra parameters depending on the action
 	 FuncParams ();
-      Ico_PutPrefIconLink (WhichGrps == Grp_ONLY_MY_GROUPS ? "mysitemap.png" :
+      Ico_PutSettingIconLink (WhichGrps == Grp_ONLY_MY_GROUPS ? "mysitemap.png" :
 		                                             "sitemap.svg",
 			   Txt_GROUP_WHICH_GROUPS[WhichGrps]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   Pre_EndOnePrefSelector ();
+   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/

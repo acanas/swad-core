@@ -34,7 +34,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
+#include "swad_setting.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -77,19 +77,19 @@ static void Cal_PutIconsCalendar (void);
 
 void Cal_PutIconsToSelectFirstDayOfWeek (void)
   {
-   extern const char *Hlp_PROFILE_Preferences_calendar;
+   extern const char *Hlp_PROFILE_Settings_calendar;
    extern const char *Txt_Calendar;
 
    Box_StartBox (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek,
-                 Hlp_PROFILE_Preferences_calendar,Box_NOT_CLOSABLE);
-   Pre_StartPrefsHead ();
+                 Hlp_PROFILE_Settings_calendar,Box_NOT_CLOSABLE);
+   Set_StartSettingsHead ();
    Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL);
-   Pre_EndPrefsHead ();
+   Set_EndSettingsHead ();
    Box_EndBox ();
   }
 
 /*****************************************************************************/
-/*********** Put contextual icons in first-day-of-week preference ************/
+/************ Put contextual icons in first-day-of-week setting **************/
 /*****************************************************************************/
 
 static void Cal_PutIconsFirstDayOfWeek (void)
@@ -110,7 +110,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) ())
    unsigned FirstDayOfWeek;
    char Icon[32 + 1];
 
-   Pre_StartOnePrefSelector ();
+   Set_StartOneSettingSelector ();
    for (FirstDayOfWeek = 0;	// Monday
 	FirstDayOfWeek <= 6;	// Sunday
 	FirstDayOfWeek++)
@@ -129,11 +129,11 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) ())
 	 snprintf (Icon,sizeof (Icon),
 	           "first-day-of-week-%u.png",
 	           FirstDayOfWeek);
-	 Ico_PutPrefIconLink (Icon,Gbl.Title);
+	 Ico_PutSettingIconLink (Icon,Gbl.Title);
 	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</div>");
         }
-   Pre_EndOnePrefSelector ();
+   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/
@@ -147,14 +147,14 @@ void Cal_ChangeFirstDayOfWeek (void)
 
    /***** Store icon first day of week database *****/
    if (Gbl.Usrs.Me.Logged)
-      DB_QueryUPDATE ("can not update your preference about first day of week",
+      DB_QueryUPDATE ("can not update your setting about first day of week",
 		      "UPDATE usr_data SET FirstDayOfWeek=%u"
 		      " WHERE UsrCod=%ld",
                       Gbl.Prefs.FirstDayOfWeek,
                       Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** Set preferences from current IP *****/
-   Pre_SetPrefsFromIP ();
+   /***** Set settings from current IP *****/
+   Set_SetSettingsFromIP ();
   }
 
 /*****************************************************************************/
@@ -270,9 +270,9 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
    /***** Preference selector to change first day of week *****/
    if (!PrintView)
      {
-      Pre_StartPrefsHead ();
+      Set_StartSettingsHead ();
       Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,NULL);
-      Pre_EndPrefsHead ();
+      Set_EndSettingsHead ();
      }
 
    /***** Draw several months *****/

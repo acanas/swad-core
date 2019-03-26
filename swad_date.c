@@ -36,7 +36,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
+#include "swad_setting.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -99,13 +99,13 @@ static unsigned Dat_GetParamDateFormat (void);
 
 void Dat_PutBoxToSelectDateFormat (void)
   {
-   extern const char *Hlp_PROFILE_Preferences_dates;
+   extern const char *Hlp_PROFILE_Settings_dates;
    extern const char *Txt_Dates;
    Dat_Format_t Format;
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Dates,Dat_PutIconsDateFormat,
-                 Hlp_PROFILE_Preferences_dates,Box_NOT_CLOSABLE);
+                 Hlp_PROFILE_Settings_dates,Box_NOT_CLOSABLE);
 
    /***** Form with list of options *****/
    Frm_StartForm (ActChgDatFmt);
@@ -142,7 +142,7 @@ void Dat_PutBoxToSelectDateFormat (void)
   }
 
 /*****************************************************************************/
-/************** Put contextual icons in date-format preference ***************/
+/*************** Put contextual icons in date-format setting *****************/
 /*****************************************************************************/
 
 static void Dat_PutIconsDateFormat (void)
@@ -183,14 +183,14 @@ void Dat_ChangeDateFormat (void)
 
    /***** Store date format in database *****/
    if (Gbl.Usrs.Me.Logged)
-      DB_QueryUPDATE ("can not update your preference about date format",
+      DB_QueryUPDATE ("can not update your setting about date format",
 		      "UPDATE usr_data SET DateFormat=%u"
 		      " WHERE UsrCod=%ld",
                       (unsigned) Gbl.Prefs.DateFormat,
                       Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** Set preferences from current IP *****/
-   Pre_SetPrefsFromIP ();
+   /***** Set settings from current IP *****/
+   Set_SetSettingsFromIP ();
   }
 
 /*****************************************************************************/

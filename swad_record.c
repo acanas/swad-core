@@ -44,11 +44,11 @@
 #include "swad_network.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
-#include "swad_preference.h"
 #include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_record.h"
 #include "swad_role.h"
+#include "swad_setting.h"
 #include "swad_table.h"
 #include "swad_user.h"
 

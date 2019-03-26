@@ -19778,7 +19778,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	//  6: ActReqEdiPrf
+	//  6: ActReqEdiSet
 #if   L==1	// ca
 	"Configuraci&oacute;"
 #elif L==2	// de
@@ -21645,25 +21645,25 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	//  6: ActReqEdiPrf
+	//  6: ActReqEdiSet
 #if   L==1	// ca
-	"Les meves prefer&egrave;ncies (idioma, colors, notificacions &hellip;)"
+	"Els meus ajustos (idioma, colors, notificacions&hellip;)"
 #elif L==2	// de
-	"Einstellungen"
+	"Meine Einstellungen (Sprache, Farben, Benachrichtigungen&hellip;)"
 #elif L==3	// en
-	"Preferences"
+	"My settings (language, colors, notifications&hellip;)"
 #elif L==4	// es
-	"Mis preferencias (idioma, colores, notificaciones&hellip;)"
+	"Mis ajustes (idioma, colores, notificaciones&hellip;)"
 #elif L==5	// fr
-	"Pr&eacute;f&eacute;rences"
+	"Mes param&egrave;tres (langue, couleurs, notifications&hellip;)"
 #elif L==6	// gn
-	"Mis preferencias (idioma, colores, notificaciones&hellip;)"	// Okoteve traducción
+	"Mis ajustes (idioma, colores, notificaciones&hellip;)"	// Okoteve traducción
 #elif L==7	// it
-	"Preferenze"
+	"Le mie impostazioni (lingua, colori, notifiche&hellip;)"
 #elif L==8	// pl
-	"Preferencje"
+	"Moje ustawienia (j&eogon;zyk, kolory, powiadomienia&hellip;)"
 #elif L==9	// pt
-	"Prefer&ecirc;ncias"
+	"Minhas configura&ccedil;&otilde;es (idioma, cores, notifica&ccedil;&otilde;es&hellip;)"
 #endif
 	,
 	NULL,	//  7
@@ -29161,25 +29161,25 @@ const char *Txt_Please_fill_in_your_record_card_including_your_sex =
 	" incluindo o seu sexo.";
 #endif
 
-const char *Txt_Please_review_your_privacy_preferences =
+const char *Txt_Please_check_your_privacy_settings =
 #if   L==1	// ca
-	"Si us plau, revisi les seves prefer&egrave;ncies de privacitat.";
+	"Si us plau, comproveu la seva configuraci&oacute; de privacitat.";
 #elif L==2	// de
 	"Bitte &uuml;berpr&uuml;fen Sie Ihre Datenschutzeinstellungen.";
 #elif L==3	// en
-	"Please review your privacy preferences.";
+	"Please review your privacy settings.";
 #elif L==4	// es
-	"Por favor, revise sus preferencias de privacidad.";
+	"Por favor, revise sus ajustes de privacidad.";
 #elif L==5	// fr
-	"S'il vous pla&icirc;t revoir vos pr&eacute;f&eacute;rences de privacit&eacute;.";
+	"S'il vous pla&icirc;t, v&eacute;rifiez vos param&egrave;tres de privacit&eacute;.";
 #elif L==6	// gn
-	"Por favor, revise sus preferencias de privacidad.";	// Okoteve traducción
+	"Por favor, revise sus ajustes de privacidad.";	// Okoteve traducción
 #elif L==7	// it
-	"Si prega di rivedere le vostre preferenze di privatezza.";
+	"Per favore, controlla le tue impostazioni sulla privacy.";
 #elif L==8	// pl
-	"Prosz&eogon; sprawdzi&cacute; ustawienia prywatno&sacute;ci.";
+	"Sprawd&zacute; ustawienia prywatno&sacute;ci.";
 #elif L==9	// pt
-	"Por favor, revise suas prefer&ecirc;ncias de privacidade.";
+	"Por favor, verifique suas configura&ccedil;&otilde;es de privacidade.";
 #endif
 
 const char *Txt_Please_select_the_country_of_your_institution =
@@ -56537,25 +56537,25 @@ const char *Txt_Your_personal_data_have_been_updated =
 	"Seus dados pessoais foram atualizados.";
 #endif
 
-const char *Txt_Your_preferences_about_notifications_have_changed =
+const char *Txt_Your_settings_about_notifications_have_changed =
 #if   L==1	// ca
-	"Les seves prefer&egrave;ncies sobre les notificacions han canviat.";
+	"La seva configuraci&oacute; de les notificacions ha canviat.";
 #elif L==2	// de
-	"Your preferences about notifications have changed.";		// Need Übersetzung
+	"Ihre Einstellungen zu Benachrichtigungen haben sich ge&auml;ndert.";
 #elif L==3	// en
-	"Your preferences about notifications have changed.";
+	"Your settings about notifications have changed.";
 #elif L==4	// es
-	"Sus preferencias sobre las notificaciones han cambiado.";
+	"Sus ajustes sobre las notificaciones han cambiado.";
 #elif L==5	// fr
-	"Your preferences about notifications have changed.";		// Besoin de traduction
+	"Vos param&egrave;tres concernant les notifications ont chang&eacute;.";
 #elif L==6	// gn
-	"Sus preferencias sobre las notificaciones han cambiado.";	// Okoteve traducción
+	"Sus ajustes sobre las notificaciones han cambiado.";	// Okoteve traducción
 #elif L==7	// it
-	"Le tue preferenze sulle notifiche sono cambiate.";
+	"Le tue impostazioni sulle notifiche sono cambiate.";
 #elif L==8	// pl
-	"Your preferences about notifications have changed.";		// Potrzebujesz tlumaczenie
+	"Twoje ustawienia dotycz&aogon;ce powiadomie&nacute; uleg&lstrok;y zmianie.";
 #elif L==9	// pt
-	"Suas prefer&ecirc;ncias sobre notifica&ccedil;&otilde;es foram alteradas.";
+	"Suas configura&ccedil;&otilde;es sobre notifica&ccedil;&otilde;es foram alteradas.";
 #endif
 
 const char *Txt_Your_record_card_in_this_course_has_been_updated =

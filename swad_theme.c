@@ -35,7 +35,7 @@
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
+#include "swad_setting.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -261,15 +261,15 @@ static void The_PutIconsTheme (void);
 
 void The_PutIconsToSelectTheme (void)
   {
-   extern const char *Hlp_PROFILE_Preferences_theme;
+   extern const char *Hlp_PROFILE_Settings_theme;
    extern const char *Txt_Theme_SKIN;
    The_Theme_t Theme;
    char Icon[PATH_MAX + 1];
 
    Box_StartBox (NULL,Txt_Theme_SKIN,The_PutIconsTheme,
-                 Hlp_PROFILE_Preferences_theme,Box_NOT_CLOSABLE);
-   Pre_StartPrefsHead ();
-   Pre_StartOnePrefSelector ();
+                 Hlp_PROFILE_Settings_theme,Box_NOT_CLOSABLE);
+   Set_StartSettingsHead ();
+   Set_StartOneSettingSelector ();
    for (Theme = (The_Theme_t) 0;
 	Theme < The_NUM_THEMES;
 	Theme++)
@@ -283,17 +283,17 @@ void The_PutIconsToSelectTheme (void)
 		"%s/%s/theme_32x20.gif",
 		Cfg_ICON_FOLDER_THEMES,
                 The_ThemeId[Theme]);
-      Ico_PutPrefIconLink (Icon,The_ThemeNames[Theme]);
+      Ico_PutSettingIconLink (Icon,The_ThemeNames[Theme]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   Pre_EndOnePrefSelector ();
-   Pre_EndPrefsHead ();
+   Set_EndOneSettingSelector ();
+   Set_EndSettingsHead ();
    Box_EndBox ();
   }
 
 /*****************************************************************************/
-/***************** Put contextual icons in theme preference ******************/
+/****************** Put contextual icons in theme setting ********************/
 /*****************************************************************************/
 
 static void The_PutIconsTheme (void)
@@ -324,14 +324,14 @@ void The_ChangeTheme (void)
 
    /***** Store theme in database *****/
    if (Gbl.Usrs.Me.Logged)
-      DB_QueryUPDATE ("can not update your preference about theme",
+      DB_QueryUPDATE ("can not update your setting about theme",
 		      "UPDATE usr_data SET Theme='%s'"
 		      " WHERE UsrCod=%ld",
                       The_ThemeId[Gbl.Prefs.Theme],
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** Set preferences from current IP *****/
-   Pre_SetPrefsFromIP ();
+   /***** Set settings from current IP *****/
+   Set_SetSettingsFromIP ();
   }
 
 /*****************************************************************************/

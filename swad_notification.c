@@ -365,13 +365,13 @@ void Ntf_ShowMyNotifications (void)
    Ntf_WriteFormAllNotifications (AllNotifications);
 
    if (NumNotifications)	// TODO: Show message only when I don't have notificacions at all
-      /* Put form to change notification preferences */
+      /* Put form to change notification settings */
       Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,NULL,
 				     "eye.svg",
 				     Txt_Mark_all_NOTIFICATIONS_as_read);
 
-   /* Put form to change notification preferences */
-   Lay_PutContextualLinkIconText (ActReqEdiPrf,Ntf_NOTIFICATIONS_ID,NULL,
+   /* Put form to change notification settings */
+   Lay_PutContextualLinkIconText (ActReqEdiSet,Ntf_NOTIFICATIONS_ID,NULL,
 				  "cog.svg",
 				  Txt_Settings);
 
@@ -1915,7 +1915,7 @@ void Ntf_MarkAllNotifAsSeen (void)
 
 void Ntf_PutFormChangeNotifSentByEMail (void)
   {
-   extern const char *Hlp_PROFILE_Preferences_notifications;
+   extern const char *Hlp_PROFILE_Settings_notifications;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Save_changes;
    extern const char *Txt_Notifications;
@@ -1924,12 +1924,12 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    Ntf_NotifyEvent_t NotifyEvent;
 
-   /***** Start section with preferences on privacy *****/
+   /***** Start section with settings on privacy *****/
    Lay_StartSection (Ntf_NOTIFICATIONS_ID);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
-                 Hlp_PROFILE_Preferences_notifications,Box_NOT_CLOSABLE);
+                 Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
    Frm_StartForm (ActChgNtfPrf);
@@ -1992,7 +1992,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    /***** End box *****/
    Box_EndBox ();
 
-   /***** End section with preferences about notifications *****/
+   /***** End section with settings about notifications *****/
    Lay_EndSection ();
   }
 
@@ -2024,18 +2024,18 @@ static void Ntf_GetParamsNotifyEvents (void)
   }
 
 /*****************************************************************************/
-/***** Change my preference about sending me notify emails about events ******/
+/******* Change my setting about sending me notify emails about events *******/
 /*****************************************************************************/
 
 void Ntf_ChangeNotifyEvents (void)
   {
-   extern const char *Txt_Your_preferences_about_notifications_have_changed;
+   extern const char *Txt_Your_settings_about_notifications_have_changed;
 
    /***** Get param with whether notify me about events *****/
    Ntf_GetParamsNotifyEvents ();
 
-   /***** Store preferences about notify events *****/
-   DB_QueryUPDATE ("can not update user's preferences",
+   /***** Store settings about notify events *****/
+   DB_QueryUPDATE ("can not update user's settings",
 		   "UPDATE usr_data"
 		   " SET NotifNtfEvents=%u,EmailNtfEvents=%u"
 		   " WHERE UsrCod=%ld",
@@ -2044,7 +2044,7 @@ void Ntf_ChangeNotifyEvents (void)
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Your_preferences_about_notifications_have_changed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Your_settings_about_notifications_have_changed);
   }
 
 /*****************************************************************************/

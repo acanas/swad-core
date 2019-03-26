@@ -46,8 +46,8 @@
 #include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
-#include "swad_preference.h"
 #include "swad_privacy.h"
+#include "swad_setting.h"
 #include "swad_table.h"
 #include "swad_theme.h"
 #include "swad_user.h"
@@ -1314,13 +1314,13 @@ void Pho_ChangePhotoVisibility (void)
 	                                                        Pri_PHOTO_ALLOWED_VIS);
 
    /***** Store public/private photo in database *****/
-   DB_QueryUPDATE ("can not update your preference about photo visibility",
+   DB_QueryUPDATE ("can not update your setting about photo visibility",
 		   "UPDATE usr_data SET PhotoVisibility='%s' WHERE UsrCod=%ld",
 		   Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show form again *****/
-   Pre_EditPrefs ();
+   Set_EditSettings ();
   }
 
 /*****************************************************************************/

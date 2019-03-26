@@ -64,7 +64,6 @@
 #include "swad_parameter.h"
 #include "swad_password.h"
 #include "swad_photo.h"
-#include "swad_preference.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_project.h"
@@ -72,6 +71,7 @@
 #include "swad_report.h"
 #include "swad_role.h"
 #include "swad_search.h"
+#include "swad_setting.h"
 #include "swad_setup.h"
 #include "swad_tab.h"
 #include "swad_test_import.h"
@@ -1497,7 +1497,7 @@ Profile:
        1271. ActSeeMyAgd		Show my full agenda (personal organizer)
        1272. ActFrmMyAcc		Show form to the creation or change of user's account
        1273. ActReqEdiRecSha		Request the edition of the record with the personal data of the user
-       1274. ActReqEdiPrf		Show forms to edit preferences
+       1274. ActReqEdiSet		Show forms to edit settings
 
        1275. ActChgMyRol		Change type of logged user
 
@@ -1559,7 +1559,7 @@ Profile:
        1325. ActChgPriPho		Change privacy of my photo
        1326. ActChgBasPriPrf		Change privacy of my basic public profile
         NEW. ActChgExtPriPrf		Change privacy of my extended public profile
-        NEW. ActChgCooPrf		Change preference about third party cookies
+        NEW. ActChgCooPrf		Change setting about third party cookies
        1327. ActChgNtfPrf		Change whether to notify by email new messages
        1328. ActPrnUsrQR		Show my QR code ready to print
 
@@ -1677,7 +1677,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeePen		*/{1060, 1,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x3C0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hie_SeePending			,"sitemap"		},
    /* ActSeeLnk		*/{ 748, 2,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_SeeLinks			,"link"			},
    /* ActLstPlg		*/{ 777, 3,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_ListPlugins		,"puzzle-piece"		},
-   /* ActSetUp		*/{ 840, 4,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Set_Setup			,"bolt"			},
+   /* ActSetUp		*/{ 840, 4,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,SUp_SetUp			,"bolt"			},
 
    // Actions not in menu:
    /* ActEdiCty		*/{ 863,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cty_EditCountries		,NULL},
@@ -3078,7 +3078,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeMyAgd	*/{1602, 3,TabPrf,ActSeeMyAgd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Agd_ShowMyAgenda		,"calendar"		},
    /* ActFrmMyAcc	*/{  36, 4,TabPrf,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormMyAccount		,"at"			},
    /* ActReqEdiRecSha	*/{ 285, 5,TabPrf,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndMore	,"card"			},
-   /* ActReqEdiPrf	*/{ 673, 6,TabPrf,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pre_EditPrefs			,"cog"			},
+   /* ActReqEdiSet	*/{ 673, 6,TabPrf,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Set_EditSettings			,"cog"			},
 
    // Actions not in menu:
    /* ActChgMyRol	*/{ 589,-1,TabUnk,ActFrmRolSes		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
@@ -3131,23 +3131,23 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqEdiMyNet	*/{1172,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rec_ShowMySharedRecordAndMore	,NULL},
    /* ActChgMyNet	*/{1173,-1,TabUnk,ActReqEdiRecSha	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Net_UpdateMyWebsAndSocialNets	,NULL},
 
-   /* ActChgThe		*/{ 841,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,The_ChangeTheme		,Pre_EditPrefs			,NULL},
-   /* ActReqChgLan	*/{ 992,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lan_AskChangeLanguage		,NULL},
-   /* ActChgLan		*/{ 654,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Lan_ChangeLanguage		,Pre_EditPrefs			,NULL},
-   /* ActChg1stDay	*/{1484,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Pre_EditPrefs			,NULL},
-   /* ActChgDatFmt	*/{1638,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_ChangeDateFormat		,Pre_EditPrefs			,NULL},
-   /* ActChgCol		*/{ 674,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Pre_ChangeSideCols		,Pre_EditPrefs			,NULL},
-   /* ActHidLftCol	*/{ 668,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Pre_HideLeftCol		,Pre_EditPrefs			,NULL},
-   /* ActHidRgtCol	*/{ 669,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Pre_HideRightCol		,Pre_EditPrefs			,NULL},
-   /* ActShoLftCol	*/{ 670,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Pre_ShowLeftCol		,Pre_EditPrefs			,NULL},
-   /* ActShoRgtCol	*/{ 671,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Pre_ShowRightCol		,Pre_EditPrefs			,NULL},
-   /* ActChgIco		*/{1092,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Ico_ChangeIconSet		,Pre_EditPrefs			,NULL},
-   /* ActChgMnu		*/{1243,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Mnu_ChangeMenu			,Pre_EditPrefs			,NULL},
-   /* ActChgPriPho	*/{ 774,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ChangePhotoVisibility	,NULL},
-   /* ActChgBasPriPrf	*/{1404,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeBasicProfileVis	,NULL},
-   /* ActChgExtPriPrf	*/{1765,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeExtendedProfileVis	,NULL},
-   /* ActChgCooPrf	*/{1764,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Coo_ChangeMyPrefsCookies	,NULL},
-   /* ActChgNtfPrf	*/{ 775,-1,TabUnk,ActReqEdiPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Ntf_ChangeNotifyEvents		,Pre_EditPrefs			,NULL},
+   /* ActChgThe		*/{ 841,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,The_ChangeTheme		,Set_EditSettings			,NULL},
+   /* ActReqChgLan	*/{ 992,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lan_AskChangeLanguage		,NULL},
+   /* ActChgLan		*/{ 654,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Lan_ChangeLanguage		,Set_EditSettings			,NULL},
+   /* ActChg1stDay	*/{1484,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Cal_ChangeFirstDayOfWeek	,Set_EditSettings			,NULL},
+   /* ActChgDatFmt	*/{1638,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_ChangeDateFormat		,Set_EditSettings			,NULL},
+   /* ActChgCol		*/{ 674,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Set_ChangeSideCols		,Set_EditSettings			,NULL},
+   /* ActHidLftCol	*/{ 668,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Set_HideLeftCol		,Set_EditSettings			,NULL},
+   /* ActHidRgtCol	*/{ 669,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Set_HideRightCol		,Set_EditSettings			,NULL},
+   /* ActShoLftCol	*/{ 670,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Set_ShowLeftCol		,Set_EditSettings			,NULL},
+   /* ActShoRgtCol	*/{ 671,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Set_ShowRightCol		,Set_EditSettings			,NULL},
+   /* ActChgIco		*/{1092,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Ico_ChangeIconSet		,Set_EditSettings			,NULL},
+   /* ActChgMnu		*/{1243,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Mnu_ChangeMenu			,Set_EditSettings			,NULL},
+   /* ActChgPriPho	*/{ 774,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Pho_ChangePhotoVisibility	,NULL},
+   /* ActChgBasPriPrf	*/{1404,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeBasicProfileVis	,NULL},
+   /* ActChgExtPriPrf	*/{1765,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_ChangeExtendedProfileVis	,NULL},
+   /* ActChgCooPrf	*/{1764,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Coo_ChangeMyPrefsCookies	,NULL},
+   /* ActChgNtfPrf	*/{ 775,-1,TabUnk,ActReqEdiSet		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,Ntf_ChangeNotifyEvents		,Set_EditSettings			,NULL},
 
    /* ActPrnUsrQR	*/{1022,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Usr_PrintUsrQRCode		,NULL},
 
@@ -3832,7 +3832,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActShoLftCol,		// #670
 	ActShoRgtCol,		// #671
 	-1,			// #672 (obsolete action)
-	ActReqEdiPrf,		// #673
+	ActReqEdiSet,		// #673
 	ActChgCol,		// #674
 	ActSeeDpt,		// #675
 	ActSeeCtr,		// #676
@@ -5249,14 +5249,14 @@ void Act_AdjustCurrentAction (void)
 
    /***** Adjustment 5:
           -------------
-          If any of my preferences about privacy is unknown
+          If any of my settings about privacy is unknown
           the only action possible
-          is to show a form to change my preferences *****/
+          is to show a form to change my settings *****/
    if (Gbl.Usrs.Me.UsrDat.PhotoVisibility == Pri_VISIBILITY_UNKNOWN ||
        Gbl.Usrs.Me.UsrDat.BaPrfVisibility == Pri_VISIBILITY_UNKNOWN ||
        Gbl.Usrs.Me.UsrDat.ExPrfVisibility == Pri_VISIBILITY_UNKNOWN)
         {
-	 Gbl.Action.Act = ActReqEdiPrf;
+	 Gbl.Action.Act = ActReqEdiSet;
 	 Tab_SetCurrentTab ();
 	 return;
         }

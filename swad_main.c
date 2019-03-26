@@ -38,9 +38,9 @@
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_MFU.h"
-#include "swad_parameter.h"
-#include "swad_preference.h"
 #include "swad_notification.h"
+#include "swad_parameter.h"
+#include "swad_setting.h"
 
 /*****************************************************************************/
 /******************************** Constants **********************************/

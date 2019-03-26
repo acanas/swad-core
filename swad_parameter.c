@@ -32,11 +32,10 @@
 
 #include "swad_action.h"
 #include "swad_config.h"
-#include "swad_database.h"	// TODO: REMOVE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_password.h"
-#include "swad_preference.h"
+#include "swad_setting.h"
 #include "swad_tab.h"
 
 /*****************************************************************************/
@@ -794,12 +793,12 @@ void Par_GetMainParameters (void)
 	 break;
      }
 
-   /***** Try to get preferences changed from current IP *****/
-   Pre_GetPrefsFromIP ();
+   /***** Try to get settings changed from current IP *****/
+   Set_GetSettingsFromIP ();
 
    if (!Gbl.Session.IsOpen)	// When no session open (no logged user)...
      {
-      /***** Try to get preferences changed from current IP *****/
+      /***** Try to get settings changed from current IP *****/
       if (Gbl.Prefs.Theme == The_THEME_UNKNOWN)
          Gbl.Prefs.Theme = The_THEME_DEFAULT;
 

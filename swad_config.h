@@ -528,7 +528,7 @@
 #define Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS 	((time_t)(       24UL * 60UL * 60UL))	// Past these seconds, remove expired pending passwords
 #define Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS	 	((time_t)(       24UL * 60UL * 60UL))	// Past these seconds, remove expired pending emails
 
-#define Cfg_TIME_TO_DELETE_IP_PREFS			((time_t)( 7UL * 24UL * 60UL * 60UL))	// Past these seconds, remove expired IP preferences
+#define Cfg_TIME_TO_DELETE_IP_PREFS			((time_t)( 7UL * 24UL * 60UL * 60UL))	// Past these seconds, remove expired IP settings
 
 #define Cfg_TIME_TO_DELETE_OLD_NOTIF 			((time_t)(30UL * 24UL * 60UL * 60UL))	// Past these seconds, remove expired notifications
 

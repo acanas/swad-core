@@ -51,7 +51,7 @@
 /****************************** Initial set up *******************************/
 /*****************************************************************************/
 
-void Set_Setup (void)
+void SUp_SetUp (void)
   {
    /***** Create tables in database *****/
    DB_CreateTablesIfNotExist ();

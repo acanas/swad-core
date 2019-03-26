@@ -35,7 +35,7 @@
 #include "swad_icon.h"
 #include "swad_layout.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
+#include "swad_setting.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -110,15 +110,15 @@ const char *Ico_GetIcon (const char *IconWithoutExtension)
 
 void Ico_PutIconsToSelectIconSet (void)
   {
-   extern const char *Hlp_PROFILE_Preferences_icons;
+   extern const char *Hlp_PROFILE_Settings_icons;
    extern const char *Txt_Icons;
    Ico_IconSet_t IconSet;
    char Icon[PATH_MAX + 1];
 
    Box_StartBox (NULL,Txt_Icons,Ico_PutIconsIconSet,
-                 Hlp_PROFILE_Preferences_icons,Box_NOT_CLOSABLE);
-   Pre_StartPrefsHead ();
-   Pre_StartOnePrefSelector ();
+                 Hlp_PROFILE_Settings_icons,Box_NOT_CLOSABLE);
+   Set_StartSettingsHead ();
+   Set_StartOneSettingSelector ();
    for (IconSet = (Ico_IconSet_t) 0;
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
@@ -132,17 +132,17 @@ void Ico_PutIconsToSelectIconSet (void)
 		"%s/%s/cog.svg",
 		Cfg_ICON_FOLDER_SETS,
                 Ico_IconSetId[IconSet]);
-      Ico_PutPrefIconLink (Icon,Ico_IconSetNames[IconSet]);
+      Ico_PutSettingIconLink (Icon,Ico_IconSetNames[IconSet]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   Pre_EndOnePrefSelector ();
-   Pre_EndPrefsHead ();
+   Set_EndOneSettingSelector ();
+   Set_EndSettingsHead ();
    Box_EndBox ();
   }
 
 /*****************************************************************************/
-/*************** Put contextual icons in icon-set preference *****************/
+/***************** Put contextual icons in icon-set setting *******************/
 /*****************************************************************************/
 
 static void Ico_PutIconsIconSet (void)
@@ -167,13 +167,13 @@ void Ico_ChangeIconSet (void)
 
    /***** Store icon set in database *****/
    if (Gbl.Usrs.Me.Logged)
-      DB_QueryUPDATE ("can not update your preference about icon set",
+      DB_QueryUPDATE ("can not update your setting about icon set",
 		      "UPDATE usr_data SET IconSet='%s' WHERE UsrCod=%ld",
 		      Ico_IconSetId[Gbl.Prefs.IconSet],
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** Set preferences from current IP *****/
-   Pre_SetPrefsFromIP ();
+   /***** Set settings from current IP *****/
+   Set_SetSettingsFromIP ();
   }
 
 /*****************************************************************************/
@@ -345,10 +345,10 @@ void Ico_PutIconTextLink (const char *Icon,const char *Text)
   }
 
 /*****************************************************************************/
-/************************** Show a preference selector ***********************/
+/**************************** Show a setting selector *************************/
 /*****************************************************************************/
 
-void Ico_PutPrefIconLink (const char *Icon,const char *Title)
+void Ico_PutSettingIconLink (const char *Icon,const char *Title)
   {
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""

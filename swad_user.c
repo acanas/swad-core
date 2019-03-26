@@ -57,11 +57,11 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_password.h"
-#include "swad_preference.h"
 #include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_record.h"
 #include "swad_role.h"
+#include "swad_setting.h"
 #include "swad_tab.h"
 #include "swad_table.h"
 #include "swad_user.h"
@@ -549,7 +549,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
 					  "NotifNtfEvents,"	// row[24]
 					  "EmailNtfEvents,"	// row[25]
 
-					  // Preferences (usually not necessary
+					  // Settings (usually not necessary
 					  // when getting another user's data)
 					  "Language,"		// row[26]
 					  "FirstDayOfWeek,"	// row[27]
@@ -666,7 +666,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
    if (UsrDat->NtfEvents.SendEmail >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
       UsrDat->NtfEvents.SendEmail = 0;
 
-   /***** Get user's preferences *****/
+   /***** Get user's settings *****/
    if (GetPrefs == Usr_GET_PREFS)
      {
       /* Get language (row[26]) */
@@ -2999,8 +2999,8 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    Act_AdjustCurrentAction ();
 	    Ses_CreateSession ();
 
-	    /* Set preferences from current IP */
-	    Pre_SetPrefsFromIP ();
+	    /* Set settings from current IP */
+	    Set_SetSettingsFromIP ();
 
 	    /* Send message via email to confirm the new email address */
 	    Mai_SendMailMsgToConfirmEmail ();
@@ -3040,7 +3040,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       Act_AdjustCurrentAction ();
 	       Ses_CreateSession ();
 
-	       Pre_SetPrefsFromIP ();	// Set preferences from current IP
+	       Set_SetSettingsFromIP ();	// Set settings from current IP
 	      }
 	    else
 	      {
@@ -3065,7 +3065,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       Act_AdjustCurrentAction ();
 	       Ses_CreateSession ();
 
-	       Pre_SetPrefsFromIP ();	// Set preferences from current IP
+	       Set_SetSettingsFromIP ();	// Set settings from current IP
 	      }
 	    else
 	       FormLogin.PutForm = true;
@@ -3314,7 +3314,7 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void)
   }
 
 /*****************************************************************************/
-/********************* Set my preferences and my roles ***********************/
+/********************** Set my settings and my roles *************************/
 /*****************************************************************************/
 
 static void Usr_SetMyPrefsAndRoles (void)
@@ -3329,7 +3329,7 @@ static void Usr_SetMyPrefsAndRoles (void)
    if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Lan_LANGUAGE_UNKNOWN)		// I have not chosen language
       Lan_UpdateMyLanguageToCurrentLanguage ();	// Update my language in database
 
-   /***** Set preferences from my preferences *****/
+   /***** Set settings from my settings *****/
    Gbl.Prefs.FirstDayOfWeek = Gbl.Usrs.Me.UsrDat.Prefs.FirstDayOfWeek;
    Gbl.Prefs.DateFormat     = Gbl.Usrs.Me.UsrDat.Prefs.DateFormat;
    Gbl.Prefs.Menu           = Gbl.Usrs.Me.UsrDat.Prefs.Menu;
@@ -5948,8 +5948,8 @@ void Usr_FreeListOtherRecipients (void)
 
 void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
   {
-   Pre_StartPrefsHead ();
-   Pre_StartOnePrefSelector ();
+   Set_StartSettingsHead ();
+   Set_StartOneSettingSelector ();
 
    /***** Select Usr_LIST_AS_CLASS_PHOTO *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
@@ -5982,8 +5982,8 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
-   Pre_EndOnePrefSelector ();
-   Pre_EndPrefsHead ();
+   Set_EndOneSettingSelector ();
+   Set_EndSettingsHead ();
   }
 
 /*****************************************************************************/
@@ -6509,7 +6509,7 @@ void Usr_ListAllDataGsts (void)
 
    /***** Get and update type of list,
           number of columns in class photo
-          and preference about view photos *****/
+          and preference about viewing photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
@@ -6627,7 +6627,7 @@ void Usr_ListAllDataStds (void)
 
    /***** Get and update type of list,
           number of columns in class photo
-          and preference about view photos *****/
+          and preference about viewing photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
@@ -6865,7 +6865,7 @@ void Usr_ListAllDataTchs (void)
 
    /***** Get and update type of list,
           number of columns in class photo
-          and preference about view photos *****/
+          and preference about viewing photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
@@ -7133,7 +7133,7 @@ void Usr_ListDataAdms (void)
 
    /***** Get and update type of list,
           number of columns in class photo
-          and preference about view photos *****/
+          and preference about viewing photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Get scope *****/
@@ -7222,9 +7222,9 @@ void Usr_ListDataAdms (void)
   }
 
 /*****************************************************************************/
-/****************** Put hidden parameters with type of list, *****************/
-/****************** number of columns in class photo *************************/
-/****************** and preference about view photos *************************/
+/**************** Put hidden parameters with type of list, *******************/
+/**************** number of columns in class photo         *******************/
+/**************** and preference about viewing photos      *******************/
 /*****************************************************************************/
 
 void Usr_PutParamsPrefsAboutUsrList (void)
@@ -7235,9 +7235,9 @@ void Usr_PutParamsPrefsAboutUsrList (void)
   }
 
 /*****************************************************************************/
-/********************* Get and update type of list,     **********************/
-/********************* number of columns in class photo **********************/
-/********************* and preference about view photos **********************/
+/****************** Get and update type of list,        **********************/
+/****************** number of columns in class photo    **********************/
+/****************** and preference about viewing photos **********************/
 /*****************************************************************************/
 
 void Usr_GetAndUpdatePrefsAboutUsrList (void)
@@ -7248,7 +7248,7 @@ void Usr_GetAndUpdatePrefsAboutUsrList (void)
    /***** Get and update number of columns in class photo *****/
    Usr_GetAndUpdateColsClassPhoto ();
 
-   /***** Get and update preference about view photos *****/
+   /***** Get and update preference about viewing photos *****/
    Usr_GetAndUpdatePrefAboutListWithPhotos ();
   }
 

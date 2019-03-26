@@ -1,4 +1,4 @@
-// swad_language.c: user's preferences on language
+// swad_language.c: user's settings on language
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -30,7 +30,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_language.h"
-#include "swad_preference.h"
+#include "swad_setting.h"
 
 /*****************************************************************************/
 /*************** External global variables from others modules ***************/
@@ -69,33 +69,33 @@ static void Lan_PutIconsLanguage (void);
 static void Lan_PutParamLanguage (void);
 
 /*****************************************************************************/
-/************** Put link to change language (edit preferences) ***************/
+/*************** Put link to change language (edit settings) *****************/
 /*****************************************************************************/
 
 void Lan_PutLinkToChangeLanguage (void)
   {
-   Lay_PutContextualLinkIconText (ActReqEdiPrf,NULL,NULL,
+   Lay_PutContextualLinkIconText (ActReqEdiSet,NULL,NULL,
 			          "globe.svg",
 				  "Change language");
   }
 
 /*****************************************************************************/
-/************* Put a selector to select language in preferences **************/
+/************** Put a selector to select language in settings ****************/
 /*****************************************************************************/
 
 void Lan_PutBoxToSelectLanguage (void)
   {
-   extern const char *Hlp_PROFILE_Preferences_language;
+   extern const char *Hlp_PROFILE_Settings_language;
    extern const char *Txt_Language;
 
    Box_StartBox (NULL,Txt_Language,Lan_PutIconsLanguage,
-                 Hlp_PROFILE_Preferences_language,Box_NOT_CLOSABLE);
+                 Hlp_PROFILE_Settings_language,Box_NOT_CLOSABLE);
    Lan_PutSelectorToSelectLanguage ();
    Box_EndBox ();
   }
 
 /*****************************************************************************/
-/*************** Put contextual icons in language preference *****************/
+/**************** Put contextual icons in language setting *******************/
 /*****************************************************************************/
 
 static void Lan_PutIconsLanguage (void)
@@ -155,8 +155,8 @@ void Lan_AskChangeLanguage (void)
 
    Gbl.Prefs.Language = CurrentLanguage;		// Restore current language
 
-   /***** Display preferences *****/
-   Pre_EditPrefs ();
+   /***** Display settings *****/
+   Set_EditSettings ();
   }
 
 /*****************************************************************************/
@@ -182,8 +182,8 @@ void Lan_ChangeLanguage (void)
        Gbl.Prefs.Language != Gbl.Usrs.Me.UsrDat.Prefs.Language)
      Lan_UpdateMyLanguageToCurrentLanguage ();
 
-   /***** Set preferences from current IP *****/
-   Pre_SetPrefsFromIP ();
+   /***** Set settings from current IP *****/
+   Set_SetSettingsFromIP ();
   }
 
 /*****************************************************************************/

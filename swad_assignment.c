@@ -41,7 +41,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
-#include "swad_preference.h"
+#include "swad_setting.h"
 #include "swad_string.h"
 #include "swad_table.h"
 
@@ -147,9 +147,9 @@ static void Asg_ShowAllAssignments (void)
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
      {
-      Pre_StartPrefsHead ();
+      Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAsg,Asg_ParamsWhichGroupsToShow);
-      Pre_EndPrefsHead ();
+      Set_EndSettingsHead ();
      }
 
    if (Gbl.Asgs.Num)

@@ -1750,7 +1750,7 @@ static void Med_AlertThirdPartyCookies (void)
 
    /* Put form to change cookies preferences */
    if (!Gbl.Form.Inside)
-      Lay_PutContextualLinkIconText (ActReqEdiPrf,Coo_COOKIES_ID,NULL,
+      Lay_PutContextualLinkIconText (ActReqEdiSet,Coo_COOKIES_ID,NULL,
 				     "cog.svg",
 				     Txt_Settings);
 

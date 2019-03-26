@@ -3500,254 +3500,254 @@ const char *Hlp_PROFILE_Photo =
 	"PROFILE.Photo.en";
 #endif
 
-const char *Hlp_PROFILE_Preferences_internationalization =
+const char *Hlp_PROFILE_Settings_internationalization =
 #if   L==1
-	"PROFILE.Preferences.es#internacionalizaci%C3%B3n";
+	"PROFILE.Settings.es#internacionalizaci%C3%B3n";
 #elif L==2
-	"PROFILE.Preferences.en#internationalization";
+	"PROFILE.Settings.en#internationalization";
 #elif L==3
-	"PROFILE.Preferences.en#internationalization";
+	"PROFILE.Settings.en#internationalization";
 #elif L==4
-	"PROFILE.Preferences.es#internacionalizaci%C3%B3n";
+	"PROFILE.Settings.es#internacionalizaci%C3%B3n";
 #elif L==5
-	"PROFILE.Preferences.en#internationalization";
+	"PROFILE.Settings.en#internationalization";
 #elif L==6
-	"PROFILE.Preferences.es#internacionalizaci%C3%B3n";
+	"PROFILE.Settings.es#internacionalizaci%C3%B3n";
 #elif L==7
-	"PROFILE.Preferences.en#internationalization";
+	"PROFILE.Settings.en#internationalization";
 #elif L==8
-	"PROFILE.Preferences.en#internationalization";
+	"PROFILE.Settings.en#internationalization";
 #elif L==9
-	"PROFILE.Preferences.en#internationalization";
+	"PROFILE.Settings.en#internationalization";
 #endif
 
-const char *Hlp_PROFILE_Preferences_language =
+const char *Hlp_PROFILE_Settings_language =
 #if   L==1
-	"PROFILE.Preferences.es#idioma";
+	"PROFILE.Settings.es#idioma";
 #elif L==2
-	"PROFILE.Preferences.en#language";
+	"PROFILE.Settings.en#language";
 #elif L==3
-	"PROFILE.Preferences.en#language";
+	"PROFILE.Settings.en#language";
 #elif L==4
-	"PROFILE.Preferences.es#idioma";
+	"PROFILE.Settings.es#idioma";
 #elif L==5
-	"PROFILE.Preferences.en#language";
+	"PROFILE.Settings.en#language";
 #elif L==6
-	"PROFILE.Preferences.es#idioma";
+	"PROFILE.Settings.es#idioma";
 #elif L==7
-	"PROFILE.Preferences.en#language";
+	"PROFILE.Settings.en#language";
 #elif L==8
-	"PROFILE.Preferences.en#language";
+	"PROFILE.Settings.en#language";
 #elif L==9
-	"PROFILE.Preferences.en#language";
+	"PROFILE.Settings.en#language";
 #endif
 
-const char *Hlp_PROFILE_Preferences_calendar =
+const char *Hlp_PROFILE_Settings_calendar =
 #if   L==1
-	"PROFILE.Preferences.es#calendario";
+	"PROFILE.Settings.es#calendario";
 #elif L==2
-	"PROFILE.Preferences.en#calendar";
+	"PROFILE.Settings.en#calendar";
 #elif L==3
-	"PROFILE.Preferences.en#calendar";
+	"PROFILE.Settings.en#calendar";
 #elif L==4
-	"PROFILE.Preferences.es#calendario";
+	"PROFILE.Settings.es#calendario";
 #elif L==5
-	"PROFILE.Preferences.en#calendar";
+	"PROFILE.Settings.en#calendar";
 #elif L==6
-	"PROFILE.Preferences.es#calendario";
+	"PROFILE.Settings.es#calendario";
 #elif L==7
-	"PROFILE.Preferences.en#calendar";
+	"PROFILE.Settings.en#calendar";
 #elif L==8
-	"PROFILE.Preferences.en#calendar";
+	"PROFILE.Settings.en#calendar";
 #elif L==9
-	"PROFILE.Preferences.en#calendar";
+	"PROFILE.Settings.en#calendar";
 #endif
 
-const char *Hlp_PROFILE_Preferences_dates =
+const char *Hlp_PROFILE_Settings_dates =
 #if   L==1
-	"PROFILE.Preferences.es#fechas";
+	"PROFILE.Settings.es#fechas";
 #elif L==2
-	"PROFILE.Preferences.en#dates";
+	"PROFILE.Settings.en#dates";
 #elif L==3
-	"PROFILE.Preferences.en#dates";
+	"PROFILE.Settings.en#dates";
 #elif L==4
-	"PROFILE.Preferences.es#fechas";
+	"PROFILE.Settings.es#fechas";
 #elif L==5
-	"PROFILE.Preferences.en#dates";
+	"PROFILE.Settings.en#dates";
 #elif L==6
-	"PROFILE.Preferences.es#fechas";
+	"PROFILE.Settings.es#fechas";
 #elif L==7
-	"PROFILE.Preferences.en#dates";
+	"PROFILE.Settings.en#dates";
 #elif L==8
-	"PROFILE.Preferences.en#dates";
+	"PROFILE.Settings.en#dates";
 #elif L==9
-	"PROFILE.Preferences.en#dates";
+	"PROFILE.Settings.en#dates";
 #endif
 
-const char *Hlp_PROFILE_Preferences_design =
+const char *Hlp_PROFILE_Settings_design =
 #if   L==1
-	"PROFILE.Preferences.es#dise%C3%B1o";
+	"PROFILE.Settings.es#dise%C3%B1o";
 #elif L==2
-	"PROFILE.Preferences.en#design";
+	"PROFILE.Settings.en#design";
 #elif L==3
-	"PROFILE.Preferences.en#design";
+	"PROFILE.Settings.en#design";
 #elif L==4
-	"PROFILE.Preferences.es#dise%C3%B1o";
+	"PROFILE.Settings.es#dise%C3%B1o";
 #elif L==5
-	"PROFILE.Preferences.en#design";
+	"PROFILE.Settings.en#design";
 #elif L==6
-	"PROFILE.Preferences.es#dise%C3%B1o";
+	"PROFILE.Settings.es#dise%C3%B1o";
 #elif L==7
-	"PROFILE.Preferences.en#design";
+	"PROFILE.Settings.en#design";
 #elif L==8
-	"PROFILE.Preferences.en#design";
+	"PROFILE.Settings.en#design";
 #elif L==9
-	"PROFILE.Preferences.en#design";
+	"PROFILE.Settings.en#design";
 #endif
 
-const char *Hlp_PROFILE_Preferences_icons =
+const char *Hlp_PROFILE_Settings_icons =
 #if   L==1
-	"PROFILE.Preferences.es#iconos";
+	"PROFILE.Settings.es#iconos";
 #elif L==2
-	"PROFILE.Preferences.en#icons";
+	"PROFILE.Settings.en#icons";
 #elif L==3
-	"PROFILE.Preferences.en#icons";
+	"PROFILE.Settings.en#icons";
 #elif L==4
-	"PROFILE.Preferences.es#iconos";
+	"PROFILE.Settings.es#iconos";
 #elif L==5
-	"PROFILE.Preferences.en#icons";
+	"PROFILE.Settings.en#icons";
 #elif L==6
-	"PROFILE.Preferences.es#iconos";
+	"PROFILE.Settings.es#iconos";
 #elif L==7
-	"PROFILE.Preferences.en#icons";
+	"PROFILE.Settings.en#icons";
 #elif L==8
-	"PROFILE.Preferences.en#icons";
+	"PROFILE.Settings.en#icons";
 #elif L==9
-	"PROFILE.Preferences.en#icons";
+	"PROFILE.Settings.en#icons";
 #endif
 
-const char *Hlp_PROFILE_Preferences_theme =
+const char *Hlp_PROFILE_Settings_theme =
 #if   L==1
-	"PROFILE.Preferences.es#tema";
+	"PROFILE.Settings.es#tema";
 #elif L==2
-	"PROFILE.Preferences.en#theme";
+	"PROFILE.Settings.en#theme";
 #elif L==3
-	"PROFILE.Preferences.en#theme";
+	"PROFILE.Settings.en#theme";
 #elif L==4
-	"PROFILE.Preferences.es#tema";
+	"PROFILE.Settings.es#tema";
 #elif L==5
-	"PROFILE.Preferences.en#theme";
+	"PROFILE.Settings.en#theme";
 #elif L==6
-	"PROFILE.Preferences.es#tema";
+	"PROFILE.Settings.es#tema";
 #elif L==7
-	"PROFILE.Preferences.en#theme";
+	"PROFILE.Settings.en#theme";
 #elif L==8
-	"PROFILE.Preferences.en#theme";
+	"PROFILE.Settings.en#theme";
 #elif L==9
-	"PROFILE.Preferences.en#theme";
+	"PROFILE.Settings.en#theme";
 #endif
 
-const char *Hlp_PROFILE_Preferences_menu =
+const char *Hlp_PROFILE_Settings_menu =
 #if   L==1
-	"PROFILE.Preferences.es#men%C3%BA";
+	"PROFILE.Settings.es#men%C3%BA";
 #elif L==2
-	"PROFILE.Preferences.en#menu";
+	"PROFILE.Settings.en#menu";
 #elif L==3
-	"PROFILE.Preferences.en#menu";
+	"PROFILE.Settings.en#menu";
 #elif L==4
-	"PROFILE.Preferences.es#men%C3%BA";
+	"PROFILE.Settings.es#men%C3%BA";
 #elif L==5
-	"PROFILE.Preferences.en#menu";
+	"PROFILE.Settings.en#menu";
 #elif L==6
-	"PROFILE.Preferences.es#men%C3%BA";
+	"PROFILE.Settings.es#men%C3%BA";
 #elif L==7
-	"PROFILE.Preferences.en#menu";
+	"PROFILE.Settings.en#menu";
 #elif L==8
-	"PROFILE.Preferences.en#menu";
+	"PROFILE.Settings.en#menu";
 #elif L==9
-	"PROFILE.Preferences.en#menu";
+	"PROFILE.Settings.en#menu";
 #endif
 
-const char *Hlp_PROFILE_Preferences_columns =
+const char *Hlp_PROFILE_Settings_columns =
 #if   L==1
-	"PROFILE.Preferences.es#columnas";
+	"PROFILE.Settings.es#columnas";
 #elif L==2
-	"PROFILE.Preferences.en#columns";
+	"PROFILE.Settings.en#columns";
 #elif L==3
-	"PROFILE.Preferences.en#columns";
+	"PROFILE.Settings.en#columns";
 #elif L==4
-	"PROFILE.Preferences.es#columnas";
+	"PROFILE.Settings.es#columnas";
 #elif L==5
-	"PROFILE.Preferences.en#columns";
+	"PROFILE.Settings.en#columns";
 #elif L==6
-	"PROFILE.Preferences.es#columnas";
+	"PROFILE.Settings.es#columnas";
 #elif L==7
-	"PROFILE.Preferences.en#columns";
+	"PROFILE.Settings.en#columns";
 #elif L==8
-	"PROFILE.Preferences.en#columns";
+	"PROFILE.Settings.en#columns";
 #elif L==9
-	"PROFILE.Preferences.en#columns";
+	"PROFILE.Settings.en#columns";
 #endif
 
-const char *Hlp_PROFILE_Preferences_privacy =
+const char *Hlp_PROFILE_Settings_privacy =
 #if   L==1
-	"PROFILE.Preferences.es#privacidad";
+	"PROFILE.Settings.es#privacidad";
 #elif L==2
-	"PROFILE.Preferences.en#privacy";
+	"PROFILE.Settings.en#privacy";
 #elif L==3
-	"PROFILE.Preferences.en#privacy";
+	"PROFILE.Settings.en#privacy";
 #elif L==4
-	"PROFILE.Preferences.es#privacidad";
+	"PROFILE.Settings.es#privacidad";
 #elif L==5
-	"PROFILE.Preferences.en#privacy";
+	"PROFILE.Settings.en#privacy";
 #elif L==6
-	"PROFILE.Preferences.es#privacidad";
+	"PROFILE.Settings.es#privacidad";
 #elif L==7
-	"PROFILE.Preferences.en#privacy";
+	"PROFILE.Settings.en#privacy";
 #elif L==8
-	"PROFILE.Preferences.en#privacy";
+	"PROFILE.Settings.en#privacy";
 #elif L==9
-	"PROFILE.Preferences.en#privacy";
+	"PROFILE.Settings.en#privacy";
 #endif
 
-const char *Hlp_PROFILE_Preferences_cookies =
+const char *Hlp_PROFILE_Settings_cookies =
 #if   L==1
-	"PROFILE.Preferences.es#cookies";
+	"PROFILE.Settings.es#cookies";
 #elif L==2
-	"PROFILE.Preferences.en#cookies";
+	"PROFILE.Settings.en#cookies";
 #elif L==3
-	"PROFILE.Preferences.en#cookies";
+	"PROFILE.Settings.en#cookies";
 #elif L==4
-	"PROFILE.Preferences.es#cookies";
+	"PROFILE.Settings.es#cookies";
 #elif L==5
-	"PROFILE.Preferences.en#cookies";
+	"PROFILE.Settings.en#cookies";
 #elif L==6
-	"PROFILE.Preferences.es#cookies";
+	"PROFILE.Settings.es#cookies";
 #elif L==7
-	"PROFILE.Preferences.en#cookies";
+	"PROFILE.Settings.en#cookies";
 #elif L==8
-	"PROFILE.Preferences.en#cookies";
+	"PROFILE.Settings.en#cookies";
 #elif L==9
-	"PROFILE.Preferences.en#cookies";
+	"PROFILE.Settings.en#cookies";
 #endif
 
-const char *Hlp_PROFILE_Preferences_notifications =
+const char *Hlp_PROFILE_Settings_notifications =
 #if   L==1
-	"PROFILE.Preferences.es#notificaciones";
+	"PROFILE.Settings.es#notificaciones";
 #elif L==2
-	"PROFILE.Preferences.en#notifications";
+	"PROFILE.Settings.en#notifications";
 #elif L==3
-	"PROFILE.Preferences.en#notifications";
+	"PROFILE.Settings.en#notifications";
 #elif L==4
-	"PROFILE.Preferences.es#notificaciones";
+	"PROFILE.Settings.es#notificaciones";
 #elif L==5
-	"PROFILE.Preferences.en#notifications";
+	"PROFILE.Settings.en#notifications";
 #elif L==6
-	"PROFILE.Preferences.es#notificaciones";
+	"PROFILE.Settings.es#notificaciones";
 #elif L==7
-	"PROFILE.Preferences.en#notifications";
+	"PROFILE.Settings.en#notifications";
 #elif L==8
-	"PROFILE.Preferences.en#notifications";
+	"PROFILE.Settings.en#notifications";
 #elif L==9
-	"PROFILE.Preferences.en#notifications";
+	"PROFILE.Settings.en#notifications";
 #endif

@@ -49,7 +49,7 @@
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
+#include "swad_setting.h"
 #include "swad_tab.h"
 #include "swad_theme.h"
 #include "swad_timeline.h"
@@ -1442,7 +1442,7 @@ void Lay_RefreshNotifsAndConnected (void)
    else if (!(Gbl.PID % 101))
       Brw_RemoveExpiredExpandedFolders ();	// Remove old expanded folders (from all users)
    else if (!(Gbl.PID % 103))
-      Pre_RemoveOldPrefsFromIP ();		// Remove old preferences from IP
+      Set_RemoveOldSettingsFromIP ();		// Remove old settings from IP
    else if (!(Gbl.PID % 107))
       Sta_RemoveOldEntriesRecentLog ();		// Remove old entries in recent log table, it's a slow query
    else if (!(Gbl.PID % 109))

@@ -45,8 +45,8 @@
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
 #include "swad_profile.h"
+#include "swad_setting.h"
 #include "swad_timeline.h"
 
 /*****************************************************************************/
@@ -1135,9 +1135,9 @@ static void TL_PutFormWhichUsrs (void)
       "users.svg",	// TL_USRS_ALL
      };
 
-   /***** Preference selector for which users *****/
-   Pre_StartPrefsHead ();
-   Pre_StartOnePrefSelector ();
+   /***** Setting selector for which users *****/
+   Set_StartSettingsHead ();
+   Set_StartOneSettingSelector ();
    for (WhichUsrs = (TL_WhichUsrs_t) 1;
 	WhichUsrs < TL_NUM_WHICH_USRS;
 	WhichUsrs++)
@@ -1147,12 +1147,12 @@ static void TL_PutFormWhichUsrs (void)
 						   "PREF_OFF");
       Frm_StartForm (ActSeeSocTmlGbl);
       Par_PutHiddenParamUnsigned ("WhichUsrs",WhichUsrs);
-      Ico_PutPrefIconLink (Icon[WhichUsrs],Txt_TIMELINE_WHICH_USERS[WhichUsrs]);
+      Ico_PutSettingIconLink (Icon[WhichUsrs],Txt_TIMELINE_WHICH_USERS[WhichUsrs]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   Pre_EndOnePrefSelector ();
-   Pre_EndPrefsHead ();
+   Set_EndOneSettingSelector ();
+   Set_EndSettingsHead ();
 
    /***** Show warning if I do not follow anyone *****/
    if (Gbl.Timeline.WhichUsrs == TL_USRS_FOLLOWED)

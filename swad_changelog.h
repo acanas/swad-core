@@ -466,10 +466,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.88 (2019-03-25)"
+#define Log_PLATFORM_VERSION	"SWAD 18.89 (2019-03-26)"
 #define CSS_FILE		"swad18.88.css"
 #define JS_FILE			"swad18.88.js"
 /*
+	Version 18.89:    Mar 26, 2019 	Corrections in help links after recent changes.
+					Module swad_preference is renamed swad_setting. (241090 lines)
 	Version 18.88:    Mar 25, 2019 	Change in usability of exam announcements, suggested by Mancia Anguita López and Javier Fernández Baldomero. (241089 lines)
 	Version 18.87.1:  Mar 24, 2019 	Code refactoring in notices. (241011 lines)
 	Version 18.87:    Mar 24, 2019 	Change in usability of notices. (240997 lines)

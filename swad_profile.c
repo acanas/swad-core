@@ -39,11 +39,11 @@
 #include "swad_nickname.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_role.h"
 #include "swad_role_type.h"
+#include "swad_setting.h"
 #include "swad_theme.h"
 #include "swad_timeline.h"
 #include "swad_user.h"
@@ -357,7 +357,7 @@ void Prf_ChangeBasicProfileVis (void)
 	                                                        Pri_BASIC_PROFILE_ALLOWED_VIS);
 
    /***** Store public/private photo in database *****/
-   DB_QueryUPDATE ("can not update your preference"
+   DB_QueryUPDATE ("can not update your setting"
 		   " about public profile visibility",
 		   "UPDATE usr_data SET BaPrfVisibility='%s'"
 		   " WHERE UsrCod=%ld",
@@ -365,7 +365,7 @@ void Prf_ChangeBasicProfileVis (void)
                    Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show form again *****/
-   Pre_EditPrefs ();
+   Set_EditSettings ();
   }
 
 void Prf_ChangeExtendedProfileVis (void)
@@ -377,7 +377,7 @@ void Prf_ChangeExtendedProfileVis (void)
 	                                                        Pri_EXTENDED_PROFILE_ALLOWED_VIS);
 
    /***** Store public/private photo in database *****/
-   DB_QueryUPDATE ("can not update your preference"
+   DB_QueryUPDATE ("can not update your setting"
 		   " about public profile visibility",
 		   "UPDATE usr_data SET ExPrfVisibility='%s'"
 		   " WHERE UsrCod=%ld",
@@ -385,7 +385,7 @@ void Prf_ChangeExtendedProfileVis (void)
                    Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show form again *****/
-   Pre_EditPrefs ();
+   Set_EditSettings ();
   }
 
 /*****************************************************************************/

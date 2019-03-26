@@ -41,8 +41,8 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
-#include "swad_preference.h"
 #include "swad_QR.h"
+#include "swad_setting.h"
 #include "swad_table.h"
 
 /*****************************************************************************/
@@ -228,9 +228,9 @@ static void Att_ShowAllAttEvents (void)
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
      {
-      Pre_StartPrefsHead ();
+      Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAtt,Att_ParamsWhichGroupsToShow);
-      Pre_EndPrefsHead ();
+      Set_EndSettingsHead ();
      }
 
    if (Gbl.AttEvents.Num)
@@ -1865,7 +1865,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Save_changes;
 
-   /***** Get my preference about photos in users' list for current course *****/
+   /***** Get my setting about photos in users' list for current course *****/
    Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
    /***** Start form *****/

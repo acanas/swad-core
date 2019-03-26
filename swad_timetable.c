@@ -38,7 +38,7 @@
 #include "swad_global.h"
 #include "swad_language.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
+#include "swad_setting.h"
 #include "swad_timetable.h"
 
 /*****************************************************************************/
@@ -371,8 +371,8 @@ void TT_ShowClassTimeTable (void)
       TT_ShowTimeTableGrpsSelected ();
    else
      {
-      /***** Preference selector *****/
-      Pre_StartPrefsHead ();
+      /***** Setting selector *****/
+      Set_StartSettingsHead ();
 
       /* Select whether show only my groups or all groups */
       if ( Gbl.TimeTable.Type == TT_MY_TIMETABLE ||
@@ -384,7 +384,7 @@ void TT_ShowClassTimeTable (void)
       Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Gbl.TimeTable.Type],
                                        Grp_PutParamWhichGrps);
 
-      Pre_EndPrefsHead ();
+      Set_EndSettingsHead ();
      }
 
    /***** Show the time table *****/

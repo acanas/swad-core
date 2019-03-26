@@ -1,4 +1,4 @@
-// swad_language.h: user's preferences on language
+// swad_language.h: user's settings on language
 
 #ifndef _SWAD_LAN
 #define _SWAD_LAN

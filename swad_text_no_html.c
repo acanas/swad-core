@@ -320,23 +320,23 @@ const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 +
 	{
 	"",
 	"Si no desitgeu rebre més avisos per correu,"
-	" desactiveu la opció corresponent en les preferències del seu perfil.",
+	" desactiveu la opció corresponent en els ajustos del seu perfil.",
 	"Wenn Sie nicht mehr erhalten möchten, E-Mail-Benachrichtigungen,"
-	" Deaktivieren Sie die Option in den Einstellungen Ihres Profils.",
+	" Deaktivieren Sie die Option in Ihren Profileinstellungen.",
 	"If you no longer wish to receive email notifications,"
-	" uncheck the option in the preferences of your profile.",
+	" uncheck the option in your profile settings.",
 	"Si no desea recibir más avisos por correo,"
-	" desactive la opción correspondiente en las preferencias de su perfil.",
+	" desactive la opción correspondiente en los ajustes de su perfil.",
 	"Si vous ne souhaitez plus recevoir de notifications par email,"
-	" décochez l'option dans les préférences de votre profil.",
+	" décochez l'option dans les paramètres de votre profil.",
 	"Si no desea recibir más avisos por correo,"
-	" desactive la opción correspondiente en las preferencias de su perfil.",	// Okoteve traducción
+	" desactive la opción correspondiente en los ajustes de su perfil.",	// Okoteve traducción
 	"Se non desideri più ricevere notifiche via email,"
-	" deselezionare l'opzione nelle preferenze del tuo profilo.",
+	" deselezionare l'opzione nelle impostazioni del tuo profilo.",
 	"Jesli nie chcesz otrzymywac powiadomien email,"
-	" usu&nacute; zaznaczenie opcje w ustawieniach swojego profilu.",
+	" odznacz opcj&eogon; w ustawieniach swojego profilu.",
 	"Se já não desejar receber notificações por email,"
-	" desmarque a opção nas preferências do seu perfil.",
+	" desmarque a opção nas configurações do seu perfil.",
 	};
 
 const char *Txt_Institutions_NO_HTML =

@@ -34,7 +34,7 @@
 #include "swad_layout.h"
 #include "swad_menu.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
+#include "swad_setting.h"
 #include "swad_tab.h"
 
 /*****************************************************************************/
@@ -286,7 +286,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeMyAgd,		//  3
 		ActFrmMyAcc,		//  4
 		ActReqEdiRecSha,	//  5
-		ActReqEdiPrf,		//  6
+		ActReqEdiSet,		//  6
 		0,			//  7
 		0,			//  8
 		0,			//  9
@@ -404,15 +404,15 @@ void Mnu_WriteMenuThisTab (void)
 
 void Mnu_PutIconsToSelectMenu (void)
   {
-   extern const char *Hlp_PROFILE_Preferences_menu;
+   extern const char *Hlp_PROFILE_Settings_menu;
    extern const char *Txt_Menu;
    extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
    Mnu_Menu_t Menu;
 
    Box_StartBox (NULL,Txt_Menu,Mnu_PutIconsMenu,
-                 Hlp_PROFILE_Preferences_menu,Box_NOT_CLOSABLE);
-   Pre_StartPrefsHead ();
-   Pre_StartOnePrefSelector ();
+                 Hlp_PROFILE_Settings_menu,Box_NOT_CLOSABLE);
+   Set_StartSettingsHead ();
+   Set_StartOneSettingSelector ();
    for (Menu = (Mnu_Menu_t) 0;
 	Menu < Mnu_NUM_MENUS;
 	Menu++)
@@ -422,17 +422,17 @@ void Mnu_PutIconsToSelectMenu (void)
         	                        "PREF_OFF");
       Frm_StartForm (ActChgMnu);
       Par_PutHiddenParamUnsigned ("Menu",(unsigned) Menu);
-      Ico_PutPrefIconLink (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu]);
+      Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   Pre_EndOnePrefSelector ();
-   Pre_EndPrefsHead ();
+   Set_EndOneSettingSelector ();
+   Set_EndSettingsHead ();
    Box_EndBox ();
   }
 
 /*****************************************************************************/
-/****************** Put contextual icons in menu preference ******************/
+/******************* Put contextual icons in menu setting ********************/
 /*****************************************************************************/
 
 static void Mnu_PutIconsMenu (void)
@@ -453,12 +453,12 @@ void Mnu_ChangeMenu (void)
 
    /***** Store menu in database *****/
    if (Gbl.Usrs.Me.Logged)
-      DB_QueryUPDATE ("can not update your preference about menu",
+      DB_QueryUPDATE ("can not update your setting about menu",
 		      "UPDATE usr_data SET Menu=%u WHERE UsrCod=%ld",
                       (unsigned) Gbl.Prefs.Menu,Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** Set preferences from current IP *****/
-   Pre_SetPrefsFromIP ();
+   /***** Set settings from current IP *****/
+   Set_SetSettingsFromIP ();
   }
 
 /*****************************************************************************/

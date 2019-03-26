@@ -41,8 +41,8 @@
 #include "swad_help.h"
 #include "swad_institution.h"
 #include "swad_language.h"
-#include "swad_preference.h"
 #include "swad_QR.h"
+#include "swad_setting.h"
 #include "swad_table.h"
 
 /*****************************************************************************/

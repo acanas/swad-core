@@ -1,7 +1,7 @@
 // swad_setup.h: initial setup after installation
 
-#ifndef _SWAD_SET
-#define _SWAD_SET
+#ifndef _SWAD_SUP
+#define _SWAD_SUP
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -35,6 +35,6 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Set_Setup (void);
+void SUp_SetUp (void);
 
 #endif

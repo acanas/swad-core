@@ -78,26 +78,26 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 
 void Pri_EditMyPrivacy (void)
   {
-   extern const char *Hlp_PROFILE_Preferences_privacy;
-   extern const char *Txt_Please_review_your_privacy_preferences;
+   extern const char *Hlp_PROFILE_Settings_privacy;
+   extern const char *Txt_Please_check_your_privacy_settings;
    extern const char *Txt_Privacy;
    extern const char *Txt_Photo;
    extern const char *Txt_Basic_public_profile;
    extern const char *Txt_Extended_public_profile;
    extern const char *Txt_Timeline;
 
-   /***** Start section with preferences on privacy *****/
+   /***** Start section with settings on privacy *****/
    Lay_StartSection (Pri_PRIVACY_ID);
 
-   /***** If any of my preferences about privacy is unknown *****/
+   /***** If any of my settings about privacy is unknown *****/
    if (Gbl.Usrs.Me.UsrDat.PhotoVisibility == Pri_VISIBILITY_UNKNOWN ||
        Gbl.Usrs.Me.UsrDat.BaPrfVisibility == Pri_VISIBILITY_UNKNOWN ||
        Gbl.Usrs.Me.UsrDat.ExPrfVisibility == Pri_VISIBILITY_UNKNOWN)
-      Ale_ShowAlert (Ale_WARNING,Txt_Please_review_your_privacy_preferences);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_check_your_privacy_settings);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Privacy,Pri_PutIconsPrivacy,
-                      Hlp_PROFILE_Preferences_privacy,Box_NOT_CLOSABLE,2);
+                      Hlp_PROFILE_Settings_privacy,Box_NOT_CLOSABLE,2);
 
    /***** Edit photo visibility *****/
    Pri_PutFormVisibility (Txt_Photo,
@@ -126,12 +126,12 @@ void Pri_EditMyPrivacy (void)
    /***** End table and box *****/
    Box_EndBoxTable ();
 
-   /***** End section with preferences on privacy *****/
+   /***** End section with settings on privacy *****/
    Lay_EndSection ();
   }
 
 /*****************************************************************************/
-/***************** Put contextual icons in privacy preference ****************/
+/****************** Put contextual icons in privacy setting ******************/
 /*****************************************************************************/
 
 static void Pri_PutIconsPrivacy (void)

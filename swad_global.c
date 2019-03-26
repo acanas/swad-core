@@ -43,9 +43,9 @@
 #include "swad_global.h"
 #include "swad_icon.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
 #include "swad_project.h"
 #include "swad_role.h"
+#include "swad_setting.h"
 #include "swad_theme.h"
 #include "swad_web_service.h"
 

@@ -42,9 +42,9 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
-#include "swad_preference.h"
 #include "swad_privacy.h"
 #include "swad_QR.h"
+#include "swad_setting.h"
 #include "swad_string.h"
 #include "swad_table.h"
 
@@ -158,11 +158,11 @@ void Agd_ShowMyAgenda (void)
 		 Hlp_PROFILE_Agenda,Box_NOT_CLOSABLE);
 
    /***** Put forms to choice which events to show *****/
-   Pre_StartPrefsHead ();
+   Set_StartSettingsHead ();
    Agd_ShowFormToSelPast__FutureEvents ();
    Agd_ShowFormToSelPrivatPublicEvents ();
    Agd_ShowFormToSelHiddenVisiblEvents ();
-   Pre_EndPrefsHead ();
+   Set_EndSettingsHead ();
 
    /***** Show the current events in the user's agenda *****/
    Agd_ShowEventsToday (Agd_MY_AGENDA_TODAY);
@@ -188,7 +188,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
       "calendar-plus.svg",	// Agd_FUTURE_EVENTS
      };
 
-   Pre_StartOnePrefSelector ();
+   Set_StartOneSettingSelector ();
    for (PstFut = Agd_PAST___EVENTS;
 	PstFut <= Agd_FUTURE_EVENTS;
 	PstFut++)
@@ -202,12 +202,12 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
 		             Gbl.Agenda.HiddenVisiblEvents,
 		             Gbl.Agenda.CurrentPage,
 		             -1L);
-      Ico_PutPrefIconLink (Icon[PstFut],
+      Ico_PutSettingIconLink (Icon[PstFut],
 	                   Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   Pre_EndOnePrefSelector ();
+   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/
@@ -224,7 +224,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
       "unlock.svg",	// Agd_PUBLIC_EVENTS
      };
 
-   Pre_StartOnePrefSelector ();
+   Set_StartOneSettingSelector ();
    for (PrvPub = Agd_PRIVAT_EVENTS;
 	PrvPub <= Agd_PUBLIC_EVENTS;
 	PrvPub++)
@@ -238,12 +238,12 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
 		             Gbl.Agenda.HiddenVisiblEvents,
 		             Gbl.Agenda.CurrentPage,
 		             -1L);
-      Ico_PutPrefIconLink (Icon[PrvPub],
+      Ico_PutSettingIconLink (Icon[PrvPub],
 	                   Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   Pre_EndOnePrefSelector ();
+   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/
@@ -260,7 +260,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
       "eye.svg",	// Agd_VISIBL_EVENTS
      };
 
-   Pre_StartOnePrefSelector ();
+   Set_StartOneSettingSelector ();
    for (HidVis = Agd_HIDDEN_EVENTS;
 	HidVis <= Agd_VISIBL_EVENTS;
 	HidVis++)
@@ -274,12 +274,12 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
 		             Gbl.Agenda.HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
 		             Gbl.Agenda.CurrentPage,
 		             -1L);
-      Ico_PutPrefIconLink (Icon[HidVis],
+      Ico_PutSettingIconLink (Icon[HidVis],
 	                   Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   Pre_EndOnePrefSelector ();
+   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/
