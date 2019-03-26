@@ -97,7 +97,7 @@ void Sch_ReqSysSearch (void)
 
 static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco_Scope_t DefaultScope)
   {
-   extern const char *Hlp_Search;
+   extern const char *Hlp_START_Search;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_SEARCH_X_in_Y;
@@ -135,7 +135,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    /***** Start box *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Box_StartBox (NULL,Txt_Search,Crs_PutIconToSelectMyCourses,
-                 Hlp_Search,Box_NOT_CLOSABLE);
+                 Hlp_START_Search,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
    Frm_StartForm (Action);

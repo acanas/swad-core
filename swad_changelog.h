@@ -441,8 +441,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Select users individually in action to send email
 
-// TODO: Actualizar ayuda en GitHub, por ejemplo Preferencias ahora es Ajustes.
-
 // TODO: Allow timeline posting only for users belonging to courses or admins to avoid user who create accounts only to post
 
 // TODO: Ver cómo recibir un fichero desde el cliente (SWADroid) en gsoap
@@ -466,10 +464,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.89 (2019-03-26)"
+#define Log_PLATFORM_VERSION	"SWAD 18.89.1 (2019-03-26)"
 #define CSS_FILE		"swad18.88.css"
 #define JS_FILE			"swad18.88.js"
 /*
+	Version 18.89.1:  Mar 26, 2019 	Corrections in help links after recent changes. (241090 lines)
 	Version 18.89:    Mar 26, 2019 	Corrections in help links after recent changes.
 					Module swad_preference is renamed swad_setting. (241090 lines)
 	Version 18.88:    Mar 25, 2019 	Change in usability of exam announcements, suggested by Mancia Anguita López and Javier Fernández Baldomero. (241089 lines)

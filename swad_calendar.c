@@ -247,7 +247,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               void (*FunctionToDrawContextualIcons) (void),
                               bool PrintView)
   {
-   extern const char *Hlp_Calendar;
+   extern const char *Hlp_START_Calendar;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    char ParamsStr[Frm_MAX_BYTES_PARAMS_STR];
 
@@ -261,7 +261,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
    /***** Start box *****/
    Box_StartBox (NULL,NULL,FunctionToDrawContextualIcons,
 	         PrintView ? NULL :
-	                     Hlp_Calendar,Box_NOT_CLOSABLE);
+	                     Hlp_START_Calendar,Box_NOT_CLOSABLE);
    Lay_WriteHeaderClassPhoto (PrintView,false,
 			      Gbl.CurrentIns.Ins.InsCod,
 			      Gbl.CurrentDeg.Deg.DegCod,

@@ -29,46 +29,111 @@
 #define L 3	// English
 #endif
 
-const char *Hlp_Search =
+/***** START tab *****/
+
+const char *Hlp_START_Search =
 #if   L==1
-	"Search.es";
+	"START.Search.es";
 #elif L==2
-	"Search.en";
+	"START.Search.en";
 #elif L==3
-	"Search.en";
+	"START.Search.en";
 #elif L==4
-	"Search.es";
+	"START.Search.es";
 #elif L==5
-	"Search.en";
+	"START.Search.en";
 #elif L==6
-	"Search.es";
+	"START.Search.es";
 #elif L==7
-	"Search.en";
+	"START.Search.en";
 #elif L==8
-	"Search.en";
+	"START.Search.en";
 #elif L==9
-	"Search.en";
+	"START.Search.en";
 #endif
 
-const char *Hlp_Calendar =
+const char *Hlp_START_Timeline =
 #if   L==1
-	"Calendar.es";
+	"START.Timeline.es";
 #elif L==2
-	"Calendar.en";
+	"START.Timeline.en";
 #elif L==3
-	"Calendar.en";
+	"START.Timeline.en";
 #elif L==4
-	"Calendar.es";
+	"START.Timeline.es";
 #elif L==5
-	"Calendar.en";
+	"START.Timeline.en";
 #elif L==6
-	"Calendar.es";
+	"START.Timeline.es";
 #elif L==7
-	"Calendar.en";
+	"START.Timeline.en";
 #elif L==8
-	"Calendar.en";
+	"START.Timeline.en";
 #elif L==9
-	"Calendar.en";
+	"START.Timeline.en";
+#endif
+
+const char *Hlp_START_Profiles_view_public_profile =
+#if   L==1
+	"START.Profiles.es#ver-perfil-p%C3%BAblico";
+#elif L==2
+	"START.Profiles.en#view-public-profile";
+#elif L==3
+	"START.Profiles.en#view-public-profile";
+#elif L==4
+	"START.Profiles.es#ver-perfil-p%C3%BAblico";
+#elif L==5
+	"START.Profiles.en#view-public-profile";
+#elif L==6
+	"START.Profiles.es#ver-perfil-p%C3%BAblico";
+#elif L==7
+	"START.Profiles.en#view-public-profile";
+#elif L==8
+	"START.Profiles.en#view-public-profile";
+#elif L==9
+	"START.Profiles.en#view-public-profile";
+#endif
+
+const char *Hlp_START_Profiles_who_to_follow =
+#if   L==1
+	"START.Profiles.es#a-qui%C3%A9n-seguir";
+#elif L==2
+	"START.Profiles.en#who-to-follow";
+#elif L==3
+	"START.Profiles.en#who-to-follow";
+#elif L==4
+	"START.Profiles.es#a-qui%C3%A9n-seguir";
+#elif L==5
+	"START.Profiles.en#who-to-follow";
+#elif L==6
+	"START.Profiles.es#a-qui%C3%A9n-seguir";
+#elif L==7
+	"START.Profiles.en#who-to-follow";
+#elif L==8
+	"START.Profiles.en#who-to-follow";
+#elif L==9
+	"START.Profiles.en#who-to-follow";
+#endif
+
+const char *Hlp_START_Calendar =
+#if   L==1
+	"START.Calendar.es";
+#elif L==2
+	"START.Calendar.en";
+#elif L==3
+	"START.Calendar.en";
+#elif L==4
+	"START.Calendar.es";
+#elif L==5
+	"START.Calendar.en";
+#elif L==6
+	"START.Calendar.es";
+#elif L==7
+	"START.Calendar.en";
+#elif L==8
+	"START.Calendar.en";
+#elif L==9
+	"START.Calendar.en";
 #endif
 
 /***** SYSTEM tab *****/
@@ -2022,176 +2087,6 @@ const char *Hlp_USERS_Connected_last_clicks =
 	"USERS.Connected.en#last-clicks";
 #endif
 
-/***** SOCIAL tab *****/
-
-const char *Hlp_START_Timeline =
-#if   L==1
-	"SOCIAL.Timeline.es";
-#elif L==2
-	"SOCIAL.Timeline.en";
-#elif L==3
-	"SOCIAL.Timeline.en";
-#elif L==4
-	"SOCIAL.Timeline.es";
-#elif L==5
-	"SOCIAL.Timeline.en";
-#elif L==6
-	"SOCIAL.Timeline.es";
-#elif L==7
-	"SOCIAL.Timeline.en";
-#elif L==8
-	"SOCIAL.Timeline.en";
-#elif L==9
-	"SOCIAL.Timeline.en";
-#endif
-
-const char *Hlp_START_Profiles_view_public_profile =
-#if   L==1
-	"SOCIAL.Profiles.es#ver-perfil-p%C3%BAblico";
-#elif L==2
-	"SOCIAL.Profiles.en#view-public-profile";
-#elif L==3
-	"SOCIAL.Profiles.en#view-public-profile";
-#elif L==4
-	"SOCIAL.Profiles.es#ver-perfil-p%C3%BAblico";
-#elif L==5
-	"SOCIAL.Profiles.en#view-public-profile";
-#elif L==6
-	"SOCIAL.Profiles.es#ver-perfil-p%C3%BAblico";
-#elif L==7
-	"SOCIAL.Profiles.en#view-public-profile";
-#elif L==8
-	"SOCIAL.Profiles.en#view-public-profile";
-#elif L==9
-	"SOCIAL.Profiles.en#view-public-profile";
-#endif
-
-const char *Hlp_START_Profiles_who_to_follow =
-#if   L==1
-	"SOCIAL.Profiles.es#a-qui%C3%A9n-seguir";
-#elif L==2
-	"SOCIAL.Profiles.en#who-to-follow";
-#elif L==3
-	"SOCIAL.Profiles.en#who-to-follow";
-#elif L==4
-	"SOCIAL.Profiles.es#a-qui%C3%A9n-seguir";
-#elif L==5
-	"SOCIAL.Profiles.en#who-to-follow";
-#elif L==6
-	"SOCIAL.Profiles.es#a-qui%C3%A9n-seguir";
-#elif L==7
-	"SOCIAL.Profiles.en#who-to-follow";
-#elif L==8
-	"SOCIAL.Profiles.en#who-to-follow";
-#elif L==9
-	"SOCIAL.Profiles.en#who-to-follow";
-#endif
-
-const char *Hlp_MESSAGES_Forums =
-#if   L==1
-	"SOCIAL.Forums.es";
-#elif L==2
-	"SOCIAL.Forums.en";
-#elif L==3
-	"SOCIAL.Forums.en";
-#elif L==4
-	"SOCIAL.Forums.es";
-#elif L==5
-	"SOCIAL.Forums.en";
-#elif L==6
-	"SOCIAL.Forums.es";
-#elif L==7
-	"SOCIAL.Forums.en";
-#elif L==8
-	"SOCIAL.Forums.en";
-#elif L==9
-	"SOCIAL.Forums.en";
-#endif
-
-const char *Hlp_MESSAGES_Forums_threads =
-#if   L==1
-	"SOCIAL.Forums.es#discusiones";
-#elif L==2
-	"SOCIAL.Forums.en#threads";
-#elif L==3
-	"SOCIAL.Forums.en#threads";
-#elif L==4
-	"SOCIAL.Forums.es#discusiones";
-#elif L==5
-	"SOCIAL.Forums.en#threads";
-#elif L==6
-	"SOCIAL.Forums.es#discusiones";
-#elif L==7
-	"SOCIAL.Forums.en#threads";
-#elif L==8
-	"SOCIAL.Forums.en#threads";
-#elif L==9
-	"SOCIAL.Forums.en#threads";
-#endif
-
-const char *Hlp_MESSAGES_Forums_new_thread =
-#if   L==1
-	"SOCIAL.Forums.es#nueva-discusi%C3%B3n";
-#elif L==2
-	"SOCIAL.Forums.en#new-thread";
-#elif L==3
-	"SOCIAL.Forums.en#new-thread";
-#elif L==4
-	"SOCIAL.Forums.es#nueva-discusi%C3%B3n";
-#elif L==5
-	"SOCIAL.Forums.en#new-thread";
-#elif L==6
-	"SOCIAL.Forums.es#nueva-discusi%C3%B3n";
-#elif L==7
-	"SOCIAL.Forums.en#new-thread";
-#elif L==8
-	"SOCIAL.Forums.en#new-thread";
-#elif L==9
-	"SOCIAL.Forums.en#new-thread";
-#endif
-
-const char *Hlp_MESSAGES_Forums_posts =
-#if   L==1
-	"SOCIAL.Forums.es#comentarios";
-#elif L==2
-	"SOCIAL.Forums.en#posts";
-#elif L==3
-	"SOCIAL.Forums.en#posts";
-#elif L==4
-	"SOCIAL.Forums.es#comentarios";
-#elif L==5
-	"SOCIAL.Forums.en#posts";
-#elif L==6
-	"SOCIAL.Forums.es#comentarios";
-#elif L==7
-	"SOCIAL.Forums.en#posts";
-#elif L==8
-	"SOCIAL.Forums.en#posts";
-#elif L==9
-	"SOCIAL.Forums.en#posts";
-#endif
-
-const char *Hlp_MESSAGES_Forums_new_post =
-#if   L==1
-	"SOCIAL.Forums.es#nuevo-comentario";
-#elif L==2
-	"SOCIAL.Forums.en#new-post";
-#elif L==3
-	"SOCIAL.Forums.en#new-post";
-#elif L==4
-	"SOCIAL.Forums.es#nuevo-comentario";
-#elif L==5
-	"SOCIAL.Forums.en#new-post";
-#elif L==6
-	"SOCIAL.Forums.es#nuevo-comentario";
-#elif L==7
-	"SOCIAL.Forums.en#new-post";
-#elif L==8
-	"SOCIAL.Forums.en#new-post";
-#elif L==9
-	"SOCIAL.Forums.en#new-post";
-#endif
-
 /***** MESSAGES tab *****/
 
 const char *Hlp_START_Notifications =
@@ -2297,6 +2192,111 @@ const char *Hlp_MESSAGES_Notices =
 	"MESSAGES.Notices.en";
 #elif L==9
 	"MESSAGES.Notices.en";
+#endif
+
+const char *Hlp_MESSAGES_Forums =
+#if   L==1
+	"MESSAGES.Forums.es";
+#elif L==2
+	"MESSAGES.Forums.en";
+#elif L==3
+	"MESSAGES.Forums.en";
+#elif L==4
+	"MESSAGES.Forums.es";
+#elif L==5
+	"MESSAGES.Forums.en";
+#elif L==6
+	"MESSAGES.Forums.es";
+#elif L==7
+	"MESSAGES.Forums.en";
+#elif L==8
+	"MESSAGES.Forums.en";
+#elif L==9
+	"MESSAGES.Forums.en";
+#endif
+
+const char *Hlp_MESSAGES_Forums_threads =
+#if   L==1
+	"MESSAGES.Forums.es#discusiones";
+#elif L==2
+	"MESSAGES.Forums.en#threads";
+#elif L==3
+	"MESSAGES.Forums.en#threads";
+#elif L==4
+	"MESSAGES.Forums.es#discusiones";
+#elif L==5
+	"MESSAGES.Forums.en#threads";
+#elif L==6
+	"MESSAGES.Forums.es#discusiones";
+#elif L==7
+	"MESSAGES.Forums.en#threads";
+#elif L==8
+	"MESSAGES.Forums.en#threads";
+#elif L==9
+	"MESSAGES.Forums.en#threads";
+#endif
+
+const char *Hlp_MESSAGES_Forums_new_thread =
+#if   L==1
+	"MESSAGES.Forums.es#nueva-discusi%C3%B3n";
+#elif L==2
+	"MESSAGES.Forums.en#new-thread";
+#elif L==3
+	"MESSAGES.Forums.en#new-thread";
+#elif L==4
+	"MESSAGES.Forums.es#nueva-discusi%C3%B3n";
+#elif L==5
+	"MESSAGES.Forums.en#new-thread";
+#elif L==6
+	"MESSAGES.Forums.es#nueva-discusi%C3%B3n";
+#elif L==7
+	"MESSAGES.Forums.en#new-thread";
+#elif L==8
+	"MESSAGES.Forums.en#new-thread";
+#elif L==9
+	"MESSAGES.Forums.en#new-thread";
+#endif
+
+const char *Hlp_MESSAGES_Forums_posts =
+#if   L==1
+	"MESSAGES.Forums.es#comentarios";
+#elif L==2
+	"MESSAGES.Forums.en#posts";
+#elif L==3
+	"MESSAGES.Forums.en#posts";
+#elif L==4
+	"MESSAGES.Forums.es#comentarios";
+#elif L==5
+	"MESSAGES.Forums.en#posts";
+#elif L==6
+	"MESSAGES.Forums.es#comentarios";
+#elif L==7
+	"MESSAGES.Forums.en#posts";
+#elif L==8
+	"MESSAGES.Forums.en#posts";
+#elif L==9
+	"MESSAGES.Forums.en#posts";
+#endif
+
+const char *Hlp_MESSAGES_Forums_new_post =
+#if   L==1
+	"MESSAGES.Forums.es#nuevo-comentario";
+#elif L==2
+	"MESSAGES.Forums.en#new-post";
+#elif L==3
+	"MESSAGES.Forums.en#new-post";
+#elif L==4
+	"MESSAGES.Forums.es#nuevo-comentario";
+#elif L==5
+	"MESSAGES.Forums.en#new-post";
+#elif L==6
+	"MESSAGES.Forums.es#nuevo-comentario";
+#elif L==7
+	"MESSAGES.Forums.en#new-post";
+#elif L==8
+	"MESSAGES.Forums.en#new-post";
+#elif L==9
+	"MESSAGES.Forums.en#new-post";
 #endif
 
 const char *Hlp_MESSAGES_Write =
