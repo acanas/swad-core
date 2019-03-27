@@ -2520,9 +2520,8 @@ static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID 
    /***** Link to toggle on/off the form to comment a note *****/
    fprintf (Gbl.F.Out,"<div class=\"TL_ICO_COMMENT ICO_HIGHLIGHT\">"
                       "<a href=\"\""
-                      " onclick=\"toggleDisplay('%s');return false;\" />"
-                      "<img src=\"%s/edit.svg\""
-                      " alt=\"%s\" title=\"%s\""
+                      " onclick=\"toggleDisplay('%s');return false;\">"
+                      "<img src=\"%s/edit.svg\" alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
                       "</a>"
                       "</div>",

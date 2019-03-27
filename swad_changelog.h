@@ -464,13 +464,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.89.3 (2019-03-27)"
+#define Log_PLATFORM_VERSION	"SWAD 18.89.4 (2019-03-27)"
 #define CSS_FILE		"swad18.89.3.css"
 #define JS_FILE			"swad18.89.3.js"
 /*
-	Version 18.89.3:  Mar 27, 2019 	Changes in multimedia attachment form. (241139 lines)
+	Version 18.89.4:  Mar 27, 2019 	Code refactoring in media uploader. (241144 lines)
+	Version 18.89.3:  Mar 27, 2019 	Changes in media attachment form. (241139 lines)
 	Version 18.89.2:  Mar 27, 2019 	Help link when writing a test question.
-					Changes in multimedia attachment form. (241111 lines)
+					Changes in media attachment form. (241111 lines)
 	Version 18.89.1:  Mar 26, 2019 	Corrections in help links after recent changes. (241090 lines)
 	Version 18.89:    Mar 26, 2019 	Corrections in help links after recent changes.
 					Module swad_preference is renamed swad_setting. (241090 lines)

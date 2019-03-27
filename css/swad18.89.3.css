@@ -2720,6 +2720,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 /*********************** Media (image/video) uploading ***********************/
 .MED_ICO
 	{
+	text-align:center;
 	margin-bottom:10px;
 	}
 .MED_PLAY

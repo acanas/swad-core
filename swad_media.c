@@ -113,6 +113,12 @@ static void Med_ResetMediaExceptURLAndTitle (struct Media *Media);
 static void Med_FreeMediaURL (struct Media *Media);
 static void Med_FreeMediaTitle (struct Media *Media);
 
+static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
+				      const char *IdSuffix,
+				      const char *FunctionName,
+				      const char *Icon,
+				      const char *Title);
+
 static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction);
 static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUploadMedia);
 static void Usr_GetURLFromForm (const char *ParamName,struct Media *Media);
@@ -369,43 +375,22 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 		      "<div class=\"PREF_CONTAINER\">");	// icons container
 
    /* Upload icon */
-   fprintf (Gbl.F.Out,"<div id=\"%s_ico_upl\""			// <id>_ico_upl
-		      " class=\"PREF_OFF\">"
-		      "<img src=\"%s/file-image.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO_HIGHLIGHT ICOx16\""
-	              " onclick=\"mediaClickOnActivateUpload('%s');\" />"
-	              "</div>",					// <id>_ico_upl
-            Id,
-	    Cfg_URL_ICON_PUBLIC,
-            Txt_Image_video,Txt_Image_video,
-            Id);
+   Med_PutIconMediaUploader (Id,"ico_upl",			// <id>_ico_upl
+			     "mediaClickOnActivateUpload",
+			     "file-image.svg",
+			     Txt_Image_video);
 
    /* YouTube icon */
-   fprintf (Gbl.F.Out,"<div id=\"%s_ico_you\""			// <id>_ico_you
-		      " class=\"PREF_OFF\">"
-		      "<img src=\"%s/youtube-brands.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO_HIGHLIGHT ICOx16\""
-	              " onclick=\"mediaClickOnActivateYoutube('%s');\" />"
-	              "</div>",					// <id>_ico_you
-            Id,
-	    Cfg_URL_ICON_PUBLIC,
-            "YouTube","YouTube",
-            Id);
+   Med_PutIconMediaUploader (Id,"ico_you",			// <id>_ico_you
+			     "mediaClickOnActivateYoutube",
+			     "youtube-brands.svg",
+			     "YouTube");
 
    /* Embed icon */
-   fprintf (Gbl.F.Out,"<div id=\"%s_ico_emb\""			// <id>_ico_emb
-		      " class=\"PREF_OFF\">"
-		      "<img src=\"%s/code.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO_HIGHLIGHT ICOx16\""
-	              " onclick=\"mediaClickOnActivateEmbed('%s');\" />"
-	              "</div>",					// <id>_ico_emb
-            Id,
-	    Cfg_URL_ICON_PUBLIC,
-            "Embed","Embed",
-            Id);
+   Med_PutIconMediaUploader (Id,"ico_emb",			// <id>_ico_emb
+			     "mediaClickOnActivateEmbed",
+			     "code.svg",
+			     "Embed");
 
    /* End icons */
    fprintf (Gbl.F.Out,"</div>"					// icons container
@@ -477,6 +462,28 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
    /***** End media uploader *****/
    fprintf (Gbl.F.Out,"</div>");				// container <id>_med_upl
+  }
+
+/*****************************************************************************/
+/********* Put an icon to toggle on/off the form to comment a note ***********/
+/*****************************************************************************/
+
+static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
+				      const char *IdSuffix,
+				      const char *FunctionName,
+				      const char *Icon,
+				      const char *Title)
+  {
+   /***** Icon to activate form in media uploader *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s_%s\" class=\"PREF_OFF\">"	// <id>_IdSuffix
+                      "<a href=\"\" onclick=\"%s('%s');return false;\">"
+                      "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
+                      " class=\"ICO_HIGHLIGHT ICOx16\" />"
+                      "</a>"
+                      "</div>",					// <id>_IdSuffix
+            UniqueId,IdSuffix,
+	    FunctionName,UniqueId,
+            Cfg_URL_ICON_PUBLIC,Icon,Title,Title);
   }
 
 /*****************************************************************************/
