@@ -2718,6 +2718,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /*********************** Media (image/video) uploading ***********************/
+.MED_ICO
+	{
+	margin-bottom:10px;
+	}
 .MED_PLAY
 	{
 	position:relative;

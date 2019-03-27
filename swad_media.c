@@ -339,6 +339,23 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    /***** Create unique id for this media uploader *****/
    Frm_SetUniqueId (Id);
 
+   fprintf (Gbl.F.Out,"<div id=\"%s_med_ico\""			// <id>_med_ico
+		      " class=\"MED_ICO\">"
+		      "<img src=\"%s/paperclip.svg\""
+	              " alt=\"%s\" title=\"%s\""
+	              " class=\"ICO_HIGHLIGHT ICOx16\""
+	              " onclick=\"mediaActivateMediaUploader('%s');\" />"
+	              "</div>",					// <id>_med_ico
+            Id,
+	    Cfg_URL_ICON_PUBLIC,
+            Txt_Multimedia,Txt_Multimedia,
+	    Id);
+
+   /***** Start media uploader *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s_med_upl\""			// container <id>_med_upl
+	              " style=\"display:none;\" />",
+            Id);
+
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Multimedia,NULL,
                  Hlp_Multimedia,Box_NOT_CLOSABLE);
@@ -457,6 +474,9 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
    /***** End box *****/
    Box_EndBox ();
+
+   /***** End media uploader *****/
+   fprintf (Gbl.F.Out,"</div>");				// container <id>_med_upl
   }
 
 /*****************************************************************************/
