@@ -29,6 +29,27 @@
 #define L 3	// English
 #endif
 
+const char *Hlp_Multimedia =
+#if   L==1
+	"Multimedia.es";
+#elif L==2
+	"Multimedia.en";
+#elif L==3
+	"Multimedia.en";
+#elif L==4
+	"Multimedia.es";
+#elif L==5
+	"Multimedia.en";
+#elif L==6
+	"Multimedia.es";
+#elif L==7
+	"Multimedia.en";
+#elif L==8
+	"Multimedia.en";
+#elif L==9
+	"Multimedia.en";
+#endif
+
 /***** START tab *****/
 
 const char *Hlp_START_Search =
@@ -1178,6 +1199,27 @@ const char *Hlp_ASSESSMENT_Tests =
 	"ASSESSMENT.Tests.en";
 #elif L==9
 	"ASSESSMENT.Tests.en";
+#endif
+
+const char *Hlp_ASSESSMENT_Tests_writing_a_question =
+#if   L==1
+	"ASSESSMENT.Tests.es#escribir-una-pregunta";
+#elif L==2
+	"ASSESSMENT.Tests.en#writing-a-question";
+#elif L==3
+	"ASSESSMENT.Tests.en#writing-a-question";
+#elif L==4
+	"ASSESSMENT.Tests.es#escribir-una-pregunta";
+#elif L==5
+	"ASSESSMENT.Tests.en#writing-a-question";
+#elif L==6
+	"ASSESSMENT.Tests.es#escribir-una-pregunta";
+#elif L==7
+	"ASSESSMENT.Tests.en#writing-a-question";
+#elif L==8
+	"ASSESSMENT.Tests.en#writing-a-question";
+#elif L==9
+	"ASSESSMENT.Tests.en#writing-a-question";
 #endif
 
 const char *Hlp_ASSESSMENT_Tests_test_results =

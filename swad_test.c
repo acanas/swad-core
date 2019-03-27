@@ -161,9 +161,6 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
                                     unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
-                                       const char *ClassContainer,
-                                       const char *ClassMedia,
-                                       const char *ClassMediaInput,
                                        bool OptionsDisabled);
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
@@ -1056,8 +1053,8 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
    Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
    Med_GetMediaDataByCod (&Gbl.Test.Media);
    Med_ShowMedia (&Gbl.Test.Media,
-                  "TEST_IMG_SHOW_STEM_CONTAINER",
-                  "TEST_IMG_SHOW_STEM");
+                  "TEST_MED_SHOW_CONTAINER",
+                  "TEST_MED_SHOW");
 
    /***** Write answers depending on shuffle (row[3]) and feedback (row[5])  *****/
    switch (ActionToDoWithQuestions)
@@ -1125,9 +1122,6 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 /*****************************************************************************/
 
 static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
-                                       const char *ClassContainer,
-                                       const char *ClassMedia,
-                                       const char *ClassMediaInput,
                                        bool OptionsDisabled)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -1143,7 +1137,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
       Med_SetParamNames (&ParamUploadMedia,NumMediaInForm);
 
       /***** Start container *****/
-      fprintf (Gbl.F.Out,"<div class=\"TEST_FORM_EDIT_MED\">");
+      fprintf (Gbl.F.Out,"<div class=\"TEST_MED_EDIT_FORM\">");
 
       /***** Choice 1: No media *****/
       fprintf (Gbl.F.Out,"<label class=\"%s\">"
@@ -1169,7 +1163,9 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 			 "%s"
 			 "</label>",
 	       Txt_Current_image_video);
-      Med_ShowMedia (Media,ClassContainer,ClassMedia);
+      Med_ShowMedia (Media,
+	             "TEST_MED_EDIT_ONE_CONTAINER",
+		     "TEST_MED_EDIT_ONE");
 
       /***** Choice 3: Change media *****/
       UniqueId++;
@@ -1185,14 +1181,14 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 			 "%s: "
 			 "</label>",
 	       Txt_Change_image_video);
-      Med_PutMediaUploader (NumMediaInForm,ClassMediaInput);
+      Med_PutMediaUploader (NumMediaInForm,"TEST_MED_INPUT");
 
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");
      }
    else	// No current image
       /***** Attached media *****/
-      Med_PutMediaUploader (NumMediaInForm,ClassMediaInput);
+      Med_PutMediaUploader (NumMediaInForm,"TEST_MED_INPUT");
   }
 
 /*****************************************************************************/
@@ -1788,7 +1784,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 
 static void Tst_ShowFormEditTags (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Tests_writing_a_question;
    extern const char *Txt_No_test_questions;
    extern const char *Txt_Tags;
    MYSQL_RES *mysql_res;
@@ -1801,7 +1797,7 @@ static void Tst_ShowFormEditTags (void)
      {
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,Txt_Tags,NULL,
-                         Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE,2);
+                         Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE,2);
 
       /***** Show tags *****/
       for (NumRow = 0;
@@ -2986,8 +2982,8 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
       Med_GetMediaDataByCod (&Gbl.Test.Media);
       Med_ShowMedia (&Gbl.Test.Media,
-                     "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
-                     "TEST_IMG_EDIT_LIST_STEM");
+                     "TEST_MED_EDIT_LIST_CONTAINER",
+                     "TEST_MED_EDIT_LIST");
 
       /* Write feedback (row[5]) and answers */
       Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
@@ -3222,8 +3218,8 @@ static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
       Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[6]);
       Med_GetMediaDataByCod (&Gbl.Test.Media);
       Med_ShowMedia (&Gbl.Test.Media,
-                     "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
-                     "TEST_IMG_EDIT_LIST_STEM");
+                     "TEST_MED_EDIT_LIST_CONTAINER",
+                     "TEST_MED_EDIT_LIST");
 
       /* Write feedback (row[5]) */
       Tst_WriteQstFeedback (row[5],"TEST_EDI_LIGHT");
@@ -3412,8 +3408,8 @@ static void Tst_WriteAnswersEdit (long QstCod)
         	               "%s",
                      Answer);
 	    Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
-	                   "TEST_IMG_EDIT_LIST_ANS_CONTAINER",
-	                   "TEST_IMG_EDIT_LIST_ANS");
+	                   "TEST_MED_EDIT_LIST_CONTAINER",
+	                   "TEST_MED_EDIT_LIST");
             fprintf (Gbl.F.Out,"</div>");
 
             /* Write the text of the feedback */
@@ -3769,8 +3765,8 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
                NumQst,NumOpt,
                Gbl.Test.Answer.Options[NumOpt].Text);
       Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
-                     "TEST_IMG_SHOW_ANS_CONTAINER",
-                     "TEST_IMG_SHOW_ANS");
+                     "TEST_MED_SHOW_CONTAINER",
+                     "TEST_MED_SHOW");
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -3956,8 +3952,8 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 	                 "%s",
                Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
-                     "TEST_IMG_SHOW_ANS_CONTAINER",
-                     "TEST_IMG_SHOW_ANS");
+                     "TEST_MED_SHOW_CONTAINER",
+                     "TEST_MED_SHOW");
       fprintf (Gbl.F.Out,"</div>");
       if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
@@ -4120,8 +4116,8 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
                NumQst,NumOpt,Class,
                Gbl.Test.Answer.Options[NumOpt].Text);
       Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
-                     "TEST_IMG_SHOW_ANS_CONTAINER",
-                     "TEST_IMG_SHOW_ANS");
+                     "TEST_MED_SHOW_CONTAINER",
+                     "TEST_MED_SHOW");
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
@@ -4915,7 +4911,7 @@ void Tst_ShowFormEditOneQst (void)
 static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                                    char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Tests_writing_a_question;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Question_code_X;
    extern const char *Txt_New_question;
@@ -4955,11 +4951,11 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	        Txt_Question_code_X,
 		Gbl.Test.QstCod);
       Box_StartBox (NULL,Gbl.Title,Tst_PutIconToRemoveOneQst,
-                    Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+                    Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
      }
    else
       Box_StartBox (NULL,Txt_New_question,NULL,
-                    Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+                    Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
    Frm_StartForm (ActRcvTstQst);
@@ -5061,9 +5057,6 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
             Txt_Stem,
             Stem);
    Tst_PutFormToEditQstMedia (&Gbl.Test.Media,-1,
-                              "TEST_IMG_EDIT_ONE_STEM_CONTAINER",
-                              "TEST_IMG_EDIT_ONE_STEM",
-                              "STEM",	// Title / attribution
                               false);
 
    /***** Feedback *****/
@@ -5276,9 +5269,6 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       /* Media */
       Tst_PutFormToEditQstMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
                                  (int) NumOpt,
-                                 "TEST_IMG_EDIT_ONE_ANS_CONTAINER",
-                                 "TEST_IMG_EDIT_ONE_ANS",
-                                 "ANSWER",	// Form inputs
                                  OptionsDisabled);
 
       /* Feedback */

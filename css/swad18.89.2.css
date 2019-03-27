@@ -2467,80 +2467,51 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0 0 0 1em;
 	}
 
-.TEST_IMG_SHOW_STEM_CONTAINER
+.TEST_MED_SHOW_CONTAINER
 	{
 	box-sizing:border-box;
 	width:100%;
 	margin:10px 0;
 	}
-.TEST_IMG_SHOW_STEM
+.TEST_MED_SHOW
 	{
 	box-sizing:border-box;
 	width:100%;
 	border-radius:4px;
 	}
-.TEST_IMG_SHOW_ANS_CONTAINER
-	{
-	box-sizing:border-box;
-	width:100%;
-	margin:10px 0;
-	}
-.TEST_IMG_SHOW_ANS
-	{
-	box-sizing:border-box;
-	width:100%;
-	border-radius:4px;
-	}
-.TEST_IMG_EDIT_LIST_STEM_CONTAINER
+.TEST_MED_EDIT_LIST_CONTAINER
 	{
 	box-sizing:border-box;
 	width:100%;
 	margin:5px 0;
 	}
-.TEST_IMG_EDIT_LIST_STEM
-	{
-	box-sizing:border-box;
-	width:100%;
-	border-radius:2px;
-	}
-.TEST_IMG_EDIT_LIST_ANS_CONTAINER
-	{
-	box-sizing:border-box;
-	width:100%;
-	margin:5px 0;
-	}
-.TEST_IMG_EDIT_LIST_ANS
+.TEST_MED_EDIT_LIST
 	{
 	box-sizing:border-box;
 	width:100%;
 	border-radius:2px;
 	}
 
-.TEST_FORM_EDIT_MED
+.TEST_MED_EDIT_FORM
 	{
 	box-sizing:border-box;
 	margin:15px 0;
 	text-align:left;
 	vertical-align:top;
 	}
+.TEST_MED_INPUT
+	{
+	box-sizing:border-box;
+	margin:0 auto;
+	width:480px;
+	}
 
-.TEST_IMG_EDIT_ONE_STEM_CONTAINER
+.TEST_MED_EDIT_ONE_CONTAINER
 	{
 	box-sizing:border-box;
 	width:100%;
 	}
-.TEST_IMG_EDIT_ONE_STEM
-	{
-	box-sizing:border-box;
-	width:100%;
-	border-radius:4px;
-	}
-.TEST_IMG_EDIT_ONE_ANS_CONTAINER
-	{
-	box-sizing:border-box;
-	width:100%;
-	}
-.TEST_IMG_EDIT_ONE_ANS
+.TEST_MED_EDIT_ONE
 	{
 	box-sizing:border-box;
 	width:100%;
@@ -2747,12 +2718,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /*********************** Media (image/video) uploading ***********************/
-.MED_UPL_CON	/* Upload container */
-	{
-	text-align:center;
-	margin-bottom:6px;
-	}
-	
 .MED_PLAY
 	{
 	position:relative;

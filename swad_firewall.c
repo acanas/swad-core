@@ -1,4 +1,4 @@
-// swad_firewall.c: firewall to mitigate mitigate denial of service attacks
+// swad_firewall.c: firewall to mitigate denial of service attacks
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -105,7 +105,7 @@ void FW_CheckFirewallAndExitIfBanned (void)
 			           Gbl.IP);
 
    /***** Exit with status 403 if banned *****/
-   /* RFC 6585 suggests "429 Too Many Requests", according to
+   /* RFC 6585 suggests "403 Forbidden", according to
       https://stackoverflow.com/questions/7447283/proper-http-status-to-return-for-hacking-attempts
       https://tools.ietf.org/html/rfc2616#section-10.4.4 */
    if (NumCurrentBans)

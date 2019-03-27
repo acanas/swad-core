@@ -23190,6 +23190,27 @@ const char *Txt_MSGS_Sent =
 	"Enviadas";
 #endif
 
+const char *Txt_Multimedia =
+#if   L==1	// ca
+	"Multim&egrave;dia";
+#elif L==2	// de
+	"Multimedia";
+#elif L==3	// en
+	"Multimedia";
+#elif L==4	// es
+	"Multimedia";
+#elif L==5	// fr
+	"Multim&eacute;dia";
+#elif L==6	// gn
+	"Multimedia";
+#elif L==7	// it
+	"Multimedialit&agrave;";
+#elif L==8	// pl
+	"Multimedia";
+#elif L==9	// pt
+	"Multim&eacute;dia";
+#endif
+
 const char *Txt_Multiple_enrolment =		// (to a type of group)
 #if   L==1	// ca
 	"&iquest;Adscripci&oacute;n m&uacute;ltiple?";	// Necessita traduccio

@@ -36,6 +36,7 @@
 #include <sys/wait.h>		// For the macro WEXITSTATUS
 #include <unistd.h>		// For unlink, lstat
 
+#include "swad_box.h"
 #include "swad_config.h"
 #include "swad_cookie.h"
 #include "swad_database.h"
@@ -324,6 +325,8 @@ void Med_GetMediaDataByCod (struct Media *Media)
 
 void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
   {
+   extern const char *Hlp_Multimedia;
+   extern const char *Txt_Multimedia;
    extern const char *Txt_Image_video;
    extern const char *Txt_Title_attribution;
    extern const char *Txt_Link;
@@ -336,8 +339,9 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    /***** Create unique id for this media uploader *****/
    Frm_SetUniqueId (Id);
 
-   /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"MED_UPL_CON\">");		// container
+   /***** Start box *****/
+   Box_StartBox (NULL,Txt_Multimedia,NULL,
+                 Hlp_Multimedia,Box_NOT_CLOSABLE);
 
    /***** Action to perform on media *****/
    Par_PutHiddenParamUnsigned (ParamUploadMedia.Action,(unsigned) Med_ACTION_NEW_MEDIA);
@@ -451,8 +455,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    /***** End input fields *****/
    fprintf (Gbl.F.Out,"</div>");				// input fields
 
-   /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");				// container
+   /***** End box *****/
+   Box_EndBox ();
   }
 
 /*****************************************************************************/

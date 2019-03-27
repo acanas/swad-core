@@ -2928,8 +2928,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
 
       /* Show media */
       Med_ShowMedia (&Gbl.Test.Media,
-                     "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
-                     "TEST_IMG_EDIT_LIST_STEM");
+                     "TEST_MED_EDIT_LIST_STEM_CONTAINER",
+                     "TEST_MED_EDIT_LIST_STEM");
 
       /* Show feedback (row[3]) */
       Tst_WriteQstFeedback (row[3],"TEST_EDI_LIGHT");
@@ -3561,8 +3561,8 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
 
    /* Show media */
    Med_ShowMedia (&Gbl.Test.Media,
-		  "TEST_IMG_EDIT_LIST_STEM_CONTAINER",
-		  "TEST_IMG_EDIT_LIST_STEM");
+		  "TEST_MED_EDIT_LIST_STEM_CONTAINER",
+		  "TEST_MED_EDIT_LIST_STEM");
 
    /* Write answers? */
    if (ShowAnswers)

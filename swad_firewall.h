@@ -1,4 +1,4 @@
-// swad_firewall.h: firewall to mitigate mitigate denial of service attacks
+// swad_firewall.h: firewall to mitigate denial of service attacks
 
 #ifndef _SWAD_FW
 #define _SWAD_FW
