@@ -234,13 +234,16 @@ static long TL_ReceiveComment (void);
 
 static void TL_ShareNote (struct TL_Note *SocNot);
 static void TL_FavNote (struct TL_Note *SocNot);
+
+static void TL_PutFormToFavUnfavComment (struct TL_Comment *SocCom,unsigned Limit);
 static void TL_FavComment (struct TL_Comment *SocCom);
+static void TL_UnfavComment (struct TL_Comment *SocCom);
+
 static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
                                     Ntf_NotifyEvent_t NotifyEvent);
 
 static void TL_UnshareNote (struct TL_Note *SocNot);
 static void TL_UnfavNote (struct TL_Note *SocNot);
-static void TL_UnfavComment (struct TL_Comment *SocCom);
 
 static void TL_RequestRemovalNote (void);
 static void TL_PutParamsRemoveNote (void);
@@ -1638,54 +1641,46 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	                 "<div class=\"TL_ICO_FAV_SHA_REM\">");
 
       /* Put icon to mark this note as favourite */
+      fprintf (Gbl.F.Out,"<div id=\"fav_not_%s_%u\" class=\"TL_ICO_FAV\">",
+	       Gbl.UniqueNameEncrypted,NumDiv);
       if (SocNot->Unavailable ||	// Unavailable notes can not be favourited
           IAmTheAuthor)			// I am the author
-        {
 	 /* Put disabled icon and list of users
 	    who have marked this note as favourite */
 	 TL_PutDisabledIconFav (SocNot->NumFavs);
-         TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
-        }
       else				// Available and I am not the author
 	{
-	 fprintf (Gbl.F.Out,"<div id=\"fav_not_%s_%u\""
-	                    " class=\"TL_ICO_FAV\">",
-	          Gbl.UniqueNameEncrypted,NumDiv);
 	 if (IAmAFaverOfThisSocNot)	// I have favourited this note
 	    /* Put icon to unfav this publication and list of users */
 	    TL_PutFormToUnfavNote (SocNot);
-	 else				//  I am not a faver of this note
+	 else				// I am not a faver of this note
 	    /* Put icon to fav this publication and list of users */
 	    TL_PutFormToFavNote (SocNot);
-	 /* Show who have marked this note as favourite */
-         TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
-	 fprintf (Gbl.F.Out,"</div>");
 	}
+      /* Show who have marked this note as favourite */
+      TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
+      fprintf (Gbl.F.Out,"</div>");
 
       /* Put icon to share/unshare */
+      fprintf (Gbl.F.Out,"<div id=\"sha_not_%s_%u\" class=\"TL_ICO_SHA\">",
+	       Gbl.UniqueNameEncrypted,NumDiv);
       if (SocNot->Unavailable ||	// Unavailable notes can not be shared
           IAmTheAuthor)			// I am the author
-        {
 	 /* Put disabled icon and list of users
 	    who have shared this note */
 	 TL_PutDisabledIconShare (SocNot->NumShared);
-         TL_ShowUsrsWhoHaveSharedNote (SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
-        }
       else				// Available and I am not the author
         {
-	 fprintf (Gbl.F.Out,"<div id=\"sha_not_%s_%u\""
-			    " class=\"TL_ICO_SHA\">",
-		  Gbl.UniqueNameEncrypted,NumDiv);
 	 if (IAmASharerOfThisSocNot)	// I am a sharer of this note
 	    /* Put icon to unshare this publication and list of users */
 	    TL_PutFormToUnshareNote (SocNot);
 	 else				// I am not a sharer of this note
 	    /* Put icon to share this publication and list of users */
 	    TL_PutFormToShareNote (SocNot);
-	 /* Show who have shared this note */
-	 TL_ShowUsrsWhoHaveSharedNote (SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
-	 fprintf (Gbl.F.Out,"</div>");
         }
+      /* Show who have shared this note */
+      TL_ShowUsrsWhoHaveSharedNote (SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
+      fprintf (Gbl.F.Out,"</div>");
 
       /* Put icon to remove this note */
       if (IAmTheAuthor)
@@ -2724,8 +2719,8 @@ static void TL_WriteOneCommentInList (MYSQL_RES *mysql_res)
 
    /***** Write comment *****/
    TL_WriteComment (&SocCom,
-			   TL_TOP_MESSAGE_NONE,-1L,
-			   false);
+		    TL_TOP_MESSAGE_NONE,-1L,
+		    false);	// Not alone
 
    /***** Free image *****/
    Med_MediaDestructor (&SocCom.Media);
@@ -2765,9 +2760,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
    struct UsrData UsrDat;
-   bool ItsMe;
    bool IAmTheAuthor;
-   bool IAmAFaverOfThisSocCom = false;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
    static unsigned NumDiv = 0;	// Used to create unique div id for fav
@@ -2804,11 +2797,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       Usr_UsrDataConstructor (&UsrDat);
       UsrDat.UsrCod = SocCom->UsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-      ItsMe = Usr_ItsMe (UsrDat.UsrCod);
-      IAmTheAuthor = ItsMe;
-      if (!IAmTheAuthor)
-	 IAmAFaverOfThisSocCom = TL_CheckIfCommIsFavedByUsr (SocCom->PubCod,
-							     Gbl.Usrs.Me.UsrDat.UsrCod);
+      IAmTheAuthor = Usr_ItsMe (UsrDat.UsrCod);
 
       /***** Left: write author's photo *****/
       fprintf (Gbl.F.Out,"<div class=\"TL_COMMENT_PHOTO\">");
@@ -2836,29 +2825,15 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       Med_ShowMedia (&SocCom->Media,"TL_COMMENT_MED_CONTAINER TL_COMMENT_WIDTH",
 	                            "TL_COMMENT_MED TL_COMMENT_WIDTH");
 
-      /* Put icon to mark this comment as favourite */
-      if (IAmTheAuthor)			// I am the author
-        {
-	 /* Put disabled icon and list of users
-	    who have marked this comment as favourite */
-	 TL_PutDisabledIconFav (SocCom->NumFavs);
-         TL_ShowUsrsWhoHaveMarkedCommAsFav (SocCom,TL_MAX_SHARERS_FAVERS_SHOWN);
-        }
-      else				// I am not the author
-	{
-	 fprintf (Gbl.F.Out,"<div id=\"fav_com_%s_%u\""
-	                    " class=\"TL_ICO_FAV\">",
-	          Gbl.UniqueNameEncrypted,NumDiv);
-	 if (IAmAFaverOfThisSocCom)	// I have favourited this comment
-	    /* Put icon to unfav this publication and list of users */
-	    TL_PutFormToUnfavComment (SocCom);
-	 else				// I am not a favouriter
-	    /* Put icon to fav this publication and list of users */
-	    TL_PutFormToFavComment (SocCom);
-	 /* Show who have marked this comment as favourite */
-         TL_ShowUsrsWhoHaveMarkedCommAsFav (SocCom,TL_MAX_SHARERS_FAVERS_SHOWN);
-	 fprintf (Gbl.F.Out,"</div>");
-	}
+      /* Start favs container */
+      fprintf (Gbl.F.Out,"<div id=\"fav_com_%s_%u\" class=\"TL_ICO_FAV\">",
+	       Gbl.UniqueNameEncrypted,NumDiv);
+
+      /* Write HTML inside DIV with form to fav/unfav */
+      TL_PutFormToFavUnfavComment (SocCom,TL_MAX_SHARERS_FAVERS_SHOWN);
+
+      /* End favs container */
+      fprintf (Gbl.F.Out,"</div>");
 
       /* Put icon to remove this comment */
       if (IAmTheAuthor && !ShowCommentAlone)
@@ -3253,19 +3228,31 @@ static long TL_ReceiveComment (void)
 void TL_ShowAllSharersNoteGbl (void)
   {
    struct TL_Note SocNot;
+   bool IAmTheAuthor;
    bool IAmASharerOfThisSocNot;
 
    /***** Get data of note *****/
    SocNot.NotCod = TL_GetParamNotCod ();
    TL_GetDataOfNoteByCod (&SocNot);
-   IAmASharerOfThisSocNot = TL_CheckIfNoteIsSharedByUsr (SocNot.NotCod,
-							 Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
-   if (IAmASharerOfThisSocNot)
-      TL_PutFormToUnshareNote (&SocNot);
-   else
-      TL_PutFormToShareNote (&SocNot);
+   IAmTheAuthor = Usr_ItsMe (SocNot.UsrCod);
+   if (SocNot.Unavailable ||		// Unavailable notes can not be shared
+       IAmTheAuthor)			// I am the author
+      /* Put disabled icon */
+      TL_PutDisabledIconShare (SocNot.NumShared);
+   else					// Available and I am not the author
+     {
+      /* Put icon to share/unshare */
+      IAmASharerOfThisSocNot = TL_CheckIfNoteIsSharedByUsr (SocNot.NotCod,
+							    Gbl.Usrs.Me.UsrDat.UsrCod);
+      if (IAmASharerOfThisSocNot)	// I have shared this note
+	 TL_PutFormToUnshareNote (&SocNot);
+      else				// I have not shared this note
+	 TL_PutFormToShareNote (&SocNot);
+     }
+
+   /* Show list of users who have shared this note */
    TL_ShowUsrsWhoHaveSharedNote (&SocNot,INT_MAX);
 
    /***** All the output is made, so don't write anymore *****/
@@ -3373,19 +3360,31 @@ static void TL_ShareNote (struct TL_Note *SocNot)
 void TL_ShowAllFaversNoteGbl (void)
   {
    struct TL_Note SocNot;
+   bool IAmTheAuthor;
    bool IAmAFaverOfThisSocNot;
 
    /***** Get data of note *****/
    SocNot.NotCod = TL_GetParamNotCod ();
    TL_GetDataOfNoteByCod (&SocNot);
-   IAmAFaverOfThisSocNot = TL_CheckIfNoteIsFavedByUsr (SocNot.NotCod,
-						       Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   if (IAmAFaverOfThisSocNot)
-      TL_PutFormToUnfavNote (&SocNot);
-   else
-      TL_PutFormToFavNote (&SocNot);
+   IAmTheAuthor = Usr_ItsMe (SocNot.UsrCod);
+   if (SocNot.Unavailable ||		// Unavailable notes can not be favourited
+       IAmTheAuthor)			// I am the author
+      /* Put disabled icon */
+      TL_PutDisabledIconFav (SocNot.NumFavs);
+   else					// Available and I am not the author
+     {
+      /* Put icon to fav/unfav */
+      IAmAFaverOfThisSocNot = TL_CheckIfNoteIsFavedByUsr (SocNot.NotCod,
+							  Gbl.Usrs.Me.UsrDat.UsrCod);
+      if (IAmAFaverOfThisSocNot)	// I have favourited this note
+	 TL_PutFormToUnfavNote (&SocNot);
+      else				// I am not a faver of this note
+	 TL_PutFormToFavNote (&SocNot);
+     }
+
+   /* Show list of users who have marked this note as favourite */
    TL_ShowUsrsWhoHaveMarkedNoteAsFav (&SocNot,INT_MAX);
 
    /***** All the output is made, so don't write anymore *****/
@@ -3488,32 +3487,21 @@ static void TL_FavNote (struct TL_Note *SocNot)
   }
 
 /*****************************************************************************/
-/************************ Mark a comment as favourite ************************/
+/********************* Mark/unmark a comment as favourite ************************/
 /*****************************************************************************/
 
 void TL_ShowAllFaversComGbl (void)
   {
    struct TL_Comment SocCom;
-   bool IAmAFaverOfThisSocCom;
-
-   /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom.Media);
 
    /***** Get data of comment *****/
+   Med_MediaConstructor (&SocCom.Media);
    SocCom.PubCod = TL_GetParamPubCod ();
    TL_GetDataOfCommByCod (&SocCom);
-   IAmAFaverOfThisSocCom = TL_CheckIfCommIsFavedByUsr (SocCom.PubCod,
-						       Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   /***** Free image *****/
    Med_MediaDestructor (&SocCom.Media);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   if (IAmAFaverOfThisSocCom)
-      TL_PutFormToUnfavComment (&SocCom);
-   else
-      TL_PutFormToFavComment (&SocCom);
-   TL_ShowUsrsWhoHaveMarkedCommAsFav (&SocCom,INT_MAX);
+   TL_PutFormToFavUnfavComment (&SocCom,INT_MAX);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3522,23 +3510,18 @@ void TL_ShowAllFaversComGbl (void)
 void TL_ShowAllFaversComUsr (void)
   {
    struct TL_Comment SocCom;
-   bool IAmAFaverOfThisSocCom;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
    /***** Get data of comment *****/
+   Med_MediaConstructor (&SocCom.Media);
    SocCom.PubCod = TL_GetParamPubCod ();
    TL_GetDataOfCommByCod (&SocCom);
-   IAmAFaverOfThisSocCom = TL_CheckIfCommIsFavedByUsr (SocCom.PubCod,
-						       Gbl.Usrs.Me.UsrDat.UsrCod);
+   Med_MediaDestructor (&SocCom.Media);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   if (IAmAFaverOfThisSocCom)
-      TL_PutFormToUnfavComment (&SocCom);
-   else
-      TL_PutFormToFavComment (&SocCom);
-   TL_ShowUsrsWhoHaveMarkedCommAsFav (&SocCom,INT_MAX);
+   TL_PutFormToFavUnfavComment (&SocCom,INT_MAX);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3552,8 +3535,7 @@ void TL_FavCommentGbl (void)
    TL_FavComment (&SocCom);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_PutFormToUnfavComment (&SocCom);
-   TL_ShowUsrsWhoHaveMarkedCommAsFav (&SocCom,TL_MAX_SHARERS_FAVERS_SHOWN);
+   TL_PutFormToFavUnfavComment (&SocCom,TL_MAX_SHARERS_FAVERS_SHOWN);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3570,16 +3552,72 @@ void TL_FavCommentUsr (void)
    TL_FavComment (&SocCom);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_PutFormToUnfavComment (&SocCom);
-   TL_ShowUsrsWhoHaveMarkedCommAsFav (&SocCom,TL_MAX_SHARERS_FAVERS_SHOWN);
+   TL_PutFormToFavUnfavComment (&SocCom,TL_MAX_SHARERS_FAVERS_SHOWN);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
+void TL_UnfavCommentGbl (void)
+  {
+   struct TL_Comment SocCom;
+
+   /***** Stop marking as favourite a previously favourited comment *****/
+   TL_UnfavComment (&SocCom);
+
+   /***** Write HTML inside DIV with form to fav *****/
+   TL_PutFormToFavUnfavComment (&SocCom,TL_MAX_SHARERS_FAVERS_SHOWN);
+
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+  }
+
+void TL_UnfavCommentUsr (void)
+  {
+   struct TL_Comment SocCom;
+
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /***** Unfav a comment previously marked as favourite *****/
+   TL_UnfavComment (&SocCom);
+
+   /***** Write HTML inside DIV with form to fav *****/
+   TL_PutFormToFavUnfavComment (&SocCom,TL_MAX_SHARERS_FAVERS_SHOWN);
+
+   /***** All the output is made, so don't write anymore *****/
+   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+  }
+
+static void TL_PutFormToFavUnfavComment (struct TL_Comment *SocCom,unsigned Limit)
+  {
+   bool IAmTheAuthor;
+   bool IAmAFaverOfThisSocCom;
+
+   IAmTheAuthor = Usr_ItsMe (SocCom->UsrCod);
+   if (IAmTheAuthor)			// I am the author
+      /* Put disabled icon */
+      TL_PutDisabledIconFav (SocCom->NumFavs);
+   else				// I am not the author
+     {
+      /* Put icon to mark this comment as favourite */
+      IAmAFaverOfThisSocCom = TL_CheckIfCommIsFavedByUsr (SocCom->PubCod,
+							  Gbl.Usrs.Me.UsrDat.UsrCod);
+      if (IAmAFaverOfThisSocCom)	// I have favourited this comment
+	 /* Put icon to unfav this publication and list of users */
+	 TL_PutFormToUnfavComment (SocCom);
+      else				// I am not a favouriter
+	 /* Put icon to fav this publication and list of users */
+	 TL_PutFormToFavComment (SocCom);
+     }
+
+   /* Show who have marked this comment as favourite */
+   TL_ShowUsrsWhoHaveMarkedCommAsFav (SocCom,Limit);
+  }
+
 static void TL_FavComment (struct TL_Comment *SocCom)
   {
-   bool ItsMe;
+   bool IAmTheAuthor;
 
    /***** Initialize image *****/
    Med_MediaConstructor (&SocCom->Media);
@@ -3590,8 +3628,8 @@ static void TL_FavComment (struct TL_Comment *SocCom)
 
    if (SocCom->PubCod > 0)
      {
-      ItsMe = Usr_ItsMe (SocCom->UsrCod);
-      if (Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
+      IAmTheAuthor = Usr_ItsMe (SocCom->UsrCod);
+      if (!IAmTheAuthor)	// I am not the author
 	 if (!TL_CheckIfCommIsFavedByUsr (SocCom->PubCod,
 					  Gbl.Usrs.Me.UsrDat.UsrCod)) // I have not yet favourited the comment
 	   {
@@ -3610,6 +3648,44 @@ static void TL_FavComment (struct TL_Comment *SocCom)
 	    /**** Create notification about favourite post
 		  for the author of the post ***/
 	    TL_CreateNotifToAuthor (SocCom->UsrCod,SocCom->PubCod,Ntf_EVENT_TIMELINE_FAV);
+	   }
+     }
+
+   /***** Free image *****/
+   Med_MediaDestructor (&SocCom->Media);
+  }
+
+static void TL_UnfavComment (struct TL_Comment *SocCom)
+  {
+   bool IAmTheAuthor;
+
+   /***** Initialize image *****/
+   Med_MediaConstructor (&SocCom->Media);
+
+   /***** Get data of comment *****/
+   SocCom->PubCod = TL_GetParamPubCod ();
+   TL_GetDataOfCommByCod (SocCom);
+
+   if (SocCom->PubCod > 0)
+     {
+      IAmTheAuthor = Usr_ItsMe (SocCom->UsrCod);
+      if (SocCom->NumFavs &&
+	  !IAmTheAuthor)	// I am not the author
+	 if (TL_CheckIfCommIsFavedByUsr (SocCom->PubCod,
+					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
+	   {
+	    /***** Delete the mark as favourite from database *****/
+	    DB_QueryDELETE ("can not unfavourite comment",
+			    "DELETE FROM social_comments_fav"
+			    " WHERE PubCod=%ld AND UsrCod=%ld",
+			    SocCom->PubCod,
+			    Gbl.Usrs.Me.UsrDat.UsrCod);
+
+	    /***** Update number of times this comment is favourited *****/
+	    TL_GetNumTimesACommHasBeenFav (SocCom);
+
+            /***** Mark possible notifications on this comment as removed *****/
+            Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,SocCom->PubCod);
 	   }
      }
 
@@ -3798,81 +3874,6 @@ static void TL_UnfavNote (struct TL_Note *SocNot)
 	       Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,OriginalPubCod);
 	   }
      }
-  }
-
-/*****************************************************************************/
-/********* Stop marking as favourite a previously favourited comment *********/
-/*****************************************************************************/
-
-void TL_UnfavCommentGbl (void)
-  {
-   struct TL_Comment SocCom;
-
-   /***** Stop marking as favourite a previously favourited comment *****/
-   TL_UnfavComment (&SocCom);
-
-   /***** Write HTML inside DIV with form to fav *****/
-   TL_PutFormToFavComment (&SocCom);
-   TL_ShowUsrsWhoHaveMarkedCommAsFav (&SocCom,TL_MAX_SHARERS_FAVERS_SHOWN);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-  }
-
-void TL_UnfavCommentUsr (void)
-  {
-   struct TL_Comment SocCom;
-
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Unfav a comment previously marked as favourite *****/
-   TL_UnfavComment (&SocCom);
-
-   /***** Write HTML inside DIV with form to fav *****/
-   TL_PutFormToFavComment (&SocCom);
-   TL_ShowUsrsWhoHaveMarkedCommAsFav (&SocCom,TL_MAX_SHARERS_FAVERS_SHOWN);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-  }
-
-static void TL_UnfavComment (struct TL_Comment *SocCom)
-  {
-   bool ItsMe;
-
-   /***** Initialize image *****/
-   Med_MediaConstructor (&SocCom->Media);
-
-   /***** Get data of comment *****/
-   SocCom->PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (SocCom);
-
-   if (SocCom->PubCod > 0)
-     {
-      ItsMe = Usr_ItsMe (SocCom->UsrCod);
-      if (SocCom->NumFavs &&
-	  Gbl.Usrs.Me.Logged && !ItsMe)	// I am not the author
-	 if (TL_CheckIfCommIsFavedByUsr (SocCom->PubCod,
-					  Gbl.Usrs.Me.UsrDat.UsrCod))	// I have favourited the comment
-	   {
-	    /***** Delete the mark as favourite from database *****/
-	    DB_QueryDELETE ("can not unfavourite comment",
-			    "DELETE FROM social_comments_fav"
-			    " WHERE PubCod=%ld AND UsrCod=%ld",
-			    SocCom->PubCod,
-			    Gbl.Usrs.Me.UsrDat.UsrCod);
-
-	    /***** Update number of times this comment is favourited *****/
-	    TL_GetNumTimesACommHasBeenFav (SocCom);
-
-            /***** Mark possible notifications on this comment as removed *****/
-            Ntf_MarkNotifAsRemoved (Ntf_EVENT_TIMELINE_FAV,SocCom->PubCod);
-	   }
-     }
-
-   /***** Free image *****/
-   Med_MediaDestructor (&SocCom->Media);
   }
 
 /*****************************************************************************/
@@ -4242,8 +4243,8 @@ static void TL_RequestRemovalComment (void)
 
 	 /* Show comment */
 	 TL_WriteComment (&SocCom,
-				 TL_TOP_MESSAGE_NONE,-1L,
-				 true);
+			  TL_TOP_MESSAGE_NONE,-1L,
+			  true);	// Alone
 
 	 /* End alert */
 	 Gbl.Timeline.PubCod = SocCom.PubCod;	// Publication to be removed

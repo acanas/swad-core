@@ -3097,23 +3097,27 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TL_ICO_FAV
 	{
 	display:inline-block;
-	vertical-align:bottom;
+	width:50%;
+	vertical-align:top;
+	background:pink;
 	}
 .TL_ICO_SHA
 	{
 	display:inline-block;
-	vertical-align:bottom;
+	width:50%;
+	vertical-align:top;
+	background:lightgreen;
 	}
 .TL_ICO_FAV_DISABLED
 	{
 	display:inline-block;
 	vertical-align:bottom;
 	opacity:0.1;
+	background:pink;
 	}
 .TL_ICO_SHA_DISABLED
 	{
 	display:inline-block;
-	padding-left:20px;
 	vertical-align:bottom;
 	opacity:0.1;
 	}
