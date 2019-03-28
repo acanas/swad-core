@@ -469,7 +469,10 @@ ps2pdf source.ps destination.pdf
 #define JS_FILE			"swad18.89.5.js"
 /*
 	Version 18.89.5:  Mar 28, 2019 	Code refactoring in media uploader.
-					Changes in design of media uploader. (241160 lines)
+					Changes in design of media uploader. (241146 lines)
+					Copy the following icon to icon public directory:
+sudo cp icon/paperclip.svg /var/www/html/swad/icon/
+
 	Version 18.89.4:  Mar 27, 2019 	Code refactoring in media uploader. (241144 lines)
 	Version 18.89.3:  Mar 27, 2019 	Changes in media attachment form. (241139 lines)
 	Version 18.89.2:  Mar 27, 2019 	Help link when writing a test question.

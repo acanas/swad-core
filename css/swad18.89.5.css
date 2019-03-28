@@ -2900,7 +2900,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	.TL_WIDTH					{width:316px;}	/* 556-240 */
 	.TL_RIGHT_WIDTH				{width:260px;}	/* 500-240 */
 	.TL_RIGHT_AUTHOR_WIDTH		{width:100px;}	/* 340-240 */
-	.TL_POST_MED_WIDTH			{width:220px;}	/* 460-240 */
 	.TL_COMMENT_WIDTH			{width:220px;}	/* 460-240 */
 	.TL_COMMENT_AUTHOR_WIDTH	{width: 60px;}	/* 300-240 */
 	.TL_MED_INPUT_WIDTH			{width:160px;}	/* 400-240 */
@@ -2910,8 +2909,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	.TL_WIDTH					{width:556px;}
 	.TL_RIGHT_WIDTH				{width:500px;}
 	.TL_RIGHT_AUTHOR_WIDTH		{width:340px;}
-	.TL_POST_MED_WIDTH			{width:460px;}
-	.TL_POST_MED_INPUT_WIDTH	{width:440px;}
 	.TL_COMMENT_WIDTH			{width:460px;}
 	.TL_COMMENT_AUTHOR_WIDTH	{width:300px;}
 	.TL_MED_INPUT_WIDTH			{width:400px;}
@@ -2989,11 +2986,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:0;
 	resize:none;
 	}
-.TL_POST_MED_INPUT
-	{
-	box-sizing:border-box;
-	margin:0 auto;
-	}
 .TL_POST_MED_CONTAINER
 	{
 	box-sizing:border-box;
@@ -3043,10 +3035,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	box-sizing:border-box;
 	margin:0;
 	resize:none;
-	}
-.TL_COMMENT_IMG_TIT_URL
-	{
-	box-sizing:border-box;
 	}
 .TL_BOTTOM_LEFT		/* Container for button used to toggle new comment form */
 	{

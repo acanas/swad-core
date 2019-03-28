@@ -182,8 +182,7 @@ static void TL_GetNoteSummary (const struct TL_Note *SocNot,
 static void TL_PublishNoteInTimeline (struct TL_Publication *SocPub);
 
 static void TL_PutFormToWriteNewPost (void);
-static void TL_PutTextarea (const char *Placeholder,
-                            const char *ClassTextArea,const char *ClassMediaInput);
+static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea);
 
 static long TL_ReceivePost (void);
 
@@ -2359,8 +2358,7 @@ static void TL_PutFormToWriteNewPost (void)
 
    /* Textarea and button */
    TL_PutTextarea (Txt_New_TIMELINE_post,
-                   "TL_POST_TEXTAREA TL_RIGHT_WIDTH",
-		   "TL_POST_MED_INPUT TL_POST_MED_WIDTH");
+                   "TL_POST_TEXTAREA TL_RIGHT_WIDTH");
 
    /* End form */
    Frm_EndForm ();
@@ -2377,8 +2375,7 @@ static void TL_PutFormToWriteNewPost (void)
 /*** Put textarea and button inside a form to submit a new post or comment ***/
 /*****************************************************************************/
 
-static void TL_PutTextarea (const char *Placeholder,
-                            const char *ClassTextArea,const char *ClassMediaInput)
+static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
   {
    extern const char *Txt_Post;
    char IdDivImgButton[Frm_MAX_BYTES_ID + 1];
@@ -2584,8 +2581,7 @@ static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
 
    /* Textarea and button */
    TL_PutTextarea (Txt_New_TIMELINE_comment,
-                    "TL_COMMENT_TEXTAREA TL_COMMENT_WIDTH",
-		    "TL_COMMENT_IMG_TIT_URL TL_COMMENT_WIDTH");
+	           "TL_COMMENT_TEXTAREA TL_COMMENT_WIDTH");
 
    /* End form */
    Frm_EndForm ();
