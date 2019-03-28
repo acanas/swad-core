@@ -1642,6 +1642,8 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	 else				//  I am not a faver of this note
 	    /* Put icon to fav this publication and list of users */
 	    TL_PutFormToFavNote (SocNot);
+	 /* Show who have marked this note as favourite */
+         TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot);
 	 fprintf (Gbl.F.Out,"</div>");
 	}
 
@@ -1665,6 +1667,8 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	 else				// I am not a sharer of this note
 	    /* Put icon to share this publication and list of users */
 	    TL_PutFormToShareNote (SocNot);
+	 /* Show who have shared this note */
+	 TL_ShowUsrsWhoHaveSharedNote (SocNot);
 	 fprintf (Gbl.F.Out,"</div>");
         }
 
@@ -2967,9 +2971,6 @@ static void TL_PutFormToShareNote (const struct TL_Note *SocNot)
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
    TL_FormFavSha (ActShaSocNotGbl,ActShaSocNotUsr,ParamCod,
 	           "share-alt.svg",Txt_Share);
-
-   /***** Who have shared this note *****/
-   TL_ShowUsrsWhoHaveSharedNote (SocNot);
   }
 
 /*****************************************************************************/
@@ -2986,9 +2987,6 @@ static void TL_PutFormToUnshareNote (const struct TL_Note *SocNot)
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
    TL_FormFavSha (ActUnsSocNotGbl,ActUnsSocNotUsr,ParamCod,
 	           "share-alt-green.svg",Txt_TIMELINE_NOTE_Shared);
-
-   /***** Who have shared this note *****/
-   TL_ShowUsrsWhoHaveSharedNote (SocNot);
   }
 
 /*****************************************************************************/
@@ -3005,9 +3003,6 @@ static void TL_PutFormToFavNote (const struct TL_Note *SocNot)
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
    TL_FormFavSha (ActFavSocNotGbl,ActFavSocNotUsr,ParamCod,
 	           "heart.svg",Txt_Mark_as_favourite);
-
-   /***** Who have marked this note as favourite *****/
-   TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot);
   }
 
 /*****************************************************************************/
@@ -3024,9 +3019,6 @@ static void TL_PutFormToUnfavNote (const struct TL_Note *SocNot)
    sprintf (ParamCod,"NotCod=%ld",SocNot->NotCod);
    TL_FormFavSha (ActUnfSocNotGbl,ActUnfSocNotUsr,ParamCod,
 	           "heart-red.svg",Txt_TIMELINE_NOTE_Favourite);
-
-   /***** Who have marked this note as favourite *****/
-   TL_ShowUsrsWhoHaveMarkedNoteAsFav (SocNot);
   }
 
 /*****************************************************************************/
@@ -3240,6 +3232,7 @@ void TL_ShareNoteGbl (void)
 
    /***** Write HTML inside DIV with form to unshare *****/
    TL_PutFormToUnshareNote (&SocNot);
+   TL_ShowUsrsWhoHaveSharedNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3257,6 +3250,7 @@ void TL_ShareNoteUsr (void)
 
    /***** Write HTML inside DIV with form to unshare *****/
    TL_PutFormToUnshareNote (&SocNot);
+   TL_ShowUsrsWhoHaveSharedNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3311,6 +3305,7 @@ void TL_FavNoteGbl (void)
 
    /***** Write HTML inside DIV with form to unfav *****/
    TL_PutFormToUnfavNote (&SocNot);
+   TL_ShowUsrsWhoHaveMarkedNoteAsFav (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3328,6 +3323,7 @@ void TL_FavNoteUsr (void)
 
    /***** Write HTML inside DIV with form to unfav *****/
    TL_PutFormToUnfavNote (&SocNot);
+   TL_ShowUsrsWhoHaveMarkedNoteAsFav (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3493,6 +3489,7 @@ void TL_UnshareNoteGbl (void)
 
    /***** Write HTML inside DIV with form to share *****/
    TL_PutFormToShareNote (&SocNot);
+   TL_ShowUsrsWhoHaveSharedNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3510,6 +3507,7 @@ void TL_UnshareNoteUsr (void)
 
    /***** Write HTML inside DIV with form to share *****/
    TL_PutFormToShareNote (&SocNot);
+   TL_ShowUsrsWhoHaveSharedNote (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3567,6 +3565,7 @@ void TL_UnfavNoteGbl (void)
 
    /***** Write HTML inside DIV with form to fav *****/
    TL_PutFormToFavNote (&SocNot);
+   TL_ShowUsrsWhoHaveMarkedNoteAsFav (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3584,6 +3583,7 @@ void TL_UnfavNoteUsr (void)
 
    /***** Write HTML inside DIV with form to fav *****/
    TL_PutFormToFavNote (&SocNot);
+   TL_ShowUsrsWhoHaveMarkedNoteAsFav (&SocNot);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -4576,11 +4576,11 @@ static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 	}
 
       if (NumUsrs > NumUsrsShown)
-	 fprintf (Gbl.F.Out,"<div class=\"TL_SHARER\">"
+	 fprintf (Gbl.F.Out,"<span class=\"TL_SHARER\">"
 	                    "<img src=\"%s/ellipsis-h.svg\""
 			    " alt=\"%u\" title=\"%u\""
 			    " class=\"ICO16x16\" />"
-			    "</div>",
+			    "</span>",
 		  Cfg_URL_ICON_PUBLIC,
 		  NumUsrs - NumUsrsShown,
 		  NumUsrs - NumUsrsShown);

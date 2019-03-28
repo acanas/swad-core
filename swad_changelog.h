@@ -464,10 +464,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.89.5 (2019-03-28)"
+#define Log_PLATFORM_VERSION	"SWAD 18.89.6 (2019-03-28)"
 #define CSS_FILE		"swad18.89.5.css"
 #define JS_FILE			"swad18.89.5.js"
 /*
+	Version 18.89.6:  Mar 28, 2019 	Code refactoring in timeline related to favers and sharers. (241151 lines)
 	Version 18.89.5:  Mar 28, 2019 	Code refactoring in media uploader.
 					Changes in design of media uploader. (241146 lines)
 					Copy the following icon to icon public directory:
