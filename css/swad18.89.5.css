@@ -3094,43 +3094,50 @@ a:hover img.CENTRE_PHOTO_SHOW
 	padding-bottom:10px;
 	opacity:0.1;
 	}
-.TL_ICO_FAV
+.TL_BOTTOM
 	{
-	display:inline-block;
-	width:50%;
+	display:table;
+	width:100%;
 	vertical-align:top;
-	background:pink;
 	}
-.TL_ICO_SHA
+.TL_FAV_NOT, .TL_SHA_NOT
 	{
-	display:inline-block;
+	display:table-cell;
 	width:50%;
+	text-align:left;
 	vertical-align:top;
-	background:lightgreen;
 	}
-.TL_ICO_FAV_DISABLED
+.TL_FAV_COM
 	{
-	display:inline-block;
+	display:table-cell;
+	width:100%;
+	text-align:left;
+	vertical-align:top;
+	}
+.TL_REM
+	{
+	display:table-cell;
+	text-align:right;
 	vertical-align:bottom;
-	opacity:0.1;
-	background:pink;
 	}
-.TL_ICO_SHA_DISABLED
+.TL_ICO
 	{
-	display:inline-block;
-	vertical-align:bottom;
-	opacity:0.1;
+	display:table-cell;
 	}
-.TL_ICO_REM
+.TL_NUM_USRS
 	{
-	vertical-align:bottom;
-	float:right;
-	}
-.TL_NUM_SHA_FAV
-	{
+	display:table-cell;
 	color:#A0A0A0;
 	font-size:12pt;
 	font-weight:bold;
+	}
+.TL_USRS
+	{
+	display:table-cell;
+	}
+.TL_ICO_DISABLED
+	{
+	opacity:0.1;
 	}
 .TL_SHARER
 	{

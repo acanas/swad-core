@@ -715,7 +715,9 @@ function evalScriptsInElem (elem) {
 // This function is called when user submit a form just inside a parent div
 function updateParentDiv (elem,Params) {
     var objXMLHttp = false;
-	var idDiv = elem.parentNode.id;
+    var parent = elem.parentNode;
+    var parentOfParent = parent.parentNode;
+	var idDiv = parentOfParent.id;
 
 	objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {

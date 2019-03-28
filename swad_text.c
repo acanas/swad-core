@@ -52139,7 +52139,7 @@ const char *Txt_View =
 
 const char *Txt_View_all_recipients =
 #if   L==1	// ca
-	"Ver todos los destinatarios";	// Necessita traduccio
+	"Veure tots els destinataris";
 #elif L==2	// de
 	"Anzeigen alle Empf&auml;nger";
 #elif L==3	// en
@@ -52153,9 +52153,30 @@ const char *Txt_View_all_recipients =
 #elif L==7	// it
 	"Vedi tutti i destinatari";
 #elif L==8	// pl
-	"View all recipients";		// Potrzebujesz tlumaczenie
+	"Zobacz wszystkich odbiorc&oacute;w";
 #elif L==9	// pt
 	"Ver todos os estinat&aacute;rios";
+#endif
+
+const char *Txt_View_all_USERS =
+#if   L==1	// ca
+	"Veure tots";
+#elif L==2	// de
+	"Anzeigen alle";
+#elif L==3	// en
+	"View all";
+#elif L==4	// es
+	"Ver todos";
+#elif L==5	// fr
+	"Voir tous";
+#elif L==6	// gn
+	"Ver todos";	// Okoteve traducción
+#elif L==7	// it
+	"Vedi tutti";
+#elif L==8	// pl
+	"Zobacz wszystkich";
+#elif L==9	// pt
+	"Ver todos";
 #endif
 
 const char *Txt_View_attendance =
