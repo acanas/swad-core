@@ -61,9 +61,9 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 8 + 55 + 38 + 12 + 42 + 36 + 19 + 110 + 157 + 437 + 176 + 168 + 15 + 67)
+#define Act_NUM_ACTIONS	(1 + 8 + 61 + 38 + 12 + 42 + 36 + 19 + 110 + 157 + 437 + 176 + 168 + 15 + 67)
 
-#define Act_MAX_ACTION_COD 1765
+#define Act_MAX_ACTION_COD 1771
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 13
 
@@ -108,51 +108,57 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 
 #define ActRcvSocPstGbl		(ActWebSvc +  15)
 #define ActRcvSocComGbl		(ActWebSvc +  16)
-#define ActShaSocNotGbl		(ActWebSvc +  17)
-#define ActUnsSocNotGbl		(ActWebSvc +  18)
-#define ActFavSocNotGbl		(ActWebSvc +  19)
-#define ActUnfSocNotGbl		(ActWebSvc +  20)
-#define ActFavSocComGbl		(ActWebSvc +  21)
-#define ActUnfSocComGbl		(ActWebSvc +  22)
-#define ActReqRemSocPubGbl	(ActWebSvc +  23)
-#define ActRemSocPubGbl		(ActWebSvc +  24)
-#define ActReqRemSocComGbl	(ActWebSvc +  25)
-#define ActRemSocComGbl		(ActWebSvc +  26)
+#define ActAllShaSocNotGbl	(ActWebSvc +  17)
+#define ActAllFavSocNotGbl	(ActWebSvc +  18)
+#define ActAllFavSocComGbl	(ActWebSvc +  19)
+#define ActShaSocNotGbl		(ActWebSvc +  20)
+#define ActUnsSocNotGbl		(ActWebSvc +  21)
+#define ActFavSocNotGbl		(ActWebSvc +  22)
+#define ActUnfSocNotGbl		(ActWebSvc +  23)
+#define ActFavSocComGbl		(ActWebSvc +  24)
+#define ActUnfSocComGbl		(ActWebSvc +  25)
+#define ActReqRemSocPubGbl	(ActWebSvc +  26)
+#define ActRemSocPubGbl		(ActWebSvc +  27)
+#define ActReqRemSocComGbl	(ActWebSvc +  28)
+#define ActRemSocComGbl		(ActWebSvc +  29)
 
-#define ActReqOthPubPrf		(ActWebSvc +  27)
+#define ActReqOthPubPrf		(ActWebSvc +  30)
 
-#define ActRcvSocPstUsr		(ActWebSvc +  28)
-#define ActRcvSocComUsr		(ActWebSvc +  29)
-#define ActShaSocNotUsr		(ActWebSvc +  30)
-#define ActUnsSocNotUsr		(ActWebSvc +  31)
-#define ActFavSocNotUsr		(ActWebSvc +  32)
-#define ActUnfSocNotUsr		(ActWebSvc +  33)
-#define ActFavSocComUsr		(ActWebSvc +  34)
-#define ActUnfSocComUsr		(ActWebSvc +  35)
-#define ActReqRemSocPubUsr	(ActWebSvc +  36)
-#define ActRemSocPubUsr		(ActWebSvc +  37)
-#define ActReqRemSocComUsr	(ActWebSvc +  38)
-#define ActRemSocComUsr		(ActWebSvc +  39)
+#define ActRcvSocPstUsr		(ActWebSvc +  31)
+#define ActRcvSocComUsr		(ActWebSvc +  32)
+#define ActAllShaSocNotUsr	(ActWebSvc +  33)
+#define ActAllFavSocNotUsr	(ActWebSvc +  34)
+#define ActAllFavSocComUsr	(ActWebSvc +  35)
+#define ActShaSocNotUsr		(ActWebSvc +  36)
+#define ActUnsSocNotUsr		(ActWebSvc +  37)
+#define ActFavSocNotUsr		(ActWebSvc +  38)
+#define ActUnfSocNotUsr		(ActWebSvc +  39)
+#define ActFavSocComUsr		(ActWebSvc +  40)
+#define ActUnfSocComUsr		(ActWebSvc +  41)
+#define ActReqRemSocPubUsr	(ActWebSvc +  42)
+#define ActRemSocPubUsr		(ActWebSvc +  43)
+#define ActReqRemSocComUsr	(ActWebSvc +  44)
+#define ActRemSocComUsr		(ActWebSvc +  45)
 
-#define ActSeeOthPubPrf		(ActWebSvc +  40)
-#define ActCalFig		(ActWebSvc +  41)
+#define ActSeeOthPubPrf		(ActWebSvc +  46)
+#define ActCalFig		(ActWebSvc +  47)
 
-#define ActFolUsr		(ActWebSvc +  42)
-#define ActUnfUsr		(ActWebSvc +  43)
-#define ActSeeFlg		(ActWebSvc +  44)
-#define ActSeeFlr		(ActWebSvc +  45)
+#define ActFolUsr		(ActWebSvc +  48)
+#define ActUnfUsr		(ActWebSvc +  49)
+#define ActSeeFlg		(ActWebSvc +  50)
+#define ActSeeFlr		(ActWebSvc +  51)
 
-#define ActPrnCal		(ActWebSvc +  46)
-#define ActChgCal1stDay		(ActWebSvc +  47)
+#define ActPrnCal		(ActWebSvc +  52)
+#define ActChgCal1stDay		(ActWebSvc +  53)
 
-#define ActSeeNewNtf		(ActWebSvc +  48)
-#define ActMrkNtfSee		(ActWebSvc +  49)
-#define ActSeeMai		(ActWebSvc +  50)
-#define ActEdiMai		(ActWebSvc +  51)
-#define ActNewMai		(ActWebSvc +  52)
-#define ActRemMai		(ActWebSvc +  53)
-#define ActRenMaiSho		(ActWebSvc +  54)
-#define ActRenMaiFul		(ActWebSvc +  55)
+#define ActSeeNewNtf		(ActWebSvc +  54)
+#define ActMrkNtfSee		(ActWebSvc +  55)
+#define ActSeeMai		(ActWebSvc +  56)
+#define ActEdiMai		(ActWebSvc +  57)
+#define ActNewMai		(ActWebSvc +  58)
+#define ActRemMai		(ActWebSvc +  59)
+#define ActRenMaiSho		(ActWebSvc +  60)
+#define ActRenMaiFul		(ActWebSvc +  61)
 
 /*****************************************************************************/
 /******************************** System tab *********************************/

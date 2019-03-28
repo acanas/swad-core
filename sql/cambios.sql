@@ -12851,4 +12851,14 @@ ALTER TABLE usr_data DROP COLUMN ExtendedProfileVisibility;
  )
  ) AS UsrsToFollow
  ORDER BY RAND() LIMIT 3;
+ 
+ 
+ 
+ 
+ 
+ 
+INSERT INTO social_pubs (NotCod,PublisherCod,PubType,TimePublish) VALUES (600,7140,2,NOW());
+
+INSERT IGNORE INTO social_comments_fav (PubCod,UsrCod,TimeFav) VALUES (1294,7140,NOW());
+ 
 

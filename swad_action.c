@@ -119,6 +119,9 @@ Start:
 
          23. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
          24. ActRcvSocComGbl		Comment a social note in the timeline (global)
+        NEW. ActAllShaSocNotGbl		Show all users who have shared a note in the timeline (global)
+        NEW. ActAllFavSocNotGbl		Show all users who have favourited a note in the timeline (global)
+        NEW. ActAllFavSocComGbl		Show all users who have favourited a comment in the timeline (global)
          25. ActShaSocNotGbl		Share a social note in the timeline (global)
          26. ActUnsSocNotGbl		Unshare a previously shared social note in the timeline (global)
          27. ActFavSocNotGbl		Favourite a social note in the timeline (global)
@@ -134,6 +137,9 @@ Start:
 
          36. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
          37. ActRcvSocComUsr		Comment a social note in the timeline (user)
+        NEW. ActAllShaSocNotUsr		Show all users who have shared a note in the timeline (user)
+        NEW. ActAllFavSocNotUsr		Show all users who have favourited a note in the timeline (user)
+        NEW. ActAllFavSocComUsr		Show all users who have favourited a comment in the timeline (user)
          38. ActShaSocNotUsr		Share a social note in the timeline (user)
          39. ActUnsSocNotUsr		Unshare a previously shared social note in the timeline (user)
          40. ActFavSocNotUsr		Favourite a social note in the timeline (user)
@@ -1624,6 +1630,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActRcvSocPstGbl	*/{1492,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TL_ShowTimelineGbl1		,TL_ReceivePostGbl		,NULL},
    /* ActRcvSocComGbl	*/{1503,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TL_ShowTimelineGbl1		,TL_ReceiveCommentGbl		,NULL},
+   /* ActAllShaSocNotGbl*/{1766,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllSharersNoteGbl	,NULL},
+   /* ActAllFavSocNotGbl*/{1767,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllFaversNoteGbl	,NULL},
+   /* ActAllFavSocComGbl*/{1768,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllFaversComGbl		,NULL},
    /* ActShaSocNotGbl	*/{1495,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShareNoteGbl		,NULL},
    /* ActUnsSocNotGbl	*/{1496,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnshareNoteGbl		,NULL},
    /* ActFavSocNotGbl	*/{1512,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_FavNoteGbl			,NULL},
@@ -1639,6 +1648,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActRcvSocPstUsr	*/{1498,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,TL_ReceivePostUsr		,NULL},
    /* ActRcvSocComUsr	*/{1504,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,TL_ReceiveCommentUsr		,NULL},
+   /* ActAllShaSocNotUsr*/{1769,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllSharersNoteUsr	,NULL},
+   /* ActAllFavSocNotUsr*/{1770,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllFaversNoteUsr	,NULL},
+   /* ActAllFavSocComUsr*/{1771,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllFaversComUsr		,NULL},
    /* ActShaSocNotUsr	*/{1499,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShareNoteUsr		,NULL},
    /* ActUnsSocNotUsr	*/{1500,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnshareNoteUsr		,NULL},
    /* ActFavSocNotUsr	*/{1514,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_FavNoteUsr			,NULL},
@@ -4925,6 +4937,12 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActUnfSevTch,		// #1763
 	ActChgCooPrf,		// #1764
 	ActChgExtPriPrf,	// #1765
+        ActAllShaSocNotGbl,	// #1766
+        ActAllFavSocNotGbl,	// #1767
+        ActAllFavSocComGbl,	// #1768
+        ActAllShaSocNotUsr,	// #1769
+        ActAllFavSocNotUsr,	// #1770
+        ActAllFavSocComUsr,	// #1771
 	};
 
 /*****************************************************************************/

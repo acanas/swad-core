@@ -154,10 +154,18 @@ void TL_PutHiddenParamPubCod (long PubCod);
 void TL_ReceiveCommentGbl (void);
 void TL_ReceiveCommentUsr (void);
 
+void TL_ShowAllSharersNoteGbl (void);
+void TL_ShowAllSharersNoteUsr (void);
 void TL_ShareNoteGbl (void);
 void TL_ShareNoteUsr (void);
+
+void TL_ShowAllFaversNoteGbl (void);
+void TL_ShowAllFaversNoteUsr (void);
 void TL_FavNoteGbl (void);
 void TL_FavNoteUsr (void);
+
+void TL_ShowAllFaversComGbl (void);
+void TL_ShowAllFaversComUsr (void);
 void TL_FavCommentGbl (void);
 void TL_FavCommentUsr (void);
 

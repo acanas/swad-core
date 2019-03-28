@@ -464,10 +464,20 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.89.6 (2019-03-28)"
+#define Log_PLATFORM_VERSION	"SWAD 18.90 (2019-03-28)"
 #define CSS_FILE		"swad18.89.5.css"
 #define JS_FILE			"swad18.89.5.js"
 /*
+ * TODO: Ver todos los favoritos de una pub. mía
+	Version 18.90:    Mar 28, 2019 	Show all users who have shared/faved social notes and comments. Not finished. (241360 lines)
+					6 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1766','es','N','Ver qui&eacute;nes comp. public. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1767','es','N','Ver qui&eacute;nes fav. public. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1768','es','N','Ver qui&eacute;nes fav. coment. social (global)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1769','es','N','Ver qui&eacute;nes comp. public. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1770','es','N','Ver qui&eacute;nes fav. public. social (usuario)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1771','es','N','Ver qui&eacute;nes fav. coment. social (usuario)');
+
 	Version 18.89.6:  Mar 28, 2019 	Code refactoring in timeline related to favers and sharers. (241151 lines)
 	Version 18.89.5:  Mar 28, 2019 	Code refactoring in media uploader.
 					Changes in design of media uploader. (241146 lines)
