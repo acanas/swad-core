@@ -156,25 +156,24 @@ void TL_ReceiveCommentUsr (void);
 
 void TL_ShowAllSharersNoteGbl (void);
 void TL_ShowAllSharersNoteUsr (void);
-void TL_ShareNoteGbl (void);
-void TL_ShareNoteUsr (void);
+void TL_ShaNoteGbl (void);
+void TL_ShaNoteUsr (void);
+void TL_UnsNoteGbl (void);
+void TL_UnsNoteUsr (void);
 
 void TL_ShowAllFaversNoteGbl (void);
 void TL_ShowAllFaversNoteUsr (void);
 void TL_FavNoteGbl (void);
 void TL_FavNoteUsr (void);
+void TL_UnfNoteGbl (void);
+void TL_UnfNoteUsr (void);
 
 void TL_ShowAllFaversComGbl (void);
 void TL_ShowAllFaversComUsr (void);
 void TL_FavCommentGbl (void);
 void TL_FavCommentUsr (void);
-
-void TL_UnshareNoteGbl (void);
-void TL_UnshareNoteUsr (void);
-void TL_UnfavNoteGbl (void);
-void TL_UnfavNoteUsr (void);
-void TL_UnfavCommentGbl (void);
-void TL_UnfavCommentUsr (void);
+void TL_UnfCommentGbl (void);
+void TL_UnfCommentUsr (void);
 
 void TL_RequestRemNoteGbl (void);
 void TL_RequestRemNoteUsr (void);
