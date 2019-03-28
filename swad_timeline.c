@@ -1442,9 +1442,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
    struct UsrData UsrDat;
-   bool ItsMe;
-   bool IAmTheAuthor = false;
-   bool IAmASharerOfThisSocNot = false;
+   bool IAmTheAuthor;
    struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
@@ -1496,14 +1494,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
       /***** Get author data *****/
       UsrDat.UsrCod = SocNot->UsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-      if (Gbl.Usrs.Me.Logged)
-	{
-	 ItsMe = Usr_ItsMe (UsrDat.UsrCod);
-	 IAmTheAuthor = ItsMe;
-	 if (!IAmTheAuthor)
-	    IAmASharerOfThisSocNot = TL_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
-								  Gbl.Usrs.Me.UsrDat.UsrCod);
-	}
+      IAmTheAuthor = Usr_ItsMe (UsrDat.UsrCod);
 
       /***** Left: write author's photo *****/
       fprintf (Gbl.F.Out,"<div class=\"TL_LEFT_PHOTO\">");
@@ -1646,22 +1637,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
       /* Put form to share/unshare */
       fprintf (Gbl.F.Out,"<div id=\"sha_not_%s_%u\" class=\"TL_ICO_SHA\">",
 	       Gbl.UniqueNameEncrypted,NumDiv);
-      if (SocNot->Unavailable ||	// Unavailable notes can not be shared
-          IAmTheAuthor)			// I am the author
-	 /* Put disabled icon and list of users
-	    who have shared this note */
-	 TL_PutDisabledIconShare (SocNot->NumShared);
-      else				// Available and I am not the author
-        {
-	 if (IAmASharerOfThisSocNot)	// I am a sharer of this note
-	    /* Put icon to unshare this publication and list of users */
-	    TL_PutFormToUnshareNote (SocNot);
-	 else				// I am not a sharer of this note
-	    /* Put icon to share this publication and list of users */
-	    TL_PutFormToShareNote (SocNot);
-        }
-      /* Show who have shared this note */
-      TL_ShowUsrsWhoHaveSharedNote (SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
+      TL_PutFormToShaUnsNote (SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
       fprintf (Gbl.F.Out,"</div>");
 
       /* Put icon to remove this note */
@@ -3210,32 +3186,13 @@ static long TL_ReceiveComment (void)
 void TL_ShowAllSharersNoteGbl (void)
   {
    struct TL_Note SocNot;
-   bool IAmTheAuthor;
-   bool IAmASharerOfThisSocNot;
 
    /***** Get data of note *****/
    SocNot.NotCod = TL_GetParamNotCod ();
    TL_GetDataOfNoteByCod (&SocNot);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
-   IAmTheAuthor = Usr_ItsMe (SocNot.UsrCod);
-   if (SocNot.Unavailable ||		// Unavailable notes can not be shared
-       IAmTheAuthor)			// I am the author
-      /* Put disabled icon */
-      TL_PutDisabledIconShare (SocNot.NumShared);
-   else					// Available and I am not the author
-     {
-      /* Put icon to share/unshare */
-      IAmASharerOfThisSocNot = TL_CheckIfNoteIsSharedByUsr (SocNot.NotCod,
-							    Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (IAmASharerOfThisSocNot)	// I have shared this note
-	 TL_PutFormToUnshareNote (&SocNot);
-      else				// I have not shared this note
-	 TL_PutFormToShareNote (&SocNot);
-     }
-
-   /* Show list of users who have shared this note */
-   TL_ShowUsrsWhoHaveSharedNote (&SocNot,INT_MAX);
+   TL_PutFormToShaUnsNote (&SocNot,INT_MAX);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3244,7 +3201,6 @@ void TL_ShowAllSharersNoteGbl (void)
 void TL_ShowAllSharersNoteUsr (void)
   {
    struct TL_Note SocNot;
-   bool IAmASharerOfThisSocNot;
 
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
@@ -3252,15 +3208,9 @@ void TL_ShowAllSharersNoteUsr (void)
    /***** Get data of note *****/
    SocNot.NotCod = TL_GetParamNotCod ();
    TL_GetDataOfNoteByCod (&SocNot);
-   IAmASharerOfThisSocNot = TL_CheckIfNoteIsSharedByUsr (SocNot.NotCod,
-							 Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
-   if (IAmASharerOfThisSocNot)
-      TL_PutFormToUnshareNote (&SocNot);
-   else
-      TL_PutFormToShareNote (&SocNot);
-   TL_ShowUsrsWhoHaveSharedNote (&SocNot,INT_MAX);
+   TL_PutFormToShaUnsNote (&SocNot,INT_MAX);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3274,8 +3224,7 @@ void TL_ShaNoteGbl (void)
    TL_ShaNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   TL_PutFormToUnshareNote (&SocNot);
-   TL_ShowUsrsWhoHaveSharedNote (&SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
+   TL_PutFormToShaUnsNote (&SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3292,8 +3241,7 @@ void TL_ShaNoteUsr (void)
    TL_ShaNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   TL_PutFormToUnshareNote (&SocNot);
-   TL_ShowUsrsWhoHaveSharedNote (&SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
+   TL_PutFormToShaUnsNote (&SocNot,TL_MAX_SHARERS_FAVERS_SHOWN);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3301,7 +3249,28 @@ void TL_ShaNoteUsr (void)
 
 static void TL_PutFormToShaUnsNote (const struct TL_Note *SocNot,unsigned Limit)
   {
+   bool IAmTheAuthor;
+   bool IAmASharerOfThisSocNot;
 
+   /***** Put form to share/unshare this note *****/
+   IAmTheAuthor = Usr_ItsMe (SocNot->UsrCod);
+   if (SocNot->Unavailable ||		// Unavailable notes can not be shared
+       IAmTheAuthor)			// I am the author
+      /* Put disabled icon */
+      TL_PutDisabledIconShare (SocNot->NumShared);
+   else					// Available and I am not the author
+     {
+      /* Put icon to share/unshare */
+      IAmASharerOfThisSocNot = TL_CheckIfNoteIsSharedByUsr (SocNot->NotCod,
+							    Gbl.Usrs.Me.UsrDat.UsrCod);
+      if (IAmASharerOfThisSocNot)	// I have shared this note
+	 TL_PutFormToUnshareNote (SocNot);
+      else				// I have not shared this note
+	 TL_PutFormToShareNote (SocNot);
+     }
+
+   /***** Show who have shared this note *****/
+   TL_ShowUsrsWhoHaveSharedNote (SocNot,Limit);
   }
 
 static void TL_ShaNote (struct TL_Note *SocNot)

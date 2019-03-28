@@ -464,10 +464,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.90.2 (2019-03-28)"
+#define Log_PLATFORM_VERSION	"SWAD 18.90.3 (2019-03-28)"
 #define CSS_FILE		"swad18.89.5.css"
 #define JS_FILE			"swad18.89.5.js"
 /*
+	Version 18.90.3:  Mar 28, 2019 	Show all users who have shared/faved social notes and comments. (241307 lines)
 	Version 18.90.2:  Mar 28, 2019 	Show all users who have shared/faved social notes and comments. Not finished. (241337 lines)
 	Version 18.90.1:  Mar 28, 2019 	Show all users who have shared/faved social notes and comments. Not finished. (241358 lines)
 	Version 18.90:    Mar 28, 2019 	Show all users who have shared/faved social notes and comments. Not finished. (241360 lines)
