@@ -2404,7 +2404,7 @@ static void TL_PutTextarea (const char *Placeholder,
    Lay_HelpPlainEditor ();
 
    /***** Attached image (optional) *****/
-   Med_PutMediaUploader (-1,ClassMediaInput);
+   Med_PutMediaUploader (-1,"TL_MED_INPUT_WIDTH");
 
    /***** Submit button *****/
    fprintf (Gbl.F.Out,"<button type=\"submit\""

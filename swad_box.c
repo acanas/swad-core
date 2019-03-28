@@ -177,7 +177,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
 	                 "%s"
 	                 "</div>",
 	       Gbl.Layout.NestedBox ? "FRAME_TITLE_SMALL" :
-		                        "FRAME_TITLE_BIG",
+		                      "FRAME_TITLE_BIG",
 	       Title);
 
    Gbl.Layout.NestedBox++;

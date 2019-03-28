@@ -772,11 +772,8 @@ function AJAXCreateObject () {
 /*****************************************************************************/
 
 function mediaActivateMediaUploader (id) {
-	var icon		= document.getElementById (id + '_med_ico');
-	var uploader	= document.getElementById (id + '_med_upl');
-
-	icon.style.display		= 'none';	// Hide icon
-	uploader.style.display	= '';		// Show uploader
+	document.getElementById (id + '_med_ico').style.display = 'none';
+	document.getElementById (id + '_med_upl').style.display = '';
 }
 
 function mediaClickOnActivateUpload (id) {

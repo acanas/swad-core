@@ -2503,7 +2503,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	margin:0 auto;
-	width:480px;
+	width:400px;
 	}
 
 .TEST_MED_EDIT_ONE_CONTAINER
@@ -2718,7 +2718,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /*********************** Media (image/video) uploading ***********************/
-.MED_ICO
+.MED_UPLOADER
 	{
 	text-align:center;
 	margin-bottom:10px;
@@ -2903,6 +2903,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	.TL_POST_MED_WIDTH			{width:220px;}	/* 460-240 */
 	.TL_COMMENT_WIDTH			{width:220px;}	/* 460-240 */
 	.TL_COMMENT_AUTHOR_WIDTH	{width: 60px;}	/* 300-240 */
+	.TL_MED_INPUT_WIDTH			{width:160px;}	/* 400-240 */
 	}
 @media only screen and (min-width: 590px)
 	{	/* For tablets and desktop (maximum width visible on Moto G4 horizontal) */
@@ -2910,8 +2911,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 	.TL_RIGHT_WIDTH				{width:500px;}
 	.TL_RIGHT_AUTHOR_WIDTH		{width:340px;}
 	.TL_POST_MED_WIDTH			{width:460px;}
+	.TL_POST_MED_INPUT_WIDTH	{width:440px;}
 	.TL_COMMENT_WIDTH			{width:460px;}
 	.TL_COMMENT_AUTHOR_WIDTH	{width:300px;}
+	.TL_MED_INPUT_WIDTH			{width:400px;}
 	}
 
 .TL_NEW_PUB
@@ -3176,7 +3179,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	margin:0 auto;
-	width:480px;
+	width:400px;
 	}
 
 /*********************************** Messages ********************************/
@@ -3203,7 +3206,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	margin:0 auto;
-	width:480px;
+	width:400px;
 	}
 .MSG_TXT
 	{

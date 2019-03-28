@@ -118,6 +118,10 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 				      const char *FunctionName,
 				      const char *Icon,
 				      const char *Title);
+static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
+				                const char *IdSuffix,
+					        struct ParamUploadMedia *ParamUploadMedia,
+					        Med_FormType_t FormType);
 
 static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction);
 static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUploadMedia);
@@ -345,17 +349,21 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    /***** Create unique id for this media uploader *****/
    Frm_SetUniqueId (Id);
 
-   fprintf (Gbl.F.Out,"<div id=\"%s_med_ico\""			// <id>_med_ico
-		      " class=\"MED_ICO\">"
+   /***** Start media uploader container *****/
+   fprintf (Gbl.F.Out,"<div class=\"MED_UPLOADER\">");		// container
+
+   /***** Icon 'clip' *****/
+   fprintf (Gbl.F.Out,"<div id=\"%s_med_ico\">"			// <id>_med_ico
+                      "<a href=\"\""
+                      " onclick=\"mediaActivateMediaUploader('%s');return false;\">"
 		      "<img src=\"%s/paperclip.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO_HIGHLIGHT ICOx16\""
-	              " onclick=\"mediaActivateMediaUploader('%s');\" />"
+	              " class=\"ICO_HIGHLIGHT ICOx16\" />"
+                      "</a>"
 	              "</div>",					// <id>_med_ico
-            Id,
+            Id,Id,
 	    Cfg_URL_ICON_PUBLIC,
-            Txt_Multimedia,Txt_Multimedia,
-	    Id);
+            Txt_Multimedia,Txt_Multimedia);
 
    /***** Start media uploader *****/
    fprintf (Gbl.F.Out,"<div id=\"%s_med_upl\""			// container <id>_med_upl
@@ -398,74 +406,65 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
    /***** Hidden field with form type *****/
    /* Upload file */
-   fprintf (Gbl.F.Out,"<input type=\"hidden\""
-		      " id=\"%s_par_upl\""			// <id>_par_upl
-		      " name=\"%s\" value=\"%u\""
-		      " disabled=\"disabled\" />",
-	    Id,ParamUploadMedia.FormType,
-            (unsigned) Med_FORM_FILE);
+   Med_PutHiddenFormTypeMediaUploader (Id,"par_upl",		// <id>_par_upl
+				       &ParamUploadMedia,Med_FORM_FILE);
 
    /* YouTube embedded video */
-   fprintf (Gbl.F.Out,"<input type=\"hidden\""
-		      " id=\"%s_par_you\""			// <id>_par_you
-		      " name=\"%s\" value=\"%u\""
-		      " disabled=\"disabled\" />",
-	    Id,ParamUploadMedia.FormType,
-            (unsigned) Med_FORM_YOUTUBE);
+   Med_PutHiddenFormTypeMediaUploader (Id,"par_you",		// <id>_par_you
+				       &ParamUploadMedia,Med_FORM_YOUTUBE);
 
    /* Other embedded media */
-   fprintf (Gbl.F.Out,"<input type=\"hidden\""
-		      " id=\"%s_par_emb\""			// <id>_par_emb
-		      " name=\"%s\" value=\"%u\""
-		      " disabled=\"disabled\" />",
-	    Id,ParamUploadMedia.FormType,
-            (unsigned) Med_FORM_EMBED);
+   Med_PutHiddenFormTypeMediaUploader (Id,"par_emb",		// <id>_par_emb
+				       &ParamUploadMedia,Med_FORM_EMBED);
 
-   /***** Start input fields *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",			// input fields
-	    ClassInput);
 
    /***** Media file *****/
-   fprintf (Gbl.F.Out,"<input id=\"%s_fil\" type=\"file\""	// <id>_fil
+   fprintf (Gbl.F.Out,"<div>"
+	              "<input id=\"%s_fil\" type=\"file\""	// <id>_fil
 	              " name=\"%s\" accept=\"image/,video/\""
 	              " class=\"%s\" disabled=\"disabled\""
-	              " style=\"display:none;\" />",		// <id>_fil
+	              " style=\"display:none;\" />"
+	              "</div>",					// <id>_fil
 	    Id,
             ParamUploadMedia.File,
 	    ClassInput);
 
    /***** Media URL *****/
-   fprintf (Gbl.F.Out,"<input id=\"%s_url\" type=\"url\""	// <id>_url
+   fprintf (Gbl.F.Out,"<div>"
+	              "<input id=\"%s_url\" type=\"url\""	// <id>_url
 		      " name=\"%s\" placeholder=\"%s\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\""
 	              " disabled=\"disabled\""
-	              " style=\"display:none;\" />",		// <id>_url
+	              " style=\"display:none;\" />"
+	              "</div>",		// <id>_url
 	    Id,
             ParamUploadMedia.URL,Txt_Link,
             ClassInput,Cns_MAX_CHARS_WWW);
 
    /***** Media title *****/
-   fprintf (Gbl.F.Out,"<input id=\"%s_tit\" type=\"text\""	// <id>_tit
+   fprintf (Gbl.F.Out,"<div>"
+	              "<input id=\"%s_tit\" type=\"text\""	// <id>_tit
 		      " name=\"%s\" placeholder=\"%s\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\""
 	              " disabled=\"disabled\""
-	              " style=\"display:none;\" />",		// <id>_tit
+	              " style=\"display:none;\" />"
+	              "</div>",		// <id>_tit
 	    Id,
             ParamUploadMedia.Title,Txt_Title_attribution,
             ClassInput,Med_MAX_CHARS_TITLE);
-
-   /***** End input fields *****/
-   fprintf (Gbl.F.Out,"</div>");				// input fields
 
    /***** End box *****/
    Box_EndBox ();
 
    /***** End media uploader *****/
    fprintf (Gbl.F.Out,"</div>");				// container <id>_med_upl
+
+   /***** End media uploader container *****/
+   fprintf (Gbl.F.Out,"</div>");				// container
   }
 
 /*****************************************************************************/
-/********* Put an icon to toggle on/off the form to comment a note ***********/
+/*********************** Put an icon in media uploader ***********************/
 /*****************************************************************************/
 
 static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
@@ -485,6 +484,23 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 	    FunctionName,UniqueId,
             Cfg_URL_ICON_PUBLIC,Icon,Title,Title);
   }
+
+/*****************************************************************************/
+/******** Put a hidden input field with form type in media uploader **********/
+/*****************************************************************************/
+
+static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
+				                const char *IdSuffix,
+					        struct ParamUploadMedia *ParamUploadMedia,
+					        Med_FormType_t FormType)
+  {
+   /***** Hidden field with form type *****/
+   /* Upload file */
+   fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"%s_%s\""	// <id>_IdSuffix
+		      " name=\"%s\" value=\"%u\" disabled=\"disabled\" />",
+            UniqueId,IdSuffix,
+	    ParamUploadMedia->FormType,(unsigned) FormType);
+   }
 
 /*****************************************************************************/
 /******************** Get media (image/video) from form **********************/
