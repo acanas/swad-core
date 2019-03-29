@@ -146,44 +146,44 @@ void TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NoteType_t NoteType,long Co
 void TL_MarkNoteOneFileAsUnavailable (const char *Path);
 void TL_MarkNotesChildrenOfFolderAsUnavailable (const char *Path);
 
-void TL_ReceivePostGbl (void);
 void TL_ReceivePostUsr (void);
+void TL_ReceivePostGbl (void);
 
 void TL_PutHiddenParamPubCod (long PubCod);
 
-void TL_ReceiveCommentGbl (void);
 void TL_ReceiveCommentUsr (void);
+void TL_ReceiveCommentGbl (void);
 
-void TL_ShowAllSharersNoteGbl (void);
 void TL_ShowAllSharersNoteUsr (void);
-void TL_ShaNoteGbl (void);
+void TL_ShowAllSharersNoteGbl (void);
 void TL_ShaNoteUsr (void);
-void TL_UnsNoteGbl (void);
+void TL_ShaNoteGbl (void);
 void TL_UnsNoteUsr (void);
+void TL_UnsNoteGbl (void);
 
-void TL_ShowAllFaversNoteGbl (void);
 void TL_ShowAllFaversNoteUsr (void);
-void TL_FavNoteGbl (void);
+void TL_ShowAllFaversNoteGbl (void);
 void TL_FavNoteUsr (void);
-void TL_UnfNoteGbl (void);
+void TL_FavNoteGbl (void);
 void TL_UnfNoteUsr (void);
+void TL_UnfNoteGbl (void);
 
-void TL_ShowAllFaversComGbl (void);
 void TL_ShowAllFaversComUsr (void);
-void TL_FavCommentGbl (void);
+void TL_ShowAllFaversComGbl (void);
 void TL_FavCommentUsr (void);
-void TL_UnfCommentGbl (void);
+void TL_FavCommentGbl (void);
 void TL_UnfCommentUsr (void);
+void TL_UnfCommentGbl (void);
 
-void TL_RequestRemNoteGbl (void);
 void TL_RequestRemNoteUsr (void);
-void TL_RemoveNoteGbl (void);
+void TL_RequestRemNoteGbl (void);
 void TL_RemoveNoteUsr (void);
+void TL_RemoveNoteGbl (void);
 
-void TL_RequestRemComGbl (void);
 void TL_RequestRemComUsr (void);
-void TL_RemoveComGbl (void);
+void TL_RequestRemComGbl (void);
 void TL_RemoveComUsr (void);
+void TL_RemoveComGbl (void);
 
 void TL_RemoveUsrContent (long UsrCod);
 

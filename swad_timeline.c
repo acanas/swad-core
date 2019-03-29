@@ -1647,13 +1647,13 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
       /* Put form to mark/unmark this note as favourite */
       fprintf (Gbl.F.Out,"<div id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT\">",
 	       Gbl.UniqueNameEncrypted,NumDiv);
-      TL_PutFormToFavUnfNote (SocNot,false);	// Show only a few
+      TL_PutFormToFavUnfNote (SocNot,TL_SHOW_A_FEW_USRS);
       fprintf (Gbl.F.Out,"</div>");
 
       /* Put form to share/unshare */
       fprintf (Gbl.F.Out,"<div id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT\">",
 	       Gbl.UniqueNameEncrypted,NumDiv);
-      TL_PutFormToShaUnsNote (SocNot,false);	// Show only a few
+      TL_PutFormToShaUnsNote (SocNot,TL_SHOW_A_FEW_USRS);
       fprintf (Gbl.F.Out,"</div>");
 
       /* Put icon to remove this note */
@@ -2409,21 +2409,8 @@ static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
 /******************* Receive and store a new public post *********************/
 /*****************************************************************************/
 
-void TL_ReceivePostGbl (void)
-  {
-   long NotCod;
-
-   /***** Receive and store post *****/
-   NotCod = TL_ReceivePost ();
-
-   /***** Write updated timeline after publication (global) *****/
-   TL_ShowTimelineGblHighlightingNot (NotCod);
-  }
-
 void TL_ReceivePostUsr (void)
   {
-   long NotCod;
-
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
@@ -2433,14 +2420,23 @@ void TL_ReceivePostUsr (void)
    /***** Start section *****/
    Lay_StartSection (TL_TIMELINE_SECTION_ID);
 
-   /***** Receive and store post *****/
-   NotCod = TL_ReceivePost ();
-
-   /***** Write updated timeline after publication (user) *****/
-   TL_ShowTimelineUsrHighlightingNot (NotCod);
+   /***** Receive and store post, and
+          write updated timeline after publication (user) *****/
+   TL_ReceivePostGbl ();
 
    /***** End section *****/
    Lay_EndSection ();
+  }
+
+void TL_ReceivePostGbl (void)
+  {
+   long NotCod;
+
+   /***** Receive and store post *****/
+   NotCod = TL_ReceivePost ();
+
+   /***** Write updated timeline after publication (global) *****/
+   TL_ShowTimelineGblHighlightingNot (NotCod);
   }
 
 // Returns the code of the note just created
@@ -2810,7 +2806,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
 	       Gbl.UniqueNameEncrypted,NumDiv);
 
       /* Write HTML inside DIV with form to fav/unfav */
-      TL_PutFormToFavUnfComment (SocCom,false);	// Show only a few
+      TL_PutFormToFavUnfComment (SocCom,TL_SHOW_A_FEW_USRS);
 
       /* End favs container */
       fprintf (Gbl.F.Out,"</div>");
@@ -3136,21 +3132,8 @@ static long TL_GetParamPubCod (void)
 /******************************* Comment a note ******************************/
 /*****************************************************************************/
 
-void TL_ReceiveCommentGbl (void)
-  {
-   long NotCod;
-
-   /***** Receive comment in a note *****/
-   NotCod = TL_ReceiveComment ();
-
-   /***** Write updated timeline after commenting (global) *****/
-   TL_ShowTimelineGblHighlightingNot (NotCod);
-  }
-
 void TL_ReceiveCommentUsr (void)
   {
-   long NotCod;
-
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
@@ -3160,14 +3143,23 @@ void TL_ReceiveCommentUsr (void)
    /***** Start section *****/
    Lay_StartSection (TL_TIMELINE_SECTION_ID);
 
-   /***** Receive comment in a note *****/
-   NotCod = TL_ReceiveComment ();
-
-   /***** Write updated timeline after commenting (user) *****/
-   TL_ShowTimelineUsrHighlightingNot (NotCod);
+   /***** Receive comment in a note
+          and write updated timeline after commenting (user) *****/
+   TL_ReceiveCommentGbl ();
 
    /***** End section *****/
    Lay_EndSection ();
+  }
+
+void TL_ReceiveCommentGbl (void)
+  {
+   long NotCod;
+
+   /***** Receive comment in a note *****/
+   NotCod = TL_ReceiveComment ();
+
+   /***** Write updated timeline after commenting (global) *****/
+   TL_ShowTimelineGblHighlightingNot (NotCod);
   }
 
 static long TL_ReceiveComment (void)
@@ -3241,6 +3233,15 @@ static long TL_ReceiveComment (void)
 /******************************** Share a note *******************************/
 /*****************************************************************************/
 
+void TL_ShowAllSharersNoteUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /***** Show all sharers *****/
+   TL_ShowAllSharersNoteGbl ();
+  }
+
 void TL_ShowAllSharersNoteGbl (void)
   {
    struct TL_Note SocNot;
@@ -3250,28 +3251,19 @@ void TL_ShowAllSharersNoteGbl (void)
    TL_GetDataOfNoteByCod (&SocNot);
 
    /***** Write HTML inside DIV with form to share/unshare *****/
-   TL_PutFormToShaUnsNote (&SocNot,true);	// Show all
+   TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_ALL_USRS);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void TL_ShowAllSharersNoteUsr (void)
+void TL_ShaNoteUsr (void)
   {
-   struct TL_Note SocNot;
-
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Get data of note *****/
-   SocNot.NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (&SocNot);
-
-   /***** Write HTML inside DIV with form to share/unshare *****/
-   TL_PutFormToShaUnsNote (&SocNot,true);	// Show all
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+   /***** Share note *****/
+   TL_ShaNoteGbl ();
   }
 
 void TL_ShaNoteGbl (void)
@@ -3282,24 +3274,7 @@ void TL_ShaNoteGbl (void)
    TL_ShaNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unshare *****/
-   TL_PutFormToShaUnsNote (&SocNot,false);	// Show only a few
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-  }
-
-void TL_ShaNoteUsr (void)
-  {
-   struct TL_Note SocNot;
-
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Share note *****/
-   TL_ShaNote (&SocNot);
-
-   /***** Write HTML inside DIV with form to unshare *****/
-   TL_PutFormToShaUnsNote (&SocNot,false);	// Show only a few
+   TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_A_FEW_USRS);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3374,6 +3349,15 @@ static void TL_ShaNote (struct TL_Note *SocNot)
 /********************** Mark/unmark a note as favourite **********************/
 /*****************************************************************************/
 
+void TL_ShowAllFaversNoteUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /***** Show all favers *****/
+   TL_ShowAllFaversNoteGbl ();
+  }
+
 void TL_ShowAllFaversNoteGbl (void)
   {
    struct TL_Note SocNot;
@@ -3383,28 +3367,19 @@ void TL_ShowAllFaversNoteGbl (void)
    TL_GetDataOfNoteByCod (&SocNot);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_PutFormToFavUnfNote (&SocNot,true);	// Show all
+   TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_ALL_USRS);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void TL_ShowAllFaversNoteUsr (void)
+void TL_FavNoteUsr (void)
   {
-   struct TL_Note SocNot;
-
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Get data of note *****/
-   SocNot.NotCod = TL_GetParamNotCod ();
-   TL_GetDataOfNoteByCod (&SocNot);
-
-   /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_PutFormToFavUnfNote (&SocNot,true);	// Show all
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+   /***** Mark note as favourite *****/
+   TL_FavNoteGbl ();
   }
 
 void TL_FavNoteGbl (void)
@@ -3415,27 +3390,19 @@ void TL_FavNoteGbl (void)
    TL_FavNote (&SocNot);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_PutFormToFavUnfNote (&SocNot,false);	// Show only a few
+   TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_A_FEW_USRS);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void TL_FavNoteUsr (void)
+void TL_UnfNoteUsr (void)
   {
-   struct TL_Note SocNot;
-
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Mark note as favourite *****/
-   TL_FavNote (&SocNot);
-
-   /***** Write HTML inside DIV with form to unfav *****/
-   TL_PutFormToFavUnfNote (&SocNot,false);	// Show only a few
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+   /***** Unfav a note previously marked as favourite *****/
+   TL_UnfNoteGbl ();
   }
 
 void TL_UnfNoteGbl (void)
@@ -3446,24 +3413,7 @@ void TL_UnfNoteGbl (void)
    TL_UnfNote (&SocNot);
 
    /***** Write HTML inside DIV with form to fav *****/
-   TL_PutFormToFavUnfNote (&SocNot,false);	// Show only a few
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-  }
-
-void TL_UnfNoteUsr (void)
-  {
-   struct TL_Note SocNot;
-
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Unfav a note previously marked as favourite *****/
-   TL_UnfNote (&SocNot);
-
-   /***** Write HTML inside DIV with form to fav *****/
-   TL_PutFormToFavUnfNote (&SocNot,false);	// Show only a few
+   TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_A_FEW_USRS);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3574,6 +3524,15 @@ static void TL_UnfNote (struct TL_Note *SocNot)
 /********************* Mark/unmark a comment as favourite ************************/
 /*****************************************************************************/
 
+void TL_ShowAllFaversComUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /***** Show all favers *****/
+   TL_ShowAllFaversComGbl ();
+  }
+
 void TL_ShowAllFaversComGbl (void)
   {
    struct TL_Comment SocCom;
@@ -3585,30 +3544,19 @@ void TL_ShowAllFaversComGbl (void)
    Med_MediaDestructor (&SocCom.Media);
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_PutFormToFavUnfComment (&SocCom,true);	// Show all
+   TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_ALL_USRS);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void TL_ShowAllFaversComUsr (void)
+void TL_FavCommentUsr (void)
   {
-   struct TL_Comment SocCom;
-
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Get data of comment *****/
-   Med_MediaConstructor (&SocCom.Media);
-   SocCom.PubCod = TL_GetParamPubCod ();
-   TL_GetDataOfCommByCod (&SocCom);
-   Med_MediaDestructor (&SocCom.Media);
-
-   /***** Write HTML inside DIV with form to fav/unfav *****/
-   TL_PutFormToFavUnfComment (&SocCom,true);	// Show all
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+   /***** Mark comment as favourite *****/
+   TL_FavCommentGbl ();
   }
 
 void TL_FavCommentGbl (void)
@@ -3619,27 +3567,19 @@ void TL_FavCommentGbl (void)
    TL_FavComment (&SocCom);
 
    /***** Write HTML inside DIV with form to unfav *****/
-   TL_PutFormToFavUnfComment (&SocCom,false);	// Show only a few
+   TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_A_FEW_USRS);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
-void TL_FavCommentUsr (void)
+void TL_UnfCommentUsr (void)
   {
-   struct TL_Comment SocCom;
-
    /***** Get user whom profile is displayed *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
 
-   /***** Mark comment as favourite *****/
-   TL_FavComment (&SocCom);
-
-   /***** Write HTML inside DIV with form to unfav *****/
-   TL_PutFormToFavUnfComment (&SocCom,false);	// Show only a few
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+   /***** Unfav a comment previously marked as favourite *****/
+   TL_UnfCommentGbl ();
   }
 
 void TL_UnfCommentGbl (void)
@@ -3650,24 +3590,7 @@ void TL_UnfCommentGbl (void)
    TL_UnfComment (&SocCom);
 
    /***** Write HTML inside DIV with form to fav *****/
-   TL_PutFormToFavUnfComment (&SocCom,false);	// Show only a few
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-  }
-
-void TL_UnfCommentUsr (void)
-  {
-   struct TL_Comment SocCom;
-
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Unfav a comment previously marked as favourite *****/
-   TL_UnfComment (&SocCom);
-
-   /***** Write HTML inside DIV with form to fav *****/
-   TL_PutFormToFavUnfComment (&SocCom,false);	// Show only a few
+   TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_A_FEW_USRS);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3820,6 +3743,15 @@ static void TL_CreateNotifToAuthor (long AuthorCod,long PubCod,
 /******************** Unshare a previously shared note ***********************/
 /*****************************************************************************/
 
+void TL_UnsNoteUsr (void)
+  {
+   /***** Get user whom profile is displayed *****/
+   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
+
+   /***** Unshare note *****/
+   TL_UnsNoteGbl ();
+  }
+
 void TL_UnsNoteGbl (void)
   {
    struct TL_Note SocNot;
@@ -3828,24 +3760,7 @@ void TL_UnsNoteGbl (void)
    TL_UnsNote (&SocNot);
 
    /***** Write HTML inside DIV with form to share *****/
-   TL_PutFormToShaUnsNote (&SocNot,false);	// Show only a few
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-  }
-
-void TL_UnsNoteUsr (void)
-  {
-   struct TL_Note SocNot;
-
-   /***** Get user whom profile is displayed *****/
-   Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ();
-
-   /***** Share note *****/
-   TL_UnsNote (&SocNot);
-
-   /***** Write HTML inside DIV with form to share *****/
-   TL_PutFormToShaUnsNote (&SocNot,false);	// Show only a few
+   TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_A_FEW_USRS);
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
@@ -3894,15 +3809,6 @@ static void TL_UnsNote (struct TL_Note *SocNot)
 /*********************** Request the removal of a note ***********************/
 /*****************************************************************************/
 
-void TL_RequestRemNoteGbl (void)
-  {
-   /***** Request the removal of note *****/
-   TL_RequestRemovalNote ();
-
-   /***** Write timeline again (global) *****/
-   TL_ShowTimelineGbl2 ();
-  }
-
 void TL_RequestRemNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
@@ -3922,6 +3828,15 @@ void TL_RequestRemNoteUsr (void)
 
    /***** End section *****/
    Lay_EndSection ();
+  }
+
+void TL_RequestRemNoteGbl (void)
+  {
+   /***** Request the removal of note *****/
+   TL_RequestRemovalNote ();
+
+   /***** Write timeline again (global) *****/
+   TL_ShowTimelineGbl2 ();
   }
 
 static void TL_RequestRemovalNote (void)
@@ -3983,15 +3898,6 @@ static void TL_PutParamsRemoveNote (void)
 /******************************* Remove a note *******************************/
 /*****************************************************************************/
 
-void TL_RemoveNoteGbl (void)
-  {
-   /***** Remove a note *****/
-   TL_RemoveNote ();
-
-   /***** Write updated timeline after removing (global) *****/
-   TL_ShowTimelineGbl2 ();
-  }
-
 void TL_RemoveNoteUsr (void)
   {
    /***** Get user whom profile is displayed *****/
@@ -4011,6 +3917,15 @@ void TL_RemoveNoteUsr (void)
 
    /***** End section *****/
    Lay_EndSection ();
+  }
+
+void TL_RemoveNoteGbl (void)
+  {
+   /***** Remove a note *****/
+   TL_RemoveNote ();
+
+   /***** Write updated timeline after removing (global) *****/
+   TL_ShowTimelineGbl2 ();
   }
 
 static void TL_RemoveNote (void)
@@ -4201,15 +4116,6 @@ static long TL_GetPubCodOfOriginalNote (long NotCod)
 /**************** Request the removal of a comment in a note *****************/
 /*****************************************************************************/
 
-void TL_RequestRemComGbl (void)
-  {
-   /***** Request the removal of comment in note *****/
-   TL_RequestRemovalComment ();
-
-   /***** Write timeline again (global) *****/
-   TL_ShowTimelineGbl2 ();
-  }
-
 void TL_RequestRemComUsr (void)
   {
    /***** Get user whom profile is displayed *****/
@@ -4229,6 +4135,15 @@ void TL_RequestRemComUsr (void)
 
    /***** End section *****/
    Lay_EndSection ();
+  }
+
+void TL_RequestRemComGbl (void)
+  {
+   /***** Request the removal of comment in note *****/
+   TL_RequestRemovalComment ();
+
+   /***** Write timeline again (global) *****/
+   TL_ShowTimelineGbl2 ();
   }
 
 static void TL_RequestRemovalComment (void)
@@ -4296,15 +4211,6 @@ static void TL_PutParamsRemoveCommment (void)
 /***************************** Remove a comment ******************************/
 /*****************************************************************************/
 
-void TL_RemoveComGbl (void)
-  {
-   /***** Remove a comment *****/
-   TL_RemoveComment ();
-
-   /***** Write updated timeline after removing (global) *****/
-   TL_ShowTimelineGbl2 ();
-  }
-
 void TL_RemoveComUsr (void)
   {
    /***** Get user whom profile is displayed *****/
@@ -4324,6 +4230,15 @@ void TL_RemoveComUsr (void)
 
    /***** End section *****/
    Lay_EndSection ();
+  }
+
+void TL_RemoveComGbl (void)
+  {
+   /***** Remove a comment *****/
+   TL_RemoveComment ();
+
+   /***** Write updated timeline after removing (global) *****/
+   TL_ShowTimelineGbl2 ();
   }
 
 static void TL_RemoveComment (void)
