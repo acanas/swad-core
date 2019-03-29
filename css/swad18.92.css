@@ -2897,29 +2897,29 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 @media only screen and (max-width: 590px)
 	{	/* For mobile-phones (maximum width visible on Moto G4 vertical) */
-	.TL_WIDTH					{width:316px;}	/* 556-240 */
-	.TL_RIGHT_WIDTH				{width:260px;}	/* 500-240 */
-	.TL_RIGHT_AUTHOR_WIDTH		{width:100px;}	/* 340-240 */
-	.TL_COMMENT_WIDTH			{width:220px;}	/* 460-240 */
-	.TL_COMMENT_AUTHOR_WIDTH	{width: 60px;}	/* 300-240 */
-	.TL_MED_INPUT_WIDTH			{width:160px;}	/* 400-240 */
-	.TL_NOTE_FOOT_WIDTH			{width:260px;}	/* 500-240 */
-	.TL_COMM_FOOT_WIDTH			{width:220px;}	/* 460-240 */
-	.TL_FAV_NOT_WIDTH			{width:120px;}	/* (480-240)/2 */
-	.TL_SHA_NOT_WIDTH			{width:120px;}	/* (480-240)/2 */
-	.TL_FAV_COM_WIDTH			{width:200px;}	/* 440-240 */
+	.TL_WIDTH				{width:316px;}	/* 556-240 */
+	.TL_RIGHT_WIDTH			{width:260px;}	/* 500-240 */
+	.TL_RIGHT_AUTHOR_WIDTH	{width:100px;}	/* 340-240 */
+	.TL_COMM_WIDTH			{width:220px;}	/* 460-240 */
+	.TL_COMM_AUTHOR_WIDTH	{width: 60px;}	/* 300-240 */
+	.TL_MED_INPUT_WIDTH		{width:160px;}	/* 400-240 */
+	.TL_NOTE_FOOT_WIDTH		{width:260px;}	/* 500-240 */
+	.TL_COMM_FOOT_WIDTH		{width:220px;}	/* 460-240 */
+	.TL_FAV_NOT_WIDTH		{width:120px;}	/* (480-240)/2 */
+	.TL_SHA_NOT_WIDTH		{width:120px;}	/* (480-240)/2 */
+	.TL_FAV_COM_WIDTH		{width:200px;}	/* 440-240 */
 	}
 @media only screen and (min-width: 590px)
 	{	/* For tablets and desktop (maximum width visible on Moto G4 horizontal) */
-	.TL_WIDTH					{width:556px;}
-	.TL_RIGHT_WIDTH				{width:500px;}
-	.TL_RIGHT_AUTHOR_WIDTH		{width:340px;}
-	.TL_COMMENT_WIDTH			{width:460px;}
-	.TL_COMMENT_AUTHOR_WIDTH	{width:300px;}
-	.TL_MED_INPUT_WIDTH			{width:400px;}
-	.TL_FAV_NOT_WIDTH			{width:240px;}
-	.TL_SHA_NOT_WIDTH			{width:240px;}
-	.TL_FAV_COM_WIDTH			{width:440px;}
+	.TL_WIDTH				{width:556px;}
+	.TL_RIGHT_WIDTH			{width:500px;}
+	.TL_RIGHT_AUTHOR_WIDTH	{width:340px;}
+	.TL_COMM_WIDTH			{width:460px;}
+	.TL_COMM_AUTHOR_WIDTH	{width:300px;}
+	.TL_MED_INPUT_WIDTH		{width:400px;}
+	.TL_FAV_NOT_WIDTH		{width:240px;}
+	.TL_SHA_NOT_WIDTH		{width:240px;}
+	.TL_FAV_COM_WIDTH		{width:440px;}
 	}
 
 .TL_NEW_PUB
@@ -2931,7 +2931,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	to {background-color:white;}
 	}
-.TL_FORM_NEW_POST
+.TL_FORM_NEW_PST
 	{
 	padding:10px 0;
 	text-align:center;
@@ -2940,7 +2940,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	border-top:1px solid silver;
 	}
-.TL_TOP_CONTAINER
+.TL_TOP_CONT
 	{
 	box-sizing:border-box;
 	padding-top:10px;
@@ -2964,7 +2964,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:top;
 	}
-.TL_RIGHT_CONTAINER
+.TL_RIGHT_CONT
 	{
 	display:inline-block;
 	box-sizing:border-box;
@@ -2988,29 +2988,29 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:right;
 	vertical-align:top;
 	}
-.TL_POST_TEXTAREA
+.TL_PST_TEXTAREA
 	{
 	box-sizing:border-box;
 	margin:0;
 	resize:none;
 	}
-.TL_POST_MED_CONTAINER
+.TL_PST_MED_CONT
 	{
 	box-sizing:border-box;
-	margin:10px 0;
+	margin-top:10px;
 	}
-.TL_POST_MED
+.TL_PST_MED
 	{
 	box-sizing:border-box;
 	border-radius:4px;
 	}
-.TL_COMMENT_CONTAINER
+.TL_COM_CONT
 	{
 	display:inline-block;
 	box-sizing:border-box;
 	padding-top:10px;
 	}
-.TL_COMMENT_AUTHOR
+.TL_COM_AUTHOR
 	{
 	display:inline-block;
 	box-sizing:border-box;
@@ -3020,17 +3020,17 @@ a:hover img.CENTRE_PHOTO_SHOW
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
-.TL_COMMENT_MED_CONTAINER
+.TL_COM_MED_CONT
 	{
 	box-sizing:border-box;
-	margin:10px 0;
+	margin-top:10px;
 	}
-.TL_COMMENT_MED
+.TL_COM_MED
 	{
 	box-sizing:border-box;
 	border-radius:4px;
 	}
-.TL_FORM_NEW_COMMENT
+.TL_FORM_NEW_COM
 	{
 	display:inline-block;
 	margin-left:56px;
@@ -3038,7 +3038,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	padding-bottom:10px;
 	text-align:center;
 	}
-.TL_COMMENT_TEXTAREA
+.TL_COM_TEXTAREA
 	{
 	box-sizing:border-box;
 	margin:0;
@@ -3049,8 +3049,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:inline-block;
 	box-sizing:border-box;
 	width:56px;
+	padding-right:11px;
 	text-align:center;
-	padding-right:10px;
 	vertical-align:bottom;
 	}
 .TL_BOTTOM_RIGHT	/* Container for fav, share, remove and comments */
@@ -3076,35 +3076,45 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .TL_TXT
 	{
-	padding:5px 0;
+	padding-top:5px;
 	color:#202020;
 	font-size:13pt;
  	line-height:1.4;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	}
-.TL_EXPAND_COMMENTS
+.TL_EXPAND_COM
 	{
 	text-align:center;
 	vertical-align:top;
 	padding-bottom:10px;
 	}
-.TL_ICO_COMMENT
+.TL_ICO_COM_OFF
 	{
 	display:inline-block;
-	padding-bottom:10px;
+	box-sizing:border-box;
+	padding:6px;
+	text-align:center;
+	vertical-align:middle;
+	border:solid 1px;
+	border-color:transparent;
 	}
-.TL_ICO_COMMENT_DISABLED
+.TL_ICO_COM_ON
 	{
 	display:inline-block;
-	padding-bottom:10px;
-	opacity:0.1;
+	box-sizing:border-box;
+	padding:6px;
+	text-align:center;
+	vertical-align:middle;
+	border:solid 1px;
+	border-color:#C0DAE4;
+	background-color:#DDECF1;
 	}
 .TL_FOOT	/* Container for favs, shares and remove */
 	{
 	display:table;
 	vertical-align:top;
-	padding-bottom:10px;
+	padding:7px 0;
 	}
 .TL_FAV_NOT, .TL_SHA_NOT
 	{
@@ -3150,11 +3160,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 	padding-left:4px;
 	vertical-align:bottom;
 	}
-.TL_COMMENT
+.TL_COM
 	{
 	border-top:1px solid silver;
 	}
-.TL_COMMENT_PHOTO
+.TL_COM_PHOTO
 	{
 	display:inline-block;
 	box-sizing:border-box;

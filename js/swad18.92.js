@@ -957,6 +957,20 @@ function toggleOffGIF (elem, staticURL) {
 }
 
 /*****************************************************************************/
+/******* Change display of edition of a new comment in a social note *********/
+/*****************************************************************************/
+
+function toggleNewComment (id) {
+	var iconDiv = document.getElementById (id + '_ico');
+
+	if (iconDiv.className == 'TL_ICO_COM_OFF')
+		iconDiv.className = 'TL_ICO_COM_ON';
+	else
+		iconDiv.className = 'TL_ICO_COM_OFF';
+	toggleDisplay(id);
+}
+
+/*****************************************************************************/
 /*************** Change display of comments in a social note *****************/
 /*****************************************************************************/
 
