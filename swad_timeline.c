@@ -59,7 +59,7 @@
 
 #define TL_NUM_VISIBLE_COMMENTS	3	// Maximum number of comments visible before expanding them
 
-#define TL_DEF_USRS_SHOWN	3	// Default maximum number of users shown who have share/fav a note
+#define TL_DEF_USRS_SHOWN	5	// Default maximum number of users shown who have share/fav a note
 #define TL_MAX_USRS_SHOWN	1000	// Top     maximum number of users shown who have share/fav a note
 
 #define TL_MAX_CHARS_IN_POST	1000
@@ -1120,11 +1120,26 @@ static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
   {
    char *OnSubmit;
 
+   /*
+   +---------------------------------------------------------------------------+
+   | div which content will be updated (parent of parent of form)              |
+   | +---------------------+ +-------+ +-------------------------------------+ |
+   | | div (parent of form)| | div   | | div for users                       | |
+   | | +-----------------+ | | for   | | +------+ +------+ +------+ +------+ | |
+   | | |    this form    | | | num.  | | |      | |      | |      | | form | | |
+   | | | +-------------+ | | | of    | | | user | | user | | user | |  to  | | |
+   | | | |   fav icon  | | | | users | | |   1  | |   2  | |   3  | | show | | |
+   | | | +-------------+ | | |       | | |      | |      | |      | |  all | | |
+   | | +-----------------+ | |       | | +------+ +------+ +------+ +------+ | |
+   | +---------------------+ +-------+ +-------------------------------------+ |
+   +---------------------------------------------------------------------------+
+   */
+
    /***** Form and icon to mark note as favourite *****/
    /* Form with icon */
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
-      if (asprintf (&OnSubmit,"updateParentDiv(this,"
+      if (asprintf (&OnSubmit,"updateDivFaversSharers(this,"
 			      "'act=%ld&ses=%s&%s&OtherUsrCod=%s');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActionUsr),
@@ -1136,7 +1151,7 @@ static void TL_FormFavSha (Act_Action_t ActionGbl,Act_Action_t ActionUsr,
      }
    else
      {
-      if (asprintf (&OnSubmit,"updateParentDiv(this,"
+      if (asprintf (&OnSubmit,"updateDivFaversSharers(this,"
 			      "'act=%ld&ses=%s&%s');"
 			      " return false;",	// return false is necessary to not submit form
 		    Act_GetActCod (ActionGbl),
@@ -1442,7 +1457,6 @@ static void TL_PutLinkToViewOldPublications (void)
 /*****************************************************************************/
 /******************************** Write note *********************************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_WriteNote (const struct TL_Note *SocNot,
                           TL_TopMessage_t TopMessage,long UsrCod,
@@ -1514,7 +1528,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
-			"PHOTO42x56",Pho_ZOOM,true);	// Use unique id
+			"PHOTO45x60",Pho_ZOOM,true);	// Use unique id
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Right: author's name, time, summary and buttons *****/
@@ -1638,39 +1652,40 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 
       fprintf (Gbl.F.Out,"</div>");
 
-      fprintf (Gbl.F.Out,"<div class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\">"
-	                 "<div class=\"TL_ICO_FAV_SHA_REM\">");
+      /* Start container for buttons and comments */
+      fprintf (Gbl.F.Out,"<div class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\">");
 
-      /* Start bottom container */
-      fprintf (Gbl.F.Out,"<div class=\"TL_BOTTOM\">");
+      /* Start foot container */
+      fprintf (Gbl.F.Out,"<div class=\"TL_FOOT TL_RIGHT_WIDTH\">");
 
-      /* Put form to mark/unmark this note as favourite */
-      fprintf (Gbl.F.Out,"<div id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT\">",
+      /* Fav zone */
+      fprintf (Gbl.F.Out,"<div id=\"fav_not_%s_%u\""
+	                 " class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\">",
 	       Gbl.UniqueNameEncrypted,NumDiv);
       TL_PutFormToFavUnfNote (SocNot,TL_SHOW_A_FEW_USRS);
       fprintf (Gbl.F.Out,"</div>");
 
-      /* Put form to share/unshare */
-      fprintf (Gbl.F.Out,"<div id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT\">",
+      /* Share zone */
+      fprintf (Gbl.F.Out,"<div id=\"sha_not_%s_%u\""
+	                 " class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\">",
 	       Gbl.UniqueNameEncrypted,NumDiv);
       TL_PutFormToShaUnsNote (SocNot,TL_SHOW_A_FEW_USRS);
       fprintf (Gbl.F.Out,"</div>");
 
       /* Put icon to remove this note */
+      fprintf (Gbl.F.Out,"<div class=\"TL_REM\">");
       if (IAmTheAuthor)
 	 TL_PutFormToRemovePublication (SocNot->NotCod);
-
-      /* Start bottom container */
       fprintf (Gbl.F.Out,"</div>");
 
-      /* End of icon bar */
+      /* End foot container */
       fprintf (Gbl.F.Out,"</div>");
 
       /* Show comments */
       if (NumComments)
 	 TL_WriteCommentsInNote (SocNot);
 
-      /* End of bottom right */
+      /* End container for buttons and comments */
       fprintf (Gbl.F.Out,"</div>");
 
       /* Put hidden form to write a new comment */
@@ -1694,7 +1709,6 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 /*****************************************************************************/
 /*************** Write sharer/commenter if distinct to author ****************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
   {
@@ -1738,7 +1752,6 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
 /*****************************************************************************/
 /*************** Write name and nickname of author of a note *****************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
   {
@@ -1860,7 +1873,6 @@ static void TL_GetAndWritePost (long PstCod)
 /*****************************************************************************/
 /************* Put form to go to an action depending on the note *************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
   {
@@ -2327,7 +2339,7 @@ static void TL_PutFormToWriteNewPost (void)
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
 						     NULL,
-		     "PHOTO42x56",Pho_ZOOM,false);
+		     "PHOTO45x60",Pho_ZOOM,false);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Right: author's name, time, summary and buttons *****/
@@ -2535,7 +2547,6 @@ static void TL_PutIconCommentDisabled (void)
 /*****************************************************************************/
 /********************** Form to comment a publication ************************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
                                                      const char IdNewComment[Frm_MAX_BYTES_ID + 1])
@@ -2595,7 +2606,6 @@ static unsigned long TL_GetNumCommentsInNote (long NotCod)
 /*****************************************************************************/
 /*********************** Write comments in a note ****************************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
   {
@@ -2721,7 +2731,6 @@ static void TL_PutIconToToggleComments (const char *UniqueId,
 /*****************************************************************************/
 /******************************** Write comment ******************************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_WriteComment (struct TL_Comment *SocCom,
                              TL_TopMessage_t TopMessage,long UsrCod,
@@ -2790,32 +2799,34 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       TL_WriteDateTime (SocCom->DateTimeUTC);
 
       /* Write content of the comment */
-      fprintf (Gbl.F.Out,"<div class=\"TL_TXT\">");
-      Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
-      fprintf (Gbl.F.Out,"</div>");
+      if (SocCom->Content[0])
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"TL_TXT\">");
+	 Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
+	 fprintf (Gbl.F.Out,"</div>");
+	}
 
       /* Show image */
       Med_ShowMedia (&SocCom->Media,"TL_COMMENT_MED_CONTAINER TL_COMMENT_WIDTH",
 	                            "TL_COMMENT_MED TL_COMMENT_WIDTH");
 
-      /* Start bottom container */
-      fprintf (Gbl.F.Out,"<div class=\"TL_BOTTOM\">");
+      /* Start foot container */
+      fprintf (Gbl.F.Out,"<div class=\"TL_FOOT TL_COMMENT_WIDTH\">");
 
-      /* Start favs container */
-      fprintf (Gbl.F.Out,"<div id=\"fav_com_%s_%u\" class=\"TL_FAV_COM\">",
+      /* Fav zone */
+      fprintf (Gbl.F.Out,"<div id=\"fav_com_%s_%u\""
+	                 " class=\"TL_FAV_COM TL_FAV_WIDTH\">",
 	       Gbl.UniqueNameEncrypted,NumDiv);
-
-      /* Write HTML inside DIV with form to fav/unfav */
       TL_PutFormToFavUnfComment (SocCom,TL_SHOW_A_FEW_USRS);
-
-      /* End favs container */
       fprintf (Gbl.F.Out,"</div>");
 
       /* Put icon to remove this comment */
+      fprintf (Gbl.F.Out,"<div class=\"TL_REM\">");
       if (IAmTheAuthor && !ShowCommentAlone)
 	 TL_PutFormToRemoveComment (SocCom->PubCod);
+      fprintf (Gbl.F.Out,"</div>");
 
-      /* End bottom container */
+      /* End foot container */
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Free memory used for user's data *****/
@@ -2836,7 +2847,6 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
 /*****************************************************************************/
 /********* Write name and nickname of author of a comment to a note **********/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_WriteAuthorComment (struct UsrData *UsrDat)
   {
@@ -2872,19 +2882,16 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
 /*****************************************************************************/
 /************************* Form to remove comment ****************************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_PutFormToRemoveComment (long PubCod)
   {
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_REM\">");
    TL_FormStart (ActReqRemSocComGbl,ActReqRemSocComUsr);
    TL_PutHiddenParamPubCod (PubCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -2934,7 +2941,6 @@ static void TL_PutDisabledIconFav (unsigned NumFavs)
 /*****************************************************************************/
 /*********************** Form to share/unshare note **************************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_PutFormToSeeAllSharersNote (const struct TL_Note *SocNot,
                                            TL_HowMany_t HowMany)
@@ -2981,7 +2987,6 @@ static void TL_PutFormToUnsNote (const struct TL_Note *SocNot)
 /*****************************************************************************/
 /************************** Form to fav/unfav note ***************************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_PutFormToSeeAllFaversNote (const struct TL_Note *SocNot,
                                           TL_HowMany_t HowMany)
@@ -3028,7 +3033,6 @@ static void TL_PutFormToUnfNote (const struct TL_Note *SocNot)
 /*****************************************************************************/
 /************************** Form to fav/unfav comment ************************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_PutFormToSeeAllFaversComment (const struct TL_Comment *SocCom,
                                              TL_HowMany_t HowMany)
@@ -3075,19 +3079,16 @@ static void TL_PutFormToUnfComment (const struct TL_Comment *SocCom)
 /*****************************************************************************/
 /************************ Form to remove publication *************************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_PutFormToRemovePublication (long NotCod)
   {
    extern const char *Txt_Remove;
 
    /***** Form to remove publication *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_REM\">");
    TL_FormStart (ActReqRemSocPubGbl,ActReqRemSocPubUsr);
    TL_PutHiddenParamNotCod (NotCod);
    Ico_PutIconLink ("trash.svg",Txt_Remove);
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -4660,7 +4661,6 @@ static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
 /*****************************************************************************/
 /************************ Show sharers or favouriters ************************/
 /*****************************************************************************/
-// All forms in this function and nested functions must have unique identifiers
 
 static void TL_ShowNumSharersOrFavers (unsigned NumUsrs)
   {

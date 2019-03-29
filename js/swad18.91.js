@@ -713,11 +713,9 @@ function evalScriptsInElem (elem) {
 /*****************************************************************************/
 
 // This function is called when user submit a form just inside a parent div
-function updateParentDiv (elem,Params) {
+function updateDivFaversSharers (form,Params) {
     var objXMLHttp = false;
-    var parent = elem.parentNode;
-    var parentOfParent = parent.parentNode;
-	var idDiv = parentOfParent.id;
+	var id = form.parentNode.parentNode.id;
 
 	objXMLHttp = AJAXCreateObject ();
 	if (objXMLHttp) {
@@ -725,8 +723,8 @@ function updateParentDiv (elem,Params) {
 		objXMLHttp.onreadystatechange = function() {	// onreadystatechange must be lowercase
 			if (objXMLHttp.readyState == 4) {			// Check if data have been received
 				if (objXMLHttp.status == 200)
-					if (idDiv) {
-						var div = document.getElementById(idDiv);		// Access to DIV
+					if (id) {
+						var div = document.getElementById(id);			// Access to DIV
 						if (div)
 							div.innerHTML = objXMLHttp.responseText;	// Update DIV content
 					}

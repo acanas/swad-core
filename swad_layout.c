@@ -663,8 +663,6 @@ static void Lay_WriteScriptInit (void)
       case ActSeeSocTmlGbl:
       case ActRcvSocPstGbl:
       case ActRcvSocComGbl:
-      case ActShaSocNotGbl:	// TODO: Remove?
-      case ActUnsSocNotGbl:	// TODO: Remove?
       case ActReqRemSocPubGbl:
       case ActRemSocPubGbl:
       case ActReqRemSocComGbl:
