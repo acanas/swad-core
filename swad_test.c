@@ -5636,36 +5636,39 @@ static long Tst_GetMedCodFromDB (int NumOpt)
    unsigned long NumRows;
    long MedCod = -1L;
 
-   /***** Query depending on NumOpt *****/
-   if (NumOpt < 0)
-      // Get media associated to stem
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
-			        "SELECT MedCod"		// row[0]
-			        " FROM tst_questions"
-			        " WHERE QstCod=%ld AND CrsCod=%ld",
-			        Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
-   else
-      // Get media associated to answer
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
-			        "SELECT MedCod"		// row[0]
-			         " FROM tst_answers"
-			       " WHERE QstCod=%ld AND AnsInd=%u",
-			       Gbl.Test.QstCod,(unsigned) NumOpt);
-
-   if (NumRows)
+   if (Gbl.Test.QstCod > 0)	// Existing question
      {
-      if (NumRows == 1)
-	{
-	 /***** Get media code (row[0]) *****/
-	 row = mysql_fetch_row (mysql_res);
-	 MedCod = Str_ConvertStrCodToLongCod (row[0]);
-	}
-      else	// NumRows > 1
-	Lay_ShowErrorAndExit ("Duplicated media in database.");
-     }
+      /***** Query depending on NumOpt *****/
+      if (NumOpt < 0)
+	 // Get media associated to stem
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
+				   "SELECT MedCod"		// row[0]
+				   " FROM tst_questions"
+				   " WHERE QstCod=%ld AND CrsCod=%ld",
+				   Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+      else
+	 // Get media associated to answer
+	 NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
+				   "SELECT MedCod"		// row[0]
+				   " FROM tst_answers"
+				   " WHERE QstCod=%ld AND AnsInd=%u",
+				  Gbl.Test.QstCod,(unsigned) NumOpt);
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      if (NumRows)
+	{
+	 if (NumRows == 1)
+	   {
+	    /***** Get media code (row[0]) *****/
+	    row = mysql_fetch_row (mysql_res);
+	    MedCod = Str_ConvertStrCodToLongCod (row[0]);
+	   }
+	 else	// NumRows > 1
+	    Lay_ShowErrorAndExit ("Duplicated media in database.");
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
 
    return MedCod;
   }

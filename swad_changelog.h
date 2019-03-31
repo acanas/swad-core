@@ -464,10 +464,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.92 (2019-03-29)"
+#define Log_PLATFORM_VERSION	"SWAD 18.92.1 (2019-04-01)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
+	Version 18.92.1:  Apr 01, 2019 	Fixed bug in tests, reported by Javier Fernández Baldomero. (241371 lines)
 	Version 18.92:    Mar 29, 2019 	Changes in timeline layout. (241367 lines)
 	Version 18.91.1:  Mar 29, 2019 	Changes in timeline layout. (241345 lines)
 	Version 18.91:    Mar 29, 2019 	Code refactoring in timeline. (241341 lines)
@@ -475,7 +476,7 @@ ps2pdf source.ps destination.pdf
 	Version 18.90.3:  Mar 28, 2019 	Show all users who have shared/faved social notes and comments. (241307 lines)
 	Version 18.90.2:  Mar 28, 2019 	Show all users who have shared/faved social notes and comments. Not finished. (241337 lines)
 	Version 18.90.1:  Mar 28, 2019 	Show all users who have shared/faved social notes and comments. Not finished. (241358 lines)
-	Version 18.90:    Mar 28, 2019 	Show all users who have shared/faved social notes and comments. Not finished. (241360 lines)
+	Version 18.90:    Mar 28, 2019 	Show all users who have shared/faved social notes and comments. Not finished. Suggested by Víctor González Argudo. (241360 lines)
 					6 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1766','es','N','Ver qui&eacute;nes comp. public. social (global)');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1767','es','N','Ver qui&eacute;nes fav. public. social (global)');
