@@ -18020,7 +18020,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 12
 	},
 	{
-	// TabSta *****************************************************
+	// TabStr *****************************************************
 	//  0: ActFrmLogIn
 #if   L==1	// ca
 	"Entrar"
@@ -19827,7 +19827,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 12
 	},
 	{
-	// TabSta *****************************************************
+	// TabStr *****************************************************
 	//  0: ActFrmLogIn
 #if   L==1	// ca
 	"Rol en aquesta sessi&oacute;"
@@ -41686,7 +41686,7 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	// TabUnk
 	NULL
 	,
-	// TabSta
+	// TabStr
 #if   L==1	// ca
 	"Inici"
 #elif L==2	// de

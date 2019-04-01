@@ -1282,7 +1282,8 @@ static void TL_SaveWhichUsersInDB (void)
       /***** Update which users in database *****/
       // WhichUsrs is stored in usr_last for next time I log in
       DB_QueryUPDATE ("can not update timeline users in user's last data",
-		      "UPDATE usr_last SET TimelineUsrs=%u WHERE UsrCod=%ld",
+		      "UPDATE usr_last SET TimelineUsrs=%u"
+		      " WHERE UsrCod=%ld",
 		      (unsigned) Gbl.Timeline.WhichUsrs,
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
      }

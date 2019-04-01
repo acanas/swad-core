@@ -789,7 +789,7 @@ static void Usr_GetMyLastData (void)
       Gbl.Usrs.Me.UsrLast.LastCrs = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get last tab */
-      Gbl.Usrs.Me.UsrLast.LastTab = TabPrf;        // By default, set last tab to the profile tab
+      Gbl.Usrs.Me.UsrLast.LastTab = TabStr;        // By default, set last tab to the start tab
       if (sscanf (row[2],"%u",&UnsignedNum) == 1)
          if (UnsignedNum >= 1 ||
              UnsignedNum <= Tab_NUM_TABS)
@@ -3090,28 +3090,37 @@ void Usr_ChkUsrAndGetUsrData (void)
 	   {
 	    // Don't adjust Gbl.Action.Act here
 	    Gbl.Action.Tab = ((Gbl.Usrs.Me.UsrLast.LastTab == TabCrs) &&
-			      (Gbl.CurrentCrs.Crs.CrsCod <= 0)) ? TabSys :
+			      (Gbl.CurrentCrs.Crs.CrsCod <= 0)) ? TabStr :
 								  Gbl.Usrs.Me.UsrLast.LastTab;
 	    Tab_DisableIncompatibleTabs ();
 	   }
-	 Usr_UpdateMyLastData ();
-	 Crs_UpdateCrsLast ();
 	}
       else if (Gbl.Action.Act == ActUnk)	// No user logged and unknown action
 	 Act_AdjustActionWhenNoUsrLogged ();
 
-      /***** When I change to another tab, go to the first option allowed *****/
+      /***** When I change to another tab, go to:
+             - my last action in that tab if it is known, or
+             - the first option allowed *****/
       if (Gbl.Action.Act == ActMnu)
 	{
-	 if (Gbl.Usrs.Me.Logged)
-	   {
-	    if ((Action = MFU_GetMyLastActionInCurrentTab ()) == ActUnk)
-	       Action = Mnu_GetFirstActionAvailableInCurrentTab ();
-	   }
-	 else
+	 /* Get my last action in current tab */
+	 Action = (Gbl.Usrs.Me.Logged) ? MFU_GetMyLastActionInCurrentTab () :
+	                                 ActUnk;
+	 if (Action == ActUnk)
+	    /* Get the first option allowed */
 	    Action = Mnu_GetFirstActionAvailableInCurrentTab ();
-	 if (Action != ActUnk)
-	    Gbl.Action.Act = Action;
+
+	 Gbl.Action.Act = (Action == ActUnk) ? ((Gbl.Usrs.Me.Logged) ? ActSeeSocTmlGbl :	// Default action if logged
+								       ActFrmLogIn) :		// Default action if not logged
+					       Action;
+	 Tab_SetCurrentTab ();
+	}
+
+      /***** Update last data for next time *****/
+      if (Gbl.Usrs.Me.Logged)
+	{
+	 Usr_UpdateMyLastData ();
+	 Crs_UpdateCrsLast ();
 	}
      }
   }
@@ -3294,8 +3303,6 @@ static void Usr_ShowAlertUsrDoesNotExistsOrWrongPassword (void)
   {
    extern const char *Txt_The_user_does_not_exist_or_password_is_incorrect;
 
-   // Gbl.Action.Act = ActFrmLogIn;
-   // Tab_SetCurrentTab ();
    Ale_ShowAlert (Ale_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
   }
 

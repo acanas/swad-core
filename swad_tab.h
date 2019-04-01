@@ -40,7 +40,7 @@
 typedef enum
   {
    TabUnk =  0,
-   TabSta =  1,
+   TabStr =  1,
    TabSys =  2,
    TabCty =  3,
    TabIns =  4,

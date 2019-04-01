@@ -43,7 +43,7 @@ extern struct Globals Gbl;
 const char *Tab_TabIcons[Tab_NUM_TABS] =
   {
    /* TabUnk */	NULL,
-   /* TabSta */ "home",
+   /* TabStr */ "home",
    /* TabSys */	"sitemap",
    /* TabCty */	"globe",
    /* TabIns */	"university",

@@ -1499,12 +1499,12 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
   }
 
 /*****************************************************************************/
-/********* Reset my number of new received notifications to 0 ****************/
+/*************** Reset my number of new notifications to 0 *******************/
 /*****************************************************************************/
 
 static void Ntf_UpdateMyLastAccessToNotifications (void)
   {
-   /***** Reset to 0 my number of new received messages *****/
+   /***** Reset to 0 my number of new notifications *****/
    DB_QueryUPDATE ("can not update last access to notifications",
 		   "UPDATE usr_last SET LastAccNotif=NOW()"
 		   " WHERE UsrCod=%ld",
