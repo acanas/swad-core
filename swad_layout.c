@@ -1343,6 +1343,13 @@ void Lay_ShowErrorAndExit (const char *Txt)
 	 /***** Log access *****/
 	 Sta_LogAccess (Txt);
 
+	 /***** Update last data for next time *****/
+	 if (Gbl.Usrs.Me.Logged)
+	   {
+	    Usr_UpdateMyLastData ();
+	    Crs_UpdateCrsLast ();
+	   }
+
 	 /***** End the output *****/
 	 if (!Gbl.Layout.HTMLEndWritten)
 	   {

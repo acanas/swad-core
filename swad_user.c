@@ -755,13 +755,16 @@ static void Usr_GetMyLastData (void)
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned UnsignedNum;
+   long ActCod;
 
    /***** Get user's last data from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get user's last data",
 			     "SELECT WhatToSearch,"		   // row[0]
 				    "LastCrs,"			   // row[1]
 				    "LastTab,"			   // row[2]
-				    "UNIX_TIMESTAMP(LastAccNotif)" // row[3]
+				    "LastAct,"			   // row[3]
+				    "LastRole,"			   // row[4]
+				    "UNIX_TIMESTAMP(LastAccNotif)" // row[5]
 			     " FROM usr_last WHERE UsrCod=%ld",
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
    if (NumRows == 0)
@@ -777,7 +780,7 @@ static void Usr_GetMyLastData (void)
      {
       row = mysql_fetch_row (mysql_res);
 
-      /* Get last type of search */
+      /* Get last type of search (row[0]) */
       Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_SEARCH_UNKNOWN;
       if (sscanf (row[0],"%u",&UnsignedNum) == 1)
          if (UnsignedNum < Sch_NUM_WHAT_TO_SEARCH)
@@ -785,20 +788,27 @@ static void Usr_GetMyLastData (void)
       if (Gbl.Usrs.Me.UsrLast.WhatToSearch == Sch_SEARCH_UNKNOWN)
 	 Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
-      /* Get last course */
+      /* Get last course (row[1]) */
       Gbl.Usrs.Me.UsrLast.LastCrs = Str_ConvertStrCodToLongCod (row[1]);
 
-      /* Get last tab */
+      /* Get last tab (row[2]) */
       Gbl.Usrs.Me.UsrLast.LastTab = TabStr;        // By default, set last tab to the start tab
       if (sscanf (row[2],"%u",&UnsignedNum) == 1)
          if (UnsignedNum >= 1 ||
              UnsignedNum <= Tab_NUM_TABS)
             Gbl.Usrs.Me.UsrLast.LastTab = (Tab_Tab_t) UnsignedNum;
 
-      /* Get last access to notifications */
+      /* Get last action (row[3]) */
+      ActCod = Str_ConvertStrCodToLongCod (row[3]);
+      Gbl.Usrs.Me.UsrLast.LastAct = Act_GetActionFromActCod (ActCod);
+
+      /* Get last rolw (row[4]) */
+      Gbl.Usrs.Me.UsrLast.LastRole = Rol_ConvertUnsignedStrToRole (row[4]);
+
+      /* Get last access to notifications (row[5]) */
       Gbl.Usrs.Me.UsrLast.LastAccNotif = 0L;
-      if (row[3])
-         sscanf (row[3],"%ld",&(Gbl.Usrs.Me.UsrLast.LastAccNotif));
+      if (row[5])
+         sscanf (row[5],"%ld",&(Gbl.Usrs.Me.UsrLast.LastAccNotif));
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -3117,11 +3127,11 @@ void Usr_ChkUsrAndGetUsrData (void)
 	}
 
       /***** Update last data for next time *****/
-      if (Gbl.Usrs.Me.Logged)
-	{
-	 Usr_UpdateMyLastData ();
-	 Crs_UpdateCrsLast ();
-	}
+      // if (Gbl.Usrs.Me.Logged)
+      //   {
+      //    Usr_UpdateMyLastData ();
+      //    Crs_UpdateCrsLast ();
+      //   }
      }
   }
 
@@ -3483,10 +3493,13 @@ void Usr_UpdateMyLastData (void)
       /***** Update my last accessed course, tab and time of click in database *****/
       // WhatToSearch, LastAccNotif remain unchanged
       DB_QueryUPDATE ("can not update last user's data",
-		      "UPDATE usr_last SET LastCrs=%ld,LastTab=%u,LastTime=NOW()"
+		      "UPDATE usr_last"
+		      " SET LastCrs=%ld,LastTab=%u,LastAct=%ld,LastRole=%u,LastTime=NOW()"
                       " WHERE UsrCod=%ld",
 		      Gbl.CurrentCrs.Crs.CrsCod,
 		      (unsigned) Gbl.Action.Tab,
+		      Act_GetActCod (Gbl.Action.Act),
+		      (unsigned) Gbl.Usrs.Me.Role.Logged,
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
    else
       Usr_InsertMyLastData ();
@@ -3501,13 +3514,15 @@ static void Usr_InsertMyLastData (void)
    /***** Insert my last accessed course, tab and time of click in database *****/
    DB_QueryINSERT ("can not insert last user's data",
 		   "INSERT INTO usr_last"
-	           " (UsrCod,WhatToSearch,LastCrs,LastTab,LastTime,LastAccNotif)"
+	           " (UsrCod,WhatToSearch,LastCrs,LastTab,LastAct,LastRole,LastTime,LastAccNotif)"
                    " VALUES"
-                   " (%ld,%u,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
+                   " (%ld,%u,%ld,%u,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Sch_SEARCH_ALL,
 		   Gbl.CurrentCrs.Crs.CrsCod,
 		   (unsigned) Gbl.Action.Tab,
+		   Act_GetActCod (Gbl.Action.Act),
+		   (unsigned) Gbl.Usrs.Me.Role.Logged,
 		   (long) (time_t) 0);	// The user never accessed to notifications
   }
 

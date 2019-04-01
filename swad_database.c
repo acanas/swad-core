@@ -2977,17 +2977,21 @@ mysql> DESCRIBE usr_last;
 | WhatToSearch | tinyint(4) | NO   |     | 0       |       |
 | LastCrs      | int(11)    | NO   |     | -1      |       |
 | LastTab      | tinyint(4) | NO   |     | NULL    |       |
+| LastAct      | int(11)    | NO   |     | -1      |       |
+| LastRole     | tinyint(4) | NO   |     | 0       |       |
 | LastTime     | datetime   | NO   | MUL | NULL    |       |
 | LastAccNotif | datetime   | NO   |     | NULL    |       |
 | TimelineUsrs | tinyint(4) | NO   |     | 0       |       |
 +--------------+------------+------+-----+---------+-------+
-7 rows in set (0.00 sec)
+9 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_last ("
 			"UsrCod INT NOT NULL,"
 			"WhatToSearch TINYINT NOT NULL DEFAULT 0,"
 			"LastCrs INT NOT NULL DEFAULT -1,"
 			"LastTab TINYINT NOT NULL,"
+			"LastAct INT NOT NULL DEFAULT -1,"
+	 		"LastRole TINYINT NOT NULL DEFAULT 0,"
 			"LastTime DATETIME NOT NULL,"
 			"LastAccNotif DATETIME NOT NULL,"
 			"TimelineUsrs TINYINT NOT NULL DEFAULT 0,"

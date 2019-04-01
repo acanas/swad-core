@@ -214,6 +214,8 @@ struct UsrLast
    Sch_WhatToSearch_t WhatToSearch;	// Search courses, teachers, documents...?
    long LastCrs;
    Tab_Tab_t LastTab;
+   Act_Action_t LastAct;
+   Rol_Role_t LastRole;
    long LastAccNotif;
   };
 

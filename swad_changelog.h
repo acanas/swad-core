@@ -464,10 +464,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.92.2 (2019-04-01)"
+#define Log_PLATFORM_VERSION	"SWAD 18.92.3 (2019-04-01)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
+	Version 18.92.3:  Apr 01, 2019 	Last action and role are saved in database. (241410 lines)
+					2 changes necessary in database:
+ALTER TABLE usr_last ADD COLUMN LastAct INT NOT NULL DEFAULT -1 AFTER LastTab;
+ALTER TABLE usr_last ADD COLUMN LastRole TINYINT NOT NULL DEFAULT 0 AFTER LastAct;
+
 	Version 18.92.2:  Apr 01, 2019 	Code refactoring related to user login and actions. (241379 lines)
 	Version 18.92.1:  Apr 01, 2019 	Fixed bug in tests, reported by Javier Fernández Baldomero. (241371 lines)
 	Version 18.92:    Mar 29, 2019 	Changes in timeline layout. (241367 lines)
