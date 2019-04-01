@@ -464,10 +464,18 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.92.3 (2019-04-01)"
+#define Log_PLATFORM_VERSION	"SWAD 18.93 (2019-04-01)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
+	Version 18.93:    Apr 01, 2019 	When a user logs in, hierarchy, action and role are got from database. (241533 lines)
+					5 changes necessary in database:
+ALTER TABLE usr_last ADD COLUMN LastSco ENUM('Unk','Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Unk' AFTER LastCrs;
+ALTER TABLE usr_last ADD COLUMN LastCod INT NOT NULL DEFAULT -1 AFTER LastSco;
+UPDATE usr_last SET LastSco='Crs',LastCod=LastCrs WHERE LastCrs>0;
+ALTER TABLE usr_last DROP COLUMN LastCrs;
+ALTER TABLE usr_last DROP COLUMN LastTab;
+
 	Version 18.92.3:  Apr 01, 2019 	Last action and role are saved in database. (241410 lines)
 					2 changes necessary in database:
 ALTER TABLE usr_last ADD COLUMN LastAct INT NOT NULL DEFAULT -1 AFTER LastTab;

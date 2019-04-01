@@ -364,10 +364,12 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
 
 void Usr_ResetMyLastData (void)
   {
-   Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
-   Gbl.Usrs.Me.UsrLast.LastCrs      = -1L;
-   Gbl.Usrs.Me.UsrLast.LastTab      = TabUnk;
-   Gbl.Usrs.Me.UsrLast.LastAccNotif = 0;
+   Gbl.Usrs.Me.UsrLast.WhatToSearch  = Sch_WHAT_TO_SEARCH_DEFAULT;
+   Gbl.Usrs.Me.UsrLast.LastHie.Scope = Sco_SCOPE_UNK;
+   Gbl.Usrs.Me.UsrLast.LastHie.Cod   = -1L;
+   Gbl.Usrs.Me.UsrLast.LastAct       = ActUnk;
+   Gbl.Usrs.Me.UsrLast.LastRole      = Rol_UNK;
+   Gbl.Usrs.Me.UsrLast.LastAccNotif  = 0;
   }
 
 /*****************************************************************************/
@@ -760,8 +762,8 @@ static void Usr_GetMyLastData (void)
    /***** Get user's last data from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get user's last data",
 			     "SELECT WhatToSearch,"		   // row[0]
-				    "LastCrs,"			   // row[1]
-				    "LastTab,"			   // row[2]
+				    "LastSco,"			   // row[1]
+				    "LastCod,"			   // row[2]
 				    "LastAct,"			   // row[3]
 				    "LastRole,"			   // row[4]
 				    "UNIX_TIMESTAMP(LastAccNotif)" // row[5]
@@ -788,21 +790,36 @@ static void Usr_GetMyLastData (void)
       if (Gbl.Usrs.Me.UsrLast.WhatToSearch == Sch_SEARCH_UNKNOWN)
 	 Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
-      /* Get last course (row[1]) */
-      Gbl.Usrs.Me.UsrLast.LastCrs = Str_ConvertStrCodToLongCod (row[1]);
-
-      /* Get last tab (row[2]) */
-      Gbl.Usrs.Me.UsrLast.LastTab = TabStr;        // By default, set last tab to the start tab
-      if (sscanf (row[2],"%u",&UnsignedNum) == 1)
-         if (UnsignedNum >= 1 ||
-             UnsignedNum <= Tab_NUM_TABS)
-            Gbl.Usrs.Me.UsrLast.LastTab = (Tab_Tab_t) UnsignedNum;
+      /* Get last hierarchy: scope (row[1]) and code (row[2]) */
+      Gbl.Usrs.Me.UsrLast.LastHie.Scope = Sco_GetScopeFromDBStr (row[1]);
+      switch (Gbl.Usrs.Me.UsrLast.LastHie.Scope)
+        {
+         case Sco_SCOPE_SYS:	// System
+            Gbl.Usrs.Me.UsrLast.LastHie.Cod = -1L;
+            break;
+         case Sco_SCOPE_CTY:	// Country
+         case Sco_SCOPE_INS:	// Institution
+         case Sco_SCOPE_CTR:	// Centre
+         case Sco_SCOPE_DEG:	// Degree
+         case Sco_SCOPE_CRS:	// Course
+            Gbl.Usrs.Me.UsrLast.LastHie.Cod = Str_ConvertStrCodToLongCod (row[2]);
+            if (Gbl.Usrs.Me.UsrLast.LastHie.Cod <= 0)
+              {
+               Gbl.Usrs.Me.UsrLast.LastHie.Scope = Sco_SCOPE_UNK;
+               Gbl.Usrs.Me.UsrLast.LastHie.Cod = -1L;
+              }
+            break;
+         default:
+            Gbl.Usrs.Me.UsrLast.LastHie.Scope = Sco_SCOPE_UNK;
+            Gbl.Usrs.Me.UsrLast.LastHie.Cod = -1L;
+            break;
+        }
 
       /* Get last action (row[3]) */
       ActCod = Str_ConvertStrCodToLongCod (row[3]);
       Gbl.Usrs.Me.UsrLast.LastAct = Act_GetActionFromActCod (ActCod);
 
-      /* Get last rolw (row[4]) */
+      /* Get last role (row[4]) */
       Gbl.Usrs.Me.UsrLast.LastRole = Rol_ConvertUnsignedStrToRole (row[4]);
 
       /* Get last access to notifications (row[5]) */
@@ -897,17 +914,11 @@ void Usr_FlushCachesUsr (void)
 
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-
-   if (Sco_ScopeDB[Scope])
-     {
-      /***** Get if a user is administrator of a degree from database *****/
-      return (DB_QueryCOUNT ("can not check if a user is administrator",
-			     "SELECT COUNT(*) FROM admin"
-			     " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
-			     UsrCod,Sco_ScopeDB[Scope],Cod) != 0);
-     }
-   return false;
+   /***** Get if a user is administrator of a degree from database *****/
+   return (DB_QueryCOUNT ("can not check if a user is administrator",
+			  "SELECT COUNT(*) FROM admin"
+			  " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
+			  UsrCod,Sco_GetDBStrFromScope (Scope),Cod) != 0);
   }
 
 /*****************************************************************************/
@@ -922,8 +933,6 @@ void Usr_FlushCacheUsrIsSuperuser (void)
 
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-
    /***** 1. Fast check: Trivial case *****/
    if (UsrCod <= 0)
       return false;
@@ -938,7 +947,7 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
       (DB_QueryCOUNT ("can not check if a user is superuser",
 		      "SELECT COUNT(*) FROM admin"
 		      " WHERE UsrCod=%ld AND Scope='%s'",
-		      UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS]) != 0);
+		      UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_SYS)) != 0);
    return Gbl.Cache.UsrIsSuperuser.IsSuperuser;
   }
 
@@ -3093,19 +3102,8 @@ void Usr_ChkUsrAndGetUsrData (void)
    /***** Adjust tab and action *****/
    if (!Gbl.Action.UsesAJAX)
      {
-      if (Gbl.Usrs.Me.Logged)
-	{
-	 /***** Set default tab when unknown *****/
-	 if (Gbl.Action.Tab == TabUnk)
-	   {
-	    // Don't adjust Gbl.Action.Act here
-	    Gbl.Action.Tab = ((Gbl.Usrs.Me.UsrLast.LastTab == TabCrs) &&
-			      (Gbl.CurrentCrs.Crs.CrsCod <= 0)) ? TabStr :
-								  Gbl.Usrs.Me.UsrLast.LastTab;
-	    Tab_DisableIncompatibleTabs ();
-	   }
-	}
-      else if (Gbl.Action.Act == ActUnk)	// No user logged and unknown action
+      if (!Gbl.Usrs.Me.Logged &&	// No user logged...
+	  Gbl.Action.Act == ActUnk)	// ...and unknown action
 	 Act_AdjustActionWhenNoUsrLogged ();
 
       /***** When I change to another tab, go to:
@@ -3125,13 +3123,6 @@ void Usr_ChkUsrAndGetUsrData (void)
 					       Action;
 	 Tab_SetCurrentTab ();
 	}
-
-      /***** Update last data for next time *****/
-      // if (Gbl.Usrs.Me.Logged)
-      //   {
-      //    Usr_UpdateMyLastData ();
-      //    Crs_UpdateCrsLast ();
-      //   }
      }
   }
 
@@ -3339,6 +3330,12 @@ static void Usr_SetMyPrefsAndRoles (void)
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    char URL[PATH_MAX + 1];
+   bool GetActionAndRoleFromLastData;
+   Act_Action_t LastSuperAction;
+   bool JustAfterLogin = Gbl.Action.Act == ActLogIn    ||
+	                 Gbl.Action.Act == ActLogInLan ||
+	                 Gbl.Action.Act == ActLogInNew ||
+			 Gbl.Action.Act == ActAnnSee;
 
    // In this point I am logged
 
@@ -3374,29 +3371,54 @@ static void Usr_SetMyPrefsAndRoles (void)
 
    /***** Get my last data *****/
    Usr_GetMyLastData ();
-   if (Gbl.Action.Act == ActLogIn ||
-       Gbl.Action.Act == ActLogInNew)	// If I just logged in...
+   if (JustAfterLogin)	// If I just logged in...
      {
       /***** WhatToSearch is stored in session,
              but in login it is got from user's last data *****/
       Gbl.Search.WhatToSearch = Gbl.Usrs.Me.UsrLast.WhatToSearch;
 
-      /***** If no course selected, go to my last visited course *****/
-      if (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
-      	  Gbl.Usrs.Me.UsrLast.LastCrs > 0)
-      	{
-      	 Gbl.CurrentCrs.Crs.CrsCod = Gbl.Usrs.Me.UsrLast.LastCrs;
+      /***** Location in hierarchy and role are stored in session,
+             but in login the are got from user's last data *****/
+      if (Gbl.Hierarchy.Scope == Sco_SCOPE_SYS)	// No country selected
+        {
+	 /***** Copy last hierarchy to current hierarchy *****/
+	 Hie_SetHierarchyFromUsrLastHierarchy ();
 
-	 /* Initialize again current course, degree, centre... */
-      	 Hie_InitHierarchy ();
+	 /* Course may have changed ==> get my role in current course again */
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	   {
+	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+									      Gbl.CurrentCrs.Crs.CrsCod);
+	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
+	   }
 
-	 /* Get again my role in this course */
-      	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
-      	                                                                   Gbl.CurrentCrs.Crs.CrsCod);
-      	 Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
-      	}
+	 // Action and role will be got from last data
+         GetActionAndRoleFromLastData = true;
+        }
+      else	// Country (and may be institution, centre, degree or course) selected
+	 // Action and role will be got from last data
+	 // only if I am in the same hierarchy location that the stored one
+	 GetActionAndRoleFromLastData =
+	    (Gbl.Hierarchy.Scope == Gbl.Usrs.Me.UsrLast.LastHie.Scope &&	// The same scope...
+	     Gbl.Hierarchy.Cod   == Gbl.Usrs.Me.UsrLast.LastHie.Cod);		// ...and code in hierarchy
+
+      /***** Get action and role from last data *****/
+      if (GetActionAndRoleFromLastData)
+        {
+	 /* Get action from last data */
+	 LastSuperAction = Act_GetSuperAction (Gbl.Usrs.Me.UsrLast.LastAct);
+	 if (LastSuperAction != ActUnk)
+	   {
+	    Gbl.Action.Act = LastSuperAction;
+	    Tab_SetCurrentTab ();
+	   }
+
+	 /* Get role from last data */
+	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrLast.LastRole;
+        }
      }
 
+   /***** Set my roles *****/
    Rol_SetMyRoles ();
   }
 
@@ -3494,10 +3516,10 @@ void Usr_UpdateMyLastData (void)
       // WhatToSearch, LastAccNotif remain unchanged
       DB_QueryUPDATE ("can not update last user's data",
 		      "UPDATE usr_last"
-		      " SET LastCrs=%ld,LastTab=%u,LastAct=%ld,LastRole=%u,LastTime=NOW()"
+		      " SET LastSco='%s',LastCod=%ld,LastAct=%ld,LastRole=%u,LastTime=NOW()"
                       " WHERE UsrCod=%ld",
-		      Gbl.CurrentCrs.Crs.CrsCod,
-		      (unsigned) Gbl.Action.Tab,
+		      Sco_GetDBStrFromScope (Gbl.Hierarchy.Scope),
+		      Gbl.Hierarchy.Cod,
 		      Act_GetActCod (Gbl.Action.Act),
 		      (unsigned) Gbl.Usrs.Me.Role.Logged,
 		      Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -3514,13 +3536,13 @@ static void Usr_InsertMyLastData (void)
    /***** Insert my last accessed course, tab and time of click in database *****/
    DB_QueryINSERT ("can not insert last user's data",
 		   "INSERT INTO usr_last"
-	           " (UsrCod,WhatToSearch,LastCrs,LastTab,LastAct,LastRole,LastTime,LastAccNotif)"
+	           " (UsrCod,WhatToSearch,LastSco,LastCod,LastAct,LastRole,LastTime,LastAccNotif)"
                    " VALUES"
-                   " (%ld,%u,%ld,%u,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
+                   " (%ld,%u,'%s',%ld,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) Sch_SEARCH_ALL,
-		   Gbl.CurrentCrs.Crs.CrsCod,
-		   (unsigned) Gbl.Action.Tab,
+		   Sco_GetDBStrFromScope (Gbl.Hierarchy.Scope),
+		   Gbl.Hierarchy.Cod,
 		   Act_GetActCod (Gbl.Action.Act),
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
 		   (long) (time_t) 0);	// The user never accessed to notifications
@@ -5004,7 +5026,6 @@ void Usr_DropTmpTableWithCandidateUsrs (void)
 
 static void Usr_GetAdmsLst (Sco_Scope_t Scope)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    const char *QueryFields =
       "UsrCod,"
       "EncryptedUsrCod,"
@@ -5074,10 +5095,10 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
 			" AND institutions.CtyCod=%ld)"
 			" ORDER BY Surname1,Surname2,FirstName,UsrCod",
 			QueryFields,
-			Sco_ScopeDB[Sco_SCOPE_SYS],
-			Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentCty.Cty.CtyCod,
-			Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCty.Cty.CtyCod,
-			Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentCty.Cty.CtyCod);
+			Sco_GetDBStrFromScope (Sco_SCOPE_SYS),
+			Sco_GetDBStrFromScope (Sco_SCOPE_INS),Gbl.CurrentCty.Cty.CtyCod,
+			Sco_GetDBStrFromScope (Sco_SCOPE_CTR),Gbl.CurrentCty.Cty.CtyCod,
+			Sco_GetDBStrFromScope (Sco_SCOPE_DEG),Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:	// System admins,
 				// admins of the current institution,
@@ -5103,10 +5124,10 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
 			" AND centres.InsCod=%ld)"
 			" ORDER BY Surname1,Surname2,FirstName,UsrCod",
 			QueryFields,
-			Sco_ScopeDB[Sco_SCOPE_SYS],
-			Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
-			Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentIns.Ins.InsCod,
-			Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentIns.Ins.InsCod);
+			Sco_GetDBStrFromScope (Sco_SCOPE_SYS),
+			Sco_GetDBStrFromScope (Sco_SCOPE_INS),Gbl.CurrentIns.Ins.InsCod,
+			Sco_GetDBStrFromScope (Sco_SCOPE_CTR),Gbl.CurrentIns.Ins.InsCod,
+			Sco_GetDBStrFromScope (Sco_SCOPE_DEG),Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:	// System admins,
 				// admins of the current institution,
@@ -5130,10 +5151,10 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
 			" AND degrees.CtrCod=%ld)"
 			" ORDER BY Surname1,Surname2,FirstName,UsrCod",
 			QueryFields,
-			Sco_ScopeDB[Sco_SCOPE_SYS],
-			Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
-			Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
-			Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentCtr.Ctr.CtrCod);
+			Sco_GetDBStrFromScope (Sco_SCOPE_SYS),
+			Sco_GetDBStrFromScope (Sco_SCOPE_INS),Gbl.CurrentIns.Ins.InsCod,
+			Sco_GetDBStrFromScope (Sco_SCOPE_CTR),Gbl.CurrentCtr.Ctr.CtrCod,
+			Sco_GetDBStrFromScope (Sco_SCOPE_DEG),Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:	// System admins
 				// and admins of the current institution, centre or degree
@@ -5153,10 +5174,10 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
 			" WHERE Scope='%s' AND Cod=%ld)"
 			" ORDER BY Surname1,Surname2,FirstName,UsrCod",
 			QueryFields,
-			Sco_ScopeDB[Sco_SCOPE_SYS],
-			Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
-			Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
-			Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentDeg.Deg.DegCod);
+			Sco_GetDBStrFromScope (Sco_SCOPE_SYS),
+			Sco_GetDBStrFromScope (Sco_SCOPE_INS),Gbl.CurrentIns.Ins.InsCod,
+			Sco_GetDBStrFromScope (Sco_SCOPE_CTR),Gbl.CurrentCtr.Ctr.CtrCod,
+			Sco_GetDBStrFromScope (Sco_SCOPE_DEG),Gbl.CurrentDeg.Deg.DegCod);
          break;
       default:        // not aplicable
 	 Lay_WrongScopeExit ();

@@ -212,8 +212,12 @@ struct UsrData
 struct UsrLast
   {
    Sch_WhatToSearch_t WhatToSearch;	// Search courses, teachers, documents...?
-   long LastCrs;
-   Tab_Tab_t LastTab;
+   // long LastCrs;
+   struct
+     {
+      Sco_Scope_t Scope;	// Course, degree, centre, etc.
+      long Cod;			// Course code, degree code, centre code, etc.
+     } LastHie;
    Act_Action_t LastAct;
    Rol_Role_t LastRole;
    long LastAccNotif;

@@ -50,6 +50,9 @@ void Hie_SeePending (void);
 void Hie_WriteMenuHierarchy (void);
 void Hie_WriteHierarchyInBreadcrumb (void);
 void Hie_WriteBigNameCtyInsCtrDegCrs (void);
+
+void Hie_SetCurrentHierarchy (void);
+void Hie_SetHierarchyFromUsrLastHierarchy (void);
 void Hie_InitHierarchy (void);
 
 void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);

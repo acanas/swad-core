@@ -2970,26 +2970,26 @@ mysql> DESCRIBE usr_IDs;
    /***** Table usr_last *****/
 /*
 mysql> DESCRIBE usr_last;
-+--------------+------------+------+-----+---------+-------+
-| Field        | Type       | Null | Key | Default | Extra |
-+--------------+------------+------+-----+---------+-------+
-| UsrCod       | int(11)    | NO   | PRI | NULL    |       |
-| WhatToSearch | tinyint(4) | NO   |     | 0       |       |
-| LastCrs      | int(11)    | NO   |     | -1      |       |
-| LastTab      | tinyint(4) | NO   |     | NULL    |       |
-| LastAct      | int(11)    | NO   |     | -1      |       |
-| LastRole     | tinyint(4) | NO   |     | 0       |       |
-| LastTime     | datetime   | NO   | MUL | NULL    |       |
-| LastAccNotif | datetime   | NO   |     | NULL    |       |
-| TimelineUsrs | tinyint(4) | NO   |     | 0       |       |
-+--------------+------------+------+-----+---------+-------+
-9 rows in set (0.00 sec)
++--------------+-------------------------------------------------+------+-----+---------+-------+
+| Field        | Type                                            | Null | Key | Default | Extra |
++--------------+-------------------------------------------------+------+-----+---------+-------+
+| UsrCod       | int(11)                                         | NO   | PRI | NULL    |       |
+| WhatToSearch | tinyint(4)                                      | NO   |     | 0       |       |
+| LastSco      | enum('Unk','Sys','Cty','Ins','Ctr','Deg','Crs') | NO   |     | Unk     |       |
+| LastCod      | int(11)                                         | NO   |     | -1      |       |
+| LastAct      | int(11)                                         | NO   |     | -1      |       |
+| LastRole     | tinyint(4)                                      | NO   |     | 0       |       |
+| LastTime     | datetime                                        | NO   | MUL | NULL    |       |
+| LastAccNotif | datetime                                        | NO   |     | NULL    |       |
+| TimelineUsrs | tinyint(4)                                      | NO   |     | 0       |       |
++--------------+-------------------------------------------------+------+-----+---------+-------+
+9 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_last ("
 			"UsrCod INT NOT NULL,"
 			"WhatToSearch TINYINT NOT NULL DEFAULT 0,"
-			"LastCrs INT NOT NULL DEFAULT -1,"
-			"LastTab TINYINT NOT NULL,"
+			"LastSco ENUM('Unk','Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Unk',"
+			"LastCod INT NOT NULL DEFAULT -1,"
 			"LastAct INT NOT NULL DEFAULT -1,"
 	 		"LastRole TINYINT NOT NULL DEFAULT 0,"
 			"LastTime DATETIME NOT NULL,"

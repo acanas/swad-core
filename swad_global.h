@@ -452,6 +452,11 @@ struct Globals
      } Scope;
    struct
      {
+      Sco_Scope_t Scope;
+      long Cod;
+     } Hierarchy;
+   struct
+     {
       struct Country Cty;
      } CurrentCty;
    struct

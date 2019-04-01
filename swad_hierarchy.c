@@ -449,6 +449,83 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
   }
 
 /*****************************************************************************/
+/***** Set current hierarchy depending on course code, degree code, etc. *****/
+/*****************************************************************************/
+
+void Hie_SetCurrentHierarchy (void)
+  {
+   if      (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+     {
+      Gbl.Hierarchy.Scope = Sco_SCOPE_CRS;
+      Gbl.Hierarchy.Cod   = Gbl.CurrentCrs.Crs.CrsCod;
+     }
+   else if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected
+     {
+      Gbl.Hierarchy.Scope = Sco_SCOPE_DEG;
+      Gbl.Hierarchy.Cod   = Gbl.CurrentDeg.Deg.DegCod;
+     }
+   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// Centre selected
+     {
+      Gbl.Hierarchy.Scope = Sco_SCOPE_CTR;
+      Gbl.Hierarchy.Cod   = Gbl.CurrentCtr.Ctr.CtrCod;
+     }
+   else if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected
+     {
+      Gbl.Hierarchy.Scope = Sco_SCOPE_INS;
+      Gbl.Hierarchy.Cod   = Gbl.CurrentIns.Ins.InsCod;
+     }
+   else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
+     {
+      Gbl.Hierarchy.Scope = Sco_SCOPE_CTY;
+      Gbl.Hierarchy.Cod   = Gbl.CurrentCty.Cty.CtyCod;
+     }
+   else
+     {
+      Gbl.Hierarchy.Scope = Sco_SCOPE_SYS;
+      Gbl.Hierarchy.Cod   = -1L;
+     }
+  }
+
+/*****************************************************************************/
+/**************** Copy last hierarchy to current hierarchy *******************/
+/*****************************************************************************/
+
+void Hie_SetHierarchyFromUsrLastHierarchy (void)
+  {
+   /***** Initialize all codes to -1 *****/
+   Gbl.CurrentCty.Cty.CtyCod =
+   Gbl.CurrentIns.Ins.InsCod =
+   Gbl.CurrentCtr.Ctr.CtrCod =
+   Gbl.CurrentDeg.Deg.DegCod =
+   Gbl.CurrentCrs.Crs.CrsCod = -1L;
+
+   /***** Copy last hierarchy scope and code to current hierarchy *****/
+   switch (Gbl.Usrs.Me.UsrLast.LastHie.Scope)
+     {
+      case Sco_SCOPE_CTY:	// Country
+         Gbl.CurrentCty.Cty.CtyCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
+	 break;
+      case Sco_SCOPE_INS:	// Institution
+         Gbl.CurrentIns.Ins.InsCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
+	 break;
+      case Sco_SCOPE_CTR:	// Centre
+         Gbl.CurrentCtr.Ctr.CtrCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
+	 break;
+      case Sco_SCOPE_DEG:	// Degree
+         Gbl.CurrentDeg.Deg.DegCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
+	 break;
+      case Sco_SCOPE_CRS:	// Course
+         Gbl.CurrentCrs.Crs.CrsCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
+	 break;
+      default:
+	 break;
+     }
+
+   /****** Initialize again current course, degree, centre... ******/
+   Hie_InitHierarchy ();
+  }
+
+/*****************************************************************************/
 /**** Initialize current country, institution, centre, degree and course *****/
 /*****************************************************************************/
 
@@ -532,6 +609,9 @@ void Hie_InitHierarchy (void)
          Gbl.CurrentCrs.Crs.CrsCod = -1L;
         }
      }
+
+   /***** Set current hierarchy depending on course code, degree code, etc. *****/
+   Hie_SetCurrentHierarchy ();
 
    /***** Initialize default fields for edition to current values *****/
    Gbl.Inss.EditingIns.CtyCod    = Gbl.CurrentCty.Cty.CtyCod;

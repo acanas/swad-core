@@ -2236,7 +2236,6 @@ void Enr_UpdateEnrolmentRequests (void)
 static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
   {
    extern const char *Hlp_USERS_Requests;
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Enrolment_requests;
    extern const char *Txt_Scope;
@@ -2358,7 +2357,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 " AND courses.CrsCod=crs_usr_requests.CrsCod"
 					 " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 					 " ORDER BY crs_usr_requests.RequestTime DESC",
-					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_DEG),
 					 RolesSelected);
                break;
             case Rol_CTR_ADM:
@@ -2377,7 +2376,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 " AND courses.CrsCod=crs_usr_requests.CrsCod"
 					 " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 					 " ORDER BY crs_usr_requests.RequestTime DESC",
-					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
+					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_CTR),
 					 RolesSelected);
                break;
             case Rol_INS_ADM:
@@ -2397,7 +2396,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 " AND courses.CrsCod=crs_usr_requests.CrsCod"
 					 " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 					 " ORDER BY crs_usr_requests.RequestTime DESC",
-					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
+					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_INS),
 					 RolesSelected);
                break;
            case Rol_SYS_ADM:
@@ -2466,7 +2465,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 " AND courses.CrsCod=crs_usr_requests.CrsCod"
 					 " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 					 " ORDER BY crs_usr_requests.RequestTime DESC",
-					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_DEG),
 					 Gbl.CurrentCty.Cty.CtyCod,
 					 RolesSelected);
                break;
@@ -2489,7 +2488,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 " AND courses.CrsCod=crs_usr_requests.CrsCod"
 					 " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 					 " ORDER BY crs_usr_requests.RequestTime DESC",
-					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
+					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_CTR),
 					 Gbl.CurrentCty.Cty.CtyCod,
 					 RolesSelected);
                break;
@@ -2512,7 +2511,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 " AND courses.CrsCod=crs_usr_requests.CrsCod"
 					 " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 					 " ORDER BY crs_usr_requests.RequestTime DESC",
-					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
+					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_INS),
 					 Gbl.CurrentCty.Cty.CtyCod,
 					 RolesSelected);
                break;
@@ -2586,7 +2585,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 " AND courses.CrsCod=crs_usr_requests.CrsCod"
 					 " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 					 " ORDER BY crs_usr_requests.RequestTime DESC",
-					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_DEG),
 					 Gbl.CurrentIns.Ins.InsCod,
 					 RolesSelected);
                break;
@@ -2608,7 +2607,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 " AND courses.CrsCod=crs_usr_requests.CrsCod"
 					 " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 					 " ORDER BY crs_usr_requests.RequestTime DESC",
-					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
+					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_CTR),
 					 Gbl.CurrentIns.Ins.InsCod,
 					 RolesSelected);
                break;
@@ -2680,7 +2679,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 " AND courses.CrsCod=crs_usr_requests.CrsCod"
 					 " AND ((1<<crs_usr_requests.Role)&%u)<>0"
 					 " ORDER BY crs_usr_requests.RequestTime DESC",
-					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+					 Gbl.Usrs.Me.UsrDat.UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_DEG),
 					 Gbl.CurrentCtr.Ctr.CtrCod,
 					 RolesSelected);
                break;
@@ -3399,7 +3398,6 @@ static void Enr_AddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
 
 static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
    extern const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y;
 
@@ -3415,7 +3413,7 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
 		       " (UsrCod,Scope,Cod)"
 		       " VALUES"
 		       " (%ld,'%s',%ld)",
-                       UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
+                       UsrDat->UsrCod,Sco_GetDBStrFromScope (Scope),Cod);
 
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,
                      UsrDat->FullName,InsCtrDegName);
@@ -4242,7 +4240,6 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,
 static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
                                    long Cod,const char *InsCtrDegName)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_THE_USER_X_has_been_removed_as_administrator_of_Y;
    extern const char *Txt_THE_USER_X_is_not_an_administrator_of_Y;
 
@@ -4252,7 +4249,7 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
       DB_QueryDELETE ("can not remove an administrator",
 		      "DELETE FROM admin"
 		      " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
-                      UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
+                      UsrDat->UsrCod,Sco_GetDBStrFromScope (Scope),Cod);
 
       Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_administrator_of_Y,
                      UsrDat->FullName,InsCtrDegName);

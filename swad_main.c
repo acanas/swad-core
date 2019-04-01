@@ -31,6 +31,7 @@
 #include <unistd.h>		// For sleep
 
 #include "swad_action.h"
+#include "swad_announcement.h"
 #include "swad_config.h"
 #include "swad_connected.h"
 #include "swad_database.h"
@@ -41,6 +42,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_setting.h"
+#include "swad_user.h"
 
 /*****************************************************************************/
 /******************************** Constants **********************************/
@@ -154,6 +156,21 @@ int main (void)
 
       /***** Start writing HTML output *****/
       Lay_WriteStartOfPage ();
+
+      /***** If I am been redirected from another action... *****/
+      switch (Gbl.Action.Original)
+	{
+	 case ActLogIn:
+	 case ActLogInNew:
+	 case ActLogInLan:
+	    Usr_WelcomeUsr ();
+	    break;
+	 case ActAnnSee:
+	    Ann_MarkAnnouncementAsSeen ();
+	    break;
+	 default:
+	    break;
+	}
 
       /***** Make a processing or other depending on the action *****/
       FunctionPosteriori = Act_GetFunctionPosteriori (Gbl.Action.Act);

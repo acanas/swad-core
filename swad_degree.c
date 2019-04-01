@@ -128,7 +128,6 @@ static void Deg_PutParamGoToDeg (void);
 void Deg_SeeDegWithPendingCrss (void)
   {
    extern const char *Hlp_SYSTEM_Hierarchy_pending;
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Degrees_with_pending_courses;
    extern const char *Txt_Degree;
    extern const char *Txt_Courses_ABBREVIATION;
@@ -153,7 +152,8 @@ void Deg_SeeDegWithPendingCrss (void)
 					      " AND (courses.Status & %u)<>0"
 					      " AND courses.DegCod=degrees.DegCod"
 					      " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
-					      Gbl.Usrs.Me.UsrDat.UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG],
+					      Gbl.Usrs.Me.UsrDat.UsrCod,
+					      Sco_GetDBStrFromScope (Sco_SCOPE_DEG),
 					      (unsigned) Crs_STATUS_BIT_PENDING);
          break;
       case Rol_SYS_ADM:
@@ -1838,7 +1838,6 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
 
 void Deg_RemoveDegreeCompletely (long DegCod)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
@@ -1890,7 +1889,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    /***** Remove administrators of this degree *****/
    DB_QueryDELETE ("can not remove administrators of a degree",
 		   "DELETE FROM admin WHERE Scope='%s' AND Cod=%ld",
-                   Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
+                   Sco_GetDBStrFromScope (Sco_SCOPE_DEG),DegCod);
 
    /***** Remove the degree *****/
    DB_QueryDELETE ("can not remove a degree",
@@ -2406,7 +2405,6 @@ unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery)
 
 void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_all_degrees;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2443,10 +2441,10 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 				        " AND admin.Scope='%s'"
 				        " AND admin.Cod=degrees.DegCod)"
 				        " ORDER BY S,FullName",
-				        (unsigned) Sco_SCOPE_SYS,UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS],
-				        (unsigned) Sco_SCOPE_INS,UsrCod,Sco_ScopeDB[Sco_SCOPE_INS],
-				        (unsigned) Sco_SCOPE_CTR,UsrCod,Sco_ScopeDB[Sco_SCOPE_CTR],
-				        (unsigned) Sco_SCOPE_DEG,UsrCod,Sco_ScopeDB[Sco_SCOPE_DEG]);
+				        (unsigned) Sco_SCOPE_SYS,UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_SYS),
+				        (unsigned) Sco_SCOPE_INS,UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_INS),
+				        (unsigned) Sco_SCOPE_CTR,UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_CTR),
+				        (unsigned) Sco_SCOPE_DEG,UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_DEG));
    if (NumRows)
       /***** Get the list of degrees *****/
       for (NumRow = 1;

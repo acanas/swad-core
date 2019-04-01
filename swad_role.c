@@ -93,10 +93,25 @@ void Rol_SetMyRoles (void)
    /***** Set the user's role I am logged *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);	// Get my roles if not yet got
    Gbl.Usrs.Me.Role.Max = Rol_GetMaxRoleInCrss ((unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss);
-   Gbl.Usrs.Me.Role.Logged = (Gbl.Usrs.Me.Role.FromSession == Rol_UNK) ?	// If no logged role retrieved from session...
-	                          ((Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role == Rol_UNK) ? Rol_USR :
-	                                                                                     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role) :
-                                  Gbl.Usrs.Me.Role.FromSession;			// Get logged role from session
+
+   /***** Set the user's role I am logged *****/
+   // My logged role is retrieved in this order from:
+   // 1. It may have been retrieved from last data stored in database just after login
+   // 2. If it is not known, it will be retrieved from current session
+   // 3. If a course is selected, it will be retrieved from my role in this course
+   // 4. If none of the former options is satisfied, it will be set to user role
+   if (Gbl.Usrs.Me.Role.Logged == Rol_UNK)				// No role from last data
+     {
+      if (Gbl.Usrs.Me.Role.FromSession == Rol_UNK)			// No role from session
+        {
+	 if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role == Rol_UNK)	// No role in current course
+	    Gbl.Usrs.Me.Role.Logged = Rol_USR;				// User
+	 else
+	    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role;	// Role in current course
+        }
+      else
+	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.Role.FromSession;	// Role from session
+     }
 
    /***** Check if I am administrator of current institution/centre/degree *****/
    if (Gbl.CurrentIns.Ins.InsCod > 0)
@@ -191,8 +206,9 @@ void Rol_SetMyRoles (void)
    if (Usr_CheckIfUsrIsSuperuser (Gbl.Usrs.Me.UsrDat.UsrCod))
       Gbl.Usrs.Me.Role.Available |= (1 << Rol_SYS_ADM);
 
-   /***** Check if the role I am logged is now available for me *****/
-   if (!(Gbl.Usrs.Me.Role.Available & (1 << Gbl.Usrs.Me.Role.Logged)))        // Current type I am logged is not available for me
+   /***** Check if the role I am logged is now available for me (it's not forbidden) *****/
+   if (!(Gbl.Usrs.Me.Role.Available &
+	 (1 << Gbl.Usrs.Me.Role.Logged)))        // Current type I am logged is not available for me
       /* Set the lowest role available for me */
       for (Gbl.Usrs.Me.Role.Logged = Rol_UNK;
            Gbl.Usrs.Me.Role.Logged <= (Rol_Role_t) (Rol_NUM_ROLES - 1);

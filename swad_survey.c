@@ -841,7 +841,6 @@ static void Svy_PutParams (void)
 
 void Svy_GetListSurveys (void)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char *SubQuery[Sco_NUM_SCOPES];
    static const char *OrderBySubQuery[Svy_NUM_ORDERS] =
      {
@@ -882,7 +881,7 @@ void Svy_GetListSurveys (void)
 	 if (asprintf (&SubQuery[Scope],"%s(Scope='%s' AND Cod=%ld%s)",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Sco_ScopeDB[Scope],Cods[Scope],
+		       Sco_GetDBStrFromScope (Scope),Cods[Scope],
 		       (HiddenAllowed & 1 << Scope) ? "" :
 						      " AND Hidden='N'") < 0)
 	    Lay_NotEnoughMemoryExit ();
@@ -913,7 +912,7 @@ void Svy_GetListSurveys (void)
 						")",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
+		       Sco_GetDBStrFromScope (Sco_SCOPE_CRS),Cods[Sco_SCOPE_CRS],
 		       (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
 							      " AND Hidden='N'",
 		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
@@ -924,7 +923,7 @@ void Svy_GetListSurveys (void)
 	 if (asprintf (&SubQuery[Sco_SCOPE_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
+		       Sco_GetDBStrFromScope (Sco_SCOPE_CRS),Cods[Sco_SCOPE_CRS],
 		       (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
 							      " AND Hidden='N'") < 0)
 	    Lay_NotEnoughMemoryExit ();
@@ -1752,14 +1751,12 @@ void Svy_UnhideSurvey (void)
 
 static bool Svy_CheckIfSimilarSurveyExists (struct Survey *Svy)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-
    /***** Get number of surveys with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar surveys",
 			  "SELECT COUNT(*) FROM surveys"
 			  " WHERE Scope='%s' AND Cod=%ld"
 			  " AND Title='%s' AND SvyCod<>%ld",
-			  Sco_ScopeDB[Svy->Scope],Svy->Cod,
+			  Sco_GetDBStrFromScope (Svy->Scope),Svy->Cod,
 			  Svy->Title,Svy->SvyCod) != 0);
   }
 
@@ -2245,7 +2242,6 @@ static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
 
 static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Created_new_survey_X;
 
    /***** Create a new survey *****/
@@ -2257,7 +2253,7 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
 				" ('%s',%ld,'N',%u,%ld,"
 				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				"'%s','%s')",
-				Sco_ScopeDB[Svy->Scope],Svy->Cod,
+				Sco_GetDBStrFromScope (Svy->Scope),Svy->Cod,
 				Svy->Roles,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Svy->TimeUTC[Svy_START_TIME],
@@ -2280,7 +2276,6 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
 
 static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_The_survey_has_been_modified;
 
    /***** Update the data of the survey *****/
@@ -2291,7 +2286,7 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
 	           "EndTime=FROM_UNIXTIME(%ld),"
 	           "Title='%s',Txt='%s'"
                    " WHERE SvyCod=%ld",
-		   Sco_ScopeDB[Svy->Scope],Svy->Cod,
+		   Sco_GetDBStrFromScope (Svy->Scope),Svy->Cod,
 		   Svy->Roles,
 		   Svy->TimeUTC[Svy_START_TIME],
 		   Svy->TimeUTC[Svy_END_TIME  ],
@@ -2472,8 +2467,6 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
 
 void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-
    /***** Remove all the users in course surveys *****/
    DB_QueryDELETE ("can not remove users"
 	           " who had answered surveys in a place on the hierarchy",
@@ -2481,7 +2474,7 @@ void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
 	           " USING surveys,svy_users"
                    " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                    " AND surveys.SvyCod=svy_users.SvyCod",
-		   Sco_ScopeDB[Scope],Cod);
+		   Sco_GetDBStrFromScope (Scope),Cod);
 
    /***** Remove all the answers in course surveys *****/
    DB_QueryDELETE ("can not remove answers of surveys"
@@ -2491,7 +2484,7 @@ void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
                    " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                    " AND surveys.SvyCod=svy_questions.SvyCod"
                    " AND svy_questions.QstCod=svy_answers.QstCod",
-		   Sco_ScopeDB[Scope],Cod);
+		   Sco_GetDBStrFromScope (Scope),Cod);
 
    /***** Remove all the questions in course surveys *****/
    DB_QueryDELETE ("can not remove questions of surveys"
@@ -2500,7 +2493,7 @@ void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
 	           " USING surveys,svy_questions"
                    " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                    " AND surveys.SvyCod=svy_questions.SvyCod",
-		   Sco_ScopeDB[Scope],Cod);
+		   Sco_GetDBStrFromScope (Scope),Cod);
 
    /***** Remove groups *****/
    DB_QueryDELETE ("can not remove all the groups"
@@ -2509,14 +2502,14 @@ void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
 	           " USING surveys,svy_grp"
                    " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                    " AND surveys.SvyCod=svy_grp.SvyCod",
-		   Sco_ScopeDB[Scope],Cod);
+		   Sco_GetDBStrFromScope (Scope),Cod);
 
    /***** Remove course surveys *****/
    DB_QueryDELETE ("can not remove all the surveys"
 		   " in a place on the hierarchy",
 		   "DELETE FROM surveys"
 	           " WHERE Scope='%s' AND Cod=%ld",
-		   Sco_ScopeDB[Scope],Cod);
+		   Sco_GetDBStrFromScope (Scope),Cod);
   }
 
 /*****************************************************************************/
@@ -3774,7 +3767,6 @@ static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
 
 unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCourses;
@@ -3788,7 +3780,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
 			 "SELECT COUNT(DISTINCT Cod)"
                          " FROM surveys"
                          " WHERE Scope='%s'",
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of courses"
@@ -3802,7 +3794,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
                          " AND courses.CrsCod=surveys.Cod"
                          " AND surveys.Scope='%s'",
 			 Gbl.CurrentIns.Ins.InsCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses"
@@ -3815,7 +3807,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
                          " AND courses.CrsCod=surveys.Cod"
                          " AND surveys.Scope='%s'",
 			 Gbl.CurrentIns.Ins.InsCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of courses"
@@ -3827,7 +3819,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
                          " AND courses.CrsCod=surveys.Cod"
                          " AND surveys.Scope='%s'",
 			 Gbl.CurrentCtr.Ctr.CtrCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of courses"
@@ -3838,7 +3830,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
                          " AND courses.CrsCod=surveys.Cod"
                          " AND surveys.Scope='%s'",
 		 	 Gbl.CurrentDeg.Deg.DegCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses"
@@ -3846,7 +3838,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
 			 "SELECT COUNT(DISTINCT Cod)"
 			 " FROM surveys"
 			 " WHERE Scope='%s' AND Cod=%ld",
-			 Sco_ScopeDB[Sco_SCOPE_CRS],
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS),
 			 Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
@@ -3873,7 +3865,6 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
 
 unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumSurveys;
@@ -3886,7 +3877,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
 			 "SELECT COUNT(*),SUM(NumNotif)"
                          " FROM surveys"
                          " WHERE Scope='%s'",
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
@@ -3899,7 +3890,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
                          " AND courses.CrsCod=surveys.Cod"
                          " AND surveys.Scope='%s'",
 			 Gbl.CurrentCty.Cty.CtyCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
@@ -3911,7 +3902,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
                          " AND courses.CrsCod=surveys.Cod"
                          " AND surveys.Scope='%s'",
 			 Gbl.CurrentIns.Ins.InsCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
@@ -3922,7 +3913,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
                          " AND courses.CrsCod=surveys.Cod"
                          " AND surveys.Scope='%s'",
 			 Gbl.CurrentCtr.Ctr.CtrCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
@@ -3932,7 +3923,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
                          " AND courses.CrsCod=surveys.Cod"
                          " AND surveys.Scope='%s'",
 			 Gbl.CurrentDeg.Deg.DegCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of surveys",
@@ -3940,7 +3931,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
                          " FROM surveys"
                          " WHERE surveys.Scope='%s'"
                          " AND CrsCod=%ld",
-			 Sco_ScopeDB[Sco_SCOPE_CRS],
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS),
 			 Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
@@ -3974,7 +3965,6 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
 
 float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    float NumQstsPerSurvey;
@@ -3991,7 +3981,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
                          " WHERE surveys.Scope='%s'"
                          " AND surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of questions"
@@ -4008,7 +3998,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
                          " AND surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 			 Gbl.CurrentCty.Cty.CtyCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions"
@@ -4024,7 +4014,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
                          " AND surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 			 Gbl.CurrentIns.Ins.InsCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of questions"
@@ -4039,7 +4029,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
                          " AND surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 			 Gbl.CurrentCtr.Ctr.CtrCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of questions"
@@ -4053,7 +4043,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
                          " AND surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
 			 Gbl.CurrentDeg.Deg.DegCod,
-			 Sco_ScopeDB[Sco_SCOPE_CRS]);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions"
@@ -4064,7 +4054,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
                          " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                          " AND surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
-			 Sco_ScopeDB[Sco_SCOPE_CRS],Gbl.CurrentCrs.Crs.CrsCod);
+			 Sco_GetDBStrFromScope (Sco_SCOPE_CRS),Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

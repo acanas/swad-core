@@ -877,7 +877,6 @@ static void Gam_PutParams (void)
 
 void Gam_GetListGames (void)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char *SubQuery[Sco_NUM_SCOPES];
    static const char *OrderBySubQuery[Gam_NUM_ORDERS] =
      {
@@ -918,7 +917,7 @@ void Gam_GetListGames (void)
 	 if (asprintf (&SubQuery[Scope],"%s(Scope='%s' AND Cod=%ld%s)",
 	               SubQueryFilled ? " OR " :
 	        	                "",
-		       Sco_ScopeDB[Scope],Cods[Scope],
+		       Sco_GetDBStrFromScope (Scope),Cods[Scope],
 		       (HiddenAllowed & 1 << Scope) ? "" :
 						      " AND Hidden='N'") < 0)
 	    Lay_NotEnoughMemoryExit ();
@@ -949,7 +948,7 @@ void Gam_GetListGames (void)
 						")",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
+		       Sco_GetDBStrFromScope (Sco_SCOPE_CRS),Cods[Sco_SCOPE_CRS],
 		       (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
 							      " AND Hidden='N'",
 		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
@@ -960,7 +959,7 @@ void Gam_GetListGames (void)
 	 if (asprintf (&SubQuery[Sco_SCOPE_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
+		       Sco_GetDBStrFromScope (Sco_SCOPE_CRS),Cods[Sco_SCOPE_CRS],
 		       (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
 							      " AND Hidden='N'") < 0)
 	    Lay_NotEnoughMemoryExit ();
@@ -1707,14 +1706,12 @@ void Gam_UnhideGame (void)
 
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-
    /***** Get number of games with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar games",
 			  "SELECT COUNT(*) FROM games"
 			  " WHERE Scope='%s' AND Cod=%ld"
 			  " AND Title='%s' AND GamCod<>%ld",
-			  Sco_ScopeDB[Game->Scope],Game->Cod,
+			  Sco_GetDBStrFromScope (Game->Scope),Game->Cod,
 			  Game->Title,Game->GamCod) != 0);
   }
 
@@ -2172,7 +2169,6 @@ void Gam_RecFormGame (void)
 
 static void Gam_CreateGame (struct Game *Game,const char *Txt)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Created_new_game_X;
 
    /***** Create a new game *****/
@@ -2184,7 +2180,7 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
 				" ('%s',%ld,'N',%u,%ld,"
 				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				"'%s','%s')",
-				Sco_ScopeDB[Game->Scope],Game->Cod,
+				Sco_GetDBStrFromScope (Game->Scope),Game->Cod,
 				Game->Roles,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Game->TimeUTC[Gam_START_TIME],
@@ -2207,7 +2203,6 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
 
 static void Gam_UpdateGame (struct Game *Game,const char *Txt)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_The_game_has_been_modified;
 
    /***** Update the data of the game *****/
@@ -2218,7 +2213,7 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
 		   "EndTime=FROM_UNIXTIME(%ld),"
 		   "Title='%s',Txt='%s'"
 		   " WHERE GamCod=%ld",
-	           Sco_ScopeDB[Game->Scope],Game->Cod,
+	           Sco_GetDBStrFromScope (Game->Scope),Game->Cod,
 	           Game->Roles,
 	           Game->TimeUTC[Gam_START_TIME],
 	           Game->TimeUTC[Gam_END_TIME  ],
@@ -2398,8 +2393,6 @@ static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
 
 void Gam_RemoveGames (Sco_Scope_t Scope,long Cod)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-
    /***** Remove all the users in course games *****/
    DB_QueryDELETE ("can not remove users who had answered games"
 		   " in a place on the hierarchy",
@@ -2407,7 +2400,7 @@ void Gam_RemoveGames (Sco_Scope_t Scope,long Cod)
 		   " USING games,gam_users"
 		   " WHERE games.Scope='%s' AND games.Cod=%ld"
 		   " AND games.GamCod=gam_users.GamCod",
-                   Sco_ScopeDB[Scope],Cod);
+                   Sco_GetDBStrFromScope (Scope),Cod);
 
    /***** Remove all the answers in course games *****/
    DB_QueryDELETE ("can not remove answers of games"
@@ -2417,7 +2410,7 @@ void Gam_RemoveGames (Sco_Scope_t Scope,long Cod)
 		   " WHERE games.Scope='%s' AND games.Cod=%ld"
 		   " AND games.GamCod=gam_questions.GamCod"
 		   " AND gam_questions.QstCod=gam_answers.QstCod",
-                   Sco_ScopeDB[Scope],Cod);
+                   Sco_GetDBStrFromScope (Scope),Cod);
 
    /***** Remove all the questions in course games *****/
    DB_QueryDELETE ("can not remove questions of games"
@@ -2426,7 +2419,7 @@ void Gam_RemoveGames (Sco_Scope_t Scope,long Cod)
 		   " USING games,gam_questions"
 		   " WHERE games.Scope='%s' AND games.Cod=%ld"
 		   " AND games.GamCod=gam_questions.GamCod",
-                   Sco_ScopeDB[Scope],Cod);
+                   Sco_GetDBStrFromScope (Scope),Cod);
 
    /***** Remove groups *****/
    DB_QueryDELETE ("can not remove all the groups"
@@ -2435,12 +2428,12 @@ void Gam_RemoveGames (Sco_Scope_t Scope,long Cod)
 		   " USING games,gam_grp"
 		   " WHERE games.Scope='%s' AND games.Cod=%ld"
 		   " AND games.GamCod=gam_grp.GamCod",
-                   Sco_ScopeDB[Scope],Cod);
+                   Sco_GetDBStrFromScope (Scope),Cod);
 
    /***** Remove course games *****/
    DB_QueryDELETE ("can not remove all the games in a place on the hierarchy",
 		   "DELETE FROM games WHERE Scope='%s' AND Cod=%ld",
-                   Sco_ScopeDB[Scope],Cod);
+                   Sco_GetDBStrFromScope (Scope),Cod);
   }
 
 /*****************************************************************************/
@@ -3796,7 +3789,6 @@ static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
 
 unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCourses;
@@ -3809,7 +3801,7 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
 			 "SELECT COUNT(DISTINCT Cod)"
 			 " FROM games"
 			 " WHERE Scope='%s'",
-                         Sco_ScopeDB[Sco_SCOPE_CRS]);
+                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
@@ -3822,7 +3814,7 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
                          Gbl.CurrentIns.Ins.InsCod,
-                         Sco_ScopeDB[Sco_SCOPE_CRS]);
+                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
@@ -3834,7 +3826,7 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
 		         Gbl.CurrentIns.Ins.InsCod,
-		         Sco_ScopeDB[Sco_SCOPE_CRS]);
+		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
@@ -3844,7 +3836,7 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
                          Gbl.CurrentCtr.Ctr.CtrCod,
-                         Sco_ScopeDB[Sco_SCOPE_CRS]);
+                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
@@ -3854,14 +3846,14 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
 		         Gbl.CurrentDeg.Deg.DegCod,
-		         Sco_ScopeDB[Sco_SCOPE_CRS]);
+		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT Cod)"
 			 " FROM games"
 			 " WHERE Scope='%s' AND Cod=%ld",
-                         Sco_ScopeDB[Sco_SCOPE_CRS],
+                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS),
                          Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
@@ -3887,7 +3879,6 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
 
 unsigned Gam_GetNumGames (Sco_Scope_t Scope)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGames;
@@ -3900,7 +3891,7 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
                          "SELECT COUNT(*)"
 			 " FROM games"
 			 " WHERE Scope='%s'",
-                         Sco_ScopeDB[Sco_SCOPE_CRS]);
+                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
@@ -3913,7 +3904,7 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
 		         Gbl.CurrentCty.Cty.CtyCod,
-		         Sco_ScopeDB[Sco_SCOPE_CRS]);
+		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
@@ -3925,7 +3916,7 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
 		         Gbl.CurrentIns.Ins.InsCod,
-		         Sco_ScopeDB[Sco_SCOPE_CRS]);
+		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
@@ -3936,7 +3927,7 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
 		         Gbl.CurrentCtr.Ctr.CtrCod,
-		         Sco_ScopeDB[Sco_SCOPE_CRS]);
+		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
@@ -3946,7 +3937,7 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
 		         Gbl.CurrentDeg.Deg.DegCod,
-		         Sco_ScopeDB[Sco_SCOPE_CRS]);
+		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
@@ -3954,7 +3945,7 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
 			 " FROM games"
 			 " WHERE games.Scope='%s'"
 			 " AND CrsCod=%ld",
-                         Sco_ScopeDB[Sco_SCOPE_CRS],
+                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS),
                          Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
@@ -3979,7 +3970,6 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
 
 float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    float NumQstsPerGame;
@@ -3995,7 +3985,7 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " WHERE games.Scope='%s'"
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                         Sco_ScopeDB[Sco_SCOPE_CRS]);
+                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
@@ -4011,7 +4001,7 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
                          Gbl.CurrentCty.Cty.CtyCod,
-                         Sco_ScopeDB[Sco_SCOPE_CRS]);
+                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
@@ -4026,7 +4016,7 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 		         Gbl.CurrentIns.Ins.InsCod,
-		         Sco_ScopeDB[Sco_SCOPE_CRS]);
+		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
@@ -4040,7 +4030,7 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
                          Gbl.CurrentCtr.Ctr.CtrCod,
-                         Sco_ScopeDB[Sco_SCOPE_CRS]);
+                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
@@ -4053,7 +4043,7 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
 		         Gbl.CurrentDeg.Deg.DegCod,
-		         Sco_ScopeDB[Sco_SCOPE_CRS]);
+		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
       case Sco_SCOPE_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
@@ -4063,7 +4053,7 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " WHERE games.Scope='%s' AND games.Cod=%ld"
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                         Sco_ScopeDB[Sco_SCOPE_CRS],Gbl.CurrentCrs.Crs.CrsCod);
+                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS),Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

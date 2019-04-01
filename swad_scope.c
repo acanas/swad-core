@@ -36,17 +36,6 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-const char *Sco_ScopeDB[Sco_NUM_SCOPES] =
-  {
-   "Unk",	// Sco_SCOPE_UNK
-   "Sys",	// Sco_SCOPE_SYS
-   "Cty",	// Sco_SCOPE_CTY
-   "Ins",	// Sco_SCOPE_INS
-   "Ctr",	// Sco_SCOPE_CTR
-   "Deg",	// Sco_SCOPE_DEG
-   "Crs",	// Sco_SCOPE_CRS
-  };
-
 /*****************************************************************************/
 /***************************** Internal constants ****************************/
 /*****************************************************************************/
@@ -334,8 +323,31 @@ Sco_Scope_t Sco_GetScopeFromDBStr (const char *ScopeDBStr)
    for (Scope = Sco_SCOPE_UNK;
 	Scope < Sco_NUM_SCOPES;
 	Scope++)
-      if (!strcmp (Sco_ScopeDB[Scope],ScopeDBStr))
+      if (!strcmp (Sco_GetDBStrFromScope (Scope),ScopeDBStr))
 	 return Scope;
 
    return Sco_SCOPE_UNK;
+  }
+
+/*****************************************************************************/
+/*********************** Get scope from database string **********************/
+/*****************************************************************************/
+
+const char *Sco_GetDBStrFromScope (Sco_Scope_t Scope)
+  {
+   static const char *Sco_ScopeDB[Sco_NUM_SCOPES] =
+     {
+      "Unk",	// Sco_SCOPE_UNK
+      "Sys",	// Sco_SCOPE_SYS
+      "Cty",	// Sco_SCOPE_CTY
+      "Ins",	// Sco_SCOPE_INS
+      "Ctr",	// Sco_SCOPE_CTR
+      "Deg",	// Sco_SCOPE_DEG
+      "Crs",	// Sco_SCOPE_CRS
+     };
+
+   if (Scope >= Sco_NUM_SCOPES)
+      Scope = Sco_SCOPE_UNK;
+
+   return Sco_ScopeDB[Scope];
   }

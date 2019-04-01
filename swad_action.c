@@ -5180,6 +5180,7 @@ void Act_AdjustCurrentAction (void)
    bool IAmATeacherInAnyCrs;
    bool JustAfterLogin = Gbl.Action.Act == ActLogIn    ||
 	                 Gbl.Action.Act == ActLogInLan ||
+	                 Gbl.Action.Act == ActLogInNew ||
 			 Gbl.Action.Act == ActAnnSee;
 
    /***** Don't adjust anything when:

@@ -1167,7 +1167,6 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
 
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
-   extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
@@ -1303,10 +1302,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				      " OR (Scope='%s' AND Cod=%ld)"
 				      " OR (Scope='%s' AND Cod=%ld))"
 				      " AND UsrCod<>%ld",
-				      Sco_ScopeDB[Sco_SCOPE_SYS],
-				      Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
-				      Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
-				      Sco_ScopeDB[Sco_SCOPE_DEG],Gbl.CurrentDeg.Deg.DegCod,
+				      Sco_GetDBStrFromScope (Sco_SCOPE_SYS),
+				      Sco_GetDBStrFromScope (Sco_SCOPE_INS),Gbl.CurrentIns.Ins.InsCod,
+				      Sco_GetDBStrFromScope (Sco_SCOPE_CTR),Gbl.CurrentCtr.Ctr.CtrCod,
+				      Sco_GetDBStrFromScope (Sco_SCOPE_DEG),Gbl.CurrentDeg.Deg.DegCod,
 				      Gbl.Usrs.Me.UsrDat.UsrCod);
 	   }
          break;
@@ -1390,11 +1389,11 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				   " AND (surveys.Roles&(1<<crs_usr.Role))<>0)",
 				   Cod,
 				   Cod,
-				   Sco_ScopeDB[Sco_SCOPE_CRS],
+				   Sco_GetDBStrFromScope (Sco_SCOPE_CRS),
 				   Gbl.Usrs.Me.UsrDat.UsrCod,
 				   Cod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod,
-				   Sco_ScopeDB[Sco_SCOPE_CRS]);
+				   Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
          break;
      }
 

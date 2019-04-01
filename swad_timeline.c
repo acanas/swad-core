@@ -370,20 +370,6 @@ void TL_ShowTimelineGbl2 (void)
       TL_TOP_MESSAGE_NONE,	// Ntf_EVENT_ENROLMENT_NET	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
      };
 
-   /***** If I am been redirected from another action... *****/
-   switch (Gbl.Action.Original)
-     {
-      case ActLogIn:
-      case ActLogInLan:
-         Usr_WelcomeUsr ();
-         break;
-      case ActAnnSee:
-	 Ann_MarkAnnouncementAsSeen ();
-	 break;
-      default:
-         break;
-     }
-
    /***** Initialize note code to -1 ==> no highlighted note *****/
    SocNot.NotCod = -1L;
 

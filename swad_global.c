@@ -242,6 +242,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentCrs.Info.ShowMsgMustBeRead = 0;
    Gbl.CurrentCrs.Notices.HighlightNotCod = -1L;	// No notice highlighted
 
+   Gbl.Hierarchy.Scope = Sco_SCOPE_UNK;
+   Gbl.Hierarchy.Cod   = -1L;
+
    Gbl.Inss.Num = 0;
    Gbl.Inss.Lst = NULL;
    Gbl.Inss.SelectedOrder = Ins_ORDER_DEFAULT;
