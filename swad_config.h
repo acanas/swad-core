@@ -533,7 +533,7 @@
 
 #define Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO		((time_t)(       12UL * 60UL * 60UL))	// After these seconds, users can recompute the average photos of a degree
 
-#define Cfg_MAX_TIME_TO_REMEMBER_LAST_ACTION_ON_LOGIN	((time_t)(        2UL * 60UL * 60UL))	// On login, if interval since last action is less than this time, remember last action and role
+#define Cfg_MAX_TIME_TO_REMEMBER_LAST_ACTION_ON_LOGIN	((time_t)(        2UL * 60UL * 60UL))	// On login, if interval since last action is less than this time, remember last action
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

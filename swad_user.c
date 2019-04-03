@@ -3337,7 +3337,7 @@ static void Usr_SetMyPrefsAndRoles (void)
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    char URL[PATH_MAX + 1];
-   bool GetActionAndRoleFromLastData;
+   bool GetRoleAndActionFromLastData;
    Act_Action_t LastSuperAction;
    bool JustAfterLogin = Gbl.Action.Act == ActLogIn    ||
 	                 Gbl.Action.Act == ActLogInLan ||
@@ -3399,19 +3399,23 @@ static void Usr_SetMyPrefsAndRoles (void)
 	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
 	   }
 
-	 // Action and role will be got from last data
-         GetActionAndRoleFromLastData = true;
+	 // role and action will be got from last data
+         GetRoleAndActionFromLastData = true;
         }
       else	// Country (and may be institution, centre, degree or course) selected
-	 // Action and role will be got from last data
+	 // Role and action will be got from last data
 	 // only if I am in the same hierarchy location that the stored one
-	 GetActionAndRoleFromLastData =
+	 GetRoleAndActionFromLastData =
 	    (Gbl.Hierarchy.Level == Gbl.Usrs.Me.UsrLast.LastHie.Scope &&	// The same scope...
 	     Gbl.Hierarchy.Cod   == Gbl.Usrs.Me.UsrLast.LastHie.Cod);		// ...and code in hierarchy
 
-      /***** Get action and role from last data *****/
-      if (GetActionAndRoleFromLastData)
-	 // Remember last action and role only if last access is recent
+      /***** Get role and action from last data *****/
+      if (GetRoleAndActionFromLastData)
+        {
+	 /* Get role from last data */
+	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrLast.LastRole;
+
+	 /* Last action is really got only if last access is recent */
 	 if (Gbl.Usrs.Me.UsrLast.LastTime >= Gbl.StartExecutionTimeUTC -
 	                                     Cfg_MAX_TIME_TO_REMEMBER_LAST_ACTION_ON_LOGIN)
 	   {
@@ -3422,10 +3426,10 @@ static void Usr_SetMyPrefsAndRoles (void)
 	       Gbl.Action.Act = LastSuperAction;
 	       Tab_SetCurrentTab ();
 	      }
-
-	    /* Get role from last data */
-	    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrLast.LastRole;
 	   }
+	 /* If action is not set to last action,
+	    it will be set later to a default action */
+        }
      }
 
    /***** Set my roles *****/

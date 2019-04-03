@@ -464,10 +464,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.94.1 (2019-04-03)"
+#define Log_PLATFORM_VERSION	"SWAD 18.94.2 (2019-04-03)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
+	Version 18.94.2:  Apr 03, 2019 	Remember last role even if last access is old. (241531 lines)
 	Version 18.94.1:  Apr 03, 2019 	Remember last action and role after login only if last access is recent. (241526 lines)
 	Version 18.94:    Apr 03, 2019 	Code refactoring related to hierarchy. (241513 lines)
 	Version 18.93:    Apr 01, 2019 	When a user logs in, hierarchy, action and role are got from database. (241533 lines)
