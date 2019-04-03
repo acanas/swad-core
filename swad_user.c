@@ -369,6 +369,7 @@ void Usr_ResetMyLastData (void)
    Gbl.Usrs.Me.UsrLast.LastHie.Cod   = -1L;
    Gbl.Usrs.Me.UsrLast.LastAct       = ActUnk;
    Gbl.Usrs.Me.UsrLast.LastRole      = Rol_UNK;
+   Gbl.Usrs.Me.UsrLast.LastTime      = 0;
    Gbl.Usrs.Me.UsrLast.LastAccNotif  = 0;
   }
 
@@ -766,7 +767,8 @@ static void Usr_GetMyLastData (void)
 				    "LastCod,"			   // row[2]
 				    "LastAct,"			   // row[3]
 				    "LastRole,"			   // row[4]
-				    "UNIX_TIMESTAMP(LastAccNotif)" // row[5]
+				    "UNIX_TIMESTAMP(LastTime),"    // row[5]
+				    "UNIX_TIMESTAMP(LastAccNotif)" // row[6]
 			     " FROM usr_last WHERE UsrCod=%ld",
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
    if (NumRows == 0)
@@ -822,10 +824,15 @@ static void Usr_GetMyLastData (void)
       /* Get last role (row[4]) */
       Gbl.Usrs.Me.UsrLast.LastRole = Rol_ConvertUnsignedStrToRole (row[4]);
 
-      /* Get last access to notifications (row[5]) */
-      Gbl.Usrs.Me.UsrLast.LastAccNotif = 0L;
+      /* Get last access to platform (row[5]) */
+      Gbl.Usrs.Me.UsrLast.LastTime = 0L;
       if (row[5])
-         sscanf (row[5],"%ld",&(Gbl.Usrs.Me.UsrLast.LastAccNotif));
+         sscanf (row[5],"%ld",&(Gbl.Usrs.Me.UsrLast.LastTime));
+
+      /* Get last access to notifications (row[6]) */
+      Gbl.Usrs.Me.UsrLast.LastAccNotif = 0L;
+      if (row[6])
+         sscanf (row[6],"%ld",&(Gbl.Usrs.Me.UsrLast.LastAccNotif));
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -3404,18 +3411,21 @@ static void Usr_SetMyPrefsAndRoles (void)
 
       /***** Get action and role from last data *****/
       if (GetActionAndRoleFromLastData)
-        {
-	 /* Get action from last data */
-	 LastSuperAction = Act_GetSuperAction (Gbl.Usrs.Me.UsrLast.LastAct);
-	 if (LastSuperAction != ActUnk)
+	 // Remember last action and role only if last access is recent
+	 if (Gbl.Usrs.Me.UsrLast.LastTime >= Gbl.StartExecutionTimeUTC -
+	                                     Cfg_MAX_TIME_TO_REMEMBER_LAST_ACTION_ON_LOGIN)
 	   {
-	    Gbl.Action.Act = LastSuperAction;
-	    Tab_SetCurrentTab ();
-	   }
+	    /* Get action from last data */
+	    LastSuperAction = Act_GetSuperAction (Gbl.Usrs.Me.UsrLast.LastAct);
+	    if (LastSuperAction != ActUnk)
+	      {
+	       Gbl.Action.Act = LastSuperAction;
+	       Tab_SetCurrentTab ();
+	      }
 
-	 /* Get role from last data */
-	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrLast.LastRole;
-        }
+	    /* Get role from last data */
+	    Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrLast.LastRole;
+	   }
      }
 
    /***** Set my roles *****/

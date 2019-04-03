@@ -1575,6 +1575,8 @@ Profile:
        1332. ActChgMyTT1stDay		Change first day of week and show timetable of the course
 */
 
+#define Act_DEFAULT_ACTION_AFTER_LOGIN ActSeeSocTmlGbl
+
 /*
 struct Act_Actions
   {
@@ -5385,10 +5387,10 @@ void Act_AdjustCurrentAction (void)
 
    /***** Adjustment 10:
           --------------
-          Just after login with all checks OK ==> go to timeline *****/
+          Just after login with all checks OK ==> go to default action *****/
    if (JustAfterLogin)
      {
-      Gbl.Action.Act = ActSeeSocTmlGbl;
+      Gbl.Action.Act = Act_DEFAULT_ACTION_AFTER_LOGIN;
       Tab_SetCurrentTab ();
      }
   }

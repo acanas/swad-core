@@ -220,6 +220,7 @@ struct UsrLast
      } LastHie;
    Act_Action_t LastAct;
    Rol_Role_t LastRole;
+   long LastTime;
    long LastAccNotif;
   };
 
