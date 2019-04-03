@@ -218,7 +218,7 @@ void Cal_DrawCurrentMonth (void)
 	              "	DrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s/%s',",
 	    Gbl.Prefs.FirstDayOfWeek,
 	    (long) Gbl.StartExecutionTimeUTC,
-	    Gbl.CurrentCtr.Ctr.PlcCod,
+	    Gbl.Hierarchy.Ctr.PlcCod,
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language]);
    Frm_SetParamsForm (ParamsStr,ActSeeCal,true);
@@ -263,9 +263,9 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	         PrintView ? NULL :
 	                     Hlp_START_Calendar,Box_NOT_CLOSABLE);
    Lay_WriteHeaderClassPhoto (PrintView,false,
-			      Gbl.CurrentIns.Ins.InsCod,
-			      Gbl.CurrentDeg.Deg.DegCod,
-			      Gbl.CurrentCrs.Crs.CrsCod);
+			      Gbl.Hierarchy.Ins.InsCod,
+			      Gbl.Hierarchy.Deg.DegCod,
+			      Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Preference selector to change first day of week *****/
    if (!PrintView)
@@ -286,7 +286,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	              "	Cal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s/%s',",
 	    Gbl.Prefs.FirstDayOfWeek,
 	    (long) Gbl.StartExecutionTimeUTC,
-	    Gbl.CurrentCtr.Ctr.PlcCod,
+	    Gbl.Hierarchy.Ctr.PlcCod,
 	    PrintView ? "true" :
 		        "false",
 	    Cfg_URL_SWAD_CGI,
@@ -313,7 +313,7 @@ static void Cal_PutIconsCalendar (void)
    Ico_PutContextualIconToPrint (ActPrnCal,NULL);
 
    /***** View holidays *****/
-   if (Gbl.CurrentIns.Ins.InsCod > 0 &&			// Institution selected
+   if (Gbl.Hierarchy.Level == Hie_INS &&		// Institution selected
        (Gbl.Hlds.Num ||					// There are holidays
         Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM))	// Institution admin or system admin
       Hld_PutIconToSeeHlds ();

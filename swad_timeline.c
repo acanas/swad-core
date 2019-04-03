@@ -1964,28 +1964,28 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 	 case TL_NOTE_INS_SHA_PUB_FILE:
 	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
+	    if (SocNot->HieCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
 	       Ins_PutParamInsCod (SocNot->HieCod);		// Go to another institution
 	    break;
 	 case TL_NOTE_CTR_DOC_PUB_FILE:
 	 case TL_NOTE_CTR_SHA_PUB_FILE:
 	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
+	    if (SocNot->HieCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current centre
 	       Ctr_PutParamCtrCod (SocNot->HieCod);		// Go to another centre
 	    break;
 	 case TL_NOTE_DEG_DOC_PUB_FILE:
 	 case TL_NOTE_DEG_SHA_PUB_FILE:
 	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
+	    if (SocNot->HieCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
 	       Deg_PutParamDegCod (SocNot->HieCod);		// Go to another degree
 	    break;
 	 case TL_NOTE_CRS_DOC_PUB_FILE:
 	 case TL_NOTE_CRS_SHA_PUB_FILE:
 	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case TL_NOTE_EXAM_ANNOUNCEMENT:
@@ -1994,7 +1994,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 		                       Anchor);	// Locate on this specific exam
             Exa_FreeAnchorStr (Anchor);
 	    Exa_PutHiddenParamExaCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case TL_NOTE_POST:	// Not applicable
@@ -2008,7 +2008,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 					 Gbl.Forum.ForumSelected.Location,
 					 Gbl.Forum.ForumSelected.ThrCod,
 					 -1L);
-	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case TL_NOTE_NOTICE:
@@ -2017,7 +2017,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 				       Anchor);
             Not_FreeAnchorStr (Anchor);
 	    Not_PutHiddenParamNotCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 default:			// Not applicable
@@ -2095,21 +2095,21 @@ void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod,struct TL_Publicati
      {
       case TL_NOTE_INS_DOC_PUB_FILE:
       case TL_NOTE_INS_SHA_PUB_FILE:
-	 HieCod = Gbl.CurrentIns.Ins.InsCod;
+	 HieCod = Gbl.Hierarchy.Ins.InsCod;
 	 break;
       case TL_NOTE_CTR_DOC_PUB_FILE:
       case TL_NOTE_CTR_SHA_PUB_FILE:
-	 HieCod = Gbl.CurrentCtr.Ctr.CtrCod;
+	 HieCod = Gbl.Hierarchy.Ctr.CtrCod;
 	 break;
       case TL_NOTE_DEG_DOC_PUB_FILE:
       case TL_NOTE_DEG_SHA_PUB_FILE:
-	 HieCod = Gbl.CurrentDeg.Deg.DegCod;
+	 HieCod = Gbl.Hierarchy.Deg.DegCod;
 	 break;
       case TL_NOTE_CRS_DOC_PUB_FILE:
       case TL_NOTE_CRS_SHA_PUB_FILE:
       case TL_NOTE_EXAM_ANNOUNCEMENT:
       case TL_NOTE_NOTICE:
-	 HieCod = Gbl.CurrentCrs.Crs.CrsCod;
+	 HieCod = Gbl.Hierarchy.Crs.Crs.CrsCod;
 	 break;
       default:
 	 HieCod = -1L;

@@ -132,7 +132,7 @@ static long Exa_GetParamsExamAnnouncement (void)
    Par_GetParToText ("CrsName",Gbl.ExamAnns.ExaDat.CrsFullName,Hie_MAX_BYTES_FULL_NAME);
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!Gbl.ExamAnns.ExaDat.CrsFullName[0])
-      Str_Copy (Gbl.ExamAnns.ExaDat.CrsFullName,Gbl.CurrentCrs.Crs.FullName,
+      Str_Copy (Gbl.ExamAnns.ExaDat.CrsFullName,Gbl.Hierarchy.Crs.Crs.FullName,
                 Hie_MAX_BYTES_FULL_NAME);
 
    /***** Get the year *****/
@@ -140,7 +140,7 @@ static long Exa_GetParamsExamAnnouncement (void)
 	                      Par_GetParToUnsignedLong ("Year",
                                                         0,	// N.A.
                                                         Deg_MAX_YEARS_PER_DEGREE,
-                                                        (unsigned long) Gbl.CurrentCrs.Crs.Year);
+                                                        (unsigned long) Gbl.Hierarchy.Crs.Crs.Year);
 
    /***** Get the type of exam announcement *****/
    Par_GetParToText ("ExamSession",Gbl.ExamAnns.ExaDat.Session,Exa_MAX_BYTES_SESSION);
@@ -321,7 +321,7 @@ void Exa_ReceiveExamAnnouncement2 (void)
    TL_StoreAndPublishNote (TL_NOTE_EXAM_ANNOUNCEMENT,Gbl.ExamAnns.HighlightExaCod,&SocPub);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
 
    /***** Show exam announcements *****/
    Exa_ListExamAnnouncementsEdit ();
@@ -417,7 +417,7 @@ void Exa_RemoveExamAnnouncement1 (void)
 		   "UPDATE exam_announcements SET Status=%u"
 		   " WHERE ExaCod=%ld AND CrsCod=%ld",
                    (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,
-                   ExaCod,Gbl.CurrentCrs.Crs.CrsCod);
+                   ExaCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod);
@@ -426,7 +426,7 @@ void Exa_RemoveExamAnnouncement1 (void)
    TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NOTE_EXAM_ANNOUNCEMENT,ExaCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
   }
 
 void Exa_RemoveExamAnnouncement2 (void)
@@ -461,7 +461,7 @@ void Exa_HideExamAnnouncement (void)
 		   "UPDATE exam_announcements SET Status=%u"
 		   " WHERE ExaCod=%ld AND CrsCod=%ld",
                    (unsigned) Exa_HIDDEN_EXAM_ANNOUNCEMENT,
-                   ExaCod,Gbl.CurrentCrs.Crs.CrsCod);
+                   ExaCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Set exam to be highlighted *****/
    Gbl.ExamAnns.HighlightExaCod = ExaCod;
@@ -494,7 +494,7 @@ void Exa_UnhideExamAnnouncement (void)
 		   "UPDATE exam_announcements SET Status=%u"
 		   " WHERE ExaCod=%ld AND CrsCod=%ld",
                    (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT,
-                   ExaCod,Gbl.CurrentCrs.Crs.CrsCod);
+                   ExaCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Set exam to be highlighted *****/
    Gbl.ExamAnns.HighlightExaCod = ExaCod;
@@ -517,7 +517,7 @@ void Exa_ListExamAnnouncementsSee (void)
 
    /***** Mark possible notifications as seen *****/
    Ntf_MarkNotifAsSeen (Ntf_EVENT_EXAM_ANNOUNCEMENT,
-	                -1L,Gbl.CurrentCrs.Crs.CrsCod,
+	                -1L,Gbl.Hierarchy.Crs.Crs.CrsCod,
 	                Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -587,7 +587,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 				" FROM exam_announcements"
 				" WHERE CrsCod=%ld AND %s"
 				" ORDER BY ExamDate DESC",
-				Gbl.CurrentCrs.Crs.CrsCod,SubQueryStatus);
+				Gbl.Hierarchy.Crs.Crs.CrsCod,SubQueryStatus);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Announcements_of_exams,
@@ -598,7 +598,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    /***** The result of the query may be empty *****/
    if (!NumExaAnns)
       Ale_ShowAlert (Ale_INFO,Txt_No_announcements_of_exams_of_X,
-                     Gbl.CurrentCrs.Crs.FullName);
+                     Gbl.Hierarchy.Crs.Crs.FullName);
 
    /***** List the existing exam announcements *****/
    for (NumExaAnn = 0;
@@ -690,7 +690,7 @@ static long Exa_AddExamAnnouncementToDB (void)
 				"(%ld,%u,0,'%s',%u,'%s',"
 				"NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00','%s',"
 				"'%s','%s','%s','%s','%s','%s')",
-				Gbl.CurrentCrs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.Crs.CrsCod,
 				(unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT,
 				Gbl.ExamAnns.ExaDat.CrsFullName,
 				Gbl.ExamAnns.ExaDat.Year,
@@ -770,7 +770,7 @@ void Exa_CreateListDatesOfExamAnnouncements (void)
 				   " FROM exam_announcements"
 				   " WHERE CrsCod=%ld AND Status=%u"
 				   " ORDER BY ExamDate DESC",
-				   Gbl.CurrentCrs.Crs.CrsCod,
+				   Gbl.Hierarchy.Crs.Crs.CrsCod,
 				   (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
 
       /***** The result of the query may be empty *****/
@@ -1001,7 +1001,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
      };
 
    /***** Get data of institution of this degree *****/
-   Ins.InsCod = Gbl.CurrentIns.Ins.InsCod;
+   Ins.InsCod = Gbl.Hierarchy.Ins.InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
    switch (TypeViewExamAnnouncement)
@@ -1067,7 +1067,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    else
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
                Ins.WWW,StyleTitle);
-   Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
+   Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
    fprintf (Gbl.F.Out,"<br />%s%s"
                       "</td>"
 	              "</tr>",
@@ -1081,8 +1081,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	    StyleTitle);
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
-               Gbl.CurrentDeg.Deg.WWW,StyleTitle);
-   fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.FullName);
+               Gbl.Hierarchy.Deg.WWW,StyleTitle);
+   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
       fprintf (Gbl.F.Out,"</a>");
    fprintf (Gbl.F.Out,"</td>"

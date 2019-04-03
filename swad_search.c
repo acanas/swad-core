@@ -64,7 +64,7 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco_Scope_t DefaultScope);
+static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie_Level_t DefaultScope);
 static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch);
 static void Sch_GetParamSearch (void);
 static void Sch_SearchInDB (void);
@@ -88,14 +88,14 @@ void Sch_ReqSysSearch (void)
   {
    /***** Search courses, teachers, documents... *****/
    Sch_GetParamWhatToSearch ();
-   Sch_PutFormToSearchWithWhatToSearchAndScope (ActSch,Sco_SCOPE_SYS);
+   Sch_PutFormToSearchWithWhatToSearchAndScope (ActSch,Hie_SYS);
   }
 
 /*****************************************************************************/
 /****************** Put a form to search, including scope ********************/
 /*****************************************************************************/
 
-static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco_Scope_t DefaultScope)
+static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie_Level_t DefaultScope)
   {
    extern const char *Hlp_START_Search;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -145,12 +145,12 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
 	              "<label class=\"%s\">%s:&nbsp;",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	               1 << Sco_SCOPE_CTY |
-		       1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR |
-		       1 << Sco_SCOPE_DEG |
-		       1 << Sco_SCOPE_CRS;
+   Gbl.Scope.Allowed = 1 << Hie_SYS |
+	               1 << Hie_CTY |
+		       1 << Hie_INS |
+		       1 << Hie_CTR |
+		       1 << Hie_DEG |
+		       1 << Hie_CRS;
    Gbl.Scope.Default = DefaultScope;
    Sco_GetScope ("ScopeSch");
    Sco_PutSelectorScope ("ScopeSch",false);
@@ -230,7 +230,7 @@ void Sch_PutFormToSearchInPageTopHeading (void)
    /***** Put form *****/
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
    Frm_StartForm (ActSch);
-   Sco_PutParamScope ("ScopeSch",Sco_SCOPE_SYS);
+   Sco_PutParamScope ("ScopeSch",Hie_SYS);
    Sch_PutInputStringToSearch ("head_search_text");
    Sch_PutMagnifyingGlassButton ("search-white.svg");
    Frm_EndForm ();
@@ -329,7 +329,7 @@ void Sch_SysSearch (void)
    if (Gbl.Search.Str[0])
      {
       /***** Show search form again *****/
-      Sch_PutFormToSearchWithWhatToSearchAndScope (ActSch,Sco_SCOPE_SYS);
+      Sch_PutFormToSearchWithWhatToSearchAndScope (ActSch,Hie_SYS);
 
       /***** Show results of search *****/
       Sch_SearchInDB ();
@@ -354,30 +354,30 @@ static void Sch_SearchInDB (void)
    /***** Select courses in all the degrees or in current degree *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_UNK:
+      case Hie_UNK:
 	 // Not aplicable
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          RangeQuery[0] = '\0';
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          sprintf (RangeQuery," AND countries.CtyCod=%ld",
-                  Gbl.CurrentCty.Cty.CtyCod);
+                  Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          sprintf (RangeQuery," AND institutions.InsCod=%ld",
-                  Gbl.CurrentIns.Ins.InsCod);
+                  Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          sprintf (RangeQuery," AND centres.CtrCod=%ld",
-                  Gbl.CurrentCtr.Ctr.CtrCod);
+                  Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          sprintf (RangeQuery," AND degrees.DegCod=%ld",
-                  Gbl.CurrentDeg.Deg.DegCod);
+                  Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          sprintf (RangeQuery," AND courses.CrsCod=%ld",
-                  Gbl.CurrentCrs.Crs.CrsCod);
+                  Gbl.Hierarchy.Crs.Crs.CrsCod);
          break;
      }
 
@@ -457,10 +457,10 @@ static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
    unsigned NumCtys;
 
    /***** Check scope *****/
-   if (Gbl.Scope.Current != Sco_SCOPE_INS &&
-       Gbl.Scope.Current != Sco_SCOPE_CTR &&
-       Gbl.Scope.Current != Sco_SCOPE_DEG &&
-       Gbl.Scope.Current != Sco_SCOPE_CRS)
+   if (Gbl.Scope.Current != Hie_INS &&
+       Gbl.Scope.Current != Hie_CTR &&
+       Gbl.Scope.Current != Hie_DEG &&
+       Gbl.Scope.Current != Hie_CRS)
       /***** Check user's permission *****/
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_COUNTRIES))
 	{
@@ -499,9 +499,9 @@ static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
    unsigned NumInss;
 
    /***** Check scope *****/
-   if (Gbl.Scope.Current != Sco_SCOPE_CTR &&
-       Gbl.Scope.Current != Sco_SCOPE_DEG &&
-       Gbl.Scope.Current != Sco_SCOPE_CRS)
+   if (Gbl.Scope.Current != Hie_CTR &&
+       Gbl.Scope.Current != Hie_DEG &&
+       Gbl.Scope.Current != Hie_CRS)
       /***** Check user's permission *****/
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_INSTITS))
 	 /***** Split institutions string into words *****/
@@ -536,8 +536,8 @@ static unsigned Sch_SearchCentresInDB (const char *RangeQuery)
    unsigned NumCtrs;
 
    /***** Check scope *****/
-   if (Gbl.Scope.Current != Sco_SCOPE_DEG &&
-       Gbl.Scope.Current != Sco_SCOPE_CRS)
+   if (Gbl.Scope.Current != Hie_DEG &&
+       Gbl.Scope.Current != Hie_CRS)
       /***** Check user's permission *****/
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_CENTRES))
 	 /***** Split centre string into words *****/
@@ -572,7 +572,7 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
    unsigned NumDegs;
 
    /***** Check scope *****/
-   if (Gbl.Scope.Current != Sco_SCOPE_CRS)
+   if (Gbl.Scope.Current != Hie_CRS)
       /***** Check user's permission *****/
       if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_DEGREES))
 	 /***** Split degree string into words *****/

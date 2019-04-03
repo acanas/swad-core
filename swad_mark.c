@@ -128,10 +128,10 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
                The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
                Gbl.RowEvenOdd);
-      if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
+      if (Gbl.Hierarchy.Crs.Grps.GrpCod > 0)	// Group zone
         {
          Frm_StartForm (ActChgNumRowHeaGrp);
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+         Grp_PutParamGrpCod (Gbl.Hierarchy.Crs.Grps.GrpCod);
         }
       else					// Course zone
          Frm_StartForm (ActChgNumRowHeaCrs);
@@ -155,10 +155,10 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
                The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
                Gbl.RowEvenOdd);
-      if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
+      if (Gbl.Hierarchy.Crs.Grps.GrpCod > 0)	// Group zone
         {
          Frm_StartForm (ActChgNumRowFooGrp);
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+         Grp_PutParamGrpCod (Gbl.Hierarchy.Crs.Grps.GrpCod);
         }
       else					// Course zone
          Frm_StartForm (ActChgNumRowFooCrs);
@@ -631,11 +631,11 @@ void Mrk_ShowMyMarks (void)
    else						// If I am logged as non-editing teacher, teacher or admin
      {
       /* Select a random student from the course */
-      if (Gbl.CurrentCrs.Grps.GrpCod > 0)	// Group zone
+      if (Gbl.Hierarchy.Crs.Grps.GrpCod > 0)	// Group zone
         {
-         if (Grp_CountNumUsrsInGrp (Rol_STD,Gbl.CurrentCrs.Grps.GrpCod))
+         if (Grp_CountNumUsrsInGrp (Rol_STD,Gbl.Hierarchy.Crs.Grps.GrpCod))
            {
-            Gbl.Usrs.Other.UsrDat.UsrCod = Usr_GetRamdomStdFromGrp (Gbl.CurrentCrs.Grps.GrpCod);
+            Gbl.Usrs.Other.UsrDat.UsrCod = Usr_GetRamdomStdFromGrp (Gbl.Hierarchy.Crs.Grps.GrpCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else
@@ -643,9 +643,9 @@ void Mrk_ShowMyMarks (void)
         }
       else					// Course zone
         {
-         if (Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])	// If there are students in this course
+         if (Gbl.Hierarchy.Crs.Crs.NumUsrs[Rol_STD])	// If there are students in this course
            {
-            Gbl.Usrs.Other.UsrDat.UsrCod = Usr_GetRamdomStdFromCrs (Gbl.CurrentCrs.Crs.CrsCod);
+            Gbl.Usrs.Other.UsrDat.UsrCod = Usr_GetRamdomStdFromCrs (Gbl.Hierarchy.Crs.Crs.CrsCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else

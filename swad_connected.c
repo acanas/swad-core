@@ -114,7 +114,7 @@ void Con_ShowConnectedUsrs (void)
    Con_ShowGlobalConnectedUsrs ();
 
    /***** Show connected users in the current location *****/
-   if (Gbl.Scope.Current != Sco_SCOPE_UNK)
+   if (Gbl.Scope.Current != Hie_UNK)
       Con_ShowConnectedUsrsBelongingToLocation ();
 
    /***** End box *****/
@@ -222,13 +222,13 @@ static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
 void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
   {
    if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&	// Right column visible
-       Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// There is a course selected
+       Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
        (Gbl.Usrs.Me.IBelongToCurrentCrs ||		// I can view users
         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
      {
       Gbl.Usrs.Connected.NumUsrs       = 0;
       Gbl.Usrs.Connected.NumUsrsToList = 0;
-      Gbl.Scope.Current = Sco_SCOPE_CRS;
+      Gbl.Scope.Current = Hie_CRS;
 
       /***** Number of teachers *****/
       Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_TCH);
@@ -307,7 +307,8 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    char CourseName[Hie_MAX_BYTES_SHRT_NAME + 1];
    struct ConnectedUsrs Usrs;
 
-   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// There is no course selected
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)	// No course selected
       return;
 
    /***** Start container *****/
@@ -319,7 +320,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
 					// the list of connected users
 					// is dynamically updated via AJAX
    Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
-   Str_Copy (CourseName,Gbl.CurrentCrs.Crs.ShrtName,
+   Str_Copy (CourseName,Gbl.Hierarchy.Crs.Crs.ShrtName,
              Hie_MAX_BYTES_SHRT_NAME);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
    fprintf (Gbl.F.Out,"%u %s %s"
@@ -409,7 +410,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	 Frm_StartFormUnique (ActLstCon);	// Must be unique because
 						// the list of connected users
 						// is dynamically updated via AJAX
-	 Sco_PutParamScope ("ScopeCon",Sco_SCOPE_CRS);
+	 Sco_PutParamScope ("ScopeCon",Hie_CRS);
 	 Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis-h.svg\""
 			    " alt=\"%s\" title=\"%s\" class=\"ICO40x40\" />"
@@ -438,7 +439,7 @@ void Con_UpdateMeInConnectedList (void)
 		    " (%ld,%u,%ld,NOW())",
                     Gbl.Usrs.Me.UsrDat.UsrCod,
                     (unsigned) Gbl.Usrs.Me.Role.Logged,
-                    Gbl.CurrentCrs.Crs.CrsCod);
+                    Gbl.Hierarchy.Crs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -489,7 +490,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
       case Rol_UNK:	// Here Rol_UNK means "any role"
 	 switch (Gbl.Scope.Current)
 	   {
-	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+	    case Hie_SYS:		// Show connected users in the whole platform
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -498,7 +499,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " FROM connected,usr_data"
 			       " WHERE connected.UsrCod=usr_data.UsrCod");
 	       break;
-	    case Sco_SCOPE_CTY:		// Show connected users in the current country
+	    case Hie_CTY:		// Show connected users in the current country
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -512,9 +513,9 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " AND courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.CurrentCty.Cty.CtyCod);
+			       Gbl.Hierarchy.Cty.CtyCod);
 	       break;
-	    case Sco_SCOPE_INS:		// Show connected users in the current institution
+	    case Hie_INS:		// Show connected users in the current institution
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -527,9 +528,9 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " AND courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.CurrentIns.Ins.InsCod);
+			       Gbl.Hierarchy.Ins.InsCod);
 	       break;
-	    case Sco_SCOPE_CTR:		// Show connected users in the current centre
+	    case Hie_CTR:		// Show connected users in the current centre
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -541,9 +542,9 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " AND courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.CurrentCtr.Ctr.CtrCod);
+			       Gbl.Hierarchy.Ctr.CtrCod);
 	       break;
-	    case Sco_SCOPE_DEG:		// Show connected users in the current degree
+	    case Hie_DEG:		// Show connected users in the current degree
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -554,9 +555,9 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " AND courses.CrsCod=crs_usr.CrsCod"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.CurrentDeg.Deg.DegCod);
+			       Gbl.Hierarchy.Deg.DegCod);
 	       break;
-	    case Sco_SCOPE_CRS:		// Show connected users in the current course
+	    case Hie_CRS:		// Show connected users in the current course
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -566,7 +567,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " WHERE crs_usr.CrsCod=%ld"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.CurrentCrs.Crs.CrsCod);
+			       Gbl.Hierarchy.Crs.Crs.CrsCod);
 	       break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -588,7 +589,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
       case Rol_TCH:
 	 switch (Gbl.Scope.Current)
 	   {
-	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+	    case Hie_SYS:		// Show connected users in the whole platform
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -600,7 +601,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " AND connected.UsrCod=usr_data.UsrCod",
 			       (unsigned) Role);
 	       break;
-	    case Sco_SCOPE_CTY:		// Show connected users in the current country
+	    case Hie_CTY:		// Show connected users in the current country
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					      " of connected users"
 					      " who belong to this location",
@@ -615,10 +616,10 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " AND crs_usr.Role=%u"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.CurrentCty.Cty.CtyCod,
+			       Gbl.Hierarchy.Cty.CtyCod,
 			       (unsigned) Role);
 	       break;
-	    case Sco_SCOPE_INS:		// Show connected users in the current institution
+	    case Hie_INS:		// Show connected users in the current institution
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -632,10 +633,10 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " AND crs_usr.Role=%u"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.CurrentIns.Ins.InsCod,
+			       Gbl.Hierarchy.Ins.InsCod,
 			       (unsigned) Role);
 	       break;
-	    case Sco_SCOPE_CTR:		// Show connected users in the current centre
+	    case Hie_CTR:		// Show connected users in the current centre
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -648,10 +649,10 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " AND crs_usr.Role=%u"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.CurrentCtr.Ctr.CtrCod,
+			       Gbl.Hierarchy.Ctr.CtrCod,
 			       (unsigned) Role);
 	       break;
-	    case Sco_SCOPE_DEG:		// Show connected users in the current degree
+	    case Hie_DEG:		// Show connected users in the current degree
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -663,10 +664,10 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " AND crs_usr.Role=%u"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.CurrentDeg.Deg.DegCod,
+			       Gbl.Hierarchy.Deg.DegCod,
 			       (unsigned) Role);
 	       break;
-	    case Sco_SCOPE_CRS:		// Show connected users in the current course
+	    case Hie_CRS:		// Show connected users in the current course
 	       DB_QuerySELECT (&mysql_res,"can not get number"
 					  " of connected users"
 					  " who belong to this location",
@@ -677,7 +678,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " AND crs_usr.Role=%u"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.CurrentCrs.Crs.CrsCod,
+			       Gbl.Hierarchy.Crs.Crs.CrsCod,
 			       (unsigned) Role);
 	       break;
 	    default:
@@ -736,7 +737,7 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
 			     " WHERE crs_usr.CrsCod=%ld AND crs_usr.Role=%u"
 			     " AND crs_usr.UsrCod=connected.UsrCod"
 			     " ORDER BY Dif",
-			     Gbl.CurrentCrs.Crs.CrsCod,
+			     Gbl.Hierarchy.Crs.Crs.CrsCod,
 			     (unsigned) Role);
    Gbl.Usrs.Connected.NumUsrs       += (unsigned) NumRows;
    Gbl.Usrs.Connected.NumUsrsToList += (unsigned) NumRows;
@@ -754,7 +755,8 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
       Gbl.Usrs.Connected.Lst[NumUsr].UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get course code (row[1]) */
-      Gbl.Usrs.Connected.Lst[NumUsr].ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.CurrentCrs.Crs.CrsCod);
+      Gbl.Usrs.Connected.Lst[NumUsr].ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) ==
+	                                        Gbl.Hierarchy.Crs.Crs.CrsCod);
 
       /* Compute elapsed time from last access */
       if (sscanf (row[2],"%ld",&Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff) != 1)
@@ -890,11 +892,11 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    char PhotoURL[PATH_MAX + 1];
    const char *Font;
    struct UsrData UsrDat;
-   bool PutLinkToRecord = (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
-	                   Gbl.Scope.Current == Sco_SCOPE_CRS &&	// Scope is current course
-	                   (Role == Rol_STD ||				// Role is student,...
-	                    Role == Rol_NET ||				// ...non-editing teacher...
-	                    Role == Rol_TCH));				// ...or teacher
+   bool PutLinkToRecord = (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
+	                   Gbl.Scope.Current   == Hie_CRS &&	// Scope is current course
+	                   (Role == Rol_STD ||			// Role is student,...
+	                    Role == Rol_NET ||			// ...non-editing teacher...
+	                    Role == Rol_TCH));			// ...or teacher
 
    /***** Get connected users who belong to current location from database *****/
    switch (Role)
@@ -913,7 +915,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
       case Rol_TCH:
 	 switch (Gbl.Scope.Current)
 	   {
-	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
+	    case Hie_SYS:		// Show connected users in the whole platform
 	       NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get list of connected users"
 	                                                       " who belong to this location",
 						    "SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
@@ -924,7 +926,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 						    " ORDER BY Dif",
 						    (unsigned) Role);
 	       break;
-	    case Sco_SCOPE_CTY:		// Show connected users in the current country
+	    case Hie_CTY:		// Show connected users in the current country
 	       NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get list of connected users"
 	                                                       " who belong to this location",
 						    "SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
@@ -938,10 +940,10 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 						    " AND crs_usr.Role=%u"
 						    " AND crs_usr.UsrCod=connected.UsrCod"
 						    " ORDER BY Dif",
-						    Gbl.CurrentCty.Cty.CtyCod,
+						    Gbl.Hierarchy.Cty.CtyCod,
 						    (unsigned) Role);
 	       break;
-	    case Sco_SCOPE_INS:		// Show connected users in the current institution
+	    case Hie_INS:		// Show connected users in the current institution
 	       NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get list of connected users"
 	                                                       " who belong to this location",
 						    "SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
@@ -954,10 +956,10 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 						    " AND crs_usr.Role=%u"
 						    " AND crs_usr.UsrCod=connected.UsrCod"
 						    " ORDER BY Dif",
-						    Gbl.CurrentIns.Ins.InsCod,
+						    Gbl.Hierarchy.Ins.InsCod,
 						    (unsigned) Role);
 	       break;
-	    case Sco_SCOPE_CTR:		// Show connected users in the current centre
+	    case Hie_CTR:		// Show connected users in the current centre
 	       NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get list of connected users"
 	                                                       " who belong to this location",
 						    "SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
@@ -969,10 +971,10 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 						    " AND crs_usr.Role=%u"
 						    " AND crs_usr.UsrCod=connected.UsrCod"
 						    " ORDER BY Dif",
-						    Gbl.CurrentCtr.Ctr.CtrCod,
+						    Gbl.Hierarchy.Ctr.CtrCod,
 						    (unsigned) Role);
 	       break;
-	    case Sco_SCOPE_DEG:		// Show connected users in the current degree
+	    case Hie_DEG:		// Show connected users in the current degree
 	       NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get list of connected users"
 	                                                       " who belong to this location",
 						    "SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
@@ -983,10 +985,10 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 						    " AND crs_usr.Role=%u"
 						    " AND crs_usr.UsrCod=connected.UsrCod"
 						    " ORDER BY Dif",
-						    Gbl.CurrentDeg.Deg.DegCod,
+						    Gbl.Hierarchy.Deg.DegCod,
 						    (unsigned) Role);
 	       break;
-	    case Sco_SCOPE_CRS:		// Show connected users in the current course
+	    case Hie_CRS:		// Show connected users in the current course
 	       NumUsrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get list of connected users"
 	                                                       " who belong to this location",
 						    "SELECT connected.UsrCod,connected.LastCrsCod,"
@@ -996,7 +998,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 						    " AND crs_usr.Role=%u"
 						    " AND crs_usr.UsrCod=connected.UsrCod"
 						    " ORDER BY Dif",
-						    Gbl.CurrentCrs.Crs.CrsCod,
+						    Gbl.Hierarchy.Crs.Crs.CrsCod,
 						    (unsigned) Role);
 	       break;
 	    default:
@@ -1025,7 +1027,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))        // Existing user
            {
 	    /* Get course code (row[1]) */
-	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.CurrentCrs.Crs.CrsCod);
+	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) ==
+		       Gbl.Hierarchy.Crs.Crs.CrsCod);
 
 	    /* Compute time from last access */
 	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)

@@ -153,7 +153,7 @@ void Deg_SeeDegWithPendingCrss (void)
 					      " AND courses.DegCod=degrees.DegCod"
 					      " GROUP BY courses.DegCod ORDER BY degrees.ShortName",
 					      Gbl.Usrs.Me.UsrDat.UsrCod,
-					      Sco_GetDBStrFromScope (Sco_SCOPE_DEG),
+					      Sco_GetDBStrFromScope (Hie_DEG),
 					      (unsigned) Crs_STATUS_BIT_PENDING);
          break;
       case Rol_SYS_ADM:
@@ -199,7 +199,7 @@ void Deg_SeeDegWithPendingCrss (void)
 
          /* Get degree code (row[0]) */
          Deg.DegCod = Str_ConvertStrCodToLongCod (row[0]);
-         BgColor = (Deg.DegCod == Gbl.CurrentDeg.Deg.DegCod) ? "LIGHT_BLUE" :
+         BgColor = (Deg.DegCod == Gbl.Hierarchy.Deg.DegCod) ? "LIGHT_BLUE" :
                                                                Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of degree */
@@ -253,7 +253,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
    Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw degree logo *****/
-   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
+   Log_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,16,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg->FullName);
@@ -301,245 +301,247 @@ static void Deg_Configuration (bool PrintView)
    extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_QR_code;
    unsigned NumCtr;
-   bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
+   bool PutLink;
 
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Deg.DegCod <= 0)		// No degree selected
+      return;
+
+   /***** Start box *****/
+   if (PrintView)
+      Box_StartBox (NULL,NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
+   else
+      Box_StartBox (NULL,NULL,Deg_PutIconsToPrintAndUpload,
+		    Hlp_DEGREE_Information,Box_NOT_CLOSABLE);
+
+   /***** Title *****/
+   PutLink = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
+   if (PutLink)
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+			 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
+	       Gbl.Hierarchy.Deg.WWW,
+	       Gbl.Hierarchy.Deg.FullName);
+   Log_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
+		 Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
+   fprintf (Gbl.F.Out,"<br />%s",
+	    Gbl.Hierarchy.Deg.FullName);
+   if (PutLink)
+      fprintf (Gbl.F.Out,"</a>");
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Start table *****/
+   Tbl_StartTableWide (2);
+
+   /***** Centre *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"OthCtrCod\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Centre);
+
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+      // Only institution admins and system admin can move a degree to another centre
      {
-      /***** Start box *****/
-      if (PrintView)
-	 Box_StartBox (NULL,NULL,NULL,
-		       NULL,Box_NOT_CLOSABLE);
-      else
-	 Box_StartBox (NULL,NULL,Deg_PutIconsToPrintAndUpload,
-		       Hlp_DEGREE_Information,Box_NOT_CLOSABLE);
+      /* Get list of centres of the current institution */
+      Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
 
-      /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-	                    " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
-		  Gbl.CurrentDeg.Deg.WWW,
-		  Gbl.CurrentDeg.Deg.FullName);
-      Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-                    Gbl.CurrentDeg.Deg.ShrtName,64,NULL,true);
-      fprintf (Gbl.F.Out,"<br />%s",
-               Gbl.CurrentDeg.Deg.FullName);
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"</a>");
-      fprintf (Gbl.F.Out,"</div>");
+      /* Put form to select centre */
+      Frm_StartForm (ActChgDegCtrCfg);
+      fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
+			 " class=\"INPUT_SHORT_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\">",
+	       Gbl.Form.Id);
+      for (NumCtr = 0;
+	   NumCtr < Gbl.Ctrs.Num;
+	   NumCtr++)
+	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
+		  Gbl.Ctrs.Lst[NumCtr].CtrCod,
+		  Gbl.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod ? " selected=\"selected\"" :
+									     "",
+		  Gbl.Ctrs.Lst[NumCtr].ShrtName);
+      fprintf (Gbl.F.Out,"</select>");
+      Frm_EndForm ();
 
-      /***** Start table *****/
-      Tbl_StartTableWide (2);
+      /* Free list of centres */
+      Ctr_FreeListCentres ();
+     }
+   else	// I can not move degree to another centre
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.FullName);
 
-      /***** Centre *****/
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** Degree full name *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"FullName\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Degree);
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+      // Only centre admins, institution admins and system admins
+      // can edit degree full name
+     {
+      /* Form to change degree full name */
+      Frm_StartForm (ActRenDegFulCfg);
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+			 " id=\"FullName\" name=\"FullName\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " class=\"INPUT_FULL_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\" />",
+	       Hie_MAX_CHARS_FULL_NAME,
+	       Gbl.Hierarchy.Deg.FullName,
+	       Gbl.Form.Id);
+      Frm_EndForm ();
+     }
+   else	// I can not edit degree full name
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** Degree short name *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"ShortName\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Short_name);
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+      // Only centre admins, institution admins and system admins
+      // can edit degree short name
+     {
+      /* Form to change degree short name */
+      Frm_StartForm (ActRenDegShoCfg);
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+			 " id=\"ShortName\" name=\"ShortName\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " class=\"INPUT_SHORT_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\" />",
+	       Hie_MAX_CHARS_SHRT_NAME,
+	       Gbl.Hierarchy.Deg.ShrtName,
+	       Gbl.Form.Id);
+      Frm_EndForm ();
+     }
+   else	// I can not edit degree short name
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.ShrtName);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** Degree WWW *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"WWW\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Web);
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
+      // Only degree admins, centre admins, institution admins
+      // and system admins can change degree WWW
+     {
+      /* Form to change degree WWW */
+      Frm_StartForm (ActChgDegWWWCfg);
+      fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " class=\"INPUT_WWW\""
+			 " onchange=\"document.getElementById('%s').submit();\" />",
+	       Cns_MAX_CHARS_WWW,
+	       Gbl.Hierarchy.Deg.WWW,
+	       Gbl.Form.Id);
+      Frm_EndForm ();
+     }
+   else	// I can not change degree WWW
+      fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
+			 "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
+			 "%s"
+			 "</a>"
+			 "</div>",
+	       Gbl.Hierarchy.Deg.WWW,
+	       Gbl.Hierarchy.Deg.WWW);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** Shortcut to the degree *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "<a href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\">"
+		      "%s/%s?deg=%ld"
+		      "</a>"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Shortcut,
+	    Cfg_URL_SWAD_CGI,
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Hierarchy.Deg.DegCod,
+	    Cfg_URL_SWAD_CGI,
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Hierarchy.Deg.DegCod);
+
+   if (PrintView)
+     {
+      /***** QR code with link to the degree *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"OthCtrCod\" class=\"%s\">%s:</label>"
-			 "</td>"
-			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Centre);
-
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-	 // Only institution admins and system admin can move a degree to another centre
-	{
-	 /* Get list of centres of the current institution */
-	 Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
-
-	 /* Put form to select centre */
-	 Frm_StartForm (ActChgDegCtrCfg);
-	 fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
-			    " class=\"INPUT_SHORT_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.Form.Id);
-	 for (NumCtr = 0;
-	      NumCtr < Gbl.Ctrs.Num;
-	      NumCtr++)
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		     Gbl.Ctrs.Lst[NumCtr].CtrCod,
-		     Gbl.Ctrs.Lst[NumCtr].CtrCod == Gbl.CurrentCtr.Ctr.CtrCod ? " selected=\"selected\"" :
-										"",
-		     Gbl.Ctrs.Lst[NumCtr].ShrtName);
-	 fprintf (Gbl.F.Out,"</select>");
-	 Frm_EndForm ();
-
-	 /* Free list of centres */
-	 Ctr_FreeListCentres ();
-	}
-      else	// I can not move degree to another centre
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.FullName);
-
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-
-      /***** Degree full name *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"FullName\" class=\"%s\">%s:</label>"
-	                 "</td>"
-			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Degree);
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-	 // Only centre admins, institution admins and system admins
-	 // can edit degree full name
-	{
-	 /* Form to change degree full name */
-	 Frm_StartForm (ActRenDegFulCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\""
-	                    " id=\"FullName\" name=\"FullName\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_FULL_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Hie_MAX_CHARS_FULL_NAME,
-		  Gbl.CurrentDeg.Deg.FullName,
-		  Gbl.Form.Id);
-	 Frm_EndForm ();
-	}
-      else	// I can not edit degree full name
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.FullName);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-
-      /***** Degree short name *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"ShortName\" class=\"%s\">%s:</label>"
-	                 "</td>"
-			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Short_name);
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-	 // Only centre admins, institution admins and system admins
-	 // can edit degree short name
-	{
-	 /* Form to change degree short name */
-	 Frm_StartForm (ActRenDegShoCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\""
-	                    " id=\"ShortName\" name=\"ShortName\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_SHORT_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Hie_MAX_CHARS_SHRT_NAME,
-		  Gbl.CurrentDeg.Deg.ShrtName,
-		  Gbl.Form.Id);
-	 Frm_EndForm ();
-	}
-      else	// I can not edit degree short name
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.ShrtName);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-
-      /***** Degree WWW *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"WWW\" class=\"%s\">%s:</label>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Web);
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
-	 // Only degree admins, centre admins, institution admins
-	 // and system admins can change degree WWW
-	{
-	 /* Form to change degree WWW */
-	 Frm_StartForm (ActChgDegWWWCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_WWW\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_CHARS_WWW,
-		  Gbl.CurrentDeg.Deg.WWW,
-		  Gbl.Form.Id);
-	 Frm_EndForm ();
-	}
-      else	// I can not change degree WWW
-	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
-			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
-	                    "%s"
-			    "</a>"
-			    "</div>",
-		  Gbl.CurrentDeg.Deg.WWW,
-		  Gbl.CurrentDeg.Deg.WWW);
+	       Txt_QR_code);
+      QR_LinkTo (250,"deg",Gbl.Hierarchy.Deg.DegCod);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+     }
+   else
+     {
+      /***** Number of courses *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"LEFT_MIDDLE\">",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Courses);
+
+      /* Form to go to see courses of this degree */
+      Frm_StartFormGoTo (ActSeeCrs);
+      Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+		Txt_Courses_of_DEGREE_X,
+		Gbl.Hierarchy.Deg.ShrtName);
+      Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+      fprintf (Gbl.F.Out,"%u</a>",
+	       Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
+      Frm_EndForm ();
+
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
-      /***** Shortcut to the degree *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s:"
-	                 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">"
-			 "<a href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\">"
-			 "%s/%s?deg=%ld"
-			 "</a>"
-			 "</td>"
-			 "</tr>",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Shortcut,
-	       Cfg_URL_SWAD_CGI,
-	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	       Gbl.CurrentDeg.Deg.DegCod,
-	       Cfg_URL_SWAD_CGI,
-	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	       Gbl.CurrentDeg.Deg.DegCod);
-
-      if (PrintView)
-	{
-	 /***** QR code with link to the degree *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-	                    "%s:"
-	                    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_QR_code);
-	 QR_LinkTo (250,"deg",Gbl.CurrentDeg.Deg.DegCod);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-	}
-      else
-	{
-	 /***** Number of courses *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-	                    "%s:"
-	                    "</td>"
-			    "<td class=\"LEFT_MIDDLE\">",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Courses);
-
-	 /* Form to go to see courses of this degree */
-	 Frm_StartFormGoTo (ActSeeCrs);
-	 Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Courses_of_DEGREE_X,
-	           Gbl.CurrentDeg.Deg.ShrtName);
-	 Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-	 fprintf (Gbl.F.Out,"%u</a>",
-		  Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod));
-	 Frm_EndForm ();
-
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-
-	 /***** Number of users *****/
-	 Deg_ShowNumUsrsInCrssOfDeg (Rol_TCH);
-	 Deg_ShowNumUsrsInCrssOfDeg (Rol_NET);
-	 Deg_ShowNumUsrsInCrssOfDeg (Rol_STD);
-	 Deg_ShowNumUsrsInCrssOfDeg (Rol_UNK);
-	}
-
-      /***** End table *****/
-      Tbl_EndTable ();
-
-      /***** End box *****/
-      Box_EndBox ();
+      /***** Number of users *****/
+      Deg_ShowNumUsrsInCrssOfDeg (Rol_TCH);
+      Deg_ShowNumUsrsInCrssOfDeg (Rol_NET);
+      Deg_ShowNumUsrsInCrssOfDeg (Rol_STD);
+      Deg_ShowNumUsrsInCrssOfDeg (Rol_UNK);
      }
+
+   /***** End table *****/
+   Tbl_EndTable ();
+
+   /***** End box *****/
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -555,7 +557,7 @@ static void Deg_PutIconsToPrintAndUpload (void)
       // Only degree admins, centre admins, institution admins and system admins
       // have permission to upload logo of the degree
       /***** Link to upload logo of degree *****/
-      Log_PutIconToChangeLogo (Sco_SCOPE_DEG);
+      Log_PutIconToChangeLogo (Hie_DEG);
   }
 
 /*****************************************************************************/
@@ -579,7 +581,7 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
-            Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.CurrentDeg.Deg.DegCod));
+            Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.Hierarchy.Deg.DegCod));
   }
 
 /*****************************************************************************/
@@ -598,19 +600,19 @@ void Deg_WriteSelectorOfDegree (void)
    /***** Start form *****/
    Frm_StartFormGoTo (ActSeeCrs);
    fprintf (Gbl.F.Out,"<select id=\"deg\" name=\"deg\" style=\"width:175px;\"");
-   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+   if (Gbl.Hierarchy.Ctr.CtrCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,">"
 	              "<option value=\"\"");
-   if (Gbl.CurrentDeg.Deg.DegCod < 0)
+   if (Gbl.Hierarchy.Deg.DegCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
             Txt_Degree);
 
-   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+   if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
       /***** Get degrees belonging to the current centre from database *****/
       NumDegs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get degrees"
@@ -619,7 +621,7 @@ void Deg_WriteSelectorOfDegree (void)
 					   " FROM degrees"
 					   " WHERE CtrCod=%ld"
 					   " ORDER BY ShortName",
-					   Gbl.CurrentCtr.Ctr.CtrCod);
+					   Gbl.Hierarchy.Ctr.CtrCod);
 
       /***** Get degrees of this centre *****/
       for (NumDeg = 0;
@@ -635,8 +637,8 @@ void Deg_WriteSelectorOfDegree (void)
 
          /* Write option */
          fprintf (Gbl.F.Out,"<option value=\"%ld\"",DegCod);
-         if (Gbl.CurrentDeg.Deg.DegCod > 0 &&
-             (DegCod == Gbl.CurrentDeg.Deg.DegCod))
+         if (Gbl.Hierarchy.Deg.DegCod > 0 &&
+             (DegCod == Gbl.Hierarchy.Deg.DegCod))
 	    fprintf (Gbl.F.Out," selected=\"selected\"");
          fprintf (Gbl.F.Out,">%s</option>",row[1]);
         }
@@ -656,22 +658,23 @@ void Deg_WriteSelectorOfDegree (void)
 
 void Deg_ShowDegsOfCurrentCtr (void)
   {
-   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-     {
-      /***** Get list of centres and degrees *****/
-      Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
-      Deg_GetListDegsOfCurrentCtr ();
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)	// No centre selected
+      return;
 
-      /***** Write menu to select country, institution and centre *****/
-      Hie_WriteMenuHierarchy ();
+   /***** Get list of centres and degrees *****/
+   Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
+   Deg_GetListDegsOfCurrentCtr ();
 
-      /***** Show list of degrees *****/
-      Deg_ListDegrees ();
+   /***** Write menu to select country, institution and centre *****/
+   Hie_WriteMenuHierarchy ();
 
-      /***** Free list of degrees and centres *****/
-      Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
-      Ctr_FreeListCentres ();
-     }
+   /***** Show list of degrees *****/
+   Deg_ListDegrees ();
+
+   /***** Free list of degrees and centres *****/
+   Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
+   Ctr_FreeListCentres ();
   }
 
 /*****************************************************************************/
@@ -700,10 +703,10 @@ static void Deg_ListDegreesForEdition (void)
 
    /***** List the degrees *****/
    for (NumDeg = 0;
-	NumDeg < Gbl.CurrentCtr.Ctr.Degs.Num;
+	NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
 	NumDeg++)
      {
-      Deg = &(Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg]);
+      Deg = &(Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg]);
 
       NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
 
@@ -733,7 +736,7 @@ static void Deg_ListDegreesForEdition (void)
       /* Degree logo */
       fprintf (Gbl.F.Out,"<td title=\"%s LEFT_MIDDLE\" style=\"width:25px;\">",
                Deg->FullName);
-      Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShrtName,20,NULL,true);
+      Log_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,20,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree short name */
@@ -967,7 +970,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
-   Log_DrawLogo (Sco_SCOPE_DEG,-1L,"",20,NULL,true);
+   Log_DrawLogo (Hie_DEG,-1L,"",20,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Degree short name *****/
@@ -1180,11 +1183,11 @@ static void Deg_ListDegrees (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Degrees_of_CENTRE_X,
-	     Gbl.CurrentCtr.Ctr.ShrtName);
+	     Gbl.Hierarchy.Ctr.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Deg_PutIconsListingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
-   if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
+   if (Gbl.Hierarchy.Ctr.Degs.Num)	// There are degrees in the current centre
      {
       /***** Write heading *****/
       Tbl_StartTableWideMargin (2);
@@ -1192,9 +1195,9 @@ static void Deg_ListDegrees (void)
 
       /***** List the degrees *****/
       for (NumDeg = 0;
-	   NumDeg < Gbl.CurrentCtr.Ctr.Degs.Num;
+	   NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
 	   NumDeg++)
-	 Deg_ListOneDegreeForSeeing (&(Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg]),NumDeg + 1);
+	 Deg_ListOneDegreeForSeeing (&(Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg]),NumDeg + 1);
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -1206,7 +1209,7 @@ static void Deg_ListDegrees (void)
    if (Deg_CheckIfICanCreateDegrees ())
      {
       Frm_StartForm (ActEdiDeg);
-      Btn_PutConfirmButton (Gbl.CurrentCtr.Ctr.Degs.Num ? Txt_Create_another_degree :
+      Btn_PutConfirmButton (Gbl.Hierarchy.Ctr.Degs.Num ? Txt_Create_another_degree :
 	                                                  Txt_Create_degree);
       Frm_EndForm ();
      }
@@ -1285,7 +1288,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_N";
      }
-   BgColor = (Deg->DegCod == Gbl.CurrentDeg.Deg.DegCod) ? "LIGHT_BLUE" :
+   BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Put tip if degree has courses *****/
@@ -1350,7 +1353,7 @@ void Deg_EditDegrees (void)
    Deg_GetListDegsOfCurrentCtr ();
 
    /***** Get list of degree types *****/
-   DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
+   DT_GetListDegreeTypes (Hie_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /***** Write menu to select country, institution and centre *****/
    Hie_WriteMenuHierarchy ();
@@ -1358,7 +1361,7 @@ void Deg_EditDegrees (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Degrees_of_CENTRE_X,
-             Gbl.CurrentCtr.Ctr.ShrtName);
+             Gbl.Hierarchy.Ctr.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
@@ -1368,7 +1371,7 @@ void Deg_EditDegrees (void)
       Deg_PutFormToCreateDegree ();
 
       /***** Forms to edit current degrees *****/
-      if (Gbl.CurrentCtr.Ctr.Degs.Num)
+      if (Gbl.Hierarchy.Ctr.Degs.Num)
          Deg_ListDegreesForEdition ();
      }
    else	// No degree types
@@ -1388,7 +1391,7 @@ void Deg_EditDegrees (void)
    DT_FreeListDegreeTypes ();
 
    /***** Free list of degrees in the current centre *****/
-   Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
+   Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
   }
 
 /*****************************************************************************/
@@ -1483,30 +1486,30 @@ void Deg_GetListDegsOfCurrentCtr (void)
 			     "SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
 			     "ShortName,FullName,WWW"
 			     " FROM degrees WHERE CtrCod=%ld ORDER BY FullName",
-			     Gbl.CurrentCtr.Ctr.CtrCod);
+			     Gbl.Hierarchy.Ctr.CtrCod);
 
    /***** Count number of rows in result *****/
    if (NumRows) // Degrees found...
      {
-      Gbl.CurrentCtr.Ctr.Degs.Num = (unsigned) NumRows;
+      Gbl.Hierarchy.Ctr.Degs.Num = (unsigned) NumRows;
 
       /***** Create list with degrees of this centre *****/
-      if ((Gbl.CurrentCtr.Ctr.Degs.Lst = (struct Degree *) calloc (Gbl.CurrentCtr.Ctr.Degs.Num,
+      if ((Gbl.Hierarchy.Ctr.Degs.Lst = (struct Degree *) calloc (Gbl.Hierarchy.Ctr.Degs.Num,
                                                                    sizeof (struct Degree))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the degrees of this centre *****/
       for (NumDeg = 0;
-	   NumDeg < Gbl.CurrentCtr.Ctr.Degs.Num;
+	   NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
 	   NumDeg++)
         {
          /* Get next degree */
          row = mysql_fetch_row (mysql_res);
-         Deg_GetDataOfDegreeFromRow (&Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg],row);
+         Deg_GetDataOfDegreeFromRow (&Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg],row);
         }
      }
    else
-      Gbl.CurrentCtr.Ctr.Degs.Num = 0;
+      Gbl.Hierarchy.Ctr.Degs.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1556,7 +1559,7 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
 
    /***** Get parameters from form *****/
    /* Set degree centre */
-   Gbl.Degs.EditingDeg.CtrCod = Gbl.CurrentCtr.Ctr.CtrCod;
+   Gbl.Degs.EditingDeg.CtrCod = Gbl.Hierarchy.Ctr.CtrCod;
 
    /* Get degree short name */
    Par_GetParToText ("ShortName",Gbl.Degs.EditingDeg.ShrtName,Hie_MAX_BYTES_SHRT_NAME);
@@ -1870,10 +1873,10 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove all the threads and posts in forums of the degree *****/
-   For_RemoveForums (Sco_SCOPE_DEG,DegCod);
+   For_RemoveForums (Hie_DEG,DegCod);
 
    /***** Remove surveys of the degree *****/
-   Svy_RemoveSurveys (Sco_SCOPE_DEG,DegCod);
+   Svy_RemoveSurveys (Hie_DEG,DegCod);
 
    /***** Remove information related to files in degree *****/
    Brw_RemoveDegFilesFromDB (DegCod);
@@ -1889,7 +1892,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    /***** Remove administrators of this degree *****/
    DB_QueryDELETE ("can not remove administrators of a degree",
 		   "DELETE FROM admin WHERE Scope='%s' AND Cod=%ld",
-                   Sco_GetDBStrFromScope (Sco_SCOPE_DEG),DegCod);
+                   Sco_GetDBStrFromScope (Hie_DEG),DegCod);
 
    /***** Remove the degree *****/
    DB_QueryDELETE ("can not remove a degree",
@@ -1912,7 +1915,7 @@ void Deg_RenameDegreeShort (void)
 
 void Deg_RenameDegreeShortInConfig (void)
   {
-   Deg_RenameDegree (&Gbl.CurrentDeg.Deg,Cns_SHRT_NAME);
+   Deg_RenameDegree (&Gbl.Hierarchy.Deg,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -1927,7 +1930,7 @@ void Deg_RenameDegreeFull (void)
 
 void Deg_RenameDegreeFullInConfig (void)
   {
-   Deg_RenameDegree (&Gbl.CurrentDeg.Deg,Cns_FULL_NAME);
+   Deg_RenameDegree (&Gbl.Hierarchy.Deg,Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -2048,26 +2051,26 @@ void Deg_ChangeDegCtrInConfig (void)
    NewCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
    /***** Check if centre has changed *****/
-   if (NewCtr.CtrCod != Gbl.CurrentDeg.Deg.CtrCod)
+   if (NewCtr.CtrCod != Gbl.Hierarchy.Deg.CtrCod)
      {
       /***** Get data of new centre *****/
       Ctr_GetDataOfCentreByCod (&NewCtr);
 
       /***** Check if it already exists a degree with the same name in the new centre *****/
-      if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.CurrentDeg.Deg.ShrtName,Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod))
+      if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Hierarchy.Deg.ShrtName,Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod))
          Ale_CreateAlert (Ale_WARNING,
                           Txt_The_degree_X_already_exists,
-		          Gbl.CurrentDeg.Deg.ShrtName);
-      else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.CurrentDeg.Deg.FullName,Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod))
+		          Gbl.Hierarchy.Deg.ShrtName);
+      else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.Hierarchy.Deg.FullName,Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod))
          Ale_CreateAlert (Ale_WARNING,
                           Txt_The_degree_X_already_exists,
-		          Gbl.CurrentDeg.Deg.FullName);
+		          Gbl.Hierarchy.Deg.FullName);
       else
 	{
 	 /***** Update centre in table of degrees *****/
-	 Deg_UpdateDegCtrDB (Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod);
-	 Gbl.CurrentDeg.Deg.CtrCod =
-	 Gbl.CurrentCtr.Ctr.CtrCod = NewCtr.CtrCod;
+	 Deg_UpdateDegCtrDB (Gbl.Hierarchy.Deg.DegCod,NewCtr.CtrCod);
+	 Gbl.Hierarchy.Deg.CtrCod =
+	 Gbl.Hierarchy.Ctr.CtrCod = NewCtr.CtrCod;
 
 	 /***** Initialize again current course, degree, centre... *****/
 	 Hie_InitHierarchy ();
@@ -2075,8 +2078,8 @@ void Deg_ChangeDegCtrInConfig (void)
 	 /***** Create alert to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
                           Txt_The_degree_X_has_been_moved_to_the_centre_Y,
-		          Gbl.CurrentDeg.Deg.FullName,
-		          Gbl.CurrentCtr.Ctr.FullName);
+		          Gbl.Hierarchy.Deg.FullName,
+		          Gbl.Hierarchy.Ctr.FullName);
 	}
      }
   }
@@ -2162,8 +2165,8 @@ void Deg_ChangeDegWWWInConfig (void)
    if (NewWWW[0])
      {
       /***** Update the table changing old WWW by new WWW *****/
-      Deg_UpdateDegWWWDB (Gbl.CurrentDeg.Deg.DegCod,NewWWW);
-      Str_Copy (Gbl.CurrentDeg.Deg.WWW,NewWWW,
+      Deg_UpdateDegWWWDB (Gbl.Hierarchy.Deg.DegCod,NewWWW);
+      Str_Copy (Gbl.Hierarchy.Deg.WWW,NewWWW,
                 Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
@@ -2254,14 +2257,14 @@ void Deg_ContEditAfterChgDeg (void)
 /***************** and put button to go to degree changed ********************/
 /*****************************************************************************/
 // Gbl.Degs.EditingDeg is the degree that is beeing edited
-// Gbl.CurrentDeg.Deg is the current degree
+// Gbl.Hierarchy.Deg is the current degree
 
 void Deg_ShowAlertAndButtonToGoToDeg (void)
   {
    extern const char *Txt_Go_to_X;
 
    // If the degree being edited is different to the current one...
-   if (Gbl.Degs.EditingDeg.DegCod != Gbl.CurrentDeg.Deg.DegCod)
+   if (Gbl.Degs.EditingDeg.DegCod != Gbl.Hierarchy.Deg.DegCod)
      {
       /***** Alert with button to go to degree *****/
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -2286,7 +2289,7 @@ static void Deg_PutParamGoToDeg (void)
 
 void Deg_RequestLogo (void)
   {
-   Log_RequestLogo (Sco_SCOPE_DEG);
+   Log_RequestLogo (Hie_DEG);
   }
 
 /*****************************************************************************/
@@ -2295,7 +2298,7 @@ void Deg_RequestLogo (void)
 
 void Deg_ReceiveLogo (void)
   {
-   Log_ReceiveLogo (Sco_SCOPE_DEG);
+   Log_ReceiveLogo (Hie_DEG);
   }
 
 /*****************************************************************************/
@@ -2304,7 +2307,7 @@ void Deg_ReceiveLogo (void)
 
 void Deg_RemoveLogo (void)
   {
-   Log_RemoveLogo (Sco_SCOPE_DEG);
+   Log_RemoveLogo (Hie_DEG);
   }
 
 /*****************************************************************************/
@@ -2441,10 +2444,10 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 				        " AND admin.Scope='%s'"
 				        " AND admin.Cod=degrees.DegCod)"
 				        " ORDER BY S,FullName",
-				        (unsigned) Sco_SCOPE_SYS,UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_SYS),
-				        (unsigned) Sco_SCOPE_INS,UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_INS),
-				        (unsigned) Sco_SCOPE_CTR,UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_CTR),
-				        (unsigned) Sco_SCOPE_DEG,UsrCod,Sco_GetDBStrFromScope (Sco_SCOPE_DEG));
+				        (unsigned) Hie_SYS,UsrCod,Sco_GetDBStrFromScope (Hie_SYS),
+				        (unsigned) Hie_INS,UsrCod,Sco_GetDBStrFromScope (Hie_INS),
+				        (unsigned) Hie_CTR,UsrCod,Sco_GetDBStrFromScope (Hie_CTR),
+				        (unsigned) Hie_DEG,UsrCod,Sco_GetDBStrFromScope (Hie_DEG));
    if (NumRows)
       /***** Get the list of degrees *****/
       for (NumRow = 1;
@@ -2473,7 +2476,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	 /* Get scope */
 	 switch (Sco_GetScopeFromUnsignedStr (row[0]))
 	   {
-	    case Sco_SCOPE_SYS:	// System
+	    case Hie_SYS:	// System
 	       fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.png\""
         	                  " alt=\"%s\" title=\"%s\""
                                   " class=\"ICO16x16\" />"
@@ -2483,7 +2486,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
                      Txt_all_degrees,
                      Txt_all_degrees);
 	       break;
-	    case Sco_SCOPE_INS:	// Institution
+	    case Hie_INS:	// Institution
 	       Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);
 	       if (Ins.InsCod > 0)
 		 {
@@ -2495,7 +2498,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 						          "DAT_SMALL_NOBR","LEFT_TOP");
 		 }
 	       break;
-	    case Sco_SCOPE_CTR:	// Centre
+	    case Hie_CTR:	// Centre
 	       Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[1]);
 	       if (Ctr.CtrCod > 0)
 		 {
@@ -2507,7 +2510,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 						     "DAT_SMALL_NOBR","LEFT_TOP");
 		 }
 	       break;
-	    case Sco_SCOPE_DEG:	// Degree
+	    case Hie_DEG:	// Degree
 	       Deg.DegCod = Str_ConvertStrCodToLongCod (row[1]);
 	       if (Deg.DegCod > 0)
 		 {

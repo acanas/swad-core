@@ -360,14 +360,14 @@ void Inf_ShowInfo (void)
      };
 
    /***** Set info type *****/
-   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+   Gbl.Hierarchy.Crs.Info.Type = Inf_AsignInfoType ();
 
    /***** Get info source from database *****/
-   Inf_GetAndCheckInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,
-                                 Gbl.CurrentCrs.Info.Type,
+   Inf_GetAndCheckInfoSrcFromDB (Gbl.Hierarchy.Crs.Crs.CrsCod,
+                                 Gbl.Hierarchy.Crs.Info.Type,
                                  &InfoSrc,&MustBeRead);
 
-   switch (Gbl.CurrentCrs.Info.Type)
+   switch (Gbl.Hierarchy.Crs.Info.Type)
      {
       case Inf_LECTURES:
       case Inf_PRACTICALS:
@@ -410,7 +410,7 @@ void Inf_ShowInfo (void)
 	 ShowWarningNoInfo = true;
          break;
       case Inf_INFO_SRC_EDITOR:
-         switch (Gbl.CurrentCrs.Info.Type)
+         switch (Gbl.Hierarchy.Crs.Info.Type)
            {
             case Inf_LECTURES:
             case Inf_PRACTICALS:
@@ -444,10 +444,10 @@ void Inf_ShowInfo (void)
 
    if (ShowWarningNoInfo)
      {
-      Box_StartBox ("100%",Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+      Box_StartBox ("100%",Txt_INFO_TITLE[Gbl.Hierarchy.Crs.Info.Type],
 		    ICanEdit ? Inf_PutIconToEditInfo :
 			       NULL,
-		    Help[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
+		    Help[Gbl.Hierarchy.Crs.Info.Type],Box_NOT_CLOSABLE);
       Ale_ShowAlert (Ale_INFO,Txt_No_information);
       if (ICanEdit)
 	 Inf_PutButtonToEditInfo ();
@@ -463,7 +463,7 @@ static void Inf_PutButtonToEditInfo (void)
   {
    extern const char *Txt_Edit;
 
-   Frm_StartForm (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type]);
+   Frm_StartForm (Inf_ActionsEditInfo[Gbl.Hierarchy.Crs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit);
    Frm_EndForm ();
   }
@@ -474,12 +474,12 @@ static void Inf_PutButtonToEditInfo (void)
 
 static void Inf_PutIconToViewInfo (void)
   {
-   Ico_PutContextualIconToView (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type],NULL);
+   Ico_PutContextualIconToView (Inf_ActionsSeeInfo[Gbl.Hierarchy.Crs.Info.Type],NULL);
   }
 
 void Inf_PutIconToEditInfo (void)
   {
-   Ico_PutContextualIconToEdit (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type],NULL);
+   Ico_PutContextualIconToEdit (Inf_ActionsEditInfo[Gbl.Hierarchy.Crs.Info.Type],NULL);
   }
 
 /*****************************************************************************/
@@ -490,7 +490,7 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled)
   {
    extern const char *Txt_Force_students_to_read_this_information;
 
-   Lay_PutContextualCheckbox (Inf_ActionsChangeForceReadInfo[Gbl.CurrentCrs.Info.Type],
+   Lay_PutContextualCheckbox (Inf_ActionsChangeForceReadInfo[Gbl.Hierarchy.Crs.Info.Type],
                               NULL,
                               "MustBeRead",
                               MustBeRead,Disabled,
@@ -507,7 +507,7 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
    extern const char *Txt_I_have_read_this_information;
    bool IHaveRead = Inf_CheckIfIHaveReadInfo ();
 
-   Lay_PutContextualCheckbox (Inf_ActionsIHaveReadInfo[Gbl.CurrentCrs.Info.Type],
+   Lay_PutContextualCheckbox (Inf_ActionsIHaveReadInfo[Gbl.Hierarchy.Crs.Info.Type],
                               NULL,
                               "IHaveRead",
                               IHaveRead,false,
@@ -526,8 +526,8 @@ static bool Inf_CheckIfIHaveReadInfo (void)
 			  "SELECT COUNT(*) FROM crs_info_read"
 			  " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Gbl.CurrentCrs.Crs.CrsCod,
-			  Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]) != 0);
+			  Gbl.Hierarchy.Crs.Crs.CrsCod,
+			  Inf_NamesInDBForInfoType[Gbl.Hierarchy.Crs.Info.Type]) != 0);
   }
 
 /*****************************************************************************/
@@ -546,7 +546,7 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
    for (InfoType = (Inf_InfoType_t) 0;
 	InfoType < Inf_NUM_INFO_TYPES;
 	InfoType++)
-      Gbl.CurrentCrs.Info.MustBeRead[InfoType] = false;
+      Gbl.Hierarchy.Crs.Info.MustBeRead[InfoType] = false;
 
    /***** Get info types where students must read info *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get if you must read"
@@ -556,9 +556,9 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
 			     " AND InfoType NOT IN"
 			     " (SELECT InfoType FROM crs_info_read"
 			     " WHERE UsrCod=%ld AND CrsCod=%ld)",
-			     Gbl.CurrentCrs.Crs.CrsCod,
+			     Gbl.Hierarchy.Crs.Crs.CrsCod,
 			     Gbl.Usrs.Me.UsrDat.UsrCod,
-			     Gbl.CurrentCrs.Crs.CrsCod);
+			     Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Set must-be-read to true for each rown in result *****/
    for (NumRow = 0;
@@ -570,7 +570,7 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
       /* Get info type (row[0]) */
       InfoType = Inf_ConvertFromStrDBToInfoType (row[0]);
 
-      Gbl.CurrentCrs.Info.MustBeRead[InfoType] = true;
+      Gbl.Hierarchy.Crs.Info.MustBeRead[InfoType] = true;
      }
 
    /***** Free structure that stores the query result *****/
@@ -604,7 +604,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    for (InfoType = (Inf_InfoType_t) 0;
 	InfoType < Inf_NUM_INFO_TYPES;
 	InfoType++)
-      if (Gbl.CurrentCrs.Info.MustBeRead[InfoType])
+      if (Gbl.Hierarchy.Crs.Info.MustBeRead[InfoType])
         {
          fprintf (Gbl.F.Out,"<li>");
          Frm_StartForm (Inf_ActionsSeeInfo[InfoType]);
@@ -634,7 +634,7 @@ void Inf_ChangeForceReadInfo (void)
    bool MustBeRead = Inf_GetMustBeReadFromForm ();
 
    /***** Set info type *****/
-   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+   Gbl.Hierarchy.Crs.Info.Type = Inf_AsignInfoType ();
 
    /***** Set status (if info must be read or not) into database *****/
    Inf_SetForceReadIntoDB (MustBeRead);
@@ -659,7 +659,7 @@ void Inf_ChangeIHaveReadInfo (void)
    bool IHaveRead = Inf_GetIfIHaveReadFromForm ();
 
    /***** Set info type *****/
-   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+   Gbl.Hierarchy.Crs.Info.Type = Inf_AsignInfoType ();
 
    /***** Set status (if I have read or not a information) into database *****/
    Inf_SetIHaveReadIntoDB (IHaveRead);
@@ -703,8 +703,8 @@ static void Inf_SetForceReadIntoDB (bool MustBeRead)
 		   " WHERE CrsCod=%ld AND InfoType='%s'",
                    MustBeRead ? 'Y' :
         	                'N',
-                   Gbl.CurrentCrs.Crs.CrsCod,
-		   Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+                   Gbl.Hierarchy.Crs.Crs.CrsCod,
+		   Inf_NamesInDBForInfoType[Gbl.Hierarchy.Crs.Info.Type]);
   }
 
 /*****************************************************************************/
@@ -721,16 +721,16 @@ static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
 		       " VALUES"
 		       " (%ld,%ld,'%s')",
                        Gbl.Usrs.Me.UsrDat.UsrCod,
-                       Gbl.CurrentCrs.Crs.CrsCod,
-                       Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+                       Gbl.Hierarchy.Crs.Crs.CrsCod,
+                       Inf_NamesInDBForInfoType[Gbl.Hierarchy.Crs.Info.Type]);
    else
       /***** Remove I have read course information *****/
       DB_QueryDELETE ("can not set that I have not read course info",
 		      "DELETE FROM crs_info_read"
 		      " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.CurrentCrs.Crs.CrsCod,
-		      Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+		      Gbl.Hierarchy.Crs.Crs.CrsCod,
+		      Inf_NamesInDBForInfoType[Gbl.Hierarchy.Crs.Info.Type]);
   }
 
 /*****************************************************************************/
@@ -795,7 +795,7 @@ static bool Inf_CheckAndShowPage (void)
    //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
 
    /***** Build path of directory containing web page *****/
-   Inf_BuildPathPage (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathRelDirHTML);
+   Inf_BuildPathPage (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,PathRelDirHTML);
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
@@ -806,8 +806,8 @@ static bool Inf_CheckAndShowPage (void)
      {
       snprintf (URL,sizeof (URL),
 	        "%s/%ld/%s/index.html",
-	        Cfg_URL_CRS_PUBLIC,Gbl.CurrentCrs.Crs.CrsCod,
-	        Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
+	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.Crs.CrsCod,
+	        Inf_FileNamesForInfoType[Gbl.Hierarchy.Crs.Info.Type]);
       Inf_ShowPage (URL);
 
       return true;
@@ -821,8 +821,8 @@ static bool Inf_CheckAndShowPage (void)
      {
       snprintf (URL,sizeof (URL),
 	        "%s/%ld/%s/index.htm",
-	        Cfg_URL_CRS_PUBLIC,Gbl.CurrentCrs.Crs.CrsCod,
-	        Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
+	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.Crs.CrsCod,
+	        Inf_FileNamesForInfoType[Gbl.Hierarchy.Crs.Info.Type]);
       Inf_ShowPage (URL);
 
       return true;
@@ -860,7 +860,7 @@ int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
    *HTMLBuffer = NULL;
 
    /***** Build path of directory containing web page *****/
-   Inf_BuildPathPage (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathRelDirHTML);
+   Inf_BuildPathPage (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,PathRelDirHTML);
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
@@ -934,12 +934,12 @@ static bool Inf_CheckURL (long CrsCod,Inf_InfoType_t InfoType)
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
      {
-      if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
-	 Gbl.CurrentCrs.Info.URL[0] = '\0';
+      if (fgets (Gbl.Hierarchy.Crs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
+	 Gbl.Hierarchy.Crs.Info.URL[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
 
-      if (Gbl.CurrentCrs.Info.URL[0])
+      if (Gbl.Hierarchy.Crs.Info.URL[0])
          return true;
      }
 
@@ -957,19 +957,19 @@ static bool Inf_CheckAndShowURL (void)
    FILE *FileURL;
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathFile);
+   Inf_BuildPathURL (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,PathFile);
 
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
      {
-      if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
-	 Gbl.CurrentCrs.Info.URL[0] = '\0';
+      if (fgets (Gbl.Hierarchy.Crs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
+	 Gbl.Hierarchy.Crs.Info.URL[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
 
-      if (Gbl.CurrentCrs.Info.URL[0])
+      if (Gbl.Hierarchy.Crs.Info.URL[0])
 	{
-	 Inf_ShowPage (Gbl.CurrentCrs.Info.URL);
+	 Inf_ShowPage (Gbl.Hierarchy.Crs.Info.URL);
          return true;
 	}
      }
@@ -1004,7 +1004,7 @@ void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1])
    TxtBuffer[0] = '\0';
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathFile);
+   Inf_BuildPathURL (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,PathFile);
 
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
@@ -1040,10 +1040,10 @@ static void Inf_ShowPage (const char *URL)
      };
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Hierarchy.Crs.Info.Type],
                  ICanEdit ? Inf_PutIconToEditInfo :
                             NULL,
-                 Help[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
+                 Help[Gbl.Hierarchy.Crs.Info.Type],Box_NOT_CLOSABLE);
 
    /***** Link to view in a new window *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
@@ -1065,7 +1065,7 @@ void Inf_SetInfoSrc (void)
    Inf_InfoSrc_t InfoSrcSelected = Inf_GetInfoSrcFromForm ();
 
    /***** Set info type *****/
-   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+   Gbl.Hierarchy.Crs.Info.Type = Inf_AsignInfoType ();
 
    /***** Set info source into database *****/
    Inf_SetInfoSrcIntoDB (InfoSrcSelected);
@@ -1101,11 +1101,11 @@ void Inf_FormsToSelSendInfo (void)
      };
 
    /***** Set info type *****/
-   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+   Gbl.Hierarchy.Crs.Info.Type = Inf_AsignInfoType ();
 
    /***** Get current info source from database *****/
-   Inf_GetAndCheckInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,
-                                 Gbl.CurrentCrs.Info.Type,
+   Inf_GetAndCheckInfoSrcFromDB (Gbl.Hierarchy.Crs.Crs.CrsCod,
+                                 Gbl.Hierarchy.Crs.Info.Type,
                                  &InfoSrcSelected,&MustBeRead);
 
    /***** Check if info available *****/
@@ -1126,7 +1126,7 @@ void Inf_FormsToSelSendInfo (void)
    /***** Form to choice between alternatives *****/
    /* Start box and table */
    Box_StartBoxTable (NULL,Txt_Source_of_information,Inf_PutIconToViewInfo,
-                      HelpEdit[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE,4);
+                      HelpEdit[Gbl.Hierarchy.Crs.Info.Type],Box_NOT_CLOSABLE,4);
 
    /* Options */
    for (InfoSrc = (Inf_InfoSrc_t) 0;
@@ -1139,7 +1139,7 @@ void Inf_FormsToSelSendInfo (void)
       if (InfoSrc == InfoSrcSelected)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">");
-      Frm_StartForm (Inf_ActionsSelecInfoSrc[Gbl.CurrentCrs.Info.Type]);
+      Frm_StartForm (Inf_ActionsSelecInfoSrc[Gbl.Hierarchy.Crs.Info.Type]);
       fprintf (Gbl.F.Out,"<input type=\"radio\""
 	                 " id=\"InfoSrc%u\" name=\"InfoSrc\" value=\"%u\"",
 	       (unsigned) InfoSrc,(unsigned) InfoSrc);
@@ -1190,27 +1190,27 @@ static bool Inf_CheckIfInfoAvailable (Inf_InfoSrc_t InfoSrc)
       case Inf_INFO_SRC_NONE:
 	 return false;
       case Inf_INFO_SRC_EDITOR:
-         switch (Gbl.CurrentCrs.Info.Type)
+         switch (Gbl.Hierarchy.Crs.Info.Type)
            {
             case Inf_LECTURES:
             case Inf_PRACTICALS:
-               return Syl_CheckSyllabus (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type);
+               return Syl_CheckSyllabus (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type);
             default:
                return false;
            }
          return false;	// Not reached
       case Inf_INFO_SRC_PLAIN_TEXT:
-         return Inf_CheckPlainTxt (Gbl.CurrentCrs.Crs.CrsCod,
-                                   Gbl.CurrentCrs.Info.Type);
+         return Inf_CheckPlainTxt (Gbl.Hierarchy.Crs.Crs.CrsCod,
+                                   Gbl.Hierarchy.Crs.Info.Type);
       case Inf_INFO_SRC_RICH_TEXT:
-         return Inf_CheckRichTxt (Gbl.CurrentCrs.Crs.CrsCod,
-                                  Gbl.CurrentCrs.Info.Type);
+         return Inf_CheckRichTxt (Gbl.Hierarchy.Crs.Crs.CrsCod,
+                                  Gbl.Hierarchy.Crs.Info.Type);
       case Inf_INFO_SRC_PAGE:
-	 return Inf_CheckPage (Gbl.CurrentCrs.Crs.CrsCod,
-                               Gbl.CurrentCrs.Info.Type);
+	 return Inf_CheckPage (Gbl.Hierarchy.Crs.Crs.CrsCod,
+                               Gbl.Hierarchy.Crs.Info.Type);
       case Inf_INFO_SRC_URL:
-	 return Inf_CheckURL (Gbl.CurrentCrs.Crs.CrsCod,
-                              Gbl.CurrentCrs.Info.Type);
+	 return Inf_CheckURL (Gbl.Hierarchy.Crs.Crs.CrsCod,
+                              Gbl.Hierarchy.Crs.Info.Type);
      }
 
    return false;	// Not reached
@@ -1224,7 +1224,7 @@ void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit;
 
-   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
+   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Hierarchy.Crs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit);
    Frm_EndForm ();
   }
@@ -1237,7 +1237,7 @@ void Inf_FormToEnterPlainTextEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit_plain_text;
 
-   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
+   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Hierarchy.Crs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit_plain_text);
    Frm_EndForm ();
   }
@@ -1250,7 +1250,7 @@ void Inf_FormToEnterRichTextEditor (Inf_InfoSrc_t InfoSrc)
   {
    extern const char *Txt_Edit_rich_text;
 
-   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
+   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Hierarchy.Crs.Info.Type]);
    Btn_PutConfirmButton (Txt_Edit_rich_text);
    Frm_EndForm ();
   }
@@ -1266,7 +1266,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    extern const char *Txt_Upload_file;
 
    /***** Start form *****/
-   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
+   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Hierarchy.Crs.Info.Type]);
 
    /***** File *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
@@ -1298,10 +1298,10 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    FILE *FileURL;
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathFile);
+   Inf_BuildPathURL (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,PathFile);
 
    /***** Start form *****/
-   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
+   Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Hierarchy.Crs.Info.Type]);
 
    /***** Link *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
@@ -1314,11 +1314,11 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
       fprintf (Gbl.F.Out,"http://");
    else
      {
-      if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
-         Gbl.CurrentCrs.Info.URL[0] = '\0';
+      if (fgets (Gbl.Hierarchy.Crs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
+         Gbl.Hierarchy.Crs.Info.URL[0] = '\0';
       /* File is not needed now. Close it */
       fclose (FileURL);
-      fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Info.URL);
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.Info.URL);
      }
    fprintf (Gbl.F.Out,"\" />"
                       "</label>"
@@ -1478,8 +1478,8 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
    if (DB_QueryCOUNT ("can not get if info source is already stored in database",
 		      "SELECT COUNT(*) FROM crs_info_src"
 		      " WHERE CrsCod=%ld AND InfoType='%s'",
-		      Gbl.CurrentCrs.Crs.CrsCod,
-		      Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]))
+		      Gbl.Hierarchy.Crs.Crs.CrsCod,
+		      Inf_NamesInDBForInfoType[Gbl.Hierarchy.Crs.Info.Type]))
       // Info is already stored in database, so update it
      {	// Update info source
       if (InfoSrc == Inf_INFO_SRC_NONE)
@@ -1487,15 +1487,15 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
 			 "UPDATE crs_info_src SET InfoSrc='%s',MustBeRead='N'"
 			 " WHERE CrsCod=%ld AND InfoType='%s'",
                          Inf_NamesInDBForInfoSrc[Inf_INFO_SRC_NONE],
-                         Gbl.CurrentCrs.Crs.CrsCod,
-                         Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+                         Gbl.Hierarchy.Crs.Crs.CrsCod,
+                         Inf_NamesInDBForInfoType[Gbl.Hierarchy.Crs.Info.Type]);
       else	// MustBeRead remains unchanged
          DB_QueryUPDATE ("can not update info source",
 			 "UPDATE crs_info_src SET InfoSrc='%s'"
 		         " WHERE CrsCod=%ld AND InfoType='%s'",
 		         Inf_NamesInDBForInfoSrc[InfoSrc],
-		         Gbl.CurrentCrs.Crs.CrsCod,
-		         Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
+		         Gbl.Hierarchy.Crs.Crs.CrsCod,
+		         Inf_NamesInDBForInfoType[Gbl.Hierarchy.Crs.Info.Type]);
      }
    else		// Info is not stored in database, so insert it
       DB_QueryINSERT ("can not insert info source",
@@ -1503,8 +1503,8 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
 		      " (CrsCod,InfoType,InfoSrc,MustBeRead)"
 		      " VALUES"
 		      " (%ld,'%s','%s','N')",
-		      Gbl.CurrentCrs.Crs.CrsCod,
-		      Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
+		      Gbl.Hierarchy.Crs.Crs.CrsCod,
+		      Inf_NamesInDBForInfoType[Gbl.Hierarchy.Crs.Info.Type],
 		      Inf_NamesInDBForInfoSrc[InfoSrc]);
   }
 
@@ -1686,8 +1686,8 @@ static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
 		    " (CrsCod,InfoType,InfoTxtHTML,InfoTxtMD)"
 		    " VALUES"
 		    " (%ld,'%s','%s','%s')",
-		    Gbl.CurrentCrs.Crs.CrsCod,
-		    Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
+		    Gbl.Hierarchy.Crs.Crs.CrsCod,
+		    Inf_NamesInDBForInfoType[Gbl.Hierarchy.Crs.Info.Type],
 		    InfoTxtHTML,InfoTxtMD);
   }
 
@@ -1780,20 +1780,20 @@ static bool Inf_CheckAndShowPlainTxt (void)
      };
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,
                          TxtHTML,NULL);
 
    if (TxtHTML[0])
      {
       /***** Start box *****/
-      Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+      Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Hierarchy.Crs.Info.Type],
                     ICanEdit ? Inf_PutIconToEditInfo :
                                NULL,
-                    Help[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
+                    Help[Gbl.Hierarchy.Crs.Info.Type],Box_NOT_CLOSABLE);
 
-      if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
-          Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
-         Lay_WriteHeaderClassPhoto (false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+      if (Gbl.Hierarchy.Crs.Info.Type == Inf_INTRODUCTION ||
+          Gbl.Hierarchy.Crs.Info.Type == Inf_TEACHING_GUIDE)
+         Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
       fprintf (Gbl.F.Out,"<div class=\"DAT LEFT_MIDDLE\">");
 
@@ -1864,20 +1864,20 @@ static bool Inf_CheckAndShowRichTxt (void)
      };
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,
                          TxtHTML,TxtMD);
 
    if (TxtMD[0])
      {
       /***** Start box *****/
-      Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+      Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Hierarchy.Crs.Info.Type],
                     ICanEdit ? Inf_PutIconToEditInfo :
                                NULL,
-                    Help[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
+                    Help[Gbl.Hierarchy.Crs.Info.Type],Box_NOT_CLOSABLE);
 
-      if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
-          Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
-         Lay_WriteHeaderClassPhoto (false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+      if (Gbl.Hierarchy.Crs.Info.Type == Inf_INTRODUCTION ||
+          Gbl.Hierarchy.Crs.Info.Type == Inf_TEACHING_GUIDE)
+         Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
       fprintf (Gbl.F.Out,"<div id=\"crs_info\" class=\"LEFT_MIDDLE\">");
 
@@ -1969,7 +1969,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
    *HTMLBuffer = NULL;
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,
                          TxtHTML,NULL);
 
    if (TxtHTML[0])
@@ -1986,7 +1986,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
                                      "Can not create temporary file");
 
       /***** Write start of HTML code *****/
-      Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type]);
+      Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Hierarchy.Crs.Info.Type]);
       fprintf (FileHTMLTmp,"<body>\n"
                            "<div class=\"DAT LEFT_MIDDLE\">\n");
 
@@ -2059,19 +2059,19 @@ void Inf_EditPlainTxtInfo (void)
      };
 
    /***** Set info type *****/
-   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+   Gbl.Hierarchy.Crs.Info.Type = Inf_AsignInfoType ();
 
    /***** Start form and box *****/
-   Frm_StartForm (Inf_ActionsRcvPlaTxtInfo[Gbl.CurrentCrs.Info.Type]);
-   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
-                 HelpEdit[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
+   Frm_StartForm (Inf_ActionsRcvPlaTxtInfo[Gbl.Hierarchy.Crs.Info.Type]);
+   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Hierarchy.Crs.Info.Type],NULL,
+                 HelpEdit[Gbl.Hierarchy.Crs.Info.Type],Box_NOT_CLOSABLE);
 
-   if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
-       Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
-      Lay_WriteHeaderClassPhoto (false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+   if (Gbl.Hierarchy.Crs.Info.Type == Inf_INTRODUCTION ||
+       Gbl.Hierarchy.Crs.Info.Type == Inf_TEACHING_GUIDE)
+      Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,
                          TxtHTML,NULL);
 
    /***** Edition area *****/
@@ -2110,19 +2110,19 @@ void Inf_EditRichTxtInfo (void)
      };
 
    /***** Set info type *****/
-   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+   Gbl.Hierarchy.Crs.Info.Type = Inf_AsignInfoType ();
 
    /***** Start form and box *****/
-   Frm_StartForm (Inf_ActionsRcvRchTxtInfo[Gbl.CurrentCrs.Info.Type]);
-   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL,
-                 HelpEdit[Gbl.CurrentCrs.Info.Type],Box_NOT_CLOSABLE);
+   Frm_StartForm (Inf_ActionsRcvRchTxtInfo[Gbl.Hierarchy.Crs.Info.Type]);
+   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Hierarchy.Crs.Info.Type],NULL,
+                 HelpEdit[Gbl.Hierarchy.Crs.Info.Type],Box_NOT_CLOSABLE);
 
-   if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
-       Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
-      Lay_WriteHeaderClassPhoto (false,false,Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+   if (Gbl.Hierarchy.Crs.Info.Type == Inf_INTRODUCTION ||
+       Gbl.Hierarchy.Crs.Info.Type == Inf_TEACHING_GUIDE)
+      Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
+   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,
                          TxtHTML,NULL);
 
    /***** Edition area *****/
@@ -2149,7 +2149,7 @@ void Inf_RecAndChangePlainTxtInfo (void)
    char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Set info type *****/
-   Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
+   Gbl.Hierarchy.Crs.Info.Type = Inf_AsignInfoType ();
 
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
@@ -2185,7 +2185,7 @@ void Inf_RecAndChangeRichTxtInfo (void)
    char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Set info type *****/
-   Gbl.CurrentCrs.Info.Type  = Inf_AsignInfoType ();
+   Gbl.Hierarchy.Crs.Info.Type  = Inf_AsignInfoType ();
 
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
@@ -2223,26 +2223,26 @@ void Inf_ReceiveURLInfo (void)
    bool URLIsOK = false;
 
    /***** Set info type *****/
-   Gbl.CurrentCrs.Info.Type  = Inf_AsignInfoType ();
+   Gbl.Hierarchy.Crs.Info.Type  = Inf_AsignInfoType ();
 
    /***** Get parameter with URL *****/
-   Par_GetParToText ("InfoSrcURL",Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_WWW);
+   Par_GetParToText ("InfoSrcURL",Gbl.Hierarchy.Crs.Info.URL,Cns_MAX_BYTES_WWW);
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathFile);
+   Inf_BuildPathURL (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,PathFile);
 
    /***** Open file with URL *****/
    if ((FileURL = fopen (PathFile,"wb")) != NULL)
      {
       /***** Write URL *****/
-      fprintf (FileURL,"%s",Gbl.CurrentCrs.Info.URL);
+      fprintf (FileURL,"%s",Gbl.Hierarchy.Crs.Info.URL);
 
       /***** Close file *****/
       fclose (FileURL);
 
       /***** Write message *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_URL_X_has_been_updated,
-                     Gbl.CurrentCrs.Info.URL);
+                     Gbl.Hierarchy.Crs.Info.URL);
       URLIsOK = true;
      }
    else
@@ -2291,7 +2291,7 @@ void Inf_ReceivePagInfo (void)
    bool FileIsOK = false;
 
    /***** Set info type *****/
-   Gbl.CurrentCrs.Info.Type  = Inf_AsignInfoType ();
+   Gbl.Hierarchy.Crs.Info.Type  = Inf_AsignInfoType ();
 
    /***** First of all, store in disk the file from stdin (really from Gbl.F.Tmp) *****/
    Param = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
@@ -2313,7 +2313,7 @@ void Inf_ReceivePagInfo (void)
    else
      {
       /***** Build path of directory containing web page *****/
-      Inf_BuildPathPage (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathRelDirHTML);
+      Inf_BuildPathPage (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Info.Type,PathRelDirHTML);
 
       /***** End the reception of the data *****/
       if (Str_FileIs (SourceFileName,"html") ||
@@ -2338,8 +2338,8 @@ void Inf_ReceivePagInfo (void)
          Fil_CreateDirIfNotExists (PathRelDirHTML);
          snprintf (PathRelFileZIP,sizeof (PathRelFileZIP),
                    "%s/%s.zip",
-                   Gbl.CurrentCrs.PathPriv,
-                   Inf_FileNamesForInfoType[Gbl.CurrentCrs.Info.Type]);
+                   Gbl.Hierarchy.Crs.PathPriv,
+                   Inf_FileNamesForInfoType[Gbl.Hierarchy.Crs.Info.Type]);
 
          if (Fil_EndReceptionOfFile (PathRelFileZIP,Param))
            {

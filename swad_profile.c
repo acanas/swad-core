@@ -304,11 +304,11 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 
       /***** Shared record card *****/
       if (!ItsMe &&				// If not me...
-	  Gbl.CurrentCrs.Crs.CrsCod > 0)	// ...and a course is selected
+	  Gbl.Hierarchy.Level == Hie_CRS)	// ...and a course is selected
 	{
 	 /* Get user's role in current course */
 	 UsrDat->Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-	                                                        Gbl.CurrentCrs.Crs.CrsCod);
+	                                                        Gbl.Hierarchy.Crs.Crs.CrsCod);
 	 UsrDat->Roles.InCurrentCrs.Valid = true;
 
 	 /* Get if user has accepted enrolment in current course */
@@ -965,7 +965,7 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
 
    /***** Rank in form to go to ranking *****/
    Frm_StartForm (ActSeeUseGbl);
-   Sco_PutParamScope ("ScopeSta",Sco_SCOPE_SYS);
+   Sco_PutParamScope ("ScopeSta",Hie_SYS);
    Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Fig_USERS_RANKING);
    Frm_LinkFormSubmit (Gbl.Title,The_ClassFormOutBox[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"#%lu</a>",Rank);
@@ -1424,7 +1424,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
 	 NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT UsrCod,%s"
@@ -1435,7 +1435,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    FieldName,
 				    FieldName,FieldName);
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
@@ -1450,10 +1450,10 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 				    FieldName,
-				    Gbl.CurrentCty.Cty.CtyCod,
+				    Gbl.Hierarchy.Cty.CtyCod,
 				    FieldName,FieldName);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
@@ -1467,10 +1467,10 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 				    FieldName,
-				    Gbl.CurrentIns.Ins.InsCod,
+				    Gbl.Hierarchy.Ins.InsCod,
 				    FieldName,FieldName);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
@@ -1483,10 +1483,10 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 				    FieldName,
-				    Gbl.CurrentCtr.Ctr.CtrCod,
+				    Gbl.Hierarchy.Ctr.CtrCod,
 				    FieldName,FieldName);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
@@ -1498,10 +1498,10 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 				    FieldName,
-				    Gbl.CurrentDeg.Deg.DegCod,
+				    Gbl.Hierarchy.Deg.DegCod,
 				    FieldName,FieldName);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT DISTINCTROW usr_figures.UsrCod,usr_figures.%s"
@@ -1512,7 +1512,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 				    FieldName,
-				    Gbl.CurrentCrs.Crs.CrsCod,
+				    Gbl.Hierarchy.Crs.Crs.CrsCod,
 				    FieldName,FieldName);
          break;
       default:
@@ -1600,7 +1600,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
 	 NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT UsrCod,"
@@ -1611,7 +1611,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 				    " AND UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY NumClicksPerDay DESC,UsrCod LIMIT 100");
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT DISTINCTROW usr_figures.UsrCod,"
@@ -1628,9 +1628,9 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 				    " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-				    Gbl.CurrentCty.Cty.CtyCod);
+				    Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT DISTINCTROW usr_figures.UsrCod,"
@@ -1646,9 +1646,9 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 				    " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-				    Gbl.CurrentIns.Ins.InsCod);
+				    Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT DISTINCTROW usr_figures.UsrCod,"
@@ -1663,9 +1663,9 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 				    " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-				    Gbl.CurrentCtr.Ctr.CtrCod);
+				    Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT DISTINCTROW usr_figures.UsrCod,"
@@ -1679,9 +1679,9 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 				    " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-				    Gbl.CurrentDeg.Deg.DegCod);
+				    Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT DISTINCTROW usr_figures.UsrCod,"
@@ -1694,7 +1694,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 				    " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-				    Gbl.CurrentCrs.Crs.CrsCod);
+				    Gbl.Hierarchy.Crs.Crs.CrsCod);
          break;
       default:
          Lay_WrongScopeExit ();

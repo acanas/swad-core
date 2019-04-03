@@ -230,7 +230,7 @@ bool Syl_CheckAndEditSyllabus (void)
    Syl_SetSyllabusTypeFromAction ();
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    if (Gbl.Action.Act == ActEditorSylLec ||
        Gbl.Action.Act == ActEditorSylPra)
@@ -248,7 +248,7 @@ bool Syl_CheckAndEditSyllabus (void)
       if (Gbl.Syllabus.EditionIsActive)
 	{
 	 /***** Button to view *****/
-         Frm_StartForm (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type]);
+         Frm_StartForm (Inf_ActionsSeeInfo[Gbl.Hierarchy.Crs.Info.Type]);
 	 Btn_PutConfirmButton (Txt_Done);
 	 Frm_EndForm ();
 	}
@@ -278,13 +278,13 @@ void Syl_EditSyllabus (void)
 
 static void Syl_SetSyllabusTypeFromAction (void)
   {
-   Gbl.CurrentCrs.Info.Type = Inf_LECTURES;
+   Gbl.Hierarchy.Crs.Info.Type = Inf_LECTURES;
 
    /***** Set the type of syllabus (lectures or practicals) *****/
    switch (Gbl.Action.Act)
      {
       case ActSeeSyl:
-	 Gbl.CurrentCrs.Info.Type = (Gbl.Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
+	 Gbl.Hierarchy.Crs.Info.Type = (Gbl.Syllabus.WhichSyllabus == Syl_LECTURES ? Inf_LECTURES :
 	                                                                          Inf_PRACTICALS);
 	 break;
       case ActSeeSylLec:
@@ -307,7 +307,7 @@ static void Syl_SetSyllabusTypeFromAction (void)
       case ActRcvPlaTxtSylLec:
       case ActRcvRchTxtSylLec:
 	 Gbl.Syllabus.WhichSyllabus = Syl_LECTURES;
-	 Gbl.CurrentCrs.Info.Type = Inf_LECTURES;
+	 Gbl.Hierarchy.Crs.Info.Type = Inf_LECTURES;
 	 break;
       case ActSeeSylPra:
       case ActEdiSylPra:
@@ -329,7 +329,7 @@ static void Syl_SetSyllabusTypeFromAction (void)
       case ActRcvPlaTxtSylPra:
       case ActRcvRchTxtSylPra:
 	 Gbl.Syllabus.WhichSyllabus = Syl_PRACTICALS;
-	 Gbl.CurrentCrs.Info.Type = Inf_PRACTICALS;
+	 Gbl.Hierarchy.Crs.Info.Type = Inf_PRACTICALS;
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong action.");
@@ -521,7 +521,7 @@ static void Syl_ShowSyllabus (bool PutIconToEdit)
                                 Gbl.Action.Act == ActLftIteSylLec || Gbl.Action.Act == ActLftIteSylPra);
 
    /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+   Box_StartBoxTable (NULL,Txt_INFO_TITLE[Gbl.Hierarchy.Crs.Info.Type],
 		      PutIconToEdit ? Inf_PutIconToEditInfo :
 				      NULL,
 		      Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
@@ -611,7 +611,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
             Ico_PutIconRemovalNotAllowed ();
 	 else
 	   {
-	    Frm_StartForm (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
+	    Frm_StartForm (Gbl.Hierarchy.Crs.Info.Type == Inf_LECTURES ? ActDelItmSylLec :
 		                                                      ActDelItmSylPra);
 	    Syl_PutParamNumItem ();
             Ico_PutIconRemove ();
@@ -628,7 +628,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
                       LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_up_X_and_its_subsections :
                                                                   Txt_Move_up_X,
                       StrItemCod);
-	    Lay_PutContextualLinkOnlyIcon (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
+	    Lay_PutContextualLinkOnlyIcon (Gbl.Hierarchy.Crs.Info.Type == Inf_LECTURES ? ActUp_IteSylLec :
 										      ActUp_IteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-up.svg",
@@ -647,7 +647,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
                       LstItemsSyllabus.Lst[NumItem].HasChildren ? Txt_Move_down_X_and_its_subsections :
                                                                   Txt_Move_down_X,
                       StrItemCod);
-	    Lay_PutContextualLinkOnlyIcon (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
+	    Lay_PutContextualLinkOnlyIcon (Gbl.Hierarchy.Crs.Info.Type == Inf_LECTURES ? ActDwnIteSylLec :
 										      ActDwnIteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-down.svg",
@@ -664,7 +664,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Increase_level_of_X,
 		      StrItemCod);
-	    Lay_PutContextualLinkOnlyIcon (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
+	    Lay_PutContextualLinkOnlyIcon (Gbl.Hierarchy.Crs.Info.Type == Inf_LECTURES ? ActRgtIteSylLec :
 										      ActRgtIteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-left.svg",
@@ -682,7 +682,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Decrease_level_of_X,
 		      StrItemCod);
-	    Lay_PutContextualLinkOnlyIcon (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
+	    Lay_PutContextualLinkOnlyIcon (Gbl.Hierarchy.Crs.Info.Type == Inf_LECTURES ? ActLftIteSylLec :
 										      ActLftIteSylPra,
 					   NULL,Syl_PutParamNumItem,
 					   "arrow-right.svg",
@@ -746,7 +746,7 @@ int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer)
    *HTMLBuffer = NULL;
 
    /***** Load syllabus from XML file to list of items in memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    if (LstItemsSyllabus.NumItems)
      {
@@ -817,7 +817,7 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
    int i;
 
    /***** Write start of HTML code *****/
-   Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type]);
+   Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Hierarchy.Crs.Info.Type]);
    fprintf (FileHTMLTmp,"<body>\n"
                         "<table>\n");
 
@@ -909,9 +909,9 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
    /***** Text of the item *****/
    fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"LEFT_MIDDLE COLOR%u\">",
             LstItemsSyllabus.NumLevels - Level + 1,Gbl.RowEvenOdd);
-   Frm_StartForm (NewItem ? (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
+   Frm_StartForm (NewItem ? (Gbl.Hierarchy.Crs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
 	                                                                ActInsIteSylPra) :
-                            (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
+                            (Gbl.Hierarchy.Crs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
                         	                                        ActModIteSylPra));
    Gbl.Syllabus.ParamNumItem = NumItem;
    Syl_PutParamNumItem ();
@@ -988,7 +988,7 @@ void Syl_RemoveItemSyllabus (void)
    Syl_SetSyllabusTypeFromAction ();
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    Gbl.Syllabus.EditionIsActive = true;
 
@@ -1056,7 +1056,7 @@ void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
    Syl_SetSyllabusTypeFromAction ();
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    Gbl.Syllabus.EditionIsActive = true;
 
@@ -1246,7 +1246,7 @@ void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreaseLevel)
    Syl_SetSyllabusTypeFromAction ();
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    Gbl.Syllabus.EditionIsActive = true;
 
@@ -1305,7 +1305,7 @@ void Syl_InsertItemSyllabus (void)
    Syl_SetSyllabusTypeFromAction ();
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    Gbl.Syllabus.EditionIsActive = true;
 
@@ -1370,7 +1370,7 @@ void Syl_ModifyItemSyllabus (void)
    Syl_SetSyllabusTypeFromAction ();
 
    /***** Load syllabus from XML file to memory *****/
-   Syl_LoadListItemsSyllabusIntoMemory (Gbl.CurrentCrs.Crs.CrsCod);
+   Syl_LoadListItemsSyllabusIntoMemory (Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    Gbl.Syllabus.EditionIsActive = true;
 

@@ -96,7 +96,7 @@ void Plc_SeePlaces (void)
    unsigned NumCtrsWithPlc = 0;
    unsigned NumCtrsInOtherPlcs;
 
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
+   if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
       /***** Get parameter with the type of order in the list of places *****/
       Plc_GetParamPlcOrder ();
@@ -177,7 +177,7 @@ void Plc_SeePlaces (void)
 			 "</td>"
 			 "</tr>",
 	       Txt_Place_unspecified,
-	       Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod) -
+	       Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
 	       NumCtrsWithPlc);
 
       /***** End table *****/
@@ -341,10 +341,10 @@ void Plc_GetListPlaces (void)
 			     " (SELECT DISTINCT PlcCod FROM centres"
 			     " WHERE InsCod=%ld))"
 			     " ORDER BY %s",
-			     Gbl.CurrentIns.Ins.InsCod,
-			     Gbl.CurrentIns.Ins.InsCod,
-			     Gbl.CurrentIns.Ins.InsCod,
-			     Gbl.CurrentIns.Ins.InsCod,
+			     Gbl.Hierarchy.Ins.InsCod,
+			     Gbl.Hierarchy.Ins.InsCod,
+			     Gbl.Hierarchy.Ins.InsCod,
+			     Gbl.Hierarchy.Ins.InsCod,
 			     OrderBySubQuery[Gbl.Plcs.SelectedOrder]);
 
    /***** Count number of rows in result *****/
@@ -726,7 +726,7 @@ static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,l
 			  "SELECT COUNT(*) FROM places"
 			  " WHERE InsCod=%ld"
 			  " AND %s='%s' AND PlcCod<>%ld",
-			  Gbl.CurrentIns.Ins.InsCod,
+			  Gbl.Hierarchy.Ins.InsCod,
 			  FieldName,Name,PlcCod) != 0);
   }
 
@@ -887,7 +887,7 @@ static void Plc_CreatePlace (struct Place *Plc)
 		   " (InsCod,ShortName,FullName)"
 		   " VALUES"
 		   " (%ld,'%s','%s')",
-                   Gbl.CurrentIns.Ins.InsCod,Plc->ShrtName,Plc->FullName);
+                   Gbl.Hierarchy.Ins.InsCod,Plc->ShrtName,Plc->FullName);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_place_X,

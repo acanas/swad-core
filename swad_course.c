@@ -83,7 +83,7 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role);
 
 static void Crs_WriteListMyCoursesToSelectOne (void);
 
-static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses);
+static void Crs_GetListCoursesInCurrentDegree (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
 static bool Crs_CheckIfICanCreateCourses (void);
 static void Crs_PutIconsListCourses (void);
@@ -184,8 +184,12 @@ static void Crs_Configuration (bool PrintView)
    unsigned Year;
    int NumIndicatorsFromDB;
    struct Ind_IndicatorsCrs Indicators;
-   bool IsForm = (!PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
-   bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
+   bool IsForm;
+   bool PutLink;
+
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)	// No course selected
+      return;
 
    /***** Messages and links above the box *****/
    if (!PrintView)
@@ -209,19 +213,20 @@ static void Crs_Configuration (bool PrintView)
 		    Hlp_COURSE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
+   PutLink = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
    fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
-	       Gbl.CurrentDeg.Deg.WWW,
-	       Gbl.CurrentDeg.Deg.FullName);
-   Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-                 Gbl.CurrentDeg.Deg.ShrtName,64,NULL,true);
+	       Gbl.Hierarchy.Deg.WWW,
+	       Gbl.Hierarchy.Deg.FullName);
+   Log_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
+                 Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
    fprintf (Gbl.F.Out,"<br />%s"
                       "</div>",
-            Gbl.CurrentCrs.Crs.FullName);
+            Gbl.Hierarchy.Crs.Crs.FullName);
 
    /***** Start table *****/
    Tbl_StartTableWide (2);
@@ -249,21 +254,21 @@ static void Crs_Configuration (bool PrintView)
 			 " onchange=\"document.getElementById('%s').submit();\">",
 	       Gbl.Form.Id);
       for (NumDeg = 0;
-	   NumDeg < Gbl.CurrentCtr.Ctr.Degs.Num;
+	   NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
 	   NumDeg++)
 	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		  Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].DegCod,
-		  Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].DegCod == Gbl.CurrentDeg.Deg.DegCod ? " selected=\"selected\"" :
-										            "",
-		  Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].ShrtName);
+		  Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].DegCod,
+		  Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].DegCod == Gbl.Hierarchy.Deg.DegCod ? " selected=\"selected\"" :
+										          "",
+		  Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg].ShrtName);
       fprintf (Gbl.F.Out,"</select>");
       Frm_EndForm ();
 
       /* Free list of degrees of the current centre */
-      Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
+      Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
      }
    else	// I can not move course to another degree
-      fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.FullName);
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
 
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -288,12 +293,12 @@ static void Crs_Configuration (bool PrintView)
 			 " class=\"INPUT_FULL_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
 	       Hie_MAX_CHARS_FULL_NAME,
-	       Gbl.CurrentCrs.Crs.FullName,
+	       Gbl.Hierarchy.Crs.Crs.FullName,
 	       Gbl.Form.Id);
       Frm_EndForm ();
      }
    else	// I can not edit course full name
-      fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Crs.FullName);
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.Crs.FullName);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
@@ -317,16 +322,17 @@ static void Crs_Configuration (bool PrintView)
 			 " class=\"INPUT_SHORT_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
 	       Hie_MAX_CHARS_SHRT_NAME,
-	       Gbl.CurrentCrs.Crs.ShrtName,
+	       Gbl.Hierarchy.Crs.Crs.ShrtName,
 	       Gbl.Form.Id);
       Frm_EndForm ();
      }
    else	// I can not edit course short name
-      fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Crs.ShrtName);
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.Crs.ShrtName);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
    /***** Course year *****/
+   IsForm = (!PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"OthCrsYear\" class=\"%s\">%s:</label>"
@@ -345,7 +351,7 @@ static void Crs_Configuration (bool PrintView)
            Year++)
 	 fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
 		  Year,
-		  Year == Gbl.CurrentCrs.Crs.Year ? " selected=\"selected\"" :
+		  Year == Gbl.Hierarchy.Crs.Crs.Year ? " selected=\"selected\"" :
 						    "",
 		  Txt_YEAR_OF_DEGREE[Year]);
       fprintf (Gbl.F.Out,"</select>");
@@ -353,7 +359,7 @@ static void Crs_Configuration (bool PrintView)
      }
    else
       fprintf (Gbl.F.Out,"%s",
-               Gbl.CurrentCrs.Crs.Year ? Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year] :
+               Gbl.Hierarchy.Crs.Crs.Year ? Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Crs.Year] :
 	                                 Txt_Not_applicable);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -377,12 +383,12 @@ static void Crs_Configuration (bool PrintView)
 	                    " onchange=\"document.getElementById('%s').submit();\" />",
                   Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
                   Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-                  Gbl.CurrentCrs.Crs.InstitutionalCrsCod,
+                  Gbl.Hierarchy.Crs.Crs.InstitutionalCrsCod,
                   Gbl.Form.Id);
          Frm_EndForm ();
 	}
       else
-         fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Crs.InstitutionalCrsCod);
+         fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.Crs.InstitutionalCrsCod);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
@@ -397,7 +403,7 @@ static void Crs_Configuration (bool PrintView)
                          "</tr>",
               The_ClassFormInBox[Gbl.Prefs.Theme],
               Txt_Internal_code,
-              Gbl.CurrentCrs.Crs.CrsCod);
+              Gbl.Hierarchy.Crs.Crs.CrsCod);
      }
 
    /***** Link to the course *****/
@@ -414,10 +420,10 @@ static void Crs_Configuration (bool PrintView)
             Txt_Shortcut,
             Cfg_URL_SWAD_CGI,
             Lan_STR_LANG_ID[Gbl.Prefs.Language],
-            Gbl.CurrentCrs.Crs.CrsCod,
+            Gbl.Hierarchy.Crs.Crs.CrsCod,
             Cfg_URL_SWAD_CGI,
             Lan_STR_LANG_ID[Gbl.Prefs.Language],
-            Gbl.CurrentCrs.Crs.CrsCod);
+            Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    if (PrintView)
      {
@@ -429,7 +435,7 @@ static void Crs_Configuration (bool PrintView)
 			 "<td class=\"DAT LEFT_MIDDLE\">",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_QR_code);
-      QR_LinkTo (250,"crs",Gbl.CurrentCrs.Crs.CrsCod);
+      QR_LinkTo (250,"crs",Gbl.Hierarchy.Crs.Crs.CrsCod);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
@@ -441,8 +447,8 @@ static void Crs_Configuration (bool PrintView)
       Crs_ShowNumUsrsInCrs (Rol_STD);
 
       /***** Indicators *****/
-      NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.CurrentCrs.Crs.CrsCod);
-      Ind_ComputeAndStoreIndicatorsCrs (Gbl.CurrentCrs.Crs.CrsCod,
+      NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.Hierarchy.Crs.Crs.CrsCod);
+      Ind_ComputeAndStoreIndicatorsCrs (Gbl.Hierarchy.Crs.Crs.CrsCod,
                                         NumIndicatorsFromDB,&Indicators);
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"%s RIGHT_MIDDLE\">"
@@ -505,7 +511,7 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
 		      "</tr>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
-            Gbl.CurrentCrs.Crs.NumUsrs[Role]);
+            Gbl.Hierarchy.Crs.Crs.NumUsrs[Role]);
   }
 
 /*****************************************************************************/
@@ -560,7 +566,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
    /***** Write link to platform *****/
-   Highlight = (Gbl.CurrentCty.Cty.CtyCod <= 0);
+   Highlight = (Gbl.Hierarchy.Cty.CtyCod <= 0);
    fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
 	    Highlight ? ClassHighlight :
 			ClassNormal);
@@ -594,8 +600,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Lay_ShowErrorAndExit ("Country not found.");
 
       /***** Write link to country *****/
-      Highlight = (Gbl.CurrentIns.Ins.InsCod <= 0 &&
-	           Gbl.CurrentCty.Cty.CtyCod == Cty.CtyCod);
+      Highlight = (Gbl.Hierarchy.Ins.InsCod <= 0 &&
+	           Gbl.Hierarchy.Cty.CtyCod == Cty.CtyCod);
       fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
                Highlight ? ClassHighlight :
         	           ClassNormal);
@@ -635,8 +641,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Lay_ShowErrorAndExit ("Institution not found.");
 
 	 /***** Write link to institution *****/
-	 Highlight = (Gbl.CurrentCtr.Ctr.CtrCod <= 0 &&
-	              Gbl.CurrentIns.Ins.InsCod == Ins.InsCod);
+	 Highlight = (Gbl.Hierarchy.Ctr.CtrCod <= 0 &&
+	              Gbl.Hierarchy.Ins.InsCod == Ins.InsCod);
 	 fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
 	          Highlight ? ClassHighlight :
 			      ClassNormal);
@@ -647,7 +653,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeInsInf),ActTxt),
 	                     Highlight ? ClassHighlight :
         	                         ClassNormal,NULL);
-	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
+	 Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins.FullName);
 	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</li>");
@@ -668,8 +674,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Lay_ShowErrorAndExit ("Centre not found.");
 
 	    /***** Write link to centre *****/
-	    Highlight = (Gbl.CurrentDeg.Deg.DegCod <= 0 &&
-			 Gbl.CurrentCtr.Ctr.CtrCod == Ctr.CtrCod);
+	    Highlight = (Gbl.Hierarchy.Level == Hie_CTR &&
+			 Gbl.Hierarchy.Ctr.CtrCod == Ctr.CtrCod);
 	    fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
 	             Highlight ? ClassHighlight :
 			         ClassNormal);
@@ -680,7 +686,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtrInf),ActTxt),
 	                        Highlight ? ClassHighlight :
         	                            ClassNormal,NULL);
-	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
+	    Log_DrawLogo (Hie_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
 	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr.FullName);
 	    Frm_EndForm ();
 	    fprintf (Gbl.F.Out,"</li>");
@@ -701,8 +707,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Lay_ShowErrorAndExit ("Degree not found.");
 
 	       /***** Write link to degree *****/
-	       Highlight = (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
-			    Gbl.CurrentDeg.Deg.DegCod == Deg.DegCod);
+	       Highlight = (Gbl.Hierarchy.Level == Hie_DEG &&
+			    Gbl.Hierarchy.Deg.DegCod == Deg.DegCod);
 	       fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
 	                Highlight ? ClassHighlight :
 			            ClassNormal);
@@ -713,7 +719,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeDegInf),ActTxt),
 	                           Highlight ? ClassHighlight :
         	                               ClassNormal,NULL);
-	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
+	       Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
 	       fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg.FullName);
 	       Frm_EndForm ();
 	       fprintf (Gbl.F.Out,"</li>");
@@ -734,7 +740,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		     Lay_ShowErrorAndExit ("Course not found.");
 
 		  /***** Write link to course *****/
-		  Highlight = (Gbl.CurrentCrs.Crs.CrsCod == Crs.CrsCod);
+		  Highlight = (Gbl.Hierarchy.Level == Hie_CRS &&
+			       Gbl.Hierarchy.Crs.Crs.CrsCod == Crs.CrsCod);
 		  fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
 	                   Highlight ? ClassHighlight :
 			               ClassNormal);
@@ -898,18 +905,19 @@ void Crs_WriteSelectorOfCourse (void)
    /***** Start form *****/
    Frm_StartFormGoTo (ActSeeCrsInf);
    fprintf (Gbl.F.Out,"<select id=\"crs\" name=\"crs\" style=\"width:175px;\"");
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)
+   if (Gbl.Hierarchy.Deg.DegCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"\"");
-   if (Gbl.CurrentCrs.Crs.CrsCod < 0)
+   fprintf (Gbl.F.Out,">"
+	              "<option value=\"\"");
+   if (Gbl.Hierarchy.Crs.Crs.CrsCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
             Txt_Course);
 
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)
+   if (Gbl.Hierarchy.Deg.DegCod > 0)
      {
       /***** Get courses belonging to the current degree from database *****/
       NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses"
@@ -917,7 +925,7 @@ void Crs_WriteSelectorOfCourse (void)
 					   "SELECT CrsCod,ShortName FROM courses"
 					   " WHERE DegCod=%ld"
 					   " ORDER BY ShortName",
-					   Gbl.CurrentDeg.Deg.DegCod);
+					   Gbl.Hierarchy.Deg.DegCod);
 
       /***** Get courses of this degree *****/
       for (NumCrs = 0;
@@ -933,8 +941,8 @@ void Crs_WriteSelectorOfCourse (void)
 
          /* Write option */
          fprintf (Gbl.F.Out,"<option value=\"%ld\"",CrsCod);
-         if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-             (CrsCod == Gbl.CurrentCrs.Crs.CrsCod))
+         if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
+             (CrsCod == Gbl.Hierarchy.Crs.Crs.CrsCod))
 	    fprintf (Gbl.F.Out," selected=\"selected\"");
          fprintf (Gbl.F.Out,">%s</option>",row[1]);
         }
@@ -954,27 +962,28 @@ void Crs_WriteSelectorOfCourse (void)
 
 void Crs_ShowCrssOfCurrentDeg (void)
   {
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)
-     {
-      /***** Get list of courses in this degree *****/
-      Crs_GetListCoursesInDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Deg.DegCod <= 0)	// No degree selected
+      return;
 
-      /***** Write menu to select country, institution, centre and degree *****/
-      Hie_WriteMenuHierarchy ();
+   /***** Get list of courses in this degree *****/
+   Crs_GetListCoursesInCurrentDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
 
-      /***** Show list of courses *****/
-      Crs_ListCourses ();
+   /***** Write menu to select country, institution, centre and degree *****/
+   Hie_WriteMenuHierarchy ();
 
-      /***** Free list of courses in this degree *****/
-      Crs_FreeListCoursesInDegree (&Gbl.CurrentDeg.Deg);
-     }
+   /***** Show list of courses *****/
+   Crs_ListCourses ();
+
+   /***** Free list of courses in this degree *****/
+   Crs_FreeListCoursesInDegree (&Gbl.Hierarchy.Deg);
   }
 
 /*****************************************************************************/
 /*************** Create a list with courses in current degree ****************/
 /*****************************************************************************/
 
-static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
+static void Crs_GetListCoursesInCurrentDegree (Crs_WhatCourses_t WhatCourses)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -991,7 +1000,7 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
 					      "SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
 					      " FROM courses WHERE DegCod=%ld AND Status=0"
 					      " ORDER BY Year,ShortName",
-					      Gbl.CurrentDeg.Deg.DegCod);
+					      Gbl.Hierarchy.Deg.DegCod);
          break;
       case Crs_ALL_COURSES_EXCEPT_REMOVED:
          NumCrss = (unsigned) DB_QuerySELECT (&mysql_res,"can not get courses"
@@ -999,7 +1008,7 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
 					      "SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
 					      " FROM courses WHERE DegCod=%ld AND (Status & %u)=0"
 					      " ORDER BY Year,ShortName",
-					      Gbl.CurrentDeg.Deg.DegCod,
+					      Gbl.Hierarchy.Deg.DegCod,
 					      (unsigned) Crs_STATUS_BIT_REMOVED);
          break;
       default:
@@ -1008,7 +1017,8 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
    if (NumCrss) // Courses found...
      {
       /***** Create list with courses in degree *****/
-      if ((Gbl.CurrentDeg.Deg.LstCrss = (struct Course *) calloc ((size_t) NumCrss,sizeof (struct Course))) == NULL)
+      if ((Gbl.Hierarchy.Deg.LstCrss = (struct Course *) calloc ((size_t) NumCrss,
+	                                                         sizeof (struct Course))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the courses in degree *****/
@@ -1016,7 +1026,7 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
 	   NumCrs < NumCrss;
 	   NumCrs++)
         {
-         Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
+         Crs = &(Gbl.Hierarchy.Deg.LstCrss[NumCrs]);
 
          /* Get next course */
          row = mysql_fetch_row (mysql_res);
@@ -1024,7 +1034,7 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
         }
      }
 
-   Gbl.CurrentDeg.NumCrss = NumCrss;
+   Gbl.Hierarchy.Deg.NumCrss = NumCrss;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1072,7 +1082,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
             Gbl.Form.Id);
 
    /***** Write an option when no course selected *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// No course selected
+   if (Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)	// No course selected
       fprintf (Gbl.F.Out,"<option value=\"-1\""
 	                 " disabled=\"disabled\" selected=\"selected\">"
 			 "%s"
@@ -1101,7 +1111,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
          fprintf (Gbl.F.Out,"<option value=\"%ld\"",
                   Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod);
-         if (CrsCod == Gbl.CurrentCrs.Crs.CrsCod)	// Course selected
+         if (CrsCod == Gbl.Hierarchy.Crs.Crs.CrsCod)	// Course selected
             fprintf (Gbl.F.Out," selected=\"selected\"");
          fprintf (Gbl.F.Out,">%s</option>",CrsShortName);
         }
@@ -1112,14 +1122,14 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
    /***** Write an option with the current course
           when I don't belong to it *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
+   if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
        !Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to it
       fprintf (Gbl.F.Out,"<option value=\"%ld\""
 	                 " disabled=\"disabled\" selected=\"selected\">"
 			 "%s"
 			 "</option>",
-	       Gbl.CurrentCrs.Crs.CrsCod,
-	       Gbl.CurrentCrs.Crs.ShrtName);
+	       Gbl.Hierarchy.Crs.Crs.CrsCod,
+	       Gbl.Hierarchy.Crs.Crs.ShrtName);
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</select>");
@@ -1142,11 +1152,11 @@ static void Crs_ListCourses (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Courses_of_DEGREE_X,
-	     Gbl.CurrentDeg.Deg.ShrtName);
+	     Gbl.Hierarchy.Deg.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Crs_PutIconsListCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
 
-   if (Gbl.CurrentDeg.NumCrss)	// There are courses in the current degree
+   if (Gbl.Hierarchy.Deg.NumCrss)	// There are courses in the current degree
      {
       /***** Start table *****/
       Tbl_StartTableWideMargin (2);
@@ -1170,8 +1180,8 @@ static void Crs_ListCourses (void)
    if (Crs_CheckIfICanCreateCourses ())
      {
       Frm_StartForm (ActEdiCrs);
-      Btn_PutConfirmButton (Gbl.CurrentDeg.NumCrss ? Txt_Create_another_course :
-	                                             Txt_Create_course);
+      Btn_PutConfirmButton (Gbl.Hierarchy.Deg.NumCrss ? Txt_Create_another_course :
+	                                                           Txt_Create_course);
       Frm_EndForm ();
      }
 
@@ -1234,10 +1244,10 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
    /***** Write all the courses of this year *****/
    for (NumCrs = 0;
-	NumCrs < Gbl.CurrentDeg.NumCrss;
+	NumCrs < Gbl.Hierarchy.Deg.NumCrss;
 	NumCrs++)
      {
-      Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
+      Crs = &(Gbl.Hierarchy.Deg.LstCrss[NumCrs]);
       if (Crs->Year == Year)	// The year of the course is this?
 	{
 	 ThisYearHasCourses = true;
@@ -1334,7 +1344,7 @@ void Crs_EditCourses (void)
    extern const char *Txt_Courses_of_DEGREE_X;
 
    /***** Get list of courses in this degree *****/
-   Crs_GetListCoursesInDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
+   Crs_GetListCoursesInCurrentDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
 
    /***** Get list of degrees in this centre *****/
    Deg_GetListDegsOfCurrentCtr ();
@@ -1345,7 +1355,7 @@ void Crs_EditCourses (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Courses_of_DEGREE_X,
-	     Gbl.CurrentDeg.Deg.ShrtName);
+	     Gbl.Hierarchy.Deg.ShrtName);
    Box_StartBox (NULL,Gbl.Title,Crs_PutIconsEditingCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
 
@@ -1353,17 +1363,17 @@ void Crs_EditCourses (void)
    Crs_PutFormToCreateCourse ();
 
    /***** Forms to edit current courses *****/
-   if (Gbl.CurrentDeg.NumCrss)
+   if (Gbl.Hierarchy.Deg.NumCrss)
       Crs_ListCoursesForEdition ();
 
    /***** End box *****/
    Box_EndBox ();
 
    /***** Free list of courses in this degree *****/
-   Crs_FreeListCoursesInDegree (&Gbl.CurrentDeg.Deg);
+   Crs_FreeListCoursesInDegree (&Gbl.Hierarchy.Deg);
 
    /***** Free list of degrees in this centre *****/
-   Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
+   Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
   }
 
 /*****************************************************************************/
@@ -1436,10 +1446,10 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 
    /***** List courses of a given year *****/
    for (NumCrs = 0;
-	NumCrs < Gbl.CurrentDeg.NumCrss;
+	NumCrs < Gbl.Hierarchy.Deg.NumCrss;
 	NumCrs++)
      {
-      Crs = &(Gbl.CurrentDeg.Deg.LstCrss[NumCrs]);
+      Crs = &(Gbl.Hierarchy.Deg.LstCrss[NumCrs]);
       if (Crs->Year == Year)
 	{
 	 ICanEdit = Crs_CheckIfICanEdit (Crs);
@@ -1874,7 +1884,7 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
 
    /***** Get parameters from form *****/
    /* Set course degree */
-   Deg.DegCod = Gbl.Degs.EditingCrs.DegCod = Gbl.CurrentDeg.Deg.DegCod;
+   Deg.DegCod = Gbl.Degs.EditingCrs.DegCod = Gbl.Hierarchy.Deg.DegCod;
 
    /* Get parameters of the new course */
    Crs_GetParamsNewCourse (&Gbl.Degs.EditingCrs);
@@ -2243,10 +2253,10 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 		      CrsCod);
 
       /***** Remove all the threads and posts in forums of the course *****/
-      For_RemoveForums (Sco_SCOPE_CRS,CrsCod);
+      For_RemoveForums (Hie_CRS,CrsCod);
 
       /***** Remove surveys of the course *****/
-      Svy_RemoveSurveys (Sco_SCOPE_CRS,CrsCod);
+      Svy_RemoveSurveys (Hie_CRS,CrsCod);
 
       /***** Remove all test exams made in the course *****/
       Tst_RemoveCrsTestResults (CrsCod);
@@ -2313,19 +2323,19 @@ void Crs_ChangeInsCrsCodInConfig (void)
    Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /***** Change the institutional course code *****/
-   if (strcmp (NewInstitutionalCrsCod,Gbl.CurrentCrs.Crs.InstitutionalCrsCod))
+   if (strcmp (NewInstitutionalCrsCod,Gbl.Hierarchy.Crs.Crs.InstitutionalCrsCod))
      {
-      Crs_UpdateInstitutionalCrsCod (&Gbl.CurrentCrs.Crs,NewInstitutionalCrsCod);
+      Crs_UpdateInstitutionalCrsCod (&Gbl.Hierarchy.Crs.Crs,NewInstitutionalCrsCod);
 
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
-	               Gbl.CurrentCrs.Crs.ShrtName,
+	               Gbl.Hierarchy.Crs.Crs.ShrtName,
 		       NewInstitutionalCrsCod);
      }
    else	// The same institutional code
       Ale_CreateAlert (Ale_INFO,NULL,
 	               Txt_The_institutional_code_of_the_course_X_has_not_changed,
-	               Gbl.CurrentCrs.Crs.ShrtName);
+	               Gbl.Hierarchy.Crs.Crs.ShrtName);
   }
 
 /*****************************************************************************/
@@ -2383,32 +2393,32 @@ void Crs_ChangeCrsDegInConfig (void)
    NewDeg.DegCod = Deg_GetAndCheckParamOtherDegCod (1);
 
    /***** Check if degree has changed *****/
-   if (NewDeg.DegCod != Gbl.CurrentCrs.Crs.DegCod)
+   if (NewDeg.DegCod != Gbl.Hierarchy.Crs.Crs.DegCod)
      {
       /***** Get data of new degree *****/
       Deg_GetDataOfDegreeByCod (&NewDeg);
 
       /***** If name of course was in database in the new degree... *****/
-      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.CurrentCrs.Crs.ShrtName,-1L,
-                                               NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year))
+      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Hierarchy.Crs.Crs.ShrtName,-1L,
+                                               NewDeg.DegCod,Gbl.Hierarchy.Crs.Crs.Year))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
-		          Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year],
+		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Crs.Year],
 			  NewDeg.FullName,
-		          Gbl.CurrentCrs.Crs.ShrtName);
-      else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.CurrentCrs.Crs.FullName,-1L,
-                                                    NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year))
+		          Gbl.Hierarchy.Crs.Crs.ShrtName);
+      else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.Hierarchy.Crs.Crs.FullName,-1L,
+                                                    NewDeg.DegCod,Gbl.Hierarchy.Crs.Crs.Year))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
-		          Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year],
+		          Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Crs.Year],
 			  NewDeg.FullName,
-		          Gbl.CurrentCrs.Crs.FullName);
+		          Gbl.Hierarchy.Crs.Crs.FullName);
       else	// Update degree in database
 	{
 	 /***** Update degree in table of courses *****/
-	 Crs_UpdateCrsDegDB (Gbl.CurrentCrs.Crs.CrsCod,NewDeg.DegCod);
-	 Gbl.CurrentCrs.Crs.DegCod =
-	 Gbl.CurrentDeg.Deg.DegCod = NewDeg.DegCod;
+	 Crs_UpdateCrsDegDB (Gbl.Hierarchy.Crs.Crs.CrsCod,NewDeg.DegCod);
+	 Gbl.Hierarchy.Crs.Crs.DegCod =
+	 Gbl.Hierarchy.Deg.DegCod = NewDeg.DegCod;
 
 	 /***** Initialize again current course, degree, centre... *****/
       	 Hie_InitHierarchy ();
@@ -2416,8 +2426,8 @@ void Crs_ChangeCrsDegInConfig (void)
 	 /***** Create alert to show the change made *****/
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,
 	                  Txt_The_course_X_has_been_moved_to_the_degree_Y,
-		          Gbl.CurrentCrs.Crs.FullName,
-		          Gbl.CurrentDeg.Deg.FullName);
+		          Gbl.Hierarchy.Crs.Crs.FullName,
+		          Gbl.Hierarchy.Deg.FullName);
 	}
      }
   }
@@ -2467,27 +2477,27 @@ void Crs_ChangeCrsYearInConfig (void)
    if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
       /***** If name of course was in database in the new year... *****/
-      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.CurrentCrs.Crs.ShrtName,-1L,
-                                               Gbl.CurrentCrs.Crs.DegCod,NewYear))
+      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Hierarchy.Crs.Crs.ShrtName,-1L,
+                                               Gbl.Hierarchy.Crs.Crs.DegCod,NewYear))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_course_X_already_exists_in_year_Y,
-		          Gbl.CurrentCrs.Crs.ShrtName,
+		          Gbl.Hierarchy.Crs.Crs.ShrtName,
 			  Txt_YEAR_OF_DEGREE[NewYear]);
-      else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.CurrentCrs.Crs.FullName,-1L,
-                                                    Gbl.CurrentCrs.Crs.DegCod,NewYear))
+      else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.Hierarchy.Crs.Crs.FullName,-1L,
+                                                    Gbl.Hierarchy.Crs.Crs.DegCod,NewYear))
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_course_X_already_exists_in_year_Y,
-		          Gbl.CurrentCrs.Crs.FullName,
+		          Gbl.Hierarchy.Crs.Crs.FullName,
 			  Txt_YEAR_OF_DEGREE[NewYear]);
       else	// Update year in database
 	{
 	 /***** Update year in table of courses *****/
-         Crs_UpdateCrsYear (&Gbl.CurrentCrs.Crs,NewYear);
+         Crs_UpdateCrsYear (&Gbl.Hierarchy.Crs.Crs,NewYear);
 
 	 /***** Create alert to show the change made *****/
 	 Ale_CreateAlert (Ale_SUCCESS,NULL,
 	                  Txt_The_year_of_the_course_X_has_changed,
-		          Gbl.CurrentCrs.Crs.ShrtName);
+		          Gbl.Hierarchy.Crs.Crs.ShrtName);
 	}
      }
    else	// Year not valid
@@ -2604,7 +2614,7 @@ void Crs_RenameCourseShort (void)
 
 void Crs_RenameCourseShortInConfig (void)
   {
-   Crs_RenameCourse (&Gbl.CurrentCrs.Crs,Cns_SHRT_NAME);
+   Crs_RenameCourse (&Gbl.Hierarchy.Crs.Crs,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -2619,7 +2629,7 @@ void Crs_RenameCourseFull (void)
 
 void Crs_RenameCourseFullInConfig (void)
   {
-   Crs_RenameCourse (&Gbl.CurrentCrs.Crs,Cns_FULL_NAME);
+   Crs_RenameCourse (&Gbl.Hierarchy.Crs.Crs,Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -2804,7 +2814,7 @@ void Crs_ContEditAfterChgCrs (void)
 	 case Rol_STD:
 	 case Rol_NET:
 	 case Rol_TCH:
-	    if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
+	    if (Gbl.Degs.EditingCrs.CrsCod != Gbl.Hierarchy.Crs.Crs.CrsCod)
 	       PutButtonToRequestRegistration = !Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
 									     Gbl.Degs.EditingCrs.CrsCod,
 									     false);
@@ -2831,14 +2841,14 @@ void Crs_ContEditAfterChgCrs (void)
 /************************ Put button to go to course *************************/
 /*****************************************************************************/
 // Gbl.Degs.EditingCrs is the course that is beeing edited
-// Gbl.CurrentCrs.Crs is the current course
+// Gbl.Hierarchy.Crs.Crs. is the current course
 
 static void Crs_PutButtonToGoToCrs (void)
   {
    extern const char *Txt_Go_to_X;
 
    // If the course being edited is different to the current one...
-   if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
+   if (Gbl.Degs.EditingCrs.CrsCod != Gbl.Hierarchy.Crs.Crs.CrsCod)
      {
       Frm_StartForm (ActSeeCrsInf);
       Crs_PutParamCrsCod (Gbl.Degs.EditingCrs.CrsCod);
@@ -2854,7 +2864,7 @@ static void Crs_PutButtonToGoToCrs (void)
 /************************ Put button to go to course *************************/
 /*****************************************************************************/
 // Gbl.Degs.EditingCrs is the course that is beeing edited
-// Gbl.CurrentCrs.Crs is the current course
+// Gbl.Hierarchy.Crs.Crs. is the current course
 
 static void Crs_PutButtonToRegisterInCrs (void)
   {
@@ -2862,7 +2872,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
 
    Frm_StartForm (ActReqSignUp);
    // If the course beeing edited is different to the current one...
-   if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
+   if (Gbl.Degs.EditingCrs.CrsCod != Gbl.Hierarchy.Crs.Crs.CrsCod)
       Crs_PutParamCrsCod (Gbl.Degs.EditingCrs.CrsCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Register_me_in_X,
@@ -2906,7 +2916,7 @@ static void Crs_PutIconToSearchCourses (void)
 
 static void Sch_PutLinkToSearchCoursesParams (void)	// TODO: Move to search module
   {
-   Sco_PutParamScope ("ScopeSch",Sco_SCOPE_SYS);
+   Sco_PutParamScope ("ScopeSch",Hie_SYS);
    Par_PutHiddenParamUnsigned ("WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
   }
 
@@ -3217,7 +3227,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Style = "DAT";
       StyleNoBR = "DAT_NOBR";
      }
-   BgColor = (CrsCod == Gbl.CurrentCrs.Crs.CrsCod) ? "LIGHT_BLUE" :
+   BgColor = (CrsCod == Gbl.Hierarchy.Crs.Crs.CrsCod) ? "LIGHT_BLUE" :
                                                      Gbl.ColorRows[RowEvenOdd];
 
    /***** Start row *****/
@@ -3253,7 +3263,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	     Txt_Go_to_X,
 	     row[2]);
    Frm_LinkFormSubmit (Gbl.Title,StyleNoBR,NULL);
-   Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,"CENTER_TOP",true);
+   Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CENTER_TOP",true);
    fprintf (Gbl.F.Out," %s (%s)"
                       "</a>",
             row[2],row[6]);
@@ -3301,13 +3311,13 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
 void Crs_UpdateCrsLast (void)
   {
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
+   if (Gbl.Hierarchy.Level == Hie_CRS &&	// Course selected
        Gbl.Usrs.Me.Role.Logged >= Rol_STD)
       /***** Update my last access to current course *****/
       DB_QueryUPDATE ("can not update last access to current course",
 		      "REPLACE INTO crs_last (CrsCod,LastTime)"
 		      " VALUES (%ld,NOW())",
-	              Gbl.CurrentCrs.Crs.CrsCod);
+	              Gbl.Hierarchy.Crs.Crs.CrsCod);
   }
 
 /*****************************************************************************/

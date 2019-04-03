@@ -167,11 +167,11 @@ void Ses_InsertSessionInDB (void)
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Usrs.Me.UsrDat.Password,
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
-		   Gbl.CurrentCty.Cty.CtyCod,
-		   Gbl.CurrentIns.Ins.InsCod,
-		   Gbl.CurrentCtr.Ctr.CtrCod,
-		   Gbl.CurrentDeg.Deg.DegCod,
-		   Gbl.CurrentCrs.Crs.CrsCod,
+		   Gbl.Hierarchy.Cty.CtyCod,
+		   Gbl.Hierarchy.Ins.InsCod,
+		   Gbl.Hierarchy.Ctr.CtrCod,
+		   Gbl.Hierarchy.Deg.DegCod,
+		   Gbl.Hierarchy.Crs.Crs.CrsCod,
 		   Gbl.Search.WhatToSearch);
   }
 
@@ -190,11 +190,11 @@ void Ses_UpdateSessionDataInDB (void)
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Gbl.Usrs.Me.UsrDat.Password,
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
-		   Gbl.CurrentCty.Cty.CtyCod,
-		   Gbl.CurrentIns.Ins.InsCod,
-		   Gbl.CurrentCtr.Ctr.CtrCod,
-		   Gbl.CurrentDeg.Deg.DegCod,
-		   Gbl.CurrentCrs.Crs.CrsCod,
+		   Gbl.Hierarchy.Cty.CtyCod,
+		   Gbl.Hierarchy.Ins.InsCod,
+		   Gbl.Hierarchy.Ctr.CtrCod,
+		   Gbl.Hierarchy.Deg.DegCod,
+		   Gbl.Hierarchy.Crs.Crs.CrsCod,
 		   Gbl.Session.Id);
   }
 
@@ -289,19 +289,19 @@ bool Ses_GetSessionData (void)
          Gbl.Usrs.Me.Role.FromSession = Rol_UNK;
 
       /***** Get country code (row[3]) *****/
-      Gbl.CurrentCty.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[3]);
+      Gbl.Hierarchy.Cty.CtyCod = Str_ConvertStrCodToLongCod (row[3]);
 
       /***** Get institution code (row[4]) *****/
-      Gbl.CurrentIns.Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
+      Gbl.Hierarchy.Ins.InsCod = Str_ConvertStrCodToLongCod (row[4]);
 
       /***** Get centre code (row[5]) *****/
-      Gbl.CurrentCtr.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
+      Gbl.Hierarchy.Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[5]);
 
       /***** Get degree code (row[6]) *****/
-      Gbl.CurrentDeg.Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
+      Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
 
       /***** Get course code (row[7]) *****/
-      Gbl.CurrentCrs.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
+      Gbl.Hierarchy.Crs.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
 
       /***** Get last search *****/
       if (Gbl.Action.Act != ActLogOut)	// When closing session, last search will not be needed

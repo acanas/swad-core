@@ -102,7 +102,7 @@ void Not_ShowFormNotice (void)
 
    /***** Help message *****/
    Ale_ShowAlert (Ale_INFO,Txt_The_notice_will_appear_as_a_yellow_note_,
-                  Gbl.CurrentCrs.Crs.FullName);
+                  Gbl.Hierarchy.Crs.Crs.FullName);
 
    /***** Start form *****/
    Frm_StartForm (ActRcvNot);
@@ -147,7 +147,7 @@ void Not_ReceiveNotice (void)
    NotCod = Not_InsertNoticeInDB (Content);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Notice_created);
@@ -160,7 +160,7 @@ void Not_ReceiveNotice (void)
    TL_StoreAndPublishNote (TL_NOTE_NOTICE,NotCod,&SocPub);
 
    /***** Set notice to be highlighted *****/
-   Gbl.CurrentCrs.Notices.HighlightNotCod = NotCod;
+   Gbl.Hierarchy.Crs.Notices.HighlightNotCod = NotCod;
   }
 
 /*****************************************************************************/
@@ -177,7 +177,7 @@ static long Not_InsertNoticeInDB (const char *Content)
 				" (CrsCod,UsrCod,CreatTime,Content,Status)"
 				" VALUES"
 				" (%ld,%ld,NOW(),'%s',%u)",
-				Gbl.CurrentCrs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Content,(unsigned) Not_ACTIVE_NOTICE);
   }
@@ -217,7 +217,7 @@ void Not_ListFullNotices (void)
   {
    /***** Show all notices *****/
    Not_ShowNotices (Not_LIST_FULL_NOTICES,
-	            Gbl.CurrentCrs.Notices.HighlightNotCod);	// Highlight notice
+	            Gbl.Hierarchy.Crs.Notices.HighlightNotCod);	// Highlight notice
   }
 
 /*****************************************************************************/
@@ -227,7 +227,7 @@ void Not_ListFullNotices (void)
 void Not_GetHighLightedNotCod (void)
   {
    /***** Get notice to be highlighted *****/
-   Gbl.CurrentCrs.Notices.HighlightNotCod = Not_GetParamNotCod ();
+   Gbl.Hierarchy.Crs.Notices.HighlightNotCod = Not_GetParamNotCod ();
   }
 
 /*****************************************************************************/
@@ -246,13 +246,13 @@ void Not_HideActiveNotice (void)
 		   "UPDATE notices SET Status=%u"
 		   " WHERE NotCod=%ld AND CrsCod=%ld",
 	           (unsigned) Not_OBSOLETE_NOTICE,
-	           NotCod,Gbl.CurrentCrs.Crs.CrsCod);
+	           NotCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
 
    /***** Set notice to be highlighted *****/
-   Gbl.CurrentCrs.Notices.HighlightNotCod = NotCod;
+   Gbl.Hierarchy.Crs.Notices.HighlightNotCod = NotCod;
   }
 
 /*****************************************************************************/
@@ -271,13 +271,13 @@ void Not_RevealHiddenNotice (void)
 		   "UPDATE notices SET Status=%u"
 		   " WHERE NotCod=%ld AND CrsCod=%ld",
 	           (unsigned) Not_ACTIVE_NOTICE,
-	           NotCod,Gbl.CurrentCrs.Crs.CrsCod);
+	           NotCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
 
    /***** Set notice to be highlighted *****/
-   Gbl.CurrentCrs.Notices.HighlightNotCod = NotCod;
+   Gbl.Hierarchy.Crs.Notices.HighlightNotCod = NotCod;
   }
 
 /*****************************************************************************/
@@ -329,13 +329,13 @@ void Not_RemoveNotice (void)
 		   " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
 		   " FROM notices"
 		   " WHERE NotCod=%ld AND CrsCod=%ld",
-                   NotCod,Gbl.CurrentCrs.Crs.CrsCod);
+                   NotCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /* Remove notice */
    DB_QueryDELETE ("can not remove notice",
 		   "DELETE FROM notices"
 		   " WHERE NotCod=%ld AND CrsCod=%ld",
-                   NotCod,Gbl.CurrentCrs.Crs.CrsCod);
+                   NotCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
@@ -344,7 +344,7 @@ void Not_RemoveNotice (void)
    TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NOTE_NOTICE,NotCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
   }
 
 /*****************************************************************************/
@@ -369,133 +369,133 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    unsigned UnsignedNum;
    Not_Status_t Status;
 
-   /***** A course must be selected (Gbl.CurrentCrs.Crs.CrsCod > 0) *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Level != Hie_CRS)	// No course selected
+      return;
+
+   /***** Get notices from database *****/
+   switch (TypeNoticesListing)
      {
-      /***** Get notices from database *****/
-      switch (TypeNoticesListing)
-	{
-	 case Not_LIST_BRIEF_NOTICES:
-	    NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
-					 "SELECT NotCod,"
-					        "UNIX_TIMESTAMP(CreatTime) AS F,"
-					        "UsrCod,"
-					        "Content,"
-					        "Status"
-					 " FROM notices"
-					 " WHERE CrsCod=%ld AND Status=%u"
-					 " ORDER BY CreatTime DESC",
-					 Gbl.CurrentCrs.Crs.CrsCod,
-					 (unsigned) Not_ACTIVE_NOTICE);
-	    break;
-	 case Not_LIST_FULL_NOTICES:
-	    NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
-					 "SELECT NotCod,"
-					        "UNIX_TIMESTAMP(CreatTime) AS F,"
-					        "UsrCod,"
-					        "Content,"
-					        "Status"
-					 " FROM notices"
-					 " WHERE CrsCod=%ld"
-					 " ORDER BY CreatTime DESC",
-					 Gbl.CurrentCrs.Crs.CrsCod);
-	    break;
-	}
-
-      if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
-	{
-	 /***** Start box *****/
-	 snprintf (StrWidth,sizeof (StrWidth),
-	           "%upx",
-	           Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
-	 Box_StartBox (StrWidth,
-	               Txt_Notices,
-		       Not_PutIconsListNotices,
-		       Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
-         if (!NumNotices)
-	    Ale_ShowAlert (Ale_INFO,Txt_No_notices);
-	}
-
-      /***** Show the notices *****/
-      for (NumNot = 0;
-	   NumNot < NumNotices;
-	   NumNot++)
-	{
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get notice code (row[0]) */
-	 if (sscanf (row[0],"%ld",&NotCod) != 1)
-	    Lay_ShowErrorAndExit ("Wrong code of notice.");
-
-	 /* Get creation time (row[1] holds the UTC date-time) */
-	 TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
-
-	 /* Get user code (row[2]) */
-	 UsrCod = Str_ConvertStrCodToLongCod (row[2]);
-
-	 /* Get the content (row[3]) and insert links */
-	 Str_Copy (Content,row[3],
-	           Cns_MAX_BYTES_TEXT);
-	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
-	                  Not_MaxCharsURLOnScreen[TypeNoticesListing]);
-	 if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
-            Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
-
-	 /* Get status of the notice (row[4]) */
-	 Status = Not_OBSOLETE_NOTICE;
-	 if (sscanf (row[4],"%u",&UnsignedNum) == 1)
-	    if (UnsignedNum < Not_NUM_STATUS)
-	      Status = (Not_Status_t) UnsignedNum;
-
-	 /* Draw the notice */
-	 Not_DrawANotice (TypeNoticesListing,
-	                  NotCod,
-			  (NotCod == HighlightNotCod),	// Highlighted?
-	                  TimeUTC,Content,UsrCod,Status);
-	}
-
-      switch (TypeNoticesListing)
-        {
-	 case Not_LIST_BRIEF_NOTICES:
-            /***** Link to RSS file *****/
-	    /* Create RSS file if not exists */
-	    snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),
-		      "%s/%ld/%s/%s",
-		      Cfg_PATH_CRS_PUBLIC,
-		      Gbl.CurrentCrs.Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
-	    if (!Fil_CheckIfPathExists (PathRelRSSFile))
-	       RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
-
-	    /* Put a link to the RSS file */
-	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-			       "<a href=\"");
-	    RSS_WriteRSSLink (Gbl.F.Out,Gbl.CurrentCrs.Crs.CrsCod);
-	    fprintf (Gbl.F.Out,"\" target=\"_blank\">"
-			       "<img src=\"%s/rss-square.svg\""
-			       " alt=\"RSS\" title=\"RSS\""
-			       " class=\"ICO16x16\" />"
-			       "</a>"
-			       "</div>",
-		     Cfg_URL_ICON_PUBLIC);
-	    break;
-	 case Not_LIST_FULL_NOTICES:
-	    /***** Button to add new notice *****/
-	    if (Not_CheckIfICanEditNotices ())
-	       Not_PutButtonToAddNewNotice ();
-
-	    /***** End box *****/
-	    Box_EndBox ();
-	    break;
-	}
-
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
-
-      /***** Mark possible notification as seen *****/
-      Ntf_MarkNotifAsSeen (Ntf_EVENT_NOTICE,
-	                   -1L,Gbl.CurrentCrs.Crs.CrsCod,
-	                   Gbl.Usrs.Me.UsrDat.UsrCod);
+      case Not_LIST_BRIEF_NOTICES:
+	 NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
+				      "SELECT NotCod,"
+					     "UNIX_TIMESTAMP(CreatTime) AS F,"
+					     "UsrCod,"
+					     "Content,"
+					     "Status"
+				      " FROM notices"
+				      " WHERE CrsCod=%ld AND Status=%u"
+				      " ORDER BY CreatTime DESC",
+				      Gbl.Hierarchy.Crs.Crs.CrsCod,
+				      (unsigned) Not_ACTIVE_NOTICE);
+	 break;
+      case Not_LIST_FULL_NOTICES:
+	 NumNotices = DB_QuerySELECT (&mysql_res,"can not get notices from database",
+				      "SELECT NotCod,"
+					     "UNIX_TIMESTAMP(CreatTime) AS F,"
+					     "UsrCod,"
+					     "Content,"
+					     "Status"
+				      " FROM notices"
+				      " WHERE CrsCod=%ld"
+				      " ORDER BY CreatTime DESC",
+				      Gbl.Hierarchy.Crs.Crs.CrsCod);
+	 break;
      }
+
+   if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
+     {
+      /***** Start box *****/
+      snprintf (StrWidth,sizeof (StrWidth),
+		"%upx",
+		Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
+      Box_StartBox (StrWidth,
+		    Txt_Notices,
+		    Not_PutIconsListNotices,
+		    Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
+      if (!NumNotices)
+	 Ale_ShowAlert (Ale_INFO,Txt_No_notices);
+     }
+
+   /***** Show the notices *****/
+   for (NumNot = 0;
+	NumNot < NumNotices;
+	NumNot++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get notice code (row[0]) */
+      if (sscanf (row[0],"%ld",&NotCod) != 1)
+	 Lay_ShowErrorAndExit ("Wrong code of notice.");
+
+      /* Get creation time (row[1] holds the UTC date-time) */
+      TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
+
+      /* Get user code (row[2]) */
+      UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+
+      /* Get the content (row[3]) and insert links */
+      Str_Copy (Content,row[3],
+		Cns_MAX_BYTES_TEXT);
+      Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
+		       Not_MaxCharsURLOnScreen[TypeNoticesListing]);
+      if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
+	 Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
+
+      /* Get status of the notice (row[4]) */
+      Status = Not_OBSOLETE_NOTICE;
+      if (sscanf (row[4],"%u",&UnsignedNum) == 1)
+	 if (UnsignedNum < Not_NUM_STATUS)
+	   Status = (Not_Status_t) UnsignedNum;
+
+      /* Draw the notice */
+      Not_DrawANotice (TypeNoticesListing,
+		       NotCod,
+		       (NotCod == HighlightNotCod),	// Highlighted?
+		       TimeUTC,Content,UsrCod,Status);
+     }
+
+   switch (TypeNoticesListing)
+     {
+      case Not_LIST_BRIEF_NOTICES:
+	 /***** Link to RSS file *****/
+	 /* Create RSS file if not exists */
+	 snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),
+		   "%s/%ld/%s/%s",
+		   Cfg_PATH_CRS_PUBLIC,
+		   Gbl.Hierarchy.Crs.Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+	 if (!Fil_CheckIfPathExists (PathRelRSSFile))
+	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
+
+	 /* Put a link to the RSS file */
+	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+			    "<a href=\"");
+	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.Hierarchy.Crs.Crs.CrsCod);
+	 fprintf (Gbl.F.Out,"\" target=\"_blank\">"
+			    "<img src=\"%s/rss-square.svg\""
+			    " alt=\"RSS\" title=\"RSS\""
+			    " class=\"ICO16x16\" />"
+			    "</a>"
+			    "</div>",
+		  Cfg_URL_ICON_PUBLIC);
+	 break;
+      case Not_LIST_FULL_NOTICES:
+	 /***** Button to add new notice *****/
+	 if (Not_CheckIfICanEditNotices ())
+	    Not_PutButtonToAddNewNotice ();
+
+	 /***** End box *****/
+	 Box_EndBox ();
+	 break;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Mark possible notification as seen *****/
+   Ntf_MarkNotifAsSeen (Ntf_EVENT_NOTICE,
+			-1L,Gbl.Hierarchy.Crs.Crs.CrsCod,
+			Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -570,7 +570,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
 			      "Status"
 		       " FROM notices"
 		       " WHERE NotCod=%ld AND CrsCod=%ld",
-		       NotCod,Gbl.CurrentCrs.Crs.CrsCod))
+		       NotCod,Gbl.Hierarchy.Crs.Crs.CrsCod))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -865,7 +865,7 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 // Returns the number of (active or obsolete) notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumNotif)
+unsigned Not_GetNumNotices (Hie_Level_t Scope,Not_Status_t Status,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -874,14 +874,14 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumN
    /***** Get number of notices from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),SUM(NumNotif)"
 			 " FROM notices"
 			 " WHERE Status=%u",
                          Status);
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),SUM(notices.NumNotif)"
 			 " FROM institutions,centres,degrees,courses,notices"
@@ -891,10 +891,10 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumN
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=notices.CrsCod"
 			 " AND notices.Status=%u",
-                         Gbl.CurrentCty.Cty.CtyCod,
+                         Gbl.Hierarchy.Cty.CtyCod,
                          Status);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),SUM(notices.NumNotif)"
 			 " FROM centres,degrees,courses,notices"
@@ -903,10 +903,10 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumN
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=notices.CrsCod"
 			 " AND notices.Status=%u",
-                         Gbl.CurrentIns.Ins.InsCod,
+                         Gbl.Hierarchy.Ins.InsCod,
                          Status);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),SUM(notices.NumNotif)"
 			 " FROM degrees,courses,notices"
@@ -914,26 +914,26 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumN
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=notices.CrsCod"
 			 " AND notices.Status=%u",
-                         Gbl.CurrentCtr.Ctr.CtrCod,
+                         Gbl.Hierarchy.Ctr.CtrCod,
                          Status);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),SUM(notices.NumNotif)"
 			 " FROM courses,notices"
 			 " WHERE courses.DegCod=%ld"
 			 " AND courses.CrsCod=notices.CrsCod"
 			 " AND notices.Status=%u",
-                         Gbl.CurrentDeg.Deg.DegCod,
+                         Gbl.Hierarchy.Deg.DegCod,
                          Status);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of notices",
 			 "SELECT COUNT(*),SUM(NumNotif)"
 			 " FROM notices"
 			 " WHERE CrsCod=%ld"
 			 " AND Status=%u",
-                         Gbl.CurrentCrs.Crs.CrsCod,
+                         Gbl.Hierarchy.Crs.Crs.CrsCod,
                          Status);
          break;
       default:
@@ -967,7 +967,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumN
 // Returns the number of deleted notices
 // sent from this location (all the platform, current degree or current course)
 
-unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
+unsigned Not_GetNumNoticesDeleted (Hie_Level_t Scope,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -976,12 +976,12 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
    /***** Get number of notices from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),SUM(NumNotif)"
 			 " FROM notices_deleted");
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
 			 " FROM institutions,centres,degrees,courses,notices_deleted"
@@ -990,9 +990,9 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=notices_deleted.CrsCod",
-                         Gbl.CurrentCty.Cty.CtyCod);
+                         Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
 			 " FROM centres,degrees,courses,notices_deleted"
@@ -1000,31 +1000,31 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=notices_deleted.CrsCod",
-                         Gbl.CurrentIns.Ins.InsCod);
+                         Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
 			 " FROM degrees,courses,notices_deleted"
 			 " WHERE degrees.CtrCod=%ld"
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=notices_deleted.CrsCod",
-                         Gbl.CurrentCtr.Ctr.CtrCod);
+                         Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
 			 " FROM courses,notices_deleted"
 			 " WHERE courses.DegCod=%ld"
 			 " AND courses.CrsCod=notices_deleted.CrsCod",
-                         Gbl.CurrentDeg.Deg.DegCod);
+                         Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of deleted notices",
 			 "SELECT COUNT(*),SUM(NumNotif)"
 			 " FROM notices_deleted"
 			 " WHERE CrsCod=%ld",
-                         Gbl.CurrentCrs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -1085,10 +1085,10 @@ static long Not_GetParamNotCod (void)
 
 static void Not_SetNotCodToEdit (long NotCod)
   {
-   Gbl.CurrentCrs.Notices.NotCod = NotCod;
+   Gbl.Hierarchy.Crs.Notices.NotCod = NotCod;
   }
 
 static long Not_GetNotCodToEdit (void)
   {
-   return Gbl.CurrentCrs.Notices.NotCod;
+   return Gbl.Hierarchy.Crs.Notices.NotCod;
   }

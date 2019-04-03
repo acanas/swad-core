@@ -283,9 +283,9 @@ static void Tst_RemoveAllMedFilesFromStemOfAllQstsInCrs (long CrsCod);
 static void Tst_RemoveMediaFromAllAnsOfQst (long CrsCod,long QstCod);
 static void Tst_RemoveAllMedFilesFromAnsOfAllQstsInCrs (long CrsCod);
 
-static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
-static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType);
-static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType);
+static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
+static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType);
+static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType);
 
 static long Tst_CreateTestResultInDB (void);
 static void Tst_StoreScoreOfTestResultInDB (long TstCod,
@@ -460,9 +460,9 @@ void Tst_ShowNewTest (void)
 	    Box_StartBox (NULL,Txt_Test,NULL,
 	                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 	    Lay_WriteHeaderClassPhoto (false,false,
-				       Gbl.CurrentIns.Ins.InsCod,
-				       Gbl.CurrentDeg.Deg.DegCod,
-				       Gbl.CurrentCrs.Crs.CrsCod);
+				       Gbl.Hierarchy.Ins.InsCod,
+				       Gbl.Hierarchy.Deg.DegCod,
+				       Gbl.Hierarchy.Crs.Crs.CrsCod);
 
             /***** Start form *****/
             Frm_StartForm (ActAssTst);
@@ -559,9 +559,9 @@ void Tst_AssessTest (void)
 	 Box_StartBox (NULL,Txt_Test_result,NULL,
 	               Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 	 Lay_WriteHeaderClassPhoto (false,false,
-				    Gbl.CurrentIns.Ins.InsCod,
-				    Gbl.CurrentDeg.Deg.DegCod,
-				    Gbl.CurrentCrs.Crs.CrsCod);
+				    Gbl.Hierarchy.Ins.InsCod,
+				    Gbl.Hierarchy.Deg.DegCod,
+				    Gbl.Hierarchy.Crs.Crs.CrsCod);
 
 	 /***** Header *****/
 	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)
@@ -690,7 +690,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
 		       " WHERE CrsCod=%ld AND UsrCod=%ld",
 		       Gbl.Test.Config.MinTimeNxtTstPerQst,
 		       Gbl.Test.Config.MinTimeNxtTstPerQst,
-		       Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod) == 1)
+		       Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod) == 1)
      {
       /* Get seconds from now to next access to test */
       row = mysql_fetch_row (mysql_res);
@@ -741,7 +741,7 @@ static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
 	            " (SessionId,CrsCod,NumTst,Status)"
 	            " VALUES"
 	            " ('%s',%ld,%u,%u)",
-		    Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,
+		    Gbl.Session.Id,Gbl.Hierarchy.Crs.Crs.CrsCod,
 		    NumTst,(unsigned) TstStatus);
   }
 
@@ -764,7 +764,7 @@ static Tst_Status_t Tst_GetTstStatus (unsigned NumTst)
 			     " WHERE SessionId='%s'"
 			     " AND CrsCod=%ld"
 			     " AND NumTst=%u",
-			     Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,NumTst);
+			     Gbl.Session.Id,Gbl.Hierarchy.Crs.Crs.CrsCod,NumTst);
 
    if (NumRows == 1)
      {
@@ -800,7 +800,7 @@ static unsigned Tst_GetNumAccessesTst (void)
 				"SELECT NumAccTst"	// row[0]
 				" FROM crs_usr"
 				" WHERE CrsCod=%ld AND UsrCod=%ld",
-				Gbl.CurrentCrs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod);
 
       if (NumRows == 0)
@@ -1258,7 +1258,7 @@ static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst)
 		   "UPDATE crs_usr SET NumAccTst=%u"
                    " WHERE CrsCod=%ld AND UsrCod=%ld",
 		   NumAccessesTst,
-		   Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -1272,7 +1272,7 @@ static void Tst_UpdateLastAccTst (void)
 		   "UPDATE crs_usr SET LastAccTst=NOW(),NumQstsLastTst=%u"
                    " WHERE CrsCod=%ld AND UsrCod=%ld",
 		   Gbl.Test.NumQsts,
-		   Gbl.CurrentCrs.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Crs.CrsCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -1615,7 +1615,7 @@ void Tst_RenameTag (void)
 			    "UPDATE tst_tags SET TagTxt='%s',ChangeTime=NOW()"
 			    " WHERE tst_tags.CrsCod=%ld"
 			    " AND tst_tags.TagTxt='%s'",
-			    NewTagTxt,Gbl.CurrentCrs.Crs.CrsCod,OldTagTxt);
+			    NewTagTxt,Gbl.Hierarchy.Crs.Crs.CrsCod,OldTagTxt);
 	   }
 
 	 /***** Write message to show the change made *****/
@@ -1639,7 +1639,7 @@ static bool Tst_CheckIfCurrentCrsHasTestTags (void)
    return (DB_QueryCOUNT ("can not check if course has tags",
 			  "SELECT COUNT(*) FROM tst_tags"
 			  " WHERE CrsCod=%ld",
-			  Gbl.CurrentCrs.Crs.CrsCod) != 0);
+			  Gbl.Hierarchy.Crs.Crs.CrsCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1657,7 +1657,7 @@ static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
 			  " FROM tst_tags"
 			  " WHERE CrsCod=%ld"
 			  " ORDER BY TagTxt",
-			  Gbl.CurrentCrs.Crs.CrsCod);
+			  Gbl.Hierarchy.Crs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -1672,7 +1672,7 @@ static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
 			  "SELECT TagCod,TagTxt FROM tst_tags"
 			  " WHERE CrsCod=%ld AND TagHidden='N'"
 			  " ORDER BY TagTxt",
-			  Gbl.CurrentCrs.Crs.CrsCod);
+			  Gbl.Hierarchy.Crs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -2054,7 +2054,7 @@ static void Tst_GetConfigTstFromDB (void)
 				    "MinTimeNxtTstPerQst,"	// row[4]
 				    "Feedback"			// row[5]
 			     " FROM tst_config WHERE CrsCod=%ld",
-			     Gbl.CurrentCrs.Crs.CrsCod);
+			     Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    Gbl.Test.Config.Feedback = Tst_FEEDBACK_DEFAULT;
    Gbl.Test.Config.MinTimeNxtTstPerQst = 0UL;
@@ -2154,7 +2154,7 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
 			     "SELECT Pluggable"		// row[0]
 			     " FROM tst_config"
 			     " WHERE CrsCod=%ld",
-			     Gbl.CurrentCrs.Crs.CrsCod);
+			     Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    if (NumRows == 0)
       Gbl.Test.Config.Pluggable = Tst_PLUGGABLE_UNKNOWN;
@@ -2235,7 +2235,7 @@ void Tst_ReceiveConfigTst (void)
 	            " (CrsCod,Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback)"
                     " VALUES"
                     " (%ld,'%s',%u,%u,%u,'%lu','%s')",
-		    Gbl.CurrentCrs.Crs.CrsCod,
+		    Gbl.Hierarchy.Crs.Crs.CrsCod,
 		    Tst_PluggableDB[Gbl.Test.Config.Pluggable],
 		    Gbl.Test.Config.Min,Gbl.Test.Config.Def,Gbl.Test.Config.Max,
 		    Gbl.Test.Config.MinTimeNxtTstPerQst,
@@ -2492,7 +2492,7 @@ static unsigned long Tst_GetQuestions (MYSQL_RES **mysql_res)
                Tst_MAX_BYTES_QUERY_TEST);
    snprintf (CrsCodStr,sizeof (CrsCodStr),
 	     "%ld",
-	     Gbl.CurrentCrs.Crs.CrsCod);
+	     Gbl.Hierarchy.Crs.Crs.CrsCod);
    Str_Concat (Query,CrsCodStr,
                Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
@@ -2663,9 +2663,9 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
 	     " AND tst_questions.QstCod=tst_question_tags.QstCod"
 	     " AND tst_question_tags.TagCod=tst_tags.TagCod"
 	     " AND tst_tags.CrsCod=%ld",
-	     Gbl.CurrentCrs.Crs.CrsCod,
-	     Gbl.CurrentCrs.Crs.CrsCod,
-	     Gbl.CurrentCrs.Crs.CrsCod);
+	     Gbl.Hierarchy.Crs.Crs.CrsCod,
+	     Gbl.Hierarchy.Crs.Crs.CrsCod,
+	     Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    if (!Gbl.Test.Tags.All) // User has not selected all the tags
      {
@@ -4648,7 +4648,7 @@ unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res)
 			  " AND tst_question_tags.TagCod=tst_tags.TagCod"
 			  " AND tst_tags.CrsCod=%ld"
 			  " ORDER BY tst_question_tags.TagInd",
-			  QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+			  QstCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -5518,7 +5518,7 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	                  "MedCod"		// row[4]
 		   " FROM tst_questions"
 		   " WHERE QstCod=%ld AND CrsCod=%ld",
-		   Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+		   Gbl.Test.QstCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
    row = mysql_fetch_row (mysql_res);
 
    /* Get the type of answer */
@@ -5645,7 +5645,7 @@ static long Tst_GetMedCodFromDB (int NumOpt)
 				   "SELECT MedCod"		// row[0]
 				   " FROM tst_questions"
 				   " WHERE QstCod=%ld AND CrsCod=%ld",
-				   Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+				   Gbl.Test.QstCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
       else
 	 // Get media associated to answer
 	 NumRows = DB_QuerySELECT (&mysql_res,"can not get media",
@@ -6229,7 +6229,7 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
    NumRows = DB_QuerySELECT (&mysql_res,"can not get tag",
 			     "SELECT TagCod FROM tst_tags"
 			     " WHERE CrsCod=%ld AND TagTxt='%s'",
-			     Gbl.CurrentCrs.Crs.CrsCod,TagTxt);
+			     Gbl.Hierarchy.Crs.Crs.CrsCod,TagTxt);
    if (NumRows == 1)
      {
       /***** Get tag code *****/
@@ -6280,7 +6280,7 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden)
                    " WHERE TagCod=%ld AND CrsCod=%ld",
 		   TagHidden ? 'Y' :
 			       'N',
-		   TagCod,Gbl.CurrentCrs.Crs.CrsCod);
+		   TagCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -6377,7 +6377,7 @@ void Tst_RemoveQst (void)
 
    /***** Remove media associated to question *****/
    /* Remove media associated to answers */
-   Tst_RemoveMediaFromAllAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
+   Tst_RemoveMediaFromAllAnsOfQst (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Test.QstCod);
 
    /* Remove media associated to stem */
    MedCod = Tst_GetMedCodFromDB (-1L);
@@ -6393,7 +6393,7 @@ void Tst_RemoveQst (void)
    DB_QueryDELETE ("can not remove a question",
 		   "DELETE FROM tst_questions"
                    " WHERE QstCod=%ld AND CrsCod=%ld",
-		   Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+		   Gbl.Test.QstCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The question to be removed does not exist or belongs to another course.");
@@ -6435,7 +6435,7 @@ void Tst_ChangeShuffleQst (void)
                    " WHERE QstCod=%ld AND CrsCod=%ld",
 		   Shuffle ? 'Y' :
 			     'N',
-		   Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+		   Gbl.Test.QstCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Shuffle ? Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled :
@@ -6506,7 +6506,7 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 				   " (%ld,NOW(),'%s','%c',"
 				   "'%s','%s',%ld,"
 				   "0,0)",
-				   Gbl.CurrentCrs.Crs.CrsCod,
+				   Gbl.Hierarchy.Crs.Crs.CrsCod,
 				   Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
 				   Gbl.Test.Shuffle ? 'Y' :
 						      'N',
@@ -6529,7 +6529,7 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 		      Gbl.Test.Stem.Text,
 		      Gbl.Test.Feedback.Text ? Gbl.Test.Feedback.Text : "",
 		      Gbl.Test.Media.MedCod,
-		      Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
+		      Gbl.Test.QstCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
       /* Remove answers and tags from this test question */
       Tst_RemAnsFromQst ();
@@ -6556,7 +6556,7 @@ static void Tst_InsertTagsIntoDB (void)
          /***** Check if this tag exists for current course *****/
          if ((TagCod = Tst_GetTagCodFromTagTxt (Gbl.Test.Tags.Txt[NumTag])) < 0)
             /* This tag is new for current course. Add it to tags table */
-            TagCod = Tst_CreateNewTag (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.Tags.Txt[NumTag]);
+            TagCod = Tst_CreateNewTag (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Test.Tags.Txt[NumTag]);
 
          /***** Insert tag in tst_question_tags *****/
          DB_QueryINSERT ("can not create tag",
@@ -6683,8 +6683,8 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
                    " FROM tst_questions,tst_question_tags"
                    " WHERE tst_questions.CrsCod=%ld"
                    " AND tst_questions.QstCod=tst_question_tags.QstCod)",
-		   Gbl.CurrentCrs.Crs.CrsCod,
-		   Gbl.CurrentCrs.Crs.CrsCod);
+		   Gbl.Hierarchy.Crs.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -6798,7 +6798,7 @@ void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
 // Returns the number of test questions
 // in this location (all the platform, current degree or current course)
 
-static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
+static unsigned Tst_GetNumTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType,struct Tst_Stats *Stats)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -6806,7 +6806,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
    /***** Get number of test questions from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -6818,7 +6818,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                             " WHERE AnsType='%s'",
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -6828,7 +6828,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                             " AND centres.CtrCod=degrees.CtrCod"
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.CurrentCty.Cty.CtyCod);
+			    Gbl.Hierarchy.Cty.CtyCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -6839,10 +6839,10 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.AnsType='%s'",
-			    Gbl.CurrentCty.Cty.CtyCod,
+			    Gbl.Hierarchy.Cty.CtyCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -6851,7 +6851,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                             " AND centres.CtrCod=degrees.CtrCod"
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.CurrentIns.Ins.InsCod);
+			    Gbl.Hierarchy.Ins.InsCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -6861,10 +6861,10 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.AnsType='%s'",
-			    Gbl.CurrentIns.Ins.InsCod,
+			    Gbl.Hierarchy.Ins.InsCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -6872,7 +6872,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                             " WHERE degrees.CtrCod=%ld"
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.CurrentCtr.Ctr.CtrCod);
+			    Gbl.Hierarchy.Ctr.CtrCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -6881,17 +6881,17 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.AnsType='%s'",
-			    Gbl.CurrentCtr.Ctr.CtrCod,
+			    Gbl.Hierarchy.Ctr.CtrCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	            " FROM courses,tst_questions"
                             " WHERE courses.DegCod=%ld"
                             " AND courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.CurrentDeg.Deg.DegCod);
+			    Gbl.Hierarchy.Deg.DegCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
@@ -6899,22 +6899,22 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
                             " WHERE courses.DegCod=%ld"
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.AnsType='%s'",
-			    Gbl.CurrentDeg.Deg.DegCod,
+			    Gbl.Hierarchy.Deg.DegCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	            " FROM tst_questions"
                             " WHERE CrsCod=%ld",
-			    Gbl.CurrentCrs.Crs.CrsCod);
+			    Gbl.Hierarchy.Crs.Crs.CrsCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of test questions",
         		    "SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	            " FROM tst_questions"
                             " WHERE CrsCod=%ld AND AnsType='%s'",
-			    Gbl.CurrentCrs.Crs.CrsCod,
+			    Gbl.Hierarchy.Crs.Crs.CrsCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       default:
@@ -6955,7 +6955,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
 // Returns the number of courses with test questions
 // in this location (all the platform, current degree or current course)
 
-static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType)
+static unsigned Tst_GetNumCoursesWithTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -6964,7 +6964,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
    /***** Get number of courses with test questions from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -6978,7 +6978,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                             " WHERE AnsType='%s'",
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -6989,7 +6989,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                             " AND centres.CtrCod=degrees.CtrCod"
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.CurrentCty.Cty.CtyCod);
+			    Gbl.Hierarchy.Cty.CtyCod);
          else
            DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -7001,10 +7001,10 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.AnsType='%s'",
-			    Gbl.CurrentCty.Cty.CtyCod,
+			    Gbl.Hierarchy.Cty.CtyCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -7014,7 +7014,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                             " AND centres.CtrCod=degrees.CtrCod"
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.CurrentIns.Ins.InsCod);
+			    Gbl.Hierarchy.Ins.InsCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -7025,10 +7025,10 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.AnsType='%s'",
-			    Gbl.CurrentIns.Ins.InsCod,
+			    Gbl.Hierarchy.Ins.InsCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -7037,7 +7037,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                             " WHERE degrees.CtrCod=%ld"
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.CurrentCtr.Ctr.CtrCod);
+			    Gbl.Hierarchy.Ctr.CtrCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -7047,10 +7047,10 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                             " AND degrees.DegCod=courses.DegCod"
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.AnsType='%s'",
-			    Gbl.CurrentCtr.Ctr.CtrCod,
+			    Gbl.Hierarchy.Ctr.CtrCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -7058,7 +7058,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
         	            " FROM courses,tst_questions"
                             " WHERE courses.DegCod=%ld"
                             " AND courses.CrsCod=tst_questions.CrsCod",
-			    Gbl.CurrentDeg.Deg.DegCod);
+			    Gbl.Hierarchy.Deg.DegCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -7067,17 +7067,17 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
                             " WHERE courses.DegCod=%ld"
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.AnsType='%s'",
-			    Gbl.CurrentDeg.Deg.DegCod,
+			    Gbl.Hierarchy.Deg.DegCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
         		    "SELECT COUNT(DISTINCT CrsCod)"
         	            " FROM tst_questions"
                             " WHERE CrsCod=%ld",
-			    Gbl.CurrentCrs.Crs.CrsCod);
+			    Gbl.Hierarchy.Crs.Crs.CrsCod);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with test questions",
@@ -7085,7 +7085,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
 			    " FROM tst_questions"
 			    " WHERE CrsCod=%ld"
 			    " AND AnsType='%s'",
-			    Gbl.CurrentCrs.Crs.CrsCod,
+			    Gbl.Hierarchy.Crs.Crs.CrsCod,
 			    Tst_StrAnswerTypesDB[AnsType]);
          break;
       default:
@@ -7110,7 +7110,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
 // Returns the number of courses with pluggable test questions
 // in this location (all the platform, current degree or current course)
 
-static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType)
+static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Tst_AnswerType_t AnsType)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -7119,7 +7119,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
    /***** Get number of courses with test questions from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
@@ -7139,7 +7139,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
 			    Tst_StrAnswerTypesDB[AnsType],
 			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
@@ -7152,7 +7152,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.CrsCod=tst_config.CrsCod"
                             " AND tst_config.pluggable='%s'",
-			    Gbl.CurrentCty.Cty.CtyCod,
+			    Gbl.Hierarchy.Cty.CtyCod,
 			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
@@ -7167,11 +7167,11 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                             " AND tst_questions.AnsType='%s'"
                             " AND tst_questions.CrsCod=tst_config.CrsCod"
                             " AND tst_config.pluggable='%s'",
-			    Gbl.CurrentCty.Cty.CtyCod,
+			    Gbl.Hierarchy.Cty.CtyCod,
 			    Tst_StrAnswerTypesDB[AnsType],
 			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
@@ -7183,7 +7183,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.CrsCod=tst_config.CrsCod"
                             " AND tst_config.pluggable='%s'",
-			    Gbl.CurrentIns.Ins.InsCod,
+			    Gbl.Hierarchy.Ins.InsCod,
 			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
@@ -7197,11 +7197,11 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                             " AND tst_questions.AnsType='%s'"
                             " AND tst_questions.CrsCod=tst_config.CrsCod"
                             " AND tst_config.pluggable='%s'",
-			    Gbl.CurrentIns.Ins.InsCod,
+			    Gbl.Hierarchy.Ins.InsCod,
 			    Tst_StrAnswerTypesDB[AnsType],
 			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
@@ -7212,7 +7212,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.CrsCod=tst_config.CrsCod"
                             " AND tst_config.pluggable='%s'",
-			    Gbl.CurrentCtr.Ctr.CtrCod,
+			    Gbl.Hierarchy.Ctr.CtrCod,
 			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
@@ -7225,11 +7225,11 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                             " AND tst_questions.AnsType='%s'"
                             " AND tst_questions.CrsCod=tst_config.CrsCod"
                             " AND tst_config.pluggable='%s'",
-			    Gbl.CurrentCtr.Ctr.CtrCod,
+			    Gbl.Hierarchy.Ctr.CtrCod,
 			    Tst_StrAnswerTypesDB[AnsType],
 			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
@@ -7239,7 +7239,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                             " AND courses.CrsCod=tst_questions.CrsCod"
                             " AND tst_questions.CrsCod=tst_config.CrsCod"
                             " AND tst_config.pluggable='%s'",
-			    Gbl.CurrentDeg.Deg.DegCod,
+			    Gbl.Hierarchy.Deg.DegCod,
 			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
@@ -7251,11 +7251,11 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                             " AND tst_questions.AnsType='%s'"
                             " AND tst_questions.CrsCod=tst_config.CrsCod"
                             " AND tst_config.pluggable='%s'",
-			    Gbl.CurrentDeg.Deg.DegCod,
+			    Gbl.Hierarchy.Deg.DegCod,
 			    Tst_StrAnswerTypesDB[AnsType],
 			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          if (AnsType == Tst_ANS_ALL)
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
         			       " with pluggable test questions",
@@ -7264,7 +7264,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                             " WHERE tst_questions.CrsCod=%ld"
                             " AND tst_questions.CrsCod=tst_config.CrsCod"
                             " AND tst_config.pluggable='%s'",
-			    Gbl.CurrentCrs.Crs.CrsCod,
+			    Gbl.Hierarchy.Crs.Crs.CrsCod,
 			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          else
             DB_QuerySELECT (&mysql_res,"can not get number of courses"
@@ -7275,7 +7275,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
                             " AND tst_questions.AnsType='%s'"
                             " AND tst_questions.CrsCod=tst_config.CrsCod"
                             " AND tst_config.pluggable='%s'",
-			    Gbl.CurrentCrs.Crs.CrsCod,
+			    Gbl.Hierarchy.Crs.Crs.CrsCod,
 			    Tst_StrAnswerTypesDB[AnsType],
 			    Tst_PluggableDB[Tst_PLUGGABLE_YES]);
          break;
@@ -7317,9 +7317,9 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
-   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_NET);
-   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_TCH);
+   Usr_GetListUsrs (Hie_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_CRS,Rol_NET);
+   Usr_GetListUsrs (Hie_CRS,Rol_TCH);
    NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
@@ -7434,7 +7434,7 @@ static long Tst_CreateTestResultInDB (void)
 				" (CrsCod,UsrCod,AllowTeachers,TstTime,NumQsts)"
 				" VALUES"
 				" (%ld,%ld,'%c',NOW(),%u)",
-				Gbl.CurrentCrs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Gbl.Test.AllowTeachers ? 'Y' :
 							 'N',
@@ -7630,7 +7630,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 			      " AND TstTime>=FROM_UNIXTIME(%ld)"
 			      " AND TstTime<=FROM_UNIXTIME(%ld)"
 			      " ORDER BY TstCod",
-			      Gbl.CurrentCrs.Crs.CrsCod,
+			      Gbl.Hierarchy.Crs.Crs.CrsCod,
 			      UsrDat->UsrCod,
 			      (long) Gbl.DateRange.TimeUTC[0],
 			      (long) Gbl.DateRange.TimeUTC[1]);
@@ -8065,9 +8065,9 @@ void Tst_ShowOneTestResult (void)
       Box_StartBox (NULL,Txt_Test_result,NULL,
                     Hlp_ASSESSMENT_Tests_test_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.CurrentIns.Ins.InsCod,
-				 Gbl.CurrentDeg.Deg.DegCod,
-				 Gbl.CurrentCrs.Crs.CrsCod);
+				 Gbl.Hierarchy.Ins.InsCod,
+				 Gbl.Hierarchy.Deg.DegCod,
+				 Gbl.Hierarchy.Crs.Crs.CrsCod);
 
       /***** Start table *****/
       Tbl_StartTableWideMargin (10);
@@ -8290,7 +8290,7 @@ static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
 		       " FROM tst_exams"
 		       " WHERE TstCod=%ld AND CrsCod=%ld",
 		       TstCod,
-		       Gbl.CurrentCrs.Crs.CrsCod) == 1)
+		       Gbl.Hierarchy.Crs.Crs.CrsCod) == 1)
      {
       row = mysql_fetch_row (mysql_res);
 

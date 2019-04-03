@@ -1010,7 +1010,7 @@ void ID_ConfirmOtherUsrID (void)
         {
 	 /* If user is a student in current course,
 	    check if he/she has accepted */
-	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	 if (Gbl.Hierarchy.Level == Hie_CRS)
 	    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role == Rol_STD)
 	       Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
 

@@ -661,11 +661,11 @@ void Par_GetMainParameters (void)
    char LongStr[1 + 10 + 1];
 
    /***** Reset codes of country, institution, centre, degree and course *****/
-   Gbl.CurrentCty.Cty.CtyCod =
-   Gbl.CurrentIns.Ins.InsCod =
-   Gbl.CurrentCtr.Ctr.CtrCod =
-   Gbl.CurrentDeg.Deg.DegCod =
-   Gbl.CurrentCrs.Crs.CrsCod = -1L;
+   Gbl.Hierarchy.Cty.CtyCod =
+   Gbl.Hierarchy.Ins.InsCod =
+   Gbl.Hierarchy.Ctr.CtrCod =
+   Gbl.Hierarchy.Deg.DegCod =
+   Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;
 
    // First of all, get action, and session identifier.
    // So, if other parameters have been stored in the database, there will be no problems to get them.
@@ -824,44 +824,44 @@ void Par_GetMainParameters (void)
    Par_GetParToText ("cty",LongStr,1 + 10);
    if (LongStr[0])	// Parameter "cty" available
      {
-      Gbl.CurrentCty.Cty.CtyCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.CurrentIns.Ins.InsCod =
-      Gbl.CurrentCtr.Ctr.CtrCod =
-      Gbl.CurrentDeg.Deg.DegCod =
-      Gbl.CurrentCrs.Crs.CrsCod = -1L;
+      Gbl.Hierarchy.Cty.CtyCod = Str_ConvertStrCodToLongCod (LongStr);
+      Gbl.Hierarchy.Ins.InsCod =
+      Gbl.Hierarchy.Ctr.CtrCod =
+      Gbl.Hierarchy.Deg.DegCod =
+      Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;
      }
 
    /***** Get institution if exists (from menu) *****/
    Par_GetParToText ("ins",LongStr,1 + 10);
    if (LongStr[0])	// Parameter "ins" available
      {
-      Gbl.CurrentIns.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.CurrentCtr.Ctr.CtrCod =
-      Gbl.CurrentDeg.Deg.DegCod =
-      Gbl.CurrentCrs.Crs.CrsCod = -1L;
+      Gbl.Hierarchy.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
+      Gbl.Hierarchy.Ctr.CtrCod =
+      Gbl.Hierarchy.Deg.DegCod =
+      Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;
      }
 
    /***** Get centre if exists (from menu) *****/
    Par_GetParToText ("ctr",LongStr,1 + 10);
    if (LongStr[0])	// Parameter "ctr" available
      {
-      Gbl.CurrentCtr.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.CurrentDeg.Deg.DegCod =
-      Gbl.CurrentCrs.Crs.CrsCod = -1L;
+      Gbl.Hierarchy.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
+      Gbl.Hierarchy.Deg.DegCod =
+      Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;
      }
 
    /***** Get numerical degree code if exists (from menu) *****/
    Par_GetParToText ("deg",LongStr,1 + 10);
    if (LongStr[0])	// Parameter "deg" available
      {
-      Gbl.CurrentDeg.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.CurrentCrs.Crs.CrsCod = -1L;	// Reset possible course from session
+      Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
+      Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;	// Reset possible course from session
      }
 
    /***** Get numerical course code if exists (from menu) *****/
    Par_GetParToText ("crs",LongStr,1 + 10);
    if (LongStr[0])	// Parameter "crs" available
-      Gbl.CurrentCrs.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
+      Gbl.Hierarchy.Crs.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
 
    /***** Get tab to activate *****/
    Gbl.Action.Tab = TabUnk;

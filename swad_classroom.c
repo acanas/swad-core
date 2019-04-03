@@ -94,90 +94,91 @@ void Cla_SeeClassrooms (void)
    unsigned NumCla;
    unsigned RowEvenOdd;
 
-   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
+      return;
+
+   /***** Get parameter with the type of order in the list of classrooms *****/
+   Cla_GetParamClaOrder ();
+
+   /***** Get list of classrooms *****/
+   Cla_GetListClassrooms (Cla_ALL_DATA);
+
+   /***** Table head *****/
+   Box_StartBox (NULL,Txt_Classrooms,Cla_PutIconsListingClassrooms,
+		 Hlp_CENTRE_Classrooms,Box_NOT_CLOSABLE);
+   Tbl_StartTableWideMargin (2);
+   fprintf (Gbl.F.Out,"<tr>");
+   for (Order  = (Cla_Order_t) 0;
+	Order <= (Cla_Order_t) (Cla_NUM_ORDERS - 1);
+	Order++)
      {
-      /***** Get parameter with the type of order in the list of classrooms *****/
-      Cla_GetParamClaOrder ();
-
-      /***** Get list of classrooms *****/
-      Cla_GetListClassrooms (Cla_ALL_DATA);
-
-      /***** Table head *****/
-      Box_StartBox (NULL,Txt_Classrooms,Cla_PutIconsListingClassrooms,
-                    Hlp_CENTRE_Classrooms,Box_NOT_CLOSABLE);
-      Tbl_StartTableWideMargin (2);
-      fprintf (Gbl.F.Out,"<tr>");
-      for (Order  = (Cla_Order_t) 0;
-	   Order <= (Cla_Order_t) (Cla_NUM_ORDERS - 1);
-	   Order++)
-	{
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-	 Frm_StartForm (ActSeeCla);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Frm_LinkFormSubmit (Txt_CLASSROOMS_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Classrooms.SelectedOrder)
-	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_CLASSROOMS_ORDER[Order]);
-	 if (Order == Gbl.Classrooms.SelectedOrder)
-	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
-	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</th>");
-	}
-      fprintf (Gbl.F.Out,"</tr>");
-
-      /***** Write list of classrooms *****/
-      for (NumCla = 0, RowEvenOdd = 1;
-	   NumCla < Gbl.Classrooms.Num;
-	   NumCla++, RowEvenOdd = 1 - RowEvenOdd)
-	{
-	 /* Short name */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"DAT LEFT_MIDDLE %s\">"
-			    "%s"
-			    "</td>",
-		  Gbl.ColorRows[RowEvenOdd],
-		  Gbl.Classrooms.Lst[NumCla].ShrtName);
-
-	 /* Full name */
-	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
-			    "%s"
-			    "</td>",
-		  Gbl.ColorRows[RowEvenOdd],
-		  Gbl.Classrooms.Lst[NumCla].FullName);
-
-	 /* Capacity */
-	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">",
-		  Gbl.ColorRows[RowEvenOdd]);
-	 Cla_WriteCapacity (Gbl.Classrooms.Lst[NumCla].Capacity);
-	 fprintf (Gbl.F.Out,"</td>");
-
-	 /* Location */
-	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
-			    "%s"
-			    "</td>"
-			    "</tr>",
-	          Gbl.ColorRows[RowEvenOdd],
-		  Gbl.Classrooms.Lst[NumCla].Location);
-	}
-
-      /***** End table *****/
-      Tbl_EndTable ();
-
-      /***** Button to create classroom *****/
-      if (Cla_CheckIfICanCreateClassrooms ())
-	{
-	 Frm_StartForm (ActEdiCla);
-	 Btn_PutConfirmButton (Txt_New_classroom);
-	 Frm_EndForm ();
-	}
-
-      /***** End box *****/
-      Box_EndBox ();
-
-      /***** Free list of classrooms *****/
-      Cla_FreeListClassrooms ();
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Frm_StartForm (ActSeeCla);
+      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Frm_LinkFormSubmit (Txt_CLASSROOMS_HELP_ORDER[Order],"TIT_TBL",NULL);
+      if (Order == Gbl.Classrooms.SelectedOrder)
+	 fprintf (Gbl.F.Out,"<u>");
+      fprintf (Gbl.F.Out,"%s",Txt_CLASSROOMS_ORDER[Order]);
+      if (Order == Gbl.Classrooms.SelectedOrder)
+	 fprintf (Gbl.F.Out,"</u>");
+      fprintf (Gbl.F.Out,"</a>");
+      Frm_EndForm ();
+      fprintf (Gbl.F.Out,"</th>");
      }
+   fprintf (Gbl.F.Out,"</tr>");
+
+   /***** Write list of classrooms *****/
+   for (NumCla = 0, RowEvenOdd = 1;
+	NumCla < Gbl.Classrooms.Num;
+	NumCla++, RowEvenOdd = 1 - RowEvenOdd)
+     {
+      /* Short name */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT LEFT_MIDDLE %s\">"
+			 "%s"
+			 "</td>",
+	       Gbl.ColorRows[RowEvenOdd],
+	       Gbl.Classrooms.Lst[NumCla].ShrtName);
+
+      /* Full name */
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
+			 "%s"
+			 "</td>",
+	       Gbl.ColorRows[RowEvenOdd],
+	       Gbl.Classrooms.Lst[NumCla].FullName);
+
+      /* Capacity */
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">",
+	       Gbl.ColorRows[RowEvenOdd]);
+      Cla_WriteCapacity (Gbl.Classrooms.Lst[NumCla].Capacity);
+      fprintf (Gbl.F.Out,"</td>");
+
+      /* Location */
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
+			 "%s"
+			 "</td>"
+			 "</tr>",
+	       Gbl.ColorRows[RowEvenOdd],
+	       Gbl.Classrooms.Lst[NumCla].Location);
+     }
+
+   /***** End table *****/
+   Tbl_EndTable ();
+
+   /***** Button to create classroom *****/
+   if (Cla_CheckIfICanCreateClassrooms ())
+     {
+      Frm_StartForm (ActEdiCla);
+      Btn_PutConfirmButton (Txt_New_classroom);
+      Frm_EndForm ();
+     }
+
+   /***** End box *****/
+   Box_EndBox ();
+
+   /***** Free list of classrooms *****/
+   Cla_FreeListClassrooms ();
   }
 
 /*****************************************************************************/
@@ -308,7 +309,7 @@ void Cla_GetListClassrooms (Cla_WhichData_t WhichData)
 				   " FROM classrooms"
 				   " WHERE CtrCod=%ld"
 				   " ORDER BY %s",
-				   Gbl.CurrentCtr.Ctr.CtrCod,
+				   Gbl.Hierarchy.Ctr.CtrCod,
 				   OrderBySubQuery[Gbl.Classrooms.SelectedOrder]);
 	 break;
       case Cla_ONLY_SHRT_NAME:
@@ -319,7 +320,7 @@ void Cla_GetListClassrooms (Cla_WhichData_t WhichData)
 				   " FROM classrooms"
 				   " WHERE CtrCod=%ld"
 				   " ORDER BY ShortName",
-				   Gbl.CurrentCtr.Ctr.CtrCod);
+				   Gbl.Hierarchy.Ctr.CtrCod);
 	 break;
      }
 
@@ -713,7 +714,7 @@ static bool Cla_CheckIfClassroomNameExists (const char *FieldName,const char *Na
 			  "SELECT COUNT(*) FROM classrooms"
 			  " WHERE CtrCod=%ld"
 			  " AND %s='%s' AND ClaCod<>%ld",
-			  Gbl.CurrentCtr.Ctr.CtrCod,
+			  Gbl.Hierarchy.Ctr.CtrCod,
 			  FieldName,Name,ClaCod) != 0);
   }
 
@@ -1012,7 +1013,7 @@ static void Cla_CreateClassroom (struct Classroom *Cla)
 		   " (CtrCod,ShortName,FullName,Capacity,Location)"
 		   " VALUES"
 		   " (%ld,'%s','%s',%u,'%s')",
-                   Gbl.CurrentCtr.Ctr.CtrCod,
+                   Gbl.Hierarchy.Ctr.CtrCod,
 		   Cla->ShrtName,Cla->FullName,Cla->Capacity,Cla->Location);
 
    /***** Write success message *****/

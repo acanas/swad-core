@@ -171,26 +171,26 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
       case TabUnk:
 	 return false;
       case TabSys:
-	 return (Gbl.CurrentCty.Cty.CtyCod <= 0);	// No country selected
+	 return (Gbl.Hierarchy.Cty.CtyCod <= 0);	// No country selected
       case TabCty:
-	 return (Gbl.CurrentCty.Cty.CtyCod > 0 &&	// Country selected
-	         Gbl.CurrentIns.Ins.InsCod <= 0);	// No institution selected
+	 return (Gbl.Hierarchy.Cty.CtyCod > 0 &&	// Country selected
+	         Gbl.Hierarchy.Ins.InsCod <= 0);	// No institution selected
       case TabIns:
-	 return (Gbl.CurrentIns.Ins.InsCod > 0 &&	// Institution selected
-	         Gbl.CurrentCtr.Ctr.CtrCod <= 0);	// No centre selected
+	 return (Gbl.Hierarchy.Ins.InsCod > 0 &&	// Institution selected
+	         Gbl.Hierarchy.Ctr.CtrCod <= 0);	// No centre selected
       case TabCtr:
-	 return (Gbl.CurrentCtr.Ctr.CtrCod > 0 &&	// Centre selected
-	         Gbl.CurrentDeg.Deg.DegCod <= 0);	// No degree selected
+	 return (Gbl.Hierarchy.Ctr.CtrCod > 0 &&	// Centre selected
+	         Gbl.Hierarchy.Deg.DegCod <= 0);	// No degree selected
       case TabDeg:
-	 return (Gbl.CurrentDeg.Deg.DegCod > 0 &&	// Degree selected
-	         Gbl.CurrentCrs.Crs.CrsCod <= 0);	// No course selected
+	 return (Gbl.Hierarchy.Deg.DegCod > 0 &&	// Degree selected
+	         Gbl.Hierarchy.Crs.Crs.CrsCod <= 0);	// No course selected
       case TabCrs:
-	 return (Gbl.CurrentCrs.Crs.CrsCod > 0);	// Course selected
+	 return (Gbl.Hierarchy.Level == Hie_CRS);	// Course selected
       case TabAss:
-	 return (Gbl.CurrentCrs.Crs.CrsCod > 0 ||	// Course selected
+	 return (Gbl.Hierarchy.Level == Hie_CRS ||	// Course selected
 	         Gbl.Usrs.Me.Role.Logged >= Rol_STD);	// I belong to course or I am an admin
       case TabFil:
-      	 return (Gbl.CurrentIns.Ins.InsCod > 0 ||	// Institution selected
+      	 return (Gbl.Hierarchy.Ins.InsCod > 0 ||	// Institution selected
 	         Gbl.Usrs.Me.Logged);			// I'm logged
       default:
 	 return true;
@@ -222,37 +222,37 @@ void Tab_SetCurrentTab (void)
    switch (Gbl.Action.Tab)
      {
       case TabCty:
-	 if (Gbl.CurrentCty.Cty.CtyCod <= 0)		// No country selected
+	 if (Gbl.Hierarchy.Cty.CtyCod <= 0)		// No country selected
 	    Gbl.Action.Act = ActSeeCty;
 	 break;
       case TabIns:
-	 if (Gbl.CurrentIns.Ins.InsCod <= 0)		// No institution selected
+	 if (Gbl.Hierarchy.Ins.InsCod <= 0)		// No institution selected
 	   {
-	    if (Gbl.CurrentCty.Cty.CtyCod > 0)		// Country selected, but no institution selected
+	    if (Gbl.Hierarchy.Cty.CtyCod > 0)		// Country selected, but no institution selected
 	       Gbl.Action.Act = ActSeeIns;
 	    else					// No country selected
 	       Gbl.Action.Act = ActSeeCty;
 	  }
 	break;
       case TabCtr:
-	 if (Gbl.CurrentCtr.Ctr.CtrCod <= 0)		// No centre selected
+	 if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
 	   {
-	    if (Gbl.CurrentIns.Ins.InsCod > 0)		// Institution selected, but no centre selected
+	    if (Gbl.Hierarchy.Ins.InsCod > 0)		// Institution selected, but no centre selected
 	       Gbl.Action.Act = ActSeeCtr;
-	    else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected, but no institution selected
+	    else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected, but no institution selected
 	       Gbl.Action.Act = ActSeeIns;
 	    else					// No country selected
 	       Gbl.Action.Act = ActSeeCty;
 	   }
          break;
       case TabDeg:
-         if (Gbl.CurrentDeg.Deg.DegCod <= 0)		// No degree selected
+         if (Gbl.Hierarchy.Deg.DegCod <= 0)		// No degree selected
 	   {
-	    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// Centre selected, but no degree selected
+	    if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Centre selected, but no degree selected
 	       Gbl.Action.Act = ActSeeDeg;
-	    else if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected, but no centre selected
+	    else if (Gbl.Hierarchy.Ins.InsCod > 0)	// Institution selected, but no centre selected
 	       Gbl.Action.Act = ActSeeCtr;
-	    else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected, but no institution selected
+	    else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected, but no institution selected
 	       Gbl.Action.Act = ActSeeIns;
 	    else					// No country selected
 	       Gbl.Action.Act = ActSeeCty;
@@ -278,23 +278,23 @@ void Tab_DisableIncompatibleTabs (void)
    switch (Gbl.Action.Tab)
      {
       case TabSys:
-	 Gbl.CurrentCty.Cty.CtyCod = -1L;
+	 Gbl.Hierarchy.Cty.CtyCod = -1L;
 	 /* falls through */
 	 /* no break */
       case TabCty:
-	 Gbl.CurrentIns.Ins.InsCod = -1L;
+	 Gbl.Hierarchy.Ins.InsCod = -1L;
 	 /* falls through */
 	 /* no break */
       case TabIns:
-	 Gbl.CurrentCtr.Ctr.CtrCod = -1L;
+	 Gbl.Hierarchy.Ctr.CtrCod = -1L;
 	 /* falls through */
 	 /* no break */
       case TabCtr:
-	 Gbl.CurrentDeg.Deg.DegCod = -1L;
+	 Gbl.Hierarchy.Deg.DegCod = -1L;
 	 /* falls through */
 	 /* no break */
       case TabDeg:
-	 Gbl.CurrentCrs.Crs.CrsCod = -1L;
+	 Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;
 	 break;
       default:
          break;

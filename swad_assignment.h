@@ -94,7 +94,7 @@ void Asg_RemoveGroupsOfType (long GrpTypCod);
 void Asg_RemoveCrsAssignments (long CrsCod);
 unsigned Asg_GetNumAssignmentsInCrs(long CrsCod);
 
-unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope);
-unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif);
+unsigned Asg_GetNumCoursesWithAssignments (Hie_Level_t Scope);
+unsigned Asg_GetNumAssignments (Hie_Level_t Scope,unsigned *NumNotif);
 
 #endif

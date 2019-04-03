@@ -490,7 +490,7 @@ static void Prj_ShowFormToFilterByDpt (void)
 		  -1L);
 
    /***** Write selector with departments *****/
-   Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,	// Departments in current insitution
+   Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
                                 Gbl.Prjs.Filter.DptCod,		// Selected department
                                 "PRJ_INPUT",			// Selector class
                                 -1L,				// First option
@@ -880,9 +880,9 @@ void Prj_PrintOneProject (void)
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (true,false,
-			      Gbl.CurrentIns.Ins.InsCod,
-			      Gbl.CurrentDeg.Deg.DegCod,
-			      Gbl.CurrentCrs.Crs.CrsCod);
+			      Gbl.Hierarchy.Ins.InsCod,
+			      Gbl.Hierarchy.Deg.DegCod,
+			      Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Table head *****/
    Tbl_StartTableWideMargin (2);
@@ -2368,7 +2368,7 @@ void Prj_GetListProjects (void)
 					 " AND projects.PrjCod=prj_usr.PrjCod"
 					 " AND prj_usr.UsrCod=%ld"
 					 " ORDER BY %s",
-					 Gbl.CurrentCrs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
 					 Gbl.Usrs.Me.UsrDat.UsrCod,
 					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
@@ -2383,7 +2383,7 @@ void Prj_GetListProjects (void)
 					 " AND projects.PrjCod=prj_usr.PrjCod"
 					 " AND prj_usr.UsrCod=%ld"
 					 " ORDER BY %s",
-					 Gbl.CurrentCrs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
 					 Gbl.Usrs.Me.UsrDat.UsrCod,
 					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
@@ -2401,7 +2401,7 @@ void Prj_GetListProjects (void)
 					 " WHERE projects.CrsCod=%ld"
 					 "%s%s%s"
 					 " ORDER BY %s",
-					 Gbl.CurrentCrs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
 					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
 	       break;
@@ -2413,7 +2413,7 @@ void Prj_GetListProjects (void)
 					 " WHERE projects.CrsCod=%ld"
 					 "%s%s%s"
 					 " ORDER BY %s",
-					 Gbl.CurrentCrs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
 					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
 	       break;
@@ -2519,7 +2519,7 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
 			  " FROM projects"
 			  " WHERE PrjCod=%ld AND CrsCod=%ld",
 			  Prj->PrjCod,
-			  Gbl.CurrentCrs.Crs.CrsCod))	// Project found...
+			  Gbl.Hierarchy.Crs.Crs.CrsCod))	// Project found...
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -2723,7 +2723,7 @@ void Prj_RemoveProject (void)
 		      "DELETE FROM prj_usr USING projects,prj_usr"
 		      " WHERE projects.PrjCod=%ld AND projects.CrsCod=%ld"
 		      " AND projects.PrjCod=prj_usr.PrjCod",
-	              Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+	              Prj.PrjCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
       /***** Flush cache *****/
       Prj_FlushCacheMyRoleInProject ();
@@ -2732,7 +2732,7 @@ void Prj_RemoveProject (void)
       DB_QueryDELETE ("can not remove project",
 		      "DELETE FROM projects"
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
-	              Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+	              Prj.PrjCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
       /***** Remove information related to files in project *****/
       Brw_RemovePrjFilesFromDB (Prj.PrjCod);
@@ -2784,7 +2784,7 @@ void Prj_HideProject (void)
       DB_QueryUPDATE ("can not hide project",
 		      "UPDATE projects SET Hidden='Y'"
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
-	              Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+	              Prj.PrjCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_is_now_hidden,
@@ -2826,7 +2826,7 @@ void Prj_ShowProject (void)
       DB_QueryUPDATE ("can not show project",
 		      "UPDATE projects SET Hidden='N'"
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
-	              Prj.PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+	              Prj.PrjCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_is_now_visible,
@@ -2988,7 +2988,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                       "<td class=\"LEFT_MIDDLE\">",
             Dpt_PARAM_DPT_COD_NAME,
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Department);
-   Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,	// Departments in current institution
+   Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
                                 Prj->DptCod,			// Selected department
                                 "PRJ_INPUT",			// Selector class
                                 0,				// First option
@@ -3294,7 +3294,7 @@ static void Prj_CreateProject (struct Project *Prj)
 				" (%ld,%ld,'%c','%c',%u,'%s',"
 				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				"'%s','%s','%s','%s','%s')",
-				Gbl.CurrentCrs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.Crs.CrsCod,
 				Prj->DptCod,
 				Prj->Hidden == Prj_HIDDEN ? 'Y' :
 							    'N',
@@ -3361,7 +3361,7 @@ static void Prj_UpdateProject (struct Project *Prj)
 	           Prj->Knowledge,
 	           Prj->Materials,
 	           Prj->URL,
-	           Prj->PrjCod,Gbl.CurrentCrs.Crs.CrsCod);
+	           Prj->PrjCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -3411,7 +3411,7 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
 // Returns the number of courses with projects
 // in this location (all the platform, current degree or current course)
 
-unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope)
+unsigned Prj_GetNumCoursesWithProjects (Hie_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3420,13 +3420,13 @@ unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope)
    /***** Get number of courses with projects from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM projects"
 			 " WHERE CrsCod>0");
          break;
-       case Sco_SCOPE_CTY:
+       case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT projects.CrsCod)"
 			 " FROM institutions,centres,degrees,courses,projects"
@@ -3436,9 +3436,9 @@ unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope)
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.Status=0"
 			 " AND courses.CrsCod=projects.CrsCod",
-                         Gbl.CurrentCty.Cty.CtyCod);
+                         Gbl.Hierarchy.Cty.CtyCod);
          break;
-       case Sco_SCOPE_INS:
+       case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT projects.CrsCod)"
 			 " FROM centres,degrees,courses,projects"
@@ -3447,9 +3447,9 @@ unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope)
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.Status=0"
 			 " AND courses.CrsCod=projects.CrsCod",
-                         Gbl.CurrentIns.Ins.InsCod);
+                         Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT projects.CrsCod)"
 			 " FROM degrees,courses,projects"
@@ -3457,23 +3457,23 @@ unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope)
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.Status=0"
 			 " AND courses.CrsCod=projects.CrsCod",
-                         Gbl.CurrentCtr.Ctr.CtrCod);
+                         Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT projects.CrsCod)"
 			 " FROM courses,projects"
 			 " WHERE courses.DegCod=%ld"
 			 " AND courses.Status=0"
 			 " AND courses.CrsCod=projects.CrsCod",
-                         Gbl.CurrentDeg.Deg.DegCod);
+                         Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with projects",
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM projects"
 			 " WHERE CrsCod=%ld",
-			 Gbl.CurrentCrs.Crs.CrsCod);
+			 Gbl.Hierarchy.Crs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -3496,7 +3496,7 @@ unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope)
 /*****************************************************************************/
 // Returns the number of projects in this location
 
-unsigned Prj_GetNumProjects (Sco_Scope_t Scope)
+unsigned Prj_GetNumProjects (Hie_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3505,13 +3505,13 @@ unsigned Prj_GetNumProjects (Sco_Scope_t Scope)
    /***** Get number of projects from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
                          " FROM projects"
                          " WHERE CrsCod>0");
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
 			 " FROM institutions,centres,degrees,courses,projects"
@@ -3520,9 +3520,9 @@ unsigned Prj_GetNumProjects (Sco_Scope_t Scope)
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=projects.CrsCod",
-                         Gbl.CurrentCty.Cty.CtyCod);
+                         Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
 			 " FROM centres,degrees,courses,projects"
@@ -3530,31 +3530,31 @@ unsigned Prj_GetNumProjects (Sco_Scope_t Scope)
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=projects.CrsCod",
-                         Gbl.CurrentIns.Ins.InsCod);
+                         Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
 			 " FROM degrees,courses,projects"
 			 " WHERE degrees.CtrCod=%ld"
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=projects.CrsCod",
-                         Gbl.CurrentCtr.Ctr.CtrCod);
+                         Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
 			 " FROM courses,projects"
 			 " WHERE courses.DegCod=%ld"
 			 " AND courses.CrsCod=projects.CrsCod",
-                         Gbl.CurrentDeg.Deg.DegCod);
+                         Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of projects",
 			 "SELECT COUNT(*)"
 			 " FROM projects"
 			 " WHERE CrsCod=%ld",
-                         Gbl.CurrentCrs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

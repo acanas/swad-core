@@ -65,7 +65,7 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void DT_SeeDegreeTypes (Act_Action_t NextAction,Sco_Scope_t Scope,
+static void DT_SeeDegreeTypes (Act_Action_t NextAction,Hie_Level_t Scope,
                                DT_Order_t DefaultOrder);
 static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder);
 
@@ -99,7 +99,7 @@ void DT_WriteSelectorDegreeTypes (void)
 
    /***** Form to select degree types *****/
    /* Get list of degree types */
-   DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
+   DT_GetListDegreeTypes (Hie_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /* List degree types */
    fprintf (Gbl.F.Out,"<select id=\"OthDegTypCod\" name=\"OthDegTypCod\""
@@ -133,7 +133,7 @@ void DT_WriteSelectorDegreeTypes (void)
 
 void DT_SeeDegreeTypesInDegTab (void)
   {
-   DT_SeeDegreeTypes (ActSeeDegTyp,Sco_SCOPE_SYS,
+   DT_SeeDegreeTypes (ActSeeDegTyp,Hie_SYS,
                       DT_ORDER_BY_DEGREE_TYPE);	// Default order if not specified
   }
 
@@ -143,7 +143,7 @@ void DT_SeeDegreeTypesInStaTab (void)
                       DT_ORDER_BY_NUM_DEGREES);	// Default order if not specified
   }
 
-static void DT_SeeDegreeTypes (Act_Action_t NextAction,Sco_Scope_t Scope,
+static void DT_SeeDegreeTypes (Act_Action_t NextAction,Hie_Level_t Scope,
                                DT_Order_t DefaultOrder)
   {
    DT_Order_t SelectedOrder;
@@ -242,7 +242,7 @@ void DT_EditDegreeTypes (void)
    extern const char *Txt_Types_of_degree;
 
    /***** Get list of degree types *****/
-   DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
+   DT_GetListDegreeTypes (Hie_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconsEditingDegreeTypes,
@@ -307,7 +307,7 @@ static void DT_ListDegreeTypesForSeeing (void)
 	NumDegTyp++)
      {
       BgColor = (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod ==
-	         Gbl.CurrentDegTyp.DegTyp.DegTypCod) ? "LIGHT_BLUE" :
+	         Gbl.Hierarchy.DegTyp.DegTypCod) ? "LIGHT_BLUE" :
                                                        Gbl.ColorRows[Gbl.RowEvenOdd];
 
       /* Number of degree type in this list */
@@ -357,10 +357,7 @@ static void DT_PutIconsListingDegTypes (void)
 
 static void DT_PutIconToEditDegTypes (void)
   {
-   bool CentreTabVisible = Gbl.CurrentCtr.Ctr.CtrCod > 0 &&	// Centre selected
-	                   Gbl.CurrentDeg.Deg.DegCod <= 0;	// No degree selected
-
-   if (CentreTabVisible &&	// Only editable if centre tab is visible
+   if (Gbl.Hierarchy.Level == Hie_CTR &&	// Only editable if centre tab is visible
        DT_CheckIfICanCreateDegreeTypes ())
       Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL);
   }
@@ -574,7 +571,7 @@ static void DT_CreateDegreeType (struct DegreeType *DegTyp)
 /**************** Create a list with all the degree types ********************/
 /*****************************************************************************/
 
-void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
+void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
   {
    static const char *OrderBySubQuery[DT_NUM_ORDERS] =
      {
@@ -588,7 +585,7 @@ void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
    /***** Get types of degree from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
 	 /* Get
 	    all degree types with degrees
 	    union with
@@ -607,7 +604,7 @@ void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
 							    " ORDER BY %s",
 							    OrderBySubQuery[Order]);
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
 	 /* Get only degree types with degrees in the current country */
 	 Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
 							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
@@ -619,10 +616,10 @@ void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
 							    " AND degrees.DegTypCod=deg_types.DegTypCod"
 							    " GROUP BY degrees.DegTypCod"
 							    " ORDER BY %s",
-							    Gbl.CurrentCty.Cty.CtyCod,
+							    Gbl.Hierarchy.Cty.CtyCod,
 							    OrderBySubQuery[Order]);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
 	 /* Get only degree types with degrees in the current institution */
 	 Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
 							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
@@ -633,10 +630,10 @@ void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
 							    " AND degrees.DegTypCod=deg_types.DegTypCod"
 							    " GROUP BY degrees.DegTypCod"
 							    " ORDER BY %s",
-							    Gbl.CurrentIns.Ins.InsCod,
+							    Gbl.Hierarchy.Ins.InsCod,
 							    OrderBySubQuery[Order]);
 	 break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
 	 /* Get only degree types with degrees in the current centre */
 	 Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
 							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
@@ -646,11 +643,11 @@ void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
 							    " AND degrees.DegTypCod=deg_types.DegTypCod"
 							    " GROUP BY degrees.DegTypCod"
 							    " ORDER BY %s",
-							    Gbl.CurrentCtr.Ctr.CtrCod,
+							    Gbl.Hierarchy.Ctr.CtrCod,
 							    OrderBySubQuery[Order]);
 	 break;
-      case Sco_SCOPE_DEG:
-      case Sco_SCOPE_CRS:
+      case Hie_DEG:
+      case Hie_CRS:
 	 /* Get only degree types with degrees in the current degree */
 	 Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
 							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
@@ -660,7 +657,7 @@ void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
 							    " AND degrees.DegTypCod=deg_types.DegTypCod"
 							    " GROUP BY degrees.DegTypCod"
 							    " ORDER BY %s",
-							    Gbl.CurrentDeg.Deg.DegCod,
+							    Gbl.Hierarchy.Deg.DegCod,
 							    OrderBySubQuery[Order]);
 	 break;
       default:

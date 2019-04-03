@@ -132,7 +132,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
    if (Gbl.Usrs.Me.Logged)		// I am logged
      {
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+      if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	{
 	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)	// I belong to this course
 	   {
@@ -144,7 +144,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		  /* Request my removing from this course */
 		  snprintf (Gbl.Title,sizeof (Gbl.Title),
 			    Txt_Remove_me_from_THE_COURSE_X,
-			    Gbl.CurrentCrs.Crs.ShrtName);
+			    Gbl.Hierarchy.Crs.Crs.ShrtName);
 		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						       ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role],
 						       Btn_REMOVE_BUTTON,Txt_Remove_me);
@@ -155,7 +155,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	    /* Request my registration in this course */
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Register_me_in_X,
-		      Gbl.CurrentCrs.Crs.ShrtName);
+		      Gbl.Hierarchy.Crs.Crs.ShrtName);
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						 ActReqSignUp,
 						 Btn_CREATE_BUTTON,Txt_Sign_up);
@@ -164,14 +164,14 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
       if (Gbl.Usrs.Me.MyCrss.Num)	// I am enroled in some courses
 	{
-	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
-	     !Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD] &&		// Current course has no students
+	 if (Gbl.Hierarchy.Level == Hie_CRS &&			// Course selected
+	     !Gbl.Hierarchy.Crs.Crs.NumUsrs[Rol_STD] &&		// Current course has no students
 	     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role == Rol_TCH)	// I am a teacher in current course
 	   {
 	    /* Request students enrolment */
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Register_students_in_COURSE_X,
-		      Gbl.CurrentCrs.Crs.ShrtName);
+		      Gbl.Hierarchy.Crs.Crs.ShrtName);
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						 ActReqEnrSevStd,
 						 Btn_CREATE_BUTTON,Txt_Register_students);
@@ -184,53 +184,53 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 						 Btn_CONFIRM_BUTTON,Txt_My_courses);
 	}
 
-      if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected
+      if (Gbl.Hierarchy.Deg.DegCod > 0)	// Degree selected
 	{
 	 /* Select a course */
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Gbl.CurrentCrs.Crs.CrsCod > 0 ? Txt_Select_create_course_in_X :
-						   Txt_Select_or_create_one_course_in_X,
-		   Gbl.CurrentDeg.Deg.ShrtName);
+	           Gbl.Hierarchy.Level == Hie_CRS ? Txt_Select_create_course_in_X :
+						    Txt_Select_or_create_one_course_in_X,
+		   Gbl.Hierarchy.Deg.ShrtName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeCrs,
 				              Btn_CONFIRM_BUTTON,Txt_Courses);
 	}
-      else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// Centre selected
+      else if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Centre selected
 	{
 	 /* Select a degree */
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Gbl.CurrentDeg.Deg.DegCod > 0 ? Txt_Select_or_create_another_degree_in_X :
+	           Gbl.Hierarchy.Deg.DegCod > 0 ? Txt_Select_or_create_another_degree_in_X :
 						   Txt_Select_or_create_one_degree_in_X,
-		   Gbl.CurrentCtr.Ctr.ShrtName);
+		   Gbl.Hierarchy.Ctr.ShrtName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeDeg,
 				              Btn_CONFIRM_BUTTON,Txt_Degrees);
 	}
-      else if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected
+      else if (Gbl.Hierarchy.Ins.InsCod > 0)	// Institution selected
 	{
 	 /* Select a centre */
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Gbl.CurrentCtr.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_centre_in_X :
+	           Gbl.Hierarchy.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_centre_in_X :
 						   Txt_Select_or_create_one_centre_in_X,
-		   Gbl.CurrentIns.Ins.ShrtName);
+		   Gbl.Hierarchy.Ins.ShrtName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeCtr,
 				              Btn_CONFIRM_BUTTON,Txt_Centres);
 	}
-      else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
+      else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected
 	{
 	 /* Select an institution */
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Gbl.CurrentIns.Ins.InsCod > 0 ? Txt_Select_or_create_another_institution_in_X :
+	           Gbl.Hierarchy.Ins.InsCod > 0 ? Txt_Select_or_create_another_institution_in_X :
 						   Txt_Select_or_create_one_institution_in_X,
-		   Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+		   Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeIns,
 				              Btn_CONFIRM_BUTTON,Txt_Institutions);
 	}
       else
 	 /* Select a country */
-	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.CurrentCty.Cty.CtyCod > 0 ? Txt_Select_another_country :
+	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Hierarchy.Cty.CtyCod > 0 ? Txt_Select_another_country :
 						                              Txt_Select_one_country,
 				              ActSeeCty,
 				              Btn_CONFIRM_BUTTON,Txt_Countries);

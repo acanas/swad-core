@@ -194,11 +194,11 @@ void Sta_LogAccess (const char *Comments)
 				"(%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
 				"%u,NOW(),%ld,%ld,'%s')",
 				ActCod,
-				Gbl.CurrentCty.Cty.CtyCod,
-				Gbl.CurrentIns.Ins.InsCod,
-				Gbl.CurrentCtr.Ctr.CtrCod,
-				Gbl.CurrentDeg.Deg.DegCod,
-				Gbl.CurrentCrs.Crs.CrsCod,
+				Gbl.Hierarchy.Cty.CtyCod,
+				Gbl.Hierarchy.Ins.InsCod,
+				Gbl.Hierarchy.Ctr.CtrCod,
+				Gbl.Hierarchy.Deg.DegCod,
+				Gbl.Hierarchy.Crs.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				(unsigned) RoleToStore,
 				Gbl.TimeGenerationInMicroseconds,
@@ -214,11 +214,11 @@ void Sta_LogAccess (const char *Comments)
                    "(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
                    "%u,NOW(),%ld,%ld,'%s')",
 		   LogCod,ActCod,
-		   Gbl.CurrentCty.Cty.CtyCod,
-		   Gbl.CurrentIns.Ins.InsCod,
-		   Gbl.CurrentCtr.Ctr.CtrCod,
-		   Gbl.CurrentDeg.Deg.DegCod,
-		   Gbl.CurrentCrs.Crs.CrsCod,
+		   Gbl.Hierarchy.Cty.CtyCod,
+		   Gbl.Hierarchy.Ins.InsCod,
+		   Gbl.Hierarchy.Ctr.CtrCod,
+		   Gbl.Hierarchy.Deg.DegCod,
+		   Gbl.Hierarchy.Crs.Crs.CrsCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) RoleToStore,
 		   Gbl.TimeGenerationInMicroseconds,
@@ -335,9 +335,9 @@ void Sta_AskShowCrsHits (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order the lists of users of this course *****/
-   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
-   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_NET);
-   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_TCH);
+   Usr_GetListUsrs (Hie_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_CRS,Rol_NET);
+   Usr_GetListUsrs (Hie_CRS,Rol_TCH);
    NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
@@ -345,7 +345,7 @@ void Sta_AskShowCrsHits (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Statistics_of_visits_to_the_course_X,
-	     Gbl.CurrentCrs.Crs.ShrtName);
+	     Gbl.Hierarchy.Crs.Crs.ShrtName);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
 
@@ -566,13 +566,13 @@ void Sta_AskShowGblHits (void)
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	               1 << Sco_SCOPE_CTY |
-		       1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR |
-		       1 << Sco_SCOPE_DEG |
-		       1 << Sco_SCOPE_CRS;
-   Gbl.Scope.Default = Sco_SCOPE_SYS;
+   Gbl.Scope.Allowed = 1 << Hie_SYS |
+	               1 << Hie_CTY |
+		       1 << Hie_INS |
+		       1 << Hie_CTR |
+		       1 << Hie_DEG |
+		       1 << Hie_CRS;
+   Gbl.Scope.Default = Hie_SYS;
    Sco_GetScope ("ScopeSta");
    Sco_PutSelectorScope ("ScopeSta",false);
    fprintf (Gbl.F.Out,"</td>"
@@ -632,7 +632,7 @@ static void Sta_PutLinkToCourseHits (void)
   {
    extern const char *Txt_Visits_to_course;
 
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
+   if (Gbl.Hierarchy.Level == Hie_CRS)		// Course selected
       switch (Gbl.Usrs.Me.Role.Logged)
         {
 	 case Rol_NET:
@@ -839,13 +839,13 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 				                   (unsigned long) Sta_ROLE_DEFAULT);
 
 	 /***** Get users range for access statistics *****/
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-			     1 << Sco_SCOPE_CTY |
-			     1 << Sco_SCOPE_INS |
-			     1 << Sco_SCOPE_CTR |
-			     1 << Sco_SCOPE_DEG |
-			     1 << Sco_SCOPE_CRS;
-	 Gbl.Scope.Default = Sco_SCOPE_SYS;
+	 Gbl.Scope.Allowed = 1 << Hie_SYS |
+			     1 << Hie_CTY |
+			     1 << Hie_INS |
+			     1 << Hie_CTR |
+			     1 << Hie_DEG |
+			     1 << Hie_CRS;
+	 Gbl.Scope.Default = Hie_SYS;
 	 Sco_GetScope ("ScopeSta");
 
 	 /***** Show form again *****/
@@ -910,16 +910,16 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Check if range of dates is forbidden for me *****/
    NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.DateRange.DateEnd.Date);
    ICanQueryWholeRange = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH && GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  Gbl.Scope.Current == Sco_SCOPE_CRS)  ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (Gbl.Scope.Current == Sco_SCOPE_DEG   ||
-			                                             Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (Gbl.Scope.Current == Sco_SCOPE_CTR   ||
-			                                             Gbl.Scope.Current == Sco_SCOPE_DEG   ||
-			                                             Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (Gbl.Scope.Current == Sco_SCOPE_INS   ||
-			                                             Gbl.Scope.Current == Sco_SCOPE_CTR   ||
-			                                             Gbl.Scope.Current == Sco_SCOPE_DEG   ||
-			                                             Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  Gbl.Scope.Current == Hie_CRS)  ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (Gbl.Scope.Current == Hie_DEG   ||
+			                                             Gbl.Scope.Current == Hie_CRS)) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (Gbl.Scope.Current == Hie_CTR   ||
+			                                             Gbl.Scope.Current == Hie_DEG   ||
+			                                             Gbl.Scope.Current == Hie_CRS)) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (Gbl.Scope.Current == Hie_INS   ||
+			                                             Gbl.Scope.Current == Hie_CTR   ||
+			                                             Gbl.Scope.Current == Hie_DEG   ||
+			                                             Gbl.Scope.Current == Hie_CRS)) ||
 			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
    if (!ICanQueryWholeRange && NumDays > Cfg_DAYS_IN_RECENT_LOG)
      {
@@ -1101,50 +1101,50 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 /* Scope */
 	 switch (Gbl.Scope.Current)
 	   {
-	    case Sco_SCOPE_UNK:
-	    case Sco_SCOPE_SYS:
+	    case Hie_UNK:
+	    case Hie_SYS:
                break;
-	    case Sco_SCOPE_CTY:
-               if (Gbl.CurrentCty.Cty.CtyCod > 0)
+	    case Hie_CTY:
+               if (Gbl.Hierarchy.Cty.CtyCod > 0)
 		 {
 		  sprintf (QueryAux," AND %s.CtyCod=%ld",
-			   LogTable,Gbl.CurrentCty.Cty.CtyCod);
+			   LogTable,Gbl.Hierarchy.Cty.CtyCod);
 		  Str_Concat (Query,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
 		 }
                break;
-	    case Sco_SCOPE_INS:
-	       if (Gbl.CurrentIns.Ins.InsCod > 0)
+	    case Hie_INS:
+	       if (Gbl.Hierarchy.Ins.InsCod > 0)
 		 {
 		  sprintf (QueryAux," AND %s.InsCod=%ld",
-			   LogTable,Gbl.CurrentIns.Ins.InsCod);
+			   LogTable,Gbl.Hierarchy.Ins.InsCod);
 		  Str_Concat (Query,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
 		 }
 	       break;
-	    case Sco_SCOPE_CTR:
-               if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	    case Hie_CTR:
+               if (Gbl.Hierarchy.Ctr.CtrCod > 0)
 		 {
 		  sprintf (QueryAux," AND %s.CtrCod=%ld",
-			   LogTable,Gbl.CurrentCtr.Ctr.CtrCod);
+			   LogTable,Gbl.Hierarchy.Ctr.CtrCod);
 		  Str_Concat (Query,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
 		 }
                break;
-	    case Sco_SCOPE_DEG:
-	       if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	    case Hie_DEG:
+	       if (Gbl.Hierarchy.Deg.DegCod > 0)
 		 {
 		  sprintf (QueryAux," AND %s.DegCod=%ld",
-			   LogTable,Gbl.CurrentDeg.Deg.DegCod);
+			   LogTable,Gbl.Hierarchy.Deg.DegCod);
 		  Str_Concat (Query,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
 		 }
 	       break;
-	    case Sco_SCOPE_CRS:
-	       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	    case Hie_CRS:
+	       if (Gbl.Hierarchy.Level == Hie_CRS)
 		 {
 		  sprintf (QueryAux," AND %s.CrsCod=%ld",
-			   LogTable,Gbl.CurrentCrs.Crs.CrsCod);
+			   LogTable,Gbl.Hierarchy.Crs.Crs.CrsCod);
 		  Str_Concat (Query,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
 		 }
@@ -1238,7 +1238,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 break;
       case Sta_SHOW_COURSE_ACCESSES:
          sprintf (QueryAux," AND %s.CrsCod=%ld",
-                  LogTable,Gbl.CurrentCrs.Crs.CrsCod);
+                  LogTable,Gbl.Hierarchy.Crs.Crs.CrsCod);
 	 Str_Concat (Query,QueryAux,
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 

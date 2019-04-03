@@ -46,7 +46,7 @@ typedef enum
 struct Survey
   {
    long SvyCod;
-   Sco_Scope_t Scope;
+   Hie_Level_t Scope;
    long Cod;		// Country, institution, centre, degree or course code
    unsigned Roles;	// Example: if survey can be made by students, Roles == (1 << Rol_STD)
    long UsrCod;
@@ -108,7 +108,7 @@ void Svy_RecFormSurvey (void);
 bool Svy_CheckIfSvyIsAssociatedToGrp (long SvyCod,long GrpCod);
 void Svy_RemoveGroup (long GrpCod);
 void Svy_RemoveGroupsOfType (long GrpTypCod);
-void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod);
+void Svy_RemoveSurveys (Hie_Level_t Scope,long Cod);
 
 void Svy_RequestEditQuestion (void);
 void Svy_ReceiveQst (void);
@@ -118,8 +118,8 @@ void Svy_RemoveQst (void);
 
 void Svy_ReceiveSurveyAnswers (void);
 
-unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope);
-unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif);
-float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope);
+unsigned Svy_GetNumCoursesWithCrsSurveys (Hie_Level_t Scope);
+unsigned Svy_GetNumCrsSurveys (Hie_Level_t Scope,unsigned *NumNotif);
+float Svy_GetNumQstsPerCrsSurvey (Hie_Level_t Scope);
 
 #endif

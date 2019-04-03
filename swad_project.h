@@ -196,7 +196,7 @@ void Prj_RecFormProject (void);
 void Prj_RemoveCrsProjects (long CrsCod);
 void Prj_RemoveUsrFromProjects (long UsrCod);
 
-unsigned Prj_GetNumCoursesWithProjects (Sco_Scope_t Scope);
-unsigned Prj_GetNumProjects (Sco_Scope_t Scope);
+unsigned Prj_GetNumCoursesWithProjects (Hie_Level_t Scope);
+unsigned Prj_GetNumProjects (Hie_Level_t Scope);
 
 #endif

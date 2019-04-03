@@ -2239,7 +2239,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 					       "DAT","CENTER_TOP");
 	 else	// Pho_DEGREES_PRINT
 	   {
-	    Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,"CENTER_TOP",true);
+	    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CENTER_TOP",true);
 	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg.FullName);
 	   }
 	 fprintf (Gbl.F.Out,"</td>");

@@ -180,31 +180,36 @@ void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_
 	 /* If session is open, course code will be get from session data,
 	    but if there is not an open session, and next action is known,
 	    it is necessary to send a parameter with course code */
-	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-	    // If course selected...
-	    snprintf (ParamLocation,sizeof (ParamLocation),
-		      "<input type=\"hidden\" name=\"crs\" value=\"%ld\" />",
-		      Gbl.CurrentCrs.Crs.CrsCod);
-	 else if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	    // If no course selected, but degree selected...
-	    snprintf (ParamLocation,sizeof (ParamLocation),
-		      "<input type=\"hidden\" name=\"deg\" value=\"%ld\" />",
-		      Gbl.CurrentDeg.Deg.DegCod);
-	 else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	    // If no degree selected, but centre selected...
-	    snprintf (ParamLocation,sizeof (ParamLocation),
-		      "<input type=\"hidden\" name=\"ctr\" value=\"%ld\" />",
-		      Gbl.CurrentCtr.Ctr.CtrCod);
-	 else if (Gbl.CurrentIns.Ins.InsCod > 0)
-	    // If no centre selected, but institution selected...
-	    snprintf (ParamLocation,sizeof (ParamLocation),
-		      "<input type=\"hidden\" name=\"ins\" value=\"%ld\" />",
-		      Gbl.CurrentIns.Ins.InsCod);
-	 else if (Gbl.CurrentCty.Cty.CtyCod > 0)
-	    // If no institution selected, but country selected...
-	    snprintf (ParamLocation,sizeof (ParamLocation),
-		      "<input type=\"hidden\" name=\"cty\" value=\"%ld\" />",
-		      Gbl.CurrentCty.Cty.CtyCod);
+	 switch (Gbl.Hierarchy.Level)
+	   {
+	    case Hie_CTY:	// Country
+	       snprintf (ParamLocation,sizeof (ParamLocation),
+			 "<input type=\"hidden\" name=\"cty\" value=\"%ld\" />",
+			 Gbl.Hierarchy.Cty.CtyCod);
+	       break;
+	    case Hie_INS:	// Institution
+	       snprintf (ParamLocation,sizeof (ParamLocation),
+			 "<input type=\"hidden\" name=\"ins\" value=\"%ld\" />",
+			 Gbl.Hierarchy.Ins.InsCod);
+	       break;
+	    case Hie_CTR:	// Centre
+	       snprintf (ParamLocation,sizeof (ParamLocation),
+			 "<input type=\"hidden\" name=\"ctr\" value=\"%ld\" />",
+			 Gbl.Hierarchy.Ctr.CtrCod);
+	       break;
+	    case Hie_DEG:	// Degree
+	       snprintf (ParamLocation,sizeof (ParamLocation),
+			 "<input type=\"hidden\" name=\"deg\" value=\"%ld\" />",
+			 Gbl.Hierarchy.Deg.DegCod);
+	       break;
+	    case Hie_CRS:	// Course
+	       snprintf (ParamLocation,sizeof (ParamLocation),
+			 "<input type=\"hidden\" name=\"crs\" value=\"%ld\" />",
+			 Gbl.Hierarchy.Crs.Crs.CrsCod);
+	       break;
+	    default:
+	       break;
+	   }
 	}
      }
 

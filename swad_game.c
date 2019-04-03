@@ -200,8 +200,8 @@ static void Gam_ListAllGames (void)
    unsigned NumGame;
 
    /***** Get number of groups in current course *****/
-   if (!Gbl.CurrentCrs.Grps.NumGrps)
-      Gbl.CurrentCrs.Grps.WhichGrps = Grp_ALL_GROUPS;
+   if (!Gbl.Hierarchy.Crs.Grps.NumGrps)
+      Gbl.Hierarchy.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
 
    /***** Get list of games *****/
    Gam_GetListGames ();
@@ -223,7 +223,7 @@ static void Gam_ListAllGames (void)
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
-   if (Gbl.CurrentCrs.Grps.NumGrps)
+   if (Gbl.Hierarchy.Crs.Grps.NumGrps)
      {
       Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAllGam,Gam_ParamsWhichGroupsToShow);
@@ -309,13 +309,9 @@ static bool Gam_CheckIfICanCreateGame (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
-         return (Gbl.CurrentCrs.Crs.CrsCod > 0);
       case Rol_DEG_ADM:
-         return (Gbl.CurrentDeg.Deg.DegCod > 0);	// Always true
       case Rol_CTR_ADM:
-         return (Gbl.CurrentCtr.Ctr.CtrCod > 0);	// Always true
       case Rol_INS_ADM:
-         return (Gbl.CurrentIns.Ins.InsCod > 0);	// Always true
       case Rol_SYS_ADM:
          return true;
       default:
@@ -610,32 +606,32 @@ static void Gam_ShowOneGame (long GamCod,
             Txt_Scope);
    switch (Game.Scope)
      {
-      case Sco_SCOPE_UNK:	// Unknown
+      case Hie_UNK:	// Unknown
          Lay_ShowErrorAndExit ("Wrong game scope.");
          break;
-      case Sco_SCOPE_SYS:	// System
+      case Hie_SYS:	// System
          fprintf (Gbl.F.Out,"%s",
                   Cfg_PLATFORM_SHORT_NAME);
 	 break;
-      case Sco_SCOPE_CTY:	// Country
+      case Hie_CTY:	// Country
          fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Country,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+                  Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	 break;
-      case Sco_SCOPE_INS:	// Institution
+      case Hie_INS:	// Institution
          fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Institution,Gbl.CurrentIns.Ins.ShrtName);
+                  Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
 	 break;
-      case Sco_SCOPE_CTR:	// Centre
+      case Hie_CTR:	// Centre
          fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Centre,Gbl.CurrentCtr.Ctr.ShrtName);
+                  Txt_Centre,Gbl.Hierarchy.Ctr.ShrtName);
 	 break;
-      case Sco_SCOPE_DEG:	// Degree
+      case Hie_DEG:	// Degree
          fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Degree,Gbl.CurrentDeg.Deg.ShrtName);
+                  Txt_Degree,Gbl.Hierarchy.Deg.ShrtName);
  	 break;
-      case Sco_SCOPE_CRS:	// Course
+      case Hie_CRS:	// Course
 	 fprintf (Gbl.F.Out,"%s %s",
-	          Txt_Course,Gbl.CurrentCrs.Crs.ShrtName);
+	          Txt_Course,Gbl.Hierarchy.Crs.Crs.ShrtName);
 	 break;
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -653,8 +649,8 @@ static void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"</div>");
 
    /* Groups whose users can answer this game */
-   if (Game.Scope == Sco_SCOPE_CRS)
-      if (Gbl.CurrentCrs.Grps.NumGrps)
+   if (Game.Scope == Hie_CRS)
+      if (Gbl.Hierarchy.Crs.Grps.NumGrps)
          Gam_GetAndWriteNamesOfGrpsAssociatedToGame (&Game);
 
    /* Text of the game */
@@ -877,7 +873,7 @@ static void Gam_PutParams (void)
 
 void Gam_GetListGames (void)
   {
-   char *SubQuery[Sco_NUM_SCOPES];
+   char *SubQuery[Hie_NUM_LEVELS];
    static const char *OrderBySubQuery[Gam_NUM_ORDERS] =
      {
       "StartTime DESC,EndTime DESC,Title DESC",	// Gam_ORDER_BY_START_DATE
@@ -889,8 +885,8 @@ void Gam_GetListGames (void)
    unsigned NumGame;
    unsigned ScopesAllowed = 0;
    unsigned HiddenAllowed = 0;
-   long Cods[Sco_NUM_SCOPES];
-   Sco_Scope_t Scope;
+   long Cods[Hie_NUM_LEVELS];
+   Hie_Level_t Scope;
    bool SubQueryFilled = false;
 
    /***** Free list of games *****/
@@ -901,16 +897,16 @@ void Gam_GetListGames (void)
    Gam_SetAllowedAndHiddenScopes (&ScopesAllowed,&HiddenAllowed);
 
    /***** Get list of games from database *****/
-   Cods[Sco_SCOPE_SYS] = -1L;				// System
-   Cods[Sco_SCOPE_CTY] = Gbl.CurrentCty.Cty.CtyCod;	// Country
-   Cods[Sco_SCOPE_INS] = Gbl.CurrentIns.Ins.InsCod;	// Institution
-   Cods[Sco_SCOPE_CTR] = Gbl.CurrentCtr.Ctr.CtrCod;	// Centre
-   Cods[Sco_SCOPE_DEG] = Gbl.CurrentDeg.Deg.DegCod;	// Degree
-   Cods[Sco_SCOPE_CRS] = Gbl.CurrentCrs.Crs.CrsCod;	// Course
+   Cods[Hie_SYS] = -1L;				// System
+   Cods[Hie_CTY] = Gbl.Hierarchy.Cty.CtyCod;	// Country
+   Cods[Hie_INS] = Gbl.Hierarchy.Ins.InsCod;	// Institution
+   Cods[Hie_CTR] = Gbl.Hierarchy.Ctr.CtrCod;	// Centre
+   Cods[Hie_DEG] = Gbl.Hierarchy.Deg.DegCod;	// Degree
+   Cods[Hie_CRS] = Gbl.Hierarchy.Crs.Crs.CrsCod;	// Course
 
    /* Fill subqueries for system, country, institution, centre and degree */
-   for (Scope  = Sco_SCOPE_SYS;
-	Scope <= Sco_SCOPE_DEG;
+   for (Scope  = Hie_SYS;
+	Scope <= Hie_DEG;
 	Scope++)
       if (ScopesAllowed & 1 << Scope)
 	{
@@ -930,11 +926,11 @@ void Gam_GetListGames (void)
         }
 
    /* Fill subquery for course */
-   if (ScopesAllowed & 1 << Sco_SCOPE_CRS)
+   if (ScopesAllowed & 1 << Hie_CRS)
      {
-      if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
+      if (Gbl.Hierarchy.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
         {
-	 if (asprintf (&SubQuery[Sco_SCOPE_CRS],"%s("
+	 if (asprintf (&SubQuery[Hie_CRS],"%s("
 						"Scope='%s' AND Cod=%ld%s"
 						" AND "
 						"(GamCod NOT IN"
@@ -948,19 +944,19 @@ void Gam_GetListGames (void)
 						")",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Sco_GetDBStrFromScope (Sco_SCOPE_CRS),Cods[Sco_SCOPE_CRS],
-		       (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
+		       Sco_GetDBStrFromScope (Hie_CRS),Cods[Hie_CRS],
+		       (HiddenAllowed & 1 << Hie_CRS) ? "" :
 							      " AND Hidden='N'",
 		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	    Lay_NotEnoughMemoryExit ();
         }
-      else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
+      else	// Gbl.Hierarchy.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
         {
-	 if (asprintf (&SubQuery[Sco_SCOPE_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
+	 if (asprintf (&SubQuery[Hie_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
 		       SubQueryFilled ? " OR " :
 					"",
-		       Sco_GetDBStrFromScope (Sco_SCOPE_CRS),Cods[Sco_SCOPE_CRS],
-		       (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
+		       Sco_GetDBStrFromScope (Hie_CRS),Cods[Hie_CRS],
+		       (HiddenAllowed & 1 << Hie_CRS) ? "" :
 							      " AND Hidden='N'") < 0)
 	    Lay_NotEnoughMemoryExit ();
         }
@@ -968,7 +964,7 @@ void Gam_GetListGames (void)
      }
    else
      {
-      if (asprintf (&SubQuery[Sco_SCOPE_CRS],"%s","") < 0)
+      if (asprintf (&SubQuery[Hie_CRS],"%s","") < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
 
@@ -980,20 +976,20 @@ void Gam_GetListGames (void)
 				"SELECT GamCod FROM games"
 				" WHERE %s%s%s%s%s%s"
 				" ORDER BY %s",
-				SubQuery[Sco_SCOPE_SYS],
-				SubQuery[Sco_SCOPE_CTY],
-				SubQuery[Sco_SCOPE_INS],
-				SubQuery[Sco_SCOPE_CTR],
-				SubQuery[Sco_SCOPE_DEG],
-				SubQuery[Sco_SCOPE_CRS],
+				SubQuery[Hie_SYS],
+				SubQuery[Hie_CTY],
+				SubQuery[Hie_INS],
+				SubQuery[Hie_CTR],
+				SubQuery[Hie_DEG],
+				SubQuery[Hie_CRS],
 				OrderBySubQuery[Gbl.Games.SelectedOrder]);
      }
    else
       Lay_ShowErrorAndExit ("Can not get list of games.");
 
    /* Free allocated memory for subqueries */
-   for (Scope  = Sco_SCOPE_SYS;
-	Scope <= Sco_SCOPE_CRS;
+   for (Scope  = Hie_SYS;
+	Scope <= Hie_CRS;
 	Scope++)
       free ((void *) SubQuery[Scope]);
 
@@ -1039,45 +1035,45 @@ static void Gam_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 	 *HiddenAllowed = 0;
          break;
       case Rol_GST:	// User not belonging to any course *******************
-	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *ScopesAllowed = 1 << Hie_SYS;
 	 *HiddenAllowed = 0;
 	 break;
       case Rol_USR:	// Student or teacher in other courses...
    	   	   	// ...but not belonging to the current course *********
-	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *ScopesAllowed = 1 << Hie_SYS;
 	 *HiddenAllowed = 0;
-	 if (Usr_CheckIfIBelongToCty (Gbl.CurrentCty.Cty.CtyCod))
+	 if (Usr_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
 	   {
-	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
-	    if (Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod))
+	    *ScopesAllowed |= 1 << Hie_CTY;
+	    if (Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
 	      {
-	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
-	       if (Usr_CheckIfIBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod))
+	       *ScopesAllowed |= 1 << Hie_INS;
+	       if (Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
 		 {
-		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
-		  if (Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod))
-		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
+		  *ScopesAllowed |= 1 << Hie_CTR;
+		  if (Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
+		     *ScopesAllowed |= 1 << Hie_DEG;
 		 }
 	      }
 	   }
          break;
       case Rol_STD:	// Student in current course **************************
-	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *ScopesAllowed = 1 << Hie_SYS;
 	 *HiddenAllowed = 0;
-	 if (Usr_CheckIfIBelongToCty (Gbl.CurrentCty.Cty.CtyCod))
+	 if (Usr_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
 	   {
-	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
-	    if (Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod))
+	    *ScopesAllowed |= 1 << Hie_CTY;
+	    if (Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
 	      {
-	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
-	       if (Usr_CheckIfIBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod))
+	       *ScopesAllowed |= 1 << Hie_INS;
+	       if (Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
 		 {
-		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
-		  if (Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod))
+		  *ScopesAllowed |= 1 << Hie_CTR;
+		  if (Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
 		    {
-		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
+		     *ScopesAllowed |= 1 << Hie_DEG;
 		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-			*ScopesAllowed |= 1 << Sco_SCOPE_CRS;
+			*ScopesAllowed |= 1 << Hie_CRS;
 		    }
 		 }
 	      }
@@ -1085,24 +1081,24 @@ static void Gam_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
          break;
       case Rol_NET:	// Non-editing teacher in current course **************
       case Rol_TCH:	// Teacher in current course **************************
-	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *ScopesAllowed = 1 << Hie_SYS;
 	 *HiddenAllowed = 0;
-	 if (Usr_CheckIfIBelongToCty (Gbl.CurrentCty.Cty.CtyCod))
+	 if (Usr_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
 	   {
-	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
-	    if (Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod))
+	    *ScopesAllowed |= 1 << Hie_CTY;
+	    if (Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
 	      {
-	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
-	       if (Usr_CheckIfIBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod))
+	       *ScopesAllowed |= 1 << Hie_INS;
+	       if (Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
 		 {
-		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
-		  if (Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod))
+		  *ScopesAllowed |= 1 << Hie_CTR;
+		  if (Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
 		    {
-		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
+		     *ScopesAllowed |= 1 << Hie_DEG;
 		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
 		       {
-			*ScopesAllowed |= 1 << Sco_SCOPE_CRS;
-			*HiddenAllowed |= 1 << Sco_SCOPE_CRS;	// A non-editing teacher or teacher can view hidden course games
+			*ScopesAllowed |= 1 << Hie_CRS;
+			*HiddenAllowed |= 1 << Hie_CRS;	// A non-editing teacher or teacher can view hidden course games
 		       }
 		    }
 		 }
@@ -1110,79 +1106,79 @@ static void Gam_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 	   }
          break;
       case Rol_DEG_ADM:	// Degree administrator *******************************
-	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *ScopesAllowed = 1 << Hie_SYS;
 	 *HiddenAllowed = 0;
-	 if (Gbl.CurrentCty.Cty.CtyCod > 0)			// Country selected
+	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
 	   {
-	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
-	    if (Gbl.CurrentIns.Ins.InsCod > 0)			// Institution selected
+	    *ScopesAllowed |= 1 << Hie_CTY;
+	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
 	      {
-	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
-	       if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// Centre selected
+	       *ScopesAllowed |= 1 << Hie_INS;
+	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Centre selected
 		 {
-		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
-		  if (Gbl.CurrentDeg.Deg.DegCod > 0)		// Degree selected
+		  *ScopesAllowed |= 1 << Hie_CTR;
+		  if (Gbl.Hierarchy.Deg.DegCod > 0)		// Degree selected
 		    {
-		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
-		     *HiddenAllowed |= 1 << Sco_SCOPE_DEG;	// A degree admin can view hidden degree games
+		     *ScopesAllowed |= 1 << Hie_DEG;
+		     *HiddenAllowed |= 1 << Hie_DEG;	// A degree admin can view hidden degree games
 		    }
 	         }
 	      }
 	   }
 	 break;
       case Rol_CTR_ADM:	// Centre administrator *******************************
-	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *ScopesAllowed = 1 << Hie_SYS;
 	 *HiddenAllowed = 0;
-	 if (Gbl.CurrentCty.Cty.CtyCod > 0)			// Country selected
+	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
 	   {
-	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
-	    if (Gbl.CurrentIns.Ins.InsCod > 0)			// Institution selected
+	    *ScopesAllowed |= 1 << Hie_CTY;
+	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
 	      {
-	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
-	       if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// Centre selected
+	       *ScopesAllowed |= 1 << Hie_INS;
+	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Centre selected
 		 {
-		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
-		  *HiddenAllowed |= 1 << Sco_SCOPE_CTR;		// A centre admin can view hidden centre games
+		  *ScopesAllowed |= 1 << Hie_CTR;
+		  *HiddenAllowed |= 1 << Hie_CTR;		// A centre admin can view hidden centre games
 		 }
 	      }
 	   }
 	 break;
       case Rol_INS_ADM:	// Institution administrator **************************
-	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
+	 *ScopesAllowed = 1 << Hie_SYS;
 	 *HiddenAllowed = 0;
-	 if (Gbl.CurrentCty.Cty.CtyCod > 0)			// Country selected
+	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
 	   {
-	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
-	    if (Gbl.CurrentIns.Ins.InsCod > 0)			// Institution selected
+	    *ScopesAllowed |= 1 << Hie_CTY;
+	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
 	      {
-	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
-	       *HiddenAllowed |= 1 << Sco_SCOPE_INS;		// An institution admin can view hidden institution games
+	       *ScopesAllowed |= 1 << Hie_INS;
+	       *HiddenAllowed |= 1 << Hie_INS;		// An institution admin can view hidden institution games
 	      }
 	   }
 	 break;
       case Rol_SYS_ADM:	// System administrator (superuser) *******************
-	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
-	 *HiddenAllowed = 1 << Sco_SCOPE_SYS;			// A system admin can view hidden system games
-	 if (Gbl.CurrentCty.Cty.CtyCod > 0)			// Country selected
+	 *ScopesAllowed = 1 << Hie_SYS;
+	 *HiddenAllowed = 1 << Hie_SYS;			// A system admin can view hidden system games
+	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
 	   {
-	    *ScopesAllowed |= 1 << Sco_SCOPE_CTY;
-	    *HiddenAllowed |= 1 << Sco_SCOPE_CTY;		// A system admin can view hidden country games
-	    if (Gbl.CurrentIns.Ins.InsCod > 0)			// Institution selected
+	    *ScopesAllowed |= 1 << Hie_CTY;
+	    *HiddenAllowed |= 1 << Hie_CTY;		// A system admin can view hidden country games
+	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
 	      {
-	       *ScopesAllowed |= 1 << Sco_SCOPE_INS;
-	       *HiddenAllowed |= 1 << Sco_SCOPE_INS;		// A system admin can view hidden institution games
-	       if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// Centre selected
+	       *ScopesAllowed |= 1 << Hie_INS;
+	       *HiddenAllowed |= 1 << Hie_INS;		// A system admin can view hidden institution games
+	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Centre selected
 		 {
-		  *ScopesAllowed |= 1 << Sco_SCOPE_CTR;
-	          *HiddenAllowed |= 1 << Sco_SCOPE_CTR;		// A system admin can view hidden centre games
-		  if (Gbl.CurrentDeg.Deg.DegCod > 0)		// Degree selected
+		  *ScopesAllowed |= 1 << Hie_CTR;
+	          *HiddenAllowed |= 1 << Hie_CTR;		// A system admin can view hidden centre games
+		  if (Gbl.Hierarchy.Deg.DegCod > 0)		// Degree selected
 		    {
-		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
-	             *HiddenAllowed |= 1 << Sco_SCOPE_DEG;	// A system admin can view hidden degree games
-		     if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
+		     *ScopesAllowed |= 1 << Hie_DEG;
+	             *HiddenAllowed |= 1 << Hie_DEG;	// A system admin can view hidden degree games
+		     if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 		       {
-			*ScopesAllowed |= 1 << Sco_SCOPE_CRS;
-	                *HiddenAllowed |= 1 << Sco_SCOPE_CRS;	// A system admin can view hidden course games
+			*ScopesAllowed |= 1 << Hie_CRS;
+	                *HiddenAllowed |= 1 << Hie_CRS;	// A system admin can view hidden course games
 		       }
 		    }
 		 }
@@ -1221,7 +1217,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       Game->GamCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get game scope (row[1]) */
-      if ((Game->Scope = Sco_GetScopeFromDBStr (row[1])) == Sco_SCOPE_UNK)
+      if ((Game->Scope = Sco_GetScopeFromDBStr (row[1])) == Hie_UNK)
          Lay_ShowErrorAndExit ("Wrong game scope.");
 
       /* Get code of the country, institution, centre, degree or course (row[2]) */
@@ -1260,25 +1256,25 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       /* Do I belong to valid groups to answer this game? */
       switch (Game->Scope)
         {
-	 case Sco_SCOPE_UNK:	// Unknown
+	 case Hie_UNK:	// Unknown
             Lay_ShowErrorAndExit ("Wrong game scope.");
 	    break;
-	 case Sco_SCOPE_SYS:	// System
+	 case Hie_SYS:	// System
             Game->Status.IBelongToScope = Gbl.Usrs.Me.Logged;
 	    break;
-	 case Sco_SCOPE_CTY:	// Country
+	 case Hie_CTY:	// Country
             Game->Status.IBelongToScope = Usr_CheckIfIBelongToCty (Game->Cod);
 	    break;
-	 case Sco_SCOPE_INS:	// Institution
+	 case Hie_INS:	// Institution
             Game->Status.IBelongToScope = Usr_CheckIfIBelongToIns (Game->Cod);
 	    break;
-	 case Sco_SCOPE_CTR:	// Centre
+	 case Hie_CTR:	// Centre
             Game->Status.IBelongToScope = Usr_CheckIfIBelongToCtr (Game->Cod);
 	    break;
-	 case Sco_SCOPE_DEG:	// Degree
+	 case Hie_DEG:	// Degree
             Game->Status.IBelongToScope = Usr_CheckIfIBelongToDeg (Game->Cod);
 	    break;
-	 case Sco_SCOPE_CRS:	// Course
+	 case Hie_CRS:	// Course
 	    Game->Status.IBelongToScope = Usr_CheckIfIBelongToCrs (Game->Cod) &&
 					  Gam_CheckIfICanDoThisGameBasedOnGrps (Game->GamCod);
 	    break;
@@ -1300,12 +1296,12 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       switch (Gbl.Usrs.Me.Role.Logged)
         {
          case Rol_STD:
-            Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_CRS ||
-        	                            Game->Scope == Sco_SCOPE_DEG ||
-        	                            Game->Scope == Sco_SCOPE_CTR ||
-        	                            Game->Scope == Sco_SCOPE_INS ||
-        	                            Game->Scope == Sco_SCOPE_CTY ||
-        	                            Game->Scope == Sco_SCOPE_SYS) &&
+            Game->Status.ICanViewResults = (Game->Scope == Hie_CRS ||
+        	                            Game->Scope == Hie_DEG ||
+        	                            Game->Scope == Hie_CTR ||
+        	                            Game->Scope == Hie_INS ||
+        	                            Game->Scope == Hie_CTY ||
+        	                            Game->Scope == Hie_SYS) &&
         	                           (Game->NumQsts != 0) &&
                                             Game->Status.Visible &&
                                             Game->Status.Open &&
@@ -1315,56 +1311,56 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
             Game->Status.ICanEdit         = false;
             break;
          case Rol_NET:
-            Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_CRS ||
-        	                            Game->Scope == Sco_SCOPE_DEG ||
-        	                            Game->Scope == Sco_SCOPE_CTR ||
-        	                            Game->Scope == Sco_SCOPE_INS ||
-        	                            Game->Scope == Sco_SCOPE_CTY ||
-        	                            Game->Scope == Sco_SCOPE_SYS) &&
+            Game->Status.ICanViewResults = (Game->Scope == Hie_CRS ||
+        	                            Game->Scope == Hie_DEG ||
+        	                            Game->Scope == Hie_CTR ||
+        	                            Game->Scope == Hie_INS ||
+        	                            Game->Scope == Hie_CTY ||
+        	                            Game->Scope == Hie_SYS) &&
         	                            Game->NumQsts != 0 &&
                                            !Game->Status.ICanAnswer;
             Game->Status.ICanEdit        = false;
             break;
          case Rol_TCH:
-            Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_CRS ||
-        	                            Game->Scope == Sco_SCOPE_DEG ||
-        	                            Game->Scope == Sco_SCOPE_CTR ||
-        	                            Game->Scope == Sco_SCOPE_INS ||
-        	                            Game->Scope == Sco_SCOPE_CTY ||
-        	                            Game->Scope == Sco_SCOPE_SYS) &&
+            Game->Status.ICanViewResults = (Game->Scope == Hie_CRS ||
+        	                            Game->Scope == Hie_DEG ||
+        	                            Game->Scope == Hie_CTR ||
+        	                            Game->Scope == Hie_INS ||
+        	                            Game->Scope == Hie_CTY ||
+        	                            Game->Scope == Hie_SYS) &&
         	                            Game->NumQsts != 0 &&
                                            !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        =  Game->Scope == Sco_SCOPE_CRS &&
+            Game->Status.ICanEdit        =  Game->Scope == Hie_CRS &&
                                             Game->Status.IBelongToScope;
             break;
          case Rol_DEG_ADM:
-            Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_DEG ||
-        	                            Game->Scope == Sco_SCOPE_CTR ||
-        	                            Game->Scope == Sco_SCOPE_INS ||
-        	                            Game->Scope == Sco_SCOPE_CTY ||
-        	                            Game->Scope == Sco_SCOPE_SYS) &&
+            Game->Status.ICanViewResults = (Game->Scope == Hie_DEG ||
+        	                            Game->Scope == Hie_CTR ||
+        	                            Game->Scope == Hie_INS ||
+        	                            Game->Scope == Hie_CTY ||
+        	                            Game->Scope == Hie_SYS) &&
         	                           (Game->NumQsts != 0) &&
                                            !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        =  Game->Scope == Sco_SCOPE_DEG &&
+            Game->Status.ICanEdit        =  Game->Scope == Hie_DEG &&
                                             Game->Status.IBelongToScope;
             break;
          case Rol_CTR_ADM:
-            Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_CTR ||
-        	                            Game->Scope == Sco_SCOPE_INS ||
-        	                            Game->Scope == Sco_SCOPE_CTY ||
-        	                            Game->Scope == Sco_SCOPE_SYS) &&
+            Game->Status.ICanViewResults = (Game->Scope == Hie_CTR ||
+        	                            Game->Scope == Hie_INS ||
+        	                            Game->Scope == Hie_CTY ||
+        	                            Game->Scope == Hie_SYS) &&
         	                           (Game->NumQsts != 0) &&
                                            !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        =  Game->Scope == Sco_SCOPE_CTR &&
+            Game->Status.ICanEdit        =  Game->Scope == Hie_CTR &&
                                             Game->Status.IBelongToScope;
             break;
          case Rol_INS_ADM:
-            Game->Status.ICanViewResults = (Game->Scope == Sco_SCOPE_INS ||
-        	                            Game->Scope == Sco_SCOPE_CTY ||
-        	                            Game->Scope == Sco_SCOPE_SYS) &&
+            Game->Status.ICanViewResults = (Game->Scope == Hie_INS ||
+        	                            Game->Scope == Hie_CTY ||
+        	                            Game->Scope == Hie_SYS) &&
         	                           (Game->NumQsts != 0) &&
                                            !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        =  Game->Scope == Sco_SCOPE_INS &&
+            Game->Status.ICanEdit        =  Game->Scope == Hie_INS &&
                                             Game->Status.IBelongToScope;
             break;
          case Rol_SYS_ADM:
@@ -1381,7 +1377,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
      {
       /* Initialize to empty game */
       Game->GamCod                  = -1L;
-      Game->Scope                   = Sco_SCOPE_UNK;
+      Game->Scope                   = Hie_UNK;
       Game->Roles                   = 0;
       Game->UsrCod                  = -1L;
       Game->TimeUTC[Gam_START_TIME] =
@@ -1753,7 +1749,7 @@ void Gam_RequestCreatOrEditGame (void)
 
       /* Initialize to empty game */
       Game.GamCod = -1L;
-      Game.Scope  = Sco_SCOPE_UNK;
+      Game.Scope  = Hie_UNK;
       Game.Roles  = (1 << Rol_STD);
       Game.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       Game.TimeUTC[Gam_START_TIME] = Gbl.StartExecutionTimeUTC;
@@ -1886,77 +1882,74 @@ static void Gam_SetDefaultAndAllowedScope (struct Game *Game)
    bool ICanEdit = false;
 
    /***** Set default scope *****/
-   Gbl.Scope.Default = Sco_SCOPE_UNK;
+   Gbl.Scope.Default = Hie_UNK;
    Gbl.Scope.Allowed = 0;
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:	// Teachers only can edit course games
-	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	 if (Game->Scope == Hie_UNK)	// Scope not defined
+	    Game->Scope = Hie_CRS;
+	 if (Game->Scope == Hie_CRS)
 	   {
-	    if (Game->Scope == Sco_SCOPE_UNK)	// Scope not defined
-	       Game->Scope = Sco_SCOPE_CRS;
-	    if (Game->Scope == Sco_SCOPE_CRS)
-	      {
-               Gbl.Scope.Default = Game->Scope;
-	       Gbl.Scope.Allowed = 1 << Sco_SCOPE_CRS;
-	       ICanEdit = true;
-	      }
+	    Gbl.Scope.Default = Game->Scope;
+	    Gbl.Scope.Allowed = 1 << Hie_CRS;
+	    ICanEdit = true;
 	   }
          break;
       case Rol_DEG_ADM:	// Degree admins only can edit degree games
-	 if (Game->Scope == Sco_SCOPE_UNK)	// Scope not defined
-	    Game->Scope = Sco_SCOPE_DEG;
-	 if (Game->Scope == Sco_SCOPE_DEG)
+	 if (Game->Scope == Hie_UNK)	// Scope not defined
+	    Game->Scope = Hie_DEG;
+	 if (Game->Scope == Hie_DEG)
 	   {
 	    Gbl.Scope.Default = Game->Scope;
-	    Gbl.Scope.Allowed = 1 << Sco_SCOPE_DEG;
+	    Gbl.Scope.Allowed = 1 << Hie_DEG;
 	    ICanEdit = true;
 	   }
          break;
       case Rol_CTR_ADM:	// Centre admins only can edit centre games
-	 if (Game->Scope == Sco_SCOPE_UNK)	// Scope not defined
-	    Game->Scope = Sco_SCOPE_CTR;
-	 if (Game->Scope == Sco_SCOPE_CTR)
+	 if (Game->Scope == Hie_UNK)	// Scope not defined
+	    Game->Scope = Hie_CTR;
+	 if (Game->Scope == Hie_CTR)
 	   {
 	    Gbl.Scope.Default = Game->Scope;
-	    Gbl.Scope.Allowed = 1 << Sco_SCOPE_CTR;
+	    Gbl.Scope.Allowed = 1 << Hie_CTR;
 	    ICanEdit = true;
 	   }
          break;
       case Rol_INS_ADM:	// Institution admins only can edit institution games
-	 if (Game->Scope == Sco_SCOPE_UNK)	// Scope not defined
-	    Game->Scope = Sco_SCOPE_INS;
-	 if (Game->Scope == Sco_SCOPE_INS)
+	 if (Game->Scope == Hie_UNK)	// Scope not defined
+	    Game->Scope = Hie_INS;
+	 if (Game->Scope == Hie_INS)
 	   {
 	    Gbl.Scope.Default = Game->Scope;
-	    Gbl.Scope.Allowed = 1 << Sco_SCOPE_INS;
+	    Gbl.Scope.Allowed = 1 << Hie_INS;
 	    ICanEdit = true;
 	   }
          break;
       case Rol_SYS_ADM:// System admins can edit any game
-	 if (Game->Scope == Sco_SCOPE_UNK)	// Scope not defined
+	 if (Game->Scope == Hie_UNK)	// Scope not defined
 	   {
-	    if      (Gbl.CurrentCrs.Crs.CrsCod > 0)
-	       Game->Scope = Sco_SCOPE_CRS;
-	    else if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	       Game->Scope = Sco_SCOPE_DEG;
-	    else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-	       Game->Scope = Sco_SCOPE_CTR;
-	    else if (Gbl.CurrentIns.Ins.InsCod > 0)
-	       Game->Scope = Sco_SCOPE_INS;
-	    else if (Gbl.CurrentCty.Cty.CtyCod > 0)
-	       Game->Scope = Sco_SCOPE_CTY;
+	    if      (Gbl.Hierarchy.Level == Hie_CRS)
+	       Game->Scope = Hie_CRS;
+	    else if (Gbl.Hierarchy.Deg.DegCod > 0)
+	       Game->Scope = Hie_DEG;
+	    else if (Gbl.Hierarchy.Ctr.CtrCod > 0)
+	       Game->Scope = Hie_CTR;
+	    else if (Gbl.Hierarchy.Ins.InsCod > 0)
+	       Game->Scope = Hie_INS;
+	    else if (Gbl.Hierarchy.Cty.CtyCod > 0)
+	       Game->Scope = Hie_CTY;
 	    else
-	       Game->Scope = Sco_SCOPE_SYS;
+	       Game->Scope = Hie_SYS;
 	   }
          Gbl.Scope.Default = Game->Scope;
-         Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	                     1 << Sco_SCOPE_CTY |
-	                     1 << Sco_SCOPE_INS |
-	                     1 << Sco_SCOPE_CTR |
-                             1 << Sco_SCOPE_DEG |
-                             1 << Sco_SCOPE_CRS;
+         Gbl.Scope.Allowed = 1 << Hie_SYS |
+	                     1 << Hie_CTY |
+	                     1 << Hie_INS |
+	                     1 << Hie_CTR |
+                             1 << Hie_DEG |
+                             1 << Hie_CRS;
 	 ICanEdit = true;
 	 break;
       default:
@@ -1981,7 +1974,7 @@ static void Gam_ShowLstGrpsToEditGame (long GamCod)
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   if (Gbl.CurrentCrs.Grps.GrpTypes.Num)
+   if (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num)
      {
       /***** Start box and table *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2007,14 +2000,14 @@ static void Gam_ShowLstGrpsToEditGame (long GamCod)
 	                 "</label>"
 	                 "</td>"
 	                 "</tr>",
-               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShrtName);
+               Txt_The_whole_course,Gbl.Hierarchy.Crs.Crs.ShrtName);
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
-         if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+         if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
                                                GamCod,Grp_SURVEY);
 
       /***** End table and box *****/
@@ -2045,7 +2038,7 @@ void Gam_RecFormGame (void)
    ItsANewGame = ((NewGame.GamCod = Gam_GetParamGameCod ()) == -1L);
 
    if (ItsANewGame)
-      NewGame.Scope = Sco_SCOPE_UNK;
+      NewGame.Scope = Hie_UNK;
    else
      {
       /* Get data of the old (current) game from database */
@@ -2061,45 +2054,45 @@ void Gam_RecFormGame (void)
    Sco_GetScope ("ScopeGame");
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
 	    Lay_ShowErrorAndExit ("Wrong game scope.");
-         NewGame.Scope = Sco_SCOPE_SYS;
+         NewGame.Scope = Hie_SYS;
          NewGame.Cod = -1L;
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
 	    Lay_ShowErrorAndExit ("Wrong game scope.");
-	 NewGame.Scope = Sco_SCOPE_CTY;
-	 NewGame.Cod = Gbl.CurrentCty.Cty.CtyCod;
+	 NewGame.Scope = Hie_CTY;
+	 NewGame.Cod = Gbl.Hierarchy.Cty.CtyCod;
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_INS_ADM)
 	    Lay_ShowErrorAndExit ("Wrong game scope.");
-	 NewGame.Scope = Sco_SCOPE_INS;
-	 NewGame.Cod = Gbl.CurrentIns.Ins.InsCod;
+	 NewGame.Scope = Hie_INS;
+	 NewGame.Cod = Gbl.Hierarchy.Ins.InsCod;
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_CTR_ADM)
 	    Lay_ShowErrorAndExit ("Wrong game scope.");
-	 NewGame.Scope = Sco_SCOPE_CTR;
-	 NewGame.Cod = Gbl.CurrentCtr.Ctr.CtrCod;
+	 NewGame.Scope = Hie_CTR;
+	 NewGame.Cod = Gbl.Hierarchy.Ctr.CtrCod;
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_DEG_ADM)
 	    Lay_ShowErrorAndExit ("Wrong game scope.");
-	 NewGame.Scope = Sco_SCOPE_DEG;
-	 NewGame.Cod = Gbl.CurrentDeg.Deg.DegCod;
+	 NewGame.Scope = Hie_DEG;
+	 NewGame.Cod = Gbl.Hierarchy.Deg.DegCod;
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
 	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
 	     Gbl.Usrs.Me.Role.Logged != Rol_TCH)
 	    Lay_ShowErrorAndExit ("Wrong game scope.");
-	 NewGame.Scope = Sco_SCOPE_CRS;
-	 NewGame.Cod = Gbl.CurrentCrs.Crs.CrsCod;
+	 NewGame.Scope = Hie_CRS;
+	 NewGame.Cod = Gbl.Hierarchy.Crs.Crs.CrsCod;
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -2189,7 +2182,7 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
 				Txt);
 
    /***** Create groups *****/
-   if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
+   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
       Gam_CreateGrps (Game->GamCod);
 
    /***** Write success message *****/
@@ -2226,7 +2219,7 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
    Gam_RemoveAllTheGrpsAssociatedToAndGame (Game->GamCod);
 
    /* Create new groups */
-   if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
+   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
       Gam_CreateGrps (Game->GamCod);
 
    /***** Write success message *****/
@@ -2309,7 +2302,7 @@ static void Gam_CreateGrps (long GamCod)
 
    /***** Create groups of the game *****/
    for (NumGrpSel = 0;
-	NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
+	NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
       /* Create group */
       DB_QueryINSERT ("can not associate a group to a game",
@@ -2317,7 +2310,7 @@ static void Gam_CreateGrps (long GamCod)
 		      " (GamCod,GrpCod)"
 		      " VALUES"
 		      " (%ld,%ld)",
-                      GamCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+                      GamCod,Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
@@ -2378,7 +2371,7 @@ static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
      }
    else
       fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShrtName);
+               Txt_The_whole_course,Gbl.Hierarchy.Crs.Crs.ShrtName);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2391,7 +2384,7 @@ static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
 /************ (country, institution, centre, degree or course)   *************/
 /*****************************************************************************/
 
-void Gam_RemoveGames (Sco_Scope_t Scope,long Cod)
+void Gam_RemoveGames (Hie_Level_t Scope,long Cod)
   {
    /***** Remove all the users in course games *****/
    DB_QueryDELETE ("can not remove users who had answered games"
@@ -3787,7 +3780,7 @@ static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
 /*****************************************************************************/
 // Returns the number of courses with games in this location
 
-unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
+unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3796,14 +3789,14 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
    /***** Get number of courses with games from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT Cod)"
 			 " FROM games"
 			 " WHERE Scope='%s'",
-                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+                         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT games.Cod)"
 			 " FROM institutions,centres,degrees,courses,games"
@@ -3813,10 +3806,10 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
-                         Gbl.CurrentIns.Ins.InsCod,
-                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+                         Gbl.Hierarchy.Ins.InsCod,
+                         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT games.Cod)"
 			 " FROM centres,degrees,courses,games"
@@ -3825,36 +3818,36 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
-		         Gbl.CurrentIns.Ins.InsCod,
-		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+		         Gbl.Hierarchy.Ins.InsCod,
+		         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
 			 " FROM degrees,courses,games"
 			 " WHERE degrees.CtrCod=%ld"
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
-                         Gbl.CurrentCtr.Ctr.CtrCod,
-                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+                         Gbl.Hierarchy.Ctr.CtrCod,
+                         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT games.Cod)"
 			 " FROM courses,games"
 			 " WHERE courses.DegCod=%ld"
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
-		         Gbl.CurrentDeg.Deg.DegCod,
-		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+		         Gbl.Hierarchy.Deg.DegCod,
+		         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
 			 "SELECT COUNT(DISTINCT Cod)"
 			 " FROM games"
 			 " WHERE Scope='%s' AND Cod=%ld",
-                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS),
-                         Gbl.CurrentCrs.Crs.CrsCod);
+                         Sco_GetDBStrFromScope (Hie_CRS),
+                         Gbl.Hierarchy.Crs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -3877,7 +3870,7 @@ unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope)
 /*****************************************************************************/
 // Returns the number of games in this location
 
-unsigned Gam_GetNumGames (Sco_Scope_t Scope)
+unsigned Gam_GetNumGames (Hie_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3886,14 +3879,14 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
    /***** Get number of games from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
 			 " FROM games"
 			 " WHERE Scope='%s'",
-                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+                         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
 			 " FROM institutions,centres,degrees,courses,games"
@@ -3903,10 +3896,10 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
-		         Gbl.CurrentCty.Cty.CtyCod,
-		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+		         Gbl.Hierarchy.Cty.CtyCod,
+		         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
 			 " FROM centres,degrees,courses,games"
@@ -3915,10 +3908,10 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
-		         Gbl.CurrentIns.Ins.InsCod,
-		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+		         Gbl.Hierarchy.Ins.InsCod,
+		         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
 			 " FROM degrees,courses,games"
@@ -3926,27 +3919,27 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
 			 " AND degrees.DegCod=courses.DegCod"
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
-		         Gbl.CurrentCtr.Ctr.CtrCod,
-		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+		         Gbl.Hierarchy.Ctr.CtrCod,
+		         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
 			 " FROM courses,games"
 			 " WHERE courses.DegCod=%ld"
 			 " AND courses.CrsCod=games.Cod"
 			 " AND games.Scope='%s'",
-		         Gbl.CurrentDeg.Deg.DegCod,
-		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+		         Gbl.Hierarchy.Deg.DegCod,
+		         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
 			 " FROM games"
 			 " WHERE games.Scope='%s'"
 			 " AND CrsCod=%ld",
-                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS),
-                         Gbl.CurrentCrs.Crs.CrsCod);
+                         Sco_GetDBStrFromScope (Hie_CRS),
+                         Gbl.Hierarchy.Crs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -3968,7 +3961,7 @@ unsigned Gam_GetNumGames (Sco_Scope_t Scope)
 /************* Get average number of questions per course game ***************/
 /*****************************************************************************/
 
-float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
+float Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3977,7 +3970,7 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
    /***** Get number of questions per game from database *****/
    switch (Scope)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
@@ -3985,9 +3978,9 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " WHERE games.Scope='%s'"
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+                         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
@@ -4000,10 +3993,10 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " AND games.Scope='%s'"
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                         Gbl.CurrentCty.Cty.CtyCod,
-                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+                         Gbl.Hierarchy.Cty.CtyCod,
+                         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
@@ -4015,10 +4008,10 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " AND games.Scope='%s'"
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-		         Gbl.CurrentIns.Ins.InsCod,
-		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+		         Gbl.Hierarchy.Ins.InsCod,
+		         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
@@ -4029,10 +4022,10 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " AND games.Scope='%s'"
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                         Gbl.CurrentCtr.Ctr.CtrCod,
-                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+                         Gbl.Hierarchy.Ctr.CtrCod,
+                         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
@@ -4042,10 +4035,10 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " AND games.Scope='%s'"
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-		         Gbl.CurrentDeg.Deg.DegCod,
-		         Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+		         Gbl.Hierarchy.Deg.DegCod,
+		         Sco_GetDBStrFromScope (Hie_CRS));
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
@@ -4053,7 +4046,7 @@ float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope)
 			 " WHERE games.Scope='%s' AND games.Cod=%ld"
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                         Sco_GetDBStrFromScope (Sco_SCOPE_CRS),Gbl.CurrentCrs.Crs.CrsCod);
+                         Sco_GetDBStrFromScope (Hie_CRS),Gbl.Hierarchy.Crs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

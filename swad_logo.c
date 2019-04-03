@@ -64,18 +64,18 @@ extern struct Globals Gbl;
 /****************************** Draw degree logo *****************************/
 /*****************************************************************************/
 
-void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
+void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
                    unsigned Size,const char *Class,bool PutIconIfNotExists)
   {
-   static const char *Icon[Sco_NUM_SCOPES] =
+   static const char *Icon[Hie_NUM_LEVELS] =
      {
-      NULL,			// Sco_SCOPE_UNK
-      NULL,			// Sco_SCOPE_SYS
-      NULL,			// Sco_SCOPE_CTY
-      "university.svg",		// Sco_SCOPE_INS
-      "building.svg",		// Sco_SCOPE_CTR
-      "graduation-cap.svg",	// Sco_SCOPE_DEG
-      NULL,			// Sco_SCOPE_CRS
+      NULL,			// Hie_UNK
+      NULL,			// Hie_SYS
+      NULL,			// Hie_CTY
+      "university.svg",		// Hie_INS
+      "building.svg",		// Hie_CTR
+      "graduation-cap.svg",	// Hie_DEG
+      NULL,			// Hie_CRS
      };
    const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX + 1];
@@ -90,7 +90,7 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
       if (Cod > 0)	// Institution, centre or degree exists
 	{
 	 /* Degree */
-	 if (Scope == Sco_SCOPE_DEG)
+	 if (Scope == Hie_DEG)
 	   {
 	    Folder = Cfg_FOLDER_DEG;
 	    DegCod = Cod;
@@ -106,10 +106,10 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 	   }
 
 	 /* Centre */
-	 if (!LogoFound && Scope != Sco_SCOPE_INS)
+	 if (!LogoFound && Scope != Hie_INS)
 	   {
 	    Folder = Cfg_FOLDER_CTR;
-	    if (Scope == Sco_SCOPE_DEG)	// && !LogoFound
+	    if (Scope == Hie_DEG)	// && !LogoFound
 	       CtrCod = Deg_GetCtrCodOfDegreeByCod (Cod);
 	    else
 	       CtrCod = Cod;
@@ -128,9 +128,9 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 	 if (!LogoFound)
 	   {
 	    Folder = Cfg_FOLDER_INS;
-	    if (Scope == Sco_SCOPE_DEG)		// && !LogoFound
+	    if (Scope == Hie_DEG)		// && !LogoFound
 	       InsCod = Deg_GetInsCodOfDegreeByCod (Cod);
-	    else if (Scope == Sco_SCOPE_CTR)	// && !LogoFound
+	    else if (Scope == Hie_CTR)	// && !LogoFound
 	       InsCod = Ctr_GetInsCodOfCentreByCod (Cod);
 	    else
 	       InsCod = Cod;
@@ -177,7 +177,7 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 /************* the logo of institution, centre or degree       ***************/
 /*****************************************************************************/
 
-void Log_PutIconToChangeLogo (Sco_Scope_t Scope)
+void Log_PutIconToChangeLogo (Hie_Level_t Scope)
   {
    extern const char *Txt_Change_logo;
    extern const char *Txt_Upload_logo;
@@ -190,19 +190,19 @@ void Log_PutIconToChangeLogo (Sco_Scope_t Scope)
    /***** Set variables depending on scope *****/
    switch (Scope)
      {
-      case Sco_SCOPE_INS:
+      case Hie_INS:
 	 Action = ActReqInsLog;
-	 Cod = Gbl.CurrentIns.Ins.InsCod;
+	 Cod = Gbl.Hierarchy.Ins.InsCod;
 	 Folder = Cfg_FOLDER_INS;
 	 break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
 	 Action = ActReqCtrLog;
-	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
+	 Cod = Gbl.Hierarchy.Ctr.CtrCod;
 	 Folder = Cfg_FOLDER_CTR;
 	 break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
 	 Action = ActReqDegLog;
-	 Cod = Gbl.CurrentDeg.Deg.DegCod;
+	 Cod = Gbl.Hierarchy.Deg.DegCod;
 	 Folder = Cfg_FOLDER_DEG;
 	 break;
       default:
@@ -229,7 +229,7 @@ void Log_PutIconToChangeLogo (Sco_Scope_t Scope)
 /**** Show a form for sending a logo of the institution, centre or degree ****/
 /*****************************************************************************/
 
-void Log_RequestLogo (Sco_Scope_t Scope)
+void Log_RequestLogo (Hie_Level_t Scope)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Remove_logo;
@@ -245,20 +245,20 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    /***** Set action depending on scope *****/
    switch (Scope)
      {
-      case Sco_SCOPE_INS:
-	 Cod = Gbl.CurrentIns.Ins.InsCod;
+      case Hie_INS:
+	 Cod = Gbl.Hierarchy.Ins.InsCod;
 	 Folder = Cfg_FOLDER_INS;
 	 ActionRec = ActRecInsLog;
 	 ActionRem = ActRemInsLog;
 	 break;
-      case Sco_SCOPE_CTR:
-	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
+      case Hie_CTR:
+	 Cod = Gbl.Hierarchy.Ctr.CtrCod;
 	 Folder = Cfg_FOLDER_CTR;
 	 ActionRec = ActRecCtrLog;
 	 ActionRem = ActRemCtrLog;
 	 break;
-      case Sco_SCOPE_DEG:
-	 Cod = Gbl.CurrentDeg.Deg.DegCod;
+      case Hie_DEG:
+	 Cod = Gbl.Hierarchy.Deg.DegCod;
 	 Folder = Cfg_FOLDER_DEG;
 	 ActionRec = ActRecDegLog;
 	 ActionRem = ActRemDegLog;
@@ -317,7 +317,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
 /******* Receive the logo of the current institution, centre or degree *******/
 /*****************************************************************************/
 
-void Log_ReceiveLogo (Sco_Scope_t Scope)
+void Log_ReceiveLogo (Hie_Level_t Scope)
   {
    extern const char *Txt_The_file_is_not_X;
    long Cod;
@@ -332,16 +332,16 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
    /***** Set variables depending on scope *****/
    switch (Scope)
      {
-      case Sco_SCOPE_INS:
-	 Cod = Gbl.CurrentIns.Ins.InsCod;
+      case Hie_INS:
+	 Cod = Gbl.Hierarchy.Ins.InsCod;
 	 Folder = Cfg_FOLDER_INS;
 	 break;
-      case Sco_SCOPE_CTR:
-	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
+      case Hie_CTR:
+	 Cod = Gbl.Hierarchy.Ctr.CtrCod;
 	 Folder = Cfg_FOLDER_CTR;
 	 break;
-      case Sco_SCOPE_DEG:
-	 Cod = Gbl.CurrentDeg.Deg.DegCod;
+      case Hie_DEG:
+	 Cod = Gbl.Hierarchy.Deg.DegCod;
 	 Folder = Cfg_FOLDER_DEG;
 	 break;
       default:
@@ -403,7 +403,7 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
 /******* Remove the logo of the current institution, centre or degree ********/
 /*****************************************************************************/
 
-void Log_RemoveLogo (Sco_Scope_t Scope)
+void Log_RemoveLogo (Hie_Level_t Scope)
   {
    long Cod;
    const char *Folder;
@@ -412,16 +412,16 @@ void Log_RemoveLogo (Sco_Scope_t Scope)
    /***** Set variables depending on scope *****/
    switch (Scope)
      {
-      case Sco_SCOPE_INS:
-	 Cod = Gbl.CurrentIns.Ins.InsCod;
+      case Hie_INS:
+	 Cod = Gbl.Hierarchy.Ins.InsCod;
 	 Folder = Cfg_FOLDER_INS;
 	 break;
-      case Sco_SCOPE_CTR:
-	 Cod = Gbl.CurrentCtr.Ctr.CtrCod;
+      case Hie_CTR:
+	 Cod = Gbl.Hierarchy.Ctr.CtrCod;
 	 Folder = Cfg_FOLDER_CTR;
 	 break;
-      case Sco_SCOPE_DEG:
-	 Cod = Gbl.CurrentDeg.Deg.DegCod;
+      case Hie_DEG:
+	 Cod = Gbl.Hierarchy.Deg.DegCod;
 	 Folder = Cfg_FOLDER_DEG;
 	 break;
       default:

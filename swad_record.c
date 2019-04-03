@@ -192,7 +192,7 @@ void Rec_ReqEditRecordFields (void)
    Rec_GetListRecordFieldsInCurrentCrs ();
 
    /***** List the current fields of records for edit them *****/
-   if (Gbl.CurrentCrs.Records.LstFields.Num)	// Fields found...
+   if (Gbl.Hierarchy.Crs.Records.LstFields.Num)	// Fields found...
      {
       /* Start box and table */
       Box_StartBoxTable (NULL,Txt_Record_fields,NULL,
@@ -205,7 +205,7 @@ void Rec_ReqEditRecordFields (void)
      }
    else	// No fields of records found for current course in the database
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_record_fields_in_the_course_X,
-                     Gbl.CurrentCrs.Crs.FullName);
+                     Gbl.Hierarchy.Crs.Crs.FullName);
 
    /***** Put a form to create a new record field *****/
    Rec_ShowFormCreateRecordField ();
@@ -225,51 +225,51 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
    unsigned long NumRow;
    unsigned Vis;
 
-   if (++Gbl.CurrentCrs.Records.LstFields.NestedCalls > 1) // If the list is already created, don't do anything
+   if (++Gbl.Hierarchy.Crs.Records.LstFields.NestedCalls > 1) // If the list is already created, don't do anything
       return;
 
    /***** Get fields of records in a course from database *****/
-   Gbl.CurrentCrs.Records.LstFields.Num =
+   Gbl.Hierarchy.Crs.Records.LstFields.Num =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get fields of records"
 					 " in a course",
 			      "SELECT FieldCod,FieldName,NumLines,Visibility"
 			      " FROM crs_record_fields"
 			      " WHERE CrsCod=%ld ORDER BY FieldName",
-			      Gbl.CurrentCrs.Crs.CrsCod);
+			      Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    /***** Get the fields of records *****/
-   if (Gbl.CurrentCrs.Records.LstFields.Num)
+   if (Gbl.Hierarchy.Crs.Records.LstFields.Num)
      {
       /***** Create a list of fields *****/
-      if ((Gbl.CurrentCrs.Records.LstFields.Lst = (struct RecordField *) calloc (Gbl.CurrentCrs.Records.LstFields.Num,sizeof (struct RecordField))) == NULL)
+      if ((Gbl.Hierarchy.Crs.Records.LstFields.Lst = (struct RecordField *) calloc (Gbl.Hierarchy.Crs.Records.LstFields.Num,sizeof (struct RecordField))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the fields *****/
       for (NumRow = 0;
-	   NumRow < Gbl.CurrentCrs.Records.LstFields.Num;
+	   NumRow < Gbl.Hierarchy.Crs.Records.LstFields.Num;
 	   NumRow++)
         {
          /* Get next field */
          row = mysql_fetch_row (mysql_res);
 
          /* Get the code of field (row[0]) */
-         if ((Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].FieldCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumRow].FieldCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong code of field.");
 
          /* Name of the field (row[1]) */
-         Str_Copy (Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].Name,row[1],
+         Str_Copy (Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumRow].Name,row[1],
                    Rec_MAX_BYTES_NAME_FIELD);
 
          /* Number of lines (row[2]) */
-         Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].NumLines = Rec_ConvertToNumLinesField (row[2]);
+         Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumRow].NumLines = Rec_ConvertToNumLinesField (row[2]);
 
          /* Visible or editable by students? (row[3]) */
          if (sscanf (row[3],"%u",&Vis) != 1)
 	    Lay_ShowErrorAndExit ("Error when getting field of record in current course.");
          if (Vis < Rec_NUM_TYPES_VISIBILITY)
-            Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].Visibility = (Rec_VisibilityRecordFields_t) Vis;
+            Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumRow].Visibility = (Rec_VisibilityRecordFields_t) Vis;
          else
-            Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].Visibility = Rec_VISIBILITY_DEFAULT;
+            Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumRow].Visibility = Rec_VISIBILITY_DEFAULT;
         }
      }
 
@@ -292,7 +292,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 
    /***** List the fields *****/
    for (NumField = 0;
-	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
+	NumField < Gbl.Hierarchy.Crs.Records.LstFields.Num;
 	NumField++)
      {
       fprintf (Gbl.F.Out,"<tr>");
@@ -300,7 +300,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       /* Write icon to remove the field */
       fprintf (Gbl.F.Out,"<td class=\"BM\">");
       Frm_StartForm (ActReqRemFie);
-      Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
+      Par_PutHiddenParamLong ("FieldCod",Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
@@ -308,12 +308,12 @@ void Rec_ListFieldsRecordsForEdition (void)
       /* Name of the field */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Frm_StartForm (ActRenFie);
-      Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
+      Par_PutHiddenParamLong ("FieldCod",Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
 	                 " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Rec_MAX_CHARS_NAME_FIELD,
-               Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name,
+               Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Name,
                Gbl.Form.Id);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
@@ -321,11 +321,11 @@ void Rec_ListFieldsRecordsForEdition (void)
       /* Number of lines in the form */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Frm_StartForm (ActChgRowFie);
-      Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
+      Par_PutHiddenParamLong ("FieldCod",Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NumLines\""
 	                 " size=\"2\" maxlength=\"2\" value=\"%u\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Gbl.CurrentCrs.Records.LstFields.Lst[NumField].NumLines,
+               Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].NumLines,
                Gbl.Form.Id);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
@@ -333,7 +333,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       /* Visibility of a field */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Frm_StartForm (ActChgVisFie);
-      Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
+      Par_PutHiddenParamLong ("FieldCod",Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<select name=\"Visibility\""
                          " onchange=\"document.getElementById('%s').submit();\">",
                Gbl.Form.Id);
@@ -342,7 +342,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	   Vis++)
         {
          fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Vis);
-         if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Vis)
+         if (Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Visibility == Vis)
 	    fprintf (Gbl.F.Out," selected=\"selected\"");
          fprintf (Gbl.F.Out,">%s</option>",
                   Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
@@ -388,7 +388,7 @@ void Rec_ShowFormCreateRecordField (void)
                       " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Rec_MAX_CHARS_NAME_FIELD,Gbl.CurrentCrs.Records.Field.Name);
+            Rec_MAX_CHARS_NAME_FIELD,Gbl.Hierarchy.Crs.Records.Field.Name);
 
    /***** Number of lines in form ******/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -396,7 +396,7 @@ void Rec_ShowFormCreateRecordField (void)
 	              " size=\"2\" maxlength=\"2\" value=\"%u\""
 	              " required=\"required\" />"
 	              "</td>",
-            Gbl.CurrentCrs.Records.Field.NumLines);
+            Gbl.Hierarchy.Crs.Records.Field.NumLines);
 
    /***** Visibility to students *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -406,7 +406,7 @@ void Rec_ShowFormCreateRecordField (void)
 	Vis++)
      {
       fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Vis);
-      if (Gbl.CurrentCrs.Records.Field.Visibility == Vis)
+      if (Gbl.Hierarchy.Crs.Records.Field.Visibility == Vis)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",
 	       Txt_RECORD_FIELD_VISIBILITY_MENU[Vis]);
@@ -461,29 +461,29 @@ void Rec_ReceiveFormField (void)
 
    /***** Get parameters from the form *****/
    /* Get the name of the field */
-   Par_GetParToText ("FieldName",Gbl.CurrentCrs.Records.Field.Name,
+   Par_GetParToText ("FieldName",Gbl.Hierarchy.Crs.Records.Field.Name,
                      Rec_MAX_BYTES_NAME_FIELD);
 
    /* Get the number of lines */
-   Gbl.CurrentCrs.Records.Field.NumLines = (unsigned)
+   Gbl.Hierarchy.Crs.Records.Field.NumLines = (unsigned)
 	                                   Par_GetParToUnsignedLong ("NumLines",
                                                                      Rec_MIN_LINES_IN_EDITION_FIELD,
                                                                      Rec_MAX_LINES_IN_EDITION_FIELD,
                                                                      Rec_DEF_LINES_IN_EDITION_FIELD);
 
    /* Get the field visibility by students */
-   Gbl.CurrentCrs.Records.Field.Visibility = (Rec_VisibilityRecordFields_t)
+   Gbl.Hierarchy.Crs.Records.Field.Visibility = (Rec_VisibilityRecordFields_t)
 	                                     Par_GetParToUnsignedLong ("Visibility",
                                                                        0,
                                                                        Rec_NUM_TYPES_VISIBILITY - 1,
                                                                        (unsigned long) Rec_VISIBILITY_DEFAULT);
 
-   if (Gbl.CurrentCrs.Records.Field.Name[0])	// If there's a name
+   if (Gbl.Hierarchy.Crs.Records.Field.Name[0])	// If there's a name
      {
       /***** If the field already was in the database... *****/
-      if (Rec_CheckIfRecordFieldIsRepeated (Gbl.CurrentCrs.Records.Field.Name))
+      if (Rec_CheckIfRecordFieldIsRepeated (Gbl.Hierarchy.Crs.Records.Field.Name))
          Ale_ShowAlert (Ale_ERROR,Txt_The_record_field_X_already_exists,
-                        Gbl.CurrentCrs.Records.Field.Name);
+                        Gbl.Hierarchy.Crs.Records.Field.Name);
       else	// Add the new field to the database
          Rec_CreateRecordField ();
      }
@@ -558,7 +558,7 @@ unsigned long Rec_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res)
 			  "SELECT FieldCod,FieldName,Visibility"
 			  " FROM crs_record_fields"
 			  " WHERE CrsCod=%ld ORDER BY FieldName",
-			  Gbl.CurrentCrs.Crs.CrsCod);
+			  Gbl.Hierarchy.Crs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -575,14 +575,14 @@ void Rec_CreateRecordField (void)
 		   " (CrsCod,FieldName,NumLines,Visibility)"
 		   " VALUES"
 		   " (%ld,'%s',%u,%u)",
-	           Gbl.CurrentCrs.Crs.CrsCod,
-	           Gbl.CurrentCrs.Records.Field.Name,
-	           Gbl.CurrentCrs.Records.Field.NumLines,
-	           (unsigned) Gbl.CurrentCrs.Records.Field.Visibility);
+	           Gbl.Hierarchy.Crs.Crs.CrsCod,
+	           Gbl.Hierarchy.Crs.Records.Field.Name,
+	           Gbl.Hierarchy.Crs.Records.Field.NumLines,
+	           (unsigned) Gbl.Hierarchy.Crs.Records.Field.Visibility);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_record_field_X,
-                  Gbl.CurrentCrs.Records.Field.Name);
+                  Gbl.Hierarchy.Crs.Records.Field.Name);
   }
 
 /*****************************************************************************/
@@ -594,11 +594,11 @@ void Rec_ReqRemField (void)
    unsigned NumRecords;
 
    /***** Get the code of field *****/
-   if ((Gbl.CurrentCrs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
+   if ((Gbl.Hierarchy.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
       Lay_ShowErrorAndExit ("Code of field is missing.");
 
    /***** Check if exists any record with that field filled *****/
-   if ((NumRecords = Rec_CountNumRecordsInCurrCrsWithField (Gbl.CurrentCrs.Records.Field.FieldCod)))	// There are records with that field filled
+   if ((NumRecords = Rec_CountNumRecordsInCurrCrsWithField (Gbl.Hierarchy.Crs.Records.Field.FieldCod)))	// There are records with that field filled
       Rec_AskConfirmRemFieldWithRecords (NumRecords);
    else			// There are no records with that field filled
       Rec_RemoveFieldFromDB ();
@@ -639,16 +639,16 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
    extern const char *Txt_Remove_record_field;
 
    /***** Get from the database the name of the field *****/
-   Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,
-                      Gbl.CurrentCrs.Records.Field.Name,
-                      &Gbl.CurrentCrs.Records.Field.NumLines,
-                      &Gbl.CurrentCrs.Records.Field.Visibility);
+   Rec_GetFieldByCod (Gbl.Hierarchy.Crs.Records.Field.FieldCod,
+                      Gbl.Hierarchy.Crs.Records.Field.Name,
+                      &Gbl.Hierarchy.Crs.Records.Field.NumLines,
+                      &Gbl.Hierarchy.Crs.Records.Field.Visibility);
 
    /***** Show question and button to remove my photo *****/
    Ale_ShowAlertAndButton (ActRemFie,NULL,NULL,Rec_PutParamFielCod,
 			   Btn_REMOVE_BUTTON,Txt_Remove_record_field,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z_,
-		           Gbl.CurrentCrs.Records.Field.Name,Gbl.CurrentCrs.Crs.FullName,
+		           Gbl.Hierarchy.Crs.Records.Field.Name,Gbl.Hierarchy.Crs.Crs.FullName,
 		           NumRecords);
 
    /***** List record fields again *****/
@@ -664,24 +664,24 @@ void Rec_RemoveFieldFromDB (void)
    extern const char *Txt_Record_field_X_removed;
 
    /***** Get from the database the name of the field *****/
-   Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,
-                      Gbl.CurrentCrs.Records.Field.Name,
-                      &Gbl.CurrentCrs.Records.Field.NumLines,
-                      &Gbl.CurrentCrs.Records.Field.Visibility);
+   Rec_GetFieldByCod (Gbl.Hierarchy.Crs.Records.Field.FieldCod,
+                      Gbl.Hierarchy.Crs.Records.Field.Name,
+                      &Gbl.Hierarchy.Crs.Records.Field.NumLines,
+                      &Gbl.Hierarchy.Crs.Records.Field.Visibility);
 
    /***** Remove field from all records *****/
    DB_QueryDELETE ("can not remove field from all students' records",
 		   "DELETE FROM crs_records WHERE FieldCod=%ld",
-                   Gbl.CurrentCrs.Records.Field.FieldCod);
+                   Gbl.Hierarchy.Crs.Records.Field.FieldCod);
 
    /***** Remove the field *****/
    DB_QueryDELETE ("can not remove field of record",
 		   "DELETE FROM crs_record_fields WHERE FieldCod=%ld",
-                   Gbl.CurrentCrs.Records.Field.FieldCod);
+                   Gbl.Hierarchy.Crs.Records.Field.FieldCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Record_field_X_removed,
-                  Gbl.CurrentCrs.Records.Field.Name);
+                  Gbl.Hierarchy.Crs.Records.Field.Name);
 
    /***** Show the form again *****/
    Rec_ReqEditRecordFields ();
@@ -693,7 +693,7 @@ void Rec_RemoveFieldFromDB (void)
 
 static void Rec_PutParamFielCod (void)
   {
-   Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.Field.FieldCod);
+   Par_PutHiddenParamLong ("FieldCod",Gbl.Hierarchy.Crs.Records.Field.FieldCod);
   }
 
 /*****************************************************************************/
@@ -714,7 +714,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
 			     "SELECT FieldName,NumLines,Visibility"
 			     " FROM crs_record_fields"
 			     " WHERE CrsCod=%ld AND FieldCod=%ld",
-			     Gbl.CurrentCrs.Crs.CrsCod,FieldCod);
+			     Gbl.Hierarchy.Crs.Crs.CrsCod,FieldCod);
 
    /***** Count number of rows in result *****/
    if (NumRows != 1)
@@ -749,7 +749,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
 void Rec_RemoveField (void)
   {
    /***** Get the code of the field *****/
-   if ((Gbl.CurrentCrs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
+   if ((Gbl.Hierarchy.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
       Lay_ShowErrorAndExit ("Code of field is missing.");
 
    /***** Borrarlo from the database *****/
@@ -770,27 +770,27 @@ void Rec_RenameField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of the field */
-   if ((Gbl.CurrentCrs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
+   if ((Gbl.Hierarchy.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
       Lay_ShowErrorAndExit ("Code of field is missing.");
 
    /* Get the new group name */
    Par_GetParToText ("FieldName",NewFieldName,Rec_MAX_BYTES_NAME_FIELD);
 
    /***** Get from the database the old field name *****/
-   Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,
-                      Gbl.CurrentCrs.Records.Field.Name,
-                      &Gbl.CurrentCrs.Records.Field.NumLines,
-                      &Gbl.CurrentCrs.Records.Field.Visibility);
+   Rec_GetFieldByCod (Gbl.Hierarchy.Crs.Records.Field.FieldCod,
+                      Gbl.Hierarchy.Crs.Records.Field.Name,
+                      &Gbl.Hierarchy.Crs.Records.Field.NumLines,
+                      &Gbl.Hierarchy.Crs.Records.Field.Visibility);
 
    /***** Check if new name is empty *****/
    if (!NewFieldName[0])
       Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_leave_the_name_of_the_field_X_empty,
-                     Gbl.CurrentCrs.Records.Field.Name);
+                     Gbl.Hierarchy.Crs.Records.Field.Name);
    else
      {
       /***** Check if the name of the olde field match the new one
              (this happens when return is pressed without changes) *****/
-      if (strcmp (Gbl.CurrentCrs.Records.Field.Name,NewFieldName))	// Different names
+      if (strcmp (Gbl.Hierarchy.Crs.Records.Field.Name,NewFieldName))	// Different names
         {
          /***** If the group ya estaba in the database... *****/
          if (Rec_CheckIfRecordFieldIsRepeated (NewFieldName))
@@ -802,11 +802,11 @@ void Rec_RenameField (void)
             DB_QueryUPDATE ("can not update name of field of record",
         		    "UPDATE crs_record_fields SET FieldName='%s'"
 			    " WHERE FieldCod=%ld",
-                            NewFieldName,Gbl.CurrentCrs.Records.Field.FieldCod);
+                            NewFieldName,Gbl.Hierarchy.Crs.Records.Field.FieldCod);
 
             /***** Write message to show the change made *****/
             Ale_ShowAlert (Ale_SUCCESS,Txt_The_record_field_X_has_been_renamed_as_Y,
-                           Gbl.CurrentCrs.Records.Field.Name,NewFieldName);
+                           Gbl.Hierarchy.Crs.Records.Field.Name,NewFieldName);
            }
         }
       else	// The same name
@@ -815,7 +815,7 @@ void Rec_RenameField (void)
      }
 
    /***** Show the form again *****/
-   Str_Copy (Gbl.CurrentCrs.Records.Field.Name,NewFieldName,
+   Str_Copy (Gbl.Hierarchy.Crs.Records.Field.Name,NewFieldName,
              Rec_MAX_BYTES_NAME_FIELD);
    Rec_ReqEditRecordFields ();
   }
@@ -832,7 +832,7 @@ void Rec_ChangeLinesField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of field */
-   if ((Gbl.CurrentCrs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
+   if ((Gbl.Hierarchy.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
       Lay_ShowErrorAndExit ("Code of field is missing.");
 
    /* Get the new number of lines */
@@ -843,28 +843,28 @@ void Rec_ChangeLinesField (void)
                                            Rec_DEF_LINES_IN_EDITION_FIELD);
 
    /* Get from the database the number of lines of the field */
-   Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,Gbl.CurrentCrs.Records.Field.Name,&Gbl.CurrentCrs.Records.Field.NumLines,&Gbl.CurrentCrs.Records.Field.Visibility);
+   Rec_GetFieldByCod (Gbl.Hierarchy.Crs.Records.Field.FieldCod,Gbl.Hierarchy.Crs.Records.Field.Name,&Gbl.Hierarchy.Crs.Records.Field.NumLines,&Gbl.Hierarchy.Crs.Records.Field.Visibility);
 
    /***** Check if the old number of rows matches the new one
           (this happens when return is pressed without changes) *****/
-   if (Gbl.CurrentCrs.Records.Field.NumLines == NewNumLines)
+   if (Gbl.Hierarchy.Crs.Records.Field.NumLines == NewNumLines)
       Ale_ShowAlert (Ale_INFO,Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed,
-                     Gbl.CurrentCrs.Records.Field.Name);
+                     Gbl.Hierarchy.Crs.Records.Field.Name);
    else
      {
       /***** Update of the table of fields changing the old maximum of students by the new one *****/
       DB_QueryUPDATE ("can not update the number of lines of a record field",
 		      "UPDATE crs_record_fields SET NumLines=%u"
 		      " WHERE FieldCod=%ld",
-                      NewNumLines,Gbl.CurrentCrs.Records.Field.FieldCod);
+                      NewNumLines,Gbl.Hierarchy.Crs.Records.Field.FieldCod);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y,
-	             Gbl.CurrentCrs.Records.Field.Name,NewNumLines);
+	             Gbl.Hierarchy.Crs.Records.Field.Name,NewNumLines);
      }
 
    /***** Show the form again *****/
-   Gbl.CurrentCrs.Records.Field.NumLines = NewNumLines;
+   Gbl.Hierarchy.Crs.Records.Field.NumLines = NewNumLines;
    Rec_ReqEditRecordFields ();
   }
 
@@ -880,7 +880,7 @@ void Rec_ChangeVisibilityField (void)
 
    /***** Get parameters of the form *****/
    /* Get the code of field */
-   if ((Gbl.CurrentCrs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
+   if ((Gbl.Hierarchy.Crs.Records.Field.FieldCod = Rec_GetFieldCod ()) == -1)
       Lay_ShowErrorAndExit ("Code of field is missing.");
 
    /* Get the new visibility of the field */
@@ -891,13 +891,13 @@ void Rec_ChangeVisibilityField (void)
                                              (unsigned long) Rec_VISIBILITY_DEFAULT);
 
    /* Get from the database the visibility of the field */
-   Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,Gbl.CurrentCrs.Records.Field.Name,&Gbl.CurrentCrs.Records.Field.NumLines,&Gbl.CurrentCrs.Records.Field.Visibility);
+   Rec_GetFieldByCod (Gbl.Hierarchy.Crs.Records.Field.FieldCod,Gbl.Hierarchy.Crs.Records.Field.Name,&Gbl.Hierarchy.Crs.Records.Field.NumLines,&Gbl.Hierarchy.Crs.Records.Field.Visibility);
 
    /***** Check if the old visibility matches the new one
           (this happens when return is pressed without changes) *****/
-   if (Gbl.CurrentCrs.Records.Field.Visibility == NewVisibility)
+   if (Gbl.Hierarchy.Crs.Records.Field.Visibility == NewVisibility)
       Ale_ShowAlert (Ale_INFO,Txt_The_visibility_of_the_record_field_X_has_not_changed,
-                     Gbl.CurrentCrs.Records.Field.Name);
+                     Gbl.Hierarchy.Crs.Records.Field.Name);
    else
      {
       /***** Update of the table of fields changing the old visibility by the new *****/
@@ -905,15 +905,15 @@ void Rec_ChangeVisibilityField (void)
 		      "UPDATE crs_record_fields SET Visibility=%u"
 		      " WHERE FieldCod=%ld",
                       (unsigned) NewVisibility,
-		      Gbl.CurrentCrs.Records.Field.FieldCod);
+		      Gbl.Hierarchy.Crs.Records.Field.FieldCod);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_RECORD_FIELD_VISIBILITY_MSG[NewVisibility],
-	             Gbl.CurrentCrs.Records.Field.Name);
+	             Gbl.Hierarchy.Crs.Records.Field.Name);
      }
 
    /***** Show the form again *****/
-   Gbl.CurrentCrs.Records.Field.Visibility = NewVisibility;
+   Gbl.Hierarchy.Crs.Records.Field.Visibility = NewVisibility;
    Rec_ReqEditRecordFields ();
   }
 
@@ -923,13 +923,13 @@ void Rec_ChangeVisibilityField (void)
 
 void Rec_FreeListFields (void)
   {
-   if (Gbl.CurrentCrs.Records.LstFields.NestedCalls > 0)
-      if (--Gbl.CurrentCrs.Records.LstFields.NestedCalls == 0)
-         if (Gbl.CurrentCrs.Records.LstFields.Lst)
+   if (Gbl.Hierarchy.Crs.Records.LstFields.NestedCalls > 0)
+      if (--Gbl.Hierarchy.Crs.Records.LstFields.NestedCalls == 0)
+         if (Gbl.Hierarchy.Crs.Records.LstFields.Lst)
            {
-            free ((void *) Gbl.CurrentCrs.Records.LstFields.Lst);
-            Gbl.CurrentCrs.Records.LstFields.Lst = NULL;
-            Gbl.CurrentCrs.Records.LstFields.Num = 0;
+            free ((void *) Gbl.Hierarchy.Crs.Records.LstFields.Lst);
+            Gbl.Hierarchy.Crs.Records.LstFields.Lst = NULL;
+            Gbl.Hierarchy.Crs.Records.LstFields.Num = 0;
            }
   }
 
@@ -1101,7 +1101,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Record of the student in the course *****/
-   if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
+   if (Gbl.Hierarchy.Crs.Records.LstFields.Num)	// There are fields in the record
      {
       switch (Gbl.Usrs.Me.Role.Logged)
         {
@@ -1229,7 +1229,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
             fprintf (Gbl.F.Out,"</div>");
 
             /* Record of the student in the course */
-            if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
+            if (Gbl.Hierarchy.Crs.Records.LstFields.Num)	// There are fields in the record
               {
                ItsMe = Usr_ItsMe (UsrDat.UsrCod);
 	       if ( Gbl.Usrs.Me.Role.Logged == Rol_NET     ||
@@ -1703,9 +1703,9 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	    if (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM)
 	       /* Check if I can edit any of the record fields */
 	       for (NumField = 0;
-		    NumField < Gbl.CurrentCrs.Records.LstFields.Num;
+		    NumField < Gbl.Hierarchy.Crs.Records.LstFields.Num;
 		    NumField++)
-		  if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
+		  if (Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
 		    {
 		     ICanEdit = true;
 		     Frm_StartForm (ActRcvRecCrs);
@@ -1749,14 +1749,14 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             Rec_DEGREE_LOGO_SIZE);
-   Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-                 Gbl.CurrentDeg.Deg.ShrtName,Rec_DEGREE_LOGO_SIZE,NULL,true);
+   Log_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
+                 Gbl.Hierarchy.Deg.ShrtName,Rec_DEGREE_LOGO_SIZE,NULL,true);
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"REC_HEAD CENTER_MIDDLE\">"
                       "%s<br />%s<br />%s"
                       "</td>"
                       "</tr>",
-            Gbl.CurrentDeg.Deg.FullName,Gbl.CurrentCrs.Crs.FullName,
+            Gbl.Hierarchy.Deg.FullName,Gbl.Hierarchy.Crs.Crs.FullName,
             UsrDat->FullName);
    Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>"
@@ -1764,12 +1764,12 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
    /***** Fields of the record that depends on the course *****/
    for (NumField = 0, Gbl.RowEvenOdd = 0;
-	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
+	NumField < Gbl.Hierarchy.Crs.Records.LstFields.Num;
 	NumField++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
       ShowField = !(TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM ||
 	            TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_CHECK) ||
-                  Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility != Rec_HIDDEN_FIELD;
+                  Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Visibility != Rec_HIDDEN_FIELD;
       // If the field must be shown...
       if (ShowField)
         {
@@ -1778,7 +1778,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   {
 	    case Rol_STD:
 	       ICanEditThisField = (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
-				    Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD);
+				    Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD);
 	       break;
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
@@ -1797,15 +1797,15 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                   ICanEditThisField ? The_ClassFormInBox[Gbl.Prefs.Theme] :
                 	             "REC_DAT_SMALL",
                   Gbl.RowEvenOdd,
-                  Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
+                  Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Name);
          if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
              TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
             fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\"> (%s)</span>",
-                     Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility]);
+                     Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Visibility]);
          fprintf (Gbl.F.Out,"</td>");
 
          /* Get the text of the field */
-         if (Rec_GetFieldFromCrsRecord (UsrDat->UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res))
+         if (Rec_GetFieldFromCrsRecord (UsrDat->UsrCod,Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res))
            {
             ThisFieldHasText = true;
             row = mysql_fetch_row (mysql_res);
@@ -1821,8 +1821,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
            {
             fprintf (Gbl.F.Out,"<textarea name=\"Field%ld\" rows=\"%u\""
         	               " class=\"REC_C2_BOT_INPUT\">",
-                     Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,
-                     Gbl.CurrentCrs.Records.LstFields.Lst[NumField].NumLines);
+                     Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod,
+                     Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].NumLines);
             if (ThisFieldHasText)
                fprintf (Gbl.F.Out,"%s",row[0]);
             fprintf (Gbl.F.Out,"</textarea>");
@@ -1886,15 +1886,15 @@ void Rec_GetFieldsCrsRecordFromForm (void)
    char FieldParamName[5 + 10 + 1];
 
    for (NumField = 0;
-	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
+	NumField < Gbl.Hierarchy.Crs.Records.LstFields.Num;
 	NumField++)
-      if (Rec_CheckIfICanEditField (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility))
+      if (Rec_CheckIfICanEditField (Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Visibility))
         {
          /* Get text from the form */
          snprintf (FieldParamName,sizeof (FieldParamName),
                    "Field%ld",
-		   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
-         Par_GetParToHTML (FieldParamName,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text,Cns_MAX_BYTES_TEXT);
+		   Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod);
+         Par_GetParToHTML (FieldParamName,Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Text,Cns_MAX_BYTES_TEXT);
         }
   }
 
@@ -1909,41 +1909,41 @@ void Rec_UpdateCrsRecord (long UsrCod)
    bool FieldAlreadyExists;
 
    for (NumField = 0;
-	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
+	NumField < Gbl.Hierarchy.Crs.Records.LstFields.Num;
 	NumField++)
-      if (Rec_CheckIfICanEditField (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility))
+      if (Rec_CheckIfICanEditField (Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Visibility))
         {
          /***** Check if already exists this field for this user in database *****/
-         FieldAlreadyExists = (Rec_GetFieldFromCrsRecord (UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res) != 0);
+         FieldAlreadyExists = (Rec_GetFieldFromCrsRecord (UsrCod,Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res) != 0);
          DB_FreeMySQLResult (&mysql_res);
          if (FieldAlreadyExists)
            {
-            if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text[0])
+            if (Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Text[0])
                /***** Update text of the field of record course *****/
                DB_QueryUPDATE ("can not update field of record",
         		       "UPDATE crs_records SET Txt='%s'"
 			       " WHERE UsrCod=%ld AND FieldCod=%ld",
-			       Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text,
+			       Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Text,
 			       UsrCod,
-			       Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
+			       Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod);
             else
                /***** Remove text of the field of record course *****/
                DB_QueryDELETE ("can not remove field of record",
         		       "DELETE FROM crs_records"
 			       " WHERE UsrCod=%ld AND FieldCod=%ld",
                                UsrCod,
-			       Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
+			       Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod);
            }
-         else if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text[0])
+         else if (Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Text[0])
 	    /***** Insert text field of record course *****/
 	    DB_QueryINSERT ("can not create field of record",
 			    "INSERT INTO crs_records"
 			    " (FieldCod,UsrCod,Txt)"
 			    " VALUES"
 			    " (%ld,%ld,'%s')",
-			    Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,
+			    Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod,
 			    UsrCod,
-			    Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text);
+			    Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Text);
        }
   }
 
@@ -2000,11 +2000,11 @@ void Rec_AllocMemFieldsRecordsCrs (void)
    unsigned NumField;
 
    for (NumField = 0;
-	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
+	NumField < Gbl.Hierarchy.Crs.Records.LstFields.Num;
 	NumField++)
-      if (Rec_CheckIfICanEditField (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility))
+      if (Rec_CheckIfICanEditField (Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Visibility))
          /* Allocate memory for the texts of the fields */
-         if ((Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+         if ((Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Text = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
             Lay_NotEnoughMemoryExit ();
   }
 
@@ -2017,14 +2017,14 @@ void Rec_FreeMemFieldsRecordsCrs (void)
    unsigned NumField;
 
    for (NumField = 0;
-	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
+	NumField < Gbl.Hierarchy.Crs.Records.LstFields.Num;
 	NumField++)
-      if (Rec_CheckIfICanEditField (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility))
+      if (Rec_CheckIfICanEditField (Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Visibility))
          /* Free memory of the text of the field */
-         if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text)
+         if (Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Text)
            {
-            free ((void *) Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text);
-            Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text = NULL;
+            free ((void *) Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Text);
+            Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Text = NULL;
            }
   }
 
@@ -2061,8 +2061,8 @@ void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t Default
    /* In this case UsrDat->Roles.InCurrentCrsDB
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
-   UsrDat->Roles.InCurrentCrs.Role = (Gbl.CurrentCrs.Crs.CrsCod > 0) ? DefaultRole :	// Course selected
-	                                                               Rol_UNK;		// No course selected
+   UsrDat->Roles.InCurrentCrs.Role = (Gbl.Hierarchy.Level == Hie_CRS) ? DefaultRole :	// Course selected
+	                                                                Rol_UNK;		// No course selected
    UsrDat->Roles.InCurrentCrs.Valid = true;
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
   }
@@ -2409,14 +2409,14 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	    Frm_EndForm ();
 	    break;
 	 case Rec_SHA_OTHER_NEW_USR_FORM:
-	    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
+	    if (Gbl.Hierarchy.Crs.Grps.NumGrps) // This course has groups?
 	       Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
 	    Btn_PutConfirmButton (Txt_Register);
 	    Frm_EndForm ();
 	    break;
 	 case Rec_SHA_OTHER_EXISTING_USR_FORM:
 	    /***** Show list of groups to register/remove me/user *****/
-	    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
+	    if (Gbl.Hierarchy.Crs.Grps.NumGrps) // This course has groups?
 	      {
 	       if (ItsMe)
 		 {
@@ -2519,10 +2519,10 @@ static void Rec_PutIconsCommands (void)
 
       /***** Button to admin user *****/
       if (ItsMe ||
-	  (Gbl.CurrentCrs.Crs.CrsCod > 0 && Gbl.Usrs.Me.Role.Logged == Rol_TCH) ||
-	  (Gbl.CurrentDeg.Deg.DegCod > 0 && Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM) ||
-	  (Gbl.CurrentCtr.Ctr.CtrCod > 0 && Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM) ||
-	  (Gbl.CurrentIns.Ins.InsCod > 0 && Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM) ||
+	  Gbl.Usrs.Me.Role.Logged == Rol_TCH     ||
+	  Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM ||
+	  Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM ||
+	  Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM ||
 	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	{
 	 switch (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role)
@@ -2546,7 +2546,7 @@ static void Rec_PutIconsCommands (void)
 					Txt_Administer_user);
 	}
 
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// A course is selected
+      if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	{
          if (Gbl.Record.UsrDat->Roles.InCurrentCrs.Role == Rol_STD)	// He/she is a student in current course
            {
@@ -2688,7 +2688,7 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
 	 Ins_PutParamInsCod (Ins->InsCod);
 	 Frm_LinkFormSubmit (Ins->FullName,NULL,NULL);
 	}
-      Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShrtName,
+      Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,
                     Rec_INSTITUTION_LOGO_SIZE,NULL,true);
       if (PutFormLinks)
 	{
@@ -2908,7 +2908,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	{
 	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:			// I want to apply for enrolment
             /***** Set default role *****/
-	    if (UsrDat->UsrCod == Gbl.CurrentCrs.Crs.RequesterUsrCod ||	// Creator of the course
+	    if (UsrDat->UsrCod == Gbl.Hierarchy.Crs.Crs.RequesterUsrCod ||	// Creator of the course
 		(UsrDat->Roles.InCrss & (1 << Rol_TCH)))		// Teacher in other courses
 	       DefaultRoleInForm = Rol_TCH;	// Request sign up as a teacher
 	    else if ((UsrDat->Roles.InCrss & (1 << Rol_NET)))			// Non-editing teacher in other courses
@@ -2931,7 +2931,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	    fprintf (Gbl.F.Out,"</select>");
 	    break;
 	 case Rec_SHA_OTHER_EXISTING_USR_FORM:	// The other user already exists in the platform
-            if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+            if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	      {
                /***** Set default role *****/
 	       switch (UsrDat->Roles.InCurrentCrs.Role)
@@ -3031,7 +3031,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	      }
 	    break;
 	 case Rec_SHA_OTHER_NEW_USR_FORM:	// The user does not exist in platform
-	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+	    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	       switch (Gbl.Usrs.Me.Role.Logged)
 		 {
 		  case Rol_TCH:
@@ -3780,7 +3780,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 	 if ( Role == Rol_STD ||
 	      Role == Rol_NET ||
 	      Role == Rol_TCH ||
-	     (Role == Rol_GST && Gbl.CurrentCrs.Crs.CrsCod <= 0))
+	     (Role == Rol_GST && Gbl.Hierarchy.Crs.Crs.CrsCod <= 0))
 	    RoleOK = true;
 	 break;
       default:

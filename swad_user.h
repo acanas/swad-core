@@ -215,7 +215,7 @@ struct UsrLast
    // long LastCrs;
    struct
      {
-      Sco_Scope_t Scope;	// Course, degree, centre, etc.
+      Hie_Level_t Scope;	// Course, degree, centre, etc.
       long Cod;			// Course code, degree code, centre code, etc.
      } LastHie;
    Act_Action_t LastAct;
@@ -276,7 +276,7 @@ void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat);
 
 void Usr_FlushCachesUsr (void);
 
-bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod);
+bool Usr_CheckIfUsrIsAdm (long UsrCod,Hie_Level_t Scope,long Cod);
 void Usr_FlushCacheUsrIsSuperuser (void);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
@@ -395,7 +395,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod);
 unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod);
 unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod);
 
-void Usr_GetListUsrs (Sco_Scope_t Scope,Rol_Role_t Role);
+void Usr_GetListUsrs (Hie_Level_t Scope,Rol_Role_t Role);
 
 void Usr_SearchListUsrs (Rol_Role_t Role);
 void Usr_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
@@ -458,7 +458,7 @@ bool Usr_ChkIfUsrCodExists (long UsrCod);
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role);
 
 unsigned Usr_GetTotalNumberOfUsersInPlatform (void);
-unsigned Usr_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,unsigned Roles);
+unsigned Usr_GetTotalNumberOfUsersInCourses (Hie_Level_t Scope,unsigned Roles);
 unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void);
 float Usr_GetNumCrssPerUsr (Rol_Role_t Role);
 float Usr_GetNumUsrsPerCrs (Rol_Role_t Role);

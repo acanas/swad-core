@@ -212,38 +212,29 @@ void Gbl_InitializeGlobals (void)
    Gbl.Msg.ShowOnlyUnreadMsgs = false;
    Gbl.Msg.ExpandedMsgCod = -1L;
 
-   Gbl.CurrentCty.Cty.CtyCod = -1L;
+   /***** Reset current hierarchy *****/
+   Hie_ResetHierarchy ();
 
-   Gbl.CurrentIns.Ins.InsCod = -1L;	// Unknown institution
-   Gbl.CurrentIns.Ins.ShrtName[0] = '\0';
-   Gbl.CurrentIns.Ins.FullName[0] = '\0';
-   Gbl.CurrentIns.Ins.WWW[0] = '\0';
-   Gbl.CurrentIns.Ins.NumCtrs = Gbl.CurrentIns.Ins.NumDpts = Gbl.CurrentIns.Ins.NumDegs = 0;
-   Gbl.CurrentIns.Ins.NumUsrs = 0;
+   Gbl.Hierarchy.Ins.ShrtName[0] = '\0';
+   Gbl.Hierarchy.Ins.FullName[0] = '\0';
+   Gbl.Hierarchy.Ins.WWW[0] = '\0';
+   Gbl.Hierarchy.Ins.NumCtrs = Gbl.Hierarchy.Ins.NumDpts = Gbl.Hierarchy.Ins.NumDegs = 0;
+   Gbl.Hierarchy.Ins.NumUsrs = 0;
 
-   Gbl.CurrentCtr.Ctr.CtrCod = -1L;
-   Gbl.CurrentCtr.Ctr.InsCod = -1L;
-   Gbl.CurrentCtr.Ctr.PlcCod = -1L;
-   Gbl.CurrentCtr.Ctr.ShrtName[0] = '\0';
-   Gbl.CurrentCtr.Ctr.FullName[0] = '\0';
-   Gbl.CurrentCtr.Ctr.Degs.Num = 0;
-   Gbl.CurrentCtr.Ctr.Degs.Lst = NULL;
+   Gbl.Hierarchy.Ctr.ShrtName[0] = '\0';
+   Gbl.Hierarchy.Ctr.FullName[0] = '\0';
+   Gbl.Hierarchy.Ctr.Degs.Num = 0;
+   Gbl.Hierarchy.Ctr.Degs.Lst = NULL;
 
-   Gbl.CurrentDegTyp.DegTyp.DegTypCod = -1L;
-   Gbl.CurrentDegTyp.DegTyp.DegTypName[0] = '\0';
+   Gbl.Hierarchy.DegTyp.DegTypName[0] = '\0';
 
-   Gbl.CurrentDeg.Deg.DegCod = -1L;
-   Gbl.CurrentDeg.Deg.ShrtName[0] = Gbl.CurrentDeg.Deg.FullName[0] = '\0';
+   Gbl.Hierarchy.Deg.ShrtName[0] = Gbl.Hierarchy.Deg.FullName[0] = '\0';
 
    Gbl.Classrooms.EditingCla.Capacity = Cla_UNLIMITED_CAPACITY;
 
-   Gbl.CurrentCrs.Crs.CrsCod = -1L;
-   Gbl.CurrentCrs.Crs.ShrtName[0] = Gbl.CurrentCrs.Crs.FullName[0] = '\0';
-   Gbl.CurrentCrs.Info.ShowMsgMustBeRead = 0;
-   Gbl.CurrentCrs.Notices.HighlightNotCod = -1L;	// No notice highlighted
-
-   Gbl.Hierarchy.Scope = Sco_SCOPE_UNK;
-   Gbl.Hierarchy.Cod   = -1L;
+   Gbl.Hierarchy.Crs.Crs.ShrtName[0] = Gbl.Hierarchy.Crs.Crs.FullName[0] = '\0';
+   Gbl.Hierarchy.Crs.Info.ShowMsgMustBeRead = 0;
+   Gbl.Hierarchy.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
 
    Gbl.Inss.Num = 0;
    Gbl.Inss.Lst = NULL;
@@ -320,34 +311,34 @@ void Gbl_InitializeGlobals (void)
    Gbl.Degs.EditingCrs.ShrtName[0] = '\0';
    Gbl.Degs.EditingCrs.FullName[0]  = '\0';
 
-   Gbl.CurrentCrs.Grps.NumGrps = 0;
-   Gbl.CurrentCrs.Grps.WhichGrps = Grp_WHICH_GROUPS_DEFAULT;
-   Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes = NULL;
-   Gbl.CurrentCrs.Grps.GrpTypes.Num = 0;
-   Gbl.CurrentCrs.Grps.GrpTypes.NestedCalls = 0;
-   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName[0] = '\0';
-   Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment = true;
-   Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment = false;
-   Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened = false;
-   Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC = (time_t) 0;
-   Gbl.CurrentCrs.Grps.GrpCod = -1L; // -1L stands for the whole course
-   Gbl.CurrentCrs.Grps.GrpName[0] = '\0';
-   Gbl.CurrentCrs.Grps.ClaCod = -1L; // -1L stands for no classroom assigned
-   Gbl.CurrentCrs.Grps.MaxStudents = Grp_NUM_STUDENTS_NOT_LIMITED;
-   Gbl.CurrentCrs.Grps.Open = false;
-   Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods  = NULL;
-   Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = 0;
-   Gbl.CurrentCrs.Grps.LstGrpsSel.NestedCalls = 0;
+   Gbl.Hierarchy.Crs.Grps.NumGrps = 0;
+   Gbl.Hierarchy.Crs.Grps.WhichGrps = Grp_WHICH_GROUPS_DEFAULT;
+   Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
+   Gbl.Hierarchy.Crs.Grps.GrpTypes.Num = 0;
+   Gbl.Hierarchy.Crs.Grps.GrpTypes.NestedCalls = 0;
+   Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName[0] = '\0';
+   Gbl.Hierarchy.Crs.Grps.GrpTyp.MandatoryEnrolment = true;
+   Gbl.Hierarchy.Crs.Grps.GrpTyp.MultipleEnrolment = false;
+   Gbl.Hierarchy.Crs.Grps.GrpTyp.MustBeOpened = false;
+   Gbl.Hierarchy.Crs.Grps.GrpTyp.OpenTimeUTC = (time_t) 0;
+   Gbl.Hierarchy.Crs.Grps.GrpCod = -1L; // -1L stands for the whole course
+   Gbl.Hierarchy.Crs.Grps.GrpName[0] = '\0';
+   Gbl.Hierarchy.Crs.Grps.ClaCod = -1L; // -1L stands for no classroom assigned
+   Gbl.Hierarchy.Crs.Grps.MaxStudents = Grp_NUM_STUDENTS_NOT_LIMITED;
+   Gbl.Hierarchy.Crs.Grps.Open = false;
+   Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods  = NULL;
+   Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps = 0;
+   Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NestedCalls = 0;
 
    Gbl.Usrs.ClassPhoto.AllGroups = true;
 
-   Gbl.CurrentCrs.Records.Field.Name[0] = '\0';
-   Gbl.CurrentCrs.Records.Field.NumLines = Rec_MIN_LINES_IN_EDITION_FIELD;
-   Gbl.CurrentCrs.Records.Field.Visibility = Rec_HIDDEN_FIELD;
+   Gbl.Hierarchy.Crs.Records.Field.Name[0] = '\0';
+   Gbl.Hierarchy.Crs.Records.Field.NumLines = Rec_MIN_LINES_IN_EDITION_FIELD;
+   Gbl.Hierarchy.Crs.Records.Field.Visibility = Rec_HIDDEN_FIELD;
 
-   Gbl.CurrentCrs.Records.LstFields.Lst = NULL;
-   Gbl.CurrentCrs.Records.LstFields.Num = 0;
-   Gbl.CurrentCrs.Records.LstFields.NestedCalls = 0;
+   Gbl.Hierarchy.Crs.Records.LstFields.Lst = NULL;
+   Gbl.Hierarchy.Crs.Records.LstFields.Num = 0;
+   Gbl.Hierarchy.Crs.Records.LstFields.NestedCalls = 0;
 
    Gbl.Syllabus.EditionIsActive = false;
    Gbl.Syllabus.WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
@@ -414,7 +405,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Stat.RowsPerPage     = Sta_DEF_ROWS_PER_PAGE;
    Gbl.Figures.FigureType      = Fig_FIGURE_TYPE_DEF;
 
-   Gbl.Scope.Current = Sco_SCOPE_CRS;
+   Gbl.Scope.Current = Hie_CRS;
 
    Gbl.Usrs.Connected.TimeToRefreshInMs = Con_MAX_TIME_TO_REFRESH_CONNECTED_IN_MS;
 
@@ -514,7 +505,7 @@ void Gbl_Cleanup (void)
    Grp_FreeListGrpTypesAndGrps ();
    Grp_FreeListCodSelectedGrps ();
    Crs_FreeListCoursesInDegree (&Gbl.Degs.EditingDeg);
-   Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
+   Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);
    DT_FreeListDegreeTypes ();
    Ins_FreeListInstitutions ();
    Ctr_FreeListCentres ();

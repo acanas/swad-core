@@ -105,8 +105,8 @@ void Att_RemoveCrsAttEvents (long CrsCod);
 
 unsigned Att_GetNumAttEventsInCrs(long CrsCod);
 
-unsigned Att_GetNumCoursesWithAttEvents (Sco_Scope_t Scope);
-unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif);
+unsigned Att_GetNumCoursesWithAttEvents (Hie_Level_t Scope);
+unsigned Att_GetNumAttEvents (Hie_Level_t Scope,unsigned *NumNotif);
 
 void Att_SeeOneAttEvent (void);
 

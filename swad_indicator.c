@@ -152,7 +152,7 @@ void Ind_ReqIndicatorsCourses (void)
                       "<td class=\"LEFT_MIDDLE\">",
             Dpt_PARAM_DPT_COD_NAME,
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Department);
-   Dpt_WriteSelectorDepartment (Gbl.CurrentIns.Ins.InsCod,	// Departments in current insitution
+   Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
                                 Gbl.Stat.DptCod,		// Selected department
                                 "INDICATORS_INPUT",		// Selector class
                                 -1L,				// First option
@@ -224,17 +224,17 @@ void Ind_ReqIndicatorsCourses (void)
 static void Ind_GetParamsIndicators (void)
   {
    /***** Get scope *****/
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	               1 << Sco_SCOPE_CTY |
-		       1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR |
-		       1 << Sco_SCOPE_DEG |
-		       1 << Sco_SCOPE_CRS;
-   Gbl.Scope.Default = Sco_SCOPE_CRS;
+   Gbl.Scope.Allowed = 1 << Hie_SYS |
+	               1 << Hie_CTY |
+		       1 << Hie_INS |
+		       1 << Hie_CTR |
+		       1 << Hie_DEG |
+		       1 << Hie_CRS;
+   Gbl.Scope.Default = Hie_CRS;
    Sco_GetScope ("ScopeInd");
 
    /***** Get degree type code *****/
-   Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Sco_SCOPE_SYS) ?
+   Gbl.Stat.DegTypCod = (Gbl.Scope.Current == Hie_SYS) ?
 	                DT_GetAndCheckParamOtherDegTypCod (-1L) :	// -1L (any degree type) is allowed here
                         -1L;
 
@@ -333,7 +333,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
            {
             if (Gbl.Stat.DegTypCod > 0)
@@ -385,7 +385,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 					  " ORDER BY degrees.FullName,courses.FullName");
            }
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -400,7 +400,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " AND crs_usr.UsrCod=usr_data.UsrCod"
 				       " AND usr_data.DptCod=%ld"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.CurrentCty.Cty.CtyCod,
+				       Gbl.Hierarchy.Cty.CtyCod,
 				       (unsigned) Rol_TCH,
 				       Gbl.Stat.DptCod);
          else
@@ -413,9 +413,9 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " AND centres.CtrCod=degrees.CtrCod"
 				       " AND degrees.DegCod=courses.DegCod"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.CurrentCty.Cty.CtyCod);
+				       Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -429,7 +429,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " AND crs_usr.UsrCod=usr_data.UsrCod"
 				       " AND usr_data.DptCod=%ld"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.CurrentIns.Ins.InsCod,
+				       Gbl.Hierarchy.Ins.InsCod,
 				       (unsigned) Rol_TCH,
 				       Gbl.Stat.DptCod);
          else
@@ -441,9 +441,9 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " AND centres.CtrCod=degrees.CtrCod"
 				       " AND degrees.DegCod=courses.DegCod"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.CurrentIns.Ins.InsCod);
+				       Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -456,7 +456,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " AND crs_usr.UsrCod=usr_data.UsrCod"
 				       " AND usr_data.DptCod=%ld"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.CurrentCtr.Ctr.CtrCod,
+				       Gbl.Hierarchy.Ctr.CtrCod,
 				       (unsigned) Rol_TCH,
 				       Gbl.Stat.DptCod);
          else
@@ -467,9 +467,9 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " WHERE degrees.CtrCod=%ld"
 				       " AND degrees.DegCod=courses.DegCod"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.CurrentCtr.Ctr.CtrCod);
+				       Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -482,7 +482,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " AND crs_usr.UsrCod=usr_data.UsrCod"
 				       " AND usr_data.DptCod=%ld"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.CurrentDeg.Deg.DegCod,
+				       Gbl.Hierarchy.Deg.DegCod,
 				       (unsigned) Rol_TCH,
 				       Gbl.Stat.DptCod);
          else
@@ -493,9 +493,9 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " WHERE degrees.DegCod=%ld"
 				       " AND degrees.DegCod=courses.DegCod"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.CurrentDeg.Deg.DegCod);
+				       Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          if (Gbl.Stat.DptCod >= 0)	// 0 means another department
             NumCrss =
             (unsigned) DB_QuerySELECT (mysql_res,"can not get courses",
@@ -509,8 +509,8 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " AND crs_usr.UsrCod=usr_data.UsrCod"
 				       " AND usr_data.DptCod=%ld"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.CurrentCrs.Crs.CrsCod,
-				       Gbl.CurrentCrs.Crs.CrsCod,
+				       Gbl.Hierarchy.Crs.Crs.CrsCod,
+				       Gbl.Hierarchy.Crs.Crs.CrsCod,
 				       (unsigned) Rol_TCH,
 				       Gbl.Stat.DptCod);
          else
@@ -521,7 +521,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " WHERE courses.CrsCod=%ld"
 				       " AND degrees.DegCod=courses.DegCod"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.CurrentCrs.Crs.CrsCod);
+				       Gbl.Hierarchy.Crs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

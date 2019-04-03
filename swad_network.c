@@ -452,7 +452,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
    unsigned NumUsrs;
 
    /***** Get total number of users in current scope *****/
-   NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
+   NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
                                                          Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
                                                                                              1 << Rol_STD |
                                                                                              1 << Rol_NET |
@@ -461,7 +461,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
    /***** Get number of users with a web / social network *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
          NumRows =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
 					       " with webs / social networks",
@@ -470,7 +470,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 				    " GROUP BY Web"
 				    " ORDER BY N DESC,Web");
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          NumRows =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
 					       " with webs / social networks",
@@ -485,9 +485,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
 				    " GROUP BY usr_webs.Web"
 				    " ORDER BY N DESC,usr_webs.Web",
-				    Gbl.CurrentCty.Cty.CtyCod);
+				    Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          NumRows =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
 					       " with webs / social networks",
@@ -501,9 +501,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
 				    " GROUP BY usr_webs.Web"
 				    " ORDER BY N DESC,usr_webs.Web",
-				    Gbl.CurrentIns.Ins.InsCod);
+				    Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          NumRows =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
 					       " with webs / social networks",
@@ -516,9 +516,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
 				    " GROUP BY usr_webs.Web"
 				    " ORDER BY N DESC,usr_webs.Web",
-				    Gbl.CurrentCtr.Ctr.CtrCod);
+				    Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          NumRows =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
 					       " with webs / social networks",
@@ -530,9 +530,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
 				    " GROUP BY usr_webs.Web"
 				    " ORDER BY N DESC,usr_webs.Web",
-				    Gbl.CurrentDeg.Deg.DegCod);
+				    Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          NumRows =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get number of users"
 					       " with webs / social networks",
@@ -543,7 +543,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
 				    " GROUP BY usr_webs.Web"
 				    " ORDER BY N DESC,usr_webs.Web",
-				    Gbl.CurrentCrs.Crs.CrsCod);
+				    Gbl.Hierarchy.Crs.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

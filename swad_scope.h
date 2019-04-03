@@ -29,6 +29,8 @@
 
 #include <stdbool.h>		// For boolean type
 
+#include "swad_hierarchy.h"
+
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -37,33 +39,20 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
-// Related with scope of courses-degrees-centres
-#define Sco_NUM_SCOPES	7
-typedef enum
-  {
-   Sco_SCOPE_UNK = 0,	// Unknown
-   Sco_SCOPE_SYS = 1,	// System
-   Sco_SCOPE_CTY = 2,	// Country
-   Sco_SCOPE_INS = 3,	// Institution
-   Sco_SCOPE_CTR = 4,	// Centre
-   Sco_SCOPE_DEG = 5,	// Degree
-   Sco_SCOPE_CRS = 6,	// Course
-  } Sco_Scope_t;
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange);
-void Sco_PutParamScope (const char *ParamName,Sco_Scope_t Scope);
+void Sco_PutParamScope (const char *ParamName,Hie_Level_t Scope);
 void Sco_GetScope (const char *ParamName);
 void Sco_AdjustScope (void);
 
 void Sco_SetScopesForListingGuests (void);
 void Sco_SetScopesForListingStudents (void);
 
-Sco_Scope_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr);
-Sco_Scope_t Sco_GetScopeFromDBStr (const char *ScopeDBStr);
-const char *Sco_GetDBStrFromScope (Sco_Scope_t Scope);
+Hie_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr);
+Hie_Level_t Sco_GetScopeFromDBStr (const char *ScopeDBStr);
+const char *Sco_GetDBStrFromScope (Hie_Level_t Scope);
 
 #endif

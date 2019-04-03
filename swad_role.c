@@ -86,7 +86,7 @@ void Rol_SetMyRoles (void)
    /***** Get my role in current course if not yet filled *****/
    if (!Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid)
      {
-      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetMyRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod);
+      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.Crs.CrsCod);
       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
      }
 
@@ -114,28 +114,28 @@ void Rol_SetMyRoles (void)
      }
 
    /***** Check if I am administrator of current institution/centre/degree *****/
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
+   if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
       /* Check if I am and administrator of current institution */
       ICanBeInsAdm = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                          Sco_SCOPE_INS,
-                                          Gbl.CurrentIns.Ins.InsCod);
-      if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+                                          Hie_INS,
+                                          Gbl.Hierarchy.Ins.InsCod);
+      if (Gbl.Hierarchy.Ctr.CtrCod > 0)
 	{
 	 /* Check if I am and administrator of current centre */
 	 ICanBeCtrAdm = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                     Sco_SCOPE_CTR,
-	                                     Gbl.CurrentCtr.Ctr.CtrCod);
-	 if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	                                     Hie_CTR,
+	                                     Gbl.Hierarchy.Ctr.CtrCod);
+	 if (Gbl.Hierarchy.Deg.DegCod > 0)
 	    /* Check if I am and administrator of current degree */
 	    ICanBeDegAdm = Usr_CheckIfUsrIsAdm (Gbl.Usrs.Me.UsrDat.UsrCod,
-	                                        Sco_SCOPE_DEG,
-	                                        Gbl.CurrentDeg.Deg.DegCod);
+	                                        Hie_DEG,
+	                                        Gbl.Hierarchy.Deg.DegCod);
 	}
      }
 
    /***** Check if I belong to current course *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+   if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
      {
       Gbl.Usrs.Me.IBelongToCurrentCrs = Usr_CheckIfUsrBelongsToCurrentCrs (&Gbl.Usrs.Me.UsrDat);
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
@@ -150,40 +150,40 @@ void Rol_SetMyRoles (void)
      }
 
    /***** Check if I belong to current degree *****/
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)
+   if (Gbl.Hierarchy.Deg.DegCod > 0)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
 	 Gbl.Usrs.Me.IBelongToCurrentDeg = true;
       else
-	 Gbl.Usrs.Me.IBelongToCurrentDeg = Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod);
+	 Gbl.Usrs.Me.IBelongToCurrentDeg = Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentDeg = false;
 
    /***** Check if I belong to current centre *****/
-   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+   if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentDeg)
          Gbl.Usrs.Me.IBelongToCurrentCtr = true;
       else
-         Gbl.Usrs.Me.IBelongToCurrentCtr = Usr_CheckIfIBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod);
+         Gbl.Usrs.Me.IBelongToCurrentCtr = Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentCtr = false;
 
    /***** Check if I belong to current institution *****/
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
+   if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentCtr)
 	 Gbl.Usrs.Me.IBelongToCurrentIns = true;
       else
-	 Gbl.Usrs.Me.IBelongToCurrentIns = Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod);
+	 Gbl.Usrs.Me.IBelongToCurrentIns = Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod);
      }
    else
       Gbl.Usrs.Me.IBelongToCurrentIns = false;
 
    /***** Build my list of available roles for current course *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+   if (Gbl.Hierarchy.Level == Hie_CRS)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
          Gbl.Usrs.Me.Role.Available = (1 << Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role);
@@ -624,7 +624,7 @@ Rol_Role_t Rol_GetRequestedRole (long UsrCod)
    if (DB_QuerySELECT (&mysql_res,"can not get requested role",
 		       "SELECT Role FROM crs_usr_requests"
 		       " WHERE CrsCod=%ld AND UsrCod=%ld",
-		       Gbl.CurrentCrs.Crs.CrsCod,UsrCod))
+		       Gbl.Hierarchy.Crs.Crs.CrsCod,UsrCod))
      {
       /***** Get role *****/
       row = mysql_fetch_row (mysql_res);

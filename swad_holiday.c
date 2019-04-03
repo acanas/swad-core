@@ -94,7 +94,7 @@ void Hld_SeeHolidays (void)
    unsigned NumHld;
    char StrDate[Cns_MAX_BYTES_DATE + 1];
 
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
+   if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
       /***** Get parameter with the type of order in the list of holidays *****/
       Hld_GetParamHldOrder ();
@@ -307,10 +307,10 @@ void Hld_GetListHolidays (void)
 				 "(SELECT DISTINCT PlcCod FROM places"
 				 " WHERE InsCod=%ld))"
 				 " ORDER BY %s",
-				 Gbl.CurrentIns.Ins.InsCod,
-				 Gbl.CurrentIns.Ins.InsCod,
-				 Gbl.CurrentIns.Ins.InsCod,
-				 Gbl.CurrentIns.Ins.InsCod,
+				 Gbl.Hierarchy.Ins.InsCod,
+				 Gbl.Hierarchy.Ins.InsCod,
+				 Gbl.Hierarchy.Ins.InsCod,
+				 Gbl.Hierarchy.Ins.InsCod,
 				 OrderBySubQuery[Gbl.Hlds.SelectedOrder]);
       if (Gbl.Hlds.Num) // Holidays found...
 	{
@@ -421,11 +421,11 @@ static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
 		       "(SELECT DISTINCT PlcCod FROM places"
 		       " WHERE InsCod=%ld))",
 		       Hld->HldCod,
-		       Gbl.CurrentIns.Ins.InsCod,
-		       Gbl.CurrentIns.Ins.InsCod,
+		       Gbl.Hierarchy.Ins.InsCod,
+		       Gbl.Hierarchy.Ins.InsCod,
 		       Hld->HldCod,
-		       Gbl.CurrentIns.Ins.InsCod,
-		       Gbl.CurrentIns.Ins.InsCod)) // Holiday found...
+		       Gbl.Hierarchy.Ins.InsCod,
+		       Gbl.Hierarchy.Ins.InsCod)) // Holiday found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -1201,7 +1201,7 @@ static void Hld_CreateHoliday (struct Holiday *Hld)
 		   " (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
 		   " VALUES"
 		   " (%ld,%ld,%u,'%04u%02u%02u','%04u%02u%02u','%s')",
-	           Gbl.CurrentIns.Ins.InsCod,Hld->PlcCod,(unsigned) Hld->HldTyp,
+	           Gbl.Hierarchy.Ins.InsCod,Hld->PlcCod,(unsigned) Hld->HldTyp,
 	           Hld->StartDate.Year,
 	           Hld->StartDate.Month,
 	           Hld->StartDate.Day,

@@ -93,107 +93,108 @@ void Dpt_SeeDepts (void)
    unsigned NumTchsInsWithDpt = 0;	// Number of teachers from the current institution with department
    unsigned NumTchsInOtherDpts;
 
-   if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Ins.InsCod <= 0)	// No institution selected
+      return;
+
+   /***** Get parameter with the type of order in the list of departments *****/
+   Dpt_GetParamDptOrder ();
+
+   /***** Get list of departments *****/
+   Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
+
+   /***** Start box and table *****/
+   Box_StartBoxTable (NULL,Txt_Departments,
+		      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
+							       NULL,
+		      Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
+
+   /***** Write heading *****/
+   fprintf (Gbl.F.Out,"<tr>");
+   for (Order = Dpt_ORDER_BY_DEPARTMENT;
+	Order <= Dpt_ORDER_BY_NUM_TCHS;
+	Order++)
      {
-      /***** Get parameter with the type of order in the list of departments *****/
-      Dpt_GetParamDptOrder ();
-
-      /***** Get list of departments *****/
-      Dpt_GetListDepartments (Gbl.CurrentIns.Ins.InsCod);
-
-      /***** Start box and table *****/
-      Box_StartBoxTable (NULL,Txt_Departments,
-                         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
-                        	                                  NULL,
-                         Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
-
-      /***** Write heading *****/
-      fprintf (Gbl.F.Out,"<tr>");
-      for (Order = Dpt_ORDER_BY_DEPARTMENT;
-	   Order <= Dpt_ORDER_BY_NUM_TCHS;
-	   Order++)
-	{
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-	 Frm_StartForm (ActSeeDpt);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Frm_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Dpts.SelectedOrder)
-	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_DEPARTMENTS_ORDER[Order]);
-	 if (Order == Gbl.Dpts.SelectedOrder)
-	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
-	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</th>");
-	}
-      fprintf (Gbl.F.Out,"</tr>");
-
-      /***** Write all the departments and their nuber of teachers *****/
-      for (NumDpt = 0;
-	   NumDpt < Gbl.Dpts.Num;
-	   NumDpt++)
-	{
-	 /* Write data of this department */
-	 fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"LEFT_MIDDLE\">"
-			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
-			    "%s"
-			    "</a>"
-			    "</td>"
-	                    "<td class=\"DAT RIGHT_MIDDLE\">"
-	                    "%u"
-	                    "</td>"
-	                    "</tr>",
-	          Gbl.Dpts.Lst[NumDpt].WWW,
-		  Gbl.Dpts.Lst[NumDpt].FullName,
-		  Gbl.Dpts.Lst[NumDpt].NumTchs);
-
-	 /* Update number of teachers from the current institution
-	    with department */
-	 NumTchsInsWithDpt += Gbl.Dpts.Lst[NumDpt].NumTchs;
-	}
-
-      /***** Separation row *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"DAT\">"
-			 "&nbsp;"
-			 "</td>"
-			 "</tr>");
-
-      /***** Write teachers with other department *****/
-      NumTchsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT LEFT_MIDDLE\">"
-			 "%s"
-			 "</td>"
-			 "<td class=\"DAT RIGHT_MIDDLE\">"
-			 "%u"
-			 "</td>"
-			 "</tr>",
-	       Txt_Other_departments,NumTchsInOtherDpts);
-      NumTchsInsWithDpt += NumTchsInOtherDpts;
-
-      /***** Write teachers with no department *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT LEFT_MIDDLE\">"
-			 "%s"
-			 "</td>"
-			 "<td class=\"DAT RIGHT_MIDDLE\">"
-			 "%u"
-			 "</td>"
-			 "</tr>",
-	       Txt_Department_unspecified,
-	       Usr_GetTotalNumberOfUsersInCourses (Sco_SCOPE_INS,
-	                                           1 << Rol_NET |
-	                                           1 << Rol_TCH) -
-	       NumTchsInsWithDpt);
-
-      /***** End table and box *****/
-      Box_EndBoxTable ();
-
-      /***** Free list of departments *****/
-      Dpt_FreeListDepartments ();
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Frm_StartForm (ActSeeDpt);
+      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Frm_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL",NULL);
+      if (Order == Gbl.Dpts.SelectedOrder)
+	 fprintf (Gbl.F.Out,"<u>");
+      fprintf (Gbl.F.Out,"%s",Txt_DEPARTMENTS_ORDER[Order]);
+      if (Order == Gbl.Dpts.SelectedOrder)
+	 fprintf (Gbl.F.Out,"</u>");
+      fprintf (Gbl.F.Out,"</a>");
+      Frm_EndForm ();
+      fprintf (Gbl.F.Out,"</th>");
      }
+   fprintf (Gbl.F.Out,"</tr>");
+
+   /***** Write all the departments and their nuber of teachers *****/
+   for (NumDpt = 0;
+	NumDpt < Gbl.Dpts.Num;
+	NumDpt++)
+     {
+      /* Write data of this department */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"LEFT_MIDDLE\">"
+			 "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
+			 "%s"
+			 "</a>"
+			 "</td>"
+			 "<td class=\"DAT RIGHT_MIDDLE\">"
+			 "%u"
+			 "</td>"
+			 "</tr>",
+	       Gbl.Dpts.Lst[NumDpt].WWW,
+	       Gbl.Dpts.Lst[NumDpt].FullName,
+	       Gbl.Dpts.Lst[NumDpt].NumTchs);
+
+      /* Update number of teachers from the current institution
+	 with department */
+      NumTchsInsWithDpt += Gbl.Dpts.Lst[NumDpt].NumTchs;
+     }
+
+   /***** Separation row *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td colspan=\"3\" class=\"DAT\">"
+		      "&nbsp;"
+		      "</td>"
+		      "</tr>");
+
+   /***** Write teachers with other department *****/
+   NumTchsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "%s"
+		      "</td>"
+		      "<td class=\"DAT RIGHT_MIDDLE\">"
+		      "%u"
+		      "</td>"
+		      "</tr>",
+	    Txt_Other_departments,NumTchsInOtherDpts);
+   NumTchsInsWithDpt += NumTchsInOtherDpts;
+
+   /***** Write teachers with no department *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "%s"
+		      "</td>"
+		      "<td class=\"DAT RIGHT_MIDDLE\">"
+		      "%u"
+		      "</td>"
+		      "</tr>",
+	    Txt_Department_unspecified,
+	    Usr_GetTotalNumberOfUsersInCourses (Hie_INS,
+						1 << Rol_NET |
+						1 << Rol_TCH) -
+	    NumTchsInsWithDpt);
+
+   /***** End table and box *****/
+   Box_EndBoxTable ();
+
+   /***** Free list of departments *****/
+   Dpt_FreeListDepartments ();
   }
 
 /*****************************************************************************/
@@ -225,17 +226,15 @@ static void Dpt_PutIconToEditDpts (void)
 
 void Dpt_EditDepartments (void)
   {
-   /***** Check if institution is selected *****/
-   if (Gbl.CurrentIns.Ins.InsCod <= 0)
-      Lay_ShowErrorAndExit ("No institution selected.");		// This should not happen
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Ins.InsCod <= 0)
+      return;
 
    /***** Get list of institutions *****/
-   Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_BASIC_DATA);
-   if (!Gbl.Inss.Num)
-      Lay_ShowErrorAndExit ("There is no list of institutions.");	// This should not happen
+   Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod,Ins_GET_BASIC_DATA);
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartments (Gbl.CurrentIns.Ins.InsCod);
+   Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
 
    /***** Put a form to create a new department *****/
    Dpt_PutFormToCreateDepartment ();

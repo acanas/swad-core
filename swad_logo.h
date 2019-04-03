@@ -39,11 +39,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
+void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
                    unsigned Size,const char *Class,bool PutIconIfNotExists);
-void Log_PutIconToChangeLogo (Sco_Scope_t Scope);
-void Log_RequestLogo (Sco_Scope_t Scope);
-void Log_ReceiveLogo (Sco_Scope_t Scope);
-void Log_RemoveLogo (Sco_Scope_t Scope);
+void Log_PutIconToChangeLogo (Hie_Level_t Scope);
+void Log_RequestLogo (Hie_Level_t Scope);
+void Log_ReceiveLogo (Hie_Level_t Scope);
+void Log_RemoveLogo (Hie_Level_t Scope);
 
 #endif

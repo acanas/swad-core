@@ -188,7 +188,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 
          /* Get institution code (row[0]) */
          Ins.InsCod = Str_ConvertStrCodToLongCod (row[0]);
-         BgColor = (Ins.InsCod == Gbl.CurrentIns.Ins.InsCod) ? "LIGHT_BLUE" :
+         BgColor = (Ins.InsCod == Gbl.Hierarchy.Ins.InsCod) ? "LIGHT_BLUE" :
                                                                Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of institution */
@@ -236,7 +236,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size)
       Ins_PutParamInsCod (Ins->InsCod);
       Frm_LinkFormSubmit (Ins->FullName,NULL,NULL);
      }
-   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->FullName,
+   Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->FullName,
 		 Size,NULL,true);
    if (PutLink)
      {
@@ -265,7 +265,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
    Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw institution logo *****/
-   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
+   Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins->FullName);
@@ -317,294 +317,296 @@ static void Ins_Configuration (bool PrintView)
    extern const char *Txt_Departments;
    extern const char *Txt_Users_of_the_institution;
    unsigned NumCty;
-   bool PutLink = !PrintView && Gbl.CurrentIns.Ins.WWW[0];
+   bool PutLink;
 
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Ins.InsCod <= 0)		// No institution selected
+      return;
+
+   /***** Start box *****/
+   if (PrintView)
+      Box_StartBox (NULL,NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
+   else
+      Box_StartBox (NULL,NULL,Ins_PutIconsToPrintAndUpload,
+		    Hlp_INSTITUTION_Information,Box_NOT_CLOSABLE);
+
+   /***** Title *****/
+   PutLink = !PrintView && Gbl.Hierarchy.Ins.WWW[0];
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
+   if (PutLink)
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+			 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
+	       Gbl.Hierarchy.Ins.WWW,
+	       Gbl.Hierarchy.Ins.FullName);
+   Log_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
+		 Gbl.Hierarchy.Ins.ShrtName,64,NULL,true);
+   fprintf (Gbl.F.Out,"<br />%s",Gbl.Hierarchy.Ins.FullName);
+   if (PutLink)
+      fprintf (Gbl.F.Out,"</a>");
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Start table *****/
+   Tbl_StartTableWide (2);
+
+   /***** Country *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"OthCtyCod\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Country);
+
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      // Only system admins can move an institution to another country
      {
-      /***** Start box *****/
-      if (PrintView)
-	 Box_StartBox (NULL,NULL,NULL,
-		       NULL,Box_NOT_CLOSABLE);
-      else
-	 Box_StartBox (NULL,NULL,Ins_PutIconsToPrintAndUpload,
-		       Hlp_INSTITUTION_Information,Box_NOT_CLOSABLE);
+      /* Get list of countries */
+      Cty_GetListCountries (Cty_GET_BASIC_DATA);
 
-      /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-	                    " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
-		  Gbl.CurrentIns.Ins.WWW,
-		  Gbl.CurrentIns.Ins.FullName);
-      Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
-                    Gbl.CurrentIns.Ins.ShrtName,64,NULL,true);
-      fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentIns.Ins.FullName);
-      if (PutLink)
-	 fprintf (Gbl.F.Out,"</a>");
-      fprintf (Gbl.F.Out,"</div>");
+      /* Put form to select country */
+      Frm_StartForm (ActChgInsCtyCfg);
+      fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
+			 " class=\"INPUT_SHORT_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\">",
+	       Gbl.Form.Id);
+      for (NumCty = 0;
+	   NumCty < Gbl.Ctys.Num;
+	   NumCty++)
+	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
+		  Gbl.Ctys.Lst[NumCty].CtyCod,
+		  Gbl.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod ? " selected=\"selected\"" :
+									     "",
+		  Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+      fprintf (Gbl.F.Out,"</select>");
+      Frm_EndForm ();
 
-      /***** Start table *****/
-      Tbl_StartTableWide (2);
+      /* Free list of countries */
+      Cty_FreeListCountries ();
+     }
+   else	// I can not move institution to another country
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 
-      /***** Country *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"OthCtyCod\" class=\"%s\">%s:</label>"
-			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Country);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	 // Only system admins can move an institution to another country
-	{
-	 /* Get list of countries */
-         Cty_GetListCountries (Cty_GET_BASIC_DATA);
+   /***** Institution full name *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"FullName\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Institution);
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      // Only system admins can edit institution full name
+     {
+      /* Form to change institution full name */
+      Frm_StartForm (ActRenInsFulCfg);
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+			 " id=\"FullName\" name=\"FullName\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " class=\"INPUT_FULL_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\" />",
+	       Hie_MAX_CHARS_FULL_NAME,
+	       Gbl.Hierarchy.Ins.FullName,
+	       Gbl.Form.Id);
+      Frm_EndForm ();
+     }
+   else	// I can not edit institution full name
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.FullName);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
-	 /* Put form to select country */
-	 Frm_StartForm (ActChgInsCtyCfg);
-	 fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
-			    " class=\"INPUT_SHORT_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.Form.Id);
-	 for (NumCty = 0;
-	      NumCty < Gbl.Ctys.Num;
-	      NumCty++)
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		     Gbl.Ctys.Lst[NumCty].CtyCod,
-		     Gbl.Ctys.Lst[NumCty].CtyCod == Gbl.CurrentCty.Cty.CtyCod ? " selected=\"selected\"" :
-										"",
-		     Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
-	 fprintf (Gbl.F.Out,"</select>");
-	 Frm_EndForm ();
+   /***** Institution short name *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"ShortName\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Short_name);
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      // Only system admins can edit institution short name
+     {
+      /* Form to change institution short name */
+      Frm_StartForm (ActRenInsShoCfg);
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+			 " id=\"ShortName\" name=\"ShortName\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " class=\"INPUT_SHORT_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\" />",
+	       Hie_MAX_CHARS_SHRT_NAME,
+	       Gbl.Hierarchy.Ins.ShrtName,
+	       Gbl.Form.Id);
+      Frm_EndForm ();
+     }
+   else	// I can not edit institution short name
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.ShrtName);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
-	 /* Free list of countries */
-	 Cty_FreeListCountries ();
-	}
-      else	// I can not move institution to another country
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+   /***** Institution WWW *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"WWW\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Web);
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+      // Only institution admins and system admins
+      // can change institution WWW
+     {
+      /* Form to change institution WWW */
+      Frm_StartForm (ActChgInsWWWCfg);
+      fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " class=\"INPUT_WWW\""
+			 " onchange=\"document.getElementById('%s').submit();\" />",
+	       Cns_MAX_CHARS_WWW,
+	       Gbl.Hierarchy.Ins.WWW,
+	       Gbl.Form.Id);
+      Frm_EndForm ();
+     }
+   else	// I can not change institution WWW
+      fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
+			 "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
+			 "%s"
+			 "</a>"
+			 "</div>",
+	       Gbl.Hierarchy.Ins.WWW,
+	       Gbl.Hierarchy.Ins.WWW);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+   /***** Shortcut to the institution *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"LEFT_MIDDLE\">"
+		      "<a href=\"%s/%s?ins=%ld\" class=\"DAT\" target=\"_blank\">"
+		      "%s/%s?ins=%ld"
+		      "</a>"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Shortcut,
+	    Cfg_URL_SWAD_CGI,
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Hierarchy.Ins.InsCod,
+	    Cfg_URL_SWAD_CGI,
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Hierarchy.Ins.InsCod);
 
-      /***** Institution full name *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"FullName\" class=\"%s\">%s:</label>"
-	                 "</td>"
-			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Institution);
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	 // Only system admins can edit institution full name
-	{
-	 /* Form to change institution full name */
-	 Frm_StartForm (ActRenInsFulCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\""
-	                    " id=\"FullName\" name=\"FullName\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_FULL_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Hie_MAX_CHARS_FULL_NAME,
-		  Gbl.CurrentIns.Ins.FullName,
-		  Gbl.Form.Id);
-	 Frm_EndForm ();
-	}
-      else	// I can not edit institution full name
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.FullName);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      /***** Institution short name *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"ShortName\" class=\"%s\">%s:</label>"
-	                 "</td>"
-			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Short_name);
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	 // Only system admins can edit institution short name
-	{
-	 /* Form to change institution short name */
-	 Frm_StartForm (ActRenInsShoCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\""
-	                    " id=\"ShortName\" name=\"ShortName\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_SHORT_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Hie_MAX_CHARS_SHRT_NAME,
-		  Gbl.CurrentIns.Ins.ShrtName,
-		  Gbl.Form.Id);
-	 Frm_EndForm ();
-	}
-      else	// I can not edit institution short name
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.ShrtName);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      /***** Institution WWW *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"WWW\" class=\"%s\">%s:</label>"
-			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Web);
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-	 // Only institution admins and system admins
-	 // can change institution WWW
-	{
-	 /* Form to change institution WWW */
-	 Frm_StartForm (ActChgInsWWWCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_WWW\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_CHARS_WWW,
-		  Gbl.CurrentIns.Ins.WWW,
-		  Gbl.Form.Id);
-	 Frm_EndForm ();
-	}
-      else	// I can not change institution WWW
-	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
-			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
-	                    "%s"
-			    "</a>"
-			    "</div>",
-		  Gbl.CurrentIns.Ins.WWW,
-		  Gbl.CurrentIns.Ins.WWW);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-
-      /***** Shortcut to the institution *****/
+   if (PrintView)
+     {
+      /***** QR code with link to the institution *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
-			 "<td class=\"LEFT_MIDDLE\">"
-			 "<a href=\"%s/%s?ins=%ld\" class=\"DAT\" target=\"_blank\">"
-			 "%s/%s?ins=%ld"
-			 "</a>"
+			 "<td class=\"LEFT_MIDDLE\">",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_QR_code);
+      QR_LinkTo (250,"ins",Gbl.Hierarchy.Ins.InsCod);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+     }
+   else
+     {
+      /***** Number of users who claim to belong to this institution *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
+			 "%u"
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Shortcut,
-	       Cfg_URL_SWAD_CGI,
-	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	       Gbl.CurrentIns.Ins.InsCod,
-	       Cfg_URL_SWAD_CGI,
-	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	       Gbl.CurrentIns.Ins.InsCod);
+	       Txt_Users_of_the_institution,
+	       Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
 
-      if (PrintView)
-	{
-	 /***** QR code with link to the institution *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"LEFT_MIDDLE\">",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_QR_code);
-	 QR_LinkTo (250,"ins",Gbl.CurrentIns.Ins.InsCod);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-	}
-      else
-	{
-	 /***** Number of users who claim to belong to this institution *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Users_of_the_institution,
-		  Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.CurrentIns.Ins.InsCod));
+      /***** Number of centres *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"LEFT_MIDDLE\">",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Centres);
 
-	 /***** Number of centres *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-	                    "%s:"
-	                    "</td>"
-			    "<td class=\"LEFT_MIDDLE\">",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Centres);
+      /* Form to go to see centres of this institution */
+      Frm_StartFormGoTo (ActSeeCtr);
+      Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+		Txt_Centres_of_INSTITUTION_X,
+		Gbl.Hierarchy.Ins.ShrtName);
+      Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+      fprintf (Gbl.F.Out,"%u</a>",
+	       Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
+      Frm_EndForm ();
 
-	 /* Form to go to see centres of this institution */
-	 Frm_StartFormGoTo (ActSeeCtr);
-	 Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Centres_of_INSTITUTION_X,
-	           Gbl.CurrentIns.Ins.ShrtName);
-	 Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-	 fprintf (Gbl.F.Out,"%u</a>",
-		  Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod));
-	 Frm_EndForm ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+      /***** Number of degrees *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
+			 "%u"
+			 "</td>"
+			 "</tr>",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Degrees,
+	       Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
 
-	 /***** Number of degrees *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Degrees,
-		  Deg_GetNumDegsInIns (Gbl.CurrentIns.Ins.InsCod));
+      /***** Number of courses *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
+			 "%u"
+			 "</td>"
+			 "</tr>",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Courses,
+	       Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
 
-	 /***** Number of courses *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Courses,
-		  Crs_GetNumCrssInIns (Gbl.CurrentIns.Ins.InsCod));
+      /***** Number of departments *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
+			 "%u"
+			 "</td>"
+			 "</tr>",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Departments,
+	       Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
 
-	 /***** Number of departments *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Departments,
-		  Dpt_GetNumDepartmentsInInstitution (Gbl.CurrentIns.Ins.InsCod));
-
-	 /***** Number of users in courses of this institution *****/
-	 Ins_ShowNumUsrsInCrssOfIns (Rol_TCH);
-	 Ins_ShowNumUsrsInCrssOfIns (Rol_NET);
-	 Ins_ShowNumUsrsInCrssOfIns (Rol_STD);
-	 Ins_ShowNumUsrsInCrssOfIns (Rol_UNK);
-	}
-
-      /***** End table *****/
-      Tbl_EndTable ();
-
-      /***** End box *****/
-      Box_EndBox ();
+      /***** Number of users in courses of this institution *****/
+      Ins_ShowNumUsrsInCrssOfIns (Rol_TCH);
+      Ins_ShowNumUsrsInCrssOfIns (Rol_NET);
+      Ins_ShowNumUsrsInCrssOfIns (Rol_STD);
+      Ins_ShowNumUsrsInCrssOfIns (Rol_UNK);
      }
+
+   /***** End table *****/
+   Tbl_EndTable ();
+
+   /***** End box *****/
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -618,7 +620,7 @@ static void Ins_PutIconsToPrintAndUpload (void)
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       /***** Icon to upload logo of institution *****/
-      Log_PutIconToChangeLogo (Sco_SCOPE_INS);
+      Log_PutIconToChangeLogo (Hie_INS);
 
    /***** Put icon to view places *****/
    Plc_PutIconToViewPlaces ();
@@ -645,7 +647,7 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
-            Usr_GetNumUsrsInCrssOfIns (Role,Gbl.CurrentIns.Ins.InsCod));
+            Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));
   }
 
 /*****************************************************************************/
@@ -654,13 +656,13 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
 
 void Ins_ShowInssOfCurrentCty (void)
   {
-   if (Gbl.CurrentCty.Cty.CtyCod > 0)
+   if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
       /***** Get parameter with the type of order in the list of institutions *****/
       Ins_GetParamInsOrder ();
 
       /***** Get list of institutions *****/
-      Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
+      Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod,Ins_GET_EXTRA_DATA);
 
       /***** Write menu to select country *****/
       Hie_WriteMenuHierarchy ();
@@ -689,7 +691,7 @@ static void Ins_ListInstitutions (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Institutions_of_COUNTRY_X,
-	     Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+	     Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    Box_StartBox (NULL,Gbl.Title,Ins_PutIconsListingInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
 
@@ -778,7 +780,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_N";
      }
-   BgColor = (Ins->InsCod == Gbl.CurrentIns.Ins.InsCod) ? "LIGHT_BLUE" :
+   BgColor = (Ins->InsCod == Gbl.Hierarchy.Ins.InsCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Number of institution in this list *****/
@@ -935,7 +937,7 @@ void Ins_EditInstitutions (void)
    extern const char *Txt_Institutions_of_COUNTRY_X;
 
    /***** Get list of institutions *****/
-   Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
+   Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod,Ins_GET_EXTRA_DATA);
 
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
@@ -943,7 +945,7 @@ void Ins_EditInstitutions (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Institutions_of_COUNTRY_X,
-             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+             Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    Box_StartBox (NULL,Gbl.Title,Ins_PutIconsEditingInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
 
@@ -1382,18 +1384,18 @@ void Ins_WriteSelectorOfInstitution (void)
    /***** Start form *****/
    Frm_StartFormGoTo (ActSeeCtr);
    fprintf (Gbl.F.Out,"<select id=\"ins\" name=\"ins\" style=\"width:175px;\"");
-   if (Gbl.CurrentCty.Cty.CtyCod > 0)
+   if (Gbl.Hierarchy.Cty.CtyCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"><option value=\"\"");
-   if (Gbl.CurrentIns.Ins.InsCod < 0)
+   if (Gbl.Hierarchy.Ins.InsCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
             Txt_Institution);
 
-   if (Gbl.CurrentCty.Cty.CtyCod > 0)
+   if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
       /***** Get institutions of selected country from database *****/
       NumInss =
@@ -1402,7 +1404,7 @@ void Ins_WriteSelectorOfInstitution (void)
 	                         " FROM institutions"
 				 " WHERE CtyCod=%ld"
 				 " ORDER BY ShortName",
-				 Gbl.CurrentCty.Cty.CtyCod);
+				 Gbl.Hierarchy.Cty.CtyCod);
 
       /***** List institutions *****/
       for (NumIns = 0;
@@ -1418,7 +1420,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
          /* Write option */
          fprintf (Gbl.F.Out,"<option value=\"%ld\"",InsCod);
-         if (Gbl.CurrentIns.Ins.InsCod > 0 && InsCod == Gbl.CurrentIns.Ins.InsCod)
+         if (Gbl.Hierarchy.Ins.InsCod > 0 && InsCod == Gbl.Hierarchy.Ins.InsCod)
             fprintf (Gbl.F.Out," selected=\"selected\"");
          fprintf (Gbl.F.Out,">%s</option>",row[1]);
         }
@@ -1489,7 +1491,7 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\" class=\"LEFT_MIDDLE\""
 	                 " style=\"width:25px;\">",
                Ins->FullName);
-      Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
+      Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Institution short name */
@@ -1736,10 +1738,10 @@ void Ins_RemoveInstitution (void)
    else	// Institution has no users ==> remove it
      {
       /***** Remove all the threads and posts in forums of the institution *****/
-      For_RemoveForums (Sco_SCOPE_INS,Ins.InsCod);
+      For_RemoveForums (Hie_INS,Ins.InsCod);
 
       /***** Remove surveys of the institution *****/
-      Svy_RemoveSurveys (Sco_SCOPE_INS,Ins.InsCod);
+      Svy_RemoveSurveys (Hie_INS,Ins.InsCod);
 
       /***** Remove information related to files in institution *****/
       Brw_RemoveInsFilesFromDB (Ins.InsCod);
@@ -1782,7 +1784,7 @@ void Ins_RenameInsShort (void)
 
 void Ins_RenameInsShortInConfig (void)
   {
-   Ins_RenameInstitution (&Gbl.CurrentIns.Ins,Cns_SHRT_NAME);
+   Ins_RenameInstitution (&Gbl.Hierarchy.Ins,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -1797,7 +1799,7 @@ void Ins_RenameInsFull (void)
 
 void Ins_RenameInsFullInConfig (void)
   {
-   Ins_RenameInstitution (&Gbl.CurrentIns.Ins,Cns_FULL_NAME);
+   Ins_RenameInstitution (&Gbl.Hierarchy.Ins,Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -1851,7 +1853,7 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
         {
          /***** If institution was in database... *****/
          if (Ins_CheckIfInsNameExistsInCty (ParamName,NewInsName,Ins->InsCod,
-                                            Gbl.CurrentCty.Cty.CtyCod))
+                                            Gbl.Hierarchy.Cty.CtyCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_institution_X_already_exists,
                              NewInsName);
@@ -1924,26 +1926,26 @@ void Ins_ChangeInsCtyInConfig (void)
    NewCty.CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
 
    /***** Check if country has changed *****/
-   if (NewCty.CtyCod != Gbl.CurrentIns.Ins.CtyCod)
+   if (NewCty.CtyCod != Gbl.Hierarchy.Ins.CtyCod)
      {
       /***** Get data of the country from database *****/
       Cty_GetDataOfCountryByCod (&NewCty,Cty_GET_BASIC_DATA);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
-      if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.CurrentIns.Ins.ShrtName,-1L,NewCty.CtyCod))
+      if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.Hierarchy.Ins.ShrtName,-1L,NewCty.CtyCod))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_institution_X_already_exists,
-		          Gbl.CurrentIns.Ins.ShrtName);
-      else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.CurrentIns.Ins.FullName,-1L,NewCty.CtyCod))
+		          Gbl.Hierarchy.Ins.ShrtName);
+      else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.Hierarchy.Ins.FullName,-1L,NewCty.CtyCod))
          Ale_CreateAlert (Ale_WARNING,NULL,
                           Txt_The_institution_X_already_exists,
-		          Gbl.CurrentIns.Ins.FullName);
+		          Gbl.Hierarchy.Ins.FullName);
       else
 	{
 	 /***** Update the table changing the country of the institution *****/
-	 Ins_UpdateInsCtyDB (Gbl.CurrentIns.Ins.InsCod,NewCty.CtyCod);
-         Gbl.CurrentIns.Ins.CtyCod =
-         Gbl.CurrentCty.Cty.CtyCod = NewCty.CtyCod;
+	 Ins_UpdateInsCtyDB (Gbl.Hierarchy.Ins.InsCod,NewCty.CtyCod);
+         Gbl.Hierarchy.Ins.CtyCod =
+         Gbl.Hierarchy.Cty.CtyCod = NewCty.CtyCod;
 
 	 /***** Initialize again current course, degree, centre... *****/
 	 Hie_InitHierarchy ();
@@ -1951,7 +1953,7 @@ void Ins_ChangeInsCtyInConfig (void)
 	 /***** Write message to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
                           Txt_The_country_of_the_institution_X_has_changed_to_Y,
-		          Gbl.CurrentIns.Ins.FullName,NewCty.Name[Gbl.Prefs.Language]);
+		          Gbl.Hierarchy.Ins.FullName,NewCty.Name[Gbl.Prefs.Language]);
 	}
      }
   }
@@ -2037,8 +2039,8 @@ void Ins_ChangeInsWWWInConfig (void)
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ins_UpdateInsWWWDB (Gbl.CurrentIns.Ins.InsCod,NewWWW);
-      Str_Copy (Gbl.CurrentIns.Ins.WWW,NewWWW,
+      Ins_UpdateInsWWWDB (Gbl.Hierarchy.Ins.InsCod,NewWWW);
+      Str_Copy (Gbl.Hierarchy.Ins.WWW,NewWWW,
                 Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
@@ -2128,14 +2130,14 @@ void Ins_ContEditAfterChgIns (void)
 /*************** and put button to go to institution changed *****************/
 /*****************************************************************************/
 // Gbl.Degs.EditingDeg is the degree that is beeing edited
-// Gbl.CurrentDeg.Deg is the current degree
+// Gbl.Hierarchy.Deg is the current degree
 
 static void Ins_ShowAlertAndButtonToGoToIns (void)
   {
    extern const char *Txt_Go_to_X;
 
    // If the institution beeing edited is different to the current one...
-   if (Gbl.Inss.EditingIns.InsCod != Gbl.CurrentIns.Ins.InsCod)
+   if (Gbl.Inss.EditingIns.InsCod != Gbl.Hierarchy.Ins.InsCod)
       /***** Alert with button to go to degree *****/
       Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,Ins_PutParamGoToIns,
                                   Btn_CONFIRM_BUTTON,Gbl.Title);
@@ -2155,7 +2157,7 @@ static void Ins_PutParamGoToIns (void)
 
 void Ins_RequestLogo (void)
   {
-   Log_RequestLogo (Sco_SCOPE_INS);
+   Log_RequestLogo (Hie_INS);
   }
 
 /*****************************************************************************/
@@ -2164,7 +2166,7 @@ void Ins_RequestLogo (void)
 
 void Ins_ReceiveLogo (void)
   {
-   Log_ReceiveLogo (Sco_SCOPE_INS);
+   Log_ReceiveLogo (Hie_INS);
   }
 
 /*****************************************************************************/
@@ -2173,7 +2175,7 @@ void Ins_ReceiveLogo (void)
 
 void Ins_RemoveLogo (void)
   {
-   Log_RemoveLogo (Sco_SCOPE_INS);
+   Log_RemoveLogo (Hie_INS);
   }
 
 /*****************************************************************************/
@@ -2209,7 +2211,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
-   Log_DrawLogo (Sco_SCOPE_INS,-1L,"",20,NULL,true);
+   Log_DrawLogo (Hie_INS,-1L,"",20,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Institution short name *****/
@@ -2357,7 +2359,7 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
 
    /***** Get parameters from form *****/
    /* Set institution country */
-   Gbl.Inss.EditingIns.CtyCod = Gbl.CurrentCty.Cty.CtyCod;
+   Gbl.Inss.EditingIns.CtyCod = Gbl.Hierarchy.Cty.CtyCod;
 
    /* Get institution short name */
    Par_GetParToText ("ShortName",Gbl.Inss.EditingIns.ShrtName,Hie_MAX_BYTES_SHRT_NAME);
@@ -2374,10 +2376,10 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
       if (Gbl.Inss.EditingIns.WWW[0])
         {
          /***** If name of institution was in database... *****/
-         if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.Inss.EditingIns.ShrtName,-1L,Gbl.CurrentCty.Cty.CtyCod))
+         if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.Inss.EditingIns.ShrtName,-1L,Gbl.Hierarchy.Cty.CtyCod))
             Ale_ShowAlert (Ale_WARNING,Txt_The_institution_X_already_exists,
                            Gbl.Inss.EditingIns.ShrtName);
-         else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.Inss.EditingIns.FullName,-1L,Gbl.CurrentCty.Cty.CtyCod))
+         else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.Inss.EditingIns.FullName,-1L,Gbl.Hierarchy.Cty.CtyCod))
             Ale_ShowAlert (Ale_WARNING,Txt_The_institution_X_already_exists,
                            Gbl.Inss.EditingIns.FullName);
          else	// Add new institution to database

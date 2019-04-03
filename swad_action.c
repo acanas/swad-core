@@ -5014,21 +5014,32 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action)
    if (Action < 0 || Action >= Act_NUM_ACTIONS)
       return false;
 
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
-      Permission = Gbl.Usrs.Me.IBelongToCurrentCrs ? Act_Actions[Action].PermissionCrsIfIBelong :
-	                                             Act_Actions[Action].PermissionCrsIfIDontBelong;
-   else if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected
-      Permission = Act_Actions[Action].PermissionDeg;
-   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// Centre selected
-      Permission = Act_Actions[Action].PermissionCtr;
-   else if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected
-      Permission = Act_Actions[Action].PermissionIns;
-   else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
-      Permission = Act_Actions[Action].PermissionCty;
-   else
-      Permission = Act_Actions[Action].PermissionSys;
+   switch (Gbl.Hierarchy.Level)
+     {
+      case Hie_SYS:	// System
+         Permission = Act_Actions[Action].PermissionSys;
+	 break;
+      case Hie_CTY:	// Country selected
+         Permission = Act_Actions[Action].PermissionCty;
+	 break;
+      case Hie_INS:	// Institution selected
+         Permission = Act_Actions[Action].PermissionIns;
+	 break;
+      case Hie_CTR:	// Centre selected
+         Permission = Act_Actions[Action].PermissionCtr;
+	 break;
+      case Hie_DEG:	// Degree selected
+         Permission = Act_Actions[Action].PermissionDeg;
+	 break;
+      case Hie_CRS:	// Course selected
+	 Permission = Gbl.Usrs.Me.IBelongToCurrentCrs ? Act_Actions[Action].PermissionCrsIfIBelong :
+							Act_Actions[Action].PermissionCrsIfIDontBelong;
+	 break;
+      default:
+	 return false;
+     }
 
-   return Permission & (1 << Gbl.Usrs.Me.Role.Logged);
+   return (bool) (Permission & (1 << Gbl.Usrs.Me.Role.Logged));
   }
 
 /*****************************************************************************/
@@ -5156,18 +5167,21 @@ char *Act_GetActionTextFromDB (long ActCod,
 
 void Act_AdjustActionWhenNoUsrLogged (void)
   {
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
-      Gbl.Action.Act = ActSeeCrsInf;
-   else if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected
-      Gbl.Action.Act = ActSeeDegInf;
-   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// Centre selected
-      Gbl.Action.Act = ActSeeCtrInf;
-   else if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected
-      Gbl.Action.Act = ActSeeInsInf;
-   else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
-      Gbl.Action.Act = ActSeeCtyInf;
-   else
-      Gbl.Action.Act = ActFrmLogIn;
+   static const Act_Action_t Actions[Hie_NUM_LEVELS] =
+     {
+      ActUnk, 		// Hie_UNK, Unknown
+      ActFrmLogIn,	// Hie_SYS, System
+      ActSeeCtyInf,	// Hie_CTY, Country
+      ActSeeInsInf,	// Hie_INS, Institution
+      ActSeeCtrInf,	// Hie_CTR, Centre
+      ActSeeDegInf,	// Hie_DEG, Degree
+      ActSeeCrsInf,	// Hie_CRS, Course
+     };
+
+   if (Gbl.Hierarchy.Level >= Hie_NUM_LEVELS)
+      Gbl.Hierarchy.Level = ActUnk;
+
+   Gbl.Action.Act = Actions[Gbl.Hierarchy.Level];
    Tab_SetCurrentTab ();
   }
 
@@ -5348,7 +5362,7 @@ void Act_AdjustCurrentAction (void)
 
             /***** Check if it is mandatory to read any information about course *****/
             if (Gbl.Action.Act == ActMnu)	// Do the following check sometimes, for example when the user changes the current tab
-               Gbl.CurrentCrs.Info.ShowMsgMustBeRead = Inf_GetIfIMustReadAnyCrsInfoInThisCrs ();
+               Gbl.Hierarchy.Crs.Info.ShowMsgMustBeRead = Inf_GetIfIMustReadAnyCrsInfoInThisCrs ();
             break;
          case Rol_NET:
             break;

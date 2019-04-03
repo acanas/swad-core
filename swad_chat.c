@@ -208,7 +208,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	        "%s %s",
 		Txt_Degree,Deg.ShrtName);
       Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,1,IsLastItemInLevel);
-      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
+      Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
       Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 
       /* Get my courses in this degree from database */

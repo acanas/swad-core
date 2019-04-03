@@ -144,6 +144,6 @@ void For_CutThread (void);
 void For_PasteThread (void);
 void For_RemoveUsrFromThrClipboard (long UsrCod);
 
-void For_RemoveForums (Sco_Scope_t Scope,long ForumLocation);
+void For_RemoveForums (Hie_Level_t Scope,long ForumLocation);
 
 #endif

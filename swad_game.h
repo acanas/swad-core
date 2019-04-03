@@ -46,7 +46,7 @@ typedef enum
 struct Game
   {
    long GamCod;
-   Sco_Scope_t Scope;
+   Hie_Level_t Scope;
    long Cod;		// Country, institution, centre, degree or course code
    unsigned Roles;	// Example: if game can be made by students, Roles == (1 << Rol_STD)
    long UsrCod;
@@ -108,7 +108,7 @@ void Gam_RecFormGame (void);
 bool Gam_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod);
 void Gam_RemoveGroup (long GrpCod);
 void Gam_RemoveGroupsOfType (long GrpTypCod);
-void Gam_RemoveGames (Sco_Scope_t Scope,long Cod);
+void Gam_RemoveGames (Hie_Level_t Scope,long Cod);
 
 void Gam_RequestNewQuestion (void);
 
@@ -128,8 +128,8 @@ void Gam_ReceiveGameAnswers (void);
 void Gam_PlayGameNextQuestion (void);
 void Gam_PlayGameShowAnswers (void);
 
-unsigned Gam_GetNumCoursesWithGames (Sco_Scope_t Scope);
-unsigned Gam_GetNumGames (Sco_Scope_t Scope);
-float Gam_GetNumQstsPerCrsGame (Sco_Scope_t Scope);
+unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);
+unsigned Gam_GetNumGames (Hie_Level_t Scope);
+float Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope);
 
 #endif

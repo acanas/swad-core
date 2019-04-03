@@ -446,74 +446,58 @@ struct Globals
      } Agenda;
    struct
      {
-      Sco_Scope_t Current;
-      Sco_Scope_t Default;
+      Hie_Level_t Current;
+      Hie_Level_t Default;
       unsigned Allowed;
      } Scope;
    struct
      {
-      Sco_Scope_t Scope;
-      long Cod;
-     } Hierarchy;
-   struct
-     {
+      Hie_Level_t Level;	// Current level in the hierarchy: system, country, institution, centre, degree or course
+      long Cod;			// Code of the current country, institution, centre, degree or course
       struct Country Cty;
-     } CurrentCty;
-   struct
-     {
       struct Instit Ins;
-     } CurrentIns;
-   struct
-     {
       struct DegreeType DegTyp;
-     } CurrentDegTyp;
-   struct
-     {
       struct Centre Ctr;
-     } CurrentCtr;
-   struct
-     {
       struct Degree Deg;
-      unsigned NumCrss;
-     } CurrentDeg;
-   struct
-     {
-      struct Course Crs;
-      char PathPriv[PATH_MAX + 1];   // Absolute path to the private directory of the course
-      char PathRelPubl[PATH_MAX + 1];   // Relative path to the public directory of the course
-      char PathURLPubl[PATH_MAX + 1];   // Abolute URL to the public part of the course
-      struct
-        {
-         unsigned NumGrps;
-         struct GroupTypes GrpTypes;
-         struct GroupType GrpTyp;
-         long GrpCod;		// Group to be edited, removed...
-         char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
-         long ClaCod;
-         unsigned MaxStudents;
-         bool Open;
-         bool FileZones;
-         struct ListCodGrps LstGrpsSel;
-         Grp_WhichGroups_t WhichGrps;	// Show my groups or all groups
-        } Grps;
       struct
 	{
-         Inf_InfoType_t Type;
-	 char URL[Cns_MAX_BYTES_WWW + 1];
-         bool MustBeRead[Inf_NUM_INFO_TYPES];	// Students must read info?
-         bool ShowMsgMustBeRead;
-	} Info;
-      struct
-        {
-         struct RecordField Field;
-         struct LstRecordFields LstFields;
-        } Records;
-      struct
-        {
-         long NotCod;		// Notice to be edited, removed... used as parameter
-         long HighlightNotCod;	// Notice code of a notice to be highlighted
-        } Notices;
-     } CurrentCrs;
+	 struct Course Crs;
+	 char PathPriv[PATH_MAX + 1];   // Absolute path to the private directory of the course
+	 char PathRelPubl[PATH_MAX + 1];   // Relative path to the public directory of the course
+	 char PathURLPubl[PATH_MAX + 1];   // Abolute URL to the public part of the course
+	 struct
+	   {
+	    unsigned NumGrps;
+	    struct GroupTypes GrpTypes;
+	    struct GroupType GrpTyp;
+	    long GrpCod;		// Group to be edited, removed...
+	    char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
+	    long ClaCod;
+	    unsigned MaxStudents;
+	    bool Open;
+	    bool FileZones;
+	    struct ListCodGrps LstGrpsSel;
+	    Grp_WhichGroups_t WhichGrps;	// Show my groups or all groups
+	   } Grps;
+	 struct
+	   {
+	    Inf_InfoType_t Type;
+	    char URL[Cns_MAX_BYTES_WWW + 1];
+	    bool MustBeRead[Inf_NUM_INFO_TYPES];	// Students must read info?
+	    bool ShowMsgMustBeRead;
+	   } Info;
+	 struct
+	   {
+	    struct RecordField Field;
+	    struct LstRecordFields LstFields;
+	   } Records;
+	 struct
+	   {
+	    long NotCod;		// Notice to be edited, removed... used as parameter
+	    long HighlightNotCod;	// Notice code of a notice to be highlighted
+	   } Notices;
+	} Crs;
+     } Hierarchy;
    struct
      {
       char PathDir[PATH_MAX + 1];

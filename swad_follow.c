@@ -1427,7 +1427,7 @@ void Fol_GetAndShowRankingFollowers (void)
    /***** Get ranking from database *****/
    switch (Gbl.Scope.Current)
      {
-      case Sco_SCOPE_SYS:
+      case Hie_SYS:
 	 NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT FollowedCod,COUNT(FollowerCod) AS N"
@@ -1435,7 +1435,7 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " GROUP BY FollowedCod"
 				    " ORDER BY N DESC,FollowedCod LIMIT 100");
          break;
-      case Sco_SCOPE_CTY:
+      case Hie_CTY:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
@@ -1448,9 +1448,9 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
 				    " GROUP BY usr_follow.FollowedCod"
 				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-				    Gbl.CurrentCty.Cty.CtyCod);
+				    Gbl.Hierarchy.Cty.CtyCod);
          break;
-      case Sco_SCOPE_INS:
+      case Hie_INS:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
@@ -1462,9 +1462,9 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
 				    " GROUP BY usr_follow.FollowedCod"
 				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-				    Gbl.CurrentIns.Ins.InsCod);
+				    Gbl.Hierarchy.Ins.InsCod);
          break;
-      case Sco_SCOPE_CTR:
+      case Hie_CTR:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
@@ -1475,9 +1475,9 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
 				    " GROUP BY usr_follow.FollowedCod"
 				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-				    Gbl.CurrentCtr.Ctr.CtrCod);
+				    Gbl.Hierarchy.Ctr.CtrCod);
          break;
-      case Sco_SCOPE_DEG:
+      case Hie_DEG:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
@@ -1487,9 +1487,9 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
 				    " GROUP BY usr_follow.FollowedCod"
 				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-				    Gbl.CurrentDeg.Deg.DegCod);
+				    Gbl.Hierarchy.Deg.DegCod);
          break;
-      case Sco_SCOPE_CRS:
+      case Hie_CRS:
          NumUsrs =
          (unsigned) DB_QuerySELECT (&mysql_res,"can not get ranking",
 				    "SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
@@ -1498,7 +1498,7 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
 				    " GROUP BY usr_follow.FollowedCod"
 				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-				    Gbl.CurrentCrs.Crs.CrsCod);
+				    Gbl.Hierarchy.Crs.Crs.CrsCod);
          break;
       default:
          Lay_WrongScopeExit ();

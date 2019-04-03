@@ -719,7 +719,7 @@ static bool TsI_CheckIfQuestionExistsInDB (void)
 					     " if a question exists",
 			      "SELECT QstCod FROM tst_questions"
 			      " WHERE CrsCod=%ld AND AnsType='%s' AND Stem='%s'",
-			      Gbl.CurrentCrs.Crs.CrsCod,
+			      Gbl.Hierarchy.Crs.Crs.CrsCod,
 			      Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
 			      Gbl.Test.Stem.Text);
 

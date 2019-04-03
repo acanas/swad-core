@@ -70,7 +70,7 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
    extern const char *Txt_Centre;
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
-   Sco_Scope_t Scope;
+   Hie_Level_t Scope;
    bool WriteScope;
 
    fprintf (Gbl.F.Out,"<select id=\"%s\" name=\"%s\"",ParamName,ParamName);
@@ -79,8 +79,8 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
                Gbl.Form.Id);
    fprintf (Gbl.F.Out,">");
 
-   for (Scope = (Sco_Scope_t) 0;
-	Scope < Sco_NUM_SCOPES;
+   for (Scope = (Hie_Level_t) 0;
+	Scope < Hie_NUM_LEVELS;
 	Scope++)
       if ((Gbl.Scope.Allowed & (1 << Scope)))
 	{
@@ -88,27 +88,27 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
 	 WriteScope = false;
 	 switch (Scope)
 	   {
-	    case Sco_SCOPE_SYS:
+	    case Hie_SYS:
 	       WriteScope = true;
 	       break;
-	    case Sco_SCOPE_CTY:
-	       if (Gbl.CurrentCty.Cty.CtyCod > 0)
+	    case Hie_CTY:
+	       if (Gbl.Hierarchy.Cty.CtyCod > 0)
 		  WriteScope = true;
 	       break;
-	    case Sco_SCOPE_INS:
-	       if (Gbl.CurrentIns.Ins.InsCod > 0)
+	    case Hie_INS:
+	       if (Gbl.Hierarchy.Ins.InsCod > 0)
 		  WriteScope = true;
 	       break;
-	    case Sco_SCOPE_CTR:
-	       if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	    case Hie_CTR:
+	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)
 		  WriteScope = true;
 	       break;
-	    case Sco_SCOPE_DEG:
-	       if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	    case Hie_DEG:
+	       if (Gbl.Hierarchy.Deg.DegCod > 0)
 		  WriteScope = true;
 	       break;
-	    case Sco_SCOPE_CRS:
-	       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	    case Hie_CRS:
+	       if (Gbl.Hierarchy.Level == Hie_CRS)
 		  WriteScope = true;
 	       break;
 	    default:
@@ -125,34 +125,34 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
 	    fprintf (Gbl.F.Out,">");
 	    switch (Scope)
 	      {
-	       case Sco_SCOPE_SYS:
+	       case Hie_SYS:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_System,Cfg_PLATFORM_SHORT_NAME);
 		  break;
-	       case Sco_SCOPE_CTY:
+	       case Hie_CTY:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Country,
-			   Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+			   Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 		  break;
-	       case Sco_SCOPE_INS:
+	       case Hie_INS:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Institution,
-			   Gbl.CurrentIns.Ins.ShrtName);
+			   Gbl.Hierarchy.Ins.ShrtName);
 		  break;
-	       case Sco_SCOPE_CTR:
+	       case Hie_CTR:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Centre,
-			   Gbl.CurrentCtr.Ctr.ShrtName);
+			   Gbl.Hierarchy.Ctr.ShrtName);
 		  break;
-	       case Sco_SCOPE_DEG:
+	       case Hie_DEG:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Degree,
-			   Gbl.CurrentDeg.Deg.ShrtName);
+			   Gbl.Hierarchy.Deg.ShrtName);
 		  break;
-	       case Sco_SCOPE_CRS:
+	       case Hie_CRS:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Course,
-			   Gbl.CurrentCrs.Crs.ShrtName);
+			   Gbl.Hierarchy.Crs.Crs.ShrtName);
 		  break;
 	       default:
 		  Lay_WrongScopeExit ();
@@ -169,7 +169,7 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
 /********************** Put hidden parameter scope ***************************/
 /*****************************************************************************/
 
-void Sco_PutParamScope (const char *ParamName,Sco_Scope_t Scope)
+void Sco_PutParamScope (const char *ParamName,Hie_Level_t Scope)
   {
    Par_PutHiddenParamUnsigned (ParamName,(unsigned) Scope);
   }
@@ -181,11 +181,11 @@ void Sco_PutParamScope (const char *ParamName,Sco_Scope_t Scope)
 void Sco_GetScope (const char *ParamName)
   {
    /***** Get parameter with scope *****/
-   Gbl.Scope.Current = (Sco_Scope_t)
+   Gbl.Scope.Current = (Hie_Level_t)
 	               Par_GetParToUnsignedLong (ParamName,
                                                  0,
-                                                 Sco_NUM_SCOPES - 1,
-                                                 (unsigned long) Sco_SCOPE_UNK);
+                                                 Hie_NUM_LEVELS - 1,
+                                                 (unsigned long) Hie_UNK);
 
    /***** Adjust scope avoiding impossible or forbidden scopes *****/
    Sco_AdjustScope ();
@@ -198,28 +198,28 @@ void Sco_GetScope (const char *ParamName)
 void Sco_AdjustScope (void)
   {
    /***** Is scope is unknow, use default scope *****/
-   if (Gbl.Scope.Current == Sco_SCOPE_UNK)
+   if (Gbl.Scope.Current == Hie_UNK)
       Gbl.Scope.Current = Gbl.Scope.Default;
 
    /***** Avoid impossible scopes *****/
-   if (Gbl.Scope.Current == Sco_SCOPE_CRS && Gbl.CurrentCrs.Crs.CrsCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_DEG;
+   if (Gbl.Scope.Current == Hie_CRS && Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)
+      Gbl.Scope.Current = Hie_DEG;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_DEG && Gbl.CurrentDeg.Deg.DegCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_CTR;
+   if (Gbl.Scope.Current == Hie_DEG && Gbl.Hierarchy.Deg.DegCod <= 0)
+      Gbl.Scope.Current = Hie_CTR;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_CTR && Gbl.CurrentCtr.Ctr.CtrCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_INS;
+   if (Gbl.Scope.Current == Hie_CTR && Gbl.Hierarchy.Ctr.CtrCod <= 0)
+      Gbl.Scope.Current = Hie_INS;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_INS && Gbl.CurrentIns.Ins.InsCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_CTY;
+   if (Gbl.Scope.Current == Hie_INS && Gbl.Hierarchy.Ins.InsCod <= 0)
+      Gbl.Scope.Current = Hie_CTY;
 
-   if (Gbl.Scope.Current == Sco_SCOPE_CTY && Gbl.CurrentCty.Cty.CtyCod <= 0)
-      Gbl.Scope.Current = Sco_SCOPE_SYS;
+   if (Gbl.Scope.Current == Hie_CTY && Gbl.Hierarchy.Cty.CtyCod <= 0)
+      Gbl.Scope.Current = Hie_SYS;
 
    /***** Avoid forbidden scopes *****/
    if ((Gbl.Scope.Allowed & (1 << Gbl.Scope.Current)) == 0)
-      Gbl.Scope.Current = Sco_SCOPE_UNK;
+      Gbl.Scope.Current = Hie_UNK;
   }
 
 /*****************************************************************************/
@@ -231,24 +231,24 @@ void Sco_SetScopesForListingGuests (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_CTR_ADM:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CTR;
-	 Gbl.Scope.Default = Sco_SCOPE_CTR;
+	 Gbl.Scope.Allowed = 1 << Hie_CTR;
+	 Gbl.Scope.Default = Hie_CTR;
 	 break;
       case Rol_INS_ADM:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_INS |
-		             1 << Sco_SCOPE_CTR;
-	 Gbl.Scope.Default = Sco_SCOPE_INS;
+	 Gbl.Scope.Allowed = 1 << Hie_INS |
+		             1 << Hie_CTR;
+	 Gbl.Scope.Default = Hie_INS;
 	 break;
       case Rol_SYS_ADM:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	                     1 << Sco_SCOPE_CTY |
-		             1 << Sco_SCOPE_INS |
-		             1 << Sco_SCOPE_CTR;
-	 Gbl.Scope.Default = Sco_SCOPE_SYS;
+	 Gbl.Scope.Allowed = 1 << Hie_SYS |
+	                     1 << Hie_CTY |
+		             1 << Hie_INS |
+		             1 << Hie_CTR;
+	 Gbl.Scope.Default = Hie_SYS;
 	 break;
       default:
       	 Gbl.Scope.Allowed = 0;
-      	 Gbl.Scope.Default = Sco_SCOPE_UNK;
+      	 Gbl.Scope.Default = Hie_UNK;
 	 break;
      }
   }
@@ -259,40 +259,40 @@ void Sco_SetScopesForListingGuests (void)
 
 void Sco_SetScopesForListingStudents (void)
   {
-   Gbl.Scope.Default = Sco_SCOPE_CRS;
+   Gbl.Scope.Default = Hie_CRS;
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CRS;
+	 Gbl.Scope.Allowed = 1 << Hie_CRS;
 	 break;
       case Rol_DEG_ADM:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_DEG |
-		             1 << Sco_SCOPE_CRS;
+	 Gbl.Scope.Allowed = 1 << Hie_DEG |
+		             1 << Hie_CRS;
 	 break;
       case Rol_CTR_ADM:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CTR |
-		             1 << Sco_SCOPE_DEG |
-		             1 << Sco_SCOPE_CRS;
+	 Gbl.Scope.Allowed = 1 << Hie_CTR |
+		             1 << Hie_DEG |
+		             1 << Hie_CRS;
 	 break;
       case Rol_INS_ADM:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_INS |
-		             1 << Sco_SCOPE_CTR |
-		             1 << Sco_SCOPE_DEG |
-		             1 << Sco_SCOPE_CRS;
+	 Gbl.Scope.Allowed = 1 << Hie_INS |
+		             1 << Hie_CTR |
+		             1 << Hie_DEG |
+		             1 << Hie_CRS;
 	 break;
       case Rol_SYS_ADM:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	                     1 << Sco_SCOPE_CTY |
-		             1 << Sco_SCOPE_INS |
-		             1 << Sco_SCOPE_CTR |
-		             1 << Sco_SCOPE_DEG |
-		             1 << Sco_SCOPE_CRS;
+	 Gbl.Scope.Allowed = 1 << Hie_SYS |
+	                     1 << Hie_CTY |
+		             1 << Hie_INS |
+		             1 << Hie_CTR |
+		             1 << Hie_DEG |
+		             1 << Hie_CRS;
 	 break;
       default:
       	 Gbl.Scope.Allowed = 0;
-      	 Gbl.Scope.Default = Sco_SCOPE_UNK;
+      	 Gbl.Scope.Default = Hie_UNK;
 	 break;
      }
   }
@@ -301,53 +301,53 @@ void Sco_SetScopesForListingStudents (void)
 /*********************** Get scope from unsigned string **********************/
 /*****************************************************************************/
 
-Sco_Scope_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr)
+Hie_Level_t Sco_GetScopeFromUnsignedStr (const char *UnsignedStr)
   {
    unsigned UnsignedNum;
 
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Sco_NUM_SCOPES)
-         return (Sco_Scope_t) UnsignedNum;
+      if (UnsignedNum < Hie_NUM_LEVELS)
+         return (Hie_Level_t) UnsignedNum;
 
-   return Sco_SCOPE_UNK;
+   return Hie_UNK;
   }
 
 /*****************************************************************************/
 /*********************** Get scope from database string **********************/
 /*****************************************************************************/
 
-Sco_Scope_t Sco_GetScopeFromDBStr (const char *ScopeDBStr)
+Hie_Level_t Sco_GetScopeFromDBStr (const char *ScopeDBStr)
   {
-   Sco_Scope_t Scope;
+   Hie_Level_t Scope;
 
-   for (Scope = Sco_SCOPE_UNK;
-	Scope < Sco_NUM_SCOPES;
+   for (Scope = Hie_UNK;
+	Scope < Hie_NUM_LEVELS;
 	Scope++)
       if (!strcmp (Sco_GetDBStrFromScope (Scope),ScopeDBStr))
 	 return Scope;
 
-   return Sco_SCOPE_UNK;
+   return Hie_UNK;
   }
 
 /*****************************************************************************/
 /*********************** Get scope from database string **********************/
 /*****************************************************************************/
 
-const char *Sco_GetDBStrFromScope (Sco_Scope_t Scope)
+const char *Sco_GetDBStrFromScope (Hie_Level_t Scope)
   {
-   static const char *Sco_ScopeDB[Sco_NUM_SCOPES] =
+   static const char *Sco_ScopeDB[Hie_NUM_LEVELS] =
      {
-      "Unk",	// Sco_SCOPE_UNK
-      "Sys",	// Sco_SCOPE_SYS
-      "Cty",	// Sco_SCOPE_CTY
-      "Ins",	// Sco_SCOPE_INS
-      "Ctr",	// Sco_SCOPE_CTR
-      "Deg",	// Sco_SCOPE_DEG
-      "Crs",	// Sco_SCOPE_CRS
+      "Unk",	// Hie_UNK
+      "Sys",	// Hie_SYS
+      "Cty",	// Hie_CTY
+      "Ins",	// Hie_INS
+      "Ctr",	// Hie_CTR
+      "Deg",	// Hie_DEG
+      "Crs",	// Hie_CRS
      };
 
-   if (Scope >= Sco_NUM_SCOPES)
-      Scope = Sco_SCOPE_UNK;
+   if (Scope >= Hie_NUM_LEVELS)
+      Scope = Hie_UNK;
 
    return Sco_ScopeDB[Scope];
   }

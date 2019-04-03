@@ -1070,7 +1070,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
             case For_FORUM_COURSE_TCHS:
             case For_FORUM_COURSE_USRS:
                Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_POST_COURSE,
-           	                    PstCod,Gbl.CurrentCrs.Crs.CrsCod,
+           	                    PstCod,Gbl.Hierarchy.Crs.Crs.CrsCod,
            	                    Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             default:
@@ -1591,12 +1591,12 @@ static void For_ShowForumList (void)
    switch (Gbl.Forum.ForumSet)
      {
       case For_ONLY_CURRENT_FORUMS:
-	 if (Gbl.CurrentIns.Ins.InsCod > 0)
+	 if (Gbl.Hierarchy.Ins.InsCod > 0)
 	   {
 	    if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 	       ICanSeeInsForum = true;
 	    else
-	       ICanSeeInsForum = Usr_CheckIfIBelongToIns (Gbl.CurrentIns.Ins.InsCod);
+	       ICanSeeInsForum = Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod);
 	   }
 	 else
 	    ICanSeeInsForum = false;
@@ -1609,10 +1609,10 @@ static void For_ShowForumList (void)
             if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 	       ICanSeeCtrForum = true;
 	    else
-	       ICanSeeCtrForum = Usr_CheckIfIBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod);
+	       ICanSeeCtrForum = Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod);
 
 	    /***** Links to forums of current institution *****/
-	    if (For_WriteLinksToInsForums (Gbl.CurrentIns.Ins.InsCod,
+	    if (For_WriteLinksToInsForums (Gbl.Hierarchy.Ins.InsCod,
 	                                   true,
 	                                   IsLastItemInLevel) > 0)
                if (ICanSeeCtrForum)
@@ -1620,21 +1620,21 @@ static void For_ShowForumList (void)
         	  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeDegForum = true;
 		  else
-		     ICanSeeDegForum = Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod);
+		     ICanSeeDegForum = Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod);
 
 		  /***** Links to forums of current centre *****/
-		  if (For_WriteLinksToCtrForums (Gbl.CurrentCtr.Ctr.CtrCod,
+		  if (For_WriteLinksToCtrForums (Gbl.Hierarchy.Ctr.CtrCod,
 		                                 true,
 		                                 IsLastItemInLevel) > 0)
 		     if (ICanSeeDegForum)
 			/***** Links to forums of current degree *****/
-			if (For_WriteLinksToDegForums (Gbl.CurrentDeg.Deg.DegCod,
+			if (For_WriteLinksToDegForums (Gbl.Hierarchy.Deg.DegCod,
 			                               true,
 			                               IsLastItemInLevel) > 0)
 			   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
 			       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 			      /***** Links to forums of current degree *****/
-			      For_WriteLinksToCrsForums (Gbl.CurrentCrs.Crs.CrsCod,
+			      For_WriteLinksToCrsForums (Gbl.Hierarchy.Crs.Crs.CrsCod,
 			                                 true,
 			                                 IsLastItemInLevel);
         	 }
@@ -2112,15 +2112,15 @@ static void For_WriteLinkToForum (struct Forum *Forum,
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-         Log_DrawLogo (Sco_SCOPE_INS,Forum->Location,ForumName,16,NULL,true);
+         Log_DrawLogo (Hie_INS,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         Log_DrawLogo (Sco_SCOPE_CTR,Forum->Location,ForumName,16,NULL,true);
+         Log_DrawLogo (Hie_CTR,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         Log_DrawLogo (Sco_SCOPE_DEG,Forum->Location,ForumName,16,NULL,true);
+         Log_DrawLogo (Hie_DEG,Forum->Location,ForumName,16,NULL,true);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
@@ -4592,21 +4592,21 @@ void For_RemoveUsrFromThrClipboard (long UsrCod)
 /********** Remove all the threads and posts in forums of a degree ***********/
 /*****************************************************************************/
 
-void For_RemoveForums (Sco_Scope_t Scope,long ForumLocation)
+void For_RemoveForums (Hie_Level_t Scope,long ForumLocation)
   {
    static const struct
      {
       For_ForumType_t Usrs;
       For_ForumType_t Tchs;
-     } ForumType[Sco_NUM_SCOPES] =
+     } ForumType[Hie_NUM_LEVELS] =
      {
-	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Sco_SCOPE_UNK	// No forums for this scope
-	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Sco_SCOPE_SYS	// Not removable
-	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Sco_SCOPE_CTY	// No forums for this scope
-	{For_FORUM_INSTIT_USRS,For_FORUM_INSTIT_TCHS},	// Sco_SCOPE_INS
-	{For_FORUM_CENTRE_USRS,For_FORUM_CENTRE_TCHS},	// Sco_SCOPE_CTR
-	{For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS},	// Sco_SCOPE_DEG
-	{For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS},	// Sco_SCOPE_CRS
+	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Hie_UNK	// No forums for this scope
+	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Hie_SYS	// Not removable
+	{For_FORUM_GLOBAL_USRS,For_FORUM_GLOBAL_TCHS},	// Hie_CTY	// No forums for this scope
+	{For_FORUM_INSTIT_USRS,For_FORUM_INSTIT_TCHS},	// Hie_INS
+	{For_FORUM_CENTRE_USRS,For_FORUM_CENTRE_TCHS},	// Hie_CTR
+	{For_FORUM_DEGREE_USRS,For_FORUM_DEGREE_TCHS},	// Hie_DEG
+	{For_FORUM_COURSE_USRS,For_FORUM_COURSE_TCHS},	// Hie_CRS
      };
 
    /***** Remove disabled posts *****/

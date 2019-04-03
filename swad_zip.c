@@ -326,7 +326,7 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
    /* Create path to folder and link */
    snprintf (PathFolderUsrInsideCrs,sizeof (PathFolderUsrInsideCrs),
 	     "%s/usr/%02u/%ld",
-	     Gbl.CurrentCrs.PathPriv,
+	     Gbl.Hierarchy.Crs.PathPriv,
 	     (unsigned) (UsrDat->UsrCod % 100),
 	     UsrDat->UsrCod);
    snprintf (LinkTmpUsr,sizeof (LinkTmpUsr),

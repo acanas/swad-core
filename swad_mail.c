@@ -864,7 +864,7 @@ void Mai_ListEmails (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order list of students in this course *****/
-   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_CRS,Rol_STD);
 
    /***** Start the box used to list the emails *****/
    Box_StartBox (NULL,Txt_Students_who_have_accepted_and_who_have_email,NULL,
@@ -916,7 +916,7 @@ void Mai_ListEmails (void)
 		  Str_Concat (StrAddresses,UsrDat.Email,
 		              Mai_MAX_BYTES_STR_ADDR);
 		  fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">%s</a>",
-			   UsrDat.Email,Gbl.CurrentCrs.Crs.FullName,UsrDat.Email);
+			   UsrDat.Email,Gbl.Hierarchy.Crs.Crs.FullName,UsrDat.Email);
 
 		  NumAcceptedStdsWithEmail++;
 		 }
@@ -950,7 +950,7 @@ void Mai_ListEmails (void)
                             "<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
                             " title=\"%s\" class=\"%s\">",
                   Gbl.Usrs.Me.UsrDat.Email,
-	          Gbl.CurrentCrs.Crs.FullName,
+	          Gbl.Hierarchy.Crs.Crs.FullName,
 	          Gbl.Usrs.Me.UsrDat.Email,
 	          StrAddresses,
                   Txt_Create_email_message,
@@ -1872,17 +1872,17 @@ bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */
 	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,
-	                                    Gbl.CurrentDeg.Deg.DegCod);
+	                                    Gbl.Hierarchy.Deg.DegCod);
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current centre,
 	    I only can see the user's email of users from current centre */
 	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,
-	                                    Gbl.CurrentCtr.Ctr.CtrCod);
+	                                    Gbl.Hierarchy.Ctr.CtrCod);
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can see the user's email of users from current institution */
 	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,
-	                                    Gbl.CurrentIns.Ins.InsCod);
+	                                    Gbl.Hierarchy.Ins.InsCod);
       case Rol_SYS_ADM:
 	 return true;
       default:

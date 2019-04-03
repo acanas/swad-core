@@ -251,8 +251,7 @@
 #define Cfg_AUTOMATIC_EMAIL_PASSWORD	DONT_PUBLISH_SMTP_PASSWORD	// Email user's password for automatic emails
 
 /* About SWAD */
-#define Cfg_ABOUT_SWAD_URL		"http://openswad.org/info/"
-#define Cfg_HOW_TO_COLLABORATE_URL	"http://swad.ugr.es/wiki/index.php/Colaborar"
+#define Cfg_ABOUT_SWAD_URL		"https://github.com/acanas/swad-core/wiki/UserGuide.en"
 
 /* Link to download Java: keep updated! */
 #define Cfg_JAVA_URL			"http://www.java.com/es/download/"

@@ -232,7 +232,7 @@ static void TT_ShowTimeTableGrpsSelected (void)
    extern const char *Txt_All_groups;
 
    fprintf (Gbl.F.Out,"<div class=\"CLASSPHOTO_TITLE CENTER_MIDDLE\">");
-   switch (Gbl.CurrentCrs.Grps.WhichGrps)
+   switch (Gbl.Hierarchy.Crs.Grps.WhichGrps)
      {
       case Grp_ONLY_MY_GROUPS:
         fprintf (Gbl.F.Out,Txt_Groups_OF_A_USER,
@@ -364,7 +364,7 @@ void TT_ShowClassTimeTable (void)
    /***** Start time table drawing *****/
    if (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE)
       Lay_WriteHeaderClassPhoto (PrintView,false,
-				 Gbl.CurrentIns.Ins.InsCod,Gbl.CurrentDeg.Deg.DegCod,Gbl.CurrentCrs.Crs.CrsCod);
+				 Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
 
    if (PrintView)
       /***** Show whether only my groups or all groups are selected *****/
@@ -377,7 +377,7 @@ void TT_ShowClassTimeTable (void)
       /* Select whether show only my groups or all groups */
       if ( Gbl.TimeTable.Type == TT_MY_TIMETABLE ||
           (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE &&
-           Gbl.CurrentCrs.Grps.NumGrps))
+           Gbl.Hierarchy.Crs.Grps.NumGrps))
          TT_PutFormToSelectWhichGroupsToShow ();
 
       /* Show form to change first day of week */
@@ -536,7 +536,7 @@ void TT_ShowTimeTable (long UsrCod)
       switch (Gbl.TimeTable.Type)
         {
          case TT_COURSE_TIMETABLE:
-            TT_WriteCrsTimeTableIntoDB (Gbl.CurrentCrs.Crs.CrsCod);
+            TT_WriteCrsTimeTableIntoDB (Gbl.Hierarchy.Crs.Crs.CrsCod);
 	    break;
          case TT_TUTORING_TIMETABLE:
             TT_WriteTutTimeTableIntoDB (UsrCod);
@@ -681,7 +681,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
    switch (Gbl.TimeTable.Type)
      {
       case TT_MY_TIMETABLE:
-         switch (Gbl.CurrentCrs.Grps.WhichGrps)
+         switch (Gbl.Hierarchy.Crs.Grps.WhichGrps)
            {
             case Grp_ONLY_MY_GROUPS:
                NumRows = DB_QuerySELECT (&mysql_res,"can not get timetable",
@@ -750,7 +750,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
            }
 	 break;
       case TT_COURSE_TIMETABLE:
-         if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS ||
+         if (Gbl.Hierarchy.Crs.Grps.WhichGrps == Grp_ALL_GROUPS ||
              Gbl.Action.Act == ActEdiCrsTT ||
              Gbl.Action.Act == ActChgCrsTT)	// If we are editing, all groups are shown
             NumRows = DB_QuerySELECT (&mysql_res,"can not get timetable",
@@ -764,7 +764,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 				      " WHERE CrsCod=%ld"
 				      " ORDER BY Weekday,S,ClassType,"
 				      "GrpCod,Info,D DESC",
-				      Gbl.CurrentCrs.Crs.CrsCod);
+				      Gbl.Hierarchy.Crs.Crs.CrsCod);
          else
             NumRows = DB_QuerySELECT (&mysql_res,"can not get timetable",
 				      "SELECT timetable_crs.Weekday,"
@@ -790,8 +790,8 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 				      " AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
 				      " ORDER BY Weekday,S,ClassType,"
 				      "GrpCod,Info,D DESC",
-				      Gbl.CurrentCrs.Crs.CrsCod,UsrCod,
-				      Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
+				      Gbl.Hierarchy.Crs.Crs.CrsCod,UsrCod,
+				      Gbl.Hierarchy.Crs.Crs.CrsCod,UsrCod);
 	 break;
       case TT_TUTORING_TIMETABLE:
          NumRows = DB_QuerySELECT (&mysql_res,"can not get timetable",
@@ -981,7 +981,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 			/* Course code (row[6]) */
 			TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].CrsCod =
 			   (Gbl.TimeTable.Type == TT_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[6]) :
-								    Gbl.CurrentCrs.Crs.CrsCod);
+								    Gbl.Hierarchy.Crs.Crs.CrsCod);
 			/* falls through */
 			/* no break */
 		     case TT_TUTORING_TIMETABLE:
@@ -1639,10 +1639,10 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		  fprintf (Gbl.F.Out," selected=\"selected\"");
                fprintf (Gbl.F.Out,">%s</option>",Txt_All_groups);
                for (NumGrpTyp = 0;
-        	    NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
+        	    NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
         	    NumGrpTyp++)
                  {
-                  GrpTyp = &Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+                  GrpTyp = &Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
 
                   for (NumGrp = 0;
                        NumGrp < GrpTyp->NumGrps;

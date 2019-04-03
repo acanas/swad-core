@@ -332,7 +332,7 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_CANVAS\">");
 
    /* If it is mandatory to read any information about course */
-   if (Gbl.CurrentCrs.Info.ShowMsgMustBeRead)
+   if (Gbl.Hierarchy.Crs.Info.ShowMsgMustBeRead)
       Inf_WriteMsgYouMustReadInfo ();
 
    /* Write title of the current action */
@@ -405,14 +405,14 @@ static void Lay_WritePageTitle (void)
 
    fprintf (Gbl.F.Out,"<title>");
 
-   if (Gbl.Params.GetMethod && Gbl.CurrentDeg.Deg.DegCod > 0)
+   if (Gbl.Params.GetMethod && Gbl.Hierarchy.Deg.DegCod > 0)
      {
       fprintf (Gbl.F.Out,"%s &gt; %s",
 	       Cfg_PLATFORM_SHORT_NAME,
-	       Gbl.CurrentDeg.Deg.ShrtName);
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	       Gbl.Hierarchy.Deg.ShrtName);
+      if (Gbl.Hierarchy.Level == Hie_CRS)
          fprintf (Gbl.F.Out," &gt; %s",
-                  Gbl.CurrentCrs.Crs.ShrtName);
+                  Gbl.Hierarchy.Crs.Crs.ShrtName);
      }
    else
       fprintf (Gbl.F.Out,"%s: %s",
@@ -479,7 +479,7 @@ static void Lay_WriteScripts (void)
 
    /***** Prepare script to draw months *****/
    if ((Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN) ||	// Left column visible
-       (Gbl.CurrentIns.Ins.InsCod > 0 &&		// Institution selected
+       (Gbl.Hierarchy.Ins.InsCod > 0 &&		// Institution selected
         (Gbl.Action.Act == ActSeeCal ||			// Viewing calendar
          Gbl.Action.Act == ActPrnCal ||			// Printing calendar
          Gbl.Action.Act == ActChgCal1stDay)))		// Changing first day
@@ -519,7 +519,7 @@ static void Lay_WriteScripts (void)
       fprintf (Gbl.F.Out,"];\n");
 
       fprintf (Gbl.F.Out,"	var STR_EXAM = '");
-      fprintf (Gbl.F.Out,Txt_Exam_of_X,Gbl.CurrentCrs.Crs.FullName);
+      fprintf (Gbl.F.Out,Txt_Exam_of_X,Gbl.Hierarchy.Crs.Crs.FullName);
       fprintf (Gbl.F.Out,"';\n");
 
       fprintf (Gbl.F.Out,"	var Hlds = [];\n");
@@ -775,7 +775,7 @@ static void Lay_WriteScriptParamsAJAX (void)
                       "var RefreshParamCrsCod = \"crs=%ld\";\n"
                       "</script>\n",
             Gbl.Session.Id,
-            Gbl.CurrentCrs.Crs.CrsCod);
+            Gbl.Hierarchy.Crs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -1002,7 +1002,7 @@ static void Lay_ShowLeftColumn (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Notices (yellow notes) *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+   if (Gbl.Hierarchy.Level == Hie_CRS)
      {
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
       Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
@@ -1036,11 +1036,11 @@ static void Lay_ShowRightColumn (void)
      }
 
    /***** Number of connected users in the current course *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// There is a course selected
+   if (Gbl.Hierarchy.Level == Hie_CRS)	// There is a course selected
      {
       fprintf (Gbl.F.Out,"<div id=\"courseconnected\""	// Used for AJAX based refresh
 	                 " class=\"LEFT_RIGHT_CELL\">");
-      Gbl.Scope.Current = Sco_SCOPE_CRS;
+      Gbl.Scope.Current = Hie_CRS;
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
       fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
      }
@@ -1433,7 +1433,7 @@ void Lay_RefreshNotifsAndConnected (void)
   {
    unsigned NumUsr;
    bool ShowConnected = (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&
-                        Gbl.CurrentCrs.Crs.CrsCod > 0;	// Right column visible && There is a course selected
+                        Gbl.Hierarchy.Level == Hie_CRS;	// Right column visible && There is a course selected
 
    /***** Sometimes, someone must do this work,
           so who best than processes that refresh via AJAX? *****/
@@ -1474,7 +1474,7 @@ void Lay_RefreshNotifsAndConnected (void)
    fprintf (Gbl.F.Out,"|");
    if (ShowConnected)
      {
-      Gbl.Scope.Current = Sco_SCOPE_CRS;
+      Gbl.Scope.Current = Hie_CRS;
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
      }
    fprintf (Gbl.F.Out,"|");
@@ -1564,7 +1564,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
      {
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Ins.WWW);
-      Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,40,NULL,true);
+      Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,40,NULL,true);
       if (!PrintView)
         fprintf (Gbl.F.Out,"</a>");
      }
@@ -1614,7 +1614,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
                             " class=\"CLASSPHOTO_TITLE\">",
                   Deg.WWW);
-      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,40,NULL,true);
+      Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,40,NULL,true);
       if (!PrintView)
          fprintf (Gbl.F.Out,"</a>");
      }

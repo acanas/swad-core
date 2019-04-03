@@ -167,8 +167,8 @@ void Cty_SeeCtyWithPendingInss (void)
 
          /* Get country code (row[0]) */
          Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
-         BgColor = (Cty.CtyCod == Gbl.CurrentCty.Cty.CtyCod) ? "LIGHT_BLUE" :
-                                                               Gbl.ColorRows[Gbl.RowEvenOdd];
+         BgColor = (Cty.CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "LIGHT_BLUE" :
+                                                              Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of country */
          Cty_GetDataOfCountryByCod (&Cty,Cty_GET_BASIC_DATA);
@@ -243,215 +243,217 @@ static void Cty_Configuration (bool PrintView)
    extern const char *Txt_Courses;
    extern const char *Txt_Users_of_the_country;
    char *MapAttribution = NULL;
-   bool PutLink = !PrintView && Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language][0];
+   bool PutLink;
 
-   if (Gbl.CurrentCty.Cty.CtyCod > 0)
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Cty.CtyCod <= 0)		// No country selected
+      return;
+
+   /***** Start box *****/
+   if (PrintView)
+      Box_StartBox (NULL,NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
+   else
+      Box_StartBox (NULL,NULL,Cty_PutIconToPrint,
+		    Hlp_COUNTRY_Information,Box_NOT_CLOSABLE);
+
+   /***** Title *****/
+   PutLink = !PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0];
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
+   if (PutLink)
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+			 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
+	       Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
+	       Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+   if (PutLink)
+      fprintf (Gbl.F.Out,"</a>");
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Country map (and link to WWW if exists) *****/
+   if (Cty_CheckIfCountryMapExists (&Gbl.Hierarchy.Cty))
      {
-      /***** Start box *****/
-      if (PrintView)
-	 Box_StartBox (NULL,NULL,NULL,
-		       NULL,Box_NOT_CLOSABLE);
-      else
-	 Box_StartBox (NULL,NULL,Cty_PutIconToPrint,
-		       Hlp_COUNTRY_Information,Box_NOT_CLOSABLE);
+      /* Get map attribution */
+      Cty_GetMapAttribution (Gbl.Hierarchy.Cty.CtyCod,&MapAttribution);
 
-      /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
+      /* Map image */
+      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CENTER_MIDDLE\">");
       if (PutLink)
-	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-	                    " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
-		  Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language],
-		  Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-      fprintf (Gbl.F.Out,"%s",Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",
+		  Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
+      Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,PrintView ? "COUNTRY_MAP_PRINT" :
+							  "COUNTRY_MAP_SHOW");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
       fprintf (Gbl.F.Out,"</div>");
 
-      /***** Country map (and link to WWW if exists) *****/
-      if (Cty_CheckIfCountryMapExists (&Gbl.CurrentCty.Cty))
+      /* Map attribution */
+      if (!PrintView && Cty_CheckIfICanEditCountries ())
 	{
-	 /* Get map attribution */
-	 Cty_GetMapAttribution (Gbl.CurrentCty.Cty.CtyCod,&MapAttribution);
-
-	 /* Map image */
-	 fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CENTER_MIDDLE\">");
-	 if (PutLink)
-	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",
-		     Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language]);
-	 Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,PrintView ? "COUNTRY_MAP_PRINT" :
-			                                     "COUNTRY_MAP_SHOW");
-	 if (PutLink)
-	    fprintf (Gbl.F.Out,"</a>");
+	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+	 Frm_StartForm (ActChgCtyMapAtt);
+	 fprintf (Gbl.F.Out,"<textarea name=\"Attribution\""
+			    " cols=\"50\" rows=\"2\""
+			    " onchange=\"document.getElementById('%s').submit();\">",
+		  Gbl.Form.Id);
+	 if (MapAttribution)
+	    fprintf (Gbl.F.Out,"%s",MapAttribution);
+	 fprintf (Gbl.F.Out,"</textarea>");
+	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</div>");
-
-	 /* Map attribution */
-	 if (!PrintView && Cty_CheckIfICanEditCountries ())
-	   {
-	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-	    Frm_StartForm (ActChgCtyMapAtt);
-	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\""
-		               " cols=\"50\" rows=\"2\""
-			       " onchange=\"document.getElementById('%s').submit();\">",
-		     Gbl.Form.Id);
-            if (MapAttribution)
-	       fprintf (Gbl.F.Out,"%s",MapAttribution);
-	    fprintf (Gbl.F.Out,"</textarea>");
-	    Frm_EndForm ();
-	    fprintf (Gbl.F.Out,"</div>");
-           }
-	 else if (MapAttribution)
-	    fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">"
-			       "%s"
-                               "</div>",
-	             MapAttribution);
-
-	 /* Free memory used for map attribution */
-	 Cty_FreeMapAttribution (&MapAttribution);
 	}
+      else if (MapAttribution)
+	 fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">"
+			    "%s"
+			    "</div>",
+		  MapAttribution);
 
-      /***** Start table *****/
-      Tbl_StartTableWide (2);
+      /* Free memory used for map attribution */
+      Cty_FreeMapAttribution (&MapAttribution);
+     }
 
-      /***** Country name (an link to WWW if exists) *****/
+   /***** Start table *****/
+   Tbl_StartTableWide (2);
+
+   /***** Country name (an link to WWW if exists) *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Country);
+   if (!PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0])
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
+	       Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
+   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+   if (!PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0])
+      fprintf (Gbl.F.Out,"</a>");
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** Link to the country inside platform *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "<a href=\"%s/%s?cty=%ld\" class=\"DAT\" target=\"_blank\">"
+		      "%s/%s?cty=%ld</a>"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Shortcut,
+	    Cfg_URL_SWAD_CGI,
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Hierarchy.Cty.CtyCod,
+	    Cfg_URL_SWAD_CGI,
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Hierarchy.Cty.CtyCod);
+
+   if (PrintView)
+     {
+      /***** QR code with link to the country *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
-			 "<td class=\"DAT_N LEFT_MIDDLE\">",
+			 "<td class=\"DAT LEFT_MIDDLE\">",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Country);
-      if (!PrintView && Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language][0])
-	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
-		  Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language]);
-      fprintf (Gbl.F.Out,"%s",Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-      if (!PrintView && Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language][0])
-	 fprintf (Gbl.F.Out,"</a>");
+	       Txt_QR_code);
+      QR_LinkTo (250,"cty",Gbl.Hierarchy.Cty.CtyCod);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
-
-      /***** Link to the country inside platform *****/
+     }
+   else
+     {
+      /***** Number of users who claim to belong to this country *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
-			 "<a href=\"%s/%s?cty=%ld\" class=\"DAT\" target=\"_blank\">"
-			 "%s/%s?cty=%ld</a>"
+			 "%u"
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Shortcut,
-	       Cfg_URL_SWAD_CGI,
-	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	       Gbl.CurrentCty.Cty.CtyCod,
-	       Cfg_URL_SWAD_CGI,
-	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	       Gbl.CurrentCty.Cty.CtyCod);
+	       Txt_Users_of_the_country,
+	       Usr_GetNumUsrsWhoClaimToBelongToCty (Gbl.Hierarchy.Cty.CtyCod));
 
-      if (PrintView)
-	{
-	 /***** QR code with link to the country *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_QR_code);
-	 QR_LinkTo (250,"cty",Gbl.CurrentCty.Cty.CtyCod);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-	}
-      else
-	{
-	 /***** Number of users who claim to belong to this country *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Users_of_the_country,
-		  Usr_GetNumUsrsWhoClaimToBelongToCty (Gbl.CurrentCty.Cty.CtyCod));
+      /***** Number of institutions *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"LEFT_MIDDLE\">",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Institutions);
 
-	 /***** Number of institutions *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-	                    "%s:"
-	                    "</td>"
-			    "<td class=\"LEFT_MIDDLE\">",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Institutions);
+      /* Form to go to see institutions of this country */
+      Frm_StartFormGoTo (ActSeeIns);
+      Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+		Txt_Institutions_of_COUNTRY_X,
+		Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+      Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+      fprintf (Gbl.F.Out,"%u</a>",
+	       Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
+      Frm_EndForm ();
 
-	 /* Form to go to see institutions of this country */
-	 Frm_StartFormGoTo (ActSeeIns);
-	 Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Institutions_of_COUNTRY_X,
-	           Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-	 Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-	 fprintf (Gbl.F.Out,"%u</a>",
-		  Ins_GetNumInssInCty (Gbl.CurrentCty.Cty.CtyCod));
-	 Frm_EndForm ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+      /***** Number of centres *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
+			 "%u"
+			 "</td>"
+			 "</tr>",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Centres,
+	       Ctr_GetNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod));
 
-	 /***** Number of centres *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Centres,
-		  Ctr_GetNumCtrsInCty (Gbl.CurrentCty.Cty.CtyCod));
+      /***** Number of degrees *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
+			 "%u"
+			 "</td>"
+			 "</tr>",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Degrees,
+	       Deg_GetNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
 
-	 /***** Number of degrees *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Degrees,
-		  Deg_GetNumDegsInCty (Gbl.CurrentCty.Cty.CtyCod));
+      /***** Number of courses *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
+			 "%u"
+			 "</td>"
+			 "</tr>",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Courses,
+	       Crs_GetNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
 
-	 /***** Number of courses *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Courses,
-		  Crs_GetNumCrssInCty (Gbl.CurrentCty.Cty.CtyCod));
-
-	 /***** Number of users in courses of this country *****/
-	 Cty_ShowNumUsrsInCrssOfCty (Rol_TCH);
-	 Cty_ShowNumUsrsInCrssOfCty (Rol_NET);
-	 Cty_ShowNumUsrsInCrssOfCty (Rol_STD);
-	 Cty_ShowNumUsrsInCrssOfCty (Rol_UNK);
-	}
-
-      /***** End table *****/
-      Tbl_EndTable ();
-
-      /***** End box *****/
-      Box_EndBox ();
+      /***** Number of users in courses of this country *****/
+      Cty_ShowNumUsrsInCrssOfCty (Rol_TCH);
+      Cty_ShowNumUsrsInCrssOfCty (Rol_NET);
+      Cty_ShowNumUsrsInCrssOfCty (Rol_STD);
+      Cty_ShowNumUsrsInCrssOfCty (Rol_UNK);
      }
+
+   /***** End table *****/
+   Tbl_EndTable ();
+
+   /***** End box *****/
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -484,7 +486,7 @@ static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role)
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
-            Usr_GetNumUsrsInCrssOfCty (Role,Gbl.CurrentCty.Cty.CtyCod));
+            Usr_GetNumUsrsInCrssOfCty (Role,Gbl.Hierarchy.Cty.CtyCod));
   }
 
 /*****************************************************************************/
@@ -697,8 +699,8 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
   {
    const char *BgColor;
 
-   BgColor = (Cty->CtyCod == Gbl.CurrentCty.Cty.CtyCod) ? "LIGHT_BLUE" :
-							  Gbl.ColorRows[Gbl.RowEvenOdd];
+   BgColor = (Cty->CtyCod == Gbl.Hierarchy.Cty.CtyCod) ? "LIGHT_BLUE" :
+							 Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Number of country in this list *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1209,7 +1211,7 @@ void Cty_WriteSelectorOfCountry (void)
                       " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"\"",
 	    Gbl.Form.Id);
-   if (Gbl.CurrentCty.Cty.CtyCod < 0)
+   if (Gbl.Hierarchy.Cty.CtyCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
             Txt_Country);
@@ -1236,7 +1238,7 @@ void Cty_WriteSelectorOfCountry (void)
 
       /* Write option */
       fprintf (Gbl.F.Out,"<option value=\"%ld\"",CtyCod);
-      if (CtyCod == Gbl.CurrentCty.Cty.CtyCod)
+      if (CtyCod == Gbl.Hierarchy.Cty.CtyCod)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",row[1]);
      }
@@ -1742,7 +1744,7 @@ void Cty_RemoveCountry (void)
    else	// Country has no users ==> remove it
      {
       /***** Remove surveys of the country *****/
-      Svy_RemoveSurveys (Sco_SCOPE_CTY,Cty.CtyCod);
+      Svy_RemoveSurveys (Hie_CTY,Cty.CtyCod);
 
       /***** Remove country *****/
       DB_QueryDELETE ("can not remove a country",
@@ -1948,7 +1950,7 @@ void Cty_ChangeCtyMapAttribution (void)
    DB_QueryUPDATE ("can not update the map attribution of a country",
 		   "UPDATE countries SET MapAttribution='%s'"
 		   " WHERE CtyCod='%03ld'",
-	           NewMapAttribution,Gbl.CurrentCty.Cty.CtyCod);
+	           NewMapAttribution,Gbl.Hierarchy.Cty.CtyCod);
 
    /***** Show the country information again *****/
    Cty_ShowConfiguration ();

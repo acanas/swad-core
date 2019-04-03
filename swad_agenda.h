@@ -129,8 +129,8 @@ void Agd_RecFormEvent (void);
 void Agd_RemoveUsrEvents (long UsrCod);
 unsigned Agd_GetNumEventsFromUsr (long UsrCod);
 
-unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope);
-unsigned Agd_GetNumEvents (Sco_Scope_t Scope);
+unsigned Agd_GetNumUsrsWithEvents (Hie_Level_t Scope);
+unsigned Agd_GetNumEvents (Hie_Level_t Scope);
 
 void Agd_PrintAgdQRCode (void);
 

@@ -195,8 +195,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
          /* Get centre code (row[0]) */
          Ctr.CtrCod = Str_ConvertStrCodToLongCod (row[0]);
-         BgColor = (Ctr.CtrCod == Gbl.CurrentCtr.Ctr.CtrCod) ? "LIGHT_BLUE" :
-                                                               Gbl.ColorRows[Gbl.RowEvenOdd];
+         BgColor = (Ctr.CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "LIGHT_BLUE" :
+                                                              Gbl.ColorRows[Gbl.RowEvenOdd];
 
          /* Get data of centre */
          Ctr_GetDataOfCentreByCod (&Ctr);
@@ -249,7 +249,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
    Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw centre logo *****/
-   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
+   Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr->FullName);
@@ -306,378 +306,380 @@ static void Ctr_Configuration (bool PrintView)
    char PathPhoto[PATH_MAX + 1];
    bool PhotoExists;
    char *PhotoAttribution = NULL;
-   bool PutLink = !PrintView && Gbl.CurrentCtr.Ctr.WWW[0];
+   bool PutLink;
 
-   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
+      return;
+
+   /***** Path to photo *****/
+   snprintf (PathPhoto,sizeof (PathPhoto),
+	     "%s/%02u/%u/%u.jpg",
+	     Cfg_PATH_CTR_PUBLIC,
+	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
+	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
+	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
+   PhotoExists = Fil_CheckIfPathExists (PathPhoto);
+
+   /***** Start box *****/
+   if (PrintView)
+      Box_StartBox (NULL,NULL,NULL,
+		    NULL,Box_NOT_CLOSABLE);
+   else
+      Box_StartBox (NULL,NULL,Ctr_PutIconsCtrConfig,
+		    Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
+
+   /***** Title *****/
+   PutLink = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
+   if (PutLink)
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+			 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
+	       Gbl.Hierarchy.Ctr.WWW,
+	       Gbl.Hierarchy.Ctr.FullName);
+   Log_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
+		 Gbl.Hierarchy.Ctr.ShrtName,64,NULL,true);
+   fprintf (Gbl.F.Out,"<br />%s",Gbl.Hierarchy.Ctr.FullName);
+   if (PutLink)
+      fprintf (Gbl.F.Out,"</a>");
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Centre photo *****/
+   if (PhotoExists)
      {
-      /***** Path to photo *****/
-      snprintf (PathPhoto,sizeof (PathPhoto),
-	        "%s/%02u/%u/%u.jpg",
-                Cfg_PATH_CTR_PUBLIC,
-	        (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	        (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
-	        (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
-      PhotoExists = Fil_CheckIfPathExists (PathPhoto);
+      /* Get photo attribution */
+      Ctr_GetPhotoAttribution (Gbl.Hierarchy.Ctr.CtrCod,&PhotoAttribution);
 
-      /***** Start box *****/
-      if (PrintView)
-	 Box_StartBox (NULL,NULL,NULL,
-		       NULL,Box_NOT_CLOSABLE);
-      else
-	 Box_StartBox (NULL,NULL,Ctr_PutIconsCtrConfig,
-		       Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
-
-      /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
+      /* Photo image */
+      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CENTER_MIDDLE\">");
       if (PutLink)
-	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-	                    " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
-		  Gbl.CurrentCtr.Ctr.WWW,
-		  Gbl.CurrentCtr.Ctr.FullName);
-      Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
-                    Gbl.CurrentCtr.Ctr.ShrtName,64,NULL,true);
-      fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentCtr.Ctr.FullName);
+	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
+		  Gbl.Hierarchy.Ctr.WWW);
+      fprintf (Gbl.F.Out,"<img src=\"%s/%02u/%u/%u.jpg\""
+			 " alt=\"%s\" title=\"%s\""
+			 " class=\"%s\" />",
+	       Cfg_URL_CTR_PUBLIC,
+	       (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
+	       (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
+	       (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
+	       Gbl.Hierarchy.Ctr.ShrtName,
+	       Gbl.Hierarchy.Ctr.FullName,
+	       PrintView ? "CENTRE_PHOTO_PRINT" :
+			   "CENTRE_PHOTO_SHOW");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
       fprintf (Gbl.F.Out,"</div>");
 
-      /***** Centre photo *****/
-      if (PhotoExists)
-	{
-	 /* Get photo attribution */
-	 Ctr_GetPhotoAttribution (Gbl.CurrentCtr.Ctr.CtrCod,&PhotoAttribution);
-
-	 /* Photo image */
-	 fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CENTER_MIDDLE\">");
-	 if (PutLink)
-	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
-		     Gbl.CurrentCtr.Ctr.WWW);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%02u/%u/%u.jpg\""
-	                    " alt=\"%s\" title=\"%s\""
-	                    " class=\"%s\" />",
-		  Cfg_URL_CTR_PUBLIC,
-		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
-		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
-		  Gbl.CurrentCtr.Ctr.ShrtName,
-		  Gbl.CurrentCtr.Ctr.FullName,
-		  PrintView ? "CENTRE_PHOTO_PRINT" :
-			      "CENTRE_PHOTO_SHOW");
-	 if (PutLink)
-	    fprintf (Gbl.F.Out,"</a>");
-	 fprintf (Gbl.F.Out,"</div>");
-
-	 /* Photo attribution */
-	 if (!PrintView &&
-	     Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-	    // Only centre admins, institution admins and centre admins
-	    // have permission to edit photo attribution
-	   {
-	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-	    Frm_StartForm (ActChgCtrPhoAtt);
-	    fprintf (Gbl.F.Out,"<textarea id=\"AttributionArea\""
-		               " name=\"Attribution\" rows=\"2\""
-			       " onchange=\"document.getElementById('%s').submit();\">",
-		     Gbl.Form.Id);
-            if (PhotoAttribution)
-	       fprintf (Gbl.F.Out,"%s",PhotoAttribution);
-	    fprintf (Gbl.F.Out,"</textarea>");
-	    Frm_EndForm ();
-	    fprintf (Gbl.F.Out,"</div>");
-	   }
-	 else if (PhotoAttribution)
-	    fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">"
-			       "%s"
-			       "</div>",
-		     PhotoAttribution);
-
-	 /* Free memory used for photo attribution */
-	 Ctr_FreePhotoAttribution (&PhotoAttribution);
-	}
-
-      /***** Start table *****/
-      Tbl_StartTableWide (2);
-
-      /***** Institution *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"OthInsCod\" class=\"%s\">%s:</label>"
-			 "</td>"
-			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Institution);
-
+      /* Photo attribution */
       if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	 // Only system admins can move a centre to another institution
+	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+	 // Only centre admins, institution admins and centre admins
+	 // have permission to edit photo attribution
 	{
-	 /* Get list of institutions of the current country */
-         Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_BASIC_DATA);
-
-	 /* Put form to select institution */
-	 Frm_StartForm (ActChgCtrInsCfg);
-	 fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
-			    " class=\"INPUT_SHORT_NAME\""
+	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+	 Frm_StartForm (ActChgCtrPhoAtt);
+	 fprintf (Gbl.F.Out,"<textarea id=\"AttributionArea\""
+			    " name=\"Attribution\" rows=\"2\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.Form.Id);
-	 for (NumIns = 0;
-	      NumIns < Gbl.Inss.Num;
-	      NumIns++)
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		     Gbl.Inss.Lst[NumIns].InsCod,
-		     Gbl.Inss.Lst[NumIns].InsCod == Gbl.CurrentIns.Ins.InsCod ? " selected=\"selected\"" :
-										"",
-		     Gbl.Inss.Lst[NumIns].ShrtName);
-	 fprintf (Gbl.F.Out,"</select>");
+	 if (PhotoAttribution)
+	    fprintf (Gbl.F.Out,"%s",PhotoAttribution);
+	 fprintf (Gbl.F.Out,"</textarea>");
 	 Frm_EndForm ();
-
-	 /* Free list of institutions */
-	 Ins_FreeListInstitutions ();
+	 fprintf (Gbl.F.Out,"</div>");
 	}
-      else	// I can not move centre to another institution
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.FullName);
+      else if (PhotoAttribution)
+	 fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">"
+			    "%s"
+			    "</div>",
+		  PhotoAttribution);
 
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      /* Free memory used for photo attribution */
+      Ctr_FreePhotoAttribution (&PhotoAttribution);
+     }
 
-      /***** Centre full name *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"FullName\" class=\"%s\">%s:</label>"
-	                 "</td>"
-			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Centre);
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-	 // Only institution admins and system admins can edit centre full name
-	{
-	 /* Form to change centre full name */
-	 Frm_StartForm (ActRenCtrFulCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\""
-	                    " id=\"FullName\" name=\"FullName\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_FULL_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Hie_MAX_CHARS_FULL_NAME,
-		  Gbl.CurrentCtr.Ctr.FullName,
-		  Gbl.Form.Id);
-	 Frm_EndForm ();
-	}
-      else	// I can not edit centre full name
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.FullName);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+   /***** Start table *****/
+   Tbl_StartTableWide (2);
 
-      /***** Centre short name *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"ShortName\" class=\"%s\">%s:</label>"
-	                 "</td>"
-			 "<td class=\"DAT_N LEFT_MIDDLE\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Short_name);
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
-	 // Only institution admins and system admins can edit centre short name
-	{
-	 /* Form to change centre short name */
-	 Frm_StartForm (ActRenCtrShoCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\""
-	                    " id=\"ShortName\" name=\"ShortName\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_SHORT_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Hie_MAX_CHARS_SHRT_NAME,
-		  Gbl.CurrentCtr.Ctr.ShrtName,
-		  Gbl.Form.Id);
-	 Frm_EndForm ();
-	}
-      else	// I can not edit centre short name
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.ShrtName);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+   /***** Institution *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"OthInsCod\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Institution);
 
-      /***** Place *****/
-      Plc.PlcCod = Gbl.CurrentCtr.Ctr.PlcCod;
-      Plc_GetDataOfPlaceByCod (&Plc);
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      // Only system admins can move a centre to another institution
+     {
+      /* Get list of institutions of the current country */
+      Ins_GetListInstitutions (Gbl.Hierarchy.Cty.CtyCod,Ins_GET_BASIC_DATA);
+
+      /* Put form to select institution */
+      Frm_StartForm (ActChgCtrInsCfg);
+      fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
+			 " class=\"INPUT_SHORT_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\">",
+	       Gbl.Form.Id);
+      for (NumIns = 0;
+	   NumIns < Gbl.Inss.Num;
+	   NumIns++)
+	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
+		  Gbl.Inss.Lst[NumIns].InsCod,
+		  Gbl.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod ? " selected=\"selected\"" :
+									     "",
+		  Gbl.Inss.Lst[NumIns].ShrtName);
+      fprintf (Gbl.F.Out,"</select>");
+      Frm_EndForm ();
+
+      /* Free list of institutions */
+      Ins_FreeListInstitutions ();
+     }
+   else	// I can not move centre to another institution
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.FullName);
+
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** Centre full name *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"FullName\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Centre);
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+      // Only institution admins and system admins can edit centre full name
+     {
+      /* Form to change centre full name */
+      Frm_StartForm (ActRenCtrFulCfg);
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+			 " id=\"FullName\" name=\"FullName\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " class=\"INPUT_FULL_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\" />",
+	       Hie_MAX_CHARS_FULL_NAME,
+	       Gbl.Hierarchy.Ctr.FullName,
+	       Gbl.Form.Id);
+      Frm_EndForm ();
+     }
+   else	// I can not edit centre full name
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.FullName);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** Centre short name *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"ShortName\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Short_name);
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+      // Only institution admins and system admins can edit centre short name
+     {
+      /* Form to change centre short name */
+      Frm_StartForm (ActRenCtrShoCfg);
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+			 " id=\"ShortName\" name=\"ShortName\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " class=\"INPUT_SHORT_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\" />",
+	       Hie_MAX_CHARS_SHRT_NAME,
+	       Gbl.Hierarchy.Ctr.ShrtName,
+	       Gbl.Form.Id);
+      Frm_EndForm ();
+     }
+   else	// I can not edit centre short name
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.ShrtName);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** Place *****/
+   Plc.PlcCod = Gbl.Hierarchy.Ctr.PlcCod;
+   Plc_GetDataOfPlaceByCod (&Plc);
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Place);
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+      // Only centre admins, institution admins and system admins
+      // can change centre place
+     {
+      /* Get list of places of the current institution */
+      Gbl.Plcs.SelectedOrder = Plc_ORDER_BY_PLACE;
+      Plc_GetListPlaces ();
+
+      /* Put form to select place */
+      Frm_StartForm (ActChgCtrPlcCfg);
+      fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"INPUT_SHORT_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\">",
+	       Gbl.Form.Id);
+      fprintf (Gbl.F.Out,"<option value=\"0\"");
+      if (Gbl.Hierarchy.Ctr.PlcCod == 0)
+	 fprintf (Gbl.F.Out," selected=\"selected\"");
+      fprintf (Gbl.F.Out,">%s</option>",Txt_Another_place);
+      for (NumPlc = 0;
+	   NumPlc < Gbl.Plcs.Num;
+	   NumPlc++)
+	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
+		  Gbl.Plcs.Lst[NumPlc].PlcCod,
+		  (Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.Hierarchy.Ctr.PlcCod) ? " selected=\"selected\"" :
+									       "",
+		  Gbl.Plcs.Lst[NumPlc].ShrtName);
+      fprintf (Gbl.F.Out,"</select>");
+      Frm_EndForm ();
+
+      /* Free list of places */
+      Plc_FreeListPlaces ();
+     }
+   else	// I can not change centre place
+      fprintf (Gbl.F.Out,"%s",Plc.FullName);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** Centre WWW *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"WWW\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"LEFT_MIDDLE\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Web);
+   if (!PrintView &&
+       Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+      // Only centre admins, institution admins and system admins
+      // can change centre WWW
+     {
+      /* Form to change centre WWW */
+      Frm_StartForm (ActChgCtrWWWCfg);
+      fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
+			 " maxlength=\"%u\" value=\"%s\""
+			 " class=\"INPUT_WWW\""
+			 " onchange=\"document.getElementById('%s').submit();\" />",
+	       Cns_MAX_CHARS_WWW,
+	       Gbl.Hierarchy.Ctr.WWW,
+	       Gbl.Form.Id);
+      Frm_EndForm ();
+     }
+   else	// I can not change centre WWW
+      fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
+			 "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
+			 "%s"
+			 "</a>"
+			 "</div>",
+	       Gbl.Hierarchy.Ctr.WWW,
+	       Gbl.Hierarchy.Ctr.WWW);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
+
+   /***** Shortcut to the centre *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "<a href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\">"
+		      "%s/%s?ctr=%ld"
+		      "</a>"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Shortcut,
+	    Cfg_URL_SWAD_CGI,
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Hierarchy.Ctr.CtrCod,
+	    Cfg_URL_SWAD_CGI,
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Hierarchy.Ctr.CtrCod);
+
+   if (PrintView)
+     {
+      /***** QR code with link to the centre *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Place);
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-	 // Only centre admins, institution admins and system admins
-	 // can change centre place
-	{
-	 /* Get list of places of the current institution */
-	 Gbl.Plcs.SelectedOrder = Plc_ORDER_BY_PLACE;
-	 Plc_GetListPlaces ();
-
-	 /* Put form to select place */
-	 Frm_StartForm (ActChgCtrPlcCfg);
-	 fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"INPUT_SHORT_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.Form.Id);
-	 fprintf (Gbl.F.Out,"<option value=\"0\"");
-	 if (Gbl.CurrentCtr.Ctr.PlcCod == 0)
-	    fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out,">%s</option>",Txt_Another_place);
-	 for (NumPlc = 0;
-	      NumPlc < Gbl.Plcs.Num;
-	      NumPlc++)
-	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		     Gbl.Plcs.Lst[NumPlc].PlcCod,
-		     (Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.CurrentCtr.Ctr.PlcCod) ? " selected=\"selected\"" :
-			                                                          "",
-		     Gbl.Plcs.Lst[NumPlc].ShrtName);
-	 fprintf (Gbl.F.Out,"</select>");
-	 Frm_EndForm ();
-
-	 /* Free list of places */
-	 Plc_FreeListPlaces ();
-	}
-      else	// I can not change centre place
-         fprintf (Gbl.F.Out,"%s",Plc.FullName);
+	       Txt_QR_code);
+      QR_LinkTo (250,"ctr",Gbl.Hierarchy.Ctr.CtrCod);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
-
-      /***** Centre WWW *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-	                 "<label for=\"WWW\" class=\"%s\">%s:</label>"
-			 "</td>"
-			 "<td class=\"LEFT_MIDDLE\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Web);
-      if (!PrintView &&
-	  Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
-	 // Only centre admins, institution admins and system admins
-	 // can change centre WWW
-	{
-	 /* Form to change centre WWW */
-	 Frm_StartForm (ActChgCtrWWWCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_WWW\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_CHARS_WWW,
-		  Gbl.CurrentCtr.Ctr.WWW,
-		  Gbl.Form.Id);
-	 Frm_EndForm ();
-	}
-      else	// I can not change centre WWW
-	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
-			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
-	                    "%s"
-			    "</a>"
-			    "</div>",
-		  Gbl.CurrentCtr.Ctr.WWW,
-		  Gbl.CurrentCtr.Ctr.WWW);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-
-      /***** Shortcut to the centre *****/
+     }
+   else
+     {
+      /***** Number of users who claim to belong to this centre *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
-			 "<a href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\">"
-			 "%s/%s?ctr=%ld"
-			 "</a>"
+			 "%u"
 			 "</td>"
 			 "</tr>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Shortcut,
-	       Cfg_URL_SWAD_CGI,
-	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	       Gbl.CurrentCtr.Ctr.CtrCod,
-	       Cfg_URL_SWAD_CGI,
-	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	       Gbl.CurrentCtr.Ctr.CtrCod);
+	       Txt_Users_of_the_centre,
+	       Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
 
-      if (PrintView)
-	{
-	 /***** QR code with link to the centre *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_QR_code);
-	 QR_LinkTo (250,"ctr",Gbl.CurrentCtr.Ctr.CtrCod);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
-	}
-      else
-	{
-	 /***** Number of users who claim to belong to this centre *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Users_of_the_centre,
-		  Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.CurrentCtr.Ctr.CtrCod));
+      /***** Number of degrees *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"LEFT_MIDDLE\">",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Degrees);
 
-	 /***** Number of degrees *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-	                    "%s:"
-	                    "</td>"
-			    "<td class=\"LEFT_MIDDLE\">",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Degrees);
+      /* Form to go to see degrees of this centre */
+      Frm_StartFormGoTo (ActSeeDeg);
+      Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+		Txt_Degrees_of_CENTRE_X,
+		Gbl.Hierarchy.Ctr.ShrtName);
+      Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+      fprintf (Gbl.F.Out,"%u</a>",
+	       Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+      Frm_EndForm ();
 
-	 /* Form to go to see degrees of this centre */
-	 Frm_StartFormGoTo (ActSeeDeg);
-	 Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-	           Txt_Degrees_of_CENTRE_X,
-	           Gbl.CurrentCtr.Ctr.ShrtName);
-	 Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-	 fprintf (Gbl.F.Out,"%u</a>",
-		  Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
-	 Frm_EndForm ();
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+      /***** Number of courses *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_MIDDLE\">"
+			 "%u"
+			 "</td>"
+			 "</tr>",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Courses,
+	       Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
 
-	 /***** Number of courses *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],
-		  Txt_Courses,
-		  Crs_GetNumCrssInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
-
-	 /***** Number of users in courses of this centre *****/
-	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_TCH);
-	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_NET);
-	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_STD);
-	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_UNK);
-	}
-
-      /***** End table *****/
-      Tbl_EndTable ();
-
-      /***** End box *****/
-      Box_EndBox ();
+      /***** Number of users in courses of this centre *****/
+      Ctr_ShowNumUsrsInCrssOfCtr (Rol_TCH);
+      Ctr_ShowNumUsrsInCrssOfCtr (Rol_NET);
+      Ctr_ShowNumUsrsInCrssOfCtr (Rol_STD);
+      Ctr_ShowNumUsrsInCrssOfCtr (Rol_UNK);
      }
+
+   /***** End table *****/
+   Tbl_EndTable ();
+
+   /***** End box *****/
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -697,7 +699,7 @@ static void Ctr_PutIconsCtrConfig (void)
       // have permission to upload logo and photo of the centre
      {
       /***** Put icon to upload logo of centre *****/
-      Log_PutIconToChangeLogo (Sco_SCOPE_CTR);
+      Log_PutIconToChangeLogo (Hie_CTR);
 
       /***** Put icon to upload photo of centre *****/
       Ctr_PutIconToChangePhoto ();
@@ -719,9 +721,9 @@ static void Ctr_PutIconToChangePhoto (void)
    snprintf (PathPhoto,sizeof (PathPhoto),
 	     "%s/%02u/%u/%u.jpg",
 	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	     (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod,
-	     (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod);
+	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
+	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod,
+	     (unsigned)  Gbl.Hierarchy.Ctr.CtrCod);
    PhotoExists = Fil_CheckIfPathExists (PathPhoto);
    Lay_PutContextualLinkOnlyIcon (ActReqCtrPho,NULL,NULL,
 			          "camera.svg",
@@ -750,7 +752,7 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
-	    Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.CurrentCtr.Ctr.CtrCod));
+	    Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.Hierarchy.Ctr.CtrCod));
   }
 
 /*****************************************************************************/
@@ -759,23 +761,24 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
 
 void Ctr_ShowCtrsOfCurrentIns (void)
   {
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
-     {
-      /***** Get parameter with the type of order in the list of centres *****/
-      Ctr_GetParamCtrOrder ();
+   /***** Trivial check *****/
+   if (Gbl.Hierarchy.Ins.InsCod <= 0)		// No institution selected
+      return;
 
-      /***** Get list of centres *****/
-      Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
+   /***** Get parameter with the type of order in the list of centres *****/
+   Ctr_GetParamCtrOrder ();
 
-      /***** Write menu to select country and institution *****/
-      Hie_WriteMenuHierarchy ();
+   /***** Get list of centres *****/
+   Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
 
-      /***** List centres *****/
-      Ctr_ListCentres ();
+   /***** Write menu to select country and institution *****/
+   Hie_WriteMenuHierarchy ();
 
-      /***** Free list of centres *****/
-      Ctr_FreeListCentres ();
-     }
+   /***** List centres *****/
+   Ctr_ListCentres ();
+
+   /***** Free list of centres *****/
+   Ctr_FreeListCentres ();
   }
 
 /*****************************************************************************/
@@ -794,7 +797,7 @@ static void Ctr_ListCentres (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Centres_of_INSTITUTION_X,
-	     Gbl.CurrentIns.Ins.FullName);
+	     Gbl.Hierarchy.Ins.FullName);
    Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsListingCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
 
@@ -892,8 +895,8 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_N";
      }
-   BgColor = (Ctr->CtrCod == Gbl.CurrentCtr.Ctr.CtrCod) ? "LIGHT_BLUE" :
-                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
+   BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "LIGHT_BLUE" :
+                                                         Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Number of centre in this list *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -984,7 +987,7 @@ void Ctr_EditCentres (void)
 
    /***** Get list of centres *****/
    Gbl.Ctrs.SelectedOrder = Ctr_ORDER_BY_CENTRE;
-   Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
+   Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
 
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
@@ -992,7 +995,7 @@ void Ctr_EditCentres (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Centres_of_INSTITUTION_X,
-             Gbl.CurrentIns.Ins.FullName);
+             Gbl.Hierarchy.Ins.FullName);
    Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsEditingCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
 
@@ -1392,18 +1395,18 @@ void Ctr_WriteSelectorOfCentre (void)
    /***** Start form *****/
    Frm_StartFormGoTo (ActSeeDeg);
    fprintf (Gbl.F.Out,"<select id=\"ctr\" name=\"ctr\" style=\"width:175px;\"");
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
+   if (Gbl.Hierarchy.Ins.InsCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"><option value=\"\"");
-   if (Gbl.CurrentCtr.Ctr.CtrCod < 0)
+   if (Gbl.Hierarchy.Ctr.CtrCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",
             Txt_Centre);
 
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
+   if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
       /***** Get centres from database *****/
       NumCtrs = (unsigned) DB_QuerySELECT (&mysql_res,"can not get centres",
@@ -1411,7 +1414,7 @@ void Ctr_WriteSelectorOfCentre (void)
 					   " FROM centres"
 					   " WHERE InsCod=%ld"
 					   " ORDER BY ShortName",
-					   Gbl.CurrentIns.Ins.InsCod);
+					   Gbl.Hierarchy.Ins.InsCod);
 
       /***** Get centres *****/
       for (NumCtr = 0;
@@ -1427,8 +1430,8 @@ void Ctr_WriteSelectorOfCentre (void)
 
          /* Write option */
          fprintf (Gbl.F.Out,"<option value=\"%ld\"",CtrCod);
-         if (Gbl.CurrentCtr.Ctr.CtrCod > 0 &&
-             CtrCod == Gbl.CurrentCtr.Ctr.CtrCod)
+         if (Gbl.Hierarchy.Ctr.CtrCod > 0 &&
+             CtrCod == Gbl.Hierarchy.Ctr.CtrCod)
 	    fprintf (Gbl.F.Out," selected=\"selected\"");
          fprintf (Gbl.F.Out,">%s</option>",row[1]);
         }
@@ -1501,7 +1504,7 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\" class=\"LEFT_MIDDLE\""
 	                 " style=\"width:25px;\">",
                Ctr->FullName);
-      Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
+      Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Place */
@@ -1768,10 +1771,10 @@ void Ctr_RemoveCentre (void)
    else	// Centre has no teachers ==> remove it
      {
       /***** Remove all the threads and posts in forums of the centre *****/
-      For_RemoveForums (Sco_SCOPE_CTR,Ctr.CtrCod);
+      For_RemoveForums (Hie_CTR,Ctr.CtrCod);
 
       /***** Remove surveys of the centre *****/
-      Svy_RemoveSurveys (Sco_SCOPE_CTR,Ctr.CtrCod);
+      Svy_RemoveSurveys (Hie_CTR,Ctr.CtrCod);
 
       /***** Remove information related to files in centre *****/
       Brw_RemoveCtrFilesFromDB (Ctr.CtrCod);
@@ -1815,34 +1818,34 @@ void Ctr_ChangeCtrInsInConfig (void)
    NewIns.InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /***** Check if institution has changed *****/
-   if (NewIns.InsCod != Gbl.CurrentCtr.Ctr.InsCod)
+   if (NewIns.InsCod != Gbl.Hierarchy.Ctr.InsCod)
      {
       /***** Get data of new institution *****/
       Ins_GetDataOfInstitutionByCod (&NewIns,Ins_GET_BASIC_DATA);
 
       /***** Check if it already exists a centre with the same name in the new institution *****/
       if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",
-                                         Gbl.CurrentCtr.Ctr.ShrtName,
-                                         Gbl.CurrentCtr.Ctr.CtrCod,
+                                         Gbl.Hierarchy.Ctr.ShrtName,
+                                         Gbl.Hierarchy.Ctr.CtrCod,
                                          NewIns.InsCod))
 	 /***** Create warning message *****/
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_centre_X_already_exists,
-		          Gbl.CurrentCtr.Ctr.ShrtName);
+		          Gbl.Hierarchy.Ctr.ShrtName);
       else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",
-                                              Gbl.CurrentCtr.Ctr.FullName,
-                                              Gbl.CurrentCtr.Ctr.CtrCod,
+                                              Gbl.Hierarchy.Ctr.FullName,
+                                              Gbl.Hierarchy.Ctr.CtrCod,
                                               NewIns.InsCod))
 	 /***** Create warning message *****/
 	 Ale_CreateAlert (Ale_WARNING,NULL,
 	                  Txt_The_centre_X_already_exists,
-		          Gbl.CurrentCtr.Ctr.FullName);
+		          Gbl.Hierarchy.Ctr.FullName);
       else
 	{
 	 /***** Update institution in table of centres *****/
-	 Ctr_UpdateCtrInsDB (Gbl.CurrentCtr.Ctr.CtrCod,NewIns.InsCod);
-	 Gbl.CurrentCtr.Ctr.InsCod =
-	 Gbl.CurrentIns.Ins.InsCod = NewIns.InsCod;
+	 Ctr_UpdateCtrInsDB (Gbl.Hierarchy.Ctr.CtrCod,NewIns.InsCod);
+	 Gbl.Hierarchy.Ctr.InsCod =
+	 Gbl.Hierarchy.Ins.InsCod = NewIns.InsCod;
 
 	 /***** Initialize again current course, degree, centre... *****/
 	 Hie_InitHierarchy ();
@@ -1850,7 +1853,7 @@ void Ctr_ChangeCtrInsInConfig (void)
 	 /***** Create message to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
                           Txt_The_centre_X_has_been_moved_to_the_institution_Y,
-		          Gbl.CurrentCtr.Ctr.FullName,NewIns.FullName);
+		          Gbl.Hierarchy.Ctr.FullName,NewIns.FullName);
 	}
      }
   }
@@ -1921,8 +1924,8 @@ void Ctr_ChangeCtrPlcInConfig (void)
    NewPlcCod = Plc_GetParamPlcCod ();
 
    /***** Update place in table of centres *****/
-   Ctr_UpdateCtrPlcDB (Gbl.CurrentCtr.Ctr.CtrCod,NewPlcCod);
-   Gbl.CurrentCtr.Ctr.PlcCod = NewPlcCod;
+   Ctr_UpdateCtrPlcDB (Gbl.Hierarchy.Ctr.CtrCod,NewPlcCod);
+   Gbl.Hierarchy.Ctr.PlcCod = NewPlcCod;
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_place_of_the_centre_has_changed);
@@ -1954,7 +1957,7 @@ void Ctr_RenameCentreShort (void)
 
 void Ctr_RenameCentreShortInConfig (void)
   {
-   Ctr_RenameCentre (&Gbl.CurrentCtr.Ctr,Cns_SHRT_NAME);
+   Ctr_RenameCentre (&Gbl.Hierarchy.Ctr,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -1969,7 +1972,7 @@ void Ctr_RenameCentreFull (void)
 
 void Ctr_RenameCentreFullInConfig (void)
   {
-   Ctr_RenameCentre (&Gbl.CurrentCtr.Ctr,Cns_FULL_NAME);
+   Ctr_RenameCentre (&Gbl.Hierarchy.Ctr,Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -2023,7 +2026,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
       if (strcmp (CurrentCtrName,NewCtrName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Ctr_CheckIfCtrNameExistsInIns (ParamName,NewCtrName,Ctr->CtrCod,Gbl.CurrentIns.Ins.InsCod))
+         if (Ctr_CheckIfCtrNameExistsInIns (ParamName,NewCtrName,Ctr->CtrCod,Gbl.Hierarchy.Ins.InsCod))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_centre_X_already_exists,
 			     NewCtrName);
@@ -2130,8 +2133,8 @@ void Ctr_ChangeCtrWWWInConfig (void)
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ctr_UpdateCtrWWWDB (Gbl.CurrentCtr.Ctr.CtrCod,NewWWW);
-      Str_Copy (Gbl.CurrentCtr.Ctr.WWW,NewWWW,
+      Ctr_UpdateCtrWWWDB (Gbl.Hierarchy.Ctr.CtrCod,NewWWW);
+      Str_Copy (Gbl.Hierarchy.Ctr.WWW,NewWWW,
                 Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
@@ -2221,14 +2224,14 @@ void Ctr_ContEditAfterChgCtr (void)
 /***************** and put button to go to centre changed ********************/
 /*****************************************************************************/
 // Gbl.Ctrs.EditingCtr is the centre that is beeing edited
-// Gbl.CurrentCtr.Ctr is the current centre
+// Gbl.Hierarchy.Ctr is the current centre
 
 static void Ctr_ShowAlertAndButtonToGoToCtr (void)
   {
    extern const char *Txt_Go_to_X;
 
    // If the centre being edited is different to the current one...
-   if (Gbl.Ctrs.EditingCtr.CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)
+   if (Gbl.Ctrs.EditingCtr.CtrCod != Gbl.Hierarchy.Ctr.CtrCod)
      {
       /***** Alert with button to go to centre *****/
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -2253,7 +2256,7 @@ static void Ctr_PutParamGoToCtr (void)
 
 void Ctr_RequestLogo (void)
   {
-   Log_RequestLogo (Sco_SCOPE_CTR);
+   Log_RequestLogo (Hie_CTR);
   }
 
 /*****************************************************************************/
@@ -2262,7 +2265,7 @@ void Ctr_RequestLogo (void)
 
 void Ctr_ReceiveLogo (void)
   {
-   Log_ReceiveLogo (Sco_SCOPE_CTR);
+   Log_ReceiveLogo (Hie_CTR);
   }
 
 /*****************************************************************************/
@@ -2271,7 +2274,7 @@ void Ctr_ReceiveLogo (void)
 
 void Ctr_RemoveLogo (void)
   {
-   Log_RemoveLogo (Sco_SCOPE_CTR);
+   Log_RemoveLogo (Hie_CTR);
   }
 
 /*****************************************************************************/
@@ -2394,22 +2397,22 @@ void Ctr_ReceivePhoto (void)
    snprintf (Path,sizeof (Path),
 	     "%s/%02u",
 	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100));
+	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100));
    Fil_CreateDirIfNotExists (Path);
    snprintf (Path,sizeof (Path),
 	     "%s/%02u/%u",
 	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	     (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
+	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
+	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
    Fil_CreateDirIfNotExists (Path);
 
    /***** Convert temporary file to public JPEG file *****/
    snprintf (PathFileImg,sizeof (PathFileImg),
 	     "%s/%02u/%u/%u.jpg",
 	     Cfg_PATH_CTR_PUBLIC,
-	     (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
-	     (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
-	     (unsigned) Gbl.CurrentCtr.Ctr.CtrCod);
+	     (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
+	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
+	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
 
    /* Call to program that makes the conversion */
    snprintf (Command,sizeof (Command),
@@ -2458,7 +2461,7 @@ void Ctr_ChangeCtrPhotoAttribution (void)
 		   " of the current centre",
 		   "UPDATE centres SET PhotoAttribution='%s'"
 		   " WHERE CtrCod=%ld",
-	           NewPhotoAttribution,Gbl.CurrentCtr.Ctr.CtrCod);
+	           NewPhotoAttribution,Gbl.Hierarchy.Ctr.CtrCod);
 
    /***** Show the centre information again *****/
    Ctr_ShowConfiguration ();
@@ -2499,7 +2502,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
-   Log_DrawLogo (Sco_SCOPE_CTR,-1L,"",20,NULL,true);
+   Log_DrawLogo (Hie_CTR,-1L,"",20,NULL,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Place *****/
@@ -2733,7 +2736,7 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
 
    /***** Get parameters from form *****/
    /* Set centre institution */
-   Gbl.Ctrs.EditingCtr.InsCod = Gbl.CurrentIns.Ins.InsCod;
+   Gbl.Ctrs.EditingCtr.InsCod = Gbl.Hierarchy.Ins.InsCod;
 
    /* Get place */
    if ((Gbl.Ctrs.EditingCtr.PlcCod = Plc_GetParamPlcCod ()) < 0)	// 0 is reserved for "other place"
@@ -2754,10 +2757,10 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
       if (Gbl.Ctrs.EditingCtr.WWW[0])
         {
          /***** If name of centre was in database... *****/
-         if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Gbl.Ctrs.EditingCtr.ShrtName,-1L,Gbl.CurrentIns.Ins.InsCod))
+         if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Gbl.Ctrs.EditingCtr.ShrtName,-1L,Gbl.Hierarchy.Ins.InsCod))
             Ale_ShowAlert (Ale_WARNING,Txt_The_centre_X_already_exists,
                            Gbl.Ctrs.EditingCtr.ShrtName);
-         else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Gbl.Ctrs.EditingCtr.FullName,-1L,Gbl.CurrentIns.Ins.InsCod))
+         else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Gbl.Ctrs.EditingCtr.FullName,-1L,Gbl.Hierarchy.Ins.InsCod))
             Ale_ShowAlert (Ale_WARNING,Txt_The_centre_X_already_exists,
                            Gbl.Ctrs.EditingCtr.FullName);
          else	// Add new centre to database
@@ -2857,7 +2860,7 @@ unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
    (unsigned) DB_QueryCOUNT ("can not get the number of centres in a place",
 			     "SELECT COUNT(*) FROM centres"
 			     " WHERE InsCod=%ld AND PlcCod=%ld",
-			     Gbl.CurrentIns.Ins.InsCod,PlcCod);
+			     Gbl.Hierarchy.Ins.InsCod,PlcCod);
   }
 
 /*****************************************************************************/

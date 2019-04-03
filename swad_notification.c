@@ -788,22 +788,22 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
      {
       if (CrsCod > 0)					// Course specified
 	{
-	 if (CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
+	 if (CrsCod != Gbl.Hierarchy.Crs.Crs.CrsCod)	// Not the current course
 	    Crs_PutParamCrsCod (CrsCod);		// Go to another course
 	}
       else if (DegCod > 0)				// Degree specified
 	{
-	 if (DegCod != Gbl.CurrentDeg.Deg.DegCod)	// Not the current degree
+	 if (DegCod != Gbl.Hierarchy.Deg.DegCod)	// Not the current degree
 	    Deg_PutParamDegCod (DegCod);		// Go to another degree
 	}
       else if (CtrCod > 0)				// Centre specified
 	{
-	 if (CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)	// Not the current centre
+	 if (CtrCod != Gbl.Hierarchy.Ctr.CtrCod)	// Not the current centre
 	    Ctr_PutParamCtrCod (CtrCod);		// Go to another centre
 	}
       else if (InsCod > 0)				// Institution specified
 	{
-	 if (InsCod != Gbl.CurrentIns.Ins.InsCod)	// Not the current institution
+	 if (InsCod != Gbl.Hierarchy.Ins.InsCod)	// Not the current institution
 	    Ins_PutParamInsCod (InsCod);		// Go to another institution
 	}
      }
@@ -942,7 +942,7 @@ void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,lon
 			 "UPDATE notif SET Status=(Status | %u)"
 			 " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND CrsCod=%ld",
                          (unsigned) Ntf_STATUS_BIT_READ,
-                         ToUsrCod,(unsigned) NotifyEvent,Gbl.CurrentCrs.Crs.CrsCod);
+                         ToUsrCod,(unsigned) NotifyEvent,Gbl.Hierarchy.Crs.Crs.CrsCod);
       else			// Set all notifications of this type
 				// for the user as seen
          DB_QueryUPDATE ("can not set notification(s) as seen",
@@ -988,7 +988,7 @@ void Ntf_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long
 		      " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND CrsCod=%ld",
 	              (unsigned) Ntf_STATUS_BIT_REMOVED,
 	              ToUsrCod,(unsigned) NotifyEvent,
-		      Gbl.CurrentCrs.Crs.CrsCod);
+		      Gbl.Hierarchy.Crs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -1195,7 +1195,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 					 "SELECT UsrCod FROM crs_usr"
 					 " WHERE CrsCod=%ld"
 					 " AND UsrCod<>%ld",
-					 Gbl.CurrentCrs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.Crs.CrsCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             case Brw_ADMI_TCH_CRS:	// Notify all teachers in course except me
@@ -1205,7 +1205,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 					 " WHERE CrsCod=%ld"
 					 " AND UsrCod<>%ld"
 					 " AND Role=%u",	// Notify teachers only
-					 Gbl.CurrentCrs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.Crs.CrsCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod,
 					 (unsigned) Rol_TCH);
                break;
@@ -1217,7 +1217,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 					 "SELECT UsrCod FROM crs_grp_usr"
 					 " WHERE crs_grp_usr.GrpCod=%ld"
 					 " AND crs_grp_usr.UsrCod<>%ld",
-					 Gbl.CurrentCrs.Grps.GrpCod,
+					 Gbl.Hierarchy.Crs.Grps.GrpCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             case Brw_ADMI_TCH_GRP:	// Notify all teachers in group except me
@@ -1231,7 +1231,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 					 " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 					 " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
 					 " AND crs_usr.Role=%u",	// Notify teachers only
-					 Gbl.CurrentCrs.Grps.GrpCod,
+					 Gbl.Hierarchy.Crs.Grps.GrpCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod,
 					 (unsigned) Rol_TCH);
                break;
@@ -1267,7 +1267,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 					      " to be notified",
 				   "SELECT UsrCod FROM crs_usr"
 				   " WHERE CrsCod=%ld AND UsrCod<>%ld",
-				   Gbl.CurrentCrs.Crs.CrsCod,
+				   Gbl.Hierarchy.Crs.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_ENROLMENT_STD:	// This function should not be called in this case
@@ -1275,7 +1275,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_ENROLMENT_TCH:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLMENT_REQUEST:
-	 if (Gbl.CurrentCrs.Crs.NumUsrs[Rol_TCH])
+	 if (Gbl.Hierarchy.Crs.Crs.NumUsrs[Rol_TCH])
 	   {
 	    // If this course has teachers ==> send notification to teachers
 	    NumRows = DB_QuerySELECT (&mysql_res,"can not get users"
@@ -1284,7 +1284,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				      " WHERE CrsCod=%ld"
 				      " AND UsrCod<>%ld"
 				      " AND Role=%u",	// Notify teachers only
-				      Gbl.CurrentCrs.Crs.CrsCod,
+				      Gbl.Hierarchy.Crs.Crs.CrsCod,
 				      Gbl.Usrs.Me.UsrDat.UsrCod,
 				      (unsigned) Rol_TCH);
 	   }
@@ -1302,10 +1302,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				      " OR (Scope='%s' AND Cod=%ld)"
 				      " OR (Scope='%s' AND Cod=%ld))"
 				      " AND UsrCod<>%ld",
-				      Sco_GetDBStrFromScope (Sco_SCOPE_SYS),
-				      Sco_GetDBStrFromScope (Sco_SCOPE_INS),Gbl.CurrentIns.Ins.InsCod,
-				      Sco_GetDBStrFromScope (Sco_SCOPE_CTR),Gbl.CurrentCtr.Ctr.CtrCod,
-				      Sco_GetDBStrFromScope (Sco_SCOPE_DEG),Gbl.CurrentDeg.Deg.DegCod,
+				      Sco_GetDBStrFromScope (Hie_SYS),
+				      Sco_GetDBStrFromScope (Hie_INS),Gbl.Hierarchy.Ins.InsCod,
+				      Sco_GetDBStrFromScope (Hie_CTR),Gbl.Hierarchy.Ctr.CtrCod,
+				      Sco_GetDBStrFromScope (Hie_DEG),Gbl.Hierarchy.Deg.DegCod,
 				      Gbl.Usrs.Me.UsrDat.UsrCod);
 	   }
          break;
@@ -1336,7 +1336,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 					            " to be notified",
 					 "SELECT UsrCod FROM crs_usr"
 					 " WHERE CrsCod=%ld AND UsrCod<>%ld",
-					 Gbl.CurrentCrs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.Crs.CrsCod,
 					 Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case For_FORUM_COURSE_TCHS:
@@ -1344,7 +1344,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 					            " to be notified",
 					 "SELECT UsrCod FROM crs_usr"
 					 " WHERE CrsCod=%ld AND Role=%u AND UsrCod<>%ld",
-					 Gbl.CurrentCrs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.Crs.CrsCod,
 					 (unsigned) Rol_TCH,
 					 Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
@@ -1389,11 +1389,11 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 				   " AND (surveys.Roles&(1<<crs_usr.Role))<>0)",
 				   Cod,
 				   Cod,
-				   Sco_GetDBStrFromScope (Sco_SCOPE_CRS),
+				   Sco_GetDBStrFromScope (Hie_CRS),
 				   Gbl.Usrs.Me.UsrDat.UsrCod,
 				   Cod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod,
-				   Sco_GetDBStrFromScope (Sco_SCOPE_CRS));
+				   Sco_GetDBStrFromScope (Hie_CRS));
          break;
      }
 
@@ -1478,10 +1478,10 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
      }
    else
      {
-      InsCod = Gbl.CurrentIns.Ins.InsCod;
-      CtrCod = Gbl.CurrentCtr.Ctr.CtrCod;
-      DegCod = Gbl.CurrentDeg.Deg.DegCod;
-      CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
+      InsCod = Gbl.Hierarchy.Ins.InsCod;
+      CtrCod = Gbl.Hierarchy.Ctr.CtrCod;
+      DegCod = Gbl.Hierarchy.Deg.DegCod;
+      CrsCod = Gbl.Hierarchy.Crs.Crs.CrsCod;
      }
 
    /***** Store notify event *****/
