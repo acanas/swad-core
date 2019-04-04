@@ -464,10 +464,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.95.1 (2019-04-03)"
+#define Log_PLATFORM_VERSION	"SWAD 18.96 (2019-04-03)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
+TODO: Fix: Campos tienen que aparecer rellenos en formulario de creación tras editar una institución existente
+
+	Version 18.96:    Apr 03, 2019 	Code refactoring in edition of institutions.
+					Fixed bug in creation of country. (241724 lines)
 	Version 18.95.1:  Apr 03, 2019 	Code refactoring in edition of countries. (241607 lines)
 	Version 18.95:    Apr 03, 2019 	Code refactoring related to hierarchy. (241575 lines)
 	Version 18.94.2:  Apr 03, 2019 	Remember last role even if last access is old. (241531 lines)

@@ -216,10 +216,6 @@ struct Globals
      } Hierarchy;
    struct
      {
-      struct Instit EditingIns;
-     } Inss;
-   struct
-     {
       struct Centre EditingCtr;
      } Ctrs;
    struct

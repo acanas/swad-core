@@ -236,13 +236,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hierarchy.Cty.Inss.Num = 0;
    Gbl.Hierarchy.Cty.Inss.Lst = NULL;
    Gbl.Hierarchy.Cty.Inss.SelectedOrder = Ins_ORDER_DEFAULT;
-   Gbl.Inss.EditingIns.InsCod = -1L;
-   Gbl.Inss.EditingIns.CtyCod = -1L;
-   Gbl.Inss.EditingIns.ShrtName[0] = '\0';
-   Gbl.Inss.EditingIns.FullName[0] = '\0';
-   Gbl.Inss.EditingIns.WWW[0] = '\0';
-   Gbl.Inss.EditingIns.Ctrs.Num = Gbl.Inss.EditingIns.NumDpts = Gbl.Inss.EditingIns.NumDegs = 0;
-   Gbl.Inss.EditingIns.NumUsrs = 0;
 
    Gbl.Hierarchy.Sys.Ctys.Num = 0;
    Gbl.Hierarchy.Sys.Ctys.Lst = NULL;

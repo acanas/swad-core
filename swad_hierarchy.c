@@ -579,7 +579,6 @@ void Hie_InitHierarchy (void)
      }
 
    /***** Initialize default fields for edition to current values *****/
-   Gbl.Inss.EditingIns.CtyCod    = Gbl.Hierarchy.Cty.CtyCod;
    Gbl.Ctrs.EditingCtr.InsCod    =
    Gbl.Dpts.EditingDpt.InsCod    = Gbl.Hierarchy.Ins.InsCod;
    Gbl.Degs.EditingDeg.CtrCod    = Gbl.Hierarchy.Ctr.CtrCod;

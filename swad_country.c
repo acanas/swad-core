@@ -2282,9 +2282,9 @@ static void Cty_CreateCountry (struct Country *Cty)
      }
    DB_QueryINSERT ("can not create country",
 		   "INSERT INTO countries"
-		   " (CtyCod,Alpha2%s%s)"
+		   " (CtyCod,Alpha2,MapAttribution%s%s)"
 		   " VALUES"
-		   " ('%03ld','%s'%s%s)",
+		   " ('%03ld','%s',''%s%s)",
                    SubQueryNam1,SubQueryWWW1,
                    Cty->CtyCod,Cty->Alpha2,SubQueryNam2,SubQueryWWW2);
 
@@ -2446,15 +2446,15 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 /*****************************************************************************/
 /*********************** Country constructor/destructor **********************/
 /*****************************************************************************/
-// *Cty must be null
+// *Cty must be NULL
 
 static void Cty_CountryConstructor (struct Country **Cty)
   {
    Lan_Language_t Lan;
 
    /***** *Cty must be NULL *****/
-   if (*Cty == NULL)
-      Lay_ShowErrorAndExit ("Error trying to initialyze country.");
+   if (*Cty != NULL)
+      Lay_ShowErrorAndExit ("Error initializinig country.");
 
    /***** Allocate memory for country *****/
    if ((*Cty = (struct Country *) malloc (sizeof (struct Country))) == NULL)
@@ -2462,10 +2462,22 @@ static void Cty_CountryConstructor (struct Country **Cty)
 
    /***** Reset country *****/
    (*Cty)->CtyCod = -1L;
+   (*Cty)->Alpha2[0] = '\0';
    for (Lan = (Lan_Language_t) 1;
 	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
+     {
       (*Cty)->Name[Lan][0] = '\0';
+      (*Cty)->WWW [Lan][0] = '\0';
+     }
+   (*Cty)->Inss.Num = 0;
+   (*Cty)->Inss.Lst = NULL;
+   (*Cty)->Inss.SelectedOrder = Ins_ORDER_DEFAULT;
+   (*Cty)->NumCtrs = 0;
+   (*Cty)->NumDegs = 0;
+   (*Cty)->NumCrss = 0;
+   (*Cty)->NumUsrs = 0;
+   (*Cty)->NumUsrsWhoClaimToBelongToCty = 0;
   }
 
 static void Cty_CountryDestructor (struct Country **Cty)
