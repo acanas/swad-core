@@ -38,7 +38,6 @@ struct System
       unsigned Num;		// Number of countries
       struct Country *Lst;	// List of countries
       Cty_Order_t SelectedOrder;
-      // struct Country EditingCty;
      } Ctys;
   };
 

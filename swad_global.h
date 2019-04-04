@@ -205,8 +205,15 @@ struct Globals
      } HTMLOutput;
    struct
      {
-      struct Country EditingCty;
-     } Ctys;
+      Hie_Level_t Level;	// Current level in the hierarchy: system, country, institution, centre, degree or course
+      long Cod;			// Code of the current country, institution, centre, degree or course
+      struct System Sys;	// Top level of the hierarchy (system or platform)
+      struct Country Cty;	// Current country
+      struct Instit Ins;	// Current institution
+      struct Centre Ctr;	// Current centre
+      struct Degree Deg;	// Current degree
+      struct Course Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
+     } Hierarchy;
    struct
      {
       struct Instit EditingIns;
@@ -445,17 +452,6 @@ struct Globals
       Hie_Level_t Default;
       unsigned Allowed;
      } Scope;
-   struct
-     {
-      Hie_Level_t Level;	// Current level in the hierarchy: system, country, institution, centre, degree or course
-      long Cod;			// Code of the current country, institution, centre, degree or course
-      struct System Sys;	// Top level of the hierarchy (system or platform)
-      struct Country Cty;	// Current country
-      struct Instit Ins;	// Current institution
-      struct Centre Ctr;	// Current centre
-      struct Degree Deg;	// Current degree
-      struct Course Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
-     } Hierarchy;
    struct
      {
       char PathPriv[PATH_MAX + 1];	// Absolute path to the private directory of the course

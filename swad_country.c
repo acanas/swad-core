@@ -100,6 +100,9 @@ static void Cty_PutFormToCreateCountry (void);
 static void Cty_PutHeadCountriesForEdition (void);
 static void Cty_CreateCountry (struct Country *Cty);
 
+static void Cty_CountryConstructor (struct Country **Cty);
+static void Cty_CountryDestructor (struct Country **Cty);
+
 /*****************************************************************************/
 /***************** List countries with pending institutions ******************/
 /*****************************************************************************/
@@ -1528,7 +1531,7 @@ static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution)
 	 if (row[0][0])
 	   {
 	    Length = strlen (row[0]);
-	    if (((*MapAttribution) = (char *) malloc (Length + 1)) == NULL)
+	    if ((*MapAttribution = (char *) malloc (Length + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Error allocating memory for map attribution.");
 	    Str_Copy (*MapAttribution,row[0],
 	              Length);
@@ -1774,12 +1777,13 @@ void Cty_RenameCountry (void)
    extern const char *Txt_The_country_X_has_been_renamed_as_Y;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_The_name_of_the_country_X_has_not_changed;
-   struct Country *Cty;
+   struct Country *Cty = NULL;
    char NewCtyName[Cty_MAX_BYTES_NAME + 1];
    Lan_Language_t Language;
    char FieldName[4 + 1 + 2 + 1];	// Example: "Name_en"
 
-   Cty = &Gbl.Ctys.EditingCty;
+   /***** Country constructor *****/
+   Cty_CountryConstructor (&Cty);
 
    /***** Get the code of the country *****/
    Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
@@ -1828,6 +1832,9 @@ void Cty_RenameCountry (void)
 	 Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_country_X_has_not_changed,
 		        Cty->Name[Language]);
      }
+
+   /***** Country destructor *****/
+   Cty_CountryDestructor (&Cty);
 
    /***** Show the form again *****/
    Cty_EditCountries ();
@@ -1900,11 +1907,12 @@ void Cty_ChangeCtyWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   struct Country *Cty;
+   struct Country *Cty = NULL;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
    Lan_Language_t Language;
 
-   Cty = &Gbl.Ctys.EditingCty;
+   /***** Country constructor *****/
+   Cty_CountryConstructor (&Cty);
 
    /***** Get the code of the country *****/
    Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
@@ -1929,6 +1937,9 @@ void Cty_ChangeCtyWWW (void)
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
 	          NewWWW);
+
+   /***** Country destructor *****/
+   Cty_CountryDestructor (&Cty);
 
    /***** Show the form again *****/
    Cty_EditCountries ();
@@ -1966,11 +1977,11 @@ static void Cty_PutFormToCreateCountry (void)
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Create_country;
-   struct Country *Cty;
+   struct Country *Cty = NULL;
    Lan_Language_t Lan;
 
-   /***** Country data *****/
-   Cty = &Gbl.Ctys.EditingCty;
+   /***** Country constructoor *****/
+   Cty_CountryConstructor (&Cty);
 
    /***** Start form *****/
    Frm_StartForm (ActNewCty);
@@ -2061,6 +2072,9 @@ static void Cty_PutFormToCreateCountry (void)
 
    /***** End form *****/
    Frm_EndForm ();
+
+   /***** Country destructor *****/
+   Cty_CountryDestructor (&Cty);
   }
 
 /*****************************************************************************/
@@ -2120,12 +2134,13 @@ void Cty_RecFormNewCountry (void)
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_You_must_specify_the_name_of_the_new_country_in_all_languages;
    char ParamName[32];
-   struct Country *Cty;
+   struct Country *Cty = NULL;
    bool CreateCountry = true;
    Lan_Language_t Lan;
    unsigned i;
 
-   Cty = &Gbl.Ctys.EditingCty;
+   /***** Country constructoor *****/
+   Cty_CountryConstructor (&Cty);
 
    /***** Get parameters from form *****/
    /* Get numeric country code */
@@ -2204,6 +2219,9 @@ void Cty_RecFormNewCountry (void)
 
    if (CreateCountry)
       Cty_CreateCountry (Cty);	// Add new country to database
+
+   /***** Country destructor *****/
+   Cty_CountryDestructor (&Cty);
 
    /***** Show the form again *****/
    Cty_EditCountries ();
@@ -2423,4 +2441,39 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (mysql_res);
+  }
+
+/*****************************************************************************/
+/*********************** Country constructor/destructor **********************/
+/*****************************************************************************/
+// *Cty must be null
+
+static void Cty_CountryConstructor (struct Country **Cty)
+  {
+   Lan_Language_t Lan;
+
+   /***** *Cty must be NULL *****/
+   if (*Cty == NULL)
+      Lay_ShowErrorAndExit ("Error trying to initialyze country.");
+
+   /***** Allocate memory for country *****/
+   if ((*Cty = (struct Country *) malloc (sizeof (struct Country))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for country.");
+
+   /***** Reset country *****/
+   (*Cty)->CtyCod = -1L;
+   for (Lan = (Lan_Language_t) 1;
+	Lan <= Lan_NUM_LANGUAGES;
+	Lan++)
+      (*Cty)->Name[Lan][0] = '\0';
+  }
+
+static void Cty_CountryDestructor (struct Country **Cty)
+  {
+   /***** Free memory used for country *****/
+   if (*Cty != NULL)
+     {
+      free ((void *) *Cty);
+      *Cty = NULL;
+     }
   }
