@@ -152,7 +152,7 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
 	       case Hie_CRS:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Course,
-			   Gbl.Hierarchy.Crs.Crs.ShrtName);
+			   Gbl.Hierarchy.Crs.ShrtName);
 		  break;
 	       default:
 		  Lay_WrongScopeExit ();
@@ -202,7 +202,7 @@ void Sco_AdjustScope (void)
       Gbl.Scope.Current = Gbl.Scope.Default;
 
    /***** Avoid impossible scopes *****/
-   if (Gbl.Scope.Current == Hie_CRS && Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)
+   if (Gbl.Scope.Current == Hie_CRS && Gbl.Hierarchy.Crs.CrsCod <= 0)
       Gbl.Scope.Current = Hie_DEG;
 
    if (Gbl.Scope.Current == Hie_DEG && Gbl.Hierarchy.Deg.DegCod <= 0)

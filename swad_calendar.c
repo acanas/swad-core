@@ -265,7 +265,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
    Lay_WriteHeaderClassPhoto (PrintView,false,
 			      Gbl.Hierarchy.Ins.InsCod,
 			      Gbl.Hierarchy.Deg.DegCod,
-			      Gbl.Hierarchy.Crs.Crs.CrsCod);
+			      Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Preference selector to change first day of week *****/
    if (!PrintView)

@@ -916,7 +916,7 @@ void Mai_ListEmails (void)
 		  Str_Concat (StrAddresses,UsrDat.Email,
 		              Mai_MAX_BYTES_STR_ADDR);
 		  fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">%s</a>",
-			   UsrDat.Email,Gbl.Hierarchy.Crs.Crs.FullName,UsrDat.Email);
+			   UsrDat.Email,Gbl.Hierarchy.Crs.FullName,UsrDat.Email);
 
 		  NumAcceptedStdsWithEmail++;
 		 }
@@ -950,7 +950,7 @@ void Mai_ListEmails (void)
                             "<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
                             " title=\"%s\" class=\"%s\">",
                   Gbl.Usrs.Me.UsrDat.Email,
-	          Gbl.Hierarchy.Crs.Crs.FullName,
+	          Gbl.Hierarchy.Crs.FullName,
 	          Gbl.Usrs.Me.UsrDat.Email,
 	          StrAddresses,
                   Txt_Create_email_message,

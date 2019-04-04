@@ -75,6 +75,7 @@
 #include "swad_session.h"
 #include "swad_survey.h"
 #include "swad_syllabus.h"
+#include "swad_system.h"
 #include "swad_test.h"
 #include "swad_timeline.h"
 #include "swad_timetable.h"
@@ -204,60 +205,65 @@ struct Globals
      } HTMLOutput;
    struct
      {
-      unsigned Num;		// Number of institutions
-      struct Instit *Lst;	// List of institutions
+      struct Country EditingCty;
+     } Ctys;
+   struct
+     {
       struct Instit EditingIns;
-      Ins_Order_t SelectedOrder;
      } Inss;
    struct
      {
-      unsigned Num;		// Number of centres
-      struct Centre *Lst;	// List of centres
       struct Centre EditingCtr;
-      Ctr_Order_t SelectedOrder;
      } Ctrs;
    struct
      {
-      unsigned Num;		// Number of countries
-      struct Country *Lst;	// List of countries
-      struct Country EditingCty;
-      Cty_Order_t SelectedOrder;
-     } Ctys;
+      struct Degree EditingDeg;
+     } Degs;
+   struct
+     {
+      struct Course EditingCrs;
+     } Crss;
+   struct
+     {
+      unsigned Num;		// Number of degree types
+      struct DegreeType *Lst;	// List of degree types
+      struct DegreeType EditingDegTyp;
+     } DegTypes;
    struct
      {
       unsigned Num;		// Number of departments
       struct Department *Lst;	// List of departments
-      struct Department EditingDpt;
       Dpt_Order_t SelectedOrder;
+      struct Department EditingDpt;
      } Dpts;
    struct
      {
       unsigned Num;		// Number of places
       struct Place *Lst;	// List of places
-      struct Place EditingPlc;
       Plc_Order_t SelectedOrder;
+      struct Place EditingPlc;
      } Plcs;
    struct
      {
       unsigned Num;		// Number of classrooms
       struct Classroom *Lst;	// List of classrooms
-      struct Classroom EditingCla;
       Cla_Order_t SelectedOrder;
+      struct Classroom EditingCla;
      } Classrooms;
    struct
      {
       bool LstIsRead;		// Is the list already read from database, or it needs to be read?
       unsigned Num;		// Number of holidays
       struct Holiday *Lst;	// List of holidays
-      struct Holiday EditingHld;
       Hld_Order_t SelectedOrder;
+      struct Holiday EditingHld;
      } Hlds;
    struct
      {
       unsigned Num;		// Number of mail domains
       struct Mail *Lst;		// List of mail domains
-      struct Mail EditingMai;
       Mai_DomainsOrder_t SelectedOrder;
+      struct Mail EditingMai;
      } Mails;
    struct
      {
@@ -272,17 +278,6 @@ struct Globals
       struct Link *Lst;		// List of institutional links
       struct Link EditingLnk;
      } Links;
-   struct
-     {
-      struct
-        {
-         unsigned Num;			// Number of degree types
-         struct DegreeType *Lst;	// List of degree types
-        } DegTypes;
-      struct DegreeType EditingDegTyp;
-      struct Degree EditingDeg;
-      struct Course EditingCrs;
-     } Degs;
    struct
      {
       Sch_WhatToSearch_t WhatToSearch;
@@ -454,50 +449,50 @@ struct Globals
      {
       Hie_Level_t Level;	// Current level in the hierarchy: system, country, institution, centre, degree or course
       long Cod;			// Code of the current country, institution, centre, degree or course
-      struct Country Cty;
-      struct Instit Ins;
-      struct DegreeType DegTyp;
-      struct Centre Ctr;
-      struct Degree Deg;
+      struct System Sys;	// Top level of the hierarchy (system or platform)
+      struct Country Cty;	// Current country
+      struct Instit Ins;	// Current institution
+      struct Centre Ctr;	// Current centre
+      struct Degree Deg;	// Current degree
+      struct Course Crs;	// Current course. Aditional info about course is stored in Gbl.Crs.
+     } Hierarchy;
+   struct
+     {
+      char PathPriv[PATH_MAX + 1];	// Absolute path to the private directory of the course
+      char PathRelPubl[PATH_MAX + 1];   // Relative path to the public directory of the course
+      char PathURLPubl[PATH_MAX + 1];   // Abolute URL to the public part of the course
       struct
 	{
-	 struct Course Crs;
-	 char PathPriv[PATH_MAX + 1];   // Absolute path to the private directory of the course
-	 char PathRelPubl[PATH_MAX + 1];   // Relative path to the public directory of the course
-	 char PathURLPubl[PATH_MAX + 1];   // Abolute URL to the public part of the course
-	 struct
-	   {
-	    unsigned NumGrps;
-	    struct GroupTypes GrpTypes;
-	    struct GroupType GrpTyp;
-	    long GrpCod;		// Group to be edited, removed...
-	    char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
-	    long ClaCod;
-	    unsigned MaxStudents;
-	    bool Open;
-	    bool FileZones;
-	    struct ListCodGrps LstGrpsSel;
-	    Grp_WhichGroups_t WhichGrps;	// Show my groups or all groups
-	   } Grps;
-	 struct
-	   {
-	    Inf_InfoType_t Type;
-	    char URL[Cns_MAX_BYTES_WWW + 1];
-	    bool MustBeRead[Inf_NUM_INFO_TYPES];	// Students must read info?
-	    bool ShowMsgMustBeRead;
-	   } Info;
-	 struct
-	   {
-	    struct RecordField Field;
-	    struct LstRecordFields LstFields;
-	   } Records;
-	 struct
-	   {
-	    long NotCod;		// Notice to be edited, removed... used as parameter
-	    long HighlightNotCod;	// Notice code of a notice to be highlighted
-	   } Notices;
-	} Crs;
-     } Hierarchy;
+	 unsigned NumGrps;
+	 struct GroupTypes GrpTypes;
+	 struct GroupType GrpTyp;
+	 long GrpCod;		// Group to be edited, removed...
+	 char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
+	 long ClaCod;
+	 unsigned MaxStudents;
+	 bool Open;
+	 bool FileZones;
+	 struct ListCodGrps LstGrpsSel;
+	 Grp_WhichGroups_t WhichGrps;	// Show my groups or all groups
+	} Grps;
+      struct
+	{
+	 Inf_InfoType_t Type;
+	 char URL[Cns_MAX_BYTES_WWW + 1];
+	 bool MustBeRead[Inf_NUM_INFO_TYPES];	// Students must read info?
+	 bool ShowMsgMustBeRead;
+	} Info;
+      struct
+	{
+	 struct RecordField Field;
+	 struct LstRecordFields LstFields;
+	} Records;
+      struct
+	{
+	 long NotCod;		// Notice to be edited, removed... used as parameter
+	 long HighlightNotCod;	// Notice code of a notice to be highlighted
+	} Notices;
+     } Crs;
    struct
      {
       char PathDir[PATH_MAX + 1];

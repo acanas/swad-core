@@ -76,13 +76,16 @@ struct Degree
    char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];	// Short name of degree
    char FullName[Hie_MAX_BYTES_FULL_NAME + 1];	// Full name of degree
    char WWW[Cns_MAX_BYTES_WWW + 1];
-   unsigned NumCrss;				// Number of courses in this degree
-   struct Course *LstCrss;			// List of courses in this degree
+   struct
+     {
+      unsigned Num;		// Number of courses in this degree
+      struct Course *Lst;	// List of courses in this degree
+     } Crss;
   };
 
 struct ListDegrees
   {
-   unsigned Num;			// Number of degrees
+   unsigned Num;		// Number of degrees
    struct Degree *Lst;		// List of degrees
   };
 

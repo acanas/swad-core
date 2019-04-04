@@ -145,7 +145,7 @@ static void Asg_ShowAllAssignments (void)
                  Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)
+   if (Gbl.Crs.Grps.NumGrps)
      {
       Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAsg,Asg_ParamsWhichGroupsToShow);
@@ -319,7 +319,7 @@ void Asg_PrintOneAssignment (void)
    Lay_WriteHeaderClassPhoto (true,false,
 			      Gbl.Hierarchy.Ins.InsCod,
 			      Gbl.Hierarchy.Deg.DegCod,
-			      Gbl.Hierarchy.Crs.Crs.CrsCod);
+			      Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Table head *****/
    Tbl_StartTableWideMargin (2);
@@ -442,7 +442,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
 
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)
+   if (Gbl.Crs.Grps.NumGrps)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
 
    fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>"
@@ -456,7 +456,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 
    /***** Mark possible notification as seen *****/
    Ntf_MarkNotifAsSeen (Ntf_EVENT_ASSIGNMENT,
-	                AsgCod,Gbl.Hierarchy.Crs.Crs.CrsCod,
+	                AsgCod,Gbl.Hierarchy.Crs.CrsCod,
 	                Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -610,7 +610,7 @@ void Asg_GetListAssignments (void)
       Asg_FreeListAssignments ();
 
    /***** Get list of assignments from database *****/
-   if (Gbl.Hierarchy.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
+   if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get assignments",
 	                        "SELECT AsgCod"
 				" FROM assignments"
@@ -619,17 +619,17 @@ void Asg_GetListAssignments (void)
 				" AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
 				" WHERE crs_grp_usr.UsrCod=%ld AND asg_grp.GrpCod=crs_grp_usr.GrpCod))"
 				" ORDER BY %s",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.CrsCod,
 				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				OrderBySubQuery[Gbl.Asgs.SelectedOrder]);
-   else	// Gbl.Hierarchy.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
+   else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
       NumRows = DB_QuerySELECT (&mysql_res,"can not get assignments",
 	                        "SELECT AsgCod"
 				" FROM assignments"
 				" WHERE CrsCod=%ld%s"
 				" ORDER BY %s",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.CrsCod,
 				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 				OrderBySubQuery[Gbl.Asgs.SelectedOrder]);
 
@@ -681,7 +681,7 @@ void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg)
 				"Title,Folder"
 				" FROM assignments"
 				" WHERE AsgCod=%ld AND CrsCod=%ld",
-				Asg->AsgCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+				Asg->AsgCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Get data of assignment *****/
       Asg_GetDataOfAssignment (Asg,&mysql_res,NumRows);
@@ -714,7 +714,7 @@ void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg)
 				"Title,Folder"
 				" FROM assignments"
 				" WHERE CrsCod=%ld AND Folder='%s'",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,Asg->Folder);
+				Gbl.Hierarchy.Crs.CrsCod,Asg->Folder);
 
       /***** Get data of assignment *****/
       Asg_GetDataOfAssignment (Asg,&mysql_res,NumRows);
@@ -831,7 +831,7 @@ static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT 
    NumRows = DB_QuerySELECT (&mysql_res,"can not get assignment text",
 	                     "SELECT Txt FROM assignments"
 			     " WHERE AsgCod=%ld AND CrsCod=%ld",
-			     AsgCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+			     AsgCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -976,7 +976,7 @@ void Asg_RemoveAssignment (void)
    /***** Remove assignment *****/
    DB_QueryDELETE ("can not remove assignment",
 		   "DELETE FROM assignments WHERE AsgCod=%ld AND CrsCod=%ld",
-                   Asg.AsgCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+                   Asg.AsgCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
@@ -1009,7 +1009,7 @@ void Asg_HideAssignment (void)
    DB_QueryUPDATE ("can not hide assignment",
 		   "UPDATE assignments SET Hidden='Y'"
 		   " WHERE AsgCod=%ld AND CrsCod=%ld",
-                   Asg.AsgCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+                   Asg.AsgCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_is_now_hidden,
@@ -1039,7 +1039,7 @@ void Asg_ShowAssignment (void)
    DB_QueryUPDATE ("can not show assignment",
 		   "UPDATE assignments SET Hidden='N'"
 		   " WHERE AsgCod=%ld AND CrsCod=%ld",
-                   Asg.AsgCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+                   Asg.AsgCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_is_now_visible,
@@ -1060,7 +1060,7 @@ static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Va
 			  "SELECT COUNT(*) FROM assignments"
 			  " WHERE CrsCod=%ld"
 			  " AND %s='%s' AND AsgCod<>%ld",
-			  Gbl.Hierarchy.Crs.Crs.CrsCod,
+			  Gbl.Hierarchy.Crs.CrsCod,
 			  Field,Value,AsgCod) != 0);
   }
 
@@ -1220,7 +1220,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   if (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num)
+   if (Gbl.Crs.Grps.GrpTypes.Num)
      {
       /***** Start box and table *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1245,14 +1245,14 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
                          "</label>"
 	                 "</td>"
 	                 "</tr>",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.Crs.ShrtName);
+               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
-         if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
                                             AsgCod,Grp_ASSIGNMENT);
 
       /***** End table and box *****/
@@ -1443,7 +1443,7 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
 				" VALUES"
 				" (%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				"'%s','%s','%s')",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Asg->TimeUTC[Dat_START_TIME],
 				Asg->TimeUTC[Dat_END_TIME  ],
@@ -1452,7 +1452,7 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
 				Txt);
 
    /***** Create groups *****/
-   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
+   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Asg_CreateGrps (Asg->AsgCod);
   }
 
@@ -1474,14 +1474,14 @@ static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
                    Asg->Title,
                    Asg->Folder,
                    Txt,
-                   Asg->AsgCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+                   Asg->AsgCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update groups *****/
    /* Remove old groups */
    Asg_RemoveAllTheGrpsAssociatedToAnAssignment (Asg->AsgCod);
 
    /* Create new groups */
-   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
+   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Asg_CreateGrps (Asg->AsgCod);
   }
 
@@ -1562,7 +1562,7 @@ static void Asg_CreateGrps (long AsgCod)
 
    /***** Create groups of the assignment *****/
    for (NumGrpSel = 0;
-	NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps;
+	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
       /* Create group */
       DB_QueryINSERT ("can not associate a group to an assignment",
@@ -1571,7 +1571,7 @@ static void Asg_CreateGrps (long AsgCod)
 		      " VALUES"
 		      " (%ld,%ld)",
                       AsgCod,
-		      Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+		      Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
@@ -1632,7 +1632,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
      }
    else
       fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.Crs.ShrtName);
+               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -1781,7 +1781,7 @@ unsigned Asg_GetNumCoursesWithAssignments (Hie_Level_t Scope)
                          "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM assignments"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -1863,7 +1863,7 @@ unsigned Asg_GetNumAssignments (Hie_Level_t Scope,unsigned *NumNotif)
                          "SELECT COUNT(*),SUM(NumNotif)"
 			 " FROM assignments"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

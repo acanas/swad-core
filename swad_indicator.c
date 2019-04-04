@@ -509,8 +509,8 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " AND crs_usr.UsrCod=usr_data.UsrCod"
 				       " AND usr_data.DptCod=%ld"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.Hierarchy.Crs.Crs.CrsCod,
-				       Gbl.Hierarchy.Crs.Crs.CrsCod,
+				       Gbl.Hierarchy.Crs.CrsCod,
+				       Gbl.Hierarchy.Crs.CrsCod,
 				       (unsigned) Rol_TCH,
 				       Gbl.Stat.DptCod);
          else
@@ -521,7 +521,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 				       " WHERE courses.CrsCod=%ld"
 				       " AND degrees.DegCod=courses.DegCod"
 				       " ORDER BY degrees.FullName,courses.FullName",
-				       Gbl.Hierarchy.Crs.Crs.CrsCod);
+				       Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

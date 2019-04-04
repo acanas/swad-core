@@ -27,6 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_centre.h"
 #include "swad_constant.h"
 #include "swad_role_type.h"
 
@@ -64,12 +65,17 @@ struct Instit
    char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
-   unsigned NumUsrsWhoClaimToBelongToIns;
-   unsigned NumCtrs;
+   struct
+     {
+      unsigned Num;		// Number of centres
+      struct Centre *Lst;	// List of centres
+      Ctr_Order_t SelectedOrder;
+     } Ctrs;
    unsigned NumDegs;
    unsigned NumCrss;
    unsigned NumDpts;
    unsigned NumUsrs;		// Number of users in courses of this institution
+   unsigned NumUsrsWhoClaimToBelongToIns;
   };
 
 #define Ins_NUM_ORDERS 2

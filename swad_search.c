@@ -377,7 +377,7 @@ static void Sch_SearchInDB (void)
          break;
       case Hie_CRS:
          sprintf (RangeQuery," AND courses.CrsCod=%ld",
-                  Gbl.Hierarchy.Crs.Crs.CrsCod);
+                  Gbl.Hierarchy.Crs.CrsCod);
          break;
      }
 

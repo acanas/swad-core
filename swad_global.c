@@ -218,7 +218,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hierarchy.Ins.ShrtName[0] = '\0';
    Gbl.Hierarchy.Ins.FullName[0] = '\0';
    Gbl.Hierarchy.Ins.WWW[0] = '\0';
-   Gbl.Hierarchy.Ins.NumCtrs = Gbl.Hierarchy.Ins.NumDpts = Gbl.Hierarchy.Ins.NumDegs = 0;
+   Gbl.Hierarchy.Ins.Ctrs.Num = Gbl.Hierarchy.Ins.NumDpts = Gbl.Hierarchy.Ins.NumDegs = 0;
    Gbl.Hierarchy.Ins.NumUsrs = 0;
 
    Gbl.Hierarchy.Ctr.ShrtName[0] = '\0';
@@ -226,39 +226,37 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hierarchy.Ctr.Degs.Num = 0;
    Gbl.Hierarchy.Ctr.Degs.Lst = NULL;
 
-   Gbl.Hierarchy.DegTyp.DegTypName[0] = '\0';
-
    Gbl.Hierarchy.Deg.ShrtName[0] = Gbl.Hierarchy.Deg.FullName[0] = '\0';
 
    Gbl.Classrooms.EditingCla.Capacity = Cla_UNLIMITED_CAPACITY;
 
-   Gbl.Hierarchy.Crs.Crs.ShrtName[0] = Gbl.Hierarchy.Crs.Crs.FullName[0] = '\0';
-   Gbl.Hierarchy.Crs.Info.ShowMsgMustBeRead = 0;
-   Gbl.Hierarchy.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
+   Gbl.Hierarchy.Crs.ShrtName[0] = Gbl.Hierarchy.Crs.FullName[0] = '\0';
+   Gbl.Crs.Info.ShowMsgMustBeRead = 0;
+   Gbl.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
 
-   Gbl.Inss.Num = 0;
-   Gbl.Inss.Lst = NULL;
-   Gbl.Inss.SelectedOrder = Ins_ORDER_DEFAULT;
+   Gbl.Hierarchy.Cty.Inss.Num = 0;
+   Gbl.Hierarchy.Cty.Inss.Lst = NULL;
+   Gbl.Hierarchy.Cty.Inss.SelectedOrder = Ins_ORDER_DEFAULT;
    Gbl.Inss.EditingIns.InsCod = -1L;
    Gbl.Inss.EditingIns.CtyCod = -1L;
    Gbl.Inss.EditingIns.ShrtName[0] = '\0';
    Gbl.Inss.EditingIns.FullName[0] = '\0';
    Gbl.Inss.EditingIns.WWW[0] = '\0';
-   Gbl.Inss.EditingIns.NumCtrs = Gbl.Inss.EditingIns.NumDpts = Gbl.Inss.EditingIns.NumDegs = 0;
+   Gbl.Inss.EditingIns.Ctrs.Num = Gbl.Inss.EditingIns.NumDpts = Gbl.Inss.EditingIns.NumDegs = 0;
    Gbl.Inss.EditingIns.NumUsrs = 0;
 
-   Gbl.Ctys.Num = 0;
-   Gbl.Ctys.Lst = NULL;
-   Gbl.Ctys.SelectedOrder = Cty_ORDER_DEFAULT;
+   Gbl.Hierarchy.Sys.Ctys.Num = 0;
+   Gbl.Hierarchy.Sys.Ctys.Lst = NULL;
+   Gbl.Hierarchy.Sys.Ctys.SelectedOrder = Cty_ORDER_DEFAULT;
    Gbl.Ctys.EditingCty.CtyCod = -1L;
    for (Lan = (Lan_Language_t) 1;
 	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
       Gbl.Ctys.EditingCty.Name[Lan][0] = '\0';
 
-   Gbl.Ctrs.Num = 0;
-   Gbl.Ctrs.Lst = NULL;
-   Gbl.Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
+   Gbl.Hierarchy.Ins.Ctrs.Num = 0;
+   Gbl.Hierarchy.Ins.Ctrs.Lst = NULL;
+   Gbl.Hierarchy.Ins.Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
    Gbl.Ctrs.EditingCtr.CtrCod = -1L;
    Gbl.Ctrs.EditingCtr.InsCod = -1L;
    Gbl.Ctrs.EditingCtr.CtrCod = -1L;
@@ -293,52 +291,52 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hlds.EditingHld.StartDate.Day   = Gbl.Hlds.EditingHld.EndDate.Day   = Gbl.Now.Date.Day;
    Gbl.Hlds.EditingHld.Name[0] = '\0';
 
-   Gbl.Degs.DegTypes.Num = 0;
-   Gbl.Degs.DegTypes.Lst = NULL;
+   Gbl.DegTypes.Num = 0;
+   Gbl.DegTypes.Lst = NULL;
 
-   Gbl.Degs.EditingDegTyp.DegTypCod     = -1L;
-   Gbl.Degs.EditingDegTyp.DegTypName[0] = '\0';
+   Gbl.DegTypes.EditingDegTyp.DegTypCod     = -1L;
+   Gbl.DegTypes.EditingDegTyp.DegTypName[0] = '\0';
 
    Gbl.Degs.EditingDeg.DegCod       = -1L;
    Gbl.Degs.EditingDeg.ShrtName[0] = '\0';
    Gbl.Degs.EditingDeg.FullName[0]  = '\0';
    Gbl.Degs.EditingDeg.WWW[0]       = '\0';
-   Gbl.Degs.EditingDeg.LstCrss      = NULL;
+   Gbl.Degs.EditingDeg.Crss.Lst      = NULL;
 
-   Gbl.Degs.EditingCrs.CrsCod       = -1L;
-   Gbl.Degs.EditingCrs.DegCod       = -1L;
-   Gbl.Degs.EditingCrs.Year         = 0;
-   Gbl.Degs.EditingCrs.ShrtName[0] = '\0';
-   Gbl.Degs.EditingCrs.FullName[0]  = '\0';
+   Gbl.Crss.EditingCrs.CrsCod       = -1L;
+   Gbl.Crss.EditingCrs.DegCod       = -1L;
+   Gbl.Crss.EditingCrs.Year         = 0;
+   Gbl.Crss.EditingCrs.ShrtName[0] = '\0';
+   Gbl.Crss.EditingCrs.FullName[0]  = '\0';
 
-   Gbl.Hierarchy.Crs.Grps.NumGrps = 0;
-   Gbl.Hierarchy.Crs.Grps.WhichGrps = Grp_WHICH_GROUPS_DEFAULT;
-   Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
-   Gbl.Hierarchy.Crs.Grps.GrpTypes.Num = 0;
-   Gbl.Hierarchy.Crs.Grps.GrpTypes.NestedCalls = 0;
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName[0] = '\0';
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.MandatoryEnrolment = true;
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.MultipleEnrolment = false;
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.MustBeOpened = false;
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.OpenTimeUTC = (time_t) 0;
-   Gbl.Hierarchy.Crs.Grps.GrpCod = -1L; // -1L stands for the whole course
-   Gbl.Hierarchy.Crs.Grps.GrpName[0] = '\0';
-   Gbl.Hierarchy.Crs.Grps.ClaCod = -1L; // -1L stands for no classroom assigned
-   Gbl.Hierarchy.Crs.Grps.MaxStudents = Grp_NUM_STUDENTS_NOT_LIMITED;
-   Gbl.Hierarchy.Crs.Grps.Open = false;
-   Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods  = NULL;
-   Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps = 0;
-   Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NestedCalls = 0;
+   Gbl.Crs.Grps.NumGrps = 0;
+   Gbl.Crs.Grps.WhichGrps = Grp_WHICH_GROUPS_DEFAULT;
+   Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
+   Gbl.Crs.Grps.GrpTypes.Num = 0;
+   Gbl.Crs.Grps.GrpTypes.NestedCalls = 0;
+   Gbl.Crs.Grps.GrpTyp.GrpTypName[0] = '\0';
+   Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment = true;
+   Gbl.Crs.Grps.GrpTyp.MultipleEnrolment = false;
+   Gbl.Crs.Grps.GrpTyp.MustBeOpened = false;
+   Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = (time_t) 0;
+   Gbl.Crs.Grps.GrpCod = -1L; // -1L stands for the whole course
+   Gbl.Crs.Grps.GrpName[0] = '\0';
+   Gbl.Crs.Grps.ClaCod = -1L; // -1L stands for no classroom assigned
+   Gbl.Crs.Grps.MaxStudents = Grp_NUM_STUDENTS_NOT_LIMITED;
+   Gbl.Crs.Grps.Open = false;
+   Gbl.Crs.Grps.LstGrpsSel.GrpCods  = NULL;
+   Gbl.Crs.Grps.LstGrpsSel.NumGrps = 0;
+   Gbl.Crs.Grps.LstGrpsSel.NestedCalls = 0;
 
    Gbl.Usrs.ClassPhoto.AllGroups = true;
 
-   Gbl.Hierarchy.Crs.Records.Field.Name[0] = '\0';
-   Gbl.Hierarchy.Crs.Records.Field.NumLines = Rec_MIN_LINES_IN_EDITION_FIELD;
-   Gbl.Hierarchy.Crs.Records.Field.Visibility = Rec_HIDDEN_FIELD;
+   Gbl.Crs.Records.Field.Name[0] = '\0';
+   Gbl.Crs.Records.Field.NumLines = Rec_MIN_LINES_IN_EDITION_FIELD;
+   Gbl.Crs.Records.Field.Visibility = Rec_HIDDEN_FIELD;
 
-   Gbl.Hierarchy.Crs.Records.LstFields.Lst = NULL;
-   Gbl.Hierarchy.Crs.Records.LstFields.Num = 0;
-   Gbl.Hierarchy.Crs.Records.LstFields.NestedCalls = 0;
+   Gbl.Crs.Records.LstFields.Lst = NULL;
+   Gbl.Crs.Records.LstFields.Num = 0;
+   Gbl.Crs.Records.LstFields.NestedCalls = 0;
 
    Gbl.Syllabus.EditionIsActive = false;
    Gbl.Syllabus.WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;

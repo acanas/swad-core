@@ -112,13 +112,13 @@ void DT_WriteSelectorDegreeTypes (void)
    fprintf (Gbl.F.Out,">%s</option>",Txt_Any_type_of_degree);
 
    for (NumDegTyp = 0;
-	NumDegTyp < Gbl.Degs.DegTypes.Num;
+	NumDegTyp < Gbl.DegTypes.Num;
 	NumDegTyp++)
      {
-      fprintf (Gbl.F.Out,"<option value=\"%ld\"",Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod );
-      if (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod  == Gbl.Stat.DegTypCod)
+      fprintf (Gbl.F.Out,"<option value=\"%ld\"",Gbl.DegTypes.Lst[NumDegTyp].DegTypCod );
+      if (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod  == Gbl.Stat.DegTypCod)
          fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName);
+      fprintf (Gbl.F.Out,">%s</option>",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
      }
 
    fprintf (Gbl.F.Out,"</select>");
@@ -204,7 +204,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
 	 return;
      }
 
-   if (Gbl.Degs.DegTypes.Num)
+   if (Gbl.DegTypes.Num)
      {
       /***** Write heading *****/
       Tbl_StartTableWideMargin (2);
@@ -223,7 +223,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    if (DT_CheckIfICanCreateDegreeTypes ())
      {
       Frm_StartForm (ActEdiDegTyp);
-      Btn_PutConfirmButton (Gbl.Degs.DegTypes.Num ? Txt_Create_another_type_of_degree :
+      Btn_PutConfirmButton (Gbl.DegTypes.Num ? Txt_Create_another_type_of_degree :
 	                                            Txt_Create_type_of_degree);
       Frm_EndForm ();
      }
@@ -252,7 +252,7 @@ void DT_EditDegreeTypes (void)
    DT_PutFormToCreateDegreeType ();
 
    /***** Forms to edit current degree types *****/
-   if (Gbl.Degs.DegTypes.Num)
+   if (Gbl.DegTypes.Num)
       DT_ListDegreeTypesForEdition ();
 
    /***** End box *****/
@@ -303,12 +303,12 @@ static void DT_ListDegreeTypesForSeeing (void)
 
    /***** List degree types with forms for edition *****/
    for (NumDegTyp = 0;
-	NumDegTyp < Gbl.Degs.DegTypes.Num;
+	NumDegTyp < Gbl.DegTypes.Num;
 	NumDegTyp++)
      {
-      BgColor = (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod ==
-	         Gbl.Hierarchy.DegTyp.DegTypCod) ? "LIGHT_BLUE" :
-                                                       Gbl.ColorRows[Gbl.RowEvenOdd];
+      BgColor = (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod ==
+	         Gbl.Hierarchy.Deg.DegTypCod) ? "LIGHT_BLUE" :
+                                                Gbl.ColorRows[Gbl.RowEvenOdd];
 
       /* Number of degree type in this list */
       fprintf (Gbl.F.Out,"<tr>"
@@ -321,14 +321,14 @@ static void DT_ListDegreeTypesForSeeing (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE %s\">"
 	                 "%s"
 	                 "</td>",
-               BgColor,Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName);
+               BgColor,Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
 
       /* Number of degrees of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_MIDDLE %s\">"
 	                 "%u"
 	                 "</td>"
                          "</tr>",
-               BgColor,Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs);
+               BgColor,Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
@@ -376,18 +376,18 @@ static void DT_ListDegreeTypesForEdition (void)
 
    /***** List degree types with forms for edition *****/
    for (NumDegTyp = 0;
-	NumDegTyp < Gbl.Degs.DegTypes.Num;
+	NumDegTyp < Gbl.DegTypes.Num;
 	NumDegTyp++)
      {
       /* Put icon to remove degree type */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      if (Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees => deletion forbidden
+      if (Gbl.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees => deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
         {
          Frm_StartForm (ActRemDegTyp);
-         DT_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
+         DT_PutParamOtherDegTypCod (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
          Ico_PutIconRemove ();
          Frm_EndForm ();
         }
@@ -397,17 +397,17 @@ static void DT_ListDegreeTypesForEdition (void)
 	                 "<td class=\"DAT CODE\">"
 	                 "%ld"
 	                 "</td>",
-               Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
+               Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
 
       /* Name of degree type */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Frm_StartForm (ActRenDegTyp);
-      DT_PutParamOtherDegTypCod (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
+      DT_PutParamOtherDegTypCod (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\""
 	                 " size=\"25\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Deg_MAX_CHARS_DEGREE_TYPE_NAME,
-               Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName,
+               Gbl.DegTypes.Lst[NumDegTyp].DegTypName,
                Gbl.Form.Id);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
@@ -417,7 +417,7 @@ static void DT_ListDegreeTypesForEdition (void)
 	                 "%u"
 	                 "</td>"
                          "</tr>",
-               Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs);
+               Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
      }
 
    /***** End table *****/
@@ -465,7 +465,7 @@ void DT_PutFormToCreateDegreeType (void)
                       " size=\"25\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                      "</td>",
-            Deg_MAX_CHARS_DEGREE_TYPE_NAME,Gbl.Degs.EditingDegTyp.DegTypName);
+            Deg_MAX_CHARS_DEGREE_TYPE_NAME,Gbl.DegTypes.EditingDegTyp.DegTypName);
 
    /***** Number of degrees of this degree type ****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -590,7 +590,7 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
 	    all degree types with degrees
 	    union with
 	    all degree types without any degree */
-	 Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
+	 Gbl.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
 							    "(SELECT deg_types.DegTypCod,deg_types.DegTypName,"
 							    "COUNT(degrees.DegCod) AS NumDegs"
 							    " FROM degrees,deg_types"
@@ -606,7 +606,7 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
          break;
       case Hie_CTY:
 	 /* Get only degree types with degrees in the current country */
-	 Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
+	 Gbl.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
 							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
 							    "COUNT(degrees.DegCod) AS NumDegs"
 							    " FROM institutions,centres,degrees,deg_types"
@@ -621,7 +621,7 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
          break;
       case Hie_INS:
 	 /* Get only degree types with degrees in the current institution */
-	 Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
+	 Gbl.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
 							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
 							    "COUNT(degrees.DegCod) AS NumDegs"
 							    " FROM centres,degrees,deg_types"
@@ -635,7 +635,7 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
 	 break;
       case Hie_CTR:
 	 /* Get only degree types with degrees in the current centre */
-	 Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
+	 Gbl.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
 							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
 							    "COUNT(degrees.DegCod) AS NumDegs"
 							    " FROM degrees,deg_types"
@@ -649,7 +649,7 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
       case Hie_DEG:
       case Hie_CRS:
 	 /* Get only degree types with degrees in the current degree */
-	 Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
+	 Gbl.DegTypes.Num = (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of degree",
 							    "SELECT deg_types.DegTypCod,deg_types.DegTypName,"
 							    "COUNT(degrees.DegCod) AS NumDegs"
 							    " FROM degrees,deg_types"
@@ -666,32 +666,32 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
      }
 
    /***** Get degree types *****/
-   if (Gbl.Degs.DegTypes.Num)
+   if (Gbl.DegTypes.Num)
      {
       /***** Create a list of degree types *****/
-      if ((Gbl.Degs.DegTypes.Lst = (struct DegreeType *)
-				   calloc (Gbl.Degs.DegTypes.Num,
+      if ((Gbl.DegTypes.Lst = (struct DegreeType *)
+				   calloc (Gbl.DegTypes.Num,
 					   sizeof (struct DegreeType))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get degree types *****/
       for (NumRow = 0;
-	   NumRow < Gbl.Degs.DegTypes.Num;
+	   NumRow < Gbl.DegTypes.Num;
 	   NumRow++)
         {
          /* Get next degree type */
          row = mysql_fetch_row (mysql_res);
 
          /* Get degree type code (row[0]) */
-         if ((Gbl.Degs.DegTypes.Lst[NumRow].DegTypCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Gbl.DegTypes.Lst[NumRow].DegTypCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong code of type of degree.");
 
          /* Get degree type name (row[1]) */
-         Str_Copy (Gbl.Degs.DegTypes.Lst[NumRow].DegTypName,row[1],
+         Str_Copy (Gbl.DegTypes.Lst[NumRow].DegTypName,row[1],
                    Deg_MAX_BYTES_DEGREE_TYPE_NAME);
 
          /* Number of degrees of this type (row[2]) */
-         if (sscanf (row[2],"%u",&Gbl.Degs.DegTypes.Lst[NumRow].NumDegs) != 1)
+         if (sscanf (row[2],"%u",&Gbl.DegTypes.Lst[NumRow].NumDegs) != 1)
             Lay_ShowErrorAndExit ("Error when getting number of degrees of a type");
         }
      }
@@ -707,11 +707,11 @@ void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order)
 void DT_FreeListDegreeTypes (void)
   {
    /***** Free memory used by the list of degree types *****/
-   if (Gbl.Degs.DegTypes.Lst)
+   if (Gbl.DegTypes.Lst)
      {
-      free ((void *) Gbl.Degs.DegTypes.Lst);
-      Gbl.Degs.DegTypes.Lst = NULL;
-      Gbl.Degs.DegTypes.Num = 0;
+      free ((void *) Gbl.DegTypes.Lst);
+      Gbl.DegTypes.Lst = NULL;
+      Gbl.DegTypes.Num = 0;
      }
   }
 
@@ -725,7 +725,7 @@ void DT_RecFormNewDegreeType (void)
    extern const char *Txt_You_must_specify_the_name_of_the_new_type_of_degree;
    struct DegreeType *DegTyp;
 
-   DegTyp = &Gbl.Degs.EditingDegTyp;
+   DegTyp = &Gbl.DegTypes.EditingDegTyp;
 
    /***** Get parameters from form *****/
    /* Get the name of degree type */
@@ -927,7 +927,7 @@ void DT_RenameDegreeType (void)
    struct DegreeType *DegTyp;
    char NewNameDegTyp[Deg_MAX_BYTES_DEGREE_TYPE_NAME + 1];
 
-   DegTyp = &Gbl.Degs.EditingDegTyp;
+   DegTyp = &Gbl.DegTypes.EditingDegTyp;
 
    /***** Get parameters from form *****/
    /* Get the code of the degree type */
@@ -1024,6 +1024,6 @@ void DT_ChangeDegreeType (void)
    Deg_ShowAlertAndButtonToGoToDeg ();
 
    /***** Show the form again *****/
-   Gbl.Degs.EditingDegTyp.DegTypCod = NewDegTypCod;
+   Gbl.DegTypes.EditingDegTyp.DegTypCod = NewDegTypCod;
    Deg_EditDegrees ();
   }

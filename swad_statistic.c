@@ -198,7 +198,7 @@ void Sta_LogAccess (const char *Comments)
 				Gbl.Hierarchy.Ins.InsCod,
 				Gbl.Hierarchy.Ctr.CtrCod,
 				Gbl.Hierarchy.Deg.DegCod,
-				Gbl.Hierarchy.Crs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				(unsigned) RoleToStore,
 				Gbl.TimeGenerationInMicroseconds,
@@ -218,7 +218,7 @@ void Sta_LogAccess (const char *Comments)
 		   Gbl.Hierarchy.Ins.InsCod,
 		   Gbl.Hierarchy.Ctr.CtrCod,
 		   Gbl.Hierarchy.Deg.DegCod,
-		   Gbl.Hierarchy.Crs.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.CrsCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) RoleToStore,
 		   Gbl.TimeGenerationInMicroseconds,
@@ -345,7 +345,7 @@ void Sta_AskShowCrsHits (void)
    /***** Start box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Statistics_of_visits_to_the_course_X,
-	     Gbl.Hierarchy.Crs.Crs.ShrtName);
+	     Gbl.Hierarchy.Crs.ShrtName);
    Box_StartBox (NULL,Gbl.Title,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
 
@@ -1144,7 +1144,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	       if (Gbl.Hierarchy.Level == Hie_CRS)
 		 {
 		  sprintf (QueryAux," AND %s.CrsCod=%ld",
-			   LogTable,Gbl.Hierarchy.Crs.Crs.CrsCod);
+			   LogTable,Gbl.Hierarchy.Crs.CrsCod);
 		  Str_Concat (Query,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
 		 }
@@ -1238,7 +1238,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 break;
       case Sta_SHOW_COURSE_ACCESSES:
          sprintf (QueryAux," AND %s.CrsCod=%ld",
-                  LogTable,Gbl.Hierarchy.Crs.Crs.CrsCod);
+                  LogTable,Gbl.Hierarchy.Crs.CrsCod);
 	 Str_Concat (Query,QueryAux,
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 

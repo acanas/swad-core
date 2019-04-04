@@ -308,7 +308,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	{
 	 /* Get user's role in current course */
 	 UsrDat->Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-	                                                        Gbl.Hierarchy.Crs.Crs.CrsCod);
+	                                                        Gbl.Hierarchy.Crs.CrsCod);
 	 UsrDat->Roles.InCurrentCrs.Valid = true;
 
 	 /* Get if user has accepted enrolment in current course */
@@ -1512,7 +1512,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName)
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY usr_figures.%s DESC,usr_figures.UsrCod LIMIT 100",
 				    FieldName,
-				    Gbl.Hierarchy.Crs.Crs.CrsCod,
+				    Gbl.Hierarchy.Crs.CrsCod,
 				    FieldName,FieldName);
          break;
       default:
@@ -1694,7 +1694,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 				    " AND usr_figures.FirstClickTime>FROM_UNIXTIME(0)"
 				    " AND usr_figures.UsrCod NOT IN (SELECT UsrCod FROM usr_banned)"
 				    " ORDER BY NumClicksPerDay DESC,usr_figures.UsrCod LIMIT 100",
-				    Gbl.Hierarchy.Crs.Crs.CrsCod);
+				    Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
          Lay_WrongScopeExit ();

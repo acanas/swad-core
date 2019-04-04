@@ -432,12 +432,12 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
 			 "<div id=\"big_short_name\">"
 			 "%s"	// Short name
 			 "</div>",
-		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.Crs.FullName :
+		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_CTR) ? Gbl.Hierarchy.Ctr.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_INS) ? Gbl.Hierarchy.Ins.FullName :
 	                                           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))),
-		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.Crs.ShrtName :
+		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.ShrtName :
 	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.ShrtName :
 	       ((Gbl.Hierarchy.Level == Hie_CTR) ? Gbl.Hierarchy.Ctr.ShrtName :
 	       ((Gbl.Hierarchy.Level == Hie_INS) ? Gbl.Hierarchy.Ins.ShrtName :
@@ -483,7 +483,7 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
          Gbl.Hierarchy.Deg.DegCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
 	 break;
       case Hie_CRS:	// Course
-         Gbl.Hierarchy.Crs.Crs.CrsCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
+         Gbl.Hierarchy.Crs.CrsCod = Gbl.Usrs.Me.UsrLast.LastHie.Cod;
 	 break;
       default:
 	 break;
@@ -500,10 +500,10 @@ void Hie_SetHierarchyFromUsrLastHierarchy (void)
 void Hie_InitHierarchy (void)
   {
    /***** If course code is available, get course data *****/
-   if (Gbl.Hierarchy.Crs.Crs.CrsCod > 0)
+   if (Gbl.Hierarchy.Crs.CrsCod > 0)
      {
-      if (Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs.Crs))		// Course found
-         Gbl.Hierarchy.Deg.DegCod = Gbl.Hierarchy.Crs.Crs.DegCod;
+      if (Crs_GetDataOfCourseByCod (&Gbl.Hierarchy.Crs))				// Course found
+         Gbl.Hierarchy.Deg.DegCod = Gbl.Hierarchy.Crs.DegCod;
       else
          Hie_ResetHierarchy ();
      }
@@ -513,13 +513,8 @@ void Hie_InitHierarchy (void)
      {
       if (Deg_GetDataOfDegreeByCod (&Gbl.Hierarchy.Deg))				// Degree found
 	{
-	 Gbl.Hierarchy.Ctr.CtrCod       = Gbl.Hierarchy.Deg.CtrCod;
-         Gbl.Hierarchy.DegTyp.DegTypCod = Gbl.Hierarchy.Deg.DegTypCod;
+	 Gbl.Hierarchy.Ctr.CtrCod = Gbl.Hierarchy.Deg.CtrCod;
          Gbl.Hierarchy.Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Gbl.Hierarchy.Deg.DegCod);
-
-         /***** Degree type is available, so get degree type data *****/
-         if (!DT_GetDataOfDegreeTypeByCod (&Gbl.Hierarchy.DegTyp))			// Degree type not found
-            Hie_ResetHierarchy ();
 	}
       else
          Hie_ResetHierarchy ();
@@ -552,35 +547,35 @@ void Hie_InitHierarchy (void)
 
    /***** Set current hierarchy level and code
           depending on course code, degree code, etc. *****/
-   if (Gbl.Hierarchy.Crs.Crs.CrsCod > 0)	// Course selected
+   if      (Gbl.Hierarchy.Crs.CrsCod > 0)	// Course selected
      {
       Gbl.Hierarchy.Level = Hie_CRS;
-      Gbl.Hierarchy.Cod   = Gbl.Hierarchy.Crs.Crs.CrsCod;
+      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Crs.CrsCod;
      }
    else if (Gbl.Hierarchy.Deg.DegCod > 0)	// Degree selected
      {
       Gbl.Hierarchy.Level = Hie_DEG;
-      Gbl.Hierarchy.Cod   = Gbl.Hierarchy.Deg.DegCod;
+      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Deg.DegCod;
      }
    else if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Centre selected
      {
       Gbl.Hierarchy.Level = Hie_CTR;
-      Gbl.Hierarchy.Cod   = Gbl.Hierarchy.Ctr.CtrCod;
+      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Ctr.CtrCod;
      }
    else if (Gbl.Hierarchy.Ins.InsCod > 0)	// Institution selected
      {
       Gbl.Hierarchy.Level = Hie_INS;
-      Gbl.Hierarchy.Cod   = Gbl.Hierarchy.Ins.InsCod;
+      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Ins.InsCod;
      }
    else if (Gbl.Hierarchy.Cty.CtyCod > 0)	// Country selected
      {
       Gbl.Hierarchy.Level = Hie_CTY;
-      Gbl.Hierarchy.Cod   = Gbl.Hierarchy.Cty.CtyCod;
+      Gbl.Hierarchy.Cod = Gbl.Hierarchy.Cty.CtyCod;
      }
    else
      {
       Gbl.Hierarchy.Level = Hie_SYS;
-      Gbl.Hierarchy.Cod   = -1L;
+      Gbl.Hierarchy.Cod = -1L;
      }
 
    /***** Initialize default fields for edition to current values *****/
@@ -588,31 +583,31 @@ void Hie_InitHierarchy (void)
    Gbl.Ctrs.EditingCtr.InsCod    =
    Gbl.Dpts.EditingDpt.InsCod    = Gbl.Hierarchy.Ins.InsCod;
    Gbl.Degs.EditingDeg.CtrCod    = Gbl.Hierarchy.Ctr.CtrCod;
-   Gbl.Degs.EditingDeg.DegTypCod = Gbl.Hierarchy.DegTyp.DegTypCod;
+   Gbl.Degs.EditingDeg.DegTypCod = Gbl.Hierarchy.Deg.DegTypCod;
 
    /***** Initialize paths *****/
-   if (Gbl.Hierarchy.Crs.Crs.CrsCod > 0)
+   if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
      {
       /***** Paths of course directories *****/
-      snprintf (Gbl.Hierarchy.Crs.PathPriv,sizeof (Gbl.Hierarchy.Crs.PathPriv),
+      snprintf (Gbl.Crs.PathPriv,sizeof (Gbl.Crs.PathPriv),
 	        "%s/%ld",
-	        Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Crs.Crs.CrsCod);
-      snprintf (Gbl.Hierarchy.Crs.PathRelPubl,sizeof (Gbl.Hierarchy.Crs.PathRelPubl),
+	        Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Crs.CrsCod);
+      snprintf (Gbl.Crs.PathRelPubl,sizeof (Gbl.Crs.PathRelPubl),
 	        "%s/%ld",
-	        Cfg_PATH_CRS_PUBLIC,Gbl.Hierarchy.Crs.Crs.CrsCod);
-      snprintf (Gbl.Hierarchy.Crs.PathURLPubl,sizeof (Gbl.Hierarchy.Crs.PathURLPubl),
+	        Cfg_PATH_CRS_PUBLIC,Gbl.Hierarchy.Crs.CrsCod);
+      snprintf (Gbl.Crs.PathURLPubl,sizeof (Gbl.Crs.PathURLPubl),
 	        "%s/%ld",
-	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.Crs.CrsCod);
+	        Cfg_URL_CRS_PUBLIC,Gbl.Hierarchy.Crs.CrsCod);
 
       /***** If any of the course directories does not exist, create it *****/
-      if (!Fil_CheckIfPathExists (Gbl.Hierarchy.Crs.PathPriv))
-	 Fil_CreateDirIfNotExists (Gbl.Hierarchy.Crs.PathPriv);
-      if (!Fil_CheckIfPathExists (Gbl.Hierarchy.Crs.PathRelPubl))
-	 Fil_CreateDirIfNotExists (Gbl.Hierarchy.Crs.PathRelPubl);
+      if (!Fil_CheckIfPathExists (Gbl.Crs.PathPriv))
+	 Fil_CreateDirIfNotExists (Gbl.Crs.PathPriv);
+      if (!Fil_CheckIfPathExists (Gbl.Crs.PathRelPubl))
+	 Fil_CreateDirIfNotExists (Gbl.Crs.PathRelPubl);
 
       /***** Count number of groups in current course
              (used in some actions) *****/
-      Gbl.Hierarchy.Crs.Grps.NumGrps = Grp_CountNumGrpsInCurrentCrs ();
+      Gbl.Crs.Grps.NumGrps = Grp_CountNumGrpsInCurrentCrs ();
      }
   }
 
@@ -633,14 +628,11 @@ void Hie_ResetHierarchy (void)
    Gbl.Hierarchy.Ctr.InsCod = -1L;
    Gbl.Hierarchy.Ctr.PlcCod = -1L;
 
-   /***** Degree type *****/
-   Gbl.Hierarchy.DegTyp.DegTypCod = -1L;
-
    /***** Degree *****/
    Gbl.Hierarchy.Deg.DegCod = -1L;
 
    /***** Course *****/
-   Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;
+   Gbl.Hierarchy.Crs.CrsCod = -1L;
 
    /***** Hierarchy level and code *****/
    Gbl.Hierarchy.Level = Hie_UNK;

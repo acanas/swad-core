@@ -171,14 +171,14 @@ void Grp_WriteNamesOfSelectedGrps (void)
 
    /***** Show the selected groups *****/
    fprintf (Gbl.F.Out,"%s: ",
-            (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps == 1) ?
+            (Gbl.Crs.Grps.LstGrpsSel.NumGrps == 1) ?
             Txt_Group  :
             Txt_Groups);
    for (NumGrpSel = 0;
-	NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps;
+	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
      {
-      if ((GrpCod = Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) >= 0)
+      if ((GrpCod = Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) >= 0)
         {
          GrpDat.GrpCod = GrpCod;
          Grp_GetDataOfGroupByCod (&GrpDat);
@@ -187,19 +187,19 @@ void Grp_WriteNamesOfSelectedGrps (void)
         }
       else	// GrpCod < 0 ==> students not belonging to any group of type (-GrpCod)
         {
-         Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod = -GrpCod;
-         Grp_GetDataOfGroupTypeByCod (&Gbl.Hierarchy.Crs.Grps.GrpTyp);
+         Gbl.Crs.Grps.GrpTyp.GrpTypCod = -GrpCod;
+         Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
          fprintf (Gbl.F.Out,"%s (%s)",
-                  Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName,
+                  Gbl.Crs.Grps.GrpTyp.GrpTypName,
                   Txt_users_with_no_group);
         }
 
-      if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps >= 2)
+      if (Gbl.Crs.Grps.LstGrpsSel.NumGrps >= 2)
         {
-         if (NumGrpSel == Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps-2)
+         if (NumGrpSel == Gbl.Crs.Grps.LstGrpsSel.NumGrps-2)
             fprintf (Gbl.F.Out," %s ",Txt_and);
-         if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps >= 3)
-            if (NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps-2)
+         if (Gbl.Crs.Grps.LstGrpsSel.NumGrps >= 3)
+            if (NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps-2)
                fprintf (Gbl.F.Out,", ");
         }
      }
@@ -264,7 +264,7 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
          Ale_ShowAlert (AlertTypeGroups,AlertTextGroups);
 
    /***** Put form to edit groups *****/
-   if (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num) // If there are group types...
+   if (Gbl.Crs.Grps.GrpTypes.Num) // If there are group types...
       Grp_EditGroups ();
 
    /***** End groups section *****/
@@ -295,11 +295,11 @@ static void Grp_EditGroupTypes (void)
    Grp_PutFormToCreateGroupType ();
 
    /***** Forms to edit current group types *****/
-   if (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num)	// Group types found...
+   if (Gbl.Crs.Grps.GrpTypes.Num)	// Group types found...
       Grp_ListGroupTypesForEdition ();
    else	// No group types found in this course
       Ale_ShowAlert (Ale_INFO,Txt_There_are_no_types_of_group_in_the_course_X,
-                     Gbl.Hierarchy.Crs.Crs.ShrtName);
+                     Gbl.Hierarchy.Crs.ShrtName);
 
    /***** End box *****/
    Box_EndBox ();
@@ -323,11 +323,11 @@ static void Grp_EditGroups (void)
    Grp_PutFormToCreateGroup ();
 
    /***** Forms to edit current groups *****/
-   if (Gbl.Hierarchy.Crs.Grps.GrpTypes.NumGrpsTotal)	// If there are groups...
+   if (Gbl.Crs.Grps.GrpTypes.NumGrpsTotal)	// If there are groups...
       Grp_ListGroupsForEdition ();
    else	// There are group types, but there aren't groups
       Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
-                     Gbl.Hierarchy.Crs.Crs.ShrtName);
+                     Gbl.Hierarchy.Crs.ShrtName);
 
    /***** End box *****/
    Box_EndBox ();
@@ -369,7 +369,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
    unsigned NumGrpTyp;
    bool ICanEdit;
 
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)
+   if (Gbl.Crs.Grps.NumGrps)
      {
       ICanEdit = !Gbl.Form.Inside &&
 	         (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
@@ -397,10 +397,10 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
       /***** List the groups for each group type *****/
       Tbl_StartTableWide (2);
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
-	 if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-	    Grp_ListGrpsForMultipleSelection (&Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+	 if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+	    Grp_ListGrpsForMultipleSelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
 	                                      GroupsSelectableByStdsOrNETs);
       Tbl_EndTable ();
 
@@ -487,16 +487,16 @@ void Grp_PutParamsCodGrps (void)
 
    /***** Write the parameter with the list of group codes to show *****/
    if (!Gbl.Usrs.ClassPhoto.AllGroups &&
-       Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
+       Gbl.Crs.Grps.LstGrpsSel.NumGrps)
      {
       fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"GrpCods\" value=\"");
       for (NumGrpSel = 0;
-	   NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps;
+	   NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	   NumGrpSel++)
         {
          if (NumGrpSel)
             fprintf (Gbl.F.Out,"%c",Par_SEPARATOR_PARAM_MULTIPLE);
-         fprintf (Gbl.F.Out,"%ld",Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+         fprintf (Gbl.F.Out,"%ld",Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
         }
       fprintf (Gbl.F.Out,"\" />");
      }
@@ -511,7 +511,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrp;
 
-   if (++Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NestedCalls > 1) // If list is created yet, there's nothing to do
+   if (++Gbl.Crs.Grps.LstGrpsSel.NestedCalls > 1) // If list is created yet, there's nothing to do
       return;
 
    /***** Get boolean parameter that indicates if all groups must be listed *****/
@@ -520,26 +520,26 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
    /***** Get parameter with list of groups selected *****/
    Grp_GetParCodsSeveralGrps ();
 
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps &&		// This course has groups and...
-       !Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)	// ...I haven't selected any group
+   if (Gbl.Crs.Grps.NumGrps &&		// This course has groups and...
+       !Gbl.Crs.Grps.LstGrpsSel.NumGrps)	// ...I haven't selected any group
      {
       /***** I I haven't selected any group, show by default the groups I belong to *****/
       /* Get list of groups of all types in current course I belong to */
-      Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.Crs.CrsCod,-1L,
+      Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,-1L,
 				   Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
 
       if (LstGrpsIBelong.NumGrps)
 	{
 	 /* Allocate space for list of selected groups */
-	 if ((Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods = (long *) calloc (LstGrpsIBelong.NumGrps,sizeof (long))) == NULL)
+	 if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = (long *) calloc (LstGrpsIBelong.NumGrps,sizeof (long))) == NULL)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /* Fill list of selected groups with list of groups I belong to */
 	 for (NumGrp = 0;
 	      NumGrp < LstGrpsIBelong.NumGrps;
 	      NumGrp++)
-	    Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = LstGrpsIBelong.GrpCods[NumGrp];
-	 Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps = LstGrpsIBelong.NumGrps;
+	    Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = LstGrpsIBelong.GrpCods[NumGrp];
+	 Gbl.Crs.Grps.LstGrpsSel.NumGrps = LstGrpsIBelong.NumGrps;
 	}
 
       /* Free list of groups I belong to */
@@ -547,7 +547,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
      }
 
    /***** If no groups selected ==> show all groups *****/
-   if (!Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
+   if (!Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Gbl.Usrs.ClassPhoto.AllGroups = true;
   }
 
@@ -561,12 +561,12 @@ void Grp_GetParCodsSeveralGrps (void)
    const char *Ptr;
    char LongStr[1 + 10 + 1];
    unsigned NumGrp;
-   unsigned long MaxSizeLstGrpCods = ((1 + 10 + 1) * Gbl.Hierarchy.Crs.Grps.NumGrps) - 1;
+   unsigned long MaxSizeLstGrpCods = ((1 + 10 + 1) * Gbl.Crs.Grps.NumGrps) - 1;
 
    /***** Reset number of groups selected *****/
-   Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps = 0;
+   Gbl.Crs.Grps.LstGrpsSel.NumGrps = 0;
 
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)	// If course has groups
+   if (Gbl.Crs.Grps.NumGrps)	// If course has groups
      {
       /***** Allocate memory for the list of group codes selected *****/
       if ((ParamLstCodGrps = (char *) malloc (MaxSizeLstGrpCods + 1)) == NULL)
@@ -582,19 +582,19 @@ void Grp_GetParCodsSeveralGrps (void)
 	      *Ptr;
 	      NumGrp++)
 	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
-	 Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps = NumGrp;
+	 Gbl.Crs.Grps.LstGrpsSel.NumGrps = NumGrp;
 
-	 if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)	// If I have selected groups...
+	 if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)	// If I have selected groups...
 	   {
 	    /***** Create a list of groups selected from LstCodGrps *****/
-	    if ((Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods = (long *) calloc (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps,sizeof (long))) == NULL)
+	    if ((Gbl.Crs.Grps.LstGrpsSel.GrpCods = (long *) calloc (Gbl.Crs.Grps.LstGrpsSel.NumGrps,sizeof (long))) == NULL)
 	       Lay_NotEnoughMemoryExit ();
 	    for (Ptr = ParamLstCodGrps, NumGrp = 0;
 		 *Ptr;
 		 NumGrp++)
 	      {
 	       Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
-	       Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
+	       Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	      }
 	   }
 	}
@@ -610,13 +610,13 @@ void Grp_GetParCodsSeveralGrps (void)
 
 void Grp_FreeListCodSelectedGrps (void)
   {
-   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NestedCalls > 0)
-      if (--Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NestedCalls == 0)
-         if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods)
+   if (Gbl.Crs.Grps.LstGrpsSel.NestedCalls > 0)
+      if (--Gbl.Crs.Grps.LstGrpsSel.NestedCalls == 0)
+         if (Gbl.Crs.Grps.LstGrpsSel.GrpCods)
            {
-            free ((void *) Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods);
-            Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods = NULL;
-            Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps = 0;
+            free ((void *) Gbl.Crs.Grps.LstGrpsSel.GrpCods);
+            Gbl.Crs.Grps.LstGrpsSel.GrpCods = NULL;
+            Gbl.Crs.Grps.LstGrpsSel.NumGrps = 0;
            }
   }
 
@@ -764,7 +764,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Query in the database the group codes which I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.Crs.CrsCod,-1L,
+   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,-1L,
 				Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
 
    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)
@@ -782,10 +782,10 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	 if (RemoveMeFromThisGrp)
 	    /* Check if the group is closed */
 	    for (NumGrpTyp = 0;
-		 NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num && !ITryToLeaveAClosedGroup;
+		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num && !ITryToLeaveAClosedGroup;
 		 NumGrpTyp++)
 	      {
-	       GrpTyp = &Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+	       GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
 	       for (NumGrpThisType = 0;
 		    NumGrpThisType < GrpTyp->NumGrps && !ITryToLeaveAClosedGroup;
 		    NumGrpThisType++)
@@ -812,12 +812,12 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	    if (RegisterMeInThisGrp)
 	       /* Check if the group is closed or full */
 	       for (NumGrpTyp = 0;
-		    NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num &&
+		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num &&
 				!ITryToRegisterInAClosedGroup &&
 				!ITryToRegisterInFullGroup;
 		    NumGrpTyp++)
 		 {
-		  GrpTyp = &Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+		  GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
 		  for (NumGrpThisType = 0;
 		       NumGrpThisType < GrpTyp->NumGrps &&
 					!ITryToRegisterInAClosedGroup &&
@@ -904,7 +904,7 @@ void Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Query in the database the group codes which user belongs to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.Crs.CrsCod,-1L,
+   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,-1L,
 				Gbl.Usrs.Other.UsrDat.UsrCod,&LstGrpsUsrBelongs);
 
    /***** Go across the list of groups user belongs to, removing those groups that are not present in the list of groups user wants to belong to *****/
@@ -1008,7 +1008,7 @@ bool Grp_CheckIfSelectionGrpsSingleEnrolmentIsValid (Rol_Role_t Role,struct List
 
 	    if (!MultipleEnrolment)
 	       for (NumGrpTyp = 0;
-		    NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+		    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 		    NumGrpTyp++)
 		  if (GrpTypCod == AlreadyExistsGroupOfType[NumGrpTyp].GrpTypCod)
 		    {
@@ -1041,15 +1041,15 @@ static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Al
    unsigned NumGrpTyp;
 
    /***** Allocate memory to a list of booleanos that indica if already se ha selected a group of cada type *****/
-   if ((*AlreadyExistsGroupOfType = (struct ListGrpsAlreadySelec *) calloc (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num,sizeof (struct ListGrpsAlreadySelec))) == NULL)
+   if ((*AlreadyExistsGroupOfType = (struct ListGrpsAlreadySelec *) calloc (Gbl.Crs.Grps.GrpTypes.Num,sizeof (struct ListGrpsAlreadySelec))) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Initialize the list *****/
    for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
      {
-      (*AlreadyExistsGroupOfType)[NumGrpTyp].GrpTypCod = Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod;
+      (*AlreadyExistsGroupOfType)[NumGrpTyp].GrpTypCod = Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod;
       (*AlreadyExistsGroupOfType)[NumGrpTyp].AlreadySelected = false;
      }
   }
@@ -1082,15 +1082,15 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
 
    /***** For each existing type of group in the course... *****/
    for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
      {
-      MultipleEnrolment = Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment;
+      MultipleEnrolment = Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment;
 
       /***** Query in the database the group codes of any group of this type the student belongs to *****/
       LstGrpsHeBelongs.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
       LstGrpsHeBelongs.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
-      Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
+      Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
 	                           UsrDat->UsrCod,&LstGrpsHeBelongs);
 
       /***** For each group selected by me... *****/
@@ -1100,9 +1100,9 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
         {
          /* Check if the selected group is of this type */
          for (NumGrpThisType = 0;
-              NumGrpThisType < Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps;
+              NumGrpThisType < Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps;
               NumGrpThisType++)
-            if (LstGrps->GrpCods[NumGrpSel] == Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpCod)
+            if (LstGrps->GrpCods[NumGrpSel] == Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpCod)
               {	// The selected group is of this type
                AlreadyRegisteredInGrp = false;
 
@@ -1118,15 +1118,15 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
                         remove user from the group to which he belongs */
                      Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs]);
                      Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
-			            UsrDat->FullName,Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
+			            UsrDat->FullName,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
                     }
 
                if (!AlreadyRegisteredInGrp)	// If the user does not belong to the selected group
                  {
                   Grp_AddUsrToGroup (UsrDat,LstGrps->GrpCods[NumGrpSel]);
                   Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z,
-		                 UsrDat->FullName,Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
-                                 Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpName);
+		                 UsrDat->FullName,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
+                                 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpName);
                  }
 
                break;	// Once we know the type of a selected group, it's not necessary to check the rest of types
@@ -1154,7 +1154,7 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
    unsigned NumGrpsHeIsRemoved = 0;
 
    /***** Query in the database the group codes of any group the user belongs to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.Crs.CrsCod,-1L,
+   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,-1L,
 	                        UsrDat->UsrCod,&LstGrpsHeBelongs);
 
    /***** For each group selected by me... *****/
@@ -1289,14 +1289,14 @@ static void Grp_ListGroupTypesForEdition (void)
 
    /***** List group types with forms for edition *****/
    for (NumGrpTyp = 0, UniqueId=1;
-	NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	NumGrpTyp++, UniqueId++)
      {
       /* Put icon to remove group type */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
       Frm_StartFormAnchor (ActReqRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-      Grp_PutParamGrpTypCod (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+      Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
@@ -1304,12 +1304,12 @@ static void Grp_ListGroupTypesForEdition (void)
       /* Name of group type */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Frm_StartFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-      Grp_PutParamGrpTypCod (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+      Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpTypName\""
 	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Grp_MAX_CHARS_GROUP_TYPE_NAME,
-               Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
+               Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                Gbl.Form.Id);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
@@ -1317,18 +1317,18 @@ static void Grp_ListGroupTypesForEdition (void)
       /* Is it mandatory to register in any group? */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Frm_StartFormAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-      Grp_PutParamGrpTypCod (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+      Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrolment\""
 	                 " style=\"width:150px;\""
 	                 " onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
                Gbl.Form.Id);
-      if (!Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
+      if (!Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
 	                 "<option value=\"Y\"",
                Txt_It_is_optional_to_choose_a_group);
-      if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
+      if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
 	                 "</select>",
@@ -1339,18 +1339,18 @@ static void Grp_ListGroupTypesForEdition (void)
       /* Is it possible to register in multiple groups? */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Frm_StartFormAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-      Grp_PutParamGrpTypCod (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+      Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MultipleEnrolment\""
 	                 " style=\"width:150px;\""
 	                 " onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
                Gbl.Form.Id);
-      if (!Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
+      if (!Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
 	                 "<option value=\"Y\"",
                Txt_A_student_can_only_belong_to_one_group);
-      if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
+      if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
 	                 "</select>",
@@ -1361,7 +1361,7 @@ static void Grp_ListGroupTypesForEdition (void)
       /* Open time */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Frm_StartFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
-      Grp_PutParamGrpTypCod (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+      Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Tbl_StartTableCenter (2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
@@ -1371,18 +1371,18 @@ static void Grp_ListGroupTypesForEdition (void)
                          "</td>"
 	                 "<td class=\"LEFT_MIDDLE\">",
                Cfg_URL_ICON_PUBLIC,
-               Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
+               Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                                                  Txt_The_groups_will_not_automatically_open,
-               Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
+               Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                                                  Txt_The_groups_will_not_automatically_open,
-               Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "" :
+               Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "" :
         	                                                                  "ICO_HIDDEN ");
       snprintf (Id,sizeof (Id),
 	        "open_time_%u",
 		UniqueId);
       Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id,
                                                    "Open",
-						   Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC,
+						   Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC,
 						   Gbl.Now.Date.Year,
 						   Gbl.Now.Date.Year + 1,
 				                   Dat_FORM_SECONDS_ON,
@@ -1399,7 +1399,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	                 "%u"
 	                 "</td>"
 	                 "</tr>",
-               Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps);
+               Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps);
      }
 
    /***** End table *****/
@@ -1498,10 +1498,10 @@ static void Grp_ListGroupsForEdition (void)
 
    /***** List the groups *****/
    for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
      {
-      GrpTyp = &Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+      GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
       for (NumGrpThisType = 0;
 	   NumGrpThisType < GrpTyp->NumGrps;
 	   NumGrpThisType++)
@@ -1560,10 +1560,10 @@ static void Grp_ListGroupsForEdition (void)
 
          /* Options for group types */
          for (NumTipGrpAux = 0;
-              NumTipGrpAux < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+              NumTipGrpAux < Gbl.Crs.Grps.GrpTypes.Num;
               NumTipGrpAux++)
            {
-            GrpTypAux = &Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumTipGrpAux];
+            GrpTypAux = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumTipGrpAux];
             fprintf (Gbl.F.Out,"<option value=\"%ld\"",GrpTypAux->GrpTypCod);
             if (GrpTypAux->GrpTypCod == GrpTyp->GrpTypCod)
 	       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -1717,7 +1717,7 @@ void Grp_ListGrpsToEditAsgAttSvyGam (struct GroupType *GrpTyp,long Cod,
    Grp_WriteGrpHead (GrpTyp);
 
    /***** Query from the database the groups of this type which I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.Crs.CrsCod,GrpTyp->GrpTypCod,
+   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod,
 	                        Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
 
    /***** List the groups *****/
@@ -1804,7 +1804,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
    bool ICanChangeMyGrps = false;
 
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps) // This course has groups
+   if (Gbl.Crs.Grps.NumGrps) // This course has groups
      {
       /***** Get list of groups types and groups in this course *****/
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -1820,7 +1820,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
                                                NULL,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps) // This course has groups
+   if (Gbl.Crs.Grps.NumGrps) // This course has groups
      {
       /***** Start form *****/
       if (PutFormToChangeGrps)
@@ -1829,11 +1829,11 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
       /***** List the groups the user belongs to for change *****/
       Tbl_StartTableWide (2);
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
-	 if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
+	 if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
 	   {
-	    ICanChangeMyGrps |= Grp_ListGrpsForChangeMySelection (&Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+	    ICanChangeMyGrps |= Grp_ListGrpsForChangeMySelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
 	                                                          &NumGrpsThisTypeIBelong);
 	    NumGrpsIBelong += NumGrpsThisTypeIBelong;
 	   }
@@ -1851,7 +1851,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    else	// This course has no groups
      {
       Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
-                     Gbl.Hierarchy.Crs.Crs.FullName);
+                     Gbl.Hierarchy.Crs.FullName);
 
       /***** Button to create group *****/
       if (ICanEdit)
@@ -1865,7 +1865,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    /***** End box *****/
    Box_EndBox ();
 
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps) // This course has groups
+   if (Gbl.Crs.Grps.NumGrps) // This course has groups
       /***** Free list of groups types and groups in this course *****/
       Grp_FreeListGrpTypesAndGrps ();
   }
@@ -1893,10 +1893,10 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
    struct GroupType *GrpTyp;
 
    for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
      {
-      GrpTyp = &Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+      GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
       // If there are groups of this type...
       if (GrpTyp->NumGrps)
 	 // If I don't belong to any group
@@ -1936,7 +1936,7 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
    Grp_WriteGrpHead (GrpTyp);
 
    /***** Query in the database the group of this type that I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.Crs.CrsCod,GrpTyp->GrpTypCod,
+   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod,
 	                        Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
    *NumGrpsThisTypeIBelong = LstGrpsIBelong.NumGrps;
 
@@ -2101,10 +2101,10 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
 
    /***** List to select the groups the user belongs to *****/
    for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
-      if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-	 Grp_ListGrpsToAddOrRemUsrs (&Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],UsrCod);
+      if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+	 Grp_ListGrpsToAddOrRemUsrs (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],UsrCod);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -2131,7 +2131,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 
    /***** Query the groups of this type which the user belongs to *****/
    if (UsrCod > 0)
-      Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.Crs.CrsCod,GrpTyp->GrpTypCod,
+      Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod,
 				   Gbl.Usrs.Other.UsrDat.UsrCod,&LstGrpsUsrBelongs);
 
    /***** List the groups *****/
@@ -2197,7 +2197,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    Grp_WriteGrpHead (GrpTyp);
 
    /***** Query from the database the groups of this type which I belong to *****/
-   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.Crs.CrsCod,GrpTyp->GrpTypCod,
+   Grp_GetLstCodGrpsUsrBelongs (Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod,
 	                        Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
 
    /***** List the groups of this type *****/
@@ -2248,9 +2248,9 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
          fprintf (Gbl.F.Out," checked=\"checked\"");
       else
          for (NumGrpSel = 0;
-              NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps;
+              NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
               NumGrpSel++)
-            if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == Grp->GrpCod)
+            if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == Grp->GrpCod)
               {
                fprintf (Gbl.F.Out," checked=\"checked\"");
                break;
@@ -2301,9 +2301,9 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
       else
 	 for (NumGrpSel = 0;
-	      NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps;
+	      NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	      NumGrpSel++)
-	    if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == -(GrpTyp->GrpTypCod))
+	    if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == -(GrpTyp->GrpTypCod))
 	      {
 	       fprintf (Gbl.F.Out," checked=\"checked\"");
 	       break;
@@ -2530,19 +2530,19 @@ static void Grp_PutFormToCreateGroupType (void)
                       " size=\"12\" maxlength=\"%u\" value=\"%s\""
 	              " required=\"required\" />"
                       "</td>",
-            Grp_MAX_CHARS_GROUP_TYPE_NAME,Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName);
+            Grp_MAX_CHARS_GROUP_TYPE_NAME,Gbl.Crs.Grps.GrpTyp.GrpTypName);
 
    /***** Is it mandatory to register in any groups of this type? *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"MandatoryEnrolment\""
                       " style=\"width:150px;\">"
                       "<option value=\"N\"");
-   if (!Gbl.Hierarchy.Crs.Grps.GrpTyp.MandatoryEnrolment)
+   if (!Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"
 	              "<option value=\"Y\"",
             Txt_It_is_optional_to_choose_a_group);
-   if (Gbl.Hierarchy.Crs.Grps.GrpTyp.MandatoryEnrolment)
+   if (Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"
 	              "</select>"
@@ -2554,12 +2554,12 @@ static void Grp_PutFormToCreateGroupType (void)
                       "<select name=\"MultipleEnrolment\""
                       " style=\"width:150px;\">"
                       "<option value=\"N\"");
-   if (!Gbl.Hierarchy.Crs.Grps.GrpTyp.MultipleEnrolment)
+   if (!Gbl.Crs.Grps.GrpTyp.MultipleEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"
 	              "<option value=\"Y\"",
             Txt_A_student_can_only_belong_to_one_group);
-   if (Gbl.Hierarchy.Crs.Grps.GrpTyp.MultipleEnrolment)
+   if (Gbl.Crs.Grps.GrpTyp.MultipleEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"
 	              "</select>"
@@ -2577,15 +2577,15 @@ static void Grp_PutFormToCreateGroupType (void)
                       "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
             Cfg_URL_ICON_PUBLIC,
-            Gbl.Hierarchy.Crs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
+            Gbl.Crs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                      Txt_The_groups_will_not_automatically_open,
-            Gbl.Hierarchy.Crs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
+            Gbl.Crs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
         	                                      Txt_The_groups_will_not_automatically_open,
-            Gbl.Hierarchy.Crs.Grps.GrpTyp.MustBeOpened ? "" :
+            Gbl.Crs.Grps.GrpTyp.MustBeOpened ? "" :
         	                                      "ICO_HIDDEN ");
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("open_time",
                                                 "Open",
-                                                Gbl.Hierarchy.Crs.Grps.GrpTyp.OpenTimeUTC,
+                                                Gbl.Crs.Grps.GrpTyp.OpenTimeUTC,
                                                 Gbl.Now.Date.Year,
                                                 Gbl.Now.Date.Year + 1,
 				                Dat_FORM_SECONDS_ON,
@@ -2658,16 +2658,16 @@ static void Grp_PutFormToCreateGroup (void)
 
    /* Options for group types */
    for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
      {
       fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-	       Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod ==
-	  Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod)
+	       Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+      if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod ==
+	  Gbl.Crs.Grps.GrpTyp.GrpTypCod)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",
-	       Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
+	       Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
      }
 
    /* End selector */
@@ -2680,7 +2680,7 @@ static void Grp_PutFormToCreateGroup (void)
                       " size=\"20\" maxlength=\"%u\" value=\"%s\""
 	              " required=\"required\" />"
 	              "</td>",
-            Grp_MAX_CHARS_GROUP_NAME,Gbl.Hierarchy.Crs.Grps.GrpName);
+            Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName);
 
    /***** Classroom *****/
    /* Start selector */
@@ -2689,14 +2689,14 @@ static void Grp_PutFormToCreateGroup (void)
 
    /* Option for no assigned classroom */
    fprintf (Gbl.F.Out,"<option value=\"-1\"");
-   if (Gbl.Hierarchy.Crs.Grps.ClaCod < 0)
+   if (Gbl.Crs.Grps.ClaCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",
 	    Txt_No_assigned_classroom);
 
    /* Option for another classroom */
    fprintf (Gbl.F.Out,"<option value=\"0\"");
-   if (Gbl.Hierarchy.Crs.Grps.ClaCod == 0)
+   if (Gbl.Crs.Grps.ClaCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",
 	    Txt_Another_classroom);
@@ -2708,7 +2708,7 @@ static void Grp_PutFormToCreateGroup (void)
      {
       fprintf (Gbl.F.Out,"<option value=\"%ld\"",
 	       Gbl.Classrooms.Lst[NumCla].ClaCod);
-      if (Gbl.Classrooms.Lst[NumCla].ClaCod == Gbl.Hierarchy.Crs.Grps.ClaCod)
+      if (Gbl.Classrooms.Lst[NumCla].ClaCod == Gbl.Crs.Grps.ClaCod)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",
 	       Gbl.Classrooms.Lst[NumCla].ShrtName);
@@ -2730,7 +2730,7 @@ static void Grp_PutFormToCreateGroup (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<input type=\"text\" name=\"MaxStudents\""
 	              " size=\"3\" maxlength=\"10\" value=\"");
-   Grp_WriteMaxStds (Gbl.Hierarchy.Crs.Grps.MaxStudents);
+   Grp_WriteMaxStds (Gbl.Crs.Grps.MaxStudents);
    fprintf (Gbl.F.Out,"\" />"
 	              "</td>"
 	              "</tr>");
@@ -2753,7 +2753,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
    MYSQL_ROW row;
    unsigned long NumGrpTyp;
 
-   if (++Gbl.Hierarchy.Crs.Grps.GrpTypes.NestedCalls > 1) // If list is created yet, there's nothing to do
+   if (++Gbl.Crs.Grps.GrpTypes.NestedCalls > 1) // If list is created yet, there's nothing to do
       return;
 
    /***** Open groups of this course that must be opened
@@ -2765,7 +2765,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
    switch (WhichGroupTypes)
      {
       case Grp_ONLY_GROUP_TYPES_WITH_GROUPS:
-	 Gbl.Hierarchy.Crs.Grps.GrpTypes.Num =
+	 Gbl.Crs.Grps.GrpTypes.Num =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of group"
 					       " of a course",
 				    "SELECT crs_grp_types.GrpTypCod,crs_grp_types.GrpTypName,"
@@ -2778,10 +2778,10 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 				    " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 				    " GROUP BY crs_grp_types.GrpTypCod"
 				    " ORDER BY crs_grp_types.GrpTypName",
-				    Gbl.Hierarchy.Crs.Crs.CrsCod);
+				    Gbl.Hierarchy.Crs.CrsCod);
 	 break;
       case Grp_ALL_GROUP_TYPES:
-	 Gbl.Hierarchy.Crs.Grps.GrpTypes.Num =
+	 Gbl.Crs.Grps.GrpTypes.Num =
 	 (unsigned) DB_QuerySELECT (&mysql_res,"can not get types of group"
 					       " of a course",
 				    "(SELECT crs_grp_types.GrpTypCod,crs_grp_types.GrpTypName AS GrpTypName,"
@@ -2802,58 +2802,58 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 				    " FROM crs_grp_types WHERE CrsCod=%ld"
 				    " AND GrpTypCod NOT IN (SELECT GrpTypCod FROM crs_grp))"
 				    " ORDER BY GrpTypName",
-				    Gbl.Hierarchy.Crs.Crs.CrsCod,
-				    Gbl.Hierarchy.Crs.Crs.CrsCod);
+				    Gbl.Hierarchy.Crs.CrsCod,
+				    Gbl.Hierarchy.Crs.CrsCod);
 	 break;
      }
 
    /***** Get group types *****/
-   Gbl.Hierarchy.Crs.Grps.GrpTypes.NumGrpsTotal = 0;
+   Gbl.Crs.Grps.GrpTypes.NumGrpsTotal = 0;
 
-   if (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num)
+   if (Gbl.Crs.Grps.GrpTypes.Num)
      {
       /***** Create a list of group types *****/
-      if ((Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes = (struct GroupType *) calloc (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num,sizeof (struct GroupType))) == NULL)
+      if ((Gbl.Crs.Grps.GrpTypes.LstGrpTypes = (struct GroupType *) calloc (Gbl.Crs.Grps.GrpTypes.Num,sizeof (struct GroupType))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get group types *****/
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
         {
          /* Get next group type */
          row = mysql_fetch_row (mysql_res);
 
          /* Get group type code (row[0]) */
-         if ((Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong type of group.");
 
          /* Get group type name (row[1]) */
-         Str_Copy (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,row[1],
+         Str_Copy (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,row[1],
                    Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
          /* Is it mandatory to register in any groups of this type? (row[2]) */
-         Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment = (row[2][0] == 'Y');
+         Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment = (row[2][0] == 'Y');
 
          /* Is it possible to register in multiple groups of this type? (row[3]) */
-         Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment = (row[3][0] == 'Y');
+         Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment = (row[3][0] == 'Y');
 
          /* Groups of this type must be opened? (row[4]) */
-         Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened = (row[4][0] == 'Y');
+         Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened = (row[4][0] == 'Y');
 
          /* Get open time (row[5] holds the open time UTC) */
-         Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[5]);
-         Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened &= Grp_CheckIfOpenTimeInTheFuture (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC);
+         Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[5]);
+         Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened &= Grp_CheckIfOpenTimeInTheFuture (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].OpenTimeUTC);
 
          /* Number of groups of this type (row[6]) */
-         if (sscanf (row[6],"%u",&Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) != 1)
+         if (sscanf (row[6],"%u",&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) != 1)
             Lay_ShowErrorAndExit ("Wrong number of groups of a type.");
 
          /* Add number of groups to total number of groups */
-         Gbl.Hierarchy.Crs.Grps.GrpTypes.NumGrpsTotal += Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps;
+         Gbl.Crs.Grps.GrpTypes.NumGrpsTotal += Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps;
 
 	 /* Initialize pointer to the list of groups of this type */
-         Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps = NULL;
+         Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps = NULL;
 
         }
      }
@@ -2881,7 +2881,7 @@ void Grp_OpenGroupsAutomatically (void)
 			      "SELECT GrpTypCod FROM crs_grp_types"
 			      " WHERE CrsCod=%ld AND MustBeOpened='Y'"
 			      " AND OpenTime<=NOW()",
-			      Gbl.Hierarchy.Crs.Crs.CrsCod);
+			      Gbl.Hierarchy.Crs.CrsCod);
 
    for (NumGrpTyp = 0;
         NumGrpTyp < NumGrpTypes;
@@ -2931,10 +2931,10 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 
    /***** Then we get the list of groups for each group type *****/
    for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
      {
-      GrpTyp = &Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+      GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
       if (GrpTyp->NumGrps)	 // If there are groups of this type...
         {
          /***** Query database *****/
@@ -3010,16 +3010,16 @@ void Grp_FreeListGrpTypesAndGrps (void)
    unsigned NumGrpTyp;
    struct GroupType *GrpTyp;
 
-   if (Gbl.Hierarchy.Crs.Grps.GrpTypes.NestedCalls > 0)
-      if (--Gbl.Hierarchy.Crs.Grps.GrpTypes.NestedCalls == 0)
-         if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes)
+   if (Gbl.Crs.Grps.GrpTypes.NestedCalls > 0)
+      if (--Gbl.Crs.Grps.GrpTypes.NestedCalls == 0)
+         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes)
            {
 	    /***** Free memory used for each list of groups (one list for each group type) *****/
 	    for (NumGrpTyp = 0;
-		 NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+		 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 		 NumGrpTyp++)
               {
-               GrpTyp = &Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
+               GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
                if (GrpTyp->LstGrps)
                  {
                   free ((void *) GrpTyp->LstGrps);
@@ -3029,9 +3029,9 @@ void Grp_FreeListGrpTypesAndGrps (void)
               }
 
 	    /***** Free memory used by the list of group types *****/
-            free ((void *) Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes);
-            Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
-            Gbl.Hierarchy.Crs.Grps.GrpTypes.Num = 0;
+            free ((void *) Gbl.Crs.Grps.GrpTypes.LstGrpTypes);
+            Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;
+            Gbl.Crs.Grps.GrpTypes.Num = 0;
            }
   }
 
@@ -3047,7 +3047,7 @@ unsigned Grp_CountNumGrpsInCurrentCrs (void)
 			     "SELECT COUNT(*) FROM crs_grp_types,crs_grp"
 			     " WHERE crs_grp_types.CrsCod=%ld"
 			     " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
-			     Gbl.Hierarchy.Crs.Crs.CrsCod);
+			     Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -3108,7 +3108,7 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
 				    "UNIX_TIMESTAMP(OpenTime)"
 			     " FROM crs_grp_types"
 			     " WHERE CrsCod=%ld AND GrpTypCod=%ld",
-			     Gbl.Hierarchy.Crs.Crs.CrsCod,GrpTyp->GrpTypCod);
+			     Gbl.Hierarchy.Crs.CrsCod,GrpTyp->GrpTypCod);
 
    /***** Count number of rows in result *****/
    if (NumRows != 1)
@@ -3342,7 +3342,7 @@ static unsigned long Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTyp
 			 " FROM crs_grp,crs_grp_usr"
 			 " WHERE crs_grp.GrpTypCod=%ld"
 			 " AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
-			 Gbl.Hierarchy.Crs.Crs.CrsCod,
+			 Gbl.Hierarchy.Crs.CrsCod,
 			 (unsigned) Role,GrpTypCod);
   }
 
@@ -3420,7 +3420,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
       return false;
 
    /***** 4. Fast check: Do I belong to the current course? *****/
@@ -3446,7 +3446,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
      }
 
    /***** 8. Fast check: Course has groups? *****/
-   if (!Gbl.Hierarchy.Crs.Grps.NumGrps)
+   if (!Gbl.Crs.Grps.NumGrps)
      {
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = true;
@@ -3472,7 +3472,7 @@ bool Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct UsrData *UsrDat)
 		      " AND crs_grp_types.CrsCod=%ld)",
 		      UsrDat->UsrCod,
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Crs.Crs.CrsCod) != 0);
+		      Gbl.Hierarchy.Crs.CrsCod) != 0);
    return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
   }
 
@@ -3497,7 +3497,7 @@ bool Grp_GetIfAvailableGrpTyp (long GrpTypCod)
      {
       if (asprintf (&SubQueryGrpTypes,"crs_grp_types.CrsCod=%ld"
 	                              " AND crs_grp_types.Mandatory='Y'",
-	            Gbl.Hierarchy.Crs.Crs.CrsCod) < 0)
+	            Gbl.Hierarchy.Crs.CrsCod) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
 
@@ -3559,7 +3559,7 @@ bool Grp_GetIfAvailableGrpTyp (long GrpTypCod)
 
 			     SubQueryGrpTypes,(unsigned) Rol_STD,
 			     SubQueryGrpTypes,
-			     Gbl.Hierarchy.Crs.Crs.CrsCod,(unsigned) Rol_STD,
+			     Gbl.Hierarchy.Crs.CrsCod,(unsigned) Rol_STD,
 			     SubQueryGrpTypes,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Free allocated memory for subquery *****/
@@ -3601,7 +3601,7 @@ static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,
 				 " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
 				 " AND crs_grp_usr.UsrCod=%ld"
 				 " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-				 Gbl.Hierarchy.Crs.Crs.CrsCod,UsrCod);
+				 Gbl.Hierarchy.Crs.CrsCod,UsrCod);
    else				// Query only the groups of specified type in the course
       LstGrps->NumGrps =
       (unsigned) DB_QuerySELECT (&mysql_res,"can not get the groups"
@@ -3614,7 +3614,7 @@ static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,
 				 " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
 				 " AND crs_grp_usr.UsrCod=%ld"
 				 " ORDER BY crs_grp.GrpName",
-				 Gbl.Hierarchy.Crs.Crs.CrsCod,GrpTypCod,UsrCod);
+				 Gbl.Hierarchy.Crs.CrsCod,GrpTypCod,UsrCod);
 
    /***** Get the groups *****/
    if (LstGrps->NumGrps)
@@ -3660,7 +3660,7 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
 			      " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
 			      " AND crs_grp_usr.UsrCod=%ld"
 			      " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-			      Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+			      Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Get the groups *****/
    if (LstGrps->NumGrps)
@@ -3711,7 +3711,7 @@ void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GroupNames)
    unsigned long NumRow;
    unsigned long NumRows;
    size_t MaxLength = (Grp_MAX_BYTES_GROUP_NAME + 2) *
-		      Gbl.Hierarchy.Crs.Grps.GrpTypes.NumGrpsTotal;
+		      Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
 
    /***** Get the names of groups which a user belongs to, from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get the names of groups"
@@ -3759,28 +3759,28 @@ void Grp_RecFormNewGrpTyp (void)
 
    /***** Get parameters from form *****/
    /* Get the name of group type */
-   Par_GetParToText ("GrpTypName",Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName,
+   Par_GetParToText ("GrpTypName",Gbl.Crs.Grps.GrpTyp.GrpTypName,
                      Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
    /* Get whether it is mandatory to regisrer in any group of this type */
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.MandatoryEnrolment = Par_GetParToBool ("MandatoryEnrolment");
+   Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment = Par_GetParToBool ("MandatoryEnrolment");
 
    /* Get whether it is possible to register in multiple groups of this type */
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.MultipleEnrolment = Par_GetParToBool ("MultipleEnrolment");
+   Gbl.Crs.Grps.GrpTyp.MultipleEnrolment = Par_GetParToBool ("MultipleEnrolment");
 
    /* Get open time */
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.Hierarchy.Crs.Grps.GrpTyp.OpenTimeUTC);
+   Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
+   Gbl.Crs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.Crs.Grps.GrpTyp.OpenTimeUTC);
 
-   if (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName[0])	// If there's a group type name
+   if (Gbl.Crs.Grps.GrpTyp.GrpTypName[0])	// If there's a group type name
      {
       /***** If name of group type was in database... *****/
-      if (Grp_CheckIfGroupTypeNameExists (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName,-1L))
+      if (Grp_CheckIfGroupTypeNameExists (Gbl.Crs.Grps.GrpTyp.GrpTypName,-1L))
         {
          AlertType = Ale_WARNING;
          snprintf (AlertTxt,sizeof (AlertTxt),
 	           Txt_The_type_of_group_X_already_exists,
-                   Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName);
+                   Gbl.Crs.Grps.GrpTyp.GrpTypName);
         }
       else	// Add new group type to database
 	{
@@ -3789,7 +3789,7 @@ void Grp_RecFormNewGrpTyp (void)
          AlertType = Ale_SUCCESS;
 	 snprintf (AlertTxt,sizeof (AlertTxt),
 	           Txt_Created_new_type_of_group_X,
-		   Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName);
+		   Gbl.Crs.Grps.GrpTyp.GrpTypName);
 	}
      }
    else	// If there is not a group type name
@@ -3831,31 +3831,31 @@ void Grp_RecFormNewGrp (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get parameters from form *****/
-   if ((Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) > 0) // Group type valid
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) > 0) // Group type valid
      {
       /* Get group name */
-      Par_GetParToText ("GrpName",Gbl.Hierarchy.Crs.Grps.GrpName,
+      Par_GetParToText ("GrpName",Gbl.Crs.Grps.GrpName,
                         Grp_MAX_BYTES_GROUP_NAME);
 
       /* Get classroom */
-      Gbl.Hierarchy.Crs.Grps.ClaCod = Cla_GetParamClaCod ();
+      Gbl.Crs.Grps.ClaCod = Cla_GetParamClaCod ();
 
       /* Get maximum number of students */
-      Gbl.Hierarchy.Crs.Grps.MaxStudents = (unsigned)
+      Gbl.Crs.Grps.MaxStudents = (unsigned)
 	                                Par_GetParToUnsignedLong ("MaxStudents",
                                                                   0,
                                                                   Grp_MAX_STUDENTS_IN_A_GROUP,
                                                                   Grp_NUM_STUDENTS_NOT_LIMITED);
 
-      if (Gbl.Hierarchy.Crs.Grps.GrpName[0])	// If there's a group name
+      if (Gbl.Crs.Grps.GrpName[0])	// If there's a group name
         {
          /***** If name of group was in database... *****/
-         if (Grp_CheckIfGroupNameExists (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod,Gbl.Hierarchy.Crs.Grps.GrpName,-1L))
+         if (Grp_CheckIfGroupNameExists (Gbl.Crs.Grps.GrpTyp.GrpTypCod,Gbl.Crs.Grps.GrpName,-1L))
            {
             AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),
 	              Txt_The_group_X_already_exists,
-                      Gbl.Hierarchy.Crs.Grps.GrpName);
+                      Gbl.Crs.Grps.GrpName);
            }
          else	// Add new group to database
            {
@@ -3865,7 +3865,7 @@ void Grp_RecFormNewGrp (void)
             AlertType = Ale_SUCCESS;
 	    snprintf (AlertTxt,sizeof (AlertTxt),
 	              Txt_Created_new_group_X,
-		      Gbl.Hierarchy.Crs.Grps.GrpName);
+		      Gbl.Crs.Grps.GrpName);
            }
         }
       else	// If there is not a group name
@@ -3899,7 +3899,7 @@ static bool Grp_CheckIfGroupTypeNameExists (const char *GrpTypName,long GrpTypCo
 			  "SELECT COUNT(*) FROM crs_grp_types"
 			  " WHERE CrsCod=%ld AND GrpTypName='%s'"
 			  " AND GrpTypCod<>%ld",
-			  Gbl.Hierarchy.Crs.Crs.CrsCod,GrpTypName,GrpTypCod) != 0);
+			  Gbl.Hierarchy.Crs.CrsCod,GrpTypName,GrpTypCod) != 0);
   }
 
 /*****************************************************************************/
@@ -3924,20 +3924,20 @@ static bool Grp_CheckIfGroupNameExists (long GrpTypCod,const char *GrpName,long 
 static void Grp_CreateGroupType (void)
   {
    /***** Create a new group type *****/
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod =
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod =
    DB_QueryINSERTandReturnCode ("can not create type of group",
 				"INSERT INTO crs_grp_types"
 				" (CrsCod,GrpTypName,Mandatory,Multiple,MustBeOpened,OpenTime)"
 				" VALUES"
 				" (%ld,'%s','%c','%c','%c',FROM_UNIXTIME(%ld))",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName,
-				Gbl.Hierarchy.Crs.Grps.GrpTyp.MandatoryEnrolment ? 'Y' :
+				Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Grps.GrpTyp.GrpTypName,
+				Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment ? 'Y' :
 										'N',
-				Gbl.Hierarchy.Crs.Grps.GrpTyp.MultipleEnrolment ? 'Y' :
+				Gbl.Crs.Grps.GrpTyp.MultipleEnrolment ? 'Y' :
 									       'N',
-				Gbl.Hierarchy.Crs.Grps.GrpTyp.MustBeOpened ? 'Y' :
+				Gbl.Crs.Grps.GrpTyp.MustBeOpened ? 'Y' :
 									  'N',
-				(long) Gbl.Hierarchy.Crs.Grps.GrpTyp.OpenTimeUTC);
+				(long) Gbl.Crs.Grps.GrpTyp.OpenTimeUTC);
   }
 
 /*****************************************************************************/
@@ -3952,10 +3952,10 @@ static void Grp_CreateGroup (void)
 		   " (GrpTypCod,GrpName,ClaCod,MaxStudents,Open,FileZones)"
 		   " VALUES"
 		   " (%ld,'%s',%ld,%u,'N','N')",
-	           Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod,
-	           Gbl.Hierarchy.Crs.Grps.GrpName,
-	           Gbl.Hierarchy.Crs.Grps.ClaCod,
-	           Gbl.Hierarchy.Crs.Grps.MaxStudents);
+	           Gbl.Crs.Grps.GrpTyp.GrpTypCod,
+	           Gbl.Crs.Grps.GrpName,
+	           Gbl.Crs.Grps.ClaCod,
+	           Gbl.Crs.Grps.MaxStudents);
   }
 
 /*****************************************************************************/
@@ -3967,11 +3967,11 @@ void Grp_ReqRemGroupType (void)
    unsigned NumGrps;
 
    /***** Get the code of the group type *****/
-   if ((Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /***** Check if this group type has groups *****/
-   if ((NumGrps = Grp_CountNumGrpsInThisCrsOfType (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod)))	// Group type has groups ==> Ask for confirmation
+   if ((NumGrps = Grp_CountNumGrpsInThisCrsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod)))	// Group type has groups ==> Ask for confirmation
       Grp_AskConfirmRemGrpTypWithGrps (NumGrps);
    else	// Group type has no groups ==> remove directly
       Grp_RemoveGroupTypeCompletely ();
@@ -3984,7 +3984,7 @@ void Grp_ReqRemGroupType (void)
 void Grp_ReqRemGroup (void)
   {
    /***** Get group code *****/
-   if ((Gbl.Hierarchy.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /***** Confirm removing *****/
@@ -4002,7 +4002,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    extern const char *Txt_Remove_type_of_group;
 
    /***** Get data of the group type from database *****/
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Hierarchy.Crs.Grps.GrpTyp);
+   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Start section to edit group types *****/
    Grp_ReqEditGroupsInternal0 ();
@@ -4013,13 +4013,13 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
 			      Grp_PutParamRemGrpTyp,
 			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_,
-                              Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName);
+                              Gbl.Crs.Grps.GrpTyp.GrpTypName);
    else
       Ale_ShowAlertAndButton (ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
 			      Grp_PutParamRemGrpTyp,
 			      Btn_REMOVE_BUTTON,Txt_Remove_type_of_group,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
-                              Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName,NumGrps);
+                              Gbl.Crs.Grps.GrpTyp.GrpTypName,NumGrps);
 
    /***** Show the form to edit group types and groups again *****/
    Grp_ReqEditGroupsInternal1 (Ale_INFO,NULL);
@@ -4032,7 +4032,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
 
 static void Grp_PutParamRemGrpTyp (void)
   {
-   Grp_PutParamGrpTypCod (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+   Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -4049,11 +4049,11 @@ static void Grp_AskConfirmRemGrp (void)
    unsigned NumStds;
 
    /***** Get name of the group from database *****/
-   GrpDat.GrpCod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+   GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Count number of students in group *****/
-   NumStds = Grp_CountNumUsrsInGrp (Rol_STD,Gbl.Hierarchy.Crs.Grps.GrpCod);
+   NumStds = Grp_CountNumUsrsInGrp (Rol_STD,Gbl.Crs.Grps.GrpCod);
 
    /***** Show the form to edit group types again *****/
    Grp_ReqEditGroupsInternal0 ();
@@ -4089,7 +4089,7 @@ static void Grp_AskConfirmRemGrp (void)
 
 static void Grp_PutParamRemGrp (void)
   {
-   Grp_PutParamGrpCod (Gbl.Hierarchy.Crs.Grps.GrpCod);
+   Grp_PutParamGrpCod (Gbl.Crs.Grps.GrpCod);
   }
 
 /*****************************************************************************/
@@ -4099,7 +4099,7 @@ static void Grp_PutParamRemGrp (void)
 void Grp_RemoveGroupType (void)
   {
    /***** Get param with code of group type *****/
-   if ((Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of type of group is missing.");
 
    /***** Remove group type and its groups *****/
@@ -4113,7 +4113,7 @@ void Grp_RemoveGroupType (void)
 void Grp_RemoveGroup (void)
   {
    /***** Get param with group code *****/
-   if ((Gbl.Hierarchy.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /***** Remove group *****/
@@ -4130,47 +4130,47 @@ static void Grp_RemoveGroupTypeCompletely (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_TYPE_NAME];
 
    /***** Get name and type of the group from database *****/
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Hierarchy.Crs.Grps.GrpTyp);
+   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Remove file zones of all the groups of this type *****/
-   Brw_RemoveZonesOfGroupsOfType (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+   Brw_RemoveZonesOfGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the associations of assignments to groups of this type *****/
-   Asg_RemoveGroupsOfType (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+   Asg_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the associations of attendance events to groups of this type *****/
-   Att_RemoveGroupsOfType (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+   Att_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the associations of surveys to groups of this type *****/
-   Svy_RemoveGroupsOfType (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+   Svy_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Change all groups of this type in course timetable *****/
    DB_QueryUPDATE ("can not update all groups of a type in course timetable",
 		   "UPDATE timetable_crs SET GrpCod=-1"
 		   " WHERE GrpCod IN"
 		   " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
-                   Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+                   Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove all the students in groups of this type *****/
    DB_QueryDELETE ("can not remove users from all groups of a type",
 		   "DELETE FROM crs_grp_usr WHERE GrpCod IN"
 		   " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
-                   Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+                   Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove all the groups of this type *****/
    DB_QueryDELETE ("can not remove groups of a type",
 		   "DELETE FROM crs_grp WHERE GrpTypCod=%ld",
-                   Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+                   Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Remove the group type *****/
    DB_QueryDELETE ("can not remove a type of group",
 		   "DELETE FROM crs_grp_types WHERE GrpTypCod=%ld",
-                   Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+                   Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),
 	     Txt_Type_of_group_X_removed,
-             Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName);
+             Gbl.Crs.Grps.GrpTyp.GrpTypName);
 
    /***** Show the form again *****/
    Grp_ReqEditGroupsInternal (Ale_SUCCESS,AlertTxt,
@@ -4188,11 +4188,11 @@ static void Grp_RemoveGroupCompletely (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get name and type of the group from database *****/
-   GrpDat.GrpCod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+   GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Remove file zones of this group *****/
-   Brw_RemoveGrpZones (Gbl.Hierarchy.Crs.Crs.CrsCod,GrpDat.GrpCod);
+   Brw_RemoveGrpZones (Gbl.Hierarchy.Crs.CrsCod,GrpDat.GrpCod);
 
    /***** Remove this group from all the assignments *****/
    Asg_RemoveGroup (GrpDat.GrpCod);
@@ -4206,17 +4206,17 @@ static void Grp_RemoveGroupCompletely (void)
    /***** Change this group in course timetable *****/
    DB_QueryUPDATE ("can not update a group in course timetable",
 		   "UPDATE timetable_crs SET GrpCod=-1 WHERE GrpCod=%ld",
-                   Gbl.Hierarchy.Crs.Grps.GrpCod);
+                   Gbl.Crs.Grps.GrpCod);
 
    /***** Remove all the students in this group *****/
    DB_QueryDELETE ("can not remove users from a group",
 		   "DELETE FROM crs_grp_usr WHERE GrpCod=%ld",
-                   Gbl.Hierarchy.Crs.Grps.GrpCod);
+                   Gbl.Crs.Grps.GrpCod);
 
    /***** Remove the group *****/
    DB_QueryDELETE ("can not remove a group",
 		   "DELETE FROM crs_grp WHERE GrpCod=%ld",
-                   Gbl.Hierarchy.Crs.Grps.GrpCod);
+                   Gbl.Crs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),
@@ -4239,17 +4239,17 @@ void Grp_OpenGroup (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Hierarchy.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /***** Get group data from database *****/
-   GrpDat.GrpCod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+   GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
    DB_QueryUPDATE ("can not open a group",
 		   "UPDATE crs_grp SET Open='Y' WHERE GrpCod=%ld",
-                   Gbl.Hierarchy.Crs.Grps.GrpCod);
+                   Gbl.Crs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),
@@ -4257,7 +4257,7 @@ void Grp_OpenGroup (void)
 	     GrpDat.GrpName);
 
    /***** Show the form again *****/
-   Gbl.Hierarchy.Crs.Grps.Open = true;
+   Gbl.Crs.Grps.Open = true;
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               Ale_SUCCESS,AlertTxt);
   }
@@ -4273,17 +4273,17 @@ void Grp_CloseGroup (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Hierarchy.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /***** Get group data from database *****/
-   GrpDat.GrpCod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+   GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
    DB_QueryUPDATE ("can not close a group",
 		   "UPDATE crs_grp SET Open='N' WHERE GrpCod=%ld",
-                   Gbl.Hierarchy.Crs.Grps.GrpCod);
+                   Gbl.Crs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),
@@ -4291,7 +4291,7 @@ void Grp_CloseGroup (void)
 	     GrpDat.GrpName);
 
    /***** Show the form again *****/
-   Gbl.Hierarchy.Crs.Grps.Open = false;
+   Gbl.Crs.Grps.Open = false;
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               Ale_SUCCESS,AlertTxt);
   }
@@ -4307,17 +4307,17 @@ void Grp_EnableFileZonesGrp (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Hierarchy.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /***** Get group data from database *****/
-   GrpDat.GrpCod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+   GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
    DB_QueryUPDATE ("can not enable file zones of a group",
 		   "UPDATE crs_grp SET FileZones='Y' WHERE GrpCod=%ld",
-                   Gbl.Hierarchy.Crs.Grps.GrpCod);
+                   Gbl.Crs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),
@@ -4325,7 +4325,7 @@ void Grp_EnableFileZonesGrp (void)
              GrpDat.GrpName);
 
    /***** Show the form again *****/
-   Gbl.Hierarchy.Crs.Grps.FileZones = true;
+   Gbl.Crs.Grps.FileZones = true;
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               Ale_SUCCESS,AlertTxt);
   }
@@ -4341,17 +4341,17 @@ void Grp_DisableFileZonesGrp (void)
    char AlertTxt[256 + Grp_MAX_BYTES_GROUP_NAME];
 
    /***** Get group code *****/
-   if ((Gbl.Hierarchy.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /***** Get group data from database *****/
-   GrpDat.GrpCod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+   GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
    DB_QueryUPDATE ("can not disable file zones of a group",
 		   "UPDATE crs_grp SET FileZones='N' WHERE GrpCod=%ld",
-                   Gbl.Hierarchy.Crs.Grps.GrpCod);
+                   Gbl.Crs.Grps.GrpCod);
 
    /***** Create message to show the change made *****/
    snprintf (AlertTxt,sizeof (AlertTxt),
@@ -4359,7 +4359,7 @@ void Grp_DisableFileZonesGrp (void)
              GrpDat.GrpName);
 
    /***** Show the form again *****/
-   Gbl.Hierarchy.Crs.Grps.FileZones = false;
+   Gbl.Crs.Grps.FileZones = false;
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               Ale_SUCCESS,AlertTxt);
   }
@@ -4379,14 +4379,14 @@ void Grp_ChangeGroupType (void)
 
    /***** Get parameters from form *****/
    /* Get group code */
-   if ((Gbl.Hierarchy.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /* Get the new group type */
    NewGrpTypCod = Grp_GetParamGrpTypCod ();
 
    /* Get from the database the type and the name of the group */
-   GrpDat.GrpCod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+   GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** If group was in database... *****/
@@ -4403,7 +4403,7 @@ void Grp_ChangeGroupType (void)
       /* Update the table of groups changing old type by new type */
       DB_QueryUPDATE ("can not update the type of a group",
 		      "UPDATE crs_grp SET GrpTypCod=%ld WHERE GrpCod=%ld",
-                      NewGrpTypCod,Gbl.Hierarchy.Crs.Grps.GrpCod);
+                      NewGrpTypCod,Gbl.Crs.Grps.GrpCod);
 
       /* Create message to show the change made */
       AlertType = Ale_SUCCESS;
@@ -4413,7 +4413,7 @@ void Grp_ChangeGroupType (void)
      }
 
    /***** Show the form again *****/
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod = NewGrpTypCod;
+   Gbl.Crs.Grps.GrpTyp.GrpTypCod = NewGrpTypCod;
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               AlertType,AlertTxt);
   }
@@ -4432,20 +4432,20 @@ void Grp_ChangeGroupClassroom (void)
 
    /***** Get parameters from form *****/
    /* Get group code */
-   if ((Gbl.Hierarchy.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /* Get the new classroom */
    NewClaCod = Cla_GetParamClaCod ();
 
    /* Get from the database the name of the group */
-   GrpDat.GrpCod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+   GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing old classroom by new classroom *****/
    DB_QueryUPDATE ("can not update the classroom of a group",
 		   "UPDATE crs_grp SET ClaCod=%ld WHERE GrpCod=%ld",
-		   NewClaCod,Gbl.Hierarchy.Crs.Grps.GrpCod);
+		   NewClaCod,Gbl.Crs.Grps.GrpCod);
 
    /* Create message to show the change made */
    AlertType = Ale_SUCCESS;
@@ -4454,7 +4454,7 @@ void Grp_ChangeGroupClassroom (void)
 	     GrpDat.GrpName);
 
    /***** Show the form again *****/
-   Gbl.Hierarchy.Crs.Grps.ClaCod = NewClaCod;
+   Gbl.Crs.Grps.ClaCod = NewClaCod;
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               AlertType,AlertTxt);
   }
@@ -4474,23 +4474,23 @@ void Grp_ChangeMandatGrpTyp (void)
 
    /***** Get parameters of the form *****/
    /* Get the código of type of group */
-   if ((Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of type of group is missing.");
 
    /* Get the new type of enrolment (mandatory or voluntaria) of this type of group */
    NewMandatoryEnrolment = Par_GetParToBool ("MandatoryEnrolment");
 
    /* Get from the database the name of the type and the old type of enrolment */
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Hierarchy.Crs.Grps.GrpTyp);
+   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Check if the old type of enrolment match the new
           (this happens when return is pressed without changes) *****/
-   if (Gbl.Hierarchy.Crs.Grps.GrpTyp.MandatoryEnrolment == NewMandatoryEnrolment)
+   if (Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment == NewMandatoryEnrolment)
      {
       AlertType = Ale_INFO;
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
-                Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName);
+                Gbl.Crs.Grps.GrpTyp.GrpTypName);
      }
    else
      {
@@ -4499,18 +4499,18 @@ void Grp_ChangeMandatGrpTyp (void)
 		      "UPDATE crs_grp_types SET Mandatory='%c' WHERE GrpTypCod=%ld",
                       NewMandatoryEnrolment ? 'Y' :
         	                              'N',
-                      Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+                      Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        NewMandatoryEnrolment ? Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory :
                                         Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary,
-                Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName);
+                Gbl.Crs.Grps.GrpTyp.GrpTypName);
      }
 
    /***** Show the form again *****/
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.MandatoryEnrolment = NewMandatoryEnrolment;
+   Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment = NewMandatoryEnrolment;
    Grp_ReqEditGroupsInternal (AlertType,AlertTxt,
                               Ale_INFO,NULL);
   }
@@ -4530,23 +4530,23 @@ void Grp_ChangeMultiGrpTyp (void)
 
    /***** Get parameters from the form *****/
    /* Get the code of type of group */
-   if ((Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of type of group is missing.");
 
    /* Get the new type of enrolment (single or multiple) of this type of group */
    NewMultipleEnrolment = Par_GetParToBool ("MultipleEnrolment");
 
    /* Get from the database the name of the type and the old type of enrolment */
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Hierarchy.Crs.Grps.GrpTyp);
+   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Check if the old type of enrolment match the new one
    	  (this happends when return is pressed without changes) *****/
-   if (Gbl.Hierarchy.Crs.Grps.GrpTyp.MultipleEnrolment == NewMultipleEnrolment)
+   if (Gbl.Crs.Grps.GrpTyp.MultipleEnrolment == NewMultipleEnrolment)
      {
       AlertType = Ale_INFO;
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
-                Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName);
+                Gbl.Crs.Grps.GrpTyp.GrpTypName);
      }
    else
      {
@@ -4556,18 +4556,18 @@ void Grp_ChangeMultiGrpTyp (void)
 		      " WHERE GrpTypCod=%ld",
                       NewMultipleEnrolment ? 'Y' :
         	                             'N',
-                      Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+                      Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        NewMultipleEnrolment ? Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X :
                                        Txt_Now_each_student_can_only_belong_to_a_group_of_type_X,
-                Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName);
+                Gbl.Crs.Grps.GrpTyp.GrpTypName);
      }
 
    /***** Show the form again *****/
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.MultipleEnrolment = NewMultipleEnrolment;
+   Gbl.Crs.Grps.GrpTyp.MultipleEnrolment = NewMultipleEnrolment;
    Grp_ReqEditGroupsInternal (AlertType,AlertTxt,
                               Ale_INFO,NULL);
   }
@@ -4581,15 +4581,15 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    extern const char *Txt_The_date_time_of_opening_of_groups_has_changed;
 
    /***** Get the code of type of group *****/
-   if ((Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of type of group is missing.");
 
    /***** Get from the database the data of this type of group *****/
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Hierarchy.Crs.Grps.GrpTyp);
+   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Get open time *****/
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
-   Gbl.Hierarchy.Crs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.Hierarchy.Crs.Grps.GrpTyp.OpenTimeUTC);
+   Gbl.Crs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
+   Gbl.Crs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.Crs.Grps.GrpTyp.OpenTimeUTC);
 
    /***** Update the table of types of group
           changing the old open time of enrolment by the new *****/
@@ -4597,10 +4597,10 @@ void Grp_ChangeOpenTimeGrpTyp (void)
 		   "UPDATE crs_grp_types"
 		   " SET MustBeOpened='%c',OpenTime=FROM_UNIXTIME(%ld)"
 		   " WHERE GrpTypCod=%ld",
-                   Gbl.Hierarchy.Crs.Grps.GrpTyp.MustBeOpened ? 'Y' :
+                   Gbl.Crs.Grps.GrpTyp.MustBeOpened ? 'Y' :
         	                                             'N',
-                   (long) Gbl.Hierarchy.Crs.Grps.GrpTyp.OpenTimeUTC,
-                   Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+                   (long) Gbl.Crs.Grps.GrpTyp.OpenTimeUTC,
+                   Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_date_time_of_opening_of_groups_has_changed);
@@ -4626,7 +4626,7 @@ void Grp_ChangeMaxStdsGrp (void)
 
    /***** Get parameters of the form *****/
    /* Get group code */
-   if ((Gbl.Hierarchy.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /* Get the new maximum number of students of the group */
@@ -4637,7 +4637,7 @@ void Grp_ChangeMaxStdsGrp (void)
                                           Grp_NUM_STUDENTS_NOT_LIMITED);
 
    /* Get from the database the type, name, and old maximum of students of the group */
-   GrpDat.GrpCod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+   GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Check if the old maximum of students equals the new one
@@ -4655,7 +4655,7 @@ void Grp_ChangeMaxStdsGrp (void)
       DB_QueryUPDATE ("can not update the maximum number of students"
 		      " in a group",
 		      "UPDATE crs_grp SET MaxStudents=%u WHERE GrpCod=%ld",
-                      NewMaxStds,Gbl.Hierarchy.Crs.Grps.GrpCod);
+                      NewMaxStds,Gbl.Crs.Grps.GrpCod);
 
       /***** Write message to show the change made *****/
       AlertType = Ale_SUCCESS;
@@ -4670,7 +4670,7 @@ void Grp_ChangeMaxStdsGrp (void)
      }
 
    /***** Show the form again *****/
-   Gbl.Hierarchy.Crs.Grps.MaxStudents = NewMaxStds;
+   Gbl.Crs.Grps.MaxStudents = NewMaxStds;
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               AlertType,AlertTxt);
   }
@@ -4716,14 +4716,14 @@ void Grp_RenameGroupType (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the group type */
-   if ((Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
+   if ((Gbl.Crs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of type of group is missing.");
 
    /* Get the new name for the group type */
    Par_GetParToText ("GrpTypName",NewNameGrpTyp,Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
    /***** Get from the database the old name of the group type *****/
-   Grp_GetDataOfGroupTypeByCod (&Gbl.Hierarchy.Crs.Grps.GrpTyp);
+   Grp_GetDataOfGroupTypeByCod (&Gbl.Crs.Grps.GrpTyp);
 
    /***** Check if new name is empty *****/
    if (!NewNameGrpTyp[0])
@@ -4731,16 +4731,16 @@ void Grp_RenameGroupType (void)
       AlertType = Ale_WARNING;
       snprintf (AlertTxt,sizeof (AlertTxt),
 	        Txt_You_can_not_leave_the_name_of_the_type_of_group_X_empty,
-                Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName);
+                Gbl.Crs.Grps.GrpTyp.GrpTypName);
      }
    else
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp))	// Different names
+      if (strcmp (Gbl.Crs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp))	// Different names
         {
          /***** If group type was in database... *****/
-         if (Grp_CheckIfGroupTypeNameExists (NewNameGrpTyp,Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod))
+         if (Grp_CheckIfGroupTypeNameExists (NewNameGrpTyp,Gbl.Crs.Grps.GrpTyp.GrpTypCod))
            {
 	    AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),
@@ -4754,13 +4754,13 @@ void Grp_RenameGroupType (void)
         		    "UPDATE crs_grp_types SET GrpTypName='%s'"
 			    " WHERE GrpTypCod=%ld",
                             NewNameGrpTyp,
-                            Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod);
+                            Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;
             snprintf (AlertTxt,sizeof (AlertTxt),
 	              Txt_The_type_of_group_X_has_been_renamed_as_Y,
-                      Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp);
+                      Gbl.Crs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp);
            }
         }
       else	// The same name
@@ -4773,7 +4773,7 @@ void Grp_RenameGroupType (void)
      }
 
    /***** Show the form again *****/
-   Str_Copy (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp,
+   Str_Copy (Gbl.Crs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp,
              Grp_MAX_BYTES_GROUP_TYPE_NAME);
    Grp_ReqEditGroupsInternal (AlertType,AlertTxt,
                               Ale_INFO,NULL);
@@ -4796,14 +4796,14 @@ void Grp_RenameGroup (void)
 
    /***** Get parameters from form *****/
    /* Get the code of the group */
-   if ((Gbl.Hierarchy.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
+   if ((Gbl.Crs.Grps.GrpCod = Grp_GetParamGrpCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /* Get the new name for the group */
    Par_GetParToText ("GrpName",NewNameGrp,Grp_MAX_BYTES_GROUP_NAME);
 
    /***** Get from the database the type and the old name of the group *****/
-   GrpDat.GrpCod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+   GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Check if new name is empty *****/
@@ -4821,7 +4821,7 @@ void Grp_RenameGroup (void)
       if (strcmp (GrpDat.GrpName,NewNameGrp))	// Different names
         {
          /***** If group was in database... *****/
-         if (Grp_CheckIfGroupNameExists (GrpDat.GrpTypCod,NewNameGrp,Gbl.Hierarchy.Crs.Grps.GrpCod))
+         if (Grp_CheckIfGroupNameExists (GrpDat.GrpTypCod,NewNameGrp,Gbl.Crs.Grps.GrpCod))
            {
 	    AlertType = Ale_WARNING;
             snprintf (AlertTxt,sizeof (AlertTxt),
@@ -4833,7 +4833,7 @@ void Grp_RenameGroup (void)
             /* Update the table changing old name by new name */
             DB_QueryUPDATE ("can not update the name of a group",
         		    "UPDATE crs_grp SET GrpName='%s' WHERE GrpCod=%ld",
-                            NewNameGrp,Gbl.Hierarchy.Crs.Grps.GrpCod);
+                            NewNameGrp,Gbl.Crs.Grps.GrpCod);
 
             /***** Write message to show the change made *****/
 	    AlertType = Ale_SUCCESS;
@@ -4852,7 +4852,7 @@ void Grp_RenameGroup (void)
      }
 
    /***** Show the form again *****/
-   Str_Copy (Gbl.Hierarchy.Crs.Grps.GrpName,NewNameGrp,
+   Str_Copy (Gbl.Crs.Grps.GrpName,NewNameGrp,
              Grp_MAX_BYTES_GROUP_NAME);
    Grp_ReqEditGroupsInternal (Ale_INFO,NULL,
                               AlertType,AlertTxt);
@@ -4910,26 +4910,26 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
    unsigned NumGrpWanted;
 
    /***** Allocate memory for the strings with group codes in each type *****/
-   if ((LstStrCodGrps = (char **) calloc (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num,sizeof (char *))) == NULL)
+   if ((LstStrCodGrps = (char **) calloc (Gbl.Crs.Grps.GrpTypes.Num,sizeof (char *))) == NULL)
       Lay_NotEnoughMemoryExit ();
 
    /***** Get lists with the groups that I want in each type
           in order to count the total number of groups selected *****/
    for (NumGrpTyp = 0, LstGrpsWanted->NumGrps = 0;
-	NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
      {
       /***** Allocate memory for the list of group codes of this type *****/
       if ((LstStrCodGrps[NumGrpTyp] = (char *) malloc ((size_t) ((1 + 10 + 1) *
-                                                                 Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps))) == NULL)
+                                                                 Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the multiple parameter code of group of this type *****/
       snprintf (Param,sizeof (Param),
 	        "GrpCod%ld",
-                Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+                Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Par_GetParMultiToText (Param,LstStrCodGrps[NumGrpTyp],
-                             ((1 + 10 + 1) * Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) - 1);
+                             ((1 + 10 + 1) * Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) - 1);
       if (LstStrCodGrps[NumGrpTyp][0])
         {
          /***** Count the number of groups selected of this type of LstCodGrps[NumGrpTyp] *****/
@@ -4952,7 +4952,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
 
       /***** Get the groups *****/
       for (NumGrpTyp = 0, NumGrpWanted = 0;
-	   NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
         {
          /* Add the groups selected of this type to the complete list of groups selected */
@@ -5001,7 +5001,7 @@ void Grp_PutParamWhichGrps (void)
   {
    Grp_GetParamWhichGrps ();
 
-   Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) Gbl.Hierarchy.Crs.Grps.WhichGrps);
+   Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) Gbl.Crs.Grps.WhichGrps);
   }
 
 void Grp_PutParamWhichGrpsOnlyMyGrps (void)
@@ -5029,7 +5029,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
 	WhichGrps++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       WhichGrps == Gbl.Hierarchy.Crs.Grps.WhichGrps ? "PREF_ON" :
+	       WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
 							    "PREF_OFF");
       Frm_StartForm (Action);
       Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) WhichGrps);
@@ -5079,7 +5079,7 @@ void Grp_GetParamWhichGrps (void)
 	}
 
       /* Get parameter */
-      Gbl.Hierarchy.Crs.Grps.WhichGrps = (Grp_WhichGroups_t)
+      Gbl.Crs.Grps.WhichGrps = (Grp_WhichGroups_t)
 	                              Par_GetParToUnsignedLong ("WhichGrps",
 	                                                        0,
 	                                                        Grp_NUM_WHICH_GROUPS - 1,

@@ -155,7 +155,7 @@ void QR_ExamAnnnouncement (void)
                       " style=\"width:250px; height:250px;\" />"
                       "</div>",
             300,300,
-            Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Crs.Crs.CrsCod,Act_GetActCod (ActSeeAllExaAnn),
+            Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Crs.CrsCod,Act_GetActCod (ActSeeAllExaAnn),
             Txt_Link_to_announcement_of_exam,
             Txt_Link_to_announcement_of_exam);
   }

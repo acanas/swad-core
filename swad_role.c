@@ -86,7 +86,7 @@ void Rol_SetMyRoles (void)
    /***** Get my role in current course if not yet filled *****/
    if (!Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid)
      {
-      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.Crs.CrsCod);
+      Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Crs.CrsCod);
       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
      }
 
@@ -624,7 +624,7 @@ Rol_Role_t Rol_GetRequestedRole (long UsrCod)
    if (DB_QuerySELECT (&mysql_res,"can not get requested role",
 		       "SELECT Role FROM crs_usr_requests"
 		       " WHERE CrsCod=%ld AND UsrCod=%ld",
-		       Gbl.Hierarchy.Crs.Crs.CrsCod,UsrCod))
+		       Gbl.Hierarchy.Crs.CrsCod,UsrCod))
      {
       /***** Get role *****/
       row = mysql_fetch_row (mysql_res);

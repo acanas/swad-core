@@ -906,7 +906,7 @@ static void Fig_GetAndShowHierarchyWithUsrs (Rol_Role_t Role)
 	 break;
      case Hie_CRS:
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
-                  Gbl.Hierarchy.Crs.Crs.CrsCod);
+                  Gbl.Hierarchy.Crs.CrsCod);
          NumCtysWithUsrs = Cty_GetNumCtysWithUsrs (Role,SubQuery);
          NumInssWithUsrs = Ins_GetNumInssWithUsrs (Role,SubQuery);
 	 NumCtrsWithUsrs = Ctr_GetNumCtrsWithUsrs (Role,SubQuery);
@@ -2349,14 +2349,14 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Level_t Scope,
 			       " AND crs_grp.GrpCod=file_browser_size.Cod"
 			       " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			       ") AS sizes",
-			       Gbl.Hierarchy.Crs.Crs.CrsCod,
+			       Gbl.Hierarchy.Crs.CrsCod,
 			       (unsigned) Brw_ADMI_DOC_CRS,
 			       (unsigned) Brw_ADMI_TCH_CRS,
 			       (unsigned) Brw_ADMI_SHR_CRS,
 			       (unsigned) Brw_ADMI_ASG_USR,
 			       (unsigned) Brw_ADMI_WRK_USR,
 			       (unsigned) Brw_ADMI_MRK_CRS,
-			       Gbl.Hierarchy.Crs.Crs.CrsCod,
+			       Gbl.Hierarchy.Crs.CrsCod,
 			       (unsigned) Brw_ADMI_DOC_GRP,
 			       (unsigned) Brw_ADMI_TCH_GRP,
 			       (unsigned) Brw_ADMI_SHR_GRP,
@@ -2376,7 +2376,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Level_t Scope,
 				      "SUM(TotalSize)"
 			       " FROM file_browser_size"
 			       " WHERE Cod=%ld AND FileBrowser=%u",
-			       Gbl.Hierarchy.Crs.Crs.CrsCod,(unsigned) FileBrowser);
+			       Gbl.Hierarchy.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOC_GRP:
 	    case Brw_ADMI_TCH_GRP:
@@ -2395,7 +2395,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Level_t Scope,
 			       " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			       " AND crs_grp.GrpCod=file_browser_size.Cod"
 			       " AND file_browser_size.FileBrowser=%u",
-			       Gbl.Hierarchy.Crs.Crs.CrsCod,(unsigned) FileBrowser);
+			       Gbl.Hierarchy.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASG_USR:
 	    case Brw_ADMI_WRK_USR:
@@ -2409,7 +2409,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Level_t Scope,
 				      "SUM(TotalSize)"
 			       " FROM file_browser_size"
 			       " WHERE Cod=%ld AND FileBrowser=%u",
-			       Gbl.Hierarchy.Crs.Crs.CrsCod,(unsigned) FileBrowser);
+			       Gbl.Hierarchy.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRF_USR:
 	       DB_QuerySELECT (&mysql_res,"can not get size of a file browser",
@@ -2424,7 +2424,7 @@ static void Fig_GetSizeOfFileZoneFromDB (Hie_Level_t Scope,
 			       " WHERE crs_usr.CrsCod=%ld"
 			       " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
 			       " AND file_browser_size.FileBrowser=%u",
-			       Gbl.Hierarchy.Crs.Crs.CrsCod,(unsigned) FileBrowser);
+			       Gbl.Hierarchy.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -2944,7 +2944,7 @@ static void Fig_GetNumberOfOERsFromDB (Hie_Level_t Scope,Brw_License_t License,u
 				    " AND FileBrowser IN (%u,%u)"
 				    " AND License=%u"
 				    " GROUP BY Public",
-				    Gbl.Hierarchy.Crs.Crs.CrsCod,
+				    Gbl.Hierarchy.Crs.CrsCod,
 				    (unsigned) Brw_ADMI_DOC_CRS,
 				    (unsigned) Brw_ADMI_SHR_CRS,
 				    (unsigned) License);
@@ -3468,7 +3468,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
 				      " WHERE crs_usr.CrsCod=%ld"
 				      " AND crs_usr.UsrCod=social_notes.UsrCod"
 				      " AND social_notes.NoteType=%u",
-				      Gbl.Hierarchy.Crs.Crs.CrsCod,
+				      Gbl.Hierarchy.Crs.CrsCod,
 				      (unsigned) NoteType);
 	    break;
 	 default:
@@ -3587,7 +3587,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
 				   " FROM crs_usr,social_notes"
 				   " WHERE crs_usr.CrsCod=%ld"
 				   " AND crs_usr.UsrCod=social_notes.UsrCod",
-				   Gbl.Hierarchy.Crs.Crs.CrsCod);
+				   Gbl.Hierarchy.Crs.CrsCod);
 	 break;
       default:
 	 Lay_WrongScopeExit ();
@@ -3780,7 +3780,7 @@ static void Fig_GetAndShowFollowStats (void)
 				      " WHERE crs_usr.CrsCod=%ld"
 				      " AND crs_usr.UsrCod=usr_follow.%s",
 				      FieldDB[Fol],
-				      Gbl.Hierarchy.Crs.Crs.CrsCod,
+				      Gbl.Hierarchy.Crs.CrsCod,
 				      FieldDB[Fol]);
 	    break;
 	 default:
@@ -3902,7 +3902,7 @@ static void Fig_GetAndShowFollowStats (void)
 			    " AND crs_usr.UsrCod=usr_follow.%s"
 			    " GROUP BY %s) AS F",
 			    FieldDB[Fol],
-			    Gbl.Hierarchy.Crs.Crs.CrsCod,
+			    Gbl.Hierarchy.Crs.CrsCod,
 			    FieldDB[Fol],
 			    FieldDB[1 - Fol]);
 	    break;
@@ -4062,8 +4062,8 @@ static void Fig_GetAndShowForumStats (void)
          Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,Gbl.Hierarchy.Deg.DegCod,-1L,&FiguresForum);
          break;
       case Hie_CRS:
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.Crs.CrsCod,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.Crs.CrsCod,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,Gbl.Hierarchy.Crs.CrsCod,&FiguresForum);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -4431,7 +4431,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
                             " FROM sta_notif"
                             " WHERE CrsCod=%ld"
                             " AND NotifyEvent=%u",
-			    Gbl.Hierarchy.Crs.Crs.CrsCod,(unsigned) NotifyEvent);
+			    Gbl.Hierarchy.Crs.CrsCod,(unsigned) NotifyEvent);
             break;
 	 default:
 	    Lay_WrongScopeExit ();
@@ -5657,7 +5657,7 @@ unsigned Fig_GetNumUsrsWhoChoseAnOption (const char *SubQuery)
 				   " WHERE crs_usr.CrsCod=%ld"
 				   " AND crs_usr.UsrCod=usr_data.UsrCod"
 				   " AND %s",
-				   Gbl.Hierarchy.Crs.Crs.CrsCod,SubQuery);
+				   Gbl.Hierarchy.Crs.CrsCod,SubQuery);
 	 break;
       default:
 	 Lay_WrongScopeExit ();

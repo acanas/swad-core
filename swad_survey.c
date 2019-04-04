@@ -205,8 +205,8 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    unsigned NumSvy;
 
    /***** Get number of groups in current course *****/
-   if (!Gbl.Hierarchy.Crs.Grps.NumGrps)
-      Gbl.Hierarchy.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
+   if (!Gbl.Crs.Grps.NumGrps)
+      Gbl.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
 
    /***** Get list of surveys *****/
    Svy_GetListSurveys ();
@@ -228,7 +228,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
                  Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)
+   if (Gbl.Crs.Grps.NumGrps)
      {
       Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAllSvy,Svy_ParamsWhichGroupsToShow);
@@ -617,7 +617,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
  	 break;
       case Hie_CRS:	// Course
 	 fprintf (Gbl.F.Out,"%s %s",
-	          Txt_Course,Gbl.Hierarchy.Crs.Crs.ShrtName);
+	          Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
 	 break;
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -636,7 +636,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /* Groups whose users can answer this survey */
    if (Svy.Scope == Hie_CRS)
-      if (Gbl.Hierarchy.Crs.Grps.NumGrps)
+      if (Gbl.Crs.Grps.NumGrps)
          Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (&Svy);
 
    /* Text of the survey */
@@ -866,7 +866,7 @@ void Svy_GetListSurveys (void)
    Cods[Hie_INS] = Gbl.Hierarchy.Ins.InsCod;	// Institution
    Cods[Hie_CTR] = Gbl.Hierarchy.Ctr.CtrCod;	// Centre
    Cods[Hie_DEG] = Gbl.Hierarchy.Deg.DegCod;	// Degree
-   Cods[Hie_CRS] = Gbl.Hierarchy.Crs.Crs.CrsCod;	// Course
+   Cods[Hie_CRS] = Gbl.Hierarchy.Crs.CrsCod;	// Course
 
    /* Fill subqueries for system, country, institution, centre and degree */
    for (Scope  = Hie_SYS;
@@ -892,7 +892,7 @@ void Svy_GetListSurveys (void)
    /* Fill subquery for course */
    if (ScopesAllowed & 1 << Hie_CRS)
      {
-      if (Gbl.Hierarchy.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
+      if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
         {
 	 if (asprintf (&SubQuery[Hie_CRS],"%s("
 						"Scope='%s' AND Cod=%ld%s"
@@ -914,7 +914,7 @@ void Svy_GetListSurveys (void)
 		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	    Lay_NotEnoughMemoryExit ();
         }
-      else	// Gbl.Hierarchy.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
+      else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
         {
 	 if (asprintf (&SubQuery[Hie_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
 		       SubQueryFilled ? " OR " :
@@ -2015,7 +2015,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   if (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num)
+   if (Gbl.Crs.Grps.GrpTypes.Num)
      {
       /***** Start box and table *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2041,14 +2041,14 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 	                 "</label>"
 	                 "</td>"
 	                 "</tr>",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.Crs.ShrtName);
+               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
-         if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
                                                SvyCod,Grp_SURVEY);
 
       /***** End table and box *****/
@@ -2138,7 +2138,7 @@ void Svy_RecFormSurvey (void)
 	     Gbl.Usrs.Me.Role.Logged != Rol_TCH)
 	    Lay_ShowErrorAndExit ("Wrong survey scope.");
 	 NewSvy.Scope = Hie_CRS;
-	 NewSvy.Cod = Gbl.Hierarchy.Crs.Crs.CrsCod;
+	 NewSvy.Cod = Gbl.Hierarchy.Crs.CrsCod;
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -2247,7 +2247,7 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
 				Txt);
 
    /***** Create groups *****/
-   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
+   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Svy_CreateGrps (Svy->SvyCod);
 
    /***** Write success message *****/
@@ -2284,7 +2284,7 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
    Svy_RemoveAllTheGrpsAssociatedToAndSurvey (Svy->SvyCod);
 
    /* Create new groups */
-   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
+   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Svy_CreateGrps (Svy->SvyCod);
 
    /***** Write success message *****/
@@ -2367,7 +2367,7 @@ static void Svy_CreateGrps (long SvyCod)
 
    /***** Create groups of the survey *****/
    for (NumGrpSel = 0;
-	NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps;
+	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
       /* Create group */
       DB_QueryINSERT ("can not associate a group to a survey",
@@ -2375,7 +2375,7 @@ static void Svy_CreateGrps (long SvyCod)
 	              " (SvyCod,GrpCod)"
 	              " VALUES"
 	              " (%ld,%ld)",
-		      SvyCod,Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+		      SvyCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
@@ -2437,7 +2437,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
      }
    else
       fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.Crs.ShrtName);
+               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -3824,7 +3824,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Hie_Level_t Scope)
 			 " FROM surveys"
 			 " WHERE Scope='%s' AND Cod=%ld",
 			 Sco_GetDBStrFromScope (Hie_CRS),
-			 Gbl.Hierarchy.Crs.Crs.CrsCod);
+			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -3917,7 +3917,7 @@ unsigned Svy_GetNumCrsSurveys (Hie_Level_t Scope,unsigned *NumNotif)
                          " WHERE surveys.Scope='%s'"
                          " AND CrsCod=%ld",
 			 Sco_GetDBStrFromScope (Hie_CRS),
-			 Gbl.Hierarchy.Crs.Crs.CrsCod);
+			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -4039,7 +4039,7 @@ float Svy_GetNumQstsPerCrsSurvey (Hie_Level_t Scope)
                          " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                          " AND surveys.SvyCod=svy_questions.SvyCod"
                          " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
-			 Sco_GetDBStrFromScope (Hie_CRS),Gbl.Hierarchy.Crs.Crs.CrsCod);
+			 Sco_GetDBStrFromScope (Hie_CRS),Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

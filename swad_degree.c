@@ -357,13 +357,13 @@ static void Deg_Configuration (bool PrintView)
 			 " onchange=\"document.getElementById('%s').submit();\">",
 	       Gbl.Form.Id);
       for (NumCtr = 0;
-	   NumCtr < Gbl.Ctrs.Num;
+	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
 	   NumCtr++)
 	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		  Gbl.Ctrs.Lst[NumCtr].CtrCod,
-		  Gbl.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod ? " selected=\"selected\"" :
+		  Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod,
+		  Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].CtrCod == Gbl.Hierarchy.Ctr.CtrCod ? " selected=\"selected\"" :
 									     "",
-		  Gbl.Ctrs.Lst[NumCtr].ShrtName);
+		  Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr].ShrtName);
       fprintf (Gbl.F.Out,"</select>");
       Frm_EndForm ();
 
@@ -784,10 +784,10 @@ static void Deg_ListDegreesForEdition (void)
 			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.Form.Id);
 	 for (NumDegTyp = 0;
-	      NumDegTyp < Gbl.Degs.DegTypes.Num;
+	      NumDegTyp < Gbl.DegTypes.Num;
 	      NumDegTyp++)
 	   {
-	    DegTyp = &Gbl.Degs.DegTypes.Lst[NumDegTyp];
+	    DegTyp = &Gbl.DegTypes.Lst[NumDegTyp];
 	    fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
 		     DegTyp->DegTypCod,
 		     (DegTyp->DegTypCod == Deg->DegTypCod) ? " selected=\"selected\"" :
@@ -799,10 +799,10 @@ static void Deg_ListDegreesForEdition (void)
 	}
       else
 	 for (NumDegTyp = 0;
-	      NumDegTyp < Gbl.Degs.DegTypes.Num;
+	      NumDegTyp < Gbl.DegTypes.Num;
 	      NumDegTyp++)
-	    if (Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod == Deg->DegTypCod)
-	       fprintf (Gbl.F.Out,"%s",Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName);
+	    if (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod == Deg->DegTypCod)
+	       fprintf (Gbl.F.Out,"%s",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree WWW */
@@ -995,10 +995,10 @@ static void Deg_PutFormToCreateDegree (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"OthDegTypCod\" style=\"width:62px;\">");
    for (NumDegTyp = 0;
-	NumDegTyp < Gbl.Degs.DegTypes.Num;
+	NumDegTyp < Gbl.DegTypes.Num;
 	NumDegTyp++)
      {
-      DegTyp = &Gbl.Degs.DegTypes.Lst[NumDegTyp];
+      DegTyp = &Gbl.DegTypes.Lst[NumDegTyp];
       fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
 	       DegTyp->DegTypCod,
 	       DegTyp->DegTypCod == Deg->DegTypCod ? " selected=\"selected\"" :
@@ -1365,7 +1365,7 @@ void Deg_EditDegrees (void)
    Box_StartBox (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
-   if (Gbl.Degs.DegTypes.Num)
+   if (Gbl.DegTypes.Num)
      {
       /***** Put a form to create a new degree *****/
       Deg_PutFormToCreateDegree ();
@@ -1683,7 +1683,7 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
    Deg->ShrtName[0] = '\0';
    Deg->FullName[0] = '\0';
    Deg->WWW[0] = '\0';
-   Deg->LstCrss = NULL;
+   Deg->Crss.Lst = NULL;
 
    /***** Check if degree code is correct *****/
    if (Deg->DegCod > 0)

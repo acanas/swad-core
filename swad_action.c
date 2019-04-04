@@ -5364,7 +5364,7 @@ void Act_AdjustCurrentAction (void)
 
             /***** Check if it is mandatory to read any information about course *****/
             if (Gbl.Action.Act == ActMnu)	// Do the following check sometimes, for example when the user changes the current tab
-               Gbl.Hierarchy.Crs.Info.ShowMsgMustBeRead = Inf_GetIfIMustReadAnyCrsInfoInThisCrs ();
+               Gbl.Crs.Info.ShowMsgMustBeRead = Inf_GetIfIMustReadAnyCrsInfoInThisCrs ();
             break;
          case Rol_NET:
             break;

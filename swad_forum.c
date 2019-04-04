@@ -1070,7 +1070,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
             case For_FORUM_COURSE_TCHS:
             case For_FORUM_COURSE_USRS:
                Ntf_MarkNotifAsSeen (Ntf_EVENT_FORUM_POST_COURSE,
-           	                    PstCod,Gbl.Hierarchy.Crs.Crs.CrsCod,
+           	                    PstCod,Gbl.Hierarchy.Crs.CrsCod,
            	                    Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             default:
@@ -1634,7 +1634,7 @@ static void For_ShowForumList (void)
 			   if (Gbl.Usrs.Me.IBelongToCurrentCrs ||
 			       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 			      /***** Links to forums of current degree *****/
-			      For_WriteLinksToCrsForums (Gbl.Hierarchy.Crs.Crs.CrsCod,
+			      For_WriteLinksToCrsForums (Gbl.Hierarchy.Crs.CrsCod,
 			                                 true,
 			                                 IsLastItemInLevel);
         	 }

@@ -261,7 +261,7 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 					     " FROM exam_announcements"
 					     " WHERE CrsCod=%ld AND Status=%u AND ExamDate>=NOW()"
 					     " ORDER BY T",
-					     Gbl.Hierarchy.Crs.Crs.CrsCod,
+					     Gbl.Hierarchy.Crs.CrsCod,
 					     (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
 
       /***** Write items with notices *****/

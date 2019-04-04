@@ -1300,7 +1300,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 		   " VALUES"
 		   " (%ld,%ld,%ld,'N',NOW())",
 	           MsgCod,
-	           Gbl.Hierarchy.Crs.Crs.CrsCod,
+	           Gbl.Hierarchy.Crs.CrsCod,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Increment number of messages sent by me *****/
@@ -2138,7 +2138,7 @@ unsigned Msg_GetNumMsgsSent (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 				   " FROM %s"
 				   " WHERE CrsCod=%ld",
 				   Table,
-				   Gbl.Hierarchy.Crs.Crs.CrsCod);
+				   Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -2238,7 +2238,7 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 					 " WHERE msg_snt.CrsCod=%ld"
 					 " AND msg_snt.MsgCod=%s.MsgCod",
 					 Table,
-					 Gbl.Hierarchy.Crs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.CrsCod,
 					 Table);
                break;
 	    default:
@@ -2374,8 +2374,8 @@ unsigned Msg_GetNumMsgsReceived (Hie_Level_t Scope,Msg_Status_t MsgStatus)
 					 " WHERE msg_snt.CrsCod=%ld"
 					 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 					 " AND msg_rcv_deleted.Notified='Y')",
-					 Gbl.Hierarchy.Crs.Crs.CrsCod,
-					 Gbl.Hierarchy.Crs.Crs.CrsCod);
+					 Gbl.Hierarchy.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.CrsCod);
                break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -3244,7 +3244,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
       if (Crs_GetDataOfCourseByCod (&Crs))
         {
          ThereIsOrgCrs = true;
-         if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Crs.Crs.CrsCod)))	// Message sent from current course
+         if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Crs.CrsCod)))	// Message sent from current course
              fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
         	                "(%s)"
         	                "</div>",

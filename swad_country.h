@@ -32,6 +32,7 @@
 
 #include "swad_action.h"
 #include "swad_hierarchy.h"
+#include "swad_institution.h"
 #include "swad_language.h"
 #include "swad_role_type.h"
 
@@ -50,12 +51,17 @@ struct Country
    char Alpha2[2 + 1];
    char Name[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1];
    char WWW [1 + Lan_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1];
-   unsigned NumUsrsWhoClaimToBelongToCty;
-   unsigned NumInss;
+   struct
+     {
+      unsigned Num;		// Number of institutions in this country
+      struct Instit *Lst;	// List of institutions in this country
+      Ins_Order_t SelectedOrder;
+     } Inss;
    unsigned NumCtrs;
    unsigned NumDegs;
    unsigned NumCrss;
-   unsigned NumUsrs;	// Number of users in courses of the institution
+   unsigned NumUsrs;		// Number of users in courses of the institution
+   unsigned NumUsrsWhoClaimToBelongToCty;
   };
 
 #define Cty_NUM_ORDERS 2

@@ -308,7 +308,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    struct ConnectedUsrs Usrs;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)	// No course selected
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
       return;
 
    /***** Start container *****/
@@ -320,7 +320,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
 					// the list of connected users
 					// is dynamically updated via AJAX
    Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
-   Str_Copy (CourseName,Gbl.Hierarchy.Crs.Crs.ShrtName,
+   Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,
              Hie_MAX_BYTES_SHRT_NAME);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
    fprintf (Gbl.F.Out,"%u %s %s"
@@ -439,7 +439,7 @@ void Con_UpdateMeInConnectedList (void)
 		    " (%ld,%u,%ld,NOW())",
                     Gbl.Usrs.Me.UsrDat.UsrCod,
                     (unsigned) Gbl.Usrs.Me.Role.Logged,
-                    Gbl.Hierarchy.Crs.Crs.CrsCod);
+                    Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -567,7 +567,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " WHERE crs_usr.CrsCod=%ld"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Crs.Crs.CrsCod);
+			       Gbl.Hierarchy.Crs.CrsCod);
 	       break;
 	    default:
 	       Lay_WrongScopeExit ();
@@ -678,7 +678,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			       " AND crs_usr.Role=%u"
 			       " AND crs_usr.UsrCod=connected.UsrCod"
 			       " AND connected.UsrCod=usr_data.UsrCod",
-			       Gbl.Hierarchy.Crs.Crs.CrsCod,
+			       Gbl.Hierarchy.Crs.CrsCod,
 			       (unsigned) Role);
 	       break;
 	    default:
@@ -737,7 +737,7 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
 			     " WHERE crs_usr.CrsCod=%ld AND crs_usr.Role=%u"
 			     " AND crs_usr.UsrCod=connected.UsrCod"
 			     " ORDER BY Dif",
-			     Gbl.Hierarchy.Crs.Crs.CrsCod,
+			     Gbl.Hierarchy.Crs.CrsCod,
 			     (unsigned) Role);
    Gbl.Usrs.Connected.NumUsrs       += (unsigned) NumRows;
    Gbl.Usrs.Connected.NumUsrsToList += (unsigned) NumRows;
@@ -756,7 +756,7 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
 
       /* Get course code (row[1]) */
       Gbl.Usrs.Connected.Lst[NumUsr].ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) ==
-	                                        Gbl.Hierarchy.Crs.Crs.CrsCod);
+	                                        Gbl.Hierarchy.Crs.CrsCod);
 
       /* Compute elapsed time from last access */
       if (sscanf (row[2],"%ld",&Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff) != 1)
@@ -998,7 +998,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 						    " AND crs_usr.Role=%u"
 						    " AND crs_usr.UsrCod=connected.UsrCod"
 						    " ORDER BY Dif",
-						    Gbl.Hierarchy.Crs.Crs.CrsCod,
+						    Gbl.Hierarchy.Crs.CrsCod,
 						    (unsigned) Role);
 	       break;
 	    default:
@@ -1028,7 +1028,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
            {
 	    /* Get course code (row[1]) */
 	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) ==
-		       Gbl.Hierarchy.Crs.Crs.CrsCod);
+		       Gbl.Hierarchy.Crs.CrsCod);
 
 	    /* Compute time from last access */
 	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)

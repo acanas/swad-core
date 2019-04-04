@@ -205,7 +205,7 @@ void Frm_SetParamsForm (char ParamsStr[Frm_MAX_BYTES_PARAMS_STR + 1],Act_Action_
 	    case Hie_CRS:	// Course
 	       snprintf (ParamLocation,sizeof (ParamLocation),
 			 "<input type=\"hidden\" name=\"crs\" value=\"%ld\" />",
-			 Gbl.Hierarchy.Crs.Crs.CrsCod);
+			 Gbl.Hierarchy.Crs.CrsCod);
 	       break;
 	    default:
 	       break;

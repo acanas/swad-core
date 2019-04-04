@@ -1498,7 +1498,7 @@ void Fol_GetAndShowRankingFollowers (void)
 				    " AND crs_usr.UsrCod=usr_follow.FollowedCod"
 				    " GROUP BY usr_follow.FollowedCod"
 				    " ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
-				    Gbl.Hierarchy.Crs.Crs.CrsCod);
+				    Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
          Lay_WrongScopeExit ();

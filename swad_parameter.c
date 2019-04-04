@@ -665,7 +665,7 @@ void Par_GetMainParameters (void)
    Gbl.Hierarchy.Ins.InsCod =
    Gbl.Hierarchy.Ctr.CtrCod =
    Gbl.Hierarchy.Deg.DegCod =
-   Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;
+   Gbl.Hierarchy.Crs.CrsCod = -1L;
 
    // First of all, get action, and session identifier.
    // So, if other parameters have been stored in the database, there will be no problems to get them.
@@ -828,7 +828,7 @@ void Par_GetMainParameters (void)
       Gbl.Hierarchy.Ins.InsCod =
       Gbl.Hierarchy.Ctr.CtrCod =
       Gbl.Hierarchy.Deg.DegCod =
-      Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;
+      Gbl.Hierarchy.Crs.CrsCod = -1L;
      }
 
    /***** Get institution if exists (from menu) *****/
@@ -838,7 +838,7 @@ void Par_GetMainParameters (void)
       Gbl.Hierarchy.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
       Gbl.Hierarchy.Ctr.CtrCod =
       Gbl.Hierarchy.Deg.DegCod =
-      Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;
+      Gbl.Hierarchy.Crs.CrsCod = -1L;
      }
 
    /***** Get centre if exists (from menu) *****/
@@ -847,7 +847,7 @@ void Par_GetMainParameters (void)
      {
       Gbl.Hierarchy.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
       Gbl.Hierarchy.Deg.DegCod =
-      Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;
+      Gbl.Hierarchy.Crs.CrsCod = -1L;
      }
 
    /***** Get numerical degree code if exists (from menu) *****/
@@ -855,13 +855,13 @@ void Par_GetMainParameters (void)
    if (LongStr[0])	// Parameter "deg" available
      {
       Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
-      Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;	// Reset possible course from session
+      Gbl.Hierarchy.Crs.CrsCod = -1L;	// Reset possible course from session
      }
 
    /***** Get numerical course code if exists (from menu) *****/
    Par_GetParToText ("crs",LongStr,1 + 10);
    if (LongStr[0])	// Parameter "crs" available
-      Gbl.Hierarchy.Crs.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
+      Gbl.Hierarchy.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
 
    /***** Get tab to activate *****/
    Gbl.Action.Tab = TabUnk;

@@ -532,9 +532,9 @@ void Cty_ListCountries2 (void)
 
    /***** Write all the countries and their number of users and institutions *****/
    for (NumCty = 0;
-	NumCty < Gbl.Ctys.Num;
+	NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
 	NumCty++)
-      Cty_ListOneCountryForSeeing (&Gbl.Ctys.Lst[NumCty],NumCty + 1);
+      Cty_ListOneCountryForSeeing (&Gbl.Hierarchy.Sys.Ctys.Lst[NumCty],NumCty + 1);
 
    /***** Separation row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -654,13 +654,13 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	 Frm_StartForm (ActSeeCty);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_COUNTRIES_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Ctys.SelectedOrder)
+	 if (Order == Gbl.Hierarchy.Sys.Ctys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
       fprintf (Gbl.F.Out,"%s",Txt_COUNTRIES_ORDER[Order]);
       if (OrderSelectable)
 	{
-	 if (Order == Gbl.Ctys.SelectedOrder)
+	 if (Order == Gbl.Hierarchy.Sys.Ctys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
@@ -738,7 +738,7 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
 		      "</td>"
 		      "</tr>",
 	    BgColor,Cty->NumUsrsWhoClaimToBelongToCty,
-	    BgColor,Cty->NumInss,
+	    BgColor,Cty->Inss.Num,
 	    BgColor,Cty->NumCtrs,
 	    BgColor,Cty->NumDegs,
 	    BgColor,Cty->NumCrss,
@@ -902,17 +902,17 @@ void Cty_WriteScriptGoogleGeochart (void)
 
    /***** Write all the countries and their number of users and institutions *****/
    for (NumCty = 0;
-	NumCty < Gbl.Ctys.Num;
+	NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
 	NumCty++)
-      if (Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty)
+      if (Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty)
         {
          /* Write data of this country */
          fprintf (Gbl.F.Out,"	['%s', %u, %u],\n",
-                  Gbl.Ctys.Lst[NumCty].Alpha2,
-                  Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty,
-                  Gbl.Ctys.Lst[NumCty].NumInss);
-         if (Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty > MaxUsrsInCountry)
-            MaxUsrsInCountry = Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty;
+                  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Alpha2,
+                  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty,
+                  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Inss.Num);
+         if (Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty > MaxUsrsInCountry)
+            MaxUsrsInCountry = Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty;
          NumCtysWithUsrs++;
         }
 
@@ -938,7 +938,7 @@ void Cty_WriteScriptGoogleGeochart (void)
 
 static void Cty_GetParamCtyOrder (void)
   {
-   Gbl.Ctys.SelectedOrder = (Cty_Order_t)
+   Gbl.Hierarchy.Sys.Ctys.SelectedOrder = (Cty_Order_t)
 	                    Par_GetParToUnsignedLong ("Order",
                                                       0,
                                                       Cty_NUM_ORDERS - 1,
@@ -955,7 +955,7 @@ void Cty_EditCountries (void)
    extern const char *Txt_Countries;
 
    /***** Get list of countries *****/
-   Gbl.Ctys.SelectedOrder = Cty_ORDER_BY_COUNTRY;
+   Gbl.Hierarchy.Sys.Ctys.SelectedOrder = Cty_ORDER_BY_COUNTRY;
    Cty_GetListCountries (Cty_GET_EXTRA_DATA);
 
    /***** Write menu to select country *****/
@@ -969,7 +969,7 @@ void Cty_EditCountries (void)
    Cty_PutFormToCreateCountry ();
 
    /***** Forms to edit current countries *****/
-   if (Gbl.Ctys.Num)
+   if (Gbl.Hierarchy.Sys.Ctys.Num)
       Cty_ListCountriesForEdition ();
 
    /***** End box *****/
@@ -1070,7 +1070,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                         Cty_MAX_BYTES_SUBQUERY_CTYS);
            }
 
-         switch (Gbl.Ctys.SelectedOrder)
+         switch (Gbl.Hierarchy.Sys.Ctys.SelectedOrder)
            {
             case Cty_ORDER_BY_COUNTRY:
                if (asprintf (&OrderBySubQuery,"Name_%s",
@@ -1107,18 +1107,18 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 
    if (NumRows) // Countries found...
      {
-      Gbl.Ctys.Num = (unsigned) NumRows;
+      Gbl.Hierarchy.Sys.Ctys.Num = (unsigned) NumRows;
 
       /***** Create list with countries *****/
-      if ((Gbl.Ctys.Lst = (struct Country *) calloc (NumRows,sizeof (struct Country))) == NULL)
+      if ((Gbl.Hierarchy.Sys.Ctys.Lst = (struct Country *) calloc (NumRows,sizeof (struct Country))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
       for (NumCty = 0;
-	   NumCty < Gbl.Ctys.Num;
+	   NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
 	   NumCty++)
         {
-         Cty = &(Gbl.Ctys.Lst[NumCty]);
+         Cty = &(Gbl.Hierarchy.Sys.Ctys.Lst[NumCty]);
 
          /* Get next country */
          row = mysql_fetch_row (mysql_res);
@@ -1142,7 +1142,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                   Cty->WWW[Lan][0] = '\0';
         	 }
                Cty->NumUsrsWhoClaimToBelongToCty = 0;
-               Cty->NumInss = Cty->NumCtrs = Cty->NumDegs = Cty->NumCrss = 0;
+               Cty->Inss.Num = Cty->NumCtrs = Cty->NumDegs = Cty->NumCrss = 0;
                Cty->NumUsrs = 0;
 
                /* Get the name of the country in current language */
@@ -1167,7 +1167,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                   Cty->NumUsrsWhoClaimToBelongToCty = 0;
 
                /* Get number of institutions in this country */
-               Cty->NumInss = Ins_GetNumInssInCty (Cty->CtyCod);
+               Cty->Inss.Num = Ins_GetNumInssInCty (Cty->CtyCod);
 
                /* Get number of centres in this country */
                Cty->NumCtrs = Ctr_GetNumCtrsInCty (Cty->CtyCod);
@@ -1185,7 +1185,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
         }
      }
    else
-      Gbl.Ctys.Num = 0;
+      Gbl.Hierarchy.Sys.Ctys.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1313,7 +1313,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
       Cty->WWW[Lan][0] = '\0';
      }
    Cty->NumUsrsWhoClaimToBelongToCty = 0;
-   Cty->NumInss = Cty->NumCtrs = Cty->NumDegs = Cty->NumCrss = 0;
+   Cty->Inss.Num = Cty->NumCtrs = Cty->NumDegs = Cty->NumCrss = 0;
    Cty->NumUsrs = 0;
 
    /***** Check if country code is correct *****/
@@ -1433,7 +1433,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	    Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNK,Cty->CtyCod);	// Here Rol_UNK means "all users"
 
 	    /* Get number of institutions in this country */
-	    Cty->NumInss = Ins_GetNumInssInCty (Cty->CtyCod);
+	    Cty->Inss.Num = Ins_GetNumInssInCty (Cty->CtyCod);
 
 	    break;
 	}
@@ -1558,12 +1558,12 @@ static void Cty_FreeMapAttribution (char **MapAttribution)
 
 void Cty_FreeListCountries (void)
   {
-   if (Gbl.Ctys.Lst)
+   if (Gbl.Hierarchy.Sys.Ctys.Lst)
      {
       /***** Free memory used by the list of courses in institution *****/
-      free ((void *) Gbl.Ctys.Lst);
-      Gbl.Ctys.Lst = NULL;
-      Gbl.Ctys.Num = 0;
+      free ((void *) Gbl.Hierarchy.Sys.Ctys.Lst);
+      Gbl.Hierarchy.Sys.Ctys.Lst = NULL;
+      Gbl.Hierarchy.Sys.Ctys.Num = 0;
      }
   }
 
@@ -1584,16 +1584,16 @@ static void Cty_ListCountriesForEdition (void)
 
    /***** Write all the countries *****/
    for (NumCty = 0;
-	NumCty < Gbl.Ctys.Num;
+	NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
 	NumCty++)
      {
-      Cty = &Gbl.Ctys.Lst[NumCty];
+      Cty = &Gbl.Hierarchy.Sys.Ctys.Lst[NumCty];
 
       /* Put icon to remove country */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td rowspan=\"%u\" class=\"BT\">",
 	       1 + Lan_NUM_LANGUAGES);
-      if (Cty->NumInss ||
+      if (Cty->Inss.Num ||
 	  Cty->NumUsrsWhoClaimToBelongToCty ||
 	  Cty->NumUsrs)	// Country has institutions or users ==> deletion forbidden
 	 Ico_PutIconRemovalNotAllowed ();
@@ -1633,7 +1633,7 @@ static void Cty_ListCountriesForEdition (void)
 	                 "%u"
 	                 "</td>"
 	                 "</tr>",
-               1 + Lan_NUM_LANGUAGES,Cty->NumInss);
+               1 + Lan_NUM_LANGUAGES,Cty->Inss.Num);
 
       /* Country name in several languages */
       for (Lan = (Lan_Language_t) 1;
@@ -1737,7 +1737,7 @@ void Cty_RemoveCountry (void)
    Cty_GetDataOfCountryByCod (&Cty,Cty_GET_EXTRA_DATA);
 
    /***** Check if this country has users *****/
-   if (Cty.NumInss ||
+   if (Cty.Inss.Num ||
        Cty.NumUsrsWhoClaimToBelongToCty ||
        Cty.NumUsrs)	// Country has institutions or users ==> don't remove
       Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_remove_a_country_with_institutions_or_users);

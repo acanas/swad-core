@@ -1985,7 +1985,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 	 case TL_NOTE_CRS_SHA_PUB_FILE:
 	    Frm_StartFormUnique (TL_DefaultActions[SocNot->NoteType]);
 	    Brw_PutHiddenParamFilCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.Crs.CrsCod)	// Not the current course
+	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case TL_NOTE_EXAM_ANNOUNCEMENT:
@@ -1994,7 +1994,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 		                       Anchor);	// Locate on this specific exam
             Exa_FreeAnchorStr (Anchor);
 	    Exa_PutHiddenParamExaCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.Crs.CrsCod)	// Not the current course
+	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case TL_NOTE_POST:	// Not applicable
@@ -2008,7 +2008,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 					 Gbl.Forum.ForumSelected.Location,
 					 Gbl.Forum.ForumSelected.ThrCod,
 					 -1L);
-	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.Crs.CrsCod)	// Not the current course
+	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 case TL_NOTE_NOTICE:
@@ -2017,7 +2017,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 				       Anchor);
             Not_FreeAnchorStr (Anchor);
 	    Not_PutHiddenParamNotCod (SocNot->Cod);
-	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.Crs.CrsCod)	// Not the current course
+	    if (SocNot->HieCod != Gbl.Hierarchy.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;
 	 default:			// Not applicable
@@ -2109,7 +2109,7 @@ void TL_StoreAndPublishNote (TL_NoteType_t NoteType,long Cod,struct TL_Publicati
       case TL_NOTE_CRS_SHA_PUB_FILE:
       case TL_NOTE_EXAM_ANNOUNCEMENT:
       case TL_NOTE_NOTICE:
-	 HieCod = Gbl.Hierarchy.Crs.Crs.CrsCod;
+	 HieCod = Gbl.Hierarchy.Crs.CrsCod;
 	 break;
       default:
 	 HieCod = -1L;

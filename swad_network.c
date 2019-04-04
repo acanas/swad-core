@@ -543,7 +543,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 				    " AND crs_usr.UsrCod=usr_webs.UsrCod"
 				    " GROUP BY usr_webs.Web"
 				    " ORDER BY N DESC,usr_webs.Web",
-				    Gbl.Hierarchy.Crs.Crs.CrsCod);
+				    Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

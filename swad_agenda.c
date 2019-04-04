@@ -1791,7 +1791,7 @@ unsigned Agd_GetNumUsrsWithEvents (Hie_Level_t Scope)
 			 " FROM crs_usr,agendas"
 			 " WHERE crs_usr.CrsCod=%ld"
 			 " AND crs_usr.UsrCod=agendas.UsrCod",
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -1877,7 +1877,7 @@ unsigned Agd_GetNumEvents (Hie_Level_t Scope)
 			 " FROM crs_usr,agendas"
 			 " WHERE crs_usr.CrsCod=%ld"
 			 " AND crs_usr.UsrCod=agendas.UsrCod",
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

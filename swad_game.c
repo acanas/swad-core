@@ -200,8 +200,8 @@ static void Gam_ListAllGames (void)
    unsigned NumGame;
 
    /***** Get number of groups in current course *****/
-   if (!Gbl.Hierarchy.Crs.Grps.NumGrps)
-      Gbl.Hierarchy.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
+   if (!Gbl.Crs.Grps.NumGrps)
+      Gbl.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
 
    /***** Get list of games *****/
    Gam_GetListGames ();
@@ -223,7 +223,7 @@ static void Gam_ListAllGames (void)
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)
+   if (Gbl.Crs.Grps.NumGrps)
      {
       Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAllGam,Gam_ParamsWhichGroupsToShow);
@@ -631,7 +631,7 @@ static void Gam_ShowOneGame (long GamCod,
  	 break;
       case Hie_CRS:	// Course
 	 fprintf (Gbl.F.Out,"%s %s",
-	          Txt_Course,Gbl.Hierarchy.Crs.Crs.ShrtName);
+	          Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
 	 break;
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -650,7 +650,7 @@ static void Gam_ShowOneGame (long GamCod,
 
    /* Groups whose users can answer this game */
    if (Game.Scope == Hie_CRS)
-      if (Gbl.Hierarchy.Crs.Grps.NumGrps)
+      if (Gbl.Crs.Grps.NumGrps)
          Gam_GetAndWriteNamesOfGrpsAssociatedToGame (&Game);
 
    /* Text of the game */
@@ -902,7 +902,7 @@ void Gam_GetListGames (void)
    Cods[Hie_INS] = Gbl.Hierarchy.Ins.InsCod;	// Institution
    Cods[Hie_CTR] = Gbl.Hierarchy.Ctr.CtrCod;	// Centre
    Cods[Hie_DEG] = Gbl.Hierarchy.Deg.DegCod;	// Degree
-   Cods[Hie_CRS] = Gbl.Hierarchy.Crs.Crs.CrsCod;	// Course
+   Cods[Hie_CRS] = Gbl.Hierarchy.Crs.CrsCod;	// Course
 
    /* Fill subqueries for system, country, institution, centre and degree */
    for (Scope  = Hie_SYS;
@@ -928,7 +928,7 @@ void Gam_GetListGames (void)
    /* Fill subquery for course */
    if (ScopesAllowed & 1 << Hie_CRS)
      {
-      if (Gbl.Hierarchy.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
+      if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
         {
 	 if (asprintf (&SubQuery[Hie_CRS],"%s("
 						"Scope='%s' AND Cod=%ld%s"
@@ -950,7 +950,7 @@ void Gam_GetListGames (void)
 		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	    Lay_NotEnoughMemoryExit ();
         }
-      else	// Gbl.Hierarchy.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
+      else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
         {
 	 if (asprintf (&SubQuery[Hie_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
 		       SubQueryFilled ? " OR " :
@@ -1974,7 +1974,7 @@ static void Gam_ShowLstGrpsToEditGame (long GamCod)
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   if (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num)
+   if (Gbl.Crs.Grps.GrpTypes.Num)
      {
       /***** Start box and table *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2000,14 +2000,14 @@ static void Gam_ShowLstGrpsToEditGame (long GamCod)
 	                 "</label>"
 	                 "</td>"
 	                 "</tr>",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.Crs.ShrtName);
+               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
-         if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
                                                GamCod,Grp_SURVEY);
 
       /***** End table and box *****/
@@ -2092,7 +2092,7 @@ void Gam_RecFormGame (void)
 	     Gbl.Usrs.Me.Role.Logged != Rol_TCH)
 	    Lay_ShowErrorAndExit ("Wrong game scope.");
 	 NewGame.Scope = Hie_CRS;
-	 NewGame.Cod = Gbl.Hierarchy.Crs.Crs.CrsCod;
+	 NewGame.Cod = Gbl.Hierarchy.Crs.CrsCod;
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -2182,7 +2182,7 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
 				Txt);
 
    /***** Create groups *****/
-   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
+   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Gam_CreateGrps (Game->GamCod);
 
    /***** Write success message *****/
@@ -2219,7 +2219,7 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
    Gam_RemoveAllTheGrpsAssociatedToAndGame (Game->GamCod);
 
    /* Create new groups */
-   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
+   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Gam_CreateGrps (Game->GamCod);
 
    /***** Write success message *****/
@@ -2302,7 +2302,7 @@ static void Gam_CreateGrps (long GamCod)
 
    /***** Create groups of the game *****/
    for (NumGrpSel = 0;
-	NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps;
+	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
       /* Create group */
       DB_QueryINSERT ("can not associate a group to a game",
@@ -2310,7 +2310,7 @@ static void Gam_CreateGrps (long GamCod)
 		      " (GamCod,GrpCod)"
 		      " VALUES"
 		      " (%ld,%ld)",
-                      GamCod,Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+                      GamCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
@@ -2371,7 +2371,7 @@ static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
      }
    else
       fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.Crs.ShrtName);
+               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -3847,7 +3847,7 @@ unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope)
 			 " FROM games"
 			 " WHERE Scope='%s' AND Cod=%ld",
                          Sco_GetDBStrFromScope (Hie_CRS),
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -3939,7 +3939,7 @@ unsigned Gam_GetNumGames (Hie_Level_t Scope)
 			 " WHERE games.Scope='%s'"
 			 " AND CrsCod=%ld",
                          Sco_GetDBStrFromScope (Hie_CRS),
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -4046,7 +4046,7 @@ float Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope)
 			 " WHERE games.Scope='%s' AND games.Cod=%ld"
 			 " AND games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                         Sco_GetDBStrFromScope (Hie_CRS),Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Sco_GetDBStrFromScope (Hie_CRS),Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

@@ -332,7 +332,7 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_CANVAS\">");
 
    /* If it is mandatory to read any information about course */
-   if (Gbl.Hierarchy.Crs.Info.ShowMsgMustBeRead)
+   if (Gbl.Crs.Info.ShowMsgMustBeRead)
       Inf_WriteMsgYouMustReadInfo ();
 
    /* Write title of the current action */
@@ -412,7 +412,7 @@ static void Lay_WritePageTitle (void)
 	       Gbl.Hierarchy.Deg.ShrtName);
       if (Gbl.Hierarchy.Level == Hie_CRS)
          fprintf (Gbl.F.Out," &gt; %s",
-                  Gbl.Hierarchy.Crs.Crs.ShrtName);
+                  Gbl.Hierarchy.Crs.ShrtName);
      }
    else
       fprintf (Gbl.F.Out,"%s: %s",
@@ -519,7 +519,7 @@ static void Lay_WriteScripts (void)
       fprintf (Gbl.F.Out,"];\n");
 
       fprintf (Gbl.F.Out,"	var STR_EXAM = '");
-      fprintf (Gbl.F.Out,Txt_Exam_of_X,Gbl.Hierarchy.Crs.Crs.FullName);
+      fprintf (Gbl.F.Out,Txt_Exam_of_X,Gbl.Hierarchy.Crs.FullName);
       fprintf (Gbl.F.Out,"';\n");
 
       fprintf (Gbl.F.Out,"	var Hlds = [];\n");
@@ -775,7 +775,7 @@ static void Lay_WriteScriptParamsAJAX (void)
                       "var RefreshParamCrsCod = \"crs=%ld\";\n"
                       "</script>\n",
             Gbl.Session.Id,
-            Gbl.Hierarchy.Crs.Crs.CrsCod);
+            Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/

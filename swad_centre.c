@@ -424,13 +424,13 @@ static void Ctr_Configuration (bool PrintView)
 			 " onchange=\"document.getElementById('%s').submit();\">",
 	       Gbl.Form.Id);
       for (NumIns = 0;
-	   NumIns < Gbl.Inss.Num;
+	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	   NumIns++)
 	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		  Gbl.Inss.Lst[NumIns].InsCod,
-		  Gbl.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod ? " selected=\"selected\"" :
+		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
+		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Gbl.Hierarchy.Ins.InsCod ? " selected=\"selected\"" :
 									     "",
-		  Gbl.Inss.Lst[NumIns].ShrtName);
+		  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
       fprintf (Gbl.F.Out,"</select>");
       Frm_EndForm ();
 
@@ -801,7 +801,7 @@ static void Ctr_ListCentres (void)
    Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsListingCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
 
-   if (Gbl.Ctrs.Num)	// There are centres in the current institution
+   if (Gbl.Hierarchy.Ins.Ctrs.Num)	// There are centres in the current institution
      {
       /***** Start table *****/
       Tbl_StartTableWideMargin (2);
@@ -809,9 +809,9 @@ static void Ctr_ListCentres (void)
 
       /***** Write all the centres and their nuber of teachers *****/
       for (NumCtr = 0;
-	   NumCtr < Gbl.Ctrs.Num;
+	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
 	   NumCtr++)
-	 Ctr_ListOneCentreForSeeing (&(Gbl.Ctrs.Lst[NumCtr]),NumCtr + 1);
+	 Ctr_ListOneCentreForSeeing (&(Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr]),NumCtr + 1);
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -823,7 +823,7 @@ static void Ctr_ListCentres (void)
    if (Ctr_CheckIfICanCreateCentres ())
      {
       Frm_StartForm (ActEdiCtr);
-      Btn_PutConfirmButton (Gbl.Ctrs.Num ? Txt_Create_another_centre :
+      Btn_PutConfirmButton (Gbl.Hierarchy.Ins.Ctrs.Num ? Txt_Create_another_centre :
 	                                   Txt_Create_centre);
       Frm_EndForm ();
      }
@@ -965,7 +965,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
 static void Ctr_GetParamCtrOrder (void)
   {
-   Gbl.Ctrs.SelectedOrder = (Ctr_Order_t)
+   Gbl.Hierarchy.Ins.Ctrs.SelectedOrder = (Ctr_Order_t)
 	                    Par_GetParToUnsignedLong ("Order",
                                                       0,
                                                       Ctr_NUM_ORDERS - 1,
@@ -986,7 +986,7 @@ void Ctr_EditCentres (void)
    Plc_GetListPlaces ();
 
    /***** Get list of centres *****/
-   Gbl.Ctrs.SelectedOrder = Ctr_ORDER_BY_CENTRE;
+   Gbl.Hierarchy.Ins.Ctrs.SelectedOrder = Ctr_ORDER_BY_CENTRE;
    Ctr_GetListCentres (Gbl.Hierarchy.Ins.InsCod);
 
    /***** Write menu to select country and institution *****/
@@ -1003,7 +1003,7 @@ void Ctr_EditCentres (void)
    Ctr_PutFormToCreateCentre ();
 
    /***** List current centres *****/
-   if (Gbl.Ctrs.Num)
+   if (Gbl.Hierarchy.Ins.Ctrs.Num)
       Ctr_ListCentresForEdition ();
 
    /***** End box *****/
@@ -1081,23 +1081,23 @@ void Ctr_GetListCentres (long InsCod)
 			     " ORDER BY %s",
 			     InsCod,
 			     InsCod,
-			     OrderBySubQuery[Gbl.Ctrs.SelectedOrder]);
+			     OrderBySubQuery[Gbl.Hierarchy.Ins.Ctrs.SelectedOrder]);
 
    if (NumRows) // Centres found...
      {
       // NumRows should be equal to Deg->NumCourses
-      Gbl.Ctrs.Num = (unsigned) NumRows;
+      Gbl.Hierarchy.Ins.Ctrs.Num = (unsigned) NumRows;
 
       /***** Create list with courses in degree *****/
-      if ((Gbl.Ctrs.Lst = (struct Centre *) calloc (NumRows,sizeof (struct Centre))) == NULL)
+      if ((Gbl.Hierarchy.Ins.Ctrs.Lst = (struct Centre *) calloc (NumRows,sizeof (struct Centre))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Get the centres *****/
       for (NumCtr = 0;
-	   NumCtr < Gbl.Ctrs.Num;
+	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
 	   NumCtr++)
         {
-         Ctr = &(Gbl.Ctrs.Lst[NumCtr]);
+         Ctr = &(Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr]);
 
          /* Get next centre */
          row = mysql_fetch_row (mysql_res);
@@ -1146,7 +1146,7 @@ void Ctr_GetListCentres (long InsCod)
         }
      }
    else
-      Gbl.Ctrs.Num = 0;
+      Gbl.Hierarchy.Ins.Ctrs.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1370,12 +1370,12 @@ static void Ctr_FreePhotoAttribution (char **PhotoAttribution)
 
 void Ctr_FreeListCentres (void)
   {
-   if (Gbl.Ctrs.Lst)
+   if (Gbl.Hierarchy.Ins.Ctrs.Lst)
      {
       /***** Free memory used by the list of courses in degree *****/
-      free ((void *) Gbl.Ctrs.Lst);
-      Gbl.Ctrs.Lst = NULL;
-      Gbl.Ctrs.Num = 0;
+      free ((void *) Gbl.Hierarchy.Ins.Ctrs.Lst);
+      Gbl.Hierarchy.Ins.Ctrs.Lst = NULL;
+      Gbl.Hierarchy.Ins.Ctrs.Num = 0;
      }
   }
 
@@ -1470,10 +1470,10 @@ static void Ctr_ListCentresForEdition (void)
 
    /***** Write all the centres *****/
    for (NumCtr = 0;
-	NumCtr < Gbl.Ctrs.Num;
+	NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
 	NumCtr++)
      {
-      Ctr = &Gbl.Ctrs.Lst[NumCtr];
+      Ctr = &Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr];
 
       ICanEdit = Ctr_CheckIfICanEditACentre (Ctr);
 
@@ -2610,13 +2610,13 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	 Frm_StartForm (ActSeeCtr);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_CENTRES_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Ctrs.SelectedOrder)
+	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
       fprintf (Gbl.F.Out,"%s",Txt_CENTRES_ORDER[Order]);
       if (OrderSelectable)
 	{
-	 if (Order == Gbl.Ctrs.SelectedOrder)
+	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();

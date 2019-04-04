@@ -144,7 +144,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		  /* Request my removing from this course */
 		  snprintf (Gbl.Title,sizeof (Gbl.Title),
 			    Txt_Remove_me_from_THE_COURSE_X,
-			    Gbl.Hierarchy.Crs.Crs.ShrtName);
+			    Gbl.Hierarchy.Crs.ShrtName);
 		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						       ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role],
 						       Btn_REMOVE_BUTTON,Txt_Remove_me);
@@ -155,7 +155,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	    /* Request my registration in this course */
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Register_me_in_X,
-		      Gbl.Hierarchy.Crs.Crs.ShrtName);
+		      Gbl.Hierarchy.Crs.ShrtName);
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						 ActReqSignUp,
 						 Btn_CREATE_BUTTON,Txt_Sign_up);
@@ -165,13 +165,13 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
       if (Gbl.Usrs.Me.MyCrss.Num)	// I am enroled in some courses
 	{
 	 if (Gbl.Hierarchy.Level == Hie_CRS &&			// Course selected
-	     !Gbl.Hierarchy.Crs.Crs.NumUsrs[Rol_STD] &&		// Current course has no students
+	     !Gbl.Hierarchy.Crs.NumUsrs[Rol_STD] &&		// Current course has no students
 	     Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role == Rol_TCH)	// I am a teacher in current course
 	   {
 	    /* Request students enrolment */
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Register_students_in_COURSE_X,
-		      Gbl.Hierarchy.Crs.Crs.ShrtName);
+		      Gbl.Hierarchy.Crs.ShrtName);
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						 ActReqEnrSevStd,
 						 Btn_CREATE_BUTTON,Txt_Register_students);

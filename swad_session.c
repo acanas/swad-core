@@ -171,7 +171,7 @@ void Ses_InsertSessionInDB (void)
 		   Gbl.Hierarchy.Ins.InsCod,
 		   Gbl.Hierarchy.Ctr.CtrCod,
 		   Gbl.Hierarchy.Deg.DegCod,
-		   Gbl.Hierarchy.Crs.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.CrsCod,
 		   Gbl.Search.WhatToSearch);
   }
 
@@ -194,7 +194,7 @@ void Ses_UpdateSessionDataInDB (void)
 		   Gbl.Hierarchy.Ins.InsCod,
 		   Gbl.Hierarchy.Ctr.CtrCod,
 		   Gbl.Hierarchy.Deg.DegCod,
-		   Gbl.Hierarchy.Crs.Crs.CrsCod,
+		   Gbl.Hierarchy.Crs.CrsCod,
 		   Gbl.Session.Id);
   }
 
@@ -301,7 +301,7 @@ bool Ses_GetSessionData (void)
       Gbl.Hierarchy.Deg.DegCod = Str_ConvertStrCodToLongCod (row[6]);
 
       /***** Get course code (row[7]) *****/
-      Gbl.Hierarchy.Crs.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
+      Gbl.Hierarchy.Crs.CrsCod = Str_ConvertStrCodToLongCod (row[7]);
 
       /***** Get last search *****/
       if (Gbl.Action.Act != ActLogOut)	// When closing session, last search will not be needed

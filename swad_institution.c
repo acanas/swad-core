@@ -372,13 +372,13 @@ static void Ins_Configuration (bool PrintView)
 			 " onchange=\"document.getElementById('%s').submit();\">",
 	       Gbl.Form.Id);
       for (NumCty = 0;
-	   NumCty < Gbl.Ctys.Num;
+	   NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
 	   NumCty++)
 	 fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-		  Gbl.Ctys.Lst[NumCty].CtyCod,
-		  Gbl.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod ? " selected=\"selected\"" :
+		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod,
+		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].CtyCod == Gbl.Hierarchy.Cty.CtyCod ? " selected=\"selected\"" :
 									     "",
-		  Gbl.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
+		  Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
       fprintf (Gbl.F.Out,"</select>");
       Frm_EndForm ();
 
@@ -695,7 +695,7 @@ static void Ins_ListInstitutions (void)
    Box_StartBox (NULL,Gbl.Title,Ins_PutIconsListingInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
 
-   if (Gbl.Inss.Num)	// There are institutions in the current country
+   if (Gbl.Hierarchy.Cty.Inss.Num)	// There are institutions in the current country
      {
       /***** Start table *****/
       Tbl_StartTableWideMargin (2);
@@ -703,9 +703,9 @@ static void Ins_ListInstitutions (void)
 
       /***** Write all the institutions and their nuber of users *****/
       for (NumIns = 0;
-	   NumIns < Gbl.Inss.Num;
+	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	   NumIns++)
-	 Ins_ListOneInstitutionForSeeing (&(Gbl.Inss.Lst[NumIns]),NumIns + 1);
+	 Ins_ListOneInstitutionForSeeing (&(Gbl.Hierarchy.Cty.Inss.Lst[NumIns]),NumIns + 1);
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -717,7 +717,7 @@ static void Ins_ListInstitutions (void)
    if (Ins_CheckIfICanCreateInstitutions ())
      {
       Frm_StartForm (ActEdiIns);
-      Btn_PutConfirmButton (Gbl.Inss.Num ? Txt_Create_another_institution :
+      Btn_PutConfirmButton (Gbl.Hierarchy.Cty.Inss.Num ? Txt_Create_another_institution :
 	                                   Txt_Create_institution);
       Frm_EndForm ();
      }
@@ -808,7 +808,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 	              "%u"
 	              "</td>",
-	    TxtClassNormal,BgColor,Ins->NumCtrs);
+	    TxtClassNormal,BgColor,Ins->Ctrs.Num);
 
    /* Number of degrees in this institution */
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
@@ -875,13 +875,13 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	 Frm_StartForm (ActSeeIns);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_INSTITUTIONS_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Inss.SelectedOrder)
+	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
       fprintf (Gbl.F.Out,"%s",Txt_INSTITUTIONS_ORDER[Order]);
       if (OrderSelectable)
 	{
-	 if (Order == Gbl.Inss.SelectedOrder)
+	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
@@ -920,7 +920,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 
 static void Ins_GetParamInsOrder (void)
   {
-   Gbl.Inss.SelectedOrder = (Ins_Order_t)
+   Gbl.Hierarchy.Cty.Inss.SelectedOrder = (Ins_Order_t)
 	                    Par_GetParToUnsignedLong ("Order",
 	                                              0,
 	                                              Ins_NUM_ORDERS - 1,
@@ -953,7 +953,7 @@ void Ins_EditInstitutions (void)
    Ins_PutFormToCreateInstitution ();
 
    /***** Forms to edit current institutions *****/
-   if (Gbl.Inss.Num)
+   if (Gbl.Hierarchy.Cty.Inss.Num)
       Ins_ListInstitutionsForEdition ();
 
    /***** End box *****/
@@ -1037,25 +1037,25 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 				   " (SELECT DISTINCT InsCod FROM usr_data))"
 				   " ORDER BY %s",
 				   CtyCod,CtyCod,
-				   OrderBySubQuery[Gbl.Inss.SelectedOrder]);
+				   OrderBySubQuery[Gbl.Hierarchy.Cty.Inss.SelectedOrder]);
          break;
      }
 
    if (NumRows) // Institutions found...
      {
       // NumRows should be equal to Deg->NumCourses
-      Gbl.Inss.Num = (unsigned) NumRows;
+      Gbl.Hierarchy.Cty.Inss.Num = (unsigned) NumRows;
 
       /***** Create list with institutions *****/
-      if ((Gbl.Inss.Lst = (struct Instit *) calloc (NumRows,sizeof (struct Instit))) == NULL)
+      if ((Gbl.Hierarchy.Cty.Inss.Lst = (struct Instit *) calloc (NumRows,sizeof (struct Instit))) == NULL)
           Lay_NotEnoughMemoryExit ();
 
       /***** Get the institutions *****/
       for (NumIns = 0;
-	   NumIns < Gbl.Inss.Num;
+	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	   NumIns++)
         {
-         Ins = &(Gbl.Inss.Lst[NumIns]);
+         Ins = &(Gbl.Hierarchy.Cty.Inss.Lst[NumIns]);
 
          /* Get next institution */
          row = mysql_fetch_row (mysql_res);
@@ -1091,7 +1091,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
            {
             case Ins_GET_BASIC_DATA:
                Ins->NumUsrsWhoClaimToBelongToIns = 0;
-               Ins->NumCtrs = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
+               Ins->Ctrs.Num = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
                Ins->NumUsrs = 0;
                break;
             case Ins_GET_EXTRA_DATA:
@@ -1100,7 +1100,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
         	  Ins->NumUsrsWhoClaimToBelongToIns = 0;
 
                /* Get number of centres in this institution */
-               Ins->NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
+               Ins->Ctrs.Num = Ctr_GetNumCtrsInIns (Ins->InsCod);
 
                /* Get number of degrees in this institution */
                Ins->NumDegs = Deg_GetNumDegsInIns (Ins->InsCod);
@@ -1118,7 +1118,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
         }
      }
    else
-      Gbl.Inss.Num = 0;
+      Gbl.Hierarchy.Cty.Inss.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1161,7 +1161,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
    Ins->FullName[0] =
    Ins->WWW[0] = '\0';
    Ins->NumUsrsWhoClaimToBelongToIns = 0;
-   Ins->NumCtrs = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
+   Ins->Ctrs.Num = Ins->NumDegs = Ins->NumCrss = Ins->NumDpts = 0;
    Ins->NumUsrs = 0;
 
    /***** Check if institution code is correct *****/
@@ -1202,7 +1202,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
 	 if (GetExtraData == Ins_GET_EXTRA_DATA)
 	   {
 	    /* Get number of centres in this institution */
-	    Ins->NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
+	    Ins->Ctrs.Num = Ctr_GetNumCtrsInIns (Ins->InsCod);
 
 	    /* Get number of departments in this institution */
 	    Ins->NumDpts = Dpt_GetNumDptsInIns (Ins->InsCod);
@@ -1359,12 +1359,12 @@ static void Ins_GetShrtNameAndCtyOfInstitution (struct Instit *Ins,
 
 void Ins_FreeListInstitutions (void)
   {
-   if (Gbl.Inss.Lst)
+   if (Gbl.Hierarchy.Cty.Inss.Lst)
      {
       /***** Free memory used by the list of institutions *****/
-      free ((void *) Gbl.Inss.Lst);
-      Gbl.Inss.Lst = NULL;
-      Gbl.Inss.Num = 0;
+      free ((void *) Gbl.Hierarchy.Cty.Inss.Lst);
+      Gbl.Hierarchy.Cty.Inss.Lst = NULL;
+      Gbl.Hierarchy.Cty.Inss.Num = 0;
      }
   }
 
@@ -1457,17 +1457,17 @@ static void Ins_ListInstitutionsForEdition (void)
 
    /***** Write all the institutions *****/
    for (NumIns = 0;
-	NumIns < Gbl.Inss.Num;
+	NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	NumIns++)
      {
-      Ins = &Gbl.Inss.Lst[NumIns];
+      Ins = &Gbl.Hierarchy.Cty.Inss.Lst[NumIns];
 
       ICanEdit = Ins_CheckIfICanEdit (Ins);
 
       /* Put icon to remove institution */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      if (Ins->NumCtrs ||
+      if (Ins->Ctrs.Num ||
 	  Ins->NumUsrsWhoClaimToBelongToIns ||
 	  Ins->NumUsrs ||	// Institution has centres or users ==> deletion forbidden
           !ICanEdit)
@@ -1571,7 +1571,7 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
 	                 "</td>",
-               Ins->NumCtrs);
+               Ins->Ctrs.Num);
 
       /* Number of users in courses of this institution */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -1731,7 +1731,7 @@ void Ins_RemoveInstitution (void)
    /***** Check if this institution has users *****/
    if (!Ins_CheckIfICanEdit (&Ins))
       Lay_NoPermissionExit ();
-   else if (Ins.NumCtrs ||
+   else if (Ins.Ctrs.Num ||
             Ins.NumUsrsWhoClaimToBelongToIns ||
             Ins.NumUsrs)	// Institution has centres or users ==> don't remove
       Ale_ShowAlert (Ale_WARNING,Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);

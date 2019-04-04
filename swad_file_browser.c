@@ -1414,7 +1414,7 @@ static int Brw_RemoveFolderFromDiskAndDB (const char Path[PATH_MAX + 1],
 void Brw_GetParAndInitFileBrowser (void)
   {
    /***** If a group is selected, get its data *****/
-   if ((Gbl.Hierarchy.Crs.Grps.GrpCod = Brw_GetGrpSettings ()) > 0)
+   if ((Gbl.Crs.Grps.GrpCod = Brw_GetGrpSettings ()) > 0)
       Brw_GetDataCurrentGrp ();
 
    /***** Get type of file browser *****/
@@ -1601,7 +1601,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActSeeAdmDocCrsGrp:	// Access to a documents zone from menu
       case ActChgToSeeDocCrs:	// Access to see a documents zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Gbl.Hierarchy.Crs.Grps.GrpCod > 0) ? Brw_SHOW_DOC_GRP :
+         Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_SHOW_DOC_GRP :
                                                                    Brw_SHOW_DOC_CRS;
          break;
       case ActSeeDocCrs:
@@ -1622,7 +1622,7 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToAdmDocCrs:	// Access to admin a documents zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Gbl.Hierarchy.Crs.Grps.GrpCod > 0) ? Brw_ADMI_DOC_GRP :
+         Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_ADMI_DOC_GRP :
                                                                    Brw_ADMI_DOC_CRS;
          break;
       case ActAdmDocCrs:
@@ -1676,7 +1676,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActAdmTchCrsGrp:
       case ActChgToAdmTch:	// Access to a teachers zone from menu
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Gbl.Hierarchy.Crs.Grps.GrpCod > 0) ? Brw_ADMI_TCH_GRP :
+         Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_ADMI_TCH_GRP :
                                                                    Brw_ADMI_TCH_CRS;
          break;
       case ActAdmTchCrs:
@@ -1726,7 +1726,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActAdmShaCrsGrp:
       case ActChgToAdmSha:	// Access to a shared zone from menu
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Gbl.Hierarchy.Crs.Grps.GrpCod > 0) ? Brw_ADMI_SHR_GRP :
+         Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_ADMI_SHR_GRP :
                                                                    Brw_ADMI_SHR_CRS;
          break;
       case ActAdmShaCrs:
@@ -1916,12 +1916,12 @@ void Brw_GetParAndInitFileBrowser (void)
 	   {
 	    case Rol_STD:
 	    case Rol_NET:
-	       Gbl.FileBrowser.Type = (Gbl.Hierarchy.Crs.Grps.GrpCod > 0) ? Brw_SHOW_MRK_GRP :
+	       Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_SHOW_MRK_GRP :
 								         Brw_SHOW_MRK_CRS;
 	       break;
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
-	       Gbl.FileBrowser.Type = (Gbl.Hierarchy.Crs.Grps.GrpCod > 0) ? Brw_ADMI_MRK_GRP :
+	       Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_ADMI_MRK_GRP :
 								         Brw_ADMI_MRK_CRS;
 	       break;
 	    default:
@@ -1931,7 +1931,7 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToSeeMrk:	// Access to see a marks zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Gbl.Hierarchy.Crs.Grps.GrpCod > 0) ? Brw_SHOW_MRK_GRP :
+         Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_SHOW_MRK_GRP :
                                                                    Brw_SHOW_MRK_CRS;
          break;
       case ActSeeMrkCrs:
@@ -1950,7 +1950,7 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
       case ActChgToAdmMrk:	// Access to admin a marks zone
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Gbl.Hierarchy.Crs.Grps.GrpCod > 0) ? Brw_ADMI_MRK_GRP :
+         Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_ADMI_MRK_GRP :
                                                                    Brw_ADMI_MRK_CRS;
          break;
       case ActAdmMrkCrs:
@@ -2184,9 +2184,9 @@ static void Brw_GetDataCurrentGrp (void)
   {
    struct GroupData GrpDat;
 
-   if (Gbl.Hierarchy.Crs.Grps.GrpCod > 0)
+   if (Gbl.Crs.Grps.GrpCod > 0)
      {
-      GrpDat.GrpCod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+      GrpDat.GrpCod = Gbl.Crs.Grps.GrpCod;
       Grp_GetDataOfGroupByCod (&GrpDat);
 
       switch (Gbl.Action.Act)
@@ -2214,34 +2214,34 @@ static void Brw_GetDataCurrentGrp (void)
 		   and check if I belongs to the selected group *****/
 	    if (GrpDat.FileZones)
 	      {
-	       if (!Grp_GetIfIBelongToGrp (Gbl.Hierarchy.Crs.Grps.GrpCod))
-	          Gbl.Hierarchy.Crs.Grps.GrpCod = -1L;	// Go to course zone
+	       if (!Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod))
+	          Gbl.Crs.Grps.GrpCod = -1L;	// Go to course zone
 	      }
 	    else
-	       Gbl.Hierarchy.Crs.Grps.GrpCod = -1L;	// Go to course zone
+	       Gbl.Crs.Grps.GrpCod = -1L;	// Go to course zone
 	    break;
 	 default:
 	    /***** For security, check if group file zones are enabled,
 		   and check if I belongs to the selected group *****/
 	    if (!GrpDat.FileZones)
 	       Lay_ShowErrorAndExit ("The group has no file zones.");
-	    else if (!Grp_GetIfIBelongToGrp (Gbl.Hierarchy.Crs.Grps.GrpCod))
+	    else if (!Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod))
 	       Lay_ShowErrorAndExit ("You don't have access to the group.");
 	    break;
 	}
 
       /***** Get data of the current group *****/
-      if (Gbl.Hierarchy.Crs.Grps.GrpCod > 0)
+      if (Gbl.Crs.Grps.GrpCod > 0)
 	{
-	 Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypCod         = GrpDat.GrpTypCod;
-	 Str_Copy (Gbl.Hierarchy.Crs.Grps.GrpTyp.GrpTypName,GrpDat.GrpTypName,
+	 Gbl.Crs.Grps.GrpTyp.GrpTypCod         = GrpDat.GrpTypCod;
+	 Str_Copy (Gbl.Crs.Grps.GrpTyp.GrpTypName,GrpDat.GrpTypName,
 	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
-	 Str_Copy (Gbl.Hierarchy.Crs.Grps.GrpName,GrpDat.GrpName,
+	 Str_Copy (Gbl.Crs.Grps.GrpName,GrpDat.GrpName,
 	           Grp_MAX_BYTES_GROUP_NAME);
-	 Gbl.Hierarchy.Crs.Grps.MaxStudents              = GrpDat.MaxStudents;
-	 Gbl.Hierarchy.Crs.Grps.Open                     = GrpDat.Open;
-	 Gbl.Hierarchy.Crs.Grps.FileZones                = GrpDat.FileZones;
-	 Gbl.Hierarchy.Crs.Grps.GrpTyp.MultipleEnrolment = GrpDat.MultipleEnrolment;
+	 Gbl.Crs.Grps.MaxStudents              = GrpDat.MaxStudents;
+	 Gbl.Crs.Grps.Open                     = GrpDat.Open;
+	 Gbl.Crs.Grps.FileZones                = GrpDat.FileZones;
+	 Gbl.Crs.Grps.GrpTyp.MultipleEnrolment = GrpDat.MultipleEnrolment;
 	}
      }
   }
@@ -2275,7 +2275,7 @@ void Brw_PutParamsFileBrowser (Act_Action_t NextAction,
   {
    if (Brw_GetIfGroupFileBrowser ())		// This file browser needs specify a group
       /***** Group code *****/
-      Grp_PutParamGrpCod (Gbl.Hierarchy.Crs.Grps.GrpCod);
+      Grp_PutParamGrpCod (Gbl.Crs.Grps.GrpCod);
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       /***** Project code *****/
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCod);
@@ -2487,7 +2487,7 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_MRK_CRS:
          /* Create path to the current course */
          Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
-                   Gbl.Hierarchy.Crs.PathPriv,
+                   Gbl.Crs.PathPriv,
                    PATH_MAX);
 	 break;
       case Brw_SHOW_DOC_GRP:
@@ -2499,14 +2499,14 @@ static void Brw_SetPathFileBrowser (void)
 	 /* Create a directory for groups inside the current course */
          snprintf (Path,sizeof (Path),
                    "%s/%s",
-                   Gbl.Hierarchy.Crs.PathPriv,Cfg_FOLDER_GRP);
+                   Gbl.Crs.PathPriv,Cfg_FOLDER_GRP);
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to this group */
          snprintf (Path,sizeof (Path),
                    "%s/%s/%ld",
-                   Gbl.Hierarchy.Crs.PathPriv,Cfg_FOLDER_GRP,
-                   Gbl.Hierarchy.Crs.Grps.GrpCod);
+                   Gbl.Crs.PathPriv,Cfg_FOLDER_GRP,
+                   Gbl.Crs.Grps.GrpCod);
          Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
         	   Path,
                    PATH_MAX);
@@ -2516,21 +2516,21 @@ static void Brw_SetPathFileBrowser (void)
 	 /* Create a directory for me inside the current course */
          snprintf (Path,sizeof (Path),
                    "%s/%s",
-                   Gbl.Hierarchy.Crs.PathPriv,Cfg_FOLDER_USR);
+                   Gbl.Crs.PathPriv,Cfg_FOLDER_USR);
          Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all users whose codes end in
 	    my-user-code mod 100 */
          snprintf (Path,sizeof (Path),
                    "%s/%s/%02u",
-                   Gbl.Hierarchy.Crs.PathPriv,Cfg_FOLDER_USR,
+                   Gbl.Crs.PathPriv,Cfg_FOLDER_USR,
                    (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100));
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to me */
          snprintf (Path,sizeof (Path),
                    "%s/%s/%02u/%ld",
-                   Gbl.Hierarchy.Crs.PathPriv,Cfg_FOLDER_USR,
+                   Gbl.Crs.PathPriv,Cfg_FOLDER_USR,
                    (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
                    Gbl.Usrs.Me.UsrDat.UsrCod);
          Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
@@ -2544,21 +2544,21 @@ static void Brw_SetPathFileBrowser (void)
 	    /* Create a directory for this user inside the current course */
             snprintf (Path,sizeof (Path),
         	      "%s/%s",
-        	      Gbl.Hierarchy.Crs.PathPriv,Cfg_FOLDER_USR);
+        	      Gbl.Crs.PathPriv,Cfg_FOLDER_USR);
             Fil_CreateDirIfNotExists (Path);
 
 	    /* Create a directory for all users whose codes end in
 	       user-code mod 100 */
 	    snprintf (Path,sizeof (Path),
 		      "%s/%s/%02u",
-		      Gbl.Hierarchy.Crs.PathPriv,Cfg_FOLDER_USR,
+		      Gbl.Crs.PathPriv,Cfg_FOLDER_USR,
 		      (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100));
 	    Fil_CreateDirIfNotExists (Path);
 
             /* Create path to user */
             snprintf (Path,sizeof (Path),
         	      "%s/%s/%02u/%ld",
-        	      Gbl.Hierarchy.Crs.PathPriv,Cfg_FOLDER_USR,
+        	      Gbl.Crs.PathPriv,Cfg_FOLDER_USR,
                       (unsigned) (Gbl.Usrs.Other.UsrDat.UsrCod % 100),
         	      Gbl.Usrs.Other.UsrDat.UsrCod);
             Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
@@ -2571,21 +2571,21 @@ static void Brw_SetPathFileBrowser (void)
 	 /* Create a directory for projects inside the current course */
          snprintf (Path,sizeof (Path),
                    "%s/%s",
-                   Gbl.Hierarchy.Crs.PathPriv,Cfg_FOLDER_PRJ);
+                   Gbl.Crs.PathPriv,Cfg_FOLDER_PRJ);
          Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all projects which codes end in
 	    project-code mod 100 */
 	 snprintf (Path,sizeof (Path),
 	           "%s/%s/%02u",
-		   Gbl.Hierarchy.Crs.PathPriv,Cfg_FOLDER_PRJ,
+		   Gbl.Crs.PathPriv,Cfg_FOLDER_PRJ,
                    (unsigned) (Gbl.Prjs.PrjCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current project */
          snprintf (Path,sizeof (Path),
                    "%s/%s/%02u/%ld",
-                   Gbl.Hierarchy.Crs.PathPriv,Cfg_FOLDER_PRJ,
+                   Gbl.Crs.PathPriv,Cfg_FOLDER_PRJ,
                    (unsigned) (Gbl.Prjs.PrjCod % 100),
                    Gbl.Prjs.PrjCod);
          Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
@@ -2643,7 +2643,7 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
 						   " from current course",
 				        "SELECT UsrCod FROM crs_usr"
 				        " WHERE CrsCod=%ld",
-					Gbl.Hierarchy.Crs.Crs.CrsCod);
+					Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Check folders *****/
    for (NumUsr = 0;
@@ -2657,7 +2657,7 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
       /* Check if folder exists */
       snprintf (PathFolder,sizeof (PathFolder),
 	        "%s/usr/%02u/%ld/%s/%s",
-                Gbl.Hierarchy.Crs.PathPriv,
+                Gbl.Crs.PathPriv,
                 (unsigned) (UsrCod % 100),
                 UsrCod,	// User's code
                 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -2696,7 +2696,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
 			     " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
 			     " WHERE crs_grp_usr.UsrCod=%ld"
 			     " AND asg_grp.GrpCod=crs_grp_usr.GrpCod))",
-			     Gbl.Hierarchy.Crs.Crs.CrsCod,ZoneUsrCod);
+			     Gbl.Hierarchy.Crs.CrsCod,ZoneUsrCod);
 
    /***** Create one folder for each assignment *****/
    for (NumRow = 0;
@@ -2749,7 +2749,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
 						   " from current course",
 				        "SELECT UsrCod FROM crs_usr"
 				        " WHERE CrsCod=%ld",
-					Gbl.Hierarchy.Crs.Crs.CrsCod);
+					Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Check if there exist folders with the new name *****/
    for (NumUsr = 0;
@@ -2763,14 +2763,14 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
       /* Rename folder if exists */
       snprintf (PathOldFolder,sizeof (PathOldFolder),
 	        "%s/usr/%02u/%ld/%s/%s",
-                Gbl.Hierarchy.Crs.PathPriv,
+                Gbl.Crs.PathPriv,
                 (unsigned) (UsrCod % 100),
                 UsrCod,	// User's code
                 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
                 OldFolderName);
       snprintf (PathNewFolder,sizeof (PathNewFolder),
 	        "%s/usr/%02u/%ld/%s/%s",
-                Gbl.Hierarchy.Crs.PathPriv,
+                Gbl.Crs.PathPriv,
                 (unsigned) (UsrCod % 100),
                 UsrCod,	// User's code
                 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -2795,7 +2795,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
          /* Rename folder if exists */
          snprintf (PathOldFolder,sizeof (PathOldFolder),
                    "%s/usr/%02u/%ld/%s/%s",
-                   Gbl.Hierarchy.Crs.PathPriv,
+                   Gbl.Crs.PathPriv,
                    (unsigned) (UsrCod % 100),
                    UsrCod,	// User's code
                    Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -2804,7 +2804,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
            {
             snprintf (PathNewFolder,sizeof (PathNewFolder),
         	      "%s/usr/%02u/%ld/%s/%s",
-                      Gbl.Hierarchy.Crs.PathPriv,
+                      Gbl.Crs.PathPriv,
 	 	      (unsigned) (UsrCod % 100),
  		      UsrCod,	// User's code
                       Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -2874,7 +2874,7 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
 						   " from current course",
 				        "SELECT UsrCod FROM crs_usr"
 				        " WHERE CrsCod=%ld",
-					Gbl.Hierarchy.Crs.Crs.CrsCod);
+					Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Remove folders *****/
    for (NumUsr = 0;
@@ -2888,7 +2888,7 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
       /* Remove tree if exists */
       snprintf (PathFolder,sizeof (PathFolder),
 	        "%s/usr/%02u/%ld/%s/%s",
-                Gbl.Hierarchy.Crs.PathPriv,
+                Gbl.Crs.PathPriv,
                 (unsigned) (UsrCod % 100),
                 UsrCod,	// User's code
                 Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
@@ -3309,7 +3309,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
                        Gbl.FileBrowser.Type == Brw_ADMI_MRK_GRP;
 
    /***** Get list of groups to show *****/
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)	// This course has groups?
+   if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
       /* Get list of group with file zones which I belong to */
       Grp_GetLstCodGrpsWithFileZonesIBelong (&LstMyGrps);
 
@@ -3333,10 +3333,10 @@ static void Brw_FormToChangeCrsGrpZone (void)
                       "</label>"
                       "</li>",
             Gbl.Form.Id,
-            Gbl.Hierarchy.Crs.Crs.FullName);
+            Gbl.Hierarchy.Crs.FullName);
 
    /***** List my groups for unique selection *****/
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)	// This course has groups?
+   if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
      {
       for (NumGrp = 0;
 	   NumGrp < LstMyGrps.NumGrps;
@@ -3355,13 +3355,13 @@ static void Brw_FormToChangeCrsGrpZone (void)
                             "<label>"
 	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
                   (IsGroupZone &&
-                   GrpDat.GrpCod == Gbl.Hierarchy.Crs.Grps.GrpCod) ? "BROWSER_TITLE" :
+                   GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? "BROWSER_TITLE" :
                                                                   "BROWSER_TITLE_LIGHT",
                   Cfg_URL_ICON_PUBLIC,
                   NumGrp < LstMyGrps.NumGrps - 1 ? "submid" :
                 	                           "subend",
 	          GrpDat.GrpCod);
-	 if (IsGroupZone && GrpDat.GrpCod == Gbl.Hierarchy.Crs.Grps.GrpCod)
+	 if (IsGroupZone && GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
 	 fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 			    "%s %s"
@@ -3913,7 +3913,7 @@ static void Brw_UpdateLastAccess (void)
          if (Gbl.Action.Act == ActChgToSeeDocCrs ||
              Gbl.Action.Act == ActChgToAdmDocCrs ||
              Gbl.Action.Act == ActChgToAdmTch)	// Update group of last access to a documents/teachers zone only when user changes zone
-            Brw_UpdateGrpLastAccZone ("LastDowGrpCod",Gbl.Hierarchy.Crs.Grps.GrpCod);
+            Brw_UpdateGrpLastAccZone ("LastDowGrpCod",Gbl.Crs.Grps.GrpCod);
          break;
       case Brw_ADMI_SHR_CRS:
          if (Gbl.Action.Act == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
@@ -3921,7 +3921,7 @@ static void Brw_UpdateLastAccess (void)
 	 break;
       case Brw_ADMI_SHR_GRP:
          if (Gbl.Action.Act == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
-            Brw_UpdateGrpLastAccZone ("LastComGrpCod",Gbl.Hierarchy.Crs.Grps.GrpCod);
+            Brw_UpdateGrpLastAccZone ("LastComGrpCod",Gbl.Crs.Grps.GrpCod);
 	 break;
       case Brw_SHOW_MRK_CRS:
       case Brw_ADMI_MRK_CRS:
@@ -3933,7 +3933,7 @@ static void Brw_UpdateLastAccess (void)
       case Brw_ADMI_MRK_GRP:
          if (Gbl.Action.Act == ActChgToSeeMrk ||
              Gbl.Action.Act == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
-            Brw_UpdateGrpLastAccZone ("LastAssGrpCod",Gbl.Hierarchy.Crs.Grps.GrpCod);
+            Brw_UpdateGrpLastAccZone ("LastAssGrpCod",Gbl.Crs.Grps.GrpCod);
 	 break;
       default:
 	 break;
@@ -3951,7 +3951,7 @@ static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod)
 		   "UPDATE crs_usr SET %s=%ld"
 		   " WHERE CrsCod=%ld AND UsrCod=%ld",
                    FieldNameDB,GrpCod,
-                   Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+                   Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -5008,7 +5008,7 @@ static void Brw_PutCheckboxFullTree (void)
 static void Brw_PutParamsFullTree (void)
   {
    if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.Hierarchy.Crs.Grps.GrpCod);
+      Grp_PutParamGrpCod (Gbl.Crs.Grps.GrpCod);
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCod);
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
@@ -5202,7 +5202,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
       case Brw_ADMI_ASG_CRS:
       case Brw_ADMI_WRK_USR:
       case Brw_ADMI_WRK_CRS:
-	 Cod = Gbl.Hierarchy.Crs.Crs.CrsCod;
+	 Cod = Gbl.Hierarchy.Crs.CrsCod;
          break;
       case Brw_SHOW_DOC_GRP:
       case Brw_ADMI_DOC_GRP:
@@ -5210,7 +5210,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
       case Brw_ADMI_SHR_GRP:
       case Brw_SHOW_MRK_GRP:
       case Brw_ADMI_MRK_GRP:
-	 Cod = Gbl.Hierarchy.Crs.Grps.GrpCod;
+	 Cod = Gbl.Crs.Grps.GrpCod;
          break;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
@@ -5277,7 +5277,7 @@ static long Brw_GetGrpLastAccZone (const char *FieldNameDB)
 			     "SELECT %s FROM crs_usr"
 			     " WHERE CrsCod=%ld AND UsrCod=%ld",
 			     FieldNameDB,
-			     Gbl.Hierarchy.Crs.Crs.CrsCod,
+			     Gbl.Hierarchy.Crs.CrsCod,
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
 
    if (NumRows == 0)	// May be an administrator not belonging to this course
@@ -7360,12 +7360,12 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
          case Brw_ADMI_MRK_CRS:
          case Brw_ADMI_ASG_USR:
          case Brw_ADMI_WRK_USR:
-            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Crs.Crs.CrsCod)
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Crs.CrsCod)
                return true;		// I am in the course of the clipboard
             break;
 	 case Brw_ADMI_ASG_CRS:
 	 case Brw_ADMI_WRK_CRS:
-            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Crs.Crs.CrsCod &&
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Crs.CrsCod &&
 	        Gbl.FileBrowser.Clipboard.WorksUsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
                return true;		// I am in the course of the clipboard
 					// I am in the student's works of the clipboard
@@ -7374,7 +7374,7 @@ static bool Brw_CheckIfClipboardIsInThisTree (void)
 	 case Brw_ADMI_TCH_GRP:
 	 case Brw_ADMI_SHR_GRP:
 	 case Brw_ADMI_MRK_GRP:
-            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Hierarchy.Crs.Grps.GrpCod)
+            if (Gbl.FileBrowser.Clipboard.Cod == Gbl.Crs.Grps.GrpCod)
                return true;		// I am in the group of the clipboard
             break;
 	 case Brw_ADMI_DOC_PRJ:
@@ -7457,12 +7457,12 @@ static long Brw_GetCodForClipboard (void)
       case Brw_ADMI_WRK_USR:
       case Brw_ADMI_WRK_CRS:
       case Brw_ADMI_MRK_CRS:
-	 return Gbl.Hierarchy.Crs.Crs.CrsCod;
+	 return Gbl.Hierarchy.Crs.CrsCod;
       case Brw_ADMI_DOC_GRP:
       case Brw_ADMI_TCH_GRP:
       case Brw_ADMI_SHR_GRP:
       case Brw_ADMI_MRK_GRP:
-	 return Gbl.Hierarchy.Crs.Grps.GrpCod;
+	 return Gbl.Crs.Grps.GrpCod;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
 	 return Gbl.Prjs.PrjCod;
@@ -7820,12 +7820,12 @@ static long Brw_GetCodForExpandedFolders (void)
       case Brw_ADMI_WRK_USR:
       case Brw_ADMI_WRK_CRS:
       case Brw_ADMI_MRK_CRS:
-	 return Gbl.Hierarchy.Crs.Crs.CrsCod;
+	 return Gbl.Hierarchy.Crs.CrsCod;
       case Brw_ADMI_DOC_GRP:
       case Brw_ADMI_TCH_GRP:
       case Brw_ADMI_SHR_GRP:
       case Brw_ADMI_MRK_GRP:
-	 return Gbl.Hierarchy.Crs.Grps.GrpCod;
+	 return Gbl.Crs.Grps.GrpCod;
       default:
          return -1L;
      }
@@ -7916,7 +7916,7 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			 "DELETE FROM clipboard"
 			 " WHERE FileBrowser=%u AND Cod=%ld",
                          (unsigned) FileBrowser,
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       case Brw_ADMI_DOC_GRP:
       case Brw_ADMI_TCH_GRP:
@@ -7926,7 +7926,7 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			 "DELETE FROM clipboard"
 			 " WHERE FileBrowser=%u AND Cod=%ld",
                          (unsigned) FileBrowser,
-                         Gbl.Hierarchy.Crs.Grps.GrpCod);
+                         Gbl.Crs.Grps.GrpCod);
          break;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_WRK_USR:
@@ -7934,7 +7934,7 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			 "DELETE FROM clipboard"
 			 " WHERE UsrCod=%ld AND FileBrowser=%u AND Cod=%ld",
                          MyUsrCod,(unsigned) FileBrowser,
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       case Brw_ADMI_ASG_CRS:
       case Brw_ADMI_WRK_CRS:
@@ -7942,7 +7942,7 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
 			 "DELETE FROM clipboard"
 			 " WHERE FileBrowser=%u AND Cod=%ld AND WorksUsrCod=%ld",
                          (unsigned) FileBrowser,
-                         Gbl.Hierarchy.Crs.Crs.CrsCod,WorksUsrCod);
+                         Gbl.Hierarchy.Crs.CrsCod,WorksUsrCod);
          break;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
@@ -8021,7 +8021,7 @@ void Brw_PasteIntoFileBrowser (void)
 //	Possible institution:		Gbl.Hierarchy.Ins.InsCod
 //	Possible centre:		Gbl.Hierarchy.Ctr.CtrCod
 //	Possible degree:		Gbl.Hierarchy.Deg.DegCod
-//	Possible course:		Gbl.Hierarchy.Crs.Crs.CrsCod
+//	Possible course:		Gbl.Hierarchy.Crs.CrsCod
 //	Possible student in works:	Gbl.Usrs.Other.UsrDat.UsrCod
 //	Path (should be a folder):	Gbl.FileBrowser.Priv.FullPathInTree
 // Returns the number of files pasted
@@ -9958,19 +9958,19 @@ void Brw_ShowFileMetadata (void)
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_DOC_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.Crs.CrsCod,
+				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_TCH_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_TEACHERS_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.Crs.CrsCod,
+				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_SHR_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.Crs.CrsCod,
+				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_SHOW_MRK_CRS:
@@ -9978,7 +9978,7 @@ void Brw_ShowFileMetadata (void)
 	    case Brw_ADMI_MRK_CRS:
 	    case Brw_ADMI_MRK_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.Crs.CrsCod,
+				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    default:
@@ -10108,19 +10108,19 @@ void Brw_DownloadFile (void)
 	    case Brw_ADMI_DOC_CRS:
 	    case Brw_ADMI_DOC_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_DOCUMENT_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.Crs.CrsCod,
+				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_TCH_CRS:
 	    case Brw_ADMI_TCH_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_TEACHERS_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.Crs.CrsCod,
+				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_ADMI_SHR_CRS:
 	    case Brw_ADMI_SHR_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_SHARED_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.Crs.CrsCod,
+				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case Brw_SHOW_MRK_CRS:
@@ -10128,7 +10128,7 @@ void Brw_DownloadFile (void)
 	    case Brw_ADMI_MRK_CRS:
 	    case Brw_ADMI_MRK_GRP:
 	       Ntf_MarkNotifAsSeen (Ntf_EVENT_MARKS_FILE,
-				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.Crs.CrsCod,
+				   FileMetadata.FilCod,Gbl.Hierarchy.Crs.CrsCod,
 				   Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    default:
@@ -11219,12 +11219,12 @@ long Brw_GetCodForFiles (void)
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_WRK_USR:
       case Brw_ADMI_MRK_CRS:
-	 return Gbl.Hierarchy.Crs.Crs.CrsCod;
+	 return Gbl.Hierarchy.Crs.CrsCod;
       case Brw_ADMI_DOC_GRP:
       case Brw_ADMI_TCH_GRP:
       case Brw_ADMI_SHR_GRP:
       case Brw_ADMI_MRK_GRP:
-	 return Gbl.Hierarchy.Crs.Grps.GrpCod;
+	 return Gbl.Crs.Grps.GrpCod;
       case Brw_ADMI_DOC_PRJ:
       case Brw_ADMI_ASS_PRJ:
 	 return Gbl.Prjs.PrjCod;
@@ -11533,7 +11533,7 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
       case Brw_ADMI_DOC_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)		// A teacher...
 							// ...can edit only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Hierarchy.Crs.Grps.GrpCod);
+	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod);
 	 // An administrator can edit
          return (Gbl.Usrs.Me.Role.Logged > Rol_TCH);
       case Brw_ADMI_TCH_CRS:
@@ -11606,7 +11606,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
       case Brw_ADMI_DOC_GRP:
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)		// A teacher
 							// ...can create/paste only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Hierarchy.Crs.Grps.GrpCod);
+	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod);
 	 // An administrator can create/paste
          return (Gbl.Usrs.Me.Role.Logged > Rol_TCH);
       case Brw_ADMI_TCH_CRS:
@@ -11615,7 +11615,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_NET ||	// A non-editing teacher...
 	     Gbl.Usrs.Me.Role.Logged == Rol_TCH)		// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Hierarchy.Crs.Grps.GrpCod);
+	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod);
 	 // An administrator can create/paste
          return (Gbl.Usrs.Me.Role.Logged > Rol_TCH);
       case Brw_ADMI_SHR_CRS:
@@ -11624,7 +11624,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// A student, non-editing teacher...
 	     Gbl.Usrs.Me.Role.Logged <= Rol_TCH)		// ...or a teacher
 							// ...can create/paste only if he/she belongs to group
-	    return Grp_GetIfIBelongToGrp (Gbl.Hierarchy.Crs.Grps.GrpCod);
+	    return Grp_GetIfIBelongToGrp (Gbl.Crs.Grps.GrpCod);
 	 // An administrator can create/paste
          return Gbl.Usrs.Me.Role.Logged >= Rol_STD;
       case Brw_ADMI_ASG_USR:
@@ -11894,7 +11894,7 @@ void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod)
             Lay_ShowErrorAndExit ("Wrong group code.");
 
          /* Remove file zones of this group */
-         Brw_RemoveGrpZones (Gbl.Hierarchy.Crs.Crs.CrsCod,GrpCod);
+         Brw_RemoveGrpZones (Gbl.Hierarchy.Crs.CrsCod,GrpCod);
 	}
 
    /***** Free structure that stores the query result *****/
@@ -12203,7 +12203,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 
       /***** Set row color *****/
       BgColor = (CrsCod > 0 &&
-	         CrsCod == Gbl.Hierarchy.Crs.Crs.CrsCod) ? "LIGHT_BLUE" :
+	         CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? "LIGHT_BLUE" :
                                                         Gbl.ColorRows[Gbl.RowEvenOdd];
 
       /***** Write number of document in this search *****/

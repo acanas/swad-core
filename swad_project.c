@@ -882,7 +882,7 @@ void Prj_PrintOneProject (void)
    Lay_WriteHeaderClassPhoto (true,false,
 			      Gbl.Hierarchy.Ins.InsCod,
 			      Gbl.Hierarchy.Deg.DegCod,
-			      Gbl.Hierarchy.Crs.Crs.CrsCod);
+			      Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Table head *****/
    Tbl_StartTableWideMargin (2);
@@ -2368,7 +2368,7 @@ void Prj_GetListProjects (void)
 					 " AND projects.PrjCod=prj_usr.PrjCod"
 					 " AND prj_usr.UsrCod=%ld"
 					 " ORDER BY %s",
-					 Gbl.Hierarchy.Crs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
 					 Gbl.Usrs.Me.UsrDat.UsrCod,
 					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
@@ -2383,7 +2383,7 @@ void Prj_GetListProjects (void)
 					 " AND projects.PrjCod=prj_usr.PrjCod"
 					 " AND prj_usr.UsrCod=%ld"
 					 " ORDER BY %s",
-					 Gbl.Hierarchy.Crs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
 					 Gbl.Usrs.Me.UsrDat.UsrCod,
 					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
@@ -2401,7 +2401,7 @@ void Prj_GetListProjects (void)
 					 " WHERE projects.CrsCod=%ld"
 					 "%s%s%s"
 					 " ORDER BY %s",
-					 Gbl.Hierarchy.Crs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
 					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
 	       break;
@@ -2413,7 +2413,7 @@ void Prj_GetListProjects (void)
 					 " WHERE projects.CrsCod=%ld"
 					 "%s%s%s"
 					 " ORDER BY %s",
-					 Gbl.Hierarchy.Crs.Crs.CrsCod,
+					 Gbl.Hierarchy.Crs.CrsCod,
 					 PreNonSubQuery,HidVisSubQuery,DptCodSubQuery,
 					 OrderBySubQuery[Gbl.Prjs.SelectedOrder]);
 	       break;
@@ -2519,7 +2519,7 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
 			  " FROM projects"
 			  " WHERE PrjCod=%ld AND CrsCod=%ld",
 			  Prj->PrjCod,
-			  Gbl.Hierarchy.Crs.Crs.CrsCod))	// Project found...
+			  Gbl.Hierarchy.Crs.CrsCod))	// Project found...
 	{
 	 /* Get row */
 	 row = mysql_fetch_row (mysql_res);
@@ -2723,7 +2723,7 @@ void Prj_RemoveProject (void)
 		      "DELETE FROM prj_usr USING projects,prj_usr"
 		      " WHERE projects.PrjCod=%ld AND projects.CrsCod=%ld"
 		      " AND projects.PrjCod=prj_usr.PrjCod",
-	              Prj.PrjCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Flush cache *****/
       Prj_FlushCacheMyRoleInProject ();
@@ -2732,7 +2732,7 @@ void Prj_RemoveProject (void)
       DB_QueryDELETE ("can not remove project",
 		      "DELETE FROM projects"
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
-	              Prj.PrjCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Remove information related to files in project *****/
       Brw_RemovePrjFilesFromDB (Prj.PrjCod);
@@ -2784,7 +2784,7 @@ void Prj_HideProject (void)
       DB_QueryUPDATE ("can not hide project",
 		      "UPDATE projects SET Hidden='Y'"
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
-	              Prj.PrjCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_is_now_hidden,
@@ -2826,7 +2826,7 @@ void Prj_ShowProject (void)
       DB_QueryUPDATE ("can not show project",
 		      "UPDATE projects SET Hidden='N'"
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
-	              Prj.PrjCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_is_now_visible,
@@ -3294,7 +3294,7 @@ static void Prj_CreateProject (struct Project *Prj)
 				" (%ld,%ld,'%c','%c',%u,'%s',"
 				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				"'%s','%s','%s','%s','%s')",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.CrsCod,
 				Prj->DptCod,
 				Prj->Hidden == Prj_HIDDEN ? 'Y' :
 							    'N',
@@ -3361,7 +3361,7 @@ static void Prj_UpdateProject (struct Project *Prj)
 	           Prj->Knowledge,
 	           Prj->Materials,
 	           Prj->URL,
-	           Prj->PrjCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+	           Prj->PrjCod,Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -3473,7 +3473,7 @@ unsigned Prj_GetNumCoursesWithProjects (Hie_Level_t Scope)
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM projects"
 			 " WHERE CrsCod=%ld",
-			 Gbl.Hierarchy.Crs.Crs.CrsCod);
+			 Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -3554,7 +3554,7 @@ unsigned Prj_GetNumProjects (Hie_Level_t Scope)
 			 "SELECT COUNT(*)"
 			 " FROM projects"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();

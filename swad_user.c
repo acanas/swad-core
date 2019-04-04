@@ -584,7 +584,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
 
    /* Get roles */
    UsrDat->Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-                                                          Gbl.Hierarchy.Crs.Crs.CrsCod);
+                                                          Gbl.Hierarchy.Crs.CrsCod);
    UsrDat->Roles.InCurrentCrs.Valid = true;
    UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
@@ -1190,7 +1190,7 @@ bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
       return false;
 
    /***** 4. Fast check: Is he/she a student? *****/
@@ -1245,7 +1245,7 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
       return false;
 
    /***** 4. Fast check: Is he/she a non-editing teacher or a teacher? *****/
@@ -1270,7 +1270,7 @@ bool Usr_CheckIfICanViewTst (const struct UsrData *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
       return false;
 
    /***** 4. Fast check: Am I a system admin? *****/
@@ -1319,7 +1319,7 @@ bool Usr_CheckIfICanViewAsgWrk (const struct UsrData *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
       return false;
 
    /***** 4. Fast check: Does he/she belong to the current course? *****/
@@ -1369,7 +1369,7 @@ bool Usr_CheckIfICanViewAtt (const struct UsrData *UsrDat)
       return false;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
       return false;
 
    /***** 4. Fast check: Is he/she a student in the current course? *****/
@@ -2048,7 +2048,7 @@ bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
   {
    /***** 1. Fast check: Trivial cases *****/
    if (UsrDat->UsrCod <= 0 ||
-       Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)
+       Gbl.Hierarchy.Crs.CrsCod <= 0)
       return false;
 
    /***** 2. Fast check: If cached... *****/
@@ -2068,7 +2068,7 @@ bool Usr_CheckIfUsrBelongsToCurrentCrs (const struct UsrData *UsrDat)
    /***** 4. Fast / slow check: Get if user belongs to current course *****/
    Gbl.Cache.UsrBelongsToCurrentCrs.UsrCod = UsrDat->UsrCod;
    Gbl.Cache.UsrBelongsToCurrentCrs.Belongs = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
-						                          Gbl.Hierarchy.Crs.Crs.CrsCod,
+						                          Gbl.Hierarchy.Crs.CrsCod,
 						                          false);
    return Gbl.Cache.UsrBelongsToCurrentCrs.Belongs;
   }
@@ -2088,7 +2088,7 @@ bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat)
   {
    /***** 1. Fast check: Trivial cases *****/
    if (UsrDat->UsrCod <= 0 ||
-       Gbl.Hierarchy.Crs.Crs.CrsCod <= 0)
+       Gbl.Hierarchy.Crs.CrsCod <= 0)
       return false;
 
    /***** 2. Fast check: If cached... *****/
@@ -2099,7 +2099,7 @@ bool Usr_CheckIfUsrHasAcceptedInCurrentCrs (const struct UsrData *UsrDat)
                                 and has accepted *****/
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.UsrCod = UsrDat->UsrCod;
    Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
-						                               Gbl.Hierarchy.Crs.Crs.CrsCod,
+						                               Gbl.Hierarchy.Crs.CrsCod,
 						                               true);
    return Gbl.Cache.UsrHasAcceptedInCurrentCrs.Accepted;
   }
@@ -3395,7 +3395,7 @@ static void Usr_SetMyPrefsAndRoles (void)
 	 if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
 	   {
 	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role = Rol_GetRoleUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
-									      Gbl.Hierarchy.Crs.Crs.CrsCod);
+									      Gbl.Hierarchy.Crs.CrsCod);
 	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Valid = true;
 	   }
 
@@ -3838,22 +3838,22 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
      {
       /***** Write the groups a the que pertenece the student *****/
       for (NumGrpTyp = 0;
-           NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+           NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
            NumGrpTyp++)
-         if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
+         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
            {
-            Grp_GetNamesGrpsStdBelongsTo (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
+            Grp_GetNamesGrpsStdBelongsTo (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
                                           UsrDat->UsrCod,GroupNames);
             Usr_WriteUsrData (Gbl.ColorRows[Gbl.RowEvenOdd],GroupNames,NULL,true,UsrDat->Accepted);
            }
 
       /***** Fields of the record dependientes of the course *****/
       for (NumField = 0;
-           NumField < Gbl.Hierarchy.Crs.Records.LstFields.Num;
+           NumField < Gbl.Crs.Records.LstFields.Num;
            NumField++)
         {
          /* Get the text of the field */
-         if (Rec_GetFieldFromCrsRecord (UsrDat->UsrCod,Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res))
+         if (Rec_GetFieldFromCrsRecord (UsrDat->UsrCod,Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res))
            {
             row = mysql_fetch_row (mysql_res);
             Str_Copy (Text,row[0],
@@ -4427,7 +4427,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 
    /***** If there are no groups selected, don't do anything *****/
    if (!Gbl.Usrs.ClassPhoto.AllGroups &&
-       !Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
+       !Gbl.Crs.Grps.LstGrpsSel.NumGrps)
      {
       *Query = NULL;
       return;
@@ -4447,7 +4447,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 	        " (SELECT ToUsrCod FROM msg_banned WHERE FromUsrCod=%ld)"
 	        " AND crs_usr.UsrCod=usr_data.UsrCod",        // Do not get banned users
       	        QueryFields,
-                Gbl.Hierarchy.Crs.Crs.CrsCod,(unsigned) Role,
+                Gbl.Hierarchy.Crs.CrsCod,(unsigned) Role,
                 Gbl.Usrs.Me.UsrDat.UsrCod);
    else
       snprintf (*Query,Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1,
@@ -4456,7 +4456,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 	        " AND crs_usr.Role=%u"
 	        " AND crs_usr.UsrCod=usr_data.UsrCod",
 	        QueryFields,
-                Gbl.Hierarchy.Crs.Crs.CrsCod,(unsigned) Role);
+                Gbl.Hierarchy.Crs.CrsCod,(unsigned) Role);
 
    /***** Select users in selected groups *****/
    if (!Gbl.Usrs.ClassPhoto.AllGroups)
@@ -4465,30 +4465,30 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
       Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
       /***** Allocate memory for list of booleans AddStdsWithoutGroupOf *****/
-      if ((AddStdsWithoutGroupOf = (bool *) calloc (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num,sizeof (bool))) == NULL)
+      if ((AddStdsWithoutGroupOf = (bool *) calloc (Gbl.Crs.Grps.GrpTypes.Num,sizeof (bool))) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Initialize vector of booleans that indicates whether it's necessary add to the list
              the students who don't belong to any group of each type *****/
       for (NumGrpTyp = 0;
-           NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+           NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
            NumGrpTyp++)
          AddStdsWithoutGroupOf[NumGrpTyp] = false;
 
       /***** Create query with the students who belong to the groups selected *****/
-      if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)        // If there are groups selected...
+      if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)        // If there are groups selected...
         {
          /* Check if there are positive and negative codes in the list */
          for (NumGrpSel = 0;
-              NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps;
+              NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
               NumGrpSel++)
-            if ((GrpCod = Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) > 0)
+            if ((GrpCod = Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) > 0)
                NumPositiveCods++;
             else
                for (NumGrpTyp = 0;
-                    NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+                    NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
                     NumGrpTyp++)
-                  if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod == -GrpCod)
+                  if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod == -GrpCod)
                     {
                      AddStdsWithoutGroupOf[NumGrpTyp] = true;
                      break;
@@ -4501,9 +4501,9 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             NumPositiveCods = 0;
             for (NumGrpSel = 0;
-                 NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps;
+                 NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
                  NumGrpSel++)
-               if ((GrpCod = Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) > 0)
+               if ((GrpCod = Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) > 0)
                  {
                   Str_Concat (*Query,NumPositiveCods ? " OR GrpCod='" :
                 				       " GrpCod='",
@@ -4524,7 +4524,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
 
       /***** Create a query with the students who don't belong to any group *****/
       for (NumGrpTyp = 0;
-           NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+           NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
            NumGrpTyp++)
          if (AddStdsWithoutGroupOf[NumGrpTyp])
            {
@@ -4542,7 +4542,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (char **Query,Rol_Role_t Role)
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             snprintf (LongStr,sizeof (LongStr),
         	      "%ld",
-		      Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
+		      Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
             Str_Concat (*Query,LongStr,
                         Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             Str_Concat (*Query,"' AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
@@ -4847,7 +4847,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND crs_usr.CrsCod=%ld"
 			      " AND %s",
 			      QueryFields,
-			      Gbl.Hierarchy.Crs.Crs.CrsCod,
+			      Gbl.Hierarchy.Crs.CrsCod,
 			      OrderQuery);
 	       break;
 	    default:
@@ -4979,7 +4979,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND %s",
 			      QueryFields,
 			      SubQueryRole,
-			      Gbl.Hierarchy.Crs.Crs.CrsCod,
+			      Gbl.Hierarchy.Crs.CrsCod,
 			      OrderQuery);
 	       break;
 	    default:
@@ -6398,7 +6398,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
      {
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
       if ((GroupNames = (char *) malloc ((Grp_MAX_BYTES_GROUP_NAME + 3) *
-                                         Gbl.Hierarchy.Crs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
+                                         Gbl.Crs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
          Lay_NotEnoughMemoryExit ();
 
       /***** Start table with list of students *****/
@@ -6715,8 +6715,8 @@ void Usr_ListAllDataStds (void)
       NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_STD;
       if (Gbl.Scope.Current == Hie_CRS)
         {
-         NumColumnsCardAndGroups = NumColumnsCommonCard + Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
-         NumColumnsTotal = NumColumnsCardAndGroups + Gbl.Hierarchy.Crs.Records.LstFields.Num;
+         NumColumnsCardAndGroups = NumColumnsCommonCard + Gbl.Crs.Grps.GrpTypes.Num;
+         NumColumnsTotal = NumColumnsCardAndGroups + Gbl.Crs.Records.LstFields.Num;
         }
       else
          NumColumnsTotal = NumColumnsCardAndGroups = NumColumnsCommonCard;
@@ -6724,7 +6724,7 @@ void Usr_ListAllDataStds (void)
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
       if (Gbl.Scope.Current == Hie_CRS)
 	{
-	 Length = (Grp_MAX_BYTES_GROUP_NAME + 2) * Gbl.Hierarchy.Crs.Grps.GrpTypes.NumGrpsTotal;
+	 Length = (Grp_MAX_BYTES_GROUP_NAME + 2) * Gbl.Crs.Grps.GrpTypes.NumGrpsTotal;
          if ((GroupNames = (char *) malloc (Length + 1)) == NULL)
             Lay_NotEnoughMemoryExit ();
 	}
@@ -6758,27 +6758,27 @@ void Usr_ListAllDataStds (void)
       /* 2. Columns for the groups */
       if (Gbl.Scope.Current == Hie_CRS)
         {
-         if (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num)
+         if (Gbl.Crs.Grps.GrpTypes.Num)
             for (NumGrpTyp = 0;
-                 NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+                 NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
                  NumGrpTyp++)
-               if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
+               if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
                   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
                 	             "%s %s&nbsp;"
                 	             "</th>",
                            Txt_Group,
-                           Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
+                           Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
 
-         if (Gbl.Hierarchy.Crs.Records.LstFields.Num)
+         if (Gbl.Crs.Records.LstFields.Num)
            {
             /* 3. Names of record fields that depend on the course */
             for (NumField = 0;
-                 NumField < Gbl.Hierarchy.Crs.Records.LstFields.Num;
+                 NumField < Gbl.Crs.Records.LstFields.Num;
                  NumField++)
                fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
         	                  "%s&nbsp;"
         	                  "</th>",
-                        Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Name);
+                        Gbl.Crs.Records.LstFields.Lst[NumField].Name);
 
             /* 4. Visibility type for the record fields that depend on the course, in other row */
             fprintf (Gbl.F.Out,"</tr>"
@@ -6790,12 +6790,12 @@ void Usr_ListAllDataStds (void)
                   fprintf (Gbl.F.Out,"<td class=\"VERY_LIGHT_BLUE\">"
                 	             "</td>");
             for (NumField = 0;
-                 NumField < Gbl.Hierarchy.Crs.Records.LstFields.Num;
+                 NumField < Gbl.Crs.Records.LstFields.Num;
                  NumField++)
                fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE VERY_LIGHT_BLUE\">"
         	                  "(%s)&nbsp;"
         	                  "</th>",
-                        Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Hierarchy.Crs.Records.LstFields.Lst[NumField].Visibility]);
+                        Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
            }
         }
 
@@ -7364,7 +7364,7 @@ static void Usr_GetMyUsrListTypeFromDB (void)
    NumRows = DB_QuerySELECT (&mysql_res,"can not get type of listing of users",
 			     "SELECT UsrListType FROM crs_usr"
 			     " WHERE CrsCod=%ld AND UsrCod=%ld",
-			     Gbl.Hierarchy.Crs.Crs.CrsCod,
+			     Gbl.Hierarchy.Crs.CrsCod,
 			     Gbl.Usrs.Me.UsrDat.UsrCod);
    if (NumRows == 1)		// Should be one only row
      {
@@ -7404,7 +7404,7 @@ static void Usr_UpdateMyUsrListTypeInDB (void)
 		   "UPDATE crs_usr SET UsrListType='%s'"
                    " WHERE CrsCod=%ld AND UsrCod=%ld",
 		   Usr_StringsUsrListTypeInDB[Gbl.Usrs.Me.ListType],
-		   Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		   Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -7468,7 +7468,7 @@ static void Usr_GetMyColsClassPhotoFromDB (void)
 					   " in class photo",
 				"SELECT ColsClassPhoto FROM crs_usr"
 				" WHERE CrsCod=%ld AND UsrCod=%ld",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod);
       if (NumRows == 1)		// Should be one only row
         {
@@ -7503,7 +7503,7 @@ static void Usr_UpdateMyColsClassPhotoInDB (void)
 		      "UPDATE crs_usr SET ColsClassPhoto=%u"
                       " WHERE CrsCod=%ld AND UsrCod=%ld",
 		      Gbl.Usrs.ClassPhoto.Cols,
-		      Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		      Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -7565,14 +7565,14 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
    Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
 
    /***** If no user logged or not course selected... *****/
-   if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Crs.Crs.CrsCod)
+   if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Crs.CrsCod)
      {
       /***** Get if listing of users must show photos from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not check if listing of users"
 					   " must show photos",
 				"SELECT ListWithPhotos FROM crs_usr"
 				" WHERE CrsCod=%ld AND UsrCod=%ld",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod);
       if (NumRows == 1)                // Should be one only row
         {
@@ -7605,7 +7605,7 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
                       " WHERE CrsCod=%ld AND UsrCod=%ld",
 		      Gbl.Usrs.Listing.WithPhotos ? 'Y' :
 						    'N',
-		      Gbl.Hierarchy.Crs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+		      Gbl.Hierarchy.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -7879,7 +7879,7 @@ void Usr_SeeStudents (void)
 				       (Gbl.Scope.Current == Hie_CRS ||
 					Gbl.Scope.Current == Hie_DEG) ? Gbl.Hierarchy.Deg.DegCod :
 									      -1L,
-					Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.Crs.CrsCod :
+					Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
 									      -1L);
 
          /* Set options allowed */
@@ -8051,7 +8051,7 @@ void Usr_SeeTeachers (void)
 				       (Gbl.Scope.Current == Hie_CRS ||
 					Gbl.Scope.Current == Hie_DEG) ? Gbl.Hierarchy.Deg.DegCod :
 									      -1L,
-					Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.Crs.CrsCod :
+					Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
 									      -1L);
 
          /* Set options allowed */
@@ -8644,7 +8644,7 @@ void Usr_SeeStdClassPhotoPrn (void)
 				 (Gbl.Scope.Current == Hie_CRS ||
 				  Gbl.Scope.Current == Hie_DEG) ? Gbl.Hierarchy.Deg.DegCod :
 					                                -1L,
-				  Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.Crs.CrsCod :
+				  Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
 					                                -1L);
       Tbl_StartTableWide (0);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
@@ -8711,7 +8711,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 				 (Gbl.Scope.Current == Hie_CRS ||
 				  Gbl.Scope.Current == Hie_DEG) ? Gbl.Hierarchy.Deg.DegCod :
 					                                -1L,
-				  Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.Crs.CrsCod :
+				  Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
 					                                -1L);
       Tbl_StartTableWide (0);
 
@@ -9157,7 +9157,7 @@ unsigned Usr_GetTotalNumberOfUsersInCourses (Hie_Level_t Scope,unsigned Roles)
             (unsigned) DB_QueryCOUNT ("can not get number of users",
         			      "SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
 				      " WHERE CrsCod=%ld",
-				      Gbl.Hierarchy.Crs.Crs.CrsCod);
+				      Gbl.Hierarchy.Crs.CrsCod);
          else
             NumUsrs =
             (unsigned) DB_QueryCOUNT ("can not get number of users",
@@ -9165,7 +9165,7 @@ unsigned Usr_GetTotalNumberOfUsersInCourses (Hie_Level_t Scope,unsigned Roles)
         			      " FROM crs_usr"
 				      " WHERE CrsCod=%ld"
 				      " AND Role%s",
-				      Gbl.Hierarchy.Crs.Crs.CrsCod,SubQueryRoles);
+				      Gbl.Hierarchy.Crs.CrsCod,SubQueryRoles);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -9467,13 +9467,13 @@ float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	 switch (Role)
 	   {
 	    case Rol_UNK:
-	       return (float) Gbl.Hierarchy.Crs.Crs.NumUsrs[Rol_UNK];	// Any user
+	       return (float) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Any user
 	    case Rol_STD:
-	       return (float) Gbl.Hierarchy.Crs.Crs.NumUsrs[Rol_STD];	// Students
+	       return (float) Gbl.Hierarchy.Crs.NumUsrs[Rol_STD];	// Students
 	    case Rol_NET:
-	       return (float) Gbl.Hierarchy.Crs.Crs.NumUsrs[Rol_UNK];	// Non-editing teachers
+	       return (float) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Non-editing teachers
 	    case Rol_TCH:
-	       return (float) Gbl.Hierarchy.Crs.Crs.NumUsrs[Rol_UNK];	// Teachers
+	       return (float) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Teachers
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong role.");
 	       break;	// Not reached

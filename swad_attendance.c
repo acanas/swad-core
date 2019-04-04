@@ -226,7 +226,7 @@ static void Att_ShowAllAttEvents (void)
 		 Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)
+   if (Gbl.Crs.Grps.NumGrps)
      {
       Set_StartSettingsHead ();
       Grp_ShowFormToSelWhichGrps (ActSeeAtt,Att_ParamsWhichGroupsToShow);
@@ -478,7 +478,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
 
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)
+   if (Gbl.Crs.Grps.NumGrps)
       Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Att);
 
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
@@ -629,7 +629,7 @@ static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest)
       Att_FreeListAttEvents ();
 
    /***** Get list of attendance events from database *****/
-   if (Gbl.Hierarchy.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
+   if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance events",
 				"SELECT AttCod"
 				" FROM att_events"
@@ -639,17 +639,17 @@ static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest)
 				" WHERE crs_grp_usr.UsrCod=%ld"
 				" AND att_grp.GrpCod=crs_grp_usr.GrpCod))"
 				" ORDER BY %s",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.CrsCod,
 				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				OrderBySubQuery[Gbl.AttEvents.SelectedOrder][OrderNewestOldest]);
-   else	// Gbl.Hierarchy.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
+   else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
       NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance events",
 				"SELECT AttCod"
 				" FROM att_events"
 				" WHERE CrsCod=%ld%s"
 				" ORDER BY %s",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.CrsCod,
 				HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 				OrderBySubQuery[Gbl.AttEvents.SelectedOrder][OrderNewestOldest]);
 
@@ -689,7 +689,7 @@ static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att)
   {
    if (Att_GetDataOfAttEventByCod (Att))
      {
-      if (Att->CrsCod != Gbl.Hierarchy.Crs.Crs.CrsCod)
+      if (Att->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
          Lay_ShowErrorAndExit ("Attendance event does not belong to current course.");
      }
    else	// Attendance event not found
@@ -821,7 +821,7 @@ static void Att_GetAttEventDescriptionFromDB (long AttCod,char Description[Cns_M
    NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance event text",
 			     "SELECT Txt FROM att_events"
 			     " WHERE AttCod=%ld AND CrsCod=%ld",
-			     AttCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+			     AttCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -966,7 +966,7 @@ void Att_HideAttEvent (void)
    DB_QueryUPDATE ("can not hide attendance event",
 		   "UPDATE att_events SET Hidden='Y'"
 		   " WHERE AttCod=%ld AND CrsCod=%ld",
-                   Att.AttCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+                   Att.AttCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_hidden,
@@ -996,7 +996,7 @@ void Att_ShowAttEvent (void)
    DB_QueryUPDATE ("can not show attendance event",
 		   "UPDATE att_events SET Hidden='N'"
 		   " WHERE AttCod=%ld AND CrsCod=%ld",
-                   Att.AttCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+                   Att.AttCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_visible,
@@ -1018,7 +1018,7 @@ static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Valu
 			  "SELECT COUNT(*) FROM att_events"
 			  " WHERE CrsCod=%ld"
 			  " AND %s='%s' AND AttCod<>%ld",
-			  Gbl.Hierarchy.Crs.Crs.CrsCod,
+			  Gbl.Hierarchy.Crs.CrsCod,
 			  Field,Value,AttCod) != 0);
   }
 
@@ -1061,7 +1061,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       Att_ResetAttendanceEvent (&Att);
 
       /* Initialize some fields */
-      Att.CrsCod = Gbl.Hierarchy.Crs.Crs.CrsCod;
+      Att.CrsCod = Gbl.Hierarchy.Crs.CrsCod;
       Att.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       Att.TimeUTC[Att_START_TIME] = Gbl.StartExecutionTimeUTC;
       Att.TimeUTC[Att_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
@@ -1187,7 +1187,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   if (Gbl.Hierarchy.Crs.Grps.GrpTypes.Num)
+   if (Gbl.Crs.Grps.GrpTypes.Num)
      {
       /***** Start box and table *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1211,14 +1211,14 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
                          "</label>"
 	                 "</td>"
 	                 "</tr>",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.Crs.ShrtName);
+               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Hierarchy.Crs.Grps.GrpTypes.Num;
+	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
-         if (Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.Hierarchy.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+         if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
                                             AttCod,Grp_ATT_EVENT);
 
       /***** End table and box *****/
@@ -1343,7 +1343,7 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Description)
 				" VALUES"
 				" (%ld,'%c',%ld,"
 				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),'%c','%s','%s')",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.CrsCod,
 				Att->Hidden ? 'Y' :
 					      'N',
 				Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -1355,7 +1355,7 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Description)
 				Description);
 
    /***** Create groups *****/
-   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
+   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Att_CreateGrps (Att->AttCod);
   }
 
@@ -1381,14 +1381,14 @@ void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Description)
         	                            'N',
                    Att->Title,
                    Description,
-                   Att->AttCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+                   Att->AttCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update groups *****/
    /* Remove old groups */
    Att_RemoveAllTheGrpsAssociatedToAnAttEvent (Att->AttCod);
 
    /* Create new groups */
-   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps)
+   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Att_CreateGrps (Att->AttCod);
   }
 
@@ -1470,7 +1470,7 @@ static void Att_CreateGrps (long AttCod)
 
    /***** Create groups of the attendance event *****/
    for (NumGrpSel = 0;
-	NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps;
+	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
       /* Create group */
       DB_QueryINSERT ("can not associate a group to an attendance event",
@@ -1479,7 +1479,7 @@ static void Att_CreateGrps (long AttCod)
 		      " VALUES"
 		      " (%ld,%ld)",
                       AttCod,
-		      Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+		      Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
@@ -1550,7 +1550,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
      }
    else
       fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.Crs.ShrtName);
+               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -1605,7 +1605,7 @@ static void Att_RemoveAttEventFromCurrentCrs (long AttCod)
    DB_QueryDELETE ("can not remove attendance event",
 		   "DELETE FROM att_events"
 		   " WHERE AttCod=%ld AND CrsCod=%ld",
-                   AttCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+                   AttCod,Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -1707,7 +1707,7 @@ unsigned Att_GetNumCoursesWithAttEvents (Hie_Level_t Scope)
 			 "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM att_events"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -1778,7 +1778,7 @@ unsigned Att_GetNumAttEvents (Hie_Level_t Scope,unsigned *NumNotif)
 			 "SELECT COUNT(*),SUM(NumNotif)"
 			 " FROM att_events"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -2211,7 +2211,7 @@ static void Att_PutParamsCodGrps (long AttCod)
    unsigned NumGrps;
 
    /***** Get groups associated to an attendance event from database *****/
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)
+   if (Gbl.Crs.Grps.NumGrps)
       NumGrps = (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups of an attendance event",
 					   "SELECT GrpCod FROM att_grp"
 					   " WHERE att_grp.AttCod=%ld",
@@ -2245,7 +2245,7 @@ static void Att_PutParamsCodGrps (long AttCod)
       Par_PutHiddenParamChar ("AllGroups",'Y');
 
    /***** Free structure that stores the query result *****/
-   if (Gbl.Hierarchy.Crs.Grps.NumGrps)
+   if (Gbl.Crs.Grps.NumGrps)
       DB_FreeMySQLResult (&mysql_res);
   }
 
@@ -3020,7 +3020,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
    else				// No events selected
      {
       /***** Set which events will be marked as selected by default *****/
-      if (!Gbl.Hierarchy.Crs.Grps.NumGrps ||	// Course has no groups
+      if (!Gbl.Crs.Grps.NumGrps ||	// Course has no groups
           Gbl.Usrs.ClassPhoto.AllGroups)	// All groups selected
 	 /* Set all events as selected */
 	 for (NumAttEvent = 0;
@@ -3058,10 +3058,10 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 		     if ((GrpCodInThisEvent = Str_ConvertStrCodToLongCod (row[0])) > 0)
 			/* Check if this group is selected */
 			for (NumGrpSel = 0;
-			     NumGrpSel < Gbl.Hierarchy.Crs.Grps.LstGrpsSel.NumGrps &&
+			     NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps &&
 			     !Gbl.AttEvents.Lst[NumAttEvent].Selected;
 			     NumGrpSel++)
-			   if (Gbl.Hierarchy.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == GrpCodInThisEvent)
+			   if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == GrpCodInThisEvent)
 			      Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
 		    }
 	       else			// This event is not associated to groups

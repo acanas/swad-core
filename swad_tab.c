@@ -183,7 +183,7 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
 	         Gbl.Hierarchy.Deg.DegCod <= 0);	// No degree selected
       case TabDeg:
 	 return (Gbl.Hierarchy.Deg.DegCod > 0 &&	// Degree selected
-	         Gbl.Hierarchy.Crs.Crs.CrsCod <= 0);	// No course selected
+	         Gbl.Hierarchy.Crs.CrsCod <= 0);	// No course selected
       case TabCrs:
 	 return (Gbl.Hierarchy.Level == Hie_CRS);	// Course selected
       case TabAss:
@@ -294,7 +294,7 @@ void Tab_DisableIncompatibleTabs (void)
 	 /* falls through */
 	 /* no break */
       case TabDeg:
-	 Gbl.Hierarchy.Crs.Crs.CrsCod = -1L;
+	 Gbl.Hierarchy.Crs.CrsCod = -1L;
 	 break;
       default:
          break;

@@ -509,13 +509,13 @@ static void Dpt_ListDepartmentsForEdition (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_Another_institution);
       for (NumIns = 0;
-	   NumIns < Gbl.Inss.Num;
+	   NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	   NumIns++)
          fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-                  Gbl.Inss.Lst[NumIns].InsCod,
-                  Gbl.Inss.Lst[NumIns].InsCod == Dpt->InsCod ? " selected=\"selected\"" :
+                  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
+                  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt->InsCod ? " selected=\"selected\"" :
                 	                                       "",
-                  Gbl.Inss.Lst[NumIns].ShrtName);
+                  Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
       fprintf (Gbl.F.Out,"</select>");
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
@@ -876,13 +876,13 @@ static void Dpt_PutFormToCreateDepartment (void)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Another_institution);
    for (NumIns = 0;
-	NumIns < Gbl.Inss.Num;
+	NumIns < Gbl.Hierarchy.Cty.Inss.Num;
 	NumIns++)
       fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
-               Gbl.Inss.Lst[NumIns].InsCod,
-               Gbl.Inss.Lst[NumIns].InsCod == Dpt->InsCod ? " selected=\"selected\"" :
+               Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
+               Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt->InsCod ? " selected=\"selected\"" :
         	                                            "",
-               Gbl.Inss.Lst[NumIns].ShrtName);
+               Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 

@@ -102,7 +102,7 @@ void Not_ShowFormNotice (void)
 
    /***** Help message *****/
    Ale_ShowAlert (Ale_INFO,Txt_The_notice_will_appear_as_a_yellow_note_,
-                  Gbl.Hierarchy.Crs.Crs.FullName);
+                  Gbl.Hierarchy.Crs.FullName);
 
    /***** Start form *****/
    Frm_StartForm (ActRcvNot);
@@ -147,7 +147,7 @@ void Not_ReceiveNotice (void)
    NotCod = Not_InsertNoticeInDB (Content);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
 
    /***** Write message of success *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Notice_created);
@@ -160,7 +160,7 @@ void Not_ReceiveNotice (void)
    TL_StoreAndPublishNote (TL_NOTE_NOTICE,NotCod,&SocPub);
 
    /***** Set notice to be highlighted *****/
-   Gbl.Hierarchy.Crs.Notices.HighlightNotCod = NotCod;
+   Gbl.Crs.Notices.HighlightNotCod = NotCod;
   }
 
 /*****************************************************************************/
@@ -177,7 +177,7 @@ static long Not_InsertNoticeInDB (const char *Content)
 				" (CrsCod,UsrCod,CreatTime,Content,Status)"
 				" VALUES"
 				" (%ld,%ld,NOW(),'%s',%u)",
-				Gbl.Hierarchy.Crs.Crs.CrsCod,
+				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Content,(unsigned) Not_ACTIVE_NOTICE);
   }
@@ -217,7 +217,7 @@ void Not_ListFullNotices (void)
   {
    /***** Show all notices *****/
    Not_ShowNotices (Not_LIST_FULL_NOTICES,
-	            Gbl.Hierarchy.Crs.Notices.HighlightNotCod);	// Highlight notice
+	            Gbl.Crs.Notices.HighlightNotCod);	// Highlight notice
   }
 
 /*****************************************************************************/
@@ -227,7 +227,7 @@ void Not_ListFullNotices (void)
 void Not_GetHighLightedNotCod (void)
   {
    /***** Get notice to be highlighted *****/
-   Gbl.Hierarchy.Crs.Notices.HighlightNotCod = Not_GetParamNotCod ();
+   Gbl.Crs.Notices.HighlightNotCod = Not_GetParamNotCod ();
   }
 
 /*****************************************************************************/
@@ -246,13 +246,13 @@ void Not_HideActiveNotice (void)
 		   "UPDATE notices SET Status=%u"
 		   " WHERE NotCod=%ld AND CrsCod=%ld",
 	           (unsigned) Not_OBSOLETE_NOTICE,
-	           NotCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+	           NotCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
 
    /***** Set notice to be highlighted *****/
-   Gbl.Hierarchy.Crs.Notices.HighlightNotCod = NotCod;
+   Gbl.Crs.Notices.HighlightNotCod = NotCod;
   }
 
 /*****************************************************************************/
@@ -271,13 +271,13 @@ void Not_RevealHiddenNotice (void)
 		   "UPDATE notices SET Status=%u"
 		   " WHERE NotCod=%ld AND CrsCod=%ld",
 	           (unsigned) Not_ACTIVE_NOTICE,
-	           NotCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+	           NotCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
 
    /***** Set notice to be highlighted *****/
-   Gbl.Hierarchy.Crs.Notices.HighlightNotCod = NotCod;
+   Gbl.Crs.Notices.HighlightNotCod = NotCod;
   }
 
 /*****************************************************************************/
@@ -329,13 +329,13 @@ void Not_RemoveNotice (void)
 		   " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
 		   " FROM notices"
 		   " WHERE NotCod=%ld AND CrsCod=%ld",
-                   NotCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+                   NotCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /* Remove notice */
    DB_QueryDELETE ("can not remove notice",
 		   "DELETE FROM notices"
 		   " WHERE NotCod=%ld AND CrsCod=%ld",
-                   NotCod,Gbl.Hierarchy.Crs.Crs.CrsCod);
+                   NotCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Mark possible notifications as removed *****/
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_NOTICE,NotCod);
@@ -344,7 +344,7 @@ void Not_RemoveNotice (void)
    TL_MarkNoteAsUnavailableUsingNoteTypeAndCod (TL_NOTE_NOTICE,NotCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
   }
 
 /*****************************************************************************/
@@ -386,7 +386,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 				      " FROM notices"
 				      " WHERE CrsCod=%ld AND Status=%u"
 				      " ORDER BY CreatTime DESC",
-				      Gbl.Hierarchy.Crs.Crs.CrsCod,
+				      Gbl.Hierarchy.Crs.CrsCod,
 				      (unsigned) Not_ACTIVE_NOTICE);
 	 break;
       case Not_LIST_FULL_NOTICES:
@@ -399,7 +399,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 				      " FROM notices"
 				      " WHERE CrsCod=%ld"
 				      " ORDER BY CreatTime DESC",
-				      Gbl.Hierarchy.Crs.Crs.CrsCod);
+				      Gbl.Hierarchy.Crs.CrsCod);
 	 break;
      }
 
@@ -463,14 +463,14 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	 snprintf (PathRelRSSFile,sizeof (PathRelRSSFile),
 		   "%s/%ld/%s/%s",
 		   Cfg_PATH_CRS_PUBLIC,
-		   Gbl.Hierarchy.Crs.Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+		   Gbl.Hierarchy.Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
 	 if (!Fil_CheckIfPathExists (PathRelRSSFile))
-	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs.Crs);
+	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
 
 	 /* Put a link to the RSS file */
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
 			    "<a href=\"");
-	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.Hierarchy.Crs.Crs.CrsCod);
+	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.Hierarchy.Crs.CrsCod);
 	 fprintf (Gbl.F.Out,"\" target=\"_blank\">"
 			    "<img src=\"%s/rss-square.svg\""
 			    " alt=\"RSS\" title=\"RSS\""
@@ -494,7 +494,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 
    /***** Mark possible notification as seen *****/
    Ntf_MarkNotifAsSeen (Ntf_EVENT_NOTICE,
-			-1L,Gbl.Hierarchy.Crs.Crs.CrsCod,
+			-1L,Gbl.Hierarchy.Crs.CrsCod,
 			Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -570,7 +570,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
 			      "Status"
 		       " FROM notices"
 		       " WHERE NotCod=%ld AND CrsCod=%ld",
-		       NotCod,Gbl.Hierarchy.Crs.Crs.CrsCod))
+		       NotCod,Gbl.Hierarchy.Crs.CrsCod))
      {
       row = mysql_fetch_row (mysql_res);
 
@@ -933,7 +933,7 @@ unsigned Not_GetNumNotices (Hie_Level_t Scope,Not_Status_t Status,unsigned *NumN
 			 " FROM notices"
 			 " WHERE CrsCod=%ld"
 			 " AND Status=%u",
-                         Gbl.Hierarchy.Crs.Crs.CrsCod,
+                         Gbl.Hierarchy.Crs.CrsCod,
                          Status);
          break;
       default:
@@ -1024,7 +1024,7 @@ unsigned Not_GetNumNoticesDeleted (Hie_Level_t Scope,unsigned *NumNotif)
 			 "SELECT COUNT(*),SUM(NumNotif)"
 			 " FROM notices_deleted"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Crs.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
@@ -1085,10 +1085,10 @@ static long Not_GetParamNotCod (void)
 
 static void Not_SetNotCodToEdit (long NotCod)
   {
-   Gbl.Hierarchy.Crs.Notices.NotCod = NotCod;
+   Gbl.Crs.Notices.NotCod = NotCod;
   }
 
 static long Not_GetNotCodToEdit (void)
   {
-   return Gbl.Hierarchy.Crs.Notices.NotCod;
+   return Gbl.Crs.Notices.NotCod;
   }
