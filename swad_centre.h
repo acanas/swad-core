@@ -69,10 +69,10 @@ struct Centre
    char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
-   unsigned NumUsrsWhoClaimToBelongToCtr;	// Number of users who claim to belong in this centre
    struct ListDegrees Degs;	// List of degrees in this centre
    unsigned NumCrss;		// Number of courses in this centre
    unsigned NumUsrs;		// Number of users in courses of this centre
+   unsigned NumUsrsWhoClaimToBelongToCtr;	// Number of users who claim to belong in this centre
   };
 
 #define Ctr_NUM_ORDERS 2
@@ -114,8 +114,8 @@ void Ctr_ContEditAfterChgCtrInConfig (void);
 void Ctr_ChangeCtrPlc (void);
 void Ctr_ChangeCtrPlcInConfig (void);
 void Ctr_RenameCentreShort (void);
-void Ctr_RenameCentreShortInConfig (void);
 void Ctr_RenameCentreFull (void);
+void Ctr_RenameCentreShortInConfig (void);
 void Ctr_RenameCentreFullInConfig (void);
 void Ctr_ChangeCtrWWW (void);
 void Ctr_ChangeCtrWWWInConfig (void);

@@ -75,6 +75,8 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+static struct Centre *Ctr_EditingCtr = NULL;	// Static variable to keep centre beeing edited
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -91,6 +93,7 @@ static void Ctr_PutIconToEditCentres (void);
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
 static void Ctr_GetParamCtrOrder (void);
 
+static void Ctr_EditCentresInternal (void);
 static void Ctr_PutIconsEditingCentres (void);
 
 static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution);
@@ -119,6 +122,9 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable);
 static void Ctr_PutHeadCentresForEdition (void);
 static void Ctr_RecFormRequestOrCreateCtr (unsigned Status);
 static void Ctr_CreateCentre (unsigned Status);
+
+static void Ctr_EditingCentreConstructor (void);
+static void Ctr_EditingCentreDestructor (void);
 
 /*****************************************************************************/
 /******************* List centres with pending degrees ***********************/
@@ -978,6 +984,18 @@ static void Ctr_GetParamCtrOrder (void)
 
 void Ctr_EditCentres (void)
   {
+   /***** Centre constructor *****/
+   Ctr_EditingCentreConstructor ();
+
+   /***** Edit centres *****/
+   Ctr_EditCentresInternal ();
+
+   /***** Centre destructor *****/
+   Ctr_EditingCentreDestructor ();
+  }
+
+static void Ctr_EditCentresInternal (void)
+  {
    extern const char *Hlp_INSTITUTION_Centres;
    extern const char *Txt_Centres_of_INSTITUTION_X;
 
@@ -1754,54 +1772,59 @@ void Ctr_RemoveCentre (void)
   {
    extern const char *Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre;
    extern const char *Txt_Centre_X_removed;
-   struct Centre Ctr;
    char PathCtr[PATH_MAX + 1];
 
+   /***** Centre constructor *****/
+   Ctr_EditingCentreConstructor ();
+
    /***** Get centre code *****/
-   Ctr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
    /***** Get data of the centre from database *****/
-   Ctr_GetDataOfCentreByCod (&Ctr);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
 
    /***** Check if this centre has teachers *****/
-   if (Ctr.Degs.Num ||
-       Ctr.NumUsrsWhoClaimToBelongToCtr ||
-       Ctr.NumUsrs)	// Centre has degrees or users ==> don't remove
+   if (Ctr_EditingCtr->Degs.Num ||
+       Ctr_EditingCtr->NumUsrsWhoClaimToBelongToCtr ||
+       Ctr_EditingCtr->NumUsrs)	// Centre has degrees or users ==> don't remove
       Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_centre_you_must_first_remove_all_degrees_and_teachers_in_the_centre);
    else	// Centre has no teachers ==> remove it
      {
       /***** Remove all the threads and posts in forums of the centre *****/
-      For_RemoveForums (Hie_CTR,Ctr.CtrCod);
+      For_RemoveForums (Hie_CTR,Ctr_EditingCtr->CtrCod);
 
       /***** Remove surveys of the centre *****/
-      Svy_RemoveSurveys (Hie_CTR,Ctr.CtrCod);
+      Svy_RemoveSurveys (Hie_CTR,Ctr_EditingCtr->CtrCod);
 
       /***** Remove information related to files in centre *****/
-      Brw_RemoveCtrFilesFromDB (Ctr.CtrCod);
+      Brw_RemoveCtrFilesFromDB (Ctr_EditingCtr->CtrCod);
 
       /***** Remove all classrooms in centre *****/
-      Cla_RemoveAllClassroomsInCtr (Ctr.CtrCod);
+      Cla_RemoveAllClassroomsInCtr (Ctr_EditingCtr->CtrCod);
 
       /***** Remove directories of the centre *****/
       snprintf (PathCtr,sizeof (PathCtr),
 	        "%s/%02u/%u",
 	        Cfg_PATH_CTR_PUBLIC,
-	        (unsigned) (Ctr.CtrCod % 100),
-	        (unsigned) Ctr.CtrCod);
+	        (unsigned) (Ctr_EditingCtr->CtrCod % 100),
+	        (unsigned) Ctr_EditingCtr->CtrCod);
       Fil_RemoveTree (PathCtr);
 
       /***** Remove centre *****/
       DB_QueryDELETE ("can not remove a centre",
 		      "DELETE FROM centres WHERE CtrCod=%ld",
-		      Ctr.CtrCod);
+		      Ctr_EditingCtr->CtrCod);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Centre_X_removed,
-	             Ctr.FullName);
+	             Ctr_EditingCtr->FullName);
      }
 
    /***** Show the form again *****/
-   Ctr_EditCentres ();
+   Ctr_EditCentresInternal ();
+
+   /***** Centre destructor *****/
+   Ctr_EditingCentreDestructor ();
   }
 
 /*****************************************************************************/
@@ -1892,18 +1915,21 @@ void Ctr_ChangeCtrPlc (void)
    extern const char *Txt_The_place_of_the_centre_has_changed;
    long NewPlcCod;
 
+   /***** Centre constructor *****/
+   Ctr_EditingCentreConstructor ();
+
    /***** Get centre code *****/
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
    /***** Get parameter with place code *****/
    NewPlcCod = Plc_GetParamPlcCod ();
 
    /***** Get data of centre from database *****/
-   Ctr_GetDataOfCentreByCod (&Gbl.Ctrs.EditingCtr);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
 
    /***** Update place in table of centres *****/
-   Ctr_UpdateCtrPlcDB (Gbl.Ctrs.EditingCtr.CtrCod,NewPlcCod);
-   Gbl.Ctrs.EditingCtr.PlcCod = NewPlcCod;
+   Ctr_UpdateCtrPlcDB (Ctr_EditingCtr->CtrCod,NewPlcCod);
+   Ctr_EditingCtr->PlcCod = NewPlcCod;
 
    /***** Create alert to show the change made
 	  and put button to go to centre changed *****/
@@ -1912,7 +1938,10 @@ void Ctr_ChangeCtrPlc (void)
    Ctr_ShowAlertAndButtonToGoToCtr ();
 
    /***** Show the form again *****/
-   Ctr_EditCentres ();
+   Ctr_EditCentresInternal ();
+
+   /***** Centre destructor *****/
+   Ctr_EditingCentreDestructor ();
   }
 
 void Ctr_ChangeCtrPlcInConfig (void)
@@ -1946,28 +1975,49 @@ static void Ctr_UpdateCtrPlcDB (long CtrCod,long NewPlcCod)
   }
 
 /*****************************************************************************/
-/********************* Change the short name of a centre *********************/
+/************************ Change the name of a centre ************************/
 /*****************************************************************************/
 
 void Ctr_RenameCentreShort (void)
   {
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
-   Ctr_RenameCentre (&Gbl.Ctrs.EditingCtr,Cns_SHRT_NAME);
+   /***** Centre constructor *****/
+   Ctr_EditingCentreConstructor ();
+
+   /***** Rename centre *****/
+   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   Ctr_RenameCentre (Ctr_EditingCtr,Cns_SHRT_NAME);
   }
+
+void Ctr_RenameCentreFull (void)
+  {
+   /***** Centre constructor *****/
+   Ctr_EditingCentreConstructor ();
+
+   /***** Rename centre *****/
+   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   Ctr_RenameCentre (Ctr_EditingCtr,Cns_FULL_NAME);
+  }
+
+void Ctr_ContEditAfterChgCtr (void)
+  {
+   /***** Write message to show the change made
+	  and put button to go to centre changed *****/
+   Ctr_ShowAlertAndButtonToGoToCtr ();
+
+   /***** Show the form again *****/
+   Ctr_EditCentresInternal ();
+
+   /***** Centre destructor *****/
+   Ctr_EditingCentreDestructor ();
+  }
+
+/*****************************************************************************/
+/*************** Change the name of a centre in configuration ****************/
+/*****************************************************************************/
 
 void Ctr_RenameCentreShortInConfig (void)
   {
    Ctr_RenameCentre (&Gbl.Hierarchy.Ctr,Cns_SHRT_NAME);
-  }
-
-/*****************************************************************************/
-/********************* Change the full name of a centre **********************/
-/*****************************************************************************/
-
-void Ctr_RenameCentreFull (void)
-  {
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
-   Ctr_RenameCentre (&Gbl.Ctrs.EditingCtr,Cns_FULL_NAME);
   }
 
 void Ctr_RenameCentreFullInConfig (void)
@@ -2088,21 +2138,24 @@ void Ctr_ChangeCtrWWW (void)
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
+   /***** Centre constructor *****/
+   Ctr_EditingCentreConstructor ();
+
    /***** Get the code of the centre *****/
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
    /***** Get the new WWW for the centre *****/
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of centre *****/
-   Ctr_GetDataOfCentreByCod (&Gbl.Ctrs.EditingCtr);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ctr_UpdateCtrWWWDB (Gbl.Ctrs.EditingCtr.CtrCod,NewWWW);
-      Str_Copy (Gbl.Ctrs.EditingCtr.WWW,NewWWW,
+      Ctr_UpdateCtrWWWDB (Ctr_EditingCtr->CtrCod,NewWWW);
+      Str_Copy (Ctr_EditingCtr->WWW,NewWWW,
 		Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made
@@ -2116,7 +2169,10 @@ void Ctr_ChangeCtrWWW (void)
       Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
-   Ctr_EditCentres ();
+   Ctr_EditCentresInternal ();
+
+   /***** Centre destructor *****/
+   Ctr_EditingCentreDestructor ();
   }
 
 void Ctr_ChangeCtrWWWInConfig (void)
@@ -2171,8 +2227,11 @@ void Ctr_ChangeCtrStatus (void)
    Ctr_Status_t Status;
    Ctr_StatusTxt_t StatusTxt;
 
+   /***** Centre constructor *****/
+   Ctr_EditingCentreConstructor ();
+
    /***** Get centre code *****/
-   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
+   Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
 
    /***** Get parameter with status *****/
    Status = (Ctr_Status_t)
@@ -2186,57 +2245,44 @@ void Ctr_ChangeCtrStatus (void)
    Status = Ctr_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of centre *****/
-   Ctr_GetDataOfCentreByCod (&Gbl.Ctrs.EditingCtr);
+   Ctr_GetDataOfCentreByCod (Ctr_EditingCtr);
 
    /***** Update status in table of centres *****/
    DB_QueryUPDATE ("can not update the status of a centre",
 		   "UPDATE centres SET Status=%u WHERE CtrCod=%ld",
-	           (unsigned) Status,Gbl.Ctrs.EditingCtr.CtrCod);
-   Gbl.Ctrs.EditingCtr.Status = Status;
+	           (unsigned) Status,Ctr_EditingCtr->CtrCod);
+   Ctr_EditingCtr->Status = Status;
 
    /***** Write message to show the change made
 	  and put button to go to centre changed *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_status_of_the_centre_X_has_changed,
-	            Gbl.Ctrs.EditingCtr.ShrtName);
+	            Ctr_EditingCtr->ShrtName);
    Ctr_ShowAlertAndButtonToGoToCtr ();
 
    /***** Show the form again *****/
-   Ctr_EditCentres ();
-  }
+   Ctr_EditCentresInternal ();
 
-/*****************************************************************************/
-/************* Show message of success after changing a centre ***************/
-/*****************************************************************************/
-
-void Ctr_ContEditAfterChgCtr (void)
-  {
-   /***** Write message to show the change made
-	  and put button to go to centre changed *****/
-   Ctr_ShowAlertAndButtonToGoToCtr ();
-
-   /***** Show the form again *****/
-   Ctr_EditCentres ();
+   /***** Centre destructor *****/
+   Ctr_EditingCentreDestructor ();
   }
 
 /*****************************************************************************/
 /***************** Write message to show the change made  ********************/
 /***************** and put button to go to centre changed ********************/
 /*****************************************************************************/
-// Gbl.Ctrs.EditingCtr is the centre that is beeing edited
-// Gbl.Hierarchy.Ctr is the current centre
 
 static void Ctr_ShowAlertAndButtonToGoToCtr (void)
   {
    extern const char *Txt_Go_to_X;
 
    // If the centre being edited is different to the current one...
-   if (Gbl.Ctrs.EditingCtr.CtrCod != Gbl.Hierarchy.Ctr.CtrCod)
+   if (Ctr_EditingCtr->CtrCod != Gbl.Hierarchy.Ctr.CtrCod)
      {
       /***** Alert with button to go to centre *****/
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Go_to_X,
-		Gbl.Ctrs.EditingCtr.ShrtName);
+		Ctr_EditingCtr->ShrtName);
       Ale_ShowLastAlertAndButton (ActSeeDeg,NULL,NULL,Ctr_PutParamGoToCtr,
                                   Btn_CONFIRM_BUTTON,Gbl.Title);
      }
@@ -2247,7 +2293,7 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
 
 static void Ctr_PutParamGoToCtr (void)
   {
-   Ctr_PutParamCtrCod (Gbl.Ctrs.EditingCtr.CtrCod);
+   Ctr_PutParamCtrCod (Ctr_EditingCtr->CtrCod);
   }
 
 /*****************************************************************************/
@@ -2509,7 +2555,7 @@ static void Ctr_PutFormToCreateCentre (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"PlcCod\" style=\"width:62px;\">"
                       "<option value=\"0\"");
-   if (Gbl.Ctrs.EditingCtr.PlcCod == 0)
+   if (Ctr_EditingCtr->PlcCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Another_place);
    for (NumPlc = 0;
@@ -2517,8 +2563,8 @@ static void Ctr_PutFormToCreateCentre (void)
 	NumPlc++)
       fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
                Gbl.Plcs.Lst[NumPlc].PlcCod,
-               (Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.Ctrs.EditingCtr.PlcCod) ? " selected=\"selected\"" :
-        	                                                             "",
+               (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr_EditingCtr->PlcCod) ? " selected=\"selected\"" :
+        	                                                         "",
                Gbl.Plcs.Lst[NumPlc].ShrtName);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
@@ -2530,7 +2576,7 @@ static void Ctr_PutFormToCreateCentre (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_SHRT_NAME,Gbl.Ctrs.EditingCtr.ShrtName);
+            Hie_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName);
 
    /***** Centre full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2539,7 +2585,7 @@ static void Ctr_PutFormToCreateCentre (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_FULL_NAME,Gbl.Ctrs.EditingCtr.FullName);
+            Hie_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName);
 
    /***** Centre WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2548,7 +2594,7 @@ static void Ctr_PutFormToCreateCentre (void)
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"
                       "</td>",
-            Cns_MAX_CHARS_WWW,Gbl.Ctrs.EditingCtr.WWW);
+            Cns_MAX_CHARS_WWW,Ctr_EditingCtr->WWW);
 
    /***** Number of users who claim to belong to this centre *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -2712,7 +2758,14 @@ static void Ctr_PutHeadCentresForEdition (void)
 
 void Ctr_RecFormReqCtr (void)
   {
+   /***** Centre constructor *****/
+   Ctr_EditingCentreConstructor ();
+
+   /***** Receive form to request a new centre *****/
    Ctr_RecFormRequestOrCreateCtr ((unsigned) Ctr_STATUS_BIT_PENDING);
+
+   /***** Centre destructor *****/
+   Ctr_EditingCentreDestructor ();
   }
 
 /*****************************************************************************/
@@ -2721,7 +2774,14 @@ void Ctr_RecFormReqCtr (void)
 
 void Ctr_RecFormNewCtr (void)
   {
+   /***** Centre constructor *****/
+   Ctr_EditingCentreConstructor ();
+
+   /***** Receive form to create a new centre *****/
    Ctr_RecFormRequestOrCreateCtr (0);
+
+   /***** Centre destructor *****/
+   Ctr_EditingCentreDestructor ();
   }
 
 /*****************************************************************************/
@@ -2736,33 +2796,33 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
 
    /***** Get parameters from form *****/
    /* Set centre institution */
-   Gbl.Ctrs.EditingCtr.InsCod = Gbl.Hierarchy.Ins.InsCod;
+   Ctr_EditingCtr->InsCod = Gbl.Hierarchy.Ins.InsCod;
 
    /* Get place */
-   if ((Gbl.Ctrs.EditingCtr.PlcCod = Plc_GetParamPlcCod ()) < 0)	// 0 is reserved for "other place"
+   if ((Ctr_EditingCtr->PlcCod = Plc_GetParamPlcCod ()) < 0)	// 0 is reserved for "other place"
       Ale_ShowAlert (Ale_ERROR,"Wrong place.");
 
    /* Get centre short name */
-   Par_GetParToText ("ShortName",Gbl.Ctrs.EditingCtr.ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Ctr_EditingCtr->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
 
    /* Get centre full name */
-   Par_GetParToText ("FullName",Gbl.Ctrs.EditingCtr.FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName",Ctr_EditingCtr->FullName,Hie_MAX_BYTES_FULL_NAME);
 
    /* Get centre WWW */
-   Par_GetParToText ("WWW",Gbl.Ctrs.EditingCtr.WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParToText ("WWW",Ctr_EditingCtr->WWW,Cns_MAX_BYTES_WWW);
 
-   if (Gbl.Ctrs.EditingCtr.ShrtName[0] &&
-       Gbl.Ctrs.EditingCtr.FullName[0])	// If there's a centre name
+   if (Ctr_EditingCtr->ShrtName[0] &&
+       Ctr_EditingCtr->FullName[0])	// If there's a centre name
      {
-      if (Gbl.Ctrs.EditingCtr.WWW[0])
+      if (Ctr_EditingCtr->WWW[0])
         {
          /***** If name of centre was in database... *****/
-         if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Gbl.Ctrs.EditingCtr.ShrtName,-1L,Gbl.Hierarchy.Ins.InsCod))
+         if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Ctr_EditingCtr->ShrtName,-1L,Gbl.Hierarchy.Ins.InsCod))
             Ale_ShowAlert (Ale_WARNING,Txt_The_centre_X_already_exists,
-                           Gbl.Ctrs.EditingCtr.ShrtName);
-         else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Gbl.Ctrs.EditingCtr.FullName,-1L,Gbl.Hierarchy.Ins.InsCod))
+                           Ctr_EditingCtr->ShrtName);
+         else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Ctr_EditingCtr->FullName,-1L,Gbl.Hierarchy.Ins.InsCod))
             Ale_ShowAlert (Ale_WARNING,Txt_The_centre_X_already_exists,
-                           Gbl.Ctrs.EditingCtr.FullName);
+                           Ctr_EditingCtr->FullName);
          else	// Add new centre to database
             Ctr_CreateCentre (Status);
         }
@@ -2773,20 +2833,19 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_centre);
 
    /***** Show the form again *****/
-   Ctr_EditCentres ();
+   Ctr_EditCentresInternal ();
   }
 
 /*****************************************************************************/
 /***************************** Create a new centre ***************************/
 /*****************************************************************************/
-// Gbl.Ctrs.EditingCtr must hold the centre beeing edited
 
 static void Ctr_CreateCentre (unsigned Status)
   {
    extern const char *Txt_Created_new_centre_X;
 
    /***** Create a new centre *****/
-   Gbl.Ctrs.EditingCtr.CtrCod =
+   Ctr_EditingCtr->CtrCod =
    DB_QueryINSERTandReturnCode ("can not create a new centre",
 				"INSERT INTO centres"
 				" (InsCod,PlcCod,Status,RequesterUsrCod,"
@@ -2794,19 +2853,19 @@ static void Ctr_CreateCentre (unsigned Status)
 				" VALUES"
 				" (%ld,%ld,%u,%ld,"
 				"'%s','%s','%s','')",
-				Gbl.Ctrs.EditingCtr.InsCod,
-				Gbl.Ctrs.EditingCtr.PlcCod,
+				Ctr_EditingCtr->InsCod,
+				Ctr_EditingCtr->PlcCod,
 				Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Gbl.Ctrs.EditingCtr.ShrtName,
-				Gbl.Ctrs.EditingCtr.FullName,
-				Gbl.Ctrs.EditingCtr.WWW);
+				Ctr_EditingCtr->ShrtName,
+				Ctr_EditingCtr->FullName,
+				Ctr_EditingCtr->WWW);
 
    /***** Write message to show the change made
 	  and put button to go to centre created *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_Created_new_centre_X,
-                    Gbl.Ctrs.EditingCtr.FullName);
+                    Ctr_EditingCtr->FullName);
    Ctr_ShowAlertAndButtonToGoToCtr ();
   }
 
@@ -2967,3 +3026,43 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (mysql_res);
   }
+
+/*****************************************************************************/
+/************************ Centre constructor/destructor **********************/
+/*****************************************************************************/
+
+static void Ctr_EditingCentreConstructor (void)
+  {
+   /***** Pointer must be NULL *****/
+   if (Ctr_EditingCtr != NULL)
+      Lay_ShowErrorAndExit ("Error initializing centre.");
+
+   /***** Allocate memory for centre *****/
+   if ((Ctr_EditingCtr = (struct Centre *) malloc (sizeof (struct Centre))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for centre.");
+
+   /***** Reset centre *****/
+   Ctr_EditingCtr->CtrCod = -1L;
+   Ctr_EditingCtr->InsCod = -1L;
+   Ctr_EditingCtr->PlcCod = -1L;
+   Ctr_EditingCtr->RequesterUsrCod = -1L;
+   Ctr_EditingCtr->ShrtName[0] = '\0';
+   Ctr_EditingCtr->FullName[0] = '\0';
+   Ctr_EditingCtr->WWW[0] = '\0';
+   Ctr_EditingCtr->Degs.Num = 0;
+   Ctr_EditingCtr->Degs.Lst = NULL;
+   Ctr_EditingCtr->NumCrss = 0;
+   Ctr_EditingCtr->NumUsrs = 0;
+   Ctr_EditingCtr->NumUsrsWhoClaimToBelongToCtr = 0;
+  }
+
+static void Ctr_EditingCentreDestructor (void)
+  {
+   /***** Free memory used for institution *****/
+   if (Ctr_EditingCtr != NULL)
+     {
+      free ((void *) Ctr_EditingCtr);
+      Ctr_EditingCtr = NULL;
+     }
+  }
+

@@ -216,10 +216,6 @@ struct Globals
      } Hierarchy;
    struct
      {
-      struct Centre EditingCtr;
-     } Ctrs;
-   struct
-     {
       struct Degree EditingDeg;
      } Degs;
    struct

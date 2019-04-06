@@ -82,7 +82,6 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrder (void);
 
 static void Ins_EditInstitutionsInternal (void);
-
 static void Ins_PutIconsEditingInstitutions (void);
 static void Ins_PutIconToViewInstitutions (void);
 
@@ -2192,7 +2191,6 @@ void Ins_ChangeInsStatus (void)
 /*************** Write message to show the change made       *****************/
 /*************** and put button to go to institution changed *****************/
 /*****************************************************************************/
-// Gbl.Hierarchy.Deg is the current degree
 
 static void Ins_ShowAlertAndButtonToGoToIns (void)
   {
@@ -2655,9 +2653,9 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
 
 static void Ins_EditingInstitutionConstructor (void)
   {
-   /***** *Ins must be NULL *****/
+   /***** Pointer must be NULL *****/
    if (Ins_EditingIns != NULL)
-      Lay_ShowErrorAndExit ("Error initializinig institution.");
+      Lay_ShowErrorAndExit ("Error initializing institution.");
 
    /***** Allocate memory for institution *****/
    if ((Ins_EditingIns = (struct Instit *) malloc (sizeof (struct Instit))) == NULL)

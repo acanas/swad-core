@@ -244,12 +244,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hierarchy.Ins.Ctrs.Num = 0;
    Gbl.Hierarchy.Ins.Ctrs.Lst = NULL;
    Gbl.Hierarchy.Ins.Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
-   Gbl.Ctrs.EditingCtr.CtrCod = -1L;
-   Gbl.Ctrs.EditingCtr.InsCod = -1L;
-   Gbl.Ctrs.EditingCtr.CtrCod = -1L;
-   Gbl.Ctrs.EditingCtr.ShrtName[0] = '\0';
-   Gbl.Ctrs.EditingCtr.FullName[0] = '\0';
-   Gbl.Ctrs.EditingCtr.WWW[0] = '\0';
 
    Gbl.Dpts.Num = 0;
    Gbl.Dpts.Lst = NULL;
