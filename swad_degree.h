@@ -68,8 +68,8 @@ typedef enum
 
 struct Degree
   {
-   long DegTypCod;				// Degree type code
    long DegCod;					// Degree code
+   long DegTypCod;				// Degree type code
    long CtrCod;					// Centre code
    Deg_Status_t Status;				// Degree status
    long RequesterUsrCod;			// User code of the person who requested the creation of this degree
@@ -128,15 +128,16 @@ long Deg_GetCtrCodOfDegreeByCod (long DegCod);
 long Deg_GetInsCodOfDegreeByCod (long DegCod);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);
-void Deg_RenameDegreeShortInConfig (void);
 void Deg_RenameDegreeFull (void);
+void Deg_ContEditAfterChgDeg (void);
+void Deg_RenameDegreeShortInConfig (void);
 void Deg_RenameDegreeFullInConfig (void);
 void Deg_ChangeDegCtrInConfig (void);
 void Deg_ContEditAfterChgDegInConfig (void);
+void Deg_ChangeDegreeType (void);
 void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegWWWInConfig (void);
 void Deg_ChangeDegStatus (void);
-void Deg_ContEditAfterChgDeg (void);
 
 void Deg_ShowAlertAndButtonToGoToDeg (void);
 

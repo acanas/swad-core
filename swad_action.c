@@ -1833,7 +1833,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemDeg		*/{ 542,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_RemoveDegree		,NULL},
    /* ActRenDegSho	*/{ 546,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_RenameDegreeShort		,Deg_ContEditAfterChgDeg	,NULL},
    /* ActRenDegFul	*/{ 547,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_RenameDegreeFull		,Deg_ContEditAfterChgDeg	,NULL},
-   /* ActChgDegTyp	*/{ 544,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_ChangeDegreeType		,NULL},
+   /* ActChgDegTyp	*/{ 544,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ChangeDegreeType		,NULL},
    /* ActChgDegWWW	*/{ 554,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ChangeDegWWW		,NULL},
    /* ActChgDegSta	*/{1207,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_ChangeDegStatus		,NULL},
 

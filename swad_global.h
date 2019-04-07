@@ -216,10 +216,6 @@ struct Globals
      } Hierarchy;
    struct
      {
-      struct Degree EditingDeg;
-     } Degs;
-   struct
-     {
       struct Course EditingCrs;
      } Crss;
    struct

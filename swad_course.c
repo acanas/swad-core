@@ -976,7 +976,7 @@ void Crs_ShowCrssOfCurrentDeg (void)
    Crs_ListCourses ();
 
    /***** Free list of courses in this degree *****/
-   Crs_FreeListCoursesInDegree (&Gbl.Hierarchy.Deg);
+   Crs_FreeListCoursesInCurrentDegree ();
   }
 
 /*****************************************************************************/
@@ -1044,13 +1044,13 @@ static void Crs_GetListCoursesInCurrentDegree (Crs_WhatCourses_t WhatCourses)
 /********************* Free list of courses in this degree *******************/
 /*****************************************************************************/
 
-void Crs_FreeListCoursesInDegree (struct Degree *Deg)
+void Crs_FreeListCoursesInCurrentDegree (void)
   {
-   if (Deg->Crss.Lst)
+   if (Gbl.Hierarchy.Deg.Crss.Lst)
      {
       /***** Free memory used by the list of courses in degree *****/
-      free ((void *) Deg->Crss.Lst);
-      Deg->Crss.Lst = NULL;
+      free ((void *) Gbl.Hierarchy.Deg.Crss.Lst);
+      Gbl.Hierarchy.Deg.Crss.Lst = NULL;
      }
   }
 
@@ -1343,11 +1343,11 @@ void Crs_EditCourses (void)
    extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
 
-   /***** Get list of courses in this degree *****/
-   Crs_GetListCoursesInCurrentDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
-
    /***** Get list of degrees in this centre *****/
    Deg_GetListDegsOfCurrentCtr ();
+
+   /***** Get list of courses in this degree *****/
+   Crs_GetListCoursesInCurrentDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
 
    /***** Write menu to select country, institution, centre and degree *****/
    Hie_WriteMenuHierarchy ();
@@ -1370,7 +1370,7 @@ void Crs_EditCourses (void)
    Box_EndBox ();
 
    /***** Free list of courses in this degree *****/
-   Crs_FreeListCoursesInDegree (&Gbl.Hierarchy.Deg);
+   Crs_FreeListCoursesInCurrentDegree ();
 
    /***** Free list of degrees in this centre *****/
    Deg_FreeListDegs (&Gbl.Hierarchy.Ctr.Degs);

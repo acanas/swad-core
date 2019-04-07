@@ -579,9 +579,7 @@ void Hie_InitHierarchy (void)
      }
 
    /***** Initialize default fields for edition to current values *****/
-   Gbl.Dpts.EditingDpt.InsCod    = Gbl.Hierarchy.Ins.InsCod;
-   Gbl.Degs.EditingDeg.CtrCod    = Gbl.Hierarchy.Ctr.CtrCod;
-   Gbl.Degs.EditingDeg.DegTypCod = Gbl.Hierarchy.Deg.DegTypCod;
+   Gbl.Dpts.EditingDpt.InsCod = Gbl.Hierarchy.Ins.InsCod;
 
    /***** Initialize paths *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected

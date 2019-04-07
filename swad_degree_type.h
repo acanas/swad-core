@@ -80,6 +80,5 @@ long DT_GetAndCheckParamOtherDegTypCod (long MinCodAllowed);
 
 bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp);
 void DT_RenameDegreeType (void);
-void DT_ChangeDegreeType (void);
 
 #endif

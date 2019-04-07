@@ -78,8 +78,10 @@ typedef enum
   } Deg_FirstOrLastYear_t;
 
 /*****************************************************************************/
-/**************************** Private constants ******************************/
+/**************************** Private variables ******************************/
 /*****************************************************************************/
+
+static struct Degree *Deg_EditingDeg = NULL;	// Static variable to keep degree beeing edited
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
@@ -104,6 +106,7 @@ static void Deg_PutIconsListingDegrees (void);
 static void Deg_PutIconToEditDegrees (void);
 static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 
+static void Deg_EditDegreesInternal (void);
 static void Deg_PutIconsEditingDegrees (void);
 
 static void Deg_RecFormRequestOrCreateDeg (unsigned Status);
@@ -120,6 +123,9 @@ static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
 static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
 static void Deg_PutParamGoToDeg (void);
+
+static void Deg_EditingDegreeConstructor (void);
+static void Deg_EditingDegreeDestructor (void);
 
 /*****************************************************************************/
 /******************* List degrees with pending courses ***********************/
@@ -939,12 +945,8 @@ static void Deg_PutFormToCreateDegree (void)
   {
    extern const char *Txt_New_degree;
    extern const char *Txt_Create_degree;
-   struct Degree *Deg;
    struct DegreeType *DegTyp;
    unsigned NumDegTyp;
-
-   /***** Degree data *****/
-   Deg = &Gbl.Degs.EditingDeg;
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
@@ -980,7 +982,7 @@ static void Deg_PutFormToCreateDegree (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_SHRT_NAME,Deg->ShrtName);
+            Hie_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName);
 
    /***** Degree full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -989,7 +991,7 @@ static void Deg_PutFormToCreateDegree (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_FULL_NAME,Deg->FullName);
+            Hie_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName);
 
    /***** Degree type *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -1001,8 +1003,8 @@ static void Deg_PutFormToCreateDegree (void)
       DegTyp = &Gbl.DegTypes.Lst[NumDegTyp];
       fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
 	       DegTyp->DegTypCod,
-	       DegTyp->DegTypCod == Deg->DegTypCod ? " selected=\"selected\"" :
-		                                     "",
+	       DegTyp->DegTypCod == Deg_EditingDeg->DegTypCod ? " selected=\"selected\"" :
+		                                                "",
 	       DegTyp->DegTypName);
      }
    fprintf (Gbl.F.Out,"</select>"
@@ -1015,7 +1017,7 @@ static void Deg_PutFormToCreateDegree (void)
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"
                       "</td>",
-            Cns_MAX_CHARS_WWW,Deg->WWW);
+            Cns_MAX_CHARS_WWW,Deg_EditingDeg->WWW);
 
    /***** Current number of courses in this degree *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -1139,31 +1141,30 @@ unsigned Deg_ConvStrToYear (const char *StrYear)
 /*****************************************************************************/
 /***************************** Create a new degree ***************************/
 /*****************************************************************************/
-// Gbl.Degs.EditingDeg must hold the degree beeing edited
 
 static void Deg_CreateDegree (unsigned Status)
   {
    extern const char *Txt_Created_new_degree_X;
 
    /***** Create a new degree *****/
-   Gbl.Degs.EditingDeg.DegCod =
+   Deg_EditingDeg->DegCod =
    DB_QueryINSERTandReturnCode ("can not create a new degree",
 				"INSERT INTO degrees (CtrCod,DegTypCod,Status,"
 				"RequesterUsrCod,ShortName,FullName,WWW)"
 				" VALUES (%ld,%ld,%u,%ld,'%s','%s','%s')",
-				Gbl.Degs.EditingDeg.CtrCod,
-				Gbl.Degs.EditingDeg.DegTypCod,
+				Deg_EditingDeg->CtrCod,
+				Deg_EditingDeg->DegTypCod,
 				Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Gbl.Degs.EditingDeg.ShrtName,
-				Gbl.Degs.EditingDeg.FullName,
-				Gbl.Degs.EditingDeg.WWW);
+				Deg_EditingDeg->ShrtName,
+				Deg_EditingDeg->FullName,
+				Deg_EditingDeg->WWW);
 
    /***** Write message to show the change made
           and put button to go to degree created *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_Created_new_degree_X,
-                    Gbl.Degs.EditingDeg.FullName);
+                    Deg_EditingDeg->FullName);
    Deg_ShowAlertAndButtonToGoToDeg ();
   }
 
@@ -1344,6 +1345,18 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 /*****************************************************************************/
 
 void Deg_EditDegrees (void)
+  {
+   /***** Degree constructor *****/
+   Deg_EditingDegreeConstructor ();
+
+   /***** Edit degrees *****/
+   Deg_EditDegreesInternal ();
+
+   /***** Degree destructor *****/
+   Deg_EditingDegreeDestructor ();
+  }
+
+static void Deg_EditDegreesInternal (void)
   {
    extern const char *Hlp_CENTRE_Degrees;
    extern const char *Txt_Degrees_of_CENTRE_X;
@@ -1535,7 +1548,14 @@ void Deg_FreeListDegs (struct ListDegrees *Degs)
 
 void Deg_RecFormReqDeg (void)
   {
+   /***** Degree constructor *****/
+   Deg_EditingDegreeConstructor ();
+
+   /***** Receive form to request a new degree *****/
    Deg_RecFormRequestOrCreateDeg ((unsigned) Deg_STATUS_BIT_PENDING);
+
+   /***** Degree destructor *****/
+   Deg_EditingDegreeDestructor ();
   }
 
 /*****************************************************************************/
@@ -1544,7 +1564,14 @@ void Deg_RecFormReqDeg (void)
 
 void Deg_RecFormNewDeg (void)
   {
+   /***** Degree constructor *****/
+   Deg_EditingDegreeConstructor ();
+
+   /***** Receive form to request a new degree *****/
    Deg_RecFormRequestOrCreateDeg (0);
+
+   /***** Degree destructor *****/
+   Deg_EditingDegreeDestructor ();
   }
 
 /*****************************************************************************/
@@ -1559,32 +1586,34 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
 
    /***** Get parameters from form *****/
    /* Set degree centre */
-   Gbl.Degs.EditingDeg.CtrCod = Gbl.Hierarchy.Ctr.CtrCod;
+   Deg_EditingDeg->CtrCod = Gbl.Hierarchy.Ctr.CtrCod;
 
    /* Get degree short name */
-   Par_GetParToText ("ShortName",Gbl.Degs.EditingDeg.ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Deg_EditingDeg->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
 
    /* Get degree full name */
-   Par_GetParToText ("FullName",Gbl.Degs.EditingDeg.FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName",Deg_EditingDeg->FullName,Hie_MAX_BYTES_FULL_NAME);
 
    /* Get degree type */
-   Gbl.Degs.EditingDeg.DegTypCod = DT_GetAndCheckParamOtherDegTypCod (1);
+   Deg_EditingDeg->DegTypCod = DT_GetAndCheckParamOtherDegTypCod (1);
 
    /* Get degree WWW */
-   Par_GetParToText ("WWW",Gbl.Degs.EditingDeg.WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParToText ("WWW",Deg_EditingDeg->WWW,Cns_MAX_BYTES_WWW);
 
-   if (Gbl.Degs.EditingDeg.ShrtName[0] &&
-       Gbl.Degs.EditingDeg.FullName[0])	// If there's a degree name
+   if (Deg_EditingDeg->ShrtName[0] &&
+       Deg_EditingDeg->FullName[0])	// If there's a degree name
      {
-      if (Gbl.Degs.EditingDeg.WWW[0])
+      if (Deg_EditingDeg->WWW[0])
 	{
 	 /***** If name of degree was in database... *****/
-	 if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.Degs.EditingDeg.ShrtName,-1L,Gbl.Degs.EditingDeg.CtrCod))
+	 if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Deg_EditingDeg->ShrtName,
+	                                    -1L,Deg_EditingDeg->CtrCod))
 	    Ale_ShowAlert (Ale_WARNING,Txt_The_degree_X_already_exists,
-		           Gbl.Degs.EditingDeg.ShrtName);
-	 else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.Degs.EditingDeg.FullName,-1L,Gbl.Degs.EditingDeg.CtrCod))
+		           Deg_EditingDeg->ShrtName);
+	 else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Deg_EditingDeg->FullName,
+	                                         -1L,Deg_EditingDeg->CtrCod))
 	    Ale_ShowAlert (Ale_WARNING,Txt_The_degree_X_already_exists,
-		           Gbl.Degs.EditingDeg.FullName);
+		           Deg_EditingDeg->FullName);
 	 else	// Add new degree to database
 	    Deg_CreateDegree (Status);
 	}
@@ -1595,7 +1624,7 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree);
 
    /***** Show the form again *****/
-   Deg_EditDegrees ();
+   Deg_EditDegreesInternal ();
   }
 
 /*****************************************************************************/
@@ -1606,29 +1635,34 @@ void Deg_RemoveDegree (void)
   {
    extern const char *Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree;
    extern const char *Txt_Degree_X_removed;
-   struct Degree Deg;
+
+   /***** Degree constructor *****/
+   Deg_EditingDegreeConstructor ();
 
    /***** Get degree code *****/
-   Deg.DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (&Deg);
+   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
 
    /***** Check if this degree has courses *****/
-   if (Crs_GetNumCrssInDeg (Deg.DegCod))	// Degree has courses ==> don't remove
+   if (Crs_GetNumCrssInDeg (Deg_EditingDeg->DegCod))	// Degree has courses ==> don't remove
       Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
    else	// Degree has no courses ==> remove it
      {
       /***** Remove degree *****/
-      Deg_RemoveDegreeCompletely (Deg.DegCod);
+      Deg_RemoveDegreeCompletely (Deg_EditingDeg->DegCod);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Degree_X_removed,
-                     Deg.FullName);
+                     Deg_EditingDeg->FullName);
      }
 
    /***** Show the form again *****/
-   Deg_EditDegrees ();
+   Deg_EditDegreesInternal ();
+
+   /***** Degree destructor *****/
+   Deg_EditingDegreeDestructor ();
   }
 
 /*****************************************************************************/
@@ -1904,28 +1938,47 @@ void Deg_RemoveDegreeCompletely (long DegCod)
   }
 
 /*****************************************************************************/
-/********************* Change the short name of a degree *********************/
+/************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
 void Deg_RenameDegreeShort (void)
   {
-   Gbl.Degs.EditingDeg.DegCod = Deg_GetAndCheckParamOtherDegCod (1);
-   Deg_RenameDegree (&Gbl.Degs.EditingDeg,Cns_SHRT_NAME);
+   /***** Degree constructor *****/
+   Deg_EditingDegreeConstructor ();
+
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   Deg_RenameDegree (Deg_EditingDeg,Cns_SHRT_NAME);
   }
+
+void Deg_RenameDegreeFull (void)
+  {
+   /***** Degree constructor *****/
+   Deg_EditingDegreeConstructor ();
+
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   Deg_RenameDegree (Deg_EditingDeg,Cns_FULL_NAME);
+  }
+
+void Deg_ContEditAfterChgDeg (void)
+  {
+   /***** Write message to show the change made
+	  and put button to go to degree changed *****/
+   Deg_ShowAlertAndButtonToGoToDeg ();
+
+   /***** Show the form again *****/
+   Deg_EditDegreesInternal ();
+
+   /***** Degree destructor *****/
+   Deg_EditingDegreeDestructor ();
+  }
+
+/*****************************************************************************/
+/*************** Change the name of a degree in configuration ****************/
+/*****************************************************************************/
 
 void Deg_RenameDegreeShortInConfig (void)
   {
    Deg_RenameDegree (&Gbl.Hierarchy.Deg,Cns_SHRT_NAME);
-  }
-
-/*****************************************************************************/
-/********************* Change the full name of a degree **********************/
-/*****************************************************************************/
-
-void Deg_RenameDegreeFull (void)
-  {
-   Gbl.Degs.EditingDeg.DegCod = Deg_GetAndCheckParamOtherDegCod (1);
-   Deg_RenameDegree (&Gbl.Degs.EditingDeg,Cns_FULL_NAME);
   }
 
 void Deg_RenameDegreeFullInConfig (void)
@@ -2110,6 +2163,49 @@ static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod)
   }
 
 /*****************************************************************************/
+/************************ Change the type of a degree ************************/
+/*****************************************************************************/
+
+void Deg_ChangeDegreeType (void)
+  {
+   extern const char *Txt_The_type_of_degree_of_the_degree_X_has_changed;
+   long NewDegTypCod;
+
+   /***** Degree constructor *****/
+   Deg_EditingDegreeConstructor ();
+
+   /***** Get parameters from form *****/
+   /* Get degree code */
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+
+   /* Get the new degree type */
+   NewDegTypCod = DT_GetAndCheckParamOtherDegTypCod (1);
+
+   /***** Get data of degree *****/
+   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
+
+   /***** Update the table of degrees changing old type by new type *****/
+   DB_QueryUPDATE ("can not update the type of a degree",
+		   "UPDATE degrees SET DegTypCod=%ld WHERE DegCod=%ld",
+	           NewDegTypCod,Deg_EditingDeg->DegCod);
+   Gbl.DegTypes.EditingDegTyp.DegTypCod =
+   Deg_EditingDeg->DegTypCod            = NewDegTypCod;
+
+   /***** Write alert to show the change made
+          and put button to go to degree changed *****/
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_The_type_of_degree_of_the_degree_X_has_changed,
+	            Deg_EditingDeg->FullName);
+   Deg_ShowAlertAndButtonToGoToDeg ();
+
+   /***** Show the form again *****/
+   Deg_EditDegreesInternal ();
+
+   /***** Degree destructor *****/
+   Deg_EditingDegreeDestructor ();
+  }
+
+/*****************************************************************************/
 /************************* Change the WWW of a degree ************************/
 /*****************************************************************************/
 
@@ -2119,22 +2215,25 @@ void Deg_ChangeDegWWW (void)
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
+   /***** Degree constructor *****/
+   Deg_EditingDegreeConstructor ();
+
    /***** Get parameters from form *****/
    /* Get the code of the degree */
-   Gbl.Degs.EditingDeg.DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
 
    /* Get the new WWW for the degree */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (&Gbl.Degs.EditingDeg);
+   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
      {
       /***** Update the table changing old WWW by new WWW *****/
-      Deg_UpdateDegWWWDB (Gbl.Degs.EditingDeg.DegCod,NewWWW);
-      Str_Copy (Gbl.Degs.EditingDeg.WWW,NewWWW,
+      Deg_UpdateDegWWWDB (Deg_EditingDeg->DegCod,NewWWW);
+      Str_Copy (Deg_EditingDeg->WWW,NewWWW,
                 Cns_MAX_BYTES_WWW);
 
       /***** Write alert to show the change made
@@ -2148,7 +2247,10 @@ void Deg_ChangeDegWWW (void)
       Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
-   Deg_EditDegrees ();
+   Deg_EditDegreesInternal ();
+
+   /***** Degree destructor *****/
+   Deg_EditingDegreeDestructor ();
   }
 
 void Deg_ChangeDegWWWInConfig (void)
@@ -2202,9 +2304,12 @@ void Deg_ChangeDegStatus (void)
    Deg_Status_t Status;
    Deg_StatusTxt_t StatusTxt;
 
+   /***** Degree constructor *****/
+   Deg_EditingDegreeConstructor ();
+
    /***** Get parameters from form *****/
    /* Get degree code */
-   Gbl.Degs.EditingDeg.DegCod = Deg_GetAndCheckParamOtherDegCod (1);
+   Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
 
    /* Get parameter with status */
    Status = (Deg_Status_t)
@@ -2218,58 +2323,44 @@ void Deg_ChangeDegStatus (void)
    Status = Deg_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (&Gbl.Degs.EditingDeg);
+   Deg_GetDataOfDegreeByCod (Deg_EditingDeg);
 
    /***** Update status in table of degrees *****/
    DB_QueryUPDATE ("can not update the status of a degree",
 		   "UPDATE degrees SET Status=%u WHERE DegCod=%ld",
-                   (unsigned) Status,Gbl.Degs.EditingDeg.DegCod);
-
-   Gbl.Degs.EditingDeg.Status = Status;
+                   (unsigned) Status,Deg_EditingDeg->DegCod);
+   Deg_EditingDeg->Status = Status;
 
    /***** Write alert to show the change made
 	  and put button to go to degree changed *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_status_of_the_degree_X_has_changed,
-                    Gbl.Degs.EditingDeg.ShrtName);
+                    Deg_EditingDeg->ShrtName);
    Deg_ShowAlertAndButtonToGoToDeg ();
 
    /***** Show the form again *****/
-   Deg_EditDegrees ();
-  }
+   Deg_EditDegreesInternal ();
 
-/*****************************************************************************/
-/************* Show message of success after changing a degree ***************/
-/*****************************************************************************/
-
-void Deg_ContEditAfterChgDeg (void)
-  {
-   /***** Write message to show the change made
-	  and put button to go to degree changed *****/
-   Deg_ShowAlertAndButtonToGoToDeg ();
-
-   /***** Show the form again *****/
-   Deg_EditDegrees ();
+   /***** Degree destructor *****/
+   Deg_EditingDegreeDestructor ();
   }
 
 /*****************************************************************************/
 /***************** Write message to show the change made  ********************/
 /***************** and put button to go to degree changed ********************/
 /*****************************************************************************/
-// Gbl.Degs.EditingDeg is the degree that is beeing edited
-// Gbl.Hierarchy.Deg is the current degree
 
 void Deg_ShowAlertAndButtonToGoToDeg (void)
   {
    extern const char *Txt_Go_to_X;
 
    // If the degree being edited is different to the current one...
-   if (Gbl.Degs.EditingDeg.DegCod != Gbl.Hierarchy.Deg.DegCod)
+   if (Deg_EditingDeg->DegCod != Gbl.Hierarchy.Deg.DegCod)
      {
       /***** Alert with button to go to degree *****/
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Go_to_X,
-		Gbl.Degs.EditingDeg.ShrtName);
+		Deg_EditingDeg->ShrtName);
       Ale_ShowLastAlertAndButton (ActSeeCrs,NULL,NULL,Deg_PutParamGoToDeg,
                                   Btn_CONFIRM_BUTTON,Gbl.Title);
      }
@@ -2280,7 +2371,7 @@ void Deg_ShowAlertAndButtonToGoToDeg (void)
 
 static void Deg_PutParamGoToDeg (void)
   {
-   Deg_PutParamDegCod (Gbl.Degs.EditingDeg.DegCod);
+   Deg_PutParamDegCod (Deg_EditingDeg->DegCod);
   }
 
 /*****************************************************************************/
@@ -2585,4 +2676,41 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (mysql_res);
+  }
+
+/*****************************************************************************/
+/************************ Degree constructor/destructor **********************/
+/*****************************************************************************/
+
+static void Deg_EditingDegreeConstructor (void)
+  {
+   /***** Pointer must be NULL *****/
+   if (Deg_EditingDeg != NULL)
+      Lay_ShowErrorAndExit ("Error initializing degree.");
+
+   /***** Allocate memory for degree *****/
+   if ((Deg_EditingDeg = (struct Degree *) malloc (sizeof (struct Degree))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for degree.");
+
+   /***** Reset degree *****/
+   Deg_EditingDeg->DegCod = -1L;
+   Deg_EditingDeg->DegTypCod = -1L;
+   Deg_EditingDeg->CtrCod = -1L;
+   Deg_EditingDeg->Status = 0;
+   Deg_EditingDeg->RequesterUsrCod = -1L;
+   Deg_EditingDeg->ShrtName[0] = '\0';
+   Deg_EditingDeg->FullName[0] = '\0';
+   Deg_EditingDeg->WWW[0] = '\0';
+   Deg_EditingDeg->Crss.Num = 0;
+   Deg_EditingDeg->Crss.Lst = NULL;
+  }
+
+static void Deg_EditingDegreeDestructor (void)
+  {
+   /***** Free memory used for institution *****/
+   if (Deg_EditingDeg != NULL)
+     {
+      free ((void *) Deg_EditingDeg);
+      Deg_EditingDeg = NULL;
+     }
   }

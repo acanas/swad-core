@@ -3065,4 +3065,3 @@ static void Ctr_EditingCentreDestructor (void)
       Ctr_EditingCtr = NULL;
      }
   }
-

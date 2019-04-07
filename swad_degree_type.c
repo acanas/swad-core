@@ -991,39 +991,3 @@ static bool DT_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCo
 			  " WHERE DegTypName='%s' AND DegTypCod<>%ld",
 			  DegTypName,DegTypCod) != 0);
   }
-
-/*****************************************************************************/
-/************************ Change the type of a degree ************************/
-/*****************************************************************************/
-
-void DT_ChangeDegreeType (void)
-  {
-   extern const char *Txt_The_type_of_degree_of_the_degree_X_has_changed;
-   long NewDegTypCod;
-
-   /***** Get parameters from form *****/
-   /* Get degree code */
-   Gbl.Degs.EditingDeg.DegCod = Deg_GetAndCheckParamOtherDegCod (1);
-
-   /* Get the new degree type */
-   NewDegTypCod = DT_GetAndCheckParamOtherDegTypCod (1);
-
-   /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (&Gbl.Degs.EditingDeg);
-
-   /***** Update the table of degrees changing old type by new type *****/
-   DB_QueryUPDATE ("can not update the type of a degree",
-		   "UPDATE degrees SET DegTypCod=%ld WHERE DegCod=%ld",
-	           NewDegTypCod,Gbl.Degs.EditingDeg.DegCod);
-
-   /***** Write alert to show the change made
-          and put button to go to degree changed *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_The_type_of_degree_of_the_degree_X_has_changed,
-	            Gbl.Degs.EditingDeg.FullName);
-   Deg_ShowAlertAndButtonToGoToDeg ();
-
-   /***** Show the form again *****/
-   Gbl.DegTypes.EditingDegTyp.DegTypCod = NewDegTypCod;
-   Deg_EditDegrees ();
-  }

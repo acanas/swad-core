@@ -105,7 +105,7 @@ unsigned Crs_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
 void Crs_WriteSelectorOfCourse (void);
 void Crs_ShowCrssOfCurrentDeg (void);
-void Crs_FreeListCoursesInDegree (struct Degree *Deg);
+void Crs_FreeListCoursesInCurrentDegree (void);
 void Crs_WriteSelectorMyCoursesInBreadcrumb (void);
 
 void Crs_EditCourses (void);
