@@ -81,7 +81,7 @@ typedef enum
 /**************************** Private variables ******************************/
 /*****************************************************************************/
 
-static struct Degree *Deg_EditingDeg = NULL;	// Static variable to keep degree beeing edited
+static struct Degree *Deg_EditingDeg = NULL;	// Static variable to keep the degree beeing edited
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
@@ -1567,7 +1567,7 @@ void Deg_RecFormNewDeg (void)
    /***** Degree constructor *****/
    Deg_EditingDegreeConstructor ();
 
-   /***** Receive form to request a new degree *****/
+   /***** Receive form to create a new degree *****/
    Deg_RecFormRequestOrCreateDeg (0);
 
    /***** Degree destructor *****/
@@ -1946,6 +1946,7 @@ void Deg_RenameDegreeShort (void)
    /***** Degree constructor *****/
    Deg_EditingDegreeConstructor ();
 
+   /***** Rename degree *****/
    Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
    Deg_RenameDegree (Deg_EditingDeg,Cns_SHRT_NAME);
   }
@@ -1955,6 +1956,7 @@ void Deg_RenameDegreeFull (void)
    /***** Degree constructor *****/
    Deg_EditingDegreeConstructor ();
 
+   /***** Rename degree *****/
    Deg_EditingDeg->DegCod = Deg_GetAndCheckParamOtherDegCod (1);
    Deg_RenameDegree (Deg_EditingDeg,Cns_FULL_NAME);
   }
@@ -2707,7 +2709,7 @@ static void Deg_EditingDegreeConstructor (void)
 
 static void Deg_EditingDegreeDestructor (void)
   {
-   /***** Free memory used for institution *****/
+   /***** Free memory used for degree *****/
    if (Deg_EditingDeg != NULL)
      {
       free ((void *) Deg_EditingDeg);

@@ -63,7 +63,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Instit *Ins_EditingIns = NULL;	// Static variable to keep institution beeing edited
+static struct Instit *Ins_EditingIns = NULL;	// Static variable to keep the institution beeing edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/

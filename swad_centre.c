@@ -75,7 +75,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Centre *Ctr_EditingCtr = NULL;	// Static variable to keep centre beeing edited
+static struct Centre *Ctr_EditingCtr = NULL;	// Static variable to keep the centre beeing edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -3058,7 +3058,7 @@ static void Ctr_EditingCentreConstructor (void)
 
 static void Ctr_EditingCentreDestructor (void)
   {
-   /***** Free memory used for institution *****/
+   /***** Free memory used for centre *****/
    if (Ctr_EditingCtr != NULL)
      {
       free ((void *) Ctr_EditingCtr);

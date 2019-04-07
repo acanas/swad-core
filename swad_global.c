@@ -278,12 +278,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.DegTypes.EditingDegTyp.DegTypCod     = -1L;
    Gbl.DegTypes.EditingDegTyp.DegTypName[0] = '\0';
 
-   Gbl.Crss.EditingCrs.CrsCod       = -1L;
-   Gbl.Crss.EditingCrs.DegCod       = -1L;
-   Gbl.Crss.EditingCrs.Year         = 0;
-   Gbl.Crss.EditingCrs.ShrtName[0] = '\0';
-   Gbl.Crss.EditingCrs.FullName[0]  = '\0';
-
    Gbl.Crs.Grps.NumGrps = 0;
    Gbl.Crs.Grps.WhichGrps = Grp_WHICH_GROUPS_DEFAULT;
    Gbl.Crs.Grps.GrpTypes.LstGrpTypes = NULL;

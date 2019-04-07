@@ -70,8 +70,10 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
-/**************************** Private constants ******************************/
+/**************************** Private variables ******************************/
 /*****************************************************************************/
+
+static struct Course *Crs_EditingCrs = NULL;	// Static variable to keep the course beeing edited
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
@@ -90,6 +92,7 @@ static void Crs_PutIconsListCourses (void);
 static void Crs_PutIconToEditCourses (void);
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 
+static void Crs_EditCoursesInternal (void);
 static void Crs_PutIconsEditingCourses (void);
 static void Crs_PutIconToViewCourses (void);
 static void Crs_ListCoursesForEdition (void);
@@ -131,6 +134,9 @@ static void Crs_PutParamOtherCrsCod (long CrsCod);
 static long Crs_GetAndCheckParamOtherCrsCod (long MinCodAllowed);
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted);
+
+static void Crs_EditingCourseConstructor (void);
+static void Crs_EditingCourseDestructor (void);
 
 /*****************************************************************************/
 /***************** Show introduction to the current course *******************/
@@ -1340,6 +1346,18 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
 void Crs_EditCourses (void)
   {
+   /***** Course constructor *****/
+   Crs_EditingCourseConstructor ();
+
+   /***** Edit courses *****/
+   Crs_EditCoursesInternal ();
+
+   /***** Course destructor *****/
+   Crs_EditingCourseDestructor ();
+  }
+
+static void Crs_EditCoursesInternal (void)
+  {
    extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
 
@@ -1699,7 +1717,7 @@ static void Crs_PutFormToCreateCourse (void)
                       " class=\"INPUT_INS_CODE\" />"
                       "</td>",
             Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-            Gbl.Crss.EditingCrs.InstitutionalCrsCod);
+            Crs_EditingCrs->InstitutionalCrsCod);
 
    /***** Year *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -1709,8 +1727,8 @@ static void Crs_PutFormToCreateCourse (void)
         Year++)
       fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
 	       Year,
-	       Year == Gbl.Crss.EditingCrs.Year ? " selected=\"selected\"" :
-				                  "",
+	       Year == Crs_EditingCrs->Year ? " selected=\"selected\"" :
+				              "",
 	       Txt_YEAR_OF_DEGREE[Year]);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
@@ -1722,7 +1740,7 @@ static void Crs_PutFormToCreateCourse (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_SHRT_NAME,Gbl.Crss.EditingCrs.ShrtName);
+            Hie_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName);
 
    /***** Course full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -1731,7 +1749,7 @@ static void Crs_PutFormToCreateCourse (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_FULL_NAME,Gbl.Crss.EditingCrs.FullName);
+            Hie_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName);
 
    /***** Current number of teachers in this course *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -1858,6 +1876,10 @@ static void Crs_PutHeadCoursesForEdition (void)
 
 void Crs_RecFormReqCrs (void)
   {
+   /***** Course constructor *****/
+   Crs_EditingCourseConstructor ();
+
+   /***** Receive form to request a new course *****/
    Crs_RecFormRequestOrCreateCrs ((unsigned) Crs_STATUS_BIT_PENDING);
   }
 
@@ -1867,6 +1889,10 @@ void Crs_RecFormReqCrs (void)
 
 void Crs_RecFormNewCrs (void)
   {
+   /***** Course constructor *****/
+   Crs_EditingCourseConstructor ();
+
+   /***** Receive form to create a new course *****/
    Crs_RecFormRequestOrCreateCrs (0);
   }
 
@@ -1884,29 +1910,29 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
 
    /***** Get parameters from form *****/
    /* Set course degree */
-   Deg.DegCod = Gbl.Crss.EditingCrs.DegCod = Gbl.Hierarchy.Deg.DegCod;
+   Deg.DegCod = Crs_EditingCrs->DegCod = Gbl.Hierarchy.Deg.DegCod;
 
    /* Get parameters of the new course */
-   Crs_GetParamsNewCourse (&Gbl.Crss.EditingCrs);
+   Crs_GetParamsNewCourse (Crs_EditingCrs);
 
    /***** Check if year is correct *****/
    Deg_GetDataOfDegreeByCod (&Deg);
-   if (Gbl.Crss.EditingCrs.Year <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
+   if (Crs_EditingCrs->Year <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
-      if (Gbl.Crss.EditingCrs.ShrtName[0] &&
-	  Gbl.Crss.EditingCrs.FullName[0])	// If there's a course name
+      if (Crs_EditingCrs->ShrtName[0] &&
+	  Crs_EditingCrs->FullName[0])	// If there's a course name
 	{
 	 /***** If name of course was in database... *****/
-	 if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Crss.EditingCrs.ShrtName,-1L,
-	                                          Gbl.Crss.EditingCrs.DegCod,Gbl.Crss.EditingCrs.Year))
+	 if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs_EditingCrs->ShrtName,
+						  -1L,Crs_EditingCrs->DegCod,Crs_EditingCrs->Year))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_course_X_already_exists,
-	                     Gbl.Crss.EditingCrs.ShrtName);
-	 else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.Crss.EditingCrs.FullName,-1L,
-	                                               Gbl.Crss.EditingCrs.DegCod,Gbl.Crss.EditingCrs.Year))
+	                     Crs_EditingCrs->ShrtName);
+	 else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs_EditingCrs->FullName,
+	                                               -1L,Crs_EditingCrs->DegCod,Crs_EditingCrs->Year))
             Ale_CreateAlert (Ale_WARNING,NULL,
         	             Txt_The_course_X_already_exists,
-		             Gbl.Crss.EditingCrs.FullName);
+		             Crs_EditingCrs->FullName);
 	 else	// Add new requested course to database
 	    Crs_CreateCourse (Status);
 	}
@@ -1917,7 +1943,7 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
    else	// Year not valid
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_The_year_X_is_not_allowed,
-                       Gbl.Crss.EditingCrs.Year);
+                       Crs_EditingCrs->Year);
   }
 
 /*****************************************************************************/
@@ -1946,14 +1972,13 @@ static void Crs_GetParamsNewCourse (struct Course *Crs)
 /*****************************************************************************/
 /************* Add a new requested course to pending requests ****************/
 /*****************************************************************************/
-// Gbl.Crss.EditingCrs must hold the course beeing edited
 
 static void Crs_CreateCourse (unsigned Status)
   {
    extern const char *Txt_Created_new_course_X;
 
    /***** Insert new course into pending requests *****/
-   Gbl.Crss.EditingCrs.CrsCod =
+   Crs_EditingCrs->CrsCod =
    DB_QueryINSERTandReturnCode ("can not create a new course",
 				"INSERT INTO courses"
 				" (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,"
@@ -1961,21 +1986,21 @@ static void Crs_CreateCourse (unsigned Status)
 				" VALUES"
 				" (%ld,%u,'%s',%u,%ld,"
 				"'%s','%s')",
-				Gbl.Crss.EditingCrs.DegCod,Gbl.Crss.EditingCrs.Year,
-				Gbl.Crss.EditingCrs.InstitutionalCrsCod,
+				Crs_EditingCrs->DegCod,Crs_EditingCrs->Year,
+				Crs_EditingCrs->InstitutionalCrsCod,
 				Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Gbl.Crss.EditingCrs.ShrtName,
-				Gbl.Crss.EditingCrs.FullName);
+				Crs_EditingCrs->ShrtName,
+				Crs_EditingCrs->FullName);
 
    /***** Create success message *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_Created_new_course_X,
-                    Gbl.Crss.EditingCrs.FullName);
+                    Crs_EditingCrs->FullName);
   }
 
 /*****************************************************************************/
-/************************ Request removing of a course ***********************/
+/****************************** Remove a course ******************************/
 /*****************************************************************************/
 
 void Crs_RemoveCourse (void)
@@ -1983,6 +2008,9 @@ void Crs_RemoveCourse (void)
    extern const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course;
    extern const char *Txt_Course_X_removed;
    struct Course Crs;
+
+   /***** Course constructor *****/
+   Crs_EditingCourseConstructor ();
 
    /***** Get course code *****/
    Crs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
@@ -2009,7 +2037,10 @@ void Crs_RemoveCourse (void)
       Lay_NoPermissionExit ();
 
    /***** Show the form again *****/
-   Crs_EditCourses ();
+   Crs_EditCoursesInternal ();
+
+   /***** Course destructor *****/
+   Crs_EditingCourseDestructor ();
   }
 
 /*****************************************************************************/
@@ -2348,31 +2379,34 @@ void Crs_ChangeInsCrsCod (void)
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
    char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];
 
+   /***** Course constructor *****/
+   Crs_EditingCourseConstructor ();
+
    /***** Get parameters from form *****/
    /* Get course code */
-   Gbl.Crss.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
 
    /* Get institutional code */
    Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /* Get data of the course */
-   Crs_GetDataOfCourseByCod (&Gbl.Crss.EditingCrs);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
 
-   if (Crs_CheckIfICanEdit (&Gbl.Crss.EditingCrs))
+   if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
       /***** Change the institutional course code *****/
-      if (strcmp (NewInstitutionalCrsCod,Gbl.Crss.EditingCrs.InstitutionalCrsCod))
+      if (strcmp (NewInstitutionalCrsCod,Crs_EditingCrs->InstitutionalCrsCod))
         {
-         Crs_UpdateInstitutionalCrsCod (&Gbl.Crss.EditingCrs,NewInstitutionalCrsCod);
+         Crs_UpdateInstitutionalCrsCod (Crs_EditingCrs,NewInstitutionalCrsCod);
          Ale_CreateAlert (Ale_SUCCESS,NULL,
                           Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
-                          Gbl.Crss.EditingCrs.ShrtName,
+                          Crs_EditingCrs->ShrtName,
 			  NewInstitutionalCrsCod);
         }
       else	// The same institutional code
 	 Ale_CreateAlert (Ale_INFO,NULL,
 	                  Txt_The_institutional_code_of_the_course_X_has_not_changed,
-                          Gbl.Crss.EditingCrs.ShrtName);
+                          Crs_EditingCrs->ShrtName);
      }
    else
       Lay_NoPermissionExit ();
@@ -2520,45 +2554,48 @@ void Crs_ChangeCrsYear (void)
    char YearStr[2 + 1];
    unsigned NewYear;
 
+   /***** Course constructor *****/
+   Crs_EditingCourseConstructor ();
+
    /***** Get parameters from form *****/
    /* Get course code */
-   Gbl.Crss.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
 
    /* Get parameter with year */
    Par_GetParToText ("OthCrsYear",YearStr,2);
    NewYear = Deg_ConvStrToYear (YearStr);
 
-   Crs_GetDataOfCourseByCod (&Gbl.Crss.EditingCrs);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
 
-   if (Crs_CheckIfICanEdit (&Gbl.Crss.EditingCrs))
+   if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
-      Deg.DegCod = Gbl.Crss.EditingCrs.DegCod;
+      Deg.DegCod = Crs_EditingCrs->DegCod;
       Deg_GetDataOfDegreeByCod (&Deg);
 
       if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
         {
          /***** If name of course was in database in the new year... *****/
-         if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.Crss.EditingCrs.ShrtName,-1L,
-                                                  Gbl.Crss.EditingCrs.DegCod,NewYear))
+         if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs_EditingCrs->ShrtName,
+                                                  -1L,Crs_EditingCrs->DegCod,NewYear))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_The_course_X_already_exists_in_year_Y,
-                             Gbl.Crss.EditingCrs.ShrtName,
+                             Crs_EditingCrs->ShrtName,
 			     Txt_YEAR_OF_DEGREE[NewYear]);
-         else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.Crss.EditingCrs.FullName,-1L,
-                                                       Gbl.Crss.EditingCrs.DegCod,NewYear))
+         else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs_EditingCrs->FullName,
+                                                       -1L,Crs_EditingCrs->DegCod,NewYear))
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_The_course_X_already_exists_in_year_Y,
-                             Gbl.Crss.EditingCrs.FullName,
+                             Crs_EditingCrs->FullName,
 			     Txt_YEAR_OF_DEGREE[NewYear]);
          else	// Update year in database
            {
             /***** Update year in table of courses *****/
-            Crs_UpdateCrsYear (&Gbl.Crss.EditingCrs,NewYear);
+            Crs_UpdateCrsYear (Crs_EditingCrs,NewYear);
 
             /***** Create message to show the change made *****/
 	    Ale_CreateAlert (Ale_SUCCESS,NULL,
 		             Txt_The_year_of_the_course_X_has_changed,
-			     Gbl.Crss.EditingCrs.ShrtName);
+			     Crs_EditingCrs->ShrtName);
            }
         }
       else	// Year not valid
@@ -2603,28 +2640,36 @@ void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutio
   }
 
 /*****************************************************************************/
-/********************* Change the short name of a course *********************/
+/************************ Change the name of a course ************************/
 /*****************************************************************************/
 
 void Crs_RenameCourseShort (void)
   {
-   Gbl.Crss.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
-   Crs_RenameCourse (&Gbl.Crss.EditingCrs,Cns_SHRT_NAME);
+   /***** Course constructor *****/
+   Crs_EditingCourseConstructor ();
+
+   /***** Rename course *****/
+   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_RenameCourse (Crs_EditingCrs,Cns_SHRT_NAME);
   }
+
+void Crs_RenameCourseFull (void)
+  {
+   /***** Course constructor *****/
+   Crs_EditingCourseConstructor ();
+
+   /***** Rename course *****/
+   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_RenameCourse (Crs_EditingCrs,Cns_FULL_NAME);
+  }
+
+/*****************************************************************************/
+/*************** Change the name of a course in configuration ****************/
+/*****************************************************************************/
 
 void Crs_RenameCourseShortInConfig (void)
   {
    Crs_RenameCourse (&Gbl.Hierarchy.Crs,Cns_SHRT_NAME);
-  }
-
-/*****************************************************************************/
-/********************* Change the full name of a course **********************/
-/*****************************************************************************/
-
-void Crs_RenameCourseFull (void)
-  {
-   Gbl.Crss.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
-   Crs_RenameCourse (&Gbl.Crss.EditingCrs,Cns_FULL_NAME);
   }
 
 void Crs_RenameCourseFullInConfig (void)
@@ -2753,9 +2798,12 @@ void Crs_ChangeCrsStatus (void)
    Crs_Status_t Status;
    Crs_StatusTxt_t StatusTxt;
 
+   /***** Course constructor *****/
+   Crs_EditingCourseConstructor ();
+
    /***** Get parameters from form *****/
    /* Get course code */
-   Gbl.Crss.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
 
    /* Get parameter with status */
    Status = (Crs_Status_t)
@@ -2769,18 +2817,18 @@ void Crs_ChangeCrsStatus (void)
    Status = Crs_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of course *****/
-   Crs_GetDataOfCourseByCod (&Gbl.Crss.EditingCrs);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
 
    /***** Update status in table of courses *****/
    DB_QueryUPDATE ("can not update the status of a course",
 		   "UPDATE courses SET Status=%u WHERE CrsCod=%ld",
-                   (unsigned) Status,Gbl.Crss.EditingCrs.CrsCod);
-   Gbl.Crss.EditingCrs.Status = Status;
+                   (unsigned) Status,Crs_EditingCrs->CrsCod);
+   Crs_EditingCrs->Status = Status;
 
    /***** Create alert to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_status_of_the_course_X_has_changed,
-                    Gbl.Crss.EditingCrs.ShrtName);
+                    Crs_EditingCrs->ShrtName);
   }
 
 /*****************************************************************************/
@@ -2808,15 +2856,15 @@ void Crs_ContEditAfterChgCrs (void)
 	    break;
 	 case Rol_USR:
 	    PutButtonToRequestRegistration = !Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
-					                                  Gbl.Crss.EditingCrs.CrsCod,
+					                                  Crs_EditingCrs->CrsCod,
 					                                  false);
             break;
 	 case Rol_STD:
 	 case Rol_NET:
 	 case Rol_TCH:
-	    if (Gbl.Crss.EditingCrs.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+	    if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
 	       PutButtonToRequestRegistration = !Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
-									     Gbl.Crss.EditingCrs.CrsCod,
+									     Crs_EditingCrs->CrsCod,
 									     false);
 	    break;
 	 default:
@@ -2834,27 +2882,28 @@ void Crs_ContEditAfterChgCrs (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Crs_EditCourses ();
+   Crs_EditCoursesInternal ();
+
+   /***** Course destructor *****/
+   Crs_EditingCourseDestructor ();
   }
 
 /*****************************************************************************/
 /************************ Put button to go to course *************************/
 /*****************************************************************************/
-// Gbl.Crss.EditingCrs is the course that is beeing edited
-// Gbl.Hierarchy.Crs. is the current course
 
 static void Crs_PutButtonToGoToCrs (void)
   {
    extern const char *Txt_Go_to_X;
 
    // If the course being edited is different to the current one...
-   if (Gbl.Crss.EditingCrs.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+   if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
      {
       Frm_StartForm (ActSeeCrsInf);
-      Crs_PutParamCrsCod (Gbl.Crss.EditingCrs.CrsCod);
+      Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Go_to_X,
-		Gbl.Crss.EditingCrs.ShrtName);
+		Crs_EditingCrs->ShrtName);
       Btn_PutConfirmButton (Gbl.Title);
       Frm_EndForm ();
      }
@@ -2863,8 +2912,6 @@ static void Crs_PutButtonToGoToCrs (void)
 /*****************************************************************************/
 /************************ Put button to go to course *************************/
 /*****************************************************************************/
-// Gbl.Crss.EditingCrs is the course that is beeing edited
-// Gbl.Hierarchy.Crs. is the current course
 
 static void Crs_PutButtonToRegisterInCrs (void)
   {
@@ -2872,11 +2919,11 @@ static void Crs_PutButtonToRegisterInCrs (void)
 
    Frm_StartForm (ActReqSignUp);
    // If the course beeing edited is different to the current one...
-   if (Gbl.Crss.EditingCrs.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Crs_PutParamCrsCod (Gbl.Crss.EditingCrs.CrsCod);
+   if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+      Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Register_me_in_X,
-	     Gbl.Crss.EditingCrs.ShrtName);
+	     Crs_EditingCrs->ShrtName);
    Btn_PutCreateButton (Gbl.Title);
    Frm_EndForm ();
   }
@@ -3440,4 +3487,44 @@ void Crs_RemoveOldCrss (void)
    /***** Write end message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_X_courses_have_been_eliminated,
                   NumCrssRemoved);
+  }
+
+/*****************************************************************************/
+/************************ Course constructor/destructor **********************/
+/*****************************************************************************/
+
+static void Crs_EditingCourseConstructor (void)
+  {
+   Rol_Role_t Role;
+
+   /***** Pointer must be NULL *****/
+   if (Crs_EditingCrs != NULL)
+      Lay_ShowErrorAndExit ("Error initializing course.");
+
+   /***** Allocate memory for course *****/
+   if ((Crs_EditingCrs = (struct Course *) malloc (sizeof (struct Course))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for course.");
+
+   /***** Reset course *****/
+   Crs_EditingCrs->CrsCod      = -1L;
+   Crs_EditingCrs->InstitutionalCrsCod[0] = '\0';
+   Crs_EditingCrs->DegCod      = -1L;
+   Crs_EditingCrs->Year        = 0;
+   Crs_EditingCrs->Status      = 0;
+   Crs_EditingCrs->ShrtName[0] = '\0';
+   Crs_EditingCrs->FullName[0] = '\0';
+   for (Role = (Rol_Role_t) 0;
+	Role < Rol_NUM_ROLES;
+	Role++)
+      Crs_EditingCrs->NumUsrs[Role] = 0;
+  }
+
+static void Crs_EditingCourseDestructor (void)
+  {
+   /***** Free memory used for course *****/
+   if (Crs_EditingCrs != NULL)
+     {
+      free ((void *) Crs_EditingCrs);
+      Crs_EditingCrs = NULL;
+     }
   }

@@ -216,10 +216,6 @@ struct Globals
      } Hierarchy;
    struct
      {
-      struct Course EditingCrs;
-     } Crss;
-   struct
-     {
       unsigned Num;		// Number of degree types
       struct DegreeType *Lst;	// List of degree types
       struct DegreeType EditingDegTyp;
