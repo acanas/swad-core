@@ -239,7 +239,7 @@ void Ale_ShowAlerts (const char *Section)
 	 if (Section)
 	    ShowAlert = (bool) !strcmp (Gbl.Alerts.List[i].Section,Section);
 	 else
-	    ShowAlert = false;
+	    ShowAlert = true;
 
 	 if (ShowAlert)
 	   {

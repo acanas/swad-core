@@ -1823,9 +1823,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActSeeDegTyp	*/{1013,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C7,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_SeeDegreeTypesInDegTab	,NULL},
    /* ActEdiDegTyp	*/{ 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_EditDegreeTypes		,NULL},
-   /* ActNewDegTyp	*/{ 537,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_RecFormNewDegreeType	,NULL},
-   /* ActRemDegTyp	*/{ 545,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_RemoveDegreeType		,NULL},
-   /* ActRenDegTyp	*/{ 538,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,DT_RenameDegreeType		,NULL},
+   /* ActNewDegTyp	*/{ 537,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DT_RecFormNewDegreeType	,DT_ContEditAfterChgDegTyp	,NULL},
+   /* ActRemDegTyp	*/{ 545,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DT_RemoveDegreeType		,DT_ContEditAfterChgDegTyp	,NULL},
+   /* ActRenDegTyp	*/{ 538,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x200,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,DT_RenameDegreeType		,DT_ContEditAfterChgDegTyp	,NULL},
 
    /* ActEdiDeg		*/{ 536,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_EditDegrees		,NULL},
    /* ActReqDeg		*/{1206,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Deg_RecFormReqDeg		,NULL},
