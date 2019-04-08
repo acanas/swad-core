@@ -2190,8 +2190,7 @@ void Deg_ChangeDegreeType (void)
    DB_QueryUPDATE ("can not update the type of a degree",
 		   "UPDATE degrees SET DegTypCod=%ld WHERE DegCod=%ld",
 	           NewDegTypCod,Deg_EditingDeg->DegCod);
-   Gbl.DegTypes.EditingDegTyp.DegTypCod =
-   Deg_EditingDeg->DegTypCod            = NewDegTypCod;
+   Deg_EditingDeg->DegTypCod = NewDegTypCod;
 
    /***** Write alert to show the change made
           and put button to go to degree changed *****/

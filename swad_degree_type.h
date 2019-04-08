@@ -67,7 +67,6 @@ void DT_EditDegreeTypes (void);
 void DT_PutIconToViewDegreeTypes (void);
 
 bool DT_CheckIfICanCreateDegreeTypes (void);
-void DT_PutFormToCreateDegreeType (void);
 
 void DT_GetListDegreeTypes (Hie_Level_t Scope,DT_Order_t Order);
 void DT_FreeListDegreeTypes (void);

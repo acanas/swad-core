@@ -464,10 +464,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.100 (2019-04-07)"
+#define Log_PLATFORM_VERSION	"SWAD 18.101 (2019-04-08)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
+¿Por qué Crs_RemoveCourse () no está como función a priori igual que las otras? Ver si se puede poner a priori
+En degree, centre, institution y country, hacer más funciones a priori al estilo de como está hecha la edición de course
+	Version 18.101:   Apr 08, 2019 	Code refactoring in edition of degree types. (241926 lines)
 	Version 18.100:   Apr 07, 2019 	Code refactoring in edition of courses. (241882 lines)
 	Version 18.99:    Apr 07, 2019 	Code refactoring in edition of degrees. (241822 lines)
 	Version 18.98:    Apr 06, 2019 	Code refactoring in edition of centres. (241762 lines)

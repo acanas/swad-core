@@ -218,7 +218,6 @@ struct Globals
      {
       unsigned Num;		// Number of degree types
       struct DegreeType *Lst;	// List of degree types
-      struct DegreeType EditingDegTyp;
      } DegTypes;
    struct
      {
