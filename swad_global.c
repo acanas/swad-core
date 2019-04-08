@@ -248,10 +248,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Dpts.Num = 0;
    Gbl.Dpts.Lst = NULL;
    Gbl.Dpts.SelectedOrder = Dpt_ORDER_DEFAULT;
-   Gbl.Dpts.EditingDpt.DptCod = -1L;
-   Gbl.Dpts.EditingDpt.ShrtName[0] = '\0';
-   Gbl.Dpts.EditingDpt.FullName[0] = '\0';
-   Gbl.Dpts.EditingDpt.WWW[0] = '\0';
 
    Gbl.Plcs.Num = 0;
    Gbl.Plcs.Lst = NULL;

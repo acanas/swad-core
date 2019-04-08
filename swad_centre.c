@@ -75,7 +75,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Centre *Ctr_EditingCtr = NULL;	// Static variable to keep the centre beeing edited
+static struct Centre *Ctr_EditingCtr = NULL;	// Static variable to keep the centre being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/

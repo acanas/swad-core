@@ -35,7 +35,7 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Ale_MAX_ALERTS	10		// Max. number of alerts stored before of beeing shown
+#define Ale_MAX_ALERTS	10		// Max. number of alerts stored before of being shown
 
 /*****************************************************************************/
 /********************************* Public types ******************************/

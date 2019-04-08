@@ -73,7 +73,7 @@ extern struct Globals Gbl;
 /**************************** Private variables ******************************/
 /*****************************************************************************/
 
-static struct Course *Crs_EditingCrs = NULL;	// Static variable to keep the course beeing edited
+static struct Course *Crs_EditingCrs = NULL;	// Static variable to keep the course being edited
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
@@ -2910,7 +2910,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
    extern const char *Txt_Register_me_in_X;
 
    Frm_StartForm (ActReqSignUp);
-   // If the course beeing edited is different to the current one...
+   // If the course being edited is different to the current one...
    if (Crs_EditingCrs->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
       Crs_PutParamCrsCod (Crs_EditingCrs->CrsCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),

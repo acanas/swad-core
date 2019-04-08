@@ -63,7 +63,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Instit *Ins_EditingIns = NULL;	// Static variable to keep the institution beeing edited
+static struct Instit *Ins_EditingIns = NULL;	// Static variable to keep the institution being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -2181,7 +2181,7 @@ void Ins_ContEditAfterChgIns (void)
 
 static void Ins_ShowAlertAndButtonToGoToIns (void)
   {
-   // If the institution beeing edited is different to the current one...
+   // If the institution being edited is different to the current one...
    if (Ins_EditingIns->InsCod != Gbl.Hierarchy.Ins.InsCod)
      {
       /***** Alert with button to go to institution *****/

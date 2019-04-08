@@ -7750,6 +7750,27 @@ const char *Txt_Departments =
 	"Departamentos";
 #endif
 
+const char *Txt_Departments_of_INSTITUTION_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Departaments de %s";
+#elif L==2	// de
+	"Abteilungen von %s";
+#elif L==3	// en
+	"Departments of %s";
+#elif L==4	// es
+	"Departamentos de %s";
+#elif L==5	// fr
+	"D&eacute;partements de %s";
+#elif L==6	// gn
+	"Peh&#7869; de %s";	// Okoteve traducción
+#elif L==7	// it
+	"Dipartimenti di %s";
+#elif L==8	// pl
+	"Wydzia&lstrok;y %s";
+#elif L==9	// pt
+	"Departamentos de %s";
+#endif
+
 const char *Txt_Departments_ABBREVIATION =
 #if   L==1	// ca
 	"Depar.";

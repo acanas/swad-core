@@ -69,6 +69,8 @@ void Dpt_ChangeDepartIns (void);
 void Dpt_RenameDepartShort (void);
 void Dpt_RenameDepartFull (void);
 void Dpt_ChangeDptWWW (void);
+void Dpt_ContEditAfterChgDpt (void);
+
 void Dpt_RecFormNewDpt (void);
 unsigned Dpt_GetTotalNumberOfDepartments (void);
 unsigned Dpt_GetNumDptsInIns (long InsCod);

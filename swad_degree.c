@@ -81,7 +81,7 @@ typedef enum
 /**************************** Private variables ******************************/
 /*****************************************************************************/
 
-static struct Degree *Deg_EditingDeg = NULL;	// Static variable to keep the degree beeing edited
+static struct Degree *Deg_EditingDeg = NULL;	// Static variable to keep the degree being edited
 
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/

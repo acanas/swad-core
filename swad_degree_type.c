@@ -61,7 +61,7 @@ extern struct Globals Gbl;
 /**************************** Private variables ******************************/
 /*****************************************************************************/
 
-static struct DegreeType *DT_EditingDegTyp = NULL;	// Static variable to keep the degree type beeing edited
+static struct DegreeType *DT_EditingDegTyp = NULL;	// Static variable to keep the degree type being edited
 
 /*****************************************************************************/
 /*************************** Private prototypes ******************************/

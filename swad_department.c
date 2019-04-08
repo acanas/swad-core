@@ -40,6 +40,7 @@
 #include "swad_language.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -59,12 +60,15 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+static struct Department *Dpt_EditingDpt = NULL;	// Static variable to keep the department being edited
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
 static void Dpt_GetParamDptOrder (void);
 static void Dpt_PutIconToEditDpts (void);
+static void Dpt_EditDepartmentsInternal (void);
 static void Dpt_ListDepartmentsForEdition (void);
 static void Dpt_PutParamDptCod (long DptCod);
 
@@ -76,6 +80,9 @@ static void Dpt_PutFormToCreateDepartment (void);
 static void Dpt_PutHeadDepartments (void);
 static void Dpt_CreateDepartment (struct Department *Dpt);
 
+static void Dpt_EditingDepartmentConstructor (void);
+static void Dpt_EditingDepartmentDestructor (void);
+
 /*****************************************************************************/
 /************************* List all the departments **************************/
 /*****************************************************************************/
@@ -83,7 +90,7 @@ static void Dpt_CreateDepartment (struct Department *Dpt);
 void Dpt_SeeDepts (void)
   {
    extern const char *Hlp_INSTITUTION_Departments;
-   extern const char *Txt_Departments;
+   extern const char *Txt_Departments_of_INSTITUTION_X;
    extern const char *Txt_DEPARTMENTS_HELP_ORDER[2];
    extern const char *Txt_DEPARTMENTS_ORDER[2];
    extern const char *Txt_Other_departments;
@@ -104,7 +111,10 @@ void Dpt_SeeDepts (void)
    Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
 
    /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_Departments,
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Departments_of_INSTITUTION_X,
+             Gbl.Hierarchy.Ins.FullName);
+   Box_StartBoxTable (NULL,Gbl.Title,
 		      Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
 							       NULL,
 		      Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
@@ -222,12 +232,26 @@ static void Dpt_PutIconToEditDpts (void)
 /*****************************************************************************/
 /******* Put forms to edit the departments of the current institution ********/
 /*****************************************************************************/
-// An institution must be selected
 
 void Dpt_EditDepartments (void)
   {
+   /***** Department constructor *****/
+   Dpt_EditingDepartmentConstructor ();
+
+   /***** Edit departments *****/
+   Dpt_EditDepartmentsInternal ();
+
+   /***** Department destructor *****/
+   Dpt_EditingDepartmentDestructor ();
+  }
+
+static void Dpt_EditDepartmentsInternal (void)
+  {
+   extern const char *Hlp_INSTITUTION_Departments_edit;
+   extern const char *Txt_Departments_of_INSTITUTION_X;
+
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Ins.InsCod <= 0)
+   if (Gbl.Hierarchy.Ins.InsCod <= 0)	// An institution must be selected
       return;
 
    /***** Get list of institutions *****/
@@ -236,12 +260,22 @@ void Dpt_EditDepartments (void)
    /***** Get list of departments *****/
    Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
 
+   /***** Start box *****/
+   snprintf (Gbl.Title,sizeof (Gbl.Title),
+	     Txt_Departments_of_INSTITUTION_X,
+             Gbl.Hierarchy.Ins.FullName);
+   Box_StartBox (NULL,Gbl.Title,NULL,
+                 Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE);
+
    /***** Put a form to create a new department *****/
    Dpt_PutFormToCreateDepartment ();
 
    /***** Forms to edit current departments *****/
    if (Gbl.Dpts.Num)
       Dpt_ListDepartmentsForEdition ();
+
+   /***** End box *****/
+   Box_EndBox ();
 
    /***** Free list of departments *****/
    Dpt_FreeListDepartments ();
@@ -451,17 +485,14 @@ unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
 
 static void Dpt_ListDepartmentsForEdition (void)
   {
-   extern const char *Hlp_INSTITUTION_Departments_edit;
-   extern const char *Txt_Departments;
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
    struct Department *Dpt;
    struct Instit Ins;
    unsigned NumIns;
 
-   /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_Departments,NULL,
-                      Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE,2);
+   /***** Start table *****/
+   Tbl_StartTable (2);
 
    /***** Write heading *****/
    Dpt_PutHeadDepartments ();
@@ -564,8 +595,8 @@ static void Dpt_ListDepartmentsForEdition (void)
                Dpt->NumTchs);
      }
 
-   /***** End table and box *****/
-   Box_EndBoxTable ();
+   /***** End table *****/
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -600,31 +631,32 @@ void Dpt_RemoveDepartment (void)
   {
    extern const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the_department;
    extern const char *Txt_Department_X_removed;
-   struct Department Dpt;
+
+   /***** Department constructor *****/
+   Dpt_EditingDepartmentConstructor ();
 
    /***** Get department code *****/
-   Dpt.DptCod = Dpt_GetAndCheckParamDptCod (1);
+   Dpt_EditingDpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
 
    /***** Get data of the department from database *****/
-   Dpt_GetDataOfDepartmentByCod (&Dpt);
+   Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
 
    /***** Check if this department has teachers *****/
-   if (Dpt.NumTchs)	// Department has teachers ==> don't remove
-      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the_department);
+   if (Dpt_EditingDpt->NumTchs)	// Department has teachers ==> don't remove
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the_department);
    else	// Department has no teachers ==> remove it
      {
       /***** Remove department *****/
       DB_QueryDELETE ("can not remove a department",
 		      "DELETE FROM departments WHERE DptCod=%ld",
-		      Dpt.DptCod);
+		      Dpt_EditingDpt->DptCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Department_X_removed,
-		     Dpt.FullName);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_Department_X_removed,
+		       Dpt_EditingDpt->FullName);
      }
-
-   /***** Show the form again *****/
-   Dpt_EditDepartments ();
   }
 
 /*****************************************************************************/
@@ -634,27 +666,29 @@ void Dpt_RemoveDepartment (void)
 void Dpt_ChangeDepartIns (void)
   {
    extern const char *Txt_The_institution_of_the_department_has_changed;
-   struct Department *Dpt;
+   long NewInsCod;
 
-   Dpt = &Gbl.Dpts.EditingDpt;
+   /***** Department constructor *****/
+   Dpt_EditingDepartmentConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   Dpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
+   Dpt_EditingDpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
 
    /* Get parameter with institution code */
-   Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
+   NewInsCod = Ins_GetAndCheckParamOtherInsCod (1);
+
+   /***** Get data of the department from database *****/
+   Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
 
    /***** Update institution in table of departments *****/
    DB_QueryUPDATE ("can not update the institution of a department",
 		   "UPDATE departments SET InsCod=%ld WHERE DptCod=%ld",
-                   Dpt->InsCod,Dpt->DptCod);
+                   NewInsCod,Dpt_EditingDpt->DptCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_institution_of_the_department_has_changed);
-
-   /***** Show the form again *****/
-   Dpt_EditDepartments ();
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_The_institution_of_the_department_has_changed);
   }
 
 /*****************************************************************************/
@@ -663,6 +697,10 @@ void Dpt_ChangeDepartIns (void)
 
 void Dpt_RenameDepartShort (void)
   {
+   /***** Department constructor *****/
+   Dpt_EditingDepartmentConstructor ();
+
+   /***** Rename department *****/
    Dpt_RenameDepartment (Cns_SHRT_NAME);
   }
 
@@ -672,6 +710,10 @@ void Dpt_RenameDepartShort (void)
 
 void Dpt_RenameDepartFull (void)
   {
+   /***** Department constructor *****/
+   Dpt_EditingDepartmentConstructor ();
+
+   /***** Rename department *****/
    Dpt_RenameDepartment (Cns_FULL_NAME);
   }
 
@@ -685,44 +727,43 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_The_department_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_department_X_has_not_changed;
-   struct Department *Dpt;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    size_t MaxBytes = 0;			// Initialized to avoid warning
    char *CurrentDptName = NULL;		// Initialized to avoid warning
    char NewDptName[Hie_MAX_BYTES_FULL_NAME + 1];
 
-   Dpt = &Gbl.Dpts.EditingDpt;
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
          MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
-         CurrentDptName = Dpt->ShrtName;
+         CurrentDptName = Dpt_EditingDpt->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
          MaxBytes = Hie_MAX_BYTES_FULL_NAME;
-         CurrentDptName = Dpt->FullName;
+         CurrentDptName = Dpt_EditingDpt->FullName;
          break;
      }
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   Dpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
+   Dpt_EditingDpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
 
    /* Get the new name for the department */
    Par_GetParToText (ParamName,NewDptName,MaxBytes);
 
    /***** Get from the database the old names of the department *****/
-   Dpt_GetDataOfDepartmentByCod (Dpt);
+   Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
 
    /***** Check if new name is empty *****/
    if (!NewDptName[0])
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_department_X_empty,
-                     CurrentDptName);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_name_of_the_department_X_empty,
+                       CurrentDptName);
    else
      {
       /***** Check if old and new names are the same
@@ -730,28 +771,30 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentDptName,NewDptName))	// Different names
         {
          /***** If degree was in database... *****/
-         if (Dpt_CheckIfDepartmentNameExists (ParamName,NewDptName,Dpt->DptCod))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_department_X_already_exists,
-                           NewDptName);
+         if (Dpt_CheckIfDepartmentNameExists (ParamName,NewDptName,Dpt_EditingDpt->DptCod))
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_department_X_already_exists,
+                             NewDptName);
          else
            {
             /* Update the table changing old name by new name */
-            Dpt_UpdateDegNameDB (Dpt->DptCod,FieldName,NewDptName);
+            Dpt_UpdateDegNameDB (Dpt_EditingDpt->DptCod,FieldName,NewDptName);
 
             /* Write message to show the change made */
-            Ale_ShowAlert (Ale_SUCCESS,Txt_The_department_X_has_been_renamed_as_Y,
-                           CurrentDptName,NewDptName);
+            Ale_CreateAlert (Ale_SUCCESS,NULL,
+        	             Txt_The_department_X_has_been_renamed_as_Y,
+                             CurrentDptName,NewDptName);
            }
         }
       else	// The same name
-         Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_department_X_has_not_changed,
-                        CurrentDptName);
+         Ale_CreateAlert (Ale_INFO,NULL,
+                          Txt_The_name_of_the_department_X_has_not_changed,
+                          CurrentDptName);
      }
 
-   /***** Show the form again *****/
+   /***** Update name *****/
    Str_Copy (CurrentDptName,NewDptName,
              MaxBytes);
-   Dpt_EditDepartments ();
   }
 
 /*****************************************************************************/
@@ -788,17 +831,20 @@ void Dpt_ChangeDptWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   struct Department *Dpt;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
-   Dpt = &Gbl.Dpts.EditingDpt;
+   /***** Department constructor *****/
+   Dpt_EditingDepartmentConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
-   Dpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
+   Dpt_EditingDpt->DptCod = Dpt_GetAndCheckParamDptCod (1);
 
    /* Get the new WWW for the department */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+
+   /***** Get data of the department from database *****/
+   Dpt_GetDataOfDepartmentByCod (Dpt_EditingDpt);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -806,19 +852,36 @@ void Dpt_ChangeDptWWW (void)
       /* Update the table changing old WWW by new WWW */
       DB_QueryUPDATE ("can not update the web of a department",
 		      "UPDATE departments SET WWW='%s' WHERE DptCod=%ld",
-                      NewWWW,Dpt->DptCod);
+                      NewWWW,Dpt_EditingDpt->DptCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
-                     NewWWW);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_The_new_web_address_is_X,
+                       NewWWW);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_web_address_empty);
+
+   /***** Update web *****/
+   Str_Copy (Dpt_EditingDpt->WWW,NewWWW,
+             Cns_MAX_BYTES_WWW);
+  }
+
+/*****************************************************************************/
+/******* Show alerts after changing a department and continue editing ********/
+/*****************************************************************************/
+
+void Dpt_ContEditAfterChgDpt (void)
+  {
+   /***** Write message to show the change made *****/
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Str_Copy (Dpt->WWW,NewWWW,
-             Cns_MAX_BYTES_WWW);
-   Dpt_EditDepartments ();
+   Dpt_EditDepartmentsInternal ();
+
+   /***** Department destructor *****/
+   Dpt_EditingDepartmentDestructor ();
   }
 
 /*****************************************************************************/
@@ -827,7 +890,6 @@ void Dpt_ChangeDptWWW (void)
 
 static void Dpt_PutFormToCreateDepartment (void)
   {
-   extern const char *Hlp_INSTITUTION_Departments_edit;
    extern const char *Txt_New_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
@@ -835,17 +897,14 @@ static void Dpt_PutFormToCreateDepartment (void)
    extern const char *Txt_WWW;
    extern const char *Txt_Another_institution;
    extern const char *Txt_Create_department;
-   struct Department *Dpt;
    unsigned NumIns;
-
-   Dpt = &Gbl.Dpts.EditingDpt;
 
    /***** Start form *****/
    Frm_StartForm (ActNewDpt);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_department,NULL,
-                      Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE,2);
+                      NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -872,7 +931,7 @@ static void Dpt_PutFormToCreateDepartment (void)
                       "<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"OthInsCod\" style=\"width:62px;\">"
                       "<option value=\"0\"");
-   if (Dpt->InsCod == 0)
+   if (Dpt_EditingDpt->InsCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Another_institution);
    for (NumIns = 0;
@@ -880,7 +939,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 	NumIns++)
       fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
                Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
-               Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt->InsCod ? " selected=\"selected\"" :
+               Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt_EditingDpt->InsCod ? " selected=\"selected\"" :
         	                                            "",
                Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
    fprintf (Gbl.F.Out,"</select>"
@@ -893,7 +952,7 @@ static void Dpt_PutFormToCreateDepartment (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName);
+            Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName);
 
    /***** Department full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -902,7 +961,7 @@ static void Dpt_PutFormToCreateDepartment (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_FULL_NAME,Dpt->FullName);
+            Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName);
 
    /***** Department WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -912,7 +971,7 @@ static void Dpt_PutFormToCreateDepartment (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            Cns_MAX_CHARS_WWW,Dpt->WWW);
+            Cns_MAX_CHARS_WWW,Dpt_EditingDpt->WWW);
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_department);
@@ -971,47 +1030,54 @@ static void Dpt_PutHeadDepartments (void)
 void Dpt_RecFormNewDpt (void)
   {
    extern const char *Txt_The_department_X_already_exists;
+   extern const char *Txt_Created_new_department_X;
    extern const char *Txt_You_must_specify_the_web_address_of_the_new_department;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department;
-   struct Department *Dpt;
 
-   Dpt = &Gbl.Dpts.EditingDpt;
+   /***** Department constructor *****/
+   Dpt_EditingDepartmentConstructor ();
 
    /***** Get parameters from form *****/
    /* Get institution */
-   Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
+   Dpt_EditingDpt->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
 
    /* Get department short name */
-   Par_GetParToText ("ShortName",Dpt->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Dpt_EditingDpt->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
 
    /* Get department full name */
-   Par_GetParToText ("FullName",Dpt->FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName",Dpt_EditingDpt->FullName,Hie_MAX_BYTES_FULL_NAME);
 
    /* Get department WWW */
-   Par_GetParToText ("WWW",Dpt->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParToText ("WWW",Dpt_EditingDpt->WWW,Cns_MAX_BYTES_WWW);
 
-   if (Dpt->ShrtName[0] && Dpt->FullName[0])	// If there's a department name
+   if (Dpt_EditingDpt->ShrtName[0] &&
+       Dpt_EditingDpt->FullName[0])	// If there's a department name
      {
-      if (Dpt->WWW[0])
+      if (Dpt_EditingDpt->WWW[0])
         {
          /***** If name of department was in database... *****/
-         if (Dpt_CheckIfDepartmentNameExists ("ShortName",Dpt->ShrtName,-1L))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_department_X_already_exists,
-                           Dpt->ShrtName);
-         else if (Dpt_CheckIfDepartmentNameExists ("FullName",Dpt->FullName,-1L))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_department_X_already_exists,
-                           Dpt->FullName);
+         if (Dpt_CheckIfDepartmentNameExists ("ShortName",Dpt_EditingDpt->ShrtName,-1L))
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_department_X_already_exists,
+                             Dpt_EditingDpt->ShrtName);
+         else if (Dpt_CheckIfDepartmentNameExists ("FullName",Dpt_EditingDpt->FullName,-1L))
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_department_X_already_exists,
+                             Dpt_EditingDpt->FullName);
          else	// Add new department to database
-            Dpt_CreateDepartment (Dpt);
+           {
+            Dpt_CreateDepartment (Dpt_EditingDpt);
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_department_X,
+			   Dpt_EditingDpt->FullName);
+           }
         }
       else	// If there is not a web
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_department);
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_You_must_specify_the_web_address_of_the_new_department);
      }
    else	// If there is not a department name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department);
-
-   /***** Show the form again *****/
-   Dpt_EditDepartments ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department);
   }
 
 /*****************************************************************************/
@@ -1020,8 +1086,6 @@ void Dpt_RecFormNewDpt (void)
 
 static void Dpt_CreateDepartment (struct Department *Dpt)
   {
-   extern const char *Txt_Created_new_department_X;
-
    /***** Create a new department *****/
    DB_QueryINSERT ("can not create a new department",
 		   "INSERT INTO departments"
@@ -1029,10 +1093,6 @@ static void Dpt_CreateDepartment (struct Department *Dpt)
 		   " VALUES"
 		   " (%ld,'%s','%s','%s')",
                    Dpt->InsCod,Dpt->ShrtName,Dpt->FullName,Dpt->WWW);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_department_X,
-                  Dpt->FullName);
   }
 
 /*****************************************************************************/
@@ -1131,3 +1191,37 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
    /***** Free list of departments *****/
    Dpt_FreeListDepartments ();
   }
+
+/*****************************************************************************/
+/********************** Department constructor/destructor ********************/
+/*****************************************************************************/
+
+static void Dpt_EditingDepartmentConstructor (void)
+  {
+   /***** Pointer must be NULL *****/
+   if (Dpt_EditingDpt != NULL)
+      Lay_ShowErrorAndExit ("Error initializing department.");
+
+   /***** Allocate memory for department *****/
+   if ((Dpt_EditingDpt = (struct Department *) malloc (sizeof (struct Department))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for department.");
+
+   /***** Reset department *****/
+   Dpt_EditingDpt->DptCod      = -1L;
+   Dpt_EditingDpt->InsCod      = -1L;
+   Dpt_EditingDpt->ShrtName[0] = '\0';
+   Dpt_EditingDpt->FullName[0] = '\0';
+   Dpt_EditingDpt->WWW[0]      = '\0';
+   Dpt_EditingDpt->NumTchs     = 0;
+  }
+
+static void Dpt_EditingDepartmentDestructor (void)
+  {
+   /***** Free memory used for degree *****/
+   if (Dpt_EditingDpt != NULL)
+     {
+      free ((void *) Dpt_EditingDpt);
+      Dpt_EditingDpt = NULL;
+     }
+  }
+

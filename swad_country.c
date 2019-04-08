@@ -63,7 +63,7 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-static struct Country *Cty_EditingCty = NULL;	// Static variable to keep the country beeing edited
+static struct Country *Cty_EditingCty = NULL;	// Static variable to keep the country being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -2001,7 +2001,7 @@ void Cty_ContEditAfterChgCty (void)
 
 static void Cty_ShowAlertAndButtonToGoToCty (void)
   {
-   // If the country beeing edited is different to the current one...
+   // If the country being edited is different to the current one...
    if (Cty_EditingCty->CtyCod != Gbl.Hierarchy.Cty.CtyCod)
      {
       /***** Alert with button to go to couuntry *****/
