@@ -1863,7 +1863,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActEdiCrs		*/{ 555,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_EditCourses		,NULL},
    /* ActReqCrs		*/{1053,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RecFormReqCrs		,Crs_ContEditAfterChgCrs	,NULL},
    /* ActNewCrs		*/{ 556,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RecFormNewCrs		,Crs_ContEditAfterChgCrs	,NULL},
-   /* ActRemCrs		*/{ 560,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Crs_RemoveCourse		,NULL},
+   /* ActRemCrs		*/{ 560,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RemoveCourse		,Crs_ContEditAfterChgCrs	,NULL},
    /* ActChgInsCrsCod	*/{1025,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeInsCrsCod		,Crs_ContEditAfterChgCrs	,NULL},
    /* ActChgCrsYea	*/{ 561,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_ChangeCrsYear		,Crs_ContEditAfterChgCrs	,NULL},
    /* ActRenCrsSho	*/{ 563,-1,TabUnk,ActSeeCrs		,    0,    0,0x3C6,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Crs_RenameCourseShort		,Crs_ContEditAfterChgCrs	,NULL},

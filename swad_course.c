@@ -2007,40 +2007,33 @@ void Crs_RemoveCourse (void)
   {
    extern const char *Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course;
    extern const char *Txt_Course_X_removed;
-   struct Course Crs;
 
    /***** Course constructor *****/
    Crs_EditingCourseConstructor ();
 
    /***** Get course code *****/
-   Crs.CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
+   Crs_EditingCrs->CrsCod = Crs_GetAndCheckParamOtherCrsCod (1);
 
    /***** Get data of the course from database *****/
-   Crs_GetDataOfCourseByCod (&Crs);
+   Crs_GetDataOfCourseByCod (Crs_EditingCrs);
 
-   if (Crs_CheckIfICanEdit (&Crs))
+   if (Crs_CheckIfICanEdit (Crs_EditingCrs))
      {
       /***** Check if this course has users *****/
-      if (Crs.NumUsrs[Rol_UNK])	// Course has users ==> don't remove
+      if (Crs_EditingCrs->NumUsrs[Rol_UNK])	// Course has users ==> don't remove
          Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
       else			// Course has no users ==> remove it
         {
          /***** Remove course *****/
-         Crs_RemoveCourseCompletely (Crs.CrsCod);
+         Crs_RemoveCourseCompletely (Crs_EditingCrs->CrsCod);
 
          /***** Write message to show the change made *****/
          Ale_ShowAlert (Ale_SUCCESS,Txt_Course_X_removed,
-                        Crs.FullName);
+                        Crs_EditingCrs->FullName);
         }
      }
    else
       Lay_NoPermissionExit ();
-
-   /***** Show the form again *****/
-   Crs_EditCoursesInternal ();
-
-   /***** Course destructor *****/
-   Crs_EditingCourseDestructor ();
   }
 
 /*****************************************************************************/
