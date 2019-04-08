@@ -2306,7 +2306,7 @@ void Deg_ChangeDegStatus (void)
   }
 
 /*****************************************************************************/
-/********* Show alerts after changing a course and continue editing **********/
+/********* Show alerts after changing a degree and continue editing **********/
 /*****************************************************************************/
 
 void Deg_ContEditAfterChgDeg (void)

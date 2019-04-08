@@ -1816,15 +1816,10 @@ void Ctr_RemoveCentre (void)
 		      Ctr_EditingCtr->CtrCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Centre_X_removed,
-	             Ctr_EditingCtr->FullName);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_Centre_X_removed,
+	               Ctr_EditingCtr->FullName);
      }
-
-   /***** Show the form again *****/
-   Ctr_EditCentresInternal ();
-
-   /***** Centre destructor *****/
-   Ctr_EditingCentreDestructor ();
   }
 
 /*****************************************************************************/
@@ -1935,13 +1930,6 @@ void Ctr_ChangeCtrPlc (void)
 	  and put button to go to centre changed *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_place_of_the_centre_has_changed);
-   Ctr_ShowAlertAndButtonToGoToCtr ();
-
-   /***** Show the form again *****/
-   Ctr_EditCentresInternal ();
-
-   /***** Centre destructor *****/
-   Ctr_EditingCentreDestructor ();
   }
 
 void Ctr_ChangeCtrPlcInConfig (void)
@@ -1996,19 +1984,6 @@ void Ctr_RenameCentreFull (void)
    /***** Rename centre *****/
    Ctr_EditingCtr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod (1);
    Ctr_RenameCentre (Ctr_EditingCtr,Cns_FULL_NAME);
-  }
-
-void Ctr_ContEditAfterChgCtr (void)
-  {
-   /***** Write message to show the change made
-	  and put button to go to centre changed *****/
-   Ctr_ShowAlertAndButtonToGoToCtr ();
-
-   /***** Show the form again *****/
-   Ctr_EditCentresInternal ();
-
-   /***** Centre destructor *****/
-   Ctr_EditingCentreDestructor ();
   }
 
 /*****************************************************************************/
@@ -2163,16 +2138,10 @@ void Ctr_ChangeCtrWWW (void)
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_The_new_web_address_is_X,
 		       NewWWW);
-      Ctr_ShowAlertAndButtonToGoToCtr ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
-
-   /***** Show the form again *****/
-   Ctr_EditCentresInternal ();
-
-   /***** Centre destructor *****/
-   Ctr_EditingCentreDestructor ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_web_address_empty);
   }
 
 void Ctr_ChangeCtrWWWInConfig (void)
@@ -2258,6 +2227,16 @@ void Ctr_ChangeCtrStatus (void)
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_status_of_the_centre_X_has_changed,
 	            Ctr_EditingCtr->ShrtName);
+  }
+
+/*****************************************************************************/
+/********* Show alerts after changing a centre and continue editing **********/
+/*****************************************************************************/
+
+void Ctr_ContEditAfterChgCtr (void)
+  {
+   /***** Write message to show the change made
+	  and put button to go to centre changed *****/
    Ctr_ShowAlertAndButtonToGoToCtr ();
 
    /***** Show the form again *****/
@@ -2763,9 +2742,6 @@ void Ctr_RecFormReqCtr (void)
 
    /***** Receive form to request a new centre *****/
    Ctr_RecFormRequestOrCreateCtr ((unsigned) Ctr_STATUS_BIT_PENDING);
-
-   /***** Centre destructor *****/
-   Ctr_EditingCentreDestructor ();
   }
 
 /*****************************************************************************/
@@ -2779,9 +2755,6 @@ void Ctr_RecFormNewCtr (void)
 
    /***** Receive form to create a new centre *****/
    Ctr_RecFormRequestOrCreateCtr (0);
-
-   /***** Centre destructor *****/
-   Ctr_EditingCentreDestructor ();
   }
 
 /*****************************************************************************/
@@ -2791,6 +2764,7 @@ void Ctr_RecFormNewCtr (void)
 static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
   {
    extern const char *Txt_The_centre_X_already_exists;
+   extern const char *Txt_Created_new_centre_X;
    extern const char *Txt_You_must_specify_the_web_address_of_the_new_centre;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_centre;
 
@@ -2818,22 +2792,28 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
         {
          /***** If name of centre was in database... *****/
          if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Ctr_EditingCtr->ShrtName,-1L,Gbl.Hierarchy.Ins.InsCod))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_centre_X_already_exists,
-                           Ctr_EditingCtr->ShrtName);
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_centre_X_already_exists,
+                             Ctr_EditingCtr->ShrtName);
          else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Ctr_EditingCtr->FullName,-1L,Gbl.Hierarchy.Ins.InsCod))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_centre_X_already_exists,
-                           Ctr_EditingCtr->FullName);
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        		     Txt_The_centre_X_already_exists,
+                             Ctr_EditingCtr->FullName);
          else	// Add new centre to database
+           {
             Ctr_CreateCentre (Status);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+			     Txt_Created_new_centre_X,
+			     Ctr_EditingCtr->FullName);
+           }
         }
       else	// If there is not a web
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_centre);
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_You_must_specify_the_web_address_of_the_new_centre);
      }
    else	// If there is not a centre name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_centre);
-
-   /***** Show the form again *****/
-   Ctr_EditCentresInternal ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_centre);
   }
 
 /*****************************************************************************/
@@ -2842,8 +2822,6 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
 
 static void Ctr_CreateCentre (unsigned Status)
   {
-   extern const char *Txt_Created_new_centre_X;
-
    /***** Create a new centre *****/
    Ctr_EditingCtr->CtrCod =
    DB_QueryINSERTandReturnCode ("can not create a new centre",
@@ -2860,13 +2838,6 @@ static void Ctr_CreateCentre (unsigned Status)
 				Ctr_EditingCtr->ShrtName,
 				Ctr_EditingCtr->FullName,
 				Ctr_EditingCtr->WWW);
-
-   /***** Write message to show the change made
-	  and put button to go to centre created *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_Created_new_centre_X,
-                    Ctr_EditingCtr->FullName);
-   Ctr_ShowAlertAndButtonToGoToCtr ();
   }
 
 /*****************************************************************************/

@@ -1754,7 +1754,8 @@ void Ins_RemoveInstitution (void)
    else if (Ins_EditingIns->Ctrs.Num ||
             Ins_EditingIns->NumUsrsWhoClaimToBelongToIns ||
             Ins_EditingIns->NumUsrs)	// Institution has centres or users ==> don't remove
-      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution);
    else	// Institution has no users ==> remove it
      {
       /***** Remove all the threads and posts in forums of the institution *****/
@@ -1784,15 +1785,10 @@ void Ins_RemoveInstitution (void)
       Ins_FlushCacheFullNameAndCtyOfInstitution ();
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Institution_X_removed,
-                     Ins_EditingIns->FullName);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_Institution_X_removed,
+                       Ins_EditingIns->FullName);
      }
-
-   /***** Show the form again *****/
-   Ins_EditInstitutionsInternal ();
-
-   /***** Institution destructor *****/
-   Ins_EditingInstitutionDestructor ();
   }
 
 /*****************************************************************************/
@@ -1817,19 +1813,6 @@ void Ins_RenameInsFull (void)
    /***** Rename institution *****/
    Ins_EditingIns->InsCod = Ins_GetAndCheckParamOtherInsCod (1);
    Ins_RenameInstitution (Ins_EditingIns,Cns_FULL_NAME);
-  }
-
-void Ins_ContEditAfterChgIns (void)
-  {
-   /***** Write message to show the change made
-	  and put button to go to institution changed *****/
-   Ins_ShowAlertAndButtonToGoToIns ();
-
-   /***** Show the form again *****/
-   Ins_EditInstitutionsInternal ();
-
-   /***** Institution destructor *****/
-   Ins_EditingInstitutionDestructor ();
   }
 
 /*****************************************************************************/
@@ -2083,16 +2066,10 @@ void Ins_ChangeInsWWW (void)
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 		       Txt_The_new_web_address_is_X,
 		       NewWWW);
-      Ins_ShowAlertAndButtonToGoToIns ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
-
-   /***** Show the form again *****/
-   Ins_EditInstitutionsInternal ();
-
-   /***** Institution destructor *****/
-   Ins_EditingInstitutionDestructor ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_web_address_empty);
   }
 
 void Ins_ChangeInsWWWInConfig (void)
@@ -2173,11 +2150,21 @@ void Ins_ChangeInsStatus (void)
                    (unsigned) Status,Ins_EditingIns->InsCod);
    Ins_EditingIns->Status = Status;
 
-   /***** Write message to show the change made
+   /***** Create message to show the change made
 	  and put button to go to institution changed *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 		    Txt_The_status_of_the_institution_X_has_changed,
 		    Ins_EditingIns->ShrtName);
+  }
+
+/*****************************************************************************/
+/****** Show alerts after changing an institution and continue editing *******/
+/*****************************************************************************/
+
+void Ins_ContEditAfterChgIns (void)
+  {
+   /***** Write message to show the change made
+	  and put button to go to institution changed *****/
    Ins_ShowAlertAndButtonToGoToIns ();
 
    /***** Show the form again *****/
@@ -2197,7 +2184,7 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
    // If the institution beeing edited is different to the current one...
    if (Ins_EditingIns->InsCod != Gbl.Hierarchy.Ins.InsCod)
      {
-      /***** Alert with button to go to degree *****/
+      /***** Alert with button to go to institution *****/
       Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,Ins_PutParamGoToIns,
                                   Btn_CONFIRM_BUTTON,Gbl.Title);
      }
@@ -2401,9 +2388,6 @@ void Ins_RecFormReqIns (void)
 
    /***** Receive form to request a new institution *****/
    Ins_RecFormRequestOrCreateIns ((unsigned) Ins_STATUS_BIT_PENDING);
-
-   /***** Institution destructor *****/
-   Ins_EditingInstitutionDestructor ();
   }
 
 /*****************************************************************************/
@@ -2417,9 +2401,6 @@ void Ins_RecFormNewIns (void)
 
    /***** Receive form to create a new institution *****/
    Ins_RecFormRequestOrCreateIns (0);
-
-   /***** Institution destructor *****/
-   Ins_EditingInstitutionDestructor ();
   }
 
 /*****************************************************************************/
@@ -2429,6 +2410,7 @@ void Ins_RecFormNewIns (void)
 static void Ins_RecFormRequestOrCreateIns (unsigned Status)
   {
    extern const char *Txt_The_institution_X_already_exists;
+   extern const char *Txt_Created_new_institution_X;
    extern const char *Txt_You_must_specify_the_web_address_of_the_new_institution;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_institution;
 
@@ -2453,23 +2435,29 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
          /***** If name of institution was in database... *****/
          if (Ins_CheckIfInsNameExistsInCty ("ShortName",Ins_EditingIns->ShrtName,
                                             -1L,Gbl.Hierarchy.Cty.CtyCod))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_institution_X_already_exists,
-                           Ins_EditingIns->ShrtName);
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_institution_X_already_exists,
+                             Ins_EditingIns->ShrtName);
          else if (Ins_CheckIfInsNameExistsInCty ("FullName",Ins_EditingIns->FullName,
                                                  -1L,Gbl.Hierarchy.Cty.CtyCod))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_institution_X_already_exists,
-                           Ins_EditingIns->FullName);
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_institution_X_already_exists,
+                             Ins_EditingIns->FullName);
          else	// Add new institution to database
+           {
             Ins_CreateInstitution (Status);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+			     Txt_Created_new_institution_X,
+			     Ins_EditingIns->FullName);
+           }
         }
       else	// If there is not a web
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_institution);
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_You_must_specify_the_web_address_of_the_new_institution);
      }
    else	// If there is not a institution name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_institution);
-
-   /***** Show the form again *****/
-   Ins_EditInstitutionsInternal ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_institution);
   }
 
 /*****************************************************************************/
@@ -2478,8 +2466,6 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
 
 static void Ins_CreateInstitution (unsigned Status)
   {
-   extern const char *Txt_Created_new_institution_X;
-
    /***** Create a new institution *****/
    Ins_EditingIns->InsCod =
    DB_QueryINSERTandReturnCode ("can not create institution",
@@ -2493,13 +2479,6 @@ static void Ins_CreateInstitution (unsigned Status)
 				Ins_EditingIns->ShrtName,
 				Ins_EditingIns->FullName,
 				Ins_EditingIns->WWW);
-
-   /***** Write message to show the change made
-	  and put button to go to institution created *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-		    Txt_Created_new_institution_X,
-		    Ins_EditingIns->FullName);
-   Ins_ShowAlertAndButtonToGoToIns ();
   }
 
 /*****************************************************************************/
