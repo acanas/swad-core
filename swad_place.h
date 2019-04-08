@@ -70,6 +70,8 @@ long Plc_GetParamPlcCod (void);
 void Plc_RemovePlace (void);
 void Plc_RenamePlaceShort (void);
 void Plc_RenamePlaceFull (void);
+void Plc_ContEditAfterChgPlc (void);
+
 void Plc_RecFormNewPlace (void);
 
 #endif

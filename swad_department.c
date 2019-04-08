@@ -1067,8 +1067,9 @@ void Dpt_RecFormNewDpt (void)
          else	// Add new department to database
            {
             Dpt_CreateDepartment (Dpt_EditingDpt);
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_department_X,
-			   Dpt_EditingDpt->FullName);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+		             Txt_Created_new_department_X,
+			     Dpt_EditingDpt->FullName);
            }
         }
       else	// If there is not a web
@@ -1217,11 +1218,10 @@ static void Dpt_EditingDepartmentConstructor (void)
 
 static void Dpt_EditingDepartmentDestructor (void)
   {
-   /***** Free memory used for degree *****/
+   /***** Free memory used for department *****/
    if (Dpt_EditingDpt != NULL)
      {
       free ((void *) Dpt_EditingDpt);
       Dpt_EditingDpt = NULL;
      }
   }
-

@@ -57,6 +57,8 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+static struct Place *Plc_EditingPlc = NULL;	// Static variable to keep the place being edited
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -65,6 +67,7 @@ static void Plc_GetParamPlcOrder (void);
 static bool Plc_CheckIfICanCreatePlaces (void);
 static void Plc_PutIconsListingPlaces (void);
 static void Plc_PutIconToEditPlaces (void);
+static void Plc_EditPlacesInternal (void);
 static void Plc_PutIconsEditingPlaces (void);
 
 static void Plc_ListPlacesForEdition (void);
@@ -77,6 +80,9 @@ static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *N
 static void Plc_PutFormToCreatePlace (void);
 static void Plc_PutHeadPlaces (void);
 static void Plc_CreatePlace (struct Place *Plc);
+
+static void Plc_EditingPlaceConstructor (void);
+static void Plc_EditingPlaceDestructor (void);
 
 /*****************************************************************************/
 /*************************** List all the places *****************************/
@@ -249,6 +255,18 @@ static void Plc_PutIconToEditPlaces (void)
 /*****************************************************************************/
 
 void Plc_EditPlaces (void)
+  {
+   /***** Place constructor *****/
+   Plc_EditingPlaceConstructor ();
+
+   /***** Edit places *****/
+   Plc_EditPlacesInternal ();
+
+   /***** Place destructor *****/
+   Plc_EditingPlaceDestructor ();
+  }
+
+static void Plc_EditPlacesInternal (void)
   {
    extern const char *Hlp_INSTITUTION_Places_edit;
    extern const char *Txt_Places;
@@ -588,32 +606,33 @@ void Plc_RemovePlace (void)
   {
    extern const char *Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place;
    extern const char *Txt_Place_X_removed;
-   struct Place Plc;
+
+   /***** Place constructor *****/
+   Plc_EditingPlaceConstructor ();
 
    /***** Get place code *****/
-   if ((Plc.PlcCod = Plc_GetParamPlcCod ()) == -1L)
+   if ((Plc_EditingPlc->PlcCod = Plc_GetParamPlcCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of place is missing.");
 
    /***** Get data of the place from database *****/
-   Plc_GetDataOfPlaceByCod (&Plc);
+   Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
 
    /***** Check if this place has centres *****/
-   if (Plc.NumCtrs)	// Place has centres ==> don't remove
-      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place);
+   if (Plc_EditingPlc->NumCtrs)	// Place has centres ==> don't remove
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place);
    else			// Place has no centres ==> remove it
      {
       /***** Remove place *****/
       DB_QueryDELETE ("can not remove a place",
 		      "DELETE FROM places WHERE PlcCod=%ld",
-		      Plc.PlcCod);
+		      Plc_EditingPlc->PlcCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Place_X_removed,
-                     Plc.FullName);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_Place_X_removed,
+                       Plc_EditingPlc->FullName);
      }
-
-   /***** Show the form again *****/
-   Plc_EditPlaces ();
   }
 
 /*****************************************************************************/
@@ -622,6 +641,10 @@ void Plc_RemovePlace (void)
 
 void Plc_RenamePlaceShort (void)
   {
+   /***** Place constructor *****/
+   Plc_EditingPlaceConstructor ();
+
+   /***** Rename place *****/
    Plc_RenamePlace (Cns_SHRT_NAME);
   }
 
@@ -631,6 +654,10 @@ void Plc_RenamePlaceShort (void)
 
 void Plc_RenamePlaceFull (void)
   {
+   /***** Place constructor *****/
+   Plc_EditingPlaceConstructor ();
+
+   /***** Rename place *****/
    Plc_RenamePlace (Cns_FULL_NAME);
   }
 
@@ -644,45 +671,44 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_The_place_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_place_X_has_not_changed;
-   struct Place *Plc;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentPlcName = NULL;		// Initialized to avoid warning
    char NewPlcName[Plc_MAX_BYTES_PLACE_FULL_NAME + 1];
 
-   Plc = &Gbl.Plcs.EditingPlc;
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
          MaxBytes = Plc_MAX_BYTES_PLACE_SHRT_NAME;
-         CurrentPlcName = Plc->ShrtName;
+         CurrentPlcName = Plc_EditingPlc->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
          MaxBytes = Plc_MAX_BYTES_PLACE_FULL_NAME;
-         CurrentPlcName = Plc->FullName;
+         CurrentPlcName = Plc_EditingPlc->FullName;
          break;
      }
 
    /***** Get parameters from form *****/
    /* Get the code of the place */
-   if ((Plc->PlcCod = Plc_GetParamPlcCod ()) == -1L)
+   if ((Plc_EditingPlc->PlcCod = Plc_GetParamPlcCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of place is missing.");
 
    /* Get the new name for the place */
    Par_GetParToText (ParamName,NewPlcName,MaxBytes);
 
    /***** Get from the database the old names of the place *****/
-   Plc_GetDataOfPlaceByCod (Plc);
+   Plc_GetDataOfPlaceByCod (Plc_EditingPlc);
 
    /***** Check if new name is empty *****/
    if (!NewPlcName[0])
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_place_X_empty,
-                     CurrentPlcName);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_name_of_the_place_X_empty,
+                       CurrentPlcName);
    else
      {
       /***** Check if old and new names are the same
@@ -690,28 +716,30 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentPlcName,NewPlcName))	// Different names
         {
          /***** If place was in database... *****/
-         if (Plc_CheckIfPlaceNameExists (ParamName,NewPlcName,Plc->PlcCod))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_place_X_already_exists,
-                           NewPlcName);
+         if (Plc_CheckIfPlaceNameExists (ParamName,NewPlcName,Plc_EditingPlc->PlcCod))
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_place_X_already_exists,
+                             NewPlcName);
          else
            {
             /* Update the table changing old name by new name */
-            Plc_UpdatePlcNameDB (Plc->PlcCod,FieldName,NewPlcName);
+            Plc_UpdatePlcNameDB (Plc_EditingPlc->PlcCod,FieldName,NewPlcName);
 
             /* Write message to show the change made */
-            Ale_ShowAlert (Ale_SUCCESS,Txt_The_place_X_has_been_renamed_as_Y,
-                           CurrentPlcName,NewPlcName);
+            Ale_CreateAlert (Ale_SUCCESS,NULL,
+        	             Txt_The_place_X_has_been_renamed_as_Y,
+                             CurrentPlcName,NewPlcName);
            }
         }
       else	// The same name
-         Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_place_X_has_not_changed,
-                        CurrentPlcName);
+         Ale_CreateAlert (Ale_INFO,NULL,
+                          Txt_The_name_of_the_place_X_has_not_changed,
+                          CurrentPlcName);
      }
 
-   /***** Show the form again *****/
+   /***** Update place name *****/
    Str_Copy (CurrentPlcName,NewPlcName,
              MaxBytes);
-   Plc_EditPlaces ();
   }
 
 /*****************************************************************************/
@@ -743,6 +771,22 @@ static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *N
   }
 
 /*****************************************************************************/
+/********** Show alerts after changing a place and continue editing **********/
+/*****************************************************************************/
+
+void Plc_ContEditAfterChgPlc (void)
+  {
+   /***** Write message to show the change made *****/
+   Ale_ShowAlerts (NULL);
+
+   /***** Show the form again *****/
+   Plc_EditPlacesInternal ();
+
+   /***** Place destructor *****/
+   Plc_EditingPlaceDestructor ();
+  }
+
+/*****************************************************************************/
 /********************* Put a form to create a new place **********************/
 /*****************************************************************************/
 
@@ -750,10 +794,6 @@ static void Plc_PutFormToCreatePlace (void)
   {
    extern const char *Txt_New_place;
    extern const char *Txt_Create_place;
-   struct Place *Plc;
-
-   /***** Place data *****/
-   Plc = &Gbl.Plcs.EditingPlc;
 
    /***** Start form *****/
    Frm_StartForm (ActNewPlc);
@@ -779,7 +819,7 @@ static void Plc_PutFormToCreatePlace (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName);
+            Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName);
 
    /***** Place full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -788,7 +828,7 @@ static void Plc_PutFormToCreatePlace (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName);
+            Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName);
 
    /***** Number of centres *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -842,35 +882,41 @@ static void Plc_PutHeadPlaces (void)
 void Plc_RecFormNewPlace (void)
   {
    extern const char *Txt_The_place_X_already_exists;
+   extern const char *Txt_Created_new_place_X;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place;
-   struct Place *Plc;
 
-   Plc = &Gbl.Plcs.EditingPlc;
+   /***** Place constructor *****/
+   Plc_EditingPlaceConstructor ();
 
    /***** Get parameters from form *****/
    /* Get place short name */
-   Par_GetParToText ("ShortName",Plc->ShrtName,Plc_MAX_BYTES_PLACE_SHRT_NAME);
+   Par_GetParToText ("ShortName",Plc_EditingPlc->ShrtName,Plc_MAX_BYTES_PLACE_SHRT_NAME);
 
    /* Get place full name */
-   Par_GetParToText ("FullName",Plc->FullName,Plc_MAX_BYTES_PLACE_FULL_NAME);
+   Par_GetParToText ("FullName",Plc_EditingPlc->FullName,Plc_MAX_BYTES_PLACE_FULL_NAME);
 
-   if (Plc->ShrtName[0] && Plc->FullName[0])	// If there's a place name
+   if (Plc_EditingPlc->ShrtName[0] &&
+       Plc_EditingPlc->FullName[0])	// If there's a place name
      {
       /***** If name of place was in database... *****/
-      if (Plc_CheckIfPlaceNameExists ("ShortName",Plc->ShrtName,-1L))
-         Ale_ShowAlert (Ale_WARNING,Txt_The_place_X_already_exists,
-                        Plc->ShrtName);
-      else if (Plc_CheckIfPlaceNameExists ("FullName",Plc->FullName,-1L))
-         Ale_ShowAlert (Ale_WARNING,Txt_The_place_X_already_exists,
-                        Plc->FullName);
+      if (Plc_CheckIfPlaceNameExists ("ShortName",Plc_EditingPlc->ShrtName,-1L))
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_The_place_X_already_exists,
+                          Plc_EditingPlc->ShrtName);
+      else if (Plc_CheckIfPlaceNameExists ("FullName",Plc_EditingPlc->FullName,-1L))
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_The_place_X_already_exists,
+                          Plc_EditingPlc->FullName);
       else	// Add new place to database
-         Plc_CreatePlace (Plc);
+        {
+         Plc_CreatePlace (Plc_EditingPlc);
+	 Ale_CreateAlert (Ale_SUCCESS,NULL,Txt_Created_new_place_X,
+			  Plc_EditingPlc->FullName);
+        }
      }
    else	// If there is not a place name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place);
-
-   /***** Show the form again *****/
-   Plc_EditPlaces ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_place);
   }
 
 /*****************************************************************************/
@@ -879,8 +925,6 @@ void Plc_RecFormNewPlace (void)
 
 static void Plc_CreatePlace (struct Place *Plc)
   {
-   extern const char *Txt_Created_new_place_X;
-
    /***** Create a new place *****/
    DB_QueryINSERT ("can not create place",
 		   "INSERT INTO places"
@@ -888,8 +932,36 @@ static void Plc_CreatePlace (struct Place *Plc)
 		   " VALUES"
 		   " (%ld,'%s','%s')",
                    Gbl.Hierarchy.Ins.InsCod,Plc->ShrtName,Plc->FullName);
+  }
 
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_place_X,
-                  Plc->FullName);
+/*****************************************************************************/
+/************************* Place constructor/destructor **********************/
+/*****************************************************************************/
+
+static void Plc_EditingPlaceConstructor (void)
+  {
+   /***** Pointer must be NULL *****/
+   if (Plc_EditingPlc != NULL)
+      Lay_ShowErrorAndExit ("Error initializing place.");
+
+   /***** Allocate memory for place *****/
+   if ((Plc_EditingPlc = (struct Place *) malloc (sizeof (struct Place))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for place.");
+
+   /***** Reset place *****/
+   Plc_EditingPlc->PlcCod      = -1L;
+   Plc_EditingPlc->InsCod      = -1L;
+   Plc_EditingPlc->ShrtName[0] = '\0';
+   Plc_EditingPlc->FullName[0] = '\0';
+   Plc_EditingPlc->NumCtrs     = 0;
+  }
+
+static void Plc_EditingPlaceDestructor (void)
+  {
+   /***** Free memory used for place *****/
+   if (Plc_EditingPlc != NULL)
+     {
+      free ((void *) Plc_EditingPlc);
+      Plc_EditingPlc = NULL;
+     }
   }

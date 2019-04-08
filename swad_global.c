@@ -252,9 +252,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Plcs.Num = 0;
    Gbl.Plcs.Lst = NULL;
    Gbl.Plcs.SelectedOrder = Plc_ORDER_DEFAULT;
-   Gbl.Plcs.EditingPlc.PlcCod = -1L;
-   Gbl.Plcs.EditingPlc.ShrtName[0] = '\0';
-   Gbl.Plcs.EditingPlc.FullName[0] = '\0';
 
    Gbl.Hlds.LstIsRead = false;	// List is not read
    Gbl.Hlds.Num = 0;

@@ -224,14 +224,12 @@ struct Globals
       unsigned Num;		// Number of departments
       struct Department *Lst;	// List of departments
       Dpt_Order_t SelectedOrder;
-      struct Department EditingDpt;
      } Dpts;
    struct
      {
       unsigned Num;		// Number of places
       struct Place *Lst;	// List of places
       Plc_Order_t SelectedOrder;
-      struct Place EditingPlc;
      } Plcs;
    struct
      {
