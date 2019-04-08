@@ -114,6 +114,7 @@ void Cty_RemoveCountry (void);
 void Cty_RenameCountry (void);
 void Cty_ChangeCtyWWW (void);
 void Cty_ChangeCtyMapAttribution (void);
+void Cty_ContEditAfterChgCty (void);
 void Cty_RecFormNewCountry (void);
 
 unsigned Cty_GetNumCtysTotal (void);

@@ -63,6 +63,8 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+static struct Country *Cty_EditingCty = NULL;	// Static variable to keep the country beeing edited
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -82,6 +84,7 @@ static void Cty_PutIconToEditCountries (void);
 static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
 static void Cty_GetParamCtyOrder (void);
 
+static void Cty_EditCountriesInternal (void);
 static void Cty_PutIconsEditingCountries (void);
 static void Cty_PutIconToViewCountries (void);
 
@@ -96,12 +99,15 @@ static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1]);
 static bool Cty_CheckIfCountryNameExists (Lan_Language_t Language,const char *Name,long CtyCod);
 static void Cty_UpdateCtyNameDB (long CtyCod,const char *FieldName,const char *NewCtyName);
 
+static void Cty_ShowAlertAndButtonToGoToCty (void);
+static void Cty_PutParamGoToCty (void);
+
 static void Cty_PutFormToCreateCountry (void);
 static void Cty_PutHeadCountriesForEdition (void);
-static void Cty_CreateCountry (struct Country *Cty);
+static void Cty_CreateCountry (void);
 
-static void Cty_CountryConstructor (struct Country **Cty);
-static void Cty_CountryDestructor (struct Country **Cty);
+static void Cty_EditingCountryConstructor (void);
+static void Cty_EditingCountryDestructor (void);
 
 /*****************************************************************************/
 /***************** List countries with pending institutions ******************/
@@ -954,6 +960,18 @@ static void Cty_GetParamCtyOrder (void)
 
 void Cty_EditCountries (void)
   {
+   /***** Country constructor *****/
+   Cty_EditingCountryConstructor ();
+
+   /***** Edit countries *****/
+   Cty_EditCountriesInternal ();
+
+   /***** Country destructor *****/
+   Cty_EditingCountryDestructor ();
+  }
+
+static void Cty_EditCountriesInternal (void)
+  {
    extern const char *Hlp_SYSTEM_Countries;
    extern const char *Txt_Countries;
 
@@ -1731,39 +1749,40 @@ void Cty_RemoveCountry (void)
   {
    extern const char *Txt_You_can_not_remove_a_country_with_institutions_or_users;
    extern const char *Txt_Country_X_removed;
-   struct Country Cty;
+
+   /***** Country constructor *****/
+   Cty_EditingCountryConstructor ();
 
    /***** Get country code *****/
-   Cty.CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
+   Cty_EditingCty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
 
    /***** Get data of the country from database *****/
-   Cty_GetDataOfCountryByCod (&Cty,Cty_GET_EXTRA_DATA);
+   Cty_GetDataOfCountryByCod (Cty_EditingCty,Cty_GET_EXTRA_DATA);
 
    /***** Check if this country has users *****/
-   if (Cty.Inss.Num ||
-       Cty.NumUsrsWhoClaimToBelongToCty ||
-       Cty.NumUsrs)	// Country has institutions or users ==> don't remove
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_remove_a_country_with_institutions_or_users);
+   if (Cty_EditingCty->Inss.Num ||
+       Cty_EditingCty->NumUsrsWhoClaimToBelongToCty ||
+       Cty_EditingCty->NumUsrs)	// Country has institutions or users ==> don't remove
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_remove_a_country_with_institutions_or_users);
    else	// Country has no users ==> remove it
      {
       /***** Remove surveys of the country *****/
-      Svy_RemoveSurveys (Hie_CTY,Cty.CtyCod);
+      Svy_RemoveSurveys (Hie_CTY,Cty_EditingCty->CtyCod);
 
       /***** Remove country *****/
       DB_QueryDELETE ("can not remove a country",
 		      "DELETE FROM countries WHERE CtyCod='%03ld'",
-		      Cty.CtyCod);
+		      Cty_EditingCty->CtyCod);
 
       /***** Flush cache *****/
       Cty_FlushCacheCountryName ();
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Country_X_removed,
-	             Cty.Name[Gbl.Prefs.Language]);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_Country_X_removed,
+	               Cty_EditingCty->Name[Gbl.Prefs.Language]);
      }
-
-   /***** Show the form again *****/
-   Cty_EditCountries ();
   }
 
 /*****************************************************************************/
@@ -1777,16 +1796,15 @@ void Cty_RenameCountry (void)
    extern const char *Txt_The_country_X_has_been_renamed_as_Y;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_The_name_of_the_country_X_has_not_changed;
-   struct Country *Cty = NULL;
    char NewCtyName[Cty_MAX_BYTES_NAME + 1];
    Lan_Language_t Language;
    char FieldName[4 + 1 + 2 + 1];	// Example: "Name_en"
 
    /***** Country constructor *****/
-   Cty_CountryConstructor (&Cty);
+   Cty_EditingCountryConstructor ();
 
    /***** Get the code of the country *****/
-   Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
+   Cty_EditingCty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
 
    /***** Get the lenguage *****/
    Language = Lan_GetParamLanguage ();
@@ -1795,49 +1813,47 @@ void Cty_RenameCountry (void)
    Par_GetParToText ("Name",NewCtyName,Cty_MAX_BYTES_NAME);
 
    /***** Get from the database the data of the country *****/
-   Cty_GetDataOfCountryByCod (Cty,Cty_GET_EXTRA_DATA);
+   Cty_GetDataOfCountryByCod (Cty_EditingCty,Cty_GET_EXTRA_DATA);
 
    /***** Check if new name is empty *****/
    if (!NewCtyName[0])
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_country_X_empty,
-	             Cty->Name[Language]);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_name_of_the_country_X_empty,
+	               Cty_EditingCty->Name[Language]);
    else
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (Cty->Name[Language],NewCtyName))	// Different names
+      if (strcmp (Cty_EditingCty->Name[Language],NewCtyName))	// Different names
 	{
 	 /***** If country was in database... *****/
-	 if (Cty_CheckIfCountryNameExists (Language,NewCtyName,Cty->CtyCod))
-	    Ale_ShowAlert (Ale_WARNING,Txt_The_country_X_already_exists,
-		           NewCtyName);
+	 if (Cty_CheckIfCountryNameExists (Language,NewCtyName,Cty_EditingCty->CtyCod))
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+		             Txt_The_country_X_already_exists,
+		             NewCtyName);
 	 else
 	   {
 	    /* Update the table changing old name by new name */
 	    snprintf (FieldName,sizeof (FieldName),
 		      "Name_%s",
 		      Lan_STR_LANG_ID[Language]);
-	    Cty_UpdateCtyNameDB (Cty->CtyCod,FieldName,NewCtyName);
+	    Cty_UpdateCtyNameDB (Cty_EditingCty->CtyCod,FieldName,NewCtyName);
 
 	    /* Write message to show the change made */
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_country_X_has_been_renamed_as_Y,
-		           Cty->Name[Language],NewCtyName);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+		             Txt_The_country_X_has_been_renamed_as_Y,
+		             Cty_EditingCty->Name[Language],NewCtyName);
 
 	    /* Update country name */
-	    Str_Copy (Cty->Name[Language],NewCtyName,
+	    Str_Copy (Cty_EditingCty->Name[Language],NewCtyName,
 		      Cty_MAX_BYTES_NAME);
 	   }
 	}
       else	// The same name
-	 Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_country_X_has_not_changed,
-		        Cty->Name[Language]);
+	 Ale_CreateAlert (Ale_INFO,NULL,
+	                  Txt_The_name_of_the_country_X_has_not_changed,
+		          Cty_EditingCty->Name[Language]);
      }
-
-   /***** Country destructor *****/
-   Cty_CountryDestructor (&Cty);
-
-   /***** Show the form again *****/
-   Cty_EditCountries ();
   }
 
 /*****************************************************************************/
@@ -1907,15 +1923,14 @@ void Cty_ChangeCtyWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   struct Country *Cty = NULL;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
    Lan_Language_t Language;
 
    /***** Country constructor *****/
-   Cty_CountryConstructor (&Cty);
+   Cty_EditingCountryConstructor ();
 
    /***** Get the code of the country *****/
-   Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
+   Cty_EditingCty->CtyCod = Cty_GetAndCheckParamOtherCtyCod (0);
 
    /***** Get the lenguage *****/
    Language = Lan_GetParamLanguage ();
@@ -1924,25 +1939,20 @@ void Cty_ChangeCtyWWW (void)
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get from the database the data of the country *****/
-   Cty_GetDataOfCountryByCod (Cty,Cty_GET_EXTRA_DATA);
+   Cty_GetDataOfCountryByCod (Cty_EditingCty,Cty_GET_EXTRA_DATA);
 
    /***** Update the table changing old WWW by new WWW *****/
    DB_QueryUPDATE ("can not update the web of a country",
 		   "UPDATE countries SET WWW_%s='%s'"
 		   " WHERE CtyCod='%03ld'",
-	           Lan_STR_LANG_ID[Language],NewWWW,Cty->CtyCod);
-   Str_Copy (Cty->WWW[Language],NewWWW,
+	           Lan_STR_LANG_ID[Language],NewWWW,Cty_EditingCty->CtyCod);
+   Str_Copy (Cty_EditingCty->WWW[Language],NewWWW,
 	     Cns_MAX_BYTES_WWW);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
-	          NewWWW);
-
-   /***** Country destructor *****/
-   Cty_CountryDestructor (&Cty);
-
-   /***** Show the form again *****/
-   Cty_EditCountries ();
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_The_new_web_address_is_X,
+	            NewWWW);
   }
 
 /*****************************************************************************/
@@ -1968,6 +1978,48 @@ void Cty_ChangeCtyMapAttribution (void)
   }
 
 /*****************************************************************************/
+/********* Show alerts after changing a country and continue editing *********/
+/*****************************************************************************/
+
+void Cty_ContEditAfterChgCty (void)
+  {
+   /***** Write message to show the change made
+	  and put button to go to country changed *****/
+   Cty_ShowAlertAndButtonToGoToCty ();
+
+   /***** Show the form again *****/
+   Cty_EditCountriesInternal ();
+
+   /***** Country destructor *****/
+   Cty_EditingCountryDestructor ();
+  }
+
+/*****************************************************************************/
+/***************** Write message to show the change made   *******************/
+/***************** and put button to go to country changed *******************/
+/*****************************************************************************/
+
+static void Cty_ShowAlertAndButtonToGoToCty (void)
+  {
+   // If the country beeing edited is different to the current one...
+   if (Cty_EditingCty->CtyCod != Gbl.Hierarchy.Cty.CtyCod)
+     {
+      /***** Alert with button to go to couuntry *****/
+      Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,Cty_PutParamGoToCty,
+                                  Btn_CONFIRM_BUTTON,Gbl.Title);
+     }
+   else
+      /***** Alert *****/
+      Ale_ShowAlerts (NULL);
+  }
+
+static void Cty_PutParamGoToCty (void)
+  {
+   /***** Put parameter *****/
+   Cty_PutParamCtyCod (Cty_EditingCty->CtyCod);
+  }
+
+/*****************************************************************************/
 /********************* Put a form to create a new country ********************/
 /*****************************************************************************/
 
@@ -1977,11 +2029,7 @@ static void Cty_PutFormToCreateCountry (void)
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Create_country;
-   struct Country *Cty = NULL;
    Lan_Language_t Lan;
-
-   /***** Country constructoor *****/
-   Cty_CountryConstructor (&Cty);
 
    /***** Start form *****/
    Frm_StartForm (ActNewCty);
@@ -2003,8 +2051,8 @@ static void Cty_PutFormToCreateCountry (void)
                       "<input type=\"text\" name=\"OthCtyCod\""
                       " size=\"3\" maxlength=\"10\" value=\"",
             1 + Lan_NUM_LANGUAGES);
-   if (Cty->CtyCod > 0)
-      fprintf (Gbl.F.Out,"%03ld",Cty->CtyCod);
+   if (Cty_EditingCty->CtyCod > 0)
+      fprintf (Gbl.F.Out,"%03ld",Cty_EditingCty->CtyCod);
    fprintf (Gbl.F.Out,"\" required=\"required\" />"
 	              "</td>");
 
@@ -2014,7 +2062,7 @@ static void Cty_PutFormToCreateCountry (void)
                       " size=\"2\" maxlength=\"2\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            1 + Lan_NUM_LANGUAGES,Cty->Alpha2);
+            1 + Lan_NUM_LANGUAGES,Cty_EditingCty->Alpha2);
 
    fprintf (Gbl.F.Out,"<td></td>"
 		      "<td></td>"
@@ -2053,7 +2101,7 @@ static void Cty_PutFormToCreateCountry (void)
                          "</td>",
                Lan_STR_LANG_ID[Lan],
                Cty_MAX_CHARS_NAME,
-               Cty->Name[Lan]);
+               Cty_EditingCty->Name[Lan]);
 
       /* WWW */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2064,7 +2112,7 @@ static void Cty_PutFormToCreateCountry (void)
 			 "</tr>",
 	       Lan_STR_LANG_ID[Lan],
 	       Cns_MAX_CHARS_WWW,
-	       Cty->WWW[Lan]);
+	       Cty_EditingCty->WWW[Lan]);
      }
 
    /***** End table, send button and end box *****/
@@ -2072,9 +2120,6 @@ static void Cty_PutFormToCreateCountry (void)
 
    /***** End form *****/
    Frm_EndForm ();
-
-   /***** Country destructor *****/
-   Cty_CountryDestructor (&Cty);
   }
 
 /*****************************************************************************/
@@ -2133,49 +2178,53 @@ void Cty_RecFormNewCountry (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_You_must_specify_the_name_of_the_new_country_in_all_languages;
+   extern const char *Txt_Created_new_country_X;
    char ParamName[32];
-   struct Country *Cty = NULL;
    bool CreateCountry = true;
    Lan_Language_t Lan;
    unsigned i;
 
    /***** Country constructoor *****/
-   Cty_CountryConstructor (&Cty);
+   Cty_EditingCountryConstructor ();
 
    /***** Get parameters from form *****/
    /* Get numeric country code */
-   if ((Cty->CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
+   if ((Cty_EditingCty->CtyCod = Cty_GetParamOtherCtyCod ()) < 0)
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_numerical_code_of_the_new_country);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_numerical_code_of_the_new_country);
       CreateCountry = false;
      }
-   else if (Cty_CheckIfNumericCountryCodeExists (Cty->CtyCod))
+   else if (Cty_CheckIfNumericCountryCodeExists (Cty_EditingCty->CtyCod))
      {
-      Ale_ShowAlert (Ale_WARNING,Txt_The_numerical_code_X_already_exists,
-                     Cty->CtyCod);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_The_numerical_code_X_already_exists,
+                       Cty_EditingCty->CtyCod);
       CreateCountry = false;
      }
    else	// Numeric code correct
      {
       /* Get alphabetic-2 country code */
-      Par_GetParToText ("Alpha2",Cty->Alpha2,2);
-      Str_ConvertToUpperText (Cty->Alpha2);
+      Par_GetParToText ("Alpha2",Cty_EditingCty->Alpha2,2);
+      Str_ConvertToUpperText (Cty_EditingCty->Alpha2);
       for (i = 0;
 	   i < 2 && CreateCountry;
 	   i++)
-         if (Cty->Alpha2[i] < 'A' ||
-             Cty->Alpha2[i] > 'Z')
+         if (Cty_EditingCty->Alpha2[i] < 'A' ||
+             Cty_EditingCty->Alpha2[i] > 'Z')
            {
-            Ale_ShowAlert (Ale_WARNING,Txt_The_alphabetical_code_X_is_not_correct,
-                           Cty->Alpha2);
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_alphabetical_code_X_is_not_correct,
+                             Cty_EditingCty->Alpha2);
             CreateCountry = false;
            }
       if (CreateCountry)
         {
-         if (Cty_CheckIfAlpha2CountryCodeExists (Cty->Alpha2))
+         if (Cty_CheckIfAlpha2CountryCodeExists (Cty_EditingCty->Alpha2))
            {
-            Ale_ShowAlert (Ale_WARNING,Txt_The_alphabetical_code_X_already_exists,
-                           Cty->Alpha2);
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_alphabetical_code_X_already_exists,
+                             Cty_EditingCty->Alpha2);
             CreateCountry = false;
            }
          else	// Alphabetic code correct
@@ -2188,22 +2237,24 @@ void Cty_RecFormNewCountry (void)
                snprintf (ParamName,sizeof (ParamName),
         	         "Name_%s",
 			 Lan_STR_LANG_ID[Lan]);
-               Par_GetParToText (ParamName,Cty->Name[Lan],Cty_MAX_BYTES_NAME);
+               Par_GetParToText (ParamName,Cty_EditingCty->Name[Lan],Cty_MAX_BYTES_NAME);
 
-               if (Cty->Name[Lan][0])	// If there's a country name
+               if (Cty_EditingCty->Name[Lan][0])	// If there's a country name
                  {
                   /***** If name of country was in database... *****/
-                  if (Cty_CheckIfCountryNameExists (Lan,Cty->Name[Lan],-1L))
+                  if (Cty_CheckIfCountryNameExists (Lan,Cty_EditingCty->Name[Lan],-1L))
                     {
-                     Ale_ShowAlert (Ale_WARNING,Txt_The_country_X_already_exists,
-                                    Cty->Name[Lan]);
+                     Ale_CreateAlert (Ale_WARNING,NULL,
+                	              Txt_The_country_X_already_exists,
+                                      Cty_EditingCty->Name[Lan]);
                      CreateCountry = false;
                      break;
                     }
                  }
                else	// If there is not a country name
                  {
-                  Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_name_of_the_new_country_in_all_languages);
+                  Ale_CreateAlert (Ale_WARNING,NULL,
+                	           Txt_You_must_specify_the_name_of_the_new_country_in_all_languages);
                   CreateCountry = false;
                   break;
                  }
@@ -2211,20 +2262,18 @@ void Cty_RecFormNewCountry (void)
                snprintf (ParamName,sizeof (ParamName),
         	         "WWW_%s",
 			 Lan_STR_LANG_ID[Lan]);
-               Par_GetParToText (ParamName,Cty->WWW[Lan],Cns_MAX_BYTES_WWW);
+               Par_GetParToText (ParamName,Cty_EditingCty->WWW[Lan],Cns_MAX_BYTES_WWW);
               }
            }
         }
      }
 
    if (CreateCountry)
-      Cty_CreateCountry (Cty);	// Add new country to database
-
-   /***** Country destructor *****/
-   Cty_CountryDestructor (&Cty);
-
-   /***** Show the form again *****/
-   Cty_EditCountries ();
+     {
+      Cty_CreateCountry ();	// Add new country to database
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_country_X,
+		     Cty_EditingCty->Name);
+     }
   }
 
 /*****************************************************************************/
@@ -2234,10 +2283,9 @@ void Cty_RecFormNewCountry (void)
 #define Cty_MAX_BYTES_SUBQUERY_CTYS_NAME	((1 + Lan_NUM_LANGUAGES) * Cty_MAX_BYTES_NAME)
 #define Cty_MAX_BYTES_SUBQUERY_CTYS_WWW		((1 + Lan_NUM_LANGUAGES) * Cns_MAX_BYTES_WWW)
 
-static void Cty_CreateCountry (struct Country *Cty)
+static void Cty_CreateCountry (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   extern const char *Txt_Created_new_country_X;
    Lan_Language_t Lan;
    char StrField[32];
    char SubQueryNam1[Cty_MAX_BYTES_SUBQUERY_CTYS + 1];
@@ -2262,7 +2310,7 @@ static void Cty_CreateCountry (struct Country *Cty)
 
       Str_Concat (SubQueryNam2,",'",
                   Cty_MAX_BYTES_SUBQUERY_CTYS_NAME);
-      Str_Concat (SubQueryNam2,Cty->Name[Lan],
+      Str_Concat (SubQueryNam2,Cty_EditingCty->Name[Lan],
                   Cty_MAX_BYTES_SUBQUERY_CTYS_NAME);
       Str_Concat (SubQueryNam2,"'",
                   Cty_MAX_BYTES_SUBQUERY_CTYS_NAME);
@@ -2275,7 +2323,7 @@ static void Cty_CreateCountry (struct Country *Cty)
 
       Str_Concat (SubQueryWWW2,",'",
                   Cty_MAX_BYTES_SUBQUERY_CTYS_WWW);
-      Str_Concat (SubQueryWWW2,Cty->WWW[Lan],
+      Str_Concat (SubQueryWWW2,Cty_EditingCty->WWW[Lan],
                   Cty_MAX_BYTES_SUBQUERY_CTYS_WWW);
       Str_Concat (SubQueryWWW2,"'",
                   Cty_MAX_BYTES_SUBQUERY_CTYS_WWW);
@@ -2286,11 +2334,8 @@ static void Cty_CreateCountry (struct Country *Cty)
 		   " VALUES"
 		   " ('%03ld','%s',''%s%s)",
                    SubQueryNam1,SubQueryWWW1,
-                   Cty->CtyCod,Cty->Alpha2,SubQueryNam2,SubQueryWWW2);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_country_X,
-                  Cty->Name);
+                   Cty_EditingCty->CtyCod,Cty_EditingCty->Alpha2,
+		   SubQueryNam2,SubQueryWWW2);
   }
 
 /*****************************************************************************/
@@ -2446,46 +2491,45 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 /*****************************************************************************/
 /*********************** Country constructor/destructor **********************/
 /*****************************************************************************/
-// *Cty must be NULL
 
-static void Cty_CountryConstructor (struct Country **Cty)
+static void Cty_EditingCountryConstructor (void)
   {
    Lan_Language_t Lan;
 
-   /***** *Cty must be NULL *****/
-   if (*Cty != NULL)
-      Lay_ShowErrorAndExit ("Error initializinig country.");
+   /***** Pointer must be NULL *****/
+   if (Cty_EditingCty != NULL)
+      Lay_ShowErrorAndExit ("Error initializing country.");
 
    /***** Allocate memory for country *****/
-   if ((*Cty = (struct Country *) malloc (sizeof (struct Country))) == NULL)
+   if ((Cty_EditingCty = (struct Country *) malloc (sizeof (struct Country))) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for country.");
 
    /***** Reset country *****/
-   (*Cty)->CtyCod = -1L;
-   (*Cty)->Alpha2[0] = '\0';
+   Cty_EditingCty->CtyCod = -1L;
+   Cty_EditingCty->Alpha2[0] = '\0';
    for (Lan = (Lan_Language_t) 1;
 	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
      {
-      (*Cty)->Name[Lan][0] = '\0';
-      (*Cty)->WWW [Lan][0] = '\0';
+      Cty_EditingCty->Name[Lan][0] = '\0';
+      Cty_EditingCty->WWW [Lan][0] = '\0';
      }
-   (*Cty)->Inss.Num = 0;
-   (*Cty)->Inss.Lst = NULL;
-   (*Cty)->Inss.SelectedOrder = Ins_ORDER_DEFAULT;
-   (*Cty)->NumCtrs = 0;
-   (*Cty)->NumDegs = 0;
-   (*Cty)->NumCrss = 0;
-   (*Cty)->NumUsrs = 0;
-   (*Cty)->NumUsrsWhoClaimToBelongToCty = 0;
+   Cty_EditingCty->Inss.Num = 0;
+   Cty_EditingCty->Inss.Lst = NULL;
+   Cty_EditingCty->Inss.SelectedOrder = Ins_ORDER_DEFAULT;
+   Cty_EditingCty->NumCtrs = 0;
+   Cty_EditingCty->NumDegs = 0;
+   Cty_EditingCty->NumCrss = 0;
+   Cty_EditingCty->NumUsrs = 0;
+   Cty_EditingCty->NumUsrsWhoClaimToBelongToCty = 0;
   }
 
-static void Cty_CountryDestructor (struct Country **Cty)
+static void Cty_EditingCountryDestructor (void)
   {
    /***** Free memory used for country *****/
-   if (*Cty != NULL)
+   if (Cty_EditingCty != NULL)
      {
-      free ((void *) *Cty);
-      *Cty = NULL;
+      free ((void *) Cty_EditingCty);
+      Cty_EditingCty = NULL;
      }
   }
