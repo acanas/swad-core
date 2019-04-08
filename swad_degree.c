@@ -122,6 +122,7 @@ static void Deg_UpdateDegNameDB (long DegCod,const char *FieldName,const char *N
 static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
 static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
+static void Deg_ShowAlertAndButtonToGoToDeg (void);
 static void Deg_PutParamGoToDeg (void);
 
 static void Deg_EditingDegreeConstructor (void);
@@ -1144,8 +1145,6 @@ unsigned Deg_ConvStrToYear (const char *StrYear)
 
 static void Deg_CreateDegree (unsigned Status)
   {
-   extern const char *Txt_Created_new_degree_X;
-
    /***** Create a new degree *****/
    Deg_EditingDeg->DegCod =
    DB_QueryINSERTandReturnCode ("can not create a new degree",
@@ -1159,13 +1158,6 @@ static void Deg_CreateDegree (unsigned Status)
 				Deg_EditingDeg->ShrtName,
 				Deg_EditingDeg->FullName,
 				Deg_EditingDeg->WWW);
-
-   /***** Write message to show the change made
-          and put button to go to degree created *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_Created_new_degree_X,
-                    Deg_EditingDeg->FullName);
-   Deg_ShowAlertAndButtonToGoToDeg ();
   }
 
 /*****************************************************************************/
@@ -1553,9 +1545,6 @@ void Deg_RecFormReqDeg (void)
 
    /***** Receive form to request a new degree *****/
    Deg_RecFormRequestOrCreateDeg ((unsigned) Deg_STATUS_BIT_PENDING);
-
-   /***** Degree destructor *****/
-   Deg_EditingDegreeDestructor ();
   }
 
 /*****************************************************************************/
@@ -1581,6 +1570,7 @@ void Deg_RecFormNewDeg (void)
 static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
   {
    extern const char *Txt_The_degree_X_already_exists;
+   extern const char *Txt_Created_new_degree_X;
    extern const char *Txt_You_must_specify_the_web_address_of_the_new_degree;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree;
 
@@ -1608,23 +1598,29 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
 	 /***** If name of degree was in database... *****/
 	 if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Deg_EditingDeg->ShrtName,
 	                                    -1L,Deg_EditingDeg->CtrCod))
-	    Ale_ShowAlert (Ale_WARNING,Txt_The_degree_X_already_exists,
-		           Deg_EditingDeg->ShrtName);
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+		             Txt_The_degree_X_already_exists,
+		             Deg_EditingDeg->ShrtName);
 	 else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Deg_EditingDeg->FullName,
 	                                         -1L,Deg_EditingDeg->CtrCod))
-	    Ale_ShowAlert (Ale_WARNING,Txt_The_degree_X_already_exists,
-		           Deg_EditingDeg->FullName);
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+		             Txt_The_degree_X_already_exists,
+		             Deg_EditingDeg->FullName);
 	 else	// Add new degree to database
+	   {
 	    Deg_CreateDegree (Status);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+			     Txt_Created_new_degree_X,
+			     Deg_EditingDeg->FullName);
+	   }
 	}
       else	// If there is not a degree logo or web
-	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_web_address_of_the_new_degree);
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_You_must_specify_the_web_address_of_the_new_degree);
      }
    else	// If there is not a degree name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree);
-
-   /***** Show the form again *****/
-   Deg_EditDegreesInternal ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree);
   }
 
 /*****************************************************************************/
@@ -1647,22 +1643,18 @@ void Deg_RemoveDegree (void)
 
    /***** Check if this degree has courses *****/
    if (Crs_GetNumCrssInDeg (Deg_EditingDeg->DegCod))	// Degree has courses ==> don't remove
-      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
    else	// Degree has no courses ==> remove it
      {
       /***** Remove degree *****/
       Deg_RemoveDegreeCompletely (Deg_EditingDeg->DegCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Degree_X_removed,
-                     Deg_EditingDeg->FullName);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+		       Txt_Degree_X_removed,
+                       Deg_EditingDeg->FullName);
      }
-
-   /***** Show the form again *****/
-   Deg_EditDegreesInternal ();
-
-   /***** Degree destructor *****/
-   Deg_EditingDegreeDestructor ();
   }
 
 /*****************************************************************************/
@@ -1961,19 +1953,6 @@ void Deg_RenameDegreeFull (void)
    Deg_RenameDegree (Deg_EditingDeg,Cns_FULL_NAME);
   }
 
-void Deg_ContEditAfterChgDeg (void)
-  {
-   /***** Write message to show the change made
-	  and put button to go to degree changed *****/
-   Deg_ShowAlertAndButtonToGoToDeg ();
-
-   /***** Show the form again *****/
-   Deg_EditDegreesInternal ();
-
-   /***** Degree destructor *****/
-   Deg_EditingDegreeDestructor ();
-  }
-
 /*****************************************************************************/
 /*************** Change the name of a degree in configuration ****************/
 /*****************************************************************************/
@@ -2192,18 +2171,11 @@ void Deg_ChangeDegreeType (void)
 	           NewDegTypCod,Deg_EditingDeg->DegCod);
    Deg_EditingDeg->DegTypCod = NewDegTypCod;
 
-   /***** Write alert to show the change made
+   /***** Create alert to show the change made
           and put button to go to degree changed *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_type_of_degree_of_the_degree_X_has_changed,
 	            Deg_EditingDeg->FullName);
-   Deg_ShowAlertAndButtonToGoToDeg ();
-
-   /***** Show the form again *****/
-   Deg_EditDegreesInternal ();
-
-   /***** Degree destructor *****/
-   Deg_EditingDegreeDestructor ();
   }
 
 /*****************************************************************************/
@@ -2242,16 +2214,10 @@ void Deg_ChangeDegWWW (void)
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_The_new_web_address_is_X,
 		       NewWWW);
-      Deg_ShowAlertAndButtonToGoToDeg ();
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
-
-   /***** Show the form again *****/
-   Deg_EditDegreesInternal ();
-
-   /***** Degree destructor *****/
-   Deg_EditingDegreeDestructor ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_web_address_empty);
   }
 
 void Deg_ChangeDegWWWInConfig (void)
@@ -2337,6 +2303,16 @@ void Deg_ChangeDegStatus (void)
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_status_of_the_degree_X_has_changed,
                     Deg_EditingDeg->ShrtName);
+  }
+
+/*****************************************************************************/
+/********* Show alerts after changing a course and continue editing **********/
+/*****************************************************************************/
+
+void Deg_ContEditAfterChgDeg (void)
+  {
+   /***** Write message to show the change made
+	  and put button to go to degree changed *****/
    Deg_ShowAlertAndButtonToGoToDeg ();
 
    /***** Show the form again *****/
@@ -2351,7 +2327,7 @@ void Deg_ChangeDegStatus (void)
 /***************** and put button to go to degree changed ********************/
 /*****************************************************************************/
 
-void Deg_ShowAlertAndButtonToGoToDeg (void)
+static void Deg_ShowAlertAndButtonToGoToDeg (void)
   {
    extern const char *Txt_Go_to_X;
 

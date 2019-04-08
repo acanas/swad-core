@@ -464,11 +464,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.101.2 (2019-04-08)"
+#define Log_PLATFORM_VERSION	"SWAD 18.101.3 (2019-04-08)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
-En degree, centre, institution y country, hacer más funciones a priori al estilo de como está hecha la edición de course
+En centre, institution y country, hacer más funciones a priori al estilo de como está hecha la edición de course
+	Version 18.101.3: Apr 08, 2019 	Code refactoring in edition of degrees. (241924 lines)
 	Version 18.101.2: Apr 08, 2019 	Code refactoring in edition of degree types.
 					Fixed bug in alerts. (241936 lines)
 	Version 18.101.1: Apr 08, 2019 	Code refactoring in edition of courses. (241921 lines)

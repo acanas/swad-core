@@ -1903,6 +1903,7 @@ void Crs_RecFormNewCrs (void)
 static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
   {
    extern const char *Txt_The_course_X_already_exists;
+   extern const char *Txt_Created_new_course_X;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course;
    extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
@@ -1934,7 +1935,12 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
         	             Txt_The_course_X_already_exists,
 		             Crs_EditingCrs->FullName);
 	 else	// Add new requested course to database
+	   {
 	    Crs_CreateCourse (Status);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+			     Txt_Created_new_course_X,
+			     Crs_EditingCrs->FullName);
+	   }
 	}
       else	// If there is not a course name
          Ale_CreateAlert (Ale_WARNING,NULL,
@@ -1975,8 +1981,6 @@ static void Crs_GetParamsNewCourse (struct Course *Crs)
 
 static void Crs_CreateCourse (unsigned Status)
   {
-   extern const char *Txt_Created_new_course_X;
-
    /***** Insert new course into pending requests *****/
    Crs_EditingCrs->CrsCod =
    DB_QueryINSERTandReturnCode ("can not create a new course",
@@ -1992,11 +1996,6 @@ static void Crs_CreateCourse (unsigned Status)
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Crs_EditingCrs->ShrtName,
 				Crs_EditingCrs->FullName);
-
-   /***** Create success message *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Txt_Created_new_course_X,
-                    Crs_EditingCrs->FullName);
   }
 
 /*****************************************************************************/
@@ -2825,7 +2824,7 @@ void Crs_ChangeCrsStatus (void)
   }
 
 /*****************************************************************************/
-/************* Show message of success after changing a course ***************/
+/********* Show alerts after changing a course and continue editing **********/
 /*****************************************************************************/
 
 void Crs_ContEditAfterChgCrs (void)

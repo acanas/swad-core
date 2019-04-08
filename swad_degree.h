@@ -129,7 +129,6 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod);
 void Deg_RemoveDegreeCompletely (long DegCod);
 void Deg_RenameDegreeShort (void);
 void Deg_RenameDegreeFull (void);
-void Deg_ContEditAfterChgDeg (void);
 void Deg_RenameDegreeShortInConfig (void);
 void Deg_RenameDegreeFullInConfig (void);
 void Deg_ChangeDegCtrInConfig (void);
@@ -138,8 +137,7 @@ void Deg_ChangeDegreeType (void);
 void Deg_ChangeDegWWW (void);
 void Deg_ChangeDegWWWInConfig (void);
 void Deg_ChangeDegStatus (void);
-
-void Deg_ShowAlertAndButtonToGoToDeg (void);
+void Deg_ContEditAfterChgDeg (void);
 
 void Deg_RequestLogo (void);
 void Deg_ReceiveLogo (void);
