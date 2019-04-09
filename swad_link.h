@@ -64,6 +64,7 @@ void Lnk_RemoveLink (void);
 void Lnk_RenameLinkShort (void);
 void Lnk_RenameLinkFull (void);
 void Lnk_ChangeLinkWWW (void);
+void Lnk_ContEditAfterChgLnk (void);
 void Lnk_RecFormNewLink (void);
 
 #endif

@@ -260,7 +260,6 @@ struct Globals
      {
       unsigned Num;		// Number of institutional links
       struct Link *Lst;		// List of institutional links
-      struct Link EditingLnk;
      } Links;
    struct
      {

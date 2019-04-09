@@ -1716,11 +1716,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActClkBan		*/{1145,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x3C7,Act_CONT_NORM,Act_DOWNLD_FILE,Ban_ClickOnBanner		,NULL				,NULL},
 
    /* ActEdiLnk		*/{ 749,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_EditLinks			,NULL},
-   /* ActNewLnk		*/{ 750,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_RecFormNewLink		,NULL},
-   /* ActRemLnk		*/{ 897,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_RemoveLink			,NULL},
-   /* ActRenLnkSho	*/{ 753,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_RenameLinkShort		,NULL},
-   /* ActRenLnkFul	*/{ 751,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_RenameLinkFull		,NULL},
-   /* ActChgLnkWWW	*/{ 752,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Lnk_ChangeLinkWWW		,NULL},
+   /* ActNewLnk		*/{ 750,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_RecFormNewLink		,Lnk_ContEditAfterChgLnk	,NULL},
+   /* ActRemLnk		*/{ 897,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_RemoveLink			,Lnk_ContEditAfterChgLnk	,NULL},
+   /* ActRenLnkSho	*/{ 753,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_RenameLinkShort		,Lnk_ContEditAfterChgLnk	,NULL},
+   /* ActRenLnkFul	*/{ 751,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_RenameLinkFull		,Lnk_ContEditAfterChgLnk	,NULL},
+   /* ActChgLnkWWW	*/{ 752,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Lnk_ChangeLinkWWW		,Lnk_ContEditAfterChgLnk	,NULL},
 
    /* ActEdiPlg		*/{ 778,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_EditPlugins		,NULL},
    /* ActNewPlg		*/{ 779,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Plg_RecFormNewPlg		,NULL},

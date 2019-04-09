@@ -330,10 +330,6 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Links.Num = 0;
    Gbl.Links.Lst = NULL;
-   Gbl.Links.EditingLnk.LnkCod = -1L;
-   Gbl.Links.EditingLnk.ShrtName[0] = '\0';
-   Gbl.Links.EditingLnk.FullName[0] = '\0';
-   Gbl.Links.EditingLnk.WWW[0] = '\0';
 
    Gbl.Usrs.Listing.RecsUsrs   = Rec_RECORD_USERS_UNKNOWN;
    Gbl.Usrs.Listing.RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;

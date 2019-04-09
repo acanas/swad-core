@@ -57,6 +57,8 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+static struct Link *Lnk_EditingLnk = NULL;	// Static variable to keep the link being edited
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -67,6 +69,7 @@ static void Lnk_PutIconsListingLinks (void);
 static void Lnk_PutIconToEditLinks (void);
 static void Lnk_WriteListOfLinks (void);
 
+static void Lnk_EditLinksInternal (void);
 static void Lnk_PutIconsEditingLinks (void);
 
 static void Lnk_ListLinksForEdition (void);
@@ -79,6 +82,9 @@ static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *N
 static void Lnk_PutFormToCreateLink (void);
 static void Lnk_PutHeadLinks (void);
 static void Lnk_CreateLink (struct Link *Lnk);
+
+static void Lnk_EditingLinkConstructor (void);
+static void Lnk_EditingLinkDestructor (void);
 
 /*****************************************************************************/
 /*************************** List all the links ******************************/
@@ -208,6 +214,18 @@ static void Lnk_WriteListOfLinks (void)
 /*****************************************************************************/
 
 void Lnk_EditLinks (void)
+  {
+   /***** Link constructor *****/
+   Lnk_EditingLinkConstructor ();
+
+   /***** Edit links *****/
+   Lnk_EditLinksInternal ();
+
+   /***** Link destructor *****/
+   Lnk_EditingLinkDestructor ();
+  }
+
+static void Lnk_EditLinksInternal (void)
   {
    extern const char *Hlp_SYSTEM_Links_edit;
    extern const char *Txt_Links;
@@ -490,26 +508,26 @@ long Lnk_GetParamLnkCod (void)
 void Lnk_RemoveLink (void)
   {
    extern const char *Txt_Link_X_removed;
-   struct Link Lnk;
+
+   /***** Link constructor *****/
+   Lnk_EditingLinkConstructor ();
 
    /***** Get link code *****/
-   if ((Lnk.LnkCod = Lnk_GetParamLnkCod ()) == -1L)
+   if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of institutional link is missing.");
 
    /***** Get data of the link from database *****/
-   Lnk_GetDataOfLinkByCod (&Lnk);
+   Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
 
    /***** Remove link *****/
    DB_QueryDELETE ("can not remove an institutional link",
 		   "DELETE FROM links WHERE LnkCod=%ld",
-		   Lnk.LnkCod);
+		   Lnk_EditingLnk->LnkCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Link_X_removed,
-                  Lnk.ShrtName);
-
-   /***** Show the form again *****/
-   Lnk_EditLinks ();
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_Link_X_removed,
+                    Lnk_EditingLnk->ShrtName);
   }
 
 /*****************************************************************************/
@@ -518,6 +536,10 @@ void Lnk_RemoveLink (void)
 
 void Lnk_RenameLinkShort (void)
   {
+   /***** Link constructor *****/
+   Lnk_EditingLinkConstructor ();
+
+   /***** Rename link *****/
    Lnk_RenameLink (Cns_SHRT_NAME);
   }
 
@@ -527,6 +549,10 @@ void Lnk_RenameLinkShort (void)
 
 void Lnk_RenameLinkFull (void)
   {
+   /***** Link constructor *****/
+   Lnk_EditingLinkConstructor ();
+
+   /***** Rename link *****/
    Lnk_RenameLink (Cns_FULL_NAME);
   }
 
@@ -540,45 +566,44 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_link_X_already_exists;
    extern const char *Txt_The_link_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_link_X_has_not_changed;
-   struct Link *Lnk;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentLnkName = NULL;		// Initialized to avoid warning
    char NewLnkName[Lnk_MAX_BYTES_LINK_FULL_NAME + 1];
 
-   Lnk = &Gbl.Links.EditingLnk;
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
          MaxBytes = Lnk_MAX_BYTES_LINK_SHRT_NAME;
-         CurrentLnkName = Lnk->ShrtName;
+         CurrentLnkName = Lnk_EditingLnk->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
          MaxBytes = Lnk_MAX_BYTES_LINK_FULL_NAME;
-         CurrentLnkName = Lnk->FullName;
+         CurrentLnkName = Lnk_EditingLnk->FullName;
          break;
      }
 
    /***** Get parameters from form *****/
    /* Get the code of the link */
-   if ((Lnk->LnkCod = Lnk_GetParamLnkCod ()) == -1L)
+   if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of institutional link is missing.");
 
    /* Get the new name for the link */
    Par_GetParToText (ParamName,NewLnkName,MaxBytes);
 
-   /***** Get from the database the old names of the link *****/
-   Lnk_GetDataOfLinkByCod (Lnk);
+   /***** Get link data from the database *****/
+   Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
 
    /***** Check if new name is empty *****/
    if (!NewLnkName[0])
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_link_X_empty,
-                     CurrentLnkName);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_name_of_the_link_X_empty,
+                       CurrentLnkName);
    else
      {
       /***** Check if old and new names are the same
@@ -586,28 +611,30 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentLnkName,NewLnkName))	// Different names
         {
          /***** If link was in database... *****/
-         if (Lnk_CheckIfLinkNameExists (ParamName,NewLnkName,Lnk->LnkCod))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_link_X_already_exists,
-                           NewLnkName);
+         if (Lnk_CheckIfLinkNameExists (ParamName,NewLnkName,Lnk_EditingLnk->LnkCod))
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_link_X_already_exists,
+                             NewLnkName);
          else
            {
             /* Update the table changing old name by new name */
-            Lnk_UpdateLnkNameDB (Lnk->LnkCod,FieldName,NewLnkName);
+            Lnk_UpdateLnkNameDB (Lnk_EditingLnk->LnkCod,FieldName,NewLnkName);
 
             /* Write message to show the change made */
-            Ale_ShowAlert (Ale_SUCCESS,Txt_The_link_X_has_been_renamed_as_Y,
-                           CurrentLnkName,NewLnkName);
+            Ale_CreateAlert (Ale_SUCCESS,NULL,
+        	             Txt_The_link_X_has_been_renamed_as_Y,
+                             CurrentLnkName,NewLnkName);
            }
         }
       else	// The same name
-         Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_link_X_has_not_changed,
-                        CurrentLnkName);
+         Ale_CreateAlert (Ale_INFO,NULL,
+                          Txt_The_name_of_the_link_X_has_not_changed,
+                          CurrentLnkName);
      }
 
-   /***** Show the form again *****/
+   /***** Update name *****/
    Str_Copy (CurrentLnkName,NewLnkName,
              MaxBytes);
-   Lnk_EditLinks ();
   }
 
 /*****************************************************************************/
@@ -644,38 +671,58 @@ void Lnk_ChangeLinkWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   struct Link *Lnk;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
-   Lnk = &Gbl.Links.EditingLnk;
+   /***** Link constructor *****/
+   Lnk_EditingLinkConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the link */
-   if ((Lnk->LnkCod = Lnk_GetParamLnkCod ()) == -1L)
+   if ((Lnk_EditingLnk->LnkCod = Lnk_GetParamLnkCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of institutional link is missing.");
 
    /* Get the new WWW for the link */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
+   /***** Get link data from the database *****/
+   Lnk_GetDataOfLinkByCod (Lnk_EditingLnk);
+
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
      {
-      /* Update the table changing old WWW by new WWW */
+      /***** Update the table changing old WWW by new WWW *****/
       DB_QueryUPDATE ("can not update the web of an institutional link",
 		      "UPDATE links SET WWW='%s' WHERE LnkCod=%ld",
-                      NewWWW,Lnk->LnkCod);
+                      NewWWW,Lnk_EditingLnk->LnkCod);
 
-      /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
-                     NewWWW);
+      /***** Message to show the change made *****/
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_The_new_web_address_is_X,
+                       NewWWW);
      }
    else
-     Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_web_address_empty);
+
+   /***** Update web *****/
+   Str_Copy (Lnk_EditingLnk->WWW,NewWWW,
+             Cns_MAX_BYTES_WWW);
+  }
+
+/*****************************************************************************/
+/********** Show alerts after changing a link and continue editing ***********/
+/*****************************************************************************/
+
+void Lnk_ContEditAfterChgLnk (void)
+  {
+   /***** Write message to show the change made *****/
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Str_Copy (Lnk->WWW,NewWWW,
-             Cns_MAX_BYTES_WWW);
-   Lnk_EditLinks ();
+   Lnk_EditLinksInternal ();
+
+   /***** Link destructor *****/
+   Lnk_EditingLinkDestructor ();
   }
 
 /*****************************************************************************/
@@ -687,9 +734,6 @@ static void Lnk_PutFormToCreateLink (void)
    extern const char *Hlp_SYSTEM_Links_edit;
    extern const char *Txt_New_link;
    extern const char *Txt_Create_link;
-   struct Link *Lnk;
-
-   Lnk = &Gbl.Links.EditingLnk;
 
    /***** Start form *****/
    Frm_StartForm (ActNewLnk);
@@ -713,7 +757,7 @@ static void Lnk_PutFormToCreateLink (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName);
+            Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName);
 
    /***** Link full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -722,7 +766,7 @@ static void Lnk_PutFormToCreateLink (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName);
+            Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName);
 
    /***** Link WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -732,7 +776,7 @@ static void Lnk_PutFormToCreateLink (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            Cns_MAX_CHARS_WWW,Lnk->WWW);
+            Cns_MAX_CHARS_WWW,Lnk_EditingLnk->WWW);
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
@@ -781,40 +825,48 @@ void Lnk_RecFormNewLink (void)
   {
    extern const char *Txt_The_link_X_already_exists;
    extern const char *Txt_You_must_specify_the_URL_of_the_new_link;
+   extern const char *Txt_Created_new_link_X;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link;
-   struct Link *Lnk;
 
-   Lnk = &Gbl.Links.EditingLnk;
+   /***** Link constructor *****/
+   Lnk_EditingLinkConstructor ();
 
    /***** Get parameters from form *****/
    /* Get link short name */
-   Par_GetParToText ("ShortName",Lnk->ShrtName,Lnk_MAX_BYTES_LINK_SHRT_NAME);
+   Par_GetParToText ("ShortName",Lnk_EditingLnk->ShrtName,Lnk_MAX_BYTES_LINK_SHRT_NAME);
 
    /* Get link full name */
-   Par_GetParToText ("FullName",Lnk->FullName,Lnk_MAX_BYTES_LINK_FULL_NAME);
+   Par_GetParToText ("FullName",Lnk_EditingLnk->FullName,Lnk_MAX_BYTES_LINK_FULL_NAME);
 
    /* Get link URL */
-   Par_GetParToText ("WWW",Lnk->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParToText ("WWW",Lnk_EditingLnk->WWW,Cns_MAX_BYTES_WWW);
 
-   if (Lnk->ShrtName[0] && Lnk->FullName[0])	// If there's a link name
+   if (Lnk_EditingLnk->ShrtName[0] &&
+       Lnk_EditingLnk->FullName[0])	// If there's a link name
      {
       /***** If name of link was in database... *****/
-      if (Lnk_CheckIfLinkNameExists ("ShortName",Lnk->ShrtName,-1L))
-         Ale_ShowAlert (Ale_WARNING,Txt_The_link_X_already_exists,
-                        Lnk->ShrtName);
-      else if (Lnk_CheckIfLinkNameExists ("FullName",Lnk->FullName,-1L))
-         Ale_ShowAlert (Ale_WARNING,Txt_The_link_X_already_exists,
-                        Lnk->FullName);
-      else if (!Lnk->WWW[0])
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_URL_of_the_new_link);
+      if (Lnk_CheckIfLinkNameExists ("ShortName",Lnk_EditingLnk->ShrtName,-1L))
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_The_link_X_already_exists,
+                          Lnk_EditingLnk->ShrtName);
+      else if (Lnk_CheckIfLinkNameExists ("FullName",Lnk_EditingLnk->FullName,-1L))
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_The_link_X_already_exists,
+                          Lnk_EditingLnk->FullName);
+      else if (!Lnk_EditingLnk->WWW[0])
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_You_must_specify_the_URL_of_the_new_link);
       else	// Add new link to database
-         Lnk_CreateLink (Lnk);
+        {
+         Lnk_CreateLink (Lnk_EditingLnk);
+      	 Ale_CreateAlert (Ale_SUCCESS,NULL,
+      	                  Txt_Created_new_link_X,
+			  Lnk_EditingLnk->ShrtName);
+        }
      }
    else	// If there is not a link name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link);
-
-   /***** Show the form again *****/
-   Lnk_EditLinks ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link);
   }
 
 /*****************************************************************************/
@@ -823,8 +875,6 @@ void Lnk_RecFormNewLink (void)
 
 static void Lnk_CreateLink (struct Link *Lnk)
   {
-   extern const char *Txt_Created_new_link_X;
-
    /***** Create a new link *****/
    DB_QueryINSERT ("can not create institutional link",
 		   "INSERT INTO links"
@@ -832,8 +882,35 @@ static void Lnk_CreateLink (struct Link *Lnk)
 		   " VALUES"
 		   " ('%s','%s','%s')",
                    Lnk->ShrtName,Lnk->FullName,Lnk->WWW);
+  }
 
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_link_X,
-                  Lnk->ShrtName);
+/*****************************************************************************/
+/************************* Place constructor/destructor **********************/
+/*****************************************************************************/
+
+static void Lnk_EditingLinkConstructor (void)
+  {
+   /***** Pointer must be NULL *****/
+   if (Lnk_EditingLnk != NULL)
+      Lay_ShowErrorAndExit ("Error initializing link.");
+
+   /***** Allocate memory for link *****/
+   if ((Lnk_EditingLnk = (struct Link *) malloc (sizeof (struct Link))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for link.");
+
+   /***** Reset link *****/
+   Lnk_EditingLnk->LnkCod      = -1L;
+   Lnk_EditingLnk->ShrtName[0] = '\0';
+   Lnk_EditingLnk->FullName[0] = '\0';
+   Lnk_EditingLnk->WWW[0]      = '\0';
+  }
+
+static void Lnk_EditingLinkDestructor (void)
+  {
+   /***** Free memory used for link *****/
+   if (Lnk_EditingLnk != NULL)
+     {
+      free ((void *) Lnk_EditingLnk);
+      Lnk_EditingLnk = NULL;
+     }
   }
