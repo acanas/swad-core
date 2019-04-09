@@ -326,10 +326,6 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Banners.Num = 0;
    Gbl.Banners.Lst = NULL;
-   Gbl.Banners.EditingBan.BanCod = -1L;
-   Gbl.Banners.EditingBan.ShrtName[0] = '\0';
-   Gbl.Banners.EditingBan.FullName[0] = '\0';
-   Gbl.Banners.EditingBan.WWW[0] = '\0';
    Gbl.Banners.BanCodClicked = 0L;
 
    Gbl.Links.Num = 0;

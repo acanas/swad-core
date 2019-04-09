@@ -71,6 +71,7 @@ void Ban_RenameBannerShort (void);
 void Ban_RenameBannerFull (void);
 void Ban_ChangeBannerImg (void);
 void Ban_ChangeBannerWWW (void);
+void Ban_ContEditAfterChgBan (void);
 void Ban_RecFormNewBanner (void);
 void Ban_WriteMenuWithBanners (void);
 void Ban_ClickOnBanner (void);

@@ -58,6 +58,8 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+static struct Banner *Ban_EditingBan = NULL;	// Static variable to keep the banner being edited
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -65,6 +67,7 @@ extern struct Globals Gbl;
 static void Ban_WriteListOfBanners (void);
 static void Ban_PutIconsListingBanners (void);
 static void Ban_PutIconToEditBanners (void);
+static void Ban_EditBannersInternal (void);
 static void Ban_GetListBanners (MYSQL_RES **mysql_res,unsigned long NumRows);
 
 static void Ban_PutIconsEditingBanners (void);
@@ -81,6 +84,9 @@ static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,
 static void Ban_PutFormToCreateBanner (void);
 static void Ban_PutHeadBanners (void);
 static void Ban_CreateBanner (struct Banner *Ban);
+
+static void Ban_EditingBannerConstructor (void);
+static void Ban_EditingBannerDestructor (void);
 
 /*****************************************************************************/
 /***************************** List all banners ******************************/
@@ -190,6 +196,18 @@ static void Ban_PutIconToEditBanners (void)
 /*****************************************************************************/
 
 void Ban_EditBanners (void)
+  {
+   /***** Banner constructor *****/
+   Ban_EditingBannerConstructor ();
+
+   /***** Edit banners *****/
+   Ban_EditBannersInternal ();
+
+   /***** Banner destructor *****/
+   Ban_EditingBannerDestructor ();
+  }
+
+static void Ban_EditBannersInternal (void)
   {
    extern const char *Hlp_SYSTEM_Banners_edit;
    extern const char *Txt_Banners;
@@ -506,26 +524,26 @@ long Ban_GetParamBanCod (void)
 void Ban_RemoveBanner (void)
   {
    extern const char *Txt_Banner_X_removed;
-   struct Banner Ban;
+
+   /***** Banner constructor *****/
+   Ban_EditingBannerConstructor ();
 
    /***** Get banner code *****/
-   if ((Ban.BanCod = Ban_GetParamBanCod ()) == -1L)
+   if ((Ban_EditingBan->BanCod = Ban_GetParamBanCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of banner is missing.");
 
    /***** Get data of the banner from database *****/
-   Ban_GetDataOfBannerByCod (&Ban);
+   Ban_GetDataOfBannerByCod (Ban_EditingBan);
 
    /***** Remove banner *****/
    DB_QueryDELETE ("can not remove a banner",
 		   "DELETE FROM banners WHERE BanCod=%ld",
-		   Ban.BanCod);
+		   Ban_EditingBan->BanCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Banner_X_removed,
-                  Ban.ShrtName);
-
-   /***** Show the form again *****/
-   Ban_EditBanners ();
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_Banner_X_removed,
+                    Ban_EditingBan->ShrtName);
   }
 
 /*****************************************************************************/
@@ -534,6 +552,9 @@ void Ban_RemoveBanner (void)
 
 void Ban_ShowBanner (void)
   {
+   /***** Banner constructor *****/
+   Ban_EditingBannerConstructor ();
+
    /***** Set banner as visible *****/
    Ban_ShowOrHideBanner (false);
   }
@@ -544,6 +565,9 @@ void Ban_ShowBanner (void)
 
 void Ban_HideBanner (void)
   {
+   /***** Banner constructor *****/
+   Ban_EditingBannerConstructor ();
+
    /***** Set banner as hidden *****/
    Ban_ShowOrHideBanner (true);
   }
@@ -556,31 +580,28 @@ static void Ban_ShowOrHideBanner (bool Hide)
   {
    extern const char *Txt_The_banner_X_is_now_hidden;
    extern const char *Txt_The_banner_X_is_now_visible;
-   struct Banner Ban;
 
    /***** Get banner code *****/
-   if ((Ban.BanCod = Ban_GetParamBanCod ()) == -1L)
+   if ((Ban_EditingBan->BanCod = Ban_GetParamBanCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of banner is missing.");
 
    /***** Get data of the banner from database *****/
-   Ban_GetDataOfBannerByCod (&Ban);
+   Ban_GetDataOfBannerByCod (Ban_EditingBan);
 
    /***** Mark file as hidden/visible in database *****/
-   if (Ban.Hidden != Hide)
+   if (Ban_EditingBan->Hidden != Hide)
       DB_QueryUPDATE ("can not change status of a banner in database",
 		      "UPDATE banners SET Hidden='%c'"
 		      " WHERE BanCod=%ld",
 	              Hide ? 'Y' :
 		             'N',
-	              Ban.BanCod);
+	              Ban_EditingBan->BanCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Hide ? Txt_The_banner_X_is_now_hidden :
-	                             Txt_The_banner_X_is_now_visible,
-	          Ban.ShrtName);
-
-   /***** Show the form again *****/
-   Ban_EditBanners ();
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Hide ? Txt_The_banner_X_is_now_hidden :
+	                   Txt_The_banner_X_is_now_visible,
+	            Ban_EditingBan->ShrtName);
   }
 
 /*****************************************************************************/
@@ -589,6 +610,10 @@ static void Ban_ShowOrHideBanner (bool Hide)
 
 void Ban_RenameBannerShort (void)
   {
+   /***** Banner constructor *****/
+   Ban_EditingBannerConstructor ();
+
+   /***** Rename banner *****/
    Ban_RenameBanner (Cns_SHRT_NAME);
   }
 
@@ -598,6 +623,10 @@ void Ban_RenameBannerShort (void)
 
 void Ban_RenameBannerFull (void)
   {
+   /***** Banner constructor *****/
+   Ban_EditingBannerConstructor ();
+
+   /***** Rename banner *****/
    Ban_RenameBanner (Cns_FULL_NAME);
   }
 
@@ -611,45 +640,44 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_banner_X_already_exists;
    extern const char *Txt_The_banner_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_banner_X_has_not_changed;
-   struct Banner *Ban;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentBanName = NULL;		// Initialized to avoid warning
    char NewBanName[Ban_MAX_BYTES_FULL_NAME + 1];
 
-   Ban = &Gbl.Banners.EditingBan;
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
          MaxBytes = Ban_MAX_BYTES_SHRT_NAME;
-         CurrentBanName = Ban->ShrtName;
+         CurrentBanName = Ban_EditingBan->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
          MaxBytes = Ban_MAX_BYTES_FULL_NAME;
-         CurrentBanName = Ban->FullName;
+         CurrentBanName = Ban_EditingBan->FullName;
          break;
      }
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   if ((Ban->BanCod = Ban_GetParamBanCod ()) == -1L)
+   if ((Ban_EditingBan->BanCod = Ban_GetParamBanCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of banner is missing.");
 
    /* Get the new name for the banner */
    Par_GetParToText (ParamName,NewBanName,MaxBytes);
 
-   /***** Get from the database the old names of the banner *****/
-   Ban_GetDataOfBannerByCod (Ban);
+   /***** Get banner data from the database *****/
+   Ban_GetDataOfBannerByCod (Ban_EditingBan);
 
    /***** Check if new name is empty *****/
    if (!NewBanName[0])
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_banner_X_empty,
-                     CurrentBanName);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_name_of_the_banner_X_empty,
+                       CurrentBanName);
    else
      {
       /***** Check if old and new names are the same
@@ -657,29 +685,30 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentBanName,NewBanName))	// Different names
         {
          /***** If banner was in database... *****/
-         if (Ban_CheckIfBannerNameExists (ParamName,NewBanName,Ban->BanCod))
-	    Ale_ShowAlert (Ale_WARNING,Txt_The_banner_X_already_exists,
-                           NewBanName);
+         if (Ban_CheckIfBannerNameExists (ParamName,NewBanName,Ban_EditingBan->BanCod))
+	    Ale_CreateAlert (Ale_WARNING,NULL,
+		             Txt_The_banner_X_already_exists,
+                             NewBanName);
          else
            {
             /* Update the table changing old name by new name */
-            Ban_UpdateBanNameDB (Ban->BanCod,FieldName,NewBanName);
+            Ban_UpdateBanNameDB (Ban_EditingBan->BanCod,FieldName,NewBanName);
 
             /* Write message to show the change made */
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_banner_X_has_been_renamed_as_Y,
-                           CurrentBanName,NewBanName);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+		             Txt_The_banner_X_has_been_renamed_as_Y,
+                             CurrentBanName,NewBanName);
            }
         }
       else	// The same name
-	 Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_banner_X_has_not_changed,
-                        CurrentBanName);
+	 Ale_CreateAlert (Ale_INFO,NULL,
+	                  Txt_The_name_of_the_banner_X_has_not_changed,
+                          CurrentBanName);
      }
 
-   /***** Show the form again *****/
+   /***** Update name *****/
    Str_Copy (CurrentBanName,NewBanName,
              MaxBytes);
-
-   Ban_EditBanners ();
   }
 
 /*****************************************************************************/
@@ -717,18 +746,21 @@ void Ban_ChangeBannerImg (void)
   {
    extern const char *Txt_The_new_image_is_X;
    extern const char *Txt_You_can_not_leave_the_image_empty;
-   struct Banner *Ban;
    char NewImg[Ban_MAX_BYTES_IMAGE + 1];
 
-   Ban = &Gbl.Banners.EditingBan;
+   /***** Banner constructor *****/
+   Ban_EditingBannerConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   if ((Ban->BanCod = Ban_GetParamBanCod ()) == -1L)
+   if ((Ban_EditingBan->BanCod = Ban_GetParamBanCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of banner is missing.");
 
    /* Get the new WWW for the banner */
    Par_GetParToText ("Img",NewImg,Ban_MAX_BYTES_IMAGE);
+
+   /***** Get banner data from the database *****/
+   Ban_GetDataOfBannerByCod (Ban_EditingBan);
 
    /***** Check if new image is empty *****/
    if (NewImg[0])
@@ -736,20 +768,20 @@ void Ban_ChangeBannerImg (void)
       /* Update the table changing old image by new image */
       DB_QueryUPDATE ("can not update the image of a banner",
 		      "UPDATE banners SET Img='%s' WHERE BanCod=%ld",
-                      NewImg,Ban->BanCod);
+                      NewImg,Ban_EditingBan->BanCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_image_is_X,
-                     NewImg);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_The_new_image_is_X,
+                       NewImg);
      }
    else
-     Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_image_empty);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_image_empty);
 
-   /***** Show the form again *****/
-   Str_Copy (Ban->Img,NewImg,
+   /***** Update image *****/
+   Str_Copy (Ban_EditingBan->Img,NewImg,
              Ban_MAX_BYTES_IMAGE);
-
-   Ban_EditBanners ();
   }
 
 /*****************************************************************************/
@@ -760,18 +792,21 @@ void Ban_ChangeBannerWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   struct Banner *Ban;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
-   Ban = &Gbl.Banners.EditingBan;
+   /***** Banner constructor *****/
+   Ban_EditingBannerConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the banner */
-   if ((Ban->BanCod = Ban_GetParamBanCod ()) == -1L)
+   if ((Ban_EditingBan->BanCod = Ban_GetParamBanCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of banner is missing.");
 
    /* Get the new WWW for the banner */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
+
+   /***** Get banner data from the database *****/
+   Ban_GetDataOfBannerByCod (Ban_EditingBan);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -779,20 +814,36 @@ void Ban_ChangeBannerWWW (void)
       /* Update the table changing old WWW by new WWW */
       DB_QueryUPDATE ("can not update the web of a banner",
 		      "UPDATE banners SET WWW='%s' WHERE BanCod=%ld",
-                      NewWWW,Ban->BanCod);
+                      NewWWW,Ban_EditingBan->BanCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_web_address_is_X,
-                     NewWWW);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_The_new_web_address_is_X,
+                       NewWWW);
      }
    else
-     Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_web_address_empty);
+
+   /***** Update web *****/
+   Str_Copy (Ban_EditingBan->WWW,NewWWW,
+             Cns_MAX_BYTES_WWW);
+  }
+
+/*****************************************************************************/
+/********* Show alerts after changing a banner and continue editing **********/
+/*****************************************************************************/
+
+void Ban_ContEditAfterChgBan (void)
+  {
+   /***** Write message to show the change made *****/
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Str_Copy (Ban->WWW,NewWWW,
-             Cns_MAX_BYTES_WWW);
+   Ban_EditBannersInternal ();
 
-   Ban_EditBanners ();
+   /***** Banner destructor *****/
+   Ban_EditingBannerDestructor ();
   }
 
 /*****************************************************************************/
@@ -804,9 +855,6 @@ static void Ban_PutFormToCreateBanner (void)
    extern const char *Hlp_SYSTEM_Banners_edit;
    extern const char *Txt_New_banner;
    extern const char *Txt_Create_banner;
-   struct Banner *Ban;
-
-   Ban = &Gbl.Banners.EditingBan;
 
    /***** Start form *****/
    Frm_StartForm (ActNewBan);
@@ -831,7 +879,7 @@ static void Ban_PutFormToCreateBanner (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName);
+            Ban_MAX_CHARS_SHRT_NAME,Ban_EditingBan->ShrtName);
 
    /***** Banner full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -840,7 +888,7 @@ static void Ban_PutFormToCreateBanner (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Ban_MAX_CHARS_FULL_NAME,Ban->FullName);
+            Ban_MAX_CHARS_FULL_NAME,Ban_EditingBan->FullName);
 
    /***** Banner image *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -848,7 +896,7 @@ static void Ban_PutFormToCreateBanner (void)
                       " size=\"12\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Ban_MAX_CHARS_IMAGE,Ban->Img);
+            Ban_MAX_CHARS_IMAGE,Ban_EditingBan->Img);
 
    /***** Banner WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -858,7 +906,7 @@ static void Ban_PutFormToCreateBanner (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            Cns_MAX_CHARS_WWW,Ban->WWW);
+            Cns_MAX_CHARS_WWW,Ban_EditingBan->WWW);
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_banner);
@@ -904,45 +952,53 @@ void Ban_RecFormNewBanner (void)
    extern const char *Txt_The_banner_X_already_exists;
    extern const char *Txt_You_must_specify_the_image_of_the_new_banner;
    extern const char *Txt_You_must_specify_the_URL_of_the_new_banner;
+   extern const char *Txt_Created_new_banner_X;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_banner;
-   struct Banner *Ban;
 
-   Ban = &Gbl.Banners.EditingBan;
+   /***** Banner constructor *****/
+   Ban_EditingBannerConstructor ();
 
    /***** Get parameters from form *****/
    /* Get banner short name */
-   Par_GetParToText ("ShortName",Ban->ShrtName,Ban_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Ban_EditingBan->ShrtName,Ban_MAX_BYTES_SHRT_NAME);
 
    /* Get banner full name */
-   Par_GetParToText ("FullName",Ban->FullName,Ban_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName",Ban_EditingBan->FullName,Ban_MAX_BYTES_FULL_NAME);
 
    /* Get banner image */
-   Par_GetParToText ("Img",Ban->Img,Ban_MAX_BYTES_IMAGE);
+   Par_GetParToText ("Img",Ban_EditingBan->Img,Ban_MAX_BYTES_IMAGE);
 
    /* Get banner URL */
-   Par_GetParToText ("WWW",Ban->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParToText ("WWW",Ban_EditingBan->WWW,Cns_MAX_BYTES_WWW);
 
-   if (Ban->ShrtName[0] && Ban->FullName[0])	// If there's a banner name
+   if (Ban_EditingBan->ShrtName[0] &&
+       Ban_EditingBan->FullName[0])	// If there's a banner name
      {
       /***** If name of banner was in database... *****/
-      if (Ban_CheckIfBannerNameExists ("ShortName",Ban->ShrtName,-1L))
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_banner_X_already_exists,
-                        Ban->ShrtName);
-      else if (Ban_CheckIfBannerNameExists ("FullName",Ban->FullName,-1L))
-	 Ale_ShowAlert (Ale_WARNING,Txt_The_banner_X_already_exists,
-                        Ban->FullName);
-      else if (!Ban->Img[0])
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_image_of_the_new_banner);
-      else if (!Ban->WWW[0])
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_URL_of_the_new_banner);
+      if (Ban_CheckIfBannerNameExists ("ShortName",Ban_EditingBan->ShrtName,-1L))
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_The_banner_X_already_exists,
+                          Ban_EditingBan->ShrtName);
+      else if (Ban_CheckIfBannerNameExists ("FullName",Ban_EditingBan->FullName,-1L))
+	 Ale_CreateAlert (Ale_WARNING,NULL,
+	                  Txt_The_banner_X_already_exists,
+                          Ban_EditingBan->FullName);
+      else if (!Ban_EditingBan->Img[0])
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_You_must_specify_the_image_of_the_new_banner);
+      else if (!Ban_EditingBan->WWW[0])
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_You_must_specify_the_URL_of_the_new_banner);
       else	// Add new banner to database
-         Ban_CreateBanner (Ban);
+        {
+         Ban_CreateBanner (Ban_EditingBan);
+	 Ale_CreateAlert (Ale_SUCCESS,Txt_Created_new_banner_X,
+			  Ban_EditingBan->ShrtName);
+        }
      }
    else	// If there is not a banner name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_banner);
-
-   /***** Show the form again *****/
-   Ban_EditBanners ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_banner);
   }
 
 /*****************************************************************************/
@@ -951,8 +1007,6 @@ void Ban_RecFormNewBanner (void)
 
 static void Ban_CreateBanner (struct Banner *Ban)
   {
-   extern const char *Txt_Created_new_banner_X;
-
    /***** Create a new banner *****/
    DB_QueryINSERT ("can not create banner",
 		   "INSERT INTO banners"
@@ -960,10 +1014,6 @@ static void Ban_CreateBanner (struct Banner *Ban)
 		   " VALUES"
 		   " ('N','%s','%s','%s','%s')",
                    Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_banner_X,
-                  Ban->ShrtName);
   }
 
 /*****************************************************************************/
@@ -1040,4 +1090,37 @@ void Ban_ClickOnBanner (void)
    Gbl.Layout.HTMLStartWritten =
    Gbl.Layout.DivsEndWritten   =
    Gbl.Layout.HTMLEndWritten   = true;	// Don't write HTML at all
+  }
+
+/*****************************************************************************/
+/************************* Banner constructor/destructor **********************/
+/*****************************************************************************/
+
+static void Ban_EditingBannerConstructor (void)
+  {
+   /***** Pointer must be NULL *****/
+   if (Ban_EditingBan != NULL)
+      Lay_ShowErrorAndExit ("Error initializing banner.");
+
+   /***** Allocate memory for banner *****/
+   if ((Ban_EditingBan = (struct Banner *) malloc (sizeof (struct Banner))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for banner.");
+
+   /***** Reset banner *****/
+   Ban_EditingBan->BanCod      = -1L;
+   Ban_EditingBan->Hidden      = true;
+   Ban_EditingBan->ShrtName[0] = '\0';
+   Ban_EditingBan->FullName[0] = '\0';
+   Ban_EditingBan->Img[0]      = '\0';
+   Ban_EditingBan->WWW[0]      = '\0';
+  }
+
+static void Ban_EditingBannerDestructor (void)
+  {
+   /***** Free memory used for place *****/
+   if (Ban_EditingBan != NULL)
+     {
+      free ((void *) Ban_EditingBan);
+      Ban_EditingBan = NULL;
+     }
   }

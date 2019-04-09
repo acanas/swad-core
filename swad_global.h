@@ -254,7 +254,6 @@ struct Globals
      {
       unsigned Num;			// Number of banners
       struct Banner *Lst;		// List of banners
-      struct Banner EditingBan;
       long BanCodClicked;
      } Banners;
    struct
@@ -635,7 +634,6 @@ struct Globals
         } Config;
       TT_TimeTableType_t Type;
       TT_TimeTableView_t View;
-      // bool Editing;
       unsigned Weekday;
       unsigned Interval;
       unsigned Column;
