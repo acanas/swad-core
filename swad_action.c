@@ -1793,13 +1793,13 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgDptWWW	*/{ 691,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x200,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dpt_ChangeDptWWW		,Dpt_ContEditAfterChgDpt	,NULL},
 
    /* ActEdiHld		*/{ 713,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Hld_EditHolidays		,NULL},
-   /* ActNewHld		*/{ 714,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_RecFormNewHoliday1		,Hld_RecFormNewHoliday2		,NULL},
-   /* ActRemHld		*/{ 716,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_RemoveHoliday1		,Hld_RemoveHoliday2		,NULL},
-   /* ActChgHldPlc	*/{ 896,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ChangeHolidayPlace1	,Hld_ChangeHolidayPlace2	,NULL},
-   /* ActChgHldTyp	*/{ 715,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ChangeHolidayType1		,Hld_ChangeHolidayType2		,NULL},
-   /* ActChgHldStrDat	*/{ 717,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ChangeStartDate1		,Hld_ChangeDate2		,NULL},
-   /* ActChgHldEndDat	*/{ 718,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ChangeEndDate1		,Hld_ChangeDate2		,NULL},
-   /* ActRenHld		*/{ 766,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_RenameHoliday1		,Hld_RenameHoliday2		,NULL},
+   /* ActNewHld		*/{ 714,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_RecFormNewHoliday		,Hld_ContEditAfterChgHld	,NULL},
+   /* ActRemHld		*/{ 716,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_RemoveHoliday		,Hld_ContEditAfterChgHld	,NULL},
+   /* ActChgHldPlc	*/{ 896,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ChangeHolidayPlace		,Hld_ContEditAfterChgHld	,NULL},
+   /* ActChgHldTyp	*/{ 715,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ChangeHolidayType		,Hld_ContEditAfterChgHld	,NULL},
+   /* ActChgHldStrDat	*/{ 717,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ChangeStartDate		,Hld_ContEditAfterChgHld	,NULL},
+   /* ActChgHldEndDat	*/{ 718,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_ChangeEndDate		,Hld_ContEditAfterChgHld	,NULL},
+   /* ActRenHld		*/{ 766,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x300,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Hld_RenameHoliday		,Hld_ContEditAfterChgHld	,NULL},
 
    // TabCtr ******************************************************************
    // Actions in menu:

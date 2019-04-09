@@ -243,7 +243,6 @@ struct Globals
       unsigned Num;		// Number of holidays
       struct Holiday *Lst;	// List of holidays
       Hld_Order_t SelectedOrder;
-      struct Holiday EditingHld;
      } Hlds;
    struct
      {

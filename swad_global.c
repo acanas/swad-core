@@ -255,13 +255,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hlds.Num = 0;
    Gbl.Hlds.Lst = NULL;
    Gbl.Hlds.SelectedOrder = Hld_DEFAULT_ORDER_TYPE;
-   Gbl.Hlds.EditingHld.HldCod = -1L;
-   Gbl.Hlds.EditingHld.PlcCod = -1L;
-   Gbl.Hlds.EditingHld.HldTyp = Hld_HOLIDAY;
-   Gbl.Hlds.EditingHld.StartDate.Year  = Gbl.Hlds.EditingHld.EndDate.Year  = Gbl.Now.Date.Year;
-   Gbl.Hlds.EditingHld.StartDate.Month = Gbl.Hlds.EditingHld.EndDate.Month = Gbl.Now.Date.Month;
-   Gbl.Hlds.EditingHld.StartDate.Day   = Gbl.Hlds.EditingHld.EndDate.Day   = Gbl.Now.Date.Day;
-   Gbl.Hlds.EditingHld.Name[0] = '\0';
 
    Gbl.DegTypes.Num = 0;
    Gbl.DegTypes.Lst = NULL;

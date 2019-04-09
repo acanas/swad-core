@@ -57,12 +57,16 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+static struct Holiday *Hld_EditingHld = NULL;	// Static variable to keep the holiday being edited
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
 static void Hld_GetParamHldOrder (void);
 static void Hld_PutIconsSeeHolidays (void);
+
+static void Hld_EditHolidaysInternal (void);
 
 static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld);
 
@@ -74,6 +78,9 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate);
 static void Hld_PutFormToCreateHoliday (void);
 static void Hld_PutHeadHolidays (void);
 static void Hld_CreateHoliday (struct Holiday *Hld);
+
+static void Hld_EditingHolidayConstructor (void);
+static void Hld_EditingHolidayDestructor (void);
 
 /*****************************************************************************/
 /*************************** List all the holidays ***************************/
@@ -237,6 +244,18 @@ void Hld_PutIconToSeeHlds (void)
 /*****************************************************************************/
 
 void Hld_EditHolidays (void)
+  {
+   /***** Holiday constructor *****/
+   Hld_EditingHolidayConstructor ();
+
+   /***** Edit holidays *****/
+   Hld_EditHolidaysInternal ();
+
+   /***** Holiday destructor *****/
+   Hld_EditingHolidayDestructor ();
+  }
+
+static void Hld_EditHolidaysInternal (void)
   {
    /***** Get list of places *****/
    Plc_GetListPlaces ();
@@ -663,53 +682,46 @@ long Hld_GetParamHldCod (void)
 /******************************* Remove a holiday ****************************/
 /*****************************************************************************/
 
-void Hld_RemoveHoliday1 (void)
+void Hld_RemoveHoliday (void)
   {
    extern const char *Txt_Holiday_X_removed;
-   struct Holiday Hld;
+
+   /***** Holiday constructor *****/
+   Hld_EditingHolidayConstructor ();
 
    /***** Get holiday code *****/
-   if ((Hld.HldCod = Hld_GetParamHldCod ()) == -1L)
+   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of holiday is missing.");
 
    /***** Get data of the holiday from database *****/
-   Hld_GetDataOfHolidayByCod (&Hld);
+   Hld_GetDataOfHolidayByCod (Hld_EditingHld);
 
    /***** Remove holiday *****/
    DB_QueryDELETE ("can not remove a holiday",
 		   "DELETE FROM holidays WHERE HldCod=%ld",
-		   Hld.HldCod);
+		   Hld_EditingHld->HldCod);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_Holiday_X_removed,
-	            Hld.Name);
-  }
-
-void Hld_RemoveHoliday2 (void)
-  {
-   /***** Show success message *****/
-   Ale_ShowAlerts (NULL);
-
-   /***** Show the form again *****/
-   Hld_EditHolidays ();
+	            Hld_EditingHld->Name);
   }
 
 /*****************************************************************************/
 /************************* Change the place of a holiday *********************/
 /*****************************************************************************/
 
-void Hld_ChangeHolidayPlace1 (void)
+void Hld_ChangeHolidayPlace (void)
   {
    extern const char *Txt_The_place_of_the_holiday_X_has_changed_to_Y;
-   struct Holiday *Hld;
    struct Place NewPlace;
 
-   Hld = &Gbl.Hlds.EditingHld;
+   /***** Holiday constructor *****/
+   Hld_EditingHolidayConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the holiday */
-   if ((Hld->HldCod = Hld_GetParamHldCod ()) == -1L)
+   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of holiday is missing.");
 
    /* Get the new place for the holiday */
@@ -719,79 +731,61 @@ void Hld_ChangeHolidayPlace1 (void)
    Plc_GetDataOfPlaceByCod (&NewPlace);
 
    /***** Get from the database the data of the holiday *****/
-   Hld_GetDataOfHolidayByCod (Hld);
+   Hld_GetDataOfHolidayByCod (Hld_EditingHld);
 
    /***** Update the place in database *****/
    DB_QueryUPDATE ("can not update the place of a holiday",
 		   "UPDATE holidays SET PlcCod=%ld WHERE HldCod=%ld",
-                   NewPlace.PlcCod,Hld->HldCod);
-   Hld->PlcCod = NewPlace.PlcCod;
-   Str_Copy (Hld->PlaceFullName,NewPlace.FullName,
+                   NewPlace.PlcCod,Hld_EditingHld->HldCod);
+   Hld_EditingHld->PlcCod = NewPlace.PlcCod;
+   Str_Copy (Hld_EditingHld->PlaceFullName,NewPlace.FullName,
              Plc_MAX_BYTES_PLACE_FULL_NAME);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_place_of_the_holiday_X_has_changed_to_Y,
-                    Hld->Name,NewPlace.FullName);
-  }
-
-void Hld_ChangeHolidayPlace2 (void)
-  {
-   /***** Show success message *****/
-   Ale_ShowAlerts (NULL);
-
-   /***** Show the form again *****/
-   Hld_EditHolidays ();
+                    Hld_EditingHld->Name,NewPlace.FullName);
   }
 
 /*****************************************************************************/
 /************************* Change the type of a holiday **********************/
 /*****************************************************************************/
 
-void Hld_ChangeHolidayType1 (void)
+void Hld_ChangeHolidayType (void)
   {
    extern const char *Txt_The_type_of_the_holiday_X_has_changed;
-   struct Holiday *Hld;
 
-   Hld = &Gbl.Hlds.EditingHld;
+   /***** Holiday constructor *****/
+   Hld_EditingHolidayConstructor ();
 
    /***** Get the code of the holiday *****/
-   if ((Hld->HldCod = Hld_GetParamHldCod ()) == -1L)
+   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of holiday is missing.");
 
    /***** Get from the database the data of the holiday *****/
-   Hld_GetDataOfHolidayByCod (Hld);
+   Hld_GetDataOfHolidayByCod (Hld_EditingHld);
 
    /***** Get the new type for the holiday *****/
-   Hld->HldTyp = Hld_GetParamHldType ();
+   Hld_EditingHld->HldTyp = Hld_GetParamHldType ();
 
    /***** Update holiday/no school period in database *****/
-   Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
+   Dat_AssignDate (&Hld_EditingHld->EndDate,&Hld_EditingHld->StartDate);
    DB_QueryUPDATE ("can not update the type of a holiday",
 		   "UPDATE holidays SET HldTyp=%u,EndDate=StartDate"
 		   " WHERE HldCod=%ld",
-	           (unsigned) Hld->HldTyp,Hld->HldCod);
+	           (unsigned) Hld_EditingHld->HldTyp,Hld_EditingHld->HldCod);
 
    /***** Write message to show the change made *****/
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_type_of_the_holiday_X_has_changed,
-                    Hld->Name);
-  }
-
-void Hld_ChangeHolidayType2 (void)
-  {
-   /***** Show success message *****/
-   Ale_ShowAlerts (NULL);
-
-   /***** Show the form again *****/
-   Hld_EditHolidays ();
+                    Hld_EditingHld->Name);
   }
 
 /*****************************************************************************/
 /*** Change the date of a holiday / the start date of a non school period ****/
 /*****************************************************************************/
 
-void Hld_ChangeStartDate1 (void)
+void Hld_ChangeStartDate (void)
   {
    Hld_ChangeDate (HLD_START_DATE);
   }
@@ -800,7 +794,7 @@ void Hld_ChangeStartDate1 (void)
 /*************** Change the end date of a non school period ******************/
 /*****************************************************************************/
 
-void Hld_ChangeEndDate1 (void)
+void Hld_ChangeEndDate (void)
   {
    Hld_ChangeDate (HLD_END_DATE);
   }
@@ -812,27 +806,27 @@ void Hld_ChangeEndDate1 (void)
 static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
   {
    extern const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y;
-   struct Holiday *Hld;
    struct Date NewDate;
    struct Date *PtrDate = NULL;			// Initialized to avoid warning
    const char *StrStartOrEndDate = NULL;	// Initialized to avoid warning
    char StrDate[Cns_MAX_BYTES_DATE + 1];
 
-   Hld = &Gbl.Hlds.EditingHld;
+   /***** Holiday constructor *****/
+   Hld_EditingHolidayConstructor ();
 
    /***** Get the code of the holiday *****/
-   if ((Hld->HldCod = Hld_GetParamHldCod ()) == -1L)
+   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of holiday is missing.");
 
    /***** Get from the database the data of the holiday *****/
-   Hld_GetDataOfHolidayByCod (Hld);
+   Hld_GetDataOfHolidayByCod (Hld_EditingHld);
 
    /***** Get the new date for the holiday *****/
    switch (StartOrEndDate)
      {
       case HLD_START_DATE:
          StrStartOrEndDate = "StartDate";
-         PtrDate = &(Hld->StartDate);
+         PtrDate = &Hld_EditingHld->StartDate;
          Dat_GetDateFromForm ("StartDay","StartMonth","StartYear",
                               &(NewDate.Day),&(NewDate.Month),&(NewDate.Year));
          if (NewDate.Day   == 0 ||
@@ -842,11 +836,11 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
          break;
       case HLD_END_DATE:
          StrStartOrEndDate = "EndDate";
-         PtrDate = &(Hld->EndDate);
-         switch (Hld->HldTyp)
+         PtrDate = &Hld_EditingHld->EndDate;
+         switch (Hld_EditingHld->HldTyp)
            {
             case Hld_HOLIDAY:
-               Dat_AssignDate (&NewDate,&Hld->StartDate);
+               Dat_AssignDate (&NewDate,&Hld_EditingHld->StartDate);
                break;
             case Hld_NON_SCHOOL_PERIOD:
                Dat_GetDateFromForm ("EndDay","EndMonth","EndYear",
@@ -867,92 +861,86 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
 	           NewDate.Year,
 	           NewDate.Month,
 	           NewDate.Day,
-	           Hld->HldCod);
+	           Hld_EditingHld->HldCod);
    Dat_AssignDate (PtrDate,&NewDate);
 
    /***** Write message to show the change made *****/
    Dat_ConvDateToDateStr (&NewDate,StrDate);
    Ale_CreateAlert (Ale_SUCCESS,NULL,
 	            Txt_The_date_of_the_holiday_X_has_changed_to_Y,
-                    Hld->Name,StrDate);
-  }
-
-/*****************************************************************************/
-/*********** Show message and form after changing a holiday date *************/
-/*****************************************************************************/
-
-void Hld_ChangeDate2 (void)
-  {
-   /***** Show success message *****/
-   Ale_ShowAlerts (NULL);
-
-   /***** Show the form again *****/
-   Hld_EditHolidays ();
+                    Hld_EditingHld->Name,StrDate);
   }
 
 /*****************************************************************************/
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-void Hld_RenameHoliday1 (void)
+void Hld_RenameHoliday (void)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_holiday_X_empty;
    extern const char *Txt_The_name_of_the_holiday_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_holiday_X_has_not_changed;
-   struct Holiday *Hld;
    char NewHldName[Hld_MAX_BYTES_HOLIDAY_NAME + 1];
 
-   Hld = &Gbl.Hlds.EditingHld;
+   /***** Holiday constructor *****/
+   Hld_EditingHolidayConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the holiday */
-   if ((Hld->HldCod = Hld_GetParamHldCod ()) == -1L)
+   if ((Hld_EditingHld->HldCod = Hld_GetParamHldCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of holiday is missing.");
 
    /* Get the new name for the holiday */
    Par_GetParToText ("Name",NewHldName,Hld_MAX_BYTES_HOLIDAY_NAME);
 
    /***** Get from the database the old names of the holiday *****/
-   Hld_GetDataOfHolidayByCod (Hld);
+   Hld_GetDataOfHolidayByCod (Hld_EditingHld);
 
    /***** Check if new name is empty *****/
    if (!NewHldName[0])
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_can_not_leave_the_name_of_the_holiday_X_empty,
-                       Hld->Name);
+                       Hld_EditingHld->Name);
    else
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (Hld->Name,NewHldName))	// Different names
+      if (strcmp (Hld_EditingHld->Name,NewHldName))	// Different names
         {
          /***** If degree was in database... *****/
 	 /* Update the table changing old name by new name */
 	 DB_QueryUPDATE ("can not update the text of a holiday",
 			 "UPDATE holidays SET Name='%s' WHERE HldCod=%ld",
-		         NewHldName,Hld->HldCod);
-	 Str_Copy (Hld->Name,NewHldName,
+		         NewHldName,Hld_EditingHld->HldCod);
+	 Str_Copy (Hld_EditingHld->Name,NewHldName,
 		   Hld_MAX_BYTES_HOLIDAY_NAME);
 
 	 /***** Write message to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
                           Txt_The_name_of_the_holiday_X_has_changed_to_Y,
-		          Hld->Name,NewHldName);
+		          Hld_EditingHld->Name,NewHldName);
         }
       else	// The same name
          Ale_CreateAlert (Ale_INFO,NULL,
                           Txt_The_name_of_the_holiday_X_has_not_changed,
-                          Hld->Name);
+                          Hld_EditingHld->Name);
      }
   }
 
-void Hld_RenameHoliday2 (void)
+/*****************************************************************************/
+/******** Show alerts after changing a holiday and continue editing **********/
+/*****************************************************************************/
+
+void Hld_ContEditAfterChgHld (void)
   {
-   /***** Write error/success message *****/
+   /***** Write message to show the change made *****/
    Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Hld_EditHolidays ();
+   Hld_EditHolidaysInternal ();
+
+   /***** Holiday destructor *****/
+   Hld_EditingHolidayDestructor ();
   }
 
 /*****************************************************************************/
@@ -970,11 +958,8 @@ static void Hld_PutFormToCreateHoliday (void)
    extern const char *Txt_Holiday;
    extern const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY];
    extern const char *Txt_Create_holiday;
-   struct Holiday *Hld;
    unsigned NumPlc;
    Hld_HolidayType_t HolidayType;
-
-   Hld = &Gbl.Hlds.EditingHld;
 
    /***** Start form *****/
    Frm_StartForm (ActNewHld);
@@ -1012,7 +997,7 @@ static void Hld_PutFormToCreateHoliday (void)
                       "<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"PlcCod\" style=\"width:62px;\">"
                       "<option value=\"-1\"");
-   if (Hld->PlcCod <= 0)
+   if (Hld_EditingHld->PlcCod <= 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_All_places);
    for (NumPlc = 0;
@@ -1020,8 +1005,8 @@ static void Hld_PutFormToCreateHoliday (void)
 	NumPlc++)
       fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
                Gbl.Plcs.Lst[NumPlc].PlcCod,
-               Gbl.Plcs.Lst[NumPlc].PlcCod == Hld->PlcCod ? " selected=\"selected\"" :
-        	                                            "",
+               Gbl.Plcs.Lst[NumPlc].PlcCod == Hld_EditingHld->PlcCod ? " selected=\"selected\"" :
+        	                                                       "",
                Gbl.Plcs.Lst[NumPlc].ShrtName);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
@@ -1034,8 +1019,8 @@ static void Hld_PutFormToCreateHoliday (void)
 	HolidayType++)
       fprintf (Gbl.F.Out,"<option value=\"%u\"%s>%s</option>",
                (unsigned) HolidayType,
-               HolidayType == Hld->HldTyp ? " selected=\"selected\"" :
-        	                            "",
+               HolidayType == Hld_EditingHld->HldTyp ? " selected=\"selected\"" :
+        	                                       "",
                Txt_HOLIDAY_TYPES[HolidayType]);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
@@ -1045,7 +1030,7 @@ static void Hld_PutFormToCreateHoliday (void)
    Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
 	              Gbl.Now.Date.Year + 1,
 	              "Start",
-                      &(Hld->StartDate),
+                      &Hld_EditingHld->StartDate,
                       false,false);
    fprintf (Gbl.F.Out,"</td>");
 
@@ -1054,7 +1039,7 @@ static void Hld_PutFormToCreateHoliday (void)
    Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
 	              Gbl.Now.Date.Year + 1,
 	              "End",
-                      &(Hld->EndDate),
+                      &Hld_EditingHld->EndDate,
                       false,false);
    fprintf (Gbl.F.Out,"</td>");
 
@@ -1066,7 +1051,7 @@ static void Hld_PutFormToCreateHoliday (void)
                       "</td>"
                       "<td></td>"
                       "</tr>",
-            Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name);
+            Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name);
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_holiday);
@@ -1120,73 +1105,68 @@ static void Hld_PutHeadHolidays (void)
 /******************* Receive form to create a new holiday ********************/
 /*****************************************************************************/
 
-void Hld_RecFormNewHoliday1 (void)
+void Hld_RecFormNewHoliday (void)
   {
    extern const char *Txt_Created_new_holiday_X;
    extern const char *Txt_You_must_specify_the_name_of_the_new_holiday;
-   struct Holiday *Hld;
 
-   Hld = &Gbl.Hlds.EditingHld;
+   /***** Holiday constructor *****/
+   Hld_EditingHolidayConstructor ();
 
    /***** Get place code *****/
-   Hld->PlcCod = Plc_GetParamPlcCod ();
+   Hld_EditingHld->PlcCod = Plc_GetParamPlcCod ();
 
    /***** Get the type of holiday *****/
-   Hld->HldTyp = Hld_GetParamHldType ();
+   Hld_EditingHld->HldTyp = Hld_GetParamHldType ();
 
    /***** Get start date *****/
    Dat_GetDateFromForm ("StartDay","StartMonth","StartYear",
-                        &(Hld->StartDate.Day),&(Hld->StartDate.Month),&(Hld->StartDate.Year));
-   if (Hld->StartDate.Day   == 0 ||
-       Hld->StartDate.Month == 0 ||
-       Hld->StartDate.Year  == 0)
-      Dat_AssignDate (&Hld->StartDate,&Gbl.Now.Date);
+                        &Hld_EditingHld->StartDate.Day,
+			&Hld_EditingHld->StartDate.Month,
+			&Hld_EditingHld->StartDate.Year);
+   if (Hld_EditingHld->StartDate.Day   == 0 ||
+       Hld_EditingHld->StartDate.Month == 0 ||
+       Hld_EditingHld->StartDate.Year  == 0)
+      Dat_AssignDate (&Hld_EditingHld->StartDate,&Gbl.Now.Date);
 
    /***** Set end date *****/
-   switch (Hld->HldTyp)
+   switch (Hld_EditingHld->HldTyp)
      {
       case Hld_HOLIDAY:
 	 /* Set end date = start date (ignore end date from form) */
-	 Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
+	 Dat_AssignDate (&Hld_EditingHld->EndDate,&Hld_EditingHld->StartDate);
          break;
       case Hld_NON_SCHOOL_PERIOD:
 	 /* Get end date from form */
 	 Dat_GetDateFromForm ("EndDay","EndMonth","EndYear",
-			      &(Hld->EndDate.Day),&(Hld->EndDate.Month),&(Hld->EndDate.Year));
-	 if (Hld->EndDate.Day   == 0 ||
-             Hld->EndDate.Month == 0 ||
-             Hld->EndDate.Year  == 0)
-            Dat_AssignDate (&Hld->EndDate,&Gbl.Now.Date);
+			      &Hld_EditingHld->EndDate.Day,
+			      &Hld_EditingHld->EndDate.Month,
+			      &Hld_EditingHld->EndDate.Year);
+	 if (Hld_EditingHld->EndDate.Day   == 0 ||
+             Hld_EditingHld->EndDate.Month == 0 ||
+             Hld_EditingHld->EndDate.Year  == 0)
+            Dat_AssignDate (&Hld_EditingHld->EndDate,&Gbl.Now.Date);
          break;
      }
 
    /***** Get holiday name *****/
-   Par_GetParToText ("Name",Hld->Name,Hld_MAX_BYTES_HOLIDAY_NAME);
+   Par_GetParToText ("Name",Hld_EditingHld->Name,Hld_MAX_BYTES_HOLIDAY_NAME);
 
    /***** Create the new holiday or set warning message *****/
-   if (Hld->Name[0])	// If there's a holiday name
+   if (Hld_EditingHld->Name[0])	// If there's a holiday name
      {
       /* Create the new holiday */
-      Hld_CreateHoliday (Hld);
+      Hld_CreateHoliday (Hld_EditingHld);
 
       /* Success message */
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_Created_new_holiday_X,
-		       Hld->Name);
+		       Hld_EditingHld->Name);
      }
    else	// If there is not a holiday name
       /* Error message */
       Ale_CreateAlert (Ale_WARNING,NULL,
 	               Txt_You_must_specify_the_name_of_the_new_holiday);
-  }
-
-void Hld_RecFormNewHoliday2 (void)
-  {
-   /***** Write error/success message *****/
-   Ale_ShowAlerts (NULL);
-
-   /***** Show the form again *****/
-   Hld_EditHolidays ();
   }
 
 /*****************************************************************************/
@@ -1209,4 +1189,39 @@ static void Hld_CreateHoliday (struct Holiday *Hld)
 	           Hld->EndDate.Month,
 	           Hld->EndDate.Day,
 	           Hld->Name);
+  }
+
+/*****************************************************************************/
+/************************* Holiday constructor/destructor ********************/
+/*****************************************************************************/
+
+static void Hld_EditingHolidayConstructor (void)
+  {
+   /***** Pointer must be NULL *****/
+   if (Hld_EditingHld != NULL)
+      Lay_ShowErrorAndExit ("Error initializing holiday.");
+
+   /***** Allocate memory for holiday *****/
+   if ((Hld_EditingHld = (struct Holiday *) malloc (sizeof (struct Holiday))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for holiday.");
+
+   /***** Reset place *****/
+   Hld_EditingHld->HldCod = -1L;
+   Hld_EditingHld->PlcCod = -1L;
+   Hld_EditingHld->PlaceFullName[0] = '\0';
+   Hld_EditingHld->HldTyp = Hld_HOLIDAY;
+   Hld_EditingHld->StartDate.Year  = Hld_EditingHld->EndDate.Year  = Gbl.Now.Date.Year;
+   Hld_EditingHld->StartDate.Month = Hld_EditingHld->EndDate.Month = Gbl.Now.Date.Month;
+   Hld_EditingHld->StartDate.Day   = Hld_EditingHld->EndDate.Day   = Gbl.Now.Date.Day;
+   Hld_EditingHld->Name[0] = '\0';
+  }
+
+static void Hld_EditingHolidayDestructor (void)
+  {
+   /***** Free memory used for holiday *****/
+   if (Hld_EditingHld != NULL)
+     {
+      free ((void *) Hld_EditingHld);
+      Hld_EditingHld = NULL;
+     }
   }
