@@ -249,7 +249,6 @@ struct Globals
       unsigned Num;		// Number of mail domains
       struct Mail *Lst;		// List of mail domains
       Mai_DomainsOrder_t SelectedOrder;
-      struct Mail EditingMai;
      } Mails;
    struct
      {

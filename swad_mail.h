@@ -69,6 +69,7 @@ long Mai_GetParamMaiCod (void);
 void Mai_RemoveMailDomain (void);
 void Mai_RenameMailDomainShort (void);
 void Mai_RenameMailDomainFull (void);
+void Mai_ContEditAfterChgMai (void);
 void Mai_RecFormNewMailDomain (void);
 
 void Mai_ListEmails (void); // Creates an email message to students

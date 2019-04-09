@@ -1680,10 +1680,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActSeeMai		*/{ 855,-1,TabUnk,ActSeeNtf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_SeeMailDomains		,NULL},
    /* ActEdiMai		*/{ 856,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_EditMailDomains		,NULL},
-   /* ActNewMai		*/{ 857,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_RecFormNewMailDomain	,NULL},
-   /* ActRemMai		*/{ 860,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_RemoveMailDomain		,NULL},
-   /* ActRenMaiSho	*/{ 858,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_RenameMailDomainShort	,NULL},
-   /* ActRenMaiFul	*/{ 859,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_RenameMailDomainFull	,NULL},
+   /* ActNewMai		*/{ 857,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Mai_RecFormNewMailDomain	,Mai_ContEditAfterChgMai	,NULL},
+   /* ActRemMai		*/{ 860,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Mai_RemoveMailDomain		,Mai_ContEditAfterChgMai	,NULL},
+   /* ActRenMaiSho	*/{ 858,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Mai_RenameMailDomainShort	,Mai_ContEditAfterChgMai	,NULL},
+   /* ActRenMaiFul	*/{ 859,-1,TabUnk,ActSeeNtf		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,Mai_RenameMailDomainFull	,Mai_ContEditAfterChgMai	,NULL},
 
    // TabSys ******************************************************************
    // Actions in menu:

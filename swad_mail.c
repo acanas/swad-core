@@ -63,7 +63,8 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-const char *Mai_EMAIL_SECTION_ID = "email_section";
+static const char *Mai_EMAIL_SECTION_ID = "email_section";
+static struct Mail *Mai_EditingMai = NULL;	// Static variable to keep the mail domain being edited
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -71,6 +72,7 @@ const char *Mai_EMAIL_SECTION_ID = "email_section";
 
 static void Mai_GetParamMaiOrder (void);
 static void Mai_PutIconToEditMailDomains (void);
+static void Mai_EditMailDomainsInternal (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
 static void Mai_GetMailDomain (const char *Email,char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
@@ -94,6 +96,9 @@ static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EM
 static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe);
 static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1],
                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
+
+static void Mai_EditingMailDomainConstructor (void);
+static void Mai_EditingMailDomainDestructor (void);
 
 /*****************************************************************************/
 /************************* List all the mail domains *************************/
@@ -195,6 +200,18 @@ static void Mai_PutIconToEditMailDomains (void)
 /*****************************************************************************/
 
 void Mai_EditMailDomains (void)
+  {
+   /***** Mail domain constructor *****/
+   Mai_EditingMailDomainConstructor ();
+
+   /***** Edit mail domains *****/
+   Mai_EditMailDomainsInternal ();
+
+   /***** Mail domain destructor *****/
+   Mai_EditingMailDomainDestructor ();
+  }
+
+static void Mai_EditMailDomainsInternal (void)
   {
    /***** Get list of mail domains *****/
    Mai_GetListMailDomainsAllowedForNotif ();
@@ -540,26 +557,26 @@ long Mai_GetParamMaiCod (void)
 void Mai_RemoveMailDomain (void)
   {
    extern const char *Txt_Email_domain_X_removed;
-   struct Mail Mai;
+
+   /***** Mail domain constructor *****/
+   Mai_EditingMailDomainConstructor ();
 
    /***** Get mail code *****/
-   if ((Mai.MaiCod = Mai_GetParamMaiCod ()) == -1L)
+   if ((Mai_EditingMai->MaiCod = Mai_GetParamMaiCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of mail domain is missing.");
 
    /***** Get data of the mail from database *****/
-   Mai_GetDataOfMailDomainByCod (&Mai);
+   Mai_GetDataOfMailDomainByCod (Mai_EditingMai);
 
    /***** Remove mail *****/
    DB_QueryDELETE ("can not remove a mail domain",
 		   "DELETE FROM mail_domains WHERE MaiCod=%ld",
-		   Mai.MaiCod);
+		   Mai_EditingMai->MaiCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Email_domain_X_removed,
-                  Mai.Domain);
-
-   /***** Show the form again *****/
-   Mai_EditMailDomains ();
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_Email_domain_X_removed,
+                    Mai_EditingMai->Domain);
   }
 
 /*****************************************************************************/
@@ -568,6 +585,10 @@ void Mai_RemoveMailDomain (void)
 
 void Mai_RenameMailDomainShort (void)
   {
+   /***** Mail domain constructor *****/
+   Mai_EditingMailDomainConstructor ();
+
+   /***** Rename mail domain *****/
    Mai_RenameMailDomain (Cns_SHRT_NAME);
   }
 
@@ -577,6 +598,10 @@ void Mai_RenameMailDomainShort (void)
 
 void Mai_RenameMailDomainFull (void)
   {
+   /***** Mail domain constructor *****/
+   Mai_EditingMailDomainConstructor ();
+
+   /***** Rename mail domain *****/
    Mai_RenameMailDomain (Cns_FULL_NAME);
   }
 
@@ -590,40 +615,38 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_email_domain_X_already_exists;
    extern const char *Txt_The_email_domain_X_has_been_renamed_as_Y;
    extern const char *Txt_The_email_domain_X_has_not_changed;
-   struct Mail *Mai;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentMaiName = NULL;		// Initialized to avoid warning
    char NewMaiName[Mai_MAX_BYTES_MAIL_INFO + 1];
 
-   Mai = &Gbl.Mails.EditingMai;
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "Domain";
          FieldName = "Domain";
          MaxBytes = Cns_MAX_BYTES_EMAIL_ADDRESS;
-         CurrentMaiName = Mai->Domain;
+         CurrentMaiName = Mai_EditingMai->Domain;
          break;
       case Cns_FULL_NAME:
          ParamName = "Info";
          FieldName = "Info";
          MaxBytes = Mai_MAX_BYTES_MAIL_INFO;
-         CurrentMaiName = Mai->Info;
+         CurrentMaiName = Mai_EditingMai->Info;
          break;
      }
 
    /***** Get parameters from form *****/
    /* Get the code of the mail */
-   if ((Mai->MaiCod = Mai_GetParamMaiCod ()) == -1L)
+   if ((Mai_EditingMai->MaiCod = Mai_GetParamMaiCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of mail domain is missing.");
 
    /* Get the new name for the mail */
    Par_GetParToText (ParamName,NewMaiName,MaxBytes);
 
    /***** Get from the database the old names of the mail *****/
-   Mai_GetDataOfMailDomainByCod (Mai);
+   Mai_GetDataOfMailDomainByCod (Mai_EditingMai);
 
    /***** Check if new name is empty *****/
    if (!NewMaiName[0])
@@ -637,14 +660,14 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentMaiName,NewMaiName))	// Different names
         {
          /***** If mail was in database... *****/
-         if (Mai_CheckIfMailDomainNameExists (ParamName,NewMaiName,Mai->MaiCod))
+         if (Mai_CheckIfMailDomainNameExists (ParamName,NewMaiName,Mai_EditingMai->MaiCod))
 	    Ale_CreateAlert (Ale_WARNING,Mai_EMAIL_SECTION_ID,
 		             Txt_The_email_domain_X_already_exists,
                              NewMaiName);
          else
            {
             /* Update the table changing old name by new name */
-            Mai_UpdateMailDomainNameDB (Mai->MaiCod,FieldName,NewMaiName);
+            Mai_UpdateMailDomainNameDB (Mai_EditingMai->MaiCod,FieldName,NewMaiName);
 
             /* Write message to show the change made */
 	    Ale_CreateAlert (Ale_SUCCESS,Mai_EMAIL_SECTION_ID,
@@ -658,10 +681,9 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
                           CurrentMaiName);
      }
 
-   /***** Show the form again *****/
+   /***** Update name *****/
    Str_Copy (CurrentMaiName,NewMaiName,
              MaxBytes);
-   Mai_EditMailDomains ();
   }
 
 /*****************************************************************************/
@@ -691,6 +713,22 @@ static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const 
   }
 
 /*****************************************************************************/
+/******* Show alerts after changing a mail domain and continue editing *******/
+/*****************************************************************************/
+
+void Mai_ContEditAfterChgMai (void)
+  {
+   /***** Write message to show the change made *****/
+   Ale_ShowAlerts (NULL);
+
+   /***** Show the form again *****/
+   Mai_EditMailDomainsInternal ();
+
+   /***** Mail domain destructor *****/
+   Mai_EditingMailDomainDestructor ();
+  }
+
+/*****************************************************************************/
 /*********************** Put a form to create a new mail *********************/
 /*****************************************************************************/
 
@@ -700,9 +738,6 @@ static void Mai_PutFormToCreateMailDomain (void)
    extern const char *Txt_New_email_domain;
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
    extern const char *Txt_Create_email_domain;
-   struct Mail *Mai;
-
-   Mai = &Gbl.Mails.EditingMai;
 
    /***** Start form *****/
    Frm_StartForm (ActNewMai);
@@ -730,7 +765,7 @@ static void Mai_PutFormToCreateMailDomain (void)
                       " size=\"15\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain);
+            Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain);
 
    /***** Mail domain info *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -740,7 +775,7 @@ static void Mai_PutFormToCreateMailDomain (void)
                       "</td>"
                       "<td></td>"
                       "</tr>",
-            Mai_MAX_CHARS_MAIL_INFO,Mai->Info);
+            Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info);
 
 
    /***** End table, send button and end box *****/
@@ -787,35 +822,41 @@ static void Mai_PutHeadMailDomains (void)
 void Mai_RecFormNewMailDomain (void)
   {
    extern const char *Txt_The_email_domain_X_already_exists;
+   extern const char *Txt_Created_new_email_domain_X;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain;
-   struct Mail *Mai;
 
-   Mai = &Gbl.Mails.EditingMai;
+   /***** Mail domain constructor *****/
+   Mai_EditingMailDomainConstructor ();
 
    /***** Get parameters from form *****/
    /* Get mail short name */
-   Par_GetParToText ("Domain",Mai->Domain,Cns_MAX_BYTES_EMAIL_ADDRESS);
+   Par_GetParToText ("Domain",Mai_EditingMai->Domain,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
    /* Get mail full name */
-   Par_GetParToText ("Info",Mai->Info,Mai_MAX_BYTES_MAIL_INFO);
+   Par_GetParToText ("Info",Mai_EditingMai->Info,Mai_MAX_BYTES_MAIL_INFO);
 
-   if (Mai->Domain[0] && Mai->Info[0])	// If there's a mail name
+   if (Mai_EditingMai->Domain[0] &&
+       Mai_EditingMai->Info[0])	// If there's a mail name
      {
       /***** If name of mail was in database... *****/
-      if (Mai_CheckIfMailDomainNameExists ("Domain",Mai->Domain,-1L))
-         Ale_ShowAlert (Ale_WARNING,Txt_The_email_domain_X_already_exists,
-                        Mai->Domain);
-      else if (Mai_CheckIfMailDomainNameExists ("Info",Mai->Info,-1L))
-         Ale_ShowAlert (Ale_WARNING,Txt_The_email_domain_X_already_exists,
-                        Mai->Info);
+      if (Mai_CheckIfMailDomainNameExists ("Domain",Mai_EditingMai->Domain,-1L))
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_The_email_domain_X_already_exists,
+                          Mai_EditingMai->Domain);
+      else if (Mai_CheckIfMailDomainNameExists ("Info",Mai_EditingMai->Info,-1L))
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_The_email_domain_X_already_exists,
+                          Mai_EditingMai->Info);
       else	// Add new mail to database
-         Mai_CreateMailDomain (Mai);
+        {
+         Mai_CreateMailDomain (Mai_EditingMai);
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_email_domain_X,
+			Mai_EditingMai->Domain);
+        }
      }
    else	// If there is not a mail name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain);
-
-   /***** Show the form again *****/
-   Mai_EditMailDomains ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain);
   }
 
 /*****************************************************************************/
@@ -824,8 +865,6 @@ void Mai_RecFormNewMailDomain (void)
 
 static void Mai_CreateMailDomain (struct Mail *Mai)
   {
-   extern const char *Txt_Created_new_email_domain_X;
-
    /***** Create a new mail *****/
    DB_QueryINSERT ("can not create mail domain",
 		   "INSERT INTO mail_domains"
@@ -833,10 +872,6 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
 		   " VALUES"
 		   " ('%s','%s')",
 	           Mai->Domain,Mai->Info);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_email_domain_X,
-                  Mai->Domain);
   }
 
 /*****************************************************************************/
@@ -1887,5 +1922,36 @@ bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
 	 return true;
       default:
 	 return false;
+     }
+  }
+
+/*****************************************************************************/
+/********************** Mail domain constructor/destructor *******************/
+/*****************************************************************************/
+
+static void Mai_EditingMailDomainConstructor (void)
+  {
+   /***** Pointer must be NULL *****/
+   if (Mai_EditingMai != NULL)
+      Lay_ShowErrorAndExit ("Error initializing mail domain.");
+
+   /***** Allocate memory for mail domain *****/
+   if ((Mai_EditingMai = (struct Mail *) malloc (sizeof (struct Mail))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for mail domain.");
+
+   /***** Reset place *****/
+   Mai_EditingMai->MaiCod    = -1L;
+   Mai_EditingMai->Domain[0] = '\0';
+   Mai_EditingMai->Info[0]   = '\0';
+   Mai_EditingMai->NumUsrs   = 0;
+  }
+
+static void Mai_EditingMailDomainDestructor (void)
+  {
+   /***** Free memory used for mail domain *****/
+   if (Mai_EditingMai != NULL)
+     {
+      free ((void *) Mai_EditingMai);
+      Mai_EditingMai = NULL;
      }
   }
