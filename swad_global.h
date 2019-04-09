@@ -154,7 +154,9 @@ struct Globals
    bool HiddenParamsInsertedIntoDB;	// If parameters are inserted in the database in this execution
 
    /* To compute execution time of the program */
-   struct timeval tvStart,tvPageCreated,tvPageSent;
+   struct timeval tvStart;
+   struct timeval tvPageCreated;
+   struct timeval tvPageSent;
    struct timezone tz;
    long TimeGenerationInMicroseconds;
    long TimeSendInMicroseconds;

@@ -423,10 +423,13 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Chequear todos los iconos .gif y .png que restan, concretamente los de file_browser
 
-// TODO: Víctor González Argudo: Como sugerencia, estaría bien que cuando te dieran like
-// mas de 5 personas se pudiera saber quienes son
-// por ejemplo dejando encima el cursor de los 3 puntos
-// y que saliera una lista con los nombres
+// TODO: Check if Feedback is set to "(null)" when importing test questions. Change columns Feedback "(null)" to "" in test questions
+
+// TODO: Select users individually in action to send email
+
+// TODO: Allow timeline posting only for users belonging to courses or admins to avoid user who create accounts only to post
+
+// TODO: Ver cómo recibir un fichero desde el cliente (SWADroid) en gsoap
 
 // TODO: Pedro Villar Castro:
 // Al asignar un TFG a alumnos, no escribir el DNI del alumno, sino escogerlo de una lista de entre los alumnos inscritos en la asignatura.
@@ -436,14 +439,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 // Que haya una opción general que los bloquee todos y que los desbloquee todos
 // Para bloquear/desbloquear se usará un icono candado
 // Para preasignado/no preasignado usar otro icono (usuario/usuario tachado, por ej.)
-
-// TODO: Check if Feedback is set to "(null)" when importing test questions. Change columns Feedback "(null)" to "" in test questions
-
-// TODO: Select users individually in action to send email
-
-// TODO: Allow timeline posting only for users belonging to courses or admins to avoid user who create accounts only to post
-
-// TODO: Ver cómo recibir un fichero desde el cliente (SWADroid) en gsoap
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -468,7 +463,7 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
-	Version 18.109:   Apr 09, 2019 	Code refactoring in edition of plugins. (242423 lines)
+	Version 18.109:   Apr 09, 2019 	Code refactoring in edition of plugins. (242421 lines)
 	Version 18.108:   Apr 09, 2019 	Code refactoring in edition of links. (242336 lines)
 	Version 18.107:   Apr 09, 2019 	Code refactoring in edition of banners. (242275 lines)
 	Version 18.106:   Apr 09, 2019 	Code refactoring in edition of mail domains. (242208 lines)
