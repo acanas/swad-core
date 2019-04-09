@@ -54,6 +54,8 @@ extern struct Globals Gbl;
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+static struct Classroom *Cla_EditingCla = NULL;	// Static variable to keep the classroom being edited
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -63,6 +65,8 @@ static bool Cla_CheckIfICanCreateClassrooms (void);
 static void Cla_PutIconsListingClassrooms (void);
 static void Cla_PutIconToEditClassrooms (void);
 static void Cla_PutIconsEditingClassrooms (void);
+
+static void Cla_EditClassroomsInternal (void);
 
 static void Cla_ListClassroomsForEdition (void);
 static void Cla_PutParamClaCod (long ClaCod);
@@ -76,6 +80,9 @@ static void Cla_WriteCapacity (unsigned Capacity);
 static void Cla_PutFormToCreateClassroom (void);
 static void Cla_PutHeadClassrooms (void);
 static void Cla_CreateClassroom (struct Classroom *Cla);
+
+static void Cla_EditingClassroomConstructor (void);
+static void Cla_EditingClassroomDestructor (void);
 
 /*****************************************************************************/
 /************************* List all the classrooms ***************************/
@@ -229,6 +236,18 @@ static void Cla_PutIconToEditClassrooms (void)
 
 void Cla_EditClassrooms (void)
   {
+   /***** Classroom constructor *****/
+   Cla_EditingClassroomConstructor ();
+
+   /***** Edit classrooms *****/
+   Cla_EditClassroomsInternal ();
+
+   /***** Classroom destructor *****/
+   Cla_EditingClassroomDestructor ();
+  }
+
+static void Cla_EditClassroomsInternal (void)
+  {
    extern const char *Hlp_CENTRE_Classrooms_edit;
    extern const char *Txt_Classrooms;
 
@@ -252,7 +271,6 @@ void Cla_EditClassrooms (void)
    /***** Free list of classrooms *****/
    Cla_FreeListClassrooms ();
   }
-
 
 /*****************************************************************************/
 /*************** Put contextual icons in edition of classrooms ***************/
@@ -561,34 +579,32 @@ long Cla_GetParamClaCod (void)
 void Cla_RemoveClassroom (void)
   {
    extern const char *Txt_Classroom_X_removed;
-   struct Classroom *Cla;
 
-   Cla = &Gbl.Classrooms.EditingCla;
+   /***** Classroom constructor *****/
+   Cla_EditingClassroomConstructor ();
 
    /***** Get classroom code *****/
-   if ((Cla->ClaCod = Cla_GetParamClaCod ()) == -1L)
+   if ((Cla_EditingCla->ClaCod = Cla_GetParamClaCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of classroom is missing.");
 
    /***** Get data of the classroom from database *****/
-   Cla_GetDataOfClassroomByCod (Cla);
+   Cla_GetDataOfClassroomByCod (Cla_EditingCla);
 
    /***** Update groups assigned to this classroom *****/
    DB_QueryUPDATE ("can not update classroom in groups",
 		   "UPDATE crs_grp SET ClaCod=0"	// 0 means another classroom
 		   " WHERE ClaCod=%ld",
-		   Cla->ClaCod);
+		   Cla_EditingCla->ClaCod);
 
    /***** Remove classroom *****/
    DB_QueryDELETE ("can not remove a classroom",
 		   "DELETE FROM classrooms WHERE ClaCod=%ld",
-		   Cla->ClaCod);
+		   Cla_EditingCla->ClaCod);
 
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Classroom_X_removed,
-	          Cla->FullName);
-
-   /***** Show the form again *****/
-   Cla_EditClassrooms ();
+   /***** Create message to show the change made *****/
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_Classroom_X_removed,
+	            Cla_EditingCla->FullName);
   }
 
 /*****************************************************************************/
@@ -610,6 +626,10 @@ void Cla_RemoveAllClassroomsInCtr (long CtrCod)
 
 void Cla_RenameClassroomShort (void)
   {
+   /***** Classroom constructor *****/
+   Cla_EditingClassroomConstructor ();
+
+   /***** Rename classroom *****/
    Cla_RenameClassroom (Cns_SHRT_NAME);
   }
 
@@ -619,6 +639,10 @@ void Cla_RenameClassroomShort (void)
 
 void Cla_RenameClassroomFull (void)
   {
+   /***** Classroom constructor *****/
+   Cla_EditingClassroomConstructor ();
+
+   /***** Rename classroom *****/
    Cla_RenameClassroom (Cns_FULL_NAME);
   }
 
@@ -632,45 +656,44 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_classroom_X_already_exists;
    extern const char *Txt_The_classroom_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_classroom_X_has_not_changed;
-   struct Classroom *Cla;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentClaName = NULL;		// Initialized to avoid warning
    char NewClaName[Cla_MAX_BYTES_FULL_NAME + 1];
 
-   Cla = &Gbl.Classrooms.EditingCla;
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
          MaxBytes = Cla_MAX_BYTES_SHRT_NAME;
-         CurrentClaName = Cla->ShrtName;
+         CurrentClaName = Cla_EditingCla->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
          MaxBytes = Cla_MAX_BYTES_FULL_NAME;
-         CurrentClaName = Cla->FullName;
+         CurrentClaName = Cla_EditingCla->FullName;
          break;
      }
 
    /***** Get parameters from form *****/
    /* Get the code of the classroom */
-   if ((Cla->ClaCod = Cla_GetParamClaCod ()) == -1L)
+   if ((Cla_EditingCla->ClaCod = Cla_GetParamClaCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of classroom is missing.");
 
    /* Get the new name for the classroom */
    Par_GetParToText (ParamName,NewClaName,MaxBytes);
 
    /***** Get from the database the old names of the classroom *****/
-   Cla_GetDataOfClassroomByCod (Cla);
+   Cla_GetDataOfClassroomByCod (Cla_EditingCla);
 
    /***** Check if new name is empty *****/
    if (!NewClaName[0])
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_classroom_X_empty,
-                     CurrentClaName);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_name_of_the_classroom_X_empty,
+                       CurrentClaName);
    else
      {
       /***** Check if old and new names are the same
@@ -678,28 +701,30 @@ static void Cla_RenameClassroom (Cns_ShrtOrFullName_t ShrtOrFullName)
       if (strcmp (CurrentClaName,NewClaName))	// Different names
         {
          /***** If classroom was in database... *****/
-         if (Cla_CheckIfClassroomNameExists (ParamName,NewClaName,Cla->ClaCod))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_classroom_X_already_exists,
-                           NewClaName);
+         if (Cla_CheckIfClassroomNameExists (ParamName,NewClaName,Cla_EditingCla->ClaCod))
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_classroom_X_already_exists,
+                             NewClaName);
          else
            {
             /* Update the table changing old name by new name */
-            Cla_UpdateClaNameDB (Cla->ClaCod,FieldName,NewClaName);
+            Cla_UpdateClaNameDB (Cla_EditingCla->ClaCod,FieldName,NewClaName);
 
             /* Write message to show the change made */
-            Ale_ShowAlert (Ale_SUCCESS,Txt_The_classroom_X_has_been_renamed_as_Y,
-                           CurrentClaName,NewClaName);
+            Ale_CreateAlert (Ale_SUCCESS,NULL,
+        	             Txt_The_classroom_X_has_been_renamed_as_Y,
+                             CurrentClaName,NewClaName);
            }
         }
       else	// The same name
-         Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_classroom_X_has_not_changed,
-                        CurrentClaName);
+         Ale_CreateAlert (Ale_INFO,NULL,
+                          Txt_The_name_of_the_classroom_X_has_not_changed,
+                          CurrentClaName);
      }
 
-   /***** Show the form again *****/
+   /***** Update classroom name *****/
    Str_Copy (CurrentClaName,NewClaName,
              MaxBytes);
-   Cla_EditClassrooms ();
   }
 
 /*****************************************************************************/
@@ -739,52 +764,51 @@ void Cla_ChangeCapacity (void)
    extern const char *Txt_The_capacity_of_classroom_X_has_not_changed;
    extern const char *Txt_The_classroom_X_does_not_have_a_limited_capacity_now;
    extern const char *Txt_The_capacity_of_classroom_X_is_now_Y;
-   struct Classroom *Cla;
    unsigned NewCapacity;
 
-   /***** Use current editing classroom *****/
-   Cla = &Gbl.Classrooms.EditingCla;
+   /***** Classroom constructor *****/
+   Cla_EditingClassroomConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the classroom */
-   if ((Cla->ClaCod = Cla_GetParamClaCod ()) == -1L)
+   if ((Cla_EditingCla->ClaCod = Cla_GetParamClaCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of classroom is missing.");
 
    /* Get the seating capacity of the classroom */
    NewCapacity = (unsigned)
-	        Par_GetParToUnsignedLong ("Capacity",
-                                          0,
-                                          Cla_MAX_CAPACITY,
-                                          Cla_UNLIMITED_CAPACITY);
+	          Par_GetParToUnsignedLong ("Capacity",
+                                            0,
+                                            Cla_MAX_CAPACITY,
+                                            Cla_UNLIMITED_CAPACITY);
 
    /***** Get data of the classroom from database *****/
-   Cla_GetDataOfClassroomByCod (Cla);
+   Cla_GetDataOfClassroomByCod (Cla_EditingCla);
 
    /***** Check if the old capacity equals the new one
           (this happens when return is pressed without changes) *****/
-   if (Cla->Capacity == NewCapacity)
+   if (Cla_EditingCla->Capacity == NewCapacity)
       /***** Message to show no changes made *****/
-      Ale_ShowAlert (Ale_INFO,Txt_The_capacity_of_classroom_X_has_not_changed,
-		     Cla->FullName);
+      Ale_CreateAlert (Ale_INFO,NULL,
+	               Txt_The_capacity_of_classroom_X_has_not_changed,
+		       Cla_EditingCla->FullName);
    else
      {
       /***** Update the table of groups changing the old capacity to the new *****/
       DB_QueryUPDATE ("can not update the capacity of a classroom",
 		      "UPDATE classrooms SET Capacity=%u WHERE ClaCod=%ld",
-                      NewCapacity,Cla->ClaCod);
-      Cla->Capacity = NewCapacity;
+                      NewCapacity,Cla_EditingCla->ClaCod);
+      Cla_EditingCla->Capacity = NewCapacity;
 
       /***** Message to show the change made *****/
       if (NewCapacity > Grp_MAX_STUDENTS_IN_A_GROUP)
-         Ale_ShowAlert (Ale_SUCCESS,Txt_The_classroom_X_does_not_have_a_limited_capacity_now,
-                        Cla->FullName);
+         Ale_CreateAlert (Ale_SUCCESS,NULL,
+                          Txt_The_classroom_X_does_not_have_a_limited_capacity_now,
+                          Cla_EditingCla->FullName);
       else
-         Ale_ShowAlert (Ale_SUCCESS,Txt_The_capacity_of_classroom_X_is_now_Y,
-                        Cla->FullName,NewCapacity);
+         Ale_CreateAlert (Ale_SUCCESS,NULL,
+                          Txt_The_capacity_of_classroom_X_is_now_Y,
+                          Cla_EditingCla->FullName,NewCapacity);
      }
-
-   /***** Show the form again *****/
-   Cla_EditClassrooms ();
   }
 
 /*****************************************************************************/
@@ -805,41 +829,56 @@ void Cla_ChangeClassroomLocation (void)
   {
    extern const char *Txt_The_location_of_the_classroom_X_has_changed_to_Y;
    extern const char *Txt_The_location_of_the_classroom_X_has_not_changed;
-   struct Classroom *Cla;
    char NewLocation[Cla_MAX_BYTES_FULL_NAME + 1];
 
-   Cla = &Gbl.Classrooms.EditingCla;
+   /***** Classroom constructor *****/
+   Cla_EditingClassroomConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the classroom */
-   if ((Cla->ClaCod = Cla_GetParamClaCod ()) == -1L)
+   if ((Cla_EditingCla->ClaCod = Cla_GetParamClaCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of classroom is missing.");
 
    /* Get the new location for the classroom */
    Par_GetParToText ("Location",NewLocation,Cla_MAX_BYTES_LOCATION);
 
    /***** Get from the database the old location of the classroom *****/
-   Cla_GetDataOfClassroomByCod (Cla);
+   Cla_GetDataOfClassroomByCod (Cla_EditingCla);
 
    /***** Check if old and new locations are the same
 	  (this happens when return is pressed without changes) *****/
-   if (strcmp (Cla->Location,NewLocation))	// Different locations
+   if (strcmp (Cla_EditingCla->Location,NewLocation))	// Different locations
      {
       /* Update the table changing old name by new name */
-      Cla_UpdateClaNameDB (Cla->ClaCod,"Location",NewLocation);
-      Str_Copy (Cla->Location,NewLocation,
+      Cla_UpdateClaNameDB (Cla_EditingCla->ClaCod,"Location",NewLocation);
+      Str_Copy (Cla_EditingCla->Location,NewLocation,
 		Cla_MAX_BYTES_LOCATION);
 
       /* Write message to show the change made */
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_location_of_the_classroom_X_has_changed_to_Y,
-		     Cla->FullName,NewLocation);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_The_location_of_the_classroom_X_has_changed_to_Y,
+		       Cla_EditingCla->FullName,NewLocation);
      }
    else	// The same location
-      Ale_ShowAlert (Ale_INFO,Txt_The_location_of_the_classroom_X_has_not_changed,
-		     Cla->FullName);
+      Ale_CreateAlert (Ale_INFO,NULL,
+	               Txt_The_location_of_the_classroom_X_has_not_changed,
+		       Cla_EditingCla->FullName);
+  }
+
+/*****************************************************************************/
+/******* Show alerts after changing a classroom and continue editing *********/
+/*****************************************************************************/
+
+void Cla_ContEditAfterChgCla (void)
+  {
+   /***** Write message to show the change made *****/
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Cla_EditClassrooms ();
+   Cla_EditClassroomsInternal ();
+
+   /***** Classroom destructor *****/
+   Cla_EditingClassroomDestructor ();
   }
 
 /*****************************************************************************/
@@ -850,10 +889,6 @@ static void Cla_PutFormToCreateClassroom (void)
   {
    extern const char *Txt_New_classroom;
    extern const char *Txt_Create_classroom;
-   struct Classroom *Cla;
-
-   /***** Classroom data *****/
-   Cla = &Gbl.Classrooms.EditingCla;
 
    /***** Start form *****/
    Frm_StartForm (ActNewCla);
@@ -879,7 +914,7 @@ static void Cla_PutFormToCreateClassroom (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Cla_MAX_CHARS_SHRT_NAME,Cla->ShrtName);
+            Cla_MAX_CHARS_SHRT_NAME,Cla_EditingCla->ShrtName);
 
    /***** Classroom full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -888,13 +923,13 @@ static void Cla_PutFormToCreateClassroom (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Cla_MAX_CHARS_FULL_NAME,Cla->FullName);
+            Cla_MAX_CHARS_FULL_NAME,Cla_EditingCla->FullName);
 
    /***** Seating capacity *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<input type=\"text\" name=\"Capacity\""
 	              " size=\"3\" maxlength=\"10\" value=\"");
-   Cla_WriteCapacity (Cla->Capacity);
+   Cla_WriteCapacity (Cla_EditingCla->Capacity);
    fprintf (Gbl.F.Out,"\" />"
 	              "</td>");
 
@@ -905,7 +940,7 @@ static void Cla_PutFormToCreateClassroom (void)
 		      " class=\"INPUT_FULL_NAME\" />"
 	              "</td>"
 		      "</tr>",
-	    Cla_MAX_CHARS_LOCATION,Cla->Location);
+	    Cla_MAX_CHARS_LOCATION,Cla_EditingCla->Location);
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_classroom);
@@ -958,45 +993,52 @@ static void Cla_PutHeadClassrooms (void)
 void Cla_RecFormNewClassroom (void)
   {
    extern const char *Txt_The_classroom_X_already_exists;
+   extern const char *Txt_Created_new_classroom_X;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_classroom;
-   struct Classroom *Cla;
 
-   Cla = &Gbl.Classrooms.EditingCla;
+   /***** Classroom constructor *****/
+   Cla_EditingClassroomConstructor ();
 
    /***** Get parameters from form *****/
    /* Get classroom short name */
-   Par_GetParToText ("ShortName",Cla->ShrtName,Cla_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Cla_EditingCla->ShrtName,Cla_MAX_BYTES_SHRT_NAME);
 
    /* Get classroom full name */
-   Par_GetParToText ("FullName",Cla->FullName,Cla_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName",Cla_EditingCla->FullName,Cla_MAX_BYTES_FULL_NAME);
 
    /* Get seating capacity */
-   Cla->Capacity = (unsigned)
-	           Par_GetParToUnsignedLong ("Capacity",
-                                             0,
-                                             Cla_MAX_CAPACITY,
-                                             Cla_UNLIMITED_CAPACITY);
+   Cla_EditingCla->Capacity = (unsigned)
+	                      Par_GetParToUnsignedLong ("Capacity",
+                                                        0,
+                                                        Cla_MAX_CAPACITY,
+                                                        Cla_UNLIMITED_CAPACITY);
 
    /* Get classroom location */
-   Par_GetParToText ("Location",Cla->Location,Cla_MAX_BYTES_LOCATION);
+   Par_GetParToText ("Location",Cla_EditingCla->Location,Cla_MAX_BYTES_LOCATION);
 
-   if (Cla->ShrtName[0] && Cla->FullName[0])	// If there's a classroom name
+   if (Cla_EditingCla->ShrtName[0] &&
+       Cla_EditingCla->FullName[0])	// If there's a classroom name
      {
       /***** If name of classroom was in database... *****/
-      if (Cla_CheckIfClassroomNameExists ("ShortName",Cla->ShrtName,-1L))
-         Ale_ShowAlert (Ale_WARNING,Txt_The_classroom_X_already_exists,
-                        Cla->ShrtName);
-      else if (Cla_CheckIfClassroomNameExists ("FullName",Cla->FullName,-1L))
-         Ale_ShowAlert (Ale_WARNING,Txt_The_classroom_X_already_exists,
-                        Cla->FullName);
+      if (Cla_CheckIfClassroomNameExists ("ShortName",Cla_EditingCla->ShrtName,-1L))
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_The_classroom_X_already_exists,
+                          Cla_EditingCla->ShrtName);
+      else if (Cla_CheckIfClassroomNameExists ("FullName",Cla_EditingCla->FullName,-1L))
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_The_classroom_X_already_exists,
+                          Cla_EditingCla->FullName);
       else	// Add new classroom to database
-         Cla_CreateClassroom (Cla);
+        {
+         Cla_CreateClassroom (Cla_EditingCla);
+	 Ale_CreateAlert (Ale_SUCCESS,NULL,
+	                  Txt_Created_new_classroom_X,
+			  Cla_EditingCla->FullName);
+        }
      }
    else	// If there is not a classroom name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_classroom);
-
-   /***** Show the form again *****/
-   Cla_EditClassrooms ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_classroom);
   }
 
 /*****************************************************************************/
@@ -1005,8 +1047,6 @@ void Cla_RecFormNewClassroom (void)
 
 static void Cla_CreateClassroom (struct Classroom *Cla)
   {
-   extern const char *Txt_Created_new_classroom_X;
-
    /***** Create a new classroom *****/
    DB_QueryINSERT ("can not create classroom",
 		   "INSERT INTO classrooms"
@@ -1015,8 +1055,37 @@ static void Cla_CreateClassroom (struct Classroom *Cla)
 		   " (%ld,'%s','%s',%u,'%s')",
                    Gbl.Hierarchy.Ctr.CtrCod,
 		   Cla->ShrtName,Cla->FullName,Cla->Capacity,Cla->Location);
+  }
 
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_classroom_X,
-                  Cla->FullName);
+/*****************************************************************************/
+/************************* Classroom constructor/destructor **********************/
+/*****************************************************************************/
+
+static void Cla_EditingClassroomConstructor (void)
+  {
+   /***** Pointer must be NULL *****/
+   if (Cla_EditingCla != NULL)
+      Lay_ShowErrorAndExit ("Error initializing classroom.");
+
+   /***** Allocate memory for classroom *****/
+   if ((Cla_EditingCla = (struct Classroom *) malloc (sizeof (struct Classroom))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for classroom.");
+
+   /***** Reset classroom *****/
+   Cla_EditingCla->ClaCod      = -1L;
+   Cla_EditingCla->InsCod      = -1L;
+   Cla_EditingCla->ShrtName[0] = '\0';
+   Cla_EditingCla->FullName[0] = '\0';
+   Cla_EditingCla->Capacity    = Cla_UNLIMITED_CAPACITY;
+   Cla_EditingCla->Location[0] = '\0';
+  }
+
+static void Cla_EditingClassroomDestructor (void)
+  {
+   /***** Free memory used for classroom *****/
+   if (Cla_EditingCla != NULL)
+     {
+      free ((void *) Cla_EditingCla);
+      Cla_EditingCla = NULL;
+     }
   }

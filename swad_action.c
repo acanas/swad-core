@@ -1838,12 +1838,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgDegSta	*/{1207,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x380,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Deg_ChangeDegStatus		,Deg_ContEditAfterChgDeg	,NULL},
 
    /* ActEdiCla		*/{1745,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_EditClassrooms		,NULL},
-   /* ActNewCla		*/{1746,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_RecFormNewClassroom	,NULL},
-   /* ActRemCla		*/{1747,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_RemoveClassroom		,NULL},
-   /* ActRenClaSho	*/{1748,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_RenameClassroomShort	,NULL},
-   /* ActRenClaFul	*/{1749,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_RenameClassroomFull	,NULL},
-   /* ActChgClaMaxStd	*/{1750,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_ChangeCapacity		,NULL},
-   /* ActRenClaLoc	*/{1751,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Cla_ChangeClassroomLocation	,NULL},
+   /* ActNewCla		*/{1746,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_RecFormNewClassroom	,Cla_ContEditAfterChgCla	,NULL},
+   /* ActRemCla		*/{1747,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_RemoveClassroom		,Cla_ContEditAfterChgCla	,NULL},
+   /* ActRenClaSho	*/{1748,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_RenameClassroomShort	,Cla_ContEditAfterChgCla	,NULL},
+   /* ActRenClaFul	*/{1749,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_RenameClassroomFull	,Cla_ContEditAfterChgCla	,NULL},
+   /* ActChgClaMaxStd	*/{1750,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_ChangeCapacity		,Cla_ContEditAfterChgCla	,NULL},
+   /* ActRenClaLoc	*/{1751,-1,TabUnk,ActSeeCla		,    0,    0,    0,0x3C6,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Cla_ChangeClassroomLocation	,Cla_ContEditAfterChgCla	,NULL},
 
    // TabDeg ******************************************************************
    // Actions in menu:

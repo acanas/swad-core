@@ -236,7 +236,6 @@ struct Globals
       unsigned Num;		// Number of classrooms
       struct Classroom *Lst;	// List of classrooms
       Cla_Order_t SelectedOrder;
-      struct Classroom EditingCla;
      } Classrooms;
    struct
      {

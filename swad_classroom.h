@@ -90,13 +90,11 @@ long Cla_GetParamClaCod (void);
 
 void Cla_RemoveClassroom (void);
 void Cla_RemoveAllClassroomsInCtr (long CtrCod);
-
 void Cla_RenameClassroomShort (void);
 void Cla_RenameClassroomFull (void);
-
 void Cla_ChangeCapacity (void);
-
 void Cla_ChangeClassroomLocation (void);
+void Cla_ContEditAfterChgCla (void);
 
 void Cla_RecFormNewClassroom (void);
 

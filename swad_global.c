@@ -227,8 +227,6 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Hierarchy.Deg.ShrtName[0] = Gbl.Hierarchy.Deg.FullName[0] = '\0';
 
-   Gbl.Classrooms.EditingCla.Capacity = Cla_UNLIMITED_CAPACITY;
-
    Gbl.Hierarchy.Crs.ShrtName[0] = Gbl.Hierarchy.Crs.FullName[0] = '\0';
    Gbl.Crs.Info.ShowMsgMustBeRead = 0;
    Gbl.Crs.Notices.HighlightNotCod = -1L;	// No notice highlighted
