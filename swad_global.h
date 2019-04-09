@@ -271,7 +271,6 @@ struct Globals
      {
       unsigned Num;		// Number of plugins
       struct Plugin *Lst;	// List of plugins
-      struct Plugin EditingPlg;
      } Plugins;
    struct
      {

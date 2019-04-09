@@ -74,6 +74,8 @@ void Plg_ChangePlgLogo (void);
 void Plg_ChangePlgAppKey (void);
 void Plg_ChangePlgURL (void);
 void Plg_ChangePlgIP (void);
+void Plg_ContEditAfterChgPlg (void);
+
 void Plg_RecFormNewPlg (void);
 void Plg_WebService (void);
 

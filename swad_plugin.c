@@ -45,6 +45,7 @@ TODO: Check if web service is called from an authorized IP.
 #include "swad_parameter.h"
 #include "swad_plugin.h"
 #include "swad_session.h"
+#include "swad_table.h"
 #include "swad_web_service.h"
 
 /*****************************************************************************/
@@ -58,10 +59,21 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
+/******************************* Private types *******************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/***************************** Private variables *****************************/
+/*****************************************************************************/
+
+static struct Plugin *Plg_EditingPlg = NULL;	// Static variable to keep the plugin being edited
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
 static void Plg_PutIconToEditPlugins (void);
+static void Plg_EditPluginsInternal (void);
 static void Plg_ListPluginsForEdition (void);
 static void Plg_PutParamPlgCod (long PlgCod);
 static void Plg_GetListPlugins (void);
@@ -69,6 +81,9 @@ static void Plg_PutFormToCreatePlugin (void);
 static void Plg_PutHeadPlugins (void);
 static bool Plg_CheckIfPluginNameExists (const char *Name,long PlgCod);
 static void Plg_CreatePlugin (struct Plugin *Plg);
+
+static void Plg_EditingPluginConstructor (void);
+static void Plg_EditingPluginDestructor (void);
 
 /*****************************************************************************/
 /************************** List available plugins ***************************/
@@ -164,8 +179,26 @@ static void Plg_PutIconToEditPlugins (void)
 
 void Plg_EditPlugins (void)
   {
+   /***** Plugin constructor *****/
+   Plg_EditingPluginConstructor ();
+
+   /***** Edit plugins *****/
+   Plg_EditPluginsInternal ();
+
+   /***** Plugin destructor *****/
+   Plg_EditingPluginDestructor ();
+  }
+
+static void Plg_EditPluginsInternal (void)
+  {
+   extern const char *Txt_Plugins;
+
    /***** Get list of plugins *****/
    Plg_GetListPlugins ();
+
+   /***** Start box *****/
+   Box_StartBox (NULL,Txt_Plugins,NULL,
+                 NULL,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new plugin *****/
    Plg_PutFormToCreatePlugin ();
@@ -173,6 +206,9 @@ void Plg_EditPlugins (void)
    /***** List current plugins *****/
    if (Gbl.Plugins.Num)
       Plg_ListPluginsForEdition ();
+
+   /***** End box *****/
+   Box_EndBox ();
 
    /***** Free list of plugins *****/
    Plg_FreeListPlugins ();
@@ -342,15 +378,11 @@ void Plg_FreeListPlugins (void)
 
 static void Plg_ListPluginsForEdition (void)
   {
-   extern const char *Txt_Plugins;
    unsigned NumPlg;
    struct Plugin *Plg;
 
-   /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_Plugins,NULL,
-                      NULL,Box_NOT_CLOSABLE,2);
-
    /***** Write heading *****/
+   Tbl_StartTableWide (2);
    Plg_PutHeadPlugins ();
 
    /***** Write all the plugins *****/
@@ -456,8 +488,8 @@ static void Plg_ListPluginsForEdition (void)
                          "</tr>");
      }
 
-   /***** End table and box *****/
-   Box_EndBoxTable ();
+   /***** End table *****/
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -486,26 +518,26 @@ long Plg_GetParamPlgCod (void)
 void Plg_RemovePlugin (void)
   {
    extern const char *Txt_Plugin_X_removed;
-   struct Plugin Plg;
+
+   /***** Plugin constructor *****/
+   Plg_EditingPluginConstructor ();
 
    /***** Get plugin code *****/
-   if ((Plg.PlgCod = Plg_GetParamPlgCod ()) == -1L)
+   if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /***** Get data of the plugin from database *****/
-   Plg_GetDataOfPluginByCod (&Plg);
+   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
 
    /***** Remove plugin *****/
    DB_QueryDELETE ("can not remove a plugin",
 		   "DELETE FROM plugins WHERE PlgCod=%ld",
-		   Plg.PlgCod);
+		   Plg_EditingPlg->PlgCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Plugin_X_removed,
-                  Plg.Name);
-
-   /***** Show the form again *****/
-   Plg_EditPlugins ();
+   Ale_CreateAlert (Ale_SUCCESS,NULL,
+	            Txt_Plugin_X_removed,
+                    Plg_EditingPlg->Name);
   }
 
 /*****************************************************************************/
@@ -518,57 +550,60 @@ void Plg_RenamePlugin (void)
    extern const char *Txt_The_plugin_X_already_exists;
    extern const char *Txt_The_plugin_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_plugin_X_has_not_changed;
-   struct Plugin *Plg;
    char NewPlgName[Plg_MAX_BYTES_PLUGIN_NAME + 1];
 
-   Plg = &Gbl.Plugins.EditingPlg;
+   /***** Plugin constructor *****/
+   Plg_EditingPluginConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   if ((Plg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
+   if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new name for the plugin */
    Par_GetParToText ("Name",NewPlgName,Plg_MAX_BYTES_PLUGIN_NAME);
 
-   /***** Get from the database the old name of the plugin *****/
-   Plg_GetDataOfPluginByCod (Plg);
+   /***** Get plugin data from the database *****/
+   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
 
    /***** Check if new name is empty *****/
    if (!NewPlgName[0])
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_name_of_the_plugin_X_empty,
-                     Plg->Name);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_name_of_the_plugin_X_empty,
+                       Plg_EditingPlg->Name);
    else
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      if (strcmp (Plg->Name,NewPlgName))	// Different names
+      if (strcmp (Plg_EditingPlg->Name,NewPlgName))	// Different names
         {
          /***** If plugin was in database... *****/
-         if (Plg_CheckIfPluginNameExists (NewPlgName,Plg->PlgCod))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_plugin_X_already_exists,
-                           NewPlgName);
+         if (Plg_CheckIfPluginNameExists (NewPlgName,Plg_EditingPlg->PlgCod))
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_plugin_X_already_exists,
+                             NewPlgName);
          else
            {
             /* Update the table changing old name by new name */
             DB_QueryUPDATE ("can not update the name of a plugin",
         		    "UPDATE plugins SET Name='%s' WHERE PlgCod=%ld",
-                            NewPlgName,Plg->PlgCod);
+                            NewPlgName,Plg_EditingPlg->PlgCod);
 
             /***** Write message to show the change made *****/
-            Ale_ShowAlert (Ale_SUCCESS,Txt_The_plugin_X_has_been_renamed_as_Y,
-                           Plg->Name,NewPlgName);
+            Ale_CreateAlert (Ale_SUCCESS,NULL,
+        	             Txt_The_plugin_X_has_been_renamed_as_Y,
+                             Plg_EditingPlg->Name,NewPlgName);
            }
         }
       else	// The same name
-         Ale_ShowAlert (Ale_INFO,Txt_The_name_of_the_plugin_X_has_not_changed,
-                        Plg->Name);
+         Ale_CreateAlert (Ale_INFO,NULL,
+                          Txt_The_name_of_the_plugin_X_has_not_changed,
+                          Plg_EditingPlg->Name);
      }
 
-   /***** Show the form again *****/
-   Str_Copy (Plg->Name,NewPlgName,
+   /***** Update name *****/
+   Str_Copy (Plg_EditingPlg->Name,NewPlgName,
              Plg_MAX_BYTES_PLUGIN_NAME);
-   Plg_EditPlugins ();
   }
 
 /*****************************************************************************/
@@ -593,18 +628,21 @@ void Plg_ChangePlgDescription (void)
   {
    extern const char *Txt_The_new_description_is_X;
    extern const char *Txt_You_can_not_leave_the_description_empty;
-   struct Plugin *Plg;
    char NewDescription[Plg_MAX_BYTES_PLUGIN_DESCRIPTION + 1];
 
-   Plg = &Gbl.Plugins.EditingPlg;
+   /***** Plugin constructor *****/
+   Plg_EditingPluginConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   if ((Plg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
+   if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new description for the plugin */
    Par_GetParToText ("Description",NewDescription,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
+
+   /***** Get plugin data from the database *****/
+   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
 
    /***** Check if new description is empty *****/
    if (NewDescription[0])
@@ -612,19 +650,20 @@ void Plg_ChangePlgDescription (void)
       /* Update the table changing old description by new description */
       DB_QueryUPDATE ("can not update the description of a plugin",
 		      "UPDATE plugins SET Description='%s' WHERE PlgCod=%ld",
-                      NewDescription,Plg->PlgCod);
+                      NewDescription,Plg_EditingPlg->PlgCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_description_is_X,
-                     NewDescription);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_The_new_description_is_X,
+                       NewDescription);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_description_empty);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_description_empty);
 
-   /***** Show the form again *****/
-   Str_Copy (Plg->Description,NewDescription,
+   /***** Update description *****/
+   Str_Copy (Plg_EditingPlg->Description,NewDescription,
              Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
-   Plg_EditPlugins ();
   }
 
 /*****************************************************************************/
@@ -635,18 +674,21 @@ void Plg_ChangePlgLogo (void)
   {
    extern const char *Txt_The_new_logo_is_X;
    extern const char *Txt_You_can_not_leave_the_logo_empty;
-   struct Plugin *Plg;
    char NewLogo[Plg_MAX_BYTES_PLUGIN_LOGO + 1];
 
-   Plg = &Gbl.Plugins.EditingPlg;
+   /***** Plugin constructor *****/
+   Plg_EditingPluginConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   if ((Plg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
+   if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new logo for the plugin */
    Par_GetParToText ("Logo",NewLogo,Plg_MAX_BYTES_PLUGIN_LOGO);
+
+   /***** Get plugin data from the database *****/
+   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
 
    /***** Check if new logo is empty *****/
    if (NewLogo[0])
@@ -654,19 +696,20 @@ void Plg_ChangePlgLogo (void)
       /* Update the table changing old logo by new logo */
       DB_QueryUPDATE ("can not update the logo of a plugin",
 		      "UPDATE plugins SET Logo='%s' WHERE PlgCod=%ld",
-                      NewLogo,Plg->PlgCod);
+                      NewLogo,Plg_EditingPlg->PlgCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_logo_is_X,
-                     NewLogo);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_The_new_logo_is_X,
+                       NewLogo);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_logo_empty);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_logo_empty);
 
-   /***** Show the form again *****/
-   Str_Copy (Plg->Logo,NewLogo,
+   /***** Update logo *****/
+   Str_Copy (Plg_EditingPlg->Logo,NewLogo,
              Plg_MAX_BYTES_PLUGIN_LOGO);
-   Plg_EditPlugins ();
   }
 
 /*****************************************************************************/
@@ -675,20 +718,23 @@ void Plg_ChangePlgLogo (void)
 
 void Plg_ChangePlgAppKey (void)
   {
-   extern const char *Txt_The_new_logo_is_X;	// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   extern const char *Txt_You_can_not_leave_the_logo_empty;// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   struct Plugin *Plg;
+   extern const char *Txt_The_new_logo_is_X;			// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   extern const char *Txt_You_can_not_leave_the_logo_empty;	// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    char NewAppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1];
 
-   Plg = &Gbl.Plugins.EditingPlg;
+   /***** Plugin constructor *****/
+   Plg_EditingPluginConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   if ((Plg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
+   if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new logo for the plugin */
    Par_GetParToText ("AppKey",NewAppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
+
+   /***** Get plugin data from the database *****/
+   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
 
    /***** Check if new logo is empty *****/
    if (NewAppKey[0])
@@ -696,19 +742,20 @@ void Plg_ChangePlgAppKey (void)
       /* Update the table changing old application key by new application key */
       DB_QueryUPDATE ("can not update the application key of a plugin",
 		      "UPDATE plugins SET AppKey='%s' WHERE PlgCod=%ld",
-                      NewAppKey,Plg->PlgCod);
+                      NewAppKey,Plg_EditingPlg->PlgCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_logo_is_X,	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                     NewAppKey);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+		       Txt_The_new_logo_is_X,			// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                       NewAppKey);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_logo_empty);	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_logo_empty);	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-   /***** Show the form again *****/
-   Str_Copy (Plg->AppKey,NewAppKey,
+   /***** Update app key *****/
+   Str_Copy (Plg_EditingPlg->AppKey,NewAppKey,
              Plg_MAX_BYTES_PLUGIN_APP_KEY);
-   Plg_EditPlugins ();
   }
 
 /*****************************************************************************/
@@ -719,18 +766,21 @@ void Plg_ChangePlgURL (void)
   {
    extern const char *Txt_The_new_URL_is_X;
    extern const char *Txt_You_can_not_leave_the_URL_empty;
-   struct Plugin *Plg;
    char NewURL[Cns_MAX_BYTES_WWW + 1];
 
-   Plg = &Gbl.Plugins.EditingPlg;
+   /***** Plugin constructor *****/
+   Plg_EditingPluginConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   if ((Plg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
+   if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new URL for the plugin */
    Par_GetParToText ("URL",NewURL,Cns_MAX_BYTES_WWW);
+
+   /***** Get plugin data from the database *****/
+   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
 
    /***** Check if new URL is empty *****/
    if (NewURL[0])
@@ -738,19 +788,20 @@ void Plg_ChangePlgURL (void)
       /* Update the table changing old WWW by new WWW */
       DB_QueryUPDATE ("can not update the URL of a plugin",
 		      "UPDATE plugins SET URL='%s' WHERE PlgCod=%ld",
-                      NewURL,Plg->PlgCod);
+                      NewURL,Plg_EditingPlg->PlgCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_URL_is_X,
-                     NewURL);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_The_new_URL_is_X,
+                       NewURL);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_URL_empty);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_URL_empty);
 
-   /***** Show the form again *****/
-   Str_Copy (Plg->URL,NewURL,
+   /***** Update URL *****/
+   Str_Copy (Plg_EditingPlg->URL,NewURL,
              Cns_MAX_BYTES_WWW);
-   Plg_EditPlugins ();
   }
 
 /*****************************************************************************/
@@ -761,18 +812,21 @@ void Plg_ChangePlgIP (void)
   {
    extern const char *Txt_The_new_IP_address_is_X;
    extern const char *Txt_You_can_not_leave_the_IP_address_empty;
-   struct Plugin *Plg;
    char NewIP[Cns_MAX_BYTES_IP + 1];
 
-   Plg = &Gbl.Plugins.EditingPlg;
+   /***** Plugin constructor *****/
+   Plg_EditingPluginConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the plugin */
-   if ((Plg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
+   if ((Plg_EditingPlg->PlgCod = Plg_GetParamPlgCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new IP for the plugin */
    Par_GetParToText ("IP",NewIP,Cns_MAX_BYTES_IP);
+
+   /***** Get plugin data from the database *****/
+   Plg_GetDataOfPluginByCod (Plg_EditingPlg);
 
    /***** Check if new IP is empty *****/
    if (NewIP[0])
@@ -780,19 +834,36 @@ void Plg_ChangePlgIP (void)
       /* Update the table changing old IP by new IP */
       DB_QueryUPDATE ("can not update the IP address of a plugin",
 		      "UPDATE plugins SET IP='%s' WHERE PlgCod=%ld",
-                      NewIP,Plg->PlgCod);
+                      NewIP,Plg_EditingPlg->PlgCod);
 
       /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_new_IP_address_is_X,
-                     NewIP);
+      Ale_CreateAlert (Ale_SUCCESS,NULL,
+	               Txt_The_new_IP_address_is_X,
+                       NewIP);
      }
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_IP_address_empty);
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_can_not_leave_the_IP_address_empty);
+
+   /***** Update IP *****/
+   Str_Copy (Plg_EditingPlg->IP,NewIP,
+             Cns_MAX_BYTES_IP);
+  }
+
+/*****************************************************************************/
+/********* Show alerts after changing a plugin and continue editing **********/
+/*****************************************************************************/
+
+void Plg_ContEditAfterChgPlg (void)
+  {
+   /***** Write message to show the change made *****/
+   Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Str_Copy (Plg->IP,NewIP,
-             Cns_MAX_BYTES_IP);
-   Plg_EditPlugins ();
+   Plg_EditPluginsInternal ();
+
+   /***** Plugin destructor *****/
+   Plg_EditingPluginDestructor ();
   }
 
 /*****************************************************************************/
@@ -809,9 +880,6 @@ static void Plg_PutFormToCreatePlugin (void)
    extern const char *Txt_URL;
    extern const char *Txt_IP;
    extern const char *Txt_Create_plugin;
-   struct Plugin *Plg;
-
-   Plg = &Gbl.Plugins.EditingPlg;
 
    /***** Start form *****/
    Frm_StartForm (ActNewPlg);
@@ -854,7 +922,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " size=\"10\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name);
+            Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name);
 
    /***** Plugin description *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -862,7 +930,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " size=\"30\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description);
+            Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg_EditingPlg->Description);
 
    /***** Plugin logo *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -870,7 +938,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " size=\"4\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo);
+            Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo);
 
    /***** Plugin application key *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -878,7 +946,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " size=\"16\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
 		      "</td>",
-	    Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey);
+	    Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey);
 
    /***** Plugin URL *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -886,7 +954,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " size=\"15\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Cns_MAX_CHARS_WWW,Plg->URL);
+            Cns_MAX_CHARS_WWW,Plg_EditingPlg->URL);
 
    /***** Plugin IP address *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -895,7 +963,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            Cns_MAX_CHARS_IP,Plg->IP);
+            Cns_MAX_CHARS_IP,Plg_EditingPlg->IP);
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_plugin);
@@ -959,50 +1027,59 @@ static void Plg_PutHeadPlugins (void)
 void Plg_RecFormNewPlg (void)
   {
    extern const char *Txt_The_plugin_X_already_exists;
+   extern const char *Txt_Created_new_plugin_X;
    extern const char *Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP_address_of_the_new_plugin;
    extern const char *Txt_You_must_specify_the_name_and_the_description_of_the_new_plugin;
-   struct Plugin *Plg;
 
-   Plg = &Gbl.Plugins.EditingPlg;
+   /***** Plugin constructor *****/
+   Plg_EditingPluginConstructor ();
 
    /***** Get parameters from form *****/
    /* Get plugin name */
-   Par_GetParToText ("Name",Plg->Name,Plg_MAX_BYTES_PLUGIN_NAME);
+   Par_GetParToText ("Name",Plg_EditingPlg->Name,Plg_MAX_BYTES_PLUGIN_NAME);
 
    /* Get plugin description */
-   Par_GetParToText ("Description",Plg->Description,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
+   Par_GetParToText ("Description",Plg_EditingPlg->Description,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
 
    /* Get plugin logo */
-   Par_GetParToText ("Logo",Plg->Logo,Plg_MAX_BYTES_PLUGIN_LOGO);
+   Par_GetParToText ("Logo",Plg_EditingPlg->Logo,Plg_MAX_BYTES_PLUGIN_LOGO);
 
    /* Get plugin application key */
-   Par_GetParToText ("AppKey",Plg->AppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
+   Par_GetParToText ("AppKey",Plg_EditingPlg->AppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
 
    /* Get plugin URL */
-   Par_GetParToText ("URL",Plg->URL,Cns_MAX_BYTES_WWW);
+   Par_GetParToText ("URL",Plg_EditingPlg->URL,Cns_MAX_BYTES_WWW);
 
    /* Get plugin IP address */
-   Par_GetParToText ("IP",Plg->IP,Cns_MAX_BYTES_IP);
+   Par_GetParToText ("IP",Plg_EditingPlg->IP,Cns_MAX_BYTES_IP);
 
-   if (Plg->Name[0])	// If there's a plugin name
+   if (Plg_EditingPlg->Name[0])	// If there's a plugin name
      {
-      if (Plg->Logo[0] && Plg->AppKey[0] && Plg->URL[0] && Plg->IP[0])
+      if (Plg_EditingPlg->Logo[0]   &&
+	  Plg_EditingPlg->AppKey[0] &&
+	  Plg_EditingPlg->URL[0]    &&
+	  Plg_EditingPlg->IP[0])
         {
          /***** If name of plugin was in database... *****/
-         if (Plg_CheckIfPluginNameExists (Plg->Name,-1L))
-            Ale_ShowAlert (Ale_WARNING,Txt_The_plugin_X_already_exists,
-                           Plg->Name);
+         if (Plg_CheckIfPluginNameExists (Plg_EditingPlg->Name,-1L))
+            Ale_CreateAlert (Ale_WARNING,NULL,
+        	             Txt_The_plugin_X_already_exists,
+                             Plg_EditingPlg->Name);
          else	// Add new plugin to database
-            Plg_CreatePlugin (Plg);
+           {
+            Plg_CreatePlugin (Plg_EditingPlg);
+	    Ale_CreateAlert (Ale_SUCCESS,NULL,
+		             Txt_Created_new_plugin_X,
+			     Plg_EditingPlg->Name);
+           }
         }
       else	// If there is not a logo, a URL or a IP
-         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP_address_of_the_new_plugin);
+         Ale_CreateAlert (Ale_WARNING,NULL,
+                          Txt_You_must_specify_the_logo_the_application_key_the_URL_and_the_IP_address_of_the_new_plugin);
      }
    else	// If there is not a plugin name
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_name_and_the_description_of_the_new_plugin);
-
-   /***** Show the form again *****/
-   Plg_EditPlugins ();
+      Ale_CreateAlert (Ale_WARNING,NULL,
+	               Txt_You_must_specify_the_name_and_the_description_of_the_new_plugin);
   }
 
 /*****************************************************************************/
@@ -1011,8 +1088,6 @@ void Plg_RecFormNewPlg (void)
 
 static void Plg_CreatePlugin (struct Plugin *Plg)
   {
-   extern const char *Txt_Created_new_plugin_X;
-
    /***** Create a new plugin *****/
    DB_QueryINSERT ("can not create plugin",
 		   "INSERT INTO plugins"
@@ -1023,10 +1098,6 @@ static void Plg_CreatePlugin (struct Plugin *Plg)
 		   "'%s','%s','%s')",
                    Plg->Name,Plg->Description,Plg->Logo,
 		   Plg->AppKey,Plg->URL,Plg->IP);
-
-   /***** Write success message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_plugin_X,
-                  Plg->Name);
   }
 
 /*****************************************************************************/
@@ -1040,4 +1111,38 @@ void Plg_WebService (void)
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+  }
+
+/*****************************************************************************/
+/************************ Plugin constructor/destructor **********************/
+/*****************************************************************************/
+
+static void Plg_EditingPluginConstructor (void)
+  {
+   /***** Pointer must be NULL *****/
+   if (Plg_EditingPlg != NULL)
+      Lay_ShowErrorAndExit ("Error initializing plugin.");
+
+   /***** Allocate memory for plugin *****/
+   if ((Plg_EditingPlg = (struct Plugin *) malloc (sizeof (struct Plugin))) == NULL)
+      Lay_ShowErrorAndExit ("Error allocating memory for plugin.");
+
+   /***** Reset plugin *****/
+   Plg_EditingPlg->PlgCod         = -1L;
+   Plg_EditingPlg->Name[0]        = '\0';
+   Plg_EditingPlg->Description[0] = '\0';
+   Plg_EditingPlg->Logo[0]        = '\0';
+   Plg_EditingPlg->AppKey[0]      = '\0';
+   Plg_EditingPlg->URL[0]         = '\0';
+   Plg_EditingPlg->IP[0]          = '\0';
+  }
+
+static void Plg_EditingPluginDestructor (void)
+  {
+   /***** Free memory used for plugin *****/
+   if (Plg_EditingPlg != NULL)
+     {
+      free ((void *) Plg_EditingPlg);
+      Plg_EditingPlg = NULL;
+     }
   }

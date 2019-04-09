@@ -464,10 +464,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.108 (2019-04-09)"
+#define Log_PLATFORM_VERSION	"SWAD 18.109 (2019-04-09)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
+	Version 18.109:   Apr 09, 2019 	Code refactoring in edition of plugins. (242423 lines)
 	Version 18.108:   Apr 09, 2019 	Code refactoring in edition of links. (242336 lines)
 	Version 18.107:   Apr 09, 2019 	Code refactoring in edition of banners. (242275 lines)
 	Version 18.106:   Apr 09, 2019 	Code refactoring in edition of mail domains. (242208 lines)
