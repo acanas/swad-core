@@ -369,59 +369,59 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
    unsigned NumGrpTyp;
    bool ICanEdit;
 
-   if (Gbl.Crs.Grps.NumGrps)
-     {
-      ICanEdit = !Gbl.Form.Inside &&
-	         (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-                  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   /***** Trivial check: if no groups ==> nothing to do *****/
+   if (!Gbl.Crs.Grps.NumGrps)
+      return;
 
-      /***** Start box *****/
-      Box_StartBox (NULL,Txt_Groups,ICanEdit ? Grp_PutIconToEditGroups :
-				               NULL,
-		    Hlp_USERS_Groups,Box_CLOSABLE);
+   /***** Start box *****/
+   ICanEdit = !Gbl.Form.Inside &&
+	      (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+	       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
+   Box_StartBox (NULL,Txt_Groups,ICanEdit ? Grp_PutIconToEditGroups :
+					    NULL,
+		 Hlp_USERS_Groups,Box_CLOSABLE);
 
-      /***** Start form to update the students listed
-	     depending on the groups selected *****/
-      Frm_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
-      Usr_PutParamsPrefsAboutUsrList ();
+   /***** Start form to update the students listed
+	  depending on the groups selected *****/
+   Frm_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+   Usr_PutParamsPrefsAboutUsrList ();
 
-      /***** Put parameters needed depending on the action *****/
-      Usr_PutExtraParamsUsrList (NextAction);
+   /***** Put parameters needed depending on the action *****/
+   Usr_PutExtraParamsUsrList (NextAction);
 
-      /***** Select all groups *****/
-      Grp_PutCheckboxAllGrps (GroupsSelectableByStdsOrNETs);
+   /***** Select all groups *****/
+   Grp_PutCheckboxAllGrps (GroupsSelectableByStdsOrNETs);
 
-      /***** Get list of groups types and groups in this course *****/
-      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+   /***** Get list of groups types and groups in this course *****/
+   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-      /***** List the groups for each group type *****/
-      Tbl_StartTableWide (2);
-      for (NumGrpTyp = 0;
-	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
-	   NumGrpTyp++)
-	 if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-	    Grp_ListGrpsForMultipleSelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-	                                      GroupsSelectableByStdsOrNETs);
-      Tbl_EndTable ();
+   /***** List the groups for each group type *****/
+   Tbl_StartTableWide (2);
+   for (NumGrpTyp = 0;
+	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
+	NumGrpTyp++)
+      if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+	 Grp_ListGrpsForMultipleSelection (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+					   GroupsSelectableByStdsOrNETs);
+   Tbl_EndTable ();
 
-      /***** Free list of groups types and groups in this course *****/
-      Grp_FreeListGrpTypesAndGrps ();
+   /***** Free list of groups types and groups in this course *****/
+   Grp_FreeListGrpTypesAndGrps ();
 
-      /***** Submit button *****/
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-			 " style=\"padding-top:12px;\">");
-      Frm_LinkFormSubmitAnimated (Txt_Update_users,
-	                          The_ClassFormInBoxBold[Gbl.Prefs.Theme],
-				  "CopyMessageToHiddenFields();");
-      Ico_PutCalculateIconWithText (Txt_Update_users);
-      fprintf (Gbl.F.Out,"</div>");
+   /***** Submit button *****/
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+		      " style=\"padding-top:12px;\">");
+   Frm_LinkFormSubmitAnimated (Txt_Update_users,
+			       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
+			       "CopyMessageToHiddenFields();");
+   Ico_PutCalculateIconWithText (Txt_Update_users);
+   fprintf (Gbl.F.Out,"</div>");
 
-      /***** End form *****/
-      Frm_EndForm ();
+   /***** End form *****/
+   Frm_EndForm ();
 
-      /***** End box *****/
-      Box_EndBox ();
-     }
+   /***** End box *****/
+   Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -2272,23 +2272,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    /***** Write rows to select the students who don't belong to any group *****/
    /* To get the students who don't belong to a type of group, use group code -(GrpTyp->GrpTypCod) */
    /* Write checkbox to select the group */
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_NET:
-	 ICanSelUnselGroup = false;
-	 break;
-      case Rol_STD:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 ICanSelUnselGroup = true;
-	 break;
-      default:
-	 ICanSelUnselGroup = false;
-	 break;
-     }
+   ICanSelUnselGroup = (Gbl.Usrs.Me.Role.Logged >= Rol_STD);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"checkbox\" id=\"Grp%ld\" name=\"GrpCods\""
