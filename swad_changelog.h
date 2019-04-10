@@ -459,10 +459,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.109.1 (2019-04-10)"
+#define Log_PLATFORM_VERSION	"SWAD 18.109.2 (2019-04-10)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
+	Version 18.109.2: Apr 10, 2019  Code refactoring in selection of users to view homework. (242421 lines)
 	Version 18.109.1: Apr 10, 2019 	A non-editing teacher can choose students with no groups of a type. (242406 lines)
 	Version 18.109:   Apr 09, 2019 	Code refactoring in edition of plugins. (242421 lines)
 	Version 18.108:   Apr 09, 2019 	Code refactoring in edition of links. (242336 lines)

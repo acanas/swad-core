@@ -424,6 +424,9 @@ void Usr_SetUsrDatMainFieldNames (void);
 void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr);
 
 void Usr_PutExtraParamsUsrList (Act_Action_t NextAction);
+void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,
+                                       const char *HelpLink,
+                                       const char *TxtButton);
 void Usr_ListUsersToSelect (Rol_Role_t Role);
 
 void Usr_ListAllDataGsts (void);

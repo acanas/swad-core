@@ -6130,6 +6130,94 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
 /******************** List users to select some of them **********************/
 /*****************************************************************************/
 
+void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,
+                                       const char *HelpLink,
+                                       const char *TxtButton)
+  {
+   extern const char *Txt_Users;
+   unsigned NumTotalUsrs;
+
+   /***** Get and update type of list,
+          number of columns in class photo
+          and preference about view photos *****/
+   Usr_GetAndUpdatePrefsAboutUsrList ();
+
+   /***** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+   /***** Get and order lists of users from this course *****/
+   Usr_GetListUsrs (Hie_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_CRS,Rol_NET);
+   Usr_GetListUsrs (Hie_CRS,Rol_TCH);
+   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
+
+   /***** Draw class photos to select users *****/
+   Box_StartBox (NULL,Txt_Users,NULL,HelpLink,Box_NOT_CLOSABLE);
+
+   /***** Show form to select the groups *****/
+   Grp_ShowFormToSelectSeveralGroups (NextAction,Grp_ONLY_MY_GROUPS);
+
+   /***** Start section with user list *****/
+   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+
+   if (NumTotalUsrs)
+     {
+      if (Usr_GetIfShowBigList (NumTotalUsrs,NULL))
+        {
+	 /* Form to select type of list used for select several users */
+	 Usr_ShowFormsToSelectUsrListType (ActReqAsgWrkCrs);
+
+	 /***** Put link to register students *****/
+	 Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+
+         /* Start form */
+         Frm_StartForm (ActAdmAsgWrkCrs);
+         Grp_PutParamsCodGrps ();
+         Gbl.FileBrowser.FullTree = true;	// By default, show all files
+         Brw_PutHiddenParamFullTreeIfSelected ();
+
+         /* Put list of users to select some of them */
+         Tbl_StartTableCenter (0);
+         Usr_ListUsersToSelect (Rol_TCH);
+         Usr_ListUsersToSelect (Rol_NET);
+         Usr_ListUsersToSelect (Rol_STD);
+         Tbl_EndTable ();
+
+         /* Send button */
+	 Btn_PutConfirmButton (TxtButton);
+
+         /* End form */
+         Frm_EndForm ();
+        }
+     }
+   else	// NumTotalUsrs == 0
+      /***** Show warning indicating no users found *****/
+      Usr_ShowWarningNoUsersFound (Rol_UNK);
+
+   /***** End section with user list *****/
+   Lay_EndSection ();
+
+   /***** End box *****/
+   Box_EndBox ();
+
+   /***** Free memory for users' list *****/
+   Usr_FreeUsrsList (Rol_TCH);
+   Usr_FreeUsrsList (Rol_NET);
+   Usr_FreeUsrsList (Rol_STD);
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
+
+   /***** Free memory for list of selected groups *****/
+   Grp_FreeListCodSelectedGrps ();
+  }
+
+/*****************************************************************************/
+/*********** List users with a given role to select some of them *************/
+/*****************************************************************************/
+
 void Usr_ListUsersToSelect (Rol_Role_t Role)
   {
    /***** If there are no users, don't list anything *****/
