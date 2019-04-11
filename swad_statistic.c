@@ -350,17 +350,18 @@ void Sta_AskShowCrsHits (void)
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs,Grp_ONLY_MY_GROUPS);
+   Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs,NULL,
+	                              Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
      {
-      if (Usr_GetIfShowBigList (NumTotalUsrs,NULL))
+      if (Usr_GetIfShowBigList (NumTotalUsrs,NULL,NULL))
         {
 	 /***** Form to select type of list used for select several users *****/
-	 Usr_ShowFormsToSelectUsrListType (ActReqAccCrs);
+	 Usr_ShowFormsToSelectUsrListType (ActReqAccCrs,NULL);
 
 	 /***** Put link to register students *****/
          Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();

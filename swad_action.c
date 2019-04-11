@@ -508,16 +508,16 @@ Assessment:
 	365. ActShoPrj			Show project
 	366. ActReqAddStdPrj		Request adding a student to a project
 	367. ActReqAddTutPrj		Request adding a tutor to a project
-	368. ActReqAddEvaPrj		Request adding an evaluator to a project
+	368. ActReqAddEvlPrj		Request adding an evaluator to a project
 	369. ActAddStdPrj		Add a student to a project
 	370. ActAddTutPrj		Add a tutor to a project
-	371. ActAddEvaPrj		Add an evaluator to a project
+	371. ActAddEvlPrj		Add an evaluator to a project
 	372. ActReqRemStdPrj		Request removing a student from a project
 	373. ActReqRemTutPrj		Request removing a tutor from a project
-	374. ActReqRemEvaPrj		Request removing an evaluator from a project
+	374. ActReqRemEvlPrj		Request removing an evaluator from a project
 	375. ActRemStdPrj		Remove a student from a project
 	376. ActRemTutPrj		Remove a tutor from a project
-	377. ActRemEvaPrj		Remove an emulator from a project
+	377. ActRemEvlPrj		Remove an emulator from a project
 
 	378. ActAdmDocPrj		Admin. project documents
         379. ActReqRemFilDocPrj		Request removal of a file from project documents
@@ -2042,18 +2042,18 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemPrj		*/{1681,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemoveProject		,NULL},
    /* ActHidPrj		*/{1682,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_HideProject		,NULL},
    /* ActShoPrj		*/{1683,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ShowProject		,NULL},
-   /* ActReqAddStdPrj	*/{1684,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddStd			,NULL},
-   /* ActReqAddTutPrj	*/{1685,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddTut			,NULL},
-   /* ActReqAddEvaPrj	*/{1686,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddEva			,NULL},
-   /* ActAddStdPrj	*/{1687,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_AddStd			,NULL},
-   /* ActAddTutPrj	*/{1688,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_AddTut			,NULL},
-   /* ActAddEvaPrj	*/{1689,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_AddEva			,NULL},
+   /* ActReqAddStdPrj	*/{1684,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddStds			,NULL},
+   /* ActReqAddTutPrj	*/{1685,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddTuts			,NULL},
+   /* ActReqAddEvlPrj	*/{1686,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddEvls			,NULL},
+   /* ActAddStdPrj	*/{1687,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_GetSelectedUsrsAndAddStds	,NULL},
+   /* ActAddTutPrj	*/{1688,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_GetSelectedUsrsAndAddTuts	,NULL},
+   /* ActAddEvlPrj	*/{1689,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_GetSelectedUsrsAndAddEvls	,NULL},
    /* ActReqRemStdPrj	*/{1690,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemStd			,NULL},
    /* ActReqRemTutPrj	*/{1691,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemTut			,NULL},
-   /* ActReqRemEvaPrj	*/{1692,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemEva			,NULL},
+   /* ActReqRemEvlPrj	*/{1692,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqRemEvl			,NULL},
    /* ActRemStdPrj	*/{1693,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemStd			,NULL},
    /* ActRemTutPrj	*/{1694,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemTut			,NULL},
-   /* ActRemEvaPrj	*/{1695,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemEva			,NULL},
+   /* ActRemEvlPrj	*/{1695,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RemEvl			,NULL},
 
    /* ActAdmDocPrj	*/{1697,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
    /* ActReqRemFilDocPrj*/{1698,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Brw_AskRemFileFromTree		,NULL},
@@ -4859,16 +4859,16 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActShoPrj,		// #1683
 	ActReqAddStdPrj,	// #1684
 	ActReqAddTutPrj,	// #1685
-	ActReqAddEvaPrj,	// #1686
+	ActReqAddEvlPrj,	// #1686
 	ActAddStdPrj,		// #1687
 	ActAddTutPrj,		// #1688
-	ActAddEvaPrj,		// #1689
+	ActAddEvlPrj,		// #1689
 	ActReqRemStdPrj,	// #1690
 	ActReqRemTutPrj,	// #1691
-	ActReqRemEvaPrj,	// #1692
+	ActReqRemEvlPrj,	// #1692
 	ActRemStdPrj,		// #1693
 	ActRemTutPrj,		// #1694
-	ActRemEvaPrj,		// #1695
+	ActRemEvlPrj,		// #1695
 	ActSeeTblAllPrj,	// #1696
 	ActAdmDocPrj,		// #1697
 	ActReqRemFilDocPrj,	// #1698

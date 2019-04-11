@@ -359,7 +359,7 @@ static void Grp_PutIconToCreateNewGroup (void)
 /*************** Show form to select one or several groups *******************/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
+void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,void (*FuncParams) (),
                                         Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
    extern const char *Hlp_USERS_Groups;
@@ -385,9 +385,8 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
 	  depending on the groups selected *****/
    Frm_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Usr_PutParamsPrefsAboutUsrList ();
-
-   /***** Put parameters needed depending on the action *****/
-   Usr_PutExtraParamsUsrList (NextAction);
+   if (FuncParams)
+      FuncParams ();
 
    /***** Select all groups *****/
    Grp_PutCheckboxAllGrps (GroupsSelectableByStdsOrNETs);

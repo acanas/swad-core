@@ -59,6 +59,7 @@ typedef enum
 /*****************************************************************************/
 
 void Msg_FormMsgUsrs (void);
+void Msg_PutParamsWriteMsg (void);
 void Msg_PutHiddenParamsSubjectAndContent (void);
 void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat);
 void Msg_PutHiddenParamOtherRecipients (void);

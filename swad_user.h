@@ -407,7 +407,9 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
 void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList *UsrInList);
 void Usr_FreeUsrsList (Rol_Role_t Role);
 
-bool Usr_GetIfShowBigList (unsigned NumUsrs,const char *OnSubmit);
+bool Usr_GetIfShowBigList (unsigned NumUsrs,
+                           void (*FuncParams) (),
+                           const char *OnSubmit);
 
 void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods);
 void Usr_GetListsSelectedUsrsCods (void);
@@ -417,16 +419,18 @@ unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void);
 void Usr_FreeListsSelectedUsrsCods (void);
 void Usr_FreeListOtherRecipients (void);
 
-void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction);
+void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,void (*FuncParams) ());
 void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role);
 unsigned Usr_GetColumnsForSelectUsrs (void);
 void Usr_SetUsrDatMainFieldNames (void);
 void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr);
 
-void Usr_PutExtraParamsUsrList (Act_Action_t NextAction);
-void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,
+void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t CurrAction,void (*FuncParamsCurrAction) (),
+                                       Act_Action_t NextAction,void (*FuncParamsNextAction) (),
                                        const char *HelpLink,
                                        const char *TxtButton);
+void Usr_GetSelectedUsrsAndGoToAct (void (*FuncWhenUsrsSelected) (),
+                                    void (*FuncWhenNoUsrsSelected) ());
 void Usr_ListUsersToSelect (Rol_Role_t Role);
 
 void Usr_ListAllDataGsts (void);

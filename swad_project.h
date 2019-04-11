@@ -113,7 +113,7 @@ typedef enum
    Prj_ROLE_UNK	= 0,	// Unknown
    Prj_ROLE_STD	= 1,	// Student
    Prj_ROLE_TUT	= 2,	// Tutor
-   Prj_ROLE_EVA	= 3,	// Evaluator
+   Prj_ROLE_EVL	= 3,	// Evaluator
   } Prj_RoleInProject_t;
 
 /***** Struct to store a project *****/
@@ -154,21 +154,21 @@ void Prj_PrintOneProject (void);
 void Prj_FlushCacheMyRoleInProject (void);
 Prj_RoleInProject_t Prj_GetMyRoleInProject (long PrjCod);
 
-void Prj_ReqAddStd (void);
-void Prj_ReqAddTut (void);
-void Prj_ReqAddEva (void);
+void Prj_ReqAddStds (void);
+void Prj_ReqAddTuts (void);
+void Prj_ReqAddEvls (void);
 
-void Prj_AddStd (void);
-void Prj_AddTut (void);
-void Prj_AddEva (void);
+void Prj_GetSelectedUsrsAndAddStds (void);
+void Prj_GetSelectedUsrsAndAddTuts (void);
+void Prj_GetSelectedUsrsAndAddEvls (void);
 
 void Prj_ReqRemStd (void);
 void Prj_ReqRemTut (void);
-void Prj_ReqRemEva (void);
+void Prj_ReqRemEvl (void);
 
 void Prj_RemStd (void);
 void Prj_RemTut (void);
-void Prj_RemEva (void);
+void Prj_RemEvl (void);
 
 void Prj_PutHiddenParamPrjOrder (void);
 

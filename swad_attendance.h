@@ -81,6 +81,7 @@ void Att_RequestCreatOrEditAttEvent (void);
 bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att);
 void Att_FreeListAttEvents (void);
 
+void Att_PutParamSelectedAttCod (void);
 void Att_PutParamAttCod (long AttCod);
 long Att_GetParamAttCod (void);
 

@@ -30098,7 +30098,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"Tutor/a"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_EVA
+#if   L==1	// ca	// Prj_ROLE_EVL
 	"Avaluador/a"
 #elif L==2	// de
 	"Auswerter"
@@ -30181,7 +30181,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"tutor/a"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_EVA
+#if   L==1	// ca	// Prj_ROLE_EVL
 	"avaluador/a"
 #elif L==2	// de
 	"Auswerter"
@@ -30264,7 +30264,7 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"Tutores"
 #endif
 	,
-#if   L==1	// ca	// Prj_ROLE_EVA
+#if   L==1	// ca	// Prj_ROLE_EVL
 	"Avaluadors"
 #elif L==2	// de
 	"Auswerter"
@@ -30284,6 +30284,90 @@ const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	"Avaliadores"
 #endif
 	};
+
+const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
+	{
+#if   L==1	// ca	// Prj_ROLE_UNK
+	"desconeguts"
+#elif L==2	// de
+	"Unbekannte"
+#elif L==3	// en
+	"unknown"
+#elif L==4	// es
+	"desconocidos"
+#elif L==5	// fr
+	"inconnus"
+#elif L==6	// gn
+	"desconocidos"	// Okoteve traducción
+#elif L==7	// it
+	"sconosciuti"
+#elif L==8	// pl
+	"nieznany"
+#elif L==9	// pt
+	"desconhecidos"
+#endif
+	,
+#if   L==1	// ca	// Prj_ROLE_STD
+	"estudiants"
+#elif L==2	// de
+	"Studenten"
+#elif L==3	// en
+	"students"
+#elif L==4	// es
+	"estudiantes"
+#elif L==5	// fr
+	"&eacute;tudiants"
+#elif L==6	// gn
+	"temimbo'e"
+#elif L==7	// it
+	"studenti"
+#elif L==8	// pl
+	"studenci"
+#elif L==9	// pt
+	"estudantes"
+#endif
+	,
+#if   L==1	// ca	// Prj_ROLE_TUT
+	"tutors"
+#elif L==2	// de
+	"Tutoren"
+#elif L==3	// en
+	"tutors"
+#elif L==4	// es
+	"tutores"
+#elif L==5	// fr
+	"tuteurs"
+#elif L==6	// gn
+	"tutores"	// Okoteve traducción
+#elif L==7	// it
+	"precettori"
+#elif L==8	// pl
+	"nauczyciele"
+#elif L==9	// pt
+	"tutores"
+#endif
+	,
+#if   L==1	// ca	// Prj_ROLE_EVL
+	"avaluadors"
+#elif L==2	// de
+	"Auswerter"
+#elif L==3	// en
+	"evaluators"
+#elif L==4	// es
+	"evaluadores"
+#elif L==5	// fr
+	"&eacute;valuateurs"
+#elif L==6	// gn
+	"evaluadores"	// Okoteve traducción
+#elif L==7	// it
+	"valutatori"
+#elif L==8	// pl
+	"ewaluator&oacute;w"
+#elif L==9	// pt
+	"avaliadores"
+#endif
+	};
+
 
 const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 	{

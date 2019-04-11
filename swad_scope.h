@@ -44,6 +44,7 @@
 /*****************************************************************************/
 
 void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange);
+void Sco_PutParamCurrentScope (void);
 void Sco_PutParamScope (const char *ParamName,Hie_Level_t Scope);
 void Sco_GetScope (const char *ParamName);
 void Sco_AdjustScope (void);

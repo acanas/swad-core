@@ -847,6 +847,11 @@ static void Att_GetAttEventDescriptionFromDB (long AttCod,char Description[Cns_M
 /************** Write parameter with code of attendance event ****************/
 /*****************************************************************************/
 
+void Att_PutParamSelectedAttCod (void)
+  {
+   Att_PutParamAttCod (Gbl.AttEvents.AttCod);
+  }
+
 void Att_PutParamAttCod (long AttCod)
   {
    Par_PutHiddenParamLong ("AttCod",AttCod);
@@ -1948,7 +1953,8 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt,Grp_ONLY_MY_GROUPS);
+   Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt,Att_PutParamSelectedAttCod,
+	                              Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
@@ -2703,21 +2709,22 @@ void Usr_ReqListStdsAttendanceCrs (void)
 		 NULL,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt,Grp_ONLY_MY_GROUPS);
+   Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt,Att_PutParamSelectedAttCod,
+	                              Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,NULL))
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,NULL,NULL))
 	{
 	 /***** Get list of selected users *****/
 	 Usr_GetListsSelectedUsrsCods ();
 
 	 /***** Draw a class photo with students of the course *****/
 	 /* Form to select type of list used for select several users */
-	 Usr_ShowFormsToSelectUsrListType (ActReqLstStdAtt);
+	 Usr_ShowFormsToSelectUsrListType (ActReqLstStdAtt,NULL);
 
 	 /* Start form */
 	 Frm_StartForm (ActSeeLstStdAtt);

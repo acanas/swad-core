@@ -432,9 +432,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 // TODO: Ver cómo recibir un fichero desde el cliente (SWADroid) en gsoap
 
 // TODO: Pedro Villar Castro:
-// Al asignar un TFG a alumnos, no escribir el DNI del alumno, sino escogerlo de una lista de entre los alumnos inscritos en la asignatura.
-
-// TODO: Pedro Villar Castro:
 // Bloquear individualmente la edición con una casilla de configuración para cada TFG, sólo el profesor de la asignatura (Perico) podría bloquear/desbloquear
 // Que haya una opción general que los bloquee todos y que los desbloquee todos
 // Para bloquear/desbloquear se usará un icono candado
@@ -459,10 +456,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.109.2 (2019-04-10)"
+#define Log_PLATFORM_VERSION	"SWAD 18.110 (2019-04-10)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
+Comprobar si Gbl.AttEvents.AttCodToEdit puede ser sustituido por Gbl.AttEvents.AttCod
+
+	Version 18.110:   Apr 10, 2019  Code refactoring in selection of groups and users.
+					Adding multiple users ad once to a project, suggested by Pedro Villar Castro. (242563 lines)
 	Version 18.109.2: Apr 10, 2019  Code refactoring in selection of users to view homework. (242421 lines)
 	Version 18.109.1: Apr 10, 2019 	A non-editing teacher can choose students with no groups of a type. (242406 lines)
 	Version 18.109:   Apr 09, 2019 	Code refactoring in edition of plugins. (242421 lines)

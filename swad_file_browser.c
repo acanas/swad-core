@@ -1602,7 +1602,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActChgToSeeDocCrs:	// Access to see a documents zone
          /* Set file browser type acording to last group accessed */
          Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_SHOW_DOC_GRP :
-                                                                   Brw_SHOW_DOC_CRS;
+                                                            Brw_SHOW_DOC_CRS;
          break;
       case ActSeeDocCrs:
       case ActExpSeeDocCrs:
@@ -1623,7 +1623,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActChgToAdmDocCrs:	// Access to admin a documents zone
          /* Set file browser type acording to last group accessed */
          Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_ADMI_DOC_GRP :
-                                                                   Brw_ADMI_DOC_CRS;
+                                                            Brw_ADMI_DOC_CRS;
          break;
       case ActAdmDocCrs:
       case ActReqRemFilDocCrs:
@@ -1677,7 +1677,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActChgToAdmTch:	// Access to a teachers zone from menu
          /* Set file browser type acording to last group accessed */
          Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_ADMI_TCH_GRP :
-                                                                   Brw_ADMI_TCH_CRS;
+                                                            Brw_ADMI_TCH_CRS;
          break;
       case ActAdmTchCrs:
       case ActReqRemFilTchCrs:
@@ -1727,7 +1727,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActChgToAdmSha:	// Access to a shared zone from menu
          /* Set file browser type acording to last group accessed */
          Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_ADMI_SHR_GRP :
-                                                                   Brw_ADMI_SHR_CRS;
+                                                            Brw_ADMI_SHR_CRS;
          break;
       case ActAdmShaCrs:
       case ActReqRemFilShaCrs:
@@ -1917,12 +1917,12 @@ void Brw_GetParAndInitFileBrowser (void)
 	    case Rol_STD:
 	    case Rol_NET:
 	       Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_SHOW_MRK_GRP :
-								         Brw_SHOW_MRK_CRS;
+								  Brw_SHOW_MRK_CRS;
 	       break;
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
 	       Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_ADMI_MRK_GRP :
-								         Brw_ADMI_MRK_CRS;
+								  Brw_ADMI_MRK_CRS;
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit ("Wrong role.");
@@ -1932,7 +1932,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActChgToSeeMrk:	// Access to see a marks zone
          /* Set file browser type acording to last group accessed */
          Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_SHOW_MRK_GRP :
-                                                                   Brw_SHOW_MRK_CRS;
+                                                            Brw_SHOW_MRK_CRS;
          break;
       case ActSeeMrkCrs:
       case ActExpSeeMrkCrs:
@@ -1951,7 +1951,7 @@ void Brw_GetParAndInitFileBrowser (void)
       case ActChgToAdmMrk:	// Access to admin a marks zone
          /* Set file browser type acording to last group accessed */
          Gbl.FileBrowser.Type = (Gbl.Crs.Grps.GrpCod > 0) ? Brw_ADMI_MRK_GRP :
-                                                                   Brw_ADMI_MRK_CRS;
+                                                            Brw_ADMI_MRK_CRS;
          break;
       case ActAdmMrkCrs:
       case ActReqRemFilMrkCrs:
@@ -3057,7 +3057,8 @@ void Brw_AskEditWorksCrs (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** List users to select some of them *****/
-   Usr_PutFormToSelectUsrsToGoToAct (ActReqAsgWrkCrs,
+   Usr_PutFormToSelectUsrsToGoToAct (ActReqAsgWrkCrs,NULL,	// Current action
+	                             ActAdmAsgWrkCrs,NULL,	// Next action
 	                             Hlp_FILES_Homework_for_teachers,
 	                             Txt_View_homework);
   }
@@ -3408,24 +3409,8 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
 void Brw_GetSelectedUsrsAndShowWorks (void)
   {
-   extern const char *Txt_You_must_select_one_ore_more_users;
-
-   /***** Get lists of the selected users if not already got *****/
-   Usr_GetListsSelectedUsrsCods ();
-
-   /***** Check the number of users whose works will be shown *****/
-   if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
-      Brw_ShowFileBrowserOrWorks ();
-   else	// If no users are selected...
-     {
-      // ...write warning alert
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
-      // ...and show again the form
-      Brw_AskEditWorksCrs ();
-     }
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
+   Usr_GetSelectedUsrsAndGoToAct (Brw_ShowFileBrowserOrWorks,	// when user(s) selected
+                                  Brw_AskEditWorksCrs);		// when no user selected
   }
 
 /*****************************************************************************/
@@ -11648,7 +11633,7 @@ static bool Brw_CheckIfICanViewProjectDocuments (Prj_RoleInProject_t MyRoleInPro
 	       return false;
 	    case Prj_ROLE_STD:
 	    case Prj_ROLE_TUT:
-	    case Prj_ROLE_EVA:
+	    case Prj_ROLE_EVL:
                return true;
 	   }
 	 break;
@@ -11677,7 +11662,7 @@ static bool Brw_CheckIfICanViewProjectAssessment (Prj_RoleInProject_t MyRoleInPr
 	    case Prj_ROLE_STD:	// Students can not view or edit project assessment
 	       return false;
 	    case Prj_ROLE_TUT:
-	    case Prj_ROLE_EVA:
+	    case Prj_ROLE_EVL:
                return true;
 	   }
 	 break;
@@ -11710,7 +11695,7 @@ static bool Brw_CheckIfICanModifyPrjDocFileOrFolder (void)
 	       return false;
 	    case Prj_ROLE_STD:
 	    case Prj_ROLE_TUT:
-	    case Prj_ROLE_EVA:
+	    case Prj_ROLE_EVL:
                return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
 	   }
 	 break;
@@ -11743,7 +11728,7 @@ static bool Brw_CheckIfICanModifyPrjAssFileOrFolder (void)
 	    case Prj_ROLE_STD:	// Students can not view or edit project assessment
 	       return false;
 	    case Prj_ROLE_TUT:
-	    case Prj_ROLE_EVA:
+	    case Prj_ROLE_EVL:
                return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
 	   }
 	 break;

@@ -120,6 +120,8 @@ void Pho_RemoveObsoleteStatDegrees (void);
 void Pho_ShowPhotoDegree (void);
 void Pho_PrintPhotoDegree (void);
 void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
+
+void Pho_PutParamsDegPhoto ();
 void Pho_PutHiddenParamTypeOfAvg (void);
 void Pho_PutHiddenParamPhotoSize (void);
 void Pho_PutHiddenParamOrderDegrees (void);

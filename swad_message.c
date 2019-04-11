@@ -240,7 +240,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       if (GetUsrsInCrs)
 	{
 	 /***** Form to select groups *****/
-	 Grp_ShowFormToSelectSeveralGroups (ActReqMsgUsr,
+	 Grp_ShowFormToSelectSeveralGroups (ActReqMsgUsr,Msg_PutParamsWriteMsg,
 	                                    Grp_ONLY_MY_GROUPS);
 
 	 /***** Start section with user list *****/
@@ -249,13 +249,15 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	 if (NumUsrsInCrs)
 	   {
 	    /***** Form to select type of list used for select several users *****/
-	    Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
+	    Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr,Msg_PutParamsWriteMsg);
 
 	    /***** Put link to register students *****/
 	    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
 	    /***** Check if it's a big list *****/
-	    ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,"CopyMessageToHiddenFields();");
+	    ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,
+		                                  Msg_PutParamsWriteMsg,
+		                                  "CopyMessageToHiddenFields();");
 
 	    if (ShowUsrsInCrs)
 	       /***** Get lists of selected users *****/
@@ -386,6 +388,28 @@ static void Msg_PutParamsShowMorePotentialRecipients (void)
 
    /***** Hidden params to send subject and content *****/
    Msg_PutHiddenParamsSubjectAndContent ();
+  }
+
+/*****************************************************************************/
+/***************** Put parameters when writing a message *********************/
+/*****************************************************************************/
+
+void Msg_PutParamsWriteMsg (void)
+  {
+   Usr_PutHiddenParUsrCodAll (ActReqMsgUsr,Gbl.Usrs.Selected.List[Rol_UNK]);
+   Msg_PutHiddenParamOtherRecipients ();
+   Msg_PutHiddenParamsSubjectAndContent ();
+   if (Gbl.Msg.Reply.IsReply)
+     {
+      Par_PutHiddenParamChar ("IsReply",'Y');
+      Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
+     }
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Usr_PutParamOtherUsrCodEncrypted ();
+      if (Gbl.Msg.ShowOnlyOneRecipient)
+	 Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
+     }
   }
 
 /*****************************************************************************/

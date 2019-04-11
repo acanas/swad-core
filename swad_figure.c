@@ -1042,7 +1042,7 @@ static void Fig_GetAndShowInstitutionsStats (void)
 
    /***** Form to select type of list used to display degree photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
-   Usr_ShowFormsToSelectUsrListType (ActSeeUseGbl);
+   Usr_ShowFormsToSelectUsrListType (ActSeeUseGbl,Fig_PutHiddenParamFigures);
 
    /***** Institutions ordered by number of centres *****/
    Fig_GetAndShowInssOrderedByNumCtrs ();

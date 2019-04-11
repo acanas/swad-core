@@ -151,8 +151,10 @@ const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/************************* Internal global variables *************************/
+/****************************** Private variables ****************************/
 /*****************************************************************************/
+
+static void (*Usr_FuncParamsBigList) ();	// Used to pass pointer to function
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -198,13 +200,16 @@ static void Usr_GetGstsLst (Hie_Level_t Scope);
 static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Level_t Scope);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
-static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char *OnSubmit);
+static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
+                                                     void (*FuncParams) (),
+                                                     const char *OnSubmit);
 static void Usr_PutParamsConfirmIWantToSeeBigList (void);
 
 static void Usr_AllocateListSelectedUsrCod (Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
 
-static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsType_t ListType);
+static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,void (*FuncParams) (),
+                                         Usr_ShowUsrsType_t ListType);
 
 static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
 
@@ -5589,7 +5594,9 @@ void Usr_FreeUsrsList (Rol_Role_t Role)
 /******** Show form to confirm that I want to see a big list of users ********/
 /*****************************************************************************/
 
-bool Usr_GetIfShowBigList (unsigned NumUsrs,const char *OnSubmit)
+bool Usr_GetIfShowBigList (unsigned NumUsrs,
+                           void (*FuncParams) (),
+                           const char *OnSubmit)
   {
    bool ShowBigList;
 
@@ -5599,7 +5606,7 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,const char *OnSubmit)
       /***** Get parameter with user's confirmation
              to see a big list of users *****/
       if (!(ShowBigList = Par_GetParToBool ("ShowBigList")))
-	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs,OnSubmit);
+	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs,FuncParams,OnSubmit);
 
       return ShowBigList;
      }
@@ -5611,12 +5618,15 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,const char *OnSubmit)
 /******** Show form to confirm that I want to see a big list of users ********/
 /*****************************************************************************/
 
-static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char *OnSubmit)
+static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
+                                                     void (*FuncParams) (),
+                                                     const char *OnSubmit)
   {
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
    extern const char *Txt_Show_anyway;
 
    /***** Show alert and button to confirm that I want to see the big list *****/
+   Usr_FuncParamsBigList = FuncParams;	// Used to pass pointer to function
    Ale_ShowAlertAndButton (Gbl.Action.Act,Usr_USER_LIST_SECTION_ID,OnSubmit,
                            Usr_PutParamsConfirmIWantToSeeBigList,
                            Btn_CONFIRM_BUTTON,Txt_Show_anyway,
@@ -5628,7 +5638,8 @@ static void Usr_PutParamsConfirmIWantToSeeBigList (void)
   {
    Grp_PutParamsCodGrps ();
    Usr_PutParamsPrefsAboutUsrList ();
-   Usr_PutExtraParamsUsrList (Gbl.Action.Act);
+   if (Usr_FuncParamsBigList)
+      Usr_FuncParamsBigList ();
    Par_PutHiddenParamChar ("ShowBigList",'Y');
   }
 
@@ -6003,7 +6014,7 @@ void Usr_FreeListOtherRecipients (void)
 /*************************** Selection of list type **************************/
 /*****************************************************************************/
 
-void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
+void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,void (*FuncParams) ())
   {
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
@@ -6012,15 +6023,16 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
             Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO ? "PREF_ON" :
         	                                              "PREF_OFF");
-   Usr_FormToSelectUsrListType (NextAction,Usr_LIST_AS_CLASS_PHOTO);
+   Usr_FormToSelectUsrListType (NextAction,FuncParams,Usr_LIST_AS_CLASS_PHOTO);
 
    /* Number of columns in the class photo */
    Frm_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Usr_LIST_AS_CLASS_PHOTO);
    Usr_PutParamListWithPhotos ();
-   Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutSelectorNumColsClassPhoto ();
+   if (FuncParams)
+      FuncParams ();
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
 
@@ -6028,13 +6040,14 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
             Gbl.Usrs.Me.ListType == Usr_LIST_AS_LISTING ? "PREF_ON" :
         	                                          "PREF_OFF");
-   Usr_FormToSelectUsrListType (NextAction,Usr_LIST_AS_LISTING);
+   Usr_FormToSelectUsrListType (NextAction,FuncParams,Usr_LIST_AS_LISTING);
 
    /* See the photos in list? */
    Frm_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Usr_LIST_AS_LISTING);
-   Usr_PutExtraParamsUsrList (NextAction);
+   if (FuncParams)
+      FuncParams ();
    Usr_PutCheckboxListWithPhotos ();
    Frm_EndForm ();
    fprintf (Gbl.F.Out,"</div>");
@@ -6047,7 +6060,8 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
 /************* Put a radio element to select a users' list type **************/
 /*****************************************************************************/
 
-static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsType_t ListType)
+static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,void (*FuncParams) (),
+                                         Usr_ShowUsrsType_t ListType)
   {
    extern const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES];
    extern const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES];
@@ -6057,7 +6071,8 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (ListType);
    Usr_PutParamListWithPhotos ();
-   Usr_PutExtraParamsUsrList (NextAction);
+   if (FuncParams)
+      FuncParams ();
 
    /***** Link and image *****/
    Frm_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],
@@ -6079,58 +6094,11 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
   }
 
 /*****************************************************************************/
-/***************** Put extra parameters for a list of users ******************/
-/*****************************************************************************/
-
-void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
-  {
-   switch (Gbl.Action.Act)
-     {
-      case ActLstGst:
-      case ActLstStd:
-      case ActLstTch:
-         Sco_PutParamScope ("ScopeUsr",Gbl.Scope.Current);
-         break;
-      case ActSeeOneAtt:
-      case ActRecAttStd:
-         Att_PutParamAttCod (Gbl.AttEvents.AttCod);
-         break;
-      case ActReqMsgUsr:
-         Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Selected.List[Rol_UNK]);
-         Msg_PutHiddenParamOtherRecipients ();
-         Msg_PutHiddenParamsSubjectAndContent ();
-         if (Gbl.Msg.Reply.IsReply)
-           {
-            Par_PutHiddenParamChar ("IsReply",'Y');
-            Msg_PutHiddenParamMsgCod (Gbl.Msg.Reply.OriginalMsgCod);
-           }
-         if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-           {
-            Usr_PutParamOtherUsrCodEncrypted ();
-            if (Gbl.Msg.ShowOnlyOneRecipient)
-               Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
-           }
-         break;
-      case ActSeeUseGbl:
-	 /* Used in selector of "Class photo"/"List"
-	    in STATS > Figures > Institutions */
-         Fig_PutHiddenParamFigures ();
-         break;
-      case ActSeePhoDeg:
-         Pho_PutHiddenParamTypeOfAvg ();
-         Pho_PutHiddenParamPhotoSize ();
-         Pho_PutHiddenParamOrderDegrees ();
-         break;
-      default:
-         break;
-     }
-  }
-
-/*****************************************************************************/
 /******************** List users to select some of them **********************/
 /*****************************************************************************/
 
-void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,
+void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t CurrAction,void (*FuncParamsCurrAction) (),
+                                       Act_Action_t NextAction,void (*FuncParamsNextAction) (),
                                        const char *HelpLink,
                                        const char *TxtButton)
   {
@@ -6157,23 +6125,26 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,
    Box_StartBox (NULL,Txt_Users,NULL,HelpLink,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (NextAction,Grp_ONLY_MY_GROUPS);
+   Grp_ShowFormToSelectSeveralGroups (CurrAction,FuncParamsCurrAction,
+	                              Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
      {
-      if (Usr_GetIfShowBigList (NumTotalUsrs,NULL))
+      if (Usr_GetIfShowBigList (NumTotalUsrs,FuncParamsCurrAction,NULL))
         {
 	 /* Form to select type of list used for select several users */
-	 Usr_ShowFormsToSelectUsrListType (ActReqAsgWrkCrs);
+	 Usr_ShowFormsToSelectUsrListType (CurrAction,FuncParamsCurrAction);
 
 	 /***** Put link to register students *****/
 	 Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
          /* Start form */
-         Frm_StartForm (ActAdmAsgWrkCrs);
+         Frm_StartForm (NextAction);
+         if (FuncParamsNextAction)
+            FuncParamsNextAction ();
          Grp_PutParamsCodGrps ();
          Gbl.FileBrowser.FullTree = true;	// By default, show all files
          Brw_PutHiddenParamFullTreeIfSelected ();
@@ -6212,6 +6183,29 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
+  }
+
+void Usr_GetSelectedUsrsAndGoToAct (void (*FuncWhenUsrsSelected) (),
+                                    void (*FuncWhenNoUsrsSelected) ())
+  {
+   extern const char *Txt_You_must_select_one_ore_more_users;
+
+   /***** Get lists of the selected users if not already got *****/
+   Usr_GetListsSelectedUsrsCods ();
+
+   /***** Check number of users *****/
+   if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
+      FuncWhenUsrsSelected ();
+   else	// If no users are selected...
+     {
+      // ...write warning alert
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+      // ...and show again the form
+      FuncWhenNoUsrsSelected ();
+     }
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -7314,7 +7308,7 @@ void Usr_ListDataAdms (void)
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	                 " style=\"margin-bottom:8px;\">");
       Frm_StartForm (ActLstOth);
-      Sco_PutParamScope ("ScopeUsr",Gbl.Scope.Current);
+      Sco_PutParamCurrentScope ();
       Usr_PutCheckboxListWithPhotos ();
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
@@ -7788,13 +7782,14 @@ void Usr_SeeGuests (void)
 
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,NULL))
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,
+	                        Sco_PutParamCurrentScope,NULL))
         {
          /***** Get list of selected users *****/
          Usr_GetListsSelectedUsrsCods ();
 
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (ActLstGst);
+	 Usr_ShowFormsToSelectUsrListType (ActLstGst,Sco_PutParamCurrentScope);
 
          /***** Draw a class photo with guests *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -7941,20 +7936,22 @@ void Usr_SeeStudents (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Hie_CRS)
-      Grp_ShowFormToSelectSeveralGroups (ActLstStd,Grp_ONLY_MY_GROUPS);
+      Grp_ShowFormToSelectSeveralGroups (ActLstStd,Sco_PutParamCurrentScope,
+	                                 Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,NULL))
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,
+	                        Sco_PutParamCurrentScope,NULL))
         {
          /***** Get list of selected users *****/
          Usr_GetListsSelectedUsrsCods ();
 
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (ActLstStd);
+	 Usr_ShowFormsToSelectUsrListType (ActLstStd,Sco_PutParamCurrentScope);
 
          /***** Draw a class photo with students of the course *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -8116,17 +8113,19 @@ void Usr_SeeTeachers (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Hie_CRS)
-      Grp_ShowFormToSelectSeveralGroups (ActLstTch,Grp_ONLY_MY_GROUPS);
+      Grp_ShowFormToSelectSeveralGroups (ActLstTch,Sco_PutParamCurrentScope,
+	                                 Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
    if (NumUsrs)
      {
-      if (Usr_GetIfShowBigList (NumUsrs,NULL))
+      if (Usr_GetIfShowBigList (NumUsrs,
+	                        Sco_PutParamCurrentScope,NULL))
         {
 	 /***** Form to select type of list of users *****/
-	 Usr_ShowFormsToSelectUsrListType (ActLstTch);
+	 Usr_ShowFormsToSelectUsrListType (ActLstTch,Sco_PutParamCurrentScope);
 
          /***** Draw a class photo with teachers of the course *****/
          if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
@@ -8643,21 +8642,18 @@ static void Usr_PutIconToShowTchsAllData (void)
 static void Usr_ShowGstsAllDataParams (void)
   {
    Usr_PutParamListWithPhotos ();
-   Usr_PutExtraParamsUsrList (ActLstGstAll);
   }
 
 static void Usr_ShowStdsAllDataParams (void)
   {
    Grp_PutParamsCodGrps ();
    Usr_PutParamListWithPhotos ();
-   Usr_PutExtraParamsUsrList (ActLstStdAll);
   }
 
 static void Usr_ShowTchsAllDataParams (void)
   {
-   Sco_PutParamScope ("ScopeUsr",Gbl.Scope.Current);
+   Sco_PutParamCurrentScope ();
    Usr_PutParamListWithPhotos ();
-   Usr_PutExtraParamsUsrList (ActLstTchAll);
   }
 
 /*****************************************************************************/

@@ -906,14 +906,15 @@ void Mai_ListEmails (void)
 		 Hlp_MESSAGES_Email,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActMaiStd,Grp_ONLY_MY_GROUPS);
+   Grp_ShowFormToSelectSeveralGroups (ActMaiStd,NULL,
+	                              Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,NULL))
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,NULL,NULL))
         {
          /***** Initialize structure with user's data *****/
          Usr_UsrDataConstructor (&UsrDat);
