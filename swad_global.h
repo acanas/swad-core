@@ -570,7 +570,6 @@ struct Globals
       long AttCod;
       bool ShowDetails;
       char *StrAttCodsSelected;
-      long AttCodToEdit;	// Used as parameter in contextual links
       unsigned CurrentPage;
      } AttEvents;
    struct

@@ -563,7 +563,7 @@ static void Att_PutFormToListStdsParams (void)
 
 static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
   {
-   Gbl.AttEvents.AttCodToEdit = AttCod;	// Used as parameters in contextual links
+   Gbl.AttEvents.AttCod = AttCod;	// Used as parameters in contextual links
 
    /***** Put form to remove attendance event *****/
    Ico_PutContextualIconToRemove (ActReqRemAtt,Att_PutParams);
@@ -584,7 +584,7 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
 
 static void Att_PutParams (void)
   {
-   Att_PutParamAttCod (Gbl.AttEvents.AttCodToEdit);
+   Att_PutParamAttCod (Gbl.AttEvents.AttCod);
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
