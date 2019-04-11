@@ -61,9 +61,9 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 8 + 61 + 38 + 12 + 42 + 36 + 19 + 110 + 157 + 437 + 176 + 168 + 15 + 67)
+#define Act_NUM_ACTIONS	(1 + 8 + 61 + 38 + 12 + 42 + 36 + 19 + 110 + 157 + 437 + 176 + 169 + 15 + 67)
 
-#define Act_MAX_ACTION_COD 1771
+#define Act_MAX_ACTION_COD 1772
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 13
 
@@ -1336,7 +1336,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActReqMsgUsr		(ActUnfSevTch +   5)
 #define ActSeeRcvMsg		(ActUnfSevTch +   6)
 #define ActSeeSntMsg		(ActUnfSevTch +   7)
-#define ActMaiStd		(ActUnfSevTch +   8)
+#define ActReqMaiUsr		(ActUnfSevTch +   8)
 // Secondary actions
 #define ActWriAnn		(ActUnfSevTch +   9)
 #define ActRcvAnn		(ActUnfSevTch +  10)
@@ -1502,29 +1502,31 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActUnbUsrMsg		(ActUnfSevTch + 167)
 #define ActUnbUsrLst		(ActUnfSevTch + 168)
 
+#define ActMaiUsr		(ActUnfSevTch + 169)
+
 /*****************************************************************************/
 /****************************** Statistics tab *******************************/
 /*****************************************************************************/
 // Actions in menu
-#define ActReqUseGbl		(ActUnbUsrLst +  1)
-#define ActSeePhoDeg		(ActUnbUsrLst +  2)
-#define ActReqStaCrs		(ActUnbUsrLst +  3)
-#define ActReqAccGbl		(ActUnbUsrLst +  4)
-#define ActReqMyUsgRep		(ActUnbUsrLst +  5)
-#define ActMFUAct		(ActUnbUsrLst +  6)
+#define ActReqUseGbl		(ActMaiUsr +  1)
+#define ActSeePhoDeg		(ActMaiUsr +  2)
+#define ActReqStaCrs		(ActMaiUsr +  3)
+#define ActReqAccGbl		(ActMaiUsr +  4)
+#define ActReqMyUsgRep		(ActMaiUsr +  5)
+#define ActMFUAct		(ActMaiUsr +  6)
 
 // Secondary actions
-#define ActSeeUseGbl		(ActUnbUsrLst +  7)
-#define ActPrnPhoDeg		(ActUnbUsrLst +  8)
-#define ActCalPhoDeg		(ActUnbUsrLst +  9)
-#define ActSeeAccGbl		(ActUnbUsrLst + 10)
-#define ActReqAccCrs		(ActUnbUsrLst + 11)
-#define ActSeeAccCrs		(ActUnbUsrLst + 12)
-#define ActSeeAllStaCrs		(ActUnbUsrLst + 13)
+#define ActSeeUseGbl		(ActMaiUsr +  7)
+#define ActPrnPhoDeg		(ActMaiUsr +  8)
+#define ActCalPhoDeg		(ActMaiUsr +  9)
+#define ActSeeAccGbl		(ActMaiUsr + 10)
+#define ActReqAccCrs		(ActMaiUsr + 11)
+#define ActSeeAccCrs		(ActMaiUsr + 12)
+#define ActSeeAllStaCrs		(ActMaiUsr + 13)
 
-#define ActLstClk		(ActUnbUsrLst + 14)
+#define ActLstClk		(ActMaiUsr + 14)
 
-#define ActSeeMyUsgRep		(ActUnbUsrLst + 15)
+#define ActSeeMyUsgRep		(ActMaiUsr + 15)
 
 /*****************************************************************************/
 /******************************** Profile tab ********************************/

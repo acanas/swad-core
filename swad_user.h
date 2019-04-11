@@ -130,7 +130,7 @@ typedef enum
    Usr_OPTION_HOMEWORK		= 2,
    Usr_OPTION_ATTENDANCE	= 3,
    Usr_OPTION_MESSAGE		= 4,
-   Usr_OPTION_EMAIL		= 5,	// TODO: Not activated. Active it when email to users allows selecting individual users
+   Usr_OPTION_EMAIL		= 5,
    Usr_OPTION_FOLLOW		= 6,
    Usr_OPTION_UNFOLLOW		= 7,
   } Usr_ListUsrsOption_t;

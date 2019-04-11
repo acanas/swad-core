@@ -10232,6 +10232,27 @@ const char *Txt_Email =
 	"Email";
 #endif
 
+const char *Txt_Email_addresses =
+#if   L==1	// ca
+	"Adreces de correu";
+#elif L==2	// de
+	"E-Mail-Adressen";
+#elif L==3	// en
+	"Email addresses";
+#elif L==4	// es
+	"Direcciones de correo";
+#elif L==5	// fr
+	"Adresses e-mail";
+#elif L==6	// gn
+	"Direcciones de correo";	// Okoteve traducción
+#elif L==7	// it
+	"Indirizzi email";
+#elif L==8	// pl
+	"Adresy e-mail";
+#elif L==9	// pt
+	"Endere&ccedil;os de email";
+#endif
+
 const char *Txt_Email_domain_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Dominio de correo <strong>%s</strong> eliminado.";	// Necessita traduccio
@@ -19508,7 +19529,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Enviadas"
 #endif
 	,
-	//  7: ActMaiStd
+	//  7: ActReqMaiUsr
 #if   L==1	// ca
 	"Correu"
 #elif L==2	// de
@@ -21362,10 +21383,10 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens enviadas por mim para outros usu&aacute;rios"
 #endif
 	,
-	//  7: ActMaiStd
+	//  7: ActReqMaiUsr
 #if   L==1	// ca
 	"Creaci&oacute; d'un missatge de correu"
-	" per enviar-lo a estudiants d'aquesta assignatura"
+	" per enviar-lo a usuaris d'aquesta assignatura"
 	" utilitzant el programa client de correu predeterminat en el meu sistema"
 #elif L==2	// de
 	"E-Mail"
@@ -21373,13 +21394,13 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Email"
 #elif L==4	// es
 	"Creaci&oacute;n de un mensaje de correo"
-	" para enviarlo a estudiantes de esta asignatura"
+	" para enviarlo a usuarios de esta asignatura"
 	" usando el programa cliente de correo predeterminado en mi sistema"
 #elif L==5	// fr
 	"Courrier &eacute;lectronique"
 #elif L==6	// gn
 	"Creaci&oacute;n de un mensaje de correo"
-	" para enviarlo a estudiantes de esta asignatura"
+	" para enviarlo a esuarios de esta asignatura"
 	" usando el programa cliente de correo predeterminado en mi sistema"// Okoteve traducción
 #elif L==7	// it
 	"Email"
@@ -41196,87 +41217,6 @@ const char *Txt_Students_now_are_required_to_read_this_information =
 	"Os estudantes agora precisam ler essas informa&ccedil;&otilde;es.";
 #endif
 
-const char *Txt_X_students_who_have_email =	// Warning: it is very important to include %u and %f in the following sentences
-#if   L==1	// ca
-	"%u estudiantes con correo (%.1f%% de %u estudiantes)";	// Necessita traduccio
-#elif L==2	// de
-	"%u Studenten mit E-Mail (%.1f%% von %u Studenten)";
-#elif L==3	// en
-	"%u students who have email (%.1f%% of %u students)";
-#elif L==4	// es
-	"%u estudiantes con correo (%.1f%% de %u estudiantes)";
-#elif L==5	// fr
-	"%u &eacute;tudiants qui ont l'email (%.1f%% de %u &eacute;tudiants)";
-#elif L==6	// gn
-	"%u estudiantes con correo (%.1f%% de %u estudiantes)";	// Okoteve traducción
-#elif L==7	// it
-	"%u studenti che hanno email (%.1f%% di %u studenti)";
-#elif L==8	// pl
-	"%u students who have email (%.1f%% of %u students)";				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"%u estudantes que t&ecirc;m email (%.1f%% dos %u estudantes)";
-#endif
-
-const char *Txt_Students_who_have_accepted_and_who_have_email =
-#if   L==1	// ca
-	"Estudiantes que han aceptado la inscripci&oacute;n"
-	" y que tienen correo";	// Necessita traduccio
-#elif L==2	// de
-	"Studenten die akzeptiert wurden"
-	" und die E-Mail";
-#elif L==3	// en
-	"Students who have accepted"
-	" and who have email";
-#elif L==4	// es
-	"Estudiantes que han aceptado la inscripci&oacute;n"
-	" y que tienen correo";
-#elif L==5	// fr
-	"&Eacute;tudiants qui ont accept&eacute;"
-	" et qui ont l'email";
-#elif L==6	// gn
-	"Estudiantes que han aceptado la inscripci&oacute;n"
-	" y que tienen correo";	// Okoteve traducción
-#elif L==7	// it
-	"Studenti che hanno aderito"
-	" e che hanno email";
-#elif L==8	// pl
-	"Students who have accepted"
-	" and who have email";				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Estudantes que aceitaram"
-	" e que t&ecirc;m email";
-#endif
-
-const char *Txt_X_students_who_have_accepted_and_who_have_email =	// Warning: it is very important to include %u and %f in the following sentences
-#if   L==1	// ca
-	"%u estudiantes que han aceptado la inscripci&oacute;n"
-	" y que tienen correo (%.1f%% de %u estudiantes)";	// Necessita traduccio
-#elif L==2	// de
-	"%u Studenten die akzeptiert wurden"
-	" und die E-Mail (%.1f%% von %u Studenten)";
-#elif L==3	// en
-	"%u students who have accepted"
-	" and who have email (%.1f%% of %u students)";
-#elif L==4	// es
-	"%u estudiantes que han aceptado la inscripci&oacute;n"
-	" y que tienen correo (%.1f%% de %u estudiantes)";
-#elif L==5	// fr
-	"%u &eacute;tudiants qui ont accept&eacute;"
-	" et qui ont l'email (%.1f%% de %u &eacute;tudiants)";
-#elif L==6	// gn
-	"%u estudiantes que han aceptado la inscripci&oacute;n"
-	" y que tienen correo (%.1f%% de %u estudiantes)";	// Okoteve traducción
-#elif L==7	// it
-	"%u studenti che hanno aderito"
-	" e che hanno email (%.1f%% di %u studenti)";
-#elif L==8	// pl
-	"%u students who have accepted"
-	" and who have email (%.1f%% of %u students)";				// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"%u estudantes que aceitaram"
-	" e que t&ecirc;m email (%.1f%% dos %u estudantes)";
-#endif
-
 const char *Txt_Surname_1 =
 #if   L==1	// ca
 	"Primer cognom";
@@ -52155,6 +52095,57 @@ const char *Txt_users_with_no_group =
 	"utilizadores com nenhum grupo";
 #endif
 
+const char *Txt_X_users_who_have_accepted_and_who_have_email =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"%u usuaris que han aceptado la inscripci&oacute;n"
+	" y que tienen correo";		// Necessita traduccio
+#elif L==2	// de
+	"%u Benutzer die akzeptiert wurden"
+	" und die E-Mail";
+#elif L==3	// en
+	"%u users who have accepted"
+	" and who have email";
+#elif L==4	// es
+	"%u usuarios que han aceptado la inscripci&oacute;n"
+	" y que tienen correo";
+#elif L==5	// fr
+	"%u utilisateurs qui ont accept&eacute;"
+	" et qui ont l'email";
+#elif L==6	// gn
+	"%u usuarios que han aceptado la inscripci&oacute;n"
+	" y que tienen correo";		// Okoteve traducción
+#elif L==7	// it
+	"%u utenti che hanno aderito"
+	" e che hanno email";
+#elif L==8	// pl
+	"%u u&zdot;ytkownik&oacute;w who have accepted"
+	" and who have email";		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"%u utilizadores que aceitaram"
+	" e que t&ecirc;m email";
+#endif
+
+const char *Txt_X_users_who_have_email =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"%u usuaris con correo";			// Necessita traduccio
+#elif L==2	// de
+	"%u Benutzer mit E-Mail";
+#elif L==3	// en
+	"%u users who have email";
+#elif L==4	// es
+	"%u usuarios con correo";
+#elif L==5	// fr
+	"%u utilisateurs qui ont l'email";
+#elif L==6	// gn
+	"%u usuarios con correo";			// Okoteve traducción
+#elif L==7	// it
+	"%u utenti che hanno email";
+#elif L==8	// pl
+	"%u u&zdot;ytkownik&oacute;w who have email";	// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"%u utilizadores que t&ecirc;m email";
+#endif
+
 const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES] =
    {
 	 ""	// Usr_LIST_UNKNOWN
@@ -52324,6 +52315,27 @@ const char *Txt_View_data_of_FILE_OR_LINK_X =	// Warning: it is very important t
 	"Zobacz dane z %s";
 #elif L==9	// pt
 	"Ver os dados de %s";
+#endif
+
+const char *Txt_View_email_addresses =
+#if   L==1	// ca
+	"Veure adreces de correu";
+#elif L==2	// de
+	"E-Mail-Adressen anzeigen";
+#elif L==3	// en
+	"View email addresses";
+#elif L==4	// es
+	"Ver direcciones de correo";
+#elif L==5	// fr
+	"Voir les adresses email";
+#elif L==6	// gn
+	"Ver asistencia";	// Okoteve traducción
+#elif L==7	// it
+	"Vedi gli indirizzi email";
+#elif L==8	// pl
+	"Zobacz adresy e-mail";
+#elif L==9	// pt
+	"Ver endere&ccedil;os de email";
 #endif
 
 const char *Txt_View_event =

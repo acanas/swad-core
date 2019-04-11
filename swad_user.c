@@ -6115,6 +6115,9 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
    /***** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
+   /***** Get lists of the selected users if not already got *****/
+   Usr_GetListsSelectedUsrsCods ();
+
    /***** Get and order lists of users from this course *****/
    Usr_GetListUsrs (Hie_CRS,Rol_STD);
    Usr_GetListUsrs (Hie_CRS,Rol_NET);
@@ -8246,7 +8249,8 @@ static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
 						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
 
          ICanChooseOption[Usr_OPTION_HOMEWORK]   =
-         ICanChooseOption[Usr_OPTION_ATTENDANCE] = (Gbl.Scope.Current == Hie_CRS &&
+         ICanChooseOption[Usr_OPTION_ATTENDANCE] =
+         ICanChooseOption[Usr_OPTION_EMAIL]      = (Gbl.Scope.Current == Hie_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_NET ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 						     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM));
@@ -8254,6 +8258,7 @@ static bool Usr_SetOptionsListUsrsAllowed (Rol_Role_t UsrsRole,
       case Rol_TCH:
 	 ICanChooseOption[Usr_OPTION_RECORDS]    =
 	 ICanChooseOption[Usr_OPTION_MESSAGE]    =
+	 ICanChooseOption[Usr_OPTION_EMAIL]      =
 	 ICanChooseOption[Usr_OPTION_FOLLOW]     =
 	 ICanChooseOption[Usr_OPTION_UNFOLLOW]   = (Gbl.Scope.Current == Hie_CRS &&
 						    (Gbl.Usrs.Me.Role.Logged == Rol_STD ||
@@ -8304,7 +8309,7 @@ static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NU
       Txt_View_homework,	// Usr_OPTION_HOMEWORK
       Txt_View_attendance,	// Usr_OPTION_ATTENDANCE
       Txt_Send_message,		// Usr_OPTION_MESSAGE
-      Txt_Create_email_message,	// Usr_OPTION_EMAIL	// TODO: Not activated. Active it when email to users allows selecting individual users
+      Txt_Create_email_message,	// Usr_OPTION_EMAIL
       Txt_Follow,		// Usr_OPTION_FOLLOW
       Txt_Unfollow,		// Usr_OPTION_UNFOLLOW
      };
@@ -8431,11 +8436,11 @@ void Usr_DoActionOnSeveralUsrs1 (void)
                break;
 	   }
 	 break;
-      case Usr_OPTION_EMAIL:		// TODO: Not activated. Active it when email to users allows selecting individual users
+      case Usr_OPTION_EMAIL:
 	 switch (Gbl.Action.Act)
 	   {
 	    case ActDoActOnSevStd:
-	       Gbl.Action.Act = ActMaiStd;
+	       Gbl.Action.Act = ActMaiUsr;
 	       break;
 	    default:
                break;

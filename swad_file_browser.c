@@ -3187,9 +3187,6 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 
    /***** End table and box *****/
    Box_EndBoxTable ();
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
   }
 
 /*****************************************************************************/

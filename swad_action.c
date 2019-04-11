@@ -1311,9 +1311,10 @@ Messages:
        1103. ActReqMsgUsr		Write message to several users
        1104. ActSeeRcvMsg		Show the messages received from other users (link in menu)
        1105. ActSeeSntMsg		Show the messages sent to other users
-       1106. ActMaiStd			Send an email to students
-       1107. ActWriAnn			Show form to create a new global announcement
-       1108. ActRcvAnn			Receive and create a new global announcement
+       1106. ActReqMaiUsr		Select users to send an email to them
+       1107. ActMaiUsr			Send an email to users
+       1108. ActWriAnn			Show form to create a new global announcement
+       1109. ActRcvAnn			Receive and create a new global announcement
        1110. ActHidAnn			Hide a global announcement that was active
        1111. ActRevAnn			Reveal a global announcement that was hidden
        1112. ActRemAnn			Remove global announcement
@@ -2881,7 +2882,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqMsgUsr	*/{  26, 4,TabMsg,ActReqMsgUsr		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_FormMsgUsrs		,"marker"		},
    /* ActSeeRcvMsg	*/{   3, 5,TabMsg,ActSeeRcvMsg		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_ShowRecMsgs		,"inbox"		},
    /* ActSeeSntMsg	*/{  70, 6,TabMsg,ActSeeSntMsg		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_ShowSntMsgs		,"share"		},
-   /* ActMaiStd		*/{ 100, 7,TabMsg,ActMaiStd		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ListEmails			,"envelope"		},
+   /* ActReqMaiUsr	*/{1772, 7,TabMsg,ActReqMaiUsr		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_ReqUsrsToListEmails	,"envelope"		},
 
    // Actions not in menu:
    /* ActWriAnn		*/{1237,-1,TabUnk,ActSeeAnn		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Ann_ShowFormAnnouncement	,NULL},
@@ -3061,6 +3062,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActBanUsrMsg	*/{1015,-1,TabUnk,ActSeeRcvMsg		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_BanSenderWhenShowingMsgs	,NULL},
    /* ActUnbUsrMsg	*/{1016,-1,TabUnk,ActSeeRcvMsg		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_UnbanSenderWhenShowingMsgs	,NULL},
    /* ActUnbUsrLst	*/{1018,-1,TabUnk,ActSeeRcvMsg		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Msg_UnbanSenderWhenListingUsrs	,NULL},
+
+   /* ActMaiUsr		*/{ 100,-1,TabUnk,ActReqMaiUsr		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mai_GetSelectedUsrsAndListEmails,NULL},
 
    // TabAna ******************************************************************
    // Actions in menu:
@@ -3273,7 +3276,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #97 (obsolete action)
 	ActAssTst,		// #98
 	-1,			// #99 (obsolete action)
-	ActMaiStd,		// #100
+	ActMaiUsr,		// #100
 	-1,			// #101 (obsolete action)
 	-1,			// #102 (obsolete action)
 	ActReqTst,		// #103
@@ -4945,6 +4948,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
         ActAllShaSocNotUsr,	// #1769
         ActAllFavSocNotUsr,	// #1770
         ActAllFavSocComUsr,	// #1771
+	ActReqMaiUsr,		// #1772
 	};
 
 /*****************************************************************************/

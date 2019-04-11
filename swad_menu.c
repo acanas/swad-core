@@ -255,7 +255,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActReqMsgUsr,		//  4
 		ActSeeRcvMsg,		//  5
 		ActSeeSntMsg,		//  6
-		ActMaiStd,		//  7
+		ActReqMaiUsr,		//  7
 		0,			//  8
 		0,			//  9
 		0,			// 10

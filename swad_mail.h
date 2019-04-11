@@ -72,7 +72,8 @@ void Mai_RenameMailDomainFull (void);
 void Mai_ContEditAfterChgMai (void);
 void Mai_RecFormNewMailDomain (void);
 
-void Mai_ListEmails (void); // Creates an email message to students
+void Mai_ReqUsrsToListEmails (void);
+void Mai_GetSelectedUsrsAndListEmails (void);
 
 bool Mai_CheckIfEmailIsValid (const char *Email);
 bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat);

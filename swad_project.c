@@ -1999,9 +1999,6 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
         }
      }
 
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
-
    /***** Put form to edit project again *****/
    Prj_RequestCreatOrEditPrj (PrjCod);
   }

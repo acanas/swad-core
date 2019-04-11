@@ -88,6 +88,8 @@ static void Mai_PutFormToCreateMailDomain (void);
 static void Mai_PutHeadMailDomains (void);
 static void Mai_CreateMailDomain (struct Mail *Mai);
 
+static void Mai_ListEmails (void);
+
 static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 				        bool IMustFillInEmail,bool IShouldConfirmEmail);
 
@@ -875,143 +877,140 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
   }
 
 /*****************************************************************************/
+/************** Request edition of works of users of the course **************/
+/*****************************************************************************/
+
+void Mai_ReqUsrsToListEmails (void)
+  {
+   extern const char *Hlp_MESSAGES_Email;
+   extern const char *Txt_View_email_addresses;
+
+   /***** List users to select some of them *****/
+   Usr_PutFormToSelectUsrsToGoToAct (ActMaiUsr,NULL,
+	                             Hlp_MESSAGES_Email,
+	                             Txt_View_email_addresses);
+  }
+
+/*****************************************************************************/
+/****** Get and check list of selected users, and show users' emails  ********/
+/*****************************************************************************/
+
+void Mai_GetSelectedUsrsAndListEmails (void)
+  {
+   Usr_GetSelectedUsrsAndGoToAct (Mai_ListEmails,		// when user(s) selected
+                                  Mai_ReqUsrsToListEmails);	// when no user selected
+  }
+
+/*****************************************************************************/
 /****** List the emails of all the students to creates an email message ******/
 /*****************************************************************************/
 
 #define Mai_MAX_BYTES_STR_ADDR (256 * 1024 - 1)
 
-void Mai_ListEmails (void)
+static void Mai_ListEmails (void)
   {
    extern const char *Hlp_MESSAGES_Email;
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
-   extern const char *Txt_Students_who_have_accepted_and_who_have_email;
-   extern const char *Txt_X_students_who_have_email;
-   extern const char *Txt_X_students_who_have_accepted_and_who_have_email;
+   extern const char *Txt_Email_addresses;
+   extern const char *Txt_X_users_who_have_email;
+   extern const char *Txt_X_users_who_have_accepted_and_who_have_email;
    extern const char *Txt_Create_email_message;
-   unsigned NumUsr;
-   unsigned NumStdsWithEmail;
-   unsigned NumAcceptedStdsWithEmail;
+   unsigned NumUsrsWithEmail = 0;
+   unsigned NumAcceptedUsrsWithEmail = 0;
    char StrAddresses[Mai_MAX_BYTES_STR_ADDR + 1];	// TODO: Use malloc depending on the number of students
    unsigned int LengthStrAddr = 0;
    struct UsrData UsrDat;
-
-   /***** Get groups to show ******/
-   Grp_GetParCodsSeveralGrpsToShowUsrs ();
-
-   /***** Get and order list of students in this course *****/
-   Usr_GetListUsrs (Hie_CRS,Rol_STD);
+   const char *Ptr;
 
    /***** Start the box used to list the emails *****/
-   Box_StartBox (NULL,Txt_Students_who_have_accepted_and_who_have_email,NULL,
+   Box_StartBox (NULL,Txt_Email_addresses,NULL,
 		 Hlp_MESSAGES_Email,Box_NOT_CLOSABLE);
 
-   /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (NULL,
-	                              Grp_ONLY_MY_GROUPS);
+   /***** Start list with users' email addresses *****/
+   fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CENTER_MIDDLE\">");
 
-   /***** Start section with user list *****/
-   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
 
-   if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
+   /***** Get email addresses of the selected users *****/
+   StrAddresses[0] = '\0';
+   Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+   while (*Ptr)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,NULL,NULL))
-        {
-         /***** Initialize structure with user's data *****/
-         Usr_UsrDataConstructor (&UsrDat);
+      /* Get next user */
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
 
-         /***** List the students' email addresses *****/
-         fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CENTER_MIDDLE\">");
-         for (NumUsr = 0, NumStdsWithEmail = 0, NumAcceptedStdsWithEmail = 0,
-              StrAddresses[0] = '\0';
-              NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
-              NumUsr++)
-           {
-	    /* Copy user's basic data from list */
-	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
+      /* Get user's email */
+      Mai_GetEmailFromUsrCod (&UsrDat);
 
-	    /* Get user's email */
-            Mai_GetEmailFromUsrCod (&UsrDat);
+      if (UsrDat.Email[0])
+	{
+	 NumUsrsWithEmail++;
 
-	    if (UsrDat.Email[0])
+	 /* Check if users has accepted inscription in current course */
+	 UsrDat.Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+
+	 if (UsrDat.Accepted) // If student has email and has accepted
+	   {
+	    if (NumAcceptedUsrsWithEmail > 0)
 	      {
-	       NumStdsWithEmail++;
-	       if (UsrDat.Accepted) // If student has email and has accepted
-		 {
-		  if (NumAcceptedStdsWithEmail > 0)
-		    {
-		     fprintf (Gbl.F.Out,", ");
-		     LengthStrAddr ++;
-		     if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
-			Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
-		     Str_Concat (StrAddresses,",",
-		                 Mai_MAX_BYTES_STR_ADDR);
-		    }
-		  LengthStrAddr += strlen (UsrDat.Email);
-		  if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
-		     Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
-		  Str_Concat (StrAddresses,UsrDat.Email,
-		              Mai_MAX_BYTES_STR_ADDR);
-		  fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">%s</a>",
-			   UsrDat.Email,Gbl.Hierarchy.Crs.FullName,UsrDat.Email);
-
-		  NumAcceptedStdsWithEmail++;
-		 }
+	       fprintf (Gbl.F.Out,", ");
+	       LengthStrAddr ++;
+	       if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
+		  Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
+	       Str_Concat (StrAddresses,",",
+			   Mai_MAX_BYTES_STR_ADDR);
 	      }
-           }
-         fprintf (Gbl.F.Out,"</div>");
+	    LengthStrAddr += strlen (UsrDat.Email);
+	    if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
+	       Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
+	    Str_Concat (StrAddresses,UsrDat.Email,
+			Mai_MAX_BYTES_STR_ADDR);
+	    fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">%s</a>",
+		     UsrDat.Email,Gbl.Hierarchy.Crs.FullName,UsrDat.Email);
 
-         /***** Free memory used for user's data *****/
-         Usr_UsrDataDestructor (&UsrDat);
-
-         /***** Show a message with the number of students with email ****/
-         fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
-         fprintf (Gbl.F.Out,Txt_X_students_who_have_email,
-                  NumStdsWithEmail,
-                  ((float) NumStdsWithEmail /
-                   (float) Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs) * 100.0,
-                  Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs);
-         fprintf (Gbl.F.Out,"</div>");
-
-         /***** Show a message with the number of students who have accepted and have email ****/
-         fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
-         fprintf (Gbl.F.Out,Txt_X_students_who_have_accepted_and_who_have_email,
-                  NumAcceptedStdsWithEmail,
-                  ((float) NumAcceptedStdsWithEmail /
-                   (float) Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs) * 100.0,
-                  Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs);
-         fprintf (Gbl.F.Out,"</div>");
-
-         /***** Icon to open the client email program *****/
-         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">"
-                            "<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
-                            " title=\"%s\" class=\"%s\">",
-                  Gbl.Usrs.Me.UsrDat.Email,
-	          Gbl.Hierarchy.Crs.FullName,
-	          Gbl.Usrs.Me.UsrDat.Email,
-	          StrAddresses,
-                  Txt_Create_email_message,
-                  The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
-         Ico_PutIconTextLink ("marker.svg",
-                              Txt_Create_email_message);
-         fprintf (Gbl.F.Out,"</a>"
-                            "</div>");
-        }
+	    NumAcceptedUsrsWithEmail++;
+	   }
+	}
      }
-   else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
-      /***** Show warning indicating no students found *****/
-      Usr_ShowWarningNoUsersFound (Rol_STD);
 
-   /***** End section with user list *****/
-   Lay_EndSection ();
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+
+   /***** End list with users' email addresses *****/
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Show a message with the number of users with email ****/
+   fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,Txt_X_users_who_have_email,
+	    NumUsrsWithEmail);
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Show a message with the number of users who have accepted and have email ****/
+   fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,Txt_X_users_who_have_accepted_and_who_have_email,
+	    NumAcceptedUsrsWithEmail);
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Icon to open the client email program *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">"
+		      "<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
+		      " title=\"%s\" class=\"%s\">",
+	    Gbl.Usrs.Me.UsrDat.Email,
+	    Gbl.Hierarchy.Crs.FullName,
+	    Gbl.Usrs.Me.UsrDat.Email,
+	    StrAddresses,
+	    Txt_Create_email_message,
+	    The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
+   Ico_PutIconTextLink ("marker.svg",
+			Txt_Create_email_message);
+   fprintf (Gbl.F.Out,"</a>"
+		      "</div>");
 
    /***** End the box used to list the emails *****/
    Box_EndBox ();
-
-   /***** Free memory for students list *****/
-   Usr_FreeUsrsList (Rol_STD);
-
-   /***** Free memory for list of selected groups *****/
-   Grp_FreeListCodSelectedGrps ();
   }
 
 /*****************************************************************************/
