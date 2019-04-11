@@ -883,10 +883,12 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
 void Mai_ReqUsrsToListEmails (void)
   {
    extern const char *Hlp_MESSAGES_Email;
+   extern const char *Txt_Email;
    extern const char *Txt_View_email_addresses;
 
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (ActMaiUsr,NULL,
+				     Txt_Email,
 	                             Hlp_MESSAGES_Email,
 	                             Txt_View_email_addresses);
   }

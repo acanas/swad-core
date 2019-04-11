@@ -1377,24 +1377,20 @@ bool Usr_CheckIfICanViewAtt (const struct UsrData *UsrDat)
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)
       return false;
 
-   /***** 4. Fast check: Is he/she a student in the current course? *****/
-   if (UsrDat->Roles.InCurrentCrs.Role != Rol_STD)
-      return false;
-
-   /***** 5. Fast check: Am I a system admin? *****/
+   /***** 4. Fast check: Am I a system admin? *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       return true;
 
-   /***** 6. Fast check: Do I belong to the current course? *****/
+   /***** 5. Fast check: Do I belong to the current course? *****/
    if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
       return false;
 
-   /***** 7. Fast check: It's me? *****/
+   /***** 6. Fast check: It's me? *****/
    ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    if (ItsMe)
       return true;
 
-   /***** 8. Fast / slow check depending on roles *****/
+   /***** 7. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
@@ -6101,11 +6097,15 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
 /*****************************************************************************/
 
 void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams) (),
+				       const char *Title,
                                        const char *HelpLink,
                                        const char *TxtButton)
   {
-   extern const char *Txt_Users;
+   extern const char *Txt_Select_users;
    unsigned NumTotalUsrs;
+
+   /***** Start box *****/
+   Box_StartBox (NULL,Title,NULL,HelpLink,Box_NOT_CLOSABLE);
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -6127,7 +6127,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Draw class photos to select users *****/
-   Box_StartBox (NULL,Txt_Users,NULL,HelpLink,Box_NOT_CLOSABLE);
+   Box_StartBox (NULL,Txt_Select_users,NULL,HelpLink,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (FuncParams,
@@ -6188,6 +6188,9 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
+
+   /***** End box *****/
+   Box_EndBox ();
   }
 
 void Usr_GetSelectedUsrsAndGoToAct (void (*FuncWhenUsrsSelected) (),
@@ -8419,7 +8422,7 @@ void Usr_DoActionOnSeveralUsrs1 (void)
 	 switch (Gbl.Action.Act)
 	   {
 	    case ActDoActOnSevStd:
-	       Gbl.Action.Act = ActSeeLstStdAtt;
+	       Gbl.Action.Act = ActSeeLstUsrAtt;
 	       break;
 	    default:
                break;

@@ -120,7 +120,7 @@ void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod);
 void Usr_ReqListStdsAttendanceCrs (void);
 void Usr_ListMyAttendanceCrs (void);
 void Usr_PrintMyAttendanceCrs (void);
-void Usr_ListStdsAttendanceCrs (void);
-void Usr_PrintStdsAttendanceCrs (void);
+void Usr_ListUsrsAttendanceCrs (void);
+void Usr_PrintUsrsAttendanceCrs (void);
 
 #endif

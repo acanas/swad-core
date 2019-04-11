@@ -2587,7 +2587,7 @@ static void Rec_PutIconsCommands (void)
 						 "calendar-check.svg",
 						 Txt_View_attendance);
 	       else	// Not me
-		  Lay_PutContextualLinkOnlyIcon (ActSeeLstStdAtt,NULL,
+		  Lay_PutContextualLinkOnlyIcon (ActSeeLstUsrAtt,NULL,
 						 Rec_PutParamsStudent,
 						 "calendar-check.svg",
 						 Txt_View_attendance);

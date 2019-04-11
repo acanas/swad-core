@@ -456,10 +456,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.111 (2019-04-11)"
+#define Log_PLATFORM_VERSION	"SWAD 18.112 (2019-04-11)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
+	Version 18.112:   Apr 11, 2019 	Code refactoring related to attendance. (242538 lines)
 	Version 18.111:   Apr 11, 2019 	New option to select users to compose an email to them. (242541 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1772','es','N','Seleccionar usuarios para env&iacute;o correo');

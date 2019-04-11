@@ -1555,7 +1555,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
    extern const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_Remove;
-   extern const char *Txt_Add_USER;
+   extern const char *Txt_Add_USERS;
    extern const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1700,7 +1700,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 			       "<td class=\"CENTER_TOP\" style=\"width:30px;\">");
 	    Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
-		      Txt_Add_USER,
+		      Txt_Add_USERS,
 		      Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]);
 	    Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInProject],NULL,
 				        Prj_PutCurrentParams,
@@ -1886,7 +1886,7 @@ void Prj_ReqAddEvls (void)
 static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Hlp_ASSESSMENT_Projects_add_user;
-   extern const char *Txt_Add_USER;
+   extern const char *Txt_Add_USERS;
    extern const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT];
    static Act_Action_t ActionAddUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
@@ -1903,9 +1903,10 @@ static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
 
    /***** Put form to select users *****/
    snprintf (TxtButton,sizeof (TxtButton),
-	     Txt_Add_USER,
+	     Txt_Add_USERS,
 	     Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]);
    Usr_PutFormToSelectUsrsToGoToAct (ActionAddUsr[RoleInProject],Prj_PutCurrentParams,
+				     TxtButton,
                                      Hlp_ASSESSMENT_Projects_add_user,
                                      TxtButton);
 

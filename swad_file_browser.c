@@ -3051,6 +3051,7 @@ static bool Brw_CheckIfQuotaExceded (void)
 void Brw_AskEditWorksCrs (void)
   {
    extern const char *Hlp_FILES_Homework_for_teachers;
+   extern const char *Txt_Assignments_and_other_works;
    extern const char *Txt_View_homework;
 
    /***** Get parameters related to file browser *****/
@@ -3058,6 +3059,7 @@ void Brw_AskEditWorksCrs (void)
 
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (ActAdmAsgWrkCrs,NULL,
+				     Txt_Assignments_and_other_works,
 	                             Hlp_FILES_Homework_for_teachers,
 	                             Txt_View_homework);
   }

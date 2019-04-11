@@ -1820,7 +1820,7 @@ const char *Txt_Add_this_ID =
 	"Adicionar este n&ordm; identif.";
 #endif
 
-const char *Txt_Add_USER =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Add_USERS =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Afegir %s";
 #elif L==2	// de
@@ -27592,6 +27592,27 @@ const char *Txt_Number_BR_of_test_BR_questions =
 	"N&ordm; de<br />quest&otilde;es<br />de test";
 #endif
 
+const char *Txt_Number_of_users =
+#if   L==1	// ca
+	"Nombre d'usuaris";
+#elif L==2	// de
+	"Anzahl der Benutzer";
+#elif L==3	// en
+	"Number of users";
+#elif L==4	// es
+	"N&ordm; de usuarios";
+#elif L==5	// fr
+	"Nombre d'utilisateurs";
+#elif L==6	// gn
+	"N&ordm; de usuarios";	// Okoteve traducción
+#elif L==7	// it
+	"Numero di utenti";
+#elif L==8	// pl
+	"Liczba uzytkownik&oacute;w";
+#elif L==9	// pt
+	"N&ordm; de utilizadores";
+#endif
+
 const char *Txt_Numeric_BR_code_BR_ISO_3166_1 =
 #if   L==1	// ca
 	"C&oacute;d.<br />num&eacute;rico<br />ISO 3166-1";	// Necessita traduccio
@@ -37904,7 +37925,28 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 	" ou ser&atilde;o removidos da disciplina e de todos os grupos.";
 #endif
 
-const char *Txt_Select_users_X_Followed_Y_Not_followed_Z =	// Warning: it is very important to include three %u in the following sentences
+const char *Txt_Select_users =
+#if   L==1	// ca
+	"Seleccioneu usuaris";
+#elif L==2	// de
+	"W&auml;hlen Sie Benutzer aus";
+#elif L==3	// en
+	"Select users";
+#elif L==4	// es
+	"Seleccione usuarios";
+#elif L==5	// fr
+	"S&eacute;lectionnez des utilisateurs";
+#elif L==6	// gn
+	"Seleccione usuarios";	// Okoteve traducción
+#elif L==7	// it
+	"Seleziona utenti";
+#elif L==8	// pl
+	"Wybierz u&zdot;ytkownik&oacute;w";
+#elif L==9	// pt
+	"Selecione usu&aacute;rios";
+#endif
+
+const char *Txt_Selected_users_X_Followed_Y_Not_followed_Z =	// Warning: it is very important to include three %u in the following sentences
 #if   L==1	// ca
 	"Usuaris seleccionats: %u<br />"
 	"&bull; Seguits: %u<br />"

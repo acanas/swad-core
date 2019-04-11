@@ -1184,7 +1184,7 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction,void (*FuncParams) 
 static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed)
   {
-   extern const char *Txt_Select_users_X_Followed_Y_Not_followed_Z;
+   extern const char *Txt_Selected_users_X_Followed_Y_Not_followed_Z;
    struct UsrData UsrDat;
    const char *Ptr;
    bool IFollowUsr;
@@ -1221,7 +1221,7 @@ static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
 
    /***** Show alert ****/
    *NumNotFollowed = NumUsrs - *NumFollowed;
-   Ale_ShowAlert (Ale_INFO,Txt_Select_users_X_Followed_Y_Not_followed_Z,
+   Ale_ShowAlert (Ale_INFO,Txt_Selected_users_X_Followed_Y_Not_followed_Z,
 	          NumUsrs,*NumFollowed,*NumNotFollowed);
   }
 
