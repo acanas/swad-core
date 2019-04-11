@@ -838,8 +838,8 @@ struct Globals
       struct
 	{
 	 long PrjCod;
-	 Prj_RoleInProject_t RoleInProject;
-	} MyRoleInProject;
+	 unsigned RolesInProject;
+	} MyRolesInProject;
       struct
         {
 	 long UsrCod;

@@ -923,7 +923,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
    static unsigned UniqueId = 0;
-   bool ICanViewProjectFiles = Prj_CheckIfICanViewProjectFiles (Prj_GetMyRoleInProject (Prj->PrjCod));
+   bool ICanViewProjectFiles = Prj_CheckIfICanViewProjectFiles (Prj_GetMyRolesInProject (Prj->PrjCod));
 
    /***** Write first row of data of this project *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -1804,41 +1804,49 @@ static unsigned Prj_GetUsrsInPrj (long PrjCod,Prj_RoleInProject_t RoleInProject,
 /************************** Get my role in a project *************************/
 /*****************************************************************************/
 
-void Prj_FlushCacheMyRoleInProject (void)
+void Prj_FlushCacheMyRolesInProject (void)
   {
-   Gbl.Cache.MyRoleInProject.PrjCod = -1L;
-   Gbl.Cache.MyRoleInProject.RoleInProject = Prj_ROLE_UNK;
+   Gbl.Cache.MyRolesInProject.PrjCod         = -1L;
+   Gbl.Cache.MyRolesInProject.RolesInProject = 0;
   }
 
-Prj_RoleInProject_t Prj_GetMyRoleInProject (long PrjCod)
+unsigned Prj_GetMyRolesInProject (long PrjCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   unsigned NumRows;
+   unsigned NumRow;
+   Prj_RoleInProject_t RoleInProject;
 
    /***** 1. Fast check: trivial cases *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod <= 0 ||
        PrjCod <= 0)
-      return Prj_ROLE_UNK;
+      return 0;
 
    /***** 2. Fast check: Is my role in project already calculated *****/
-   if (PrjCod == Gbl.Cache.MyRoleInProject.PrjCod)
-      return Gbl.Cache.MyRoleInProject.RoleInProject;
+   if (PrjCod == Gbl.Cache.MyRolesInProject.PrjCod)
+      return Gbl.Cache.MyRolesInProject.RolesInProject;
 
    /***** 3. Slow check: Get my role in project from database.
 			 The result of the query will have one row or none *****/
-   Gbl.Cache.MyRoleInProject.PrjCod = PrjCod;
-   Gbl.Cache.MyRoleInProject.RoleInProject = Prj_ROLE_UNK;
-   if (DB_QuerySELECT (&mysql_res,"can not get my role in project",
-		       "SELECT RoleInProject FROM prj_usr"
-		       " WHERE PrjCod=%ld AND UsrCod=%ld",
-		       PrjCod,Gbl.Usrs.Me.UsrDat.UsrCod))
+   Gbl.Cache.MyRolesInProject.PrjCod         = PrjCod;
+   Gbl.Cache.MyRolesInProject.RolesInProject = 0;
+   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get my roles in project",
+		                        "SELECT RoleInProject FROM prj_usr"
+		                        " WHERE PrjCod=%ld AND UsrCod=%ld",
+		                        PrjCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   for (NumRow = 0;
+	NumRow < NumRows;
+	NumRow++)
      {
       row = mysql_fetch_row (mysql_res);
-      Gbl.Cache.MyRoleInProject.RoleInProject = Prj_ConvertUnsignedStrToRoleInProject (row[0]);
+      RoleInProject = Prj_ConvertUnsignedStrToRoleInProject (row[0]);
+      if (RoleInProject != Prj_ROLE_UNK)
+	 Gbl.Cache.MyRolesInProject.RolesInProject |= (1 << RoleInProject);
      }
    DB_FreeMySQLResult (&mysql_res);
 
-   return Gbl.Cache.MyRoleInProject.RoleInProject;
+   return Gbl.Cache.MyRolesInProject.RolesInProject;
   }
 
 /*****************************************************************************/
@@ -1982,7 +1990,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
 	 /* Flush cache */
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	 if (ItsMe)
-	    Prj_FlushCacheMyRoleInProject ();
+	    Prj_FlushCacheMyRolesInProject ();
 
 	 /* Show success alert */
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project,
@@ -2140,7 +2148,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 /***** Flush cache *****/
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 	 if (ItsMe)
-	    Prj_FlushCacheMyRoleInProject ();
+	    Prj_FlushCacheMyRolesInProject ();
 
 	 /***** Show success alert *****/
          Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
@@ -2224,23 +2232,14 @@ static void Prj_PutFormsToRemEditOnePrj (long PrjCod,Prj_HiddenVisibl_t Hidden,
 /******************** Can I view files of a given project? *******************/
 /*****************************************************************************/
 
-bool Prj_CheckIfICanViewProjectFiles (Prj_RoleInProject_t MyRoleInProject)
+bool Prj_CheckIfICanViewProjectFiles (unsigned MyRolesInProject)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
-	 switch (MyRoleInProject)
-	   {
-	    case Prj_ROLE_UNK:	// I am not a member
-	       return false;
-	    case Prj_ROLE_STD:
-	    case Prj_ROLE_TUT:
-	    case Prj_ROLE_EVL:
-               return true;
-	   }
-	 return false;
+	 return (MyRolesInProject != 0);	// Am I a member?
       case Rol_SYS_ADM:
 	 return true;
       default:
@@ -2257,7 +2256,7 @@ static bool Prj_CheckIfICanEditProject (long PrjCod)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return (Prj_GetMyRoleInProject (PrjCod) == Prj_ROLE_TUT);
+	 return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT)) != 0);	// Am I tutor?
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return true;
@@ -2742,7 +2741,7 @@ void Prj_RemoveProject (void)
 	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Flush cache *****/
-      Prj_FlushCacheMyRoleInProject ();
+      Prj_FlushCacheMyRolesInProject ();
 
       /***** Remove project *****/
       DB_QueryDELETE ("can not remove project",
@@ -3337,7 +3336,7 @@ static void Prj_CreateProject (struct Project *Prj)
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Flush cache *****/
-   Prj_FlushCacheMyRoleInProject ();
+   Prj_FlushCacheMyRolesInProject ();
   }
 
 /*****************************************************************************/
@@ -3394,7 +3393,7 @@ void Prj_RemoveCrsProjects (long CrsCod)
                    CrsCod);
 
    /***** Flush cache *****/
-   Prj_FlushCacheMyRoleInProject ();
+   Prj_FlushCacheMyRolesInProject ();
 
    /***** Remove projects *****/
    DB_QueryDELETE ("can not remove all the projects of a course",
@@ -3418,7 +3417,7 @@ void Prj_RemoveUsrFromProjects (long UsrCod)
    /***** Flush cache *****/
    ItsMe = Usr_ItsMe (UsrCod);
    if (ItsMe)
-      Prj_FlushCacheMyRoleInProject ();
+      Prj_FlushCacheMyRolesInProject ();
   }
 
 /*****************************************************************************/

@@ -416,7 +416,7 @@ void Gbl_InitializeGlobals (void)
    Usr_FlushCacheUsrHasAcceptedInCurrentCrs ();
    Usr_FlushCacheUsrSharesAnyOfMyCrs ();
    Rol_FlushCacheRoleUsrInCrs ();
-   Prj_FlushCacheMyRoleInProject ();
+   Prj_FlushCacheMyRolesInProject ();
    Grp_FlushCacheIBelongToGrp ();
    Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
    Fol_FlushCacheFollow ();
