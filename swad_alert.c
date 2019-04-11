@@ -299,7 +299,7 @@ static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
 /*****************************************************************************/
 
 void Ale_ShowLastAlertAndButton (Act_Action_t NextAction,const char *Anchor,
-                                 const char *OnSubmit,void (*FuncParams) (),
+                                 const char *OnSubmit,void (*FuncParams) (void),
 				 Btn_Button_t Button,const char *TxtButton)
   {
    /***** Show last alert and then reset it *****/
@@ -328,7 +328,7 @@ void Ale_ShowLastAlertAndButton1 (void)
 /*****************************************************************************/
 
 void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,
-                             const char *OnSubmit,void (*FuncParams) (),
+                             const char *OnSubmit,void (*FuncParams) (void),
                              Btn_Button_t Button,const char *TxtButton,
 			     Ale_AlertType_t AlertType,const char *fmt,...)
   {
@@ -443,7 +443,7 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
 /*****************************************************************************/
 
 void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                              void (*FuncParams) (),
+                              void (*FuncParams) (void),
                               Btn_Button_t Button,const char *TxtButton)
   {
    /***** Optional button *****/

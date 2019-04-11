@@ -95,8 +95,8 @@ static void Fol_PutInactiveIconToFollowUnfollow (void);
 static void Fol_PutIconToFollow (struct UsrData *UsrDat);
 static void Fol_PutIconToUnfollow (struct UsrData *UsrDat);
 
-static void Fol_RequestFollowUsrs (Act_Action_t NextAction,void (*FuncParams) ());
-static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction,void (*FuncParams) ());
+static void Fol_RequestFollowUsrs (Act_Action_t NextAction,void (*FuncParams) (void));
+static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction,void (*FuncParams) (void));
 static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed);
 static void Fol_PutParamsFollowSelectedStds (void);
@@ -1099,7 +1099,7 @@ void Fol_RequestFollowTchs (void)
    Fol_RequestFollowUsrs (ActFolSevTch,Fol_PutParamsFollowSelectedTchs);
   }
 
-static void Fol_RequestFollowUsrs (Act_Action_t NextAction,void (*FuncParams) ())
+static void Fol_RequestFollowUsrs (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Txt_Follow;
    extern const char *Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet;
@@ -1143,7 +1143,7 @@ void Fol_RequestUnfollowTchs (void)
    Fol_RequestUnfollowUsrs (ActUnfSevTch,Fol_PutParamsUnfollowSelectedTchs);
   }
 
-static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction,void (*FuncParams) ())
+static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow;
    extern const char *Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow;

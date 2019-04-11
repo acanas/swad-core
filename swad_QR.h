@@ -39,7 +39,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (Act_Action_t Action,void (*FuncParams) ());
+void QR_PutLinkToPrintQRCode (Act_Action_t Action,void (*FuncParams) (void));
 void QR_PutParamQRString (void);
 
 void QR_PrintQRCode (void);

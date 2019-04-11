@@ -456,13 +456,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.110 (2019-04-10)"
+#define Log_PLATFORM_VERSION	"SWAD 18.110.1 (2019-04-11)"
 #define CSS_FILE		"swad18.92.css"
 #define JS_FILE			"swad18.92.js"
 /*
 Comprobar si Gbl.AttEvents.AttCodToEdit puede ser sustituido por Gbl.AttEvents.AttCod
 
-	Version 18.110:   Apr 10, 2019  Code refactoring in selection of groups and users.
+	Version 18.110.1: Apr 11, 2019  Code refactoring in selection of groups and users. (242553 lines)
+	Version 18.110:   Apr 11, 2019  Code refactoring in selection of groups and users.
 					Adding multiple users ad once to a project, suggested by Pedro Villar Castro. (242563 lines)
 	Version 18.109.2: Apr 10, 2019  Code refactoring in selection of users to view homework. (242421 lines)
 	Version 18.109.1: Apr 10, 2019 	A non-editing teacher can choose students with no groups of a type. (242406 lines)

@@ -79,7 +79,7 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole);
 void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
 
-void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) ());
+void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) (void));
 
 void Enr_ReqAcceptRegisterInCrs (void);
 void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],

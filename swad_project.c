@@ -1897,23 +1897,9 @@ static void Prj_ReqAddUsrs (Prj_RoleInProject_t RoleInProject)
    snprintf (TxtButton,sizeof (TxtButton),
 	     Txt_Add_USER,
 	     Txt_PROJECT_ROLES_PLURAL_abc[RoleInProject]);
-   Usr_PutFormToSelectUsrsToGoToAct (Gbl.Action.Act,Prj_PutCurrentParams,		// Current action
-	                             ActionAddUsr[RoleInProject],Prj_PutCurrentParams,	// Next action
+   Usr_PutFormToSelectUsrsToGoToAct (ActionAddUsr[RoleInProject],Prj_PutCurrentParams,
                                      Hlp_ASSESSMENT_Projects_add_user,
                                      TxtButton);
-
-   /***** Start box *****/
-   // snprintf (Gbl.Title,sizeof (Gbl.Title),
-   //	        Txt_Add_USER,
-   //	        Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
-   // Box_StartBox (NULL,Gbl.Title,NULL,
-   //               Hlp_ASSESSMENT_Projects_add_user,Box_NOT_CLOSABLE);
-
-   /***** Write form to request another user's ID *****/
-   // Enr_WriteFormToReqAnotherUsrID (ActionAddUsr[RoleInProject],Prj_PutCurrentParams);
-
-   /***** End box *****/
-   // Box_EndBox ();
 
    /***** Put a form to create/edit project *****/
    Prj_RequestCreatOrEditPrj (Gbl.Prjs.PrjCod);

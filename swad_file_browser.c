@@ -3057,8 +3057,7 @@ void Brw_AskEditWorksCrs (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** List users to select some of them *****/
-   Usr_PutFormToSelectUsrsToGoToAct (ActReqAsgWrkCrs,NULL,	// Current action
-	                             ActAdmAsgWrkCrs,NULL,	// Next action
+   Usr_PutFormToSelectUsrsToGoToAct (ActAdmAsgWrkCrs,NULL,
 	                             Hlp_FILES_Homework_for_teachers,
 	                             Txt_View_homework);
   }

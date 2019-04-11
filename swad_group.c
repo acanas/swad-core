@@ -359,7 +359,7 @@ static void Grp_PutIconToCreateNewGroup (void)
 /*************** Show form to select one or several groups *******************/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,void (*FuncParams) (),
+void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
                                         Grp_WhichGroups_t GroupsSelectableByStdsOrNETs)
   {
    extern const char *Hlp_USERS_Groups;
@@ -383,7 +383,8 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,void (*FuncParam
 
    /***** Start form to update the students listed
 	  depending on the groups selected *****/
-   Frm_StartFormAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
+   Frm_StartFormAnchor (Gbl.Action.Act,			// Repeat current action
+			Usr_USER_LIST_SECTION_ID);
    Usr_PutParamsPrefsAboutUsrList ();
    if (FuncParams)
       FuncParams ();
@@ -5001,7 +5002,7 @@ void Grp_PutParamWhichGrpsAllGrps (void)
 /***** Show form to choice whether to show only my groups or all groups ******/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
+void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) (void))
   {
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;

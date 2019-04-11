@@ -217,7 +217,7 @@ Ico_IconSet_t Ico_GetIconSetFromStr (const char *Str)
 /*****************************************************************************/
 
 void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
-				 void (*FuncParams) (),
+				 void (*FuncParams) (void),
 				 const char *Txt)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncParams,
@@ -225,7 +225,7 @@ void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
 				  Txt);
   }
 
-void Ico_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) ())
+void Ico_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Txt_Remove;
 
@@ -234,7 +234,7 @@ void Ico_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) (
 				  Txt_Remove);
   }
 
-void Ico_PutContextualIconToEdit (Act_Action_t NextAction,void (*FuncParams) ())
+void Ico_PutContextualIconToEdit (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Txt_Edit;
 
@@ -243,7 +243,7 @@ void Ico_PutContextualIconToEdit (Act_Action_t NextAction,void (*FuncParams) ())
 				  Txt_Edit);
   }
 
-void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,void (*FuncParams) ())
+void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Txt_Files;
 
@@ -252,7 +252,7 @@ void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,void (*FuncParams
 				  Txt_Files);
   }
 
-void Ico_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) ())
+void Ico_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Txt_View;
 
@@ -261,7 +261,7 @@ void Ico_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) ())
 				  Txt_View);
   }
 
-void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) ())
+void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) (void))
   {
    extern const char *Txt_Hide;
 
@@ -270,7 +270,7 @@ void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,voi
 				  Txt_Hide);
   }
 
-void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) ())
+void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) (void))
   {
    extern const char *Txt_Show;
 
@@ -279,7 +279,7 @@ void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,v
 				  Txt_Show);
   }
 
-void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) ())
+void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *Txt_Print;
 

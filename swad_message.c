@@ -240,7 +240,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       if (GetUsrsInCrs)
 	{
 	 /***** Form to select groups *****/
-	 Grp_ShowFormToSelectSeveralGroups (ActReqMsgUsr,Msg_PutParamsWriteMsg,
+	 Grp_ShowFormToSelectSeveralGroups (Msg_PutParamsWriteMsg,
 	                                    Grp_ONLY_MY_GROUPS);
 
 	 /***** Start section with user list *****/
@@ -249,14 +249,13 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	 if (NumUsrsInCrs)
 	   {
 	    /***** Form to select type of list used for select several users *****/
-	    Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr,Msg_PutParamsWriteMsg);
+	    Usr_ShowFormsToSelectUsrListType (Msg_PutParamsWriteMsg);
 
 	    /***** Put link to register students *****/
 	    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
 	    /***** Check if it's a big list *****/
-	    ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,
-		                                  Msg_PutParamsWriteMsg,
+	    ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,Msg_PutParamsWriteMsg,
 		                                  "CopyMessageToHiddenFields();");
 
 	    if (ShowUsrsInCrs)

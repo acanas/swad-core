@@ -363,7 +363,7 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
 /****** Write a form to request another user's ID, @nickname or email ********/
 /*****************************************************************************/
 
-void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) ())
+void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) (void))
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_nick_email_or_ID;

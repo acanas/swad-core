@@ -351,7 +351,7 @@ void Usr_WriteLandingPage (void);
 void Usr_WriteFormLogout (void);
 void Usr_Logout (void);
 void Usr_PutLinkToLogin (void);
-void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ());
+void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void));
 void Usr_WelcomeUsr (void);
 
 void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
@@ -408,7 +408,7 @@ void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList
 void Usr_FreeUsrsList (Rol_Role_t Role);
 
 bool Usr_GetIfShowBigList (unsigned NumUsrs,
-                           void (*FuncParams) (),
+                           void (*FuncParams) (void),
                            const char *OnSubmit);
 
 void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods);
@@ -419,14 +419,13 @@ unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void);
 void Usr_FreeListsSelectedUsrsCods (void);
 void Usr_FreeListOtherRecipients (void);
 
-void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction,void (*FuncParams) ());
+void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void));
 void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role);
 unsigned Usr_GetColumnsForSelectUsrs (void);
 void Usr_SetUsrDatMainFieldNames (void);
 void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr);
 
-void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t CurrAction,void (*FuncParamsCurrAction) (),
-                                       Act_Action_t NextAction,void (*FuncParamsNextAction) (),
+void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams) (),
                                        const char *HelpLink,
                                        const char *TxtButton);
 void Usr_GetSelectedUsrsAndGoToAct (void (*FuncWhenUsrsSelected) (),

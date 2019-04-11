@@ -7329,7 +7329,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
                  Hlp_ASSESSMENT_Tests_test_results,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstRes,NULL,
+   Grp_ShowFormToSelectSeveralGroups (NULL,
 	                              Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
@@ -7340,7 +7340,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
       if (Usr_GetIfShowBigList (NumTotalUsrs,NULL,NULL))
         {
 	 /***** Form to select type of list used for select several users *****/
-	 Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstRes,NULL);
+	 Usr_ShowFormsToSelectUsrListType (NULL);
 
          /***** Start form *****/
          Frm_StartForm (ActSeeUsrTstRes);

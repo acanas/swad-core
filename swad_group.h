@@ -147,7 +147,7 @@ typedef enum
 void Grp_WriteNamesOfSelectedGrps (void);
 void Grp_ReqEditGroups (void);
 
-void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,void (*FuncParams) (),
+void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
                                         Grp_WhichGroups_t GroupsSelectableByStdsOrNETs);
 void Grp_PutParamsCodGrps (void);
 void Grp_GetParCodsSeveralGrpsToShowUsrs (void);
@@ -219,7 +219,7 @@ void Grp_PutParamAllGroups (void);
 void Grp_PutParamWhichGrps (void);
 void Grp_PutParamWhichGrpsOnlyMyGrps (void);
 void Grp_PutParamWhichGrpsAllGrps (void);
-void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ());
+void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) (void));
 void Grp_GetParamWhichGrps (void);
 
 #endif

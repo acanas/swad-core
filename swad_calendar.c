@@ -103,7 +103,7 @@ static void Cal_PutIconsFirstDayOfWeek (void)
 /************** Show form to select the first day of the week ****************/
 /*****************************************************************************/
 
-void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) ())
+void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (void))
   {
    extern const char *Txt_First_day_of_the_week;
    extern const char *Txt_DAYS_SMALL[7];

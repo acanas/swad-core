@@ -2117,7 +2117,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
      {
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
-	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParamsDegPhoto);
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto);
       Tbl_StartTableCenter (0);
 
       /***** Get and print degrees *****/
@@ -2198,7 +2198,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       /***** Class photo start *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 /***** Form to select type of list used to display degree photos *****/
-	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg,Pho_PutParamsDegPhoto);
+	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto);
 
       /***** Write heading *****/
       Tbl_StartTableCenter (2);

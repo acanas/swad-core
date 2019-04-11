@@ -64,7 +64,7 @@ extern struct Globals Gbl;
 /***************** Put a link to a print view of a QR code *******************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (Act_Action_t Action,void (*FuncParams) ())
+void QR_PutLinkToPrintQRCode (Act_Action_t Action,void (*FuncParams) (void))
   {
    extern const char *Txt_QR_code;
 

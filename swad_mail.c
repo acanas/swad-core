@@ -906,7 +906,7 @@ void Mai_ListEmails (void)
 		 Hlp_MESSAGES_Email,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActMaiStd,NULL,
+   Grp_ShowFormToSelectSeveralGroups (NULL,
 	                              Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/

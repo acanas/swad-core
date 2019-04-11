@@ -1953,7 +1953,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt,Att_PutParamSelectedAttCod,
+   Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,
 	                              Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
@@ -2709,7 +2709,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 		 NULL,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt,Att_PutParamSelectedAttCod,
+   Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,
 	                              Grp_ONLY_MY_GROUPS);
 
    /***** Start section with user list *****/
@@ -2724,7 +2724,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 
 	 /***** Draw a class photo with students of the course *****/
 	 /* Form to select type of list used for select several users */
-	 Usr_ShowFormsToSelectUsrListType (ActReqLstStdAtt,NULL);
+	 Usr_ShowFormsToSelectUsrListType (NULL);
 
 	 /* Start form */
 	 Frm_StartForm (ActSeeLstStdAtt);
