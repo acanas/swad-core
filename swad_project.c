@@ -1667,7 +1667,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    /* Icon to remove user */
 	    if (ProjectView == Prj_EDIT_ONE_PROJECT)
 	      {
-	       fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
+	       fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_ICO\">");
 	       Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInProject],NULL,
 					      Prj_PutCurrentParams,
 					      "trash.svg",
@@ -1676,7 +1676,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	      }
 
 	    /* Put user's photo */
-	    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
+	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_PHO\">");
 	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
 								 NULL,
@@ -1684,7 +1684,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    fprintf (Gbl.F.Out,"</td>");
 
 	    /* Write user's name */
-	    fprintf (Gbl.F.Out,"<td class=\"AUTHOR_TXT LEFT_MIDDLE\">%s</td>",
+	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_NAM\">%s</td>",
 		     Gbl.Usrs.Other.UsrDat.FullName);
 
 	    /* End row for this user */
@@ -1697,7 +1697,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	{
 	 case Prj_EDIT_ONE_PROJECT:
 	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"CENTER_TOP\" style=\"width:30px;\">");
+			       "<td class=\"PRJ_MEMBER_ICO\">");
 	    Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Add_USERS,
@@ -1706,11 +1706,8 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 				        Prj_PutCurrentParams,
 				        Gbl.Title);
 	    fprintf (Gbl.F.Out,"</td>"
-			       "<td style=\"width:30px;\">"	// Column for photo
-			       "</td>");
-	    if (RoleInProject == Prj_ROLE_STD)
-	       fprintf (Gbl.F.Out,"<td></td>");		// Column for user's IDs
-	    fprintf (Gbl.F.Out,"<td></td>"			// Column for name
+			       "<td class=\"PRJ_MEMBER_PHO\"></td>"	// Column for photo
+	                       "<td class=\"PRJ_MEMBER_NAM\"></td>"	// Column for name
 			       "</tr>");
 	    break;
 	 default:
@@ -1958,7 +1955,7 @@ static void Prj_AddEvls (void)
 static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project;
-   extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
+   extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS];
    long PrjCod;
    const char *Ptr;
    bool ItsMe;
@@ -1996,7 +1993,7 @@ static void Prj_AddUsrsToProject (Prj_RoleInProject_t RoleInProject)
 	 /* Show success alert */
 	 Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_enroled_as_a_Y_in_the_project,
 			Gbl.Usrs.Other.UsrDat.FullName,
-			Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject]);
+			Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex]);
         }
      }
 
@@ -2027,9 +2024,8 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y;
    extern const char *Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y;
-   extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
-   extern const char *Txt_Remove_me_from_this_project;
-   extern const char *Txt_Remove_user_from_this_project;
+   extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS];
+   extern const char *Txt_Remove_USER_from_this_project;
    static Act_Action_t ActionRemUsr[Prj_NUM_ROLES_IN_PROJECT] =
      {
       ActUnk,		// Prj_ROLE_UNK, Unknown
@@ -2058,11 +2054,11 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	{
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
-	 /***** Show question and button to remove user as administrator *****/
+	 /***** Show question and button to remove user as a role from project *****/
 	 /* Start alert */
 	 Ale_ShowAlertAndButton1 (Ale_QUESTION,ItsMe ? Txt_Do_you_really_want_to_be_removed_as_a_X_from_the_project_Y :
 			                               Txt_Do_you_really_want_to_remove_the_following_user_as_a_X_from_the_project_Y,
-				  Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject],
+				  Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex],
 				  Prj.Title);
 
 	 /* Show user's record */
@@ -2072,8 +2068,10 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 Frm_StartForm (ActionRemUsr[RoleInProject]);
 	 Gbl.Prjs.PrjCod = Prj.PrjCod;
 	 Prj_PutCurrentParams ();
-	 Btn_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_project :
-				      Txt_Remove_user_from_this_project);
+	 snprintf (Gbl.Title,sizeof (Gbl.Title),
+	           Txt_Remove_USER_from_this_project,
+		   Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex]);
+	 Btn_PutRemoveButton (Gbl.Title);
 	 Frm_EndForm ();
 
 	 /* End alert */
@@ -2114,7 +2112,7 @@ void Prj_RemEvl (void)
 static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z;
-   extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT];
+   extern const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS];
    struct Project Prj;
    bool ItsMe;
 
@@ -2151,7 +2149,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
 	 /***** Show success alert *****/
          Ale_ShowAlert (Ale_SUCCESS,Txt_THE_USER_X_has_been_removed_as_a_Y_from_the_project_Z,
 		        Gbl.Usrs.Other.UsrDat.FullName,
-		        Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject],
+		        Txt_PROJECT_ROLES_SINGUL_abc[RoleInProject][Gbl.Usrs.Other.UsrDat.Sex],
 		        Prj.Title);
 	}
       else

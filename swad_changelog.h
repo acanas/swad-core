@@ -456,10 +456,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.112 (2019-04-11)"
-#define CSS_FILE		"swad18.92.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.112.1 (2019-04-12)"
+#define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.92.js"
 /*
+	Version 18.112.1: Apr 12, 2019 	Minor changes in layout of projects. (? lines)
 	Version 18.112:   Apr 11, 2019 	Code refactoring related to attendance. (242538 lines)
 	Version 18.111:   Apr 11, 2019 	New option to select users to compose an email to them. (242541 lines)
 					1 change necessary in database:

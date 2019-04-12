@@ -30161,9 +30161,10 @@ const char *Txt_PROJECT_ROLES_SINGUL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 #endif
 	};
 
-const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT] =
+const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT][Usr_NUM_SEXS] =
+{
 	{
-#if   L==1	// ca	// Prj_ROLE_UNK
+#if   L==1	// ca	// Prj_ROLE_UNK - Usr_SEX_UNKNOWN
 	"desconegut/da"
 #elif L==2	// de
 	"Unbekannter/e"
@@ -30182,8 +30183,69 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"desconhecido/a"
 #endif
-	,
-#if   L==1	// ca	// Prj_ROLE_STD
+	 ,
+#if   L==1	// ca	// Prj_ROLE_UNK - Usr_SEX_FEMALE
+	"desconeguda"
+#elif L==2	// de
+	"Unbekanntere"
+#elif L==3	// en
+	"unknown"
+#elif L==4	// es
+	"desconocida"
+#elif L==5	// fr
+	"inconnu/e"
+#elif L==6	// gn
+	"desconocida"	// Okoteve traducción
+#elif L==7	// it
+	"sconosciuta"
+#elif L==8	// pl
+	"nieznany"
+#elif L==9	// pt
+	"desconhecida"
+#endif
+	 ,
+#if   L==1	// ca	// Prj_ROLE_UNK - Usr_SEX_MALE
+	"desconegut"
+#elif L==2	// de
+	"Unbekannter"
+#elif L==3	// en
+	"unknown"
+#elif L==4	// es
+	"desconocido"
+#elif L==5	// fr
+	"inconnu"
+#elif L==6	// gn
+	"desconocido"	// Okoteve traducción
+#elif L==7	// it
+	"sconosciuto"
+#elif L==8	// pl
+	"nieznany"
+#elif L==9	// pt
+	"desconhecido"
+#endif
+	 ,
+#if   L==1	// ca	// Prj_ROLE_UNK - Usr_SEX_ALL
+	"desconegut/da"
+#elif L==2	// de
+	"Unbekannter/e"
+#elif L==3	// en
+	"unknown"
+#elif L==4	// es
+	"desconocido/a"
+#elif L==5	// fr
+	"inconnu/e"
+#elif L==6	// gn
+	"desconocido/a"	// Okoteve traducción
+#elif L==7	// it
+	"sconosciuto/a"
+#elif L==8	// pl
+	"nieznany"
+#elif L==9	// pt
+	"desconhecido/a"
+#endif
+	 },
+	 {
+#if   L==1	// ca	// Prj_ROLE_STD - Usr_SEX_UNKNOWN
 	"estudiant"
 #elif L==2	// de
 	"Student"
@@ -30202,8 +30264,69 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"estudante"
 #endif
-	,
-#if   L==1	// ca	// Prj_ROLE_TUT
+	 ,
+#if   L==1	// ca	// Prj_ROLE_STD - Usr_SEX_FEMALE
+	"estudiant"
+#elif L==2	// de
+	"Student"
+#elif L==3	// en
+	"student"
+#elif L==4	// es
+	"estudiante"
+#elif L==5	// fr
+	"&eacute;tudiante"
+#elif L==6	// gn
+	"temimbo'e"
+#elif L==7	// it
+	"studente"
+#elif L==8	// pl
+	"student"
+#elif L==9	// pt
+	"estudante"
+#endif
+	 ,
+#if   L==1	// ca	// Prj_ROLE_STD - Usr_SEX_MALE
+	"estudiant"
+#elif L==2	// de
+	"Student"
+#elif L==3	// en
+	"student"
+#elif L==4	// es
+	"estudiante"
+#elif L==5	// fr
+	"&eacute;tudiant"
+#elif L==6	// gn
+	"temimbo'e"
+#elif L==7	// it
+	"studente"
+#elif L==8	// pl
+	"student"
+#elif L==9	// pt
+	"estudante"
+#endif
+	 ,
+#if   L==1	// ca	// Prj_ROLE_STD - Usr_SEX_ALL
+	"estudiant"
+#elif L==2	// de
+	"Student"
+#elif L==3	// en
+	"student"
+#elif L==4	// es
+	"estudiante"
+#elif L==5	// fr
+	"&eacute;tudiant/e"
+#elif L==6	// gn
+	"temimbo'e"
+#elif L==7	// it
+	"studente"
+#elif L==8	// pl
+	"student"
+#elif L==9	// pt
+	"estudante"
+#endif
+	 },
+	 {
+#if   L==1	// ca	// Prj_ROLE_TUT - Usr_SEX_UNKNOWN
 	"tutor/a"
 #elif L==2	// de
 	"Tutor"
@@ -30212,7 +30335,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==4	// es
 	"tutor/a"
 #elif L==5	// fr
-	"tuteur"
+	"tuteur/trice"
 #elif L==6	// gn
 	"tutor/a"	// Okoteve traducción
 #elif L==7	// it
@@ -30222,8 +30345,69 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"tutor/a"
 #endif
-	,
-#if   L==1	// ca	// Prj_ROLE_EVL
+	 ,
+#if   L==1	// ca	// Prj_ROLE_TUT - Usr_SEX_FEMALE
+	"tutora"
+#elif L==2	// de
+	"Tutor"
+#elif L==3	// en
+	"tutor"
+#elif L==4	// es
+	"tutora"
+#elif L==5	// fr
+	"tutrice"
+#elif L==6	// gn
+	"tutora"	// Okoteve traducción
+#elif L==7	// it
+	"precettore"
+#elif L==8	// pl
+	"nauczyciel"
+#elif L==9	// pt
+	"tutora"
+#endif
+	 ,
+#if   L==1	// ca	// Prj_ROLE_TUT - Usr_SEX_MALE
+	"tutor"
+#elif L==2	// de
+	"Tutor"
+#elif L==3	// en
+	"tutor"
+#elif L==4	// es
+	"tutor"
+#elif L==5	// fr
+	"tuteur"
+#elif L==6	// gn
+	"tutor"	// Okoteve traducción
+#elif L==7	// it
+	"precettore"
+#elif L==8	// pl
+	"nauczyciel"
+#elif L==9	// pt
+	"tutor"
+#endif
+	 ,
+#if   L==1	// ca	// Prj_ROLE_TUT - Usr_SEX_ALL
+	"tutor/a"
+#elif L==2	// de
+	"Tutor"
+#elif L==3	// en
+	"tutor"
+#elif L==4	// es
+	"tutor/a"
+#elif L==5	// fr
+	"tuteur/trice"
+#elif L==6	// gn
+	"tutor/a"	// Okoteve traducción
+#elif L==7	// it
+	"precettore"
+#elif L==8	// pl
+	"nauczyciel"
+#elif L==9	// pt
+	"tutor/a"
+#endif
+	 },
+	 {
+#if   L==1	// ca	// Prj_ROLE_EVL - Usr_SEX_UNKNOWN
 	"avaluador/a"
 #elif L==2	// de
 	"Auswerter"
@@ -30232,7 +30416,7 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==4	// es
 	"evaluador/a"
 #elif L==5	// fr
-	"&eacute;valuateur"
+	"&eacute;valuateur/trice"
 #elif L==6	// gn
 	"evaluador/a"	// Okoteve traducción
 #elif L==7	// it
@@ -30242,7 +30426,68 @@ const char *Txt_PROJECT_ROLES_SINGUL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #elif L==9	// pt
 	"avaliador/a"
 #endif
-	};
+	 ,
+#if   L==1	// ca	// Prj_ROLE_EVL - Usr_SEX_FEMALE
+	"avaluadora"
+#elif L==2	// de
+	"Auswerter"
+#elif L==3	// en
+	"evaluator"
+#elif L==4	// es
+	"evaluadora"
+#elif L==5	// fr
+	"&eacute;valuatrice"
+#elif L==6	// gn
+	"evaluadora"	// Okoteve traducción
+#elif L==7	// it
+	"valutatore"
+#elif L==8	// pl
+	"ewaluator"
+#elif L==9	// pt
+	"avaliadora"
+#endif
+	 ,
+#if   L==1	// ca	// Prj_ROLE_EVL - Usr_SEX_MALE
+	"avaluador"
+#elif L==2	// de
+	"Auswerter"
+#elif L==3	// en
+	"evaluator"
+#elif L==4	// es
+	"evaluador"
+#elif L==5	// fr
+	"&eacute;valuateur"
+#elif L==6	// gn
+	"evaluador"	// Okoteve traducción
+#elif L==7	// it
+	"valutatore"
+#elif L==8	// pl
+	"ewaluator"
+#elif L==9	// pt
+	"avaliador"
+#endif
+	 ,
+#if   L==1	// ca	// Prj_ROLE_EVL - Usr_SEX_ALL
+	"avaluador/a"
+#elif L==2	// de
+	"Auswerter"
+#elif L==3	// en
+	"evaluator"
+#elif L==4	// es
+	"evaluador/a"
+#elif L==5	// fr
+	"&eacute;valuateur/trice"
+#elif L==6	// gn
+	"evaluador/a"	// Okoteve traducción
+#elif L==7	// it
+	"valutatore"
+#elif L==8	// pl
+	"ewaluator"
+#elif L==9	// pt
+	"avaliador/a"
+#endif
+	 }
+};
 
 const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT] =
 	{
@@ -32193,27 +32438,6 @@ const char *Txt_Remove_me_from_this_course =
 	"Tirar me desta disciplina";
 #endif
 
-const char *Txt_Remove_me_from_this_project =
-#if   L==1	// ca
-	"Eliminarme d'aquest projecte";
-#elif L==2	// de
-	"Entfernen Sie diesen Projekt";
-#elif L==3	// en
-	"Remove me from this project";
-#elif L==4	// es
-	"Eliminarme de este proyecto";
-#elif L==5	// fr
-	"Enlever-moi de ce projet";
-#elif L==6	// gn
-	"Eliminarme de este proyecto";	// Okoteve traducción
-#elif L==7	// it
-	"Rimuovimi da questo progetto";
-#elif L==8	// pl
-	"Usu&ntilde; z projekt";
-#elif L==9	// pt
-	"Tirar me deste projeto";
-#endif
-
 const char *Txt_Remove_me_from_THE_COURSE_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Eliminarme de <strong>%s</strong>";
@@ -32466,25 +32690,25 @@ const char *Txt_Remove_user_from_this_course =
 	"Tirar utilizador desta disciplina";
 #endif
 
-const char *Txt_Remove_user_from_this_project =
+const char *Txt_Remove_USER_from_this_project =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"Eliminar usuari d'aquest projecte";
+	"Eliminar %s d'aquest projecte";
 #elif L==2	// de
-	"Entfernen Benutzer Sie diesen Projekt";
+	"Entfernen %s Sie diesen Projekt";
 #elif L==3	// en
-	"Remove user from this project";
+	"Remove %s from this project";
 #elif L==4	// es
-	"Eliminar usuario de este proyecto";
+	"Eliminar %s de este proyecto";
 #elif L==5	// fr
-	"Enlever utilisateur de ce projet";
+	"Enlever %s de ce projet";
 #elif L==6	// gn
-	"Eliminar usuario de este proyecto";	// Okoteve traducción
+	"Eliminar %s de este proyecto";	// Okoteve traducción
 #elif L==7	// it
-	"Rimuovi utente da questo progetto";
+	"Rimuovi %s da questo progetto";
 #elif L==8	// pl
-	"Usu&ntilde; u&zdot;ytkownika z projekt";
+	"Usu&ntilde; %s z projekt";
 #elif L==9	// pt
-	"Tirar utilizador deste projeto";
+	"Tirar %s deste projeto";
 #endif
 
 const char *Txt_Remove_USER_as_an_administrator =
