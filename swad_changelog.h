@@ -435,7 +435,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 // Bloquear individualmente la edición con una casilla de configuración para cada TFG, sólo el profesor de la asignatura (Perico) podría bloquear/desbloquear
 // Que haya una opción general que los bloquee todos y que los desbloquee todos
 // Para bloquear/desbloquear se usará un icono candado
-// Para preasignado/no preasignado usar otro icono (usuario/usuario tachado, por ej.)
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -456,11 +455,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.112.1 (2019-04-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.112.2 (2019-04-12)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.92.js"
 /*
-	Version 18.112.1: Apr 12, 2019 	Minor changes in layout of projects. (? lines)
+	Version 18.112.2: Apr 12, 2019 	Changed icons for preassigned/non-preassigned projects. (242783 lines)
+					Copy the following icon to icon public directory:
+sudo cp icon/user-slash.svg /var/www/html/swad/icon/
+
+	Version 18.112.1: Apr 12, 2019 	Changes in layout of projects. (242781 lines)
 	Version 18.112:   Apr 11, 2019 	Code refactoring related to attendance. (242538 lines)
 	Version 18.111:   Apr 11, 2019 	New option to select users to compose an email to them. (242541 lines)
 					1 change necessary in database:

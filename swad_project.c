@@ -91,8 +91,8 @@ static const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
 /***** Image for preassigned and non-preassigned projects *****/
 static const char *PreassignedNonpreassigImage[Prj_NUM_PREASSIGNED_NONPREASSIG] =
   {
-   "lock.svg",		// Prj_PREASSIGNED
-   "unlock.svg",	// Prj_NONPREASSIG
+   "user.svg",		// Prj_PREASSIGNED
+   "user-slash.svg",	// Prj_NONPREASSIG
   };
 
 /*****************************************************************************/
