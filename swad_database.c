@@ -2097,6 +2097,7 @@ mysql> DESCRIBE projects;
 | PrjCod      | int(11)                             | NO   | PRI | NULL    | auto_increment |
 | CrsCod      | int(11)                             | NO   | MUL | -1      |                |
 | DptCod      | int(11)                             | NO   |     | -1      |                |
+| Locked      | enum('N','Y')                       | NO   |     | N       |                |
 | Hidden      | enum('N','Y')                       | NO   |     | N       |                |
 | Preassigned | enum('N','Y')                       | NO   |     | N       |                |
 | NumStds     | int(11)                             | NO   |     | 1       |                |
@@ -2109,12 +2110,13 @@ mysql> DESCRIBE projects;
 | Materials   | text                                | NO   |     | NULL    |                |
 | URL         | varchar(255)                        | NO   |     | NULL    |                |
 +-------------+-------------------------------------+------+-----+---------+----------------+
-14 rows in set (0,00 sec)
+15 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS projects ("
 			"PrjCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"DptCod INT NOT NULL DEFAULT -1,"
+			"Locked ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"NumStds INT NOT NULL DEFAULT 1,"

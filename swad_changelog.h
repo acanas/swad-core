@@ -455,10 +455,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.112.2 (2019-04-12)"
+#define Log_PLATFORM_VERSION	"SWAD 18.113 (2019-04-17)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.92.js"
 /*
+	Version 18.113:   Apr 17, 2019 	Individual locking of the edition of each project through a padlock icon. Only the teacher of the subject can lock / unlock each project. Suggested by Pedro Villar Castro. (243000 lines)
+ALTER TABLE projects ADD COLUMN Locked ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER DptCod;
+
 	Version 18.112.2: Apr 12, 2019 	Changed icons for preassigned/non-preassigned projects. (242783 lines)
 					Copy the following icon to icon public directory:
 sudo cp icon/user-slash.svg /var/www/html/swad/icon/

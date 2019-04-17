@@ -17581,6 +17581,27 @@ const char *Txt_Locations =
 	"Localiza&ccedil;&otilde;es";
 #endif
 
+const char *Txt_Lock =
+#if   L==1	// ca
+	"Tancar";
+#elif L==2	// de
+	"Abschlie&szlig;en";
+#elif L==3	// en
+	"Lock";
+#elif L==4	// es
+	"Bloquear";
+#elif L==5	// fr
+	"Verrouiller";
+#elif L==6	// gn
+	"Bloquear";	// Okoteve traducción
+#elif L==7	// it
+	"Bloccare";
+#elif L==8	// pl
+	"Zablokowa&cacute;";
+#elif L==9	// pt
+	"Trancar";
+#endif
+
 const char *Txt_LOG_More_info =
 #if   L==1	// ca
 	"Observaciones";	// Necessita traduccio
@@ -43990,6 +44011,48 @@ const char *Txt_The_department_X_has_been_renamed_as_Y =	// Warning: it is very 
 	"O departamento <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
+const char *Txt_The_edition_of_project_X_is_now_locked =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"L'edici&oacute; del projecte <strong>%s</strong> ara est&agrave; bloquejada.";
+#elif L==2	// de
+	"Die Edition des Projekts <strong>%s</strong> ist jetzt gesperrt.";
+#elif L==3	// en
+	"The edition of the project <strong>%s</strong> is now locked.";
+#elif L==4	// es
+	"La edici&oacute;n del proyecto <strong>%s</strong> ahora est&aacute; bloqueada.";
+#elif L==5	// fr
+	"L'&eacute;dition du projet <strong>%s</strong> est maintenant verrouill&eacute;e.";
+#elif L==6	// gn
+	"La edici&oacute;n del proyecto <strong>%s</strong> ahora est&aacute; bloqueada.";	// Okoteve traducción
+#elif L==7	// it
+	"L'edizione del progetto <strong>%s</strong> &egrave; ora chiusa a chiave.";
+#elif L==8	// pl
+	"Edycja projektu <strong>%s</strong> jest teraz zablokowana.";
+#elif L==9	// pt
+	"A edi&ccedil;&atilde;o do projeto <strong>%s</strong> est&aacute; agora bloqueada.";
+#endif
+
+const char *Txt_The_edition_of_project_X_is_now_unlocked =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"L'edici&oacute; del projecte <strong>%s</strong> ara est&agrave; desbloquejada.";
+#elif L==2	// de
+	"Die Edition des Projekts <strong>%s</strong> ist jetzt freigeschaltet.";
+#elif L==3	// en
+	"The edition of the project <strong>%s</strong> is now unlocked.";
+#elif L==4	// es
+	"La edici&oacute;n del proyecto <strong>%s</strong> ahora est&aacute; desbloqueada.";
+#elif L==5	// fr
+	"L'&eacute;dition du projet <strong>%s</strong> est maintenant ouverte.";
+#elif L==6	// gn
+	"La edici&oacute;n del proyecto <strong>%s</strong> ahora est&aacute; desbloqueada.";	// Okoteve traducción
+#elif L==7	// it
+	"L'edizione del progetto <strong>%s</strong> &egrave; ora chiusa a chiave.";
+#elif L==8	// pl
+	"Edycja projektu <strong>%s</strong> jest teraz odblokowana.";
+#elif L==9	// pt
+	"A edi&ccedil;&atilde;o do projeto <strong>%s</strong> est&aacute; agora desbloqueada.";
+#endif
+
 const char *Txt_The_email_X_has_been_confirmed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"El correo <strong>%s</strong> ha sido confirmado.";	// Necessita traduccio
@@ -51369,6 +51432,27 @@ const char *Txt_unknown_TIME =
 	"unknown";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"desconhecido";
+#endif
+
+const char *Txt_Unlock =
+#if   L==1	// ca
+	"Desbloquejar";
+#elif L==2	// de
+	"Aufschlie&szlig;en";
+#elif L==3	// en
+	"Unlock";
+#elif L==4	// es
+	"Desbloquear";
+#elif L==5	// fr
+	"D&eacute;verouiller";
+#elif L==6	// gn
+	"Desbloquear";	// Okoteve traducción
+#elif L==7	// it
+	"Sbloccare";
+#elif L==8	// pl
+	"Odblokowa&cacute;";
+#elif L==9	// pt
+	"Desbloquear";
 #endif
 
 const char *Txt_unread_MESSAGE =

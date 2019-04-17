@@ -94,7 +94,13 @@ static const char *PreassignedNonpreassigImage[Prj_NUM_PREASSIGNED_NONPREASSIG] 
    "user.svg",		// Prj_PREASSIGNED
    "user-slash.svg",	// Prj_NONPREASSIG
   };
-
+/*
+static const char *PreassignedNonpreassigImage[Prj_NUM_PREASSIGNED_NONPREASSIG] =
+  {
+   "lock.svg",		// Prj_PREASSIGNED
+   "unlock.svg",	// Prj_NONPREASSIG
+  };
+*/
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -169,10 +175,11 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
 
 static void Prj_GetParamPrjOrder (void);
 
-static void Prj_PutFormsToRemEditOnePrj (long PrjCod,Prj_HiddenVisibl_t Hidden,
+static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
                                          bool ICanViewProjectFiles);
 
 static bool Prj_CheckIfICanEditProject (long PrjCod);
+static bool Prj_CheckIfICanLockProject (void);
 
 static void Prj_ResetProject (struct Project *Prj);
 
@@ -948,18 +955,14 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-         fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"CONTEXT_COL COLOR%u\">",
-                  Gbl.RowEvenOdd);
-         Prj_PutFormsToRemEditOnePrj (Prj->PrjCod,Prj->Hidden,
-                                      ICanViewProjectFiles);
+      case Prj_FILE_BROWSER_PROJECT:
+         fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"CONTEXT_COL");
+         if (ProjectView == Prj_LIST_PROJECTS)
+	    fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+         fprintf (Gbl.F.Out,"\">");
+         Prj_PutFormsToRemEditOnePrj (Prj,ICanViewProjectFiles);
          fprintf (Gbl.F.Out,"</td>");
 	 break;
-      case Prj_FILE_BROWSER_PROJECT:
-         fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"CONTEXT_COL\">");
-         Prj_PutFormsToRemEditOnePrj (Prj->PrjCod,Prj->Hidden,
-                                      ICanViewProjectFiles);
-         fprintf (Gbl.F.Out,"</td>");
-         break;
       default:
 	 break;
      }
@@ -2191,18 +2194,18 @@ void Prj_PutHiddenParamPrjOrder (void)
 /****************** Put a link (form) to edit one project ********************/
 /*****************************************************************************/
 
-static void Prj_PutFormsToRemEditOnePrj (long PrjCod,Prj_HiddenVisibl_t Hidden,
+static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
                                          bool ICanViewProjectFiles)
   {
-   Gbl.Prjs.PrjCod = PrjCod;	// Used as parameter in contextual links
+   Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used as parameter in contextual links
 
-   if (Prj_CheckIfICanEditProject (PrjCod))
+   if (Prj_CheckIfICanEditProject (Prj->PrjCod))
      {
       /***** Put form to remove project *****/
       Ico_PutContextualIconToRemove (ActReqRemPrj,Prj_PutCurrentParams);
 
       /***** Put form to hide/show project *****/
-      switch (Hidden)
+      switch (Prj->Hidden)
         {
 	 case Prj_HIDDEN:
 	    Ico_PutContextualIconToUnhide (ActShoPrj,NULL,Prj_PutCurrentParams);
@@ -2222,6 +2225,18 @@ static void Prj_PutFormsToRemEditOnePrj (long PrjCod,Prj_HiddenVisibl_t Hidden,
 
    /***** Put form to print project *****/
    Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutCurrentParams);
+
+   /***** Put form to lock project *****/
+   if (Prj_CheckIfICanLockProject ())
+      switch (Prj->Locked)
+	{
+	 case Prj_LOCKED:
+	    Ico_PutContextualIconToUnlock (ActUnlPrj,Prj_PutCurrentParams);
+	    break;
+	 case Prj_UNLOCKED:
+	    Ico_PutContextualIconToLock (ActLckPrj,Prj_PutCurrentParams);
+	    break;
+	}
   }
 
 /*****************************************************************************/
@@ -2253,6 +2268,22 @@ static bool Prj_CheckIfICanEditProject (long PrjCod)
      {
       case Rol_NET:
 	 return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT)) != 0);	// Am I tutor?
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Can I block a given project? ***********************/
+/*****************************************************************************/
+
+static bool Prj_CheckIfICanLockProject (void)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return true;
@@ -2516,17 +2547,18 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
 			  "SELECT PrjCod,"			// row[ 0]
 				 "CrsCod,"			// row[ 1]
 				 "DptCod,"			// row[ 2]
-				 "Hidden,"			// row[ 3]
-				 "Preassigned,"			// row[ 4]
-				 "NumStds,"			// row[ 5]
-				 "Proposal,"			// row[ 6]
-				 "UNIX_TIMESTAMP(CreatTime),"	// row[ 7]
-				 "UNIX_TIMESTAMP(ModifTime),"	// row[ 8]
-				 "Title,"			// row[ 9]
-				 "Description,"			// row[10]
-				 "Knowledge,"			// row[11]
-				 "Materials,"			// row[12]
-				 "URL"				// row[13]
+				 "Locked,"			// row[ 3]
+				 "Hidden,"			// row[ 4]
+				 "Preassigned,"			// row[ 5]
+				 "NumStds,"			// row[ 6]
+				 "Proposal,"			// row[ 7]
+				 "UNIX_TIMESTAMP(CreatTime),"	// row[ 8]
+				 "UNIX_TIMESTAMP(ModifTime),"	// row[ 9]
+				 "Title,"			// row[10]
+				 "Description,"			// row[11]
+				 "Knowledge,"			// row[12]
+				 "Materials,"			// row[13]
+				 "URL"				// row[14]
 			  " FROM projects"
 			  " WHERE PrjCod=%ld AND CrsCod=%ld",
 			  Prj->PrjCod,
@@ -2544,56 +2576,60 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
 	 /* Get code of the department (row[2]) */
 	 Prj->DptCod = Str_ConvertStrCodToLongCod (row[2]);
 
-	 /* Get whether the project is hidden or not (row[3]) */
-	 Prj->Hidden = (row[3][0] == 'Y') ? Prj_HIDDEN :
+	 /* Get whether the project is locked or not (row[3]) */
+	 Prj->Locked = (row[3][0] == 'Y') ? Prj_LOCKED :
+					    Prj_UNLOCKED;
+
+	 /* Get whether the project is hidden or not (row[4]) */
+	 Prj->Hidden = (row[4][0] == 'Y') ? Prj_HIDDEN :
 					    Prj_VISIBL;
 
-	 /* Get if project is preassigned or not (row[4]) */
-	 Prj->Preassigned = (row[4][0] == 'Y') ? Prj_PREASSIGNED :
+	 /* Get if project is preassigned or not (row[5]) */
+	 Prj->Preassigned = (row[5][0] == 'Y') ? Prj_PREASSIGNED :
 						 Prj_NONPREASSIG;
 
-	 /* Get if project is preassigned or not (row[5]) */
-	 NumLong = Str_ConvertStrCodToLongCod (row[5]);
+	 /* Get if project is preassigned or not (row[6]) */
+	 NumLong = Str_ConvertStrCodToLongCod (row[6]);
 	 if (NumLong >= 0)
 	    Prj->NumStds = (unsigned) NumLong;
 	 else
 	    Prj->NumStds = 1;
 
-	 /* Get project status (row[6]) */
+	 /* Get project status (row[7]) */
 	 Prj->Proposal = Prj_PROPOSAL_DEFAULT;
 	 for (Proposal  = (Prj_Proposal_t) 0;
 	      Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
 	      Proposal++)
-	    if (!strcmp (Prj_Proposal_DB[Proposal],row[6]))
+	    if (!strcmp (Prj_Proposal_DB[Proposal],row[7]))
 	      {
 	       Prj->Proposal = Proposal;
 	       break;
 	      }
 
-	 /* Get creation date/time (row[7] holds the creation UTC time) */
-	 Prj->CreatTime = Dat_GetUNIXTimeFromStr (row[7]);
+	 /* Get creation date/time (row[8] holds the creation UTC time) */
+	 Prj->CreatTime = Dat_GetUNIXTimeFromStr (row[8]);
 
-	 /* Get modification date/time (row[8] holds the modification UTC time) */
-	 Prj->ModifTime = Dat_GetUNIXTimeFromStr (row[8]);
+	 /* Get modification date/time (row[9] holds the modification UTC time) */
+	 Prj->ModifTime = Dat_GetUNIXTimeFromStr (row[9]);
 
-	 /* Get the title of the project (row[9]) */
-	 Str_Copy (Prj->Title,row[9],
+	 /* Get the title of the project (row[10]) */
+	 Str_Copy (Prj->Title,row[10],
 		   Prj_MAX_BYTES_PROJECT_TITLE);
 
-	 /* Get the description of the project (row[10]) */
-	 Str_Copy (Prj->Description,row[10],
+	 /* Get the description of the project (row[11]) */
+	 Str_Copy (Prj->Description,row[11],
 		   Cns_MAX_BYTES_TEXT);
 
-	 /* Get the required knowledge for the project (row[11]) */
-	 Str_Copy (Prj->Knowledge,row[11],
+	 /* Get the required knowledge for the project (row[12]) */
+	 Str_Copy (Prj->Knowledge,row[12],
 		   Cns_MAX_BYTES_TEXT);
 
-	 /* Get the required materials for the project (row[12]) */
-	 Str_Copy (Prj->Materials,row[12],
+	 /* Get the required materials for the project (row[13]) */
+	 Str_Copy (Prj->Materials,row[13],
 		   Cns_MAX_BYTES_TEXT);
 
-	 /* Get the URL of the project (row[13]) */
-	 Str_Copy (Prj->URL,row[13],
+	 /* Get the URL of the project (row[14]) */
+	 Str_Copy (Prj->URL,row[14],
 		   Cns_MAX_BYTES_WWW);
 	}
 
@@ -2617,6 +2653,7 @@ static void Prj_ResetProject (struct Project *Prj)
    if (Prj->PrjCod <= 0)	// If > 0 ==> keep value
       Prj->PrjCod = -1L;
    Prj->CrsCod = -1L;
+   Prj->Locked	    = Prj_UNLOCKED;
    Prj->Hidden      = Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT;
    Prj->Preassigned = Prj_NEW_PRJ_PREASSIGNED_NONPREASSIG_DEFAULT;
    Prj->NumStds     = 1;
@@ -2841,6 +2878,90 @@ void Prj_ShowProject (void)
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_is_now_visible,
+	             Prj.Title);
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
+
+   /***** Show projects again *****/
+   Prj_ShowProjectsInCurrentPage ();
+  }
+
+/*****************************************************************************/
+/************************** Lock edition of a project ************************/
+/*****************************************************************************/
+
+void Prj_LockProjectEdition (void)
+  {
+   extern const char *Txt_The_edition_of_project_X_is_now_locked;
+   struct Project Prj;
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
+
+   /***** Get parameters *****/
+   Prj_GetParams ();
+   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
+      Lay_ShowErrorAndExit ("Code of project is missing.");
+
+   /***** Get data of the project from database *****/
+   Prj_GetDataOfProjectByCod (&Prj);
+
+   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+     {
+      /***** Hide project *****/
+      DB_QueryUPDATE ("can not hide project",
+		      "UPDATE projects SET Locked='Y'"
+		      " WHERE PrjCod=%ld AND CrsCod=%ld",
+	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+
+      /***** Write message to show the change made *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_edition_of_project_X_is_now_locked,
+	             Prj.Title);
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Free memory of the project *****/
+   Prj_FreeMemProject (&Prj);
+
+   /***** Show projects again *****/
+   Prj_ShowProjectsInCurrentPage ();
+  }
+
+/*****************************************************************************/
+/************************* Unlock edition of a project ***********************/
+/*****************************************************************************/
+
+void Prj_UnlockProjectEdition (void)
+  {
+   extern const char *Txt_The_edition_of_project_X_is_now_unlocked;
+   struct Project Prj;
+
+   /***** Allocate memory for the project *****/
+   Prj_AllocMemProject (&Prj);
+
+   /***** Get parameters *****/
+   Prj_GetParams ();
+   if ((Prj.PrjCod = Prj_GetParamPrjCod ()) < 0)
+      Lay_ShowErrorAndExit ("Code of project is missing.");
+
+   /***** Get data of the project from database *****/
+   Prj_GetDataOfProjectByCod (&Prj);
+
+   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+     {
+      /***** Show project *****/
+      DB_QueryUPDATE ("can not show project",
+		      "UPDATE projects SET Locked='N'"
+		      " WHERE PrjCod=%ld AND CrsCod=%ld",
+	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+
+      /***** Write message to show the change made *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_edition_of_project_X_is_now_unlocked,
 	             Prj.Title);
      }
    else

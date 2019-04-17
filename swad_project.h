@@ -57,6 +57,12 @@ typedef enum
 #define Prj_FILTER_PREASSIGNED_DEFAULT	(1 << Prj_PREASSIGNED)	// on
 #define Prj_FILTER_NONPREASSIG_DEFAULT	(1 << Prj_NONPREASSIG)	// on
 
+typedef enum
+  {
+   Prj_LOCKED   = 0,
+   Prj_UNLOCKED = 1,
+  } Prj_Locked_t;
+
 /* Hidden projects / visible projects */
 #define Prj_NUM_HIDDEN_VISIBL 2
 typedef enum
@@ -121,6 +127,7 @@ struct Project
   {
    long PrjCod;
    long CrsCod;
+   Prj_Locked_t Locked;
    Prj_HiddenVisibl_t Hidden;
    Prj_PreassignedNonpreassig_t Preassigned;
    unsigned NumStds;
@@ -191,6 +198,8 @@ void Prj_ReqRemProject (void);
 void Prj_RemoveProject (void);
 void Prj_HideProject (void);
 void Prj_ShowProject (void);
+void Prj_LockProjectEdition (void);
+void Prj_UnlockProjectEdition (void);
 void Prj_RecFormProject (void);
 
 void Prj_RemoveCrsProjects (long CrsCod);
