@@ -288,24 +288,6 @@ void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) (v
 				  Txt_Print);
   }
 
-void Ico_PutContextualIconToLock (Act_Action_t NextAction,void (*FuncParams) (void))
-  {
-   extern const char *Txt_Lock;
-
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
-				  "unlock.svg",
-				  Txt_Lock);
-  }
-
-void Ico_PutContextualIconToUnlock (Act_Action_t NextAction,void (*FuncParams) (void))
-  {
-   extern const char *Txt_Unlock;
-
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
-				  "lock.svg",
-				  Txt_Unlock);
-  }
-
 /*****************************************************************************/
 /**************** Show an icon inside a div (without text) *******************/
 /*****************************************************************************/

@@ -57,13 +57,15 @@ typedef enum
 #define Prj_FILTER_PREASSIGNED_DEFAULT	(1 << Prj_PREASSIGNED)	// on
 #define Prj_FILTER_NONPREASSIG_DEFAULT	(1 << Prj_NONPREASSIG)	// on
 
+/* Locked/unlocked project */
+#define Prj_NUM_LOCKED_UNLOCKED 2
 typedef enum
   {
    Prj_LOCKED   = 0,
    Prj_UNLOCKED = 1,
   } Prj_Locked_t;
 
-/* Hidden projects / visible projects */
+/* Hidden/visible project */
 #define Prj_NUM_HIDDEN_VISIBL 2
 typedef enum
   {

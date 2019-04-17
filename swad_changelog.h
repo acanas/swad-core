@@ -455,10 +455,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.113 (2019-04-17)"
+#define Log_PLATFORM_VERSION	"SWAD 18.114 (2019-04-17)"
 #define CSS_FILE		"swad18.112.1.css"
-#define JS_FILE			"swad18.92.js"
+#define JS_FILE			"swad18.114.js"
 /*
+	Version 18.114:   Apr 17, 2019 	Project locking/unlocking is made via AJAX. (243023 lines)
 	Version 18.113:   Apr 17, 2019 	Individual locking of the edition of each project through a padlock icon. Only the teacher of the subject can lock / unlock each project. Suggested by Pedro Villar Castro. (243000 lines)
 ALTER TABLE projects ADD COLUMN Locked ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER DptCod;
 
