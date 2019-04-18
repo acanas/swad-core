@@ -202,6 +202,12 @@ void Prj_HideProject (void);
 void Prj_ShowProject (void);
 void Prj_LockProjectEdition (void);
 void Prj_UnlockProjectEdition (void);
+
+void Prj_ReqLockAllProjectsEdition (void);
+void Prj_ReqUnlockAllProjectsEdition (void);
+void Prj_LockAllProjectsEdition (void);
+void Prj_UnlockAllProjectsEdition (void);
+
 void Prj_RecFormProject (void);
 
 void Prj_RemoveCrsProjects (long CrsCod);

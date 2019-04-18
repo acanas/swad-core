@@ -508,6 +508,10 @@ Assessment:
 	365. ActShoPrj			Show project
 	NEW. ActLckPrj			Lock project edition
 	NEW. ActUnlPrj			Unlock project edition
+	NEW. ActReqLckAllPrj		Request locking of all projects
+	NEW. ActReqUnlAllPrj		Request unlocking of all projects
+	NEW. ActLckAllPrj		Lock all projects
+	NEW. ActUnlAllPrj		Unlock all projects
 	366. ActReqAddStdPrj		Request adding a student to a project
 	367. ActReqAddTutPrj		Request adding a tutor to a project
 	368. ActReqAddEvlPrj		Request adding an evaluator to a project
@@ -1638,10 +1642,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAllShaSocNotGbl*/{1766,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllSharersNoteGbl	,NULL},
    /* ActAllFavSocNotGbl*/{1767,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllFaversNoteGbl	,NULL},
    /* ActAllFavSocComGbl*/{1768,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllFaversComGbl		,NULL},
-   /* ActShaSocNotGbl	*/{1495,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShaNoteGbl		,NULL},
-   /* ActUnsSocNotGbl	*/{1496,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnsNoteGbl		,NULL},
+   /* ActShaSocNotGbl	*/{1495,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShaNoteGbl			,NULL},
+   /* ActUnsSocNotGbl	*/{1496,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnsNoteGbl			,NULL},
    /* ActFavSocNotGbl	*/{1512,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_FavNoteGbl			,NULL},
-   /* ActUnfSocNotGbl	*/{1513,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnfNoteGbl		,NULL},
+   /* ActUnfSocNotGbl	*/{1513,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnfNoteGbl			,NULL},
    /* ActFavSocComGbl	*/{1516,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_FavCommentGbl		,NULL},
    /* ActUnfSocComGbl	*/{1517,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnfCommentGbl		,NULL},
    /* ActReqRemSocPubGbl*/{1494,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,TL_ShowTimelineGbl1		,TL_RequestRemNoteGbl		,NULL},
@@ -1656,10 +1660,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAllShaSocNotUsr*/{1769,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllSharersNoteUsr	,NULL},
    /* ActAllFavSocNotUsr*/{1770,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllFaversNoteUsr	,NULL},
    /* ActAllFavSocComUsr*/{1771,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShowAllFaversComUsr		,NULL},
-   /* ActShaSocNotUsr	*/{1499,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShaNoteUsr		,NULL},
-   /* ActUnsSocNotUsr	*/{1500,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnsNoteUsr		,NULL},
+   /* ActShaSocNotUsr	*/{1499,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_ShaNoteUsr			,NULL},
+   /* ActUnsSocNotUsr	*/{1500,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnsNoteUsr			,NULL},
    /* ActFavSocNotUsr	*/{1514,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_FavNoteUsr			,NULL},
-   /* ActUnfSocNotUsr	*/{1515,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnfNoteUsr		,NULL},
+   /* ActUnfSocNotUsr	*/{1515,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnfNoteUsr			,NULL},
    /* ActFavSocComUsr	*/{1518,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_FavCommentUsr		,NULL},
    /* ActUnfSocComUsr	*/{1519,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_UnfCommentUsr		,NULL},
    /* ActReqRemSocPubUsr*/{1501,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,TL_RequestRemNoteUsr		,NULL},
@@ -2047,6 +2051,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActShoPrj		*/{1683,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ShowProject		,NULL},
    /* ActLckPrj		*/{1773,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_LockProjectEdition		,NULL},
    /* ActUnlPrj		*/{1774,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnlockProjectEdition	,NULL},
+   /* ActReqLckAllPrj	*/{1775,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqLockAllProjectsEdition	,NULL},
+   /* ActReqUnlAllPrj	*/{1776,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqUnlockAllProjectsEdition,NULL},
+   /* ActLckAllPrj	*/{1777,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_LockAllProjectsEdition	,NULL},
+   /* ActUnlAllPrj	*/{1778,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnlockAllProjectsEdition	,NULL},
    /* ActReqAddStdPrj	*/{1684,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddStds			,NULL},
    /* ActReqAddTutPrj	*/{1685,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddTuts			,NULL},
    /* ActReqAddEvlPrj	*/{1686,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddEvls			,NULL},
@@ -4955,6 +4963,10 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqMaiUsr,		// #1772
 	ActLckPrj,		// #1773
 	ActUnlPrj,		// #1774
+	ActReqLckAllPrj,	// #1775
+	ActReqUnlAllPrj,	// #1776
+	ActLckAllPrj,		// #1777
+	ActUnlAllPrj,		// #1778
 	};
 
 /*****************************************************************************/

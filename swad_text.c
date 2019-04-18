@@ -17624,6 +17624,90 @@ const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED] =
 #endif
    };
 
+const char *Txt_Lock_editing =
+#if   L==1	// ca
+	"Bloquejar edici&oacute;";
+#elif L==2	// de
+	"Bearbeitung sperren";
+#elif L==3	// en
+	"Lock editing";
+#elif L==4	// es
+	"Bloquear edici&oacute;n";
+#elif L==5	// fr
+	"Verrouiller l'&eacute;dition";
+#elif L==6	// gn
+	"Bloquear edici&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Blocca la modifica";
+#elif L==8	// pl
+	"Zablokuj edycj&eogon;";
+#elif L==9	// pt
+	"Bloquear edi&ccedil;&atilde;o";
+#endif
+
+const char *Txt_Unlock_editing =
+#if   L==1	// ca
+	"Desbloquejar edici&oacute;";
+#elif L==2	// de
+	"Bearbeitung freischalten";
+#elif L==3	// en
+	"Unlock editing";
+#elif L==4	// es
+	"Desbloquear edici&oacute;n";
+#elif L==5	// fr
+	"D&eacute;verrouiller l'&eacute;dition";
+#elif L==6	// gn
+	"Desbloquear edici&oacute;n";	// Okoteve traducción
+#elif L==7	// it
+	"Sblocca la modifica";
+#elif L==8	// pl
+	"Odblokuj edycj&eogon;";
+#elif L==9	// pt
+	"Desbloquear edi&ccedil;&atilde;o";
+#endif
+
+const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Voleu bloquejar l'edici&oacute;n dels %u projectes seleccionats?";
+#elif L==2	// de
+	"M&ouml;chten Sie die Bearbeitung der ausgew&auml;hlten %u-Projekte sperren?";
+#elif L==3	// en
+	"Do you want to lock the editing of the %u selected projects?";
+#elif L==4	// es
+	"&iquest;Desea bloquear la edici&oacute;n de los %u proyectos seleccionados?";
+#elif L==5	// fr
+	"Voulez-vous verrouiller l'&eacute;dition des %u projets s&eacute;lectionn&eacute;s?";
+#elif L==6	// gn
+	"&iquest;Desea bloquear la edici&oacute;n de los %u proyectos seleccionados?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi bloccare la modifica dei %u progetti selezionati?";
+#elif L==8	// pl
+	"Czy chcesz zablokowa&cacute; edycj&eogon; %u wybranych projekt&oacute;w?";
+#elif L==9	// pt
+	"Voc&ecirc; quer bloquear a edi&ccedil;&atilde;o dos %u projetos selecionados?";
+#endif
+
+const char *Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects =	// Warning: it is very important to include %u in the following sentences
+#if   L==1	// ca
+	"Voleu desbloquejar l'edici&oacute; dels %u projectes seleccionats?";
+#elif L==2	// de
+	"M&ouml;chten Sie die Bearbeitung der ausgew&auml;hlten %u-Projekte freischalten?";
+#elif L==3	// en
+	"Do you want to unlock the editing of the %u selected projects?";
+#elif L==4	// es
+	"&iquest;Desea desbloquear la edici&oacute;n de los %u proyectos seleccionados?";
+#elif L==5	// fr
+	"Voulez-vous d&eacute;verrouiller l'&eacute;dition des %u projets s&eacute;lectionn&eacute;s?";
+#elif L==6	// gn
+	"&iquest;Desea desbloquear la edici&oacute;n de los %u proyectos seleccionados?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi sbloccare la modifica dei %u progetti selezionati?";
+#elif L==8	// pl
+	"Czy chcesz odblokowa&cacute; edycj&eogon; %u wybranych projekt&oacute;w?";
+#elif L==9	// pt
+	"Voc&ecirc; quer desbloquear a edi&ccedil;&atilde;o dos %u projetos selecionados?";
+#endif
+
 const char *Txt_LOG_More_info =
 #if   L==1	// ca
 	"Observaciones";	// Necessita traduccio

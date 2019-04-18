@@ -431,9 +431,6 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Ver cómo recibir un fichero desde el cliente (SWADroid) en gsoap
 
-// TODO: Pedro Villar Castro:
-// Que haya una opción general que los bloquee todos y que los desbloquee todos
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -453,10 +450,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.114.3 (2019-04-18)"
+#define Log_PLATFORM_VERSION	"SWAD 18.115 (2019-04-18)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.114.js"
 /*
+	Version 18.115:   Apr 18, 2019 	Contextual buttons to lock/unlock edition of all projects, suggested by Pedro Villar Castro. (243275 lines)
 	Version 18.114.3: Apr 18, 2019 	Locked edition of a project. (243025 lines)
 	Version 18.114.2: Apr 18, 2019 	Icons to inform about locked/unlocked project edition. (243023 lines)
 	Version 18.114.1: Apr 18, 2019 	Changes in translation of title related to project locking/unlocking. (243024 lines)

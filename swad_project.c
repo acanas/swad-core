@@ -140,6 +140,8 @@ static void Prj_PutIconsListProjects (void);
 static void Prj_PutIconToCreateNewPrj (void);
 static void Prj_PutButtonToCreateNewPrj (void);
 static void Prj_PutIconToShowAllData (void);
+static void Prj_PutIconsToLockUnlockAllProjects (void);
+
 static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
                                 Prj_ProjectView_t ProjectView);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
@@ -185,11 +187,14 @@ static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
                                          bool ICanViewProjectFiles);
 
 static bool Prj_CheckIfICanEditProject (const struct Project *Prj);
-static bool Prj_CheckIfICanLockProject (void);
+static bool Prj_CheckIfICanLockProjects (void);
 static void Prj_FormLockUnlock (const struct Project *Prj);
 static void Prj_PutIconOffLockedUnlocked (const struct Project *Prj);
 
 static void Prj_ResetProject (struct Project *Prj);
+
+static void Prj_LockProjectEditionInDB (long PrjCod);
+static void Prj_UnlockProjectEditionInDB (long PrjCod);
 
 static void Prj_RequestCreatOrEditPrj (long PrjCod);
 static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject);
@@ -255,6 +260,9 @@ void Prj_ShowTableAllProjects (void)
      }
    else	// No projects created
       Ale_ShowAlert (Ale_INFO,Txt_No_projects);
+
+   /***** Free list of projects *****/
+   Prj_FreeListProjects ();
   }
 
 /*****************************************************************************/
@@ -812,8 +820,15 @@ static void Prj_PutIconsListProjects (void)
    if (Prj_CheckIfICanCreateProjects ())
       Prj_PutIconToCreateNewPrj ();
 
-   /***** Put icon to show all data in a table *****/
-   Prj_PutIconToShowAllData ();
+   if (Gbl.Prjs.Num)
+     {
+      /***** Put icon to show all data in a table *****/
+      Prj_PutIconToShowAllData ();
+
+      /***** Put icons to lock/unlock edition of all projects *****/
+      if (Prj_CheckIfICanLockProjects ())
+	 Prj_PutIconsToLockUnlockAllProjects ();
+     }
 
    /***** Put icon to show a figure *****/
    Gbl.Figures.FigureType = Fig_PROJECTS;
@@ -860,6 +875,26 @@ static void Prj_PutIconToShowAllData (void)
    Lay_PutContextualLinkOnlyIcon (ActSeeTblAllPrj,NULL,Prj_PutCurrentParams,
 			          "table.svg",
 				  Txt_Show_all_data_in_a_table);
+  }
+
+/*****************************************************************************/
+/****** Put icons to request locking/unlocking edition of all projects *******/
+/*****************************************************************************/
+
+static void Prj_PutIconsToLockUnlockAllProjects (void)
+  {
+   extern const char *Txt_Lock_editing;
+   extern const char *Txt_Unlock_editing;
+
+   /***** Put icon to lock all projects *****/
+   Lay_PutContextualLinkOnlyIcon (ActReqLckAllPrj,NULL,Prj_PutCurrentParams,
+			          "lock.svg",
+				  Txt_Lock_editing);
+
+   /***** Put icon to unlock all projects *****/
+   Lay_PutContextualLinkOnlyIcon (ActReqUnlAllPrj,NULL,Prj_PutCurrentParams,
+			          "unlock.svg",
+				  Txt_Unlock_editing);
   }
 
 /*****************************************************************************/
@@ -2235,7 +2270,7 @@ static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
    Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutCurrentParams);
 
    /***** Locked/unlocked project edition *****/
-   if (Prj_CheckIfICanLockProject ())
+   if (Prj_CheckIfICanLockProjects ())
      {
       /* Put form to lock/unlock project edition */
       fprintf (Gbl.F.Out,"<div id=\"prj_lck_%ld\">",Prj->PrjCod);
@@ -2288,10 +2323,10 @@ static bool Prj_CheckIfICanEditProject (const struct Project *Prj)
   }
 
 /*****************************************************************************/
-/************************ Can I block a given project? ***********************/
+/********************* Can I lock/unlock project edition? ********************/
 /*****************************************************************************/
 
-static bool Prj_CheckIfICanLockProject (void)
+static bool Prj_CheckIfICanLockProjects (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -2972,10 +3007,7 @@ void Prj_LockProjectEdition (void)
    if (Prj_CheckIfICanEditProject (&Prj))
      {
       /***** Lock project edition *****/
-      DB_QueryUPDATE ("can not lock project edition",
-		      "UPDATE projects SET Locked='Y'"
-		      " WHERE PrjCod=%ld AND CrsCod=%ld",
-	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+      Prj_LockProjectEditionInDB (Prj.PrjCod);
       Prj.Locked = Prj_LOCKED;
 
       /***** Show updated form and icon *****/
@@ -2989,6 +3021,14 @@ void Prj_LockProjectEdition (void)
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+  }
+
+static void Prj_LockProjectEditionInDB (long PrjCod)
+  {
+   DB_QueryUPDATE ("can not lock project edition",
+		   "UPDATE projects SET Locked='Y'"
+		   " WHERE PrjCod=%ld AND CrsCod=%ld",
+		   PrjCod,Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -3013,10 +3053,7 @@ void Prj_UnlockProjectEdition (void)
    if (Prj_CheckIfICanEditProject (&Prj))
      {
       /***** Unlock project edition *****/
-      DB_QueryUPDATE ("can not unlock project edition",
-		      "UPDATE projects SET Locked='N'"
-		      " WHERE PrjCod=%ld AND CrsCod=%ld",
-	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+      Prj_UnlockProjectEditionInDB (Prj.PrjCod);
       Prj.Locked = Prj_UNLOCKED;
 
       /***** Show updated form and icon *****/
@@ -3030,6 +3067,156 @@ void Prj_UnlockProjectEdition (void)
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
+  }
+
+static void Prj_UnlockProjectEditionInDB (long PrjCod)
+  {
+   DB_QueryUPDATE ("can not lock project edition",
+		   "UPDATE projects SET Locked='N'"
+		   " WHERE PrjCod=%ld AND CrsCod=%ld",
+		   PrjCod,Gbl.Hierarchy.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
+/************ Request locking/unlocking edition of all projects **************/
+/*****************************************************************************/
+
+void Prj_ReqLockAllProjectsEdition (void)
+  {
+   extern const char *Txt_Lock_editing;
+   extern const char *Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects;
+   extern const char *Txt_No_projects;
+
+   /***** Get parameters *****/
+   Prj_GetParams ();
+
+   /***** Show question and button to lock all selected projects *****/
+   if (Prj_CheckIfICanLockProjects ())
+     {
+      /* Get list of projects */
+      Prj_GetListProjects ();
+
+      /* Show question and button */
+      if (Gbl.Prjs.Num)
+	 Ale_ShowAlertAndButton (ActLckAllPrj,NULL,NULL,Prj_PutCurrentParams,
+				 Btn_REMOVE_BUTTON,Txt_Lock_editing,
+				 Ale_QUESTION,Txt_Do_you_want_to_lock_the_editing_of_the_X_selected_projects,
+				 Gbl.Prjs.Num);
+      else	// No projects found
+	 Ale_ShowAlert (Ale_INFO,Txt_No_projects);
+
+      /* Free list of projects */
+      Prj_FreeListProjects ();
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Show projects again *****/
+   Prj_ShowProjectsInCurrentPage ();
+  }
+
+void Prj_ReqUnlockAllProjectsEdition (void)
+  {
+   extern const char *Txt_Unlock_editing;
+   extern const char *Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects;
+   extern const char *Txt_No_projects;
+
+   /***** Get parameters *****/
+   Prj_GetParams ();
+
+   /***** Show question and button to unlock all selected projects *****/
+   if (Prj_CheckIfICanLockProjects ())
+     {
+      /* Get list of projects */
+      Prj_GetListProjects ();
+
+      /* Show question and button */
+      if (Gbl.Prjs.Num)
+	 Ale_ShowAlertAndButton (ActUnlAllPrj,NULL,NULL,Prj_PutCurrentParams,
+				 Btn_CREATE_BUTTON,Txt_Unlock_editing,
+				 Ale_QUESTION,Txt_Do_you_want_to_unlock_the_editing_of_the_X_selected_projects,
+				 Gbl.Prjs.Num);
+      else	// No projects found
+	 Ale_ShowAlert (Ale_INFO,Txt_No_projects);
+
+      /* Free list of projects */
+      Prj_FreeListProjects ();
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Show projects again *****/
+   Prj_ShowProjectsInCurrentPage ();
+  }
+
+/*****************************************************************************/
+/******************* Lock/unlock edition of all projects *********************/
+/*****************************************************************************/
+
+void Prj_LockAllProjectsEdition (void)
+  {
+   extern const char *Txt_No_projects;
+   unsigned NumPrj;
+
+   /***** Get parameters *****/
+   Prj_GetParams ();
+
+   /***** Lock all selected projects *****/
+   if (Prj_CheckIfICanLockProjects ())
+     {
+      /* Get list of projects */
+      Prj_GetListProjects ();
+
+      /* Lock projects */
+      if (Gbl.Prjs.Num)
+	 for (NumPrj = 0;
+	      NumPrj < Gbl.Prjs.Num;
+	      NumPrj++)
+            Prj_LockProjectEditionInDB (Gbl.Prjs.LstPrjCods[NumPrj]);
+      else	// No projects found
+	 Ale_ShowAlert (Ale_INFO,Txt_No_projects);
+
+      /* Free list of projects */
+      Prj_FreeListProjects ();
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Show projects again *****/
+   Prj_ShowProjectsInCurrentPage ();
+  }
+
+void Prj_UnlockAllProjectsEdition (void)
+  {
+   extern const char *Txt_No_projects;
+   unsigned NumPrj;
+
+   /***** Get parameters *****/
+   Prj_GetParams ();
+
+   /***** Unlock all selected projects *****/
+   if (Prj_CheckIfICanLockProjects ())
+     {
+      /* Get list of projects */
+      Prj_GetListProjects ();
+
+      /* Unlock projects */
+      if (Gbl.Prjs.Num)
+	 for (NumPrj = 0;
+	      NumPrj < Gbl.Prjs.Num;
+	      NumPrj++)
+            Prj_UnlockProjectEditionInDB (Gbl.Prjs.LstPrjCods[NumPrj]);
+      else	// No projects found
+	 Ale_ShowAlert (Ale_INFO,Txt_No_projects);
+
+      /* Free list of projects */
+      Prj_FreeListProjects ();
+     }
+   else
+      Lay_NoPermissionExit ();
+
+   /***** Show projects again *****/
+   Prj_ShowProjectsInCurrentPage ();
   }
 
 /*****************************************************************************/
