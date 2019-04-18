@@ -17584,43 +17584,43 @@ const char *Txt_Locations =
 const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED] =
   {
 #if   L==1	// ca
-	"Edici&oacute; bloquejada. Premi per desbloquejar-la."
+	"Edici&oacute; bloquejada"
 #elif L==2	// de
-	"Gesperrte Ausgabe. Dr&uuml;cke zum Entsperren."
+	"Gesperrte Ausgabe"
 #elif L==3	// en
-	"Locked edition. Press to unlock it."
+	"Locked edition"
 #elif L==4	// es
-	"Edici&oacute;n bloqueada. Pulse para desbloquearla."
+	"Edici&oacute;n bloqueada"
 #elif L==5	// fr
-	"Edition verrouill&eacute;e. Appuyez pour la d&eacute;verrouiller."
+	"Edition verrouill&eacute;e"
 #elif L==6	// gn
-	"Edici&oacute;n bloqueada. Pulse para desbloquearla."	// Okoteve traducción
+	"Edici&oacute;n bloqueada"	// Okoteve traducción
 #elif L==7	// it
-	"Edizione bloccata. Premere per sbloccarela."
+	"Edizione bloccata"
 #elif L==8	// pl
-	"Zamkni&eogon;ta edycja. Naci&sacute;nij, aby go odblokowa&cacute;."
+	"Zamkni&eogon;ta edycja"
 #elif L==9	// pt
-	"Edi&ccedil;&atilde;o bloqueada. Pressione para desbloquear."
+	"Edi&ccedil;&atilde;o bloqueada"
 #endif
 	,
 #if   L==1	// ca
-	"Edici&oacute; permesa. Premi per bloquejar-la."
+	"Edici&oacute; permesa"
 #elif L==2	// de
-	"Erlaubte Ausgabe. Dr&uuml;cken Sie, um es zu sperren."
+	"Erlaubte Ausgabe"
 #elif L==3	// en
-	"Allowed edition. Press to lock it."
+	"Allowed edition"
 #elif L==4	// es
-	"Edici&oacute;n permitida. Pulse para bloquearla."
+	"Edici&oacute;n permitida"
 #elif L==5	// fr
-	"&Eacute;dition autoris&eacute;e. Appuyez sur pour la verrouiller."
+	"&Eacute;dition autoris&eacute;e"
 #elif L==6	// gn
-	"Edici&oacute;n permitida. Pulse para bloquearla."	// Okoteve traducción
+	"Edici&oacute;n permitida"	// Okoteve traducción
 #elif L==7	// it
-	"Edizione consentita. Premere per bloccarla."
+	"Edizione consentita"
 #elif L==8	// pl
-	"Dozwolone wydanie. Naci&sacute;nij, aby go zablokowa&cacute;."
+	"Dozwolone wydanie"
 #elif L==9	// pt
-	"Edi&ccedil;&atilde;o permitida. Pressione para travar."
+	"Edi&ccedil;&atilde;o permitida"
 #endif
    };
 

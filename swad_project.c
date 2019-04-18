@@ -88,19 +88,25 @@ static const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
    "unmodified",	// Prj_PROPOSAL_UNMODIFIED
   };
 
-/***** Image for preassigned and non-preassigned projects *****/
+/***** Preassigned/non-preassigned project *****/
 static const char *PreassignedNonpreassigImage[Prj_NUM_PREASSIGNED_NONPREASSIG] =
   {
    "user.svg",		// Prj_PREASSIGNED
    "user-slash.svg",	// Prj_NONPREASSIG
   };
-/*
-static const char *PreassignedNonpreassigImage[Prj_NUM_PREASSIGNED_NONPREASSIG] =
+
+/***** Locked/unlocked project edition *****/
+static const char *Prj_LockIcons[Prj_NUM_LOCKED_UNLOCKED] =
   {
-   "lock.svg",		// Prj_PREASSIGNED
-   "unlock.svg",	// Prj_NONPREASSIG
+   "lock.svg",	// Prj_LOCKED
+   "unlock.svg",	// Prj_UNLOCKED
   };
-*/
+static const Act_Action_t Prj_LockActions[Prj_NUM_LOCKED_UNLOCKED] =
+  {
+   ActUnlPrj,	// Prj_LOCKED
+   ActLckPrj,	// Prj_UNLOCKED
+  };
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -181,6 +187,7 @@ static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
 static bool Prj_CheckIfICanEditProject (long PrjCod);
 static bool Prj_CheckIfICanLockProject (void);
 static void Prj_FormLockUnlock (const struct Project *Prj);
+static void Prj_PutIconOffLockedUnlocked (const struct Project *Prj);
 
 static void Prj_ResetProject (struct Project *Prj);
 
@@ -2227,13 +2234,17 @@ static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
    /***** Put form to print project *****/
    Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutCurrentParams);
 
-   /***** Put form to lock project *****/
+   /***** Locked/unlocked project edition *****/
    if (Prj_CheckIfICanLockProject ())
      {
+      /* Put form to lock/unlock project edition */
       fprintf (Gbl.F.Out,"<div id=\"prj_lck_%ld\">",Prj->PrjCod);
       Prj_FormLockUnlock (Prj);
       fprintf (Gbl.F.Out,"</div>");
      }
+   else
+      /* Put icon toinform about locked/unlocked project edition */
+      Prj_PutIconOffLockedUnlocked (Prj);
   }
 
 /*****************************************************************************/
@@ -2290,23 +2301,13 @@ static bool Prj_CheckIfICanLockProject (void)
   }
 
 /*****************************************************************************/
-/*********************** Form to lock/unlock a project ***********************/
+/******************** Form to lock/unlock project edition ********************/
 /*****************************************************************************/
 
 static void Prj_FormLockUnlock (const struct Project *Prj)
   {
    extern const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED];
    char *OnSubmit;
-   static const Act_Action_t Prj_LockActions[Prj_NUM_LOCKED_UNLOCKED] =
-     {
-      ActUnlPrj,	// Prj_LOCKED
-      ActLckPrj,	// Prj_UNLOCKED
-     };
-   static const char *Prj_LockIcons[Prj_NUM_LOCKED_UNLOCKED] =
-     {
-      "lock.svg",	// Prj_LOCKED
-      "unlock.svg",	// Prj_UNLOCKED
-     };
    /*
    +---------------------+
    | div (parent of form)|
@@ -2319,7 +2320,7 @@ static void Prj_FormLockUnlock (const struct Project *Prj)
    +---------------------+
    */
 
-   /***** Form and icon to mark note as favourite *****/
+   /***** Form and icon to lock/unlock project edition *****/
    /* Form with icon */
    if (asprintf (&OnSubmit,"updateDivLockUnlockProject(this,"
 			   "'act=%ld&ses=%s&PrjCod=%ld');"
@@ -2334,6 +2335,18 @@ static void Prj_FormLockUnlock (const struct Project *Prj)
 
    /* Free allocated memory for subquery */
    free ((void *) OnSubmit);
+  }
+
+/*****************************************************************************/
+/********* Put icon to inform about locked/unlocked project edition **********/
+/*****************************************************************************/
+
+static void Prj_PutIconOffLockedUnlocked (const struct Project *Prj)
+  {
+   extern const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED];
+
+   /***** Icon to inform about locked/unlocked project edition *****/
+   Ico_PutIconOff (Prj_LockIcons[Prj->Locked],Txt_LOCKED_UNLOCKED[Prj->Locked]);
   }
 
 /*****************************************************************************/
@@ -2940,7 +2953,6 @@ void Prj_ShowProject (void)
 
 void Prj_LockProjectEdition (void)
   {
-   // extern const char *Txt_The_edition_of_project_X_is_now_locked;
    struct Project Prj;
 
    /***** Allocate memory for the project *****/
@@ -2956,16 +2968,14 @@ void Prj_LockProjectEdition (void)
 
    if (Prj_CheckIfICanEditProject (Prj.PrjCod))
      {
-      /***** Hide project *****/
-      DB_QueryUPDATE ("can not lock project",
+      /***** Lock project edition *****/
+      DB_QueryUPDATE ("can not lock project edition",
 		      "UPDATE projects SET Locked='Y'"
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
 	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
       Prj.Locked = Prj_LOCKED;
 
-      /***** Write message to show the change made *****/
-      // Ale_ShowAlert (Ale_SUCCESS,Txt_The_edition_of_project_X_is_now_locked,
-      //	             Prj.Title);
+      /***** Show updated form and icon *****/
       Prj_FormLockUnlock (&Prj);
      }
    else
@@ -2976,9 +2986,6 @@ void Prj_LockProjectEdition (void)
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-
-   /***** Show projects again *****/
-   // Prj_ShowProjectsInCurrentPage ();
   }
 
 /*****************************************************************************/
@@ -2987,7 +2994,6 @@ void Prj_LockProjectEdition (void)
 
 void Prj_UnlockProjectEdition (void)
   {
-   // extern const char *Txt_The_edition_of_project_X_is_now_unlocked;
    struct Project Prj;
 
    /***** Allocate memory for the project *****/
@@ -3003,16 +3009,14 @@ void Prj_UnlockProjectEdition (void)
 
    if (Prj_CheckIfICanEditProject (Prj.PrjCod))
      {
-      /***** Show project *****/
-      DB_QueryUPDATE ("can not unlock project",
+      /***** Unlock project edition *****/
+      DB_QueryUPDATE ("can not unlock project edition",
 		      "UPDATE projects SET Locked='N'"
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
 	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
       Prj.Locked = Prj_UNLOCKED;
 
-      /***** Write message to show the change made *****/
-      // Ale_ShowAlert (Ale_SUCCESS,Txt_The_edition_of_project_X_is_now_unlocked,
-      //	             Prj.Title);
+      /***** Show updated form and icon *****/
       Prj_FormLockUnlock (&Prj);
      }
    else
@@ -3023,9 +3027,6 @@ void Prj_UnlockProjectEdition (void)
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-
-   /***** Show projects again *****/
-   // Prj_ShowProjectsInCurrentPage ();
   }
 
 /*****************************************************************************/
