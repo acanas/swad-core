@@ -184,7 +184,7 @@ static void Prj_GetParamPrjOrder (void);
 static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
                                          bool ICanViewProjectFiles);
 
-static bool Prj_CheckIfICanEditProject (long PrjCod);
+static bool Prj_CheckIfICanEditProject (const struct Project *Prj);
 static bool Prj_CheckIfICanLockProject (void);
 static void Prj_FormLockUnlock (const struct Project *Prj);
 static void Prj_PutIconOffLockedUnlocked (const struct Project *Prj);
@@ -2061,7 +2061,7 @@ static void Prj_ReqRemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    /***** Get user to be removed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+      if (Prj_CheckIfICanEditProject (&Prj))
 	{
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
 
@@ -2141,7 +2141,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject)
    /***** Get user to be removed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+      if (Prj_CheckIfICanEditProject (&Prj))
 	{
 	 /***** Remove user from the table of project-users *****/
 	 DB_QueryDELETE ("can not remove a user from a project",
@@ -2207,7 +2207,7 @@ static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
   {
    Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used as parameter in contextual links
 
-   if (Prj_CheckIfICanEditProject (Prj->PrjCod))
+   if (Prj_CheckIfICanEditProject (Prj))
      {
       /***** Put form to remove project *****/
       Ico_PutContextualIconToRemove (ActReqRemPrj,Prj_PutCurrentParams);
@@ -2270,12 +2270,15 @@ bool Prj_CheckIfICanViewProjectFiles (unsigned MyRolesInProject)
 /************************ Can I edit a given project? ************************/
 /*****************************************************************************/
 
-static bool Prj_CheckIfICanEditProject (long PrjCod)
+static bool Prj_CheckIfICanEditProject (const struct Project *Prj)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return ((Prj_GetMyRolesInProject (PrjCod) & (1 << Prj_ROLE_TUT)) != 0);	// Am I tutor?
+	 if (Prj->Locked == Prj_LOCKED)			// Locked edition
+	    return false;
+	 return (Prj_GetMyRolesInProject (Prj->PrjCod) &
+	         (1 << Prj_ROLE_TUT)) != 0;		// Am I a tutor?
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return true;
@@ -2781,7 +2784,7 @@ void Prj_ReqRemProject (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
 
-   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+   if (Prj_CheckIfICanEditProject (&Prj))
      {
       /***** Show question and button to remove the project *****/
       Gbl.Prjs.PrjCod = Prj.PrjCod;
@@ -2821,7 +2824,7 @@ void Prj_RemoveProject (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);	// Inside this function, the course is checked to be the current one
 
-   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+   if (Prj_CheckIfICanEditProject (&Prj))
      {
       /***** Remove users in project *****/
       DB_QueryDELETE ("can not remove project",
@@ -2883,7 +2886,7 @@ void Prj_HideProject (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
 
-   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+   if (Prj_CheckIfICanEditProject (&Prj))
      {
       /***** Hide project *****/
       DB_QueryUPDATE ("can not hide project",
@@ -2925,7 +2928,7 @@ void Prj_ShowProject (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
 
-   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+   if (Prj_CheckIfICanEditProject (&Prj))
      {
       /***** Show project *****/
       DB_QueryUPDATE ("can not show project",
@@ -2966,7 +2969,7 @@ void Prj_LockProjectEdition (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
 
-   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+   if (Prj_CheckIfICanEditProject (&Prj))
      {
       /***** Lock project edition *****/
       DB_QueryUPDATE ("can not lock project edition",
@@ -3007,7 +3010,7 @@ void Prj_UnlockProjectEdition (void)
    /***** Get data of the project from database *****/
    Prj_GetDataOfProjectByCod (&Prj);
 
-   if (Prj_CheckIfICanEditProject (Prj.PrjCod))
+   if (Prj_CheckIfICanEditProject (&Prj))
      {
       /***** Unlock project edition *****/
       DB_QueryUPDATE ("can not unlock project edition",
@@ -3382,7 +3385,7 @@ void Prj_RecFormProject (void)
       /* Get data of the project from database */
       Prj_GetDataOfProjectByCod (&Prj);
 
-      ICanEditProject = Prj_CheckIfICanEditProject (Prj.PrjCod);
+      ICanEditProject = Prj_CheckIfICanEditProject (&Prj);
      }
 
    if (ICanEditProject)
