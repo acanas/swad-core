@@ -17581,46 +17581,46 @@ const char *Txt_Locations =
 	"Localiza&ccedil;&otilde;es";
 #endif
 
-const char *Txt_Lock_Unlock[Prj_NUM_LOCKED_UNLOCKED] =
+const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED] =
   {
 #if   L==1	// ca
-	"Desbloquejar"
+	"Edici&oacute; bloquejada. Premi per desbloquejar-la."
 #elif L==2	// de
-	"Aufschlie&szlig;en"
+	"Gesperrte Ausgabe. Dr&uuml;cke zum Entsperren."
 #elif L==3	// en
-	"Unlock"
+	"Locked edition. Press to unlock it."
 #elif L==4	// es
-	"Desbloquear"
+	"Edici&oacute;n bloqueada. Pulse para desbloquearla."
 #elif L==5	// fr
-	"D&eacute;verouiller"
+	"Edition verrouill&eacute;e. Appuyez pour la d&eacute;verrouiller."
 #elif L==6	// gn
-	"Desbloquear"	// Okoteve traducción
+	"Edici&oacute;n bloqueada. Pulse para desbloquearla."	// Okoteve traducción
 #elif L==7	// it
-	"Sbloccare"
+	"Edizione bloccata. Premere per sbloccarela."
 #elif L==8	// pl
-	"Odblokowa&cacute;"
+	"Zamkni&eogon;ta edycja. Naci&sacute;nij, aby go odblokowa&cacute;."
 #elif L==9	// pt
-	"Desbloquear"
+	"Edi&ccedil;&atilde;o bloqueada. Pressione para desbloquear."
 #endif
 	,
 #if   L==1	// ca
-	"Tancar"
+	"Edici&oacute; permesa. Premi per bloquejar-la."
 #elif L==2	// de
-	"Abschlie&szlig;en"
+	"Erlaubte Ausgabe. Dr&uuml;cken Sie, um es zu sperren."
 #elif L==3	// en
-	"Lock"
+	"Allowed edition. Press to lock it."
 #elif L==4	// es
-	"Bloquear"
+	"Edici&oacute;n permitida. Pulse para bloquearla."
 #elif L==5	// fr
-	"Verrouiller"
+	"&Eacute;dition autoris&eacute;e. Appuyez sur pour la verrouiller."
 #elif L==6	// gn
-	"Bloquear"	// Okoteve traducción
+	"Edici&oacute;n permitida. Pulse para bloquearla."	// Okoteve traducción
 #elif L==7	// it
-	"Bloccare"
+	"Edizione consentita. Premere per bloccarla."
 #elif L==8	// pl
-	"Zablokowa&cacute;"
+	"Dozwolone wydanie. Naci&sacute;nij, aby go zablokowa&cacute;."
 #elif L==9	// pt
-	"Bloquear"
+	"Edi&ccedil;&atilde;o permitida. Pressione para travar."
 #endif
    };
 

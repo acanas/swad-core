@@ -2295,7 +2295,7 @@ static bool Prj_CheckIfICanLockProject (void)
 
 static void Prj_FormLockUnlock (const struct Project *Prj)
   {
-   extern const char *Txt_Lock_Unlock[Prj_NUM_LOCKED_UNLOCKED];
+   extern const char *Txt_LOCKED_UNLOCKED[Prj_NUM_LOCKED_UNLOCKED];
    char *OnSubmit;
    static const Act_Action_t Prj_LockActions[Prj_NUM_LOCKED_UNLOCKED] =
      {
@@ -2329,7 +2329,7 @@ static void Prj_FormLockUnlock (const struct Project *Prj)
 		 Prj->PrjCod) < 0)
       Lay_NotEnoughMemoryExit ();
    Frm_StartFormOnSubmit (ActUnk,OnSubmit);
-   Ico_PutIconLink (Prj_LockIcons[Prj->Locked],Txt_Lock_Unlock[Prj->Locked]);
+   Ico_PutIconLink (Prj_LockIcons[Prj->Locked],Txt_LOCKED_UNLOCKED[Prj->Locked]);
    Frm_EndForm ();
 
    /* Free allocated memory for subquery */
