@@ -3018,9 +3018,6 @@ void Prj_LockProjectEdition (void)
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 static void Prj_LockProjectEditionInDB (long PrjCod)
@@ -3064,9 +3061,6 @@ void Prj_UnlockProjectEdition (void)
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 static void Prj_UnlockProjectEditionInDB (long PrjCod)

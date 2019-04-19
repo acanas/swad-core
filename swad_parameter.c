@@ -718,38 +718,24 @@ void Par_GetMainParameters (void)
 
    /***** Get action to perform *****/
    ActCod = Par_GetParToLong ("act");
-   // if (ActCod < 0)
-   //   ActCod = Par_GetParToLong ("ActCod");	// Obsolete, old parameter now replaced by "act"
    if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
       Gbl.Action.Act = Gbl.Action.Original = Act_FromActCodToAction[ActCod];
 
    /***** Some preliminary adjusts depending on action *****/
-   if (Gbl.Action.Act == ActRefCon          ||
-       Gbl.Action.Act == ActRefLstClk       ||
-       Gbl.Action.Act == ActRefNewSocPubGbl)
-      {
-       Gbl.Action.UsesAJAX          = true;
-       Gbl.Action.IsAJAXAutoRefresh = true;
-      }
-   else if (Gbl.Action.Act == ActRefOldSocPubGbl || Gbl.Action.Act == ActRefOldSocPubUsr ||
-	    Gbl.Action.Act == ActAllShaSocNotGbl || Gbl.Action.Act == ActAllShaSocNotUsr ||
-	    Gbl.Action.Act == ActAllFavSocNotGbl || Gbl.Action.Act == ActAllFavSocNotUsr ||
-	    Gbl.Action.Act == ActAllFavSocComGbl || Gbl.Action.Act == ActAllFavSocComUsr ||
-	    Gbl.Action.Act == ActShaSocNotGbl    || Gbl.Action.Act == ActShaSocNotUsr    ||
-	    Gbl.Action.Act == ActUnsSocNotGbl    || Gbl.Action.Act == ActUnsSocNotUsr    ||
-            Gbl.Action.Act == ActFavSocNotGbl    || Gbl.Action.Act == ActFavSocNotUsr    ||
-            Gbl.Action.Act == ActUnfSocNotGbl    || Gbl.Action.Act == ActUnfSocNotUsr    ||
-            Gbl.Action.Act == ActFavSocComGbl    || Gbl.Action.Act == ActFavSocComUsr    ||
-            Gbl.Action.Act == ActUnfSocComGbl    || Gbl.Action.Act == ActUnfSocComUsr    ||
-	    Gbl.Action.Act == ActLckPrj          || Gbl.Action.Act == ActUnlPrj)
+   switch (Act_GetBrowserTab (Gbl.Action.Act))
      {
-      Gbl.Action.UsesAJAX          = true;
-      Gbl.Action.IsAJAXAutoRefresh = false;
-     }
-   else
-     {
-      Gbl.Action.UsesAJAX          = false;
-      Gbl.Action.IsAJAXAutoRefresh = false;
+      case Act_AJAX_NORMAL:
+	 Gbl.Action.UsesAJAX          = true;
+	 Gbl.Action.IsAJAXAutoRefresh = false;
+	 break;
+      case Act_AJAX_RFRESH:
+         Gbl.Action.UsesAJAX          = true;
+         Gbl.Action.IsAJAXAutoRefresh = true;
+         break;
+      default:
+	 Gbl.Action.UsesAJAX          = false;
+	 Gbl.Action.IsAJAXAutoRefresh = false;
+         break;
      }
 
    /***** Get session identifier, if exists *****/

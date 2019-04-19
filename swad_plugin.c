@@ -1101,19 +1101,6 @@ static void Plg_CreatePlugin (struct Plugin *Plg)
   }
 
 /*****************************************************************************/
-/******** Function called when a web service if required by a plugin *********/
-/*****************************************************************************/
-
-void Plg_WebService (void)
-  {
-   /***** Call soap service *****/
-   Svc_WebService ();
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
-  }
-
-/*****************************************************************************/
 /************************ Plugin constructor/destructor **********************/
 /*****************************************************************************/
 

@@ -54,9 +54,12 @@ typedef enum
    Act_BRW_1ST_TAB,	// The main (original, first) tab in the browser
    Act_BRW_NEW_TAB,	// A new (second) blank tab in the browser
    Act_BRW_2ND_TAB,	// The second tab in the browser
+   Act_AJAX_NORMAL,	// Update a zone of the page using AJAX
+   Act_AJAX_RFRESH,	// Update a zone of the page using AJAX, with auto-refresh
    Act_UPLOAD_FILE,	// Upload a file. Do not write HTML content. Write Status code instead for Dropzone.js
    Act_DOWNLD_FILE,	// Download a file in a new tab. Do not write HTML content.
    Act_204_NO_CONT,	// Do not write HTML content. HTTP will return Status 204 No Content
+   Act_WEB_SERVICE,	// Web service. Send output to client using SOAP.
   } Act_BrowserTab_t;
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action

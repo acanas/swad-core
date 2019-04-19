@@ -1172,11 +1172,14 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    unsigned NumFollowing;
    unsigned NumFollowers;
    bool PhotoExists;
-   bool BrowserTabIs1stTab = Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB;
+   Act_BrowserTab_t BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
+   bool BrowserTabIs1stTab = (BrowserTab == Act_BRW_1ST_TAB ||
+	                      BrowserTab == Act_AJAX_NORMAL ||
+			      BrowserTab == Act_AJAX_RFRESH);
    bool PutLinkToPublicProfile = !Gbl.Form.Inside &&	// Only if not inside another form
-                                 BrowserTabIs1stTab;	// Only in main browser tab
+                                 BrowserTabIs1stTab;	// Only in main browser tab (or AJAX)
    bool PutZoomCode = (Zoom == Pho_ZOOM) &&		// Make zoom
-                      BrowserTabIs1stTab;		// Only in main browser tab
+                      BrowserTabIs1stTab;		// Only in main browser tab (or AJAX)
    char IdCaption[Frm_MAX_BYTES_ID + 1];
    char MainDegreeShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
    Rol_Role_t MaxRole;	// Maximum user's role in his/her main degree

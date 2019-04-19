@@ -470,9 +470,6 @@ void TL_RefreshNewTimelineGbl (void)
       /***** Drop temporary tables *****/
       TL_DropTemporaryTablesUsedToQueryTimeline ();
      }
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 /*****************************************************************************/
@@ -514,9 +511,6 @@ static void TL_GetAndShowOldTimeline (TL_TimelineUsrOrGbl_t TimelineUsrOrGbl)
 
    /***** Drop temporary tables *****/
    TL_DropTemporaryTablesUsedToQueryTimeline ();
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 /*****************************************************************************/
@@ -3238,9 +3232,6 @@ void TL_ShowAllSharersNoteGbl (void)
 
    /***** Write HTML inside DIV with form to share/unshare *****/
    TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_ALL_USRS);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 void TL_ShaNoteUsr (void)
@@ -3261,9 +3252,6 @@ void TL_ShaNoteGbl (void)
 
    /***** Write HTML inside DIV with form to unshare *****/
    TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_A_FEW_USRS);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 static void TL_PutFormToShaUnsNote (const struct TL_Note *SocNot,
@@ -3354,9 +3342,6 @@ void TL_ShowAllFaversNoteGbl (void)
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
    TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_ALL_USRS);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 void TL_FavNoteUsr (void)
@@ -3377,9 +3362,6 @@ void TL_FavNoteGbl (void)
 
    /***** Write HTML inside DIV with form to unfav *****/
    TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_A_FEW_USRS);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 void TL_UnfNoteUsr (void)
@@ -3400,9 +3382,6 @@ void TL_UnfNoteGbl (void)
 
    /***** Write HTML inside DIV with form to fav *****/
    TL_PutFormToFavUnfNote (&SocNot,TL_SHOW_A_FEW_USRS);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 static void TL_PutFormToFavUnfNote (const struct TL_Note *SocNot,
@@ -3531,9 +3510,6 @@ void TL_ShowAllFaversComGbl (void)
 
    /***** Write HTML inside DIV with form to fav/unfav *****/
    TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_ALL_USRS);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 void TL_FavCommentUsr (void)
@@ -3554,9 +3530,6 @@ void TL_FavCommentGbl (void)
 
    /***** Write HTML inside DIV with form to unfav *****/
    TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_A_FEW_USRS);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 void TL_UnfCommentUsr (void)
@@ -3577,9 +3550,6 @@ void TL_UnfCommentGbl (void)
 
    /***** Write HTML inside DIV with form to fav *****/
    TL_PutFormToFavUnfComment (&SocCom,TL_SHOW_A_FEW_USRS);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 static void TL_PutFormToFavUnfComment (const struct TL_Comment *SocCom,
@@ -3747,9 +3717,6 @@ void TL_UnsNoteGbl (void)
 
    /***** Write HTML inside DIV with form to share *****/
    TL_PutFormToShaUnsNote (&SocNot,TL_SHOW_A_FEW_USRS);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 static void TL_UnsNote (struct TL_Note *SocNot)

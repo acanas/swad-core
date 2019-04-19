@@ -131,8 +131,15 @@ int main (void)
 	 Con_RemoveOldConnected ();
 
 	 /***** Get number of sessions *****/
-	 if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
-	    Ses_GetNumSessions ();
+	 switch (Act_GetBrowserTab (Gbl.Action.Act))
+	   {
+	    case Act_BRW_1ST_TAB:
+	    case Act_AJAX_RFRESH:
+	       Ses_GetNumSessions ();
+               break;
+	    default:
+	       break;
+	   }
 
 	 /***** Check user and get user's data *****/
 	 Usr_ChkUsrAndGetUsrData ();
@@ -176,6 +183,20 @@ int main (void)
       FunctionPosteriori = Act_GetFunctionPosteriori (Gbl.Action.Act);
       if (FunctionPosteriori != NULL)
 	  FunctionPosteriori ();
+
+      /* When updating a small zone via AJAX, all output is already done */
+      switch (Act_GetBrowserTab (Gbl.Action.Act))
+        {
+         case Act_AJAX_NORMAL:
+         case Act_AJAX_RFRESH:
+         case Act_WEB_SERVICE:
+	    /* All the output is made, so don't write anymore */
+	    Gbl.Layout.DivsEndWritten =
+            Gbl.Layout.HTMLEndWritten = true;
+	    break;
+         default:
+            break;
+        }
      }
 
    /***** Cleanup and exit *****/

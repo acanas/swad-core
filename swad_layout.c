@@ -1486,9 +1486,6 @@ void Lay_RefreshNotifsAndConnected (void)
 	   NumUsr < Gbl.Usrs.Connected.NumUsrsToList;
 	   NumUsr++)
          fprintf (Gbl.F.Out,"%ld|",Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff);
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 /*****************************************************************************/
@@ -1505,9 +1502,6 @@ void Lay_RefreshLastClicks (void)
       /***** Get and show last clicks *****/
       Sta_GetAndShowLastClicks ();
      }
-
-   /***** All the output is made, so don't write anymore *****/
-   Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
   }
 
 /*****************************************************************************/
