@@ -447,9 +447,7 @@ void Exa_RemoveExamAnnouncement2 (void)
 
 void Exa_HideExamAnnouncement (void)
   {
-   extern const char *Txt_The_announcement_of_exam_is_now_hidden;
    long ExaCod;
-   char *Anchor = NULL;
 
    /***** Get the code of the exam announcement *****/
    if ((ExaCod = Exa_GetParamExaCod ()) <= 0)
@@ -464,12 +462,6 @@ void Exa_HideExamAnnouncement (void)
 
    /***** Set exam to be highlighted *****/
    Gbl.ExamAnns.HighlightExaCod = ExaCod;
-
-   /***** Create alert to show the change made *****/
-   Frm_SetAnchorStr (ExaCod,&Anchor);
-   Ale_CreateAlert (Ale_SUCCESS,Anchor,
-	            Txt_The_announcement_of_exam_is_now_hidden);
-   Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/
@@ -480,9 +472,7 @@ void Exa_HideExamAnnouncement (void)
 
 void Exa_UnhideExamAnnouncement (void)
   {
-   extern const char *Txt_The_announcement_of_exam_is_now_visible;
    long ExaCod;
-   char *Anchor = NULL;
 
    /***** Get the code of the exam announcement *****/
    if ((ExaCod = Exa_GetParamExaCod ()) <= 0)
@@ -497,12 +487,6 @@ void Exa_UnhideExamAnnouncement (void)
 
    /***** Set exam to be highlighted *****/
    Gbl.ExamAnns.HighlightExaCod = ExaCod;
-
-   /***** Create alert to show the change made *****/
-   Frm_SetAnchorStr (ExaCod,&Anchor);
-   Ale_CreateAlert (Ale_SUCCESS,Anchor,
-	            Txt_The_announcement_of_exam_is_now_visible);
-   Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/
