@@ -401,6 +401,7 @@ static void Ban_ListBannersForEdition (void)
   {
    unsigned NumBan;
    struct Banner *Ban;
+   char *Anchor = NULL;
 
    /***** Start table *****/
    Tbl_StartTableWide (2);
@@ -416,6 +417,9 @@ static void Ban_ListBannersForEdition (void)
       Ban = &Gbl.Banners.Lst[NumBan];
       Gbl.Banners.BanCodToEdit = Ban->BanCod;
 
+      /* Set anchor string */
+      Frm_SetAnchorStr (Ban->BanCod,&Anchor);
+
       /* Put icon to remove banner */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
@@ -425,18 +429,19 @@ static void Ban_ListBannersForEdition (void)
       /* Put icon to hide/show banner */
       fprintf (Gbl.F.Out,"<td class=\"BM\">");
       if (Ban->Hidden)
-         Ico_PutContextualIconToUnhide (ActShoBan,NULL,Ban_PutParamBanCodToEdit);
+         Ico_PutContextualIconToUnhide (ActShoBan,Anchor,Ban_PutParamBanCodToEdit);
       else
-         Ico_PutContextualIconToHide (ActHidBan,NULL,Ban_PutParamBanCodToEdit);
+         Ico_PutContextualIconToHide (ActHidBan,Anchor,Ban_PutParamBanCodToEdit);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Banner code */
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%ld&nbsp;"
-	                 "</td>",
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">",
                Ban->Hidden ? "DAT_LIGHT" :
-        	             "DAT",
-               Ban->BanCod);
+        	             "DAT");
+      Lay_StartArticle (Anchor);
+      fprintf (Gbl.F.Out,"%ld",Ban->BanCod);
+      Lay_EndArticle ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Banner short name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -485,6 +490,9 @@ static void Ban_ListBannersForEdition (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");
+
+      /* Free anchor string */
+      Frm_FreeAnchorStr (Anchor);
      }
 
    /***** End table *****/
@@ -576,9 +584,6 @@ void Ban_HideBanner (void)
 
 static void Ban_ShowOrHideBanner (bool Hide)
   {
-   extern const char *Txt_The_banner_X_is_now_hidden;
-   extern const char *Txt_The_banner_X_is_now_visible;
-
    /***** Get banner code *****/
    if ((Ban_EditingBan->BanCod = Ban_GetParamBanCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of banner is missing.");
@@ -594,12 +599,6 @@ static void Ban_ShowOrHideBanner (bool Hide)
 	              Hide ? 'Y' :
 		             'N',
 	              Ban_EditingBan->BanCod);
-
-   /***** Write message to show the change made *****/
-   Ale_CreateAlert (Ale_SUCCESS,NULL,
-	            Hide ? Txt_The_banner_X_is_now_hidden :
-	                   Txt_The_banner_X_is_now_visible,
-	            Ban_EditingBan->ShrtName);
   }
 
 /*****************************************************************************/

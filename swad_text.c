@@ -43034,48 +43034,6 @@ const char *Txt_The_banner_X_has_been_renamed_as_Y =	// Warning: it is very impo
 	"O banner <strong>%s</strong> foi renomeado como <strong>%s</strong>.";
 #endif
 
-const char *Txt_The_banner_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El banner <strong>%s</strong> ara est&agrave; ocult.";
-#elif L==2	// de
-	"Der Werbebanner <strong>%s</strong> ist jetzt ausgeblendet.";	// Need Übersetzung
-#elif L==3	// en
-	"The banner <strong>%s</strong> is now hidden.";
-#elif L==4	// es
-	"El banner <strong>%s</strong> ahora est&aacute; oculto.";
-#elif L==5	// fr
-	"Le banner <strong>%s</strong> est maintenant cach&eacute;.";
-#elif L==6	// gn
-	"El banner <strong>%s</strong> ahora est&aacute; oculto.";	// Okoteve traducción
-#elif L==7	// it
-	"Il banner <strong>%s</strong> &egrave; ora nascosto.";
-#elif L==8	// pl
-	"The banner <strong>%s</strong> jest ukryte.";
-#elif L==9	// pt
-	"O banner <strong>%s</strong> &eacute; agora oculto.";
-#endif
-
-const char *Txt_The_banner_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El banner <strong>%s</strong> ara est&agrave; visible.";
-#elif L==2	// de
-	"Der Werbebanner <strong>%s</strong> ist jetzt sichtbar.";	// Need Übersetzung
-#elif L==3	// en
-	"The banner <strong>%s</strong> is now visible.";
-#elif L==4	// es
-	"El banner <strong>%s</strong> ahora est&aacute; visible.";
-#elif L==5	// fr
-	"Le banner <strong>%s</strong> est maintenant visible.";
-#elif L==6	// gn
-	"El banner <strong>%s</strong> ahora est&aacute; visible.";	// Okoteve traducción
-#elif L==7	// it
-	"Il banner <strong>%s</strong> &egrave; ora visible.";
-#elif L==8	// pl
-	"The banner <strong>%s</strong> jest teraz widoczny.";
-#elif L==9	// pt
-	"O banner <strong>%s</strong> &eacute; agora visible.";
-#endif
-
 const char *Txt_The_capacity_of_classroom_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"L'aforament de l'aula <strong>%s</strong> no ha canviat.";
