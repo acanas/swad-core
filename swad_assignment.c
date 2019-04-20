@@ -79,7 +79,8 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView);
 static void Asg_GetParamAsgOrder (void);
 
-static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden);
+static void Asg_PutFormsToRemEditOneAsg (const struct Assignment *Asg,
+                                         const char *Anchor);
 static void Asg_PutParams (void);
 static void Asg_GetDataOfAssignment (struct Assignment *Asg,
                                      MYSQL_RES **mysql_res,
@@ -340,6 +341,7 @@ void Asg_PrintOneAssignment (void)
 static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
   {
    extern const char *Txt_Today;
+   char *Anchor = NULL;
    static unsigned UniqueId = 0;
    struct Assignment Asg;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -347,6 +349,9 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    /***** Get data of this assignment *****/
    Asg.AsgCod = AsgCod;
    Asg_GetDataOfAssignmentByCod (&Asg);
+
+   /***** Set anchor string *****/
+   Frm_SetAnchorStr (Asg.AsgCod,&Anchor);
 
    /***** Write first row of data of this assignment *****/
    /* Forms to remove/edit this assignment */
@@ -357,7 +362,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    else
      {
       fprintf (Gbl.F.Out," COLOR%u\">",Gbl.RowEvenOdd);
-      Asg_PutFormsToRemEditOneAsg (Asg.AsgCod,Asg.Hidden);
+      Asg_PutFormsToRemEditOneAsg (&Asg,Anchor);
      }
    fprintf (Gbl.F.Out,"</td>");
 
@@ -400,14 +405,15 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* Assignment title */
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",
+	    Asg.Hidden ? "ASG_TITLE_LIGHT" :
+        	         "ASG_TITLE");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<div class=\"%s\">%s</div>",
-            Asg.Hidden ? "ASG_TITLE_LIGHT" :
-        	         "ASG_TITLE",
-            Asg.Title);
+   fprintf (Gbl.F.Out,"\">");
+   Lay_StartArticle (Anchor);
+   fprintf (Gbl.F.Out,"%s",Asg.Title);
+   Lay_EndArticle ();
    fprintf (Gbl.F.Out,"</td>");
 
    /* Assignment folder */
@@ -451,6 +457,9 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
             Asg.Hidden ? "DAT_LIGHT" :
         	         "DAT",
             Txt);
+
+   /***** Free anchor string *****/
+   Frm_FreeAnchorStr (Anchor);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
@@ -533,9 +542,10 @@ void Asg_PutHiddenParamAsgOrder (void)
 /***************** Put a link (form) to edit one assignment ******************/
 /*****************************************************************************/
 
-static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
+static void Asg_PutFormsToRemEditOneAsg (const struct Assignment *Asg,
+                                         const char *Anchor)
   {
-   Gbl.Asgs.AsgCodToEdit = AsgCod;	// Used as parameter in contextual links
+   Gbl.Asgs.AsgCodToEdit = Asg->AsgCod;	// Used as parameter in contextual links
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -545,10 +555,10 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 	 Ico_PutContextualIconToRemove (ActReqRemAsg,Asg_PutParams);
 
 	 /***** Put form to hide/show assignment *****/
-	 if (Hidden)
-	    Ico_PutContextualIconToUnhide (ActShoAsg,NULL,Asg_PutParams);
+	 if (Asg->Hidden)
+	    Ico_PutContextualIconToUnhide (ActShoAsg,Anchor,Asg_PutParams);
 	 else
-	    Ico_PutContextualIconToHide (ActHidAsg,NULL,Asg_PutParams);
+	    Ico_PutContextualIconToHide (ActHidAsg,Anchor,Asg_PutParams);
 
 	 /***** Put form to edit assignment *****/
 	 Ico_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);
@@ -995,7 +1005,6 @@ void Asg_RemoveAssignment (void)
 
 void Asg_HideAssignment (void)
   {
-   extern const char *Txt_Assignment_X_is_now_hidden;
    struct Assignment Asg;
 
    /***** Get assignment code *****/
@@ -1011,10 +1020,6 @@ void Asg_HideAssignment (void)
 		   " WHERE AsgCod=%ld AND CrsCod=%ld",
                    Asg.AsgCod,Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_is_now_hidden,
-                  Asg.Title);
-
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
   }
@@ -1025,7 +1030,6 @@ void Asg_HideAssignment (void)
 
 void Asg_ShowAssignment (void)
   {
-   extern const char *Txt_Assignment_X_is_now_visible;
    struct Assignment Asg;
 
    /***** Get assignment code *****/
@@ -1040,10 +1044,6 @@ void Asg_ShowAssignment (void)
 		   "UPDATE assignments SET Hidden='N'"
 		   " WHERE AsgCod=%ld AND CrsCod=%ld",
                    Asg.AsgCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_is_now_visible,
-                  Asg.Title);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();

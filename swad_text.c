@@ -2072,48 +2072,6 @@ const char *Txt_Assignment =
 	"Atividade";
 #endif
 
-const char *Txt_Assignment_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"La activitat <strong>%s</strong> ara est&agrave; oculta.";
-#elif L==2	// de
-	"Die Aufgabe <strong>%s</strong> ist jetzt ausgeblendet.";
-#elif L==3	// en
-	"Assignment <strong>%s</strong> is now hidden.";
-#elif L==4	// es
-	"La actividad <strong>%s</strong> ahora est&aacute; oculta.";
-#elif L==5	// fr
-	"L'activit&eacute; <strong>%s</strong> est maintenant cach&eacute;e.";
-#elif L==6	// gn
-	"La actividad <strong>%s</strong> ahora est&aacute; oculta.";	// Okoteve traducción
-#elif L==7	// it
-	"L'attivit&agrave; <strong>%s</strong> &egrave; ora nascosta.";
-#elif L==8	// pl
-	"Zadanie <strong>%s</strong> jest ukryte.";
-#elif L==9	// pt
-	"A atividade <strong>%s</strong> &eacute; agora oculta.";
-#endif
-
-const char *Txt_Assignment_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"La activitat <strong>%s</strong> ara est&agrave; visible.";
-#elif L==2	// de
-	"Die Aufgabe <strong>%s</strong> ist jetzt sichtbar.";
-#elif L==3	// en
-	"Assignment <strong>%s</strong> is now visible.";
-#elif L==4	// es
-	"La actividad <strong>%s</strong> ahora est&aacute; visible.";
-#elif L==5	// fr
-	"L'activit&eacute; <strong>%s</strong> est maintenant visible.";
-#elif L==6	// gn
-	"La actividad <strong>%s</strong> ahora est&aacute; visible.";	// Okoteve traducción
-#elif L==7	// it
-	"L'attivit&agrave; <strong>%s</strong> &egrave; ora visibile.";
-#elif L==8	// pl
-	"Zadanie <strong>%s</strong> jest teraz widoczny.";
-#elif L==9	// pt
-	"A atividade <strong>%s</strong> &eacute; agora vis&iacute;vel.";
-#endif
-
 const char *Txt_Assignment_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Activitat <strong>%s</strong> eliminada.";

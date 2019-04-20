@@ -991,9 +991,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		  Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
 					      "DATE_BLUE",
 	          Gbl.RowEvenOdd);
-         Lay_StartArticle (Anchor);
 	 fprintf (Gbl.F.Out,"%u",NumIndex);
-	 Lay_EndArticle ();
 	 fprintf (Gbl.F.Out,"</td>");
 	 break;
       default:
@@ -1051,10 +1049,13 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* Project title */
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",
+	    Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
+        	                        "ASG_TITLE");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
+   Lay_StartArticle (Anchor);
    if (ICanViewProjectFiles)
      {
       Frm_StartForm (ActAdmDocPrj);
@@ -1067,10 +1068,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
       Frm_EndForm ();
      }
    else
-      fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
-               Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
-        	                           "ASG_TITLE",
-	       Prj->Title);
+      fprintf (Gbl.F.Out,"%s",Prj->Title);
+   Lay_EndArticle ();
    fprintf (Gbl.F.Out,"</td>");
 
    /* Department */
