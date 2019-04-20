@@ -108,8 +108,10 @@ static void Agd_PutIconsOtherPublicAgenda (void);
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
 static void Agd_GetParamEventOrder (void);
-
-static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent);
+static void Agd_SetAnchorStr (long AgdCod,char **Anchor);
+static void Agd_FreeAnchorStr (char *Anchor);
+static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent,
+                                           const char *Anchor);
 
 static void Agd_PutCurrentParamsMyAgenda (void);
 static void Agd_GetParams (Agd_AgendaType_t AgendaType);
@@ -715,6 +717,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    extern const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS];
    extern const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS];
    extern const char *Txt_Today;
+   char *Anchor = NULL;
    static unsigned UniqueId = 0;
    struct AgendaEvent AgdEvent;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -733,6 +736,9 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
          break;
      }
    Agd_GetDataOfEventByCod (&AgdEvent);
+
+   /***** Set anchor string *****/
+   Agd_SetAnchorStr (AgdEvent.AgdCod,&Anchor);
 
    /***** Write first row of data of this event *****/
    /* Start date/time */
@@ -767,13 +773,14 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* Event */
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
-                      "<div class=\"%s\">%s</div>"
-                      "</td>",
-            Gbl.RowEvenOdd,
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP COLOR%u\">",
             AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
         	              "ASG_TITLE",
-            AgdEvent.Event);
+            Gbl.RowEvenOdd);
+   Lay_StartArticle (Anchor);
+   fprintf (Gbl.F.Out,"%s",AgdEvent.Event);
+   Lay_EndArticle ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /* Location */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
@@ -795,7 +802,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
      {
       case Agd_MY_AGENDA_TODAY:
       case Agd_MY_AGENDA:
-         Agd_PutFormsToRemEditOneEvent (&AgdEvent);
+         Agd_PutFormsToRemEditOneEvent (&AgdEvent,Anchor);
          break;
       default:
 	 break;
@@ -817,14 +824,43 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
         	              "DAT",
             Txt);
 
+   /***** Free anchor string *****/
+   Agd_FreeAnchorStr (Anchor);
+
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+  }
+
+/*****************************************************************************/
+/****************** Build/free anchor string for an event ********************/
+/*****************************************************************************/
+
+static void Agd_SetAnchorStr (long AgdCod,char **Anchor)
+  {
+   if (AgdCod > 0)
+     {
+      if (asprintf (Anchor,"agd_%ld",
+		    AgdCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   else
+      *Anchor = NULL;
+  }
+
+static void Agd_FreeAnchorStr (char *Anchor)
+  {
+   if (Anchor)
+     {
+      free ((void *) Anchor);
+      Anchor = NULL;
+     }
   }
 
 /*****************************************************************************/
 /******************* Put a link (form) to edit one event *********************/
 /*****************************************************************************/
 
-static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
+static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent,
+                                           const char *Anchor)
   {
    extern const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses;
    extern const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private;
@@ -836,9 +872,9 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
 
    /***** Put form to hide/show event *****/
    if (AgdEvent->Hidden)
-      Ico_PutContextualIconToUnhide (ActShoEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda);
+      Ico_PutContextualIconToUnhide (ActShoEvtMyAgd,Anchor,Agd_PutCurrentParamsMyAgenda);
    else
-      Ico_PutContextualIconToHide (ActHidEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda);
+      Ico_PutContextualIconToHide (ActHidEvtMyAgd,Anchor,Agd_PutCurrentParamsMyAgenda);
 
    /***** Put form to edit event *****/
    Ico_PutContextualIconToEdit (ActEdiOneEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
@@ -1321,7 +1357,6 @@ void Agd_RemoveEvent (void)
 
 void Agd_HideEvent (void)
   {
-   extern const char *Txt_Event_X_is_now_hidden;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1338,10 +1373,6 @@ void Agd_HideEvent (void)
 		   " WHERE AgdCod=%ld AND UsrCod=%ld",
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
 
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_hidden,
-	          AgdEvent.Event);
-
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
   }
@@ -1352,7 +1383,6 @@ void Agd_HideEvent (void)
 
 void Agd_UnhideEvent (void)
   {
-   extern const char *Txt_Event_X_is_now_visible;
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -1368,10 +1398,6 @@ void Agd_UnhideEvent (void)
 		   "UPDATE agendas SET Hidden='N'"
 		   " WHERE AgdCod=%ld AND UsrCod=%ld",
                    AgdEvent.AgdCod,AgdEvent.UsrCod);
-
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_visible,
-                  AgdEvent.Event);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
