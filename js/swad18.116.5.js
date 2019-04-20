@@ -1554,7 +1554,7 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 				FormIdNum++;
 				FormId = id + '_event_' + FormIdNum;
 				Gbl_HTMLContent +=	'<form method="post" action="' +
-									CGI + '#' + 'exam_' +
+									CGI + '#' + 'cod_' +
 									ExaCod +
 									'" id="' + FormId + '">' +
 									FormEventParams +

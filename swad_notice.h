@@ -69,9 +69,6 @@ void Not_RemoveNotice (void);
 
 void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod);
 
-void Not_SetAnchorStr (long NotCod,char **Anchor);
-void Not_FreeAnchorStr (char *Anchor);
-
 void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,
                                      long NotCod,bool GetContent);

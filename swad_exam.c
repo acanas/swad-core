@@ -296,13 +296,12 @@ void Exa_ReceiveExamAnnouncement1 (void)
    /***** Free memory of the exam announcement *****/
    Exa_FreeMemExamAnnouncement ();
 
-
    /***** Create alert to show the change made *****/
-   Exa_SetAnchorStr (ExaCod,&Anchor);
+   Frm_SetAnchorStr (ExaCod,&Anchor);
    Ale_CreateAlert (Ale_SUCCESS,Anchor,
                     NewExamAnnouncement ? Txt_Created_new_announcement_of_exam :
                                           Txt_The_announcement_of_exam_has_been_successfully_updated);
-   Exa_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (Anchor);
 
    /***** Set exam to be highlighted *****/
    Gbl.ExamAnns.HighlightExaCod = ExaCod;
@@ -467,10 +466,10 @@ void Exa_HideExamAnnouncement (void)
    Gbl.ExamAnns.HighlightExaCod = ExaCod;
 
    /***** Create alert to show the change made *****/
-   Exa_SetAnchorStr (ExaCod,&Anchor);
+   Frm_SetAnchorStr (ExaCod,&Anchor);
    Ale_CreateAlert (Ale_SUCCESS,Anchor,
 	            Txt_The_announcement_of_exam_is_now_hidden);
-   Exa_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/
@@ -500,10 +499,10 @@ void Exa_UnhideExamAnnouncement (void)
    Gbl.ExamAnns.HighlightExaCod = ExaCod;
 
    /***** Create alert to show the change made *****/
-   Exa_SetAnchorStr (ExaCod,&Anchor);
+   Frm_SetAnchorStr (ExaCod,&Anchor);
    Ale_CreateAlert (Ale_SUCCESS,Anchor,
 	            Txt_The_announcement_of_exam_is_now_visible);
-   Exa_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/
@@ -1019,7 +1018,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
      }
 
    /***** Build anchor string *****/
-   Exa_SetAnchorStr (ExaCod,&Anchor);
+   Frm_SetAnchorStr (ExaCod,&Anchor);
 
    /***** Start article *****/
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
@@ -1506,7 +1505,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Lay_EndArticle ();
 
    /***** Free anchor string *****/
-   Exa_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/
@@ -1564,40 +1563,6 @@ static long Exa_GetParamExaCod (void)
   {
    /* Get notice code */
    return Par_GetParToLong ("ExaCod");
-  }
-
-/*****************************************************************************/
-/*********** Build/free anchor string for an announcement of exam ************/
-/*****************************************************************************/
-
-void Exa_SetAnchorStr (long ExaCod,char **Anchor)
-  {
-   if (ExaCod > 0)
-     {
-      if (ExaCod == Gbl.ExamAnns.NewExaCod)	// New announcement of exam
-	{
-	 if (asprintf (Anchor,"exam_new") < 0)
-	    Lay_NotEnoughMemoryExit ();
-	}
-      else					// Existing announcement of exam, not a new one
-	{
-	 // Existing announcement of exam, not new
-	 if (asprintf (Anchor,"exam_%ld",
-		       ExaCod) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	}
-     }
-   else						// ?
-      *Anchor = NULL;
-  }
-
-void Exa_FreeAnchorStr (char *Anchor)
-  {
-   if (Anchor)
-     {
-      free ((void *) Anchor);
-      Anchor = NULL;
-     }
   }
 
 /*****************************************************************************/

@@ -108,9 +108,6 @@ void Exa_GetDateToHighlight (void);
 void Exa_CreateListDatesOfExamAnnouncements (void);
 void Exa_PutHiddenParamExaCod (long ExaCod);
 
-void Exa_SetAnchorStr (long ExaCod,char **Anchor);
-void Exa_FreeAnchorStr (char *Anchor);
-
 void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                                char **ContentStr,
                                                long ExaCod,bool GetContent);

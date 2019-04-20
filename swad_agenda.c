@@ -108,8 +108,6 @@ static void Agd_PutIconsOtherPublicAgenda (void);
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
 static void Agd_GetParamEventOrder (void);
-static void Agd_SetAnchorStr (long AgdCod,char **Anchor);
-static void Agd_FreeAnchorStr (char *Anchor);
 static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent,
                                            const char *Anchor);
 
@@ -738,7 +736,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Set anchor string *****/
-   Agd_SetAnchorStr (AgdEvent.AgdCod,&Anchor);
+   Frm_SetAnchorStr (AgdEvent.AgdCod,&Anchor);
 
    /***** Write first row of data of this event *****/
    /* Start date/time */
@@ -825,34 +823,9 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
             Txt);
 
    /***** Free anchor string *****/
-   Agd_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (Anchor);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-  }
-
-/*****************************************************************************/
-/****************** Build/free anchor string for an event ********************/
-/*****************************************************************************/
-
-static void Agd_SetAnchorStr (long AgdCod,char **Anchor)
-  {
-   if (AgdCod > 0)
-     {
-      if (asprintf (Anchor,"agd_%ld",
-		    AgdCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-     }
-   else
-      *Anchor = NULL;
-  }
-
-static void Agd_FreeAnchorStr (char *Anchor)
-  {
-   if (Anchor)
-     {
-      free ((void *) Anchor);
-      Anchor = NULL;
-     }
   }
 
 /*****************************************************************************/

@@ -641,7 +641,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    char *Anchor = NULL;
 
    /***** Build anchor string *****/
-   Not_SetAnchorStr (NotCod,&Anchor);
+   Frm_SetAnchorStr (NotCod,&Anchor);
 
    /***** Start article for this notice *****/
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
@@ -744,32 +744,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      }
 
    /***** Free anchor string *****/
-   Not_FreeAnchorStr (Anchor);
-  }
-
-/*****************************************************************************/
-/****************** Build/free anchor string for a notice ********************/
-/*****************************************************************************/
-
-void Not_SetAnchorStr (long NotCod,char **Anchor)
-  {
-   if (NotCod > 0)	// Existing announcement of exam, not a new one
-     {
-      if (asprintf (Anchor,"not_%ld",
-		    NotCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-     }
-   else			// ?
-      *Anchor = NULL;
-  }
-
-void Not_FreeAnchorStr (char *Anchor)
-  {
-   if (Anchor)
-     {
-      free ((void *) Anchor);
-      Anchor = NULL;
-     }
+   Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/

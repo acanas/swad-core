@@ -144,8 +144,6 @@ static void Prj_PutIconsToLockUnlockAllProjects (void);
 
 static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
                                 Prj_ProjectView_t ProjectView);
-static void Prj_SetAnchorStr (long PrjCod,char **Anchor);
-static void Prj_FreeAnchorStr (char *Anchor);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
                                         const char *Icon,const char *Text);
 static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj);
@@ -980,7 +978,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    bool ICanViewProjectFiles = Prj_CheckIfICanViewProjectFiles (Prj_GetMyRolesInProject (Prj->PrjCod));
 
    /***** Set anchor string *****/
-   Prj_SetAnchorStr (Prj->PrjCod,&Anchor);
+   Frm_SetAnchorStr (Prj->PrjCod,&Anchor);
 
    /***** Write first row of data of this project *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -1247,34 +1245,9 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    Prj_ShowOneProjectURL (Prj,ProjectView,"prj_url_",UniqueId);
 
    /***** Free anchor string *****/
-   Prj_FreeAnchorStr (Anchor);
+   Frm_FreeAnchorStr (Anchor);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-  }
-
-/*****************************************************************************/
-/****************** Build/free anchor string for a project *******************/
-/*****************************************************************************/
-
-static void Prj_SetAnchorStr (long PrjCod,char **Anchor)
-  {
-   if (PrjCod > 0)
-     {
-      if (asprintf (Anchor,"prj_%ld",
-		    PrjCod) < 0)
-	 Lay_NotEnoughMemoryExit ();
-     }
-   else
-      *Anchor = NULL;
-  }
-
-static void Prj_FreeAnchorStr (char *Anchor)
-  {
-   if (Anchor)
-     {
-      free ((void *) Anchor);
-      Anchor = NULL;
-     }
   }
 
 /*****************************************************************************/

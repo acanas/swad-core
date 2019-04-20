@@ -72,5 +72,7 @@ void Frm_LinkFormSubmitAnimated (const char *Title,const char *LinkClass,
 
 void Frm_SetUniqueId (char UniqueId[Frm_MAX_BYTES_ID + 1]);
 
-#endif
+void Frm_SetAnchorStr (long Cod,char **Anchor);
+void Frm_FreeAnchorStr (char *Anchor);
 
+#endif

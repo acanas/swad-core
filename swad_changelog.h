@@ -448,10 +448,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.116.4 (2019-04-20)"
+#define Log_PLATFORM_VERSION	"SWAD 18.116.5 (2019-04-20)"
 #define CSS_FILE		"swad18.112.1.css"
-#define JS_FILE			"swad18.114.js"
+#define JS_FILE			"swad18.116.5.js"
 /*
+	Version 18.116.5: Apr 20, 2019 	Changed the behaviour of hiding/showing an attendance event.
+					Code refactoring related to anchors. (243014 lines)
 	Version 18.116.4: Apr 20, 2019 	Changed the behaviour of hiding/showing an agenda event. (243130 lines)
 	Version 18.116.3: Apr 20, 2019 	Changed the behaviour of hiding/showing a project. (243105 lines)
 	Version 18.116.2: Apr 20, 2019 	Code refactoring in announcements and notices. (243124 lines)

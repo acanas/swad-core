@@ -91,7 +91,8 @@ static void Att_PutFormToListMyAttendance (void);
 static void Att_PutFormToListStdsAttendance (void);
 static void Att_PutFormToListStdsParams (void);
 
-static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden);
+static void Att_PutFormsToRemEditOneAttEvent (const struct AttendanceEvent *Att,
+                                              const char *Anchor);
 static void Att_PutParams (void);
 static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest);
 static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att);
@@ -372,12 +373,16 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
   {
    extern const char *Txt_Today;
    extern const char *Txt_View_event;
+   char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this attendance event *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (Att);
    Att_GetNumStdsTotalWhoAreInAttEvent (Att);
+
+   /***** Set anchor string *****/
+   Frm_SetAnchorStr (Att->AttCod,&Anchor);
 
    /***** Write first row of data of this attendance event *****/
    /* Forms to remove/edit this attendance event */
@@ -390,7 +395,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
      {
       case Rol_TCH:
       case Rol_SYS_ADM:
-         Att_PutFormsToRemEditOneAttEvent (Att->AttCod,Att->Hidden);
+         Att_PutFormsToRemEditOneAttEvent (Att,Anchor);
 	 break;
       default:
          break;
@@ -439,9 +444,11 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    if (!ShowOnlyThisAttEventComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
+   Lay_StartArticle (Anchor);
    Att_PutLinkAttEvent (Att,Txt_View_event,Att->Title,
 	                Att->Hidden ? "ASG_TITLE_LIGHT" :
 	                              "ASG_TITLE");
+   Lay_EndArticle ();
    fprintf (Gbl.F.Out,"</td>");
 
    /* Number of students in this event */
@@ -488,6 +495,9 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
+
+   /***** Free anchor string *****/
+   Frm_FreeAnchorStr (Anchor);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -561,18 +571,19 @@ static void Att_PutFormToListStdsParams (void)
 /************** Put a link (form) to edit one attendance event ***************/
 /*****************************************************************************/
 
-static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
+static void Att_PutFormsToRemEditOneAttEvent (const struct AttendanceEvent *Att,
+                                              const char *Anchor)
   {
-   Gbl.AttEvents.AttCod = AttCod;	// Used as parameters in contextual links
+   Gbl.AttEvents.AttCod = Att->AttCod;	// Used as parameters in contextual links
 
    /***** Put form to remove attendance event *****/
    Ico_PutContextualIconToRemove (ActReqRemAtt,Att_PutParams);
 
    /***** Put form to hide/show attendance event *****/
-   if (Hidden)
-      Ico_PutContextualIconToUnhide (ActShoAtt,NULL,Att_PutParams);
+   if (Att->Hidden)
+      Ico_PutContextualIconToUnhide (ActShoAtt,Anchor,Att_PutParams);
    else
-      Ico_PutContextualIconToHide (ActHidAtt,NULL,Att_PutParams);
+      Ico_PutContextualIconToHide (ActHidAtt,Anchor,Att_PutParams);
 
    /***** Put form to edit attendance event *****/
    Ico_PutContextualIconToEdit (ActEdiOneAtt,Att_PutParams);
@@ -957,7 +968,6 @@ void Att_RemoveAttEventFromDB (long AttCod)
 
 void Att_HideAttEvent (void)
   {
-   extern const char *Txt_Event_X_is_now_hidden;
    struct AttendanceEvent Att;
 
    /***** Get attendance event code *****/
@@ -973,10 +983,6 @@ void Att_HideAttEvent (void)
 		   " WHERE AttCod=%ld AND CrsCod=%ld",
                    Att.AttCod,Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_hidden,
-                  Att.Title);
-
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
   }
@@ -987,7 +993,6 @@ void Att_HideAttEvent (void)
 
 void Att_ShowAttEvent (void)
   {
-   extern const char *Txt_Event_X_is_now_visible;
    struct AttendanceEvent Att;
 
    /***** Get attendance event code *****/
@@ -1002,10 +1007,6 @@ void Att_ShowAttEvent (void)
 		   "UPDATE att_events SET Hidden='N'"
 		   " WHERE AttCod=%ld AND CrsCod=%ld",
                    Att.AttCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_is_now_visible,
-                  Att.Title);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();

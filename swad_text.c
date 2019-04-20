@@ -10766,27 +10766,6 @@ const char *Txt_Event =
 	"Evento";
 #endif
 
-const char *Txt_Event_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"L'esdeveniment <strong>%s</strong> ara est&agrave; ocult.";
-#elif L==2	// de
-	"Der Ereignis <strong>%s</strong> ist jetzt ausgeblendet.";
-#elif L==3	// en
-	"Event <strong>%s</strong> is now hidden.";
-#elif L==4	// es
-	"El evento <strong>%s</strong> ahora est&aacute; oculto.";
-#elif L==5	// fr
-	"L'&eacute;v&eacute;nement <strong>%s</strong> est maintenant cach&eacute;.";
-#elif L==6	// gn
-	"El evento <strong>%s</strong> ahora est&aacute; oculto.";	// Okoteve traducción
-#elif L==7	// it
-	"L'evento <strong>%s</strong> &egrave; ora nascosto.";
-#elif L==8	// pl
-	"Wydarzenie <strong>%s</strong> jest ukryte.";
-#elif L==9	// pt
-	"O evento <strong>%s</strong> &eacute; agora oculto.";
-#endif
-
 const char *Txt_Event_X_is_now_private =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"L'esdevenimen <strong>%s</strong> ara &eacute;s privat.";
@@ -10806,27 +10785,6 @@ const char *Txt_Event_X_is_now_private =	// Warning: it is very important to inc
 	"Wydarzenie <strong>%s</strong> jest obecnie prywatne.";
 #elif L==9	// pt
 	"O evento <strong>%s</strong> &eacute; agora privado.";
-#endif
-
-const char *Txt_Event_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"L'esdevenimen <strong>%s</strong> ara est&agrave; visible.";
-#elif L==2	// de
-	"Der Ereignis <strong>%s</strong> ist jetzt sichtbar.";
-#elif L==3	// en
-	"Event <strong>%s</strong> is now visible.";
-#elif L==4	// es
-	"El evento <strong>%s</strong> ahora est&aacute; visible.";
-#elif L==5	// fr
-	"L'&eacute;v&eacute;nement <strong>%s</strong> est maintenant visible.";
-#elif L==6	// gn
-	"El evento <strong>%s</strong> ahora est&aacute; visible.";	// Okoteve traducción
-#elif L==7	// it
-	"L'evento <strong>%s</strong> &egrave; ora visibile.";
-#elif L==8	// pl
-	"Wydarzenie <strong>%s</strong> jest teraz widoczny.";
-#elif L==9	// pt
-	"O evento <strong>%s</strong> &eacute; agora vis&iacute;vel.";
 #endif
 
 const char *Txt_Event_X_is_now_visible_to_users_of_your_courses =	// Warning: it is very important to include %s in the following sentences

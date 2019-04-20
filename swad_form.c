@@ -25,9 +25,11 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+
 #include "swad_form.h"
 #include "swad_global.h"
-
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -307,4 +309,29 @@ void Frm_SetUniqueId (char UniqueId[Frm_MAX_BYTES_ID + 1])
 	     "id_%s_%u",
              Gbl.UniqueNameEncrypted,
              ++CountForThisExecution);
+  }
+
+/*****************************************************************************/
+/****************** Build/free anchor string given a code ********************/
+/*****************************************************************************/
+
+void Frm_SetAnchorStr (long Cod,char **Anchor)
+  {
+   if (Cod > 0)
+     {
+      if (asprintf (Anchor,"cod_%ld",
+		    Cod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   else
+      *Anchor = NULL;
+  }
+
+void Frm_FreeAnchorStr (char *Anchor)
+  {
+   if (Anchor)
+     {
+      free ((void *) Anchor);
+      Anchor = NULL;
+     }
   }
