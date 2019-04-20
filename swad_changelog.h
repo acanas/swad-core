@@ -448,10 +448,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.116.8 (2019-04-20)"
+#define Log_PLATFORM_VERSION	"SWAD 18.116.9 (2019-04-20)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.116.5.js"
 /*
+	Version 18.116.9: Apr 20, 2019 	Changed the behaviour of hiding/showing a game. (242841 lines)
 	Version 18.116.8: Apr 20, 2019 	Changed the behaviour of hiding/showing an exam announcement. (242881 lines)
 	Version 18.116.7: Apr 20, 2019 	Changed the behaviour of hiding/showing a banner. (242934 lines)
 	Version 18.116.6: Apr 20, 2019 	Changed the behaviour of hiding/showing an assignment. (242974 lines)

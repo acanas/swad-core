@@ -99,7 +99,8 @@ static void Gam_WriteAuthor (struct Game *Game);
 static void Gam_WriteStatus (struct Game *Game);
 static void Gam_GetParamGameOrder (void);
 
-static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible,
+static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
+					  const char *Anchor,
                                           bool ShowOnlyThisGame);
 static void Gam_PutParamsToPlayGame1stQst (void);
 static void Gam_PutParams (void);
@@ -430,6 +431,7 @@ static void Gam_ShowOneGame (long GamCod,
    extern const char *Txt_Users;
    extern const char *Txt_Play;
    extern const char *Txt_View_game_results;
+   char *Anchor = NULL;
    static unsigned UniqueId = 0;
    struct Game Game;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -443,6 +445,9 @@ static void Gam_ShowOneGame (long GamCod,
    Game.GamCod = GamCod;
    Gam_GetDataOfGameByCod (&Game);
 
+   /***** Set anchor string *****/
+   Frm_SetAnchorStr (Game.GamCod,&Anchor);
+
    /***** Start table *****/
    if (ShowOnlyThisGame)
       Tbl_StartTableWide (2);
@@ -455,8 +460,7 @@ static void Gam_ShowOneGame (long GamCod,
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    if (Game.Status.ICanEdit)
-      Gam_PutFormsToRemEditOneGame (Game.GamCod,Game.Status.Visible,
-                                    ShowOnlyThisGame);
+      Gam_PutFormsToRemEditOneGame (&Game,Anchor,ShowOnlyThisGame);
    fprintf (Gbl.F.Out,"</td>");
 
    /* Start date/time */
@@ -501,8 +505,7 @@ static void Gam_ShowOneGame (long GamCod,
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-
-   /* Put form to view game */
+   Lay_StartArticle (Anchor);
    Frm_StartForm (ActSeeOneGam);
    Gam_PutParamGameCod (GamCod);
    Gam_PutHiddenParamGameOrder ();
@@ -514,6 +517,7 @@ static void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"%s</a>",
             Game.Title);
    Frm_EndForm ();
+   Lay_EndArticle ();
 
    /* Number of questions and number of distinct users who have already answered this game */
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u; %s: %u</div>"
@@ -681,6 +685,9 @@ static void Gam_ShowOneGame (long GamCod,
    else
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
+   /***** Free anchor string *****/
+   Frm_FreeAnchorStr (Anchor);
+
    /***** Put big button to start playing *****/
    if (PutButtonToStart)
       Gam_PutBigButtonToStartGame (Game.GamCod);
@@ -805,13 +812,14 @@ void Gam_PutHiddenParamGameOrder (void)
 /******************** Put a link (form) to edit one game *********************/
 /*****************************************************************************/
 
-static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible,
+static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
+					  const char *Anchor,
                                           bool ShowOnlyThisGame)
   {
    extern const char *Txt_Reset;
    extern const char *Txt_Play;
 
-   Gbl.Games.CurrentGamCod = GamCod;	// Used as parameter in contextual links
+   Gbl.Games.CurrentGamCod = Game->GamCod;	// Used as parameter in contextual links
 
    /***** Put icon to remove game *****/
    Ico_PutContextualIconToRemove (ActReqRemGam,Gam_PutParams);
@@ -822,10 +830,10 @@ static void Gam_PutFormsToRemEditOneGame (long GamCod,bool Visible,
 				  Txt_Reset);
 
    /***** Put icon to hide/show game *****/
-   if (Visible)
-      Ico_PutContextualIconToHide (ActHidGam,NULL,Gam_PutParams);
+   if (Game->Status.Visible)
+      Ico_PutContextualIconToHide (ActHidGam,Anchor,Gam_PutParams);
    else
-      Ico_PutContextualIconToUnhide (ActShoGam,NULL,Gam_PutParams);
+      Ico_PutContextualIconToUnhide (ActShoGam,Anchor,Gam_PutParams);
 
    /***** Put icon to edit game *****/
    Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);
@@ -1640,7 +1648,6 @@ void Gam_ResetGame (void)
 
 void Gam_HideGame (void)
   {
-   extern const char *Txt_Game_X_is_now_hidden;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1657,10 +1664,6 @@ void Gam_HideGame (void)
 		   "UPDATE games SET Hidden='Y' WHERE GamCod=%ld",
 		   Game.GamCod);
 
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Game_X_is_now_hidden,
-                  Game.Title);
-
    /***** Show games again *****/
    Gam_ListAllGames ();
   }
@@ -1671,7 +1674,6 @@ void Gam_HideGame (void)
 
 void Gam_UnhideGame (void)
   {
-   extern const char *Txt_Game_X_is_now_visible;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1687,10 +1689,6 @@ void Gam_UnhideGame (void)
    DB_QueryUPDATE ("can not show game",
 		   "UPDATE games SET Hidden='N' WHERE GamCod=%ld",
 		   Game.GamCod);
-
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Game_X_is_now_visible,
-                  Game.Title);
 
    /***** Show games again *****/
    Gam_ListAllGames ();
