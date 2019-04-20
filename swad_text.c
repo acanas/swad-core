@@ -26076,27 +26076,6 @@ const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_ =
 	" Tente copiar e colar novamente.";
 #endif
 
-const char *Txt_NOTICE_Active_SINGULAR =
-#if   L==1	// ca
-	"Activo";	// Necessita traduccio
-#elif L==2	// de
-	"Aktive";
-#elif L==3	// en
-	"Active";
-#elif L==4	// es
-	"Activo";
-#elif L==5	// fr
-	"Active";
-#elif L==6	// gn
-	"Activo";	// Okoteve traducción
-#elif L==7	// it
-	"Attivo";
-#elif L==8	// pl
-	"Active";
-#elif L==9	// pt
-	"Ativo";
-#endif
-
 const char *Txt_NOTICE_Active_BR_notices =
 #if   L==1	// ca
 	"Avisos<br />activos";	// Necessita traduccio
@@ -26116,27 +26095,6 @@ const char *Txt_NOTICE_Active_BR_notices =
 	"Active<br />Ogloszenia";
 #elif L==9	// pt
 	"Avisos<br />ativos";
-#endif
-
-const char *Txt_NOTICE_Active_Mark_as_obsolete =
-#if   L==1	// ca
-	"Actiu; marcar com obsolet";
-#elif L==2	// de
-	"Aktive; marke als veraltet";
-#elif L==3	// en
-	"Active; mark as obsolete";
-#elif L==4	// es
-	"Activo; marcar como obsoleto";
-#elif L==5	// fr
-	"Active; marquer comme obsol&egrave;te";
-#elif L==6	// gn
-	"Activo; marcar como obsoleto";	// Okoteve traducción
-#elif L==7	// it
-	"Attivo; segnare come obsoleto";
-#elif L==8	// pl
-	"Active; zaznaczy jako przestarzale";
-#elif L==9	// pt
-	"Ativo; marcar como obsoleto";
 #endif
 
 const char *Txt_NOTICE_Deleted_BR_notices =
@@ -26160,27 +26118,6 @@ const char *Txt_NOTICE_Deleted_BR_notices =
 	"Avisos<br />suprimidos";
 #endif
 
-const char *Txt_NOTICE_Obsolete_SINGULAR =
-#if   L==1	// ca
-	"Obsoleto";	// Necessita traduccio
-#elif L==2	// de
-	"Veraltet";
-#elif L==3	// en
-	"Obsolete";
-#elif L==4	// es
-	"Obsoleto";
-#elif L==5	// fr
-	"Obsol&egrave;te";
-#elif L==6	// gn
-	"Obsoleto";	// Okoteve traducción
-#elif L==7	// it
-	"Obsoleto";
-#elif L==8	// pl
-	"Przestarzaly";
-#elif L==9	// pt
-	"Obsoleto";
-#endif
-
 const char *Txt_NOTICE_Obsolete_BR_notices =
 #if   L==1	// ca
 	"Avisos<br />obsoletos";	// Necessita traduccio
@@ -26200,27 +26137,6 @@ const char *Txt_NOTICE_Obsolete_BR_notices =
 	"Przestarzaly<br />Ogloszenia";
 #elif L==9	// pt
 	"Avisos<br />obsoletos";
-#endif
-
-const char *Txt_NOTICE_Obsolete_Mark_as_active =
-#if   L==1	// ca
-	"Obsolet; marcar com actiu";
-#elif L==2	// de
-	"Veraltet; marke als aktive";
-#elif L==3	// en
-	"Obsolete; mark as active";
-#elif L==4	// es
-	"Obsoleto; marcar como activo";
-#elif L==5	// fr
-	"Obsol&egrave;te; marquer comme active";
-#elif L==6	// gn
-	"Obsoleto; marcar como activo";	// Okoteve traducción
-#elif L==7	// it
-	"Obsoleto; segnare come attivo";
-#elif L==8	// pl
-	"Przestarzaly; znak towarowy jako aktywnych";
-#elif L==9	// pt
-	"Obsoleto; marcar como ativo";
 #endif
 
 const char *Txt_Notice =

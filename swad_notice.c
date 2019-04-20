@@ -614,10 +614,6 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              long UsrCod,
                              Not_Status_t Status)
   {
-   extern const char *Txt_NOTICE_Active_SINGULAR;
-   extern const char *Txt_NOTICE_Active_Mark_as_obsolete;
-   extern const char *Txt_NOTICE_Obsolete_SINGULAR;
-   extern const char *Txt_NOTICE_Obsolete_Mark_as_active;
    extern const char *Txt_See_full_notice;
    extern const char *Txt_Today;
    static const char *ContainerClass[Not_NUM_STATUS] =
@@ -663,7 +659,6 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    /***** Write the date in the top part of the yellow note *****/
    /* Write symbol to indicate if notice is obsolete or active */
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
-     {
       if (Not_CheckIfICanEditNotices ())
 	{
          Not_SetNotCodToEdit (NotCod);	// To be used as parameter
@@ -675,46 +670,14 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
          switch (Status)
            {
             case Not_ACTIVE_NOTICE:
-	       Lay_PutContextualLinkOnlyIcon (ActHidNot,Anchor,Not_PutParams,
-					      "eye.svg",
-					      Txt_NOTICE_Active_Mark_as_obsolete);
+	       Ico_PutContextualIconToHide (ActHidNot,NULL,Not_PutParams);
                break;
             case Not_OBSOLETE_NOTICE:
-	       Lay_PutContextualLinkOnlyIcon (ActRevNot,Anchor,Not_PutParams,
-					      "eye-slash.svg",
-					      Txt_NOTICE_Obsolete_Mark_as_active);
+	       Ico_PutContextualIconToUnhide (ActRevNot,NULL,Not_PutParams);
                break;
            }
          Frm_EndForm ();
    	}
-      else	// Don't put forms
-	 /* Status of the notice */
-         switch (Status)
-           {
-            case Not_ACTIVE_NOTICE:
-               fprintf (Gbl.F.Out,"<span title=\"%s\">"
-                                  "<img src=\"%s/eye.svg\""
-                                  " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICO_HIDDEN ICO16x16\" />"
-                                  "</span>",
-                        Txt_NOTICE_Active_SINGULAR,
-                        Cfg_URL_ICON_PUBLIC,
-                        Txt_NOTICE_Active_SINGULAR,
-                        Txt_NOTICE_Active_SINGULAR);
-               break;
-            case Not_OBSOLETE_NOTICE:
-               fprintf (Gbl.F.Out,"<span title=\"%s\">"
-                                  "<img src=\"%s/eye-slash.svg\""
-                                  " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICO_HIDDEN ICO16x16\" />"
-                                  "</span>",
-                        Txt_NOTICE_Obsolete_SINGULAR,
-                        Cfg_URL_ICON_PUBLIC,
-                        Txt_NOTICE_Obsolete_SINGULAR,
-                        Txt_NOTICE_Obsolete_SINGULAR);
-               break;
-           }
-     }
 
    /* Write the date */
    UniqueId++;

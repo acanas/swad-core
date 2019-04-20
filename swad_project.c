@@ -487,7 +487,7 @@ static void Prj_ShowFormToFilterByHidden (void)
                      Gbl.Prjs.CurrentPage,
                      -1L);
       Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis],
-	                   Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
+	                      Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }

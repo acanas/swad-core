@@ -448,10 +448,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.116.1 (2019-04-20)"
+#define Log_PLATFORM_VERSION	"SWAD 18.116.2 (2019-04-20)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.114.js"
 /*
+	Version 18.116.2: Apr 20, 2019 	Code refactoring in announcements and notices. (243124 lines)
 	Version 18.116.1: Apr 20, 2019 	Code refactoring in edition of banners. (243246 lines)
 	Version 18.116:   Apr 19, 2019 	Code refactoring related to actions and AJAX. (243246 lines)
 	Version 18.115:   Apr 18, 2019 	Contextual buttons to lock/unlock edition of all projects, suggested by Pedro Villar Castro. (243275 lines)
