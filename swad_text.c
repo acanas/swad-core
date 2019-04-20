@@ -29884,48 +29884,6 @@ const char *Txt_Project_files =
 	"Arquivos do projeto";
 #endif
 
-const char *Txt_Project_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El projecte <strong>%s</strong> ara est&agrave; ocult.";
-#elif L==2	// de
-	"Die Projekt <strong>%s</strong> ist jetzt ausgeblendet.";
-#elif L==3	// en
-	"Project <strong>%s</strong> is now hidden.";
-#elif L==4	// es
-	"El proyecto <strong>%s</strong> ahora est&aacute; oculto.";
-#elif L==5	// fr
-	"Le project <strong>%s</strong> est maintenant cach&eacute;.";
-#elif L==6	// gn
-	"El proyecto <strong>%s</strong> ahora est&aacute; oculto.";	// Okoteve traducción
-#elif L==7	// it
-	"Il progetto <strong>%s</strong> &egrave; ora nascosto.";
-#elif L==8	// pl
-	"Projekt <strong>%s</strong> jest ukryte.";
-#elif L==9	// pt
-	"O projeto <strong>%s</strong> &eacute; agora oculto.";
-#endif
-
-const char *Txt_Project_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"El projecte <strong>%s</strong> ara est&agrave; visible.";
-#elif L==2	// de
-	"Die Projekt <strong>%s</strong> ist jetzt sichtbar.";
-#elif L==3	// en
-	"Project <strong>%s</strong> is now visible.";
-#elif L==4	// es
-	"El proyecto <strong>%s</strong> ahora est&aacute; visible.";
-#elif L==5	// fr
-	"Le project <strong>%s</strong> est maintenant visible.";
-#elif L==6	// gn
-	"El proyecto <strong>%s</strong> ahora est&aacute; visible.";	// Okoteve traducción
-#elif L==7	// it
-	"Il progetto <strong>%s</strong> &egrave; ora nascosto.";
-#elif L==8	// pl
-	"Projekt <strong>%s</strong> jest teraz widoczne.";
-#elif L==9	// pt
-	"O projeto <strong>%s</strong> &eacute; agora vis&iacute;vel.";
-#endif
-
 const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS] =
    {
 	 // Prj_ORDER_START_TIME

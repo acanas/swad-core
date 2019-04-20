@@ -144,6 +144,8 @@ static void Prj_PutIconsToLockUnlockAllProjects (void);
 
 static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
                                 Prj_ProjectView_t ProjectView);
+static void Prj_SetAnchorStr (long PrjCod,char **Anchor);
+static void Prj_FreeAnchorStr (char *Anchor);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
                                         const char *Icon,const char *Text);
 static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj);
@@ -184,6 +186,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInProject);
 static void Prj_GetParamPrjOrder (void);
 
 static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
+                                         const char *Anchor,
                                          bool ICanViewProjectFiles);
 
 static bool Prj_CheckIfICanEditProject (const struct Project *Prj);
@@ -972,8 +975,12 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    extern const char *Txt_Description;
    extern const char *Txt_Required_knowledge;
    extern const char *Txt_Required_materials;
+   char *Anchor = NULL;
    static unsigned UniqueId = 0;
    bool ICanViewProjectFiles = Prj_CheckIfICanViewProjectFiles (Prj_GetMyRolesInProject (Prj->PrjCod));
+
+   /***** Set anchor string *****/
+   Prj_SetAnchorStr (Prj->PrjCod,&Anchor);
 
    /***** Write first row of data of this project *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -982,12 +989,13 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"%s RIGHT_TOP COLOR%u\">",
+	 fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"BIG_INDEX %s RIGHT_TOP COLOR%u\">",
 		  Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
 					      "DATE_BLUE",
 	          Gbl.RowEvenOdd);
-	 if (NumIndex > 0)
-	    fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">%u</div>",NumIndex);
+         Lay_StartArticle (Anchor);
+	 fprintf (Gbl.F.Out,"%u",NumIndex);
+	 Lay_EndArticle ();
 	 fprintf (Gbl.F.Out,"</td>");
 	 break;
       default:
@@ -1003,7 +1011,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
          if (ProjectView == Prj_LIST_PROJECTS)
 	    fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
          fprintf (Gbl.F.Out,"\">");
-         Prj_PutFormsToRemEditOnePrj (Prj,ICanViewProjectFiles);
+         Prj_PutFormsToRemEditOnePrj (Prj,Anchor,ICanViewProjectFiles);
          fprintf (Gbl.F.Out,"</td>");
 	 break;
       default:
@@ -1238,7 +1246,35 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    /* Link to view more info about the project */
    Prj_ShowOneProjectURL (Prj,ProjectView,"prj_url_",UniqueId);
 
+   /***** Free anchor string *****/
+   Prj_FreeAnchorStr (Anchor);
+
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+  }
+
+/*****************************************************************************/
+/****************** Build/free anchor string for a project *******************/
+/*****************************************************************************/
+
+static void Prj_SetAnchorStr (long PrjCod,char **Anchor)
+  {
+   if (PrjCod > 0)
+     {
+      if (asprintf (Anchor,"prj_%ld",
+		    PrjCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   else
+      *Anchor = NULL;
+  }
+
+static void Prj_FreeAnchorStr (char *Anchor)
+  {
+   if (Anchor)
+     {
+      free ((void *) Anchor);
+      Anchor = NULL;
+     }
   }
 
 /*****************************************************************************/
@@ -2238,6 +2274,7 @@ void Prj_PutHiddenParamPrjOrder (void)
 /*****************************************************************************/
 
 static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
+                                         const char *Anchor,
                                          bool ICanViewProjectFiles)
   {
    Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used as parameter in contextual links
@@ -2251,10 +2288,10 @@ static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
       switch (Prj->Hidden)
         {
 	 case Prj_HIDDEN:
-	    Ico_PutContextualIconToUnhide (ActShoPrj,NULL,Prj_PutCurrentParams);
+	    Ico_PutContextualIconToUnhide (ActShoPrj,Anchor,Prj_PutCurrentParams);
 	    break;
 	 case Prj_VISIBL:
-	    Ico_PutContextualIconToHide (ActHidPrj,NULL,Prj_PutCurrentParams);
+	    Ico_PutContextualIconToHide (ActHidPrj,Anchor,Prj_PutCurrentParams);
 	    break;
         }
 
@@ -2907,7 +2944,6 @@ void Prj_RemoveProject (void)
 
 void Prj_HideProject (void)
   {
-   extern const char *Txt_Project_X_is_now_hidden;
    struct Project Prj;
 
    /***** Allocate memory for the project *****/
@@ -2922,17 +2958,11 @@ void Prj_HideProject (void)
    Prj_GetDataOfProjectByCod (&Prj);
 
    if (Prj_CheckIfICanEditProject (&Prj))
-     {
       /***** Hide project *****/
       DB_QueryUPDATE ("can not hide project",
 		      "UPDATE projects SET Hidden='Y'"
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
 	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
-
-      /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_is_now_hidden,
-	             Prj.Title);
-     }
    else
       Lay_NoPermissionExit ();
 
@@ -2949,7 +2979,6 @@ void Prj_HideProject (void)
 
 void Prj_ShowProject (void)
   {
-   extern const char *Txt_Project_X_is_now_visible;
    struct Project Prj;
 
    /***** Allocate memory for the project *****/
@@ -2964,17 +2993,11 @@ void Prj_ShowProject (void)
    Prj_GetDataOfProjectByCod (&Prj);
 
    if (Prj_CheckIfICanEditProject (&Prj))
-     {
       /***** Show project *****/
       DB_QueryUPDATE ("can not show project",
 		      "UPDATE projects SET Hidden='N'"
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
 	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
-
-      /***** Write message to show the change made *****/
-      Ale_ShowAlert (Ale_SUCCESS,Txt_Project_X_is_now_visible,
-	             Prj.Title);
-     }
    else
       Lay_NoPermissionExit ();
 
