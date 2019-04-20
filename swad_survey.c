@@ -106,7 +106,8 @@ static void Svy_WriteAuthor (struct Survey *Svy);
 static void Svy_WriteStatus (struct Survey *Svy);
 static void Svy_GetParamSvyOrder (void);
 
-static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible);
+static void Svy_PutFormsToRemEditOneSvy (const struct Survey *Svy,
+                                         const char *Anchor);
 static void Svy_PutParams (void);
 
 static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
@@ -431,6 +432,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    extern const char *Txt_Users;
    extern const char *Txt_Answer_survey;
    extern const char *Txt_View_survey_results;
+   char *Anchor = NULL;
    static unsigned UniqueId = 0;
    struct Survey Svy;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -444,6 +446,9 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Svy.SvyCod = SvyCod;
    Svy_GetDataOfSurveyByCod (&Svy);
 
+   /***** Set anchor string *****/
+   Frm_SetAnchorStr (Svy.SvyCod,&Anchor);
+
    /***** Start table *****/
    if (ShowOnlyThisSvyComplete)
       Tbl_StartTableWide (2);
@@ -456,7 +461,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    if (Svy.Status.ICanEdit)
-      Svy_PutFormsToRemEditOneSvy (Svy.SvyCod,Svy.Status.Visible);
+      Svy_PutFormsToRemEditOneSvy (&Svy,Anchor);
    fprintf (Gbl.F.Out,"</td>");
 
    /* Start date/time */
@@ -501,8 +506,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    if (!ShowOnlyThisSvyComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-
-   /* Put form to view survey */
+   Lay_StartArticle (Anchor);
    Frm_StartForm (ActSeeOneSvy);
    Svy_PutParamSvyCod (SvyCod);
    Svy_PutHiddenParamSvyOrder ();
@@ -514,6 +518,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    fprintf (Gbl.F.Out,"%s</a>",
             Svy.Title);
    Frm_EndForm ();
+   Lay_EndArticle ();
 
    /* Number of questions and number of distinct users who have already answered this survey */
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u; %s: %u</div>"
@@ -677,6 +682,9 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       /***** End box *****/
       Box_EndBox ();
      }
+
+   /***** Free anchor string *****/
+   Frm_FreeAnchorStr (Anchor);
   }
 
 /*****************************************************************************/
@@ -794,11 +802,12 @@ void Svy_PutHiddenParamSvyOrder (void)
 /******************* Put a link (form) to edit one survey ********************/
 /*****************************************************************************/
 
-static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
+static void Svy_PutFormsToRemEditOneSvy (const struct Survey *Svy,
+                                         const char *Anchor)
   {
    extern const char *Txt_Reset;
 
-   Gbl.Svys.SvyCodToEdit = SvyCod;	// Used as parameters in contextual links
+   Gbl.Svys.SvyCodToEdit = Svy->SvyCod;	// Used as parameters in contextual links
 
    /***** Put form to remove survey *****/
    Ico_PutContextualIconToRemove (ActReqRemSvy,Svy_PutParams);
@@ -809,10 +818,10 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 				  Txt_Reset);
 
    /***** Put form to hide/show survey *****/
-   if (Visible)
-      Ico_PutContextualIconToHide (ActHidSvy,NULL,Svy_PutParams);
+   if (Svy->Status.Visible)
+      Ico_PutContextualIconToHide (ActHidSvy,Anchor,Svy_PutParams);
    else
-      Ico_PutContextualIconToUnhide (ActShoSvy,NULL,Svy_PutParams);
+      Ico_PutContextualIconToUnhide (ActShoSvy,Anchor,Svy_PutParams);
 
    /***** Put form to edit survey *****/
    Ico_PutContextualIconToEdit (ActEdiOneSvy,Svy_PutParams);
@@ -1677,7 +1686,6 @@ void Svy_ResetSurvey (void)
 
 void Svy_HideSurvey (void)
   {
-   extern const char *Txt_Survey_X_is_now_hidden;
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
@@ -1698,10 +1706,6 @@ void Svy_HideSurvey (void)
 		   "UPDATE surveys SET Hidden='Y' WHERE SvyCod=%ld",
 		   Svy.SvyCod);
 
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Survey_X_is_now_hidden,
-                  Svy.Title);
-
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
   }
@@ -1712,7 +1716,6 @@ void Svy_HideSurvey (void)
 
 void Svy_UnhideSurvey (void)
   {
-   extern const char *Txt_Survey_X_is_now_visible;
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
@@ -1732,10 +1735,6 @@ void Svy_UnhideSurvey (void)
    DB_QueryUPDATE ("can not show survey",
 		   "UPDATE surveys SET Hidden='N' WHERE SvyCod=%ld",
 		   Svy.SvyCod);
-
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Survey_X_is_now_visible,
-                  Svy.Title);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);

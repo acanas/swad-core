@@ -41547,48 +41547,6 @@ const char *Txt_SURVEY_Type_of_user_not_allowed =
 	"Tipo de usu&aacute;rio n&atilde;o permitido";
 #endif
 
-const char *Txt_Survey_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"L'enquesta <strong>%s</strong> ara est&agrave; oculta.";
-#elif L==2	// de
-	"Die Umfrage <strong>%s</strong> ist jetzt ausgeblendet.";
-#elif L==3	// en
-	"Survey <strong>%s</strong> is now hidden.";
-#elif L==4	// es
-	"La encuesta <strong>%s</strong> ahora est&aacute; oculta.";
-#elif L==5	// fr
-	"Le sondage <strong>%s</strong> est maintenant cach&eacute;.";
-#elif L==6	// gn
-	"La encuesta <strong>%s</strong> ahora est&aacute; oculta.";	// Okoteve traducción
-#elif L==7	// it
-	"Il sondaggio <strong>%s</strong> &egrave; ora nascosto.";
-#elif L==8	// pl
-	"Badanie <strong>%s</strong> jest teraz ukryta.";
-#elif L==9	// pt
-	"O inqu&eacute;rito <strong>%s</strong> &eacute; agora oculto.";
-#endif
-
-const char *Txt_Survey_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"L'enquesta <strong>%s</strong> ara est&agrave; visible.";
-#elif L==2	// de
-	"Die Umfrage <strong>%s</strong> ist jetzt sichtbar.";
-#elif L==3	// en
-	"Survey <strong>%s</strong> is now visible.";
-#elif L==4	// es
-	"La encuesta <strong>%s</strong> ahora est&aacute; visible.";
-#elif L==5	// fr
-	"Le sondage <strong>%s</strong> est maintenant visible.";
-#elif L==6	// gn
-	"La encuesta <strong>%s</strong> ahora est&aacute; visible.";	// Okoteve traducción
-#elif L==7	// it
-	"Il sondaggio <strong>%s</strong> &egrave; ora visibile.";
-#elif L==8	// pl
-	"Badanie <strong>%s</strong> jest teraz widoczne.";
-#elif L==9	// pt
-	"O inqu&eacute;rito <strong>%s</strong> &eacute; agora vis&iacute;vel.";
-#endif
-
 const char *Txt_Survey_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Enquesta <strong>%s</strong> eliminada.";
