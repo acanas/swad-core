@@ -73,6 +73,7 @@ static void Ban_GetListBanners (MYSQL_RES **mysql_res,unsigned long NumRows);
 static void Ban_PutIconsEditingBanners (void);
 
 static void Ban_ListBannersForEdition (void);
+static void Ban_PutParamBanCodToEdit (void);
 static void Ban_PutParamBanCod (long BanCod);
 static void Ban_ShowOrHideBanner (bool Hide);
 
@@ -398,8 +399,6 @@ void Ban_PutIconToViewBanners (void)
 
 static void Ban_ListBannersForEdition (void)
   {
-   extern const char *Txt_Show;
-   extern const char *Txt_Hide;
    unsigned NumBan;
    struct Banner *Ban;
 
@@ -415,26 +414,20 @@ static void Ban_ListBannersForEdition (void)
 	NumBan++)
      {
       Ban = &Gbl.Banners.Lst[NumBan];
+      Gbl.Banners.BanCodToEdit = Ban->BanCod;
 
       /* Put icon to remove banner */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      Frm_StartForm (ActRemBan);
-      Ban_PutParamBanCod (Ban->BanCod);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+      Ico_PutContextualIconToRemove (ActRemBan,Ban_PutParamBanCodToEdit);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Put icon to hide/show banner */
       fprintf (Gbl.F.Out,"<td class=\"BM\">");
-      Frm_StartForm (Ban->Hidden ? ActShoBan :
-	                           ActHidBan);
-      Ban_PutParamBanCod (Ban->BanCod);
-      Ico_PutIconLink (Ban->Hidden ? "eye-slash.svg" :
-        	                     "eye.svg",
-		       Ban->Hidden ? Txt_Show :
-        	                     Txt_Hide);
-      Frm_EndForm ();
+      if (Ban->Hidden)
+         Ico_PutContextualIconToUnhide (ActShoBan,NULL,Ban_PutParamBanCodToEdit);
+      else
+         Ico_PutContextualIconToHide (ActHidBan,NULL,Ban_PutParamBanCodToEdit);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Banner code */
@@ -448,7 +441,7 @@ static void Ban_ListBannersForEdition (void)
       /* Banner short name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Frm_StartForm (ActRenBanSho);
-      Ban_PutParamBanCod (Ban->BanCod);
+      Ban_PutParamBanCodToEdit ();
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
@@ -460,7 +453,7 @@ static void Ban_ListBannersForEdition (void)
       /* Banner full name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Frm_StartForm (ActRenBanFul);
-      Ban_PutParamBanCod (Ban->BanCod);
+      Ban_PutParamBanCodToEdit ();
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
@@ -472,7 +465,7 @@ static void Ban_ListBannersForEdition (void)
       /* Banner image */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Frm_StartForm (ActChgBanImg);
-      Ban_PutParamBanCod (Ban->BanCod);
+      Ban_PutParamBanCodToEdit ();
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\""
 	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
@@ -483,7 +476,7 @@ static void Ban_ListBannersForEdition (void)
       /* Banner WWW */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Frm_StartForm (ActChgBanWWW);
-      Ban_PutParamBanCod (Ban->BanCod);
+      Ban_PutParamBanCodToEdit ();
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_WWW\""
@@ -501,6 +494,11 @@ static void Ban_ListBannersForEdition (void)
 /*****************************************************************************/
 /******************* Write parameter with code of banner *********************/
 /*****************************************************************************/
+
+static void Ban_PutParamBanCodToEdit (void)
+  {
+   Ban_PutParamBanCod (Gbl.Banners.BanCodToEdit);
+  }
 
 static void Ban_PutParamBanCod (long BanCod)
   {

@@ -254,9 +254,10 @@ struct Globals
      } Mails;
    struct
      {
-      unsigned Num;			// Number of banners
-      struct Banner *Lst;		// List of banners
-      long BanCodClicked;
+      unsigned Num;		// Number of banners
+      struct Banner *Lst;	// List of banners
+      long BanCodToEdit;	// Used as parameter in contextual links
+      long BanCodClicked;	// Banned clicked, used to log it
      } Banners;
    struct
      {
