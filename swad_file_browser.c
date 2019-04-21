@@ -1259,14 +1259,14 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
                                      const char *FileName);
 static void Brw_PutIconsRemoveCopyPaste (unsigned Level,
                                          const char PathInTree[PATH_MAX + 1],
-                                         const char *FileName,const char *FileNameToShow);
+                                         const char *FileName);
 static bool Brw_CheckIfCanPasteIn (unsigned Level);
 static void Brw_PutIconRemove (const char PathInTree[PATH_MAX + 1],
                                const char *FileName);
 static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
                              const char *FileName);
 static void Brw_PutIconPaste (unsigned Level,const char PathInTree[PATH_MAX + 1],
-                              const char *FileName,const char *FileNameToShow);
+                              const char *FileName);
 static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                                   const char *FileBrowserId,const char *RowId,
                                                   Brw_IconTree_t IconThisRow,
@@ -5587,7 +5587,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       Gbl.FileBrowser.ICanEditFileOrFolder = Brw_CheckIfICanEditFileOrFolder (Level);
 
       /* Put icons to remove, copy and paste */
-      Brw_PutIconsRemoveCopyPaste (Level,PathInTree,FileName,FileNameToShow);
+      Brw_PutIconsRemoveCopyPaste (Level,PathInTree,FileName);
      }
 
    /***** Indentation depending on level, icon, and file/folder name *****/
@@ -5708,7 +5708,7 @@ void Brw_SetFullPathInTree (const char PathInTreeUntilFileOrFolder[PATH_MAX + 1]
 
 static void Brw_PutIconsRemoveCopyPaste (unsigned Level,
                                          const char PathInTree[PATH_MAX + 1],
-                                         const char *FileName,const char *FileNameToShow)
+                                         const char *FileName)
   {
    /***** Icon to remove folder, file or link *****/
    Brw_PutIconRemove (PathInTree,FileName);
@@ -5717,7 +5717,7 @@ static void Brw_PutIconsRemoveCopyPaste (unsigned Level,
    Brw_PutIconCopy (PathInTree,FileName);
 
    /***** Icon to paste *****/
-   Brw_PutIconPaste (Level,PathInTree,FileName,FileNameToShow);
+   Brw_PutIconPaste (Level,PathInTree,FileName);
   }
 
 /*****************************************************************************/
@@ -5822,9 +5822,8 @@ static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
 /*****************************************************************************/
 
 static void Brw_PutIconPaste (unsigned Level,const char PathInTree[PATH_MAX + 1],
-                              const char *FileName,const char *FileNameToShow)
+                              const char *FileName)
   {
-   extern const char *Txt_Paste_in_X;
    extern const char *Txt_Copy_not_allowed;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
@@ -5835,15 +5834,10 @@ static void Brw_PutIconPaste (unsigned Level,const char PathInTree[PATH_MAX + 1]
       if (Brw_CheckIfCanPasteIn (Level))
 	{
 	 /***** Form to paste the content of the clipboard *****/
-	 Frm_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
-	 Brw_PutParamsFileBrowser (Brw_ActPaste[Gbl.FileBrowser.Type],
-				   PathInTree,FileName,
-				   Brw_IS_FOLDER,-1L);
-	 snprintf (Gbl.Title,sizeof (Gbl.Title),
-		   Txt_Paste_in_X,
-		   FileNameToShow);
-	 Ico_PutIconLink ("paste.svg",Gbl.Title);
-	 Frm_EndForm ();
+	 Brw_PathInTree = PathInTree;
+	 Brw_FileName   = FileName;
+	 Ico_PutContextualIconToPaste (Brw_ActPaste[Gbl.FileBrowser.Type],
+				       Brw_PutImplicitParamsFileBrowser);
 	}
       else
 	 /* Icon to paste inactive */

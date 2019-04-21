@@ -28385,27 +28385,6 @@ const char *Txt_Paste =
 	"Colar";
 #endif
 
-const char *Txt_Paste_in_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Pegar en %s";	// Necessita traduccio
-#elif L==2	// de
-	"Einf&uuml;gen an %s";
-#elif L==3	// en
-	"Paste in %s";
-#elif L==4	// es
-	"Pegar en %s";
-#elif L==5	// fr
-	"Coller dans %s";
-#elif L==6	// gn
-	"Pegar en %s";	// Okoteve traducción
-#elif L==7	// it
-	"Incolla in %s";
-#elif L==8	// pl
-	"Wklej w %s";
-#elif L==9	// pt
-	"Colar em %s";
-#endif
-
 const char *Txt_PERCENT_of_users =
 #if   L==1	// ca
 	"% de usuarios";	// Necessita traduccio

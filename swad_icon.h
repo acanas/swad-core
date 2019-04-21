@@ -66,6 +66,7 @@ void Ico_PutContextualIconToUnhide (Act_Action_t NextAction,const char *Anchor,v
 void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) (void));
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) (void));
 void Ico_PutContextualIconToCopy (Act_Action_t NextAction,void (*FuncParams) (void));
+void Ico_PutContextualIconToPaste (Act_Action_t NextAction,void (*FuncParams) (void));
 
 void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title);
 void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title);
