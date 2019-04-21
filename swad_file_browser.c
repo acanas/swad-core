@@ -1268,19 +1268,16 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                                   const char *FileBrowserId,const char *RowId,
                                                   Brw_IconTree_t IconThisRow,
                                                   const char PathInTree[PATH_MAX + 1],
-                                                  const char *FileName,
-                                                  const char *FileNameToShow);
+                                                  const char *FileName);
 static void Brw_IndentDependingOnLevel (unsigned Level);
 static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *RowId,
                                        bool Hidden,
                                        const char PathInTree[PATH_MAX + 1],
-                                       const char *FileName,
-                                       const char *FileNameToShow);
+                                       const char *FileName);
 static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *RowId,
                                          bool Hidden,
                                          const char PathInTree[PATH_MAX + 1],
-                                         const char *FileName,
-                                         const char *FileNameToShow);
+                                         const char *FileName);
 
 static void Brw_PutIconShow (const char *PathInTree,const char *FileName,
                              const char *Anchor);
@@ -5604,7 +5601,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /* Indent depending on level */
    if (Level)
       Brw_IndentAndWriteIconExpandContract (Level,FileBrowserId,RowId,IconThisRow,
-                                            PathInTree,FileName,FileNameToShow);
+                                            PathInTree,FileName);
 
    /* Put icon to show/hide file or folder */
    if (AdminDocsZone || AdminMarks)
@@ -5840,8 +5837,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                                   const char *FileBrowserId,const char *RowId,
                                                   Brw_IconTree_t IconThisRow,
                                                   const char PathInTree[PATH_MAX + 1],
-                                                  const char *FileName,
-                                                  const char *FileNameToShow)
+                                                  const char *FileName)
   {
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<table>"
@@ -5862,23 +5858,23 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
 	 /***** Visible icon to expand folder *****/
          Brw_PutIconToExpandFolder (FileBrowserId,RowId,
                                     false,	// Visible
-                                    PathInTree,FileName,FileNameToShow);
+                                    PathInTree,FileName);
 
 	 /***** Hidden icon to contract folder *****/
          Brw_PutIconToContractFolder (FileBrowserId,RowId,
                                       true,	// Hidden
-                                      PathInTree,FileName,FileNameToShow);
+                                      PathInTree,FileName);
 	 break;
       case Brw_ICON_TREE_CONTRACT:
 	 /***** Hidden icon to expand folder *****/
          Brw_PutIconToExpandFolder (FileBrowserId,RowId,
                                     true,	// Hidden
-                                    PathInTree,FileName,FileNameToShow);
+                                    PathInTree,FileName);
 
 	 /***** Visible icon to contract folder *****/
          Brw_PutIconToContractFolder (FileBrowserId,RowId,
                                       false,	// Visible
-                                      PathInTree,FileName,FileNameToShow);
+                                      PathInTree,FileName);
 	 break;
      }
    fprintf (Gbl.F.Out,"</td>");
@@ -5915,8 +5911,7 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *RowId,
                                        bool Hidden,
                                        const char PathInTree[PATH_MAX + 1],
-                                       const char *FileName,
-                                       const char *FileNameToShow)
+                                       const char *FileName)
   {
    extern const char *Txt_Expand;
    char JavaScriptFuncToExpandFolder[256 + Brw_MAX_ROW_ID];
@@ -5938,10 +5933,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
    Brw_PutParamsFileBrowser (Brw_ActExpandFolder[Gbl.FileBrowser.Type],
 			     PathInTree,FileName,
 			     Brw_IS_FOLDER,-1L);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     "%s %s",
-	     Txt_Expand,FileNameToShow);
-   Ico_PutIconLink ("caret-right.svg",Gbl.Title);
+   Ico_PutIconLink ("caret-right.svg",Txt_Expand);
    Frm_EndForm ();
 
    /***** End container *****/
@@ -5955,8 +5947,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *RowId,
                                          bool Hidden,
                                          const char PathInTree[PATH_MAX + 1],
-                                         const char *FileName,
-                                         const char *FileNameToShow)
+                                         const char *FileName)
   {
    extern const char *Txt_Contract;
    char JavaScriptFuncToContractFolder[256 + Brw_MAX_ROW_ID];
@@ -5978,10 +5969,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    Brw_PutParamsFileBrowser (Brw_ActContractFolder[Gbl.FileBrowser.Type],
 			     PathInTree,FileName,
 			     Brw_IS_FOLDER,-1L);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     "%s %s",
-	     Txt_Contract,FileNameToShow);
-   Ico_PutIconLink ("caret-down.svg",Gbl.Title);
+   Ico_PutIconLink ("caret-down.svg",Txt_Contract);
    Frm_EndForm ();
 
    /***** End container *****/
