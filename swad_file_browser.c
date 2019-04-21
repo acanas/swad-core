@@ -1264,7 +1264,7 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level);
 static void Brw_PutIconRemove (const char PathInTree[PATH_MAX + 1],
                                const char *FileName);
 static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
-                             const char *FileName,const char *FileNameShow);
+                             const char *FileName);
 static void Brw_PutIconPaste (unsigned Level,const char PathInTree[PATH_MAX + 1],
                               const char *FileName,const char *FileNameToShow);
 static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
@@ -5468,7 +5468,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /***** Initializations *****/
    Gbl.FileBrowser.Clipboard.IsThisFile = false;
    snprintf (FileBrowserId,sizeof (FileBrowserId),
-	     "file_browser_%u",
+	     "fil_brw_%u",
 	     Gbl.FileBrowser.Id);
 
    /***** Is this row hidden or visible? *****/
@@ -5714,7 +5714,7 @@ static void Brw_PutIconsRemoveCopyPaste (unsigned Level,
    Brw_PutIconRemove (PathInTree,FileName);
 
    /***** Icon to copy *****/
-   Brw_PutIconCopy (PathInTree,FileName,FileNameToShow);
+   Brw_PutIconCopy (PathInTree,FileName);
 
    /***** Icon to paste *****/
    Brw_PutIconPaste (Level,PathInTree,FileName,FileNameToShow);
@@ -5795,6 +5795,7 @@ static void Brw_PutIconRemove (const char PathInTree[PATH_MAX + 1],
 	}
    else
       Ico_PutIconRemovalNotAllowed ();
+
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -5803,22 +5804,15 @@ static void Brw_PutIconRemove (const char PathInTree[PATH_MAX + 1],
 /*****************************************************************************/
 
 static void Brw_PutIconCopy (const char PathInTree[PATH_MAX + 1],
-                             const char *FileName,const char *FileNameToShow)
+                             const char *FileName)
   {
-   extern const char *Txt_Copy_FOLDER_FILE_OR_LINK_X;
-
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
    /***** Form to copy into the clipboard *****/
-   Frm_StartForm (Brw_ActCopy[Gbl.FileBrowser.Type]);
-   Brw_PutParamsFileBrowser (Brw_ActCopy[Gbl.FileBrowser.Type],
-                             PathInTree,FileName,
-                             Gbl.FileBrowser.FileType,-1L);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Copy_FOLDER_FILE_OR_LINK_X,
-	     FileNameToShow);
-   Ico_PutIconLink ("copy.svg",Gbl.Title);
-   Frm_EndForm ();
+   Brw_PathInTree = PathInTree;
+   Brw_FileName   = FileName;
+   Ico_PutContextualIconToCopy (Brw_ActCopy[Gbl.FileBrowser.Type],
+				Brw_PutImplicitParamsFileBrowser);
 
    fprintf (Gbl.F.Out,"</td>");
   }

@@ -4669,25 +4669,25 @@ const char *Txt_Cookies =
 	"Cookies";
 #endif
 
-const char *Txt_Copy_FOLDER_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Copy =
 #if   L==1	// ca
-	"Copiar %s";
+	"Copiar";
 #elif L==2	// de
-	"Kopieren %s";
+	"Kopieren";
 #elif L==3	// en
-	"Copy %s";
+	"Copy";
 #elif L==4	// es
-	"Copiar %s";
+	"Copiar";
 #elif L==5	// fr
-	"Copier %s";
+	"Copier";
 #elif L==6	// gn
-	"Ekopia %s";
+	"Ekopia";
 #elif L==7	// it
-	"Copiare %s";
+	"Copiare";
 #elif L==8	// pl
-	"Kopia %s";
+	"Kopia";
 #elif L==9	// pt
-	"Copiar %s";
+	"Copiar";
 #endif
 
 const char *Txt_Copy_not_allowed =

@@ -288,6 +288,15 @@ void Ico_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) (v
 				  Txt_Print);
   }
 
+void Ico_PutContextualIconToCopy (Act_Action_t NextAction,void (*FuncParams) (void))
+  {
+   extern const char *Txt_Copy;
+
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "copy.svg",
+				  Txt_Copy);
+  }
+
 /*****************************************************************************/
 /**************** Show an icon inside a div (without text) *******************/
 /*****************************************************************************/
