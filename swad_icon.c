@@ -306,6 +306,16 @@ void Ico_PutContextualIconToPaste (Act_Action_t NextAction,void (*FuncParams) (v
 				  Txt_Paste);
   }
 
+void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,void (*FuncParams) (void),bool Open)
+  {
+   extern const char *Txt_Upload_file_or_create_folder;
+
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  Open ? "folder-open-yellow-plus.png" :
+				  	 "folder-yellow-plus.png",
+				  Txt_Upload_file_or_create_folder);
+  }
+
 /*****************************************************************************/
 /**************** Show an icon inside a div (without text) *******************/
 /*****************************************************************************/

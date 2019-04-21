@@ -1330,25 +1330,29 @@ void Fol_UnfollowUsrs (void)
 static void Fol_PutParamsFollowSelectedStds (void)
   {
    /***** Hidden parameter with the encrypted codes of users selected *****/
-   Usr_PutHiddenParUsrCodAll (ActFolSevStd,Gbl.Usrs.Selected.List[Rol_UNK]);
+   // Usr_PutHiddenParUsrCodAll (ActFolSevStd,Gbl.Usrs.Selected.List[Rol_UNK]);
+   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
   }
 
 static void Fol_PutParamsFollowSelectedTchs (void)
   {
    /***** Hidden parameter with the encrypted codes of users selected *****/
-   Usr_PutHiddenParUsrCodAll (ActFolSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
+   // Usr_PutHiddenParUsrCodAll (ActFolSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
+   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
   }
 
 static void Fol_PutParamsUnfollowSelectedStds (void)
   {
    /***** Hidden parameter with the encrypted codes of users selected *****/
-   Usr_PutHiddenParUsrCodAll (ActUnfSevStd,Gbl.Usrs.Selected.List[Rol_UNK]);
+   // Usr_PutHiddenParUsrCodAll (ActUnfSevStd,Gbl.Usrs.Selected.List[Rol_UNK]);
+   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
   }
 
 static void Fol_PutParamsUnfollowSelectedTchs (void)
   {
    /***** Hidden parameter with the encrypted codes of users selected *****/
-   Usr_PutHiddenParUsrCodAll (ActUnfSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
+   // Usr_PutHiddenParUsrCodAll (ActUnfSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
+   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
   }
 
 /*****************************************************************************/

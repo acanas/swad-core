@@ -3052,7 +3052,8 @@ static void Att_PutParamsToPrintStdsList (void)
    if (Gbl.AttEvents.ShowDetails)
       Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParUsrCodAll (ActPrnLstUsrAtt,Gbl.Usrs.Selected.List[Rol_UNK]);
+   // Usr_PutHiddenParUsrCodAll (ActPrnLstUsrAtt,Gbl.Usrs.Selected.List[Rol_UNK]);
+   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
    if (Gbl.AttEvents.StrAttCodsSelected)
       if (Gbl.AttEvents.StrAttCodsSelected[0])
 	 Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
@@ -3070,7 +3071,8 @@ static void Att_PutButtonToShowDetails (void)
    Frm_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_DETAILS_ID);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Selected.List[Rol_UNK]);
+   // Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Selected.List[Rol_UNK]);
+   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
    if (Gbl.AttEvents.StrAttCodsSelected)
       if (Gbl.AttEvents.StrAttCodsSelected[0])
 	 Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
@@ -3109,7 +3111,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
      {
       Frm_StartFormAnchor (Gbl.Action.Act,Att_ATTENDANCE_TABLE_ID);
       Grp_PutParamsCodGrps ();
-      Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Selected.List[Rol_UNK]);
+      // Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Selected.List[Rol_UNK]);
+      Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
      }
 
    /***** Start table *****/

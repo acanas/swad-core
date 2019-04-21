@@ -1595,7 +1595,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamLong ("FirstRow",FirstRow - Gbl.Stat.RowsPerPage);
       Par_PutHiddenParamLong ("LastRow" ,FirstRow - 1);
       Par_PutHiddenParamLong ("RowsPage",Gbl.Stat.RowsPerPage);
-      Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Selected.List[Rol_UNK]);
+      // Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Selected.List[Rol_UNK]);
+      Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
      }
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20%%;\">");
    if (FirstRow > 1)
@@ -1631,7 +1632,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamUnsigned ("FirstRow" ,(unsigned) (LastRow + 1));
       Par_PutHiddenParamUnsigned ("LastRow"  ,(unsigned) (LastRow + Gbl.Stat.RowsPerPage));
       Par_PutHiddenParamUnsigned ("RowsPage" ,(unsigned) Gbl.Stat.RowsPerPage);
-      Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Selected.List[Rol_UNK]);
+      // Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Selected.List[Rol_UNK]);
+      Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
      }
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:20%%;\">");
    if (LastRow < NumRows)
@@ -2106,7 +2108,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    Par_PutHiddenParamUnsigned ("CountType",(unsigned) Gbl.Stat.CountType);
    Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
    if (Gbl.Action.Act == ActSeeAccCrs)
-      Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Selected.List[Rol_UNK]);
+      // Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Selected.List[Rol_UNK]);
+      Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
    else // Gbl.Action.Act == ActSeeAccGbl
      {
       Par_PutHiddenParamUnsigned ("Role",(unsigned) Gbl.Stat.Role);

@@ -986,7 +986,8 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
       /* Link to print view */
       Frm_StartForm (ActPrnRecSevGst);
-      Usr_PutHiddenParUsrCodAll (ActPrnRecSevGst,Gbl.Usrs.Selected.List[Rol_UNK]);
+      // Usr_PutHiddenParUsrCodAll (ActPrnRecSevGst,Gbl.Usrs.Selected.List[Rol_UNK]);
+      Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
@@ -1083,7 +1084,8 @@ static void Rec_ShowRecordOneStdCrs (void)
 
    /* Link to print view */
    Frm_StartForm (ActPrnRecSevStd);
-   Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   // Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
    Rec_ShowLinkToPrintPreviewOfRecords ();
    Frm_EndForm ();
 
@@ -1184,7 +1186,8 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
       /* Link to print view */
       Frm_StartForm (ActPrnRecSevStd);
-      Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Selected.List[Rol_UNK]);
+      // Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Selected.List[Rol_UNK]);
+      Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
@@ -1310,7 +1313,8 @@ static void Rec_ShowRecordOneTchCrs (void)
 
    /* Link to print view */
    Frm_StartForm (ActPrnRecSevTch);
-   Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   // Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
    Par_PutHiddenParamChar ("ShowOfficeHours",ShowOfficeHours ? 'Y' :
 	                                                       'N');
@@ -1398,7 +1402,8 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
       /* Link to print view */
       Frm_StartForm (ActPrnRecSevTch);
-      Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
+      // Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
+      Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
       Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
       Par_PutHiddenParamChar ("ShowOfficeHours",
                               ShowOfficeHours ? 'Y' :
@@ -1554,7 +1559,8 @@ static void Rec_PutParamsShowOfficeHoursOneTch (void)
 
 static void Rec_PutParamsShowOfficeHoursSeveralTchs (void)
   {
-   Usr_PutHiddenParUsrCodAll (ActSeeRecSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
+   // Usr_PutHiddenParUsrCodAll (ActSeeRecSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
+   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
   }
 
@@ -1728,7 +1734,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 				    Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	    if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
-	       Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Selected.List[Rol_UNK]);
+	       // Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Selected.List[Rol_UNK]);
+	       Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
 	   }
 	 break;
       default:

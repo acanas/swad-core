@@ -53,8 +53,11 @@ extern struct Globals Gbl;
 
 static void Ses_RemoveSessionFromDB (void);
 
+/*
 static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t NextAction,
                                                const char *ParamName);
+*/
+static bool Ses_CheckIfHiddenParIsAlreadyInDB (const char *ParamName);
 
 /*****************************************************************************/
 /************************** Get number of open sessions **********************/
@@ -332,8 +335,11 @@ bool Ses_GetSessionData (void)
 /******************* Insert hidden parameter in the database *****************/
 /*****************************************************************************/
 
+/*
 void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
                               const char *ParamName,const char *ParamValue)
+*/
+void Ses_InsertHiddenParInDB (const char *ParamName,const char *ParamValue)
   {
    /***** Before of inserting the first hidden parameter passed to the next action,
 	  delete all the parameters coming from the previous action *****/
@@ -342,9 +348,11 @@ void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
    /***** For a unique session-action-parameter, don't insert a parameter more than one time *****/
    if (ParamName)
       if (ParamName[0])
-	 if (!Ses_CheckIfHiddenParIsAlreadyInDB (NextAction,ParamName))
+	 // if (!Ses_CheckIfHiddenParIsAlreadyInDB (NextAction,ParamName))
+         if (!Ses_CheckIfHiddenParIsAlreadyInDB (ParamName))
 	   {
 	    /***** Insert parameter in the database *****/
+	    /*
 	    DB_QueryINSERT ("can not create hidden parameter",
 			    "INSERT INTO hidden_params"
 			    " (SessionId,Action,ParamName,ParamValue)"
@@ -352,6 +360,16 @@ void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
 			    " ('%s',%ld,'%s','%s')",
 			    Gbl.Session.Id,
 			    Act_GetActCod (NextAction),
+			    ParamName,
+			    ParamValue ? ParamValue :
+					 "");
+	    */
+	    DB_QueryINSERT ("can not create hidden parameter",
+			    "INSERT INTO hidden_params"
+			    " (SessionId,ParamName,ParamValue)"
+			    " VALUES"
+			    " ('%s','%s','%s')",
+			    Gbl.Session.Id,
 			    ParamName,
 			    ParamValue ? ParamValue :
 					 "");
@@ -391,17 +409,30 @@ void Ses_RemoveHiddenParFromExpiredSessions (void)
 /*****************************************************************************/
 // Return true if the parameter already existed in database
 
+/*
 static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t NextAction,
                                                const char *ParamName)
+*/
+static bool Ses_CheckIfHiddenParIsAlreadyInDB (const char *ParamName)
   {
    /***** Get a hidden parameter from database *****/
+   /*
    return (DB_QueryCOUNT ("can not check if a hidden parameter"
 			  " is already in database",
 			  "SELECT COUNT(*) FROM hidden_params"
 			  " WHERE SessionId='%s'"
 			  " AND Action=%ld AND ParamName='%s'",
 			  Gbl.Session.Id,
-			  Act_GetActCod (NextAction),ParamName) != 0);
+			  Act_GetActCod (NextAction),
+			  ParamName) != 0);
+   */
+   return (DB_QueryCOUNT ("can not check if a hidden parameter"
+			  " is already in database",
+			  "SELECT COUNT(*) FROM hidden_params"
+			  " WHERE SessionId='%s'"
+			  " AND ParamName='%s'",
+			  Gbl.Session.Id,
+			  ParamName) != 0);
   }
 
 /*****************************************************************************/
@@ -409,8 +440,12 @@ static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t NextAction,
 /*****************************************************************************/
 // Return true if the parameter is too big
 
+/*
 unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
                                  const char *ParamName,char *ParamValue,
+                                 size_t MaxBytes)
+*/
+unsigned Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
                                  size_t MaxBytes)
   {
    MYSQL_RES *mysql_res;
@@ -425,6 +460,7 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
      {
       /***** Get a hidden parameter from database *****/
+      /*
       NumRows = DB_QuerySELECT (&mysql_res,"can not get a hidden parameter",
 				"SELECT ParamValue"
 				" FROM hidden_params"
@@ -433,6 +469,14 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
 				" AND ParamName='%s'",
 				Gbl.Session.Id,
 				Act_GetActCod (NextAction),
+				ParamName);
+      */
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get a hidden parameter",
+				"SELECT ParamValue"
+				" FROM hidden_params"
+				" WHERE SessionId='%s'"
+				" AND ParamName='%s'",
+				Gbl.Session.Id,
 				ParamName);
 
       /***** Check if the parameter is found in database *****/

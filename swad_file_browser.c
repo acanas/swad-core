@@ -1289,15 +1289,13 @@ static void Brw_PutIconFolder (unsigned Level,
                                const char *FileBrowserId,const char *RowId,
                                Brw_IconTree_t IconSubtree,
                                const char *PathInTree,
-                               const char *FileName,
-                               const char *FileNameToShow);
+                               const char *FileName);
 static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *RowId,
 			                  bool Open,bool Hidden);
 static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *RowId,
 				       bool Open,bool Hidden,
 				       const char PathInTree[PATH_MAX + 1],
-				       const char *FileName,
-				       const char *FileNameToShow);
+				       const char *FileName);
 
 static void Brw_PutIconNewFileOrFolder (void);
 static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
@@ -2278,13 +2276,21 @@ long Brw_GetParamFilCod (void)
 
 static void Brw_PutImplicitParamsFileBrowser (void)
   {
+   /*
    Brw_PutParamsFileBrowser (ActUnk,
 			     Brw_PathInTree,Brw_FileName,
 			     Gbl.FileBrowser.FileType,-1L);
+   */
+   Brw_PutParamsFileBrowser (Brw_PathInTree,Brw_FileName,
+			     Gbl.FileBrowser.FileType,-1L);
   }
 
+/*
 void Brw_PutParamsFileBrowser (Act_Action_t NextAction,
                                const char *PathInTree,const char *FileFolderName,
+                               Brw_FileType_t FileType,long FilCod)
+*/
+void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FileFolderName,
                                Brw_FileType_t FileType,long FilCod)
   {
    if (Brw_GetIfGroupFileBrowser ())		// This file browser needs specify a group
@@ -2293,12 +2299,13 @@ void Brw_PutParamsFileBrowser (Act_Action_t NextAction,
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       /***** Project code *****/
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCod);
-   else if (NextAction != ActUnk)
+   else// if (NextAction != ActUnk)
      {
       if (Brw_GetIfCrsAssigWorksFileBrowser ())
 	{
 	 /***** Users selected *****/
-	 Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Selected.List[Rol_UNK]);
+	 // Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Selected.List[Rol_UNK]);
+	 Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
 	 Usr_PutParamOtherUsrCodEncrypted ();
 	}
      }
@@ -4935,8 +4942,11 @@ static void Brw_PutParamsFullTree (void)
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCod);
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+      /*
       Usr_PutHiddenParUsrCodAll (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
                                  Gbl.Usrs.Selected.List[Rol_UNK]);
+      */
+      Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
   }
 
 /*****************************************************************************/
@@ -5616,7 +5626,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    if (Gbl.FileBrowser.FileType == Brw_IS_FOLDER)
       /* Icon with folder */
       Brw_PutIconFolder (Level,FileBrowserId,RowId,IconThisRow,
-                         PathInTree,FileName,FileNameToShow);
+                         PathInTree,FileName);
    else	// File or link
      {
       /* Icon with file type or link */
@@ -5930,8 +5940,12 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
    Frm_StartFormAnchorOnSubmit (Brw_ActExpandFolder[Gbl.FileBrowser.Type],
 				FileBrowserId,
 				JavaScriptFuncToExpandFolder);	// JavaScript function to unhide rows
+   /*
    Brw_PutParamsFileBrowser (Brw_ActExpandFolder[Gbl.FileBrowser.Type],
 			     PathInTree,FileName,
+			     Brw_IS_FOLDER,-1L);
+   */
+   Brw_PutParamsFileBrowser (PathInTree,FileName,
 			     Brw_IS_FOLDER,-1L);
    Ico_PutIconLink ("caret-right.svg",Txt_Expand);
    Frm_EndForm ();
@@ -5966,8 +5980,12 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    Frm_StartFormAnchorOnSubmit (Brw_ActContractFolder[Gbl.FileBrowser.Type],
 				FileBrowserId,
 				JavaScriptFuncToContractFolder);	// JavaScript function to hide rows
+   /*
    Brw_PutParamsFileBrowser (Brw_ActContractFolder[Gbl.FileBrowser.Type],
 			     PathInTree,FileName,
+			     Brw_IS_FOLDER,-1L);
+   */
+   Brw_PutParamsFileBrowser (PathInTree,FileName,
 			     Brw_IS_FOLDER,-1L);
    Ico_PutIconLink ("caret-down.svg",Txt_Contract);
    Frm_EndForm ();
@@ -6031,8 +6049,7 @@ static void Brw_PutIconFolder (unsigned Level,
                                const char *FileBrowserId,const char *RowId,
                                Brw_IconTree_t IconSubtree,
                                const char *PathInTree,
-                               const char *FileName,
-                               const char *FileNameToShow)
+                               const char *FileName)
   {
    bool ICanCreate;
 
@@ -6049,13 +6066,13 @@ static void Brw_PutIconFolder (unsigned Level,
 	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
 				    false,	// Closed
 				    false,	// Visible
-				    PathInTree,FileName,FileNameToShow);
+				    PathInTree,FileName);
 
 	 /***** Hidden icon with folder open *****/
 	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
 				    true,	// Open
 				    true,	// Hidden
-				    PathInTree,FileName,FileNameToShow);
+				    PathInTree,FileName);
 	}
       else
 	{
@@ -6063,13 +6080,13 @@ static void Brw_PutIconFolder (unsigned Level,
 	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
 				    false,	// Closed
 				    true,	// Hidden
-				    PathInTree,FileName,FileNameToShow);
+				    PathInTree,FileName);
 
 	 /***** Visible icon with folder open *****/
 	 Brw_PutIconFolderWithPlus (FileBrowserId,RowId,
 				    true,	// Open
 				    false,	// Visible
-				    PathInTree,FileName,FileNameToShow);
+				    PathInTree,FileName);
 	}
      }
    else	// I can't create a new file or folder
@@ -6143,10 +6160,9 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
 static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *RowId,
 				       bool Open,bool Hidden,
 				       const char PathInTree[PATH_MAX + 1],
-				       const char *FileName,
-				       const char *FileNameToShow)
+				       const char *FileName)
   {
-   extern const char *Txt_Upload_file_or_create_folder_in_FOLDER;
+   // extern const char *Txt_Upload_file_or_create_folder;
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div id=\"folder_%s_%s_%s\"",
@@ -6158,18 +6174,21 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
    fprintf (Gbl.F.Out,">");
 
    /***** Form and icon *****/
+   Brw_PathInTree = PathInTree;
+   Brw_FileName   = FileName;
+   Ico_PutContextualIconToCreateInFolder (Brw_ActFormCreate[Gbl.FileBrowser.Type],
+					  Brw_PutImplicitParamsFileBrowser,
+					  Open);
+/*
    Frm_StartForm (Brw_ActFormCreate[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Brw_ActFormCreate[Gbl.FileBrowser.Type],
 			     PathInTree,FileName,
 			     Brw_IS_FOLDER,-1L);
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_Upload_file_or_create_folder_in_FOLDER,
-	     FileNameToShow);
    Ico_PutIconLink (Open ? "folder-open-yellow-plus.png" :
 	                   "folder-yellow-plus.png",
-	            Gbl.Title);
+	            Txt_Upload_file_or_create_folder);
    Frm_EndForm ();
-
+*/
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -6205,8 +6224,13 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
    extern const char *Txt_View_data_of_FILE_OR_LINK_X;
 
    Frm_StartForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
+   /*
    Brw_PutParamsFileBrowser (Brw_ActReqDatFile[Gbl.FileBrowser.Type],
                              NULL,NULL,
+                             Brw_IS_UNKNOWN,	// Not used
+                             FileMetadata->FilCod);
+   */
+   Brw_PutParamsFileBrowser (NULL,NULL,
                              Brw_IS_UNKNOWN,	// Not used
                              FileMetadata->FilCod);
 
@@ -6298,8 +6322,12 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
          Frm_StartForm (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
+         /*
          Brw_PutParamsFileBrowser (Brw_ActRenameFolder[Gbl.FileBrowser.Type],
                                    PathInTree,FileName,
+                                   Brw_IS_FOLDER,-1L);
+         */
+         Brw_PutParamsFileBrowser (PathInTree,FileName,
                                    Brw_IS_FOLDER,-1L);
 	}
 
@@ -6348,8 +6376,12 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
       fprintf (Gbl.F.Out,"<div class=\"FILENAME\">");
 
       Frm_StartForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
+      /*
       Brw_PutParamsFileBrowser (Brw_ActDowFile[Gbl.FileBrowser.Type],
                                 PathInTree,FileName,
+                                Gbl.FileBrowser.FileType,-1L);
+      */
+      Brw_PutParamsFileBrowser (PathInTree,FileName,
                                 Gbl.FileBrowser.FileType,-1L);
 
       /* Link to the form and to the file */
@@ -6603,8 +6635,13 @@ void Brw_AskRemFileFromTree (void)
 
 static void Brw_PutParamsRemFile (void)
   {
+   /*
    Brw_PutParamsFileBrowser (Brw_ActRemoveFile[Gbl.FileBrowser.Type],
 			     Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+			     Gbl.FileBrowser.FilFolLnkName,
+			     Gbl.FileBrowser.FileType,-1L);
+   */
+   Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
 			     Gbl.FileBrowser.FilFolLnkName,
 			     Gbl.FileBrowser.FileType,-1L);
   }
@@ -6744,8 +6781,13 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
 
 static void Brw_PutParamsRemFolder (void)
   {
+   /*
    Brw_PutParamsFileBrowser (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],
                              Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+                             Gbl.FileBrowser.FilFolLnkName,
+                             Brw_IS_FOLDER,-1L);
+   */
+   Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
                              Brw_IS_FOLDER,-1L);
   }
@@ -8412,8 +8454,13 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 
    /***** Start form *****/
    Frm_StartForm (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
+   /*
    Brw_PutParamsFileBrowser (Brw_ActCreateFolder[Gbl.FileBrowser.Type],
                              Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+                             Gbl.FileBrowser.FilFolLnkName,
+                             Brw_IS_FOLDER,-1L);
+   */
+   Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
                              Brw_IS_FOLDER,-1L);
 
@@ -8475,8 +8522,13 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
             Cfg_URL_ICON_PUBLIC);
    Par_PutHiddenParamLong ("act",Act_GetActCod (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]));
    Par_PutHiddenParamString ("ses",Gbl.Session.Id);
+   /*
    Brw_PutParamsFileBrowser (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type],
                              Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+                             Gbl.FileBrowser.FilFolLnkName,
+                             Brw_IS_FOLDER,-1L);
+   */
+   Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
                              Brw_IS_FOLDER,-1L);
 
@@ -8488,8 +8540,13 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** Put button to refresh file browser after upload *****/
    Frm_StartForm (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type]);
+   /*
    Brw_PutParamsFileBrowser (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type],
                              NULL,NULL,
+                             Brw_IS_UNKNOWN,	// Not used
+                             -1L);
+   */
+   Brw_PutParamsFileBrowser (NULL,NULL,
                              Brw_IS_UNKNOWN,	// Not used
                              -1L);
 
@@ -8524,8 +8581,13 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /***** Form to upload one files using the classic way *****/
    Frm_StartForm (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
+   /*
    Brw_PutParamsFileBrowser (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type],
                              Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+                             Gbl.FileBrowser.FilFolLnkName,
+                             Brw_IS_FOLDER,-1L);
+   */
+   Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
                              Brw_IS_FOLDER,-1L);
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" />",
@@ -8551,8 +8613,13 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 
    /***** Start form *****/
    Frm_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
+   /*
    Brw_PutParamsFileBrowser (Brw_ActPaste[Gbl.FileBrowser.Type],
                              Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+                             Gbl.FileBrowser.FilFolLnkName,
+                             Brw_IS_FOLDER,-1L);
+   */
+   Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
                              Brw_IS_FOLDER,-1L);
 
@@ -8586,8 +8653,13 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    /***** Start form *****/
    Frm_StartForm (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
+   /*
    Brw_PutParamsFileBrowser (Brw_ActCreateLink[Gbl.FileBrowser.Type],
                              Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+                             Gbl.FileBrowser.FilFolLnkName,
+                             Brw_IS_FOLDER,-1L);
+   */
+   Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
                              Brw_IS_FOLDER,-1L);
 
@@ -9581,8 +9653,13 @@ void Brw_ShowFileMetadata (void)
 	      }
 
 	    Frm_StartForm (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
+	    /*
             Brw_PutParamsFileBrowser (Brw_ActRecDatFile[Gbl.FileBrowser.Type],
                                       FileMetadata.PathInTreeUntilFilFolLnk,
+				      FileMetadata.FilFolLnkName,
+				      FileMetadata.FileType,-1L);
+            */
+            Brw_PutParamsFileBrowser (FileMetadata.PathInTreeUntilFilFolLnk,
 				      FileMetadata.FilFolLnkName,
 				      FileMetadata.FileType,-1L);
 	   }
@@ -10099,8 +10176,13 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       /* Form to see marks */
       Frm_StartForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
 								  ActSeeMyMrkGrp);
+      /*
       Brw_PutParamsFileBrowser (ActUnk,
                                 FileMetadata->PathInTreeUntilFilFolLnk,
+			        FileMetadata->FilFolLnkName,
+			        FileMetadata->FileType,-1L);
+      */
+      Brw_PutParamsFileBrowser (FileMetadata->PathInTreeUntilFilFolLnk,
 			        FileMetadata->FilFolLnkName,
 			        FileMetadata->FileType,-1L);
 
@@ -10157,8 +10239,13 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t Fil
       /* Form to see marks */
       Frm_StartForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
 								  ActSeeMyMrkGrp);
+      /*
       Brw_PutParamsFileBrowser (ActUnk,
                                 Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+			        Gbl.FileBrowser.FilFolLnkName,
+			        FileType,-1L);
+      */
+      Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
 			        Gbl.FileBrowser.FilFolLnkName,
 			        FileType,-1L);
 
@@ -12174,8 +12261,17 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          Frm_StartForm (Action);
 
       /* Parameters to go to file / folder */
+      /*
       Brw_PutParamsFileBrowser (ActUnk,
 				FileMetadata.FileType == Brw_IS_FOLDER ? FileMetadata.PathInTreeUntilFilFolLnk :
+									 NULL,
+				FileMetadata.FileType == Brw_IS_FOLDER ? FileMetadata.FilFolLnkName :
+									 NULL,
+				FileMetadata.FileType,
+				FileMetadata.FileType == Brw_IS_FOLDER ? -1L :
+									 FileMetadata.FilCod);
+      */
+      Brw_PutParamsFileBrowser (FileMetadata.FileType == Brw_IS_FOLDER ? FileMetadata.PathInTreeUntilFilFolLnk :
 									 NULL,
 				FileMetadata.FileType == Brw_IS_FOLDER ? FileMetadata.FilFolLnkName :
 									 NULL,

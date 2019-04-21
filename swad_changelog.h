@@ -448,10 +448,16 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.117.5 (2019-04-21)"
+#define Log_PLATFORM_VERSION	"SWAD 18.118 (2019-04-22)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.116.5.js"
 /*
+	Version 18.118:   Apr 22, 2019	Changed the behaviour of creating in folder of file browser.
+					Removed action from hidden_params table. (242841 lines)
+					2 changes necessary in database:
+DROP TABLE hidden_params;
+CREATE TABLE IF NOT EXISTS hidden_params (SessionId CHAR(43) NOT NULL,ParamName VARCHAR(255) NOT NULL,ParamValue LONGTEXT NOT NULL,INDEX(SessionId));
+
 	Version 18.117.5: Apr 21, 2019	Changed the behaviour of expanding/contracting folder in file browser. (242610 lines)
 	Version 18.117.4: Apr 21, 2019	Code refactoring in file browser. (242621 lines)
 	Version 18.117.3: Apr 21, 2019	Changed the behaviour of pasting a file/folder in file browser. (242633 lines)
@@ -476,6 +482,7 @@ ps2pdf source.ps destination.pdf
 	Version 18.114.1: Apr 18, 2019 	Changes in translation of title related to project locking/unlocking. (243024 lines)
 	Version 18.114:   Apr 17, 2019 	Project locking/unlocking is made via AJAX. (243023 lines)
 	Version 18.113:   Apr 17, 2019 	Individual locking of the edition of each project through a padlock icon. Only the teacher of the subject can lock / unlock each project. Suggested by Pedro Villar Castro. (243000 lines)
+					1 change necessary in database:
 ALTER TABLE projects ADD COLUMN Locked ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER DptCod;
 
 	Version 18.112.2: Apr 12, 2019 	Changed icons for preassigned/non-preassigned projects. (242783 lines)

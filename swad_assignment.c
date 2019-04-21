@@ -484,7 +484,7 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
 
 static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
   {
-   extern const char *Txt_Upload_file_or_create_folder_in_FOLDER;
+   extern const char *Txt_Upload_file_or_create_folder;
    extern const char *Txt_Folder;
    bool ICanSendFiles = !Asg->Hidden &&				// It's visible (not hidden)
                         Asg->Open &&				// It's open (inside dates)
@@ -497,14 +497,16 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
      {
       /* Form to create a new file or folder */
       Frm_StartForm (ActFrmCreAsgUsr);
+      /*
       Brw_PutParamsFileBrowser (ActUnk,
 				Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
 				Asg->Folder,
 				Brw_IS_FOLDER,-1L);
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Upload_file_or_create_folder_in_FOLDER,
-	        Asg->Folder);
-      Ico_PutIconLink ("folder-open-green.svg",Gbl.Title);
+      */
+      Brw_PutParamsFileBrowser (Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+				Asg->Folder,
+				Brw_IS_FOLDER,-1L);
+      Ico_PutIconLink ("folder-open-green.svg",Txt_Upload_file_or_create_folder);
       Frm_EndForm ();
      }
    else			// Sending of files disabled

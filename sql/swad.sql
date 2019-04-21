@@ -649,12 +649,17 @@ CREATE TABLE IF NOT EXISTS games (
 --
 -- Table hidden_params: stores some hidden parameters passed from a page to another using database instead of forms
 --
+-- CREATE TABLE IF NOT EXISTS hidden_params (
+-- 	SessionId CHAR(43) NOT NULL,
+-- 	Action INT NOT NULL,
+-- 	ParamName VARCHAR(255) NOT NULL,
+-- 	ParamValue LONGTEXT NOT NULL,
+-- 	INDEX(SessionId,Action));
 CREATE TABLE IF NOT EXISTS hidden_params (
 	SessionId CHAR(43) NOT NULL,
-	Action INT NOT NULL,
 	ParamName VARCHAR(255) NOT NULL,
 	ParamValue LONGTEXT NOT NULL,
-	INDEX(SessionId,Action));
+	INDEX(SessionId));
 --
 -- Table holidays: stores the holidays in each institution
 --

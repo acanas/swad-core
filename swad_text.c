@@ -51204,25 +51204,25 @@ const char *Txt_Upload_file =
 	"Fazer upload de arquivo";
 #endif
 
-const char *Txt_Upload_file_or_create_folder_in_FOLDER =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Upload_file_or_create_folder =
 #if   L==1	// ca
-	"A&ntilde;adir archivos o crear carpeta en %s";	// Necessita traduccio
+	"A&ntilde;adir archivos o crear carpeta";	// Necessita traduccio
 #elif L==2	// de
-	"Datei uploaden oder Verzeichnis in %s erstellen";
+	"Datei uploaden oder Verzeichnis erstellen";
 #elif L==3	// en
-	"Upload files or create folder in %s";
+	"Upload files or create folder";
 #elif L==4	// es
-	"A&ntilde;adir archivos o crear carpeta en %s";
+	"A&ntilde;adir archivos o crear carpeta";
 #elif L==5	// fr
-	"Charger fichiers ou cr&eacute;er r&eacute;pertoire dans %s";
+	"Charger fichiers ou cr&eacute;er r&eacute;pertoire";
 #elif L==6	// gn
-	"A&ntilde;adir archivos o crear carpeta en %s";	// Okoteve traducción
+	"A&ntilde;adir archivos o crear carpeta";	// Okoteve traducción
 #elif L==7	// it
-	"Caricare file o creare cartella in %s";
+	"Caricare file o creare cartella";
 #elif L==8	// pl
-	"Upload file or create folder in %s";		// Potrzebujesz tlumaczenie
+	"Upload file or create folder";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Fazer upload de arquivos ou criar diret&oacute;rio em %s";
+	"Fazer upload de arquivos ou criar diret&oacute;rio";
 #endif
 
 const char *Txt_Upload_files =

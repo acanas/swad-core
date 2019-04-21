@@ -5643,14 +5643,16 @@ static void Usr_PutParamsConfirmIWantToSeeBigList (void)
 /************* Write parameter with the list of users selected ***************/
 /*****************************************************************************/
 
-void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods)
+// void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods)
+void Usr_PutHiddenParUsrCodAll (const char *ListUsrCods)
   {
    /***** Put a parameter indicating that a list of several users is present *****/
    Par_PutHiddenParamChar ("MultiUsrs",'Y');
 
    /***** Put a parameter with the encrypted user codes of several users *****/
    if (Gbl.Session.IsOpen)
-      Ses_InsertHiddenParInDB (NextAction,Usr_ParamUsrCod[Rol_UNK],ListUsrCods);
+      // Ses_InsertHiddenParInDB (NextAction,Usr_ParamUsrCod[Rol_UNK],ListUsrCods);
+      Ses_InsertHiddenParInDB (Usr_ParamUsrCod[Rol_UNK],ListUsrCods);
    else
       Par_PutHiddenParamString (Usr_ParamUsrCod[Rol_UNK],ListUsrCods);
   }
@@ -5670,7 +5672,11 @@ void Usr_GetListsSelectedUsrsCods (void)
       Usr_AllocateListSelectedUsrCod (Rol_UNK);
       if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
 	{
+	 /*
 	 Ses_GetHiddenParFromDB (Gbl.Action.Act,Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK],
+				 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+	 */
+	 Ses_GetHiddenParFromDB (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK],
 				 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,Gbl.Usrs.Selected.List[Rol_UNK],
 			   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
