@@ -11738,48 +11738,6 @@ const char *Txt_file_folder =
 	"arquivo/diret&oacute;rio";
 #endif
 
-const char *Txt_FILE_FOLDER_OR_LINK_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"<strong>%s</strong> ahora est&aacute; oculto.";	// Necessita traduccio
-#elif L==2	// de
-	"<strong>%s</strong> ist jetzt ausgeblendet.";
-#elif L==3	// en
-	"<strong>%s</strong> is now hidden.";
-#elif L==4	// es
-	"<strong>%s</strong> ahora est&aacute; oculto.";
-#elif L==5	// fr
-	"<strong>%s</strong> est maintenant cach&eacute;.";
-#elif L==6	// gn
-	"<strong>%s</strong> ahora est&aacute; oculto.";	// Okoteve traducción
-#elif L==7	// it
-	"<strong>%s</strong> &egrave; ora nascosto.";
-#elif L==8	// pl
-	"<strong>%s</strong> jest ukryty.";
-#elif L==9	// pt
-	"<strong>%s</strong> &eacute; agora oculto.";
-#endif
-
-const char *Txt_FILE_FOLDER_OR_LINK_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"<strong>%s</strong> ahora est&aacute; visible.";	// Necessita traduccio
-#elif L==2	// de
-	"<strong>%s</strong> ist jetzt sichtbar.";
-#elif L==3	// en
-	"<strong>%s</strong> is now visible.";
-#elif L==4	// es
-	"<strong>%s</strong> ahora est&aacute; visible.";
-#elif L==5	// fr
-	"<strong>%s</strong> est maintenant visible.";
-#elif L==6	// gn
-	"<strong>%s</strong> ahora est&aacute; visible.";	// Okoteve traducción
-#elif L==7	// it
-	"<strong>%s</strong> &egrave; ora visibile.";
-#elif L==8	// pl
-	"<strong>%s</strong> jest teraz widoczny.";
-#elif L==9	// pt
-	"<strong>%s</strong> &eacute; agora vis&iacute;vel.";
-#endif
-
 const char *Txt_FILE_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"<strong>%s</strong> eliminat.";
@@ -14412,27 +14370,6 @@ const char *Txt_Hide =
 	"Ukryj";
 #elif L==9	// pt
 	"Ocultar";
-#endif
-
-const char *Txt_Hide_FOLDER_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Amagar %s";
-#elif L==2	// de
-	"Ausblenden %s";
-#elif L==3	// en
-	"Hide %s";
-#elif L==4	// es
-	"Ocultar %s";
-#elif L==5	// fr
-	"Masquer %s";
-#elif L==6	// gn
-	"Ocultar %s";	// Okoteve traducción
-#elif L==7	// it
-	"Nascondi %s";
-#elif L==8	// pl
-	"Ukryj %s";
-#elif L==9	// pt
-	"Ocultar %s";
 #endif
 
 const char *Txt_Hide_left_column =
@@ -38793,27 +38730,6 @@ const char *Txt_Show =
 	"Pokaza&cacute;";
 #elif L==9	// pt
 	"Mostrar";
-#endif
-
-const char *Txt_Show_FOLDER_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Mostra %s";
-#elif L==2	// de
-	"Zeige %s";
-#elif L==3	// en
-	"Show %s";
-#elif L==4	// es
-	"Mostrar %s";
-#elif L==5	// fr
-	"Voir %s";
-#elif L==6	// gn
-	"Mostrar %s";	// Okoteve traducción
-#elif L==7	// it
-	"Visualizza %s";
-#elif L==8	// pl
-	"Pokaza&cacute; %s";
-#elif L==9	// pt
-	"Mostrar %s";
 #endif
 
 const char *Txt_Show_all_data_in_a_table =
