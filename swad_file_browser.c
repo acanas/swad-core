@@ -1257,9 +1257,6 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
                                      Brw_IconTree_t IconThisRow,
                                      const char PathInTree[PATH_MAX + 1],
                                      const char *FileName);
-static void Brw_PutIconsRemoveCopyPaste (unsigned Level,
-                                         const char PathInTree[PATH_MAX + 1],
-                                         const char *FileName);
 static bool Brw_CheckIfCanPasteIn (unsigned Level);
 static void Brw_PutIconRemove (const char PathInTree[PATH_MAX + 1],
                                const char *FileName);
@@ -5586,8 +5583,14 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       /* Check if I can modify (remove, rename, etc.) this file or folder */
       Gbl.FileBrowser.ICanEditFileOrFolder = Brw_CheckIfICanEditFileOrFolder (Level);
 
-      /* Put icons to remove, copy and paste */
-      Brw_PutIconsRemoveCopyPaste (Level,PathInTree,FileName);
+      /* Icon to remove folder, file or link */
+      Brw_PutIconRemove (PathInTree,FileName);
+
+      /* Icon to copy */
+      Brw_PutIconCopy (PathInTree,FileName);
+
+      /* Icon to paste */
+      Brw_PutIconPaste (Level,PathInTree,FileName);
      }
 
    /***** Indentation depending on level, icon, and file/folder name *****/
@@ -5700,24 +5703,6 @@ void Brw_SetFullPathInTree (const char PathInTreeUntilFileOrFolder[PATH_MAX + 1]
    else	// It's the root folder
       Str_Copy (Gbl.FileBrowser.Priv.FullPathInTree,PathInTreeUntilFileOrFolder,
 	        PATH_MAX);
-  }
-
-/*****************************************************************************/
-/****************** Put icons to remove, copy and paste **********************/
-/*****************************************************************************/
-
-static void Brw_PutIconsRemoveCopyPaste (unsigned Level,
-                                         const char PathInTree[PATH_MAX + 1],
-                                         const char *FileName)
-  {
-   /***** Icon to remove folder, file or link *****/
-   Brw_PutIconRemove (PathInTree,FileName);
-
-   /***** Icon to copy *****/
-   Brw_PutIconCopy (PathInTree,FileName);
-
-   /***** Icon to paste *****/
-   Brw_PutIconPaste (Level,PathInTree,FileName);
   }
 
 /*****************************************************************************/

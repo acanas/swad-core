@@ -448,10 +448,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.117.3 (2019-04-21)"
+#define Log_PLATFORM_VERSION	"SWAD 18.117.4 (2019-04-21)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.116.5.js"
 /*
+	Version 18.117.4: Apr 21, 2019	Code refactoring in file browser. (242621 lines)
 	Version 18.117.3: Apr 21, 2019	Changed the behaviour of pasting a file/folder in file browser. (242633 lines)
 	Version 18.117.2: Apr 21, 2019	Changed the behaviour of copying a file/folder in file browser. (242650 lines)
 	Version 18.117.1: Apr 21, 2019	Changed the behaviour of removing a file/folder in file browser. (242647 lines)
