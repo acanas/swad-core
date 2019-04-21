@@ -31908,27 +31908,6 @@ const char *Txt_Remove_file =
 	"Remover arquivo";
 #endif
 
-const char *Txt_Remove_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Eliminar %s";
-#elif L==2	// de
-	"Datei %s";
-#elif L==3	// en
-	"Remove %s";
-#elif L==4	// es
-	"Eliminar %s";
-#elif L==5	// fr
-	"Supprimer %s";
-#elif L==6	// gn
-	"Eliminar %s";	// Okoteve traducción
-#elif L==7	// it
-	"Rimuovere %s";
-#elif L==8	// pl
-	"Usu&nacute; %s";
-#elif L==9	// pt
-	"Remover %s";
-#endif
-
 const char *Txt_Remove_files_older_than_PART_1_OF_2 =
 #if   L==1	// ca
 	"Eliminar els arxius amb m&eacute;s de";
@@ -31990,27 +31969,6 @@ const char *Txt_Remove_folder =
 	"Usu&nacute; folder";
 #elif L==9	// pt
 	"Remover diret&oacute;rio";
-#endif
-
-const char *Txt_Remove_folder_X = // Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Eliminar carpeta %s";
-#elif L==2	// de
-	"Verzeichnis entfernen %s";
-#elif L==3	// en
-	"Remove folder %s";
-#elif L==4	// es
-	"Eliminar carpeta %s";
-#elif L==5	// fr
-	"Supprimer r&eacute;pertoire %s";
-#elif L==6	// gn
-	"Eliminar carpeta %s";	// Okoteve traducción
-#elif L==7	// it
-	"Rimuovere cartella %s";
-#elif L==8	// pl
-	"Usu&nacute; folder %s";
-#elif L==9	// pt
-	"Remover diret&oacute;rio %s";
 #endif
 
 const char *Txt_Remove_game =
