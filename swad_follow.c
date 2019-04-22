@@ -95,14 +95,11 @@ static void Fol_PutInactiveIconToFollowUnfollow (void);
 static void Fol_PutIconToFollow (struct UsrData *UsrDat);
 static void Fol_PutIconToUnfollow (struct UsrData *UsrDat);
 
-static void Fol_RequestFollowUsrs (Act_Action_t NextAction,void (*FuncParams) (void));
-static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction,void (*FuncParams) (void));
+static void Fol_RequestFollowUsrs (Act_Action_t NextAction);
+static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction);
 static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed);
-static void Fol_PutParamsFollowSelectedStds (void);
-static void Fol_PutParamsFollowSelectedTchs (void);
-static void Fol_PutParamsUnfollowSelectedStds (void);
-static void Fol_PutParamsUnfollowSelectedTchs (void);
+static void Fol_PutParamsSelectedUsrs (void);
 
 static void Fol_FollowUsr (struct UsrData *UsrDat);
 static void Fol_UnfollowUsr (struct UsrData *UsrDat);
@@ -1091,15 +1088,15 @@ void Fol_UnfollowUsr2 (void)
 
 void Fol_RequestFollowStds (void)
   {
-   Fol_RequestFollowUsrs (ActFolSevStd,Fol_PutParamsFollowSelectedStds);
+   Fol_RequestFollowUsrs (ActFolSevStd);
   }
 
 void Fol_RequestFollowTchs (void)
   {
-   Fol_RequestFollowUsrs (ActFolSevTch,Fol_PutParamsFollowSelectedTchs);
+   Fol_RequestFollowUsrs (ActFolSevTch);
   }
 
-static void Fol_RequestFollowUsrs (Act_Action_t NextAction,void (*FuncParams) (void))
+static void Fol_RequestFollowUsrs (Act_Action_t NextAction)
   {
    extern const char *Txt_Follow;
    extern const char *Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet;
@@ -1118,12 +1115,12 @@ static void Fol_RequestFollowUsrs (Act_Action_t NextAction,void (*FuncParams) (v
      {
       if (NumNotFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 FuncParams,
+				 Fol_PutParamsSelectedUsrs,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 FuncParams,
+				 Fol_PutParamsSelectedUsrs,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet,
 				 NumNotFollowed);
@@ -1135,15 +1132,15 @@ static void Fol_RequestFollowUsrs (Act_Action_t NextAction,void (*FuncParams) (v
 
 void Fol_RequestUnfollowStds (void)
   {
-   Fol_RequestUnfollowUsrs (ActUnfSevStd,Fol_PutParamsUnfollowSelectedStds);
+   Fol_RequestUnfollowUsrs (ActUnfSevStd);
   }
 
 void Fol_RequestUnfollowTchs (void)
   {
-   Fol_RequestUnfollowUsrs (ActUnfSevTch,Fol_PutParamsUnfollowSelectedTchs);
+   Fol_RequestUnfollowUsrs (ActUnfSevTch);
   }
 
-static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction,void (*FuncParams) (void))
+static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
   {
    extern const char *Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow;
    extern const char *Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow;
@@ -1162,12 +1159,12 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction,void (*FuncParams) 
      {
       if (NumFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 FuncParams,
+				 Fol_PutParamsSelectedUsrs,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 FuncParams,
+				 Fol_PutParamsSelectedUsrs,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow,
 				 NumFollowed);
@@ -1327,31 +1324,9 @@ void Fol_UnfollowUsrs (void)
 /**************** Put parameter with list of selected users ******************/
 /*****************************************************************************/
 
-static void Fol_PutParamsFollowSelectedStds (void)
+static void Fol_PutParamsSelectedUsrs (void)
   {
    /***** Hidden parameter with the encrypted codes of users selected *****/
-   // Usr_PutHiddenParUsrCodAll (ActFolSevStd,Gbl.Usrs.Selected.List[Rol_UNK]);
-   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
-  }
-
-static void Fol_PutParamsFollowSelectedTchs (void)
-  {
-   /***** Hidden parameter with the encrypted codes of users selected *****/
-   // Usr_PutHiddenParUsrCodAll (ActFolSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
-   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
-  }
-
-static void Fol_PutParamsUnfollowSelectedStds (void)
-  {
-   /***** Hidden parameter with the encrypted codes of users selected *****/
-   // Usr_PutHiddenParUsrCodAll (ActUnfSevStd,Gbl.Usrs.Selected.List[Rol_UNK]);
-   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
-  }
-
-static void Fol_PutParamsUnfollowSelectedTchs (void)
-  {
-   /***** Hidden parameter with the encrypted codes of users selected *****/
-   // Usr_PutHiddenParUsrCodAll (ActUnfSevTch,Gbl.Usrs.Selected.List[Rol_UNK]);
    Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
   }
 

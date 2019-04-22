@@ -46,18 +46,10 @@ void Ses_UpdateSessionDataInDB (void);
 void Ses_UpdateSessionLastRefreshInDB (void);
 void Ses_RemoveExpiredSessions (void);
 bool Ses_GetSessionData (void);
-/*
-void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
-                              const char *ParamName,const char *ParamValue);
-*/
+
 void Ses_InsertHiddenParInDB (const char *ParamName,const char *ParamValue);
 void Ses_RemoveHiddenParFromThisSession (void);
 void Ses_RemoveHiddenParFromExpiredSessions (void);
-/*
-unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
-                                 const char *ParamName,char *ParamValue,
-                                 size_t MaxBytes);
-*/
 unsigned Ses_GetHiddenParFromDB (const char *ParamName,char *ParamValue,
                                  size_t MaxBytes);
 

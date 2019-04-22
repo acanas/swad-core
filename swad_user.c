@@ -5643,7 +5643,6 @@ static void Usr_PutParamsConfirmIWantToSeeBigList (void)
 /************* Write parameter with the list of users selected ***************/
 /*****************************************************************************/
 
-// void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods)
 void Usr_PutHiddenParUsrCodAll (const char *ListUsrCods)
   {
    /***** Put a parameter indicating that a list of several users is present *****/
@@ -5651,7 +5650,6 @@ void Usr_PutHiddenParUsrCodAll (const char *ListUsrCods)
 
    /***** Put a parameter with the encrypted user codes of several users *****/
    if (Gbl.Session.IsOpen)
-      // Ses_InsertHiddenParInDB (NextAction,Usr_ParamUsrCod[Rol_UNK],ListUsrCods);
       Ses_InsertHiddenParInDB (Usr_ParamUsrCod[Rol_UNK],ListUsrCods);
    else
       Par_PutHiddenParamString (Usr_ParamUsrCod[Rol_UNK],ListUsrCods);
@@ -5672,10 +5670,6 @@ void Usr_GetListsSelectedUsrsCods (void)
       Usr_AllocateListSelectedUsrCod (Rol_UNK);
       if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
 	{
-	 /*
-	 Ses_GetHiddenParFromDB (Gbl.Action.Act,Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK],
-				 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-	 */
 	 Ses_GetHiddenParFromDB (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK],
 				 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 	 Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,Gbl.Usrs.Selected.List[Rol_UNK],
@@ -6121,9 +6115,6 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
    /***** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
-   /***** Get lists of the selected users if not already got *****/
-   Usr_GetListsSelectedUsrsCods ();
-
    /***** Get and order lists of users from this course *****/
    Usr_GetListUsrs (Hie_CRS,Rol_STD);
    Usr_GetListUsrs (Hie_CRS,Rol_NET);
@@ -6188,9 +6179,6 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
    Usr_FreeUsrsList (Rol_TCH);
    Usr_FreeUsrsList (Rol_NET);
    Usr_FreeUsrsList (Rol_STD);
-
-   /***** Free memory used by list of selected users' codes *****/
-   Usr_FreeListsSelectedUsrsCods ();
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -7799,9 +7787,6 @@ void Usr_SeeGuests (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,
 	                        Sco_PutParamCurrentScope,NULL))
         {
-         /***** Get list of selected users *****/
-         Usr_GetListsSelectedUsrsCods ();
-
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope);
 
@@ -7961,9 +7946,6 @@ void Usr_SeeStudents (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,
 	                        Sco_PutParamCurrentScope,NULL))
         {
-         /***** Get list of selected users *****/
-         Usr_GetListsSelectedUsrsCods ();
-
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (Sco_PutParamCurrentScope);
 
@@ -7974,12 +7956,12 @@ void Usr_SeeStudents (void)
 					Gbl.Scope.Current == Hie_DEG ||
 					Gbl.Scope.Current == Hie_CTR ||
 					Gbl.Scope.Current == Hie_INS) ? Gbl.Hierarchy.Ins.InsCod :
-									      -1L,
+								        -1L,
 				       (Gbl.Scope.Current == Hie_CRS ||
 					Gbl.Scope.Current == Hie_DEG) ? Gbl.Hierarchy.Deg.DegCod :
-									      -1L,
+									-1L,
 					Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
-									      -1L);
+									-1L);
 
          /* Set options allowed */
          PutForm = Usr_SetOptionsListUsrsAllowed (Rol_STD,ICanChooseOption);

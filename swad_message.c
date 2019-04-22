@@ -395,7 +395,6 @@ static void Msg_PutParamsShowMorePotentialRecipients (void)
 
 void Msg_PutParamsWriteMsg (void)
   {
-   // Usr_PutHiddenParUsrCodAll (ActReqMsgUsr,Gbl.Usrs.Selected.List[Rol_UNK]);
    Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
    Msg_PutHiddenParamOtherRecipients ();
    Msg_PutHiddenParamsSubjectAndContent ();

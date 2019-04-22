@@ -481,16 +481,11 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
       switch (Gbl.Action.Original)
 	{
 	 case ActSeeRecSevGst:
-	    // Usr_PutHiddenParUsrCodAll (ActCnfID_Oth,Gbl.Usrs.Selected.List[Rol_UNK]);
-	    Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
-	    break;
 	 case ActSeeRecSevStd:
-	    // Usr_PutHiddenParUsrCodAll (ActCnfID_Std,Gbl.Usrs.Selected.List[Rol_UNK]);
+	 case ActSeeRecSevTch:
 	    Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
 	    break;
-	 case ActSeeRecSevTch:
-	    // Usr_PutHiddenParUsrCodAll (ActCnfID_Tch,Gbl.Usrs.Selected.List[Rol_UNK]);
-	    Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
+	 default:
 	    break;
 	}
      }

@@ -1846,7 +1846,6 @@ void Brw_GetParAndInitFileBrowser (void)
          break;
 
       /***** Another users' works *****/
-      case ActReqAsgWrkCrs:
       case ActReqRemFilWrkCrs:
       case ActRemFilWrkCrs:
       case ActRemFolWrkCrs:
@@ -2304,7 +2303,6 @@ void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FileFolderName
       if (Brw_GetIfCrsAssigWorksFileBrowser ())
 	{
 	 /***** Users selected *****/
-	 // Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Selected.List[Rol_UNK]);
 	 Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
 	 Usr_PutParamOtherUsrCodEncrypted ();
 	}
@@ -3074,9 +3072,6 @@ void Brw_AskEditWorksCrs (void)
    extern const char *Hlp_FILES_Homework_for_teachers;
    extern const char *Txt_Assignments_and_other_works;
    extern const char *Txt_View_homework;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ();
 
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (ActAdmAsgWrkCrs,NULL,
@@ -4942,10 +4937,6 @@ static void Brw_PutParamsFullTree (void)
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCod);
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-      /*
-      Usr_PutHiddenParUsrCodAll (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
-                                 Gbl.Usrs.Selected.List[Rol_UNK]);
-      */
       Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
   }
 
@@ -6162,8 +6153,6 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 				       const char PathInTree[PATH_MAX + 1],
 				       const char *FileName)
   {
-   // extern const char *Txt_Upload_file_or_create_folder;
-
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div id=\"folder_%s_%s_%s\"",
 	    Open ? "open" :
@@ -6179,16 +6168,7 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
    Ico_PutContextualIconToCreateInFolder (Brw_ActFormCreate[Gbl.FileBrowser.Type],
 					  Brw_PutImplicitParamsFileBrowser,
 					  Open);
-/*
-   Frm_StartForm (Brw_ActFormCreate[Gbl.FileBrowser.Type]);
-   Brw_PutParamsFileBrowser (Brw_ActFormCreate[Gbl.FileBrowser.Type],
-			     PathInTree,FileName,
-			     Brw_IS_FOLDER,-1L);
-   Ico_PutIconLink (Open ? "folder-open-yellow-plus.png" :
-	                   "folder-yellow-plus.png",
-	            Txt_Upload_file_or_create_folder);
-   Frm_EndForm ();
-*/
+
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
   }

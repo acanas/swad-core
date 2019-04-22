@@ -1418,29 +1418,11 @@ mysql> DESCRIBE hidden_params;
 | Field      | Type         | Null | Key | Default | Extra |
 +------------+--------------+------+-----+---------+-------+
 | SessionId  | char(43)     | NO   | MUL | NULL    |       |
-| Action     | int(11)      | NO   |     | NULL    |       |
-| ParamName  | varchar(255) | NO   |     | NULL    |       |
-| ParamValue | longtext     | NO   |     | NULL    |       |
-+------------+--------------+------+-----+---------+-------+
-4 rows in set (0,00 sec)
-mysql> DESCRIBE hidden_params;
-+------------+--------------+------+-----+---------+-------+
-| Field      | Type         | Null | Key | Default | Extra |
-+------------+--------------+------+-----+---------+-------+
-| SessionId  | char(43)     | NO   | MUL | NULL    |       |
 | ParamName  | varchar(255) | NO   |     | NULL    |       |
 | ParamValue | longtext     | NO   |     | NULL    |       |
 +------------+--------------+------+-----+---------+-------+
 3 rows in set (0.01 sec)
 */
-   /*
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS hidden_params ("
-			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
-			"Action INT NOT NULL,"
-			"ParamName VARCHAR(255) NOT NULL,"
-			"ParamValue LONGTEXT NOT NULL,"
-		   "INDEX(SessionId,Action))");
-   */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS hidden_params ("
 			"SessionId CHAR(43) NOT NULL,"	// Cns_BYTES_SESSION_ID
 			"ParamName VARCHAR(255) NOT NULL,"
