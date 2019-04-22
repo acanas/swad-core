@@ -366,11 +366,6 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
    extern const char *Txt_Create_ZIP_file;
 
    Frm_StartForm (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
-   /*
-   Brw_PutParamsFileBrowser (ZIP_ActZIPFolder[Gbl.FileBrowser.Type],
-                             PathInTree,FileName,
-                             Brw_IS_FOLDER,-1L);
-   */
    Brw_PutParamsFileBrowser (PathInTree,FileName,
                              Brw_IS_FOLDER,-1L);
    Frm_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassFormInBox[Gbl.Prefs.Theme],NULL);

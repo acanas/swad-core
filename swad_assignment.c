@@ -497,12 +497,6 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
      {
       /* Form to create a new file or folder */
       Frm_StartForm (ActFrmCreAsgUsr);
-      /*
-      Brw_PutParamsFileBrowser (ActUnk,
-				Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-				Asg->Folder,
-				Brw_IS_FOLDER,-1L);
-      */
       Brw_PutParamsFileBrowser (Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
 				Asg->Folder,
 				Brw_IS_FOLDER,-1L);
