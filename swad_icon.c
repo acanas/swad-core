@@ -316,6 +316,15 @@ void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,void (*FuncP
 				  Txt_Upload_file_or_create_folder);
   }
 
+void Ico_PutContextualIconToZIP (Act_Action_t NextAction,void (*FuncParams) (void))
+  {
+   extern const char *Txt_Create_ZIP_file;
+
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "download.svg",
+				  Txt_Create_ZIP_file);
+  }
+
 /*****************************************************************************/
 /**************** Show an icon inside a div (without text) *******************/
 /*****************************************************************************/

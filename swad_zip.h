@@ -47,7 +47,6 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void);
 bool ZIP_GetCreateZIPFromForm (void);
 void ZIP_CreateZIPAsgWrk (void);
 
-void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *FileName);
 void ZIP_CompressFileTree (void);
 
 #endif

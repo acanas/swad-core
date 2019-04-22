@@ -448,10 +448,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.118.2 (2019-04-22)"
+#define Log_PLATFORM_VERSION	"SWAD 18.118.3 (2019-04-22)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.116.5.js"
 /*
+	Version 18.118.3: Apr 22, 2019	Changed the behaviour of creating zip in file browser. (242545 lines)
 	Version 18.118.2: Apr 22, 2019	Removed unused code related to hidden_params table. (242545 lines)
 	Version 18.118.1: Apr 22, 2019	Removed unused code related to hidden_params table. (242682 lines)
 	Version 18.118:   Apr 22, 2019	Changed the behaviour of creating in folder of file browser.

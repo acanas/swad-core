@@ -55,39 +55,6 @@
 #define ZIP_MiB (1024ULL * 1024ULL)
 #define ZIP_MAX_SIZE_UNCOMPRESSED (1024ULL * ZIP_MiB)
 
-const Act_Action_t ZIP_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
-  {
-   ActUnk,		// Brw_UNKNOWN
-   ActZIPSeeDocCrs,	// Brw_SHOW_DOC_CRS
-   ActUnk,		// Brw_SHOW_MRK_CRS
-   ActZIPAdmDocCrs,	// Brw_ADMI_DOC_CRS
-   ActZIPShaCrs,	// Brw_ADMI_SHR_CRS
-   ActZIPShaGrp,	// Brw_ADMI_SHR_GRP
-   ActZIPWrkUsr,	// Brw_ADMI_WRK_USR
-   ActZIPWrkCrs,	// Brw_ADMI_WRK_CRS
-   ActZIPAdmMrkCrs,	// Brw_ADMI_MRK_CRS
-   ActZIPBrf,		// Brw_ADMI_BRF_USR
-   ActZIPSeeDocGrp,	// Brw_SHOW_DOC_GRP
-   ActZIPAdmDocGrp,	// Brw_ADMI_DOC_GRP
-   ActUnk,		// Brw_SHOW_MRK_GRP
-   ActZIPAdmMrkGrp,	// Brw_ADMI_MRK_GRP
-   ActZIPAsgUsr,	// Brw_ADMI_ASG_USR
-   ActZIPAsgCrs,	// Brw_ADMI_ASG_CRS
-   ActZIPSeeDocDeg,	// Brw_SHOW_DOC_DEG
-   ActZIPAdmDocDeg,	// Brw_ADMI_DOC_DEG
-   ActZIPSeeDocCtr,	// Brw_SHOW_DOC_CTR
-   ActZIPAdmDocCtr,	// Brw_ADMI_DOC_CTR
-   ActZIPSeeDocIns,	// Brw_SHOW_DOC_INS
-   ActZIPAdmDocIns,	// Brw_ADMI_DOC_INS
-   ActZIPShaDeg,	// Brw_ADMI_SHR_DEG
-   ActZIPShaCtr,	// Brw_ADMI_SHR_CTR
-   ActZIPShaIns,	// Brw_ADMI_SHR_INS
-   ActZIPTchCrs,	// Brw_ADMI_TCH_CRS
-   ActZIPTchGrp,	// Brw_ADMI_TCH_GRP
-   ActZIPDocPrj,	// Brw_ADMI_DOC_PRJ
-   ActZIPAssPrj,	// Brw_ADMI_ASS_PRJ
-  };
-
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -354,29 +321,6 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
       if (!Success)
 	 Lay_ShowErrorAndExit ("Can not create temporary link for compression.");
      }
-  }
-
-/*****************************************************************************/
-/***************** Put button to create ZIP file of a folder *****************/
-/*****************************************************************************/
-
-void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *FileName)
-  {
-   extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Create_ZIP_file;
-
-   Frm_StartForm (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
-   Brw_PutParamsFileBrowser (PathInTree,FileName,
-                             Brw_IS_FOLDER,-1L);
-   Frm_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassFormInBox[Gbl.Prefs.Theme],NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/download.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO16x16\" />"
-		      "</a>",
-	 Cfg_URL_ICON_PUBLIC,
-	 Txt_Create_ZIP_file,
-	 Txt_Create_ZIP_file);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/

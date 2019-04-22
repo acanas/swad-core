@@ -1098,6 +1098,39 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
    ActChgDatDocPrj,	// Brw_ADMI_DOC_PRJ
    ActChgDatAssPrj,	// Brw_ADMI_ASS_PRJ
   };
+static const Act_Action_t Brw_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
+  {
+   ActUnk,		// Brw_UNKNOWN
+   ActZIPSeeDocCrs,	// Brw_SHOW_DOC_CRS
+   ActUnk,		// Brw_SHOW_MRK_CRS
+   ActZIPAdmDocCrs,	// Brw_ADMI_DOC_CRS
+   ActZIPShaCrs,	// Brw_ADMI_SHR_CRS
+   ActZIPShaGrp,	// Brw_ADMI_SHR_GRP
+   ActZIPWrkUsr,	// Brw_ADMI_WRK_USR
+   ActZIPWrkCrs,	// Brw_ADMI_WRK_CRS
+   ActZIPAdmMrkCrs,	// Brw_ADMI_MRK_CRS
+   ActZIPBrf,		// Brw_ADMI_BRF_USR
+   ActZIPSeeDocGrp,	// Brw_SHOW_DOC_GRP
+   ActZIPAdmDocGrp,	// Brw_ADMI_DOC_GRP
+   ActUnk,		// Brw_SHOW_MRK_GRP
+   ActZIPAdmMrkGrp,	// Brw_ADMI_MRK_GRP
+   ActZIPAsgUsr,	// Brw_ADMI_ASG_USR
+   ActZIPAsgCrs,	// Brw_ADMI_ASG_CRS
+   ActZIPSeeDocDeg,	// Brw_SHOW_DOC_DEG
+   ActZIPAdmDocDeg,	// Brw_ADMI_DOC_DEG
+   ActZIPSeeDocCtr,	// Brw_SHOW_DOC_CTR
+   ActZIPAdmDocCtr,	// Brw_ADMI_DOC_CTR
+   ActZIPSeeDocIns,	// Brw_SHOW_DOC_INS
+   ActZIPAdmDocIns,	// Brw_ADMI_DOC_INS
+   ActZIPShaDeg,	// Brw_ADMI_SHR_DEG
+   ActZIPShaCtr,	// Brw_ADMI_SHR_CTR
+   ActZIPShaIns,	// Brw_ADMI_SHR_INS
+   ActZIPTchCrs,	// Brw_ADMI_TCH_CRS
+   ActZIPTchGrp,	// Brw_ADMI_TCH_GRP
+   ActZIPDocPrj,	// Brw_ADMI_DOC_PRJ
+   ActZIPAssPrj,	// Brw_ADMI_ASS_PRJ
+  };
+
 
 /* All quotas must be multiple of 1 GiB (Gibibyte)*/
 #define Brw_GiB (1024ULL * 1024ULL * 1024ULL)
@@ -1302,6 +1335,9 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
                                                    struct FileMetadata *FileMetadata,
                                                    const char *FileNameToShow);
 static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName);
+
+static void Brw_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *FileName);
+
 static void Brw_WriteFileName (unsigned Level,bool IsPublic,
                                const char *PathInTree,const char *FileName,const char *FileNameToShow);
 static void Brw_GetFileNameToShowDependingOnLevel (Brw_FileBrowser_t FileBrowser,
@@ -3506,7 +3542,7 @@ static void Brw_ShowFileBrowser (void)
 	                     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM;
 
    /***** Set title of file browser *****/
-   Brw_TitleOfFileBrowser[Brw_UNKNOWN       ] = NULL;					// Brw_UNKNOWN
+   Brw_TitleOfFileBrowser[Brw_UNKNOWN     ] = NULL;					// Brw_UNKNOWN
    Brw_TitleOfFileBrowser[Brw_SHOW_DOC_CRS] = Txt_Documents_area;			// Brw_SHOW_DOC_CRS
    Brw_TitleOfFileBrowser[Brw_SHOW_MRK_CRS] = Txt_Marks_area;				// Brw_SHOW_MRK_CRS
    Brw_TitleOfFileBrowser[Brw_ADMI_DOC_CRS] = Txt_Documents_management_area;		// Brw_ADMI_DOC_CRS
@@ -3537,7 +3573,7 @@ static void Brw_ShowFileBrowser (void)
    Brw_TitleOfFileBrowser[Brw_ADMI_ASS_PRJ] = Txt_Project_assessment;			// Brw_ADMI_ASS_PRJ
 
    /***** Set help link of file browser *****/
-   Brw_HelpOfFileBrowser[Brw_UNKNOWN       ] = NULL;				// Brw_UNKNOWN
+   Brw_HelpOfFileBrowser[Brw_UNKNOWN     ] = NULL;				// Brw_UNKNOWN
    Brw_HelpOfFileBrowser[Brw_SHOW_DOC_CRS] = Hlp_FILES_Documents;		// Brw_SHOW_DOC_CRS
    Brw_HelpOfFileBrowser[Brw_SHOW_MRK_CRS] = Hlp_FILES_Marks;			// Brw_SHOW_MRK_CRS
    Brw_HelpOfFileBrowser[Brw_ADMI_DOC_CRS] = Hlp_FILES_Documents;		// Brw_ADMI_DOC_CRS
@@ -5648,7 +5684,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
 	  !SeeMarks &&				// Do not ZIP folders when seeing marks
 	  !(SeeDocsZone && RowSetAsHidden))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
-	    ZIP_PutButtonToDownloadZIPOfAFolder (PathInTree,FileName);
+	 Brw_PutButtonToDownloadZIPOfAFolder (PathInTree,FileName);
       fprintf (Gbl.F.Out,"</td>");
      }
    else	// File or link
@@ -5922,7 +5958,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
 				FileBrowserId,
 				JavaScriptFuncToExpandFolder);	// JavaScript function to unhide rows
    Brw_PutParamsFileBrowser (PathInTree,FileName,
-			     Brw_IS_FOLDER,-1L);
+			     Gbl.FileBrowser.FileType,-1L);
    Ico_PutIconLink ("caret-right.svg",Txt_Expand);
    Frm_EndForm ();
 
@@ -5957,7 +5993,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 				FileBrowserId,
 				JavaScriptFuncToContractFolder);	// JavaScript function to hide rows
    Brw_PutParamsFileBrowser (PathInTree,FileName,
-			     Brw_IS_FOLDER,-1L);
+			     Gbl.FileBrowser.FileType,-1L);
    Ico_PutIconLink ("caret-down.svg",Txt_Contract);
    Frm_EndForm ();
 
@@ -6186,7 +6222,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
    /***** Start form *****/
    Frm_StartForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (NULL,NULL,
-                             Brw_IS_UNKNOWN,	// Not used
+			     Gbl.FileBrowser.FileType,	// Not used
                              FileMetadata->FilCod);
 
    /***** Name and link of the file or folder *****/
@@ -6249,6 +6285,19 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
   }
 
 /*****************************************************************************/
+/***************** Put button to create ZIP file of a folder *****************/
+/*****************************************************************************/
+
+static void Brw_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *FileName)
+  {
+   /***** Form to zip and download folder *****/
+   Brw_PathInTree = PathInTree;
+   Brw_FileName   = FileName;
+   Ico_PutContextualIconToZIP (Brw_ActZIPFolder[Gbl.FileBrowser.Type],
+			       Brw_PutImplicitParamsFileBrowser);
+  }
+
+/*****************************************************************************/
 /********** Write central part with the name of a file or folder *************/
 /*****************************************************************************/
 
@@ -6276,7 +6325,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 	{
          Frm_StartForm (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
          Brw_PutParamsFileBrowser (PathInTree,FileName,
-                                   Brw_IS_FOLDER,-1L);
+				   Gbl.FileBrowser.FileType,-1L);
 	}
 
       /***** Write name of the folder *****/
@@ -6720,7 +6769,7 @@ static void Brw_PutParamsRemFolder (void)
   {
    Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
-                             Brw_IS_FOLDER,-1L);
+			     Gbl.FileBrowser.FileType,-1L);
   }
 
 /*****************************************************************************/
@@ -8387,7 +8436,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    Frm_StartForm (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
-                             Brw_IS_FOLDER,-1L);
+			     Gbl.FileBrowser.FileType,-1L);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Create_folder,NULL,
@@ -8449,7 +8498,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    Par_PutHiddenParamString ("ses",Gbl.Session.Id);
    Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
-                             Brw_IS_FOLDER,-1L);
+			     Gbl.FileBrowser.FileType,-1L);
 
    fprintf (Gbl.F.Out,"<div class=\"dz-message\">"
 		      "<span class=\"DAT_LIGHT\">%s</span>"
@@ -8460,7 +8509,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    /***** Put button to refresh file browser after upload *****/
    Frm_StartForm (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (NULL,NULL,
-                             Brw_IS_UNKNOWN,	// Not used
+			     Gbl.FileBrowser.FileType,	// Not used
                              -1L);
 
    /***** Button to send *****/
@@ -8496,7 +8545,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    Frm_StartForm (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
-                             Brw_IS_FOLDER,-1L);
+			     Gbl.FileBrowser.FileType,-1L);
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" />",
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
@@ -8522,7 +8571,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    Frm_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
-                             Brw_IS_FOLDER,-1L);
+			     Gbl.FileBrowser.FileType,-1L);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Paste,NULL,
@@ -8556,7 +8605,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    Frm_StartForm (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
-                             Brw_IS_FOLDER,-1L);
+			     Gbl.FileBrowser.FileType,-1L);
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Create_link,NULL,
@@ -10124,7 +10173,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t Fil
 								ActSeeMyMrkGrp);
       Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
 			        Gbl.FileBrowser.FilFolLnkName,
-			        FileType,-1L);
+				FileType,-1L);
 
       /* Link begin */
       snprintf (Gbl.Title,sizeof (Gbl.Title),
