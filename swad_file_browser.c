@@ -6304,8 +6304,8 @@ static void Brw_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const ch
 static void Brw_WriteFileName (unsigned Level,bool IsPublic,
                                const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
-   extern const char *Txt_Check_marks_in_file_X;
-   extern const char *Txt_Download_FILE_OR_LINK_X;
+   extern const char *Txt_Check_marks_in_the_file;
+   extern const char *Txt_Download;
    extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
 
    /***** Name and link of the folder, file or link *****/
@@ -6377,12 +6377,10 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
                                 Gbl.FileBrowser.FileType,-1L);
 
       /* Link to the form and to the file */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
-	         Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_file_X :
-	                	                             Txt_Download_FILE_OR_LINK_X,
-	        FileNameToShow);
-      Frm_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle,NULL);
+      Frm_LinkFormSubmit ((Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
+	                   Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
+	                                                               Txt_Download,
+			  Gbl.FileBrowser.TxtStyle,NULL);
       fprintf (Gbl.F.Out,"%s</a>",
 	       FileNameToShow);
       Frm_EndForm ();
@@ -10104,7 +10102,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
                                             struct FileMetadata *FileMetadata,
                                             const char *FileNameToShow)
   {
-   extern const char *Txt_Check_marks_in_file_X;
+   extern const char *Txt_Check_marks_in_the_file;
    extern const char *Txt_Download;
 
    /***** On the screen a link will be shown to download the file *****/
@@ -10119,10 +10117,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 			        FileMetadata->FileType,-1L);
 
       /* Link begin */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Check_marks_in_file_X,
-		FileNameToShow);
-      Frm_LinkFormSubmit (Gbl.Title,"FILENAME_TXT",NULL);
+      Frm_LinkFormSubmit (Txt_Check_marks_in_the_file,"FILENAME_TXT",NULL);
       Brw_PutIconFile (32,FileMetadata->FileType,FileMetadata->FilFolLnkName);
 
       /* Name of the file of marks, link end and form end */
@@ -10132,7 +10127,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 			 " class=\"ICO40x40\" />"
 			 "</a>",
 	       FileNameToShow,Cfg_URL_ICON_PUBLIC,
-	       Gbl.Title,Gbl.Title);
+	       Txt_Check_marks_in_the_file,Txt_Check_marks_in_the_file);
       Frm_EndForm ();
      }
    else
@@ -10162,7 +10157,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t FileType,
                                               const char *FileNameToShow)
   {
-   extern const char *Txt_Check_marks_in_file_X;
+   extern const char *Txt_Check_marks_in_the_file;
 
    /***** On the screen a link will be shown to download the file *****/
    if (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
@@ -10176,10 +10171,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t Fil
 				FileType,-1L);
 
       /* Link begin */
-      snprintf (Gbl.Title,sizeof (Gbl.Title),
-	        Txt_Check_marks_in_file_X,
-		FileNameToShow);
-      Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
+      Frm_LinkFormSubmit (Txt_Check_marks_in_the_file,"DAT",NULL);
 
       /* Name of the file of marks, link end and form end */
       fprintf (Gbl.F.Out,"%s</a>",FileNameToShow);

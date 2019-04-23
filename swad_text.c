@@ -3765,25 +3765,25 @@ const char *Txt_Check_another_ID =
 	"Verificar outra ID?";
 #endif
 
-const char *Txt_Check_marks_in_file_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Check_marks_in_the_file =
 #if   L==1	// ca
-	"Consultar qualificacions en el fitxer %s";
+	"Consultar qualificacions al fitxer";
 #elif L==2	// de
-	"Bewertung in Datei %s abrufen";
+	"&Uuml;berpr&uuml;fen Sie die Noten in der Datei";
 #elif L==3	// en
-	"Check marks in file %s";
+	"Check marks in the file";
 #elif L==4	// es
-	"Consultar calificaciones en el archivo %s";
+	"Consultar calificaciones en el archivo";
 #elif L==5	// fr
-	"Check marks in file %s";			// Besoin de traduction
+	"Consulter les notes dans le fichier";
 #elif L==6	// gn
-	"Consultar calificaciones en el archivo %s";	// Okoteve traducción
+	"Consultar calificaciones en el archivo";	// Okoteve traducción
 #elif L==7	// it
-	"Consultare i risultati nel file %s";
+	"Consultare le valutazioni nel file";
 #elif L==8	// pl
-	"Zaznaczenia w pliku %s";
+	"Sprawd&zacute; oceny w pliku";
 #elif L==9	// pt
-	"Verifique notas no arquivo %s";
+	"Verifique as notas no arquivo";
 #endif
 
 const char *Txt_Classroom =
@@ -9493,27 +9493,6 @@ const char *Txt_Download =	// As a verb
 	"Pobierz";
 #elif L==9	// pt
 	"Baixar";
-#endif
-
-const char *Txt_Download_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1	// ca
-	"Descarregar %s";
-#elif L==2	// de
-	"Laden Sie %s";
-#elif L==3	// en
-	"Download %s";
-#elif L==4	// es
-	"Descargar %s";
-#elif L==5	// fr
-	"T&eacute;l&eacute;charger %s";
-#elif L==6	// gn
-	"Descargar %s";		// Okoteve traducción
-#elif L==7	// it
-	"Scarica %s";
-#elif L==8	// pl
-	"Pobierz %s";
-#elif L==9	// pt
-	"Download %s";
 #endif
 
 const char *Txt_download =	// As a noun
