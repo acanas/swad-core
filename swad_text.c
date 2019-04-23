@@ -52143,25 +52143,25 @@ const char *Txt_View_attendance =
 	"Ver presen&ccedil;a";
 #endif
 
-const char *Txt_View_data_of_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_View_data =
 #if   L==1	// ca
-	"Veure dades de %s";
+	"Veure dades";
 #elif L==2	// de
-	"Siehe Daten von %s";
+	"Siehe Daten";
 #elif L==3	// en
-	"View data of %s";
+	"View data";
 #elif L==4	// es
-	"Ver datos de %s";
+	"Ver datos";
 #elif L==5	// fr
-	"Voir les donn&eacute;es de %s";
+	"Voir les donn&eacute;es";
 #elif L==6	// gn
-	"Ver datos de %s";	// Okoteve traducción
+	"Ver datos";	// Okoteve traducción
 #elif L==7	// it
-	"Visualizza i dati de %s";
+	"Visualizza i dati";
 #elif L==8	// pl
-	"Zobacz dane z %s";
+	"Zobacz dane";
 #elif L==9	// pt
-	"Ver os dados de %s";
+	"Ver os dados";
 #endif
 
 const char *Txt_View_email_addresses =

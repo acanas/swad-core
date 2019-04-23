@@ -1332,14 +1332,13 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 
 static void Brw_PutIconNewFileOrFolder (void);
 static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
-                                                   struct FileMetadata *FileMetadata,
-                                                   const char *FileNameToShow);
+                                                   struct FileMetadata *FileMetadata);
 static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName);
 
 static void Brw_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *FileName);
 
 static void Brw_WriteFileName (unsigned Level,bool IsPublic,
-                               const char *PathInTree,const char *FileName,const char *FileNameToShow);
+                               const char *PathInTree,const char *FileName);
 static void Brw_GetFileNameToShowDependingOnLevel (Brw_FileBrowser_t FileBrowser,
                                                    unsigned Level,
                                                    Brw_FileType_t FileType,
@@ -1351,9 +1350,7 @@ static void Brw_GetFileNameToShow (Brw_FileType_t FileType,
 static void Brw_WriteDatesAssignment (void);
 static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata);
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod);
-static void Brw_PutParamsRemFile (void);
 static void Brw_AskConfirmRemoveFolderNotEmpty (void);
-static void Brw_PutParamsRemFolder (void);
 
 static void Brw_WriteCurrentClipboard (void);
 
@@ -5462,7 +5459,6 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    bool LightStyle = false;
    bool IsRecent = false;
    struct FileMetadata FileMetadata;
-   char FileNameToShow[NAME_MAX + 1];
    char FileBrowserId[32];
    bool SeeDocsZone     = Gbl.FileBrowser.Type == Brw_SHOW_DOC_INS ||
 	                  Gbl.FileBrowser.Type == Brw_SHOW_DOC_CTR ||
@@ -5565,13 +5561,6 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    else	// Not an assignment zone
       Gbl.FileBrowser.Asg.AsgCod = -1L;
 
-   /***** Get the name of the file to show *****/
-   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
-                                          Level,
-                                          Gbl.FileBrowser.FileType,
-                                          FileName,
-                                          FileNameToShow);
-
    /***** Start this row *****/
    if (asprintf (&Anchor,"fil_brw_%u_%s",
 		 Gbl.FileBrowser.Id,RowId) < 0)
@@ -5648,7 +5637,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
      {
       /* Icon with file type or link */
       fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
-      Brw_PutIconFileWithLinkToViewMetadata (16,&FileMetadata,FileNameToShow);
+      Brw_PutIconFileWithLinkToViewMetadata (16,&FileMetadata);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -5659,7 +5648,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /* File or folder name */
    Brw_WriteFileName (Level,FileMetadata.IsPublic,
-                      PathInTree,FileName,FileNameToShow);
+                      PathInTree,FileName);
 
    /* End column */
    fprintf (Gbl.F.Out,"</tr>"
@@ -6214,10 +6203,9 @@ static void Brw_PutIconNewFileOrFolder (void)
 // FileType can be Brw_IS_FILE or Brw_IS_LINK
 
 static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
-                                                   struct FileMetadata *FileMetadata,
-                                                   const char *FileNameToShow)
+                                                   struct FileMetadata *FileMetadata)
   {
-   extern const char *Txt_View_data_of_FILE_OR_LINK_X;
+   extern const char *Txt_View_data;
 
    /***** Start form *****/
    Frm_StartForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
@@ -6226,10 +6214,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
                              FileMetadata->FilCod);
 
    /***** Name and link of the file or folder *****/
-   snprintf (Gbl.Title,sizeof (Gbl.Title),
-	     Txt_View_data_of_FILE_OR_LINK_X,
-	     FileNameToShow);
-   Frm_LinkFormSubmit (Gbl.Title,Gbl.FileBrowser.TxtStyle,NULL);
+   Frm_LinkFormSubmit (Txt_View_data,Gbl.FileBrowser.TxtStyle,NULL);
 
    /***** Icon depending on the file extension *****/
    Brw_PutIconFile (Size,FileMetadata->FileType,FileMetadata->FilFolLnkName);
@@ -6254,10 +6239,8 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
 
    /***** Icon depending on the file extension *****/
    if (FileType == Brw_IS_LINK)
-      fprintf (Gbl.F.Out,"<img src=\"%s/link.svg\""
-	                 " alt=\"%s\" title=\"%s\"",
-	       Cfg_URL_ICON_PUBLIC,
-	       Txt_Link,Txt_Link);
+      fprintf (Gbl.F.Out,"<img src=\"%s/link.svg\" alt=\"%s\"",
+	       Cfg_URL_ICON_PUBLIC,Txt_Link);
    else	// FileType == Brw_IS_FILE
      {
       fprintf (Gbl.F.Out,"<img src=\"%s%ux%u/",
@@ -6302,11 +6285,19 @@ static void Brw_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const ch
 /*****************************************************************************/
 
 static void Brw_WriteFileName (unsigned Level,bool IsPublic,
-                               const char *PathInTree,const char *FileName,const char *FileNameToShow)
+                               const char *PathInTree,const char *FileName)
   {
    extern const char *Txt_Check_marks_in_the_file;
    extern const char *Txt_Download;
    extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
+   char FileNameToShow[NAME_MAX + 1];
+
+   /***** Get the name of the file to show *****/
+   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,
+                                          Level,
+                                          Gbl.FileBrowser.FileType,
+                                          FileName,
+                                          FileNameToShow);
 
    /***** Name and link of the folder, file or link *****/
    if (Gbl.FileBrowser.FileType == Brw_IS_FOLDER)
@@ -6604,8 +6595,10 @@ void Brw_AskRemFileFromTree (void)
                                              Gbl.FileBrowser.FileType,
                                              Gbl.FileBrowser.FilFolLnkName,
                                              FileNameToShow);
+      Brw_PathInTree = Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk;
+      Brw_FileName   = Gbl.FileBrowser.FilFolLnkName;
       Ale_ShowAlertAndButton (Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,NULL,
-                              Brw_PutParamsRemFile,
+			      Brw_PutImplicitParamsFileBrowser,
                               Btn_REMOVE_BUTTON,
                               Gbl.FileBrowser.FileType == Brw_IS_FILE ? Txt_Remove_file :
         	                                                        Txt_Remove_link,
@@ -6617,17 +6610,6 @@ void Brw_AskRemFileFromTree (void)
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
-  }
-
-/*****************************************************************************/
-/*********************** Put params to remove a file/link ********************/
-/*****************************************************************************/
-
-static void Brw_PutParamsRemFile (void)
-  {
-   Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
-			     Gbl.FileBrowser.FilFolLnkName,
-			     Gbl.FileBrowser.FileType,-1L);
   }
 
 /*****************************************************************************/
@@ -6752,22 +6734,13 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
    extern const char *Txt_Remove_folder;
 
    /***** Show question and button to remove not empty folder *****/
+   Brw_PathInTree = Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk;
+   Brw_FileName   = Gbl.FileBrowser.FilFolLnkName;
    Ale_ShowAlertAndButton (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],NULL,NULL,
-			   Brw_PutParamsRemFolder,
+			   Brw_PutImplicitParamsFileBrowser,
 			   Btn_REMOVE_BUTTON,Txt_Remove_folder,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_folder_X,
                            Gbl.FileBrowser.FilFolLnkName);
-  }
-
-/*****************************************************************************/
-/************************ Put params to remove a folder **********************/
-/*****************************************************************************/
-
-static void Brw_PutParamsRemFolder (void)
-  {
-   Brw_PutParamsFileBrowser (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
-                             Gbl.FileBrowser.FilFolLnkName,
-			     Gbl.FileBrowser.FileType,-1L);
   }
 
 /*****************************************************************************/
@@ -10104,6 +10077,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
   {
    extern const char *Txt_Check_marks_in_the_file;
    extern const char *Txt_Download;
+   const char *Title;
 
    /***** On the screen a link will be shown to download the file *****/
    if (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ||
@@ -10132,12 +10106,13 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
      }
    else
      {
+      Title = (FileMetadata->FileType == Brw_IS_LINK) ? URL :	// If it's a link, show full URL in title
+                                                        Txt_Download;
+
       /* Put anchor and filename */
       fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME_TXT\""
                          " title=\"%s\" target=\"_blank\">",
-	       URL,
-	       (FileMetadata->FileType == Brw_IS_LINK) ? URL :	// If it's a link, show full URL in title
-		                                         FileNameToShow);
+	       URL,Title);
       Brw_PutIconFile (32,FileMetadata->FileType,FileMetadata->FilFolLnkName);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
 			 "<img src=\"%s/download.svg\""
@@ -10146,7 +10121,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 			 "</a>",
 	       FileNameToShow,
 	       Cfg_URL_ICON_PUBLIC,
-	       Txt_Download,Txt_Download);
+	       Title,Title);
      }
   }
 
