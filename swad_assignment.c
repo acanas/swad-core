@@ -514,9 +514,12 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
             Lay_ShowErrorAndExit ("Wrong role.");
 	    break;
         }
-      Brw_PutParamsFileBrowser (Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-				Asg->Folder,
-				Brw_IS_FOLDER,-1L);
+      Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+   	        PATH_MAX);
+      Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,Asg->Folder,
+   	        NAME_MAX);
+      Gbl.FileBrowser.FilFolLnk.Type = Brw_IS_FOLDER;
+      Brw_PutImplicitParamsFileBrowser ();
       Ico_PutIconLink ("folder-open-yellow-plus.png",
 		       Txt_Upload_file_or_create_folder);
       Frm_EndForm ();

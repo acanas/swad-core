@@ -4420,7 +4420,11 @@ int swad__getDirectoryTree (struct soap *soap,
 	     "%s/%ld",
              Cfg_PATH_CRS_PRIVATE,Gbl.Hierarchy.Crs.CrsCod);
    Brw_InitializeFileBrowser ();
-   Brw_SetFullPathInTree (Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],".");
+   Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
+	     PATH_MAX);
+   Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,".",
+	     NAME_MAX);
+   Brw_SetFullPathInTree ();
 
    /* Check if exists the directory for HTML output. If not exists, create it */
    Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
@@ -4439,7 +4443,7 @@ int swad__getDirectoryTree (struct soap *soap,
    /* Get directory tree into XML file */
    XML_WriteStartFile (Gbl.F.XML,"tree",false);
    if (!Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_IS_FOLDER,
-                                                  Gbl.FileBrowser.Priv.FullPathInTree)) // If root folder is visible
+                                                  Gbl.FileBrowser.FilFolLnk.Full)) // If root folder is visible
       Svc_ListDir (1,Gbl.FileBrowser.Priv.PathRootFolder,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
    XML_WriteEndFile (Gbl.F.XML,"tree");
 
@@ -4492,10 +4496,15 @@ static void Svc_ListDir (unsigned Level,const char *Path,const char *PathInTree)
 		      "%s/%s",
 		      PathInTree,FileList[NumFile]->d_name);
 
+	    Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,PathInTree,
+	 	     PATH_MAX);
+	    Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileList[NumFile]->d_name,
+	 	     NAME_MAX);
+
 	    if (!lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
 	      {
 	       /***** Construct the full path of the file or folder *****/
-	       Brw_SetFullPathInTree (PathInTree,FileList[NumFile]->d_name);
+	       Brw_SetFullPathInTree ();
 
 	       if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 		 {
@@ -4542,7 +4551,7 @@ static bool Svc_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
    if (Gbl.FileBrowser.Type == Brw_SHOW_DOC_CRS ||
        Gbl.FileBrowser.Type == Brw_SHOW_DOC_GRP)
       if (Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,
-                                                    Gbl.FileBrowser.Priv.FullPathInTree))
+                                                    Gbl.FileBrowser.FilFolLnk.Full))
 	 return false;
 
    /***** XML row *****/
@@ -4562,7 +4571,7 @@ static bool Svc_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
 	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FileType,
-	                                        Gbl.FileBrowser.Priv.FullPathInTree,false,Brw_LICENSE_DEFAULT);
+	                                        Gbl.FileBrowser.FilFolLnk.Full,false,Brw_LICENSE_DEFAULT);
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS);
@@ -4692,7 +4701,8 @@ int swad__getFile (struct soap *soap,
 				     "Requester must belong to group");
 
    /***** Check if file is in a valid zone *****/
-   switch ((Gbl.FileBrowser.Type = FileMetadata.FileBrowser))
+   Gbl.FileBrowser.Type = FileMetadata.FileBrowser;
+   switch (Gbl.FileBrowser.Type)
      {
       case Brw_ADMI_DOC_CRS:
       case Brw_ADMI_DOC_GRP:
@@ -4704,8 +4714,8 @@ int swad__getFile (struct soap *soap,
 	 // Downloading a file of marks is only allowed for teachers
 	 if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role != Rol_TCH)
 	    return soap_receiver_fault (Gbl.soap,
-					 "Wrong tree",
-					 "Wrong file zone");
+					"Wrong tree",
+					"Wrong file zone");
 	 break;
       default:
          return soap_sender_fault (Gbl.soap,
@@ -4715,9 +4725,12 @@ int swad__getFile (struct soap *soap,
 
    /***** Set paths *****/
    Hie_InitHierarchy ();
-   Brw_SetFullPathInTree (FileMetadata.PathInTreeUntilFilFolLnk,
-                          FileMetadata.FilFolLnkName);
    Brw_InitializeFileBrowser ();
+   Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata.PathInTreeUntilFilFolLnk,
+	     PATH_MAX);
+   Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata.FilFolLnkName,
+	     NAME_MAX);
+   Brw_SetFullPathInTree ();
 
    /***** Get file size and date *****/
    Brw_GetFileTypeSizeAndDate (&FileMetadata);

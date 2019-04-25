@@ -46,7 +46,7 @@ struct MarksProperties
 /*****************************************************************************/
 
 void Mrk_AddMarksToDB (long FilCod,struct MarksProperties *Marks);
-void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,const char *PathInTree,const char *FileName);
+void Mrk_GetAndWriteNumRowsHeaderAndFooter (void);
 void Mrk_ChangeNumRowsHeader (void);
 void Mrk_ChangeNumRowsFooter (void);
 

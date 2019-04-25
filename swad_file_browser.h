@@ -242,13 +242,12 @@ void Brw_RemoveExpiredExpandedFolders (void);
 
 void Brw_CalcSizeOfDir (char *Path);
 
-void Brw_SetFullPathInTree (const char *PathInTreeUntilFileOrFolder,const char *FilFolLnkName);
+void Brw_SetFullPathInTree (void);
 
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
                                            const char *FileName);
 
-void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FileFolderName,
-                               Brw_FileType_t FileType,long FilCod);
+void Brw_PutImplicitParamsFileBrowser (void);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long CrsCod,long GrpCod);

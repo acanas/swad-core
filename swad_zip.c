@@ -374,13 +374,13 @@ static void ZIP_CompressFolderIntoZIP (void)
    snprintf (Path,sizeof (Path),
 	     "%s/%s",
 	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	     Gbl.FileBrowser.Priv.FullPathInTree);
+	     Gbl.FileBrowser.FilFolLnk.Full);
    snprintf (PathCompression,sizeof (PathCompression),
 	     "%s/%s",
 	     Cfg_PATH_ZIP_PRIVATE,
 	     Gbl.FileBrowser.ZIP.TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
 
-   UncompressedSize = ZIP_CloneDir (Path,PathCompression,Gbl.FileBrowser.Priv.FullPathInTree);
+   UncompressedSize = ZIP_CloneDir (Path,PathCompression,Gbl.FileBrowser.FilFolLnk.Full);
 
    if (UncompressedSize == 0)					// Nothing to compress
       Ale_ShowAlert (Ale_WARNING,Txt_The_folder_is_empty);
@@ -396,7 +396,7 @@ static void ZIP_CompressFolderIntoZIP (void)
       /***** Create public zip file with the assignment and works *****/
       snprintf (FileNameZIP,sizeof (FileNameZIP),
 	        "%s.zip",
-	        strcmp (Gbl.FileBrowser.FilFolLnkName,".") ? Gbl.FileBrowser.FilFolLnkName :
+	        strcmp (Gbl.FileBrowser.FilFolLnk.Name,".") ? Gbl.FileBrowser.FilFolLnk.Name :
 							    Txt_ROOT_FOLDER_EXTERNAL_NAMES[Gbl.FileBrowser.Type]);
       snprintf (PathFileZIP,sizeof (PathFileZIP),
 	        "%s/%s/%s/%s",

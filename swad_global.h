@@ -507,12 +507,15 @@ struct Globals
 	{
 	 char PathAboveRootFolder[PATH_MAX + 1];
 	 char PathRootFolder[PATH_MAX + 1];
-	 char PathInTreeUntilFilFolLnk[PATH_MAX + 1];
-	 char FullPathInTree[PATH_MAX + 1];
 	} Priv;
       char NewFilFolLnkName[NAME_MAX + 1];
-      char FilFolLnkName[NAME_MAX + 1];
-      Brw_FileType_t FileType;
+      struct
+        {
+	 char Full[PATH_MAX + 1];	// Full path in tree, including filename
+	 char Path[PATH_MAX + 1];	// Path in tree above filename
+	 char Name[NAME_MAX + 1];	// Filename
+	 Brw_FileType_t Type;
+        } FilFolLnk;
       unsigned Level;
       bool ICanEditFileOrFolder;	// Can I modify (remove, rename, create inside, etc.) a file or folder?
       Brw_IconViewEdit_t IconViewEdit;

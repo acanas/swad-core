@@ -105,16 +105,14 @@ void Mrk_AddMarksToDB (long FilCod,struct MarksProperties *Marks)
 /********* Write number of header and footer rows of a file of marks *********/
 /*****************************************************************************/
 
-void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
-                                            const char *PathInTree,
-                                            const char *FileName)
+void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
   {
    extern const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES];
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
    struct MarksProperties Marks;
 
-   if (FileType == Brw_IS_FOLDER)
+   if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
       fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>"
                          "<td class=\"COLOR%u\"></td>",
                Gbl.RowEvenOdd,
@@ -128,13 +126,9 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
                The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
                Gbl.RowEvenOdd);
-      if (Gbl.Crs.Grps.GrpCod > 0)	// Group zone
-        {
-         Frm_StartForm (ActChgNumRowHeaGrp);
-         Grp_PutParamGrpCod (Gbl.Crs.Grps.GrpCod);
-        }
-      else					// Course zone
-         Frm_StartForm (ActChgNumRowHeaCrs);
+      Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
+                                               ActChgNumRowHeaCrs);	// Course zone
+      Brw_PutImplicitParamsFileBrowser ();
       fprintf (Gbl.F.Out,"<label>&nbsp;%s: "
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
@@ -145,8 +139,6 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                Mrk_HeadOrFootStr[Brw_HEADER],Marks.Header,
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
-      Brw_PutParamsFileBrowser (PathInTree,FileName,
-                                FileType,-1L);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -154,13 +146,9 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
                The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
                Gbl.RowEvenOdd);
-      if (Gbl.Crs.Grps.GrpCod > 0)	// Group zone
-        {
-         Frm_StartForm (ActChgNumRowFooGrp);
-         Grp_PutParamGrpCod (Gbl.Crs.Grps.GrpCod);
-        }
-      else					// Course zone
-         Frm_StartForm (ActChgNumRowFooCrs);
+      Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
+	                                       ActChgNumRowFooCrs);	// Course zone
+      Brw_PutImplicitParamsFileBrowser ();
       fprintf (Gbl.F.Out,"<label>&nbsp;%s: "
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
@@ -171,8 +159,6 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                Mrk_HeadOrFootStr[Brw_FOOTER],Marks.Footer,
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
-      Brw_PutParamsFileBrowser (PathInTree,FileName,
-                                FileType,-1L);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -207,7 +193,7 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
 			     Mrk_HeadOrFootStr[Brw_FOOTER],
 			     (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 			     Cod,
-			     Gbl.FileBrowser.Priv.FullPathInTree);
+			     Gbl.FileBrowser.FilFolLnk.Full);
 
    /***** The result of the query must have only one row *****/
    if (NumRows == 1)
@@ -278,7 +264,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
 		      Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
 		      (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
 		      Cod,
-		      Gbl.FileBrowser.Priv.FullPathInTree);
+		      Gbl.FileBrowser.FilFolLnk.Full);
 
       /***** Write message of success *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_The_number_of_rows_is_now_X,
@@ -613,12 +599,11 @@ void Mrk_ShowMyMarks (void)
    Brw_GetParAndInitFileBrowser ();
 
    /***** Get the path of the file of marks *****/
-   Brw_SetFullPathInTree (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
-	                  Gbl.FileBrowser.FilFolLnkName);
+   Brw_SetFullPathInTree ();
    snprintf (PathPrivate,sizeof (PathPrivate),
 	     "%s/%s",
              Gbl.FileBrowser.Priv.PathAboveRootFolder,
-             Gbl.FileBrowser.Priv.FullPathInTree);
+             Gbl.FileBrowser.FilFolLnk.Full);
 
    /***** Get number of rows of header or footer *****/
    Mrk_GetNumRowsHeaderAndFooter (&Marks);
