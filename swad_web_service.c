@@ -4570,7 +4570,7 @@ static bool Svc_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
 
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
-	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FileType,
+	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FilFolLnk.Type,
 	                                        Gbl.FileBrowser.FilFolLnk.Full,false,Brw_LICENSE_DEFAULT);
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod;
@@ -4726,9 +4726,9 @@ int swad__getFile (struct soap *soap,
    /***** Set paths *****/
    Hie_InitHierarchy ();
    Brw_InitializeFileBrowser ();
-   Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata.PathInTreeUntilFilFolLnk,
+   Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata.FilFolLnk.Path,
 	     PATH_MAX);
-   Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata.FilFolLnkName,
+   Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata.FilFolLnk.Name,
 	     NAME_MAX);
    Brw_SetFullPathInTree ();
 
@@ -4739,12 +4739,12 @@ int swad__getFile (struct soap *soap,
    Brw_GetAndUpdateFileViews (&FileMetadata);
 
    /***** Create and get link to download the file *****/
-   Brw_GetLinkToDownloadFile (FileMetadata.PathInTreeUntilFilFolLnk,
-                              FileMetadata.FilFolLnkName,
+   Brw_GetLinkToDownloadFile (FileMetadata.FilFolLnk.Path,
+                              FileMetadata.FilFolLnk.Name,
 	                      URL);
 
    /***** Copy data into output structure *****/
-   Str_Copy (getFileOut->fileName,FileMetadata.FilFolLnkName,
+   Str_Copy (getFileOut->fileName,FileMetadata.FilFolLnk.Name,
              NAME_MAX);
 
    Str_Copy (getFileOut->URL,URL,
@@ -4804,7 +4804,7 @@ int swad__getMarks (struct soap *soap,
    FileMetadata.FilCod = (long) fileCode;
    Brw_GetFileMetadataByCod (&FileMetadata);
 
-   if (FileMetadata.FileType != Brw_IS_FILE ||
+   if (FileMetadata.FilFolLnk.Type != Brw_IS_FILE ||
        FileMetadata.IsHidden ||
        (FileMetadata.FileBrowser != Brw_ADMI_MRK_CRS &&
 	FileMetadata.FileBrowser != Brw_ADMI_MRK_GRP))

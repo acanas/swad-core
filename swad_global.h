@@ -509,13 +509,7 @@ struct Globals
 	 char PathRootFolder[PATH_MAX + 1];
 	} Priv;
       char NewFilFolLnkName[NAME_MAX + 1];
-      struct
-        {
-	 char Full[PATH_MAX + 1];	// Full path in tree, including filename
-	 char Path[PATH_MAX + 1];	// Path in tree above filename
-	 char Name[NAME_MAX + 1];	// Filename
-	 Brw_FileType_t Type;
-        } FilFolLnk;
+      struct FilFolLnk FilFolLnk;
       unsigned Level;
       bool ICanEditFileOrFolder;	// Can I modify (remove, rename, create inside, etc.) a file or folder?
       Brw_IconViewEdit_t IconViewEdit;
@@ -524,10 +518,8 @@ struct Globals
          Brw_FileBrowser_t FileBrowser;	// Type of the file browser
          long Cod;			// Code of the institution/centre/degree/course/group related to the file browser with the clipboard
 	 long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
-         char Path[PATH_MAX + 1];	// Complete path in the file browser
-         char FileName[NAME_MAX + 1];	// File name, last part of complete path in the file browser
          unsigned Level;
-         Brw_FileType_t FileType;	// Folder, file or link
+         struct FilFolLnk FilFolLnk;
          bool IsThisTree;		// When showing a file browser, is it that corresponding to the clipboard?
          bool IsThisFile;		// When showing a row of a file browser, are we in the path of the clipboard?
         } Clipboard;

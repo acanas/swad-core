@@ -113,6 +113,14 @@ typedef enum
    Brw_ICON_EDIT = 2
   } Brw_IconViewEdit_t;
 
+struct FilFolLnk
+  {
+   char Full[PATH_MAX + 1];	// Full path = Path/Name
+   char Path[PATH_MAX + 1];	// Path in tree, without ending '/', until file, folder or link name
+   char Name[NAME_MAX + 1];	// File, folder or link name
+   Brw_FileType_t Type;
+  };
+
 struct FileMetadata
   {
    long FilCod;
@@ -120,14 +128,10 @@ struct FileMetadata
    long Cod;	// Code of institution, centre, degree, course or group
    long ZoneUsrCod;
    long PublisherUsrCod;
-   char FullPathInTree[PATH_MAX + 1];
-   // FullPathInTree is splitted as PathInTreeUntilFilFolLnk/FilFolLnkName
-   char PathInTreeUntilFilFolLnk[PATH_MAX + 1];	// Path in tree, without ending '/', until file, folder or link name
-   char FilFolLnkName[NAME_MAX + 1];		// File, folder or link name
+   struct FilFolLnk FilFolLnk;
    bool IsHidden;
    bool IsPublic;
    Brw_License_t License;
-   Brw_FileType_t FileType;
    off_t Size;
    time_t Time;
    unsigned NumMyViews;

@@ -5497,7 +5497,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    Brw_GetFileTypeSizeAndDate (&FileMetadata);
    if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
       /* Add entry to the table of files/folders */
-      FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FileType,
+      FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FilFolLnk.Type,
                                              Gbl.FileBrowser.FilFolLnk.Full,false,Brw_LICENSE_DEFAULT);
 
    /***** Is this row public or private? *****/
@@ -5569,7 +5569,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	  Level != 0)	// Never copy root folder
 	 // If path in the clipboard is equal to complete path in tree...
 	 // ...or is the start of complete path in tree...
-         if (Str_Path1BeginsByPath2 (Gbl.FileBrowser.FilFolLnk.Full,Gbl.FileBrowser.Clipboard.Path))
+         if (Str_Path1BeginsByPath2 (Gbl.FileBrowser.FilFolLnk.Full,Gbl.FileBrowser.Clipboard.FilFolLnk.Full))
             Gbl.FileBrowser.Clipboard.IsThisFile = true;
 
       /* Check if I can modify (remove, rename, etc.) this file or folder */
@@ -5696,7 +5696,7 @@ void Brw_SetFullPathInTree (void)
 /*****************************************************************************/
 /******* Check if the clipboard can be pasted into the current folder ********/
 /*****************************************************************************/
-// Return true if Gbl.FileBrowser.Clipboard.Path can be pasted into Gbl.FileBrowser.FilFolLnk.Full
+// Return true if Gbl.FileBrowser.Clipboard.FilFolLnk.Full can be pasted into Gbl.FileBrowser.FilFolLnk.Full
 
 static bool Brw_CheckIfCanPasteIn (unsigned Level)
   {
@@ -5711,7 +5711,7 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level)
       return false;
 
    /***** Do not paste a link in marks... *****/
-   if (Gbl.FileBrowser.Clipboard.FileType == Brw_IS_LINK &&
+   if (Gbl.FileBrowser.Clipboard.FilFolLnk.Type == Brw_IS_LINK &&
        (Gbl.FileBrowser.Type == Brw_ADMI_MRK_CRS ||
         Gbl.FileBrowser.Type == Brw_ADMI_MRK_GRP))
       return false;
@@ -5727,10 +5727,10 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level)
       snprintf (PathDstWithFile,sizeof (PathDstWithFile),
 	        "%s/%s",
 	        Gbl.FileBrowser.FilFolLnk.Full,
-	        Gbl.FileBrowser.Clipboard.FileName);
+	        Gbl.FileBrowser.Clipboard.FilFolLnk.Name);
 
       return !Str_Path1BeginsByPath2 (PathDstWithFile,
-		                      Gbl.FileBrowser.Clipboard.Path);
+		                      Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
      }
 
    return true;	// I can paste
@@ -6154,7 +6154,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
    Frm_LinkFormSubmit (Txt_View_data,Gbl.FileBrowser.TxtStyle,NULL);
 
    /***** Icon depending on the file extension *****/
-   Brw_PutIconFile (Size,FileMetadata->FileType,FileMetadata->FilFolLnkName);
+   Brw_PutIconFile (Size,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
 
    /***** End link and form *****/
    fprintf (Gbl.F.Out,"</a>");
@@ -6571,7 +6571,7 @@ void Brw_RemFileFromTree (void)
         {
 	 /* Name of the file/link to be shown */
 	 Brw_GetFileNameToShow (Str_FileIs (Gbl.FileBrowser.FilFolLnk.Name,"url") ? Brw_IS_LINK :
-										   Brw_IS_FILE,
+										    Brw_IS_FILE,
 				Gbl.FileBrowser.FilFolLnk.Name,FileNameToShow);
 
 	 /* Remove file/link from disk and database */
@@ -7014,13 +7014,13 @@ static void Brw_WriteCurrentClipboard (void)
       // Not the root folder
       Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Clipboard.FileBrowser,
                                              Gbl.FileBrowser.Clipboard.Level,
-                                             Gbl.FileBrowser.Clipboard.FileType,
-                                             Gbl.FileBrowser.Clipboard.FileName,
+                                             Gbl.FileBrowser.Clipboard.FilFolLnk.Type,
+                                             Gbl.FileBrowser.Clipboard.FilFolLnk.Name,
                                              FileNameToShow);
 
       Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s <strong>%s</strong>.",
                      Txt_Copy_source,TxtClipboardZone,
-                     TxtFileType[Gbl.FileBrowser.Clipboard.FileType],
+                     TxtFileType[Gbl.FileBrowser.Clipboard.FilFolLnk.Type],
                      FileNameToShow);
      }
    else
@@ -7040,7 +7040,6 @@ static bool Brw_GetMyClipboard (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char PathUntilFileName[PATH_MAX + 1];
    unsigned NumRows;
    unsigned UnsignedNum;
 
@@ -7048,9 +7047,9 @@ static bool Brw_GetMyClipboard (void)
    Gbl.FileBrowser.Clipboard.FileBrowser = Brw_UNKNOWN;
    Gbl.FileBrowser.Clipboard.Cod         = -1L;
    Gbl.FileBrowser.Clipboard.WorksUsrCod = -1L;
-   Gbl.FileBrowser.Clipboard.FileType    = Brw_IS_UNKNOWN;
-   Gbl.FileBrowser.Clipboard.Path[0]     = '\0';
-   Gbl.FileBrowser.Clipboard.FileName[0] = '\0';
+   Gbl.FileBrowser.Clipboard.FilFolLnk.Type    = Brw_IS_UNKNOWN;
+   Gbl.FileBrowser.Clipboard.FilFolLnk.Full[0]     = '\0';
+   Gbl.FileBrowser.Clipboard.FilFolLnk.Name[0] = '\0';
    Gbl.FileBrowser.Clipboard.Level       = 0;
 
    /***** Get my current clipboard from database *****/
@@ -7078,21 +7077,21 @@ static bool Brw_GetMyClipboard (void)
          Gbl.FileBrowser.Clipboard.WorksUsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
          /* Get file type (row[3]) */
-         Gbl.FileBrowser.Clipboard.FileType = Brw_IS_UNKNOWN;	// default
+         Gbl.FileBrowser.Clipboard.FilFolLnk.Type = Brw_IS_UNKNOWN;	// default
          if (sscanf (row[3],"%u",&UnsignedNum) == 1)
             if (UnsignedNum < Brw_NUM_FILE_TYPES)
-               Gbl.FileBrowser.Clipboard.FileType = (Brw_FileType_t) UnsignedNum;
+               Gbl.FileBrowser.Clipboard.FilFolLnk.Type = (Brw_FileType_t) UnsignedNum;
 
          /* Get file path (row[4]) */
-         Str_Copy (Gbl.FileBrowser.Clipboard.Path,row[4],
+         Str_Copy (Gbl.FileBrowser.Clipboard.FilFolLnk.Full,row[4],
                    PATH_MAX);
-         Str_SplitFullPathIntoPathAndFileName (Gbl.FileBrowser.Clipboard.Path,
-                                               PathUntilFileName,
-                                               Gbl.FileBrowser.Clipboard.FileName);
+         Str_SplitFullPathIntoPathAndFileName (Gbl.FileBrowser.Clipboard.FilFolLnk.Full,
+					       Gbl.FileBrowser.Clipboard.FilFolLnk.Path,
+                                               Gbl.FileBrowser.Clipboard.FilFolLnk.Name);
 
          /* Set clipboard level
             (number of slashes in full path, including file or folder) */
-         Gbl.FileBrowser.Clipboard.Level = Brw_NumLevelsInPath (Gbl.FileBrowser.Clipboard.Path);
+         Gbl.FileBrowser.Clipboard.Level = Brw_NumLevelsInPath (Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
         }
      }
 
@@ -7791,7 +7790,7 @@ void Brw_PasteIntoFileBrowser (void)
 //	Possible degree:		Gbl.FileBrowser.Clipboard.DegCod
 //	Possible course:		Gbl.FileBrowser.Clipboard.CrsCod
 //	Possible student in works:	Gbl.FileBrowser.Clipboard.WorksUsrCod
-//	Path (file or folder):		Gbl.FileBrowser.Clipboard.Path
+//	Path (file or folder):		Gbl.FileBrowser.Clipboard.FilFolLnk.Full
 // Destination:
 //	Type of file browser:		Gbl.FileBrowser.Type
 //	Possible institution:		Gbl.Hierarchy.Ins.InsCod
@@ -7840,7 +7839,7 @@ static void Brw_PasteClipboard (void)
 		         Cfg_PATH_INS_PRIVATE,
 		         (unsigned) (Ins.InsCod % 100),
 		         (unsigned) Ins.InsCod,
-			 Gbl.FileBrowser.Clipboard.Path);
+			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -7853,7 +7852,7 @@ static void Brw_PasteClipboard (void)
 		         Cfg_PATH_CTR_PRIVATE,
 		         (unsigned) (Ctr.CtrCod % 100),
 		         (unsigned) Ctr.CtrCod,
-			 Gbl.FileBrowser.Clipboard.Path);
+			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -7866,7 +7865,7 @@ static void Brw_PasteClipboard (void)
 		         Cfg_PATH_DEG_PRIVATE,
 		         (unsigned) (Deg.DegCod % 100),
 		         (unsigned) Deg.DegCod,
-			 Gbl.FileBrowser.Clipboard.Path);
+			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -7879,7 +7878,7 @@ static void Brw_PasteClipboard (void)
 	       snprintf (PathOrg,sizeof (PathOrg),
 		         "%s/%ld/%s",
                          Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,
-			 Gbl.FileBrowser.Clipboard.Path);
+			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -7895,7 +7894,7 @@ static void Brw_PasteClipboard (void)
 		         "%s/%ld/%s/%ld/%s",
                          Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_GRP,
 			 GrpDat.GrpCod,
-			 Gbl.FileBrowser.Clipboard.Path);
+			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -7912,7 +7911,7 @@ static void Brw_PasteClipboard (void)
                          Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_USR,
 			 (unsigned) (Gbl.FileBrowser.Clipboard.WorksUsrCod % 100),
 			 Gbl.FileBrowser.Clipboard.WorksUsrCod,
-			 Gbl.FileBrowser.Clipboard.Path);
+			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
 	       Usr_UsrDataDestructor (&UsrDat);
               }
             else
@@ -7927,7 +7926,7 @@ static void Brw_PasteClipboard (void)
                          Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_USR,
 			 (unsigned) (Gbl.Usrs.Me.UsrDat.UsrCod % 100),
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
-			 Gbl.FileBrowser.Clipboard.Path);
+			 Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             else
                Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -7941,7 +7940,7 @@ static void Brw_PasteClipboard (void)
 			Cfg_PATH_CRS_PRIVATE,Crs.CrsCod,Cfg_FOLDER_PRJ,
 			(unsigned) (PrjCod % 100),
 			PrjCod,
-			Gbl.FileBrowser.Clipboard.Path);
+			Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
 	    else
 	       Lay_ShowErrorAndExit ("The copy source does not exist.");
             break;
@@ -7949,7 +7948,7 @@ static void Brw_PasteClipboard (void)
             snprintf (PathOrg,sizeof (PathOrg),
         	      "%s/%s",
         	      Gbl.Usrs.Me.PathDir,
-        	      Gbl.FileBrowser.Clipboard.Path);
+        	      Gbl.FileBrowser.Clipboard.FilFolLnk.Full);
             break;
          default:
             Lay_ShowErrorAndExit ("Wrong file browser.");
@@ -8940,7 +8939,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
 			                                             Gbl.FileBrowser.Level,
 			                                             Brw_IS_FOLDER,
 			                                             Gbl.FileBrowser.FilFolLnk.Name,
-			                                             FileNameToShow);
+			                                             FileNameToShow);	// Folder name
         	              Ale_CreateAlert (Ale_SUCCESS,NULL,
         	        	               Txt_The_file_X_has_been_placed_inside_the_folder_Y,
 			                       Gbl.FileBrowser.NewFilFolLnkName,
@@ -9125,7 +9124,7 @@ void Brw_RecLinkFileBrowser (void)
 		                                            Gbl.FileBrowser.Level,
 		                                            Brw_IS_FOLDER,
 					                    Gbl.FileBrowser.FilFolLnk.Name,
-					                    FileNameToShow);
+					                    FileNameToShow);	// Folder name
 		     Ale_ShowAlert (Ale_SUCCESS,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
 			            FileName,FileNameToShow);
 
@@ -9340,8 +9339,8 @@ bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
 			  FileMetadata->FileBrowser,
 			  FileMetadata->Cod,
 			  FileMetadata->ZoneUsrCod,
-			  FileMetadata->FullPathInTree,
-			  FileMetadata->FullPathInTree) != 0);
+			  FileMetadata->FilFolLnk.Full,
+			  FileMetadata->FilFolLnk.Full) != 0);
   }
 
 /*****************************************************************************/
@@ -9396,8 +9395,8 @@ void Brw_ShowFileMetadata (void)
      {
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
-	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FileType,
-	                                        FileMetadata.FullPathInTree,
+	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FilFolLnk.Type,
+	                                        FileMetadata.FilFolLnk.Full,
 	                                        false,Brw_LICENSE_DEFAULT);
 
       /***** Check if I can view this file.
@@ -9429,8 +9428,8 @@ void Brw_ShowFileMetadata (void)
 
    if (ICanView)
      {
-      if (FileMetadata.FileType == Brw_IS_FILE ||
-	  FileMetadata.FileType == Brw_IS_LINK)
+      if (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||
+	  FileMetadata.FilFolLnk.Type == Brw_IS_LINK)
 	{
 	 /***** Update number of views *****/
 	 Brw_GetAndUpdateFileViews (&FileMetadata);
@@ -9452,8 +9451,8 @@ void Brw_ShowFileMetadata (void)
 	     Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP)
 	    URL[0] = '\0';
 	 else
-	    Brw_GetLinkToDownloadFile (FileMetadata.PathInTreeUntilFilFolLnk,
-				       FileMetadata.FilFolLnkName,
+	    Brw_GetLinkToDownloadFile (FileMetadata.FilFolLnk.Path,
+				       FileMetadata.FilFolLnk.Name,
 				       URL);
 
 	 /***** Can I edit the properties of the file? *****/
@@ -9461,8 +9460,8 @@ void Brw_ShowFileMetadata (void)
 	 ICanEdit = Brw_CheckIfICanEditFileMetadata (IAmTheOwner);
 
 	 /***** Name of the file/link to be shown *****/
-	 Brw_GetFileNameToShow (FileMetadata.FileType,
-	                        FileMetadata.FilFolLnkName,
+	 Brw_GetFileNameToShow (FileMetadata.FilFolLnk.Type,
+	                        FileMetadata.FilFolLnk.Name,
 	                        FileNameToShow);
 
 	 /***** Start form to update the metadata of a file *****/
@@ -9786,7 +9785,7 @@ void Brw_DownloadFile (void)
      {
       if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
 	 /* Add entry to the table of files/folders */
-	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FileType,
+	 FileMetadata.FilCod = Brw_AddPathToDB (-1L,FileMetadata.FilFolLnk.Type,
 	                                        Gbl.FileBrowser.FilFolLnk.Full,
 	                                        false,Brw_LICENSE_DEFAULT);
 
@@ -9819,8 +9818,8 @@ void Brw_DownloadFile (void)
 
    if (ICanView)
      {
-      if (FileMetadata.FileType == Brw_IS_FILE ||
-	  FileMetadata.FileType == Brw_IS_LINK)
+      if (FileMetadata.FilFolLnk.Type == Brw_IS_FILE ||
+	  FileMetadata.FilFolLnk.Type == Brw_IS_LINK)
 	{
 	 /***** Update number of views *****/
 	 Brw_GetAndUpdateFileViews (&FileMetadata);
@@ -10003,16 +10002,16 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       /* Form to see marks */
       Frm_StartForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
 								ActSeeMyMrkGrp);
-      Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata->PathInTreeUntilFilFolLnk,
+      Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata->FilFolLnk.Path,
    	     PATH_MAX);
-      Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata->FilFolLnkName,
+      Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata->FilFolLnk.Name,
    	     NAME_MAX);
-      Gbl.FileBrowser.FilFolLnk.Type = FileMetadata->FileType;
+      Gbl.FileBrowser.FilFolLnk.Type = FileMetadata->FilFolLnk.Type;
       Brw_PutImplicitParamsFileBrowser ();
 
       /* Link begin */
       Frm_LinkFormSubmit (Txt_Check_marks_in_the_file,"FILENAME_TXT",NULL);
-      Brw_PutIconFile (32,FileMetadata->FileType,FileMetadata->FilFolLnkName);
+      Brw_PutIconFile (32,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
 
       /* Name of the file of marks, link end and form end */
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
@@ -10026,14 +10025,14 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
      }
    else
      {
-      Title = (FileMetadata->FileType == Brw_IS_LINK) ? URL :	// If it's a link, show full URL in title
+      Title = (FileMetadata->FilFolLnk.Type == Brw_IS_LINK) ? URL :	// If it's a link, show full URL in title
                                                         Txt_Download;
 
       /* Put anchor and filename */
       fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME_TXT\""
                          " title=\"%s\" target=\"_blank\">",
 	       URL,Title);
-      Brw_PutIconFile (32,FileMetadata->FileType,FileMetadata->FilFolLnkName);
+      Brw_PutIconFile (32,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
 			 "<img src=\"%s/download.svg\""
 			 " alt=\"%s\" title=\"%s\""
@@ -10062,11 +10061,11 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
       /* Form to see marks */
       Frm_StartForm (Gbl.FileBrowser.Type == Brw_SHOW_MRK_CRS ? ActSeeMyMrkCrs :
 								ActSeeMyMrkGrp);
-      Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata->PathInTreeUntilFilFolLnk,
+      Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,FileMetadata->FilFolLnk.Path,
    	     PATH_MAX);
-      Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata->FilFolLnkName,
+      Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,FileMetadata->FilFolLnk.Name,
    	     NAME_MAX);
-      Gbl.FileBrowser.FilFolLnk.Type = FileMetadata->FileType;
+      Gbl.FileBrowser.FilFolLnk.Type = FileMetadata->FilFolLnk.Type;
       Brw_PutImplicitParamsFileBrowser ();
 
       /* Link begin */
@@ -10197,7 +10196,7 @@ void Brw_ChgFileMetadata (void)
                                    Gbl.FileBrowser.FilFolLnk.Full,
                                    PublicFileAfterEdition,License);
       else				// No entry in database
-         FileMetadata.FilCod = Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,FileMetadata.FileType,
+         FileMetadata.FilCod = Brw_AddPathToDB (Gbl.Usrs.Me.UsrDat.UsrCod,FileMetadata.FilFolLnk.Type,
                                                 Gbl.FileBrowser.FilFolLnk.Full,
                                                 PublicFileAfterEdition,License);
 
@@ -10360,17 +10359,17 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
       FileMetadata->PublisherUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
       /* Get file type (row[5]) */
-      FileMetadata->FileType = Brw_IS_UNKNOWN;	// default
+      FileMetadata->FilFolLnk.Type = Brw_IS_UNKNOWN;	// default
       if (sscanf (row[5],"%u",&UnsignedNum) == 1)
 	 if (UnsignedNum < Brw_NUM_FILE_TYPES)
-	    FileMetadata->FileType = (Brw_FileType_t) UnsignedNum;
+	    FileMetadata->FilFolLnk.Type = (Brw_FileType_t) UnsignedNum;
 
       /* Get path (row[6]) */
-      Str_Copy (FileMetadata->FullPathInTree,row[6],
+      Str_Copy (FileMetadata->FilFolLnk.Full,row[6],
                 PATH_MAX);
-      Str_SplitFullPathIntoPathAndFileName (FileMetadata->FullPathInTree,
-					    FileMetadata->PathInTreeUntilFilFolLnk,
-					    FileMetadata->FilFolLnkName);
+      Str_SplitFullPathIntoPathAndFileName (FileMetadata->FilFolLnk.Full,
+					    FileMetadata->FilFolLnk.Path,
+					    FileMetadata->FilFolLnk.Name);
 
       /* File is hidden? (row[7]) */
       switch (Gbl.FileBrowser.Type)
@@ -10425,10 +10424,10 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
       FileMetadata->Cod                         = -1L;
       FileMetadata->ZoneUsrCod                  = -1L;
       FileMetadata->PublisherUsrCod             = -1L;
-      FileMetadata->FileType                    = Brw_IS_UNKNOWN;
-      FileMetadata->FullPathInTree[0]           = '\0';
-      FileMetadata->PathInTreeUntilFilFolLnk[0] = '\0';
-      FileMetadata->FilFolLnkName[0]            = '\0';
+      FileMetadata->FilFolLnk.Type                    = Brw_IS_UNKNOWN;
+      FileMetadata->FilFolLnk.Full[0]           = '\0';
+      FileMetadata->FilFolLnk.Path[0] = '\0';
+      FileMetadata->FilFolLnk.Name[0]            = '\0';
       FileMetadata->IsHidden                    = false;
       FileMetadata->IsPublic                    = false;
       FileMetadata->License                     = Brw_LICENSE_DEFAULT;
@@ -10489,17 +10488,17 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
       FileMetadata->PublisherUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
       /* Get file type (row[5]) */
-      FileMetadata->FileType = Brw_IS_UNKNOWN;	// default
+      FileMetadata->FilFolLnk.Type = Brw_IS_UNKNOWN;	// default
       if (sscanf (row[5],"%u",&UnsignedNum) == 1)
 	 if (UnsignedNum < Brw_NUM_FILE_TYPES)
-	    FileMetadata->FileType = (Brw_FileType_t) UnsignedNum;
+	    FileMetadata->FilFolLnk.Type = (Brw_FileType_t) UnsignedNum;
 
       /* Get path (row[6]) */
-      Str_Copy (FileMetadata->FullPathInTree,row[6],
+      Str_Copy (FileMetadata->FilFolLnk.Full,row[6],
                 PATH_MAX);
-      Str_SplitFullPathIntoPathAndFileName (FileMetadata->FullPathInTree,
-					    FileMetadata->PathInTreeUntilFilFolLnk,
-					    FileMetadata->FilFolLnkName);
+      Str_SplitFullPathIntoPathAndFileName (FileMetadata->FilFolLnk.Full,
+					    FileMetadata->FilFolLnk.Path,
+					    FileMetadata->FilFolLnk.Name);
 
       /* Is a hidden file? (row[7]) */
       switch (Gbl.FileBrowser.Type)
@@ -10554,10 +10553,10 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
       FileMetadata->Cod                         = -1L;
       FileMetadata->ZoneUsrCod                  = -1L;
       FileMetadata->PublisherUsrCod             = -1L;
-      FileMetadata->FileType                    = Brw_IS_UNKNOWN;
-      FileMetadata->FullPathInTree[0]           = '\0';
-      FileMetadata->PathInTreeUntilFilFolLnk[0] = '\0';
-      FileMetadata->FilFolLnkName[0]            = '\0';
+      FileMetadata->FilFolLnk.Type                    = Brw_IS_UNKNOWN;
+      FileMetadata->FilFolLnk.Full[0]           = '\0';
+      FileMetadata->FilFolLnk.Path[0] = '\0';
+      FileMetadata->FilFolLnk.Name[0]            = '\0';
       FileMetadata->IsHidden                    = false;
       FileMetadata->IsPublic                    = false;
       FileMetadata->License                     = Brw_LICENSE_DEFAULT;
@@ -10588,11 +10587,11 @@ bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata)
    snprintf (Path,sizeof (Path),
 	     "%s/%s",
 	     Gbl.FileBrowser.Priv.PathAboveRootFolder,
-	     FileMetadata->FullPathInTree);
+	     FileMetadata->FilFolLnk.Full);
    if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
      {
       // Error on lstat
-      FileMetadata->FileType = Brw_IS_UNKNOWN;
+      FileMetadata->FilFolLnk.Type = Brw_IS_UNKNOWN;
       FileMetadata->Size = (off_t) 0;
       FileMetadata->Time = (time_t) 0;
       return false;
@@ -10600,12 +10599,12 @@ bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata)
    else
      {
       if (S_ISDIR (FileStatus.st_mode))
-	 FileMetadata->FileType = Brw_IS_FOLDER;
+	 FileMetadata->FilFolLnk.Type = Brw_IS_FOLDER;
       else if (S_ISREG (FileStatus.st_mode))
-         FileMetadata->FileType = Str_FileIs (FileMetadata->FullPathInTree,"url") ? Brw_IS_LINK :
-                                                                                    Brw_IS_FILE;
+         FileMetadata->FilFolLnk.Type = Str_FileIs (FileMetadata->FilFolLnk.Full,"url") ? Brw_IS_LINK :
+                                                                                          Brw_IS_FILE;
       else
-	 FileMetadata->FileType = Brw_IS_UNKNOWN;
+	 FileMetadata->FilFolLnk.Type = Brw_IS_UNKNOWN;
       FileMetadata->Size = FileStatus.st_size;
       FileMetadata->Time = FileStatus.st_mtime;
       return true;
@@ -11714,7 +11713,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    Brw_GetFileMetadataByCod (&FileMetadata);
 
    /***** Copy file name into summary string *****/
-   Str_Copy (SummaryStr,FileMetadata.FilFolLnkName,
+   Str_Copy (SummaryStr,FileMetadata.FilFolLnk.Name,
              Ntf_MAX_BYTES_SUMMARY);
 
    /***** Copy some file metadata into content string *****/
@@ -11735,8 +11734,8 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       if (asprintf (ContentStr,"%s: %s<br />"	// File name
 			       "%s: %s<br />"	// File path
 			       "%s: %s",	// Publisher
-		    Txt_Filename,FileMetadata.FilFolLnkName,
-		    Txt_Folder,FileMetadata.PathInTreeUntilFilFolLnk,	// TODO: Fix bug: do not write internal name (for example "comun")
+		    Txt_Filename,FileMetadata.FilFolLnk.Name,
+		    Txt_Folder,FileMetadata.FilFolLnk.Path,	// TODO: Fix bug: do not write internal name (for example "comun")
 		    Txt_Uploaded_by,
 		    FileHasPublisher ? PublisherUsrDat.FullName :
 				       Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]) < 0)
@@ -12041,8 +12040,8 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
                BgColor,Title);
 
       /***** Get the name of the file to show *****/
-      Brw_GetFileNameToShow (FileMetadata.FileType,
-                             FileMetadata.FilFolLnkName,
+      Brw_GetFileNameToShow (FileMetadata.FilFolLnk.Type,
+                             FileMetadata.FilFolLnk.Name,
                              FileNameToShow);
 
       /***** Write file name using path (row[1]) *****/
@@ -12078,7 +12077,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
          Frm_StartForm (Action);
 
       /* Parameters to go to file / folder */
-      if (FileMetadata.FileType == Brw_IS_FOLDER)
+      if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
 	 Brw_PutImplicitParamsFileBrowser ();
       else
 	 Brw_PutParamsFileBrowser (NULL,		// Not used
@@ -12088,7 +12087,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 
       /* File or folder icon */
       Frm_LinkFormSubmit (FileNameToShow,"DAT_N",NULL);
-      if (FileMetadata.FileType == Brw_IS_FOLDER)
+      if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
 	 /* Icon with folder */
 	 fprintf (Gbl.F.Out,"<img src=\"%s/folder-yellow.png\""
 			    " alt=\"%s\" title=\"%s\""
@@ -12097,7 +12096,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 		  Txt_Folder,Txt_Folder);
       else
 	 /* Icon with file type or link */
-	 Brw_PutIconFile (16,FileMetadata.FileType,FileMetadata.FilFolLnkName);
+	 Brw_PutIconFile (16,FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name);
       fprintf (Gbl.F.Out,"&nbsp;%s"
 	                 "</a>",
 	       FileNameToShow);
