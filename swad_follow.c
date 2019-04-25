@@ -99,7 +99,6 @@ static void Fol_RequestFollowUsrs (Act_Action_t NextAction);
 static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction);
 static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed);
-static void Fol_PutParamsSelectedUsrs (void);
 
 static void Fol_FollowUsr (struct UsrData *UsrDat);
 static void Fol_UnfollowUsr (struct UsrData *UsrDat);
@@ -1115,12 +1114,12 @@ static void Fol_RequestFollowUsrs (Act_Action_t NextAction)
      {
       if (NumNotFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutParamsSelectedUsrs,
+				 Usr_PutHiddenParSelectedUsrsCods,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_selected_user_whom_you_do_not_follow_yet);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutParamsSelectedUsrs,
+				 Usr_PutHiddenParSelectedUsrsCods,
 				 Btn_CREATE_BUTTON,Txt_Follow,
 				 Ale_QUESTION,Txt_Do_you_want_to_follow_the_X_selected_users_whom_you_do_not_follow_yet,
 				 NumNotFollowed);
@@ -1159,12 +1158,12 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
      {
       if (NumFollowed == 1)
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutParamsSelectedUsrs,
+				 Usr_PutHiddenParSelectedUsrsCods,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_selected_user_whom_you_follow);
       else
          Ale_ShowAlertAndButton (NextAction,NULL,NULL,
-				 Fol_PutParamsSelectedUsrs,
+				 Usr_PutHiddenParSelectedUsrsCods,
 				 Btn_CREATE_BUTTON,Txt_Unfollow,
 				 Ale_QUESTION,Txt_Do_you_want_to_stop_following_the_X_selected_users_whom_you_follow,
 				 NumFollowed);
@@ -1318,16 +1317,6 @@ void Fol_UnfollowUsrs (void)
    else
       Ale_ShowAlert (Ale_SUCCESS,Txt_You_have_stopped_following_X_users,
 	             NumUnfollowed);
-  }
-
-/*****************************************************************************/
-/**************** Put parameter with list of selected users ******************/
-/*****************************************************************************/
-
-static void Fol_PutParamsSelectedUsrs (void)
-  {
-   /***** Hidden parameter with the encrypted codes of users selected *****/
-   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
   }
 
 /*****************************************************************************/

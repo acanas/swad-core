@@ -99,9 +99,8 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
 
 static void ZIP_PutLinkToCreateZIPAsgWrkParams (void)
   {
-   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
-   if (Gbl.FileBrowser.FullTree)
-      Par_PutHiddenParamChar ("FullTree",'Y');
+   Usr_PutHiddenParSelectedUsrsCods ();
+   Brw_PutHiddenParamFullTreeIfSelected ();
    Par_PutHiddenParamChar ("CreateZIP",'Y');
   }
 

@@ -2321,14 +2321,11 @@ void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FileFolderName
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       /***** Project code *****/
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCod);
-   else// if (NextAction != ActUnk)
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      if (Brw_GetIfCrsAssigWorksFileBrowser ())
-	{
-	 /***** Users selected *****/
-	 Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
-	 Usr_PutParamOtherUsrCodEncrypted ();
-	}
+      /***** Users selected *****/
+      Usr_PutHiddenParSelectedUsrsCods ();
+      Usr_PutParamOtherUsrCodEncrypted ();
      }
 
    /***** If full tree selected? *****/
@@ -4960,7 +4957,7 @@ static void Brw_PutParamsFullTree (void)
    else if (Brw_GetIfProjectFileBrowser ())	// This file browser needs specify a project
       Prj_PutParamPrjCod (Gbl.Prjs.PrjCod);
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-      Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
+      Usr_PutHiddenParSelectedUsrsCods ();
   }
 
 /*****************************************************************************/
@@ -11453,7 +11450,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (!Gbl.FileBrowser.Asg.IBelongToCrsOrGrps)	// If I do not belong to course / groups of this assignment
 	    return false; 				// I can not create anything inside this assignment
 
-	 switch (Gbl.Usrs.Me.Role.Logged)
+	 switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
 	   {
 	    case Rol_STD:			// Students...
 	    case Rol_NET:			// ...and non-editing teachers...

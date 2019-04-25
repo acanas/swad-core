@@ -581,7 +581,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat,Usr_GetPrefs_t GetPrefs)
 
    /* Get encrypted user's code (row[0]) */
    Str_Copy (UsrDat->EncryptedUsrCod,row[0],
-            Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 
    /* Get encrypted password (row[1]) */
    Str_Copy (UsrDat->Password,row[1],
@@ -5643,16 +5643,33 @@ static void Usr_PutParamsConfirmIWantToSeeBigList (void)
 /************* Write parameter with the list of users selected ***************/
 /*****************************************************************************/
 
-void Usr_PutHiddenParUsrCodAll (const char *ListUsrCods)
+void Usr_PutHiddenParSelectedUsrsCods (void)
   {
    /***** Put a parameter indicating that a list of several users is present *****/
    Par_PutHiddenParamChar ("MultiUsrs",'Y');
 
    /***** Put a parameter with the encrypted user codes of several users *****/
    if (Gbl.Session.IsOpen)
-      Ses_InsertHiddenParInDB (Usr_ParamUsrCod[Rol_UNK],ListUsrCods);
+      Ses_InsertHiddenParInDB (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK]);
    else
-      Par_PutHiddenParamString (Usr_ParamUsrCod[Rol_UNK],ListUsrCods);
+      Par_PutHiddenParamString (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK]);
+  }
+
+/*****************************************************************************/
+/**************** Create list of selected users with one given user ************************/
+/*****************************************************************************/
+
+void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (void)
+  {
+   /***** Create list of user codes and put encrypted user code in it *****/
+   if (!Gbl.Usrs.Selected.List[Rol_UNK])
+     {
+      if ((Gbl.Usrs.Selected.List[Rol_UNK] = (char *) malloc (Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1)) == NULL)
+         Lay_NotEnoughMemoryExit ();
+      Str_Copy (Gbl.Usrs.Selected.List[Rol_UNK],Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+		Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Gbl.Usrs.Selected.Filled = true;
+     }
   }
 
 /*****************************************************************************/

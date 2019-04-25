@@ -488,20 +488,49 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
    extern const char *Txt_Folder;
    bool ICanSendFiles = !Asg->Hidden &&				// It's visible (not hidden)
                         Asg->Open &&				// It's open (inside dates)
-                        Asg->IBelongToCrsOrGrps &&		// I belong to course or groups
-                        Gbl.Usrs.Me.Role.Logged == Rol_STD;	// I am a student
+                        Asg->IBelongToCrsOrGrps;		// I belong to course or groups
 
    /***** Folder icon *****/
    if (!PrintView &&	// Not print view
        ICanSendFiles)	// I can send files to this assignment folder
      {
       /* Form to create a new file or folder */
-      Frm_StartForm (ActFrmCreAsgUsr);
+      Gbl.FileBrowser.FullTree = true;	// By default, show all files
+      switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
+        {
+	 case Rol_STD:
+	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_USR;	// User assignments
+	    Frm_StartForm (ActFrmCreAsgUsr);
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;	// Course assignments
+	    Str_Copy (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,Gbl.Usrs.Me.UsrDat.EncryptedUsrCod,
+		      Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr ();
+	    Frm_StartForm (ActFrmCreAsgCrs);
+	    break;
+	 default:
+            Lay_ShowErrorAndExit ("Wrong role.");
+	    break;
+        }
       Brw_PutParamsFileBrowser (Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
 				Asg->Folder,
 				Brw_IS_FOLDER,-1L);
-      Ico_PutIconLink ("folder-open-green.svg",Txt_Upload_file_or_create_folder);
+      Ico_PutIconLink ("folder-open-yellow-plus.png",
+		       Txt_Upload_file_or_create_folder);
       Frm_EndForm ();
+      switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
+        {
+	 case Rol_STD:
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	    Usr_FreeListsSelectedUsrsCods ();
+	    break;
+	 default:
+	    break;
+        }
      }
    else			// Sending of files disabled
       Ico_PutIconOff (ICanSendFiles ? "folder-open-green.svg" :

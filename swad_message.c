@@ -108,6 +108,7 @@ static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,boo
 static long Msg_GetParamMsgCod (void);
 static void Msg_PutLinkToShowMorePotentialRecipients (void);
 static void Msg_PutParamsShowMorePotentialRecipients (void);
+static void Msg_PutParamsWriteMsg (void);
 static void Msg_ShowOneUniqueRecipient (void);
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
@@ -393,9 +394,9 @@ static void Msg_PutParamsShowMorePotentialRecipients (void)
 /***************** Put parameters when writing a message *********************/
 /*****************************************************************************/
 
-void Msg_PutParamsWriteMsg (void)
+static void Msg_PutParamsWriteMsg (void)
   {
-   Usr_PutHiddenParUsrCodAll (Gbl.Usrs.Selected.List[Rol_UNK]);
+   Usr_PutHiddenParSelectedUsrsCods ();
    Msg_PutHiddenParamOtherRecipients ();
    Msg_PutHiddenParamsSubjectAndContent ();
    if (Gbl.Msg.Reply.IsReply)

@@ -411,7 +411,8 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,
                            void (*FuncParams) (void),
                            const char *OnSubmit);
 
-void Usr_PutHiddenParUsrCodAll (const char *ListUsrCods);
+void Usr_PutHiddenParSelectedUsrsCods (void);
+void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (void);
 void Usr_GetListsSelectedUsrsCods (void);
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
 bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind);
