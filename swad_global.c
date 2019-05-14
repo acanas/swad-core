@@ -402,8 +402,6 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.WebService.Function = Svc_unknown;
 
-   Gbl.Layout.NestedBox = 0;
-
    /* Flush caches */
    Cty_FlushCacheCountryName ();
    Ins_FlushCacheShortNameOfInstitution ();

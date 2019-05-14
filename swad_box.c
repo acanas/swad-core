@@ -54,6 +54,12 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
+/***************************** Private variabled *****************************/
+/*****************************************************************************/
+
+static unsigned Box_Nested = 0;
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -176,11 +182,11 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE %s\">"
 	                 "%s"
 	                 "</div>",
-	       Gbl.Layout.NestedBox ? "FRAME_TITLE_SMALL" :
-		                      "FRAME_TITLE_BIG",
+	       Box_Nested ? "FRAME_TITLE_SMALL" :
+		            "FRAME_TITLE_BIG",
 	       Title);
 
-   Gbl.Layout.NestedBox++;
+   Box_Nested++;
   }
 
 void Box_EndBoxTable (void)
@@ -203,7 +209,7 @@ void Box_EndBoxWithButton (Btn_Button_t Button,const char *TxtButton)
 
 void Box_EndBox (void)
   {
-   Gbl.Layout.NestedBox--;
+   Box_Nested--;
 
    /***** End box and box container *****/
    fprintf (Gbl.F.Out,"</div>"
