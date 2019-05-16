@@ -1792,7 +1792,7 @@ void Ins_RemoveInstitution (void)
   }
 
 /*****************************************************************************/
-/***************** Change the name of an institution *******************/
+/********************* Change the name of an institution *********************/
 /*****************************************************************************/
 
 void Ins_RenameInsShort (void)
@@ -1821,32 +1821,14 @@ void Ins_RenameInsFull (void)
 
 void Ins_RenameInsShortInConfig (void)
   {
-   struct Instit *Ins = NULL;
-
-   /***** Institution constructor *****/
-   Ins_EditingInstitutionConstructor (&Ins);
-
    /***** Rename institution *****/
-   Ins->InsCod = Gbl.Hierarchy.Ins.InsCod;
-   Ins_RenameInstitution (Ins,Cns_SHRT_NAME);
-
-   /***** Institution destructor *****/
-   Ins_EditingInstitutionDestructor (&Ins);
+   Ins_RenameInstitution (&Gbl.Hierarchy.Ins,Cns_SHRT_NAME);
   }
 
 void Ins_RenameInsFullInConfig (void)
   {
-   struct Instit *Ins = NULL;
-
-   /***** Institution constructor *****/
-   Ins_EditingInstitutionConstructor (&Ins);
-
    /***** Rename institution *****/
-   Ins->InsCod = Gbl.Hierarchy.Ins.InsCod;
-   Ins_RenameInstitution (Ins,Cns_FULL_NAME);
-
-   /***** Institution destructor *****/
-   Ins_EditingInstitutionDestructor (&Ins);
+   Ins_RenameInstitution (&Gbl.Hierarchy.Ins,Cns_FULL_NAME);
   }
 
 /*****************************************************************************/
