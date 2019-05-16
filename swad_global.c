@@ -34,6 +34,7 @@
 #include <unistd.h>		// For getpid
 
 #include "swad_action.h"
+#include "swad_API.h"
 #include "swad_calendar.h"
 #include "swad_classroom.h"
 #include "swad_config.h"
@@ -47,7 +48,6 @@
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_theme.h"
-#include "swad_web_service.h"
 
 /*****************************************************************************/
 /****************************** Public variables *****************************/
@@ -400,7 +400,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.ColorRows[0] = "COLOR0";	// Darker
    Gbl.ColorRows[1] = "COLOR1";	// Lighter
 
-   Gbl.WebService.Function = Svc_unknown;
+   Gbl.WebService.Function = API_unknown;
 
    /* Flush caches */
    Cty_FlushCacheCountryName ();

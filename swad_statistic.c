@@ -3295,7 +3295,7 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
 	                 "<td class=\"LOG LEFT_TOP\">"
 	                 "%s&nbsp;"
 	                 "</td>",
-               Svc_GetFunctionNameFromFunCod (FunCod));
+               API_GetFunctionNameFromFunCod (FunCod));
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);

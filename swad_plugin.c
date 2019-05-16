@@ -34,6 +34,7 @@ TODO: Check if web service is called from an authorized IP.
 #include <stdlib.h>		// For calloc, free
 #include <string.h>
 
+#include "swad_API.h"
 #include "swad_box.h"
 #include "swad_config.h"
 #include "swad_constant.h"
@@ -46,7 +47,6 @@ TODO: Check if web service is called from an authorized IP.
 #include "swad_plugin.h"
 #include "swad_session.h"
 #include "swad_table.h"
-#include "swad_web_service.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

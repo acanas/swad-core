@@ -242,6 +242,32 @@ struct swad__getTrivialQuestionOutput
    struct swad__answersArray answersArray;
   };
 
+
+/* getGames */
+struct swad__game
+  {
+   int gameCode;
+   char *userSurname1;
+   char *userSurname2;
+   char *userFirstname;
+   char *userPhoto;
+   int startTime;
+   int endTime;
+   char *title;
+   char *text;
+   char *groups;
+  };
+struct swad__gamesArray
+  {
+   struct swad__game *__ptr;	// pointer to array
+   int __size; 			// number of elements pointed to
+  };
+struct swad__getGamesOutput
+  {
+   int numGames;
+   struct swad__gamesArray gamesArray;
+  };
+
 /* structs used in getUsers and sendMessage */
 struct swad__user
   {
@@ -415,6 +441,10 @@ int swad__getTests (char *wsKey,int courseCode,long beginTime,
                     struct swad__getTestsOutput *getTestsOut);
 int swad__getTrivialQuestion (char *wsKey,char *degrees,float lowerScore,float upperScore,
                               struct swad__getTrivialQuestionOutput *getTrivialQuestionOut);
+
+/* Games */
+int swad__getGames (char *wsKey,int courseCode,
+                    struct swad__getGamesOutput *getGamesOut);
 
 /* List of users */
 int swad__getUsers (char *wsKey,int courseCode,char *groups,int userRole,

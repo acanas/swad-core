@@ -27,7 +27,7 @@
 ###############################################################################
 
 OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
-       swad_announcement.o swad_assignment.o swad_attendance.o \
+       swad_announcement.o swad_API.o swad_assignment.o swad_attendance.o \
        swad_banner.o swad_box.o swad_button.o \
        swad_calendar.o swad_centre.o swad_chat.o swad_classroom.o \
        swad_config.o swad_connected.o swad_cookie.o swad_country.o \
@@ -54,7 +54,6 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
        swad_tab.o swad_table.o swad_test.o swad_test_import.o swad_theme.o \
        swad_timeline.o swad_timetable.o \
        swad_user.o \
-       swad_web_service.o \
        swad_xml.o \
        swad_zip.o
 SOAPOBJS = soap/soapC.o soap/soapServer.o

@@ -1,7 +1,7 @@
-// swad_web_service.h: SWAD web service provided to external plugins
+// swad_API.h: SWAD web API provided to external plugins
 
-#ifndef _SWAD_SVC
-#define _SWAD_SVC
+#ifndef _SWAD_API
+#define _SWAD_API
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -31,7 +31,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Svc_NUM_FUNCTIONS 27
+#define API_NUM_FUNCTIONS 28
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -40,42 +40,43 @@
 // Add new functions at the end
 typedef enum
   {
-   Svc_unknown			=  0,	// unknown function
-   Svc_loginBySessionKey	=  1,
-   Svc_loginByUserPassword	=  2,	// deprecated
-   Svc_loginByUserPasswordKey	=  3,
-   Svc_getCourses		=  4,
-   Svc_getUsers			=  5,
-   Svc_getNotifications		=  6,
-   Svc_getTestConfig		=  7,
-   Svc_getTests			=  8,
-   Svc_sendMessage		=  9,
-   Svc_sendNotice		= 10,
-   Svc_getDirectoryTree		= 11,
-   Svc_getGroups		= 12,
-   Svc_getGroupTypes		= 13,
-   Svc_sendMyGroups		= 14,
-   Svc_getFile			= 15,
-   Svc_markNotificationsAsRead	= 16,
-   Svc_getNewPassword		= 17,
-   Svc_getCourseInfo		= 18,
-   Svc_getAttendanceEvents	= 19,
-   Svc_sendAttendanceEvent	= 20,
-   Svc_getAttendanceUsers	= 21,
-   Svc_sendAttendanceUsers	= 22,
-   Svc_createAccount		= 23,
-   Svc_getMarks			= 24,
-   Svc_getTrivialQuestion       = 25,
-   Svc_findUsers		= 26,
-   Svc_removeAttendanceEvent	= 27,
-  } Svc_Function_t;
+   API_unknown			=  0,	// unknown function
+   API_loginBySessionKey	=  1,
+   API_loginByUserPassword	=  2,	// deprecated
+   API_loginByUserPasswordKey	=  3,
+   API_getCourses		=  4,
+   API_getUsers			=  5,
+   API_getNotifications		=  6,
+   API_getTestConfig		=  7,
+   API_getTests			=  8,
+   API_sendMessage		=  9,
+   API_sendNotice		= 10,
+   API_getDirectoryTree		= 11,
+   API_getGroups		= 12,
+   API_getGroupTypes		= 13,
+   API_sendMyGroups		= 14,
+   API_getFile			= 15,
+   API_markNotificationsAsRead	= 16,
+   API_getNewPassword		= 17,
+   API_getCourseInfo		= 18,
+   API_getAttendanceEvents	= 19,
+   API_sendAttendanceEvent	= 20,
+   API_getAttendanceUsers	= 21,
+   API_sendAttendanceUsers	= 22,
+   API_createAccount		= 23,
+   API_getMarks			= 24,
+   API_getTrivialQuestion       = 25,
+   API_findUsers		= 26,
+   API_removeAttendanceEvent	= 27,
+   API_getGames			= 28,
+  } API_Function_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Svc_WebService (void);
-void Svc_Exit (const char *DetailErrorMessage);
-const char *Svc_GetFunctionNameFromFunCod (long FunCod);
+void API_WebService (void);
+void API_Exit (const char *DetailErrorMessage);
+const char *API_GetFunctionNameFromFunCod (long FunCod);
 
 #endif

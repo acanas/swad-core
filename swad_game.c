@@ -954,7 +954,7 @@ void Gam_GetListGames (void)
 					"",
 		       Sco_GetDBStrFromScope (Hie_CRS),Cods[Hie_CRS],
 		       (HiddenAllowed & 1 << Hie_CRS) ? "" :
-							      " AND Hidden='N'",
+							" AND Hidden='N'",
 		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	    Lay_NotEnoughMemoryExit ();
         }
@@ -965,7 +965,7 @@ void Gam_GetListGames (void)
 					"",
 		       Sco_GetDBStrFromScope (Hie_CRS),Cods[Hie_CRS],
 		       (HiddenAllowed & 1 << Hie_CRS) ? "" :
-							      " AND Hidden='N'") < 0)
+							" AND Hidden='N'") < 0)
 	    Lay_NotEnoughMemoryExit ();
         }
       SubQueryFilled = true;

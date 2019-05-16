@@ -34,6 +34,7 @@
 
 #include "swad_alert.h"
 #include "swad_agenda.h"
+#include "swad_API.h"
 #include "swad_assignment.h"
 #include "swad_attendance.h"
 #include "swad_banner.h"
@@ -79,7 +80,6 @@
 #include "swad_test.h"
 #include "swad_timeline.h"
 #include "swad_timetable.h"
-#include "swad_web_service.h"
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/
@@ -278,7 +278,7 @@ struct Globals
      {
       bool IsWebService;	// Must generate HTML output (IsWebService==false) or SOAP-XML output (IsWebService==true)?
       long PlgCod;
-      Svc_Function_t Function;
+      API_Function_t Function;
      } WebService;
    struct
      {

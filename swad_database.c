@@ -3091,7 +3091,7 @@ mysql> DESCRIBE ws_keys;
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS ws_keys ("
-			"WSKey CHAR(43) NOT NULL,"	// Svc_BYTES_WS_KEY
+			"WSKey CHAR(43) NOT NULL,"	// API_BYTES_WS_KEY
 			"UsrCod INT NOT NULL,"
 			"PlgCod INT NOT NULL,"
 			"LastTime DATETIME NOT NULL,"

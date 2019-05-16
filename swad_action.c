@@ -1617,7 +1617,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRefNewSocPubGbl*/{1509,-1,TabUnk,ActRefNewSocPubGbl	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_AJAX_RFRESH,NULL				,TL_RefreshNewTimelineGbl	,NULL},
    /* ActRefOldSocPubGbl*/{1510,-1,TabUnk,ActRefOldSocPubGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_RefreshOldTimelineGbl	,NULL},
    /* ActRefOldSocPubUsr*/{1511,-1,TabUnk,ActRefOldSocPubUsr	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_RefreshOldTimelineUsr	,NULL},
-   /* ActWebSvc		*/{ 892,-1,TabUnk,ActWebSvc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_WEB_SERVICE,NULL				,Svc_WebService			,NULL},
+   /* ActWebSvc		*/{ 892,-1,TabUnk,ActWebSvc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_WEB_SERVICE,NULL				,API_WebService			,NULL},
 
    // TabStr ******************************************************************
    /* ActFrmLogIn	*/{1521, 0,TabStr,ActFrmLogIn		,    0,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Usr_WriteLandingPage		,"power-off"		},

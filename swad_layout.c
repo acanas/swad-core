@@ -30,6 +30,7 @@
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
+#include "swad_API.h"
 #include "swad_box.h"
 #include "swad_calendar.h"
 #include "swad_changelog.h"
@@ -53,7 +54,6 @@
 #include "swad_tab.h"
 #include "swad_theme.h"
 #include "swad_timeline.h"
-#include "swad_web_service.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -1369,7 +1369,7 @@ void Lay_ShowErrorAndExit (const char *Txt)
 
    /***** Exit *****/
    if (Gbl.WebService.IsWebService)
-      Svc_Exit (Txt);
+      API_Exit (Txt);
    exit (0);
   }
 
