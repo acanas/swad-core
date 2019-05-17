@@ -316,7 +316,6 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
    row[3] MedCod
    row[4] Correct
    */
-
    /***** Write the answers *****/
    switch (Gbl.Test.AnswerType)
      {
@@ -361,15 +360,19 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
            {
             row = mysql_fetch_row (mysql_res);
 
-            /* Write the answer (row[1]), that is in HTML */
+            /* Start answer */
             fprintf (Gbl.Test.XML.FileXML,"<option");
+
+            /* Write whether the answer is correct or not (row[4]) */
             if (Gbl.Test.AnswerType != Tst_ANS_TEXT)
                fprintf (Gbl.Test.XML.FileXML," correct=\"%s\"",
-                        (row[7][0] == 'Y') ? "yes" :
+                        (row[4][0] == 'Y') ? "yes" :
                                              "no");
-            fprintf (Gbl.Test.XML.FileXML,">%s"
-        	                          "<text>%s</text>%s",
-                     Txt_NEW_LINE,
+
+            fprintf (Gbl.Test.XML.FileXML,">%s",Txt_NEW_LINE);
+
+            /* Write the answer (row[1]), that is in HTML */
+            fprintf (Gbl.Test.XML.FileXML,"<text>%s</text>%s",
                      row[1],Txt_NEW_LINE);
 
             /* Write the feedback (row[2]) */
@@ -377,6 +380,8 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
 	       if (row[2][0])
 		  fprintf (Gbl.Test.XML.FileXML,"<feedback>%s</feedback>%s",
 			   row[2],Txt_NEW_LINE);
+
+            /* End answer */
             fprintf (Gbl.Test.XML.FileXML,"</option>%s",
                      Txt_NEW_LINE);
            }

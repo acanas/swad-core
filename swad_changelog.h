@@ -448,10 +448,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.121.1 (2019-05-16)"
+#define Log_PLATFORM_VERSION	"SWAD 18.121.2 (2019-05-17)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.116.5.js"
 /*
+	Version 18.121.2: May 17, 2019	Fixed bug in exporting tests. (242700 lines)
 	Version 18.121.1: May 16, 2019	Fixed bug in renaming of institution. (242697 lines)
 	Version 18.121:   May 13, 2019	Module swad_web_service is renamed as swad_API.
 					New API function getCourses. (242708 lines)
