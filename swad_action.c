@@ -610,6 +610,7 @@ Assessment:
         456. ActGamTch1stQst		Show first question when playing a game (by a teacher)
         457. ActGamTchNxtQst		Show next question when playing a game (by a teacher)
         458. ActGamTchAns		Show answers of current question when playing a game (by a teacher)
+        NEW. ActGamTchEnd		End playing a game (by a teacher)
 
         NEW. ActPlyGamStd		Play a game (by a student)
         NEW. ActGamStdCurQst		Show current question when playing a game (by a student)
@@ -2141,9 +2142,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeGam		*/{1650,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
 
    /* ActStrGamTch	*/{1670,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_StartGameTch		,NULL},
-   /* ActGamTch1stQst	*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Gam_GameTchNextQuestion	,NULL},
+   /* ActGamTch1stQst	*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Gam_GameTchFirstQuestion	,NULL},
    /* ActGamTchNxtQst	*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_GameTchNextQuestion	,NULL},
    /* ActGamTchAns	*/{1673,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_GameTchShowAnswers		,NULL},
+   /* ActGamTchEnd	*/{1781,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_GameTchEnd			,NULL},
 
    /* ActPlyGamStd	*/{1779,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_PlayGameStd		,NULL},
    /* ActGamStdCurQst	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Gam_GameStdCurrentQuestion	,NULL},
@@ -4978,6 +4980,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActUnlAllPrj,		// #1778
 	ActPlyGamStd,		// #1779
 	ActGamStdCurQst,	// #1780
+	ActGamTchEnd,		// #1781
 	};
 
 /*****************************************************************************/

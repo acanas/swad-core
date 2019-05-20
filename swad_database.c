@@ -1377,8 +1377,8 @@ mysql> DESCRIBE gam_playing;
 | Field          | Type          | Null | Key | Default | Extra |
 +----------------+---------------+------+-----+---------+-------+
 | GamCod         | int(11)       | NO   | PRI | NULL    |       |
-| QstCod         | int(11)       | NO   |     | -1      |       |
 | QstInd         | int(11)       | NO   |     | 0       |       |
+| QstCod         | int(11)       | NO   |     | -1      |       |
 | ShowingAnswers | enum('N','Y') | NO   |     | N       |       |
 | GamStart       | datetime      | NO   |     | NULL    |       |
 | QstStart       | datetime      | NO   |     | NULL    |       |
@@ -1387,8 +1387,8 @@ mysql> DESCRIBE gam_playing;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_playing ("
 			"GamCod INT NOT NULL,"
-			"QstCod INT NOT NULL DEFAULT -1,"
 			"QstInd INT NOT NULL DEFAULT 0,"
+			"QstCod INT NOT NULL DEFAULT -1,"
 			"ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"GamStart DATETIME NOT NULL,"
 			"QstStart DATETIME NOT NULL,"

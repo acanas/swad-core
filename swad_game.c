@@ -156,9 +156,16 @@ static void Gam_ExchangeQuestions (long GamCod,
 static void Gam_PutBigButtonToStartGameTch (long GamCod);
 static void Gam_PutBigButtonToPlayGameStd (long GamCod);
 
-static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers);
+static bool Gam_CheckIfGameIsBeeingPlayed (long GamCod);
+static void Gam_UpdateGameQstBeeingPlayed (long GamCod,unsigned QstInd,long QstCod,bool ShowingAnswers);
+static void Gam_RemoveGameBeeingPlayed (long GamCod);
+
+static void Gam_PlayGameShowQuestionAndAnswers (long GamCod,
+						unsigned QstInd,
+						bool ShowAnswers);
 static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
                                         long GamCod,unsigned QstInd);
+static void Gam_PutBigButtonToEnd (long GamCod);
 
 static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod);
 static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
@@ -2628,8 +2635,6 @@ static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
                 Txt_of_PART_OF_A_TOTAL,MaxUsrs);
 
    /***** Draw bar with a with proportional to the number of clicks *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\" style=\"width:%upx;\">",
-            Gam_MAX_BAR_WIDTH + 125);
    if (NumUsrs && MaxUsrs)
       BarWidth = (unsigned) ((((float) NumUsrs * (float) Gam_MAX_BAR_WIDTH) /
 	                       (float) MaxUsrs) + 0.5);
@@ -2646,7 +2651,7 @@ static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
       BarWidth);
 
    /***** Write the number of users *****/
-   fprintf (Gbl.F.Out,"%s</td>",Gbl.Title);
+   fprintf (Gbl.F.Out,"%s",Gbl.Title);
   }
 
 /*****************************************************************************/
@@ -3012,12 +3017,103 @@ static void Gam_PutBigButtonToPlayGameStd (long GamCod)
   }
 
 /*****************************************************************************/
-/**************** Show next question when playing a game *********************/
+/********* Show first question when playing a game (by a teacher) ************/
+/*****************************************************************************/
+
+void Gam_GameTchFirstQuestion (void)
+  {
+   long GamCod;
+
+   /***** Get parameters *****/
+   /* Get game code */
+   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+
+   /***** Check that the game is not being played *****/
+   if (Gam_CheckIfGameIsBeeingPlayed (GamCod))
+      Ale_ShowAlert (Ale_WARNING,"Este juego ya est&aacute; jug&aacute;ndose.");	// TODO: Need translation!!!!!!
+   else
+      /***** Show questions and possible answers *****/
+      Gam_PlayGameShowQuestionAndAnswers (GamCod,0,
+					  false);	// Don't show answers
+  }
+
+/*****************************************************************************/
+/******************** Check if I have answered a game ************************/
+/*****************************************************************************/
+
+static bool Gam_CheckIfGameIsBeeingPlayed (long GamCod)
+  {
+   /***** Get if game is being played from database *****/
+   return (DB_QueryCOUNT ("can not check if game is being played",
+			  "SELECT COUNT(*) FROM gam_playing"
+			  " WHERE GamCod=%ld",
+			  GamCod) != 0);
+  }
+
+/*****************************************************************************/
+/********************** Insert/update game being played **********************/
+/*****************************************************************************/
+
+static void Gam_UpdateGameQstBeeingPlayed (long GamCod,unsigned QstInd,long QstCod,bool ShowingAnswers)
+  {
+   if (ShowingAnswers)	// Show a question previously shown and its answers
+      DB_QueryUPDATE ("can not update game beeing played",
+		      "UPDATE gam_playing"
+		      " SET ShowingAnswers='Y'"
+		      " WHERE GamCod=%ld AND QstInd=%u AND QstCod=%ld",
+                      GamCod,QstInd,QstCod);
+   else			// Show a question without answers
+     {
+      if (QstInd == 0)	// 1st question beeing shown
+	 DB_QueryINSERT ("can not update game beeing played",
+			 "INSERT gam_playing"
+			 " (GamCod,QstInd,QstCod,ShowingAnswers,GamStart,QstStart)"
+			 " VALUES"
+			 " (%ld,0,%ld,'N',NOW(),NOW())",
+			 GamCod,QstCod);
+      else		// 2nd, 3rd... question beeing shown
+	 DB_QueryUPDATE ("can not update game beeing played",
+			 "UPDATE gam_playing"
+			 " SET QstInd=%u,QstCod=%ld,ShowingAnswers='N',QstStart=NOW()"
+			 " WHERE GamCod=%ld",
+			 QstInd,QstCod,GamCod);
+     }
+  }
+
+/*****************************************************************************/
+/******************** Remove game from games being played ********************/
+/*****************************************************************************/
+
+static void Gam_RemoveGameBeeingPlayed (long GamCod)
+  {
+   /***** Remove game being played from database *****/
+   DB_QueryDELETE ("can not remove game being played",
+		   "DELETE FROM gam_playing"
+		   " WHERE GamCod=%ld",
+	           GamCod);
+  }
+
+/*****************************************************************************/
+/********* Show next question when playing a game (by a teacher) *************/
 /*****************************************************************************/
 
 void Gam_GameTchNextQuestion (void)
   {
-   Gam_PlayGameShowQuestionAndAnswers (false);	// Don't show answers
+   long GamCod;
+   unsigned QstInd;
+
+   /***** Get parameters *****/
+   /* Get game code */
+   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+
+   /* Get question index */
+   QstInd = Gam_GetParamQstInd ();
+
+   /***** Show questions and possible answers *****/
+   Gam_PlayGameShowQuestionAndAnswers (GamCod,QstInd,
+				       false);	// Don't show answers
   }
 
 /*****************************************************************************/
@@ -3026,31 +3122,38 @@ void Gam_GameTchNextQuestion (void)
 
 void Gam_GameTchShowAnswers (void)
   {
-   Gam_PlayGameShowQuestionAndAnswers (true);	// Show answers
+   long GamCod;
+   unsigned QstInd;
+
+   /***** Get parameters *****/
+   /* Get game code */
+   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+
+   /* Get question index */
+   QstInd = Gam_GetParamQstInd ();
+
+   /***** Show questions and possible answers *****/
+   Gam_PlayGameShowQuestionAndAnswers (GamCod,QstInd,
+				       true);	// Show answers
   }
 
 /*****************************************************************************/
 /************ Show question and its answers when playing a game **************/
 /*****************************************************************************/
 
-static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
+static void Gam_PlayGameShowQuestionAndAnswers (long GamCod,
+						unsigned QstInd,
+						bool ShowAnswers)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct Game Game;
-   unsigned QstInd;
    int NxtQstInd;
    long QstCod;
-
-   /***** Get parameters *****/
-   /* Get game code */
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
-
-   /* Get question index */
-   QstInd = Gam_GetParamQstInd ();
+   struct Game Game;
 
    /***** Get data of question from database *****/
+   Game.GamCod = GamCod;
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
 			"SELECT tst_questions.QstCod,"		// row[0]
 			       "tst_questions.AnsType,"		// row[1]
@@ -3074,6 +3177,10 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
 
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_QST_CONTAINER\">");
 
+   /* Get question code (row[0]) */
+   if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Lay_ShowErrorAndExit ("Error: wrong question code.");
+
    /* Write stem (row[2]) */
    Tst_WriteQstStem (row[2],"GAM_PLAY_QST");
 
@@ -3089,10 +3196,6 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
    /* Write answers? */
    if (ShowAnswers)
      {
-      /* Get question code (row[0]) */
-      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-	 Lay_ShowErrorAndExit ("Error: wrong question code.");
-
       /* Get answer type (row[1]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
@@ -3111,9 +3214,12 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
      {
       /* Get index of the next question */
       NxtQstInd = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstInd);
-      if (NxtQstInd > 0)
+      if (NxtQstInd >= 0)	// Not last question
 	 /* Put button to show next question */
 	 Gam_PutBigButtonToContinue (ActGamTchNxtQst,Game.GamCod,(unsigned) NxtQstInd);
+      else			// Last question
+	 /* Put button to end */
+	 Gam_PutBigButtonToEnd (Game.GamCod);
      }
    else
       /* Put button to show answers */
@@ -3122,6 +3228,9 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
 
    /***** End container for question *****/
    fprintf (Gbl.F.Out,"</div>");
+
+   /***** Insert/update game in table of games currently being played *****/
+   Gam_UpdateGameQstBeeingPlayed (GamCod,QstInd,QstCod,ShowAnswers);
   }
 
 /*****************************************************************************/
@@ -3147,8 +3256,9 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
 	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
 	              "<br />"
 	              "%s",
-            Cfg_URL_ICON_PUBLIC,Txt_Continue,Txt_Continue,
-            Txt_Continue);
+            Cfg_URL_ICON_PUBLIC,
+	    Txt_Continue,Txt_Continue,
+	    Txt_Continue);
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End form *****/
@@ -3156,6 +3266,63 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+
+/*****************************************************************************/
+/************************* Put a big button to end ***************************/
+/*****************************************************************************/
+
+static void Gam_PutBigButtonToEnd (long GamCod)
+  {
+   extern const char *Txt_Finish;
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTINUE_CONTAINER\">");
+
+   /***** Start form *****/
+   Frm_StartForm (ActGamTchEnd);
+   Gam_PutParamGameCod (GamCod);
+
+   /***** Put icon with link *****/
+   Frm_LinkFormSubmit (Txt_Finish,"GAM_PLAY_CONTINUE ICO_HIGHLIGHT",NULL);
+   fprintf (Gbl.F.Out,"<img src=\"%s/flag-checkered.svg\""
+	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
+	              "<br />"
+	              "%s",
+            Cfg_URL_ICON_PUBLIC,
+	    Txt_Finish,Txt_Finish,
+	    Txt_Finish);
+   fprintf (Gbl.F.Out,"</a>");
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/******************** End playing a game (by a teacher) **********************/
+/*****************************************************************************/
+
+void Gam_GameTchEnd (void)
+  {
+   long GamCod;
+
+   /***** Get parameters *****/
+   /* Get game code */
+   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+
+   /***** Remove game being played *****/
+   Gam_RemoveGameBeeingPlayed (GamCod);
+
+   /***** Show alert *****/
+   Ale_ShowAlert (Ale_INFO,"Juego finalizado.");	// TODO: Need translation!!!!!
+
+   /***** Button to close *****/
+   Btn_PutCloseButton ("Cerrar");	// TODO: Need translation!!!!!
   }
 
 /*****************************************************************************/

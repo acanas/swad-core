@@ -149,3 +149,14 @@ void Btn_PutRemoveButtonInline (const char *TxtButton)
                       "</button>",
             TxtButton);
   }
+
+void Btn_PutCloseButton (const char *TxtButton)
+  {
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+                      "<button type=\"submit\" class=\"BT_SUBMIT BT_CONFIRM\""
+                      " onclick=\"window.close();\">"
+                      "%s"
+                      "</button>"
+                      "</div>",
+            TxtButton);
+  }

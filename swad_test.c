@@ -4122,16 +4122,17 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
 	                 "</tr>");
 
       /***** Show result (number of users who answered? *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_TOP\">");
       if (ShowResult)
+	{
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td></td>"
+			    "<td class=\"DAT LEFT_TOP\">");
 	 /* Get number of users who selected this answer
 	    and draw proportional bar */
 	 Gam_GetAndDrawBarNumUsrsWhoAnswered (Game,QstCod,AnsInd);
-      else
-         fprintf (Gbl.F.Out,"&nbsp;");
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
+	}
      }
 
    /***** End table *****/

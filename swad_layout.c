@@ -686,7 +686,6 @@ static void Lay_WriteScriptInit (void)
    if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN))	// Right column visible
       Con_WriteScriptClockConnected ();
 
-   // Put the focus on login form
    fprintf (Gbl.F.Out,"	ActionAJAX = \"%s\";\n"
                       "	setTimeout(\"refreshConnected()\",%lu);\n",
             Lan_STR_LANG_ID[Gbl.Prefs.Language],

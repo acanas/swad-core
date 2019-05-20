@@ -122,8 +122,10 @@ void Gam_StartGameTch (void);
 void Gam_PlayGameStd (void);
 
 void Gam_ReceiveGameAnswers (void);
+void Gam_GameTchFirstQuestion (void);
 void Gam_GameTchNextQuestion (void);
 void Gam_GameTchShowAnswers (void);
+void Gam_GameTchEnd (void);
 
 void Gam_GameStdCurrentQuestion (void);
 

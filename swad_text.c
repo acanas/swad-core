@@ -12205,6 +12205,27 @@ const char *Txt_Filter =	// As a noun
 	"Filtro";
 #endif
 
+const char *Txt_Finish =
+#if   L==1	// ca
+       "Acabar";
+#elif L==2	// de
+       "Fertig";
+#elif L==3	// en
+       "Finish";
+#elif L==4	// es
+       "Terminar";
+#elif L==5	// fr
+       "Terminer";
+#elif L==6	// gn
+       "Momba";
+#elif L==7	// it
+       "Finire";
+#elif L==8	// pl
+       "Koniec";
+#elif L==9	// pt
+       "Terminar";
+#endif
+
 const char *Txt_First_day_of_the_week =
 #if   L==1	// ca
 	"Primer dia de la setmana";

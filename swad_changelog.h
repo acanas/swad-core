@@ -448,14 +448,20 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.122.2 (2019-05-18)"
-#define CSS_FILE		"swad18.112.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.122.3 (2019-05-20)"
+#define CSS_FILE		"swad18.122.3.css"
 #define JS_FILE			"swad18.116.5.js"
 /*
+	Version 18.122.3: May 20, 2019	Changes in games. (242558 lines)
+					Copy the following icon to icon public directory:
+sudo cp icon/flag-checkered.svg /var/www/html/swad/icon/
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1781','es','N','Finalizar juego');
+
 	Version 18.122.2: May 20, 2019	New action to show current question (in a game beeing played) to a student. (242378 lines)
 					2 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1780','es','N','Mostrar juego a estudiante');
-CREATE TABLE IF NOT EXISTS gam_playing (GamCod INT NOT NULL,QstCod INT NOT NULL DEFAULT -1,QstInd INT NOT NULL DEFAULT 0,ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',GamStart DATETIME NOT NULL,QstStart DATETIME NOT NULL,UNIQUE INDEX(GamCod));
+CREATE TABLE IF NOT EXISTS gam_playing (GamCod INT NOT NULL,QstInd INT NOT NULL DEFAULT 0,QstCod INT NOT NULL DEFAULT -1,ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',GamStart DATETIME NOT NULL,QstStart DATETIME NOT NULL,UNIQUE INDEX(GamCod));
 
 	Version 18.122.1: May 20, 2019	New action to play game by a student. (242257 lines)
 					2 changes necessary in database:
