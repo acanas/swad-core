@@ -448,10 +448,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.122 (2019-05-18)"
+#define Log_PLATFORM_VERSION	"SWAD 18.122.1 (2019-05-18)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.116.5.js"
 /*
+	Version 18.122.1: May 20, 2019	New action to play game by a student. (242257 lines)
+					2 changes necessary in database:
+UPDATE actions SET Txt='Preparar para comenzar juego' WHERE ActCod='1670' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1779','es','N','Preparar para jugar como estudiante');
+
 	Version 18.122:   May 18, 2019	Games available for students.
 					Scope and roles removed from games. (242145 lines)
 					3 changes necessary in database:

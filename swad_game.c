@@ -97,7 +97,8 @@ static void Gam_ParamsWhichGroupsToShow (void);
 static void Gam_ShowOneGame (long GamCod,
                              bool ShowOnlyThisGame,
                              bool ListGameQuestions,
-                             bool PutButtonToStart);
+                             bool PutButtonToStart,
+			     bool PutButtonToPlay);
 static void Gam_WriteAuthor (struct Game *Game);
 static void Gam_WriteStatus (struct Game *Game);
 static void Gam_GetParamGameOrder (void);
@@ -152,7 +153,8 @@ static void Gam_PutParamsOneQst (void);
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
-static void Gam_PutBigButtonToStartGame (long GamCod);
+static void Gam_PutBigButtonToStartGameTch (long GamCod);
+static void Gam_PutBigButtonToPlayGameStd (long GamCod);
 
 static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers);
 static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
@@ -272,7 +274,8 @@ static void Gam_ListAllGames (void)
 	 Gam_ShowOneGame (Gbl.Games.LstGamCods[NumGame - 1],
 	                  false,
 	                  false,
-	                  false);
+	                  false,	// Do not put button to start game
+			  false);	// Do not put button to play
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -400,7 +403,8 @@ void Gam_SeeOneGame (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-                    false);
+	            false,	// Do not put button to start game
+		    false);	// Do not put button to play
   }
 
 /*****************************************************************************/
@@ -410,7 +414,8 @@ void Gam_SeeOneGame (void)
 static void Gam_ShowOneGame (long GamCod,
                              bool ShowOnlyThisGame,
                              bool ListGameQuestions,
-                             bool PutButtonToStart)
+                             bool PutButtonToStart,
+			     bool PutButtonToPlay)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Game;
@@ -419,6 +424,7 @@ static void Gam_ShowOneGame (long GamCod,
    extern const char *Txt_No_of_questions;
    extern const char *Txt_No_of_users;
    extern const char *Txt_Play;
+   extern const char *Txt_Start_game;
    extern const char *Txt_View_game_results;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -455,17 +461,33 @@ static void Gam_ShowOneGame (long GamCod,
       /* Icons to remove/edit this game */
       Gam_PutFormsToRemEditOneGame (&Game,Anchor);
 
-   if (ShowOnlyThisGame)
-      /* Icon to show first question */
-      Lay_PutContextualLinkOnlyIcon (ActPlyGam1stQst,NULL,
-				     Gam_PutParamsToPlayGame1stQst,
-				     "play.svg",
-				     Txt_Play);
-   else
-      /* Icon to play game */
-      Lay_PutContextualLinkOnlyIcon (ActPlyGam,NULL,Gam_PutParams,
-				     "play.svg",
-				     Txt_Play);
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	  /* Icon to play game */
+	  Lay_PutContextualLinkOnlyIcon (ActPlyGamStd,NULL,
+					 Gam_PutParams,
+					 "play.svg",
+					 Txt_Play);
+	  break;
+      case Rol_NET:
+      case Rol_TCH:
+	if (ShowOnlyThisGame)
+	   /* Icon to show first question */
+	   Lay_PutContextualLinkOnlyIcon (ActGamTch1stQst,NULL,
+					  Gam_PutParamsToPlayGame1stQst,
+					  "play.svg",
+					  Txt_Play);
+	else
+	   /* Icon to start game */
+	   Lay_PutContextualLinkOnlyIcon (ActStrGamTch,NULL,
+					  Gam_PutParams,
+					  "play.svg",
+					  Txt_Play);
+	 break;
+      default:
+	 break;
+     }
 
    fprintf (Gbl.F.Out,"</td>");
 
@@ -516,9 +538,6 @@ static void Gam_ShowOneGame (long GamCod,
    Lay_StartArticle (Anchor);
    Frm_StartForm (ActSeeGam);
    Gam_PutParamGameCod (GamCod);
-   // Gam_PutHiddenParamGameOrder ();
-   // Grp_PutParamWhichGrps ();
-   // Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
    Frm_LinkFormSubmit (Txt_View_game,
                        Game.Status.Visible ? "ASG_TITLE" :
 	                                     "ASG_TITLE_LIGHT",NULL);
@@ -553,16 +572,29 @@ static void Gam_ShowOneGame (long GamCod,
      {
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-      /* Possible button to play the game */
+      /* Possible button to play/start the game */
       if (Game.Status.Open)
 	{
-	 Frm_StartForm (ActPlyGam);
-	 Gam_PutParamGameCod (Game.GamCod);
-	 Gam_PutHiddenParamGameOrder ();
-	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
-	 Btn_PutCreateButtonInline (Txt_Play);
-	 Frm_EndForm ();
+	 switch (Gbl.Usrs.Me.Role.Logged)
+	   {
+	    case Rol_STD:
+	       /* Icon to play game */
+	       Frm_StartForm (ActPlyGamStd);
+	       Gam_PutParamGameCod (Game.GamCod);
+	       Btn_PutCreateButtonInline (Txt_Play);
+	       Frm_EndForm ();
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       /* Icon to start game */
+	       Frm_StartForm (ActStrGamTch);
+	       Gam_PutParamGameCod (Game.GamCod);
+	       Btn_PutCreateButtonInline (Txt_Start_game);
+	       Frm_EndForm ();
+	       break;
+	    default:
+	       break;
+	   }
 	}
 
       /* Possible button to see the result of the game */
@@ -586,7 +618,7 @@ static void Gam_ShowOneGame (long GamCod,
       /* Possible button to answer this game */
       if (Game.Status.ICanAnswer)
 	{
-	 Frm_StartForm (ActPlyGam);
+	 Frm_StartForm (ActStrGamTch);
 	 Gam_PutParamGameCod (Game.GamCod);
 	 Gam_PutHiddenParamGameOrder ();
 	 Grp_PutParamWhichGrps ();
@@ -604,32 +636,33 @@ static void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Start 2nd row of this game *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"LEFT_TOP");
+   fprintf (Gbl.F.Out,"<tr>");
+
+   /***** Author of the game *****/
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-
-   /* Author of the game */
    Gam_WriteAuthor (&Game);
+   fprintf (Gbl.F.Out,"</td>");
 
-   fprintf (Gbl.F.Out,"</td>"
-                      "<td class=\"LEFT_TOP");
+   /***** Text of the game *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-
-   /* Text of the game */
    Gam_GetGameTxtFromDB (Game.GamCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Game.Status.Visible ? "DAT" :
         	                  "DAT_LIGHT",
             Txt);
+
+   /***** End 2nd row of this game *****/
+   fprintf (Gbl.F.Out,"</tr>");
 
    /***** Write questions of this game *****/
    if (ListGameQuestions)
@@ -650,9 +683,13 @@ static void Gam_ShowOneGame (long GamCod,
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
 
-   /***** Put big button to start playing *****/
+   /***** Put big button to start game as a teacher *****/
    if (PutButtonToStart)
-      Gam_PutBigButtonToStartGame (Game.GamCod);
+      Gam_PutBigButtonToStartGameTch (Game.GamCod);
+
+   /***** Put big button to play game as a student *****/
+   if (PutButtonToPlay)
+      Gam_PutBigButtonToPlayGameStd (Game.GamCod);
 
    /***** End box *****/
    if (ShowOnlyThisGame)
@@ -1913,7 +1950,8 @@ void Gam_RequestNewQuestion (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-                    false);
+		    false,	// Do not put button to start game
+		    false);	// Do not put button to play
   }
 
 /*****************************************************************************/
@@ -2458,7 +2496,8 @@ void Gam_AddTstQuestionsToGame (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-                    false);
+		    false,	// Do not put button to start game
+		    false);	// Do not put button to play
   }
 
 /*****************************************************************************/
@@ -2652,7 +2691,8 @@ void Gam_RequestRemoveQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-                    false);
+		    false,	// Do not put button to start game
+		    false);	// Do not put button to play
   }
 
 /*****************************************************************************/
@@ -2702,7 +2742,8 @@ void Gam_RemoveQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-                    false);
+		    false,	// Do not put button to start game
+		    false);	// Do not put button to play
   }
 
 /*****************************************************************************/
@@ -2749,7 +2790,8 @@ void Gam_MoveUpQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-                    false);
+		    false,	// Do not put button to start game
+		    false);	// Do not put button to play
   }
 
 /*****************************************************************************/
@@ -2801,7 +2843,8 @@ void Gam_MoveDownQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-                    false);
+		    false,	// Do not put button to start game
+		    false);	// Do not put button to play
   }
 
 /*****************************************************************************/
@@ -2856,12 +2899,12 @@ static void Gam_ExchangeQuestions (long GamCod,
   }
 
 /*****************************************************************************/
-/************************* Start playing a game ******************************/
+/******************* Start playing a game as a teacher ***********************/
 /*****************************************************************************/
 
-void Gam_PlayGame (void)
+void Gam_StartGameTch (void)
   {
-   struct Game Game;
+   long GamCod;
 
    /***** Get parameters *****/
    Gam_GetParamGameOrder ();
@@ -2869,26 +2912,77 @@ void Gam_PlayGame (void)
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
    /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Show game *****/
-   Gam_ShowOneGame (Game.GamCod,
+   Gam_ShowOneGame (GamCod,
                     true,	// Show only this game
-                    false,
-                    true);	// Put button to start
+                    false,	// Do not list questions
+                    true,	// Put button to start game
+		    false);	// Do not put button to play
   }
 
 /*****************************************************************************/
-/********************* Put a big button to start game ************************/
+/******************* Start playing a game as a student ***********************/
 /*****************************************************************************/
 
-static void Gam_PutBigButtonToStartGame (long GamCod)
+void Gam_PlayGameStd (void)
+  {
+   long GamCod;
+
+   /***** Get parameters *****/
+   Gam_GetParamGameOrder ();
+   Grp_GetParamWhichGrps ();
+   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
+
+   /***** Get game code *****/
+   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+
+   /***** Show game *****/
+   Gam_ShowOneGame (GamCod,
+                    true,	// Show only this game
+                    false,	// Do not list questions
+                    false,	// Do not put button to start game
+		    true);	// Put button to play
+  }
+
+/*****************************************************************************/
+/*************** Put a big button to start game as a teacher *****************/
+/*****************************************************************************/
+
+static void Gam_PutBigButtonToStartGameTch (long GamCod)
+  {
+   extern const char *Txt_Start_game;
+
+   /***** Start form *****/
+   Frm_StartForm (ActGamTch1stQst);
+   Gam_PutParamGameCod (GamCod);
+   Gam_PutParamQstInd (0);	// Start by first question in game
+
+   /***** Put icon with link *****/
+   Frm_LinkFormSubmit (Txt_Start_game,NULL,NULL);
+   fprintf (Gbl.F.Out,"<img src=\"%s/play.svg\""
+		      " alt=\"%s\" title=\"%s\""
+	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\" />",
+            Cfg_URL_ICON_PUBLIC,Txt_Start_game,Txt_Start_game);
+   fprintf (Gbl.F.Out,"</a>");
+
+   /***** End form *****/
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/**************** Put a big button to play game as a student *****************/
+/*****************************************************************************/
+
+static void Gam_PutBigButtonToPlayGameStd (long GamCod)
   {
    extern const char *Txt_Play;
 
    /***** Start form *****/
-   Frm_StartForm (ActPlyGam1stQst);
+   Frm_StartForm (ActPlyGamStd);
    Gam_PutParamGameCod (GamCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
 
@@ -2908,7 +3002,7 @@ static void Gam_PutBigButtonToStartGame (long GamCod)
 /**************** Show next question when playing a game *********************/
 /*****************************************************************************/
 
-void Gam_PlayGameNextQuestion (void)
+void Gam_GameTchNextQuestion (void)
   {
    Gam_PlayGameShowQuestionAndAnswers (false);	// Don't show answers
   }
@@ -2917,7 +3011,7 @@ void Gam_PlayGameNextQuestion (void)
 /************ Show question and its answers when playing a game **************/
 /*****************************************************************************/
 
-void Gam_PlayGameShowAnswers (void)
+void Gam_GameTchShowAnswers (void)
   {
    Gam_PlayGameShowQuestionAndAnswers (true);	// Show answers
   }
@@ -3006,11 +3100,11 @@ static void Gam_PlayGameShowQuestionAndAnswers (bool ShowAnswers)
       NxtQstInd = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstInd);
       if (NxtQstInd > 0)
 	 /* Put button to show next question */
-	 Gam_PutBigButtonToContinue (ActPlyGamNxtQst,Game.GamCod,(unsigned) NxtQstInd);
+	 Gam_PutBigButtonToContinue (ActGamTchNxtQst,Game.GamCod,(unsigned) NxtQstInd);
      }
    else
       /* Put button to show answers */
-      Gam_PutBigButtonToContinue (ActPlyGamAns,Game.GamCod,QstInd);
+      Gam_PutBigButtonToContinue (ActGamTchAns,Game.GamCod,QstInd);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** End container for question *****/
@@ -3082,7 +3176,8 @@ void Gam_ReceiveGameAnswers (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-                    false);
+		    false,	// Do not put button to start game
+		    false);	// Do not put button to play
   }
 
 /*****************************************************************************/

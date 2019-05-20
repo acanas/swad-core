@@ -40875,6 +40875,27 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #endif
 	};
 
+const char *Txt_Start_game =
+#if   L==1	// ca
+	 "Comen&ccedil;ar joc";
+#elif L==2	// de
+	 "Spiel starten";
+#elif L==3	// en
+	 "Start game";
+#elif L==4	// es
+	 "Comenzar juego";
+#elif L==5	// fr
+	 "Commencer le jeu";
+#elif L==6	// gn
+	 "&Ntilde;epyr&utilde; &ntilde;embosar&aacute;i";
+#elif L==7	// it
+	 "Inizia il gioco";
+#elif L==8	// pl
+	 "Rozpocznij gr&eogon;";
+#elif L==9	// pt
+	 "Come&ccedil;ar o jogo";
+#endif
+
 const char *Txt_Statistic =
 #if   L==1	// ca
 	 "Estad&iacute;stique";

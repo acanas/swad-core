@@ -118,11 +118,12 @@ void Gam_RemoveQst (void);
 void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);
 
-void Gam_PlayGame (void);
+void Gam_StartGameTch (void);
+void Gam_PlayGameStd (void);
 
 void Gam_ReceiveGameAnswers (void);
-void Gam_PlayGameNextQuestion (void);
-void Gam_PlayGameShowAnswers (void);
+void Gam_GameTchNextQuestion (void);
+void Gam_GameTchShowAnswers (void);
 
 unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);
 unsigned Gam_GetNumGames (Hie_Level_t Scope);
