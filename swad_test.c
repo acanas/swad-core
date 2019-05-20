@@ -4100,20 +4100,21 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
 
       /***** Write letter of this option *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_TOP\">"
-                         "<label for=\"Ans%06u_%u\" class=\"%s\">"
-	                 "%c)&nbsp;"
-	                 "</label>"
+	                 "<td class=\"CENTER_MIDDLE\">"
+                         "<button class=\"BT_GAME BT_%c\">"
+	                 "%c"
+	                 "</button>"
 	                 "</td>",
-	       NumQst,NumOpt,Class,
+	       'A' + (char) NumOpt,
 	       'a' + (char) NumOpt);
 
       /***** Write the option text *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                          "<label for=\"Ans%06u_%u\" class=\"%s\">"
 	                 "%s"
 	                 "</label>",
-               NumQst,NumOpt,Class,
+               NumQst,NumOpt,
+	       Class,
                Gbl.Test.Answer.Options[NumOpt].Text);
       Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
                      "TEST_MED_SHOW_CONTAINER",

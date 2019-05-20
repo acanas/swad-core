@@ -1459,6 +1459,38 @@ a:hover						/* Default ==> underlined */
 	background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));
 	}
 
+.BT_A	{background-color:#e21c3d; border-color:#a9152d;} /* red */
+.BT_B	{background-color:#1369ce; border-color:#0e519c;} /* blue */
+.BT_C	{background-color:#d89e00; border-color:#a27600;} /* yellow */
+.BT_D	{background-color:#2b9010; border-color:#206c0c;} /* green */
+.BT_E	{background-color:#e30087; border-color:#aa0064;} /* pink */
+.BT_F	{background-color:#00b5e9; border-color:#0089b0;} /* light blue */
+.BT_G	{background-color:#f58700; border-color:#b86400;} /* orange */
+.BT_H	{background-color:#b3d00a; border-color:#869d07;} /* light green */
+.BT_I	{background-color:#642075; border-color:#4b1858;} /* purple */
+.BT_J	{background-color:#f5e800; border-color:#b8ad00;} /* light yellow */
+.BT_GAME
+	{
+	box-sizing:border-box;
+	width:64px;
+	margin:8px;
+	padding:8px;
+	border-radius:4px;
+	border-width:1px;
+	border-style:solid;
+	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
+	color:white;
+	font-size:36px;
+	font-weight:bold;
+	line-height:normal;
+	white-space:nowrap;
+	}
+.BT_GAME:hover
+	{
+	background-image:-webkit-linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));	/* Safari */
+	background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));
+	}
+
 /********************************** Notice ***********************************/
 .NOTICE_HIGHLIGHT
 	{
