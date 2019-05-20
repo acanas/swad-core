@@ -89,6 +89,9 @@ struct SurveyQuestion	// Must be initialized to 0 before using it
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+long Svy_CurrentSvyCod;	// Used as parameter in contextual links
+long Svy_CurrentQstCod;	// Used as parameter in contextual links
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -507,7 +510,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    Lay_StartArticle (Anchor);
-   Frm_StartForm (ActSeeOneSvy);
+   Frm_StartForm (ActSeeSvy);
    Svy_PutParamSvyCod (SvyCod);
    Svy_PutHiddenParamSvyOrder ();
    Grp_PutParamWhichGrps ();
@@ -544,7 +547,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-	 Frm_StartForm (ActSeeOneSvy);
+	 Frm_StartForm (ActSeeSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrder ();
 	 Grp_PutParamWhichGrps ();
@@ -559,7 +562,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-	 Frm_StartForm (ActSeeOneSvy);
+	 Frm_StartForm (ActSeeSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrder ();
 	 Grp_PutParamWhichGrps ();
@@ -807,7 +810,7 @@ static void Svy_PutFormsToRemEditOneSvy (const struct Survey *Svy,
   {
    extern const char *Txt_Reset;
 
-   Gbl.Svys.SvyCodToEdit = Svy->SvyCod;	// Used as parameters in contextual links
+   Svy_CurrentSvyCod = Svy->SvyCod;	// Used as parameters in contextual links
 
    /***** Put form to remove survey *****/
    Ico_PutContextualIconToRemove (ActReqRemSvy,Svy_PutParams);
@@ -833,8 +836,8 @@ static void Svy_PutFormsToRemEditOneSvy (const struct Survey *Svy,
 
 static void Svy_PutParams (void)
   {
-   if (Gbl.Svys.SvyCodToEdit > 0)
-      Svy_PutParamSvyCod (Gbl.Svys.SvyCodToEdit);
+   if (Svy_CurrentSvyCod > 0)
+      Svy_PutParamSvyCod (Svy_CurrentSvyCod);
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
@@ -1516,7 +1519,7 @@ void Svy_AskRemSurvey (void)
       Lay_ShowErrorAndExit ("You can not remove this survey.");
 
    /***** Show question and button to remove survey *****/
-   Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
+   Svy_CurrentSvyCod = Svy.SvyCod;
    Ale_ShowAlertAndButton (ActRemSvy,NULL,NULL,Svy_PutParams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_survey,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_survey_X,
@@ -1617,7 +1620,7 @@ void Svy_AskResetSurvey (void)
                   Svy.Title);
 
    /***** Button of confirmation of reset *****/
-   Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
+   Svy_CurrentSvyCod = Svy.SvyCod;
    Svy_PutButtonToResetSurvey ();
 
    /***** Show surveys again *****/
@@ -1825,7 +1828,7 @@ void Svy_RequestCreatOrEditSvy (void)
      }
 
    /***** Start form *****/
-   Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
+   Svy_CurrentSvyCod = Svy.SvyCod;
    Frm_StartForm (ItsANewSurvey ? ActNewSvy :
 	                          ActChgSvy);
    Svy_PutParams ();
@@ -2637,8 +2640,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
      {
       /* Parameters for contextual icon */
-      Gbl.Svys.SvyCodToEdit    = SvyCod;
-      Gbl.Svys.SvyQstCodToEdit = SvyQst->QstCod;
+      Svy_CurrentSvyCod    = SvyCod;
+      Svy_CurrentQstCod = SvyQst->QstCod;
 
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%s %u",
@@ -3155,7 +3158,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
 				        Svy->SvyCod);
 
    /***** Start box *****/
-   Gbl.Svys.SvyCodToEdit = Svy->SvyCod;
+   Svy_CurrentSvyCod = Svy->SvyCod;
    Box_StartBox (NULL,Txt_Questions,Svy->Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
                                                            NULL,
                  Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
@@ -3215,8 +3218,8 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
             Frm_EndForm ();
 
             /* Write icon to edit the question */
-            Gbl.Svys.SvyCodToEdit    = Svy->SvyCod;
-            Gbl.Svys.SvyQstCodToEdit = SvyQst->QstCod;
+            Svy_CurrentSvyCod    = Svy->SvyCod;
+            Svy_CurrentQstCod = SvyQst->QstCod;
             Ico_PutContextualIconToEdit (ActEdiOneSvyQst,Svy_PutParamsToEditQuestion);
 
             fprintf (Gbl.F.Out,"</td>");
@@ -3280,8 +3283,8 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
 
 static void Svy_PutParamsToEditQuestion (void)
   {
-   Svy_PutParamSvyCod (Gbl.Svys.SvyCodToEdit);
-   Svy_PutParamQstCod (Gbl.Svys.SvyQstCodToEdit);
+   Svy_PutParamSvyCod (Svy_CurrentSvyCod);
+   Svy_PutParamQstCod (Svy_CurrentQstCod);
   }
 
 /*****************************************************************************/
@@ -3496,8 +3499,8 @@ static void Svy_PutIconToRemoveOneQst (void)
 
 static void Svy_PutParamsRemoveOneQst (void)
   {
-   Svy_PutParamSvyCod (Gbl.Svys.SvyCodToEdit);
-   Svy_PutParamQstCod (Gbl.Svys.SvyQstCodToEdit);
+   Svy_PutParamSvyCod (Svy_CurrentSvyCod);
+   Svy_PutParamQstCod (Svy_CurrentQstCod);
   }
 
 /*****************************************************************************/
@@ -3527,8 +3530,8 @@ void Svy_RequestRemoveQst (void)
    SvyQst.QstInd = Svy_GetQstIndFromQstCod (SvyQst.QstCod);
 
    /***** Show question and button to remove question *****/
-   Gbl.Svys.SvyCodToEdit    = SvyCod;
-   Gbl.Svys.SvyQstCodToEdit = SvyQst.QstCod;
+   Svy_CurrentSvyCod    = SvyCod;
+   Svy_CurrentQstCod = SvyQst.QstCod;
    Ale_ShowAlertAndButton (ActRemSvyQst,NULL,NULL,Svy_PutParamsRemoveOneQst,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,

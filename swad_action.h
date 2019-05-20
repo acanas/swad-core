@@ -608,7 +608,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActSeeUsrTstRes		(ActChgCrsTT1stDay + 114)
 #define ActSeeOneTstResOth	(ActChgCrsTT1stDay + 115)
 
-#define ActSeeOneGam		(ActChgCrsTT1stDay + 116)
+#define ActSeeGam		(ActChgCrsTT1stDay + 116)
 #define ActPlyGam		(ActChgCrsTT1stDay + 117)
 #define ActPlyGam1stQst		(ActChgCrsTT1stDay + 118)
 #define ActPlyGamNxtQst		(ActChgCrsTT1stDay + 119)
@@ -632,7 +632,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActUp_GamQst		(ActChgCrsTT1stDay + 137)
 #define ActDwnGamQst		(ActChgCrsTT1stDay + 138)
 
-#define ActSeeOneSvy		(ActChgCrsTT1stDay + 139)
+#define ActSeeSvy		(ActChgCrsTT1stDay + 139)
 #define ActAnsSvy		(ActChgCrsTT1stDay + 140)
 #define ActFrmNewSvy		(ActChgCrsTT1stDay + 141)
 #define ActEdiOneSvy		(ActChgCrsTT1stDay + 142)

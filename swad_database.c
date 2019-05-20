@@ -1306,39 +1306,33 @@ mysql> DESCRIBE forum_thread;
    /***** Table games *****/
 /*
 mysql> DESCRIBE games;
-+-----------+-------------------------------------------+------+-----+---------+----------------+
-| Field     | Type                                      | Null | Key | Default | Extra          |
-+-----------+-------------------------------------------+------+-----+---------+----------------+
-| GamCod    | int(11)                                   | NO   | PRI | NULL    | auto_increment |
-| Scope     | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | MUL | Sys     |                |
-| Cod       | int(11)                                   | NO   |     | -1      |                |
-| DegCod    | int(11)                                   | NO   |     | -1      |                |
-| CrsCod    | int(11)                                   | NO   |     | -1      |                |
-| Hidden    | enum('N','Y')                             | NO   |     | N       |                |
-| NumNotif  | int(11)                                   | NO   |     | 0       |                |
-| Roles     | int(11)                                   | NO   |     | 0       |                |
-| UsrCod    | int(11)                                   | NO   |     | NULL    |                |
-| StartTime | datetime                                  | NO   |     | NULL    |                |
-| EndTime   | datetime                                  | NO   |     | NULL    |                |
-| Title     | varchar(2047)                             | NO   |     | NULL    |                |
-| Txt       | text                                      | NO   |     | NULL    |                |
-+-----------+-------------------------------------------+------+-----+---------+----------------+
-13 rows in set (0,00 sec)
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| GamCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CrsCod    | int(11)       | NO   | MUL | -1      |                |
+| Hidden    | enum('N','Y') | NO   |     | N       |                |
+| NumNotif  | int(11)       | NO   |     | 0       |                |
+| UsrCod    | int(11)       | NO   |     | NULL    |                |
+| StartTime | datetime      | NO   |     | NULL    |                |
+| EndTime   | datetime      | NO   |     | NULL    |                |
+| Title     | varchar(2047) | NO   |     | NULL    |                |
+| Txt       | text          | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS games ("
 			"GamCod INT NOT NULL AUTO_INCREMENT,"
-			"Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',"
-			"Cod INT NOT NULL DEFAULT -1,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"NumNotif INT NOT NULL DEFAULT 0,"
-			"Roles INT NOT NULL DEFAULT 0,"
 			"UsrCod INT NOT NULL,"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
-			"Title VARCHAR(2047) NOT NULL,"	// Svy_MAX_BYTES_SURVEY_TITLE
+			"Title VARCHAR(2047) NOT NULL,"	// Gam_MAX_BYTES_SURVEY_TITLE
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(GamCod),"
-		   "INDEX(Scope,Cod))");
+		   "INDEX(CrsCod))");
 
    /***** Table gam_answers *****/
 /*

@@ -448,10 +448,17 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.121.2 (2019-05-17)"
+#define Log_PLATFORM_VERSION	"SWAD 18.122 (2019-05-18)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.116.5.js"
 /*
+	Version 18.122:   May 18, 2019	Games available for students.
+					Scope and roles removed from games. (242145 lines)
+					3 changes necessary in database:
+ALTER TABLE games DROP INDEX Scope;
+ALTER TABLE games DROP COLUMN Scope,DROP COLUMN Roles;
+ALTER TABLE games CHANGE COLUMN Cod CrsCod INT NOT NULL DEFAULT -1,ADD INDEX (CrsCod);
+
 	Version 18.121.2: May 17, 2019	Fixed bug in exporting tests. (242700 lines)
 	Version 18.121.1: May 16, 2019	Fixed bug in renaming of institution. (242697 lines)
 	Version 18.121:   May 13, 2019	Module swad_web_service is renamed as swad_API.

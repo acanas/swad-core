@@ -80,6 +80,9 @@ const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
+long Gam_CurrentGamCod;	// Used as parameter in contextual links
+long Gam_CurrentQstCod;	// Used as parameter in contextual links
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
@@ -100,20 +103,13 @@ static void Gam_WriteStatus (struct Game *Game);
 static void Gam_GetParamGameOrder (void);
 
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
-					  const char *Anchor,
-                                          bool ShowOnlyThisGame);
+					  const char *Anchor);
 static void Gam_PutParamsToPlayGame1stQst (void);
 static void Gam_PutParams (void);
 
-static void Gam_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
-                                           unsigned *HiddenAllowed);
-
 static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
-static void Gam_PutButtonToResetGame (void);
-
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game);
-static void Gam_SetDefaultAndAllowedScope (struct Game *Game);
 static void Gam_ShowLstGrpsToEditGame (long GamCod);
 
 static void Gam_CreateGame (struct Game *Game,const char *Txt);
@@ -422,13 +418,6 @@ static void Gam_ShowOneGame (long GamCod,
    extern const char *Txt_View_game;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_No_of_users;
-   extern const char *Txt_Scope;
-   extern const char *Txt_Country;
-   extern const char *Txt_Institution;
-   extern const char *Txt_Centre;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Course;
-   extern const char *Txt_Users;
    extern const char *Txt_Play;
    extern const char *Txt_View_game_results;
    char *Anchor = NULL;
@@ -444,6 +433,7 @@ static void Gam_ShowOneGame (long GamCod,
    /***** Get data of this game *****/
    Game.GamCod = GamCod;
    Gam_GetDataOfGameByCod (&Game);
+   Gam_CurrentGamCod = Game.GamCod;	// Used as parameter in contextual links
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Game.GamCod,&Anchor);
@@ -452,18 +442,34 @@ static void Gam_ShowOneGame (long GamCod,
    if (ShowOnlyThisGame)
       Tbl_StartTableWide (2);
 
-   /***** Write first row of data of this assignment *****/
-   /* Forms to remove/edit this assignment */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"2\" class=\"CONTEXT_COL");
+   /***** Start first row of this game *****/
+   fprintf (Gbl.F.Out,"<tr>");
+
+   /***** Icons related to this game *****/
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CONTEXT_COL");
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
+
    if (Game.Status.ICanEdit)
-      Gam_PutFormsToRemEditOneGame (&Game,Anchor,ShowOnlyThisGame);
+      /* Icons to remove/edit this game */
+      Gam_PutFormsToRemEditOneGame (&Game,Anchor);
+
+   if (ShowOnlyThisGame)
+      /* Icon to show first question */
+      Lay_PutContextualLinkOnlyIcon (ActPlyGam1stQst,NULL,
+				     Gam_PutParamsToPlayGame1stQst,
+				     "play.svg",
+				     Txt_Play);
+   else
+      /* Icon to play game */
+      Lay_PutContextualLinkOnlyIcon (ActPlyGam,NULL,Gam_PutParams,
+				     "play.svg",
+				     Txt_Play);
+
    fprintf (Gbl.F.Out,"</td>");
 
-   /* Start date/time */
+   /***** Start date/time *****/
    UniqueId++;
    fprintf (Gbl.F.Out,"<td id=\"gam_date_start_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
@@ -482,7 +488,7 @@ static void Gam_ShowOneGame (long GamCod,
             UniqueId,Game.TimeUTC[Gam_START_TIME],
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
-   /* End date/time */
+   /***** End date/time *****/
    fprintf (Gbl.F.Out,"<td id=\"gam_date_end_%u\" class=\"%s LEFT_TOP",
             UniqueId,
             Game.Status.Visible ? (Game.Status.Open ? "DATE_GREEN" :
@@ -500,17 +506,19 @@ static void Gam_ShowOneGame (long GamCod,
             UniqueId,Game.TimeUTC[Gam_END_TIME],
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
-   /* Game title */
+   /***** Game title and main data *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
+
+   /* Game title */
    Lay_StartArticle (Anchor);
-   Frm_StartForm (ActSeeOneGam);
+   Frm_StartForm (ActSeeGam);
    Gam_PutParamGameCod (GamCod);
-   Gam_PutHiddenParamGameOrder ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
+   // Gam_PutHiddenParamGameOrder ();
+   // Grp_PutParamWhichGrps ();
+   // Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
    Frm_LinkFormSubmit (Txt_View_game,
                        Game.Status.Visible ? "ASG_TITLE" :
 	                                     "ASG_TITLE_LIGHT",NULL);
@@ -519,9 +527,8 @@ static void Gam_ShowOneGame (long GamCod,
    Frm_EndForm ();
    Lay_EndArticle ();
 
-   /* Number of questions and number of distinct users who have already answered this game */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u; %s: %u</div>"
-	              "</td>",
+   /* Number of questions and number of distinct students who have already answered */
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u; %s: %u</div>",
             Game.Status.Visible ? "ASG_GRP" :
         	                  "ASG_GRP_LIGHT",
             Txt_No_of_questions,
@@ -529,7 +536,13 @@ static void Gam_ShowOneGame (long GamCod,
             Txt_No_of_users,
             Game.NumUsrs);
 
-   /* Status of the game */
+   /* Groups whose students can answer this game */
+   if (Gbl.Crs.Grps.NumGrps)
+      Gam_GetAndWriteNamesOfGrpsAssociatedToGame (&Game);
+
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** Status of the game *****/
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP");
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
@@ -540,54 +553,57 @@ static void Gam_ShowOneGame (long GamCod,
      {
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-      Frm_StartForm (ActPlyGam);
-      Gam_PutParamGameCod (Game.GamCod);
-      Gam_PutHiddenParamGameOrder ();
-      Grp_PutParamWhichGrps ();
-      Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
-      Btn_PutCreateButtonInline (Txt_Play);
-      Frm_EndForm ();
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
-   else	// Show several games
-     {
-      /* Possible button to answer this game */
-      if (Game.Status.ICanAnswer)
+      /* Possible button to play the game */
+      if (Game.Status.Open)
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
-
-	 Frm_StartForm (ActSeeOneGam);
+	 Frm_StartForm (ActPlyGam);
 	 Gam_PutParamGameCod (Game.GamCod);
 	 Gam_PutHiddenParamGameOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Btn_PutCreateButtonInline (Txt_Play);
 	 Frm_EndForm ();
-
-	 fprintf (Gbl.F.Out,"</div>");
 	}
-      /* Possible button to see the result of the game */
-      else if (Game.Status.ICanViewResults)
-	{
-	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-	 Frm_StartForm (ActSeeOneGam);
+      /* Possible button to see the result of the game */
+      if (Game.Status.ICanViewResults)
+	{
+	 Frm_StartForm (ActSeeGam);
 	 Gam_PutParamGameCod (Game.GamCod);
 	 Gam_PutHiddenParamGameOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Btn_PutConfirmButtonInline (Txt_View_game_results);
 	 Frm_EndForm ();
-
-	 fprintf (Gbl.F.Out,"</div>");
 	}
+
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   else	// Show several games
+     {
+      fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
+
+      /* Possible button to answer this game */
+      if (Game.Status.ICanAnswer)
+	{
+	 Frm_StartForm (ActPlyGam);
+	 Gam_PutParamGameCod (Game.GamCod);
+	 Gam_PutHiddenParamGameOrder ();
+	 Grp_PutParamWhichGrps ();
+	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
+	 Btn_PutCreateButtonInline (Txt_Play);
+	 Frm_EndForm ();
+	}
+
+      fprintf (Gbl.F.Out,"</div>");
      }
 
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
 
-   /***** Write second row of data of this game *****/
+   /***** End 1st row of this game *****/
+   fprintf (Gbl.F.Out,"</tr>");
+
+   /***** Start 2nd row of this game *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"LEFT_TOP");
    if (!ShowOnlyThisGame)
@@ -602,60 +618,6 @@ static void Gam_ShowOneGame (long GamCod,
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-
-   /* Scope of the game */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
-            Game.Status.Visible ? "ASG_GRP" :
-        	                  "ASG_GRP_LIGHT",
-            Txt_Scope);
-   switch (Game.Scope)
-     {
-      case Hie_UNK:	// Unknown
-         Lay_ShowErrorAndExit ("Wrong game scope.");
-         break;
-      case Hie_SYS:	// System
-         fprintf (Gbl.F.Out,"%s",
-                  Cfg_PLATFORM_SHORT_NAME);
-	 break;
-      case Hie_CTY:	// Country
-         fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-	 break;
-      case Hie_INS:	// Institution
-         fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
-	 break;
-      case Hie_CTR:	// Centre
-         fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Centre,Gbl.Hierarchy.Ctr.ShrtName);
-	 break;
-      case Hie_DEG:	// Degree
-         fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Degree,Gbl.Hierarchy.Deg.ShrtName);
- 	 break;
-      case Hie_CRS:	// Course
-	 fprintf (Gbl.F.Out,"%s %s",
-	          Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
-	 break;
-     }
-   fprintf (Gbl.F.Out,"</div>");
-
-   /* Users' roles who can answer the game */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s:<br />",
-            Game.Status.Visible ? "ASG_GRP" :
-        	                  "ASG_GRP_LIGHT",
-            Txt_Users);
-   Rol_WriteSelectorRoles (1 << Rol_STD |
-                           1 << Rol_NET |
-			   1 << Rol_TCH,
-			   Game.Roles,
-			   true,false);
-   fprintf (Gbl.F.Out,"</div>");
-
-   /* Groups whose users can answer this game */
-   if (Game.Scope == Hie_CRS)
-      if (Gbl.Crs.Grps.NumGrps)
-         Gam_GetAndWriteNamesOfGrpsAssociatedToGame (&Game);
 
    /* Text of the game */
    Gam_GetGameTxtFromDB (Game.GamCod,Txt);
@@ -716,8 +678,6 @@ static void Gam_WriteStatus (struct Game *Game)
    extern const char *Txt_Visible_game;
    extern const char *Txt_Closed_game;
    extern const char *Txt_Open_game;
-   extern const char *Txt_SURVEY_Type_of_user_not_allowed;
-   extern const char *Txt_SURVEY_Type_of_user_allowed;
    extern const char *Txt_GAME_You_belong_to_the_scope_of_the_game;
    extern const char *Txt_GAME_You_dont_belong_to_the_scope_of_the_game;
    extern const char *Txt_SURVEY_You_have_already_answered;
@@ -745,18 +705,6 @@ static void Gam_WriteStatus (struct Game *Game)
                Game->Status.Visible ? "STATUS_RED" :
         	                     "STATUS_RED_LIGHT",
                Txt_Closed_game);
-
-   /* Write whether game can be answered by me or not depending on user type */
-   if (Game->Status.IAmLoggedWithAValidRoleToAnswer)
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Game->Status.Visible ? "STATUS_GREEN" :
-        	                     "STATUS_GREEN_LIGHT",
-               Txt_SURVEY_Type_of_user_allowed);
-   else
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Game->Status.Visible ? "STATUS_RED" :
-        	                     "STATUS_RED_LIGHT",
-               Txt_SURVEY_Type_of_user_not_allowed);
 
    /* Write whether game can be answered by me or not depending on groups */
    if (Game->Status.IBelongToScope)
@@ -813,13 +761,10 @@ void Gam_PutHiddenParamGameOrder (void)
 /*****************************************************************************/
 
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
-					  const char *Anchor,
-                                          bool ShowOnlyThisGame)
+					  const char *Anchor)
   {
    extern const char *Txt_Reset;
    extern const char *Txt_Play;
-
-   Gbl.Games.CurrentGamCod = Game->GamCod;	// Used as parameter in contextual links
 
    /***** Put icon to remove game *****/
    Ico_PutContextualIconToRemove (ActReqRemGam,Gam_PutParams);
@@ -837,18 +782,6 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 
    /***** Put icon to edit game *****/
    Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);
-
-   if (ShowOnlyThisGame)
-      /***** Put icon to show first question *****/
-      Lay_PutContextualLinkOnlyIcon (ActPlyGam1stQst,NULL,
-				     Gam_PutParamsToPlayGame1stQst,
-				     "play.svg",
-				     Txt_Play);
-   else
-      /***** Put icon to play game *****/
-      Lay_PutContextualLinkOnlyIcon (ActPlyGam,NULL,Gam_PutParams,
-				     "play.svg",
-				     Txt_Play);
   }
 
 /*****************************************************************************/
@@ -867,8 +800,8 @@ static void Gam_PutParamsToPlayGame1stQst (void)
 
 static void Gam_PutParams (void)
   {
-   if (Gbl.Games.CurrentGamCod > 0)
-      Gam_PutParamGameCod (Gbl.Games.CurrentGamCod);
+   if (Gam_CurrentGamCod > 0)
+      Gam_PutParamGameCod (Gam_CurrentGamCod);
 
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
@@ -881,7 +814,7 @@ static void Gam_PutParams (void)
 
 void Gam_GetListGames (void)
   {
-   char *SubQuery[Hie_NUM_LEVELS];
+   char *SubQuery;
    static const char *OrderBySubQuery[Gam_NUM_ORDERS] =
      {
       "StartTime DESC,EndTime DESC,Title DESC",	// Gam_ORDER_BY_START_DATE
@@ -891,115 +824,46 @@ void Gam_GetListGames (void)
    MYSQL_ROW row;
    unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned NumGame;
-   unsigned ScopesAllowed = 0;
-   unsigned HiddenAllowed = 0;
-   long Cods[Hie_NUM_LEVELS];
-   Hie_Level_t Scope;
-   bool SubQueryFilled = false;
 
    /***** Free list of games *****/
    if (Gbl.Games.LstIsRead)
       Gam_FreeListGames ();
 
-   /***** Set allowed and hidden scopes to get list depending on my user's role *****/
-   Gam_SetAllowedAndHiddenScopes (&ScopesAllowed,&HiddenAllowed);
-
    /***** Get list of games from database *****/
-   Cods[Hie_SYS] = -1L;				// System
-   Cods[Hie_CTY] = Gbl.Hierarchy.Cty.CtyCod;	// Country
-   Cods[Hie_INS] = Gbl.Hierarchy.Ins.InsCod;	// Institution
-   Cods[Hie_CTR] = Gbl.Hierarchy.Ctr.CtrCod;	// Centre
-   Cods[Hie_DEG] = Gbl.Hierarchy.Deg.DegCod;	// Degree
-   Cods[Hie_CRS] = Gbl.Hierarchy.Crs.CrsCod;	// Course
-
-   /* Fill subqueries for system, country, institution, centre and degree */
-   for (Scope  = Hie_SYS;
-	Scope <= Hie_DEG;
-	Scope++)
-      if (ScopesAllowed & 1 << Scope)
-	{
-	 if (asprintf (&SubQuery[Scope],"%s(Scope='%s' AND Cod=%ld%s)",
-	               SubQueryFilled ? " OR " :
-	        	                "",
-		       Sco_GetDBStrFromScope (Scope),Cods[Scope],
-		       (HiddenAllowed & 1 << Scope) ? "" :
-						      " AND Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 SubQueryFilled = true;
-	}
-      else
-        {
-	 if (asprintf (&SubQuery[Scope],"%s","") < 0)
-	    Lay_NotEnoughMemoryExit ();
-        }
-
    /* Fill subquery for course */
-   if (ScopesAllowed & 1 << Hie_CRS)
+   if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
      {
-      if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
-        {
-	 if (asprintf (&SubQuery[Hie_CRS],"%s("
-						"Scope='%s' AND Cod=%ld%s"
-						" AND "
-						"(GamCod NOT IN"
-						" (SELECT GamCod FROM gam_grp)"
-						" OR"
-						" GamCod IN"
-						" (SELECT gam_grp.GamCod"
-						" FROM gam_grp,crs_grp_usr"
-						" WHERE crs_grp_usr.UsrCod=%ld"
-						" AND gam_grp.GrpCod=crs_grp_usr.GrpCod))"
-						")",
-		       SubQueryFilled ? " OR " :
-					"",
-		       Sco_GetDBStrFromScope (Hie_CRS),Cods[Hie_CRS],
-		       (HiddenAllowed & 1 << Hie_CRS) ? "" :
-							" AND Hidden='N'",
-		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	    Lay_NotEnoughMemoryExit ();
-        }
-      else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-        {
-	 if (asprintf (&SubQuery[Hie_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
-		       SubQueryFilled ? " OR " :
-					"",
-		       Sco_GetDBStrFromScope (Hie_CRS),Cods[Hie_CRS],
-		       (HiddenAllowed & 1 << Hie_CRS) ? "" :
-							" AND Hidden='N'") < 0)
-	    Lay_NotEnoughMemoryExit ();
-        }
-      SubQueryFilled = true;
-     }
-   else
-     {
-      if (asprintf (&SubQuery[Hie_CRS],"%s","") < 0)
-	 Lay_NotEnoughMemoryExit ();
-     }
+      if (asprintf (&SubQuery,"CrsCod=%ld"
+			      " AND"
+			      "(GamCod NOT IN"
+			      " (SELECT GamCod FROM gam_grp)"
+			      " OR"
+			      " GamCod IN"
+			      " (SELECT gam_grp.GamCod"
+			      " FROM gam_grp,crs_grp_usr"
+			      " WHERE crs_grp_usr.UsrCod=%ld"
+			      " AND gam_grp.GrpCod=crs_grp_usr.GrpCod))",
+		     Gbl.Hierarchy.Crs.CrsCod,
+		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	  Lay_NotEnoughMemoryExit ();
+      }
+    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
+      {
+       if (asprintf (&SubQuery,"CrsCod=%ld",
+		     Gbl.Hierarchy.Crs.CrsCod) < 0)
+	  Lay_NotEnoughMemoryExit ();
+      }
 
    /* Make query */
-   if (SubQueryFilled)
-     {
-      /* Make query */
-      NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
-				"SELECT GamCod FROM games"
-				" WHERE %s%s%s%s%s%s"
-				" ORDER BY %s",
-				SubQuery[Hie_SYS],
-				SubQuery[Hie_CTY],
-				SubQuery[Hie_INS],
-				SubQuery[Hie_CTR],
-				SubQuery[Hie_DEG],
-				SubQuery[Hie_CRS],
-				OrderBySubQuery[Gbl.Games.SelectedOrder]);
-     }
-   else
-      Lay_ShowErrorAndExit ("Can not get list of games.");
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
+			     "SELECT GamCod FROM games"
+			     " WHERE %s"
+			     " ORDER BY %s",
+			     SubQuery,
+			     OrderBySubQuery[Gbl.Games.SelectedOrder]);
 
-   /* Free allocated memory for subqueries */
-   for (Scope  = Hie_SYS;
-	Scope <= Hie_CRS;
-	Scope++)
-      free ((void *) SubQuery[Scope]);
+   /* Free allocated memory for subquery */
+   free ((void *) SubQuery);
 
    if (NumRows) // Games found...
      {
@@ -1030,173 +894,6 @@ void Gam_GetListGames (void)
   }
 
 /*****************************************************************************/
-/*** Set allowed and hidden scopes to get list depending on my user's role ***/
-/*****************************************************************************/
-
-static void Gam_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
-                                           unsigned *HiddenAllowed)
-  {
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_UNK:	// User not logged in *********************************
-	 *ScopesAllowed = 0;
-	 *HiddenAllowed = 0;
-         break;
-      case Rol_GST:	// User not belonging to any course *******************
-	 *ScopesAllowed = 1 << Hie_SYS;
-	 *HiddenAllowed = 0;
-	 break;
-      case Rol_USR:	// Student or teacher in other courses...
-   	   	   	// ...but not belonging to the current course *********
-	 *ScopesAllowed = 1 << Hie_SYS;
-	 *HiddenAllowed = 0;
-	 if (Usr_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
-	   {
-	    *ScopesAllowed |= 1 << Hie_CTY;
-	    if (Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
-	      {
-	       *ScopesAllowed |= 1 << Hie_INS;
-	       if (Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
-		 {
-		  *ScopesAllowed |= 1 << Hie_CTR;
-		  if (Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
-		     *ScopesAllowed |= 1 << Hie_DEG;
-		 }
-	      }
-	   }
-         break;
-      case Rol_STD:	// Student in current course **************************
-	 *ScopesAllowed = 1 << Hie_SYS;
-	 *HiddenAllowed = 0;
-	 if (Usr_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
-	   {
-	    *ScopesAllowed |= 1 << Hie_CTY;
-	    if (Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
-	      {
-	       *ScopesAllowed |= 1 << Hie_INS;
-	       if (Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
-		 {
-		  *ScopesAllowed |= 1 << Hie_CTR;
-		  if (Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
-		    {
-		     *ScopesAllowed |= 1 << Hie_DEG;
-		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-			*ScopesAllowed |= 1 << Hie_CRS;
-		    }
-		 }
-	      }
-	   }
-         break;
-      case Rol_NET:	// Non-editing teacher in current course **************
-      case Rol_TCH:	// Teacher in current course **************************
-	 *ScopesAllowed = 1 << Hie_SYS;
-	 *HiddenAllowed = 0;
-	 if (Usr_CheckIfIBelongToCty (Gbl.Hierarchy.Cty.CtyCod))
-	   {
-	    *ScopesAllowed |= 1 << Hie_CTY;
-	    if (Usr_CheckIfIBelongToIns (Gbl.Hierarchy.Ins.InsCod))
-	      {
-	       *ScopesAllowed |= 1 << Hie_INS;
-	       if (Usr_CheckIfIBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod))
-		 {
-		  *ScopesAllowed |= 1 << Hie_CTR;
-		  if (Usr_CheckIfIBelongToDeg (Gbl.Hierarchy.Deg.DegCod))
-		    {
-		     *ScopesAllowed |= 1 << Hie_DEG;
-		     if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-		       {
-			*ScopesAllowed |= 1 << Hie_CRS;
-			*HiddenAllowed |= 1 << Hie_CRS;	// A non-editing teacher or teacher can view hidden course games
-		       }
-		    }
-		 }
-	      }
-	   }
-         break;
-      case Rol_DEG_ADM:	// Degree administrator *******************************
-	 *ScopesAllowed = 1 << Hie_SYS;
-	 *HiddenAllowed = 0;
-	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
-	   {
-	    *ScopesAllowed |= 1 << Hie_CTY;
-	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
-	      {
-	       *ScopesAllowed |= 1 << Hie_INS;
-	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Centre selected
-		 {
-		  *ScopesAllowed |= 1 << Hie_CTR;
-		  if (Gbl.Hierarchy.Deg.DegCod > 0)		// Degree selected
-		    {
-		     *ScopesAllowed |= 1 << Hie_DEG;
-		     *HiddenAllowed |= 1 << Hie_DEG;	// A degree admin can view hidden degree games
-		    }
-	         }
-	      }
-	   }
-	 break;
-      case Rol_CTR_ADM:	// Centre administrator *******************************
-	 *ScopesAllowed = 1 << Hie_SYS;
-	 *HiddenAllowed = 0;
-	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
-	   {
-	    *ScopesAllowed |= 1 << Hie_CTY;
-	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
-	      {
-	       *ScopesAllowed |= 1 << Hie_INS;
-	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Centre selected
-		 {
-		  *ScopesAllowed |= 1 << Hie_CTR;
-		  *HiddenAllowed |= 1 << Hie_CTR;		// A centre admin can view hidden centre games
-		 }
-	      }
-	   }
-	 break;
-      case Rol_INS_ADM:	// Institution administrator **************************
-	 *ScopesAllowed = 1 << Hie_SYS;
-	 *HiddenAllowed = 0;
-	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
-	   {
-	    *ScopesAllowed |= 1 << Hie_CTY;
-	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
-	      {
-	       *ScopesAllowed |= 1 << Hie_INS;
-	       *HiddenAllowed |= 1 << Hie_INS;		// An institution admin can view hidden institution games
-	      }
-	   }
-	 break;
-      case Rol_SYS_ADM:	// System administrator (superuser) *******************
-	 *ScopesAllowed = 1 << Hie_SYS;
-	 *HiddenAllowed = 1 << Hie_SYS;			// A system admin can view hidden system games
-	 if (Gbl.Hierarchy.Cty.CtyCod > 0)			// Country selected
-	   {
-	    *ScopesAllowed |= 1 << Hie_CTY;
-	    *HiddenAllowed |= 1 << Hie_CTY;		// A system admin can view hidden country games
-	    if (Gbl.Hierarchy.Ins.InsCod > 0)			// Institution selected
-	      {
-	       *ScopesAllowed |= 1 << Hie_INS;
-	       *HiddenAllowed |= 1 << Hie_INS;		// A system admin can view hidden institution games
-	       if (Gbl.Hierarchy.Ctr.CtrCod > 0)		// Centre selected
-		 {
-		  *ScopesAllowed |= 1 << Hie_CTR;
-	          *HiddenAllowed |= 1 << Hie_CTR;		// A system admin can view hidden centre games
-		  if (Gbl.Hierarchy.Deg.DegCod > 0)		// Degree selected
-		    {
-		     *ScopesAllowed |= 1 << Hie_DEG;
-	             *HiddenAllowed |= 1 << Hie_DEG;	// A system admin can view hidden degree games
-		     if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
-		       {
-			*ScopesAllowed |= 1 << Hie_CRS;
-	                *HiddenAllowed |= 1 << Hie_CRS;	// A system admin can view hidden course games
-		       }
-		    }
-		 }
-	      }
-	   }
-	 break;
-     }
-  }
-
-/*****************************************************************************/
 /********************* Get game data using its code ************************/
 /*****************************************************************************/
 
@@ -1208,11 +905,13 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 
    /***** Get data of game from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get game data",
-			     "SELECT GamCod,Scope,Cod,Hidden,Roles,UsrCod,"
-			     "UNIX_TIMESTAMP(StartTime),"
-			     "UNIX_TIMESTAMP(EndTime),"
-			     "NOW() BETWEEN StartTime AND EndTime,"
-			     "Title"
+			     "SELECT GamCod,"					// row[0]
+			            "Hidden,"					// row[1]
+			            "UsrCod,"					// row[2]
+			            "UNIX_TIMESTAMP(StartTime),"		// row[3]
+			            "UNIX_TIMESTAMP(EndTime),"			// row[4]
+			            "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
+			            "Title"					// row[6]
 			     " FROM games"
 			     " WHERE GamCod=%ld",
 			     Game->GamCod);
@@ -1224,79 +923,42 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       /* Get code of the game (row[0]) */
       Game->GamCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get game scope (row[1]) */
-      if ((Game->Scope = Sco_GetScopeFromDBStr (row[1])) == Hie_UNK)
-         Lay_ShowErrorAndExit ("Wrong game scope.");
+      /* Get whether the game is hidden (row[1]) */
+      Game->Status.Visible = (row[1][0] == 'N');
 
-      /* Get code of the country, institution, centre, degree or course (row[2]) */
-      Game->Cod = Str_ConvertStrCodToLongCod (row[2]);
+      /* Get author of the game (row[2]) */
+      Game->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
-      /* Get whether the game is hidden (row[3]) */
-      Game->Status.Visible = (row[3][0] == 'N');
+      /* Get start date (row[3] holds the start UTC time) */
+      Game->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
-      /* Get roles (row[4]) */
-      if (sscanf (row[4],"%u",&Game->Roles) != 1)
-      	 Lay_ShowErrorAndExit ("Error when reading roles of game.");
+      /* Get end   date (row[4] holds the end   UTC time) */
+      Game->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get author of the game (row[5]) */
-      Game->UsrCod = Str_ConvertStrCodToLongCod (row[5]);
+      /* Get whether the game is open or closed (row(5)) */
+      Game->Status.Open = (row[5][0] == '1');
 
-      /* Get start date (row[6] holds the start UTC time) */
-      Game->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[6]);
-
-      /* Get end   date (row[7] holds the end   UTC time) */
-      Game->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[7]);
-
-      /* Get whether the game is open or closed (row(8)) */
-      Game->Status.Open = (row[8][0] == '1');
-
-      /* Get the title of the game (row[9]) */
-      Str_Copy (Game->Title,row[9],
+      /* Get the title of the game (row[6]) */
+      Str_Copy (Game->Title,row[6],
                 Gam_MAX_BYTES_SURVEY_TITLE);
 
       /* Get number of questions and number of users who have already answer this game */
       Game->NumQsts = Gam_GetNumQstsGame (Game->GamCod);
       Game->NumUsrs = Gam_GetNumUsrsWhoHaveAnsweredGame (Game->GamCod);
 
-      /* Am I logged with a valid role to answer this game? */
-      Game->Status.IAmLoggedWithAValidRoleToAnswer = (Game->Roles & (1 << Gbl.Usrs.Me.Role.Logged));
-
       /* Do I belong to valid groups to answer this game? */
-      switch (Game->Scope)
-        {
-	 case Hie_UNK:	// Unknown
-            Lay_ShowErrorAndExit ("Wrong game scope.");
-	    break;
-	 case Hie_SYS:	// System
-            Game->Status.IBelongToScope = Gbl.Usrs.Me.Logged;
-	    break;
-	 case Hie_CTY:	// Country
-            Game->Status.IBelongToScope = Usr_CheckIfIBelongToCty (Game->Cod);
-	    break;
-	 case Hie_INS:	// Institution
-            Game->Status.IBelongToScope = Usr_CheckIfIBelongToIns (Game->Cod);
-	    break;
-	 case Hie_CTR:	// Centre
-            Game->Status.IBelongToScope = Usr_CheckIfIBelongToCtr (Game->Cod);
-	    break;
-	 case Hie_DEG:	// Degree
-            Game->Status.IBelongToScope = Usr_CheckIfIBelongToDeg (Game->Cod);
-	    break;
-	 case Hie_CRS:	// Course
-	    Game->Status.IBelongToScope = Usr_CheckIfIBelongToCrs (Game->Cod) &&
-					  Gam_CheckIfICanDoThisGameBasedOnGrps (Game->GamCod);
-	    break;
-        }
+      Game->Status.IBelongToScope = Gbl.Usrs.Me.IBelongToCurrentCrs &&
+				    Gam_CheckIfICanDoThisGameBasedOnGrps (Game->GamCod);
 
       /* Have I answered this game? */
       Game->Status.IHaveAnswered = Gam_CheckIfIHaveAnsweredGame (Game->GamCod);
 
       /* Can I answer game? */
-      Game->Status.ICanAnswer = (Game->NumQsts != 0) &&
-                                 Game->Status.Visible &&
-                                 Game->Status.Open &&
-                                 Game->Status.IAmLoggedWithAValidRoleToAnswer &&
-                                 Game->Status.IBelongToScope &&
+      Game->Status.ICanAnswer = Game->NumQsts != 0 &&
+                                Game->Status.Visible &&
+                                Game->Status.Open &&
+                                Gbl.Usrs.Me.Role.Logged == Rol_STD &&
+                                Game->Status.IBelongToScope &&
                                 !Game->Status.IHaveAnswered;
 
       /* Can I view results of the game?
@@ -1304,75 +966,40 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       switch (Gbl.Usrs.Me.Role.Logged)
         {
          case Rol_STD:
-            Game->Status.ICanViewResults = (Game->Scope == Hie_CRS ||
-        	                            Game->Scope == Hie_DEG ||
-        	                            Game->Scope == Hie_CTR ||
-        	                            Game->Scope == Hie_INS ||
-        	                            Game->Scope == Hie_CTY ||
-        	                            Game->Scope == Hie_SYS) &&
-        	                           (Game->NumQsts != 0) &&
-                                            Game->Status.Visible &&
-                                            Game->Status.Open &&
-                                            Game->Status.IAmLoggedWithAValidRoleToAnswer &&
-                                            Game->Status.IBelongToScope &&
-                                            Game->Status.IHaveAnswered;
+            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
+                                           Game->Status.Visible &&
+                                           Game->Status.Open &&
+                                           Game->Status.IBelongToScope &&
+                                           Game->Status.IHaveAnswered;
             Game->Status.ICanEdit         = false;
             break;
          case Rol_NET:
-            Game->Status.ICanViewResults = (Game->Scope == Hie_CRS ||
-        	                            Game->Scope == Hie_DEG ||
-        	                            Game->Scope == Hie_CTR ||
-        	                            Game->Scope == Hie_INS ||
-        	                            Game->Scope == Hie_CTY ||
-        	                            Game->Scope == Hie_SYS) &&
-        	                            Game->NumQsts != 0 &&
+            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
                                            !Game->Status.ICanAnswer;
             Game->Status.ICanEdit        = false;
             break;
          case Rol_TCH:
-            Game->Status.ICanViewResults = (Game->Scope == Hie_CRS ||
-        	                            Game->Scope == Hie_DEG ||
-        	                            Game->Scope == Hie_CTR ||
-        	                            Game->Scope == Hie_INS ||
-        	                            Game->Scope == Hie_CTY ||
-        	                            Game->Scope == Hie_SYS) &&
-        	                            Game->NumQsts != 0 &&
+            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
                                            !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        =  Game->Scope == Hie_CRS &&
-                                            Game->Status.IBelongToScope;
+            Game->Status.ICanEdit        = Game->Status.IBelongToScope;
             break;
          case Rol_DEG_ADM:
-            Game->Status.ICanViewResults = (Game->Scope == Hie_DEG ||
-        	                            Game->Scope == Hie_CTR ||
-        	                            Game->Scope == Hie_INS ||
-        	                            Game->Scope == Hie_CTY ||
-        	                            Game->Scope == Hie_SYS) &&
-        	                           (Game->NumQsts != 0) &&
+            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
                                            !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        =  Game->Scope == Hie_DEG &&
-                                            Game->Status.IBelongToScope;
+            Game->Status.ICanEdit        = Game->Status.IBelongToScope;
             break;
          case Rol_CTR_ADM:
-            Game->Status.ICanViewResults = (Game->Scope == Hie_CTR ||
-        	                            Game->Scope == Hie_INS ||
-        	                            Game->Scope == Hie_CTY ||
-        	                            Game->Scope == Hie_SYS) &&
-        	                           (Game->NumQsts != 0) &&
+            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
                                            !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        =  Game->Scope == Hie_CTR &&
-                                            Game->Status.IBelongToScope;
+            Game->Status.ICanEdit        = Game->Status.IBelongToScope;
             break;
          case Rol_INS_ADM:
-            Game->Status.ICanViewResults = (Game->Scope == Hie_INS ||
-        	                            Game->Scope == Hie_CTY ||
-        	                            Game->Scope == Hie_SYS) &&
-        	                           (Game->NumQsts != 0) &&
+            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
                                            !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        =  Game->Scope == Hie_INS &&
-                                            Game->Status.IBelongToScope;
+            Game->Status.ICanEdit        = Game->Status.IBelongToScope;
             break;
          case Rol_SYS_ADM:
-            Game->Status.ICanViewResults = (Game->NumQsts != 0);
+            Game->Status.ICanViewResults = Game->NumQsts != 0;
             Game->Status.ICanEdit        = true;
             break;
          default:
@@ -1385,22 +1012,18 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
      {
       /* Initialize to empty game */
       Game->GamCod                  = -1L;
-      Game->Scope                   = Hie_UNK;
-      Game->Roles                   = 0;
       Game->UsrCod                  = -1L;
       Game->TimeUTC[Gam_START_TIME] =
       Game->TimeUTC[Gam_END_TIME  ] = (time_t) 0;
       Game->Title[0]                = '\0';
       Game->NumQsts                 = 0;
       Game->NumUsrs                 = 0;
-      Game->Status.Visible                         = true;
-      Game->Status.Open                            = false;
-      Game->Status.IAmLoggedWithAValidRoleToAnswer = false;
-      Game->Status.IBelongToScope                  = false;
-      Game->Status.IHaveAnswered                   = false;
-      Game->Status.ICanAnswer                      = false;
-      Game->Status.ICanViewResults                 = false;
-      Game->Status.ICanEdit                        = false;
+      Game->Status.Visible          = true;
+      Game->Status.Open             = false;
+      Game->Status.IHaveAnswered    = false;
+      Game->Status.ICanAnswer       = false;
+      Game->Status.ICanViewResults  = false;
+      Game->Status.ICanEdit         = false;
      }
 
    /***** Free structure that stores the query result *****/
@@ -1500,7 +1123,7 @@ void Gam_AskRemGame (void)
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
    /***** Show question and button to remove game *****/
-   Gbl.Games.CurrentGamCod = Game.GamCod;
+   Gam_CurrentGamCod = Game.GamCod;
    Ale_ShowAlertAndButton (ActRemGam,NULL,NULL,Gam_PutParams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_game,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_game_X,
@@ -1561,6 +1184,7 @@ void Gam_RemoveGame (void)
 void Gam_AskResetGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_reset_the_game_X;
+   extern const char *Txt_Reset_game;
    struct Game Game;
 
    /***** Get parameters *****/
@@ -1578,29 +1202,16 @@ void Gam_AskResetGame (void)
       Lay_ShowErrorAndExit ("You can not reset this game.");
 
    /***** Ask for confirmation of reset *****/
-   Ale_ShowAlert (Ale_WARNING,Txt_Do_you_really_want_to_reset_the_game_X,
-                  Game.Title);
-
-   /***** Button of confirmation of reset *****/
-   Gbl.Games.CurrentGamCod = Game.GamCod;
-   Gam_PutButtonToResetGame ();
+   Gam_CurrentGamCod = Game.GamCod;
+   Ale_ShowAlertAndButton (ActRstGam,NULL,NULL,
+			   Gam_PutParams,
+                           Btn_REMOVE_BUTTON,
+			   Txt_Reset_game,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_reset_the_game_X,
+			   Game.Title);
 
    /***** Show games again *****/
    Gam_ListAllGames ();
-  }
-
-/*****************************************************************************/
-/************************* Put button to reset game ************************/
-/*****************************************************************************/
-
-static void Gam_PutButtonToResetGame (void)
-  {
-   extern const char *Txt_Reset_game;
-
-   Frm_StartForm (ActRstGam);
-   Gam_PutParams ();
-   Btn_PutRemoveButton (Txt_Reset_game);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -1703,10 +1314,10 @@ static bool Gam_CheckIfSimilarGameExists (struct Game *Game)
    /***** Get number of games with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar games",
 			  "SELECT COUNT(*) FROM games"
-			  " WHERE Scope='%s' AND Cod=%ld"
-			  " AND Title='%s' AND GamCod<>%ld",
-			  Sco_GetDBStrFromScope (Game->Scope),Game->Cod,
-			  Game->Title,Game->GamCod) != 0);
+			  " WHERE CrsCod=%ld AND Title='%s'"
+			  " AND GamCod<>%ld",
+			  Gbl.Hierarchy.Crs.CrsCod,Game->Title,
+			  Game->GamCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1719,11 +1330,9 @@ void Gam_RequestCreatOrEditGame (void)
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_game;
-   extern const char *Txt_Scope;
    extern const char *Txt_Edit_game;
    extern const char *Txt_Title;
    extern const char *Txt_Description;
-   extern const char *Txt_Users;
    extern const char *Txt_Create_game;
    extern const char *Txt_Save_changes;
    struct Game Game;
@@ -1747,21 +1356,18 @@ void Gam_RequestCreatOrEditGame (void)
 
       /* Initialize to empty game */
       Game.GamCod = -1L;
-      Game.Scope  = Hie_UNK;
-      Game.Roles  = (1 << Rol_STD);
       Game.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       Game.TimeUTC[Gam_START_TIME] = Gbl.StartExecutionTimeUTC;
       Game.TimeUTC[Gam_END_TIME  ] = Gbl.StartExecutionTimeUTC + (24 * 60 * 60);	// +24 hours
-      Game.Title[0] = '\0';
-      Game.NumQsts = 0;
-      Game.NumUsrs = 0;
-      Game.Status.Visible = true;
-      Game.Status.Open = true;
-      Game.Status.IAmLoggedWithAValidRoleToAnswer = false;
-      Game.Status.IBelongToScope = false;
-      Game.Status.IHaveAnswered = false;
-      Game.Status.ICanAnswer = false;
-      Game.Status.ICanViewResults = false;
+      Game.Title[0]                = '\0';
+      Game.NumQsts                 = 0;
+      Game.NumUsrs                 = 0;
+      Game.Status.Visible          = true;
+      Game.Status.Open             = true;
+      Game.Status.IBelongToScope   = false;
+      Game.Status.IHaveAnswered    = false;
+      Game.Status.ICanAnswer       = false;
+      Game.Status.ICanViewResults  = false;
      }
    else
      {
@@ -1775,7 +1381,7 @@ void Gam_RequestCreatOrEditGame (void)
      }
 
    /***** Start form *****/
-   Gbl.Games.CurrentGamCod = Game.GamCod;
+   Gam_CurrentGamCod = Game.GamCod;
    Frm_StartForm (ItsANewGame ? ActNewGam :
 	                        ActChgGam);
    Gam_PutParams ();
@@ -1790,20 +1396,6 @@ void Gam_RequestCreatOrEditGame (void)
                 	                 Txt_Edit_game,
                          NULL,
                          Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
-
-   /***** Scope of the game *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"ScopeGame\" class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Scope);
-   Gam_SetDefaultAndAllowedScope (&Game);
-   Sco_GetScope ("ScopeGame");
-   Sco_PutSelectorScope ("ScopeGame",false);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
 
    /***** Game title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1839,21 +1431,6 @@ void Gam_RequestCreatOrEditGame (void)
                       "</td>"
                       "</tr>");
 
-   /***** Users' roles who can answer the game *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP %s\">%s:"
-	              "</td>"
-                      "<td class=\"DAT LEFT_MIDDLE\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Users);
-   Rol_WriteSelectorRoles (1 << Rol_STD |
-                           1 << Rol_NET |
-                           1 << Rol_TCH,
-                           Game.Roles,
-                           false,false);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
    /***** Groups *****/
    Gam_ShowLstGrpsToEditGame (Game.GamCod);
 
@@ -1869,93 +1446,6 @@ void Gam_RequestCreatOrEditGame (void)
    /***** Show questions of the game ready to be edited *****/
    if (!ItsANewGame)
       Gam_ListGameQuestions (&Game);
-  }
-
-/*****************************************************************************/
-/****** Set default and allowed scopes depending on logged user's role *******/
-/*****************************************************************************/
-
-static void Gam_SetDefaultAndAllowedScope (struct Game *Game)
-  {
-   bool ICanEdit = false;
-
-   /***** Set default scope *****/
-   Gbl.Scope.Default = Hie_UNK;
-   Gbl.Scope.Allowed = 0;
-
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_TCH:	// Teachers only can edit course games
-	 if (Game->Scope == Hie_UNK)	// Scope not defined
-	    Game->Scope = Hie_CRS;
-	 if (Game->Scope == Hie_CRS)
-	   {
-	    Gbl.Scope.Default = Game->Scope;
-	    Gbl.Scope.Allowed = 1 << Hie_CRS;
-	    ICanEdit = true;
-	   }
-         break;
-      case Rol_DEG_ADM:	// Degree admins only can edit degree games
-	 if (Game->Scope == Hie_UNK)	// Scope not defined
-	    Game->Scope = Hie_DEG;
-	 if (Game->Scope == Hie_DEG)
-	   {
-	    Gbl.Scope.Default = Game->Scope;
-	    Gbl.Scope.Allowed = 1 << Hie_DEG;
-	    ICanEdit = true;
-	   }
-         break;
-      case Rol_CTR_ADM:	// Centre admins only can edit centre games
-	 if (Game->Scope == Hie_UNK)	// Scope not defined
-	    Game->Scope = Hie_CTR;
-	 if (Game->Scope == Hie_CTR)
-	   {
-	    Gbl.Scope.Default = Game->Scope;
-	    Gbl.Scope.Allowed = 1 << Hie_CTR;
-	    ICanEdit = true;
-	   }
-         break;
-      case Rol_INS_ADM:	// Institution admins only can edit institution games
-	 if (Game->Scope == Hie_UNK)	// Scope not defined
-	    Game->Scope = Hie_INS;
-	 if (Game->Scope == Hie_INS)
-	   {
-	    Gbl.Scope.Default = Game->Scope;
-	    Gbl.Scope.Allowed = 1 << Hie_INS;
-	    ICanEdit = true;
-	   }
-         break;
-      case Rol_SYS_ADM:// System admins can edit any game
-	 if (Game->Scope == Hie_UNK)	// Scope not defined
-	   {
-	    if      (Gbl.Hierarchy.Level == Hie_CRS)
-	       Game->Scope = Hie_CRS;
-	    else if (Gbl.Hierarchy.Deg.DegCod > 0)
-	       Game->Scope = Hie_DEG;
-	    else if (Gbl.Hierarchy.Ctr.CtrCod > 0)
-	       Game->Scope = Hie_CTR;
-	    else if (Gbl.Hierarchy.Ins.InsCod > 0)
-	       Game->Scope = Hie_INS;
-	    else if (Gbl.Hierarchy.Cty.CtyCod > 0)
-	       Game->Scope = Hie_CTY;
-	    else
-	       Game->Scope = Hie_SYS;
-	   }
-         Gbl.Scope.Default = Game->Scope;
-         Gbl.Scope.Allowed = 1 << Hie_SYS |
-	                     1 << Hie_CTY |
-	                     1 << Hie_INS |
-	                     1 << Hie_CTR |
-                             1 << Hie_DEG |
-                             1 << Hie_CRS;
-	 ICanEdit = true;
-	 break;
-      default:
-	 break;
-     }
-
-   if (!ICanEdit)
-      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2035,66 +1525,13 @@ void Gam_RecFormGame (void)
    /***** Get the code of the game *****/
    ItsANewGame = ((NewGame.GamCod = Gam_GetParamGameCod ()) == -1L);
 
-   if (ItsANewGame)
-      NewGame.Scope = Hie_UNK;
-   else
+   if (!ItsANewGame)
      {
       /* Get data of the old (current) game from database */
       OldGame.GamCod = NewGame.GamCod;
       Gam_GetDataOfGameByCod (&OldGame);
       if (!OldGame.Status.ICanEdit)
          Lay_ShowErrorAndExit ("You can not update this game.");
-      NewGame.Scope = OldGame.Scope;
-     }
-
-   /***** Get scope *****/
-   Gam_SetDefaultAndAllowedScope (&NewGame);
-   Sco_GetScope ("ScopeGame");
-   switch (Gbl.Scope.Current)
-     {
-      case Hie_SYS:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	    Lay_ShowErrorAndExit ("Wrong game scope.");
-         NewGame.Scope = Hie_SYS;
-         NewGame.Cod = -1L;
-         break;
-      case Hie_CTY:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
-	    Lay_ShowErrorAndExit ("Wrong game scope.");
-	 NewGame.Scope = Hie_CTY;
-	 NewGame.Cod = Gbl.Hierarchy.Cty.CtyCod;
-         break;
-      case Hie_INS:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Role.Logged != Rol_INS_ADM)
-	    Lay_ShowErrorAndExit ("Wrong game scope.");
-	 NewGame.Scope = Hie_INS;
-	 NewGame.Cod = Gbl.Hierarchy.Ins.InsCod;
-         break;
-      case Hie_CTR:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Role.Logged != Rol_CTR_ADM)
-	    Lay_ShowErrorAndExit ("Wrong game scope.");
-	 NewGame.Scope = Hie_CTR;
-	 NewGame.Cod = Gbl.Hierarchy.Ctr.CtrCod;
-         break;
-      case Hie_DEG:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Role.Logged != Rol_DEG_ADM)
-	    Lay_ShowErrorAndExit ("Wrong game scope.");
-	 NewGame.Scope = Hie_DEG;
-	 NewGame.Cod = Gbl.Hierarchy.Deg.DegCod;
-         break;
-      case Hie_CRS:
-	 if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.Role.Logged != Rol_TCH)
-	    Lay_ShowErrorAndExit ("Wrong game scope.");
-	 NewGame.Scope = Hie_CRS;
-	 NewGame.Cod = Gbl.Hierarchy.Crs.CrsCod;
-         break;
-      default:
-	 Lay_WrongScopeExit ();
-	 break;
      }
 
    /***** Get start/end date-times *****/
@@ -2112,9 +1549,6 @@ void Gam_RecFormGame (void)
       NewGame.TimeUTC[Gam_START_TIME] = Gbl.StartExecutionTimeUTC;
    if (NewGame.TimeUTC[Gam_END_TIME] == 0)
       NewGame.TimeUTC[Gam_END_TIME] = NewGame.TimeUTC[Gam_START_TIME] + 24 * 60 * 60;	// +24 hours
-
-   /***** Get users who can answer this game *****/
-   NewGame.Roles = Rol_GetSelectedRoles ();
 
    /***** Check if title is correct *****/
    if (NewGame.Title[0])	// If there's a game title
@@ -2166,13 +1600,10 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
    Game->GamCod =
    DB_QueryINSERTandReturnCode ("can not create new game",
 				"INSERT INTO games"
-				" (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
+				" (CrsCod,Hidden,UsrCod,StartTime,EndTime,Title,Txt)"
 				" VALUES"
-				" ('%s',%ld,'N',%u,%ld,"
-				"FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
-				"'%s','%s')",
-				Sco_GetDBStrFromScope (Game->Scope),Game->Cod,
-				Game->Roles,
+				" (%ld,'N',%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),'%s','%s')",
+				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Game->TimeUTC[Gam_START_TIME],
 				Game->TimeUTC[Gam_END_TIME  ],
@@ -2199,13 +1630,13 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
    /***** Update the data of the game *****/
    DB_QueryUPDATE ("can not update game",
 		   "UPDATE games"
-		   " SET Scope='%s',Cod=%ld,Roles=%u,"
-		   "StartTime=FROM_UNIXTIME(%ld),"
-		   "EndTime=FROM_UNIXTIME(%ld),"
-		   "Title='%s',Txt='%s'"
+		   " SET CrsCod=%ld,"
+		        "StartTime=FROM_UNIXTIME(%ld),"
+		        "EndTime=FROM_UNIXTIME(%ld),"
+		        "Title='%s',"
+		        "Txt='%s'"
 		   " WHERE GamCod=%ld",
-	           Sco_GetDBStrFromScope (Game->Scope),Game->Cod,
-	           Game->Roles,
+		   Gbl.Hierarchy.Crs.CrsCod,
 	           Game->TimeUTC[Gam_START_TIME],
 	           Game->TimeUTC[Gam_END_TIME  ],
 	           Game->Title,
@@ -2726,7 +2157,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
 					Game->GamCod);
 
    /***** Start box *****/
-   Gbl.Games.CurrentGamCod = Game->GamCod;
+   Gam_CurrentGamCod = Game->GamCod;
    Box_StartBox (NULL,Txt_Questions,Game->Status.ICanEdit ? Gam_PutIconToAddNewQuestions :
                                                             NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
@@ -2833,8 +2264,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /***** Icons *****/
-      Gbl.Games.CurrentGamCod = Game->GamCod;
-      Gbl.Games.CurrentQstCod = QstCod;
+      Gam_CurrentGamCod = Game->GamCod;
+      Gam_CurrentQstCod = QstCod;
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
@@ -3181,8 +2612,8 @@ static void Gam_PutIconToRemoveOneQst (void)
 
 static void Gam_PutParamsOneQst (void)
   {
-   Gam_PutParamGameCod (Gbl.Games.CurrentGamCod);
-   Gam_PutParamQstCod (Gbl.Games.CurrentQstCod);
+   Gam_PutParamGameCod (Gam_CurrentGamCod);
+   Gam_PutParamQstCod (Gam_CurrentQstCod);
   }
 
 /*****************************************************************************/
@@ -3210,8 +2641,8 @@ void Gam_RequestRemoveQst (void)
    QstInd = (unsigned) Gam_GetQstIndFromQstCod (Game.GamCod,QstCod);	// TODO: Remove this function because a question code can be repeated
 
    /***** Show question and button to remove question *****/
-   Gbl.Games.CurrentGamCod = Game.GamCod;
-   Gbl.Games.CurrentQstCod = QstCod;
+   Gam_CurrentGamCod = Game.GamCod;
+   Gam_CurrentQstCod = QstCod;
    Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,Gam_PutParamsOneQst,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,

@@ -8462,7 +8462,7 @@ const char *Txt_Do_you_really_want_to_remove_the_assignment_X =	// Warning: it i
 
 const char *Txt_Do_you_really_want_to_remove_the_entire_thread =
 #if   L==1	// ca
-	"&iquest;Realmente desea eliminar toda la discusi&oacute;n?";	// Necessita traduccio
+	"De veres voleu eliminar tota la discusi&oacute;?";
 #elif L==2	// de
 	"Wollen Sie die gesamten Thread wirklich entfernen?";
 #elif L==3	// en
@@ -8483,7 +8483,7 @@ const char *Txt_Do_you_really_want_to_remove_the_entire_thread =
 
 const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"&iquest;Realmente desea eliminar toda la discusi&oacute;n <strong>%s</strong>?";	// Necessita traduccio
+	"De veres voleu eliminar tota la discussi&oacute; <strong>%s</strong>?";
 #elif L==2	// de
 	"Wollen Sie die gesamten Thread <strong>%s</strong> wirklich entfernen?";
 #elif L==3	// en
@@ -8504,7 +8504,7 @@ const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X =	// Warning: i
 
 const char *Txt_Do_you_really_want_to_remove_the_event_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"&iquest;Realmente desea eliminar el evento <strong>%s</strong>?";	// Necessita traduccio
+	"De veres voleu eliminar l'esdevenimen <strong>%s</strong>?";
 #elif L==2	// de
 	"Wollen Sie der Ereignis <strong>%s</strong> wirklich entfernen?";
 #elif L==3	// en
@@ -8564,7 +8564,7 @@ const char *Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_Y_Z
 
 const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
-	"&iquest;Realmente desea eliminar <strong>%s</strong>?";	// Necessita traduccio
+	"De veres voleu eliminar <strong>%s</strong>?";
 #elif L==2	// de
 	"Wollen Sie <strong>%s</strong> wirklich entfernen?";
 #elif L==3	// en

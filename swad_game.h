@@ -45,11 +45,8 @@ typedef enum
 
 struct Game
   {
-   long GamCod;
-   Hie_Level_t Scope;
-   long Cod;		// Country, institution, centre, degree or course code
-   unsigned Roles;	// Example: if game can be made by students, Roles == (1 << Rol_STD)
-   long UsrCod;
+   long GamCod;		// Game code
+   long UsrCod;		// Author code
    char Title[Gam_MAX_BYTES_SURVEY_TITLE + 1];
    time_t TimeUTC[Gam_NUM_DATES];
    unsigned NumQsts;	// Number of questions in the game
@@ -58,7 +55,6 @@ struct Game
      {
       bool Visible;		// Game is not hidden
       bool Open;		// Start date <= now <= end date
-      bool IAmLoggedWithAValidRoleToAnswer;	// I am logged with a valid role to answer this game
       bool IBelongToScope;	// I belong to the scope of this game
       bool IHaveAnswered;	// I have already answered this game
       bool ICanAnswer;

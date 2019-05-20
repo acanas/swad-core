@@ -702,8 +702,6 @@ struct Globals
       unsigned Num;	// Number of surveys
       long *LstGamCods;	// List of game codes
       Gam_Order_t SelectedOrder;
-      long CurrentGamCod;	// Used as parameter in contextual links
-      long CurrentQstCod;	// Used as parameter in contextual links
       unsigned CurrentPage;
       char *ListQuestions;
      } Games;
@@ -713,8 +711,6 @@ struct Globals
       unsigned Num;	// Number of surveys
       long *LstSvyCods;	// List of survey codes
       Svy_Order_t SelectedOrder;
-      long SvyCodToEdit;	// Used as parameter in contextual links
-      long SvyQstCodToEdit;	// Used as parameter in contextual links
       unsigned CurrentPage;
      } Svys;
    struct
