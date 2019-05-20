@@ -448,10 +448,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.122.3 (2019-05-20)"
-#define CSS_FILE		"swad18.122.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.122.4 (2019-05-20)"
+#define CSS_FILE		"swad18.122.4.css"
 #define JS_FILE			"swad18.116.5.js"
 /*
+	Version 18.122.4: May 20, 2019	Changes in buttons. (242563 lines)
 	Version 18.122.3: May 20, 2019	Changes in games. (242558 lines)
 					Copy the following icon to icon public directory:
 sudo cp icon/flag-checkered.svg /var/www/html/swad/icon/

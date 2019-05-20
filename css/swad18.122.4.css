@@ -1405,23 +1405,25 @@ a:hover						/* Default ==> underlined */
 .BT_CREATE
 	{
 	background-color:#5BC33B;
-	border:1px solid #518741;
+	border-color:#518741;
 	}
 .BT_CONFIRM
 	{
 	background-color:#55ACEE;
-	border:1px solid #3B88C3;
+	border-color:#3B88C3;
 	}
 .BT_REMOVE
 	{
 	background-color:#EF5555;
-	border:1px solid #C33B3B;
+	border-color:#C33B3B;
 	}
 .BT_SUBMIT
 	{
 	margin:8px auto;
 	padding:10px 20px;
 	border-radius:4px;
+	border-width:1px;
+	border-style:solid;
 	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
 	color:white;
 	font-size:20px;
@@ -1436,6 +1438,8 @@ a:hover						/* Default ==> underlined */
 	margin:0 10px;
 	padding:2px 4px;
 	border-radius:4px;
+	border-width:1px;
+	border-style:solid;
 	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
 	color:white;
 	font-size:15px;
