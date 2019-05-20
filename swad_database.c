@@ -1370,6 +1370,30 @@ mysql> DESCRIBE gam_grp;
 			"GrpCod INT NOT NULL,"
 		   "UNIQUE INDEX(GamCod,GrpCod))");
 
+   /***** Table gam_playing *****/
+/*
+mysql> DESCRIBE gam_playing;
++----------------+---------------+------+-----+---------+-------+
+| Field          | Type          | Null | Key | Default | Extra |
++----------------+---------------+------+-----+---------+-------+
+| GamCod         | int(11)       | NO   | PRI | NULL    |       |
+| QstCod         | int(11)       | NO   |     | -1      |       |
+| QstInd         | int(11)       | NO   |     | 0       |       |
+| ShowingAnswers | enum('N','Y') | NO   |     | N       |       |
+| GamStart       | datetime      | NO   |     | NULL    |       |
+| QstStart       | datetime      | NO   |     | NULL    |       |
++----------------+---------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_playing ("
+			"GamCod INT NOT NULL,"
+			"QstCod INT NOT NULL DEFAULT -1,"
+			"QstInd INT NOT NULL DEFAULT 0,"
+			"ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"GamStart DATETIME NOT NULL,"
+			"QstStart DATETIME NOT NULL,"
+		   "UNIQUE INDEX(GamCod))");
+
    /***** Table gam_questions *****/
 /*
 mysql> DESCRIBE gam_questions;

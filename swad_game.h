@@ -125,6 +125,8 @@ void Gam_ReceiveGameAnswers (void);
 void Gam_GameTchNextQuestion (void);
 void Gam_GameTchShowAnswers (void);
 
+void Gam_GameStdCurrentQuestion (void);
+
 unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);
 unsigned Gam_GetNumGames (Hie_Level_t Scope);
 float Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope);

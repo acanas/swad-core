@@ -448,10 +448,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.122.1 (2019-05-18)"
+#define Log_PLATFORM_VERSION	"SWAD 18.122.2 (2019-05-18)"
 #define CSS_FILE		"swad18.112.1.css"
 #define JS_FILE			"swad18.116.5.js"
 /*
+	Version 18.122.2: May 20, 2019	New action to show current question (in a game beeing played) to a student. (242378 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1780','es','N','Mostrar juego a estudiante');
+CREATE TABLE IF NOT EXISTS gam_playing (GamCod INT NOT NULL,QstCod INT NOT NULL DEFAULT -1,QstInd INT NOT NULL DEFAULT 0,ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',GamStart DATETIME NOT NULL,QstStart DATETIME NOT NULL,UNIQUE INDEX(GamCod));
+
 	Version 18.122.1: May 20, 2019	New action to play game by a student. (242257 lines)
 					2 changes necessary in database:
 UPDATE actions SET Txt='Preparar para comenzar juego' WHERE ActCod='1670' AND Language='es';

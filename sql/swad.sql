@@ -598,6 +598,21 @@ CREATE TABLE IF NOT EXISTS forum_thread (
 	UNIQUE INDEX(FirstPstCod),
 	UNIQUE INDEX(LastPstCod));
 --
+-- Table games: stores the games
+--
+CREATE TABLE IF NOT EXISTS games (
+	GamCod INT NOT NULL AUTO_INCREMENT,
+	CrsCod INT NOT NULL DEFAULT -1,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	NumNotif INT NOT NULL DEFAULT 0,
+	UsrCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	Title VARCHAR(2047) NOT NULL,
+	Txt TEXT NOT NULL,
+	UNIQUE INDEX(GamCod),
+	INDEX(CrsCod));
+--
 -- Table gam_answers: stores the answers to the games
 --
 CREATE TABLE IF NOT EXISTS gam_answers (
@@ -614,6 +629,17 @@ CREATE TABLE IF NOT EXISTS gam_grp (
 	GrpCod INT NOT NULL,
 	UNIQUE INDEX(GamCod,GrpCod));
 --
+-- Table gam_playing: stores the games beeing played currently
+--
+CREATE TABLE IF NOT EXISTS gam_playing (
+	GamCod INT NOT NULL,
+	QstCod INT NOT NULL DEFAULT -1,
+	QstInd INT NOT NULL DEFAULT 0,
+	ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',
+	GamStart DATETIME NOT NULL,
+	QstStart DATETIME NOT NULL,
+	UNIQUE INDEX(GamCod));
+--
 -- Table gam_questions: stores the questions in the games
 --
 CREATE TABLE IF NOT EXISTS gam_questions (
@@ -629,21 +655,6 @@ CREATE TABLE IF NOT EXISTS gam_users (
 	GamCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	UNIQUE INDEX(GamCod,UsrCod));
---
--- Table games: stores the games
---
-CREATE TABLE IF NOT EXISTS games (
-	GamCod INT NOT NULL AUTO_INCREMENT,
-	CrsCod INT NOT NULL DEFAULT -1,
-	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	NumNotif INT NOT NULL DEFAULT 0,
-	UsrCod INT NOT NULL,
-	StartTime DATETIME NOT NULL,
-	EndTime DATETIME NOT NULL,
-	Title VARCHAR(2047) NOT NULL,
-	Txt TEXT NOT NULL,
-	UNIQUE INDEX(GamCod),
-	INDEX(CrsCod));
 --
 -- Table hidden_params: stores some hidden parameters passed from a page to another using database instead of forms
 --

@@ -618,13 +618,26 @@ static void Gam_ShowOneGame (long GamCod,
       /* Possible button to answer this game */
       if (Game.Status.ICanAnswer)
 	{
-	 Frm_StartForm (ActStrGamTch);
-	 Gam_PutParamGameCod (Game.GamCod);
-	 Gam_PutHiddenParamGameOrder ();
-	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
-	 Btn_PutCreateButtonInline (Txt_Play);
-	 Frm_EndForm ();
+	 switch (Gbl.Usrs.Me.Role.Logged)
+	   {
+	    case Rol_STD:
+	       /* Icon to play game */
+	       Frm_StartForm (ActPlyGamStd);
+	       Gam_PutParamGameCod (Game.GamCod);
+	       Btn_PutCreateButtonInline (Txt_Play);
+	       Frm_EndForm ();
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       /* Icon to start game */
+	       Frm_StartForm (ActStrGamTch);
+	       Gam_PutParamGameCod (Game.GamCod);
+	       Btn_PutCreateButtonInline (Txt_Start_game);
+	       Frm_EndForm ();
+	       break;
+	    default:
+	       break;
+	   }
 	}
 
       fprintf (Gbl.F.Out,"</div>");
@@ -2982,7 +2995,7 @@ static void Gam_PutBigButtonToPlayGameStd (long GamCod)
    extern const char *Txt_Play;
 
    /***** Start form *****/
-   Frm_StartForm (ActPlyGamStd);
+   Frm_StartForm (ActGamStdCurQst);
    Gam_PutParamGameCod (GamCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
 
@@ -3142,6 +3155,86 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
    Frm_EndForm ();
 
    /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/***** Show current question to a student when he/she is playing a game ******/
+/*****************************************************************************/
+
+void Gam_GameStdCurrentQuestion (void)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   struct Game Game;
+   unsigned QstInd;
+   long QstCod;
+   bool ShowAnswers = true;	// TODO: Get whether to show answers from a database table
+
+   /***** Get parameters *****/
+   /* Get game code */
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+
+   /* Get question index */
+   QstInd = Gam_GetParamQstInd ();	// TODO: Get current question from a database table
+
+   /***** Get data of question from database *****/
+   if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
+			"SELECT tst_questions.QstCod,"		// row[0]
+			       "tst_questions.AnsType,"		// row[1]
+			       "tst_questions.Stem,"		// row[2]
+			       "tst_questions.MedCod"		// row[3]
+			" FROM gam_questions,tst_questions"
+			" WHERE gam_questions.GamCod=%ld"
+			" AND gam_questions.QstInd=%u"
+			" AND gam_questions.QstCod=tst_questions.QstCod",
+			Game.GamCod,QstInd))
+      Ale_ShowAlert (Ale_ERROR,"Question doesn't exist.");
+   row = mysql_fetch_row (mysql_res);
+
+   /***** Show question *****/
+   /* Start container for number and question */
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
+
+   /* Write number of question */
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_NUM_QST\">%u</div>",
+	    QstInd + 1);
+
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_QST_CONTAINER\">");
+
+   /* Write stem (row[2]) */
+   Tst_WriteQstStem (row[2],"GAM_PLAY_QST");
+
+   /* Get media (row[3]) */
+   Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+   Med_GetMediaDataByCod (&Gbl.Test.Media);
+
+   /* Show media */
+   Med_ShowMedia (&Gbl.Test.Media,
+		  "TEST_MED_EDIT_LIST_STEM_CONTAINER",
+		  "TEST_MED_EDIT_LIST_STEM");
+
+   /* Write answers? */
+   if (ShowAnswers)
+     {
+      /* Get question code (row[0]) */
+      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+	 Lay_ShowErrorAndExit ("Error: wrong question code.");
+
+      /* Get answer type (row[1]) */
+      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
+
+      /* Write answers */
+      Tst_WriteAnswersGameResult (&Game,QstInd,QstCod,
+                                  "GAM_PLAY_QST",false);	// Don't show result
+     }
+   else
+      fprintf (Gbl.F.Out,"&nbsp;");
+
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** End container for question *****/
    fprintf (Gbl.F.Out,"</div>");
   }
 

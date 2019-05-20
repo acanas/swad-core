@@ -605,11 +605,15 @@ Assessment:
         452. ActReqRemSvyQst		Request the removal of a question of a survey
         453. ActRemSvyQst		Confirm the removal of a question of a survey
 
-        454. ActSeeGam		Show one game
-        455. ActStrGamTch			Start playing a game
-        456. ActGamTch1stQst		Show first question when playing a game
-        457. ActGamTchNxtQst		Show next question when playing a game
-        458. ActGamTchAns		Show answers of current question when playing a game
+        454. ActSeeGam			Show one game
+        455. ActStrGamTch		Start a game (by a teacher)
+        456. ActGamTch1stQst		Show first question when playing a game (by a teacher)
+        457. ActGamTchNxtQst		Show next question when playing a game (by a teacher)
+        458. ActGamTchAns		Show answers of current question when playing a game (by a teacher)
+
+        NEW. ActPlyGamStd		Play a game (by a student)
+        NEW. ActGamStdCurQst		Show current question when playing a game (by a student)
+
         459. ActAnsGam			Answer a game
         460. ActFrmNewGam		Form to create a new game
         461. ActEdiOneGam		Edit one game
@@ -2141,7 +2145,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActGamTchNxtQst	*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_GameTchNextQuestion	,NULL},
    /* ActGamTchAns	*/{1673,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_GameTchShowAnswers		,NULL},
 
-   /* ActPlyGamStd	*/{1779,-1,TabUnk,ActSeeAllGam		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_PlayGameStd		,NULL},
+   /* ActPlyGamStd	*/{1779,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_PlayGameStd		,NULL},
+   /* ActGamStdCurQst	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Gam_GameStdCurrentQuestion	,NULL},
 
    /* ActAnsGam		*/{1651,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ReceiveGameAnswers		,NULL},
    /* ActFrmNewGam	*/{1652,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
@@ -4865,7 +4870,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActStrGamTch,		// #1670
 	ActGamTch1stQst,	// #1671
 	ActGamTchNxtQst,	// #1672
-	ActGamTchAns,	// #1673
+	ActGamTchAns,		// #1673
 	ActSeePrj,		// #1674
 	ActFrmNewPrj,		// #1675
 	ActEdiOnePrj,		// #1676
@@ -4972,6 +4977,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActLckAllPrj,		// #1777
 	ActUnlAllPrj,		// #1778
 	ActPlyGamStd,		// #1779
+	ActGamStdCurQst,	// #1780
 	};
 
 /*****************************************************************************/
