@@ -452,6 +452,10 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
+	Version 18.123.1: May 22, 2019	Wait icon while a game has not started. (? lines)
+					Copy the following icon to icon public directory:
+sudo cp icon/wait.gif /var/www/html/swad/icon/
+
 	Version 18.123:   May 22, 2019	Game is refreshed automatically.
 					Code refactoring in actions related to AJAX refreshing. (242770 lines)
 	Version 18.122.5: May 20, 2019	Buttons for options in games. (242596 lines)

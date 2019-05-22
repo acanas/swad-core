@@ -2615,6 +2615,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:table;
 	margin:5%;
 	width:90%;
+	text-align:center;
+	}
+.GAM_PLAY_STD_WAIT
+	{
+	box-sizing:border-box;
+	width:50%;
+	margin:0 auto;
 	}
 .GAM_PLAY_STD_NUM_QST
 	{

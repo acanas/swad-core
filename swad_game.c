@@ -3401,7 +3401,7 @@ static void Gam_ShowQuestionBeingPlayed (void)
       ShowAnswers = (row[2][0] == 'Y');
      }
 
-   /***** Free structure that stores the query result *****/
+   /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Show question *****/
@@ -3452,6 +3452,14 @@ static void Gam_ShowQuestionBeingPlayed (void)
        }
 
       fprintf (Gbl.F.Out,"</div>");
+     }
+   else
+     {
+      fprintf (Gbl.F.Out,"<img src=\"%s/wait.gif\""
+			 " alt=\"Please wait\" title=\"%s\""
+			 " class=\"GAM_PLAY_STD_WAIT\" />",
+	       Cfg_URL_ICON_PUBLIC,
+	       "Por favor, espere a que el juego comience...");	// TODO: Need translation!!!!!
      }
   }
 
