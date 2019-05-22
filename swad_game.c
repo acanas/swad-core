@@ -167,6 +167,8 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
                                         long GamCod,unsigned QstInd);
 static void Gam_PutBigButtonToEnd (long GamCod);
 
+static void Gam_ShowQuestionBeingPlayed (void);
+
 static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod);
 static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
 static void Gam_RegisterIHaveAnsweredGame (long GamCod);
@@ -3169,20 +3171,20 @@ static void Gam_PlayGameShowQuestionAndAnswers (long GamCod,
 
    /***** Show question *****/
    /* Start container for number and question */
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_CONTAINER\">");
 
    /* Write number of question */
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_NUM_QST\">%u</div>",
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_NUM_QST\">%u</div>",
 	    QstInd + 1);
 
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_QST_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_QST_CONTAINER\">");
 
    /* Get question code (row[0]) */
    if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Lay_ShowErrorAndExit ("Error: wrong question code.");
 
    /* Write stem (row[2]) */
-   Tst_WriteQstStem (row[2],"GAM_PLAY_QST");
+   Tst_WriteQstStem (row[2],"GAM_PLAY_TCH_QST");
 
    /* Get media (row[3]) */
    Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -3201,15 +3203,13 @@ static void Gam_PlayGameShowQuestionAndAnswers (long GamCod,
 
       /* Write answers */
       Tst_WriteAnswersGameResult (&Game,QstInd,QstCod,
-                                  "GAM_PLAY_QST",false);	// Don't show result
+                                  "GAM_PLAY_TCH_QST",false);	// Don't show result
      }
-   else
-      fprintf (Gbl.F.Out,"&nbsp;");
 
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Put button to continue *****/
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_NXT_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_NXT_CONTAINER\">");
    if (ShowAnswers)
      {
       /* Get index of the next question */
@@ -3243,7 +3243,7 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
    extern const char *Txt_Continue;
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTINUE_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_CONTINUE_CONTAINER\">");
 
    /***** Start form *****/
    Frm_StartForm (NextAction);
@@ -3251,7 +3251,7 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
    Gam_PutParamQstInd (QstInd);
 
    /***** Put icon with link *****/
-   Frm_LinkFormSubmit (Txt_Continue,"GAM_PLAY_CONTINUE ICO_HIGHLIGHT",NULL);
+   Frm_LinkFormSubmit (Txt_Continue,"GAM_PLAY_TCH_CONTINUE ICO_HIGHLIGHT",NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/step-forward.svg\""
 	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
 	              "<br />"
@@ -3326,83 +3326,133 @@ void Gam_GameTchEnd (void)
   }
 
 /*****************************************************************************/
-/***** Show current question to a student when he/she is playing a game ******/
+/********************** Get code of game being played ************************/
 /*****************************************************************************/
 
-void Gam_GameStdCurrentQuestion (void)
+void Gam_GetGameBeingPlayed (void)
+  {
+   /***** Get game code ****/
+   if ((Gbl.Games.GamCodBeingPlayed = Gam_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+  }
+
+/*****************************************************************************/
+/********* Show game being played to me as student in a new window ***********/
+/*****************************************************************************/
+
+void Gam_ShowNewGameToMeAsStd (void)
+  {
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_STD_CONTAINER\">");
+   Gam_ShowQuestionBeingPlayed ();
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/*************** Refresh current game for a student via AJAX *****************/
+/*****************************************************************************/
+
+void Gam_RefreshCurrentGameStd (void)
+  {
+   if (Gbl.Session.IsOpen)	// If session has been closed, do not write anything
+      /***** Get and show current question *****/
+      Gam_ShowQuestionBeingPlayed ();
+  }
+
+/*****************************************************************************/
+/************ Show current question being played for a student ***************/
+/*****************************************************************************/
+
+static void Gam_ShowQuestionBeingPlayed (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   struct Game Game;
+   // struct Game Game;
    unsigned QstInd;
    long QstCod;
-   bool ShowAnswers = true;	// TODO: Get whether to show answers from a database table
+   bool GameIsPlaying;
+   bool ShowAnswers;
+   unsigned NumOptions;
+   unsigned NumOpt;
 
-   /***** Get parameters *****/
-   /* Get game code */
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
-
-   /* Get question index */
-   QstInd = Gam_GetParamQstInd ();	// TODO: Get current question from a database table
-
-   /***** Get data of question from database *****/
-   if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
-			"SELECT tst_questions.QstCod,"		// row[0]
-			       "tst_questions.AnsType,"		// row[1]
-			       "tst_questions.Stem,"		// row[2]
-			       "tst_questions.MedCod"		// row[3]
-			" FROM gam_questions,tst_questions"
-			" WHERE gam_questions.GamCod=%ld"
-			" AND gam_questions.QstInd=%u"
-			" AND gam_questions.QstCod=tst_questions.QstCod",
-			Game.GamCod,QstInd))
-      Ale_ShowAlert (Ale_ERROR,"Question doesn't exist.");
-   row = mysql_fetch_row (mysql_res);
-
-   /***** Show question *****/
-   /* Start container for number and question */
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
-
-   /* Write number of question */
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_NUM_QST\">%u</div>",
-	    QstInd + 1);
-
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_QST_CONTAINER\">");
-
-   /* Write stem (row[2]) */
-   Tst_WriteQstStem (row[2],"GAM_PLAY_QST");
-
-   /* Get media (row[3]) */
-   Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
-   Med_GetMediaDataByCod (&Gbl.Test.Media);
-
-   /* Show media */
-   Med_ShowMedia (&Gbl.Test.Media,
-		  "TEST_MED_EDIT_LIST_STEM_CONTAINER",
-		  "TEST_MED_EDIT_LIST_STEM");
-
-   /* Write answers? */
-   if (ShowAnswers)
+   /***** Get question being played from database *****/
+   GameIsPlaying = (DB_QuerySELECT (&mysql_res,"can not get question being played",
+				    "SELECT QstInd,"		// row[0]
+					   "QstCod,"		// row[1]
+					   "ShowingAnswers,"	// row[2]
+					   "GamStart,"		// row[3]
+					   "QstStart"		// row[4]
+				    " FROM gam_playing"
+				    " WHERE GamCod=%ld",
+				    Gbl.Games.GamCodBeingPlayed) != 0);
+   if (GameIsPlaying)
      {
-      /* Get question code (row[0]) */
-      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      /* Get row */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get question index (row[0]) */
+      if (sscanf (row[0],"%d",&QstInd) != 1)
+	 Lay_ShowErrorAndExit ("Error when getting question index.");
+
+      /* Get question code (row[1]) */
+      if ((QstCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
 	 Lay_ShowErrorAndExit ("Error: wrong question code.");
 
-      /* Get answer type (row[1]) */
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-
-      /* Write answers */
-      Tst_WriteAnswersGameResult (&Game,QstInd,QstCod,
-                                  "GAM_PLAY_QST",false);	// Don't show result
+      /* Get whether the answers are being shown (row[2]) */
+      ShowAnswers = (row[2][0] == 'Y');
      }
-   else
-      fprintf (Gbl.F.Out,"&nbsp;");
 
-   fprintf (Gbl.F.Out,"</div>");
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
 
-   /***** End container for question *****/
-   fprintf (Gbl.F.Out,"</div>");
+   /***** Show question *****/
+   if (GameIsPlaying)
+     {
+      /***** Show question *****/
+      /* Write number of question */
+      fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_NUM_QST\">%u</div>",
+	       QstInd + 1);
+
+      fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_QST_CONTAINER\">");
+
+      /* Write answers? */
+      if (ShowAnswers)
+       {
+	if (Tst_CheckIfQuestionIsValidForGame (QstCod))
+	  {
+	   /***** Start table *****/
+	   Tbl_StartTableWide (8);
+
+	   /***** Write answers *****/
+	   NumOptions = Tst_GetNumAnswersQst (QstCod);
+	   for (NumOpt = 0;
+	    	NumOpt < NumOptions;
+	    	NumOpt++)
+	     {
+	      // if (NumOpt % 2 == 0)
+		 fprintf (Gbl.F.Out,"<tr>");
+
+	      /***** Write letter for this option *****/
+	      fprintf (Gbl.F.Out,"<td class=\"GAM_PLAY_STD_CELL\">"
+				 "<div class=\"GAM_PLAY_STD_BUTTON BT_%c\">"
+	    	                 "%c"
+	    	                 "</div>"
+	    	                 "</td>",
+	    	       'A' + (char) NumOpt,
+	    	       'a' + (char) NumOpt);
+
+	      // if (NumOpt % 2 == 1)
+		 fprintf (Gbl.F.Out,"</tr>");
+	     }
+
+	   /***** End table *****/
+	   Tbl_EndTable ();
+	  }
+	else
+	   Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
+       }
+
+      fprintf (Gbl.F.Out,"</div>");
+     }
   }
 
 /*****************************************************************************/

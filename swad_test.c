@@ -3268,6 +3268,15 @@ void Tst_WriteParamEditQst (void)
 /*************** Get answers of a test question from database ****************/
 /*****************************************************************************/
 
+unsigned Tst_GetNumAnswersQst (long QstCod)
+  {
+   return (unsigned) DB_QueryCOUNT ("can not get number of answers of a question",
+			            "SELECT COUNT(*)"
+			            " FROM tst_answers"
+			            " WHERE QstCod=%ld",
+			            QstCod);
+  }
+
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
   {
    unsigned long NumRows;
@@ -3522,26 +3531,26 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
 void Tst_WriteAnswersGameResult (struct Game *Game,unsigned NumQst,long QstCod,
                                  const char *Class,bool ShowResult)
   {
-   /***** Write parameter with question code *****/
-   // Tst_WriteParamQstCod (NumQst,QstCod);
-
    /***** Write answer depending on type *****/
-   switch (Gbl.Test.AnswerType)
-     {
-      case Tst_ANS_INT:
-      case Tst_ANS_FLOAT:
-      case Tst_ANS_TRUE_FALSE:
-      case Tst_ANS_TEXT:
-         Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
-         break;
-      case Tst_ANS_UNIQUE_CHOICE:
-      case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsViewGame (Game,NumQst,QstCod,
-                                     Class,ShowResult);
-         break;
-      default:
-         break;
-     }
+   if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
+      Tst_WriteChoiceAnsViewGame (Game,NumQst,QstCod,
+                                  Class,ShowResult);
+   else
+      Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
+  }
+
+/*****************************************************************************/
+/***************** Check if a question is valid for a game *******************/
+/*****************************************************************************/
+
+bool Tst_CheckIfQuestionIsValidForGame (long QstCod)
+  {
+   /***** Check if a question is valid for a game from database *****/
+   return DB_QueryCOUNT ("can not check type of a question",
+			 "SELECT COUNT(*)"
+			 " FROM tst_questions"
+			 " WHERE QstCod=%ld AND AnsType='%s'",
+			 QstCod,Tst_StrAnswerTypesDB[Tst_ANS_UNIQUE_CHOICE]) != 0;
   }
 
 /*****************************************************************************/
@@ -4098,15 +4107,22 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
       Gbl.Test.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
       Med_GetMediaDataByCod (&Gbl.Test.Answer.Options[NumOpt].Media);
 
-      /***** Write letter of this option *****/
+      /***** Write letter for this option *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"CENTER_MIDDLE\">"
-                         "<button class=\"BT_GAME BT_%c\">"
-	                 "%c"
-	                 "</button>"
-	                 "</td>",
-	       'A' + (char) NumOpt,
-	       'a' + (char) NumOpt);
+                         "<div class=\"");
+      if (ShowResult)
+	 fprintf (Gbl.F.Out,"%s\">"
+	                    "%c)&nbsp;",
+	          Class,
+                  'a' + (char) NumOpt);
+      else
+	 fprintf (Gbl.F.Out,"GAM_PLAY_TCH_BUTTON BT_%c\">"
+	                    "%c",
+	          'A' + (char) NumOpt,
+	          'a' + (char) NumOpt);
+      fprintf (Gbl.F.Out,"</div>"
+	                 "</td>");
 
       /***** Write the option text *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"

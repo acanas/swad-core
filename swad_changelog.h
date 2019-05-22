@@ -448,10 +448,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.122.5 (2019-05-20)"
-#define CSS_FILE		"swad18.122.5.css"
-#define JS_FILE			"swad18.116.5.js"
+#define Log_PLATFORM_VERSION	"SWAD 18.123 (2019-05-22)"
+#define CSS_FILE		"swad18.123.css"
+#define JS_FILE			"swad18.123.js"
 /*
+	Version 18.123:   May 22, 2019	Game is refreshed automatically.
+					Code refactoring in actions related to AJAX refreshing. (242770 lines)
 	Version 18.122.5: May 20, 2019	Buttons for options in games. (242596 lines)
 	Version 18.122.4: May 20, 2019	Changes in buttons. (242563 lines)
 	Version 18.122.3: May 20, 2019	Changes in games. (242558 lines)

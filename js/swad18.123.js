@@ -4,7 +4,7 @@
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
-    Copyright (C) 1999-2019 Antonio Cañas-Vargas
+    Copyright (C) 1999-2019 Antonio Caï¿½as-Vargas
     University of Granada (SPAIN) (acanas@ugr.es)
 
     This program is free software: you can redistribute it and/or modify
@@ -513,6 +513,40 @@ function readConnUsrsData () {
 }
 
 /*****************************************************************************/
+/*********** Automatic refresh of current game question using AJAX ***********/
+/*****************************************************************************/
+
+//  This function must be called from time to time
+var objXMLHttpReqGam = false;
+function refreshGame () {
+	objXMLHttpReqGam = AJAXCreateObject();
+	if (objXMLHttpReqGam) {
+		var RefreshParams = RefreshParamNxtActGam + '&' +
+							RefreshParamGamCod + '&' +
+							RefreshParamIdSes;
+
+		objXMLHttpReqGam.onreadystatechange = readGameData;	// onreadystatechange must be lowercase
+		objXMLHttpReqGam.open('POST',ActionAJAX,true);
+		objXMLHttpReqGam.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		objXMLHttpReqGam.send(RefreshParams);
+	}
+}
+
+function readGameData () {
+	if (objXMLHttpReqGam.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqGam.status == 200) {
+			var htmlGame = objXMLHttpReqGam.responseText;	// Get HTML code for last clicks
+
+			var divGame = document.getElementById('game');	// Access to game DIV
+			if (divGame)
+				divGame.innerHTML = htmlGame;				// Update game DIV
+			// Global delay variable is set initially in swad-core
+			setTimeout('refreshGame()',delayGame);
+		}
+	}
+}
+
+/*****************************************************************************/
 /**************** Automatic refresh of last clicks using AJAX ****************/
 /*****************************************************************************/
 
@@ -521,13 +555,13 @@ var objXMLHttpReqLog = false;
 function refreshLastClicks () {
 	objXMLHttpReqLog = AJAXCreateObject();
 	if (objXMLHttpReqLog) {
-		var RefreshParams = RefreshParamNxtActLog + '&' +
+		var RefreshParams = RefreshParamNxtActLstClk + '&' +
 							RefreshParamIdSes + '&' +
 							RefreshParamCrsCod;
 
 		objXMLHttpReqLog.onreadystatechange = readLastClicksData;	// onreadystatechange must be lowercase
 		objXMLHttpReqLog.open('POST',ActionAJAX,true);
-		objXMLHttpReqLog.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqLog.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttpReqLog.send(RefreshParams);
 	}
 }
@@ -564,7 +598,7 @@ function refreshNewTimeline () {
 
 		objXMLHttpReqNewTL.onreadystatechange = readNewTimelineData;	// onreadystatechange must be lowercase
 		objXMLHttpReqNewTL.open('POST',ActionAJAX,true);
-		objXMLHttpReqNewTL.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		objXMLHttpReqNewTL.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		objXMLHttpReqNewTL.send(RefreshParams);
 	}
 }

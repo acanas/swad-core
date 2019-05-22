@@ -64,9 +64,9 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 8 + 61 + 38 + 12 + 42 + 36 + 19 + 110 + 166 + 437 + 176 + 169 + 15 + 67)
+#define Act_NUM_ACTIONS	(1 + 4 + 64 + 38 + 12 + 42 + 36 + 19 + 110 + 167 + 437 + 176 + 169 + 16 + 67)
 
-#define Act_MAX_ACTION_COD 1781
+#define Act_MAX_ACTION_COD 1782
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 13
 
@@ -78,14 +78,9 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActUnk			 1
 #define ActMnu			 2
 
-// The following 5 actions use AJAX to refresh only a part of the page
 #define ActRefCon		 3
-#define ActRefLstClk		 4
-#define ActRefNewSocPubGbl	 5
-#define ActRefOldSocPubGbl	 6
-#define ActRefOldSocPubUsr	 7
 
-#define ActWebSvc		 8
+#define ActWebSvc		 4
 
 /*****************************************************************************/
 /********************************* Start tab *********************************/
@@ -109,59 +104,62 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 
 #define ActSch			(ActWebSvc +  14)
 
-#define ActRcvSocPstGbl		(ActWebSvc +  15)
-#define ActRcvSocComGbl		(ActWebSvc +  16)
-#define ActAllShaSocNotGbl	(ActWebSvc +  17)
-#define ActAllFavSocNotGbl	(ActWebSvc +  18)
-#define ActAllFavSocComGbl	(ActWebSvc +  19)
-#define ActShaSocNotGbl		(ActWebSvc +  20)
-#define ActUnsSocNotGbl		(ActWebSvc +  21)
-#define ActFavSocNotGbl		(ActWebSvc +  22)
-#define ActUnfSocNotGbl		(ActWebSvc +  23)
-#define ActFavSocComGbl		(ActWebSvc +  24)
-#define ActUnfSocComGbl		(ActWebSvc +  25)
-#define ActReqRemSocPubGbl	(ActWebSvc +  26)
-#define ActRemSocPubGbl		(ActWebSvc +  27)
-#define ActReqRemSocComGbl	(ActWebSvc +  28)
-#define ActRemSocComGbl		(ActWebSvc +  29)
+#define ActRefNewSocPubGbl	(ActWebSvc +  15)
+#define ActRefOldSocPubGbl	(ActWebSvc +  16)
+#define ActRcvSocPstGbl		(ActWebSvc +  17)
+#define ActRcvSocComGbl		(ActWebSvc +  18)
+#define ActAllShaSocNotGbl	(ActWebSvc +  19)
+#define ActAllFavSocNotGbl	(ActWebSvc +  20)
+#define ActAllFavSocComGbl	(ActWebSvc +  21)
+#define ActShaSocNotGbl		(ActWebSvc +  22)
+#define ActUnsSocNotGbl		(ActWebSvc +  23)
+#define ActFavSocNotGbl		(ActWebSvc +  24)
+#define ActUnfSocNotGbl		(ActWebSvc +  25)
+#define ActFavSocComGbl		(ActWebSvc +  26)
+#define ActUnfSocComGbl		(ActWebSvc +  27)
+#define ActReqRemSocPubGbl	(ActWebSvc +  28)
+#define ActRemSocPubGbl		(ActWebSvc +  29)
+#define ActReqRemSocComGbl	(ActWebSvc +  30)
+#define ActRemSocComGbl		(ActWebSvc +  31)
 
-#define ActReqOthPubPrf		(ActWebSvc +  30)
+#define ActReqOthPubPrf		(ActWebSvc +  32)
 
-#define ActRcvSocPstUsr		(ActWebSvc +  31)
-#define ActRcvSocComUsr		(ActWebSvc +  32)
-#define ActAllShaSocNotUsr	(ActWebSvc +  33)
-#define ActAllFavSocNotUsr	(ActWebSvc +  34)
-#define ActAllFavSocComUsr	(ActWebSvc +  35)
-#define ActShaSocNotUsr		(ActWebSvc +  36)
-#define ActUnsSocNotUsr		(ActWebSvc +  37)
-#define ActFavSocNotUsr		(ActWebSvc +  38)
-#define ActUnfSocNotUsr		(ActWebSvc +  39)
-#define ActFavSocComUsr		(ActWebSvc +  40)
-#define ActUnfSocComUsr		(ActWebSvc +  41)
-#define ActReqRemSocPubUsr	(ActWebSvc +  42)
-#define ActRemSocPubUsr		(ActWebSvc +  43)
-#define ActReqRemSocComUsr	(ActWebSvc +  44)
-#define ActRemSocComUsr		(ActWebSvc +  45)
+#define ActRefOldSocPubUsr	(ActWebSvc +  33)
+#define ActRcvSocPstUsr		(ActWebSvc +  34)
+#define ActRcvSocComUsr		(ActWebSvc +  35)
+#define ActAllShaSocNotUsr	(ActWebSvc +  36)
+#define ActAllFavSocNotUsr	(ActWebSvc +  37)
+#define ActAllFavSocComUsr	(ActWebSvc +  38)
+#define ActShaSocNotUsr		(ActWebSvc +  39)
+#define ActUnsSocNotUsr		(ActWebSvc +  40)
+#define ActFavSocNotUsr		(ActWebSvc +  41)
+#define ActUnfSocNotUsr		(ActWebSvc +  42)
+#define ActFavSocComUsr		(ActWebSvc +  43)
+#define ActUnfSocComUsr		(ActWebSvc +  44)
+#define ActReqRemSocPubUsr	(ActWebSvc +  45)
+#define ActRemSocPubUsr		(ActWebSvc +  46)
+#define ActReqRemSocComUsr	(ActWebSvc +  47)
+#define ActRemSocComUsr		(ActWebSvc +  48)
 
-#define ActSeeOthPubPrf		(ActWebSvc +  46)
-#define ActCalFig		(ActWebSvc +  47)
+#define ActSeeOthPubPrf		(ActWebSvc +  49)
+#define ActCalFig		(ActWebSvc +  50)
 
-#define ActFolUsr		(ActWebSvc +  48)
-#define ActUnfUsr		(ActWebSvc +  49)
-#define ActSeeFlg		(ActWebSvc +  50)
-#define ActSeeFlr		(ActWebSvc +  51)
+#define ActFolUsr		(ActWebSvc +  51)
+#define ActUnfUsr		(ActWebSvc +  52)
+#define ActSeeFlg		(ActWebSvc +  53)
+#define ActSeeFlr		(ActWebSvc +  54)
 
-#define ActPrnCal		(ActWebSvc +  52)
-#define ActChgCal1stDay		(ActWebSvc +  53)
+#define ActPrnCal		(ActWebSvc +  55)
+#define ActChgCal1stDay		(ActWebSvc +  56)
 
-#define ActSeeNewNtf		(ActWebSvc +  54)
-#define ActMrkNtfSee		(ActWebSvc +  55)
-#define ActSeeMai		(ActWebSvc +  56)
-#define ActEdiMai		(ActWebSvc +  57)
-#define ActNewMai		(ActWebSvc +  58)
-#define ActRemMai		(ActWebSvc +  59)
-#define ActRenMaiSho		(ActWebSvc +  60)
-#define ActRenMaiFul		(ActWebSvc +  61)
+#define ActSeeNewNtf		(ActWebSvc +  57)
+#define ActMrkNtfSee		(ActWebSvc +  58)
+#define ActSeeMai		(ActWebSvc +  59)
+#define ActEdiMai		(ActWebSvc +  60)
+#define ActNewMai		(ActWebSvc +  61)
+#define ActRemMai		(ActWebSvc +  62)
+#define ActRenMaiSho		(ActWebSvc +  63)
+#define ActRenMaiFul		(ActWebSvc +  64)
 
 /*****************************************************************************/
 /******************************** System tab *********************************/
@@ -616,51 +614,52 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActGamTchAns		(ActChgCrsTT1stDay + 121)
 #define ActPlyGamStd		(ActChgCrsTT1stDay + 122)
 #define ActGamStdCurQst		(ActChgCrsTT1stDay + 123)
-#define ActAnsGam		(ActChgCrsTT1stDay + 124)
-#define ActFrmNewGam		(ActChgCrsTT1stDay + 125)
-#define ActEdiOneGam		(ActChgCrsTT1stDay + 126)
-#define ActNewGam		(ActChgCrsTT1stDay + 127)
-#define ActChgGam		(ActChgCrsTT1stDay + 128)
-#define ActReqRemGam		(ActChgCrsTT1stDay + 129)
-#define ActRemGam		(ActChgCrsTT1stDay + 130)
-#define ActReqRstGam		(ActChgCrsTT1stDay + 131)
-#define ActRstGam		(ActChgCrsTT1stDay + 132)
-#define ActHidGam		(ActChgCrsTT1stDay + 133)
-#define ActShoGam		(ActChgCrsTT1stDay + 134)
-#define ActAddOneGamQst		(ActChgCrsTT1stDay + 135)
-#define ActGamLstTstQst		(ActChgCrsTT1stDay + 136)
-#define ActAddTstQstToGam	(ActChgCrsTT1stDay + 137)
-#define ActReqRemGamQst		(ActChgCrsTT1stDay + 138)
-#define ActRemGamQst		(ActChgCrsTT1stDay + 139)
-#define ActUp_GamQst		(ActChgCrsTT1stDay + 140)
-#define ActDwnGamQst		(ActChgCrsTT1stDay + 141)
+#define ActRefGamStd		(ActChgCrsTT1stDay + 124)
+#define ActAnsGam		(ActChgCrsTT1stDay + 125)
+#define ActFrmNewGam		(ActChgCrsTT1stDay + 126)
+#define ActEdiOneGam		(ActChgCrsTT1stDay + 127)
+#define ActNewGam		(ActChgCrsTT1stDay + 128)
+#define ActChgGam		(ActChgCrsTT1stDay + 129)
+#define ActReqRemGam		(ActChgCrsTT1stDay + 130)
+#define ActRemGam		(ActChgCrsTT1stDay + 131)
+#define ActReqRstGam		(ActChgCrsTT1stDay + 132)
+#define ActRstGam		(ActChgCrsTT1stDay + 133)
+#define ActHidGam		(ActChgCrsTT1stDay + 134)
+#define ActShoGam		(ActChgCrsTT1stDay + 135)
+#define ActAddOneGamQst		(ActChgCrsTT1stDay + 136)
+#define ActGamLstTstQst		(ActChgCrsTT1stDay + 137)
+#define ActAddTstQstToGam	(ActChgCrsTT1stDay + 138)
+#define ActReqRemGamQst		(ActChgCrsTT1stDay + 139)
+#define ActRemGamQst		(ActChgCrsTT1stDay + 140)
+#define ActUp_GamQst		(ActChgCrsTT1stDay + 141)
+#define ActDwnGamQst		(ActChgCrsTT1stDay + 142)
 
-#define ActSeeSvy		(ActChgCrsTT1stDay + 142)
-#define ActAnsSvy		(ActChgCrsTT1stDay + 143)
-#define ActFrmNewSvy		(ActChgCrsTT1stDay + 144)
-#define ActEdiOneSvy		(ActChgCrsTT1stDay + 145)
-#define ActNewSvy		(ActChgCrsTT1stDay + 146)
-#define ActChgSvy		(ActChgCrsTT1stDay + 147)
-#define ActReqRemSvy		(ActChgCrsTT1stDay + 148)
-#define ActRemSvy		(ActChgCrsTT1stDay + 149)
-#define ActReqRstSvy		(ActChgCrsTT1stDay + 150)
-#define ActRstSvy		(ActChgCrsTT1stDay + 151)
-#define ActHidSvy		(ActChgCrsTT1stDay + 152)
-#define ActShoSvy		(ActChgCrsTT1stDay + 153)
-#define ActEdiOneSvyQst		(ActChgCrsTT1stDay + 154)
-#define ActRcvSvyQst		(ActChgCrsTT1stDay + 155)
-#define ActReqRemSvyQst		(ActChgCrsTT1stDay + 156)
-#define ActRemSvyQst		(ActChgCrsTT1stDay + 157)
+#define ActSeeSvy		(ActChgCrsTT1stDay + 143)
+#define ActAnsSvy		(ActChgCrsTT1stDay + 144)
+#define ActFrmNewSvy		(ActChgCrsTT1stDay + 145)
+#define ActEdiOneSvy		(ActChgCrsTT1stDay + 146)
+#define ActNewSvy		(ActChgCrsTT1stDay + 147)
+#define ActChgSvy		(ActChgCrsTT1stDay + 148)
+#define ActReqRemSvy		(ActChgCrsTT1stDay + 149)
+#define ActRemSvy		(ActChgCrsTT1stDay + 150)
+#define ActReqRstSvy		(ActChgCrsTT1stDay + 151)
+#define ActRstSvy		(ActChgCrsTT1stDay + 152)
+#define ActHidSvy		(ActChgCrsTT1stDay + 153)
+#define ActShoSvy		(ActChgCrsTT1stDay + 154)
+#define ActEdiOneSvyQst		(ActChgCrsTT1stDay + 155)
+#define ActRcvSvyQst		(ActChgCrsTT1stDay + 156)
+#define ActReqRemSvyQst		(ActChgCrsTT1stDay + 157)
+#define ActRemSvyQst		(ActChgCrsTT1stDay + 158)
 
-#define ActSeeOneExaAnn		(ActChgCrsTT1stDay + 158)
-#define ActSeeDatExaAnn		(ActChgCrsTT1stDay + 159)
-#define ActEdiExaAnn		(ActChgCrsTT1stDay + 160)
-#define ActRcvExaAnn		(ActChgCrsTT1stDay + 161)
-#define ActPrnExaAnn		(ActChgCrsTT1stDay + 162)
-#define ActReqRemExaAnn		(ActChgCrsTT1stDay + 163)
-#define ActRemExaAnn		(ActChgCrsTT1stDay + 164)
-#define ActHidExaAnn		(ActChgCrsTT1stDay + 165)
-#define ActShoExaAnn		(ActChgCrsTT1stDay + 166)
+#define ActSeeOneExaAnn		(ActChgCrsTT1stDay + 159)
+#define ActSeeDatExaAnn		(ActChgCrsTT1stDay + 160)
+#define ActEdiExaAnn		(ActChgCrsTT1stDay + 161)
+#define ActRcvExaAnn		(ActChgCrsTT1stDay + 162)
+#define ActPrnExaAnn		(ActChgCrsTT1stDay + 163)
+#define ActReqRemExaAnn		(ActChgCrsTT1stDay + 164)
+#define ActRemExaAnn		(ActChgCrsTT1stDay + 165)
+#define ActHidExaAnn		(ActChgCrsTT1stDay + 166)
+#define ActShoExaAnn		(ActChgCrsTT1stDay + 167)
 
 /*****************************************************************************/
 /******************************** Files tab **********************************/
@@ -1537,8 +1536,9 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActSeeAllStaCrs		(ActMaiUsr + 13)
 
 #define ActLstClk		(ActMaiUsr + 14)
+#define ActRefLstClk		(ActMaiUsr + 15)
 
-#define ActSeeMyUsgRep		(ActMaiUsr + 15)
+#define ActSeeMyUsgRep		(ActMaiUsr + 16)
 
 /*****************************************************************************/
 /******************************** Profile tab ********************************/

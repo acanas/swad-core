@@ -127,7 +127,9 @@ void Gam_GameTchNextQuestion (void);
 void Gam_GameTchShowAnswers (void);
 void Gam_GameTchEnd (void);
 
-void Gam_GameStdCurrentQuestion (void);
+void Gam_GetGameBeingPlayed (void);
+void Gam_ShowNewGameToMeAsStd (void);
+void Gam_RefreshCurrentGameStd (void);
 
 unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);
 unsigned Gam_GetNumGames (Hie_Level_t Scope);

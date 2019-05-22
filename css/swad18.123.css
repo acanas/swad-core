@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2019 Antonio Cañas Vargas
+    Copyright (C) 1999-2019 Antonio CaÃ±as Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -1459,38 +1459,6 @@ a:hover						/* Default ==> underlined */
 	background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));
 	}
 
-.BT_A	{background-color:#e21c3d; border-color:#a9152d;} /* red */
-.BT_B	{background-color:#1369ce; border-color:#0e519c;} /* blue */
-.BT_C	{background-color:#d89e00; border-color:#a27600;} /* yellow */
-.BT_D	{background-color:#2b9010; border-color:#206c0c;} /* green */
-.BT_E	{background-color:#e30087; border-color:#aa0064;} /* pink */
-.BT_F	{background-color:#00b5e9; border-color:#0089b0;} /* light blue */
-.BT_G	{background-color:#f58700; border-color:#b86400;} /* orange */
-.BT_H	{background-color:#b3d00a; border-color:#869d07;} /* light green */
-.BT_I	{background-color:#642075; border-color:#4b1858;} /* purple */
-.BT_J	{background-color:#f5e800; border-color:#b8ad00;} /* light yellow */
-.BT_GAME
-	{
-	box-sizing:border-box;
-	width:64px;
-	margin:8px;
-	padding:8px;
-	border-radius:4px;
-	border-width:1px;
-	border-style:solid;
-	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
-	color:white;
-	font-size:36px;
-	font-weight:bold;
-	line-height:normal;
-	white-space:nowrap;
-	}
-.BT_GAME:hover
-	{
-	background-image:-webkit-linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));	/* Safari */
-	background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));
-	}
-
 /********************************** Notice ***********************************/
 .NOTICE_HIGHLIGHT
 	{
@@ -2133,13 +2101,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 .NOWRAP	{white-space:nowrap;}
 
 /****************************** Placing of objects ***************************/
-.LEFT_TOP		{text-align:left; vertical-align:top;}
+.LEFT_TOP	{text-align:left; vertical-align:top;}
 .LEFT_MIDDLE	{text-align:left; vertical-align:middle;}
 .LEFT_BOTTOM	{text-align:left; vertical-align:bottom;}
-.CENTER_TOP		{text-align:center; vertical-align:top;}
+.CENTER_TOP	{text-align:center; vertical-align:top;}
 .CENTER_MIDDLE	{text-align:center; vertical-align:middle;}
 .CENTER_BOTTOM	{text-align:center; vertical-align:bottom;}
-.RIGHT_TOP		{text-align:right; vertical-align:top;}
+.RIGHT_TOP	{text-align:right; vertical-align:top;}
 .RIGHT_MIDDLE	{text-align:right; vertical-align:middle;}
 .RIGHT_BOTTOM	{text-align:right; vertical-align:bottom;}
 
@@ -2596,53 +2564,131 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /********************************** Games ************************************/
-.GAM_PLAY_CONTAINER
+.GAM_PLAY_TCH_CONTAINER
 	{
 	box-sizing:border-box;
 	display:table;
 	margin:5%;
 	width:90%;
 	}
-.GAM_PLAY_NUM_QST
+.GAM_PLAY_TCH_NUM_QST
 	{
-	width:10%;
+	width:15%;
 	float:left;
-	/* position:relative; */
 	padding-bottom:24pt;
 	color:#808080;
 	font-size:48pt;
 	font-weight:bold;
 	}
-.GAM_PLAY_QST_CONTAINER
+.GAM_PLAY_TCH_QST_CONTAINER
 	{
-	width:80%;
+	width:70%;
 	float:left;
-	/* position:relative; */
 	}
-.GAM_PLAY_NXT_CONTAINER
+.GAM_PLAY_TCH_NXT_CONTAINER
 	{
-	width:10%;
+	width:15%;
 	float:left;
-	/* position:relative; */
 	}
-.GAM_PLAY_QST
+.GAM_PLAY_TCH_QST
 	{
 	color:#202020;
 	font-size:24pt;
 	}
-.GAM_PLAY_CONTINUE_CONTAINER
+.GAM_PLAY_TCH_CONTINUE_CONTAINER
 	{
 	clear:all;
 	text-align:center;
 	}
-.GAM_PLAY_CONTINUE_CONTAINER a
+.GAM_PLAY_TCH_CONTINUE_CONTAINER a
 	{
 	text-decoration:none;
 	}
-.GAM_PLAY_CONTINUE
+.GAM_PLAY_TCH_CONTINUE
 	{
 	font-size:16pt;
 	}
+
+.GAM_PLAY_STD_CONTAINER
+	{
+	box-sizing:border-box;
+	display:table;
+	margin:5%;
+	width:90%;
+	}
+.GAM_PLAY_STD_NUM_QST
+	{
+	width:15%;
+	float:left;
+	padding-bottom:24pt;
+	color:#808080;
+	font-size:48pt;
+	font-weight:bold;
+	}
+.GAM_PLAY_STD_QST_CONTAINER
+	{
+	width:85%;
+	float:left;
+	}
+.GAM_PLAY_STD_QST
+	{
+	color:#202020;
+	font-size:24pt;
+	}
+
+.GAM_PLAY_TCH_BUTTON
+	{
+	box-sizing:border-box;
+	width:64px;
+	margin:8px;
+	padding:8px;
+	border-radius:4px;
+	border-width:1px;
+	border-style:solid;
+	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
+	color:white;
+	font-size:36pt;
+	font-weight:bold;
+	line-height:normal;
+	white-space:nowrap;
+	}
+.GAM_PLAY_STD_CELL
+	{
+	text-align:center;
+	vertical-align:middle;
+	}
+.GAM_PLAY_STD_BUTTON
+	{
+	box-sizing:border-box;
+	width:80%;
+	margin:10px auto;
+	padding:20px;
+	border-radius:4px;
+	border-width:1px;
+	border-style:solid;
+	box-shadow:0 1px 0 rgba(255,255,255,0.15) inset;
+	color:white;
+	font-size:44pt;
+	font-weight:bold;
+	line-height:normal;
+	white-space:nowrap;
+	}
+.GAM_PLAY_TCH_BUTTON:hover, .GAM_PLAY_STD_BUTTON:hover
+	{
+	background-image:-webkit-linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));	/* Safari */
+	background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));
+	}
+
+.BT_A	{background-color:#e21c3d; border-color:#a9152d;} /* red */
+.BT_B	{background-color:#1369ce; border-color:#0e519c;} /* blue */
+.BT_C	{background-color:#d89e00; border-color:#a27600;} /* yellow */
+.BT_D	{background-color:#2b9010; border-color:#206c0c;} /* green */
+.BT_E	{background-color:#e30087; border-color:#aa0064;} /* pink */
+.BT_F	{background-color:#00b5e9; border-color:#0089b0;} /* light blue */
+.BT_G	{background-color:#f58700; border-color:#b86400;} /* orange */
+.BT_H	{background-color:#b3d00a; border-color:#869d07;} /* light green */
+.BT_I	{background-color:#642075; border-color:#4b1858;} /* purple */
+.BT_J	{background-color:#f5e800; border-color:#b8ad00;} /* light yellow */
 
 /******************************* Time table **********************************/
 #timetable

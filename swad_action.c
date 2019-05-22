@@ -93,10 +93,6 @@ extern struct Globals Gbl;
 	  1. ActUnk			Unknown action
 	  2. ActMnu			Show menu of a tab
 	  3. ActRefCon			Refresh number of notifications and connected users via AJAX
-	  4. ActRefLstClk		Refresh last clicks in log via AJAX
-	  5. ActRefNewSocPubGbl		Refresh recent social timeline via AJAX
-	  6. ActRefOldSocPubGbl		View old social timeline with users I follow via AJAX
-	  7. ActRefOldSocPubUsr		View old social timeline of a user via AJAX
 	  8. ActWebSvc			Call plugin function
 
 Start:
@@ -117,6 +113,8 @@ Start:
 
 	 22. ActSch			Search for courses, teachers, documents...
 
+	  5. ActRefNewSocPubGbl		Refresh recent social timeline via AJAX
+	  6. ActRefOldSocPubGbl		View old social timeline with users I follow via AJAX
          23. ActRcvSocPstGbl		Receive a public social post to be displayed in the timeline (global)
          24. ActRcvSocComGbl		Comment a social note in the timeline (global)
          25. ActAllShaSocNotGbl		Show all users who have shared a note in the timeline (global)
@@ -135,6 +133,7 @@ Start:
 
          38. ActReqOthPubPrf		Request @nickname to show a public user's profile
 
+	  7. ActRefOldSocPubUsr		View old social timeline of a user via AJAX
          39. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
          40. ActRcvSocComUsr		Comment a social note in the timeline (user)
          41. ActAllShaSocNotUsr		Show all users who have shared a note in the timeline (user)
@@ -614,6 +613,7 @@ Assessment:
 
         NEW. ActPlyGamStd		Play a game (by a student)
         NEW. ActGamStdCurQst		Show current question when playing a game (by a student)
+        NEW. ActRefGamStd		Refresh current question when playing a game (by a student)
 
         459. ActAnsGam			Answer a game
         460. ActFrmNewGam		Form to create a new game
@@ -1504,7 +1504,8 @@ Statistics:
        1279. ActSeeAccCrs		Query clicks to current course
        1280. ActSeeAllStaCrs		Show statistics of courses
 
-       1281. ActLstClk			List last clicks in real time
+       1281. ActLstClk			List last clicks
+	  4. ActRefLstClk		Refresh last clicks in real time via AJAX
 
        1282. ActSeeMyUsgRep		Show my usage report
 
@@ -1618,10 +1619,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActUnk		*/{ 194,-1,TabUnk,ActUnk		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,NULL				,NULL},
    /* ActMnu		*/{   2,-1,TabUnk,ActMnu		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,NULL				,NULL},
    /* ActRefCon		*/{ 845,-1,TabUnk,ActRefCon		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_AJAX_RFRESH,NULL				,Lay_RefreshNotifsAndConnected	,NULL},
-   /* ActRefLstClk	*/{ 994,-1,TabUnk,ActRefLstClk		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_AJAX_RFRESH,NULL				,Lay_RefreshLastClicks		,NULL},
-   /* ActRefNewSocPubGbl*/{1509,-1,TabUnk,ActRefNewSocPubGbl	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_AJAX_RFRESH,NULL				,TL_RefreshNewTimelineGbl	,NULL},
-   /* ActRefOldSocPubGbl*/{1510,-1,TabUnk,ActRefOldSocPubGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_RefreshOldTimelineGbl	,NULL},
-   /* ActRefOldSocPubUsr*/{1511,-1,TabUnk,ActRefOldSocPubUsr	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_RefreshOldTimelineUsr	,NULL},
    /* ActWebSvc		*/{ 892,-1,TabUnk,ActWebSvc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_WEB_SERVICE,NULL				,API_WebService			,NULL},
 
    // TabStr ******************************************************************
@@ -1642,6 +1639,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActSch		*/{ 628,-1,TabUnk,ActReqSch		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,Sch_GetParamsSearch		,Sch_SysSearch			,NULL},
 
+   /* ActRefNewSocPubGbl*/{1509,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_AJAX_RFRESH,NULL				,TL_RefreshNewTimelineGbl	,NULL},
+   /* ActRefOldSocPubGbl*/{1510,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_RefreshOldTimelineGbl	,NULL},
    /* ActRcvSocPstGbl	*/{1492,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TL_ShowTimelineGbl1		,TL_ReceivePostGbl		,NULL},
    /* ActRcvSocComGbl	*/{1503,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,TL_ShowTimelineGbl1		,TL_ReceiveCommentGbl		,NULL},
    /* ActAllShaSocNotGbl*/{1766,-1,TabUnk,ActSeeSocTmlGbl	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_ShowAllSharersNoteGbl	,NULL},
@@ -1660,6 +1659,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActReqOthPubPrf	*/{1401,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prf_RequestUserProfile		,NULL},
 
+   /* ActRefOldSocPubUsr*/{1511,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_RefreshOldTimelineUsr	,NULL},
    /* ActRcvSocPstUsr	*/{1498,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,TL_ReceivePostUsr		,NULL},
    /* ActRcvSocComUsr	*/{1504,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_DATA,Act_BRW_1ST_TAB,NULL				,TL_ReceiveCommentUsr		,NULL},
    /* ActAllShaSocNotUsr*/{1769,-1,TabUnk,ActSeeSocPrf		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,TL_ShowAllSharersNoteUsr	,NULL},
@@ -2148,7 +2148,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActGamTchEnd	*/{1781,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_GameTchEnd			,NULL},
 
    /* ActPlyGamStd	*/{1779,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_PlayGameStd		,NULL},
-   /* ActGamStdCurQst	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Gam_GameStdCurrentQuestion	,NULL},
+   /* ActGamStdCurQst	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_GetGameBeingPlayed		,Gam_ShowNewGameToMeAsStd	,NULL},
+   /* ActRefGamStd	*/{1782,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Gam_GetGameBeingPlayed		,Gam_RefreshCurrentGameStd	,NULL},
 
    /* ActAnsGam		*/{1651,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ReceiveGameAnswers		,NULL},
    /* ActFrmNewGam	*/{1652,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
@@ -3107,6 +3108,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeAllStaCrs	*/{ 768,-1,TabUnk,ActReqAccGbl		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Ind_ShowIndicatorsCourses	,NULL},
 
    /* ActLstClk		*/{ 989,-1,TabUnk,ActReqAccGbl		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Sta_ShowLastClicks		,NULL},
+   /* ActRefLstClk	*/{ 994,-1,TabUnk,ActRefLstClk		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_AJAX_RFRESH,NULL				,Lay_RefreshLastClicks		,NULL},
 
    /* ActSeeMyUsgRep	*/{1582,-1,TabUnk,ActReqMyUsgRep	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Rep_ShowMyUsageReport		,NULL},
 
@@ -4981,6 +4983,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActPlyGamStd,		// #1779
 	ActGamStdCurQst,	// #1780
 	ActGamTchEnd,		// #1781
+	ActRefGamStd,		// #1782
 	};
 
 /*****************************************************************************/

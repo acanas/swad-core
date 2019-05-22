@@ -117,6 +117,7 @@ void Lay_WriteStartOfPage (void)
       "main_horizontal",	// Mnu_MENU_HORIZONTAL
       "main_vertical",		// Mnu_MENU_VERTICAL
      };
+   Act_BrowserTab_t BrowserTab;
 
    /***** If, when this function is called, the head is being written
           or the head is already written ==> don't do anything *****/
@@ -252,23 +253,32 @@ void Lay_WriteStartOfPage (void)
    fprintf (Gbl.F.Out,"</head>\n");
 
    /***** HTML body *****/
-   if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
-      fprintf (Gbl.F.Out,"<body onload=\"init();\">\n"
-                         "<div id=\"zoomLyr\" class=\"ZOOM\">"
-                         "<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
-                         " alt=\"\" title=\"\""
-                         " class=\"IMG_USR\" />"
-                         "<div id=\"zoomTxt\" class=\"CENTER_MIDDLE\">"
-                         "</div>"
-                         "</div>",
-	       Cfg_URL_ICON_PUBLIC);
-   else
+   BrowserTab = Act_GetBrowserTab (Gbl.Action.Act);
+   switch (BrowserTab)
      {
-      fprintf (Gbl.F.Out,"<body>\n");
-      Gbl.Layout.WritingHTMLStart = false;
-      Gbl.Layout.HTMLStartWritten =
-      Gbl.Layout.DivsEndWritten   = true;
-      return;
+      case Act_BRW_1ST_TAB:
+	 fprintf (Gbl.F.Out,"<body onload=\"init();\">\n"
+			    "<div id=\"zoomLyr\" class=\"ZOOM\">"
+			    "<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
+			    " alt=\"\" title=\"\""
+			    " class=\"IMG_USR\" />"
+			    "<div id=\"zoomTxt\" class=\"CENTER_MIDDLE\">"
+			    "</div>"
+			    "</div>",
+		  Cfg_URL_ICON_PUBLIC);
+	 break;
+      case Act_BRW_NEW_TAB:
+	 fprintf (Gbl.F.Out,"<body onload=\"init();\">\n");
+	 Gbl.Layout.WritingHTMLStart = false;
+	 Gbl.Layout.HTMLStartWritten =
+	 Gbl.Layout.DivsEndWritten   = true;
+	 return;
+      default:
+	 fprintf (Gbl.F.Out,"<body>\n");
+	 Gbl.Layout.WritingHTMLStart = false;
+	 Gbl.Layout.HTMLStartWritten =
+	 Gbl.Layout.DivsEndWritten   = true;
+	 return;
      }
 
    /***** Start box that contains the whole page except the foot *****/
@@ -652,14 +662,12 @@ static void Lay_WriteScriptMathJax (void)
 static void Lay_WriteScriptInit (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
-   bool RefreshLastClicks  = false;
    bool RefreshNewTimeline = false;
+   bool RefreshGame        = false;
+   bool RefreshLastClicks  = false;
 
    switch (Gbl.Action.Act)
      {
-      case ActLstClk:
-	 RefreshLastClicks = true;
-	 break;
       case ActSeeSocTmlGbl:
       case ActRcvSocPstGbl:
       case ActRcvSocComGbl:
@@ -668,6 +676,12 @@ static void Lay_WriteScriptInit (void)
       case ActReqRemSocComGbl:
       case ActRemSocComGbl:
 	 RefreshNewTimeline = true;
+	 break;
+      case ActGamStdCurQst:
+	 RefreshGame = true;
+	 break;
+      case ActLstClk:
+	 RefreshLastClicks = true;
 	 break;
       default:
 	 break;
@@ -680,6 +694,9 @@ static void Lay_WriteScriptInit (void)
    if (RefreshNewTimeline)
       fprintf (Gbl.F.Out,"var delayNewTimeline = %lu;\n",
 	       Cfg_TIME_TO_REFRESH_TIMELINE);
+   else if (RefreshGame)	// Refresh game via AJAX
+      fprintf (Gbl.F.Out,"var delayGame = %lu;\n",
+	       Cfg_TIME_TO_REFRESH_GAME);
 
    fprintf (Gbl.F.Out,"function init(){\n");
 
@@ -694,6 +711,8 @@ static void Lay_WriteScriptInit (void)
    if (RefreshLastClicks)	// Refresh last clicks via AJAX
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+   else if (RefreshGame)	// Refresh game via AJAX
+      fprintf (Gbl.F.Out,"	setTimeout(\"refreshGame()\",delayGame);\n");
    else if (RefreshNewTimeline)	// Refresh timeline via AJAX
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshNewTimeline()\",delayNewTimeline);\n");
 
@@ -710,13 +729,16 @@ static void Lay_WriteScriptParamsAJAX (void)
    /***** Start script *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
-   /***** Parameter to refresh connected users *****/
-   fprintf (Gbl.F.Out,"var RefreshParamNxtActCon = \"act=%ld\";\n",
-            Act_GetActCod (ActRefCon));
+   /***** Parameters with code of session and current course code *****/
+   fprintf (Gbl.F.Out,"var RefreshParamIdSes = \"ses=%s\";\n"
+                      "var RefreshParamCrsCod = \"crs=%ld\";\n",
+	    Gbl.Session.Id,
+	    Gbl.Hierarchy.Crs.CrsCod);
 
-   /***** Parameter to refresh clicks in realtime *****/
-   fprintf (Gbl.F.Out,"var RefreshParamNxtActLog = \"act=%ld\";\n",
-            Act_GetActCod (ActRefLstClk));
+   /***** Parameter to refresh connected users *****/
+   if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
+      fprintf (Gbl.F.Out,"var RefreshParamNxtActCon = \"act=%ld\";\n",
+	       Act_GetActCod (ActRefCon));
 
    /***** Parameters related with expanding/contracting folders in file browsers *****/
    if (Gbl.FileBrowser.Type != Brw_UNKNOWN)
@@ -724,12 +746,13 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 put parameters used by AJAX */
       fprintf (Gbl.F.Out,"var RefreshParamExpand = \"act=%ld\";\n"
 			 "var RefreshParamContract = \"act=%ld\";\n",
-	       Act_GetActCod (Brw_GetActionExpand ()  ),
+	       Act_GetActCod (Brw_GetActionExpand   ()),
 	       Act_GetActCod (Brw_GetActionContract ()));
 
-   /***** Parameters related with social timeline refreshing *****/
+   /***** Parameters related with other actions *****/
    switch (Gbl.Action.Act)
      {
+      /* Parameters related with global timeline refreshing */
       case ActSeeSocTmlGbl:
       case ActRcvSocPstGbl:
       case ActRcvSocComGbl:
@@ -746,6 +769,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 		  Act_GetActCod (ActRefOldSocPubGbl),
 		  (unsigned) Gbl.Timeline.WhichUsrs);
 	 break;
+      /* Parameters related with user timeline refreshing */
       case ActSeeOthPubPrf:
       case ActRcvSocPstUsr:
       case ActRcvSocComUsr:
@@ -765,16 +789,24 @@ static void Lay_WriteScriptParamsAJAX (void)
 		  Act_GetActCod (ActRefOldSocPubUsr),
 		  Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
+      /* Parameters related with game refreshing */
+      case ActGamStdCurQst:
+	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"
+			    "var RefreshParamGamCod = \"GamCod=%ld\";\n",
+		 Act_GetActCod (ActRefGamStd),
+		 Gbl.Games.GamCodBeingPlayed);
+	 break;
+      /* Parameter related with clicks refreshing */
+      case ActLstClk:
+	 fprintf (Gbl.F.Out,"var RefreshParamNxtActLstClk = \"act=%ld\";\n",
+		  Act_GetActCod (ActRefLstClk));
+	 break;
       default:
 	 break;
      }
 
-   /***** Parameters with code of session and current course code *****/
-   fprintf (Gbl.F.Out,"var RefreshParamIdSes = \"ses=%s\";\n"
-                      "var RefreshParamCrsCod = \"crs=%ld\";\n"
-                      "</script>\n",
-            Gbl.Session.Id,
-            Gbl.Hierarchy.Crs.CrsCod);
+   /***** End script *****/
+   fprintf (Gbl.F.Out,"</script>\n");
   }
 
 /*****************************************************************************/
