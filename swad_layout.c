@@ -794,7 +794,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"
 			    "var RefreshParamGamCod = \"GamCod=%ld\";\n",
 		 Act_GetActCod (ActRefGamStd),
-		 Gbl.Games.GamCodBeingPlayed);
+		 Gbl.Games.MchCodBeingPlayed);
 	 break;
       /* Parameter related with clicks refreshing */
       case ActLstClk:

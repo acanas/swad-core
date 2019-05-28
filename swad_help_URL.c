@@ -1371,17 +1371,17 @@ const char *Hlp_ASSESSMENT_Games_edit_game =
 
 const char *Hlp_ASSESSMENT_Games_new_game =
 #if   L==1
-	"ASSESSMENT.Games.es#nueva-juego";
+	"ASSESSMENT.Games.es#nuevo-juego";
 #elif L==2
 	"ASSESSMENT.Games.en#new-game";
 #elif L==3
 	"ASSESSMENT.Games.en#new-game";
 #elif L==4
-	"ASSESSMENT.Games.es#nueva-juego";
+	"ASSESSMENT.Games.es#nuevo-juego";
 #elif L==5
 	"ASSESSMENT.Games.en#new-game";
 #elif L==6
-	"ASSESSMENT.Games.es#nueva-juego";
+	"ASSESSMENT.Games.es#nuevo-juego";
 #elif L==7
 	"ASSESSMENT.Games.en#new-game";
 #elif L==8
@@ -1409,6 +1409,48 @@ const char *Hlp_ASSESSMENT_Games_edit_juego =
 	"ASSESSMENT.Games.en#edit-juego";
 #elif L==9
 	"ASSESSMENT.Games.en#edit-juego";
+#endif
+
+const char *Hlp_ASSESSMENT_Games_matches =
+#if   L==1
+	"ASSESSMENT.Games.es#partidas";
+#elif L==2
+	"ASSESSMENT.Games.en#matches";
+#elif L==3
+	"ASSESSMENT.Games.en#matches";
+#elif L==4
+	"ASSESSMENT.Games.es#partidas";
+#elif L==5
+	"ASSESSMENT.Games.en#matches";
+#elif L==6
+	"ASSESSMENT.Games.es#partidas";
+#elif L==7
+	"ASSESSMENT.Games.en#matches";
+#elif L==8
+	"ASSESSMENT.Games.en#matches";
+#elif L==9
+	"ASSESSMENT.Games.en#matches";
+#endif
+
+const char *Hlp_ASSESSMENT_Games_new_match =
+#if   L==1
+	"ASSESSMENT.Games.es#nueva-partida";
+#elif L==2
+	"ASSESSMENT.Games.en#new-match";
+#elif L==3
+	"ASSESSMENT.Games.en#new-match";
+#elif L==4
+	"ASSESSMENT.Games.es#nueva-partida";
+#elif L==5
+	"ASSESSMENT.Games.en#new-match";
+#elif L==6
+	"ASSESSMENT.Games.es#nueva-partida";
+#elif L==7
+	"ASSESSMENT.Games.en#new-match";
+#elif L==8
+	"ASSESSMENT.Games.en#new-match";
+#elif L==9
+	"ASSESSMENT.Games.en#new-match";
 #endif
 
 const char *Hlp_ASSESSMENT_Games_questions =

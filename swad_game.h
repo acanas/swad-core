@@ -33,8 +33,8 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Gam_MAX_CHARS_SURVEY_TITLE	(128 - 1)	// 127
-#define Gam_MAX_BYTES_SURVEY_TITLE	((Gam_MAX_CHARS_SURVEY_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+#define Gam_MAX_CHARS_TITLE	(128 - 1)	// 127
+#define Gam_MAX_BYTES_TITLE	((Gam_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Gam_NUM_DATES 2
 typedef enum
@@ -47,7 +47,7 @@ struct Game
   {
    long GamCod;		// Game code
    long UsrCod;		// Author code
-   char Title[Gam_MAX_BYTES_SURVEY_TITLE + 1];
+   char Title[Gam_MAX_BYTES_TITLE + 1];
    time_t TimeUTC[Gam_NUM_DATES];
    unsigned NumQsts;	// Number of questions in the game
    unsigned NumUsrs;	// Number of distinct users who have already answered the game
@@ -55,7 +55,6 @@ struct Game
      {
       bool Visible;		// Game is not hidden
       bool Open;		// Start date <= now <= end date
-      bool IBelongToScope;	// I belong to the scope of this game
       bool IHaveAnswered;	// I have already answered this game
       bool ICanAnswer;
       bool ICanViewResults;
@@ -94,6 +93,8 @@ void Gam_FreeListGames (void);
 
 void Gam_PutParamGameCod (long GamCod);
 long Gam_GetParamGameCod (void);
+void Gam_PutParamMatchCod (long MchCod);	// TODO: Check if this function can be static
+long Gam_GetParamMatchCod (void);		// TODO: Check if this function can be static
 void Gam_AskRemGame (void);
 void Gam_RemoveGame (void);
 void Gam_AskResetGame (void);
@@ -101,14 +102,14 @@ void Gam_ResetGame (void);
 void Gam_HideGame (void);
 void Gam_UnhideGame (void);
 void Gam_RecFormGame (void);
-bool Gam_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod);
+bool Gam_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod);
 void Gam_RemoveGroup (long GrpCod);
 void Gam_RemoveGroupsOfType (long GrpTypCod);
 void Gam_RemoveGames (Hie_Level_t Scope,long Cod);
 
 void Gam_RequestNewQuestion (void);
 
-void Gam_GetAndDrawBarNumUsrsWhoAnswered (struct Game *Game,long QstCod,unsigned AnsInd);
+void Gam_GetAndDrawBarNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd,unsigned NumUsrs);
 
 void Gam_AddTstQuestionsToGame (void);
 
@@ -118,18 +119,21 @@ void Gam_RemoveQst (void);
 void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);
 
-void Gam_StartGameTch (void);
-void Gam_PlayGameStd (void);
+void Gam_RequestRemoveMatch (void);
+void Gam_RemoveMatch (void);
+
+void Gam_RequestNewMatch (void);
+void Gam_PlayMatchStd (void);
 
 void Gam_ReceiveGameAnswers (void);
-void Gam_GameTchFirstQuestion (void);
-void Gam_GameTchNextQuestion (void);
-void Gam_GameTchShowAnswers (void);
-void Gam_GameTchEnd (void);
+void Gam_CreateAndStartNewMatch (void);
+void Gam_MatchTchNextQuestion (void);
+void Gam_MatchTchShowAnswers (void);
+void Gam_MatchTchEnd (void);
 
-void Gam_GetGameBeingPlayed (void);
-void Gam_ShowNewGameToMeAsStd (void);
-void Gam_RefreshCurrentGameStd (void);
+void Gam_GetMatchBeingPlayed (void);
+void Gam_ShowNewMatchToMeAsStd (void);
+void Gam_RefreshCurrentMatchStd (void);
 
 unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);
 unsigned Gam_GetNumGames (Hie_Level_t Scope);

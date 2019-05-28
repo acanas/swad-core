@@ -429,6 +429,9 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Ver cómo recibir un fichero desde el cliente (SWADroid) en gsoap
 
+// TODO: En Actividades, en Juegos, en Encuestas, en Asistencia poner filtros de Pasados (rojo), Actuales (verde), Futuros (azul).
+//	 Pensar si en Agenda se puede poner igual.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -448,11 +451,22 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.123 (2019-05-22)"
+#define Log_PLATFORM_VERSION	"SWAD 18.124 (2019-05-28)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
-	Version 18.123.1: May 22, 2019	Wait icon while a game has not started. (? lines)
+	Version 18.124:   May 28, 2019	Every game can have several matches (game instances). (243400 lines)
+					4 changes necessary in database:
+DROP TABLE gam_played,gam_playing,gam_grp;
+CREATE TABLE IF NOT EXISTS gam_matches (MchCod INT NOT NULL AUTO_INCREMENT,GamCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,UsrCod INT NOT NULL,Title VARCHAR(2047) NOT NULL,UNIQUE INDEX(MchCod),INDEX(GamCod));
+CREATE TABLE IF NOT EXISTS gam_playing (MchCod INT NOT NULL,QstInd INT NOT NULL DEFAULT 0,QstCod INT NOT NULL DEFAULT -1,ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',MchStart DATETIME NOT NULL,QstStart DATETIME NOT NULL,UNIQUE INDEX(MchCod));
+CREATE TABLE IF NOT EXISTS gam_grp (MchCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(MchCod,GrpCod));
+
+	Version 18.123.2: May 23, 2019	New table with games instances already played. (242829 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS gam_matches (MchCod INT NOT NULL AUTO_INCREMENT,GamCod INT NOT NULL,Start DATETIME NOT NULL,UNIQUE INDEX(GamPlyCod),INDEX(GamCod));
+
+	Version 18.123.1: May 22, 2019	Wait icon while a game has not started. (242788 lines)
 					Copy the following icon to icon public directory:
 sudo cp icon/wait.gif /var/www/html/swad/icon/
 
@@ -486,7 +500,7 @@ ALTER TABLE games CHANGE COLUMN Cod CrsCod INT NOT NULL DEFAULT -1,ADD INDEX (Cr
 	Version 18.121.2: May 17, 2019	Fixed bug in exporting tests. (242700 lines)
 	Version 18.121.1: May 16, 2019	Fixed bug in renaming of institution. (242697 lines)
 	Version 18.121:   May 13, 2019	Module swad_web_service is renamed as swad_API.
-					New API function getCourses. (242708 lines)
+					New API function getGames. (242708 lines)
 	Version 18.120.2: Apr 30, 2019	Code refactoring related to boxes. (242465 lines)
 	Version 18.120.1: Apr 25, 2019	Code refactoring related to file browser. (242461 lines)
 	Version 18.120:   Apr 25, 2019	Code refactoring related to file browser. (242466 lines)

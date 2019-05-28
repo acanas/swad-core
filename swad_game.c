@@ -72,16 +72,29 @@ const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
 #define Gam_MAX_SELECTED_QUESTIONS		1000
 #define Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Gam_MAX_SELECTED_QUESTIONS * (1 + 10 + 1))
 
+#define Gam_NEW_MATCH_SECTION_ID	"new_match"
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
+
+struct Match
+  {
+   long MchCod;
+   long GamCod;
+   long UsrCod;
+   time_t TimeUTC[2];
+   bool Open;
+   char Title[Gam_MAX_BYTES_TITLE + 1];
+  };
 
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
 
-long Gam_CurrentGamCod;	// Used as parameter in contextual links
-long Gam_CurrentQstCod;	// Used as parameter in contextual links
+long Gam_CurrentGamCod = -1L;	// Used as parameter in contextual links
+long Gam_CurrentQstCod = -1L;	// Used as parameter in contextual links
+long Gam_CurrentMchCod = -1L;	// Used as parameter in contextual links
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -97,29 +110,29 @@ static void Gam_ParamsWhichGroupsToShow (void);
 static void Gam_ShowOneGame (long GamCod,
                              bool ShowOnlyThisGame,
                              bool ListGameQuestions,
-                             bool PutButtonToStart,
+                             bool PutFormNewMatch,
 			     bool PutButtonToPlay);
 static void Gam_WriteAuthor (struct Game *Game);
-static void Gam_WriteStatus (struct Game *Game);
+// static void Gam_WriteStatus (struct Game *Game);
 static void Gam_GetParamGameOrder (void);
 
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 					  const char *Anchor);
-static void Gam_PutParamsToPlayGame1stQst (void);
 static void Gam_PutParams (void);
+static void Gam_PutParamCurrentMchCod (void);
 
 static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game);
-static void Gam_ShowLstGrpsToEditGame (long GamCod);
+static void Gam_ShowLstGrpsToEditMatch (void);
 
 static void Gam_CreateGame (struct Game *Game,const char *Txt);
 static void Gam_UpdateGame (struct Game *Game,const char *Txt);
-static bool Gam_CheckIfGamIsAssociatedToGrps (long GamCod);
-static void Gam_RemoveAllTheGrpsAssociatedToAndGame (long GamCod);
-static void Gam_CreateGrps (long GamCod);
-static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game);
-static bool Gam_CheckIfICanDoThisGameBasedOnGrps (long GamCod);
+// static bool Gam_CheckIfMatchIsAssociatedToGrps (long MchCod);
+// Nstatic void Gam_RemoveAllTheGrpsAssociatedToMatchesOfAGame (long GamCod);
+static void Gam_CreateGrps (long MchCod);
+static void Gam_GetAndWriteNamesOfGrpsAssociatedToMatch (struct Match *Match);
+static bool Gam_CheckIfIPlayThisMatchBasedOnGrps (long GamCod);
 
 static unsigned Gam_GetNumQstsGame (long GamCod);
 static void Gam_PutParamQstCod (long QstCod);
@@ -134,8 +147,7 @@ static int Gam_GetMaxQuestionIndexInGame (long GamCod);
 static int Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
 static int Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
 static void Gam_ListGameQuestions (struct Game *Game);
-static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
-                                                  unsigned NumQsts,
+static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res);
 static void Gam_PutIconToAddNewQuestions (void);
 static void Gam_PutButtonToAddNewQuestions (void);
@@ -147,24 +159,32 @@ static unsigned Gam_CountNumQuestionsInList (void);
 static unsigned Gam_GetNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd);
 static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 
-// static void Gam_PutIconToRemoveOneQst (void);
 static void Gam_PutParamsOneQst (void);
 
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
-static void Gam_PutBigButtonToStartGameTch (long GamCod);
-static void Gam_PutBigButtonToPlayGameStd (long GamCod);
+static void Gam_ListPlayedMatches (struct Game *Game,bool PutFormNewMatch);
+static void Gam_PutIconToPlayNewMatch (void);
+static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
+                                                MYSQL_RES *mysql_res);
+static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
+				     struct Match *Match);
+static void Gam_PutButtonNewMatch (long GamCod);
 
-static bool Gam_CheckIfGameIsBeeingPlayed (long GamCod);
-static void Gam_UpdateGameQstBeeingPlayed (long GamCod,unsigned QstInd,long QstCod,bool ShowingAnswers);
-static void Gam_RemoveGameBeeingPlayed (long GamCod);
+static void Gam_PutBigButtonToPlayMatchTch (struct Game *Game);
+static void Gam_PutBigButtonToPlayMatchStd (long MchCod);
 
-static void Gam_PlayGameShowQuestionAndAnswers (long GamCod,
+static long Gam_CreateMatch (struct Match *Match);
+// static bool Gam_CheckIfGameIsBeingPlayed (long GamCod);
+static void Gam_UpdateMatchBeingPlayed (long MchCod,unsigned QstInd,long QstCod,bool ShowingAnswers);
+static void Gam_RemoveMatchBeingPlayed (long MchCod);
+
+static void Gam_PlayGameShowQuestionAndAnswers (long MchCod,
 						unsigned QstInd,
 						bool ShowAnswers);
 static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
-                                        long GamCod,unsigned QstInd);
+                                        long MchCod,unsigned QstInd);
 static void Gam_PutBigButtonToEnd (long GamCod);
 
 static void Gam_ShowQuestionBeingPlayed (void);
@@ -201,7 +221,7 @@ static void Gam_ListAllGames (void)
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Game;
-   extern const char *Txt_Status;
+   // extern const char *Txt_Status;
    extern const char *Txt_No_games;
    Gam_Order_t Order;
    struct Pagination Pagination;
@@ -269,12 +289,12 @@ static void Gam_ListAllGames (void)
       fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"CENTER_MIDDLE\">"
-			 "%s"
-			 "</th>"
+			 // "<th class=\"CENTER_MIDDLE\">"
+			 // "%s"
+			 // "</th>"
 			 "</tr>",
-	       Txt_Game,
-	       Txt_Status);
+	       Txt_Game);
+      //       Txt_Status);
 
       /***** Write all the games *****/
       for (NumGame = Pagination.FirstItemVisible;
@@ -283,7 +303,7 @@ static void Gam_ListAllGames (void)
 	 Gam_ShowOneGame (Gbl.Games.LstGamCods[NumGame - 1],
 	                  false,
 	                  false,
-	                  false,	// Do not put button to start game
+	                  false,	// Do not put form to start new match
 			  false);	// Do not put button to play
 
       /***** End table *****/
@@ -412,7 +432,7 @@ void Gam_SeeOneGame (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-	            false,	// Do not put button to start game
+	            false,	// Do not put form to start new match
 		    false);	// Do not put button to play
   }
 
@@ -423,7 +443,7 @@ void Gam_SeeOneGame (void)
 static void Gam_ShowOneGame (long GamCod,
                              bool ShowOnlyThisGame,
                              bool ListGameQuestions,
-                             bool PutButtonToStart,
+                             bool PutFormNewMatch,
 			     bool PutButtonToPlay)
   {
    extern const char *Hlp_ASSESSMENT_Games;
@@ -433,8 +453,8 @@ static void Gam_ShowOneGame (long GamCod,
    extern const char *Txt_No_of_questions;
    extern const char *Txt_No_of_users;
    extern const char *Txt_Play;
-   extern const char *Txt_Start_game;
-   extern const char *Txt_View_game_results;
+   extern const char *Txt_New_match;
+//    extern const char *Txt_View_game_results;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    struct Game Game;
@@ -473,26 +493,20 @@ static void Gam_ShowOneGame (long GamCod,
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	  /* Icon to play game */
-	  Lay_PutContextualLinkOnlyIcon (ActPlyGamStd,NULL,
-					 Gam_PutParams,
-					 "play.svg",
-					 Txt_Play);
-	  break;
+	 /* Icon to play match */
+	 Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
+					Gam_PutParams,
+					"play.svg",
+					Txt_Play);
+	 break;
       case Rol_NET:
       case Rol_TCH:
-	if (ShowOnlyThisGame)
-	   /* Icon to show first question */
-	   Lay_PutContextualLinkOnlyIcon (ActGamTch1stQst,NULL,
-					  Gam_PutParamsToPlayGame1stQst,
-					  "play.svg",
-					  Txt_Play);
-	else
-	   /* Icon to start game */
-	   Lay_PutContextualLinkOnlyIcon (ActStrGamTch,NULL,
-					  Gam_PutParams,
-					  "play.svg",
-					  Txt_Play);
+	 if (ShowOnlyThisGame)
+	    /* Icon to start a new match */
+	    Lay_PutContextualLinkOnlyIcon (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID,
+					   Gam_PutParams,
+					   "play.svg",
+					   Txt_New_match);
 	 break;
       default:
 	 break;
@@ -564,13 +578,10 @@ static void Gam_ShowOneGame (long GamCod,
             Txt_No_of_users,
             Game.NumUsrs);
 
-   /* Groups whose students can answer this game */
-   if (Gbl.Crs.Grps.NumGrps)
-      Gam_GetAndWriteNamesOfGrpsAssociatedToGame (&Game);
-
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Status of the game *****/
+/*
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP");
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
@@ -581,24 +592,24 @@ static void Gam_ShowOneGame (long GamCod,
      {
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-      /* Possible button to play/start the game */
+      * Possible button to play/start the game *
       if (Game.Status.Open)
 	{
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
-	       /* Icon to play game */
-	       Frm_StartForm (ActPlyGamStd);
+	       * Icon to play game *
+	       Frm_StartForm (ActPlyMchStd);
 	       Gam_PutParamGameCod (Game.GamCod);
 	       Btn_PutCreateButtonInline (Txt_Play);
 	       Frm_EndForm ();
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:
-	       /* Icon to start game */
-	       Frm_StartForm (ActStrGamTch);
+	       * Icon to start game *
+	       Frm_StartFormAnchor (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID);
 	       Gam_PutParamGameCod (Game.GamCod);
-	       Btn_PutCreateButtonInline (Txt_Start_game);
+	       Btn_PutCreateButtonInline (Txt_New_match);
 	       Frm_EndForm ();
 	       break;
 	    default:
@@ -606,7 +617,7 @@ static void Gam_ShowOneGame (long GamCod,
 	   }
 	}
 
-      /* Possible button to see the result of the game */
+      * Possible button to see the result of the game *
       if (Game.Status.ICanViewResults)
 	{
 	 Frm_StartForm (ActSeeGam);
@@ -624,24 +635,24 @@ static void Gam_ShowOneGame (long GamCod,
      {
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
-      /* Possible button to answer this game */
+      * Possible button to answer this game *
       if (Game.Status.ICanAnswer)
 	{
 	 switch (Gbl.Usrs.Me.Role.Logged)
 	   {
 	    case Rol_STD:
-	       /* Icon to play game */
-	       Frm_StartForm (ActPlyGamStd);
+	       * Icon to play game *
+	       Frm_StartForm (ActPlyMchStd);
 	       Gam_PutParamGameCod (Game.GamCod);
 	       Btn_PutCreateButtonInline (Txt_Play);
 	       Frm_EndForm ();
 	       break;
 	    case Rol_NET:
 	    case Rol_TCH:
-	       /* Icon to start game */
-	       Frm_StartForm (ActStrGamTch);
+	       * Icon to start game *
+	       Frm_StartFormAnchor (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID);
 	       Gam_PutParamGameCod (Game.GamCod);
-	       Btn_PutCreateButtonInline (Txt_Start_game);
+	       Btn_PutCreateButtonInline (Txt_New_match);
 	       Frm_EndForm ();
 	       break;
 	    default:
@@ -653,7 +664,7 @@ static void Gam_ShowOneGame (long GamCod,
      }
 
    fprintf (Gbl.F.Out,"</td>");
-
+*/
    /***** End 1st row of this game *****/
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -686,16 +697,6 @@ static void Gam_ShowOneGame (long GamCod,
    /***** End 2nd row of this game *****/
    fprintf (Gbl.F.Out,"</tr>");
 
-   /***** Write questions of this game *****/
-   if (ListGameQuestions)
-     {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"5\">");
-      Gam_ListGameQuestions (&Game);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
-     }
-
    /***** End table *****/
    if (ShowOnlyThisGame)
       Tbl_EndTable ();
@@ -705,17 +706,32 @@ static void Gam_ShowOneGame (long GamCod,
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
 
-   /***** Put big button to start game as a teacher *****/
-   if (PutButtonToStart)
-      Gam_PutBigButtonToStartGameTch (Game.GamCod);
-
-   /***** Put big button to play game as a student *****/
-   if (PutButtonToPlay)
-      Gam_PutBigButtonToPlayGameStd (Game.GamCod);
-
-   /***** End box *****/
    if (ShowOnlyThisGame)
+     {
+      switch (Gbl.Usrs.Me.Role.Logged)
+        {
+	 case Rol_STD:
+            /* Put big button to play match */
+	    if (PutButtonToPlay)
+               Gam_PutBigButtonToPlayMatchStd (Game.GamCod);	// TODO: Change to match !!!!!!!!!!!!!!!!!!
+            break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+            /* List played matches */
+            Gam_ListPlayedMatches (&Game,PutFormNewMatch);
+            break;
+	 default:
+	    break;
+        }
+
+      /***** Write questions of this game *****/
+      if (ListGameQuestions)
+	 Gam_ListGameQuestions (&Game);
+
+      /***** End box *****/
       Box_EndBox ();
+     }
   }
 
 /*****************************************************************************/
@@ -730,7 +746,7 @@ static void Gam_WriteAuthor (struct Game *Game)
 /*****************************************************************************/
 /************************ Write status of a game ***************************/
 /*****************************************************************************/
-
+/*
 static void Gam_WriteStatus (struct Game *Game)
   {
    extern const char *Txt_Hidden_game;
@@ -742,10 +758,10 @@ static void Gam_WriteStatus (struct Game *Game)
    extern const char *Txt_SURVEY_You_have_already_answered;
    extern const char *Txt_SURVEY_You_have_not_answered;
 
-   /***** Start list with items of status *****/
+   ***** Start list with items of status *****
    fprintf (Gbl.F.Out,"<ul>");
 
-   /* Write whether game is visible or hidden */
+   * Write whether game is visible or hidden *
    if (Game->Status.Visible)
       fprintf (Gbl.F.Out,"<li class=\"STATUS_GREEN\">%s</li>",
                Txt_Visible_game);
@@ -753,7 +769,7 @@ static void Gam_WriteStatus (struct Game *Game)
       fprintf (Gbl.F.Out,"<li class=\"STATUS_RED_LIGHT\">%s</li>",
                Txt_Hidden_game);
 
-   /* Write whether game is open or closed */
+   * Write whether game is open or closed *
    if (Game->Status.Open)
       fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
                Game->Status.Visible ? "STATUS_GREEN" :
@@ -765,7 +781,7 @@ static void Gam_WriteStatus (struct Game *Game)
         	                     "STATUS_RED_LIGHT",
                Txt_Closed_game);
 
-   /* Write whether game can be answered by me or not depending on groups */
+   * Write whether game can be answered by me or not depending on groups *
    if (Game->Status.IBelongToScope)
       fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
                Game->Status.Visible ? "STATUS_GREEN" :
@@ -777,7 +793,7 @@ static void Gam_WriteStatus (struct Game *Game)
         	                     "STATUS_RED_LIGHT",
                Txt_GAME_You_dont_belong_to_the_scope_of_the_game);
 
-   /* Write whether game has been already answered by me or not */
+   * Write whether game has been already answered by me or not *
    if (Game->Status.IHaveAnswered)
       fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
                Game->Status.Visible ? "STATUS_GREEN" :
@@ -789,10 +805,10 @@ static void Gam_WriteStatus (struct Game *Game)
         	                     "STATUS_RED_LIGHT",
                Txt_SURVEY_You_have_not_answered);
 
-   /***** End list with items of status *****/
+   ***** End list with items of status *****
    fprintf (Gbl.F.Out,"</ul>");
   }
-
+*/
 /*****************************************************************************/
 /********** Get parameter with the type or order in list of games ************/
 /*****************************************************************************/
@@ -844,16 +860,6 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
   }
 
 /*****************************************************************************/
-/************* Params used to play the first question of a game **************/
-/*****************************************************************************/
-
-static void Gam_PutParamsToPlayGame1stQst (void)
-  {
-   Gam_PutParams ();
-   Gam_PutParamQstInd (0);	// Start by first question in game
-  }
-
-/*****************************************************************************/
 /******************** Params used to edit/play a game ************************/
 /*****************************************************************************/
 
@@ -867,13 +873,18 @@ static void Gam_PutParams (void)
    Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
   }
 
+static void Gam_PutParamCurrentMchCod (void)
+  {
+   if (Gam_CurrentMchCod > 0)
+      Gam_PutParamMatchCod (Gam_CurrentMchCod);
+  }
+
 /*****************************************************************************/
 /*********************** Get list of all the games *************************/
 /*****************************************************************************/
 
 void Gam_GetListGames (void)
   {
-   char *SubQuery;
    static const char *OrderBySubQuery[Gam_NUM_ORDERS] =
      {
       "StartTime DESC,EndTime DESC,Title DESC",	// Gam_ORDER_BY_START_DATE
@@ -889,41 +900,12 @@ void Gam_GetListGames (void)
       Gam_FreeListGames ();
 
    /***** Get list of games from database *****/
-   /* Fill subquery for course */
-   if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
-     {
-      if (asprintf (&SubQuery,"CrsCod=%ld"
-			      " AND"
-			      "(GamCod NOT IN"
-			      " (SELECT GamCod FROM gam_grp)"
-			      " OR"
-			      " GamCod IN"
-			      " (SELECT gam_grp.GamCod"
-			      " FROM gam_grp,crs_grp_usr"
-			      " WHERE crs_grp_usr.UsrCod=%ld"
-			      " AND gam_grp.GrpCod=crs_grp_usr.GrpCod))",
-		     Gbl.Hierarchy.Crs.CrsCod,
-		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	  Lay_NotEnoughMemoryExit ();
-      }
-    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-      {
-       if (asprintf (&SubQuery,"CrsCod=%ld",
-		     Gbl.Hierarchy.Crs.CrsCod) < 0)
-	  Lay_NotEnoughMemoryExit ();
-      }
-
-   /* Make query */
    NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
 			     "SELECT GamCod FROM games"
-			     " WHERE %s"
+			     " WHERE CrsCod=%ld"
 			     " ORDER BY %s",
-			     SubQuery,
+			     Gbl.Hierarchy.Crs.CrsCod,
 			     OrderBySubQuery[Gbl.Games.SelectedOrder]);
-
-   /* Free allocated memory for subquery */
-   free ((void *) SubQuery);
-
    if (NumRows) // Games found...
      {
       Gbl.Games.Num = (unsigned) NumRows;
@@ -953,7 +935,7 @@ void Gam_GetListGames (void)
   }
 
 /*****************************************************************************/
-/********************* Get game data using its code ************************/
+/********************** Get game data using its code *************************/
 /*****************************************************************************/
 
 void Gam_GetDataOfGameByCod (struct Game *Game)
@@ -989,25 +971,21 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       Game->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get start date (row[3] holds the start UTC time) */
-      Game->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      Game->TimeUTC[Gam_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
       /* Get end   date (row[4] holds the end   UTC time) */
-      Game->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+      Game->TimeUTC[Gam_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the game is open or closed (row(5)) */
       Game->Status.Open = (row[5][0] == '1');
 
       /* Get the title of the game (row[6]) */
       Str_Copy (Game->Title,row[6],
-                Gam_MAX_BYTES_SURVEY_TITLE);
+                Gam_MAX_BYTES_TITLE);
 
       /* Get number of questions and number of users who have already answer this game */
       Game->NumQsts = Gam_GetNumQstsGame (Game->GamCod);
       Game->NumUsrs = Gam_GetNumUsrsWhoHaveAnsweredGame (Game->GamCod);
-
-      /* Do I belong to valid groups to answer this game? */
-      Game->Status.IBelongToScope = Gbl.Usrs.Me.IBelongToCurrentCrs &&
-				    Gam_CheckIfICanDoThisGameBasedOnGrps (Game->GamCod);
 
       /* Have I answered this game? */
       Game->Status.IHaveAnswered = Gam_CheckIfIHaveAnsweredGame (Game->GamCod);
@@ -1017,7 +995,6 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
                                 Game->Status.Visible &&
                                 Game->Status.Open &&
                                 Gbl.Usrs.Me.Role.Logged == Rol_STD &&
-                                Game->Status.IBelongToScope &&
                                 !Game->Status.IHaveAnswered;
 
       /* Can I view results of the game?
@@ -1028,7 +1005,6 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
             Game->Status.ICanViewResults = Game->NumQsts != 0 &&
                                            Game->Status.Visible &&
                                            Game->Status.Open &&
-                                           Game->Status.IBelongToScope &&
                                            Game->Status.IHaveAnswered;
             Game->Status.ICanEdit         = false;
             break;
@@ -1038,24 +1014,12 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
             Game->Status.ICanEdit        = false;
             break;
          case Rol_TCH:
-            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
-                                           !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        = Game->Status.IBelongToScope;
-            break;
          case Rol_DEG_ADM:
-            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
-                                           !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        = Game->Status.IBelongToScope;
-            break;
          case Rol_CTR_ADM:
-            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
-                                           !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        = Game->Status.IBelongToScope;
-            break;
          case Rol_INS_ADM:
             Game->Status.ICanViewResults = Game->NumQsts != 0 &&
                                            !Game->Status.ICanAnswer;
-            Game->Status.ICanEdit        = Game->Status.IBelongToScope;
+            Game->Status.ICanEdit        = true;
             break;
          case Rol_SYS_ADM:
             Game->Status.ICanViewResults = Game->NumQsts != 0;
@@ -1090,7 +1054,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
   }
 
 /*****************************************************************************/
-/**************************** Free list of games ***************************/
+/***************************** Free list of games ****************************/
 /*****************************************************************************/
 
 void Gam_FreeListGames (void)
@@ -1139,7 +1103,7 @@ static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   }
 
 /*****************************************************************************/
-/******************* Write parameter with code of game *********************/
+/******************** Write parameter with code of game **********************/
 /*****************************************************************************/
 
 void Gam_PutParamGameCod (long GamCod)
@@ -1148,7 +1112,7 @@ void Gam_PutParamGameCod (long GamCod)
   }
 
 /*****************************************************************************/
-/******************** Get parameter with code of game **********************/
+/********************* Get parameter with code of game ***********************/
 /*****************************************************************************/
 
 long Gam_GetParamGameCod (void)
@@ -1158,7 +1122,26 @@ long Gam_GetParamGameCod (void)
   }
 
 /*****************************************************************************/
-/*************** Ask for confirmation of removing of a game ****************/
+/******************** Write parameter with code of match **********************/
+/*****************************************************************************/
+
+void Gam_PutParamMatchCod (long MchCod)
+  {
+   Par_PutHiddenParamLong ("MchCod",MchCod);
+  }
+
+/*****************************************************************************/
+/********************* Get parameter with code of match **********************/
+/*****************************************************************************/
+
+long Gam_GetParamMatchCod (void)
+  {
+   /***** Get code of match *****/
+   return Par_GetParToLong ("MchCod");
+  }
+
+/*****************************************************************************/
+/*************** Ask for confirmation of removing of a game ******************/
 /*****************************************************************************/
 
 void Gam_AskRemGame (void)
@@ -1193,7 +1176,7 @@ void Gam_AskRemGame (void)
   }
 
 /*****************************************************************************/
-/****************************** Remove a game ******************************/
+/******************************* Remove a game *******************************/
 /*****************************************************************************/
 
 void Gam_RemoveGame (void)
@@ -1220,8 +1203,17 @@ void Gam_RemoveGame (void)
 		   "DELETE FROM gam_questions WHERE GamCod=%ld",
 		   Game.GamCod);
 
-   /***** Remove all the groups of this game *****/
-   Gam_RemoveAllTheGrpsAssociatedToAndGame (Game.GamCod);
+   /***** Remove all the matches in this game *****/
+   /* Remove groups in matches of the game */
+   DB_QueryDELETE ("can not remove the groups associated to matches of a game",
+		   "DELETE FROM gam_grp USING gam_grp,gam_matches"
+		   " WHERE gam_matches.GrpCod=%ld"
+		   " AND gam_matches.MchCod=gam_grp.MchCod",
+		   Game.GamCod);
+   /* Remove matches of the game */
+   DB_QueryDELETE ("can not remove matches of a game",
+		   "DELETE FROM gam_matches WHERE GamCod=%ld",
+		   Game.GamCod);
 
    /***** Remove game *****/
    DB_QueryDELETE ("can not remove game",
@@ -1423,7 +1415,6 @@ void Gam_RequestCreatOrEditGame (void)
       Game.NumUsrs                 = 0;
       Game.Status.Visible          = true;
       Game.Status.Open             = true;
-      Game.Status.IBelongToScope   = false;
       Game.Status.IHaveAnswered    = false;
       Game.Status.ICanAnswer       = false;
       Game.Status.ICanViewResults  = false;
@@ -1469,7 +1460,7 @@ void Gam_RequestCreatOrEditGame (void)
                       "</tr>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Title,
-            Gam_MAX_CHARS_SURVEY_TITLE,Game.Title);
+            Gam_MAX_CHARS_TITLE,Game.Title);
 
    /***** Game start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Game.TimeUTC,Dat_FORM_SECONDS_ON);
@@ -1490,9 +1481,6 @@ void Gam_RequestCreatOrEditGame (void)
                       "</td>"
                       "</tr>");
 
-   /***** Groups *****/
-   Gam_ShowLstGrpsToEditGame (Game.GamCod);
-
    /***** End table, send button and end box *****/
    if (ItsANewGame)
       Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_game);
@@ -1511,7 +1499,7 @@ void Gam_RequestCreatOrEditGame (void)
 /******************** Show list of groups to edit a game *******************/
 /*****************************************************************************/
 
-static void Gam_ShowLstGrpsToEditGame (long GamCod)
+static void Gam_ShowLstGrpsToEditMatch (void)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Groups;
@@ -1540,8 +1528,8 @@ static void Gam_ShowLstGrpsToEditGame (long GamCod)
                          "<label>"
                          "<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
-      if (!Gam_CheckIfGamIsAssociatedToGrps (GamCod))
-         fprintf (Gbl.F.Out," checked=\"checked\"");
+      // if (!Gam_CheckIfMatchIsAssociatedToGrps (MchCod))
+      fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
 	                 "%s %s"
 	                 "</label>"
@@ -1554,8 +1542,9 @@ static void Gam_ShowLstGrpsToEditGame (long GamCod)
 	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
-                                               GamCod,Grp_SURVEY);
+            Grp_ListGrpsToEditAsgAttSvyMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+                                            -1L,	// -1 means "New match"
+					    Grp_MATCH);
 
       /***** End table and box *****/
       Box_EndBoxTable ();
@@ -1598,7 +1587,7 @@ void Gam_RecFormGame (void)
    NewGame.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get game title *****/
-   Par_GetParToText ("Title",NewGame.Title,Gam_MAX_BYTES_SURVEY_TITLE);
+   Par_GetParToText ("Title",NewGame.Title,Gam_MAX_BYTES_TITLE);
 
    /***** Get game text and insert links *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -1669,10 +1658,6 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
 				Game->Title,
 				Txt);
 
-   /***** Create groups *****/
-   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Gam_CreateGrps (Game->GamCod);
-
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Created_new_game_X,
                   Game->Title);
@@ -1702,58 +1687,52 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
 	           Txt,
 	           Game->GamCod);
 
-   /***** Update groups *****/
-   /* Remove old groups */
-   Gam_RemoveAllTheGrpsAssociatedToAndGame (Game->GamCod);
-
-   /* Create new groups */
-   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Gam_CreateGrps (Game->GamCod);
-
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_game_has_been_modified);
   }
 
 /*****************************************************************************/
-/*************** Check if a game is associated to any group ****************/
+/*************** Check if a match is associated to any group *****************/
+/*****************************************************************************/
+/*
+static bool Gam_CheckIfMatchIsAssociatedToGrps (long MchCod)
+  {
+   ***** Get if a match is associated to a group from database *****
+   return (DB_QueryCOUNT ("can not check if a match is associated to groups",
+			  "SELECT COUNT(*) FROM gam_grp"
+			  " WHERE MchCod=%ld",
+			  MchCod) != 0);
+  }
+*/
+/*****************************************************************************/
+/************* Check if a match is associated to a given group ***************/
 /*****************************************************************************/
 
-static bool Gam_CheckIfGamIsAssociatedToGrps (long GamCod)
+bool Gam_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod)
   {
-   /***** Get if a game is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if a game is associated to groups",
+   /***** Get if a match is associated to a group from database *****/
+   return (DB_QueryCOUNT ("can not check if a match is associated to a group",
 			  "SELECT COUNT(*) FROM gam_grp"
-			  " WHERE GamCod=%ld",
-			  GamCod) != 0);
+			  " WHERE MchCod=%ld AND GrpCod=%ld",
+			  MchCod,GrpCod) != 0);
   }
 
 /*****************************************************************************/
-/**************** Check if a game is associated to a group *****************/
+/******************** Remove groups in matches of a game *********************/
 /*****************************************************************************/
-
-bool Gam_CheckIfGamIsAssociatedToGrp (long GamCod,long GrpCod)
+/*
+static void Gam_RemoveAllTheGrpsAssociatedToMatchesOfAGame (long GamCod)
   {
-   /***** Get if a game is associated to a group from database *****/
-   return (DB_QueryCOUNT ("can not check if a game is associated to a group",
-			  "SELECT COUNT(*) FROM gam_grp"
-			  " WHERE GamCod=%ld AND GrpCod=%ld",
-			  GamCod,GrpCod) != 0);
-  }
-
-/*****************************************************************************/
-/************************* Remove groups of a game *************************/
-/*****************************************************************************/
-
-static void Gam_RemoveAllTheGrpsAssociatedToAndGame (long GamCod)
-  {
-   /***** Remove groups of the game *****/
-   DB_QueryDELETE ("can not remove the groups associated to a game",
-		   "DELETE FROM gam_grp WHERE GamCod=%ld",
+   ***** Remove groups of the game *****
+   DB_QueryDELETE ("can not remove the groups associated to matches of a game",
+		   "DELETE FROM gam_grp USING gam_grp,gam_matches"
+		   " WHERE gam_matches.GrpCod=%ld"
+		   " AND gam_matches.MchCod=gam_grp.MchCod",
 		   GamCod);
   }
-
+*/
 /*****************************************************************************/
-/******************* Remove one group from all the games *******************/
+/******************** Remove one group from all the games ********************/
 /*****************************************************************************/
 
 void Gam_RemoveGroup (long GrpCod)
@@ -1766,7 +1745,7 @@ void Gam_RemoveGroup (long GrpCod)
   }
 
 /*****************************************************************************/
-/*************** Remove groups of one type from all the games **************/
+/**************** Remove groups of one type from all the games ***************/
 /*****************************************************************************/
 
 void Gam_RemoveGroupsOfType (long GrpTypCod)
@@ -1781,31 +1760,31 @@ void Gam_RemoveGroupsOfType (long GrpTypCod)
   }
 
 /*****************************************************************************/
-/************************ Create groups of a game **************************/
+/******************* Create groups associated to a match *********************/
 /*****************************************************************************/
 
-static void Gam_CreateGrps (long GamCod)
+static void Gam_CreateGrps (long MchCod)
   {
    unsigned NumGrpSel;
 
-   /***** Create groups of the game *****/
+   /***** Create groups associated to the match *****/
    for (NumGrpSel = 0;
 	NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
       /* Create group */
-      DB_QueryINSERT ("can not associate a group to a game",
+      DB_QueryINSERT ("can not associate a group to a match",
 		      "INSERT INTO gam_grp"
-		      " (GamCod,GrpCod)"
+		      " (MchCod,GrpCod)"
 		      " VALUES"
 		      " (%ld,%ld)",
-                      GamCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+                      MchCod,Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
   }
 
 /*****************************************************************************/
-/************ Get and write the names of the groups of a game **************/
+/************* Get and write the names of the groups of a match **************/
 /*****************************************************************************/
 
-static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
+static void Gam_GetAndWriteNamesOfGrpsAssociatedToMatch (struct Match *Match)
   {
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
@@ -1816,20 +1795,18 @@ static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
    unsigned long NumRow;
    unsigned long NumRows;
 
-   /***** Get groups associated to a game from database *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a game",
+   /***** Get groups associated to a match from database *****/
+   NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a match",
 			     "SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
 			     " FROM gam_grp,crs_grp,crs_grp_types"
-			     " WHERE gam_grp.GamCod=%ld"
+			     " WHERE gam_grp.MchCod=%ld"
 			     " AND gam_grp.GrpCod=crs_grp.GrpCod"
 			     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 			     " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
-			     Game->GamCod);
+			     Match->MchCod);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
-            Game->Status.Visible ? "ASG_GRP" :
-        	                  "ASG_GRP_LIGHT",
+   fprintf (Gbl.F.Out,"<div class=\"ASG_GRP\">%s: ",
             NumRows == 1 ? Txt_Group  :
                            Txt_Groups);
 
@@ -1868,8 +1845,8 @@ static void Gam_GetAndWriteNamesOfGrpsAssociatedToGame (struct Game *Game)
   }
 
 /*****************************************************************************/
-/************ Remove all the games of a place on the hierarchy *************/
-/************ (country, institution, centre, degree or course)   *************/
+/************* Remove all the games of a place on the hierarchy **************/
+/************* (country, institution, centre, degree or course) **************/
 /*****************************************************************************/
 
 void Gam_RemoveGames (Hie_Level_t Scope,long Cod)
@@ -1918,20 +1895,20 @@ void Gam_RemoveGames (Hie_Level_t Scope,long Cod)
   }
 
 /*****************************************************************************/
-/************ Check if I belong to any of the groups of a game *************/
+/************ Check if I belong to any of the groups of a match **************/
 /*****************************************************************************/
 
-static bool Gam_CheckIfICanDoThisGameBasedOnGrps (long GamCod)
+static bool Gam_CheckIfIPlayThisMatchBasedOnGrps (long MchCod)
   {
-   /***** Get if I can do a game from database *****/
-   return (DB_QueryCOUNT ("can not check if I can do a game",
-			  "SELECT COUNT(*) FROM games"
-			  " WHERE GamCod=%ld"
-			  " AND (GamCod NOT IN (SELECT GamCod FROM gam_grp) OR"
-			  " GamCod IN (SELECT gam_grp.GamCod FROM gam_grp,crs_grp_usr"
+   /***** Get if I can play a match from database *****/
+   return (DB_QueryCOUNT ("can not check if I can play a match",
+			  "SELECT COUNT(*) FROM gam_matches"
+			  " WHERE MchCod=%ld"
+			  " AND (MchCod NOT IN (SELECT MchCod FROM gam_grp) OR"
+			  " MchCod IN (SELECT gam_grp.MchCod FROM gam_grp,crs_grp_usr"
 			  " WHERE crs_grp_usr.UsrCod=%ld"
 			  " AND gam_grp.GrpCod=crs_grp_usr.GrpCod))",
-			  GamCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+			  MchCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
   }
 
 /*****************************************************************************/
@@ -1972,7 +1949,7 @@ void Gam_RequestNewQuestion (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put button to start game
+		    false,	// Do not put form to start new match
 		    false);	// Do not put button to play
   }
 
@@ -2019,7 +1996,7 @@ static unsigned Gam_GetParamQstInd (void)
   }
 
 /*****************************************************************************/
-/********************* Remove answers of a game question *******************/
+/********************** Remove answers of a game question ********************/
 /*****************************************************************************/
 
 static void Gam_RemAnswersOfAQuestion (long QstCod)
@@ -2225,7 +2202,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
    if (NumQsts)
      {
       /***** Show the table with the questions *****/
-      Gam_ListOneOrMoreQuestionsForEdition (Game,NumQsts,mysql_res);
+      Gam_ListOneOrMoreQuestionsForEdition (Game->GamCod,NumQsts,mysql_res);
 
       if (ActionToDoWithQuestions == Tst_SHOW_GAME_TO_ANSWER)
 	{
@@ -2256,8 +2233,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
 /********************* List game questions for edition ***********************/
 /*****************************************************************************/
 
-static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
-                                                  unsigned NumQsts,
+static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Questions;
@@ -2324,14 +2300,14 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /***** Icons *****/
-      Gam_CurrentGamCod = Game->GamCod;
+      Gam_CurrentGamCod = GamCod;
       Gam_CurrentQstCod = QstCod;
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
       /* Put icon to remove the question */
       Frm_StartForm (ActReqRemGamQst);
-      Gam_PutParamGameCod (Game->GamCod);
+      Gam_PutParamGameCod (GamCod);
       Gam_PutParamQstCod (QstCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
@@ -2410,7 +2386,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Game *Game,
       Tst_WriteQstFeedback (row[3],"TEST_EDI_LIGHT");
 
       /* Show answers */
-      Tst_WriteAnswersGameResult (Game,NumQst,QstCod,
+      Tst_WriteAnswersGameResult (GamCod,NumQst,QstCod,
                                   "TEST_EDI",true);	// Show result
 
       fprintf (Gbl.F.Out,"</td>"
@@ -2518,7 +2494,7 @@ void Gam_AddTstQuestionsToGame (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put button to start game
+		    false,	// Do not put form to start new match
 		    false);	// Do not put button to play
   }
 
@@ -2576,16 +2552,15 @@ static unsigned Gam_CountNumQuestionsInList (void)
 /*** Get number of users who selected this answer and draw proportional bar **/
 /*****************************************************************************/
 
-void Gam_GetAndDrawBarNumUsrsWhoAnswered (struct Game *Game,long QstCod,unsigned AnsInd)
+void Gam_GetAndDrawBarNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd,unsigned NumUsrs)
   {
    unsigned NumUsrsThisAnswer;
 
    /***** Get number of users who selected this answer *****/
-   NumUsrsThisAnswer = Gam_GetNumUsrsWhoAnswered (Game->GamCod,QstCod,AnsInd);
+   NumUsrsThisAnswer = Gam_GetNumUsrsWhoAnswered (GamCod,QstCod,AnsInd);
 
    /***** Show stats of this answer *****/
-   if (Game->Status.ICanViewResults)
-      Gam_DrawBarNumUsrs (NumUsrsThisAnswer,Game->NumUsrs);
+   Gam_DrawBarNumUsrs (NumUsrsThisAnswer,NumUsrs);
   }
 
 /*****************************************************************************/
@@ -2657,15 +2632,6 @@ static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
   }
 
 /*****************************************************************************/
-/********************* Put icon to remove one question ***********************/
-/*****************************************************************************/
-/*
-static void Gam_PutIconToRemoveOneQst (void)
-  {
-   Ico_PutContextualIconToRemove (ActReqRemGamQst,Gam_PutParamsRemoveOneQst);
-  }
-*/
-/*****************************************************************************/
 /**************** Put parameter to move/remove one question ******************/
 /*****************************************************************************/
 
@@ -2687,7 +2653,7 @@ void Gam_RequestRemoveQst (void)
    long QstCod;
    unsigned QstInd;
 
-   /***** Get parameters from form *****/
+   /***** Get parameters *****/
    /* Get game code */
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
@@ -2711,7 +2677,7 @@ void Gam_RequestRemoveQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put button to start game
+		    false,	// Do not put form to start new match
 		    false);	// Do not put button to play
   }
 
@@ -2726,7 +2692,7 @@ void Gam_RemoveQst (void)
    long QstCod;
    unsigned QstInd;
 
-   /***** Get parameters from form *****/
+   /***** Get parameters *****/
    /* Get game code */
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
@@ -2762,7 +2728,7 @@ void Gam_RemoveQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put button to start game
+		    false,	// Do not put form to start new match
 		    false);	// Do not put button to play
   }
 
@@ -2778,7 +2744,7 @@ void Gam_MoveUpQst (void)
    int QstIndTop;
    int QstIndBottom;
 
-   /***** Get parameters from form *****/
+   /***** Get parameters *****/
    /* Get game code */
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
@@ -2810,7 +2776,7 @@ void Gam_MoveUpQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put button to start game
+		    false,	// Do not put form to start new match
 		    false);	// Do not put button to play
   }
 
@@ -2827,7 +2793,7 @@ void Gam_MoveDownQst (void)
    int QstIndBottom;
    int MaxQstInd;	// -1 if no questions
 
-   /***** Get parameters from form *****/
+   /***** Get parameters *****/
    /* Get game code */
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
@@ -2863,7 +2829,7 @@ void Gam_MoveDownQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put button to start game
+		    false,	// Do not put form to start new match
 		    false);	// Do not put button to play
   }
 
@@ -2919,10 +2885,412 @@ static void Gam_ExchangeQuestions (long GamCod,
   }
 
 /*****************************************************************************/
+/************************* List the matches of a game ************************/
+/*****************************************************************************/
+
+static void Gam_ListPlayedMatches (struct Game *Game,bool PutFormNewMatch)
+  {
+   extern const char *Hlp_ASSESSMENT_Games_matches;
+   extern const char *Txt_Matches;
+   char *SubQuery;
+   MYSQL_RES *mysql_res;
+   unsigned NumMatches;
+
+   /***** Get data of matches from database *****/
+   /* Fill subquery for game */
+   if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
+     {
+      if (asprintf (&SubQuery,"GamCod=%ld"
+			      " AND"
+			      "(MchCod NOT IN"
+			      " (SELECT MchCod FROM gam_grp)"
+			      " OR"
+			      " MchCod IN"
+			      " (SELECT gam_grp.MchCod"
+			      " FROM gam_grp,crs_grp_usr"
+			      " WHERE crs_grp_usr.UsrCod=%ld"
+			      " AND gam_grp.GrpCod=crs_grp_usr.GrpCod))",
+		     Game->GamCod,
+		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	  Lay_NotEnoughMemoryExit ();
+      }
+    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
+      {
+       if (asprintf (&SubQuery,"GamCod=%ld",
+		     Game->GamCod) < 0)
+	  Lay_NotEnoughMemoryExit ();
+      }
+
+   /* Make query */
+   NumMatches = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
+					   "SELECT MchCod,"				// row[0]
+						  "GamCod,"				// row[1]
+						  "UNIX_TIMESTAMP(StartTime),"		// row[2]
+						  "UNIX_TIMESTAMP(EndTime),"		// row[3]
+			                          "NOW() BETWEEN StartTime AND EndTime,"// row[4]
+					          "UsrCod,"				// row[5]
+						  "Title"				// row[6]
+					   " FROM gam_matches"
+					   " WHERE %s"
+					   " ORDER BY MchCod",
+					   SubQuery);
+
+   /* Free allocated memory for subquery */
+   free ((void *) SubQuery);
+
+   /***** Start box *****/
+   Gam_CurrentGamCod = Game->GamCod;
+   Box_StartBox (NULL,Txt_Matches,Gam_PutIconToPlayNewMatch,
+                 Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
+
+   if (NumMatches)
+      /***** Show the table with the matches *****/
+      Gam_ListOneOrMoreMatchesForEdition (NumMatches,mysql_res);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Put button to play a new match in this game *****/
+   if (PutFormNewMatch)
+      Gam_PutBigButtonToPlayMatchTch (Game);
+   else
+      Gam_PutButtonNewMatch (Game->GamCod);
+
+   /***** End box *****/
+   Box_EndBox ();
+  }
+
+/*****************************************************************************/
+/********************** Get match data using its code ************************/
+/*****************************************************************************/
+
+void Gam_GetDataOfMatchByCod (struct Match *Match)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned long NumRows;
+
+   /***** Get data of match from database *****/
+   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
+					"SELECT MchCod,"				// row[0]
+					       "GamCod,"				// row[1]
+					       "UNIX_TIMESTAMP(StartTime),"		// row[2]
+					       "UNIX_TIMESTAMP(EndTime),"		// row[3]
+					       "NOW() BETWEEN StartTime AND EndTime,"	// row[4]
+					       "UsrCod,"				// row[5]
+					       "Title"					// row[6]
+					" FROM gam_matches"
+					" WHERE MchCod=%ld"
+					" AND GamCod IN"		// Extra check
+					" (SELECT GamCod FROM games"
+					" WHERE CrsCod='%ld')",
+					Match->MchCod,
+					Gbl.Hierarchy.Crs.CrsCod);
+   if (NumRows) // Match found...
+      /***** Get match data from row *****/
+      Gam_GetMatchDataFromRow (mysql_res,Match);
+   else
+     {
+      /* Initialize to empty match */
+      Match->MchCod                  = -1L;
+      Match->GamCod                  = -1L;
+      Match->UsrCod                  = -1L;
+      Match->TimeUTC[Gam_START_TIME] =
+      Match->TimeUTC[Gam_END_TIME  ] = (time_t) 0;
+      Match->Open                    = false;
+      Match->Title[0]                = '\0';
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/***************** Put icon to add a new questions to game *******************/
+/*****************************************************************************/
+
+static void Gam_PutIconToPlayNewMatch (void)
+  {
+   extern const char *Txt_New_match;
+
+   /***** Put form to create a new question *****/
+   Ico_PutContextualIconToAdd (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID,Gam_PutParams,
+			       Txt_New_match);
+  }
+
+/*****************************************************************************/
+/*********************** List game matches for edition ***********************/
+/*****************************************************************************/
+
+static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
+                                                MYSQL_RES *mysql_res)
+  {
+   extern const char *Txt_No_INDEX;
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
+   extern const char *Txt_Match;
+   extern const char *Txt_Today;
+   unsigned NumMatch;
+   unsigned UniqueId;
+   struct Match Match;
+
+   /***** Write the heading *****/
+   Tbl_StartTableWideMargin (2);
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th></th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "<th class=\"CENTER_TOP\">"
+                      "%s"
+                      "</th>"
+                      "</tr>",
+            Txt_No_INDEX,
+            Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
+	    Txt_START_END_TIME[Gam_ORDER_BY_START_DATE],
+	    Txt_START_END_TIME[Gam_ORDER_BY_END_DATE],
+            Txt_Match);
+
+   /***** Write rows *****/
+   for (NumMatch = 0, UniqueId = 1;
+	NumMatch < NumMatches;
+	NumMatch++, UniqueId++)
+     {
+      Gbl.RowEvenOdd = NumMatch % 2;
+
+      /***** Get match data from row *****/
+      Gam_GetMatchDataFromRow (mysql_res,&Match);
+
+      /***** Icons *****/
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td class=\"BT%u\">",Gbl.RowEvenOdd);
+
+      /* Put icon to remove the match */
+      Frm_StartForm (ActReqRemMch);
+      Gam_PutParamMatchCod (Match.MchCod);
+      Ico_PutIconRemove ();
+      Frm_EndForm ();
+
+      fprintf (Gbl.F.Out,"</td>");
+
+      /***** Number of match ******/
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">"
+			 "<div class=\"BIG_INDEX\">%u</div>"
+			 "</td>",
+	       Gbl.RowEvenOdd,
+	       NumMatch + 1);
+
+      /***** Match player *****/
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
+      Usr_WriteAuthor1Line (Match.UsrCod,false);
+      fprintf (Gbl.F.Out,"</td>");
+
+      /***** Start date/time *****/
+      fprintf (Gbl.F.Out,"<td id=\"mch_date_start_%u\""
+	                 " class=\"%s LEFT_TOP COLOR%u\">",
+	       UniqueId,
+	       Match.Open ? "DATE_GREEN" :
+			    "DATE_RED",
+	       Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('mch_date_start_%u',%ld,"
+			 "%u,'<br />','%s',true,true,0x7);"
+			 "</script>"
+			 "</td>",
+	       UniqueId,Match.TimeUTC[Gam_START_TIME],
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+
+      /***** End date/time *****/
+      fprintf (Gbl.F.Out,"<td id=\"mch_date_end_%u\""
+	                 " class=\"%s LEFT_TOP COLOR%u\">",
+	       UniqueId,
+	       Match.Open ? "DATE_GREEN" :
+			    "DATE_RED",
+	       Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"\">"
+			 "<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('mch_date_end_%u',%ld,"
+			 "%u,'<br />','%s',false,true,0x7);"
+			 "</script>"
+			 "</td>",
+	       UniqueId,Match.TimeUTC[Gam_END_TIME],
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+
+      /***** Title and groups *****/
+      /* Title */
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">%s",
+	       Gbl.RowEvenOdd,Match.Title);
+
+      /* Groups whose students can answer this match */
+      if (Gbl.Crs.Grps.NumGrps)
+	 Gam_GetAndWriteNamesOfGrpsAssociatedToMatch (&Match);
+
+      fprintf (Gbl.F.Out,"</td>");
+
+      fprintf (Gbl.F.Out,"</tr>");
+     }
+
+   /***** End table *****/
+   Tbl_EndTable ();
+  }
+
+/*****************************************************************************/
+/******************** Get game data from a database row **********************/
+/*****************************************************************************/
+
+static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
+				     struct Match *Match)
+  {
+   MYSQL_ROW row;
+
+   /***** Get match data *****/
+   row = mysql_fetch_row (mysql_res);
+   /*
+   row[0] MchCod
+   row[1] GamCod
+   row[2] UNIX_TIMESTAMP(StartTime)
+   row[3] UNIX_TIMESTAMP(EndTime)
+   row[4] NOW() BETWEEN StartTime AND EndTime
+   row[5] UsrCod
+   row[6] Title
+   */
+   /* row[0] holds the code of the match */
+   if ((Match->MchCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
+      Lay_ShowErrorAndExit ("Wrong code of match.");
+
+   /* row[1] holds the code of the game */
+   if ((Match->GamCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
+      Lay_ShowErrorAndExit ("Wrong code of game.");
+
+   /* Get start date (row[2] holds the start UTC time) */
+   Match->TimeUTC[Gam_START_TIME] = Dat_GetUNIXTimeFromStr (row[2]);
+
+   /* Get end   date (row[3] holds the end   UTC time) */
+   Match->TimeUTC[Gam_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[3]);
+
+   /* Get whether the match is open or closed (row(4)) */
+   Match->Open = (row[4][0] == '1');
+
+   /* Get match player (row[5]) */
+   Match->UsrCod = Str_ConvertStrCodToLongCod (row[5]);
+
+   /* Get the title of the game (row[6]) */
+   if (row[6])
+      Str_Copy (Match->Title,row[6],
+		Gam_MAX_BYTES_TITLE);
+   else
+      Match->Title[0] = '\0';
+  }
+
+/*****************************************************************************/
+/************** Request the removal of a match (game instance) ***************/
+/*****************************************************************************/
+
+void Gam_RequestRemoveMatch (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_the_match_X;
+   extern const char *Txt_Remove_match;
+   struct Match Match;
+
+   /***** Get parameters *****/
+   /* Get match code */
+   if ((Match.MchCod = Gam_GetParamMatchCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of match is missing.");
+
+   /***** Get data of the match from database *****/
+   Gam_GetDataOfMatchByCod (&Match);
+
+   /***** Show question and button to remove question *****/
+   Gam_CurrentMchCod = Match.MchCod;
+   Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,Gam_PutParamCurrentMchCod,
+			   Btn_REMOVE_BUTTON,Txt_Remove_match,
+			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_match_X,
+	                   Match.Title);
+
+   /***** Show current game *****/
+   Gam_ShowOneGame (Match.GamCod,
+                    true,	// Show only this game
+                    true,	// List game questions
+		    false,	// Do not put form to start new match
+		    false);	// Do not put button to play
+  }
+
+/*****************************************************************************/
+/********************** Remove a match (game instance) ***********************/
+/*****************************************************************************/
+
+void Gam_RemoveMatch (void)
+  {
+   extern const char *Txt_Match_X_removed;
+   struct Match Match;
+
+   /***** Get parameters *****/
+   /* Get match code */
+   if ((Match.MchCod = Gam_GetParamMatchCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of match is missing.");
+
+   /***** Get data of the match from database *****/
+   Gam_GetDataOfMatchByCod (&Match);
+
+   /***** Remove the match from all the tables *****/
+   /* Remove groups associated to the match */
+   DB_QueryDELETE ("can not remove the groups associated to matches of a game",
+		   "DELETE FROM gam_grp USING gam_grp,gam_matches,games"
+		   " WHERE gam_grp.MchCod=%ld"
+		   " AND gam_grp.MchCod=gam_matches.MchCod"
+		   " AND gam_matches.GamCod=games.GamCod"
+		   " AND games.CrsCod=%ld",	// Extra check
+		   Match.MchCod);
+   /* Remove the match itself */
+   DB_QueryDELETE ("can not remove a match",
+		   "DELETE FROM gam_matches USING gam_matches,games"
+		   " WHERE gam_matches.MchCod=%ld"
+		   " AND gam_matches.GamCod=games.GamCod"
+		   " AND games.CrsCod=%ld",	// Extra check
+		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
+   if (!mysql_affected_rows (&Gbl.mysql))
+      Lay_ShowErrorAndExit ("The match to be removed does not exist.");
+
+   /***** Write message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Match_X_removed,
+		  Match.Title);
+
+   /***** Show current game *****/
+   Gam_ShowOneGame (Match.GamCod,
+                    true,	// Show only this game
+                    true,	// List game questions
+		    false,	// Do not put form to start new match
+		    false);	// Do not put button to play
+  }
+
+/*****************************************************************************/
+/********************* Put button to create a new match **********************/
+/*****************************************************************************/
+
+static void Gam_PutButtonNewMatch (long GamCod)
+  {
+   extern const char *Txt_New_match;
+
+   Frm_StartFormAnchor (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID);
+   Gam_PutParamGameCod (GamCod);
+   Btn_PutConfirmButton (Txt_New_match);
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
 /******************* Start playing a game as a teacher ***********************/
 /*****************************************************************************/
 
-void Gam_StartGameTch (void)
+void Gam_RequestNewMatch (void)
   {
    long GamCod;
 
@@ -2939,7 +3307,7 @@ void Gam_StartGameTch (void)
    Gam_ShowOneGame (GamCod,
                     true,	// Show only this game
                     false,	// Do not list questions
-                    true,	// Put button to start game
+                    true,	// Put form to start new match
 		    false);	// Do not put button to play
   }
 
@@ -2947,63 +3315,109 @@ void Gam_StartGameTch (void)
 /******************* Start playing a game as a student ***********************/
 /*****************************************************************************/
 
-void Gam_PlayGameStd (void)
+void Gam_PlayMatchStd (void)
   {
-   long GamCod;
+   struct Match Match;
+   bool IBelongToGroups;
 
    /***** Get parameters *****/
    Gam_GetParamGameOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
-   /***** Get game code *****/
-   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+   /***** Get match code *****/
+   if ((Match.MchCod = Gam_GetParamMatchCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of match is missing.");
+
+   /***** Get data of the match from database *****/
+   Gam_GetDataOfMatchByCod (&Match);
+
+   /***** Do I belong to valid groups to play this match? *****/
+   IBelongToGroups = Gbl.Usrs.Me.IBelongToCurrentCrs &&
+		     Gam_CheckIfIPlayThisMatchBasedOnGrps (Match.MchCod);
 
    /***** Show game *****/
-   Gam_ShowOneGame (GamCod,
-                    true,	// Show only this game
-                    false,	// Do not list questions
-                    false,	// Do not put button to start game
-		    true);	// Put button to play
+   Gam_ShowOneGame (Match.GamCod,
+                    true,		// Show only this game
+                    false,		// Do not list questions
+                    false,		// Do not put form to start new match
+		    IBelongToGroups);	// Put button to play
   }
 
 /*****************************************************************************/
-/*************** Put a big button to start game as a teacher *****************/
+/****** Put a big button to play match (start a new match) as a teacher ******/
 /*****************************************************************************/
 
-static void Gam_PutBigButtonToStartGameTch (long GamCod)
+static void Gam_PutBigButtonToPlayMatchTch (struct Game *Game)
   {
-   extern const char *Txt_Start_game;
+   extern const char *Hlp_ASSESSMENT_Games_new_match;
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_New_match;
+   extern const char *Txt_Title;
+   extern const char *Txt_Play;
+
+   /***** Start section for a new match *****/
+   Lay_StartSection (Gam_NEW_MATCH_SECTION_ID);
 
    /***** Start form *****/
    Frm_StartForm (ActGamTch1stQst);
-   Gam_PutParamGameCod (GamCod);
+   Gam_PutParamGameCod (Game->GamCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
 
+   /***** Start box and table *****/
+   Box_StartBoxTable (NULL,Txt_New_match,NULL,
+		      Hlp_ASSESSMENT_Games_new_match,Box_NOT_CLOSABLE,2);
+
+   /***** Match title *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"Title\" class=\"%s\">%s:</label>"
+	              "</td>"
+                      "<td class=\"LEFT_MIDDLE\">"
+                      "<input type=\"text\" id=\"Title\" name=\"Title\""
+                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
+                      " required=\"required\" />"
+                      "</td>"
+                      "</tr>",
+            The_ClassFormInBox[Gbl.Prefs.Theme],
+            Txt_Title,
+            Gam_MAX_CHARS_TITLE,Game->Title);
+
+   /***** Groups *****/
+   Gam_ShowLstGrpsToEditMatch ();
+
+   /***** End table *****/
+   Tbl_EndTable ();
+
    /***** Put icon with link *****/
-   Frm_LinkFormSubmit (Txt_Start_game,NULL,NULL);
+   Frm_LinkFormSubmit (Txt_Play,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/play.svg\""
 		      " alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\" />",
-            Cfg_URL_ICON_PUBLIC,Txt_Start_game,Txt_Start_game);
+            Cfg_URL_ICON_PUBLIC,Txt_Play,Txt_Play);
    fprintf (Gbl.F.Out,"</a>");
+
+   /***** End box *****/
+   Box_EndBox ();
 
    /***** End form *****/
    Frm_EndForm ();
+
+   /***** End section for a new match *****/
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
-/**************** Put a big button to play game as a student *****************/
+/******** Put a big button to play match (join a match) as a student *********/
 /*****************************************************************************/
 
-static void Gam_PutBigButtonToPlayGameStd (long GamCod)
+static void Gam_PutBigButtonToPlayMatchStd (long MchCod)
   {
    extern const char *Txt_Play;
 
    /***** Start form *****/
    Frm_StartForm (ActGamStdCurQst);
-   Gam_PutParamGameCod (GamCod);
+   Gam_PutParamMatchCod (MchCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
 
    /***** Put icon with link *****/
@@ -3019,102 +3433,145 @@ static void Gam_PutBigButtonToPlayGameStd (long GamCod)
   }
 
 /*****************************************************************************/
-/********* Show first question when playing a game (by a teacher) ************/
+/********* Create a new match and show first question (by a teacher) *********/
 /*****************************************************************************/
 
-void Gam_GameTchFirstQuestion (void)
+void Gam_CreateAndStartNewMatch (void)
   {
-   long GamCod;
+   struct Match Match;
 
-   /***** Get parameters *****/
+   /***** Get form parameters *****/
    /* Get game code */
-   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
+   if ((Match.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
-   /***** Check that the game is not being played *****/
-   if (Gam_CheckIfGameIsBeeingPlayed (GamCod))
-      Ale_ShowAlert (Ale_WARNING,"Este juego ya est&aacute; jug&aacute;ndose.");	// TODO: Need translation!!!!!!
-   else
-      /***** Show questions and possible answers *****/
-      Gam_PlayGameShowQuestionAndAnswers (GamCod,0,
-					  false);	// Don't show answers
+   /* Get match title */
+   Par_GetParToText ("Title",Match.Title,Gam_MAX_BYTES_TITLE);
+
+   /* Get groups for this games */
+   Grp_GetParCodsSeveralGrps ();
+
+   /***** Create a new match *****/
+   Match.MchCod = Gam_CreateMatch (&Match);
+
+   /***** Free memory for list of selected groups *****/
+   Grp_FreeListCodSelectedGrps ();
+
+   /***** Show questions and possible answers *****/
+   Gam_PlayGameShowQuestionAndAnswers (Match.MchCod,
+				       0,	// First question (index is 0)
+				       false);	// Don't show answers
   }
 
 /*****************************************************************************/
-/******************** Check if I have answered a game ************************/
+/********************** Create a new match in a game *************************/
 /*****************************************************************************/
 
-static bool Gam_CheckIfGameIsBeeingPlayed (long GamCod)
+static long Gam_CreateMatch (struct Match *Match)
   {
-   /***** Get if game is being played from database *****/
+   long MchCod;
+
+   /***** Create a new match *****/
+   MchCod = DB_QueryINSERTandReturnCode ("can not create match",
+				         "INSERT gam_matches"
+				         " (GamCod,StartTime,EndTime,UsrCod,Title)"
+				         " VALUES"
+				         " (%ld,NOW(),NOW(),%ld,'%s')",
+				         Match->GamCod,
+				         Gbl.Usrs.Me.UsrDat.UsrCod,
+				         Match->Title);
+
+   /***** Create groups associated to the match *****/
+   if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
+      Gam_CreateGrps (MchCod);
+
+   return MchCod;
+  }
+
+/*****************************************************************************/
+/******************** Check if I game is being played ************************/
+/*****************************************************************************/
+/*
+static bool Gam_CheckIfGameIsBeingPlayed (long GamCod)
+  {
+   ***** Get if game is being played from database *****
    return (DB_QueryCOUNT ("can not check if game is being played",
-			  "SELECT COUNT(*) FROM gam_playing"
-			  " WHERE GamCod=%ld",
+			  "SELECT COUNT(*)"
+			  " FROM gam_matches,gam_playing"
+			  " WHERE gam_matches.GamCod=%ld"
+			  " AND gam_matches.MchCod=gam_playing.MchCod",
 			  GamCod) != 0);
   }
-
+*/
 /*****************************************************************************/
-/********************** Insert/update game being played **********************/
+/***************** Insert/update a game match being played *******************/
 /*****************************************************************************/
 
-static void Gam_UpdateGameQstBeeingPlayed (long GamCod,unsigned QstInd,long QstCod,bool ShowingAnswers)
+static void Gam_UpdateMatchBeingPlayed (long MchCod,unsigned QstInd,long QstCod,bool ShowingAnswers)
   {
+   /***** Update match in table of matches being played currently *****/
    if (ShowingAnswers)	// Show a question previously shown and its answers
-      DB_QueryUPDATE ("can not update game beeing played",
+      DB_QueryUPDATE ("can not update match beeing played",
 		      "UPDATE gam_playing"
 		      " SET ShowingAnswers='Y'"
-		      " WHERE GamCod=%ld AND QstInd=%u AND QstCod=%ld",
-                      GamCod,QstInd,QstCod);
+		      " WHERE MchCod=%ld"
+		      " AND QstInd=%u AND QstCod=%ld",	// Extra checks, not necessary
+                      MchCod,QstInd,QstCod);
    else			// Show a question without answers
      {
       if (QstInd == 0)	// 1st question beeing shown
-	 DB_QueryINSERT ("can not update game beeing played",
+	 DB_QueryINSERT ("can not create match beeing played",
 			 "INSERT gam_playing"
-			 " (GamCod,QstInd,QstCod,ShowingAnswers,GamStart,QstStart)"
+			 " (MchCod,QstInd,QstCod,ShowingAnswers,MchStart,QstStart)"
 			 " VALUES"
 			 " (%ld,0,%ld,'N',NOW(),NOW())",
-			 GamCod,QstCod);
+			 MchCod,QstCod);
       else		// 2nd, 3rd... question beeing shown
-	 DB_QueryUPDATE ("can not update game beeing played",
+	 DB_QueryUPDATE ("can not update match beeing played",
 			 "UPDATE gam_playing"
 			 " SET QstInd=%u,QstCod=%ld,ShowingAnswers='N',QstStart=NOW()"
-			 " WHERE GamCod=%ld",
-			 QstInd,QstCod,GamCod);
+			 " WHERE MchCod=%ld",
+			 QstInd,QstCod,MchCod);
      }
+
+   /***** Update match end time in table of matches already played *****/
+   DB_QueryUPDATE ("can not update match end time",
+		   "UPDATE gam_matches SET EndTime=NOW() WHERE MchCod=%ld",
+		   MchCod);
   }
 
 /*****************************************************************************/
-/******************** Remove game from games being played ********************/
+/****************** Remove match from matches being played *******************/
 /*****************************************************************************/
 
-static void Gam_RemoveGameBeeingPlayed (long GamCod)
+static void Gam_RemoveMatchBeingPlayed (long MchCod)
   {
    /***** Remove game being played from database *****/
-   DB_QueryDELETE ("can not remove game being played",
+   DB_QueryDELETE ("can not remove match being played",
 		   "DELETE FROM gam_playing"
-		   " WHERE GamCod=%ld",
-	           GamCod);
+		   " WHERE MchCod=%ld",
+	           MchCod);
   }
 
 /*****************************************************************************/
 /********* Show next question when playing a game (by a teacher) *************/
 /*****************************************************************************/
 
-void Gam_GameTchNextQuestion (void)
+void Gam_MatchTchNextQuestion (void)
   {
-   long GamCod;
+   long MchCod;
    unsigned QstInd;
 
    /***** Get parameters *****/
-   /* Get game code */
-   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+   /* Get match code */
+   if ((MchCod = Gam_GetParamMatchCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of match is missing.");
 
    /* Get question index */
    QstInd = Gam_GetParamQstInd ();
 
    /***** Show questions and possible answers *****/
-   Gam_PlayGameShowQuestionAndAnswers (GamCod,QstInd,
+   Gam_PlayGameShowQuestionAndAnswers (MchCod,QstInd,
 				       false);	// Don't show answers
   }
 
@@ -3122,29 +3579,29 @@ void Gam_GameTchNextQuestion (void)
 /************ Show question and its answers when playing a game **************/
 /*****************************************************************************/
 
-void Gam_GameTchShowAnswers (void)
+void Gam_MatchTchShowAnswers (void)
   {
-   long GamCod;
+   long MchCod;
    unsigned QstInd;
 
    /***** Get parameters *****/
-   /* Get game code */
-   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+   /* Get match code */
+   if ((MchCod = Gam_GetParamMatchCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of match is missing.");
 
    /* Get question index */
    QstInd = Gam_GetParamQstInd ();
 
    /***** Show questions and possible answers *****/
-   Gam_PlayGameShowQuestionAndAnswers (GamCod,QstInd,
+   Gam_PlayGameShowQuestionAndAnswers (MchCod,QstInd,
 				       true);	// Show answers
   }
 
 /*****************************************************************************/
-/************ Show question and its answers when playing a game **************/
+/*********** Show question and its answers when playing a match **************/
 /*****************************************************************************/
 
-static void Gam_PlayGameShowQuestionAndAnswers (long GamCod,
+static void Gam_PlayGameShowQuestionAndAnswers (long MchCod,
 						unsigned QstInd,
 						bool ShowAnswers)
   {
@@ -3152,10 +3609,13 @@ static void Gam_PlayGameShowQuestionAndAnswers (long GamCod,
    MYSQL_ROW row;
    int NxtQstInd;
    long QstCod;
-   struct Game Game;
+   struct Match Match;
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = MchCod;
+   Gam_GetDataOfMatchByCod (&Match);
 
    /***** Get data of question from database *****/
-   Game.GamCod = GamCod;
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
 			"SELECT tst_questions.QstCod,"		// row[0]
 			       "tst_questions.AnsType,"		// row[1]
@@ -3165,7 +3625,7 @@ static void Gam_PlayGameShowQuestionAndAnswers (long GamCod,
 			" WHERE gam_questions.GamCod=%ld"
 			" AND gam_questions.QstInd=%u"
 			" AND gam_questions.QstCod=tst_questions.QstCod",
-			Game.GamCod,QstInd))
+			Match.GamCod,QstInd))
       Ale_ShowAlert (Ale_ERROR,"Question doesn't exist.");
    row = mysql_fetch_row (mysql_res);
 
@@ -3202,7 +3662,7 @@ static void Gam_PlayGameShowQuestionAndAnswers (long GamCod,
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
       /* Write answers */
-      Tst_WriteAnswersGameResult (&Game,QstInd,QstCod,
+      Tst_WriteAnswersGameResult (Match.GamCod,QstInd,QstCod,
                                   "GAM_PLAY_TCH_QST",false);	// Don't show result
      }
 
@@ -3213,24 +3673,24 @@ static void Gam_PlayGameShowQuestionAndAnswers (long GamCod,
    if (ShowAnswers)
      {
       /* Get index of the next question */
-      NxtQstInd = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstInd);
+      NxtQstInd = Gam_GetNextQuestionIndexInGame (Match.GamCod,QstInd);
       if (NxtQstInd >= 0)	// Not last question
 	 /* Put button to show next question */
-	 Gam_PutBigButtonToContinue (ActGamTchNxtQst,Game.GamCod,(unsigned) NxtQstInd);
+	 Gam_PutBigButtonToContinue (ActGamTchNxtQst,Match.MchCod,(unsigned) NxtQstInd);
       else			// Last question
 	 /* Put button to end */
-	 Gam_PutBigButtonToEnd (Game.GamCod);
+	 Gam_PutBigButtonToEnd (Match.MchCod);
      }
    else
       /* Put button to show answers */
-      Gam_PutBigButtonToContinue (ActGamTchAns,Game.GamCod,QstInd);
+      Gam_PutBigButtonToContinue (ActGamTchAns,Match.MchCod,QstInd);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** End container for question *****/
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Insert/update game in table of games currently being played *****/
-   Gam_UpdateGameQstBeeingPlayed (GamCod,QstInd,QstCod,ShowAnswers);
+   Gam_UpdateMatchBeingPlayed (MchCod,QstInd,QstCod,ShowAnswers);
   }
 
 /*****************************************************************************/
@@ -3238,7 +3698,7 @@ static void Gam_PlayGameShowQuestionAndAnswers (long GamCod,
 /*****************************************************************************/
 
 static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
-                                        long GamCod,unsigned QstInd)
+                                        long MchCod,unsigned QstInd)
   {
    extern const char *Txt_Continue;
 
@@ -3247,7 +3707,7 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
 
    /***** Start form *****/
    Frm_StartForm (NextAction);
-   Gam_PutParamGameCod (GamCod);
+   Gam_PutParamMatchCod (MchCod);
    Gam_PutParamQstInd (QstInd);
 
    /***** Put icon with link *****/
@@ -3268,12 +3728,11 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
    fprintf (Gbl.F.Out,"</div>");
   }
 
-
 /*****************************************************************************/
-/************************* Put a big button to end ***************************/
+/********************* Put a big button to end a match ***********************/
 /*****************************************************************************/
 
-static void Gam_PutBigButtonToEnd (long GamCod)
+static void Gam_PutBigButtonToEnd (long MchCod)
   {
    extern const char *Txt_Finish;
 
@@ -3282,7 +3741,7 @@ static void Gam_PutBigButtonToEnd (long GamCod)
 
    /***** Start form *****/
    Frm_StartForm (ActGamTchEnd);
-   Gam_PutParamGameCod (GamCod);
+   Gam_PutParamMatchCod (MchCod);
 
    /***** Put icon with link *****/
    Frm_LinkFormSubmit (Txt_Finish,"GAM_PLAY_CONTINUE ICO_HIGHLIGHT",NULL);
@@ -3303,44 +3762,43 @@ static void Gam_PutBigButtonToEnd (long GamCod)
   }
 
 /*****************************************************************************/
-/******************** End playing a game (by a teacher) **********************/
+/******************** End playing a match (by a teacher) *********************/
 /*****************************************************************************/
 
-void Gam_GameTchEnd (void)
+void Gam_MatchTchEnd (void)
   {
-   long GamCod;
+   long MchCod;
 
-   /***** Get parameters *****/
-   /* Get game code */
-   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+   /***** Get match code *****/
+   if ((MchCod = Gam_GetParamMatchCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of match is missing.");
 
-   /***** Remove game being played *****/
-   Gam_RemoveGameBeeingPlayed (GamCod);
+   /***** Remove match being played *****/
+   Gam_RemoveMatchBeingPlayed (MchCod);
 
    /***** Show alert *****/
-   Ale_ShowAlert (Ale_INFO,"Juego finalizado.");	// TODO: Need translation!!!!!
+   Ale_ShowAlert (Ale_INFO,"Partida finalizada.");	// TODO: Need translation!!!!!
 
-   /***** Button to close *****/
+   /***** Button to close browser tab *****/
    Btn_PutCloseButton ("Cerrar");	// TODO: Need translation!!!!!
   }
 
 /*****************************************************************************/
-/********************** Get code of game being played ************************/
+/********************** Get code of match being played ************************/
 /*****************************************************************************/
 
-void Gam_GetGameBeingPlayed (void)
+void Gam_GetMatchBeingPlayed (void)
   {
-   /***** Get game code ****/
-   if ((Gbl.Games.GamCodBeingPlayed = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+   /***** Get match code ****/
+   if ((Gbl.Games.MchCodBeingPlayed = Gam_GetParamMatchCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of match is missing.");
   }
 
 /*****************************************************************************/
 /********* Show game being played to me as student in a new window ***********/
 /*****************************************************************************/
 
-void Gam_ShowNewGameToMeAsStd (void)
+void Gam_ShowNewMatchToMeAsStd (void)
   {
    fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_STD_CONTAINER\">");
    Gam_ShowQuestionBeingPlayed ();
@@ -3351,7 +3809,7 @@ void Gam_ShowNewGameToMeAsStd (void)
 /*************** Refresh current game for a student via AJAX *****************/
 /*****************************************************************************/
 
-void Gam_RefreshCurrentGameStd (void)
+void Gam_RefreshCurrentMatchStd (void)
   {
    if (Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       /***** Get and show current question *****/
@@ -3366,13 +3824,19 @@ static void Gam_ShowQuestionBeingPlayed (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   // struct Game Game;
+   bool IBelongToGroups;
    unsigned QstInd;
    long QstCod;
    bool GameIsPlaying;
    bool ShowAnswers;
    unsigned NumOptions;
    unsigned NumOpt;
+
+   /***** Do I belong to valid groups to play this match? *****/
+   IBelongToGroups = Gbl.Usrs.Me.IBelongToCurrentCrs &&
+		     Gam_CheckIfIPlayThisMatchBasedOnGrps (Gbl.Games.MchCodBeingPlayed);
+   if (!IBelongToGroups)
+      Lay_ShowErrorAndExit ("You can not play this match!");
 
    /***** Get question being played from database *****/
    GameIsPlaying = (DB_QuerySELECT (&mysql_res,"can not get question being played",
@@ -3382,8 +3846,8 @@ static void Gam_ShowQuestionBeingPlayed (void)
 					   "GamStart,"		// row[3]
 					   "QstStart"		// row[4]
 				    " FROM gam_playing"
-				    " WHERE GamCod=%ld",
-				    Gbl.Games.GamCodBeingPlayed) != 0);
+				    " WHERE MchCod=%ld",
+				    Gbl.Games.MchCodBeingPlayed) != 0);
    if (GameIsPlaying)
      {
       /* Get row */
@@ -3494,7 +3958,7 @@ void Gam_ReceiveGameAnswers (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put button to start game
+		    false,	// Do not put form to start new match
 		    false);	// Do not put button to play
   }
 

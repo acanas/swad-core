@@ -704,7 +704,7 @@ struct Globals
       Gam_Order_t SelectedOrder;
       unsigned CurrentPage;
       char *ListQuestions;
-      long GamCodBeingPlayed;	// Used to refresh game via AJAX
+      long MchCodBeingPlayed;	// Used to refresh game via AJAX
      } Games;
    struct
      {

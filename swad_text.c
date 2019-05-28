@@ -8889,6 +8889,27 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warnin
 	"Ao fazer isso, voc&ecirc; remover&aacute; %u estudantes desse grupo.";
 #endif
 
+const char *Txt_Do_you_really_want_to_remove_the_match_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"De veres voleu eliminar la partida <strong>%s</strong>?";
+#elif L==2	// de
+	"Wollen Sie die Spiel <strong>%s</strong> wirklich entfernen?";
+#elif L==3	// en
+	"Do you really want to remove the match <strong>%s</strong>?";
+#elif L==4	// es
+	"&iquest;Realmente desea eliminar la partida <strong>%s</strong>?";
+#elif L==5	// fr
+	"Voulez-vous vraiment supprimer le match <strong>%s</strong>?";
+#elif L==6	// gn
+	"&iquest;Realmente desea eliminar la partida <strong>%s</strong>?";	// Okoteve traducción
+#elif L==7	// it
+	"Vuoi realmente rimuovere la partita <strong>%s</strong>?";
+#elif L==8	// pl
+	"Czy na pewno chcesz usunac mecz <strong>%s</strong>?";
+#elif L==9	// pt
+	"Voc&ecirc; realmente deseja remover o jogo <strong>%s</strong>?";
+#endif
+
 const char *Txt_Do_you_really_want_to_remove_the_photo_of_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"De veres voleu eliminar la foto de <strong>%s</strong>?";
@@ -17812,9 +17833,72 @@ const char *Txt_Marks_area =
 	"Zona de notas";
 #endif
 
+const char *Txt_Match =		// of a game
+#if   L==1	// ca
+	"Partida";
+#elif L==2	// de
+	"Spiel";
+#elif L==3	// en
+	"Match";
+#elif L==4	// es
+	"Partida";
+#elif L==5	// fr
+	"Match";
+#elif L==6	// gn
+	"Partida";	// Okoteve traducción
+#elif L==7	// it
+	"Partita";
+#elif L==8	// pl
+	"Mecz";
+#elif L==9	// pt
+	"Jogo";
+#endif
+
+const char *Txt_Match_X_removed =	// Warning: it is very important to include %s in the following sentences
+#if   L==1	// ca
+	"Partida <strong>%s</strong> eliminada.";
+#elif L==2	// de
+	"Spiel <strong>%s</strong> entfernt.";
+#elif L==3	// en
+	"Match <strong>%s</strong> removed.";
+#elif L==4	// es
+	"Partida <strong>%s</strong> eliminada.";
+#elif L==5	// fr
+	"Match <strong>%s</strong> supprim&eacute;.";
+#elif L==6	// gn
+	"Partida <strong>%s</strong> eliminada.";	// Okoteve traducción
+#elif L==7	// it
+	"Partita <strong>%s</strong> rimossa.";
+#elif L==8	// pl
+	"Mecz <strong>%s</strong> usuni&eogon;te.";
+#elif L==9	// pt
+	"Jogo <strong>%s</strong> removido.";
+#endif
+
+const char *Txt_Matches =	// of a game
+#if   L==1	// ca
+	"Partides";
+#elif L==2	// de
+	"Spiele";
+#elif L==3	// en
+	"Matches";
+#elif L==4	// es
+	"Partidas";
+#elif L==5	// fr
+	"Matchs";
+#elif L==6	// gn
+	"Partidas";	// Okoteve traducción
+#elif L==7	// it
+	"Partite";
+#elif L==8	// pl
+	"Mecze";
+#elif L==9	// pt
+	"Jogos";
+#endif
+
 const char *Txt_Materials =
 #if   L==1	// ca
-	"Materiales";	// Necessita traduccio
+	"Materials";
 #elif L==2	// de
 	"Material";
 #elif L==3	// en
@@ -23777,6 +23861,27 @@ const char *Txt_New_link =
 	"Nowy link";
 #elif L==9	// pt
 	"Nova liga&ccedil;&atilde;o";
+#endif
+
+const char *Txt_New_match =	// of a game
+#if   L==1	// ca
+	"Nova partida";
+#elif L==2	// de
+	"Neues Spiel";
+#elif L==3	// en
+	"New match";
+#elif L==4	// es
+	"Nueva partida";
+#elif L==5	// fr
+	"Nouveau match";
+#elif L==6	// gn
+	"Nueva partida";	// Okoteve traducción
+#elif L==7	// it
+	"Nuova partita";
+#elif L==8	// pl
+	"Nowy mecz";
+#elif L==9	// pt
+	"Novo jogo";
 #endif
 
 const char *Txt_New_message =
@@ -32032,6 +32137,27 @@ const char *Txt_Remove_logo =
 	"Usu&nacute; logo";
 #elif L==9	// pt
 	"Remover logotipo";
+#endif
+
+const char *Txt_Remove_match =	// of a game
+#if   L==1	// ca
+	"Eliminar partida";
+#elif L==2	// de
+	"Entfernen Spiel";
+#elif L==3	// en
+	"Remove match";
+#elif L==4	// es
+	"Eliminar partida";
+#elif L==5	// fr
+	"Supprimer match";
+#elif L==6	// gn
+	"Eliminar partida";	// Okoteve traducción
+#elif L==7	// it
+	"Rimuovere partita";
+#elif L==8	// pl
+	"Usu&nacute; mecz";
+#elif L==9	// pt
+	"Remover jogo";
 #endif
 
 const char *Txt_Remove_me =
@@ -40896,23 +41022,23 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #endif
 	};
 
-const char *Txt_Start_game =
+const char *Txt_Start_match =
 #if   L==1	// ca
-	 "Comen&ccedil;ar joc";
+	 "Comen&ccedil;ar partida";
 #elif L==2	// de
 	 "Spiel starten";
 #elif L==3	// en
-	 "Start game";
+	 "Start match";
 #elif L==4	// es
-	 "Comenzar juego";
+	 "Comenzar partida";
 #elif L==5	// fr
-	 "Commencer le jeu";
+	 "Commencer le match";
 #elif L==6	// gn
 	 "&Ntilde;epyr&utilde; &ntilde;embosar&aacute;i";
 #elif L==7	// it
-	 "Inizia il gioco";
+	 "Inizia la partita";
 #elif L==8	// pl
-	 "Rozpocznij gr&eogon;";
+	 "Rozpocznij mecz";
 #elif L==9	// pt
 	 "Come&ccedil;ar o jogo";
 #endif

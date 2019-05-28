@@ -157,8 +157,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
 static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
 static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
 			            struct UsrData *UsrDat,
-                                    struct Game *Game,
-                                    unsigned NumQst,long QstCod,MYSQL_ROW row,
+                                    long GamCod,unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled);
@@ -210,8 +209,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 				          unsigned NumQst,MYSQL_RES *mysql_res,
                                           double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
-                                        unsigned NumQst,long QstCod,
+static void Tst_WriteChoiceAnsViewGame (long GamCod,unsigned NumQst,long QstCod,
                                         const char *Class,
                                         bool ShowResult);
 
@@ -866,7 +864,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
 
       Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_TO_ANSWER,
 			      &Gbl.Usrs.Me.UsrDat,
-                              NULL,NumQst,QstCod,row,
+                              -1L,NumQst,QstCod,row,
 	                      &ScoreThisQst,		// Not used here
 	                      &AnswerIsNotBlank);	// Not used here
      }
@@ -968,7 +966,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 	 /***** Write question and answers *****/
 	 Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
 	                         &Gbl.Usrs.Me.UsrDat,
-				 NULL,NumQst,QstCod,row,
+				 -1L,NumQst,QstCod,row,
 				 &ScoreThisQst,&AnswerIsNotBlank);
 
 	 /***** Store test result question in database *****/
@@ -1009,8 +1007,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 
 static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
 			            struct UsrData *UsrDat,
-                                    struct Game *Game,
-                                    unsigned NumQst,long QstCod,MYSQL_ROW row,
+                                    long GamCod,unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
@@ -1074,11 +1071,11 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
       case Tst_SELECT_QUESTIONS_FOR_GAME:
 	 break;
       case Tst_SHOW_GAME_TO_ANSWER:
-	 Tst_WriteAnswersGameResult (Game,NumQst,QstCod,
+	 Tst_WriteAnswersGameResult (GamCod,NumQst,QstCod,
 	                             "GAM_PLAY_QST",false);	// Don't show result
 	 break;
       case Tst_SHOW_GAME_RESULT:
-	 Tst_WriteAnswersGameResult (Game,NumQst,QstCod,
+	 Tst_WriteAnswersGameResult (GamCod,NumQst,QstCod,
 	                             "GAM_PLAY_QST",true);	// Show result
 	 break;
      }
@@ -3528,12 +3525,12 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
 /************** Write answers of a question when viewing a game **************/
 /*****************************************************************************/
 
-void Tst_WriteAnswersGameResult (struct Game *Game,unsigned NumQst,long QstCod,
+void Tst_WriteAnswersGameResult (long GamCod,unsigned NumQst,long QstCod,
                                  const char *Class,bool ShowResult)
   {
    /***** Write answer depending on type *****/
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
-      Tst_WriteChoiceAnsViewGame (Game,NumQst,QstCod,
+      Tst_WriteChoiceAnsViewGame (GamCod,NumQst,QstCod,
                                   Class,ShowResult);
    else
       Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
@@ -4047,8 +4044,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 /******** Write single or multiple choice answer when viewing a test *********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
-                                        unsigned NumQst,long QstCod,
+static void Tst_WriteChoiceAnsViewGame (long GamCod,unsigned NumQst,long QstCod,
                                         const char *Class,
                                         bool ShowResult)
   {
@@ -4146,7 +4142,8 @@ static void Tst_WriteChoiceAnsViewGame (struct Game *Game,
 			    "<td class=\"DAT LEFT_TOP\">");
 	 /* Get number of users who selected this answer
 	    and draw proportional bar */
-	 Gam_GetAndDrawBarNumUsrsWhoAnswered (Game,QstCod,AnsInd);
+	 Gam_GetAndDrawBarNumUsrsWhoAnswered (GamCod,QstCod,AnsInd,
+					      0);	// TODO: NumUsrs
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
@@ -8264,7 +8261,7 @@ static void Tst_ShowTestResult (time_t TstTimeUTC)
 	    /***** Write questions and answers *****/
 	    Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
 	                            &Gbl.Usrs.Other.UsrDat,
-				    NULL,NumQst,QstCod,row,
+				    -1L,NumQst,QstCod,row,
 				    &ScoreThisQst,	// Not used here
 				    &AnswerIsNotBlank);	// Not used here
 	   }

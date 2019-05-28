@@ -154,7 +154,7 @@ bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
 void Tst_WriteParamEditQst (void);
 unsigned Tst_GetNumAnswersQst (long QstCod);
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);
-void Tst_WriteAnswersGameResult (struct Game *Game,unsigned NumQst,long QstCod,
+void Tst_WriteAnswersGameResult (long GamCod,unsigned NumQst,long QstCod,
                                  const char *Class,bool ShowResult);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);

@@ -1329,7 +1329,7 @@ mysql> DESCRIBE games;
 			"UsrCod INT NOT NULL,"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
-			"Title VARCHAR(2047) NOT NULL,"	// Gam_MAX_BYTES_SURVEY_TITLE
+			"Title VARCHAR(2047) NOT NULL,"	// Gam_MAX_BYTES_TITLE
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(GamCod),"
 		   "INDEX(CrsCod))");
@@ -1360,15 +1360,40 @@ mysql> DESCRIBE gam_grp;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
-| GamCod | int(11) | NO   | PRI | NULL    |       |
+| MchCod | int(11) | NO   | PRI | NULL    |       |
 | GrpCod | int(11) | NO   | PRI | NULL    |       |
 +--------+---------+------+-----+---------+-------+
 2 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_grp ("
-			"GamCod INT NOT NULL,"
+			"MchCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
-		   "UNIQUE INDEX(GamCod,GrpCod))");
+		   "UNIQUE INDEX(MchCod,GrpCod))");
+
+   /***** Table gam_matches *****/
+/*
+mysql> DESCRIBE gam_matches;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| MchCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| GamCod    | int(11)       | NO   | MUL | NULL    |                |
+| StartTime | datetime      | NO   |     | NULL    |                |
+| EndTime   | datetime      | NO   |     | NULL    |                |
+| UsrCod    | int(11)       | NO   |     | NULL    |                |
+| Title     | varchar(2047) | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_matches ("
+			"MchCod INT NOT NULL AUTO_INCREMENT,"
+			"GamCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"Title VARCHAR(2047) NOT NULL,"	// Gam_MAX_BYTES_TITLE
+		   "UNIQUE INDEX(MchCod),"
+		   "INDEX(GamCod)");
 
    /***** Table gam_playing *****/
 /*
@@ -1376,23 +1401,23 @@ mysql> DESCRIBE gam_playing;
 +----------------+---------------+------+-----+---------+-------+
 | Field          | Type          | Null | Key | Default | Extra |
 +----------------+---------------+------+-----+---------+-------+
-| GamCod         | int(11)       | NO   | PRI | NULL    |       |
+| MchCod         | int(11)       | NO   | PRI | NULL    |       |
 | QstInd         | int(11)       | NO   |     | 0       |       |
 | QstCod         | int(11)       | NO   |     | -1      |       |
 | ShowingAnswers | enum('N','Y') | NO   |     | N       |       |
-| GamStart       | datetime      | NO   |     | NULL    |       |
+| MchStart       | datetime      | NO   |     | NULL    |       |
 | QstStart       | datetime      | NO   |     | NULL    |       |
 +----------------+---------------+------+-----+---------+-------+
 6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_playing ("
-			"GamCod INT NOT NULL,"
+			"MchCod INT NOT NULL,"
 			"QstInd INT NOT NULL DEFAULT 0,"
 			"QstCod INT NOT NULL DEFAULT -1,"
 			"ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"GamStart DATETIME NOT NULL,"
+			"MchStart DATETIME NOT NULL,"
 			"QstStart DATETIME NOT NULL,"
-		   "UNIQUE INDEX(GamCod))");
+		   "UNIQUE INDEX(MchCod))");
 
    /***** Table gam_questions *****/
 /*

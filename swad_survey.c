@@ -2050,7 +2050,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
          if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-            Grp_ListGrpsToEditAsgAttSvyGam (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+            Grp_ListGrpsToEditAsgAttSvyMch (&Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
                                                SvyCod,Grp_SURVEY);
 
       /***** End table and box *****/

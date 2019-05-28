@@ -1700,11 +1700,11 @@ static void Grp_WriteHeadingGroups (void)
   }
 
 /*****************************************************************************/
-/********* List groups of a type                                    **********/
-/********* to edit assignments, attendance events, surveys or games **********/
+/******** List groups of a type                                     **********/
+/******** to edit assignments, attendance events, surveys or matches *********/
 /*****************************************************************************/
 
-void Grp_ListGrpsToEditAsgAttSvyGam (struct GroupType *GrpTyp,long Cod,
+void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
                                      Grp_AsgAttSvyGam_t Grp_AsgAttOrSvy)
   {
    struct ListCodGrps LstGrpsIBelong;
@@ -1751,8 +1751,8 @@ void Grp_ListGrpsToEditAsgAttSvyGam (struct GroupType *GrpTyp,long Cod,
             case Grp_SURVEY:
                AssociatedToGrp = Svy_CheckIfSvyIsAssociatedToGrp (Cod,Grp->GrpCod);
                break;
-            case Grp_GAME:
-               AssociatedToGrp = Gam_CheckIfGamIsAssociatedToGrp (Cod,Grp->GrpCod);
+            case Grp_MATCH:
+               AssociatedToGrp = Gam_CheckIfMatchIsAssociatedToGrp (Cod,Grp->GrpCod);
                break;
            }
          if (AssociatedToGrp)

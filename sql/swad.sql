@@ -622,23 +622,35 @@ CREATE TABLE IF NOT EXISTS gam_answers (
 	NumUsrs INT NOT NULL DEFAULT 0,
 	UNIQUE INDEX(GamCod,QstCod,AnsInd));
 --
--- Table gam_grp: stores the groups associated to each game
+-- Table gam_grp: stores the groups associated to each match in a game
 --
 CREATE TABLE IF NOT EXISTS gam_grp (
-	GamCod INT NOT NULL,
+	MchCod INT NOT NULL,
 	GrpCod INT NOT NULL,
-	UNIQUE INDEX(GamCod,GrpCod));
+	UNIQUE INDEX(MchCod,GrpCod));
 --
--- Table gam_playing: stores the games beeing played currently
+-- Table gam_matches: stores the matches (games instances) already played
+--
+CREATE TABLE IF NOT EXISTS gam_matches (
+	MchCod INT NOT NULL AUTO_INCREMENT,
+	GamCod INT NOT NULL,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	UsrCod INT NOT NULL,
+	Title VARCHAR(2047) NOT NULL,
+	UNIQUE INDEX(MchCod),
+	INDEX(GamCod));
+--
+-- Table gam_playing: stores the matches (game instances) beeing played currently
 --
 CREATE TABLE IF NOT EXISTS gam_playing (
-	GamCod INT NOT NULL,
+	MchCod INT NOT NULL,
 	QstInd INT NOT NULL DEFAULT 0,
 	QstCod INT NOT NULL DEFAULT -1,
 	ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',
-	GamStart DATETIME NOT NULL,
+	MchStart DATETIME NOT NULL,
 	QstStart DATETIME NOT NULL,
-	UNIQUE INDEX(GamCod));
+	UNIQUE INDEX(MchCod));
 --
 -- Table gam_questions: stores the questions in the games
 --
