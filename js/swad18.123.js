@@ -86,6 +86,7 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 	writeLocalDateHMSFromUTC.lastd = d;	// Update last date for the next call
 
 	/* Set date */
+	StrDate = '';
 	if (WriteDate) {
         WriteTodayStr = false;
         if (StrToday != null)
@@ -111,7 +112,6 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 					StrDate = MonthsShort[Mon - 1] + '&nbsp;' + Day.toString() + ',&nbsp;' + Yea.toString();
 					break;
 				default:
-					StrDate = '';
 					break;
 			}
 		
@@ -120,10 +120,10 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 			DayOfWeek = (DayOfWeek == 0) ? 6 : DayOfWeek - 1;
 			StrDate = StrDate + Separator + DAYS[DayOfWeek];
 		}
-		StrDate = StrDate + Separator;
 	}
-	else
-		StrDate = '';
+	else if (WriteWeekDay)
+		StrDate = Separator;
+	StrDate = StrDate + Separator;
 
 	/* Set HH:MM:SS */
 	StrHou = '';

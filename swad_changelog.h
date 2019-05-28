@@ -451,15 +451,19 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.124 (2019-05-28)"
+#define Log_PLATFORM_VERSION	"SWAD 18.125 (2019-05-29)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
+	Version 18.125:   May 29, 2019	Unification of tables of matches (saved and current) into one table. (243371 lines)
+					2 changes necessary in database:
+DROP TABLE gam_matches;
+CREATE TABLE IF NOT EXISTS gam_matches (MchCod INT NOT NULL AUTO_INCREMENT,GamCod INT NOT NULL,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,Title VARCHAR(2047) NOT NULL,QstInd INT NOT NULL DEFAULT 0,QstCod INT NOT NULL DEFAULT -1,QstStartTime DATETIME NOT NULL,ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',Finished ENUM('N','Y') NOT NULL DEFAULT 'N',UNIQUE INDEX(MchCod),INDEX(GamCod));
+
 	Version 18.124:   May 28, 2019	Every game can have several matches (game instances). (243400 lines)
-					4 changes necessary in database:
-DROP TABLE gam_played,gam_playing,gam_grp;
+					3 changes necessary in database:
+DROP TABLE gam_played,gam_matches,gam_grp;
 CREATE TABLE IF NOT EXISTS gam_matches (MchCod INT NOT NULL AUTO_INCREMENT,GamCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,UsrCod INT NOT NULL,Title VARCHAR(2047) NOT NULL,UNIQUE INDEX(MchCod),INDEX(GamCod));
-CREATE TABLE IF NOT EXISTS gam_playing (MchCod INT NOT NULL,QstInd INT NOT NULL DEFAULT 0,QstCod INT NOT NULL DEFAULT -1,ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',MchStart DATETIME NOT NULL,QstStart DATETIME NOT NULL,UNIQUE INDEX(MchCod));
 CREATE TABLE IF NOT EXISTS gam_grp (MchCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(MchCod,GrpCod));
 
 	Version 18.123.2: May 23, 2019	New table with games instances already played. (242829 lines)
@@ -481,9 +485,8 @@ sudo cp icon/flag-checkered.svg /var/www/html/swad/icon/
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1781','es','N','Finalizar juego');
 
 	Version 18.122.2: May 20, 2019	New action to show current question (in a game beeing played) to a student. (242378 lines)
-					2 changes necessary in database:
+					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1780','es','N','Mostrar juego a estudiante');
-CREATE TABLE IF NOT EXISTS gam_playing (GamCod INT NOT NULL,QstInd INT NOT NULL DEFAULT 0,QstCod INT NOT NULL DEFAULT -1,ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',GamStart DATETIME NOT NULL,QstStart DATETIME NOT NULL,UNIQUE INDEX(GamCod));
 
 	Version 18.122.1: May 20, 2019	New action to play game by a student. (242257 lines)
 					2 changes necessary in database:

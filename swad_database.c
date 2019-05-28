@@ -1373,51 +1373,37 @@ mysql> DESCRIBE gam_grp;
    /***** Table gam_matches *****/
 /*
 mysql> DESCRIBE gam_matches;
-+-----------+---------------+------+-----+---------+----------------+
-| Field     | Type          | Null | Key | Default | Extra          |
-+-----------+---------------+------+-----+---------+----------------+
-| MchCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
-| GamCod    | int(11)       | NO   | MUL | NULL    |                |
-| StartTime | datetime      | NO   |     | NULL    |                |
-| EndTime   | datetime      | NO   |     | NULL    |                |
-| UsrCod    | int(11)       | NO   |     | NULL    |                |
-| Title     | varchar(2047) | NO   |     | NULL    |                |
-+-----------+---------------+------+-----+---------+----------------+
-6 rows in set (0.00 sec)
++----------------+---------------+------+-----+---------+----------------+
+| Field          | Type          | Null | Key | Default | Extra          |
++----------------+---------------+------+-----+---------+----------------+
+| MchCod         | int(11)       | NO   | PRI | NULL    | auto_increment |
+| GamCod         | int(11)       | NO   | MUL | NULL    |                |
+| UsrCod         | int(11)       | NO   |     | NULL    |                |
+| StartTime      | datetime      | NO   |     | NULL    |                |
+| EndTime        | datetime      | NO   |     | NULL    |                |
+| Title          | varchar(2047) | NO   |     | NULL    |                |
+| QstInd         | int(11)       | NO   |     | 0       |                |
+| QstCod         | int(11)       | NO   |     | -1      |                |
+| QstStartTime   | datetime      | NO   |     | NULL    |                |
+| ShowingAnswers | enum('N','Y') | NO   |     | N       |                |
+| Finished       | enum('N','Y') | NO   |     | N       |                |
++----------------+---------------+------+-----+---------+----------------+
+11 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_matches ("
 			"MchCod INT NOT NULL AUTO_INCREMENT,"
 			"GamCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
-			"UsrCod INT NOT NULL,"
 			"Title VARCHAR(2047) NOT NULL,"	// Gam_MAX_BYTES_TITLE
-		   "UNIQUE INDEX(MchCod),"
-		   "INDEX(GamCod)");
-
-   /***** Table gam_playing *****/
-/*
-mysql> DESCRIBE gam_playing;
-+----------------+---------------+------+-----+---------+-------+
-| Field          | Type          | Null | Key | Default | Extra |
-+----------------+---------------+------+-----+---------+-------+
-| MchCod         | int(11)       | NO   | PRI | NULL    |       |
-| QstInd         | int(11)       | NO   |     | 0       |       |
-| QstCod         | int(11)       | NO   |     | -1      |       |
-| ShowingAnswers | enum('N','Y') | NO   |     | N       |       |
-| MchStart       | datetime      | NO   |     | NULL    |       |
-| QstStart       | datetime      | NO   |     | NULL    |       |
-+----------------+---------------+------+-----+---------+-------+
-6 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_playing ("
-			"MchCod INT NOT NULL,"
 			"QstInd INT NOT NULL DEFAULT 0,"
 			"QstCod INT NOT NULL DEFAULT -1,"
+			"QstStartTime DATETIME NOT NULL,"
 			"ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"MchStart DATETIME NOT NULL,"
-			"QstStart DATETIME NOT NULL,"
-		   "UNIQUE INDEX(MchCod))");
+			"Finished ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(MchCod),"
+		   "INDEX(GamCod)");
 
    /***** Table gam_questions *****/
 /*

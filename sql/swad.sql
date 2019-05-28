@@ -634,23 +634,17 @@ CREATE TABLE IF NOT EXISTS gam_grp (
 CREATE TABLE IF NOT EXISTS gam_matches (
 	MchCod INT NOT NULL AUTO_INCREMENT,
 	GamCod INT NOT NULL,
+	UsrCod INT NOT NULL,
 	StartTime DATETIME NOT NULL,
 	EndTime DATETIME NOT NULL,
-	UsrCod INT NOT NULL,
 	Title VARCHAR(2047) NOT NULL,
-	UNIQUE INDEX(MchCod),
-	INDEX(GamCod));
---
--- Table gam_playing: stores the matches (game instances) beeing played currently
---
-CREATE TABLE IF NOT EXISTS gam_playing (
-	MchCod INT NOT NULL,
 	QstInd INT NOT NULL DEFAULT 0,
 	QstCod INT NOT NULL DEFAULT -1,
+	QstStartTime DATETIME NOT NULL,
 	ShowingAnswers ENUM('N','Y') NOT NULL DEFAULT 'N',
-	MchStart DATETIME NOT NULL,
-	QstStart DATETIME NOT NULL,
-	UNIQUE INDEX(MchCod));
+	Finished ENUM('N','Y') NOT NULL DEFAULT 'N',
+	UNIQUE INDEX(MchCod),
+	INDEX(GamCod));
 --
 -- Table gam_questions: stores the questions in the games
 --

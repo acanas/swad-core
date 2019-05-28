@@ -84,8 +84,15 @@ struct Match
    long GamCod;
    long UsrCod;
    time_t TimeUTC[2];
-   bool Open;
    char Title[Gam_MAX_BYTES_TITLE + 1];
+   struct
+     {
+      int QstInd;
+      long QstCod;
+      time_t QstStartTimeUTC;
+      bool ShowAnswers;
+      bool Finished;
+     } Status;
   };
 
 /*****************************************************************************/
@@ -113,7 +120,6 @@ static void Gam_ShowOneGame (long GamCod,
                              bool PutFormNewMatch,
 			     bool PutButtonToPlay);
 static void Gam_WriteAuthor (struct Game *Game);
-// static void Gam_WriteStatus (struct Game *Game);
 static void Gam_GetParamGameOrder (void);
 
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
@@ -128,8 +134,6 @@ static void Gam_ShowLstGrpsToEditMatch (void);
 
 static void Gam_CreateGame (struct Game *Game,const char *Txt);
 static void Gam_UpdateGame (struct Game *Game,const char *Txt);
-// static bool Gam_CheckIfMatchIsAssociatedToGrps (long MchCod);
-// Nstatic void Gam_RemoveAllTheGrpsAssociatedToMatchesOfAGame (long GamCod);
 static void Gam_CreateGrps (long MchCod);
 static void Gam_GetAndWriteNamesOfGrpsAssociatedToMatch (struct Match *Match);
 static bool Gam_CheckIfIPlayThisMatchBasedOnGrps (long GamCod);
@@ -144,8 +148,8 @@ static void Gam_RemAnswersOfAQuestion (long QstCod);
 static int Gam_GetQstIndFromQstCod (long GamCod,long QstCod);	// TODO: Remove this function because a question code can be repeated
 static long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
 static int Gam_GetMaxQuestionIndexInGame (long GamCod);
-static int Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
-static int Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
+static int Gam_GetPrevQuestionIndexInGame (long GamCod,int QstInd);
+static int Gam_GetNextQuestionIndexInGame (long GamCod,int QstInd);
 static void Gam_ListGameQuestions (struct Game *Game);
 static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                                                   MYSQL_RES *mysql_res);
@@ -176,9 +180,8 @@ static void Gam_PutBigButtonToPlayMatchTch (struct Game *Game);
 static void Gam_PutBigButtonToPlayMatchStd (long MchCod);
 
 static long Gam_CreateMatch (struct Match *Match);
-// static bool Gam_CheckIfGameIsBeingPlayed (long GamCod);
-static void Gam_UpdateMatchBeingPlayed (long MchCod,unsigned QstInd,long QstCod,bool ShowingAnswers);
-static void Gam_RemoveMatchBeingPlayed (long MchCod);
+static void Gam_UpdateMatchBeingPlayed (long MchCod,unsigned QstInd,long QstCod,
+					bool ShowingAnswers);
 
 static void Gam_PlayGameShowQuestionAndAnswers (long MchCod,
 						unsigned QstInd,
@@ -187,7 +190,7 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
                                         long MchCod,unsigned QstInd);
 static void Gam_PutBigButtonToEnd (long GamCod);
 
-static void Gam_ShowQuestionBeingPlayed (void);
+static void Gam_ShowQuestionBeingPlayed (struct Match *Match);
 
 static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod);
 static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
@@ -1718,22 +1721,9 @@ bool Gam_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod)
   }
 
 /*****************************************************************************/
-/******************** Remove groups in matches of a game *********************/
-/*****************************************************************************/
-/*
-static void Gam_RemoveAllTheGrpsAssociatedToMatchesOfAGame (long GamCod)
-  {
-   ***** Remove groups of the game *****
-   DB_QueryDELETE ("can not remove the groups associated to matches of a game",
-		   "DELETE FROM gam_grp USING gam_grp,gam_matches"
-		   " WHERE gam_matches.GrpCod=%ld"
-		   " AND gam_matches.MchCod=gam_grp.MchCod",
-		   GamCod);
-  }
-*/
-/*****************************************************************************/
 /******************** Remove one group from all the games ********************/
 /*****************************************************************************/
+// TODO: Check if this function should be called when removing group
 
 void Gam_RemoveGroup (long GrpCod)
   {
@@ -1747,6 +1737,7 @@ void Gam_RemoveGroup (long GrpCod)
 /*****************************************************************************/
 /**************** Remove groups of one type from all the games ***************/
 /*****************************************************************************/
+// TODO: Check if this function should be called when removing group type
 
 void Gam_RemoveGroupsOfType (long GrpTypCod)
   {
@@ -2098,7 +2089,7 @@ static int Gam_GetMaxQuestionIndexInGame (long GamCod)
 // Question index can be 0, 1, 2,...
 // Return -1 if no previous question
 
-static int Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
+static int Gam_GetPrevQuestionIndexInGame (long GamCod,int QstInd)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2109,7 +2100,7 @@ static int Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
    // ...this implementation works even with non continuous indexes
    if (!DB_QuerySELECT (&mysql_res,"can not get previous question index",
 			"SELECT MAX(QstInd) FROM gam_questions"
-			" WHERE GamCod=%ld AND QstInd<%u",
+			" WHERE GamCod=%ld AND QstInd<%d",
 			GamCod,QstInd))
       Lay_ShowErrorAndExit ("Error: previous question index not found.");
 
@@ -2131,7 +2122,7 @@ static int Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
 // Question index can be 0, 1, 2,...
 // Return -1 if no next question
 
-static int Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
+static int Gam_GetNextQuestionIndexInGame (long GamCod,int QstInd)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2142,7 +2133,7 @@ static int Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
    // ...this implementation works even with non continuous indexes
    if (!DB_QuerySELECT (&mysql_res,"can not get next question index",
 			"SELECT MIN(QstInd) FROM gam_questions"
-			" WHERE GamCod=%ld AND QstInd>%u",
+			" WHERE GamCod=%ld AND QstInd>%d",
 			GamCod,QstInd))
       Lay_ShowErrorAndExit ("Error: next question index not found.");
 
@@ -2923,13 +2914,17 @@ static void Gam_ListPlayedMatches (struct Game *Game,bool PutFormNewMatch)
 
    /* Make query */
    NumMatches = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
-					   "SELECT MchCod,"				// row[0]
-						  "GamCod,"				// row[1]
-						  "UNIX_TIMESTAMP(StartTime),"		// row[2]
-						  "UNIX_TIMESTAMP(EndTime),"		// row[3]
-			                          "NOW() BETWEEN StartTime AND EndTime,"// row[4]
-					          "UsrCod,"				// row[5]
-						  "Title"				// row[6]
+					   "SELECT MchCod,"				// row[ 0]
+						  "GamCod,"				// row[ 1]
+						  "UsrCod,"				// row[ 2]
+						  "UNIX_TIMESTAMP(StartTime),"		// row[ 3]
+						  "UNIX_TIMESTAMP(EndTime),"		// row[ 4]
+						  "Title,"				// row[ 5]
+						  "QstInd,"				// row[ 6]
+						  "QstCod,"				// row[ 7]
+						  "UNIX_TIMESTAMP(QstStartTime),"	// row[ 8]
+						  "ShowingAnswers,"			// row[ 9]
+						  "Finished"				// row[10]
 					   " FROM gam_matches"
 					   " WHERE %s"
 					   " ORDER BY MchCod",
@@ -2971,13 +2966,17 @@ void Gam_GetDataOfMatchByCod (struct Match *Match)
 
    /***** Get data of match from database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
-					"SELECT MchCod,"				// row[0]
-					       "GamCod,"				// row[1]
-					       "UNIX_TIMESTAMP(StartTime),"		// row[2]
-					       "UNIX_TIMESTAMP(EndTime),"		// row[3]
-					       "NOW() BETWEEN StartTime AND EndTime,"	// row[4]
-					       "UsrCod,"				// row[5]
-					       "Title"					// row[6]
+					"SELECT MchCod,"				// row[ 0]
+					       "GamCod,"				// row[ 1]
+					       "UsrCod,"				// row[ 2]
+					       "UNIX_TIMESTAMP(StartTime),"		// row[ 3]
+					       "UNIX_TIMESTAMP(EndTime),"		// row[ 4]
+					       "Title,"					// row[ 5]
+					       "QstInd,"				// row[ 6]
+					       "QstCod,"				// row[ 7]
+					       "UNIX_TIMESTAMP(QstStartTime),"		// row[ 8]
+					       "ShowingAnswers,"			// row[ 9]
+					       "Finished"				// row[10]
 					" FROM gam_matches"
 					" WHERE MchCod=%ld"
 					" AND GamCod IN"		// Extra check
@@ -2996,8 +2995,12 @@ void Gam_GetDataOfMatchByCod (struct Match *Match)
       Match->UsrCod                  = -1L;
       Match->TimeUTC[Gam_START_TIME] =
       Match->TimeUTC[Gam_END_TIME  ] = (time_t) 0;
-      Match->Open                    = false;
       Match->Title[0]                = '\0';
+      Match->Status.QstInd           = -1;
+      Match->Status.QstCod           = -1L;
+      Match->Status.QstStartTimeUTC  = (time_t) 0;
+      Match->Status.ShowAnswers      = false;
+      Match->Status.Finished         = false;
      }
 
    /***** Free structure that stores the query result *****/
@@ -3028,6 +3031,7 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Match;
+   extern const char *Txt_Continue;
    extern const char *Txt_Today;
    unsigned NumMatch;
    unsigned UniqueId;
@@ -3037,19 +3041,19 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
    Tbl_StartTableWideMargin (2);
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
-                      "<th class=\"CENTER_TOP\">"
+                      "<th class=\"RIGHT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"CENTER_TOP\">"
+                      "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"CENTER_TOP\">"
+                      "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"CENTER_TOP\">"
+                      "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"CENTER_TOP\">"
+                      "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -3079,6 +3083,16 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
       Ico_PutIconRemove ();
       Frm_EndForm ();
 
+      /* Put icon to continue playing the match */
+      if (!Match.Status.Finished)
+	{
+	 Gam_CurrentMchCod = Match.MchCod;
+	 Lay_PutContextualLinkOnlyIcon (ActGamTchNxtQst,NULL,	// TODO: Continue on a new tab!!!!
+					Gam_PutParamCurrentMchCod,
+					"play.svg",
+					Txt_Continue);
+	}
+
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Number of match ******/
@@ -3098,8 +3112,8 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
       fprintf (Gbl.F.Out,"<td id=\"mch_date_start_%u\""
 	                 " class=\"%s LEFT_TOP COLOR%u\">",
 	       UniqueId,
-	       Match.Open ? "DATE_GREEN" :
-			    "DATE_RED",
+	       Match.Status.Finished ? "DATE_RED" :
+		                       "DATE_GREEN",
 	       Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('mch_date_start_%u',%ld,"
@@ -3113,8 +3127,8 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
       fprintf (Gbl.F.Out,"<td id=\"mch_date_end_%u\""
 	                 " class=\"%s LEFT_TOP COLOR%u\">",
 	       UniqueId,
-	       Match.Open ? "DATE_GREEN" :
-			    "DATE_RED",
+	       Match.Status.Finished ? "DATE_RED" :
+			               "DATE_GREEN",
 	       Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"\">"
 			 "<script type=\"text/javascript\">"
@@ -3126,9 +3140,10 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
 	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
       /***** Title and groups *****/
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+
       /* Title */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">%s",
-	       Gbl.RowEvenOdd,Match.Title);
+      fprintf (Gbl.F.Out,"<span class=\"ASG_TITLE\">%s</span>",Match.Title);
 
       /* Groups whose students can answer this match */
       if (Gbl.Crs.Grps.NumGrps)
@@ -3155,40 +3170,60 @@ static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    /***** Get match data *****/
    row = mysql_fetch_row (mysql_res);
    /*
-   row[0] MchCod
-   row[1] GamCod
-   row[2] UNIX_TIMESTAMP(StartTime)
-   row[3] UNIX_TIMESTAMP(EndTime)
-   row[4] NOW() BETWEEN StartTime AND EndTime
-   row[5] UsrCod
-   row[6] Title
+   row[ 0]	MchCod
+   row[ 1]	GamCod
+   row[ 2]	UsrCod
+   row[ 3]	UNIX_TIMESTAMP(StartTime)
+   row[ 4]	UNIX_TIMESTAMP(EndTime)
+   row[ 5]	Title
    */
-   /* row[0] holds the code of the match */
+   /***** Get match data *****/
+   /* Code of the match (row[0]) */
    if ((Match->MchCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
       Lay_ShowErrorAndExit ("Wrong code of match.");
 
-   /* row[1] holds the code of the game */
+   /* Code of the game (row[1]) */
    if ((Match->GamCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
       Lay_ShowErrorAndExit ("Wrong code of game.");
 
-   /* Get start date (row[2] holds the start UTC time) */
-   Match->TimeUTC[Gam_START_TIME] = Dat_GetUNIXTimeFromStr (row[2]);
+   /* Get match teacher (row[2]) */
+   Match->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
-   /* Get end   date (row[3] holds the end   UTC time) */
-   Match->TimeUTC[Gam_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[3]);
+   /* Get start date (row[3] holds the start UTC time) */
+   Match->TimeUTC[Gam_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
-   /* Get whether the match is open or closed (row(4)) */
-   Match->Open = (row[4][0] == '1');
+   /* Get end   date (row[4] holds the end   UTC time) */
+   Match->TimeUTC[Gam_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
-   /* Get match player (row[5]) */
-   Match->UsrCod = Str_ConvertStrCodToLongCod (row[5]);
-
-   /* Get the title of the game (row[6]) */
-   if (row[6])
-      Str_Copy (Match->Title,row[6],
+   /* Get the title of the game (row[5]) */
+   if (row[5])
+      Str_Copy (Match->Title,row[5],
 		Gam_MAX_BYTES_TITLE);
    else
       Match->Title[0] = '\0';
+
+   /***** Get current match status *****/
+   /*
+   row[ 6]	QstInd
+   row[ 7]	QstCod
+   row[ 8]	UNIX_TIMESTAMP(QstStartTime)
+   row[ 9]	ShowingAnswers
+   row[10]	Finished
+    */
+   /* Current question index (row[6]) */
+   Match->Status.QstInd = (int) Str_ConvertStrCodToLongCod (row[6]);
+
+   /* Current question code (row[7]) */
+   Match->Status.QstCod = Str_ConvertStrCodToLongCod (row[7]);
+
+   /* Get question start date (row[8] holds the start UTC time) */
+   Match->Status.QstStartTimeUTC = Dat_GetUNIXTimeFromStr (row[8]);
+
+   /* Get whether to show question answers or not (row(9)) */
+   Match->Status.ShowAnswers = (row[9][0] == 'Y');
+
+   /* Get whether the match is finished or not (row(10)) */
+   Match->Status.Finished = (row[10][0] == 'Y');
   }
 
 /*****************************************************************************/
@@ -3474,12 +3509,14 @@ static long Gam_CreateMatch (struct Match *Match)
    /***** Create a new match *****/
    MchCod = DB_QueryINSERTandReturnCode ("can not create match",
 				         "INSERT gam_matches"
-				         " (GamCod,StartTime,EndTime,UsrCod,Title)"
+				         " (GamCod,UsrCod,StartTime,EndTime,Title,"
+				         "QstInd,QstCod,QstStartTime,ShowingAnswers,Finished)"
 				         " VALUES"
-				         " (%ld,NOW(),NOW(),%ld,'%s')",
+				         " (%ld,%ld,NOW(),NOW(),'%s',"
+				         "-1,-1,FROM_UNIXTIME(0),'N','N')",
 				         Match->GamCod,
 				         Gbl.Usrs.Me.UsrDat.UsrCod,
-				         Match->Title);
+					 Match->Title);
 
    /***** Create groups associated to the match *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
@@ -3489,68 +3526,35 @@ static long Gam_CreateMatch (struct Match *Match)
   }
 
 /*****************************************************************************/
-/******************** Check if I game is being played ************************/
-/*****************************************************************************/
-/*
-static bool Gam_CheckIfGameIsBeingPlayed (long GamCod)
-  {
-   ***** Get if game is being played from database *****
-   return (DB_QueryCOUNT ("can not check if game is being played",
-			  "SELECT COUNT(*)"
-			  " FROM gam_matches,gam_playing"
-			  " WHERE gam_matches.GamCod=%ld"
-			  " AND gam_matches.MchCod=gam_playing.MchCod",
-			  GamCod) != 0);
-  }
-*/
-/*****************************************************************************/
 /***************** Insert/update a game match being played *******************/
 /*****************************************************************************/
 
-static void Gam_UpdateMatchBeingPlayed (long MchCod,unsigned QstInd,long QstCod,bool ShowingAnswers)
+static void Gam_UpdateMatchBeingPlayed (long MchCod,unsigned QstInd,long QstCod,
+					bool ShowingAnswers)
   {
    /***** Update match in table of matches being played currently *****/
    if (ShowingAnswers)	// Show a question previously shown and its answers
-      DB_QueryUPDATE ("can not update match beeing played",
-		      "UPDATE gam_playing"
-		      " SET ShowingAnswers='Y'"
-		      " WHERE MchCod=%ld"
-		      " AND QstInd=%u AND QstCod=%ld",	// Extra checks, not necessary
-                      MchCod,QstInd,QstCod);
+      DB_QueryUPDATE ("can not update match being played",
+		      "UPDATE gam_matches,games"
+		      " SET gam_matches.EndTime=NOW(),"
+		           "gam_matches.ShowingAnswers='Y'"
+		      " WHERE gam_matches.MchCod=%ld"
+		      " AND gam_matches.GamCod=games.GamCod"
+		      " AND games.CrsCod=%ld",	// Extra check
+                      MchCod,Gbl.Hierarchy.Crs.CrsCod);
    else			// Show a question without answers
-     {
-      if (QstInd == 0)	// 1st question beeing shown
-	 DB_QueryINSERT ("can not create match beeing played",
-			 "INSERT gam_playing"
-			 " (MchCod,QstInd,QstCod,ShowingAnswers,MchStart,QstStart)"
-			 " VALUES"
-			 " (%ld,0,%ld,'N',NOW(),NOW())",
-			 MchCod,QstCod);
-      else		// 2nd, 3rd... question beeing shown
-	 DB_QueryUPDATE ("can not update match beeing played",
-			 "UPDATE gam_playing"
-			 " SET QstInd=%u,QstCod=%ld,ShowingAnswers='N',QstStart=NOW()"
-			 " WHERE MchCod=%ld",
-			 QstInd,QstCod,MchCod);
-     }
-
-   /***** Update match end time in table of matches already played *****/
-   DB_QueryUPDATE ("can not update match end time",
-		   "UPDATE gam_matches SET EndTime=NOW() WHERE MchCod=%ld",
-		   MchCod);
-  }
-
-/*****************************************************************************/
-/****************** Remove match from matches being played *******************/
-/*****************************************************************************/
-
-static void Gam_RemoveMatchBeingPlayed (long MchCod)
-  {
-   /***** Remove game being played from database *****/
-   DB_QueryDELETE ("can not remove match being played",
-		   "DELETE FROM gam_playing"
-		   " WHERE MchCod=%ld",
-	           MchCod);
+      DB_QueryUPDATE ("can not update match being played",
+		      "UPDATE gam_matches,games"
+		      " SET gam_matches.EndTime=NOW(),"
+		           "gam_matches.QstInd=%d,"
+			   "gam_matches.QstCod=%ld,"
+			   "gam_matches.ShowingAnswers='N',"
+			   "gam_matches.QstStartTime=NOW()"
+		      " WHERE gam_matches.MchCod=%ld"
+		      " AND gam_matches.GamCod=games.GamCod"
+		      " AND games.CrsCod=%ld",	// Extra check
+		      QstInd,QstCod,
+		      MchCod,Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -3673,7 +3677,7 @@ static void Gam_PlayGameShowQuestionAndAnswers (long MchCod,
    if (ShowAnswers)
      {
       /* Get index of the next question */
-      NxtQstInd = Gam_GetNextQuestionIndexInGame (Match.GamCod,QstInd);
+      NxtQstInd = Gam_GetNextQuestionIndexInGame (Match.GamCod,Match.Status.QstInd);
       if (NxtQstInd >= 0)	// Not last question
 	 /* Put button to show next question */
 	 Gam_PutBigButtonToContinue (ActGamTchNxtQst,Match.MchCod,(unsigned) NxtQstInd);
@@ -3773,8 +3777,15 @@ void Gam_MatchTchEnd (void)
    if ((MchCod = Gam_GetParamMatchCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of match is missing.");
 
-   /***** Remove match being played *****/
-   Gam_RemoveMatchBeingPlayed (MchCod);
+   /***** Update match being played *****/
+   DB_QueryUPDATE ("can not update match being played",
+		   "UPDATE gam_matches,games"
+		   " SET gam_matches.Finished='Y',"
+			"gam_matches.EndTime=NOW()"
+		   " WHERE gam_matches.MchCod=%ld"
+		   " AND gam_matches.GamCod=games.GamCod"
+		   " AND games.CrsCod=%ld",	// Extra check
+		   MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show alert *****/
    Ale_ShowAlert (Ale_INFO,"Partida finalizada.");	// TODO: Need translation!!!!!
@@ -3800,8 +3811,15 @@ void Gam_GetMatchBeingPlayed (void)
 
 void Gam_ShowNewMatchToMeAsStd (void)
   {
+   struct Match Match;
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Gam_GetDataOfMatchByCod (&Match);
+
+   /***** Show current question *****/
    fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_STD_CONTAINER\">");
-   Gam_ShowQuestionBeingPlayed ();
+   Gam_ShowQuestionBeingPlayed (&Match);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -3811,83 +3829,55 @@ void Gam_ShowNewMatchToMeAsStd (void)
 
 void Gam_RefreshCurrentMatchStd (void)
   {
-   if (Gbl.Session.IsOpen)	// If session has been closed, do not write anything
-      /***** Get and show current question *****/
-      Gam_ShowQuestionBeingPlayed ();
+   struct Match Match;
+
+   if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
+      return;
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Gam_GetDataOfMatchByCod (&Match);
+
+   /***** Show current question *****/
+   Gam_ShowQuestionBeingPlayed (&Match);
   }
 
 /*****************************************************************************/
 /************ Show current question being played for a student ***************/
 /*****************************************************************************/
 
-static void Gam_ShowQuestionBeingPlayed (void)
+static void Gam_ShowQuestionBeingPlayed (struct Match *Match)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    bool IBelongToGroups;
-   unsigned QstInd;
-   long QstCod;
-   bool GameIsPlaying;
-   bool ShowAnswers;
    unsigned NumOptions;
    unsigned NumOpt;
 
    /***** Do I belong to valid groups to play this match? *****/
    IBelongToGroups = Gbl.Usrs.Me.IBelongToCurrentCrs &&
-		     Gam_CheckIfIPlayThisMatchBasedOnGrps (Gbl.Games.MchCodBeingPlayed);
+		     Gam_CheckIfIPlayThisMatchBasedOnGrps (Match->MchCod);
    if (!IBelongToGroups)
       Lay_ShowErrorAndExit ("You can not play this match!");
 
-   /***** Get question being played from database *****/
-   GameIsPlaying = (DB_QuerySELECT (&mysql_res,"can not get question being played",
-				    "SELECT QstInd,"		// row[0]
-					   "QstCod,"		// row[1]
-					   "ShowingAnswers,"	// row[2]
-					   "GamStart,"		// row[3]
-					   "QstStart"		// row[4]
-				    " FROM gam_playing"
-				    " WHERE MchCod=%ld",
-				    Gbl.Games.MchCodBeingPlayed) != 0);
-   if (GameIsPlaying)
-     {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get question index (row[0]) */
-      if (sscanf (row[0],"%d",&QstInd) != 1)
-	 Lay_ShowErrorAndExit ("Error when getting question index.");
-
-      /* Get question code (row[1]) */
-      if ((QstCod = Str_ConvertStrCodToLongCod (row[1])) <= 0)
-	 Lay_ShowErrorAndExit ("Error: wrong question code.");
-
-      /* Get whether the answers are being shown (row[2]) */
-      ShowAnswers = (row[2][0] == 'Y');
-     }
-
-   /* Free structure that stores the query result */
-   DB_FreeMySQLResult (&mysql_res);
-
    /***** Show question *****/
-   if (GameIsPlaying)
+   if (!Match->Status.Finished)
      {
       /***** Show question *****/
       /* Write number of question */
       fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_NUM_QST\">%u</div>",
-	       QstInd + 1);
+	       Match->Status.QstInd + 1);
 
       fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_QST_CONTAINER\">");
 
       /* Write answers? */
-      if (ShowAnswers)
+      if (Match->Status.ShowAnswers)
        {
-	if (Tst_CheckIfQuestionIsValidForGame (QstCod))
+	if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
 	  {
 	   /***** Start table *****/
 	   Tbl_StartTableWide (8);
 
 	   /***** Write answers *****/
-	   NumOptions = Tst_GetNumAnswersQst (QstCod);
+	   NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
 	   for (NumOpt = 0;
 	    	NumOpt < NumOptions;
 	    	NumOpt++)
