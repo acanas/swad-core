@@ -453,10 +453,17 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.126.2 (2019-05-29)"
+#define Log_PLATFORM_VERSION	"SWAD 18.127 (2019-05-30)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
+1. ¿Qué ocurre si se está jugando una partida en una pestaña y se reanuda la misma en otra pestaña (da igual otra pestaña que otro navegador u ordenador)?
+   ¿Cómo deben avanzar las dos instancias de la misma partida?
+2. ¿Puede un profesor reanudar una partida comenzada por otro profesor?
+	Version 18.127:   May 30, 2019	Changes in game matches. (243481 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod=1673;
+
 	Version 18.126.2: May 30, 2019	New column in list of matches for match status. (? lines)
 	Version 18.126.1: May 30, 2019	New option to resume an unfinished match. (243415 lines)
 					11 changes necessary in database:

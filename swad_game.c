@@ -90,7 +90,7 @@ struct Match
       unsigned QstInd;	// 0 means that the game has not started. First question has index 0.
       long QstCod;
       time_t QstStartTimeUTC;
-      bool ShowAnswers;
+      bool ShowingAnswers;
       bool Finished;
      } Status;
   };
@@ -178,15 +178,11 @@ static void Gam_PutButtonNewMatch (long GamCod);
 static void Gam_PutBigButtonToPlayMatchTch (struct Game *Game);
 static void Gam_PutBigButtonToPlayMatchStd (long MchCod);
 
-static long Gam_CreateMatch (struct Match *Match);
-static void Gam_UpdateMatchBeingPlayed (long MchCod,unsigned QstInd,long QstCod,
-					bool ShowingAnswers);
+static void Gam_CreateMatch (struct Match *Match);
+static void Gam_UpdateMatchBeingPlayed (struct Match *Match);
 
-static void Gam_PlayGameShowQuestionAndAnswers (long MchCod,
-						unsigned QstInd,
-						bool ShowAnswers);
-static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
-                                        long MchCod,unsigned QstInd);
+static void Gam_PlayGameShowQuestionAndAnswers (struct Match *Match);
+static void Gam_PutBigButtonToContinue (long MchCod);
 static void Gam_PutBigButtonToFinishMatch (long GamCod);
 
 static void Gam_ShowQuestionBeingPlayed (struct Match *Match);
@@ -2975,7 +2971,7 @@ void Gam_GetDataOfMatchByCod (struct Match *Match)
       Match->Status.QstInd           = 0;
       Match->Status.QstCod           = -1L;
       Match->Status.QstStartTimeUTC  = (time_t) 0;
-      Match->Status.ShowAnswers      = false;
+      Match->Status.ShowingAnswers      = false;
       Match->Status.Finished         = false;
      }
 
@@ -3213,7 +3209,7 @@ static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    Match->Status.QstStartTimeUTC = Dat_GetUNIXTimeFromStr (row[8]);
 
    /* Get whether to show question answers or not (row(9)) */
-   Match->Status.ShowAnswers = (row[9][0] == 'Y');
+   Match->Status.ShowingAnswers = (row[9][0] == 'Y');
 
    /* Get whether the match is finished or not (row(10)) */
    Match->Status.Finished = (row[10][0] == 'Y');
@@ -3467,7 +3463,6 @@ static void Gam_PutBigButtonToPlayMatchStd (long MchCod)
 void Gam_CreateAndStartNewMatch (void)
   {
    struct Match Match;
-   unsigned QstInd;
 
    /***** Get form parameters *****/
    /* Get game code */
@@ -3481,43 +3476,55 @@ void Gam_CreateAndStartNewMatch (void)
    Grp_GetParCodsSeveralGrps ();
 
    /***** Create a new match *****/
-   Match.MchCod = Gam_CreateMatch (&Match);
+   Gam_CreateMatch (&Match);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
 
    /***** Show questions and possible answers *****/
-   QstInd = Gam_GetFirstQuestionIndexInGame (Match.GamCod);
-   Gam_PlayGameShowQuestionAndAnswers (Match.MchCod,
-				       QstInd,	// First question
-				       false);	// Don't show answers
+   Gam_PlayGameShowQuestionAndAnswers (&Match);
   }
 
 /*****************************************************************************/
 /********************** Create a new match in a game *************************/
 /*****************************************************************************/
 
-static long Gam_CreateMatch (struct Match *Match)
+static void Gam_CreateMatch (struct Match *Match)
   {
-   long MchCod;
+   /***** Initialize new match *****/
+   Match->UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;	// Player (me)
+   Match->Status.QstInd = Gam_GetFirstQuestionIndexInGame (Match->GamCod);
+   if (Match->Status.QstInd > 0)
+     {
+      Match->Status.QstCod      = Gam_GetQstCodFromQstInd (Match->GamCod,Match->Status.QstInd);
+      Match->Status.ShowingAnswers = false;	// Don't show answers initially
+      Match->Status.Finished    = false;	// Game not finished
+     }
+   else	// The game has no questions!
+     {
+      Match->Status.QstCod      = -1L;		// Non-existent question
+      Match->Status.ShowingAnswers = false;	// Don't show answers initially
+      Match->Status.Finished    = true;		// Game not finished
+     }
 
-   /***** Create a new match *****/
-   MchCod = DB_QueryINSERTandReturnCode ("can not create match",
-				         "INSERT gam_matches"
-				         " (GamCod,UsrCod,StartTime,EndTime,Title,"
-				         "QstInd,QstCod,QstStartTime,ShowingAnswers,Finished)"
-				         " VALUES"
-				         " (%ld,%ld,NOW(),NOW(),'%s',"
-				         "0,-1,FROM_UNIXTIME(0),'N','N')",
-				         Match->GamCod,
-				         Gbl.Usrs.Me.UsrDat.UsrCod,
-					 Match->Title);
+   /***** Insert this new match into database *****/
+   Match->MchCod = DB_QueryINSERTandReturnCode ("can not create match",
+					        "INSERT gam_matches"
+					        " (GamCod,UsrCod,StartTime,EndTime,Title,"
+					        "QstInd,QstCod,QstStartTime,ShowingAnswers,Finished)"
+					        " VALUES"
+					        " (%ld,%ld,NOW(),NOW(),'%s',"
+					        "%u,%ld,NOW(),'%c','%c')",
+					        Match->GamCod,Match->UsrCod,Match->Title,
+					        Match->Status.QstInd,Match->Status.QstCod,
+					        Match->Status.ShowingAnswers ? 'Y' :
+									    'N',
+					        Match->Status.Finished    ? 'Y' :
+									    'N');
 
    /***** Create groups associated to the match *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Gam_CreateGrps (MchCod);
-
-   return MchCod;
+      Gam_CreateGrps (Match->MchCod);
   }
 
 /*****************************************************************************/
@@ -3528,7 +3535,6 @@ void Gam_ResumeUnfinishedMatch (void)
   {
    extern const char *Txt_Finished_match;
    struct Match Match;
-   unsigned QstInd;
 
    /***** Get parameters *****/
    /* Get match code */
@@ -3552,16 +3558,10 @@ void Gam_ResumeUnfinishedMatch (void)
       if (Match.Status.QstInd == 0)
          /* If current question index is 0 ==>
             start playing the first question */
-         QstInd = Gam_GetFirstQuestionIndexInGame (Match.GamCod);
-      else
-         /* If current question index is >0 ==>
-            show again current question, without answers */
-	 QstInd = Match.Status.QstInd;
+         Match.Status.QstInd = Gam_GetFirstQuestionIndexInGame (Match.GamCod);
 
       /***** Show questions and possible answers *****/
-      Gam_PlayGameShowQuestionAndAnswers (Match.MchCod,
-					  QstInd,
-				          false);	// Don't show answers
+      Gam_PlayGameShowQuestionAndAnswers (&Match);
      }
   }
 
@@ -3569,107 +3569,109 @@ void Gam_ResumeUnfinishedMatch (void)
 /***************** Insert/update a game match being played *******************/
 /*****************************************************************************/
 
-static void Gam_UpdateMatchBeingPlayed (long MchCod,unsigned QstInd,long QstCod,
-					bool ShowingAnswers)
+static void Gam_UpdateMatchBeingPlayed (struct Match *Match)
   {
-   /***** Update match in table of matches being played currently *****/
-   if (ShowingAnswers)	// Show a question previously shown and its answers
-      DB_QueryUPDATE ("can not update match being played",
-		      "UPDATE gam_matches,games"
-		      " SET gam_matches.EndTime=NOW(),"
-		           "gam_matches.ShowingAnswers='Y'"
-		      " WHERE gam_matches.MchCod=%ld"
-		      " AND gam_matches.GamCod=games.GamCod"
-		      " AND games.CrsCod=%ld",	// Extra check
-                      MchCod,Gbl.Hierarchy.Crs.CrsCod);
-   else			// Show a question without answers
-      DB_QueryUPDATE ("can not update match being played",
-		      "UPDATE gam_matches,games"
-		      " SET gam_matches.EndTime=NOW(),"
-		           "gam_matches.QstInd=%u,"
-			   "gam_matches.QstCod=%ld,"
-			   "gam_matches.ShowingAnswers='N',"
-			   "gam_matches.QstStartTime=NOW()"
-		      " WHERE gam_matches.MchCod=%ld"
-		      " AND gam_matches.GamCod=games.GamCod"
-		      " AND games.CrsCod=%ld",	// Extra check
-		      QstInd,QstCod,
-		      MchCod,Gbl.Hierarchy.Crs.CrsCod);
+   /***** Update match status in database *****/
+   DB_QueryUPDATE ("can not update match being played",
+		   "UPDATE gam_matches,games"
+		   " SET gam_matches.EndTime=NOW(),"
+			"gam_matches.QstInd=%u,"
+			"gam_matches.QstCod=%ld,"
+			"gam_matches.ShowingAnswers='%c',"
+			"gam_matches.QstStartTime=NOW()"
+		   " WHERE gam_matches.MchCod=%ld"
+		   " AND gam_matches.GamCod=games.GamCod"
+		   " AND games.CrsCod=%ld",	// Extra check
+		   Match->Status.QstInd,Match->Status.QstCod,
+		   Match->Status.ShowingAnswers ? 'Y' :
+					          'N',
+		   Match->MchCod,Gbl.Hierarchy.Crs.CrsCod);
   }
 
 /*****************************************************************************/
-/********* Show next question when playing a game (by a teacher) *************/
+/*** Show next match status (show next question, answers...) (by a teacher) **/
 /*****************************************************************************/
 
-void Gam_MatchTchNextQuestion (void)
+void Gam_NextStatusMatch (void)
   {
-   long MchCod;
-   unsigned QstInd;
+   extern const char *Txt_Finished_match;
+   struct Match Match;
+   long NxtQstInd;
 
    /***** Get parameters *****/
    /* Get match code */
-   if ((MchCod = Gam_GetParamMatchCod ()) == -1L)
+   if ((Match.MchCod = Gam_GetParamMatchCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of match is missing.");
 
-   /* Get question index */
-   QstInd = Gam_GetParamQstInd ();
+   /***** Get data of the match from database *****/
+   Gam_GetDataOfMatchByCod (&Match);
 
-   /***** Show questions and possible answers *****/
-   Gam_PlayGameShowQuestionAndAnswers (MchCod,QstInd,
-				       false);	// Don't show answers
-  }
+   /***** If not yet finished, update status *****/
+   if (!Match.Status.Finished)
+     {
+      if (Match.Status.ShowingAnswers)	// Showing answers currently
+	{
+	 /* Get index of the next question */
+	 NxtQstInd = Gam_GetNextQuestionIndexInGame (Match.GamCod,
+						     Match.Status.QstInd);
+	 if (NxtQstInd)	// Not last question
+	   {
+	    Match.Status.QstInd = NxtQstInd;		// Go to the next question
+	    Match.Status.QstCod = Gam_GetQstCodFromQstInd (Match.GamCod,
+							   Match.Status.QstInd);
+	    Match.Status.ShowingAnswers = false;	// Don't show answers
+	    Match.Status.Finished       = false;	// Game is not finished
+	   }
+	 else		// No more questions
+	   {
+	    Match.Status.QstInd = 0;			// No more questions
+	    Match.Status.QstCod = -1L;			// No more questions
+	    Match.Status.ShowingAnswers = false;	// Don't show answers
+	    Match.Status.Finished       = true;	// Game is finished
+	   }
+	}
+      else
+	{
+	 Match.Status.ShowingAnswers = true;		// Show answers
+	 Match.Status.Finished       = false;		// Game is not finished
+	}
 
-/*****************************************************************************/
-/************ Show question and its answers when playing a game **************/
-/*****************************************************************************/
+      /* Update match status in database */
+      Gam_UpdateMatchBeingPlayed (&Match);
+     }
 
-void Gam_MatchTchShowAnswers (void)
-  {
-   long MchCod;
-   unsigned QstInd;
+   /***** Show status and questions *****/
+   if (Match.Status.Finished)
+     {
+      /* Show alert */
+      Ale_ShowAlert (Ale_WARNING,Txt_Finished_match);
 
-   /***** Get parameters *****/
-   /* Get match code */
-   if ((MchCod = Gam_GetParamMatchCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
-
-   /* Get question index */
-   QstInd = Gam_GetParamQstInd ();
-
-   /***** Show questions and possible answers *****/
-   Gam_PlayGameShowQuestionAndAnswers (MchCod,QstInd,
-				       true);	// Show answers
+      /* Button to close browser tab */
+      Btn_PutCloseButton ("Cerrar");			// TODO: Need translation!!!!!
+     }
+   else
+      /* Show questions and possible answers */
+      Gam_PlayGameShowQuestionAndAnswers (&Match);
   }
 
 /*****************************************************************************/
 /*********** Show question and its answers when playing a match **************/
 /*****************************************************************************/
 
-static void Gam_PlayGameShowQuestionAndAnswers (long MchCod,
-						unsigned QstInd,
-						bool ShowAnswers)
+static void Gam_PlayGameShowQuestionAndAnswers (struct Match *Match)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NxtQstInd;
-   long QstCod;
-   struct Match Match;
-
-   /***** Get data of the match from database *****/
-   Match.MchCod = MchCod;
-   Gam_GetDataOfMatchByCod (&Match);
 
    /***** Get data of question from database *****/
    if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
-			"SELECT tst_questions.QstCod,"		// row[0]
-			       "tst_questions.AnsType,"		// row[1]
-			       "tst_questions.Stem,"		// row[2]
-			       "tst_questions.MedCod"		// row[3]
-			" FROM gam_questions,tst_questions"
-			" WHERE gam_questions.GamCod=%ld"
-			" AND gam_questions.QstInd=%u"
-			" AND gam_questions.QstCod=tst_questions.QstCod",
-			Match.GamCod,QstInd))
+			"SELECT AnsType,"	// row[0]
+			       "Stem,"		// row[1]
+			       "MedCod"		// row[2]
+			" FROM tst_questions"
+			" WHERE QstCod=%ld",
+			Match->Status.QstCod))
       Ale_ShowAlert (Ale_ERROR,"Question doesn't exist.");
    row = mysql_fetch_row (mysql_res);
 
@@ -3678,19 +3680,20 @@ static void Gam_PlayGameShowQuestionAndAnswers (long MchCod,
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_CONTAINER\">");
 
    /* Write number of question */
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_NUM_QST\">%u</div>",QstInd);
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_NUM_QST\">%u</div>",
+	    Match->Status.QstInd);
 
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_QST_CONTAINER\">");
 
-   /* Get question code (row[0]) */
-   if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-      Lay_ShowErrorAndExit ("Error: wrong question code.");
+   /* Get answer type (row[0]) */
+   Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
+   // TODO: Check that answer type is correct (unique choice)
 
-   /* Write stem (row[2]) */
-   Tst_WriteQstStem (row[2],"GAM_PLAY_TCH_QST");
+   /* Write stem (row[1]) */
+   Tst_WriteQstStem (row[1],"GAM_PLAY_TCH_QST");
 
-   /* Get media (row[3]) */
-   Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
+   /* Get media (row[2]) */
+   Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
    Med_GetMediaDataByCod (&Gbl.Test.Media);
 
    /* Show media */
@@ -3699,49 +3702,43 @@ static void Gam_PlayGameShowQuestionAndAnswers (long MchCod,
 		  "TEST_MED_EDIT_LIST_STEM");
 
    /* Write answers? */
-   if (ShowAnswers)
-     {
-      /* Get answer type (row[1]) */
-      Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-
+   if (Match->Status.ShowingAnswers)
       /* Write answers */
-      Tst_WriteAnswersGameResult (Match.GamCod,QstInd,QstCod,
+      Tst_WriteAnswersGameResult (Match->GamCod,
+				  Match->Status.QstInd,
+				  Match->Status.QstCod,
                                   "GAM_PLAY_TCH_QST",false);	// Don't show result
-     }
 
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Put button to continue *****/
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_NXT_CONTAINER\">");
-   if (ShowAnswers)
+   if (Match->Status.ShowingAnswers)
      {
       /* Get index of the next question */
-      NxtQstInd = Gam_GetNextQuestionIndexInGame (Match.GamCod,Match.Status.QstInd);
+      NxtQstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
+						  Match->Status.QstInd);
       if (NxtQstInd)	// Not last question
 	 /* Put button to show next question */
-	 Gam_PutBigButtonToContinue (ActGamTchNxtQst,Match.MchCod,(unsigned) NxtQstInd);
+	 Gam_PutBigButtonToContinue (Match->MchCod);
       else		// Last question
 	 /* Put button to end */
-	 Gam_PutBigButtonToFinishMatch (Match.MchCod);
+	 Gam_PutBigButtonToFinishMatch (Match->MchCod);
      }
    else
       /* Put button to show answers */
-      Gam_PutBigButtonToContinue (ActGamTchAns,Match.MchCod,QstInd);
+      Gam_PutBigButtonToContinue (Match->MchCod);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** End container for question *****/
    fprintf (Gbl.F.Out,"</div>");
-
-   /***** Insert/update game in table of games currently being played *****/
-   Gam_UpdateMatchBeingPlayed (MchCod,QstInd,QstCod,ShowAnswers);
   }
 
 /*****************************************************************************/
 /*********************** Put a big button to continue ************************/
 /*****************************************************************************/
 
-static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
-                                        long MchCod,unsigned QstInd)
+static void Gam_PutBigButtonToContinue (long MchCod)
   {
    extern const char *Txt_Continue;
 
@@ -3749,9 +3746,8 @@ static void Gam_PutBigButtonToContinue (Act_Action_t NextAction,
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_CONTINUE_CONTAINER\">");
 
    /***** Start form *****/
-   Frm_StartForm (NextAction);
+   Frm_StartForm (ActNxtMch);
    Gam_PutParamMatchCod (MchCod);
-   Gam_PutParamQstInd (QstInd);
 
    /***** Put icon with link *****/
    Frm_LinkFormSubmit (Txt_Continue,"GAM_PLAY_TCH_CONTINUE ICO_HIGHLIGHT",NULL);
@@ -3909,7 +3905,7 @@ static void Gam_ShowQuestionBeingPlayed (struct Match *Match)
       fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_QST_CONTAINER\">");
 
       /* Write answers? */
-      if (Match->Status.ShowAnswers)
+      if (Match->Status.ShowingAnswers)
        {
 	if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
 	  {
