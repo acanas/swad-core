@@ -146,6 +146,7 @@ static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd);
 
 static long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
 static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod);
+static unsigned Gam_GetFirstQuestionIndexInGame (long GamCod);
 static unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
 static unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
 static void Gam_ListGameQuestions (struct Game *Game);
@@ -2048,10 +2049,20 @@ static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod)
   }
 
 /*****************************************************************************/
+/******************** Get first question index in a game *********************/
+/*****************************************************************************/
+
+static unsigned Gam_GetFirstQuestionIndexInGame (long GamCod)
+  {
+   return Gam_GetNextQuestionIndexInGame (GamCod,
+					  0);	// First index > 0
+  }
+
+/*****************************************************************************/
 /*********** Get previous question index to a given index in a game **********/
 /*****************************************************************************/
-// Question index can be 1, 2, 3...
-// Return 0 if no previous question
+// Input question index can be 1, 2, 3... n-1
+// Return question index will be 1, 2, 3... n if previous question exists, or 0 if no previous question
 
 static unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
@@ -2083,8 +2094,8 @@ static unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd)
 /*****************************************************************************/
 /************* Get next question index to a given index in a game ************/
 /*****************************************************************************/
-// Question index can be 1, 2, 3...
-// Return 0 if no next question
+// Input question index can be 0, 1, 2, 3... n-1
+// Return question index will be 1, 2, 3... n if next question exists, or 0 if no next question
 
 static unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
@@ -2996,8 +3007,10 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Match;
+   extern const char *Txt_Status;
    extern const char *Txt_Resume;
    extern const char *Txt_Today;
+   extern const char *Txt_Finished_match;
    unsigned NumMatch;
    unsigned UniqueId;
    struct Match Match;
@@ -3021,12 +3034,16 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
                       "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
+                      "<th class=\"LEFT_TOP\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_No_INDEX,
             Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
 	    Txt_START_END_TIME[Gam_ORDER_BY_START_DATE],
 	    Txt_START_END_TIME[Gam_ORDER_BY_END_DATE],
-            Txt_Match);
+            Txt_Match,
+            Txt_Status);
 
    /***** Write rows *****/
    for (NumMatch = 0, UniqueId = 1;
@@ -3061,11 +3078,8 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Number of match ******/
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">"
-			 "<div class=\"BIG_INDEX\">%u</div>"
-			 "</td>",
-	       Gbl.RowEvenOdd,
-	       NumMatch + 1);
+      fprintf (Gbl.F.Out,"<td class=\"BIG_INDEX RIGHT_TOP COLOR%u\">%u</td>",
+	       Gbl.RowEvenOdd,NumMatch + 1);
 
       /***** Match player *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
@@ -3114,6 +3128,20 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
       if (Gbl.Crs.Grps.NumGrps)
 	 Gam_GetAndWriteNamesOfGrpsAssociatedToMatch (&Match);
 
+      fprintf (Gbl.F.Out,"</td>");
+
+      /***** Match status ******/
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      if (Match.Status.Finished)
+         Ico_PutIconOff ("flag-checkered.svg",Txt_Finished_match);
+      else	// Unfinished match
+	{
+	 Gam_CurrentMchCod = Match.MchCod;
+	 Lay_PutContextualLinkOnlyIcon (ActResMch,NULL,
+					Gam_PutParamCurrentMchCod,
+					"play.svg",
+					Txt_Resume);
+	}
       fprintf (Gbl.F.Out,"</td>");
 
       fprintf (Gbl.F.Out,"</tr>");
@@ -3439,6 +3467,7 @@ static void Gam_PutBigButtonToPlayMatchStd (long MchCod)
 void Gam_CreateAndStartNewMatch (void)
   {
    struct Match Match;
+   unsigned QstInd;
 
    /***** Get form parameters *****/
    /* Get game code */
@@ -3458,8 +3487,9 @@ void Gam_CreateAndStartNewMatch (void)
    Grp_FreeListCodSelectedGrps ();
 
    /***** Show questions and possible answers *****/
+   QstInd = Gam_GetFirstQuestionIndexInGame (Match.GamCod);
    Gam_PlayGameShowQuestionAndAnswers (Match.MchCod,
-				       0,	// First question (index is 0)
+				       QstInd,	// First question
 				       false);	// Don't show answers
   }
 
@@ -3496,7 +3526,9 @@ static long Gam_CreateMatch (struct Match *Match)
 
 void Gam_ResumeUnfinishedMatch (void)
   {
+   extern const char *Txt_Finished_match;
    struct Match Match;
+   unsigned QstInd;
 
    /***** Get parameters *****/
    /* Get match code */
@@ -3509,16 +3541,28 @@ void Gam_ResumeUnfinishedMatch (void)
    if (Match.Status.Finished)
      {
       /***** Show alert *****/
-      Ale_ShowAlert (Ale_WARNING,"Partida finalizada.");	// TODO: Need translation!!!!!
+      Ale_ShowAlert (Ale_WARNING,Txt_Finished_match);
 
       /***** Button to close browser tab *****/
       Btn_PutCloseButton ("Cerrar");				// TODO: Need translation!!!!!
      }
    else	// Unfinished match
+     {
+      /***** In what question do we resume the match? *****/
+      if (Match.Status.QstInd == 0)
+         /* If current question index is 0 ==>
+            start playing the first question */
+         QstInd = Gam_GetFirstQuestionIndexInGame (Match.GamCod);
+      else
+         /* If current question index is >0 ==>
+            show again current question, without answers */
+	 QstInd = Match.Status.QstInd;
+
       /***** Show questions and possible answers *****/
       Gam_PlayGameShowQuestionAndAnswers (Match.MchCod,
-					  Match.Status.QstInd,		// Resume last question index shown
-					  Match.Status.ShowAnswers);	// Show answers?
+					  QstInd,
+				          false);	// Don't show answers
+     }
   }
 
 /*****************************************************************************/
@@ -3766,6 +3810,7 @@ static void Gam_PutBigButtonToFinishMatch (long MchCod)
 
 void Gam_MatchTchEnd (void)
   {
+   extern const char *Txt_Finished_match;
    long MchCod;
 
    /***** Get match code *****/
@@ -3783,7 +3828,7 @@ void Gam_MatchTchEnd (void)
 		   MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Show alert *****/
-   Ale_ShowAlert (Ale_INFO,"Partida finalizada.");	// TODO: Need translation!!!!!
+   Ale_ShowAlert (Ale_INFO,Txt_Finished_match);
 
    /***** Button to close browser tab *****/
    Btn_PutCloseButton ("Cerrar");	// TODO: Need translation!!!!!

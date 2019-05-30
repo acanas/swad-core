@@ -12247,6 +12247,27 @@ const char *Txt_Finish =
        "Terminar";
 #endif
 
+const char *Txt_Finished_match =
+#if   L==1	// ca
+	"Partida finalitzada";
+#elif L==2	// de
+	"Spiel beendet";
+#elif L==3	// en
+	"Finished match";
+#elif L==4	// es
+	"Partida finalizada";
+#elif L==5	// fr
+	"Match termin&eacute;";
+#elif L==6	// gn
+	"Partida finalizada";	// Okoteve traducción
+#elif L==7	// it
+	"Partita finita";
+#elif L==8	// pl
+	"Zako&nacute;czony mecz";
+#elif L==9	// pt
+	"Jogo terminado";
+#endif
+
 const char *Txt_First_day_of_the_week =
 #if   L==1	// ca
 	"Primer dia de la setmana";

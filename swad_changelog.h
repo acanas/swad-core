@@ -453,10 +453,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.126.1 (2019-05-29)"
+#define Log_PLATFORM_VERSION	"SWAD 18.126.2 (2019-05-29)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
+	Version 18.126.2: May 30, 2019	New column in list of matches for match status. (? lines)
 	Version 18.126.1: May 30, 2019	New option to resume an unfinished match. (243415 lines)
 					11 changes necessary in database:
 UPDATE actions SET Txt='Preparar partida (como profesor)' WHERE ActCod='1670' AND Language='es';
