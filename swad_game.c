@@ -3213,6 +3213,13 @@ static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 
    /* Get whether the match is finished or not (row(10)) */
    Match->Status.Finished = (row[10][0] == 'Y');
+
+   /* If question index is 0 ==> the game is finished */
+   if (Match->Status.QstInd == 0)
+     {
+      Match->Status.QstCod = -1L;
+      Match->Status.Finished = true;
+     }
   }
 
 /*****************************************************************************/
@@ -3496,15 +3503,15 @@ static void Gam_CreateMatch (struct Match *Match)
    Match->Status.QstInd = Gam_GetFirstQuestionIndexInGame (Match->GamCod);
    if (Match->Status.QstInd > 0)
      {
-      Match->Status.QstCod      = Gam_GetQstCodFromQstInd (Match->GamCod,Match->Status.QstInd);
+      Match->Status.QstCod         = Gam_GetQstCodFromQstInd (Match->GamCod,Match->Status.QstInd);
       Match->Status.ShowingAnswers = false;	// Don't show answers initially
-      Match->Status.Finished    = false;	// Game not finished
+      Match->Status.Finished       = false;	// Game not finished
      }
    else	// The game has no questions!
      {
-      Match->Status.QstCod      = -1L;		// Non-existent question
+      Match->Status.QstCod         = -1L;	// Non-existent question
       Match->Status.ShowingAnswers = false;	// Don't show answers initially
-      Match->Status.Finished    = true;		// Game not finished
+      Match->Status.Finished       = true;	// Game not finished
      }
 
    /***** Insert this new match into database *****/
@@ -3518,9 +3525,9 @@ static void Gam_CreateMatch (struct Match *Match)
 					        Match->GamCod,Match->UsrCod,Match->Title,
 					        Match->Status.QstInd,Match->Status.QstCod,
 					        Match->Status.ShowingAnswers ? 'Y' :
-									    'N',
-					        Match->Status.Finished    ? 'Y' :
-									    'N');
+									       'N',
+					        Match->Status.Finished       ? 'Y' :
+									       'N');
 
    /***** Create groups associated to the match *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
@@ -3577,13 +3584,16 @@ static void Gam_UpdateMatchBeingPlayed (struct Match *Match)
 		   " SET gam_matches.EndTime=NOW(),"
 			"gam_matches.QstInd=%u,"
 			"gam_matches.QstCod=%ld,"
+			"gam_matches.QstStartTime=NOW(),"
 			"gam_matches.ShowingAnswers='%c',"
-			"gam_matches.QstStartTime=NOW()"
+			"gam_matches.Finished='%c'"
 		   " WHERE gam_matches.MchCod=%ld"
 		   " AND gam_matches.GamCod=games.GamCod"
 		   " AND games.CrsCod=%ld",	// Extra check
 		   Match->Status.QstInd,Match->Status.QstCod,
 		   Match->Status.ShowingAnswers ? 'Y' :
+					          'N',
+		   Match->Status.Finished       ? 'Y' :
 					          'N',
 		   Match->MchCod,Gbl.Hierarchy.Crs.CrsCod);
   }
@@ -3627,7 +3637,7 @@ void Gam_NextStatusMatch (void)
 	    Match.Status.QstInd = 0;			// No more questions
 	    Match.Status.QstCod = -1L;			// No more questions
 	    Match.Status.ShowingAnswers = false;	// Don't show answers
-	    Match.Status.Finished       = true;	// Game is finished
+	    Match.Status.Finished       = true;		// Game is finished
 	   }
 	}
       else
@@ -3779,7 +3789,7 @@ static void Gam_PutBigButtonToFinishMatch (long MchCod)
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTINUE_CONTAINER\">");
 
    /***** Start form *****/
-   Frm_StartForm (ActEndMch);
+   Frm_StartForm (ActNxtMch);
    Gam_PutParamMatchCod (MchCod);
 
    /***** Put icon with link *****/
@@ -3798,36 +3808,6 @@ static void Gam_PutBigButtonToFinishMatch (long MchCod)
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/******************** End playing a match (by a teacher) *********************/
-/*****************************************************************************/
-
-void Gam_MatchTchEnd (void)
-  {
-   extern const char *Txt_Finished_match;
-   long MchCod;
-
-   /***** Get match code *****/
-   if ((MchCod = Gam_GetParamMatchCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
-
-   /***** Update match being played *****/
-   DB_QueryUPDATE ("can not update match being played",
-		   "UPDATE gam_matches,games"
-		   " SET gam_matches.Finished='Y',"
-			"gam_matches.EndTime=NOW()"
-		   " WHERE gam_matches.MchCod=%ld"
-		   " AND gam_matches.GamCod=games.GamCod"
-		   " AND games.CrsCod=%ld",	// Extra check
-		   MchCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /***** Show alert *****/
-   Ale_ShowAlert (Ale_INFO,Txt_Finished_match);
-
-   /***** Button to close browser tab *****/
-   Btn_PutCloseButton ("Cerrar");	// TODO: Need translation!!!!!
   }
 
 /*****************************************************************************/

@@ -129,7 +129,6 @@ void Gam_ReceiveGameAnswers (void);
 void Gam_CreateAndStartNewMatch (void);
 void Gam_ResumeUnfinishedMatch (void);
 void Gam_NextStatusMatch (void);
-void Gam_MatchTchEnd (void);
 
 void Gam_GetMatchBeingPlayed (void);
 void Gam_ShowNewMatchToMeAsStd (void);

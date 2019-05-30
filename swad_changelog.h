@@ -434,6 +434,9 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Cambiar QstInd al rango 1,2,3... (código especial 0 en lugar de -1) en swad_survey
 
+// TODO: Probar qué ocurre si se está jugando una partida en una pestaña y se reanuda la misma en otra pestaña (da igual otra pestaña que otro navegador u ordenador)
+// TODO: ¿Puede un profesor reanudar una partida comenzada por otro profesor?
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -453,13 +456,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.127 (2019-05-30)"
+#define Log_PLATFORM_VERSION	"SWAD 18.127.1 (2019-05-31)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
-1. ¿Qué ocurre si se está jugando una partida en una pestaña y se reanuda la misma en otra pestaña (da igual otra pestaña que otro navegador u ordenador)?
-   ¿Cómo deben avanzar las dos instancias de la misma partida?
-2. ¿Puede un profesor reanudar una partida comenzada por otro profesor?
+	Version 18.127.1: May 31, 2019	Removed action to end a match. (243464 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod=1781;
+
 	Version 18.127:   May 30, 2019	Changes in game matches. (243481 lines)
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod=1673;
