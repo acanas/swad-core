@@ -209,7 +209,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 				          unsigned NumQst,MYSQL_RES *mysql_res,
                                           double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteChoiceAnsViewGame (long GamCod,unsigned NumQst,long QstCod,
+static void Tst_WriteChoiceAnsViewGame (long GamCod,unsigned QstInd,long QstCod,
                                         const char *Class,
                                         bool ShowResult);
 
@@ -3525,12 +3525,12 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
 /************** Write answers of a question when viewing a game **************/
 /*****************************************************************************/
 
-void Tst_WriteAnswersGameResult (long GamCod,unsigned NumQst,long QstCod,
+void Tst_WriteAnswersGameResult (long GamCod,unsigned QstInd,long QstCod,
                                  const char *Class,bool ShowResult)
   {
    /***** Write answer depending on type *****/
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
-      Tst_WriteChoiceAnsViewGame (GamCod,NumQst,QstCod,
+      Tst_WriteChoiceAnsViewGame (GamCod,QstInd,QstCod,
                                   Class,ShowResult);
    else
       Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
@@ -4044,7 +4044,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 /******** Write single or multiple choice answer when viewing a test *********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsViewGame (long GamCod,unsigned NumQst,long QstCod,
+static void Tst_WriteChoiceAnsViewGame (long GamCod,unsigned QstInd,long QstCod,
                                         const char *Class,
                                         bool ShowResult)
   {
@@ -4125,7 +4125,7 @@ static void Tst_WriteChoiceAnsViewGame (long GamCod,unsigned NumQst,long QstCod,
                          "<label for=\"Ans%06u_%u\" class=\"%s\">"
 	                 "%s"
 	                 "</label>",
-               NumQst,NumOpt,
+               QstInd,NumOpt,
 	       Class,
                Gbl.Test.Answer.Options[NumOpt].Text);
       Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
@@ -4142,7 +4142,7 @@ static void Tst_WriteChoiceAnsViewGame (long GamCod,unsigned NumQst,long QstCod,
 			    "<td class=\"DAT LEFT_TOP\">");
 	 /* Get number of users who selected this answer
 	    and draw proportional bar */
-	 Gam_GetAndDrawBarNumUsrsWhoAnswered (GamCod,QstCod,AnsInd,
+	 Gam_GetAndDrawBarNumUsrsWhoAnswered (GamCod,QstInd,AnsInd,
 					      0);	// TODO: NumUsrs
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -6338,7 +6338,7 @@ void Tst_RequestRemoveQst (void)
 						Tst_PutParamsRemoveQst,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-			   (unsigned long) Gbl.Test.QstCod);
+			   Gbl.Test.QstCod);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)

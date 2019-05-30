@@ -3530,12 +3530,12 @@ void Svy_RequestRemoveQst (void)
    SvyQst.QstInd = Svy_GetQstIndFromQstCod (SvyQst.QstCod);
 
    /***** Show question and button to remove question *****/
-   Svy_CurrentSvyCod    = SvyCod;
+   Svy_CurrentSvyCod = SvyCod;
    Svy_CurrentQstCod = SvyQst.QstCod;
    Ale_ShowAlertAndButton (ActRemSvyQst,NULL,NULL,Svy_PutParamsRemoveOneQst,
 			   Btn_REMOVE_BUTTON,Txt_Remove_question,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-	                   (unsigned long) (SvyQst.QstInd + 1));
+	                   (long) SvyQst.QstInd + 1);
 
    /***** Show current survey *****/
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);

@@ -8952,25 +8952,25 @@ const char *Txt_Do_you_really_want_to_remove_the_project_X =	// Warning: it is v
 	"Voc&ecirc; realmente deseja remover o projeto <strong>%s</strong>?";
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %lu in the following sentences
+const char *Txt_Do_you_really_want_to_remove_the_question_X =	// Warning: it is very important to include %ld in the following sentences
 #if   L==1	// ca
-	"De veres voleu eliminar pregunta <strong>%lu</strong>?";
+	"De veres voleu eliminar pregunta <strong>%ld</strong>?";
 #elif L==2	// de
-	"Wollen Sie die Frage <strong>%lu</strong> wirklich entfernen?";
+	"Wollen Sie die Frage <strong>%ld</strong> wirklich entfernen?";
 #elif L==3	// en
-	"Do you really want to remove the question <strong>%lu</strong>?";
+	"Do you really want to remove the question <strong>%ld</strong>?";
 #elif L==4	// es
-	"&iquest;Realmente desea eliminar la pregunta <strong>%lu</strong>?";
+	"&iquest;Realmente desea eliminar la pregunta <strong>%ld</strong>?";
 #elif L==5	// fr
-	"Voulez-vous vraiment supprimer la question <strong>%lu</strong>?";
+	"Voulez-vous vraiment supprimer la question <strong>%ld</strong>?";
 #elif L==6	// gn
-	"&iquest;Realmente desea eliminar la pregunta <strong>%lu</strong>?";	// Okoteve traducción
+	"&iquest;Realmente desea eliminar la pregunta <strong>%ld</strong>?";	// Okoteve traducción
 #elif L==7	// it
-	"Vuoi realmente rimuovere la domanda <strong>%lu</strong>?";
+	"Vuoi realmente rimuovere la domanda <strong>%ld</strong>?";
 #elif L==8	// pl
-	"Czy na pewno chcesz usunac pytanie <strong>%lu</strong>?";
+	"Czy na pewno chcesz usunac pytanie <strong>%ld</strong>?";
 #elif L==9	// pt
-	"Voc&ecirc; realmente deseja remover a quest&atilde;o <strong>%lu</strong>?";
+	"Voc&ecirc; realmente deseja remover a quest&atilde;o <strong>%ld</strong>?";
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_survey_X =	// Warning: it is very important to include %s in the following sentences
@@ -33010,6 +33010,27 @@ const char *Txt_results_per_page =
 	"wynik&oacute;w na stronie";
 #elif L==9	// pt
 	"resultados por p&aacute;gina";
+#endif
+
+const char *Txt_Resume =	// Resume a game match
+#if   L==1	// ca
+	"Reprendre";
+#elif L==2	// de
+	"Fortsetzen";
+#elif L==3	// en
+	"Resume";
+#elif L==4	// es
+	"Reanudar";
+#elif L==5	// fr
+	"Reprendre";
+#elif L==6	// gn
+	"Reanudar";	// Okoteve traducción
+#elif L==7	// it
+	"Riprendi";
+#elif L==8	// pl
+	"Wzn&oacute;w";
+#elif L==9	// pt
+	"Retomar";
 #endif
 
 const char *Txt_Retype_new_password =

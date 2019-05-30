@@ -608,10 +608,11 @@ Assessment:
         455. ActFrmNewMch		Put form to create a new match (by a teacher)
         NEW. ActReqRemMch		Request the removal of a match (by a teacher)
         NEW. ActRemMch			Confirm the removal of a match (by a teacher)
-        456. ActGamTch1stQst		Show first question when playing a game (by a teacher)
+        456. ActNewMch			Create a new match showing first question in a new browser tab (by a teacher)
+        NEW. ActResMch			Resume an unfinished match showing current question in a new browser tab (by a teacher)
         457. ActGamTchNxtQst		Show next question when playing a game (by a teacher)
         458. ActGamTchAns		Show answers of current question when playing a game (by a teacher)
-        NEW. ActGamTchEnd		End playing a game (by a teacher)
+        NEW. ActEndMch			Finish a match (by a teacher)
 
         NEW. ActPlyMchStd		Play a game (by a student)
         NEW. ActGamStdCurQst		Show current question when playing a game (by a student)
@@ -2146,10 +2147,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActFrmNewMch	*/{1670,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestNewMatch		,NULL},
    /* ActReqRemMch	*/{1783,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestRemoveMatch		,NULL},
    /* ActRemMch		*/{1784,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RemoveMatch		,NULL},
-   /* ActGamTch1stQst	*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Gam_CreateAndStartNewMatch	,NULL},
+   /* ActNewMch		*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Gam_CreateAndStartNewMatch	,NULL},
+   /* ActResMch		*/{1785,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Gam_ResumeUnfinishedMatch	,NULL},
    /* ActGamTchNxtQst	*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_MatchTchNextQuestion	,NULL},
    /* ActGamTchAns	*/{1673,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_MatchTchShowAnswers	,NULL},
-   /* ActGamTchEnd	*/{1781,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_MatchTchEnd		,NULL},
+   /* ActEndMch		*/{1781,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_MatchTchEnd		,NULL},
 
    /* ActPlyMchStd	*/{1779,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_PlayMatchStd		,NULL},
    /* ActGamStdCurQst	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_GetMatchBeingPlayed	,Gam_ShowNewMatchToMeAsStd	,NULL},
@@ -4876,7 +4878,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActUp_GamQst,		// #1668
 	ActDwnGamQst,		// #1669
 	ActFrmNewMch,		// #1670
-	ActGamTch1stQst,	// #1671
+	ActNewMch,		// #1671
 	ActGamTchNxtQst,	// #1672
 	ActGamTchAns,		// #1673
 	ActSeePrj,		// #1674
@@ -4986,10 +4988,11 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActUnlAllPrj,		// #1778
 	ActPlyMchStd,		// #1779
 	ActGamStdCurQst,	// #1780
-	ActGamTchEnd,		// #1781
+	ActEndMch,		// #1781
 	ActRefGamStd,		// #1782
         ActReqRemMch,		// #1783
         ActRemMch,		// #1784
+	ActResMch,		// #1785
 	};
 
 /*****************************************************************************/

@@ -432,6 +432,8 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 // TODO: En Actividades, en Juegos, en Encuestas, en Asistencia poner filtros de Pasados (rojo), Actuales (verde), Futuros (azul).
 //	 Pensar si en Agenda se puede poner igual.
 
+// TODO: Cambiar QstInd al rango 1,2,3... (código especial 0 en lugar de -1) en swad_survey
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -451,10 +453,31 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.125 (2019-05-29)"
+#define Log_PLATFORM_VERSION	"SWAD 18.126.1 (2019-05-29)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
+	Version 18.126.1: May 30, 2019	New option to resume an unfinished match. (243415 lines)
+					11 changes necessary in database:
+UPDATE actions SET Txt='Preparar partida (como profesor)' WHERE ActCod='1670' AND Language='es';
+UPDATE actions SET Txt='Comenzar partida (como profesor)' WHERE ActCod='1671' AND Language='es';
+UPDATE actions SET Txt='Mostrar siguiente pregunta en partida (como profesor)' WHERE ActCod='1672' AND Language='es';
+UPDATE actions SET Txt='Mostrar respuestas de pregunta en partida (como profesor)' WHERE ActCod='1673' AND Language='es';
+UPDATE actions SET Txt='Prepararse a jugar (como estudiante)' WHERE ActCod='1779' AND Language='es';
+UPDATE actions SET Txt='Unirse a partida (como estudiante)' WHERE ActCod='1780' AND Language='es';
+UPDATE actions SET Txt='Finalizar partida (como profesor)' WHERE ActCod='1781' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1782','es','N','Refrescar partida (como estudiante)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1783','es','N','Solicitar eliminar partida (como profesor)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1784','es','N','Eliminar partida (como profesor)');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1785','es','N','Reanudar partida (como profesor)');
+
+	Version 18.126:   May 30, 2019	Question index range changes from 0,1,2... to 1,2,3... (? lines)
+					2 changes necessary in database:
+UPDATE gam_questions SET QstInd=QstInd+1;
+UPDATE gam_matches SET QstInd=QstInd+1;
+DROP TABLE gam_answers;
+CREATE TABLE IF NOT EXISTS gam_answers (GamCod INT NOT NULL,QstInd INT NOT NULL,AnsInd TINYINT NOT NULL,NumUsrs INT NOT NULL DEFAULT 0,UNIQUE INDEX(GamCod,QstInd,AnsInd));
+
 	Version 18.125:   May 29, 2019	Unification of tables of matches (saved and current) into one table. (243371 lines)
 					2 changes necessary in database:
 DROP TABLE gam_matches;

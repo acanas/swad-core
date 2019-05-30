@@ -109,7 +109,7 @@ void Gam_RemoveGames (Hie_Level_t Scope,long Cod);
 
 void Gam_RequestNewQuestion (void);
 
-void Gam_GetAndDrawBarNumUsrsWhoAnswered (long GamCod,long QstCod,unsigned AnsInd,unsigned NumUsrs);
+void Gam_GetAndDrawBarNumUsrsWhoAnswered (long GamCod,unsigned QstInd,unsigned AnsInd,unsigned NumUsrs);
 
 void Gam_AddTstQuestionsToGame (void);
 
@@ -127,6 +127,7 @@ void Gam_PlayMatchStd (void);
 
 void Gam_ReceiveGameAnswers (void);
 void Gam_CreateAndStartNewMatch (void);
+void Gam_ResumeUnfinishedMatch (void);
 void Gam_MatchTchNextQuestion (void);
 void Gam_MatchTchShowAnswers (void);
 void Gam_MatchTchEnd (void);
