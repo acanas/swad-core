@@ -611,6 +611,7 @@ Assessment:
         456. ActNewMch			Create a new match showing first question in a new browser tab (by a teacher)
         NEW. ActResMch			Resume an unfinished match showing current question in a new browser tab (by a teacher)
         457. ActNxtMch			Show next question when playing a game (by a teacher)
+        NEW. ActShoMch			Show finished match results
 
         NEW. ActPlyMchStd		Play a game (by a student)
         NEW. ActGamStdCurQst		Show current question when playing a game (by a student)
@@ -2148,6 +2149,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewMch		*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Gam_CreateAndStartNewMatch	,NULL},
    /* ActResMch		*/{1785,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Gam_ResumeUnfinishedMatch	,NULL},
    /* ActNxtMch		*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_NextStatusMatch		,NULL},
+   /* ActShoMch		*/{1786,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ShowFinishedMatchResults	,NULL},
 
    /* ActPlyMchStd	*/{1779,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_PlayMatchStd		,NULL},
    /* ActGamStdCurQst	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_GetMatchBeingPlayed	,Gam_ShowNewMatchToMeAsStd	,NULL},
@@ -4989,6 +4991,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
         ActReqRemMch,		// #1783
         ActRemMch,		// #1784
 	ActResMch,		// #1785
+	ActShoMch,		// #1786
 	};
 
 /*****************************************************************************/

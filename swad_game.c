@@ -169,7 +169,8 @@ static void Gam_ExchangeQuestions (long GamCod,
 
 static void Gam_ListPlayedMatches (struct Game *Game,bool PutFormNewMatch);
 static void Gam_PutIconToPlayNewMatch (void);
-static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
+static void Gam_ListOneOrMoreMatchesForEdition (struct Game *Game,
+						unsigned NumMatches,
                                                 MYSQL_RES *mysql_res);
 static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Match *Match);
@@ -2912,7 +2913,7 @@ static void Gam_ListPlayedMatches (struct Game *Game,bool PutFormNewMatch)
 
    if (NumMatches)
       /***** Show the table with the matches *****/
-      Gam_ListOneOrMoreMatchesForEdition (NumMatches,mysql_res);
+      Gam_ListOneOrMoreMatchesForEdition (Game,NumMatches,mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2996,7 +2997,8 @@ static void Gam_PutIconToPlayNewMatch (void)
 /*********************** List game matches for edition ***********************/
 /*****************************************************************************/
 
-static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
+static void Gam_ListOneOrMoreMatchesForEdition (struct Game *Game,
+						unsigned NumMatches,
                                                 MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
@@ -3030,7 +3032,7 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
                       "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
-                      "<th class=\"LEFT_TOP\">"
+                      "<th class=\"RIGHT_TOP\">"
                       "%s"
                       "</th>"
                       "</tr>",
@@ -3062,6 +3064,7 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
       Frm_EndForm ();
 
       /* Put icon to continue playing an unfinished match */
+      /*
       if (!Match.Status.Finished)
 	{
 	 Gam_CurrentMchCod = Match.MchCod;
@@ -3070,6 +3073,7 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
 					"play.svg",
 					Txt_Resume);
 	}
+      */
 
       fprintf (Gbl.F.Out,"</td>");
 
@@ -3127,11 +3131,21 @@ static void Gam_ListOneOrMoreMatchesForEdition (unsigned NumMatches,
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Match status ******/
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
       if (Match.Status.Finished)
-         Ico_PutIconOff ("flag-checkered.svg",Txt_Finished_match);
+	 /* Icon to inform about finished match */
+         // Ico_PutIconOff ("flag-checkered.svg",Txt_Finished_match);
+	 Lay_PutContextualLinkOnlyIcon (ActShoMch,NULL,
+					Gam_PutParamCurrentMchCod,
+					"flag-checkered.svg",
+					Txt_Finished_match);
       else	// Unfinished match
 	{
+	 /* Current question index / total of questions */
+         fprintf (Gbl.F.Out,"<div class=\"DAT\">%u/%u</div>",
+		  Match.Status.QstInd,Game->NumQsts);
+
+	 /* Icon to resume */
 	 Gam_CurrentMchCod = Match.MchCod;
 	 Lay_PutContextualLinkOnlyIcon (ActResMch,NULL,
 					Gam_PutParamCurrentMchCod,
@@ -3811,7 +3825,16 @@ static void Gam_PutBigButtonToFinishMatch (long MchCod)
   }
 
 /*****************************************************************************/
-/********************** Get code of match being played ************************/
+/******************* Show the results of a finished match ********************/
+/*****************************************************************************/
+
+void Gam_ShowFinishedMatchResults (void)
+  {
+   Ale_ShowAlert (Ale_INFO,"To be implemented...");
+  }
+
+/*****************************************************************************/
+/********************** Get code of match being played ***********************/
 /*****************************************************************************/
 
 void Gam_GetMatchBeingPlayed (void)
