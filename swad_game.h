@@ -93,8 +93,6 @@ void Gam_FreeListGames (void);
 
 void Gam_PutParamGameCod (long GamCod);
 long Gam_GetParamGameCod (void);
-void Gam_PutParamMatchCod (long MchCod);	// TODO: Check if this function can be static
-long Gam_GetParamMatchCod (void);		// TODO: Check if this function can be static
 void Gam_AskRemGame (void);
 void Gam_RemoveGame (void);
 void Gam_AskResetGame (void);

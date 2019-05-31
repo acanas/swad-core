@@ -4119,7 +4119,7 @@ const char *Txt_Close =
 #elif L==9	// pt
 	"Fechar";
 #endif
-
+/*
 const char *Txt_Closed_game =
 #if   L==1	// ca
 	"Joc tancat";
@@ -4140,7 +4140,7 @@ const char *Txt_Closed_game =
 #elif L==9	// pt
 	"Jogo fechado";
 #endif
-
+*/
 const char *Txt_Closed_survey =
 #if   L==1	// ca
 	"Enquesta tancada";
@@ -13593,7 +13593,7 @@ const char *Txt_Game_X_reset =	// Warning: it is very important to include %s in
 #elif L==9	// pt
 	"Jogo <strong>%s</strong> fixado em zero.";
 #endif
-
+/*
 const char *Txt_GAME_You_belong_to_the_scope_of_the_game =
 #if   L==1	// ca
 	"Pertany a l'&agrave;mbit del joc";
@@ -13635,7 +13635,7 @@ const char *Txt_GAME_You_dont_belong_to_the_scope_of_the_game =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pertence ao &acirc;mbito do jogo";
 #endif
-
+*/
 const char *Txt_Games =
 #if   L==1	// ca
 	"Jocs";
@@ -14350,7 +14350,7 @@ const char *Txt_hidden_documents =
 #elif L==9	// pt
 	"documentos ocultos";
 #endif
-
+/*
 const char *Txt_Hidden_game =
 #if   L==1	// ca
 	"Joc ocult";
@@ -14371,7 +14371,7 @@ const char *Txt_Hidden_game =
 #elif L==9	// pt
 	"Jogo oculto";
 #endif
-
+*/
 const char *Txt_Hidden_survey =
 #if   L==1	// ca
 	"Enquesta oculta";
@@ -27907,7 +27907,7 @@ const char *Txt_open_documents =
 #elif L==9	// pt
 	"documentos abertos";
 #endif
-
+/*
 const char *Txt_Open_game =
 #if   L==1	// ca
 	"Joc oberto";
@@ -27928,7 +27928,7 @@ const char *Txt_Open_game =
 #elif L==9	// pt
 	"Jogo aberto";
 #endif
-
+*/
 const char *Txt_Open_survey =
 #if   L==1	// ca
 	"Enquesta oberta";
@@ -52667,7 +52667,7 @@ const char *Txt_Visible_by_BR_the_student =
 #elif L==9	// pt
 	"Vis&iacute;vel pelo<br />estudante?";
 #endif
-
+/*
 const char *Txt_Visible_game =
 #if   L==1	// ca
 	"Joc visible";
@@ -52688,7 +52688,7 @@ const char *Txt_Visible_game =
 #elif L==9	// pt
 	"Jogo vis&iacute;vel";
 #endif
-
+*/
 const char *Txt_Visible_MALE_PLURAL =
 #if   L==1	// ca
 	"Visibles";

@@ -129,6 +129,9 @@ static void Gam_PutParamCurrentMchCod (void);
 
 static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
+static void Gam_PutParamMatchCod (long MchCod);
+static long Gam_GetParamMatchCod (void);
+
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game);
 static void Gam_ShowLstGrpsToEditMatch (void);
 
@@ -182,6 +185,7 @@ static void Gam_PutBigButtonToPlayMatchStd (long MchCod);
 static void Gam_CreateMatch (struct Match *Match);
 static void Gam_UpdateMatchBeingPlayed (struct Match *Match);
 
+static void Gam_ShowAlertFinishedMatch (void);
 static void Gam_PlayGameShowQuestionAndAnswers (struct Match *Match);
 static void Gam_PutBigButtonToContinue (long MchCod);
 static void Gam_PutBigButtonToFinishMatch (long GamCod);
@@ -220,7 +224,6 @@ static void Gam_ListAllGames (void)
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Game;
-   // extern const char *Txt_Status;
    extern const char *Txt_No_games;
    Gam_Order_t Order;
    struct Pagination Pagination;
@@ -288,12 +291,8 @@ static void Gam_ListAllGames (void)
       fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 // "<th class=\"CENTER_MIDDLE\">"
-			 // "%s"
-			 // "</th>"
 			 "</tr>",
 	       Txt_Game);
-      //       Txt_Status);
 
       /***** Write all the games *****/
       for (NumGame = Pagination.FirstItemVisible;
@@ -453,7 +452,6 @@ static void Gam_ShowOneGame (long GamCod,
    extern const char *Txt_No_of_users;
    extern const char *Txt_Play;
    extern const char *Txt_New_match;
-//    extern const char *Txt_View_game_results;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    struct Game Game;
@@ -579,91 +577,6 @@ static void Gam_ShowOneGame (long GamCod,
 
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Status of the game *****/
-/*
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP");
-   if (!ShowOnlyThisGame)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
-   Gam_WriteStatus (&Game);
-
-   if (ShowOnlyThisGame)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
-
-      * Possible button to play/start the game *
-      if (Game.Status.Open)
-	{
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_STD:
-	       * Icon to play game *
-	       Frm_StartForm (ActPlyMchStd);
-	       Gam_PutParamGameCod (Game.GamCod);
-	       Btn_PutCreateButtonInline (Txt_Play);
-	       Frm_EndForm ();
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	       * Icon to start game *
-	       Frm_StartFormAnchor (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID);
-	       Gam_PutParamGameCod (Game.GamCod);
-	       Btn_PutCreateButtonInline (Txt_New_match);
-	       Frm_EndForm ();
-	       break;
-	    default:
-	       break;
-	   }
-	}
-
-      * Possible button to see the result of the game *
-      if (Game.Status.ICanViewResults)
-	{
-	 Frm_StartForm (ActSeeGam);
-	 Gam_PutParamGameCod (Game.GamCod);
-	 Gam_PutHiddenParamGameOrder ();
-	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
-	 Btn_PutConfirmButtonInline (Txt_View_game_results);
-	 Frm_EndForm ();
-	}
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
-   else	// Show several games
-     {
-      fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
-
-      * Possible button to answer this game *
-      if (Game.Status.ICanAnswer)
-	{
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_STD:
-	       * Icon to play game *
-	       Frm_StartForm (ActPlyMchStd);
-	       Gam_PutParamGameCod (Game.GamCod);
-	       Btn_PutCreateButtonInline (Txt_Play);
-	       Frm_EndForm ();
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	       * Icon to start game *
-	       Frm_StartFormAnchor (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID);
-	       Gam_PutParamGameCod (Game.GamCod);
-	       Btn_PutCreateButtonInline (Txt_New_match);
-	       Frm_EndForm ();
-	       break;
-	    default:
-	       break;
-	   }
-	}
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
-   fprintf (Gbl.F.Out,"</td>");
-*/
    /***** End 1st row of this game *****/
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -742,72 +655,6 @@ static void Gam_WriteAuthor (struct Game *Game)
    Usr_WriteAuthor1Line (Game->UsrCod,!Game->Status.Visible);
   }
 
-/*****************************************************************************/
-/************************ Write status of a game ***************************/
-/*****************************************************************************/
-/*
-static void Gam_WriteStatus (struct Game *Game)
-  {
-   extern const char *Txt_Hidden_game;
-   extern const char *Txt_Visible_game;
-   extern const char *Txt_Closed_game;
-   extern const char *Txt_Open_game;
-   extern const char *Txt_GAME_You_belong_to_the_scope_of_the_game;
-   extern const char *Txt_GAME_You_dont_belong_to_the_scope_of_the_game;
-   extern const char *Txt_SURVEY_You_have_already_answered;
-   extern const char *Txt_SURVEY_You_have_not_answered;
-
-   ***** Start list with items of status *****
-   fprintf (Gbl.F.Out,"<ul>");
-
-   * Write whether game is visible or hidden *
-   if (Game->Status.Visible)
-      fprintf (Gbl.F.Out,"<li class=\"STATUS_GREEN\">%s</li>",
-               Txt_Visible_game);
-   else
-      fprintf (Gbl.F.Out,"<li class=\"STATUS_RED_LIGHT\">%s</li>",
-               Txt_Hidden_game);
-
-   * Write whether game is open or closed *
-   if (Game->Status.Open)
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Game->Status.Visible ? "STATUS_GREEN" :
-        	                     "STATUS_GREEN_LIGHT",
-               Txt_Open_game);
-   else
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Game->Status.Visible ? "STATUS_RED" :
-        	                     "STATUS_RED_LIGHT",
-               Txt_Closed_game);
-
-   * Write whether game can be answered by me or not depending on groups *
-   if (Game->Status.IBelongToScope)
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Game->Status.Visible ? "STATUS_GREEN" :
-        	                     "STATUS_GREEN_LIGHT",
-               Txt_GAME_You_belong_to_the_scope_of_the_game);
-   else
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Game->Status.Visible ? "STATUS_RED" :
-        	                     "STATUS_RED_LIGHT",
-               Txt_GAME_You_dont_belong_to_the_scope_of_the_game);
-
-   * Write whether game has been already answered by me or not *
-   if (Game->Status.IHaveAnswered)
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Game->Status.Visible ? "STATUS_GREEN" :
-        	                     "STATUS_GREEN_LIGHT",
-               Txt_SURVEY_You_have_already_answered);
-   else
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Game->Status.Visible ? "STATUS_RED" :
-        	                     "STATUS_RED_LIGHT",
-               Txt_SURVEY_You_have_not_answered);
-
-   ***** End list with items of status *****
-   fprintf (Gbl.F.Out,"</ul>");
-  }
-*/
 /*****************************************************************************/
 /********** Get parameter with the type or order in list of games ************/
 /*****************************************************************************/
@@ -1124,7 +971,7 @@ long Gam_GetParamGameCod (void)
 /******************** Write parameter with code of match **********************/
 /*****************************************************************************/
 
-void Gam_PutParamMatchCod (long MchCod)
+static void Gam_PutParamMatchCod (long MchCod)
   {
    Par_PutHiddenParamLong ("MchCod",MchCod);
   }
@@ -1133,7 +980,7 @@ void Gam_PutParamMatchCod (long MchCod)
 /********************* Get parameter with code of match **********************/
 /*****************************************************************************/
 
-long Gam_GetParamMatchCod (void)
+static long Gam_GetParamMatchCod (void)
   {
    /***** Get code of match *****/
    return Par_GetParToLong ("MchCod");
@@ -1526,10 +1373,9 @@ static void Gam_ShowLstGrpsToEditMatch (void)
 	                 "<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">"
                          "<label>"
                          "<input type=\"checkbox\""
-                         " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
-      // if (!Gam_CheckIfMatchIsAssociatedToGrps (MchCod))
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
+                         " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\""
+                         " checked=\"checked\""
+                         " onclick=\"uncheckChildren(this,'GrpCods')\" />"
 	                 "%s %s"
 	                 "</label>"
 	                 "</td>"
@@ -1690,19 +1536,6 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
    Ale_ShowAlert (Ale_SUCCESS,Txt_The_game_has_been_modified);
   }
 
-/*****************************************************************************/
-/*************** Check if a match is associated to any group *****************/
-/*****************************************************************************/
-/*
-static bool Gam_CheckIfMatchIsAssociatedToGrps (long MchCod)
-  {
-   ***** Get if a match is associated to a group from database *****
-   return (DB_QueryCOUNT ("can not check if a match is associated to groups",
-			  "SELECT COUNT(*) FROM gam_grp"
-			  " WHERE MchCod=%ld",
-			  MchCod) != 0);
-  }
-*/
 /*****************************************************************************/
 /************* Check if a match is associated to a given group ***************/
 /*****************************************************************************/
@@ -3008,7 +2841,7 @@ static void Gam_ListOneOrMoreMatchesForEdition (struct Game *Game,
    extern const char *Txt_Status;
    extern const char *Txt_Resume;
    extern const char *Txt_Today;
-   extern const char *Txt_Finished_match;
+   extern const char *Txt_View_game_results;
    unsigned NumMatch;
    unsigned UniqueId;
    struct Match Match;
@@ -3138,7 +2971,7 @@ static void Gam_ListOneOrMoreMatchesForEdition (struct Game *Game,
 	 Lay_PutContextualLinkOnlyIcon (ActShoMch,NULL,
 					Gam_PutParamCurrentMchCod,
 					"flag-checkered.svg",
-					Txt_Finished_match);
+					Txt_View_game_results);
       else	// Unfinished match
 	{
 	 /* Current question index / total of questions */
@@ -3554,7 +3387,6 @@ static void Gam_CreateMatch (struct Match *Match)
 
 void Gam_ResumeUnfinishedMatch (void)
   {
-   extern const char *Txt_Finished_match;
    struct Match Match;
 
    /***** Get parameters *****/
@@ -3566,13 +3398,7 @@ void Gam_ResumeUnfinishedMatch (void)
    Gam_GetDataOfMatchByCod (&Match);
 
    if (Match.Status.Finished)
-     {
-      /***** Show alert *****/
-      Ale_ShowAlert (Ale_WARNING,Txt_Finished_match);
-
-      /***** Button to close browser tab *****/
-      Btn_PutCloseButton ("Cerrar");				// TODO: Need translation!!!!!
-     }
+      Gam_ShowAlertFinishedMatch ();
    else	// Unfinished match
      {
       /***** In what question do we resume the match? *****/
@@ -3618,7 +3444,6 @@ static void Gam_UpdateMatchBeingPlayed (struct Match *Match)
 
 void Gam_NextStatusMatch (void)
   {
-   extern const char *Txt_Finished_match;
    struct Match Match;
    long NxtQstInd;
 
@@ -3666,16 +3491,25 @@ void Gam_NextStatusMatch (void)
 
    /***** Show status and questions *****/
    if (Match.Status.Finished)
-     {
-      /* Show alert */
-      Ale_ShowAlert (Ale_WARNING,Txt_Finished_match);
-
-      /* Button to close browser tab */
-      Btn_PutCloseButton ("Cerrar");			// TODO: Need translation!!!!!
-     }
+      Gam_ShowAlertFinishedMatch ();
    else
       /* Show questions and possible answers */
       Gam_PlayGameShowQuestionAndAnswers (&Match);
+  }
+
+/*****************************************************************************/
+/********************* Show alert about finished match ***********************/
+/*****************************************************************************/
+
+static void Gam_ShowAlertFinishedMatch (void)
+  {
+   extern const char *Txt_Finished_match;
+
+   /***** Show alert *****/
+   Ale_ShowAlert (Ale_WARNING,Txt_Finished_match);
+
+   /***** Button to close browser tab *****/
+   Btn_PutCloseButton ("Cerrar");	// TODO: Need translation!!!!!
   }
 
 /*****************************************************************************/

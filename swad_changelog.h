@@ -456,14 +456,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.127.2 (2019-05-31)"
+#define Log_PLATFORM_VERSION	"SWAD 18.127.3 (2019-05-31)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
+	Version 18.127.3: May 31, 2019	Code refactoring and cleaning in games. (243346 lines)
 	Version 18.127.2: May 31, 2019	Question index is shown in match status.
 					New action to show results of a finished match. (243493 lines)
 					1 change necessary in database:
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1785','es','N','Ver resultados partida');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1786','es','N','Ver resultados partida');
 
 	Version 18.127.1: May 31, 2019	Removed action to end a match. (243464 lines)
 					1 change necessary in database:
