@@ -1819,6 +1819,8 @@ void Ctr_RemoveCentre (void)
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_Centre_X_removed,
 	               Ctr_EditingCtr->FullName);
+
+      Ctr_EditingCtr->CtrCod = -1L;	// To not showing button to go to centre
      }
   }
 
@@ -3013,17 +3015,17 @@ static void Ctr_EditingCentreConstructor (void)
       Lay_ShowErrorAndExit ("Error allocating memory for centre.");
 
    /***** Reset centre *****/
-   Ctr_EditingCtr->CtrCod = -1L;
-   Ctr_EditingCtr->InsCod = -1L;
-   Ctr_EditingCtr->PlcCod = -1L;
+   Ctr_EditingCtr->CtrCod          = -1L;
+   Ctr_EditingCtr->InsCod          = -1L;
+   Ctr_EditingCtr->PlcCod          = -1L;
    Ctr_EditingCtr->RequesterUsrCod = -1L;
-   Ctr_EditingCtr->ShrtName[0] = '\0';
-   Ctr_EditingCtr->FullName[0] = '\0';
-   Ctr_EditingCtr->WWW[0] = '\0';
-   Ctr_EditingCtr->Degs.Num = 0;
-   Ctr_EditingCtr->Degs.Lst = NULL;
-   Ctr_EditingCtr->NumCrss = 0;
-   Ctr_EditingCtr->NumUsrs = 0;
+   Ctr_EditingCtr->ShrtName[0]     = '\0';
+   Ctr_EditingCtr->FullName[0]     = '\0';
+   Ctr_EditingCtr->WWW[0]          = '\0';
+   Ctr_EditingCtr->Degs.Num        = 0;
+   Ctr_EditingCtr->Degs.Lst        = NULL;
+   Ctr_EditingCtr->NumCrss         = 0;
+   Ctr_EditingCtr->NumUsrs         = 0;
    Ctr_EditingCtr->NumUsrsWhoClaimToBelongToCtr = 0;
   }
 

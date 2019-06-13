@@ -12862,3 +12862,7 @@ INSERT INTO social_pubs (NotCod,PublisherCod,PubType,TimePublish) VALUES (600,71
 INSERT IGNORE INTO social_comments_fav (PubCod,UsrCod,TimeFav) VALUES (1294,7140,NOW());
  
 
+SELECT COUNT(*) FROM degrees WHERE CtrCod=2 AND FullName='Máster Universitario en Electrónica Industrial' AND DegCod<>-1;
+
+
+

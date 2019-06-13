@@ -1788,6 +1788,8 @@ void Ins_RemoveInstitution (void)
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_Institution_X_removed,
                        Ins_EditingIns->FullName);
+
+      Ins_EditingIns->InsCod = -1L;	// To not showing button to go to institution
      }
   }
 
@@ -2163,10 +2165,15 @@ void Ins_ContEditAfterChgIns (void)
 
 static void Ins_ShowAlertAndButtonToGoToIns (void)
   {
+   extern const char *Txt_Go_to_X;
+
    // If the institution being edited is different to the current one...
    if (Ins_EditingIns->InsCod != Gbl.Hierarchy.Ins.InsCod)
      {
       /***** Alert with button to go to institution *****/
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Go_to_X,
+		Ins_EditingIns->ShrtName);
       Ale_ShowLastAlertAndButton (ActSeeCtr,NULL,NULL,Ins_PutParamGoToIns,
                                   Btn_CONFIRM_BUTTON,Gbl.Title);
      }
@@ -2623,17 +2630,17 @@ static void Ins_EditingInstitutionConstructor (void)
       Lay_ShowErrorAndExit ("Error allocating memory for institution.");
 
    /***** Reset institution *****/
-   Ins_EditingIns->InsCod = -1L;
-   Ins_EditingIns->CtyCod = -1L;
-   Ins_EditingIns->ShrtName[0] = '\0';
-   Ins_EditingIns->FullName[0] = '\0';
-   Ins_EditingIns->WWW[0] = '\0';
-   Ins_EditingIns->Ctrs.Num = 0;
-   Ins_EditingIns->Ctrs.Lst = NULL;
+   Ins_EditingIns->InsCod             = -1L;
+   Ins_EditingIns->CtyCod             = -1L;
+   Ins_EditingIns->ShrtName[0]        = '\0';
+   Ins_EditingIns->FullName[0]        = '\0';
+   Ins_EditingIns->WWW[0]             = '\0';
+   Ins_EditingIns->Ctrs.Num           = 0;
+   Ins_EditingIns->Ctrs.Lst           = NULL;
    Ins_EditingIns->Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
-   Ins_EditingIns->NumDpts = 0;
-   Ins_EditingIns->NumDegs = 0;
-   Ins_EditingIns->NumUsrs = 0;
+   Ins_EditingIns->NumDpts            = 0;
+   Ins_EditingIns->NumDegs            = 0;
+   Ins_EditingIns->NumUsrs            = 0;
    Ins_EditingIns->NumUsrsWhoClaimToBelongToIns = 0;
   }
 

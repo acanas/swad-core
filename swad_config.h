@@ -129,7 +129,10 @@
 /* Google Analytics without cookies.
  * This code comes from http://stackoverflow.com/a/19995629
  */
-#define Cfg_GOOGLE_ANALYTICS "<script type=\"text/javascript\">" \
+#define Cfg_GOOGLE_ANALYTICS			""
+
+/*
+"<script type=\"text/javascript\">" \
 "  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" \
 "  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," \
 "  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" \
@@ -144,6 +147,7 @@
 "  });" \
 "  ga('send', 'pageview');" \
 "</script>"
+*/
 
 #elif defined SWAD_UGR_ES			// swad.ugr.es *************************
 
@@ -184,7 +188,10 @@
 
 #define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (60UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
-#define Cfg_GOOGLE_ANALYTICS "<script type=\"text/javascript\">" \
+#define Cfg_GOOGLE_ANALYTICS			""
+
+/*
+"<script type=\"text/javascript\">" \
 "  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" \
 "  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," \
 "  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" \
@@ -199,6 +206,7 @@
 "  });" \
 "  ga('send', 'pageview');" \
 "</script>"
+*/
 
 #elif defined SWADBERRY_UGR_ES			// swadberry.ugr.es ******************
 

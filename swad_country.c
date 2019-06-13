@@ -1782,6 +1782,8 @@ void Cty_RemoveCountry (void)
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 	               Txt_Country_X_removed,
 	               Cty_EditingCty->Name[Gbl.Prefs.Language]);
+
+      Cty_EditingCty->CtyCod = -1L;	// To not showing button to go to country
      }
   }
 
@@ -2001,10 +2003,15 @@ void Cty_ContEditAfterChgCty (void)
 
 static void Cty_ShowAlertAndButtonToGoToCty (void)
   {
+   extern const char *Txt_Go_to_X;
+
    // If the country being edited is different to the current one...
    if (Cty_EditingCty->CtyCod != Gbl.Hierarchy.Cty.CtyCod)
      {
       /***** Alert with button to go to couuntry *****/
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+	        Txt_Go_to_X,
+		Cty_EditingCty->Name[Gbl.Prefs.Language]);
       Ale_ShowLastAlertAndButton (ActSeeIns,NULL,NULL,Cty_PutParamGoToCty,
                                   Btn_CONFIRM_BUTTON,Gbl.Title);
      }

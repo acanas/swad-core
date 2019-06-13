@@ -1558,9 +1558,6 @@ void Deg_RecFormNewDeg (void)
 
    /***** Receive form to create a new degree *****/
    Deg_RecFormRequestOrCreateDeg (0);
-
-   /***** Degree destructor *****/
-   Deg_EditingDegreeDestructor ();
   }
 
 /*****************************************************************************/
@@ -1654,6 +1651,8 @@ void Deg_RemoveDegree (void)
       Ale_CreateAlert (Ale_SUCCESS,NULL,
 		       Txt_Degree_X_removed,
                        Deg_EditingDeg->FullName);
+
+      Deg_EditingDeg->DegCod = -1L;	// To not showing button to go to degree
      }
   }
 
@@ -2670,16 +2669,16 @@ static void Deg_EditingDegreeConstructor (void)
       Lay_ShowErrorAndExit ("Error allocating memory for degree.");
 
    /***** Reset degree *****/
-   Deg_EditingDeg->DegCod = -1L;
-   Deg_EditingDeg->DegTypCod = -1L;
-   Deg_EditingDeg->CtrCod = -1L;
-   Deg_EditingDeg->Status = 0;
+   Deg_EditingDeg->DegCod          = -1L;
+   Deg_EditingDeg->DegTypCod       = -1L;
+   Deg_EditingDeg->CtrCod          = -1L;
+   Deg_EditingDeg->Status          = 0;
    Deg_EditingDeg->RequesterUsrCod = -1L;
-   Deg_EditingDeg->ShrtName[0] = '\0';
-   Deg_EditingDeg->FullName[0] = '\0';
-   Deg_EditingDeg->WWW[0] = '\0';
-   Deg_EditingDeg->Crss.Num = 0;
-   Deg_EditingDeg->Crss.Lst = NULL;
+   Deg_EditingDeg->ShrtName[0]     = '\0';
+   Deg_EditingDeg->FullName[0]     = '\0';
+   Deg_EditingDeg->WWW[0]          = '\0';
+   Deg_EditingDeg->Crss.Num        = 0;
+   Deg_EditingDeg->Crss.Lst        = NULL;
   }
 
 static void Deg_EditingDegreeDestructor (void)

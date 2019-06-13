@@ -2029,6 +2029,8 @@ void Crs_RemoveCourse (void)
          /***** Write message to show the change made *****/
          Ale_ShowAlert (Ale_SUCCESS,Txt_Course_X_removed,
                         Crs_EditingCrs->FullName);
+
+         Crs_EditingCrs->CrsCod = -1L;	// To not showing button to go to course
         }
      }
    else

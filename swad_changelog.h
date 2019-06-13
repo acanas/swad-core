@@ -456,10 +456,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.127.3 (2019-05-31)"
+#define Log_PLATFORM_VERSION	"SWAD 18.128 (2019-06-13)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
+	Version 18.128:   Jun 13, 2019	Fixed bug in creation of degrees. (243365 lines)
 	Version 18.127.3: May 31, 2019	Code refactoring and cleaning in games. (243346 lines)
 	Version 18.127.2: May 31, 2019	Question index is shown in match status.
 					New action to show results of a finished match. (243493 lines)
@@ -503,13 +504,13 @@ CREATE TABLE IF NOT EXISTS gam_matches (MchCod INT NOT NULL AUTO_INCREMENT,GamCo
 
 	Version 18.124:   May 28, 2019	Every game can have several matches (game instances). (243400 lines)
 					3 changes necessary in database:
-DROP TABLE gam_played,gam_matches,gam_grp;
+DROP TABLE gam_matches,gam_grp;
 CREATE TABLE IF NOT EXISTS gam_matches (MchCod INT NOT NULL AUTO_INCREMENT,GamCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,UsrCod INT NOT NULL,Title VARCHAR(2047) NOT NULL,UNIQUE INDEX(MchCod),INDEX(GamCod));
 CREATE TABLE IF NOT EXISTS gam_grp (MchCod INT NOT NULL,GrpCod INT NOT NULL,UNIQUE INDEX(MchCod,GrpCod));
 
 	Version 18.123.2: May 23, 2019	New table with games instances already played. (242829 lines)
 					1 change necessary in database:
-CREATE TABLE IF NOT EXISTS gam_matches (MchCod INT NOT NULL AUTO_INCREMENT,GamCod INT NOT NULL,Start DATETIME NOT NULL,UNIQUE INDEX(GamPlyCod),INDEX(GamCod));
+CREATE TABLE IF NOT EXISTS gam_matches (MchCod INT NOT NULL AUTO_INCREMENT,GamCod INT NOT NULL,Start DATETIME NOT NULL,UNIQUE INDEX(MchCod),INDEX(GamCod));
 
 	Version 18.123.1: May 22, 2019	Wait icon while a game has not started. (242788 lines)
 					Copy the following icon to icon public directory:
