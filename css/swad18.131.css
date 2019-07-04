@@ -2564,13 +2564,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /********************************** Games ************************************/
-.GAM_PLAY_TCH_CONTAINER
+.GAM_PLAY_CONTAINER
 	{
 	box-sizing:border-box;
 	display:table;
 	margin:5%;
 	width:90%;
+	text-align:center;
 	}
+
 .GAM_PLAY_TCH_NUM_QST
 	{
 	width:15%;
@@ -2609,14 +2611,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:16pt;
 	}
 
-.GAM_PLAY_STD_CONTAINER
-	{
-	box-sizing:border-box;
-	display:table;
-	margin:5%;
-	width:90%;
-	text-align:center;
-	}
 .GAM_PLAY_STD_WAIT
 	{
 	box-sizing:border-box;

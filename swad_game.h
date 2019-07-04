@@ -124,14 +124,14 @@ void Gam_RequestNewMatch (void);
 // void Gam_PlayMatchStd (void);
 
 void Gam_ReceiveGameAnswers (void);
-void Gam_CreateAndStartNewMatch (void);
+void Gam_CreateNewMatch (void);
 void Gam_ResumeUnfinishedMatch (void);
 void Gam_NextStatusMatch (void);
 
 void Gam_ShowFinishedMatchResults (void);
 
 void Gam_GetMatchBeingPlayed (void);
-void Gam_ShowNewMatchToMeAsStd (void);
+void Gam_ShowMatchToMeAsStd (void);
 void Gam_RefreshCurrentMatchStd (void);
 
 unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);
