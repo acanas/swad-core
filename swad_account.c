@@ -117,6 +117,7 @@ void Acc_ShowFormMyAccount (void)
       /***** Links to other actions *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Usr_PutLinkToLogin ();
+      Pwd_PutLinkToSendNewPasswd ();
       Lan_PutLinkToChangeLanguage ();
       fprintf (Gbl.F.Out,"</div>");
 
@@ -140,7 +141,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 
    /***** Start box *****/
    Box_StartBox (NULL,Title,NULL,
-                 Hlp_PROFILE_SignUp,Box_CLOSABLE);
+                 Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
 
    /***** Help alert *****/
    Ale_ShowAlert (Ale_INFO,Txt_If_you_think_you_may_have_been_registered_);
@@ -262,9 +263,6 @@ void Acc_CheckIfEmptyAccountExists (void)
 
       Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered);
      }
-
-   /**** Show form to create a new account *****/
-   // Acc_ShowFormRequestNewAccountWithParams ("","");
   }
 
 /*****************************************************************************/
@@ -327,6 +325,13 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 
 void Acc_ShowFormCreateMyAccount (void)
   {
+   /***** Links to other actions *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Usr_PutLinkToLogin ();
+   Pwd_PutLinkToSendNewPasswd ();
+   Lan_PutLinkToChangeLanguage ();
+   fprintf (Gbl.F.Out,"</div>");
+
    /**** Show form to create a new account *****/
    Acc_ShowFormRequestNewAccountWithParams ("","");
   }

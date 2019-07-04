@@ -15151,49 +15151,41 @@ const char *Txt_If_you_have_an_Android_device_try_SWADroid =
 
 const char *Txt_If_you_have_forgotten_your_password_ =
 #if   L==1	// ca
-	"Si usted ha olvidado su contrase&ntilde;a,"
-	" se le enviar&aacute; una nueva"
-	" a la direcci&oacute;n de correo"
-	" que escribi&oacute; en su ficha personal.";	// Necessita traduccio
+	"Si vost&egrave; ha oblidat la seva contrasenya,"
+	" se li enviar&agrave; una de nova"
+	" a la vostra adre&ccedil;a de correu.";
 #elif L==2	// de
 	"Wenn Sie Ihr Passwort vergessen haben,"
-	" eine neue wird"
-	" die E-Mail von Ihnen angegebene Adresse"
-	" in Ihren Profil gesendet werden vergessen.";
+	" wird ein neues"
+	" an Ihre E-Mail-Adresse gesendet.";
 #elif L==3	// en
 	"If you have forgotten your password,"
 	" a new one will be sent"
-	" to the email address"
-	" you entered in your record.";
+	" to your email address.";
 #elif L==4	// es
 	"Si usted ha olvidado su contrase&ntilde;a,"
 	" se le enviar&aacute; una nueva"
-	" a la direcci&oacute;n de correo"
-	" que escribi&oacute; en su ficha personal.";
+	" a su direcci&oacute;n de correo.";
 #elif L==5	// fr
 	"Si vous avez oubli&eacute; votre mot de passe,"
-	" une nouvelle sera envoy&eacute;"
-	" &agrave; l'adresse &eacute;lectronique"
-	" que vous avez entr&eacute; dans votre carte.";
+	" un nouveau mot de passe vous sera envoy&eacute;"
+	" &agrave; votre adresse e-mail.";
 #elif L==6	// gn
 	"Si usted ha olvidado su contrase&ntilde;a,"
 	" se le enviar&aacute; una nueva"
-	" a la direcci&oacute;n de correo"
-	" que escribi&oacute; en su ficha personal.";	// Okoteve traducción
+	" a su direcci&oacute;n de correo.";	// Okoteve traducción
 #elif L==7	// it
 	"Se hai dimenticato la tua password,"
-	" una nuova verr&agrave; inviata"
-	" all'indirizzo email"
-	" che hai inserito nella tua scheda.";
+	" ne verr&agrave; inviata una nuova"
+	" al tuo indirizzo email.";
 #elif L==8	// pl
-	"Jesli nie pamietasz hasla,"
-	" nowe zostanie wyslane na adres email,"
-	" kt&oacute;ry wszedl w rekordzie.";
+	"Je&sacute;li zapomnia&lstrok;e&sacute; has&lstrok;a,"
+	" nowe zostanie wys&lstrok;ane"
+	" na Tw&oacute;j adres e-mail.";
 #elif L==9	// pt
 	"Se voc&ecirc; tiver esquecido sua senha,"
 	" uma nova ser&aacute; enviada"
-	" para o email"
-	" que voc&ecirc; inseriu em seu cart&atilde;o.";
+	" para o seu endere&ccedil;o de email.";
 #endif
 
 const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_ =
