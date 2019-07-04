@@ -437,6 +437,8 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 // TODO: Probar qué ocurre si se está jugando una partida en una pestaña y se reanuda la misma en otra pestaña (da igual otra pestaña que otro navegador u ordenador)
 // TODO: ¿Puede un profesor reanudar una partida comenzada por otro profesor?
 
+// TODO: Perico: bloquear la subida de archivos por parte de estudiantes (no tiene que ver con el bloqueo de la edición de proyectos)
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -456,10 +458,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.128 (2019-06-13)"
+#define Log_PLATFORM_VERSION	"SWAD 18.129 (2019-07-04)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
+	Version 18.129:   Jul 04, 2019	Button to skip step in creation of a new account. (243425 lines)
 	Version 18.128:   Jun 13, 2019	Fixed bug in creation of degrees. (243365 lines)
 	Version 18.127.3: May 31, 2019	Code refactoring and cleaning in games. (243346 lines)
 	Version 18.127.2: May 31, 2019	Question index is shown in match status.

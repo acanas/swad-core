@@ -39257,6 +39257,27 @@ const char *Txt_Size_of_photos =
 	"Tamanho das fotos";
 #endif
 
+const char *Txt_Skip_this_step =
+#if   L==1	// ca
+	"Saltar aquest pas";
+#elif L==2	// de
+	"&Uuml;berspringen Sie diesen Schritt";
+#elif L==3	// en
+	"Skip this step";
+#elif L==4	// es
+	"Saltar este paso";
+#elif L==5	// fr
+	"Passer cette &eacute;tape";
+#elif L==6	// gn
+	"Saltar este paso";	// Okoteve traducción
+#elif L==7	// it
+	"Salta questo passaggio";
+#elif L==8	// pl
+	"Pomi&nacute; ten krok";
+#elif L==9	// pt
+	"Pule esta etapa";
+#endif
+
 const char *Txt_Sort_degrees_by =
 #if   L==1	// ca
 	"Ordenar titulacions per";

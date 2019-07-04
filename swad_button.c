@@ -150,10 +150,19 @@ void Btn_PutRemoveButtonInline (const char *TxtButton)
             TxtButton);
   }
 
-void Btn_PutCloseButton (const char *TxtButton)
+void Btn_PutCloseBoxButtonInline (const char *TxtButton)
+  {
+   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_REMOVE\""
+                      " onclick=\"toggleDisplay('%s');return false;\">"
+                      "%s"
+                      "</button>",
+            Gbl.Box.Ids[Gbl.Box.Nested],TxtButton);
+  }
+
+void Btn_PutCloseTabButton (const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-                      "<button type=\"submit\" class=\"BT_SUBMIT BT_CONFIRM\""
+                      "<button type=\"submit\" class=\"BT_SUBMIT BT_REMOVE\""
                       " onclick=\"window.close();\">"
                       "%s"
                       "</button>"

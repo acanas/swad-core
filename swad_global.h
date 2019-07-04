@@ -38,6 +38,7 @@
 #include "swad_assignment.h"
 #include "swad_attendance.h"
 #include "swad_banner.h"
+#include "swad_box.h"
 #include "swad_centre.h"
 #include "swad_classroom.h"
 #include "swad_connected.h"
@@ -106,6 +107,11 @@ struct Globals
       char UniqueId[32 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 10 + 1];	// Unique identifier string used in forms
       bool Inside;		// Set to true inside a form to avoid nested forms
      } Form;
+   struct
+     {
+      int Nested;			// Index of top open box
+      char *Ids[Box_MAX_NESTED];	// 0 <= box index < Box_MAX_NESTED
+     } Box;
    struct
      {
       size_t Num;		// Number of alert

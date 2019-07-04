@@ -54,10 +54,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
-/***************************** Private variabled *****************************/
+/***************************** Private variables *****************************/
 /*****************************************************************************/
-
-static unsigned Box_Nested = 0;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -114,6 +112,7 @@ void Box_StartBoxShadow (const char *Width,const char *Title,
 			 "FRAME_SHADOW");
   }
 
+// Return pointer to box id string
 static void Box_StartBoxInternal (const char *Width,const char *Title,
 				  void (*FunctionToDrawContextualIcons) (void),
 				  const char *HelpLink,Box_Closable_t Closable,
@@ -121,15 +120,30 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
   {
    extern const char *Txt_Help;
    extern const char *Txt_Close;
-   char IdFrame[Frm_MAX_BYTES_ID + 1];
+
+   /***** Check level of nesting *****/
+   if (Gbl.Box.Nested >= Box_MAX_NESTED - 1)	// Can not nest a new box
+      Lay_ShowErrorAndExit ("Box nesting limit reached.");
+
+   /***** Increase level of nesting *****/
+   Gbl.Box.Nested++;
+
+   /***** Create unique identifier for this box *****/
+   if (Closable == Box_CLOSABLE)
+     {
+      if ((Gbl.Box.Ids[Gbl.Box.Nested] = (char *) malloc (Frm_MAX_BYTES_ID + 1)) == NULL)
+	 Lay_ShowErrorAndExit ("Error allocating memory for box id.");
+     }
+   else
+      Gbl.Box.Ids[Gbl.Box.Nested] = NULL;
 
    /***** Start box container *****/
    fprintf (Gbl.F.Out,"<div class=\"FRAME_CONTAINER\"");
    if (Closable == Box_CLOSABLE)
      {
       /* Create unique id for alert */
-      Frm_SetUniqueId (IdFrame);
-      fprintf (Gbl.F.Out," id=\"%s\"",IdFrame);
+      Frm_SetUniqueId (Gbl.Box.Ids[Gbl.Box.Nested]);
+      fprintf (Gbl.F.Out," id=\"%s\"",Gbl.Box.Ids[Gbl.Box.Nested]);
      }
    fprintf (Gbl.F.Out,">");
 
@@ -166,7 +180,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
      {
       fprintf (Gbl.F.Out,"<a href=\"\""
 			 " onclick=\"toggleDisplay('%s');return false;\" />",
-	       IdFrame);
+	       Gbl.Box.Ids[Gbl.Box.Nested]);
       Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
 		      "close.svg",Txt_Close);
       fprintf (Gbl.F.Out,"</a>");
@@ -182,11 +196,9 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE %s\">"
 	                 "%s"
 	                 "</div>",
-	       Box_Nested ? "FRAME_TITLE_SMALL" :
+	       Gbl.Box.Nested ? "FRAME_TITLE_SMALL" :
 		            "FRAME_TITLE_BIG",
 	       Title);
-
-   Box_Nested++;
   }
 
 void Box_EndBoxTable (void)
@@ -209,9 +221,18 @@ void Box_EndBoxWithButton (Btn_Button_t Button,const char *TxtButton)
 
 void Box_EndBox (void)
   {
-   Box_Nested--;
+   /***** Check level of nesting *****/
+   if (Gbl.Box.Nested < 0)
+      Lay_ShowErrorAndExit ("Trying to end a box not open.");
+
+   /***** Free memory allocated for box id string *****/
+   if (Gbl.Box.Ids[Gbl.Box.Nested])
+      free (Gbl.Box.Ids[Gbl.Box.Nested]);
 
    /***** End box and box container *****/
    fprintf (Gbl.F.Out,"</div>"
 		      "</div>");
+
+   /***** Decrease level of nesting *****/
+   Gbl.Box.Nested--;
   }

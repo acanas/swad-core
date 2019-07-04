@@ -3509,7 +3509,7 @@ static void Gam_ShowAlertFinishedMatch (void)
    Ale_ShowAlert (Ale_WARNING,Txt_Finished_match);
 
    /***** Button to close browser tab *****/
-   Btn_PutCloseButton ("Cerrar");	// TODO: Need translation!!!!!
+   Btn_PutCloseTabButton ("Cerrar");	// TODO: Need translation!!!!!
   }
 
 /*****************************************************************************/

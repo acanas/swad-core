@@ -139,6 +139,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    extern const char *Txt_If_you_think_you_may_have_been_registered_;
    extern const char *Txt_ID;
    extern const char *Txt_Check;
+   extern const char *Txt_Skip_this_step;
 
    /***** Start box *****/
    Box_StartBox (NULL,Title,NULL,
@@ -157,8 +158,11 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 		      "</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_ID,
 	    ID_MAX_CHARS_USR_ID);
-   Btn_PutConfirmButton (Txt_Check);
+   Btn_PutConfirmButtonInline (Txt_Check);
    Frm_EndForm ();
+
+   /***** Form to skip this step *****/
+   Btn_PutCloseBoxButtonInline (Txt_Skip_this_step);
 
    /***** End box *****/
    Box_EndBox ();
