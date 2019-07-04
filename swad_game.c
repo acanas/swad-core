@@ -521,14 +521,15 @@ static void Gam_ShowOneGame (long GamCod,
                                                       "DATE_RED_LIGHT"));
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('gam_date_start_%u',%ld,"
-                      "%u,'<br />','%s',true,true,0x7);"
-                      "</script>"
-	              "</td>",
-            UniqueId,Game.TimeUTC[Gam_START_TIME],
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   fprintf (Gbl.F.Out,"\">");
+   if (Game.TimeUTC[Gam_START_TIME])
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('gam_date_start_%u',%ld,"
+			 "%u,'<br />','%s',true,true,0x7);"
+			 "</script>",
+	       UniqueId,Game.TimeUTC[Gam_START_TIME],
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** End date/time *****/
    fprintf (Gbl.F.Out,"<td id=\"gam_date_end_%u\" class=\"%s LEFT_TOP",
@@ -539,14 +540,15 @@ static void Gam_ShowOneGame (long GamCod,
                                                       "DATE_RED_LIGHT"));
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('gam_date_end_%u',%ld,"
-                      "%u,'<br />','%s',false,true,0x7);"
-                      "</script>"
-	              "</td>",
-            UniqueId,Game.TimeUTC[Gam_END_TIME],
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   fprintf (Gbl.F.Out,"\">");
+   if (Game.TimeUTC[Gam_END_TIME])
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('gam_date_end_%u',%ld,"
+			 "%u,'<br />','%s',false,true,0x7);"
+			 "</script>",
+	       UniqueId,Game.TimeUTC[Gam_END_TIME],
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Game title and main data *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
@@ -733,8 +735,8 @@ void Gam_GetListGames (void)
   {
    static const char *OrderBySubQuery[Gam_NUM_ORDERS] =
      {
-      "StartTime DESC,EndTime DESC,Title DESC",	// Gam_ORDER_BY_START_DATE
-      "EndTime DESC,StartTime DESC,Title DESC",	// Gam_ORDER_BY_END_DATE
+      "StartTime DESC,EndTime DESC,games.Title DESC",	// Gam_ORDER_BY_START_DATE
+      "EndTime DESC,StartTime DESC,games.Title DESC",	// Gam_ORDER_BY_END_DATE
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -747,8 +749,14 @@ void Gam_GetListGames (void)
 
    /***** Get list of games from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
-			     "SELECT GamCod FROM games"
-			     " WHERE CrsCod=%ld"
+			     "SELECT games.GamCod,"
+			            "MIN(gam_matches.StartTime) AS StartTime,"
+			            "MAX(gam_matches.EndTime) AS EndTime"
+			     " FROM games"
+			     " LEFT JOIN gam_matches"
+			     " ON games.GamCod=gam_matches.GamCod"
+			     " WHERE games.CrsCod=%ld"
+			     " GROUP BY games.GamCod"
 			     " ORDER BY %s",
 			     Gbl.Hierarchy.Crs.CrsCod,
 			     OrderBySubQuery[Gbl.Games.SelectedOrder]);
@@ -792,15 +800,14 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 
    /***** Get data of game from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get game data",
-			     "SELECT GamCod,"					// row[0]
-			            "Hidden,"					// row[1]
-			            "UsrCod,"					// row[2]
-			            "UNIX_TIMESTAMP(StartTime),"		// row[3]
-			            "UNIX_TIMESTAMP(EndTime),"			// row[4]
-			            "NOW() BETWEEN StartTime AND EndTime,"	// row[5]
-			            "Title"					// row[6]
+			     "SELECT games.GamCod,"					// row[0]
+			            "games.Hidden,"					// row[1]
+			            "games.UsrCod,"					// row[2]
+			            "games.Title"					// row[3]
 			     " FROM games"
-			     " WHERE GamCod=%ld",
+			     " LEFT JOIN gam_matches"
+			     " ON games.GamCod=gam_matches.GamCod"
+			     " WHERE games.GamCod=%ld",
 			     Game->GamCod);
    if (NumRows) // Game found...
      {
@@ -816,17 +823,8 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       /* Get author of the game (row[2]) */
       Game->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
-      /* Get start date (row[3] holds the start UTC time) */
-      Game->TimeUTC[Gam_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
-
-      /* Get end   date (row[4] holds the end   UTC time) */
-      Game->TimeUTC[Gam_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
-
-      /* Get whether the game is open or closed (row(5)) */
-      Game->Status.Open = (row[5][0] == '1');
-
-      /* Get the title of the game (row[6]) */
-      Str_Copy (Game->Title,row[6],
+      /* Get the title of the game (row[3]) */
+      Str_Copy (Game->Title,row[3],
                 Gam_MAX_BYTES_TITLE);
 
       /* Get number of questions and number of users who have already answer this game */
@@ -835,13 +833,6 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 
       /* Have I answered this game? */
       Game->Status.IHaveAnswered = Gam_CheckIfIHaveAnsweredGame (Game->GamCod);
-
-      /* Can I answer game? */
-      Game->Status.ICanAnswer = Game->NumQsts != 0 &&
-                                Game->Status.Visible &&
-                                Game->Status.Open &&
-                                Gbl.Usrs.Me.Role.Logged == Rol_STD &&
-                                !Game->Status.IHaveAnswered;
 
       /* Can I view results of the game?
          Can I edit game? */
@@ -855,16 +846,14 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
             Game->Status.ICanEdit         = false;
             break;
          case Rol_NET:
-            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
-                                           !Game->Status.ICanAnswer;
+            Game->Status.ICanViewResults = Game->NumQsts != 0;
             Game->Status.ICanEdit        = false;
             break;
          case Rol_TCH:
          case Rol_DEG_ADM:
          case Rol_CTR_ADM:
          case Rol_INS_ADM:
-            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
-                                           !Game->Status.ICanAnswer;
+            Game->Status.ICanViewResults = Game->NumQsts != 0;
             Game->Status.ICanEdit        = true;
             break;
          case Rol_SYS_ADM:
@@ -882,21 +871,55 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       /* Initialize to empty game */
       Game->GamCod                  = -1L;
       Game->UsrCod                  = -1L;
-      Game->TimeUTC[Gam_START_TIME] =
-      Game->TimeUTC[Gam_END_TIME  ] = (time_t) 0;
       Game->Title[0]                = '\0';
       Game->NumQsts                 = 0;
       Game->NumUsrs                 = 0;
       Game->Status.Visible          = true;
-      Game->Status.Open             = false;
       Game->Status.IHaveAnswered    = false;
-      Game->Status.ICanAnswer       = false;
       Game->Status.ICanViewResults  = false;
       Game->Status.ICanEdit         = false;
      }
 
-   /***** Free structure that stores the query result *****/
+   /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
+
+   if (Game->GamCod > 0)
+     {
+      /***** Get start and end times from database *****/
+      NumRows = DB_QuerySELECT (&mysql_res,"can not get game data",
+				"SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
+				       "UNIX_TIMESTAMP(MAX(EndTime))"	// row[1]
+				" FROM gam_matches"
+				" WHERE GamCod=%ld",
+				Game->GamCod);
+      if (NumRows)
+	{
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get start date (row[0] holds the start UTC time) */
+	 Game->TimeUTC[Gam_START_TIME] = Dat_GetUNIXTimeFromStr (row[0]);
+
+	 /* Get end   date (row[1] holds the end   UTC time) */
+	 Game->TimeUTC[Gam_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[1]);
+	}
+
+      /* Free structure that stores the query result */
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Get whether the game is open or closed *****/
+      Game->Status.Open = DB_QueryCOUNT ("can not get game data",
+					 "SELECT COUNT(*) FROM gam_matches"
+					 " WHERE GamCod=%ld"
+					 " AND Finished='N'",	// Matches not finished
+					 Game->GamCod);
+     }
+   else
+     {
+      Game->TimeUTC[Gam_START_TIME] =
+      Game->TimeUTC[Gam_END_TIME  ] = (time_t) 0;
+      Game->Status.Open             = false;
+     }
   }
 
 /*****************************************************************************/
@@ -1262,7 +1285,6 @@ void Gam_RequestCreatOrEditGame (void)
       Game.Status.Visible          = true;
       Game.Status.Open             = true;
       Game.Status.IHaveAnswered    = false;
-      Game.Status.ICanAnswer       = false;
       Game.Status.ICanViewResults  = false;
      }
    else
@@ -1309,7 +1331,7 @@ void Gam_RequestCreatOrEditGame (void)
             Gam_MAX_CHARS_TITLE,Game.Title);
 
    /***** Game start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Game.TimeUTC,Dat_FORM_SECONDS_ON);
+   // Dat_PutFormStartEndClientLocalDateTimes (Game.TimeUTC,Dat_FORM_SECONDS_ON);
 
    /***** Game text *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1427,21 +1449,11 @@ void Gam_RecFormGame (void)
          Lay_ShowErrorAndExit ("You can not update this game.");
      }
 
-   /***** Get start/end date-times *****/
-   NewGame.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewGame.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
-
    /***** Get game title *****/
    Par_GetParToText ("Title",NewGame.Title,Gam_MAX_BYTES_TITLE);
 
    /***** Get game text and insert links *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-
-   /***** Adjust dates *****/
-   if (NewGame.TimeUTC[Gam_START_TIME] == 0)
-      NewGame.TimeUTC[Gam_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (NewGame.TimeUTC[Gam_END_TIME] == 0)
-      NewGame.TimeUTC[Gam_END_TIME] = NewGame.TimeUTC[Gam_START_TIME] + 24 * 60 * 60;	// +24 hours
 
    /***** Check if title is correct *****/
    if (NewGame.Title[0])	// If there's a game title
@@ -1493,13 +1505,11 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
    Game->GamCod =
    DB_QueryINSERTandReturnCode ("can not create new game",
 				"INSERT INTO games"
-				" (CrsCod,Hidden,UsrCod,StartTime,EndTime,Title,Txt)"
+				" (CrsCod,Hidden,UsrCod,Title,Txt)"
 				" VALUES"
-				" (%ld,'N',%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),'%s','%s')",
+				" (%ld,'N',%ld,'%s','%s')",
 				Gbl.Hierarchy.Crs.CrsCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
-				Game->TimeUTC[Gam_START_TIME],
-				Game->TimeUTC[Gam_END_TIME  ],
 				Game->Title,
 				Txt);
 
@@ -1520,14 +1530,10 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
    DB_QueryUPDATE ("can not update game",
 		   "UPDATE games"
 		   " SET CrsCod=%ld,"
-		        "StartTime=FROM_UNIXTIME(%ld),"
-		        "EndTime=FROM_UNIXTIME(%ld),"
 		        "Title='%s',"
 		        "Txt='%s'"
 		   " WHERE GamCod=%ld",
 		   Gbl.Hierarchy.Crs.CrsCod,
-	           Game->TimeUTC[Gam_START_TIME],
-	           Game->TimeUTC[Gam_END_TIME  ],
 	           Game->Title,
 	           Txt,
 	           Game->GamCod);
@@ -1971,10 +1977,10 @@ static void Gam_ListGameQuestions (struct Game *Game)
    Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions;
 
    /***** How to show the questions ******/
-   if (Game->Status.ICanAnswer && !Editing)
-      ActionToDoWithQuestions = Tst_SHOW_GAME_TO_ANSWER;
-   else
+   if (Editing)
       ActionToDoWithQuestions = Tst_SHOW_GAME_RESULT;
+   else
+      ActionToDoWithQuestions = Tst_SHOW_GAME_TO_ANSWER;
 
    /***** Get data of questions from database *****/
    NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get data of a question",

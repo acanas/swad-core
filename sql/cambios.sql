@@ -12864,5 +12864,7 @@ INSERT IGNORE INTO social_comments_fav (PubCod,UsrCod,TimeFav) VALUES (1294,7140
 
 SELECT COUNT(*) FROM degrees WHERE CtrCod=2 AND FullName='Máster Universitario en Electrónica Industrial' AND DegCod<>-1;
 
+-----------------
 
+SELECT UNIX_TIMESTAMP(MIN(StartTime)),UNIX_TIMESTAMP(MAX(EndTime)) FROM gam_matches WHERE GamCod=1;
 

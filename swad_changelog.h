@@ -458,10 +458,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.129.3 (2019-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 18.130 (2019-07-04)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
+	Version 18.130:   Jul 04, 2019	Changes in listing of games. (243436 lines)
+					1 change necessary in database:
+ALTER TABLE games DROP COLUMN StartTime,DROP COLUMN EndTime;
+
 	Version 18.129.3: Jul 04, 2019	Changes in translation of alert. (243433 lines)
 	Version 18.129.2: Jul 04, 2019	Changes in creation of a new account. (243451 lines)
 	Version 18.129.1: Jul 04, 2019	Creation of a new account is splitted into two steps. (243444 lines)
