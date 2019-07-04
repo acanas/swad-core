@@ -1535,8 +1535,9 @@ Profile:
        1301. ActPrnAgdQR		Show agenda QR code ready to print
 
        1302. ActChkUsrAcc		Check if already exists a new account without password associated to a ID
+        NEW. ActCreMyAcc		Form to create a new account for me
        1303. ActCreUsrAcc		Create new user account
-       1304. ActRemMyID		Remove one of my user's IDs
+       1304. ActRemMyID			Remove one of my user's IDs
        1305. ActChgMyID			Create a new user's ID for me
        1306. ActRemMyNck		Remove one of my old nicknames
        1307. ActChgMyNck		Change my nickname
@@ -3143,6 +3144,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPrnAgdQR	*/{1618,-1,TabUnk,ActSeeMyAgd		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Agd_PrintAgdQRCode		,NULL},
 
    /* ActChkUsrAcc	*/{1584,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_CheckIfEmptyAccountExists	,NULL},
+   /* ActCreMyAcc	*/{1787,-1,TabUnk,ActFrmMyAcc		,0x001,0x001,0x001,0x001,0x001,0x001,0x001,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_ShowFormCreateMyAccount	,NULL},
    /* ActCreUsrAcc	*/{1163,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Acc_AfterCreationNewAccount	,NULL},
 
    /* ActRemMyID	*/{1147,-1,TabUnk,ActFrmMyAcc		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,ID_RemoveMyUsrID		,NULL},
@@ -4993,6 +4995,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
         ActRemMch,		// #1784
 	ActResMch,		// #1785
 	ActShoMch,		// #1786
+	ActCreMyAcc,		// #1787
 	};
 
 /*****************************************************************************/

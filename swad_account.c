@@ -122,9 +122,6 @@ void Acc_ShowFormMyAccount (void)
 
       /**** Show form to check if I have an account *****/
       Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered);
-
-      /**** Show form to create a new account *****/
-      Acc_ShowFormRequestNewAccountWithParams ("","");
      }
   }
 
@@ -158,11 +155,13 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 		      "</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_ID,
 	    ID_MAX_CHARS_USR_ID);
-   Btn_PutConfirmButtonInline (Txt_Check);
+   Btn_PutCreateButtonInline (Txt_Check);
    Frm_EndForm ();
 
    /***** Form to skip this step *****/
-   Btn_PutCloseBoxButtonInline (Txt_Skip_this_step);
+   Frm_StartForm (ActCreMyAcc);
+   Btn_PutConfirmButton (Txt_Skip_this_step);
+   Frm_EndForm ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -265,7 +264,7 @@ void Acc_CheckIfEmptyAccountExists (void)
      }
 
    /**** Show form to create a new account *****/
-   Acc_ShowFormRequestNewAccountWithParams ("","");
+   // Acc_ShowFormRequestNewAccountWithParams ("","");
   }
 
 /*****************************************************************************/
@@ -320,6 +319,16 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STD);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
+  }
+
+/*****************************************************************************/
+/********************* Show form to create a new account *********************/
+/*****************************************************************************/
+
+void Acc_ShowFormCreateMyAccount (void)
+  {
+   /**** Show form to create a new account *****/
+   Acc_ShowFormRequestNewAccountWithParams ("","");
   }
 
 /*****************************************************************************/

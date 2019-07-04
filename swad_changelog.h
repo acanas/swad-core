@@ -458,10 +458,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.129 (2019-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 18.129.1 (2019-07-04)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
+	Version 18.129.1: Jul 04, 2019	Creation of a new account is splitted into two steps. (243441 lines)
 	Version 18.129:   Jul 04, 2019	Button to skip step in creation of a new account. (243425 lines)
 	Version 18.128:   Jun 13, 2019	Fixed bug in creation of degrees. (243365 lines)
 	Version 18.127.3: May 31, 2019	Code refactoring and cleaning in games. (243346 lines)

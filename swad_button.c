@@ -149,7 +149,7 @@ void Btn_PutRemoveButtonInline (const char *TxtButton)
                       "</button>",
             TxtButton);
   }
-
+/*
 void Btn_PutCloseBoxButtonInline (const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_REMOVE\""
@@ -158,7 +158,7 @@ void Btn_PutCloseBoxButtonInline (const char *TxtButton)
                       "</button>",
             Gbl.Box.Ids[Gbl.Box.Nested],TxtButton);
   }
-
+*/
 void Btn_PutCloseTabButton (const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
