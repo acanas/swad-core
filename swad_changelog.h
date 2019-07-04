@@ -458,10 +458,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.130.1 (2019-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 18.130.2 (2019-07-04)"
 #define CSS_FILE		"swad18.123.css"
-#define JS_FILE			"swad18.123.js"
+#define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.130.2: Jul 04, 2019	Changes in listing of games and matches for students. (243429 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod=1779;
+
 	Version 18.130.1: Jul 04, 2019	Changes in listing of games. (243505 lines)
 	Version 18.130:   Jul 04, 2019	Changes in listing of games. (243436 lines)
 					1 change necessary in database:

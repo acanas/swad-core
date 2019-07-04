@@ -522,7 +522,7 @@ function refreshGame () {
 	objXMLHttpReqGam = AJAXCreateObject();
 	if (objXMLHttpReqGam) {
 		var RefreshParams = RefreshParamNxtActGam + '&' +
-							RefreshParamGamCod + '&' +
+							RefreshParamMchCod + '&' +
 							RefreshParamIdSes;
 
 		objXMLHttpReqGam.onreadystatechange = readGameData;	// onreadystatechange must be lowercase

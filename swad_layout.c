@@ -677,7 +677,7 @@ static void Lay_WriteScriptInit (void)
       case ActRemSocComGbl:
 	 RefreshNewTimeline = true;
 	 break;
-      case ActGamStdCurQst:
+      case ActPlyMchStd:
 	 RefreshGame = true;
 	 break;
       case ActLstClk:
@@ -790,10 +790,10 @@ static void Lay_WriteScriptParamsAJAX (void)
 		  Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
       /* Parameters related with game refreshing */
-      case ActGamStdCurQst:
+      case ActPlyMchStd:
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"
-			    "var RefreshParamGamCod = \"GamCod=%ld\";\n",
-		 Act_GetActCod (ActRefGamStd),
+			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
+		 Act_GetActCod (ActRefMchStd),
 		 Gbl.Games.MchCodBeingPlayed);
 	 break;
       /* Parameter related with clicks refreshing */

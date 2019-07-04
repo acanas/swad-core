@@ -108,7 +108,7 @@ unsigned Gam_CurrentQstInd = 0;	// Used as parameter in contextual links
 /*****************************************************************************/
 
 static void Gam_ListAllGames (void);
-static bool Gam_CheckIfICanCreateGame (void);
+static bool Gam_CheckIfICanEditGames (void);
 static void Gam_PutIconsListGames (void);
 static void Gam_PutIconToCreateNewGame (void);
 static void Gam_PutButtonToCreateNewGame (void);
@@ -116,8 +116,7 @@ static void Gam_PutParamsToCreateNewGame (void);
 static void Gam_ShowOneGame (long GamCod,
                              bool ShowOnlyThisGame,
                              bool ListGameQuestions,
-                             bool PutFormNewMatch,
-			     bool PutButtonToPlay);
+                             bool PutFormNewMatch);
 static void Gam_WriteAuthor (struct Game *Game);
 
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
@@ -170,17 +169,16 @@ static void Gam_PutParamsOneQst (void);
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
-static void Gam_ListPlayedMatches (struct Game *Game,bool PutFormNewMatch);
+static void Gam_ListMatches (struct Game *Game,bool PutFormNewMatch);
 static void Gam_PutIconToPlayNewMatch (void);
-static void Gam_ListOneOrMoreMatchesForEdition (struct Game *Game,
+static void Gam_ListOneOrMoreMatches (struct Game *Game,
 						unsigned NumMatches,
                                                 MYSQL_RES *mysql_res);
 static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Match *Match);
 static void Gam_PutButtonNewMatch (long GamCod);
 
-static void Gam_PutBigButtonToPlayMatchTch (struct Game *Game);
-static void Gam_PutBigButtonToPlayMatchStd (long MchCod);
+static void Gam_PutFormNewMatch (struct Game *Game);
 
 static void Gam_CreateMatch (struct Match *Match);
 static void Gam_UpdateMatchBeingPlayed (struct Match *Match);
@@ -255,8 +253,10 @@ static void Gam_ListAllGames (void)
      {
       /***** Table head *****/
       Tbl_StartTableWideMargin (2);
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
+      fprintf (Gbl.F.Out,"<tr>");
+      if (Gam_CheckIfICanEditGames ())
+         fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
+
       for (Order  = (Gam_Order_t) 0;
 	   Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
 	   Order++)
@@ -286,9 +286,8 @@ static void Gam_ListAllGames (void)
 	   NumGame++)
 	 Gam_ShowOneGame (Gbl.Games.LstGamCods[NumGame - 1],
 	                  false,
-	                  false,
-	                  false,	// Do not put form to start new match
-			  false);	// Do not put button to play
+	                  false,	// Do not list game questions
+	                  false);	// Do not put form to start new match
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -297,7 +296,7 @@ static void Gam_ListAllGames (void)
       Ale_ShowAlert (Ale_INFO,Txt_No_games);
 
    /***** Button to create a new game *****/
-   if (Gam_CheckIfICanCreateGame ())
+   if (Gam_CheckIfICanEditGames ())
       Gam_PutButtonToCreateNewGame ();
 
    /***** End box *****/
@@ -317,7 +316,7 @@ static void Gam_ListAllGames (void)
 /******************* Check if I can create a new game **********************/
 /*****************************************************************************/
 
-static bool Gam_CheckIfICanCreateGame (void)
+static bool Gam_CheckIfICanEditGames (void)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -340,7 +339,7 @@ static bool Gam_CheckIfICanCreateGame (void)
 static void Gam_PutIconsListGames (void)
   {
    /***** Put icon to create a new game *****/
-   if (Gam_CheckIfICanCreateGame ())
+   if (Gam_CheckIfICanEditGames ())
       Gam_PutIconToCreateNewGame ();
 
    /***** Put icon to show a figure *****/
@@ -404,9 +403,8 @@ void Gam_SeeOneGame (void)
    /***** Show game *****/
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
-                    true,	// List game questions
-	            false,	// Do not put form to start new match
-		    false);	// Do not put button to play
+                    false,	// Do not list game questions
+	            false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -416,8 +414,7 @@ void Gam_SeeOneGame (void)
 static void Gam_ShowOneGame (long GamCod,
                              bool ShowOnlyThisGame,
                              bool ListGameQuestions,
-                             bool PutFormNewMatch,
-			     bool PutButtonToPlay)
+                             bool PutFormNewMatch)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Game;
@@ -425,7 +422,6 @@ static void Gam_ShowOneGame (long GamCod,
    extern const char *Txt_View_game;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_No_of_users;
-   extern const char *Txt_Play;
    extern const char *Txt_New_match;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -453,38 +449,25 @@ static void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Icons related to this game *****/
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CONTEXT_COL");
-   if (!ShowOnlyThisGame)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
-
    if (Game.Status.ICanEdit)
+     {
+      fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CONTEXT_COL");
+      if (!ShowOnlyThisGame)
+	 fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"\">");
+
       /* Icons to remove/edit this game */
       Gam_PutFormsToRemEditOneGame (&Game,Anchor);
 
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 /* Icon to play match */
-	 Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
+      if (ShowOnlyThisGame)
+	 /* Icon to start a new match */
+	 Lay_PutContextualLinkOnlyIcon (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID,
 					Gam_PutParams,
 					"play.svg",
-					Txt_Play);
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-	 if (ShowOnlyThisGame)
-	    /* Icon to start a new match */
-	    Lay_PutContextualLinkOnlyIcon (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID,
-					   Gam_PutParams,
-					   "play.svg",
-					   Txt_New_match);
-	 break;
-      default:
-	 break;
-     }
+					Txt_New_match);
 
-   fprintf (Gbl.F.Out,"</td>");
+      fprintf (Gbl.F.Out,"</td>");
+     }
 
    /***** Start date/time *****/
    UniqueId++;
@@ -597,22 +580,8 @@ static void Gam_ShowOneGame (long GamCod,
 
    if (ShowOnlyThisGame)
      {
-      switch (Gbl.Usrs.Me.Role.Logged)
-        {
-	 case Rol_STD:
-            /* Put big button to play match */
-	    if (PutButtonToPlay)
-               Gam_PutBigButtonToPlayMatchStd (Game.GamCod);	// TODO: Change to match !!!!!!!!!!!!!!!!!!
-            break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-            /* List played matches */
-            Gam_ListPlayedMatches (&Game,PutFormNewMatch);
-            break;
-	 default:
-	    break;
-        }
+      /***** List matches *****/
+      Gam_ListMatches (&Game,PutFormNewMatch);
 
       /***** Write questions of this game *****/
       if (ListGameQuestions)
@@ -649,7 +618,6 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 					  const char *Anchor)
   {
    extern const char *Txt_Reset;
-   extern const char *Txt_Play;
 
    /***** Put icon to remove game *****/
    Ico_PutContextualIconToRemove (ActReqRemGam,Gam_PutParams);
@@ -1225,7 +1193,7 @@ static bool Gam_CheckIfSimilarGameExists (struct Game *Game)
   }
 
 /*****************************************************************************/
-/********************* Put a form to create a new game *********************/
+/*********************** Put a form to create a new game *********************/
 /*****************************************************************************/
 
 void Gam_RequestCreatOrEditGame (void)
@@ -1255,14 +1223,14 @@ void Gam_RequestCreatOrEditGame (void)
    if (ItsANewGame)
      {
       /***** Put link (form) to create new game *****/
-      if (!Gam_CheckIfICanCreateGame ())
+      if (!Gam_CheckIfICanEditGames ())
          Lay_ShowErrorAndExit ("You can not create a new game here.");
 
       /* Initialize to empty game */
       Game.GamCod = -1L;
       Game.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Game.TimeUTC[Gam_START_TIME] = Gbl.StartExecutionTimeUTC;
-      Game.TimeUTC[Gam_END_TIME  ] = Gbl.StartExecutionTimeUTC + (24 * 60 * 60);	// +24 hours
+      Game.TimeUTC[Gam_START_TIME] = (time_t) 0;
+      Game.TimeUTC[Gam_END_TIME  ] = (time_t) 0;
       Game.Title[0]                = '\0';
       Game.NumQsts                 = 0;
       Game.NumUsrs                 = 0;
@@ -1313,9 +1281,6 @@ void Gam_RequestCreatOrEditGame (void)
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Title,
             Gam_MAX_CHARS_TITLE,Game.Title);
-
-   /***** Game start and end dates *****/
-   // Dat_PutFormStartEndClientLocalDateTimes (Game.TimeUTC,Dat_FORM_SECONDS_ON);
 
    /***** Game text *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1759,8 +1724,7 @@ void Gam_RequestNewQuestion (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put form to start new match
-		    false);	// Do not put button to play
+		    false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2287,8 +2251,7 @@ void Gam_AddTstQuestionsToGame (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put form to start new match
-		    false);	// Do not put button to play
+		    false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2465,8 +2428,7 @@ void Gam_RequestRemoveQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put form to start new match
-		    false);	// Do not put button to play
+		    false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2516,8 +2478,7 @@ void Gam_RemoveQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put form to start new match
-		    false);	// Do not put button to play
+		    false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2561,8 +2522,7 @@ void Gam_MoveUpQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put form to start new match
-		    false);	// Do not put button to play
+		    false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2616,8 +2576,7 @@ void Gam_MoveDownQst (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put form to start new match
-		    false);	// Do not put button to play
+		    false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -2675,7 +2634,7 @@ static void Gam_ExchangeQuestions (long GamCod,
 /************************* List the matches of a game ************************/
 /*****************************************************************************/
 
-static void Gam_ListPlayedMatches (struct Game *Game,bool PutFormNewMatch)
+static void Gam_ListMatches (struct Game *Game,bool PutFormNewMatch)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
    extern const char *Txt_Matches;
@@ -2687,8 +2646,7 @@ static void Gam_ListPlayedMatches (struct Game *Game,bool PutFormNewMatch)
    /* Fill subquery for game */
    if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
      {
-      if (asprintf (&SubQuery,"GamCod=%ld"
-			      " AND"
+      if (asprintf (&SubQuery," AND"
 			      "(MchCod NOT IN"
 			      " (SELECT MchCod FROM gam_grp)"
 			      " OR"
@@ -2697,16 +2655,12 @@ static void Gam_ListPlayedMatches (struct Game *Game,bool PutFormNewMatch)
 			      " FROM gam_grp,crs_grp_usr"
 			      " WHERE crs_grp_usr.UsrCod=%ld"
 			      " AND gam_grp.GrpCod=crs_grp_usr.GrpCod))",
-		     Game->GamCod,
 		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	  Lay_NotEnoughMemoryExit ();
       }
     else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-      {
-       if (asprintf (&SubQuery,"GamCod=%ld",
-		     Game->GamCod) < 0)
+       if (asprintf (&SubQuery,"%s","") < 0)
 	  Lay_NotEnoughMemoryExit ();
-      }
 
    /* Make query */
    NumMatches = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
@@ -2722,8 +2676,9 @@ static void Gam_ListPlayedMatches (struct Game *Game,bool PutFormNewMatch)
 						  "ShowingAnswers,"			// row[ 9]
 						  "Finished"				// row[10]
 					   " FROM gam_matches"
-					   " WHERE %s"
+					   " WHERE GamCod=%ld%s"
 					   " ORDER BY MchCod",
+					   Game->GamCod,
 					   SubQuery);
 
    /* Free allocated memory for subquery */
@@ -2736,16 +2691,25 @@ static void Gam_ListPlayedMatches (struct Game *Game,bool PutFormNewMatch)
 
    if (NumMatches)
       /***** Show the table with the matches *****/
-      Gam_ListOneOrMoreMatchesForEdition (Game,NumMatches,mysql_res);
+      Gam_ListOneOrMoreMatches (Game,NumMatches,mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Put button to play a new match in this game *****/
-   if (PutFormNewMatch)
-      Gam_PutBigButtonToPlayMatchTch (Game);
-   else
-      Gam_PutButtonNewMatch (Game->GamCod);
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 if (PutFormNewMatch)
+	    Gam_PutFormNewMatch (Game);			// Form to fill in data and start playing a new match
+	 else
+	    Gam_PutButtonNewMatch (Game->GamCod);	// Button to create a new match
+	 break;
+      default:
+	 break;
+     }
 
    /***** End box *****/
    Box_EndBox ();
@@ -2820,7 +2784,7 @@ static void Gam_PutIconToPlayNewMatch (void)
 /*********************** List game matches for edition ***********************/
 /*****************************************************************************/
 
-static void Gam_ListOneOrMoreMatchesForEdition (struct Game *Game,
+static void Gam_ListOneOrMoreMatches (struct Game *Game,
 						unsigned NumMatches,
                                                 MYSQL_RES *mysql_res)
   {
@@ -2829,6 +2793,7 @@ static void Gam_ListOneOrMoreMatchesForEdition (struct Game *Game,
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Match;
    extern const char *Txt_Status;
+   extern const char *Txt_Play;
    extern const char *Txt_Resume;
    extern const char *Txt_Today;
    extern const char *Txt_View_game_results;
@@ -2885,18 +2850,6 @@ static void Gam_ListOneOrMoreMatchesForEdition (struct Game *Game,
       Gam_PutParamMatchCod (Match.MchCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
-
-      /* Put icon to continue playing an unfinished match */
-      /*
-      if (!Match.Status.Finished)
-	{
-	 Gam_CurrentMchCod = Match.MchCod;
-	 Lay_PutContextualLinkOnlyIcon (ActResMch,NULL,
-					Gam_PutParamCurrentMchCod,
-					"play.svg",
-					Txt_Resume);
-	}
-      */
 
       fprintf (Gbl.F.Out,"</td>");
 
@@ -2968,12 +2921,32 @@ static void Gam_ListOneOrMoreMatchesForEdition (struct Game *Game,
          fprintf (Gbl.F.Out,"<div class=\"DAT\">%u/%u</div>",
 		  Match.Status.QstInd,Game->NumQsts);
 
-	 /* Icon to resume */
-	 Gam_CurrentMchCod = Match.MchCod;
-	 Lay_PutContextualLinkOnlyIcon (ActResMch,NULL,
-					Gam_PutParamCurrentMchCod,
-					"play.svg",
-					Txt_Resume);
+         switch (Gbl.Usrs.Me.Role.Logged)
+           {
+            case Rol_STD:
+	       /* Icon to play as student */
+	       Gam_CurrentMchCod = Match.MchCod;
+	       Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
+					      Gam_PutParamCurrentMchCod,
+					      "play.svg",
+					      Txt_Play);
+               break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	    case Rol_DEG_ADM:
+	    case Rol_CTR_ADM:
+	    case Rol_INS_ADM:
+	    case Rol_SYS_ADM:
+	       /* Icon to resume */
+	       Gam_CurrentMchCod = Match.MchCod;
+	       Lay_PutContextualLinkOnlyIcon (ActResMch,NULL,
+					      Gam_PutParamCurrentMchCod,
+					      "play.svg",
+					      Txt_Resume);
+	       break;
+	    default:
+	       break;
+           }
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -3088,8 +3061,7 @@ void Gam_RequestRemoveMatch (void)
    Gam_ShowOneGame (Match.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put form to start new match
-		    false);	// Do not put button to play
+		    false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -3136,8 +3108,7 @@ void Gam_RemoveMatch (void)
    Gam_ShowOneGame (Match.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put form to start new match
-		    false);	// Do not put button to play
+		    false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/
@@ -3174,49 +3145,15 @@ void Gam_RequestNewMatch (void)
    /***** Show game *****/
    Gam_ShowOneGame (GamCod,
                     true,	// Show only this game
-                    false,	// Do not list questions
-                    true,	// Put form to start new match
-		    false);	// Do not put button to play
-  }
-
-/*****************************************************************************/
-/******************* Start playing a game as a student ***********************/
-/*****************************************************************************/
-
-void Gam_PlayMatchStd (void)
-  {
-   struct Match Match;
-   bool IBelongToGroups;
-
-   /***** Get parameters *****/
-   Gam_GetParamOrder ();
-   Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
-
-   /***** Get match code *****/
-   if ((Match.MchCod = Gam_GetParamMatchCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
-
-   /***** Get data of the match from database *****/
-   Gam_GetDataOfMatchByCod (&Match);
-
-   /***** Do I belong to valid groups to play this match? *****/
-   IBelongToGroups = Gbl.Usrs.Me.IBelongToCurrentCrs &&
-		     Gam_CheckIfIPlayThisMatchBasedOnGrps (Match.MchCod);
-
-   /***** Show game *****/
-   Gam_ShowOneGame (Match.GamCod,
-                    true,		// Show only this game
-                    false,		// Do not list questions
-                    false,		// Do not put form to start new match
-		    IBelongToGroups);	// Put button to play
+                    false,	// Do not list game questions
+                    true);	// Put form to start new match
   }
 
 /*****************************************************************************/
 /****** Put a big button to play match (start a new match) as a teacher ******/
 /*****************************************************************************/
 
-static void Gam_PutBigButtonToPlayMatchTch (struct Game *Game)
+static void Gam_PutFormNewMatch (struct Game *Game)
   {
    extern const char *Hlp_ASSESSMENT_Games_new_match;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -3273,31 +3210,6 @@ static void Gam_PutBigButtonToPlayMatchTch (struct Game *Game)
 
    /***** End section for a new match *****/
    Lay_EndSection ();
-  }
-
-/*****************************************************************************/
-/******** Put a big button to play match (join a match) as a student *********/
-/*****************************************************************************/
-
-static void Gam_PutBigButtonToPlayMatchStd (long MchCod)
-  {
-   extern const char *Txt_Play;
-
-   /***** Start form *****/
-   Frm_StartForm (ActGamStdCurQst);
-   Gam_PutParamMatchCod (MchCod);
-   Gam_PutParamQstInd (0);	// Start by first question in game
-
-   /***** Put icon with link *****/
-   Frm_LinkFormSubmit (Txt_Play,NULL,NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/play.svg\""
-		      " alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\" />",
-            Cfg_URL_ICON_PUBLIC,Txt_Play,Txt_Play);
-   fprintf (Gbl.F.Out,"</a>");
-
-   /***** End form *****/
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/
@@ -3811,8 +3723,7 @@ void Gam_ReceiveGameAnswers (void)
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
-		    false,	// Do not put form to start new match
-		    false);	// Do not put button to play
+		    false);	// Do not put form to start new match
   }
 
 /*****************************************************************************/

@@ -613,9 +613,8 @@ Assessment:
         457. ActNxtMch			Show next question when playing a game (by a teacher)
         NEW. ActShoMch			Show finished match results
 
-        NEW. ActPlyMchStd		Play a game (by a student)
-        NEW. ActGamStdCurQst		Show current question when playing a game (by a student)
-        NEW. ActRefGamStd		Refresh current question when playing a game (by a student)
+        NEW. ActPlyMchStd		Show current question when playing a game (by a student)
+        NEW. ActRefMchStd		Refresh current question when playing a game (by a student)
 
         459. ActAnsGam			Answer a game
         460. ActFrmNewGam		Form to create a new game
@@ -2153,9 +2152,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNxtMch		*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,NULL				,Gam_NextStatusMatch		,NULL},
    /* ActShoMch		*/{1786,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ShowFinishedMatchResults	,NULL},
 
-   /* ActPlyMchStd	*/{1779,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_PlayMatchStd		,NULL},
-   /* ActGamStdCurQst	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_GetMatchBeingPlayed	,Gam_ShowNewMatchToMeAsStd	,NULL},
-   /* ActRefGamStd	*/{1782,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Gam_GetMatchBeingPlayed	,Gam_RefreshCurrentMatchStd	,NULL},
+   /* ActPlyMchStd	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_GetMatchBeingPlayed	,Gam_ShowNewMatchToMeAsStd	,NULL},
+   /* ActRefMchStd	*/{1782,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Gam_GetMatchBeingPlayed	,Gam_RefreshCurrentMatchStd	,NULL},
 
    /* ActAnsGam		*/{1651,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ReceiveGameAnswers		,NULL},
    /* ActFrmNewGam	*/{1652,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
@@ -4987,10 +4985,10 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqUnlAllPrj,	// #1776
 	ActLckAllPrj,		// #1777
 	ActUnlAllPrj,		// #1778
-	ActPlyMchStd,		// #1779
-	ActGamStdCurQst,	// #1780
+	-1,			// #1779 (obsolete action)
+	ActPlyMchStd,	// #1780
 	-1,			// #1781 (obsolete action)
-	ActRefGamStd,		// #1782
+	ActRefMchStd,		// #1782
         ActReqRemMch,		// #1783
         ActRemMch,		// #1784
 	ActResMch,		// #1785

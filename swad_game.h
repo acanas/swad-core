@@ -121,7 +121,7 @@ void Gam_RequestRemoveMatch (void);
 void Gam_RemoveMatch (void);
 
 void Gam_RequestNewMatch (void);
-void Gam_PlayMatchStd (void);
+// void Gam_PlayMatchStd (void);
 
 void Gam_ReceiveGameAnswers (void);
 void Gam_CreateAndStartNewMatch (void);
