@@ -13593,49 +13593,7 @@ const char *Txt_Game_X_reset =	// Warning: it is very important to include %s in
 #elif L==9	// pt
 	"Jogo <strong>%s</strong> fixado em zero.";
 #endif
-/*
-const char *Txt_GAME_You_belong_to_the_scope_of_the_game =
-#if   L==1	// ca
-	"Pertany a l'&agrave;mbit del joc";
-#elif L==2	// de
-	"Sie geh&ouml;ren zum Umfang des Spiels";
-#elif L==3	// en
-	"You belong to the scope of the game";
-#elif L==4	// es
-	"Pertenece al &aacute;mbito del juego";
-#elif L==5	// fr
-	"Vous appartenez &agrave; la port&eacute;e du jeu";
-#elif L==6	// gn
-	"Pertenece al &aacute;mbito del juego";		// Okoteve traducción
-#elif L==7	// it
-	"Voi appartenete al campo del gioco";
-#elif L==8	// pl
-	"Nale&zdot;ysz do zakresu gry";
-#elif L==9	// pt
-	"Voc&ecirc; pertence ao &acirc;mbito do jogo";
-#endif
 
-const char *Txt_GAME_You_dont_belong_to_the_scope_of_the_game =
-#if   L==1	// ca
-	"No pertany a l'&agrave;mbit del joc";
-#elif L==2	// de
-	"Sie geh&ouml;ren nicht zum Umfang des Spiels";
-#elif L==3	// en
-	"You don't belong to the scope the game";
-#elif L==4	// es
-	"No pertenece al &aacute;mbito del juego";
-#elif L==5	// fr
-	"Vous n'appartenez pas &agrave; la port&eacute;e du jeu";
-#elif L==6	// gn
-	"No pertenece al &aacute;mbito del juego";	// Okoteve traducción
-#elif L==7	// it
-	"Voi non appartieni al campo del gioco";
-#elif L==8	// pl
-	"Nie nale&zdot;&aogon; do zakresu gry";
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o pertence ao &acirc;mbito do jogo";
-#endif
-*/
 const char *Txt_Games =
 #if   L==1	// ca
 	"Jocs";
@@ -13656,6 +13614,132 @@ const char *Txt_Games =
 #elif L==9	// pt
 	"Jogos";
 #endif
+
+const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS] =
+   {		// Gam_ORDER_BY_START_DATE
+#if   L==1	// ca
+	 "Inici"
+#elif L==2	// de
+	 "Start"
+#elif L==3	// en
+	 "Start"
+#elif L==4	// es
+	 "Inicio"
+#elif L==5	// fr
+	 "D&eacute;but"
+#elif L==6	// gn
+	 "&Ntilde;epyr&utilde;"
+#elif L==7	// it
+	 "Inizio"
+#elif L==8	// pl
+	 "Pocz&aogon;tek"
+#elif L==9	// pt
+	 "In&iacute;cio"
+#endif
+	 ,	// Gam_ORDER_BY_END_DATE
+#if   L==1	// ca
+	 "Final"
+#elif L==2	// de
+	 "Ende"
+#elif L==3	// en
+	 "End"
+#elif L==4	// es
+	 "Final"
+#elif L==5	// fr
+	 "Fin"
+#elif L==6	// gn
+	 "Paha"
+#elif L==7	// it
+	 "Fine"
+#elif L==8	// pl
+	 "Koniec"
+#elif L==9	// pt
+	 "Fim"
+#endif
+	 ,	// Gam_ORDER_BY_TITLE
+#if   L==1	// ca
+	"Joc"
+#elif L==2	// de
+	"Spiel"
+#elif L==3	// en
+	"Game"
+#elif L==4	// es
+	"Juego"
+#elif L==5	// fr
+	"Jeu"
+#elif L==6	// gn
+	"Juego"		// Okoteve traducción
+#elif L==7	// it
+	"Gioco"
+#elif L==8	// pl
+	"Gra"
+#elif L==9	// pt
+	"Jogo"
+#endif
+	};
+
+const char *Txt_GAMES_ORDER_HELP[Gam_NUM_ORDERS] =
+   {		// Gam_ORDER_BY_START_DATE
+#if   L==1	// ca
+	 "Ordenar per data de comen&ccedil;ament"
+#elif L==2	// de
+	 "Sortieren nach Startdatum"
+#elif L==3	// en
+	 "Sort by start date"
+#elif L==4	// es
+	 "Ordenar por fecha de comienzo"
+#elif L==5	// fr
+	 "Trier par date de d&eacute;but"
+#elif L==6	// gn
+	 "Ordenar por fecha de comienzo"	// Okoteve traducción
+#elif L==7	// it
+	 "Ordina per data di inizio"
+#elif L==8	// pl
+	 "Sortuj wedlug daty rozpoczecia"
+#elif L==9	// pt
+	 "Classificar por data de in&iacute;cio"
+#endif
+	 ,
+#if   L==1	// ca
+	 "Ordenar per data de finalitzaci&oacute;"
+#elif L==2	// de
+	 "Sortieren nach Enddatum"
+#elif L==3	// en
+	 "Sort by end date"
+#elif L==4	// es
+	 "Ordenar por fecha de finalizaci&oacute;n"
+#elif L==5	// fr
+	 "Trier par date de fin"
+#elif L==6	// gn
+	 "Ordenar por fecha de finalizaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	 "Ordina per data di fine"
+#elif L==8	// pl
+	 "Sortuj wedlug daty zakonczenia"
+#elif L==9	// pt
+	 "Classificar por data de t&eacute;rmino"
+#endif
+	 ,	// Gam_ORDER_BY_TITLE
+#if   L==1	// ca
+	 "Ordenar per t&iacute;tol del joc"
+#elif L==2	// de
+	 "Sortieren nach Spieltitel"
+#elif L==3	// en
+	 "Sort by game title"
+#elif L==4	// es
+	 "Ordenar por t&iacute;tulo del juego"
+#elif L==5	// fr
+	 "Trier par titre de jeu"
+#elif L==6	// gn
+	 "Ordenar por t&iacute;tulo del juego"	// Okoteve traducción
+#elif L==7	// it
+	 "Ordina per titolo del gioco"
+#elif L==8	// pl
+	 "Sortuj wed&lstrok;ug tytu&lstrok;u gry"
+#elif L==9	// pt
+	 "Classificar por t&iacute;tulo do jogo"
+#endif
+	};
 
 const char *Txt_General =
 #if   L==1	// ca
@@ -29933,7 +30017,7 @@ const char *Txt_PROJECT_ORDER_HELP[Prj_NUM_ORDERS] =
 #elif L==4	// es
 	 "Ordenar por t&iacute;tulo"
 #elif L==5	// fr
-	 "Trier par date de d&eacute;but"
+	 "Trier par titre"
 #elif L==6	// gn
 	 "Ordenar por t&iacute;tulo"	// Okoteve traducción
 #elif L==7	// it

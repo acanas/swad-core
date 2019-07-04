@@ -61,11 +61,12 @@ struct Game
      } Status;
   };
 
-#define Gam_NUM_ORDERS 2
+#define Gam_NUM_ORDERS 3
 typedef enum
   {
    Gam_ORDER_BY_START_DATE = 0,
    Gam_ORDER_BY_END_DATE   = 1,
+   Gam_ORDER_BY_TITLE      = 2,
   } Gam_Order_t;
 #define Gam_ORDER_DEFAULT Gam_ORDER_BY_START_DATE
 

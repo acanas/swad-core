@@ -113,19 +113,19 @@ static void Gam_PutIconsListGames (void);
 static void Gam_PutIconToCreateNewGame (void);
 static void Gam_PutButtonToCreateNewGame (void);
 static void Gam_PutParamsToCreateNewGame (void);
-static void Gam_ParamsWhichGroupsToShow (void);
 static void Gam_ShowOneGame (long GamCod,
                              bool ShowOnlyThisGame,
                              bool ListGameQuestions,
                              bool PutFormNewMatch,
 			     bool PutButtonToPlay);
 static void Gam_WriteAuthor (struct Game *Game);
-static void Gam_GetParamGameOrder (void);
 
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 					  const char *Anchor);
 static void Gam_PutParams (void);
 static void Gam_PutParamCurrentMchCod (void);
+static void Gam_PutHiddenParamOrder (void);
+static void Gam_GetParamOrder (void);
 
 static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
@@ -205,7 +205,7 @@ static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod);
 void Gam_SeeAllGames (void)
   {
    /***** Get parameters *****/
-   Gam_GetParamGameOrder ();
+   Gam_GetParamOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
@@ -221,9 +221,8 @@ static void Gam_ListAllGames (void)
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Games;
-   extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
-   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
-   extern const char *Txt_Game;
+   extern const char *Txt_GAMES_ORDER_HELP[Gam_NUM_ORDERS];
+   extern const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS];
    extern const char *Txt_No_games;
    Gam_Order_t Order;
    struct Pagination Pagination;
@@ -252,35 +251,26 @@ static void Gam_ListAllGames (void)
    Box_StartBox ("100%",Txt_Games,Gam_PutIconsListGames,
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
-   /***** Select whether show only my groups or all groups *****/
-   if (Gbl.Crs.Grps.NumGrps)
-     {
-      Set_StartSettingsHead ();
-      Grp_ShowFormToSelWhichGrps (ActSeeAllGam,Gam_ParamsWhichGroupsToShow);
-      Set_EndSettingsHead ();
-     }
-
    if (Gbl.Games.Num)
      {
       /***** Table head *****/
       Tbl_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
-      for (Order = Gam_ORDER_BY_START_DATE;
-	   Order <= Gam_ORDER_BY_END_DATE;
+      for (Order  = (Gam_Order_t) 0;
+	   Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
 
 	 /* Form to change order */
 	 Frm_StartForm (ActSeeAllGam);
-	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
+	 Frm_LinkFormSubmit (Txt_GAMES_ORDER_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Games.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
+	 fprintf (Gbl.F.Out,"%s",Txt_GAMES_ORDER[Order]);
 	 if (Order == Gbl.Games.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
@@ -288,11 +278,7 @@ static void Gam_ListAllGames (void)
 
 	 fprintf (Gbl.F.Out,"</th>");
 	}
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "</tr>",
-	       Txt_Game);
+      fprintf (Gbl.F.Out,"</tr>");
 
       /***** Write all the games *****/
       for (NumGame = Pagination.FirstItemVisible;
@@ -395,17 +381,6 @@ static void Gam_PutButtonToCreateNewGame (void)
 static void Gam_PutParamsToCreateNewGame (void)
   {
    Gam_PutHiddenParamGameOrder ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
-  }
-
-/*****************************************************************************/
-/**************** Put params to select which groups to show ******************/
-/*****************************************************************************/
-
-static void Gam_ParamsWhichGroupsToShow (void)
-  {
-   Gam_PutHiddenParamGameOrder ();
    Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
   }
 
@@ -418,7 +393,7 @@ void Gam_SeeOneGame (void)
    struct Game Game;
 
    /***** Get parameters *****/
-   Gam_GetParamGameOrder ();
+   Gam_GetParamOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
@@ -658,19 +633,6 @@ static void Gam_WriteAuthor (struct Game *Game)
   }
 
 /*****************************************************************************/
-/********** Get parameter with the type or order in list of games ************/
-/*****************************************************************************/
-
-static void Gam_GetParamGameOrder (void)
-  {
-   Gbl.Games.SelectedOrder = (Gam_Order_t)
-	                     Par_GetParToUnsignedLong ("Order",
-	                                               0,
-	                                               Gam_NUM_ORDERS - 1,
-	                                               (unsigned long) Gam_ORDER_DEFAULT);
-  }
-
-/*****************************************************************************/
 /****** Put a hidden parameter with the type of order in list of games *******/
 /*****************************************************************************/
 
@@ -716,8 +678,7 @@ static void Gam_PutParams (void)
    if (Gam_CurrentGamCod > 0)
       Gam_PutParamGameCod (Gam_CurrentGamCod);
 
-   Att_PutHiddenParamAttOrder ();
-   Grp_PutParamWhichGrps ();
+   Gam_PutHiddenParamOrder ();
    Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
   }
 
@@ -725,6 +686,28 @@ static void Gam_PutParamCurrentMchCod (void)
   {
    if (Gam_CurrentMchCod > 0)
       Gam_PutParamMatchCod (Gam_CurrentMchCod);
+  }
+
+/*****************************************************************************/
+/****** Put a hidden parameter with the type of order in list of games *******/
+/*****************************************************************************/
+
+static void Gam_PutHiddenParamOrder (void)
+  {
+   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Games.SelectedOrder);
+  }
+
+/*****************************************************************************/
+/********** Get parameter with the type or order in list of games ************/
+/*****************************************************************************/
+
+static void Gam_GetParamOrder (void)
+  {
+   Gbl.Games.SelectedOrder = (Gam_Order_t)
+	                     Par_GetParToUnsignedLong ("Order",
+	                                               0,
+	                                               Gam_NUM_ORDERS - 1,
+	                                               (unsigned long) Gam_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -737,6 +720,7 @@ void Gam_GetListGames (void)
      {
       "StartTime DESC,EndTime DESC,games.Title DESC",	// Gam_ORDER_BY_START_DATE
       "EndTime DESC,StartTime DESC,games.Title DESC",	// Gam_ORDER_BY_END_DATE
+      "games.Title DESC",				// Gam_ORDER_BY_TITLE
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1020,7 +1004,7 @@ void Gam_AskRemGame (void)
    struct Game Game;
 
    /***** Get parameters *****/
-   Gam_GetParamGameOrder ();
+   Gam_GetParamOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
@@ -1108,7 +1092,7 @@ void Gam_AskResetGame (void)
    struct Game Game;
 
    /***** Get parameters *****/
-   Gam_GetParamGameOrder ();
+   Gam_GetParamOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
@@ -1260,7 +1244,7 @@ void Gam_RequestCreatOrEditGame (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
-   Gam_GetParamGameOrder ();
+   Gam_GetParamOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
@@ -1764,7 +1748,7 @@ void Gam_RequestNewQuestion (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get other parameters *****/
-   Gam_GetParamGameOrder ();
+   Gam_GetParamOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
@@ -3179,7 +3163,7 @@ void Gam_RequestNewMatch (void)
    long GamCod;
 
    /***** Get parameters *****/
-   Gam_GetParamGameOrder ();
+   Gam_GetParamOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
@@ -3205,7 +3189,7 @@ void Gam_PlayMatchStd (void)
    bool IBelongToGroups;
 
    /***** Get parameters *****/
-   Gam_GetParamGameOrder ();
+   Gam_GetParamOrder ();
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 

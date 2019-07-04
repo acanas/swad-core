@@ -458,10 +458,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.130 (2019-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 18.130.1 (2019-07-04)"
 #define CSS_FILE		"swad18.123.css"
 #define JS_FILE			"swad18.123.js"
 /*
+	Version 18.130.1: Jul 04, 2019	Changes in listing of games. (243505 lines)
 	Version 18.130:   Jul 04, 2019	Changes in listing of games. (243436 lines)
 					1 change necessary in database:
 ALTER TABLE games DROP COLUMN StartTime,DROP COLUMN EndTime;
