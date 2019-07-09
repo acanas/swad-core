@@ -172,8 +172,8 @@ static void Gam_ExchangeQuestions (long GamCod,
 static void Gam_ListMatches (struct Game *Game,bool PutFormNewMatch);
 static void Gam_PutIconToPlayNewMatch (void);
 static void Gam_ListOneOrMoreMatches (struct Game *Game,
-						unsigned NumMatches,
-                                                MYSQL_RES *mysql_res);
+				      unsigned NumMatches,
+                                      MYSQL_RES *mysql_res);
 static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Match *Match);
 static void Gam_PutButtonNewMatch (long GamCod);
@@ -190,9 +190,9 @@ static void Gam_PutBigButton (long MchCod,const char *Txt,const char *Icon);
 
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
 
-static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod);
+static void Gam_ReceiveAndStoreStdAnswerToQst (struct Match *Match);
 static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
-static void Gam_RegisterIHaveAnsweredGame (long GamCod);
+// static void Gam_RegisterIHaveAnsweredGame (long GamCod);
 static bool Gam_CheckIfIHaveAnsweredGame (long GamCod);
 static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod);
 
@@ -840,7 +840,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       /***** Get start and end times from database *****/
       NumRows = DB_QuerySELECT (&mysql_res,"can not get game data",
 				"SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
-				       "UNIX_TIMESTAMP(MAX(EndTime))"	// row[1]
+				       "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
 				" FROM gam_matches"
 				" WHERE GamCod=%ld",
 				Game->GamCod);
@@ -2785,8 +2785,8 @@ static void Gam_PutIconToPlayNewMatch (void)
 /*****************************************************************************/
 
 static void Gam_ListOneOrMoreMatches (struct Game *Game,
-						unsigned NumMatches,
-                                                MYSQL_RES *mysql_res)
+				      unsigned NumMatches,
+                                      MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -3617,8 +3617,13 @@ void Gam_RefreshCurrentMatchStd (void)
 static void Gam_ShowMatchStatusForStd (struct Match *Match)
   {
    bool IBelongToGroups;
+   bool Shuffle = false;	// TODO: Read shuffle from question
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
    unsigned NumOptions;
    unsigned NumOpt;
+   unsigned Index;
+   bool ErrorInIndex = false;
 
    /***** Do I belong to valid groups to play this match? *****/
    IBelongToGroups = Gbl.Usrs.Me.IBelongToCurrentCrs &&
@@ -3648,42 +3653,83 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 
 	 fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_QST_CONTAINER\">");
 
-	 /* Write answers? */
+	 /* Write buttons for answers? */
 	 if (Match->Status.ShowingAnswers)
-	  {
-	   if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
-	     {
-	      /***** Start table *****/
-	      Tbl_StartTableWide (8);
+	   {
+	    if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
+	      {
+	       /***** Start table *****/
+	       Tbl_StartTableWide (8);
 
-	      /***** Write answers *****/
-	      NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
-	      for (NumOpt = 0;
-		   NumOpt < NumOptions;
-		   NumOpt++)
-		{
-		 // if (NumOpt % 2 == 0)
-		    fprintf (Gbl.F.Out,"<tr>");
+	       /***** Write answers *****/
+	       NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
 
-		 /***** Write letter for this option *****/
-		 fprintf (Gbl.F.Out,"<td class=\"GAM_PLAY_STD_CELL\">"
-				    "<div class=\"GAM_PLAY_STD_BUTTON BT_%c\">"
-				    "%c"
-				    "</div>"
-				    "</td>",
-			  'A' + (char) NumOpt,
-			  'a' + (char) NumOpt);
+	       /***** Get answers of a question from database *****/
+	       Shuffle = false;
+	       NumOptions = Tst_GetAnswersQst (Match->Status.QstCod,&mysql_res,Shuffle);
+	       /*
+	       row[0] AnsInd
+	       row[1] Answer
+	       row[2] Feedback
+	       row[3] MedCod
+	       row[4] Correct
+	       */
 
-		 // if (NumOpt % 2 == 1)
-		    fprintf (Gbl.F.Out,"</tr>");
-		}
+	       for (NumOpt = 0;
+		    NumOpt < NumOptions;
+		    NumOpt++)
+		 {
+		  /***** Get next answer *****/
+		  row = mysql_fetch_row (mysql_res);
 
-	      /***** End table *****/
-	      Tbl_EndTable ();
-	     }
-	   else
-	      Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
-	  }
+		  /***** Assign index (row[0]).
+			 Index is 0,1,2,3... if no shuffle
+			 or 1,3,0,2... (example) if shuffle *****/
+		  if (sscanf (row[0],"%u",&Index) == 1)
+		    {
+		     if (Index >= Tst_MAX_OPTIONS_PER_QUESTION)
+			ErrorInIndex = true;
+		    }
+		  else
+		     ErrorInIndex = true;
+		  if (ErrorInIndex)
+		     Lay_ShowErrorAndExit ("Wrong index of answer when showing a test.");
+
+		  /***** Start row *****/
+		  // if (NumOpt % 2 == 0)
+		  fprintf (Gbl.F.Out,"<tr>");
+
+		  /***** Write letter for this option *****/
+		  /* Start table cell */
+		  fprintf (Gbl.F.Out,"<td class=\"GAM_PLAY_STD_CELL\">");
+
+		  /* Form with button */
+		  Frm_StartForm (ActAnsMchQstStd);
+                  Gam_PutParamMatchCod (Match->MchCod);		// Current match being played
+		  Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
+		  Par_PutHiddenParamUnsigned ("Ans",Index);	// Index for this option
+		  fprintf (Gbl.F.Out,"<button type=\"submit\""
+			             " class=\"GAM_PLAY_STD_BUTTON BT_%c\">"
+				     "%c"
+				     "</button>",
+			   'A' + (char) NumOpt,
+			   'a' + (char) NumOpt);
+		  Frm_EndForm ();
+
+		  /* End table cell */
+		  fprintf (Gbl.F.Out,"</td>");
+
+		  /***** End row *****/
+		  // if (NumOpt % 2 == 1)
+		  fprintf (Gbl.F.Out,"</tr>");
+		 }
+
+	       /***** End table *****/
+	       Tbl_EndTable ();
+	      }
+	    else
+	       Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
+	   }
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
@@ -3691,44 +3737,31 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
   }
 
 /*****************************************************************************/
-/************************ Receive answers of a game ************************/
+/********* Receive question answer from student when playing a match *********/
 /*****************************************************************************/
 
-void Gam_ReceiveGameAnswers (void)
+void Gam_ReceiveQstAnsFromStd (void)
   {
-   extern const char *Txt_You_already_played_this_game_before;
    extern const char *Txt_Thanks_for_playing_the_game;
-   struct Game Game;
+   struct Match Match;
 
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
+   /***** Get match code *****/
+   if ((Match.MchCod = Gam_GetParamMatchCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of match is missing.");
 
-   /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Game);
+   /***** Get data of the match from database *****/
+   Gam_GetDataOfMatchByCod (&Match);
 
-   /***** Check if I have no answered this game formerly *****/
-   if (Game.Status.IHaveAnswered)
-      Ale_ShowAlert (Ale_WARNING,Txt_You_already_played_this_game_before);
-   else
-     {
-      /***** Receive and store user's answers *****/
-      Gam_ReceiveAndStoreUserAnswersToAGame (Game.GamCod);
-      Ale_ShowAlert (Ale_INFO,Txt_Thanks_for_playing_the_game);
-     }
-
-   /***** Show current game *****/
-   Gam_ShowOneGame (Game.GamCod,
-                    true,	// Show only this game
-                    true,	// List game questions
-		    false);	// Do not put form to start new match
+   /***** Receive and store user's answer *****/
+   Gam_ReceiveAndStoreStdAnswerToQst (&Match);
+   Ale_ShowAlert (Ale_INFO,Txt_Thanks_for_playing_the_game);
   }
 
 /*****************************************************************************/
-/**************** Get and store user's answers to a game *******************/
+/************* Get and store user's answer to a match question ***************/
 /*****************************************************************************/
 
-static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod)
+static void Gam_ReceiveAndStoreStdAnswerToQst (struct Match *Match)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3741,11 +3774,17 @@ static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod)
    char UnsignedStr[10 + 1];
    unsigned AnsInd;
 
-   /***** Get questions of this game from database *****/
+   /***** Get question index from form *****/
+
+
+   /***** Check that question index is the current one being played *****/
+
+
+   /***** Get question of this game from database *****/
    NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions of a game",
 					"SELECT QstCod FROM gam_questions"
 					" WHERE GamCod=%ld ORDER BY QstCod",
-					GamCod);
+					Match->GamCod);
    if (NumQsts)	// The game has questions
      {
       /***** Get questions *****/
@@ -3784,7 +3823,7 @@ static void Gam_ReceiveAndStoreUserAnswersToAGame (long GamCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Register that you have answered this game *****/
-   Gam_RegisterIHaveAnsweredGame (GamCod);
+   // Gam_RegisterIHaveAnsweredGame (GamCod);
   }
 
 /*****************************************************************************/
@@ -3804,7 +3843,7 @@ static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
 /*****************************************************************************/
 /******************* Register that I have answered a game ********************/
 /*****************************************************************************/
-
+/*
 static void Gam_RegisterIHaveAnsweredGame (long GamCod)
   {
    DB_QueryINSERT ("can not register that you have answered the game",
@@ -3814,7 +3853,7 @@ static void Gam_RegisterIHaveAnsweredGame (long GamCod)
 		   " (%ld,%ld)",
                    GamCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
-
+*/
 /*****************************************************************************/
 /******************** Check if I have answered a game ************************/
 /*****************************************************************************/

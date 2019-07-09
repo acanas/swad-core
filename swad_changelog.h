@@ -458,10 +458,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.131 (2019-07-04)"
+#define Log_PLATFORM_VERSION	"SWAD 18.132 (2019-07-09)"
 #define CSS_FILE		"swad18.131.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.132:   Jul 09, 2019	Reception of student answer to a match question. Not finished. (243461 lines)
 	Version 18.131:   Jul 04, 2019	Changes in matches. (243426 lines)
 	Version 18.130.2: Jul 04, 2019	Changes in listing of games and matches for students. (243429 lines)
 					1 change necessary in database:

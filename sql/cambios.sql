@@ -12868,3 +12868,7 @@ SELECT COUNT(*) FROM degrees WHERE CtrCod=2 AND FullName='Máster Universitario e
 
 SELECT UNIX_TIMESTAMP(MIN(StartTime)),UNIX_TIMESTAMP(MAX(EndTime)) FROM gam_matches WHERE GamCod=1;
 
+----------------------
+
+
+SELECT MchCod,GamCod,UsrCod,UNIX_TIMESTAMP(StartTime),UNIX_TIMESTAMP(EndTime),Title,QstInd,QstCod,UNIX_TIMESTAMP(QstStartTime),ShowingAnswers,Finished FROM gam_matches WHERE GamCod=7 ORDER BY MchCod;

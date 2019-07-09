@@ -123,7 +123,7 @@ void Gam_RemoveMatch (void);
 void Gam_RequestNewMatch (void);
 // void Gam_PlayMatchStd (void);
 
-void Gam_ReceiveGameAnswers (void);
+void Gam_ReceiveQstAnsFromStd (void);
 void Gam_CreateNewMatch (void);
 void Gam_ResumeUnfinishedMatch (void);
 void Gam_NextStatusMatch (void);

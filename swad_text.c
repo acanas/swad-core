@@ -53741,7 +53741,7 @@ const char *Txt_You_already_answered_this_survey_before =
 #elif L==9	// pt
 	"Voc&ecirc; j&aacute; respondeu a esso inqu&eacute;rito antes.";
 #endif
-
+/*
 const char *Txt_You_already_played_this_game_before =
 #if   L==1	// ca
 	"Vost&egrave; ja ha jugat aquest joc abans.";
@@ -53762,7 +53762,7 @@ const char *Txt_You_already_played_this_game_before =
 #elif L==9	// pt
 	"Voc&ecirc; j&aacute; jogou este jogo antes.";
 #endif
-
+*/
 const char *Txt_You_are_now_LOGGED_IN_as_X =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"Vost&egrave; est&agrave; ara %s com a <strong>%s</strong>.";
