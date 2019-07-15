@@ -2570,7 +2570,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:table;
 	margin:5%;
 	width:90%;
-	text-align:center;
+	/* text-align:center; */
 	}
 
 .GAM_PLAY_TCH_NUM_QST
@@ -2676,7 +2676,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .GAM_PLAY_STD_ANSWER_SELECTED
 	{
-	box-shadow: 0px 0px 24px 12px rgba(0,180,0,1);
+	box-shadow: 0px 0px 18px 12px rgba(0,128,0,1);
 	}
 .GAM_PLAY_TCH_BUTTON:hover, .GAM_PLAY_STD_BUTTON:hover
 	{

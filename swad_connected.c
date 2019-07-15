@@ -1105,12 +1105,12 @@ void Con_WriteScriptClockConnected (void)
   {
    unsigned NumUsr;
 
-   fprintf (Gbl.F.Out,"	NumUsrsCon = %u;\n",
+   fprintf (Gbl.F.Out,"\tNumUsrsCon = %u;\n",
             Gbl.Usrs.Connected.NumUsrsToList);
    for (NumUsr = 0;
 	NumUsr < Gbl.Usrs.Connected.NumUsrsToList;
 	NumUsr++)
-      fprintf (Gbl.F.Out,"	ListSeconds[%u] = %ld;\n",
+      fprintf (Gbl.F.Out,"\tListSeconds[%u] = %ld;\n",
                NumUsr,Gbl.Usrs.Connected.Lst[NumUsr].TimeDiff);
-   fprintf (Gbl.F.Out,"	writeClockConnected();\n");
+   fprintf (Gbl.F.Out,"\twriteClockConnected();\n");
   }

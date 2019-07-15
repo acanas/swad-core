@@ -458,10 +458,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.132.2 (2019-07-15)"
+#define Log_PLATFORM_VERSION	"SWAD 18.132.3 (2019-07-15)"
 #define CSS_FILE		"swad18.132.2.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+TODO: Poner cronómetro o algo que se vaya actualizando para ver que va cambiando la respuesta del estudiante
+	Version 18.132.3: Jul 15, 2019	Reception of student answer to a match question. (243470 lines)
 	Version 18.132.2: Jul 15, 2019	Reception of student answer to a match question. Not finished. (243456 lines)
 	Version 18.132.1: Jul 15, 2019	Reception of student answer to a match question. Not finished. (243405 lines)
 					2 changes necessary in database:

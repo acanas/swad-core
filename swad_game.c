@@ -3805,11 +3805,8 @@ void Gam_ReceiveQstAnsFromStd (void)
    unsigned StdAnsInd;
    int PreviousStdAnsInd;
 
-   /***** Get match code *****/
-   if ((Match.MchCod = Gam_GetParamMatchCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
-
    /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
 
    /***** Get question index from form *****/
@@ -3849,6 +3846,15 @@ void Gam_ReceiveQstAnsFromStd (void)
 			  " (%ld,%ld,%u,%u)",
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd,StdAnsInd);
      }
+
+   /***** Start container for match status *****/
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER\">");
+
+   /***** Show current question *****/
+   Gam_ShowMatchStatusForStd (&Match);
+
+   /***** End container for match status *****/
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

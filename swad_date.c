@@ -1533,7 +1533,7 @@ void Dat_WriteScriptMonths (void)
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
    unsigned NumMonth;
 
-   fprintf (Gbl.F.Out,"var Months = [");
+   fprintf (Gbl.F.Out,"\tvar Months = [");
    for (NumMonth = 0;
 	NumMonth < 12;
 	NumMonth++)
@@ -1544,7 +1544,7 @@ void Dat_WriteScriptMonths (void)
      }
    fprintf (Gbl.F.Out,"];\n");
 
-   fprintf (Gbl.F.Out,"var MonthsShort = [");
+   fprintf (Gbl.F.Out,"\tvar MonthsShort = [");
    for (NumMonth = 0;
 	NumMonth < 12;
 	NumMonth++)

@@ -268,6 +268,7 @@ void Lay_WriteStartOfPage (void)
 		  Cfg_URL_ICON_PUBLIC);
 	 break;
       case Act_BRW_NEW_TAB:
+      case Act_BRW_2ND_TAB:
 	 fprintf (Gbl.F.Out,"<body onload=\"init();\">\n");
 	 Gbl.Layout.WritingHTMLStart = false;
 	 Gbl.Layout.HTMLStartWritten =
@@ -662,9 +663,13 @@ static void Lay_WriteScriptMathJax (void)
 static void Lay_WriteScriptInit (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   bool RefreshConnected;
    bool RefreshNewTimeline = false;
    bool RefreshGame        = false;
    bool RefreshLastClicks  = false;
+
+   RefreshConnected = Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&
+	              (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN);	// Right column visible
 
    switch (Gbl.Action.Act)
      {
@@ -678,6 +683,7 @@ static void Lay_WriteScriptInit (void)
 	 RefreshNewTimeline = true;
 	 break;
       case ActPlyMchStd:
+      case ActAnsMchQstStd:
 	 RefreshGame = true;
 	 break;
       case ActLstClk:
@@ -692,29 +698,31 @@ static void Lay_WriteScriptInit (void)
    Dat_WriteScriptMonths ();
 
    if (RefreshNewTimeline)
-      fprintf (Gbl.F.Out,"var delayNewTimeline = %lu;\n",
+      fprintf (Gbl.F.Out,"\tvar delayNewTimeline = %lu;\n",
 	       Cfg_TIME_TO_REFRESH_TIMELINE);
    else if (RefreshGame)	// Refresh game via AJAX
-      fprintf (Gbl.F.Out,"var delayGame = %lu;\n",
+      fprintf (Gbl.F.Out,"\tvar delayGame = %lu;\n",
 	       Cfg_TIME_TO_REFRESH_GAME);
 
    fprintf (Gbl.F.Out,"function init(){\n");
 
-   if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN))	// Right column visible
-      Con_WriteScriptClockConnected ();
+   fprintf (Gbl.F.Out,"\tActionAJAX = \"%s\";\n",
+            Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 
-   fprintf (Gbl.F.Out,"	ActionAJAX = \"%s\";\n"
-                      "	setTimeout(\"refreshConnected()\",%lu);\n",
-            Lan_STR_LANG_ID[Gbl.Prefs.Language],
-            Gbl.Usrs.Connected.TimeToRefreshInMs);
+   if (RefreshConnected)	// Refresh connected users via AJAX
+     {
+      Con_WriteScriptClockConnected ();
+      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshConnected()\",%lu);\n",
+	       Gbl.Usrs.Connected.TimeToRefreshInMs);
+     }
 
    if (RefreshLastClicks)	// Refresh last clicks via AJAX
-      fprintf (Gbl.F.Out,"	setTimeout(\"refreshLastClicks()\",%lu);\n",
+      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
    else if (RefreshGame)	// Refresh game via AJAX
-      fprintf (Gbl.F.Out,"	setTimeout(\"refreshGame()\",delayGame);\n");
+      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshGame()\",delayGame);\n");
    else if (RefreshNewTimeline)	// Refresh timeline via AJAX
-      fprintf (Gbl.F.Out,"	setTimeout(\"refreshNewTimeline()\",delayNewTimeline);\n");
+      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshNewTimeline()\",delayNewTimeline);\n");
 
    fprintf (Gbl.F.Out,"}\n"
                       "</script>\n");
@@ -791,6 +799,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 break;
       /* Parameters related with game refreshing */
       case ActPlyMchStd:
+      case ActAnsMchQstStd:
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"
 			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
 		 Act_GetActCod (ActRefMchStd),
