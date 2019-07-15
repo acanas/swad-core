@@ -42818,7 +42818,7 @@ const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user =
 #elif L==9	// pt
 	"Obrigado por relatar um possível usu&aacute;rio duplicado.";
 #endif
-
+/*
 const char *Txt_Thanks_for_playing_the_game =
 #if   L==1	// ca
 	"Gr&agrave;cies per jugar al joc.";
@@ -42839,7 +42839,7 @@ const char *Txt_Thanks_for_playing_the_game =
 #elif L==9	// pt
 	"Obrigado por jogar o jogo.";
 #endif
-
+*/
 const char *Txt_Thanks_for_answering_the_survey =
 #if   L==1	// ca
 	"Gracias por responder la encuesta.";	// Necessita traduccio

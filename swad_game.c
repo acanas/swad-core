@@ -143,6 +143,8 @@ static bool Gam_CheckIfIPlayThisMatchBasedOnGrps (long GamCod);
 static unsigned Gam_GetNumQstsGame (long GamCod);
 static void Gam_PutParamQstInd (unsigned QstInd);
 static unsigned Gam_GetParamQstInd (void);
+static void Gam_PutParamAnswer (unsigned AnsInd);
+static unsigned Gam_GetParamAnswer (void);
 static unsigned Gam_GetQstIndFromStr (const char *UnsignedStr);
 static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd);
 
@@ -190,10 +192,6 @@ static void Gam_PutBigButton (long MchCod,const char *Txt,const char *Icon);
 
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
 
-static void Gam_ReceiveAndStoreStdAnswerToQst (struct Match *Match);
-static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd);
-// static void Gam_RegisterIHaveAnsweredGame (long GamCod);
-static bool Gam_CheckIfIHaveAnsweredGame (long GamCod);
 static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod);
 
 /*****************************************************************************/
@@ -783,9 +781,6 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       Game->NumQsts = Gam_GetNumQstsGame (Game->GamCod);
       Game->NumUsrs = Gam_GetNumUsrsWhoHaveAnsweredGame (Game->GamCod);
 
-      /* Have I answered this game? */
-      Game->Status.IHaveAnswered = Gam_CheckIfIHaveAnsweredGame (Game->GamCod);
-
       /* Can I view results of the game?
          Can I edit game? */
       switch (Gbl.Usrs.Me.Role.Logged)
@@ -793,8 +788,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
          case Rol_STD:
             Game->Status.ICanViewResults = Game->NumQsts != 0 &&
                                            Game->Status.Visible &&
-                                           Game->Status.Open &&
-                                           Game->Status.IHaveAnswered;
+                                           Game->Status.Open;
             Game->Status.ICanEdit         = false;
             break;
          case Rol_NET:
@@ -827,7 +821,6 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       Game->NumQsts                 = 0;
       Game->NumUsrs                 = 0;
       Game->Status.Visible          = true;
-      Game->Status.IHaveAnswered    = false;
       Game->Status.ICanViewResults  = false;
       Game->Status.ICanEdit         = false;
      }
@@ -1236,7 +1229,6 @@ void Gam_RequestCreatOrEditGame (void)
       Game.NumUsrs                 = 0;
       Game.Status.Visible          = true;
       Game.Status.Open             = true;
-      Game.Status.IHaveAnswered    = false;
       Game.Status.ICanViewResults  = false;
      }
    else
@@ -1747,6 +1739,30 @@ static unsigned Gam_GetParamQstInd (void)
    LongNum = Par_GetParToLong ("QstInd");
    if (LongNum < 0)
       Lay_ShowErrorAndExit ("Wrong question index.");
+
+   return (unsigned) LongNum;
+  }
+
+/*****************************************************************************/
+/******************* Write parameter with student's answer *******************/
+/*****************************************************************************/
+
+static void Gam_PutParamAnswer (unsigned AnsInd)
+  {
+   Par_PutHiddenParamUnsigned ("Ans",AnsInd);
+  }
+
+/*****************************************************************************/
+/******************* Get parameter with student's answer *********************/
+/*****************************************************************************/
+
+static unsigned Gam_GetParamAnswer (void)
+  {
+   long LongNum;
+
+   LongNum = Par_GetParToLong ("Ans");
+   if (LongNum < 0)
+      Lay_ShowErrorAndExit ("Wrong answer index.");
 
    return (unsigned) LongNum;
   }
@@ -3707,7 +3723,7 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 		  Frm_StartForm (ActAnsMchQstStd);
                   Gam_PutParamMatchCod (Match->MchCod);		// Current match being played
 		  Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
-		  Par_PutHiddenParamUnsigned ("Ans",Index);	// Index for this option
+		  Gam_PutParamAnswer (Index);			// Index for this option
 		  fprintf (Gbl.F.Out,"<button type=\"submit\""
 			             " class=\"GAM_PLAY_STD_BUTTON BT_%c\">"
 				     "%c"
@@ -3742,8 +3758,9 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 
 void Gam_ReceiveQstAnsFromStd (void)
   {
-   extern const char *Txt_Thanks_for_playing_the_game;
    struct Match Match;
+   unsigned QstInd;
+   unsigned AnsInd;
 
    /***** Get match code *****/
    if ((Match.MchCod = Gam_GetParamMatchCod ()) == -1L)
@@ -3752,119 +3769,33 @@ void Gam_ReceiveQstAnsFromStd (void)
    /***** Get data of the match from database *****/
    Gam_GetDataOfMatchByCod (&Match);
 
-   /***** Receive and store user's answer *****/
-   Gam_ReceiveAndStoreStdAnswerToQst (&Match);
-   Ale_ShowAlert (Ale_INFO,Txt_Thanks_for_playing_the_game);
-  }
-
-/*****************************************************************************/
-/************* Get and store user's answer to a match question ***************/
-/*****************************************************************************/
-
-static void Gam_ReceiveAndStoreStdAnswerToQst (struct Match *Match)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumQst;
-   unsigned NumQsts;
-   long QstCod;
-   char ParamName[3 + 10 + 6 + 1];
-   char StrAnswersIndexes[Tst_MAX_OPTIONS_PER_QUESTION * (10 + 1)];
-   const char *Ptr;
-   char UnsignedStr[10 + 1];
-   unsigned AnsInd;
-
    /***** Get question index from form *****/
-
+   QstInd = Gam_GetParamQstInd ();
 
    /***** Check that question index is the current one being played *****/
-
-
-   /***** Get question of this game from database *****/
-   NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get questions of a game",
-					"SELECT QstCod FROM gam_questions"
-					" WHERE GamCod=%ld ORDER BY QstCod",
-					Match->GamCod);
-   if (NumQsts)	// The game has questions
+   if (QstInd == Match.Status.QstInd)	// Receiving an answer
+					// to the current question being played
      {
-      /***** Get questions *****/
-      for (NumQst = 0;
-	   NumQst < NumQsts;
-	   NumQst++)
-        {
-         /* Get next answer */
-         row = mysql_fetch_row (mysql_res);
+      /***** Get answer index *****/
+      /*-------+--------------+
+      | Button | Answer index |
+      +--------+--------------+
+      |   a    |       0      |
+      |   b    |       1      |
+      |   c    |       2      |
+      |   d    |       3      |
+      |  ...   |      ...     |
+      +--------+-------------*/
+      AnsInd = Gam_GetParamAnswer ();
 
-         /* Get question code (row[0]) */
-         if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) <= 0)
-            Lay_ShowErrorAndExit ("Error: wrong question code.");
-
-         /* Get possible parameter with the user's answer */
-         snprintf (ParamName,sizeof (ParamName),
-                   "Ans%010u",
-		   (unsigned) QstCod);
-         // Lay_ShowAlert (Lay_INFO,ParamName);
-         Par_GetParMultiToText (ParamName,StrAnswersIndexes,
-                                Gam_MAX_ANSWERS_PER_QUESTION * (10 + 1));
-         Ptr = StrAnswersIndexes;
-         while (*Ptr)
-           {
-            Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
-            if (sscanf (UnsignedStr,"%u",&AnsInd) == 1)
-               // Parameter exists, so user has marked this answer, so store it in database
-               Gam_IncreaseAnswerInDB (QstCod,AnsInd);
-           }
-        }
+      /***** Store student's answer *****/
+      DB_QueryUPDATE ("can not register your answer to the game",
+		      "REPLACE gam_answers"
+		      " (MchCod,UsrCod,QstInd,AnsInd)"
+		      " VALUES"
+		      " (%ld,%ld,%u,%u)",
+		      Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd,AnsInd);
      }
-   else		// The game has no questions and answers
-      Lay_ShowErrorAndExit ("Error: this game has no questions.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   /***** Register that you have answered this game *****/
-   // Gam_RegisterIHaveAnsweredGame (GamCod);
-  }
-
-/*****************************************************************************/
-/************ Increase number of users who have marked one answer ************/
-/*****************************************************************************/
-
-static void Gam_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
-  {
-   /***** Increase number of users who have selected
-          the answer AnsInd in the question QstCod *****/
-   DB_QueryUPDATE ("can not register your answer to the game",
-		   "UPDATE gam_answers SET NumUsrs=NumUsrs+1"
-		   " WHERE QstCod=%ld AND AnsInd=%u",
-                   QstCod,AnsInd);
-  }
-
-/*****************************************************************************/
-/******************* Register that I have answered a game ********************/
-/*****************************************************************************/
-/*
-static void Gam_RegisterIHaveAnsweredGame (long GamCod)
-  {
-   DB_QueryINSERT ("can not register that you have answered the game",
-		   "INSERT INTO gam_users"
-		   " (GamCod,UsrCod)"
-		   " VALUES"
-		   " (%ld,%ld)",
-                   GamCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-*/
-/*****************************************************************************/
-/******************** Check if I have answered a game ************************/
-/*****************************************************************************/
-
-static bool Gam_CheckIfIHaveAnsweredGame (long GamCod)
-  {
-   /***** Get number of games with a field value from database *****/
-   return (DB_QueryCOUNT ("can not check if you have answered a game",
-			  "SELECT COUNT(*) FROM gam_users"
-			  " WHERE GamCod=%ld AND UsrCod=%ld",
-			  GamCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
   }
 
 /*****************************************************************************/

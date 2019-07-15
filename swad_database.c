@@ -1333,22 +1333,22 @@ mysql> DESCRIBE games;
    /***** Table gam_answers *****/
 /*
 mysql> DESCRIBE gam_answers;
-+---------+------------+------+-----+---------+-------+
-| Field   | Type       | Null | Key | Default | Extra |
-+---------+------------+------+-----+---------+-------+
-| GamCod  | int(11)    | NO   | PRI | NULL    |       |
-| QstInd  | int(11)    | NO   | PRI | NULL    |       |
-| AnsInd  | tinyint(4) | NO   | PRI | NULL    |       |
-| NumUsrs | int(11)    | NO   |     | 0       |       |
-+---------+------------+------+-----+---------+-------+
++--------+------------+------+-----+---------+-------+
+| Field  | Type       | Null | Key | Default | Extra |
++--------+------------+------+-----+---------+-------+
+| MchCod | int(11)    | NO   | PRI | NULL    |       |
+| UsrCod | int(11)    | NO   | PRI | NULL    |       |
+| QstInd | int(11)    | NO   | PRI | NULL    |       |
+| AnsInd | tinyint(4) | NO   | PRI | NULL    |       |
++--------+------------+------+-----+---------+-------+
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_answers ("
-			"GamCod INT NOT NULL,"
+			"MchCod INT NOT NULL,"
+	                "UsrCod INT NOT NULL,"
 			"QstInd INT NOT NULL,"
 			"AnsInd TINYINT NOT NULL,"
-			"NumUsrs INT NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(GamCod,QstInd,AnsInd))");
+		   "UNIQUE INDEX(MchCod,UsrCod,QstInd))");
 
    /***** Table gam_grp *****/
 /*

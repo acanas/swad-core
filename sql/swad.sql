@@ -613,12 +613,12 @@ CREATE TABLE IF NOT EXISTS games (
 --
 -- Table gam_answers: stores the answers to the matches
 --
-CREATE TABLE IF NOT EXISTS gam_answers (
-	GamCod INT NOT NULL,
-	QstInd INT NOT NULL,
-	AnsInd TINYINT NOT NULL,
-	NumUsrs INT NOT NULL DEFAULT 0,
-	UNIQUE INDEX(GamCod,QstInd,AnsInd));
+CREATE TABLE IF NOT EXISTS gam_answers ("
+	MchCod INT NOT NULL,"
+	UsrCod INT NOT NULL,"
+	QstInd INT NOT NULL,"
+	AnsInd TINYINT NOT NULL,"
+	UNIQUE INDEX(MchCod,UsrCod,QstInd));
 --
 -- Table gam_grp: stores the groups associated to each match in a game
 --

@@ -55,7 +55,6 @@ struct Game
      {
       bool Visible;		// Game is not hidden
       bool Open;		// Start date <= now <= end date
-      bool IHaveAnswered;	// I have already answered this game
       bool ICanViewResults;
       bool ICanEdit;
      } Status;
