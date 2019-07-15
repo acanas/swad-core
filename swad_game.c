@@ -191,6 +191,7 @@ static void Gam_PlayGameShowQuestionAndAnswers (struct Match *Match);
 static void Gam_PutBigButton (long MchCod,const char *Txt,const char *Icon);
 
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
+static int Gam_GetQstAnsFromDB (long MchCod,unsigned QstInd);
 
 static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod);
 
@@ -3636,6 +3637,7 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
    bool Shuffle = false;	// TODO: Read shuffle from question
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   int StdAnsInd;
    unsigned NumOptions;
    unsigned NumOpt;
    unsigned Index;
@@ -3674,13 +3676,15 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 	   {
 	    if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
 	      {
-	       /***** Start table *****/
-	       Tbl_StartTableWide (8);
+	       /***** Get student's answer to this question
+	              (<0 ==> no answer) *****/
+	       StdAnsInd = Gam_GetQstAnsFromDB (Match->MchCod,
+						Match->Status.QstInd);
 
-	       /***** Write answers *****/
+	       /***** Get number of options in this question *****/
 	       NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
 
-	       /***** Get answers of a question from database *****/
+	       /***** Get answers of question from database *****/
 	       Shuffle = false;
 	       NumOptions = Tst_GetAnswersQst (Match->Status.QstCod,&mysql_res,Shuffle);
 	       /*
@@ -3690,6 +3694,9 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 	       row[3] MedCod
 	       row[4] Correct
 	       */
+
+	       /***** Start table *****/
+	       Tbl_StartTableWide (8);
 
 	       for (NumOpt = 0;
 		    NumOpt < NumOptions;
@@ -3725,7 +3732,10 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 		  Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 		  Gam_PutParamAnswer (Index);			// Index for this option
 		  fprintf (Gbl.F.Out,"<button type=\"submit\""
-			             " class=\"GAM_PLAY_STD_BUTTON BT_%c\">"
+			             " class=\"");
+		  if (StdAnsInd == (int) NumOpt)	// Student's answer
+		     fprintf (Gbl.F.Out,"GAM_PLAY_STD_ANSWER_SELECTED ");
+		  fprintf (Gbl.F.Out,"GAM_PLAY_STD_BUTTON BT_%c\">"
 				     "%c"
 				     "</button>",
 			   'A' + (char) NumOpt,
@@ -3753,6 +3763,38 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
   }
 
 /*****************************************************************************/
+/**** Receive previous question answer in a match question from database *****/
+/*****************************************************************************/
+
+static int Gam_GetQstAnsFromDB (long MchCod,unsigned QstInd)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+   int StdAnsInd = -1;	// <0 ==> no answer selected
+
+   /***** Get student's answer *****/
+   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get student's answer to a match question",
+					"SELECT AnsInd FROM gam_answers"
+					" WHERE MchCod=%ld AND UsrCod=%ld AND QstInd=%u",
+					MchCod,
+					Gbl.Usrs.Me.UsrDat.UsrCod,
+					QstInd);
+   if (NumRows) // Answer found...
+     {
+      /***** Get answer index *****/
+      row = mysql_fetch_row (mysql_res);
+      if (sscanf (row[0],"%d",&StdAnsInd) != 1)
+	 Lay_ShowErrorAndExit ("Error when getting student's answer to a match question.");
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return StdAnsInd;
+  }
+
+/*****************************************************************************/
 /********* Receive question answer from student when playing a match *********/
 /*****************************************************************************/
 
@@ -3760,7 +3802,8 @@ void Gam_ReceiveQstAnsFromStd (void)
   {
    struct Match Match;
    unsigned QstInd;
-   unsigned AnsInd;
+   unsigned StdAnsInd;
+   int PreviousStdAnsInd;
 
    /***** Get match code *****/
    if ((Match.MchCod = Gam_GetParamMatchCod ()) == -1L)
@@ -3786,15 +3829,25 @@ void Gam_ReceiveQstAnsFromStd (void)
       |   d    |       3      |
       |  ...   |      ...     |
       +--------+-------------*/
-      AnsInd = Gam_GetParamAnswer ();
+      StdAnsInd = Gam_GetParamAnswer ();
+
+      /***** Get previous student's answer to this question
+	     (<0 ==> no answer) *****/
+      PreviousStdAnsInd = Gam_GetQstAnsFromDB (Match.MchCod,QstInd);
 
       /***** Store student's answer *****/
-      DB_QueryUPDATE ("can not register your answer to the game",
-		      "REPLACE gam_answers"
-		      " (MchCod,UsrCod,QstInd,AnsInd)"
-		      " VALUES"
-		      " (%ld,%ld,%u,%u)",
-		      Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd,AnsInd);
+      if (PreviousStdAnsInd == (int) StdAnsInd)
+	 DB_QueryDELETE ("can not register your answer to the match question",
+			  "DELETE FROM gam_answers"
+			  " WHERE MchCod=%ld AND UsrCod=%ld AND QstInd=%u",
+			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd);
+      else
+	 DB_QueryREPLACE ("can not register your answer to the match question",
+			  "REPLACE gam_answers"
+			  " (MchCod,UsrCod,QstInd,AnsInd)"
+			  " VALUES"
+			  " (%ld,%ld,%u,%u)",
+			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd,StdAnsInd);
      }
   }
 

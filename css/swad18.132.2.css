@@ -2674,6 +2674,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 	line-height:normal;
 	white-space:nowrap;
 	}
+.GAM_PLAY_STD_ANSWER_SELECTED
+	{
+	box-shadow: 0px 0px 24px 12px rgba(0,180,0,1);
+	}
 .GAM_PLAY_TCH_BUTTON:hover, .GAM_PLAY_STD_BUTTON:hover
 	{
 	background-image:-webkit-linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));	/* Safari */

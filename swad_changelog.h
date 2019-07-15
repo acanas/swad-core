@@ -458,10 +458,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.132.1 (2019-07-15)"
-#define CSS_FILE		"swad18.131.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.132.2 (2019-07-15)"
+#define CSS_FILE		"swad18.132.2.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.132.2: Jul 15, 2019	Reception of student answer to a match question. Not finished. (243456 lines)
 	Version 18.132.1: Jul 15, 2019	Reception of student answer to a match question. Not finished. (243405 lines)
 					2 changes necessary in database:
 DROP TABLE IF EXISTS gam_answers;
