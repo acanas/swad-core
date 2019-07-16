@@ -1401,6 +1401,24 @@ mysql> DESCRIBE gam_matches;
 		   "UNIQUE INDEX(MchCod),"
 		   "INDEX(GamCod)");
 
+   /***** Table gam_players *****/
+/*
+mysql> DESCRIBE gam_players;
++--------+-----------+------+-----+-------------------+-----------------------------+
+| Field  | Type      | Null | Key | Default           | Extra                       |
++--------+-----------+------+-----+-------------------+-----------------------------+
+| MchCod | int(11)   | NO   | PRI | NULL              |                             |
+| UsrCod | int(11)   | NO   | PRI | NULL              |                             |
+| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++--------+-----------+------+-----+-------------------+-----------------------------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_players ("
+			"MchCod INT NOT NULL,"
+	                "UsrCod INT NOT NULL,"
+		        "TS TIMESTAMP,"
+		   "UNIQUE INDEX(MchCod,UsrCod))");
+
    /***** Table gam_questions *****/
 /*
 mysql> DESCRIBE gam_questions;

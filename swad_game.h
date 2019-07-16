@@ -116,22 +116,24 @@ void Gam_RemoveQst (void);
 void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);
 
-void Gam_RequestRemoveMatch (void);
-void Gam_RemoveMatch (void);
+void Gam_RequestRemoveMatchTch (void);
+void Gam_RemoveMatchTch (void);
 
-void Gam_RequestNewMatch (void);
-// void Gam_PlayMatchStd (void);
+void Gam_RequestNewMatchTch (void);
 
-void Gam_ReceiveQstAnsFromStd (void);
-void Gam_CreateNewMatch (void);
-void Gam_ResumeUnfinishedMatch (void);
-void Gam_NextStatusMatch (void);
+void Gam_CreateNewMatchTch1 (void);
+void Gam_CreateNewMatchTch2 (void);
+void Gam_ResumeUnfinishedMatchTch (void);
+void Gam_NextStatusMatchTch (void);
 
 void Gam_ShowFinishedMatchResults (void);
 
 void Gam_GetMatchBeingPlayed (void);
 void Gam_ShowMatchToMeAsStd (void);
+void Gam_RefreshCurrentMatchTch (void);
 void Gam_RefreshCurrentMatchStd (void);
+
+void Gam_ReceiveQstAnsFromStd (void);
 
 unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);
 unsigned Gam_GetNumGames (Hie_Level_t Scope);

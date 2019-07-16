@@ -2570,7 +2570,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:table;
 	margin:5%;
 	width:90%;
-	/* text-align:center; */
+	}
+.GAM_PLAY_CONTAINER_TOP
+	{
+	box-sizing:border-box;
 	}
 
 .GAM_PLAY_TCH_NUM_QST
@@ -2611,12 +2614,17 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:16pt;
 	}
 
-.GAM_PLAY_STD_WAIT
+.GAM_PLAY_STD_WAIT_CONTAINER
+	{
+	box-sizing:border-box;
+	text-align:center;
+	}
+.GAM_PLAY_STD_WAIT_IMAGE
 	{
 	box-sizing:border-box;
 	width:50%;
-	margin:0 auto;
 	}
+
 .GAM_PLAY_STD_NUM_QST
 	{
 	width:15%;

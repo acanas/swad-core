@@ -682,6 +682,9 @@ static void Lay_WriteScriptInit (void)
       case ActRemSocComGbl:
 	 RefreshNewTimeline = true;
 	 break;
+      case ActNewMchTch:
+      case ActResMchTch:
+      case ActNxtMchTch:
       case ActPlyMchStd:
       case ActAnsMchQstStd:
 	 RefreshGame = true;
@@ -797,13 +800,21 @@ static void Lay_WriteScriptParamsAJAX (void)
 		  Act_GetActCod (ActRefOldSocPubUsr),
 		  Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
-      /* Parameters related with game refreshing */
+      /* Parameters related with match refreshing */
+      case ActNewMchTch:
+      case ActResMchTch:
+      case ActNxtMchTch:
+	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"
+			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
+		  Act_GetActCod (ActRefMchTch),
+		  Gbl.Games.MchCodBeingPlayed);
+	 break;
       case ActPlyMchStd:
       case ActAnsMchQstStd:
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"
 			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
-		 Act_GetActCod (ActRefMchStd),
-		 Gbl.Games.MchCodBeingPlayed);
+		  Act_GetActCod (ActRefMchStd),
+		  Gbl.Games.MchCodBeingPlayed);
 	 break;
       /* Parameter related with clicks refreshing */
       case ActLstClk:

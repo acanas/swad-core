@@ -182,13 +182,19 @@ static void Gam_PutButtonNewMatch (long GamCod);
 
 static void Gam_PutFormNewMatch (struct Game *Game);
 
-static void Gam_CreateMatch (struct Match *Match);
+static long Gam_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1]);
 static void Gam_UpdateMatchBeingPlayed (struct Match *Match);
 
 static void Gam_ShowMatchStatusForTch (struct Match *Match);
 static void Gam_ShowAlertFinishedMatch (void);
 static void Gam_PlayGameShowQuestionAndAnswers (struct Match *Match);
 static void Gam_PutBigButton (long MchCod,const char *Txt,const char *Icon);
+
+static void Gam_RemoveOldPlayers (void);
+static void Gam_RemoveAllPlayersInMatch (long MchCod);
+static void Gam_RegisterMeAsPlayerInMatch (long MchCod);
+static void Gam_GetAndShowNumPlayersInMatch (long MchCod);
+static unsigned Gam_GetNumPlayers (long MchCod);
 
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
 static int Gam_GetQstAnsFromDB (long MchCod,unsigned QstInd);
@@ -460,7 +466,7 @@ static void Gam_ShowOneGame (long GamCod,
 
       if (ShowOnlyThisGame)
 	 /* Icon to start a new match */
-	 Lay_PutContextualLinkOnlyIcon (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID,
+	 Lay_PutContextualLinkOnlyIcon (ActFrmNewMchTch,Gam_NEW_MATCH_SECTION_ID,
 					Gam_PutParams,
 					"play.svg",
 					Txt_New_match);
@@ -2793,7 +2799,7 @@ static void Gam_PutIconToPlayNewMatch (void)
    extern const char *Txt_New_match;
 
    /***** Put form to create a new question *****/
-   Ico_PutContextualIconToAdd (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID,Gam_PutParams,
+   Ico_PutContextualIconToAdd (ActFrmNewMchTch,Gam_NEW_MATCH_SECTION_ID,Gam_PutParams,
 			       Txt_New_match);
   }
 
@@ -2863,7 +2869,7 @@ static void Gam_ListOneOrMoreMatches (struct Game *Game,
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
       /* Put icon to remove the match */
-      Frm_StartForm (ActReqRemMch);
+      Frm_StartForm (ActReqRemMchTch);
       Gam_PutParamMatchCod (Match.MchCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
@@ -2928,7 +2934,7 @@ static void Gam_ListOneOrMoreMatches (struct Game *Game,
       if (Match.Status.Finished)
 	 /* Icon to inform about finished match */
          // Ico_PutIconOff ("flag-checkered.svg",Txt_Finished_match);
-	 Lay_PutContextualLinkOnlyIcon (ActShoMch,NULL,
+	 Lay_PutContextualLinkOnlyIcon (ActShoMchTch,NULL,
 					Gam_PutParamCurrentMchCod,
 					"flag-checkered.svg",
 					Txt_View_game_results);
@@ -2956,7 +2962,7 @@ static void Gam_ListOneOrMoreMatches (struct Game *Game,
 	    case Rol_SYS_ADM:
 	       /* Icon to resume */
 	       Gam_CurrentMchCod = Match.MchCod;
-	       Lay_PutContextualLinkOnlyIcon (ActResMch,NULL,
+	       Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
 					      Gam_PutParamCurrentMchCod,
 					      "play.svg",
 					      Txt_Resume);
@@ -3053,7 +3059,7 @@ static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 /************** Request the removal of a match (game instance) ***************/
 /*****************************************************************************/
 
-void Gam_RequestRemoveMatch (void)
+void Gam_RequestRemoveMatchTch (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_match_X;
    extern const char *Txt_Remove_match;
@@ -3069,7 +3075,7 @@ void Gam_RequestRemoveMatch (void)
 
    /***** Show question and button to remove question *****/
    Gam_CurrentMchCod = Match.MchCod;
-   Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,Gam_PutParamCurrentMchCod,
+   Ale_ShowAlertAndButton (ActRemMchTch,NULL,NULL,Gam_PutParamCurrentMchCod,
 			   Btn_REMOVE_BUTTON,Txt_Remove_match,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_match_X,
 	                   Match.Title);
@@ -3085,7 +3091,7 @@ void Gam_RequestRemoveMatch (void)
 /********************** Remove a match (game instance) ***********************/
 /*****************************************************************************/
 
-void Gam_RemoveMatch (void)
+void Gam_RemoveMatchTch (void)
   {
    extern const char *Txt_Match_X_removed;
    struct Match Match;
@@ -3136,7 +3142,7 @@ static void Gam_PutButtonNewMatch (long GamCod)
   {
    extern const char *Txt_New_match;
 
-   Frm_StartFormAnchor (ActFrmNewMch,Gam_NEW_MATCH_SECTION_ID);
+   Frm_StartFormAnchor (ActFrmNewMchTch,Gam_NEW_MATCH_SECTION_ID);
    Gam_PutParamGameCod (GamCod);
    Btn_PutConfirmButton (Txt_New_match);
    Frm_EndForm ();
@@ -3146,7 +3152,7 @@ static void Gam_PutButtonNewMatch (long GamCod)
 /******************* Start playing a game as a teacher ***********************/
 /*****************************************************************************/
 
-void Gam_RequestNewMatch (void)
+void Gam_RequestNewMatchTch (void)
   {
    long GamCod;
 
@@ -3182,7 +3188,7 @@ static void Gam_PutFormNewMatch (struct Game *Game)
    Lay_StartSection (Gam_NEW_MATCH_SECTION_ID);
 
    /***** Start form *****/
-   Frm_StartForm (ActNewMch);
+   Frm_StartForm (ActNewMchTch);
    Gam_PutParamGameCod (Game->GamCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
 
@@ -3233,82 +3239,106 @@ static void Gam_PutFormNewMatch (struct Game *Game)
 /********* Create a new match and show first question (by a teacher) *********/
 /*****************************************************************************/
 
-void Gam_CreateNewMatch (void)
+void Gam_CreateNewMatchTch1 (void)
   {
-   struct Match Match;
+   long GamCod;
+   char Title[Gam_MAX_BYTES_TITLE + 1];
 
    /***** Get form parameters *****/
    /* Get match code */
-   if ((Match.GamCod = Gam_GetParamGameCod ()) == -1L)
+   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /* Get match title */
-   Par_GetParToText ("Title",Match.Title,Gam_MAX_BYTES_TITLE);
+   Par_GetParToText ("Title",Title,Gam_MAX_BYTES_TITLE);
 
    /* Get groups for this games */
    Grp_GetParCodsSeveralGrps ();
 
    /***** Create a new match *****/
-   Gam_CreateMatch (&Match);
+   Gbl.Games.MchCodBeingPlayed = Gam_CreateMatch (GamCod,Title);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
+  }
+
+void Gam_CreateNewMatchTch2 (void)
+  {
+   struct Match Match;
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Gam_GetDataOfMatchByCod (&Match);
 
    /***** Show current match status *****/
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
+
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER_TOP\">");
+   Gam_GetAndShowNumPlayersInMatch (Match.MchCod);
+   fprintf (Gbl.F.Out,"</div>");
+
    Gam_ShowMatchStatusForTch (&Match);
+
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
 /********************** Create a new match in a game *************************/
 /*****************************************************************************/
 
-static void Gam_CreateMatch (struct Match *Match)
+static long Gam_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
   {
-   /***** Initialize new match *****/
-   Match->UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;	// Player (me)
-   Match->Status.QstInd         = 0;		// Match has not started, so not the first question yet
-   Match->Status.QstCod         = -1L;		// Non-existent question
-   Match->Status.ShowingAnswers = false;	// Don't show answers initially
-   Match->Status.Finished       = false;	// Game finished
+   long MchCod;
 
    /***** Insert this new match into database *****/
-   Match->MchCod = DB_QueryINSERTandReturnCode ("can not create match",
-					        "INSERT gam_matches"
-					        " (GamCod,UsrCod,StartTime,EndTime,Title,"
-					        "QstInd,QstCod,QstStartTime,ShowingAnswers,Finished)"
-					        " VALUES"
-					        " (%ld,%ld,NOW(),NOW(),'%s',"
-					        "%u,%ld,NOW(),'%c','%c')",
-					        Match->GamCod,Match->UsrCod,Match->Title,
-					        Match->Status.QstInd,Match->Status.QstCod,
-					        Match->Status.ShowingAnswers ? 'Y' :
-									       'N',
-					        Match->Status.Finished       ? 'Y' :
-									       'N');
+   MchCod = DB_QueryINSERTandReturnCode ("can not create match",
+				         "INSERT gam_matches"
+				         " (GamCod,UsrCod,StartTime,EndTime,Title,"
+				         "QstInd,QstCod,QstStartTime,ShowingAnswers,Finished)"
+				         " VALUES"
+				         " (%ld,"	// GamCod
+				         "%ld,"		// UsrCod
+				         "NOW(),"	// StartTime
+				         "NOW(),"	// EndTime
+				         "'%s',"	// Title
+				         "0,"		// QstInd: Match has not started, so not the first question yet
+				         "-1,"		// QstCod: Non-existent question
+				         "NOW(),"	// QstStartTime
+				         "'N',"		// ShowingAnswers: Don't show answers initially
+				         "'N')",	// Finished: Game unfinished
+				         GamCod,
+				         Gbl.Usrs.Me.UsrDat.UsrCod,	// Game creator
+				         Title);
 
    /***** Create groups associated to the match *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
-      Gam_CreateGrps (Match->MchCod);
+      Gam_CreateGrps (MchCod);
+
+   return MchCod;
   }
 
 /*****************************************************************************/
 /**** Resume an unfinished match and show current question (by a teacher) ****/
 /*****************************************************************************/
 
-void Gam_ResumeUnfinishedMatch (void)
+void Gam_ResumeUnfinishedMatchTch (void)
   {
    struct Match Match;
 
-   /***** Get parameters *****/
-   /* Get match code */
-   if ((Match.MchCod = Gam_GetParamMatchCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
-
    /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
 
    /***** Show current match status *****/
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
+
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER_TOP\">");
+   Gam_GetAndShowNumPlayersInMatch (Match.MchCod);
+   fprintf (Gbl.F.Out,"</div>");
+
    Gam_ShowMatchStatusForTch (&Match);
+
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -3341,17 +3371,13 @@ static void Gam_UpdateMatchBeingPlayed (struct Match *Match)
 /*** Show next match status (show next question, answers...) (by a teacher) **/
 /*****************************************************************************/
 
-void Gam_NextStatusMatch (void)
+void Gam_NextStatusMatchTch (void)
   {
    struct Match Match;
    long NxtQstInd;
 
-   /***** Get parameters *****/
-   /* Get match code */
-   if ((Match.MchCod = Gam_GetParamMatchCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
-
    /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
 
    /***** If not yet finished, update status *****/
@@ -3407,10 +3433,22 @@ void Gam_NextStatusMatch (void)
 
       /* Update match status in database */
       Gam_UpdateMatchBeingPlayed (&Match);
+
+      /* Remove all players in this match */
+      if (Match.Status.Finished)
+	 Gam_RemoveAllPlayersInMatch (Match.MchCod);
      }
 
    /***** Show current match status *****/
+   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
+
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER_TOP\">");
+   Gam_GetAndShowNumPlayersInMatch (Match.MchCod);
+   fprintf (Gbl.F.Out,"</div>");
+
    Gam_ShowMatchStatusForTch (&Match);
+
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -3419,18 +3457,12 @@ void Gam_NextStatusMatch (void)
 
 static void Gam_ShowMatchStatusForTch (struct Match *Match)
   {
-   /***** Start container for match status *****/
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
-
    /***** Show current match status *****/
    if (Match->Status.Finished)
       Gam_ShowAlertFinishedMatch ();
    else	// Unfinished match
       /***** Show current question and possible answers *****/
       Gam_PlayGameShowQuestionAndAnswers (Match);
-
-   /***** End container for match status *****/
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -3545,7 +3577,7 @@ static void Gam_PutBigButton (long MchCod,const char *Txt,const char *Icon)
    fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_CONTINUE_CONTAINER\">");
 
    /***** Start form *****/
-   Frm_StartForm (ActNxtMch);
+   Frm_StartForm (ActNxtMchTch);
    Gam_PutParamMatchCod (MchCod);
 
    /***** Put icon with link *****/
@@ -3564,6 +3596,63 @@ static void Gam_PutBigButton (long MchCod,const char *Txt,const char *Icon)
 
    /***** End container for button *****/
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/*********************** Get number of players in a match ********************/
+/*****************************************************************************/
+
+static void Gam_RemoveOldPlayers (void)
+  {
+   /***** Remove players who have left matches *****/
+   DB_QueryDELETE ("can not remove old match players",
+		    "DELETE FROM gam_players"
+		    " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		    Cfg_SECONDS_TO_REFRESH_GAME*5);
+  }
+
+static void Gam_RemoveAllPlayersInMatch (long MchCod)
+  {
+   /***** Delete all match players ******/
+   DB_QueryDELETE ("can not delete match players",
+		    "DELETE FROM gam_players"
+		    " WHERE MchCod=%ld",
+		    MchCod);
+  }
+
+static void Gam_RegisterMeAsPlayerInMatch (long MchCod)
+  {
+   /***** Insert me as match player *****/
+   DB_QueryREPLACE ("can not insert match player",
+		    "REPLACE gam_players"
+		    " (MchCod,UsrCod)"
+		    " VALUES"
+		    " (%ld,%ld)",
+		    MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+static void Gam_GetAndShowNumPlayersInMatch (long MchCod)
+  {
+   unsigned NumPlayers;
+
+   /***** Remove old players *****/
+   Gam_RemoveOldPlayers ();
+
+   /***** Get number of players (students who have joined this match) *****/
+   NumPlayers = Gam_GetNumPlayers (MchCod);
+
+   /***** Show number of players *****/
+   fprintf (Gbl.F.Out,"Players: %u",NumPlayers);	// TODO: Need translation!!!!!
+  }
+
+static unsigned Gam_GetNumPlayers (long MchCod)
+  {
+   /***** Get number of players who are playing a match *****/
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of players",
+			     "SELECT COUNT(*) FROM gam_players"
+			     " WHERE MchCod=%ld",
+			     MchCod);
   }
 
 /*****************************************************************************/
@@ -3598,14 +3687,23 @@ void Gam_ShowMatchToMeAsStd (void)
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
 
-   /***** Start container for match status *****/
+   /***** Show current match status *****/
    fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER\">");
-
-   /***** Show current question *****/
    Gam_ShowMatchStatusForStd (&Match);
-
-   /***** End container for match status *****/
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/*************** Refresh current game for a teacher via AJAX *****************/
+/*****************************************************************************/
+
+void Gam_RefreshCurrentMatchTch (void)
+  {
+   if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
+      return;
+
+   /***** Get and show number of players *****/
+   Gam_GetAndShowNumPlayersInMatch (Gbl.Games.MchCodBeingPlayed);
   }
 
 /*****************************************************************************/
@@ -3623,7 +3721,7 @@ void Gam_RefreshCurrentMatchStd (void)
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
 
-   /***** Show current question *****/
+   /***** Show current match status *****/
    Gam_ShowMatchStatusForStd (&Match);
   }
 
@@ -3654,11 +3752,17 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
       Gam_ShowAlertFinishedMatch ();
    else	// Unfinished match
      {
+      /***** Update players ******/
+      Gam_RemoveOldPlayers ();
+      Gam_RegisterMeAsPlayerInMatch (Match->MchCod);
+
       if (Match->Status.QstInd == 0)	// Not yet started
 	{
-	 fprintf (Gbl.F.Out,"<img src=\"%s/wait.gif\""
+	 fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_WAIT_CONTAINER\">"
+	                    "<img src=\"%s/wait.gif\""
 			    " alt=\"Please wait\" title=\"%s\""
-			    " class=\"GAM_PLAY_STD_WAIT\" />",
+			    " class=\"GAM_PLAY_STD_WAIT_IMAGE\" />"
+			    "</div>",
 		  Cfg_URL_ICON_PUBLIC,
 		  "Por favor, espere a que el juego comience...");	// TODO: Need translation!!!!!
 	}
@@ -3847,13 +3951,9 @@ void Gam_ReceiveQstAnsFromStd (void)
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd,StdAnsInd);
      }
 
-   /***** Start container for match status *****/
+   /***** Show current match status *****/
    fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER\">");
-
-   /***** Show current question *****/
    Gam_ShowMatchStatusForStd (&Match);
-
-   /***** End container for match status *****/
    fprintf (Gbl.F.Out,"</div>");
   }
 
