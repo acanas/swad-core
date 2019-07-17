@@ -151,7 +151,6 @@ static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd);
 
 static long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
 static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod);
-static unsigned Gam_GetFirstQuestionIndexInGame (long GamCod);
 static unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
 static unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
 static void Gam_ListGameQuestions (struct Game *Game);
@@ -186,6 +185,7 @@ static void Gam_PutFormNewMatch (struct Game *Game);
 static long Gam_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1]);
 static void Gam_UpdateMatchBeingPlayed (struct Match *Match);
 
+static void Gam_SetMatchStatusToNextQuestion (struct Match *Match);
 static void Gam_ShowMatchStatusForTch (struct Match *Match);
 static void Gam_ShowAlertFinishedMatch (void);
 static void Gam_PlayGameShowQuestionAndAnswers (struct Match *Match);
@@ -1827,16 +1827,6 @@ static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod)
   }
 
 /*****************************************************************************/
-/******************** Get first question index in a game *********************/
-/*****************************************************************************/
-
-static unsigned Gam_GetFirstQuestionIndexInGame (long GamCod)
-  {
-   return Gam_GetNextQuestionIndexInGame (GamCod,
-					  0);	// First index > 0
-  }
-
-/*****************************************************************************/
 /*********** Get previous question index to a given index in a game **********/
 /*****************************************************************************/
 // Input question index can be 1, 2, 3... n-1
@@ -3281,9 +3271,9 @@ void Gam_RequestStartResumeMatchTch (void)
    Gam_GetDataOfMatchByCod (&Match);
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_CONT\">");
 
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER_TOP\">");
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT_TOP\">");
    Gam_GetAndShowNumPlayersInMatch (Match.MchCod);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -3372,7 +3362,6 @@ static void Gam_UpdateMatchBeingPlayed (struct Match *Match)
 void Gam_ResumeMatchTch (void)
   {
    struct Match Match;
-   long NxtQstInd;
 
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
@@ -3382,33 +3371,18 @@ void Gam_ResumeMatchTch (void)
    if (!Match.Status.Finished)
      {
       if (Match.Status.QstInd == 0)			// Match has been created, but it has not started
-	{
-	 /* Get index of the first question */
-	 NxtQstInd = Gam_GetFirstQuestionIndexInGame (Match.GamCod);
-	 if (NxtQstInd)	// Not last question
-	   {
-	    Match.Status.QstInd = NxtQstInd;		// Go to the next question
-	    Match.Status.QstCod = Gam_GetQstCodFromQstInd (Match.GamCod,
-							   Match.Status.QstInd);
-	    Match.Status.Finished = false;		// Match is not finished
-	   }
-	 else		// No more questions
-	   {
-	    Match.Status.QstInd = 0;			// No more questions
-	    Match.Status.QstCod = -1L;			// No more questions
-	    Match.Status.Finished = true;		// Match is finished
-	   }
-	}
-      Match.Status.ShowingAnswers = false;		// Don't show answers
+	 Gam_SetMatchStatusToNextQuestion (&Match);
+
+      Match.Status.ShowingAnswers = false;		// Don't show answers in any case
 
       /* Update match status in database */
       Gam_UpdateMatchBeingPlayed (&Match);
      }
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_CONT\">");
 
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER_TOP\">");
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT_TOP\">");
    Gam_GetAndShowNumPlayersInMatch (Match.MchCod);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -3424,7 +3398,6 @@ void Gam_ResumeMatchTch (void)
 void Gam_NextStatusMatchTch (void)
   {
    struct Match Match;
-   long NxtQstInd;
 
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
@@ -3434,46 +3407,11 @@ void Gam_NextStatusMatchTch (void)
    if (!Match.Status.Finished)
      {
       if (Match.Status.QstInd == 0)			// Match has been created, but it has not started
-	{
-	 /* Get index of the first question */
-	 NxtQstInd = Gam_GetFirstQuestionIndexInGame (Match.GamCod);
-	 if (NxtQstInd)	// Not last question
-	   {
-	    Match.Status.QstInd = NxtQstInd;		// Go to the next question
-	    Match.Status.QstCod = Gam_GetQstCodFromQstInd (Match.GamCod,
-							   Match.Status.QstInd);
-	    Match.Status.Finished = false;		// Match is not finished
-	   }
-	 else		// No more questions
-	   {
-	    Match.Status.QstInd = 0;			// No more questions
-	    Match.Status.QstCod = -1L;			// No more questions
-	    Match.Status.Finished = true;		// Match is finished
-	   }
-	 Match.Status.ShowingAnswers = false;		// Don't show answers
-	}
+	 Gam_SetMatchStatusToNextQuestion (&Match);
       else						// Match has started
 	{
 	 if (Match.Status.ShowingAnswers)		// Showing answers currently
-	   {
-	    /* Get index of the next question */
-	    NxtQstInd = Gam_GetNextQuestionIndexInGame (Match.GamCod,
-							Match.Status.QstInd);
-	    if (NxtQstInd)	// Not last question
-	      {
-	       Match.Status.QstInd = NxtQstInd;		// Go to the next question
-	       Match.Status.QstCod = Gam_GetQstCodFromQstInd (Match.GamCod,
-							      Match.Status.QstInd);
-	       Match.Status.Finished = false;		// Match is not finished
-	      }
-	    else		// No more questions
-	      {
-	       Match.Status.QstInd = 0;			// No more questions
-	       Match.Status.QstCod = -1L;		// No more questions
-	       Match.Status.Finished = true;		// Match is finished
-	      }
-	    Match.Status.ShowingAnswers = false;	// Don't show answers
-	   }
+	    Gam_SetMatchStatusToNextQuestion (&Match);
 	 else
 	   {
 	    Match.Status.Finished       = false;	// Match is not finished
@@ -3486,15 +3424,40 @@ void Gam_NextStatusMatchTch (void)
      }
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_CONT\">");
 
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER_TOP\">");
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT_TOP\">");
    Gam_GetAndShowNumPlayersInMatch (Match.MchCod);
    fprintf (Gbl.F.Out,"</div>");
 
    Gam_ShowMatchStatusForTch (&Match);
 
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********************* Set match status to next question *********************/
+/*****************************************************************************/
+
+static void Gam_SetMatchStatusToNextQuestion (struct Match *Match)
+  {
+   /***** Get index of the next question *****/
+   Match->Status.QstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
+					                  Match->Status.QstInd);
+
+   if (Match->Status.QstInd)			// Not last question
+     {
+      Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
+						      Match->Status.QstInd);
+      Match->Status.Finished = false;		// Match is not finished
+     }
+   else						// No more questions
+     {
+      Match->Status.QstCod = -1L;		// No more questions
+      Match->Status.Finished = true;		// Match is finished
+     }
+
+   Match->Status.ShowingAnswers = false;	// Don't show answers
   }
 
 /*****************************************************************************/
@@ -3524,12 +3487,13 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
 static void Gam_ShowAlertFinishedMatch (void)
   {
    extern const char *Txt_Finished_match;
+   extern const char *Txt_Close;
 
    /***** Show alert *****/
    Ale_ShowAlert (Ale_INFO,Txt_Finished_match);
 
    /***** Button to close browser tab *****/
-   Btn_PutCloseTabButton ("Cerrar");	// TODO: Need translation!!!!!
+   Btn_PutCloseTabButton (Txt_Close);
   }
 
 /*****************************************************************************/
@@ -3561,17 +3525,17 @@ static void Gam_PlayGameShowQuestionAndAnswers (struct Match *Match)
 
    /***** Show question *****/
    /* Write number of question */
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_NUM_QST\">%u</div>",
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_NUM_QST\">%u</div>",
 	    Match->Status.QstInd);
 
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_QST_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_QST_CONTAINER\">");
 
    /* Get answer type (row[0]) */
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
    // TODO: Check that answer type is correct (unique choice)
 
    /* Write stem (row[1]) */
-   Tst_WriteQstStem (row[1],"GAM_PLAY_TCH_QST");
+   Tst_WriteQstStem (row[1],"MATCH_TCH_QST");
 
    /* Get media (row[2]) */
    Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -3588,12 +3552,12 @@ static void Gam_PlayGameShowQuestionAndAnswers (struct Match *Match)
       Tst_WriteAnswersGameResult (Match->GamCod,
 				  Match->Status.QstInd,
 				  Match->Status.QstCod,
-				  "GAM_PLAY_TCH_QST",false);	// Don't show result
+				  "MATCH_TCH_QST",false);	// Don't show result
 
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Put button to continue *****/
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_NXT_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_NXT_CONTAINER\">");
    if (Match->Status.ShowingAnswers)
      {
       /* Get index of the next question */
@@ -3623,14 +3587,14 @@ static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 			      const char *Icon,const char *Txt)
   {
    /***** Start container for button *****/
-   fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_TCH_CONTINUE_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_CONTINUE_CONTAINER\">");
 
    /***** Start form *****/
    Frm_StartForm (NextAction);
    Gam_PutParamMatchCod (MchCod);
 
    /***** Put icon with link *****/
-   Frm_LinkFormSubmit (Txt,"GAM_PLAY_TCH_CONTINUE ICO_HIGHLIGHT",NULL);
+   Frm_LinkFormSubmit (Txt,"MATCH_TCH_CONTINUE ICO_HIGHLIGHT",NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
 	              "<br />"
@@ -3709,6 +3673,7 @@ static void Gam_RegisterMeAsPlayerInMatch (long MchCod)
 
 static void Gam_GetAndShowNumPlayersInMatch (long MchCod)
   {
+   extern const char *Txt_Players;
    unsigned NumPlayers;
 
    /***** Remove old players *****/
@@ -3718,7 +3683,7 @@ static void Gam_GetAndShowNumPlayersInMatch (long MchCod)
    NumPlayers = Gam_GetNumPlayers (MchCod);
 
    /***** Show number of players *****/
-   fprintf (Gbl.F.Out,"Players: %u",NumPlayers);	// TODO: Need translation!!!!!
+   fprintf (Gbl.F.Out,"%s: %u",Txt_Players,NumPlayers);
   }
 
 static unsigned Gam_GetNumPlayers (long MchCod)
@@ -3764,7 +3729,7 @@ void Gam_ShowMatchToMeAsStd (void)
    Gam_GetDataOfMatchByCod (&Match);
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
    Gam_ShowMatchStatusForStd (&Match);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -3817,6 +3782,7 @@ void Gam_RefreshMatchStd (void)
 
 static void Gam_ShowMatchStatusForStd (struct Match *Match)
   {
+   extern const char *Txt_Please_wait_;
    bool IBelongToGroups;
    bool Shuffle = false;	// TODO: Read shuffle from question
    MYSQL_RES *mysql_res;
@@ -3846,10 +3812,10 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 	{
 	 /***** Show question *****/
 	 /* Write number of question */
-	 fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_NUM_QST\">%u</div>",
+	 fprintf (Gbl.F.Out,"<div class=\"MATCH_STD_NUM_QST\">%u</div>",
 		  Match->Status.QstInd);
 
-	 fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_QST_CONTAINER\">");
+	 fprintf (Gbl.F.Out,"<div class=\"MATCH_STD_QST_CONTAINER\">");
 
 	 /* Write buttons for answers? */
 	 if (Match->Status.ShowingAnswers)
@@ -3904,7 +3870,7 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 
 		  /***** Write letter for this option *****/
 		  /* Start table cell */
-		  fprintf (Gbl.F.Out,"<td class=\"GAM_PLAY_STD_CELL\">");
+		  fprintf (Gbl.F.Out,"<td class=\"MATCH_STD_CELL\">");
 
 		  /* Form with button.
 		     Sumitting onmousedown instead of default onclick
@@ -3919,8 +3885,8 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 				     "return false;\" class=\"",
 			   Gbl.Form.Id);
 		  if (StdAnsInd == (int) NumOpt)	// Student's answer
-		     fprintf (Gbl.F.Out,"GAM_PLAY_STD_ANSWER_SELECTED ");
-		  fprintf (Gbl.F.Out,"GAM_PLAY_STD_BUTTON BT_%c\">"
+		     fprintf (Gbl.F.Out,"MATCH_STD_ANSWER_SELECTED ");
+		  fprintf (Gbl.F.Out,"MATCH_STD_BUTTON BT_%c\">"
 			             "%c"
 				     "</button>",
 			   'A' + (char) NumOpt,
@@ -3945,12 +3911,14 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 	 fprintf (Gbl.F.Out,"</div>");
 	}
       else	// Not being played
-	 fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_WAIT_CONTAINER\">"
+	 fprintf (Gbl.F.Out,"<div class=\"MATCH_STD_WAIT_CONTAINER\">"
 	                    "<img src=\"%s/wait.gif\""
-			    " alt=\"Please wait...\" title=\"Please wait...\""	// TODO: Need translation!!!!!
-			    " class=\"GAM_PLAY_STD_WAIT_IMAGE\" />"
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"MATCH_STD_WAIT_IMAGE\" />"
 			    "</div>",
-		  Cfg_URL_ICON_PUBLIC);
+		  Cfg_URL_ICON_PUBLIC,
+		  Txt_Please_wait_,
+		  Txt_Please_wait_);
      }
   }
 
@@ -4040,7 +4008,7 @@ void Gam_ReceiveQstAnsFromStd (void)
      }
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
    Gam_ShowMatchStatusForStd (&Match);
    fprintf (Gbl.F.Out,"</div>");
   }

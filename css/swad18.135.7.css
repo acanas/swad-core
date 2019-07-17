@@ -2563,20 +2563,20 @@ a:hover img.CENTRE_PHOTO_SHOW
 	vertical-align:top;
 	}
 
-/********************************** Games ************************************/
-.GAM_PLAY_CONTAINER
+/********************************** Matches **********************************/
+.MATCH_CONT
 	{
 	box-sizing:border-box;
 	display:table;
 	margin:5%;
 	width:90%;
 	}
-.GAM_PLAY_CONTAINER_TOP
+.MATCH_CONT_TOP
 	{
 	box-sizing:border-box;
 	}
 
-.GAM_PLAY_TCH_NUM_QST
+.MATCH_TCH_NUM_QST
 	{
 	width:15%;
 	float:left;
@@ -2585,47 +2585,47 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:48pt;
 	font-weight:bold;
 	}
-.GAM_PLAY_TCH_QST_CONTAINER
+.MATCH_TCH_QST_CONTAINER
 	{
 	width:70%;
 	float:left;
 	}
-.GAM_PLAY_TCH_NXT_CONTAINER
+.MATCH_TCH_NXT_CONTAINER
 	{
 	width:15%;
 	float:left;
 	}
-.GAM_PLAY_TCH_QST
+.MATCH_TCH_QST
 	{
 	color:#202020;
 	font-size:24pt;
 	}
-.GAM_PLAY_TCH_CONTINUE_CONTAINER
+.MATCH_TCH_CONTINUE_CONTAINER
 	{
 	clear:all;
 	text-align:center;
 	}
-.GAM_PLAY_TCH_CONTINUE_CONTAINER a
+.MATCH_TCH_CONTINUE_CONTAINER a
 	{
 	text-decoration:none;
 	}
-.GAM_PLAY_TCH_CONTINUE
+.MATCH_TCH_CONTINUE
 	{
 	font-size:16pt;
 	}
 
-.GAM_PLAY_STD_WAIT_CONTAINER
+.MATCH_STD_WAIT_CONTAINER
 	{
 	box-sizing:border-box;
 	text-align:center;
 	}
-.GAM_PLAY_STD_WAIT_IMAGE
+.MATCH_STD_WAIT_IMAGE
 	{
 	box-sizing:border-box;
 	width:50%;
 	}
 
-.GAM_PLAY_STD_NUM_QST
+.MATCH_STD_NUM_QST
 	{
 	width:15%;
 	float:left;
@@ -2634,18 +2634,18 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:48pt;
 	font-weight:bold;
 	}
-.GAM_PLAY_STD_QST_CONTAINER
+.MATCH_STD_QST_CONTAINER
 	{
 	width:85%;
 	float:left;
 	}
-.GAM_PLAY_STD_QST
+.MATCH_STD_QST
 	{
 	color:#202020;
 	font-size:24pt;
 	}
 
-.GAM_PLAY_TCH_BUTTON
+.MATCH_TCH_BUTTON
 	{
 	box-sizing:border-box;
 	width:64px;
@@ -2661,12 +2661,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	line-height:normal;
 	white-space:nowrap;
 	}
-.GAM_PLAY_STD_CELL
+.MATCH_STD_CELL
 	{
 	text-align:center;
 	vertical-align:middle;
 	}
-.GAM_PLAY_STD_BUTTON
+.MATCH_STD_BUTTON
 	{
 	box-sizing:border-box;
 	width:80%;
@@ -2682,7 +2682,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	line-height:normal;
 	white-space:nowrap;
 	}
-.GAM_PLAY_STD_ANSWER_SELECTED
+.MATCH_STD_ANSWER_SELECTED
 	{
 	box-shadow: 0px 0px 18px 12px rgba(0,128,0,1);
 	}

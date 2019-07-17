@@ -1072,11 +1072,11 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
 	 break;
       case Tst_SHOW_GAME_TO_ANSWER:
 	 Tst_WriteAnswersGameResult (GamCod,NumQst,QstCod,
-	                             "GAM_PLAY_QST",false);	// Don't show result
+	                             "MATCH_QST",false);	// Don't show result
 	 break;
       case Tst_SHOW_GAME_RESULT:
 	 Tst_WriteAnswersGameResult (GamCod,NumQst,QstCod,
-	                             "GAM_PLAY_QST",true);	// Show result
+	                             "MATCH_QST",true);	// Show result
 	 break;
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -4113,7 +4113,7 @@ static void Tst_WriteChoiceAnsViewGame (long GamCod,unsigned QstInd,long QstCod,
 	          Class,
                   'a' + (char) NumOpt);
       else
-	 fprintf (Gbl.F.Out,"GAM_PLAY_TCH_BUTTON BT_%c\">"
+	 fprintf (Gbl.F.Out,"MATCH_TCH_BUTTON BT_%c\">"
 	                    "%c",
 	          'A' + (char) NumOpt,
 	          'a' + (char) NumOpt);

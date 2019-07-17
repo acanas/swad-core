@@ -29051,7 +29051,7 @@ const char *Txt_PLACES_ORDER[Plc_NUM_ORDERS] =
 #endif
 	};
 
-const char *Txt_Play =	// To play a game
+const char *Txt_Play =	// To play a game match
 #if   L==1	// ca
 	"Jugar";
 #elif L==2	// de
@@ -29070,6 +29070,27 @@ const char *Txt_Play =	// To play a game
 	"Gra&cacute;";
 #elif L==9	// pt
 	"Jogar";
+#endif
+
+const char *Txt_Players =	// Match players
+#if   L==1	// ca
+	"Jugadors";
+#elif L==2	// de
+	"Spieler";
+#elif L==3	// en
+	"Players";
+#elif L==4	// es
+	"Jugadores";
+#elif L==5	// fr
+	"Joueurs";
+#elif L==6	// gn
+	"Jugadores";	// Okoteve traducción
+#elif L==7	// it
+	"Giocatori";
+#elif L==8	// pl
+	"Gracze";
+#elif L==9	// pt
+	"Jogadores";
 #endif
 
 const char *Txt_Please_check_your_email_address =
@@ -29413,6 +29434,27 @@ const char *Txt_Please_specify_if_you_allow_access_to_test_questions_from_mobile
 #elif L==9	// pt
 	"Por favor, especifique se voc&ecirc; permite acesso"
 	" para perguntas de teste de aplicativos para dispositivos m&oacute;veis.";
+#endif
+
+const char *Txt_Please_wait_ =
+#if   L==1	// ca
+	"Espereu, si us plau&hellip;";
+#elif L==2	// de
+	"Warten Sie bitte&hellip;";
+#elif L==3	// en
+	"Please wait&hellip;";
+#elif L==4	// es
+	"Espere, por favor&hellip;";
+#elif L==5	// fr
+	"Attendez s'il vous pla&icirc;t&hellip;";
+#elif L==6	// gn
+	"Espere, por favor&hellip;";	// Okoteve traducción
+#elif L==7	// it
+	"Aspetta, per favore&hellip;";
+#elif L==8	// pl
+	"Prosz&eogon; czeka&cacute;&hellip;";
+#elif L==9	// pt
+	"Espere, por favor&hellip;";
 #endif
 
 const char *Txt_Plugin =
