@@ -458,10 +458,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.135 (2019-07-17)"
+#define Log_PLATFORM_VERSION	"SWAD 18.135.1 (2019-07-17)"
 #define CSS_FILE		"swad18.132.2.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.135.1: Jul 17, 2019	When a teacher resumes a match, no answers are shown. (243708 lines)
 	Version 18.135:   Jul 17, 2019	A match is put in pause for students when the teacher closes the tab. (243707 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS gam_mch_being_played (MchCod INT NOT NULL,TS TIMESTAMP,UNIQUE INDEX(MchCod));

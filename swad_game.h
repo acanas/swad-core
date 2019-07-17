@@ -123,7 +123,7 @@ void Gam_RequestNewMatchTch (void);
 
 void Gam_CreateNewMatchTch (void);
 void Gam_RequestStartResumeMatchTch (void);
-void Gam_CurrentStatusMatchTch (void);
+void Gam_ResumeMatchTch (void);
 void Gam_NextStatusMatchTch (void);
 
 void Gam_ShowFinishedMatchResults (void);

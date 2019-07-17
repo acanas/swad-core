@@ -3363,7 +3363,7 @@ static void Gam_UpdateMatchBeingPlayed (struct Match *Match)
 /** Show current match status (current question, answers...) (by a teacher) **/
 /*****************************************************************************/
 
-void Gam_CurrentStatusMatchTch (void)
+void Gam_ResumeMatchTch (void)
   {
    struct Match Match;
    long NxtQstInd;
@@ -3392,11 +3392,11 @@ void Gam_CurrentStatusMatchTch (void)
 	    Match.Status.QstCod = -1L;			// No more questions
 	    Match.Status.Finished = true;		// Match is finished
 	   }
-	 Match.Status.ShowingAnswers = false;		// Don't show answers
-
-	 /* Update match status in database */
-	 Gam_UpdateMatchBeingPlayed (&Match);
 	}
+      Match.Status.ShowingAnswers = false;		// Don't show answers
+
+      /* Update match status in database */
+      Gam_UpdateMatchBeingPlayed (&Match);
      }
 
    /***** Show current match status *****/
@@ -3473,7 +3473,7 @@ void Gam_NextStatusMatchTch (void)
 	    Match.Status.Finished       = false;	// Match is not finished
 	    Match.Status.ShowingAnswers = true;		// Show answers
 	   }
-      }
+        }
 
       /* Update match status in database */
       Gam_UpdateMatchBeingPlayed (&Match);
