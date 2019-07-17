@@ -2686,13 +2686,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-shadow: 0px 0px 18px 12px rgba(0,128,0,1);
 	}
-/*
-.GAM_PLAY_TCH_BUTTON:hover, .GAM_PLAY_STD_BUTTON:hover
-	{
-	background-image:-webkit-linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));	Safari
-	background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2));
-	}
-*/
 
 .BT_A	{background-color:#e21c3d; border-color:#a9152d;} /* red */
 .BT_B	{background-color:#1369ce; border-color:#0e519c;} /* blue */

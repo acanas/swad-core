@@ -3076,17 +3076,40 @@ void Gam_RemoveMatchTch (void)
    Gam_GetDataOfMatchByCod (&Match);
 
    /***** Remove the match from all the tables *****/
+   /* Remove match players */
+   DB_QueryDELETE ("can not remove match players",
+		   "DELETE FROM gam_players"
+		   " USING gam_players,gam_matches,games"
+		   " WHERE gam_players.MchCod=%ld"
+		   " AND gam_players.MchCod=gam_matches.MchCod"
+		   " AND gam_matches.GamCod=games.GamCod"
+		   " AND games.CrsCod=%ld",	// Extra check
+		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
+
+   /* Remove match from list of matches being played */
+   DB_QueryDELETE ("can not remove match from matches being played",
+		   "DELETE FROM gam_mch_being_played"
+		   " USING gam_mch_being_played,gam_matches,games"
+		   " WHERE gam_mch_being_played.MchCod=%ld"
+		   " AND gam_mch_being_played.MchCod=gam_matches.MchCod"
+		   " AND gam_matches.GamCod=games.GamCod"
+		   " AND games.CrsCod=%ld",	// Extra check
+		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
+
    /* Remove groups associated to the match */
-   DB_QueryDELETE ("can not remove the groups associated to matches of a game",
-		   "DELETE FROM gam_grp USING gam_grp,gam_matches,games"
+   DB_QueryDELETE ("can not remove the groups associated to a match",
+		   "DELETE FROM gam_grp"
+		   " USING gam_grp,gam_matches,games"
 		   " WHERE gam_grp.MchCod=%ld"
 		   " AND gam_grp.MchCod=gam_matches.MchCod"
 		   " AND gam_matches.GamCod=games.GamCod"
 		   " AND games.CrsCod=%ld",	// Extra check
-		   Match.MchCod);
+		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
+
    /* Remove the match itself */
    DB_QueryDELETE ("can not remove a match",
-		   "DELETE FROM gam_matches USING gam_matches,games"
+		   "DELETE FROM gam_matches"
+		   " USING gam_matches,games"
 		   " WHERE gam_matches.MchCod=%ld"
 		   " AND gam_matches.GamCod=games.GamCod"
 		   " AND games.CrsCod=%ld",	// Extra check
@@ -3883,13 +3906,13 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 		  Gam_PutParamAnswer (Index);			// Index for this option
 		  fprintf (Gbl.F.Out,"<button type=\"submit\""
 			             " onmousedown=\"document.getElementById('%s').submit();"
-				     "return false;\" class=\"");
+				     "return false;\" class=\"",
+			   Gbl.Form.Id);
 		  if (StdAnsInd == (int) NumOpt)	// Student's answer
 		     fprintf (Gbl.F.Out,"GAM_PLAY_STD_ANSWER_SELECTED ");
 		  fprintf (Gbl.F.Out,"GAM_PLAY_STD_BUTTON BT_%c\">"
 			             "%c"
 				     "</button>",
-			   Gbl.Form.Id,
 			   'A' + (char) NumOpt,
 			   'a' + (char) NumOpt);
 		  Frm_EndForm ();

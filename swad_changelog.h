@@ -458,10 +458,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.135.3 (2019-07-17)"
+#define Log_PLATFORM_VERSION	"SWAD 18.135.4 (2019-07-17)"
 #define CSS_FILE		"swad18.132.2.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.135.4: Jul 17, 2019	Changes and bug fixing while removing a match. (243682 lines)
 	Version 18.135.3: Jul 17, 2019	Removed unused code in games.
 					Optimization in match buttons. (243668 lines)
 					8 changes necessary in database:
