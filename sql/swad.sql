@@ -644,6 +644,13 @@ CREATE TABLE IF NOT EXISTS gam_matches (
 	UNIQUE INDEX(MchCod),
 	INDEX(GamCod));
 --
+-- Table gam_mch_being_played: stores the current matches being played
+--
+CREATE TABLE IF NOT EXISTS gam_mch_being_played (
+	MchCod INT NOT NULL,
+	TS TIMESTAMP,
+	UNIQUE INDEX(MchCod));
+--
 -- Table gam_players: stores the current match players
 --
 CREATE TABLE IF NOT EXISTS gam_players (

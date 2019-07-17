@@ -130,8 +130,8 @@ void Gam_ShowFinishedMatchResults (void);
 
 void Gam_GetMatchBeingPlayed (void);
 void Gam_ShowMatchToMeAsStd (void);
-void Gam_RefreshNumPlayersMatchTch (void);
-void Gam_RefreshCurrentMatchStd (void);
+void Gam_RefreshMatchTch (void);
+void Gam_RefreshMatchStd (void);
 
 void Gam_ReceiveQstAnsFromStd (void);
 

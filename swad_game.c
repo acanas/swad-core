@@ -92,6 +92,7 @@ struct Match
       time_t QstStartTimeUTC;
       bool ShowingAnswers;
       bool Finished;
+      bool BeingPlayed;
      } Status;
   };
 
@@ -192,7 +193,9 @@ static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 			      const char *Icon,const char *Txt);
 
 static void Gam_RemoveOldPlayers (void);
-static void Gam_RemoveAllPlayersInMatch (long MchCod);
+static void Gam_UpdateMatchAsBeingPlayed (long MchCod);
+static void Gam_SetMatchAsNotBeingPlayed (long MchCod);
+static bool Gam_GetIfMatchIsBeingPlayed (long MchCod);
 static void Gam_RegisterMeAsPlayerInMatch (long MchCod);
 static void Gam_GetAndShowNumPlayersInMatch (long MchCod);
 static unsigned Gam_GetNumPlayers (long MchCod);
@@ -2779,6 +2782,7 @@ void Gam_GetDataOfMatchByCod (struct Match *Match)
       Match->Status.QstStartTimeUTC  = (time_t) 0;
       Match->Status.ShowingAnswers   = false;
       Match->Status.Finished         = false;
+      Match->Status.BeingPlayed      = false;
      }
 
    /***** Free structure that stores the query result *****/
@@ -3041,6 +3045,12 @@ static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 
    /* Get whether the match is finished or not (row(10)) */
    Match->Status.Finished = (row[10][0] == 'Y');
+
+   /***** Get whether the match is being played or not *****/
+   if (Match->Status.Finished)
+      Match->Status.BeingPlayed = false;
+   else
+      Match->Status.BeingPlayed = Gam_GetIfMatchIsBeingPlayed (Match->MchCod);
   }
 
 /*****************************************************************************/
@@ -3343,6 +3353,10 @@ static void Gam_UpdateMatchBeingPlayed (struct Match *Match)
 		   Match->Status.Finished       ? 'Y' :
 					          'N',
 		   Match->MchCod,Gbl.Hierarchy.Crs.CrsCod);
+
+   if (Match->Status.Finished)
+      /* Update match as not being played */
+      Gam_SetMatchAsNotBeingPlayed (Match->MchCod);
   }
 
 /*****************************************************************************/
@@ -3383,10 +3397,6 @@ void Gam_CurrentStatusMatchTch (void)
 	 /* Update match status in database */
 	 Gam_UpdateMatchBeingPlayed (&Match);
 	}
-
-      /* Remove all players in this match */
-      if (Match.Status.Finished)
-	 Gam_RemoveAllPlayersInMatch (Match.MchCod);
      }
 
    /***** Show current match status *****/
@@ -3467,10 +3477,6 @@ void Gam_NextStatusMatchTch (void)
 
       /* Update match status in database */
       Gam_UpdateMatchBeingPlayed (&Match);
-
-      /* Remove all players in this match */
-      if (Match.Status.Finished)
-	 Gam_RemoveAllPlayersInMatch (Match.MchCod);
      }
 
    /***** Show current match status *****/
@@ -3493,10 +3499,16 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
   {
    /***** Show current match status *****/
    if (Match->Status.Finished)
+      /* Show alert */
       Gam_ShowAlertFinishedMatch ();
    else	// Unfinished match
-      /***** Show current question and possible answers *****/
+     {
+      /* Show current question and possible answers */
       Gam_PlayGameShowQuestionAndAnswers (Match);
+
+      /* Update match as being played */
+      Gam_UpdateMatchAsBeingPlayed (Match->MchCod);
+     }
   }
 
 /*****************************************************************************/
@@ -3635,30 +3647,57 @@ static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 
 static void Gam_RemoveOldPlayers (void)
   {
-   /***** Remove players who have left matches *****/
-   DB_QueryDELETE ("can not remove old match players",
-		    "DELETE FROM gam_players"
-		    " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		    Cfg_SECONDS_TO_REFRESH_GAME*5);
+   /***** Delete matches not being played *****/
+   DB_QueryDELETE ("can not update matches as not being played",
+		   "DELETE FROM gam_mch_being_played"
+		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		   Cfg_SECONDS_TO_REFRESH_GAME*3);
+
+   /***** Delete players who have left matches *****/
+   DB_QueryDELETE ("can not update match players",
+		   "DELETE FROM gam_players"
+		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
+		   Cfg_SECONDS_TO_REFRESH_GAME*3);
   }
 
-static void Gam_RemoveAllPlayersInMatch (long MchCod)
+static void Gam_UpdateMatchAsBeingPlayed (long MchCod)
+  {
+   /***** Insert me as match player *****/
+   DB_QueryREPLACE ("can not set match as being played",
+		    "REPLACE gam_mch_being_played (MchCod) VALUE (%ld)",
+		    MchCod);
+  }
+
+static void Gam_SetMatchAsNotBeingPlayed (long MchCod)
   {
    /***** Delete all match players ******/
-   DB_QueryDELETE ("can not delete match players",
+   DB_QueryDELETE ("can not update match players",
 		    "DELETE FROM gam_players"
 		    " WHERE MchCod=%ld",
 		    MchCod);
+
+   /***** Delete match as being played ******/
+   DB_QueryDELETE ("can not set match as not being played",
+		    "DELETE FROM gam_mch_being_played"
+		    " WHERE MchCod=%ld",
+		    MchCod);
+  }
+
+static bool Gam_GetIfMatchIsBeingPlayed (long MchCod)
+  {
+   /***** Get if a match is being played or not *****/
+   return
+   (bool) (DB_QueryCOUNT ("can not get if match is being played",
+			  "SELECT COUNT(*) FROM gam_mch_being_played"
+			  " WHERE MchCod=%ld",
+			  MchCod) != 0);
   }
 
 static void Gam_RegisterMeAsPlayerInMatch (long MchCod)
   {
    /***** Insert me as match player *****/
    DB_QueryREPLACE ("can not insert match player",
-		    "REPLACE gam_players"
-		    " (MchCod,UsrCod)"
-		    " VALUES"
-		    " (%ld,%ld)",
+		    "REPLACE gam_players (MchCod,UsrCod) VALUES (%ld,%ld)",
 		    MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -3725,23 +3764,33 @@ void Gam_ShowMatchToMeAsStd (void)
   }
 
 /*****************************************************************************/
-/************ Refresh number of players for a teacher via AJAX ***************/
+/****************** Refresh match for a teacher via AJAX *********************/
 /*****************************************************************************/
 
-void Gam_RefreshNumPlayersMatchTch (void)
+void Gam_RefreshMatchTch (void)
   {
+   struct Match Match;
+
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       return;
 
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Gam_GetDataOfMatchByCod (&Match);
+
    /***** Get and show number of players *****/
-   Gam_GetAndShowNumPlayersInMatch (Gbl.Games.MchCodBeingPlayed);
+   Gam_GetAndShowNumPlayersInMatch (Match.MchCod);
+
+   /***** Update match as being played *****/
+   if (Match.Status.BeingPlayed)
+      Gam_UpdateMatchAsBeingPlayed (Match.MchCod);
   }
 
 /*****************************************************************************/
 /*************** Refresh current game for a student via AJAX *****************/
 /*****************************************************************************/
 
-void Gam_RefreshCurrentMatchStd (void)
+void Gam_RefreshMatchStd (void)
   {
    struct Match Match;
 
@@ -3787,17 +3836,7 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
       Gam_RemoveOldPlayers ();
       Gam_RegisterMeAsPlayerInMatch (Match->MchCod);
 
-      if (Match->Status.QstInd == 0)	// Not yet started
-	{
-	 fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_WAIT_CONTAINER\">"
-	                    "<img src=\"%s/wait.gif\""
-			    " alt=\"Please wait\" title=\"%s\""
-			    " class=\"GAM_PLAY_STD_WAIT_IMAGE\" />"
-			    "</div>",
-		  Cfg_URL_ICON_PUBLIC,
-		  "Por favor, espere a que el juego comience...");	// TODO: Need translation!!!!!
-	}
-      else
+      if (Match->Status.BeingPlayed)
 	{
 	 /***** Show question *****/
 	 /* Write number of question */
@@ -3894,6 +3933,13 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 
 	 fprintf (Gbl.F.Out,"</div>");
 	}
+      else	// Not being played
+	 fprintf (Gbl.F.Out,"<div class=\"GAM_PLAY_STD_WAIT_CONTAINER\">"
+	                    "<img src=\"%s/wait.gif\""
+			    " alt=\"Please wait...\" title=\"Please wait...\""	// TODO: Need translation!!!!!
+			    " class=\"GAM_PLAY_STD_WAIT_IMAGE\" />"
+			    "</div>",
+		  Cfg_URL_ICON_PUBLIC);
      }
   }
 

@@ -684,6 +684,7 @@ static void Lay_WriteScriptInit (void)
 	 break;
       case ActNewMchTch:
       case ActResMchTch:
+      case ActCurMchTch:
       case ActNxtMchTch:
       case ActPlyMchStd:
       case ActAnsMchQstStd:
@@ -800,15 +801,17 @@ static void Lay_WriteScriptParamsAJAX (void)
 		  Act_GetActCod (ActRefOldSocPubUsr),
 		  Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
-      /* Parameters related with match refreshing */
+      /* Parameters related with match refreshing (for teachers) */
       case ActNewMchTch:
       case ActResMchTch:
+      case ActCurMchTch:
       case ActNxtMchTch:
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"
 			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
 		  Act_GetActCod (ActRefMchTch),
 		  Gbl.Games.MchCodBeingPlayed);
 	 break;
+      /* Parameters related with match refreshing (for students) */
       case ActPlyMchStd:
       case ActAnsMchQstStd:
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"
