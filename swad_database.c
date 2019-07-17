@@ -1454,22 +1454,6 @@ mysql> DESCRIBE gam_questions;
 		   "INDEX(GamCod),"
 		   "INDEX(QstCod))");
 
-   /***** Table gam_users *****/
-/*
-mysql> DESCRIBE gam_users;
-+--------+---------+------+-----+---------+-------+
-| Field  | Type    | Null | Key | Default | Extra |
-+--------+---------+------+-----+---------+-------+
-| SvyCod | int(11) | NO   | PRI | NULL    |       |
-| UsrCod | int(11) | NO   | PRI | NULL    |       |
-+--------+---------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_users ("
-			"GamCod INT NOT NULL,"
-			"UsrCod INT NOT NULL,"
-		   "UNIQUE INDEX(GamCod,UsrCod))");
-
    /***** Table hidden_params *****/
 /*
 mysql> DESCRIBE hidden_params;

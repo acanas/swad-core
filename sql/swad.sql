@@ -668,13 +668,6 @@ CREATE TABLE IF NOT EXISTS gam_questions (
 	INDEX(GamCod),
 	INDEX(QstCod));
 --
--- Table gam_users: stores the users who have answer the games
---
-CREATE TABLE IF NOT EXISTS gam_users (
-	GamCod INT NOT NULL,
-	UsrCod INT NOT NULL,
-	UNIQUE INDEX(GamCod,UsrCod));
---
 -- Table hidden_params: stores some hidden parameters passed from a page to another using database instead of forms
 --
 CREATE TABLE IF NOT EXISTS hidden_params (

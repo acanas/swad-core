@@ -458,10 +458,23 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.135.1 (2019-07-17)"
+#define Log_PLATFORM_VERSION	"SWAD 18.135.3 (2019-07-17)"
 #define CSS_FILE		"swad18.132.2.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.135.3: Jul 17, 2019	Removed unused code in games.
+					Optimization in match buttons. (243668 lines)
+					8 changes necessary in database:
+DROP TABLE IF EXISTS gam_users;
+Only if you use MyISAM:
+ALTER TABLE games ENGINE=MyISAM;
+ALTER TABLE gam_answers ENGINE=MyISAM;
+ALTER TABLE gam_grp ENGINE=MyISAM;
+ALTER TABLE gam_matches ENGINE=MyISAM;
+ALTER TABLE gam_mch_being_played ENGINE=MyISAM;
+ALTER TABLE gam_players ENGINE=MyISAM;
+ALTER TABLE gam_questions ENGINE=MyISAM;
+
 	Version 18.135.1: Jul 17, 2019	When a teacher resumes a match, no answers are shown. (243708 lines)
 	Version 18.135:   Jul 17, 2019	A match is put in pause for students when the teacher closes the tab. (243707 lines)
 					1 change necessary in database:

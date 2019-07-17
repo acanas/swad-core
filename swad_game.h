@@ -50,7 +50,6 @@ struct Game
    char Title[Gam_MAX_BYTES_TITLE + 1];
    time_t TimeUTC[Gam_NUM_DATES];
    unsigned NumQsts;	// Number of questions in the game
-   unsigned NumUsrs;	// Number of distinct users who have already answered the game
    struct
      {
       bool Visible;		// Game is not hidden

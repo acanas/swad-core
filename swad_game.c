@@ -203,8 +203,6 @@ static unsigned Gam_GetNumPlayers (long MchCod);
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
 static int Gam_GetQstAnsFromDB (long MchCod,unsigned QstInd);
 
-static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod);
-
 /*****************************************************************************/
 /*************************** List all the games ******************************/
 /*****************************************************************************/
@@ -430,7 +428,6 @@ static void Gam_ShowOneGame (long GamCod,
    extern const char *Txt_Today;
    extern const char *Txt_View_game;
    extern const char *Txt_No_of_questions;
-   extern const char *Txt_No_of_users;
    extern const char *Txt_New_match;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -535,14 +532,12 @@ static void Gam_ShowOneGame (long GamCod,
    Frm_EndForm ();
    Lay_EndArticle ();
 
-   /* Number of questions and number of distinct students who have already answered */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u; %s: %u</div>",
+   /* Number of questions */
+   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u</div>",
             Game.Status.Visible ? "ASG_GRP" :
         	                  "ASG_GRP_LIGHT",
             Txt_No_of_questions,
-            Game.NumQsts,
-            Txt_No_of_users,
-            Game.NumUsrs);
+            Game.NumQsts);
 
    fprintf (Gbl.F.Out,"</td>");
 
@@ -788,9 +783,8 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       Str_Copy (Game->Title,row[3],
                 Gam_MAX_BYTES_TITLE);
 
-      /* Get number of questions and number of users who have already answer this game */
+      /* Get number of questions */
       Game->NumQsts = Gam_GetNumQstsGame (Game->GamCod);
-      Game->NumUsrs = Gam_GetNumUsrsWhoHaveAnsweredGame (Game->GamCod);
 
       /* Can I view results of the game?
          Can I edit game? */
@@ -830,7 +824,6 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       Game->UsrCod                  = -1L;
       Game->Title[0]                = '\0';
       Game->NumQsts                 = 0;
-      Game->NumUsrs                 = 0;
       Game->Status.Visible          = true;
       Game->Status.ICanViewResults  = false;
       Game->Status.ICanEdit         = false;
@@ -1018,11 +1011,6 @@ void Gam_RemoveGame (void)
    if (!Game.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
-   /***** Remove all the users in this game *****/
-   DB_QueryDELETE ("can not remove users who are answered a game",
-		   "DELETE FROM gam_users WHERE GamCod=%ld",
-		   Game.GamCod);
-
    /***** Remove all the questions in this game *****/
    DB_QueryDELETE ("can not remove questions of a game",
 		   "DELETE FROM gam_questions WHERE GamCod=%ld",
@@ -1107,11 +1095,6 @@ void Gam_ResetGame (void)
    Gam_GetDataOfGameByCod (&Game);
    if (!Game.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not reset this game.");
-
-   /***** Remove all the users in this game *****/
-   DB_QueryDELETE ("can not remove users who are answered a game",
-		   "DELETE FROM gam_users WHERE GamCod=%ld",
-		   Game.GamCod);
 
    /***** Reset all the answers in this game *****/
    DB_QueryUPDATE ("can not reset answers of a game",
@@ -1237,7 +1220,6 @@ void Gam_RequestCreatOrEditGame (void)
       Game.TimeUTC[Gam_END_TIME  ] = (time_t) 0;
       Game.Title[0]                = '\0';
       Game.NumQsts                 = 0;
-      Game.NumUsrs                 = 0;
       Game.Status.Visible          = true;
       Game.Status.Open             = true;
       Game.Status.ICanViewResults  = false;
@@ -1623,15 +1605,6 @@ static void Gam_GetAndWriteNamesOfGrpsAssociatedToMatch (struct Match *Match)
 
 void Gam_RemoveGames (Hie_Level_t Scope,long Cod)
   {
-   /***** Remove all the users in course games *****/
-   DB_QueryDELETE ("can not remove users who had answered games"
-		   " in a place on the hierarchy",
-		   "DELETE FROM gam_users"
-		   " USING games,gam_users"
-		   " WHERE games.Scope='%s' AND games.Cod=%ld"
-		   " AND games.GamCod=gam_users.GamCod",
-                   Sco_GetDBStrFromScope (Scope),Cod);
-
    /***** Remove all the answers in course games *****/
    DB_QueryDELETE ("can not remove answers of games"
 		   " in a place on the hierarchy"
@@ -3900,18 +3873,23 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 		  /* Start table cell */
 		  fprintf (Gbl.F.Out,"<td class=\"GAM_PLAY_STD_CELL\">");
 
-		  /* Form with button */
+		  /* Form with button.
+		     Sumitting onmousedown instead of default onclick
+		     is necessary in order to be fast
+		     and not lose clicks due to refresh */
 		  Frm_StartForm (ActAnsMchQstStd);
                   Gam_PutParamMatchCod (Match->MchCod);		// Current match being played
 		  Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 		  Gam_PutParamAnswer (Index);			// Index for this option
 		  fprintf (Gbl.F.Out,"<button type=\"submit\""
-			             " class=\"");
+			             " onmousedown=\"document.getElementById('%s').submit();"
+				     "return false;\" class=\"");
 		  if (StdAnsInd == (int) NumOpt)	// Student's answer
 		     fprintf (Gbl.F.Out,"GAM_PLAY_STD_ANSWER_SELECTED ");
 		  fprintf (Gbl.F.Out,"GAM_PLAY_STD_BUTTON BT_%c\">"
-				     "%c"
+			             "%c"
 				     "</button>",
+			   Gbl.Form.Id,
 			   'A' + (char) NumOpt,
 			   'a' + (char) NumOpt);
 		  Frm_EndForm ();
@@ -4032,21 +4010,6 @@ void Gam_ReceiveQstAnsFromStd (void)
    fprintf (Gbl.F.Out,"<div id=\"game\" class=\"GAM_PLAY_CONTAINER\">");
    Gam_ShowMatchStatusForStd (&Match);
    fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/************** Get number of users who have answered a game *****************/
-/*****************************************************************************/
-
-static unsigned Gam_GetNumUsrsWhoHaveAnsweredGame (long GamCod)
-  {
-   /***** Get number of games with a field value from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of users"
-			     " who have answered a game",
-			     "SELECT COUNT(*) FROM gam_users"
-			     " WHERE GamCod=%ld",
-			     GamCod);
   }
 
 /*****************************************************************************/
