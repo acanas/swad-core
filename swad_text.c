@@ -33109,25 +33109,25 @@ const char *Txt_results_per_page =
 	"resultados por p&aacute;gina";
 #endif
 
-const char *Txt_Resume =	// Resume a game match
+const char *Txt_Resume_match =
 #if   L==1	// ca
-	"Reprendre";
+	"Reprendre partida";
 #elif L==2	// de
-	"Fortsetzen";
+	"Spiel fortsetzen";
 #elif L==3	// en
-	"Resume";
+	"Resume match";
 #elif L==4	// es
-	"Reanudar";
+	"Reanudar partida";
 #elif L==5	// fr
-	"Reprendre";
+	"Reprendre le match";
 #elif L==6	// gn
-	"Reanudar";	// Okoteve traducción
+	"Reanudar partida";	// Okoteve traducción
 #elif L==7	// it
-	"Riprendi";
+	"Riprendi la partita";
 #elif L==8	// pl
-	"Wzn&oacute;w";
+	"Wzn&oacute;w mecz";
 #elif L==9	// pt
-	"Retomar";
+	"Retomar o jogo";
 #endif
 
 const char *Txt_Retype_new_password =

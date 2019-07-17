@@ -121,16 +121,16 @@ void Gam_RemoveMatchTch (void);
 
 void Gam_RequestNewMatchTch (void);
 
-void Gam_CreateNewMatchTch1 (void);
-void Gam_CreateNewMatchTch2 (void);
-void Gam_ResumeUnfinishedMatchTch (void);
+void Gam_CreateNewMatchTch (void);
+void Gam_RequestStartResumeMatchTch (void);
+void Gam_CurrentStatusMatchTch (void);
 void Gam_NextStatusMatchTch (void);
 
 void Gam_ShowFinishedMatchResults (void);
 
 void Gam_GetMatchBeingPlayed (void);
 void Gam_ShowMatchToMeAsStd (void);
-void Gam_RefreshCurrentMatchTch (void);
+void Gam_RefreshNumPlayersMatchTch (void);
 void Gam_RefreshCurrentMatchStd (void);
 
 void Gam_ReceiveQstAnsFromStd (void);

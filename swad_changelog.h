@@ -458,10 +458,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.133 (2019-07-16)"
+#define Log_PLATFORM_VERSION	"SWAD 18.134 (2019-07-16)"
 #define CSS_FILE		"swad18.132.2.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.134:   Jul 17, 2019	Changes resuming a match. (243641 lines)
+					2 changes necessary in database:
+UPDATE actions SET Txt='Mostrar pregunta siguiente en partida (como profesor)' WHERE ActCod='1672' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1789','es','N','Mostrar pregunta actual en partida (como profesor)');
+
 	Version 18.133:   Jul 16, 2019	Display number of players in a game. (243604 lines)
 					3 changes necessary in database:
 DROP TABLE IF EXISTS gam_players;
