@@ -2152,7 +2152,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqNewMchTch	*/{1670,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestNewMatchTch		,NULL},
    /* ActNewMchTch	*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_CreateNewMatchTch		,Gam_RequestStartResumeMatchTch	,NULL},
    /* ActResMchTch	*/{1785,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_GetMatchBeingPlayed	,Gam_RequestStartResumeMatchTch	,NULL},
-   /* ActCurMchTch	*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_ResumeMatchTch	,NULL},
+   /* ActCurMchTch	*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_ResumeMatchTch		,NULL},
    /* ActNxtMchTch	*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_NextStatusMatchTch		,NULL},
    /* ActRefMchTch	*/{1788,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Gam_GetMatchBeingPlayed	,Gam_RefreshMatchTch		,NULL},
    /* ActShoMchTch	*/{1786,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ShowFinishedMatchResults	,NULL},

@@ -3096,6 +3096,16 @@ void Gam_RemoveMatchTch (void)
 		   " AND games.CrsCod=%ld",	// Extra check
 		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
+   /* Remove students' answers to match */
+   DB_QueryDELETE ("can not remove students' answers associated to a match",
+		   "DELETE FROM gam_answers"
+		   " USING gam_answers,gam_matches,games"
+		   " WHERE gam_answers.MchCod=%ld"
+		   " AND gam_answers.MchCod=gam_matches.MchCod"
+		   " AND gam_matches.GamCod=games.GamCod"
+		   " AND games.CrsCod=%ld",	// Extra check
+		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
+
    /* Remove groups associated to the match */
    DB_QueryDELETE ("can not remove the groups associated to a match",
 		   "DELETE FROM gam_grp"
