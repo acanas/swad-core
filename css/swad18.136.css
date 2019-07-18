@@ -2571,29 +2571,65 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:5%;
 	width:90%;
 	}
-.MATCH_CONT_TOP
+.MATCH_TOP
 	{
 	box-sizing:border-box;
+	display:table;
+	width:100%;
+	border:1px solid pink;
+	}
+.MATCH_TOP_LEFT
+	{
+	box-sizing:border-box;
+	float:left;
+	width:80%;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	border:1px solid red;
+	}
+.MATCH_TOP_RIGHT
+	{
+	box-sizing:border-box;
+	float:left;
+	width:20%;
+	text-align:right;
+	border:1px solid blue;
+	}
+.MATCH_BOTTOM
+	{
+	box-sizing:border-box;
+	width:100%;
+	border:1px solid pink;
+	}
+.MATCH_BOTTOM_LEFT
+	{
+	box-sizing:border-box;
+	float:left;
+	width:20%;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	border:1px solid red;
+	}
+.MATCH_BOTTOM_RIGHT
+	{
+	box-sizing:border-box;
+	float:left;
+	width:80%;
+	border:1px solid blue;
 	}
 
 .MATCH_TCH_NUM_QST
 	{
-	width:15%;
-	float:left;
+	text-align:center;
 	padding-bottom:24pt;
 	color:#808080;
 	font-size:48pt;
 	font-weight:bold;
 	}
-.MATCH_TCH_QST_CONTAINER
-	{
-	width:70%;
-	float:left;
-	}
 .MATCH_TCH_NXT_CONTAINER
 	{
-	width:15%;
-	float:left;
 	}
 .MATCH_TCH_QST
 	{
@@ -2603,6 +2639,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MATCH_TCH_CONTINUE_CONTAINER
 	{
 	clear:all;
+	margin:0 auto;
 	text-align:center;
 	}
 .MATCH_TCH_CONTINUE_CONTAINER a

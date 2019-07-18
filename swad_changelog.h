@@ -458,10 +458,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.135.7 (2019-07-17)"
-#define CSS_FILE		"swad18.135.7.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.136 (2019-07-17)"
+#define CSS_FILE		"swad18.136.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.136:   Jul 18, 2019	Changes in layout of match. (243767 lines)
 	Version 18.135.7: Jul 17, 2019	CSS refactoring and translation in match playing. (243699 lines)
 	Version 18.135.6: Jul 17, 2019	Code refactoring in match playing. (243654 lines)
 	Version 18.135.5: Jul 17, 2019	Changes while removing a match. (243692 lines)
