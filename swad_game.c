@@ -187,9 +187,12 @@ static void Gam_UpdateMatchStatusInDB (struct Match *Match);
 
 static void Gam_SetMatchStatusToNextQuestion (struct Match *Match);
 static void Gam_ShowMatchStatusForTch (struct Match *Match);
-static void Gam_ShowAlertFinishedMatch (void);
+static void Gam_ShowMatchStatusForStd (struct Match *Match);
 static void Gam_ShowBottonLeftColumnTch (struct Match *Match);
+static void Gam_ShowBottonLeftColumnStd (struct Match *Match);
 static void Gam_ShowQuestionAndAnswersTch (struct Match *Match);
+static void Gam_ShowQuestionAndAnswersStd (struct Match *Match);
+
 static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 			      const char *Icon,const char *Txt);
 static void Gam_PutBigButtonClose (void);
@@ -2781,7 +2784,7 @@ static void Gam_ListOneOrMoreMatches (struct Game *Game,
    extern const char *Txt_Match;
    extern const char *Txt_Status;
    extern const char *Txt_Play;
-   extern const char *Txt_Resume_match;
+   extern const char *Txt_Resume;
    extern const char *Txt_Today;
    extern const char *Txt_View_game_results;
    unsigned NumMatch;
@@ -2929,7 +2932,7 @@ static void Gam_ListOneOrMoreMatches (struct Game *Game,
 	       Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
 					      Gam_PutParamCurrentMchCod,
 					      "play.svg",
-					      Txt_Resume_match);
+					      Txt_Resume);
 	       break;
 	    default:
 	       break;
@@ -3496,19 +3499,51 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
   }
 
 /*****************************************************************************/
-/********************* Show alert about finished match ***********************/
+/************ Show current question being played for a student ***************/
 /*****************************************************************************/
 
-static void Gam_ShowAlertFinishedMatch (void)
+static void Gam_ShowMatchStatusForStd (struct Match *Match)
   {
-   extern const char *Txt_Finished_match;
-   extern const char *Txt_Close;
+   extern const char *Txt_Please_wait_;
+   bool IBelongToGroups;
 
-   /***** Show alert *****/
-   Ale_ShowAlert (Ale_INFO,Txt_Finished_match);
+   /***** Do I belong to valid groups to play this match? *****/
+   IBelongToGroups = Gbl.Usrs.Me.IBelongToCurrentCrs &&
+		     Gam_CheckIfIPlayThisMatchBasedOnGrps (Match->MchCod);
+   if (!IBelongToGroups)
+      Lay_ShowErrorAndExit ("You can not play this match!");
 
-   /***** Button to close browser tab *****/
-   Btn_PutCloseTabButton (Txt_Close);
+   /***** Bottom row *****/
+   /* Start bottom container */
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");
+
+   /* Show left column */
+   Gam_ShowBottonLeftColumnStd (Match);
+
+   /* Show right column */
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM_RIGHT\">");
+   if (!Match->Status.Finished)
+     {
+      /***** Update players ******/
+      Gam_RegisterMeAsPlayerInMatch (Match->MchCod);
+
+      if (Match->Status.BeingPlayed)
+	 /* Show current question and possible answers */
+	 Gam_ShowQuestionAndAnswersStd (Match);
+      else	// Not being played
+	 fprintf (Gbl.F.Out,"<div class=\"MATCH_STD_WAIT_CONTAINER\">"
+			    "<img src=\"%s/wait.gif\""
+			    " alt=\"%s\" title=\"%s\""
+			    " class=\"MATCH_STD_WAIT_IMAGE\" />"
+			    "</div>",
+		  Cfg_URL_ICON_PUBLIC,
+		  Txt_Please_wait_,
+		  Txt_Please_wait_);
+     }
+   fprintf (Gbl.F.Out,"</div>");
+
+   /* End bottom container */
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -3521,8 +3556,8 @@ static void Gam_ShowBottonLeftColumnTch (struct Match *Match)
    extern const char *Txt_Next_QUESTION;
    extern const char *Txt_Finish;
    extern const char *Txt_Answers;
-   extern const char *Txt_Start_match;
-   extern const char *Txt_Resume_match;
+   extern const char *Txt_Start;
+   extern const char *Txt_Resume;
    unsigned NxtQstInd;
    unsigned NumQsts;
 
@@ -3571,8 +3606,42 @@ static void Gam_ShowBottonLeftColumnTch (struct Match *Match)
       Gam_PutBigButton (ActCurMchTch,
 			Match->MchCod,
 			"play.svg",
-			Match->Status.QstInd == 0 ? Txt_Start_match :
-						    Txt_Resume_match);
+			Match->Status.QstInd == 0 ? Txt_Start :
+						    Txt_Resume);
+   fprintf (Gbl.F.Out,"</div>"
+                      "</div>");
+
+   /***** End bottom left container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/******** Show left botton column when playing a match (as a student) ********/
+/*****************************************************************************/
+
+static void Gam_ShowBottonLeftColumnStd (struct Match *Match)
+  {
+   extern const char *Txt_End;
+   unsigned NumQsts;
+
+   /***** Start bottom left container *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM_LEFT\">");
+
+   /***** Write number of question *****/
+   NumQsts = Gam_GetNumQstsGame (Match->GamCod);
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_NUM_QST\">");
+   if (Match->Status.Finished)
+      fprintf (Gbl.F.Out,"%s",Txt_End);
+   else
+      fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Button *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_NXT_CONTAINER\">"
+                      "<div class=\"MATCH_TCH_CONTINUE_CONTAINER\">");
+   if (Match->Status.Finished)
+      /* Put button to close browser tab */
+      Gam_PutBigButtonClose ();
    fprintf (Gbl.F.Out,"</div>"
                       "</div>");
 
@@ -3628,6 +3697,118 @@ static void Gam_ShowQuestionAndAnswersTch (struct Match *Match)
 				  Match->Status.QstInd,
 				  Match->Status.QstCod,
 				  "MATCH_TCH_QST",false);	// Don't show result
+  }
+
+/*****************************************************************************/
+/***** Show question and its answers when playing a match (as a student) *****/
+/*****************************************************************************/
+
+static void Gam_ShowQuestionAndAnswersStd (struct Match *Match)
+  {
+   bool Shuffle = false;	// TODO: Read shuffle from question
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   int StdAnsInd;
+   unsigned NumOptions;
+   unsigned NumOpt;
+   unsigned Index;
+   bool ErrorInIndex = false;
+
+   /***** Show question *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_STD_QST_CONTAINER\">");
+
+   /* Write buttons for answers? */
+   if (Match->Status.ShowingAnswers)
+     {
+      if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
+	{
+	 /***** Get student's answer to this question
+		(<0 ==> no answer) *****/
+	 StdAnsInd = Gam_GetQstAnsFromDB (Match->MchCod,
+					  Match->Status.QstInd);
+
+	 /***** Get number of options in this question *****/
+	 NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
+
+	 /***** Get answers of question from database *****/
+	 Shuffle = false;
+	 NumOptions = Tst_GetAnswersQst (Match->Status.QstCod,&mysql_res,Shuffle);
+	 /*
+	 row[0] AnsInd
+	 row[1] Answer
+	 row[2] Feedback
+	 row[3] MedCod
+	 row[4] Correct
+	 */
+
+	 /***** Start table *****/
+	 Tbl_StartTableWide (8);
+
+	 for (NumOpt = 0;
+	      NumOpt < NumOptions;
+	      NumOpt++)
+	   {
+	    /***** Get next answer *****/
+	    row = mysql_fetch_row (mysql_res);
+
+	    /***** Assign index (row[0]).
+		   Index is 0,1,2,3... if no shuffle
+		   or 1,3,0,2... (example) if shuffle *****/
+	    if (sscanf (row[0],"%u",&Index) == 1)
+	      {
+	       if (Index >= Tst_MAX_OPTIONS_PER_QUESTION)
+		  ErrorInIndex = true;
+	      }
+	    else
+	       ErrorInIndex = true;
+	    if (ErrorInIndex)
+	       Lay_ShowErrorAndExit ("Wrong index of answer when showing a test.");
+
+	    /***** Start row *****/
+	    // if (NumOpt % 2 == 0)
+	    fprintf (Gbl.F.Out,"<tr>");
+
+	    /***** Write letter for this option *****/
+	    /* Start table cell */
+	    fprintf (Gbl.F.Out,"<td class=\"MATCH_STD_CELL\">");
+
+	    /* Form with button.
+	       Sumitting onmousedown instead of default onclick
+	       is necessary in order to be fast
+	       and not lose clicks due to refresh */
+	    Frm_StartForm (ActAnsMchQstStd);
+	    Gam_PutParamMatchCod (Match->MchCod);		// Current match being played
+	    Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
+	    Gam_PutParamAnswer (Index);			// Index for this option
+	    fprintf (Gbl.F.Out,"<button type=\"submit\""
+			       " onmousedown=\"document.getElementById('%s').submit();"
+			       "return false;\" class=\"",
+		     Gbl.Form.Id);
+	    if (StdAnsInd == (int) NumOpt)	// Student's answer
+	       fprintf (Gbl.F.Out,"MATCH_STD_ANSWER_SELECTED ");
+	    fprintf (Gbl.F.Out,"MATCH_STD_BUTTON BT_%c\">"
+			       "%c"
+			       "</button>",
+		     'A' + (char) NumOpt,
+		     'a' + (char) NumOpt);
+	    Frm_EndForm ();
+
+	    /* End table cell */
+	    fprintf (Gbl.F.Out,"</td>");
+
+	    /***** End row *****/
+	    // if (NumOpt % 2 == 1)
+	    fprintf (Gbl.F.Out,"</tr>");
+	   }
+
+	 /***** End table *****/
+	 Tbl_EndTable ();
+	}
+      else
+	 Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
+     }
+
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -3797,6 +3978,10 @@ void Gam_ShowMatchToMeAsStd (void)
   {
    struct Match Match;
 
+   /***** Remove old players.
+          This function must be called before getting match status. *****/
+   Gam_RemoveOldPlayers ();
+
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
@@ -3845,157 +4030,16 @@ void Gam_RefreshMatchStd (void)
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       return;
 
+   /***** Remove old players.
+          This function must be called before getting match status. *****/
+   Gam_RemoveOldPlayers ();
+
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
 
    /***** Show current match status *****/
    Gam_ShowMatchStatusForStd (&Match);
-  }
-
-/*****************************************************************************/
-/************ Show current question being played for a student ***************/
-/*****************************************************************************/
-
-static void Gam_ShowMatchStatusForStd (struct Match *Match)
-  {
-   extern const char *Txt_Please_wait_;
-   bool IBelongToGroups;
-   bool Shuffle = false;	// TODO: Read shuffle from question
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   int StdAnsInd;
-   unsigned NumOptions;
-   unsigned NumOpt;
-   unsigned Index;
-   bool ErrorInIndex = false;
-
-   /***** Do I belong to valid groups to play this match? *****/
-   IBelongToGroups = Gbl.Usrs.Me.IBelongToCurrentCrs &&
-		     Gam_CheckIfIPlayThisMatchBasedOnGrps (Match->MchCod);
-   if (!IBelongToGroups)
-      Lay_ShowErrorAndExit ("You can not play this match!");
-
-   /***** Show current match status *****/
-   if (Match->Status.Finished)
-      Gam_ShowAlertFinishedMatch ();
-   else	// Unfinished match
-     {
-      /***** Update players ******/
-      Gam_RegisterMeAsPlayerInMatch (Match->MchCod);
-
-      if (Match->Status.BeingPlayed)
-	{
-	 /***** Show question *****/
-	 /* Write number of question */
-	 fprintf (Gbl.F.Out,"<div class=\"MATCH_STD_NUM_QST\">%u</div>",
-		  Match->Status.QstInd);
-
-	 fprintf (Gbl.F.Out,"<div class=\"MATCH_STD_QST_CONTAINER\">");
-
-	 /* Write buttons for answers? */
-	 if (Match->Status.ShowingAnswers)
-	   {
-	    if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
-	      {
-	       /***** Get student's answer to this question
-	              (<0 ==> no answer) *****/
-	       StdAnsInd = Gam_GetQstAnsFromDB (Match->MchCod,
-						Match->Status.QstInd);
-
-	       /***** Get number of options in this question *****/
-	       NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
-
-	       /***** Get answers of question from database *****/
-	       Shuffle = false;
-	       NumOptions = Tst_GetAnswersQst (Match->Status.QstCod,&mysql_res,Shuffle);
-	       /*
-	       row[0] AnsInd
-	       row[1] Answer
-	       row[2] Feedback
-	       row[3] MedCod
-	       row[4] Correct
-	       */
-
-	       /***** Start table *****/
-	       Tbl_StartTableWide (8);
-
-	       for (NumOpt = 0;
-		    NumOpt < NumOptions;
-		    NumOpt++)
-		 {
-		  /***** Get next answer *****/
-		  row = mysql_fetch_row (mysql_res);
-
-		  /***** Assign index (row[0]).
-			 Index is 0,1,2,3... if no shuffle
-			 or 1,3,0,2... (example) if shuffle *****/
-		  if (sscanf (row[0],"%u",&Index) == 1)
-		    {
-		     if (Index >= Tst_MAX_OPTIONS_PER_QUESTION)
-			ErrorInIndex = true;
-		    }
-		  else
-		     ErrorInIndex = true;
-		  if (ErrorInIndex)
-		     Lay_ShowErrorAndExit ("Wrong index of answer when showing a test.");
-
-		  /***** Start row *****/
-		  // if (NumOpt % 2 == 0)
-		  fprintf (Gbl.F.Out,"<tr>");
-
-		  /***** Write letter for this option *****/
-		  /* Start table cell */
-		  fprintf (Gbl.F.Out,"<td class=\"MATCH_STD_CELL\">");
-
-		  /* Form with button.
-		     Sumitting onmousedown instead of default onclick
-		     is necessary in order to be fast
-		     and not lose clicks due to refresh */
-		  Frm_StartForm (ActAnsMchQstStd);
-                  Gam_PutParamMatchCod (Match->MchCod);		// Current match being played
-		  Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
-		  Gam_PutParamAnswer (Index);			// Index for this option
-		  fprintf (Gbl.F.Out,"<button type=\"submit\""
-			             " onmousedown=\"document.getElementById('%s').submit();"
-				     "return false;\" class=\"",
-			   Gbl.Form.Id);
-		  if (StdAnsInd == (int) NumOpt)	// Student's answer
-		     fprintf (Gbl.F.Out,"MATCH_STD_ANSWER_SELECTED ");
-		  fprintf (Gbl.F.Out,"MATCH_STD_BUTTON BT_%c\">"
-			             "%c"
-				     "</button>",
-			   'A' + (char) NumOpt,
-			   'a' + (char) NumOpt);
-		  Frm_EndForm ();
-
-		  /* End table cell */
-		  fprintf (Gbl.F.Out,"</td>");
-
-		  /***** End row *****/
-		  // if (NumOpt % 2 == 1)
-		  fprintf (Gbl.F.Out,"</tr>");
-		 }
-
-	       /***** End table *****/
-	       Tbl_EndTable ();
-	      }
-	    else
-	       Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
-	   }
-
-	 fprintf (Gbl.F.Out,"</div>");
-	}
-      else	// Not being played
-	 fprintf (Gbl.F.Out,"<div class=\"MATCH_STD_WAIT_CONTAINER\">"
-	                    "<img src=\"%s/wait.gif\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"MATCH_STD_WAIT_IMAGE\" />"
-			    "</div>",
-		  Cfg_URL_ICON_PUBLIC,
-		  Txt_Please_wait_,
-		  Txt_Please_wait_);
-     }
   }
 
 /*****************************************************************************/
@@ -4040,6 +4084,10 @@ void Gam_ReceiveQstAnsFromStd (void)
    unsigned QstInd;
    unsigned StdAnsInd;
    int PreviousStdAnsInd;
+
+   /***** Remove old players.
+          This function must be called before getting match status. *****/
+   Gam_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;

@@ -12267,7 +12267,7 @@ const char *Txt_Finish =
 #elif L==9	// pt
        "Terminar";
 #endif
-
+/*
 const char *Txt_Finished_match =
 #if   L==1	// ca
 	"Partida finalitzada";
@@ -12288,7 +12288,7 @@ const char *Txt_Finished_match =
 #elif L==9	// pt
 	"Jogo terminado";
 #endif
-
+*/
 const char *Txt_First_day_of_the_week =
 #if   L==1	// ca
 	"Primer dia de la setmana";
@@ -33193,25 +33193,25 @@ const char *Txt_results_per_page =
 	"resultados por p&aacute;gina";
 #endif
 
-const char *Txt_Resume_match =
+const char *Txt_Resume =
 #if   L==1	// ca
-	"Reprendre partida";
+	"Reprendre";
 #elif L==2	// de
-	"Spiel fortsetzen";
+	"Fortsetzen";
 #elif L==3	// en
-	"Resume match";
+	"Resume";
 #elif L==4	// es
-	"Reanudar partida";
+	"Reanudar";
 #elif L==5	// fr
-	"Reprendre le match";
+	"Reprendre";
 #elif L==6	// gn
-	"Reanudar partida";	// Okoteve traducción
+	"Reanudar";	// Okoteve traducción
 #elif L==7	// it
-	"Riprendi la partita";
+	"Riprendi";
 #elif L==8	// pl
-	"Wzn&oacute;w mecz";
+	"Wzn&oacute;w";
 #elif L==9	// pt
-	"Retomar o jogo";
+	"Retomar";
 #endif
 
 const char *Txt_Retype_new_password =
@@ -41245,25 +41245,25 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #endif
 	};
 
-const char *Txt_Start_match =
+const char *Txt_Start =
 #if   L==1	// ca
-	 "Comen&ccedil;ar partida";
+	 "Comen&ccedil;ar";
 #elif L==2	// de
-	 "Spiel starten";
+	 "Starten";
 #elif L==3	// en
-	 "Start match";
+	 "Start";
 #elif L==4	// es
-	 "Comenzar partida";
+	 "Comenzar";
 #elif L==5	// fr
-	 "Commencer le match";
+	 "Commencer";
 #elif L==6	// gn
-	 "&Ntilde;epyr&utilde; &ntilde;embosar&aacute;i";
+	 "&Ntilde;epyr&utilde;";
 #elif L==7	// it
-	 "Inizia la partita";
+	 "Inizia";
 #elif L==8	// pl
-	 "Rozpocznij mecz";
+	 "Rozpocznij";
 #elif L==9	// pt
-	 "Come&ccedil;ar o jogo";
+	 "Come&ccedil;ar";
 #endif
 
 const char *Txt_Statistic =

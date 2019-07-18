@@ -149,7 +149,7 @@ void Btn_PutRemoveButtonInline (const char *TxtButton)
                       "</button>",
             TxtButton);
   }
-
+/*
 void Btn_PutCloseTabButton (const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
@@ -160,3 +160,4 @@ void Btn_PutCloseTabButton (const char *TxtButton)
                       "</div>",
             TxtButton);
   }
+*/
