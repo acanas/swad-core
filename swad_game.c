@@ -183,7 +183,7 @@ static void Gam_PutButtonNewMatch (long GamCod);
 static void Gam_PutFormNewMatch (struct Game *Game);
 
 static long Gam_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1]);
-static void Gam_UpdateMatchStatus (struct Match *Match);
+static void Gam_UpdateMatchStatusInDB (struct Match *Match);
 
 static void Gam_SetMatchStatusToNextQuestion (struct Match *Match);
 static void Gam_ShowMatchStatusForTch (struct Match *Match);
@@ -192,6 +192,7 @@ static void Gam_ShowBottonLeftColumnTch (struct Match *Match);
 static void Gam_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 			      const char *Icon,const char *Txt);
+static void Gam_PutBigButtonClose (void);
 
 static void Gam_RemoveOldPlayers (void);
 static void Gam_UpdateMatchAsBeingPlayed (long MchCod);
@@ -3265,6 +3266,10 @@ void Gam_RequestStartResumeMatchTch (void)
   {
    struct Match Match;
 
+   /***** Remove old players.
+          This function must be called before getting match status. *****/
+   Gam_RemoveOldPlayers ();
+
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
@@ -3314,7 +3319,7 @@ static long Gam_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
 /***************** Insert/update a game match being played *******************/
 /*****************************************************************************/
 
-static void Gam_UpdateMatchStatus (struct Match *Match)
+static void Gam_UpdateMatchStatusInDB (struct Match *Match)
   {
    /***** Update match status in database *****/
    DB_QueryUPDATE ("can not update match being played",
@@ -3348,6 +3353,10 @@ void Gam_ResumeMatchTch (void)
   {
    struct Match Match;
 
+   /***** Remove old players.
+          This function must be called before getting match status. *****/
+   Gam_RemoveOldPlayers ();
+
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
@@ -3362,7 +3371,7 @@ void Gam_ResumeMatchTch (void)
       Match.Status.BeingPlayed    = true;		// Resume match
 
       /* Update match status in database */
-      Gam_UpdateMatchStatus (&Match);
+      Gam_UpdateMatchStatusInDB (&Match);
      }
 
    /***** Show current match status *****/
@@ -3378,6 +3387,10 @@ void Gam_ResumeMatchTch (void)
 void Gam_NextStatusMatchTch (void)
   {
    struct Match Match;
+
+   /***** Remove old players.
+          This function must be called before getting match status. *****/
+   Gam_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
@@ -3400,7 +3413,7 @@ void Gam_NextStatusMatchTch (void)
         }
 
       /* Update match status in database */
-      Gam_UpdateMatchStatus (&Match);
+      Gam_UpdateMatchStatusInDB (&Match);
      }
 
    /***** Show current match status *****/
@@ -3465,11 +3478,10 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
    /* Show left column */
    Gam_ShowBottonLeftColumnTch (Match);
 
-   /* Bottom content */
-   if (Match->Status.Finished)
-      /* Show alert */
-      Gam_ShowAlertFinishedMatch ();
-   else if (Match->Status.BeingPlayed)
+   /* Show right column */
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM_RIGHT\">");
+   if (!Match->Status.Finished &&
+	Match->Status.BeingPlayed)
      {
       /* Show current question and possible answers */
       Gam_ShowQuestionAndAnswersTch (Match);
@@ -3477,6 +3489,7 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
       /* Update match as being played */
       Gam_UpdateMatchAsBeingPlayed (Match->MchCod);
      }
+   fprintf (Gbl.F.Out,"</div>");
 
    /* End bottom container */
    fprintf (Gbl.F.Out,"</div>");
@@ -3504,23 +3517,36 @@ static void Gam_ShowAlertFinishedMatch (void)
 
 static void Gam_ShowBottonLeftColumnTch (struct Match *Match)
   {
-   extern const char *Txt_Continue;
+   extern const char *Txt_End;
+   extern const char *Txt_Next_QUESTION;
    extern const char *Txt_Finish;
+   extern const char *Txt_Answers;
    extern const char *Txt_Start_match;
    extern const char *Txt_Resume_match;
    unsigned NxtQstInd;
+   unsigned NumQsts;
 
    /***** Start bottom left container *****/
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM_LEFT\">");
 
-   if (Match->Status.BeingPlayed)
-     {
-      /***** Write number of question *****/
-      fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_NUM_QST\">%u</div>",
-	       Match->Status.QstInd);
+   /***** Write number of question *****/
+   NumQsts = Gam_GetNumQstsGame (Match->GamCod);
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_NUM_QST\">");
+   if (Match->Status.Finished)
+      fprintf (Gbl.F.Out,"%s",Txt_End);
+   else
+      fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
+   fprintf (Gbl.F.Out,"</div>");
 
-      /***** Put button to continue *****/
-      fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_NXT_CONTAINER\">");
+   /***** Button *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_NXT_CONTAINER\">"
+                      "<div class=\"MATCH_TCH_CONTINUE_CONTAINER\">");
+   if (Match->Status.Finished)
+      /* Put button to close browser tab */
+      Gam_PutBigButtonClose ();
+   else if (Match->Status.BeingPlayed)
+     {
+      /* Put button to continue */
       if (Match->Status.ShowingAnswers)
 	{
 	 /* Get index of the next question */
@@ -3529,7 +3555,7 @@ static void Gam_ShowBottonLeftColumnTch (struct Match *Match)
 	 if (NxtQstInd)	// Not last question
 	    /* Put button to show next question */
 	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			      "step-forward.svg",Txt_Continue);
+			      "step-forward.svg",Txt_Next_QUESTION);
 	 else		// Last question
 	    /* Put button to finish */
 	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
@@ -3538,20 +3564,17 @@ static void Gam_ShowBottonLeftColumnTch (struct Match *Match)
       else
 	 /* Put button to show answers */
 	 Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			   "step-forward.svg",Txt_Continue);
-      fprintf (Gbl.F.Out,"</div>");
+			   "step-forward.svg",Txt_Answers);
      }
    else
-     {
-      fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_NXT_CONTAINER\">");
       /* Put button to start / resume match */
       Gam_PutBigButton (ActCurMchTch,
 			Match->MchCod,
 			"play.svg",
 			Match->Status.QstInd == 0 ? Txt_Start_match :
 						    Txt_Resume_match);
-      fprintf (Gbl.F.Out,"</div>");
-     }
+   fprintf (Gbl.F.Out,"</div>"
+                      "</div>");
 
    /***** End bottom left container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -3582,8 +3605,6 @@ static void Gam_ShowQuestionAndAnswersTch (struct Match *Match)
    row = mysql_fetch_row (mysql_res);
 
    /***** Show question *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM_RIGHT\">");
-
    /* Get answer type (row[0]) */
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
    // TODO: Check that answer type is correct (unique choice)
@@ -3607,26 +3628,30 @@ static void Gam_ShowQuestionAndAnswersTch (struct Match *Match)
 				  Match->Status.QstInd,
 				  Match->Status.QstCod,
 				  "MATCH_TCH_QST",false);	// Don't show result
-
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
-/************************** Put a big button to start ************************/
+/*********************** Put a big button to do action ***********************/
 /*****************************************************************************/
 
 static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 			      const char *Icon,const char *Txt)
   {
-   /***** Start container for button *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_CONTINUE_CONTAINER\">");
-
    /***** Start form *****/
    Frm_StartForm (NextAction);
    Gam_PutParamMatchCod (MchCod);
 
    /***** Put icon with link *****/
-   Frm_LinkFormSubmit (Txt,"MATCH_TCH_CONTINUE ICO_HIGHLIGHT",NULL);
+   /* Submitting onmousedown instead of default onclick
+      is necessary in order to be fast
+      and not lose clicks due to refresh */
+   fprintf (Gbl.F.Out,"<a href=\"\"");
+   fprintf (Gbl.F.Out," title=\"%s\"",Txt);
+   fprintf (Gbl.F.Out," class=\"%s\"","MATCH_TCH_CONTINUE ICO_HIGHLIGHT");
+   fprintf (Gbl.F.Out," onmousedown=\"");
+   fprintf (Gbl.F.Out,"document.getElementById('%s').submit();"
+		      "return false;\">",
+	    Gbl.Form.Id);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
 	              "<br />"
@@ -3638,13 +3663,32 @@ static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 
    /***** End form *****/
    Frm_EndForm ();
+  }
 
-   /***** End container for button *****/
-   fprintf (Gbl.F.Out,"</div>");
+static void Gam_PutBigButtonClose (void)
+  {
+   extern const char *Txt_Close;
+
+   /***** Put icon with link *****/
+   /* onmousedown instead of default onclick
+      is necessary in order to be fast
+      and not lose clicks due to refresh */
+   fprintf (Gbl.F.Out,"<a href=\"\"");
+   fprintf (Gbl.F.Out," title=\"%s\"",Txt_Close);
+   fprintf (Gbl.F.Out," class=\"%s\"","MATCH_TCH_CONTINUE ICO_HIGHLIGHT");
+   fprintf (Gbl.F.Out," onmousedown=\"window.close();\"\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/close.svg\""
+	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
+	              "<br />"
+	              "%s",
+            Cfg_URL_ICON_PUBLIC,
+	    Txt_Close,Txt_Close,
+	    Txt_Close);
+   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/
-/*********************** Get number of players in a match ********************/
+/**************************** Remove old players *****************************/
 /*****************************************************************************/
 
 static void Gam_RemoveOldPlayers (void)
@@ -3707,9 +3751,6 @@ static void Gam_GetAndShowNumPlayersInMatch (long MchCod)
   {
    extern const char *Txt_Players;
    unsigned NumPlayers;
-
-   /***** Remove old players *****/
-   Gam_RemoveOldPlayers ();
 
    /***** Get number of players (students who have joined this match) *****/
    NumPlayers = Gam_GetNumPlayers (MchCod);
@@ -3777,6 +3818,10 @@ void Gam_RefreshMatchTch (void)
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       return;
 
+   /***** Remove old players.
+          This function must be called before getting match status. *****/
+   Gam_RemoveOldPlayers ();
+
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
@@ -3837,7 +3882,6 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
    else	// Unfinished match
      {
       /***** Update players ******/
-      Gam_RemoveOldPlayers ();
       Gam_RegisterMeAsPlayerInMatch (Match->MchCod);
 
       if (Match->Status.BeingPlayed)

@@ -10451,6 +10451,27 @@ const char *Txt_Email_X_removed =	// Warning: it is very important to include %s
 	"Email <strong>%s</strong> removido.";
 #endif
 
+const char *Txt_End =
+#if   L==1	// ca
+	 "Final";
+#elif L==2	// de
+	 "Ende";
+#elif L==3	// en
+	 "End";
+#elif L==4	// es
+	 "Final";
+#elif L==5	// fr
+	 "Fin";
+#elif L==6	// gn
+	 "Paha";
+#elif L==7	// it
+	 "Fine";
+#elif L==8	// pl
+	 "Koniec";
+#elif L==9	// pt
+	 "Fim";
+#endif
+
 const char *Txt_End_date =
 #if   L==1	// ca
 	"Data final";
@@ -24378,6 +24399,27 @@ const char *Txt_NEW_YEAR_GREETING =	// Warning: it is very important to include 
 	"Happy %u!";
 #elif L==9	// pt
 	"Feliz %u!";
+#endif
+
+const char *Txt_Next_QUESTION =
+#if   L==1	// ca
+	"Seg&uuml;ent";
+#elif L==2	// de
+	"N&auml;chste";
+#elif L==3	// en
+	"Next";
+#elif L==4	// es
+	"Siguiente";
+#elif L==5	// fr
+	"Suivante";
+#elif L==6	// gn
+	"Siguiente";	// Okoteve traducción
+#elif L==7	// it
+	"Successiva";
+#elif L==8	// pl
+	"Nast&eogon;pne";
+#elif L==9	// pt
+	"Seguinte";
 #endif
 
 const char *Txt_nick_email_or_ID =

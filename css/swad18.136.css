@@ -2576,6 +2576,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	box-sizing:border-box;
 	display:table;
 	width:100%;
+	padding-bottom:12pt;
+	font-size:18pt;
 	border:1px solid pink;
 	}
 .MATCH_TOP_LEFT
