@@ -163,6 +163,7 @@ static void Gam_AllocateListSelectedQuestions (void);
 static void Gam_FreeListsSelectedQuestions (void);
 static unsigned Gam_CountNumQuestionsInList (void);
 
+static unsigned Gam_GetNumAnswerers (struct Match *Match);
 static unsigned Gam_GetNumUsrsWhoAnswered (long GamCod,unsigned QstInd,unsigned AnsInd);
 static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 
@@ -188,7 +189,7 @@ static void Gam_UpdateMatchStatusInDB (struct Match *Match);
 static void Gam_SetMatchStatusToNextQuestion (struct Match *Match);
 static void Gam_ShowMatchStatusForTch (struct Match *Match);
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
-static void Gam_ShowBottonLeftColumnTch (struct Match *Match);
+static void Gam_ShowBottonLeftColumnTch (struct Match *Match,unsigned NumPlayers);
 static void Gam_ShowBottonLeftColumnStd (struct Match *Match);
 static void Gam_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Gam_ShowQuestionAndAnswersStd (struct Match *Match);
@@ -202,7 +203,6 @@ static void Gam_UpdateMatchAsBeingPlayed (long MchCod);
 static void Gam_SetMatchAsNotBeingPlayed (long MchCod);
 static bool Gam_GetIfMatchIsBeingPlayed (long MchCod);
 static void Gam_RegisterMeAsPlayerInMatch (long MchCod);
-static void Gam_GetAndShowNumPlayersInMatch (long MchCod);
 static unsigned Gam_GetNumPlayers (long MchCod);
 
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
@@ -1667,7 +1667,7 @@ static bool Gam_CheckIfIPlayThisMatchBasedOnGrps (long MchCod)
 
 static unsigned Gam_GetNumQstsGame (long GamCod)
   {
-   /***** Get data of questions from database *****/
+   /***** Get nuumber of questions in a game from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of questions of a game",
 			     "SELECT COUNT(*) FROM gam_questions"
@@ -2306,6 +2306,20 @@ void Gam_GetAndDrawBarNumUsrsWhoAnswered (long GamCod,unsigned QstInd,unsigned A
 
    /***** Show stats of this answer *****/
    Gam_DrawBarNumUsrs (NumUsrsThisAnswer,NumUsrs);
+  }
+
+/*****************************************************************************/
+/***** Get number of users who have answered current question in a match *****/
+/*****************************************************************************/
+
+static unsigned Gam_GetNumAnswerers (struct Match *Match)
+  {
+   /***** Get number of users who have answered the current question in a match from database *****/
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of questions of a game",
+			     "SELECT COUNT(*) FROM gam_answers"
+			     " WHERE MchCod=%ld AND QstInd=%u",
+			     Match->MchCod,Match->Status.QstInd);
   }
 
 /*****************************************************************************/
@@ -3456,6 +3470,16 @@ static void Gam_SetMatchStatusToNextQuestion (struct Match *Match)
 
 static void Gam_ShowMatchStatusForTch (struct Match *Match)
   {
+   extern const char *Txt_Players;
+   unsigned NumPlayers = Gam_GetNumPlayers (Match->MchCod);
+
+   /***** Left column *****/
+   Gam_ShowBottonLeftColumnTch (Match,NumPlayers);
+
+   /***** Right column *****/
+   /* Start right container */
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
+
    /***** Top row *****/
    /* Start top container */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\">");
@@ -3467,9 +3491,8 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
 	    Match->Title);
 
    /* Right: Number of players */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP_RIGHT\">");
-   Gam_GetAndShowNumPlayersInMatch (Match->MchCod);
-   fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP_RIGHT\">%s: %u</div>",
+	    Txt_Players,NumPlayers);
 
    /* End top container */
    fprintf (Gbl.F.Out,"</div>");
@@ -3477,9 +3500,6 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
    /***** Bottom row *****/
    /* Start bottom container */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");
-
-   /* Show left column */
-   Gam_ShowBottonLeftColumnTch (Match);
 
    /* Show right column */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM_RIGHT\">");
@@ -3495,6 +3515,9 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
    fprintf (Gbl.F.Out,"</div>");
 
    /* End bottom container */
+   fprintf (Gbl.F.Out,"</div>");
+
+   /* End right container */
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -3550,7 +3573,7 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 /******** Show left botton column when playing a match (as a teacher) ********/
 /*****************************************************************************/
 
-static void Gam_ShowBottonLeftColumnTch (struct Match *Match)
+static void Gam_ShowBottonLeftColumnTch (struct Match *Match,unsigned NumPlayers)
   {
    extern const char *Txt_End;
    extern const char *Txt_Next_QUESTION;
@@ -3560,13 +3583,14 @@ static void Gam_ShowBottonLeftColumnTch (struct Match *Match)
    extern const char *Txt_Resume;
    unsigned NxtQstInd;
    unsigned NumQsts;
+   unsigned NumAnswerers;
 
-   /***** Start bottom left container *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM_LEFT\">");
+   /***** Start left container *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_LEFT\">");
 
    /***** Write number of question *****/
    NumQsts = Gam_GetNumQstsGame (Match->GamCod);
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_NUM_QST\">");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_QST\">");
    if (Match->Status.Finished)
       fprintf (Gbl.F.Out,"%s",Txt_End);
    else
@@ -3599,7 +3623,7 @@ static void Gam_ShowBottonLeftColumnTch (struct Match *Match)
       else
 	 /* Put button to show answers */
 	 Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			   "step-forward.svg",Txt_Answers);
+			   "list.svg",Txt_Answers);
      }
    else
       /* Put button to start / resume match */
@@ -3611,7 +3635,20 @@ static void Gam_ShowBottonLeftColumnTch (struct Match *Match)
    fprintf (Gbl.F.Out,"</div>"
                       "</div>");
 
-   /***** End bottom left container *****/
+   /***** Write number of users who have answered *****/
+   if (!Match->Status.Finished &&
+	Match->Status.BeingPlayed &&
+	Match->Status.ShowingAnswers)
+     {
+      NumAnswerers = Gam_GetNumAnswerers (Match);
+      fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_ANSWERERS\">"
+                         "responden<br />"	// TODO: Need translation!!!
+                         "<strong>%u/%u</strong>"
+	                 "</div>",
+	       NumAnswerers,NumPlayers);
+     }
+
+   /***** End left container *****/
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -3629,7 +3666,7 @@ static void Gam_ShowBottonLeftColumnStd (struct Match *Match)
 
    /***** Write number of question *****/
    NumQsts = Gam_GetNumQstsGame (Match->GamCod);
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_NUM_QST\">");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_QST\">");
    if (Match->Status.Finished)
       fprintf (Gbl.F.Out,"%s",Txt_End);
    else
@@ -3926,18 +3963,6 @@ static void Gam_RegisterMeAsPlayerInMatch (long MchCod)
    DB_QueryREPLACE ("can not insert match player",
 		    "REPLACE gam_players (MchCod,UsrCod) VALUES (%ld,%ld)",
 		    MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-static void Gam_GetAndShowNumPlayersInMatch (long MchCod)
-  {
-   extern const char *Txt_Players;
-   unsigned NumPlayers;
-
-   /***** Get number of players (students who have joined this match) *****/
-   NumPlayers = Gam_GetNumPlayers (MchCod);
-
-   /***** Show number of players *****/
-   fprintf (Gbl.F.Out,"%s: %u",Txt_Players,NumPlayers);
   }
 
 static unsigned Gam_GetNumPlayers (long MchCod)
