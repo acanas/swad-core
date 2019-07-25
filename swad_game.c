@@ -93,6 +93,7 @@ struct Match
       bool ShowingAnswers;
       bool Finished;
       bool BeingPlayed;
+      unsigned NumPlayers;
      } Status;
   };
 
@@ -189,8 +190,9 @@ static void Gam_UpdateMatchStatusInDB (struct Match *Match);
 static void Gam_SetMatchStatusToNextQuestion (struct Match *Match);
 static void Gam_ShowMatchStatusForTch (struct Match *Match);
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
-static void Gam_ShowBottonLeftColumnTch (struct Match *Match,unsigned NumPlayers);
-static void Gam_ShowBottonLeftColumnStd (struct Match *Match);
+static void Gam_ShowLeftColumnTch (struct Match *Match);
+static void Gam_ShowLeftColumnStd (struct Match *Match);
+static void Gam_ShowMatchTitleAndPlayers (struct Match *Match);
 static void Gam_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Gam_ShowQuestionAndAnswersStd (struct Match *Match);
 
@@ -203,7 +205,7 @@ static void Gam_UpdateMatchAsBeingPlayed (long MchCod);
 static void Gam_SetMatchAsNotBeingPlayed (long MchCod);
 static bool Gam_GetIfMatchIsBeingPlayed (long MchCod);
 static void Gam_RegisterMeAsPlayerInMatch (long MchCod);
-static unsigned Gam_GetNumPlayers (long MchCod);
+static void Gam_GetNumPlayers (struct Match *Match);
 
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
 static int Gam_GetQstAnsFromDB (long MchCod,unsigned QstInd);
@@ -3470,39 +3472,22 @@ static void Gam_SetMatchStatusToNextQuestion (struct Match *Match)
 
 static void Gam_ShowMatchStatusForTch (struct Match *Match)
   {
-   extern const char *Txt_Players;
-   unsigned NumPlayers = Gam_GetNumPlayers (Match->MchCod);
+   /***** Get current number of players *****/
+   Gam_GetNumPlayers (Match);
 
    /***** Left column *****/
-   Gam_ShowBottonLeftColumnTch (Match,NumPlayers);
+   Gam_ShowLeftColumnTch (Match);
 
    /***** Right column *****/
    /* Start right container */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
 
    /***** Top row *****/
-   /* Start top container */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\">");
-
-   /* Left: Match title */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP_LEFT\">"
-		      "%s"
-		      "</div>",
-	    Match->Title);
-
-   /* Right: Number of players */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP_RIGHT\">%s: %u</div>",
-	    Txt_Players,NumPlayers);
-
-   /* End top container */
-   fprintf (Gbl.F.Out,"</div>");
+   Gam_ShowMatchTitleAndPlayers (Match);
 
    /***** Bottom row *****/
-   /* Start bottom container */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");
 
-   /* Show right column */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM_RIGHT\">");
    if (!Match->Status.Finished &&
 	Match->Status.BeingPlayed)
      {
@@ -3512,9 +3497,7 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
       /* Update match as being played */
       Gam_UpdateMatchAsBeingPlayed (Match->MchCod);
      }
-   fprintf (Gbl.F.Out,"</div>");
 
-   /* End bottom container */
    fprintf (Gbl.F.Out,"</div>");
 
    /* End right container */
@@ -3536,15 +3519,21 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
    if (!IBelongToGroups)
       Lay_ShowErrorAndExit ("You can not play this match!");
 
+   /***** Get current number of players *****/
+   Gam_GetNumPlayers (Match);
+
+   /***** Left column *****/
+   Gam_ShowLeftColumnStd (Match);
+
+   /***** Right column *****/
+   /* Start right container */
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
+
+   /***** Top row *****/
+   Gam_ShowMatchTitleAndPlayers (Match);
+
    /***** Bottom row *****/
-   /* Start bottom container */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");
-
-   /* Show left column */
-   Gam_ShowBottonLeftColumnStd (Match);
-
-   /* Show right column */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM_RIGHT\">");
    if (!Match->Status.Finished)
      {
       /***** Update players ******/
@@ -3565,7 +3554,7 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
      }
    fprintf (Gbl.F.Out,"</div>");
 
-   /* End bottom container */
+   /* End right container */
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -3573,7 +3562,7 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 /******** Show left botton column when playing a match (as a teacher) ********/
 /*****************************************************************************/
 
-static void Gam_ShowBottonLeftColumnTch (struct Match *Match,unsigned NumPlayers)
+static void Gam_ShowLeftColumnTch (struct Match *Match)
   {
    extern const char *Txt_End;
    extern const char *Txt_Next_QUESTION;
@@ -3587,6 +3576,9 @@ static void Gam_ShowBottonLeftColumnTch (struct Match *Match,unsigned NumPlayers
 
    /***** Start left container *****/
    fprintf (Gbl.F.Out,"<div class=\"MATCH_LEFT\">");
+
+   /***** Top *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\"></div>");
 
    /***** Write number of question *****/
    NumQsts = Gam_GetNumQstsGame (Match->GamCod);
@@ -3645,7 +3637,7 @@ static void Gam_ShowBottonLeftColumnTch (struct Match *Match,unsigned NumPlayers
                          "responden<br />"	// TODO: Need translation!!!
                          "<strong>%u/%u</strong>"
 	                 "</div>",
-	       NumAnswerers,NumPlayers);
+	       NumAnswerers,Match->Status.NumPlayers);
      }
 
    /***** End left container *****/
@@ -3656,13 +3648,16 @@ static void Gam_ShowBottonLeftColumnTch (struct Match *Match,unsigned NumPlayers
 /******** Show left botton column when playing a match (as a student) ********/
 /*****************************************************************************/
 
-static void Gam_ShowBottonLeftColumnStd (struct Match *Match)
+static void Gam_ShowLeftColumnStd (struct Match *Match)
   {
    extern const char *Txt_End;
    unsigned NumQsts;
 
-   /***** Start bottom left container *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM_LEFT\">");
+   /***** Start left container *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_LEFT\">");
+
+   /***** Top *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\"></div>");
 
    /***** Write number of question *****/
    NumQsts = Gam_GetNumQstsGame (Match->GamCod);
@@ -3682,7 +3677,32 @@ static void Gam_ShowBottonLeftColumnStd (struct Match *Match)
    fprintf (Gbl.F.Out,"</div>"
                       "</div>");
 
-   /***** End bottom left container *****/
+   /***** End left container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/************** Show match title and current number of players ***************/
+/*****************************************************************************/
+
+static void Gam_ShowMatchTitleAndPlayers (struct Match *Match)
+  {
+   extern const char *Txt_Players;
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\">");
+
+   /***** Left: Match title *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP_LEFT\">"
+		      "%s"
+		      "</div>",
+	    Match->Title);
+
+   /***** Right: Number of players *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP_RIGHT\">%s: %u</div>",
+	    Txt_Players,Match->Status.NumPlayers);
+
+   /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -3965,14 +3985,13 @@ static void Gam_RegisterMeAsPlayerInMatch (long MchCod)
 		    MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
-static unsigned Gam_GetNumPlayers (long MchCod)
+static void Gam_GetNumPlayers (struct Match *Match)
   {
    /***** Get number of players who are playing a match *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of players",
-			     "SELECT COUNT(*) FROM gam_players"
-			     " WHERE MchCod=%ld",
-			     MchCod);
+   Match->Status.NumPlayers = (unsigned) DB_QueryCOUNT ("can not get number of players",
+							"SELECT COUNT(*) FROM gam_players"
+							" WHERE MchCod=%ld",
+							Match->MchCod);
   }
 
 /*****************************************************************************/

@@ -439,6 +439,8 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Perico: bloquear la subida de archivos por parte de estudiantes (no tiene que ver con el bloqueo de la edición de proyectos)
 
+// TODO: Al confirmar una inscripción, mostrar ficha de retroalimentación similar a la que se muestra cuando se crea un administrador. Tal y como está ahora crea confusión al usuario.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -458,10 +460,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.136.4 (2019-07-19)"
+#define Log_PLATFORM_VERSION	"SWAD 18.136.5 (2019-07-25)"
 #define CSS_FILE		"swad18.136.4.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.136.5: Jul 25, 2019	Changes in layout of match for students. (243936 lines)
 	Version 18.136.4: Jul 19, 2019	Changes in layout of match for teachers. (243920 lines)
 	Version 18.136.3: Jul 19, 2019	New icon to see answers in a match. (243924 lines)
 					Copy the following icon to icon public directory:

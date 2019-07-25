@@ -2594,8 +2594,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	box-sizing:border-box;
 	display:table;
 	width:100%;
+	height:60px;
 	font-size:18pt;
-	padding-bottom:18pt;
 	border:1px solid pink;
 	}
 .MATCH_TOP_LEFT
@@ -2626,10 +2626,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MATCH_NUM_QST
 	{
 	text-align:center;
-	padding:48pt 0;
+	vertical-align:top;
+	padding-bottom:48pt;
 	color:#808080;
 	font-size:36pt;
 	font-weight:bold;
+	border:1px solid green;
 	}
 .MATCH_NUM_ANSWERERS
 	{
