@@ -460,10 +460,22 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.136.5 (2019-07-25)"
-#define CSS_FILE		"swad18.136.4.css"
+#define Log_PLATFORM_VERSION	"SWAD 18.138 (2019-07-30)"
+#define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.138.3: Jul 30, 2019	Time of current match and current match question are stored in database. (? lines)
+	Version 18.138.2: Jul 30, 2019	Buttons backward and start on finished games. (? lines)
+	Version 18.138.1: Jul 30, 2019	Close button in games always present. (? lines)
+	Version 18.138:   Jul 30, 2019	Button to go backward when playing a game. (244080 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1790','es','N','Mostrar pregunta anterior en partida (como profesor)');
+
+					Copy the following icons to icon public directory:
+sudo cp icon/step-backward.svg /var/www/html/swad/icon/
+sudo cp icon/step-forward.svg /var/www/html/swad/icon/
+
+	Version 18.136.6: Jul 25, 2019	Changes in layout of match for students. (243931 lines)
 	Version 18.136.5: Jul 25, 2019	Changes in layout of match for students. (243936 lines)
 	Version 18.136.4: Jul 19, 2019	Changes in layout of match for teachers. (243920 lines)
 	Version 18.136.3: Jul 19, 2019	New icon to see answers in a match. (243924 lines)

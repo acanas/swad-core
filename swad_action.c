@@ -611,8 +611,9 @@ Assessment:
         455. ActReqNewMchTch		Put form to create a new match (by a teacher)
         456. ActNewMchTch		Create a new match showing first question in a new browser tab (by a teacher)
         NEW. ActResMchTch		Resume an unfinished match showing current question in a new browser tab (by a teacher)
-        NEW. ActCurMchTch		Show current question when playing a match (by a teacher)
-        457. ActNxtMchTch		Show next question when playing a match (by a teacher)
+        NEW. ActPrvMchTch		Show previous question when playing a match (by a teacher)
+        NEW. ActCurMchTch		Show current  question when playing a match (by a teacher)
+        457. ActNxtMchTch		Show next     question when playing a match (by a teacher)
         NEW. ActRefMchTch		Refresh current question when playing a match (as teacher)
         NEW. ActShoMchTch		Show finished match results
 
@@ -2152,6 +2153,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqNewMchTch	*/{1670,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestNewMatchTch		,NULL},
    /* ActNewMchTch	*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_CreateNewMatchTch		,Gam_RequestStartResumeMatchTch	,NULL},
    /* ActResMchTch	*/{1785,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_GetMatchBeingPlayed	,Gam_RequestStartResumeMatchTch	,NULL},
+   /* ActPrvMchTch	*/{1790,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_PrevStatusMatchTch		,NULL},
    /* ActCurMchTch	*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_ResumeMatchTch		,NULL},
    /* ActNxtMchTch	*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_NextStatusMatchTch		,NULL},
    /* ActRefMchTch	*/{1788,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Gam_GetMatchBeingPlayed	,Gam_RefreshMatchTch		,NULL},
@@ -5001,6 +5003,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActCreMyAcc,		// #1787
 	ActRefMchTch,		// #1788
 	ActCurMchTch,		// #1789
+	ActPrvMchTch,		// #1790
 	};
 
 /*****************************************************************************/

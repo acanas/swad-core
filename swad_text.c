@@ -29668,6 +29668,27 @@ const char *Txt_Presents =
 	"Presentes";
 #endif
 
+const char *Txt_Previous_QUESTION =
+#if   L==1	// ca
+	"Anterior";
+#elif L==2	// de
+	"Vorherige";
+#elif L==3	// en
+	"Previous";
+#elif L==4	// es
+	"Anterior";
+#elif L==5	// fr
+	"Pr&eacute;c&eacute;dente";
+#elif L==6	// gn
+	"Anterior";	// Okoteve traducción
+#elif L==7	// it
+	"Precedente";
+#elif L==8	// pl
+	"Poprzednie";
+#elif L==9	// pt
+	"Anterior";
+#endif
+
 const char *Txt_Print =
 #if   L==1	// ca
 	"Imprimir";
