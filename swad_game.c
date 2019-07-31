@@ -193,7 +193,8 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match);
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
 static void Gam_ShowLeftColumnTch (struct Match *Match);
 static void Gam_ShowLeftColumnStd (struct Match *Match);
-static void Gam_ShowMatchTitleAndPlayers (struct Match *Match);
+static void Gam_ShowNumPlayers (struct Match *Match);
+static void Gam_ShowMatchTitleAndCloseButton (struct Match *Match);
 static void Gam_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Gam_ShowQuestionAndAnswersStd (struct Match *Match);
 
@@ -3553,7 +3554,7 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
 
    /***** Top row *****/
-   Gam_ShowMatchTitleAndPlayers (Match);
+   Gam_ShowMatchTitleAndCloseButton (Match);
 
    /***** Bottom row *****/
    if (!Match->Status.Finished &&
@@ -3591,7 +3592,7 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
 
    /***** Top row *****/
-   Gam_ShowMatchTitleAndPlayers (Match);
+   Gam_ShowMatchTitleAndCloseButton (Match);
 
    /***** Bottom row *****/
    if (!Match->Status.Finished)
@@ -3670,7 +3671,7 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 	 if (Match->Status.ShowingAnswers)
 	    /* Put button to start current question */
 	    Gam_PutBigButton (ActCurMchTch,Match->MchCod,
-			      "step-backward.svg",Txt_Stem);
+			      "angle-up.svg",Txt_Stem);
 	 else
 	   {
 	    /* Get index of the previous question */
@@ -3717,7 +3718,7 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
       else
 	 /* Put button to show answers */
 	 Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			   "step-forward.svg",Txt_Answers);
+			   "angle-down.svg",Txt_Answers);
      }
    else
       /* Put button to start / resume match */
@@ -3731,7 +3732,10 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    /* End buttons container */
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Write number of users who have answered *****/
+   /***** Number of players *****/
+   Gam_ShowNumPlayers (Match);
+
+   /***** Number of users who have answered *****/
    if (!Match->Status.Finished &&
 	Match->Status.BeingPlayed &&
 	Match->Status.ShowingAnswers)
@@ -3790,17 +3794,35 @@ static void Gam_ShowLeftColumnStd (struct Match *Match)
    /* End buttons container */
    fprintf (Gbl.F.Out,"</div>");
 
+   /***** Number of players *****/
+   Gam_ShowNumPlayers (Match);
+
    /***** End left container *****/
    fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
-/************** Show match title and current number of players ***************/
+/************************** Show number of players ***************************/
 /*****************************************************************************/
 
-static void Gam_ShowMatchTitleAndPlayers (struct Match *Match)
+static void Gam_ShowNumPlayers (struct Match *Match)
   {
    extern const char *Txt_Players;
+
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_PLAYERS\">"
+	              "%s<br />"
+                      "<strong>%u</strong>"
+	              "</div>",
+	    Txt_Players,Match->Status.NumPlayers);
+  }
+
+/*****************************************************************************/
+/******************** Show match title and close button **********************/
+/*****************************************************************************/
+
+static void Gam_ShowMatchTitleAndCloseButton (struct Match *Match)
+  {
+   extern const char *Txt_Close;
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\">");
@@ -3811,9 +3833,20 @@ static void Gam_ShowMatchTitleAndPlayers (struct Match *Match)
 		      "</div>",
 	    Match->Title);
 
-   /***** Right: Number of players *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP_RIGHT\">%s: %u</div>",
-	    Txt_Players,Match->Status.NumPlayers);
+   /***** Right: Icon to close this tab *****/
+   /* onmousedown instead of default onclick
+      is necessary in order to be fast
+      and not lose clicks due to refresh */
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP_RIGHT ICO_HIGHLIGHT\">"
+                      "<a href=\"\" title=\"%s\""
+                      " onmousedown=\"window.close();\"\">"
+                      "<img src=\"%s/close.svg\" alt=\"%s\" title=\"%s\""
+                      " class=\"ICO16x16\" />"
+	              "</a>"
+	              "</div>",
+            Txt_Close,
+	    Cfg_URL_ICON_PUBLIC,
+	    Txt_Close,Txt_Close);
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");

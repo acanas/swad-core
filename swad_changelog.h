@@ -460,13 +460,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.138 (2019-07-30)"
+#define Log_PLATFORM_VERSION	"SWAD 18.138.1 (2019-07-31)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
-	Version 18.138.3: Jul 30, 2019	Time of current match and current match question are stored in database. (? lines)
-	Version 18.138.2: Jul 30, 2019	Buttons backward and start on finished games. (? lines)
-	Version 18.138.1: Jul 30, 2019	Close button in games always present. (? lines)
+	Version 18.138.4: Jul 31, 2019	Time of current match and current match question are stored in database. (? lines)
+	Version 18.138.3: Jul 31, 2019	Buttons backward and start on finished games. (? lines)
+	Version 18.138.2: Jul 31, 2019	Three buttons: backward, answers, forward. (? lines)
+	Version 18.138.1: Jul 31, 2019	Close button in games always present.
+				        Number of players in left column. (244117 lines)
 	Version 18.138:   Jul 30, 2019	Button to go backward when playing a game. (244080 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1790','es','N','Mostrar pregunta anterior en partida (como profesor)');

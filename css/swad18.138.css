@@ -2602,7 +2602,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	float:left;
-	width:60%;
+	width:90%;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -2612,7 +2612,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	float:left;
-	width:40%;
+	width:10%;
 	text-align:right;
 	border:1px solid blue;
 	}
@@ -2632,6 +2632,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:36pt;
 	font-weight:bold;
 	border:1px solid green;
+	}
+.MATCH_NUM_PLAYERS
+	{
+	text-align:center;
+	padding:16pt 0;
+	color:#808080;
+	font-size:16pt;
 	}
 .MATCH_NUM_ANSWERERS
 	{
