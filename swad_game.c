@@ -3500,16 +3500,16 @@ static void Gam_SetMatchStatusToPrevQuestion (struct Match *Match)
      {
       Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
 						      Match->Status.QstInd);
-      Match->Status.Finished = false;		// Match is not finished
+      Match->Status.ShowingAnswers = true;	// Show answers
      }
    else						// No previous question
      {
       Match->Status.QstCod = -1L;		// No previous questions
-      Match->Status.BeingPlayed = false;	// Match is not being played
-      Match->Status.Finished = false;		// Match is not finished
+      Match->Status.BeingPlayed    = false;	// Match is not being played
+      Match->Status.ShowingAnswers = false;	// Do not show answers
      }
 
-   Match->Status.ShowingAnswers = false;	// Don't show answers
+   Match->Status.Finished          = false;	// Match is not finished
   }
 
 /*****************************************************************************/
@@ -3662,16 +3662,15 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTONS_CONTAINER\">");
 
    /* Left button */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_RIGHT_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_LEFT_CONTAINER\">");
    if (!Match->Status.Finished)		// Not finished
      {
       if (Match->Status.BeingPlayed)
 	{
-	 /* Put button to go backward */
 	 if (Match->Status.ShowingAnswers)
-	    /* Put button to start current question */
+	    /* Put button to hide answers */
 	    Gam_PutBigButton (ActCurMchTch,Match->MchCod,
-			      "angle-up.svg",Txt_Stem);
+			      "step-backward.svg",Txt_Stem);
 	 else
 	   {
 	    /* Get index of the previous question */
@@ -3700,7 +3699,6 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
       Gam_PutBigButtonClose ();
    else if (Match->Status.BeingPlayed)
      {
-      /* Put button to continue */
       if (Match->Status.ShowingAnswers)
 	{
 	 /* Get index of the next question */
@@ -3718,7 +3716,7 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
       else
 	 /* Put button to show answers */
 	 Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			   "angle-down.svg",Txt_Answers);
+			   "step-forward.svg",Txt_Answers);
      }
    else
       /* Put button to start / resume match */
