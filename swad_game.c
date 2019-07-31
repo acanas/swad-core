@@ -1878,7 +1878,7 @@ static unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NextQstInd = 0;
+   unsigned NextQstInd = INT_MAX;	// End of questions has been reached
 
    /***** Get next question index in a game from database *****/
    // Although indexes are always continuous...
@@ -3423,8 +3423,10 @@ void Gam_PrevStatusMatchTch (void)
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
 
-   /***** If not yet finished, update status *****/
-   if (!Match.Status.Finished)
+   /***** Update status *****/
+   if (Match.Status.Finished)
+      Gam_SetMatchStatusToPrevQuestion (&Match);
+   else
      {
       if (Match.Status.ShowingAnswers)		// Showing answers currently
 	{
@@ -3495,20 +3497,19 @@ static void Gam_SetMatchStatusToPrevQuestion (struct Match *Match)
    /***** Get index of the previous question *****/
    Match->Status.QstInd = Gam_GetPrevQuestionIndexInGame (Match->GamCod,
 					                  Match->Status.QstInd);
-
-   if (Match->Status.QstInd)			// Not first question
-     {
-      Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
-						      Match->Status.QstInd);
-      Match->Status.ShowingAnswers = true;	// Show answers
-     }
-   else						// No previous question
+   if (Match->Status.QstInd == 0)		// Start of questions has been reached
      {
       Match->Status.QstCod = -1L;		// No previous questions
       Match->Status.BeingPlayed    = false;	// Match is not being played
       Match->Status.ShowingAnswers = false;	// Do not show answers
      }
-
+   else
+     {
+      Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
+						      Match->Status.QstInd);
+      Match->Status.BeingPlayed    = true;	// Match is being played
+      Match->Status.ShowingAnswers = true;	// Show answers
+     }
    Match->Status.Finished          = false;	// Match is not finished
   }
 
@@ -3521,19 +3522,17 @@ static void Gam_SetMatchStatusToNextQuestion (struct Match *Match)
    /***** Get index of the next question *****/
    Match->Status.QstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
 					                  Match->Status.QstInd);
-
-   if (Match->Status.QstInd)			// Not last question
+   if (Match->Status.QstInd == INT_MAX)		// End of questions has been reached
+     {
+      Match->Status.QstCod = -1L;		// No more questions
+      Match->Status.Finished = true;		// Match is finished
+     }
+   else						// No more questions
      {
       Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
 						      Match->Status.QstInd);
       Match->Status.Finished = false;		// Match is not finished
      }
-   else						// No more questions
-     {
-      Match->Status.QstCod = -1L;		// No more questions
-      Match->Status.Finished = true;		// Match is finished
-     }
-
    Match->Status.ShowingAnswers = false;	// Don't show answers
   }
 
@@ -3663,7 +3662,11 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 
    /* Left button */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_LEFT_CONTAINER\">");
-   if (!Match->Status.Finished)		// Not finished
+   if (Match->Status.Finished)		// Finished
+      /* Put button to show last question */
+      Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
+			"step-backward.svg",Txt_Previous_QUESTION);
+   else					// Not finished
      {
       if (Match->Status.BeingPlayed)
 	{
@@ -3704,14 +3707,14 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 	 /* Get index of the next question */
 	 NxtQstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
 						     Match->Status.QstInd);
-	 if (NxtQstInd)	// Not last question
-	    /* Put button to show next question */
-	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			      "step-forward.svg",Txt_Next_QUESTION);
-	 else		// Last question
+	 if (NxtQstInd == INT_MAX)	// Last question
 	    /* Put button to finish */
 	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
 			      "flag-checkered.svg",Txt_Finish);
+	 else				// Not last question
+	    /* Put button to show next question */
+	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
+			      "step-forward.svg",Txt_Next_QUESTION);
 	}
       else
 	 /* Put button to show answers */
