@@ -2788,7 +2788,6 @@ static void Gam_ListOneOrMoreMatches (struct Game *Game,
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
    extern const char *Txt_Today;
-   extern const char *Txt_View_game_results;
    unsigned NumMatch;
    unsigned UniqueId;
    struct Match Match;
@@ -2900,46 +2899,41 @@ static void Gam_ListOneOrMoreMatches (struct Game *Game,
 
       /***** Match status ******/
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
-      if (Match.Status.QstInd >= Gam_AFTER_LAST_QUESTION)	// Finished match
-	 /* Icon to inform about finished match */
-         // Ico_PutIconOff ("flag-checkered.svg",Txt_Finished_match);
-	 Lay_PutContextualLinkOnlyIcon (ActShoMchTch,NULL,
-					Gam_PutParamCurrentMchCod,
-					"flag-checkered.svg",
-					Txt_View_game_results);
-      else							// Unfinished match
-	{
+
+      if (Match.Status.QstInd < Gam_AFTER_LAST_QUESTION)	// Unfinished match
 	 /* Current question index / total of questions */
-         fprintf (Gbl.F.Out,"<div class=\"DAT\">%u/%u</div>",
+	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%u/%u</div>",
 		  Match.Status.QstInd,Game->NumQsts);
 
-         switch (Gbl.Usrs.Me.Role.Logged)
-           {
-            case Rol_STD:
-	       /* Icon to play as student */
-	       Gam_CurrentMchCod = Match.MchCod;
-	       Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
-					      Gam_PutParamCurrentMchCod,
-					      "play.svg",
-					      Txt_Play);
-               break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	    case Rol_DEG_ADM:
-	    case Rol_CTR_ADM:
-	    case Rol_INS_ADM:
-	    case Rol_SYS_ADM:
-	       /* Icon to resume */
-	       Gam_CurrentMchCod = Match.MchCod;
-	       Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
-					      Gam_PutParamCurrentMchCod,
-					      "play.svg",
-					      Txt_Resume);
-	       break;
-	    default:
-	       break;
-           }
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_STD:
+	    /* Icon to play as student */
+	    Gam_CurrentMchCod = Match.MchCod;
+	    Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
+					   Gam_PutParamCurrentMchCod,
+					   Match.Status.QstInd < Gam_AFTER_LAST_QUESTION ? "play.svg" :
+											   "flag-checkered.svg",
+					   Txt_Play);
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_DEG_ADM:
+	 case Rol_CTR_ADM:
+	 case Rol_INS_ADM:
+	 case Rol_SYS_ADM:
+	    /* Icon to resume */
+	    Gam_CurrentMchCod = Match.MchCod;
+	    Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
+					   Gam_PutParamCurrentMchCod,
+					   Match.Status.QstInd < Gam_AFTER_LAST_QUESTION ? "play.svg" :
+											   "flag-checkered.svg",
+					   Txt_Resume);
+	    break;
+	 default:
+	    break;
 	}
+
       fprintf (Gbl.F.Out,"</td>");
 
       fprintf (Gbl.F.Out,"</tr>");

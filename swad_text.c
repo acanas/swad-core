@@ -52659,7 +52659,7 @@ const char *Txt_View_game =
 #elif L==9	// pt
 	"Ver jogo";
 #endif
-
+/*
 const char *Txt_View_game_results =
 #if   L==1	// ca
 	"Veure resultats";
@@ -52680,7 +52680,7 @@ const char *Txt_View_game_results =
 #elif L==9	// pt
 	"Ver resultados";
 #endif
-
+*/
 const char *Txt_View_in_a_new_window =
 #if   L==1	// ca
 	"Mostrar en una finestra nova";
