@@ -460,11 +460,17 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.138.3 (2019-07-31)"
+#define Log_PLATFORM_VERSION	"SWAD 18.138.5 (2019-08-01)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
-	Version 18.138.4: Jul 31, 2019	Time of current match and current match question are stored in database. (? lines)
+	Version 18.138.7: Aug 01, 2019	Time of current match and current match question are stored in database. (? lines)
+	Version 18.138.6: Aug 01, 2019	Matches finished can be played again from list of matches. (? lines)
+	Version 18.138.5: Aug 01, 2019	Finished column in matches replaced by a special value in question index. (244108 lines)
+					1 change necessary in database:
+ALTER TABLE gam_matches DROP COLUMN Finished;
+
+	Version 18.138.4: Aug 01, 2019	Changes in backward and forward behaviour and buttons in matches. (244121 lines)
 	Version 18.138.3: Jul 31, 2019	Button backward on finished match. (244118 lines)
 	Version 18.138.2: Jul 31, 2019	Changes in backward and forward behaviour and buttons in matches. (244111 lines)
 	Version 18.138.1: Jul 31, 2019	Close button in games always present.

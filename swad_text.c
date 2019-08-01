@@ -10451,27 +10451,6 @@ const char *Txt_Email_X_removed =	// Warning: it is very important to include %s
 	"Email <strong>%s</strong> removido.";
 #endif
 
-const char *Txt_End =
-#if   L==1	// ca
-	 "Final";
-#elif L==2	// de
-	 "Ende";
-#elif L==3	// en
-	 "End";
-#elif L==4	// es
-	 "Final";
-#elif L==5	// fr
-	 "Fin";
-#elif L==6	// gn
-	 "Paha";
-#elif L==7	// it
-	 "Fine";
-#elif L==8	// pl
-	 "Koniec";
-#elif L==9	// pt
-	 "Fim";
-#endif
-
 const char *Txt_End_date =
 #if   L==1	// ca
 	"Data final";
@@ -17970,6 +17949,48 @@ const char *Txt_Match =		// of a game
 	"Mecz";
 #elif L==9	// pt
 	"Jogo";
+#endif
+
+const char *Txt_MATCH_End =
+#if   L==1	// ca
+	 "Final";
+#elif L==2	// de
+	 "Ende";
+#elif L==3	// en
+	 "End";
+#elif L==4	// es
+	 "Final";
+#elif L==5	// fr
+	 "Fin";
+#elif L==6	// gn
+	 "Paha";
+#elif L==7	// it
+	 "Fine";
+#elif L==8	// pl
+	 "Koniec";
+#elif L==9	// pt
+	 "Fim";
+#endif
+
+const char *Txt_MATCH_Start =
+#if   L==1	// ca
+	 "Inici";
+#elif L==2	// de
+	 "Start";
+#elif L==3	// en
+	 "Start";
+#elif L==4	// es
+	 "Inicio";
+#elif L==5	// fr
+	 "D&eacute;but";
+#elif L==6	// gn
+	 "&Ntilde;epyr&utilde;";
+#elif L==7	// it
+	 "Inizio";
+#elif L==8	// pl
+	 "Pocz&aogon;tek";
+#elif L==9	// pt
+	 "In&iacute;cio";
 #endif
 
 const char *Txt_Match_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -41266,7 +41287,7 @@ const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES] =
 #endif
 	};
 
-const char *Txt_Start =
+const char *Txt_Start =	// As a verb
 #if   L==1	// ca
 	 "Comen&ccedil;ar";
 #elif L==2	// de

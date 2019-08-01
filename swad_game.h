@@ -53,7 +53,6 @@ struct Game
    struct
      {
       bool Visible;		// Game is not hidden
-      bool Open;		// Start date <= now <= end date
       bool ICanViewResults;
       bool ICanEdit;
      } Status;
