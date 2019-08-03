@@ -187,7 +187,12 @@ static void Gam_PutFormNewMatch (struct Game *Game);
 
 static long Gam_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1]);
 static void Gam_UpdateMatchStatusInDB (struct Match *Match);
+
 static void Gam_UpdateElapsedTimeInQuestion (struct Match *Match);
+static void Gam_GetElapsedTimeInQuestion (struct Match *Match,
+				          char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1]);
+static void Gam_GetElapsedTimeInMatch (struct Match *Match,
+				       char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1]);
 
 static void Gam_SetMatchStatusToPrevQuestion (struct Match *Match);
 static void Gam_SetMatchStatusToNextQuestion (struct Match *Match);
@@ -3344,7 +3349,7 @@ static void Gam_UpdateMatchStatusInDB (struct Match *Match)
   }
 
 /*****************************************************************************/
-/** Update elapsed time in current question (by a teacher) **/
+/********** Update elapsed time in current question (by a teacher) ***********/
 /*****************************************************************************/
 
 static void Gam_UpdateElapsedTimeInQuestion (struct Match *Match)
@@ -3361,6 +3366,77 @@ static void Gam_UpdateElapsedTimeInQuestion (struct Match *Match)
 		      Match->MchCod,Match->Status.QstInd,
 		      Cfg_SECONDS_TO_REFRESH_GAME,
 		      Cfg_SECONDS_TO_REFRESH_GAME);
+  }
+
+/*****************************************************************************/
+/******************* Get elapsed time in a match question ********************/
+/*****************************************************************************/
+
+static void Gam_GetElapsedTimeInQuestion (struct Match *Match,
+				          char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1])
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+
+   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get elapsed time",
+				        "SELECT ElapsedTime"
+				        " FROM gam_time"
+				        " WHERE MchCod=%ld AND QstInd=%u",
+				        Match->MchCod,Match->Status.QstInd);
+   if (NumRows)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get the elapsed time (row[0]) */
+      if (strlen (row[0]) > 2 + 1 + 2 + 1 + 2)
+	 Str_Copy (HHHMMSS,"+99:59:59",
+		   Gam_MAX_BYTES_TITLE);
+      else
+	 Str_Copy (HHHMMSS,row[0],
+		   Gam_MAX_BYTES_TITLE);
+     }
+   else
+      Str_Copy (HHHMMSS,"00:00:00",
+		Gam_MAX_BYTES_TITLE);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/*********************** Get elapsed time in a match *************************/
+/*****************************************************************************/
+
+static void Gam_GetElapsedTimeInMatch (struct Match *Match,
+				       char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1])
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+
+   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get elapsed time",
+				        "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"
+				        " FROM gam_time WHERE MchCod=%ld",
+				        Match->MchCod);
+   if (NumRows)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get the elapsed time (row[0]) */
+      if (strlen (row[0]) > 2 + 1 + 2 + 1 + 2)
+	 Str_Copy (HHHMMSS,"+99:59:59",
+		   Gam_MAX_BYTES_TITLE);
+      else
+	 Str_Copy (HHHMMSS,row[0],
+		   Gam_MAX_BYTES_TITLE);
+     }
+   else
+      Str_Copy (HHHMMSS,"00:00:00",
+		Gam_MAX_BYTES_TITLE);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

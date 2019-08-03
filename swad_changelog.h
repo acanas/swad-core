@@ -460,10 +460,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.139 (2019-08-03)"
+#define Log_PLATFORM_VERSION	"SWAD 18.139.1 (2019-08-03)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.139.1: Aug 03, 2019	Get elapsed time in a question and in a match. (244216 lines)
 	Version 18.139:   Aug 03, 2019	Time of current match and current match question are stored in database. (244150 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS gam_time (MchCod INT NOT NULL,QstInd INT NOT NULL,ElapsedTime TIME NOT NULL DEFAULT 0,UNIQUE INDEX(MchCod,QstInd));
