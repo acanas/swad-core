@@ -12872,3 +12872,10 @@ SELECT UNIX_TIMESTAMP(MIN(StartTime)),UNIX_TIMESTAMP(MAX(EndTime)) FROM gam_matc
 
 
 SELECT MchCod,GamCod,UsrCod,UNIX_TIMESTAMP(StartTime),UNIX_TIMESTAMP(EndTime),Title,QstInd,QstCod,UNIX_TIMESTAMP(QstStartTime),ShowingAnswers,Finished FROM gam_matches WHERE GamCod=7 ORDER BY MchCod;
+
+
+REPLACE gam_time (MchCod,QstInd,ElapsedTime) VALUES (61,1,ADDTIME(ElapsedTime,SEC_TO_TIME(1)));
+
+INSERT INTO gam_time (MchCod,QstInd) VALUES (61,1,SEC_TO_TIME(1)) ON DUPLICATE KEY UPDATE ElapsedTime=ADDTIME(ElapsedTime,SEC_TO_TIME(1));
+  
+  

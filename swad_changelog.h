@@ -460,12 +460,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.138.6 (2019-08-02)"
+#define Log_PLATFORM_VERSION	"SWAD 18.139 (2019-08-03)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
-	Version 18.138.7: Aug 01, 2019	Time of current match and current match question are stored in database. (? lines)
-	Version 18.138.6: Aug 02, 2019	Matches finished can be played again from list of matches. (? lines)
+	Version 18.139:   Aug 03, 2019	Time of current match and current match question are stored in database. (244150 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS gam_time (MchCod INT NOT NULL,QstInd INT NOT NULL,ElapsedTime TIME NOT NULL DEFAULT 0,UNIQUE INDEX(MchCod,QstInd));
+
+	Version 18.138.6: Aug 02, 2019	Matches finished can be played again from list of matches. (244102 lines)
 	Version 18.138.5: Aug 01, 2019	Finished column in matches replaced by a special value in question index. (244108 lines)
 					1 change necessary in database:
 ALTER TABLE gam_matches DROP COLUMN Finished;

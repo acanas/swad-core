@@ -187,6 +187,7 @@ static void Gam_PutFormNewMatch (struct Game *Game);
 
 static long Gam_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1]);
 static void Gam_UpdateMatchStatusInDB (struct Match *Match);
+static void Gam_UpdateElapsedTimeInQuestion (struct Match *Match);
 
 static void Gam_SetMatchStatusToPrevQuestion (struct Match *Match);
 static void Gam_SetMatchStatusToNextQuestion (struct Match *Match);
@@ -3343,6 +3344,26 @@ static void Gam_UpdateMatchStatusInDB (struct Match *Match)
   }
 
 /*****************************************************************************/
+/** Update elapsed time in current question (by a teacher) **/
+/*****************************************************************************/
+
+static void Gam_UpdateElapsedTimeInQuestion (struct Match *Match)
+  {
+   /***** Update elapsed time in current question in database *****/
+   if (Match->Status.BeingPlayed &&
+       Match->Status.QstInd > 0 &&
+       Match->Status.QstInd < Gam_AFTER_LAST_QUESTION)
+      DB_QueryINSERT ("can not update elapsed time in question",
+		      "INSERT INTO gam_time (MchCod,QstInd,ElapsedTime)"
+		      " VALUES (%ld,%u,SEC_TO_TIME(%u))"
+		      " ON DUPLICATE KEY"
+		      " UPDATE ElapsedTime=ADDTIME(ElapsedTime,SEC_TO_TIME(%u))",
+		      Match->MchCod,Match->Status.QstInd,
+		      Cfg_SECONDS_TO_REFRESH_GAME,
+		      Cfg_SECONDS_TO_REFRESH_GAME);
+  }
+
+/*****************************************************************************/
 /** Show current match status (current question, answers...) (by a teacher) **/
 /*****************************************************************************/
 
@@ -4167,6 +4188,9 @@ void Gam_RefreshMatchTch (void)
 
    /***** Update match status in database *****/
    Gam_UpdateMatchStatusInDB (&Match);
+
+   /***** Update elapsed time in this question *****/
+   Gam_UpdateElapsedTimeInQuestion (&Match);
 
    /***** Show current match status *****/
    Gam_ShowMatchStatusForTch (&Match);

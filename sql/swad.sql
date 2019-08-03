@@ -667,6 +667,14 @@ CREATE TABLE IF NOT EXISTS gam_questions (
 	INDEX(GamCod),
 	INDEX(QstCod));
 --
+-- Table gam_time: stores the elapsed time in every question in every match played
+--
+CREATE TABLE IF NOT EXISTS gam_time (
+	MchCod INT NOT NULL,
+	QstInd INT NOT NULL,
+	ElapsedTime TIME NOT NULL DEFAULT 0,
+	UNIQUE INDEX(MchCod,QstInd));
+--
 -- Table hidden_params: stores some hidden parameters passed from a page to another using database instead of forms
 --
 CREATE TABLE IF NOT EXISTS hidden_params (

@@ -1452,6 +1452,24 @@ mysql> DESCRIBE gam_questions;
 		   "INDEX(GamCod),"
 		   "INDEX(QstCod))");
 
+      /***** Table gam_time *****/
+/*
+mysql> DESCRIBE gam_time;
++-------------+---------+------+-----+----------+-------+
+| Field       | Type    | Null | Key | Default  | Extra |
++-------------+---------+------+-----+----------+-------+
+| MchCod      | int(11) | NO   | PRI | NULL     |       |
+| QstInd      | int(11) | NO   | PRI | NULL     |       |
+| ElapsedTime | time    | NO   |     | 00:00:00 |       |
++-------------+---------+------+-----+----------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_time ("
+			"MchCod INT NOT NULL,"
+			"QstInd INT NOT NULL,"
+			"ElapsedTime TIME NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(MchCod,QstInd))");
+
    /***** Table hidden_params *****/
 /*
 mysql> DESCRIBE hidden_params;
