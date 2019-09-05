@@ -193,6 +193,8 @@ static void Gam_GetElapsedTimeInQuestion (struct Match *Match,
 				          char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1]);
 static void Gam_GetElapsedTimeInMatch (struct Match *Match,
 				       char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1]);
+static void Gam_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
+				char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1]);
 
 static void Gam_SetMatchStatusToPrevQuestion (struct Match *Match);
 static void Gam_SetMatchStatusToNextQuestion (struct Match *Match);
@@ -3376,29 +3378,17 @@ static void Gam_GetElapsedTimeInQuestion (struct Match *Match,
 				          char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1])
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumRows;
 
+   /***** Query database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get elapsed time",
 				        "SELECT ElapsedTime"
 				        " FROM gam_time"
 				        " WHERE MchCod=%ld AND QstInd=%u",
 				        Match->MchCod,Match->Status.QstInd);
-   if (NumRows)
-     {
-      row = mysql_fetch_row (mysql_res);
 
-      /* Get the elapsed time (row[0]) */
-      if (strlen (row[0]) > 2 + 1 + 2 + 1 + 2)
-	 Str_Copy (HHHMMSS,"+99:59:59",
-		   Gam_MAX_BYTES_TITLE);
-      else
-	 Str_Copy (HHHMMSS,row[0],
-		   Gam_MAX_BYTES_TITLE);
-     }
-   else
-      Str_Copy (HHHMMSS,"00:00:00",
-		Gam_MAX_BYTES_TITLE);
+   /***** Get elapsed time from query result *****/
+   Gam_GetElapsedTime (NumRows,mysql_res,HHHMMSS);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3412,13 +3402,30 @@ static void Gam_GetElapsedTimeInMatch (struct Match *Match,
 				       char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1])
   {
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumRows;
 
+   /***** Query database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get elapsed time",
 				        "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"
 				        " FROM gam_time WHERE MchCod=%ld",
 				        Match->MchCod);
+
+   /***** Get elapsed time from query result *****/
+   Gam_GetElapsedTime (NumRows,mysql_res,HHHMMSS);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/*********************** Get elapsed time in a match *************************/
+/*****************************************************************************/
+
+static void Gam_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
+				char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1])
+  {
+   MYSQL_ROW row;
+
    if (NumRows)
      {
       row = mysql_fetch_row (mysql_res);
@@ -3434,9 +3441,6 @@ static void Gam_GetElapsedTimeInMatch (struct Match *Match,
    else
       Str_Copy (HHHMMSS,"00:00:00",
 		Gam_MAX_BYTES_TITLE);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -3693,6 +3697,7 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    extern const char *Txt_Answers;
    extern const char *Txt_Start;
    extern const char *Txt_Resume;
+   char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1];
    unsigned PrvQstInd;	// Previous question index
    unsigned NxtQstInd;	// Next question index
    unsigned NumQsts;
@@ -3702,7 +3707,13 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_LEFT\">");
 
    /***** Top *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\"></div>");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\">");
+
+   /* Write elapsed time in match */
+   Gam_GetElapsedTimeInMatch (Match,HHHMMSS);
+   fprintf (Gbl.F.Out,"%s",HHHMMSS);
+
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Write number of question *****/
    NumQsts = Gam_GetNumQstsGame (Match->GamCod);
@@ -3727,8 +3738,10 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 	{
 	 if (Match->Status.ShowingAnswers)
 	    /* Put button to hide answers */
+	    // Gam_PutBigButton (ActCurMchTch,Match->MchCod,
+	    //		         "step-backward.svg",Txt_Stem);
 	    Gam_PutBigButton (ActCurMchTch,Match->MchCod,
-			      "step-backward.svg",Txt_Stem);
+			      "&larrb;",Txt_Stem);
 	 else
 	   {
 	    /* Get index of the previous question */
@@ -3736,12 +3749,16 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 							Match->Status.QstInd);
 	    if (PrvQstInd == 0)		// There is not a previous question
 	       /* Put button to resume match before first question */
+	       // Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
+	       //                   "step-backward.svg",Txt_MATCH_Start);
 	       Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-				 "step-backward.svg",Txt_MATCH_Start);
+				 "&larrb;",Txt_MATCH_Start);
 	    else			// There is a previous question
 	       /* Put button to show previous question */
+	       // Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
+	       //                   "step-backward.svg",Txt_Previous_QUESTION);
 	       Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-				 "step-backward.svg",Txt_Previous_QUESTION);
+				 "&larrb;",Txt_Previous_QUESTION);
 	   }
 	}
       else				// Not being played
@@ -3750,8 +3767,10 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
      }
    else								// Finished
       /* Put button to show last question */
+      // Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
+      //   	 	   "step-backward.svg",Txt_Previous_QUESTION);
       Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-			"step-backward.svg",Txt_Previous_QUESTION);
+			"&larrb;",Txt_Previous_QUESTION);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -3769,25 +3788,37 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 						     Match->Status.QstInd);
 	 if (NxtQstInd >= Gam_AFTER_LAST_QUESTION)	// No more questions
 	    /* Put button to finish */
+	    // Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
+	    // 		         "step-forward.svg",Txt_Finish);
 	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			      "step-forward.svg",Txt_Finish);
+			      "&rarrb;",Txt_Finish);
 	 else						// There are more questions
 	    /* Put button to show next question */
+	    // Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
+	    // 		         "step-forward.svg",Txt_Next_QUESTION);
 	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			      "step-forward.svg",Txt_Next_QUESTION);
+			      "&rarrb;",Txt_Next_QUESTION);
 	}
       else
 	 /* Put button to show answers */
+	 // Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
+	 // 		   "step-forward.svg",Txt_Answers);
 	 Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			   "step-forward.svg",Txt_Answers);
+			   "&rarrb;",Txt_Answers);
      }
    else
       /* Put button to start / resume match */
+      // Gam_PutBigButton (ActCurMchTch,
+      //   		   Match->MchCod,
+      //                   "play.svg",
+      //                   Match->Status.QstInd == 0 ? Txt_Start :
+      //					       Txt_Resume);
       Gam_PutBigButton (ActCurMchTch,
 			Match->MchCod,
-			"play.svg",
+			"&rtrif;",
 			Match->Status.QstInd == 0 ? Txt_Start :
-						    Txt_Resume);
+      					            Txt_Resume);
+
    fprintf (Gbl.F.Out,"</div>");
 
    /* End buttons container */
@@ -3856,7 +3887,7 @@ static void Gam_ShowLeftColumnStd (struct Match *Match)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Number of players *****/
-   Gam_ShowNumPlayers (Match);
+   // Gam_ShowNumPlayers (Match);
 
    /***** End left container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -4078,18 +4109,18 @@ static void Gam_ShowQuestionAndAnswersStd (struct Match *Match)
 /*****************************************************************************/
 /*********************** Put a big button to do action ***********************/
 /*****************************************************************************/
-
+/*
 static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 			      const char *Icon,const char *Txt)
   {
-   /***** Start form *****/
+   ***** Start form *****
    Frm_StartForm (NextAction);
    Gam_PutParamMatchCod (MchCod);
 
-   /***** Put icon with link *****/
-   /* Submitting onmousedown instead of default onclick
+   ***** Put icon with link *****
+   * Submitting onmousedown instead of default onclick
       is necessary in order to be fast
-      and not lose clicks due to refresh */
+      and not lose clicks due to refresh *
    fprintf (Gbl.F.Out,"<a href=\"\"");
    fprintf (Gbl.F.Out," title=\"%s\"",Txt);
    fprintf (Gbl.F.Out," class=\"%s\"","MATCH_BUTTON ICO_HIGHLIGHT");
@@ -4106,18 +4137,46 @@ static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 	    Txt);
    fprintf (Gbl.F.Out,"</a>");
 
+   ***** End form *****
+   Frm_EndForm ();
+  }
+*/
+
+static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
+			      const char *Icon,const char *Txt)
+  {
+   /***** Start form *****/
+   Frm_StartForm (NextAction);
+   Gam_PutParamMatchCod (MchCod);
+
+   /***** Put icon with link *****/
+   /* Submitting onmousedown instead of default onclick
+      is necessary in order to be fast
+      and not lose clicks due to refresh */
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON\">");
+   fprintf (Gbl.F.Out,"<a href=\"\"");
+   fprintf (Gbl.F.Out," title=\"%s\"",Txt);
+   fprintf (Gbl.F.Out," class=\"%s\"","ICO_HIGHLIGHT");
+   fprintf (Gbl.F.Out," onmousedown=\"");
+   fprintf (Gbl.F.Out,"document.getElementById('%s').submit();"
+		      "return false;\">",
+	    Gbl.Form.Id);
+   fprintf (Gbl.F.Out,"%s",Icon);
+   fprintf (Gbl.F.Out,"</a>");
+   fprintf (Gbl.F.Out,"</div>");
+
    /***** End form *****/
    Frm_EndForm ();
   }
-
+/*
 static void Gam_PutBigButtonClose (void)
   {
    extern const char *Txt_Close;
 
-   /***** Put icon with link *****/
-   /* onmousedown instead of default onclick
+   ***** Put icon with link *****
+   * onmousedown instead of default onclick
       is necessary in order to be fast
-      and not lose clicks due to refresh */
+      and not lose clicks due to refresh *
    fprintf (Gbl.F.Out,"<a href=\"\"");
    fprintf (Gbl.F.Out," title=\"%s\"",Txt_Close);
    fprintf (Gbl.F.Out," class=\"%s\"","MATCH_BUTTON ICO_HIGHLIGHT");
@@ -4130,6 +4189,25 @@ static void Gam_PutBigButtonClose (void)
 	    Txt_Close,Txt_Close,
 	    Txt_Close);
    fprintf (Gbl.F.Out,"</a>");
+  }
+*/
+
+static void Gam_PutBigButtonClose (void)
+  {
+   extern const char *Txt_Close;
+
+   /***** Put icon with link *****/
+   /* onmousedown instead of default onclick
+      is necessary in order to be fast
+      and not lose clicks due to refresh */
+   // fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON\">");
+   fprintf (Gbl.F.Out,"<a href=\"\"");
+   fprintf (Gbl.F.Out," title=\"%s\"",Txt_Close);
+   fprintf (Gbl.F.Out," class=\"%s\"","MATCH_BUTTON ICO_HIGHLIGHT");
+   fprintf (Gbl.F.Out," onmousedown=\"window.close(); return false;\"\">");
+   fprintf (Gbl.F.Out,"%s","&times;");
+   fprintf (Gbl.F.Out,"</a>");
+   // fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

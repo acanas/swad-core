@@ -460,10 +460,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.139.1 (2019-08-03)"
+#define Log_PLATFORM_VERSION	"SWAD 18.139.2 (2019-09-05)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.139.2: Sep 05, 2019	Number of match players is not displayed for students.
+				        Changes in layout of matches buttons (not finished).
+				        Display match elapsed time. (244306 lines)
 	Version 18.139.1: Aug 03, 2019	Get elapsed time in a question and in a match. (244216 lines)
 	Version 18.139:   Aug 03, 2019	Time of current match and current match question are stored in database. (244150 lines)
 					1 change necessary in database:
@@ -9838,7 +9841,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 
 	--------------------------------
 
-	Versión 0.9:    21/sep/1999	 Comienzo de la versión inicial.
+	Versión 0.9:    21/sep/1999	Comienzo de la versión inicial.
 	--------------------------------
 	Versión 1.0:    1999-2000	Primera versión, que sólo incluía las fichas,las calificaciones y la descarga de documentos.
 	Versión 1.1:    2000-2001	Incluía el envío automático de la foto.

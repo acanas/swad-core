@@ -2596,6 +2596,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:100%;
 	height:60px;
 	font-size:18pt;
+	text-align:center;
 	border:1px solid pink;
 	}
 .MATCH_TOP_LEFT
@@ -2658,25 +2659,44 @@ a:hover img.CENTRE_PHOTO_SHOW
 
 .MATCH_BUTTON_LEFT_CONTAINER
 	{
+	display:table-cell;
 	box-sizing:border-box;
 	float:left;
 	width:50%;
+	height:200px;
 	margin:0 auto;
 	text-align:center;
-	border:1px solid red;
+	vertical-align:middle;
+	border:1px solid black;
+	font-size:48pt;
 	}
 .MATCH_BUTTON_RIGHT_CONTAINER
 	{
+	display:table-cell;
 	box-sizing:border-box;
 	float:left;
 	width:50%;
+	height:200px;
 	margin:0 auto;
 	text-align:center;
+	vertical-align:middle;
 	border:1px solid blue;
+	font-size:48pt;
 	}
+
 .MATCH_BUTTON
 	{
-	font-size:12pt;
+	display:table-cell;
+	width:100%;
+	font-size:48pt;
+	text-align:center;
+	vertical-align:middle;
+	background:red;
+	margin:auto;
+	}
+.MATCH_BUTTON a
+	{
+	text-decoration:none;
 	}
 
 .MATCH_TCH_QST
