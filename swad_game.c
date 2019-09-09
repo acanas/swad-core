@@ -3444,20 +3444,26 @@ static void Gam_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
 				char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1])
   {
    MYSQL_ROW row;
+   bool ElapsedTimeGotFromDB = false;
 
    if (NumRows)
      {
       row = mysql_fetch_row (mysql_res);
 
-      /* Get the elapsed time (row[0]) */
-      if (strlen (row[0]) > 2 + 1 + 2 + 1 + 2)
-	 Str_Copy (HHHMMSS,"+99:59:59",
-		   Gam_MAX_BYTES_TITLE);
-      else
-	 Str_Copy (HHHMMSS,row[0],
-		   Gam_MAX_BYTES_TITLE);
+      if (row[0])
+	{
+	 /* Get the elapsed time (row[0]) */
+	 if (strlen (row[0]) > 2 + 1 + 2 + 1 + 2)
+	    Str_Copy (HHHMMSS,"+99:59:59",
+		      Gam_MAX_BYTES_TITLE);
+	 else
+	    Str_Copy (HHHMMSS,row[0],
+		      Gam_MAX_BYTES_TITLE);
+	 ElapsedTimeGotFromDB = true;
+	}
      }
-   else
+
+   if (!ElapsedTimeGotFromDB)
       Str_Copy (HHHMMSS,"00:00:00",
 		Gam_MAX_BYTES_TITLE);
   }
