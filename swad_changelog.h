@@ -460,10 +460,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.141.1 (2019-09-09)"
+#define Log_PLATFORM_VERSION	"SWAD 18.142 (2019-09-10)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.142:   Sep 10, 2019	New action to see the stem/hide the answers of a question when playing a match. (244345 lines)
+					2 changes necessary in database:
+UPDATE actions SET Txt='Comenzar/reanudar partida (como profesor)' WHERE ActCod='1789' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1792','es','N','Mostrar solo enunciado en partida (como profesor)');
+
 	Version 18.141.1: Sep 09, 2019	Display question elapsed time. (244329 lines)
 	Version 18.141:   Sep 09, 2019	New action to pause a match. (244312 lines)
 					1 change necessary in database:
