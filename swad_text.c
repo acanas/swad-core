@@ -28650,6 +28650,27 @@ const char *Txt_Paste =
 	"Colar";
 #endif
 
+const char *Txt_Pause =
+#if   L==1	// ca
+	"Fer una pausa";
+#elif L==2	// de
+	"Wiedergabe anzuhalten";
+#elif L==3	// en
+	"Pause";
+#elif L==4	// es
+	"Hacer una pausa";
+#elif L==5	// fr
+	"Faire une pause";
+#elif L==6	// gn
+	"Hacer una pausa";	// Okoteve traducción
+#elif L==7	// it
+	"Mettere in pausa";
+#elif L==8	// pl
+	"Wstrzyma&cacute;";
+#elif L==9	// pt
+	"Pausar";
+#endif
+
 const char *Txt_PERCENT_of_users =
 #if   L==1	// ca
 	"% de usuarios";	// Necessita traduccio

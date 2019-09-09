@@ -697,6 +697,7 @@ static void Lay_WriteScriptInit (void)
       case ActNewMchTch:
       case ActResMchTch:
       case ActPrvMchTch:
+      case ActPauMchTch:
       case ActCurMchTch:
       case ActNxtMchTch:
       case ActPlyMchStd:
@@ -818,6 +819,7 @@ static void Lay_WriteScriptParamsAJAX (void)
       case ActNewMchTch:
       case ActResMchTch:
       case ActPrvMchTch:
+      case ActPauMchTch:
       case ActCurMchTch:
       case ActNxtMchTch:
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"

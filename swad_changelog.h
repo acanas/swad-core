@@ -460,10 +460,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.140.1 (2019-09-09)"
+#define Log_PLATFORM_VERSION	"SWAD 18.141 (2019-09-09)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.141:   Sep 09, 2019	New action to pause a match. (244312 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1791','es','N','Pausar partida (como profesor)');
+
 	Version 18.140.1: Sep 09, 2019	Fixed bug in matches. (244217 lines)
 	Version 18.140:   Sep 09, 2019	Font awesome used for matches. (244211 lines)
 					Copy the following icons to public directory:

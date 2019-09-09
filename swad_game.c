@@ -85,8 +85,9 @@ const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
 #define Gam_ICON_NEXT		"&#9193;"	// Alternatives: "&rarrb;"
 #define Gam_ICON_ANSWERS	"&#9193;"	// Alternatives: "&rarrb;"
 */
-#define Gam_ICON_CLOSE		"fas fa-window-close"
+#define Gam_ICON_CLOSE		"fas fa-times"
 #define Gam_ICON_PLAY		"fas fa-play"
+#define Gam_ICON_PAUSE		"fas fa-pause"
 #define Gam_ICON_STEM		"fas fa-step-backward"
 #define Gam_ICON_START		"fas fa-step-backward"
 #define Gam_ICON_PREVIOUS	"fas fa-step-backward"
@@ -228,6 +229,7 @@ static void Gam_ShowQuestionAndAnswersStd (struct Match *Match);
 
 static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 			      const char *Icon,const char *Txt);
+static void Gam_PutBigButtonOff (const char *Icon);
 static void Gam_PutBigButtonClose (void);
 
 static void Gam_RemoveOldPlayers (void);
@@ -3469,6 +3471,35 @@ static void Gam_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
   }
 
 /*****************************************************************************/
+/********************* Pause current match (by a teacher) ********************/
+/*****************************************************************************/
+
+void Gam_PauseMatchTch (void)
+  {
+   struct Match Match;
+
+   /***** Remove old players.
+          This function must be called before getting match status. *****/
+   Gam_RemoveOldPlayers ();
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Gam_GetDataOfMatchByCod (&Match);
+
+   /***** Update status *****/
+   Match.Status.ShowingAnswers = false;		// Don't show answers in any case
+   Match.Status.BeingPlayed    = false;		// Resume match
+
+   /***** Update match status in database *****/
+   Gam_UpdateMatchStatusInDB (&Match);
+
+   /***** Show current match status *****/
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   Gam_ShowMatchStatusForTch (&Match);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
 /** Show current match status (current question, answers...) (by a teacher) **/
 /*****************************************************************************/
 
@@ -3715,11 +3746,12 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    extern const char *Txt_Stem;
    extern const char *Txt_MATCH_Start;
    extern const char *Txt_Previous_QUESTION;
+   extern const char *Txt_Pause;
+   extern const char *Txt_Start;
+   extern const char *Txt_Resume;
    extern const char *Txt_Next_QUESTION;
    extern const char *Txt_Finish;
    extern const char *Txt_Answers;
-   extern const char *Txt_Start;
-   extern const char *Txt_Resume;
    char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1];
    unsigned PrvQstInd;	// Previous question index
    unsigned NxtQstInd;	// Next question index
@@ -3778,6 +3810,18 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
       Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
 			Gam_ICON_PREVIOUS,Txt_Previous_QUESTION);
 
+   fprintf (Gbl.F.Out,"</div>");
+
+   /* Center button */
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CENTER_CONTAINER\">");
+   if (Match->Status.BeingPlayed)
+      /* Put button to pause match */
+      Gam_PutBigButton (ActPauMchTch,
+			Match->MchCod,
+			Gam_ICON_PAUSE,Txt_Pause);
+   else
+      /* Put inactive button to pause match */
+      Gam_PutBigButtonOff (Gam_ICON_PAUSE);
    fprintf (Gbl.F.Out,"</div>");
 
    /* Right button */
@@ -4079,7 +4123,7 @@ static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
       is necessary in order to be fast
       and not lose clicks due to refresh */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">"
-                      "<a href=\"\" title=\"%s\" class=\"MATCH_BUTTON\""
+                      "<a href=\"\" class=\"MATCH_BUTTON_ON\" title=\"%s\" "
 	              " onmousedown=\"document.getElementById('%s').submit();"
 	              " return false;\">"
 	              "<i class=\"%s\"></i>"
@@ -4093,6 +4137,17 @@ static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
    Frm_EndForm ();
   }
 
+static void Gam_PutBigButtonOff (const char *Icon)
+  {
+   /***** Put inactive icon *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">"
+                      "<div class=\"MATCH_BUTTON_OFF\">"
+	              "<i class=\"%s\"></i>"
+	              "</div>"
+	              "</div>",
+	    Icon);
+  }
+
 static void Gam_PutBigButtonClose (void)
   {
    extern const char *Txt_Close;
@@ -4102,7 +4157,7 @@ static void Gam_PutBigButtonClose (void)
       is necessary in order to be fast
       and not lose clicks due to refresh */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">"
-                      "<a href=\"\" title=\"%s\" class=\"MATCH_BUTTON\""
+                      "<a href=\"\" class=\"MATCH_BUTTON_ON\" title=\"%s\" "
 	              " onmousedown=\"window.close();"
 	              " return false;\"\">"
 	              "<i class=\"%s\"></i>"
