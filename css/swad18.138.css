@@ -2678,6 +2678,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 	height:100px;
 	vertical-align:middle;
 	}
+.MATCH_BUTTON_CONTAINER a
+	{
+	text-decoration:none;
+	color:#404040;
+	}
 .MATCH_BUTTON
 	{
 	display:table-cell;
@@ -2686,11 +2691,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:center;
 	vertical-align:middle;
 	margin:auto;
+	opacity:0.7;
 	}
-.MATCH_BUTTON_CONTAINER a
+.MATCH_BUTTON:hover
 	{
-	text-decoration:none;
-	color:#404040;
+	opacity:1;
 	}
 
 .MATCH_TCH_QST

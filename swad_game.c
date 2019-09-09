@@ -76,6 +76,15 @@ const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
 
 #define Gam_AFTER_LAST_QUESTION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a match is finished
 
+#define Gam_ICON_CLOSE		"&#10062;"	// Alternatives: "&#10005;" "&#10060;" "&times;"
+#define Gam_ICON_PLAY		"&#127937;"	// Alternatives: "&#8227;" "&#9193;" "&#9654;" "&#9656;" "&rarrb;" "&rtrif;"
+#define Gam_ICON_STEM		"&#9194;"	// Alternatives: "&larrb;"
+#define Gam_ICON_START		"&#9194;"	// Alternatives: "&larrb;"
+#define Gam_ICON_PREVIOUS	"&#9194;"	// Alternatives: "&larrb;"
+#define Gam_ICON_FINISH		"&#9193;"	// Alternatives: "&rarrb;"
+#define Gam_ICON_NEXT		"&#9193;"	// Alternatives: "&rarrb;"
+#define Gam_ICON_ANSWERS	"&#9193;"	// Alternatives: "&rarrb;"
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -3738,11 +3747,8 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 	{
 	 if (Match->Status.ShowingAnswers)
 	    /* Put button to hide answers */
-	    // Gam_PutBigButton (ActCurMchTch,Match->MchCod,
-	    //		         "step-backward.svg",Txt_Stem);
 	    Gam_PutBigButton (ActCurMchTch,Match->MchCod,
-			      "&#9194;", // "&larrb;"
-			      Txt_Stem);
+			      Gam_ICON_STEM,Txt_Stem);
 	 else
 	   {
 	    /* Get index of the previous question */
@@ -3750,18 +3756,12 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 							Match->Status.QstInd);
 	    if (PrvQstInd == 0)		// There is not a previous question
 	       /* Put button to resume match before first question */
-	       // Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-	       //                   "step-backward.svg",Txt_MATCH_Start);
 	       Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-				 "&#9194;", // "&larrb;"
-			         Txt_MATCH_Start);
+				 Gam_ICON_START,Txt_MATCH_Start);
 	    else			// There is a previous question
 	       /* Put button to show previous question */
-	       // Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-	       //                   "step-backward.svg",Txt_Previous_QUESTION);
 	       Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-				 "&#9194;", // "&larrb;"
-			         Txt_Previous_QUESTION);
+				 Gam_ICON_PREVIOUS,Txt_Previous_QUESTION);
 	   }
 	}
       else				// Not being played
@@ -3770,11 +3770,8 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
      }
    else								// Finished
       /* Put button to show last question */
-      // Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-      //   	 	   "step-backward.svg",Txt_Previous_QUESTION);
       Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-			"&#9194;", // "&larrb;"
-			Txt_Previous_QUESTION);
+			Gam_ICON_PREVIOUS,Txt_Previous_QUESTION);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -3792,39 +3789,24 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 						     Match->Status.QstInd);
 	 if (NxtQstInd >= Gam_AFTER_LAST_QUESTION)	// No more questions
 	    /* Put button to finish */
-	    // Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-	    // 		         "step-forward.svg",Txt_Finish);
 	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			      "&#9193;", // "&larrb;"
-			      Txt_Finish);
+			      Gam_ICON_FINISH,Txt_Finish);
 	 else						// There are more questions
 	    /* Put button to show next question */
-	    // Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-	    // 		         "step-forward.svg",Txt_Next_QUESTION);
 	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			      "&#9193;", // "&larrb;"
-			      Txt_Next_QUESTION);
+			      Gam_ICON_NEXT,Txt_Next_QUESTION);
 	}
       else
 	 /* Put button to show answers */
-	 // Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-	 // 		   "step-forward.svg",Txt_Answers);
 	 Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			   "&#9193;", // "&larrb;"
-			   Txt_Answers);
+			   Gam_ICON_ANSWERS,Txt_Answers);
      }
    else
       /* Put button to start / resume match */
-      // Gam_PutBigButton (ActCurMchTch,
-      //   		   Match->MchCod,
-      //                   "play.svg",
-      //                   Match->Status.QstInd == 0 ? Txt_Start :
-      //					       Txt_Resume);
       Gam_PutBigButton (ActCurMchTch,
 			Match->MchCod,
-			"&#9193;", // "&rarrb;",	// "&#9656;",	// "&#9654;",	// "&#8227;",	//"&rarrb;", // "&rtrif;",
-			Match->Status.QstInd == 0 ? Txt_Start :
-      					            Txt_Resume);
+			Gam_ICON_PLAY,Match->Status.QstInd == 0 ? Txt_Start :
+      					                          Txt_Resume);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -4116,38 +4098,6 @@ static void Gam_ShowQuestionAndAnswersStd (struct Match *Match)
 /*****************************************************************************/
 /*********************** Put a big button to do action ***********************/
 /*****************************************************************************/
-/*
-static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
-			      const char *Icon,const char *Txt)
-  {
-   ***** Start form *****
-   Frm_StartForm (NextAction);
-   Gam_PutParamMatchCod (MchCod);
-
-   ***** Put icon with link *****
-   * Submitting onmousedown instead of default onclick
-      is necessary in order to be fast
-      and not lose clicks due to refresh *
-   fprintf (Gbl.F.Out,"<a href=\"\"");
-   fprintf (Gbl.F.Out," title=\"%s\"",Txt);
-   fprintf (Gbl.F.Out," class=\"%s\"","MATCH_BUTTON ICO_HIGHLIGHT");
-   fprintf (Gbl.F.Out," onmousedown=\"");
-   fprintf (Gbl.F.Out,"document.getElementById('%s').submit();"
-		      "return false;\">",
-	    Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
-	              "<br />"
-	              "%s",
-            Cfg_URL_ICON_PUBLIC,Icon,
-	    Txt,Txt,
-	    Txt);
-   fprintf (Gbl.F.Out,"</a>");
-
-   ***** End form *****
-   Frm_EndForm ();
-  }
-*/
 
 static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 			      const char *Icon,const char *Txt)
@@ -4160,41 +4110,18 @@ static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
    /* Submitting onmousedown instead of default onclick
       is necessary in order to be fast
       and not lose clicks due to refresh */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">");
-   fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"MATCH_BUTTON ICO_HIGHLIGHT\""
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">"
+                      "<a href=\"\" title=\"%s\" class=\"MATCH_BUTTON\""
 	              " onmousedown=\"document.getElementById('%s').submit();"
-	              " return false;\">%s</a>",
+	              " return false;\">%s</a>"
+	              "</div>",
 	    Txt,
 	    Gbl.Form.Id,
 	    Icon);
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** End form *****/
    Frm_EndForm ();
   }
-/*
-static void Gam_PutBigButtonClose (void)
-  {
-   extern const char *Txt_Close;
-
-   ***** Put icon with link *****
-   * onmousedown instead of default onclick
-      is necessary in order to be fast
-      and not lose clicks due to refresh *
-   fprintf (Gbl.F.Out,"<a href=\"\"");
-   fprintf (Gbl.F.Out," title=\"%s\"",Txt_Close);
-   fprintf (Gbl.F.Out," class=\"%s\"","MATCH_BUTTON ICO_HIGHLIGHT");
-   fprintf (Gbl.F.Out," onmousedown=\"window.close();\"\">");
-   fprintf (Gbl.F.Out,"<img src=\"%s/close.svg\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICO64x64\" />"
-	              "<br />"
-	              "%s",
-            Cfg_URL_ICON_PUBLIC,
-	    Txt_Close,Txt_Close,
-	    Txt_Close);
-   fprintf (Gbl.F.Out,"</a>");
-  }
-*/
 
 static void Gam_PutBigButtonClose (void)
   {
@@ -4204,13 +4131,12 @@ static void Gam_PutBigButtonClose (void)
    /* onmousedown instead of default onclick
       is necessary in order to be fast
       and not lose clicks due to refresh */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">");
-   fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"MATCH_BUTTON ICO_HIGHLIGHT\""
-	              " onmousedown=\"window.close(); return false;\"\">"
-	              "&#10062;"	// "&#10060;"	// "&times;"	// "&#10005;"
-	              "</a>",
-	    Txt_Close);
-   fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">"
+                      "<a href=\"\" title=\"%s\" class=\"MATCH_BUTTON\""
+	              " onmousedown=\"window.close();"
+	              " return false;\"\">%s</a>"
+	              "</div>",
+	    Txt_Close,Gam_ICON_CLOSE);
   }
 
 /*****************************************************************************/
