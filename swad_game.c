@@ -212,7 +212,7 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match);
 static void Gam_ShowLeftColumnTch (struct Match *Match);
 static void Gam_ShowLeftColumnStd (struct Match *Match);
 static void Gam_ShowNumPlayers (struct Match *Match);
-static void Gam_ShowMatchTitleAndCloseButton (struct Match *Match);
+static void Gam_ShowMatchTitle (struct Match *Match);
 static void Gam_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Gam_ShowQuestionAndAnswersStd (struct Match *Match);
 
@@ -3623,7 +3623,7 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
 
    /***** Top row *****/
-   Gam_ShowMatchTitleAndCloseButton (Match);
+   Gam_ShowMatchTitle (Match);
 
    /***** Bottom row *****/
    if (Match->Status.BeingPlayed)
@@ -3660,7 +3660,7 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
 
    /***** Top row *****/
-   Gam_ShowMatchTitleAndCloseButton (Match);
+   Gam_ShowMatchTitle (Match);
 
    /***** Bottom row *****/
    if (Match->Status.QstInd < Gam_AFTER_LAST_QUESTION)	// Unfinished
@@ -3901,33 +3901,13 @@ static void Gam_ShowNumPlayers (struct Match *Match)
 /******************** Show match title and close button **********************/
 /*****************************************************************************/
 
-static void Gam_ShowMatchTitleAndCloseButton (struct Match *Match)
+static void Gam_ShowMatchTitle (struct Match *Match)
   {
-   extern const char *Txt_Close;
-
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\">");
 
    /***** Left: Match title *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP_LEFT\">"
-		      "%s"
-		      "</div>",
-	    Match->Title);
-
-   /***** Right: Icon to close this tab *****/
-   /* onmousedown instead of default onclick
-      is necessary in order to be fast
-      and not lose clicks due to refresh */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP_RIGHT ICO_HIGHLIGHT\">"
-                      "<a href=\"\" title=\"%s\""
-                      " onmousedown=\"window.close();\"\">"
-                      "<img src=\"%s/close.svg\" alt=\"%s\" title=\"%s\""
-                      " class=\"ICO16x16\" />"
-	              "</a>"
-	              "</div>",
-            Txt_Close,
-	    Cfg_URL_ICON_PUBLIC,
-	    Txt_Close,Txt_Close);
+   fprintf (Gbl.F.Out,"%s",Match->Title);
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");

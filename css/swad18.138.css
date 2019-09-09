@@ -2592,30 +2592,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MATCH_TOP
 	{
 	box-sizing:border-box;
-	display:table;
+	/* display:table; */
 	width:100%;
 	height:60px;
 	font-size:18pt;
 	text-align:center;
-	border:1px solid pink;
-	}
-.MATCH_TOP_LEFT
-	{
-	box-sizing:border-box;
-	float:left;
-	width:90%;
-	white-space:nowrap;
-	overflow:hidden;
 	text-overflow:ellipsis;
-	border:1px solid red;
-	}
-.MATCH_TOP_RIGHT
-	{
-	box-sizing:border-box;
-	float:left;
-	width:10%;
-	text-align:right;
-	border:1px solid blue;
+	border:1px solid pink;
 	}
 .MATCH_BOTTOM
 	{
