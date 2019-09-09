@@ -1559,7 +1559,6 @@ void Dat_WriteScriptMonths (void)
 /*****************************************************************************/
 /********* Write time difference in seconds as hours:minutes:seconds *********/
 /*****************************************************************************/
-// TimeDiff must be in seconds
 
 void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
   {
@@ -1581,3 +1580,22 @@ void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
                (long) Seconds);
   }
 
+/*****************************************************************************/
+/******************* Write time as hours:minutes:seconds *********************/
+/*****************************************************************************/
+
+void Dat_WriteHoursMinutesSeconds (struct Time *Time)
+  {
+   if (Time->Hour)
+      fprintf (Gbl.F.Out,"%u:%02u'%02u&quot;",
+               Time->Hour,
+               Time->Minute,
+               Time->Second);
+   else if (Time->Minute)
+      fprintf (Gbl.F.Out,"%u'%02u&quot;",
+               Time->Minute,
+               Time->Second);
+   else
+      fprintf (Gbl.F.Out,"%u&quot;",
+               Time->Second);
+  }

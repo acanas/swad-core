@@ -2579,7 +2579,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
-	border:1px solid red;
 	}
 .MATCH_RIGHT
 	{
@@ -2587,34 +2586,40 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:table;
 	float:left;
 	width:75%;
-	border:1px solid blue;
 	}
 .MATCH_TOP
 	{
 	box-sizing:border-box;
 	width:100%;
 	height:60px;
+	color:#808080;
 	font-size:18pt;
+	font-weight:bold;
 	text-align:center;
 	text-overflow:ellipsis;
-	border:1px solid pink;
 	}
 .MATCH_BOTTOM
 	{
 	box-sizing:border-box;
 	width:100%;
-	border:1px solid pink;
+	padding-left:24px;
 	}
 
 .MATCH_NUM_QST
 	{
-	text-align:center;
-	vertical-align:top;
-	padding-bottom:48pt;
 	color:#808080;
 	font-size:36pt;
 	font-weight:bold;
-	border:1px solid green;
+	text-align:center;
+	vertical-align:top;
+	}
+.MATCH_TIME_QST
+	{
+	color:#808080;
+	font-size:18pt;
+	font-weight:bold;
+	text-align:center;
+	vertical-align:top;
 	}
 .MATCH_NUM_PLAYERS
 	{
@@ -2642,24 +2647,21 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:table-cell;
 	box-sizing:border-box;
 	float:left;
-	width:33%;
-	/* border:1px solid green; */
+	width:35%;
 	}
 .MATCH_BUTTON_CENTER_CONTAINER
 	{
 	display:table-cell;
 	box-sizing:border-box;
 	float:left;
-	width:34%;
-	/* border:1px solid green; */
+	width:30%;
 	}
 .MATCH_BUTTON_RIGHT_CONTAINER
 	{
 	display:table-cell;
 	box-sizing:border-box;
 	float:left;
-	width:33%;
-	/* border:1px solid green; */
+	width:35%;
 	}
 
 .MATCH_BUTTON_CONTAINER
@@ -2667,8 +2669,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	box-sizing:border-box;
 	display:table;
 	width:100%;
-	height:100px;
-	vertical-align:middle;
+	height:128px;
+	font-size:36pt;
 	}
 .MATCH_BUTTON_CONTAINER a
 	{
@@ -2679,10 +2681,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	display:table-cell;
 	width:100%;
-	font-size:48pt;
 	text-align:center;
 	vertical-align:middle;
-	/* margin:auto; */
 	opacity:0.7;
 	}
 .MATCH_BUTTON_ON:hover
@@ -2693,10 +2693,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	display:table-cell;
 	width:100%;
-	font-size:48pt;
 	text-align:center;
 	vertical-align:middle;
-	/* margin:auto; */
 	opacity:0.1;
 	}
 
@@ -2743,7 +2741,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	text-align:center;
 	vertical-align:middle;
-	border:1px solid green;
 	}
 .MATCH_STD_BUTTON
 	{

@@ -209,11 +209,11 @@ static void Gam_UpdateMatchStatusInDB (struct Match *Match);
 
 static void Gam_UpdateElapsedTimeInQuestion (struct Match *Match);
 static void Gam_GetElapsedTimeInQuestion (struct Match *Match,
-				          char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1]);
+				          struct Time *Time);
 static void Gam_GetElapsedTimeInMatch (struct Match *Match,
-				       char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1]);
+				       struct Time *Time);
 static void Gam_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
-				char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1]);
+				struct Time *Time);
 
 static void Gam_SetMatchStatusToPrevQuestion (struct Match *Match);
 static void Gam_SetMatchStatusToNextQuestion (struct Match *Match);
@@ -3396,7 +3396,7 @@ static void Gam_UpdateElapsedTimeInQuestion (struct Match *Match)
 /*****************************************************************************/
 
 static void Gam_GetElapsedTimeInQuestion (struct Match *Match,
-				          char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1])
+					  struct Time *Time)
   {
    MYSQL_RES *mysql_res;
    unsigned NumRows;
@@ -3409,7 +3409,7 @@ static void Gam_GetElapsedTimeInQuestion (struct Match *Match,
 				        Match->MchCod,Match->Status.QstInd);
 
    /***** Get elapsed time from query result *****/
-   Gam_GetElapsedTime (NumRows,mysql_res,HHHMMSS);
+   Gam_GetElapsedTime (NumRows,mysql_res,Time);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3420,7 +3420,7 @@ static void Gam_GetElapsedTimeInQuestion (struct Match *Match,
 /*****************************************************************************/
 
 static void Gam_GetElapsedTimeInMatch (struct Match *Match,
-				       char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1])
+				       struct Time *Time)
   {
    MYSQL_RES *mysql_res;
    unsigned NumRows;
@@ -3432,7 +3432,7 @@ static void Gam_GetElapsedTimeInMatch (struct Match *Match,
 				        Match->MchCod);
 
    /***** Get elapsed time from query result *****/
-   Gam_GetElapsedTime (NumRows,mysql_res,HHHMMSS);
+   Gam_GetElapsedTime (NumRows,mysql_res,Time);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3443,31 +3443,27 @@ static void Gam_GetElapsedTimeInMatch (struct Match *Match,
 /*****************************************************************************/
 
 static void Gam_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
-				char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1])
+				struct Time *Time)
   {
    MYSQL_ROW row;
    bool ElapsedTimeGotFromDB = false;
 
+   /***** Get time from H...H:MM:SS string *****/
    if (NumRows)
      {
       row = mysql_fetch_row (mysql_res);
 
       if (row[0])
-	{
 	 /* Get the elapsed time (row[0]) */
-	 if (strlen (row[0]) > 2 + 1 + 2 + 1 + 2)
-	    Str_Copy (HHHMMSS,"+99:59:59",
-		      Gam_MAX_BYTES_TITLE);
-	 else
-	    Str_Copy (HHHMMSS,row[0],
-		      Gam_MAX_BYTES_TITLE);
-	 ElapsedTimeGotFromDB = true;
-	}
+	 if (sscanf (row[0],"%u:%02u:%02u",&Time->Hour,&Time->Minute,&Time->Second) == 3)
+	    ElapsedTimeGotFromDB = true;
      }
 
+   /***** Initialize time to default value (0) *****/
    if (!ElapsedTimeGotFromDB)
-      Str_Copy (HHHMMSS,"00:00:00",
-		Gam_MAX_BYTES_TITLE);
+      Time->Hour   =
+      Time->Minute =
+      Time->Second = 0;
   }
 
 /*****************************************************************************/
@@ -3752,7 +3748,7 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    extern const char *Txt_Next_QUESTION;
    extern const char *Txt_Finish;
    extern const char *Txt_Answers;
-   char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1];
+   struct Time Time;
    unsigned PrvQstInd;	// Previous question index
    unsigned NxtQstInd;	// Next question index
    unsigned NumAnswerers;
@@ -3764,13 +3760,19 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\">");
 
    /* Write elapsed time in match */
-   Gam_GetElapsedTimeInMatch (Match,HHHMMSS);
-   fprintf (Gbl.F.Out,"%s",HHHMMSS);
+   Gam_GetElapsedTimeInMatch (Match,&Time);
+   Dat_WriteHoursMinutesSeconds (&Time);
 
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write number of question *****/
    Gam_ShowNumQstInGame (Match);
+
+   /***** Write elapsed time in question *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TIME_QST\">");
+   Gam_GetElapsedTimeInQuestion (Match,&Time);
+   Dat_WriteHoursMinutesSeconds (&Time);
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Buttons *****/
    /* Start buttons container */
