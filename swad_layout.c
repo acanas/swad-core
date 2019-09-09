@@ -195,8 +195,20 @@ void Lay_WriteStartOfPage (void)
 	    Cfg_URL_ICON_PUBLIC);
 
    /* Style sheet for SWAD */
-   fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\" href=\"%s/%s\" type=\"text/css\" />\n",
+   fprintf (Gbl.F.Out,"<link rel=\"stylesheet\""
+	              " href=\"%s/%s\""
+	              " type=\"text/css\" />\n",
             Cfg_URL_SWAD_PUBLIC,CSS_FILE);
+
+   /* Style sheets for Font Awesome */
+   fprintf (Gbl.F.Out,"<link rel=\"stylesheet\""
+	              " href=\"%s/fontawesome/css/fontawesome.css\""
+	              " type=\"text/css\" />\n",
+            Cfg_URL_SWAD_PUBLIC);
+   fprintf (Gbl.F.Out,"<link rel=\"stylesheet\""
+	              " href=\"%s/fontawesome/css/solid.css\""
+	              " type=\"text/css\" />\n",
+            Cfg_URL_SWAD_PUBLIC);
 
    /* Style sheet for Dropzone.js (http://www.dropzonejs.com/) */
    // The public directory dropzone must hold:
@@ -227,7 +239,7 @@ void Lay_WriteStartOfPage (void)
       case ActFrmCreMrkCrs:	// Brw_ADMI_MRK_CRS
       case ActFrmCreMrkGrp:	// Brw_ADMI_MRK_GRP
       case ActFrmCreBrf:	// Brw_ADMI_BRF_USR
-	 fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\""
+	 fprintf (Gbl.F.Out,"<link rel=\"stylesheet\""
 			    " href=\"%s/dropzone/css/dropzone.css\""
 			    " type=\"text/css\" />\n",
 		  Cfg_URL_SWAD_PUBLIC);

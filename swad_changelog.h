@@ -460,11 +460,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.139.5 (2019-09-09)"
+#define Log_PLATFORM_VERSION	"SWAD 18.140 (2019-09-09)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
-	Version 18.139.5: Sep 09, 2019	Changes in layout of matches. (? lines)
+	Version 18.140:   Sep 09, 2019	Font awesome used for matches. (244211 lines)
+					Copy the following icons to public directory:
+sudo cp -a fontawesome /var/www/html/swad/
+
+	Version 18.139.5: Sep 09, 2019	Changes in layout of matches. (244201 lines)
 	Version 18.139.4: Sep 09, 2019	Changes in layout of matches buttons. Removed unused code. (244239 lines)
 	Version 18.139.3: Sep 09, 2019	Changes in layout of matches buttons. (244305 lines)
 	Version 18.139.2: Sep 05, 2019	Number of match players is not displayed for students.

@@ -75,15 +75,24 @@ const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
 #define Gam_NEW_MATCH_SECTION_ID	"new_match"
 
 #define Gam_AFTER_LAST_QUESTION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a match is finished
-
+/*
 #define Gam_ICON_CLOSE		"&#10062;"	// Alternatives: "&#10005;" "&#10060;" "&times;"
 #define Gam_ICON_PLAY		"&#127937;"	// Alternatives: "&#8227;" "&#9193;" "&#9654;" "&#9656;" "&rarrb;" "&rtrif;"
 #define Gam_ICON_STEM		"&#9194;"	// Alternatives: "&larrb;"
 #define Gam_ICON_START		"&#9194;"	// Alternatives: "&larrb;"
 #define Gam_ICON_PREVIOUS	"&#9194;"	// Alternatives: "&larrb;"
-#define Gam_ICON_FINISH		"&#9193;"	// Alternatives: "&rarrb;"
+#define Gam_ICON_FINISH		"&#9193;"	// Alternatives: "&#127937;" "&rarrb;"
 #define Gam_ICON_NEXT		"&#9193;"	// Alternatives: "&rarrb;"
 #define Gam_ICON_ANSWERS	"&#9193;"	// Alternatives: "&rarrb;"
+*/
+#define Gam_ICON_CLOSE		"fas fa-window-close"
+#define Gam_ICON_PLAY		"fas fa-play"
+#define Gam_ICON_STEM		"fas fa-step-backward"
+#define Gam_ICON_START		"fas fa-step-backward"
+#define Gam_ICON_PREVIOUS	"fas fa-step-backward"
+#define Gam_ICON_FINISH		"fas fa-step-forward"
+#define Gam_ICON_NEXT		"fas fa-step-forward"
+#define Gam_ICON_ANSWERS	"fas fa-step-forward"
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -211,6 +220,7 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match);
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
 static void Gam_ShowLeftColumnTch (struct Match *Match);
 static void Gam_ShowLeftColumnStd (struct Match *Match);
+static void Gam_ShowNumQstInGame (struct Match *Match);
 static void Gam_ShowNumPlayers (struct Match *Match);
 static void Gam_ShowMatchTitle (struct Match *Match);
 static void Gam_ShowQuestionAndAnswersTch (struct Match *Match);
@@ -3696,11 +3706,9 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 
 static void Gam_ShowLeftColumnTch (struct Match *Match)
   {
-   extern const char *Txt_MATCH_Start;
-   extern const char *Txt_MATCH_End;
    extern const char *Txt_Stem;
+   extern const char *Txt_MATCH_Start;
    extern const char *Txt_Previous_QUESTION;
-   extern const char *Txt_Start;
    extern const char *Txt_Next_QUESTION;
    extern const char *Txt_Finish;
    extern const char *Txt_Answers;
@@ -3709,7 +3717,6 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    char HHHMMSS[3 + 1 + 2 + 1 + 2 + 1];
    unsigned PrvQstInd;	// Previous question index
    unsigned NxtQstInd;	// Next question index
-   unsigned NumQsts;
    unsigned NumAnswerers;
 
    /***** Start left container *****/
@@ -3725,15 +3732,7 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write number of question *****/
-   NumQsts = Gam_GetNumQstsGame (Match->GamCod);
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_QST\">");
-   if (Match->Status.QstInd == 0)				// Not started
-      fprintf (Gbl.F.Out,"%s",Txt_MATCH_Start);
-   else if (Match->Status.QstInd >= Gam_AFTER_LAST_QUESTION)	// Finished
-      fprintf (Gbl.F.Out,"%s",Txt_MATCH_End);
-   else
-      fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
-   fprintf (Gbl.F.Out,"</div>");
+   Gam_ShowNumQstInGame (Match);
 
    /***** Buttons *****/
    /* Start buttons container */
@@ -3838,10 +3837,6 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 
 static void Gam_ShowLeftColumnStd (struct Match *Match)
   {
-   extern const char *Txt_MATCH_Start;
-   extern const char *Txt_MATCH_End;
-   unsigned NumQsts;
-
    /***** Start left container *****/
    fprintf (Gbl.F.Out,"<div class=\"MATCH_LEFT\">");
 
@@ -3849,36 +3844,29 @@ static void Gam_ShowLeftColumnStd (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\"></div>");
 
    /***** Write number of question *****/
-   NumQsts = Gam_GetNumQstsGame (Match->GamCod);
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_QST\">");
-   if (Match->Status.QstInd < Gam_AFTER_LAST_QUESTION)	// Unfinished
-      fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
-   else							// Finished
-      fprintf (Gbl.F.Out,"%s",Txt_MATCH_End);
-   fprintf (Gbl.F.Out,"</div>");
-
-   /***** Buttons *****/
-   /* Start buttons container */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTONS_CONTAINER\">");
-
-   /* Left button */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_LEFT_CONTAINER\">"
-                      "</div>");
-
-   /* Right button */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_RIGHT_CONTAINER\">");
-   if (Match->Status.QstInd >= Gam_AFTER_LAST_QUESTION)	// Finished
-      /* Put button to close browser tab */
-      Gam_PutBigButtonClose ();
-   fprintf (Gbl.F.Out,"</div>");
-
-   /* End buttons container */
-   fprintf (Gbl.F.Out,"</div>");
-
-   /***** Number of players *****/
-   // Gam_ShowNumPlayers (Match);
+   Gam_ShowNumQstInGame (Match);
 
    /***** End left container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********************* Show number of question in game ***********************/
+/*****************************************************************************/
+
+static void Gam_ShowNumQstInGame (struct Match *Match)
+  {
+   extern const char *Txt_MATCH_Start;
+   extern const char *Txt_MATCH_End;
+   unsigned NumQsts = Gam_GetNumQstsGame (Match->GamCod);
+
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_QST\">");
+   if (Match->Status.QstInd == 0)				// Not started
+      fprintf (Gbl.F.Out,"%s",Txt_MATCH_Start);
+   else if (Match->Status.QstInd >= Gam_AFTER_LAST_QUESTION)	// Finished
+      fprintf (Gbl.F.Out,"%s",Txt_MATCH_End);
+   else
+      fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -3898,19 +3886,13 @@ static void Gam_ShowNumPlayers (struct Match *Match)
   }
 
 /*****************************************************************************/
-/******************** Show match title and close button **********************/
+/***************************** Show match title ******************************/
 /*****************************************************************************/
 
 static void Gam_ShowMatchTitle (struct Match *Match)
   {
-   /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\">");
-
-   /***** Left: Match title *****/
-   fprintf (Gbl.F.Out,"%s",Match->Title);
-
-   /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   /***** Match title *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\">%s</div>",Match->Title);
   }
 
 /*****************************************************************************/
@@ -4093,7 +4075,9 @@ static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">"
                       "<a href=\"\" title=\"%s\" class=\"MATCH_BUTTON\""
 	              " onmousedown=\"document.getElementById('%s').submit();"
-	              " return false;\">%s</a>"
+	              " return false;\">"
+	              "<i class=\"%s\"></i>"
+	              "</a>"
 	              "</div>",
 	    Txt,
 	    Gbl.Form.Id,
@@ -4114,7 +4098,9 @@ static void Gam_PutBigButtonClose (void)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">"
                       "<a href=\"\" title=\"%s\" class=\"MATCH_BUTTON\""
 	              " onmousedown=\"window.close();"
-	              " return false;\"\">%s</a>"
+	              " return false;\"\">"
+	              "<i class=\"%s\"></i>"
+	              "</a>"
 	              "</div>",
 	    Txt_Close,Gam_ICON_CLOSE);
   }
