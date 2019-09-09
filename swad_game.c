@@ -3741,7 +3741,8 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 	    // Gam_PutBigButton (ActCurMchTch,Match->MchCod,
 	    //		         "step-backward.svg",Txt_Stem);
 	    Gam_PutBigButton (ActCurMchTch,Match->MchCod,
-			      "&larrb;",Txt_Stem);
+			      "&#9194;", // "&larrb;"
+			      Txt_Stem);
 	 else
 	   {
 	    /* Get index of the previous question */
@@ -3752,13 +3753,15 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 	       // Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
 	       //                   "step-backward.svg",Txt_MATCH_Start);
 	       Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-				 "&larrb;",Txt_MATCH_Start);
+				 "&#9194;", // "&larrb;"
+			         Txt_MATCH_Start);
 	    else			// There is a previous question
 	       /* Put button to show previous question */
 	       // Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
 	       //                   "step-backward.svg",Txt_Previous_QUESTION);
 	       Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-				 "&larrb;",Txt_Previous_QUESTION);
+				 "&#9194;", // "&larrb;"
+			         Txt_Previous_QUESTION);
 	   }
 	}
       else				// Not being played
@@ -3770,7 +3773,8 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
       // Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
       //   	 	   "step-backward.svg",Txt_Previous_QUESTION);
       Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
-			"&larrb;",Txt_Previous_QUESTION);
+			"&#9194;", // "&larrb;"
+			Txt_Previous_QUESTION);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -3791,20 +3795,23 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 	    // Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
 	    // 		         "step-forward.svg",Txt_Finish);
 	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			      "&rarrb;",Txt_Finish);
+			      "&#9193;", // "&larrb;"
+			      Txt_Finish);
 	 else						// There are more questions
 	    /* Put button to show next question */
 	    // Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
 	    // 		         "step-forward.svg",Txt_Next_QUESTION);
 	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			      "&rarrb;",Txt_Next_QUESTION);
+			      "&#9193;", // "&larrb;"
+			      Txt_Next_QUESTION);
 	}
       else
 	 /* Put button to show answers */
 	 // Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
 	 // 		   "step-forward.svg",Txt_Answers);
 	 Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			   "&rarrb;",Txt_Answers);
+			   "&#9193;", // "&larrb;"
+			   Txt_Answers);
      }
    else
       /* Put button to start / resume match */
@@ -3815,7 +3822,7 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
       //					       Txt_Resume);
       Gam_PutBigButton (ActCurMchTch,
 			Match->MchCod,
-			"&rtrif;",
+			"&#9193;", // "&rarrb;",	// "&#9656;",	// "&#9654;",	// "&#8227;",	//"&rarrb;", // "&rtrif;",
 			Match->Status.QstInd == 0 ? Txt_Start :
       					            Txt_Resume);
 
@@ -4153,16 +4160,13 @@ static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
    /* Submitting onmousedown instead of default onclick
       is necessary in order to be fast
       and not lose clicks due to refresh */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON\">");
-   fprintf (Gbl.F.Out,"<a href=\"\"");
-   fprintf (Gbl.F.Out," title=\"%s\"",Txt);
-   fprintf (Gbl.F.Out," class=\"%s\"","ICO_HIGHLIGHT");
-   fprintf (Gbl.F.Out," onmousedown=\"");
-   fprintf (Gbl.F.Out,"document.getElementById('%s').submit();"
-		      "return false;\">",
-	    Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"%s",Icon);
-   fprintf (Gbl.F.Out,"</a>");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"MATCH_BUTTON ICO_HIGHLIGHT\""
+	              " onmousedown=\"document.getElementById('%s').submit();"
+	              " return false;\">%s</a>",
+	    Txt,
+	    Gbl.Form.Id,
+	    Icon);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** End form *****/
@@ -4200,14 +4204,13 @@ static void Gam_PutBigButtonClose (void)
    /* onmousedown instead of default onclick
       is necessary in order to be fast
       and not lose clicks due to refresh */
-   // fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON\">");
-   fprintf (Gbl.F.Out,"<a href=\"\"");
-   fprintf (Gbl.F.Out," title=\"%s\"",Txt_Close);
-   fprintf (Gbl.F.Out," class=\"%s\"","MATCH_BUTTON ICO_HIGHLIGHT");
-   fprintf (Gbl.F.Out," onmousedown=\"window.close(); return false;\"\">");
-   fprintf (Gbl.F.Out,"%s","&times;");
-   fprintf (Gbl.F.Out,"</a>");
-   // fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"MATCH_BUTTON ICO_HIGHLIGHT\""
+	              " onmousedown=\"window.close(); return false;\"\">"
+	              "&#10062;"	// "&#10060;"	// "&times;"	// "&#10005;"
+	              "</a>",
+	    Txt_Close);
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
