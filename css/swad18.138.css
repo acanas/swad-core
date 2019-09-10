@@ -90,7 +90,7 @@ a:hover						/* Default ==> underlined */
 	{
 	text-decoration:underline;
 	}	
-.TAB_OFF a, .TAB_ON a, .MENU_LIST_ITEM a	/* Tabs and menus are the exceptions */
+.TAB_OFF a, .TAB_ON a, .MENU_LIST_ITEM a, .CONTEXT_OPT a	/* Tabs and menus are the exceptions */
 	{
 	text-decoration:none;
 	}
@@ -2620,6 +2620,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-weight:bold;
 	text-align:center;
 	vertical-align:top;
+	}
+.MATCH_SHOW_RESULTS
+	{
+	text-align:center;
+	padding-bottom:16pt;
+	font-size:13pt;
 	}
 .MATCH_NUM_PLAYERS
 	{

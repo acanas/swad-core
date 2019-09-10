@@ -52722,28 +52722,7 @@ const char *Txt_View_game =
 #elif L==9	// pt
 	"Ver jogo";
 #endif
-/*
-const char *Txt_View_game_results =
-#if   L==1	// ca
-	"Veure resultats";
-#elif L==2	// de
-	"Anzeigen Ergebnisse";
-#elif L==3	// en
-	"View game results";
-#elif L==4	// es
-	"Ver resultados";
-#elif L==5	// fr
-	"Voir r&eacute;sultats";
-#elif L==6	// gn
-	"Ver resultados";	// Okoteve traducción
-#elif L==7	// it
-	"Vedi risultati";
-#elif L==8	// pl
-	"Wy&sacute;wietl wyniki ankiety";
-#elif L==9	// pt
-	"Ver resultados";
-#endif
-*/
+
 const char *Txt_View_in_a_new_window =
 #if   L==1	// ca
 	"Mostrar en una finestra nova";
@@ -52826,6 +52805,27 @@ const char *Txt_View_records =
 	"Zobacz rekordy";
 #elif L==9	// pt
 	"Ver cart&otilde;es";
+#endif
+
+const char *Txt_View_results =
+#if   L==1	// ca
+	"Veure resultats";
+#elif L==2	// de
+	"Anzeigen Ergebnisse";
+#elif L==3	// en
+	"View results";
+#elif L==4	// es
+	"Ver resultados";
+#elif L==5	// fr
+	"Voir r&eacute;sultats";
+#elif L==6	// gn
+	"Ver resultados";	// Okoteve traducción
+#elif L==7	// it
+	"Vedi risultati";
+#elif L==8	// pl
+	"Wy&sacute;wietl wyniki ankiety";
+#elif L==9	// pt
+	"Ver resultados";
 #endif
 
 const char *Txt_View_survey =

@@ -460,10 +460,15 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.142.3 (2019-09-10)"
+#define Log_PLATFORM_VERSION	"SWAD 18.143 (2019-09-10)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.143:   Sep 10, 2019	Checkbox to show results in matches. (244543 lines)
+					2 changes necessary in database:
+ALTER TABLE gam_matches ADD COLUMN ShowResults ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER ShowingAnswers;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1794','es','N','Cambiar presentaci&oacute;n de resultados en partida (como profesor)');
+
 	Version 18.142.3: Sep 10, 2019	Animation on teacher's screen when match paused.
 					Code refactoring in matches. (244454 lines)
 	Version 18.142.2: Sep 10, 2019	Elapsed time in question not shown in start and end. (244391 lines)
