@@ -2624,14 +2624,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MATCH_NUM_PLAYERS
 	{
 	text-align:center;
-	padding:16pt 0;
+	padding:8pt 0;
 	color:#808080;
 	font-size:16pt;
 	}
 .MATCH_NUM_ANSWERERS
 	{
 	text-align:center;
-	padding:16pt 0;
+	padding:8pt 0;
 	color:#808080;
 	font-size:16pt;
 	}
@@ -2704,12 +2704,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:24pt;
 	}
 
-.MATCH_STD_WAIT_CONTAINER
+.MATCH_WAIT_CONTAINER
 	{
 	box-sizing:border-box;
 	text-align:center;
 	}
-.MATCH_STD_WAIT_IMAGE
+.MATCH_WAIT_IMAGE
 	{
 	box-sizing:border-box;
 	width:50%;

@@ -88,14 +88,14 @@ const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
 #define Gam_ICON_CLOSE		"fas fa-times"
 #define Gam_ICON_PLAY		"fas fa-play"
 #define Gam_ICON_PAUSE		"fas fa-pause"
-// #define Gam_ICON_STEM	"fas fa-step-backward"
-#define Gam_ICON_STEM		"fas fa-angle-up"
+#define Gam_ICON_STEM		"fas fa-step-backward"
+// #define Gam_ICON_STEM	"fas fa-angle-up"
 #define Gam_ICON_START		"fas fa-step-backward"
 #define Gam_ICON_PREVIOUS	"fas fa-step-backward"
 #define Gam_ICON_FINISH		"fas fa-step-forward"
 #define Gam_ICON_NEXT		"fas fa-step-forward"
-// #define Gam_ICON_ANSWERS	"fas fa-step-forward"
-#define Gam_ICON_ANSWERS	"fas fa-angle-down"
+#define Gam_ICON_ANSWERS	"fas fa-step-forward"
+// #define Gam_ICON_ANSWERS	"fas fa-angle-down"
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -223,6 +223,7 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match);
 static void Gam_ShowMatchStatusForStd (struct Match *Match);
 static void Gam_ShowLeftColumnTch (struct Match *Match);
 static void Gam_ShowLeftColumnStd (struct Match *Match);
+static void Gam_ShowButtons (struct Match *Match);
 static void Gam_ShowNumQstInGame (struct Match *Match);
 static void Gam_ShowNumPlayers (struct Match *Match);
 static void Gam_ShowMatchTitle (struct Match *Match);
@@ -233,6 +234,8 @@ static void Gam_PutBigButton (Act_Action_t NextAction,long MchCod,
 			      const char *Icon,const char *Txt);
 static void Gam_PutBigButtonOff (const char *Icon);
 static void Gam_PutBigButtonClose (void);
+
+static void Gam_ShowWaitImage (const char *Txt);
 
 static void Gam_RemoveOldPlayers (void);
 static void Gam_UpdateMatchAsBeingPlayed (long MchCod);
@@ -3687,6 +3690,8 @@ static void Gam_SetMatchStatusToNextQuestion (struct Match *Match)
 
 static void Gam_ShowMatchStatusForTch (struct Match *Match)
   {
+   extern const char *Txt_MATCH_Paused;
+
    /***** Get current number of players *****/
    Gam_GetNumPlayers (Match);
 
@@ -3697,13 +3702,15 @@ static void Gam_ShowMatchStatusForTch (struct Match *Match)
    /* Start right container */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
 
-   /***** Top row *****/
+   /* Top row */
    Gam_ShowMatchTitle (Match);
 
-   /***** Bottom row *****/
+   /* Bottom row */
    if (Match->Status.BeingPlayed)
       /* Show current question and possible answers */
       Gam_ShowQuestionAndAnswersTch (Match);
+   else	// Not being played
+      Gam_ShowWaitImage (Txt_MATCH_Paused);
 
    /* End right container */
    fprintf (Gbl.F.Out,"</div>");
@@ -3749,14 +3756,7 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 	 /* Show current question and possible answers */
 	 Gam_ShowQuestionAndAnswersStd (Match);
       else	// Not being played
-	 fprintf (Gbl.F.Out,"<div class=\"MATCH_STD_WAIT_CONTAINER\">"
-			    "<img src=\"%s/wait.gif\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"MATCH_STD_WAIT_IMAGE\" />"
-			    "</div>",
-		  Cfg_URL_ICON_PUBLIC,
-		  Txt_Please_wait_,
-		  Txt_Please_wait_);
+	 Gam_ShowWaitImage (Txt_Please_wait_);
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -3771,18 +3771,8 @@ static void Gam_ShowMatchStatusForStd (struct Match *Match)
 
 static void Gam_ShowLeftColumnTch (struct Match *Match)
   {
-   extern const char *Txt_Stem;
-   extern const char *Txt_MATCH_Start;
-   extern const char *Txt_Previous_QUESTION;
-   extern const char *Txt_Pause;
-   extern const char *Txt_Start;
-   extern const char *Txt_Resume;
-   extern const char *Txt_Next_QUESTION;
-   extern const char *Txt_Finish;
-   extern const char *Txt_Answers;
+   extern const char *Txt_MATCH_respond;
    struct Time Time;
-   unsigned PrvQstInd;	// Previous question index
-   unsigned NxtQstInd;	// Next question index
    unsigned NumAnswerers;
 
    /***** Start left container *****/
@@ -3813,6 +3803,65 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Buttons *****/
+   Gam_ShowButtons (Match);
+
+   /***** Number of players *****/
+   Gam_ShowNumPlayers (Match);
+
+   /***** Number of users who have answered *****/
+   if (Match->Status.BeingPlayed &&
+       Match->Status.ShowingAnswers)
+     {
+      NumAnswerers = Gam_GetNumAnswerers (Match);
+      fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_ANSWERERS\">"
+                         "%s<br />"
+                         "<strong>%u/%u</strong>"
+	                 "</div>",
+	       Txt_MATCH_respond,
+	       NumAnswerers,Match->Status.NumPlayers);
+     }
+
+   /***** End left container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/******** Show left botton column when playing a match (as a student) ********/
+/*****************************************************************************/
+
+static void Gam_ShowLeftColumnStd (struct Match *Match)
+  {
+   /***** Start left container *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_LEFT\">");
+
+   /***** Top *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\"></div>");
+
+   /***** Write number of question *****/
+   Gam_ShowNumQstInGame (Match);
+
+   /***** End left container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********************* Show buttons to control a match ***********************/
+/*****************************************************************************/
+
+static void Gam_ShowButtons (struct Match *Match)
+  {
+   extern const char *Txt_Stem;
+   extern const char *Txt_MATCH_Start;
+   extern const char *Txt_Previous_QUESTION;
+   extern const char *Txt_Pause;
+   extern const char *Txt_Start;
+   extern const char *Txt_Resume;
+   extern const char *Txt_Next_QUESTION;
+   extern const char *Txt_Answers;
+   extern const char *Txt_Finish;
+   unsigned PrvQstInd;	// Previous question index
+   unsigned NxtQstInd;	// Next question index
+
    /* Start buttons container */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTONS_CONTAINER\">");
 
@@ -3914,43 +3963,6 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    fprintf (Gbl.F.Out,"</div>");
 
    /* End buttons container */
-   fprintf (Gbl.F.Out,"</div>");
-
-   /***** Number of players *****/
-   Gam_ShowNumPlayers (Match);
-
-   /***** Number of users who have answered *****/
-   if (Match->Status.BeingPlayed &&
-       Match->Status.ShowingAnswers)
-     {
-      NumAnswerers = Gam_GetNumAnswerers (Match);
-      fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_ANSWERERS\">"
-                         "responden<br />"	// TODO: Need translation!!!
-                         "<strong>%u/%u</strong>"
-	                 "</div>",
-	       NumAnswerers,Match->Status.NumPlayers);
-     }
-
-   /***** End left container *****/
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/******** Show left botton column when playing a match (as a student) ********/
-/*****************************************************************************/
-
-static void Gam_ShowLeftColumnStd (struct Match *Match)
-  {
-   /***** Start left container *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_LEFT\">");
-
-   /***** Top *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\"></div>");
-
-   /***** Write number of question *****/
-   Gam_ShowNumQstInGame (Match);
-
-   /***** End left container *****/
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -4218,6 +4230,22 @@ static void Gam_PutBigButtonClose (void)
 	              "</a>"
 	              "</div>",
 	    Txt_Close,Gam_ICON_CLOSE);
+  }
+
+/*****************************************************************************/
+/****************************** Show wait image ******************************/
+/*****************************************************************************/
+
+static void Gam_ShowWaitImage (const char *Txt)
+  {
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_WAIT_CONTAINER\">"
+		      "<img src=\"%s/wait.gif\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"MATCH_WAIT_IMAGE\" />"
+		      "</div>",
+	    Cfg_URL_ICON_PUBLIC,
+	    Txt,
+	    Txt);
   }
 
 /*****************************************************************************/

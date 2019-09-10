@@ -460,10 +460,12 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.142.2 (2019-09-10)"
+#define Log_PLATFORM_VERSION	"SWAD 18.142.3 (2019-09-10)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.142.3: Sep 10, 2019	Animation on teacher's screen when match paused.
+					Code refactoring in matches. (244454 lines)
 	Version 18.142.2: Sep 10, 2019	Elapsed time in question not shown in start and end. (244391 lines)
 	Version 18.142.1: Sep 10, 2019	When a match is paused, backward/forward buttons go to previous/next question. (244386 lines)
 					1 change necessary in database:

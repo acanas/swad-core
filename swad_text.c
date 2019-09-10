@@ -17972,6 +17972,27 @@ const char *Txt_MATCH_End =
 	 "Fim";
 #endif
 
+const char *Txt_MATCH_Paused =
+#if   L==1	// ca
+	 "En pausa";
+#elif L==2	// de
+	 "Angehalten";
+#elif L==3	// en
+	 "Paused";
+#elif L==4	// es
+	 "En pausa";
+#elif L==5	// fr
+	 "En pause";
+#elif L==6	// gn
+	 "En pausa";	// Okoteve traducción
+#elif L==7	// it
+	 "In pausa";
+#elif L==8	// pl
+	 "Wstrzymany";
+#elif L==9	// pt
+	 "Pausado";
+#endif
+
 const char *Txt_MATCH_Start =
 #if   L==1	// ca
 	 "Inici";
@@ -18012,6 +18033,27 @@ const char *Txt_Match_X_removed =	// Warning: it is very important to include %s
 	"Mecz <strong>%s</strong> usuni&eogon;te.";
 #elif L==9	// pt
 	"Jogo <strong>%s</strong> removido.";
+#endif
+
+const char *Txt_MATCH_respond =
+#if   L==1	// ca
+	 "responen";
+#elif L==2	// de
+	 "antworten";
+#elif L==3	// en
+	 "respond";
+#elif L==4	// es
+	 "responden";
+#elif L==5	// fr
+	 "r&eacute;pondent";
+#elif L==6	// gn
+	 "responden";	// Okoteve traducción
+#elif L==7	// it
+	 "rispondono";
+#elif L==8	// pl
+	 "odpowiadaj&aogon;";
+#elif L==9	// pt
+	 "respondem";
 #endif
 
 const char *Txt_Matches =	// of a game
