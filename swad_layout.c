@@ -696,11 +696,12 @@ static void Lay_WriteScriptInit (void)
 	 break;
       case ActNewMchTch:
       case ActResMchTch:
-      case ActPrvMchTch:
       case ActPauMchTch:
       case ActPlyMchTch:
-      case ActSteMchTch:
-      case ActNxtMchTch:
+      case ActShoSteMchTch:
+      case ActShoAnsMchTch:
+      case ActPrvQstMchTch:
+      case ActNxtQstMchTch:
       case ActPlyMchStd:
       case ActAnsMchQstStd:
 	 RefreshGame = true;
@@ -819,11 +820,12 @@ static void Lay_WriteScriptParamsAJAX (void)
       /* Parameters related with match refreshing (for teachers) */
       case ActNewMchTch:
       case ActResMchTch:
-      case ActPrvMchTch:
       case ActPauMchTch:
       case ActPlyMchTch:
-      case ActSteMchTch:
-      case ActNxtMchTch:
+      case ActShoSteMchTch:
+      case ActShoAnsMchTch:
+      case ActPrvQstMchTch:
+      case ActNxtQstMchTch:
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"
 			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
 		  Act_GetActCod (ActRefMchTch),

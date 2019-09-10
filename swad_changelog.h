@@ -460,10 +460,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.142 (2019-09-10)"
+#define Log_PLATFORM_VERSION	"SWAD 18.142.1 (2019-09-10)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.142.1: Sep 10, 2019	When a match is paused, backward/forward buttons go to previous/next question. (244383 lines)
 	Version 18.142:   Sep 10, 2019	New action to see the stem/hide the answers of a question when playing a match. (244345 lines)
 					2 changes necessary in database:
 UPDATE actions SET Txt='Comenzar/reanudar partida (como profesor)' WHERE ActCod='1789' AND Language='es';

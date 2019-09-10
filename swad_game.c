@@ -89,13 +89,13 @@ const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
 #define Gam_ICON_PLAY		"fas fa-play"
 #define Gam_ICON_PAUSE		"fas fa-pause"
 // #define Gam_ICON_STEM	"fas fa-step-backward"
-#define Gam_ICON_STEM		"fas fa-file"
+#define Gam_ICON_STEM		"fas fa-angle-up"
 #define Gam_ICON_START		"fas fa-step-backward"
 #define Gam_ICON_PREVIOUS	"fas fa-step-backward"
 #define Gam_ICON_FINISH		"fas fa-step-forward"
 #define Gam_ICON_NEXT		"fas fa-step-forward"
 // #define Gam_ICON_ANSWERS	"fas fa-step-forward"
-#define Gam_ICON_ANSWERS	"fas fa-file-alt"
+#define Gam_ICON_ANSWERS	"fas fa-angle-down"
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -3531,10 +3531,10 @@ void Gam_ResumeMatchTch (void)
   }
 
 /*****************************************************************************/
-/* Show previous match status (previous question, answers...) (by a teacher) */
+/** Show stem, hiding answers, of current question in a match (by a teacher) */
 /*****************************************************************************/
 
-void Gam_PrevStatusMatchTch (void)
+void Gam_ShowStemQstMatchTch (void)
   {
    struct Match Match;
 
@@ -3547,15 +3547,63 @@ void Gam_PrevStatusMatchTch (void)
    Gam_GetDataOfMatchByCod (&Match);
 
    /***** Update status *****/
-   if (Match.Status.QstInd >= Gam_AFTER_LAST_QUESTION)	// Finished
-      Gam_SetMatchStatusToPrevQuestion (&Match);
-   else							// Unfinished
-     {
-      if (Match.Status.ShowingAnswers)			// Showing answers currently
-	 Match.Status.ShowingAnswers = false;		// Do not show answers
-      else
-	 Gam_SetMatchStatusToPrevQuestion (&Match);
-     }
+   Match.Status.ShowingAnswers = false;		// Do not show answers
+
+   /***** Update match status in database *****/
+   Gam_UpdateMatchStatusInDB (&Match);
+
+   /***** Show current match status *****/
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   Gam_ShowMatchStatusForTch (&Match);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/**** Show stem and answers of current question in a match (by a teacher) ****/
+/*****************************************************************************/
+
+void Gam_ShowAnssQstMatchTch (void)
+  {
+   struct Match Match;
+
+   /***** Remove old players.
+          This function must be called before getting match status. *****/
+   Gam_RemoveOldPlayers ();
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Gam_GetDataOfMatchByCod (&Match);
+
+   /***** Update status *****/
+   Match.Status.ShowingAnswers = true;		// Show answers
+
+   /***** Update match status in database *****/
+   Gam_UpdateMatchStatusInDB (&Match);
+
+   /***** Show current match status *****/
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   Gam_ShowMatchStatusForTch (&Match);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/* Show previous match status (previous question, answers...) (by a teacher) */
+/*****************************************************************************/
+
+void Gam_PrevQstMatchTch (void)
+  {
+   struct Match Match;
+
+   /***** Remove old players.
+          This function must be called before getting match status. *****/
+   Gam_RemoveOldPlayers ();
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Gam_GetDataOfMatchByCod (&Match);
+
+   /***** Update status *****/
+   Gam_SetMatchStatusToPrevQuestion (&Match);
 
    /***** Update match status in database *****/
    Gam_UpdateMatchStatusInDB (&Match);
@@ -3570,7 +3618,7 @@ void Gam_PrevStatusMatchTch (void)
 /***** Show next match status (next question, answers...) (by a teacher) *****/
 /*****************************************************************************/
 
-void Gam_NextStatusMatchTch (void)
+void Gam_NextQstMatchTch (void)
   {
    struct Match Match;
 
@@ -3582,16 +3630,8 @@ void Gam_NextStatusMatchTch (void)
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
 
-   /***** If not yet finished, update status *****/
-   if (Match.Status.QstInd == 0)				// Not started
-      Gam_SetMatchStatusToNextQuestion (&Match);
-   else if (Match.Status.QstInd < Gam_AFTER_LAST_QUESTION)	// Unfinished
-     {
-      if (Match.Status.ShowingAnswers)				// Showing answers currently
-	 Gam_SetMatchStatusToNextQuestion (&Match);
-      else
-	 Match.Status.ShowingAnswers = true;			// Show answers
-     }
+   /***** Update status *****/
+   Gam_SetMatchStatusToNextQuestion (&Match);
 
    /***** Update match status in database *****/
    Gam_UpdateMatchStatusInDB (&Match);
@@ -3614,15 +3654,12 @@ static void Gam_SetMatchStatusToPrevQuestion (struct Match *Match)
    if (Match->Status.QstInd == 0)		// Start of questions has been reached
      {
       Match->Status.QstCod = -1L;		// No previous questions
-      Match->Status.BeingPlayed    = false;	// Match is not being played
-      Match->Status.ShowingAnswers = false;	// Do not show answers
+      Match->Status.BeingPlayed = false;	// Match is not being played
      }
    else
-     {
       Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
 						      Match->Status.QstInd);
-      Match->Status.ShowingAnswers = true;	// Show answers
-     }
+   Match->Status.ShowingAnswers = Match->Status.BeingPlayed;	// Show answers only if being played
   }
 
 /*****************************************************************************/
@@ -3778,15 +3815,16 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_LEFT_CONTAINER\">");
    if (Match->Status.QstInd < Gam_AFTER_LAST_QUESTION)		// Unfinished
      {
-      if (Match->Status.ShowingAnswers)
+      if (Match->Status.BeingPlayed &&
+	  Match->Status.ShowingAnswers)
 	 /* Put button to show stem of current question, hiding answers */
-	 Gam_PutBigButton (ActSteMchTch,Match->MchCod,
+	 Gam_PutBigButton (ActShoSteMchTch,Match->MchCod,
 			   Gam_ICON_STEM,Txt_Stem);
       else if (Match->Status.QstInd == 0)
 	{
 	 if (Match->Status.BeingPlayed)
 	    /* Put button to go to start of match before first question */
-	    Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
+	    Gam_PutBigButton (ActPrvQstMchTch,Match->MchCod,
 			      Gam_ICON_START,Txt_MATCH_Start);
 	 else				// Not being played
 	    /* Put button to close browser tab */
@@ -3799,17 +3837,17 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 						     Match->Status.QstInd);
 	 if (PrvQstInd == 0)		// There is not a previous question
 	    /* Put button to resume match before first question */
-	    Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
+	    Gam_PutBigButton (ActPrvQstMchTch,Match->MchCod,
 			      Gam_ICON_START,Txt_MATCH_Start);
 	 else			// There is a previous question
 	    /* Put button to show previous question */
-	    Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
+	    Gam_PutBigButton (ActPrvQstMchTch,Match->MchCod,
 			      Gam_ICON_PREVIOUS,Txt_Previous_QUESTION);
 	}
      }
    else								// Finished
       /* Put button to show last question */
-      Gam_PutBigButton (ActPrvMchTch,Match->MchCod,
+      Gam_PutBigButton (ActPrvQstMchTch,Match->MchCod,
 			Gam_ICON_PREVIOUS,Txt_Previous_QUESTION);
 
    fprintf (Gbl.F.Out,"</div>");
@@ -3844,27 +3882,28 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
       /* Get index of the next question */
       NxtQstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
 						  Match->Status.QstInd);
-      if (Match->Status.ShowingAnswers)
-	{
-	 if (NxtQstInd >= Gam_AFTER_LAST_QUESTION)	// No more questions
-	    /* Put button to finish */
-	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			      Gam_ICON_FINISH,Txt_Finish);
-	 else						// There are more questions
-	    /* Put button to show next question */
-	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
-			      Gam_ICON_NEXT,Txt_Next_QUESTION);
-	}
-      else
+      if (Match->Status.BeingPlayed &&
+	  !Match->Status.ShowingAnswers)
 	{
 	 if (Match->Status.QstInd == 0)
 	    /* Put button to show first question */
-	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
+	    Gam_PutBigButton (ActNxtQstMchTch,Match->MchCod,
 			      Gam_ICON_NEXT,Txt_Next_QUESTION);
 	 else
 	    /* Put button to show answers */
-	    Gam_PutBigButton (ActNxtMchTch,Match->MchCod,
+	    Gam_PutBigButton (ActShoAnsMchTch,Match->MchCod,
 			      Gam_ICON_ANSWERS,Txt_Answers);
+	}
+      else
+	{
+	 if (NxtQstInd >= Gam_AFTER_LAST_QUESTION)	// No more questions
+	    /* Put button to finish */
+	    Gam_PutBigButton (ActNxtQstMchTch,Match->MchCod,
+			      Gam_ICON_FINISH,Txt_Finish);
+	 else						// There are more questions
+	    /* Put button to show next question */
+	    Gam_PutBigButton (ActNxtQstMchTch,Match->MchCod,
+			      Gam_ICON_NEXT,Txt_Next_QUESTION);
 	}
      }
    fprintf (Gbl.F.Out,"</div>");
