@@ -3485,7 +3485,6 @@ void Gam_PauseMatchTch (void)
    Gam_GetDataOfMatchByCod (&Match);
 
    /***** Update status *****/
-   Match.Status.ShowingAnswers = false;		// Don't show answers in any case
    Match.Status.BeingPlayed    = false;		// Resume match
 
    /***** Update match status in database *****/
@@ -3803,8 +3802,14 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
 
    /***** Write elapsed time in question *****/
    fprintf (Gbl.F.Out,"<div class=\"MATCH_TIME_QST\">");
-   Gam_GetElapsedTimeInQuestion (Match,&Time);
-   Dat_WriteHoursMinutesSeconds (&Time);
+   if (Match->Status.QstInd > 0 &&
+       Match->Status.QstInd < Gam_AFTER_LAST_QUESTION)
+     {
+      Gam_GetElapsedTimeInQuestion (Match,&Time);
+      Dat_WriteHoursMinutesSeconds (&Time);
+     }
+   else
+      fprintf (Gbl.F.Out,"-");
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Buttons *****/
