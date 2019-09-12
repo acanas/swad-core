@@ -191,7 +191,7 @@ static void Gam_FreeListsSelectedQuestions (void);
 static unsigned Gam_CountNumQuestionsInList (void);
 
 static unsigned Gam_GetNumAnswerers (struct Match *Match);
-static unsigned Gam_GetNumUsrsWhoAnswered (long GamCod,unsigned QstInd,unsigned AnsInd);
+static unsigned Gam_GetNumUsrsWhoAnswered (long MchCod,unsigned QstInd,unsigned AnsInd);
 static void Gam_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 
 static void Gam_PutParamsOneQst (void);
@@ -2179,8 +2179,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
 
       /* Show answers */
-      Tst_WriteAnswersGameResult (GamCod,QstInd,QstCod,
-                                  "TEST_EDI",true);	// Show result
+      Tst_WriteAnswersMatchResult (-1L,QstInd,QstCod,
+                                   "TEST_EDI",false);	// Don't show result
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -2344,12 +2344,12 @@ static unsigned Gam_CountNumQuestionsInList (void)
 /*** Get number of users who selected this answer and draw proportional bar **/
 /*****************************************************************************/
 
-void Gam_GetAndDrawBarNumUsrsWhoAnswered (long GamCod,unsigned QstInd,unsigned AnsInd,unsigned NumUsrs)
+void Gam_GetAndDrawBarNumUsrsWhoAnswered (long MchCod,unsigned QstInd,unsigned AnsInd,unsigned NumUsrs)
   {
    unsigned NumUsrsThisAnswer;
 
    /***** Get number of users who selected this answer *****/
-   NumUsrsThisAnswer = Gam_GetNumUsrsWhoAnswered (GamCod,QstInd,AnsInd);
+   NumUsrsThisAnswer = Gam_GetNumUsrsWhoAnswered (MchCod,QstInd,AnsInd);
 
    /***** Show stats of this answer *****/
    Gam_DrawBarNumUsrs (NumUsrsThisAnswer,NumUsrs);
@@ -2373,25 +2373,17 @@ static unsigned Gam_GetNumAnswerers (struct Match *Match)
 /**** Get number of users who selected a given answer of a game question *****/
 /*****************************************************************************/
 
-static unsigned Gam_GetNumUsrsWhoAnswered (long GamCod,unsigned QstInd,unsigned AnsInd)
+static unsigned Gam_GetNumUsrsWhoAnswered (long MchCod,unsigned QstInd,unsigned AnsInd)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned NumUsrs = 0;	// Default returned value
-
-   /***** Get answers of a question from database *****/
-   if (DB_QuerySELECT (&mysql_res,"can not get number of users who answered",
-		       "SELECT NumUsrs FROM gam_answers"
-		       " WHERE GamCod=%ld AND QstInd=%u AND AnsInd=%u",
-		       GamCod,QstInd,AnsInd))
-     {
-      row = mysql_fetch_row (mysql_res);
-      if (row[0])	// There are users who selected this answer
-	 if (sscanf (row[0],"%u",&NumUsrs) != 1)
-	    Lay_ShowErrorAndExit ("Error when getting number of users who answered.");
-     }
-
-   return NumUsrs;
+   /***** Get number of users who have chosen
+          an answer of a question from database *****/
+   return (unsigned) DB_QueryCOUNT ("can not get number of users who answered",
+				    "SELECT COUNT(*)"
+				    " FROM gam_answers"
+				    " WHERE MchCod=%ld"
+				    " AND QstInd=%u"
+				    " AND AnsInd=%u",
+				    MchCod,QstInd,AnsInd);
   }
 
 /*****************************************************************************/
@@ -4111,10 +4103,10 @@ static void Gam_ShowQuestionAndAnswersTch (struct Match *Match)
       case Gam_ANSWERS:
 	 if (Match->Status.BeingPlayed)
 	    /* Write answers */
-	    Tst_WriteAnswersGameResult (Match->GamCod,
-					Match->Status.QstInd,
-					Match->Status.QstCod,
-					"MATCH_TCH_QST",false);	// Don't show result
+	    Tst_WriteAnswersMatchResult (Match->MchCod,
+					 Match->Status.QstInd,
+					 Match->Status.QstCod,
+					 "MATCH_TCH_QST",false);	// Don't show result
 	 else	// Not being played
 	    Gam_ShowWaitImage (Txt_MATCH_Paused);
 	 break;
@@ -4124,8 +4116,11 @@ static void Gam_ShowQuestionAndAnswersTch (struct Match *Match)
 			   Gam_ICON_RESULTS,Txt_View_results);
 	 break;
       case Gam_RESULTS:
-	 /* Show results */
-         fprintf (Gbl.F.Out,"%s","Resultados aqu&iacute;");	// TODO: Show results here
+	 /* Write answers with results */
+	 Tst_WriteAnswersMatchResult (Match->MchCod,
+				      Match->Status.QstInd,
+				      Match->Status.QstCod,
+				      "MATCH_TCH_QST",true);	// Show result
 	 break;
      }
 

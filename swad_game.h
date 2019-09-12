@@ -104,7 +104,7 @@ void Gam_RemoveGames (Hie_Level_t Scope,long Cod);
 
 void Gam_RequestNewQuestion (void);
 
-void Gam_GetAndDrawBarNumUsrsWhoAnswered (long GamCod,unsigned QstInd,unsigned AnsInd,unsigned NumUsrs);
+void Gam_GetAndDrawBarNumUsrsWhoAnswered (long MchCod,unsigned QstInd,unsigned AnsInd,unsigned NumUsrs);
 
 void Gam_AddTstQuestionsToGame (void);
 
