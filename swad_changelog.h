@@ -460,10 +460,16 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.144 (2019-09-10)"
+#define Log_PLATFORM_VERSION	"SWAD 19.0 (2019-09-12)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.0:     Sep 12, 2019	Changes in behaviour of matches. (244585 lines)
+					3 changes necessary in database:
+ALTER TABLE gam_matches DROP COLUMN ShowResults,DROP COLUMN Showing;
+ALTER TABLE gam_matches ADD COLUMN Showing ENUM('wording','answers','request','results') NOT NULL DEFAULT 'wording' AFTER QstStartTime;
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN (1792,1793,1794);
+
 	Version 18.144:   Sep 10, 2019	Show question results in match. (244641 lines)
 					3 changes necessary in database:
 ALTER TABLE gam_matches DROP COLUMN ShowingAnswers,DROP COLUMN ShowResults;

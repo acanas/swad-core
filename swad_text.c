@@ -12225,7 +12225,7 @@ const char *Txt_Filter =	// As a noun
 #elif L==9	// pt
 	"Filtro";
 #endif
-
+/*
 const char *Txt_Finish =
 #if   L==1	// ca
        "Acabar";
@@ -12246,6 +12246,7 @@ const char *Txt_Finish =
 #elif L==9	// pt
        "Terminar";
 #endif
+*/
 /*
 const char *Txt_Finished_match =
 #if   L==1	// ca
@@ -13886,6 +13887,27 @@ const char *Txt_Go_back =
 	"Wraca&cacute;";
 #elif L==9	// pt
 	"Voltar";
+#endif
+
+const char *Txt_Go_forward =
+#if   L==1	// ca
+	"Anar endavant";
+#elif L==2	// de
+	"Vorw&auml;rts gehen";
+#elif L==3	// en
+	"Go forward";
+#elif L==4	// es
+	"Avanzar";
+#elif L==5	// fr
+	"Aller de l'avant";
+#elif L==6	// gn
+	"Avanzar";	// Okoteve traducción
+#elif L==7	// it
+	"Avanzare";
+#elif L==8	// pl
+	"Id&zacute; napr&oacute;d";
+#elif L==9	// pt
+	"Avan&ccedil;ar";
 #endif
 
 const char *Txt_Go_to_X =	// Warning: it is very important to include %s in the following sentences
@@ -24463,7 +24485,7 @@ const char *Txt_NEW_YEAR_GREETING =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Feliz %u!";
 #endif
-
+/*
 const char *Txt_Next_QUESTION =
 #if   L==1	// ca
 	"Seg&uuml;ent";
@@ -24484,7 +24506,7 @@ const char *Txt_Next_QUESTION =
 #elif L==9	// pt
 	"Seguinte";
 #endif
-
+*/
 const char *Txt_nick_email_or_ID =
 #if   L==1	// ca
 	"@sobrenom, correu o ID (DNI/c&egrave;dula)";
@@ -29751,7 +29773,7 @@ const char *Txt_Presents =
 #elif L==9	// pt
 	"Presentes";
 #endif
-
+/*
 const char *Txt_Previous_QUESTION =
 #if   L==1	// ca
 	"Anterior";
@@ -29772,7 +29794,7 @@ const char *Txt_Previous_QUESTION =
 #elif L==9	// pt
 	"Anterior";
 #endif
-
+*/
 const char *Txt_Print =
 #if   L==1	// ca
 	"Imprimir";
@@ -41474,27 +41496,6 @@ const char *Txt_Stay_connected_with_SWADroid =
 	"Stay connected with <strong>SWADroid</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Fique ligado/a com <strong>SWADroid</strong>.";
-#endif
-
-const char *Txt_Stem =		// Stem of a test question
-#if   L==1	// ca
-	"Enunciat";
-#elif L==2	// de
-	"Stamm";
-#elif L==3	// en
-	"Stem";
-#elif L==4	// es
-	"Enunciado";
-#elif L==5	// fr
-	"Question";
-#elif L==6	// gn
-	"Enunciado";	// Okoteve traducción
-#elif L==7	// it
-	"Domanda";
-#elif L==8	// pl
-	"Stem";		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Quest&atilde;o";
 #endif
 
 const char *Txt_Step_1_Provide_a_list_of_users =
@@ -53309,6 +53310,27 @@ const char *Txt_works_ZIP_FILE_NAME =	// Name (without extension) of the ZIP fil
 	"homework";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"trabalhos";
+#endif
+
+const char *Txt_Wording =	// Statement of a question
+#if   L==1	// ca
+	"Enunciat";
+#elif L==2	// de
+	"Aussage";
+#elif L==3	// en
+	"Wording";
+#elif L==4	// es
+	"Enunciado";
+#elif L==5	// fr
+	"&Eacute;nonc&eacute;";
+#elif L==6	// gn
+	"Enunciado";	// Okoteve traducción
+#elif L==7	// it
+	"Formulazione";
+#elif L==8	// pl
+	"Sformu&lstrok;owanie";
+#elif L==9	// pt
+	"Reda&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Works_area =

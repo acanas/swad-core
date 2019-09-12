@@ -4932,7 +4932,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    extern const char *Txt_New_question;
    extern const char *Txt_Tags;
    extern const char *Txt_new_tag;
-   extern const char *Txt_Stem;
+   extern const char *Txt_Wording;
    extern const char *Txt_Feedback;
    extern const char *Txt_optional;
    extern const char *Txt_Type;
@@ -5069,7 +5069,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                       "%s"
                       "</textarea><br />",
             The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Stem,
+            Txt_Wording,
             Stem);
    Tst_PutFormToEditQstMedia (&Gbl.Test.Media,-1,
                               false);

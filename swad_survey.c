@@ -2576,7 +2576,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Question;
    extern const char *Txt_New_question;
-   extern const char *Txt_Stem;
+   extern const char *Txt_Wording;
    extern const char *Txt_Type;
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
    extern const char *Txt_Save_changes;
@@ -2674,7 +2674,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
                       "</textarea>"
                       "</td>"
                       "</tr>",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Stem,
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Wording,
 	    Txt);
 
    /***** Type of answer *****/

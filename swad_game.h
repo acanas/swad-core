@@ -123,12 +123,12 @@ void Gam_CreateNewMatchTch (void);
 void Gam_RequestStartResumeMatchTch (void);
 void Gam_PauseMatchTch (void);
 void Gam_ResumeMatchTch (void);
-void Gam_ShowStemQstMatchTch (void);
-void Gam_ShowAnssQstMatchTch (void);
-void Gam_ShowRessQstMatchTch (void);
-void Gam_PrevQstMatchTch (void);
-void Gam_NextQstMatchTch (void);
-void Gam_CurrQstMatchTch (void);
+// void Gam_ShowStemQstMatchTch (void);
+// void Gam_ShowAnssQstMatchTch (void);
+void Gam_ShowResultsQstMatchTch (void);
+void Gam_BackMatchTch (void);
+void Gam_ForwardMatchTch (void);
+// void Gam_CurrQstMatchTch (void);
 
 void Gam_ShowFinishedMatchResults (void);
 
