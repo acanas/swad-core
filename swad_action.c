@@ -615,9 +615,10 @@ Assessment:
         NEW. ActPlyMchTch		Play/resume current match (by a teacher)
         NEW. ActShoSteMchTch		Show stem of current question, hiding answers, when playing a match (by a teacher)
         NEW. ActShoAnsMchTch		Show full current question, including answers, when playing a match (by a teacher)
+        NEW. ActShoResMchTch		Show results when playing a match (by a teacher)
         NEW. ActPrvQstMchTch		Show previous question when playing a match (by a teacher)
         457. ActNxtQstMchTch		Show next question when playing a match (by a teacher)
-        NEW. ActChgDisResMchTch		Change display of results when playing a match (by a teacher)
+        NEW. ActChgShoResMchTch		Change display of results when playing a match (by a teacher)
         NEW. ActRefMchTch		Refresh current question when playing a match (as teacher)
         NEW. ActShoMchTch		Show finished match results
 
@@ -2161,9 +2162,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPlyMchTch	*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_ResumeMatchTch		,NULL},
    /* ActShoSteMchTch	*/{1792,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_ShowStemQstMatchTch	,NULL},
    /* ActShoAnsMchTch	*/{1793,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_ShowAnssQstMatchTch	,NULL},
+   /* ActShoResMchTch	*/{1795,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_ShowRessQstMatchTch	,NULL},
    /* ActPrvQstMchTch	*/{1790,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_PrevQstMatchTch		,NULL},
    /* ActNxtQstMchTch	*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_NextQstMatchTch		,NULL},
-   /* ActChgDisResMchTch*/{1794,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_CurrQstMatchTch		,NULL},
+   /* ActChgShoResMchTch*/{1794,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_CurrQstMatchTch		,NULL},
    /* ActRefMchTch	*/{1788,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Gam_GetMatchBeingPlayed	,Gam_RefreshMatchTch		,NULL},
    /* ActShoMchTch	*/{1786,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ShowFinishedMatchResults	,NULL},
 
@@ -5015,7 +5017,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActPauMchTch,		// #1791
 	ActShoSteMchTch,	// #1792
 	ActShoAnsMchTch,	// #1793
-	ActChgDisResMchTch,	// #1794
+	ActChgShoResMchTch,	// #1794
+	ActShoResMchTch,	// #1795
 	};
 
 /*****************************************************************************/

@@ -88,18 +88,28 @@ const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
 #define Gam_ICON_CLOSE		"fas fa-times"
 #define Gam_ICON_PLAY		"fas fa-play"
 #define Gam_ICON_PAUSE		"fas fa-pause"
-#define Gam_ICON_STEM		"fas fa-step-backward"
-// #define Gam_ICON_STEM	"fas fa-angle-up"
-#define Gam_ICON_START		"fas fa-step-backward"
 #define Gam_ICON_PREVIOUS	"fas fa-step-backward"
-#define Gam_ICON_FINISH		"fas fa-step-forward"
 #define Gam_ICON_NEXT		"fas fa-step-forward"
-#define Gam_ICON_ANSWERS	"fas fa-step-forward"
-// #define Gam_ICON_ANSWERS	"fas fa-angle-down"
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
+
+#define Gam_NUM_SHOWING 3
+typedef enum
+  {
+   Gam_SHOWING_WORDING,	// Showing only the question wording
+   Gam_SHOWING_ANSWERS,	// Showing the question wording and the answers
+   Gam_REQUEST_RESULTS,	// Requesting confirmation to show the results
+   Gam_SHOWING_RESULTS,	// Showing the results
+  } Gam_Showing_t;
+#define Gam_SHOWING_DEFAULT Gam_SHOWING_WORDING
+const char *Gam_ShowingStringsDB[Gam_NUM_SHOWING] =
+  {
+   "stem",
+   "answers",
+   "results",
+  };
 
 struct Match
   {
@@ -113,8 +123,8 @@ struct Match
       unsigned QstInd;	// 0 means that the game has not started. First question has index 0.
       long QstCod;
       time_t QstStartTimeUTC;
-      bool ShowingAnswers;
       bool ShowResults;
+      Gam_Showing_t Showing;
       bool BeingPlayed;
       unsigned NumPlayers;
      } Status;
@@ -171,6 +181,7 @@ static unsigned Gam_GetParamQstInd (void);
 static void Gam_PutParamAnswer (unsigned AnsInd);
 static unsigned Gam_GetParamAnswer (void);
 static unsigned Gam_GetQstIndFromStr (const char *UnsignedStr);
+static Gam_Showing_t Gam_GetShowingFromStr (const char *Str);
 static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd);
 
 static long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
@@ -1791,6 +1802,23 @@ static unsigned Gam_GetQstIndFromStr (const char *UnsignedStr)
   }
 
 /*****************************************************************************/
+/****************** Get parameter with what is being shown *******************/
+/*****************************************************************************/
+
+static Gam_Showing_t Gam_GetShowingFromStr (const char *Str)
+  {
+   Gam_Showing_t Showing;
+
+   for (Showing = (Gam_Showing_t) 0;
+	Showing <= (Gam_Showing_t) (Gam_NUM_SHOWING - 1);
+	Showing++)
+      if (!strcmp (Str,Gam_ShowingStringsDB[Showing]))
+         return Showing;
+
+   return (Gam_Showing_t) Gam_SHOWING_DEFAULT;
+  }
+
+/*****************************************************************************/
 /********************** Remove answers of a game question ********************/
 /*****************************************************************************/
 
@@ -2700,11 +2728,11 @@ static void Gam_ListMatches (struct Game *Game,bool PutFormNewMatch)
 						  "UNIX_TIMESTAMP(StartTime),"		// row[ 3]
 						  "UNIX_TIMESTAMP(EndTime),"		// row[ 4]
 						  "Title,"				// row[ 5]
-						  "QstInd,"				// row[ 6]
-						  "QstCod,"				// row[ 7]
-						  "UNIX_TIMESTAMP(QstStartTime),"	// row[ 8]
-						  "ShowingAnswers,"			// row[ 9]
-					          "ShowResults"				// row[10]
+					          "ShowResults,"			// row[ 6]
+						  "QstInd,"				// row[ 7]
+						  "QstCod,"				// row[ 8]
+						  "UNIX_TIMESTAMP(QstStartTime),"	// row[ 9]
+						  "Showing"				// row[10]
 					   " FROM gam_matches"
 					   " WHERE GamCod=%ld%s"
 					   " ORDER BY MchCod",
@@ -2762,11 +2790,11 @@ void Gam_GetDataOfMatchByCod (struct Match *Match)
 					       "UNIX_TIMESTAMP(StartTime),"		// row[ 3]
 					       "UNIX_TIMESTAMP(EndTime),"		// row[ 4]
 					       "Title,"					// row[ 5]
-					       "QstInd,"				// row[ 6]
-					       "QstCod,"				// row[ 7]
-					       "UNIX_TIMESTAMP(QstStartTime),"		// row[ 8]
-					       "ShowingAnswers,"			// row[ 9]
-					       "ShowResults"				// row[10]
+					       "ShowResults,"				// row[ 6]
+					       "QstInd,"				// row[ 7]
+					       "QstCod,"				// row[ 8]
+					       "UNIX_TIMESTAMP(QstStartTime),"		// row[ 9]
+					       "Showing"				// row[10]
 					" FROM gam_matches"
 					" WHERE MchCod=%ld"
 					" AND GamCod IN"		// Extra check
@@ -2789,8 +2817,8 @@ void Gam_GetDataOfMatchByCod (struct Match *Match)
       Match->Status.QstInd           = 0;
       Match->Status.QstCod           = -1L;
       Match->Status.QstStartTimeUTC  = (time_t) 0;
-      Match->Status.ShowingAnswers   = false;
       Match->Status.ShowResults      = false;
+      Match->Status.Showing          = Gam_SHOWING_WORDING;
       Match->Status.BeingPlayed      = false;
      }
 
@@ -3000,6 +3028,7 @@ static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    row[ 3]	UNIX_TIMESTAMP(StartTime)
    row[ 4]	UNIX_TIMESTAMP(EndTime)
    row[ 5]	Title
+   row[ 6]	ShowResults
    */
    /***** Get match data *****/
    /* Code of the match (row[0]) */
@@ -3026,28 +3055,27 @@ static void Gam_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    else
       Match->Title[0] = '\0';
 
+   /* Get whether to show results or not (row(6)) */
+   Match->Status.ShowResults = (row[6][0] == 'Y');
+
    /***** Get current match status *****/
    /*
-   row[ 6]	QstInd
-   row[ 7]	QstCod
-   row[ 8]	UNIX_TIMESTAMP(QstStartTime)
-   row[ 9]	ShowingAnswers
-   row[10]	ShowResults
+   row[ 7]	QstInd
+   row[ 8]	QstCod
+   row[ 9]	UNIX_TIMESTAMP(QstStartTime)
+   row[10]	Showing
    */
-   /* Current question index (row[6]) */
-   Match->Status.QstInd = Gam_GetQstIndFromStr (row[6]);
+   /* Current question index (row[7]) */
+   Match->Status.QstInd = Gam_GetQstIndFromStr (row[7]);
 
-   /* Current question code (row[7]) */
-   Match->Status.QstCod = Str_ConvertStrCodToLongCod (row[7]);
+   /* Current question code (row[8]) */
+   Match->Status.QstCod = Str_ConvertStrCodToLongCod (row[8]);
 
-   /* Get question start date (row[8] holds the start UTC time) */
-   Match->Status.QstStartTimeUTC = Dat_GetUNIXTimeFromStr (row[8]);
+   /* Get question start date (row[9] holds the start UTC time) */
+   Match->Status.QstStartTimeUTC = Dat_GetUNIXTimeFromStr (row[9]);
 
-   /* Get whether to show question answers or not (row(9)) */
-   Match->Status.ShowingAnswers = (row[9][0] == 'Y');
-
-   /* Get whether to show results or not (row(10)) */
-   Match->Status.ShowResults = (row[10][0] == 'Y');
+   /* Get what to show (stem, answers, results) (row(10)) */
+   Match->Status.Showing = Gam_GetShowingFromStr (row[10]);
 
    /***** Get whether the match is being played or not *****/
    if (Match->Status.QstInd >= Gam_AFTER_LAST_QUESTION)	// Finished
@@ -3332,23 +3360,23 @@ static long Gam_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
    /***** Insert this new match into database *****/
    MchCod = DB_QueryINSERTandReturnCode ("can not create match",
 				         "INSERT gam_matches"
-				         " (GamCod,UsrCod,StartTime,EndTime,Title,"
-				         "QstInd,QstCod,QstStartTime,"
-				         "ShowingAnswers,ShowResults)"
+				         " (GamCod,UsrCod,StartTime,EndTime,Title,ShowResults,"
+				         "QstInd,QstCod,QstStartTime,Showing)"
 				         " VALUES"
 				         " (%ld,"	// GamCod
 				         "%ld,"		// UsrCod
 				         "NOW(),"	// StartTime
 				         "NOW(),"	// EndTime
 				         "'%s',"	// Title
+				         "'N',"		// ShowResults: Don't show results initially
 				         "0,"		// QstInd: Match has not started, so not the first question yet
 				         "-1,"		// QstCod: Non-existent question
 				         "NOW(),"	// QstStartTime
-				         "'N',"		// ShowingAnswers: Don't show answers initially
-				         "'N')",	// ShowResults: Don't show results initially
+				         "'%s'",	// What is being shown
 				         GamCod,
 				         Gbl.Usrs.Me.UsrDat.UsrCod,	// Game creator
-				         Title);
+				         Title,
+					 Gam_ShowingStringsDB[Gam_SHOWING_DEFAULT]);
 
    /***** Create groups associated to the match *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
@@ -3370,16 +3398,12 @@ static void Gam_UpdateMatchStatusInDB (struct Match *Match)
 			"gam_matches.QstInd=%u,"
 			"gam_matches.QstCod=%ld,"
 			"gam_matches.QstStartTime=NOW(),"
-			"gam_matches.ShowingAnswers='%c',"
-			"gam_matches.ShowResults='%c'"
+			"gam_matches.Showing='%s'"
 		   " WHERE gam_matches.MchCod=%ld"
 		   " AND gam_matches.GamCod=games.GamCod"
 		   " AND games.CrsCod=%ld",	// Extra check
 		   Match->Status.QstInd,Match->Status.QstCod,
-		   Match->Status.ShowingAnswers ? 'Y' :
-					          'N',
-		   Match->Status.ShowResults ? 'Y' :
-					       'N',
+		   Gam_ShowingStringsDB[Match->Status.Showing],
 		   Match->MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
    if (Match->Status.BeingPlayed)
@@ -3563,7 +3587,7 @@ void Gam_ShowStemQstMatchTch (void)
    Gam_GetDataOfMatchByCod (&Match);
 
    /***** Update status *****/
-   Match.Status.ShowingAnswers = false;		// Do not show answers
+   Match.Status.Showing = Gam_SHOWING_WORDING;		// Show only the stem
 
    /***** Update match status in database *****/
    Gam_UpdateMatchStatusInDB (&Match);
@@ -3591,7 +3615,35 @@ void Gam_ShowAnssQstMatchTch (void)
    Gam_GetDataOfMatchByCod (&Match);
 
    /***** Update status *****/
-   Match.Status.ShowingAnswers = true;		// Show answers
+   Match.Status.Showing = Gam_SHOWING_ANSWERS;		// Show answers
+
+   /***** Update match status in database *****/
+   Gam_UpdateMatchStatusInDB (&Match);
+
+   /***** Show current match status *****/
+   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   Gam_ShowMatchStatusForTch (&Match);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/******** Show results of current question in a match (by a teacher) *********/
+/*****************************************************************************/
+
+void Gam_ShowRessQstMatchTch (void)
+  {
+   struct Match Match;
+
+   /***** Remove old players.
+          This function must be called before getting match status. *****/
+   Gam_RemoveOldPlayers ();
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Gam_GetDataOfMatchByCod (&Match);
+
+   /***** Update status *****/
+   Match.Status.Showing = Gam_REQUEST_RESULTS;		// Show results
 
    /***** Update match status in database *****/
    Gam_UpdateMatchStatusInDB (&Match);
@@ -3674,8 +3726,7 @@ void Gam_CurrQstMatchTch (void)
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Gam_GetDataOfMatchByCod (&Match);
 
-   /***** Get if results should be displayed *****/
-   // Match.Status.ShowResults = Par_GetParToBool ("ShowResults");
+   /***** Toggle display of results *****/
    Match.Status.ShowResults = !Match.Status.ShowResults;
 
    /***** Update match status in database *****/
@@ -3704,7 +3755,17 @@ static void Gam_SetMatchStatusToPrevQuestion (struct Match *Match)
    else
       Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
 						      Match->Status.QstInd);
-   Match->Status.ShowingAnswers = Match->Status.BeingPlayed;	// Show answers only if being played
+
+   /***** What to show *****/
+   if (Match->Status.BeingPlayed)
+     {
+      if (Match->Status.ShowResults)
+         Match->Status.Showing = Gam_REQUEST_RESULTS;	// Show results
+      else
+         Match->Status.Showing = Gam_SHOWING_ANSWERS;	// Show answers
+     }
+   else
+      Match->Status.Showing = Gam_SHOWING_WORDING;		// Show only stem
   }
 
 /*****************************************************************************/
@@ -3724,7 +3785,7 @@ static void Gam_SetMatchStatusToNextQuestion (struct Match *Match)
       Match->Status.QstCod = -1L;			// No more questions
       Match->Status.BeingPlayed = false;
      }
-   Match->Status.ShowingAnswers = false;		// Don't show answers
+   Match->Status.Showing = Gam_SHOWING_WORDING;			// Show only the stem
   }
 
 /*****************************************************************************/
@@ -3855,8 +3916,7 @@ static void Gam_ShowLeftColumnTch (struct Match *Match)
    Gam_ShowNumPlayers (Match);
 
    /***** Number of users who have answered *****/
-   if (Match->Status.BeingPlayed &&
-       Match->Status.ShowingAnswers)
+   if (Match->Status.BeingPlayed)
      {
       NumAnswerers = Gam_GetNumAnswerers (Match);
       fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_ANSWERERS\">"
@@ -3904,6 +3964,7 @@ static void Gam_PutMatchControlButtons (struct Match *Match)
    extern const char *Txt_Resume;
    extern const char *Txt_Next_QUESTION;
    extern const char *Txt_Answers;
+   extern const char *Txt_View_results;
    extern const char *Txt_Finish;
    unsigned PrvQstInd;	// Previous question index
    unsigned NxtQstInd;	// Next question index
@@ -3915,17 +3976,33 @@ static void Gam_PutMatchControlButtons (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_LEFT_CONTAINER\">");
    if (Match->Status.QstInd < Gam_AFTER_LAST_QUESTION)		// Unfinished
      {
-      if (Match->Status.BeingPlayed &&
-	  Match->Status.ShowingAnswers)
-	 /* Put button to show stem of current question, hiding answers */
-	 Gam_PutBigButton (ActShoSteMchTch,Match->MchCod,
-			   Gam_ICON_STEM,Txt_Stem);
+      if (Match->Status.BeingPlayed)
+	{
+	 switch (Match->Status.Showing)
+	   {
+	    case Gam_SHOWING_WORDING:
+	       /* Put button to show stem of current question, hiding answers */
+	       Gam_PutBigButton (ActPrvQstMchTch,Match->MchCod,
+				 Gam_ICON_PREVIOUS,Txt_Previous_QUESTION);
+	       break;
+	    case Gam_SHOWING_ANSWERS:
+	       /* Put button to show stem of current question, hiding answers */
+	       Gam_PutBigButton (ActShoSteMchTch,Match->MchCod,
+				 Gam_ICON_PREVIOUS,Txt_Stem);
+	       break;
+	    case Gam_REQUEST_RESULTS:
+	       /* Put button to show stem of current question, hiding answers */
+	       Gam_PutBigButton (ActShoAnsMchTch,Match->MchCod,
+				 Gam_ICON_PREVIOUS,Txt_Stem);
+	       break;
+	   }
+	}
       else if (Match->Status.QstInd == 0)
 	{
 	 if (Match->Status.BeingPlayed)
 	    /* Put button to go to start of match before first question */
 	    Gam_PutBigButton (ActPrvQstMchTch,Match->MchCod,
-			      Gam_ICON_START,Txt_MATCH_Start);
+			      Gam_ICON_PREVIOUS,Txt_MATCH_Start);
 	 else				// Not being played
 	    /* Put button to close browser tab */
 	    Gam_PutBigButtonClose ();
@@ -3938,7 +4015,7 @@ static void Gam_PutMatchControlButtons (struct Match *Match)
 	 if (PrvQstInd == 0)		// There is not a previous question
 	    /* Put button to resume match before first question */
 	    Gam_PutBigButton (ActPrvQstMchTch,Match->MchCod,
-			      Gam_ICON_START,Txt_MATCH_Start);
+			      Gam_ICON_PREVIOUS,Txt_MATCH_Start);
 	 else			// There is a previous question
 	    /* Put button to show previous question */
 	    Gam_PutBigButton (ActPrvQstMchTch,Match->MchCod,
@@ -3982,24 +4059,46 @@ static void Gam_PutMatchControlButtons (struct Match *Match)
       /* Get index of the next question */
       NxtQstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
 						  Match->Status.QstInd);
-      if (Match->Status.BeingPlayed &&
-	  !Match->Status.ShowingAnswers)
+      if (Match->Status.BeingPlayed)	// Being played
 	{
-	 if (Match->Status.QstInd == 0)
-	    /* Put button to show first question */
-	    Gam_PutBigButton (ActNxtQstMchTch,Match->MchCod,
-			      Gam_ICON_NEXT,Txt_Next_QUESTION);
-	 else
-	    /* Put button to show answers */
-	    Gam_PutBigButton (ActShoAnsMchTch,Match->MchCod,
-			      Gam_ICON_ANSWERS,Txt_Answers);
+	 if (Match->Status.Showing == Gam_SHOWING_WORDING)		// Not showing answers
+	   {
+	    if (Match->Status.QstInd == 0)
+	       /* Put button to show first question */
+	       Gam_PutBigButton (ActNxtQstMchTch,Match->MchCod,
+				 Gam_ICON_NEXT,Txt_Next_QUESTION);
+	    else
+	       /* Put button to show answers */
+	       Gam_PutBigButton (ActShoAnsMchTch,Match->MchCod,
+				 Gam_ICON_NEXT,Txt_Answers);
+	   }
+	 else						// Showing answers
+	   {
+	    if (Match->Status.ShowResults)			// Show results
+	      {
+	       /* Put button to show results */
+	       Gam_PutBigButton (ActShoResMchTch,Match->MchCod,
+				 Gam_ICON_NEXT,Txt_View_results);
+	      }
+	    else					// Don't show results
+	      {
+	       if (NxtQstInd >= Gam_AFTER_LAST_QUESTION)	// No more questions
+		  /* Put button to finish */
+		  Gam_PutBigButton (ActNxtQstMchTch,Match->MchCod,
+				    Gam_ICON_NEXT,Txt_Finish);
+	       else						// There are more questions
+		  /* Put button to show next question */
+		  Gam_PutBigButton (ActNxtQstMchTch,Match->MchCod,
+				    Gam_ICON_NEXT,Txt_Next_QUESTION);
+	      }
+	   }
 	}
-      else
+      else				// Not being played
 	{
 	 if (NxtQstInd >= Gam_AFTER_LAST_QUESTION)	// No more questions
 	    /* Put button to finish */
 	    Gam_PutBigButton (ActNxtQstMchTch,Match->MchCod,
-			      Gam_ICON_FINISH,Txt_Finish);
+			      Gam_ICON_NEXT,Txt_Finish);
 	 else						// There are more questions
 	    /* Put button to show next question */
 	    Gam_PutBigButton (ActNxtQstMchTch,Match->MchCod,
@@ -4024,7 +4123,7 @@ static void Gam_PutCheckboxResult (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_SHOW_RESULTS\">");
 
    /***** Start form *****/
-   Frm_StartForm (ActChgDisResMchTch);
+   Frm_StartForm (ActChgShoResMchTch);
    Gam_PutParamMatchCod (Match->MchCod);	// Current match being played
 
    /***** Put icon with link *****/
@@ -4142,7 +4241,7 @@ static void Gam_ShowQuestionAndAnswersTch (struct Match *Match)
 		  "TEST_MED_EDIT_LIST_STEM");
 
    /* Write answers? */
-   if (Match->Status.ShowingAnswers)
+   if (Match->Status.Showing == Gam_SHOWING_ANSWERS)
       /* Write answers */
       Tst_WriteAnswersGameResult (Match->GamCod,
 				  Match->Status.QstInd,
@@ -4169,7 +4268,7 @@ static void Gam_ShowQuestionAndAnswersStd (struct Match *Match)
 
    /***** Show question *****/
    /* Write buttons for answers? */
-   if (Match->Status.ShowingAnswers)
+   if (Match->Status.Showing == Gam_SHOWING_ANSWERS)
      {
       if (Tst_CheckIfQuestionIsValidForGame (Match->Status.QstCod))
 	{

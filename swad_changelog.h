@@ -460,10 +460,16 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 18.143 (2019-09-10)"
+#define Log_PLATFORM_VERSION	"SWAD 18.144 (2019-09-10)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 18.144:   Sep 10, 2019	Show question results in match. (244641 lines)
+					3 changes necessary in database:
+ALTER TABLE gam_matches DROP COLUMN ShowingAnswers,DROP COLUMN ShowResults;
+ALTER TABLE gam_matches ADD COLUMN ShowResults ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER QstStartTime;
+ALTER TABLE gam_matches ADD COLUMN Showing ENUM('stem','answers','results') NOT NULL DEFAULT 'stem' AFTER ShowResults;
+
 	Version 18.143:   Sep 10, 2019	Checkbox to show results in matches. (244543 lines)
 					2 changes necessary in database:
 ALTER TABLE gam_matches ADD COLUMN ShowResults ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER ShowingAnswers;
