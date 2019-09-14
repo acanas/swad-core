@@ -68,12 +68,11 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
-#define Mch_NUM_SHOWING 4
+#define Mch_NUM_SHOWING 3
 typedef enum
   {
    Mch_WORDING,	// Showing only the question wording
    Mch_ANSWERS,	// Showing the question wording and the answers
-   Mch_REQUEST,	// Requesting confirmation to show the results
    Mch_RESULTS,	// Showing the results
   } Mch_Showing_t;
 #define Mch_SHOWING_DEFAULT Mch_WORDING
@@ -90,6 +89,7 @@ struct Match
       unsigned QstInd;	// 0 means that the game has not started. First question has index 1.
       long QstCod;
       time_t QstStartTimeUTC;
+      bool ShowResults;
       Mch_Showing_t Showing;
       bool BeingPlayed;
       unsigned NumPlayers;
@@ -104,7 +104,6 @@ const char *Mch_ShowingStringsDB[Mch_NUM_SHOWING] =
   {
    "wording",
    "answers",
-   "request",
    "results",
   };
 
@@ -157,8 +156,9 @@ static void Mch_ShowMatchStatusForStd (struct Match *Match);
 static bool Mch_CheckIfIPlayThisMatchBasedOnGrps (long MchCod);
 static void Mch_ShowLeftColumnTch (struct Match *Match);
 static void Mch_ShowLeftColumnStd (struct Match *Match);
-static void Mch_PutMatchControlButtons (struct Match *Match);
 static void Mch_ShowNumQstInMatch (struct Match *Match);
+static void Mch_PutMatchControlButtons (struct Match *Match);
+static void Mch_PutCheckboxResult (struct Match *Match);
 static void Mch_ShowNumPlayers (struct Match *Match);
 static void Mch_ShowMatchTitle (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
@@ -222,16 +222,17 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 
    /* Make query */
    NumMatches = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
-					   "SELECT MchCod,"				// row[0]
-						  "GamCod,"				// row[1]
-						  "UsrCod,"				// row[2]
-						  "UNIX_TIMESTAMP(StartTime),"		// row[3]
-						  "UNIX_TIMESTAMP(EndTime),"		// row[4]
-						  "Title,"				// row[5]
-						  "QstInd,"				// row[6]
-						  "QstCod,"				// row[7]
-						  "UNIX_TIMESTAMP(QstStartTime),"	// row[8]
-						  "Showing"				// row[9]
+					   "SELECT MchCod,"				// row[ 0]
+						  "GamCod,"				// row[ 1]
+						  "UsrCod,"				// row[ 2]
+						  "UNIX_TIMESTAMP(StartTime),"		// row[ 3]
+						  "UNIX_TIMESTAMP(EndTime),"		// row[ 4]
+						  "Title,"				// row[ 5]
+						  "QstInd,"				// row[ 6]
+						  "QstCod,"				// row[ 7]
+						  "UNIX_TIMESTAMP(QstStartTime),"	// row[ 8]
+					          "ShowResults,"			// row[ 9]
+						  "Showing"				// row[10]
 					   " FROM gam_matches"
 					   " WHERE GamCod=%ld%s"
 					   " ORDER BY MchCod",
@@ -283,16 +284,17 @@ static void Mch_GetDataOfMatchByCod (struct Match *Match)
 
    /***** Get data of match from database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
-					"SELECT MchCod,"				// row[0]
-					       "GamCod,"				// row[1]
-					       "UsrCod,"				// row[2]
-					       "UNIX_TIMESTAMP(StartTime),"		// row[3]
-					       "UNIX_TIMESTAMP(EndTime),"		// row[4]
-					       "Title,"					// row[5]
-					       "QstInd,"				// row[6]
-					       "QstCod,"				// row[7]
-					       "UNIX_TIMESTAMP(QstStartTime),"		// row[8]
-					       "Showing"				// row[9]
+					"SELECT MchCod,"				// row[ 0]
+					       "GamCod,"				// row[ 1]
+					       "UsrCod,"				// row[ 2]
+					       "UNIX_TIMESTAMP(StartTime),"		// row[ 3]
+					       "UNIX_TIMESTAMP(EndTime),"		// row[ 4]
+					       "Title,"					// row[ 5]
+					       "QstInd,"				// row[ 6]
+					       "QstCod,"				// row[ 7]
+					       "UNIX_TIMESTAMP(QstStartTime),"		// row[ 8]
+					       "ShowResults,"				// row[ 9]
+					       "Showing"				// row[10]
 					" FROM gam_matches"
 					" WHERE MchCod=%ld"
 					" AND GamCod IN"		// Extra check
@@ -315,6 +317,7 @@ static void Mch_GetDataOfMatchByCod (struct Match *Match)
       Match->Status.QstInd           = 0;
       Match->Status.QstCod           = -1L;
       Match->Status.QstStartTimeUTC  = (time_t) 0;
+      Match->Status.ShowResults      = true;
       Match->Status.Showing          = Mch_WORDING;
       Match->Status.BeingPlayed      = false;
      }
@@ -583,12 +586,12 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    /***** Get match data *****/
    row = mysql_fetch_row (mysql_res);
    /*
-   row[0]	MchCod
-   row[1]	GamCod
-   row[2]	UsrCod
-   row[3]	UNIX_TIMESTAMP(StartTime)
-   row[4]	UNIX_TIMESTAMP(EndTime)
-   row[5]	Title
+   row[ 0]	MchCod
+   row[ 1]	GamCod
+   row[ 2]	UsrCod
+   row[ 3]	UNIX_TIMESTAMP(StartTime)
+   row[ 4]	UNIX_TIMESTAMP(EndTime)
+   row[ 5]	Title
    */
    /***** Get match data *****/
    /* Code of the match (row[0]) */
@@ -617,10 +620,11 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 
    /***** Get current match status *****/
    /*
-   row[6]	QstInd
-   row[7]	QstCod
-   row[8]	UNIX_TIMESTAMP(QstStartTime)
-   row[9]	Showing
+   row[ 6]	QstInd
+   row[ 7]	QstCod
+   row[ 8]	UNIX_TIMESTAMP(QstStartTime)
+   row[ 9]	ShowResults
+   row[10]	Showing
    */
    /* Current question index (row[6]) */
    Match->Status.QstInd = Gam_GetQstIndFromStr (row[6]);
@@ -631,8 +635,11 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    /* Get question start date (row[8] holds the start UTC time) */
    Match->Status.QstStartTimeUTC = Dat_GetUNIXTimeFromStr (row[8]);
 
-   /* Get what to show (stem, answers, results) (row(9)) */
-   Match->Status.Showing = Mch_GetShowingFromStr (row[9]);
+   /* Get whether to show results or not (row(9)) */
+   Match->Status.ShowResults = (row[9][0] == 'Y');
+
+   /* Get what to show (stem, answers, results) (row(10)) */
+   Match->Status.Showing = Mch_GetShowingFromStr (row[10]);
 
    /***** Get whether the match is being played or not *****/
    if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// Finished
@@ -1058,11 +1065,13 @@ static void Mch_UpdateMatchStatusInDB (struct Match *Match)
 			"gam_matches.QstInd=%u,"
 			"gam_matches.QstCod=%ld,"
 			"gam_matches.QstStartTime=NOW(),"
+			"gam_matches.ShowResults='%c',"
 			"gam_matches.Showing='%s'"
 		   " WHERE gam_matches.MchCod=%ld"
 		   " AND gam_matches.GamCod=games.GamCod"
 		   " AND games.CrsCod=%ld",	// Extra check
 		   Match->Status.QstInd,Match->Status.QstCod,
+		   Match->Status.ShowResults ? 'Y' : 'N',
 		   Mch_ShowingStringsDB[Match->Status.Showing],
 		   Match->MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
@@ -1231,10 +1240,10 @@ void Mch_ResumeMatchTch (void)
   }
 
 /*****************************************************************************/
-/******** Show results of current question in a match (by a teacher) *********/
+/********* Toggle the display of results in a match (by a teacher) ***********/
 /*****************************************************************************/
 
-void Mch_ShowResultsQstMatchTch (void)
+void Mch_ToggleDisplayResultsMatchTch (void)
   {
    struct Match Match;
 
@@ -1247,7 +1256,10 @@ void Mch_ShowResultsQstMatchTch (void)
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Update status *****/
-   Match.Status.Showing = Mch_RESULTS;		// Show results
+   Match.Status.ShowResults = !Match.Status.ShowResults;	// Toggle display
+   if (!Match.Status.ShowResults &&
+        Match.Status.Showing == Mch_RESULTS)
+     Match.Status.Showing = Mch_ANSWERS;	// Hide results
 
    /***** Update match status in database *****/
    Mch_UpdateMatchStatusInDB (&Match);
@@ -1324,7 +1336,8 @@ static void Mch_SetMatchStatusToPrev (struct Match *Match)
    switch (Match->Status.Showing)
      {
       case Mch_WORDING:
-	 Match->Status.Showing = Mch_REQUEST;
+	 Match->Status.Showing = Match->Status.ShowResults ? Mch_RESULTS :
+	                                                     Mch_ANSWERS;
 
 	 /***** Get index of the previous question *****/
 	 Match->Status.QstInd = Gam_GetPrevQuestionIndexInGame (Match->GamCod,
@@ -1341,11 +1354,8 @@ static void Mch_SetMatchStatusToPrev (struct Match *Match)
       case Mch_ANSWERS:
 	 Match->Status.Showing = Mch_WORDING;
 	 break;
-      case Mch_REQUEST:
-	 Match->Status.Showing = Mch_ANSWERS;
-	 break;
       case Mch_RESULTS:
-	 Match->Status.Showing = Mch_REQUEST;
+	 Match->Status.Showing = Mch_ANSWERS;
 	 break;
      }
   }
@@ -1363,24 +1373,28 @@ static void Mch_SetMatchStatusToNext (struct Match *Match)
 	 Match->Status.Showing = Mch_ANSWERS;
 	 break;
       case Mch_ANSWERS:
-	 Match->Status.Showing = Mch_REQUEST;
+	 Match->Status.Showing = Match->Status.ShowResults ? Mch_RESULTS :
+							     Mch_WORDING;
 	 break;
-      case Mch_REQUEST:
       case Mch_RESULTS:
 	 Match->Status.Showing = Mch_WORDING;
-
-	 /***** Get index of the next question *****/
-	 Match->Status.QstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
-								Match->Status.QstInd);
-	 if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
-	    Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
-							    Match->Status.QstInd);
-	 else							// Finished
-	   {
-	    Match->Status.QstCod = -1L;				// No more questions
-	    Match->Status.BeingPlayed = false;
-	   }
 	 break;
+     }
+
+   /***** Go to next question? *****/
+   if (Match->Status.Showing == Mch_WORDING)
+     {
+      /***** Get index of the next question *****/
+      Match->Status.QstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
+							     Match->Status.QstInd);
+      if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
+	 Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
+							 Match->Status.QstInd);
+      else							// Finished
+	{
+	 Match->Status.QstCod = -1L;				// No more questions
+	 Match->Status.BeingPlayed = false;
+	}
      }
   }
 
@@ -1516,6 +1530,9 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
    /***** Buttons *****/
    Mch_PutMatchControlButtons (Match);
 
+   /***** Write button to request viewing results *****/
+   Mch_PutCheckboxResult (Match);
+
    /***** Number of players *****/
    Mch_ShowNumPlayers (Match);
 
@@ -1551,6 +1568,26 @@ static void Mch_ShowLeftColumnStd (struct Match *Match)
    Mch_ShowNumQstInMatch (Match);
 
    /***** End left container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********************* Show number of question in game ***********************/
+/*****************************************************************************/
+
+static void Mch_ShowNumQstInMatch (struct Match *Match)
+  {
+   extern const char *Txt_MATCH_Start;
+   extern const char *Txt_MATCH_End;
+   unsigned NumQsts = Gam_GetNumQstsGame (Match->GamCod);
+
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_QST\">");
+   if (Match->Status.QstInd == 0)				// Not started
+      fprintf (Gbl.F.Out,"%s",Txt_MATCH_Start);
+   else if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// Finished
+      fprintf (Gbl.F.Out,"%s",Txt_MATCH_End);
+   else
+      fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -1617,22 +1654,43 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
   }
 
 /*****************************************************************************/
-/********************* Show number of question in game ***********************/
+/***************** Put checkbox to select if show results ********************/
 /*****************************************************************************/
 
-static void Mch_ShowNumQstInMatch (struct Match *Match)
+static void Mch_PutCheckboxResult (struct Match *Match)
   {
-   extern const char *Txt_MATCH_Start;
-   extern const char *Txt_MATCH_End;
-   unsigned NumQsts = Gam_GetNumQstsGame (Match->GamCod);
+   extern const char *Txt_View_results;
 
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_QST\">");
-   if (Match->Status.QstInd == 0)				// Not started
-      fprintf (Gbl.F.Out,"%s",Txt_MATCH_Start);
-   else if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// Finished
-      fprintf (Gbl.F.Out,"%s",Txt_MATCH_End);
-   else
-      fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_SHOW_RESULTS\">");
+
+   /***** Start form *****/
+   Frm_StartForm (ActChgDisResMchTch);
+   Mch_PutParamMatchCod (Match->MchCod);	// Current match being played
+
+   /***** Put icon with link *****/
+   /* Submitting onmousedown instead of default onclick
+      is necessary in order to be fast
+      and not lose clicks due to refresh */
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">"
+	              "<a href=\"\" class=\"ICO_HIGHLIGHT\""
+	              " title=\"%s\" "
+	              " onmousedown=\"document.getElementById('%s').submit();"
+	              " return false;\">"
+	              "<i class=\"%s\"></i>"
+	              "&nbsp;%s"
+	              "</a>"
+	              "</div>",
+	    Txt_View_results,
+	    Gbl.Form.Id,
+	    Match->Status.ShowResults ? "fas fa-toggle-on" :
+		                        "fas fa-toggle-off",
+	    Txt_View_results);
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -1722,11 +1780,6 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
 					 "MATCH_TCH_QST",false);	// Don't show result
 	 else	// Not being played
 	    Mch_ShowWaitImage (Txt_MATCH_Paused);
-	 break;
-      case Mch_REQUEST:
-	 /* Write button to request viewing results */
-         Mch_PutBigButton (ActShoResMchTch,Match->MchCod,
-			   Mch_ICON_RESULTS,Txt_View_results);
 	 break;
       case Mch_RESULTS:
 	 /* Write answers with results */

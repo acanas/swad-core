@@ -617,7 +617,7 @@ Assessment:
 
         NEW. ActBckMchTch		Go back when playing a match (by a teacher)
         457. ActFwdMchTch		Go forward when playing a match (by a teacher)
-        NEW. ActShoResMchTch		Show results when playing a match (by a teacher)
+        NEW. ActChgDisResMchTch		Change display of results when playing a match (by a teacher)
 
         NEW. ActRefMchTch		Refresh current question when playing a match (as teacher)
         NEW. ActShoMchTch		Show finished match results
@@ -2162,7 +2162,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPlyMchTch	*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ResumeMatchTch		,NULL},
    /* ActBckMchTch	*/{1790,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_BackMatchTch		,NULL},
    /* ActFwdMchTch	*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ForwardMatchTch		,NULL},
-   /* ActShoResMchTch	*/{1795,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ShowResultsQstMatchTch	,NULL},
+   /* ActChgDisResMchTch*/{1794,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ToggleDisplayResultsMatchTch,NULL},
    /* ActRefMchTch	*/{1788,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchTch		,NULL},
    /* ActShoMchTch	*/{1786,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ShowFinishedMatchResults	,NULL},
 
@@ -5014,8 +5014,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActPauMchTch,		// #1791
 	-1,			// #1792 (obsolete action)
 	-1,			// #1793 (obsolete action)
-	-1,			// #1794 (obsolete action)
-	ActShoResMchTch,	// #1795
+	ActChgDisResMchTch,	// #1794
 	};
 
 /*****************************************************************************/

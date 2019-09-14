@@ -50,7 +50,7 @@ void Mch_CreateNewMatchTch (void);
 void Mch_RequestStartResumeMatchTch (void);
 void Mch_PauseMatchTch (void);
 void Mch_ResumeMatchTch (void);
-void Mch_ShowResultsQstMatchTch (void);
+void Mch_ToggleDisplayResultsMatchTch (void);
 void Mch_BackMatchTch (void);
 void Mch_ForwardMatchTch (void);
 

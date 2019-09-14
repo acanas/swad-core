@@ -2647,6 +2647,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:table;
 	box-sizing:border-box;
 	width:100%;
+	padding:20px 0;
 	}
 .MATCH_BUTTON_LEFT_CONTAINER
 	{
@@ -2675,7 +2676,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	box-sizing:border-box;
 	display:table;
 	width:100%;
-	height:128px;
+	height:64px;
 	font-size:36pt;
 	}
 .MATCH_BUTTON_CONTAINER a
@@ -2718,7 +2719,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MATCH_WAIT_IMAGE
 	{
 	box-sizing:border-box;
-	width:50%;
+	width:25%;
 	}
 
 .MATCH_STD_QST
