@@ -460,10 +460,14 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 19.2 (2019-09-14)"
+#define Log_PLATFORM_VERSION	"SWAD 19.2.1 (2019-09-14)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.2.1:   Sep 14, 2019	Show results in match is the default. (244630 lines)
+					1 change necessary in database:
+ALTER TABLE gam_matches CHANGE COLUMN ShowResults ShowResults ENUM('N','Y') NOT NULL DEFAULT 'Y';
+
 	Version 19.2:     Sep 14, 2019	Changes in match buttons. (244627 lines)
 					6 changes necessary in database:
 ALTER TABLE gam_matches DROP COLUMN Showing;

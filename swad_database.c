@@ -1381,10 +1381,10 @@ mysql> DESCRIBE gam_matches;
 | QstInd       | int(11)                             | NO   |     | 0       |                |
 | QstCod       | int(11)                             | NO   |     | -1      |                |
 | QstStartTime | datetime                            | NO   |     | NULL    |                |
-| ShowResults  | enum('N','Y')                       | NO   |     | N       |                |
+| ShowResults  | enum('N','Y')                       | NO   |     | Y       |                |
 | Showing      | enum('wording','answers','results') | NO   |     | wording |                |
 +--------------+-------------------------------------+------+-----+---------+----------------+
-11 rows in set (0.01 sec)
+11 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_matches ("
 			"MchCod INT NOT NULL AUTO_INCREMENT,"
@@ -1396,7 +1396,7 @@ mysql> DESCRIBE gam_matches;
 			"QstInd INT NOT NULL DEFAULT 0,"
 			"QstCod INT NOT NULL DEFAULT -1,"
 			"QstStartTime DATETIME NOT NULL,"
-			"ShowResults ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"ShowResults ENUM('N','Y') NOT NULL DEFAULT 'Y',"
 			"Showing ENUM('wording','answers','request','results') NOT NULL DEFAULT 'wording',"
 		   "UNIQUE INDEX(MchCod),"
 		   "INDEX(GamCod)");
