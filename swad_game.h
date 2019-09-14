@@ -81,8 +81,13 @@ typedef enum
 
 void Gam_SeeAllGames (void);
 void Gam_SeeOneGame (void);
+void Gam_ShowOneGame (long GamCod,
+                      bool ShowOnlyThisGame,
+                      bool ListGameQuestions,
+                      bool PutFormNewMatch);
 void Gam_PutHiddenParamGameOrder (void);
 void Gam_RequestCreatOrEditGame (void);
+void Gam_PutParams (void);
 void Gam_GetListGames (void);
 void Gam_GetDataOfGameByCod (struct Game *Gam);
 void Gam_GetDataOfGameByFolder (struct Game *Gam);
@@ -102,9 +107,15 @@ void Gam_RemoveGroup (long GrpCod);
 void Gam_RemoveGroupsOfType (long GrpTypCod);
 void Gam_RemoveGames (Hie_Level_t Scope,long Cod);
 
-void Gam_RequestNewQuestion (void);
+unsigned Gam_GetNumQstsGame (long GamCod);
 
-void Gam_GetAndDrawBarNumUsrsWhoAnswered (long MchCod,unsigned QstInd,unsigned AnsInd,unsigned NumUsrs);
+void Gam_RequestNewQuestion (void);
+void Gam_PutParamQstInd (unsigned QstInd);
+unsigned Gam_GetParamQstInd (void);
+unsigned Gam_GetQstIndFromStr (const char *UnsignedStr);
+long Gam_GetQstCodFromQstInd (long GamCod,unsigned QstInd);
+unsigned Gam_GetPrevQuestionIndexInGame (long GamCod,unsigned QstInd);
+unsigned Gam_GetNextQuestionIndexInGame (long GamCod,unsigned QstInd);
 
 void Gam_AddTstQuestionsToGame (void);
 
@@ -114,30 +125,7 @@ void Gam_RemoveQst (void);
 void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);
 
-void Gam_RequestRemoveMatchTch (void);
-void Gam_RemoveMatchTch (void);
-
 void Gam_RequestNewMatchTch (void);
-
-void Gam_CreateNewMatchTch (void);
-void Gam_RequestStartResumeMatchTch (void);
-void Gam_PauseMatchTch (void);
-void Gam_ResumeMatchTch (void);
-// void Gam_ShowStemQstMatchTch (void);
-// void Gam_ShowAnssQstMatchTch (void);
-void Gam_ShowResultsQstMatchTch (void);
-void Gam_BackMatchTch (void);
-void Gam_ForwardMatchTch (void);
-// void Gam_CurrQstMatchTch (void);
-
-void Gam_ShowFinishedMatchResults (void);
-
-void Gam_GetMatchBeingPlayed (void);
-void Gam_ShowMatchToMeAsStd (void);
-void Gam_RefreshMatchTch (void);
-void Gam_RefreshMatchStd (void);
-
-void Gam_ReceiveQstAnsFromStd (void);
 
 unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);
 unsigned Gam_GetNumGames (Hie_Level_t Scope);

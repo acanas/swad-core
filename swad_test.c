@@ -43,6 +43,7 @@
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_language.h"
+#include "swad_match.h"
 #include "swad_media.h"
 #include "swad_parameter.h"
 #include "swad_table.h"
@@ -4142,7 +4143,7 @@ static void Tst_WriteChoiceAnsViewGame (long MchCod,unsigned QstInd,long QstCod,
 			    "<td class=\"DAT LEFT_TOP\">");
 	 /* Get number of users who selected this answer
 	    and draw proportional bar */
-	 Gam_GetAndDrawBarNumUsrsWhoAnswered (MchCod,QstInd,AnsInd,
+	 Mch_GetAndDrawBarNumUsrsWhoAnswered (MchCod,QstInd,AnsInd,
 					      0);	// TODO: NumUsrs
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");

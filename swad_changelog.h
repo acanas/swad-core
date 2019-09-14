@@ -460,10 +460,11 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 19.0.1 (2019-09-13)"
+#define Log_PLATFORM_VERSION	"SWAD 19.1 (2019-09-14)"
 #define CSS_FILE		"swad18.138.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.1:     Sep 14, 2019	Game module splitted into game and match modules. (244572 lines)
 	Version 19.0.1:   Sep 13, 2019	Show results of questions in matches. (244583 lines)
 	Version 19.0:     Sep 12, 2019	Changes in behaviour of matches. (244585 lines)
 					3 changes necessary in database:

@@ -56,6 +56,7 @@
 #include "swad_language.h"
 #include "swad_mail.h"
 #include "swad_mark.h"
+#include "swad_match.h"
 #include "swad_MFU.h"
 #include "swad_network.h"
 #include "swad_nickname.h"
@@ -2152,22 +2153,22 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActSeeGam		*/{1650,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
 
-   /* ActReqRemMchTch	*/{1783,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestRemoveMatchTch	,NULL},
-   /* ActRemMchTch	*/{1784,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RemoveMatchTch		,NULL},
+   /* ActReqRemMchTch	*/{1783,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_RequestRemoveMatchTch	,NULL},
+   /* ActRemMchTch	*/{1784,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_RemoveMatchTch		,NULL},
    /* ActReqNewMchTch	*/{1670,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestNewMatchTch		,NULL},
-   /* ActNewMchTch	*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_CreateNewMatchTch		,Gam_RequestStartResumeMatchTch	,NULL},
-   /* ActResMchTch	*/{1785,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_GetMatchBeingPlayed	,Gam_RequestStartResumeMatchTch	,NULL},
-   /* ActPauMchTch	*/{1791,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_PauseMatchTch		,NULL},
-   /* ActPlyMchTch	*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_ResumeMatchTch		,NULL},
-   /* ActBckMchTch	*/{1790,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_BackMatchTch		,NULL},
-   /* ActFwdMchTch	*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_ForwardMatchTch		,NULL},
-   /* ActShoResMchTch	*/{1795,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_ShowResultsQstMatchTch	,NULL},
-   /* ActRefMchTch	*/{1788,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Gam_GetMatchBeingPlayed	,Gam_RefreshMatchTch		,NULL},
-   /* ActShoMchTch	*/{1786,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ShowFinishedMatchResults	,NULL},
+   /* ActNewMchTch	*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_CreateNewMatchTch		,Mch_RequestStartResumeMatchTch	,NULL},
+   /* ActResMchTch	*/{1785,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_RequestStartResumeMatchTch	,NULL},
+   /* ActPauMchTch	*/{1791,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_PauseMatchTch		,NULL},
+   /* ActPlyMchTch	*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ResumeMatchTch		,NULL},
+   /* ActBckMchTch	*/{1790,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_BackMatchTch		,NULL},
+   /* ActFwdMchTch	*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ForwardMatchTch		,NULL},
+   /* ActShoResMchTch	*/{1795,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ShowResultsQstMatchTch	,NULL},
+   /* ActRefMchTch	*/{1788,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchTch		,NULL},
+   /* ActShoMchTch	*/{1786,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ShowFinishedMatchResults	,NULL},
 
-   /* ActPlyMchStd	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Gam_GetMatchBeingPlayed	,Gam_ShowMatchToMeAsStd		,NULL},
-   /* ActRefMchStd	*/{1782,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Gam_GetMatchBeingPlayed	,Gam_RefreshMatchStd		,NULL},
-   /* ActAnsMchQstStd	*/{1651,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Gam_GetMatchBeingPlayed	,Gam_ReceiveQstAnsFromStd	,NULL},
+   /* ActPlyMchStd	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_ShowMatchToMeAsStd		,NULL},
+   /* ActRefMchStd	*/{1782,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchStd		,NULL},
+   /* ActAnsMchQstStd	*/{1651,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ReceiveQstAnsFromStd	,NULL},
 
    /* ActFrmNewGam	*/{1652,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
    /* ActEdiOneGam	*/{1653,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
