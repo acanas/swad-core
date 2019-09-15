@@ -210,9 +210,9 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 				          unsigned NumQst,MYSQL_RES *mysql_res,
                                           double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteChoiceAnsViewGame (long MchCod,unsigned QstInd,long QstCod,
-                                        const char *Class,
-                                        bool ShowResult);
+static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
+                                         const char *Class,
+                                         bool ShowResult);
 
 static void Tst_WriteTextAnsViewTest (unsigned NumQst);
 static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
@@ -3531,8 +3531,8 @@ void Tst_WriteAnswersMatchResult (long MchCod,unsigned QstInd,long QstCod,
   {
    /***** Write answer depending on type *****/
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
-      Tst_WriteChoiceAnsViewGame (MchCod,QstInd,QstCod,
-                                  Class,ShowResult);
+      Tst_WriteChoiceAnsViewMatch (MchCod,QstInd,QstCod,
+                                   Class,ShowResult);
    else
       Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
   }
@@ -4042,18 +4042,23 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/******** Write single or multiple choice answer when viewing a test *********/
+/******** Write single or multiple choice answer when viewing a match ********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsViewGame (long MchCod,unsigned QstInd,long QstCod,
-                                        const char *Class,
-                                        bool ShowResult)
+static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
+                                         const char *Class,
+                                         bool ShowResult)
   {
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned AnsInd;
+   unsigned NumAnswerersQst;
+   bool Correct;
    bool ErrorInIndex = false;
+
+   /***** Get number of users who hasve answered this question from database *****/
+   NumAnswerersQst = Mch_GetNumUsrsWhoHaveAnswerQst (MchCod,QstInd);
 
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,false);
@@ -4066,7 +4071,7 @@ static void Tst_WriteChoiceAnsViewGame (long MchCod,unsigned QstInd,long QstCod,
    */
 
    /***** Start table *****/
-   Tbl_StartTable (2);
+   Tbl_StartTableWide (2);
 
    for (NumOpt = 0;
 	NumOpt < Gbl.Test.Answer.NumOptions;
@@ -4104,24 +4109,19 @@ static void Tst_WriteChoiceAnsViewGame (long MchCod,unsigned QstInd,long QstCod,
       Gbl.Test.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
       Med_GetMediaDataByCod (&Gbl.Test.Answer.Options[NumOpt].Media);
 
-      /***** Write letter for this option *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"CENTER_MIDDLE\">"
-                         "<div class=\"");
-      if (ShowResult)
-	 fprintf (Gbl.F.Out,"%s\">"
-	                    "%c)&nbsp;",
-	          Class,
-                  'a' + (char) NumOpt);
-      else
-	 fprintf (Gbl.F.Out,"MATCH_TCH_BUTTON BT_%c\">"
-	                    "%c",
-	          'A' + (char) NumOpt,
-	          'a' + (char) NumOpt);
-      fprintf (Gbl.F.Out,"</div>"
-	                 "</td>");
+      /***** Start row for this option *****/
+      fprintf (Gbl.F.Out,"<tr>");
 
-      /***** Write the option text *****/
+      /***** Write letter for this option *****/
+      fprintf (Gbl.F.Out,"<td class=\"MATCH_TCH_BUTTON_TD\">"
+                         "<div class=\"MATCH_TCH_BUTTON BT_%c\">"
+			 "%c"
+	                 "</div>"
+	                 "</td>",
+	       'A' + (char) NumOpt,
+	       'a' + (char) NumOpt);
+
+      /***** Write the option text and the result *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                          "<label for=\"Ans%06u_%u\" class=\"%s\">"
 	                 "%s"
@@ -4132,22 +4132,23 @@ static void Tst_WriteChoiceAnsViewGame (long MchCod,unsigned QstInd,long QstCod,
       Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
                      "TEST_MED_SHOW_CONTAINER",
                      "TEST_MED_SHOW");
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
 
-      /***** Show result (number of users who answered? *****/
+      /* Show result (number of users who answered? */
       if (ShowResult)
 	{
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td></td>"
-			    "<td class=\"DAT LEFT_TOP\">");
+         /* Get if correct (row[4]) */
+         Correct = (row[4][0] == 'Y');
+
 	 /* Get number of users who selected this answer
 	    and draw proportional bar */
-	 Mch_GetAndDrawBarNumUsrsWhoAnswered (MchCod,QstInd,AnsInd,
-					      0);	// TODO: NumUsrs
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (MchCod,QstInd,AnsInd,
+						   NumAnswerersQst,Correct);
 	}
+
+      fprintf (Gbl.F.Out,"</td>");
+
+      /***** End row for this option *****/
+      fprintf (Gbl.F.Out,"</tr>");
      }
 
    /***** End table *****/

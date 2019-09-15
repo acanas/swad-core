@@ -63,6 +63,8 @@ void Mch_RefreshMatchStd (void);
 
 void Mch_ReceiveQstAnsFromStd (void);
 
-void Mch_GetAndDrawBarNumUsrsWhoAnswered (long MchCod,unsigned QstInd,unsigned AnsInd,unsigned NumUsrs);
+void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd,
+					       unsigned NumAnswerersQst,bool Correct);
+unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd);
 
 #endif

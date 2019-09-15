@@ -71,11 +71,11 @@ extern struct Globals Gbl;
 #define Mch_NUM_SHOWING 3
 typedef enum
   {
-   Mch_WORDING,	// Showing only the question wording
-   Mch_ANSWERS,	// Showing the question wording and the answers
+   Mch_STEM,	// Showing only the question stem
+   Mch_ANSWERS,	// Showing the question stem and the answers
    Mch_RESULTS,	// Showing the results
   } Mch_Showing_t;
-#define Mch_SHOWING_DEFAULT Mch_WORDING
+#define Mch_SHOWING_DEFAULT Mch_STEM
 
 struct Match
   {
@@ -102,7 +102,7 @@ struct Match
 
 const char *Mch_ShowingStringsDB[Mch_NUM_SHOWING] =
   {
-   "wording",
+   "stem",
    "answers",
    "results",
   };
@@ -183,9 +183,8 @@ static void Mch_GetNumPlayers (struct Match *Match);
 
 static int Mch_GetQstAnsFromDB (long MchCod,unsigned QstInd);
 
-static unsigned Mch_GetNumAnswerers (struct Match *Match);
-static unsigned Mch_GetNumUsrsWhoAnswered (long MchCod,unsigned QstInd,unsigned AnsInd);
-static void Mch_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
+static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
+static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQst,bool Correct);
 
 /*****************************************************************************/
 /************************* List the matches of a game ************************/
@@ -318,7 +317,7 @@ static void Mch_GetDataOfMatchByCod (struct Match *Match)
       Match->Status.QstCod           = -1L;
       Match->Status.QstStartTimeUTC  = (time_t) 0;
       Match->Status.ShowResults      = true;
-      Match->Status.Showing          = Mch_WORDING;
+      Match->Status.Showing          = Mch_STEM;
       Match->Status.BeingPlayed      = false;
      }
 
@@ -1335,7 +1334,7 @@ static void Mch_SetMatchStatusToPrev (struct Match *Match)
    /***** What to show *****/
    switch (Match->Status.Showing)
      {
-      case Mch_WORDING:
+      case Mch_STEM:
 	 Match->Status.Showing = Match->Status.ShowResults ? Mch_RESULTS :
 	                                                     Mch_ANSWERS;
 
@@ -1352,7 +1351,7 @@ static void Mch_SetMatchStatusToPrev (struct Match *Match)
 							    Match->Status.QstInd);
 	 break;
       case Mch_ANSWERS:
-	 Match->Status.Showing = Mch_WORDING;
+	 Match->Status.Showing = Mch_STEM;
 	 break;
       case Mch_RESULTS:
 	 Match->Status.Showing = Mch_ANSWERS;
@@ -1369,20 +1368,20 @@ static void Mch_SetMatchStatusToNext (struct Match *Match)
    /***** What to show *****/
    switch (Match->Status.Showing)
      {
-      case Mch_WORDING:
+      case Mch_STEM:
 	 Match->Status.Showing = Mch_ANSWERS;
 	 break;
       case Mch_ANSWERS:
 	 Match->Status.Showing = Match->Status.ShowResults ? Mch_RESULTS :
-							     Mch_WORDING;
+							     Mch_STEM;
 	 break;
       case Mch_RESULTS:
-	 Match->Status.Showing = Mch_WORDING;
+	 Match->Status.Showing = Mch_STEM;
 	 break;
      }
 
    /***** Go to next question? *****/
-   if (Match->Status.Showing == Mch_WORDING)
+   if (Match->Status.Showing == Mch_STEM)
      {
       /***** Get index of the next question *****/
       Match->Status.QstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
@@ -1498,7 +1497,7 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
   {
    extern const char *Txt_MATCH_respond;
    struct Time Time;
-   unsigned NumAnswerers;
+   unsigned NumAnswerersQst;
 
    /***** Start left container *****/
    fprintf (Gbl.F.Out,"<div class=\"MATCH_LEFT\">");
@@ -1536,16 +1535,17 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
    /***** Number of players *****/
    Mch_ShowNumPlayers (Match);
 
-   /***** Number of users who have answered *****/
+   /***** Number of users who have answered this question *****/
    if (Match->Status.BeingPlayed)
      {
-      NumAnswerers = Mch_GetNumAnswerers (Match);
+      NumAnswerersQst = Mch_GetNumUsrsWhoHaveAnswerQst (Match->MchCod,
+			                                Match->Status.QstInd);
       fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_ANSWERERS\">"
                          "%s<br />"
                          "<strong>%u/%u</strong>"
 	                 "</div>",
 	       Txt_MATCH_respond,
-	       NumAnswerers,Match->Status.NumPlayers);
+	       NumAnswerersQst,Match->Status.NumPlayers);
      }
 
    /***** End left container *****/
@@ -1751,10 +1751,10 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
    // TODO: Check that answer type is correct (unique choice)
 
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");	// Bottom
 
    /* Write stem (row[1]) */
-   Tst_WriteQstStem (row[1],"MATCH_TCH_QST");
+   Tst_WriteQstStem (row[1],"MATCH_TCH_STEM");
 
    /* Get media (row[2]) */
    Gbl.Test.Media.MedCod = Str_ConvertStrCodToLongCod (row[2]);
@@ -1768,17 +1768,18 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
    /* Write answers? */
    switch (Match->Status.Showing)
      {
-      case Mch_WORDING:
+      case Mch_STEM:
 	 /* Don't write anything */
 	 break;
       case Mch_ANSWERS:
-	 if (Match->Status.BeingPlayed)
+	 if (Match->Status.BeingPlayed)			// Being played
 	    /* Write answers */
 	    Tst_WriteAnswersMatchResult (Match->MchCod,
 					 Match->Status.QstInd,
 					 Match->Status.QstCod,
-					 "MATCH_TCH_QST",false);	// Don't show result
-	 else	// Not being played
+					 "MATCH_TCH_ANS",
+					 false);	// Don't show result
+	 else						// Not being played
 	    Mch_ShowWaitImage (Txt_MATCH_Paused);
 	 break;
       case Mch_RESULTS:
@@ -1786,11 +1787,12 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
 	 Tst_WriteAnswersMatchResult (Match->MchCod,
 				      Match->Status.QstInd,
 				      Match->Status.QstCod,
-				      "MATCH_TCH_QST",true);	// Show result
+				      "MATCH_TCH_ANS",
+				      true);		// Show result
 	 break;
      }
 
-   fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,"</div>");			// Bottom
   }
 
 /*****************************************************************************/
@@ -2260,91 +2262,100 @@ void Mch_ReceiveQstAnsFromStd (void)
   }
 
 /*****************************************************************************/
-/***** Get number of users who have answered current question in a match *****/
-/*****************************************************************************/
-
-static unsigned Mch_GetNumAnswerers (struct Match *Match)
-  {
-   /***** Get number of users who have answered the current question in a match from database *****/
-   return
-   (unsigned) DB_QueryCOUNT ("can not get number of questions of a game",
-			     "SELECT COUNT(*) FROM gam_answers"
-			     " WHERE MchCod=%ld AND QstInd=%u",
-			     Match->MchCod,
-			     Match->Status.QstInd);
-  }
-
-/*****************************************************************************/
 /*** Get number of users who selected this answer and draw proportional bar **/
 /*****************************************************************************/
 
-void Mch_GetAndDrawBarNumUsrsWhoAnswered (long MchCod,unsigned QstInd,unsigned AnsInd,unsigned NumUsrs)
+void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd,
+					       unsigned NumAnswerersQst,bool Correct)
   {
-   unsigned NumUsrsThisAnswer;
+   unsigned NumAnswerersAns;
 
    /***** Get number of users who selected this answer *****/
-   NumUsrsThisAnswer = Mch_GetNumUsrsWhoAnswered (MchCod,QstInd,AnsInd);
+   NumAnswerersAns = Mch_GetNumUsrsWhoHaveChosenAns (MchCod,QstInd,AnsInd);
 
    /***** Show stats of this answer *****/
-   Mch_DrawBarNumUsrs (NumUsrsThisAnswer,NumUsrs);
+   Mch_DrawBarNumUsrs (NumAnswerersAns,NumAnswerersQst,Correct);
   }
 
 /*****************************************************************************/
-/**** Get number of users who selected a given answer of a game question *****/
+/******* Get number of users who have answered a question in a match *********/
 /*****************************************************************************/
 
-static unsigned Mch_GetNumUsrsWhoAnswered (long MchCod,unsigned QstInd,unsigned AnsInd)
+unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd)
+  {
+   /***** Get number of users who have answered
+          a question in a match from database *****/
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of users who hasve answered a question",
+			     "SELECT COUNT(*) FROM gam_answers"
+			     " WHERE MchCod=%ld AND QstInd=%u",
+			     MchCod,QstInd);
+  }
+
+/*****************************************************************************/
+/*** Get number of users who have chosen a given answer of a game question ***/
+/*****************************************************************************/
+
+static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd)
   {
    /***** Get number of users who have chosen
           an answer of a question from database *****/
-   return (unsigned) DB_QueryCOUNT ("can not get number of users who answered",
-				    "SELECT COUNT(*)"
-				    " FROM gam_answers"
-				    " WHERE MchCod=%ld"
-				    " AND QstInd=%u"
-				    " AND AnsInd=%u",
-				    MchCod,QstInd,AnsInd);
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of users who have chosen an answer",
+			     "SELECT COUNT(*) FROM gam_answers"
+			     " WHERE MchCod=%ld AND QstInd=%u AND AnsInd=%u",
+			     MchCod,QstInd,AnsInd);
   }
 
 /*****************************************************************************/
 /***************** Draw a bar with the percentage of answers *****************/
 /*****************************************************************************/
 
-#define Gam_MAX_BAR_WIDTH 125
+// #define Mch_MAX_BAR_WIDTH 400
+#define Mch_MAX_BAR_WIDTH 100
 
-static void Mch_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
+static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQst,bool Correct)
   {
    extern const char *Txt_of_PART_OF_A_TOTAL;
+   unsigned i;
    unsigned BarWidth = 0;
 
    /***** String with the number of users *****/
-   if (MaxUsrs)
+   if (NumAnswerersQst)
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%u&nbsp;(%u%%&nbsp;%s&nbsp;%u)",
-                NumUsrs,
-                (unsigned) ((((float) NumUsrs * 100.0) / (float) MaxUsrs) + 0.5),
-                Txt_of_PART_OF_A_TOTAL,MaxUsrs);
+                NumAnswerersAns,
+                (unsigned) ((((float) NumAnswerersAns * 100.0) / (float) NumAnswerersQst) + 0.5),
+                Txt_of_PART_OF_A_TOTAL,NumAnswerersQst);
    else
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
-                Txt_of_PART_OF_A_TOTAL,MaxUsrs);
+                Txt_of_PART_OF_A_TOTAL,NumAnswerersQst);
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_RESULT\">");
 
    /***** Draw bar with a with proportional to the number of clicks *****/
-   if (NumUsrs && MaxUsrs)
-      BarWidth = (unsigned) ((((float) NumUsrs * (float) Gam_MAX_BAR_WIDTH) /
-	                       (float) MaxUsrs) + 0.5);
-   if (BarWidth < 2)
-      BarWidth = 2;
-   fprintf (Gbl.F.Out,"<img src=\"%s/c1x16.gif\""
-	              " alt=\"%s\" title=\"%s\""
-                      " class=\"LEFT_TOP\""
-	              " style=\"width:%upx; height:20px;\" />"
-	              "&nbsp;",
-      Cfg_URL_ICON_PUBLIC,
-      Gbl.Title,
-      Gbl.Title,
-      BarWidth);
+   if (NumAnswerersAns && NumAnswerersQst)
+      BarWidth = (unsigned) ((((float) NumAnswerersAns * (float) Mch_MAX_BAR_WIDTH) /
+	                       (float) NumAnswerersQst) + 0.5);
+
+   /***** Bar proportional to number of users *****/
+   Tbl_StartTableWide (0);
+   fprintf (Gbl.F.Out,"<tr class=\"MATCH_RES_TR\">");
+   for (i = 0;
+	i < 100;
+	i++)
+      fprintf (Gbl.F.Out,"<td class=\"%s\"></td>",
+	       (i < BarWidth) ? (Correct ? "MATCH_RES_CORRECT" :
+					   "MATCH_RES_WRONG") :
+				"MATCH_RES_VOID");
+   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndTable ();
 
    /***** Write the number of users *****/
    fprintf (Gbl.F.Out,"%s",Gbl.Title);
+
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
   }

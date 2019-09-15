@@ -640,7 +640,7 @@ CREATE TABLE IF NOT EXISTS gam_matches (
 	QstCod INT NOT NULL DEFAULT -1,
 	QstStartTime DATETIME NOT NULL,
 	ShowResults ENUM('N','Y') NOT NULL DEFAULT 'Y',
-	Showing ENUM('wording','answers','results') NOT NULL DEFAULT 'wording',
+	Showing ENUM('stem','answers','results') NOT NULL DEFAULT 'stem',
 	UNIQUE INDEX(MchCod),
 	INDEX(GamCod));
 --

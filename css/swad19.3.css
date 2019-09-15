@@ -2705,7 +2705,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	opacity:0.1;
 	}
 
-.MATCH_TCH_QST
+.MATCH_TCH_STEM
+	{
+	color:#202020;
+	font-size:24pt;
+	padding-bottom:12pt;
+	}
+.MATCH_TCH_ANS
 	{
 	color:#202020;
 	font-size:24pt;
@@ -2728,6 +2734,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:24pt;
 	}
 
+.MATCH_TCH_BUTTON_TD
+	{
+	box-sizing:border-box;
+	width:84px;
+	text-align:center;
+	vertical-align:middle;
+	}
 .MATCH_TCH_BUTTON
 	{
 	box-sizing:border-box;
@@ -2768,6 +2781,34 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MATCH_STD_ANSWER_SELECTED
 	{
 	box-shadow: 0px 0px 18px 12px rgba(0,128,0,1);
+	}
+
+.MATCH_RESULT
+	{
+	padding:10px 0;
+	color:#606060;
+	font-size:16pt;
+	text-align:left;
+	vertical-align:top;
+	}
+.MATCH_RES_TR
+	{
+	height:24px;
+	}
+.MATCH_RES_CORRECT
+	{
+	width:1%;
+	background:green;
+	}
+.MATCH_RES_WRONG
+	{
+	width:1%;
+	background:red;
+	}
+.MATCH_RES_VOID
+	{
+	width:1%;
+	background:white;
 	}
 
 .BT_A	{background-color:#e21c3d; border-color:#a9152d;} /* red */
