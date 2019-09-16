@@ -4373,25 +4373,6 @@ int swad__getGames (struct soap *soap,
      }
 
    /***** Query list of games *****/
-   /*
-   mysql> DESCRIBE games;
-   +-----------+-------------------------------------------+------+-----+---------+----------------+
-   | Field     | Type                                      | Null | Key | Default | Extra          |
-   +-----------+-------------------------------------------+------+-----+---------+----------------+
-   | GamCod    | int(11)                                   | NO   | PRI | NULL    | auto_increment |
-   | Scope     | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | MUL | Sys     |                |
-   | Cod       | int(11)                                   | NO   |     | -1      |                |
-   | Hidden    | enum('N','Y')                             | NO   |     | N       |                |
-   | NumNotif  | int(11)                                   | NO   |     | 0       |                |
-   | Roles     | int(11)                                   | NO   |     | 0       |                |
-   | UsrCod    | int(11)                                   | NO   |     | NULL    |                |
-   | StartTime | datetime                                  | NO   |     | NULL    |                |
-   | EndTime   | datetime                                  | NO   |     | NULL    |                |
-   | Title     | varchar(2047)                             | NO   |     | NULL    |                |
-   | Txt       | text                                      | NO   |     | NULL    |                |
-   +-----------+-------------------------------------------+------+-----+---------+----------------+
-   11 rows in set (0.00 sec)
-   */
    NumRows =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get games",
 			      "SELECT GamCod,"				// row[0]
@@ -4400,16 +4381,16 @@ int swad__getGames (struct soap *soap,
 			             "UNIX_TIMESTAMP(EndTime) AS ET,"	// row[3]
 			             "Title,"				// row[4]
 			             "Txt"				// row[5]
-			      " FROM att_events"
-			      " WHERE Scope='%s' AND Cod=%ld"
+			      " FROM gam_games"
+			      " WHERE CrsCod=%ld"
 			      " AND Hidden='N'"
 			      " AND NOW() BETWEEN StartTime AND EndTime"
-			      " AND (GamCod NOT IN (SELECT GamCod FROM gam_grp) OR"
-			      " GamCod IN (SELECT gam_grp.GamCod FROM gam_grp,crs_grp_usr"
+			      " AND (GamCod NOT IN (SELECT GamCod FROM mch_groups) OR"
+			      " GamCod IN (SELECT mch_groups.GamCod FROM mch_groups,crs_grp_usr"
 			      " WHERE crs_grp_usr.UsrCod=%ld"
-			      " AND gam_grp.GrpCod=crs_grp_usr.GrpCod))"
+			      " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))"
 			      " ORDER BY ST DESC,ET DESC,Title DESC",
-			      Sco_GetDBStrFromScope (Hie_CRS),courseCode,
+			      courseCode,
 			      Gbl.Usrs.Me.UsrDat.UsrCod);
 
    getGamesOut->gamesArray.__size =
@@ -4520,8 +4501,8 @@ static void API_GetListGrpsInGameFromDB (long GamCod,char **ListGroups)
 
    /***** Get list of groups *****/
    NumGrps =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups of a game",
-			      "SELECT GrpCod FROM gam_grp WHERE GamCod=%ld",
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get groups of a match",
+			      "SELECT GrpCod FROM mch_groups WHERE GamCod=%ld",
 			      GamCod);
    if (NumGrps == 0)
       *ListGroups = NULL;

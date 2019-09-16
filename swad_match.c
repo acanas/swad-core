@@ -205,13 +205,13 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
      {
       if (asprintf (&SubQuery," AND"
 			      "(MchCod NOT IN"
-			      " (SELECT MchCod FROM gam_grp)"
+			      " (SELECT MchCod FROM mch_groups)"
 			      " OR"
 			      " MchCod IN"
-			      " (SELECT gam_grp.MchCod"
-			      " FROM gam_grp,crs_grp_usr"
+			      " (SELECT mch_groups.MchCod"
+			      " FROM mch_groups,crs_grp_usr"
 			      " WHERE crs_grp_usr.UsrCod=%ld"
-			      " AND gam_grp.GrpCod=crs_grp_usr.GrpCod))",
+			      " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))",
 		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
 	  Lay_NotEnoughMemoryExit ();
       }
@@ -232,7 +232,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 						  "UNIX_TIMESTAMP(QstStartTime),"	// row[ 8]
 					          "ShowResults,"			// row[ 9]
 						  "Showing"				// row[10]
-					   " FROM gam_matches"
+					   " FROM mch_matches"
 					   " WHERE GamCod=%ld%s"
 					   " ORDER BY MchCod",
 					   Game->GamCod,
@@ -294,10 +294,10 @@ static void Mch_GetDataOfMatchByCod (struct Match *Match)
 					       "UNIX_TIMESTAMP(QstStartTime),"		// row[ 8]
 					       "ShowResults,"				// row[ 9]
 					       "Showing"				// row[10]
-					" FROM gam_matches"
+					" FROM mch_matches"
 					" WHERE MchCod=%ld"
 					" AND GamCod IN"		// Extra check
-					" (SELECT GamCod FROM games"
+					" (SELECT GamCod FROM gam_games"
 					" WHERE CrsCod='%ld')",
 					Match->MchCod,
 					Gbl.Hierarchy.Crs.CrsCod);
@@ -527,9 +527,9 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (struct Match *Match)
    /***** Get groups associated to a match from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get groups of a match",
 			     "SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
-			     " FROM gam_grp,crs_grp,crs_grp_types"
-			     " WHERE gam_grp.MchCod=%ld"
-			     " AND gam_grp.GrpCod=crs_grp.GrpCod"
+			     " FROM mch_groups,crs_grp,crs_grp_types"
+			     " WHERE mch_groups.MchCod=%ld"
+			     " AND mch_groups.GrpCod=crs_grp.GrpCod"
 			     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 			     " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
 			     Match->MchCod);
@@ -716,51 +716,51 @@ void Mch_RemoveMatchTch (void)
    /***** Remove the match from all the tables *****/
    /* Remove match players */
    DB_QueryDELETE ("can not remove match players",
-		   "DELETE FROM gam_players"
-		   " USING gam_players,gam_matches,games"
-		   " WHERE gam_players.MchCod=%ld"
-		   " AND gam_players.MchCod=gam_matches.MchCod"
-		   " AND gam_matches.GamCod=games.GamCod"
-		   " AND games.CrsCod=%ld",	// Extra check
+		   "DELETE FROM mch_players"
+		   " USING mch_players,mch_matches,gam_games"
+		   " WHERE mch_players.MchCod=%ld"
+		   " AND mch_players.MchCod=mch_matches.MchCod"
+		   " AND mch_matches.GamCod=gam_games.GamCod"
+		   " AND gam_games.CrsCod=%ld",	// Extra check
 		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /* Remove match from list of matches being played */
    DB_QueryDELETE ("can not remove match from matches being played",
-		   "DELETE FROM gam_mch_being_played"
-		   " USING gam_mch_being_played,gam_matches,games"
-		   " WHERE gam_mch_being_played.MchCod=%ld"
-		   " AND gam_mch_being_played.MchCod=gam_matches.MchCod"
-		   " AND gam_matches.GamCod=games.GamCod"
-		   " AND games.CrsCod=%ld",	// Extra check
+		   "DELETE FROM mch_playing"
+		   " USING mch_playing,mch_matches,gam_games"
+		   " WHERE mch_playing.MchCod=%ld"
+		   " AND mch_playing.MchCod=mch_matches.MchCod"
+		   " AND mch_matches.GamCod=gam_games.GamCod"
+		   " AND gam_games.CrsCod=%ld",	// Extra check
 		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /* Remove students' answers to match */
    DB_QueryDELETE ("can not remove students' answers associated to a match",
-		   "DELETE FROM gam_answers"
-		   " USING gam_answers,gam_matches,games"
-		   " WHERE gam_answers.MchCod=%ld"
-		   " AND gam_answers.MchCod=gam_matches.MchCod"
-		   " AND gam_matches.GamCod=games.GamCod"
-		   " AND games.CrsCod=%ld",	// Extra check
+		   "DELETE FROM mch_answers"
+		   " USING mch_answers,mch_matches,gam_games"
+		   " WHERE mch_answers.MchCod=%ld"
+		   " AND mch_answers.MchCod=mch_matches.MchCod"
+		   " AND mch_matches.GamCod=gam_games.GamCod"
+		   " AND gam_games.CrsCod=%ld",	// Extra check
 		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /* Remove groups associated to the match */
    DB_QueryDELETE ("can not remove the groups associated to a match",
-		   "DELETE FROM gam_grp"
-		   " USING gam_grp,gam_matches,games"
-		   " WHERE gam_grp.MchCod=%ld"
-		   " AND gam_grp.MchCod=gam_matches.MchCod"
-		   " AND gam_matches.GamCod=games.GamCod"
-		   " AND games.CrsCod=%ld",	// Extra check
+		   "DELETE FROM mch_groups"
+		   " USING mch_groups,mch_matches,gam_games"
+		   " WHERE mch_groups.MchCod=%ld"
+		   " AND mch_groups.MchCod=mch_matches.MchCod"
+		   " AND mch_matches.GamCod=gam_games.GamCod"
+		   " AND gam_games.CrsCod=%ld",	// Extra check
 		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
    /* Remove the match itself */
    DB_QueryDELETE ("can not remove a match",
-		   "DELETE FROM gam_matches"
-		   " USING gam_matches,games"
-		   " WHERE gam_matches.MchCod=%ld"
-		   " AND gam_matches.GamCod=games.GamCod"
-		   " AND games.CrsCod=%ld",	// Extra check
+		   "DELETE FROM mch_matches"
+		   " USING mch_matches,gam_games"
+		   " WHERE mch_matches.MchCod=%ld"
+		   " AND mch_matches.GamCod=gam_games.GamCod"
+		   " AND gam_games.CrsCod=%ld",	// Extra check
 		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
    if (!mysql_affected_rows (&Gbl.mysql))
       Lay_ShowErrorAndExit ("The match to be removed does not exist.");
@@ -1004,7 +1004,7 @@ static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
 
    /***** Insert this new match into database *****/
    MchCod = DB_QueryINSERTandReturnCode ("can not create match",
-				         "INSERT gam_matches"
+				         "INSERT mch_matches"
 				         " (GamCod,UsrCod,StartTime,EndTime,Title,ShowResults,"
 				         "QstInd,QstCod,QstStartTime,Showing)"
 				         " VALUES"
@@ -1044,7 +1044,7 @@ static void Mch_CreateGrps (long MchCod)
 	NumGrpSel++)
       /* Create group */
       DB_QueryINSERT ("can not associate a group to a match",
-		      "INSERT INTO gam_grp"
+		      "INSERT INTO mch_groups"
 		      " (MchCod,GrpCod)"
 		      " VALUES"
 		      " (%ld,%ld)",
@@ -1059,16 +1059,16 @@ static void Mch_UpdateMatchStatusInDB (struct Match *Match)
   {
    /***** Update match status in database *****/
    DB_QueryUPDATE ("can not update match being played",
-		   "UPDATE gam_matches,games"
-		   " SET gam_matches.EndTime=NOW(),"
-			"gam_matches.QstInd=%u,"
-			"gam_matches.QstCod=%ld,"
-			"gam_matches.QstStartTime=NOW(),"
-			"gam_matches.ShowResults='%c',"
-			"gam_matches.Showing='%s'"
-		   " WHERE gam_matches.MchCod=%ld"
-		   " AND gam_matches.GamCod=games.GamCod"
-		   " AND games.CrsCod=%ld",	// Extra check
+		   "UPDATE mch_matches,gam_games"
+		   " SET mch_matches.EndTime=NOW(),"
+			"mch_matches.QstInd=%u,"
+			"mch_matches.QstCod=%ld,"
+			"mch_matches.QstStartTime=NOW(),"
+			"mch_matches.ShowResults='%c',"
+			"mch_matches.Showing='%s'"
+		   " WHERE mch_matches.MchCod=%ld"
+		   " AND mch_matches.GamCod=gam_games.GamCod"
+		   " AND gam_games.CrsCod=%ld",	// Extra check
 		   Match->Status.QstInd,Match->Status.QstCod,
 		   Match->Status.ShowResults ? 'Y' : 'N',
 		   Mch_ShowingStringsDB[Match->Status.Showing],
@@ -1093,7 +1093,7 @@ static void Mch_UpdateElapsedTimeInQuestion (struct Match *Match)
        Match->Status.QstInd > 0 &&
        Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)
       DB_QueryINSERT ("can not update elapsed time in question",
-		      "INSERT INTO gam_time (MchCod,QstInd,ElapsedTime)"
+		      "INSERT INTO mch_times (MchCod,QstInd,ElapsedTime)"
 		      " VALUES (%ld,%u,SEC_TO_TIME(%u))"
 		      " ON DUPLICATE KEY"
 		      " UPDATE ElapsedTime=ADDTIME(ElapsedTime,SEC_TO_TIME(%u))",
@@ -1115,7 +1115,7 @@ static void Mch_GetElapsedTimeInQuestion (struct Match *Match,
    /***** Query database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get elapsed time",
 				        "SELECT ElapsedTime"
-				        " FROM gam_time"
+				        " FROM mch_times"
 				        " WHERE MchCod=%ld AND QstInd=%u",
 				        Match->MchCod,Match->Status.QstInd);
 
@@ -1139,7 +1139,7 @@ static void Mch_GetElapsedTimeInMatch (struct Match *Match,
    /***** Query database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get elapsed time",
 				        "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(ElapsedTime)))"
-				        " FROM gam_time WHERE MchCod=%ld",
+				        " FROM mch_times WHERE MchCod=%ld",
 				        Match->MchCod);
 
    /***** Get elapsed time from query result *****/
@@ -1480,12 +1480,12 @@ static bool Mch_CheckIfIPlayThisMatchBasedOnGrps (long MchCod)
   {
    /***** Get if I can play a match from database *****/
    return (DB_QueryCOUNT ("can not check if I can play a match",
-			  "SELECT COUNT(*) FROM gam_matches"
+			  "SELECT COUNT(*) FROM mch_matches"
 			  " WHERE MchCod=%ld"
-			  " AND (MchCod NOT IN (SELECT MchCod FROM gam_grp) OR"
-			  " MchCod IN (SELECT gam_grp.MchCod FROM gam_grp,crs_grp_usr"
+			  " AND (MchCod NOT IN (SELECT MchCod FROM mch_groups) OR"
+			  " MchCod IN (SELECT mch_groups.MchCod FROM mch_groups,crs_grp_usr"
 			  " WHERE crs_grp_usr.UsrCod=%ld"
-			  " AND gam_grp.GrpCod=crs_grp_usr.GrpCod))",
+			  " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))",
 			  MchCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
   }
 
@@ -2011,13 +2011,13 @@ static void Mch_RemoveOldPlayers (void)
   {
    /***** Delete matches not being played *****/
    DB_QueryDELETE ("can not update matches as not being played",
-		   "DELETE FROM gam_mch_being_played"
+		   "DELETE FROM mch_playing"
 		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		   Cfg_SECONDS_TO_REFRESH_GAME*3);
 
    /***** Delete players who have left matches *****/
    DB_QueryDELETE ("can not update match players",
-		   "DELETE FROM gam_players"
+		   "DELETE FROM mch_players"
 		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
 		   Cfg_SECONDS_TO_REFRESH_GAME*3);
   }
@@ -2026,7 +2026,7 @@ static void Mch_UpdateMatchAsBeingPlayed (long MchCod)
   {
    /***** Insert match as being played *****/
    DB_QueryREPLACE ("can not set match as being played",
-		    "REPLACE gam_mch_being_played (MchCod) VALUE (%ld)",
+		    "REPLACE mch_playing (MchCod) VALUE (%ld)",
 		    MchCod);
   }
 
@@ -2034,13 +2034,13 @@ static void Mch_SetMatchAsNotBeingPlayed (long MchCod)
   {
    /***** Delete all match players ******/
    DB_QueryDELETE ("can not update match players",
-		    "DELETE FROM gam_players"
+		    "DELETE FROM mch_players"
 		    " WHERE MchCod=%ld",
 		    MchCod);
 
    /***** Delete match as being played ******/
    DB_QueryDELETE ("can not set match as not being played",
-		    "DELETE FROM gam_mch_being_played"
+		    "DELETE FROM mch_playing"
 		    " WHERE MchCod=%ld",
 		    MchCod);
   }
@@ -2050,7 +2050,7 @@ static bool Mch_GetIfMatchIsBeingPlayed (long MchCod)
    /***** Get if a match is being played or not *****/
    return
    (bool) (DB_QueryCOUNT ("can not get if match is being played",
-			  "SELECT COUNT(*) FROM gam_mch_being_played"
+			  "SELECT COUNT(*) FROM mch_playing"
 			  " WHERE MchCod=%ld",
 			  MchCod) != 0);
   }
@@ -2059,17 +2059,18 @@ static void Mch_RegisterMeAsPlayerInMatch (long MchCod)
   {
    /***** Insert me as match player *****/
    DB_QueryREPLACE ("can not insert match player",
-		    "REPLACE gam_players (MchCod,UsrCod) VALUES (%ld,%ld)",
+		    "REPLACE mch_players (MchCod,UsrCod) VALUES (%ld,%ld)",
 		    MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 static void Mch_GetNumPlayers (struct Match *Match)
   {
    /***** Get number of players who are playing a match *****/
-   Match->Status.NumPlayers = (unsigned) DB_QueryCOUNT ("can not get number of players",
-							"SELECT COUNT(*) FROM gam_players"
-							" WHERE MchCod=%ld",
-							Match->MchCod);
+   Match->Status.NumPlayers =
+   (unsigned) DB_QueryCOUNT ("can not get number of players",
+			     "SELECT COUNT(*) FROM mch_players"
+			     " WHERE MchCod=%ld",
+			     Match->MchCod);
   }
 
 /*****************************************************************************/
@@ -2179,7 +2180,7 @@ static int Mch_GetQstAnsFromDB (long MchCod,unsigned QstInd)
 
    /***** Get student's answer *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get student's answer to a match question",
-					"SELECT AnsInd FROM gam_answers"
+					"SELECT AnsInd FROM mch_answers"
 					" WHERE MchCod=%ld AND UsrCod=%ld AND QstInd=%u",
 					MchCod,
 					Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -2243,12 +2244,12 @@ void Mch_ReceiveQstAnsFromStd (void)
       /***** Store student's answer *****/
       if (PreviousStdAnsInd == (int) StdAnsInd)
 	 DB_QueryDELETE ("can not register your answer to the match question",
-			  "DELETE FROM gam_answers"
+			  "DELETE FROM mch_answers"
 			  " WHERE MchCod=%ld AND UsrCod=%ld AND QstInd=%u",
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd);
       else
 	 DB_QueryREPLACE ("can not register your answer to the match question",
-			  "REPLACE gam_answers"
+			  "REPLACE mch_answers"
 			  " (MchCod,UsrCod,QstInd,AnsInd)"
 			  " VALUES"
 			  " (%ld,%ld,%u,%u)",
@@ -2287,7 +2288,7 @@ unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd)
           a question in a match from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of users who hasve answered a question",
-			     "SELECT COUNT(*) FROM gam_answers"
+			     "SELECT COUNT(*) FROM mch_answers"
 			     " WHERE MchCod=%ld AND QstInd=%u",
 			     MchCod,QstInd);
   }
@@ -2302,7 +2303,7 @@ static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsi
           an answer of a question from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of users who have chosen an answer",
-			     "SELECT COUNT(*) FROM gam_answers"
+			     "SELECT COUNT(*) FROM mch_answers"
 			     " WHERE MchCod=%ld AND QstInd=%u AND AnsInd=%u",
 			     MchCod,QstInd,AnsInd);
   }

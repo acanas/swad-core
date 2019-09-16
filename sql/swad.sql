@@ -598,9 +598,9 @@ CREATE TABLE IF NOT EXISTS forum_thread (
 	UNIQUE INDEX(FirstPstCod),
 	UNIQUE INDEX(LastPstCod));
 --
--- Table games: stores the games
+-- Table gam_games: stores the games
 --
-CREATE TABLE IF NOT EXISTS games (
+CREATE TABLE IF NOT EXISTS gam_games (
 	GamCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
@@ -611,25 +611,25 @@ CREATE TABLE IF NOT EXISTS games (
 	UNIQUE INDEX(GamCod),
 	INDEX(CrsCod));
 --
--- Table gam_answers: stores the answers to the matches
+-- Table mch_answers: stores the answers to the matches
 --
-CREATE TABLE IF NOT EXISTS gam_answers ("
+CREATE TABLE IF NOT EXISTS mch_answers ("
 	MchCod INT NOT NULL,"
 	UsrCod INT NOT NULL,"
 	QstInd INT NOT NULL,"
 	AnsInd TINYINT NOT NULL,"
 	UNIQUE INDEX(MchCod,UsrCod,QstInd));
 --
--- Table gam_grp: stores the groups associated to each match in a game
+-- Table mch_groups: stores the groups associated to each match in a game
 --
-CREATE TABLE IF NOT EXISTS gam_grp (
+CREATE TABLE IF NOT EXISTS mch_groups (
 	MchCod INT NOT NULL,
 	GrpCod INT NOT NULL,
 	UNIQUE INDEX(MchCod,GrpCod));
 --
--- Table gam_matches: stores the matches (games instances) already played
+-- Table mch_matches: stores the matches (games instances) already played
 --
-CREATE TABLE IF NOT EXISTS gam_matches (
+CREATE TABLE IF NOT EXISTS mch_matches (
 	MchCod INT NOT NULL AUTO_INCREMENT,
 	GamCod INT NOT NULL,
 	UsrCod INT NOT NULL,
@@ -644,16 +644,16 @@ CREATE TABLE IF NOT EXISTS gam_matches (
 	UNIQUE INDEX(MchCod),
 	INDEX(GamCod));
 --
--- Table gam_mch_being_played: stores the current matches being played
+-- Table mch_playing: stores the current matches being played
 --
-CREATE TABLE IF NOT EXISTS gam_mch_being_played (
+CREATE TABLE IF NOT EXISTS mch_playing (
 	MchCod INT NOT NULL,
 	TS TIMESTAMP,
 	UNIQUE INDEX(MchCod));
 --
--- Table gam_players: stores the current match players
+-- Table mch_players: stores the current match players
 --
-CREATE TABLE IF NOT EXISTS gam_players (
+CREATE TABLE IF NOT EXISTS mch_players (
 	MchCod INT NOT NULL,
 	UsrCod INT NOT NULL,
 	TS TIMESTAMP,
@@ -668,9 +668,9 @@ CREATE TABLE IF NOT EXISTS gam_questions (
 	INDEX(GamCod),
 	INDEX(QstCod));
 --
--- Table gam_time: stores the elapsed time in every question in every match played
+-- Table mch_times: stores the elapsed time in every question in every match played
 --
-CREATE TABLE IF NOT EXISTS gam_time (
+CREATE TABLE IF NOT EXISTS mch_times (
 	MchCod INT NOT NULL,
 	QstInd INT NOT NULL,
 	ElapsedTime TIME NOT NULL DEFAULT 0,

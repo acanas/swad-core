@@ -1303,9 +1303,9 @@ mysql> DESCRIBE forum_thread;
 		   "UNIQUE INDEX(LastPstCod))");
 
 
-   /***** Table games *****/
+   /***** Table gam_games *****/
 /*
-mysql> DESCRIBE games;
+mysql> DESCRIBE gam_games;
 +----------+---------------+------+-----+---------+----------------+
 | Field    | Type          | Null | Key | Default | Extra          |
 +----------+---------------+------+-----+---------+----------------+
@@ -1319,7 +1319,7 @@ mysql> DESCRIBE games;
 +----------+---------------+------+-----+---------+----------------+
 7 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS games ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_games ("
 			"GamCod INT NOT NULL AUTO_INCREMENT,"
 			"CrsCod INT NOT NULL DEFAULT -1,"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
@@ -1330,9 +1330,9 @@ mysql> DESCRIBE games;
 		   "UNIQUE INDEX(GamCod),"
 		   "INDEX(CrsCod))");
 
-   /***** Table gam_answers *****/
+   /***** Table mch_answers *****/
 /*
-mysql> DESCRIBE gam_answers;
+mysql> DESCRIBE mch_answers;
 +--------+------------+------+-----+---------+-------+
 | Field  | Type       | Null | Key | Default | Extra |
 +--------+------------+------+-----+---------+-------+
@@ -1343,16 +1343,16 @@ mysql> DESCRIBE gam_answers;
 +--------+------------+------+-----+---------+-------+
 4 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_answers ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_answers ("
 			"MchCod INT NOT NULL,"
 	                "UsrCod INT NOT NULL,"
 			"QstInd INT NOT NULL,"
 			"AnsInd TINYINT NOT NULL,"
 		   "UNIQUE INDEX(MchCod,UsrCod,QstInd))");
 
-   /***** Table gam_grp *****/
+   /***** Table mch_groups *****/
 /*
-mysql> DESCRIBE gam_grp;
+mysql> DESCRIBE mch_groups;
 +--------+---------+------+-----+---------+-------+
 | Field  | Type    | Null | Key | Default | Extra |
 +--------+---------+------+-----+---------+-------+
@@ -1361,14 +1361,14 @@ mysql> DESCRIBE gam_grp;
 +--------+---------+------+-----+---------+-------+
 2 rows in set (0.01 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_grp ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_groups ("
 			"MchCod INT NOT NULL,"
 			"GrpCod INT NOT NULL,"
 		   "UNIQUE INDEX(MchCod,GrpCod))");
 
-   /***** Table gam_matches *****/
+   /***** Table mch_matches *****/
 /*
-mysql> DESCRIBE gam_matches;
+mysql> DESCRIBE mch_matches;
 +--------------+----------------------------------+------+-----+---------+----------------+
 | Field        | Type                             | Null | Key | Default | Extra          |
 +--------------+----------------------------------+------+-----+---------+----------------+
@@ -1386,7 +1386,7 @@ mysql> DESCRIBE gam_matches;
 +--------------+----------------------------------+------+-----+---------+----------------+
 11 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_matches ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_matches ("
 			"MchCod INT NOT NULL AUTO_INCREMENT,"
 			"GamCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
@@ -1401,9 +1401,9 @@ mysql> DESCRIBE gam_matches;
 		   "UNIQUE INDEX(MchCod),"
 		   "INDEX(GamCod)");
 
-   /***** Table gam_mch_being_played *****/
+   /***** Table mch_playing *****/
 /*
-mysql> DESCRIBE gam_mch_being_played;
+mysql> DESCRIBE mch_playing;
 +--------+-----------+------+-----+-------------------+-----------------------------+
 | Field  | Type      | Null | Key | Default           | Extra                       |
 +--------+-----------+------+-----+-------------------+-----------------------------+
@@ -1412,14 +1412,14 @@ mysql> DESCRIBE gam_mch_being_played;
 +--------+-----------+------+-----+-------------------+-----------------------------+
 2 rows in set (0.01 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_mch_being_played ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_playing ("
 			"MchCod INT NOT NULL,"
 		        "TS TIMESTAMP,"
 		   "UNIQUE INDEX(MchCod))");
 
-   /***** Table gam_players *****/
+   /***** Table mch_players *****/
 /*
-mysql> DESCRIBE gam_players;
+mysql> DESCRIBE mch_players;
 +--------+-----------+------+-----+-------------------+-----------------------------+
 | Field  | Type      | Null | Key | Default           | Extra                       |
 +--------+-----------+------+-----+-------------------+-----------------------------+
@@ -1429,7 +1429,7 @@ mysql> DESCRIBE gam_players;
 +--------+-----------+------+-----+-------------------+-----------------------------+
 3 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_players ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_players ("
 			"MchCod INT NOT NULL,"
 	                "UsrCod INT NOT NULL,"
 		        "TS TIMESTAMP,"
@@ -1454,9 +1454,9 @@ mysql> DESCRIBE gam_questions;
 		   "INDEX(GamCod),"
 		   "INDEX(QstCod))");
 
-      /***** Table gam_time *****/
+      /***** Table mch_times *****/
 /*
-mysql> DESCRIBE gam_time;
+mysql> DESCRIBE mch_times;
 +-------------+---------+------+-----+----------+-------+
 | Field       | Type    | Null | Key | Default  | Extra |
 +-------------+---------+------+-----+----------+-------+
@@ -1466,7 +1466,7 @@ mysql> DESCRIBE gam_time;
 +-------------+---------+------+-----+----------+-------+
 3 rows in set (0.00 sec)
 */
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS gam_time ("
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_times ("
 			"MchCod INT NOT NULL,"
 			"QstInd INT NOT NULL,"
 			"ElapsedTime TIME NOT NULL DEFAULT 0,"

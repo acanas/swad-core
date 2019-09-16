@@ -603,9 +603,9 @@ void Gam_GetListGames (void)
   {
    static const char *OrderBySubQuery[Gam_NUM_ORDERS] =
      {
-      "StartTime DESC,EndTime DESC,games.Title DESC",	// Gam_ORDER_BY_START_DATE
-      "EndTime DESC,StartTime DESC,games.Title DESC",	// Gam_ORDER_BY_END_DATE
-      "games.Title DESC",				// Gam_ORDER_BY_TITLE
+      "StartTime DESC,EndTime DESC,gam_games.Title DESC",	// Gam_ORDER_BY_START_DATE
+      "EndTime DESC,StartTime DESC,gam_games.Title DESC",	// Gam_ORDER_BY_END_DATE
+      "gam_games.Title DESC",					// Gam_ORDER_BY_TITLE
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -618,14 +618,14 @@ void Gam_GetListGames (void)
 
    /***** Get list of games from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
-			     "SELECT games.GamCod,"
-			            "MIN(gam_matches.StartTime) AS StartTime,"
-			            "MAX(gam_matches.EndTime) AS EndTime"
-			     " FROM games"
-			     " LEFT JOIN gam_matches"
-			     " ON games.GamCod=gam_matches.GamCod"
-			     " WHERE games.CrsCod=%ld"
-			     " GROUP BY games.GamCod"
+			     "SELECT gam_games.GamCod,"
+			            "MIN(mch_matches.StartTime) AS StartTime,"
+			            "MAX(mch_matches.EndTime) AS EndTime"
+			     " FROM gam_games"
+			     " LEFT JOIN mch_matches"
+			     " ON gam_games.GamCod=mch_matches.GamCod"
+			     " WHERE gam_games.CrsCod=%ld"
+			     " GROUP BY gam_games.GamCod"
 			     " ORDER BY %s",
 			     Gbl.Hierarchy.Crs.CrsCod,
 			     OrderBySubQuery[Gbl.Games.SelectedOrder]);
@@ -669,14 +669,14 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 
    /***** Get data of game from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get game data",
-			     "SELECT games.GamCod,"					// row[0]
-			            "games.Hidden,"					// row[1]
-			            "games.UsrCod,"					// row[2]
-			            "games.Title"					// row[3]
-			     " FROM games"
-			     " LEFT JOIN gam_matches"
-			     " ON games.GamCod=gam_matches.GamCod"
-			     " WHERE games.GamCod=%ld",
+			     "SELECT gam_games.GamCod,"		// row[0]
+			            "gam_games.Hidden,"		// row[1]
+			            "gam_games.UsrCod,"		// row[2]
+			            "gam_games.Title"		// row[3]
+			     " FROM gam_games"
+			     " LEFT JOIN mch_matches"
+			     " ON gam_games.GamCod=mch_matches.GamCod"
+			     " WHERE gam_games.GamCod=%ld",
 			     Game->GamCod);
    if (NumRows) // Game found...
      {
@@ -750,7 +750,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get game data",
 				"SELECT UNIX_TIMESTAMP(MIN(StartTime)),"	// row[0]
 				       "UNIX_TIMESTAMP(MAX(EndTime))"		// row[1]
-				" FROM gam_matches"
+				" FROM mch_matches"
 				" WHERE GamCod=%ld",
 				Game->GamCod);
       if (NumRows)
@@ -803,7 +803,7 @@ static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 
    /***** Get text of game from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get game text",
-			     "SELECT Txt FROM games WHERE GamCod=%ld",
+			     "SELECT Txt FROM gam_games WHERE GamCod=%ld",
 			     GamCod);
 
    /***** The result of the query must have one row or none *****/
@@ -904,18 +904,18 @@ void Gam_RemoveGame (void)
    /***** Remove all the matches in this game *****/
    /* Remove groups in matches of the game */
    DB_QueryDELETE ("can not remove the groups associated to matches of a game",
-		   "DELETE FROM gam_grp USING gam_grp,gam_matches"
-		   " WHERE gam_matches.GrpCod=%ld"
-		   " AND gam_matches.MchCod=gam_grp.MchCod",
+		   "DELETE FROM mch_groups USING mch_groups,mch_matches"
+		   " WHERE mch_matches.GrpCod=%ld"
+		   " AND mch_matches.MchCod=mch_groups.MchCod",
 		   Game.GamCod);
    /* Remove matches of the game */
    DB_QueryDELETE ("can not remove matches of a game",
-		   "DELETE FROM gam_matches WHERE GamCod=%ld",
+		   "DELETE FROM mch_matches WHERE GamCod=%ld",
 		   Game.GamCod);
 
    /***** Remove game *****/
    DB_QueryDELETE ("can not remove game",
-		   "DELETE FROM games WHERE GamCod=%ld",
+		   "DELETE FROM gam_games WHERE GamCod=%ld",
 		   Game.GamCod);
 
    /***** Write message to show the change made *****/
@@ -983,10 +983,10 @@ void Gam_ResetGame (void)
 
    /***** Reset all the answers in this game *****/
    DB_QueryUPDATE ("can not reset answers of a game",
-		   "UPDATE gam_answers,gam_questions"
-		   " SET gam_answers.NumUsrs=0"
+		   "UPDATE mch_answers,gam_questions"
+		   " SET mch_answers.NumUsrs=0"
 		   " WHERE gam_questions.GamCod=%ld"
-		   " AND gam_questions.QstCod=gam_answers.QstCod",
+		   " AND gam_questions.QstCod=mch_answers.QstCod",
 		   Game.GamCod);
 
    /***** Write message to show the change made *****/
@@ -1016,7 +1016,7 @@ void Gam_HideGame (void)
 
    /***** Hide game *****/
    DB_QueryUPDATE ("can not hide game",
-		   "UPDATE games SET Hidden='Y' WHERE GamCod=%ld",
+		   "UPDATE gam_games SET Hidden='Y' WHERE GamCod=%ld",
 		   Game.GamCod);
 
    /***** Show games again *****/
@@ -1042,7 +1042,7 @@ void Gam_UnhideGame (void)
 
    /***** Show game *****/
    DB_QueryUPDATE ("can not show game",
-		   "UPDATE games SET Hidden='N' WHERE GamCod=%ld",
+		   "UPDATE gam_games SET Hidden='N' WHERE GamCod=%ld",
 		   Game.GamCod);
 
    /***** Show games again *****/
@@ -1057,7 +1057,7 @@ static bool Gam_CheckIfSimilarGameExists (struct Game *Game)
   {
    /***** Get number of games with a field value from database *****/
    return (DB_QueryCOUNT ("can not get similar games",
-			  "SELECT COUNT(*) FROM games"
+			  "SELECT COUNT(*) FROM gam_games"
 			  " WHERE CrsCod=%ld AND Title='%s'"
 			  " AND GamCod<>%ld",
 			  Gbl.Hierarchy.Crs.CrsCod,Game->Title,
@@ -1256,7 +1256,7 @@ static void Gam_CreateGame (struct Game *Game,const char *Txt)
    /***** Create a new game *****/
    Game->GamCod =
    DB_QueryINSERTandReturnCode ("can not create new game",
-				"INSERT INTO games"
+				"INSERT INTO gam_games"
 				" (CrsCod,Hidden,UsrCod,Title,Txt)"
 				" VALUES"
 				" (%ld,'N',%ld,'%s','%s')",
@@ -1280,7 +1280,7 @@ static void Gam_UpdateGame (struct Game *Game,const char *Txt)
 
    /***** Update the data of the game *****/
    DB_QueryUPDATE ("can not update game",
-		   "UPDATE games"
+		   "UPDATE gam_games"
 		   " SET CrsCod=%ld,"
 		        "Title='%s',"
 		        "Txt='%s'"
@@ -1302,7 +1302,7 @@ bool Gam_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod)
   {
    /***** Get if a match is associated to a group from database *****/
    return (DB_QueryCOUNT ("can not check if a match is associated to a group",
-			  "SELECT COUNT(*) FROM gam_grp"
+			  "SELECT COUNT(*) FROM mch_groups"
 			  " WHERE MchCod=%ld AND GrpCod=%ld",
 			  MchCod,GrpCod) != 0);
   }
@@ -1314,10 +1314,10 @@ bool Gam_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod)
 
 void Gam_RemoveGroup (long GrpCod)
   {
-   /***** Remove group from all the games *****/
+   /***** Remove group from all the matches *****/
    DB_QueryDELETE ("can not remove group"
-	           " from the associations between games and groups",
-		   "DELETE FROM gam_grp WHERE GrpCod=%ld",
+	           " from the associations between matches and groups",
+		   "DELETE FROM mch_groups WHERE GrpCod=%ld",
 		   GrpCod);
   }
 
@@ -1328,12 +1328,12 @@ void Gam_RemoveGroup (long GrpCod)
 
 void Gam_RemoveGroupsOfType (long GrpTypCod)
   {
-   /***** Remove group from all the games *****/
+   /***** Remove group from all the matches *****/
    DB_QueryDELETE ("can not remove groups of a type"
-	           " from the associations between games and groups",
-		   "DELETE FROM gam_grp USING crs_grp,gam_grp"
+	           " from the associations between matches and groups",
+		   "DELETE FROM mch_groups USING crs_grp,mch_groups"
 		   " WHERE crs_grp.GrpTypCod=%ld"
-		   " AND crs_grp.GrpCod=gam_grp.GrpCod",
+		   " AND crs_grp.GrpCod=mch_groups.GrpCod",
                    GrpTypCod);
   }
 
@@ -1342,40 +1342,40 @@ void Gam_RemoveGroupsOfType (long GrpTypCod)
 /************* (country, institution, centre, degree or course) **************/
 /*****************************************************************************/
 
-void Gam_RemoveGames (Hie_Level_t Scope,long Cod)
+void Gam_RemoveGames (long CrsCod)	// TODO: Function not used?????
   {
    /***** Remove all the answers in course games *****/
    DB_QueryDELETE ("can not remove answers of games"
-		   " in a place on the hierarchy"
-		   "DELETE FROM gam_answers"
-		   " USING games,gam_questions,gam_answers"
-		   " WHERE games.Scope='%s' AND games.Cod=%ld"
-		   " AND games.GamCod=gam_questions.GamCod"
-		   " AND gam_questions.QstCod=gam_answers.QstCod",
-                   Sco_GetDBStrFromScope (Scope),Cod);
+		   " in a place on the hierarchy",
+		   "DELETE FROM mch_answers"
+		   " USING gam_games,gam_questions,mch_answers"
+		   " WHERE gam_games.CrsCod=%ld"
+		   " AND gam_games.GamCod=gam_questions.GamCod"
+		   " AND gam_questions.QstCod=mch_answers.QstCod",
+                   CrsCod);
 
    /***** Remove all the questions in course games *****/
-   DB_QueryDELETE ("can not remove questions of games"
+   DB_QueryDELETE ("can not remove questions of gam_games"
 		   " in a place on the hierarchy",
 		   "DELETE FROM gam_questions"
-		   " USING games,gam_questions"
-		   " WHERE games.Scope='%s' AND games.Cod=%ld"
-		   " AND games.GamCod=gam_questions.GamCod",
-                   Sco_GetDBStrFromScope (Scope),Cod);
+		   " USING gam_games,gam_questions"
+		   " WHERE gam_games.CrsCod=%ld"
+		   " AND gam_games.GamCod=gam_questions.GamCod",
+                   CrsCod);
 
    /***** Remove groups *****/
    DB_QueryDELETE ("can not remove all the groups"
 	           " associated to games of a course",
-		   "DELETE FROM gam_grp"
-		   " USING games,gam_grp"
-		   " WHERE games.Scope='%s' AND games.Cod=%ld"
-		   " AND games.GamCod=gam_grp.GamCod",
-                   Sco_GetDBStrFromScope (Scope),Cod);
+		   "DELETE FROM mch_groups"
+		   " USING gam_games,mch_groups"
+		   " WHERE gam_games.CrsCod=%ld"
+		   " AND gam_games.GamCod=mch_groups.GamCod",
+                   CrsCod);
 
    /***** Remove course games *****/
    DB_QueryDELETE ("can not remove all the games in a place on the hierarchy",
-		   "DELETE FROM games WHERE Scope='%s' AND Cod=%ld",
-                   Sco_GetDBStrFromScope (Scope),Cod);
+		   "DELETE FROM gam_games WHERE CrsCod=%ld",
+                   CrsCod);
   }
 
 /*****************************************************************************/
@@ -1464,7 +1464,7 @@ static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
   {
    /***** Remove answers *****/
    DB_QueryDELETE ("can not remove the answers of a question",
-		   "DELETE FROM gam_answers"
+		   "DELETE FROM mch_answers"
 		   " WHERE GamCod=%ld AND QstInd=%u",
 		   GamCod,QstInd);
   }
@@ -2062,7 +2062,7 @@ void Gam_RemoveQst (void)
 
    /* Change index of questions greater than this */
    DB_QueryUPDATE ("can not update indexes of questions in table of answers",
-		   "UPDATE gam_answers SET QstInd=QstInd-1"
+		   "UPDATE mch_answers SET QstInd=QstInd-1"
 		   " WHERE GamCod=%ld AND QstInd>%u",
                    Game.GamCod,QstInd);
    DB_QueryUPDATE ("can not update indexes of questions",
@@ -2269,62 +2269,52 @@ unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope)
      {
       case Hie_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
-			 "SELECT COUNT(DISTINCT Cod)"
-			 " FROM games"
-			 " WHERE Scope='%s'",
-                         Sco_GetDBStrFromScope (Hie_CRS));
+			 "SELECT COUNT(DISTINCT CrsCod)"
+			 " FROM gam_games");
          break;
       case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
-			 "SELECT COUNT(DISTINCT games.Cod)"
-			 " FROM institutions,centres,degrees,courses,games"
+			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
+			 " FROM institutions,centres,degrees,courses,gam_games"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'",
-                         Gbl.Hierarchy.Ins.InsCod,
-                         Sco_GetDBStrFromScope (Hie_CRS));
+			 " AND courses.CrsCod=gam_games.CrsCod",
+                         Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
-			 "SELECT COUNT(DISTINCT games.Cod)"
-			 " FROM centres,degrees,courses,games"
+			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
+			 " FROM centres,degrees,courses,gam_games"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'",
-		         Gbl.Hierarchy.Ins.InsCod,
-		         Sco_GetDBStrFromScope (Hie_CRS));
+			 " AND courses.CrsCod=gam_games.CrsCod",
+		         Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
-			 " FROM degrees,courses,games"
+			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
+			 " FROM degrees,courses,gam_games"
 			 " WHERE degrees.CtrCod=%ld"
 			 " AND degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'",
-                         Gbl.Hierarchy.Ctr.CtrCod,
-                         Sco_GetDBStrFromScope (Hie_CRS));
+			 " AND courses.CrsCod=gam_games.CrsCod",
+                         Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
-			 "SELECT COUNT(DISTINCT games.Cod)"
-			 " FROM courses,games"
+			 "SELECT COUNT(DISTINCT gam_games.CrsCod)"
+			 " FROM courses,gam_games"
 			 " WHERE courses.DegCod=%ld"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'",
-		         Gbl.Hierarchy.Deg.DegCod,
-		         Sco_GetDBStrFromScope (Hie_CRS));
+			 " AND courses.CrsCod=gam_games.CrsCod",
+		         Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of courses with games",
-			 "SELECT COUNT(DISTINCT Cod)"
-			 " FROM games"
-			 " WHERE Scope='%s' AND Cod=%ld",
-                         Sco_GetDBStrFromScope (Hie_CRS),
+			 "SELECT COUNT(DISTINCT CrsCod)"
+			 " FROM gam_games"
+			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
@@ -2360,63 +2350,51 @@ unsigned Gam_GetNumGames (Hie_Level_t Scope)
       case Hie_SYS:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM games"
-			 " WHERE Scope='%s'",
-                         Sco_GetDBStrFromScope (Hie_CRS));
+			 " FROM gam_games");
          break;
       case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM institutions,centres,degrees,courses,games"
+			 " FROM institutions,centres,degrees,courses,gam_games"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'",
-		         Gbl.Hierarchy.Cty.CtyCod,
-		         Sco_GetDBStrFromScope (Hie_CRS));
+			 " AND courses.CrsCod=gam_games.CrsCod",
+		         Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM centres,degrees,courses,games"
+			 " FROM centres,degrees,courses,gam_games"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'",
-		         Gbl.Hierarchy.Ins.InsCod,
-		         Sco_GetDBStrFromScope (Hie_CRS));
+			 " AND courses.CrsCod=gam_games.CrsCod",
+		         Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM degrees,courses,games"
+			 " FROM degrees,courses,gam_games"
 			 " WHERE degrees.CtrCod=%ld"
 			 " AND degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'",
-		         Gbl.Hierarchy.Ctr.CtrCod,
-		         Sco_GetDBStrFromScope (Hie_CRS));
+			 " AND courses.CrsCod=gam_games.CrsCod",
+		         Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM courses,games"
+			 " FROM courses,gam_games"
 			 " WHERE courses.DegCod=%ld"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'",
-		         Gbl.Hierarchy.Deg.DegCod,
-		         Sco_GetDBStrFromScope (Hie_CRS));
+			 " AND courses.CrsCod=gam_games.CrsCod",
+		         Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of games",
                          "SELECT COUNT(*)"
-			 " FROM games"
-			 " WHERE games.Scope='%s'"
-			 " AND CrsCod=%ld",
-                         Sco_GetDBStrFromScope (Hie_CRS),
+			 " FROM gam_games"
+			 " WHERE CrsCod=%ld",
                          Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
@@ -2452,79 +2430,69 @@ float Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope)
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM games,gam_questions"
-			 " WHERE games.Scope='%s'"
-			 " AND games.GamCod=gam_questions.GamCod"
-			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                         Sco_GetDBStrFromScope (Hie_CRS));
+			 " FROM gam_games,gam_questions"
+			 " WHERE gam_games.GamCod=gam_questions.GamCod"
+			 " GROUP BY gam_questions.GamCod) AS NumQstsTable");
          break;
       case Hie_CTY:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM institutions,centres,degrees,courses,games,gam_questions"
+			 " FROM institutions,centres,degrees,courses,gam_games,gam_questions"
 			 " WHERE institutions.CtyCod=%ld"
 			 " AND institutions.InsCod=centres.InsCod"
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'"
-			 " AND games.GamCod=gam_questions.GamCod"
+			 " AND courses.CrsCod=gam_games.CrsCod"
+			 " AND gam_games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                         Gbl.Hierarchy.Cty.CtyCod,
-                         Sco_GetDBStrFromScope (Hie_CRS));
+                         Gbl.Hierarchy.Cty.CtyCod);
          break;
       case Hie_INS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM centres,degrees,courses,games,gam_questions"
+			 " FROM centres,degrees,courses,gam_games,gam_questions"
 			 " WHERE centres.InsCod=%ld"
 			 " AND centres.CtrCod=degrees.CtrCod"
 			 " AND degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'"
-			 " AND games.GamCod=gam_questions.GamCod"
+			 " AND courses.CrsCod=gam_games.CrsCod"
+			 " AND gam_games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-		         Gbl.Hierarchy.Ins.InsCod,
-		         Sco_GetDBStrFromScope (Hie_CRS));
+		         Gbl.Hierarchy.Ins.InsCod);
          break;
       case Hie_CTR:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM degrees,courses,games,gam_questions"
+			 " FROM degrees,courses,gam_games,gam_questions"
 			 " WHERE degrees.CtrCod=%ld"
 			 " AND degrees.DegCod=courses.DegCod"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'"
-			 " AND games.GamCod=gam_questions.GamCod"
+			 " AND courses.CrsCod=gam_games.CrsCod"
+			 " AND gam_games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                         Gbl.Hierarchy.Ctr.CtrCod,
-                         Sco_GetDBStrFromScope (Hie_CRS));
+                         Gbl.Hierarchy.Ctr.CtrCod);
          break;
       case Hie_DEG:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM courses,games,gam_questions"
+			 " FROM courses,gam_games,gam_questions"
 			 " WHERE courses.DegCod=%ld"
-			 " AND courses.CrsCod=games.Cod"
-			 " AND games.Scope='%s'"
-			 " AND games.GamCod=gam_questions.GamCod"
+			 " AND courses.CrsCod=gam_games.CrsCod"
+			 " AND gam_games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-		         Gbl.Hierarchy.Deg.DegCod,
-		         Sco_GetDBStrFromScope (Hie_CRS));
+		         Gbl.Hierarchy.Deg.DegCod);
          break;
       case Hie_CRS:
          DB_QuerySELECT (&mysql_res,"can not get number of questions per game",
 			 "SELECT AVG(NumQsts) FROM"
 			 " (SELECT COUNT(gam_questions.QstCod) AS NumQsts"
-			 " FROM games,gam_questions"
-			 " WHERE games.Scope='%s' AND games.Cod=%ld"
-			 " AND games.GamCod=gam_questions.GamCod"
+			 " FROM gam_games,gam_questions"
+			 " WHERE gam_games.Cod=%ld"
+			 " AND gam_games.GamCod=gam_questions.GamCod"
 			 " GROUP BY gam_questions.GamCod) AS NumQstsTable",
-                         Sco_GetDBStrFromScope (Hie_CRS),Gbl.Hierarchy.Crs.CrsCod);
+                         Gbl.Hierarchy.Crs.CrsCod);
          break;
       default:
 	 Lay_WrongScopeExit ();
