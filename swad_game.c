@@ -891,7 +891,7 @@ void Gam_RemoveGame (void)
    DB_QueryDELETE ("can not remove the groups associated to matches of a game",
 		   "DELETE FROM mch_groups"
 		   " USING mch_matches,mch_groups"
-		   " WHERE mch_matches.GrpCod=%ld"
+		   " WHERE mch_matches.GamCod=%ld"
 		   " AND mch_matches.MchCod=mch_groups.MchCod",
 		   Game.GamCod);
    /* Remove matches of the game */

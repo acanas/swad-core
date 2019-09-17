@@ -459,10 +459,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.6 (2019-09-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.6.1 (2019-09-17)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.6.1:   Sep 17, 2019	Fixed bug while removing a game. (244601 lines)
 	Version 19.6:     Sep 17, 2019	Remove actions to reset a game. (244600 lines)
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod IN (1658,1659);
