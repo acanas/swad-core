@@ -18054,7 +18054,28 @@ const char *Txt_Matches =	// of a game
 #elif L==8	// pl
 	"Mecze";
 #elif L==9	// pt
-	"Jogos";
+	"Partidas";
+#endif
+
+const char *Txt_Matches_results =
+#if   L==1	// ca
+	"Resultats de partides";
+#elif L==2	// de
+	"Spielergebnisse";
+#elif L==3	// en
+	"Matches results";
+#elif L==4	// es
+	"Resultados de las partidas";
+#elif L==5	// fr
+	"R&eacute;sultats des matchs";
+#elif L==6	// gn
+	"Resultados de las partidas";	// Okoteve traducción
+#elif L==7	// it
+	"Risultati delle partite";
+#elif L==8	// pl
+	"Wyniki mecz&oacute;w";
+#elif L==9	// pt
+	"Resultados das partidas";
 #endif
 
 const char *Txt_Materials =

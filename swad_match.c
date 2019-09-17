@@ -2437,3 +2437,18 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
   }
+
+/*****************************************************************************/
+/****************** Write a form to go to result of matches ******************/
+/*****************************************************************************/
+
+void Mch_PutFormToViewResultsOfMatches (Act_Action_t Action)
+  {
+   extern const char *Txt_Matches_results;
+
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Lay_PutContextualLinkIconText (Action,NULL,NULL,
+				  "tasks.svg",
+				  Txt_Matches_results);
+   fprintf (Gbl.F.Out,"</div>");
+  }

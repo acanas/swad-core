@@ -156,6 +156,21 @@ static void Gam_ListAllGames (void)
    struct Pagination Pagination;
    unsigned NumGame;
 
+   /***** Put link to view matches results *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+         Mch_PutFormToViewResultsOfMatches (ActReqSeeMyTstRes);		// TODO: Change action!!!!
+         break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+         Mch_PutFormToViewResultsOfMatches (ActReqSeeUsrTstRes);	// TODO: Change action!!!!
+	 break;
+      default:
+	 break;
+     }
+
    /***** Get number of groups in current course *****/
    if (!Gbl.Crs.Grps.NumGrps)
       Gbl.Crs.Grps.WhichGrps = Grp_ALL_GROUPS;
