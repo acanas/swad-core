@@ -1604,18 +1604,17 @@ static void Gam_ListGameQuestions (struct Game *Game)
    extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_Questions;
    extern const char *Txt_This_game_has_no_questions;
-   extern const char *Txt_Done;
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
    bool Editing = (Gbl.Action.Act == ActEdiOneGam    ||
-	           Gbl.Action.Act == ActAddOneGamQst);
-   Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions;
+	           Gbl.Action.Act == ActAddOneGamQst);	// TODO: Ampliar casos en los que se está editando para que se muestre el botón de Añadir preguntas
+   // Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions;
 
    /***** How to show the questions ******/
-   if (Editing)
-      ActionToDoWithQuestions = Tst_SHOW_GAME_RESULT;
-   else
-      ActionToDoWithQuestions = Tst_SHOW_GAME_TO_ANSWER;
+   // if (Editing)
+   //   ActionToDoWithQuestions = Tst_SHOW_GAME_RESULT;
+   //else
+   //   ActionToDoWithQuestions = Tst_SHOW_GAME_TO_ANSWER;
 
    /***** Get data of questions from database *****/
    NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -1638,19 +1637,8 @@ static void Gam_ListGameQuestions (struct Game *Game)
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    if (NumQsts)
-     {
       /***** Show the table with the questions *****/
       Gam_ListOneOrMoreQuestionsForEdition (Game->GamCod,NumQsts,mysql_res);
-
-      if (ActionToDoWithQuestions == Tst_SHOW_GAME_TO_ANSWER)
-	{
-	 /***** Button to create/modify game *****/
-	 Btn_PutConfirmButton (Txt_Done);
-
-	 /***** End form *****/
-	 Frm_EndForm ();
-	}
-     }
    else	// This game has no questions
       Ale_ShowAlert (Ale_INFO,Txt_This_game_has_no_questions);
 
@@ -1844,10 +1832,10 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    Tbl_EndTable ();
 
    /***** Button to add a new question *****/
-   Gam_PutButtonToAddNewQuestions ();
+   // Gam_PutButtonToAddNewQuestions ();
 
    /***** End box *****/
-   Box_EndBox ();
+   // Box_EndBox ();
   }
 
 /*****************************************************************************/

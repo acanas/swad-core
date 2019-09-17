@@ -71,7 +71,7 @@ typedef enum
 typedef enum
   {
    Tst_SHOW_TEST_TO_ANSWER,		// Showing a test to a student
-   Tst_SHOW_TEST_RESULT,			// Showing the assessment of a test
+   Tst_SHOW_TEST_RESULT,		// Showing the assessment of a test
    Tst_EDIT_TEST,			// Editing test questions
    Tst_SELECT_QUESTIONS_FOR_GAME,	// Selecting test questions for a game
    Tst_SHOW_GAME_TO_ANSWER,		// Showing a game to a student

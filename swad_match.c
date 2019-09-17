@@ -68,14 +68,15 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
-#define Mch_NUM_SHOWING 3
+#define Mch_NUM_SHOWING 4
 typedef enum
   {
+   Mch_NOTHING,	// Don't show anything
    Mch_STEM,	// Showing only the question stem
    Mch_ANSWERS,	// Showing the question stem and the answers
    Mch_RESULTS,	// Showing the results
   } Mch_Showing_t;
-#define Mch_SHOWING_DEFAULT Mch_STEM
+#define Mch_SHOWING_DEFAULT Mch_NOTHING
 
 struct Match
   {
@@ -91,7 +92,7 @@ struct Match
       time_t QstStartTimeUTC;
       bool ShowResults;
       Mch_Showing_t Showing;
-      bool BeingPlayed;
+      bool Playing;
       unsigned NumPlayers;
      } Status;
   };
@@ -102,6 +103,7 @@ struct Match
 
 const char *Mch_ShowingStringsDB[Mch_NUM_SHOWING] =
   {
+   "nothing",
    "stem",
    "answers",
    "results",
@@ -150,7 +152,13 @@ static void Mch_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
 				struct Time *Time);
 
 static void Mch_SetMatchStatusToPrev (struct Match *Match);
+static void Mch_SetMatchStatusToPrevQst (struct Match *Match);
+static void Mch_SetMatchStatusToStart (struct Match *Match);
+
 static void Mch_SetMatchStatusToNext (struct Match *Match);
+static void Mch_SetMatchStatusToNextQst (struct Match *Match);
+static void Mch_SetMatchStatusToEnd (struct Match *Match);
+
 static void Mch_ShowMatchStatusForTch (struct Match *Match);
 static void Mch_ShowMatchStatusForStd (struct Match *Match);
 static bool Mch_CheckIfIPlayThisMatchBasedOnGrps (long MchCod);
@@ -318,7 +326,7 @@ static void Mch_GetDataOfMatchByCod (struct Match *Match)
       Match->Status.QstStartTimeUTC  = (time_t) 0;
       Match->Status.ShowResults      = true;
       Match->Status.Showing          = Mch_STEM;
-      Match->Status.BeingPlayed      = false;
+      Match->Status.Playing          = false;
      }
 
    /***** Free structure that stores the query result *****/
@@ -642,9 +650,9 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 
    /***** Get whether the match is being played or not *****/
    if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// Finished
-      Match->Status.BeingPlayed = false;
+      Match->Status.Playing = false;
    else							// Unfinished
-      Match->Status.BeingPlayed = Mch_GetIfMatchIsBeingPlayed (Match->MchCod);
+      Match->Status.Playing = Mch_GetIfMatchIsBeingPlayed (Match->MchCod);
   }
 
 /*****************************************************************************/
@@ -1074,7 +1082,7 @@ static void Mch_UpdateMatchStatusInDB (struct Match *Match)
 		   Mch_ShowingStringsDB[Match->Status.Showing],
 		   Match->MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
-   if (Match->Status.BeingPlayed)
+   if (Match->Status.Playing)
       /* Update match as being played */
       Mch_UpdateMatchAsBeingPlayed (Match->MchCod);
    else
@@ -1089,7 +1097,7 @@ static void Mch_UpdateMatchStatusInDB (struct Match *Match)
 static void Mch_UpdateElapsedTimeInQuestion (struct Match *Match)
   {
    /***** Update elapsed time in current question in database *****/
-   if (Match->Status.BeingPlayed &&
+   if (Match->Status.Playing &&
        Match->Status.QstInd > 0 &&
        Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)
       DB_QueryINSERT ("can not update elapsed time in question",
@@ -1194,7 +1202,7 @@ void Mch_PauseMatchTch (void)
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Update status *****/
-   Match.Status.BeingPlayed    = false;		// Resume match
+   Match.Status.Playing = false;	// Pause match
 
    /***** Update match status in database *****/
    Mch_UpdateMatchStatusInDB (&Match);
@@ -1226,7 +1234,7 @@ void Mch_ResumeMatchTch (void)
      {
       if (Match.Status.QstInd == 0)			// Match has been created, but it has not started
 	 Mch_SetMatchStatusToNext (&Match);
-      Match.Status.BeingPlayed = true;			// Start/resume match
+      Match.Status.Playing = true;			// Start/resume match
      }
 
    /***** Update match status in database *****/
@@ -1332,31 +1340,48 @@ void Mch_ForwardMatchTch (void)
 static void Mch_SetMatchStatusToPrev (struct Match *Match)
   {
    /***** What to show *****/
-   switch (Match->Status.Showing)
-     {
-      case Mch_STEM:
-	 Match->Status.Showing = Match->Status.ShowResults ? Mch_RESULTS :
-	                                                     Mch_ANSWERS;
+   if (Match->Status.QstInd == 0)				// Start
+      Mch_SetMatchStatusToStart (Match);
+   else if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// End
+      Mch_SetMatchStatusToPrevQst (Match);
+   else								// Between start and end
+      switch (Match->Status.Showing)
+	{
+	 case Mch_NOTHING:
+	 case Mch_STEM:
+	    Mch_SetMatchStatusToPrevQst (Match);
+	    break;
+	 case Mch_ANSWERS:
+	    Match->Status.Showing = Mch_STEM;
+	    break;
+	 case Mch_RESULTS:
+	    Match->Status.Showing = Mch_ANSWERS;
+	    break;
+	}
+  }
 
-	 /***** Get index of the previous question *****/
-	 Match->Status.QstInd = Gam_GetPrevQuestionIndexInGame (Match->GamCod,
-								Match->Status.QstInd);
-	 if (Match->Status.QstInd == 0)		// Start of questions has been reached
-	   {
-	    Match->Status.QstCod = -1L;		// No previous questions
-	    Match->Status.BeingPlayed = false;	// Match is not being played
-	   }
-	 else
-	    Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
-							    Match->Status.QstInd);
-	 break;
-      case Mch_ANSWERS:
-	 Match->Status.Showing = Mch_STEM;
-	 break;
-      case Mch_RESULTS:
-	 Match->Status.Showing = Mch_ANSWERS;
-	 break;
+static void Mch_SetMatchStatusToPrevQst (struct Match *Match)
+  {
+   /***** Get index of the previous question *****/
+   Match->Status.QstInd = Gam_GetPrevQuestionIndexInGame (Match->GamCod,
+							  Match->Status.QstInd);
+   if (Match->Status.QstInd == 0)		// Start of questions has been reached
+      Mch_SetMatchStatusToStart (Match);
+   else
+     {
+      Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
+						      Match->Status.QstInd);
+      Match->Status.Showing = Match->Status.ShowResults ? Mch_RESULTS :
+							  Mch_ANSWERS;
      }
+  }
+
+static void Mch_SetMatchStatusToStart (struct Match *Match)
+  {
+   Match->Status.QstInd  = 0;				// Before first question
+   Match->Status.QstCod  = -1L;
+   Match->Status.Playing = false;
+   Match->Status.Showing = Mch_NOTHING;
   }
 
 /*****************************************************************************/
@@ -1366,35 +1391,54 @@ static void Mch_SetMatchStatusToPrev (struct Match *Match)
 static void Mch_SetMatchStatusToNext (struct Match *Match)
   {
    /***** What to show *****/
-   switch (Match->Status.Showing)
-     {
-      case Mch_STEM:
-	 Match->Status.Showing = Mch_ANSWERS;
-	 break;
-      case Mch_ANSWERS:
-	 Match->Status.Showing = Match->Status.ShowResults ? Mch_RESULTS :
-							     Mch_STEM;
-	 break;
-      case Mch_RESULTS:
-	 Match->Status.Showing = Mch_STEM;
-	 break;
-     }
-
-   /***** Go to next question? *****/
-   if (Match->Status.Showing == Mch_STEM)
-     {
-      /***** Get index of the next question *****/
-      Match->Status.QstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
-							     Match->Status.QstInd);
-      if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
-	 Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
-							 Match->Status.QstInd);
-      else							// Finished
+   if (Match->Status.QstInd == 0)				// Start
+      Mch_SetMatchStatusToNextQst (Match);
+   else if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// End
+      Mch_SetMatchStatusToEnd (Match);
+   else								// Between start and end
+      switch (Match->Status.Showing)
 	{
-	 Match->Status.QstCod = -1L;				// No more questions
-	 Match->Status.BeingPlayed = false;
+	 case Mch_NOTHING:
+	    Match->Status.Showing = Mch_STEM;
+	    break;
+	 case Mch_STEM:
+	    Match->Status.Showing = Mch_ANSWERS;
+	    break;
+	 case Mch_ANSWERS:
+	    if (Match->Status.ShowResults)
+	       Match->Status.Showing = Mch_RESULTS;
+	    else
+	       Mch_SetMatchStatusToNextQst (Match);
+	    break;
+	 case Mch_RESULTS:
+	    Mch_SetMatchStatusToNextQst (Match);
+	    break;
 	}
+  }
+
+static void Mch_SetMatchStatusToNextQst (struct Match *Match)
+  {
+   /***** Get index of the next question *****/
+   Match->Status.QstInd = Gam_GetNextQuestionIndexInGame (Match->GamCod,
+							  Match->Status.QstInd);
+
+   /***** Get question code *****/
+   if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// Finished
+      Mch_SetMatchStatusToEnd (Match);
+   else							// Unfinished
+     {
+      Match->Status.QstCod = Gam_GetQstCodFromQstInd (Match->GamCod,
+						      Match->Status.QstInd);
+      Match->Status.Showing = Mch_STEM;
      }
+  }
+
+static void Mch_SetMatchStatusToEnd (struct Match *Match)
+  {
+   Match->Status.QstInd  = Mch_AFTER_LAST_QUESTION;	// After last question
+   Match->Status.QstCod  = -1L;
+   Match->Status.Playing = false;
+   Match->Status.Showing = Mch_NOTHING;
   }
 
 /*****************************************************************************/
@@ -1459,7 +1503,7 @@ static void Mch_ShowMatchStatusForStd (struct Match *Match)
       /***** Update players ******/
       Mch_RegisterMeAsPlayerInMatch (Match->MchCod);
 
-      if (Match->Status.BeingPlayed)
+      if (Match->Status.Playing)
 	 /* Show current question and possible answers */
 	 Mch_ShowQuestionAndAnswersStd (Match);
       else	// Not being played
@@ -1536,7 +1580,7 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
    Mch_ShowNumPlayers (Match);
 
    /***** Number of users who have answered this question *****/
-   if (Match->Status.BeingPlayed)
+   if (Match->Status.Playing)
      {
       NumAnswerersQst = Mch_GetNumUsrsWhoHaveAnswerQst (Match->MchCod,
 			                                Match->Status.QstInd);
@@ -1619,7 +1663,7 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
 
    /***** Center button *****/
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CENTER_CONTAINER\">");
-   if (Match->Status.BeingPlayed)				// Being played
+   if (Match->Status.Playing)					// Being played
       /* Put button to pause match */
       Mch_PutBigButton (ActPauMchTch,
 			Match->MchCod,
@@ -1768,11 +1812,12 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
    /* Write answers? */
    switch (Match->Status.Showing)
      {
+      case Mch_NOTHING:
       case Mch_STEM:
 	 /* Don't write anything */
 	 break;
       case Mch_ANSWERS:
-	 if (Match->Status.BeingPlayed)			// Being played
+	 if (Match->Status.Playing)			// Being played
 	    /* Write answers */
 	    Tst_WriteAnswersMatchResult (Match->MchCod,
 					 Match->Status.QstInd,

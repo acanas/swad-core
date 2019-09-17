@@ -462,12 +462,23 @@ ps2pdf source.ps destination.pdf
 /*
 can not remove the groups associated to matches of a game
 Type of answer not valid in a game.
+
+
+¿Eliminar botón de reset en un juego? Tal vez sí, para simplificar. No tiene sentido resetear todas las partidas de un juego.
+¿Poner botón de reset en una partida? No parece necesario, basta con eliminarla y crear otra
+
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 19.4.2 (2019-09-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.5 (2019-09-17)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.5:     Sep 17, 2019	Fixed bugs related with edition of games.
+					Fixed bugs related with behaviour of matches.  (244691 lines)
+					2 changes necessary in database:
+ALTER TABLE mch_matches DROP COLUMN Showing;
+ALTER TABLE mch_matches ADD COLUMN Showing ENUM('nothing','stem','answers','results') NOT NULL DEFAULT 'nothing' AFTER ShowResults;
+
 	Version 19.4.2:   Sep 17, 2019	Fixed bug when removing a question in a game. (244654 lines)
 	Version 19.4.1:   Sep 17, 2019	Fixed bug when removing a question in a game. (244650 lines)
 	Version 19.4:     Sep 17, 2019	Changes in games ans matches tables. (244644 lines)
