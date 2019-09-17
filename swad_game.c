@@ -904,7 +904,8 @@ void Gam_RemoveGame (void)
    /***** Remove all the matches in this game *****/
    /* Remove groups in matches of the game */
    DB_QueryDELETE ("can not remove the groups associated to matches of a game",
-		   "DELETE FROM mch_groups USING mch_groups,mch_matches"
+		   "DELETE FROM mch_groups"
+		   " USING mch_matches,mch_groups"
 		   " WHERE mch_matches.GrpCod=%ld"
 		   " AND mch_matches.MchCod=mch_groups.MchCod",
 		   Game.GamCod);
@@ -1331,7 +1332,8 @@ void Gam_RemoveGroupsOfType (long GrpTypCod)
    /***** Remove group from all the matches *****/
    DB_QueryDELETE ("can not remove groups of a type"
 	           " from the associations between matches and groups",
-		   "DELETE FROM mch_groups USING crs_grp,mch_groups"
+		   "DELETE FROM mch_groups"
+		   " USING crs_grp,mch_groups"
 		   " WHERE crs_grp.GrpTypCod=%ld"
 		   " AND crs_grp.GrpCod=mch_groups.GrpCod",
                    GrpTypCod);
@@ -1462,10 +1464,13 @@ unsigned Gam_GetQstIndFromStr (const char *UnsignedStr)
 
 static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd)
   {
-   /***** Remove answers *****/
+   /***** Remove answers from all matches of this game *****/
    DB_QueryDELETE ("can not remove the answers of a question",
 		   "DELETE FROM mch_answers"
-		   " WHERE GamCod=%ld AND QstInd=%u",
+		   " USING mch_matches,mch_answers"
+		   " WHERE mch_matches.GamCod=%ld"	// From all matches of this game...
+		   " AND mch_matches.MchCod=mch_answers.MchCod"
+		   " AND mch_answers.QstInd=%u",	// ...remove only answers to this question
 		   GamCod,QstInd);
   }
 
