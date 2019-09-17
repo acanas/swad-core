@@ -351,7 +351,6 @@ void Gam_ShowOneGame (long GamCod,
    extern const char *Txt_Today;
    extern const char *Txt_View_game;
    extern const char *Txt_No_of_questions;
-   extern const char *Txt_New_match;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    struct Game Game;
@@ -387,13 +386,6 @@ void Gam_ShowOneGame (long GamCod,
 
       /* Icons to remove/edit this game */
       Gam_PutFormsToRemEditOneGame (&Game,Anchor);
-
-      if (ShowOnlyThisGame)
-	 /* Icon to start a new match */
-	 Lay_PutContextualLinkOnlyIcon (ActReqNewMchTch,Mch_NEW_MATCH_SECTION_ID,
-					Gam_PutParams,
-					"play.svg",
-					Txt_New_match);
 
       fprintf (Gbl.F.Out,"</td>");
      }

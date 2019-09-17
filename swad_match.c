@@ -192,6 +192,7 @@ static void Mch_GetNumPlayers (struct Match *Match);
 static int Mch_GetQstAnsFromDB (long MchCod,unsigned QstInd);
 
 static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
+static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQst,bool Correct);
 
 /*****************************************************************************/
@@ -358,6 +359,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Match;
+   extern const char *Txt_Players;
    extern const char *Txt_Status;
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
@@ -388,12 +390,16 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
                       "<th class=\"RIGHT_TOP\">"
                       "%s"
                       "</th>"
+                      "<th class=\"RIGHT_TOP\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_No_INDEX,
             Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
 	    Txt_START_END_TIME[Gam_ORDER_BY_START_DATE],
 	    Txt_START_END_TIME[Gam_ORDER_BY_END_DATE],
             Txt_Match,
+	    Txt_Players,
             Txt_Status);
 
    /***** Write rows *****/
@@ -470,6 +476,13 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 	 Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (&Match);
 
       fprintf (Gbl.F.Out,"</td>");
+
+      /***** Number of players who have answered any question in the match ******/
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">"
+	                 "%u"
+	                 "</td>",
+	       Gbl.RowEvenOdd,
+	       Mch_GetNumUsrsWhoHaveAnswerMch (Match.MchCod));
 
       /***** Match status ******/
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
@@ -2330,7 +2343,7 @@ void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsig
 unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd)
   {
    /***** Get number of users who have answered
-          a question in a match from database *****/
+          a question in match from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of users who hasve answered a question",
 			     "SELECT COUNT(*) FROM mch_answers"
@@ -2351,6 +2364,21 @@ static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsi
 			     "SELECT COUNT(*) FROM mch_answers"
 			     " WHERE MchCod=%ld AND QstInd=%u AND AnsInd=%u",
 			     MchCod,QstInd,AnsInd);
+  }
+
+/*****************************************************************************/
+/****** Get number of users who have answered any question in a match ********/
+/*****************************************************************************/
+
+static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod)
+  {
+   /***** Get number of users who have answered
+          any question in match from database *****/
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of users who hasve answered a match",
+			     "SELECT COUNT(DISTINCT UsrCod) FROM mch_answers"
+			     " WHERE MchCod=%ld",
+			     MchCod);
   }
 
 /*****************************************************************************/

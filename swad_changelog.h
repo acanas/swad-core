@@ -469,12 +469,14 @@ Type of answer not valid in a game.
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 19.5 (2019-09-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.5.2 (2019-09-17)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.5.2:   Sep 17, 2019	New column with number of players in listing of matches of a game. (244711 lines)
+	Version 19.5.1:   Sep 17, 2019	Removed icon to play a new match in a game. (244685 lines)
 	Version 19.5:     Sep 17, 2019	Fixed bugs related with edition of games.
-					Fixed bugs related with behaviour of matches.  (244691 lines)
+					Fixed bugs related with behaviour of matches. (244691 lines)
 					2 changes necessary in database:
 ALTER TABLE mch_matches DROP COLUMN Showing;
 ALTER TABLE mch_matches ADD COLUMN Showing ENUM('nothing','stem','answers','results') NOT NULL DEFAULT 'nothing' AFTER ShowResults;
