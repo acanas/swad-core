@@ -469,10 +469,11 @@ Type of answer not valid in a game.
 
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 19.5.3 (2019-09-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.5.4 (2019-09-17)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.5.4:   Sep 17, 2019	Fixed bugs while removing games in a course. (244732 lines)
 	Version 19.5.3:   Sep 17, 2019	Removed unused column in table of matches.
 				        Update match end time only if match is being played. (244714 lines)
 					1 change necessary in database:

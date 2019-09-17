@@ -2280,6 +2280,9 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
       /***** Remove all the threads and posts in forums of the course *****/
       For_RemoveForums (Hie_CRS,CrsCod);
 
+      /***** Remove games of the course *****/
+      Gam_RemoveGamesCrs (CrsCod);
+
       /***** Remove surveys of the course *****/
       Svy_RemoveSurveys (Hie_CRS,CrsCod);
 

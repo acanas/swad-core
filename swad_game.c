@@ -976,10 +976,10 @@ void Gam_ResetGame (void)
 
    /***** Reset all the answers in this game *****/
    DB_QueryUPDATE ("can not reset answers of a game",
-		   "UPDATE mch_answers,gam_questions"
-		   " SET mch_answers.NumUsrs=0"
-		   " WHERE gam_questions.GamCod=%ld"
-		   " AND gam_questions.QstCod=mch_answers.QstCod",
+		   "DELETE FROM mch_answers"
+		   " USING mch_matches,mch_answers"
+		   " WHERE mch_matches.GamCod=%ld"
+		   " AND mch_matches.MchCod=mch_answers.MchCod",
 		   Game.GamCod);
 
    /***** Write message to show the change made *****/
@@ -1332,43 +1332,60 @@ void Gam_RemoveGroupsOfType (long GrpTypCod)
   }
 
 /*****************************************************************************/
-/************* Remove all the games of a place on the hierarchy **************/
-/************* (country, institution, centre, degree or course) **************/
+/******************** Remove all the games of a course ***********************/
 /*****************************************************************************/
 
-void Gam_RemoveGames (long CrsCod)	// TODO: Function not used?????
+void Gam_RemoveGamesCrs (long CrsCod)
   {
-   /***** Remove all the answers in course games *****/
-   DB_QueryDELETE ("can not remove answers of games"
-		   " in a place on the hierarchy",
+   /***** Remove the matches of games in this course *****/
+   /* Remove matches players */
+   DB_QueryDELETE ("can not remove match players",
+		   "DELETE FROM mch_players"
+		   " USING gam_games,mch_matches,mch_players"
+		   " WHERE gam_games.CrsCod=%ld"
+		   " AND gam_games.GamCod=mch_matches.GamCod"
+		   " AND mch_matches.MchCod=mch_players.MchCod",
+		   CrsCod);
+
+   /* Remove matches from list of matches being played */
+   DB_QueryDELETE ("can not remove matches being played",
+		   "DELETE FROM mch_playing"
+		   " USING gam_games,mch_matches,mch_playing"
+		   " WHERE gam_games.CrsCod=%ld"
+		   " AND gam_games.GamCod=mch_matches.GamCod"
+		   " AND mch_matches.MchCod=mch_playing.MchCod",
+		   CrsCod);
+
+   /* Remove students' answers to match */
+   DB_QueryDELETE ("can not remove students' answers associated to matches",
 		   "DELETE FROM mch_answers"
-		   " USING gam_games,gam_questions,mch_answers"
+		   " USING gam_games,mch_matches,mch_answers"
 		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=gam_questions.GamCod"
-		   " AND gam_questions.QstCod=mch_answers.QstCod",
-                   CrsCod);
+		   " AND gam_games.GamCod=mch_matches.GamCod"
+		   " AND mch_matches.MchCod=mch_answers.MchCod",
+		   CrsCod);
 
-   /***** Remove all the questions in course games *****/
-   DB_QueryDELETE ("can not remove questions of gam_games"
-		   " in a place on the hierarchy",
-		   "DELETE FROM gam_questions"
-		   " USING gam_games,gam_questions"
-		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=gam_questions.GamCod",
-                   CrsCod);
-
-   /***** Remove groups *****/
-   DB_QueryDELETE ("can not remove all the groups"
-	           " associated to games of a course",
+   /* Remove groups associated to the match */
+   DB_QueryDELETE ("can not remove the groups associated to matches",
 		   "DELETE FROM mch_groups"
-		   " USING gam_games,mch_groups"
+		   " USING gam_games,mch_matches,mch_answers"
 		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=mch_groups.GamCod",
-                   CrsCod);
+		   " AND gam_games.GamCod=mch_matches.GamCod"
+		   " AND mch_matches.MchCod=mch_groups.MchCod",
+		   CrsCod);
 
-   /***** Remove course games *****/
-   DB_QueryDELETE ("can not remove all the games in a place on the hierarchy",
-		   "DELETE FROM gam_games WHERE CrsCod=%ld",
+   /* Remove the matches themselves */
+   DB_QueryDELETE ("can not remove matches",
+		   "DELETE FROM mch_matches"
+		   " USING gam_games,mch_matches"
+		   " WHERE gam_games.CrsCod=%ld"
+		   " AND gam_games.GamCod=mch_matches.GamCod",
+		   CrsCod);
+
+   /***** Remove the games *****/
+   DB_QueryDELETE ("can not remove games",
+		   "DELETE FROM gam_games"
+		   " WHERE CrsCod=%ld",
                    CrsCod);
   }
 
