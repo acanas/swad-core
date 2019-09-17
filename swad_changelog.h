@@ -464,10 +464,11 @@ can not remove the groups associated to matches of a game
 Type of answer not valid in a game.
 */
 
-#define Log_PLATFORM_VERSION	"SWAD 19.4.1 (2019-09-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.4.2 (2019-09-17)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.4.2:   Sep 17, 2019	Fixed bug when removing a question in a game. (244654 lines)
 	Version 19.4.1:   Sep 17, 2019	Fixed bug when removing a question in a game. (244650 lines)
 	Version 19.4:     Sep 17, 2019	Changes in games ans matches tables. (244644 lines)
 					8 changes necessary in database:

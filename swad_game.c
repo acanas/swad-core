@@ -2067,8 +2067,11 @@ void Gam_RemoveQst (void)
 
    /* Change index of questions greater than this */
    DB_QueryUPDATE ("can not update indexes of questions in table of answers",
-		   "UPDATE mch_answers SET QstInd=QstInd-1"
-		   " WHERE GamCod=%ld AND QstInd>%u",
+		   "UPDATE mch_answers,mch_matches"
+		   " SET mch_answers.QstInd=mch_answers.QstInd-1"
+		   " WHERE mch_matches.GamCod=%ld"
+		   " WHERE mch_matches.MchCod=mch_answers.MchCod"
+		   " AND mch_answers.QstInd>%u",
                    Game.GamCod,QstInd);
    DB_QueryUPDATE ("can not update indexes of questions",
 		   "UPDATE gam_questions SET QstInd=QstInd-1"
