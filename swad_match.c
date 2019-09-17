@@ -1019,19 +1019,19 @@ static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
 
    /***** Insert this new match into database *****/
    MchCod = DB_QueryINSERTandReturnCode ("can not create match",
-				         "INSERT mch_matches"
-				         " (GamCod,UsrCod,StartTime,EndTime,Title,ShowResults,"
-				         "QstInd,QstCod,Showing)"
-				         " VALUES"
-				         " (%ld,"	// GamCod
+				         "INSERT mch_matches "
+				         "(GamCod,UsrCod,StartTime,EndTime,Title,"
+				         "QstInd,QstCod,ShowResults,Showing)"
+				         " VALUES "
+				         "(%ld,"	// GamCod
 				         "%ld,"		// UsrCod
 				         "NOW(),"	// StartTime
 				         "NOW(),"	// EndTime
 				         "'%s',"	// Title
-				         "'N',"		// ShowResults: Don't show results initially
 				         "0,"		// QstInd: Match has not started, so not the first question yet
 				         "-1,"		// QstCod: Non-existent question
-				         "'%s'",	// What is being shown
+				         "'N',"		// ShowResults: Don't show results initially
+				         "'%s')",	// Showing: What is being shown
 				         GamCod,
 				         Gbl.Usrs.Me.UsrDat.UsrCod,	// Game creator
 				         Title,
