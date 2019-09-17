@@ -459,20 +459,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-/*
-can not remove the groups associated to matches of a game
-Type of answer not valid in a game.
-
-
-¿Eliminar botón de reset en un juego? Tal vez sí, para simplificar. No tiene sentido resetear todas las partidas de un juego.
-¿Poner botón de reset en una partida? No parece necesario, basta con eliminarla y crear otra
-
-*/
-
-#define Log_PLATFORM_VERSION	"SWAD 19.5.5 (2019-09-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.6 (2019-09-17)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.6:     Sep 17, 2019	Remove actions to reset a game. (244600 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN (1658,1659);
+
 	Version 19.5.5:   Sep 17, 2019	Fixed bug while creating a match. (244733 lines)
 	Version 19.5.4:   Sep 17, 2019	Fixed bugs while removing games in a course. (244732 lines)
 	Version 19.5.3:   Sep 17, 2019	Removed unused column in table of matches.

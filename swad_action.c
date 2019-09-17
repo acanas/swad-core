@@ -632,8 +632,6 @@ Assessment:
         463. ActChgGam			Modify data of an existing game
         464. ActReqRemGam		Request the removal of a game
         465. ActRemGam			Remove game
-        466. ActReqRstGam		Request the reset of answers of a game
-        467. ActRstGam			Reset answers of game
         468. ActHidGam			Hide game
         469. ActShoGam			Show game
         470. ActAddOneGamQst		Add a new question to a game
@@ -2176,8 +2174,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgGam		*/{1655,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RecFormGame		,NULL},
    /* ActReqRemGam	*/{1656,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_AskRemGame			,NULL},
    /* ActRemGam		*/{1657,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RemoveGame			,NULL},
-   /* ActReqRstGam	*/{1658,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_AskResetGame		,NULL},
-   /* ActRstGam		*/{1659,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_ResetGame			,NULL},
    /* ActHidGam		*/{1660,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_HideGame			,NULL},
    /* ActShoGam		*/{1661,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_UnhideGame			,NULL},
    /* ActAddOneGamQst	*/{1662,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestNewQuestion		,NULL},
@@ -4878,8 +4874,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgGam,		// #1655
 	ActReqRemGam,		// #1656
 	ActRemGam,		// #1657
-	ActReqRstGam,		// #1658
-	ActRstGam,		// #1659
+	-1,			// #1658 (obsolete action)
+	-1,			// #1659 (obsolete action)
 	ActHidGam,		// #1660
 	ActShoGam,		// #1661
 	ActAddOneGamQst,	// #1662
@@ -4892,7 +4888,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActDwnGamQst,		// #1669
 	ActReqNewMchTch,	// #1670
 	ActNewMchTch,		// #1671
-	ActFwdMchTch,	// #1672
+	ActFwdMchTch,		// #1672
 	-1,			// #1673 (obsolete action)
 	ActSeePrj,		// #1674
 	ActFrmNewPrj,		// #1675

@@ -532,15 +532,8 @@ void Gam_PutHiddenParamGameOrder (void)
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 					  const char *Anchor)
   {
-   extern const char *Txt_Reset;
-
    /***** Put icon to remove game *****/
    Ico_PutContextualIconToRemove (ActReqRemGam,Gam_PutParams);
-
-   /***** Put icon to reset game *****/
-   Lay_PutContextualLinkOnlyIcon (ActReqRstGam,NULL,Gam_PutParams,
-				  "recycle.svg",
-				  Txt_Reset);
 
    /***** Put icon to hide/show game *****/
    if (Game->Status.Visible)
@@ -913,77 +906,6 @@ void Gam_RemoveGame (void)
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Game_X_removed,
-                  Game.Title);
-
-   /***** Show games again *****/
-   Gam_ListAllGames ();
-  }
-
-/*****************************************************************************/
-/***************** Ask for confirmation of reset of a game *****************/
-/*****************************************************************************/
-
-void Gam_AskResetGame (void)
-  {
-   extern const char *Txt_Do_you_really_want_to_reset_the_game_X;
-   extern const char *Txt_Reset_game;
-   struct Game Game;
-
-   /***** Get parameters *****/
-   Gam_GetParamOrder ();
-   Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
-
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
-
-   /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Game);
-   if (!Game.Status.ICanEdit)
-      Lay_ShowErrorAndExit ("You can not reset this game.");
-
-   /***** Ask for confirmation of reset *****/
-   Gam_CurrentGamCod = Game.GamCod;
-   Ale_ShowAlertAndButton (ActRstGam,NULL,NULL,
-			   Gam_PutParams,
-                           Btn_REMOVE_BUTTON,
-			   Txt_Reset_game,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_reset_the_game_X,
-			   Game.Title);
-
-   /***** Show games again *****/
-   Gam_ListAllGames ();
-  }
-
-/*****************************************************************************/
-/******************************* Reset a game ******************************/
-/*****************************************************************************/
-
-void Gam_ResetGame (void)
-  {
-   extern const char *Txt_Game_X_reset;
-   struct Game Game;
-
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
-
-   /***** Get data of the game from database *****/
-   Gam_GetDataOfGameByCod (&Game);
-   if (!Game.Status.ICanEdit)
-      Lay_ShowErrorAndExit ("You can not reset this game.");
-
-   /***** Reset all the answers in this game *****/
-   DB_QueryUPDATE ("can not reset answers of a game",
-		   "DELETE FROM mch_answers"
-		   " USING mch_matches,mch_answers"
-		   " WHERE mch_matches.GamCod=%ld"
-		   " AND mch_matches.MchCod=mch_answers.MchCod",
-		   Game.GamCod);
-
-   /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Game_X_reset,
                   Game.Title);
 
    /***** Show games again *****/

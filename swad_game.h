@@ -97,8 +97,6 @@ void Gam_PutParamGameCod (long GamCod);
 long Gam_GetParamGameCod (void);
 void Gam_AskRemGame (void);
 void Gam_RemoveGame (void);
-void Gam_AskResetGame (void);
-void Gam_ResetGame (void);
 void Gam_HideGame (void);
 void Gam_UnhideGame (void);
 void Gam_RecFormGame (void);
