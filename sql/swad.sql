@@ -638,7 +638,6 @@ CREATE TABLE IF NOT EXISTS mch_matches (
 	Title VARCHAR(2047) NOT NULL,
 	QstInd INT NOT NULL DEFAULT 0,
 	QstCod INT NOT NULL DEFAULT -1,
-	QstStartTime DATETIME NOT NULL,
 	ShowResults ENUM('N','Y') NOT NULL DEFAULT 'Y',
 	Showing ENUM('nothing','stem','answers','results') NOT NULL DEFAULT 'nothing',
 	UNIQUE INDEX(MchCod),

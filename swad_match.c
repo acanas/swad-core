@@ -230,17 +230,16 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 
    /* Make query */
    NumMatches = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
-					   "SELECT MchCod,"				// row[ 0]
-						  "GamCod,"				// row[ 1]
-						  "UsrCod,"				// row[ 2]
-						  "UNIX_TIMESTAMP(StartTime),"		// row[ 3]
-						  "UNIX_TIMESTAMP(EndTime),"		// row[ 4]
-						  "Title,"				// row[ 5]
-						  "QstInd,"				// row[ 6]
-						  "QstCod,"				// row[ 7]
-						  "UNIX_TIMESTAMP(QstStartTime),"	// row[ 8]
-					          "ShowResults,"			// row[ 9]
-						  "Showing"				// row[10]
+					   "SELECT MchCod,"				// row[0]
+						  "GamCod,"				// row[1]
+						  "UsrCod,"				// row[2]
+						  "UNIX_TIMESTAMP(StartTime),"		// row[3]
+						  "UNIX_TIMESTAMP(EndTime),"		// row[4]
+						  "Title,"				// row[5]
+						  "QstInd,"				// row[6]
+						  "QstCod,"				// row[7]
+					          "ShowResults,"			// row[8]
+						  "Showing"				// row[9]
 					   " FROM mch_matches"
 					   " WHERE GamCod=%ld%s"
 					   " ORDER BY MchCod",
@@ -292,17 +291,16 @@ static void Mch_GetDataOfMatchByCod (struct Match *Match)
 
    /***** Get data of match from database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
-					"SELECT MchCod,"				// row[ 0]
-					       "GamCod,"				// row[ 1]
-					       "UsrCod,"				// row[ 2]
-					       "UNIX_TIMESTAMP(StartTime),"		// row[ 3]
-					       "UNIX_TIMESTAMP(EndTime),"		// row[ 4]
-					       "Title,"					// row[ 5]
-					       "QstInd,"				// row[ 6]
-					       "QstCod,"				// row[ 7]
-					       "UNIX_TIMESTAMP(QstStartTime),"		// row[ 8]
-					       "ShowResults,"				// row[ 9]
-					       "Showing"				// row[10]
+					"SELECT MchCod,"				// row[0]
+					       "GamCod,"				// row[1]
+					       "UsrCod,"				// row[2]
+					       "UNIX_TIMESTAMP(StartTime),"		// row[3]
+					       "UNIX_TIMESTAMP(EndTime),"		// row[4]
+					       "Title,"					// row[5]
+					       "QstInd,"				// row[6]
+					       "QstCod,"				// row[7]
+					       "ShowResults,"				// row[8]
+					       "Showing"				// row[9]
 					" FROM mch_matches"
 					" WHERE MchCod=%ld"
 					" AND GamCod IN"		// Extra check
@@ -606,12 +604,12 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    /***** Get match data *****/
    row = mysql_fetch_row (mysql_res);
    /*
-   row[ 0]	MchCod
-   row[ 1]	GamCod
-   row[ 2]	UsrCod
-   row[ 3]	UNIX_TIMESTAMP(StartTime)
-   row[ 4]	UNIX_TIMESTAMP(EndTime)
-   row[ 5]	Title
+   row[0]	MchCod
+   row[1]	GamCod
+   row[2]	UsrCod
+   row[3]	UNIX_TIMESTAMP(StartTime)
+   row[4]	UNIX_TIMESTAMP(EndTime)
+   row[5]	Title
    */
    /***** Get match data *****/
    /* Code of the match (row[0]) */
@@ -640,11 +638,10 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 
    /***** Get current match status *****/
    /*
-   row[ 6]	QstInd
-   row[ 7]	QstCod
-   row[ 8]	UNIX_TIMESTAMP(QstStartTime)
-   row[ 9]	ShowResults
-   row[10]	Showing
+   row[6]	QstInd
+   row[7]	QstCod
+   row[8]	ShowResults
+   row[9]	Showing
    */
    /* Current question index (row[6]) */
    Match->Status.QstInd = Gam_GetQstIndFromStr (row[6]);
@@ -652,14 +649,11 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    /* Current question code (row[7]) */
    Match->Status.QstCod = Str_ConvertStrCodToLongCod (row[7]);
 
-   /* Get question start date (row[8] holds the start UTC time) */
-   Match->Status.QstStartTimeUTC = Dat_GetUNIXTimeFromStr (row[8]);
+   /* Get whether to show results or not (row(8)) */
+   Match->Status.ShowResults = (row[8][0] == 'Y');
 
-   /* Get whether to show results or not (row(9)) */
-   Match->Status.ShowResults = (row[9][0] == 'Y');
-
-   /* Get what to show (stem, answers, results) (row(10)) */
-   Match->Status.Showing = Mch_GetShowingFromStr (row[10]);
+   /* Get what to show (stem, answers, results) (row(9)) */
+   Match->Status.Showing = Mch_GetShowingFromStr (row[9]);
 
    /***** Get whether the match is being played or not *****/
    if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// Finished
@@ -1027,7 +1021,7 @@ static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
    MchCod = DB_QueryINSERTandReturnCode ("can not create match",
 				         "INSERT mch_matches"
 				         " (GamCod,UsrCod,StartTime,EndTime,Title,ShowResults,"
-				         "QstInd,QstCod,QstStartTime,Showing)"
+				         "QstInd,QstCod,Showing)"
 				         " VALUES"
 				         " (%ld,"	// GamCod
 				         "%ld,"		// UsrCod
@@ -1037,7 +1031,6 @@ static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
 				         "'N',"		// ShowResults: Don't show results initially
 				         "0,"		// QstInd: Match has not started, so not the first question yet
 				         "-1,"		// QstCod: Non-existent question
-				         "NOW(),"	// QstStartTime
 				         "'%s'",	// What is being shown
 				         GamCod,
 				         Gbl.Usrs.Me.UsrDat.UsrCod,	// Game creator
@@ -1076,20 +1069,31 @@ static void Mch_CreateGrps (long MchCod)
 /***************** Insert/update a game match being played *******************/
 /*****************************************************************************/
 
+#define Mch_MAX_BYTES_SUBQUERY 128
+
 static void Mch_UpdateMatchStatusInDB (struct Match *Match)
   {
+   char MchSubQuery[Mch_MAX_BYTES_SUBQUERY];
+
+   /***** Update end time only if match is currently being played *****/
+   if (Match->Status.Playing)
+      Str_Copy (MchSubQuery,"mch_matches.EndTime=NOW(),",
+		Mch_MAX_BYTES_SUBQUERY);
+   else
+      MchSubQuery[0] = '\0';
+
    /***** Update match status in database *****/
    DB_QueryUPDATE ("can not update match being played",
 		   "UPDATE mch_matches,gam_games"
-		   " SET mch_matches.EndTime=NOW(),"
+		   " SET %s"
 			"mch_matches.QstInd=%u,"
 			"mch_matches.QstCod=%ld,"
-			"mch_matches.QstStartTime=NOW(),"
 			"mch_matches.ShowResults='%c',"
 			"mch_matches.Showing='%s'"
 		   " WHERE mch_matches.MchCod=%ld"
 		   " AND mch_matches.GamCod=gam_games.GamCod"
 		   " AND gam_games.CrsCod=%ld",	// Extra check
+		   MchSubQuery,
 		   Match->Status.QstInd,Match->Status.QstCod,
 		   Match->Status.ShowResults ? 'Y' : 'N',
 		   Mch_ShowingStringsDB[Match->Status.Showing],
