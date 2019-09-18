@@ -626,6 +626,13 @@ Assessment:
         NEW. ActRefMchStd		Refresh current question when playing a game (as student)
         459. ActAnsMchQstStd		Answer a match question (as student)
 
+	NEW. ActReqSeeMyMchRes		Select range of dates to see my matches results
+	NEW. ActSeeMyMchRes		Show my matches results
+	NEW. ActReqSeeUsrMchRes		Select users and range of dates to see matches results
+	NEW. ActSeeUsrMchRes		Show matches results of several users
+	NEW. ActSeeOneMchResMe		Show one match result of me as student
+	NEW. ActSeeOneMchResOth		Show one match result of other user
+
         460. ActFrmNewGam		Form to create a new game
         461. ActEdiOneGam		Edit one game
         462. ActNewGam			Create new game
@@ -639,8 +646,8 @@ Assessment:
         472. ActAddTstQstToGam		Add selected test questions to game
         473. ActReqRemGamQst		Request the removal of a question of a game
         474. ActRemGamQst		Confirm the removal of a question of a game
-        475. ActUp_GamQst,		Move up a question of a game
-        476. ActDwnGamQst,		Move down a question of a game
+        475. ActUp_GamQst		Move up a question of a game
+        476. ActDwnGamQst		Move down a question of a game
 
 	477. ActSeeOneExaAnn		Show one exam announcement
 	478. ActSeeDatExaAnn		Show exam announcements of a given date
@@ -2167,6 +2174,13 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPlyMchStd	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_ShowMatchToMeAsStd		,NULL},
    /* ActRefMchStd	*/{1782,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchStd		,NULL},
    /* ActAnsMchQstStd	*/{1651,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ReceiveQstAnsFromStd	,NULL},
+
+   /* ActReqSeeMyMchRes	*/{1795,-1,TabUnk,ActSeeAllGam		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Tst_SelDatesToSeeMyTestResults	,NULL},
+   /* ActSeeMyMchRes	*/{1796,-1,TabUnk,ActSeeAllGam		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowMyTestResults		,NULL},
+   /* ActSeeOneMchResMe	*/{1797,-1,TabUnk,ActSeeAllGam		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowOneTestResult		,NULL},
+   /* ActReqSeeUsrMchRes*/{1798,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Tst_SelUsrsToSeeUsrsTestResults,NULL},
+   /* ActSeeUsrMchRes	*/{1799,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowUsrsTestResults	,NULL},
+   /* ActSeeOneMchResOth*/{1800,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowOneTestResult		,NULL},
 
    /* ActFrmNewGam	*/{1652,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
    /* ActEdiOneGam	*/{1653,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
@@ -5011,6 +5025,12 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #1792 (obsolete action)
 	-1,			// #1793 (obsolete action)
 	ActChgDisResMchTch,	// #1794
+	ActReqSeeMyMchRes,	// #1795
+	ActSeeMyMchRes,		// #1796
+	ActSeeOneMchResMe,	// #1797
+	ActReqSeeUsrMchRes,	// #1798
+	ActSeeUsrMchRes,	// #1799
+	ActSeeOneMchResOth,	// #1800
 	};
 
 /*****************************************************************************/

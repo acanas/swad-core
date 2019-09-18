@@ -462,10 +462,19 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.6.3 (2019-09-18)"
+#define Log_PLATFORM_VERSION	"SWAD 19.7 (2019-09-18)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.7:     Sep 17, 2019	New actions to see the matches results. (244664 lines)
+					6 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1795','es','N','Seleccionar fechas para mis result. partidas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1796','es','N','Ver mis resultados de partidas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1797','es','N','Ver una partida m&iacute;a ya realizada');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1798','es','N','Seleccionar usuarios para result. partidas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1799','es','N','Ver resultados de partidas de usuarios');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1800','es','N','Ver una partida ya realizada');
+
 	Version 19.6.3:   Sep 18, 2019	Change in text for test results and matches results. (244632 lines)
 	Version 19.6.2:   Sep 17, 2019	Link to see the matches results. Not finished. (244649 lines)
 	Version 19.6.1:   Sep 17, 2019	Fixed bug while removing a game. (244601 lines)
