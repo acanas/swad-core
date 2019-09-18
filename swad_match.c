@@ -2444,11 +2444,11 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 
 void Mch_PutFormToViewResultsOfMatches (Act_Action_t Action)
   {
-   extern const char *Txt_Matches_results;
+   extern const char *Txt_Results;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLinkIconText (Action,NULL,NULL,
 				  "tasks.svg",
-				  Txt_Matches_results);
+				  Txt_Results);
    fprintf (Gbl.F.Out,"</div>");
   }

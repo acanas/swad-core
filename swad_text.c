@@ -18057,27 +18057,6 @@ const char *Txt_Matches =	// of a game
 	"Partidas";
 #endif
 
-const char *Txt_Matches_results =
-#if   L==1	// ca
-	"Resultats de partides";
-#elif L==2	// de
-	"Spielergebnisse";
-#elif L==3	// en
-	"Matches results";
-#elif L==4	// es
-	"Resultados de las partidas";
-#elif L==5	// fr
-	"R&eacute;sultats des matchs";
-#elif L==6	// gn
-	"Resultados de las partidas";	// Okoteve traducción
-#elif L==7	// it
-	"Risultati delle partite";
-#elif L==8	// pl
-	"Wyniki mecz&oacute;w";
-#elif L==9	// pt
-	"Resultados das partidas";
-#endif
-
 const char *Txt_Materials =
 #if   L==1	// ca
 	"Materials";
@@ -33257,6 +33236,27 @@ const char *Txt_Reset_survey =
 	"Reiniciar inqu&eacute;rito";
 #endif
 
+const char *Txt_Results =
+#if   L==1	// ca
+	"Resultats";
+#elif L==2	// de
+	"Ergebnisse";
+#elif L==3	// en
+	"Results";
+#elif L==4	// es
+	"Resultados";
+#elif L==5	// fr
+	"R&eacute;sultats";
+#elif L==6	// gn
+	"Resultados";	// Okoteve traducción
+#elif L==7	// it
+	"Risultati";
+#elif L==8	// pl
+	"Wyniki";
+#elif L==9	// pt
+	"Resultados";
+#endif
+
 const char *Txt_results_per_page =
 #if   L==1	// ca
 	"resultats per p&agrave;gina";
@@ -42881,27 +42881,6 @@ const char *Txt_Test_result =
 	"Wynik testu";
 #elif L==9	// pt
 	"Resultado do teste";
-#endif
-
-const char *Txt_Test_results =
-#if   L==1	// ca
-	"Resultats de tests";
-#elif L==2	// de
-	"Testergebnisse";
-#elif L==3	// en
-	"Test results";
-#elif L==4	// es
-	"Resultados de los test";
-#elif L==5	// fr
-	"R&eacute;sultats des tests";
-#elif L==6	// gn
-	"Resultados de los test";	// Okoteve traducción
-#elif L==7	// it
-	"Risultati dei test";
-#elif L==8	// pl
-	"Wyniki test&oacute;w";
-#elif L==9	// pt
-	"Resultados dos testes";
 #endif
 
 const char *Txt_Text =

@@ -1222,25 +1222,25 @@ const char *Hlp_ASSESSMENT_Tests_writing_a_question =
 	"ASSESSMENT.Tests.en#writing-a-question";
 #endif
 
-const char *Hlp_ASSESSMENT_Tests_test_results =
+const char *Hlp_ASSESSMENT_Tests_results =
 #if   L==1
-	"ASSESSMENT.Tests.es#resultados-de-tests";
+	"ASSESSMENT.Tests.es#resultados-de-tests";	// TODO: Change to #resultados
 #elif L==2
-	"ASSESSMENT.Tests.en#test-results";
+	"ASSESSMENT.Tests.en#test-results";		// TODO: Change to #results
 #elif L==3
-	"ASSESSMENT.Tests.en#test-results";
+	"ASSESSMENT.Tests.en#test-results";		// TODO: Change to #results
 #elif L==4
-	"ASSESSMENT.Tests.es#resultados-de-tests";
+	"ASSESSMENT.Tests.es#resultados-de-tests";	// TODO: Change to #resultados
 #elif L==5
-	"ASSESSMENT.Tests.en#test-results";
+	"ASSESSMENT.Tests.en#test-results";		// TODO: Change to #results
 #elif L==6
-	"ASSESSMENT.Tests.es#resultados-de-tests";
+	"ASSESSMENT.Tests.es#resultados-de-tests";	// TODO: Change to #resultados
 #elif L==7
-	"ASSESSMENT.Tests.en#test-results";
+	"ASSESSMENT.Tests.en#test-results";		// TODO: Change to #results
 #elif L==8
-	"ASSESSMENT.Tests.en#test-results";
+	"ASSESSMENT.Tests.en#test-results";		// TODO: Change to #results
 #elif L==9
-	"ASSESSMENT.Tests.en#test-results";
+	"ASSESSMENT.Tests.en#test-results";		// TODO: Change to #results
 #endif
 
 const char *Hlp_ASSESSMENT_Surveys =

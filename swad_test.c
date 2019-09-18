@@ -409,12 +409,12 @@ void Tst_ShowFormAskTst (void)
 
 static void Tst_PutFormToViewResultsOfUsersTests (Act_Action_t Action)
   {
-   extern const char *Txt_Test_results;
+   extern const char *Txt_Results;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLinkIconText (Action,NULL,NULL,
 				  "tasks.svg",
-				  Txt_Test_results);
+				  Txt_Results);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -7318,9 +7318,9 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 
 void Tst_SelUsrsToSeeUsrsTestResults (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests_test_results;
+   extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Test_results;
+   extern const char *Txt_Results;
    extern const char *Txt_Users;
    extern const char *Txt_View_test_results;
    unsigned NumTotalUsrs;
@@ -7342,8 +7342,8 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Test_results,NULL,
-                 Hlp_ASSESSMENT_Tests_test_results,Box_NOT_CLOSABLE);
+   Box_StartBox (NULL,Txt_Results,NULL,
+                 Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (NULL,
@@ -7420,16 +7420,16 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 
 void Tst_SelDatesToSeeMyTestResults (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests_test_results;
-   extern const char *Txt_Test_results;
+   extern const char *Hlp_ASSESSMENT_Tests_results;
+   extern const char *Txt_Results;
    extern const char *Txt_View_test_results;
 
    /***** Start form *****/
    Frm_StartForm (ActSeeMyTstRes);
 
    /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_Test_results,NULL,
-                      Hlp_ASSESSMENT_Tests_test_results,Box_NOT_CLOSABLE,2);
+   Box_StartBoxTable (NULL,Txt_Results,NULL,
+                      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
    /***** End table, send button and end box *****/
@@ -7483,8 +7483,8 @@ static void Tst_StoreScoreOfTestResultInDB (long TstCod,
 
 void Tst_ShowUsrsTestResults (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests_test_results;
-   extern const char *Txt_Test_results;
+   extern const char *Hlp_ASSESSMENT_Tests_results;
+   extern const char *Txt_Results;
    extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
 
@@ -7498,8 +7498,8 @@ void Tst_ShowUsrsTestResults (void)
    if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
      {
       /***** Start box and table *****/
-      Box_StartBoxTable (NULL,Txt_Test_results,NULL,
-                         Hlp_ASSESSMENT_Tests_test_results,Box_NOT_CLOSABLE,2);
+      Box_StartBoxTable (NULL,Txt_Results,NULL,
+                         Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
       /***** Header of the table with the list of users *****/
       Tst_ShowHeaderTestResults ();
@@ -7586,15 +7586,15 @@ static void Tst_ShowHeaderTestResults (void)
 
 void Tst_ShowMyTestResults (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests_test_results;
-   extern const char *Txt_Test_results;
+   extern const char *Hlp_ASSESSMENT_Tests_results;
+   extern const char *Txt_Results;
 
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
    /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_Test_results,NULL,
-                      Hlp_ASSESSMENT_Tests_test_results,Box_NOT_CLOSABLE,2);
+   Box_StartBoxTable (NULL,Txt_Results,NULL,
+                      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
    /***** Header of the table with the list of users *****/
    Tst_ShowHeaderTestResults ();
@@ -8001,7 +8001,7 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
 
 void Tst_ShowOneTestResult (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests_test_results;
+   extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Test_result;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date;
@@ -8081,7 +8081,7 @@ void Tst_ShowOneTestResult (void)
 
       /***** Start box *****/
       Box_StartBox (NULL,Txt_Test_result,NULL,
-                    Hlp_ASSESSMENT_Tests_test_results,Box_NOT_CLOSABLE);
+                    Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.Hierarchy.Ins.InsCod,
 				 Gbl.Hierarchy.Deg.DegCod,

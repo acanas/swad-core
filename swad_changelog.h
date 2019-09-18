@@ -441,6 +441,9 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Al confirmar una inscripción, mostrar ficha de retroalimentación similar a la que se muestra cuando se crea un administrador. Tal y como está ahora crea confusión al usuario.
 
+// TODO: En Eventos de asistencia, poner un icono de enlace a horario de la asignatura ¿y otro a grupos?
+// TODO: Reportado por Javier Fernández Baldomero. Un profesor debería poder cambiar la foto de un estudiante confirmado. Sale el icono, pero luego dice ue no hay permiso
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -459,10 +462,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.6.2 (2019-09-17)"
+#define Log_PLATFORM_VERSION	"SWAD 19.6.3 (2019-09-18)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.6.3:   Sep 18, 2019	Change in text for test results and matches results. (244632 lines)
 	Version 19.6.2:   Sep 17, 2019	Link to see the matches results. Not finished. (244649 lines)
 	Version 19.6.1:   Sep 17, 2019	Fixed bug while removing a game. (244601 lines)
 	Version 19.6:     Sep 17, 2019	Remove actions to reset a game. (244600 lines)
