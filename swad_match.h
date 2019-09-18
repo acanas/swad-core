@@ -67,6 +67,7 @@ void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsig
 					       unsigned NumAnswerersQst,bool Correct);
 unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd);
 
-void Mch_PutFormToViewResultsOfMatches (Act_Action_t Action);
+void Mch_PutFormToViewMchResults (Act_Action_t Action);
+void Mch_SelUsrsToViewUsrsMchResults (void);
 
 #endif

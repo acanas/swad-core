@@ -2442,7 +2442,7 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 /****************** Write a form to go to result of matches ******************/
 /*****************************************************************************/
 
-void Mch_PutFormToViewResultsOfMatches (Act_Action_t Action)
+void Mch_PutFormToViewMchResults (Act_Action_t Action)
   {
    extern const char *Txt_Results;
 
@@ -2451,4 +2451,106 @@ void Mch_PutFormToViewResultsOfMatches (Act_Action_t Action)
 				  "tasks.svg",
 				  Txt_Results);
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/*********** Select users and dates to show their matches results ************/
+/*****************************************************************************/
+
+void Mch_SelUsrsToViewUsrsMchResults (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Tests_results;	// TODO: Change to matches results
+   extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_Results;
+   extern const char *Txt_Users;
+   extern const char *Txt_View_matches_results;
+   unsigned NumTotalUsrs;
+
+   /***** Get and update type of list,
+          number of columns in class photo
+          and preference about viewing photos *****/
+   Usr_GetAndUpdatePrefsAboutUsrList ();
+
+   /***** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+   /***** Get and order lists of users from this course *****/
+   Usr_GetListUsrs (Hie_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_CRS,Rol_NET);
+   Usr_GetListUsrs (Hie_CRS,Rol_TCH);
+   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
+
+   /***** Start box *****/
+   Box_StartBox (NULL,Txt_Results,NULL,
+                 Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
+
+   /***** Show form to select the groups *****/
+   Grp_ShowFormToSelectSeveralGroups (NULL,
+	                              Grp_ONLY_MY_GROUPS);
+
+   /***** Start section with user list *****/
+   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+
+   if (NumTotalUsrs)
+     {
+      if (Usr_GetIfShowBigList (NumTotalUsrs,NULL,NULL))
+        {
+	 /***** Form to select type of list used for select several users *****/
+	 Usr_ShowFormsToSelectUsrListType (NULL);
+
+         /***** Start form *****/
+         Frm_StartForm (ActSeeUsrMchRes);
+         Grp_PutParamsCodGrps ();
+
+         /***** Put list of users to select some of them *****/
+         Tbl_StartTableCenter (2);
+         fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s RIGHT_TOP\">"
+			    "%s:"
+			    "</td>"
+			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
+                  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users,
+                  The_ClassFormInBox[Gbl.Prefs.Theme]);
+         Tbl_StartTable (2);
+         Usr_ListUsersToSelect (Rol_TCH);
+         Usr_ListUsersToSelect (Rol_NET);
+         Usr_ListUsersToSelect (Rol_STD);
+         Tbl_EndTable ();
+         fprintf (Gbl.F.Out,"</td>"
+                            "</tr>");
+
+         /***** Starting and ending dates in the search *****/
+         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
+
+         Tbl_EndTable ();
+
+         /***** Send button *****/
+	 Btn_PutConfirmButton (Txt_View_matches_results);
+
+         /***** End form *****/
+         Frm_EndForm ();
+        }
+     }
+   else	// NumTotalUsrs == 0
+      /***** Show warning indicating no students found *****/
+      Usr_ShowWarningNoUsersFound (Rol_UNK);
+
+   /***** End section with user list *****/
+   Lay_EndSection ();
+
+   /***** End box *****/
+   Box_EndBox ();
+
+   /***** Free memory for users' list *****/
+   Usr_FreeUsrsList (Rol_TCH);
+   Usr_FreeUsrsList (Rol_NET);
+   Usr_FreeUsrsList (Rol_STD);
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
+
+   /***** Free memory for list of selected groups *****/
+   Grp_FreeListCodSelectedGrps ();
   }

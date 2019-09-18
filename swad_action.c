@@ -2152,7 +2152,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqSeeMyTstRes	*/{1083,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Tst_SelDatesToSeeMyTestResults	,NULL},
    /* ActSeeMyTstRes	*/{1084,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowMyTestResults		,NULL},
    /* ActSeeOneTstResMe	*/{1085,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowOneTestResult		,NULL},
-   /* ActReqSeeUsrTstRes*/{1080,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Tst_SelUsrsToSeeUsrsTestResults,NULL},
+   /* ActReqSeeUsrTstRes*/{1080,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Tst_SelUsrsToViewUsrsTstResults,NULL},
    /* ActSeeUsrTstRes	*/{1081,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowUsrsTestResults	,NULL},
    /* ActSeeOneTstResOth*/{1082,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowOneTestResult		,NULL},
 
@@ -2178,7 +2178,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqSeeMyMchRes	*/{1795,-1,TabUnk,ActSeeAllGam		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Tst_SelDatesToSeeMyTestResults	,NULL},
    /* ActSeeMyMchRes	*/{1796,-1,TabUnk,ActSeeAllGam		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowMyTestResults		,NULL},
    /* ActSeeOneMchResMe	*/{1797,-1,TabUnk,ActSeeAllGam		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowOneTestResult		,NULL},
-   /* ActReqSeeUsrMchRes*/{1798,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Tst_SelUsrsToSeeUsrsTestResults,NULL},
+   /* ActReqSeeUsrMchRes*/{1798,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Mch_SelUsrsToViewUsrsMchResults,NULL},
    /* ActSeeUsrMchRes	*/{1799,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowUsrsTestResults	,NULL},
    /* ActSeeOneMchResOth*/{1800,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Tst_ShowOneTestResult		,NULL},
 

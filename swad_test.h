@@ -195,7 +195,7 @@ void Tst_FreeTagsList (void);
 
 void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 
-void Tst_SelUsrsToSeeUsrsTestResults (void);
+void Tst_SelUsrsToViewUsrsTstResults (void);
 void Tst_SelDatesToSeeMyTestResults (void);
 void Tst_ShowUsrsTestResults (void);
 void Tst_ShowMyTestResults (void);

@@ -52682,6 +52682,27 @@ const char *Txt_View_in_a_new_window =
 	"Ver em uma nova janela";
 #endif
 
+const char *Txt_View_matches_results =
+#if   L==1	// ca
+	"Veure resultats de partides";
+#elif L==2	// de
+	"Siehe Spielergebnisse";
+#elif L==3	// en
+	"View matches results";
+#elif L==4	// es
+	"Ver resultados de partidas";
+#elif L==5	// fr
+	"Voir r&eacute;sultats de matchs";
+#elif L==6	// gn
+	"Ver resultados de partidas";	// Okoteve traducción
+#elif L==7	// it
+	"Vedi risultati delle partite";
+#elif L==8	// pl
+	"Zobacz wyniki mecze";
+#elif L==9	// pt
+	"Ver resultados de partidas";
+#endif
+
 const char *Txt_View_record_and_office_hours =
 #if   L==1	// ca
 	"Veure fitxa i horari de tutories";
@@ -52837,11 +52858,11 @@ const char *Txt_View_test_results =
 #elif L==3	// en
 	"View test results";
 #elif L==4	// es
-	"Ver resultados de los test";
+	"Ver resultados de test";
 #elif L==5	// fr
 	"Voir r&eacute;sultats de tests";
 #elif L==6	// gn
-	"Ver resultados de los test";	// Okoteve traducción
+	"Ver resultados de test";	// Okoteve traducción
 #elif L==7	// it
 	"Vedi risultati dei test";
 #elif L==8	// pl

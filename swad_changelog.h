@@ -462,11 +462,12 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.7 (2019-09-18)"
+#define Log_PLATFORM_VERSION	"SWAD 19.7.1 (2019-09-18)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
-	Version 19.7:     Sep 17, 2019	New actions to see the matches results. (244664 lines)
+	Version 19.7.1:   Sep 17, 2019	Users' selection to view the matches results. (244768 lines)
+	Version 19.7:     Sep 17, 2019	New actions to view the matches results. (244664 lines)
 					6 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1795','es','N','Seleccionar fechas para mis result. partidas');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1796','es','N','Ver mis resultados de partidas');

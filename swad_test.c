@@ -146,7 +146,7 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void Tst_PutFormToViewResultsOfUsersTests (Act_Action_t Action);
+static void Tst_PutFormToViewTstResults (Act_Action_t Action);
 
 static void Tst_GetQuestionsAndAnswersFromForm (void);
 static void Tst_ShowTstTotalMark (double TotalScore);
@@ -327,12 +327,12 @@ void Tst_ShowFormAskTst (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         Tst_PutFormToViewResultsOfUsersTests (ActReqSeeMyTstRes);
+         Tst_PutFormToViewTstResults (ActReqSeeMyTstRes);
          break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-         Tst_PutFormToViewResultsOfUsersTests (ActReqSeeUsrTstRes);
+         Tst_PutFormToViewTstResults (ActReqSeeUsrTstRes);
 	 break;
       default:
 	 break;
@@ -407,7 +407,7 @@ void Tst_ShowFormAskTst (void)
 /*************** Write a form to go to result of users' tests ****************/
 /*****************************************************************************/
 
-static void Tst_PutFormToViewResultsOfUsersTests (Act_Action_t Action)
+static void Tst_PutFormToViewTstResults (Act_Action_t Action)
   {
    extern const char *Txt_Results;
 
@@ -7316,7 +7316,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Hie_Level_t Scope,Ts
 /************ Select users and dates to show their test results **************/
 /*****************************************************************************/
 
-void Tst_SelUsrsToSeeUsrsTestResults (void)
+void Tst_SelUsrsToViewUsrsTstResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -7525,7 +7525,7 @@ void Tst_ShowUsrsTestResults (void)
       // ...write warning alert
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
       // ...and show again the form
-      Tst_SelUsrsToSeeUsrsTestResults ();
+      Tst_SelUsrsToViewUsrsTstResults ();
      }
 
    /***** Free memory used by list of selected users' codes *****/
