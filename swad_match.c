@@ -134,7 +134,6 @@ static Mch_Showing_t Mch_GetShowingFromStr (const char *Str);
 static void Mch_PutParamCurrentMchCod (void);
 static void Mch_PutParamMchCod (long MchCod);
 static long Mch_GetParamMchCod (void);
-static long Mch_GetParamMchResCod (void);
 
 static void Mch_PutButtonNewMatch (long GamCod);
 
@@ -201,7 +200,7 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 
 static void Mch_ShowHeaderMchResults (void);
 static void Mch_ShowMchResults (struct UsrData *UsrDat);
-static void Mch_GetMatchResultDataByMchCod (long MchResCod,
+static void Mch_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             unsigned *NumQsts,
 					    unsigned *NumQstsNotBlank,
@@ -825,16 +824,6 @@ static long Mch_GetParamMchCod (void)
   {
    /***** Get code of match *****/
    return Par_GetParToLong ("MchCod");
-  }
-
-/*****************************************************************************/
-/****************** Get parameter with code of match result ******************/
-/*****************************************************************************/
-
-static long Mch_GetParamMchResCod (void)
-  {
-   /***** Get code of match *****/
-   return Par_GetParToLong ("MchResCod");
   }
 
 /*****************************************************************************/
@@ -2877,7 +2866,6 @@ static void Mch_ShowMchResults (struct UsrData *UsrDat)
    unsigned NumResults;
    unsigned NumResult;
    static unsigned UniqueId = 0;
-   long MchResCod;
    long MchCod;
    Dat_StartEndTime_t StartEndTime;
    unsigned NumQstsInThisResult;
@@ -2892,13 +2880,12 @@ static void Mch_ShowMchResults (struct UsrData *UsrDat)
    /***** Make database query *****/
    NumResults =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches results of a user",
-			      "SELECT mch_results.MchResCod,"			// row[0]
-			             "mch_results.MchCod,"			// row[1]
-			             "UNIX_TIMESTAMP(mch_matches.StartTime),"	// row[2]
-			             "UNIX_TIMESTAMP(mch_matches.EndTime),"	// row[3]
-			             "mch_results.NumQsts,"			// row[4]
-			             "mch_results.NumQstsNotBlank,"		// row[5]
-			             "mch_results.Score"			// row[6]
+			      "SELECT mch_results.MchCod,"			// row[0]
+			             "UNIX_TIMESTAMP(mch_matches.StartTime),"	// row[1]
+			             "UNIX_TIMESTAMP(mch_matches.EndTime),"	// row[2]
+			             "mch_results.NumQsts,"			// row[3]
+			             "mch_results.NumQstsNotBlank,"		// row[4]
+			             "mch_results.Score"			// row[5]
 			      " FROM mch_results,mch_matches,gam_games"
 			      " WHERE mch_results.UsrCod=%ld"
 			      " AND mch_results.MchCod=mch_matches.MchCod"
@@ -2906,7 +2893,7 @@ static void Mch_ShowMchResults (struct UsrData *UsrDat)
 			      " AND gam_games.CrsCod=%ld"			// Extra check
 			      " AND mch_matches.EndTime>=FROM_UNIXTIME(%ld)"
 			      " AND mch_matches.StartTime<=FROM_UNIXTIME(%ld)"
-			      " ORDER BY MchResCod",
+			      " ORDER BY MchCod",
 			      UsrDat->UsrCod,
 			      Gbl.Hierarchy.Crs.CrsCod,
 			      (long) Gbl.DateRange.TimeUTC[Dat_START_TIME],
@@ -2925,23 +2912,19 @@ static void Mch_ShowMchResults (struct UsrData *UsrDat)
         {
          row = mysql_fetch_row (mysql_res);
 
-         /* Get match result code (row[0]) */
-	 if ((MchResCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of result.");
-
-         /* Get match code (row[1]) */
-	 if ((MchCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
+         /* Get match code (row[0]) */
+	 if ((MchCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of match.");
 
          if (NumResult)
             fprintf (Gbl.F.Out,"<tr>");
 
-         /* Write start/end times (row[2], row[3] hold UTC start/end times) */
+         /* Write start/end times (row[1], row[2] hold UTC start/end times) */
          for (StartEndTime = (Dat_StartEndTime_t) 0;
 	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	      StartEndTime++)
            {
-	    TimeUTC[0] = Dat_GetUNIXTimeFromStr (row[2 + StartEndTime]);
+	    TimeUTC[0] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
 	    UniqueId++;
 	    fprintf (Gbl.F.Out,"<td id =\"mch_time_%u_%u\""
 		               " class=\"%s RIGHT_TOP COLOR%u\">"
@@ -2957,21 +2940,21 @@ static void Mch_ShowMchResults (struct UsrData *UsrDat)
 		     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
            }
 
-         /* Get number of questions (row[4]) */
-         if (sscanf (row[4],"%u",&NumQstsInThisResult) != 1)
+         /* Get number of questions (row[3]) */
+         if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
             NumQstsInThisResult = 0;
 	 if (Gbl.Test.AllowTeachers)
 	    NumTotalQsts += NumQstsInThisResult;
 
-         /* Get number of questions not blank (row[5]) */
-         if (sscanf (row[5],"%u",&NumQstsNotBlankInThisResult) != 1)
+         /* Get number of questions not blank (row[4]) */
+         if (sscanf (row[4],"%u",&NumQstsNotBlankInThisResult) != 1)
             NumQstsNotBlankInThisResult = 0;
 	 if (Gbl.Test.AllowTeachers)
 	    NumTotalQstsNotBlank += NumQstsNotBlankInThisResult;
 
-         /* Get score (row[6]) */
+         /* Get score (row[5]) */
 	 Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-         if (sscanf (row[6],"%lf",&ScoreInThisResult) != 1)
+         if (sscanf (row[5],"%lf",&ScoreInThisResult) != 1)
             ScoreInThisResult = 0.0;
          Str_SetDecimalPointToLocal ();	// Return to local system
 	 TotalScoreOfAllResults += ScoreInThisResult;
@@ -3055,7 +3038,7 @@ void Mch_ShowOneMchResult (void)
    extern const char *Txt_non_blank_QUESTIONS;
    extern const char *Txt_Score;
    extern const char *Txt_out_of_PART_OF_A_SCORE;
-   long MchResCod;
+   long MchCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];	// Match result UTC date-time
    unsigned NumQstsNotBlank;
    double TotalScore;
@@ -3066,11 +3049,11 @@ void Mch_ShowOneMchResult (void)
    bool ICanViewScore;
 
    /***** Get the code of the test *****/
-   if ((MchResCod = Mch_GetParamMchResCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of match result is missing.");
+   if ((MchCod = Mch_GetParamMchCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of match is missing.");
 
    /***** Get test result data *****/
-   Mch_GetMatchResultDataByMchCod (MchResCod,
+   Mch_GetMatchResultDataByMchCod (MchCod,Gbl.Usrs.Other.UsrDat.UsrCod,
 				   TimeUTC,
 				   &Gbl.Test.NumQsts,
 				   &NumQstsNotBlank,
@@ -3242,7 +3225,7 @@ void Mch_ShowOneMchResult (void)
 /************* Get data of a match result using its match code ***************/
 /*****************************************************************************/
 
-static void Mch_GetMatchResultDataByMchCod (long MchResCod,
+static void Mch_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             unsigned *NumQsts,
 					    unsigned *NumQstsNotBlank,
@@ -3255,44 +3238,38 @@ static void Mch_GetMatchResultDataByMchCod (long MchResCod,
    /***** Make database query *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data"
 				  " of a test result of a user",
-		       "SELECT mch_results.UsrCod,"				// row[0]
-			      "UNIX_TIMESTAMP(mch_matches.StartTime),"		// row[2]
+		       "SELECT UNIX_TIMESTAMP(mch_matches.StartTime),"		// row[1]
 			      "UNIX_TIMESTAMP(mch_matches.EndTime),"		// row[2]
 		              "mch_results.NumQsts,"				// row[3]
 		              "mch_results.NumQstsNotBlank,"			// row[4]
 		              "mch_results.Score"				// row[5]
 		       " FROM mch_results,mch_matches"
-		       " WHERE mch_results.MchResCod=%ld"
+		       " WHERE mch_results.MchCod=%ld"
+		       " AND mch_results.UsrCod=%ld"
 		       " AND mch_results.MchCod=mch_matches.MchCod"
 		       " AND mch_matches.CrsCod=%ld",	// Extra check
-		       MchResCod,
+		       MchCod,UsrCod,
 		       Gbl.Hierarchy.Crs.CrsCod) == 1)
      {
       row = mysql_fetch_row (mysql_res);
 
-      /* Get user code (row[0]) */
-      Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get if teachers are allowed to see this test result (row[1]) */
-      Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
-
-      /* Get start time (row[1] and row[2] hold UTC date-times) */
+      /* Get start time (row[0] and row[1] hold UTC date-times) */
       for (StartEndTime = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
-         TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
+         TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[StartEndTime]);
 
-      /* Get number of questions (row[3]) */
-      if (sscanf (row[3],"%u",NumQsts) != 1)
+      /* Get number of questions (row[2]) */
+      if (sscanf (row[2],"%u",NumQsts) != 1)
 	 *NumQsts = 0;
 
-      /* Get number of questions not blank (row[4]) */
-      if (sscanf (row[4],"%u",NumQstsNotBlank) != 1)
+      /* Get number of questions not blank (row[3]) */
+      if (sscanf (row[3],"%u",NumQstsNotBlank) != 1)
 	 *NumQstsNotBlank = 0;
 
-      /* Get score (row[5]) */
+      /* Get score (row[4]) */
       Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
-      if (sscanf (row[5],"%lf",Score) != 1)
+      if (sscanf (row[4],"%lf",Score) != 1)
 	 *Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
