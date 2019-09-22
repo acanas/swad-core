@@ -18036,6 +18036,27 @@ const char *Txt_MATCH_respond =
 	 "respondem";
 #endif
 
+const char *Txt_Match_result =
+#if   L==1	// ca
+	"Resultat de la partida";
+#elif L==2	// de
+	"Spielergebnis";
+#elif L==3	// en
+	"Match result";
+#elif L==4	// es
+	"Resultado de la partida";
+#elif L==5	// fr
+	"R&eacute;sultat du match";
+#elif L==6	// gn
+	"Resultado de la partida";	// Okoteve traducción
+#elif L==7	// it
+	"Risultato della partita";
+#elif L==8	// pl
+	"Wynik mecz";
+#elif L==9	// pt
+	"Resultado do jogo";
+#endif
+
 const char *Txt_Matches =	// of a game
 #if   L==1	// ca
 	"Partides";

@@ -1,7 +1,7 @@
-// swad_match.h: matches in games using remote control
+// swad_cookie.h:  user's preferences about cookies
 
-#ifndef _SWAD_MCH
-#define _SWAD_MCH
+#ifndef _SWAD_COO
+#define _SWAD_COO
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,51 +27,17 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_scope.h"
-
 /*****************************************************************************/
-/************************** Public types and constants ***********************/
+/************************* Public types and constants ************************/
 /*****************************************************************************/
 
-#define Mch_NEW_MATCH_SECTION_ID	"new_match"
-
-#define Mch_AFTER_LAST_QUESTION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a match is finished
+#define Coo_COOKIES_ID	"cookies"
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch);
-
-void Mch_RequestRemoveMatchTch (void);
-void Mch_RemoveMatchTch (void);
-
-void Mch_CreateNewMatchTch (void);
-void Mch_RequestStartResumeMatchTch (void);
-void Mch_PauseMatchTch (void);
-void Mch_ResumeMatchTch (void);
-void Mch_ToggleDisplayResultsMatchTch (void);
-void Mch_BackMatchTch (void);
-void Mch_ForwardMatchTch (void);
-
-void Mch_ShowFinishedMatchResults (void);
-
-void Mch_GetMatchBeingPlayed (void);
-void Mch_ShowMatchToMeAsStd (void);
-void Mch_RefreshMatchTch (void);
-void Mch_RefreshMatchStd (void);
-
-void Mch_ReceiveQstAnsFromStd (void);
-
-void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd,
-					       unsigned NumAnswerersQst,bool Correct);
-unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd);
-
-void Mch_PutFormToViewMchResults (Act_Action_t Action);
-void Mch_SelDatesToSeeMyMchResults (void);
-void Mch_ShowMyMchResults (void);
-void Mch_SelUsrsToViewUsrsMchResults (void);
-void Mch_ShowUsrsMchResults (void);
-void Mch_ShowOneMchResult (void);
+void Coo_EditMyPrefsOnCookies (void);
+void Coo_ChangeMyPrefsCookies (void);
 
 #endif

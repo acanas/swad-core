@@ -168,6 +168,8 @@ void Tst_EnableTag (void);
 void Tst_DisableTag (void);
 void Tst_RenameTag (void);
 
+void Tst_GetConfigTstFromDB (void);
+
 void Tst_GetConfigFromRow (MYSQL_ROW row);
 bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void);
 void Tst_ReceiveConfigTst (void);
@@ -196,10 +198,10 @@ void Tst_FreeTagsList (void);
 void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 
 void Tst_SelUsrsToViewUsrsTstResults (void);
-void Tst_SelDatesToSeeMyTestResults (void);
-void Tst_ShowUsrsTestResults (void);
-void Tst_ShowMyTestResults (void);
-void Tst_ShowOneTestResult (void);
+void Tst_SelDatesToSeeMyTstResults (void);
+void Tst_ShowMyTstResults (void);
+void Tst_ShowUsrsTstResults (void);
+void Tst_ShowOneTstResult (void);
 void Tst_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod);
 void Tst_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void Tst_RemoveCrsTestResults (long CrsCod);

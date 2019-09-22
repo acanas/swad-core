@@ -1243,6 +1243,28 @@ const char *Hlp_ASSESSMENT_Tests_results =
 	"ASSESSMENT.Tests.en#test-results";		// TODO: Change to #results
 #endif
 
+
+const char *Hlp_ASSESSMENT_Games_results =
+#if   L==1
+	"ASSESSMENT.Games.es#resultados";
+#elif L==2
+	"ASSESSMENT.Games.en#results";
+#elif L==3
+	"ASSESSMENT.Games.en#results";
+#elif L==4
+	"ASSESSMENT.Games.es#resultados";
+#elif L==5
+	"ASSESSMENT.Games.en#results";
+#elif L==6
+	"ASSESSMENT.Games.es#resultados";
+#elif L==7
+	"ASSESSMENT.Games.en#results";
+#elif L==8
+	"ASSESSMENT.Games.en#results";
+#elif L==9
+	"ASSESSMENT.Games.en#results";
+#endif
+
 const char *Hlp_ASSESSMENT_Surveys =
 #if   L==1
 	"ASSESSMENT.Surveys.es";

@@ -39,6 +39,7 @@
 #include "swad_game.h"
 #include "swad_global.h"
 #include "swad_group.h"
+#include "swad_ID.h"
 #include "swad_match.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
@@ -131,8 +132,9 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 static Mch_Showing_t Mch_GetShowingFromStr (const char *Str);
 
 static void Mch_PutParamCurrentMchCod (void);
-static void Mch_PutParamMatchCod (long MchCod);
-static long Mch_GetParamMatchCod (void);
+static void Mch_PutParamMchCod (long MchCod);
+static long Mch_GetParamMchCod (void);
+static long Mch_GetParamMchResCod (void);
 
 static void Mch_PutButtonNewMatch (long GamCod);
 
@@ -194,6 +196,15 @@ static int Mch_GetQstAnsFromDB (long MchCod,unsigned QstInd);
 static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQst,bool Correct);
+
+static void Mch_ShowHeaderMchResults (void);
+static void Mch_ShowMchResults (struct UsrData *UsrDat);
+static void Mch_GetMatchResultDataByMchCod (long MchResCod,
+					    time_t *StartTimeUTC,
+					    time_t *EndTimeUTC,
+                                            unsigned *NumQsts,
+					    unsigned *NumQstsNotBlank,
+					    double *Score);
 
 /*****************************************************************************/
 /************************* List the matches of a game ************************/
@@ -416,7 +427,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 
       /* Put icon to remove the match */
       Frm_StartForm (ActReqRemMchTch);
-      Mch_PutParamMatchCod (Match.MchCod);
+      Mch_PutParamMchCod (Match.MchCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
 
@@ -691,7 +702,7 @@ void Mch_RequestRemoveMatchTch (void)
 
    /***** Get parameters *****/
    /* Get match code */
-   if ((Match.MchCod = Mch_GetParamMatchCod ()) == -1L)
+   if ((Match.MchCod = Mch_GetParamMchCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of match is missing.");
 
    /***** Get data of the match from database *****/
@@ -722,7 +733,7 @@ void Mch_RemoveMatchTch (void)
 
    /***** Get parameters *****/
    /* Get match code */
-   if ((Match.MchCod = Mch_GetParamMatchCod ()) == -1L)
+   if ((Match.MchCod = Mch_GetParamMchCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of match is missing.");
 
    /***** Get data of the match from database *****/
@@ -798,14 +809,14 @@ void Mch_RemoveMatchTch (void)
 static void Mch_PutParamCurrentMchCod (void)
   {
    if (Mch_CurrentMchCod > 0)
-      Mch_PutParamMatchCod (Mch_CurrentMchCod);
+      Mch_PutParamMchCod (Mch_CurrentMchCod);
   }
 
 /*****************************************************************************/
 /******************** Write parameter with code of match **********************/
 /*****************************************************************************/
 
-static void Mch_PutParamMatchCod (long MchCod)
+static void Mch_PutParamMchCod (long MchCod)
   {
    Par_PutHiddenParamLong ("MchCod",MchCod);
   }
@@ -814,10 +825,20 @@ static void Mch_PutParamMatchCod (long MchCod)
 /********************* Get parameter with code of match **********************/
 /*****************************************************************************/
 
-static long Mch_GetParamMatchCod (void)
+static long Mch_GetParamMchCod (void)
   {
    /***** Get code of match *****/
    return Par_GetParToLong ("MchCod");
+  }
+
+/*****************************************************************************/
+/****************** Get parameter with code of match result ******************/
+/*****************************************************************************/
+
+static long Mch_GetParamMchResCod (void)
+  {
+   /***** Get code of match *****/
+   return Par_GetParToLong ("MchResCod");
   }
 
 /*****************************************************************************/
@@ -1727,7 +1748,7 @@ static void Mch_PutCheckboxResult (struct Match *Match)
 
    /***** Start form *****/
    Frm_StartForm (ActChgDisResMchTch);
-   Mch_PutParamMatchCod (Match->MchCod);	// Current match being played
+   Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
    /***** Put icon with link *****/
    /* Submitting onmousedown instead of default onclick
@@ -1933,7 +1954,7 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	       is necessary in order to be fast
 	       and not lose clicks due to refresh */
 	    Frm_StartForm (ActAnsMchQstStd);
-	    Mch_PutParamMatchCod (Match->MchCod);	// Current match being played
+	    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 	    Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 	    Mch_PutParamAnswer (Index);			// Index for this option
 	    fprintf (Gbl.F.Out,"<button type=\"submit\""
@@ -1999,7 +2020,7 @@ static void Mch_PutBigButton (Act_Action_t NextAction,long MchCod,
   {
    /***** Start form *****/
    Frm_StartForm (NextAction);
-   Mch_PutParamMatchCod (MchCod);
+   Mch_PutParamMchCod (MchCod);
 
    /***** Put icon with link *****/
    /* Submitting onmousedown instead of default onclick
@@ -2151,7 +2172,7 @@ void Mch_ShowFinishedMatchResults (void)
 void Mch_GetMatchBeingPlayed (void)
   {
    /***** Get match code ****/
-   if ((Gbl.Games.MchCodBeingPlayed = Mch_GetParamMatchCod ()) == -1L)
+   if ((Gbl.Games.MchCodBeingPlayed = Mch_GetParamMchCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of match is missing.");
   }
 
@@ -2454,12 +2475,64 @@ void Mch_PutFormToViewMchResults (Act_Action_t Action)
   }
 
 /*****************************************************************************/
+/****************** Select dates to show my matches results ******************/
+/*****************************************************************************/
+
+void Mch_SelDatesToSeeMyMchResults (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Games_results;
+   extern const char *Txt_Results;
+   extern const char *Txt_View_matches_results;
+
+   /***** Start form *****/
+   Frm_StartForm (ActSeeMyMchRes);
+
+   /***** Start box and table *****/
+   Box_StartBoxTable (NULL,Txt_Results,NULL,
+                      Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
+   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
+
+   /***** End table, send button and end box *****/
+   Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_View_matches_results);
+
+   /***** End form *****/
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/*************************** Show my matches results *************************/
+/*****************************************************************************/
+
+void Mch_ShowMyMchResults (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Games_results;
+   extern const char *Txt_Results;
+
+   /***** Get starting and ending dates *****/
+   Dat_GetIniEndDatesFromForm ();
+
+   /***** Start box and table *****/
+   Box_StartBoxTable (NULL,Txt_Results,NULL,
+                      Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
+
+   /***** Header of the table with the list of users *****/
+   Mch_ShowHeaderMchResults ();
+
+   /***** List my test results *****/
+   // Tst_GetConfigTstFromDB ();	// To get feedback type	// TODO: Change to matches results
+   Mch_ShowMchResults (&Gbl.Usrs.Me.UsrDat);
+
+   /***** End table and box *****/
+   Box_EndBoxTable ();
+  }
+
+/*****************************************************************************/
 /*********** Select users and dates to show their matches results ************/
 /*****************************************************************************/
 
 void Mch_SelUsrsToViewUsrsMchResults (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests_results;	// TODO: Change to matches results
+   extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Results;
    extern const char *Txt_Users;
@@ -2484,7 +2557,7 @@ void Mch_SelUsrsToViewUsrsMchResults (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Results,NULL,
-                 Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
+                 Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (NULL,
@@ -2553,4 +2626,583 @@ void Mch_SelUsrsToViewUsrsMchResults (void)
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
+  }
+
+/*****************************************************************************/
+/****************** Show matches results for several users *******************/
+/*****************************************************************************/
+
+void Mch_ShowUsrsMchResults (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Games_results;
+   extern const char *Txt_Results;
+   extern const char *Txt_You_must_select_one_ore_more_users;
+   const char *Ptr;
+
+   /***** Get list of the selected users's IDs *****/
+   Usr_GetListsSelectedUsrsCods ();
+
+   /***** Get starting and ending dates *****/
+   Dat_GetIniEndDatesFromForm ();
+
+   /***** Check the number of users whose tests results will be shown *****/
+   if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
+     {
+      /***** Start box and table *****/
+      Box_StartBoxTable (NULL,Txt_Results,NULL,
+                         Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
+
+      /***** Header of the table with the list of users *****/
+      Mch_ShowHeaderMchResults ();
+
+      /***** List the test exams of the selected users *****/
+      Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
+      while (*Ptr)
+	{
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
+	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
+	    if (Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))	// TODO: Change to matches results
+	       /***** Show matches results *****/
+	       Mch_ShowMchResults (&Gbl.Usrs.Other.UsrDat);
+	}
+
+      /***** End table and box *****/
+      Box_EndBoxTable ();
+     }
+   else	// If no users are selected...
+     {
+      // ...write warning alert
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+      // ...and show again the form
+      Mch_SelUsrsToViewUsrsMchResults ();
+     }
+
+   /***** Free memory used by list of selected users' codes *****/
+   Usr_FreeListsSelectedUsrsCods ();
+  }
+
+/*****************************************************************************/
+/********************* Show header of my matches results *********************/
+/*****************************************************************************/
+
+static void Mch_ShowHeaderMchResults (void)
+  {
+   extern const char *Txt_User[Usr_NUM_SEXS];
+   extern const char *Txt_Date;
+   extern const char *Txt_Questions;
+   extern const char *Txt_Non_blank_BR_questions;
+   extern const char *Txt_Total_BR_score;
+   extern const char *Txt_Average_BR_score_BR_per_question_BR_from_0_to_1;
+   extern const char *Txt_Score;
+   extern const char *Txt_out_of_PART_OF_A_SCORE;
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<th colspan=\"2\" class=\"CENTER_TOP\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"RIGHT_TOP\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"RIGHT_TOP\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"RIGHT_TOP\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"RIGHT_TOP\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"RIGHT_TOP\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"RIGHT_TOP\">"
+		      "%s<br />%s<br />%u"
+		      "</th>"
+		      "<th></th>"
+		      "</tr>",
+	    Txt_User[Usr_SEX_UNKNOWN],
+	    Txt_Date,
+	    Txt_Questions,
+	    Txt_Non_blank_BR_questions,
+	    Txt_Total_BR_score,
+	    Txt_Average_BR_score_BR_per_question_BR_from_0_to_1,
+	    Txt_Score,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+  }
+
+/*****************************************************************************/
+/*********** Show the test results of a user in the current course ***********/
+/*****************************************************************************/
+
+static void Mch_ShowMchResults (struct UsrData *UsrDat)
+  {
+   extern const char *Txt_Today;
+   extern const char *Txt_View_test;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumExams;
+   unsigned NumTest;
+   static unsigned UniqueId = 0;
+   long TstCod;
+   unsigned NumQstsInThisTest;
+   unsigned NumQstsNotBlankInThisTest;
+   unsigned NumTotalQsts = 0;
+   unsigned NumTotalQstsNotBlank = 0;
+   double ScoreInThisTest;
+   double TotalScoreOfAllTests = 0.0;
+   unsigned NumExamsVisibleByTchs = 0;
+   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
+   bool ICanViewTest;
+   bool ICanViewScore;
+   time_t TimeUTC;
+   char *ClassDat;
+
+   /***** Make database query *****/
+   NumExams =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
+			      "SELECT TstCod,"			// row[0]
+			             "AllowTeachers,"		// row[1]
+			             "UNIX_TIMESTAMP(TstTime),"	// row[2]
+			             "NumQsts,"			// row[3]
+			             "NumQstsNotBlank,"		// row[4]
+			             "Score"			// row[5]
+			      " FROM tst_exams"
+			      " WHERE CrsCod=%ld AND UsrCod=%ld"
+			      " AND TstTime>=FROM_UNIXTIME(%ld)"
+			      " AND TstTime<=FROM_UNIXTIME(%ld)"
+			      " ORDER BY TstCod",
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      UsrDat->UsrCod,
+			      (long) Gbl.DateRange.TimeUTC[0],
+			      (long) Gbl.DateRange.TimeUTC[1]);
+
+   /***** Show user's data *****/
+   fprintf (Gbl.F.Out,"<tr>");
+   // Tst_ShowDataUsr (UsrDat,NumExams);	// TODO: Change to matches results
+
+   /***** Get and print test results *****/
+   if (NumExams)
+     {
+      for (NumTest = 0;
+           NumTest < NumExams;
+           NumTest++)
+        {
+         row = mysql_fetch_row (mysql_res);
+
+         /* Get test code (row[0]) */
+	 if ((TstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of test result.");
+
+	 /* Get if teachers are allowed to see this test result (row[1]) */
+	 Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
+	 ClassDat = Gbl.Test.AllowTeachers ? "DAT" :
+	                                     "DAT_LIGHT";
+
+	 switch (Gbl.Usrs.Me.Role.Logged)
+	   {
+	    case Rol_STD:
+	       ICanViewTest  = ItsMe;
+	       ICanViewScore = ItsMe &&
+		               Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	    case Rol_DEG_ADM:
+	    case Rol_CTR_ADM:
+	    case Rol_INS_ADM:
+	       ICanViewTest  =
+	       ICanViewScore = ItsMe ||
+	                       Gbl.Test.AllowTeachers;
+	       break;
+	    case Rol_SYS_ADM:
+	       ICanViewTest  =
+	       ICanViewScore = true;
+	       break;
+	    default:
+	       ICanViewTest  =
+	       ICanViewScore = false;
+               break;
+	   }
+
+         if (NumTest)
+            fprintf (Gbl.F.Out,"<tr>");
+
+         /* Write date and time (row[2] holds UTC date-time) */
+         TimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
+         UniqueId++;
+	 fprintf (Gbl.F.Out,"<td id =\"tst_date_%u\" class=\"%s RIGHT_TOP COLOR%u\">"
+			    "<script type=\"text/javascript\">"
+			    "writeLocalDateHMSFromUTC('tst_date_%u',%ld,"
+			    "%u,',&nbsp;','%s',true,false,0x7);"
+			    "</script>"
+			    "</td>",
+	          UniqueId,ClassDat,Gbl.RowEvenOdd,
+	          UniqueId,(long) TimeUTC,
+	          (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+
+         /* Get number of questions (row[3]) */
+         if (sscanf (row[3],"%u",&NumQstsInThisTest) != 1)
+            NumQstsInThisTest = 0;
+	 if (Gbl.Test.AllowTeachers)
+	    NumTotalQsts += NumQstsInThisTest;
+
+         /* Get number of questions not blank (row[4]) */
+         if (sscanf (row[4],"%u",&NumQstsNotBlankInThisTest) != 1)
+            NumQstsNotBlankInThisTest = 0;
+	 if (Gbl.Test.AllowTeachers)
+	    NumTotalQstsNotBlank += NumQstsNotBlankInThisTest;
+
+         /* Get score (row[5]) */
+	 Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
+         if (sscanf (row[5],"%lf",&ScoreInThisTest) != 1)
+            ScoreInThisTest = 0.0;
+         Str_SetDecimalPointToLocal ();	// Return to local system
+	 if (Gbl.Test.AllowTeachers)
+	    TotalScoreOfAllTests += ScoreInThisTest;
+
+         /* Write number of questions */
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
+	 if (ICanViewTest)
+	    fprintf (Gbl.F.Out,"%u",NumQstsInThisTest);
+	 fprintf (Gbl.F.Out,"</td>");
+
+         /* Write number of questions not blank */
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
+	 if (ICanViewTest)
+	    fprintf (Gbl.F.Out,"%u",NumQstsNotBlankInThisTest);
+	 fprintf (Gbl.F.Out,"</td>");
+
+	 /* Write score */
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
+	 if (ICanViewScore)
+	    fprintf (Gbl.F.Out,"%.2lf",ScoreInThisTest);
+	 fprintf (Gbl.F.Out,"</td>");
+
+         /* Write average score per question */
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
+	 if (ICanViewScore)
+	    fprintf (Gbl.F.Out,"%.2lf",
+		     NumQstsInThisTest ? ScoreInThisTest / (double) NumQstsInThisTest :
+			                 0.0);
+	 fprintf (Gbl.F.Out,"</td>");
+
+         /* Write score over Tst_SCORE_MAX */
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
+	 if (ICanViewScore)
+	    fprintf (Gbl.F.Out,"%.2lf",
+		     NumQstsInThisTest ? ScoreInThisTest * Tst_SCORE_MAX / (double) NumQstsInThisTest :
+			                 0.0);
+	 fprintf (Gbl.F.Out,"</td>");
+
+	 /* Link to show this result */
+	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
+		  Gbl.RowEvenOdd);
+	 if (ICanViewTest)
+	   {
+	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstRes ? ActSeeOneTstResMe :
+						              ActSeeOneTstResOth);
+	    // Tst_PutParamTstCod (TstCod);		// TODO: Change to matches results
+	    Ico_PutIconLink ("tasks.svg",Txt_View_test);
+	    Frm_EndForm ();
+	   }
+	 fprintf (Gbl.F.Out,"</td>"
+                            "</tr>");
+
+	 if (Gbl.Test.AllowTeachers)
+            NumExamsVisibleByTchs++;
+        }
+
+      /***** Write totals for this user *****/
+      // Tst_ShowTestResultsSummaryRow (ItsMe,NumExamsVisibleByTchs,
+      //                                NumTotalQsts,NumTotalQstsNotBlank,
+      //                                TotalScoreOfAllTests);	// TODO: Change to matches results
+     }
+   else
+      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
+	                 "<td class=\"COLOR%u\"></td>"
+	                 "</tr>",
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd,
+	       Gbl.RowEvenOdd);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+  }
+
+/*****************************************************************************/
+/******************* Show one match result of another user *******************/
+/*****************************************************************************/
+
+void Mch_ShowOneMchResult (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Games_results;
+   extern const char *Txt_Match_result;
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_Date;
+   extern const char *Txt_Today;
+   extern const char *Txt_Questions;
+   extern const char *Txt_non_blank_QUESTIONS;
+   extern const char *Txt_Score;
+   extern const char *Txt_out_of_PART_OF_A_SCORE;
+   long MchResCod;
+   time_t StartTimeUTC = 0;	// Match result UTC date-time, initialized to avoid warning
+   time_t EndTimeUTC = 0;	// Match result UTC date-time, initialized to avoid warning
+   unsigned NumQstsNotBlank;
+   double TotalScore;
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX + 1];
+   bool ItsMe;
+   bool ICanViewTest;
+   bool ICanViewScore;
+
+   /***** Get the code of the test *****/
+   if ((MchResCod = Mch_GetParamMchResCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of match result is missing.");
+
+   /***** Get test result data *****/
+   Mch_GetMatchResultDataByMchCod (MchResCod,
+				   &StartTimeUTC,
+				   &EndTimeUTC,
+				   &Gbl.Test.NumQsts,
+				   &NumQstsNotBlank,
+				   &TotalScore);
+   Gbl.Test.Config.Feedback = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
+
+   /***** Check if I can view this test result *****/
+   ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 ICanViewTest = ItsMe;
+	 if (ItsMe)
+	   {
+	    Tst_GetConfigTstFromDB ();	// To get feedback type
+	    ICanViewScore = Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
+	   }
+	 else
+	    ICanViewScore = false;
+	 break;
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActSeeOneTstResMe:
+	       ICanViewTest  =
+	       ICanViewScore = ItsMe;
+	       break;
+	    case ActSeeOneTstResOth:
+	       ICanViewTest  =
+	       ICanViewScore = ItsMe ||
+			       Gbl.Test.AllowTeachers;
+	       break;
+	    default:
+	       ICanViewTest  =
+	       ICanViewScore = false;
+	       break;
+	   }
+	 break;
+      case Rol_SYS_ADM:
+	 ICanViewTest  =
+	 ICanViewScore = true;
+	 break;
+      default:
+	 ICanViewTest  =
+	 ICanViewScore = false;
+	 break;
+     }
+
+   if (ICanViewTest)	// I am allowed to view this test result
+     {
+      /***** Get questions and user's answers of the test result from database *****/
+      // Tst_GetTestResultQuestionsFromDB (TstCod);	// TODO: Change to matches results
+
+      /***** Start box *****/
+      Box_StartBox (NULL,Txt_Match_result,NULL,
+                    Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
+      Lay_WriteHeaderClassPhoto (false,false,
+				 Gbl.Hierarchy.Ins.InsCod,
+				 Gbl.Hierarchy.Deg.DegCod,
+				 Gbl.Hierarchy.Crs.CrsCod);
+
+      /***** Start table *****/
+      Tbl_StartTableWideMargin (10);
+
+      /***** Header row *****/
+      /* Get data of the user who made the test */
+      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+	 Lay_ShowErrorAndExit ("User does not exists.");
+      if (!Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
+	 Lay_ShowErrorAndExit ("You can not view this test result.");
+
+      /* User */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT_N RIGHT_TOP\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_TOP\">",
+	       Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Other.UsrDat.Sex]);
+      ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
+      fprintf (Gbl.F.Out," %s",
+	       Gbl.Usrs.Other.UsrDat.Surname1);
+      if (Gbl.Usrs.Other.UsrDat.Surname2[0])
+	 fprintf (Gbl.F.Out," %s",
+		  Gbl.Usrs.Other.UsrDat.Surname2);
+      if (Gbl.Usrs.Other.UsrDat.FirstName[0])
+	 fprintf (Gbl.F.Out,", %s",
+		  Gbl.Usrs.Other.UsrDat.FirstName);
+      fprintf (Gbl.F.Out,"<br />");
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
+							   NULL,
+			"PHOTO45x60",Pho_ZOOM,false);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
+
+      /* Test dates */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT_N RIGHT_TOP\">"
+			 "%s:"
+			 "</td>"
+			 "<td id=\"match_start\" class=\"DAT LEFT_TOP\">"
+			 "<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('match_start',%ld,"
+			 "%u,',&nbsp;','%s',true,true,0x7);"
+			 "</script>"
+			 "</td>"
+			 "<td id=\"match_end\" class=\"DAT LEFT_TOP\">"
+			 "<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('match_end',%ld,"
+			 "%u,',&nbsp;','%s',true,true,0x7);"
+			 "</script>"
+			 "</td>"
+			 "</tr>",
+	       Txt_Date,
+	       StartTimeUTC,(unsigned) Gbl.Prefs.DateFormat,Txt_Today,
+	       EndTimeUTC  ,(unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+
+      /* Number of questions */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT_N RIGHT_TOP\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_TOP\">"
+			 "%u (%u %s)"
+			 "</td>"
+			 "</tr>",
+	       Txt_Questions,
+	       Gbl.Test.NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+
+      /* Score */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT_N RIGHT_TOP\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_TOP\">",
+	       Txt_Score);
+      if (ICanViewScore)
+	 fprintf (Gbl.F.Out,"%.2lf (%.2lf",
+		  TotalScore,
+		  Gbl.Test.NumQsts ? TotalScore * Tst_SCORE_MAX / (double) Gbl.Test.NumQsts :
+				     0.0);
+      else
+	 fprintf (Gbl.F.Out,"? (?");	// No feedback
+      fprintf (Gbl.F.Out," %s %u)</td>"
+			 "</tr>",
+	       Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+
+      /***** Write answers and solutions *****/
+      // Tst_ShowTestResult (TstTimeUTC);	// TODO: Change to matches results
+
+      /***** Write total mark of test *****/
+      // if (ICanViewScore)
+      //    Tst_ShowTstTotalMark (TotalScore);	// TODO: Change to matches results
+
+      /***** End table *****/
+      Tbl_EndTable ();
+
+      /***** End box *****/
+      Box_EndBox ();
+     }
+   else	// I am not allowed to view this match result
+      Lay_ShowErrorAndExit ("You can not view this match result.");
+  }
+
+/*****************************************************************************/
+/************* Get data of a match result using its match code ***************/
+/*****************************************************************************/
+
+static void Mch_GetMatchResultDataByMchCod (long MchResCod,
+					    time_t *StartTimeUTC,
+					    time_t *EndTimeUTC,
+                                            unsigned *NumQsts,
+					    unsigned *NumQstsNotBlank,
+					    double *Score)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+
+   /***** Make database query *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get data"
+				  " of a test result of a user",
+		       "SELECT mch_results.UsrCod,"				// row[0]
+			      "UNIX_TIMESTAMP(mch_matches.StartTime),"		// row[2]
+			      "UNIX_TIMESTAMP(mch_matches.EndTime),"		// row[2]
+		              "mch_results.NumQsts,"				// row[3]
+		              "mch_results.NumQstsNotBlank,"			// row[4]
+		              "mch_results.Score"				// row[5]
+		       " FROM mch_results,mch_matches"
+		       " WHERE mch_results.MchResCod=%ld"
+		       " AND mch_results.MchCod=mch_matches.MchCod"
+		       " AND mch_matches.CrsCod=%ld",	// Extra check
+		       MchResCod,
+		       Gbl.Hierarchy.Crs.CrsCod) == 1)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get user code (row[0]) */
+      Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+      /* Get if teachers are allowed to see this test result (row[1]) */
+      Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
+
+      /* Get start time (row[1] and row[2] hold UTC date-times) */
+      *StartTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
+      *EndTimeUTC   = Dat_GetUNIXTimeFromStr (row[2]);
+
+      /* Get number of questions (row[3]) */
+      if (sscanf (row[3],"%u",NumQsts) != 1)
+	 *NumQsts = 0;
+
+      /* Get number of questions not blank (row[4]) */
+      if (sscanf (row[4],"%u",NumQstsNotBlank) != 1)
+	 *NumQstsNotBlank = 0;
+
+      /* Get score (row[5]) */
+      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+      if (sscanf (row[5],"%lf",Score) != 1)
+	 *Score = 0.0;
+      Str_SetDecimalPointToLocal ();	// Return to local system
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }

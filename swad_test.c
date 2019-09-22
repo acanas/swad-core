@@ -181,7 +181,6 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt);
 static void Tst_ShowFormConfigTst (void);
 static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
                                      unsigned Value);
-static void Tst_GetConfigTstFromDB (void);
 static Tst_Pluggable_t Tst_GetPluggableFromForm (void);
 static Tst_Feedback_t Tst_GetFeedbackTypeFromForm (void);
 static void Tst_CheckAndCorrectNumbersQst (void);
@@ -290,7 +289,7 @@ static long Tst_CreateTestResultInDB (void);
 static void Tst_StoreScoreOfTestResultInDB (long TstCod,
                                           unsigned NumQstsNotBlank,double Score);
 static void Tst_ShowHeaderTestResults (void);
-static void Tst_ShowTestResults (struct UsrData *UsrDat);
+static void Tst_ShowTstResults (struct UsrData *UsrDat);
 static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams);
 static void Tst_PutParamTstCod (long TstCod);
 static long Tst_GetParamTstCod (void);
@@ -2037,7 +2036,7 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
 /*************** Get configuration of test for current course ****************/
 /*****************************************************************************/
 
-static void Tst_GetConfigTstFromDB (void)
+void Tst_GetConfigTstFromDB (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -7418,7 +7417,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
 /******************* Select dates to show my test results ********************/
 /*****************************************************************************/
 
-void Tst_SelDatesToSeeMyTestResults (void)
+void Tst_SelDatesToSeeMyTstResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
@@ -7437,6 +7436,33 @@ void Tst_SelDatesToSeeMyTestResults (void)
 
    /***** End form *****/
    Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/***************************** Show my test results **************************/
+/*****************************************************************************/
+
+void Tst_ShowMyTstResults (void)
+  {
+   extern const char *Hlp_ASSESSMENT_Tests_results;
+   extern const char *Txt_Results;
+
+   /***** Get starting and ending dates *****/
+   Dat_GetIniEndDatesFromForm ();
+
+   /***** Start box and table *****/
+   Box_StartBoxTable (NULL,Txt_Results,NULL,
+                      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
+
+   /***** Header of the table with the list of users *****/
+   Tst_ShowHeaderTestResults ();
+
+   /***** List my test results *****/
+   Tst_GetConfigTstFromDB ();	// To get feedback type
+   Tst_ShowTstResults (&Gbl.Usrs.Me.UsrDat);
+
+   /***** End table and box *****/
+   Box_EndBoxTable ();
   }
 
 /*****************************************************************************/
@@ -7481,7 +7507,7 @@ static void Tst_StoreScoreOfTestResultInDB (long TstCod,
 /******************** Show test results for several users ********************/
 /*****************************************************************************/
 
-void Tst_ShowUsrsTestResults (void)
+void Tst_ShowUsrsTstResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Results;
@@ -7514,7 +7540,7 @@ void Tst_ShowUsrsTestResults (void)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
 	    if (Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
 	       /***** Show test results *****/
-	       Tst_ShowTestResults (&Gbl.Usrs.Other.UsrDat);
+	       Tst_ShowTstResults (&Gbl.Usrs.Other.UsrDat);
 	}
 
       /***** End table and box *****/
@@ -7581,37 +7607,10 @@ static void Tst_ShowHeaderTestResults (void)
   }
 
 /*****************************************************************************/
-/***************************** Show my test results **************************/
-/*****************************************************************************/
-
-void Tst_ShowMyTestResults (void)
-  {
-   extern const char *Hlp_ASSESSMENT_Tests_results;
-   extern const char *Txt_Results;
-
-   /***** Get starting and ending dates *****/
-   Dat_GetIniEndDatesFromForm ();
-
-   /***** Start box and table *****/
-   Box_StartBoxTable (NULL,Txt_Results,NULL,
-                      Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
-
-   /***** Header of the table with the list of users *****/
-   Tst_ShowHeaderTestResults ();
-
-   /***** List my test results *****/
-   Tst_GetConfigTstFromDB ();	// To get feedback type
-   Tst_ShowTestResults (&Gbl.Usrs.Me.UsrDat);
-
-   /***** End table and box *****/
-   Box_EndBoxTable ();
-  }
-
-/*****************************************************************************/
 /*********** Show the test results of a user in the current course ***********/
 /*****************************************************************************/
 
-static void Tst_ShowTestResults (struct UsrData *UsrDat)
+static void Tst_ShowTstResults (struct UsrData *UsrDat)
   {
    extern const char *Txt_Today;
    extern const char *Txt_View_test;
@@ -7999,7 +7998,7 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
 /******************* Show one test result of another user ********************/
 /*****************************************************************************/
 
-void Tst_ShowOneTestResult (void)
+void Tst_ShowOneTstResult (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Test_result;

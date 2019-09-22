@@ -658,6 +658,18 @@ CREATE TABLE IF NOT EXISTS mch_players (
 	TS TIMESTAMP,
 	UNIQUE INDEX(MchCod,UsrCod));
 --
+-- Table mch_results: stores the current match results
+--
+CREATE TABLE IF NOT EXISTS mch_results (
+	MchResCod INT NOT NULL AUTO_INCREMENT,
+	MchCod INT NOT NULL,
+	UsrCod INT NOT NULL,
+	NumQsts INT NOT NULL DEFAULT 0,
+	NumQstsNotBlank INT NOT NULL DEFAULT 0,
+	Score DOUBLE PRECISION NOT NULL DEFAULT 0,
+	UNIQUE INDEX(MchResCod),
+	UNIQUE INDEX(MchCod,UsrCod));
+--
 -- Table gam_questions: stores the questions in the games
 --
 CREATE TABLE IF NOT EXISTS gam_questions (

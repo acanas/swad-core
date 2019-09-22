@@ -441,6 +441,12 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Al confirmar una inscripción, mostrar ficha de retroalimentación similar a la que se muestra cuando se crea un administrador. Tal y como está ahora crea confusión al usuario.
 
+// TODO: Suggested by Jose Luis Bernier Villamor: "Compartidos" debería inhabilitarse si el profesor lo quiere, porque algunos alumnos suben por error los trabajos
+// 	 Alternativa. Llamarle "Públicos" o algo así y poner la opción más alejada de Trabajos.
+// TODO: Suggested by Jose Luis Bernier Villamor: Posibilidad de que los profesores decidan en la configuración
+//						  de la asignatura si desean o no que se pueda solicitar
+//						  inscripción en la asignatura
+
 // TODO: En Eventos de asistencia, poner un icono de enlace a horario de la asignatura ¿y otro a grupos?
 // TODO: Reportado por Javier Fernández Baldomero. Un profesor debería poder cambiar la foto de un estudiante confirmado. Sale el icono, pero luego dice ue no hay permiso
 
@@ -462,12 +468,19 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.7.1 (2019-09-18)"
+#define Log_PLATFORM_VERSION	"SWAD 19.8 (2019-09-22)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
-	Version 19.7.1:   Sep 17, 2019	Users' selection to view the matches results. (244768 lines)
-	Version 19.7:     Sep 17, 2019	New actions to view the matches results. (244664 lines)
+	Version 19.8:     Sep 22, 2019	View matches results. Not finished.
+					Help links related to test and match results changed. (245412 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS mch_results (MchResCod INT NOT NULL AUTO_INCREMENT,MchCod INT NOT NULL,UsrCod INT NOT NULL,NumQsts INT NOT NULL DEFAULT 0,NumQstsNotBlank INT NOT NULL DEFAULT 0,Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(MchResCod),UNIQUE INDEX(MchCod,UsrCod));
+
+	Version 19.7.3:   Sep 19, 2019	View matches results. Not finished. (244858 lines)
+	Version 19.7.2:   Sep 19, 2019	Users' selection to view my matches results. (244789 lines)
+	Version 19.7.1:   Sep 18, 2019	Users' selection to view users' matches results. (244768 lines)
+	Version 19.7:     Sep 18, 2019	New actions to view the matches results. (244664 lines)
 					6 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1795','es','N','Seleccionar fechas para mis result. partidas');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1796','es','N','Ver mis resultados de partidas');
