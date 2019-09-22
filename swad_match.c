@@ -2663,7 +2663,7 @@ void Mch_ShowUsrsMchResults (void)
 	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
-	    if (Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))	// TODO: Change to matches results
+	    if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
 	       /***** Show matches results *****/
 	       Mch_ShowMchResults (&Gbl.Usrs.Other.UsrDat);
 	}

@@ -1259,10 +1259,59 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/************** Check if I can view test exams of another user ***************/
+/************ Check if I can view test results of another user ***************/
 /*****************************************************************************/
 
 bool Usr_CheckIfICanViewTst (const struct UsrData *UsrDat)
+  {
+   bool ItsMe;
+
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return false;
+
+   /***** 2. Fast check: Is it a valid user code? *****/
+   if (UsrDat->UsrCod <= 0)
+      return false;
+
+   /***** 3. Fast check: Is it a course selected? *****/
+   if (Gbl.Hierarchy.Crs.CrsCod <= 0)
+      return false;
+
+   /***** 4. Fast check: Am I a system admin? *****/
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      return true;
+
+   /***** 5. Fast check: Do I belong to the current course? *****/
+   if (!Gbl.Usrs.Me.IBelongToCurrentCrs)
+      return false;
+
+   /***** 6. Fast check: It's me? *****/
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
+   if (ItsMe)
+      return true;
+
+   /***** 7. Fast check: Does he/she belong to the current course? *****/
+   if (!Usr_CheckIfUsrBelongsToCurrentCrs (UsrDat))
+      return false;
+
+   /***** 8. Fast / slow check depending on roles *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
+	 return Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat);
+      case Rol_TCH:
+	 return true;
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
+/*********** Check if I can view matches results of another user *************/
+/*****************************************************************************/
+
+bool Usr_CheckIfICanViewMch (const struct UsrData *UsrDat)
   {
    bool ItsMe;
 
