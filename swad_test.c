@@ -3284,7 +3284,8 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
 			            "Feedback,"		// row[2]
 			            "MedCod,"		// row[3]
 			            "Correct"		// row[4]
-			     " FROM tst_answers WHERE QstCod=%ld ORDER BY %s",
+			     " FROM tst_answers"
+			     " WHERE QstCod=%ld ORDER BY %s",
 			     QstCod,
 			     Shuffle ? "RAND(NOW())" :
 				       "AnsInd");
@@ -3794,7 +3795,6 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
    extern const char *Txt_TST_Answer_given_by_the_user;
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
-   MYSQL_ROW row;
    char StrOneIndex[10 + 1];
    const char *Ptr;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
@@ -3805,10 +3805,152 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       char *Class;
       char *Str;
      } Ans;
-   unsigned NumOptTotInQst = 0;
-   unsigned NumOptCorrInQst = 0;
-   unsigned NumAnsGood = 0;
-   unsigned NumAnsBad = 0;
+
+   /***** Get text and correctness of answers for this question
+          from database (one row per answer) *****/
+   Tst_GetChoiceAns (mysql_res);
+
+   /***** Get indexes for this question from string *****/
+   for (NumOpt = 0, Ptr = Gbl.Test.StrIndexesOneQst[NumQst];
+	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt++)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,10);
+      if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
+         Lay_ShowErrorAndExit ("Wrong index of answer when assessing a test.");
+     }
+
+   /***** Get the user's answers for this question from string *****/
+   for (NumOpt = 0;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt++)
+      AnswersUsr[NumOpt] = false;
+   for (NumOpt = 0, Ptr = Gbl.Test.StrAnswersOneQst[NumQst];
+	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt++)
+      if (*Ptr)
+        {
+         Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,10);
+         if (sscanf (StrOneIndex,"%d",&AnsUsr) != 1)
+            Lay_ShowErrorAndExit ("Bad user's answer.");
+         if (AnsUsr < 0 || AnsUsr >= Tst_MAX_OPTIONS_PER_QUESTION)
+            Lay_ShowErrorAndExit ("Bad user's answer.");
+         AnswersUsr[AnsUsr] = true;
+        }
+
+   /***** Compute the total score of this question *****/
+   Tst_ComputeScoreQst (Indexes,AnswersUsr,ScoreThisQst,AnswerIsNotBlank);
+
+   /***** Start table *****/
+   Tbl_StartTable (2);
+   fprintf (Gbl.F.Out,"<tr>");
+   Tst_WriteHeadUserCorrect (UsrDat);
+   fprintf (Gbl.F.Out,"<td></td>"
+	              "<td></td>"
+	              "</tr>");
+
+   /***** Write answers (one row per answer) *****/
+   for (NumOpt = 0;
+	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt++)
+     {
+      fprintf (Gbl.F.Out,"<tr>");
+
+      /* Draw icon depending on user's answer */
+      if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
+        {
+         if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+             Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+           {
+            if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
+              {
+               Ans.Class = "ANS_OK";
+               Ans.Str   = "&check;";
+              }
+            else
+              {
+               Ans.Class = "ANS_BAD";
+               Ans.Str   = "&cross;";
+              }
+           }
+         else
+	   {
+	    Ans.Class = "ANS_0";
+	    Ans.Str   = "&bull;";
+	   }
+	 fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\" title=\"%s\">%s</td>",
+			    Ans.Class,Txt_TST_Answer_given_by_the_user,Ans.Str);
+        }
+      else	// This answer has NOT been selected by the user
+	 fprintf (Gbl.F.Out,"<td></td>");
+
+      /* Draw icon that indicates whether the answer is correct */
+      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+          Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+        {
+         if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
+	    fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_TOP\" title=\"%s\">&bull;</td>",
+		     Txt_TST_Answer_given_by_the_teachers);
+         else
+	    fprintf (Gbl.F.Out,"<td></td>");
+        }
+      else
+	 fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_TOP\">?</td>");
+
+      /* Answer letter (a, b, c,...) */
+      fprintf (Gbl.F.Out,"<td class=\"ANS_TXT LEFT_TOP\">"
+	                 "%c)&nbsp;"
+	                 "</td>",
+               'a' + (char) NumOpt);
+
+      /* Answer text and feedback */
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
+	                 "<div class=\"ANS_TXT\">"
+	                 "%s",
+               Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
+      Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
+                     "TEST_MED_SHOW_CONTAINER",
+                     "TEST_MED_SHOW");
+      fprintf (Gbl.F.Out,"</div>");
+      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
+	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
+	       fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\">"
+				  "%s"
+				  "</div>",
+			Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback);
+      fprintf (Gbl.F.Out,"</td>"
+	                 "</tr>");
+     }
+
+   /***** Write the total score of this question *****/
+   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
+     {
+      Tst_WriteScoreStart (4);
+      if (*ScoreThisQst == 0.0)
+         fprintf (Gbl.F.Out,"ANS_0");
+      else if (*ScoreThisQst > 0.0)
+         fprintf (Gbl.F.Out,"ANS_OK");
+      else
+         fprintf (Gbl.F.Out,"ANS_BAD");
+      fprintf (Gbl.F.Out,"\">%.2lf",*ScoreThisQst);
+      Tst_WriteScoreEnd ();
+     }
+
+   /***** End table *****/
+   Tbl_EndTable ();
+  }
+
+/*****************************************************************************/
+/************************ Get choice answer from row *************************/
+/*****************************************************************************/
+
+void Tst_GetChoiceAns (MYSQL_RES *mysql_res)
+  {
+   unsigned NumOpt;
+   MYSQL_ROW row;
 
    /***** Get text and correctness of answers for this question
           from database (one row per answer) *****/
@@ -3859,118 +4001,31 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       /***** Assign correctness (row[4]) of this answer (this option) *****/
       Gbl.Test.Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
      }
+  }
 
-   /***** Get indexes for this question from string *****/
-   for (NumOpt = 0, Ptr = Gbl.Test.StrIndexesOneQst[NumQst];
-	NumOpt < Gbl.Test.Answer.NumOptions;
-	NumOpt++)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,10);
-      if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
-         Lay_ShowErrorAndExit ("Wrong index of answer when assessing a test.");
-     }
+/*****************************************************************************/
+/********************* Compute the score of this question ********************/
+/*****************************************************************************/
 
-   /***** Get the user's answers for this question from string *****/
-   for (NumOpt = 0;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
-	NumOpt++)
-      AnswersUsr[NumOpt] = false;
-   for (NumOpt = 0, Ptr = Gbl.Test.StrAnswersOneQst[NumQst];
-	NumOpt < Gbl.Test.Answer.NumOptions;
-	NumOpt++)
-      if (*Ptr)
-        {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,10);
-         if (sscanf (StrOneIndex,"%d",&AnsUsr) != 1)
-            Lay_ShowErrorAndExit ("Bad user's answer.");
-         if (AnsUsr < 0 || AnsUsr >= Tst_MAX_OPTIONS_PER_QUESTION)
-            Lay_ShowErrorAndExit ("Bad user's answer.");
-         AnswersUsr[AnsUsr] = true;
-        }
+void Tst_ComputeScoreQst (unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],	// Indexes of all answers of this question
+                          bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION],
+			  double *ScoreThisQst,bool *AnswerIsNotBlank)
+  {
+   unsigned NumOpt;
+   unsigned NumOptTotInQst = 0;
+   unsigned NumOptCorrInQst = 0;
+   unsigned NumAnsGood = 0;
+   unsigned NumAnsBad = 0;
 
-   /***** Start table *****/
-   Tbl_StartTable (2);
-   fprintf (Gbl.F.Out,"<tr>");
-   Tst_WriteHeadUserCorrect (UsrDat);
-   fprintf (Gbl.F.Out,"<td></td>"
-	              "<td></td>"
-	              "</tr>");
-
-   /***** Write answers (one row per answer) *****/
+   /***** Compute the total score of this question *****/
    for (NumOpt = 0;
 	NumOpt < Gbl.Test.Answer.NumOptions;
 	NumOpt++)
      {
-      fprintf (Gbl.F.Out,"<tr>");
-
-      /* Draw icon depending on user's answer */
-      if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
-        {
-         if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-             Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
-           {
-            if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
-              {
-               Ans.Class = "ANS_OK";
-               Ans.Str   = "&check;";
-              }
-            else
-              {
-               Ans.Class = "ANS_BAD";
-               Ans.Str   = "&cross;";
-              }
-           }
-         else
-	   {
-	    Ans.Class = "ANS_0";
-	    Ans.Str   = "&bull;";
-	   }
-	 fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\" title=\"%s\">%s</td>",
-			    Ans.Class,Txt_TST_Answer_given_by_the_user,Ans.Str);
-        }
-      else	// This answer has NOT been selected by the user
-	 fprintf (Gbl.F.Out,"<td></td>");
-
-      /* Draw icon that indicates whether the answer is correct */
-
-      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-          Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
-        {
-         if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
-	    fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_TOP\" title=\"%s\">&bull;</td>",
-		     Txt_TST_Answer_given_by_the_teachers);
-         else
-	    fprintf (Gbl.F.Out,"<td></td>");
-        }
-      else
-	 fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_TOP\">?</td>");
-
-      /* Answer letter (a, b, c,...) */
-      fprintf (Gbl.F.Out,"<td class=\"ANS_TXT LEFT_TOP\">"
-	                 "%c)&nbsp;"
-	                 "</td>",
-               'a' + (char) NumOpt);
-
-      /* Answer text and feedback */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-	                 "<div class=\"ANS_TXT\">"
-	                 "%s",
-               Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
-      Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
-                     "TEST_MED_SHOW_CONTAINER",
-                     "TEST_MED_SHOW");
-      fprintf (Gbl.F.Out,"</div>");
-      if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
-	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
-	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
-	       fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\">"
-				  "%s"
-				  "</div>",
-			Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
       NumOptTotInQst++;
+      if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
+         NumOptCorrInQst++;
+
       if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
         {
          if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
@@ -3978,14 +4033,10 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
          else
             NumAnsBad++;
         }
-      if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
-         NumOptCorrInQst++;
      }
 
-   /***** The answer is blank? *****/
+   /* The answer is blank? */
    *AnswerIsNotBlank = NumAnsGood != 0 || NumAnsBad != 0;
-
-   /***** Compute and write the total score of this question *****/
    if (*AnswerIsNotBlank)
      {
       /* Compute the score */
@@ -4018,25 +4069,6 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
      }
    else	// Answer is blank
       *ScoreThisQst = 0.0;
-
-   /* Write the score */
-   if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_RESULT ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
-     {
-      Tst_WriteScoreStart (4);
-      if (*ScoreThisQst == 0.0)
-         fprintf (Gbl.F.Out,"ANS_0");
-      else if (*ScoreThisQst > 0.0)
-         fprintf (Gbl.F.Out,"ANS_OK");
-      else
-         fprintf (Gbl.F.Out,"ANS_BAD");
-      fprintf (Gbl.F.Out,"\">%.2lf",*ScoreThisQst);
-      Tst_WriteScoreEnd ();
-     }
-
-   /***** End table *****/
-   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

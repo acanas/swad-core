@@ -2638,7 +2638,7 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   long NumLong;
+   long LongNum;
    Prj_Proposal_t Proposal;
 
    if (Prj->PrjCod > 0)
@@ -2693,9 +2693,9 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
 						 Prj_NONPREASSIG;
 
 	 /* Get if project is preassigned or not (row[6]) */
-	 NumLong = Str_ConvertStrCodToLongCod (row[6]);
-	 if (NumLong >= 0)
-	    Prj->NumStds = (unsigned) NumLong;
+	 LongNum = Str_ConvertStrCodToLongCod (row[6]);
+	 if (LongNum >= 0)
+	    Prj->NumStds = (unsigned) LongNum;
 	 else
 	    Prj->NumStds = 1;
 

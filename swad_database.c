@@ -1436,26 +1436,23 @@ mysql> DESCRIBE mch_players;
    /***** Table mch_results *****/
 /*
 mysql> DESCRIBE mch_results;
-+-----------------+---------+------+-----+---------+----------------+
-| Field           | Type    | Null | Key | Default | Extra          |
-+-----------------+---------+------+-----+---------+----------------+
-| MchResCod       | int(11) | NO   | PRI | NULL    | auto_increment |
-| MchCod          | int(11) | NO   | MUL | NULL    |                |
-| UsrCod          | int(11) | NO   |     | NULL    |                |
-| NumQsts         | int(11) | NO   |     | 0       |                |
-| NumQstsNotBlank | int(11) | NO   |     | 0       |                |
-| Score           | double  | NO   |     | 0       |                |
-+-----------------+---------+------+-----+---------+----------------+
-6 rows in set (0.01 sec)
++-----------------+---------+------+-----+---------+-------+
+| Field           | Type    | Null | Key | Default | Extra |
++-----------------+---------+------+-----+---------+-------+
+| MchCod          | int(11) | NO   | PRI | NULL    |       |
+| UsrCod          | int(11) | NO   | PRI | NULL    |       |
+| NumQsts         | int(11) | NO   |     | 0       |       |
+| NumQstsNotBlank | int(11) | NO   |     | 0       |       |
+| Score           | double  | NO   |     | 0       |       |
++-----------------+---------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_results ("
-			"MchResCod INT NOT NULL AUTO_INCREMENT,"
 			"MchCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
 			"NumQsts INT NOT NULL DEFAULT 0,"
 			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-		   "UNIQUE INDEX(MchResCod),"
 		   "UNIQUE INDEX(MchCod,UsrCod))");
 
    /***** Table gam_questions *****/
