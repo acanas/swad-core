@@ -290,7 +290,6 @@ static void Tst_StoreScoreOfTestResultInDB (long TstCod,
                                           unsigned NumQstsNotBlank,double Score);
 static void Tst_ShowHeaderTestResults (void);
 static void Tst_ShowTstResults (struct UsrData *UsrDat);
-static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams);
 static void Tst_PutParamTstCod (long TstCod);
 static long Tst_GetParamTstCod (void);
 static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
@@ -7654,7 +7653,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 
    /***** Show user's data *****/
    fprintf (Gbl.F.Out,"<tr>");
-   Tst_ShowDataUsr (UsrDat,NumExams);
+   Usr_ShowTableCellWithUsrData (UsrDat,NumExams);
 
    /***** Get and print test results *****/
    if (NumExams)
@@ -7819,67 +7818,6 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
    DB_FreeMySQLResult (&mysql_res);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-  }
-
-/*****************************************************************************/
-/******************** Show a row with the data of a user *********************/
-/*****************************************************************************/
-
-static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
-  {
-   bool ShowPhoto;
-   char PhotoURL[PATH_MAX + 1];
-   Act_Action_t NextAction;
-
-   /***** Show user's photo and name *****/
-   fprintf (Gbl.F.Out,"<td ");
-   if (NumExams)
-      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumExams + 1);
-   fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
-	    Gbl.RowEvenOdd);
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
-                	                NULL,
-                     "PHOTO45x60",Pho_ZOOM,false);
-   fprintf (Gbl.F.Out,"</td>");
-
-   /***** Start form to go to user's record card *****/
-   fprintf (Gbl.F.Out,"<td ");
-   if (NumExams)
-      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumExams + 1);
-   fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
-	    Gbl.RowEvenOdd);
-   switch (UsrDat->Roles.InCurrentCrs.Role)
-     {
-      case Rol_STD:
-	 NextAction = ActSeeRecOneStd;
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-	 NextAction = ActSeeRecOneTch;
-	 break;
-      default:
-	 NextAction = ActUnk;
-	 Lay_ShowErrorAndExit ("Wrong role.");
-	 break;
-     }
-   Frm_StartForm (NextAction);
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Frm_LinkFormSubmit (UsrDat->FullName,"AUTHOR_TXT",NULL);
-
-   /***** Show user's ID *****/
-   ID_WriteUsrIDs (UsrDat,NULL);
-
-   /***** Show user's name *****/
-   fprintf (Gbl.F.Out,"<br />%s",UsrDat->Surname1);
-   if (UsrDat->Surname2[0])
-      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
-   if (UsrDat->FirstName[0])
-      fprintf (Gbl.F.Out,",<br />%s",UsrDat->FirstName);
-
-   /***** End form *****/
-   Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/

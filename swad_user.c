@@ -9728,3 +9728,65 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
   }
+
+/*****************************************************************************/
+/*************** Show a table cell with the data of a user *******************/
+/*****************************************************************************/
+
+void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
+  {
+   bool ShowPhoto;
+   char PhotoURL[PATH_MAX + 1];
+   Act_Action_t NextAction;
+
+   /***** Show user's photo and name *****/
+   fprintf (Gbl.F.Out,"<td ");
+   if (NumRows)
+      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumRows + 1);
+   fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
+	    Gbl.RowEvenOdd);
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                	                NULL,
+                     "PHOTO45x60",Pho_ZOOM,false);
+   fprintf (Gbl.F.Out,"</td>");
+
+   /***** Start form to go to user's record card *****/
+   fprintf (Gbl.F.Out,"<td ");
+   if (NumRows)
+      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumRows + 1);
+   fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
+	    Gbl.RowEvenOdd);
+   switch (UsrDat->Roles.InCurrentCrs.Role)
+     {
+      case Rol_STD:
+	 NextAction = ActSeeRecOneStd;
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+	 NextAction = ActSeeRecOneTch;
+	 break;
+      default:
+	 NextAction = ActUnk;
+	 Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
+     }
+   Frm_StartForm (NextAction);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Frm_LinkFormSubmit (UsrDat->FullName,"AUTHOR_TXT",NULL);
+
+   /***** Show user's ID *****/
+   ID_WriteUsrIDs (UsrDat,NULL);
+
+   /***** Show user's name *****/
+   fprintf (Gbl.F.Out,"<br />%s",UsrDat->Surname1);
+   if (UsrDat->Surname2[0])
+      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+   if (UsrDat->FirstName[0])
+      fprintf (Gbl.F.Out,",<br />%s",UsrDat->FirstName);
+
+   /***** End form *****/
+   Frm_EndForm ();
+   fprintf (Gbl.F.Out,"</td>");
+  }
+

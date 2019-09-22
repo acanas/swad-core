@@ -468,10 +468,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.8.1 (2019-09-22)"
+#define Log_PLATFORM_VERSION	"SWAD 19.8.2 (2019-09-22)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.8.2:   Sep 22, 2019	View matches results. Not finished. (245429 lines)
 	Version 19.8.1:   Sep 22, 2019	View matches results. Not finished. (245474 lines)
 	Version 19.8:     Sep 22, 2019	View matches results. Not finished.
 					Help links related to test and match results changed. (245412 lines)

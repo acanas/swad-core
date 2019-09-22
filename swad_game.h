@@ -27,6 +27,7 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_date.h"
 #include "swad_scope.h"
 
 /*****************************************************************************/
@@ -36,19 +37,12 @@
 #define Gam_MAX_CHARS_TITLE	(128 - 1)	// 127
 #define Gam_MAX_BYTES_TITLE	((Gam_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Gam_NUM_DATES 2
-typedef enum
-  {
-   Gam_START_TIME = 0,
-   Gam_END_TIME   = 1,
-  } Gam_StartOrEndTime_t;
-
 struct Game
   {
    long GamCod;		// Game code
    long UsrCod;		// Author code
    char Title[Gam_MAX_BYTES_TITLE + 1];
-   time_t TimeUTC[Gam_NUM_DATES];
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
    unsigned NumQsts;	// Number of questions in the game
    struct
      {

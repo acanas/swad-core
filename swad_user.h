@@ -480,4 +480,6 @@ void Usr_PrintUsrQRCode (void);
 
 void Usr_WriteAuthor1Line (long UsrCod,bool Hidden);
 
+void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows);
+
 #endif

@@ -414,12 +414,12 @@ void Gam_ShowOneGame (long GamCod,
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-   if (Game.TimeUTC[Gam_START_TIME])
+   if (Game.TimeUTC[Dat_START_TIME])
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('gam_date_start_%u',%ld,"
 			 "%u,'<br />','%s',true,true,0x7);"
 			 "</script>",
-	       UniqueId,Game.TimeUTC[Gam_START_TIME],
+	       UniqueId,Game.TimeUTC[Dat_START_TIME],
 	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    fprintf (Gbl.F.Out,"</td>");
 
@@ -431,12 +431,12 @@ void Gam_ShowOneGame (long GamCod,
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
-   if (Game.TimeUTC[Gam_END_TIME])
+   if (Game.TimeUTC[Dat_END_TIME])
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('gam_date_end_%u',%ld,"
 			 "%u,'<br />','%s',false,true,0x7);"
 			 "</script>",
-	       UniqueId,Game.TimeUTC[Gam_END_TIME],
+	       UniqueId,Game.TimeUTC[Dat_END_TIME],
 	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    fprintf (Gbl.F.Out,"</td>");
 
@@ -759,10 +759,10 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get start date (row[0] holds the start UTC time) */
-	 Game->TimeUTC[Gam_START_TIME] = Dat_GetUNIXTimeFromStr (row[0]);
+	 Game->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[0]);
 
 	 /* Get end   date (row[1] holds the end   UTC time) */
-	 Game->TimeUTC[Gam_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[1]);
+	 Game->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[1]);
 	}
 
       /* Free structure that stores the query result */
@@ -770,8 +770,8 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
      }
    else
      {
-      Game->TimeUTC[Gam_START_TIME] =
-      Game->TimeUTC[Gam_END_TIME  ] = (time_t) 0;
+      Game->TimeUTC[Dat_START_TIME] =
+      Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
      }
   }
 
@@ -1031,8 +1031,8 @@ void Gam_RequestCreatOrEditGame (void)
       /* Initialize to empty game */
       Game.GamCod = -1L;
       Game.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Game.TimeUTC[Gam_START_TIME] = (time_t) 0;
-      Game.TimeUTC[Gam_END_TIME  ] = (time_t) 0;
+      Game.TimeUTC[Dat_START_TIME] = (time_t) 0;
+      Game.TimeUTC[Dat_END_TIME  ] = (time_t) 0;
       Game.Title[0]                = '\0';
       Game.NumQsts                 = 0;
       Game.Status.Visible          = true;

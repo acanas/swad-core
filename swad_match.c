@@ -84,7 +84,7 @@ struct Match
    long MchCod;
    long GamCod;
    long UsrCod;
-   time_t TimeUTC[2];
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
    char Title[Gam_MAX_BYTES_TITLE + 1];
    struct
      {
@@ -200,8 +200,7 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 static void Mch_ShowHeaderMchResults (void);
 static void Mch_ShowMchResults (struct UsrData *UsrDat);
 static void Mch_GetMatchResultDataByMchCod (long MchResCod,
-					    time_t *StartTimeUTC,
-					    time_t *EndTimeUTC,
+					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             unsigned *NumQsts,
 					    unsigned *NumQstsNotBlank,
 					    double *Score);
@@ -299,6 +298,7 @@ static void Mch_GetDataOfMatchByCod (struct Match *Match)
   {
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
+   Dat_StartEndTime_t StartEndTime;
 
    /***** Get data of match from database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches",
@@ -328,8 +328,10 @@ static void Mch_GetDataOfMatchByCod (struct Match *Match)
       Match->MchCod                  = -1L;
       Match->GamCod                  = -1L;
       Match->UsrCod                  = -1L;
-      Match->TimeUTC[Gam_START_TIME] =
-      Match->TimeUTC[Gam_END_TIME  ] = (time_t) 0;
+      for (StartEndTime = (Dat_StartEndTime_t) 0;
+	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	   StartEndTime++)
+         Match->TimeUTC[StartEndTime] = (time_t) 0;
       Match->Title[0]                = '\0';
       Match->Status.QstInd           = 0;
       Match->Status.QstCod           = -1L;
@@ -376,6 +378,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
    unsigned NumMatch;
    unsigned UniqueId;
    struct Match Match;
+   Dat_StartEndTime_t StartEndTime;
 
    /***** Write the heading *****/
    Tbl_StartTableWideMargin (2);
@@ -443,36 +446,26 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
       Usr_WriteAuthor1Line (Match.UsrCod,false);
       fprintf (Gbl.F.Out,"</td>");
 
-      /***** Start date/time *****/
-      fprintf (Gbl.F.Out,"<td id=\"mch_date_start_%u\""
-	                 " class=\"%s LEFT_TOP COLOR%u\">",
-	       UniqueId,
-	       Match.Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
-		                                                "DATE_GREEN",
-	       Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('mch_date_start_%u',%ld,"
-			 "%u,'<br />','%s',true,true,0x7);"
-			 "</script>"
-			 "</td>",
-	       UniqueId,Match.TimeUTC[Gam_START_TIME],
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-
-      /***** End date/time *****/
-      fprintf (Gbl.F.Out,"<td id=\"mch_date_end_%u\""
-	                 " class=\"%s LEFT_TOP COLOR%u\">",
-	       UniqueId,
-	       Match.Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
-			                                        "DATE_GREEN",
-	       Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"\">"
-			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('mch_date_end_%u',%ld,"
-			 "%u,'<br />','%s',false,true,0x7);"
-			 "</script>"
-			 "</td>",
-	       UniqueId,Match.TimeUTC[Gam_END_TIME],
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      /***** Start/end date/time *****/
+      for (StartEndTime = (Dat_StartEndTime_t) 0;
+	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	   StartEndTime++)
+	{
+	 fprintf (Gbl.F.Out,"<td id=\"mch_time_%u_%u\""
+			    " class=\"%s LEFT_TOP COLOR%u\">",
+		  (unsigned) StartEndTime,UniqueId,
+		  Match.Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
+								   "DATE_GREEN",
+		  Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			    "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
+			    "%ld,%u,'<br />','%s',true,true,0x7);"
+			    "</script>"
+			    "</td>",
+		  (unsigned) StartEndTime,UniqueId,
+		  Match.TimeUTC[StartEndTime],
+		  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	}
 
       /***** Title and groups *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
@@ -611,6 +604,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Match *Match)
   {
    MYSQL_ROW row;
+   Dat_StartEndTime_t StartEndTime;
 
    /***** Get match data *****/
    row = mysql_fetch_row (mysql_res);
@@ -634,11 +628,11 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    /* Get match teacher (row[2]) */
    Match->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
-   /* Get start date (row[3] holds the start UTC time) */
-   Match->TimeUTC[Gam_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
-
-   /* Get end   date (row[4] holds the end   UTC time) */
-   Match->TimeUTC[Gam_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+   /* Get start/end times (row[3], row[4] hold start/end UTC times) */
+   for (StartEndTime = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
+      Match->TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[3 + StartEndTime]);
 
    /* Get the title of the game (row[5]) */
    if (row[5])
@@ -2741,181 +2735,142 @@ static void Mch_ShowMchResults (struct UsrData *UsrDat)
    extern const char *Txt_View_test;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumExams;
-   unsigned NumTest;
+   unsigned NumResults;
+   unsigned NumResult;
    static unsigned UniqueId = 0;
-   long TstCod;
-   unsigned NumQstsInThisTest;
-   unsigned NumQstsNotBlankInThisTest;
+   long MchResCod;
+   long MchCod;
+   Dat_StartEndTime_t StartEndTime;
+   unsigned NumQstsInThisResult;
+   unsigned NumQstsNotBlankInThisResult;
    unsigned NumTotalQsts = 0;
    unsigned NumTotalQstsNotBlank = 0;
-   double ScoreInThisTest;
-   double TotalScoreOfAllTests = 0.0;
-   unsigned NumExamsVisibleByTchs = 0;
-   bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-   bool ICanViewTest;
-   bool ICanViewScore;
-   time_t TimeUTC;
+   double ScoreInThisResult;
+   double TotalScoreOfAllResults = 0.0;
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
    char *ClassDat;
 
    /***** Make database query *****/
-   NumExams =
-   (unsigned) DB_QuerySELECT (&mysql_res,"can not get test exams of a user",
-			      "SELECT TstCod,"			// row[0]
-			             "AllowTeachers,"		// row[1]
-			             "UNIX_TIMESTAMP(TstTime),"	// row[2]
-			             "NumQsts,"			// row[3]
-			             "NumQstsNotBlank,"		// row[4]
-			             "Score"			// row[5]
-			      " FROM tst_exams"
-			      " WHERE CrsCod=%ld AND UsrCod=%ld"
-			      " AND TstTime>=FROM_UNIXTIME(%ld)"
-			      " AND TstTime<=FROM_UNIXTIME(%ld)"
-			      " ORDER BY TstCod",
-			      Gbl.Hierarchy.Crs.CrsCod,
+   NumResults =
+   (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches results of a user",
+			      "SELECT mch_results.MchResCod,"			// row[0]
+			             "mch_results.MchCod,"			// row[1]
+			             "UNIX_TIMESTAMP(mch_matches.StartTime),"	// row[2]
+			             "UNIX_TIMESTAMP(mch_matches.EndTime),"	// row[3]
+			             "mch_results.NumQsts,"			// row[4]
+			             "mch_results.NumQstsNotBlank,"		// row[5]
+			             "mch_results.Score"			// row[6]
+			      " FROM mch_results,mch_matches,gam_games"
+			      " WHERE mch_results.UsrCod=%ld"
+			      " AND mch_results.MchCod=mch_matches.MchCod"
+			      " AND mch_matches.GamCod=gam_games.GamCod"
+			      " AND gam_games.CrsCod=%ld"			// Extra check
+			      " AND mch_matches.EndTime>=FROM_UNIXTIME(%ld)"
+			      " AND mch_matches.StartTime<=FROM_UNIXTIME(%ld)"
+			      " ORDER BY MchResCod",
 			      UsrDat->UsrCod,
-			      (long) Gbl.DateRange.TimeUTC[0],
-			      (long) Gbl.DateRange.TimeUTC[1]);
+			      Gbl.Hierarchy.Crs.CrsCod,
+			      (long) Gbl.DateRange.TimeUTC[Dat_START_TIME],
+			      (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
 
    /***** Show user's data *****/
    fprintf (Gbl.F.Out,"<tr>");
-   // Tst_ShowDataUsr (UsrDat,NumExams);	// TODO: Change to matches results
+   Usr_ShowTableCellWithUsrData (UsrDat,NumResults);
 
    /***** Get and print test results *****/
-   if (NumExams)
+   if (NumResults)
      {
-      for (NumTest = 0;
-           NumTest < NumExams;
-           NumTest++)
+      for (NumResult = 0;
+           NumResult < NumResults;
+           NumResult++)
         {
          row = mysql_fetch_row (mysql_res);
 
-         /* Get test code (row[0]) */
-	 if ((TstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of test result.");
+         /* Get match result code (row[0]) */
+	 if ((MchResCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of result.");
 
-	 /* Get if teachers are allowed to see this test result (row[1]) */
-	 Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
-	 ClassDat = Gbl.Test.AllowTeachers ? "DAT" :
-	                                     "DAT_LIGHT";
+         /* Get match code (row[1]) */
+	 if ((MchCod = Str_ConvertStrCodToLongCod (row[1])) < 0)
+	    Lay_ShowErrorAndExit ("Wrong code of match.");
 
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_STD:
-	       ICanViewTest  = ItsMe;
-	       ICanViewScore = ItsMe &&
-		               Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	    case Rol_DEG_ADM:
-	    case Rol_CTR_ADM:
-	    case Rol_INS_ADM:
-	       ICanViewTest  =
-	       ICanViewScore = ItsMe ||
-	                       Gbl.Test.AllowTeachers;
-	       break;
-	    case Rol_SYS_ADM:
-	       ICanViewTest  =
-	       ICanViewScore = true;
-	       break;
-	    default:
-	       ICanViewTest  =
-	       ICanViewScore = false;
-               break;
-	   }
-
-         if (NumTest)
+         if (NumResult)
             fprintf (Gbl.F.Out,"<tr>");
 
-         /* Write date and time (row[2] holds UTC date-time) */
-         TimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
-         UniqueId++;
-	 fprintf (Gbl.F.Out,"<td id =\"tst_date_%u\" class=\"%s RIGHT_TOP COLOR%u\">"
-			    "<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('tst_date_%u',%ld,"
-			    "%u,',&nbsp;','%s',true,false,0x7);"
-			    "</script>"
-			    "</td>",
-	          UniqueId,ClassDat,Gbl.RowEvenOdd,
-	          UniqueId,(long) TimeUTC,
-	          (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+         /* Write start/end times (row[2], row[3] hold UTC start/end times) */
+         for (StartEndTime = (Dat_StartEndTime_t) 0;
+	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	      StartEndTime++)
+           {
+	    TimeUTC[0] = Dat_GetUNIXTimeFromStr (row[2 + StartEndTime]);
+	    UniqueId++;
+	    fprintf (Gbl.F.Out,"<td id =\"mch_time_%u_%u\""
+		               " class=\"%s RIGHT_TOP COLOR%u\">"
+			       "<script type=\"text/javascript\">"
+			       "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
+			       "%ld,%u,',&nbsp;','%s',true,false,0x7);"
+			       "</script>"
+			       "</td>",
+		     (unsigned) StartEndTime,UniqueId,
+		     ClassDat,Gbl.RowEvenOdd,
+		     (unsigned) StartEndTime,UniqueId,
+		     (long) TimeUTC[StartEndTime],
+		     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+           }
 
-         /* Get number of questions (row[3]) */
-         if (sscanf (row[3],"%u",&NumQstsInThisTest) != 1)
-            NumQstsInThisTest = 0;
+         /* Get number of questions (row[4]) */
+         if (sscanf (row[4],"%u",&NumQstsInThisResult) != 1)
+            NumQstsInThisResult = 0;
 	 if (Gbl.Test.AllowTeachers)
-	    NumTotalQsts += NumQstsInThisTest;
+	    NumTotalQsts += NumQstsInThisResult;
 
-         /* Get number of questions not blank (row[4]) */
-         if (sscanf (row[4],"%u",&NumQstsNotBlankInThisTest) != 1)
-            NumQstsNotBlankInThisTest = 0;
+         /* Get number of questions not blank (row[5]) */
+         if (sscanf (row[5],"%u",&NumQstsNotBlankInThisResult) != 1)
+            NumQstsNotBlankInThisResult = 0;
 	 if (Gbl.Test.AllowTeachers)
-	    NumTotalQstsNotBlank += NumQstsNotBlankInThisTest;
+	    NumTotalQstsNotBlank += NumQstsNotBlankInThisResult;
 
-         /* Get score (row[5]) */
+         /* Get score (row[6]) */
 	 Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-         if (sscanf (row[5],"%lf",&ScoreInThisTest) != 1)
-            ScoreInThisTest = 0.0;
+         if (sscanf (row[6],"%lf",&ScoreInThisResult) != 1)
+            ScoreInThisResult = 0.0;
          Str_SetDecimalPointToLocal ();	// Return to local system
-	 if (Gbl.Test.AllowTeachers)
-	    TotalScoreOfAllTests += ScoreInThisTest;
+	 TotalScoreOfAllResults += ScoreInThisResult;
 
          /* Write number of questions */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
-	          ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewTest)
-	    fprintf (Gbl.F.Out,"%u",NumQstsInThisTest);
-	 fprintf (Gbl.F.Out,"</td>");
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">%u</td>",
+	          ClassDat,Gbl.RowEvenOdd,NumQstsInThisResult);
 
          /* Write number of questions not blank */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
-	          ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewTest)
-	    fprintf (Gbl.F.Out,"%u",NumQstsNotBlankInThisTest);
-	 fprintf (Gbl.F.Out,"</td>");
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">%u</td>",
+	          ClassDat,Gbl.RowEvenOdd,NumQstsNotBlankInThisResult);
 
 	 /* Write score */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
-	          ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewScore)
-	    fprintf (Gbl.F.Out,"%.2lf",ScoreInThisTest);
-	 fprintf (Gbl.F.Out,"</td>");
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">%.2lf</td>",
+	          ClassDat,Gbl.RowEvenOdd,ScoreInThisResult);
 
          /* Write average score per question */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
-	          ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewScore)
-	    fprintf (Gbl.F.Out,"%.2lf",
-		     NumQstsInThisTest ? ScoreInThisTest / (double) NumQstsInThisTest :
-			                 0.0);
-	 fprintf (Gbl.F.Out,"</td>");
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">%.2lf</td>",
+	          ClassDat,Gbl.RowEvenOdd,
+		  NumQstsInThisResult ? ScoreInThisResult / (double) NumQstsInThisResult :
+			                0.0);
 
          /* Write score over Tst_SCORE_MAX */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
-	          ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewScore)
-	    fprintf (Gbl.F.Out,"%.2lf",
-		     NumQstsInThisTest ? ScoreInThisTest * Tst_SCORE_MAX / (double) NumQstsInThisTest :
-			                 0.0);
-	 fprintf (Gbl.F.Out,"</td>");
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">%.2lf</td>",
+	          ClassDat,Gbl.RowEvenOdd,
+		  NumQstsInThisResult ? ScoreInThisResult * Tst_SCORE_MAX / (double) NumQstsInThisResult :
+			                0.0);
 
 	 /* Link to show this result */
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
 		  Gbl.RowEvenOdd);
-	 if (ICanViewTest)
-	   {
-	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstRes ? ActSeeOneTstResMe :
-						              ActSeeOneTstResOth);
-	    // Tst_PutParamTstCod (TstCod);		// TODO: Change to matches results
-	    Ico_PutIconLink ("tasks.svg",Txt_View_test);
-	    Frm_EndForm ();
-	   }
+	 Frm_StartForm (Gbl.Action.Act == ActSeeMyMchRes ? ActSeeOneMchResMe :
+							   ActSeeOneMchResOth);
+	 // Tst_PutParamTstCod (TstCod);		// TODO: Change to matches results
+	 Ico_PutIconLink ("tasks.svg",Txt_View_test);
+	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
-
-	 if (Gbl.Test.AllowTeachers)
-            NumExamsVisibleByTchs++;
         }
 
       /***** Write totals for this user *****/
@@ -2962,8 +2917,7 @@ void Mch_ShowOneMchResult (void)
    extern const char *Txt_Score;
    extern const char *Txt_out_of_PART_OF_A_SCORE;
    long MchResCod;
-   time_t StartTimeUTC = 0;	// Match result UTC date-time, initialized to avoid warning
-   time_t EndTimeUTC = 0;	// Match result UTC date-time, initialized to avoid warning
+   time_t TimeUTC[Dat_NUM_START_END_TIME];	// Match result UTC date-time
    unsigned NumQstsNotBlank;
    double TotalScore;
    bool ShowPhoto;
@@ -2978,8 +2932,7 @@ void Mch_ShowOneMchResult (void)
 
    /***** Get test result data *****/
    Mch_GetMatchResultDataByMchCod (MchResCod,
-				   &StartTimeUTC,
-				   &EndTimeUTC,
+				   TimeUTC,
 				   &Gbl.Test.NumQsts,
 				   &NumQstsNotBlank,
 				   &TotalScore);
@@ -3096,8 +3049,8 @@ void Mch_ShowOneMchResult (void)
 			 "</td>"
 			 "</tr>",
 	       Txt_Date,
-	       StartTimeUTC,(unsigned) Gbl.Prefs.DateFormat,Txt_Today,
-	       EndTimeUTC  ,(unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	       TimeUTC[Dat_START_TIME],(unsigned) Gbl.Prefs.DateFormat,Txt_Today,
+	       TimeUTC[Dat_END_TIME],(unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
       /* Number of questions */
       fprintf (Gbl.F.Out,"<tr>"
@@ -3151,14 +3104,14 @@ void Mch_ShowOneMchResult (void)
 /*****************************************************************************/
 
 static void Mch_GetMatchResultDataByMchCod (long MchResCod,
-					    time_t *StartTimeUTC,
-					    time_t *EndTimeUTC,
+					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             unsigned *NumQsts,
 					    unsigned *NumQstsNotBlank,
 					    double *Score)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   Dat_StartEndTime_t StartEndTime;
 
    /***** Make database query *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data"
@@ -3185,8 +3138,10 @@ static void Mch_GetMatchResultDataByMchCod (long MchResCod,
       Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
 
       /* Get start time (row[1] and row[2] hold UTC date-times) */
-      *StartTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
-      *EndTimeUTC   = Dat_GetUNIXTimeFromStr (row[2]);
+      for (StartEndTime = (Dat_StartEndTime_t) 0;
+	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	   StartEndTime++)
+         TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
 
       /* Get number of questions (row[3]) */
       if (sscanf (row[3],"%u",NumQsts) != 1)
