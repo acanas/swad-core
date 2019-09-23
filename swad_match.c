@@ -3024,15 +3024,15 @@ void Mch_ShowOneMchResult (void)
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Match_result;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Date;
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Today;
    extern const char *Txt_Questions;
    extern const char *Txt_non_blank_QUESTIONS;
    extern const char *Txt_Score;
    extern const char *Txt_out_of_PART_OF_A_SCORE;
    long MchCod;
-   Usr_MeOrOther_t MeOrOther = (Gbl.Action.Act == ActSeeOneMchResMe) ? Usr_ME :
-	                                                               Usr_OTHER;
+   Usr_MeOrOther_t MeOrOther;
+   struct UsrData *UsrDat;
    time_t TimeUTC[Dat_NUM_START_END_TIME];	// Match result UTC date-time
    unsigned NumQstsNotBlank;
    double TotalScore;
@@ -3042,19 +3042,27 @@ void Mch_ShowOneMchResult (void)
    bool ICanViewResult;
    bool ICanViewScore;
 
-   /***** Get form parameters *****/
-   /* Get match code */
+   /***** Get match code *****/
    if ((MchCod = Mch_GetParamMchCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of match is missing.");
 
-   /* Get user's code */
-   if (MeOrOther == Usr_OTHER)
-      Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
+   /***** Pointer to user's data *****/
+   MeOrOther = (Gbl.Action.Act == ActSeeOneMchResMe) ? Usr_ME :
+	                                               Usr_OTHER;
+   switch (MeOrOther)
+     {
+      case Usr_ME:
+	 UsrDat = &Gbl.Usrs.Me.UsrDat;
+	 break;
+      case Usr_OTHER:
+      default:
+	 UsrDat = &Gbl.Usrs.Other.UsrDat;
+         Usr_GetParamOtherUsrCodEncrypted (UsrDat);
+	 break;
+     }
 
    /***** Get test result data *****/
-   Mch_GetMatchResultDataByMchCod (MchCod,
-				   MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.UsrCod :
-	                                                 Gbl.Usrs.Other.UsrDat.UsrCod,
+   Mch_GetMatchResultDataByMchCod (MchCod,UsrDat->UsrCod,
 				   TimeUTC,
 				   &Gbl.Test.NumQsts,
 				   &NumQstsNotBlank,
@@ -3062,7 +3070,7 @@ void Mch_ShowOneMchResult (void)
    Gbl.Test.Config.Feedback = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
 
    /***** Check if I can view this test result *****/
-   ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
+   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
@@ -3079,13 +3087,13 @@ void Mch_ShowOneMchResult (void)
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
-	 switch (Gbl.Action.Act)
+	 switch (MeOrOther)
 	   {
-	    case ActSeeOneTstResMe:
+	    case Usr_ME:
 	       ICanViewResult =
 	       ICanViewScore  = ItsMe;
 	       break;
-	    case ActSeeOneTstResOth:
+	    case Usr_OTHER:
 	       ICanViewResult =
 	       ICanViewScore  = true;
 	       break;
@@ -3108,9 +3116,7 @@ void Mch_ShowOneMchResult (void)
    if (ICanViewResult)	// I am allowed to view this match result
      {
       /***** Get questions and user's answers of the match result from database *****/
-      Mch_GetMatchResultQuestionsFromDB (MchCod,
-					 MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.UsrCod :
-	                                                       Gbl.Usrs.Other.UsrDat.UsrCod);
+      Mch_GetMatchResultQuestionsFromDB (MchCod,UsrDat->UsrCod);
 
       /***** Start box *****/
       Box_StartBox (NULL,Txt_Match_result,NULL,
@@ -3124,11 +3130,11 @@ void Mch_ShowOneMchResult (void)
       Tbl_StartTableWideMargin (10);
 
       /***** Header row *****/
-      /* Get data of the user who made the match */
-      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
+      /* Get data of the user who answer the match */
+      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
 	 Lay_ShowErrorAndExit ("User does not exists.");
-      if (!Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
-	 Lay_ShowErrorAndExit ("You can not view this test result.");
+      if (!Usr_CheckIfICanViewTst (UsrDat))
+	 Lay_ShowErrorAndExit ("You can not view this match result.");
 
       /* User */
       fprintf (Gbl.F.Out,"<tr>"
@@ -3136,25 +3142,25 @@ void Mch_ShowOneMchResult (void)
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_TOP\">",
-	       Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Other.UsrDat.Sex]);
-      ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
+	       Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+      ID_WriteUsrIDs (UsrDat,NULL);
       fprintf (Gbl.F.Out," %s",
-	       Gbl.Usrs.Other.UsrDat.Surname1);
-      if (Gbl.Usrs.Other.UsrDat.Surname2[0])
+	       UsrDat->Surname1);
+      if (UsrDat->Surname2[0])
 	 fprintf (Gbl.F.Out," %s",
-		  Gbl.Usrs.Other.UsrDat.Surname2);
-      if (Gbl.Usrs.Other.UsrDat.FirstName[0])
+		  UsrDat->Surname2);
+      if (UsrDat->FirstName[0])
 	 fprintf (Gbl.F.Out,", %s",
-		  Gbl.Usrs.Other.UsrDat.FirstName);
+		  UsrDat->FirstName);
       fprintf (Gbl.F.Out,"<br />");
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-      Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
-							   NULL,
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+					   NULL,
 			"PHOTO45x60",Pho_ZOOM,false);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
-      /* Match dates */
+      /* Start time (for user in this match) */
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"DAT_N RIGHT_TOP\">"
 			 "%s:"
@@ -3165,6 +3171,15 @@ void Mch_ShowOneMchResult (void)
 			 "%u,',&nbsp;','%s',true,true,0x7);"
 			 "</script>"
 			 "</td>"
+			 "</tr>",
+	       Txt_START_END_TIME[Dat_START_TIME],
+	       TimeUTC[Dat_START_TIME],(unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+
+      /* End time (for user in this match) */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT_N RIGHT_TOP\">"
+			 "%s:"
+			 "</td>"
 			 "<td id=\"match_end\" class=\"DAT LEFT_TOP\">"
 			 "<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('match_end',%ld,"
@@ -3172,8 +3187,7 @@ void Mch_ShowOneMchResult (void)
 			 "</script>"
 			 "</td>"
 			 "</tr>",
-	       Txt_Date,
-	       TimeUTC[Dat_START_TIME],(unsigned) Gbl.Prefs.DateFormat,Txt_Today,
+	       Txt_START_END_TIME[Dat_END_TIME],
 	       TimeUTC[Dat_END_TIME],(unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
       /* Number of questions */
@@ -3244,7 +3258,7 @@ static void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod)
 			     "SELECT gam_questions.QstCod,"	// row[0]
 				    "gam_questions.QstInd,"	// row[1]
 				    "mch_indexes.Indexes"	// row[2]
-			     " FROM mch_matches,gam_questions,mch_questions"
+			     " FROM mch_matches,gam_questions,mch_indexes"
 			     " WHERE mch_matches.MchCod=%ld"
 			     " AND mch_matches.GamCod=gam_questions.GamCod"
 			     " AND mch_matches.MchCod=mch_indexes.MchCod"
@@ -3304,16 +3318,17 @@ static void Mch_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
    /***** Make database query *****/
    if (DB_QuerySELECT (&mysql_res,"can not get data"
 				  " of a test result of a user",
-		       "SELECT UNIX_TIMESTAMP(mch_matches.StartTime),"		// row[1]
-			      "UNIX_TIMESTAMP(mch_matches.EndTime),"		// row[2]
+		       "SELECT UNIX_TIMESTAMP(mch_results.StartTime),"		// row[1]
+			      "UNIX_TIMESTAMP(mch_results.EndTime),"		// row[2]
 		              "mch_results.NumQsts,"				// row[3]
 		              "mch_results.NumQstsNotBlank,"			// row[4]
 		              "mch_results.Score"				// row[5]
-		       " FROM mch_results,mch_matches"
+		       " FROM mch_results,mch_matches,gam_games"
 		       " WHERE mch_results.MchCod=%ld"
 		       " AND mch_results.UsrCod=%ld"
 		       " AND mch_results.MchCod=mch_matches.MchCod"
-		       " AND mch_matches.CrsCod=%ld",	// Extra check
+		       " AND mch_matches.GamCod=gam_games.GamCod"
+		       " AND gam_games.CrsCod=%ld",	// Extra check
 		       MchCod,UsrCod,
 		       Gbl.Hierarchy.Crs.CrsCod) == 1)
      {
