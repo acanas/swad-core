@@ -99,6 +99,12 @@ struct Match
      } Status;
   };
 
+struct Mch_UsrAnswer
+  {
+   int NumOpt;	// < 0 ==> no answer selected
+   int AnsInd;	// < 0 ==> no answer selected
+  };
+
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
@@ -177,8 +183,8 @@ static void Mch_ShowMatchTitle (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersStd (struct Match *Match);
 
-static void Mch_PutParamAnswer (unsigned AnsInd);
-static unsigned Mch_GetParamAnswer (void);
+static void Mch_PutParamNumOpt (unsigned NumOpt);
+static unsigned Mch_GetParamNumOpt (void);
 
 static void Mch_PutBigButton (Act_Action_t NextAction,long MchCod,
 			      const char *Icon,const char *Txt);
@@ -194,7 +200,8 @@ static bool Mch_GetIfMatchIsBeingPlayed (long MchCod);
 static void Mch_RegisterMeAsPlayerInMatch (long MchCod);
 static void Mch_GetNumPlayers (struct Match *Match);
 
-static int Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd);
+static void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
+				 struct Mch_UsrAnswer *UsrAnswer);
 static void Mch_ComputeScore (struct Match *Match,unsigned NumQsts,long UsrCod,
 			      unsigned *NumQstsNotBlank,double *TotalScore);
 
@@ -1088,7 +1095,7 @@ static void Mch_CreateIndexes (long GamCod,long MchCod)
 	     DB_QuerySELECT (&mysql_res,"can not get questions of a game",
 			     "SELECT gam_questions.QstCod,"	// row[0]
 			            "gam_questions.QstInd,"	// row[1]
-			            "tst_questions.AnsType"	// row[2]
+			            "tst_questions.AnsType,"	// row[2]
 			            "tst_questions.Shuffle"	// row[3]
 			     " FROM gam_questions,tst_questions"
 			     " WHERE gam_questions.GamCod=%ld"
@@ -1153,10 +1160,10 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
 	     DB_QuerySELECT (&mysql_res,"can not get questions of a game",
 			     "SELECT AnsInd"	// row[0]
 			     " FROM tst_answers"
-			     " WHERE GamCod=%ld"
+			     " WHERE QstCod=%ld"
 			     " ORDER BY %s",
 			     QstCod,
-			     Shuffle ? "RAND(NOW())" :
+			     Shuffle ? "RAND()" :	// Use RAND() because is really random; RAND(NOW()) repeats order
 				       "AnsInd");
 
    /***** For each answer in question... *****/
@@ -1170,10 +1177,10 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
       if ((LongNum = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong answer index.");
       AnsInd = (unsigned) LongNum;
+      snprintf (StrOneAnswer,sizeof (StrOneAnswer),
+		"%u",AnsInd);
 
       /* Concatenate answer index to list of answers */
-      snprintf (StrOneAnswer,10 + 1,
-		"%u",AnsInd);
       if (NumAns)
          Str_Concat (StrAnswersOneQst,",",
 		     Tst_MAX_BYTES_ANSWERS_ONE_QST);
@@ -1191,6 +1198,38 @@ static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
 		   " VALUES"
 		   " (%ld,%u,'%s')",
 		   MchCod,QstInd,StrAnswersOneQst);
+  }
+
+/*****************************************************************************/
+/***************** Get indexes for a question from database ******************/
+/*****************************************************************************/
+
+void Mch_GetIndexes (long MchCod,unsigned QstInd,
+		     unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION])
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
+
+   /***** Get indexes for a question from database *****/
+   if (!DB_QuerySELECT (&mysql_res,"can not get data of a question",
+			"SELECT Indexes"	// row[0]
+			" FROM mch_indexes"
+			" WHERE MchCod=%ld AND QstInd=%u",
+			MchCod,QstInd))
+      Lay_ShowErrorAndExit ("No indexes found for a question.");
+   row = mysql_fetch_row (mysql_res);
+
+   /* Get indexes (row[0]) */
+   Str_Copy (StrIndexesOneQst,row[0],
+	     Tst_MAX_BYTES_INDEXES_ONE_QST);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Get indexes from string *****/
+   Par_ReplaceCommaBySeparatorMultiple (StrIndexesOneQst);
+   Tst_GetIndexesFromStr (StrIndexesOneQst,Indexes);
   }
 
 /*****************************************************************************/
@@ -1976,7 +2015,10 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
 		  "TEST_MED_EDIT_LIST_STEM_CONTAINER",
 		  "TEST_MED_EDIT_LIST_STEM");
 
-   /* Write answers? */
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Write answers? *****/
    switch (Match->Status.Showing)
      {
       case Mch_NOTHING:
@@ -2013,14 +2055,9 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
 
 static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
   {
-   bool Shuffle = false;	// TODO: Read shuffle from question
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   int StdAnsInd;
+   struct Mch_UsrAnswer UsrAnswer;
    unsigned NumOptions;
    unsigned NumOpt;
-   unsigned Index;
-   bool ErrorInIndex = false;
 
    /***** Show question *****/
    /* Write buttons for answers? */
@@ -2030,23 +2067,13 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	{
 	 /***** Get student's answer to this question
 		(<0 ==> no answer) *****/
-	 StdAnsInd = Mch_GetQstAnsFromDB (Match->MchCod,
-					  Gbl.Usrs.Me.UsrDat.UsrCod,
-					  Match->Status.QstInd);
+	 Mch_GetQstAnsFromDB (Match->MchCod,
+			      Gbl.Usrs.Me.UsrDat.UsrCod,
+			      Match->Status.QstInd,
+			      &UsrAnswer);
 
 	 /***** Get number of options in this question *****/
 	 NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
-
-	 /***** Get answers of question from database *****/
-	 Shuffle = false;
-	 NumOptions = Tst_GetAnswersQst (Match->Status.QstCod,&mysql_res,Shuffle);
-	 /*
-	 row[0] AnsInd
-	 row[1] Answer
-	 row[2] Feedback
-	 row[3] MedCod
-	 row[4] Correct
-	 */
 
 	 /***** Start table *****/
 	 Tbl_StartTableWide (8);
@@ -2055,24 +2082,7 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	      NumOpt < NumOptions;
 	      NumOpt++)
 	   {
-	    /***** Get next answer *****/
-	    row = mysql_fetch_row (mysql_res);
-
-	    /***** Assign index (row[0]).
-		   Index is 0,1,2,3... if no shuffle
-		   or 1,3,0,2... (example) if shuffle *****/
-	    if (sscanf (row[0],"%u",&Index) == 1)
-	      {
-	       if (Index >= Tst_MAX_OPTIONS_PER_QUESTION)
-		  ErrorInIndex = true;
-	      }
-	    else
-	       ErrorInIndex = true;
-	    if (ErrorInIndex)
-	       Lay_ShowErrorAndExit ("Wrong index of answer when showing a test.");
-
 	    /***** Start row *****/
-	    // if (NumOpt % 2 == 0)
 	    fprintf (Gbl.F.Out,"<tr>");
 
 	    /***** Write letter for this option *****/
@@ -2086,12 +2096,12 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	    Frm_StartForm (ActAnsMchQstStd);
 	    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 	    Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
-	    Mch_PutParamAnswer (Index);			// Index for this option
+	    Mch_PutParamNumOpt (NumOpt);		// Number of button
 	    fprintf (Gbl.F.Out,"<button type=\"submit\""
 			       " onmousedown=\"document.getElementById('%s').submit();"
 			       "return false;\" class=\"",
 		     Gbl.Form.Id);
-	    if (StdAnsInd == (int) NumOpt)	// Student's answer
+	    if (UsrAnswer.NumOpt == (int) NumOpt)	// Student's answer
 	       fprintf (Gbl.F.Out,"MATCH_STD_ANSWER_SELECTED ");
 	    fprintf (Gbl.F.Out,"MATCH_STD_BUTTON BT_%c\">"
 			       "%c"
@@ -2104,7 +2114,6 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	    fprintf (Gbl.F.Out,"</td>");
 
 	    /***** End row *****/
-	    // if (NumOpt % 2 == 1)
 	    fprintf (Gbl.F.Out,"</tr>");
 	   }
 
@@ -2116,29 +2125,28 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
      }
   }
 
-
 /*****************************************************************************/
-/******************* Write parameter with student's answer *******************/
+/****** Write parameter with number of option (button) pressed by user *******/
 /*****************************************************************************/
 
-static void Mch_PutParamAnswer (unsigned AnsInd)
+static void Mch_PutParamNumOpt (unsigned NumOpt)
   {
-   Par_PutHiddenParamUnsigned ("Ans",AnsInd);
+   Par_PutHiddenParamUnsigned ("NumOpt",NumOpt);
   }
 
 /*****************************************************************************/
-/******************* Get parameter with student's answer *********************/
+/******* Get parameter with number of option (button) pressed by user ********/
 /*****************************************************************************/
 
-static unsigned Mch_GetParamAnswer (void)
+static unsigned Mch_GetParamNumOpt (void)
   {
-   long LongNum;
+   long NumOpt;
 
-   LongNum = Par_GetParToLong ("Ans");
-   if (LongNum < 0)
-      Lay_ShowErrorAndExit ("Wrong answer index.");
+   NumOpt = Par_GetParToLong ("NumOpt");
+   if (NumOpt < 0)
+      Lay_ShowErrorAndExit ("Wrong number of option.");
 
-   return (unsigned) LongNum;
+   return (unsigned) NumOpt;
   }
 
 /*****************************************************************************/
@@ -2384,32 +2392,41 @@ void Mch_RefreshMatchStd (void)
 /**** Receive previous question answer in a match question from database *****/
 /*****************************************************************************/
 
-static int Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd)
+static void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
+				 struct Mch_UsrAnswer *UsrAnswer)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
-   int AnsInd = -1;	// <0 ==> no answer selected
+
+   /***** Set default values for number of option and answer index *****/
+   UsrAnswer->NumOpt = -1;	// < 0 ==> no answer selected
+   UsrAnswer->AnsInd = -1;	// < 0 ==> no answer selected
 
    /***** Get student's answer *****/
-   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get student's answer to a match question",
-					"SELECT AnsInd FROM mch_answers"
+   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get user's answer to a match question",
+					"SELECT NumOpt,"	// row[0]
+					       "AnsInd"		// row[1]
+					" FROM mch_answers"
 					" WHERE MchCod=%ld"
 					" AND UsrCod=%ld"
 					" AND QstInd=%u",
 					MchCod,UsrCod,QstInd);
    if (NumRows) // Answer found...
      {
-      /***** Get answer index *****/
       row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%d",&AnsInd) != 1)
+
+      /***** Get number of option index (row[0]) *****/
+      if (sscanf (row[0],"%d",&(UsrAnswer->NumOpt)) != 1)
+	 Lay_ShowErrorAndExit ("Error when getting student's answer to a match question.");
+
+      /***** Get answer index (row[1]) *****/
+      if (sscanf (row[1],"%d",&(UsrAnswer->AnsInd)) != 1)
 	 Lay_ShowErrorAndExit ("Error when getting student's answer to a match question.");
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
-   return AnsInd;
   }
 
 /*****************************************************************************/
@@ -2420,8 +2437,9 @@ void Mch_ReceiveQstAnsFromStd (void)
   {
    struct Match Match;
    unsigned QstInd;
-   unsigned StdAnsInd;
-   int PreviousStdAnsInd;
+   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];
+   struct Mch_UsrAnswer PreviousUsrAnswer;
+   struct Mch_UsrAnswer UsrAnswer;
    unsigned NumQsts;
    unsigned NumQstsNotBlank;
    double TotalScore;
@@ -2437,39 +2455,53 @@ void Mch_ReceiveQstAnsFromStd (void)
    /***** Get question index from form *****/
    QstInd = Gam_GetParamQstInd ();
 
+   /***** Get indexes for this question from database *****/
+   Mch_GetIndexes (Match.MchCod,QstInd,Indexes);
+
    /***** Check that question index is the current one being played *****/
    if (QstInd == Match.Status.QstInd)	// Receiving an answer
 					// to the current question being played
      {
       /***** Get answer index *****/
-      /*-------+--------------+
-      | Button | Answer index |
-      +--------+--------------+
-      |   a    |       0      |
-      |   b    |       1      |
-      |   c    |       2      |
-      |   d    |       3      |
-      |  ...   |      ...     |
-      +--------+-------------*/
-      StdAnsInd = Mch_GetParamAnswer ();
+      /*
+      Indexes[4] = {0,3,1,2}
+      +-------+--------+----------+---------+
+      | Button | Option | Answer   | Correct |
+      | letter | number | index    |         |
+      | screen | screen | database |         |
+      +--------+--------+----------+---------+
+      |   a    |    0   |    0     |         |
+      |   b    |    1   |    3     |         |
+      |   c    |    2   |    1     |    Y    | <---- User press button #2 (index = 1, correct)
+      |   d    |    3   |    2     |         |
+      +--------+--------+----------+---------+
+      UsrAnswer.NumOpt = 2
+      UsrAnswer.AnsInd = 1
+      */
+      UsrAnswer.NumOpt = Mch_GetParamNumOpt ();
+      UsrAnswer.AnsInd = Indexes[UsrAnswer.NumOpt];
 
       /***** Get previous student's answer to this question
 	     (<0 ==> no answer) *****/
-      PreviousStdAnsInd = Mch_GetQstAnsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd);
+      Mch_GetQstAnsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd,
+			   &PreviousUsrAnswer);
 
       /***** Store student's answer *****/
-      if (PreviousStdAnsInd == (int) StdAnsInd)
-	 DB_QueryDELETE ("can not register your answer to the match question",
+      if (PreviousUsrAnswer.AnsInd == UsrAnswer.AnsInd)
+	 DB_QueryDELETE ("can not remove your answer to the match question",
 			  "DELETE FROM mch_answers"
 			  " WHERE MchCod=%ld AND UsrCod=%ld AND QstInd=%u",
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd);
-      else
+      else if (UsrAnswer.NumOpt >= 0 &&
+	       UsrAnswer.AnsInd >= 0)
 	 DB_QueryREPLACE ("can not register your answer to the match question",
 			  "REPLACE mch_answers"
-			  " (MchCod,UsrCod,QstInd,AnsInd)"
+			  " (MchCod,UsrCod,QstInd,NumOpt,AnsInd)"
 			  " VALUES"
-			  " (%ld,%ld,%u,%u)",
-			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd,StdAnsInd);
+			  " (%ld,%ld,%u,%d,%d)",
+			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,QstInd,
+			  UsrAnswer.NumOpt,
+			  UsrAnswer.AnsInd);
 
       /***** Update student's match result *****/
       NumQsts = Gam_GetNumQstsGame (Match.GamCod);
@@ -2488,7 +2520,7 @@ void Mch_ReceiveQstAnsFromStd (void)
 			       "NumQsts=%u,"
 			       "NumQstsNotBlank=%u,"
 			       "Score='%lf'"
-			 " WHERE MchCod=%ld AND UsrCod=%ld",
+			  " WHERE MchCod=%ld AND UsrCod=%ld",
 			  NumQsts,NumQstsNotBlank,TotalScore,
 			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       else								// Result doesn't exist
@@ -2529,7 +2561,7 @@ static void Mch_ComputeScore (struct Match *Match,unsigned NumQsts,long UsrCod,
    double ScoreThisQst;
    bool AnswerIsNotBlank;
    long LongNum;
-   int AnsInd;
+   struct Mch_UsrAnswer UsrAnswer;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION];
 
@@ -2540,11 +2572,11 @@ static void Mch_ComputeScore (struct Match *Match,unsigned NumQsts,long UsrCod,
 			     "SELECT gam_questions.QstCod,"	// row[0]
 				    "gam_questions.QstInd,"	// row[1]
 				    "mch_indexes.Indexes"	// row[2]
-			     " FROM mch_matches,gam_questions,mch_questions"
+			     " FROM mch_matches,gam_questions,mch_indexes"
 			     " WHERE mch_matches.MchCod=%ld"
 			     " AND mch_matches.GamCod=gam_questions.GamCod"
 			     " AND mch_matches.MchCod=mch_indexes.MchCod"
-			     " AND mch_matches.QstInd=mch_indexes.QstInd"
+			     " AND gam_questions.QstInd=mch_indexes.QstInd"
 			     " ORDER BY gam_questions.QstInd");
 
    /***** For each question in match... *****/
@@ -2568,20 +2600,22 @@ static void Mch_ComputeScore (struct Match *Match,unsigned NumQsts,long UsrCod,
                 Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /***** Get answers selected by user for this question *****/
-      AnsInd = Mch_GetQstAnsFromDB (Match->MchCod,UsrCod,QstInd);
-      if (AnsInd >= 0)		// AnsInd >= 0 ==> answer selected
+      Mch_GetQstAnsFromDB (Match->MchCod,UsrCod,QstInd,&UsrAnswer);
+      if (UsrAnswer.AnsInd >= 0)		// AnsInd >= 0 ==> answer selected
 	{
          snprintf (Gbl.Test.StrAnswersOneQst[NumQst],Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
-		   "%d",AnsInd);
+		   "%d",UsrAnswer.AnsInd);
          (*NumQstsNotBlank)++;
 	}
       else			// AnsInd < 0 ==> no answer selected
 	 Gbl.Test.StrAnswersOneQst[NumQst][0] = '\0';	// Empty answer
 
       /***** Get indexes for this question from string *****/
+      Par_ReplaceCommaBySeparatorMultiple (Gbl.Test.StrIndexesOneQst[NumQst]);
       Tst_GetIndexesFromStr (Gbl.Test.StrIndexesOneQst[NumQst],Indexes);
 
       /***** Get the user's answers for this question from string *****/
+      Par_ReplaceCommaBySeparatorMultiple (Gbl.Test.StrAnswersOneQst[NumQst]);
       Tst_GetAnswersFromStr (Gbl.Test.StrAnswersOneQst[NumQst],AnswersUsr);
 
       /***** Get correct answers of test question from database *****/
@@ -3486,7 +3520,7 @@ static void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod)
    unsigned NumQst;
    long LongNum;
    unsigned QstInd;
-   int AnsInd;
+   struct Mch_UsrAnswer UsrAnswer;
 
    /***** Get questions and answers of a match result *****/
    NumQsts = (unsigned)
@@ -3521,11 +3555,11 @@ static void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod)
                 Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question */
-      AnsInd = Mch_GetQstAnsFromDB (MchCod,UsrCod,QstInd);
-      if (AnsInd >= 0)		// AnsInd >= 0 ==> answer selected
+      Mch_GetQstAnsFromDB (MchCod,UsrCod,QstInd,&UsrAnswer);
+      if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
          snprintf (Gbl.Test.StrAnswersOneQst[NumQst],Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
-		   "%d",AnsInd);
-      else			// AnsInd < 0 ==> no answer selected
+		   "%d",UsrAnswer.AnsInd);
+      else				// UsrAnswer.AnsInd < 0 ==> no answer selected
 	 Gbl.Test.StrAnswersOneQst[NumQst][0] = '\0';	// Empty answer
 
       /* Replace each comma by a separator of multiple parameters */

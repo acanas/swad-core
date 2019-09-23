@@ -1339,15 +1339,17 @@ mysql> DESCRIBE mch_answers;
 | MchCod | int(11)    | NO   | PRI | NULL    |       |
 | UsrCod | int(11)    | NO   | PRI | NULL    |       |
 | QstInd | int(11)    | NO   | PRI | NULL    |       |
-| AnsInd | tinyint(4) | NO   | PRI | NULL    |       |
+| NumOpt | tinyint(4) | NO   |     | NULL    |       |
+| AnsInd | tinyint(4) | NO   |     | NULL    |       |
 +--------+------------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
+5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_answers ("
 			"MchCod INT NOT NULL,"
 	                "UsrCod INT NOT NULL,"
 			"QstInd INT NOT NULL,"
-			"AnsInd TINYINT NOT NULL,"
+			"NumOpt TINYINT NOT NULL,"	// Number of button on screen (Always ordered: 0,1,2,3)
+			"AnsInd TINYINT NOT NULL,"	// Answer index (Can be shuffled: 0,3,1,2)
 		   "UNIQUE INDEX(MchCod,UsrCod,QstInd))");
 
    /***** Table mch_groups *****/

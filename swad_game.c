@@ -1382,13 +1382,13 @@ void Gam_PutParamQstInd (unsigned QstInd)
 
 unsigned Gam_GetParamQstInd (void)
   {
-   long LongNum;
+   long QstInd;
 
-   LongNum = Par_GetParToLong ("QstInd");
-   if (LongNum < 0)
+   QstInd = Par_GetParToLong ("QstInd");
+   if (QstInd < 0)
       Lay_ShowErrorAndExit ("Wrong question index.");
 
-   return (unsigned) LongNum;
+   return (unsigned) QstInd;
   }
 
 /*****************************************************************************/
@@ -1397,11 +1397,11 @@ unsigned Gam_GetParamQstInd (void)
 
 unsigned Gam_GetQstIndFromStr (const char *UnsignedStr)
   {
-   long LongNum;
+   long QstInd;
 
-   LongNum = Str_ConvertStrCodToLongCod (UnsignedStr);
-   return (LongNum > 0) ? (unsigned) LongNum :
-	                  0;
+   QstInd = Str_ConvertStrCodToLongCod (UnsignedStr);
+   return (QstInd > 0) ? (unsigned) QstInd :
+	                 0;
   }
 
 /*****************************************************************************/

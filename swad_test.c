@@ -4017,13 +4017,22 @@ void Tst_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ON
    const char *Ptr;
    char StrOneIndex[10 + 1];
 
+   /***** Initialize to 0 *****/
    for (NumOpt = 0, Ptr = StrIndexesOneQst;
-	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
+	NumOpt++)
+      Indexes[NumOpt] = 0;
+
+   /***** Get indexes from string *****/
+   for (NumOpt = 0, Ptr = StrIndexesOneQst;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
 	NumOpt++)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,10);
       if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
-         Lay_ShowErrorAndExit ("Wrong index of answer when assessing a test.");
+         Lay_ShowErrorAndExit ("Wrong index of answer.");
+      if (Indexes[NumOpt] >= Tst_MAX_OPTIONS_PER_QUESTION)
+         Lay_ShowErrorAndExit ("Wrong index of answer.");
      }
   }
 
@@ -4136,12 +4145,10 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned AnsInd;
    unsigned NumAnswerersQst;
-   bool Correct;
-   bool ErrorInIndex = false;
+   unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
 
-   /***** Get number of users who hasve answered this question from database *****/
+   /***** Get number of users who have answered this question from database *****/
    NumAnswerersQst = Mch_GetNumUsrsWhoHaveAnswerQst (MchCod,QstInd);
 
    /***** Get answers of a question from database *****/
@@ -4154,45 +4161,47 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
    row[4] Correct
    */
 
-   /***** Start table *****/
-   Tbl_StartTableWide (2);
-
    for (NumOpt = 0;
 	NumOpt < Gbl.Test.Answer.NumOptions;
 	NumOpt++)
      {
-      /***** Get next answer *****/
+      /* Get next answer */
       row = mysql_fetch_row (mysql_res);
 
-      /***** Allocate memory for text in this choice answer *****/
+      /* Allocate memory for text in this choice answer */
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
 	 /* Abort on error */
 	 Ale_ShowAlertsAndExit ();
 
-      /***** Assign index (row[0]).
-             Index is 0,1,2,3... if no shuffle
-             or 1,3,0,2... (example) if shuffle *****/
-      if (sscanf (row[0],"%u",&AnsInd) == 1)
-        {
-         if (AnsInd >= Tst_MAX_OPTIONS_PER_QUESTION)
-            ErrorInIndex = true;
-        }
-      else
-         ErrorInIndex = true;
-      if (ErrorInIndex)
-         Lay_ShowErrorAndExit ("Wrong index of answer when showing a test.");
-
-      /***** Copy text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
+      /* Copy text (row[1]) and convert it, that is in HTML, to rigorous HTML */
       Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         Gbl.Test.Answer.Options[NumOpt].Text,
                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
-      /***** Get media (row[3]) *****/
+      /* Get media (row[3]) */
       Gbl.Test.Answer.Options[NumOpt].Media.MedCod = Str_ConvertStrCodToLongCod (row[3]);
       Med_GetMediaDataByCod (&Gbl.Test.Answer.Options[NumOpt].Media);
 
+      /* Get if correct (row[4]) */
+      Gbl.Test.Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Get indexes for this question in match *****/
+   Mch_GetIndexes (MchCod,QstInd,Indexes);
+
+   /***** Start table *****/
+   Tbl_StartTableWide (2);
+
+   /***** Show one row for each option *****/
+   for (NumOpt = 0;
+	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt++)
+     {
       /***** Start row for this option *****/
       fprintf (Gbl.F.Out,"<tr>");
 
@@ -4212,22 +4221,18 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
 	                 "</label>",
                QstInd,NumOpt,
 	       Class,
-               Gbl.Test.Answer.Options[NumOpt].Text);
-      Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
+               Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
+      Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
                      "TEST_MED_SHOW_CONTAINER",
                      "TEST_MED_SHOW");
 
       /* Show result (number of users who answered? */
       if (ShowResult)
-	{
-         /* Get if correct (row[4]) */
-         Correct = (row[4][0] == 'Y');
-
 	 /* Get number of users who selected this answer
 	    and draw proportional bar */
-	 Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (MchCod,QstInd,AnsInd,
-						   NumAnswerersQst,Correct);
-	}
+	 Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (MchCod,QstInd,Indexes[NumOpt],
+						   NumAnswerersQst,
+						   Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct);
 
       fprintf (Gbl.F.Out,"</td>");
 
@@ -4237,9 +4242,6 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
 
    /***** End table *****/
    Tbl_EndTable ();
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

@@ -12878,4 +12878,19 @@ REPLACE gam_time (MchCod,QstInd,ElapsedTime) VALUES (61,1,ADDTIME(ElapsedTime,SE
 
 INSERT INTO gam_time (MchCod,QstInd) VALUES (61,1,SEC_TO_TIME(1)) ON DUPLICATE KEY UPDATE ElapsedTime=ADDTIME(ElapsedTime,SEC_TO_TIME(1));
   
-  
+
+
+----------------
+
+SELECT gam_questions.QstCod,
+       gam_questions.QstInd,
+       mch_indexes.Indexes
+ FROM mch_matches,gam_questions,mch_indexes
+ WHERE mch_matches.MchCod=69
+ AND mch_matches.GamCod=gam_questions.GamCod
+ AND mch_matches.MchCod=mch_indexes.MchCod
+ AND gam_questions.QstInd=mch_indexes.QstInd
+ ORDER BY gam_questions.QstInd;
+ 
+ 
+ SELECT Correct FROM tst_answers WHERE QstCod=1787 ORDER BY AnsInd;

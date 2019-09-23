@@ -981,9 +981,11 @@ bool Par_GetNextStrUntilSeparParamMult (const char **StrSrc,char *StrDst,size_t 
    do
       if ((Ch = (unsigned char) **StrSrc))
 	 (*StrSrc)++;
-   while (Ch && Ch < 32); // Skip special characters (the separator will be a special character less than 32)
+   while (Ch && Ch < 32);	// Skip special characters
+				// (the separator will be a special character
+				// less than 32)
 
-   while (Ch >= 32)
+   while (Ch >= 32)		// Until special character or end
      {
       CharsFound = true;
       if (i < LongMax)
