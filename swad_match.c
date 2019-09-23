@@ -3133,6 +3133,7 @@ void Mch_ShowOneMchResult (void)
    Usr_MeOrOther_t MeOrOther;
    struct UsrData *UsrDat;
    time_t TimeUTC[Dat_NUM_START_END_TIME];	// Match result UTC date-time
+   unsigned NumQsts;
    unsigned NumQstsNotBlank;
    double TotalScore;
    bool ShowPhoto;
@@ -3163,7 +3164,7 @@ void Mch_ShowOneMchResult (void)
    /***** Get test result data *****/
    Mch_GetMatchResultDataByMchCod (MchCod,UsrDat->UsrCod,
 				   TimeUTC,
-				   &Gbl.Test.NumQsts,
+				   &NumQsts,
 				   &NumQstsNotBlank,
 				   &TotalScore);
    Gbl.Test.Config.Feedback = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
@@ -3299,7 +3300,7 @@ void Mch_ShowOneMchResult (void)
 			 "</td>"
 			 "</tr>",
 	       Txt_Questions,
-	       Gbl.Test.NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+	       NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
 
       /* Score */
       fprintf (Gbl.F.Out,"<tr>"
@@ -3311,8 +3312,8 @@ void Mch_ShowOneMchResult (void)
       if (ICanViewScore)
 	 fprintf (Gbl.F.Out,"%.2lf (%.2lf",
 		  TotalScore,
-		  Gbl.Test.NumQsts ? TotalScore * Tst_SCORE_MAX / (double) Gbl.Test.NumQsts :
-				     0.0);
+		  NumQsts ? TotalScore * Tst_SCORE_MAX / (double) NumQsts :
+			    0.0);
       else
 	 fprintf (Gbl.F.Out,"? (?");	// No feedback
       fprintf (Gbl.F.Out," %s %u)</td>"
@@ -3320,11 +3321,11 @@ void Mch_ShowOneMchResult (void)
 	       Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
 
       /***** Write answers and solutions *****/
-      // Tst_ShowTestResult (TstTimeUTC);	// TODO: Change to matches results
+      Tst_ShowTestResult (NumQsts,TimeUTC[Dat_START_TIME]);
 
       /***** Write total mark of test *****/
-      // if (ICanViewScore)
-      //    Tst_ShowTstTotalMark (TotalScore);	// TODO: Change to matches results
+      if (ICanViewScore)
+         Tst_ShowTstTotalMark (NumQsts,TotalScore);
 
       /***** End table *****/
       Tbl_EndTable ();

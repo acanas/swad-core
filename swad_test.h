@@ -142,6 +142,7 @@ struct Tst_Stats
 void Tst_ShowFormAskTst (void);
 void Tst_ShowNewTest (void);
 void Tst_AssessTest (void);
+void Tst_ShowTstTotalMark (unsigned NumQsts,double TotalScore);
 
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
@@ -211,6 +212,7 @@ void Tst_SelDatesToSeeMyTstResults (void);
 void Tst_ShowMyTstResults (void);
 void Tst_ShowUsrsTstResults (void);
 void Tst_ShowOneTstResult (void);
+void Tst_ShowTestResult (unsigned NumQsts,time_t TstTimeUTC);
 void Tst_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod);
 void Tst_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void Tst_RemoveCrsTestResults (long CrsCod);

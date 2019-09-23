@@ -149,7 +149,6 @@ extern struct Globals Gbl;
 static void Tst_PutFormToViewTstResults (Act_Action_t Action);
 
 static void Tst_GetQuestionsAndAnswersFromForm (void);
-static void Tst_ShowTstTotalMark (double TotalScore);
 static bool Tst_CheckIfNextTstAllowed (void);
 static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus);
 static Tst_Status_t Tst_GetTstStatus (unsigned NumTst);
@@ -297,9 +296,8 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
                                            unsigned NumTotalQsts,
                                            unsigned NumTotalQstsNotBlank,
                                            double TotalScoreOfAllTests);
-static void Tst_ShowTestResult (time_t TstTimeUTC);
 static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
-                                           unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score);
+                                           unsigned *NumQstsNotBlank,double *Score);
 static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score);
 static void Tst_GetTestResultQuestionsFromDB (long TstCod);
 
@@ -575,7 +573,7 @@ void Tst_AssessTest (void)
 
 	 /***** Write total mark of test *****/
 	 if (Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING)
-	    Tst_ShowTstTotalMark (TotalScore);
+	    Tst_ShowTstTotalMark (Gbl.Test.NumQsts,TotalScore);
 
 	 /***** End box *****/
 	 Box_EndBox ();
@@ -639,11 +637,11 @@ static void Tst_GetQuestionsAndAnswersFromForm (void)
 /************************** Show total mark of a test ************************/
 /*****************************************************************************/
 
-static void Tst_ShowTstTotalMark (double TotalScore)
+void Tst_ShowTstTotalMark (unsigned NumQsts,double TotalScore)
   {
    extern const char *Txt_Score;
    extern const char *Txt_out_of_PART_OF_A_SCORE;
-   double TotalScoreOverSCORE_MAX = TotalScore * Tst_SCORE_MAX / (double) Gbl.Test.NumQsts;
+   double TotalScoreOverSCORE_MAX = TotalScore * Tst_SCORE_MAX / (double) NumQsts;
 
    /***** Write total mark ****/
    fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\""
@@ -8040,7 +8038,8 @@ void Tst_ShowOneTstResult (void)
       Lay_ShowErrorAndExit ("Code of test is missing.");
 
    /***** Get test result data *****/
-   Tst_GetTestResultDataByTstCod (TstCod,&TstTimeUTC,&Gbl.Test.NumQsts,&NumQstsNotBlank,&TotalScore);
+   Tst_GetTestResultDataByTstCod (TstCod,&TstTimeUTC,
+				  &NumQstsNotBlank,&TotalScore);
    Gbl.Test.Config.Feedback = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
 
    /***** Check if I can view this test result *****/
@@ -8192,11 +8191,11 @@ void Tst_ShowOneTstResult (void)
 			 "</tr>");
 
       /***** Write answers and solutions *****/
-      Tst_ShowTestResult (TstTimeUTC);
+      Tst_ShowTestResult (Gbl.Test.NumQsts,TstTimeUTC);
 
       /***** Write total mark of test *****/
       if (ICanViewScore)
-	 Tst_ShowTstTotalMark (TotalScore);
+	 Tst_ShowTstTotalMark (Gbl.Test.NumQsts,TotalScore);
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -8212,7 +8211,7 @@ void Tst_ShowOneTstResult (void)
 /************************* Show the result of a test *************************/
 /*****************************************************************************/
 
-static void Tst_ShowTestResult (time_t TstTimeUTC)
+void Tst_ShowTestResult (unsigned NumQsts,time_t TstTimeUTC)
   {
    extern const char *Txt_Question_modified;
    extern const char *Txt_Question_removed;
@@ -8226,7 +8225,7 @@ static void Tst_ShowTestResult (time_t TstTimeUTC)
    time_t EditTimeUTC;
 
    for (NumQst = 0;
-	NumQst < Gbl.Test.NumQsts;
+	NumQst < NumQsts;
 	NumQst++)
      {
       Gbl.RowEvenOdd = NumQst % 2;
@@ -8305,7 +8304,7 @@ static void Tst_ShowTestResult (time_t TstTimeUTC)
 /*****************************************************************************/
 
 static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
-                                           unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score)
+                                           unsigned *NumQstsNotBlank,double *Score)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -8336,8 +8335,8 @@ static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
       *TstTimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
 
       /* Get number of questions (row[3]) */
-      if (sscanf (row[3],"%u",NumQsts) != 1)
-	 *NumQsts = 0;
+      if (sscanf (row[3],"%u",&Gbl.Test.NumQsts) != 1)
+	 Gbl.Test.NumQsts = 0;
 
       /* Get number of questions not blank (row[4]) */
       if (sscanf (row[4],"%u",NumQstsNotBlank) != 1)
