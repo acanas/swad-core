@@ -1433,6 +1433,24 @@ mysql> DESCRIBE mch_players;
 		        "TS TIMESTAMP,"
 		   "UNIQUE INDEX(MchCod,UsrCod))");
 
+   /***** Table mch_indexes *****/
+/*
+mysql> DESCRIBE mch_indexes;
++---------+---------+------+-----+---------+-------+
+| Field   | Type    | Null | Key | Default | Extra |
++---------+---------+------+-----+---------+-------+
+| MchCod  | int(11) | NO   | PRI | NULL    |       |
+| QstInd  | int(11) | NO   | PRI | NULL    |       |
+| Indexes | text    | NO   |     | NULL    |       |
++---------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_indexes ("
+			"MchCod INT NOT NULL,"
+			"QstInd INT NOT NULL,"
+			"Indexes TEXT NOT NULL,"	// Tst_MAX_BYTES_INDEXES_ONE_QST
+		   "UNIQUE INDEX(MchCod,QstInd))");
+
    /***** Table mch_results *****/
 /*
 mysql> DESCRIBE mch_results;

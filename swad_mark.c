@@ -41,6 +41,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/

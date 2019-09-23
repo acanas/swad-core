@@ -3285,7 +3285,8 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
 			            "MedCod,"		// row[3]
 			            "Correct"		// row[4]
 			     " FROM tst_answers"
-			     " WHERE QstCod=%ld ORDER BY %s",
+			     " WHERE QstCod=%ld"
+			     " ORDER BY %s",
 			     QstCod,
 			     Shuffle ? "RAND(NOW())" :
 				       "AnsInd");
@@ -3293,6 +3294,35 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
       Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
 
    return (unsigned) NumRows;
+  }
+
+void Tst_GetCorrectAnswersFromDB (long QstCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumOpt;
+
+   /***** Query database *****/
+   Gbl.Test.Answer.NumOptions = (unsigned)
+				DB_QuerySELECT (&mysql_res,"can not get answers of a question",
+						"SELECT Correct"		// row[0]
+						" FROM tst_answers"
+						" WHERE QstCod=%ld"
+						" ORDER BY AnsInd",
+						QstCod);
+   for (NumOpt = 0;
+	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt++)
+     {
+      /* Get next answer */
+      row = mysql_fetch_row (mysql_res);
+
+      /* Assign correctness (row[0]) of this answer (this option) */
+      Gbl.Test.Answer.Options[NumOpt].Correct = (row[0][0] == 'Y');
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -3795,10 +3825,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
    extern const char *Txt_TST_Answer_given_by_the_user;
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
-   char StrOneIndex[10 + 1];
-   const char *Ptr;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
-   int AnsUsr;
    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION];
    struct
      {
@@ -3811,32 +3838,10 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
    Tst_GetChoiceAns (mysql_res);
 
    /***** Get indexes for this question from string *****/
-   for (NumOpt = 0, Ptr = Gbl.Test.StrIndexesOneQst[NumQst];
-	NumOpt < Gbl.Test.Answer.NumOptions;
-	NumOpt++)
-     {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,10);
-      if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
-         Lay_ShowErrorAndExit ("Wrong index of answer when assessing a test.");
-     }
+   Tst_GetIndexesFromStr (Gbl.Test.StrIndexesOneQst[NumQst],Indexes);
 
    /***** Get the user's answers for this question from string *****/
-   for (NumOpt = 0;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
-	NumOpt++)
-      AnswersUsr[NumOpt] = false;
-   for (NumOpt = 0, Ptr = Gbl.Test.StrAnswersOneQst[NumQst];
-	NumOpt < Gbl.Test.Answer.NumOptions;
-	NumOpt++)
-      if (*Ptr)
-        {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,10);
-         if (sscanf (StrOneIndex,"%d",&AnsUsr) != 1)
-            Lay_ShowErrorAndExit ("Bad user's answer.");
-         if (AnsUsr < 0 || AnsUsr >= Tst_MAX_OPTIONS_PER_QUESTION)
-            Lay_ShowErrorAndExit ("Bad user's answer.");
-         AnswersUsr[AnsUsr] = true;
-        }
+   Tst_GetAnswersFromStr (Gbl.Test.StrAnswersOneQst[NumQst],AnswersUsr);
 
    /***** Compute the total score of this question *****/
    Tst_ComputeScoreQst (Indexes,AnswersUsr,ScoreThisQst,AnswerIsNotBlank);
@@ -4001,6 +4006,57 @@ void Tst_GetChoiceAns (MYSQL_RES *mysql_res)
       /***** Assign correctness (row[4]) of this answer (this option) *****/
       Gbl.Test.Answer.Options[NumOpt].Correct = (row[4][0] == 'Y');
      }
+  }
+
+/*****************************************************************************/
+/********************* Get vector of indexes from string *********************/
+/*****************************************************************************/
+
+void Tst_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ONE_QST + 1],	// 0 1 2 3, 3 0 2 1, etc.
+			    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION])
+  {
+   unsigned NumOpt;
+   const char *Ptr;
+   char StrOneIndex[10 + 1];
+
+   for (NumOpt = 0, Ptr = StrIndexesOneQst;
+	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt++)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,10);
+      if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
+         Lay_ShowErrorAndExit ("Wrong index of answer when assessing a test.");
+     }
+  }
+
+/*****************************************************************************/
+/****************** Get vector of user's answers from string *****************/
+/*****************************************************************************/
+
+void Tst_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1],
+			    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION])
+  {
+   unsigned NumOpt;
+   const char *Ptr;
+   char StrOneAnswer[10 + 1];
+   int AnsUsr;
+
+   for (NumOpt = 0;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt++)
+      AnswersUsr[NumOpt] = false;
+   for (NumOpt = 0, Ptr = StrAnswersOneQst;
+	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt++)
+      if (*Ptr)
+        {
+         Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneAnswer,10);
+         if (sscanf (StrOneAnswer,"%d",&AnsUsr) != 1)
+            Lay_ShowErrorAndExit ("Bad user's answer.");
+         if (AnsUsr < 0 || AnsUsr >= Tst_MAX_OPTIONS_PER_QUESTION)
+            Lay_ShowErrorAndExit ("Bad user's answer.");
+         AnswersUsr[AnsUsr] = true;
+        }
   }
 
 /*****************************************************************************/

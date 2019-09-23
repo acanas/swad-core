@@ -611,7 +611,7 @@ CREATE TABLE IF NOT EXISTS gam_games (
 	UNIQUE INDEX(GamCod),
 	INDEX(CrsCod));
 --
--- Table mch_answers: stores the answers to the matches
+-- Table mch_answers: stores the users' answers to the matches
 --
 CREATE TABLE IF NOT EXISTS mch_answers ("
 	MchCod INT NOT NULL,"
@@ -657,6 +657,14 @@ CREATE TABLE IF NOT EXISTS mch_players (
 	UsrCod INT NOT NULL,
 	TS TIMESTAMP,
 	UNIQUE INDEX(MchCod,UsrCod));
+--
+-- Table mch_indexes: stores the order of answers in a match
+--
+CREATE TABLE IF NOT EXISTS mch_indexes (
+	MchCod INT NOT NULL,
+	QstInd INT NOT NULL,
+	Indexes TEXT NOT NULL,
+	UNIQUE INDEX(MchCod,QstInd));
 --
 -- Table mch_results: stores the current match results
 --

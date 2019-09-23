@@ -450,6 +450,8 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 // TODO: En Eventos de asistencia, poner un icono de enlace a horario de la asignatura ¿y otro a grupos?
 // TODO: Reportado por Javier Fernández Baldomero. Un profesor debería poder cambiar la foto de un estudiante confirmado. Sale el icono, pero luego dice ue no hay permiso
 
+// TODO: URGENTE: Reportado por Javier Fernández Baldomero. Al pasar lista con SWADroid, los estudiantes sin foto no salen en la lista de alumnos de SWADroid.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -468,10 +470,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.9.3 (2019-09-23)"
+#define Log_PLATFORM_VERSION	"SWAD 19.10 (2019-09-23)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+	Version 19.10:    Sep 23, 2019	View matches results. Not finished. (245709 lines)
+					1 change necessary in database:
+CREATE TABLE IF NOT EXISTS mch_indexes (MchCod INT NOT NULL,QstInd INT NOT NULL,Indexes TEXT NOT NULL,UNIQUE INDEX(MchCod,QstInd));
+
 	Version 19.9.3:   Sep 23, 2019	Code refactoring in tables. (245597 lines)
 	Version 19.9.2:   Sep 23, 2019	View matches results. Not finished. (245598 lines)
 					2 changes necessary in database:
