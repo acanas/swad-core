@@ -2331,13 +2331,35 @@ void Mch_ReceiveQstAnsFromStd (void)
       Mch_ComputeScore (&Match,NumQsts,&NumQstsNotBlank,&TotalScore);
 
       Str_SetDecimalPointToUS ();	// To print the floating point as a dot
-      DB_QueryREPLACE ("can not update match result",
-		       "REPLACE mch_results"
-		       " (MchCod,UsrCod,NumQsts,NumQstsNotBlank,Score)"
-		       " VALUES"
-		       " (%ld,%ld,%u,%u,'%lf')",
-		       Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-		       NumQsts,NumQstsNotBlank,TotalScore);
+      if (DB_QueryCOUNT ("can not get if match result exists",
+			 "SELECT COUNT(*) FROM mch_results"
+			 " WHERE MchCod=%ld AND UsrCod=%ld",
+			 Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod))	// Result exists
+	 /* Update result */
+	 DB_QueryUPDATE ("can not update match result",
+			  "UPDATE mch_results"
+			  " SET EndTime=NOW(),"
+			       "NumQsts=%u,"
+			       "NumQstsNotBlank=%u,"
+			       "Score='%lf'"
+			 " WHERE MchCod=%ld AND UsrCod=%ld",
+			  NumQsts,NumQstsNotBlank,TotalScore,
+			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+      else								// Result doesn't exist
+	 /* Create result */
+	 DB_QueryINSERT ("can not create match result",
+			  "INSERT mch_results "
+			  "(MchCod,UsrCod,StartTime,EndTime,NumQsts,NumQstsNotBlank,Score)"
+			  " VALUES "
+			  "(%ld,"	// MchCod
+			  "%ld,"	// UsrCod
+			  "NOW(),"	// StartTime
+			  "NOW(),"	// EndTime
+			  "%u,"		// NumQsts
+			  "%u,"		// NumQstsNotBlank
+			  "'%lf')",	// Score
+			  Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+			  NumQsts,NumQstsNotBlank,TotalScore);
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
 
@@ -2492,7 +2514,7 @@ unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd)
    /***** Get number of users who have answered
           a question in match from database *****/
    return
-   (unsigned) DB_QueryCOUNT ("can not get number of users who hasve answered a question",
+   (unsigned) DB_QueryCOUNT ("can not get number of users who have answered a question",
 			     "SELECT COUNT(*) FROM mch_answers"
 			     " WHERE MchCod=%ld AND QstInd=%u",
 			     MchCod,QstInd);
@@ -2522,7 +2544,7 @@ static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod)
    /***** Get number of users who have answered
           any question in match from database *****/
    return
-   (unsigned) DB_QueryCOUNT ("can not get number of users who hasve answered a match",
+   (unsigned) DB_QueryCOUNT ("can not get number of users who have answered a match",
 			     "SELECT COUNT(DISTINCT UsrCod) FROM mch_answers"
 			     " WHERE MchCod=%ld",
 			     MchCod);
@@ -2812,7 +2834,7 @@ void Mch_ShowUsrsMchResults (void)
 static void Mch_ShowHeaderMchResults (void)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
-   extern const char *Txt_Date;
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
    extern const char *Txt_Non_blank_BR_questions;
    extern const char *Txt_Total_BR_score;
@@ -2824,7 +2846,10 @@ static void Mch_ShowHeaderMchResults (void)
 		      "<th colspan=\"2\" class=\"CENTER_TOP\">"
 		      "%s"
 		      "</th>"
-		      "<th class=\"RIGHT_TOP\">"
+		      "<th class=\"LEFT_TOP\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"LEFT_TOP\">"
 		      "%s"
 		      "</th>"
 		      "<th class=\"RIGHT_TOP\">"
@@ -2845,7 +2870,8 @@ static void Mch_ShowHeaderMchResults (void)
 		      "<th></th>"
 		      "</tr>",
 	    Txt_User[Usr_SEX_UNKNOWN],
-	    Txt_Date,
+	    Txt_START_END_TIME[Dat_START_TIME],
+	    Txt_START_END_TIME[Dat_END_TIME],
 	    Txt_Questions,
 	    Txt_Non_blank_BR_questions,
 	    Txt_Total_BR_score,
@@ -2881,8 +2907,8 @@ static void Mch_ShowMchResults (struct UsrData *UsrDat)
    NumResults =
    (unsigned) DB_QuerySELECT (&mysql_res,"can not get matches results of a user",
 			      "SELECT mch_results.MchCod,"			// row[0]
-			             "UNIX_TIMESTAMP(mch_matches.StartTime),"	// row[1]
-			             "UNIX_TIMESTAMP(mch_matches.EndTime),"	// row[2]
+			             "UNIX_TIMESTAMP(mch_results.StartTime),"	// row[1]
+			             "UNIX_TIMESTAMP(mch_results.EndTime),"	// row[2]
 			             "mch_results.NumQsts,"			// row[3]
 			             "mch_results.NumQstsNotBlank,"		// row[4]
 			             "mch_results.Score"			// row[5]
@@ -2924,10 +2950,10 @@ static void Mch_ShowMchResults (struct UsrData *UsrDat)
 	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	      StartEndTime++)
            {
-	    TimeUTC[0] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
+	    TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
 	    UniqueId++;
 	    fprintf (Gbl.F.Out,"<td id =\"mch_time_%u_%u\""
-		               " class=\"%s RIGHT_TOP COLOR%u\">"
+		               " class=\"%s LEFT_TOP COLOR%u\">"
 			       "<script type=\"text/javascript\">"
 			       "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
 			       "%ld,%u,',&nbsp;','%s',true,false,0x7);"

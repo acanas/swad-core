@@ -1436,20 +1436,24 @@ mysql> DESCRIBE mch_players;
    /***** Table mch_results *****/
 /*
 mysql> DESCRIBE mch_results;
-+-----------------+---------+------+-----+---------+-------+
-| Field           | Type    | Null | Key | Default | Extra |
-+-----------------+---------+------+-----+---------+-------+
-| MchCod          | int(11) | NO   | PRI | NULL    |       |
-| UsrCod          | int(11) | NO   | PRI | NULL    |       |
-| NumQsts         | int(11) | NO   |     | 0       |       |
-| NumQstsNotBlank | int(11) | NO   |     | 0       |       |
-| Score           | double  | NO   |     | 0       |       |
-+-----------------+---------+------+-----+---------+-------+
-5 rows in set (0.00 sec)
++-----------------+----------+------+-----+---------+-------+
+| Field           | Type     | Null | Key | Default | Extra |
++-----------------+----------+------+-----+---------+-------+
+| MchCod          | int(11)  | NO   | PRI | NULL    |       |
+| UsrCod          | int(11)  | NO   | PRI | NULL    |       |
+| StartTime       | datetime | NO   |     | NULL    |       |
+| EndTime         | datetime | NO   |     | NULL    |       |
+| NumQsts         | int(11)  | NO   |     | 0       |       |
+| NumQstsNotBlank | int(11)  | NO   |     | 0       |       |
+| Score           | double   | NO   |     | 0       |       |
++-----------------+----------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_results ("
 			"MchCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"	// Time this user started to answer
+			"EndTime DATETIME NOT NULL,"	// Time this user finished to answer
 			"NumQsts INT NOT NULL DEFAULT 0,"
 			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
 			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
