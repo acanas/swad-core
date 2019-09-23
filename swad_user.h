@@ -136,6 +136,12 @@ typedef enum
   } Usr_ListUsrsOption_t;
 #define Usr_LIST_USRS_DEFAULT_OPTION Usr_OPTION_RECORDS
 
+typedef enum
+  {
+   Usr_ME,
+   Usr_OTHER,
+  } Usr_MeOrOther_t;
+
 // Related with user's data
 struct UsrData
   {
@@ -212,7 +218,6 @@ struct UsrData
 struct UsrLast
   {
    Sch_WhatToSearch_t WhatToSearch;	// Search courses, teachers, documents...?
-   // long LastCrs;
    struct
      {
       Hie_Level_t Scope;	// Course, degree, centre, etc.

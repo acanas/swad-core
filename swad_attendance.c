@@ -3589,13 +3589,12 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	                   Gbl.AttEvents.Lst[NumAttEvent].CommentTchVisible);
 
 	 /***** Write a row for this event *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-		            "<td class=\"COLOR%u\"></td>"
-			    "<td class=\"%s RIGHT_TOP COLOR%u\">"
+	 fprintf (Gbl.F.Out,"<tr>");
+	 Tbl_PutEmptyCells (1);
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">"
 			    "%u:"
 			    "</td>"
 			    "<td class=\"BT%u\">",
-	          Gbl.RowEvenOdd,
 		  Present ? "DAT_GREEN" :
 			    "DAT_RED",
 	          Gbl.RowEvenOdd,
@@ -3622,14 +3621,11 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	 /***** Write comments for this student *****/
 	 if (ShowCommentStd || ShowCommentTch)
 	   {
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"COLOR%u\"></td>"
-			       "<td class=\"COLOR%u\"></td>"
-			       "<td class=\"BT%u\"></td>"
+	    fprintf (Gbl.F.Out,"<tr>");
+	    Tbl_PutEmptyCells (2);
+	    fprintf (Gbl.F.Out,"<td class=\"BT%u\"></td>"
 			       "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
 	                       "<dl>",
-	             Gbl.RowEvenOdd,
-	             Gbl.RowEvenOdd,
 	             Gbl.RowEvenOdd,
 	             Gbl.RowEvenOdd);
 	    if (ShowCommentStd)

@@ -47,6 +47,7 @@
 #include "swad_setting.h"
 #include "swad_table.h"
 #include "swad_test.h"
+#include "swad_user.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -199,7 +200,7 @@ static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQst,bool Correct);
 
 static void Mch_ShowHeaderMchResults (void);
-static void Mch_ShowMchResults (struct UsrData *UsrDat);
+static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther);
 static void Mch_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             unsigned *NumQsts,
@@ -2662,9 +2663,8 @@ void Mch_ShowMyMchResults (void)
    /***** Header of the table with the list of users *****/
    Mch_ShowHeaderMchResults ();
 
-   /***** List my test results *****/
-   // Tst_GetConfigTstFromDB ();	// To get feedback type	// TODO: Change to matches results
-   Mch_ShowMchResults (&Gbl.Usrs.Me.UsrDat);
+   /***** List my matches results *****/
+   Mch_ShowMchResults (Usr_ME);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -2809,7 +2809,7 @@ void Mch_ShowUsrsMchResults (void)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
 	    if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
 	       /***** Show matches results *****/
-	       Mch_ShowMchResults (&Gbl.Usrs.Other.UsrDat);
+	       Mch_ShowMchResults (Usr_OTHER);
 	}
 
       /***** End table and box *****/
@@ -2883,12 +2883,13 @@ static void Mch_ShowHeaderMchResults (void)
 /*********** Show the test results of a user in the current course ***********/
 /*****************************************************************************/
 
-static void Mch_ShowMchResults (struct UsrData *UsrDat)
+static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Today;
    extern const char *Txt_View_test;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   struct UsrData *UsrDat;
    unsigned NumResults;
    unsigned NumResult;
    static unsigned UniqueId = 0;
@@ -2902,6 +2903,10 @@ static void Mch_ShowMchResults (struct UsrData *UsrDat)
    double TotalScoreOfAllResults = 0.0;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    char *ClassDat;
+
+   /***** Set user *****/
+   UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
+	                            &Gbl.Usrs.Other.UsrDat;
 
    /***** Make database query *****/
    NumResults =
@@ -3012,9 +3017,18 @@ static void Mch_ShowMchResults (struct UsrData *UsrDat)
 	 /* Link to show this result */
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
 		  Gbl.RowEvenOdd);
-	 Frm_StartForm (Gbl.Action.Act == ActSeeMyMchRes ? ActSeeOneMchResMe :
-							   ActSeeOneMchResOth);
-	 // Tst_PutParamTstCod (TstCod);		// TODO: Change to matches results
+	 switch (MeOrOther)
+	   {
+	    case Usr_ME:
+	       Frm_StartForm (ActSeeOneMchResMe);
+	       Mch_PutParamMchCod (MchCod);
+	       break;
+	    case Usr_OTHER:
+	       Frm_StartForm (ActSeeOneMchResOth);
+	       Mch_PutParamMchCod (MchCod);
+	       Usr_PutParamOtherUsrCodEncrypted ();
+	       break;
+	   }
 	 Ico_PutIconLink ("tasks.svg",Txt_View_test);
 	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</td>"
@@ -3027,21 +3041,10 @@ static void Mch_ShowMchResults (struct UsrData *UsrDat)
       //                                TotalScoreOfAllTests);	// TODO: Change to matches results
      }
    else
-      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "</tr>",
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd);
+     {
+      Tbl_PutEmptyCells (8);
+      fprintf (Gbl.F.Out,"</tr>");
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

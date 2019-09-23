@@ -7830,21 +7830,10 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
                                      TotalScoreOfAllTests);
      }
    else
-      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "<td class=\"COLOR%u\"></td>"
-	                 "</tr>",
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd,
-	       Gbl.RowEvenOdd);
+     {
+      Tbl_PutEmptyCells (7);
+      fprintf (Gbl.F.Out,"</tr>");
+     }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

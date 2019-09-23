@@ -92,3 +92,14 @@ void Tbl_EndTable (void)
   {
    fprintf (Gbl.F.Out,"</table>");
   }
+
+void Tbl_PutEmptyCells (unsigned NumColumns)
+  {
+   unsigned NumCol;
+
+   for (NumCol = 0;
+	NumCol < NumColumns;
+	NumCol++)
+      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>",
+	       Gbl.RowEvenOdd);
+  }

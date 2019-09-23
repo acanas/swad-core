@@ -45,4 +45,6 @@ void Tbl_StartTableWide (unsigned CellPadding);
 void Tbl_StartTableWideMargin (unsigned CellPadding);
 void Tbl_EndTable (void);
 
+void Tbl_PutEmptyCells (unsigned NumColumns);
+
 #endif

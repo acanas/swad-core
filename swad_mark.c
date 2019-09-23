@@ -113,10 +113,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
    struct MarksProperties Marks;
 
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
-      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>"
-                         "<td class=\"COLOR%u\"></td>",
-               Gbl.RowEvenOdd,
-               Gbl.RowEvenOdd);
+      Tbl_PutEmptyCells (2);
    else	// File or link
      {
       /***** Get number of rows in header or footer *****/
