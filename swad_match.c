@@ -142,6 +142,9 @@ static void Mch_PutFormNewMatch (struct Game *Game);
 static void Mch_ShowLstGrpsToCreateMatch (void);
 
 static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1]);
+static void Mch_CreateIndexes (long GamCod,long MchCod);
+static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
+			       long QstCod,bool Shuffle);
 static void Mch_CreateGrps (long MchCod);
 static void Mch_UpdateMatchStatusInDB (struct Match *Match);
 
@@ -1050,11 +1053,144 @@ static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
 				         Title,
 					 Mch_ShowingStringsDB[Mch_SHOWING_DEFAULT]);
 
+   /***** Create indexes for answers *****/
+   Mch_CreateIndexes (GamCod,MchCod);
+
    /***** Create groups associated to the match *****/
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       Mch_CreateGrps (MchCod);
 
    return MchCod;
+  }
+
+/*****************************************************************************/
+/*********************** Create indexes for a match **************************/
+/*****************************************************************************/
+/* Everytime a new match is created,
+   the answers of each shufflable question are shuffled.
+   The shuffling is stored in a table of indexes
+   that will be read when showing a match */
+
+static void Mch_CreateIndexes (long GamCod,long MchCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumQsts;
+   unsigned NumQst;
+   long QstCod;
+   long LongNum;
+   unsigned QstInd;
+   Tst_AnswerType_t AnswerType;
+   bool Shuffle;
+
+   /***** Get questions of the game *****/
+   NumQsts = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get questions of a game",
+			     "SELECT gam_questions.QstCod,"	// row[0]
+			            "gam_questions.QstInd,"	// row[1]
+			            "tst_questions.AnsType"	// row[2]
+			            "tst_questions.Shuffle"	// row[3]
+			     " FROM gam_questions,tst_questions"
+			     " WHERE gam_questions.GamCod=%ld"
+			     " AND gam_questions.QstCod=tst_questions.QstCod"
+			     " ORDER BY gam_questions.QstInd",
+			     GamCod);
+
+   /***** For each question in game... *****/
+   for (NumQst = 0;
+	NumQst < NumQsts;
+	NumQst++)
+     {
+      /***** Get question data *****/
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get question code (row[0]) */
+      if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 Lay_ShowErrorAndExit ("Wrong code of question.");
+
+      /* Get question index (row[1]) */
+      if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
+	 Lay_ShowErrorAndExit ("Wrong question index.");
+      QstInd = (unsigned) LongNum;
+
+      /* Get answer type (row[2]) */
+      AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
+      if (AnswerType != Tst_ANS_UNIQUE_CHOICE)
+	 Lay_ShowErrorAndExit ("Wrong answer type.");
+
+      /* Get shuffle (row[3]) */
+      Shuffle = (row[3][0] == 'Y');
+
+      /***** Reorder answer *****/
+      Mch_ReorderAnswer (MchCod,QstInd,QstCod,Shuffle);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/******************* Reorder answers of a match question *********************/
+/*****************************************************************************/
+
+static void Mch_ReorderAnswer (long MchCod,unsigned QstInd,
+			       long QstCod,bool Shuffle)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumAnss;
+   unsigned NumAns;
+   long LongNum;
+   unsigned AnsInd;
+   char StrOneAnswer[10 + 1];
+   char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+
+   /***** Initialize list of answers to empty string *****/
+   StrAnswersOneQst[0] = '\0';
+
+   /***** Get questions of the game *****/
+   NumAnss = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get questions of a game",
+			     "SELECT AnsInd"	// row[0]
+			     " FROM tst_answers"
+			     " WHERE GamCod=%ld"
+			     " ORDER BY %s",
+			     QstCod,
+			     Shuffle ? "RAND(NOW())" :
+				       "AnsInd");
+
+   /***** For each answer in question... *****/
+   for (NumAns = 0;
+	NumAns < NumAnss;
+	NumAns++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get answer index (row[0]) */
+      if ((LongNum = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 Lay_ShowErrorAndExit ("Wrong answer index.");
+      AnsInd = (unsigned) LongNum;
+
+      /* Concatenate answer index to list of answers */
+      snprintf (StrOneAnswer,10 + 1,
+		"%u",AnsInd);
+      if (NumAns)
+         Str_Concat (StrAnswersOneQst,",",
+		     Tst_MAX_BYTES_ANSWERS_ONE_QST);
+      Str_Concat (StrAnswersOneQst,StrOneAnswer,
+		  Tst_MAX_BYTES_ANSWERS_ONE_QST);
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Create entry for this question in table of match indexes *****/
+   DB_QueryINSERT ("can not create match indexes",
+		   "INSERT INTO mch_indexes"
+		   " (MchCod,QstInd,Indexes)"
+		   " VALUES"
+		   " (%ld,%u,'%s')",
+		   MchCod,QstInd,StrAnswersOneQst);
   }
 
 /*****************************************************************************/
@@ -1823,7 +1959,8 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
    /***** Show question *****/
    /* Get answer type (row[0]) */
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[0]);
-   // TODO: Check that answer type is correct (unique choice)
+   if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE)
+      Lay_ShowErrorAndExit ("Wrong answer type.");
 
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");	// Bottom
 
