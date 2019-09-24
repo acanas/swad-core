@@ -142,6 +142,8 @@ void Tst_ShowNewTest (void);
 void Tst_AssessTest (void);
 void Tst_ShowTstTotalMark (unsigned NumQsts,double TotalScore);
 
+void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);
+
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 

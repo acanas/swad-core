@@ -872,14 +872,12 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
 
 static void Tst_ShowTstTagsPresentInATestResult (long TstCod)
   {
-   extern const char *Txt_no_tags;
    MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   unsigned long NumRow;
+   unsigned long NumTags;
 
    /***** Get all tags of questions in this test *****/
-   NumRows = DB_QuerySELECT (&mysql_res,"can not get tags"
+   NumTags = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get tags"
 					" present in a test result",
 			     "SELECT tst_tags.TagTxt"	// row[0]
 			     " FROM"
@@ -891,13 +889,29 @@ static void Tst_ShowTstTagsPresentInATestResult (long TstCod)
 			     " WHERE TagsCods.TagCod=tst_tags.TagCod"
 			     " ORDER BY tst_tags.TagTxt",
 			     TstCod);
-   if (NumRows)
+   Tst_ShowTagList (NumTags,mysql_res);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************************** Show list of test tags ***************************/
+/*****************************************************************************/
+
+void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
+  {
+   extern const char *Txt_no_tags;
+   MYSQL_ROW row;
+   unsigned NumTag;
+
+   if (NumTags)
      {
       /***** Write the tags *****/
       fprintf (Gbl.F.Out,"<ul>");
-      for (NumRow = 0;
-	   NumRow < NumRows;
-	   NumRow++)
+      for (NumTag = 0;
+	   NumTag < NumTags;
+	   NumTag++)
         {
          row = mysql_fetch_row (mysql_res);
          fprintf (Gbl.F.Out,"<li>%s</li>",
@@ -908,9 +922,6 @@ static void Tst_ShowTstTagsPresentInATestResult (long TstCod)
    else
       fprintf (Gbl.F.Out,"%s",
                Txt_no_tags);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/

@@ -222,6 +222,7 @@ static void Mch_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
                                             unsigned *NumQsts,
 					    unsigned *NumQstsNotBlank,
 					    double *Score);
+static void Mch_ShowTstTagsPresentInAMatchResult (long GamCod);
 
 /*****************************************************************************/
 /************************* List the matches of a game ************************/
@@ -3254,7 +3255,8 @@ void Mch_ShowOneMchResult (void)
    extern const char *Txt_non_blank_QUESTIONS;
    extern const char *Txt_Score;
    extern const char *Txt_out_of_PART_OF_A_SCORE;
-   long MchCod;
+   extern const char *Txt_Tags;
+   struct Match Match;
    Usr_MeOrOther_t MeOrOther;
    struct UsrData *UsrDat;
    time_t TimeUTC[Dat_NUM_START_END_TIME];	// Match result UTC date-time
@@ -3268,8 +3270,11 @@ void Mch_ShowOneMchResult (void)
    bool ICanViewScore;
 
    /***** Get match code *****/
-   if ((MchCod = Mch_GetParamMchCod ()) == -1L)
+   if ((Match.MchCod = Mch_GetParamMchCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of match is missing.");
+
+   /***** Get data of the match from database *****/
+   Mch_GetDataOfMatchByCod (&Match);
 
    /***** Pointer to user's data *****/
    MeOrOther = (Gbl.Action.Act == ActSeeOneMchResMe) ? Usr_ME :
@@ -3287,7 +3292,7 @@ void Mch_ShowOneMchResult (void)
      }
 
    /***** Get test result data *****/
-   Mch_GetMatchResultDataByMchCod (MchCod,UsrDat->UsrCod,
+   Mch_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,
 				   TimeUTC,
 				   &NumQsts,
 				   &NumQstsNotBlank,
@@ -3341,7 +3346,7 @@ void Mch_ShowOneMchResult (void)
    if (ICanViewResult)	// I am allowed to view this match result
      {
       /***** Get questions and user's answers of the match result from database *****/
-      Mch_GetMatchResultQuestionsFromDB (MchCod,UsrDat->UsrCod,
+      Mch_GetMatchResultQuestionsFromDB (Match.MchCod,UsrDat->UsrCod,
 					 &NumQsts,&NumQstsNotBlank);
 
       /***** Start box *****/
@@ -3445,6 +3450,17 @@ void Mch_ShowOneMchResult (void)
       fprintf (Gbl.F.Out," %s %u)</td>"
 			 "</tr>",
 	       Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+
+      /* Tags present in this result */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT_N RIGHT_TOP\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_TOP\">",
+	       Txt_Tags);
+      Mch_ShowTstTagsPresentInAMatchResult (Match.GamCod);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
       /***** Write answers and solutions *****/
       Tst_ShowTestResult (UsrDat,NumQsts,TimeUTC[Dat_START_TIME]);
@@ -3584,6 +3600,35 @@ static void Mch_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 	 *Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/******************** Show test tags in this match result ********************/
+/*****************************************************************************/
+
+static void Mch_ShowTstTagsPresentInAMatchResult (long GamCod)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned long NumTags;
+
+   /***** Get all tags of questions in this test *****/
+   NumTags = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get tags"
+					" present in a match result",
+			     "SELECT tst_tags.TagTxt"	// row[0]
+			     " FROM"
+			     " (SELECT DISTINCT(tst_question_tags.TagCod)"
+			     " FROM tst_question_tags,gam_questions"
+			     " WHERE gam_questions.GamCod=%ld"
+			     " AND gam_questions.QstCod=tst_question_tags.QstCod)"
+			     " AS TagsCods,tst_tags"
+			     " WHERE TagsCods.TagCod=tst_tags.TagCod"
+			     " ORDER BY tst_tags.TagTxt",
+			     GamCod);
+   Tst_ShowTagList (NumTags,mysql_res);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
