@@ -3494,7 +3494,7 @@ void Mch_ShowOneMchResult (void)
 	       Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
 
       /***** Write answers and solutions *****/
-      Tst_ShowTestResult (NumQsts,TimeUTC[Dat_START_TIME]);
+      Tst_ShowTestResult (UsrDat,NumQsts,TimeUTC[Dat_START_TIME]);
 
       /***** End table *****/
       Tbl_EndTable ();

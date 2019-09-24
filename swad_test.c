@@ -157,7 +157,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
 static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
 static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
 			            struct UsrData *UsrDat,
-                                    long MchCod,unsigned NumQst,long QstCod,MYSQL_ROW row,
+                                    unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
                                        bool OptionsDisabled);
@@ -193,7 +193,6 @@ static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
                                                     unsigned long NumRows,
                                                     MYSQL_RES *mysql_res);
 
-static void Tst_WriteAnswersEdit (long QstCod);
 static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,bool Shuffle);
 static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
                                         unsigned NumQst,long QstCod,
@@ -861,7 +860,7 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
 
       Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_TO_ANSWER,
 			      &Gbl.Usrs.Me.UsrDat,
-                              -1L,NumQst,QstCod,row,
+                              NumQst,QstCod,row,
 	                      &ScoreThisQst,		// Not used here
 	                      &AnswerIsNotBlank);	// Not used here
      }
@@ -963,7 +962,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 	 /***** Write question and answers *****/
 	 Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
 	                         &Gbl.Usrs.Me.UsrDat,
-				 -1L,NumQst,QstCod,row,
+				 NumQst,QstCod,row,
 				 &ScoreThisQst,&AnswerIsNotBlank);
 
 	 /***** Store test result question in database *****/
@@ -1004,7 +1003,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 
 static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions,
 			            struct UsrData *UsrDat,
-                                    long MchCod,unsigned NumQst,long QstCod,MYSQL_ROW row,
+                                    unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
@@ -1063,17 +1062,7 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
 	 if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
 	    Tst_WriteQstFeedback (row[5],"TEST_EXA_LIGHT");
 	 break;
-      case Tst_EDIT_TEST:
-	 break;
-      case Tst_SELECT_QUESTIONS_FOR_GAME:
-	 break;
-      case Tst_SHOW_GAME_TO_ANSWER:
-	 Tst_WriteAnswersMatchResult (MchCod,NumQst,QstCod,
-	                              "MATCH_QST",false);	// Don't show result
-	 break;
-      case Tst_SHOW_GAME_RESULT:
-	 Tst_WriteAnswersMatchResult (MchCod,NumQst,QstCod,
-	                              "MATCH_QST",true);	// Show result
+      default:
 	 break;
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -3327,7 +3316,7 @@ void Tst_GetCorrectAnswersFromDB (long QstCod)
 /**************** Get and write the answers of a test question ***************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersEdit (long QstCod)
+void Tst_WriteAnswersEdit (long QstCod)
   {
    extern const char *Txt_TST_Answer_given_by_the_teachers;
    unsigned NumOpt;
@@ -8200,7 +8189,8 @@ void Tst_ShowOneTstResult (void)
 			 "</tr>");
 
       /***** Write answers and solutions *****/
-      Tst_ShowTestResult (Gbl.Test.NumQsts,TstTimeUTC);
+      Tst_ShowTestResult (&Gbl.Usrs.Other.UsrDat,
+			  Gbl.Test.NumQsts,TstTimeUTC);
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -8220,7 +8210,8 @@ void Tst_ShowOneTstResult (void)
 /************************* Show the result of a test *************************/
 /*****************************************************************************/
 
-void Tst_ShowTestResult (unsigned NumQsts,time_t TstTimeUTC)
+void Tst_ShowTestResult (struct UsrData *UsrDat,
+			 unsigned NumQsts,time_t TstTimeUTC)
   {
    extern const char *Txt_Question_modified;
    extern const char *Txt_Question_removed;
@@ -8260,9 +8251,8 @@ void Tst_ShowTestResult (unsigned NumQsts,time_t TstTimeUTC)
 	        ==> don't show question ****/
 	 EditTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 	 ThisQuestionHasBeenEdited = false;
-	 // if (TstTimeUTC)
-	    if (EditTimeUTC > TstTimeUTC)
-	       ThisQuestionHasBeenEdited = true;
+	 if (EditTimeUTC > TstTimeUTC)
+	    ThisQuestionHasBeenEdited = true;
 
 	 if (ThisQuestionHasBeenEdited)
 	    /***** Question has been edited *****/
@@ -8284,8 +8274,8 @@ void Tst_ShowTestResult (unsigned NumQsts,time_t TstTimeUTC)
 
 	    /***** Write questions and answers *****/
 	    Tst_WriteQstAndAnsTest (Tst_SHOW_TEST_RESULT,
-	                            &Gbl.Usrs.Other.UsrDat,
-				    -1L,NumQst,QstCod,row,
+	                            UsrDat,
+				    NumQst,QstCod,row,
 				    &ScoreThisQst,	// Not used here
 				    &AnswerIsNotBlank);	// Not used here
 	   }

@@ -1554,13 +1554,6 @@ static void Gam_ListGameQuestions (struct Game *Game)
    unsigned NumQsts;
    bool Editing = (Gbl.Action.Act == ActEdiOneGam    ||
 	           Gbl.Action.Act == ActAddOneGamQst);	// TODO: Ampliar casos en los que se está editando para que se muestre el botón de Añadir preguntas
-   // Tst_ActionToDoWithQuestions_t ActionToDoWithQuestions;
-
-   /***** How to show the questions ******/
-   // if (Editing)
-   //   ActionToDoWithQuestions = Tst_SHOW_GAME_RESULT;
-   //else
-   //   ActionToDoWithQuestions = Tst_SHOW_GAME_TO_ANSWER;
 
    /***** Get data of questions from database *****/
    NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -1764,8 +1757,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       Tst_WriteQstFeedback (row[4],"TEST_EDI_LIGHT");
 
       /* Show answers */
-      Tst_WriteAnswersMatchResult (-1L,QstInd,QstCod,
-                                   "TEST_EDI",false);	// Don't show result
+      Tst_WriteAnswersEdit (Gbl.Test.QstCod);
 
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");

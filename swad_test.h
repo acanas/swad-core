@@ -74,8 +74,6 @@ typedef enum
    Tst_SHOW_TEST_RESULT,		// Showing the assessment of a test
    Tst_EDIT_TEST,			// Editing test questions
    Tst_SELECT_QUESTIONS_FOR_GAME,	// Selecting test questions for a game
-   Tst_SHOW_GAME_TO_ANSWER,		// Showing a game to a student
-   Tst_SHOW_GAME_RESULT,		// Showing the assessment of a game
   } Tst_ActionToDoWithQuestions_t;
 
 #define Tst_NUM_TYPES_FEEDBACK		5
@@ -156,6 +154,7 @@ void Tst_WriteParamEditQst (void);
 unsigned Tst_GetNumAnswersQst (long QstCod);
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);
 void Tst_GetCorrectAnswersFromDB (long QstCod);
+void Tst_WriteAnswersEdit (long QstCod);
 void Tst_WriteAnswersMatchResult (long MchCod,unsigned QstInd,long QstCod,
                                   const char *Class,bool ShowResult);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
@@ -212,7 +211,8 @@ void Tst_SelDatesToSeeMyTstResults (void);
 void Tst_ShowMyTstResults (void);
 void Tst_ShowUsrsTstResults (void);
 void Tst_ShowOneTstResult (void);
-void Tst_ShowTestResult (unsigned NumQsts,time_t TstTimeUTC);
+void Tst_ShowTestResult (struct UsrData *UsrDat,
+			 unsigned NumQsts,time_t TstTimeUTC);
 void Tst_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod);
 void Tst_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod);
 void Tst_RemoveCrsTestResults (long CrsCod);
