@@ -12892,5 +12892,15 @@ SELECT gam_questions.QstCod,
  AND gam_questions.QstInd=mch_indexes.QstInd
  ORDER BY gam_questions.QstInd;
  
+SELECT gam_questions.QstCod,
+       gam_questions.QstInd,
+       mch_indexes.Indexes
+ FROM mch_matches,gam_questions,mch_indexes
+ WHERE mch_matches.MchCod=69
+ AND mch_matches.GamCod=gam_questions.GamCod
+ AND mch_matches.MchCod=mch_indexes.MchCod
+ AND gam_questions.QstInd=mch_indexes.QstInd
+ ORDER BY gam_questions.QstInd;
+ 
  
  SELECT Correct FROM tst_answers WHERE QstCod=1787 ORDER BY AnsInd;

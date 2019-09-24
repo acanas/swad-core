@@ -3496,12 +3496,12 @@ void Mch_ShowOneMchResult (void)
       /***** Write answers and solutions *****/
       Tst_ShowTestResult (NumQsts,TimeUTC[Dat_START_TIME]);
 
+      /***** End table *****/
+      Tbl_EndTable ();
+
       /***** Write total mark of test *****/
       if (ICanViewScore)
          Tst_ShowTstTotalMark (NumQsts,TotalScore);
-
-      /***** End table *****/
-      Tbl_EndTable ();
 
       /***** End box *****/
       Box_EndBox ();
@@ -3535,8 +3535,9 @@ static void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod)
 			     " WHERE mch_matches.MchCod=%ld"
 			     " AND mch_matches.GamCod=gam_questions.GamCod"
 			     " AND mch_matches.MchCod=mch_indexes.MchCod"
-			     " AND mch_matches.QstInd=mch_indexes.QstInd"
-			     " ORDER BY gam_questions.QstInd");
+			     " AND gam_questions.QstInd=mch_indexes.QstInd"
+			     " ORDER BY gam_questions.QstInd",
+			     MchCod);
    for (NumQst = 0;
 	NumQst < NumQsts;
 	NumQst++)

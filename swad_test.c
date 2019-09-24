@@ -8202,12 +8202,12 @@ void Tst_ShowOneTstResult (void)
       /***** Write answers and solutions *****/
       Tst_ShowTestResult (Gbl.Test.NumQsts,TstTimeUTC);
 
+      /***** End table *****/
+      Tbl_EndTable ();
+
       /***** Write total mark of test *****/
       if (ICanViewScore)
 	 Tst_ShowTstTotalMark (Gbl.Test.NumQsts,TotalScore);
-
-      /***** End table *****/
-      Tbl_EndTable ();
 
       /***** End box *****/
       Box_EndBox ();
