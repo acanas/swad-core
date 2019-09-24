@@ -14414,28 +14414,28 @@ const char *Txt_hidden_documents =
 #elif L==9	// pt
 	"documentos ocultos";
 #endif
-/*
-const char *Txt_Hidden_game =
+
+const char *Txt_Hidden_result =
 #if   L==1	// ca
-	"Joc ocult";
+	"Resultat ocult";
 #elif L==2	// de
-	"Ausgeblendet Spiel";
+	"Ausgeblendet Ergebnis";
 #elif L==3	// en
-	"Hidden game";
+	"Hidden result";
 #elif L==4	// es
-	"Juego oculto";
+	"Resultado oculto";
 #elif L==5	// fr
-	"Jeu cach&eacute;";
+	"R&eacute;sultat cach&eacute;";
 #elif L==6	// gn
-	"Juego oculto";	// Okoteve traducción
+	"Resultado oculto";	// Okoteve traducción
 #elif L==7	// it
-	"Gioco nascosto";
+	"Risultato nascosto";
 #elif L==8	// pl
-	"Ukryte gra";
+	"Ukryte wynik";
 #elif L==9	// pt
-	"Jogo oculto";
+	"Resultado oculto";
 #endif
-*/
+
 const char *Txt_Hidden_survey =
 #if   L==1	// ca
 	"Enquesta oculta";
@@ -33255,6 +33255,27 @@ const char *Txt_Reset_survey =
 	"Reset badania";
 #elif L==9	// pt
 	"Reiniciar inqu&eacute;rito";
+#endif
+
+const char *Txt_Result =
+#if   L==1	// ca
+	"Resultat";
+#elif L==2	// de
+	"Ergebnis";
+#elif L==3	// en
+	"Result";
+#elif L==4	// es
+	"Resultado";
+#elif L==5	// fr
+	"R&eacute;sultat";
+#elif L==6	// gn
+	"Resultado";	// Okoteve traducción
+#elif L==7	// it
+	"Risultato";
+#elif L==8	// pl
+	"Wynik";
+#elif L==9	// pt
+	"Resultado";
 #endif
 
 const char *Txt_Results =
@@ -52933,28 +52954,28 @@ const char *Txt_Visible_by_BR_the_student =
 #elif L==9	// pt
 	"Vis&iacute;vel pelo<br />estudante?";
 #endif
-/*
-const char *Txt_Visible_game =
+
+const char *Txt_Visible_result =
 #if   L==1	// ca
-	"Joc visible";
+	"Resultat visible";
 #elif L==2	// de
-	"Sichtbare Spiel";
+	"Sichtbare Ergebnis";
 #elif L==3	// en
-	"Visible game";
+	"Visible result";
 #elif L==4	// es
-	"Juego visible";
+	"Resultado visible";
 #elif L==5	// fr
-	"Jeu visible";
+	"R&eacute;sultat visible";
 #elif L==6	// gn
-	"Juego visible";	// Okoteve traducción
+	"Resultado visible";	// Okoteve traducción
 #elif L==7	// it
-	"Gioco visibile";
+	"Risultato visibile";
 #elif L==8	// pl
-	"Widoczny gra";
+	"Widoczny wynik";
 #elif L==9	// pt
-	"Jogo vis&iacute;vel";
+	"Resultado vis&iacute;vel";
 #endif
-*/
+
 const char *Txt_Visible_MALE_PLURAL =
 #if   L==1	// ca
 	"Visibles";

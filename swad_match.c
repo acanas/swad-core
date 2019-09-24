@@ -87,14 +87,15 @@ struct Match
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    char Title[Gam_MAX_BYTES_TITLE + 1];
+   bool VisibleResult;
    struct
      {
       unsigned QstInd;	// 0 means that the game has not started. First question has index 1.
       long QstCod;
       time_t QstStartTimeUTC;
-      bool ShowResults;
-      Mch_Showing_t Showing;
-      bool Playing;
+      bool ShowResults;		// Show results while playing?
+      Mch_Showing_t Showing;	// What is shown on teacher's screen?
+      bool Playing;		// Is being played now?
       unsigned NumPlayers;
      } Status;
   };
@@ -352,6 +353,7 @@ static void Mch_GetDataOfMatchByCod (struct Match *Match)
 	   StartEndTime++)
          Match->TimeUTC[StartEndTime] = (time_t) 0;
       Match->Title[0]                = '\0';
+      Match->VisibleResult	     = false;
       Match->Status.QstInd           = 0;
       Match->Status.QstCod           = -1L;
       Match->Status.QstStartTimeUTC  = (time_t) 0;
@@ -391,9 +393,12 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
    extern const char *Txt_Match;
    extern const char *Txt_Players;
    extern const char *Txt_Status;
+   extern const char *Txt_Result;
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
    extern const char *Txt_Today;
+   extern const char *Txt_Visible_result;
+   extern const char *Txt_Hidden_result;
    unsigned NumMatch;
    unsigned UniqueId;
    struct Match Match;
@@ -424,6 +429,9 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
                       "<th class=\"RIGHT_TOP\">"
                       "%s"
                       "</th>"
+                      "<th class=\"RIGHT_TOP\">"
+                      "%s"
+                      "</th>"
                       "</tr>",
             Txt_No_INDEX,
             Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
@@ -431,7 +439,8 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 	    Txt_START_END_TIME[Gam_ORDER_BY_END_DATE],
             Txt_Match,
 	    Txt_Players,
-            Txt_Status);
+            Txt_Status,
+            Txt_Result);
 
    /***** Write rows *****/
    for (NumMatch = 0, UniqueId = 1;
@@ -542,6 +551,44 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 	    break;
 	}
 
+      fprintf (Gbl.F.Out,"</td>");
+
+      /***** Match result visible? *****/
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      switch (Gbl.Usrs.Me.Role.Logged)
+	{
+	 case Rol_STD:
+	    /* Match result visible or hidden? */
+	    if (Match.VisibleResult)
+	       Ico_PutIconOff ("eye.svg",Txt_Visible_result);
+	    else
+	       Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_DEG_ADM:
+	 case Rol_CTR_ADM:
+	 case Rol_INS_ADM:
+	 case Rol_SYS_ADM:
+	    /* Match result visible or hidden? */
+	    if (Match.VisibleResult)
+	       Ico_PutIconOff ("eye.svg",Txt_Visible_result);
+	    else
+	       Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
+	    break;
+	    /*// TODO: Put icon to make visible / to hide
+	    / Icon to resume /
+	    Mch_CurrentMchCod = Match.MchCod;
+	    Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
+					   Mch_PutParamCurrentMchCod,
+					   Match.Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
+											   "flag-checkered.svg",
+					   Txt_Resume);
+	    */
+	    break;
+	 default:
+	    break;
+	}
       fprintf (Gbl.F.Out,"</td>");
 
       fprintf (Gbl.F.Out,"</tr>");

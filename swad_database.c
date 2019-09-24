@@ -1371,21 +1371,22 @@ mysql> DESCRIBE mch_groups;
    /***** Table mch_matches *****/
 /*
 mysql> DESCRIBE mch_matches;
-+-------------+--------------------------------------------+------+-----+---------+----------------+
-| Field       | Type                                       | Null | Key | Default | Extra          |
-+-------------+--------------------------------------------+------+-----+---------+----------------+
-| MchCod      | int(11)                                    | NO   | PRI | NULL    | auto_increment |
-| GamCod      | int(11)                                    | NO   | MUL | NULL    |                |
-| UsrCod      | int(11)                                    | NO   |     | NULL    |                |
-| StartTime   | datetime                                   | NO   |     | NULL    |                |
-| EndTime     | datetime                                   | NO   |     | NULL    |                |
-| Title       | varchar(2047)                              | NO   |     | NULL    |                |
-| QstInd      | int(11)                                    | NO   |     | 0       |                |
-| QstCod      | int(11)                                    | NO   |     | -1      |                |
-| ShowResults | enum('N','Y')                              | NO   |     | Y       |                |
-| Showing     | enum('nothing','stem','answers','results') | NO   |     | nothing |                |
-+-------------+--------------------------------------------+------+-----+---------+----------------+
-10 rows in set (0.00 sec)
++---------------+--------------------------------------------+------+-----+---------+----------------+
+| Field         | Type                                       | Null | Key | Default | Extra          |
++---------------+--------------------------------------------+------+-----+---------+----------------+
+| MchCod        | int(11)                                    | NO   | PRI | NULL    | auto_increment |
+| GamCod        | int(11)                                    | NO   | MUL | NULL    |                |
+| UsrCod        | int(11)                                    | NO   |     | NULL    |                |
+| StartTime     | datetime                                   | NO   |     | NULL    |                |
+| EndTime       | datetime                                   | NO   |     | NULL    |                |
+| Title         | varchar(2047)                              | NO   |     | NULL    |                |
+| VisibleResult | enum('N','Y')                              | NO   |     | N       |                |
+| QstInd        | int(11)                                    | NO   |     | 0       |                |
+| QstCod        | int(11)                                    | NO   |     | -1      |                |
+| ShowResults   | enum('N','Y')                              | NO   |     | Y       |                |
+| Showing       | enum('nothing','stem','answers','results') | NO   |     | nothing |                |
++---------------+--------------------------------------------+------+-----+---------+----------------+
+11 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_matches ("
 			"MchCod INT NOT NULL AUTO_INCREMENT,"
@@ -1394,6 +1395,7 @@ mysql> DESCRIBE mch_matches;
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
 			"Title VARCHAR(2047) NOT NULL,"	// Gam_MAX_BYTES_TITLE
+			"VisibleResult ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"QstInd INT NOT NULL DEFAULT 0,"
 			"QstCod INT NOT NULL DEFAULT -1,"
 			"ShowResults ENUM('N','Y') NOT NULL DEFAULT 'Y',"
