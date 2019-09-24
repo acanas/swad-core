@@ -2758,6 +2758,7 @@ void Mch_ShowMyMchResults (void)
    Mch_ShowHeaderMchResults ();
 
    /***** List my matches results *****/
+   Tst_GetConfigTstFromDB ();	// To get feedback type
    Mch_ShowMchResults (Usr_ME);
 
    /***** End table and box *****/
