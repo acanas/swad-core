@@ -4048,24 +4048,29 @@ void Tst_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ON
    unsigned NumOpt;
    const char *Ptr;
    char StrOneAnswer[10 + 1];
-   int AnsUsr;
+   unsigned AnsUsr;
 
+   /***** Initialize all answers to false *****/
    for (NumOpt = 0;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
 	NumOpt++)
       AnswersUsr[NumOpt] = false;
+
+   /***** Set selected answers to true *****/
    for (NumOpt = 0, Ptr = StrAnswersOneQst;
-	NumOpt < Gbl.Test.Answer.NumOptions;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
 	NumOpt++)
-      if (*Ptr)
-        {
-         Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneAnswer,10);
-         if (sscanf (StrOneAnswer,"%d",&AnsUsr) != 1)
-            Lay_ShowErrorAndExit ("Bad user's answer.");
-         if (AnsUsr < 0 || AnsUsr >= Tst_MAX_OPTIONS_PER_QUESTION)
-            Lay_ShowErrorAndExit ("Bad user's answer.");
-         AnswersUsr[AnsUsr] = true;
-        }
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneAnswer,10);
+
+      if (sscanf (StrOneAnswer,"%u",&AnsUsr) != 1)
+	 Lay_ShowErrorAndExit ("Bad user's answer.");
+
+      if (AnsUsr >= Tst_MAX_OPTIONS_PER_QUESTION)
+	 Lay_ShowErrorAndExit ("Bad user's answer.");
+
+      AnswersUsr[AnsUsr] = true;
+     }
   }
 
 /*****************************************************************************/

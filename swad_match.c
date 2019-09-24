@@ -2508,19 +2508,6 @@ void Mch_ReceiveQstAnsFromStd (void)
       Mch_ComputeScore (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 			&NumQsts,&NumQstsNotBlank,&TotalScore);
 
-   DB_QueryINSERT ("can not debug",	// TODO: Remove
-		   "INSERT INTO debug"
-		   " (DebugTime,Txt)"
-		   " VALUES"
-		   " (NOW(),'NumQsts = %u')",
-		   NumQsts);
-   DB_QueryINSERT ("can not debug",	// TODO: Remove
-		   "INSERT INTO debug"
-		   " (DebugTime,Txt)"
-		   " VALUES"
-		   " (NOW(),'NumQstsNotBlank = %u')",
-		   NumQstsNotBlank);
-
       Str_SetDecimalPointToUS ();	// To print the floating point as a dot
       if (DB_QueryCOUNT ("can not get if match result exists",
 			 "SELECT COUNT(*) FROM mch_results"
