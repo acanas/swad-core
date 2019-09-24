@@ -4017,23 +4017,25 @@ void Tst_GetIndexesFromStr (const char StrIndexesOneQst[Tst_MAX_BYTES_INDEXES_ON
    const char *Ptr;
    char StrOneIndex[10 + 1];
 
-   /***** Initialize to 0 *****/
-   for (NumOpt = 0, Ptr = StrIndexesOneQst;
-	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
-	NumOpt++)
-      Indexes[NumOpt] = 0;
-
    /***** Get indexes from string *****/
    for (NumOpt = 0, Ptr = StrIndexesOneQst;
 	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION && *Ptr;
 	NumOpt++)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,10);
+
       if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
-         Lay_ShowErrorAndExit ("Wrong index of answer.");
+	 Lay_ShowErrorAndExit ("Wrong index of answer.");
+
       if (Indexes[NumOpt] >= Tst_MAX_OPTIONS_PER_QUESTION)
-         Lay_ShowErrorAndExit ("Wrong index of answer.");
+	 Lay_ShowErrorAndExit ("Wrong index of answer.");
      }
+
+   /***** Initialize remaining to 0 *****/
+   for (;
+	NumOpt < Tst_MAX_OPTIONS_PER_QUESTION;
+	NumOpt++)
+      Indexes[NumOpt] = 0;
   }
 
 /*****************************************************************************/
