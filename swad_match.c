@@ -202,9 +202,7 @@ static void Mch_GetNumPlayers (struct Match *Match);
 
 static void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
 				 struct Mch_UsrAnswer *UsrAnswer);
-static void Mch_ComputeScore (long MchCod,long UsrCod,
-			      unsigned *NumQsts,unsigned *NumQstsNotBlank,
-			      double *TotalScore);
+static double Mch_ComputeScore (unsigned NumQsts);
 
 static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd);
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
@@ -217,7 +215,8 @@ static void Mch_ShowMchResultsSummaryRow (bool ItsMe,
                                           unsigned NumTotalQsts,
                                           unsigned NumTotalQstsNotBlank,
                                           double TotalScoreOfAllResults);
-static void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod);
+static void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
+					       unsigned *NumQsts,unsigned *NumQstsNotBlank);
 static void Mch_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             unsigned *NumQsts,
@@ -2505,8 +2504,9 @@ void Mch_ReceiveQstAnsFromStd (void)
 			  UsrAnswer.AnsInd);
 
       /***** Update student's match result *****/
-      Mch_ComputeScore (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-			&NumQsts,&NumQstsNotBlank,&TotalScore);
+      Mch_GetMatchResultQuestionsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+					 &NumQsts,&NumQstsNotBlank);
+      TotalScore = Mch_ComputeScore (NumQsts);
 
       Str_SetDecimalPointToUS ();	// To print the floating point as a dot
       if (DB_QueryCOUNT ("can not get if match result exists",
@@ -2551,73 +2551,23 @@ void Mch_ReceiveQstAnsFromStd (void)
 /******************** Compute match score for a student **********************/
 /*****************************************************************************/
 
-static void Mch_ComputeScore (long MchCod,long UsrCod,
-			      unsigned *NumQsts,unsigned *NumQstsNotBlank,
-			      double *TotalScore)
+static double Mch_ComputeScore (unsigned NumQsts)
   {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
    unsigned NumQst;
-   unsigned QstInd;
    double ScoreThisQst;
    bool AnswerIsNotBlank;
-   long LongNum;
-   struct Mch_UsrAnswer UsrAnswer;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION];
+   double TotalScore = 0.0;
 
-   /***** Get questions and answers of a match result *****/
-   *NumQsts = (unsigned)
-	      DB_QuerySELECT (&mysql_res,"can not get questions and answers"
-		                         " of a match result",
-			      "SELECT gam_questions.QstCod,"	// row[0]
-				     "gam_questions.QstInd,"	// row[1]
-				     "mch_indexes.Indexes"	// row[2]
-			      " FROM mch_matches,gam_questions,mch_indexes"
-			      " WHERE mch_matches.MchCod=%ld"
-			      " AND mch_matches.GamCod=gam_questions.GamCod"
-			      " AND mch_matches.MchCod=mch_indexes.MchCod"
-			      " AND gam_questions.QstInd=mch_indexes.QstInd"
-			      " ORDER BY gam_questions.QstInd",
-			      MchCod);
-
-   /***** For each question in match... *****/
-   for (NumQst = 0, *NumQstsNotBlank = 0, *TotalScore = 0.0;
-	NumQst < *NumQsts;
+   for (NumQst = 0;
+	NumQst < NumQsts;
 	NumQst++)
      {
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get question code (row[0]) */
-      if ((Gbl.Test.QstCodes[NumQst] = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
-
-      /* Get question index (row[1]) */
-      if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
-	 Lay_ShowErrorAndExit ("Wrong code of question.");
-      QstInd = (unsigned) LongNum;
-
-      /* Get indexes for this question (row[2]) */
-      Str_Copy (Gbl.Test.StrIndexesOneQst[NumQst],row[2],
-                Tst_MAX_BYTES_INDEXES_ONE_QST);
-
-      /***** Get answers selected by user for this question *****/
-      Mch_GetQstAnsFromDB (MchCod,UsrCod,QstInd,&UsrAnswer);
-      if (UsrAnswer.AnsInd >= 0)		// AnsInd >= 0 ==> answer selected
-	{
-         snprintf (Gbl.Test.StrAnswersOneQst[NumQst],Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
-		   "%d",UsrAnswer.AnsInd);
-         (*NumQstsNotBlank)++;
-	}
-      else			// AnsInd < 0 ==> no answer selected
-	 Gbl.Test.StrAnswersOneQst[NumQst][0] = '\0';	// Empty answer
-
       /***** Get indexes for this question from string *****/
-      Par_ReplaceCommaBySeparatorMultiple (Gbl.Test.StrIndexesOneQst[NumQst]);
       Tst_GetIndexesFromStr (Gbl.Test.StrIndexesOneQst[NumQst],Indexes);
 
       /***** Get the user's answers for this question from string *****/
-      Par_ReplaceCommaBySeparatorMultiple (Gbl.Test.StrAnswersOneQst[NumQst]);
       Tst_GetAnswersFromStr (Gbl.Test.StrAnswersOneQst[NumQst],AnswersUsr);
 
       /***** Get correct answers of test question from database *****/
@@ -2627,8 +2577,10 @@ static void Mch_ComputeScore (long MchCod,long UsrCod,
       Tst_ComputeScoreQst (Indexes,AnswersUsr,&ScoreThisQst,&AnswerIsNotBlank);
 
       /***** Compute total score *****/
-      *TotalScore += ScoreThisQst;
+      TotalScore += ScoreThisQst;
      }
+
+   return TotalScore;
   }
 
 /*****************************************************************************/
@@ -3389,7 +3341,8 @@ void Mch_ShowOneMchResult (void)
    if (ICanViewResult)	// I am allowed to view this match result
      {
       /***** Get questions and user's answers of the match result from database *****/
-      Mch_GetMatchResultQuestionsFromDB (MchCod,UsrDat->UsrCod);
+      Mch_GetMatchResultQuestionsFromDB (MchCod,UsrDat->UsrCod,
+					 &NumQsts,&NumQstsNotBlank);
 
       /***** Start box *****/
       Box_StartBox (NULL,Txt_Match_result,NULL,
@@ -3514,32 +3467,32 @@ void Mch_ShowOneMchResult (void)
 /************ Get the questions of a match result from database **************/
 /*****************************************************************************/
 
-static void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod)
+static void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
+					       unsigned *NumQsts,unsigned *NumQstsNotBlank)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumQsts;
    unsigned NumQst;
    long LongNum;
    unsigned QstInd;
    struct Mch_UsrAnswer UsrAnswer;
 
    /***** Get questions and answers of a match result *****/
-   NumQsts = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get questions and answers"
-		                        " of a match result",
-			     "SELECT gam_questions.QstCod,"	// row[0]
-				    "gam_questions.QstInd,"	// row[1]
-				    "mch_indexes.Indexes"	// row[2]
-			     " FROM mch_matches,gam_questions,mch_indexes"
-			     " WHERE mch_matches.MchCod=%ld"
-			     " AND mch_matches.GamCod=gam_questions.GamCod"
-			     " AND mch_matches.MchCod=mch_indexes.MchCod"
-			     " AND gam_questions.QstInd=mch_indexes.QstInd"
-			     " ORDER BY gam_questions.QstInd",
-			     MchCod);
-   for (NumQst = 0;
-	NumQst < NumQsts;
+   *NumQsts = (unsigned)
+	      DB_QuerySELECT (&mysql_res,"can not get questions and answers"
+		                         " of a match result",
+			      "SELECT gam_questions.QstCod,"	// row[0]
+				     "gam_questions.QstInd,"	// row[1]
+				     "mch_indexes.Indexes"	// row[2]
+			      " FROM mch_matches,gam_questions,mch_indexes"
+			      " WHERE mch_matches.MchCod=%ld"
+			      " AND mch_matches.GamCod=gam_questions.GamCod"
+			      " AND mch_matches.MchCod=mch_indexes.MchCod"
+			      " AND gam_questions.QstInd=mch_indexes.QstInd"
+			      " ORDER BY gam_questions.QstInd",
+			      MchCod);
+   for (NumQst = 0, *NumQstsNotBlank = 0;
+	NumQst < *NumQsts;
 	NumQst++)
      {
       row = mysql_fetch_row (mysql_res);
@@ -3549,19 +3502,22 @@ static void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get question index (row[1]) */
-      if ((LongNum = Str_ConvertStrCodToLongCod (row[0])) < 0)
+      if ((LongNum = Str_ConvertStrCodToLongCod (row[1])) < 0)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
       QstInd = (unsigned) LongNum;
 
       /* Get indexes for this question (row[2]) */
-      Str_Copy (Gbl.Test.StrIndexesOneQst[NumQst],row[1],
+      Str_Copy (Gbl.Test.StrIndexesOneQst[NumQst],row[2],
                 Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question */
       Mch_GetQstAnsFromDB (MchCod,UsrCod,QstInd,&UsrAnswer);
       if (UsrAnswer.AnsInd >= 0)	// UsrAnswer.AnsInd >= 0 ==> answer selected
+	{
          snprintf (Gbl.Test.StrAnswersOneQst[NumQst],Tst_MAX_BYTES_ANSWERS_ONE_QST + 1,
 		   "%d",UsrAnswer.AnsInd);
+         (*NumQstsNotBlank)++;
+        }
       else				// UsrAnswer.AnsInd < 0 ==> no answer selected
 	 Gbl.Test.StrAnswersOneQst[NumQst][0] = '\0';	// Empty answer
 

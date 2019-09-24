@@ -1056,6 +1056,7 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
          Tst_WriteAnswersTestToAnswer (NumQst,QstCod,(row[3][0] == 'Y'));
 	 break;
       case Tst_SHOW_TEST_RESULT:
+
 	 Tst_WriteAnswersTestResult (UsrDat,NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
 
 	 /* Write question feedback (row[5]) */
