@@ -131,12 +131,17 @@ long Mch_CurrentMchCod = -1L;	// Used as parameter in contextual links
 static void Mch_GetDataOfMatchByCod (struct Match *Match);
 
 static void Mch_PutIconToPlayNewMatch (void);
+
 static void Mch_ListOneOrMoreMatches (struct Game *Game,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res);
-static void Mch_PutCellStatus (const struct Match *Match,unsigned NumQsts);
-static void Mch_PutCellVisibleResult (const struct Match *Match);
-static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (struct Match *Match);
+static void Mch_ListOneOrMoreMatchesHeading (void);
+static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned UniqueId);
+static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match);
+static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Match);
+static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts);
+static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match);
+
 static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Match *Match);
 static Mch_Showing_t Mch_GetShowingFromStr (const char *Str);
@@ -389,6 +394,78 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res)
   {
+   unsigned NumMatch;
+   unsigned UniqueId;
+   struct Match Match;
+
+   /***** Write the heading *****/
+   Tbl_StartTableWideMargin (2);
+   Mch_ListOneOrMoreMatchesHeading ();
+
+   /***** Write rows *****/
+   for (NumMatch = 0, UniqueId = 1;
+	NumMatch < NumMatches;
+	NumMatch++, UniqueId++)
+     {
+      Gbl.RowEvenOdd = NumMatch % 2;
+
+      /***** Get match data from row *****/
+      Mch_GetMatchDataFromRow (mysql_res,&Match);
+
+      /***** Icons *****/
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td class=\"BT%u\">",Gbl.RowEvenOdd);
+
+      /* Put icon to remove the match */
+      Frm_StartForm (ActReqRemMchTch);
+      Mch_PutParamMchCod (Match.MchCod);
+      Ico_PutIconRemove ();
+      Frm_EndForm ();
+
+      fprintf (Gbl.F.Out,"</td>");
+
+      /***** Number of match ******/
+      fprintf (Gbl.F.Out,"<td class=\"BIG_INDEX RIGHT_TOP COLOR%u\">%u</td>",
+	       Gbl.RowEvenOdd,NumMatch + 1);
+
+      /***** Match player *****/
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+	       Gbl.RowEvenOdd);
+      Usr_WriteAuthor1Line (Match.UsrCod,false);
+      fprintf (Gbl.F.Out,"</td>");
+
+      /***** Start/end date/time *****/
+      Mch_ListOneOrMoreMatchesTimes (&Match,UniqueId);
+
+      /***** Title and groups *****/
+      Mch_ListOneOrMoreMatchesTitleGrps (&Match);
+
+      /***** Number of players who have answered any question in the match ******/
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">"
+	                 "%u"
+	                 "</td>",
+	       Gbl.RowEvenOdd,
+	       Mch_GetNumUsrsWhoHaveAnswerMch (Match.MchCod));
+
+      /***** Match status ******/
+      Mch_ListOneOrMoreMatchesStatus (&Match,Game->NumQsts);
+
+      /***** Match result visible? *****/
+      Mch_ListOneOrMoreMatchesResult (&Match);
+
+      fprintf (Gbl.F.Out,"</tr>");
+     }
+
+   /***** End table *****/
+   Tbl_EndTable ();
+  }
+
+/*****************************************************************************/
+/***************** Put a column for match start and end times ****************/
+/*****************************************************************************/
+
+static void Mch_ListOneOrMoreMatchesHeading (void)
+  {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -396,14 +473,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
    extern const char *Txt_Players;
    extern const char *Txt_Status;
    extern const char *Txt_Result;
-   extern const char *Txt_Today;
-   unsigned NumMatch;
-   unsigned UniqueId;
-   struct Match Match;
-   Dat_StartEndTime_t StartEndTime;
 
-   /***** Write the heading *****/
-   Tbl_StartTableWideMargin (2);
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
                       "<th class=\"RIGHT_TOP\">"
@@ -439,185 +509,52 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 	    Txt_Players,
             Txt_Status,
             Txt_Result);
+  }
 
-   /***** Write rows *****/
-   for (NumMatch = 0, UniqueId = 1;
-	NumMatch < NumMatches;
-	NumMatch++, UniqueId++)
+/*****************************************************************************/
+/***************** Put a column for match start and end times ****************/
+/*****************************************************************************/
+
+static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned UniqueId)
+  {
+   extern const char *Txt_Today;
+   Dat_StartEndTime_t StartEndTime;
+
+   for (StartEndTime = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
      {
-      Gbl.RowEvenOdd = NumMatch % 2;
-
-      /***** Get match data from row *****/
-      Mch_GetMatchDataFromRow (mysql_res,&Match);
-
-      /***** Icons *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"BT%u\">",Gbl.RowEvenOdd);
-
-      /* Put icon to remove the match */
-      Frm_StartForm (ActReqRemMchTch);
-      Mch_PutParamMchCod (Match.MchCod);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
-
-      fprintf (Gbl.F.Out,"</td>");
-
-      /***** Number of match ******/
-      fprintf (Gbl.F.Out,"<td class=\"BIG_INDEX RIGHT_TOP COLOR%u\">%u</td>",
-	       Gbl.RowEvenOdd,NumMatch + 1);
-
-      /***** Match player *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+      fprintf (Gbl.F.Out,"<td id=\"mch_time_%u_%u\""
+			 " class=\"%s LEFT_TOP COLOR%u\">",
+	       (unsigned) StartEndTime,UniqueId,
+	       Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
+								"DATE_GREEN",
 	       Gbl.RowEvenOdd);
-      Usr_WriteAuthor1Line (Match.UsrCod,false);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /***** Start/end date/time *****/
-      for (StartEndTime = (Dat_StartEndTime_t) 0;
-	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	   StartEndTime++)
-	{
-	 fprintf (Gbl.F.Out,"<td id=\"mch_time_%u_%u\""
-			    " class=\"%s LEFT_TOP COLOR%u\">",
-		  (unsigned) StartEndTime,UniqueId,
-		  Match.Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
-								   "DATE_GREEN",
-		  Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
-			    "%ld,%u,'<br />','%s',true,true,0x7);"
-			    "</script>"
-			    "</td>",
-		  (unsigned) StartEndTime,UniqueId,
-		  Match.TimeUTC[StartEndTime],
-		  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-	}
-
-      /***** Title and groups *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
-
-      /* Title */
-      fprintf (Gbl.F.Out,"<span class=\"ASG_TITLE\">%s</span>",Match.Title);
-
-      /* Groups whose students can answer this match */
-      if (Gbl.Crs.Grps.NumGrps)
-	 Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (&Match);
-
-      fprintf (Gbl.F.Out,"</td>");
-
-      /***** Number of players who have answered any question in the match ******/
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">"
-	                 "%u"
-	                 "</td>",
-	       Gbl.RowEvenOdd,
-	       Mch_GetNumUsrsWhoHaveAnswerMch (Match.MchCod));
-
-      /***** Match status ******/
-      Mch_PutCellStatus (&Match,Game->NumQsts);
-
-      /***** Match result visible? *****/
-      Mch_PutCellVisibleResult (&Match);
-
-      fprintf (Gbl.F.Out,"</tr>");
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
+			 "%ld,%u,'<br />','%s',true,true,0x7);"
+			 "</script>"
+			 "</td>",
+	       (unsigned) StartEndTime,UniqueId,
+	       Match->TimeUTC[StartEndTime],
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
      }
-
-   /***** End table *****/
-   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
-/********************** Put a column for match status ************************/
+/***************** Put a column for match title and grous ********************/
 /*****************************************************************************/
 
-static void Mch_PutCellStatus (const struct Match *Match,unsigned NumQsts)
+static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
   {
-   extern const char *Txt_Play;
-   extern const char *Txt_Resume;
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+   /***** Title *****/
+   fprintf (Gbl.F.Out,"<span class=\"ASG_TITLE\">%s</span>",Match->Title);
 
-   if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished match
-      /* Current question index / total of questions */
-      fprintf (Gbl.F.Out,"<div class=\"DAT\">%u/%u</div>",
-	       Match->Status.QstInd,NumQsts);
-
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 /* Icon to play as student */
-	 Mch_CurrentMchCod = Match->MchCod;
-	 Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
-					Mch_PutParamCurrentMchCod,
-					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
-											 "flag-checkered.svg",
-					Txt_Play);
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 /* Icon to resume */
-	 Mch_CurrentMchCod = Match->MchCod;
-	 Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
-					Mch_PutParamCurrentMchCod,
-					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
-											 "flag-checkered.svg",
-					Txt_Resume);
-	 break;
-      default:
-	 break;
-     }
-
-   fprintf (Gbl.F.Out,"</td>");
-  }
-
-/*****************************************************************************/
-/**************** Put a column for visibility of match result ****************/
-/*****************************************************************************/
-
-static void Mch_PutCellVisibleResult (const struct Match *Match)
-  {
-   extern const char *Txt_Visible_result;
-   extern const char *Txt_Hidden_result;
-
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
-
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 /* Match result visible or hidden? */
-	 if (Match->VisibleResult)
-	    Ico_PutIconOff ("eye.svg",Txt_Visible_result);
-	 else
-	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 /* Match result visible or hidden? */
-	 if (Match->VisibleResult)
-	    Ico_PutIconOff ("eye.svg",Txt_Visible_result);
-	 else
-	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
-	 break;
-	 /*// TODO: Put icon to make visible / to hide
-	 / Icon to resume /
-	 Mch_CurrentMchCod = Match.MchCod;
-	 Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
-					Mch_PutParamCurrentMchCod,
-					Match.Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
-											"flag-checkered.svg",
-					Txt_Resume);
-	 */
-	 break;
-      default:
-	 break;
-     }
+   /***** Groups whose students can answer this match *****/
+   if (Gbl.Crs.Grps.NumGrps)
+      Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (Match);
 
    fprintf (Gbl.F.Out,"</td>");
   }
@@ -626,7 +563,7 @@ static void Mch_PutCellVisibleResult (const struct Match *Match)
 /************* Get and write the names of the groups of a match **************/
 /*****************************************************************************/
 
-static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (struct Match *Match)
+static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Match)
   {
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
@@ -684,6 +621,103 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (struct Match *Match)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********************** Put a column for match status ************************/
+/*****************************************************************************/
+
+static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts)
+  {
+   extern const char *Txt_Play;
+   extern const char *Txt_Resume;
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+
+   if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished match
+      /* Current question index / total of questions */
+      fprintf (Gbl.F.Out,"<div class=\"DAT\">%u/%u</div>",
+	       Match->Status.QstInd,NumQsts);
+
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 /* Icon to play as student */
+	 Mch_CurrentMchCod = Match->MchCod;
+	 Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
+					Mch_PutParamCurrentMchCod,
+					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
+											 "flag-checkered.svg",
+					Txt_Play);
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 /* Icon to resume */
+	 Mch_CurrentMchCod = Match->MchCod;
+	 Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
+					Mch_PutParamCurrentMchCod,
+					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
+											 "flag-checkered.svg",
+					Txt_Resume);
+	 break;
+      default:
+	 break;
+     }
+
+   fprintf (Gbl.F.Out,"</td>");
+  }
+
+/*****************************************************************************/
+/**************** Put a column for visibility of match result ****************/
+/*****************************************************************************/
+
+static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match)
+  {
+   extern const char *Txt_Visible_result;
+   extern const char *Txt_Hidden_result;
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 /* Match result visible or hidden? */
+	 if (Match->VisibleResult)
+	    Ico_PutIconOff ("eye.svg",Txt_Visible_result);
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 /* Match result visible or hidden? */
+	 if (Match->VisibleResult)
+	    Ico_PutIconOff ("eye.svg",Txt_Visible_result);
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
+	 break;
+	 /*// TODO: Put icon to make visible / to hide
+	 / Icon to resume /
+	 Mch_CurrentMchCod = Match.MchCod;
+	 Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
+					Mch_PutParamCurrentMchCod,
+					Match.Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
+											"flag-checkered.svg",
+					Txt_Resume);
+	 */
+	 break;
+      default:
+	 break;
+     }
+
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
