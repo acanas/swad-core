@@ -134,6 +134,8 @@ static void Mch_PutIconToPlayNewMatch (void);
 static void Mch_ListOneOrMoreMatches (struct Game *Game,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res);
+static void Mch_PutCellStatus (const struct Match *Match,unsigned NumQsts);
+static void Mch_PutCellVisibleResult (const struct Match *Match);
 static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (struct Match *Match);
 static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Match *Match);
@@ -394,11 +396,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
    extern const char *Txt_Players;
    extern const char *Txt_Status;
    extern const char *Txt_Result;
-   extern const char *Txt_Play;
-   extern const char *Txt_Resume;
    extern const char *Txt_Today;
-   extern const char *Txt_Visible_result;
-   extern const char *Txt_Hidden_result;
    unsigned NumMatch;
    unsigned UniqueId;
    struct Match Match;
@@ -515,87 +513,113 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 	       Mch_GetNumUsrsWhoHaveAnswerMch (Match.MchCod));
 
       /***** Match status ******/
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
-
-      if (Match.Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished match
-	 /* Current question index / total of questions */
-	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%u/%u</div>",
-		  Match.Status.QstInd,Game->NumQsts);
-
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:
-	    /* Icon to play as student */
-	    Mch_CurrentMchCod = Match.MchCod;
-	    Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
-					   Mch_PutParamCurrentMchCod,
-					   Match.Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
-											   "flag-checkered.svg",
-					   Txt_Play);
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_DEG_ADM:
-	 case Rol_CTR_ADM:
-	 case Rol_INS_ADM:
-	 case Rol_SYS_ADM:
-	    /* Icon to resume */
-	    Mch_CurrentMchCod = Match.MchCod;
-	    Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
-					   Mch_PutParamCurrentMchCod,
-					   Match.Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
-											   "flag-checkered.svg",
-					   Txt_Resume);
-	    break;
-	 default:
-	    break;
-	}
-
-      fprintf (Gbl.F.Out,"</td>");
+      Mch_PutCellStatus (&Match,Game->NumQsts);
 
       /***** Match result visible? *****/
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
-      switch (Gbl.Usrs.Me.Role.Logged)
-	{
-	 case Rol_STD:
-	    /* Match result visible or hidden? */
-	    if (Match.VisibleResult)
-	       Ico_PutIconOff ("eye.svg",Txt_Visible_result);
-	    else
-	       Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
-	    break;
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_DEG_ADM:
-	 case Rol_CTR_ADM:
-	 case Rol_INS_ADM:
-	 case Rol_SYS_ADM:
-	    /* Match result visible or hidden? */
-	    if (Match.VisibleResult)
-	       Ico_PutIconOff ("eye.svg",Txt_Visible_result);
-	    else
-	       Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
-	    break;
-	    /*// TODO: Put icon to make visible / to hide
-	    / Icon to resume /
-	    Mch_CurrentMchCod = Match.MchCod;
-	    Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
-					   Mch_PutParamCurrentMchCod,
-					   Match.Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
-											   "flag-checkered.svg",
-					   Txt_Resume);
-	    */
-	    break;
-	 default:
-	    break;
-	}
-      fprintf (Gbl.F.Out,"</td>");
+      Mch_PutCellVisibleResult (&Match);
 
       fprintf (Gbl.F.Out,"</tr>");
      }
 
    /***** End table *****/
    Tbl_EndTable ();
+  }
+
+/*****************************************************************************/
+/********************** Put a column for match status ************************/
+/*****************************************************************************/
+
+static void Mch_PutCellStatus (const struct Match *Match,unsigned NumQsts)
+  {
+   extern const char *Txt_Play;
+   extern const char *Txt_Resume;
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+
+   if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished match
+      /* Current question index / total of questions */
+      fprintf (Gbl.F.Out,"<div class=\"DAT\">%u/%u</div>",
+	       Match->Status.QstInd,NumQsts);
+
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 /* Icon to play as student */
+	 Mch_CurrentMchCod = Match->MchCod;
+	 Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
+					Mch_PutParamCurrentMchCod,
+					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
+											 "flag-checkered.svg",
+					Txt_Play);
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 /* Icon to resume */
+	 Mch_CurrentMchCod = Match->MchCod;
+	 Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
+					Mch_PutParamCurrentMchCod,
+					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
+											 "flag-checkered.svg",
+					Txt_Resume);
+	 break;
+      default:
+	 break;
+     }
+
+   fprintf (Gbl.F.Out,"</td>");
+  }
+
+/*****************************************************************************/
+/**************** Put a column for visibility of match result ****************/
+/*****************************************************************************/
+
+static void Mch_PutCellVisibleResult (const struct Match *Match)
+  {
+   extern const char *Txt_Visible_result;
+   extern const char *Txt_Hidden_result;
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 /* Match result visible or hidden? */
+	 if (Match->VisibleResult)
+	    Ico_PutIconOff ("eye.svg",Txt_Visible_result);
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 /* Match result visible or hidden? */
+	 if (Match->VisibleResult)
+	    Ico_PutIconOff ("eye.svg",Txt_Visible_result);
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
+	 break;
+	 /*// TODO: Put icon to make visible / to hide
+	 / Icon to resume /
+	 Mch_CurrentMchCod = Match.MchCod;
+	 Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
+					Mch_PutParamCurrentMchCod,
+					Match.Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
+											"flag-checkered.svg",
+					Txt_Resume);
+	 */
+	 break;
+      default:
+	 break;
+     }
+
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
