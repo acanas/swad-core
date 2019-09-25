@@ -2442,3 +2442,33 @@ float Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope)
 
    return NumQstsPerGame;
   }
+
+/*****************************************************************************/
+/************************* Show test tags in a game **************************/
+/*****************************************************************************/
+
+void Gam_ShowTstTagsPresentInAGame (long GamCod)
+  {
+   MYSQL_RES *mysql_res;
+   unsigned long NumTags;
+
+   /***** Get all tags of questions in this game *****/
+   NumTags = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get tags"
+					" present in a match result",
+			     "SELECT tst_tags.TagTxt"	// row[0]
+			     " FROM"
+			     " (SELECT DISTINCT(tst_question_tags.TagCod)"
+			     " FROM tst_question_tags,gam_questions"
+			     " WHERE gam_questions.GamCod=%ld"
+			     " AND gam_questions.QstCod=tst_question_tags.QstCod)"
+			     " AS TagsCods,tst_tags"
+			     " WHERE TagsCods.TagCod=tst_tags.TagCod"
+			     " ORDER BY tst_tags.TagTxt",
+			     GamCod);
+   Tst_ShowTagList (NumTags,mysql_res);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+

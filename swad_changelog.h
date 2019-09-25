@@ -470,12 +470,21 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.13.3 (2019-09-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.14 (2019-09-25)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
 // TODO: Poner columna en listado de juegos que indique el número de partidas
 // TODO: Imposibilitar la edición de preguntas de un juego cuando tenga partidas
+// TODO: Evitar que el estudiante vea resultados de partidas cuando están ocultos
+
+	Version 19.14:    Sep 25, 2019	New actions to show/hide match results. (246152 lines)
+					5 changes necessary in database:
+ALTER TABLE mch_matches DROP COLUMN VisibleResult,DROP COLUMN ShowResults;
+ALTER TABLE mch_matches ADD COLUMN ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Showing;
+ALTER TABLE mch_matches ADD COLUMN ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER ShowQstResults;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1801','es','N','Cambiar visibilidad de resultados de una partida');
+UPDATE actions SET Obsolete='Y' WHERE ActCod=1786;
 
 	Version 19.13.3:  Sep 25, 2019	Code refactoring in match listing. (246123 lines)
 	Version 19.13.2:  Sep 25, 2019	Code refactoring in match listing. (246086 lines)

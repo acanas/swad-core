@@ -66,7 +66,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 
 #define Act_NUM_ACTIONS	(1 + 4 + 64 + 38 + 12 + 42 + 36 + 19 + 110 + 177 + 437 + 176 + 169 + 16 + 68)
 
-#define Act_MAX_ACTION_COD 1800
+#define Act_MAX_ACTION_COD 1801
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 13
 
@@ -616,9 +616,9 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActPlyMchTch		(ActChgCrsTT1stDay + 123)
 #define ActBckMchTch		(ActChgCrsTT1stDay + 124)
 #define ActFwdMchTch		(ActChgCrsTT1stDay + 125)
-#define ActChgDisResMchTch	(ActChgCrsTT1stDay + 126)
-#define ActRefMchTch		(ActChgCrsTT1stDay + 127)
-#define ActShoMchTch		(ActChgCrsTT1stDay + 128)
+#define ActRefMchTch		(ActChgCrsTT1stDay + 126)
+#define ActChgVisResMchQst	(ActChgCrsTT1stDay + 127)
+#define ActChgVisResMchUsr	(ActChgCrsTT1stDay + 128)
 #define ActPlyMchStd		(ActChgCrsTT1stDay + 129)
 #define ActRefMchStd		(ActChgCrsTT1stDay + 130)
 #define ActAnsMchQstStd		(ActChgCrsTT1stDay + 131)

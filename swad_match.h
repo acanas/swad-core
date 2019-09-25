@@ -43,6 +43,8 @@
 
 void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch);
 
+void Mch_ToggleVisibilResultsMchUsr (void);
+
 void Mch_RequestRemoveMatchTch (void);
 void Mch_RemoveMatchTch (void);
 
@@ -52,11 +54,9 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
 		     unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
 void Mch_PauseMatchTch (void);
 void Mch_ResumeMatchTch (void);
-void Mch_ToggleDisplayResultsMatchTch (void);
+void Mch_ToggleVisibilResultsMchQst (void);
 void Mch_BackMatchTch (void);
 void Mch_ForwardMatchTch (void);
-
-void Mch_ShowFinishedMatchResults (void);
 
 void Mch_GetMatchBeingPlayed (void);
 void Mch_ShowMatchToMeAsStd (void);

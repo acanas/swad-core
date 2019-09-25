@@ -123,4 +123,6 @@ unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);
 unsigned Gam_GetNumGames (Hie_Level_t Scope);
 float Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope);
 
+void Gam_ShowTstTagsPresentInAGame (long GamCod);
+
 #endif

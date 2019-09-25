@@ -617,10 +617,10 @@ Assessment:
 
         NEW. ActBckMchTch		Go back when playing a match (by a teacher)
         457. ActFwdMchTch		Go forward when playing a match (by a teacher)
-        NEW. ActChgDisResMchTch		Change display of results when playing a match (by a teacher)
-
         NEW. ActRefMchTch		Refresh current question when playing a match (as teacher)
-        NEW. ActShoMchTch		Show finished match results
+
+        NEW. ActChgVisResMchQst		Change visibility of question results when playing a match
+        NEW. ActChgVisResMchUsr		Change visibility of match results (exam with all questions for a student)
 
         NEW. ActPlyMchStd		Show current question when playing a game (as student)
         NEW. ActRefMchStd		Refresh current question when playing a game (as student)
@@ -2167,9 +2167,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPlyMchTch	*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ResumeMatchTch		,NULL},
    /* ActBckMchTch	*/{1790,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_BackMatchTch		,NULL},
    /* ActFwdMchTch	*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ForwardMatchTch		,NULL},
-   /* ActChgDisResMchTch*/{1794,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ToggleDisplayResultsMatchTch,NULL},
    /* ActRefMchTch	*/{1788,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchTch		,NULL},
-   /* ActShoMchTch	*/{1786,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ShowFinishedMatchResults	,NULL},
+   /* ActChgVisResMchQst*/{1794,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ToggleVisibilResultsMchQst	,NULL},
+   /* ActChgVisResMchUsr*/{1801,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ToggleVisibilResultsMchUsr	,NULL},
 
    /* ActPlyMchStd	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_ShowMatchToMeAsStd		,NULL},
    /* ActRefMchStd	*/{1782,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchStd		,NULL},
@@ -5016,7 +5016,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
         ActReqRemMchTch,	// #1783
         ActRemMchTch,		// #1784
 	ActResMchTch,		// #1785
-	ActShoMchTch,		// #1786
+	-1,			// #1786 (obsolete action)
 	ActCreMyAcc,		// #1787
 	ActRefMchTch,		// #1788
 	ActPlyMchTch,		// #1789
@@ -5024,13 +5024,14 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActPauMchTch,		// #1791
 	-1,			// #1792 (obsolete action)
 	-1,			// #1793 (obsolete action)
-	ActChgDisResMchTch,	// #1794
+	ActChgVisResMchQst,	// #1794
 	ActReqSeeMyMchRes,	// #1795
 	ActSeeMyMchRes,		// #1796
 	ActSeeOneMchResMe,	// #1797
 	ActReqSeeUsrMchRes,	// #1798
 	ActSeeUsrMchRes,	// #1799
 	ActSeeOneMchResOth,	// #1800
+	ActChgVisResMchUsr,	// #1801
 	};
 
 /*****************************************************************************/
