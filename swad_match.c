@@ -1308,7 +1308,7 @@ static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
 				         "0,"		// QstInd: Match has not started, so not the first question yet
 				         "-1,"		// QstCod: Non-existent question
 				         "'%s',"	// Showing: What is being shown
-				         "'N',",	// ShowQstResults: Don't show question results initially
+				         "'N',"		// ShowQstResults: Don't show question results initially
 				         "'N')",	// ShowUsrResults: Don't show user results initially
 				         GamCod,
 				         Gbl.Usrs.Me.UsrDat.UsrCod,	// Game creator

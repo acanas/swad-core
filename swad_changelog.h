@@ -470,11 +470,18 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.14.2 (2019-09-26)"
+#define Log_PLATFORM_VERSION	"SWAD 19.14.4 (2019-09-26)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
-// TODO: Imposibilitar la edición de preguntas de un juego cuando tenga partidas
+// TODO: Imposibilitar la edición (creación/eliminación/movimiento) de preguntas de un juego cuando tenga partidas
+
+	Version 19.14.4:  Sep 26, 2019	Fixed bug creating a new match. (246270 lines)
+					8 changes necessary in database:
+Only if you use MyISAM:
+ALTER TABLE mch_indexes ENGINE=MyISAM;
+ALTER TABLE mch_results ENGINE=MyISAM;
+ALTER TABLE mch_times ENGINE=MyISAM;
 
 	Version 19.14.3:  Sep 26, 2019	Column in game row with the number of matches. (246264 lines)
 	Version 19.14.2:  Sep 26, 2019	Student can not see a match result if hidden. (246227 lines)
