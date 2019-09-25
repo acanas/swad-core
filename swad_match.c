@@ -146,6 +146,8 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts);
 static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match);
 
+static bool Mch_GetIfShowUsrResults (long MchCod);
+
 static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Match *Match);
 static Mch_Showing_t Mch_GetShowingFromStr (const char *Str);
@@ -222,7 +224,7 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 
 static void Mch_ShowHeaderMchResults (void);
 static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther);
-static void Mch_ShowMchResultsSummaryRow (bool ItsMe,
+static void Mch_ShowMchResultsSummaryRow (bool ShowSummaryResults,
                                           unsigned NumResults,
                                           unsigned NumTotalQsts,
                                           unsigned NumTotalQstsNotBlank,
@@ -791,6 +793,42 @@ void Mch_ToggleVisibilResultsMchUsr (void)
   }
 
 /*****************************************************************************/
+/********************* Get visibility of match result ************************/
+/*****************************************************************************/
+
+static bool Mch_GetIfShowUsrResults (long MchCod)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   bool ShowUsrResults;
+
+   /***** Get data of match from database *****/
+   NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get if show result",
+					"SELECT ShowUsrResults"		// row[0]
+					" FROM mch_matches"
+					" WHERE MchCod=%ld"
+					" AND GamCod IN"		// Extra check
+					" (SELECT GamCod FROM gam_games"
+					" WHERE CrsCod='%ld')",
+					MchCod,
+					Gbl.Hierarchy.Crs.CrsCod);
+   if (NumRows) // Match found...
+     {
+      /* Get whether to show user results or not (row(0)) */
+      row = mysql_fetch_row (mysql_res);
+      ShowUsrResults = (row[0][0] == 'Y');
+     }
+   else
+      ShowUsrResults = false;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return ShowUsrResults;
+  }
+
+/*****************************************************************************/
 /******************** Get game data from a database row **********************/
 /*****************************************************************************/
 
@@ -855,7 +893,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    /* Get whether to show question results or not (row(9)) */
    Match->Status.ShowQstResults = (row[9][0] == 'Y');
 
-   /* Get whether to show question results or not (row(10)) */
+   /* Get whether to show user results or not (row(10)) */
    Match->Status.ShowUsrResults = (row[10][0] == 'Y');
 
    /***** Get whether the match is being played or not *****/
@@ -3154,10 +3192,13 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Today;
    extern const char *Txt_Match_result;
+   extern const char *Txt_Hidden_result;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrData *UsrDat;
    bool ItsMe;
+   bool ShowResultThisMatch;
+   bool ShowSummaryResults = true;
    unsigned NumResults;
    unsigned NumResult;
    static unsigned UniqueId = 0;
@@ -3175,7 +3216,6 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
    /***** Set user *****/
    UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
 	                            &Gbl.Usrs.Other.UsrDat;
-   ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Make database query *****/
    NumResults =
@@ -3216,6 +3256,30 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	 if ((MchCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of match.");
 
+	 /* Show results? */
+	 switch (Gbl.Usrs.Me.Role.Logged)
+	   {
+	    case Rol_STD:
+	       ItsMe = Usr_ItsMe (UsrDat->UsrCod);
+	       if (ItsMe && Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING)
+	          ShowResultThisMatch = Mch_GetIfShowUsrResults (MchCod);
+	       else
+                  ShowResultThisMatch = false;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	    case Rol_DEG_ADM:
+	    case Rol_CTR_ADM:
+	    case Rol_INS_ADM:
+	    case Rol_SYS_ADM:
+	       ShowResultThisMatch = true;
+	       break;
+	    default:
+	       ShowResultThisMatch = false;
+	       break;
+	   }
+	 ShowSummaryResults = ShowSummaryResults && ShowResultThisMatch;
+
          if (NumResult)
             fprintf (Gbl.F.Out,"<tr>");
 
@@ -3250,12 +3314,15 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
             NumQstsNotBlankInThisResult = 0;
 	 NumTotalQstsNotBlank += NumQstsNotBlankInThisResult;
 
-         /* Get score (row[5]) */
-	 Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-         if (sscanf (row[5],"%lf",&ScoreInThisResult) != 1)
-            ScoreInThisResult = 0.0;
-         Str_SetDecimalPointToLocal ();	// Return to local system
-	 TotalScoreOfAllResults += ScoreInThisResult;
+	 if (ShowResultThisMatch)
+	   {
+	    /* Get score (row[5]) */
+	    Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
+	    if (sscanf (row[5],"%lf",&ScoreInThisResult) != 1)
+	       ScoreInThisResult = 0.0;
+	    Str_SetDecimalPointToLocal ();	// Return to local system
+	    TotalScoreOfAllResults += ScoreInThisResult;
+	   }
 
          /* Write number of questions */
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">%u</td>",
@@ -3266,44 +3333,61 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	          ClassDat,Gbl.RowEvenOdd,NumQstsNotBlankInThisResult);
 
 	 /* Write score */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">%.2lf</td>",
-	          ClassDat,Gbl.RowEvenOdd,ScoreInThisResult);
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
+	 if (ShowResultThisMatch)
+	    fprintf (Gbl.F.Out,"%.2lf",
+		     ScoreInThisResult);
+	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write average score per question */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">%.2lf</td>",
-	          ClassDat,Gbl.RowEvenOdd,
-		  NumQstsInThisResult ? ScoreInThisResult / (double) NumQstsInThisResult :
-			                0.0);
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
+	 if (ShowResultThisMatch)
+	    fprintf (Gbl.F.Out,"%.2lf",
+		     NumQstsInThisResult ? ScoreInThisResult / (double) NumQstsInThisResult :
+			                   0.0);
+	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write score over Tst_SCORE_MAX */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">%.2lf</td>",
-	          ClassDat,Gbl.RowEvenOdd,
-		  NumQstsInThisResult ? ScoreInThisResult * Tst_SCORE_MAX / (double) NumQstsInThisResult :
-			                0.0);
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
+	          ClassDat,Gbl.RowEvenOdd);
+	 if (ShowResultThisMatch)
+	    fprintf (Gbl.F.Out,"%.2lf",
+		     NumQstsInThisResult ? ScoreInThisResult * Tst_SCORE_MAX / (double) NumQstsInThisResult :
+			                   0.0);
+	 fprintf (Gbl.F.Out,"</td>");
 
 	 /* Link to show this result */
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
 		  Gbl.RowEvenOdd);
-	 switch (MeOrOther)
+	 if (ShowResultThisMatch)
 	   {
-	    case Usr_ME:
-	       Frm_StartForm (ActSeeOneMchResMe);
-	       Mch_PutParamMchCod (MchCod);
-	       break;
-	    case Usr_OTHER:
-	       Frm_StartForm (ActSeeOneMchResOth);
-	       Mch_PutParamMchCod (MchCod);
-	       Usr_PutParamOtherUsrCodEncrypted ();
-	       break;
+	    switch (MeOrOther)
+	      {
+	       case Usr_ME:
+		  Frm_StartForm (ActSeeOneMchResMe);
+		  Mch_PutParamMchCod (MchCod);
+		  break;
+	       case Usr_OTHER:
+		  Frm_StartForm (ActSeeOneMchResOth);
+		  Mch_PutParamMchCod (MchCod);
+		  Usr_PutParamOtherUsrCodEncrypted ();
+		  break;
+	      }
+	    Ico_PutIconLink ("tasks.svg",Txt_Match_result);
+	    Frm_EndForm ();
 	   }
-	 Ico_PutIconLink ("tasks.svg",Txt_Match_result);
-	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
+	 fprintf (Gbl.F.Out,"</td>");
+
+         fprintf (Gbl.F.Out,"</tr>");
         }
 
       /***** Write totals for this user *****/
-      Mch_ShowMchResultsSummaryRow (ItsMe,NumResults,
+      Mch_ShowMchResultsSummaryRow (ShowSummaryResults,
+				    NumResults,
                                     NumTotalQsts,NumTotalQstsNotBlank,
                                     TotalScoreOfAllResults);
      }
@@ -3323,36 +3407,13 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 /************** Show row with summary of user's matches results **************/
 /*****************************************************************************/
 
-static void Mch_ShowMchResultsSummaryRow (bool ItsMe,
+static void Mch_ShowMchResultsSummaryRow (bool ShowSummaryResults,
                                           unsigned NumResults,
                                           unsigned NumTotalQsts,
                                           unsigned NumTotalQstsNotBlank,
                                           double TotalScoreOfAllResults)
   {
    extern const char *Txt_Matches;
-   bool ICanViewTotalScore;
-
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_STD:
-	 ICanViewTotalScore = ItsMe &&
-			      Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
-	 break;
-      case Rol_NET:
-      case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-	 ICanViewTotalScore = ItsMe ||
-			      NumResults;
-	 break;
-      case Rol_SYS_ADM:
-	 ICanViewTotalScore = true;
-	 break;
-      default:
-	 ICanViewTotalScore = false;
-	 break;
-     }
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -3382,14 +3443,14 @@ static void Mch_ShowMchResultsSummaryRow (bool ItsMe,
    /***** Write total score *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   if (ICanViewTotalScore)
+   if (ShowSummaryResults)
       fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllResults);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write average score per question *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   if (ICanViewTotalScore)
+   if (ShowSummaryResults)
       fprintf (Gbl.F.Out,"%.2lf",
 	       NumTotalQsts ? TotalScoreOfAllResults / (double) NumTotalQsts :
 			      0.0);
@@ -3398,7 +3459,7 @@ static void Mch_ShowMchResultsSummaryRow (bool ItsMe,
    /***** Write score over Tst_SCORE_MAX *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   if (ICanViewTotalScore)
+   if (ShowSummaryResults)
       fprintf (Gbl.F.Out,"%.2lf",
 	       NumTotalQsts ? TotalScoreOfAllResults * Tst_SCORE_MAX /
 			      (double) NumTotalQsts :
