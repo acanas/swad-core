@@ -1977,6 +1977,20 @@ static void Mch_ShowMatchStatusForStd (struct Match *Match)
   }
 
 /*****************************************************************************/
+/******************* Get number of questions of a game *********************/
+/*****************************************************************************/
+
+unsigned Gam_GetNumMchsGame (long GamCod)
+  {
+   /***** Get number of matches in a game from database *****/
+   return
+   (unsigned) DB_QueryCOUNT ("can not get number of matches of a game",
+			     "SELECT COUNT(*) FROM mch_matches"
+			     " WHERE GamCod=%ld",
+			     GamCod);
+  }
+
+/*****************************************************************************/
 /************ Check if I belong to any of the groups of a match **************/
 /*****************************************************************************/
 

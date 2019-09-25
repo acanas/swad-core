@@ -58,6 +58,8 @@ void Mch_ToggleVisibilResultsMchQst (void);
 void Mch_BackMatchTch (void);
 void Mch_ForwardMatchTch (void);
 
+unsigned Gam_GetNumMchsGame (long GamCod);
+
 void Mch_GetMatchBeingPlayed (void);
 void Mch_ShowMatchToMeAsStd (void);
 void Mch_RefreshMatchTch (void);

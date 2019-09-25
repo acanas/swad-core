@@ -474,9 +474,9 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
-// TODO: Poner columna en listado de juegos que indique el número de partidas
 // TODO: Imposibilitar la edición de preguntas de un juego cuando tenga partidas
 
+	Version 19.14.3:  Sep 26, 2019	Column in game row with the number of matches. (246264 lines)
 	Version 19.14.2:  Sep 26, 2019	Student can not see a match result if hidden. (246227 lines)
 	Version 19.14.1:  Sep 25, 2019	Student can not see match results if hidden. (246207 lines)
 	Version 19.14:    Sep 25, 2019	New actions to show/hide match results. (246152 lines)

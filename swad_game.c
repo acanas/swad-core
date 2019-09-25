@@ -101,6 +101,8 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 static void Gam_PutHiddenParamOrder (void);
 static void Gam_GetParamOrder (void);
 
+static void Gam_ResetGame (struct Game *Game,long UsrCod);
+
 static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game);
@@ -151,6 +153,7 @@ static void Gam_ListAllGames (void)
    extern const char *Txt_Games;
    extern const char *Txt_GAMES_ORDER_HELP[Gam_NUM_ORDERS];
    extern const char *Txt_GAMES_ORDER[Gam_NUM_ORDERS];
+   extern const char *Txt_Matches;
    extern const char *Txt_No_games;
    Gam_Order_t Order;
    struct Pagination Pagination;
@@ -223,6 +226,9 @@ static void Gam_ListAllGames (void)
 
 	 fprintf (Gbl.F.Out,"</th>");
 	}
+
+      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">%s</th>",Txt_Matches);
+
       fprintf (Gbl.F.Out,"</tr>");
 
       /***** Write all the games *****/
@@ -366,6 +372,7 @@ void Gam_ShowOneGame (long GamCod,
    extern const char *Txt_Today;
    extern const char *Txt_View_game;
    extern const char *Txt_No_of_questions;
+   extern const char *Txt_Matches;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    struct Game Game;
@@ -467,6 +474,24 @@ void Gam_ShowOneGame (long GamCod,
 
    fprintf (Gbl.F.Out,"</td>");
 
+   /***** Number of matches in game *****/
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP");
+   if (!ShowOnlyThisGame)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">");
+
+   Frm_StartForm (ActSeeGam);
+   Gam_PutParamGameCod (GamCod);
+   Frm_LinkFormSubmit (Txt_Matches,
+                       Game.Status.Visible ? "ASG_TITLE" :
+	                                     "ASG_TITLE_LIGHT",NULL);
+   if (ShowOnlyThisGame)
+      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Matches);
+   fprintf (Gbl.F.Out,"%u</a>",Game.NumMchs);
+   Frm_EndForm ();
+
+   fprintf (Gbl.F.Out,"</td>");
+
    /***** End 1st row of this game *****/
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -482,7 +507,7 @@ void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Text of the game *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
    if (!ShowOnlyThisGame)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
@@ -699,6 +724,9 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       /* Get number of questions */
       Game->NumQsts = Gam_GetNumQstsGame (Game->GamCod);
 
+      /* Get number of matches */
+      Game->NumMchs = Gam_GetNumMchsGame (Game->GamCod);
+
       /* Can I view results of the game?
          Can I edit game? */
       switch (Gbl.Usrs.Me.Role.Logged)
@@ -730,16 +758,8 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
         }
      }
    else
-     {
       /* Initialize to empty game */
-      Game->GamCod                  = -1L;
-      Game->UsrCod                  = -1L;
-      Game->Title[0]                = '\0';
-      Game->NumQsts                 = 0;
-      Game->Status.Visible          = true;
-      Game->Status.ICanViewResults  = false;
-      Game->Status.ICanEdit         = false;
-     }
+      Gam_ResetGame (Game,-1L);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -773,6 +793,25 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       Game->TimeUTC[Dat_START_TIME] =
       Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
      }
+  }
+
+/*****************************************************************************/
+/*************************** Initialize game to empty ************************/
+/*****************************************************************************/
+
+static void Gam_ResetGame (struct Game *Game,long UsrCod)
+  {
+   /***** Initialize to empty game *****/
+   Game->GamCod = -1L;
+   Game->UsrCod = UsrCod;
+   Game->TimeUTC[Dat_START_TIME] = (time_t) 0;
+   Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Game->Title[0]                = '\0';
+   Game->NumQsts                 = 0;
+   Game->NumMchs                 = 0;
+   Game->Status.Visible          = true;
+   Game->Status.ICanViewResults  = false;
+   Game->Status.ICanEdit         = false;
   }
 
 /*****************************************************************************/
@@ -1029,14 +1068,7 @@ void Gam_RequestCreatOrEditGame (void)
          Lay_ShowErrorAndExit ("You can not create a new game here.");
 
       /* Initialize to empty game */
-      Game.GamCod = -1L;
-      Game.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Game.TimeUTC[Dat_START_TIME] = (time_t) 0;
-      Game.TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-      Game.Title[0]                = '\0';
-      Game.NumQsts                 = 0;
-      Game.Status.Visible          = true;
-      Game.Status.ICanViewResults  = false;
+      Gam_ResetGame (&Game,Gbl.Usrs.Me.UsrDat.UsrCod);
      }
    else
      {
