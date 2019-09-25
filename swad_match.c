@@ -136,9 +136,13 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res);
 static void Mch_ListOneOrMoreMatchesHeading (void);
+static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match);
+static void Mch_ListOneOrMoreMatchesNumMatch (unsigned NumMatch);
+static void Mch_ListOneOrMoreMatchesAuthor (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned UniqueId);
 static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match);
 static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Match);
+static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts);
 static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match);
 
@@ -412,45 +416,31 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
       /***** Get match data from row *****/
       Mch_GetMatchDataFromRow (mysql_res,&Match);
 
-      /***** Icons *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"BT%u\">",Gbl.RowEvenOdd);
+      /***** Write row for this match ****/
+      fprintf (Gbl.F.Out,"<tr>");
 
-      /* Put icon to remove the match */
-      Frm_StartForm (ActReqRemMchTch);
-      Mch_PutParamMchCod (Match.MchCod);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+      /* Icons */
+      Mch_ListOneOrMoreMatchesIcons (&Match);
 
-      fprintf (Gbl.F.Out,"</td>");
+      /* Number of match **/
+      Mch_ListOneOrMoreMatchesNumMatch (NumMatch);
 
-      /***** Number of match ******/
-      fprintf (Gbl.F.Out,"<td class=\"BIG_INDEX RIGHT_TOP COLOR%u\">%u</td>",
-	       Gbl.RowEvenOdd,NumMatch + 1);
+      /* Match player */
+      Mch_ListOneOrMoreMatchesAuthor (&Match);
 
-      /***** Match player *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
-	       Gbl.RowEvenOdd);
-      Usr_WriteAuthor1Line (Match.UsrCod,false);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /***** Start/end date/time *****/
+      /* Start/end date/time */
       Mch_ListOneOrMoreMatchesTimes (&Match,UniqueId);
 
-      /***** Title and groups *****/
+      /* Title and groups */
       Mch_ListOneOrMoreMatchesTitleGrps (&Match);
 
-      /***** Number of players who have answered any question in the match ******/
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">"
-	                 "%u"
-	                 "</td>",
-	       Gbl.RowEvenOdd,
-	       Mch_GetNumUsrsWhoHaveAnswerMch (Match.MchCod));
+      /* Number of players who have answered any question in the match */
+      Mch_ListOneOrMoreMatchesNumPlayers (&Match);
 
-      /***** Match status ******/
+      /* Match status */
       Mch_ListOneOrMoreMatchesStatus (&Match,Game->NumQsts);
 
-      /***** Match result visible? *****/
+      /* Match result visible? */
       Mch_ListOneOrMoreMatchesResult (&Match);
 
       fprintf (Gbl.F.Out,"</tr>");
@@ -509,6 +499,45 @@ static void Mch_ListOneOrMoreMatchesHeading (void)
 	    Txt_Players,
             Txt_Status,
             Txt_Result);
+  }
+
+/*****************************************************************************/
+/************************* Put a column for icons ****************************/
+/*****************************************************************************/
+
+static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
+  {
+   fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
+
+   /* Put icon to remove the match */
+   Frm_StartForm (ActReqRemMchTch);
+   Mch_PutParamMchCod (Match->MchCod);
+   Ico_PutIconRemove ();
+   Frm_EndForm ();
+
+   fprintf (Gbl.F.Out,"</td>");
+  }
+
+/*****************************************************************************/
+/********************* Put a column for number of match **********************/
+/*****************************************************************************/
+
+static void Mch_ListOneOrMoreMatchesNumMatch (unsigned NumMatch)
+  {
+   fprintf (Gbl.F.Out,"<td class=\"BIG_INDEX RIGHT_TOP COLOR%u\">%u</td>",
+	    Gbl.RowEvenOdd,NumMatch + 1);
+  }
+
+/*****************************************************************************/
+/************* Put a column for teacher who created the match ****************/
+/*****************************************************************************/
+
+static void Mch_ListOneOrMoreMatchesAuthor (const struct Match *Match)
+  {
+   /***** Match author (teacher) *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+   Usr_WriteAuthor1Line (Match->UsrCod,false);
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -621,6 +650,20 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/******************* Put a column for number of players **********************/
+/*****************************************************************************/
+
+static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match)
+  {
+   /***** Number of players who have answered any question in the match ******/
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">"
+		      "%u"
+		      "</td>",
+	    Gbl.RowEvenOdd,
+	    Mch_GetNumUsrsWhoHaveAnswerMch (Match->MchCod));
   }
 
 /*****************************************************************************/

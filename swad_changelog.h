@@ -470,10 +470,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.13.2 (2019-09-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.13.3 (2019-09-25)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
+// TODO: Poner columna en listado de juegos que indique el número de partidas
+// TODO: Imposibilitar la edición de preguntas de un juego cuando tenga partidas
+
+	Version 19.13.3:  Sep 25, 2019	Code refactoring in match listing. (246123 lines)
 	Version 19.13.2:  Sep 25, 2019	Code refactoring in match listing. (246086 lines)
 	Version 19.13.1:  Sep 25, 2019	Code refactoring in match listing. (246061 lines)
 	Version 19.13:    Sep 25, 2019	Column for visibility in match listing. (246044 lines)
