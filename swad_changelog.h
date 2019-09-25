@@ -470,14 +470,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.14.1 (2019-09-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.14.2 (2019-09-26)"
 #define CSS_FILE		"swad19.3.css"
 #define JS_FILE			"swad18.130.2.js"
 /*
 // TODO: Poner columna en listado de juegos que indique el número de partidas
 // TODO: Imposibilitar la edición de preguntas de un juego cuando tenga partidas
-// TODO: Evitar que el estudiante vea el resultado de una partida cuando está oculto
 
+	Version 19.14.2:  Sep 26, 2019	Student can not see a match result if hidden. (246227 lines)
 	Version 19.14.1:  Sep 25, 2019	Student can not see match results if hidden. (246207 lines)
 	Version 19.14:    Sep 25, 2019	New actions to show/hide match results. (246152 lines)
 					5 changes necessary in database:

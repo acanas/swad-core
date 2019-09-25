@@ -146,7 +146,8 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts);
 static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match);
 
-static bool Mch_GetIfShowUsrResults (long MchCod);
+static bool Mch_CheckIfICanSeeMatchResult (long MchCod,long UsrCod);
+static bool Mch_GetVisibilityMchResultFromDB (long MchCod);
 
 static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Match *Match);
@@ -793,17 +794,51 @@ void Mch_ToggleVisibilResultsMchUsr (void)
   }
 
 /*****************************************************************************/
+/********************* Get if I can see match result  ************************/
+/*****************************************************************************/
+
+static bool Mch_CheckIfICanSeeMatchResult (long MchCod,long UsrCod)
+  {
+   bool ItsMe;
+   bool ShowResultThisMatch;
+
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 ItsMe = Usr_ItsMe (UsrCod);
+	 if (ItsMe && Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING)
+	    ShowResultThisMatch = Mch_GetVisibilityMchResultFromDB (MchCod);
+	 else
+	    ShowResultThisMatch = false;
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 ShowResultThisMatch = true;
+	 break;
+      default:
+	 ShowResultThisMatch = false;
+	 break;
+     }
+
+   return ShowResultThisMatch;
+  }
+
+/*****************************************************************************/
 /********************* Get visibility of match result ************************/
 /*****************************************************************************/
 
-static bool Mch_GetIfShowUsrResults (long MchCod)
+static bool Mch_GetVisibilityMchResultFromDB (long MchCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    bool ShowUsrResults;
 
-   /***** Get data of match from database *****/
+   /***** Get visibility of match result from database *****/
    NumRows = (unsigned) DB_QuerySELECT (&mysql_res,"can not get if show result",
 					"SELECT ShowUsrResults"		// row[0]
 					" FROM mch_matches"
@@ -3196,7 +3231,6 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    struct UsrData *UsrDat;
-   bool ItsMe;
    bool ShowResultThisMatch;
    bool ShowSummaryResults = true;
    unsigned NumResults;
@@ -3256,28 +3290,8 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	 if ((MchCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of match.");
 
-	 /* Show results? */
-	 switch (Gbl.Usrs.Me.Role.Logged)
-	   {
-	    case Rol_STD:
-	       ItsMe = Usr_ItsMe (UsrDat->UsrCod);
-	       if (ItsMe && Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING)
-	          ShowResultThisMatch = Mch_GetIfShowUsrResults (MchCod);
-	       else
-                  ShowResultThisMatch = false;
-	       break;
-	    case Rol_NET:
-	    case Rol_TCH:
-	    case Rol_DEG_ADM:
-	    case Rol_CTR_ADM:
-	    case Rol_INS_ADM:
-	    case Rol_SYS_ADM:
-	       ShowResultThisMatch = true;
-	       break;
-	    default:
-	       ShowResultThisMatch = false;
-	       break;
-	   }
+	 /* Show match result? */
+	 ShowResultThisMatch = Mch_CheckIfICanSeeMatchResult (MchCod,UsrDat->UsrCod);
 	 ShowSummaryResults = ShowSummaryResults && ShowResultThisMatch;
 
          if (NumResult)
@@ -3538,15 +3552,25 @@ void Mch_ShowOneMchResult (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 ICanViewResult = ItsMe;
-	 if (ItsMe)
+	 switch (MeOrOther)
 	   {
-	    Tst_GetConfigTstFromDB ();	// To get feedback type
-	    ICanViewScore = Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
+	    case Usr_ME:
+	       ICanViewResult = ItsMe && Match.Status.ShowUsrResults;
+	       if (ICanViewResult)
+		 {
+		  Tst_GetConfigTstFromDB ();	// To get feedback type
+		  ICanViewScore = Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING;
+		 }
+	       else
+		  ICanViewScore  = false;
+	       break;
+	    default:
+	       ICanViewResult =
+	       ICanViewScore  = false;
+	       break;
 	   }
-	 else
-	    ICanViewScore = false;
 	 break;
+      case Rol_NET:
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
