@@ -677,7 +677,7 @@ static void Lay_WriteScriptInit (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    bool RefreshConnected;
    bool RefreshNewTimeline = false;
-   bool RefreshGame        = false;
+   bool RefreshMatch       = false;
    bool RefreshLastClicks  = false;
 
    RefreshConnected = Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&
@@ -701,9 +701,11 @@ static void Lay_WriteScriptInit (void)
       case ActBckMchTch:
       case ActFwdMchTch:
       case ActChgVisResMchQst:
+	 RefreshMatch = true;
+	 break;
       case ActPlyMchStd:
       case ActAnsMchQstStd:
-	 RefreshGame = true;
+	 RefreshMatch = true;
 	 break;
       case ActLstClk:
 	 RefreshLastClicks = true;
@@ -719,8 +721,8 @@ static void Lay_WriteScriptInit (void)
    if (RefreshNewTimeline)
       fprintf (Gbl.F.Out,"\tvar delayNewTimeline = %lu;\n",
 	       Cfg_TIME_TO_REFRESH_TIMELINE);
-   else if (RefreshGame)	// Refresh game via AJAX
-      fprintf (Gbl.F.Out,"\tvar delayGame = %lu;\n",
+   else if (RefreshMatch)	// Refresh match via AJAX
+      fprintf (Gbl.F.Out,"\tvar delayMatch = %lu;\n",
 	       Cfg_TIME_TO_REFRESH_GAME);
 
    fprintf (Gbl.F.Out,"function init(){\n");
@@ -738,8 +740,8 @@ static void Lay_WriteScriptInit (void)
    if (RefreshLastClicks)	// Refresh last clicks via AJAX
       fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-   else if (RefreshGame)	// Refresh game via AJAX
-      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshGame()\",delayGame);\n");
+   else if (RefreshMatch)	// Refresh match via AJAX
+      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshMatch()\",delayMatch);\n");
    else if (RefreshNewTimeline)	// Refresh timeline via AJAX
       fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshNewTimeline()\",delayNewTimeline);\n");
 
@@ -824,7 +826,7 @@ static void Lay_WriteScriptParamsAJAX (void)
       case ActBckMchTch:
       case ActFwdMchTch:
       case ActChgVisResMchQst:
-	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"
+	 fprintf (Gbl.F.Out,"var RefreshParamNxtActMch = \"act=%ld\";\n"
 			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
 		  Act_GetActCod (ActRefMchTch),
 		  Gbl.Games.MchCodBeingPlayed);
@@ -832,7 +834,7 @@ static void Lay_WriteScriptParamsAJAX (void)
       /* Parameters related with match refreshing (for students) */
       case ActPlyMchStd:
       case ActAnsMchQstStd:
-	 fprintf (Gbl.F.Out,"var RefreshParamNxtActGam = \"act=%ld\";\n"
+	 fprintf (Gbl.F.Out,"var RefreshParamNxtActMch = \"act=%ld\";\n"
 			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
 		  Act_GetActCod (ActRefMchStd),
 		  Gbl.Games.MchCodBeingPlayed);

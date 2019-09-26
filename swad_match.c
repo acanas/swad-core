@@ -1284,7 +1284,7 @@ void Mch_RequestStartResumeMatchTch (void)
    Mch_UpdateMatchStatusInDB (&Match);
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MATCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1672,7 +1672,7 @@ void Mch_PauseMatchTch (void)
    Mch_UpdateMatchStatusInDB (&Match);
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MATCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1705,7 +1705,7 @@ void Mch_ResumeMatchTch (void)
    Mch_UpdateMatchStatusInDB (&Match);
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MATCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1736,7 +1736,7 @@ void Mch_ToggleVisibilResultsMchQst (void)
    Mch_UpdateMatchStatusInDB (&Match);
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MATCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1764,7 +1764,7 @@ void Mch_BackMatchTch (void)
    Mch_UpdateMatchStatusInDB (&Match);
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MATCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1792,7 +1792,7 @@ void Mch_ForwardMatchTch (void)
    Mch_UpdateMatchStatusInDB (&Match);
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MATCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2611,7 +2611,7 @@ void Mch_ShowMatchToMeAsStd (void)
    Mch_GetDataOfMatchByCod (&Match);
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MATCH_CONT\">");
    Mch_ShowMatchStatusForStd (&Match);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2822,7 +2822,7 @@ void Mch_ReceiveQstAnsFromStd (void)
      }
 
    /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div id=\"game\" class=\"MATCH_CONT\">");
+   fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MATCH_CONT\">");
    Mch_ShowMatchStatusForStd (&Match);
    fprintf (Gbl.F.Out,"</div>");
   }

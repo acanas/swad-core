@@ -513,35 +513,35 @@ function readConnUsrsData () {
 }
 
 /*****************************************************************************/
-/*********** Automatic refresh of current game question using AJAX ***********/
+/********** Automatic refresh of current match question using AJAX ***********/
 /*****************************************************************************/
 
 //  This function must be called from time to time
-var objXMLHttpReqGam = false;
-function refreshGame () {
-	objXMLHttpReqGam = AJAXCreateObject();
-	if (objXMLHttpReqGam) {
-		var RefreshParams = RefreshParamNxtActGam + '&' +
+var objXMLHttpReqMch = false;
+function refreshMatch () {
+	objXMLHttpReqMch = AJAXCreateObject();
+	if (objXMLHttpReqMch) {
+		var RefreshParams = RefreshParamNxtActMch + '&' +
 							RefreshParamMchCod + '&' +
 							RefreshParamIdSes;
 
-		objXMLHttpReqGam.onreadystatechange = readGameData;	// onreadystatechange must be lowercase
-		objXMLHttpReqGam.open('POST',ActionAJAX,true);
-		objXMLHttpReqGam.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		objXMLHttpReqGam.send(RefreshParams);
+		objXMLHttpReqMch.onreadystatechange = readMatchData;	// onreadystatechange must be lowercase
+		objXMLHttpReqMch.open('POST',ActionAJAX,true);
+		objXMLHttpReqMch.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		objXMLHttpReqMch.send(RefreshParams);
 	}
 }
 
-function readGameData () {
-	if (objXMLHttpReqGam.readyState == 4) {	// Check if data have been received
-		if (objXMLHttpReqGam.status == 200) {
-			var htmlGame = objXMLHttpReqGam.responseText;	// Get HTML code for last clicks
+function readMatchData () {
+	if (objXMLHttpReqMch.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqMch.status == 200) {
+			var htmlMatch = objXMLHttpReqMch.responseText;	// Get HTML code for match
 
-			var divGame = document.getElementById('game');	// Access to game DIV
+			var divGame = document.getElementById('match');	// Access to game DIV
 			if (divGame)
-				divGame.innerHTML = htmlGame;				// Update game DIV
+				divGame.innerHTML = htmlMatch;				// Update game DIV
 			// Global delay variable is set initially in swad-core
-			setTimeout('refreshGame()',delayGame);
+			setTimeout('refreshMatch()',delayMatch);
 		}
 	}
 }
