@@ -730,8 +730,9 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
 
 static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match)
   {
-   extern const char *Txt_Visible_result;
+   extern const char *Txt_Match_result;
    extern const char *Txt_Hidden_result;
+   extern const char *Txt_Visible_result;
 
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP COLOR%u\">",Gbl.RowEvenOdd);
 
@@ -739,10 +740,15 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match)
      {
       case Rol_STD:
 	 /* Match result visible or hidden? */
-	 Ico_PutIconOff (Match->Status.ShowUsrResults ? "eye.svg" :
-					                "eye-slash.svg",
-			 Match->Status.ShowUsrResults ? Txt_Visible_result :
-			                                Txt_Hidden_result);
+	 if (Match->Status.ShowUsrResults)
+	   {
+	    Frm_StartForm (ActSeeOneMchResMe);
+	    Mch_PutParamMchCod (Match->MchCod);
+	    Ico_PutIconLink ("tasks.svg",Txt_Match_result);
+	    Frm_EndForm ();
+	   }
+	 else
+	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
 	 break;
       case Rol_NET:
       case Rol_TCH:
