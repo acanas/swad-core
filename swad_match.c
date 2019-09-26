@@ -188,8 +188,12 @@ static void Mch_SetMatchStatusToEnd (struct Match *Match);
 static void Mch_ShowMatchStatusForTch (struct Match *Match);
 static void Mch_ShowMatchStatusForStd (struct Match *Match);
 static bool Mch_CheckIfIPlayThisMatchBasedOnGrps (long MchCod);
+
 static void Mch_ShowLeftColumnTch (struct Match *Match);
+static void Mch_ShowRightColumnTch (struct Match *Match);
 static void Mch_ShowLeftColumnStd (struct Match *Match);
+static void Mch_ShowRightColumnStd (struct Match *Match);
+
 static void Mch_ShowNumQstInMatch (struct Match *Match);
 static void Mch_PutMatchControlButtons (struct Match *Match);
 static void Mch_PutCheckboxResult (struct Match *Match);
@@ -1907,24 +1911,11 @@ static void Mch_SetMatchStatusToEnd (struct Match *Match)
 
 static void Mch_ShowMatchStatusForTch (struct Match *Match)
   {
-   /***** Get current number of players *****/
-   Mch_GetNumPlayers (Match);
-
    /***** Left column *****/
    Mch_ShowLeftColumnTch (Match);
 
    /***** Right column *****/
-   /* Start right container */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
-
-   /* Top row: match title */
-   Mch_ShowMatchTitle (Match);
-
-   /* Bottom row: current question and possible answers */
-   Mch_ShowQuestionAndAnswersTch (Match);
-
-   /* End right container */
-   fprintf (Gbl.F.Out,"</div>");
+   Mch_ShowRightColumnTch (Match);
   }
 
 /*****************************************************************************/
@@ -1933,7 +1924,6 @@ static void Mch_ShowMatchStatusForTch (struct Match *Match)
 
 static void Mch_ShowMatchStatusForStd (struct Match *Match)
   {
-   extern const char *Txt_Please_wait_;
    bool IBelongToGroups;
 
    /***** Do I belong to valid groups to play this match? *****/
@@ -1942,38 +1932,11 @@ static void Mch_ShowMatchStatusForStd (struct Match *Match)
    if (!IBelongToGroups)
       Lay_ShowErrorAndExit ("You can not play this match!");
 
-   /***** Get current number of players *****/
-   Mch_GetNumPlayers (Match);
-
    /***** Left column *****/
    Mch_ShowLeftColumnStd (Match);
 
    /***** Right column *****/
-   /* Start right container */
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
-
-   /***** Top row *****/
-   Mch_ShowMatchTitle (Match);
-
-   /***** Bottom row *****/
-   if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
-     {
-      fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");
-
-      /***** Update players ******/
-      Mch_RegisterMeAsPlayerInMatch (Match->MchCod);
-
-      if (Match->Status.Playing)
-	 /* Show current question and possible answers */
-	 Mch_ShowQuestionAndAnswersStd (Match);
-      else	// Not being played
-	 Mch_ShowWaitImage (Txt_Please_wait_);
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
-   /* End right container */
-   fprintf (Gbl.F.Out,"</div>");
+   Mch_ShowRightColumnStd (Match);
   }
 
 /*****************************************************************************/
@@ -2008,7 +1971,7 @@ static bool Mch_CheckIfIPlayThisMatchBasedOnGrps (long MchCod)
   }
 
 /*****************************************************************************/
-/******** Show left botton column when playing a match (as a teacher) ********/
+/*********** Show left column when playing a match (as a teacher) ************/
 /*****************************************************************************/
 
 static void Mch_ShowLeftColumnTch (struct Match *Match)
@@ -2050,6 +2013,9 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
    /***** Write button to request viewing results *****/
    Mch_PutCheckboxResult (Match);
 
+   /***** Get current number of players *****/
+   Mch_GetNumPlayers (Match);
+
    /***** Number of players *****/
    Mch_ShowNumPlayers (Match);
 
@@ -2071,7 +2037,26 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
   }
 
 /*****************************************************************************/
-/******** Show left botton column when playing a match (as a student) ********/
+/********** Show right column when playing a match (as a teacher) ************/
+/*****************************************************************************/
+
+static void Mch_ShowRightColumnTch (struct Match *Match)
+  {
+   /***** Start right container *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
+
+   /***** Top row: match title *****/
+   Mch_ShowMatchTitle (Match);
+
+   /***** Bottom row: current question and possible answers *****/
+   Mch_ShowQuestionAndAnswersTch (Match);
+
+   /***** End right container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/*********** Show left column when playing a match (as a student) ************/
 /*****************************************************************************/
 
 static void Mch_ShowLeftColumnStd (struct Match *Match)
@@ -2086,6 +2071,41 @@ static void Mch_ShowLeftColumnStd (struct Match *Match)
    Mch_ShowNumQstInMatch (Match);
 
    /***** End left container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********** Show right column when playing a match (as a student) ************/
+/*****************************************************************************/
+
+static void Mch_ShowRightColumnStd (struct Match *Match)
+  {
+   extern const char *Txt_Please_wait_;
+
+   /***** Start right container *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_RIGHT\">");
+
+   /***** Top row *****/
+   Mch_ShowMatchTitle (Match);
+
+   /***** Bottom row *****/
+   if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
+     {
+      fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");
+
+      /***** Update players ******/
+      Mch_RegisterMeAsPlayerInMatch (Match->MchCod);
+
+      if (Match->Status.Playing)
+	 /* Show current question and possible answers */
+	 Mch_ShowQuestionAndAnswersStd (Match);
+      else	// Not being played
+	 Mch_ShowWaitImage (Txt_Please_wait_);
+
+      fprintf (Gbl.F.Out,"</div>");
+     }
+
+   /***** End right container *****/
    fprintf (Gbl.F.Out,"</div>");
   }
 
