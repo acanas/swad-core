@@ -128,6 +128,8 @@ static void Gam_PutParamsOneQst (void);
 static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
+static bool Gam_GetNumMchsGameAndCheckIfEditable (struct Game *Game);
+
 /*****************************************************************************/
 /*************************** List all the games ******************************/
 /*****************************************************************************/
@@ -1043,7 +1045,6 @@ void Gam_RequestCreatOrEditGame (void)
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_New_game;
    extern const char *Txt_Edit_game;
    extern const char *Txt_Title;
@@ -1063,9 +1064,7 @@ void Gam_RequestCreatOrEditGame (void)
    Game.GamCod = Gam_GetParamGameCod ();
 
    /***** Check if game has matches *****/
-   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
-   else
+   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
       /***** Get from the database the data of the game *****/
       ItsANewGame = (Game.GamCod < 0);
@@ -1158,7 +1157,6 @@ void Gam_RequestCreatOrEditGame (void)
 
 void Gam_RecFormGame (void)
   {
-   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_Already_existed_a_game_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_game;
    struct Game OldGame;
@@ -1171,9 +1169,7 @@ void Gam_RecFormGame (void)
    NewGame.GamCod = Gam_GetParamGameCod ();
 
    /***** Check if game has matches *****/
-   if ((NewGame.NumMchs = Gam_GetNumMchsGame (NewGame.GamCod)))
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
-   else
+   if (Gam_GetNumMchsGameAndCheckIfEditable (&NewGame))
      {
       ItsANewGame = (NewGame.GamCod < 0);
       if (!ItsANewGame)
@@ -1395,7 +1391,6 @@ unsigned Gam_GetNumQstsGame (long GamCod)
 
 void Gam_RequestNewQuestion (void)
   {
-   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1403,9 +1398,7 @@ void Gam_RequestNewQuestion (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
-   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
-   else
+   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
       /***** Get other parameters *****/
       Gam_GetParamOrder ();
@@ -1429,7 +1422,6 @@ void Gam_RequestNewQuestion (void)
 
 void Gam_ListTstQuestionsToSelect (void)
   {
-   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    struct Game Game;
 
    /***** Get game code *****/
@@ -1437,9 +1429,7 @@ void Gam_ListTstQuestionsToSelect (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
-   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
-   else
+   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
       /***** List several test questions for selection *****/
       Tst_ListQuestionsToSelect (Game.GamCod);
   }
@@ -1886,7 +1876,6 @@ static void Gam_PutButtonToAddNewQuestions (void)
 
 void Gam_AddTstQuestionsToGame (void)
   {
-   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_You_must_select_one_ore_more_questions;
    struct Game Game;
    const char *Ptr;
@@ -1899,9 +1888,7 @@ void Gam_AddTstQuestionsToGame (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
-   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
-   else
+   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
       /***** Get selected questions *****/
       /* Allocate space for selected question codes */
@@ -2017,7 +2004,6 @@ static void Gam_PutParamsOneQst (void)
 
 void Gam_RequestRemoveQst (void)
   {
-   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
    struct Game Game;
@@ -2028,9 +2014,7 @@ void Gam_RequestRemoveQst (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
-   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
-   else
+   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
       /***** Get question index *****/
       QstInd = Gam_GetParamQstInd ();
@@ -2057,7 +2041,6 @@ void Gam_RequestRemoveQst (void)
 
 void Gam_RemoveQst (void)
   {
-   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_Question_removed;
    struct Game Game;
    unsigned QstInd;
@@ -2067,9 +2050,7 @@ void Gam_RemoveQst (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
-   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
-   else
+   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
       /***** Get question index *****/
       QstInd = Gam_GetParamQstInd ();
@@ -2116,7 +2097,6 @@ void Gam_RemoveQst (void)
 
 void Gam_MoveUpQst (void)
   {
-   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_The_question_has_been_moved_up;
    extern const char *Txt_Movement_not_allowed;
    struct Game Game;
@@ -2128,9 +2108,7 @@ void Gam_MoveUpQst (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
-   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
-   else
+   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
       /***** Get question index *****/
       QstIndBottom = Gam_GetParamQstInd ();
@@ -2166,7 +2144,6 @@ void Gam_MoveUpQst (void)
 
 void Gam_MoveDownQst (void)
   {
-   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_The_question_has_been_moved_down;
    extern const char *Txt_Movement_not_allowed;
    extern const char *Txt_This_game_has_no_questions;
@@ -2180,9 +2157,7 @@ void Gam_MoveDownQst (void)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
-   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
-   else
+   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
       /***** Get question index *****/
       QstIndTop = Gam_GetParamQstInd ();
@@ -2269,6 +2244,27 @@ static void Gam_ExchangeQuestions (long GamCod,
 				// ...to not retry the unlock if error in unlocking
    DB_Query ("can not unlock tables after moving game questions",
 	     "UNLOCK TABLES");
+  }
+
+
+/*****************************************************************************/
+/*********** Get number of matches and check is edition is possible **********/
+/*****************************************************************************/
+// Games with matches should not be edited
+// Return true if no matches (if game is editable)
+
+static bool Gam_GetNumMchsGameAndCheckIfEditable (struct Game *Game)
+  {
+   extern const char *Txt_You_can_not_edit_a_game_with_matches;
+
+   /***** Check if game has matches *****/
+   if ((Game->NumMchs = Gam_GetNumMchsGame (Game->GamCod)))
+     {
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
+      return false;	// It has matches ==> it's not editable
+     }
+   else
+      return true;   	// It has no matches ==> it's editable
   }
 
 /*****************************************************************************/
@@ -2579,4 +2575,3 @@ void Gam_ShowTstTagsPresentInAGame (long GamCod)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
   }
-

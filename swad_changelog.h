@@ -470,10 +470,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.16 (2019-09-26)"
+#define Log_PLATFORM_VERSION	"SWAD 19.16.1 (2019-09-26)"
 #define CSS_FILE		"swad19.15.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.16.1:  Sep 26, 2019	Code refactoring in edition of games. (246416 lines)
 	Version 19.16:    Sep 26, 2019	Make it impossible to edit a game when it has matches. (246424 lines)
 	Version 19.15:    Sep 26, 2019	Refresh only left part of the teacher's screen when playing a match. (246332 lines)
 	Version 19.14.6:  Sep 26, 2019	Code refactoring related to match refreshing. (246294 lines)
