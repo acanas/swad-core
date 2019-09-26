@@ -718,6 +718,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    struct AgendaEvent AgdEvent;
+   Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this event *****/
@@ -739,36 +740,27 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    Frm_SetAnchorStr (AgdEvent.AgdCod,&Anchor);
 
    /***** Write first row of data of this event *****/
-   /* Start date/time */
-   UniqueId++;
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td id=\"agd_date_start_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
-                      "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('agd_date_start_%u',%ld,"
-                      "%u,'<br />','%s',true,true,0x6);"
-                      "</script>"
-	              "</td>",
-	    UniqueId,
-            AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
-        	              Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
-            Gbl.RowEvenOdd,
-            UniqueId,AgdEvent.TimeUTC[Agd_START_TIME],
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   fprintf (Gbl.F.Out,"<tr>");
 
-   /* End date/time */
+   /* Start/end date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"agd_date_end_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
-                      "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('agd_date_end_%u',%ld,"
-                      "%u,'<br />','%s',false,true,0x6);"
-                      "</script>"
-	              "</td>",
-	    UniqueId,
-            AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
-        	              Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
-            Gbl.RowEvenOdd,
-            UniqueId,AgdEvent.TimeUTC[Agd_END_TIME],
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   for (StartEndTime = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
+      fprintf (Gbl.F.Out,"<td id=\"agd_date_%u_%u\""
+	                 " class=\"%s LEFT_BOTTOM COLOR%u\">"
+			 "<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('agd_date_%u_%u',%ld,"
+			 "%u,'<br />','%s',true,true,0x6);"
+			 "</script>"
+			 "</td>",
+	       (unsigned) StartEndTime,UniqueId,
+	       AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
+				 Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
+	       Gbl.RowEvenOdd,
+	       (unsigned) StartEndTime,UniqueId,
+	       AgdEvent.TimeUTC[StartEndTime],
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* Event */
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP COLOR%u\">",
@@ -783,12 +775,13 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    /* Location */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
                       "<div class=\"%s\">%s</div>"
-                      "</td>"
-	              "</tr>",
+                      "</td>",
             Gbl.RowEvenOdd,
             AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
         	              "ASG_TITLE",
             AgdEvent.Location);
+
+   fprintf (Gbl.F.Out,"</tr>");
 
    /***** Write second row of data of this event *****/
    fprintf (Gbl.F.Out,"<tr>"
