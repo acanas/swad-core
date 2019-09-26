@@ -103,6 +103,8 @@ void Gam_RemoveGamesCrs (long CrsCod);
 unsigned Gam_GetNumQstsGame (long GamCod);
 
 void Gam_RequestNewQuestion (void);
+void Gam_ListTstQuestionsToSelect (void);
+
 void Gam_PutParamQstInd (unsigned QstInd);
 unsigned Gam_GetParamQstInd (void);
 unsigned Gam_GetQstIndFromStr (const char *UnsignedStr);

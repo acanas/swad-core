@@ -582,7 +582,8 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
       Ico_PutContextualIconToUnhide (ActShoGam,Anchor,Gam_PutParams);
 
    /***** Put icon to edit game *****/
-   Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);
+   if (!Game->NumMchs)	// Edit only if match has no matches
+      Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);
   }
 
 /*****************************************************************************/
@@ -734,7 +735,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
          case Rol_STD:
             Game->Status.ICanViewResults = Game->NumQsts != 0 &&
                                            Game->Status.Visible;
-            Game->Status.ICanEdit         = false;
+            Game->Status.ICanEdit        = false;
             break;
          case Rol_NET:
             Game->Status.ICanViewResults = Game->NumQsts != 0;
@@ -1042,6 +1043,7 @@ void Gam_RequestCreatOrEditGame (void)
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_New_game;
    extern const char *Txt_Edit_game;
    extern const char *Txt_Title;
@@ -1058,89 +1060,96 @@ void Gam_RequestCreatOrEditGame (void)
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
    /***** Get the code of the game *****/
-   ItsANewGame = ((Game.GamCod = Gam_GetParamGameCod ()) == -1L);
+   Game.GamCod = Gam_GetParamGameCod ();
 
-   /***** Get from the database the data of the game *****/
-   if (ItsANewGame)
-     {
-      /***** Put link (form) to create new game *****/
-      if (!Gam_CheckIfICanEditGames ())
-         Lay_ShowErrorAndExit ("You can not create a new game here.");
-
-      /* Initialize to empty game */
-      Gam_ResetGame (&Game,Gbl.Usrs.Me.UsrDat.UsrCod);
-     }
+   /***** Check if game has matches *****/
+   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
    else
      {
-      /* Get data of the game from database */
-      Gam_GetDataOfGameByCod (&Game);
-      if (!Game.Status.ICanEdit)
-         Lay_ShowErrorAndExit ("You can not update this game.");
+      /***** Get from the database the data of the game *****/
+      ItsANewGame = (Game.GamCod < 0);
+      if (ItsANewGame)
+	{
+	 /***** Put link (form) to create new game *****/
+	 if (!Gam_CheckIfICanEditGames ())
+	    Lay_ShowErrorAndExit ("You can not create a new game here.");
 
-      /* Get text of the game from database */
-      Gam_GetGameTxtFromDB (Game.GamCod,Txt);
+	 /* Initialize to empty game */
+	 Gam_ResetGame (&Game,Gbl.Usrs.Me.UsrDat.UsrCod);
+	}
+      else
+	{
+	 /* Get data of the game from database */
+	 Gam_GetDataOfGameByCod (&Game);
+	 if (!Game.Status.ICanEdit)
+	    Lay_ShowErrorAndExit ("You can not update this game.");
+
+	 /* Get text of the game from database */
+	 Gam_GetGameTxtFromDB (Game.GamCod,Txt);
+	}
+
+      /***** Start form *****/
+      Gam_CurrentGamCod = Game.GamCod;
+      Frm_StartForm (ItsANewGame ? ActNewGam :
+				   ActChgGam);
+      Gam_PutParams ();
+
+      /***** Start box and table *****/
+      if (ItsANewGame)
+	 Box_StartBoxTable (NULL,Txt_New_game,NULL,
+			    Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
+      else
+	 Box_StartBoxTable (NULL,
+			    Game.Title[0] ? Game.Title :
+					    Txt_Edit_game,
+			    NULL,
+			    Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
+
+      /***** Game title *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"RIGHT_MIDDLE\">"
+			 "<label for=\"Title\" class=\"%s\">%s:</label>"
+			 "</td>"
+			 "<td class=\"LEFT_MIDDLE\">"
+			 "<input type=\"text\" id=\"Title\" name=\"Title\""
+			 " size=\"45\" maxlength=\"%u\" value=\"%s\""
+			 " required=\"required\" />"
+			 "</td>"
+			 "</tr>",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Title,
+	       Gam_MAX_CHARS_TITLE,Game.Title);
+
+      /***** Game text *****/
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"RIGHT_TOP\">"
+			 "<label for=\"Txt\" class=\"%s\">%s:</label>"
+			 "</td>"
+			 "<td class=\"LEFT_TOP\">"
+			 "<textarea id=\"Txt\" name=\"Txt\""
+			 " cols=\"60\" rows=\"10\">",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],
+	       Txt_Description);
+      if (!ItsANewGame)
+	 fprintf (Gbl.F.Out,"%s",Txt);
+      fprintf (Gbl.F.Out,"</textarea>"
+			 "</td>"
+			 "</tr>");
+
+      /***** End table, send button and end box *****/
+      if (ItsANewGame)
+	 Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_game);
+      else
+	 Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+
+      /***** End form *****/
+      Frm_EndForm ();
+
+      /***** Show questions of the game ready to be edited *****/
+      if (!ItsANewGame)
+	 Gam_ListGameQuestions (&Game);
      }
-
-   /***** Start form *****/
-   Gam_CurrentGamCod = Game.GamCod;
-   Frm_StartForm (ItsANewGame ? ActNewGam :
-	                        ActChgGam);
-   Gam_PutParams ();
-
-   /***** Start box and table *****/
-   if (ItsANewGame)
-      Box_StartBoxTable (NULL,Txt_New_game,NULL,
-                         Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
-   else
-      Box_StartBoxTable (NULL,
-                         Game.Title[0] ? Game.Title :
-                	                 Txt_Edit_game,
-                         NULL,
-                         Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
-
-   /***** Game title *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"Title\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" id=\"Title\" name=\"Title\""
-                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Title,
-            Gam_MAX_CHARS_TITLE,Game.Title);
-
-   /***** Game text *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Txt\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Txt\" name=\"Txt\""
-                      " cols=\"60\" rows=\"10\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Description);
-   if (!ItsANewGame)
-      fprintf (Gbl.F.Out,"%s",Txt);
-   fprintf (Gbl.F.Out,"</textarea>"
-                      "</td>"
-                      "</tr>");
-
-   /***** End table, send button and end box *****/
-   if (ItsANewGame)
-      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_game);
-   else
-      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
-
-   /***** End form *****/
-   Frm_EndForm ();
-
-   /***** Show questions of the game ready to be edited *****/
-   if (!ItsANewGame)
-      Gam_ListGameQuestions (&Game);
   }
 
 /*****************************************************************************/
@@ -1149,6 +1158,7 @@ void Gam_RequestCreatOrEditGame (void)
 
 void Gam_RecFormGame (void)
   {
+   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_Already_existed_a_game_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_game;
    struct Game OldGame;
@@ -1158,50 +1168,57 @@ void Gam_RecFormGame (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the game *****/
-   ItsANewGame = ((NewGame.GamCod = Gam_GetParamGameCod ()) == -1L);
+   NewGame.GamCod = Gam_GetParamGameCod ();
 
-   if (!ItsANewGame)
-     {
-      /* Get data of the old (current) game from database */
-      OldGame.GamCod = NewGame.GamCod;
-      Gam_GetDataOfGameByCod (&OldGame);
-      if (!OldGame.Status.ICanEdit)
-         Lay_ShowErrorAndExit ("You can not update this game.");
-     }
-
-   /***** Get game title *****/
-   Par_GetParToText ("Title",NewGame.Title,Gam_MAX_BYTES_TITLE);
-
-   /***** Get game text and insert links *****/
-   Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
-
-   /***** Check if title is correct *****/
-   if (NewGame.Title[0])	// If there's a game title
-     {
-      /* If title of game was in database... */
-      if (Gam_CheckIfSimilarGameExists (&NewGame))
-        {
-         NewGameIsCorrect = false;
-         Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_game_with_the_title_X,
-                        NewGame.Title);
-        }
-     }
-   else	// If there is not a game title
-     {
-      NewGameIsCorrect = false;
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_game);
-     }
-
-   /***** Create a new game or update an existing one *****/
-   if (NewGameIsCorrect)
-     {
-      if (ItsANewGame)
-         Gam_CreateGame (&NewGame,Txt);	// Add new game to database
-      else
-         Gam_UpdateGame (&NewGame,Txt);
-     }
+   /***** Check if game has matches *****/
+   if ((NewGame.NumMchs = Gam_GetNumMchsGame (NewGame.GamCod)))
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
    else
-      Gam_RequestCreatOrEditGame ();
+     {
+      ItsANewGame = (NewGame.GamCod < 0);
+      if (!ItsANewGame)
+	{
+	 /* Get data of the old (current) game from database */
+	 OldGame.GamCod = NewGame.GamCod;
+	 Gam_GetDataOfGameByCod (&OldGame);
+	 if (!OldGame.Status.ICanEdit)
+	    Lay_ShowErrorAndExit ("You can not update this game.");
+	}
+
+      /***** Get game title *****/
+      Par_GetParToText ("Title",NewGame.Title,Gam_MAX_BYTES_TITLE);
+
+      /***** Get game text and insert links *****/
+      Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
+
+      /***** Check if title is correct *****/
+      if (NewGame.Title[0])	// If there's a game title
+	{
+	 /* If title of game was in database... */
+	 if (Gam_CheckIfSimilarGameExists (&NewGame))
+	   {
+	    NewGameIsCorrect = false;
+	    Ale_ShowAlert (Ale_WARNING,Txt_Already_existed_a_game_with_the_title_X,
+			   NewGame.Title);
+	   }
+	}
+      else	// If there is not a game title
+	{
+	 NewGameIsCorrect = false;
+	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_game);
+	}
+
+      /***** Create a new game or update an existing one *****/
+      if (NewGameIsCorrect)
+	{
+	 if (ItsANewGame)
+	    Gam_CreateGame (&NewGame,Txt);	// Add new game to database
+	 else
+	    Gam_UpdateGame (&NewGame,Txt);
+	}
+      else
+	 Gam_RequestCreatOrEditGame ();
+     }
 
    /***** Show games again *****/
    Gam_ListAllGames ();
@@ -1378,25 +1395,53 @@ unsigned Gam_GetNumQstsGame (long GamCod)
 
 void Gam_RequestNewQuestion (void)
   {
+   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    struct Game Game;
 
    /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
-   /***** Get other parameters *****/
-   Gam_GetParamOrder ();
-   Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
+   /***** Check if game has matches *****/
+   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
+   else
+     {
+      /***** Get other parameters *****/
+      Gam_GetParamOrder ();
+      Grp_GetParamWhichGrps ();
+      Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
-   /***** Show form to create a new question in this game *****/
-   Tst_ShowFormAskSelectTstsForGame (Game.GamCod);
+      /***** Show form to create a new question in this game *****/
+      Tst_ShowFormAskSelectTstsForGame (Game.GamCod);
+     }
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
                     true,	// Show only this game
                     true,	// List game questions
 		    false);	// Do not put form to start new match
+  }
+
+/*****************************************************************************/
+/**************** List several test questions for selection ******************/
+/*****************************************************************************/
+
+void Gam_ListTstQuestionsToSelect (void)
+  {
+   extern const char *Txt_You_can_not_edit_a_game_with_matches;
+   struct Game Game;
+
+   /***** Get game code *****/
+   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+
+   /***** Check if game has matches *****/
+   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
+   else
+      /***** List several test questions for selection *****/
+      Tst_ListQuestionsToSelect (Game.GamCod);
   }
 
 /*****************************************************************************/
@@ -1841,6 +1886,7 @@ static void Gam_PutButtonToAddNewQuestions (void)
 
 void Gam_AddTstQuestionsToGame (void)
   {
+   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_You_must_select_one_ore_more_questions;
    struct Game Game;
    const char *Ptr;
@@ -1852,45 +1898,51 @@ void Gam_AddTstQuestionsToGame (void)
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
-   /***** Get selected questions *****/
-   /* Allocate space for selected question codes */
-   Gam_AllocateListSelectedQuestions ();
-
-   /* Get question codes */
-   Par_GetParMultiToText ("QstCods",Gbl.Games.ListQuestions,
-                          Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS);
-
-   /* Check number of questions */
-   if (Gam_CountNumQuestionsInList () == 0)	// If no questions selected...
-     {						// ...write warning alert
-      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_questions);
-
-      // TODO: Show form again!!!
-     }
-
-   /***** Insert questions in database *****/
-   Ptr = Gbl.Games.ListQuestions;
-   while (*Ptr)
+   /***** Check if game has matches *****/
+   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
+   else
      {
-      /* Get next code */
-      Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
-      if (sscanf (LongStr,"%ld",&QstCod) != 1)
-         Lay_ShowErrorAndExit ("Wrong question code.");
+      /***** Get selected questions *****/
+      /* Allocate space for selected question codes */
+      Gam_AllocateListSelectedQuestions ();
 
-      /* Get current maximum index */
-      MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// -1 if no questions
+      /* Get question codes */
+      Par_GetParMultiToText ("QstCods",Gbl.Games.ListQuestions,
+			     Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS);
 
-      /* Insert question in the table of questions */
-      DB_QueryINSERT ("can not create question",
-		      "INSERT INTO gam_questions"
-		      " (GamCod,QstCod,QstInd)"
-		      " VALUES"
-		      " (%ld,%ld,%u)",
-	              Game.GamCod,QstCod,MaxQstInd + 1);
+      /* Check number of questions */
+      if (Gam_CountNumQuestionsInList () == 0)	// If no questions selected...
+	{						// ...write warning alert
+	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_questions);
+
+	 // TODO: Show form again!!!
+	}
+
+      /***** Insert questions in database *****/
+      Ptr = Gbl.Games.ListQuestions;
+      while (*Ptr)
+	{
+	 /* Get next code */
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
+	    Lay_ShowErrorAndExit ("Wrong question code.");
+
+	 /* Get current maximum index */
+	 MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// -1 if no questions
+
+	 /* Insert question in the table of questions */
+	 DB_QueryINSERT ("can not create question",
+			 "INSERT INTO gam_questions"
+			 " (GamCod,QstCod,QstInd)"
+			 " VALUES"
+			 " (%ld,%ld,%u)",
+			 Game.GamCod,QstCod,MaxQstInd + 1);
+	}
+
+      /***** Free space for selected question codes *****/
+      Gam_FreeListsSelectedQuestions ();
      }
-
-   /***** Free space for selected question codes *****/
-   Gam_FreeListsSelectedQuestions ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -1965,26 +2017,32 @@ static void Gam_PutParamsOneQst (void)
 
 void Gam_RequestRemoveQst (void)
   {
+   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
    struct Game Game;
    unsigned QstInd;
 
-   /***** Get parameters *****/
-   /* Get game code */
+   /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
-   /* Get question index */
-   QstInd = Gam_GetParamQstInd ();
+   /***** Check if game has matches *****/
+   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
+   else
+     {
+      /***** Get question index *****/
+      QstInd = Gam_GetParamQstInd ();
 
-   /***** Show question and button to remove question *****/
-   Gam_CurrentGamCod = Game.GamCod;
-   Gam_CurrentQstInd = QstInd;
-   Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,Gam_PutParamsOneQst,
-			   Btn_REMOVE_BUTTON,Txt_Remove_question,
-			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
-	                   QstInd);
+      /***** Show question and button to remove question *****/
+      Gam_CurrentGamCod = Game.GamCod;
+      Gam_CurrentQstInd = QstInd;
+      Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,Gam_PutParamsOneQst,
+			      Btn_REMOVE_BUTTON,Txt_Remove_question,
+			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
+			      QstInd);
+     }
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -1999,45 +2057,51 @@ void Gam_RequestRemoveQst (void)
 
 void Gam_RemoveQst (void)
   {
+   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_Question_removed;
    struct Game Game;
    unsigned QstInd;
 
-   /***** Get parameters *****/
-   /* Get game code */
+   /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
-   /* Get question index */
-   QstInd = Gam_GetParamQstInd ();
+   /***** Check if game has matches *****/
+   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
+   else
+     {
+      /***** Get question index *****/
+      QstInd = Gam_GetParamQstInd ();
 
-   /***** Remove the question from all the tables *****/
-   /* Remove answers from this test question */
-   Gam_RemAnswersOfAQuestion (Game.GamCod,QstInd);
+      /***** Remove the question from all the tables *****/
+      /* Remove answers from this test question */
+      Gam_RemAnswersOfAQuestion (Game.GamCod,QstInd);
 
-   /* Remove the question itself */
-   DB_QueryDELETE ("can not remove a question",
-		   "DELETE FROM gam_questions"
-		   " WHERE GamCod=%ld AND QstInd=%u",
-		   Game.GamCod,QstInd);
-   if (!mysql_affected_rows (&Gbl.mysql))
-      Lay_ShowErrorAndExit ("The question to be removed does not exist.");
+      /* Remove the question itself */
+      DB_QueryDELETE ("can not remove a question",
+		      "DELETE FROM gam_questions"
+		      " WHERE GamCod=%ld AND QstInd=%u",
+		      Game.GamCod,QstInd);
+      if (!mysql_affected_rows (&Gbl.mysql))
+	 Lay_ShowErrorAndExit ("The question to be removed does not exist.");
 
-   /* Change index of questions greater than this */
-   DB_QueryUPDATE ("can not update indexes of questions in table of answers",
-		   "UPDATE mch_answers,mch_matches"
-		   " SET mch_answers.QstInd=mch_answers.QstInd-1"
-		   " WHERE mch_matches.GamCod=%ld"
-		   " WHERE mch_matches.MchCod=mch_answers.MchCod"
-		   " AND mch_answers.QstInd>%u",
-                   Game.GamCod,QstInd);
-   DB_QueryUPDATE ("can not update indexes of questions",
-		   "UPDATE gam_questions SET QstInd=QstInd-1"
-		   " WHERE GamCod=%ld AND QstInd>%u",
-                   Game.GamCod,QstInd);
+      /* Change index of questions greater than this */
+      DB_QueryUPDATE ("can not update indexes of questions in table of answers",
+		      "UPDATE mch_answers,mch_matches"
+		      " SET mch_answers.QstInd=mch_answers.QstInd-1"
+		      " WHERE mch_matches.GamCod=%ld"
+		      " WHERE mch_matches.MchCod=mch_answers.MchCod"
+		      " AND mch_answers.QstInd>%u",
+		      Game.GamCod,QstInd);
+      DB_QueryUPDATE ("can not update indexes of questions",
+		      "UPDATE gam_questions SET QstInd=QstInd-1"
+		      " WHERE GamCod=%ld AND QstInd>%u",
+		      Game.GamCod,QstInd);
 
-   /***** Write message *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
+      /***** Write message *****/
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
+     }
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -2052,36 +2116,42 @@ void Gam_RemoveQst (void)
 
 void Gam_MoveUpQst (void)
   {
+   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_The_question_has_been_moved_up;
    extern const char *Txt_Movement_not_allowed;
    struct Game Game;
    unsigned QstIndTop;
    unsigned QstIndBottom;
 
-   /***** Get parameters *****/
-   /* Get game code */
+   /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
-   /* Get question index */
-   QstIndBottom = Gam_GetParamQstInd ();
-
-   /***** Move up question *****/
-   if (QstIndBottom > 1)
-     {
-      /* Indexes of questions to be exchanged */
-      QstIndTop = Gam_GetPrevQuestionIndexInGame (Game.GamCod,QstIndBottom);
-      if (!QstIndTop)
-         Lay_ShowErrorAndExit ("Wrong index of question.");
-
-      /* Exchange questions */
-      Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
-
-      /* Success alert */
-      Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_up);
-     }
+   /***** Check if game has matches *****/
+   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
    else
-      Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+     {
+      /***** Get question index *****/
+      QstIndBottom = Gam_GetParamQstInd ();
+
+      /***** Move up question *****/
+      if (QstIndBottom > 1)
+	{
+	 /* Indexes of questions to be exchanged */
+	 QstIndTop = Gam_GetPrevQuestionIndexInGame (Game.GamCod,QstIndBottom);
+	 if (!QstIndTop)
+	    Lay_ShowErrorAndExit ("Wrong index of question.");
+
+	 /* Exchange questions */
+	 Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
+
+	 /* Success alert */
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_up);
+	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+     }
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -2096,6 +2166,7 @@ void Gam_MoveUpQst (void)
 
 void Gam_MoveDownQst (void)
   {
+   extern const char *Txt_You_can_not_edit_a_game_with_matches;
    extern const char *Txt_The_question_has_been_moved_down;
    extern const char *Txt_Movement_not_allowed;
    extern const char *Txt_This_game_has_no_questions;
@@ -2104,38 +2175,43 @@ void Gam_MoveDownQst (void)
    unsigned QstIndBottom;
    unsigned MaxQstInd;	// 0 if no questions
 
-   /***** Get parameters *****/
-   /* Get game code */
+   /***** Get game code *****/
    if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
-   /* Get question index */
-   QstIndTop = Gam_GetParamQstInd ();
-
-   /* Get maximum question index */
-   MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);
-
-   /***** Move down question *****/
-   if (MaxQstInd)
+   /***** Check if game has matches *****/
+   if ((Game.NumMchs = Gam_GetNumMchsGame (Game.GamCod)))
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
+   else
      {
-      if (QstIndTop < MaxQstInd)
+      /***** Get question index *****/
+      QstIndTop = Gam_GetParamQstInd ();
+
+      /***** Get maximum question index *****/
+      MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);
+
+      /***** Move down question *****/
+      if (MaxQstInd)
 	{
-	 /* Indexes of questions to be exchanged */
-         QstIndBottom = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
-	 if (!QstIndBottom)
-	    Lay_ShowErrorAndExit ("Wrong index of question.");
+	 if (QstIndTop < MaxQstInd)
+	   {
+	    /* Indexes of questions to be exchanged */
+	    QstIndBottom = Gam_GetNextQuestionIndexInGame (Game.GamCod,QstIndTop);
+	    if (!QstIndBottom)
+	       Lay_ShowErrorAndExit ("Wrong index of question.");
 
-	 /* Exchange questions */
-	 Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
+	    /* Exchange questions */
+	    Gam_ExchangeQuestions (Game.GamCod,QstIndTop,QstIndBottom);
 
-         /* Success alert */
-	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_down);
+	    /* Success alert */
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_question_has_been_moved_down);
+	   }
+	 else
+	    Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
 	}
       else
-         Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
+	 Ale_ShowAlert (Ale_WARNING,Txt_This_game_has_no_questions);
      }
-   else
-      Ale_ShowAlert (Ale_WARNING,Txt_This_game_has_no_questions);
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,

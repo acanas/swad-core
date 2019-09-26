@@ -1946,6 +1946,10 @@ static void Mch_ShowMatchStatusForStd (struct Match *Match)
 
 unsigned Gam_GetNumMchsGame (long GamCod)
   {
+   /***** Trivial check *****/
+   if (GamCod < 0)	// A non-existing game...
+      return 0;		// ...has no matches
+
    /***** Get number of matches in a game from database *****/
    return
    (unsigned) DB_QueryCOUNT ("can not get number of matches of a game",

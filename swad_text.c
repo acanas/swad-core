@@ -54243,6 +54243,28 @@ const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_create
 	" uma vez diret&oacute;rios foram criados.";
 #endif
 
+const char *Txt_You_can_not_edit_a_game_with_matches =
+#if   L==1	// ca
+	"No es pot editar un joc amb partides.";
+#elif L==2	// de
+	"Sie k&ouml;nnen ein Spiel mit Matche nicht bearbeiten.";
+#elif L==3	// en
+	"You can not edit a game with matches.";
+#elif L==4	// es
+	"No se puede editar un juego con partidas.";
+#elif L==5	// fr
+	"Vous ne pouvez pas &eacute;diter un jeu avec des matchs.";
+#elif L==6	// gn
+	"No se puede editar un juego con partidas.";	// Okoteve traducción
+#elif L==7	// it
+	"Non &egrave; possibile modificare un gioco con i partite.";
+#elif L==8	// pl
+	"Nie mo&zdot;na edytowa&cacute; gry za pomoc&aogon; mecze.";
+#elif L==9	// pt
+	"Voc&ecirc; n&atilde;o pode editar um jogo com partidas.";
+#endif
+
+
 const char *Txt_You_can_not_leave_empty_intermediate_answers =
 #if   L==1	// ca
 	"No puede dejar respuestas intermedias sin rellenar.";	// Necessita traduccio

@@ -2413,15 +2413,10 @@ void Tst_ListQuestionsToEdit (void)
 /**************** List several test questions for selection ******************/
 /*****************************************************************************/
 
-void Tst_ListQuestionsToSelect (void)
+void Tst_ListQuestionsToSelect (long GamCod)
   {
-   long GamCod;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
-
-   /***** Get game code *****/
-   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get parameters, query the database and list the questions *****/
    if (Tst_GetParamsTst (Tst_SELECT_QUESTIONS_FOR_GAME))	// Get parameters from the form
