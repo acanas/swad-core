@@ -2579,7 +2579,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
-	border:1px solid red;
 	}
 .MATCH_RIGHT
 	{
@@ -2587,7 +2586,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	display:table;
 	float:left;
 	width:75%;
-	border:1px solid red;
 	}
 .MATCH_TOP
 	{

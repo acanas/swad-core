@@ -677,7 +677,8 @@ static void Lay_WriteScriptInit (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    bool RefreshConnected;
    bool RefreshNewTimeline = false;
-   bool RefreshMatch       = false;
+   bool RefreshMatchStd       = false;
+   bool RefreshMatchTch   = false;
    bool RefreshLastClicks  = false;
 
    RefreshConnected = Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&
@@ -694,6 +695,10 @@ static void Lay_WriteScriptInit (void)
       case ActRemSocComGbl:
 	 RefreshNewTimeline = true;
 	 break;
+      case ActPlyMchStd:
+      case ActAnsMchQstStd:
+	 RefreshMatchStd = true;
+	 break;
       case ActNewMchTch:
       case ActResMchTch:
       case ActPauMchTch:
@@ -701,11 +706,7 @@ static void Lay_WriteScriptInit (void)
       case ActBckMchTch:
       case ActFwdMchTch:
       case ActChgVisResMchQst:
-	 RefreshMatch = true;
-	 break;
-      case ActPlyMchStd:
-      case ActAnsMchQstStd:
-	 RefreshMatch = true;
+	 RefreshMatchTch = true;
 	 break;
       case ActLstClk:
 	 RefreshLastClicks = true;
@@ -721,9 +722,10 @@ static void Lay_WriteScriptInit (void)
    if (RefreshNewTimeline)
       fprintf (Gbl.F.Out,"\tvar delayNewTimeline = %lu;\n",
 	       Cfg_TIME_TO_REFRESH_TIMELINE);
-   else if (RefreshMatch)	// Refresh match via AJAX
+   else if (RefreshMatchStd ||
+	    RefreshMatchTch)	// Refresh match via AJAX
       fprintf (Gbl.F.Out,"\tvar delayMatch = %lu;\n",
-	       Cfg_TIME_TO_REFRESH_GAME);
+	       Cfg_TIME_TO_REFRESH_MATCH);
 
    fprintf (Gbl.F.Out,"function init(){\n");
 
@@ -740,8 +742,10 @@ static void Lay_WriteScriptInit (void)
    if (RefreshLastClicks)	// Refresh last clicks via AJAX
       fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-   else if (RefreshMatch)	// Refresh match via AJAX
-      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshMatch()\",delayMatch);\n");
+   else if (RefreshMatchStd)	// Refresh match for a student via AJAX
+      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshMatchStd()\",delayMatch);\n");
+   else if (RefreshMatchTch)	// Refresh match for a teacher via AJAX
+      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshMatchTch()\",delayMatch);\n");
    else if (RefreshNewTimeline)	// Refresh timeline via AJAX
       fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshNewTimeline()\",delayNewTimeline);\n");
 
@@ -818,6 +822,14 @@ static void Lay_WriteScriptParamsAJAX (void)
 		  Act_GetActCod (ActRefOldSocPubUsr),
 		  Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
+      /* Parameters related with match refreshing (for students) */
+      case ActPlyMchStd:
+      case ActAnsMchQstStd:
+	 fprintf (Gbl.F.Out,"var RefreshParamNxtActMch = \"act=%ld\";\n"
+			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
+		  Act_GetActCod (ActRefMchStd),
+		  Gbl.Games.MchCodBeingPlayed);
+	 break;
       /* Parameters related with match refreshing (for teachers) */
       case ActNewMchTch:
       case ActResMchTch:
@@ -829,14 +841,6 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActMch = \"act=%ld\";\n"
 			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
 		  Act_GetActCod (ActRefMchTch),
-		  Gbl.Games.MchCodBeingPlayed);
-	 break;
-      /* Parameters related with match refreshing (for students) */
-      case ActPlyMchStd:
-      case ActAnsMchQstStd:
-	 fprintf (Gbl.F.Out,"var RefreshParamNxtActMch = \"act=%ld\";\n"
-			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
-		  Act_GetActCod (ActRefMchStd),
 		  Gbl.Games.MchCodBeingPlayed);
 	 break;
       /* Parameter related with clicks refreshing */

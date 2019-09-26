@@ -517,31 +517,65 @@ function readConnUsrsData () {
 /*****************************************************************************/
 
 //  This function must be called from time to time
-var objXMLHttpReqMch = false;
-function refreshMatch () {
-	objXMLHttpReqMch = AJAXCreateObject();
-	if (objXMLHttpReqMch) {
+var objXMLHttpReqMchStd = false;
+function refreshMatchStd () {
+	objXMLHttpReqMchStd = AJAXCreateObject();
+	if (objXMLHttpReqMchStd) {
 		var RefreshParams = RefreshParamNxtActMch + '&' +
 							RefreshParamMchCod + '&' +
 							RefreshParamIdSes;
 
-		objXMLHttpReqMch.onreadystatechange = readMatchData;	// onreadystatechange must be lowercase
-		objXMLHttpReqMch.open('POST',ActionAJAX,true);
-		objXMLHttpReqMch.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		objXMLHttpReqMch.send(RefreshParams);
+		objXMLHttpReqMchStd.onreadystatechange = readMatchStdData;	// onreadystatechange must be lowercase
+		objXMLHttpReqMchStd.open('POST',ActionAJAX,true);
+		objXMLHttpReqMchStd.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		objXMLHttpReqMchStd.send(RefreshParams);
 	}
 }
 
-function readMatchData () {
-	if (objXMLHttpReqMch.readyState == 4) {	// Check if data have been received
-		if (objXMLHttpReqMch.status == 200) {
-			var htmlMatch = objXMLHttpReqMch.responseText;	// Get HTML code for match
+function readMatchStdData () {
+	if (objXMLHttpReqMchStd.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqMchStd.status == 200) {
+			var htmlMatch = objXMLHttpReqMchStd.responseText;	// Get HTML code
 
-			var divGame = document.getElementById('match');	// Access to game DIV
-			if (divGame)
-				divGame.innerHTML = htmlMatch;				// Update game DIV
+			var divMatch = document.getElementById('match');	// Access to game DIV
+			if (divMatch)
+				divMatch.innerHTML = htmlMatch;					// Update game DIV
 			// Global delay variable is set initially in swad-core
-			setTimeout('refreshMatch()',delayMatch);
+			setTimeout('refreshMatchStd()',delayMatch);
+		}
+	}
+}
+
+/*****************************************************************************/
+/**** Automatic refresh of left part of current match question using AJAX ****/
+/*****************************************************************************/
+
+//This function must be called from time to time
+var objXMLHttpReqMchTch = false;
+function refreshMatchTch () {
+	objXMLHttpReqMchTch = AJAXCreateObject();
+	if (objXMLHttpReqMchTch) {
+		var RefreshParams = RefreshParamNxtActMch + '&' +
+							RefreshParamMchCod + '&' +
+							RefreshParamIdSes;
+
+		objXMLHttpReqMchTch.onreadystatechange = readMatchTchData;	// onreadystatechange must be lowercase
+		objXMLHttpReqMchTch.open('POST',ActionAJAX,true);
+		objXMLHttpReqMchTch.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		objXMLHttpReqMchTch.send(RefreshParams);
+	}
+}
+
+function readMatchTchData () {
+	if (objXMLHttpReqMchTch.readyState == 4) {	// Check if data have been received
+		if (objXMLHttpReqMchTch.status == 200) {
+			var htmlMatch = objXMLHttpReqMchTch.responseText;	// Get HTML code
+
+			var divMatch = document.getElementById('match_left');	// Access to game DIV
+			if (divMatch)
+				divMatch.innerHTML = htmlMatch;					// Update game DIV
+			// Global delay variable is set initially in swad-core
+			setTimeout('refreshMatchTch()',delayMatch);
 		}
 	}
 }

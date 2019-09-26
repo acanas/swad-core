@@ -190,6 +190,7 @@ static void Mch_ShowMatchStatusForStd (struct Match *Match);
 static bool Mch_CheckIfIPlayThisMatchBasedOnGrps (long MchCod);
 
 static void Mch_ShowLeftColumnTch (struct Match *Match);
+static void Mch_ShowInsideLeftColumnTch (struct Match *Match);
 static void Mch_ShowRightColumnTch (struct Match *Match);
 static void Mch_ShowLeftColumnStd (struct Match *Match);
 static void Mch_ShowRightColumnStd (struct Match *Match);
@@ -1570,8 +1571,8 @@ static void Mch_UpdateElapsedTimeInQuestion (struct Match *Match)
 		      " ON DUPLICATE KEY"
 		      " UPDATE ElapsedTime=ADDTIME(ElapsedTime,SEC_TO_TIME(%u))",
 		      Match->MchCod,Match->Status.QstInd,
-		      Cfg_SECONDS_TO_REFRESH_GAME,
-		      Cfg_SECONDS_TO_REFRESH_GAME);
+		      Cfg_SECONDS_TO_REFRESH_MATCH,
+		      Cfg_SECONDS_TO_REFRESH_MATCH);
   }
 
 /*****************************************************************************/
@@ -1976,12 +1977,21 @@ static bool Mch_CheckIfIPlayThisMatchBasedOnGrps (long MchCod)
 
 static void Mch_ShowLeftColumnTch (struct Match *Match)
   {
+   /***** Start left container *****/
+   fprintf (Gbl.F.Out,"<div id=\"match_left\" class=\"MATCH_LEFT\">");
+
+   /***** Show content of div *****/
+   Mch_ShowInsideLeftColumnTch (Match);
+
+   /***** End left container *****/
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Mch_ShowInsideLeftColumnTch (struct Match *Match)
+  {
    extern const char *Txt_MATCH_respond;
    struct Time Time;
    unsigned NumAnswerersQst;
-
-   /***** Start left container *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_LEFT\">");
 
    /***** Top *****/
    fprintf (Gbl.F.Out,"<div class=\"MATCH_TOP\">");
@@ -2031,9 +2041,6 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
 	       Txt_MATCH_respond,
 	       NumAnswerersQst,Match->Status.NumPlayers);
      }
-
-   /***** End left container *****/
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -2523,13 +2530,13 @@ static void Mch_RemoveOldPlayers (void)
    DB_QueryDELETE ("can not update matches as not being played",
 		   "DELETE FROM mch_playing"
 		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		   Cfg_SECONDS_TO_REFRESH_GAME*3);
+		   Cfg_SECONDS_TO_REFRESH_MATCH*3);
 
    /***** Delete players who have left matches *****/
    DB_QueryDELETE ("can not update match players",
 		   "DELETE FROM mch_players"
 		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		   Cfg_SECONDS_TO_REFRESH_GAME*3);
+		   Cfg_SECONDS_TO_REFRESH_MATCH*3);
   }
 
 static void Mch_UpdateMatchAsBeingPlayed (long MchCod)
@@ -2642,7 +2649,8 @@ void Mch_RefreshMatchTch (void)
    Mch_UpdateElapsedTimeInQuestion (&Match);
 
    /***** Show current match status *****/
-   Mch_ShowMatchStatusForTch (&Match);
+   // Mch_ShowMatchStatusForTch (&Match);
+   Mch_ShowInsideLeftColumnTch (&Match);
   }
 
 /*****************************************************************************/
