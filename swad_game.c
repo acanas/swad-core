@@ -378,6 +378,7 @@ void Gam_ShowOneGame (long GamCod,
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    struct Game Game;
+   Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Start box *****/
@@ -414,40 +415,29 @@ void Gam_ShowOneGame (long GamCod,
       fprintf (Gbl.F.Out,"</td>");
      }
 
-   /***** Start date/time *****/
+   /***** Start/end date/time *****/
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"gam_date_start_%u\" class=\"%s LEFT_TOP",
-	    UniqueId,
-            Game.Status.Visible ? "DATE_GREEN" :
-                                  "DATE_GREEN_LIGHT");
-   if (!ShowOnlyThisGame)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
-   if (Game.TimeUTC[Dat_START_TIME])
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('gam_date_start_%u',%ld,"
-			 "%u,'<br />','%s',true,true,0x7);"
-			 "</script>",
-	       UniqueId,Game.TimeUTC[Dat_START_TIME],
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-   fprintf (Gbl.F.Out,"</td>");
-
-   /***** End date/time *****/
-   fprintf (Gbl.F.Out,"<td id=\"gam_date_end_%u\" class=\"%s LEFT_TOP",
-            UniqueId,
-            Game.Status.Visible ? "DATE_GREEN" :
-                                  "DATE_GREEN_LIGHT");
-   if (!ShowOnlyThisGame)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
-   if (Game.TimeUTC[Dat_END_TIME])
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('gam_date_end_%u',%ld,"
-			 "%u,'<br />','%s',false,true,0x7);"
-			 "</script>",
-	       UniqueId,Game.TimeUTC[Dat_END_TIME],
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-   fprintf (Gbl.F.Out,"</td>");
+   for (StartEndTime = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
+     {
+      fprintf (Gbl.F.Out,"<td id=\"gam_date_%u_%u\" class=\"%s LEFT_TOP",
+	       (unsigned) StartEndTime,UniqueId,
+	       Game.Status.Visible ? "DATE_GREEN" :
+				     "DATE_GREEN_LIGHT");
+      if (!ShowOnlyThisGame)
+	 fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"\">");
+      if (Game.TimeUTC[Dat_START_TIME])
+	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			    "writeLocalDateHMSFromUTC('gam_date_%u_%u',%ld,"
+			    "%u,'<br />','%s',true,true,0x7);"
+			    "</script>",
+		  (unsigned) StartEndTime,UniqueId,
+		  Game.TimeUTC[StartEndTime],
+		  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      fprintf (Gbl.F.Out,"</td>");
+     }
 
    /***** Game title and main data *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
