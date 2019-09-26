@@ -131,7 +131,7 @@ static void Gam_ExchangeQuestions (long GamCod,
 static bool Gam_GetNumMchsGameAndCheckIfEditable (struct Game *Game);
 
 /*****************************************************************************/
-/*************************** List all the games ******************************/
+/***************************** List all games ********************************/
 /*****************************************************************************/
 
 void Gam_SeeAllGames (void)
@@ -141,7 +141,7 @@ void Gam_SeeAllGames (void)
    Grp_GetParamWhichGrps ();
    Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
 
-   /***** Show all the games *****/
+   /***** Show all games *****/
    Gam_ListAllGames ();
   }
 
@@ -537,12 +537,12 @@ void Gam_ShowOneGame (long GamCod,
 
    if (ShowOnlyThisGame)
      {
-      /***** List matches *****/
-      Mch_ListMatches (&Game,PutFormNewMatch);
-
-      /***** Write questions of this game *****/
       if (ListGameQuestions)
+          /***** Write questions of this game *****/
 	 Gam_ListGameQuestions (&Game);
+      else
+	 /***** List matches *****/
+	 Mch_ListMatches (&Game,PutFormNewMatch);
 
       /***** End box *****/
       Box_EndBox ();
@@ -1149,6 +1149,9 @@ void Gam_RequestCreatOrEditGame (void)
       if (!ItsANewGame)
 	 Gam_ListGameQuestions (&Game);
      }
+
+   /***** Show all games *****/
+   Gam_ListAllGames ();
   }
 
 /*****************************************************************************/
@@ -2072,7 +2075,7 @@ void Gam_RemoveQst (void)
 		      "UPDATE mch_answers,mch_matches"
 		      " SET mch_answers.QstInd=mch_answers.QstInd-1"
 		      " WHERE mch_matches.GamCod=%ld"
-		      " WHERE mch_matches.MchCod=mch_answers.MchCod"
+		      " AND mch_matches.MchCod=mch_answers.MchCod"
 		      " AND mch_answers.QstInd>%u",
 		      Game.GamCod,QstInd);
       DB_QueryUPDATE ("can not update indexes of questions",

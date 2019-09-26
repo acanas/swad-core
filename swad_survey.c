@@ -172,7 +172,7 @@ static bool Svy_CheckIfIHaveAnsweredSvy (long SvyCod);
 static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod);
 
 /*****************************************************************************/
-/************************** List all the surveys *****************************/
+/***************************** List all surveys ******************************/
 /*****************************************************************************/
 
 void Svy_SeeAllSurveys (void)
@@ -187,7 +187,7 @@ void Svy_SeeAllSurveys (void)
    Grp_GetParamWhichGrps ();
    Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
-   /***** Show all the surveys *****/
+   /***** Show all surveys *****/
    Svy_ListAllSurveys (&SvyQst);
   }
 
@@ -1922,6 +1922,9 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Show questions of the survey ready to be edited *****/
    if (!ItsANewSurvey)
       Svy_ListSvyQuestions (&Svy,&SvyQst);
+
+   /***** Show all surveys *****/
+   Svy_ListAllSurveys (&SvyQst);
   }
 
 /*****************************************************************************/
