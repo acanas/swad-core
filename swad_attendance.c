@@ -375,6 +375,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    extern const char *Txt_View_event;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
+   Dat_StartEndTime_t StartEndTime;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this attendance event *****/
@@ -402,42 +403,29 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
      }
    fprintf (Gbl.F.Out,"</td>");
 
-   /* Start date/time */
+   /* Start/end date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"att_date_start_%u\" class=\"%s LEFT_BOTTOM",
-	    UniqueId,
-            Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
-        	                       "DATE_RED_LIGHT") :
-                          (Att->Open ? "DATE_GREEN" :
-                        	       "DATE_RED"));
-   if (!ShowOnlyThisAttEventComplete)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,"
-                      "%u,'<br />','%s',true,true,0x7);"
-                      "</script>"
-	              "</td>",
-            UniqueId,Att->TimeUTC[Att_START_TIME],
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-
-   /* End date/time */
-   fprintf (Gbl.F.Out,"<td id=\"att_date_end_%u\" class=\"%s LEFT_BOTTOM",
-            UniqueId,
-            Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
-        	                       "DATE_RED_LIGHT") :
-                          (Att->Open ? "DATE_GREEN" :
-                        	       "DATE_RED"));
-   if (!ShowOnlyThisAttEventComplete)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('att_date_end_%u',%ld,"
-                      "%u,'<br />','%s',false,true,0x7);"
-                      "</script>"
-	              "</td>",
-            UniqueId,Att->TimeUTC[Att_END_TIME],
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   for (StartEndTime = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
+     {
+      fprintf (Gbl.F.Out,"<td id=\"att_date_%u_%u\" class=\"%s LEFT_BOTTOM",
+	       (unsigned) StartEndTime,UniqueId,
+	       Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
+					  "DATE_RED_LIGHT") :
+			     (Att->Open ? "DATE_GREEN" :
+					  "DATE_RED"));
+      if (!ShowOnlyThisAttEventComplete)
+	 fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"\">"
+			 "<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('att_date_%u_%u',%ld,"
+			 "%u,'<br />','%s',true,true,0x7);"
+			 "</script>"
+			 "</td>",
+	       (unsigned) StartEndTime,UniqueId,Att->TimeUTC[StartEndTime],
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+     }
 
    /* Attendance event title */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");

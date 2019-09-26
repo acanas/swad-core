@@ -344,6 +344,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    struct Assignment Asg;
+   Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this assignment *****/
@@ -366,43 +367,30 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
      }
    fprintf (Gbl.F.Out,"</td>");
 
-   /* Start date/time */
+   /* Start/end date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_start_%u\" class=\"%s LEFT_BOTTOM",
-	    UniqueId,
-            Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
-        	                     "DATE_RED_LIGHT") :
-                         (Asg.Open ? "DATE_GREEN" :
-                                     "DATE_RED"));
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_start_%u',%ld,"
-                      "%u,'<br />','%s',true,true,0x7);"
-                      "</script>"
-	              "</td>",
-            UniqueId,Asg.TimeUTC[Dat_START_TIME],
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
-   /* End date/time */
-   UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_BOTTOM",
-	    UniqueId,
-            Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
-        	                     "DATE_RED_LIGHT") :
-                         (Asg.Open ? "DATE_GREEN" :
-                                     "DATE_RED"));
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_end_%u',%ld,"
-                      "%u,'<br />','%s',false,true,0x7);"
-                      "</script>"
-	              "</td>",
-            UniqueId,Asg.TimeUTC[Dat_END_TIME],
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   for (StartEndTime = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
+     {
+      fprintf (Gbl.F.Out,"<td id=\"asg_date_%u_%u\" class=\"%s LEFT_BOTTOM",
+	       (unsigned) StartEndTime,UniqueId,
+	       Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
+					"DATE_RED_LIGHT") :
+			    (Asg.Open ? "DATE_GREEN" :
+					"DATE_RED"));
+      if (!PrintView)
+	 fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"\">"
+			 "<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('asg_date_%u_%u',%ld,"
+			 "%u,'<br />','%s',true,true,0x7);"
+			 "</script>"
+			 "</td>",
+	       (unsigned) StartEndTime,UniqueId,Asg.TimeUTC[StartEndTime],
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+     }
 
    /* Assignment title */
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",

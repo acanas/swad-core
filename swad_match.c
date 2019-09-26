@@ -3554,6 +3554,7 @@ void Mch_ShowOneMchResult (void)
    Usr_MeOrOther_t MeOrOther;
    struct UsrData *UsrDat;
    time_t TimeUTC[Dat_NUM_START_END_TIME];	// Match result UTC date-time
+   Dat_StartEndTime_t StartEndTime;
    unsigned NumQsts;
    unsigned NumQstsNotBlank;
    double TotalScore;
@@ -3695,35 +3696,26 @@ void Mch_ShowOneMchResult (void)
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
-      /* Start time (for user in this match) */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N RIGHT_TOP\">"
-			 "%s:"
-			 "</td>"
-			 "<td id=\"match_start\" class=\"DAT LEFT_TOP\">"
-			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('match_start',%ld,"
-			 "%u,',&nbsp;','%s',true,true,0x7);"
-			 "</script>"
-			 "</td>"
-			 "</tr>",
-	       Txt_START_END_TIME[Dat_START_TIME],
-	       TimeUTC[Dat_START_TIME],(unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-
-      /* End time (for user in this match) */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N RIGHT_TOP\">"
-			 "%s:"
-			 "</td>"
-			 "<td id=\"match_end\" class=\"DAT LEFT_TOP\">"
-			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('match_end',%ld,"
-			 "%u,',&nbsp;','%s',true,true,0x7);"
-			 "</script>"
-			 "</td>"
-			 "</tr>",
-	       Txt_START_END_TIME[Dat_END_TIME],
-	       TimeUTC[Dat_END_TIME],(unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      /* Start/end time (for user in this match) */
+      for (StartEndTime = (Dat_StartEndTime_t) 0;
+	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	   StartEndTime++)
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"DAT_N RIGHT_TOP\">"
+			    "%s:"
+			    "</td>"
+			    "<td id=\"match_%u\" class=\"DAT LEFT_TOP\">"
+			    "<script type=\"text/javascript\">"
+			    "writeLocalDateHMSFromUTC('match_%u',%ld,"
+			    "%u,',&nbsp;','%s',true,true,0x7);"
+			    "</script>"
+			    "</td>"
+			    "</tr>",
+		  Txt_START_END_TIME[StartEndTime],
+		  (unsigned) StartEndTime,
+		  (unsigned) StartEndTime,
+		  TimeUTC[StartEndTime],
+		  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
       /* Number of questions */
       fprintf (Gbl.F.Out,"<tr>"
