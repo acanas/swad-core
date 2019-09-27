@@ -52,6 +52,10 @@ void Mch_CreateNewMatchTch (void);
 void Mch_RequestStartResumeMatchTch (void);
 void Mch_GetIndexes (long MchCod,unsigned QstInd,
 		     unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
+
+void Mch_RemoveGroup (long GrpCod);
+void Mch_RemoveGroupsOfType (long GrpTypCod);
+
 void Mch_PauseMatchTch (void);
 void Mch_ResumeMatchTch (void);
 void Mch_ToggleVisibilResultsMchQst (void);

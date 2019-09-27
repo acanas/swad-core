@@ -97,8 +97,6 @@ void Gam_HideGame (void);
 void Gam_UnhideGame (void);
 void Gam_RecFormGame (void);
 bool Gam_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod);
-void Gam_RemoveGroup (long GrpCod);
-void Gam_RemoveGroupsOfType (long GrpTypCod);
 void Gam_RemoveGamesCrs (long CrsCod);
 
 unsigned Gam_GetNumQstsGame (long GamCod);

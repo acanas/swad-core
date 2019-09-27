@@ -1537,6 +1537,35 @@ static void Mch_CreateGrps (long MchCod)
   }
 
 /*****************************************************************************/
+/********************* Remove one group from all matches *********************/
+/*****************************************************************************/
+
+void Mch_RemoveGroup (long GrpCod)
+  {
+   /***** Remove group from all the matches *****/
+   DB_QueryDELETE ("can not remove group"
+	           " from the associations between matches and groups",
+		   "DELETE FROM mch_groups WHERE GrpCod=%ld",
+		   GrpCod);
+  }
+
+/*****************************************************************************/
+/***************** Remove groups of one type from all matches ****************/
+/*****************************************************************************/
+
+void Mch_RemoveGroupsOfType (long GrpTypCod)
+  {
+   /***** Remove group from all the matches *****/
+   DB_QueryDELETE ("can not remove groups of a type"
+	           " from the associations between matches and groups",
+		   "DELETE FROM mch_groups"
+		   " USING crs_grp,mch_groups"
+		   " WHERE crs_grp.GrpTypCod=%ld"
+		   " AND crs_grp.GrpCod=mch_groups.GrpCod",
+                   GrpTypCod);
+  }
+
+/*****************************************************************************/
 /***************** Insert/update a game match being played *******************/
 /*****************************************************************************/
 

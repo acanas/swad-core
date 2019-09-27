@@ -101,7 +101,7 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 static void Gam_PutHiddenParamOrder (void);
 static void Gam_GetParamOrder (void);
 
-static void Gam_ResetGame (struct Game *Game,long UsrCod);
+static void Gam_ResetGame (struct Game *Game);
 
 static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
@@ -756,7 +756,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
      }
    else
       /* Initialize to empty game */
-      Gam_ResetGame (Game,-1L);
+      Gam_ResetGame (Game);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -796,12 +796,11 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 /*************************** Initialize game to empty ************************/
 /*****************************************************************************/
 
-static void Gam_ResetGame (struct Game *Game,long UsrCod)
+static void Gam_ResetGame (struct Game *Game)
   {
    /***** Initialize to empty game *****/
    Game->GamCod = -1L;
    Game->CrsCod = -1L;
-   // Game->UsrCod = UsrCod;
    Game->UsrCod = -1L;
    Game->TimeUTC[Dat_START_TIME] = (time_t) 0;
    Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
@@ -1071,7 +1070,7 @@ void Gam_RequestCreatOrEditGame (void)
 	    Lay_ShowErrorAndExit ("You can not create a new game here.");
 
 	 /* Initialize to empty game */
-	 Gam_ResetGame (&Game,Gbl.Usrs.Me.UsrDat.UsrCod);
+	 Gam_ResetGame (&Game);
 	}
       else
 	{
@@ -1279,37 +1278,6 @@ bool Gam_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod)
 			  "SELECT COUNT(*) FROM mch_groups"
 			  " WHERE MchCod=%ld AND GrpCod=%ld",
 			  MchCod,GrpCod) != 0);
-  }
-
-/*****************************************************************************/
-/******************** Remove one group from all the games ********************/
-/*****************************************************************************/
-// TODO: Check if this function should be called when removing group
-
-void Gam_RemoveGroup (long GrpCod)
-  {
-   /***** Remove group from all the matches *****/
-   DB_QueryDELETE ("can not remove group"
-	           " from the associations between matches and groups",
-		   "DELETE FROM mch_groups WHERE GrpCod=%ld",
-		   GrpCod);
-  }
-
-/*****************************************************************************/
-/**************** Remove groups of one type from all the games ***************/
-/*****************************************************************************/
-// TODO: Check if this function should be called when removing group type
-
-void Gam_RemoveGroupsOfType (long GrpTypCod)
-  {
-   /***** Remove group from all the matches *****/
-   DB_QueryDELETE ("can not remove groups of a type"
-	           " from the associations between matches and groups",
-		   "DELETE FROM mch_groups"
-		   " USING crs_grp,mch_groups"
-		   " WHERE crs_grp.GrpTypCod=%ld"
-		   " AND crs_grp.GrpCod=mch_groups.GrpCod",
-                   GrpTypCod);
   }
 
 /*****************************************************************************/

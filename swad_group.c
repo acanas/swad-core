@@ -4125,6 +4125,9 @@ static void Grp_RemoveGroupTypeCompletely (void)
    /***** Remove the associations of attendance events to groups of this type *****/
    Att_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
+   /***** Remove the associations of matches to groups of this type *****/
+   Mch_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
+
    /***** Remove the associations of surveys to groups of this type *****/
    Svy_RemoveGroupsOfType (Gbl.Crs.Grps.GrpTyp.GrpTypCod);
 
@@ -4178,13 +4181,16 @@ static void Grp_RemoveGroupCompletely (void)
    /***** Remove file zones of this group *****/
    Brw_RemoveGrpZones (Gbl.Hierarchy.Crs.CrsCod,GrpDat.GrpCod);
 
-   /***** Remove this group from all the assignments *****/
+   /***** Remove this group from all assignments *****/
    Asg_RemoveGroup (GrpDat.GrpCod);
 
-   /***** Remove this group from all the attendance events *****/
+   /***** Remove this group from all attendance events *****/
    Att_RemoveGroup (GrpDat.GrpCod);
 
-   /***** Remove this group from all the surveys *****/
+   /***** Remove this group from all matches *****/
+   Mch_RemoveGroup (GrpDat.GrpCod);
+
+   /***** Remove this group from all surveys *****/
    Svy_RemoveGroup (GrpDat.GrpCod);
 
    /***** Change this group in course timetable *****/
