@@ -73,16 +73,6 @@ const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
 #define Gam_MAX_SELECTED_QUESTIONS		1000
 #define Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Gam_MAX_SELECTED_QUESTIONS * (1 + 10 + 1))
 
-/*
-mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'gam%';
-*/
-const char *GameTables[] =
-  {
-   "gam_questions",	// questions in games
-   "gam_games"		// the games themselves
-  };
-#define Gam_NUM_TABLES	(sizeof (GameTables) / sizeof (GameTables[0]))
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -116,7 +106,6 @@ static void Gam_ResetGame (struct Game *Game);
 static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 
 static void Gam_RemoveGameFromAllTables (long GamCod);
-static void Gam_RemoveGameFromTable (long GamCod,const char *TableName);
 
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game);
 
@@ -946,9 +935,6 @@ void Gam_RemoveGame (void)
    if (!Game.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
-   /***** Remove all the matches in this game *****/
-   Mch_RemoveMatchInGameFromAllTables (Game.GamCod);
-
    /***** Remove game from all tables *****/
    Gam_RemoveGameFromAllTables (Game.GamCod);
 
@@ -966,26 +952,42 @@ void Gam_RemoveGame (void)
 
 static void Gam_RemoveGameFromAllTables (long GamCod)
   {
-   unsigned NumTable;
+   /***** Remove all matches in this game *****/
+   Mch_RemoveMatchesInGameFromAllTables (GamCod);
 
-   for (NumTable = 0;
-	NumTable < Gam_NUM_TABLES;
-	NumTable++)
-      /* Remove game from table */
-      Gam_RemoveGameFromTable (GamCod,GameTables[NumTable]);
+   /***** Remove game question *****/
+   DB_QueryDELETE ("can not remove game questions",
+		   "DELETE FROM gam_questions WHERE GamCod=%ld",
+		   GamCod);
+
+   /***** Remove game *****/
+   DB_QueryDELETE ("can not remove game",
+		   "DELETE FROM gam_games WHERE GamCod=%ld",
+		   GamCod);
   }
 
 /*****************************************************************************/
-/************************* Remove game from table ****************************/
+/******************** Remove all the games of a course ***********************/
 /*****************************************************************************/
 
-static void Gam_RemoveGameFromTable (long GamCod,const char *TableName)
+void Gam_RemoveGamesCrs (long CrsCod)
   {
-   /***** Remove game from table *****/
-   DB_QueryDELETE ("can not remove game from table",
-		   "DELETE FROM %s WHERE GamCod=%ld",
-		   TableName,
-		   GamCod);
+   /***** Remove all matches in this course *****/
+   Mch_RemoveMatchInCourseFromAllTables (CrsCod);
+
+   /***** Remove the questions in games *****/
+   DB_QueryDELETE ("can not remove questions in course games",
+		   "DELETE FROM gam_questions"
+		   " USING gam_games,gam_questions"
+		   " WHERE gam_games.CrsCod=%ld"
+		   " AND gam_games.GamCod=gam_questions.GamCod",
+                   CrsCod);
+
+   /***** Remove the games *****/
+   DB_QueryDELETE ("can not remove course games",
+		   "DELETE FROM gam_games"
+		   " WHERE CrsCod=%ld",
+                   CrsCod);
   }
 
 /*****************************************************************************/
@@ -1302,64 +1304,6 @@ bool Gam_CheckIfMatchIsAssociatedToGrp (long MchCod,long GrpCod)
 			  "SELECT COUNT(*) FROM mch_groups"
 			  " WHERE MchCod=%ld AND GrpCod=%ld",
 			  MchCod,GrpCod) != 0);
-  }
-
-/*****************************************************************************/
-/******************** Remove all the games of a course ***********************/
-/*****************************************************************************/
-
-void Gam_RemoveGamesCrs (long CrsCod)
-  {
-   /***** Remove the matches of games in this course *****/
-   /* Remove matches players */
-   DB_QueryDELETE ("can not remove match players",
-		   "DELETE FROM mch_players"
-		   " USING gam_games,mch_matches,mch_players"
-		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=mch_matches.GamCod"
-		   " AND mch_matches.MchCod=mch_players.MchCod",
-		   CrsCod);
-
-   /* Remove matches from list of matches being played */
-   DB_QueryDELETE ("can not remove matches being played",
-		   "DELETE FROM mch_playing"
-		   " USING gam_games,mch_matches,mch_playing"
-		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=mch_matches.GamCod"
-		   " AND mch_matches.MchCod=mch_playing.MchCod",
-		   CrsCod);
-
-   /* Remove students' answers to match */
-   DB_QueryDELETE ("can not remove students' answers associated to matches",
-		   "DELETE FROM mch_answers"
-		   " USING gam_games,mch_matches,mch_answers"
-		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=mch_matches.GamCod"
-		   " AND mch_matches.MchCod=mch_answers.MchCod",
-		   CrsCod);
-
-   /* Remove groups associated to the match */
-   DB_QueryDELETE ("can not remove the groups associated to matches",
-		   "DELETE FROM mch_groups"
-		   " USING gam_games,mch_matches,mch_answers"
-		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=mch_matches.GamCod"
-		   " AND mch_matches.MchCod=mch_groups.MchCod",
-		   CrsCod);
-
-   /* Remove the matches themselves */
-   DB_QueryDELETE ("can not remove matches",
-		   "DELETE FROM mch_matches"
-		   " USING gam_games,mch_matches"
-		   " WHERE gam_games.CrsCod=%ld"
-		   " AND gam_games.GamCod=mch_matches.GamCod",
-		   CrsCod);
-
-   /***** Remove the games *****/
-   DB_QueryDELETE ("can not remove games",
-		   "DELETE FROM gam_games"
-		   " WHERE CrsCod=%ld",
-                   CrsCod);
   }
 
 /*****************************************************************************/

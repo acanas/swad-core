@@ -121,7 +121,7 @@ const char *Mch_ShowingStringsDB[Mch_NUM_SHOWING] =
 /*
 mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'mch%';
 */
-const char *MatchTables[] =
+const char *MatchSecondaryTables[] =
   {
    "mch_players",	// match players
    "mch_playing",	// matches being played
@@ -130,9 +130,9 @@ const char *MatchTables[] =
    "mch_times",		// times associated to matches
    "mch_groups",	// groups associated to matches
    "mch_indexes",	// indexes associated to matches
-   "mch_matches"	// the matches themselves
+   // "mch_matches"	// the matches themselves, this table is treated separately
   };
-#define Mch_NUM_TABLES	(sizeof (MatchTables) / sizeof (MatchTables[0]))
+#define Mch_NUM_SECONDARY_TABLES	(sizeof (MatchSecondaryTables) / sizeof (MatchSecondaryTables[0]))
 
 /*****************************************************************************/
 /***************************** Private variables *****************************/
@@ -171,7 +171,8 @@ static Mch_Showing_t Mch_GetShowingFromStr (const char *Str);
 
 static void Mch_RemoveMatchFromAllTables (long MchCod);
 static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName);
-static void Mch_RemoveMatchInGameFromTable (long GamCod,const char *TableName);
+static void Mch_RemoveMatchesInGameFromTable (long GamCod,const char *TableName);
+static void Mch_RemoveMatchInCourseFromTable (long CrsCod,const char *TableName);
 
 static void Mch_PutParamCurrentMchCod (void);
 static void Mch_PutParamMchCod (long MchCod);
@@ -1066,35 +1067,68 @@ static void Mch_RemoveMatchFromAllTables (long MchCod)
   {
    unsigned NumTable;
 
+   /***** Remove match from secondary tables *****/
    for (NumTable = 0;
-	NumTable < Mch_NUM_TABLES;
+	NumTable < Mch_NUM_SECONDARY_TABLES;
 	NumTable++)
-      /* Remove match from table */
-      Mch_RemoveMatchFromTable (MchCod,MatchTables[NumTable]);
+      Mch_RemoveMatchFromTable (MchCod,MatchSecondaryTables[NumTable]);
+
+   /***** Remove match from main table *****/
+   DB_QueryDELETE ("can not remove match",
+		   "DELETE FROM mch_matches WHERE MchCod=%ld",
+		   MchCod);
   }
 
 /*****************************************************************************/
 /******************** Remove match in game from all tables *******************/
 /*****************************************************************************/
 
-void Mch_RemoveMatchInGameFromAllTables (long GamCod)
+void Mch_RemoveMatchesInGameFromAllTables (long GamCod)
   {
    unsigned NumTable;
 
+   /***** Remove matches from secondary tables *****/
    for (NumTable = 0;
-	NumTable < Mch_NUM_TABLES;
+	NumTable < Mch_NUM_SECONDARY_TABLES;
 	NumTable++)
-      /* Remove match from table */
-      Mch_RemoveMatchInGameFromTable (GamCod,MatchTables[NumTable]);
+      Mch_RemoveMatchesInGameFromTable (GamCod,MatchSecondaryTables[NumTable]);
+
+   /***** Remove matches from main table *****/
+   DB_QueryDELETE ("can not remove matches of a game",
+		   "DELETE FROM mch_matches WHERE GamCod=%ld",
+		   GamCod);
   }
 
 /*****************************************************************************/
-/************************ Remove match from table ****************************/
+/******************* Remove match in course from all tables ******************/
+/*****************************************************************************/
+
+void Mch_RemoveMatchInCourseFromAllTables (long CrsCod)
+  {
+   unsigned NumTable;
+
+   /***** Remove matches from secondary tables *****/
+   for (NumTable = 0;
+	NumTable < Mch_NUM_SECONDARY_TABLES;
+	NumTable++)
+      Mch_RemoveMatchInCourseFromTable (CrsCod,MatchSecondaryTables[NumTable]);
+
+   /***** Remove matches from main table *****/
+   DB_QueryDELETE ("can not remove matches of a course from table",
+		   "DELETE FROM %s"
+		   " USING gam_games,mch_matches"
+		   " WHERE gam_games.CrsCod=%ld"
+		   " AND gam_games.GamCod=mch_matches.GamCod",
+		   CrsCod);
+  }
+
+/*****************************************************************************/
+/******************** Remove match from secondary table **********************/
 /*****************************************************************************/
 
 static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName)
   {
-   /***** Remove match from table *****/
+   /***** Remove match from secondary table *****/
    DB_QueryDELETE ("can not remove match from table",
 		   "DELETE FROM %s WHERE MchCod=%ld",
 		   TableName,
@@ -1102,11 +1136,12 @@ static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName)
   }
 
 /*****************************************************************************/
-/****************** Remove all matches in game from table ********************/
+/************* Remove all matches in game from secondary table ***************/
 /*****************************************************************************/
 
-static void Mch_RemoveMatchInGameFromTable (long GamCod,const char *TableName)
+static void Mch_RemoveMatchesInGameFromTable (long GamCod,const char *TableName)
   {
+   /***** Remove matches in game from secondary table *****/
    DB_QueryDELETE ("can not remove matches of a game from table",
 		   "DELETE FROM %s"
 		   " USING mch_matches,%s"
@@ -1115,6 +1150,25 @@ static void Mch_RemoveMatchInGameFromTable (long GamCod,const char *TableName)
 		   TableName,
 		   TableName,
 		   GamCod,
+		   TableName);
+  }
+
+/*****************************************************************************/
+/*********** Remove all matches in course from secondary table ***************/
+/*****************************************************************************/
+
+static void Mch_RemoveMatchInCourseFromTable (long CrsCod,const char *TableName)
+  {
+   /***** Remove matches in course from secondary table *****/
+   DB_QueryDELETE ("can not remove matches of a course from table",
+		   "DELETE FROM %s"
+		   " USING gam_games,mch_matches,%s"
+		   " WHERE gam_games.CrsCod=%ld"
+		   " AND gam_games.GamCod=mch_matches.GamCod"
+		   " AND mch_matches.MchCod=%s.MchCod",
+		   TableName,
+		   TableName,
+		   CrsCod,
 		   TableName);
   }
 
