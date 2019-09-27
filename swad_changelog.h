@@ -471,10 +471,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.17.1 (2019-09-27)"
+#define Log_PLATFORM_VERSION	"SWAD 19.17.2 (2019-09-27)"
 #define CSS_FILE		"swad19.15.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.17.2:  Sep 27, 2019	Code refactoring removing matches and games. (246448 lines)
 	Version 19.17.1:  Sep 27, 2019	Remove associations between matches and groups when removing groups. (246412 lines)
 	Version 19.17:    Sep 27, 2019	Improvements in the code that deletes a match. (246410 lines)
 	Version 19.16.8:  Sep 27, 2019	Code refactoring. (246387 lines)

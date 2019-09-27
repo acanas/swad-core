@@ -48,6 +48,8 @@ void Mch_ToggleVisibilResultsMchUsr (void);
 void Mch_RequestRemoveMatchTch (void);
 void Mch_RemoveMatchTch (void);
 
+void Mch_RemoveMatchInGameFromAllTables (long GamCod);
+
 void Mch_CreateNewMatchTch (void);
 void Mch_RequestStartResumeMatchTch (void);
 void Mch_GetIndexes (long MchCod,unsigned QstInd,

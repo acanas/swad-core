@@ -118,6 +118,22 @@ const char *Mch_ShowingStringsDB[Mch_NUM_SHOWING] =
    "results",
   };
 
+/*
+mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'mch%';
+*/
+const char *MatchTables[] =
+  {
+   "mch_players",	// match players
+   "mch_playing",	// matches being played
+   "mch_results",	// matches results
+   "mch_answers",	// students' answers to matches
+   "mch_times",		// times associated to matches
+   "mch_groups",	// groups associated to matches
+   "mch_indexes",	// indexes associated to matches
+   "mch_matches"	// the matches themselves
+  };
+#define Mch_NUM_TABLES	(sizeof (MatchTables) / sizeof (MatchTables[0]))
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -155,6 +171,7 @@ static Mch_Showing_t Mch_GetShowingFromStr (const char *Str);
 
 static void Mch_RemoveMatchFromAllTables (long MchCod);
 static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName);
+static void Mch_RemoveMatchInGameFromTable (long GamCod,const char *TableName);
 
 static void Mch_PutParamCurrentMchCod (void);
 static void Mch_PutParamMchCod (long MchCod);
@@ -1044,36 +1061,9 @@ void Mch_RemoveMatchTch (void)
 /*****************************************************************************/
 /********************** Remove match from all tables *************************/
 /*****************************************************************************/
-/*
-mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'mch%';
-+-------------+
-| table_name  |
-+-------------+
-| mch_answers |
-| mch_groups  |
-| mch_indexes |
-| mch_matches |
-| mch_players |
-| mch_playing |
-| mch_results |
-| mch_times   |
-+-------------+
-8 rows in set (0.00 sec)
-*/
+
 static void Mch_RemoveMatchFromAllTables (long MchCod)
   {
-   static const char *MatchTables[] =
-     {
-      "mch_players",	// match players
-      "mch_playing",	// matches being played
-      "mch_results",	// matches results
-      "mch_answers",	// students' answers to matches
-      "mch_times",	// times associated to matches
-      "mch_groups",	// groups associated to matches
-      "mch_indexes",	// indexes associated to matches
-      "mch_matches"	// the matches themselves
-     };
-#define Mch_NUM_TABLES	(sizeof (MatchTables) / sizeof (MatchTables[0]))
    unsigned NumTable;
 
    for (NumTable = 0;
@@ -1081,6 +1071,21 @@ static void Mch_RemoveMatchFromAllTables (long MchCod)
 	NumTable++)
       /* Remove match from table */
       Mch_RemoveMatchFromTable (MchCod,MatchTables[NumTable]);
+  }
+
+/*****************************************************************************/
+/******************** Remove match in game from all tables *******************/
+/*****************************************************************************/
+
+void Mch_RemoveMatchInGameFromAllTables (long GamCod)
+  {
+   unsigned NumTable;
+
+   for (NumTable = 0;
+	NumTable < Mch_NUM_TABLES;
+	NumTable++)
+      /* Remove match from table */
+      Mch_RemoveMatchInGameFromTable (GamCod,MatchTables[NumTable]);
   }
 
 /*****************************************************************************/
@@ -1092,7 +1097,25 @@ static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName)
    /***** Remove match from table *****/
    DB_QueryDELETE ("can not remove match from table",
 		   "DELETE FROM %s WHERE MchCod=%ld",
-		   TableName,MchCod);
+		   TableName,
+		   MchCod);
+  }
+
+/*****************************************************************************/
+/****************** Remove all matches in game from table ********************/
+/*****************************************************************************/
+
+static void Mch_RemoveMatchInGameFromTable (long GamCod,const char *TableName)
+  {
+   DB_QueryDELETE ("can not remove matches of a game from table",
+		   "DELETE FROM %s"
+		   " USING mch_matches,%s"
+		   " WHERE mch_matches.GamCod=%ld"
+		   " AND mch_matches.MchCod=%s.MchCod",
+		   TableName,
+		   TableName,
+		   GamCod,
+		   TableName);
   }
 
 /*****************************************************************************/

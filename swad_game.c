@@ -73,6 +73,16 @@ const char *Gam_StrAnswerTypesDB[Gam_NUM_ANS_TYPES] =
 #define Gam_MAX_SELECTED_QUESTIONS		1000
 #define Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS	(Gam_MAX_SELECTED_QUESTIONS * (1 + 10 + 1))
 
+/*
+mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'gam%';
+*/
+const char *GameTables[] =
+  {
+   "gam_questions",	// questions in games
+   "gam_games"		// the games themselves
+  };
+#define Gam_NUM_TABLES	(sizeof (GameTables) / sizeof (GameTables[0]))
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -104,6 +114,9 @@ static void Gam_GetParamOrder (void);
 static void Gam_ResetGame (struct Game *Game);
 
 static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
+
+static void Gam_RemoveGameFromAllTables (long GamCod);
+static void Gam_RemoveGameFromTable (long GamCod,const char *TableName);
 
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game);
 
@@ -933,28 +946,11 @@ void Gam_RemoveGame (void)
    if (!Game.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
-   /***** Remove all the questions in this game *****/
-   DB_QueryDELETE ("can not remove questions of a game",
-		   "DELETE FROM gam_questions WHERE GamCod=%ld",
-		   Game.GamCod);
-
    /***** Remove all the matches in this game *****/
-   /* Remove groups in matches of the game */
-   DB_QueryDELETE ("can not remove the groups associated to matches of a game",
-		   "DELETE FROM mch_groups"
-		   " USING mch_matches,mch_groups"
-		   " WHERE mch_matches.GamCod=%ld"
-		   " AND mch_matches.MchCod=mch_groups.MchCod",
-		   Game.GamCod);
-   /* Remove matches of the game */
-   DB_QueryDELETE ("can not remove matches of a game",
-		   "DELETE FROM mch_matches WHERE GamCod=%ld",
-		   Game.GamCod);
+   Mch_RemoveMatchInGameFromAllTables (Game.GamCod);
 
-   /***** Remove game *****/
-   DB_QueryDELETE ("can not remove game",
-		   "DELETE FROM gam_games WHERE GamCod=%ld",
-		   Game.GamCod);
+   /***** Remove game from all tables *****/
+   Gam_RemoveGameFromAllTables (Game.GamCod);
 
    /***** Write message to show the change made *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Game_X_removed,
@@ -962,6 +958,34 @@ void Gam_RemoveGame (void)
 
    /***** Show games again *****/
    Gam_ListAllGames ();
+  }
+
+/*****************************************************************************/
+/*********************** Remove game from all tables *************************/
+/*****************************************************************************/
+
+static void Gam_RemoveGameFromAllTables (long GamCod)
+  {
+   unsigned NumTable;
+
+   for (NumTable = 0;
+	NumTable < Gam_NUM_TABLES;
+	NumTable++)
+      /* Remove game from table */
+      Gam_RemoveGameFromTable (GamCod,GameTables[NumTable]);
+  }
+
+/*****************************************************************************/
+/************************* Remove game from table ****************************/
+/*****************************************************************************/
+
+static void Gam_RemoveGameFromTable (long GamCod,const char *TableName)
+  {
+   /***** Remove game from table *****/
+   DB_QueryDELETE ("can not remove game from table",
+		   "DELETE FROM %s WHERE GamCod=%ld",
+		   TableName,
+		   GamCod);
   }
 
 /*****************************************************************************/
@@ -1867,7 +1891,7 @@ void Gam_AddTstQuestionsToGame (void)
 
       /* Check number of questions */
       if (Gam_CountNumQuestionsInList () == 0)	// If no questions selected...
-	{						// ...write warning alert
+	{					// ...write warning alert
 	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_questions);
 
 	 // TODO: Show form again!!!
