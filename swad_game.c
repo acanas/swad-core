@@ -688,9 +688,10 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
    /***** Get data of game from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get game data",
 			     "SELECT gam_games.GamCod,"		// row[0]
-			            "gam_games.Hidden,"		// row[1]
-			            "gam_games.UsrCod,"		// row[2]
-			            "gam_games.Title"		// row[3]
+			            "gam_games.CrsCod,"		// row[1]
+			            "gam_games.Hidden,"		// row[2]
+			            "gam_games.UsrCod,"		// row[3]
+			            "gam_games.Title"		// row[4]
 			     " FROM gam_games"
 			     " LEFT JOIN mch_matches"
 			     " ON gam_games.GamCod=mch_matches.GamCod"
@@ -704,14 +705,17 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       /* Get code of the game (row[0]) */
       Game->GamCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get whether the game is hidden (row[1]) */
-      Game->Status.Visible = (row[1][0] == 'N');
+      /* Get code of the course (row[1]) */
+      Game->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
-      /* Get author of the game (row[2]) */
-      Game->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+      /* Get whether the game is hidden (row[2]) */
+      Game->Status.Visible = (row[2][0] == 'N');
 
-      /* Get the title of the game (row[3]) */
-      Str_Copy (Game->Title,row[3],
+      /* Get author of the game (row[3]) */
+      Game->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+
+      /* Get the title of the game (row[4]) */
+      Str_Copy (Game->Title,row[4],
                 Gam_MAX_BYTES_TITLE);
 
       /* Get number of questions */
@@ -796,7 +800,9 @@ static void Gam_ResetGame (struct Game *Game,long UsrCod)
   {
    /***** Initialize to empty game *****/
    Game->GamCod = -1L;
-   Game->UsrCod = UsrCod;
+   Game->CrsCod = -1L;
+   // Game->UsrCod = UsrCod;
+   Game->UsrCod = -1L;
    Game->TimeUTC[Dat_START_TIME] = (time_t) 0;
    Game->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Game->Title[0]                = '\0';

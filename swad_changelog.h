@@ -447,6 +447,7 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 //						  de la asignatura si desean o no que se pueda solicitar
 //						  inscripción en la asignatura
 
+// TODO: Reported by Francisco José Pelayo Valle: un estudiante sube 50 ficheros de golpe ==> el firewall le banea. No debería, ¿o sí?
 // TODO: En Eventos de asistencia, poner un icono de enlace a horario de la asignatura ¿y otro a grupos?
 // TODO: Reportado por Javier Fernández Baldomero. Un profesor debería poder cambiar la foto de un estudiante confirmado. Sale el icono, pero luego dice ue no hay permiso
 
@@ -470,10 +471,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.16.8 (2019-09-27)"
+#define Log_PLATFORM_VERSION	"SWAD 19.17 (2019-09-27)"
 #define CSS_FILE		"swad19.15.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.17:    Sep 27, 2019	Improvements in the code that deletes a match. (246410 lines)
 	Version 19.16.8:  Sep 27, 2019	Code refactoring. (246387 lines)
 	Version 19.16.7:  Sep 27, 2019	Show match result for student in listing of matches. (246386 lines)
 	Version 19.16.6:  Sep 27, 2019	Code refactoring in match dates. (246378 lines)

@@ -153,6 +153,9 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Match *Match);
 static Mch_Showing_t Mch_GetShowingFromStr (const char *Str);
 
+static void Mch_RemoveMatchFromAllTables (long MchCod);
+static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName);
+
 static void Mch_PutParamCurrentMchCod (void);
 static void Mch_PutParamMchCod (long MchCod);
 static long Mch_GetParamMchCod (void);
@@ -1006,6 +1009,7 @@ void Mch_RemoveMatchTch (void)
   {
    extern const char *Txt_Match_X_removed;
    struct Match Match;
+   struct Game Game;
 
    /***** Get parameters *****/
    /* Get match code */
@@ -1014,58 +1018,17 @@ void Mch_RemoveMatchTch (void)
 
    /***** Get data of the match from database *****/
    Mch_GetDataOfMatchByCod (&Match);
-
-   /***** Remove the match from all the tables *****/
-   /* Remove match players */
-   DB_QueryDELETE ("can not remove match players",
-		   "DELETE FROM mch_players"
-		   " USING mch_players,mch_matches,gam_games"
-		   " WHERE mch_players.MchCod=%ld"
-		   " AND mch_players.MchCod=mch_matches.MchCod"
-		   " AND mch_matches.GamCod=gam_games.GamCod"
-		   " AND gam_games.CrsCod=%ld",	// Extra check
-		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /* Remove match from list of matches being played */
-   DB_QueryDELETE ("can not remove match from matches being played",
-		   "DELETE FROM mch_playing"
-		   " USING mch_playing,mch_matches,gam_games"
-		   " WHERE mch_playing.MchCod=%ld"
-		   " AND mch_playing.MchCod=mch_matches.MchCod"
-		   " AND mch_matches.GamCod=gam_games.GamCod"
-		   " AND gam_games.CrsCod=%ld",	// Extra check
-		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /* Remove students' answers to match */
-   DB_QueryDELETE ("can not remove students' answers associated to a match",
-		   "DELETE FROM mch_answers"
-		   " USING mch_answers,mch_matches,gam_games"
-		   " WHERE mch_answers.MchCod=%ld"
-		   " AND mch_answers.MchCod=mch_matches.MchCod"
-		   " AND mch_matches.GamCod=gam_games.GamCod"
-		   " AND gam_games.CrsCod=%ld",	// Extra check
-		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /* Remove groups associated to the match */
-   DB_QueryDELETE ("can not remove the groups associated to a match",
-		   "DELETE FROM mch_groups"
-		   " USING mch_groups,mch_matches,gam_games"
-		   " WHERE mch_groups.MchCod=%ld"
-		   " AND mch_groups.MchCod=mch_matches.MchCod"
-		   " AND mch_matches.GamCod=gam_games.GamCod"
-		   " AND gam_games.CrsCod=%ld",	// Extra check
-		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
-
-   /* Remove the match itself */
-   DB_QueryDELETE ("can not remove a match",
-		   "DELETE FROM mch_matches"
-		   " USING mch_matches,gam_games"
-		   " WHERE mch_matches.MchCod=%ld"
-		   " AND mch_matches.GamCod=gam_games.GamCod"
-		   " AND gam_games.CrsCod=%ld",	// Extra check
-		   Match.MchCod,Gbl.Hierarchy.Crs.CrsCod);
-   if (!mysql_affected_rows (&Gbl.mysql))
+   if (Match.MchCod < 0)
       Lay_ShowErrorAndExit ("The match to be removed does not exist.");
+
+   /***** Ensure that the match belongs to this course *****/
+   Game.GamCod = Match.GamCod;
+   Gam_GetDataOfGameByCod (&Game);
+   if (Game.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+      Lay_ShowErrorAndExit ("Match does not belong to this course.");
+
+   /***** Remove the match from all database tables *****/
+   Mch_RemoveMatchFromAllTables (Match.MchCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Match_X_removed,
@@ -1076,6 +1039,60 @@ void Mch_RemoveMatchTch (void)
                     true,	// Show only this game
                     false,	// Do not list game questions
 		    false);	// Do not put form to start new match
+  }
+
+/*****************************************************************************/
+/********************** Remove match from all tables *************************/
+/*****************************************************************************/
+/*
+mysql> SELECT table_name FROM information_schema.tables WHERE table_name LIKE 'mch%';
++-------------+
+| table_name  |
++-------------+
+| mch_answers |
+| mch_groups  |
+| mch_indexes |
+| mch_matches |
+| mch_players |
+| mch_playing |
+| mch_results |
+| mch_times   |
++-------------+
+8 rows in set (0.00 sec)
+*/
+static void Mch_RemoveMatchFromAllTables (long MchCod)
+  {
+   static const char *MatchTables[] =
+     {
+      "mch_players",	// match players
+      "mch_playing",	// matches being played
+      "mch_results",	// matches results
+      "mch_answers",	// students' answers to matches
+      "mch_times",	// times associated to matches
+      "mch_groups",	// groups associated to matches
+      "mch_indexes",	// indexes associated to matches
+      "mch_matches"	// the matches themselves
+     };
+#define Mch_NUM_TABLES	(sizeof (MatchTables) / sizeof (MatchTables[0]))
+   unsigned NumTable;
+
+   for (NumTable = 0;
+	NumTable < Mch_NUM_TABLES;
+	NumTable++)
+      /* Remove match from table */
+      Mch_RemoveMatchFromTable (MchCod,MatchTables[NumTable]);
+  }
+
+/*****************************************************************************/
+/************************ Remove match from table ****************************/
+/*****************************************************************************/
+
+static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName)
+  {
+   /***** Remove match from table *****/
+   DB_QueryDELETE ("can not remove match from table",
+		   "DELETE FROM %s WHERE MchCod=%ld",
+		   TableName,MchCod);
   }
 
 /*****************************************************************************/
