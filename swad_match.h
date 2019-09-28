@@ -37,11 +37,48 @@
 
 #define Mch_AFTER_LAST_QUESTION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a match is finished
 
+#define Mch_NUM_SHOWING 4
+typedef enum
+  {
+   Mch_NOTHING,	// Don't show anything
+   Mch_STEM,	// Showing only the question stem
+   Mch_ANSWERS,	// Showing the question stem and the answers
+   Mch_RESULTS,	// Showing the results
+  } Mch_Showing_t;
+#define Mch_SHOWING_DEFAULT Mch_NOTHING
+
+struct Match
+  {
+   long MchCod;
+   long GamCod;
+   long UsrCod;
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
+   char Title[Gam_MAX_BYTES_TITLE + 1];
+   struct
+     {
+      unsigned QstInd;	// 0 means that the game has not started. First question has index 1.
+      long QstCod;
+      time_t QstStartTimeUTC;
+      Mch_Showing_t Showing;	// What is shown on teacher's screen
+      bool ShowQstResults;	// Show global results of current question while playing
+      bool ShowUsrResults;	// Show exam with results of all questions for the student
+      bool Playing;		// Is being played now?
+      unsigned NumPlayers;
+     } Status;			// Status related to match playing
+  };
+
+struct Mch_UsrAnswer
+  {
+   int NumOpt;	// < 0 ==> no answer selected
+   int AnsInd;	// < 0 ==> no answer selected
+  };
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch);
+void Mch_GetDataOfMatchByCod (struct Match *Match);
 
 void Mch_ToggleVisibilResultsMchUsr (void);
 
@@ -50,6 +87,9 @@ void Mch_RemoveMatchTch (void);
 
 void Mch_RemoveMatchesInGameFromAllTables (long GamCod);
 void Mch_RemoveMatchInCourseFromAllTables (long CrsCod);
+
+void Mch_PutParamMchCod (long MchCod);
+long Mch_GetParamMchCod (void);
 
 void Mch_CreateNewMatchTch (void);
 void Mch_RequestStartResumeMatchTch (void);
@@ -65,24 +105,19 @@ void Mch_ToggleVisibilResultsMchQst (void);
 void Mch_BackMatchTch (void);
 void Mch_ForwardMatchTch (void);
 
-unsigned Gam_GetNumMchsGame (long GamCod);
+unsigned Mch_GetNumMchsInGame (long GamCod);
 
 void Mch_GetMatchBeingPlayed (void);
 void Mch_ShowMatchToMeAsStd (void);
 void Mch_RefreshMatchTch (void);
 void Mch_RefreshMatchStd (void);
 
+void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
+		          struct Mch_UsrAnswer *UsrAnswer);
 void Mch_ReceiveQstAnsFromStd (void);
 
 void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd,
 					       unsigned NumAnswerersQst,bool Correct);
 unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd);
-
-void Mch_PutFormToViewMchResults (Act_Action_t Action);
-void Mch_SelDatesToSeeMyMchResults (void);
-void Mch_ShowMyMchResults (void);
-void Mch_SelUsrsToViewUsrsMchResults (void);
-void Mch_ShowUsrsMchResults (void);
-void Mch_ShowOneMchResult (void);
 
 #endif

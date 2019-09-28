@@ -38,6 +38,7 @@
 #include "swad_game.h"
 #include "swad_global.h"
 #include "swad_group.h"
+#include "swad_match.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_project.h"

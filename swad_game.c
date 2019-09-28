@@ -40,6 +40,7 @@
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_match.h"
+#include "swad_match_result.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
@@ -724,7 +725,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       Game->NumQsts = Gam_GetNumQstsGame (Game->GamCod);
 
       /* Get number of matches */
-      Game->NumMchs = Gam_GetNumMchsGame (Game->GamCod);
+      Game->NumMchs = Mch_GetNumMchsInGame (Game->GamCod);
 
       /* Can I view results of the game?
          Can I edit game? */
@@ -1770,12 +1771,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
    /***** End table *****/
    Tbl_EndTable ();
-
-   /***** Button to add a new question *****/
-   // Gam_PutButtonToAddNewQuestions ();
-
-   /***** End box *****/
-   // Box_EndBox ();
   }
 
 /*****************************************************************************/
@@ -2193,7 +2188,7 @@ static bool Gam_GetNumMchsGameAndCheckIfEditable (struct Game *Game)
    extern const char *Txt_You_can_not_edit_a_game_with_matches;
 
    /***** Check if game has matches *****/
-   if ((Game->NumMchs = Gam_GetNumMchsGame (Game->GamCod)))
+   if ((Game->NumMchs = Mch_GetNumMchsInGame (Game->GamCod)))
      {
       Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
       return false;	// It has matches ==> it's not editable

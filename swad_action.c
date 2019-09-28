@@ -57,6 +57,7 @@
 #include "swad_mail.h"
 #include "swad_mark.h"
 #include "swad_match.h"
+#include "swad_match_result.h"
 #include "swad_MFU.h"
 #include "swad_network.h"
 #include "swad_nickname.h"
