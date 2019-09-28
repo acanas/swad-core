@@ -3917,7 +3917,7 @@ static void For_RestrictAccess (void)
 	 break;
      }
    if (!ICanSeeForum)
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
   }
 
 /*****************************************************************************/

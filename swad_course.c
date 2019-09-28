@@ -2034,7 +2034,7 @@ void Crs_RemoveCourse (void)
         }
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2406,7 +2406,7 @@ void Crs_ChangeInsCrsCod (void)
                           Crs_EditingCrs->ShrtName);
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2601,7 +2601,7 @@ void Crs_ChangeCrsYear (void)
 			  NewYear);
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2754,7 +2754,7 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
         }
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
   }
 
 /*****************************************************************************/

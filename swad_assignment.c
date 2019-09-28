@@ -41,6 +41,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
 #include "swad_table.h"
@@ -499,7 +500,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
 	    Frm_StartForm (ActFrmCreAsgCrs);
 	    break;
 	 default:
-            Lay_ShowErrorAndExit ("Wrong role.");
+            Rol_WrongRoleExit ();
 	    break;
         }
       Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,

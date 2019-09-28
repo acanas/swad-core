@@ -38,6 +38,7 @@
 #include "swad_hierarchy.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_role.h"
 #include "swad_string.h"
 #include "swad_table.h"
 #include "swad_user.h"
@@ -687,7 +688,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	   }
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
 
@@ -842,7 +843,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	 Frm_StartFormUnique (ActSeeRecOneTch);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -1007,7 +1008,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	   }
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
    if (NumUsrs)
@@ -1061,7 +1062,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		     Frm_StartForm (ActSeeRecOneTch);
 		     break;
 		  default:
-		     Lay_ShowErrorAndExit ("Wrong role.");
+		     Rol_WrongRoleExit ();
 		 }
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	      }

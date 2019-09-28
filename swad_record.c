@@ -1700,7 +1700,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       case Rec_CRS_PRINT_SEVERAL_RECORDS:
 		  break;
 	       default:
-		  Lay_NoPermissionExit ();
+		  Act_NoPermissionExit ();
 		  break;
 	      }
 
@@ -1717,7 +1717,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		    }
 	   }
 	 else	// Not me ==> I am a student trying to do something forbidden
-	    Lay_NoPermissionExit ();
+	    Act_NoPermissionExit ();
 	 break;
       case Rol_NET:
 	 break;
@@ -1736,7 +1736,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   }
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
      }
 
    /***** Start box and table *****/
@@ -3793,7 +3793,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 	 break;
      }
    if (!RoleOK)
-      Lay_ShowErrorAndExit ("Wrong role.");
+      Rol_WrongRoleExit ();
    return Role;
   }
 

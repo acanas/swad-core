@@ -1137,7 +1137,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	 break;
       default:
 	 SubQueryRole[0] = '\0';
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
    DB_Query ("can not create temporary table",
@@ -5038,7 +5038,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	   }
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
 
@@ -5553,7 +5553,7 @@ static void Usr_GetListUsrsFromQuery (char *Query,Rol_Role_t Role,Hie_Level_t Sc
 		    }
         	  break;
                default:
-		  Lay_ShowErrorAndExit ("Wrong role.");
+		  Rol_WrongRoleExit ();
         	  break;
 	      }
 
@@ -6322,7 +6322,7 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 	       Usr_NameSelUnsel[Role],
 	       Usr_ParamUsrCod[Role]);
    else
-      Lay_ShowErrorAndExit ("Wrong role.");
+      Rol_WrongRoleExit ();
    Sex = Usr_GetSexOfUsrsLst (Role);
    fprintf (Gbl.F.Out,"%s:"
 	              "</label>"
@@ -6399,7 +6399,7 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
       fprintf (Gbl.F.Out," />");
      }
    else
-      Lay_ShowErrorAndExit ("Wrong role.");
+      Rol_WrongRoleExit ();
   }
 
 /*****************************************************************************/
@@ -9623,7 +9623,7 @@ float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	    case Rol_TCH:
 	       return (float) Gbl.Hierarchy.Crs.NumUsrs[Rol_UNK];	// Teachers
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong role.");
+	       Rol_WrongRoleExit ();
 	       break;	// Not reached
 	   }
 	 break;
@@ -9768,7 +9768,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 	 break;
       default:
 	 NextAction = ActUnk;
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
    Frm_StartForm (NextAction);

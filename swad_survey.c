@@ -2003,7 +2003,7 @@ static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy)
      }
 
    if (!ICanEdit)
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
   }
 
 /*****************************************************************************/

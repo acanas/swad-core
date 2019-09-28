@@ -180,7 +180,7 @@ static void Gam_ListAllGames (void)
       case Rol_INS_ADM:
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
 
@@ -660,7 +660,7 @@ void Gam_GetListGames (void)
 	    Lay_NotEnoughMemoryExit ();
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
 

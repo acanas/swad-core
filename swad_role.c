@@ -636,3 +636,12 @@ Rol_Role_t Rol_GetRequestedRole (long UsrCod)
 
    return Role;
   }
+
+/*****************************************************************************/
+/************* Show error message about wrong role and exit ******************/
+/*****************************************************************************/
+
+void Rol_WrongRoleExit (void)
+  {
+   Lay_ShowErrorAndExit ("Wrong role.");
+  }

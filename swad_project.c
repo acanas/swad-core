@@ -42,6 +42,7 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_project.h"
+#include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
 #include "swad_table.h"
@@ -646,7 +647,7 @@ static void Prj_GetHiddenParamHidVis (void)
 								       (unsigned) Prj_FILTER_VISIBL_DEFAULT);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
          break;
      }
   }
@@ -2482,7 +2483,7 @@ void Prj_GetListProjects (void)
 	      }
 	    break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong role.");
+	    Rol_WrongRoleExit ();
 	    break;
 	}
 
@@ -2838,7 +2839,7 @@ void Prj_ReqRemProject (void)
 	                      Prj.Title);
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2901,7 +2902,7 @@ void Prj_RemoveProject (void)
 	             Prj.Title);
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2936,7 +2937,7 @@ void Prj_HideProject (void)
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
 	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -2971,7 +2972,7 @@ void Prj_ShowProject (void)
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
 	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3009,7 +3010,7 @@ void Prj_LockProjectEdition (void)
       Prj_FormLockUnlock (&Prj);
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3052,7 +3053,7 @@ void Prj_UnlockProjectEdition (void)
       Prj_FormLockUnlock (&Prj);
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3098,7 +3099,7 @@ void Prj_ReqLockAllProjectsEdition (void)
       Prj_FreeListProjects ();
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjectsInCurrentPage ();
@@ -3132,7 +3133,7 @@ void Prj_ReqUnlockAllProjectsEdition (void)
       Prj_FreeListProjects ();
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjectsInCurrentPage ();
@@ -3169,7 +3170,7 @@ void Prj_LockAllProjectsEdition (void)
       Prj_FreeListProjects ();
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjectsInCurrentPage ();
@@ -3202,7 +3203,7 @@ void Prj_UnlockAllProjectsEdition (void)
       Prj_FreeListProjects ();
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjectsInCurrentPage ();
@@ -3633,7 +3634,7 @@ void Prj_RecFormProject (void)
       Prj_RequestCreatOrEditPrj (Prj.PrjCod);
      }
    else
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);

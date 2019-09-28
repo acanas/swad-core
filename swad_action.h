@@ -1687,4 +1687,6 @@ char *Act_GetActionTextFromDB (long ActCod,
 void Act_AdjustActionWhenNoUsrLogged (void);
 void Act_AdjustCurrentAction (void);
 
+void Act_NoPermissionExit (void);
+
 #endif

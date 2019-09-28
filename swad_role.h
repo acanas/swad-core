@@ -62,4 +62,6 @@ unsigned Rol_GetSelectedRoles (void);
 
 Rol_Role_t Rol_GetRequestedRole (long UsrCod);
 
+void Rol_WrongRoleExit (void);
+
 #endif

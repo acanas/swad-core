@@ -53,6 +53,7 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
+#include "swad_role.h"
 #include "swad_string.h"
 #include "swad_table.h"
 #include "swad_timeline.h"
@@ -1941,7 +1942,7 @@ void Brw_GetParAndInitFileBrowser (void)
 								  Brw_ADMI_MRK_CRS;
 	       break;
 	    default:
-	       Lay_ShowErrorAndExit ("Wrong role.");
+	       Rol_WrongRoleExit ();
 	       break;
 	   }
          break;
@@ -3343,7 +3344,7 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
       else if (!Grp_GetIfIBelongToGrp (GrpDat->GrpCod))
         {
          if (AbortOnError)
-            Lay_NoPermissionExit ();
+            Act_NoPermissionExit ();
          GrpDat->GrpCod = -1L;
         }
      }
@@ -3384,7 +3385,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 	 break;
       default:
 	 NextAction = ActUnk;
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
    Frm_StartForm (NextAction);
@@ -4024,7 +4025,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
 	       break;
 	    default:
 	       Subtitle[0] = '\0';
-	       Lay_ShowErrorAndExit ("Wrong role.");
+	       Rol_WrongRoleExit ();
 	       break;
 	   }
  	 break;
@@ -10244,7 +10245,7 @@ void Brw_ChgFileMetadata (void)
      }
    else
       /***** Write error message and exit *****/
-      Lay_NoPermissionExit ();
+      Act_NoPermissionExit ();
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();

@@ -231,7 +231,7 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
       case Rol_TCH:
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
      }
 
    /***** Update the role of a user in a course *****/
@@ -274,7 +274,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
       case Rol_TCH:
 	 break;
       default:
-         Lay_ShowErrorAndExit ("Wrong role.");
+         Rol_WrongRoleExit ();
      }
 
    /***** Register user in current course in database *****/
@@ -338,7 +338,7 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
 	 break;
       default:
 	 NotifyEvent = Ntf_EVENT_UNKNOWN;
-         Lay_ShowErrorAndExit ("Wrong role.");
+         Rol_WrongRoleExit ();
      }
 
    /***** Remove possible enrolment request ******/
@@ -425,7 +425,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
 	 Frm_StartForm (ActAccEnrTch);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
      }
    Btn_PutCreateButtonInline (Txt_Confirm_my_enrolment);
    Frm_EndForm ();
@@ -443,7 +443,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
 	 Frm_StartForm (ActRemMe_Tch);
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
      }
    Btn_PutRemoveButtonInline (Txt_Remove_me_from_this_course);
    Frm_EndForm ();
@@ -465,7 +465,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
 	 break;
       default:
 	 NotifyEvent = Ntf_EVENT_UNKNOWN;
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
    Ntf_MarkNotifAsSeen (NotifyEvent,-1L,Gbl.Hierarchy.Crs.CrsCod,
@@ -636,7 +636,7 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
 	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 break;
       default:
-	 Lay_NoPermissionExit ();
+	 Act_NoPermissionExit ();
 	 break;
      }
   }
@@ -689,7 +689,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	 default:
 	    NextAction = ActUnk;
 	    Title = NULL;
-	    Lay_ShowErrorAndExit ("Wrong role.");
+	    Rol_WrongRoleExit ();
 	    break;
 	}
 
@@ -714,7 +714,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
       default:
 	 NextAction = ActUnk;
 	 Title = NULL;
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
    Frm_StartForm (NextAction);
@@ -1078,16 +1078,16 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       case Rol_STD:
 	 if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)		// Can I register/remove students?
 	    // No, I can not
-	    Lay_ShowErrorAndExit ("You are not allowed to perform this action.");
+	    Act_NoPermissionExit ();
 	 break;
       case Rol_NET:
       case Rol_TCH:
 	 if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)	// Can I register/remove teachers?
 	    // No, I can not
-	    Lay_ShowErrorAndExit ("You are not allowed to perform this action.");
+	    Act_NoPermissionExit ();
 	 break;
       default:
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
 	 break;
      }
 
@@ -1141,7 +1141,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	    WhatToDo.RegisterUsrs = false;
 	   }
 	 else
-	    Lay_ShowErrorAndExit ("You are not allowed to perform this action.");
+	    Act_NoPermissionExit ();
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong registering / removing specification.");
@@ -1988,7 +1988,7 @@ void Enr_SignUpInCrs (void)
       if (!(RoleFromForm == Rol_STD ||
 	    RoleFromForm == Rol_NET ||
             RoleFromForm == Rol_TCH))
-         Lay_ShowErrorAndExit ("Wrong role.");
+         Rol_WrongRoleExit ();
 
       /***** Try to get and old request of the same user in the same course from database *****/
       if (DB_QuerySELECT (&mysql_res,"can not get enrolment request",
@@ -2143,7 +2143,7 @@ void Enr_AskIfRejectSignUp (void)
 				     Btn_REMOVE_BUTTON,Txt_Reject);
            }
          else
-            Lay_ShowErrorAndExit ("Wrong role.");
+            Rol_WrongRoleExit ();
         }
      }
    else
@@ -2208,7 +2208,7 @@ void Enr_ShowEnrolmentRequests (void)
 			                      (1 << Rol_TCH));
 	 break;
       default:
-	 Lay_NoPermissionExit ();
+	 Act_NoPermissionExit ();
 	 break;
      }
   }
@@ -2413,7 +2413,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_NoPermissionExit ();
+               Act_NoPermissionExit ();
                break;
            }
          break;
@@ -2535,7 +2535,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_NoPermissionExit ();
+               Act_NoPermissionExit ();
                break;
            }
          break;
@@ -2631,7 +2631,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_NoPermissionExit ();
+               Act_NoPermissionExit ();
                break;
            }
          break;
@@ -2703,7 +2703,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_NoPermissionExit ();
+               Act_NoPermissionExit ();
                break;
            }
          break;
@@ -2753,7 +2753,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_NoPermissionExit ();
+               Act_NoPermissionExit ();
                break;
            }
          break;
@@ -2778,7 +2778,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Lay_NoPermissionExit ();
+               Act_NoPermissionExit ();
                break;
            }
          break;
@@ -2923,7 +2923,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
         	  break;
                default:
         	  NextAction = ActUnk;
-        	  Lay_ShowErrorAndExit ("Wrong role.");
+        	  Rol_WrongRoleExit ();
         	  break;
               }
             Frm_StartForm (NextAction);
@@ -3070,7 +3070,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
       default:
 	 NextAction = ActUnk;
 	 TitleText = NULL;
-	 Lay_ShowErrorAndExit ("Wrong role.");
+	 Rol_WrongRoleExit ();
      }
    Lay_PutContextualLinkIconText (NextAction,NULL,NULL,
 				  "users-cog.svg",
@@ -3151,7 +3151,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
 	 break;
       default:
 	 NextAction = ActUnk;
-         Lay_ShowErrorAndExit ("Wrong role.");
+         Rol_WrongRoleExit ();
 	 break;
      }
    Enr_WriteFormToReqAnotherUsrID (NextAction,NULL);
@@ -3784,7 +3784,7 @@ void Enr_CreateNewUsr1 (void)
 	    Gbl.Action.Act = ActCreTch;
 	    break;
 	 default:
-	    Lay_ShowErrorAndExit ("Wrong role.");
+	    Rol_WrongRoleExit ();
 	    break;
         }
       Tab_SetCurrentTab ();
@@ -3916,7 +3916,7 @@ void Enr_ModifyUsr1 (void)
 			Gbl.Action.Act = ActUpdTch;
 			break;
 		     default:
-			Lay_ShowErrorAndExit ("Wrong role.");
+			Rol_WrongRoleExit ();
 			break;
 		    }
 		  Tab_SetCurrentTab ();
@@ -4078,7 +4078,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
 	    break;
 	 default:
 	    NextAction = ActUnk;
-	    Lay_ShowErrorAndExit ("Wrong role.");
+	    Rol_WrongRoleExit ();
 	    break;
         }
       Frm_StartForm (NextAction);
