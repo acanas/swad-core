@@ -175,7 +175,12 @@ static void Gam_ListAllGames (void)
       case Rol_SYS_ADM:
          Mch_PutFormToViewMchResults (ActReqSeeUsrMchRes);
 	 break;
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+	 break;
       default:
+	 Lay_ShowErrorAndExit ("Wrong role.");
 	 break;
      }
 
@@ -630,6 +635,7 @@ void Gam_GetListGames (void)
      };
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   char *HiddenSubQuery;
    unsigned long NumRows = 0;	// Initialized to avoid warning
    unsigned NumGame;
 
@@ -637,19 +643,46 @@ void Gam_GetListGames (void)
    if (Gbl.Games.LstIsRead)
       Gam_FreeListGames ();
 
+   /***** Subquery: get hidden games depending on user's role *****/
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+         if (asprintf (&HiddenSubQuery," AND Hidden='N'") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 if (asprintf (&HiddenSubQuery,"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
+     }
+
    /***** Get list of games from database *****/
    NumRows = DB_QuerySELECT (&mysql_res,"can not get games",
-			     "SELECT gam_games.GamCod,"
-			            "MIN(mch_matches.StartTime) AS StartTime,"
-			            "MAX(mch_matches.EndTime) AS EndTime"
+			     "SELECT gam_games.GamCod,"				// row[0]
+			            "MIN(mch_matches.StartTime) AS StartTime,"	// row[1]
+			            "MAX(mch_matches.EndTime) AS EndTime"	// row[2]
 			     " FROM gam_games"
 			     " LEFT JOIN mch_matches"
 			     " ON gam_games.GamCod=mch_matches.GamCod"
 			     " WHERE gam_games.CrsCod=%ld"
+			     "%s"
 			     " GROUP BY gam_games.GamCod"
 			     " ORDER BY %s",
 			     Gbl.Hierarchy.Crs.CrsCod,
+			     HiddenSubQuery,
 			     OrderBySubQuery[Gbl.Games.SelectedOrder]);
+
+   /***** Free allocated memory for subquery *****/
+   free ((void *) HiddenSubQuery);
+
    if (NumRows) // Games found...
      {
       Gbl.Games.Num = (unsigned) NumRows;
@@ -663,7 +696,7 @@ void Gam_GetListGames (void)
 	   NumGame < Gbl.Games.Num;
 	   NumGame++)
         {
-         /* Get next game code */
+         /* Get next game code (row[0]) */
          row = mysql_fetch_row (mysql_res);
          if ((Gbl.Games.LstGamCods[NumGame] = Str_ConvertStrCodToLongCod (row[0])) <= 0)
             Lay_ShowErrorAndExit ("Error: wrong game code.");
