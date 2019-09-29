@@ -116,6 +116,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res);
 static void Mch_ListOneOrMoreMatchesHeading (void);
+static bool Mch_CheckIfICanEditMatches (void);
 static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesAuthor (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned UniqueId);
@@ -398,7 +399,8 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
       fprintf (Gbl.F.Out,"<tr>");
 
       /* Icons */
-      Mch_ListOneOrMoreMatchesIcons (&Match);
+      if (Mch_CheckIfICanEditMatches ())
+         Mch_ListOneOrMoreMatchesIcons (&Match);
 
       /* Match player */
       Mch_ListOneOrMoreMatchesAuthor (&Match);
@@ -438,9 +440,15 @@ static void Mch_ListOneOrMoreMatchesHeading (void)
    extern const char *Txt_Status;
    extern const char *Txt_Result;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th></th>"
-                      "<th class=\"LEFT_TOP\">"
+   /***** Start row *****/
+   fprintf (Gbl.F.Out,"<tr>");
+
+   /***** Column for icons *****/
+   if (Mch_CheckIfICanEditMatches ())
+      fprintf (Gbl.F.Out,"<th></th>");
+
+   /***** The rest of columns *****/
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -460,8 +468,7 @@ static void Mch_ListOneOrMoreMatchesHeading (void)
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
 	    Txt_START_END_TIME[Gam_ORDER_BY_START_DATE],
 	    Txt_START_END_TIME[Gam_ORDER_BY_END_DATE],
@@ -469,6 +476,27 @@ static void Mch_ListOneOrMoreMatchesHeading (void)
 	    Txt_Players,
             Txt_Status,
             Txt_Result);
+
+   /***** End row *****/
+   fprintf (Gbl.F.Out,"</tr>");
+  }
+
+/*****************************************************************************/
+/************************ Check if I can edit games **************************/
+/*****************************************************************************/
+
+static bool Mch_CheckIfICanEditMatches (void)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+         return true;
+      default:
+         return false;
+     }
+   return false;
   }
 
 /*****************************************************************************/
@@ -661,9 +689,6 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
 	 break;
       case Rol_NET:
       case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 /* Icon to resume */
 	 Mch_CurrentMchCod = Match->MchCod;

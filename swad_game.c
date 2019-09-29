@@ -274,7 +274,7 @@ static void Gam_ListAllGames (void)
   }
 
 /*****************************************************************************/
-/******************* Check if I can create a new game **********************/
+/************************ Check if I can edit games **************************/
 /*****************************************************************************/
 
 static bool Gam_CheckIfICanEditGames (void)
@@ -282,9 +282,6 @@ static bool Gam_CheckIfICanEditGames (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
       case Rol_SYS_ADM:
          return true;
       default:
