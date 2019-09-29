@@ -44,13 +44,9 @@ struct Game
    long UsrCod;		// Author code
    char Title[Gam_MAX_BYTES_TITLE + 1];
    time_t TimeUTC[Dat_NUM_START_END_TIME];
+   bool Hidden;		// Game is hidden
    unsigned NumQsts;	// Number of questions in the game
    unsigned NumMchs;	// Number of matches in the game
-   struct
-     {
-      bool Visible;		// Game is not hidden
-      bool ICanEdit;
-     } Status;
   };
 
 #define Gam_NUM_ORDERS 3

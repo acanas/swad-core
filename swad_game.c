@@ -402,7 +402,7 @@ void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Icons related to this game *****/
-   if (Game.Status.ICanEdit)
+   if (Gam_CheckIfICanEditGames ())
      {
       fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CONTEXT_COL");
       if (!ShowOnlyThisGame)
@@ -423,8 +423,8 @@ void Gam_ShowOneGame (long GamCod,
      {
       fprintf (Gbl.F.Out,"<td id=\"gam_date_%u_%u\" class=\"%s LEFT_TOP",
 	       (unsigned) StartEndTime,UniqueId,
-	       Game.Status.Visible ? "DATE_GREEN" :
-				     "DATE_GREEN_LIGHT");
+	       Game.Hidden ? "DATE_GREEN_LIGHT":
+		             "DATE_GREEN");
       if (!ShowOnlyThisGame)
 	 fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"\">");
@@ -451,8 +451,8 @@ void Gam_ShowOneGame (long GamCod,
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
    Frm_LinkFormSubmit (Txt_View_game,
-                       Game.Status.Visible ? "ASG_TITLE" :
-	                                     "ASG_TITLE_LIGHT",NULL);
+                       Game.Hidden ? "ASG_TITLE_LIGHT":
+                	             "ASG_TITLE",NULL);
    fprintf (Gbl.F.Out,"%s</a>",
             Game.Title);
    Frm_EndForm ();
@@ -460,8 +460,8 @@ void Gam_ShowOneGame (long GamCod,
 
    /* Number of questions */
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u</div>",
-            Game.Status.Visible ? "ASG_GRP" :
-        	                  "ASG_GRP_LIGHT",
+            Game.Hidden ? "ASG_GRP_LIGHT" :
+        	          "ASG_GRP",
             Txt_No_of_questions,
             Game.NumQsts);
 
@@ -477,8 +477,8 @@ void Gam_ShowOneGame (long GamCod,
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
    Frm_LinkFormSubmit (Txt_Matches,
-                       Game.Status.Visible ? "ASG_TITLE" :
-	                                     "ASG_TITLE_LIGHT",NULL);
+                       Game.Hidden ? "ASG_TITLE_LIGHT" :
+                	             "ASG_TITLE",NULL);
    if (ShowOnlyThisGame)
       fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Matches);
    fprintf (Gbl.F.Out,"%u</a>",Game.NumMchs);
@@ -511,8 +511,8 @@ void Gam_ShowOneGame (long GamCod,
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>"
                       "</td>",
-            Game.Status.Visible ? "DAT" :
-        	                  "DAT_LIGHT",
+            Game.Hidden ? "DAT_LIGHT" :
+        	          "DAT",
             Txt);
 
    /***** End 2nd row of this game *****/
@@ -547,7 +547,7 @@ void Gam_ShowOneGame (long GamCod,
 
 static void Gam_WriteAuthor (struct Game *Game)
   {
-   Usr_WriteAuthor1Line (Game->UsrCod,!Game->Status.Visible);
+   Usr_WriteAuthor1Line (Game->UsrCod,Game->Hidden);
   }
 
 /*****************************************************************************/
@@ -569,11 +569,11 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
    /***** Put icon to remove game *****/
    Ico_PutContextualIconToRemove (ActReqRemGam,Gam_PutParams);
 
-   /***** Put icon to hide/show game *****/
-   if (Game->Status.Visible)
-      Ico_PutContextualIconToHide (ActHidGam,Anchor,Gam_PutParams);
-   else
+   /***** Put icon to unhide/hide game *****/
+   if (Game->Hidden)
       Ico_PutContextualIconToUnhide (ActShoGam,Anchor,Gam_PutParams);
+   else
+      Ico_PutContextualIconToHide (ActHidGam,Anchor,Gam_PutParams);
 
    /***** Put icon to edit game *****/
    if (!Game->NumMchs)	// Edit only if match has no matches
@@ -754,7 +754,7 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       Game->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get whether the game is hidden (row[2]) */
-      Game->Status.Visible = (row[2][0] == 'N');
+      Game->Hidden = (row[2][0] == 'Y');
 
       /* Get author of the game (row[3]) */
       Game->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
@@ -768,30 +768,6 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
 
       /* Get number of matches */
       Game->NumMchs = Mch_GetNumMchsInGame (Game->GamCod);
-
-      /* Can I view results of the game?
-         Can I edit game? */
-      switch (Gbl.Usrs.Me.Role.Logged)
-        {
-         case Rol_STD:
-            Game->Status.ICanEdit        = false;
-            break;
-         case Rol_NET:
-            Game->Status.ICanEdit        = false;
-            break;
-         case Rol_TCH:
-         case Rol_DEG_ADM:
-         case Rol_CTR_ADM:
-         case Rol_INS_ADM:
-            Game->Status.ICanEdit        = true;
-            break;
-         case Rol_SYS_ADM:
-            Game->Status.ICanEdit        = true;
-            break;
-         default:
-            Game->Status.ICanEdit        = false;
-            break;
-        }
      }
    else
       /* Initialize to empty game */
@@ -846,8 +822,7 @@ static void Gam_ResetGame (struct Game *Game)
    Game->Title[0]                = '\0';
    Game->NumQsts                 = 0;
    Game->NumMchs                 = 0;
-   Game->Status.Visible          = true;
-   Game->Status.ICanEdit         = false;
+   Game->Hidden                  = false;
   }
 
 /*****************************************************************************/
@@ -934,7 +909,7 @@ void Gam_AskRemGame (void)
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
-   if (!Game.Status.ICanEdit)
+   if (!Gam_CheckIfICanEditGames ())
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
    /***** Show question and button to remove game *****/
@@ -963,7 +938,7 @@ void Gam_RemoveGame (void)
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
-   if (!Game.Status.ICanEdit)
+   if (!Gam_CheckIfICanEditGames ())
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
    /***** Remove game from all tables *****/
@@ -1035,7 +1010,7 @@ void Gam_HideGame (void)
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
-   if (!Game.Status.ICanEdit)
+   if (!Gam_CheckIfICanEditGames ())
       Lay_ShowErrorAndExit ("You can not hide this game.");
 
    /***** Hide game *****/
@@ -1061,7 +1036,7 @@ void Gam_UnhideGame (void)
 
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
-   if (!Game.Status.ICanEdit)
+   if (!Gam_CheckIfICanEditGames ())
       Lay_ShowErrorAndExit ("You can not unhide this game.");
 
    /***** Show game *****/
@@ -1128,7 +1103,7 @@ void Gam_RequestCreatOrEditGame (void)
 	{
 	 /* Get data of the game from database */
 	 Gam_GetDataOfGameByCod (&Game);
-	 if (!Game.Status.ICanEdit)
+	 if (!Gam_CheckIfICanEditGames ())
 	    Lay_ShowErrorAndExit ("You can not update this game.");
 
 	 /* Get text of the game from database */
@@ -1227,7 +1202,7 @@ void Gam_RecFormGame (void)
 	 /* Get data of the old (current) game from database */
 	 OldGame.GamCod = NewGame.GamCod;
 	 Gam_GetDataOfGameByCod (&OldGame);
-	 if (!OldGame.Status.ICanEdit)
+	 if (!Gam_CheckIfICanEditGames ())
 	    Lay_ShowErrorAndExit ("You can not update this game.");
 	}
 
@@ -1581,6 +1556,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
    unsigned NumQsts;
    bool Editing = (Gbl.Action.Act == ActEdiOneGam    ||
 	           Gbl.Action.Act == ActAddOneGamQst);	// TODO: Ampliar casos en los que se está editando para que se muestre el botón de Añadir preguntas
+   bool ICanEditGames = Gam_CheckIfICanEditGames ();
 
    /***** Get data of questions from database *****/
    NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -1598,8 +1574,8 @@ static void Gam_ListGameQuestions (struct Game *Game)
 
    /***** Start box *****/
    Gam_CurrentGamCod = Game->GamCod;
-   Box_StartBox (NULL,Txt_Questions,Game->Status.ICanEdit ? Gam_PutIconToAddNewQuestions :
-                                                            NULL,
+   Box_StartBox (NULL,Txt_Questions,ICanEditGames ? Gam_PutIconToAddNewQuestions :
+                                                    NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    if (NumQsts)
@@ -1608,9 +1584,9 @@ static void Gam_ListGameQuestions (struct Game *Game)
    else	// This game has no questions
       Ale_ShowAlert (Ale_INFO,Txt_This_game_has_no_questions);
 
-   if (Game->Status.ICanEdit &&	// I can edit
-       (!NumQsts ||		// This game has no questions
-	Editing))		// I am editing
+   if (ICanEditGames &&	// I can edit
+       (!NumQsts ||	// This game has no questions
+	Editing))	// I am editing
       /***** Put button to add a new question in this game *****/
       Gam_PutButtonToAddNewQuestions ();
 
