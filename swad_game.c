@@ -100,7 +100,6 @@ static void Gam_WriteAuthor (struct Game *Game);
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 					  const char *Anchor);
 
-static long Gam_GetParams (void);
 static void Gam_PutHiddenParamOrder (void);
 static void Gam_GetParamOrder (void);
 
@@ -134,6 +133,8 @@ static void Gam_ExchangeQuestions (long GamCod,
                                    unsigned QstIndTop,unsigned QstIndBottom);
 
 static bool Gam_GetNumMchsGameAndCheckIfEditable (struct Game *Game);
+
+static long Gam_GetParamCurrentGamCod (void);
 
 /*****************************************************************************/
 /***************************** List all games ********************************/
@@ -389,7 +390,6 @@ void Gam_ShowOneGame (long GamCod,
    /***** Get data of this game *****/
    Game.GamCod = GamCod;
    Gam_GetDataOfGameByCod (&Game);
-   Gam_CurrentGamCod = Game.GamCod;	// Used as parameter in contextual links
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Game.GamCod,&Anchor);
@@ -446,7 +446,7 @@ void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"\">");
 
    /* Game title */
-   Gam_CurrentGamCod = GamCod;
+   Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
    Lay_StartArticle (Anchor);
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
@@ -473,7 +473,7 @@ void Gam_ShowOneGame (long GamCod,
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
 
-   Gam_CurrentGamCod = GamCod;
+   Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
    Frm_LinkFormSubmit (Txt_Matches,
@@ -566,6 +566,8 @@ void Gam_PutHiddenParamGameOrder (void)
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 					  const char *Anchor)
   {
+   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
+
    /***** Put icon to remove game *****/
    Ico_PutContextualIconToRemove (ActReqRemGam,Gam_PutParams);
 
@@ -586,8 +588,11 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 
 void Gam_PutParams (void)
   {
-   if (Gam_CurrentGamCod > 0)
-      Gam_PutParamGameCod (Gam_CurrentGamCod);
+   long CurrentGamCod = Gam_GetParamCurrentGamCod ();
+
+   if (CurrentGamCod > 0)
+      Gam_PutParamGameCod (CurrentGamCod);
+
    Gam_PutHiddenParamOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
@@ -597,7 +602,7 @@ void Gam_PutParams (void)
 /******************* Get parameters used to edit a game **********************/
 /*****************************************************************************/
 
-static long Gam_GetParams (void)
+long Gam_GetParams (void)
   {
    /***** Get other parameters *****/
    Gam_GetParamOrder ();
@@ -913,7 +918,7 @@ void Gam_AskRemGame (void)
       Lay_ShowErrorAndExit ("You can not remove this game.");
 
    /***** Show question and button to remove game *****/
-   Gam_CurrentGamCod = Game.GamCod;
+   Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
    Ale_ShowAlertAndButton (ActRemGam,NULL,NULL,Gam_PutParams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_game,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_game_X,
@@ -1111,7 +1116,7 @@ void Gam_RequestCreatOrEditGame (void)
 	}
 
       /***** Start form *****/
-      Gam_CurrentGamCod = Game.GamCod;
+      Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
       Frm_StartForm (ItsANewGame ? ActNewGam :
 				   ActChgGam);
       Gam_PutParams ();
@@ -1337,7 +1342,7 @@ void Gam_RequestNewQuestion (void)
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
       /***** Show form to create a new question in this game *****/
-      Gam_CurrentGamCod = Game.GamCod;
+      Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
       Tst_ShowFormAskSelectTstsForGame ();
      }
 
@@ -1364,7 +1369,7 @@ void Gam_ListTstQuestionsToSelect (void)
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
       /***** List several test questions for selection *****/
-      Gam_CurrentGamCod = Game.GamCod;
+      Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
       Tst_ListQuestionsToSelect ();
      }
   }
@@ -1573,7 +1578,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
 					Game->GamCod);
 
    /***** Start box *****/
-   Gam_CurrentGamCod = Game->GamCod;
+   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Box_StartBox (NULL,Txt_Questions,ICanEditGames ? Gam_PutIconToAddNewQuestions :
                                                     NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
@@ -1674,13 +1679,12 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       QstCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /***** Icons *****/
-      Gam_CurrentGamCod = GamCod;
+      Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
       Gam_CurrentQstInd = QstInd;
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
       /* Put icon to remove the question */
-      Gam_CurrentGamCod = GamCod;
       Frm_StartForm (ActReqRemGamQst);
       Gam_PutParams ();
       Gam_PutParamQstInd (QstInd);
@@ -1951,7 +1955,7 @@ void Gam_RequestRemoveQst (void)
       QstInd = Gam_GetParamQstInd ();
 
       /***** Show question and button to remove question *****/
-      Gam_CurrentGamCod = Game.GamCod;
+      Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
       Gam_CurrentQstInd = QstInd;
       Ale_ShowAlertAndButton (ActRemGamQst,NULL,NULL,Gam_PutParamsOneQst,
 			      Btn_REMOVE_BUTTON,Txt_Remove_question,
@@ -2206,7 +2210,7 @@ void Gam_PutButtonNewMatch (long GamCod)
   {
    extern const char *Txt_New_match;
 
-   Gam_CurrentGamCod = GamCod;
+   Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
    Frm_StartFormAnchor (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID);
    Gam_PutParams ();
    Btn_PutConfirmButton (Txt_New_match);
@@ -2515,4 +2519,18 @@ void Gam_ShowTstTagsPresentInAGame (long GamCod)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/**************** Access to variable used to pass parameter ******************/
+/*****************************************************************************/
+
+void Gam_SetParamCurrentGamCod (long GamCod)
+  {
+   Gam_CurrentGamCod = GamCod;
+  }
+
+static long Gam_GetParamCurrentGamCod (void)
+  {
+   return Gam_CurrentGamCod;
   }

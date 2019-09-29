@@ -653,6 +653,7 @@ void Mch_ShowOneMchResult (void)
    extern const char *Txt_Score;
    extern const char *Txt_out_of_PART_OF_A_SCORE;
    extern const char *Txt_Tags;
+   struct Game Game;
    struct Match Match;
    Usr_MeOrOther_t MeOrOther;
    struct UsrData *UsrDat;
@@ -668,12 +669,8 @@ void Mch_ShowOneMchResult (void)
    bool ICanViewResult;
    bool ICanViewScore;
 
-   /***** Get match code *****/
-   if ((Match.MchCod = Mch_GetParamMchCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
-
-   /***** Get data of the match from database *****/
-   Mch_GetDataOfMatchByCod (&Match);
+   /***** Get and check parameters *****/
+   Mch_GetAndCheckParameters (&Game,&Match);
 
    /***** Pointer to user's data *****/
    MeOrOther = (Gbl.Action.Act == ActSeeOneMchResMe) ? Usr_ME :

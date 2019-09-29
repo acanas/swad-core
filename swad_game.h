@@ -80,6 +80,7 @@ void Gam_PutHiddenParamGameOrder (void);
 void Gam_RequestCreatOrEditGame (void);
 
 void Gam_PutParams (void);
+long Gam_GetParams (void);
 
 void Gam_GetListGames (void);
 void Gam_GetDataOfGameByCod (struct Game *Gam);
@@ -126,5 +127,7 @@ unsigned Gam_GetNumGames (Hie_Level_t Scope);
 float Gam_GetNumQstsPerCrsGame (Hie_Level_t Scope);
 
 void Gam_ShowTstTagsPresentInAGame (long GamCod);
+
+void Gam_SetParamCurrentGamCod (long GamCod);
 
 #endif

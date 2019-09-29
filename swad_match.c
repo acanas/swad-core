@@ -137,7 +137,8 @@ static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName);
 static void Mch_RemoveMatchesInGameFromTable (long GamCod,const char *TableName);
 static void Mch_RemoveMatchInCourseFromTable (long CrsCod,const char *TableName);
 
-static void Mch_PutParams (void);
+static void Mch_PutParamsEdit (void);
+static void Mch_PutParamsPlay (void);
 
 static void Mch_PutFormNewMatch (struct Game *Game);
 static void Mch_ShowLstGrpsToCreateMatch (void);
@@ -205,6 +206,9 @@ static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsi
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQst,bool Correct);
 
+static void Mch_SetParamCurrentMchCod (long MchCod);
+static long Mch_GetParamCurrentMchCod (void);
+
 /*****************************************************************************/
 /************************* List the matches of a game ************************/
 /*****************************************************************************/
@@ -213,7 +217,6 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
   {
    extern const char *Hlp_ASSESSMENT_Games_matches;
    extern const char *Txt_Matches;
-   extern long Gam_CurrentGamCod;	// Used as parameter in contextual links;
    char *SubQuery;
    MYSQL_RES *mysql_res;
    unsigned NumMatches;
@@ -261,7 +264,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
    free ((void *) SubQuery);
 
    /***** Start box *****/
-   Gam_CurrentGamCod = Game->GamCod;
+   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Box_StartBox (NULL,Txt_Matches,Mch_PutIconToPlayNewMatch,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
@@ -514,9 +517,10 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
    fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
    /***** Put icon to remove the match *****/
-   Mch_CurrentMchCod = Match->MchCod;
+   Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
+   Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
    Frm_StartForm (ActReqRemMch);
-   Mch_PutParams ();
+   Mch_PutParamsEdit ();
    Ico_PutIconRemove ();
    Frm_EndForm ();
 
@@ -684,9 +688,9 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
 	 if (ICanPlayThisMatchBasedOnGrps)
 	   {
 	    /* Icon to play as student */
-	    Mch_CurrentMchCod = Match->MchCod;
+            Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
 	    Lay_PutContextualLinkOnlyIcon (ActJoiMch,NULL,
-					   Mch_PutParams,
+					   Mch_PutParamsPlay,
 					   Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
 											    "flag-checkered.svg",
 					   Txt_Play);
@@ -696,9 +700,9 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /* Icon to resume */
-	 Mch_CurrentMchCod = Match->MchCod;
+         Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
 	 Lay_PutContextualLinkOnlyIcon (ActResMch,NULL,
-					Mch_PutParams,
+					Mch_PutParamsPlay,
 					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
 											 "flag-checkered.svg",
 					Txt_Resume);
@@ -731,8 +735,10 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
 	    /* Match result visible or hidden? */
 	    if (Match->Status.ShowUsrResults)
 	      {
+               Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
+               Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
 	       Frm_StartForm (ActSeeOneMchResMe);
-	       Mch_PutParamMchCod (Match->MchCod);
+	       Mch_PutParamsEdit ();
 	       Ico_PutIconLink ("tasks.svg",Txt_Match_result);
 	       Frm_EndForm ();
 	      }
@@ -744,9 +750,10 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /* Match result visible or hidden? */
-	 Mch_CurrentMchCod = Match->MchCod;
+         Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
+         Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
-					Mch_PutParams,
+					Mch_PutParamsEdit,
 					Match->Status.ShowUsrResults ? "eye.svg" :
 							               "eye-slash.svg",
 					Match->Status.ShowUsrResults ? Txt_Visible_result :
@@ -765,14 +772,11 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
 
 void Mch_ToggleVisibilResultsMchUsr (void)
   {
+   struct Game Game;
    struct Match Match;
 
-   /***** Get game code *****/
-   if ((Match.MchCod = Mch_GetParamMchCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
-
-   /***** Get data of the match and the game from database *****/
-   Mch_GetDataOfMatchByCod (&Match);
+   /***** Get and check parameters *****/
+   Mch_GetAndCheckParameters (&Game,&Match);
 
    /***** Toggle visibility of match results *****/
    Match.Status.ShowUsrResults = !Match.Status.ShowUsrResults;
@@ -891,19 +895,16 @@ void Mch_RequestRemoveMatch (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_match_X;
    extern const char *Txt_Remove_match;
+   struct Game Game;
    struct Match Match;
 
-   /***** Get parameters *****/
-   /* Get match code */
-   if ((Match.MchCod = Mch_GetParamMchCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
-
-   /***** Get data of the match from database *****/
-   Mch_GetDataOfMatchByCod (&Match);
+   /***** Get and check parameters *****/
+   Mch_GetAndCheckParameters (&Game,&Match);
 
    /***** Show question and button to remove question *****/
-   Mch_CurrentMchCod = Match.MchCod;
-   Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,Mch_PutParams,
+   Gam_SetParamCurrentGamCod (Match.GamCod);	// Used to pass parameter
+   Mch_SetParamCurrentMchCod (Match.MchCod);	// Used to pass parameter
+   Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,Mch_PutParamsEdit,
 			   Btn_REMOVE_BUTTON,Txt_Remove_match,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_match_X,
 	                   Match.Title);
@@ -922,24 +923,11 @@ void Mch_RequestRemoveMatch (void)
 void Mch_RemoveMatch (void)
   {
    extern const char *Txt_Match_X_removed;
-   struct Match Match;
    struct Game Game;
+   struct Match Match;
 
-   /***** Get parameters *****/
-   /* Get match code */
-   if ((Match.MchCod = Mch_GetParamMchCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of match is missing.");
-
-   /***** Get data of the match from database *****/
-   Mch_GetDataOfMatchByCod (&Match);
-   if (Match.MchCod < 0)
-      Lay_ShowErrorAndExit ("The match to be removed does not exist.");
-
-   /***** Ensure that the match belongs to this course *****/
-   Game.GamCod = Match.GamCod;
-   Gam_GetDataOfGameByCod (&Game);
-   if (Game.CrsCod != Gbl.Hierarchy.Crs.CrsCod)
-      Lay_ShowErrorAndExit ("Match does not belong to this course.");
+   /***** Get and check parameters *****/
+   Mch_GetAndCheckParameters (&Game,&Match);
 
    /***** Remove the match from all database tables *****/
    Mch_RemoveMatchFromAllTables (Match.MchCod);
@@ -1072,11 +1060,22 @@ static void Mch_RemoveMatchInCourseFromTable (long CrsCod,const char *TableName)
 /*********************** Params used to edit a match *************************/
 /*****************************************************************************/
 
-static void Mch_PutParams (void)
+static void Mch_PutParamsEdit (void)
   {
-   if (Mch_CurrentMchCod > 0)
-      Mch_PutParamMchCod (Mch_CurrentMchCod);
-   Grp_PutParamWhichGrps ();
+   Gam_PutParams ();
+   Mch_PutParamsPlay ();
+  }
+
+/*****************************************************************************/
+/*********************** Params used to edit a match *************************/
+/*****************************************************************************/
+
+static void Mch_PutParamsPlay (void)
+  {
+   long CurrentMchCod = Mch_GetParamCurrentMchCod ();
+
+   if (CurrentMchCod > 0)
+      Mch_PutParamMchCod (CurrentMchCod);
   }
 
 /*****************************************************************************/
@@ -1086,6 +1085,30 @@ static void Mch_PutParams (void)
 void Mch_PutParamMchCod (long MchCod)
   {
    Par_PutHiddenParamLong ("MchCod",MchCod);
+  }
+
+/*****************************************************************************/
+/************************** Get and check parameters *************************/
+/*****************************************************************************/
+
+void Mch_GetAndCheckParameters (struct Game *Game,struct Match *Match)
+  {
+   /***** Get parameters *****/
+   /* Get parameters of game */
+   if ((Game->GamCod = Gam_GetParams ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of game is missing.");
+   Gam_GetDataOfGameByCod (Game);
+
+   /* Get match code */
+   if ((Match->MchCod = Mch_GetParamMchCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of match is missing.");
+   Mch_GetDataOfMatchByCod (Match);
+
+   /***** Ensure parameters are correct *****/
+   if (Game->GamCod != Match->GamCod)
+      Lay_ShowErrorAndExit ("Wrong game code.");
+   if (Game->CrsCod != Gbl.Hierarchy.Crs.CrsCod)
+      Lay_ShowErrorAndExit ("Match does not belong to this course.");
   }
 
 /*****************************************************************************/
@@ -3016,3 +3039,18 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
   }
+
+/*****************************************************************************/
+/**************** Access to variable used to pass parameter ******************/
+/*****************************************************************************/
+
+static void Mch_SetParamCurrentMchCod (long MchCod)
+  {
+   Mch_CurrentMchCod = MchCod;
+  }
+
+static long Mch_GetParamCurrentMchCod (void)
+  {
+   return Mch_CurrentMchCod;
+  }
+
