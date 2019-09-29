@@ -107,6 +107,8 @@ void Mch_ForwardMatchTch (void);
 
 unsigned Mch_GetNumMchsInGame (long GamCod);
 
+bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod);
+
 void Mch_GetMatchBeingPlayed (void);
 void Mch_ShowMatchToMeAsStd (void);
 void Mch_RefreshMatchTch (void);

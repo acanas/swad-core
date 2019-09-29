@@ -471,10 +471,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.19.2 (2019-09-29)"
+#define Log_PLATFORM_VERSION	"SWAD 19.19.3 (2019-09-29)"
 #define CSS_FILE		"swad19.15.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.19.3:  Sep 29, 2019	Students will not see matches results for groups to which they don't belong. (246645 lines)
 	Version 19.19.2:  Sep 29, 2019	Students will not see icons to remove matches. (246619 lines)
 	Version 19.19.1:  Sep 29, 2019	Students will not see matches for groups to which they don't belong. (246601 lines)
 	Version 19.19:    Sep 29, 2019	Selections of my groups/all groups in listing of matches.

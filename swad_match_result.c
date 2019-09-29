@@ -664,6 +664,7 @@ void Mch_ShowOneMchResult (void)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool ItsMe;
+   bool ICanPlayThisMatchBasedOnGrps;
    bool ICanViewResult;
    bool ICanViewScore;
 
@@ -705,7 +706,10 @@ void Mch_ShowOneMchResult (void)
 	 switch (MeOrOther)
 	   {
 	    case Usr_ME:
-	       ICanViewResult = ItsMe && Match.Status.ShowUsrResults;
+	       ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match.MchCod);
+	       ICanViewResult = ItsMe && ICanPlayThisMatchBasedOnGrps &&
+		                Match.Status.ShowUsrResults;
+
 	       if (ICanViewResult)
 		 {
 		  Tst_GetConfigTstFromDB ();	// To get feedback type

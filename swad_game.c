@@ -473,8 +473,9 @@ void Gam_ShowOneGame (long GamCod,
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
 
+   Gam_CurrentGamCod = GamCod;
    Frm_StartForm (ActSeeGam);
-   Gam_PutParamGameCod (GamCod);
+   Gam_PutParams ();
    Frm_LinkFormSubmit (Txt_Matches,
                        Game.Status.Visible ? "ASG_TITLE" :
 	                                     "ASG_TITLE_LIGHT",NULL);

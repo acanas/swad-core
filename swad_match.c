@@ -115,7 +115,7 @@ static void Mch_PutIconToPlayNewMatch (void);
 static void Mch_ListOneOrMoreMatches (struct Game *Game,
 				      unsigned NumMatches,
                                       MYSQL_RES *mysql_res);
-static void Mch_ListOneOrMoreMatchesHeading (void);
+static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches);
 static bool Mch_CheckIfICanEditMatches (void);
 static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesAuthor (const struct Match *Match);
@@ -123,8 +123,10 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match);
 static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match);
-static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts);
-static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match);
+static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts,
+					    bool ICanPlayThisMatchBasedOnGrps);
+static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
+					    bool ICanPlayThisMatchBasedOnGrps);
 
 static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Match *Match);
@@ -165,7 +167,6 @@ static void Mch_SetMatchStatusToEnd (struct Match *Match);
 
 static void Mch_ShowMatchStatusForTch (struct Match *Match);
 static void Mch_ShowMatchStatusForStd (struct Match *Match);
-static bool Mch_CheckIfIPlayThisMatchBasedOnGrps (long MchCod);
 
 static void Mch_ShowLeftColumnTch (struct Match *Match);
 static void Mch_ShowInsideLeftColumnTch (struct Match *Match);
@@ -380,10 +381,12 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
    unsigned NumMatch;
    unsigned UniqueId;
    struct Match Match;
+   bool ICanPlayThisMatchBasedOnGrps;
+   bool ICanEditMatches = Mch_CheckIfICanEditMatches ();
 
    /***** Write the heading *****/
    Tbl_StartTableWideMargin (2);
-   Mch_ListOneOrMoreMatchesHeading ();
+   Mch_ListOneOrMoreMatchesHeading (ICanEditMatches);
 
    /***** Write rows *****/
    for (NumMatch = 0, UniqueId = 1;
@@ -394,12 +397,13 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 
       /***** Get match data from row *****/
       Mch_GetMatchDataFromRow (mysql_res,&Match);
+      ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match.MchCod);
 
       /***** Write row for this match ****/
       fprintf (Gbl.F.Out,"<tr>");
 
       /* Icons */
-      if (Mch_CheckIfICanEditMatches ())
+      if (ICanEditMatches)
          Mch_ListOneOrMoreMatchesIcons (&Match);
 
       /* Match player */
@@ -415,10 +419,12 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
       Mch_ListOneOrMoreMatchesNumPlayers (&Match);
 
       /* Match status */
-      Mch_ListOneOrMoreMatchesStatus (&Match,Game->NumQsts);
+      Mch_ListOneOrMoreMatchesStatus (&Match,Game->NumQsts,
+				      ICanPlayThisMatchBasedOnGrps);
 
       /* Match result visible? */
-      Mch_ListOneOrMoreMatchesResult (&Match);
+      Mch_ListOneOrMoreMatchesResult (&Match,
+				      ICanPlayThisMatchBasedOnGrps);
 
       fprintf (Gbl.F.Out,"</tr>");
      }
@@ -431,7 +437,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 /***************** Put a column for match start and end times ****************/
 /*****************************************************************************/
 
-static void Mch_ListOneOrMoreMatchesHeading (void)
+static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -444,7 +450,7 @@ static void Mch_ListOneOrMoreMatchesHeading (void)
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Column for icons *****/
-   if (Mch_CheckIfICanEditMatches ())
+   if (ICanEditMatches)
       fprintf (Gbl.F.Out,"<th></th>");
 
    /***** The rest of columns *****/
@@ -659,11 +665,11 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match)
 /********************** Put a column for match status ************************/
 /*****************************************************************************/
 
-static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts)
+static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned NumQsts,
+					    bool ICanPlayThisMatchBasedOnGrps)
   {
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
-   bool IBelongToGroups;
 
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP COLOR%u\">",Gbl.RowEvenOdd);
 
@@ -675,8 +681,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 IBelongToGroups = Mch_CheckIfIPlayThisMatchBasedOnGrps (Match->MchCod);
-	 if (IBelongToGroups)
+	 if (ICanPlayThisMatchBasedOnGrps)
 	   {
 	    /* Icon to play as student */
 	    Mch_CurrentMchCod = Match->MchCod;
@@ -709,7 +714,8 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
 /**************** Put a column for visibility of match result ****************/
 /*****************************************************************************/
 
-static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match)
+static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
+					    bool ICanPlayThisMatchBasedOnGrps)
   {
    extern const char *Txt_Match_result;
    extern const char *Txt_Hidden_result;
@@ -720,22 +726,22 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 /* Match result visible or hidden? */
-	 if (Match->Status.ShowUsrResults)
+	 if (ICanPlayThisMatchBasedOnGrps)
 	   {
-	    Frm_StartForm (ActSeeOneMchResMe);
-	    Mch_PutParamMchCod (Match->MchCod);
-	    Ico_PutIconLink ("tasks.svg",Txt_Match_result);
-	    Frm_EndForm ();
+	    /* Match result visible or hidden? */
+	    if (Match->Status.ShowUsrResults)
+	      {
+	       Frm_StartForm (ActSeeOneMchResMe);
+	       Mch_PutParamMchCod (Match->MchCod);
+	       Ico_PutIconLink ("tasks.svg",Txt_Match_result);
+	       Frm_EndForm ();
+	      }
+	    else
+	       Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
 	   }
-	 else
-	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
 	 break;
       case Rol_NET:
       case Rol_TCH:
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
       case Rol_SYS_ADM:
 	 /* Match result visible or hidden? */
 	 Mch_CurrentMchCod = Match->MchCod;
@@ -1931,12 +1937,11 @@ static void Mch_ShowMatchStatusForTch (struct Match *Match)
 
 static void Mch_ShowMatchStatusForStd (struct Match *Match)
   {
-   bool IBelongToGroups;
+   bool ICanPlayThisMatchBasedOnGrps;
 
-   /***** Do I belong to valid groups to play this match? *****/
-   IBelongToGroups = Gbl.Usrs.Me.IBelongToCurrentCrs &&
-		     Mch_CheckIfIPlayThisMatchBasedOnGrps (Match->MchCod);
-   if (!IBelongToGroups)
+   /***** Can I play this match? *****/
+   ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match->MchCod);
+   if (!ICanPlayThisMatchBasedOnGrps)
       Lay_ShowErrorAndExit ("You can not play this match!");
 
    /***** Left column *****/
@@ -1968,17 +1973,32 @@ unsigned Mch_GetNumMchsInGame (long GamCod)
 /************ Check if I belong to any of the groups of a match **************/
 /*****************************************************************************/
 
-static bool Mch_CheckIfIPlayThisMatchBasedOnGrps (long MchCod)
+bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod)
   {
-   /***** Get if I can play a match from database *****/
-   return (DB_QueryCOUNT ("can not check if I can play a match",
-			  "SELECT COUNT(*) FROM mch_matches"
-			  " WHERE MchCod=%ld"
-			  " AND (MchCod NOT IN (SELECT MchCod FROM mch_groups) OR"
-			  " MchCod IN (SELECT mch_groups.MchCod FROM mch_groups,crs_grp_usr"
-			  " WHERE crs_grp_usr.UsrCod=%ld"
-			  " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))",
-			  MchCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_STD:
+	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+	    /***** Get if I can play a match from database *****/
+	    return (DB_QueryCOUNT ("can not check if I can play a match",
+				   "SELECT COUNT(*) FROM mch_matches"
+				   " WHERE MchCod=%ld"
+				   " AND (MchCod NOT IN (SELECT MchCod FROM mch_groups) OR"
+				   " MchCod IN (SELECT mch_groups.MchCod FROM mch_groups,crs_grp_usr"
+				   " WHERE crs_grp_usr.UsrCod=%ld"
+				   " AND mch_groups.GrpCod=crs_grp_usr.GrpCod))",
+				   MchCod,Gbl.Usrs.Me.UsrDat.UsrCod) != 0);
+	 else
+	    return false;
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+	 return Gbl.Usrs.Me.IBelongToCurrentCrs;
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
   }
 
 /*****************************************************************************/
