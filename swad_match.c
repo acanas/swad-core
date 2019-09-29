@@ -635,6 +635,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
   {
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
+   bool IBelongToGroups;
 
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP COLOR%u\">",Gbl.RowEvenOdd);
 
@@ -646,13 +647,17 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-	 /* Icon to play as student */
-	 Mch_CurrentMchCod = Match->MchCod;
-	 Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
-					Mch_PutParams,
-					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
-											 "flag-checkered.svg",
-					Txt_Play);
+	 IBelongToGroups = Mch_CheckIfIPlayThisMatchBasedOnGrps (Match->MchCod);
+	 if (IBelongToGroups)
+	   {
+	    /* Icon to play as student */
+	    Mch_CurrentMchCod = Match->MchCod;
+	    Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
+					   Mch_PutParams,
+					   Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
+											    "flag-checkered.svg",
+					   Txt_Play);
+	   }
 	 break;
       case Rol_NET:
       case Rol_TCH:

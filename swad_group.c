@@ -5059,7 +5059,7 @@ void Grp_GetParamWhichGrps (void)
 	 case ActPrnCrsTT:	// Print course timetable
 	 case ActChgCrsTT1stDay:// Change first day of week in course timetable
 	 case ActSeeAsg:	// List assignments
-	 case ActSeeGam:	// List games
+	 case ActSeeAllGam:	// List games
 	 case ActSeeAllSvy:	// List surveys
 	 case ActSeeAtt:	// List attendance
 	    /*
