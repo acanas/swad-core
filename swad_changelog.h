@@ -471,10 +471,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.21 (2019-09-29)"
+#define Log_PLATFORM_VERSION	"SWAD 19.22 (2019-09-29)"
 #define CSS_FILE		"swad19.15.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.22:    Sep 29, 2019	Remove user from match tables in course. (246703 lines)
 	Version 19.21:    Sep 29, 2019	Code refactoring in games and matches. (246674 lines)
 	Version 19.20:    Sep 29, 2019	Code refactoring in games and matches. (246631 lines)
 					14 changes necessary in database:

@@ -39,6 +39,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_ID.h"
+#include "swad_match.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
@@ -91,11 +92,12 @@ typedef enum
    Enr_REMOVE_USR,
   } Enr_ReqDelOrDelUsr_t;
 
+/* Remove important user production (works and match results)? */
 typedef enum
   {
-   Enr_DO_NOT_REMOVE_WORKS,
-   Enr_REMOVE_WORKS,
-  } Enr_RemoveUsrWorks_t;
+   Enr_DO_NOT_REMOVE_USR_PRODUCTION,
+   Enr_REMOVE_USR_PRODUCTION,
+  } Enr_RemoveUsrProduction_t;
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -165,8 +167,10 @@ static void Enr_ReqRemOrRemAdm (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr,Hie_Level_t 
 
 static void Enr_ReqAddAdm (Hie_Level_t Scope,long Cod,const char *InsCtrDegName);
 static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat);
-static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *Crs,
-                                          Enr_RemoveUsrWorks_t RemoveUsrWorks,Cns_QuietOrVerbose_t QuietOrVerbose);
+static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
+					  struct Course *Crs,
+                                          Enr_RemoveUsrProduction_t RemoveUsrWorks,
+					  Cns_QuietOrVerbose_t QuietOrVerbose);
 
 static void Enr_AskIfRemAdm (bool ItsMe,Hie_Level_t Scope,
 			     const char *InsCtrDegName);
@@ -1299,14 +1303,16 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 			else        // The teacher has not selected groups
 			  {
 			   Enr_EffectivelyRemUsrFromCrs (&UsrDat,&Gbl.Hierarchy.Crs,
-							 Enr_DO_NOT_REMOVE_WORKS,Cns_QUIET);        // Remove user from the course
+							 Enr_DO_NOT_REMOVE_USR_PRODUCTION,
+							 Cns_QUIET);        // Remove user from the course
 			   NumUsrsRemoved++;
 			  }
 		       }
 		     else        // No groups
 		       {
 			Enr_EffectivelyRemUsrFromCrs (&UsrDat,&Gbl.Hierarchy.Crs,
-						      Enr_DO_NOT_REMOVE_WORKS,Cns_QUIET);        // Remove user from the course
+						      Enr_DO_NOT_REMOVE_USR_PRODUCTION,
+						      Cns_QUIET);        // Remove user from the course
 			NumUsrsRemoved++;
 		       }
 		    }
@@ -1925,7 +1931,8 @@ unsigned Enr_RemAllStdsInCrs (struct Course *Crs)
      {
       Gbl.Usrs.Other.UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod;
       Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,Crs,
-				    Enr_REMOVE_WORKS,Cns_QUIET);
+				    Enr_REMOVE_USR_PRODUCTION,
+				    Cns_QUIET);
      }
 
    /***** Free memory for students list *****/
@@ -3459,7 +3466,8 @@ void Enr_RemUsrFromCrs1 (void)
 	{
 	 if (Enr_CheckIfICanRemUsrFromCrs ())
 	    Enr_EffectivelyRemUsrFromCrs (&Gbl.Usrs.Other.UsrDat,&Gbl.Hierarchy.Crs,
-					  Enr_REMOVE_WORKS,Cns_VERBOSE);
+					  Enr_REMOVE_USR_PRODUCTION,
+					  Cns_VERBOSE);
 	 else
 	    Ale_CreateAlertUserNotFoundOrYouDoNotHavePermission ();
 	}
@@ -4099,8 +4107,10 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat)
 /************************ Remove a user from a course ************************/
 /*****************************************************************************/
 
-static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *Crs,
-                                          Enr_RemoveUsrWorks_t RemoveUsrWorks,Cns_QuietOrVerbose_t QuietOrVerbose)
+static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,
+					  struct Course *Crs,
+                                          Enr_RemoveUsrProduction_t RemoveUsrWorks,
+					  Cns_QuietOrVerbose_t QuietOrVerbose)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_course_Y;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
@@ -4116,9 +4126,15 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
       /***** Remove user's status about reading of course information *****/
       Inf_RemoveUsrFromCrsInfoRead (UsrDat->UsrCod,Crs->CrsCod);
 
-      /***** Remove works zone of this user in course *****/
-      if (RemoveUsrWorks == Enr_REMOVE_WORKS)
+      /***** Remove important production of this user in course *****/
+      if (RemoveUsrWorks == Enr_REMOVE_USR_PRODUCTION)
+	{
+	 /* Remove works zone in course */
          Brw_RemoveUsrWorksInCrs (UsrDat,Crs);
+
+         /* Remove user's matches in course */
+         Mch_RemoveUsrFromMatchTablesInCrs (UsrDat->UsrCod,Crs->CrsCod);
+	}
 
       /***** Remove fields of this user in its course record *****/
       Rec_RemoveFieldsCrsRecordInCrs (UsrDat->UsrCod,Crs);
