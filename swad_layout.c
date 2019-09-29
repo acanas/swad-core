@@ -695,16 +695,16 @@ static void Lay_WriteScriptInit (void)
       case ActRemSocComGbl:
 	 RefreshNewTimeline = true;
 	 break;
-      case ActPlyMchStd:
+      case ActJoiMch:
       case ActAnsMchQstStd:
 	 RefreshMatchStd = true;
 	 break;
-      case ActNewMchTch:
-      case ActResMchTch:
-      case ActPauMchTch:
-      case ActPlyMchTch:
-      case ActBckMchTch:
-      case ActFwdMchTch:
+      case ActNewMch:
+      case ActResMch:
+      case ActBckMch:
+      case ActPlyMch:
+      case ActPauMch:
+      case ActFwdMch:
       case ActChgVisResMchQst:
 	 RefreshMatchTch = true;
 	 break;
@@ -823,7 +823,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 		  Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
 	 break;
       /* Parameters related with match refreshing (for students) */
-      case ActPlyMchStd:
+      case ActJoiMch:
       case ActAnsMchQstStd:
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActMch = \"act=%ld\";\n"
 			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
@@ -831,12 +831,12 @@ static void Lay_WriteScriptParamsAJAX (void)
 		  Gbl.Games.MchCodBeingPlayed);
 	 break;
       /* Parameters related with match refreshing (for teachers) */
-      case ActNewMchTch:
-      case ActResMchTch:
-      case ActPauMchTch:
-      case ActPlyMchTch:
-      case ActBckMchTch:
-      case ActFwdMchTch:
+      case ActNewMch:
+      case ActResMch:
+      case ActBckMch:
+      case ActPlyMch:
+      case ActPauMch:
+      case ActFwdMch:
       case ActChgVisResMchQst:
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActMch = \"act=%ld\";\n"
 			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",

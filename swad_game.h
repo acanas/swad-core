@@ -119,7 +119,7 @@ void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);
 
 void Gam_PutButtonNewMatch (long GamCod);
-void Gam_RequestNewMatchTch (void);
+void Gam_RequestNewMatch (void);
 
 unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);
 unsigned Gam_GetNumGames (Hie_Level_t Scope);

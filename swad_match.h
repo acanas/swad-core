@@ -82,8 +82,8 @@ void Mch_GetDataOfMatchByCod (struct Match *Match);
 
 void Mch_ToggleVisibilResultsMchUsr (void);
 
-void Mch_RequestRemoveMatchTch (void);
-void Mch_RemoveMatchTch (void);
+void Mch_RequestRemoveMatch (void);
+void Mch_RemoveMatch (void);
 
 void Mch_RemoveMatchesInGameFromAllTables (long GamCod);
 void Mch_RemoveMatchInCourseFromAllTables (long CrsCod);
@@ -92,31 +92,31 @@ void Mch_PutParamMchCod (long MchCod);
 long Mch_GetParamMchCod (void);
 
 void Mch_CreateNewMatchTch (void);
-void Mch_RequestStartResumeMatchTch (void);
+void Mch_ResumeMatch (void);
 void Mch_GetIndexes (long MchCod,unsigned QstInd,
 		     unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION]);
 
 void Mch_RemoveGroup (long GrpCod);
 void Mch_RemoveGroupsOfType (long GrpTypCod);
 
-void Mch_PauseMatchTch (void);
-void Mch_ResumeMatchTch (void);
+void Mch_PauseMatch (void);
+void Mch_PlayMatch (void);
 void Mch_ToggleVisibilResultsMchQst (void);
-void Mch_BackMatchTch (void);
-void Mch_ForwardMatchTch (void);
+void Mch_BackMatch (void);
+void Mch_ForwardMatch (void);
 
 unsigned Mch_GetNumMchsInGame (long GamCod);
 
 bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod);
 
 void Mch_GetMatchBeingPlayed (void);
-void Mch_ShowMatchToMeAsStd (void);
+void Mch_JoinMatchAsStd (void);
 void Mch_RefreshMatchTch (void);
 void Mch_RefreshMatchStd (void);
 
 void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
 		          struct Mch_UsrAnswer *UsrAnswer);
-void Mch_ReceiveQstAnsFromStd (void);
+void Mch_ReceiveQuestionAnswer (void);
 
 void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd,
 					       unsigned NumAnswerersQst,bool Correct);

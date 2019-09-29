@@ -608,31 +608,30 @@ Assessment:
 
         460. ActSeeGam			Show one game
 
-        461. ActReqRemMchTch		Request the removal of a match (by a teacher)
-        462. ActRemMchTch		Confirm the removal of a match (by a teacher)
-        463. ActReqNewMchTch		Put form to create a new match (by a teacher)
-        464. ActNewMchTch		Create a new match showing first question in a new browser tab (by a teacher)
-        465. ActResMchTch		Resume an unfinished match showing current question in a new browser tab (by a teacher)
-        466. ActPauMchTch		Pause current match (by a teacher)
-        467. ActPlyMchTch		Play/resume current match (by a teacher)
-
-        468. ActBckMchTch		Go back when playing a match (by a teacher)
-        469. ActFwdMchTch		Go forward when playing a match (by a teacher)
+        461. ActReqRemMch		Request the removal of a match
+        462. ActRemMch			Confirm the removal of a match
+        463. ActReqNewMch		Put form to create a new match
+        464. ActNewMch			Create a new match showing first question in a new browser tab
+        465. ActResMch			Resume an unfinished match showing current question in a new browser tab
+        466. ActBckMch			Go back when playing a match
+        467. ActPlyMch			Play current match (go from pause to play)
+        468. ActPauMch			Pause current match (go from play to pause)
+        469. ActFwdMch			Go forward when playing a match
+        471. ActChgVisResMchQst		Change visibility of question results when playing a match
         470. ActRefMchTch		Refresh current question when playing a match (as teacher)
 
-        471. ActChgVisResMchQst		Change visibility of question results when playing a match
-        472. ActChgVisResMchUsr		Change visibility of match results (exam with all questions for a student)
-
-        473. ActPlyMchStd		Show current question when playing a game (as student)
-        474. ActRefMchStd		Refresh current question when playing a game (as student)
-        475. ActAnsMchQstStd		Answer a match question (as student)
+        473. ActJoiMch			Show current question when playing a game (as student)
+        474. ActAnsMchQstStd		Answer a match question (as student)
+        475. ActRefMchStd		Refresh current question when playing a game (as student)
 
 	476. ActReqSeeMyMchRes		Select range of dates to see my matches results
 	477. ActSeeMyMchRes		Show my matches results
 	478. ActReqSeeUsrMchRes		Select users and range of dates to see matches results
+
 	479. ActSeeUsrMchRes		Show matches results of several users
 	480. ActSeeOneMchResMe		Show one match result of me as student
 	481. ActSeeOneMchResOth		Show one match result of other user
+        472. ActChgVisResMchUsr		Change visibility of match results for students
 
         482. ActFrmNewGam		Form to create a new game
         483. ActEdiOneGam		Edit one game
@@ -2158,29 +2157,30 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActSeeGam		*/{1650,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_SeeOneGame			,NULL},
 
-   /* ActReqRemMchTch	*/{1783,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_RequestRemoveMatchTch	,NULL},
-   /* ActRemMchTch	*/{1784,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_RemoveMatchTch		,NULL},
-   /* ActReqNewMchTch	*/{1670,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestNewMatchTch		,NULL},
-   /* ActNewMchTch	*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_CreateNewMatchTch		,Mch_RequestStartResumeMatchTch	,NULL},
-   /* ActResMchTch	*/{1785,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_RequestStartResumeMatchTch	,NULL},
-   /* ActPauMchTch	*/{1791,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_PauseMatchTch		,NULL},
-   /* ActPlyMchTch	*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ResumeMatchTch		,NULL},
-   /* ActBckMchTch	*/{1790,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_BackMatchTch		,NULL},
-   /* ActFwdMchTch	*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ForwardMatchTch		,NULL},
-   /* ActRefMchTch	*/{1788,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchTch		,NULL},
+   /* ActReqRemMch	*/{1783,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_RequestRemoveMatch		,NULL},
+   /* ActRemMch		*/{1784,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_RemoveMatch		,NULL},
+   /* ActReqNewMch	*/{1670,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestNewMatch		,NULL},
+   /* ActNewMch		*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_CreateNewMatchTch		,Mch_ResumeMatch		,NULL},
+   /* ActResMch		*/{1785,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_ResumeMatch		,NULL},
+   /* ActBckMch		*/{1790,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_BackMatch			,NULL},
+   /* ActPlyMch		*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_PlayMatch			,NULL},
+   /* ActPauMch		*/{1791,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_PauseMatch			,NULL},
+   /* ActFwdMch		*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ForwardMatch		,NULL},
    /* ActChgVisResMchQst*/{1794,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ToggleVisibilResultsMchQst	,NULL},
-   /* ActChgVisResMchUsr*/{1801,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ToggleVisibilResultsMchUsr	,NULL},
+   /* ActRefMchTch	*/{1788,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchTch		,NULL},
 
-   /* ActPlyMchStd	*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_ShowMatchToMeAsStd		,NULL},
+   /* ActJoiMch		*/{1780,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_JoinMatchAsStd		,NULL},
+   /* ActAnsMchQstStd	*/{1651,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ReceiveQuestionAnswer	,NULL},
    /* ActRefMchStd	*/{1782,-1,TabUnk,ActSeeAllGam		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchStd		,NULL},
-   /* ActAnsMchQstStd	*/{1651,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ReceiveQstAnsFromStd	,NULL},
 
    /* ActReqSeeMyMchRes	*/{1795,-1,TabUnk,ActSeeAllGam		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Mch_SelDatesToSeeMyMchResults	,NULL},
    /* ActSeeMyMchRes	*/{1796,-1,TabUnk,ActSeeAllGam		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ShowMyMchResults		,NULL},
    /* ActSeeOneMchResMe	*/{1797,-1,TabUnk,ActSeeAllGam		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ShowOneMchResult		,NULL},
+
    /* ActReqSeeUsrMchRes*/{1798,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,Dat_SetIniEndDates		,Mch_SelUsrsToViewUsrsMchResults,NULL},
    /* ActSeeUsrMchRes	*/{1799,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ShowUsrsMchResults		,NULL},
    /* ActSeeOneMchResOth*/{1800,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ShowOneMchResult		,NULL},
+   /* ActChgVisResMchUsr*/{1801,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Mch_ToggleVisibilResultsMchUsr	,NULL},
 
    /* ActFrmNewGam	*/{1652,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
    /* ActEdiOneGam	*/{1653,-1,TabUnk,ActSeeAllGam		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Gam_RequestCreatOrEditGame	,NULL},
@@ -4900,9 +4900,9 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActAddTstQstToGam,	// #1667
 	ActUp_GamQst,		// #1668
 	ActDwnGamQst,		// #1669
-	ActReqNewMchTch,	// #1670
-	ActNewMchTch,		// #1671
-	ActFwdMchTch,		// #1672
+	ActReqNewMch,	// #1670
+	ActNewMch,		// #1671
+	ActFwdMch,		// #1672
 	-1,			// #1673 (obsolete action)
 	ActSeePrj,		// #1674
 	ActFrmNewPrj,		// #1675
@@ -5010,18 +5010,18 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActLckAllPrj,		// #1777
 	ActUnlAllPrj,		// #1778
 	-1,			// #1779 (obsolete action)
-	ActPlyMchStd,		// #1780
+	ActJoiMch,		// #1780
 	-1,			// #1781 (obsolete action)
 	ActRefMchStd,		// #1782
-        ActReqRemMchTch,	// #1783
-        ActRemMchTch,		// #1784
-	ActResMchTch,		// #1785
+        ActReqRemMch,		// #1783
+        ActRemMch,		// #1784
+	ActResMch,		// #1785
 	-1,			// #1786 (obsolete action)
 	ActCreMyAcc,		// #1787
 	ActRefMchTch,		// #1788
-	ActPlyMchTch,		// #1789
-	ActBckMchTch,		// #1790
-	ActPauMchTch,		// #1791
+	ActPlyMch,		// #1789
+	ActBckMch,		// #1790
+	ActPauMch,		// #1791
 	-1,			// #1792 (obsolete action)
 	-1,			// #1793 (obsolete action)
 	ActChgVisResMchQst,	// #1794

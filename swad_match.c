@@ -366,7 +366,7 @@ static void Mch_PutIconToPlayNewMatch (void)
    extern const char *Txt_New_match;
 
    /***** Put form to create a new match *****/
-   Ico_PutContextualIconToAdd (ActReqNewMchTch,Mch_NEW_MATCH_SECTION_ID,Gam_PutParams,
+   Ico_PutContextualIconToAdd (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID,Gam_PutParams,
 			       Txt_New_match);
   }
 
@@ -515,7 +515,7 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
 
    /***** Put icon to remove the match *****/
    Mch_CurrentMchCod = Match->MchCod;
-   Frm_StartForm (ActReqRemMchTch);
+   Frm_StartForm (ActReqRemMch);
    Mch_PutParams ();
    Ico_PutIconRemove ();
    Frm_EndForm ();
@@ -685,7 +685,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
 	   {
 	    /* Icon to play as student */
 	    Mch_CurrentMchCod = Match->MchCod;
-	    Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
+	    Lay_PutContextualLinkOnlyIcon (ActJoiMch,NULL,
 					   Mch_PutParams,
 					   Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
 											    "flag-checkered.svg",
@@ -697,7 +697,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
       case Rol_SYS_ADM:
 	 /* Icon to resume */
 	 Mch_CurrentMchCod = Match->MchCod;
-	 Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
+	 Lay_PutContextualLinkOnlyIcon (ActResMch,NULL,
 					Mch_PutParams,
 					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
 											 "flag-checkered.svg",
@@ -887,7 +887,7 @@ static Mch_Showing_t Mch_GetShowingFromStr (const char *Str)
 /************** Request the removal of a match (game instance) ***************/
 /*****************************************************************************/
 
-void Mch_RequestRemoveMatchTch (void)
+void Mch_RequestRemoveMatch (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_match_X;
    extern const char *Txt_Remove_match;
@@ -903,7 +903,7 @@ void Mch_RequestRemoveMatchTch (void)
 
    /***** Show question and button to remove question *****/
    Mch_CurrentMchCod = Match.MchCod;
-   Ale_ShowAlertAndButton (ActRemMchTch,NULL,NULL,Mch_PutParams,
+   Ale_ShowAlertAndButton (ActRemMch,NULL,NULL,Mch_PutParams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_match,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_match_X,
 	                   Match.Title);
@@ -919,7 +919,7 @@ void Mch_RequestRemoveMatchTch (void)
 /********************** Remove a match (game instance) ***********************/
 /*****************************************************************************/
 
-void Mch_RemoveMatchTch (void)
+void Mch_RemoveMatch (void)
   {
    extern const char *Txt_Match_X_removed;
    struct Match Match;
@@ -1114,7 +1114,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    Lay_StartSection (Mch_NEW_MATCH_SECTION_ID);
 
    /***** Start form *****/
-   Frm_StartForm (ActNewMchTch);
+   Frm_StartForm (ActNewMch);
    Gam_PutParamGameCod (Game->GamCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
 
@@ -1252,7 +1252,7 @@ void Mch_CreateNewMatchTch (void)
 /******* Show button to actually start / resume a match (by a teacher) *******/
 /*****************************************************************************/
 
-void Mch_RequestStartResumeMatchTch (void)
+void Mch_ResumeMatch (void)
   {
    struct Match Match;
 
@@ -1666,7 +1666,7 @@ static void Mch_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
 /********************* Pause current match (by a teacher) ********************/
 /*****************************************************************************/
 
-void Mch_PauseMatchTch (void)
+void Mch_PauseMatch (void)
   {
    struct Match Match;
 
@@ -1694,7 +1694,7 @@ void Mch_PauseMatchTch (void)
 /** Show current match status (current question, answers...) (by a teacher) **/
 /*****************************************************************************/
 
-void Mch_ResumeMatchTch (void)
+void Mch_PlayMatch (void)
   {
    struct Match Match;
 
@@ -1758,7 +1758,7 @@ void Mch_ToggleVisibilResultsMchQst (void)
 /************* Show previous question in a match (by a teacher) **************/
 /*****************************************************************************/
 
-void Mch_BackMatchTch (void)
+void Mch_BackMatch (void)
   {
    struct Match Match;
 
@@ -1786,7 +1786,7 @@ void Mch_BackMatchTch (void)
 /*************** Show next question in a match (by a teacher) ****************/
 /*****************************************************************************/
 
-void Mch_ForwardMatchTch (void)
+void Mch_ForwardMatch (void)
   {
    struct Match Match;
 
@@ -2126,21 +2126,23 @@ static void Mch_ShowRightColumnStd (struct Match *Match)
    Mch_ShowMatchTitle (Match);
 
    /***** Bottom row *****/
-   if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
+   if (Match->Status.Playing)
      {
-      fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");
+      if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");
 
-      /***** Update players ******/
-      Mch_RegisterMeAsPlayerInMatch (Match->MchCod);
+	 /***** Update players ******/
+	 Mch_RegisterMeAsPlayerInMatch (Match->MchCod);
 
-      if (Match->Status.Playing)
 	 /* Show current question and possible answers */
 	 Mch_ShowQuestionAndAnswersStd (Match);
-      else	// Not being played
-	 Mch_ShowWaitImage (Txt_Please_wait_);
 
-      fprintf (Gbl.F.Out,"</div>");
+	 fprintf (Gbl.F.Out,"</div>");
+	}
      }
+   else	// Not being played
+      Mch_ShowWaitImage (Txt_Please_wait_);
 
    /***** End right container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -2188,7 +2190,7 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
       Mch_PutBigButtonClose ();
    else
       /* Put button to go back */
-      Mch_PutBigButton (ActBckMchTch,Match->MchCod,
+      Mch_PutBigButton (ActBckMch,Match->MchCod,
 			Mch_ICON_PREVIOUS,Txt_Go_back);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2196,14 +2198,14 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CENTER_CONTAINER\">");
    if (Match->Status.Playing)					// Being played
       /* Put button to pause match */
-      Mch_PutBigButton (ActPauMchTch,
+      Mch_PutBigButton (ActPauMch,
 			Match->MchCod,
 			Mch_ICON_PAUSE,Txt_Pause);
    else								// Paused
      {
       if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Not finished
 	 /* Put button to play match */
-	 Mch_PutBigButton (ActPlyMchTch,
+	 Mch_PutBigButton (ActPlyMch,
 			   Match->MchCod,
 			   Mch_ICON_PLAY,Match->Status.QstInd == 0 ? Txt_Start :
 								     Txt_Resume);
@@ -2220,7 +2222,7 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
       Mch_PutBigButtonClose ();
    else
       /* Put button to show answers */
-      Mch_PutBigButton (ActFwdMchTch,Match->MchCod,
+      Mch_PutBigButton (ActFwdMch,Match->MchCod,
 			Mch_ICON_NEXT,Txt_Go_forward);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2635,7 +2637,7 @@ void Mch_GetMatchBeingPlayed (void)
 /********* Show game being played to me as student in a new window ***********/
 /*****************************************************************************/
 
-void Mch_ShowMatchToMeAsStd (void)
+void Mch_JoinMatchAsStd (void)
   {
    struct Match Match;
 
@@ -2751,7 +2753,7 @@ void Mch_GetQstAnsFromDB (long MchCod,long UsrCod,unsigned QstInd,
 /********* Receive question answer from student when playing a match *********/
 /*****************************************************************************/
 
-void Mch_ReceiveQstAnsFromStd (void)
+void Mch_ReceiveQuestionAnswer (void)
   {
    struct Match Match;
    unsigned QstInd;

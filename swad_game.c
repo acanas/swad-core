@@ -2207,7 +2207,7 @@ void Gam_PutButtonNewMatch (long GamCod)
    extern const char *Txt_New_match;
 
    Gam_CurrentGamCod = GamCod;
-   Frm_StartFormAnchor (ActReqNewMchTch,Mch_NEW_MATCH_SECTION_ID);
+   Frm_StartFormAnchor (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID);
    Gam_PutParams ();
    Btn_PutConfirmButton (Txt_New_match);
    Frm_EndForm ();
@@ -2217,7 +2217,7 @@ void Gam_PutButtonNewMatch (long GamCod)
 /************* Request the creation of a new match as a teacher **************/
 /*****************************************************************************/
 
-void Gam_RequestNewMatchTch (void)
+void Gam_RequestNewMatch (void)
   {
    long GamCod;
 

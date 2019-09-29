@@ -471,10 +471,28 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.19.5 (2019-09-29)"
+#define Log_PLATFORM_VERSION	"SWAD 19.20 (2019-09-29)"
 #define CSS_FILE		"swad19.15.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.20:    Sep 29, 2019	Code refactoring in games and matches. (246631 lines)
+					14 changes necessary in database:
+UPDATE actions SET Txt='Solicitar eliminaci&oacute;n partida' WHERE ActCod='1783' AND Language='es';
+UPDATE actions SET Txt='Eliminar partida' WHERE ActCod='1784' AND Language='es';
+UPDATE actions SET Txt='Solicitar nueva partida' WHERE ActCod='1670' AND Language='es';
+UPDATE actions SET Txt='Crear nueva partida' WHERE ActCod='1671' AND Language='es';
+UPDATE actions SET Txt='Reanudar partida' WHERE ActCod='1785' AND Language='es';
+UPDATE actions SET Txt='Ir hacia atr&aacute;s en partida' WHERE ActCod='1790' AND Language='es';
+UPDATE actions SET Txt='Jugar partida' WHERE ActCod='1789' AND Language='es';
+UPDATE actions SET Txt='Pausar partida' WHERE ActCod='1791' AND Language='es';
+UPDATE actions SET Txt='Ir hacia delante en partida' WHERE ActCod='1672' AND Language='es';
+UPDATE actions SET Txt='Cambiar presentaci&oacute;n de resultados de pregunta en partida' WHERE ActCod='1794' AND Language='es';
+UPDATE actions SET Txt='Refrescar partida (como profesor)' WHERE ActCod='1788' AND Language='es';
+UPDATE actions SET Txt='Unirse a partida' WHERE ActCod='1780' AND Language='es';
+UPDATE actions SET Txt='Responder pregunta en partida' WHERE ActCod='1651' AND Language='es';
+UPDATE actions SET Txt='Refrescar partida (como estudiante)' WHERE ActCod='1782' AND Language='es';
+
+	Version 19.19.6:  Sep 29, 2019	Changes in behaviour of match playing for students. (? lines)
 	Version 19.19.5:  Sep 29, 2019	Code refactoring in games. (246612 lines)
 	Version 19.19.4:  Sep 29, 2019	Code refactoring in games. (246638 lines)
 	Version 19.19.3:  Sep 29, 2019	Students will not see matches results for groups to which they don't belong. (246645 lines)
