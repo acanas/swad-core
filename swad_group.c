@@ -4997,7 +4997,7 @@ void Grp_PutParamWhichGrps (void)
 
 void Grp_PutParamWhichGrpsOnlyMyGrps (void)
   {
-   Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) Grp_ONLY_MY_GROUPS);
+   Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) Grp_MY_GROUPS);
   }
 
 void Grp_PutParamWhichGrpsAllGrps (void)
@@ -5014,24 +5014,29 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) (void))
    extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;
 
+   /***** Start setting selector *****/
    Set_StartOneSettingSelector ();
-   for (WhichGrps = Grp_ONLY_MY_GROUPS;
+
+   /***** Put icons to select which groups *****/
+   for (WhichGrps  = Grp_MY_GROUPS;
 	WhichGrps <= Grp_ALL_GROUPS;
 	WhichGrps++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	       WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
-							    "PREF_OFF");
+						     "PREF_OFF");
       Frm_StartForm (Action);
       Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) WhichGrps);
       if (FuncParams)	// Extra parameters depending on the action
 	 FuncParams ();
-      Ico_PutSettingIconLink (WhichGrps == Grp_ONLY_MY_GROUPS ? "mysitemap.png" :
+      Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
 		                                             "sitemap.svg",
 			   Txt_GROUP_WHICH_GROUPS[WhichGrps]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
+
+   /***** End setting selector *****/
    Set_EndOneSettingSelector ();
   }
 
@@ -5050,31 +5055,37 @@ void Grp_GetParamWhichGrps (void)
       /* Set default */
       switch (Gbl.Action.Act)
 	{
-	 case ActSeeCrsTT:
-	 case ActPrnCrsTT:
-	 case ActChgCrsTT1stDay:
-	 case ActSeeAsg:
-	 case ActSeeAllSvy:
-	 case ActSeeAtt:
-	    WhichGroupsDefault = Gbl.Usrs.Me.IBelongToCurrentCrs ? Grp_ONLY_MY_GROUPS :	// If I belong to this course ==> see only my groups
-							           Grp_ALL_GROUPS;	// If I don't belong to this course ==> see all groups
+	 case ActSeeCrsTT:	// Show course timetable
+	 case ActPrnCrsTT:	// Print course timetable
+	 case ActChgCrsTT1stDay:// Change first day of week in course timetable
+	 case ActSeeAsg:	// List assignments
+	 case ActSeeGam:	// List games
+	 case ActSeeAllSvy:	// List surveys
+	 case ActSeeAtt:	// List attendance
+	    /*
+	    If I belong       to this course ==> see only my groups
+	    If I don't belong to this course ==> see all groups
+	    */
+	    WhichGroupsDefault = Gbl.Usrs.Me.IBelongToCurrentCrs ? Grp_MY_GROUPS :
+							           Grp_ALL_GROUPS;
 	    break;
-	 case ActSeeMyTT:
-	 case ActPrnMyTT:
-	 case ActChgMyTT1stDay:
-	    WhichGroupsDefault = Grp_ONLY_MY_GROUPS;	// By default, see only my groups
+	 case ActSeeMyTT:	// Show my timetable
+	 case ActPrnMyTT:	// Print my timetable
+	 case ActChgMyTT1stDay:	// Change first day of week in my timetable
+	    /* By default, show only my groups */
+	    WhichGroupsDefault = Grp_MY_GROUPS;
 	    break;
-	 default:	// Control never should enter here
+	 default:			// Control never should enter here
 	    WhichGroupsDefault = Grp_WHICH_GROUPS_DEFAULT;
 	    break;
 	}
 
       /* Get parameter */
       Gbl.Crs.Grps.WhichGrps = (Grp_WhichGroups_t)
-	                              Par_GetParToUnsignedLong ("WhichGrps",
-	                                                        0,
-	                                                        Grp_NUM_WHICH_GROUPS - 1,
-	                                                        (unsigned long) WhichGroupsDefault);
+	                       Par_GetParToUnsignedLong ("WhichGrps",
+	                                                 0,
+	                                                 Grp_NUM_WHICH_GROUPS - 1,
+	                                                 (unsigned long) WhichGroupsDefault);
 
       AlreadyGot = true;
      }

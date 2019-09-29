@@ -97,7 +97,8 @@ const char *MatchSecondaryTables[] =
    "mch_indexes",	// indexes associated to matches
    // "mch_matches"	// the matches themselves, this table is treated separately
   };
-#define Mch_NUM_SECONDARY_TABLES	(sizeof (MatchSecondaryTables) / sizeof (MatchSecondaryTables[0]))
+#define Mch_NUM_SECONDARY_TABLES	(sizeof (MatchSecondaryTables) / \
+					 sizeof (MatchSecondaryTables[0]))
 
 /*****************************************************************************/
 /***************************** Private variables *****************************/
@@ -116,7 +117,6 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
                                       MYSQL_RES *mysql_res);
 static void Mch_ListOneOrMoreMatchesHeading (void);
 static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match);
-static void Mch_ListOneOrMoreMatchesNumMatch (unsigned NumMatch);
 static void Mch_ListOneOrMoreMatchesAuthor (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned UniqueId);
 static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match);
@@ -134,9 +134,7 @@ static void Mch_RemoveMatchFromTable (long MchCod,const char *TableName);
 static void Mch_RemoveMatchesInGameFromTable (long GamCod,const char *TableName);
 static void Mch_RemoveMatchInCourseFromTable (long CrsCod,const char *TableName);
 
-static void Mch_PutParamCurrentMchCod (void);
-
-static void Mch_PutButtonNewMatch (long GamCod);
+static void Mch_PutParams (void);
 
 static void Mch_PutFormNewMatch (struct Game *Game);
 static void Mch_ShowLstGrpsToCreateMatch (void);
@@ -220,7 +218,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 
    /***** Get data of matches from database *****/
    /* Fill subquery for game */
-   if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
+   if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
      {
       if (asprintf (&SubQuery," AND"
 			      "(MchCod NOT IN"
@@ -265,6 +263,14 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
    Box_StartBox (NULL,Txt_Matches,Mch_PutIconToPlayNewMatch,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
+   /***** Select whether show only my groups or all groups *****/
+   if (Gbl.Crs.Grps.NumGrps)
+     {
+      Set_StartSettingsHead ();
+      Grp_ShowFormToSelWhichGrps (ActSeeGam,Gam_PutParams);
+      Set_EndSettingsHead ();
+     }
+
    if (NumMatches)
       /***** Show the table with the matches *****/
       Mch_ListOneOrMoreMatches (Game,NumMatches,mysql_res);
@@ -281,7 +287,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 	 if (PutFormNewMatch)
 	    Mch_PutFormNewMatch (Game);			// Form to fill in data and start playing a new match
 	 else
-	    Mch_PutButtonNewMatch (Game->GamCod);	// Button to create a new match
+	    Gam_PutButtonNewMatch (Game->GamCod);	// Button to create a new match
 	 break;
       default:
 	 break;
@@ -350,14 +356,14 @@ void Mch_GetDataOfMatchByCod (struct Match *Match)
   }
 
 /*****************************************************************************/
-/***************** Put icon to add a new questions to game *******************/
+/********************* Put icon to create a new match ************************/
 /*****************************************************************************/
 
 static void Mch_PutIconToPlayNewMatch (void)
   {
    extern const char *Txt_New_match;
 
-   /***** Put form to create a new question *****/
+   /***** Put form to create a new match *****/
    Ico_PutContextualIconToAdd (ActReqNewMchTch,Mch_NEW_MATCH_SECTION_ID,Gam_PutParams,
 			       Txt_New_match);
   }
@@ -394,9 +400,6 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
       /* Icons */
       Mch_ListOneOrMoreMatchesIcons (&Match);
 
-      /* Number of match **/
-      Mch_ListOneOrMoreMatchesNumMatch (NumMatch);
-
       /* Match player */
       Mch_ListOneOrMoreMatchesAuthor (&Match);
 
@@ -428,7 +431,6 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
 
 static void Mch_ListOneOrMoreMatchesHeading (void)
   {
-   extern const char *Txt_No_INDEX;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Match;
@@ -438,9 +440,6 @@ static void Mch_ListOneOrMoreMatchesHeading (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
-                      "<th class=\"RIGHT_TOP\">"
-                      "%s"
-                      "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
@@ -463,7 +462,6 @@ static void Mch_ListOneOrMoreMatchesHeading (void)
                       "%s"
                       "</th>"
                       "</tr>",
-            Txt_No_INDEX,
             Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
 	    Txt_START_END_TIME[Gam_ORDER_BY_START_DATE],
 	    Txt_START_END_TIME[Gam_ORDER_BY_END_DATE],
@@ -481,23 +479,14 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
   {
    fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
-   /* Put icon to remove the match */
+   /***** Put icon to remove the match *****/
+   Mch_CurrentMchCod = Match->MchCod;
    Frm_StartForm (ActReqRemMchTch);
-   Mch_PutParamMchCod (Match->MchCod);
+   Mch_PutParams ();
    Ico_PutIconRemove ();
    Frm_EndForm ();
 
    fprintf (Gbl.F.Out,"</td>");
-  }
-
-/*****************************************************************************/
-/********************* Put a column for number of match **********************/
-/*****************************************************************************/
-
-static void Mch_ListOneOrMoreMatchesNumMatch (unsigned NumMatch)
-  {
-   fprintf (Gbl.F.Out,"<td class=\"BIG_INDEX RIGHT_TOP COLOR%u\">%u</td>",
-	    Gbl.RowEvenOdd,NumMatch + 1);
   }
 
 /*****************************************************************************/
@@ -660,7 +649,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
 	 /* Icon to play as student */
 	 Mch_CurrentMchCod = Match->MchCod;
 	 Lay_PutContextualLinkOnlyIcon (ActPlyMchStd,NULL,
-					Mch_PutParamCurrentMchCod,
+					Mch_PutParams,
 					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
 											 "flag-checkered.svg",
 					Txt_Play);
@@ -674,7 +663,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
 	 /* Icon to resume */
 	 Mch_CurrentMchCod = Match->MchCod;
 	 Lay_PutContextualLinkOnlyIcon (ActResMchTch,NULL,
-					Mch_PutParamCurrentMchCod,
+					Mch_PutParams,
 					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
 											 "flag-checkered.svg",
 					Txt_Resume);
@@ -721,7 +710,7 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match)
 	 /* Match result visible or hidden? */
 	 Mch_CurrentMchCod = Match->MchCod;
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
-					Mch_PutParamCurrentMchCod,
+					Mch_PutParams,
 					Match->Status.ShowUsrResults ? "eye.svg" :
 							               "eye-slash.svg",
 					Match->Status.ShowUsrResults ? Txt_Visible_result :
@@ -878,7 +867,7 @@ void Mch_RequestRemoveMatchTch (void)
 
    /***** Show question and button to remove question *****/
    Mch_CurrentMchCod = Match.MchCod;
-   Ale_ShowAlertAndButton (ActRemMchTch,NULL,NULL,Mch_PutParamCurrentMchCod,
+   Ale_ShowAlertAndButton (ActRemMchTch,NULL,NULL,Mch_PutParams,
 			   Btn_REMOVE_BUTTON,Txt_Remove_match,
 			   Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_match_X,
 	                   Match.Title);
@@ -1044,13 +1033,14 @@ static void Mch_RemoveMatchInCourseFromTable (long CrsCod,const char *TableName)
   }
 
 /*****************************************************************************/
-/***************** Put parameter with current match code *********************/
+/*********************** Params used to edit a match *************************/
 /*****************************************************************************/
 
-static void Mch_PutParamCurrentMchCod (void)
+static void Mch_PutParams (void)
   {
    if (Mch_CurrentMchCod > 0)
       Mch_PutParamMchCod (Mch_CurrentMchCod);
+   Grp_PutParamWhichGrps ();
   }
 
 /*****************************************************************************/
@@ -1070,20 +1060,6 @@ long Mch_GetParamMchCod (void)
   {
    /***** Get code of match *****/
    return Par_GetParToLong ("MchCod");
-  }
-
-/*****************************************************************************/
-/********************* Put button to create a new match **********************/
-/*****************************************************************************/
-
-static void Mch_PutButtonNewMatch (long GamCod)
-  {
-   extern const char *Txt_New_match;
-
-   Frm_StartFormAnchor (ActReqNewMchTch,Mch_NEW_MATCH_SECTION_ID);
-   Gam_PutParamGameCod (GamCod);
-   Btn_PutConfirmButton (Txt_New_match);
-   Frm_EndForm ();
   }
 
 /*****************************************************************************/

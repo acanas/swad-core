@@ -189,8 +189,7 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res);
 static void Tst_ListOneQstToEdit (void);
 static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
                                                   MYSQL_RES *mysql_res);
-static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
-                                                    unsigned long NumRows,
+static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
                                                     MYSQL_RES *mysql_res);
 
 static void Tst_WriteAnswersTestToAnswer (unsigned NumQst,long QstCod,bool Shuffle);
@@ -1336,7 +1335,7 @@ void Tst_ShowFormAskEditTsts (void)
 /************** Show form select test questions for a game *******************/
 /*****************************************************************************/
 
-void Tst_ShowFormAskSelectTstsForGame (long GamCod)
+void Tst_ShowFormAskSelectTstsForGame (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_No_test_questions;
@@ -1353,7 +1352,7 @@ void Tst_ShowFormAskSelectTstsForGame (long GamCod)
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_StartForm (ActGamLstTstQst);
-      Gam_PutParamGameCod (GamCod);
+      Gam_PutParams ();
 
       Tbl_StartTable (2);
 
@@ -2413,7 +2412,7 @@ void Tst_ListQuestionsToEdit (void)
 /**************** List several test questions for selection ******************/
 /*****************************************************************************/
 
-void Tst_ListQuestionsToSelect (long GamCod)
+void Tst_ListQuestionsToSelect (void)
   {
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
@@ -2423,14 +2422,14 @@ void Tst_ListQuestionsToSelect (long GamCod)
      {
       if ((NumRows = Tst_GetQuestions (&mysql_res)) != 0)	// Query database
 	 /* Show the table with the questions */
-         Tst_ListOneOrMoreQuestionsForSelection (GamCod,NumRows,mysql_res);
+         Tst_ListOneOrMoreQuestionsForSelection (NumRows,mysql_res);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
       /* Show the form again */
-      Tst_ShowFormAskSelectTstsForGame (GamCod);
+      Tst_ShowFormAskSelectTstsForGame ();
 
    /***** Free memory used by the list of tags *****/
    Tst_FreeTagsList ();
@@ -3050,8 +3049,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 /****************** List for edition one or more test questions **************/
 /*****************************************************************************/
 
-static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
-                                                    unsigned long NumRows,
+static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
                                                     MYSQL_RES *mysql_res)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
@@ -3077,7 +3075,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (long GamCod,
 
    /***** Start form *****/
    Frm_StartForm (ActAddTstQstToGam);
-   Gam_PutParamGameCod (GamCod);
+   Gam_PutParams ();
 
    /***** Write the heading *****/
    Tbl_StartTableWideMargin (2);
@@ -7436,7 +7434,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (NULL,
-	                              Grp_ONLY_MY_GROUPS);
+	                              Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);

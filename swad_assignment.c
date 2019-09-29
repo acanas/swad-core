@@ -637,7 +637,7 @@ void Asg_GetListAssignments (void)
       Asg_FreeListAssignments ();
 
    /***** Get list of assignments from database *****/
-   if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
+   if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get assignments",
 	                        "SELECT AsgCod"
 				" FROM assignments"

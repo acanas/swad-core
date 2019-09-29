@@ -148,9 +148,9 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
 void Tst_ShowFormAskEditTsts (void);
-void Tst_ShowFormAskSelectTstsForGame (long GamCod);
+void Tst_ShowFormAskSelectTstsForGame (void);
 void Tst_ListQuestionsToEdit (void);
-void Tst_ListQuestionsToSelect (long GamCod);
+void Tst_ListQuestionsToSelect (void);
 bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
 void Tst_WriteParamEditQst (void);
 unsigned Tst_GetNumAnswersQst (long QstCod);

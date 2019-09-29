@@ -471,11 +471,14 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.18.2 (2019-09-28)"
+#define Log_PLATFORM_VERSION	"SWAD 19.19 (2019-09-29)"
 #define CSS_FILE		"swad19.15.css"
 #define JS_FILE			"swad19.15.js"
 /*
-	Version 19.18.2:  Sep 28, 2019	Code refactoring. (246585 lines)
+	Version 19.19.1:   Sep 29, 2019	Students will not see matches for groups to which they don't belong.
+	Version 19.19:    Sep 29, 2019	Selections of my groups/all groups in listing of matches.
+					Removed column with number of match. (246596 lines)
+	Version 19.18.2:  Sep 28, 2019	Code refactoring related to errors. (246585 lines)
 	Version 19.18.1:  Sep 28, 2019	Students will not see hidden games. (246571 lines)
 	Version 19.18:    Sep 28, 2019	New module swad_match_result for match results. (246540 lines)
 	Version 19.17.3:  Sep 28, 2019	Code refactoring removing matches and games. (246446 lines)

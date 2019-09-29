@@ -127,7 +127,7 @@ struct ListGrpsAlreadySelec
 #define Grp_NUM_WHICH_GROUPS 2
 typedef enum
   {
-   Grp_ONLY_MY_GROUPS,
+   Grp_MY_GROUPS,
    Grp_ALL_GROUPS,
   } Grp_WhichGroups_t;
 #define Grp_WHICH_GROUPS_DEFAULT Grp_ALL_GROUPS

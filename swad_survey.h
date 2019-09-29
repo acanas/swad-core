@@ -91,7 +91,6 @@ void Svy_SeeAllSurveys (void);
 void Svy_SeeOneSurvey (void);
 void Svy_PutHiddenParamSvyOrder (void);
 void Svy_RequestCreatOrEditSvy (void);
-void Svy_GetListSurveys (void);
 void Svy_GetDataOfSurveyByCod (struct Survey *Svy);
 void Svy_GetDataOfSurveyByFolder (struct Survey *Svy);
 void Svy_FreeListSurveys (void);

@@ -99,6 +99,8 @@ static void Gam_WriteAuthor (struct Game *Game);
 
 static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
 					  const char *Anchor);
+
+static long Gam_GetParams (void);
 static void Gam_PutHiddenParamOrder (void);
 static void Gam_GetParamOrder (void);
 
@@ -140,9 +142,7 @@ static bool Gam_GetNumMchsGameAndCheckIfEditable (struct Game *Game);
 void Gam_SeeAllGames (void)
   {
    /***** Get parameters *****/
-   Gam_GetParamOrder ();
-   Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
+   Gam_GetParams ();	// Return value ignored
 
    /***** Show all games *****/
    Gam_ListAllGames ();
@@ -353,12 +353,7 @@ void Gam_SeeOneGame (void)
    struct Game Game;
 
    /***** Get parameters *****/
-   Gam_GetParamOrder ();
-   Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
-
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Show game *****/
@@ -454,9 +449,10 @@ void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"\">");
 
    /* Game title */
+   Gam_CurrentGamCod = GamCod;
    Lay_StartArticle (Anchor);
    Frm_StartForm (ActSeeGam);
-   Gam_PutParamGameCod (GamCod);
+   Gam_PutParams ();
    Frm_LinkFormSubmit (Txt_View_game,
                        Game.Status.Visible ? "ASG_TITLE" :
 	                                     "ASG_TITLE_LIGHT",NULL);
@@ -587,16 +583,31 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
   }
 
 /*****************************************************************************/
-/******************** Params used to edit/play a game ************************/
+/*********************** Params used to edit a game **************************/
 /*****************************************************************************/
 
 void Gam_PutParams (void)
   {
    if (Gam_CurrentGamCod > 0)
       Gam_PutParamGameCod (Gam_CurrentGamCod);
-
    Gam_PutHiddenParamOrder ();
+   Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
+  }
+
+/*****************************************************************************/
+/******************* Get parameters used to edit a game **********************/
+/*****************************************************************************/
+
+static long Gam_GetParams (void)
+  {
+   /***** Get other parameters *****/
+   Gam_GetParamOrder ();
+   Grp_GetParamWhichGrps ();
+   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
+
+   /***** Get game code *****/
+   return Gam_GetParamGameCod ();
   }
 
 /*****************************************************************************/
@@ -927,12 +938,7 @@ void Gam_AskRemGame (void)
    struct Game Game;
 
    /***** Get parameters *****/
-   Gam_GetParamOrder ();
-   Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
-
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get data of the game from database *****/
@@ -1032,8 +1038,8 @@ void Gam_HideGame (void)
   {
    struct Game Game;
 
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get data of the game from database *****/
@@ -1058,8 +1064,8 @@ void Gam_UnhideGame (void)
   {
    struct Game Game;
 
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Get data of the game from database *****/
@@ -1111,12 +1117,7 @@ void Gam_RequestCreatOrEditGame (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
-   Gam_GetParamOrder ();
-   Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
-
-   /***** Get the code of the game *****/
-   Game.GamCod = Gam_GetParamGameCod ();
+   Game.GamCod = Gam_GetParams ();
 
    /***** Check if game has matches *****/
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
@@ -1362,20 +1363,16 @@ void Gam_RequestNewQuestion (void)
   {
    struct Game Game;
 
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
      {
-      /***** Get other parameters *****/
-      Gam_GetParamOrder ();
-      Grp_GetParamWhichGrps ();
-      Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
-
       /***** Show form to create a new question in this game *****/
-      Tst_ShowFormAskSelectTstsForGame (Game.GamCod);
+      Gam_CurrentGamCod = Game.GamCod;
+      Tst_ShowFormAskSelectTstsForGame ();
      }
 
    /***** Show current game *****/
@@ -1393,14 +1390,17 @@ void Gam_ListTstQuestionsToSelect (void)
   {
    struct Game Game;
 
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
    if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
+     {
       /***** List several test questions for selection *****/
-      Tst_ListQuestionsToSelect (Game.GamCod);
+      Gam_CurrentGamCod = Game.GamCod;
+      Tst_ListQuestionsToSelect ();
+     }
   }
 
 /*****************************************************************************/
@@ -1713,8 +1713,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
       /* Put icon to remove the question */
+      Gam_CurrentGamCod = GamCod;
       Frm_StartForm (ActReqRemGamQst);
-      Gam_PutParamGameCod (GamCod);
+      Gam_PutParams ();
       Gam_PutParamQstInd (QstInd);
       Ico_PutIconRemove ();
       Frm_EndForm ();
@@ -1846,8 +1847,8 @@ void Gam_AddTstQuestionsToGame (void)
    long QstCod;
    unsigned MaxQstInd;
 
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
@@ -1957,7 +1958,7 @@ static unsigned Gam_CountNumQuestionsInList (void)
 
 static void Gam_PutParamsOneQst (void)
   {
-   Gam_PutParamGameCod (Gam_CurrentGamCod);
+   Gam_PutParams ();
    Gam_PutParamQstInd (Gam_CurrentQstInd);
   }
 
@@ -1972,8 +1973,8 @@ void Gam_RequestRemoveQst (void)
    struct Game Game;
    unsigned QstInd;
 
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
@@ -2008,8 +2009,8 @@ void Gam_RemoveQst (void)
    struct Game Game;
    unsigned QstInd;
 
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
@@ -2066,8 +2067,8 @@ void Gam_MoveUpQst (void)
    unsigned QstIndTop;
    unsigned QstIndBottom;
 
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
@@ -2115,8 +2116,8 @@ void Gam_MoveDownQst (void)
    unsigned QstIndBottom;
    unsigned MaxQstInd;	// 0 if no questions
 
-   /***** Get game code *****/
-   if ((Game.GamCod = Gam_GetParamGameCod ()) == -1L)
+   /***** Get parameters *****/
+   if ((Game.GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Check if game has matches *****/
@@ -2231,6 +2232,21 @@ static bool Gam_GetNumMchsGameAndCheckIfEditable (struct Game *Game)
   }
 
 /*****************************************************************************/
+/********************* Put button to create a new match **********************/
+/*****************************************************************************/
+
+void Gam_PutButtonNewMatch (long GamCod)
+  {
+   extern const char *Txt_New_match;
+
+   Gam_CurrentGamCod = GamCod;
+   Frm_StartFormAnchor (ActReqNewMchTch,Mch_NEW_MATCH_SECTION_ID);
+   Gam_PutParams ();
+   Btn_PutConfirmButton (Txt_New_match);
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
 /************* Request the creation of a new match as a teacher **************/
 /*****************************************************************************/
 
@@ -2239,12 +2255,7 @@ void Gam_RequestNewMatchTch (void)
    long GamCod;
 
    /***** Get parameters *****/
-   Gam_GetParamOrder ();
-   Grp_GetParamWhichGrps ();
-   Gbl.Games.CurrentPage = Pag_GetParamPagNum (Pag_GAMES);
-
-   /***** Get game code *****/
-   if ((GamCod = Gam_GetParamGameCod ()) == -1L)
+   if ((GamCod = Gam_GetParams ()) == -1L)
       Lay_ShowErrorAndExit ("Code of game is missing.");
 
    /***** Show game *****/

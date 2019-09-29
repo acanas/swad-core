@@ -242,7 +242,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	{
 	 /***** Form to select groups *****/
 	 Grp_ShowFormToSelectSeveralGroups (Msg_PutParamsWriteMsg,
-	                                    Grp_ONLY_MY_GROUPS);
+	                                    Grp_MY_GROUPS);
 
 	 /***** Start section with user list *****/
          Lay_StartSection (Usr_USER_LIST_SECTION_ID);

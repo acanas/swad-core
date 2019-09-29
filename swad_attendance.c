@@ -628,7 +628,7 @@ static void Att_GetListAttEvents (Att_OrderNewestOldest_t OrderNewestOldest)
       Att_FreeListAttEvents ();
 
    /***** Get list of attendance events from database *****/
-   if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
+   if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
       NumRows = DB_QuerySELECT (&mysql_res,"can not get attendance events",
 				"SELECT AttCod"
 				" FROM att_events"
@@ -1943,7 +1943,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (Att_PutParamSelectedAttCod,
-	                              Grp_ONLY_MY_GROUPS);
+	                              Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);

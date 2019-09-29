@@ -234,7 +234,7 @@ static void TT_ShowTimeTableGrpsSelected (void)
    fprintf (Gbl.F.Out,"<div class=\"CLASSPHOTO_TITLE CENTER_MIDDLE\">");
    switch (Gbl.Crs.Grps.WhichGrps)
      {
-      case Grp_ONLY_MY_GROUPS:
+      case Grp_MY_GROUPS:
         fprintf (Gbl.F.Out,Txt_Groups_OF_A_USER,
                  Gbl.Usrs.Me.UsrDat.FullName);
         break;
@@ -683,7 +683,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
       case TT_MY_TIMETABLE:
          switch (Gbl.Crs.Grps.WhichGrps)
            {
-            case Grp_ONLY_MY_GROUPS:
+            case Grp_MY_GROUPS:
                NumRows = DB_QuerySELECT (&mysql_res,"can not get timetable",
 					 "SELECT timetable_crs.Weekday,"
 					        "TIME_TO_SEC(timetable_crs.StartTime) AS S,"

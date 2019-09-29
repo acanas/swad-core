@@ -113,6 +113,8 @@ static void Svy_PutFormsToRemEditOneSvy (const struct Survey *Svy,
                                          const char *Anchor);
 static void Svy_PutParams (void);
 
+static void Svy_GetListSurveys (void);
+
 static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
                                            unsigned *HiddenAllowed);
 
@@ -847,7 +849,7 @@ static void Svy_PutParams (void)
 /*********************** Get list of all the surveys *************************/
 /*****************************************************************************/
 
-void Svy_GetListSurveys (void)
+static void Svy_GetListSurveys (void)
   {
    char *SubQuery[Hie_NUM_LEVELS];
    static const char *OrderBySubQuery[Svy_NUM_ORDERS] =
@@ -904,7 +906,7 @@ void Svy_GetListSurveys (void)
    /* Fill subquery for course */
    if (ScopesAllowed & 1 << Hie_CRS)
      {
-      if (Gbl.Crs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
+      if (Gbl.Crs.Grps.WhichGrps == Grp_MY_GROUPS)
         {
 	 if (asprintf (&SubQuery[Hie_CRS],"%s("
 						"Scope='%s' AND Cod=%ld%s"
@@ -1695,6 +1697,11 @@ void Svy_HideSurvey (void)
    /***** Initialize question to zero *****/
    Svy_InitQst (&SvyQst);
 
+   /***** Get parameters *****/
+   Svy_GetParamSvyOrder ();
+   Grp_GetParamWhichGrps ();
+   Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
+
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of survey is missing.");
@@ -1724,6 +1731,11 @@ void Svy_UnhideSurvey (void)
 
    /***** Initialize question to zero *****/
    Svy_InitQst (&SvyQst);
+
+   /***** Get parameters *****/
+   Svy_GetParamSvyOrder ();
+   Grp_GetParamWhichGrps ();
+   Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)

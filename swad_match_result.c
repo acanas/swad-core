@@ -194,7 +194,7 @@ void Mch_SelUsrsToViewUsrsMchResults (void)
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (NULL,
-	                              Grp_ONLY_MY_GROUPS);
+	                              Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);

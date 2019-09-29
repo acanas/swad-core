@@ -83,7 +83,9 @@ void Gam_ShowOneGame (long GamCod,
                       bool PutFormNewMatch);
 void Gam_PutHiddenParamGameOrder (void);
 void Gam_RequestCreatOrEditGame (void);
+
 void Gam_PutParams (void);
+
 void Gam_GetListGames (void);
 void Gam_GetDataOfGameByCod (struct Game *Gam);
 void Gam_GetDataOfGameByFolder (struct Game *Gam);
@@ -121,6 +123,7 @@ void Gam_RemoveQst (void);
 void Gam_MoveUpQst (void);
 void Gam_MoveDownQst (void);
 
+void Gam_PutButtonNewMatch (long GamCod);
 void Gam_RequestNewMatchTch (void);
 
 unsigned Gam_GetNumCoursesWithGames (Hie_Level_t Scope);
