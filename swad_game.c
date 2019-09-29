@@ -32,19 +32,14 @@
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
-#include "swad_alert.h"
-#include "swad_box.h"
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_game.h"
 #include "swad_global.h"
-#include "swad_group.h"
 #include "swad_match.h"
 #include "swad_match_result.h"
 #include "swad_pagination.h"
-#include "swad_parameter.h"
 #include "swad_role.h"
-#include "swad_setting.h"
 #include "swad_table.h"
 #include "swad_test.h"
 
