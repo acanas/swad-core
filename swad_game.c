@@ -164,12 +164,12 @@ static void Gam_ListAllGames (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         Mch_PutFormToViewMchResults (ActReqSeeMyMchRes);
+         McR_PutFormToViewMchResults (ActReqSeeMyMchRes);
          break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-         Mch_PutFormToViewMchResults (ActReqSeeUsrMchRes);
+         McR_PutFormToViewMchResults (ActReqSeeUsrMchRes);
 	 break;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:

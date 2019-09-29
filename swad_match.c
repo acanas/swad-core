@@ -2898,7 +2898,7 @@ void Mch_ReceiveQuestionAnswer (void)
 			  UsrAnswer.AnsInd);
 
       /***** Update student's match result *****/
-      Mch_GetMatchResultQuestionsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+      McR_GetMatchResultQuestionsFromDB (Match.MchCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 					 &NumQsts,&NumQstsNotBlank);
       TotalScore = Mch_ComputeScore (NumQsts);
 

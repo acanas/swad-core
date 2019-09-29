@@ -474,10 +474,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.24.2 (2019-09-30)"
+#define Log_PLATFORM_VERSION	"SWAD 19.25 (2019-09-30)"
 #define CSS_FILE		"swad19.15.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.25:    Sep 30, 2019	Code refactoring in match results. (246743 lines)
 	Version 19.24.2:  Sep 30, 2019	Code refactoring in games and matches. (246742 lines)
 	Version 19.24.1:  Sep 30, 2019	Fixed bug in match results. (246759 lines)
 	Version 19.24:    Sep 30, 2019	Non-editing teachers can not change visibility of matches created by other teachers.

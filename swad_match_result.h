@@ -35,13 +35,13 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Mch_PutFormToViewMchResults (Act_Action_t Action);
-void Mch_SelDatesToSeeMyMchResults (void);
-void Mch_ShowMyMchResults (void);
-void Mch_SelUsrsToViewUsrsMchResults (void);
-void Mch_ShowUsrsMchResults (void);
-void Mch_ShowOneMchResult (void);
-void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
+void McR_PutFormToViewMchResults (Act_Action_t Action);
+void McR_SelDatesToSeeMyMchResults (void);
+void McR_ShowMyMchResults (void);
+void McR_SelUsrsToViewUsrsMchResults (void);
+void McR_ShowUsrsMchResults (void);
+void McR_ShowOneMchResult (void);
+void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
 					unsigned *NumQsts,unsigned *NumQstsNotBlank);
 
 #endif

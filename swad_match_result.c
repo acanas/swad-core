@@ -69,27 +69,27 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Mch_ShowHeaderMchResults (void);
-static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther);
-static void Mch_ShowMchResultsSummaryRow (bool ShowSummaryResults,
+static void McR_ShowHeaderMchResults (void);
+static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther);
+static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
                                           unsigned NumResults,
                                           unsigned NumTotalQsts,
                                           unsigned NumTotalQstsNotBlank,
                                           double TotalScoreOfAllResults);
-static void Mch_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
+static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             unsigned *NumQsts,
 					    unsigned *NumQstsNotBlank,
 					    double *Score);
 
-static bool Mch_CheckIfICanSeeMatchResult (long MchCod,long UsrCod);
-static bool Mch_GetVisibilityMchResultFromDB (long MchCod);
+static bool McR_CheckIfICanSeeMatchResult (long MchCod,long UsrCod);
+static bool McR_GetVisibilityMchResultFromDB (long MchCod);
 
 /*****************************************************************************/
 /****************** Write a form to go to result of matches ******************/
 /*****************************************************************************/
 
-void Mch_PutFormToViewMchResults (Act_Action_t Action)
+void McR_PutFormToViewMchResults (Act_Action_t Action)
   {
    extern const char *Txt_Results;
 
@@ -104,7 +104,7 @@ void Mch_PutFormToViewMchResults (Act_Action_t Action)
 /****************** Select dates to show my matches results ******************/
 /*****************************************************************************/
 
-void Mch_SelDatesToSeeMyMchResults (void)
+void McR_SelDatesToSeeMyMchResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
@@ -129,7 +129,7 @@ void Mch_SelDatesToSeeMyMchResults (void)
 /*************************** Show my matches results *************************/
 /*****************************************************************************/
 
-void Mch_ShowMyMchResults (void)
+void McR_ShowMyMchResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
@@ -142,11 +142,11 @@ void Mch_ShowMyMchResults (void)
                       Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
 
    /***** Header of the table with the list of users *****/
-   Mch_ShowHeaderMchResults ();
+   McR_ShowHeaderMchResults ();
 
    /***** List my matches results *****/
    Tst_GetConfigTstFromDB ();	// To get feedback type
-   Mch_ShowMchResults (Usr_ME);
+   McR_ShowMchResults (Usr_ME);
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -156,7 +156,7 @@ void Mch_ShowMyMchResults (void)
 /*********** Select users and dates to show their matches results ************/
 /*****************************************************************************/
 
-void Mch_SelUsrsToViewUsrsMchResults (void)
+void McR_SelUsrsToViewUsrsMchResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
@@ -258,7 +258,7 @@ void Mch_SelUsrsToViewUsrsMchResults (void)
 /****************** Show matches results for several users *******************/
 /*****************************************************************************/
 
-void Mch_ShowUsrsMchResults (void)
+void McR_ShowUsrsMchResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Results;
@@ -279,7 +279,7 @@ void Mch_ShowUsrsMchResults (void)
                          Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
 
       /***** Header of the table with the list of users *****/
-      Mch_ShowHeaderMchResults ();
+      McR_ShowHeaderMchResults ();
 
       /***** List the matches results of the selected users *****/
       Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
@@ -291,7 +291,7 @@ void Mch_ShowUsrsMchResults (void)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))               // Get of the database the data of the user
 	    if (Usr_CheckIfICanViewMch (&Gbl.Usrs.Other.UsrDat))
 	       /***** Show matches results *****/
-	       Mch_ShowMchResults (Usr_OTHER);
+	       McR_ShowMchResults (Usr_OTHER);
 	}
 
       /***** End table and box *****/
@@ -302,7 +302,7 @@ void Mch_ShowUsrsMchResults (void)
       // ...write warning alert
       Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
       // ...and show again the form
-      Mch_SelUsrsToViewUsrsMchResults ();
+      McR_SelUsrsToViewUsrsMchResults ();
      }
 
    /***** Free memory used by list of selected users' codes *****/
@@ -313,7 +313,7 @@ void Mch_ShowUsrsMchResults (void)
 /********************* Show header of my matches results *********************/
 /*****************************************************************************/
 
-static void Mch_ShowHeaderMchResults (void)
+static void McR_ShowHeaderMchResults (void)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -365,7 +365,7 @@ static void Mch_ShowHeaderMchResults (void)
 /********* Show the matches results of a user in the current course **********/
 /*****************************************************************************/
 
-static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
+static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_Today;
    extern const char *Txt_Match_result;
@@ -434,7 +434,7 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
          Mch_GetDataOfMatchByCod (&Match);
 
 	 /* Show match result? */
-	 ShowResultThisMatch = Mch_CheckIfICanSeeMatchResult (Match.MchCod,UsrDat->UsrCod);
+	 ShowResultThisMatch = McR_CheckIfICanSeeMatchResult (Match.MchCod,UsrDat->UsrCod);
 	 ShowSummaryResults = ShowSummaryResults && ShowResultThisMatch;
 
          if (NumResult)
@@ -545,7 +545,7 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
         }
 
       /***** Write totals for this user *****/
-      Mch_ShowMchResultsSummaryRow (ShowSummaryResults,
+      McR_ShowMchResultsSummaryRow (ShowSummaryResults,
 				    NumResults,
                                     NumTotalQsts,NumTotalQstsNotBlank,
                                     TotalScoreOfAllResults);
@@ -566,7 +566,7 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 /************** Show row with summary of user's matches results **************/
 /*****************************************************************************/
 
-static void Mch_ShowMchResultsSummaryRow (bool ShowSummaryResults,
+static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
                                           unsigned NumResults,
                                           unsigned NumTotalQsts,
                                           unsigned NumTotalQstsNotBlank,
@@ -637,7 +637,7 @@ static void Mch_ShowMchResultsSummaryRow (bool ShowSummaryResults,
 /******************* Show one match result of another user *******************/
 /*****************************************************************************/
 
-void Mch_ShowOneMchResult (void)
+void McR_ShowOneMchResult (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Match_result;
@@ -685,7 +685,7 @@ void Mch_ShowOneMchResult (void)
      }
 
    /***** Get match result data *****/
-   Mch_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,
+   McR_GetMatchResultDataByMchCod (Match.MchCod,UsrDat->UsrCod,
 				   TimeUTC,
 				   &NumQsts,
 				   &NumQstsNotBlank,
@@ -752,7 +752,7 @@ void Mch_ShowOneMchResult (void)
    if (ICanViewResult)	// I am allowed to view this match result
      {
       /***** Get questions and user's answers of the match result from database *****/
-      Mch_GetMatchResultQuestionsFromDB (Match.MchCod,UsrDat->UsrCod,
+      McR_GetMatchResultQuestionsFromDB (Match.MchCod,UsrDat->UsrCod,
 					 &NumQsts,&NumQstsNotBlank);
 
       /***** Start box *****/
@@ -880,7 +880,7 @@ void Mch_ShowOneMchResult (void)
 /************ Get the questions of a match result from database **************/
 /*****************************************************************************/
 
-void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
+void McR_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
 					unsigned *NumQsts,unsigned *NumQstsNotBlank)
   {
    MYSQL_RES *mysql_res;
@@ -948,7 +948,7 @@ void Mch_GetMatchResultQuestionsFromDB (long MchCod,long UsrCod,
 /************* Get data of a match result using its match code ***************/
 /*****************************************************************************/
 
-static void Mch_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
+static void McR_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 					    time_t TimeUTC[Dat_NUM_START_END_TIME],
                                             unsigned *NumQsts,
 					    unsigned *NumQstsNotBlank,
@@ -1006,7 +1006,7 @@ static void Mch_GetMatchResultDataByMchCod (long MchCod,long UsrCod,
 /********************* Get if I can see match result  ************************/
 /*****************************************************************************/
 
-static bool Mch_CheckIfICanSeeMatchResult (long MchCod,long UsrCod)
+static bool McR_CheckIfICanSeeMatchResult (long MchCod,long UsrCod)
   {
    bool ItsMe;
    bool ShowResultThisMatch;
@@ -1016,7 +1016,7 @@ static bool Mch_CheckIfICanSeeMatchResult (long MchCod,long UsrCod)
       case Rol_STD:
 	 ItsMe = Usr_ItsMe (UsrCod);
 	 if (ItsMe && Gbl.Test.Config.Feedback != Tst_FEEDBACK_NOTHING)
-	    ShowResultThisMatch = Mch_GetVisibilityMchResultFromDB (MchCod);
+	    ShowResultThisMatch = McR_GetVisibilityMchResultFromDB (MchCod);
 	 else
 	    ShowResultThisMatch = false;
 	 break;
@@ -1040,7 +1040,7 @@ static bool Mch_CheckIfICanSeeMatchResult (long MchCod,long UsrCod)
 /********************* Get visibility of match result ************************/
 /*****************************************************************************/
 
-static bool Mch_GetVisibilityMchResultFromDB (long MchCod)
+static bool McR_GetVisibilityMchResultFromDB (long MchCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
