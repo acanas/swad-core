@@ -8018,6 +8018,7 @@ void Tst_ShowOneTstResult (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests_results;
    extern const char *Txt_Test_result;
+   extern const char *Txt_The_user_does_not_exist;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date;
    extern const char *Txt_Today;
@@ -8109,9 +8110,9 @@ void Tst_ShowOneTstResult (void)
       /***** Header row *****/
       /* Get data of the user who made the test */
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
-	 Lay_ShowErrorAndExit ("User does not exists.");
+	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
       if (!Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
-	 Lay_ShowErrorAndExit ("You can not view this test result.");
+         Act_NoPermissionExit ();
 
       /* User */
       fprintf (Gbl.F.Out,"<tr>"
@@ -8208,7 +8209,7 @@ void Tst_ShowOneTstResult (void)
       Box_EndBox ();
      }
    else	// I am not allowed to view this test result
-      Lay_ShowErrorAndExit ("You can not view this test result.");
+      Act_NoPermissionExit ();
   }
 
 /*****************************************************************************/

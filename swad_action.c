@@ -5492,4 +5492,3 @@ void Act_NoPermissionExit (void)
 
    Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
   }
-

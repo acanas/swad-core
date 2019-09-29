@@ -1518,7 +1518,7 @@ void Svy_AskRemSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_ShowErrorAndExit ("You can not remove this survey.");
+      Act_NoPermissionExit ();
 
    /***** Show question and button to remove survey *****/
    Svy_CurrentSvyCod = Svy.SvyCod;
@@ -1551,7 +1551,7 @@ void Svy_RemoveSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_ShowErrorAndExit ("You can not remove this survey.");
+      Act_NoPermissionExit ();
 
    /***** Remove all the users in this survey *****/
    DB_QueryDELETE ("can not remove users who are answered a survey",
@@ -1615,7 +1615,7 @@ void Svy_AskResetSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_ShowErrorAndExit ("You can not reset this survey.");
+      Act_NoPermissionExit ();
 
    /***** Ask for confirmation of reset *****/
    Ale_ShowAlert (Ale_WARNING,Txt_Do_you_really_want_to_reset_the_survey_X,
@@ -1663,7 +1663,7 @@ void Svy_ResetSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_ShowErrorAndExit ("You can not reset this survey.");
+      Act_NoPermissionExit ();
 
    /***** Remove all the users in this survey *****/
    DB_QueryDELETE ("can not remove users who are answered a survey",
@@ -1709,7 +1709,7 @@ void Svy_HideSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_ShowErrorAndExit ("You can not hide this survey.");
+      Act_NoPermissionExit ();
 
    /***** Hide survey *****/
    DB_QueryUPDATE ("can not hide survey",
@@ -1744,7 +1744,7 @@ void Svy_UnhideSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Lay_ShowErrorAndExit ("You can not unhide this survey.");
+      Act_NoPermissionExit ();
 
    /***** Show survey *****/
    DB_QueryUPDATE ("can not show survey",
@@ -1808,7 +1808,7 @@ void Svy_RequestCreatOrEditSvy (void)
      {
       /***** Put link (form) to create new survey *****/
       if (!Svy_CheckIfICanCreateSvy ())
-         Lay_ShowErrorAndExit ("You can not create a new survey here.");
+         Act_NoPermissionExit ();
 
       /* Initialize to empty survey */
       Svy.SvyCod = -1L;
@@ -1833,7 +1833,7 @@ void Svy_RequestCreatOrEditSvy (void)
       /* Get data of the survey from database */
       Svy_GetDataOfSurveyByCod (&Svy);
       if (!Svy.Status.ICanEdit)
-         Lay_ShowErrorAndExit ("You can not update this survey.");
+         Act_NoPermissionExit ();
 
       /* Get text of the survey from database */
       Svy_GetSurveyTxtFromDB (Svy.SvyCod,Txt);
@@ -2108,7 +2108,7 @@ void Svy_RecFormSurvey (void)
       OldSvy.SvyCod = NewSvy.SvyCod;
       Svy_GetDataOfSurveyByCod (&OldSvy);
       if (!OldSvy.Status.ICanEdit)
-         Lay_ShowErrorAndExit ("You can not update this survey.");
+         Act_NoPermissionExit ();
       NewSvy.Scope = OldSvy.Scope;
      }
 

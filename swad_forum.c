@@ -4170,11 +4170,11 @@ void For_RemovePost (void)
    /* Check if I am the author of the message */
    ItsMe = Usr_ItsMe (UsrDat.UsrCod);
    if (!ItsMe)
-      Lay_ShowErrorAndExit ("You can not remove post because you aren't the author.");
+      Act_NoPermissionExit ();
 
    /* Check if the message is the last message in the thread */
    if (Gbl.Forum.ForumSelected.PstCod != For_GetLastPstCod (Gbl.Forum.ForumSelected.ThrCod))
-      Lay_ShowErrorAndExit ("You can not remove post because it is not the last of the thread.");
+      Act_NoPermissionExit ();
 
    /***** Remove the post *****/
    ThreadDeleted = For_RemoveForumPst (Gbl.Forum.ForumSelected.PstCod,Media.MedCod);
@@ -4306,7 +4306,7 @@ void For_RemoveThread (void)
 	                                            Ale_SUCCESS,Txt_Thread_removed);
      }
    else
-      Lay_ShowErrorAndExit ("You can not remove threads in this forum.");
+      Act_NoPermissionExit ();
   }
 
 /*****************************************************************************/

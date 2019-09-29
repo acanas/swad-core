@@ -385,7 +385,7 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
    unsigned NumResults;
    unsigned NumResult;
    static unsigned UniqueId = 0;
-   long MchCod;
+   struct Match Match;
    Dat_StartEndTime_t StartEndTime;
    unsigned NumQstsInThisResult;
    unsigned NumQstsNotBlankInThisResult;
@@ -436,11 +436,12 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
          row = mysql_fetch_row (mysql_res);
 
          /* Get match code (row[0]) */
-	 if ((MchCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	 if ((Match.MchCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of match.");
+         Mch_GetDataOfMatchByCod (&Match);
 
 	 /* Show match result? */
-	 ShowResultThisMatch = Mch_CheckIfICanSeeMatchResult (MchCod,UsrDat->UsrCod);
+	 ShowResultThisMatch = Mch_CheckIfICanSeeMatchResult (Match.MchCod,UsrDat->UsrCod);
 	 ShowSummaryResults = ShowSummaryResults && ShowResultThisMatch;
 
          if (NumResult)
@@ -526,15 +527,17 @@ static void Mch_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 		  Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	   {
+	    Gam_SetParamCurrentGamCod (Match.GamCod);	// Used to pass parameter
+	    Mch_SetParamCurrentMchCod (Match.MchCod);	// Used to pass parameter
 	    switch (MeOrOther)
 	      {
 	       case Usr_ME:
 		  Frm_StartForm (ActSeeOneMchResMe);
-		  Mch_PutParamMchCod (MchCod);
+		  Mch_PutParamsEdit ();
 		  break;
 	       case Usr_OTHER:
 		  Frm_StartForm (ActSeeOneMchResOth);
-		  Mch_PutParamMchCod (MchCod);
+		  Mch_PutParamsEdit ();
 		  Usr_PutParamOtherUsrCodEncrypted ();
 		  break;
 	      }
@@ -645,6 +648,7 @@ void Mch_ShowOneMchResult (void)
   {
    extern const char *Hlp_ASSESSMENT_Games_results;
    extern const char *Txt_Match_result;
+   extern const char *Txt_The_user_does_not_exist;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Today;
@@ -772,9 +776,9 @@ void Mch_ShowOneMchResult (void)
       /***** Header row *****/
       /* Get data of the user who answer the match */
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
-	 Lay_ShowErrorAndExit ("User does not exists.");
+	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
       if (!Usr_CheckIfICanViewTst (UsrDat))
-	 Lay_ShowErrorAndExit ("You can not view this match result.");
+         Act_NoPermissionExit ();
 
       /* User */
       fprintf (Gbl.F.Out,"<tr>"
@@ -876,7 +880,7 @@ void Mch_ShowOneMchResult (void)
       Box_EndBox ();
      }
    else	// I am not allowed to view this match result
-      Lay_ShowErrorAndExit ("You can not view this match result.");
+      Act_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -1074,4 +1078,3 @@ static bool Mch_GetVisibilityMchResultFromDB (long MchCod)
 
    return ShowUsrResults;
   }
-

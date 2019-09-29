@@ -2230,7 +2230,7 @@ static void Ins_PutFormToCreateInstitution (void)
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
       Frm_StartForm (ActReqIns);
    else
-      Lay_ShowErrorAndExit ("You can not edit institutions.");
+      Act_NoPermissionExit ();
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_institution,NULL,

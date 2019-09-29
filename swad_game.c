@@ -915,7 +915,7 @@ void Gam_AskRemGame (void)
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Lay_ShowErrorAndExit ("You can not remove this game.");
+      Act_NoPermissionExit ();
 
    /***** Show question and button to remove game *****/
    Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
@@ -944,7 +944,7 @@ void Gam_RemoveGame (void)
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Lay_ShowErrorAndExit ("You can not remove this game.");
+      Act_NoPermissionExit ();
 
    /***** Remove game from all tables *****/
    Gam_RemoveGameFromAllTables (Game.GamCod);
@@ -1016,7 +1016,7 @@ void Gam_HideGame (void)
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Lay_ShowErrorAndExit ("You can not hide this game.");
+      Act_NoPermissionExit ();
 
    /***** Hide game *****/
    DB_QueryUPDATE ("can not hide game",
@@ -1042,7 +1042,7 @@ void Gam_UnhideGame (void)
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Lay_ShowErrorAndExit ("You can not unhide this game.");
+      Act_NoPermissionExit ();
 
    /***** Show game *****/
    DB_QueryUPDATE ("can not show game",
@@ -1099,7 +1099,7 @@ void Gam_RequestCreatOrEditGame (void)
 	{
 	 /***** Put link (form) to create new game *****/
 	 if (!Gam_CheckIfICanEditGames ())
-	    Lay_ShowErrorAndExit ("You can not create a new game here.");
+            Act_NoPermissionExit ();
 
 	 /* Initialize to empty game */
 	 Gam_ResetGame (&Game);
@@ -1109,7 +1109,7 @@ void Gam_RequestCreatOrEditGame (void)
 	 /* Get data of the game from database */
 	 Gam_GetDataOfGameByCod (&Game);
 	 if (!Gam_CheckIfICanEditGames ())
-	    Lay_ShowErrorAndExit ("You can not update this game.");
+            Act_NoPermissionExit ();
 
 	 /* Get text of the game from database */
 	 Gam_GetGameTxtFromDB (Game.GamCod,Txt);
@@ -1208,7 +1208,7 @@ void Gam_RecFormGame (void)
 	 OldGame.GamCod = NewGame.GamCod;
 	 Gam_GetDataOfGameByCod (&OldGame);
 	 if (!Gam_CheckIfICanEditGames ())
-	    Lay_ShowErrorAndExit ("You can not update this game.");
+            Act_NoPermissionExit ();
 	}
 
       /***** Get game title *****/

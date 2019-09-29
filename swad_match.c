@@ -100,7 +100,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
                                       MYSQL_RES *mysql_res);
 static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches);
 static bool Mch_CheckIfICanEditMatches (void);
-static bool Mch_CheckIfICanRemoveMatch (const struct Match *Match);
+static bool Mch_CheckIfICanEditThisMatch (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesAuthor (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned UniqueId);
@@ -122,8 +122,8 @@ static void Mch_RemoveMatchesInGameFromTable (long GamCod,const char *TableName)
 static void Mch_RemoveMatchInCourseFromTable (long CrsCod,const char *TableName);
 static void Mch_RemoveUsrMchResultsInCrs (long UsrCod,long CrsCod,const char *TableName);
 
-static void Mch_PutParamsEdit (void);
 static void Mch_PutParamsPlay (void);
+static void Mch_PutParamMchCod (long MchCod);
 
 static void Mch_PutFormNewMatch (struct Game *Game);
 static void Mch_ShowLstGrpsToCreateMatch (void);
@@ -191,7 +191,6 @@ static unsigned Mch_GetNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsi
 static unsigned Mch_GetNumUsrsWhoHaveAnswerMch (long MchCod);
 static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQst,bool Correct);
 
-static void Mch_SetParamCurrentMchCod (long MchCod);
 static long Mch_GetParamCurrentMchCod (void);
 
 /*****************************************************************************/
@@ -494,10 +493,10 @@ static bool Mch_CheckIfICanEditMatches (void)
   }
 
 /*****************************************************************************/
-/*********************** Check if I can remove a match ***********************/
+/***************** Check if I can edit (remove/resume) a match ***************/
 /*****************************************************************************/
 
-static bool Mch_CheckIfICanRemoveMatch (const struct Match *Match)
+static bool Mch_CheckIfICanEditThisMatch (const struct Match *Match)
   {
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -520,7 +519,7 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
    fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
    /***** Put icon to remove the match *****/
-   if (Mch_CheckIfICanRemoveMatch (Match))
+   if (Mch_CheckIfICanEditThisMatch (Match))
      {
       Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
       Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
@@ -708,12 +707,15 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /* Icon to resume */
-         Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
-	 Lay_PutContextualLinkOnlyIcon (ActResMch,NULL,
-					Mch_PutParamsPlay,
-					Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
-											 "flag-checkered.svg",
-					Txt_Resume);
+	 if (Mch_CheckIfICanEditThisMatch (Match))
+	   {
+	    Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
+	    Lay_PutContextualLinkOnlyIcon (ActResMch,NULL,
+					   Mch_PutParamsPlay,
+					   Match->Status.QstInd < Mch_AFTER_LAST_QUESTION ? "play.svg" :
+											    "flag-checkered.svg",
+					   Txt_Resume);
+	   }
 	 break;
       default:
 	 break;
@@ -743,6 +745,7 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
 	    /* Match result visible or hidden? */
 	    if (Match->Status.ShowUsrResults)
 	      {
+ 	       /* Result is visible by me */
                Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
                Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
 	       Frm_StartForm (ActSeeOneMchResMe);
@@ -751,6 +754,7 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
 	       Frm_EndForm ();
 	      }
 	    else
+	       /* Result is forbidden to me */
 	       Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
 	   }
 	 break;
@@ -758,14 +762,24 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /* Match result visible or hidden? */
-         Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
-         Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
-	 Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
-					Mch_PutParamsEdit,
-					Match->Status.ShowUsrResults ? "eye.svg" :
-							               "eye-slash.svg",
-					Match->Status.ShowUsrResults ? Txt_Visible_result :
-							               Txt_Hidden_result);
+	 if (Mch_CheckIfICanEditThisMatch (Match))
+	   {
+	    /* I can edit visibility */
+	    Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
+	    Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
+	    Lay_PutContextualLinkOnlyIcon (ActChgVisResMchUsr,NULL,
+					   Mch_PutParamsEdit,
+					   Match->Status.ShowUsrResults ? "eye.svg" :
+									  "eye-slash.svg",
+					   Match->Status.ShowUsrResults ? Txt_Visible_result :
+									  Txt_Hidden_result);
+	   }
+	 else
+	    /* I can not edit visibility */
+	    Ico_PutIconOff (Match->Status.ShowUsrResults ? "eye.svg" :
+							   "eye-slash.svg",
+			    Match->Status.ShowUsrResults ? Txt_Visible_result :
+							   Txt_Hidden_result);
 	 break;
       default:
 	 break;
@@ -785,6 +799,10 @@ void Mch_ToggleVisibilResultsMchUsr (void)
 
    /***** Get and check parameters *****/
    Mch_GetAndCheckParameters (&Game,&Match);
+
+   /***** Check if I have permission to change visibility *****/
+   if (!Mch_CheckIfICanEditThisMatch (&Match))
+      Act_NoPermissionExit ();
 
    /***** Toggle visibility of match results *****/
    Match.Status.ShowUsrResults = !Match.Status.ShowUsrResults;
@@ -938,8 +956,8 @@ void Mch_RemoveMatch (void)
    Mch_GetAndCheckParameters (&Game,&Match);
 
    /***** Check if I can remove this match *****/
-   if (!Mch_CheckIfICanRemoveMatch (&Match))
-      Lay_ShowErrorAndExit ("You can not remove this match.");
+   if (!Mch_CheckIfICanEditThisMatch (&Match))
+      Act_NoPermissionExit ();
 
    /***** Remove the match from all database tables *****/
    Mch_RemoveMatchFromAllTables (Match.MchCod);
@@ -1095,7 +1113,7 @@ static void Mch_RemoveUsrMchResultsInCrs (long UsrCod,long CrsCod,const char *Ta
 /*********************** Params used to edit a match *************************/
 /*****************************************************************************/
 
-static void Mch_PutParamsEdit (void)
+void Mch_PutParamsEdit (void)
   {
    Gam_PutParams ();
    Mch_PutParamsPlay ();
@@ -1117,7 +1135,7 @@ static void Mch_PutParamsPlay (void)
 /******************** Write parameter with code of match **********************/
 /*****************************************************************************/
 
-void Mch_PutParamMchCod (long MchCod)
+static void Mch_PutParamMchCod (long MchCod)
   {
    Par_PutHiddenParamLong ("MchCod",MchCod);
   }
@@ -1321,6 +1339,10 @@ void Mch_ResumeMatch (void)
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Mch_GetDataOfMatchByCod (&Match);
+
+   /***** Check if I have permission to resume match *****/
+   if (!Mch_CheckIfICanEditThisMatch (&Match))
+      Act_NoPermissionExit ();
 
    /***** Update match status in database *****/
    Mch_UpdateMatchStatusInDB (&Match);
@@ -2000,7 +2022,7 @@ static void Mch_ShowMatchStatusForStd (struct Match *Match)
    /***** Can I play this match? *****/
    ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match->MchCod);
    if (!ICanPlayThisMatchBasedOnGrps)
-      Lay_ShowErrorAndExit ("You can not play this match!");
+      Act_NoPermissionExit ();
 
    /***** Left column *****/
    Mch_ShowLeftColumnStd (Match);
@@ -3079,7 +3101,7 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 /**************** Access to variable used to pass parameter ******************/
 /*****************************************************************************/
 
-static void Mch_SetParamCurrentMchCod (long MchCod)
+void Mch_SetParamCurrentMchCod (long MchCod)
   {
    Mch_CurrentMchCod = MchCod;
   }

@@ -89,7 +89,7 @@ void Mch_RemoveMatchesInGameFromAllTables (long GamCod);
 void Mch_RemoveMatchInCourseFromAllTables (long CrsCod);
 void Mch_RemoveUsrFromMatchTablesInCrs (long UsrCod,long CrsCod);
 
-void Mch_PutParamMchCod (long MchCod);
+void Mch_PutParamsEdit (void);
 void Mch_GetAndCheckParameters (struct Game *Game,struct Match *Match);
 long Mch_GetParamMchCod (void);
 
@@ -123,5 +123,7 @@ void Mch_ReceiveQuestionAnswer (void);
 void Mch_GetAndDrawBarNumUsrsWhoHaveChosenAns (long MchCod,unsigned QstInd,unsigned AnsInd,
 					       unsigned NumAnswerersQst,bool Correct);
 unsigned Mch_GetNumUsrsWhoHaveAnswerQst (long MchCod,unsigned QstInd);
+
+void Mch_SetParamCurrentMchCod (long MchCod);
 
 #endif
