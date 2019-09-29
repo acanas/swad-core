@@ -449,6 +449,9 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: Reported by Francisco José Pelayo Valle: un estudiante sube 50 ficheros de golpe ==> el firewall le banea. No debería, ¿o sí?
 // TODO: En Eventos de asistencia, poner un icono de enlace a horario de la asignatura ¿y otro a grupos?
+
+// TODO: Non-editing teacher should create attendance events and control attendance
+
 // TODO: Reportado por Javier Fernández Baldomero. Un profesor debería poder cambiar la foto de un estudiante confirmado. Sale el icono, pero luego dice ue no hay permiso
 
 // TODO: URGENTE: Reportado por Javier Fernández Baldomero. Al pasar lista con SWADroid, los estudiantes sin foto no salen en la lista de alumnos de SWADroid.
@@ -471,10 +474,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.22 (2019-09-29)"
+#define Log_PLATFORM_VERSION	"SWAD 19.23 (2019-09-29)"
 #define CSS_FILE		"swad19.15.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.23:    Sep 29, 2019	Non-editing teachers can not remove matches from other teachers. (246730 lines)
 	Version 19.22:    Sep 29, 2019	Remove user from match tables in course. (246703 lines)
 	Version 19.21:    Sep 29, 2019	Code refactoring in games and matches. (246674 lines)
 	Version 19.20:    Sep 29, 2019	Code refactoring in games and matches. (246631 lines)

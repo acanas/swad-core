@@ -100,6 +100,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
                                       MYSQL_RES *mysql_res);
 static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches);
 static bool Mch_CheckIfICanEditMatches (void);
+static bool Mch_CheckIfICanRemoveMatch (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesAuthor (const struct Match *Match);
 static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned UniqueId);
@@ -475,7 +476,7 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
   }
 
 /*****************************************************************************/
-/************************ Check if I can edit games **************************/
+/*********************** Check if I can edit matches *************************/
 /*****************************************************************************/
 
 static bool Mch_CheckIfICanEditMatches (void)
@@ -493,6 +494,24 @@ static bool Mch_CheckIfICanEditMatches (void)
   }
 
 /*****************************************************************************/
+/*********************** Check if I can remove a match ***********************/
+/*****************************************************************************/
+
+static bool Mch_CheckIfICanRemoveMatch (const struct Match *Match)
+  {
+   switch (Gbl.Usrs.Me.Role.Logged)
+     {
+      case Rol_NET:
+	 return (Match->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);	// Only if I am the creator
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
 /************************* Put a column for icons ****************************/
 /*****************************************************************************/
 
@@ -501,12 +520,17 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
    fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
    /***** Put icon to remove the match *****/
-   Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
-   Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
-   Frm_StartForm (ActReqRemMch);
-   Mch_PutParamsEdit ();
-   Ico_PutIconRemove ();
-   Frm_EndForm ();
+   if (Mch_CheckIfICanRemoveMatch (Match))
+     {
+      Gam_SetParamCurrentGamCod (Match->GamCod);	// Used to pass parameter
+      Mch_SetParamCurrentMchCod (Match->MchCod);	// Used to pass parameter
+      Frm_StartForm (ActReqRemMch);
+      Mch_PutParamsEdit ();
+      Ico_PutIconRemove ();
+      Frm_EndForm ();
+     }
+   else
+      Ico_PutIconRemovalNotAllowed ();
 
    fprintf (Gbl.F.Out,"</td>");
   }
@@ -912,6 +936,10 @@ void Mch_RemoveMatch (void)
 
    /***** Get and check parameters *****/
    Mch_GetAndCheckParameters (&Game,&Match);
+
+   /***** Check if I can remove this match *****/
+   if (!Mch_CheckIfICanRemoveMatch (&Match))
+      Lay_ShowErrorAndExit ("You can not remove this match.");
 
    /***** Remove the match from all database tables *****/
    Mch_RemoveMatchFromAllTables (Match.MchCod);
