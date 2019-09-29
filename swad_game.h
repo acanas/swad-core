@@ -49,7 +49,6 @@ struct Game
    struct
      {
       bool Visible;		// Game is not hidden
-      bool ICanViewResults;
       bool ICanEdit;
      } Status;
   };

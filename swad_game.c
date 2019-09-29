@@ -774,27 +774,21 @@ void Gam_GetDataOfGameByCod (struct Game *Game)
       switch (Gbl.Usrs.Me.Role.Logged)
         {
          case Rol_STD:
-            Game->Status.ICanViewResults = Game->NumQsts != 0 &&
-                                           Game->Status.Visible;
             Game->Status.ICanEdit        = false;
             break;
          case Rol_NET:
-            Game->Status.ICanViewResults = Game->NumQsts != 0;
             Game->Status.ICanEdit        = false;
             break;
          case Rol_TCH:
          case Rol_DEG_ADM:
          case Rol_CTR_ADM:
          case Rol_INS_ADM:
-            Game->Status.ICanViewResults = Game->NumQsts != 0;
             Game->Status.ICanEdit        = true;
             break;
          case Rol_SYS_ADM:
-            Game->Status.ICanViewResults = Game->NumQsts != 0;
             Game->Status.ICanEdit        = true;
             break;
          default:
-            Game->Status.ICanViewResults = false;
             Game->Status.ICanEdit        = false;
             break;
         }
@@ -853,7 +847,6 @@ static void Gam_ResetGame (struct Game *Game)
    Game->NumQsts                 = 0;
    Game->NumMchs                 = 0;
    Game->Status.Visible          = true;
-   Game->Status.ICanViewResults  = false;
    Game->Status.ICanEdit         = false;
   }
 
