@@ -157,7 +157,6 @@ static void Mch_ShowRightColumnStd (struct Match *Match);
 static void Mch_ShowNumQstInMatch (struct Match *Match);
 static void Mch_PutMatchControlButtons (struct Match *Match);
 static void Mch_PutCheckboxResult (struct Match *Match);
-static void Mch_ShowNumPlayers (struct Match *Match);
 static void Mch_ShowMatchTitle (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersStd (struct Match *Match);
@@ -2122,30 +2121,33 @@ static void Mch_ShowInsideLeftColumnTch (struct Match *Match)
       fprintf (Gbl.F.Out,"-");
    fprintf (Gbl.F.Out,"</div>");
 
+   /***** Number of users who have answered this question *****/
+   NumAnswerersQst = Mch_GetNumUsrsWhoHaveAnswerQst (Match->MchCod,
+						     Match->Status.QstInd);
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_ANSWERERS\">"
+		      "%s<br />"
+		      "<strong>%u",
+	    Txt_MATCH_respond,
+	    NumAnswerersQst);
+
+   if (Match->Status.Playing)
+     {
+      /* Get current number of players */
+      Mch_GetNumPlayers (Match);
+
+      /* Show current number of players */
+      fprintf (Gbl.F.Out,"/%u",
+	       Match->Status.NumPlayers);
+     }
+
+   fprintf (Gbl.F.Out,"</strong>"
+		      "</div>");
+
    /***** Buttons *****/
    Mch_PutMatchControlButtons (Match);
 
    /***** Write button to request viewing results *****/
    Mch_PutCheckboxResult (Match);
-
-   /***** Get current number of players *****/
-   Mch_GetNumPlayers (Match);
-
-   /***** Number of players *****/
-   Mch_ShowNumPlayers (Match);
-
-   /***** Number of users who have answered this question *****/
-   if (Match->Status.Playing)
-     {
-      NumAnswerersQst = Mch_GetNumUsrsWhoHaveAnswerQst (Match->MchCod,
-			                                Match->Status.QstInd);
-      fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_ANSWERERS\">"
-                         "%s<br />"
-                         "<strong>%u/%u</strong>"
-	                 "</div>",
-	       Txt_MATCH_respond,
-	       NumAnswerersQst,Match->Status.NumPlayers);
-     }
   }
 
 /*****************************************************************************/
@@ -2344,21 +2346,6 @@ static void Mch_PutCheckboxResult (struct Match *Match)
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/************************** Show number of players ***************************/
-/*****************************************************************************/
-
-static void Mch_ShowNumPlayers (struct Match *Match)
-  {
-   extern const char *Txt_Players;
-
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_PLAYERS\">"
-	              "%s<br />"
-                      "<strong>%u</strong>"
-	              "</div>",
-	    Txt_Players,Match->Status.NumPlayers);
   }
 
 /*****************************************************************************/

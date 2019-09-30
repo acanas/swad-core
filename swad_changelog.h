@@ -456,6 +456,15 @@ Lo de mutear anuncios, en principio prefiero hacer una opción para seguir masiva
 
 // TODO: URGENTE: Reportado por Javier Fernández Baldomero. Al pasar lista con SWADroid, los estudiantes sin foto no salen en la lista de alumnos de SWADroid.
 
+// TODO: Sugerencia de Pedro A. García Sánchez: poner un enlace a horario externo, igual que con otras partes de la información
+/*
+Ya voy a empezar a darte la lata... Aunque esto es algo que tengo apuntado desde hace tiempo. En los másteres es complicado hacer una plantilla de horarios como la que tienes en swad, pero nos obligan a meter el horario, con aula y profesor, por cada sesión. Por ejemplo,
+
+https://oficinavirtual.ugr.es/awc/horario/ve_horario/visor.jsp?programa=M37156&siglas=15
+
+contiene una de las que yo imparto. Así que me imagino que te esperarás la sugerencia (petición con café o cerveza como recompensa): ¿sería posible que en la pestaña de horario se pudiese embeber esa página? (Creo que los grados usan algo parecido también.)
+*/
+
 // TODO: No repintar los botones de matches del profesor durante el refresco AJAX
 
 /*****************************************************************************/
@@ -476,10 +485,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.26.1 (2019-09-30)"
-#define CSS_FILE		"swad19.15.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.27 (2019-09-30)"
+#define CSS_FILE		"swad19.27.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.27:    Sep 30, 2019	Changes in layout of match playing. (246756 lines)
 	Version 19.26.1:  Sep 30, 2019	Changes in edition of games. (246760 lines)
 	Version 19.26:    Sep 30, 2019	Changes in edition of games. (246743 lines)
 	Version 19.25.3:  Sep 30, 2019	Fixed bug: students should not see icon to add a match. (246745 lines)
