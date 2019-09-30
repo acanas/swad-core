@@ -465,8 +465,6 @@ https://oficinavirtual.ugr.es/awc/horario/ve_horario/visor.jsp?programa=M37156&s
 contiene una de las que yo imparto. Así que me imagino que te esperarás la sugerencia (petición con café o cerveza como recompensa): ¿sería posible que en la pestaña de horario se pudiese embeber esa página? (Creo que los grados usan algo parecido también.)
 */
 
-// TODO: No repintar los botones de matches del profesor durante el refresco AJAX
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
@@ -485,10 +483,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.28 (2019-09-30)"
+#define Log_PLATFORM_VERSION	"SWAD 19.28.1 (2019-09-30)"
 #define CSS_FILE		"swad19.28.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.28.1:  Sep 30, 2019	New column in list of match results with the name of the match. (246760 lines)
 	Version 19.28:    Sep 30, 2019	Changes in layout of match playing. (246752 lines)
 	Version 19.27:    Sep 30, 2019	Changes in layout of match playing. (246756 lines)
 	Version 19.26.1:  Sep 30, 2019	Changes in edition of games. (246760 lines)

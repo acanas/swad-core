@@ -316,6 +316,7 @@ void McR_ShowUsrsMchResults (void)
 static void McR_ShowHeaderMchResults (void)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
+   extern const char *Txt_Match;
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Questions;
    extern const char *Txt_Non_blank_BR_questions;
@@ -326,6 +327,9 @@ static void McR_ShowHeaderMchResults (void)
 
    fprintf (Gbl.F.Out,"<tr>"
 		      "<th colspan=\"2\" class=\"CENTER_TOP\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"LEFT_TOP\">"
 		      "%s"
 		      "</th>"
 		      "<th class=\"LEFT_TOP\">"
@@ -352,6 +356,7 @@ static void McR_ShowHeaderMchResults (void)
 		      "<th></th>"
 		      "</tr>",
 	    Txt_User[Usr_SEX_UNKNOWN],
+	    Txt_Match,
 	    Txt_START_END_TIME[Dat_START_TIME],
 	    Txt_START_END_TIME[Dat_END_TIME],
 	    Txt_Questions,
@@ -439,6 +444,10 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
          if (NumResult)
             fprintf (Gbl.F.Out,"<tr>");
 
+         /* Write match title */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">%s</td>",
+	          Gbl.RowEvenOdd,Match.Title);
+
          /* Write start/end times (row[1], row[2] hold UTC start/end times) */
          for (StartEndTime = (Dat_StartEndTime_t) 0;
 	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
@@ -450,7 +459,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 		               " class=\"DAT LEFT_TOP COLOR%u\">"
 			       "<script type=\"text/javascript\">"
 			       "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
-			       "%ld,%u,',&nbsp;','%s',true,false,0x7);"
+			       "%ld,%u,'<br />','%s',true,false,0x7);"
 			       "</script>"
 			       "</td>",
 		     (unsigned) StartEndTime,UniqueId,
@@ -577,7 +586,7 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Row title *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"2\""
+   fprintf (Gbl.F.Out,"<td colspan=\"3\""
 	              " class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">"
 		      "%s: %u"
 		      "</td>",
