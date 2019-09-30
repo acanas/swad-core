@@ -160,6 +160,7 @@ static void Mch_PutCheckboxResult (struct Match *Match);
 static void Mch_ShowMatchTitle (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersStd (struct Match *Match);
+static void Mch_ShowMatchPodium (struct Match *Match);
 
 static void Mch_PutParamNumOpt (unsigned NumOpt);
 static unsigned Mch_GetParamNumOpt (void);
@@ -2135,19 +2136,24 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
 						     Match->Status.QstInd);
    fprintf (Gbl.F.Out,"<div class=\"MATCH_NUM_ANSWERERS\">"
 		      "%s<br />"
-		      "<strong>%u",
-	    Txt_MATCH_respond,
-	    NumAnswerersQst);
-
-   if (Match->Status.Playing)
+		      "<strong>",
+	    Txt_MATCH_respond);
+   if (Match->Status.QstInd > 0 &&
+       Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)
      {
-      /* Get current number of players */
-      Mch_GetNumPlayers (Match);
+      fprintf (Gbl.F.Out,"%u",NumAnswerersQst);
+      if (Match->Status.Playing)
+	{
+	 /* Get current number of players */
+	 Mch_GetNumPlayers (Match);
 
-      /* Show current number of players */
-      fprintf (Gbl.F.Out,"/%u",
-	       Match->Status.NumPlayers);
+	 /* Show current number of players */
+	 fprintf (Gbl.F.Out,"/%u",
+		  Match->Status.NumPlayers);
+	}
      }
+   else
+      fprintf (Gbl.F.Out,"-");
 
    fprintf (Gbl.F.Out,"</strong>"
 		      "</div>");
@@ -2166,7 +2172,10 @@ static void Mch_ShowRightColumnTch (struct Match *Match)
    Mch_ShowMatchTitle (Match);
 
    /***** Bottom row: current question and possible answers *****/
-   Mch_ShowQuestionAndAnswersTch (Match);
+   if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Not finished
+      Mch_ShowQuestionAndAnswersTch (Match);
+   else							// Finished
+      Mch_ShowMatchPodium (Match);
 
    /***** End right container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -2513,6 +2522,94 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
       else
 	 Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
      }
+  }
+
+/*****************************************************************************/
+/***************************** Show match podium *****************************/
+/*****************************************************************************/
+
+static void Mch_ShowMatchPodium (struct Match *Match)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+   unsigned NumRow;
+   struct
+     {
+      double Score;
+      unsigned NumUsrs;
+     } Podium[3];
+   unsigned i;
+   static const unsigned Position[3] =
+     {
+      1,	// 2nd position
+      0,	// 1st position
+      2		// 3rd position
+     };
+
+   /***** Get podium from database *****/
+   NumRows = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get data of a question",
+			     "SELECT Score,"			// row[0]
+				     "COUNT(*) AS NumUsrs"	// row[1]
+			     " FROM mch_results"
+			     " WHERE MchCod=%ld"
+			     " GROUP BY Score"
+			     " ORDER BY Score DESC LIMIT 3",
+			     Match->MchCod);
+
+   /* Get podium */
+   for (NumRow = 0;
+	NumRow < NumRows;
+	NumRow++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get score (row[0]) */
+      Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
+      if (sscanf (row[0],"%lf",&(Podium[NumRow].Score)) != 1)
+	 Podium[NumRow].Score = 0.0;
+      Str_SetDecimalPointToLocal ();	// Return to local system
+
+      /* Get number of users (row[1]) *****/
+      if (sscanf (row[1],"%u",&(Podium[NumRow].NumUsrs)) != 1)
+	 Podium[NumRow].NumUsrs = 0;
+     }
+
+   /* Reset remaining positions */
+   for (;
+	NumRow < 3;
+	NumRow++)
+     {
+      /* Score */
+      Podium[NumRow].Score = 0.0;
+
+      /* Number of users */
+      Podium[NumRow].NumUsrs = 0;
+     }
+
+   /***** Show podium *****/
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");	// Bottom
+
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_PODIUM\">");	// Podium
+
+   for (i = 0;
+	i < 3;
+	i++)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"MATCH_PODIUM_%u\">",Position[i]);
+      if (Podium[Position[i]].NumUsrs)
+	 fprintf (Gbl.F.Out,"<div class=\"MATCH_PODIUM_POSITION\">%u</div>"
+			    "<div class=\"MATCH_PODIUM_SCORE\">%.2lf (%u)</div>",
+		  Position[i] + 1,
+		  Podium[Position[i]].Score,
+		  Podium[Position[i]].NumUsrs);
+      fprintf (Gbl.F.Out,"</div>");
+     }
+
+   fprintf (Gbl.F.Out,"</div>");			// Podium
+
+   fprintf (Gbl.F.Out,"</div>");			// Bottom
   }
 
 /*****************************************************************************/

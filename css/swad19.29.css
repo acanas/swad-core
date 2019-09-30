@@ -2602,7 +2602,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	width:100%;
-	padding-left:24px;
+	padding:0 12px;
 	}
 
 .MATCH_REFRESHABLE_TEACHER
@@ -2730,10 +2730,56 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:25%;
 	}
 
-.MATCH_STD_QST
+.MATCH_PODIUM
 	{
-	color:#202020;
+	display:table;
+	box-sizing:border-box;
+	width:100%;
+	text-align:center;
+	}
+.MATCH_PODIUM_POSITION
+	{
+	color:white;
+	font-size:32pt;
+	font-weight:bold;
+	}
+.MATCH_PODIUM_SCORE
+	{
+	color:white;
 	font-size:24pt;
+	font-weight:bold;
+	}
+.MATCH_PODIUM_1
+	{
+	display:table-cell;
+	box-sizing:border-box;
+	float:left;
+	width:33%;
+	margin-top:200px;
+	height:200px;
+	margin-top:200px;
+	background:grey;
+	}
+.MATCH_PODIUM_0
+	{
+	display:table-cell;
+	box-sizing:border-box;
+	float:left;
+	width:34%;
+	margin-top:100px;
+	height:300px;
+	margin-top:100px;
+	background:grey;
+	}
+.MATCH_PODIUM_2
+	{
+	display:table-cell;
+	box-sizing:border-box;
+	float:left;
+	width:33%;
+	height:100px;
+	margin-top:300px;
+	background:grey;
 	}
 
 .MATCH_TCH_BUTTON_TD
