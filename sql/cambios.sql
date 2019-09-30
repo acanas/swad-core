@@ -12904,3 +12904,199 @@ SELECT gam_questions.QstCod,
  
  
  SELECT Correct FROM tst_answers WHERE QstCod=1787 ORDER BY AnsInd;
+
+ -------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+swad 18.129.1 ----> swad 19.25
+
+Ficheros:
+---------
+
+sudo cp icon/list.svg /var/www/html/swad/icon/
+
+sudo cp icon/step-backward.svg /var/www/html/swad/icon/
+sudo cp icon/step-forward.svg /var/www/html/swad/icon/
+
+sudo cp -a fontawesome /var/www/html/swad/
+
+
+
+Base de datos:
+--------------
+
+ALTER TABLE games DROP COLUMN StartTime,DROP COLUMN EndTime;
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod=1779;
+
+DROP TABLE IF EXISTS gam_answers;
+CREATE TABLE IF NOT EXISTS gam_answers (MchCod INT NOT NULL,UsrCod INT NOT NULL,QstInd INT NOT NULL,AnsInd TINYINT NOT NULL,UNIQUE INDEX(MchCod,UsrCod,QstInd));
+
+DROP TABLE IF EXISTS gam_players;
+CREATE TABLE IF NOT EXISTS gam_players (MchCod INT NOT NULL,UsrCod INT NOT NULL,TS TIMESTAMP,UNIQUE INDEX(MchCod,UsrCod));
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1788','es','N','Refrescar partida (como profesor)');
+
+UPDATE actions SET Txt='Mostrar pregunta siguiente en partida (como profesor)' WHERE ActCod='1672' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1789','es','N','Mostrar pregunta actual en partida (como profesor)');
+
+CREATE TABLE IF NOT EXISTS gam_mch_being_played (MchCod INT NOT NULL,TS TIMESTAMP,UNIQUE INDEX(MchCod));
+
+DROP TABLE IF EXISTS gam_users;
+ALTER TABLE games ENGINE=MyISAM;
+ALTER TABLE gam_answers ENGINE=MyISAM;
+ALTER TABLE gam_grp ENGINE=MyISAM;
+ALTER TABLE gam_matches ENGINE=MyISAM;
+ALTER TABLE gam_mch_being_played ENGINE=MyISAM;
+ALTER TABLE gam_players ENGINE=MyISAM;
+ALTER TABLE gam_questions ENGINE=MyISAM;
+
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1790','es','N','Mostrar pregunta anterior en partida (como profesor)');
+
+ALTER TABLE gam_matches DROP COLUMN Finished;
+
+CREATE TABLE IF NOT EXISTS gam_time (MchCod INT NOT NULL,QstInd INT NOT NULL,ElapsedTime TIME NOT NULL DEFAULT 0,UNIQUE INDEX(MchCod,QstInd));
+
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1791','es','N','Pausar partida (como profesor)');
+
+UPDATE actions SET Txt='Comenzar/reanudar partida (como profesor)' WHERE ActCod='1789' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1792','es','N','Mostrar solo enunciado en partida (como profesor)');
+
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1793','es','N','Mostrar enunciado y respuestas en partida (como profesor)');
+
+ALTER TABLE gam_matches ADD COLUMN ShowResults ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER ShowingAnswers;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1794','es','N','Cambiar presentaci&oacute;n de resultados en partida (como profesor)');
+
+ALTER TABLE gam_matches DROP COLUMN ShowingAnswers,DROP COLUMN ShowResults;
+ALTER TABLE gam_matches ADD COLUMN ShowResults ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER QstStartTime;
+ALTER TABLE gam_matches ADD COLUMN Showing ENUM('stem','answers','results') NOT NULL DEFAULT 'stem' AFTER ShowResults;
+
+ALTER TABLE gam_matches DROP COLUMN ShowResults,DROP COLUMN Showing;
+ALTER TABLE gam_matches ADD COLUMN Showing ENUM('wording','answers','request','results') NOT NULL DEFAULT 'wording' AFTER QstStartTime;
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN (1792,1793,1794);
+
+ALTER TABLE gam_matches DROP COLUMN Showing;
+ALTER TABLE gam_matches ADD COLUMN ShowResults ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER QstStartTime;
+ALTER TABLE gam_matches ADD COLUMN Showing ENUM('wording','answers','results') NOT NULL DEFAULT 'wording' AFTER ShowResults;
+DELETE FROM actions WHERE ActCod='1794';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1794','es','N','Cambiar presentaci&oacute;n de resultados en partida (como profesor)');
+UPDATE actions SET Obsolete='Y' WHERE ActCod=1795;
+
+ALTER TABLE gam_matches CHANGE COLUMN ShowResults ShowResults ENUM('N','Y') NOT NULL DEFAULT 'Y';
+
+ALTER TABLE gam_matches DROP COLUMN Showing;
+ALTER TABLE gam_matches ADD COLUMN Showing ENUM('stem','answers','results') NOT NULL DEFAULT 'stem' AFTER ShowResults;
+
+RENAME TABLE gam_answers TO mch_answers;
+RENAME TABLE gam_grp TO mch_groups;
+RENAME TABLE gam_matches TO mch_matches;
+RENAME TABLE gam_players TO mch_players;
+RENAME TABLE gam_mch_being_played TO mch_playing;
+RENAME TABLE gam_time TO mch_times;
+RENAME TABLE games TO gam_games;
+DROP TABLE gam_playing;
+
+ALTER TABLE mch_matches DROP COLUMN Showing;
+ALTER TABLE mch_matches ADD COLUMN Showing ENUM('nothing','stem','answers','results') NOT NULL DEFAULT 'nothing' AFTER ShowResults;
+
+ALTER TABLE mch_matches DROP COLUMN QstStartTime;
+
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN (1658,1659);
+
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1795','es','N','Seleccionar fechas para mis result. partidas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1796','es','N','Ver mis resultados de partidas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1797','es','N','Ver una partida m&iacute;a ya realizada');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1798','es','N','Seleccionar usuarios para result. partidas');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1799','es','N','Ver resultados de partidas de usuarios');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1800','es','N','Ver una partida ya realizada');
+
+CREATE TABLE IF NOT EXISTS mch_results (MchResCod INT NOT NULL AUTO_INCREMENT,MchCod INT NOT NULL,UsrCod INT NOT NULL,NumQsts INT NOT NULL DEFAULT 0,NumQstsNotBlank INT NOT NULL DEFAULT 0,Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(MchResCod),UNIQUE INDEX(MchCod,UsrCod));
+
+DROP TABLE IF EXISTS mch_results;
+CREATE TABLE IF NOT EXISTS mch_results (MchCod INT NOT NULL,UsrCod INT NOT NULL,NumQsts INT NOT NULL DEFAULT 0,NumQstsNotBlank INT NOT NULL DEFAULT 0,Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(MchCod,UsrCod));
+
+DROP TABLE IF EXISTS mch_results;
+CREATE TABLE IF NOT EXISTS mch_results (MchCod INT NOT NULL,UsrCod INT NOT NULL,StartTime DATETIME NOT NULL,EndTime DATETIME NOT NULL,NumQsts INT NOT NULL DEFAULT 0,NumQstsNotBlank INT NOT NULL DEFAULT 0,Score DOUBLE PRECISION NOT NULL DEFAULT 0,UNIQUE INDEX(MchCod,UsrCod));
+
+CREATE TABLE IF NOT EXISTS mch_indexes (MchCod INT NOT NULL,QstInd INT NOT NULL,Indexes TEXT NOT NULL,UNIQUE INDEX(MchCod,QstInd));
+
+ALTER TABLE mch_answers ADD COLUMN NumOpt TINYINT NOT NULL AFTER QstInd;
+
+ALTER TABLE mch_matches ADD COLUMN VisibleResult ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Title;
+
+ALTER TABLE mch_matches DROP COLUMN VisibleResult,DROP COLUMN ShowResults;
+ALTER TABLE mch_matches ADD COLUMN ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Showing;
+ALTER TABLE mch_matches ADD COLUMN ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER ShowQstResults;
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1801','es','N','Cambiar visibilidad de resultados de una partida');
+UPDATE actions SET Obsolete='Y' WHERE ActCod=1786;
+
+ALTER TABLE hidden_params ENGINE=MyISAM;
+ALTER TABLE mch_indexes ENGINE=MyISAM;
+ALTER TABLE mch_results ENGINE=MyISAM;
+ALTER TABLE mch_times ENGINE=MyISAM;
+ALTER TABLE timetable_tut ENGINE=MyISAM;
+SELECT TABLE_NAME,ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'swad';
+
+UPDATE actions SET Txt='Solicitar eliminaci&oacute;n partida' WHERE ActCod='1783' AND Language='es';
+UPDATE actions SET Txt='Eliminar partida' WHERE ActCod='1784' AND Language='es';
+UPDATE actions SET Txt='Solicitar nueva partida' WHERE ActCod='1670' AND Language='es';
+UPDATE actions SET Txt='Crear nueva partida' WHERE ActCod='1671' AND Language='es';
+UPDATE actions SET Txt='Reanudar partida' WHERE ActCod='1785' AND Language='es';
+UPDATE actions SET Txt='Ir hacia atr&aacute;s en partida' WHERE ActCod='1790' AND Language='es';
+UPDATE actions SET Txt='Jugar partida' WHERE ActCod='1789' AND Language='es';
+UPDATE actions SET Txt='Pausar partida' WHERE ActCod='1791' AND Language='es';
+UPDATE actions SET Txt='Ir hacia delante en partida' WHERE ActCod='1672' AND Language='es';
+UPDATE actions SET Txt='Cambiar presentaci&oacute;n de resultados de pregunta en partida' WHERE ActCod='1794' AND Language='es';
+UPDATE actions SET Txt='Refrescar partida (como profesor)' WHERE ActCod='1788' AND Language='es';
+UPDATE actions SET Txt='Unirse a partida' WHERE ActCod='1780' AND Language='es';
+UPDATE actions SET Txt='Responder pregunta en partida' WHERE ActCod='1651' AND Language='es';
+UPDATE actions SET Txt='Refrescar partida (como estudiante)' WHERE ActCod='1782' AND Language='es';
+
+
+// Borrado opcional:
+
+DELETE FROM gam_games;
+DELETE FROM gam_questions;
+
+DELETE FROM mch_answers;
+DELETE FROM mch_groups;
+DELETE FROM mch_indexes;
+DELETE FROM mch_matches;
+DELETE FROM mch_players;
+DELETE FROM mch_playing;
+DELETE FROM mch_results;
+DELETE FROM mch_times;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 

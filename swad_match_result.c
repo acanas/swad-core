@@ -387,7 +387,6 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
    double ScoreInThisResult;
    double TotalScoreOfAllResults = 0.0;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
-   char *ClassDat;
 
    /***** Set user *****/
    UsrDat = (MeOrOther == Usr_ME) ? &Gbl.Usrs.Me.UsrDat :
@@ -448,14 +447,14 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	    TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
 	    UniqueId++;
 	    fprintf (Gbl.F.Out,"<td id =\"mch_time_%u_%u\""
-		               " class=\"%s LEFT_TOP COLOR%u\">"
+		               " class=\"DAT LEFT_TOP COLOR%u\">"
 			       "<script type=\"text/javascript\">"
 			       "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
 			       "%ld,%u,',&nbsp;','%s',true,false,0x7);"
 			       "</script>"
 			       "</td>",
 		     (unsigned) StartEndTime,UniqueId,
-		     ClassDat,Gbl.RowEvenOdd,
+		     Gbl.RowEvenOdd,
 		     (unsigned) StartEndTime,UniqueId,
 		     (long) TimeUTC[StartEndTime],
 		     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
