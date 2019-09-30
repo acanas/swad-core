@@ -149,7 +149,7 @@ static void Mch_ShowMatchStatusForTch (struct Match *Match);
 static void Mch_ShowMatchStatusForStd (struct Match *Match);
 
 static void Mch_ShowLeftColumnTch (struct Match *Match);
-static void Mch_ShowInsideLeftColumnTch (struct Match *Match);
+static void Mch_ShowRefreshablePartTch (struct Match *Match);
 static void Mch_ShowRightColumnTch (struct Match *Match);
 static void Mch_ShowLeftColumnStd (struct Match *Match);
 static void Mch_ShowRightColumnStd (struct Match *Match);
@@ -2082,16 +2082,25 @@ bool Mch_CheckIfICanPlayThisMatchBasedOnGrps (long MchCod)
 static void Mch_ShowLeftColumnTch (struct Match *Match)
   {
    /***** Start left container *****/
-   fprintf (Gbl.F.Out,"<div id=\"match_left\" class=\"MATCH_LEFT\">");
+   fprintf (Gbl.F.Out,"<div class=\"MATCH_LEFT\">");
 
-   /***** Show content of div *****/
-   Mch_ShowInsideLeftColumnTch (Match);
+   /***** Refreshable part *****/
+   fprintf (Gbl.F.Out,"<div id=\"match_left\""
+	              " class=\"MATCH_REFRESHABLE_TEACHER\">");
+   Mch_ShowRefreshablePartTch (Match);
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Buttons *****/
+   Mch_PutMatchControlButtons (Match);
+
+   /***** Write button to request viewing results *****/
+   Mch_PutCheckboxResult (Match);
 
    /***** End left container *****/
    fprintf (Gbl.F.Out,"</div>");
   }
 
-static void Mch_ShowInsideLeftColumnTch (struct Match *Match)
+static void Mch_ShowRefreshablePartTch (struct Match *Match)
   {
    extern const char *Txt_MATCH_respond;
    struct Time Time;
@@ -2142,12 +2151,6 @@ static void Mch_ShowInsideLeftColumnTch (struct Match *Match)
 
    fprintf (Gbl.F.Out,"</strong>"
 		      "</div>");
-
-   /***** Buttons *****/
-   Mch_PutMatchControlButtons (Match);
-
-   /***** Write button to request viewing results *****/
-   Mch_PutCheckboxResult (Match);
   }
 
 /*****************************************************************************/
@@ -2323,13 +2326,10 @@ static void Mch_PutCheckboxResult (struct Match *Match)
    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
    /***** Put icon with link *****/
-   /* Submitting onmousedown instead of default onclick
-      is necessary in order to be fast
-      and not lose clicks due to refresh */
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">"
 	              "<a href=\"\" class=\"ICO_HIGHLIGHT\""
 	              " title=\"%s\" "
-	              " onmousedown=\"document.getElementById('%s').submit();"
+	              " onclick=\"document.getElementById('%s').submit();"
 	              " return false;\">"
 	              "<i class=\"%s\"></i>"
 	              "&nbsp;%s"
@@ -2551,12 +2551,9 @@ static void Mch_PutBigButton (Act_Action_t NextAction,long MchCod,
    Mch_PutParamMchCod (MchCod);
 
    /***** Put icon with link *****/
-   /* Submitting onmousedown instead of default onclick
-      is necessary in order to be fast
-      and not lose clicks due to refresh */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">"
                       "<a href=\"\" class=\"MATCH_BUTTON_ON\" title=\"%s\" "
-	              " onmousedown=\"document.getElementById('%s').submit();"
+	              " onclick=\"document.getElementById('%s').submit();"
 	              " return false;\">"
 	              "<i class=\"%s\"></i>"
 	              "</a>"
@@ -2585,12 +2582,9 @@ static void Mch_PutBigButtonClose (void)
    extern const char *Txt_Close;
 
    /***** Put icon with link *****/
-   /* onmousedown instead of default onclick
-      is necessary in order to be fast
-      and not lose clicks due to refresh */
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">"
                       "<a href=\"\" class=\"MATCH_BUTTON_ON\" title=\"%s\" "
-	              " onmousedown=\"window.close();"
+	              " onmouseclick=\"window.close();"
 	              " return false;\"\">"
 	              "<i class=\"%s\"></i>"
 	              "</a>"
@@ -2743,8 +2737,7 @@ void Mch_RefreshMatchTch (void)
    Mch_UpdateElapsedTimeInQuestion (&Match);
 
    /***** Show current match status *****/
-   // Mch_ShowMatchStatusForTch (&Match);
-   Mch_ShowInsideLeftColumnTch (&Match);
+   Mch_ShowRefreshablePartTch (&Match);
   }
 
 /*****************************************************************************/

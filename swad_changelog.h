@@ -485,10 +485,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.27 (2019-09-30)"
-#define CSS_FILE		"swad19.27.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.28 (2019-09-30)"
+#define CSS_FILE		"swad19.28.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.28:    Sep 30, 2019	Changes in layout of match playing. (246752 lines)
 	Version 19.27:    Sep 30, 2019	Changes in layout of match playing. (246756 lines)
 	Version 19.26.1:  Sep 30, 2019	Changes in edition of games. (246760 lines)
 	Version 19.26:    Sep 30, 2019	Changes in edition of games. (246743 lines)
