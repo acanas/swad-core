@@ -87,7 +87,7 @@ long Mch_CurrentMchCod = -1L;	// Used as parameter in contextual links
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Mch_PutIconToPlayNewMatch (void);
+static void Mch_PutIconToCreateNewMatch (void);
 
 static void Mch_ListOneOrMoreMatches (struct Game *Game,
 				      unsigned NumMatches,
@@ -198,6 +198,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
    char *SubQuery;
    MYSQL_RES *mysql_res;
    unsigned NumMatches;
+   bool ICanEditMatches = Mch_CheckIfICanEditMatches ();
 
    /***** Get data of matches from database *****/
    /* Fill subquery for game */
@@ -243,7 +244,8 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 
    /***** Start box *****/
    Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
-   Box_StartBox (NULL,Txt_Matches,Mch_PutIconToPlayNewMatch,
+   Box_StartBox (NULL,Txt_Matches,ICanEditMatches ? Mch_PutIconToCreateNewMatch :
+	                                            NULL,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
@@ -342,7 +344,7 @@ void Mch_GetDataOfMatchByCod (struct Match *Match)
 /********************* Put icon to create a new match ************************/
 /*****************************************************************************/
 
-static void Mch_PutIconToPlayNewMatch (void)
+static void Mch_PutIconToCreateNewMatch (void)
   {
    extern const char *Txt_New_match;
 
@@ -483,7 +485,6 @@ static bool Mch_CheckIfICanEditMatches (void)
       default:
          return false;
      }
-   return false;
   }
 
 /*****************************************************************************/

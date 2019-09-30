@@ -474,10 +474,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.25.2 (2019-09-30)"
+#define Log_PLATFORM_VERSION	"SWAD 19.25.3 (2019-09-30)"
 #define CSS_FILE		"swad19.15.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.25.3:  Sep 30, 2019	Fixed bug: students should not see icon to add a match. (246745 lines)
 	Version 19.25.2:  Sep 30, 2019	Fixed bug in match results. (246744 lines)
 	Version 19.25.1:  Sep 30, 2019	Fixed bug in match results. (246743 lines)
 	Version 19.25:    Sep 30, 2019	Code refactoring in match results. (246743 lines)
@@ -636,7 +637,7 @@ ALTER TABLE mch_matches ADD COLUMN Showing ENUM('nothing','stem','answers','resu
 	Version 19.4.2:   Sep 17, 2019	Fixed bug when removing a question in a game. (244654 lines)
 	Version 19.4.1:   Sep 17, 2019	Fixed bug when removing a question in a game. (244650 lines)
 	Version 19.4:     Sep 17, 2019	Changes in games ans matches tables. (244644 lines)
-					8 changes necessary in database:
+					7 changes necessary in database:
 RENAME TABLE gam_answers TO mch_answers;
 RENAME TABLE gam_grp TO mch_groups;
 RENAME TABLE gam_matches TO mch_matches;
@@ -644,7 +645,6 @@ RENAME TABLE gam_players TO mch_players;
 RENAME TABLE gam_mch_being_played TO mch_playing;
 RENAME TABLE gam_time TO mch_times;
 RENAME TABLE games TO gam_games;
-DROP TABLE gam_playing;
 
 	Version 19.3:     Sep 15, 2019	Changes in match results. (244680 lines)
 					2 changes necessary in database:

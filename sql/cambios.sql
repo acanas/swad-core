@@ -12911,7 +12911,7 @@ SELECT gam_questions.QstCod,
  
  
  
-swad 18.129.1 ----> swad 19.25
+swad 18.128 ----> swad 19.25
 
 Ficheros:
 ---------
@@ -12927,6 +12927,9 @@ sudo cp -a fontawesome /var/www/html/swad/
 
 Base de datos:
 --------------
+
+UPDATE actions SET Txt='Solicitar la creaci&oacute;n de una cuenta (1/2)' WHERE ActCod='36' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1787','es','N','Solicitar la creaci&oacute;n de una cuenta (2/2)');
 
 ALTER TABLE games DROP COLUMN StartTime,DROP COLUMN EndTime;
 
@@ -12996,7 +12999,6 @@ RENAME TABLE gam_players TO mch_players;
 RENAME TABLE gam_mch_being_played TO mch_playing;
 RENAME TABLE gam_time TO mch_times;
 RENAME TABLE games TO gam_games;
-DROP TABLE gam_playing;
 
 ALTER TABLE mch_matches DROP COLUMN Showing;
 ALTER TABLE mch_matches ADD COLUMN Showing ENUM('nothing','stem','answers','results') NOT NULL DEFAULT 'nothing' AFTER ShowResults;
