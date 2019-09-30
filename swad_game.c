@@ -114,7 +114,8 @@ static void Gam_RemAnswersOfAQuestion (long GamCod,unsigned QstInd);
 static unsigned Gam_GetMaxQuestionIndexInGame (long GamCod);
 static void Gam_ListGameQuestions (struct Game *Game);
 static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
-                                                  MYSQL_RES *mysql_res);
+                                                  MYSQL_RES *mysql_res,
+						  bool ICanEditQuestions);
 static void Gam_PutIconToAddNewQuestions (void);
 static void Gam_PutButtonToAddNewQuestions (void);
 
@@ -573,8 +574,7 @@ static void Gam_PutFormsToRemEditOneGame (const struct Game *Game,
       Ico_PutContextualIconToHide (ActHidGam,Anchor,Gam_PutParams);
 
    /***** Put icon to edit game *****/
-   if (!Game->NumMchs)	// Edit only if match has no matches
-      Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);
+   Ico_PutContextualIconToEdit (ActEdiOneGam,Gam_PutParams);
   }
 
 /*****************************************************************************/
@@ -1085,95 +1085,88 @@ void Gam_RequestCreatOrEditGame (void)
    /***** Get parameters *****/
    Game.GamCod = Gam_GetParams ();
 
-   /***** Check if game has matches *****/
-   if (Gam_GetNumMchsGameAndCheckIfEditable (&Game))
+   /***** Get from the database the data of the game *****/
+   ItsANewGame = (Game.GamCod < 0);
+   if (ItsANewGame)
      {
-      /***** Get from the database the data of the game *****/
-      ItsANewGame = (Game.GamCod < 0);
-      if (ItsANewGame)
-	{
-	 /***** Put link (form) to create new game *****/
-	 if (!Gam_CheckIfICanEditGames ())
-            Act_NoPermissionExit ();
+      /***** Put link (form) to create new game *****/
+      if (!Gam_CheckIfICanEditGames ())
+	 Act_NoPermissionExit ();
 
-	 /* Initialize to empty game */
-	 Gam_ResetGame (&Game);
-	}
-      else
-	{
-	 /* Get data of the game from database */
-	 Gam_GetDataOfGameByCod (&Game);
-	 if (!Gam_CheckIfICanEditGames ())
-            Act_NoPermissionExit ();
+      /* Initialize to empty game */
+      Gam_ResetGame (&Game);
+     }
+   else
+     {
+      /* Get data of the game from database */
+      Gam_GetDataOfGameByCod (&Game);
+      if (!Gam_CheckIfICanEditGames ())
+	 Act_NoPermissionExit ();
 
-	 /* Get text of the game from database */
-	 Gam_GetGameTxtFromDB (Game.GamCod,Txt);
-	}
-
-      /***** Start form *****/
-      Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
-      Frm_StartForm (ItsANewGame ? ActNewGam :
-				   ActChgGam);
-      Gam_PutParams ();
-
-      /***** Start box and table *****/
-      if (ItsANewGame)
-	 Box_StartBoxTable (NULL,Txt_New_game,NULL,
-			    Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
-      else
-	 Box_StartBoxTable (NULL,
-			    Game.Title[0] ? Game.Title :
-					    Txt_Edit_game,
-			    NULL,
-			    Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
-
-      /***** Game title *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_MIDDLE\">"
-			 "<label for=\"Title\" class=\"%s\">%s:</label>"
-			 "</td>"
-			 "<td class=\"LEFT_MIDDLE\">"
-			 "<input type=\"text\" id=\"Title\" name=\"Title\""
-			 " size=\"45\" maxlength=\"%u\" value=\"%s\""
-			 " required=\"required\" />"
-			 "</td>"
-			 "</tr>",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Title,
-	       Gam_MAX_CHARS_TITLE,Game.Title);
-
-      /***** Game text *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"RIGHT_TOP\">"
-			 "<label for=\"Txt\" class=\"%s\">%s:</label>"
-			 "</td>"
-			 "<td class=\"LEFT_TOP\">"
-			 "<textarea id=\"Txt\" name=\"Txt\""
-			 " cols=\"60\" rows=\"10\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Description);
-      if (!ItsANewGame)
-	 fprintf (Gbl.F.Out,"%s",Txt);
-      fprintf (Gbl.F.Out,"</textarea>"
-			 "</td>"
-			 "</tr>");
-
-      /***** End table, send button and end box *****/
-      if (ItsANewGame)
-	 Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_game);
-      else
-	 Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
-
-      /***** End form *****/
-      Frm_EndForm ();
-
-      /***** Show questions of the game ready to be edited *****/
-      if (!ItsANewGame)
-	 Gam_ListGameQuestions (&Game);
+      /* Get text of the game from database */
+      Gam_GetGameTxtFromDB (Game.GamCod,Txt);
      }
 
-   /***** Show all games *****/
-   Gam_ListAllGames ();
+   /***** Start form *****/
+   Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
+   Frm_StartForm (ItsANewGame ? ActNewGam :
+				ActChgGam);
+   Gam_PutParams ();
+
+   /***** Start box and table *****/
+   if (ItsANewGame)
+      Box_StartBoxTable (NULL,Txt_New_game,NULL,
+			 Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
+   else
+      Box_StartBoxTable (NULL,
+			 Game.Title[0] ? Game.Title :
+					 Txt_Edit_game,
+			 NULL,
+			 Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
+
+   /***** Game title *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"Title\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"LEFT_MIDDLE\">"
+		      "<input type=\"text\" id=\"Title\" name=\"Title\""
+		      " size=\"45\" maxlength=\"%u\" value=\"%s\""
+		      " required=\"required\" />"
+		      "</td>"
+		      "</tr>",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Title,
+	    Gam_MAX_CHARS_TITLE,Game.Title);
+
+   /***** Game text *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"RIGHT_TOP\">"
+		      "<label for=\"Txt\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"LEFT_TOP\">"
+		      "<textarea id=\"Txt\" name=\"Txt\""
+		      " cols=\"60\" rows=\"10\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Description);
+   if (!ItsANewGame)
+      fprintf (Gbl.F.Out,"%s",Txt);
+   fprintf (Gbl.F.Out,"</textarea>"
+		      "</td>"
+		      "</tr>");
+
+   /***** End table, send button and end box *****/
+   if (ItsANewGame)
+      Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_game);
+   else
+      Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   /***** Show questions of the game ready to be edited *****/
+   if (!ItsANewGame)
+      Gam_ListGameQuestions (&Game);
   }
 
 /*****************************************************************************/
@@ -1554,9 +1547,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
    extern const char *Txt_This_game_has_no_questions;
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
-   bool Editing = (Gbl.Action.Act == ActEdiOneGam    ||
-	           Gbl.Action.Act == ActAddOneGamQst);	// TODO: Ampliar casos en los que se está editando para que se muestre el botón de Añadir preguntas
-   bool ICanEditGames = Gam_CheckIfICanEditGames ();
+   bool ICanEditQuestions = Gam_GetNumMchsGameAndCheckIfEditable (Game);
 
    /***** Get data of questions from database *****/
    NumQsts = (unsigned) DB_QuerySELECT (&mysql_res,"can not get data of a question",
@@ -1574,19 +1565,19 @@ static void Gam_ListGameQuestions (struct Game *Game)
 
    /***** Start box *****/
    Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
-   Box_StartBox (NULL,Txt_Questions,ICanEditGames ? Gam_PutIconToAddNewQuestions :
-                                                    NULL,
+   Box_StartBox (NULL,Txt_Questions,ICanEditQuestions ? Gam_PutIconToAddNewQuestions :
+                                                        NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    if (NumQsts)
       /***** Show the table with the questions *****/
-      Gam_ListOneOrMoreQuestionsForEdition (Game->GamCod,NumQsts,mysql_res);
+      Gam_ListOneOrMoreQuestionsForEdition (Game->GamCod,NumQsts,mysql_res,
+					    ICanEditQuestions);
    else	// This game has no questions
       Ale_ShowAlert (Ale_INFO,Txt_This_game_has_no_questions);
 
-   if (ICanEditGames &&	// I can edit
-       (!NumQsts ||	// This game has no questions
-	Editing))	// I am editing
+   if (ICanEditQuestions &&		// I can edit questions
+       !NumQsts)			// This game has no questions
       /***** Put button to add a new question in this game *****/
       Gam_PutButtonToAddNewQuestions ();
 
@@ -1602,7 +1593,8 @@ static void Gam_ListGameQuestions (struct Game *Game)
 /*****************************************************************************/
 
 static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
-                                                  MYSQL_RES *mysql_res)
+                                                  MYSQL_RES *mysql_res,
+						  bool ICanEditQuestions)
   {
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
@@ -1617,7 +1609,6 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    MYSQL_ROW row;
    unsigned QstInd;
    unsigned MaxQstInd;
-   long QstCod;
    char StrQstInd[10 + 1];
 
    /***** Get maximum question index *****/
@@ -1671,7 +1662,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 		QstInd);
 
       /* Get question code (row[1]) */
-      QstCod = Str_ConvertStrCodToLongCod (row[1]);
+      Gbl.Test.QstCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /***** Icons *****/
       Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
@@ -1680,14 +1671,19 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
       /* Put icon to remove the question */
-      Frm_StartForm (ActReqRemGamQst);
-      Gam_PutParams ();
-      Gam_PutParamQstInd (QstInd);
-      Ico_PutIconRemove ();
-      Frm_EndForm ();
+      if (ICanEditQuestions)
+	{
+	 Frm_StartForm (ActReqRemGamQst);
+	 Gam_PutParams ();
+	 Gam_PutParamQstInd (QstInd);
+	 Ico_PutIconRemove ();
+	 Frm_EndForm ();
+	}
+      else
+         Ico_PutIconRemovalNotAllowed ();
 
       /* Put icon to move up the question */
-      if (QstInd > 1)
+      if (ICanEditQuestions && QstInd > 1)
 	{
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Move_up_X,
@@ -1700,7 +1696,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
          Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
 
       /* Put icon to move down the question */
-      if (QstInd < MaxQstInd)
+      if (ICanEditQuestions && QstInd < MaxQstInd)
 	{
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Move_down_X,
@@ -1713,8 +1709,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
          Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
 
       /* Put icon to edit the question */
-      Gbl.Test.QstCod = QstCod;
-      Ico_PutContextualIconToEdit (ActEdiOneTstQst,Tst_PutParamQstCod);
+      if (ICanEditQuestions)
+	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,Tst_PutParamQstCod);
 
       fprintf (Gbl.F.Out,"</td>");
 
@@ -2181,20 +2177,17 @@ static void Gam_ExchangeQuestions (long GamCod,
 /*********** Get number of matches and check is edition is possible **********/
 /*****************************************************************************/
 // Games with matches should not be edited
-// Return true if no matches (if game is editable)
 
 static bool Gam_GetNumMchsGameAndCheckIfEditable (struct Game *Game)
   {
-   extern const char *Txt_You_can_not_edit_a_game_with_matches;
+   /***** Get number of matches *****/
+   Game->NumMchs = Mch_GetNumMchsInGame (Game->GamCod);
 
-   /***** Check if game has matches *****/
-   if ((Game->NumMchs = Mch_GetNumMchsInGame (Game->GamCod)))
-     {
-      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_edit_a_game_with_matches);
-      return false;	// It has matches ==> it's not editable
-     }
+   if (Gam_CheckIfICanEditGames ())
+      /***** Questions are editable only if game has no matches *****/
+      return (bool) (Game->NumMchs == 0);
    else
-      return true;   	// It has no matches ==> it's editable
+      return false;	// Questions are not editable
   }
 
 /*****************************************************************************/

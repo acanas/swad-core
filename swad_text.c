@@ -54242,7 +54242,7 @@ const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_create
 	"Voc&ecirc; n&atilde;o pode desativar o upload de arquivos,"
 	" uma vez diret&oacute;rios foram criados.";
 #endif
-
+/*
 const char *Txt_You_can_not_edit_a_game_with_matches =
 #if   L==1	// ca
 	"No es pot editar un joc amb partides.";
@@ -54263,8 +54263,7 @@ const char *Txt_You_can_not_edit_a_game_with_matches =
 #elif L==9	// pt
 	"Voc&ecirc; n&atilde;o pode editar um jogo com partidas.";
 #endif
-
-
+*/
 const char *Txt_You_can_not_leave_empty_intermediate_answers =
 #if   L==1	// ca
 	"No puede dejar respuestas intermedias sin rellenar.";	// Necessita traduccio
