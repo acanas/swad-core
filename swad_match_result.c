@@ -481,24 +481,24 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	   }
 
          /* Write number of questions */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">%u</td>",
-	          ClassDat,Gbl.RowEvenOdd,NumQstsInThisResult);
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">%u</td>",
+	          Gbl.RowEvenOdd,NumQstsInThisResult);
 
          /* Write number of questions not blank */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">%u</td>",
-	          ClassDat,Gbl.RowEvenOdd,NumQstsNotBlankInThisResult);
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">%u</td>",
+	          Gbl.RowEvenOdd,NumQstsNotBlankInThisResult);
 
 	 /* Write score */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
-	          ClassDat,Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",
+	          Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     ScoreInThisResult);
 	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write average score per question */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
-	          ClassDat,Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",
+	          Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisResult ? ScoreInThisResult / (double) NumQstsInThisResult :
@@ -506,8 +506,8 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write score over Tst_SCORE_MAX */
-	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
-	          ClassDat,Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",
+	          Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisResult ? ScoreInThisResult * Tst_SCORE_MAX / (double) NumQstsInThisResult :

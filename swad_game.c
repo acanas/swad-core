@@ -2135,7 +2135,7 @@ static void Gam_ExchangeQuestions (long GamCod,
    long QstCodTop;
    long QstCodBottom;
 
-   /***** Lock table to make the inscription atomic *****/
+   /***** Lock table to make the move atomic *****/
    DB_Query ("can not lock tables to move game question",
 	     "LOCK TABLES gam_questions WRITE");
    Gbl.DB.LockedTables = true;
