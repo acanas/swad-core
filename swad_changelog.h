@@ -483,10 +483,11 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.28.1 (2019-09-30)"
+#define Log_PLATFORM_VERSION	"SWAD 19.28.2 (2019-09-30)"
 #define CSS_FILE		"swad19.28.css"
 #define JS_FILE			"swad19.15.js"
 /*
+	Version 19.28.2:  Sep 30, 2019	Changed position of column in list of match results with the name of the match. (246762 lines)
 	Version 19.28.1:  Sep 30, 2019	New column in list of match results with the name of the match. (246760 lines)
 	Version 19.28:    Sep 30, 2019	Changes in layout of match playing. (246752 lines)
 	Version 19.27:    Sep 30, 2019	Changes in layout of match playing. (246756 lines)

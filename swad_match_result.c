@@ -69,7 +69,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void McR_ShowHeaderMchResults (void);
+static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther);
 static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther);
 static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
                                           unsigned NumResults,
@@ -142,7 +142,7 @@ void McR_ShowMyMchResults (void)
                       Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
 
    /***** Header of the table with the list of users *****/
-   McR_ShowHeaderMchResults ();
+   McR_ShowHeaderMchResults (Usr_ME);
 
    /***** List my matches results *****/
    Tst_GetConfigTstFromDB ();	// To get feedback type
@@ -279,7 +279,7 @@ void McR_ShowUsrsMchResults (void)
                          Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
 
       /***** Header of the table with the list of users *****/
-      McR_ShowHeaderMchResults ();
+      McR_ShowHeaderMchResults (Usr_OTHER);
 
       /***** List the matches results of the selected users *****/
       Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
@@ -313,7 +313,7 @@ void McR_ShowUsrsMchResults (void)
 /********************* Show header of my matches results *********************/
 /*****************************************************************************/
 
-static void McR_ShowHeaderMchResults (void)
+static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_Match;
@@ -355,10 +355,11 @@ static void McR_ShowHeaderMchResults (void)
 		      "</th>"
 		      "<th></th>"
 		      "</tr>",
-	    Txt_User[Usr_SEX_UNKNOWN],
-	    Txt_Match,
+	    Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
+		                           Usr_SEX_UNKNOWN],
 	    Txt_START_END_TIME[Dat_START_TIME],
 	    Txt_START_END_TIME[Dat_END_TIME],
+	    Txt_Match,
 	    Txt_Questions,
 	    Txt_Non_blank_BR_questions,
 	    Txt_Total_BR_score,
@@ -444,10 +445,6 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
          if (NumResult)
             fprintf (Gbl.F.Out,"<tr>");
 
-         /* Write match title */
-	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">%s</td>",
-	          Gbl.RowEvenOdd,Match.Title);
-
          /* Write start/end times (row[1], row[2] hold UTC start/end times) */
          for (StartEndTime = (Dat_StartEndTime_t) 0;
 	      StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
@@ -468,6 +465,10 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 		     (long) TimeUTC[StartEndTime],
 		     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
            }
+
+         /* Write match title */
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">%s</td>",
+	          Gbl.RowEvenOdd,Match.Title);
 
          /* Get number of questions (row[3]) */
          if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
