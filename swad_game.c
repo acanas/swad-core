@@ -1187,7 +1187,7 @@ void Gam_RecFormGame (void)
    NewGame.GamCod = Gam_GetParamGameCod ();
 
    /***** Check if game has matches *****/
-   if (Gam_GetNumMchsGameAndCheckIfEditable (&NewGame))
+   if (Gam_CheckIfICanEditGames ())
      {
       ItsANewGame = (NewGame.GamCod < 0);
       if (!ItsANewGame)
@@ -1233,6 +1233,8 @@ void Gam_RecFormGame (void)
       else
 	 Gam_RequestCreatOrEditGame ();
      }
+   else
+      Act_NoPermissionExit ();
 
    /***** Show games again *****/
    Gam_ListAllGames ();
@@ -1333,6 +1335,8 @@ void Gam_RequestNewQuestion (void)
       Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
       Tst_ShowFormAskSelectTstsForGame ();
      }
+   else
+      Act_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -1360,6 +1364,8 @@ void Gam_ListTstQuestionsToSelect (void)
       Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
       Tst_ListQuestionsToSelect ();
      }
+   else
+      Act_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -1856,6 +1862,8 @@ void Gam_AddTstQuestionsToGame (void)
       /***** Free space for selected question codes *****/
       Gam_FreeListsSelectedQuestions ();
      }
+   else
+      Act_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -1953,6 +1961,8 @@ void Gam_RequestRemoveQst (void)
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_question_X,
 			      QstInd);
      }
+   else
+      Act_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -2009,6 +2019,8 @@ void Gam_RemoveQst (void)
       /***** Write message *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
      }
+   else
+      Act_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -2056,6 +2068,8 @@ void Gam_MoveUpQst (void)
       else
 	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
      }
+   else
+      Act_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -2113,6 +2127,8 @@ void Gam_MoveDownQst (void)
       else
 	 Ale_ShowAlert (Ale_WARNING,Txt_This_game_has_no_questions);
      }
+   else
+      Act_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
