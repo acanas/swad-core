@@ -2925,9 +2925,10 @@ void Mch_ReceiveQuestionAnswer (void)
    /***** Get indexes for this question from database *****/
    Mch_GetIndexes (Match.MchCod,QstInd,Indexes);
 
-   /***** Check that question index is the current one being played *****/
-   if (QstInd == Match.Status.QstInd)	// Receiving an answer
-					// to the current question being played
+   /***** Check that teacher's screen is showing answers
+          and question index is the current one being played *****/
+   if (Match.Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing answers
+       QstInd == Match.Status.QstInd)		// Receiving an answer to the current question being played
      {
       /***** Get answer index *****/
       /*
