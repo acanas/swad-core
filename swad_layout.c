@@ -719,13 +719,12 @@ static void Lay_WriteScriptInit (void)
 
    Dat_WriteScriptMonths ();
 
-   if (RefreshNewTimeline)
-      fprintf (Gbl.F.Out,"\tvar delayNewTimeline = %lu;\n",
-	       Cfg_TIME_TO_REFRESH_TIMELINE);
-   else if (RefreshMatchStd ||
-	    RefreshMatchTch)	// Refresh match via AJAX
-      fprintf (Gbl.F.Out,"\tvar delayMatch = %lu;\n",
-	       Cfg_TIME_TO_REFRESH_MATCH);
+   if (RefreshNewTimeline)	// Refresh new timeline via AJAX
+      fprintf (Gbl.F.Out,"\tvar delayNewTL = %lu;\n",Cfg_TIME_TO_REFRESH_TIMELINE);
+   else if (RefreshMatchStd)	// Refresh match via AJAX
+      fprintf (Gbl.F.Out,"\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_STD);
+   else if (RefreshMatchTch)	// Refresh match via AJAX
+      fprintf (Gbl.F.Out,"\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
 
    fprintf (Gbl.F.Out,"function init(){\n");
 
@@ -747,7 +746,7 @@ static void Lay_WriteScriptInit (void)
    else if (RefreshMatchTch)	// Refresh match for a teacher via AJAX
       fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshMatchTch()\",delayMatch);\n");
    else if (RefreshNewTimeline)	// Refresh timeline via AJAX
-      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshNewTimeline()\",delayNewTimeline);\n");
+      fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshNewTL()\",delayNewTL);\n");
 
    fprintf (Gbl.F.Out,"}\n"
                       "</script>\n");

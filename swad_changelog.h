@@ -483,12 +483,15 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.29 (2019-10-01)"
+#define Log_PLATFORM_VERSION	"SWAD 19.30 (2019-10-01)"
 #define CSS_FILE		"swad19.29.css"
-#define JS_FILE			"swad19.15.js"
+#define JS_FILE			"swad19.30.js"
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 
+	Version 19.30:    Oct 01, 2019	The match refreshment time for teachers is now different from the time for students.
+					Code refactoring in matchs.
+					Code refactoring in new timeline. (246902 lines)
 	Version 19.29.1:  Oct 01, 2019	Changed refreshing time in matches.
 					Fixed bug in icon reported by Francisco Javier Fernández Baldomero.
 					Fixed bug in closing window in matches. (246900 lines)

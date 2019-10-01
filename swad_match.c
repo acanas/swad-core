@@ -1328,7 +1328,8 @@ void Mch_ResumeMatch (void)
    struct Match Match;
 
    /***** Remove old players.
-          This function must be called before getting match status. *****/
+          This function must be called by a teacher
+          before getting match status. *****/
    Mch_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
@@ -1658,8 +1659,8 @@ static void Mch_UpdateElapsedTimeInQuestion (struct Match *Match)
 		      " ON DUPLICATE KEY"
 		      " UPDATE ElapsedTime=ADDTIME(ElapsedTime,SEC_TO_TIME(%u))",
 		      Match->MchCod,Match->Status.QstInd,
-		      Cfg_SECONDS_TO_REFRESH_MATCH,
-		      Cfg_SECONDS_TO_REFRESH_MATCH);
+		      Cfg_SECONDS_TO_REFRESH_MATCH_TCH,
+		      Cfg_SECONDS_TO_REFRESH_MATCH_TCH);
   }
 
 /*****************************************************************************/
@@ -1746,7 +1747,8 @@ void Mch_PauseMatch (void)
    struct Match Match;
 
    /***** Remove old players.
-          This function must be called before getting match status. *****/
+          This function must be called by a teacher
+          before getting match status. *****/
    Mch_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
@@ -1774,7 +1776,8 @@ void Mch_PlayMatch (void)
    struct Match Match;
 
    /***** Remove old players.
-          This function must be called before getting match status. *****/
+          This function must be called by a teacher
+          before getting match status. *****/
    Mch_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
@@ -1807,7 +1810,8 @@ void Mch_ToggleVisibilResultsMchQst (void)
    struct Match Match;
 
    /***** Remove old players.
-          This function must be called before getting match status. *****/
+          This function must be called by a teacher
+          before getting match status. *****/
    Mch_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
@@ -1838,7 +1842,8 @@ void Mch_BackMatch (void)
    struct Match Match;
 
    /***** Remove old players.
-          This function must be called before getting match status. *****/
+          This function must be called by a teacher
+          before getting match status. *****/
    Mch_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
@@ -1866,7 +1871,8 @@ void Mch_ForwardMatch (void)
    struct Match Match;
 
    /***** Remove old players.
-          This function must be called before getting match status. *****/
+          This function must be called by a teacher
+          before getting match status. *****/
    Mch_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
@@ -2711,17 +2717,17 @@ static void Mch_ShowWaitImage (const char *Txt)
 
 static void Mch_RemoveOldPlayers (void)
   {
-   /***** Delete matches not being played *****/
+   /***** Delete matches not being played by teacher *****/
    DB_QueryDELETE ("can not update matches as not being played",
 		   "DELETE FROM mch_playing"
 		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		   Cfg_SECONDS_TO_REFRESH_MATCH*3);
+		   Cfg_SECONDS_TO_REFRESH_MATCH_TCH*3);
 
-   /***** Delete players who have left matches *****/
+   /***** Delete players (students) who have left matches *****/
    DB_QueryDELETE ("can not update match players",
 		   "DELETE FROM mch_players"
 		   " WHERE TS<FROM_UNIXTIME(UNIX_TIMESTAMP()-%lu)",
-		   Cfg_SECONDS_TO_REFRESH_MATCH*3);
+		   Cfg_SECONDS_TO_REFRESH_MATCH_STD*3);
   }
 
 static void Mch_UpdateMatchAsBeingPlayed (long MchCod)
@@ -2794,10 +2800,6 @@ void Mch_JoinMatchAsStd (void)
   {
    struct Match Match;
 
-   /***** Remove old players.
-          This function must be called before getting match status. *****/
-   Mch_RemoveOldPlayers ();
-
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Mch_GetDataOfMatchByCod (&Match);
@@ -2820,7 +2822,8 @@ void Mch_RefreshMatchTch (void)
       return;
 
    /***** Remove old players.
-          This function must be called before getting match status. *****/
+          This function must be called by a teacher
+          before getting match status. *****/
    Mch_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
@@ -2847,10 +2850,6 @@ void Mch_RefreshMatchStd (void)
 
    if (!Gbl.Session.IsOpen)	// If session has been closed, do not write anything
       return;
-
-   /***** Remove old players.
-          This function must be called before getting match status. *****/
-   Mch_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
@@ -2915,10 +2914,6 @@ void Mch_ReceiveQuestionAnswer (void)
    unsigned NumQsts;
    unsigned NumQstsNotBlank;
    double TotalScore;
-
-   /***** Remove old players.
-          This function must be called before getting match status. *****/
-   Mch_RemoveOldPlayers ();
 
    /***** Get data of the match from database *****/
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;

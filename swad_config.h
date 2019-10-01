@@ -503,8 +503,10 @@
 #define Cfg_TIME_TO_REFRESH_TIMELINE			((time_t)(             2UL * 1000UL))	// Initial refresh period of social timeline in miliseconds
 												// This delay is increased 1 second on each refresh
 
-#define Cfg_SECONDS_TO_REFRESH_MATCH			2							// Refresh period of game being played in seconds
-#define Cfg_TIME_TO_REFRESH_MATCH			((time_t)(Cfg_SECONDS_TO_REFRESH_MATCH * 1000UL))	// Refresh period of game being played in miliseconds
+#define Cfg_SECONDS_TO_REFRESH_MATCH_TCH		1							// Refresh period of match being played in seconds (for teachers)
+#define Cfg_SECONDS_TO_REFRESH_MATCH_STD		5							// Refresh period of match being played in seconds (for students)
+#define Cfg_TIME_TO_REFRESH_MATCH_TCH			((time_t)(Cfg_SECONDS_TO_REFRESH_MATCH_TCH * 1000UL))	// Refresh period of match being played in miliseconds (for teachers)
+#define Cfg_TIME_TO_REFRESH_MATCH_STD			((time_t)(Cfg_SECONDS_TO_REFRESH_MATCH_STD * 1000UL))	// Refresh period of match being played in miliseconds (for students)
 
 #define Cfg_TIME_TO_REFRESH_LAST_CLICKS			((time_t)(             1UL * 1000UL))	// Refresh period of last clicks in miliseconds
 

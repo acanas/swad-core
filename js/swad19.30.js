@@ -623,7 +623,7 @@ function readLastClicksData () {
 
 // This function must be called from time to time
 var objXMLHttpReqNewTL = false;
-function refreshNewTimeline () {
+function refreshNewTL () {
 	objXMLHttpReqNewTL = AJAXCreateObject();
 	if (objXMLHttpReqNewTL) {
 		var RefreshParams = RefreshParamNxtActNewPub + '&' +
@@ -672,8 +672,8 @@ function readNewTimelineData () {
 			}
 			
 			// Global delay variable is set initially in swad-core
-			delayNewTimeline += 1000;	// Increase 1 second
-			setTimeout('refreshNewTimeline()',delayNewTimeline);
+			delayNewTL += 1000;	// Increase 1 second
+			setTimeout('refreshNewTL()',delayNewTL);
 		}
 	}
 }
