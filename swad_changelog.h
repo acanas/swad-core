@@ -487,6 +487,14 @@ ps2pdf source.ps destination.pdf
 #define CSS_FILE		"swad19.29.css"
 #define JS_FILE			"swad19.15.js"
 /*
+// TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
+
+	Version 19.29.1:  Oct 01, 2019	Changed refreshing time in matches.
+					Fixed bug in icon reported by Francisco Javier Fernández Baldomero.
+					Fixed bug in closing window in matches. (246900 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/clipboard-list.svg /var/www/html/swad/icon/
+
 	Version 19.29:    Oct 01, 2019	Show podium at the end of the match. (246894 lines)
 	Version 19.28.2:  Sep 30, 2019	Changed position of column in list of match results with the name of the match. (246762 lines)
 	Version 19.28.1:  Sep 30, 2019	New column in list of match results with the name of the match. (246760 lines)

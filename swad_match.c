@@ -2681,7 +2681,7 @@ static void Mch_PutBigButtonClose (void)
    /***** Put icon with link *****/
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CONTAINER\">"
                       "<a href=\"\" class=\"MATCH_BUTTON_ON\" title=\"%s\" "
-	              " onmouseclick=\"window.close();"
+	              " onclick=\"window.close();"
 	              " return false;\"\">"
 	              "<i class=\"%s\"></i>"
 	              "</a>"
