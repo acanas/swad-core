@@ -25617,6 +25617,27 @@ const char *Txt_No_questions_found_matching_your_search_criteria =
 	"N&atilde;o quest&otilde;es com os seus crit&eacute;rios de pesquisa selecionados.";
 #endif
 
+const char *Txt_No_questions_have_been_added =
+#if   L==1	// ca
+	"No s'ha afegit cap pregunta.";
+#elif L==2	// de
+	"Es wurden keine Fragen hinzugef&uuml;gt.";
+#elif L==3	// en
+	"No questions have been added.";
+#elif L==4	// es
+	"No se ha a&ntilde;adido ninguna pregunta.";
+#elif L==5	// fr
+	"Aucune question n'a &eacute;t&eacute; ajout&eacute;e.";
+#elif L==6	// gn
+	"No se ha a&ntilde;adido ninguna pregunta.";		// Okoteve traducción
+#elif L==7	// it
+	"Nessuna domanda &egrave; stata aggiunta.";
+#elif L==8	// pl
+	"Nie dodano &zdot;adnych pyta&nacute;.";
+#elif L==9	// pt
+	"Nenhuma pergunta foi adicionada.";
+#endif
+
 const char *Txt_No_results =
 #if   L==1	// ca
 	"No hi ha resultats.";
@@ -55855,27 +55876,6 @@ const char *Txt_You_must_select_a_T_F_answer =
 	"You must select a T/F answer.";		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Voc&ecirc; deve selecionar uma resposta V ou F.";
-#endif
-
-const char *Txt_You_must_select_one_ore_more_questions =
-#if   L==1	// ca
-	"Heu de seleccionar una o m&eacute;s preguntes.";
-#elif L==2	// de
-	"Sie m&uuml;ssen eine oder mehrere Fragen ausw&auml;hlen.";
-#elif L==3	// en
-	"You must select one or more questions.";
-#elif L==4	// es
-	"Debe seleccionar una o m&aacute;s preguntas.";
-#elif L==5	// fr
-	"Vous devez s&eacute;lectionner une ou plusieurs questions.";
-#elif L==6	// gn
-	"Debe seleccionar una o m&aacute;s preguntas.";		// Okoteve traducción
-#elif L==7	// it
-	"Devi selezionare una o pi&ugrave; domande.";
-#elif L==8	// pl
-	"Musisz wybra&cacute; jedno lub wi&eogon;cej pyta&nacute;.";
-#elif L==9	// pt
-	"Voc&ecirc; deve selecionar uma ou mais perguntas.";
 #endif
 
 const char *Txt_You_must_select_one_ore_more_recipients =

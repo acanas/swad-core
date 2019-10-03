@@ -464,6 +464,8 @@ https://oficinavirtual.ugr.es/awc/horario/ve_horario/visor.jsp?programa=M37156&s
 
 contiene una de las que yo imparto. Así que me imagino que te esperarás la sugerencia (petición con café o cerveza como recompensa): ¿sería posible que en la pestaña de horario se pudiese embeber esa página? (Creo que los grados usan algo parecido también.)
 */
+// TODO: En resultados de test y de juegos, en preguntas modificadas se podría mostrar la puntuación obtenida en la pregunta (ahora no sale)
+// TODO: Al crear un nuevo juego, debería irse a la pantalla de añadir preguntas (la misma opción que sale cuando pulsas en editar un juego existente)
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -483,12 +485,13 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.30.1 (2019-10-01)"
+#define Log_PLATFORM_VERSION	"SWAD 19.30.2 (2019-10-03)"
 #define CSS_FILE		"swad19.29.css"
 #define JS_FILE			"swad19.30.js"
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 
+	Version 19.30.2:  Oct 03, 2019	Changes in edition of games. (246914 lines)
 	Version 19.30.1:  Oct 01, 2019	Changes in match playing. (246904 lines)
 	Version 19.30:    Oct 01, 2019	The match refreshment time for teachers is now different from the time for students.
 					Code refactoring in matchs.

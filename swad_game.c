@@ -106,6 +106,8 @@ static void Gam_RemoveGameFromAllTables (long GamCod);
 
 static bool Gam_CheckIfSimilarGameExists (struct Game *Game);
 
+static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame);
+
 static void Gam_CreateGame (struct Game *Game,const char *Txt);
 static void Gam_UpdateGame (struct Game *Game,const char *Txt);
 
@@ -1064,10 +1066,34 @@ static bool Gam_CheckIfSimilarGameExists (struct Game *Game)
   }
 
 /*****************************************************************************/
-/*********************** Put a form to create a new game *********************/
+/**************** Request the creation or edition of a game ******************/
 /*****************************************************************************/
 
 void Gam_RequestCreatOrEditGame (void)
+  {
+   struct Game Game;
+   bool ItsANewGame;
+
+   /***** Check if I can create new games *****/
+   if (!Gam_CheckIfICanEditGames ())
+      Act_NoPermissionExit ();
+
+   /***** Get parameters *****/
+   Game.GamCod = Gam_GetParams ();
+   ItsANewGame = (Game.GamCod < 0);
+
+   /***** Put forms to create/edit a game *****/
+   Gam_PutFormsEditionGame (&Game,ItsANewGame);
+
+   /***** Show games again *****/
+   Gam_ListAllGames ();
+  }
+
+/*****************************************************************************/
+/********************* Put a form to create/edit a game **********************/
+/*****************************************************************************/
+
+static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
   {
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
@@ -1078,37 +1104,21 @@ void Gam_RequestCreatOrEditGame (void)
    extern const char *Txt_Description;
    extern const char *Txt_Create_game;
    extern const char *Txt_Save_changes;
-   struct Game Game;
-   bool ItsANewGame;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Get parameters *****/
-   Game.GamCod = Gam_GetParams ();
-
-   /***** Get from the database the data of the game *****/
-   ItsANewGame = (Game.GamCod < 0);
+   /***** Get game data *****/
    if (ItsANewGame)
-     {
-      /***** Put link (form) to create new game *****/
-      if (!Gam_CheckIfICanEditGames ())
-	 Act_NoPermissionExit ();
-
       /* Initialize to empty game */
-      Gam_ResetGame (&Game);
-     }
+      Gam_ResetGame (Game);
    else
      {
-      /* Get data of the game from database */
-      Gam_GetDataOfGameByCod (&Game);
-      if (!Gam_CheckIfICanEditGames ())
-	 Act_NoPermissionExit ();
-
-      /* Get text of the game from database */
-      Gam_GetGameTxtFromDB (Game.GamCod,Txt);
+      /* Get game data from database */
+      Gam_GetDataOfGameByCod (Game);
+      Gam_GetGameTxtFromDB (Game->GamCod,Txt);
      }
 
    /***** Start form *****/
-   Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
+   Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Frm_StartForm (ItsANewGame ? ActNewGam :
 				ActChgGam);
    Gam_PutParams ();
@@ -1119,8 +1129,8 @@ void Gam_RequestCreatOrEditGame (void)
 			 Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
    else
       Box_StartBoxTable (NULL,
-			 Game.Title[0] ? Game.Title :
-					 Txt_Edit_game,
+			 Game->Title[0] ? Game->Title :
+					  Txt_Edit_game,
 			 NULL,
 			 Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
 
@@ -1137,7 +1147,7 @@ void Gam_RequestCreatOrEditGame (void)
 		      "</tr>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Title,
-	    Gam_MAX_CHARS_TITLE,Game.Title);
+	    Gam_MAX_CHARS_TITLE,Game->Title);
 
    /***** Game text *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1166,7 +1176,7 @@ void Gam_RequestCreatOrEditGame (void)
 
    /***** Show questions of the game ready to be edited *****/
    if (!ItsANewGame)
-      Gam_ListGameQuestions (&Game);
+      Gam_ListGameQuestions (Game);
   }
 
 /*****************************************************************************/
@@ -1232,6 +1242,9 @@ void Gam_RecFormGame (void)
 	}
       else
 	 Gam_RequestCreatOrEditGame ();
+
+      /***** Put forms to create/edit a game *****/
+      Gam_PutFormsEditionGame (&NewGame,false);
      }
    else
       Act_NoPermissionExit ();
@@ -1575,16 +1588,15 @@ static void Gam_ListGameQuestions (struct Game *Game)
                                                         NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
+   /***** Show table with questions *****/
    if (NumQsts)
-      /***** Show the table with the questions *****/
       Gam_ListOneOrMoreQuestionsForEdition (Game->GamCod,NumQsts,mysql_res,
 					    ICanEditQuestions);
    else	// This game has no questions
       Ale_ShowAlert (Ale_INFO,Txt_This_game_has_no_questions);
 
-   if (ICanEditQuestions &&		// I can edit questions
-       !NumQsts)			// This game has no questions
-      /***** Put button to add a new question in this game *****/
+   /***** Put button to add a new question in this game *****/
+   if (ICanEditQuestions)		// I can edit questions
       Gam_PutButtonToAddNewQuestions ();
 
    /***** Free structure that stores the query result *****/
@@ -1808,7 +1820,7 @@ static void Gam_PutButtonToAddNewQuestions (void)
 
 void Gam_AddTstQuestionsToGame (void)
   {
-   extern const char *Txt_You_must_select_one_ore_more_questions;
+   extern const char *Txt_No_questions_have_been_added;
    struct Game Game;
    const char *Ptr;
    char LongStr[1 + 10 + 1];
@@ -1831,33 +1843,31 @@ void Gam_AddTstQuestionsToGame (void)
 			     Gam_MAX_BYTES_LIST_SELECTED_QUESTIONS);
 
       /* Check number of questions */
-      if (Gam_CountNumQuestionsInList () == 0)	// If no questions selected...
-	{					// ...write warning alert
-	 Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_questions);
-
-	 // TODO: Show form again!!!
-	}
-
-      /***** Insert questions in database *****/
-      Ptr = Gbl.Games.ListQuestions;
-      while (*Ptr)
+      if (Gam_CountNumQuestionsInList ())	// If questions selected...
 	{
-	 /* Get next code */
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
-	 if (sscanf (LongStr,"%ld",&QstCod) != 1)
-	    Lay_ShowErrorAndExit ("Wrong question code.");
+	 /***** Insert questions in database *****/
+	 Ptr = Gbl.Games.ListQuestions;
+	 while (*Ptr)
+	   {
+	    /* Get next code */
+	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
+	    if (sscanf (LongStr,"%ld",&QstCod) != 1)
+	       Lay_ShowErrorAndExit ("Wrong question code.");
 
-	 /* Get current maximum index */
-	 MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// -1 if no questions
+	    /* Get current maximum index */
+	    MaxQstInd = Gam_GetMaxQuestionIndexInGame (Game.GamCod);	// -1 if no questions
 
-	 /* Insert question in the table of questions */
-	 DB_QueryINSERT ("can not create question",
-			 "INSERT INTO gam_questions"
-			 " (GamCod,QstCod,QstInd)"
-			 " VALUES"
-			 " (%ld,%ld,%u)",
-			 Game.GamCod,QstCod,MaxQstInd + 1);
+	    /* Insert question in the table of questions */
+	    DB_QueryINSERT ("can not create question",
+			    "INSERT INTO gam_questions"
+			    " (GamCod,QstCod,QstInd)"
+			    " VALUES"
+			    " (%ld,%ld,%u)",
+			    Game.GamCod,QstCod,MaxQstInd + 1);
+	   }
 	}
+      else
+	 Ale_ShowAlert (Ale_WARNING,Txt_No_questions_have_been_added);
 
       /***** Free space for selected question codes *****/
       Gam_FreeListsSelectedQuestions ();
