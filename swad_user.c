@@ -7382,7 +7382,7 @@ void Usr_ListDataAdms (void)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Heading row with column names *****/
-      fprintf (Gbl.F.Out,"<table>");
+      Tbl_StartTable ();
       fprintf (Gbl.F.Out,"<tr>");
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_ADM;
@@ -7415,7 +7415,7 @@ void Usr_ListDataAdms (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Tbl_EndTable ();
      }
    else        // Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs == 0
       /***** Show warning indicating no admins found *****/

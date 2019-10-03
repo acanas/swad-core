@@ -52,6 +52,7 @@
 #include "swad_parameter.h"
 #include "swad_setting.h"
 #include "swad_tab.h"
+#include "swad_table.h"
 #include "swad_theme.h"
 #include "swad_timeline.h"
 
@@ -1682,7 +1683,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</tr>");
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

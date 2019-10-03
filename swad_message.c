@@ -3349,7 +3349,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    char PhotoURL[PATH_MAX + 1];
 
    /***** Put an icon to show if user has read the message *****/
-   fprintf (Gbl.F.Out,"<table>");
+   Tbl_StartTable ();
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/%s\""
@@ -3393,7 +3393,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
                Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
@@ -3475,7 +3475,7 @@ static void Msg_WriteMsgTo (long MsgCod)
    if (NumRecipientsTotal)
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table>");
+      Tbl_StartTable ();
 
       /***** How many recipients will be shown? *****/
       if (NumRecipientsKnown <= Msg_MAX_RECIPIENTS_TO_SHOW)
@@ -3581,7 +3581,7 @@ static void Msg_WriteMsgTo (long MsgCod)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Tbl_EndTable ();
      }
 
    /***** Free structure that stores the query result *****/

@@ -3537,7 +3537,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
    /***** Write user's ID ******/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
             Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<table>");
+   Tbl_StartTable ();
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"%s LEFT_MIDDLE\">",
 	    UsrDat->Accepted ? "DAT_N" :
@@ -3555,7 +3555,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,", %s</td>"
                       "</tr>",
 	    UsrDat->FirstName);
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
 

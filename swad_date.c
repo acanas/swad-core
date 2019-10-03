@@ -37,6 +37,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_setting.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -549,7 +550,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table>");
+   Tbl_StartTable ();
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Year *****/
@@ -665,7 +666,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</tr>");
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
 
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
    fprintf (Gbl.F.Out,"<input type=\"hidden\""
@@ -816,7 +817,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    unsigned NumDaysSelectedMonth;
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table>");
+   Tbl_StartTable ();
    fprintf (Gbl.F.Out,"<tr>");
 
    /***** Year *****/
@@ -895,7 +896,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</tr>");
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

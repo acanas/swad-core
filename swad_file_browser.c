@@ -3670,7 +3670,7 @@ static void Brw_ShowFileBrowser (void)
                    false,	// Tree not contracted
                    Gbl.FileBrowser.Priv.PathRootFolder,
                    Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
 
    /***** Show and store number of documents found *****/
    Brw_ShowAndStoreSizeOfFileTree ();
@@ -5591,7 +5591,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    fprintf (Gbl.F.Out,"<td class=\"NO_BR LEFT_TOP COLOR%u\""
 	              " style=\"width:99%%;\">",
             Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<table>");
+   Tbl_StartTable ();
    fprintf (Gbl.F.Out,"<tr>");
 
    /* Indent depending on level */
@@ -5629,7 +5629,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /* End column */
    fprintf (Gbl.F.Out,"</tr>");
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>");
 
    if (AdminMarks)
@@ -5819,7 +5819,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                                   Brw_IconTree_t IconThisRow)
   {
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-   fprintf (Gbl.F.Out,"<table>");
+   Tbl_StartTable ();
    fprintf (Gbl.F.Out,"<tr>");
    Brw_IndentDependingOnLevel (Level);
 
@@ -5855,7 +5855,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
    fprintf (Gbl.F.Out,"</td>");
 
    fprintf (Gbl.F.Out,"</tr>");
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -8506,7 +8506,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	          FileNameToShow);
 
    /***** URL *****/
-   fprintf (Gbl.F.Out,"<table>");
+   Tbl_StartTable ();
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"NewLinkURL\" class=\"%s\">"
@@ -8538,7 +8538,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       "</tr>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional,
             Brw_MAX_CHARS_FOLDER);
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_link);

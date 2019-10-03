@@ -381,11 +381,11 @@ void Sta_AskShowCrsHits (void)
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users,
                   The_ClassFormInBox[Gbl.Prefs.Theme]);
-         fprintf (Gbl.F.Out,"<table>");
+         Tbl_StartTable ();
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
-         fprintf (Gbl.F.Out,"</table>");
+         Tbl_EndTable ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
@@ -1470,7 +1470,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	    Sta_ShowNumHitsPerCourse (NumRows,mysql_res);
 	    break;
 	}
-      fprintf (Gbl.F.Out,"</table>");
+      Tbl_EndTable ();
 
       /* End box and section */
       Box_EndBox ();

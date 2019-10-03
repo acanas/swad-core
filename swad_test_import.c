@@ -1045,7 +1045,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    if (Gbl.Test.Tags.Num)
      {
       /***** Write the tags *****/
-      fprintf (Gbl.F.Out,"<table>");
+      Tbl_StartTable ();
       for (NumTag = 0;
 	   NumTag < Gbl.Test.Tags.Num;
 	   NumTag++)
@@ -1059,7 +1059,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                             "</tr>",
                   ClassData,
                   ClassData,Gbl.Test.Tags.Txt[NumTag]);
-      fprintf (Gbl.F.Out,"</table>");
+      Tbl_EndTable ();
      }
    else	// no tags for this question
       fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;(%s)&nbsp;</span>",
@@ -1114,7 +1114,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
       case Tst_ANS_TEXT:
-         fprintf (Gbl.F.Out,"<table>");
+         Tbl_StartTable ();
          for (NumOpt = 0;
               NumOpt < Gbl.Test.Answer.NumOptions;
               NumOpt++)
@@ -1186,7 +1186,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             if (AnswerFeedbackLength)
 	       free ((void *) AnswerFeedback);
            }
-         fprintf (Gbl.F.Out,"</table>");
+         Tbl_EndTable ();
 	 break;
       default:
          break;

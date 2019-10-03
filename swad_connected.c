@@ -288,7 +288,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
 
    /***** Put link to register students *****/
    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
@@ -337,7 +337,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NET);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD);
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");

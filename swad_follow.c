@@ -36,6 +36,7 @@
 #include "swad_notification.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -216,7 +217,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
       Frm_EndForm ();
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table>");
+      Tbl_StartTable ();
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -241,7 +242,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Tbl_EndTable ();
 
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");

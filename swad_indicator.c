@@ -1386,7 +1386,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/

@@ -44,6 +44,7 @@
 #include "swad_role.h"
 #include "swad_role_type.h"
 #include "swad_setting.h"
+#include "swad_table.h"
 #include "swad_theme.h"
 #include "swad_timeline.h"
 #include "swad_user.h"
@@ -1537,7 +1538,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      fprintf (Gbl.F.Out,"<table>");
+      Tbl_StartTable ();
 
       for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
 	   NumUsr <= NumUsrs;
@@ -1572,7 +1573,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 		  Figure);
 	}
 
-      fprintf (Gbl.F.Out,"</table>");
+      Tbl_EndTable ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1706,7 +1707,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      fprintf (Gbl.F.Out,"<table>");
+      Tbl_StartTable ();
 
       for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
 	   NumUsr <= NumUsrs;
@@ -1738,7 +1739,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 			    "</tr>");
 	}
 
-      fprintf (Gbl.F.Out,"</table>");
+      Tbl_EndTable ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

@@ -39,6 +39,7 @@
 #include "swad_language.h"
 #include "swad_parameter.h"
 #include "swad_setting.h"
+#include "swad_table.h"
 #include "swad_timetable.h"
 
 /*****************************************************************************/
@@ -1259,7 +1260,7 @@ static void TT_DrawTimeTable (void)
    TT_TimeTableDrawAdjustRow ();
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Tbl_EndTable ();
   }
 
 /*****************************************************************************/
