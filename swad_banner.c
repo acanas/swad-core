@@ -404,7 +404,7 @@ static void Ban_ListBannersForEdition (void)
    char *Anchor = NULL;
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Table head *****/
    Ban_PutHeadBanners ();

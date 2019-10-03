@@ -410,7 +410,7 @@ static void Lnk_ListLinksForEdition (void)
    struct Link *Lnk;
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Table head *****/
    Lnk_PutHeadLinks ();

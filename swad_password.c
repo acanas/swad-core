@@ -680,7 +680,7 @@ void Pwd_ShowFormChgMyPwd (void)
      }
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Current password *****/
    if (IHaveAPasswordInDB) // If I have a password in database...
@@ -852,7 +852,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    Usr_PutParamOtherUsrCodEncrypted ();
 
    /* New password */
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    Pwd_PutFormToGetNewPasswordTwice ();
    Tbl_EndTable ();
 

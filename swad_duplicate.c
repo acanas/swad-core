@@ -159,7 +159,7 @@ void Dup_ListDuplicateUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      Tbl_StartTableCenter (2);
+      Tbl_StartTableCenterPadding (2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;
@@ -292,7 +292,7 @@ static void Dup_ListSimilarUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      Tbl_StartTableCenter (2);
+      Tbl_StartTableCenterPadding (2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;

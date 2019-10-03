@@ -1031,7 +1031,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
                                         &PaginationPsts);
 
       /***** Start table *****/
-      Tbl_StartTableWide (2);
+      Tbl_StartTableWidePadding (2);
 
       /***** Show posts from this page, the author and the date of last reply *****/
       mysql_data_seek (mysql_res,(my_ulonglong) (PaginationPsts.FirstItemVisible - 1));
@@ -2559,7 +2559,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
                                         &PaginationThrs);
 
       /***** Heading row *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<th style=\"width:20px;\"></th>"
                          "<th class=\"CONTEXT_COL\"></th>"	// Column for contextual icons
@@ -3958,7 +3958,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
      }
 
    /***** Subject and content *****/
-   Tbl_StartTableCenter (2);
+   Tbl_StartTableCenterPadding (2);
 
    // If writing a reply to a message of an existing thread ==> write subject
    /* Subject */

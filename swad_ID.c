@@ -594,7 +594,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_ID);
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** List existing user's IDs *****/
    for (NumID = 0;

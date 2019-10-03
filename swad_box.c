@@ -79,7 +79,7 @@ void Box_StartBoxTable (const char *Width,const char *Title,
   {
    Box_StartBox (Width,Title,FunctionToDrawContextualIcons,
                  HelpLink,Closable);
-   Tbl_StartTableWide (CellPadding);
+   Tbl_StartTableWidePadding (CellPadding);
   }
 
 void Box_StartBoxTableShadow (const char *Width,const char *Title,
@@ -90,7 +90,7 @@ void Box_StartBoxTableShadow (const char *Width,const char *Title,
    Box_StartBoxShadow (Width,Title,
                        FunctionToDrawContextualIcons,
                        HelpLink);
-   Tbl_StartTableWide (CellPadding);
+   Tbl_StartTableWidePadding (CellPadding);
   }
 
 void Box_StartBox (const char *Width,const char *Title,

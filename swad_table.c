@@ -56,36 +56,60 @@ extern struct Globals Gbl;
 /******************************* Start/end table *****************************/
 /*****************************************************************************/
 
-void Tbl_StartTable (unsigned CellPadding)
+void Tbl_StartTablePadding (unsigned CellPadding)
   {
-   fprintf (Gbl.F.Out,"<table");
    if (CellPadding)
-      fprintf (Gbl.F.Out," class=\"CELLS_PAD_%u\"",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
-   fprintf (Gbl.F.Out,">");
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_%u\">",
+	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+   else
+      Tbl_StartTable ();
   }
 
-void Tbl_StartTableCenter (unsigned CellPadding)
+void Tbl_StartTable (void)
   {
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER");
-   if (CellPadding)
-      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
-   fprintf (Gbl.F.Out,"\">");
+   fprintf (Gbl.F.Out,"<table>");
   }
 
-void Tbl_StartTableWide (unsigned CellPadding)
+void Tbl_StartTableCenterPadding (unsigned CellPadding)
   {
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE");
    if (CellPadding)
-      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
-   fprintf (Gbl.F.Out,"\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_%u\">",
+	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+   else
+      Tbl_StartTableCenter ();
   }
 
-void Tbl_StartTableWideMargin (unsigned CellPadding)
+void Tbl_StartTableCenter (void)
   {
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER\">");
+  }
+
+void Tbl_StartTableWidePadding (unsigned CellPadding)
+  {
    if (CellPadding)
-      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
-   fprintf (Gbl.F.Out,"\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_%u\">",
+	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+   else
+      Tbl_StartTableWide ();
+  }
+
+void Tbl_StartTableWide (void)
+  {
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE\">");
+  }
+
+void Tbl_StartTableWideMarginPadding (unsigned CellPadding)
+  {
+   if (CellPadding)
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_%u\">",
+	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+   else
+      Tbl_StartTableWideMargin ();
+  }
+
+void Tbl_StartTableWideMargin (void)
+  {
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN\">");
   }
 
 void Tbl_EndTable (void)

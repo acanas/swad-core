@@ -235,7 +235,7 @@ static void Crs_Configuration (bool PrintView)
             Gbl.Hierarchy.Crs.FullName);
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Degree *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1165,7 +1165,7 @@ static void Crs_ListCourses (void)
    if (Gbl.Hierarchy.Deg.Crss.Num)	// There are courses in the current degree
      {
       /***** Start table *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       Crs_PutHeadCoursesForSeeing ();
 
       /***** List the courses *****/
@@ -1430,7 +1430,7 @@ static void Crs_ListCoursesForEdition (void)
    unsigned Year;
 
    /***** Write heading *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    Crs_PutHeadCoursesForEdition ();
 
    /***** List the courses *****/

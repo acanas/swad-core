@@ -39,10 +39,18 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tbl_StartTable (unsigned CellPadding);
-void Tbl_StartTableCenter (unsigned CellPadding);
-void Tbl_StartTableWide (unsigned CellPadding);
-void Tbl_StartTableWideMargin (unsigned CellPadding);
+void Tbl_StartTablePadding (unsigned CellPadding);
+void Tbl_StartTable (void);
+
+void Tbl_StartTableCenterPadding (unsigned CellPadding);
+void Tbl_StartTableCenter (void);
+
+void Tbl_StartTableWidePadding (unsigned CellPadding);
+void Tbl_StartTableWide (void);
+
+void Tbl_StartTableWideMarginPadding (unsigned CellPadding);
+void Tbl_StartTableWideMargin (void);
+
 void Tbl_EndTable (void);
 
 void Tbl_PutEmptyCells (unsigned NumColumns);

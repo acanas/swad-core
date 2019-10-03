@@ -382,7 +382,7 @@ static void Plg_ListPluginsForEdition (void)
    struct Plugin *Plg;
 
    /***** Write heading *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    Plg_PutHeadPlugins ();
 
    /***** Write all the plugins *****/

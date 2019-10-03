@@ -374,19 +374,19 @@ void Sta_AskShowCrsHits (void)
          Par_PutHiddenParamLong ("LastRow",0);
 
          /***** Put list of users to select some of them *****/
-         Tbl_StartTableCenter (2);
+         Tbl_StartTableCenterPadding (2);
          fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"RIGHT_TOP %s\">%s:"
 			    "</td>"
-			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">"
-                            "<table>",
+			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users,
                   The_ClassFormInBox[Gbl.Prefs.Theme]);
+         fprintf (Gbl.F.Out,"<table>");
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
-         fprintf (Gbl.F.Out,"</table>"
-                            "</td>"
+         fprintf (Gbl.F.Out,"</table>");
+         fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
          /***** Initial and final dates of the search *****/
@@ -1582,7 +1582,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    /***** Put heading with backward and forward buttons *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"7\" class=\"LEFT_MIDDLE\">");
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    fprintf (Gbl.F.Out,"<tr>");
 
    /* Put link to jump to previous page (older clicks) */
@@ -2371,7 +2371,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
    unsigned B;
 
    /***** Write numbers from 0 to Hits.Max *****/
-   Tbl_StartTableWide (0);
+   Tbl_StartTableWide ();
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"%u\" class=\"LOG LEFT_BOTTOM\""
 	              " style=\"width:%upx;\">"
@@ -4124,7 +4124,7 @@ void Sta_GetAndShowLastClicks (void)
 			     " OR actions.Language IS NULL");	// When action is not present in table of actions
 
    /***** Write list of connected users *****/
-   Tbl_StartTableCenter (1);
+   Tbl_StartTableCenterPadding (1);
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:85px;\">"

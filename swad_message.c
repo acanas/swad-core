@@ -287,7 +287,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Start table *****/
-   Tbl_StartTableCenter (2);
+   Tbl_StartTableCenterPadding (2);
 
    /***** "To:" section (recipients) *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -302,7 +302,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    else
      {
       /***** Show potential recipients *****/
-      Tbl_StartTableWide (0);
+      Tbl_StartTableWide ();
       if (ShowUsrsInCrs)
 	{
 	 Usr_ListUsersToSelect (Rol_TCH);	// All teachers in course
@@ -1812,7 +1812,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
                                         &Pagination);
 
       /***** Show received / sent messages in this page *****/
-      Tbl_StartTableWide (2);
+      Tbl_StartTableWidePadding (2);
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -2642,7 +2642,7 @@ void Msg_ShowFormToFilterMsgs (void)
      };
 
    /***** Start table *****/
-   Tbl_StartTableCenter (2);
+   Tbl_StartTableCenterPadding (2);
 
    /***** Filter authors/recipients *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2999,7 +2999,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
      {
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td rowspan=\"3\" colspan=\"2\" class=\"LEFT_TOP\">");
-      Tbl_StartTable (2);
+      Tbl_StartTablePadding (2);
 
       /***** Write course origin of message *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -3191,7 +3191,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
    bool WriteAuthor = false;
 
    /***** Start table *****/
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
 
    /***** Start first column *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3349,8 +3349,8 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    char PhotoURL[PATH_MAX + 1];
 
    /***** Put an icon to show if user has read the message *****/
-   fprintf (Gbl.F.Out,"<table>"
-	              "<tr>"
+   fprintf (Gbl.F.Out,"<table>");
+   fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
@@ -3392,8 +3392,8 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
       fprintf (Gbl.F.Out,"[%s]",
                Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-	              "</table>");
+	              "</tr>");
+   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/

@@ -242,7 +242,7 @@ void Prj_ShowTableAllProjects (void)
       Prj_AllocMemProject (&Prj);
 
       /***** Table head *****/
-      Tbl_StartTableWide (2);
+      Tbl_StartTableWidePadding (2);
       Prj_ShowTableAllProjectsHead ();
 
       /***** Write all the projects *****/
@@ -325,7 +325,7 @@ static void Prj_ShowProjectsInCurrentPage (void)
       Prj_AllocMemProject (&Prj);
 
       /***** Table head *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       Prj_ShowProjectsHead (Prj_LIST_PROJECTS);
 
       /***** Write all the projects *****/
@@ -906,7 +906,7 @@ static void Prj_PutIconsToLockUnlockAllProjects (void)
 void Prj_ShowOneUniqueProject (struct Project *Prj)
   {
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Write project head *****/
    Prj_ShowProjectsHead (Prj_FILE_BROWSER_PROJECT);
@@ -940,7 +940,7 @@ void Prj_PrintOneProject (void)
 			      Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Table head *****/
-   Tbl_StartTableWideMargin (2);
+   Tbl_StartTableWideMarginPadding (2);
    Prj_ShowProjectsHead (Prj_PRINT_ONE_PROJECT);
 
    /***** Write project *****/
@@ -1702,7 +1702,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	}
 
       /***** Start table with all members with this role *****/
-      Tbl_StartTable (2);
+      Tbl_StartTablePadding (2);
 
       /***** Write users *****/
       for (NumUsr = 0;

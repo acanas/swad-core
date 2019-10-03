@@ -1749,7 +1749,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"LEFT_TOP\">");
-   Tbl_StartTableWide (0);
+   Tbl_StartTableWide ();
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             Rec_DEGREE_LOGO_SIZE);
@@ -2291,7 +2291,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       /***** Show email and user's IDs *****/
       if (ShowIDRows)
 	{
-         Tbl_StartTableWide (2);
+         Tbl_StartTableWidePadding (2);
 
          /* Show email */
 	 Rec_ShowEmail (UsrDat,ClassForm);
@@ -2353,7 +2353,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
             break;
         }
 
-      Tbl_StartTableWide (2);
+      Tbl_StartTableWidePadding (2);
 
       if (ShowIDRows)
 	{

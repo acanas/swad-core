@@ -204,7 +204,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
          Grp_PutParamsCodGrps ();
 
          /***** Put list of users to select some of them *****/
-         Tbl_StartTableCenter (2);
+         Tbl_StartTableCenterPadding (2);
          fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
@@ -212,7 +212,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users,
                   The_ClassFormInBox[Gbl.Prefs.Theme]);
-         Tbl_StartTable (2);
+         Tbl_StartTablePadding (2);
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
@@ -773,7 +773,7 @@ void McR_ShowOneMchResult (void)
 				 Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Start table *****/
-      Tbl_StartTableWideMargin (10);
+      Tbl_StartTableWideMarginPadding (10);
 
       /***** Header row *****/
       /* Get data of the user who answer the match */

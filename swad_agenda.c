@@ -466,7 +466,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    if (Gbl.Agenda.Num)
      {
       /***** Start table *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
 
       /***** Table head *****/
       Agd_WriteHeaderListEvents (AgendaType);

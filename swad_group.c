@@ -397,7 +397,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** List the groups for each group type *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    for (NumGrpTyp = 0;
 	NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
@@ -1285,7 +1285,7 @@ static void Grp_ListGroupTypesForEdition (void)
    char Id[32];
 
    /***** Write heading *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    Grp_WriteHeadingGroupTypes ();
 
    /***** List group types with forms for edition *****/
@@ -1363,7 +1363,7 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Frm_StartFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      Tbl_StartTableCenter (2);
+      Tbl_StartTableCenterPadding (2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
                          "<img src=\"%s/clock.svg\""
@@ -1494,7 +1494,7 @@ static void Grp_ListGroupsForEdition (void)
    Rol_Role_t Role;
 
    /***** Write heading *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    Grp_WriteHeadingGroups ();
 
    /***** List the groups *****/
@@ -1828,7 +1828,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	 Frm_StartForm (ActChgGrp);
 
       /***** List the groups the user belongs to for change *****/
-      Tbl_StartTableWide (2);
+      Tbl_StartTableWidePadding (2);
       for (NumGrpTyp = 0;
 	   NumGrpTyp < Gbl.Crs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
@@ -2553,7 +2553,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Open time *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/clock.svg\""

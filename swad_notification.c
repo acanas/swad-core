@@ -393,7 +393,7 @@ void Ntf_ShowMyNotifications (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -1938,7 +1938,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       Mai_WriteWarningEmailNotifications ();
 
    /***** List of notifications *****/
-   Tbl_StartTableCenter (2);
+   Tbl_StartTableCenterPadding (2);
    fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
 		      "<th class=\"CENTER_MIDDLE\">"

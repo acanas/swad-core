@@ -209,7 +209,7 @@ static void Gam_ListAllGames (void)
    if (Gbl.Games.Num)
      {
       /***** Table head *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       fprintf (Gbl.F.Out,"<tr>");
       if (Gam_CheckIfICanEditGames ())
          fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
@@ -394,7 +394,7 @@ void Gam_ShowOneGame (long GamCod,
 
    /***** Start table *****/
    if (ShowOnlyThisGame)
-      Tbl_StartTableWide (2);
+      Tbl_StartTableWidePadding (2);
 
    /***** Start first row of this game *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -1633,7 +1633,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    MaxQstInd = Gam_GetMaxQuestionIndexInGame (GamCod);
 
    /***** Write the heading *****/
-   Tbl_StartTableWideMargin (2);
+   Tbl_StartTableWideMarginPadding (2);
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
                       "<th class=\"CENTER_TOP\">"

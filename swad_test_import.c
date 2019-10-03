@@ -531,7 +531,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
       /* Current element is <test> */
 
       /***** Write heading of list of imported questions *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       TsI_WriteHeadingListImportedQst ();
 
       /***** For each question... *****/

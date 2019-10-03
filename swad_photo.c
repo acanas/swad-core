@@ -891,7 +891,7 @@ static void Pho_UpdatePhoto2 (void)
    Ale_ShowLastAlertAndButton1 ();
 
    /***** Show the three images resulting of the processing *****/
-   Tbl_StartTableWide (0);
+   Tbl_StartTableWide ();
    fprintf (Gbl.F.Out,"<tr>");
    for (NumPhoto = 0;
         NumPhoto < 3;
@@ -1718,7 +1718,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 /***** Start box *****/
 	 Box_StartBox (NULL,Txt_Degrees,Pho_PutIconToPrintDegreeStats,
 		       Hlp_ANALYTICS_Degrees,Box_NOT_CLOSABLE);
-	 Tbl_StartTableCenter (2);
+	 Tbl_StartTableCenterPadding (2);
 
 	 /***** Put a selector for the type of average *****/
 	 Pho_PutSelectorForTypeOfAvg ();
@@ -2121,7 +2121,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto);
-      Tbl_StartTableCenter (0);
+      Tbl_StartTableCenter ();
 
       /***** Get and print degrees *****/
       for (NumDeg = 0, NumDegsNotEmpty = 0;
@@ -2204,7 +2204,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Usr_ShowFormsToSelectUsrListType (Pho_PutParamsDegPhoto);
 
       /***** Write heading *****/
-      Tbl_StartTableCenter (2);
+      Tbl_StartTableCenterPadding (2);
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"RIGHT_TOP\">"
 			 "%s"

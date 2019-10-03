@@ -344,7 +344,7 @@ void Tst_ShowFormAskTst (void)
         {
          Frm_StartForm (ActSeeTst);
 
-         Tbl_StartTable (2);
+         Tbl_StartTablePadding (2);
 
          /***** Selection of tags *****/
          Tst_ShowFormSelTags (NumRows,mysql_res,true,1);
@@ -464,7 +464,7 @@ void Tst_ShowNewTest (void)
             Par_PutHiddenParamUnsigned ("NumQst",Gbl.Test.NumQsts);
 
             /***** List the questions *****/
-            Tbl_StartTableWideMargin (10);
+            Tbl_StartTableWideMarginPadding (10);
             Tst_ShowTestQuestionsWhenSeeing (mysql_res);
 	    Tbl_EndTable ();
 
@@ -565,7 +565,7 @@ void Tst_AssessTest (void)
 	   }
 
 	 /***** Write answers and solutions *****/
-         Tbl_StartTableWideMargin (10);
+         Tbl_StartTableWideMarginPadding (10);
 	 Tst_ShowTestResultAfterAssess (TstCod,&NumQstsNotBlank,&TotalScore);
 	 Tbl_EndTable ();
 
@@ -1298,7 +1298,7 @@ void Tst_ShowFormAskEditTsts (void)
       Frm_StartForm (ActLstTstQst);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Tst_ORDER_STEM);
 
-      Tbl_StartTable (2);
+      Tbl_StartTablePadding (2);
 
       /***** Selection of tags *****/
       Tst_ShowFormSelTags (NumRows,mysql_res,false,2);
@@ -1354,7 +1354,7 @@ void Tst_ShowFormAskSelectTstsForGame (void)
       Frm_StartForm (ActGamLstTstQst);
       Gam_PutParams ();
 
-      Tbl_StartTable (2);
+      Tbl_StartTablePadding (2);
 
       /***** Selection of tags *****/
       Tst_ShowFormSelTags (NumRows,mysql_res,false,2);
@@ -1704,7 +1704,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    if (NumCols > 1)
       fprintf (Gbl.F.Out," colspan=\"%u\"",NumCols);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP\">");
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
    fprintf (Gbl.F.Out,"<tr>");
    if (!ShowOnlyEnabledTags)
       fprintf (Gbl.F.Out,"<td></td>");
@@ -1909,7 +1909,7 @@ static void Tst_ShowFormConfigTst (void)
    Frm_StartForm (ActRcvCfgTst);
 
    /***** Tests are visible from plugins? *****/
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
@@ -1942,7 +1942,7 @@ static void Tst_ShowFormConfigTst (void)
                       "<td class=\"LEFT_BOTTOM\">",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_No_of_questions);
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
    Tst_PutInputFieldNumQst ("NumQstMin",Txt_minimum,
                             Gbl.Test.Config.Min);	// Minimum number of questions
    Tst_PutInputFieldNumQst ("NumQstDef",Txt_default,
@@ -2323,7 +2323,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    if (NumCols > 1)
       fprintf (Gbl.F.Out," colspan=\"%u\"",NumCols);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP\">");
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
@@ -2802,7 +2802,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/
-   Tbl_StartTableWideMargin (2);
+   Tbl_StartTableWideMarginPadding (2);
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
                       "<th class=\"CENTER_TOP\">"
@@ -3078,7 +3078,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
    Gam_PutParams ();
 
    /***** Write the heading *****/
-   Tbl_StartTableWideMargin (2);
+   Tbl_StartTableWideMarginPadding (2);
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
                       "<th class=\"CENTER_TOP\">"
@@ -3375,7 +3375,7 @@ void Tst_WriteAnswersEdit (long QstCod)
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
       case Tst_ANS_TEXT:
-         Tbl_StartTable (2);
+         Tbl_StartTablePadding (2);
          for (NumOpt = 0;
               NumOpt < Gbl.Test.Answer.NumOptions;
               NumOpt++)
@@ -3653,7 +3653,7 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
      }
 
    /***** Header with the title of each column *****/
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
    fprintf (Gbl.F.Out,"<tr>");
    Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
@@ -3721,7 +3721,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
    */
 
    /***** Start table *****/
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
 
    for (NumOpt = 0;
 	NumOpt < Gbl.Test.Answer.NumOptions;
@@ -3839,7 +3839,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
    Tst_ComputeScoreQst (Indexes,AnswersUsr,ScoreThisQst,AnswerIsNotBlank);
 
    /***** Start table *****/
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
    fprintf (Gbl.F.Out,"<tr>");
    Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"<td></td>"
@@ -4196,7 +4196,7 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
    Mch_GetIndexes (MchCod,QstInd,Indexes);
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Show one row for each option *****/
    for (NumOpt = 0;
@@ -4314,7 +4314,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
      }
 
    /***** Header with the title of each column *****/
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
    fprintf (Gbl.F.Out,"<tr>");
    Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
@@ -4368,7 +4368,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\">");
-      Tbl_StartTable (2);
+      Tbl_StartTablePadding (2);
 
       for (NumOpt = 0;
 	   NumOpt < Gbl.Test.Answer.NumOptions;
@@ -4477,7 +4477,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
       Lay_ShowErrorAndExit ("Wrong integer answer.");
 
    /***** Header with the title of each column *****/
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
    fprintf (Gbl.F.Out,"<tr>");
    Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
@@ -4602,7 +4602,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
      }
 
    /***** Header with the title of each column *****/
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
    fprintf (Gbl.F.Out,"<tr>");
    Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
@@ -5067,7 +5067,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       Tst_PutParamQstCod ();
 
    /***** Start table *****/
-   Tbl_StartTable (2);	// Table for this question
+   Tbl_StartTablePadding (2);	// Table for this question
 
    /***** Help for text editor *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -5086,7 +5086,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                       "</td>"
                       "<td class=\"LEFT_TOP\">",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Tags);
-   Tbl_StartTable (2);	// Table for tags
+   Tbl_StartTablePadding (2);	// Table for tags
 
    for (NumTag = 0;
 	NumTag < Tst_MAX_TAGS_PER_QUESTION;
@@ -5268,7 +5268,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
 	              "<td class=\"LEFT_TOP\">");
-   Tbl_StartTable (2);	// Table with choice answers
+   Tbl_StartTablePadding (2);	// Table with choice answers
 
    OptionsDisabled = Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
                      Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE &&
@@ -7451,7 +7451,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
          Grp_PutParamsCodGrps ();
 
          /***** Put list of users to select some of them *****/
-         Tbl_StartTableCenter (2);
+         Tbl_StartTableCenterPadding (2);
          fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
@@ -7459,7 +7459,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users,
                   The_ClassFormInBox[Gbl.Prefs.Theme]);
-         Tbl_StartTable (2);
+         Tbl_StartTablePadding (2);
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
@@ -8105,7 +8105,7 @@ void Tst_ShowOneTstResult (void)
 				 Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Start table *****/
-      Tbl_StartTableWideMargin (10);
+      Tbl_StartTableWideMarginPadding (10);
 
       /***** Header row *****/
       /* Get data of the user who made the test */

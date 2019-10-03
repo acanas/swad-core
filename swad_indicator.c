@@ -117,7 +117,7 @@ void Ind_ReqIndicatorsCourses (void)
    /***** Form to update indicators *****/
    /* Start form and table */
    Frm_StartForm (ActReqStaCrs);
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /* Scope */
    fprintf (Gbl.F.Out,"<tr>"
@@ -630,7 +630,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    const char *ClassHighlight = "DAT RIGHT_MIDDLE LIGHT_BLUE";
 
    /***** Write number of courses with each number of indicators valid *****/
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
 
    fprintf (Gbl.F.Out,"<tr>");
    if (PutForm)

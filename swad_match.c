@@ -368,7 +368,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
    bool ICanEditMatches = Mch_CheckIfICanEditMatches ();
 
    /***** Write the heading *****/
-   Tbl_StartTableWideMargin (2);
+   Tbl_StartTableWideMarginPadding (2);
    Mch_ListOneOrMoreMatchesHeading (ICanEditMatches);
 
    /***** Write rows *****/
@@ -2481,7 +2481,7 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	 NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
 
 	 /***** Start table *****/
-	 Tbl_StartTableWide (8);
+	 Tbl_StartTableWidePadding (8);
 
 	 for (NumOpt = 0;
 	      NumOpt < NumOptions;
@@ -3146,7 +3146,7 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 	                       (float) NumAnswerersQst) + 0.5);
 
    /***** Bar proportional to number of users *****/
-   Tbl_StartTableWide (0);
+   Tbl_StartTableWide ();
    fprintf (Gbl.F.Out,"<tr class=\"MATCH_RES_TR\">");
    for (i = 0;
 	i < 100;

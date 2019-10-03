@@ -6218,7 +6218,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
          Brw_PutHiddenParamFullTreeIfSelected ();
 
          /* Put list of users to select some of them */
-         Tbl_StartTableCenter (0);
+         Tbl_StartTableCenter ();
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
@@ -6732,7 +6732,7 @@ void Usr_ListAllDataGsts (void)
       NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_GST;
 
       /***** Start table with list of guests *****/
-      Tbl_StartTableWide (0);
+      Tbl_StartTableWide ();
 
       /* Start row */
       fprintf (Gbl.F.Out,"<tr>");
@@ -6880,7 +6880,7 @@ void Usr_ListAllDataStds (void)
 	}
 
       /***** Start table with list of students *****/
-      Tbl_StartTableWide (0);
+      Tbl_StartTableWide ();
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
          fprintf (Gbl.F.Out,"<tr>"
@@ -7102,7 +7102,7 @@ void Usr_ListAllDataTchs (void)
       NumColumns = Usr_NUM_ALL_FIELDS_DATA_TCH;
 
       /***** Start table with lists of teachers *****/
-      Tbl_StartTableWide (0);
+      Tbl_StartTableWide ();
 
       /***** List teachers and non-editing teachers *****/
       Gbl.RowEvenOdd = 0;
@@ -7382,8 +7382,8 @@ void Usr_ListDataAdms (void)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Heading row with column names *****/
-      fprintf (Gbl.F.Out,"<table>"
-	                 "<tr>");
+      fprintf (Gbl.F.Out,"<table>");
+      fprintf (Gbl.F.Out,"<tr>");
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_ADM;
            NumCol++)
@@ -7873,7 +7873,7 @@ void Usr_SeeGuests (void)
 	    Frm_StartForm (ActDoActOnSevGst);
 
          /* Start table */
-	 Tbl_StartTableWide (0);
+	 Tbl_StartTableWide ();
 
          /* Draw the classphoto/list */
          switch (Gbl.Usrs.Me.ListType)
@@ -8040,7 +8040,7 @@ void Usr_SeeStudents (void)
            }
 
          /* Start table */
-         Tbl_StartTableWide (0);
+         Tbl_StartTableWide ();
 
          /* Draw the classphoto/list */
          switch (Gbl.Usrs.Me.ListType)
@@ -8214,7 +8214,7 @@ void Usr_SeeTeachers (void)
            }
 
          /* Start table */
-         Tbl_StartTableWide (0);
+         Tbl_StartTableWide ();
 
          /***** Draw the classphoto/list  *****/
          switch (Gbl.Usrs.Me.ListType)
@@ -8746,7 +8746,7 @@ void Usr_SeeGstClassPhotoPrn (void)
 				  Gbl.Scope.Current == Hie_INS) ? Gbl.Hierarchy.Ins.InsCod :
                                                                         -1L,
 				 -1L,-1L);
-      Tbl_StartTableWide (0);
+      Tbl_StartTableWide ();
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
                           Rol_GST,false);
       Tbl_EndTable ();
@@ -8794,7 +8794,7 @@ void Usr_SeeStdClassPhotoPrn (void)
 					                                -1L,
 				  Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
 					                                -1L);
-      Tbl_StartTableWide (0);
+      Tbl_StartTableWide ();
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
                           Rol_STD,false);
       Tbl_EndTable ();
@@ -8861,7 +8861,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 					                                -1L,
 				  Gbl.Scope.Current == Hie_CRS  ? Gbl.Hierarchy.Crs.CrsCod :
 					                                -1L);
-      Tbl_StartTableWide (0);
+      Tbl_StartTableWide ();
 
       /* List teachers and non-editing teachers */
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,

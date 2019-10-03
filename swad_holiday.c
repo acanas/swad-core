@@ -114,7 +114,7 @@ void Hld_SeeHolidays (void)
                     Hlp_INSTITUTION_Holidays,Box_NOT_CLOSABLE);
       if (Gbl.Hlds.Num)
 	 {
-         Tbl_StartTableWideMargin (2);
+         Tbl_StartTableWideMarginPadding (2);
          fprintf (Gbl.F.Out,"<tr>");
 	 for (Order = Hld_ORDER_BY_PLACE;
 	      Order <= Hld_ORDER_BY_START_DATE;

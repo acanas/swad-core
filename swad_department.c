@@ -492,7 +492,7 @@ static void Dpt_ListDepartmentsForEdition (void)
    unsigned NumIns;
 
    /***** Start table *****/
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
 
    /***** Write heading *****/
    Dpt_PutHeadDepartments ();

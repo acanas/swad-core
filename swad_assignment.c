@@ -157,7 +157,7 @@ static void Asg_ShowAllAssignments (void)
    if (Gbl.Asgs.Num)
      {
       /***** Table head *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       Asg_PutHeadForSeeing (false);	// Not print view
 
       /***** Write all the assignments *****/
@@ -324,7 +324,7 @@ void Asg_PrintOneAssignment (void)
 			      Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Table head *****/
-   Tbl_StartTableWideMargin (2);
+   Tbl_StartTableWideMarginPadding (2);
    Asg_PutHeadForSeeing (true);		// Print view
 
    /***** Write assignment *****/

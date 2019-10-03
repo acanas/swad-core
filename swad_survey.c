@@ -244,7 +244,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    if (Gbl.Svys.Num)
      {
       /***** Table head *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
       for (Order = Svy_ORDER_BY_START_DATE;
@@ -456,7 +456,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /***** Start table *****/
    if (ShowOnlyThisSvyComplete)
-      Tbl_StartTableWide (2);
+      Tbl_StartTableWidePadding (2);
 
    /***** Write first row of data of this assignment *****/
    /* Forms to remove/edit this assignment */
@@ -2675,7 +2675,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       Svy_PutParamQstCod (SvyQst->QstCod);
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2724,7 +2724,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
                       "<td class=\"LEFT_TOP\">");
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
    for (NumAns = 0;
 	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	NumAns++)
@@ -3188,7 +3188,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
 	}
 
       /***** Write the heading *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       fprintf (Gbl.F.Out,"<tr>");
       if (Svy->Status.ICanEdit)
          fprintf (Gbl.F.Out,"<th></th>");
@@ -3379,7 +3379,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 	 Lay_ShowErrorAndExit ("Wrong number of answers.");
 
       /* Write one row for each answer */
-      Tbl_StartTable (5);
+      Tbl_StartTablePadding (5);
       for (NumAns = 0;
 	   NumAns < NumAnswers;
 	   NumAns++)

@@ -99,7 +99,7 @@ void Hie_WriteMenuHierarchy (void)
    extern const char *Txt_Course;
 
    /***** Start table *****/
-   Tbl_StartTableCenter (2);
+   Tbl_StartTableCenterPadding (2);
 
    /***** Write a 1st selector
           with all the countries *****/

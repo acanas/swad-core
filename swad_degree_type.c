@@ -215,7 +215,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    if (Gbl.DegTypes.Num)
      {
       /***** Write heading *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       DT_PutHeadDegreeTypesForSeeing (NextAction,SelectedOrder);
 
       /***** List current degree types for seeing *****/
@@ -391,7 +391,7 @@ static void DT_ListDegreeTypesForEdition (void)
    unsigned NumDegTyp;
 
    /***** Write heading *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    DT_PutHeadDegreeTypesForEdition ();
 
    /***** List degree types with forms for edition *****/

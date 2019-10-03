@@ -1606,7 +1606,7 @@ static void Fig_GetAndShowFileBrowsersStats (void)
                  Hlp_ANALYTICS_Figures_folders_and_files,Box_NOT_CLOSABLE);
 
    /***** Write sizes of all file zones *****/
-   Tbl_StartTableCenter (2);
+   Tbl_StartTableCenterPadding (2);
    Fig_WriteStatsExpTreesTableHead1 ();
    for (NumStat = 0;
 	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
@@ -1617,7 +1617,7 @@ static void Fig_GetAndShowFileBrowsersStats (void)
    Tbl_EndTable ();
 
    /***** Write sizes of all file zones per course *****/
-   Tbl_StartTableCenter (2);
+   Tbl_StartTableCenterPadding (2);
    Fig_WriteStatsExpTreesTableHead2 ();
    for (NumStat = 0;
 	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
@@ -1628,7 +1628,7 @@ static void Fig_GetAndShowFileBrowsersStats (void)
    Tbl_EndTable ();
 
    /***** Write sizes of all file zones per user *****/
-   Tbl_StartTableCenter (2);
+   Tbl_StartTableCenterPadding (2);
    Fig_WriteStatsExpTreesTableHead3 ();
    for (NumStat = 0;
 	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;

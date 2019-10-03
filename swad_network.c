@@ -292,7 +292,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
                  Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
 
    /***** Start table *****/
-   Tbl_StartTable (2);
+   Tbl_StartTablePadding (2);
 
    /***** Start form *****/
    Frm_StartFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);

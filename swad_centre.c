@@ -405,7 +405,7 @@ static void Ctr_Configuration (bool PrintView)
      }
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -810,7 +810,7 @@ static void Ctr_ListCentres (void)
    if (Gbl.Hierarchy.Ins.Ctrs.Num)	// There are centres in the current institution
      {
       /***** Start table *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
       /***** Write all the centres and their nuber of teachers *****/
@@ -1483,7 +1483,7 @@ static void Ctr_ListCentresForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    Ctr_PutHeadCentresForEdition ();
 
    /***** Write all the centres *****/

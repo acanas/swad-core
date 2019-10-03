@@ -322,7 +322,7 @@ static void Cty_Configuration (bool PrintView)
      }
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Country name (an link to WWW if exists) *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1600,7 +1600,7 @@ static void Cty_ListCountriesForEdition (void)
    Lan_Language_t Lan;
 
    /***** Write heading *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    Cty_PutHeadCountriesForEdition ();
 
    /***** Write all the countries *****/

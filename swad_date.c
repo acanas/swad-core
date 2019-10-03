@@ -549,8 +549,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table>"
-	              "<tr>");
+   fprintf (Gbl.F.Out,"<table>");
+   fprintf (Gbl.F.Out,"<tr>");
 
    /***** Year *****/
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
@@ -664,8 +664,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</tr>");
+   fprintf (Gbl.F.Out,"</table>");
 
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
    fprintf (Gbl.F.Out,"<input type=\"hidden\""
@@ -816,8 +816,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    unsigned NumDaysSelectedMonth;
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table>"
-	              "<tr>");
+   fprintf (Gbl.F.Out,"<table>");
+   fprintf (Gbl.F.Out,"<tr>");
 
    /***** Year *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -894,8 +894,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	              "</td>");
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</tr>");
+   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/

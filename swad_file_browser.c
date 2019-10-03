@@ -5589,10 +5589,10 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /***** Indentation depending on level, icon, and file/folder name *****/
    /* Start column */
    fprintf (Gbl.F.Out,"<td class=\"NO_BR LEFT_TOP COLOR%u\""
-	              " style=\"width:99%%;\">"
-                      "<table>"
-                      "<tr>",
+	              " style=\"width:99%%;\">",
             Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<table>");
+   fprintf (Gbl.F.Out,"<tr>");
 
    /* Indent depending on level */
    if (Level)
@@ -5628,9 +5628,9 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    Brw_WriteFileName (Level,FileMetadata.IsPublic);
 
    /* End column */
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</tr>");
+   fprintf (Gbl.F.Out,"</table>");
+   fprintf (Gbl.F.Out,"</td>");
 
    if (AdminMarks)
       /***** Header and footer rows *****/
@@ -5818,9 +5818,9 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                                   const char *FileBrowserId,const char *RowId,
                                                   Brw_IconTree_t IconThisRow)
   {
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-	              "<table>"
-	              "<tr>");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<table>");
+   fprintf (Gbl.F.Out,"<tr>");
    Brw_IndentDependingOnLevel (Level);
 
    /***** Icon to expand/contract *****/
@@ -5854,9 +5854,9 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
      }
    fprintf (Gbl.F.Out,"</td>");
 
-   fprintf (Gbl.F.Out,"</tr>"
-		      "</table>"
-                      "</td>");
+   fprintf (Gbl.F.Out,"</tr>");
+   fprintf (Gbl.F.Out,"</table>");
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 /*****************************************************************************/
@@ -8506,8 +8506,8 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	          FileNameToShow);
 
    /***** URL *****/
-   fprintf (Gbl.F.Out,"<table>"
-	              "<tr>"
+   fprintf (Gbl.F.Out,"<table>");
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"NewLinkURL\" class=\"%s\">"
 	              "%s:&nbsp;"
@@ -8535,10 +8535,10 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       " id=\"NewLinkName\" name=\"NewLinkName\""
                       " size=\"30\" maxlength=\"%u\" value=\"\" />"
                       "</td>"
-                      "</tr>"
-                      "</table>",
+                      "</tr>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional,
             Brw_MAX_CHARS_FOLDER);
+   fprintf (Gbl.F.Out,"</table>");
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_link);

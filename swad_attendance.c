@@ -237,7 +237,7 @@ static void Att_ShowAllAttEvents (void)
    if (Gbl.AttEvents.Num)
      {
       /***** Table head *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
       for (Order = Dat_START_TIME;
@@ -1875,7 +1875,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /* Start table */
-   Tbl_StartTableWideMargin (2);
+   Tbl_StartTableWideMarginPadding (2);
 
    /* Header */
    fprintf (Gbl.F.Out,"<tr>"
@@ -1962,7 +1962,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Grp_PutParamsCodGrps ();
 
       /* Start table */
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
 
       /* Header */
       fprintf (Gbl.F.Out,"<tr>"
@@ -3101,7 +3101,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
      }
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3232,7 +3232,7 @@ static void Att_ListUsrsAttendanceTable (Att_TypeOfView_t TypeOfView,
    Lay_StartSection (Att_ATTENDANCE_TABLE_ID);
 
    /***** Start table *****/
-   Tbl_StartTableCenter (2);
+   Tbl_StartTableCenterPadding (2);
 
    /***** Heading row *****/
    Att_WriteTableHeadSeveralAttEvents ();
@@ -3535,11 +3535,11 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write user's ID ******/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">"
-                      "<table>"
-                      "<tr>"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
+            Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<table>");
+   fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"%s LEFT_MIDDLE\">",
-            Gbl.RowEvenOdd,
 	    UsrDat->Accepted ? "DAT_N" :
 			       "DAT");
    ID_WriteUsrIDs (UsrDat,NULL);
@@ -3553,11 +3553,11 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
    if (UsrDat->Surname2[0])
      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
    fprintf (Gbl.F.Out,", %s</td>"
-                      "</tr>"
-                      "</table>"
-                      "</td>"
                       "</tr>",
 	    UsrDat->FirstName);
+   fprintf (Gbl.F.Out,"</table>");
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
 
    /***** List the events with students *****/
    for (NumAttEvent = 0, UniqueId = 1;

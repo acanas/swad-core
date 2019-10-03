@@ -353,7 +353,7 @@ static void Ins_Configuration (bool PrintView)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -704,7 +704,7 @@ static void Ins_ListInstitutions (void)
    if (Gbl.Hierarchy.Cty.Inss.Num)	// There are institutions in the current country
      {
       /***** Start table *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
       /***** Write all the institutions and their nuber of users *****/
@@ -1470,7 +1470,7 @@ static void Ins_ListInstitutionsForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    Ins_PutHeadInstitutionsForEdition ();
 
    /***** Write all the institutions *****/

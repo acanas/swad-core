@@ -339,7 +339,7 @@ static void Deg_Configuration (bool PrintView)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start table *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
 
    /***** Centre *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -705,7 +705,7 @@ static void Deg_ListDegreesForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    Deg_PutHeadDegreesForEdition ();
 
    /***** List the degrees *****/
@@ -1183,7 +1183,7 @@ static void Deg_ListDegrees (void)
    if (Gbl.Hierarchy.Ctr.Degs.Num)	// There are degrees in the current centre
      {
       /***** Write heading *****/
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       Deg_PutHeadDegreesForSeeing ();
 
       /***** List the degrees *****/

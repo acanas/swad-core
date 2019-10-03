@@ -114,7 +114,7 @@ void Cla_SeeClassrooms (void)
    /***** Table head *****/
    Box_StartBox (NULL,Txt_Classrooms,Cla_PutIconsListingClassrooms,
 		 Hlp_CENTRE_Classrooms,Box_NOT_CLOSABLE);
-   Tbl_StartTableWideMargin (2);
+   Tbl_StartTableWideMarginPadding (2);
    fprintf (Gbl.F.Out,"<tr>");
    for (Order  = (Cla_Order_t) 0;
 	Order <= (Cla_Order_t) (Cla_NUM_ORDERS - 1);
@@ -474,7 +474,7 @@ static void Cla_ListClassroomsForEdition (void)
    struct Classroom *Cla;
 
    /***** Write heading *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    Cla_PutHeadClassrooms ();
 
    /***** Write all the classrooms *****/

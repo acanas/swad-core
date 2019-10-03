@@ -113,7 +113,7 @@ void Plc_SeePlaces (void)
       /***** Table head *****/
       Box_StartBox (NULL,Txt_Places,Plc_PutIconsListingPlaces,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
-      Tbl_StartTableWideMargin (2);
+      Tbl_StartTableWideMarginPadding (2);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
@@ -512,7 +512,7 @@ static void Plc_ListPlacesForEdition (void)
    struct Place *Plc;
 
    /***** Write heading *****/
-   Tbl_StartTableWide (2);
+   Tbl_StartTableWidePadding (2);
    Plc_PutHeadPlaces ();
 
    /***** Write all the places *****/
