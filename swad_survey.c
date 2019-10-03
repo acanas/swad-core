@@ -3189,7 +3189,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
 
       /***** Write the heading *****/
       Tbl_StartTableWideMarginPadding (2);
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
       if (Svy->Status.ICanEdit)
          fprintf (Gbl.F.Out,"<th></th>");
       fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
@@ -3219,7 +3219,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
          if (sscanf (row[0],"%ld",&(SvyQst->QstCod)) != 1)
             Lay_ShowErrorAndExit ("Wrong code of question.");
 
-         fprintf (Gbl.F.Out,"<tr>");
+         Tbl_StartRow ();
 
          if (Svy->Status.ICanEdit)
            {
@@ -3401,7 +3401,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 			   SvyQst->AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER,false);
 
 	 /* Selectors and label with the letter of the answer */
-	 fprintf (Gbl.F.Out,"<tr>");
+	 Tbl_StartRow ();
 
 	 if (PutFormAnswerSurvey)
 	   {

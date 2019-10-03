@@ -412,8 +412,8 @@ void Ann_ShowFormAnnouncement (void)
    Ann_PutSubjectMessage ("Content",Txt_MSG_Content,20);
 
    /***** Users' roles who can view the announcement *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
                       "%s: "
                       "</td>"
                       "<td class=\"DAT LEFT_TOP\">",
@@ -430,8 +430,8 @@ void Ann_ShowFormAnnouncement (void)
                            1 << Rol_NET |
                            1 << Rol_TCH,
                            false,false);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_announcement);
@@ -449,18 +449,18 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"%s\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<textarea id=\"%s\" name=\"%s\""
                       " cols=\"75\" rows=\"%u\">"
                       "</textarea>"
-	              "</td>"
-	              "</tr>",
+	              "</td>",
 	    Field,The_ClassFormInBox[Gbl.Prefs.Theme],Label,
 	    Field,Field,Rows);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

@@ -295,7 +295,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 	NumField < Gbl.Crs.Records.LstFields.Num;
 	NumField++)
      {
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
 
       /* Write icon to remove the field */
       fprintf (Gbl.F.Out,"<td class=\"BM\">");
@@ -2260,23 +2260,23 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
                       Rec_RecordHelp[TypeOfView],Box_NOT_CLOSABLE,2);
 
    /***** Institution and user's photo *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Rec_ShowInstitutionInHead (&Ins,PutFormLinks);
    Rec_ShowPhoto (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Full name *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Rec_ShowFullName (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** User's nickname *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Rec_ShowNickname (UsrDat,PutFormLinks);
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** User's country, web and social networks *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Rec_ShowCountryInHead (UsrDat,ShowData);
    Rec_ShowWebsAndSocialNets (UsrDat,TypeOfView);
    fprintf (Gbl.F.Out,"</tr>");

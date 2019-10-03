@@ -383,7 +383,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
       ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match.MchCod);
 
       /***** Write row for this match ****/
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
 
       /* Icons */
       if (ICanEditMatches)
@@ -430,7 +430,7 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
    extern const char *Txt_Result;
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Column for icons *****/
    if (ICanEditMatches)
@@ -2488,7 +2488,7 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	      NumOpt++)
 	   {
 	    /***** Start row *****/
-	    fprintf (Gbl.F.Out,"<tr>");
+	    Tbl_StartRow ();
 
 	    /***** Write letter for this option *****/
 	    /* Start table cell */

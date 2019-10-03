@@ -165,7 +165,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
 
 	 /***** Show user *****/
 	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
-	    fprintf (Gbl.F.Out,"<tr>");
+	    Tbl_StartRow ();
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
 	    Fol_ShowFollowedOrFollower (&UsrDat);
 	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
@@ -717,7 +717,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 
 	    /***** Show user *****/
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
-	       fprintf (Gbl.F.Out,"<tr>");
+	       Tbl_StartRow ();
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowingUsrDat,Usr_DONT_GET_PREFS))
 	       Fol_ShowFollowedOrFollower (&FollowingUsrDat);
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
@@ -800,7 +800,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 
 	    /***** Show user *****/
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
-	       fprintf (Gbl.F.Out,"<tr>");
+	       Tbl_StartRow ();
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowerUsrDat,Usr_DONT_GET_PREFS))
 	       Fol_ShowFollowedOrFollower (&FollowerUsrDat);
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||

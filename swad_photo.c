@@ -892,7 +892,7 @@ static void Pho_UpdatePhoto2 (void)
 
    /***** Show the three images resulting of the processing *****/
    Tbl_StartTableWide ();
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    for (NumPhoto = 0;
         NumPhoto < 3;
         NumPhoto++)
@@ -2145,7 +2145,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 	   {
 	    if ((NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
 	      {
-	       fprintf (Gbl.F.Out,"<tr>");
+	       Tbl_StartRow ();
 	       TRIsOpen = true;
 	      }
 

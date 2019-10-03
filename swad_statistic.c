@@ -1399,12 +1399,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 Box_StartBox (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],NULL,
 	               NULL,Box_NOT_CLOSABLE);
 
-      fprintf (Gbl.F.Out,"<table");
-      if (Sta_CellPadding[Gbl.Stat.ClicksGroupedBy])
-         fprintf (Gbl.F.Out," class=\"CELLS_PAD_%u\"",
-                  Sta_CellPadding[Gbl.Stat.ClicksGroupedBy]);
-      fprintf (Gbl.F.Out,">");
-
+      Tbl_StartTablePadding (Sta_CellPadding[Gbl.Stat.ClicksGroupedBy]);
       switch (Gbl.Stat.ClicksGroupedBy)
 	{
 	 case Sta_CLICKS_CRS_DETAILED_LIST:
@@ -1583,7 +1578,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"7\" class=\"LEFT_MIDDLE\">");
    Tbl_StartTableWidePadding (2);
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /* Put link to jump to previous page (older clicks) */
    if (FirstRow > 1)
@@ -2851,7 +2846,7 @@ static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
       /***** Draw the graphic *****/
       mysql_data_seek (mysql_res,0);
       NumRow = 1;
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
       while (Hour < 24)
 	{
 	 Hits.Num = 0.0;
@@ -3050,7 +3045,7 @@ static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
    unsigned i;
    float NumX;
 
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    for (i = 0, NumX = 0;
 	i <= Sta_NUM_DIVISIONS_X;
 	i++, NumX += IncX)
@@ -3075,7 +3070,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
    unsigned BarWidth;
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Labels of the Y axis, and Y axis *****/
    if (!Minute)

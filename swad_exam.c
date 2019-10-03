@@ -48,6 +48,7 @@
 #include "swad_QR.h"
 #include "swad_RSS.h"
 #include "swad_string.h"
+#include "swad_table.h"
 #include "swad_timeline.h"
 
 /*****************************************************************************/
@@ -1039,8 +1040,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
      }
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"%s CELLS_PAD_2\">",
-            ClassExaAnnouncement[TypeViewExamAnnouncement][Gbl.ExamAnns.ExaDat.Status]);
+   Tbl_StartTableClass ("%s CELLS_PAD_2\">",
+                        ClassExaAnnouncement[TypeViewExamAnnouncement][Gbl.ExamAnns.ExaDat.Status]);
 
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<tr>"

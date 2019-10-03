@@ -44,6 +44,7 @@
 #include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_report.h"
+#include "swad_table.h"
 #include "swad_timeline.h"
 
 /*****************************************************************************/
@@ -277,8 +278,8 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    extern const char *Txt_Its_me;
 
    /***** Write number of user in the list *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td rowspan=\"2\""
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\""
 		      " class=\"USR_LIST_NUM_N RIGHT_TOP COLOR%u\">"
 		      "%u"
 		      "</td>",
@@ -304,19 +305,19 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Btn_PutCreateButtonInline (Txt_Its_me);
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Courses of this user *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
    UsrDat->Sex = Usr_SEX_UNKNOWN;
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NET);
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STD);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -366,8 +367,8 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 		NewNicknameWithoutArroba);
    else
       NewNicknameWithArroba[0] = '\0';
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"NewNick\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">"
@@ -375,17 +376,17 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Nickname,
             1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
             Txt_HELP_nickname,
             NewNicknameWithArroba);
+   Tbl_EndRow ();
 
    /***** Email *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"NewEmail\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">"
@@ -393,13 +394,13 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Email,
             Cns_MAX_CHARS_EMAIL_ADDRESS,
             Txt_HELP_email,
             NewEmail);
+   Tbl_EndRow ();
 
    /***** Password *****/
    Pwd_PutFormToGetNewPasswordOnce ();

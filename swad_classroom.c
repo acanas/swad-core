@@ -115,7 +115,7 @@ void Cla_SeeClassrooms (void)
    Box_StartBox (NULL,Txt_Classrooms,Cla_PutIconsListingClassrooms,
 		 Hlp_CENTRE_Classrooms,Box_NOT_CLOSABLE);
    Tbl_StartTableWideMarginPadding (2);
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    for (Order  = (Cla_Order_t) 0;
 	Order <= (Cla_Order_t) (Cla_NUM_ORDERS - 1);
 	Order++)
@@ -133,7 +133,7 @@ void Cla_SeeClassrooms (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Write list of classrooms *****/
    for (NumCla = 0, RowEvenOdd = 1;
@@ -141,8 +141,8 @@ void Cla_SeeClassrooms (void)
 	NumCla++, RowEvenOdd = 1 - RowEvenOdd)
      {
       /* Short name */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT LEFT_MIDDLE %s\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
 			 "%s"
 			 "</td>",
 	       Gbl.ColorRows[RowEvenOdd],
@@ -164,10 +164,10 @@ void Cla_SeeClassrooms (void)
       /* Location */
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
 			 "%s"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       Gbl.ColorRows[RowEvenOdd],
 	       Gbl.Classrooms.Lst[NumCla].Location);
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -485,8 +485,8 @@ static void Cla_ListClassroomsForEdition (void)
       Cla = &Gbl.Classrooms.Lst[NumCla];
 
       /* Put icon to remove classroom */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       Frm_StartForm (ActRemCla);
       Cla_PutParamClaCod (Cla->ClaCod);
       Ico_PutIconRemove ();
@@ -545,8 +545,8 @@ static void Cla_ListClassroomsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cla_MAX_CHARS_LOCATION,Cla->Location,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -901,8 +901,8 @@ static void Cla_PutFormToCreateClassroom (void)
    Cla_PutHeadClassrooms ();
 
    /***** Column to remove classroom, disabled here *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\"></td>");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
 
    /***** Classroom code *****/
    fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
@@ -938,9 +938,9 @@ static void Cla_PutFormToCreateClassroom (void)
                       "<input type=\"text\" name=\"Location\""
 		      " size=\"15\" maxlength=\"%u\" value=\"%s\""
 		      " class=\"INPUT_FULL_NAME\" />"
-	              "</td>"
-		      "</tr>",
+	              "</td>",
 	    Cla_MAX_CHARS_LOCATION,Cla_EditingCla->Location);
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_classroom);
@@ -961,8 +961,8 @@ static void Cla_PutHeadClassrooms (void)
    extern const char *Txt_Capacity_OF_A_CLASSROOM;
    extern const char *Txt_Location;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -977,13 +977,13 @@ static void Cla_PutHeadClassrooms (void)
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
-                      "</th>"
-		      "</tr>",
+                      "</th>",
             Txt_Code,
             Txt_Short_name,
             Txt_Full_name,
             Txt_Capacity_OF_A_CLASSROOM,
             Txt_Location);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

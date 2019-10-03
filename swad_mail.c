@@ -128,7 +128,7 @@ void Mai_SeeMailDomains (void)
                       Hlp_START_Domains,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    for (Order = Mai_ORDER_BY_DOMAIN;
 	Order <= Mai_ORDER_BY_USERS;
 	Order++)
@@ -1282,7 +1282,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 		  Txt_Current_email);
       else	// NumEmail >= 2
 	{
-	 fprintf (Gbl.F.Out,"<tr>");
+	 Tbl_StartRow ();
 	 if (NumEmail == 2)
 	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"REC_C1_BOT RIGHT_TOP\">"
 			       "<label for=\"Email\" class=\"%s\">"

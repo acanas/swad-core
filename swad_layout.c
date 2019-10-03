@@ -1616,8 +1616,8 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Crs_GetDataOfCourseByCod (&Crs);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table style=\"width:100%%; padding:12px;\">"
-                      "<tr>");
+   fprintf (Gbl.F.Out,"<table style=\"width:100%%; padding:12px;\">");	// TODO: Change inline style to class
+   Tbl_StartRow ();
 
    /***** First column: institution logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:80px;\">");

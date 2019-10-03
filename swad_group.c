@@ -2145,7 +2145,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 	                                     false;
 
       /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
 
       /* Start cell for checkbox */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");

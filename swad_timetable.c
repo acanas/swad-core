@@ -1162,7 +1162,7 @@ static void TT_DrawTimeTable (void)
 	Min = (Min + Gbl.TimeTable.Config.Range.MinutesPerInterval) %
 	      TT_SECONDS_PER_MINUTE)
      {
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
 
       /* Left hour:minutes cell */
       if (Interval % 2)
@@ -1250,7 +1250,7 @@ static void TT_DrawTimeTable (void)
       Grp_FreeListGrpTypesAndGrps ();
 
    /***** Row with day names *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    TT_DrawCellAlignTimeTable ();
    TT_TimeTableDrawDaysCells ();
    TT_DrawCellAlignTimeTable ();

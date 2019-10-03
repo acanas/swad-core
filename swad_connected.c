@@ -282,7 +282,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Number of teachers and students *****/
-   fprintf (Gbl.F.Out,"<table class=\"CONNECTED_LIST\">");
+   Tbl_StartTableClass ("CONNECTED_LIST");
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NET);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
@@ -330,7 +330,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Frm_EndForm ();
 
    /***** Number of teachers and students *****/
-   fprintf (Gbl.F.Out,"<table class=\"CONNECTED_LIST\">");
+   Tbl_StartTableClass ("CONNECTED_LIST");
    Gbl.Usrs.Connected.NumUsr        = 0;
    Gbl.Usrs.Connected.NumUsrs       = 0;
    Gbl.Usrs.Connected.NumUsrsToList = 0;
@@ -357,14 +357,14 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&Usrs);
    if (Usrs.NumUsrs)
      {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"CENTER_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"CENTER_TOP\">"
 			 "%u %s"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       Usrs.NumUsrs,
 	       (Usrs.NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
 				     Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
+      Tbl_EndRow ();
 
       /***** I can see connected users *****/
       Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Role);
@@ -391,14 +391,14 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
       if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
 	 Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
 
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"CON_USR_NARROW_TIT\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"CON_USR_NARROW_TIT\">"
 			 "%u %s"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       NumUsrsThisRole,
 	       (NumUsrsThisRole == 1) ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
 					Txt_ROLES_PLURAL_abc[Role][UsrSex]);
+      Tbl_EndRow ();
 
       /***** I can see connected users *****/
       Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Role);
@@ -406,8 +406,8 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
       /***** Write message with number of users not listed *****/
       if (Gbl.Usrs.Connected.NumUsrsToList < Gbl.Usrs.Connected.NumUsrs)
 	{
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td colspan=\"3\" class=\"CENTER_TOP\">");
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"CENTER_TOP\">");
 	 Frm_StartFormUnique (ActLstCon);	// Must be unique because
 						// the list of connected users
 						// is dynamically updated via AJAX
@@ -419,8 +419,8 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Connected_users,Txt_Connected_users);
 	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndRow ();
 	}
      }
   }
@@ -816,8 +816,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
      }
 
    /***** Show photo *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CON_PHOTO COLOR%u\">",
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"CON_PHOTO COLOR%u\">",
 	    Gbl.RowEvenOdd);
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
@@ -867,8 +867,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
    fprintf (Gbl.F.Out,"</div>");	// Used for automatic update, only when displayed on right column
 
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    if (!ItsMe)
       /***** Free memory used for user's data *****/
@@ -1036,8 +1036,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       TimeDiff = (time_t) 0;
 
 	    /***** Show photo *****/
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"CON_PHOTO COLOR%u\">",
+	    Tbl_StartRow ();
+	    fprintf (Gbl.F.Out,"<td class=\"CON_PHOTO COLOR%u\">",
 		     Gbl.RowEvenOdd);
 	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
@@ -1083,8 +1083,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    fprintf (Gbl.F.Out,"<td class=\"%s COLOR%u\">",
 		     Font,Gbl.RowEvenOdd);
 	    Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
-	    fprintf (Gbl.F.Out,"</td>"
-			       "</tr>");
+	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndRow ();
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 	   }

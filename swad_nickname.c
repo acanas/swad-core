@@ -281,7 +281,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 		  Txt_Current_nickname);
       else	// NumNick >= 2
 	{
-	 fprintf (Gbl.F.Out,"<tr>");
+	 Tbl_StartRow ();
 	 if (NumNick == 2)
 	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\""
 			       " class=\"REC_C1_BOT RIGHT_TOP\">"

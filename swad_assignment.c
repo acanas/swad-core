@@ -202,8 +202,8 @@ static void Asg_PutHeadForSeeing (bool PrintView)
    extern const char *Txt_Folder;
    Dat_StartEndTime_t Order;
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
    for (Order = Dat_START_TIME;
 	Order <= Dat_END_TIME;
 	Order++)
@@ -236,10 +236,10 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 		      "</th>"
 		      "<th class=\"LEFT_MIDDLE\">"
 		      "%s"
-		      "</th>"
-		      "</tr>",
+		      "</th>",
 	    Txt_Assignment,
 	    Txt_Folder);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -357,8 +357,8 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 
    /***** Write first row of data of this assignment *****/
    /* Forms to remove/edit this assignment */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"2\" class=\"CONTEXT_COL");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CONTEXT_COL");
    if (PrintView)
       fprintf (Gbl.F.Out,"\">");
    else
@@ -412,12 +412,12 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    fprintf (Gbl.F.Out,"\">");
    if (Asg.SendWork == Asg_SEND_WORK)
       Asg_WriteAssignmentFolder (&Asg,PrintView);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Write second row of data of this assignment *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"LEFT_TOP");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
@@ -441,11 +441,11 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
 
    fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Asg.Hidden ? "DAT_LIGHT" :
         	         "DAT",
             Txt);
+   Tbl_EndRow ();
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
@@ -1158,25 +1158,25 @@ void Asg_RequestCreatOrEditAsg (void)
 
 
    /***** Assignment title *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Title\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title,
             Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title);
+   Tbl_EndRow ();
 
    /***** Assignment start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Asg.TimeUTC,Dat_FORM_SECONDS_ON);
 
    /***** Send work? *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
@@ -1184,16 +1184,16 @@ void Asg_RequestCreatOrEditAsg (void)
                       "<input type=\"text\" name=\"Folder\""
                       " size=\"30\" maxlength=\"%u\" value=\"%s\" />"
                       "</label>"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Upload_files_QUESTION,
             Txt_Folder,
             Brw_MAX_CHARS_FOLDER,Asg.Folder);
+   Tbl_EndRow ();
 
    /***** Assignment text *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"Txt\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
@@ -1203,8 +1203,8 @@ void Asg_RequestCreatOrEditAsg (void)
    if (!ItsANewAssignment)
       fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</textarea>"
-                      "</td>"
-                      "</tr>");
+                      "</td>");
+   Tbl_EndRow ();
 
    /***** Groups *****/
    Asg_ShowLstGrpsToEditAssignment (Asg.AsgCod);
@@ -1240,8 +1240,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
    if (Gbl.Crs.Grps.GrpTypes.Num)
      {
       /***** Start box and table *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
 	                 "</td>"
                          "<td class=\"LEFT_TOP\">",
@@ -1251,8 +1251,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
                          Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">"
                          "<label>"
                          "<input type=\"checkbox\" id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
       if (!Asg_CheckIfAsgIsAssociatedToGrps (AsgCod))
@@ -1260,9 +1260,9 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
 	                 "%s %s"
                          "</label>"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      Tbl_EndRow ();
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
@@ -1274,8 +1274,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 
       /***** End table and box *****/
       Box_EndBoxTable ();
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** Free list of groups types and groups in this course *****/

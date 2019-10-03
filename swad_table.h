@@ -39,6 +39,8 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
+void Tbl_StartTableClass (const char *fmt,...);
+
 void Tbl_StartTablePadding (unsigned CellPadding);
 void Tbl_StartTable (void);
 
@@ -52,6 +54,9 @@ void Tbl_StartTableWideMarginPadding (unsigned CellPadding);
 void Tbl_StartTableWideMargin (void);
 
 void Tbl_EndTable (void);
+
+void Tbl_StartRow (void);
+void Tbl_EndRow (void);
 
 void Tbl_PutEmptyCells (unsigned NumColumns);
 

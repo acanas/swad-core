@@ -1562,7 +1562,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	   }
 
 	 /***** Show row *****/
-	 fprintf (Gbl.F.Out,"<tr>");
+	 Tbl_StartRow ();
          Prf_ShowUsrInRanking (&UsrDat,Rank);
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
 	                    " style=\"height:50px;\">"
@@ -1729,7 +1729,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	   }
 
 	 /***** Show row *****/
-	 fprintf (Gbl.F.Out,"<tr>");
+	 Tbl_StartRow ();
 	 Prf_ShowUsrInRanking (&UsrDat,Rank);
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
 	                    " style=\"height:50px;\">",

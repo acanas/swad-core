@@ -551,7 +551,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
    /***** Start table *****/
    Tbl_StartTable ();
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Year *****/
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
@@ -818,7 +818,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 
    /***** Start table *****/
    Tbl_StartTable ();
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Year *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"

@@ -39,6 +39,7 @@
 #include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -282,16 +283,16 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<th class=\"CENTER_MIDDLE LIGHT_BLUE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE LIGHT_BLUE\">"
 	                 "%s"
 	                 "</th>"
                          "<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
                          "%s"
-                         "</th>"
-                         "</tr>",
+                         "</th>",
                Txt_CHAT_Room_code,
                Txt_No_of_users);
+      Tbl_EndRow ();
 
       /***** Loop over chat rooms *****/
       for (NumRow = 0;
@@ -300,15 +301,15 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 	{
 	 /* Get next chat room */
 	 row = mysql_fetch_row (mysql_res);
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT LEFT_MIDDLE\">"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
                             "%s"
                             "</td>"
                             "<td class=\"DAT RIGHT_MIDDLE\">"
                             "%s"
-                            "</td>"
-                            "</tr>",
+                            "</td>",
                   row[0],row[1]);
+         Tbl_EndRow ();
         }
 
       /***** End table and box *****/

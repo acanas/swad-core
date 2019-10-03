@@ -632,7 +632,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    /***** Write number of courses with each number of indicators valid *****/
    Tbl_StartTablePadding (2);
 
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    if (PutForm)
       fprintf (Gbl.F.Out,"<th></th>");
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
@@ -650,7 +650,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
      {
       Class = Gbl.Stat.IndicatorsSelected[Ind] ? ClassHighlight :
                                                  ClassNormal;
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
       if (PutForm)
 	{
 	 fprintf (Gbl.F.Out,"<td class=\"%s\">"
@@ -684,7 +684,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
      }
 
    /***** Write total of courses *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    if (PutForm)
       fprintf (Gbl.F.Out,"<td>"
 			 "</td>");
@@ -747,7 +747,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    long ActCod;
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"INDICATORS\">");
+   Tbl_StartTableClass ("INDICATORS");
 
    /***** Write table heading *****/
    switch (IndicatorsLayout)

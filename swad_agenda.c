@@ -566,7 +566,7 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
    Agd_Order_t Order;
 
    /***** Table head *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    for (Order = Agd_ORDER_BY_START_DATE;
 	Order <= Agd_ORDER_BY_END_DATE;
 	Order++)
@@ -602,10 +602,10 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 		      "</th>"
 		      "<th class=\"LEFT_MIDDLE\">"
 		      "%s"
-		      "</th>"
-		      "</tr>",
+		      "</th>",
 	    Txt_Event,
 	    Txt_Location);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -740,7 +740,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    Frm_SetAnchorStr (AgdEvent.AgdCod,&Anchor);
 
    /***** Write first row of data of this event *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /* Start/end date/time */
    UniqueId++;
@@ -781,11 +781,11 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
         	              "ASG_TITLE",
             AgdEvent.Location);
 
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Write second row of data of this event *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
 
    /* Forms to remove/edit this event */
@@ -808,12 +808,12 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">"
 	              "<div class=\"PAR %s\">%s</div>"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Gbl.RowEvenOdd,
             AgdEvent.Hidden ? "DAT_LIGHT" :
         	              "DAT",
             Txt);
+   Tbl_EndRow ();
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
@@ -1500,42 +1500,42 @@ void Agd_RequestCreatOrEditEvent (void)
 			 Hlp_PROFILE_Agenda_edit_event,Box_NOT_CLOSABLE,2);
 
    /***** Event *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Event\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" id=\"Event\" name=\"Event\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Event,
             Agd_MAX_CHARS_EVENT,AgdEvent.Event);
+   Tbl_EndRow ();
 
    /***** Location *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Location\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" id=\"Location\" name=\"Location\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Location,
             Agd_MAX_CHARS_LOCATION,AgdEvent.Location);
+   Tbl_EndRow ();
 
    /***** Start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (AgdEvent.TimeUTC,
                                             Dat_FORM_SECONDS_OFF);
 
    /***** Text *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"Txt\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
@@ -1546,8 +1546,8 @@ void Agd_RequestCreatOrEditEvent (void)
    if (!ItsANewEvent)
       fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</textarea>"
-                      "</td>"
-                      "</tr>");
+                      "</td>");
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    if (ItsANewEvent)

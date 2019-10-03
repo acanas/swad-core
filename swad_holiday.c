@@ -115,7 +115,7 @@ void Hld_SeeHolidays (void)
       if (Gbl.Hlds.Num)
 	 {
          Tbl_StartTableWideMarginPadding (2);
-         fprintf (Gbl.F.Out,"<tr>");
+         Tbl_StartRow ();
 	 for (Order = Hld_ORDER_BY_PLACE;
 	      Order <= Hld_ORDER_BY_START_DATE;
 	      Order++)

@@ -25,7 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <stdio.h>		// For fprintf
+#define _GNU_SOURCE 		// For vasprintf
+#include <stdarg.h>		// For va_start, va_end
+#include <stdio.h>		// For fprintf, vasprintf
 
 #include "swad_table.h"
 #include "swad_global.h"
@@ -55,6 +57,37 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 /******************************* Start/end table *****************************/
 /*****************************************************************************/
+
+void Tbl_StartTableClass (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Class;
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Class,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+				      // or some other error occurs,
+				      // vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 fprintf (Gbl.F.Out,"<table class=\"%s\">",Class);
+
+	 free ((void *) Class);
+	}
+      else
+         Tbl_StartTable ();
+     }
+   else
+      Tbl_StartTable ();
+  }
 
 void Tbl_StartTablePadding (unsigned CellPadding)
   {
@@ -115,6 +148,16 @@ void Tbl_StartTableWideMargin (void)
 void Tbl_EndTable (void)
   {
    fprintf (Gbl.F.Out,"</table>");
+  }
+
+void Tbl_StartRow (void)
+  {
+   Tbl_StartRow ();
+  }
+
+void Tbl_EndRow (void)
+  {
+   fprintf (Gbl.F.Out,"</tr>");
   }
 
 void Tbl_PutEmptyCells (unsigned NumColumns)

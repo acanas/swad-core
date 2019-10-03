@@ -421,7 +421,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 			      (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
 
    /***** Show user's data *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Usr_ShowTableCellWithUsrData (UsrDat,NumResults);
 
    /***** Get and print matches results *****/
@@ -443,7 +443,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	 ShowSummaryResults = ShowSummaryResults && ShowResultThisMatch;
 
          if (NumResult)
-            fprintf (Gbl.F.Out,"<tr>");
+            Tbl_StartRow ();
 
          /* Write start/end times (row[1], row[2] hold UTC start/end times) */
          for (StartEndTime = (Dat_StartEndTime_t) 0;
@@ -584,7 +584,7 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
    extern const char *Txt_Matches;
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Row title *****/
    fprintf (Gbl.F.Out,"<td colspan=\"3\""

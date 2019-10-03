@@ -210,7 +210,7 @@ static void Gam_ListAllGames (void)
      {
       /***** Table head *****/
       Tbl_StartTableWideMarginPadding (2);
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
       if (Gam_CheckIfICanEditGames ())
          fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
 
@@ -397,7 +397,7 @@ void Gam_ShowOneGame (long GamCod,
       Tbl_StartTableWidePadding (2);
 
    /***** Start first row of this game *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Icons related to this game *****/
    if (Gam_CheckIfICanEditGames ())
@@ -488,7 +488,7 @@ void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Start 2nd row of this game *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Author of the game *****/
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");

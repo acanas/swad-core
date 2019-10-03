@@ -114,7 +114,7 @@ void Plc_SeePlaces (void)
       Box_StartBox (NULL,Txt_Places,Plc_PutIconsListingPlaces,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
       Tbl_StartTableWideMarginPadding (2);
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
 	   Order++)

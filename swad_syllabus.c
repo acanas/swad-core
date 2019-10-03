@@ -595,7 +595,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
       Syl_WriteNumItem (StrItemCod,NULL,Level,CodItem);
 
    /***** Start the row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    if (Gbl.Syllabus.EditionIsActive)
      {

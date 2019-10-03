@@ -120,7 +120,7 @@ void Dpt_SeeDepts (void)
 		      Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    for (Order = Dpt_ORDER_BY_DEPARTMENT;
 	Order <= Dpt_ORDER_BY_NUM_TCHS;
 	Order++)

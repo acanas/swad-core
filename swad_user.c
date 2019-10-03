@@ -3631,7 +3631,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    struct Instit Ins;
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Checkbox to select user *****/
    // Two colors are used alternatively to better distinguish the rows
@@ -3719,7 +3719,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    struct Department Dpt;
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
@@ -3821,7 +3821,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
                     Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM;
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
@@ -3941,7 +3941,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    struct Department Dpt;
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show teacher's photo *****/
@@ -4013,7 +4013,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    struct Instit Ins;
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Write number of user *****/
    fprintf (Gbl.F.Out,"<td class=\"USR_LIST_NUM_N CENTER_MIDDLE COLOR%u\">"
@@ -6459,7 +6459,7 @@ void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr)
   {
    unsigned NumCol;
 
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** First column used for selection *****/
    if (PutCheckBoxToSelectUsr)
@@ -6623,7 +6623,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
 
       /***** Heading row with column names *****/
       /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
 
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
@@ -6735,7 +6735,7 @@ void Usr_ListAllDataGsts (void)
       Tbl_StartTableWide ();
 
       /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
 
       /* Columns for the data */
       for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
@@ -6893,7 +6893,7 @@ void Usr_ListAllDataStds (void)
 
       /***** Heading row with column names *****/
       /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
 
       /* 1. Columns for the data */
       for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
@@ -7134,7 +7134,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
    unsigned NumUsr;
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
 						1);
 	NumCol < NumColumns;
@@ -7383,7 +7383,7 @@ void Usr_ListDataAdms (void)
 
       /***** Heading row with column names *****/
       Tbl_StartTable ();
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_ADM;
            NumCol++)
@@ -8927,7 +8927,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	{
 	 if ((NumUsr % Gbl.Usrs.ClassPhoto.Cols) == 0)
 	   {
-	    fprintf (Gbl.F.Out,"<tr>");
+	    Tbl_StartRow ();
 	    TRIsOpen = true;
 	   }
 

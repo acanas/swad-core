@@ -3184,7 +3184,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	 if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show a row with the data of the owner of the works *****/
-	    fprintf (Gbl.F.Out,"<tr>");
+	    Tbl_StartRow ();
 	    Brw_ShowDataOwnerAsgWrk (&Gbl.Usrs.Other.UsrDat);
 
 	    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
@@ -3656,7 +3656,7 @@ static void Brw_ShowFileBrowser (void)
    Brw_WriteSubtitleOfFileBrowser ();
 
    /***** List recursively the directory *****/
-   fprintf (Gbl.F.Out,"<table class=\"BROWSER_TABLE\">");
+   Tbl_StartTableClass ("BROWSER_TABLE");
    Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
 	     PATH_MAX);
    Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,".",
@@ -5592,7 +5592,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	              " style=\"width:99%%;\">",
             Gbl.RowEvenOdd);
    Tbl_StartTable ();
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /* Indent depending on level */
    if (Level)
@@ -5820,7 +5820,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
   {
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Tbl_StartTable ();
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Brw_IndentDependingOnLevel (Level);
 
    /***** Icon to expand/contract *****/

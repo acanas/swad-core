@@ -421,8 +421,8 @@ static void Ban_ListBannersForEdition (void)
       Frm_SetAnchorStr (Ban->BanCod,&Anchor);
 
       /* Put icon to remove banner */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       Ico_PutContextualIconToRemove (ActRemBan,Ban_PutParamBanCodToEdit);
       fprintf (Gbl.F.Out,"</td>");
 
@@ -488,8 +488,8 @@ static void Ban_ListBannersForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_CHARS_WWW,Ban->WWW,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>"
-                         "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       /* Free anchor string */
       Frm_FreeAnchorStr (Anchor);
@@ -864,8 +864,8 @@ static void Ban_PutFormToCreateBanner (void)
    Ban_PutHeadBanners ();
 
    /***** Banner code *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\"></td>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>"
                       "<td class=\"BM\"></td>"
                       "<td></td>");
 
@@ -901,9 +901,9 @@ static void Ban_PutFormToCreateBanner (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Cns_MAX_CHARS_WWW,Ban_EditingBan->WWW);
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_banner);
@@ -924,20 +924,20 @@ static void Ban_PutHeadBanners (void)
    extern const char *Txt_Image;
    extern const char *Txt_WWW;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"BM\"></th>"
                       "<th class=\"RIGHT_MIDDLE\">%s</th>"
                       "<th class=\"LEFT_MIDDLE\">%s</th>"
                       "<th class=\"LEFT_MIDDLE\">%s</th>"
                       "<th class=\"LEFT_MIDDLE\">%s</th>"
-                      "<th class=\"LEFT_MIDDLE\">%s</th>"
-                      "</tr>",
+                      "<th class=\"LEFT_MIDDLE\">%s</th>",
             Txt_Code,
             Txt_Short_name,
             Txt_Full_name,
             Txt_Image,
             Txt_WWW);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

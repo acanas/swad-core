@@ -685,7 +685,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
    extern const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS];
    Prj_Order_t Order;
 
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Column for number of project *****/
    switch (ProjectView)
@@ -756,7 +756,7 @@ static void Prj_ShowTableAllProjectsHead (void)
    Prj_Order_t Order;
    unsigned NumRoleToShow;
 
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    for (Order = (Prj_Order_t) 0;
 	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
@@ -982,7 +982,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    Frm_SetAnchorStr (Prj->PrjCod,&Anchor);
 
    /***** Write first row of data of this project *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /* Number of project */
    switch (ProjectView)
@@ -1077,7 +1077,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    Prj_ShowOneProjectDepartment (Prj,ProjectView);
 
    /***** Preassigned? *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
@@ -1116,7 +1116,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
                       "</tr>");
 
    /***** Number of students *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
@@ -1285,7 +1285,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
    Prj_GetDataOfProjectByCod (Prj);
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Start date/time *****/
    UniqueId++;
@@ -1642,7 +1642,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
    if (WriteRow)
      {
       /***** Start row with label and listing of users *****/
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
 
       /* Column for label */
       switch (ProjectView)
@@ -1717,7 +1717,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	   {
 	    /* Start row for this user */
-	    fprintf (Gbl.F.Out,"<tr>");
+	    Tbl_StartRow ();
 
 	    /* Icon to remove user */
 	    if (ProjectView == Prj_EDIT_ONE_PROJECT)

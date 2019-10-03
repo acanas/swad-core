@@ -1439,7 +1439,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	      {
 	       if ((NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
 		 {
-		  fprintf (Gbl.F.Out,"<tr>");
+		  Tbl_StartRow ();
 		  TRIsOpen = true;
 		 }
 

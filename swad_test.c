@@ -1705,7 +1705,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
       fprintf (Gbl.F.Out," colspan=\"%u\"",NumCols);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP\">");
    Tbl_StartTablePadding (2);
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    if (!ShowOnlyEnabledTags)
       fprintf (Gbl.F.Out,"<td></td>");
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -1727,7 +1727,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 	NumRow++)
      {
       row = mysql_fetch_row (mysql_res);
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
       if (!ShowOnlyEnabledTags)
         {
          TagHidden = (row[2][0] == 'Y');
@@ -1807,7 +1807,7 @@ static void Tst_ShowFormEditTags (void)
          if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong code of tag.");
 
-         fprintf (Gbl.F.Out,"<tr>");
+         Tbl_StartRow ();
 
          /* Form to enable / disable this tag */
          if (row[2][0] == 'Y')	// Tag disabled
@@ -3654,7 +3654,7 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Header with the title of each column *****/
    Tbl_StartTablePadding (2);
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -3840,7 +3840,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Start table *****/
    Tbl_StartTablePadding (2);
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"<td></td>"
 	              "<td></td>"
@@ -3851,7 +3851,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 	NumOpt < Gbl.Test.Answer.NumOptions;
 	NumOpt++)
      {
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
 
       /* Draw icon depending on user's answer */
       if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
@@ -4204,7 +4204,7 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
 	NumOpt++)
      {
       /***** Start row for this option *****/
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
 
       /***** Write letter for this option *****/
       fprintf (Gbl.F.Out,"<td class=\"MATCH_TCH_BUTTON_TD\">"
@@ -4315,7 +4315,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Header with the title of each column *****/
    Tbl_StartTablePadding (2);
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -4478,7 +4478,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Header with the title of each column *****/
    Tbl_StartTablePadding (2);
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -4603,7 +4603,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
 
    /***** Header with the title of each column *****/
    Tbl_StartTablePadding (2);
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Tst_WriteHeadUserCorrect (UsrDat);
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -5092,7 +5092,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	NumTag < Tst_MAX_TAGS_PER_QUESTION;
 	NumTag++)
      {
-      fprintf (Gbl.F.Out,"<tr>");
+      Tbl_StartRow ();
 
       /***** Write the tags already existing in a selector *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -7741,7 +7741,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 			      (long) Gbl.DateRange.TimeUTC[1]);
 
    /***** Show user's data *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
    Usr_ShowTableCellWithUsrData (UsrDat,NumExams);
 
    /***** Get and print test results *****/
@@ -7789,7 +7789,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 	   }
 
          if (NumTest)
-            fprintf (Gbl.F.Out,"<tr>");
+            Tbl_StartRow ();
 
          /* Write date and time (row[2] holds UTC date-time) */
          TimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
@@ -7953,7 +7953,7 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
      }
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<tr>");
+   Tbl_StartRow ();
 
    /***** Row title *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">"
