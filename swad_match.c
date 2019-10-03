@@ -1175,7 +1175,7 @@ long Mch_GetParamMchCod (void)
 
 static void Mch_PutFormNewMatch (struct Game *Game)
   {
-   extern const char *Hlp_ASSESSMENT_Games_new_match;
+   extern const char *Hlp_ASSESSMENT_Games_matches;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_New_match;
    extern const char *Txt_Title;
@@ -1191,7 +1191,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_match,NULL,
-		      Hlp_ASSESSMENT_Games_new_match,Box_NOT_CLOSABLE,2);
+		      Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE,2);
 
    /***** Match title *****/
    fprintf (Gbl.F.Out,"<tr>"

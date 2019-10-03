@@ -1276,7 +1276,7 @@ static void Tst_UpdateLastAccTst (void)
 
 void Tst_ShowFormAskEditTsts (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Tests_editing_questions;
    extern const char *Txt_No_test_questions;
    extern const char *Txt_List_edit_questions;
    extern const char *Txt_Show_questions;
@@ -1290,7 +1290,7 @@ void Tst_ShowFormAskEditTsts (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
-                 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+                 Hlp_ASSESSMENT_Tests_editing_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
@@ -1337,7 +1337,7 @@ void Tst_ShowFormAskEditTsts (void)
 
 void Tst_ShowFormAskSelectTstsForGame (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_No_test_questions;
    extern const char *Txt_Select_questions;
    extern const char *Txt_Show_questions;
@@ -1346,7 +1346,7 @@ void Tst_ShowFormAskSelectTstsForGame (void)
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Select_questions,NULL,
-                 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+                 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
@@ -3052,7 +3052,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
                                                     MYSQL_RES *mysql_res)
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Games_questions;
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Code;
@@ -3071,7 +3071,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Questions,NULL,
-		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
+		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    /***** Start form *****/
    Frm_StartForm (ActAddTstQstToGam);
