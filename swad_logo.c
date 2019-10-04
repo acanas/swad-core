@@ -96,7 +96,7 @@ void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
 	    DegCod = Cod;
 	    snprintf (PathLogo,sizeof (PathLogo),
 		      "%s/%02u/%u/logo/%u.png",
-		      Cfg_PATH_DEG_PRIVATE,
+		      Cfg_PATH_DEG_PUBLIC,
 		      (unsigned) (DegCod % 100),
 		      (unsigned) DegCod,
 		      (unsigned) DegCod);

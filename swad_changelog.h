@@ -493,7 +493,8 @@ ps2pdf source.ps destination.pdf
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 
-	Version 19.31.2:  Oct 04, 2019	Fixed bug while removing the matches of a course, reported by Pedro A. García Sánchez. (? lines)
+	Version 19.31.2:  Oct 04, 2019	Fixed bug while removing the matches of a course, reported by Pedro A. García Sánchez.
+					Fixed bug in degree logo. (? lines)
 	Version 19.31.1:  Oct 04, 2019	Code refactoring in HTML tables. (247035 lines)
 	Version 19.31  :  Oct 04, 2019	Code refactoring in HTML tables. (246967 lines)
 	Version 19.30.6:  Oct 03, 2019	Code refactoring in HTML tables. (246928 lines)
