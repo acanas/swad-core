@@ -1013,7 +1013,7 @@ static void Fig_ShowHierarchyRow (const char *Text1,const char *Text2,
    Fig_ShowHierarchyCell (ClassTxt,NumCrss);
 
    /***** End row *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
   }
 
 static void Fig_ShowHierarchyCell (const char *ClassTxt,int Num)
@@ -1458,12 +1458,12 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 
 	       if ((++NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
 		 {
-		  fprintf (Gbl.F.Out,"</tr>");
+		  Tbl_EndRow ();
 		  TRIsOpen = false;
 		 }
 	      }
 	    if (TRIsOpen)
-	       fprintf (Gbl.F.Out,"</tr>");
+	       Tbl_EndRow ();
 
 	    break;
 	 case Usr_LIST_AS_LISTING:

@@ -3440,7 +3440,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 	 if (Svy->Status.ICanViewResults)
 	    Svy_DrawBarNumUsrs (NumUsrsThisAnswer,Svy->NumUsrs);
 
-	 fprintf (Gbl.F.Out,"</tr>");
+	 Tbl_EndRow ();
 
 	 /* Free memory allocated for the answer */
 	 Svy_FreeTextChoiceAnswer (SvyQst,NumAns);

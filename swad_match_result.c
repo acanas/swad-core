@@ -550,7 +550,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
 	 fprintf (Gbl.F.Out,"</td>");
 
-         fprintf (Gbl.F.Out,"</tr>");
+         Tbl_EndRow ();
         }
 
       /***** Write totals for this user *****/
@@ -562,7 +562,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
    else
      {
       Tbl_PutEmptyCells (8);
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -639,7 +639,7 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
 	    Gbl.RowEvenOdd);
 
    /***** End row *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

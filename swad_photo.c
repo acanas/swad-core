@@ -908,7 +908,7 @@ static void Pho_UpdatePhoto2 (void)
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
                Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT,
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
    Tbl_EndTable ();
 
    /***** End alert *****/
@@ -2156,13 +2156,13 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 
 	    if ((++NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
 	      {
-	       fprintf (Gbl.F.Out,"</tr>");
+	       Tbl_EndRow ();
 	       TRIsOpen = false;
 	      }
 	   }
 	}
       if (TRIsOpen)
-	 fprintf (Gbl.F.Out,"</tr>");
+	 Tbl_EndRow ();
 
       Tbl_EndTable ();
      }
@@ -2221,7 +2221,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 			    "%s"
 			    "</th>",
 		  Txt_SEX_PLURAL_Abc[Sex]);
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
 
       /***** Get degrees *****/
       for (NumDeg = 0, Gbl.RowEvenOdd = 0, NumDegsNotEmpty = 0;
@@ -2272,7 +2272,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	       Pho_ShowDegreeStat (NumStds,NumStdsWithPhoto);
 	    fprintf (Gbl.F.Out,"</td>");
 	   }
-	 fprintf (Gbl.F.Out,"</tr>");
+	 Tbl_EndRow ();
 	}
 
       /***** Photos end *****/

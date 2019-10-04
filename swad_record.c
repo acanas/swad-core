@@ -2263,23 +2263,23 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Tbl_StartRow ();
    Rec_ShowInstitutionInHead (&Ins,PutFormLinks);
    Rec_ShowPhoto (UsrDat);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Full name *****/
    Tbl_StartRow ();
    Rec_ShowFullName (UsrDat);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** User's nickname *****/
    Tbl_StartRow ();
    Rec_ShowNickname (UsrDat,PutFormLinks);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** User's country, web and social networks *****/
    Tbl_StartRow ();
    Rec_ShowCountryInHead (UsrDat,ShowData);
    Rec_ShowWebsAndSocialNets (UsrDat,TypeOfView);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    if (ShowIDRows ||
        ShowAddressRows ||

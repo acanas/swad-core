@@ -409,7 +409,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
       Mch_ListOneOrMoreMatchesResult (&Match,
 				      ICanPlayThisMatchBasedOnGrps);
 
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -467,7 +467,7 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
             Txt_Result);
 
    /***** End row *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -2519,7 +2519,7 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	    fprintf (Gbl.F.Out,"</td>");
 
 	    /***** End row *****/
-	    fprintf (Gbl.F.Out,"</tr>");
+	    Tbl_EndRow ();
 	   }
 
 	 /***** End table *****/
@@ -3155,7 +3155,7 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 	       (i < BarWidth) ? (Correct ? "MATCH_RES_CORRECT" :
 					   "MATCH_RES_WRONG") :
 				"MATCH_RES_VOID");
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
    Tbl_EndTable ();
 
    /***** Write the number of users *****/

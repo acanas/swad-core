@@ -1643,7 +1643,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    if (LastRow < NumRows)
       Frm_EndForm ();
 
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
    Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -2173,7 +2173,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 	                 "%02uh"
 	                 "</td>",
                GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH,Hour);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Write rows beginning by the most recent day and ending by the oldest one *****/
    mysql_data_seek (mysql_res,0);
@@ -2237,7 +2237,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
                Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHour,Hits.Max);
             else	// D < NumDaysFromLastDateToCurrDate
                Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
-            fprintf (Gbl.F.Out,"</tr>");
+            Tbl_EndRow ();
 
             /* Decrease day */
             Dat_GetDateBefore (&Date,&Date);
@@ -2288,7 +2288,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
          Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHour,Hits.Max);
       else	// D < NumDaysFromLastDateToCurrDate
          Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
 
       /* Decrease day */
       Dat_GetDateBefore (&Date,&Date);
@@ -2324,7 +2324,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 
       /* Draw the color proportional to number of clicks */
       Sta_DrawAccessesPerHourForADay (SelectedColorType,NumAccPerHourZero,Hits.Max);
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
 
       /* Decrease day */
       Dat_GetDateBefore (&Date,&Date);
@@ -2407,7 +2407,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
 	                 "</td>",
                R,G,B,Cfg_URL_ICON_PUBLIC);
      }
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
    Tbl_EndTable ();
   }
 
@@ -2873,7 +2873,7 @@ static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
 		 H++, Hour++)
 	       Sta_WriteAccessHour (H,&Hits,ColumnWidth);
 	}
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
      }
   }
 
@@ -3056,7 +3056,7 @@ static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
       fprintf (Gbl.F.Out,Format,NumX);
       fprintf (Gbl.F.Out,"</td>");
      }
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

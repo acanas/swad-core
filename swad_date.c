@@ -454,10 +454,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
                       " onclick=\"setDateToYesterday('Start','End');\" />"
 	              "<input type=\"button\" name=\"Today\" value=\"%s\""
                       " onclick=\"setDateToToday('Start','End');\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Txt_Yesterday,
             Txt_Today);
+   Tbl_EndRow ();
 
    /***** End date-time *****/
    Tbl_StartRow ();
@@ -477,8 +477,8 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 				                SetHMS000000To235959 ? Dat_HMS_TO_235959 :	// Set hour, minute and second to 23:59:59
 				                                       Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                false);						// Don't submit on change
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -517,8 +517,8 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
 				                   FormSeconds,
 				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                   false);		// Don't submit on change
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
   }
 
@@ -665,7 +665,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
    Tbl_EndTable ();
 
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
@@ -895,7 +895,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	              "</td>");
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
    Tbl_EndTable ();
   }
 

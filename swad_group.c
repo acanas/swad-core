@@ -1767,7 +1767,7 @@ void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
 
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
      }
 
    /***** Free memory with the list of groups which I belongs to *****/
@@ -2072,7 +2072,7 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
 
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
      }
 
    /***** Free memory with the list of groups a the that belongs the user *****/
@@ -2170,7 +2170,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       Grp_WriteRowGrp (Grp,UsrBelongsToThisGroup);
 
       /* End row */
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
      }
 
    /***** Free memory with the lists of groups *****/
@@ -2264,7 +2264,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
 
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
      }
 
    /***** Free memory with the list of groups which I belongs to *****/

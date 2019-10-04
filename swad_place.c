@@ -132,7 +132,7 @@ void Plc_SeePlaces (void)
 	 Frm_EndForm ();
 	 fprintf (Gbl.F.Out,"</th>");
 	}
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
 
       /***** Write all places and their nuber of centres *****/
       for (NumPlc = 0;

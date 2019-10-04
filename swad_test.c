@@ -2857,7 +2857,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       fprintf (Gbl.F.Out,"</th>");
      }
 
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Write rows *****/
    for (NumRow = 0, UniqueId = 1;
@@ -3658,7 +3658,7 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
    Tbl_StartTablePadding (2);
    Tbl_StartRow ();
    Tst_WriteHeadUserCorrect (UsrDat);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Write the user answer *****/
    Tbl_StartRow ();
@@ -4240,7 +4240,7 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
       fprintf (Gbl.F.Out,"</td>");
 
       /***** End row for this option *****/
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -4319,7 +4319,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    Tbl_StartTablePadding (2);
    Tbl_StartRow ();
    Tst_WriteHeadUserCorrect (UsrDat);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Write the user answer *****/
    Tbl_StartRow ();
@@ -4482,7 +4482,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
    Tbl_StartTablePadding (2);
    Tbl_StartRow ();
    Tst_WriteHeadUserCorrect (UsrDat);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Write the user answer *****/
    Tbl_StartRow ();
@@ -4607,7 +4607,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
    Tbl_StartTablePadding (2);
    Tbl_StartRow ();
    Tst_WriteHeadUserCorrect (UsrDat);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Write the user answer *****/
    Tbl_StartRow ();
@@ -5139,7 +5139,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                          "</td>",
 	       NumTag,NumTag,Tst_MAX_CHARS_TAG,Gbl.Test.Tags.Txt[NumTag],NumTag);
 
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
      }
 
    Tbl_EndTable ();	// Table for tags
@@ -7891,7 +7891,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
    else
      {
       Tbl_PutEmptyCells (7);
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -8009,7 +8009,7 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
 	    Gbl.RowEvenOdd);
 
    /***** End row *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

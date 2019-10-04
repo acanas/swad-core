@@ -1241,7 +1241,7 @@ static void TT_DrawTimeTable (void)
 	                           Min,
 	                           "LEFT_MIDDLE");
 
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
      }
 
    /***** Free list of groups types and groups in this course *****/
@@ -1254,7 +1254,7 @@ static void TT_DrawTimeTable (void)
    TT_DrawCellAlignTimeTable ();
    TT_TimeTableDrawDaysCells ();
    TT_DrawCellAlignTimeTable ();
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Bottom row used for column adjustement *****/
    TT_TimeTableDrawAdjustRow ();

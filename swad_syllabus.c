@@ -726,7 +726,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
      }
 
    /***** End of the row *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }

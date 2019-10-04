@@ -1185,7 +1185,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	                 "</td>",
                StyleNormal,StrExamDate);
      }
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Start time *****/
    Tbl_StartRow ();

@@ -936,10 +936,10 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
                       "<textarea id=\"UsrsIDs\" name=\"UsrsIDs\""
                       " cols=\"60\" rows=\"10\">"
                       "</textarea>"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
+   Tbl_EndRow ();
    Tbl_EndTable ();
   }
 
@@ -2301,8 +2301,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeEnr",true);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /* Users' roles in listing */
    Tbl_StartRow ();
@@ -2316,8 +2316,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                            1 << Rol_TCH,
                            RolesSelected,
                            false,true);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /* End table and form */
    Tbl_EndTable ();
@@ -2819,13 +2819,13 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                          "%s"
                          "</th>"
                          "<th></th>"
-                         "<th></th>"
-                         "</tr>",
+                         "<th></th>",
                Txt_Course,
                Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
                Txt_Requester,
                Txt_Role,
                Txt_Date);
+      Tbl_EndRow ();
 
       /* List requests */
       for (NumReq = 0;
@@ -2947,8 +2947,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Btn_PutRemoveButtonInline (Txt_Reject);
             Frm_EndForm ();
-            fprintf (Gbl.F.Out,"</td>"
-                               "</tr>");
+            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndRow ();
 
             /***** Mark possible notification as seen *****/
             Ntf_MarkNotifAsSeen (Ntf_EVENT_ENROLMENT_REQUEST,

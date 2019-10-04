@@ -146,7 +146,7 @@ void Mai_SeeMailDomains (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Write all the mail domains *****/
    for (NumMai = 0;

@@ -238,7 +238,7 @@ static void Gam_ListAllGames (void)
 
       fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">%s</th>",Txt_Matches);
 
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
 
       /***** Write all the games *****/
       for (NumGame = Pagination.FirstItemVisible;
@@ -485,7 +485,7 @@ void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** End 1st row of this game *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Start 2nd row of this game *****/
    Tbl_StartRow ();
@@ -514,7 +514,7 @@ void Gam_ShowOneGame (long GamCod,
             Txt);
 
    /***** End 2nd row of this game *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** End table *****/
    if (ShowOnlyThisGame)

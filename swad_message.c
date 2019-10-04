@@ -2993,7 +2993,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    Msg_WriteMsgDate (CreatTimeUTC,Open ? "MSG_TIT_BG" :
 	                                 "MSG_TIT_BG_NEW");
 
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    if (Expanded)
      {

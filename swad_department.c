@@ -138,7 +138,7 @@ void Dpt_SeeDepts (void)
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</th>");
      }
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Write all the departments and their nuber of teachers *****/
    for (NumDpt = 0;
@@ -154,11 +154,11 @@ void Dpt_SeeDepts (void)
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE\">"
 			 "%u"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       Gbl.Dpts.Lst[NumDpt].WWW,
 	       Gbl.Dpts.Lst[NumDpt].FullName,
 	       Gbl.Dpts.Lst[NumDpt].NumTchs);
+      Tbl_EndRow ();
 
       /* Update number of teachers from the current institution
 	 with department */
@@ -169,8 +169,8 @@ void Dpt_SeeDepts (void)
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"DAT\">"
 		      "&nbsp;"
-		      "</td>"
-		      "</tr>");
+		      "</td>");
+   Tbl_EndRow ();
 
    /***** Write teachers with other department *****/
    NumTchsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
@@ -180,9 +180,9 @@ void Dpt_SeeDepts (void)
 		      "</td>"
 		      "<td class=\"DAT RIGHT_MIDDLE\">"
 		      "%u"
-		      "</td>"
-		      "</tr>",
+		      "</td>",
 	    Txt_Other_departments,NumTchsInOtherDpts);
+   Tbl_EndRow ();
    NumTchsInsWithDpt += NumTchsInOtherDpts;
 
    /***** Write teachers with no department *****/
@@ -192,13 +192,13 @@ void Dpt_SeeDepts (void)
 		      "</td>"
 		      "<td class=\"DAT RIGHT_MIDDLE\">"
 		      "%u"
-		      "</td>"
-		      "</tr>",
+		      "</td>",
 	    Txt_Department_unspecified,
 	    Usr_GetTotalNumberOfUsersInCourses (Hie_INS,
 						1 << Rol_NET |
 						1 << Rol_TCH) -
 	    NumTchsInsWithDpt);
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -590,9 +590,9 @@ static void Dpt_ListDepartmentsForEdition (void)
       /* Number of teachers */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
                Dpt->NumTchs);
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -919,12 +919,12 @@ static void Dpt_PutFormToCreateDepartment (void)
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Institution,
             Txt_Short_name,
             Txt_Full_name,
             Txt_WWW);
+   Tbl_EndRow ();
 
    /***** Institution *****/
    Tbl_StartRow ();
@@ -969,9 +969,9 @@ static void Dpt_PutFormToCreateDepartment (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Cns_MAX_CHARS_WWW,Dpt_EditingDpt->WWW);
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_department);
@@ -1013,14 +1013,14 @@ static void Dpt_PutHeadDepartments (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Code,
             Txt_Institution,
             Txt_Short_name,
             Txt_Full_name,
             Txt_WWW,
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

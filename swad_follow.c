@@ -170,7 +170,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
 	    Fol_ShowFollowedOrFollower (&UsrDat);
 	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 	     NumUsr == NumUsrs - 1)
-	    fprintf (Gbl.F.Out,"</tr>");
+	    Tbl_EndRow ();
 	}
 
       /***** Free memory used for user's data *****/
@@ -722,7 +722,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	       Fol_ShowFollowedOrFollower (&FollowingUsrDat);
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 		NumUsr == NumUsrs - 1)
-	       fprintf (Gbl.F.Out,"</tr>");
+	       Tbl_EndRow ();
 	   }
 
          /***** End table and box *****/
@@ -805,7 +805,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	       Fol_ShowFollowedOrFollower (&FollowerUsrDat);
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 		NumUsr == NumUsrs - 1)
-	       fprintf (Gbl.F.Out,"</tr>");
+	       Tbl_EndRow ();
 	   }
 
          /***** End table and box *****/

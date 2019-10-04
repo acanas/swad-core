@@ -3703,7 +3703,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** End row *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3801,7 +3801,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 	             NULL,true,false);
 
    /***** End row *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3921,7 +3921,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
      }
 
    /***** End row *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3999,7 +3999,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
                 	                                        "&nbsp;",
                      NULL,true,UsrDat->Accepted);
 
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -6476,7 +6476,7 @@ void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr)
                             "</th>",
                   Usr_UsrDatMainFieldNames[NumCol]);
 
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -6642,7 +6642,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
                      Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -6748,7 +6748,7 @@ void Usr_ListAllDataGsts (void)
                   FieldNames[NumCol]);
 
       /* End row */
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -6931,7 +6931,7 @@ void Usr_ListAllDataStds (void)
                         Gbl.Crs.Records.LstFields.Lst[NumField].Name);
 
             /* 4. Visibility type for the record fields that depend on the course, in other row */
-            fprintf (Gbl.F.Out,"</tr>");
+            Tbl_EndRow ();
             Tbl_StartRow ();
             for (NumCol = 0;
                  NumCol < NumColumnsCardAndGroups;
@@ -6950,7 +6950,7 @@ void Usr_ListAllDataStds (void)
         }
 
       /* End row */
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -7143,7 +7143,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 			 "%s&nbsp;"
 			 "</th>",
 	       FieldNames[NumCol]);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -7392,7 +7392,7 @@ void Usr_ListDataAdms (void)
         	               "%s&nbsp;"
         	               "</th>",
                      FieldNames[NumCol]);
-      fprintf (Gbl.F.Out,"</tr>");
+      Tbl_EndRow ();
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -8985,12 +8985,12 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 	 if ((++NumUsr % Gbl.Usrs.ClassPhoto.Cols) == 0)
 	   {
-	    fprintf (Gbl.F.Out,"</tr>");
+	    Tbl_EndRow ();
 	    TRIsOpen = false;
 	   }
 	}
       if (TRIsOpen)
-	 fprintf (Gbl.F.Out,"</tr>");
+	 Tbl_EndRow ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

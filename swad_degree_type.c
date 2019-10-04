@@ -346,9 +346,9 @@ static void DT_ListDegreeTypesForSeeing (void)
       /* Number of degrees of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_MIDDLE %s\">"
 	                 "%u"
-	                 "</td>"
-                         "</tr>",
+	                 "</td>",
                BgColor,Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
+      Tbl_EndRow ();
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
@@ -436,9 +436,9 @@ static void DT_ListDegreeTypesForEdition (void)
       /* Number of degrees of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
-	                 "</td>"
-                         "</tr>",
+	                 "</td>",
                Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -491,8 +491,8 @@ static void DT_PutFormToCreateDegreeType (void)
    /***** Number of degrees of this degree type ****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "0"
-	              "</td>"
-	              "</tr>");
+	              "</td>");
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_type_of_degree);
@@ -563,11 +563,11 @@ static void DT_PutHeadDegreeTypesForEdition (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Code,
             Txt_Type_of_degree,
             Txt_Degrees);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

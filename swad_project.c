@@ -786,7 +786,7 @@ static void Prj_ShowTableAllProjectsHead (void)
             Txt_Required_materials,
             Txt_URL);
 
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -1378,7 +1378,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
    Prj_ShowTableAllProjectsURL (Prj);
 
    /***** End row *****/
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -1744,7 +1744,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 		     Gbl.Usrs.Other.UsrDat.FullName);
 
 	    /* End row for this user */
-	    fprintf (Gbl.F.Out,"</tr>");
+	    Tbl_EndRow ();
 	   }
 	}
 

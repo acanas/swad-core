@@ -5628,7 +5628,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    Brw_WriteFileName (Level,FileMetadata.IsPublic);
 
    /* End column */
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
    Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>");
 
@@ -5659,7 +5659,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /***** End this row *****/
    free ((void *) Anchor);
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
@@ -5854,7 +5854,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
      }
    fprintf (Gbl.F.Out,"</td>");
 
-   fprintf (Gbl.F.Out,"</tr>");
+   Tbl_EndRow ();
    Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>");
   }
