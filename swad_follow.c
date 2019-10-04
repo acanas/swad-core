@@ -944,8 +944,8 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 	 /* Form to follow */
 	 Fol_PutIconToFollow (UsrDat);
      }
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }

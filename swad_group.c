@@ -1389,8 +1389,8 @@ static void Grp_ListGroupTypesForEdition (void)
 				                   Dat_FORM_SECONDS_ON,
 				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                   true);		// Submit on change
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
       Tbl_EndTable ();
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</td>");
@@ -1398,9 +1398,9 @@ static void Grp_ListGroupTypesForEdition (void)
       /* Number of groups of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
 	                 "%u"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
                Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps);
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -1463,13 +1463,13 @@ static void Grp_WriteHeadingGroupTypes (void)
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Type_of_group,Txt_eg_Lectures_Practicals,
             Txt_Mandatory_enrolment,
             Txt_Multiple_enrolment,
             Txt_Opening_of_groups,
             Txt_No_of_BR_groups);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -1647,8 +1647,8 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"\" onchange=\"document.getElementById('%s').submit();\" />",
                   Gbl.Form.Id);
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndRow ();
         }
      }
 
@@ -1695,9 +1695,9 @@ static void Grp_WriteHeadingGroups (void)
 	       Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
    fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Max_BR_students);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -2324,8 +2324,8 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 
    /* Last void columns for max. students and vacants */
    fprintf (Gbl.F.Out,"<td></td>"
-	              "<td></td>"
-                      "</tr>");
+	              "<td></td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -2363,8 +2363,8 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
                UniqueId,(long) GrpTyp->OpenTimeUTC,
                (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
      }
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Head row with title of each column *****/
    Tbl_StartRow ();
@@ -2389,10 +2389,10 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Max_BR_students,
             Txt_Vacants);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -2576,16 +2576,16 @@ static void Grp_PutFormToCreateGroupType (void)
 				                Dat_FORM_SECONDS_ON,
 				                Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                false);			// Don't submit on change
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
    Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Number of groups of this type *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
 		      "0"	// It's a new group type ==> 0 groups
-		      "</td>"
-		      "</tr>");
+		      "</td>");
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_type_of_group);
@@ -2717,8 +2717,8 @@ static void Grp_PutFormToCreateGroup (void)
 	              " size=\"3\" maxlength=\"10\" value=\"");
    Grp_WriteMaxStds (Gbl.Crs.Grps.MaxStudents);
    fprintf (Gbl.F.Out,"\" />"
-	              "</td>"
-	              "</tr>");
+	              "</td>");
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_group);

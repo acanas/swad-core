@@ -383,12 +383,12 @@ static void Fig_GetAndShowUsersStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Users,
             Txt_No_of_users,
             Txt_Average_number_of_courses_to_which_a_user_belongs,
             Txt_Average_number_of_users_belonging_to_a_course);
+   Tbl_EndRow ();
 
    Fig_GetAndShowNumUsrsInCrss (Rol_STD);		// Students
    Fig_GetAndShowNumUsrsInCrss (Rol_NET);		// Non-editing teachers
@@ -396,7 +396,8 @@ static void Fig_GetAndShowUsersStats (void)
    Fig_GetAndShowNumUsrsInCrss (Rol_UNK);		// Any user in courses
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<th colspan=\"4\" style=\"height:10px;\">"
-                      "</tr>");
+                      "</th>");
+   Tbl_EndRow ();
    Fig_GetAndShowNumUsrsNotBelongingToAnyCrs ();	// Users not beloging to any course
 
    /***** End table and box *****/
@@ -445,13 +446,13 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
                       "</td>"
                       "<td class=\"%s\">"
                       "%.2f"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Class,(Role == Rol_UNK) ? Txt_Total :
         	                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
             Class,NumUsrs,
             Class,NumCrssPerUsr,
             Class,NumUsrsPerCrs);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -476,12 +477,12 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
                       "</td>"
                       "<td class=\"%s\">"
                       "%.2f"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Class,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
             Class,Usr_GetNumUsrsNotBelongingToAnyCrs (),
             Class,0.0,
             Class,0.0);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -526,8 +527,7 @@ static void Fig_GetAndShowUsersRanking (void)
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Clicks,
             Txt_Clicks_per_day,
             Txt_Timeline,
@@ -535,6 +535,7 @@ static void Fig_GetAndShowUsersRanking (void)
             Txt_Downloads,
             Txt_Forums,
             Txt_Messages);
+   Tbl_EndRow ();
 
    /***** Rankings *****/
    Tbl_StartRow ();
@@ -558,8 +559,8 @@ static void Fig_GetAndShowUsersRanking (void)
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"DAT LEFT_TOP\">");
    Prf_GetAndShowRankingMsgSnt ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -643,13 +644,13 @@ static void Fig_WriteHeadHierarchy (void)
                       " class=\"CONTEXT_ICO_x16\" />"
                       "<br />"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Cfg_URL_ICON_PUBLIC,Txt_Countries   ,Txt_Countries   ,Txt_Countries,
             Cfg_URL_ICON_PUBLIC,Txt_Institutions,Txt_Institutions,Txt_Institutions,
             Cfg_URL_ICON_PUBLIC,Txt_Centres     ,Txt_Centres     ,Txt_Centres,
             Cfg_URL_ICON_PUBLIC,Txt_Degrees     ,Txt_Degrees     ,Txt_Degrees,
             Cfg_URL_ICON_PUBLIC,Txt_Courses     ,Txt_Courses     ,Txt_Courses);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -1475,10 +1476,10 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 			       "</th>"
 			       "<th class=\"RIGHT_MIDDLE\">"
 			       "%s"
-			       "</th>"
-			       "</tr>",
+			       "</th>",
 		     Txt_Institution,
 		     TxtFigure);
+	    Tbl_EndRow ();
 
 	    for (NumIns = 1, NumOrder = 1, NumberLastRow = 0;
 		 NumIns <= NumInss;
@@ -1518,9 +1519,9 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       /***** Write statistic *****/
 	       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 				  "%u"
-				  "</td>"
-				  "</tr>",
+				  "</td>",
 			NumberThisRow);
+	       Tbl_EndRow ();
 
 	       NumberLastRow = NumberThisRow;
 	      }
@@ -2523,8 +2524,7 @@ static void Fig_WriteStatsExpTreesTableHead1 (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_File_zones,
             Txt_Courses,
             Txt_Groups,
@@ -2533,6 +2533,7 @@ static void Fig_WriteStatsExpTreesTableHead1 (void)
             Txt_Folders,
             Txt_Files,
             Txt_Size);
+   Tbl_EndRow ();
   }
 
 static void Fig_WriteStatsExpTreesTableHead2 (void)
@@ -2555,12 +2556,12 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s/<br />%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_File_zones,
             Txt_Folders,Txt_course,
             Txt_Files,Txt_course,
             Txt_Size,Txt_course);
+   Tbl_EndRow ();
   }
 
 static void Fig_WriteStatsExpTreesTableHead3 (void)
@@ -2583,12 +2584,12 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s/<br />%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_File_zones,
             Txt_Folders,Txt_user[Usr_SEX_UNKNOWN],
             Txt_Files,Txt_user[Usr_SEX_UNKNOWN],
             Txt_Size,Txt_user[Usr_SEX_UNKNOWN]);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -2656,8 +2657,7 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
                       "</td>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s"
-                      "</td>"
-	              "</tr>",
+                      "</td>",
             Class,NameOfFileZones,
             Class,StrNumCrss,
             Class,StrNumGrps,
@@ -2666,8 +2666,8 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
             Class,SizeOfFileZones->NumFolders,
             Class,SizeOfFileZones->NumFiles,
             Class,FileSizeStr);
+   Tbl_EndRow ();
   }
-
 
 static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
@@ -2718,14 +2718,13 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
                       "</td>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s"
-                      "</td>"
-	              "</tr>",
+                      "</td>",
             Class,NameOfFileZones,
             Class,StrNumFoldersPerCrs,
             Class,StrNumFilesPerCrs,
             Class,FileSizePerCrsStr);
+   Tbl_EndRow ();
   }
-
 
 static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 					    Brw_FileBrowser_t FileZone,
@@ -2776,12 +2775,12 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
                       "</td>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s"
-                      "</td>"
-	              "</tr>",
+                      "</td>",
             Class,NameOfFileZones,
             Class,StrNumFoldersPerUsr,
             Class,StrNumFilesPerUsr,
             Class,FileSizePerUsrStr);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -2813,11 +2812,11 @@ static void Fig_GetAndShowOERsStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_License,
             Txt_No_of_private_files,
             Txt_No_of_public_files);
+   Tbl_EndRow ();
 
    for (License = 0;
 	License < Brw_NUM_LICENSES;
@@ -2834,11 +2833,11 @@ static void Fig_GetAndShowOERsStats (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%lu"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Txt_LICENSES[License],
                NumFiles[0],
                NumFiles[1]);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -3016,12 +3015,12 @@ static void Fig_GetAndShowAssignmentsStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Number_of_BR_assignments,
             Txt_Number_of_BR_courses_with_BR_assignments,
             Txt_Average_number_BR_of_ASSIG_BR_per_course,
             Txt_Number_of_BR_notifications);
+   Tbl_EndRow ();
 
    /***** Write number of assignments *****/
    Tbl_StartRow ();
@@ -3036,12 +3035,12 @@ static void Fig_GetAndShowAssignmentsStats (void)
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             NumAssignments,
             NumCoursesWithAssignments,
             NumAssignmentsPerCourse,
             NumNotif);
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3081,11 +3080,11 @@ static void Fig_GetAndShowProjectsStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Number_of_BR_projects,
             Txt_Number_of_BR_courses_with_BR_projects,
             Txt_Average_number_BR_of_projects_BR_per_course);
+   Tbl_EndRow ();
 
    /***** Write number of projects *****/
    Tbl_StartRow ();
@@ -3097,11 +3096,11 @@ static void Fig_GetAndShowProjectsStats (void)
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%.2f"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             NumProjects,
             NumCoursesWithProjects,
             NumProjectsPerCourse);
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3161,8 +3160,7 @@ static void Fig_GetAndShowTestsStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Type_of_BR_answers,
             Txt_Number_of_BR_courses_BR_with_test_BR_questions,
             Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions,
@@ -3172,6 +3170,7 @@ static void Fig_GetAndShowTestsStats (void)
             Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course,
             Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded,
             Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
+   Tbl_EndRow ();
 
    for (AnsType = (Tst_AnswerType_t) 0;
 	AnsType < Tst_NUM_ANS_TYPES;
@@ -3208,8 +3207,7 @@ static void Fig_GetAndShowTestsStats (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%.2f"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Txt_TST_STR_ANSWER_TYPES[AnsType],
                Stats.NumCoursesWithQuestions,
                Stats.NumCoursesWithPluggableQuestions,
@@ -3222,6 +3220,7 @@ static void Fig_GetAndShowTestsStats (void)
                Stats.AvgHitsPerCourse,
                Stats.AvgHitsPerQuestion,
                Stats.AvgScorePerQuestion);
+      Tbl_EndRow ();
      }
 
    /***** Get the stats about test questions from this location *****/
@@ -3255,8 +3254,7 @@ static void Fig_GetAndShowTestsStats (void)
                       "</td>"
                       "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%.2f"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Txt_Total,
             Stats.NumCoursesWithQuestions,
             Stats.NumCoursesWithPluggableQuestions,
@@ -3269,6 +3267,7 @@ static void Fig_GetAndShowTestsStats (void)
             Stats.AvgHitsPerCourse,
             Stats.AvgHitsPerQuestion,
             Stats.AvgScorePerQuestion);
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3308,11 +3307,11 @@ static void Fig_GetAndShowGamesStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Number_of_BR_games,
             Txt_Number_of_BR_courses_with_BR_games,
             Txt_Average_number_BR_of_games_BR_per_course);
+   Tbl_EndRow ();
 
    /***** Write number of games *****/
    Tbl_StartRow ();
@@ -3324,11 +3323,11 @@ static void Fig_GetAndShowGamesStats (void)
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%.2f"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             NumGames,
             NumCoursesWithGames,
             NumGamesPerCourse);
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3377,13 +3376,13 @@ static void Fig_GetAndShowSocialActivityStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Type,
             Txt_No_of_social_posts,
             Txt_No_of_users,
             Txt_PERCENT_of_users,
             Txt_No_of_posts_BR_per_user);
+   Tbl_EndRow ();
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
@@ -3514,8 +3513,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%.2f"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Txt_TIMELINE_NOTE[NoteType],
                NumSocialNotes,
                NumUsrs,
@@ -3523,6 +3521,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
         	              0.0,
                NumUsrs ? (float) NumSocialNotes / (float) NumUsrs :
         	         0.0);
+      Tbl_EndRow ();
      }
 
    /***** Get and write totals *****/
@@ -3632,8 +3631,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
 		      "</td>"
 		      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
 		      "%.2f"
-		      "</td>"
-		      "</tr>",
+		      "</td>",
 	    Txt_Total,
 	    NumSocialNotes,
 	    NumUsrs,
@@ -3641,6 +3639,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
 			   0.0,
 	    NumUsrs ? (float) NumSocialNotes / (float) NumUsrs :
 		      0.0);
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3686,11 +3685,11 @@ static void Fig_GetAndShowFollowStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Users,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
+   Tbl_EndRow ();
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
@@ -3799,14 +3798,14 @@ static void Fig_GetAndShowFollowStats (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Fol == 0 ? Txt_Followed :
         	          Txt_Followers,
                NumUsrs,
                NumUsrsTotal ? (float) NumUsrs * 100.0 /
         	              (float) NumUsrsTotal :
         	              0.0);
+      Tbl_EndRow ();
      }
 
    /***** Write number of followed/followers per follower/followed *****/
@@ -3927,10 +3926,10 @@ static void Fig_GetAndShowFollowStats (void)
 			 "%5.2f"
 			 "</td>"
 			 "<td>"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       Txt_FollowPerFollow[Fol],
 	       Average);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -3996,8 +3995,7 @@ static void Fig_GetAndShowForumStats (void)
                       "</th>"
                       "<th class=\"RIGHT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Cfg_URL_ICON_PUBLIC,
             Txt_Scope,
             Txt_Scope,
@@ -4009,6 +4007,7 @@ static void Fig_GetAndShowForumStats (void)
             Txt_No_of_threads_BR_per_forum,
             Txt_No_of_posts_BR_per_thread,
             Txt_No_of_posts_BR_per_forum);
+   Tbl_EndRow ();
 
    /***** Write a row for each type of forum *****/
    switch (Gbl.Scope.Current)
@@ -4224,14 +4223,14 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
                       "</td>"
                       "<td class=\"DAT RIGHT_TOP\">"
                       "%.2f"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Cfg_URL_ICON_PUBLIC,Icon,
             ForumName1,ForumName2,
             ForumName1,ForumName2,
             ForumName1,ForumName2,
             NumForums,NumThreads,NumPosts,NumUsrsToBeNotifiedByEMail,
             NumThrsPerForum,NumPostsPerThread,NumPostsPerForum);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -4280,8 +4279,7 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
                       "</td>"
                       "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%.2f"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Txt_Total,
             FiguresForum->NumForums,
             FiguresForum->NumThreads,
@@ -4290,6 +4288,7 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
             NumThrsPerForum,
             NumPostsPerThread,
             NumPostsPerForum);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -4339,13 +4338,13 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Event,
             Txt_No_of_users,
             Txt_PERCENT_of_users,
             Txt_Number_of_BR_events,
             Txt_Number_of_BR_emails);
+   Tbl_EndRow ();
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
@@ -4486,8 +4485,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%u"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent],
                NumUsrs[NotifyEvent],
                NumUsrsTotal ? (float) NumUsrs[NotifyEvent] * 100.0 /
@@ -4495,6 +4493,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
         	              0.0,
                NumEvents[NotifyEvent],
                NumMails[NotifyEvent]);
+      Tbl_EndRow ();
      }
 
    /***** Write total number of users who want to be notified by email on some event *****/
@@ -4513,8 +4512,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
                       "</td>"
                       "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "%u"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Txt_Total,
             NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent,
             NumUsrsTotal ? (float) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
@@ -4522,6 +4520,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
         	           0.0,
             NumEventsTotal,
             NumMailsTotal);
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4580,13 +4579,13 @@ static void Fig_GetAndShowNoticesStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_NOTICE_Active_BR_notices,
             Txt_NOTICE_Obsolete_BR_notices,
             Txt_NOTICE_Deleted_BR_notices,
             Txt_Total,
             Txt_Number_of_BR_notifications);
+   Tbl_EndRow ();
 
    /***** Write number of notices *****/
    Tbl_StartRow ();
@@ -4604,13 +4603,13 @@ static void Fig_GetAndShowNoticesStats (void)
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             NumNotices[Not_ACTIVE_NOTICE],
             NumNotices[Not_OBSOLETE_NOTICE],
             NumNoticesDeleted,
             NumTotalNotices,
             NumTotalNotifications);
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4663,13 +4662,13 @@ static void Fig_GetAndShowMsgsStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Messages,
             Txt_MSGS_Not_deleted,
             Txt_MSGS_Deleted,
             Txt_Total,
             Txt_Number_of_BR_notifications);
+   Tbl_EndRow ();
 
    /***** Write number of messages *****/
    Tbl_StartRow ();
@@ -4687,12 +4686,12 @@ static void Fig_GetAndShowMsgsStats (void)
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "-"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Txt_MSGS_Sent,
             NumMsgsSentNotDeleted,
             NumMsgsSentDeleted,
             NumMsgsSentNotDeleted + NumMsgsSentDeleted);
+   Tbl_EndRow ();
 
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
@@ -4709,14 +4708,13 @@ static void Fig_GetAndShowMsgsStats (void)
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
-                      "</td>"
-                      "</tr>",
-
+                      "</td>",
             Txt_MSGS_Received,
             NumMsgsReceivedNotDeleted,
             NumMsgsReceivedAndDeleted,
             NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted,
             NumMsgsReceivedAndNotified);
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4769,13 +4767,13 @@ static void Fig_GetAndShowSurveysStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Number_of_BR_surveys,
             Txt_Number_of_BR_courses_with_BR_surveys,
             Txt_Average_number_BR_of_surveys_BR_per_course,
             Txt_Average_number_BR_of_questions_BR_per_survey,
             Txt_Number_of_BR_notifications);
+   Tbl_EndRow ();
 
    /***** Write number of surveys *****/
    Tbl_StartRow ();
@@ -4793,13 +4791,13 @@ static void Fig_GetAndShowSurveysStats (void)
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             NumSurveys,
             NumCoursesWithSurveys,
             NumSurveysPerCourse,
             NumQstsPerSurvey,
             NumNotif);
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4865,11 +4863,11 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             TxtObject,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
+   Tbl_EndRow ();
 
    /***** For each privacy option... *****/
    for (Visibility = (Pri_Visibility_t) 0;
@@ -4903,12 +4901,12 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 			    "</td>"
 			    "<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%5.2f%%"
-			    "</td>"
-			    "</tr>",
+			    "</td>",
 		  Txt_PRIVACY_OPTIONS[Visibility],NumUsrs[Visibility],
 		  NumUsrsTotal ? (float) NumUsrs[Visibility] * 100.0 /
 				 (float) NumUsrsTotal :
 				 0);
+         Tbl_EndRow ();
 	}
    }
 
@@ -4958,11 +4956,11 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Cookies,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
+   Tbl_EndRow ();
 
    /***** For each option... *****/
    for (i = 0;
@@ -4994,14 +4992,14 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
 	       AcceptedClass[i],
                AcceptedSymbol[i],
                NumUsrs[i],
                NumUsrsTotal ? (float) NumUsrs[i] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -5040,11 +5038,11 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Language,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
+   Tbl_EndRow ();
 
    /***** For each language... *****/
    for (Lan = (Lan_Language_t) 1;
@@ -5076,12 +5074,12 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Txt_STR_LANG_NAME[Lan],NumUsrs[Lan],
                NumUsrsTotal ? (float) NumUsrs[Lan] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -5121,11 +5119,11 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Calendar,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
+   Tbl_EndRow ();
 
    /***** For each day... *****/
    for (FirstDayOfWeek = 0;	// Monday
@@ -5161,8 +5159,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 			    "</td>"
 			    "<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%5.2f%%"
-			    "</td>"
-			    "</tr>",
+			    "</td>",
 		  Cfg_URL_ICON_PUBLIC,FirstDayOfWeek,
 		  Txt_DAYS_SMALL[FirstDayOfWeek],
 		  Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek],
@@ -5170,6 +5167,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 		  NumUsrsTotal ? (float) NumUsrs[FirstDayOfWeek] * 100.0 /
 				 (float) NumUsrsTotal :
 				 0);
+	 Tbl_EndRow ();
 	}
 
    /***** End table and box *****/
@@ -5206,11 +5204,11 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Format,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
+   Tbl_EndRow ();
 
    /***** For each format... *****/
    for (Format = (Dat_Format_t) 0;
@@ -5243,12 +5241,12 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE\">"
 			 "%5.2f%%"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       NumUsrs[Format],
 	       NumUsrsTotal ? (float) NumUsrs[Format] * 100.0 /
 			      (float) NumUsrsTotal :
 			      0);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -5287,11 +5285,11 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Icons,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
+   Tbl_EndRow ();
 
    /***** For each icon set... *****/
    for (IconSet = (Ico_IconSet_t) 0;
@@ -5325,8 +5323,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Cfg_URL_ICON_SETS_PUBLIC,
                Ico_IconSetId[IconSet],
                Ico_IconSetNames[IconSet],
@@ -5335,6 +5332,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
                NumUsrsTotal ? (float) NumUsrs[IconSet] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -5373,11 +5371,11 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Menu,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
+   Tbl_EndRow ();
 
    /***** For each menu... *****/
    for (Menu = (Mnu_Menu_t) 0;
@@ -5411,8 +5409,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Cfg_URL_ICON_PUBLIC,Mnu_MenuIcons[Menu],
                Txt_MENU_NAMES[Menu],
                Txt_MENU_NAMES[Menu],
@@ -5420,6 +5417,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
                NumUsrsTotal ? (float) NumUsrs[Menu] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -5458,11 +5456,11 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Theme_SKIN,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
+   Tbl_EndRow ();
 
    /***** For each theme... *****/
    for (Theme = (The_Theme_t) 0;
@@ -5496,8 +5494,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Theme],
                The_ThemeNames[Theme],
                The_ThemeNames[Theme],
@@ -5505,6 +5502,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
                NumUsrsTotal ? (float) NumUsrs[Theme] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -5542,11 +5540,11 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Columns,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
+   Tbl_EndRow ();
 
    /***** For each language... *****/
    for (SideCols = 0;
@@ -5580,8 +5578,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
                          "%5.2f%%"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Cfg_URL_ICON_PUBLIC,SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
@@ -5589,6 +5586,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
                NumUsrsTotal ? (float) NumUsrs[SideCols] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/

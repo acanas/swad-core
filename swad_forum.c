@@ -1211,8 +1211,8 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
      }
    else
       fprintf (Gbl.F.Out,"[%s]",Txt_FORUM_Post_banned);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Form to ban/unban post *****/
    Tbl_StartRow ();
@@ -1307,8 +1307,8 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Free image *****/
    Med_MediaDestructor (&Media);
@@ -2600,12 +2600,12 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
                          "</th>"
                          "<th class=\"RIGHT_MIDDLE\">"
                          "%s"
-                         "</th>"
-                         "</tr>",
+                         "</th>",
                Txt_No_BR_msgs,
                Txt_Unread_BR_msgs,
                Txt_WriBRters,
                Txt_ReaBRders);
+      Tbl_EndRow ();
 
       /***** List the threads *****/
       For_ListForumThrs (ThrCods,ThrCodHighlighted,&PaginationThrs);
@@ -3553,10 +3553,10 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
       /***** Write number of users who have read this thread *****/
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
 	                 "%u&nbsp;"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
                Style,BgColor,
                Thr.NumReaders);
+      Tbl_EndRow ();
      }
 
    /***** Free memory used for user's data *****/
@@ -3971,12 +3971,12 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 		      " class=\"MSG_SUBJECT\""
 		      " maxlength=\"%u\" value=\"%s\""
 		      " required=\"required\" />"
-		      "</td>"
-		      "</tr>",
+		      "</td>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Subject,
 	    Cns_MAX_CHARS_SUBJECT,
 	    IsReply ? Subject :
 		      "");
+   Tbl_EndRow ();
 
    /* Content */
    Tbl_StartRow ();
@@ -3988,9 +3988,9 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
                       " class=\"MSG_CONTENT\""
                       " rows=\"10\">"
                       "</textarea>"
-	              "</td>"
-	              "</tr>",
+	              "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Content);
+   Tbl_EndRow ();
 
    Tbl_EndTable ();
 

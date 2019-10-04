@@ -270,8 +270,9 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
                                                  Btn_Button_t Button,
                                                  const char *TxtButton)
   {
-   /***** Description *****/
    Tbl_StartRow ();
+
+   /***** Description *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>",
@@ -282,6 +283,7 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
    Frm_StartForm (Action);
    Btn_PutButtonInline (Button,TxtButton);
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+
+   Tbl_EndRow ();
   }

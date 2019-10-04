@@ -1143,11 +1143,11 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 		      "<input type=\"text\" id=\"Title\" name=\"Title\""
 		      " size=\"45\" maxlength=\"%u\" value=\"%s\""
 		      " required=\"required\" />"
-		      "</td>"
-		      "</tr>",
+		      "</td>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Title,
 	    Gam_MAX_CHARS_TITLE,Game->Title);
+   Tbl_EndRow ();
 
    /***** Game text *****/
    Tbl_StartRow ();
@@ -1162,8 +1162,8 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
    if (!ItsANewGame)
       fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</textarea>"
-		      "</td>"
-		      "</tr>");
+		      "</td>");
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    if (ItsANewGame)
@@ -1647,12 +1647,12 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_No_INDEX,
             Txt_Code,
             Txt_Tags,
             Txt_Question);
+   Tbl_EndRow ();
 
    /***** Write rows *****/
    for (NumQst = 0;
@@ -1776,8 +1776,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       /* Show answers */
       Tst_WriteAnswersEdit (Gbl.Test.QstCod);
 
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       /***** Destroy test question *****/
       Tst_QstDestructor ();

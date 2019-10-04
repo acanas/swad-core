@@ -127,8 +127,8 @@ void Ind_ReqIndicatorsCourses (void)
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeInd",true);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /* Compute stats for a type of degree */
    Tbl_StartRow ();
@@ -141,8 +141,8 @@ void Ind_ReqIndicatorsCourses (void)
    fprintf (Gbl.F.Out," (");
    fprintf (Gbl.F.Out,Txt_only_if_the_scope_is_X,
             Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,")</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,")</td>");
+   Tbl_EndRow ();
 
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
    Tbl_StartRow ();
@@ -158,8 +158,8 @@ void Ind_ReqIndicatorsCourses (void)
                                 -1L,				// First option
                                 Txt_Any_department,		// Text when no department selected
                                 true);				// Submit on change
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Get courses from database *****/
    /* The result will contain courses with any number of indicators
@@ -181,8 +181,8 @@ void Ind_ReqIndicatorsCourses (void)
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_No_of_indicators);
    Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,true);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /* End table and form */
    Tbl_EndTable ();
@@ -640,10 +640,10 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                       "</th>"
                       "<th colspan=\"2\" class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Indicators,
             Txt_Courses);
+   Tbl_EndRow ();
    for (Ind = 0;
 	Ind <= Ind_NUM_INDICATORS;
 	Ind++)
@@ -672,8 +672,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                          "</td>"
                          "<td class=\"%s\">"
                          "(%.1f%%)"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Class,
                Ind,Ind,
                Class,
@@ -681,6 +680,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                Class,
                NumCrss ? (float) NumCrssWithIndicatorYes[Ind] * 100.0 / (float) NumCrss :
         	         0.0);
+      Tbl_EndRow ();
      }
 
    /***** Write total of courses *****/
@@ -696,11 +696,11 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                       "</td>"
                       "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "(%.1f%%)"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Txt_Total,
             NumCrss,
             100.0);
+   Tbl_EndRow ();
 
    Tbl_EndTable ();
   }
@@ -768,13 +768,13 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "</th>"
                             "<th colspan=\"11\" class=\"CENTER_MIDDLE COLOR0\">"
                             "%s"
-                            "</th>"
-                            "</tr>",
+                            "</th>",
                   Txt_Degree,
                   Txt_Course,
                   Txt_Institutional_BR_code,
                   Txt_Web_page_of_the_course,
                   Txt_Indicators);
+         Tbl_EndRow ();
 
          Tbl_StartRow ();
          fprintf (Gbl.F.Out,"<th rowspan=\"2\" class=\"CENTER_TOP COLOR0\">"
@@ -794,14 +794,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "</th>"
                             "<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">"
                             "(E) %s"
-                            "</th>"
-                            "</tr>",
+                            "</th>",
                   Txt_No_INDEX,
                   Txt_Syllabus_of_the_course,
                   Txt_Guided_academic_assignments,
                   Txt_Online_tutoring,
                   Txt_Materials,
                   Txt_Assessment_criteria);
+         Tbl_EndRow ();
 
          Tbl_StartRow ();
          fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">"
@@ -833,8 +833,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "</th>"
                             "<th class=\"CENTER_MIDDLE COLOR0\">"
                             "%s"
-                            "</th>"
-                            "</tr>",
+                            "</th>",
                   Txt_YES,
                   Txt_NO,
 
@@ -849,6 +848,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
                   Txt_YES,
                   Txt_NO);
+         Tbl_EndRow ();
          break;
       case Ind_INDICATORS_FULL:
          Tbl_StartRow ();
@@ -872,8 +872,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "</th>"
                             "<th colspan=\"24\" class=\"CENTER_MIDDLE COLOR0\">"
                             "%s"
-                            "</th>"
-                            "</tr>",
+                            "</th>",
                   Txt_Degree,
                   Txt_Course,
                   Txt_Institutional_BR_code,
@@ -881,6 +880,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                   Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
                   Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
                   Txt_Indicators);
+         Tbl_EndRow ();
 
          Tbl_StartRow ();
          fprintf (Gbl.F.Out,"<th rowspan=\"2\" class=\"CENTER_TOP COLOR0\">"
@@ -900,14 +900,14 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "</th>"
                             "<th colspan=\"4\" class=\"CENTER_TOP COLOR0\">"
                             "(E) %s"
-                            "</th>"
-                            "</tr>",
+                            "</th>",
                   Txt_No_INDEX,
                   Txt_Syllabus_of_the_course,
                   Txt_Guided_academic_assignments,
                   Txt_Online_tutoring,
                   Txt_Materials,
                   Txt_Assessment_criteria);
+         Tbl_EndRow ();
 
          Tbl_StartRow ();
          fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">"
@@ -978,8 +978,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "</th>"
                             "<th class=\"LEFT_MIDDLE COLOR0\">"
                             "%s"
-                            "</th>"
-                            "</tr>",
+                            "</th>",
                   Txt_YES,
                   Txt_NO,
                   Txt_INFO_TITLE[Inf_LECTURES],
@@ -1007,6 +1006,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                   Txt_NO,
                   Txt_INFO_TITLE[Inf_ASSESSMENT],
                   Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
+         Tbl_EndRow ();
       break;
      }
 
@@ -1092,8 +1092,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 				     "</td>"
 				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
 				     "%s"
-				     "</td>"
-				     "</tr>",
+				     "</td>",
 			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
 			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
 							   "DAT_SMALL_RED"),
@@ -1152,6 +1151,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
 			   Indicators.ThereIsAssessment ? "" :
 							  Txt_NO);
+		  Tbl_EndRow ();
 		  break;
 	       case Ind_INDICATORS_FULL:
 		  /* Get number of users */
@@ -1258,8 +1258,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 				     "</td>"
 				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
 				     "%s"
-				     "</td>"
-				     "</tr>",
+				     "</td>",
 			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
 			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
 							   "DAT_SMALL_RED"),
@@ -1379,6 +1378,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 										"DAT_SMALL_RED",
 			   Gbl.RowEvenOdd,
 			   Txt_INFO_SRC_SHORT_TEXT[Indicators.TeachingGuideSrc]);
+		  Tbl_EndRow ();
 		  break;
 		 }
 	   }

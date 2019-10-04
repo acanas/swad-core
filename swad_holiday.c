@@ -138,10 +138,10 @@ void Hld_SeeHolidays (void)
 			    "</th>"
 			    "<th class=\"LEFT_MIDDLE\">"
 			    "%s"
-			    "</th>"
-			    "</tr>",
+			    "</th>",
 		  Txt_End_date,
 		  Txt_Holiday);
+	 Tbl_EndRow ();
 
 	 /***** Write all the holidays *****/
 	 for (NumHld = 0;
@@ -174,9 +174,9 @@ void Hld_SeeHolidays (void)
 	    fprintf (Gbl.F.Out,"</td>"
 			       "<td class=\"DAT LEFT_MIDDLE\">"
 			       "&nbsp;%s"
-			       "</td>"
-			       "</tr>",
+			       "</td>",
 		     Gbl.Hlds.Lst[NumHld].Name);
+	    Tbl_EndRow ();
 	   }
 	 Tbl_EndTable ();
 	}
@@ -651,8 +651,8 @@ static void Hld_ListHolidaysForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>"
-                         "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -984,13 +984,13 @@ static void Hld_PutFormToCreateHoliday (void)
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Place,
             Txt_Type,
             Txt_START_END_TIME[Dat_START_TIME],
             Txt_START_END_TIME[Dat_END_TIME],
             Txt_Holiday);
+   Tbl_EndRow ();
 
    /***** Holiday place *****/
    Tbl_StartRow ();
@@ -1049,9 +1049,9 @@ static void Hld_PutFormToCreateHoliday (void)
                       " size=\"20\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
-                      "<td></td>"
-                      "</tr>",
+                      "<td></td>",
             Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name);
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_holiday);
@@ -1091,14 +1091,14 @@ static void Hld_PutHeadHolidays (void)
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Code,
             Txt_Place,
             Txt_Type,
             Txt_START_END_TIME[Dat_START_TIME],
             Txt_START_END_TIME[Dat_END_TIME],
             Txt_Holiday);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

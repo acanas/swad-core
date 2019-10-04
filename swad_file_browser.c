@@ -3199,8 +3199,8 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	    Brw_InitializeFileBrowser ();
 	    Brw_ShowFileBrowser ();
 
-	    fprintf (Gbl.F.Out,"</td>"
-			       "</tr>");
+	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndRow ();
 	   }
      }
 
@@ -8518,10 +8518,10 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       " id=\"NewLinkURL\" name=\"NewLinkURL\""
                       " size=\"30\" maxlength=\"%u\" value=\"\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_URL,
             PATH_MAX);
+   Tbl_EndRow ();
 
    /***** Link name *****/
    Tbl_StartRow ();
@@ -8534,10 +8534,10 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       "<input type=\"text\""
                       " id=\"NewLinkName\" name=\"NewLinkName\""
                       " size=\"30\" maxlength=\"%u\" value=\"\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional,
             Brw_MAX_CHARS_FOLDER);
+   Tbl_EndRow ();
    Tbl_EndTable ();
 
    /***** Send button and end box *****/
@@ -9498,8 +9498,8 @@ void Brw_ShowFileMetadata (void)
 	 fprintf (Gbl.F.Out,"<td colspan=\"2\""
 			    " class=\"FILENAME_TXT CENTER_MIDDLE\">");
 	 Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndRow ();
 
 	 /***** Filename *****/
 	 Tbl_StartRow ();
@@ -9509,8 +9509,8 @@ void Brw_ShowFileMetadata (void)
 			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Filename);
 	 Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndRow ();
 
 	 /***** Publisher's data *****/
 	 Tbl_StartRow ();
@@ -9534,8 +9534,8 @@ void Brw_ShowFileMetadata (void)
 	 else
 	    /* Unknown publisher */
 	    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
-	 fprintf (Gbl.F.Out,"</td>"
-	                    "</tr>");
+	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndRow ();
 
 	 /***** Free memory used for publisher's data *****/
 	 if (FileMetadata.PublisherUsrCod > 0)
@@ -9549,11 +9549,11 @@ void Brw_ShowFileMetadata (void)
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">"
 	                    "%s"
-	                    "</td>"
-			    "</tr>",
+	                    "</td>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_File_size,
 		  FileSizeStr);
+	 Tbl_EndRow ();
 
 	 /***** Write the date *****/
 	 Tbl_StartRow ();
@@ -9565,12 +9565,12 @@ void Brw_ShowFileMetadata (void)
 		            "writeLocalDateHMSFromUTC('filedate',%ld,"
 		            "%u,',&nbsp;','%s',true,true,0x7);"
 		            "</script>"
-	                    "</td>"
-			    "</tr>",
+	                    "</td>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Date_of_creation,
 	          (long) FileMetadata.Time,
 	          (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	 Tbl_EndRow ();
 
 	 /***** Private or public? *****/
 	 Tbl_StartRow ();
@@ -9601,8 +9601,8 @@ void Brw_ShowFileMetadata (void)
 	    fprintf (Gbl.F.Out,"%s",
 	             FileMetadata.IsPublic ? Txt_Public_open_educational_resource_OER_for_everyone :
 					     Txt_Private_available_to_certain_users_identified);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndRow ();
 
 	 /***** License *****/
 	 Tbl_StartRow ();
@@ -9628,8 +9628,8 @@ void Brw_ShowFileMetadata (void)
 	   }
 	 else		// I can not edit file properties
 	    fprintf (Gbl.F.Out,"%s",Txt_LICENSES[FileMetadata.License]);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndRow ();
 
 	 /***** Write my number of views *****/
 	 if (Gbl.Usrs.Me.Logged)
@@ -9640,10 +9640,10 @@ void Brw_ShowFileMetadata (void)
 			       "</td>"
 			       "<td class=\"DAT LEFT_MIDDLE\">"
 			       "%u"
-			       "</td>"
-			       "</tr>",
+			       "</td>",
 		     The_ClassFormInBox[Gbl.Prefs.Theme],Txt_My_views,
 		     FileMetadata.NumMyViews);
+	    Tbl_EndRow ();
 	   }
 
 	 /***** Write number of identificated views *****/
@@ -9653,13 +9653,13 @@ void Brw_ShowFileMetadata (void)
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%u (%u %s)"
-			    "</td>"
-			    "</tr>",
+			    "</td>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Identified_views,
 		  FileMetadata.NumViewsFromLoggedUsrs,
 		  FileMetadata.NumLoggedUsrs,
 		  (FileMetadata.NumLoggedUsrs == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
 			                              Txt_users[Usr_SEX_UNKNOWN]);
+	 Tbl_EndRow ();
 
 	 /***** Write number of public views *****/
 	 Tbl_StartRow ();
@@ -9668,10 +9668,10 @@ void Brw_ShowFileMetadata (void)
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%u"
-			    "</td>"
-			    "</tr>",
+			    "</td>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Public_views,
 		  FileMetadata.NumPublicViews);
+	 Tbl_EndRow ();
 
 	 /***** End box *****/
 	 if (ICanEdit)	// I can edit file properties
@@ -11802,14 +11802,14 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 			 "</th>"
 			 "<th class=\"LEFT_MIDDLE\">"
 			 "%s"
-			 "</th>"
-			 "</tr>",
+			 "</th>",
 	       Txt_Institution,
 	       Txt_Centre,
 	       Txt_Degree,
 	       Txt_Course,
 	       Txt_File_zone,
 	       Txt_Document);
+      Tbl_EndRow ();
 
       /***** List documents found *****/
       for (NumDoc = 1;
@@ -11834,8 +11834,8 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
       else
 	 fprintf (Gbl.F.Out,"%lu %s",NumDocsHidden,Txt_hidden_documents);
       fprintf (Gbl.F.Out,")"
-	                 "</th>"
-			 "</tr>");
+	                 "</th>");
+      Tbl_EndRow ();
 
       /***** End table and box *****/
       Box_EndBoxTable ();
@@ -12107,8 +12107,8 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       /* End form */
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
