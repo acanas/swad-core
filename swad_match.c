@@ -1051,8 +1051,8 @@ void Mch_RemoveMatchInCourseFromAllTables (long CrsCod)
    Mch_RemoveMatchInCourseFromTable (CrsCod,"mch_indexes");
 
    /***** Remove matches from main table *****/
-   DB_QueryDELETE ("can not remove matches of a course from table",
-		   "DELETE FROM %s"
+   DB_QueryDELETE ("can not remove matches of a course",
+		   "DELETE FROM mch_matches"
 		   " USING gam_games,mch_matches"
 		   " WHERE gam_games.CrsCod=%ld"
 		   " AND gam_games.GamCod=mch_matches.GamCod",
