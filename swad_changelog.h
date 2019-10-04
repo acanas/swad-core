@@ -493,7 +493,7 @@ ps2pdf source.ps destination.pdf
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 
-	Version 19.31.1:  Oct 04, 2019	Code refactoring in HTML tables. (247022 lines)
+	Version 19.31.1:  Oct 04, 2019	Code refactoring in HTML tables. (247035 lines)
 	Version 19.31  :  Oct 04, 2019	Code refactoring in HTML tables. (246967 lines)
 	Version 19.30.6:  Oct 03, 2019	Code refactoring in HTML tables. (246928 lines)
 	Version 19.30.5:  Oct 03, 2019	Code refactoring in HTML tables. (246922 lines)
