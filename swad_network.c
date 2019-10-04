@@ -323,9 +323,9 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Row for this web / social network *****/
-      fprintf (Gbl.F.Out,"<tr>"
+      Tbl_StartRow ();
 
-			 "<td class=\"REC_C1_BOT LEFT_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT LEFT_MIDDLE\">"
 			 "<label for=\"URL%u\" class=\"%s\">"
 			 "<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
@@ -555,8 +555,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
                       Hlp_ANALYTICS_Figures_webs_social_networks,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -592,8 +592,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	 if (sscanf (row[1],"%u",&NumUsrs) != 1)
 	    Lay_ShowErrorAndExit ("Error when getting number of files.");
 
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 			    "<img src=\"%s/%s\""
 			    " alt=\"%s\" title=\"%s\""
                             " class=\"CONTEXT_ICO_16x16\""

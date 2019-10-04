@@ -103,8 +103,8 @@ void Hie_WriteMenuHierarchy (void)
 
    /***** Write a 1st selector
           with all the countries *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"cty\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
@@ -117,8 +117,8 @@ void Hie_WriteMenuHierarchy (void)
      {
       /***** Write a 2nd selector
              with the institutions of selected country *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"RIGHT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                          "<label for=\"ins\" class=\"%s\">%s:</label>"
                          "</td>"
                          "<td class=\"LEFT_MIDDLE\">",
@@ -131,8 +131,8 @@ void Hie_WriteMenuHierarchy (void)
         {
          /***** Write a 3rd selector
                 with all the centres of selected institution *****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"RIGHT_MIDDLE\">"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                             "<label for=\"ctr\" class=\"%s\">%s:</label>"
                             "</td>"
                             "<td class=\"LEFT_MIDDLE\">",
@@ -145,8 +145,8 @@ void Hie_WriteMenuHierarchy (void)
            {
             /***** Write a 4th selector
                    with all the degrees of selected centre *****/
-            fprintf (Gbl.F.Out,"<tr>"
-                               "<td class=\"RIGHT_MIDDLE\">"
+            Tbl_StartRow ();
+	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                                "<label for=\"deg\" class=\"%s\">%s:</label>"
                                "</td>"
                                "<td class=\"LEFT_MIDDLE\">",
@@ -159,8 +159,8 @@ void Hie_WriteMenuHierarchy (void)
 	      {
 	       /***** Write a 5th selector
 		      with all the courses of selected degree *****/
-	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td class=\"RIGHT_MIDDLE\">"
+	       Tbl_StartRow ();
+	       fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                                   "<label for=\"crs\" class=\"%s\">%s:</label>"
 				  "</td>"
 				  "<td class=\"LEFT_MIDDLE\">",

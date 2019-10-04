@@ -1175,8 +1175,8 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
                 Cns_MAX_BYTES_SUBJECT);
 
    /***** Put an icon with post status *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CONTEXT_COL %s\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"CONTEXT_COL %s\">"
                       "<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />"
@@ -1215,8 +1215,8 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 	              "</tr>");
 
    /***** Form to ban/unban post *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CONTEXT_COL\">");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"CONTEXT_COL\">");
    if (ICanModerateForum)
      {
       Frm_StartFormAnchor (Enabled ? For_ActionsDisPstFor[Gbl.Forum.ForumSelected.Type] :
@@ -2560,8 +2560,8 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 
       /***** Heading row *****/
       Tbl_StartTableWideMarginPadding (2);
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<th style=\"width:20px;\"></th>"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<th style=\"width:20px;\"></th>"
                          "<th class=\"CONTEXT_COL\"></th>"	// Column for contextual icons
                          "<th class=\"LEFT_MIDDLE\">%s</th>",
                Txt_MSG_Subject);
@@ -3403,8 +3403,8 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                                                        Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /***** Show my photo if I have any posts in this thread *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"CENTER_TOP %s\" style=\"width:20px;\">",
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP %s\" style=\"width:20px;\">",
                BgColor);
       if (Thr.NumMyPosts)
         {
@@ -3962,8 +3962,8 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 
    // If writing a reply to a message of an existing thread ==> write subject
    /* Subject */
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"Subject\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\">"
@@ -3979,8 +3979,8 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 		      "");
 
    /* Content */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"Content\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"

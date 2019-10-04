@@ -1705,8 +1705,8 @@ void Lay_AdvertisementMobile (void)
                          NULL,Box_NOT_CLOSABLE,8);
 
       /***** Show advertisement *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"DAT CENTER_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
 	                 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 	                 " class=\"DAT\">"
                          "%s<br /><br />"

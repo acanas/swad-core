@@ -152,9 +152,10 @@ void Mai_SeeMailDomains (void)
    for (NumMai = 0;
 	NumMai < Gbl.Mails.Num;
 	NumMai++)
+     {
       /* Write data of this mail domain */
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">"
                          "%s"
                          "</td>"
                          "<td class=\"DAT LEFT_TOP\">"
@@ -167,6 +168,7 @@ void Mai_SeeMailDomains (void)
                Gbl.Mails.Lst[NumMai].Domain,
                Gbl.Mails.Lst[NumMai].Info,
                Gbl.Mails.Lst[NumMai].NumUsrs);
+     }
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -483,8 +485,8 @@ static void Mai_ListMailDomainsForEdition (void)
       Mai = &Gbl.Mails.Lst[NumMai];
 
       /* Put icon to remove mail */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       Frm_StartForm (ActRemMai);
       Mai_PutParamMaiCod (Mai->MaiCod);
       Ico_PutIconRemove ();
@@ -749,8 +751,8 @@ static void Mai_PutFormToCreateMailDomain (void)
                       Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -761,8 +763,8 @@ static void Mai_PutFormToCreateMailDomain (void)
             Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
 
    /***** Mail domain *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"Domain\""
                       " size=\"15\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
@@ -796,8 +798,8 @@ static void Mai_PutHeadMailDomains (void)
    extern const char *Txt_Code;
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -1270,9 +1272,10 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       Confirmed = (row[1][0] == 'Y');
 
       if (NumEmail == 1)
+	{
 	 /* The first mail is the current one */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"REC_C1_BOT RIGHT_TOP\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">"
 			    "<label for=\"Email\" class=\"%s\">"
 			    "%s:"
 			    "</label>"
@@ -1280,6 +1283,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 			    "<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Current_email);
+	}
       else	// NumEmail >= 2
 	{
 	 Tbl_StartRow ();
@@ -1375,8 +1379,8 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
      }
 
    /***** Form to enter new email *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"REC_C1_BOT RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">"
                       "<label for=\"NewEmail\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"REC_C2_BOT LEFT_TOP DAT\">",

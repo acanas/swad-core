@@ -684,8 +684,9 @@ void Pwd_ShowFormChgMyPwd (void)
 
    /***** Current password *****/
    if (IHaveAPasswordInDB) // If I have a password in database...
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+     {
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
 			 "<label for=\"UsrPwd\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
@@ -698,10 +699,11 @@ void Pwd_ShowFormChgMyPwd (void)
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Current_password,
 	       Pwd_MAX_CHARS_PLAIN_PASSWORD);
+     }
 
    /***** Help message *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\">");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"2\">");
    Ale_ShowAlert (Ale_INFO,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
 	          Pwd_MIN_CHARS_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"</td>"
@@ -733,8 +735,8 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    extern const char *Txt_HELP_password;
 
    /***** Start form element ****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Passwd\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
@@ -768,8 +770,8 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    /***** 1st password *****/
    /* Start form element */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
 	              "<label for=\"Paswd1\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
@@ -791,8 +793,8 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    /***** 2nd password *****/
    /* Start form element */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
 	              "<label for=\"Paswd2\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"REC_C2_BOT LEFT_MIDDLE\">"

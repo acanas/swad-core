@@ -146,8 +146,8 @@ void Dpt_SeeDepts (void)
 	NumDpt++)
      {
       /* Write data of this department */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 			 "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 			 "%s"
 			 "</a>"
@@ -166,16 +166,16 @@ void Dpt_SeeDepts (void)
      }
 
    /***** Separation row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"3\" class=\"DAT\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"DAT\">"
 		      "&nbsp;"
 		      "</td>"
 		      "</tr>");
 
    /***** Write teachers with other department *****/
    NumTchsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"DAT LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 		      "%s"
 		      "</td>"
 		      "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -186,8 +186,8 @@ void Dpt_SeeDepts (void)
    NumTchsInsWithDpt += NumTchsInOtherDpts;
 
    /***** Write teachers with no department *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"DAT LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 		      "%s"
 		      "</td>"
 		      "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -509,8 +509,8 @@ static void Dpt_ListDepartmentsForEdition (void)
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
       /* Put icon to remove department */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       if (Dpt->NumTchs)	// Department has teachers ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
@@ -907,8 +907,8 @@ static void Dpt_PutFormToCreateDepartment (void)
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -927,8 +927,8 @@ static void Dpt_PutFormToCreateDepartment (void)
             Txt_WWW);
 
    /***** Institution *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"OthInsCod\" style=\"width:62px;\">"
                       "<option value=\"0\"");
    if (Dpt_EditingDpt->InsCod == 0)
@@ -993,8 +993,8 @@ static void Dpt_PutHeadDepartments (void)
    extern const char *Txt_WWW;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"

@@ -32,6 +32,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/

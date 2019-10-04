@@ -423,8 +423,8 @@ static void Lnk_ListLinksForEdition (void)
       Lnk = &Gbl.Links.Lst[NumLnk];
 
       /* Put icon to remove link */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       Frm_StartForm (ActRemLnk);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       Ico_PutIconRemove ();
@@ -746,8 +746,8 @@ static void Lnk_PutFormToCreateLink (void)
    Lnk_PutHeadLinks ();
 
    /***** Link code *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\"></td>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>"
                       "<td></td>");
 
    /***** Link short name *****/
@@ -796,8 +796,8 @@ static void Lnk_PutHeadLinks (void)
    extern const char *Txt_Full_name;
    extern const char *Txt_WWW;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"

@@ -1194,8 +1194,8 @@ static void Mch_PutFormNewMatch (struct Game *Game)
 		      Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE,2);
 
    /***** Match title *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Title\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
@@ -1249,8 +1249,8 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
    if (Gbl.Crs.Grps.GrpTypes.Num)
      {
       /***** Start box and table *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
 	                 "%s:"
 	                 "</td>"
                          "<td class=\"LEFT_TOP\">",
@@ -1260,8 +1260,8 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
                          NULL,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">"
                          "<label>"
                          "<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\""

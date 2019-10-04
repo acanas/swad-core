@@ -149,8 +149,8 @@ void Hld_SeeHolidays (void)
 	      NumHld++)
 	   {
 	    /* Write data of this holiday */
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"DAT LEFT_MIDDLE\">"
+	    Tbl_StartRow ();
+	    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 			       "%s"
 			       "</td>",
 		     Gbl.Hlds.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
@@ -562,8 +562,8 @@ static void Hld_ListHolidaysForEdition (void)
       Hld = &Gbl.Hlds.Lst[NumHld];
 
       /* Put icon to remove holiday */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       Frm_StartForm (ActRemHld);
       Hld_PutParamHldCod (Hld->HldCod);
       Ico_PutIconRemove ();
@@ -969,8 +969,8 @@ static void Hld_PutFormToCreateHoliday (void)
                       Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -993,8 +993,8 @@ static void Hld_PutFormToCreateHoliday (void)
             Txt_Holiday);
 
    /***** Holiday place *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"PlcCod\" style=\"width:62px;\">"
                       "<option value=\"-1\"");
    if (Hld_EditingHld->PlcCod <= 0)
@@ -1072,8 +1072,8 @@ static void Hld_PutHeadHolidays (void)
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Holiday;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"

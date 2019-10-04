@@ -958,8 +958,8 @@ static void TsI_WriteHeadingListImportedQst (void)
    extern const char *Txt_Question;
 
    /***** Write the heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th></th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
@@ -1017,8 +1017,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    NumQst++;
 
    /***** Put icon to indicate that a question does not exist in database *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"BT%u CENTER_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"BT%u CENTER_TOP\">"
                       "<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_16x16\" />"
@@ -1049,8 +1049,9 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
       for (NumTag = 0;
 	   NumTag < Gbl.Test.Tags.Num;
 	   NumTag++)
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s LEFT_TOP\">"
+	{
+         Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
                             "&nbsp;&#8226;&nbsp;"
                             "</td>"
                             "<td class=\"%s LEFT_TOP\">"
@@ -1059,6 +1060,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                             "</tr>",
                   ClassData,
                   ClassData,Gbl.Test.Tags.Txt[NumTag]);
+	}
       Tbl_EndTable ();
      }
    else	// no tags for this question
@@ -1147,8 +1149,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 		 }
 
             /* Put an icon that indicates whether the answer is correct or wrong */
-            fprintf (Gbl.F.Out,"<tr>"
-        	               "<td class=\"BT%u\">",
+            Tbl_StartRow ();
+            fprintf (Gbl.F.Out,"<td class=\"BT%u\">",
 		     Gbl.RowEvenOdd);
             if (Gbl.Test.Answer.Options[NumOpt].Correct)
                fprintf (Gbl.F.Out,"<img src=\"%s/check.svg\""

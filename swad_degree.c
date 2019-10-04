@@ -185,8 +185,8 @@ void Deg_SeeDegWithPendingCrss (void)
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<th class=\"LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "<th class=\"RIGHT_MIDDLE\">"
@@ -213,8 +213,8 @@ void Deg_SeeDegWithPendingCrss (void)
          Deg_GetDataOfDegreeByCod (&Deg);
 
          /* Degree logo and full name */
-         fprintf (Gbl.F.Out,"<tr>"
-	                    "<td class=\"LEFT_MIDDLE %s\">",
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
          Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,
                                             "DAT_NOBR","CENTER_MIDDLE");
@@ -342,8 +342,8 @@ static void Deg_Configuration (bool PrintView)
    Tbl_StartTableWidePadding (2);
 
    /***** Centre *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"OthCtrCod\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT_N LEFT_MIDDLE\">",
@@ -384,8 +384,8 @@ static void Deg_Configuration (bool PrintView)
 		      "</tr>");
 
    /***** Degree full name *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"FullName\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT_N LEFT_MIDDLE\">",
@@ -414,8 +414,8 @@ static void Deg_Configuration (bool PrintView)
 		      "</tr>");
 
    /***** Degree short name *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"ShortName\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT_N LEFT_MIDDLE\">",
@@ -444,8 +444,8 @@ static void Deg_Configuration (bool PrintView)
 		      "</tr>");
 
    /***** Degree WWW *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"WWW\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">",
@@ -479,8 +479,8 @@ static void Deg_Configuration (bool PrintView)
 		      "</tr>");
 
    /***** Shortcut to the degree *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">"
@@ -501,8 +501,8 @@ static void Deg_Configuration (bool PrintView)
    if (PrintView)
      {
       /***** QR code with link to the degree *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
@@ -515,8 +515,8 @@ static void Deg_Configuration (bool PrintView)
    else
      {
       /***** Number of courses *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"LEFT_MIDDLE\">",
@@ -577,8 +577,8 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">"
@@ -720,8 +720,8 @@ static void Deg_ListDegreesForEdition (void)
       ICanEdit = Deg_CheckIfICanEditADegree (Deg);
 
       /* Put icon to remove degree */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       if (NumCrss ||	// Degree has courses ==> deletion forbidden
 	  !ICanEdit)
          Ico_PutIconRemovalNotAllowed ();
@@ -965,8 +965,8 @@ static void Deg_PutFormToCreateDegree (void)
    Deg_PutHeadDegreesForEdition ();
 
    /***** Column to remove degree, disabled here *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\"></td>");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
 
    /***** Degree code *****/
    fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
@@ -1052,8 +1052,8 @@ static void Deg_PutHeadDegreesForSeeing (void)
    extern const char *Txt_Type;
    extern const char *Txt_Courses_ABBREVIATION;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th></th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
@@ -1086,8 +1086,8 @@ static void Deg_PutHeadDegreesForEdition (void)
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_Requester;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -1285,8 +1285,8 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Put tip if degree has courses *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s CENTER_MIDDLE %s\" title=\"%s\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\" title=\"%s\">"
 		      "%s"
 		      "</td>",
 	    TxtClassNormal,BgColor,
@@ -2522,8 +2522,8 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	   NumRow++)
 	{
          /***** Indent *****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"RIGHT_TOP COLOR%u\">"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">"
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
                             " class=\"ICO25x25\" />"

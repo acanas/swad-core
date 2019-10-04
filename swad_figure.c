@@ -371,8 +371,8 @@ static void Fig_GetAndShowUsersStats (void)
                       Hlp_ANALYTICS_Figures_users,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -394,8 +394,8 @@ static void Fig_GetAndShowUsersStats (void)
    Fig_GetAndShowNumUsrsInCrss (Rol_NET);		// Non-editing teachers
    Fig_GetAndShowNumUsrsInCrss (Rol_TCH);		// Teachers
    Fig_GetAndShowNumUsrsInCrss (Rol_UNK);		// Any user in courses
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th colspan=\"4\" style=\"height:10px;\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th colspan=\"4\" style=\"height:10px;\">"
                       "</tr>");
    Fig_GetAndShowNumUsrsNotBelongingToAnyCrs ();	// Users not beloging to any course
 
@@ -433,8 +433,8 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    NumUsrsPerCrs = Usr_GetNumUsrsPerCrs (Role);
 
    /***** Write the total number of users *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s\">"
                       "%s"
                       "</td>"
                       "<td class=\"%s\">"
@@ -464,8 +464,8 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
    char *Class = "DAT RIGHT_BOTTOM";
 
    /***** Write the total number of users not belonging to any course *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s\">"
                       "%s"
                       "</td>"
                       "<td class=\"%s\">"
@@ -505,8 +505,8 @@ static void Fig_GetAndShowUsersRanking (void)
                       Hlp_ANALYTICS_Figures_ranking,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
@@ -537,8 +537,8 @@ static void Fig_GetAndShowUsersRanking (void)
             Txt_Messages);
 
    /***** Rankings *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT LEFT_TOP\">");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
    Prf_GetAndShowRankingClicks ();
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"DAT LEFT_TOP\">");
@@ -607,8 +607,8 @@ static void Fig_WriteHeadHierarchy (void)
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "<img src=\"%s/globe.svg\""
                       " alt=\"%s\" title=\"%s\""
@@ -999,8 +999,8 @@ static void Fig_ShowHierarchyRow (const char *Text1,const char *Text2,
 				  int NumCrss)	// < 0 ==> do not show number
   {
    /***** Start row and write text *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s%s"
 		      "</td>",
 	    ClassTxt,Text1,Text2);
@@ -1468,8 +1468,8 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	    break;
 	 case Usr_LIST_AS_LISTING:
 	    /***** Draw institutions as a list *****/
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<th></th>"
+	    Tbl_StartRow ();
+	    fprintf (Gbl.F.Out,"<th></th>"
 			       "<th class=\"LEFT_MIDDLE\">"
 			       "%s"
 			       "</th>"
@@ -1490,8 +1490,8 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       /***** Number of order *****/
 	       if (NumberThisRow != NumberLastRow)
 		  NumOrder = NumIns;
-	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td class=\"DAT RIGHT_MIDDLE\">"
+	       Tbl_StartRow ();
+	       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 				  "%u"
 				  "</td>",
 			NumOrder);
@@ -2499,8 +2499,8 @@ static void Fig_WriteStatsExpTreesTableHead1 (void)
    extern const char *Txt_Files;
    extern const char *Txt_Size;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -2543,8 +2543,8 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
    extern const char *Txt_Size;
    extern const char *Txt_course;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -2571,8 +2571,8 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
    extern const char *Txt_Size;
    extern const char *Txt_user[Usr_NUM_SEXS];
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -2632,8 +2632,8 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 	        "%d",
 		SizeOfFileZones->NumUsrs);
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
@@ -2706,8 +2706,8 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 	                     FileSizePerCrsStr);
      }
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
@@ -2764,8 +2764,8 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 	                     FileSizePerUsrStr);
      }
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
@@ -2804,8 +2804,8 @@ static void Fig_GetAndShowOERsStats (void)
                       Hlp_ANALYTICS_Figures_open_educational_resources_oer,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -2825,8 +2825,8 @@ static void Fig_GetAndShowOERsStats (void)
      {
       Fig_GetNumberOfOERsFromDB (Gbl.Scope.Current,License,NumFiles);
 
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -3004,8 +3004,8 @@ static void Fig_GetAndShowAssignmentsStats (void)
                       Hlp_ANALYTICS_Figures_assignments,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -3024,8 +3024,8 @@ static void Fig_GetAndShowAssignmentsStats (void)
             Txt_Number_of_BR_notifications);
 
    /***** Write number of assignments *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -3072,8 +3072,8 @@ static void Fig_GetAndShowProjectsStats (void)
                       Hlp_ANALYTICS_Figures_projects,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -3088,8 +3088,8 @@ static void Fig_GetAndShowProjectsStats (void)
             Txt_Average_number_BR_of_projects_BR_per_course);
 
    /***** Write number of projects *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -3134,8 +3134,8 @@ static void Fig_GetAndShowTestsStats (void)
                       Hlp_ANALYTICS_Figures_tests,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -3181,8 +3181,8 @@ static void Fig_GetAndShowTestsStats (void)
       Tst_GetTestStats (AnsType,&Stats);
 
       /***** Write number of assignments *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -3228,8 +3228,8 @@ static void Fig_GetAndShowTestsStats (void)
    Tst_GetTestStats (Tst_ANS_ALL,&Stats);
 
    /***** Write number of assignments *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
@@ -3299,8 +3299,8 @@ static void Fig_GetAndShowGamesStats (void)
                       Hlp_ANALYTICS_Figures_games,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -3315,8 +3315,8 @@ static void Fig_GetAndShowGamesStats (void)
             Txt_Average_number_BR_of_games_BR_per_course);
 
    /***** Write number of games *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -3362,8 +3362,8 @@ static void Fig_GetAndShowSocialActivityStats (void)
                       Hlp_ANALYTICS_Figures_timeline,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -3499,8 +3499,8 @@ static void Fig_GetAndShowSocialActivityStats (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Write number of social notes and number of users *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -3617,8 +3617,8 @@ static void Fig_GetAndShowSocialActivityStats (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /* Write totals */
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
 		      "%s"
 		      "</td>"
 		      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
@@ -3677,8 +3677,8 @@ static void Fig_GetAndShowFollowStats (void)
                       Hlp_ANALYTICS_Figures_followed_followers,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -3790,8 +3790,8 @@ static void Fig_GetAndShowFollowStats (void)
 	}
 
       /***** Write number of followed / followers *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -3919,8 +3919,8 @@ static void Fig_GetAndShowFollowStats (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Write number of followed per follower *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 			 "%s"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -3967,8 +3967,8 @@ static void Fig_GetAndShowForumStats (void)
                       Hlp_ANALYTICS_Figures_forums,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_TOP\" style=\"width:20px;\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\" style=\"width:20px;\">"
                       "<img src=\"%s/comments.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />"
@@ -4195,8 +4195,8 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    FiguresForum->NumUsrsToBeNotifiedByEMail += NumUsrsToBeNotifiedByEMail;
 
    /***** Write forum name and stats *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"LEFT_TOP\" style=\"width:20px;\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:20px;\">"
                       "<img src=\"%s/%s\""
                       " alt=\"%s%s\" title=\"%s%s\""
                       " class=\"ICO16x16\" />"
@@ -4254,8 +4254,8 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
 	                                       0.0);
 
    /***** Write forum name and stats *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT_N_LINE_TOP\" style=\"width:20px;\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP\" style=\"width:20px;\">"
                       "</td>"
                       "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
                       "%s"
@@ -4324,8 +4324,8 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
                       Hlp_ANALYTICS_Figures_notifications,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -4470,8 +4470,9 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE\">"
+     {
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4494,10 +4495,11 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
         	              0.0,
                NumEvents[NotifyEvent],
                NumMails[NotifyEvent]);
+     }
 
    /***** Write total number of users who want to be notified by email on some event *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
@@ -4563,8 +4565,8 @@ static void Fig_GetAndShowNoticesStats (void)
                       Hlp_ANALYTICS_Figures_notices,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -4587,8 +4589,8 @@ static void Fig_GetAndShowNoticesStats (void)
             Txt_Number_of_BR_notifications);
 
    /***** Write number of notices *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4646,8 +4648,8 @@ static void Fig_GetAndShowMsgsStats (void)
                       Hlp_ANALYTICS_Figures_messages,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -4670,8 +4672,8 @@ static void Fig_GetAndShowMsgsStats (void)
             Txt_Number_of_BR_notifications);
 
    /***** Write number of messages *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4686,9 +4688,14 @@ static void Fig_GetAndShowMsgsStats (void)
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "-"
                       "</td>"
-                      "</tr>"
-                      "<tr>"
-                      "<td class=\"DAT LEFT_MIDDLE\">"
+                      "</tr>",
+            Txt_MSGS_Sent,
+            NumMsgsSentNotDeleted,
+            NumMsgsSentDeleted,
+            NumMsgsSentNotDeleted + NumMsgsSentDeleted);
+
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4704,10 +4711,7 @@ static void Fig_GetAndShowMsgsStats (void)
                       "%u"
                       "</td>"
                       "</tr>",
-            Txt_MSGS_Sent,
-            NumMsgsSentNotDeleted,
-            NumMsgsSentDeleted,
-            NumMsgsSentNotDeleted + NumMsgsSentDeleted,
+
             Txt_MSGS_Received,
             NumMsgsReceivedNotDeleted,
             NumMsgsReceivedAndDeleted,
@@ -4750,8 +4754,8 @@ static void Fig_GetAndShowSurveysStats (void)
                       Hlp_ANALYTICS_Figures_surveys,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -4774,8 +4778,8 @@ static void Fig_GetAndShowSurveysStats (void)
             Txt_Number_of_BR_notifications);
 
    /***** Write number of surveys *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"DAT RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
                       "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4852,8 +4856,8 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
    unsigned NumUsrsTotal = 0;
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -4889,8 +4893,9 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	Visibility < Pri_NUM_OPTIONS_PRIVACY;
 	Visibility++)
       if (MaskAllowedVisibility & (1 << Visibility))
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
+	{
+	 Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 			    "%s"
 			    "</td>"
 			    "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4904,6 +4909,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 		  NumUsrsTotal ? (float) NumUsrs[Visibility] * 100.0 /
 				 (float) NumUsrsTotal :
 				 0);
+	}
    }
 
 /*****************************************************************************/
@@ -4943,8 +4949,8 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
                       Hlp_ANALYTICS_Figures_cookies,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -4978,8 +4984,9 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
    for (i = 0;
 	i < 2;
 	i++)
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s CENTER_MIDDLE\">"
+     {
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">"
                          "%s"
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -4995,6 +5002,7 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
                NumUsrsTotal ? (float) NumUsrs[i] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+     }
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5023,8 +5031,8 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
                       Hlp_ANALYTICS_Figures_language,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -5058,8 +5066,9 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
    for (Lan = (Lan_Language_t) 1;
 	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE\">"
+     {
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
                          "%s"
                          "</td>"
                          "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -5073,6 +5082,7 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
                NumUsrsTotal ? (float) NumUsrs[Lan] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+     }
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5102,8 +5112,8 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
                       Hlp_ANALYTICS_Figures_calendar,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -5139,8 +5149,9 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	FirstDayOfWeek <= 6;	// Sunday
 	FirstDayOfWeek++)
       if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"CENTER_MIDDLE\">"
+	{
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 			    "<img src=\"%s/first-day-of-week-%u.png\""
 			    " alt=\"%s\" title=\"%s: %s\""
 			    " class=\"ICO40x40\" />"
@@ -5159,6 +5170,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 		  NumUsrsTotal ? (float) NumUsrs[FirstDayOfWeek] * 100.0 /
 				 (float) NumUsrsTotal :
 				 0);
+	}
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5185,8 +5197,8 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
                       Hlp_ANALYTICS_Figures_dates,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -5221,8 +5233,8 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
 	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 	Format++)
      {
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N LEFT_MIDDLE\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE\">");
       Dat_PutSpanDateFormat (Format);
       Dat_PutScriptDateFormat (Format);
       fprintf (Gbl.F.Out,"</td>"
@@ -5266,8 +5278,8 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
                       Hlp_ANALYTICS_Figures_icons,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -5301,8 +5313,9 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
    for (IconSet = (Ico_IconSet_t) 0;
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"LEFT_MIDDLE\">"
+     {
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                          "<img src=\"%s/%s/cog.svg\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />"
@@ -5322,6 +5335,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
                NumUsrsTotal ? (float) NumUsrs[IconSet] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+     }
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5350,8 +5364,8 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
                       Hlp_ANALYTICS_Figures_menu,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -5385,8 +5399,9 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
    for (Menu = (Mnu_Menu_t) 0;
 	Menu < Mnu_NUM_MENUS;
 	Menu++)
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"CENTER_MIDDLE\">"
+     {
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                          "<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />"
@@ -5405,6 +5420,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
                NumUsrsTotal ? (float) NumUsrs[Menu] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+     }
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5433,8 +5449,8 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
                       Hlp_ANALYTICS_Figures_theme,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -5468,8 +5484,9 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
    for (Theme = (The_Theme_t) 0;
 	Theme < The_NUM_THEMES;
 	Theme++)
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"CENTER_MIDDLE\">"
+     {
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                          "<img src=\"%s/%s/theme_32x20.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:40px; height:25px;\" />"
@@ -5488,6 +5505,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
                NumUsrsTotal ? (float) NumUsrs[Theme] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+     }
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -5515,8 +5533,8 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
                       Hlp_ANALYTICS_Figures_columns,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -5550,8 +5568,9 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
    for (SideCols = 0;
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"CENTER_MIDDLE\">"
+     {
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                          "<img src=\"%s/layout%u%u_32x20.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:40px; height:25px;\" />"
@@ -5570,6 +5589,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
                NumUsrsTotal ? (float) NumUsrs[SideCols] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
+     }
 
    /***** End table and box *****/
    Box_EndBoxTable ();

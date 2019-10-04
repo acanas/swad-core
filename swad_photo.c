@@ -1786,8 +1786,8 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    extern const char *Txt_AVERAGE_PHOTO_TYPES[Pho_NUM_AVERAGE_PHOTO_TYPES];
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"AvgType\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
@@ -1847,8 +1847,8 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    extern const char *Txt_STAT_DEGREE_PHOTO_SIZE[Pho_NUM_HOW_COMPUTE_PHOTO_SIZES];
    Pho_HowComputePhotoSize_t PhoSi;
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"PhotoSize\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
@@ -1908,8 +1908,8 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    extern const char *Txt_STAT_DEGREE_PHOTO_ORDER[Pho_NUM_HOW_ORDER_DEGREES];
    Pho_HowOrderDegrees_t Order;
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Order\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
@@ -2205,8 +2205,8 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
       /***** Write heading *****/
       Tbl_StartTableCenterPadding (2);
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<th class=\"RIGHT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">"
 			 "%s"
 			 "</th>"
 			 "<th class=\"CENTER_TOP\">"
@@ -2239,8 +2239,8 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Deg_GetDataOfDegreeByCod (&Deg);
 
 	 /***** Show logo and name of this degree *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
 			    "%u"
 			    "</td>",
 		  Gbl.RowEvenOdd,++NumDegsNotEmpty);

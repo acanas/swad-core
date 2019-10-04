@@ -394,8 +394,8 @@ void Ntf_ShowMyNotifications (void)
 
       /***** Start table *****/
       Tbl_StartTableWideMarginPadding (2);
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "<th class=\"LEFT_MIDDLE\">"
@@ -492,8 +492,8 @@ void Ntf_ShowMyNotifications (void)
 
          /***** Write row for this notification *****/
 	 /* Write event icon */
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s LEFT_TOP\" style=\"width:25px;\">",
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\" style=\"width:25px;\">",
                   ClassBackground);
          if (PutLink)
             PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
@@ -602,8 +602,8 @@ void Ntf_ShowMyNotifications (void)
             Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
                                            Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
                                            false);
-            fprintf (Gbl.F.Out,"<tr>"
-                               "<td colspan=\"2\"></td>"
+            Tbl_StartRow ();
+            fprintf (Gbl.F.Out,"<td colspan=\"2\"></td>"
                                "<td colspan=\"4\" class=\"DAT LEFT_TOP\""
                                " style=\"padding-bottom:12px;\">"
                                "%s"
@@ -1939,8 +1939,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    /***** List of notifications *****/
    Tbl_StartTableCenterPadding (2);
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<th></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th></th>"
 		      "<th class=\"CENTER_MIDDLE\">"
 		      "%s"
 		      "</th>"
@@ -1957,8 +1957,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++)	// O is reserved for Ntf_EVENT_UNKNOWN
      {
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 	                 "%s:"
 	                 "</td>"
 	                 "<td class=\"CENTER_MIDDLE\">"

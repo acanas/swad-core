@@ -1135,8 +1135,8 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 			 Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
 
    /***** Game title *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"Title\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\">"
@@ -1150,8 +1150,8 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 	    Gam_MAX_CHARS_TITLE,Game->Title);
 
    /***** Game text *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 		      "<label for=\"Txt\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"LEFT_TOP\">"
@@ -1634,8 +1634,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
    /***** Write the heading *****/
    Tbl_StartTableWideMarginPadding (2);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th></th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
@@ -1685,8 +1685,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       /***** Icons *****/
       Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
       Gam_CurrentQstInd = QstInd;
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"BT%u\">",Gbl.RowEvenOdd);
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
 
       /* Put icon to remove the question */
       if (ICanEditQuestions)

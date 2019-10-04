@@ -1208,8 +1208,9 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		  UniqueId);
 	 break;
       default:
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td colspan=\"2\" class=\"RIGHT_TOP");
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP");
+	 break;
      }
    fprintf (Gbl.F.Out," %s\">"
                       "%s:"
@@ -1474,8 +1475,8 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
 		  id,UniqueId);
 	 break;
       case Prj_PRINT_ONE_PROJECT:
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td colspan=\"2\" class=\"RIGHT_TOP");
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP");
 	 break;
       default:
 	 // Not applicable
@@ -1543,8 +1544,8 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
 	          id,UniqueId);
 	 break;
       case Prj_PRINT_ONE_PROJECT:
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td colspan=\"2\" class=\"RIGHT_TOP");
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP");
 	 break;
       default:
 	 // Not applicable
@@ -1751,8 +1752,8 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
       switch (ProjectView)
 	{
 	 case Prj_EDIT_ONE_PROJECT:
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"PRJ_MEMBER_ICO\">");
+	    Tbl_StartRow ();
+	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_ICO\">");
 	    Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Add_USERS,
@@ -3334,8 +3335,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                       NULL,Box_NOT_CLOSABLE,2);
 
    /* Project title */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Title\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
@@ -3348,8 +3349,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
             Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title);
 
    /* Department */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"%s\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
@@ -3365,8 +3366,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 	              "</tr>");
 
    /* Preassigned? */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
@@ -3389,8 +3390,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                       "</tr>");
 
    /* Number of students */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
@@ -3403,8 +3404,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
             Prj->NumStds);
 
    /* Proposal */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
@@ -3438,8 +3439,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                               Prj->Materials,4);
 
    /* URL for additional info */
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"WWW\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">"
@@ -3474,8 +3475,8 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"%s\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"

@@ -140,8 +140,8 @@ void Plc_SeePlaces (void)
 	   NumPlc++)
 	{
 	 /* Write data of this place */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 			    "%s"
 			    "</td>"
 	                    "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -154,16 +154,16 @@ void Plc_SeePlaces (void)
 	}
 
       /***** Separation row *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"2\" class=\"DAT\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT\">"
 			 "&nbsp;"
 			 "</td>"
 			 "</tr>");
 
       /***** Write centres (of the current institution) with other place *****/
       NumCtrsInOtherPlcs = Ctr_GetNumCtrsInPlc (0);
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 			 "%s"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -174,8 +174,8 @@ void Plc_SeePlaces (void)
       NumCtrsWithPlc += NumCtrsInOtherPlcs;
 
       /***** Write centres (of the current institution) with no place *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 			 "%s"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE\">"
@@ -523,8 +523,8 @@ static void Plc_ListPlacesForEdition (void)
       Plc = &Gbl.Plcs.Lst[NumPlc];
 
       /* Put icon to remove place */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       if (Plc->NumCtrs)	// Place has centres ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
@@ -805,8 +805,8 @@ static void Plc_PutFormToCreatePlace (void)
    Plc_PutHeadPlaces ();
 
    /***** Column to remove place, disabled here *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\"></td>");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
 
    /***** Place code *****/
    fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
@@ -853,8 +853,8 @@ static void Plc_PutHeadPlaces (void)
    extern const char *Txt_Full_name;
    extern const char *Txt_Centres;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"

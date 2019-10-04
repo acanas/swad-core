@@ -1132,8 +1132,8 @@ static void TT_DrawTimeTable (void)
    TT_TimeTableDrawAdjustRow ();
 
    /***** Row with day names *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"2\" class=\"TT_HOUR_BIG RIGHT_MIDDLE\""
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_HOUR_BIG RIGHT_MIDDLE\""
 	              " style=\"width:%u%%;\">"
 	              "%02u:00"
 	              "</td>",
@@ -1272,8 +1272,8 @@ static void TT_TimeTableDrawAdjustRow (void)
    unsigned Weekday;
    unsigned Minicolumn;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"TT_HOURCOL\"></td>");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"TT_HOURCOL\"></td>");
    TT_DrawCellAlignTimeTable ();
    for (Weekday = 0;
 	Weekday < TT_DAYS_PER_WEEK;

@@ -120,8 +120,8 @@ void Ind_ReqIndicatorsCourses (void)
    Tbl_StartTableWidePadding (2);
 
    /* Scope */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"ScopeInd\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
@@ -131,8 +131,8 @@ void Ind_ReqIndicatorsCourses (void)
 	              "</tr>");
 
    /* Compute stats for a type of degree */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"OthDegTypCod\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
@@ -145,8 +145,8 @@ void Ind_ReqIndicatorsCourses (void)
 	              "</tr>");
 
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"%s\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
@@ -173,8 +173,8 @@ void Ind_ReqIndicatorsCourses (void)
    Ind_GetNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,mysql_res);
 
    /* Selection of the number of indicators */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_TOP %s\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP %s\">"
                       "%s:"
                       "</td>"
                       "<td class=\"LEFT_TOP\">",
@@ -753,8 +753,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    switch (IndicatorsLayout)
      {
       case Ind_INDICATORS_BRIEF:
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</th>"
                             "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
@@ -769,9 +769,15 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "<th colspan=\"11\" class=\"CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</th>"
-                            "</tr>"
-                            "<tr>"
-                            "<th rowspan=\"2\" class=\"CENTER_TOP COLOR0\">"
+                            "</tr>",
+                  Txt_Degree,
+                  Txt_Course,
+                  Txt_Institutional_BR_code,
+                  Txt_Web_page_of_the_course,
+                  Txt_Indicators);
+
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<th rowspan=\"2\" class=\"CENTER_TOP COLOR0\">"
                             "%s"
                             "</th>"
                             "<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">"
@@ -789,9 +795,16 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">"
                             "(E) %s"
                             "</th>"
-                            "</tr>"
-                            "<tr>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
+                            "</tr>",
+                  Txt_No_INDEX,
+                  Txt_Syllabus_of_the_course,
+                  Txt_Guided_academic_assignments,
+                  Txt_Online_tutoring,
+                  Txt_Materials,
+                  Txt_Assessment_criteria);
+
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</th>"
                             "<th class=\"CENTER_MIDDLE COLOR0\">"
@@ -822,19 +835,6 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "%s"
                             "</th>"
                             "</tr>",
-                  Txt_Degree,
-                  Txt_Course,
-                  Txt_Institutional_BR_code,
-                  Txt_Web_page_of_the_course,
-                  Txt_Indicators,
-
-                  Txt_No_INDEX,
-                  Txt_Syllabus_of_the_course,
-                  Txt_Guided_academic_assignments,
-                  Txt_Online_tutoring,
-                  Txt_Materials,
-                  Txt_Assessment_criteria,
-
                   Txt_YES,
                   Txt_NO,
 
@@ -851,8 +851,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                   Txt_NO);
          break;
       case Ind_INDICATORS_FULL:
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
                             "%s"
                             "</th>"
                             "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
@@ -873,9 +873,17 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "<th colspan=\"24\" class=\"CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</th>"
-                            "</tr>"
-                            "<tr>"
-                            "<th rowspan=\"2\" class=\"CENTER_TOP COLOR0\">"
+                            "</tr>",
+                  Txt_Degree,
+                  Txt_Course,
+                  Txt_Institutional_BR_code,
+                  Txt_Web_page_of_the_course,
+                  Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+                  Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
+                  Txt_Indicators);
+
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<th rowspan=\"2\" class=\"CENTER_TOP COLOR0\">"
                             "%s"
                             "</th>"
                             "<th colspan=\"5\" class=\"CENTER_TOP COLOR0\">"
@@ -893,9 +901,16 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "<th colspan=\"4\" class=\"CENTER_TOP COLOR0\">"
                             "(E) %s"
                             "</th>"
-                            "</tr>"
-                            "<tr>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
+                            "</tr>",
+                  Txt_No_INDEX,
+                  Txt_Syllabus_of_the_course,
+                  Txt_Guided_academic_assignments,
+                  Txt_Online_tutoring,
+                  Txt_Materials,
+                  Txt_Assessment_criteria);
+
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">"
                             "%s"
                             "</th>"
                             "<th class=\"CENTER_MIDDLE COLOR0\">"
@@ -965,21 +980,6 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                             "%s"
                             "</th>"
                             "</tr>",
-                  Txt_Degree,
-                  Txt_Course,
-                  Txt_Institutional_BR_code,
-                  Txt_Web_page_of_the_course,
-                  Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-                  Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
-                  Txt_Indicators,
-
-                  Txt_No_INDEX,
-                  Txt_Syllabus_of_the_course,
-                  Txt_Guided_academic_assignments,
-                  Txt_Online_tutoring,
-                  Txt_Materials,
-                  Txt_Assessment_criteria,
-
                   Txt_YES,
                   Txt_NO,
                   Txt_INFO_TITLE[Inf_LECTURES],
@@ -1039,8 +1039,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 	    switch (IndicatorsLayout)
 	      {
 	       case Ind_INDICATORS_BRIEF:
-		  fprintf (Gbl.F.Out,"<tr>"
-				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+		  Tbl_StartRow ();
+		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
 				     "%s"
 				     "</td>"
 				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
@@ -1159,8 +1159,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 		  NumTchs = Usr_GetNumUsrsInCrs (Rol_NET,CrsCod) +	// Non-editing teachers
 			    Usr_GetNumUsrsInCrs (Rol_TCH,CrsCod);	// Teachers
 
-		  fprintf (Gbl.F.Out,"<tr>"
-				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+		  Tbl_StartRow ();
+		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
 				     "%s"
 				     "</td>"
 				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"

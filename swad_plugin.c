@@ -114,8 +114,8 @@ void Plg_ListPlugins (void)
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th style=\"width:40px;\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th style=\"width:40px;\">"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
@@ -136,8 +136,8 @@ void Plg_ListPlugins (void)
 
       /* Plugin logo */
       // TODO: Change plugin icons to 32x32
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE\" style=\"width:45px;\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\" style=\"width:45px;\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
@@ -393,8 +393,8 @@ static void Plg_ListPluginsForEdition (void)
       Plg = &Gbl.Plugins.Lst[NumPlg];
 
       /* Put icon to remove plugin */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       Frm_StartForm (ActRemPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
       Ico_PutIconRemove ();
@@ -889,8 +889,8 @@ static void Plg_PutFormToCreatePlugin (void)
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -986,8 +986,8 @@ static void Plg_PutHeadPlugins (void)
    extern const char *Txt_URL;
    extern const char *Txt_IP;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"

@@ -1294,8 +1294,8 @@ static void Grp_ListGroupTypesForEdition (void)
 	NumGrpTyp++, UniqueId++)
      {
       /* Put icon to remove group type */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       Frm_StartFormAnchor (ActReqRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Ico_PutIconRemove ();
@@ -1364,8 +1364,8 @@ static void Grp_ListGroupTypesForEdition (void)
       Frm_StartFormAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Tbl_StartTableCenterPadding (2);
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
                          "<img src=\"%s/clock.svg\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"%sCONTEXT_ICO_16x16\" />"
@@ -1447,8 +1447,8 @@ static void Grp_WriteHeadingGroupTypes (void)
    extern const char *Txt_Opening_of_groups;
    extern const char *Txt_No_of_BR_groups;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s<br />(%s)"
                       "</th>"
@@ -1510,8 +1510,8 @@ static void Grp_ListGroupsForEdition (void)
          Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
 
          /***** Icon to remove group *****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"BM\">");
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"BM\">");
          Frm_StartFormAnchor (ActReqRemGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          Ico_PutIconRemove ();
@@ -1670,8 +1670,8 @@ static void Grp_WriteHeadingGroups (void)
    extern const char *Txt_Max_BR_students;
    Rol_Role_t Role;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"BM\"></th>"
                       "<th class=\"BM\"></th>"
                       "<th class=\"CENTER_MIDDLE\">"
@@ -1730,8 +1730,8 @@ void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 
       /* Put checkbox to select the group */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_MIDDLE");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
       if (IBelongToThisGroup)
 	 fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">"
@@ -2016,8 +2016,8 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 
       /* Put radio item or checkbox to select the group */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_MIDDLE");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
       if (IBelongToThisGroup)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">");
@@ -2236,8 +2236,8 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	   }
 
       /* Put checkbox to select the group */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_MIDDLE");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
       if (IBelongToThisGroup)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">"
@@ -2274,8 +2274,8 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    /* To get the students who don't belong to a type of group, use group code -(GrpTyp->GrpTypCod) */
    /* Write checkbox to select the group */
    ICanSelUnselGroup = (Gbl.Usrs.Me.Role.Logged >= Rol_STD);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"checkbox\" id=\"Grp%ld\" name=\"GrpCods\""
                       " value=\"%ld\"",
             -(GrpTyp->GrpTypCod),
@@ -2345,8 +2345,8 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    Rol_Role_t Role;
 
    /***** Name of group type *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"9\" class=\"GRP_TITLE LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"9\" class=\"GRP_TITLE LEFT_MIDDLE\">"
 	              "<br />%s",
 	    GrpTyp->GrpTypName);
    if (GrpTyp->MustBeOpened)
@@ -2367,8 +2367,8 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
                       "</tr>");
 
    /***** Head row with title of each column *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th colspan=\"2\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th colspan=\"2\"></th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -2506,8 +2506,8 @@ static void Grp_PutFormToCreateGroupType (void)
    Grp_WriteHeadingGroupTypes ();
 
    /***** Column to remove group type, disabled here *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\"></td>");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
 
    /***** Name of group type *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2554,8 +2554,8 @@ static void Grp_PutFormToCreateGroupType (void)
    /***** Open time *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Tbl_StartTablePadding (2);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/clock.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"%sCONTEXT_ICO_16x16\" />"
@@ -2623,8 +2623,8 @@ static void Grp_PutFormToCreateGroup (void)
    Grp_WriteHeadingGroups ();
 
    /***** Empty column to remove *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\"></td>");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
 
    /***** Disabled icon to open group *****/
    fprintf (Gbl.F.Out,"<td class=\"BM\">");

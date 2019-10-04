@@ -33,6 +33,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -270,8 +271,8 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
                                                  const char *TxtButton)
   {
    /***** Description *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>",
             Description);

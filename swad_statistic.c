@@ -375,8 +375,8 @@ void Sta_AskShowCrsHits (void)
 
          /***** Put list of users to select some of them *****/
          Tbl_StartTableCenterPadding (2);
-         fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"RIGHT_TOP %s\">%s:"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP %s\">%s:"
 			    "</td>"
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users,
@@ -396,8 +396,8 @@ void Sta_AskShowCrsHits (void)
          Sta_WriteSelectorAction ();
 
          /***** Option a) Listing of clicks distributed by some metric *****/
-         fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"RIGHT_MIDDLE %s\">%s:</td>"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE %s\">%s:</td>"
 			    "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Show);
 
@@ -537,8 +537,8 @@ void Sta_AskShowGblHits (void)
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (Gbl.Action.Act == ActReqAccGbl);
 
    /***** Users' roles whose accesses we want to see *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"Role\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">"
@@ -561,8 +561,8 @@ void Sta_AskShowGblHits (void)
    Sta_WriteSelectorAction ();
 
    /***** Clicks made from anywhere, current centre, current degree or current course *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"ScopeSta\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
@@ -580,8 +580,8 @@ void Sta_AskShowGblHits (void)
 	              "</tr>");
 
    /***** Count type for the statistic *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"CountType\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
@@ -697,8 +697,8 @@ static void Sta_WriteSelectorAction (void)
    Tab_Tab_t Tab;
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"StatAct\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">"
@@ -1575,8 +1575,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    NumPagsTotal = NumPagesBefore + 1 + NumPagesAfter;
 
    /***** Put heading with backward and forward buttons *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"7\" class=\"LEFT_MIDDLE\">");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"7\" class=\"LEFT_MIDDLE\">");
    Tbl_StartTableWidePadding (2);
    Tbl_StartRow ();
 
@@ -1649,8 +1649,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	              "</tr>");
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
@@ -1700,8 +1700,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	 Rol_WrongRoleExit ();
 
       /* Write the number of row */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG RIGHT_TOP COLOR%u\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP COLOR%u\">"
 	                 "%ld&nbsp;"
 	                 "</td>",
 	       Gbl.RowEvenOdd,NumRow);
@@ -1812,8 +1812,8 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
@@ -1851,8 +1851,8 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Get the data of the user from the database
 
       /* Write the number of row */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG RIGHT_TOP COLOR%u\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP COLOR%u\">"
 	                 "%ld&nbsp;"
 	                 "</td>",
 	       Gbl.RowEvenOdd,NumRow);
@@ -1943,8 +1943,8 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
    Dat_AssignDate (&LastDate,&Gbl.DateRange.DateEnd.Date);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -1988,8 +1988,8 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
 
          /* Write the date */
 	 Dat_ConvDateToDateStr (&Date,StrDate);
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s RIGHT_TOP\">"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
                             "%s&nbsp;"
                             "</td>",
 	          NumDayWeek == 6 ? "LOG_R" :
@@ -2028,8 +2028,8 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
 
       /* Write the date */
       Dat_ConvDateToDateStr (&Date,StrDate);
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
 	                 "%s&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
@@ -2092,8 +2092,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    SelectedColorType = Sta_GetStatColorType ();
 
    /***** Put a selector for the type of color *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"26\" class=\"CENTER_MIDDLE\">");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"26\" class=\"CENTER_MIDDLE\">");
 
    Frm_StartFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
    Dat_WriteParamsIniEndDates ();
@@ -2142,8 +2142,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
       NumAccPerHour[Hour] = NumAccPerHourZero[Hour] = 0.0;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th rowspan=\"3\" class=\"CENTER_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th rowspan=\"3\" class=\"LEFT_TOP\">"
@@ -2158,14 +2158,14 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
             Txt_Day,
             GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"24\" class=\"LEFT_TOP\""
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"24\" class=\"LEFT_TOP\""
 	              " style=\"width:%upx;\">",
 	    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH);
    Sta_DrawBarColors (SelectedColorType,Hits.Max);
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-	              "<tr>");
+	              "</tr>");
+   Tbl_StartRow ();
    for (Hour = 0;
 	Hour < 24;
 	Hour++)
@@ -2216,8 +2216,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 
             /* Write the date */
             Dat_ConvDateToDateStr (&Date,StrDate);
-            fprintf (Gbl.F.Out,"<tr>"
-        	               "<td class=\"%s RIGHT_TOP\">"
+            Tbl_StartRow ();
+            fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
         	               "%s&nbsp;"
         	               "</td>",
 	             NumDayWeek == 6 ? "LOG_R" :
@@ -2267,8 +2267,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 
       /* Write the date */
       Dat_ConvDateToDateStr (&Date,StrDate);
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
 	                 "%s&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
@@ -2306,8 +2306,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 
       /* Write the date */
       Dat_ConvDateToDateStr (&Date,StrDate);
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
 	                 "%s&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
@@ -2367,8 +2367,8 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
 
    /***** Write numbers from 0 to Hits.Max *****/
    Tbl_StartTableWide ();
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"%u\" class=\"LOG LEFT_BOTTOM\""
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG LEFT_BOTTOM\""
 	              " style=\"width:%upx;\">"
 	              "0"
 	              "</td>",
@@ -2391,8 +2391,8 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
    Str_WriteFloatNum (Gbl.F.Out,HitsMax);
    fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-	              "<tr>");
+	              "</tr>");
+   Tbl_StartRow ();
 
    /***** Draw colors *****/
    for (NumColor = 0;
@@ -2535,8 +2535,8 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
    Dat_AssignDate (&LastDate,&Gbl.DateRange.DateEnd.Date);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -2571,8 +2571,8 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
 	   W++)
         {
          /* Write week */
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG LEFT_TOP\">"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">"
                             "%04u-%02u&nbsp;"
                             "</td>",
 	          Date.Year,Date.Week);
@@ -2598,8 +2598,8 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
        W++)
     {
      /* Write week */
-     fprintf (Gbl.F.Out,"<tr>"
-	                "<td class=\"LOG LEFT_TOP\">"
+     Tbl_StartRow ();
+     fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">"
 	                "%04u-%02u&nbsp;"
 	                "</td>",
               Date.Year,Date.Week);
@@ -2635,8 +2635,8 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
    Dat_AssignDate (&LastDate,&Gbl.DateRange.DateEnd.Date);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -2672,8 +2672,8 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
 	   M++)
         {
          /* Write the month */
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG LEFT_TOP\">"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">"
                             "%04u-%02u&nbsp;"
                             "</td>",
 	          Date.Year,Date.Month);
@@ -2698,8 +2698,8 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
        M++)
     {
      /* Write the month */
-     fprintf (Gbl.F.Out,"<tr>"
-	                "<td class=\"LOG LEFT_TOP\">"
+     Tbl_StartRow ();
+     fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">"
 	                "%04u-%02u&nbsp;"
 	                "</td>",
               Date.Year,Date.Month);
@@ -2735,8 +2735,8 @@ static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
    Dat_AssignDate (&LastDate,&Gbl.DateRange.DateEnd.Date);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -2772,8 +2772,8 @@ static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
 	   Y++)
         {
          /* Write the year */
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG LEFT_TOP\">"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">"
                             "%04u&nbsp;"
                             "</td>",
 	          Date.Year);
@@ -2798,8 +2798,8 @@ static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
        Y++)
     {
      /* Write the year */
-     fprintf (Gbl.F.Out,"<tr>"
-	                "<td class=\"LOG LEFT_TOP\">"
+     Tbl_StartRow ();
+     fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">"
 	                "%04u&nbsp;"
 	                "</td>",
               Date.Year);
@@ -2999,8 +2999,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 
       /***** X axis *****/
       /* First division (left) */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
 	                 "<img src=\"%s/ejexizq24x1.gif\""
 	                 " alt=\"\" title=\"\""
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
@@ -3147,8 +3147,8 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -3173,16 +3173,20 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
       ActCod = Str_ConvertStrCodToLongCod (row[0]);
 
       if (ActCod >= 0)
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG RIGHT_TOP\">"
+	{
+         Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">"
                             "%s&nbsp;"
                             "</td>",
                   Act_GetActionTextFromDB (ActCod,ActTxt));
+	}
       else
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LOG RIGHT_TOP\">"
+	{
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">"
                             "?&nbsp;"
                             "</td>");
+	}
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
@@ -3206,8 +3210,8 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
    struct Plugin Plg;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -3231,8 +3235,8 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
       /* Write the plugin */
       if (sscanf (row[0],"%ld",&Plg.PlgCod) != 1)
 	 Lay_ShowErrorAndExit ("Wrong plugin code.");
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG RIGHT_TOP\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
       if (Plg_GetDataOfPluginByCod (&Plg))
          fprintf (Gbl.F.Out,"%s",Plg.Name);
       else
@@ -3261,8 +3265,8 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
    long FunCod;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -3286,8 +3290,8 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
       /* Write the plugin */
       if (sscanf (row[0],"%ld",&FunCod) != 1)
 	 Lay_ShowErrorAndExit ("Wrong function code.");
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG LEFT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">"
 	                 "%s&nbsp;"
 	                 "</td>",
                API_GetFunctionNameFromFunCod (FunCod));
@@ -3316,8 +3320,8 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
    struct Banner Ban;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
@@ -3353,8 +3357,8 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
       if (sscanf (row[0],"%ld",&(Ban.BanCod)) != 1)
 	 Lay_ShowErrorAndExit ("Wrong banner code.");
       Ban_GetDataOfBannerByCod (&Ban);
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"LOG LEFT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">"
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
@@ -3392,8 +3396,8 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
    long CtyCod;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
@@ -3421,8 +3425,8 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
       CtyCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Write ranking of this country */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG RIGHT_MIDDLE\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_MIDDLE\">");
       if (CtyCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;"
@@ -3486,8 +3490,8 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
    long InsCod;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
@@ -3515,8 +3519,8 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
       InsCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Write ranking of this institution */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG RIGHT_TOP\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
       if (InsCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;"
@@ -3582,8 +3586,8 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
    long CtrCod;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
@@ -3611,8 +3615,8 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
       CtrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Write ranking of this centre */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG RIGHT_TOP\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
       if (CtrCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;"
@@ -3678,8 +3682,8 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
    long DegCod;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
@@ -3707,8 +3711,8 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
       DegCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Write ranking of this degree */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG RIGHT_TOP\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
       if (DegCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;"
@@ -3779,8 +3783,8 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
    struct Course Crs;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
@@ -3821,8 +3825,8 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       CrsOK = Crs_GetDataOfCourseByCod (&Crs);
 
       /* Write ranking of this course */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG RIGHT_TOP\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
       if (CrsOK)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;</td>");
@@ -4120,8 +4124,8 @@ void Sta_GetAndShowLastClicks (void)
 
    /***** Write list of connected users *****/
    Tbl_StartTableCenterPadding (1);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\""
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\""
                       " style=\"width:85px;\">"
                       "%s"				// Click
                       "</th>"
@@ -4201,8 +4205,8 @@ void Sta_GetAndShowLastClicks (void)
       Deg_GetShortNameOfDegreeByCod (&Deg);
 
       /* Print table row */
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
                          "%s"					// Click
                          "</td>"
                          "<td class=\"%s RIGHT_MIDDLE\">"	// Elapsed time

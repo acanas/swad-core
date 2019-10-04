@@ -173,8 +173,8 @@ void Ins_SeeInsWithPendingCtrs (void)
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<th class=\"LEFT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "<th class=\"RIGHT_MIDDLE\">"
@@ -201,8 +201,8 @@ void Ins_SeeInsWithPendingCtrs (void)
          Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
          /* Institution logo and name */
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"LEFT_MIDDLE %s\">",
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
          Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeCtr,
                                                  "DAT_NOBR","CENTER_MIDDLE");
@@ -356,8 +356,8 @@ static void Ins_Configuration (bool PrintView)
    Tbl_StartTableWidePadding (2);
 
    /***** Country *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"OthCtyCod\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">",
@@ -398,8 +398,8 @@ static void Ins_Configuration (bool PrintView)
 		      "</tr>");
 
    /***** Institution full name *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"FullName\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT_N LEFT_MIDDLE\">",
@@ -427,8 +427,8 @@ static void Ins_Configuration (bool PrintView)
 		      "</tr>");
 
    /***** Institution short name *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"ShortName\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT_N LEFT_MIDDLE\">",
@@ -456,8 +456,8 @@ static void Ins_Configuration (bool PrintView)
 		      "</tr>");
 
    /***** Institution WWW *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"WWW\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">",
@@ -491,8 +491,8 @@ static void Ins_Configuration (bool PrintView)
 		      "</tr>");
 
    /***** Shortcut to the institution *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\">"
@@ -513,8 +513,8 @@ static void Ins_Configuration (bool PrintView)
    if (PrintView)
      {
       /***** QR code with link to the institution *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"LEFT_MIDDLE\">",
@@ -527,8 +527,8 @@ static void Ins_Configuration (bool PrintView)
    else
      {
       /***** Number of users who claim to belong to this institution *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
@@ -540,8 +540,8 @@ static void Ins_Configuration (bool PrintView)
 	       Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
 
       /***** Number of centres *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"LEFT_MIDDLE\">",
@@ -563,8 +563,8 @@ static void Ins_Configuration (bool PrintView)
 			 "</tr>");
 
       /***** Number of degrees *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
@@ -576,8 +576,8 @@ static void Ins_Configuration (bool PrintView)
 	       Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
 
       /***** Number of courses *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
@@ -589,8 +589,8 @@ static void Ins_Configuration (bool PrintView)
 	       Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
 
       /***** Number of departments *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
@@ -642,8 +642,8 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">"
@@ -790,8 +790,8 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
 
    /***** Number of institution in this list *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE %s\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
                       "%u"
                       "</td>",
 	    TxtClassNormal,BgColor,
@@ -867,8 +867,8 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    extern const char *Txt_Departments_ABBREVIATION;
    Ins_Order_t Order;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th></th>");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th></th>");
    for (Order = Ins_ORDER_BY_INSTITUTION;
 	Order <= Ins_ORDER_BY_NUM_USRS;
 	Order++)
@@ -1483,8 +1483,8 @@ static void Ins_ListInstitutionsForEdition (void)
       ICanEdit = Ins_CheckIfICanEdit (Ins);
 
       /* Put icon to remove institution */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       if (Ins->Ctrs.Num ||
 	  Ins->NumUsrsWhoClaimToBelongToIns ||
 	  Ins->NumUsrs ||	// Institution has centres or users ==> deletion forbidden
@@ -2240,8 +2240,8 @@ static void Ins_PutFormToCreateInstitution (void)
    Ins_PutHeadInstitutionsForEdition ();
 
    /***** Column to remove institution, disabled here *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\"></td>");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
 
    /***** Institution code *****/
    fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
@@ -2325,8 +2325,8 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"

@@ -269,9 +269,10 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
       row = mysql_fetch_row (mysql_res);
 
       if (NumNick == 1)
+	{
 	 /* The first nickname is the current one */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"REC_C1_BOT RIGHT_TOP\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">"
 			    "<label for=\"Nick\" class=\"%s\">"
 			    "%s:"
 			    "</label>"
@@ -279,6 +280,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 			    "<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Current_nickname);
+	}
       else	// NumNick >= 2
 	{
 	 Tbl_StartRow ();
@@ -365,8 +367,8 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
      }
 
    /***** Form to enter new nickname *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"REC_C1_BOT RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">"
                       "<label for=\"NewNick\" class=\"%s\">"
                       "%s:"
                       "</label>"

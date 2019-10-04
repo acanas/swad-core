@@ -185,8 +185,8 @@ void Dup_ListDuplicateUsrs (void)
             /* Write data of this user */
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
 
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+	    Tbl_StartRow ();
+            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\"></td>"
 			       "<td colspan=\"%u\""
 			       " class=\"DAT LEFT_MIDDLE COLOR%u\">",
 	             Gbl.RowEvenOdd,
@@ -318,8 +318,8 @@ static void Dup_ListSimilarUsrs (void)
             /* Write data of this user */
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
 
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+	    Tbl_StartRow ();
+            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\"></td>"
 			       "<td colspan=\"%u\" class=\"COLOR%u\">",
 		     Gbl.RowEvenOdd,
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
@@ -336,8 +336,8 @@ static void Dup_ListSimilarUsrs (void)
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
 
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+	    Tbl_StartRow ();
+            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\"></td>"
 			       "<td colspan=\"%u\" class=\"LEFT_TOP COLOR%u\""
 			       " style=\"padding-bottom:20px;\">",
 		     Gbl.RowEvenOdd,

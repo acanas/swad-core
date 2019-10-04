@@ -428,8 +428,8 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    extern const char *Txt_Today;
 
    /***** Start date-time *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
@@ -460,8 +460,8 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
             Txt_Today);
 
    /***** End date-time *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
@@ -502,8 +502,8 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
 	StartEndTime++)
      {
       /* Date-time */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"RIGHT_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	                 "<label class=\"%s\">%s:</label>"
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\">",

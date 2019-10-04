@@ -1044,8 +1044,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                         ClassExaAnnouncement[TypeViewExamAnnouncement][Gbl.ExamAnns.ExaDat.Status]);
 
    /***** Institution logo *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"CENTER_MIDDLE\">");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"CENTER_MIDDLE\">");
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
       fprintf (Gbl.F.Out,"<span class=\"%s\">",StyleTitle);
    else
@@ -1060,8 +1060,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
  	                                                 "</a>");
 
    /***** Degree *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"%s CENTER_MIDDLE\">",
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"%s CENTER_MIDDLE\">",
 	    StyleTitle);
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
@@ -1073,23 +1073,23 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"%s CENTER_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"%s CENTER_MIDDLE\">"
 	              "&nbsp;<br />"
 	              "<strong>%s</strong>"
 	              "</td>"
 	              "</tr>",
             StyleNormal,Txt_EXAM_ANNOUNCEMENT);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"%s LEFT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"%s LEFT_MIDDLE\">"
 	              "&nbsp;"
 	              "</td>"
 	              "</tr>",
 	    StyleNormal);
 
    /***** Name of the course *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_BOTTOM\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_BOTTOM\">"
 	              "<label for=\"CrsName\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"%s LEFT_BOTTOM\">",
@@ -1109,8 +1109,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Year/semester (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_BOTTOM\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_BOTTOM\">"
 	              "<label for=\"Year\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"%s LEFT_BOTTOM\">",
@@ -1141,8 +1141,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Exam session *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_BOTTOM\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_BOTTOM\">"
 	              "<label for=\"ExamSession\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"%s LEFT_BOTTOM\">",
@@ -1160,8 +1160,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Date of the exam *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_BOTTOM\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_BOTTOM\">"
 	              "%s:"
 	              "</td>",
             StyleForm,
@@ -1188,8 +1188,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Start time *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_BOTTOM\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_BOTTOM\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"%s LEFT_BOTTOM\">",
@@ -1234,8 +1234,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Approximate duration of the exam *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_BOTTOM\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_BOTTOM\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"%s LEFT_BOTTOM\">",
@@ -1300,8 +1300,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Place where the exam will be made *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"Place\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
@@ -1325,8 +1325,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Exam mode *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"ExamMode\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
@@ -1350,8 +1350,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Structure of the exam *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"Structure\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
@@ -1375,8 +1375,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Documentation required *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"DocRequired\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
@@ -1400,8 +1400,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Material required *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"MatRequired\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
@@ -1425,8 +1425,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Material allowed *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"MatAllowed\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
@@ -1450,8 +1450,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 	              "</tr>");
 
    /***** Other information to students *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
 	              "<label for=\"OtherInfo\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",

@@ -205,8 +205,8 @@ void McR_SelUsrsToViewUsrsMchResults (void)
 
          /***** Put list of users to select some of them *****/
          Tbl_StartTableCenterPadding (2);
-         fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_TOP\">"
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
 			    "</td>"
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
@@ -325,8 +325,8 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    extern const char *Txt_Score;
    extern const char *Txt_out_of_PART_OF_A_SCORE;
 
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<th colspan=\"2\" class=\"CENTER_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_TOP\">"
 		      "%s"
 		      "</th>"
 		      "<th class=\"LEFT_TOP\">"
@@ -783,8 +783,8 @@ void McR_ShowOneMchResult (void)
          Act_NoPermissionExit ();
 
       /* User */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N RIGHT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_TOP\">",
@@ -810,8 +810,9 @@ void McR_ShowOneMchResult (void)
       for (StartEndTime = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"DAT_N RIGHT_TOP\">"
+	{
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\">"
 			    "%s:"
 			    "</td>"
 			    "<td id=\"match_%u\" class=\"DAT LEFT_TOP\">"
@@ -826,10 +827,11 @@ void McR_ShowOneMchResult (void)
 		  (unsigned) StartEndTime,
 		  TimeUTC[StartEndTime],
 		  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	}
 
       /* Number of questions */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N RIGHT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_TOP\">"
@@ -840,8 +842,8 @@ void McR_ShowOneMchResult (void)
 	       NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
 
       /* Score */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N RIGHT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_TOP\">",
@@ -858,8 +860,8 @@ void McR_ShowOneMchResult (void)
 	       Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
 
       /* Tags present in this result */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N RIGHT_TOP\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\">"
 			 "%s:"
 			 "</td>"
 			 "<td class=\"DAT LEFT_TOP\">",

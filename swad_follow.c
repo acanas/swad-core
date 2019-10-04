@@ -898,8 +898,8 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CON_PHOTO COLOR%u\">",
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"CON_PHOTO COLOR%u\">",
 	    Gbl.RowEvenOdd);
    if (Visible)
      {

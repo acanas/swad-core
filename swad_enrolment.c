@@ -928,8 +928,8 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
 
    /***** Text area for users' IDs *****/
    Tbl_StartTableCenterPadding (2);
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
                       "<label for=\"UsrsIDs\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_TOP\">"
@@ -2294,8 +2294,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Tbl_StartTableWideMarginPadding (2);
 
    /* Scope (whole platform, current centre, current degree or current course) */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
                       "<label for=\"ScopeEnr\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
@@ -2305,8 +2305,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                       "</tr>");
 
    /* Users' roles in listing */
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
                       "<label class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
@@ -2861,8 +2861,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
               DesiredRole == Rol_TCH))
            {
             /***** Number *****/
-            fprintf (Gbl.F.Out,"<tr>"
-                               "<td class=\"DAT RIGHT_TOP\">"
+            Tbl_StartRow ();
+	    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP\">"
                                "%lu"
                                "</td>",
                      NumReqs - NumReq);

@@ -6311,8 +6311,8 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Usr_Sex_t Sex;
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">"
 	              "<label>",
             Usr_GetColumnsForSelectUsrs ());
    if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
@@ -6554,8 +6554,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       /***** Start table with list of students *****/
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"%u\" class=\"TIT CENTER_MIDDLE\">",
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"TIT CENTER_MIDDLE\">",
                   1 + Usr_NUM_MAIN_FIELDS_DATA_USR);
          Grp_WriteNamesOfSelectedGrps ();
          fprintf (Gbl.F.Out,"</td>"
@@ -6883,8 +6883,8 @@ void Usr_ListAllDataStds (void)
       Tbl_StartTableWide ();
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
-         fprintf (Gbl.F.Out,"<tr>"
-	                    "<td colspan=\"%u\" class=\"TIT CENTER_MIDDLE\">",
+         Tbl_StartRow ();
+         fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"TIT CENTER_MIDDLE\">",
                   NumColumnsTotal);
          Grp_WriteNamesOfSelectedGrps ();
          fprintf (Gbl.F.Out,"</td>"
@@ -6931,8 +6931,8 @@ void Usr_ListAllDataStds (void)
                         Gbl.Crs.Records.LstFields.Lst[NumField].Name);
 
             /* 4. Visibility type for the record fields that depend on the course, in other row */
-            fprintf (Gbl.F.Out,"</tr>"
-        	               "<tr>");
+            fprintf (Gbl.F.Out,"</tr>");
+            Tbl_StartRow ();
             for (NumCol = 0;
                  NumCol < NumColumnsCardAndGroups;
                  NumCol++)
@@ -7237,8 +7237,8 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	 if (Role != Rol_GST &&				// Guests do not belong to any course
 	     Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)		// Only admins can view the courses
 	   {
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
+	    Tbl_StartRow ();
+	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\"></td>"
 			       "<td colspan=\"%u\" class=\"COLOR%u\">",
 		     Gbl.RowEvenOdd,
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,

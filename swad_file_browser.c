@@ -8507,8 +8507,8 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    /***** URL *****/
    Tbl_StartTable ();
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"NewLinkURL\" class=\"%s\">"
 	              "%s:&nbsp;"
 	              "</label>"
@@ -8524,8 +8524,8 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
             PATH_MAX);
 
    /***** Link name *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"NewLinkName\" class=\"%s\">"
 	              "%s&nbsp;(%s):&nbsp;"
 	              "</label>"
@@ -9494,16 +9494,16 @@ void Brw_ShowFileMetadata (void)
 	 Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
 
 	 /***** Link to download the file *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td colspan=\"2\""
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td colspan=\"2\""
 			    " class=\"FILENAME_TXT CENTER_MIDDLE\">");
 	 Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 
 	 /***** Filename *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
@@ -9513,8 +9513,8 @@ void Brw_ShowFileMetadata (void)
 			    "</tr>");
 
 	 /***** Publisher's data *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
@@ -9543,8 +9543,8 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Write the file size *****/
 	 Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">"
@@ -9556,8 +9556,8 @@ void Brw_ShowFileMetadata (void)
 		  FileSizeStr);
 
 	 /***** Write the date *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td id=\"filedate\" class=\"DAT LEFT_MIDDLE\">"
@@ -9573,8 +9573,8 @@ void Brw_ShowFileMetadata (void)
 	          (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
 	 /***** Private or public? *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"RIGHT_MIDDLE\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 			    "<label for=\"PublicFile\" class=\"%s\">"
 			    "%s:"
 			    "</label>"
@@ -9605,8 +9605,8 @@ void Brw_ShowFileMetadata (void)
 			    "</tr>");
 
 	 /***** License *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"RIGHT_MIDDLE\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 			    "<label for=\"License\" class=\"%s\">%s:</label>"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
@@ -9633,8 +9633,9 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Write my number of views *****/
 	 if (Gbl.Usrs.Me.Logged)
-	    fprintf (Gbl.F.Out,"<tr>"
-			       "<td class=\"%s RIGHT_MIDDLE\">"
+	   {
+	    Tbl_StartRow ();
+	    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			       "%s:"
 			       "</td>"
 			       "<td class=\"DAT LEFT_MIDDLE\">"
@@ -9643,10 +9644,11 @@ void Brw_ShowFileMetadata (void)
 			       "</tr>",
 		     The_ClassFormInBox[Gbl.Prefs.Theme],Txt_My_views,
 		     FileMetadata.NumMyViews);
+	   }
 
 	 /***** Write number of identificated views *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">"
@@ -9660,8 +9662,8 @@ void Brw_ShowFileMetadata (void)
 			                              Txt_users[Usr_SEX_UNKNOWN]);
 
 	 /***** Write number of public views *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
+	 Tbl_StartRow ();
+	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 			    "%s:"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">"
@@ -11781,8 +11783,8 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<th class=\"BM\"></th>"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
 			 "<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
@@ -11823,8 +11825,8 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 
       /***** Write footer *****/
       /* Number of documents not hidden found */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<th colspan=\"7\" class=\"CENTER_MIDDLE\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<th colspan=\"7\" class=\"CENTER_MIDDLE\">"
 			 "(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
       if (NumDocsHidden == 1)
@@ -11918,8 +11920,8 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
                                                         Gbl.ColorRows[Gbl.RowEvenOdd];
 
       /***** Write number of document in this search *****/
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"DAT RIGHT_TOP %s\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP %s\">"
 	                 "%lu"
 	                 "</td>",
 	       BgColor,++(*NumDocsNotHidden));

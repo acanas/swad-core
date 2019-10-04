@@ -33,6 +33,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_privacy.h"
+#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -155,8 +156,8 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    Pri_Visibility_t Visibility;
 
    /***** Select visibility *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>"
 	              "<td class=\"LEFT_TOP\">",

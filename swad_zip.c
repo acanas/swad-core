@@ -42,6 +42,7 @@
 #include "swad_ID.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
+#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -566,8 +567,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
 
    /***** Link to download the file *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" class=\"FILENAME_TXT CENTER_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"FILENAME_TXT CENTER_MIDDLE\">"
                       "<a href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\">"
                       "<img src=\"%s32x32/zip32x32.gif\""
                       " alt=\"%s\" title=\"%s\""
@@ -589,8 +590,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 	    Txt_Download);
 
    /***** Filename *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">"
@@ -602,8 +603,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
    /***** Write the file size *****/
    Fil_WriteFileSizeFull ((double) FileSize,FileSizeStr);
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\">"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">"

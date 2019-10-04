@@ -331,8 +331,8 @@ static void DT_ListDegreeTypesForSeeing (void)
                                                 Gbl.ColorRows[Gbl.RowEvenOdd];
 
       /* Number of degree type in this list */
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N RIGHT_MIDDLE %s\">"
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_MIDDLE %s\">"
 			 "%u"
 			 "</td>",
 	       BgColor,NumDegTyp + 1);
@@ -400,8 +400,8 @@ static void DT_ListDegreeTypesForEdition (void)
 	NumDegTyp++)
      {
       /* Put icon to remove degree type */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"BM\">");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       if (Gbl.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees => deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
@@ -474,8 +474,8 @@ static void DT_PutFormToCreateDegreeType (void)
    DT_PutHeadDegreeTypesForEdition ();
 
    /***** Column to remove degree type, disabled here *****/
-   fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\"></td>");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
 
    /***** Degree type code *****/
    fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
@@ -511,8 +511,8 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
    extern const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS];
    DT_Order_t Order;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th></th>");
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th></th>");
    for (Order = DT_ORDER_BY_DEGREE_TYPE;
 	Order <= DT_ORDER_BY_NUM_DEGREES;
 	Order++)
@@ -553,8 +553,8 @@ static void DT_PutHeadDegreeTypesForEdition (void)
    extern const char *Txt_Type_of_degree;
    extern const char *Txt_Degrees;
 
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
+   Tbl_StartRow ();
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"

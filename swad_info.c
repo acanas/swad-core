@@ -41,6 +41,7 @@
 #include "swad_info.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
+#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -1134,8 +1135,8 @@ void Inf_FormsToSelSendInfo (void)
 	InfoSrc++)
      {
       /* Select info source */
-      fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"DAT LEFT_TOP");
+      Tbl_StartRow ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP");
       if (InfoSrc == InfoSrcSelected)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">");
