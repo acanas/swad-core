@@ -119,9 +119,9 @@ void Plg_ListPlugins (void)
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Plugin);
+   Tbl_EndRow ();
 
    /***** Write all the plugins *****/
    for (NumPlg = 0;
@@ -148,13 +148,13 @@ void Plg_ListPlugins (void)
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "%s"
                          "</a>"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                URL,Plg->Name,
                Cfg_URL_ICON_PLUGINS_PUBLIC,Gbl.Plugins.Lst[NumPlg].Logo,
                Plg->Name,Plg->Name,
                URL,Plg->Name,
                Plg->Name);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -484,8 +484,8 @@ static void Plg_ListPluginsForEdition (void)
                Cns_MAX_CHARS_IP,Plg->IP,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>"
-                         "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -907,14 +907,14 @@ static void Plg_PutFormToCreatePlugin (void)
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Name,
             Txt_Description,
             Txt_Logo,
             Txt_Application_key,
             Txt_URL,
             Txt_IP);
+   Tbl_EndRow ();
 
    /***** Plugin name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -961,9 +961,9 @@ static void Plg_PutFormToCreatePlugin (void)
                       "<input type=\"text\" name=\"IP\""
                       " size=\"10\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Cns_MAX_CHARS_IP,Plg_EditingPlg->IP);
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_plugin);
@@ -1009,8 +1009,7 @@ static void Plg_PutHeadPlugins (void)
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Code,
             Txt_Name,
             Txt_Description,
@@ -1018,6 +1017,7 @@ static void Plg_PutHeadPlugins (void)
             Txt_Application_key,
             Txt_URL,
             Txt_IP);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

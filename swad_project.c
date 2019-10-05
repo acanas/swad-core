@@ -1112,8 +1112,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
         	                                    Txt_No);
    Ico_PutIconOff (PreassignedNonpreassigImage[Prj->Preassigned],
 		   Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned]);
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Number of students *****/
    Tbl_StartRow ();
@@ -1145,11 +1145,11 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
      }
    fprintf (Gbl.F.Out," %s\">"
                       "%u"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             Prj->NumStds);
+   Tbl_EndRow ();
 
    /***** Project members *****/
    Prj_ShowOneProjectMembers (Prj,ProjectView);
@@ -1163,31 +1163,31 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		  UniqueId,
 	          Gbl.RowEvenOdd);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndRow ();
 
 	 fprintf (Gbl.F.Out,"<tr id=\"prj_con_%u\" style=\"display:none;\">"
 			    "<td colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\">",
 		  UniqueId,
 	          Gbl.RowEvenOdd);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndRow ();
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 fprintf (Gbl.F.Out,"<tr id=\"prj_exp_%u\">"
 			    "<td colspan=\"5\" class=\"CENTER_MIDDLE\">",
 		  UniqueId);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndRow ();
 
 	 fprintf (Gbl.F.Out,"<tr id=\"prj_con_%u\" style=\"display:none;\">"
 			    "<td colspan=\"5\" class=\"CENTER_MIDDLE\">",
 		  UniqueId);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndRow ();
 	 break;
       default:
 	 break;
@@ -1223,11 +1223,11 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
                       "%s"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             Txt_PROJECT_STATUS[Prj->Proposal]);
+   Tbl_EndRow ();
 
    /***** Write rows of data of this project *****/
    /* Description of the project */
@@ -1417,8 +1417,8 @@ static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
    fprintf (Gbl.F.Out,"%s",Dpt.FullName);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 static void Prj_ShowTableAllProjectsDepartment (const struct Project *Prj)
@@ -1493,11 +1493,11 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
                       "%s"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             TxtField);
+   Tbl_EndRow ();
   }
 
 static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
@@ -1568,8 +1568,8 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
    fprintf (Gbl.F.Out,"%s",Prj->URL);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 static void Prj_ShowTableAllProjectsURL (const struct Project *Prj)
@@ -1763,8 +1763,8 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 				        Gbl.Title);
 	    fprintf (Gbl.F.Out,"</td>"
 			       "<td class=\"PRJ_MEMBER_PHO\"></td>"	// Column for photo
-	                       "<td class=\"PRJ_MEMBER_NAM\"></td>"	// Column for name
-			       "</tr>");
+	                       "<td class=\"PRJ_MEMBER_NAM\"></td>");	// Column for name
+	    Tbl_EndRow ();
 	    break;
 	 default:
 	    break;
@@ -1774,8 +1774,8 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
       Tbl_EndTable ();
 
       /***** End row with label and listing of users *****/
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3343,10 +3343,10 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                       "<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title,
             Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title);
+   Tbl_EndRow ();
 
    /* Department */
    Tbl_StartRow ();
@@ -3362,8 +3362,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                                 0,				// First option
                                 Txt_Another_department,		// Text when no department selected
                                 false);				// Don't submit on change
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /* Preassigned? */
    Tbl_StartRow ();
@@ -3386,8 +3386,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    fprintf (Gbl.F.Out,">%s</option>",Txt_No);
 
    fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-                      "</tr>");
+	              "</td>");
+   Tbl_EndRow ();
 
    /* Number of students */
    Tbl_StartRow ();
@@ -3397,11 +3397,11 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"number\" name=\"NumStds\""
                       " min=\"0\" value=\"%u\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Number_of_students,
             Prj->NumStds);
+   Tbl_EndRow ();
 
    /* Proposal */
    Tbl_StartRow ();
@@ -3423,8 +3423,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
       fprintf (Gbl.F.Out,">%s</option>",Txt_PROJECT_STATUS[Proposal]);
      }
    fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-                      "</tr>");
+	              "</td>");
+   Tbl_EndRow ();
 
    /* Description of the project */
    Prj_EditOneProjectTxtArea ("Description",Txt_Description,
@@ -3446,11 +3446,11 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 		      "<td class=\"DAT LEFT_MIDDLE\">"
                       "<input type=\"url\" id=\"URL\" name=\"URL\""
 		      " size=\"45\" maxlength=\"%u\" value=\"%s\" />"
-                      "</td>"
-		      "</tr>",
+                      "</td>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_URL,
 	    Cns_MAX_CHARS_WWW,Prj->URL);
+   Tbl_EndRow ();
 
    /* End table, send button and end box */
    if (ItsANewProject)
@@ -3483,12 +3483,12 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
                       "<textarea id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\">"
                       "%s"
                       "</textarea>"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Id,The_ClassFormInBox[Gbl.Prefs.Theme],Label,
             Id,Id,
             NumRows,
             TxtField);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

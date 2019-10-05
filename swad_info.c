@@ -1172,8 +1172,8 @@ void Inf_FormsToSelSendInfo (void)
                   Txt_INFO_SRC_HELP[InfoSrc]);
       if (Inf_FormsForEditionTypes[InfoSrc])
          Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/

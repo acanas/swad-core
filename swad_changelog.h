@@ -487,12 +487,13 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.31.4 (2019-10-04)"
+#define Log_PLATFORM_VERSION	"SWAD 19.31.5 (2019-10-05)"
 #define CSS_FILE		"swad19.29.css"
 #define JS_FILE			"swad19.30.js"
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 
+	Version 19.31.5:  Oct 05, 2019	Code refactoring in HTML tables. (247044 lines)
 	Version 19.31.4:  Oct 04, 2019	Code refactoring in HTML tables. (247043 lines)
 	Version 19.31.3:  Oct 04, 2019	Code refactoring in HTML tables. (247039 lines)
 	Version 19.31.2:  Oct 04, 2019	Fixed bug while removing the matches of a course, reported by Pedro A. García Sánchez.

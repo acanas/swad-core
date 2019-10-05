@@ -163,11 +163,11 @@ void Mai_SeeMailDomains (void)
                          "</td>"
                          "<td class=\"DAT RIGHT_TOP\">"
                          "%u"
-                         "</td>"
-                         "</tr>",
+                         "</td>",
                Gbl.Mails.Lst[NumMai].Domain,
                Gbl.Mails.Lst[NumMai].Info,
                Gbl.Mails.Lst[NumMai].NumUsrs);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -526,9 +526,9 @@ static void Mai_ListMailDomainsForEdition (void)
       /* Number of users */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
                Mai->NumUsrs);
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -757,10 +757,10 @@ static void Mai_PutFormToCreateMailDomain (void)
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],
             Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
+   Tbl_EndRow ();
 
    /***** Mail domain *****/
    Tbl_StartRow ();
@@ -777,9 +777,9 @@ static void Mai_PutFormToCreateMailDomain (void)
                       " size=\"40\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
-                      "<td></td>"
-                      "</tr>",
+                      "<td></td>",
             Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info);
+   Tbl_EndRow ();
 
 
    /***** End table, send button and end box *****/
@@ -811,12 +811,12 @@ static void Mai_PutHeadMailDomains (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Code,
             Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],
             Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ],
             Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -1374,8 +1374,8 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	 fprintf (Gbl.F.Out,"</td>");
 	}
 
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** Form to enter new email *****/
@@ -1415,8 +1415,8 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
         	                          Txt_Save_changes);		// User has no email address yet
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** End table *****/
    Tbl_EndTable ();

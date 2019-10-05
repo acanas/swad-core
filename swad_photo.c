@@ -1810,8 +1810,8 @@ static void Pho_PutSelectorForTypeOfAvg (void)
      }
    fprintf (Gbl.F.Out,"</select>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -1871,8 +1871,8 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
      }
    fprintf (Gbl.F.Out,"</select>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -1932,8 +1932,8 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
      }
    fprintf (Gbl.F.Out,"</select>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

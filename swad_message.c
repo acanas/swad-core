@@ -313,8 +313,8 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       Tbl_EndTable ();
      }
 
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Subject and content sections *****/
    Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
@@ -485,10 +485,10 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
       fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
    fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE LIGHT_BLUE\">"
 	              "<label for=\"OtherRecipients\">%s:</label>"
-	              "</th>"
-	              "</tr>",
+	              "</th>",
             StdsAndTchsWritten ? Txt_Other_recipients :
         	                 Txt_Recipients);
+   Tbl_EndRow ();
 
    /***** Textarea with users' @nicknames, emails or IDs *****/
    Tbl_StartRow ();
@@ -508,8 +508,8 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
       if (Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname))
          fprintf (Gbl.F.Out,"@%s",Nickname);
    fprintf (Gbl.F.Out,"</textarea>"
-	              "</td>"
-	              "</tr>");
+	              "</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -577,9 +577,9 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
 	 fprintf (Gbl.F.Out,"Re: ");
       fprintf (Gbl.F.Out,"%s"
                          "</textarea>"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
 	       Gbl.Msg.Subject);
+      Tbl_EndRow ();
 
       /***** Message content *****/
       Tbl_StartRow ();
@@ -609,9 +609,9 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
      {
       /* End message subject */
       fprintf (Gbl.F.Out,"%s</textarea>"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
 	       Gbl.Msg.Subject);
+      Tbl_EndRow ();
 
       /***** Message content *****/
       Tbl_StartRow ();
@@ -633,8 +633,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       fprintf (Gbl.F.Out,"\n%s",Content);
      }
    fprintf (Gbl.F.Out,"</textarea>"
-	              "</td>"
-	              "</tr>");
+	              "</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -2664,11 +2664,11 @@ void Msg_ShowFormToFilterMsgs (void)
                       "<input type=\"search\" name=\"FilterContent\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</label>"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_MSG_Content,
             Msg_MAX_CHARS_FILTER_CONTENT,Gbl.Msg.FilterContent);
+   Tbl_EndRow ();
 
    /***** End table *****/
    Tbl_EndTable ();
@@ -3005,8 +3005,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       FromThisCrs = Msg_WriteCrsOrgMsg (CrsCod);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       /***** Form to reply message *****/
       Tbl_StartRow ();
@@ -3015,8 +3015,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 	  Gbl.Usrs.Me.Role.Logged >= Rol_USR)
 	 // Guests (users without courses) can read messages but not reply them
          Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,Replied,&UsrDat);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       Tbl_EndTable ();
       fprintf (Gbl.F.Out,"</td>");
@@ -3028,8 +3028,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
                          "<td colspan=\"2\" class=\"LEFT_TOP\">",
                Txt_MSG_From);
       Msg_WriteMsgFrom (&UsrDat,Deleted);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       /***** Write "To:" *****/
       Tbl_StartRow ();
@@ -3039,8 +3039,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
                          "<td colspan=\"2\" class=\"LEFT_TOP\">",
                Txt_MSG_To);
       Msg_WriteMsgTo (MsgCod);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       /***** Write "Content:" *****/
       Tbl_StartRow ();
@@ -3060,8 +3060,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       if (Content[0])
          Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
       Med_ShowMedia (&Media,"MSG_IMG_CONTAINER","MSG_IMG");
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       /***** Free image *****/
       Med_MediaDestructor (&Media);
@@ -3238,8 +3238,8 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
      }
 
    /***** End second column *****/
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** End table *****/
    Tbl_EndTable ();
@@ -3391,8 +3391,8 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    else
       fprintf (Gbl.F.Out,"[%s]",
                Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
    Tbl_EndTable ();
   }
 
@@ -3541,8 +3541,8 @@ static void Msg_WriteMsgTo (long MsgCod)
             fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
          else
             fprintf (Gbl.F.Out,"[%s]",Txt_unknown_recipient);	// User not found, likely a user who has been removed
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndRow ();
         }
 
       /***** If any recipients are unknown *****/
@@ -3552,12 +3552,12 @@ static void Msg_WriteMsgTo (long MsgCod)
          Tbl_StartRow ();
 	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"AUTHOR_TXT LEFT_MIDDLE\">"
                             "[%u %s]"
-                            "</td>"
-                            "</tr>",
+                            "</td>",
                   NumRecipientsUnknown,
                   (NumRecipientsUnknown == 1) ?
                   Txt_unknown_recipient :
                   Txt_unknown_recipients);
+	 Tbl_EndRow ();
 	}
 
       /***** If any known recipient is not listed *****/
@@ -3575,8 +3575,8 @@ static void Msg_WriteMsgTo (long MsgCod)
                   NumRecipientsKnown - NumRecipientsToShow);
          fprintf (Gbl.F.Out,"</a>");
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndRow ();
         }
 
       /***** Free memory used for user's data *****/
@@ -3871,9 +3871,9 @@ void Msg_ListBannedUsrs (void)
             /* Write user's full name */
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
         	               "%s"
-        	               "</td>"
-                               "</tr>",
+        	               "</td>",
                      UsrDat.FullName);
+            Tbl_EndRow ();
            }
         }
 

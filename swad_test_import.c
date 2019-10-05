@@ -974,13 +974,13 @@ static void TsI_WriteHeadingListImportedQst (void)
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_No_INDEX,
             Txt_Tags,
             Txt_Type,
             Txt_Shuffle,
             Txt_Question);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -1056,10 +1056,10 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                             "</td>"
                             "<td class=\"%s LEFT_TOP\">"
                             "%s"
-                            "</td>"
-                            "</tr>",
+                            "</td>",
                   ClassData,
                   ClassData,Gbl.Test.Tags.Txt[NumTag]);
+	 Tbl_EndRow ();
 	}
       Tbl_EndTable ();
      }
@@ -1180,8 +1180,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 		                  "%s"
 		                  "</div>",
 			AnswerFeedback);
-            fprintf (Gbl.F.Out,"</td>"
-        	               "</tr>");
+            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndRow ();
 
 	    /* Free memory allocated for the answer and the feedback */
 	    free ((void *) AnswerText);
@@ -1193,6 +1193,6 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
       default:
          break;
      }
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }

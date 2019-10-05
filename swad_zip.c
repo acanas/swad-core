@@ -578,8 +578,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO40x40\" />"
 		      "</a>"
-		      "</td>"
-		      "</tr>",
+		      "</td>",
             URL,FileName,
             CfG_URL_ICON_FILEXT_PUBLIC,
             Txt_ZIP_file,
@@ -588,6 +587,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Download,
 	    Txt_Download);
+   Tbl_EndRow ();
 
    /***** Filename *****/
    Tbl_StartRow ();
@@ -596,10 +596,10 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">"
 		      "<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">%s</a>"
-		      "</td>"
-		      "</tr>",
+		      "</td>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Filename,
 	    URL,FileName,FileName);
+   Tbl_EndRow ();
 
    /***** Write the file size *****/
    Fil_WriteFileSizeFull ((double) FileSize,FileSizeStr);
@@ -618,8 +618,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
       fprintf (Gbl.F.Out," (%s %s)",
                FileSizeStr,Txt_FILE_uncompressed);
      }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();

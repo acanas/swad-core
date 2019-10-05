@@ -694,11 +694,11 @@ void Pwd_ShowFormChgMyPwd (void)
 			 " id=\"UsrPwd\" name=\"UsrPwd\""
 			 " size=\"18\" maxlength=\"%u\""
 			 " autocomplete=\"off\" required=\"required\" />"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Current_password,
 	       Pwd_MAX_CHARS_PLAIN_PASSWORD);
+      Tbl_EndRow ();
      }
 
    /***** Help message *****/
@@ -706,8 +706,8 @@ void Pwd_ShowFormChgMyPwd (void)
    fprintf (Gbl.F.Out,"<td colspan=\"2\">");
    Ale_ShowAlert (Ale_INFO,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
 	          Pwd_MIN_CHARS_PLAIN_PASSWORD);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** New password *****/
    Pwd_PutFormToGetNewPasswordTwice ();
@@ -753,8 +753,8 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    /***** End form element ****/
    fprintf (Gbl.F.Out,"\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>");
+                      "</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -788,8 +788,8 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    /* End form element */
    fprintf (Gbl.F.Out,"\" required=\"required\" />"
-                      "</td>"
-                      "</tr>");
+                      "</td>");
+   Tbl_EndRow ();
 
    /***** 2nd password *****/
    /* Start form element */
@@ -811,8 +811,8 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    /* End form element */
    fprintf (Gbl.F.Out,"\" required=\"required\" />"
-                      "</td>"
-                      "</tr>");
+                      "</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

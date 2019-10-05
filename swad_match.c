@@ -1202,11 +1202,11 @@ static void Mch_PutFormNewMatch (struct Game *Game)
                       "<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Title,
             Gam_MAX_CHARS_TITLE,Game->Title);
+   Tbl_EndRow ();
 
    /***** Groups *****/
    Mch_ShowLstGrpsToCreateMatch ();
@@ -1269,9 +1269,9 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
                          " onclick=\"uncheckChildren(this,'GrpCods')\" />"
 	                 "%s %s"
 	                 "</label>"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      Tbl_EndRow ();
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
@@ -1284,8 +1284,8 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
 
       /***** End table and box *****/
       Box_EndBoxTable ();
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** Free list of groups types and groups in this course *****/

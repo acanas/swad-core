@@ -146,10 +146,10 @@ void Plc_SeePlaces (void)
 			    "</td>"
 	                    "<td class=\"DAT RIGHT_MIDDLE\">"
 	                    "%u"
-	                    "</td>"
-			    "</tr>",
+	                    "</td>",
 		  Gbl.Plcs.Lst[NumPlc].FullName,
 		  Gbl.Plcs.Lst[NumPlc].NumCtrs);
+	 Tbl_EndRow ();
 	 NumCtrsWithPlc += Gbl.Plcs.Lst[NumPlc].NumCtrs;
 	}
 
@@ -157,8 +157,8 @@ void Plc_SeePlaces (void)
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT\">"
 			 "&nbsp;"
-			 "</td>"
-			 "</tr>");
+			 "</td>");
+      Tbl_EndRow ();
 
       /***** Write centres (of the current institution) with other place *****/
       NumCtrsInOtherPlcs = Ctr_GetNumCtrsInPlc (0);
@@ -168,9 +168,9 @@ void Plc_SeePlaces (void)
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE\">"
 			 "%u"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       Txt_Other_places,NumCtrsInOtherPlcs);
+      Tbl_EndRow ();
       NumCtrsWithPlc += NumCtrsInOtherPlcs;
 
       /***** Write centres (of the current institution) with no place *****/
@@ -180,11 +180,11 @@ void Plc_SeePlaces (void)
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE\">"
 			 "%u"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       Txt_Place_unspecified,
 	       Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
 	       NumCtrsWithPlc);
+      Tbl_EndRow ();
 
       /***** End table *****/
       Tbl_EndTable ();
@@ -569,9 +569,9 @@ static void Plc_ListPlacesForEdition (void)
       /* Number of centres */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	                 "%u"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
                Plc->NumCtrs);
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -832,8 +832,8 @@ static void Plc_PutFormToCreatePlace (void)
    /***** Number of centres *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 		      "0"
-		      "</td>"
-		      "</tr>");
+		      "</td>");
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_place);
@@ -866,12 +866,12 @@ static void Plc_PutHeadPlaces (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Code,
             Txt_Short_name,
             Txt_Full_name,
             Txt_Centres);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

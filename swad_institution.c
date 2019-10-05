@@ -179,10 +179,10 @@ void Ins_SeeInsWithPendingCtrs (void)
                          "</th>"
                          "<th class=\"RIGHT_MIDDLE\">"
                          "%s"
-                         "</th>"
-                         "</tr>",
+                         "</th>",
                Txt_Institution,
                Txt_Centres_ABBREVIATION);
+      Tbl_EndRow ();
 
       /***** List the institutions *****/
       for (NumIns = 0;
@@ -211,9 +211,9 @@ void Ins_SeeInsWithPendingCtrs (void)
          /* Number of pending centres (row[1]) */
          fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
                             "%s"
-                            "</td>"
-	                    "</tr>",
+                            "</td>",
                   BgColor,row[1]);
+         Tbl_EndRow ();
 
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
@@ -394,8 +394,8 @@ static void Ins_Configuration (bool PrintView)
    else	// I can not move institution to another country
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Institution full name *****/
    Tbl_StartRow ();
@@ -423,8 +423,8 @@ static void Ins_Configuration (bool PrintView)
      }
    else	// I can not edit institution full name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.FullName);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Institution short name *****/
    Tbl_StartRow ();
@@ -452,8 +452,8 @@ static void Ins_Configuration (bool PrintView)
      }
    else	// I can not edit institution short name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.ShrtName);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Institution WWW *****/
    Tbl_StartRow ();
@@ -487,8 +487,8 @@ static void Ins_Configuration (bool PrintView)
 			 "</div>",
 	       Gbl.Hierarchy.Ins.WWW,
 	       Gbl.Hierarchy.Ins.WWW);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Shortcut to the institution *****/
    Tbl_StartRow ();
@@ -499,8 +499,7 @@ static void Ins_Configuration (bool PrintView)
 		      "<a href=\"%s/%s?ins=%ld\" class=\"DAT\" target=\"_blank\">"
 		      "%s/%s?ins=%ld"
 		      "</a>"
-		      "</td>"
-		      "</tr>",
+		      "</td>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Shortcut,
 	    Cfg_URL_SWAD_CGI,
@@ -509,6 +508,7 @@ static void Ins_Configuration (bool PrintView)
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Ins.InsCod);
+   Tbl_EndRow ();
 
    if (PrintView)
      {
@@ -521,8 +521,8 @@ static void Ins_Configuration (bool PrintView)
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_QR_code);
       QR_LinkTo (250,"ins",Gbl.Hierarchy.Ins.InsCod);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
    else
      {
@@ -533,11 +533,11 @@ static void Ins_Configuration (bool PrintView)
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "%u"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Users_of_the_institution,
 	       Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
+      Tbl_EndRow ();
 
       /***** Number of centres *****/
       Tbl_StartRow ();
@@ -559,8 +559,8 @@ static void Ins_Configuration (bool PrintView)
 	       Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       /***** Number of degrees *****/
       Tbl_StartRow ();
@@ -569,11 +569,11 @@ static void Ins_Configuration (bool PrintView)
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "%u"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Degrees,
 	       Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
+      Tbl_EndRow ();
 
       /***** Number of courses *****/
       Tbl_StartRow ();
@@ -582,11 +582,11 @@ static void Ins_Configuration (bool PrintView)
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "%u"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Courses,
 	       Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
+      Tbl_EndRow ();
 
       /***** Number of departments *****/
       Tbl_StartRow ();
@@ -595,11 +595,11 @@ static void Ins_Configuration (bool PrintView)
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">"
 			 "%u"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Departments,
 	       Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
+      Tbl_EndRow ();
 
       /***** Number of users in courses of this institution *****/
       Ins_ShowNumUsrsInCrssOfIns (Rol_TCH);
@@ -648,12 +648,12 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
 		      "</td>"
 		      "<td class=\"DAT LEFT_MIDDLE\">"
 		      "%u"
-		      "</td>"
-		      "</tr>",
+		      "</td>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
             Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -846,8 +846,8 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 	    TxtClassNormal,BgColor);
    if (StatusTxt != Ins_STATUS_ACTIVE) // If active ==> do not show anything
       fprintf (Gbl.F.Out,"%s",Txt_INSTITUTION_STATUS[StatusTxt]);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -910,15 +910,15 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
                       "%s+<br />%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Centres_ABBREVIATION,
             Txt_Degrees_ABBREVIATION,
             Txt_Courses_ABBREVIATION,
             Txt_Departments_ABBREVIATION,
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   }
+   Tbl_EndRow ();
+  }
 
 /*****************************************************************************/
 /******* Get parameter with the type or order in list of institutions ********/
@@ -1626,8 +1626,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	}
       else if (StatusTxt != Ins_STATUS_ACTIVE)	// If active ==> do not show anything
 	 fprintf (Gbl.F.Out,"%s",Txt_INSTITUTION_STATUS[StatusTxt]);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -2300,8 +2300,8 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution status *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-	              "</td>"
-		      "</tr>");
+	              "</td>");
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_institution);
@@ -2353,8 +2353,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Code,
             Txt_Short_name_of_the_institution,
             Txt_Full_name_of_the_institution,
@@ -2364,6 +2363,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
             Txt_Requester);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

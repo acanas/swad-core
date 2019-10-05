@@ -324,7 +324,6 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
       /***** Row for this web / social network *****/
       Tbl_StartRow ();
-
       fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT LEFT_MIDDLE\">"
 			 "<label for=\"URL%u\" class=\"%s\">"
 			 "<img src=\"%s/%s\""
@@ -339,9 +338,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "<input type=\"url\" id=\"URL%u\" name=\"URL%u\""
 			 " maxlength=\"%u\" value=\"%s\""
 		         " class=\"REC_C2_BOT_INPUT\" />"
-			 "</td>"
-
-			 "</tr>",
+			 "</td>",
 	       (unsigned) NumURL,The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
@@ -349,6 +346,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       (unsigned) NumURL,(unsigned) NumURL,
 	       Cns_MAX_CHARS_WWW,URL);
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -564,11 +562,11 @@ void Net_ShowWebAndSocialNetworksStats (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Web_social_network,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
+   Tbl_EndRow ();
 
    /***** For each web / social network... *****/
    for (NumRow = 0;
@@ -604,8 +602,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			    "</td>"
 			    "<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%.2f%%"
-			    "</td>"
-			    "</tr>",
+			    "</td>",
 		  Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
@@ -613,6 +610,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 		  NumUsrs,
 		  NumUsrsTotal ? 100.0 * (float) NumUsrs / (float) NumUsrsTotal :
 			         0.0);
+	 Tbl_EndRow ();
 	}
      }
 

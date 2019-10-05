@@ -1714,11 +1714,11 @@ void Lay_AdvertisementMobile (void)
                          " alt=\"SWADroid\" title=\"%s\""
                          " style=\"width:250px; height:375px;\" />"
                          "</a>"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
                Txt_Stay_connected_with_SWADroid,
                Cfg_URL_ICON_PUBLIC,
                Txt_Stay_connected_with_SWADroid);
+      Tbl_EndRow ();
 
       /***** End table and box *****/
       Box_EndBoxTable ();

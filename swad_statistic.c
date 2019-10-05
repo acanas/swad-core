@@ -386,8 +386,8 @@ void Sta_AskShowCrsHits (void)
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
          Tbl_EndTable ();
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndRow ();
 
          /***** Initial and final dates of the search *****/
          Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (Gbl.Action.Act == ActReqAccCrs);
@@ -464,8 +464,8 @@ void Sta_AskShowCrsHits (void)
            }
          fprintf (Gbl.F.Out,"</select>)"
                             "</label>"
-                            "</td>"
-                            "</tr>");
+                            "</td>");
+         Tbl_EndRow ();
          Tbl_EndTable ();
 
 	 /***** Hidden param used to get client time zone *****/
@@ -554,8 +554,8 @@ void Sta_AskShowGblHits (void)
       fprintf (Gbl.F.Out,">%s",Txt_ROLE_STATS[RoleStat]);
      }
    fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "</tr>");
+	              "</td>");
+   Tbl_EndRow ();
 
    /***** Selection of action *****/
    Sta_WriteSelectorAction ();
@@ -576,8 +576,8 @@ void Sta_AskShowGblHits (void)
    Gbl.Scope.Default = Hie_SYS;
    Sco_GetScope ("ScopeSta");
    Sco_PutSelectorScope ("ScopeSta",false);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Count type for the statistic *****/
    Tbl_StartRow ();
@@ -609,8 +609,8 @@ void Sta_AskShowGblHits (void)
      }
    fprintf (Gbl.F.Out,"</select>"
 	              "</label>"
-		      "</td>"
-		      "</tr>");
+		      "</td>");
+   Tbl_EndRow ();
 
    /***** End table *****/
    Tbl_EndTable ();
@@ -723,8 +723,8 @@ static void Sta_WriteSelectorAction (void)
      }
 
    fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "</tr>");
+	              "</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -1645,8 +1645,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
    Tbl_EndRow ();
    Tbl_EndTable ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Write heading *****/
    Tbl_StartRow ();
@@ -1670,8 +1670,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
                       "</th>"
                       "<th class=\"LEFT_TOP\" style=\"width:10%%;\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_No_INDEX,
             Txt_User_ID,
             Txt_Name,
@@ -1679,6 +1678,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
             Txt_Date,
             Txt_Action,
             Txt_LOG_More_info);
+   Tbl_EndRow ();
 
    /***** Write rows back *****/
    for (NumRow = LastRow, UniqueId = 1, Gbl.RowEvenOdd = 0;
@@ -1756,8 +1756,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",
                Gbl.RowEvenOdd);
       Sta_WriteLogComments (LogCod);
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** Free memory used by the data of the user *****/
@@ -1830,14 +1830,14 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
                       "</th>"
                       "<th colspan=\"2\" class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_No_INDEX,
             Txt_Photo,
             Txt_ID,
             Txt_Name,
             Txt_Role,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Write rows *****/
    for (NumRow = 1, Hits.Max = 0.0, Gbl.RowEvenOdd = 0;
@@ -1910,8 +1910,8 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 			                                      'r',	// Non-editing teacher or teacher
 		  BarWidth);
       Str_WriteFloatNum (Gbl.F.Out,Hits.Num);
-      fprintf (Gbl.F.Out,"&nbsp;</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"&nbsp;</td>");
+      Tbl_EndRow ();
      }
 
    /***** Free memory used by the data of the user *****/
@@ -1952,11 +1952,11 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Date,
             Txt_Day,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of pages generated per day *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -2126,8 +2126,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    fprintf (Gbl.F.Out,"</select>"
 	              "</label>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Compute maximum number of pages generated per day-hour *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,2,1);
@@ -2152,19 +2152,21 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
                       "<th colspan=\"24\" class=\"LEFT_TOP\""
                       " style=\"width:%upx;\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Date,
             Txt_Day,
             GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
+
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td colspan=\"24\" class=\"LEFT_TOP\""
 	              " style=\"width:%upx;\">",
 	    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH);
    Sta_DrawBarColors (SelectedColorType,Hits.Max);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
+
    Tbl_StartRow ();
    for (Hour = 0;
 	Hour < 24;
@@ -2390,8 +2392,9 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
    Str_WriteFloatNum (Gbl.F.Out,HitsMax);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
+
    Tbl_StartRow ();
 
    /***** Draw colors *****/
@@ -2541,10 +2544,10 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Week,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of pages generated per week *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -2641,10 +2644,10 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Month,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of pages generated per month *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -2741,10 +2744,10 @@ static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Year,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of pages generated per year *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -3024,10 +3027,10 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	                 "<img src=\"%s/tr24x1.gif\""
 	                 " alt=\"\" title=\"\""
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
 	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC,
 	       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
+      Tbl_EndRow ();
 
       /***** Write again the labels of the X axis *****/
       Sta_WriteLabelsXAxisAccMin (IncX,Format);
@@ -3127,8 +3130,8 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
                   BarWidth);
 
    /***** End cell of graphic and end row *****/
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3153,10 +3156,10 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Action,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of pages generated per day *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -3216,10 +3219,10 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Plugin,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of pages generated per plugin *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -3271,10 +3274,10 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Function,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of pages generated per function *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -3326,10 +3329,10 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Banner,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of clicks per banner *****/
    for (NumRow = 1;
@@ -3405,11 +3408,11 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_No_INDEX,
             Txt_Country,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of hits per country *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -3499,11 +3502,11 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_No_INDEX,
             Txt_Institution,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of hits per institution *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -3595,11 +3598,11 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_No_INDEX,
             Txt_Centre,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of hits per centre *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -3691,11 +3694,11 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_No_INDEX,
             Txt_Degree,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of hits per degree *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -3798,13 +3801,13 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
                       "</th>"
                       "<th class=\"LEFT_TOP\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_No_INDEX,
             Txt_Degree,
             Txt_Year_OF_A_DEGREE,
             Txt_Course,
             Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
+   Tbl_EndRow ();
 
    /***** Compute maximum number of pages generated per course *****/
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
@@ -3939,8 +3942,8 @@ static void Sta_DrawBarNumHits (char Color,
       fprintf (Gbl.F.Out,"0&nbsp;(0");
 
    fprintf (Gbl.F.Out,"%%)&nbsp;"
-	              "</td>"
-	              "</tr>");
+	              "</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -4156,8 +4159,7 @@ void Sta_GetAndShowLastClicks (void)
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:275px;\">"
                       "%s"				// Action
-                      "</th>"
-                      "</tr>",
+                      "</th>",
                Txt_Click,
                Txt_ELAPSED_TIME,
                Txt_Role,
@@ -4166,6 +4168,7 @@ void Sta_GetAndShowLastClicks (void)
                Txt_Centre,
                Txt_Degree,
                Txt_Action);
+   Tbl_EndRow ();
 
    for (NumRow = 0;
 	NumRow < NumRows;
@@ -4240,8 +4243,8 @@ void Sta_GetAndShowLastClicks (void)
       if (row[8])
 	 if (row[8][0])
 	    fprintf (Gbl.F.Out,"%s",row[8]);			// Action
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
    Tbl_EndTable ();
 

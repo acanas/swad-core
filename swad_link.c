@@ -474,8 +474,8 @@ static void Lnk_ListLinksForEdition (void)
                Cns_MAX_CHARS_WWW,Lnk->WWW,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>"
-                         "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** End table *****/
@@ -774,9 +774,9 @@ static void Lnk_PutFormToCreateLink (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Cns_MAX_CHARS_WWW,Lnk_EditingLnk->WWW);
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
@@ -809,12 +809,12 @@ static void Lnk_PutHeadLinks (void)
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Code,
             Txt_Short_name,
             Txt_Full_name,
             Txt_WWW);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

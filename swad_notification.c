@@ -409,13 +409,13 @@ void Ntf_ShowMyNotifications (void)
                          "</th>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
-                         "</th>"
-                         "</tr>",
+                         "</th>",
                Txt_Event,
                Txt_MSG_From,
                Txt_Location,
                Txt_Date,
                Txt_Email);	// Date and time, in YYYY-MM-DD HH:MM:SS format
+      Tbl_EndRow ();
 
       /***** List notifications one by one *****/
       for (NumNotif = 0;
@@ -591,9 +591,9 @@ void Ntf_ShowMyNotifications (void)
          /* Write status (sent by email / pending to be sent by email) */
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
                             "%s"
-                            "</td>"
-                            "</tr>",
+                            "</td>",
                   ClassBackground,Txt_NOTIFICATION_STATUS[StatusTxt]);
+         Tbl_EndRow ();
 
          /***** Write content of the event *****/
          if (PutLink)
@@ -607,9 +607,9 @@ void Ntf_ShowMyNotifications (void)
                                "<td colspan=\"4\" class=\"DAT LEFT_TOP\""
                                " style=\"padding-bottom:12px;\">"
                                "%s"
-                               "</td>"
-                               "</tr>",
+                               "</td>",
                      SummaryStr);
+            Tbl_EndRow ();
             if (ContentStr != NULL)
               {
                free ((void *) ContentStr);
@@ -1946,10 +1946,10 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 		      "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
-                      "</th>"
-	              "</tr>",
+                      "</th>",
 	    Txt_Create_BR_notification,
 	    Txt_Notify_me_BR_by_email);
+   Tbl_EndRow ();
 
    /***** Checkbox to activate internal notifications and email notifications
           about events *****/
@@ -1976,8 +1976,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       if ((Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent)))
           fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />"
-	                 "</td>"
-	                 "</tr>");
+	                 "</td>");
+      Tbl_EndRow ();
      }
 
    Tbl_EndTable ();

@@ -1567,10 +1567,10 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
 	                    " style=\"height:50px;\">"
 	                    "%ld"
-	                    "</td>"
-			    "</tr>",
+	                    "</td>",
 		  Gbl.RowEvenOdd,
 		  Figure);
+	 Tbl_EndRow ();
 	}
 
       Tbl_EndTable ();
@@ -1735,8 +1735,8 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	                    " style=\"height:50px;\">",
 	          Gbl.RowEvenOdd);
 	 Str_WriteFloatNum (Gbl.F.Out,NumClicksPerDay);
-	 fprintf (Gbl.F.Out,"</td>"
-			    "</tr>");
+	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndRow ();
 	}
 
       Tbl_EndTable ();

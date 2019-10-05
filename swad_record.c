@@ -349,8 +349,8 @@ void Rec_ListFieldsRecordsForEdition (void)
         }
       fprintf (Gbl.F.Out,"</select>");
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
   }
 
@@ -413,8 +413,8 @@ void Rec_ShowFormCreateRecordField (void)
      }
 
    fprintf (Gbl.F.Out,"</select>"
-	              "</td>"
-	              "</tr>");
+	              "</td>");
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_record_field);
@@ -443,11 +443,11 @@ static void Rec_WriteHeadingRecordFields (void)
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "</tr>",
+                      "</th>",
             Txt_Field_BR_name,
             Txt_No_of_BR_lines,
             Txt_Visible_by_BR_the_student);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -1758,13 +1758,13 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"REC_HEAD CENTER_MIDDLE\">"
                       "%s<br />%s<br />%s"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Gbl.Hierarchy.Deg.FullName,Gbl.Hierarchy.Crs.FullName,
             UsrDat->FullName);
+   Tbl_EndRow ();
    Tbl_EndTable ();
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Fields of the record that depends on the course *****/
    for (NumField = 0, Gbl.RowEvenOdd = 0;
@@ -1844,8 +1844,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
             else
                fprintf (Gbl.F.Out,"-");
            }
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndRow ();
 
          /* Free structure that stores the query result */
          DB_FreeMySQLResult (&mysql_res);
@@ -2442,8 +2442,8 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	    break;
         }
 
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/
@@ -2853,8 +2853,8 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
 	 fprintf (Gbl.F.Out,"********");
       fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -2873,8 +2873,8 @@ static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm,
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_TOP\">",
 	    ClassForm,Txt_ID);
    ID_WriteUsrIDs (UsrDat,Anchor);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3097,8 +3097,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	 default:
 	    break;
 	}
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
    else if (SexForm)
      {
@@ -3122,8 +3122,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			    "</label>",
 		  Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
 	}
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
    else	// RoleForm == false, SexForm == false
      {
@@ -3134,11 +3134,11 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			 "</td>"
 			 "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">"
 			 "%s"
-			 "</td>"
-			 "</tr>",
+			 "</td>",
 	       ClassForm,
 	       Txt_Role,
 	       Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+      Tbl_EndRow ();
      }
   }
 
@@ -3178,8 +3178,8 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
      }
    else if (UsrDat->Surname1[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 
@@ -3210,8 +3210,8 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
 	       UsrDat->Surname2);
    else if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname2);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3251,8 +3251,8 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
      }
    else if (UsrDat->FirstName[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3306,8 +3306,8 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
 	       Gbl.Hierarchy.Sys.Ctys.Lst[NumCty].Name[Gbl.Prefs.Language]);
      }
    fprintf (Gbl.F.Out,"</select>"
-		      "</td>"
-		      "</tr>");
+		      "</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3340,8 +3340,8 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
       else if (UsrDat->OriginPlace[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
      }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3371,8 +3371,8 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
       else if (UsrDat->StrBirthday[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->StrBirthday);
      }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3405,8 +3405,8 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
       else if (UsrDat->LocalAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
      }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3441,8 +3441,8 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
 	          UsrDat->LocalPhone,
 	          UsrDat->LocalPhone);
      }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3475,8 +3475,8 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
       else if (UsrDat->FamilyAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
      }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3511,8 +3511,8 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 	          UsrDat->FamilyPhone,
 	          UsrDat->FamilyPhone);
      }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3546,8 +3546,8 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
 	 fprintf (Gbl.F.Out,"%s",UsrDat->Comments);
 	}
      }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3600,8 +3600,8 @@ static void Rec_ShowInstitution (struct Instit *Ins,
 	 if (Ins->WWW[0])
 	    fprintf (Gbl.F.Out,"</a>");
 	}
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3635,8 +3635,8 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,
 	    fprintf (Gbl.F.Out,"</a>");
 	}
      }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3670,8 +3670,8 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,
 	    fprintf (Gbl.F.Out,"</a>");
 	}
      }
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3691,8 +3691,8 @@ static void Rec_ShowOffice (struct UsrData *UsrDat,
 	    ClassForm,Txt_Office);
    if (ShowData)
       fprintf (Gbl.F.Out,"%s",UsrDat->Tch.Office);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -3714,8 +3714,8 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">%s</a>",
 	       UsrDat->Tch.OfficePhone,
 	       UsrDat->Tch.OfficePhone);
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -4026,8 +4026,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
      }
    fprintf (Gbl.F.Out,"</select>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Institution *****/
    Tbl_StartRow ();
@@ -4070,8 +4070,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
      }
    fprintf (Gbl.F.Out,"</select>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>"
-		      "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    if (IAmATeacher)
      {
@@ -4116,8 +4116,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	}
       fprintf (Gbl.F.Out,"</select>");
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       /***** Department *****/
       Tbl_StartRow ();
@@ -4134,8 +4134,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 				   "",					// Text when no department selected
 				   true);				// Submit on change
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       /***** Office *****/
       Tbl_StartRow ();
@@ -4155,8 +4155,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       Gbl.Usrs.Me.UsrDat.Tch.Office,
 	       Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
 
       /***** Phone *****/
       Tbl_StartRow ();
@@ -4177,8 +4177,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 	       Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
 	       Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** End table and box *****/

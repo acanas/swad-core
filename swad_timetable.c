@@ -1145,10 +1145,10 @@ static void TT_DrawTimeTable (void)
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_HOUR_BIG LEFT_MIDDLE\""
 	              " style=\"width:%u%%;\">"
 	              "%02u:00"
-	              "</td>"
-	              "</tr>",
+	              "</td>",
             TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,
             Gbl.TimeTable.Config.Range.Hours.Start);
+   Tbl_EndRow ();
 
    /***** Get list of groups types and groups in this course *****/
    if (Gbl.Action.Act == ActEdiCrsTT ||
@@ -1283,8 +1283,8 @@ static void TT_TimeTableDrawAdjustRow (void)
 	   Minicolumn++)
          fprintf (Gbl.F.Out,"<td class=\"TT_MINICOL\"></td>");
    TT_DrawCellAlignTimeTable ();
-   fprintf (Gbl.F.Out,"<td class=\"TT_HOURCOL\"></td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"<td class=\"TT_HOURCOL\"></td>");
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/

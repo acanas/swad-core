@@ -4047,8 +4047,8 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",Gbl.ColorRows[Gbl.RowEvenOdd]);
    Ins_DrawInstitutionLogoWithLink (&Ins,25);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Write degrees which are administrated by this administrator *****/
    Hie_GetAndWriteInsCtrDegAdminBy (UsrDat->UsrCod,
@@ -6326,10 +6326,10 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
    Sex = Usr_GetSexOfUsrsLst (Role);
    fprintf (Gbl.F.Out,"%s:"
 	              "</label>"
-	              "</th>"
-	              "</tr>",
+	              "</th>",
 	    Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
                                                   Txt_ROLES_PLURAL_Abc[Role][Sex]);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
@@ -6558,8 +6558,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
          fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"TIT CENTER_MIDDLE\">",
                   1 + Usr_NUM_MAIN_FIELDS_DATA_USR);
          Grp_WriteNamesOfSelectedGrps ();
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndRow ();
         }
 
       /***** Put a row to select all users *****/
@@ -6887,8 +6887,8 @@ void Usr_ListAllDataStds (void)
          fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"TIT CENTER_MIDDLE\">",
                   NumColumnsTotal);
          Grp_WriteNamesOfSelectedGrps ();
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndRow ();
         }
 
       /***** Heading row with column names *****/
@@ -7251,8 +7251,8 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	      }
 	    else
 	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Role);
-	    fprintf (Gbl.F.Out,"</td>"
-			       "</tr>");
+	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndRow ();
 	   }
 
 	 Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;

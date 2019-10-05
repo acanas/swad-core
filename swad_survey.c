@@ -274,10 +274,10 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 			 "</th>"
 			 "<th class=\"CENTER_MIDDLE\">"
 			 "%s"
-			 "</th>"
-			 "</tr>",
+			 "</th>",
 	       Txt_Survey,
 	       Txt_Status);
+      Tbl_EndRow ();
 
       /***** Write all the surveys *****/
       for (NumSvy = Pagination.FirstItemVisible;
@@ -576,8 +576,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	}
      }
 
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Write second row of data of this survey *****/
    Tbl_StartRow ();
@@ -655,11 +655,11 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Svy.Status.Visible ? "DAT" :
         	                 "DAT_LIGHT",
             Txt);
+   Tbl_EndRow ();
 
    /***** Write questions of this survey *****/
    if (ShowOnlyThisSvyComplete)
@@ -667,8 +667,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td colspan=\"5\">");
       Svy_ListSvyQuestions (&Svy,SvyQst);
-      fprintf (Gbl.F.Out,"</td>"
-			 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -1867,8 +1867,8 @@ void Svy_RequestCreatOrEditSvy (void)
    Svy_SetDefaultAndAllowedScope (&Svy);
    Sco_GetScope ("ScopeSvy");
    Sco_PutSelectorScope ("ScopeSvy",false);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Survey title *****/
    Tbl_StartRow ();
@@ -1879,11 +1879,11 @@ void Svy_RequestCreatOrEditSvy (void)
                       "<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Title,
             Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title);
+   Tbl_EndRow ();
 
    /***** Survey start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Svy.TimeUTC,Dat_FORM_SECONDS_ON);
@@ -1901,8 +1901,8 @@ void Svy_RequestCreatOrEditSvy (void)
    if (!ItsANewSurvey)
       fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</textarea>"
-                      "</td>"
-                      "</tr>");
+                      "</td>");
+   Tbl_EndRow ();
 
    /***** Users' roles who can answer the survey *****/
    Tbl_StartRow ();
@@ -1916,8 +1916,8 @@ void Svy_RequestCreatOrEditSvy (void)
                            1 << Rol_TCH,
                            Svy.Roles,
                            false,false);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Groups *****/
    Svy_ShowLstGrpsToEditSurvey (Svy.SvyCod);
@@ -2056,9 +2056,9 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
 	                 "%s %s"
 	                 "</label>"
-	                 "</td>"
-	                 "</tr>",
+	                 "</td>",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      Tbl_EndRow ();
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
@@ -2070,8 +2070,8 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 
       /***** End table and box *****/
       Box_EndBoxTable ();
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
+      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndRow ();
      }
 
    /***** Free list of groups types and groups in this course *****/
@@ -2687,10 +2687,10 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
                       " cols=\"60\" rows=\"4\">"
 	              "%s"
                       "</textarea>"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Wording,
 	    Txt);
+   Tbl_EndRow ();
 
    /***** Type of answer *****/
    Tbl_StartRow ();
@@ -2716,8 +2716,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 	                 "</label><br />",
                Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
      }
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** Answers *****/
    /* Unique or multiple choice answers */
@@ -2744,12 +2744,12 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       if (SvyQst->AnsChoice[NumAns].Text)
          fprintf (Gbl.F.Out,"%s",SvyQst->AnsChoice[NumAns].Text);
       fprintf (Gbl.F.Out,"</textarea>"
-	                 "</td>"
-	                 "</tr>");
+	                 "</td>");
+      Tbl_EndRow ();
      }
    Tbl_EndTable ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndRow ();
 
    /***** End table *****/
    Tbl_EndTable ();
@@ -3200,11 +3200,11 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
                          "</th>"
                          "<th class=\"LEFT_TOP\">"
                          "%s"
-                         "</th>"
-                         "</tr>",
+                         "</th>",
                Txt_No_INDEX,
                Txt_Type,
                Txt_Question);
+      Tbl_EndRow ();
 
       /***** Write questions one by one *****/
       for (NumQst = 0;
@@ -3261,8 +3261,8 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
 	          Gbl.RowEvenOdd);
          Svy_WriteQstStem (row[3]);
          Svy_WriteAnswersOfAQst (Svy,SvyQst,PutFormAnswerSurvey);
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndRow ();
         }
 
       Tbl_EndTable ();
@@ -3494,9 +3494,9 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
       BarWidth);
 
    /***** Write the number of users *****/
-   fprintf (Gbl.F.Out,"%s</td>"
-	              "</tr>",
+   fprintf (Gbl.F.Out,"%s</td>",
             Gbl.Title);
+   Tbl_EndRow ();
   }
 
 /*****************************************************************************/
