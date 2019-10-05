@@ -8534,7 +8534,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       "<input type=\"text\""
                       " id=\"NewLinkName\" name=\"NewLinkName\""
                       " size=\"30\" maxlength=\"%u\" value=\"\" />"
-                      "</td>"
+                      "</td>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional,
             Brw_MAX_CHARS_FOLDER);
    Tbl_EndRow ();

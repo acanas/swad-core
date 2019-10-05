@@ -561,7 +561,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
      }
    else
      {
-      Tbl_PutEmptyCells (8);
+      Tbl_PutEmptyColouredCells (8);
       Tbl_EndRow ();
      }
 

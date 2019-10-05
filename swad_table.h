@@ -55,9 +55,11 @@ void Tbl_StartTableWideMargin (void);
 
 void Tbl_EndTable (void);
 
+void Tbl_StartClass (const char *Class);
 void Tbl_StartRow (void);
 void Tbl_EndRow (void);
 
 void Tbl_PutEmptyCells (unsigned NumColumns);
+void Tbl_PutEmptyColouredCells (unsigned NumColumns);
 
 #endif

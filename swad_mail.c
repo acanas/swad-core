@@ -762,8 +762,9 @@ static void Mai_PutFormToCreateMailDomain (void)
             Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
    Tbl_EndRow ();
 
-   /***** Mail domain *****/
    Tbl_StartRow ();
+
+   /***** Mail domain *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"Domain\""
                       " size=\"15\" maxlength=\"%u\" value=\"%s\""
@@ -776,11 +777,12 @@ static void Mai_PutFormToCreateMailDomain (void)
                       "<input type=\"text\" name=\"Info\""
                       " size=\"40\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
-                      "</td>"
-                      "<td></td>",
+                      "</td>",
             Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info);
-   Tbl_EndRow ();
 
+   Tbl_PutEmptyCells (1);
+
+   Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_email_domain);

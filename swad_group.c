@@ -2275,6 +2275,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    /* Write checkbox to select the group */
    ICanSelUnselGroup = (Gbl.Usrs.Me.Role.Logged >= Rol_STD);
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"checkbox\" id=\"Grp%ld\" name=\"GrpCods\""
                       " value=\"%ld\"",
@@ -2322,9 +2323,9 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 			 "</td>",
 	       Grp_CountNumUsrsInNoGrpsOfType (Role,GrpTyp->GrpTypCod));
 
-   /* Last void columns for max. students and vacants */
-   fprintf (Gbl.F.Out,"<td></td>"
-	              "<td></td>");
+   /* Last empty columns for max. students and vacants */
+   Tbl_PutEmptyCells (2);
+
    Tbl_EndRow ();
   }
 

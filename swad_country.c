@@ -1610,8 +1610,9 @@ static void Cty_ListCountriesForEdition (void)
      {
       Cty = &Gbl.Hierarchy.Sys.Ctys.Lst[NumCty];
 
-      /* Put icon to remove country */
       Tbl_StartRow ();
+
+      /* Put icon to remove country */
       fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"BT\">",
 	       1 + Lan_NUM_LANGUAGES);
       if (Cty->Inss.Num ||
@@ -1639,9 +1640,7 @@ static void Cty_ListCountriesForEdition (void)
 	                 "</td>",
                1 + Lan_NUM_LANGUAGES,Cty->Alpha2);
 
-      fprintf (Gbl.F.Out,"<td></td>"
-	                 "<td></td>"
-	                 "<td></td>");
+      Tbl_PutEmptyCells (3);
 
       /* Number of users */
       fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
@@ -1654,6 +1653,7 @@ static void Cty_ListCountriesForEdition (void)
 	                 "%u"
 	                 "</td>",
                1 + Lan_NUM_LANGUAGES,Cty->Inss.Num);
+
       Tbl_EndRow ();
 
       /* Country name in several languages */
@@ -1661,8 +1661,9 @@ static void Cty_ListCountriesForEdition (void)
 	   Lan <= Lan_NUM_LANGUAGES;
 	   Lan++)
         {
-	 /* Language */
          Tbl_StartRow ();
+
+	 /* Language */
          fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
                             "%s:"
                             "</td>",
@@ -1694,6 +1695,7 @@ static void Cty_ListCountriesForEdition (void)
                   Cty->WWW[Lan],Gbl.Form.Id);
          Frm_EndForm ();
          fprintf (Gbl.F.Out,"</td>");
+
          Tbl_EndRow ();
         }
      }
@@ -2048,8 +2050,9 @@ static void Cty_PutFormToCreateCountry (void)
    /***** Write heading *****/
    Cty_PutHeadCountriesForEdition ();
 
-   /***** Column to remove country, disabled here *****/
    Tbl_StartRow ();
+
+   /***** Column to remove country, disabled here *****/
    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"BT\"></td>",
             1 + Lan_NUM_LANGUAGES);
 
@@ -2071,21 +2074,20 @@ static void Cty_PutFormToCreateCountry (void)
                       "</td>",
             1 + Lan_NUM_LANGUAGES,Cty_EditingCty->Alpha2);
 
-   fprintf (Gbl.F.Out,"<td></td>"
-		      "<td></td>"
-		      "<td></td>");
+   Tbl_PutEmptyCells (3);
 
-   /* Number of users */
+   /***** Number of users *****/
    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	              "0"
 	              "</td>",
 	    1 + Lan_NUM_LANGUAGES);
 
-   /* Number of institutions */
+   /***** Number of institutions *****/
    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
 	              "0"
 	              "</td>",
 	    1 + Lan_NUM_LANGUAGES);
+
    Tbl_EndRow ();
 
    /***** Country name in several languages *****/
@@ -2093,8 +2095,9 @@ static void Cty_PutFormToCreateCountry (void)
 	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
      {
-      /* Language */
       Tbl_StartRow ();
+
+      /* Language */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP\">"
 	                 "%s"
 	                 "</td>",
@@ -2119,6 +2122,7 @@ static void Cty_PutFormToCreateCountry (void)
 	       Lan_STR_LANG_ID[Lan],
 	       Cns_MAX_CHARS_WWW,
 	       Cty_EditingCty->WWW[Lan]);
+
       Tbl_EndRow ();
      }
 

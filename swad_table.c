@@ -161,6 +161,23 @@ void Tbl_EndTable (void)
 	    "</table>");
   }
 
+void Tbl_StartClass (const char *Class)
+  {
+   if (Class)
+     {
+      if (Class[0])
+	{
+	 fprintf (Gbl.F.Out,
+		  "<tr class=\"%s\">",
+		  Class);
+	}
+      else
+	 Tbl_StartRow ();
+     }
+   else
+      Tbl_StartRow ();
+  }
+
 void Tbl_StartRow (void)
   {
    fprintf (Gbl.F.Out,
@@ -174,6 +191,17 @@ void Tbl_EndRow (void)
   }
 
 void Tbl_PutEmptyCells (unsigned NumColumns)
+  {
+   unsigned NumCol;
+
+   for (NumCol = 0;
+	NumCol < NumColumns;
+	NumCol++)
+      fprintf (Gbl.F.Out,
+	       "<td></td>");
+  }
+
+void Tbl_PutEmptyColouredCells (unsigned NumColumns)
   {
    unsigned NumCol;
 

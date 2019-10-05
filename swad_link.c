@@ -745,10 +745,11 @@ static void Lnk_PutFormToCreateLink (void)
    /***** Write heading *****/
    Lnk_PutHeadLinks ();
 
-   /***** Link code *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>"
-                      "<td></td>");
+
+   /***** Link code *****/
+   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
+   Tbl_PutEmptyCells (1);
 
    /***** Link short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -776,6 +777,7 @@ static void Lnk_PutFormToCreateLink (void)
                       " required=\"required\" />"
                       "</td>",
             Cns_MAX_CHARS_WWW,Lnk_EditingLnk->WWW);
+
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/

@@ -992,8 +992,9 @@ static void Hld_PutFormToCreateHoliday (void)
             Txt_Holiday);
    Tbl_EndRow ();
 
-   /***** Holiday place *****/
    Tbl_StartRow ();
+
+   /***** Holiday place *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"PlcCod\" style=\"width:62px;\">"
                       "<option value=\"-1\"");
@@ -1048,9 +1049,11 @@ static void Hld_PutFormToCreateHoliday (void)
                       "<input type=\"text\" name=\"Name\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
-                      "</td>"
-                      "<td></td>",
+                      "</td>",
             Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name);
+
+   Tbl_PutEmptyCells (1);
+
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/

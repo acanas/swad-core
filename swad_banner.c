@@ -866,8 +866,8 @@ static void Ban_PutFormToCreateBanner (void)
    /***** Banner code *****/
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"BM\"></td>"
-                      "<td class=\"BM\"></td>"
-                      "<td></td>");
+                      "<td class=\"BM\"></td>");
+   Tbl_PutEmptyCells (1);
 
    /***** Banner short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"

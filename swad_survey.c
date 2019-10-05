@@ -2720,10 +2720,12 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    Tbl_EndRow ();
 
    /***** Answers *****/
-   /* Unique or multiple choice answers */
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td></td>"
-                      "<td class=\"LEFT_TOP\">");
+
+   Tbl_PutEmptyCells (1);
+
+   /* Unique or multiple choice answers */
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
    Tbl_StartTablePadding (2);
    for (NumAns = 0;
 	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
@@ -2749,6 +2751,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
      }
    Tbl_EndTable ();
    fprintf (Gbl.F.Out,"</td>");
+
    Tbl_EndRow ();
 
    /***** End table *****/

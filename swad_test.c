@@ -1709,7 +1709,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    Tbl_StartTablePadding (2);
    Tbl_StartRow ();
    if (!ShowOnlyEnabledTags)
-      fprintf (Gbl.F.Out,"<td></td>");
+      Tbl_PutEmptyCells (1);
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
 	              "<input type=\"checkbox\" name=\"AllTags\" value=\"Y\"",
@@ -3844,8 +3844,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
    Tbl_StartTablePadding (2);
    Tbl_StartRow ();
    Tst_WriteHeadUserCorrect (UsrDat);
-   fprintf (Gbl.F.Out,"<td></td>"
-	              "<td></td>");
+   Tbl_PutEmptyCells (2);
    Tbl_EndRow ();
 
    /***** Write answers (one row per answer) *****/
@@ -3881,7 +3880,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 			    Ans.Class,Txt_TST_Answer_given_by_the_user,Ans.Str);
         }
       else	// This answer has NOT been selected by the user
-	 fprintf (Gbl.F.Out,"<td></td>");
+         Tbl_PutEmptyCells (1);
 
       /* Draw icon that indicates whether the answer is correct */
       if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
@@ -3891,7 +3890,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 	    fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_TOP\" title=\"%s\">&bull;</td>",
 		     Txt_TST_Answer_given_by_the_teachers);
          else
-	    fprintf (Gbl.F.Out,"<td></td>");
+            Tbl_PutEmptyCells (1);
         }
       else
 	 fprintf (Gbl.F.Out,"<td class=\"ANS_0 CENTER_TOP\">?</td>");
@@ -5229,8 +5228,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    /* Floating point answer */
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td></td>"
-                      "<td class=\"LEFT_TOP\">");
+   Tbl_PutEmptyCells (1);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
    Tst_PutFloatInputField (Txt_Real_number_between_A_and_B_1,"AnsFloatMin",
                            Gbl.Test.Answer.FloatingPoint[0]);
    Tst_PutFloatInputField (Txt_Real_number_between_A_and_B_2,"AnsFloatMax",
@@ -5240,8 +5239,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    /* T/F answer */
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td></td>"
-                      "<td class=\"LEFT_TOP\">");
+   Tbl_PutEmptyCells (1);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
    Tst_PutTFInputField (Txt_TF_QST[0],'T');
    Tst_PutTFInputField (Txt_TF_QST[1],'F');
    fprintf (Gbl.F.Out,"</td>");
@@ -5249,8 +5248,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    /* Questions can be shuffled? */
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td></td>"
-                      "<td class=\"LEFT_TOP\">"
+   Tbl_PutEmptyCells (1);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
                       "<label class=\"%s\">"
                       "<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"",
             The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -5268,8 +5267,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    /* Simple or multiple choice answers */
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td></td>"
-	              "<td class=\"LEFT_TOP\">");
+   Tbl_PutEmptyCells (1);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
    Tbl_StartTablePadding (2);	// Table with choice answers
 
    OptionsDisabled = Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
@@ -7890,7 +7889,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
      }
    else
      {
-      Tbl_PutEmptyCells (7);
+      Tbl_PutEmptyColouredCells (7);
       Tbl_EndRow ();
      }
 

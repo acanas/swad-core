@@ -3147,7 +3147,7 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 
    /***** Bar proportional to number of users *****/
    Tbl_StartTableWide ();
-   fprintf (Gbl.F.Out,"<tr class=\"MATCH_RES_TR\">");
+   Tbl_StartClass ("MATCH_RES_TR");
    for (i = 0;
 	i < 100;
 	i++)

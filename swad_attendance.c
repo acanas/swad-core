@@ -3578,7 +3578,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 
 	 /***** Write a row for this event *****/
 	 Tbl_StartRow ();
-	 Tbl_PutEmptyCells (1);
+	 Tbl_PutEmptyColouredCells (1);
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">"
 			    "%u:"
 			    "</td>"
@@ -3610,7 +3610,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	 if (ShowCommentStd || ShowCommentTch)
 	   {
 	    Tbl_StartRow ();
-	    Tbl_PutEmptyCells (2);
+	    Tbl_PutEmptyColouredCells (2);
 	    fprintf (Gbl.F.Out,"<td class=\"BT%u\"></td>"
 			       "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
 	                       "<dl>",
