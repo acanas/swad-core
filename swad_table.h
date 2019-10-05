@@ -55,7 +55,7 @@ void Tbl_StartTableWideMargin (void);
 
 void Tbl_EndTable (void);
 
-void Tbl_StartClass (const char *Class);
+void Tbl_StartRowAttr (const char *fmt,...);
 void Tbl_StartRow (void);
 void Tbl_EndRow (void);
 

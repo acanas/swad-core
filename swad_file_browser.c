@@ -5545,7 +5545,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    if (asprintf (&Anchor,"fil_brw_%u_%s",
 		 Gbl.FileBrowser.Id,RowId) < 0)
       Lay_NotEnoughMemoryExit ();
-   fprintf (Gbl.F.Out,"<tr id=\"%s\"",Anchor);
+   Tbl_StartRowAttr ("id=\"%s\"",Anchor);
    switch (IconThisRow)
      {
       case Brw_ICON_TREE_NOTHING:

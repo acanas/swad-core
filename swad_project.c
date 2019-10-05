@@ -1158,33 +1158,29 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 fprintf (Gbl.F.Out,"<tr id=\"prj_exp_%u\">"
-			    "<td colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\">",
-		  UniqueId,
+	 Tbl_StartRowAttr ("id=\"prj_exp_%u\"",UniqueId);
+	 fprintf (Gbl.F.Out,"<td colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\">",
 	          Gbl.RowEvenOdd);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
 	 fprintf (Gbl.F.Out,"</td>");
 	 Tbl_EndRow ();
 
-	 fprintf (Gbl.F.Out,"<tr id=\"prj_con_%u\" style=\"display:none;\">"
-			    "<td colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\">",
-		  UniqueId,
+	 Tbl_StartRowAttr ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
+	 fprintf (Gbl.F.Out,"<td colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\">",
 	          Gbl.RowEvenOdd);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
 	 fprintf (Gbl.F.Out,"</td>");
 	 Tbl_EndRow ();
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
-	 fprintf (Gbl.F.Out,"<tr id=\"prj_exp_%u\">"
-			    "<td colspan=\"5\" class=\"CENTER_MIDDLE\">",
-		  UniqueId);
+	 Tbl_StartRowAttr ("id=\"prj_exp_%u\"",UniqueId);
+	 fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"CENTER_MIDDLE\">");
 	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
 	 fprintf (Gbl.F.Out,"</td>");
 	 Tbl_EndRow ();
 
-	 fprintf (Gbl.F.Out,"<tr id=\"prj_con_%u\" style=\"display:none;\">"
-			    "<td colspan=\"5\" class=\"CENTER_MIDDLE\">",
-		  UniqueId);
+	 Tbl_StartRowAttr ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
+	 fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"CENTER_MIDDLE\">");
 	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
 	 fprintf (Gbl.F.Out,"</td>");
 	 Tbl_EndRow ();
@@ -1197,15 +1193,13 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 fprintf (Gbl.F.Out,"<tr id=\"prj_pro_%u\" style=\"display:none;\">"
-			    "<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u",
-		  UniqueId,
+	 Tbl_StartRowAttr ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
+	 fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u",
 	          Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
-	 fprintf (Gbl.F.Out,"<tr id=\"prj_pro_%u\" style=\"display:none;\">"
-			    "<td colspan=\"3\" class=\"RIGHT_TOP",
-		  UniqueId);
+	 Tbl_StartRowAttr ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
+	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP");
 	 break;
       default:
 	 Tbl_StartRow ();
@@ -1465,14 +1459,13 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
-			    "<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u",
-		  id,UniqueId,Gbl.RowEvenOdd);
+	 Tbl_StartRowAttr ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	 fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u",
+		  Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
-	 fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
-			    "<td colspan=\"3\" class=\"RIGHT_TOP",
-		  id,UniqueId);
+	 Tbl_StartRowAttr ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP");
 	 break;
       case Prj_PRINT_ONE_PROJECT:
 	 Tbl_StartRow ();
@@ -1534,14 +1527,13 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
-			    "<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u",
-	          id,UniqueId,Gbl.RowEvenOdd);
+	 Tbl_StartRowAttr ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	 fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u",
+		  Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
-	 fprintf (Gbl.F.Out,"<tr id=\"%s%u\" style=\"display:none;\">"
-			    "<td colspan=\"3\" class=\"RIGHT_TOP",
-	          id,UniqueId);
+	 Tbl_StartRowAttr ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP");
 	 break;
       case Prj_PRINT_ONE_PROJECT:
 	 Tbl_StartRow ();

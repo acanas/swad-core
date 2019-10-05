@@ -161,18 +161,37 @@ void Tbl_EndTable (void)
 	    "</table>");
   }
 
-void Tbl_StartClass (const char *Class)
+/*****************************************************************************/
+/**************************** Start/end table row ****************************/
+/*****************************************************************************/
+
+void Tbl_StartRowAttr (const char *fmt,...)
   {
-   if (Class)
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   if (fmt)
      {
-      if (Class[0])
+      if (fmt[0])
 	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,
-		  "<tr class=\"%s\">",
-		  Class);
+		  "<tr %s>",Attr);
+
+	 free ((void *) Attr);
 	}
       else
-	 Tbl_StartRow ();
+         Tbl_StartRow ();
      }
    else
       Tbl_StartRow ();
@@ -189,6 +208,10 @@ void Tbl_EndRow (void)
    fprintf (Gbl.F.Out,
 	    "</tr>");
   }
+
+/*****************************************************************************/
+/********************************* Table cells *******************************/
+/*****************************************************************************/
 
 void Tbl_PutEmptyCells (unsigned NumColumns)
   {
