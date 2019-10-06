@@ -106,10 +106,10 @@ void Con_ShowConnectedUsrs (void)
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('connected_current_time',%ld,"
                       "%u,',&nbsp;',null,false,true,0x7);"
-                      "</script>"
-	              "</td>",
+                      "</script>",
             (long) Gbl.StartExecutionTimeUTC,
             (unsigned) Gbl.Prefs.DateFormat);
+   Tbl_EndRow ();
 
    /***** Number of connected users in the whole platform *****/
    Con_ShowGlobalConnectedUsrs ();
@@ -359,11 +359,11 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
      {
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"CENTER_TOP\">"
-			 "%u %s"
-			 "</td>",
+			 "%u %s",
 	       Usrs.NumUsrs,
 	       (Usrs.NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
 				     Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
+      Tbl_EndRow ();
       Tbl_EndRow ();
 
       /***** I can see connected users *****/
@@ -393,11 +393,11 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"CON_USR_NARROW_TIT\">"
-			 "%u %s"
-			 "</td>",
+			 "%u %s",
 	       NumUsrsThisRole,
 	       (NumUsrsThisRole == 1) ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
 					Txt_ROLES_PLURAL_abc[Role][UsrSex]);
+      Tbl_EndRow ();
       Tbl_EndRow ();
 
       /***** I can see connected users *****/
@@ -419,7 +419,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Connected_users,Txt_Connected_users);
 	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 	}
      }
@@ -823,7 +823,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
                      "PHOTO21x28",Pho_ZOOM,true);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write full name and link *****/
    Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_NAME_NARROW CON_CRS" :
@@ -853,7 +853,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"</a>"
 	              "</div>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write time from last access *****/
    Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
@@ -867,7 +867,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
    fprintf (Gbl.F.Out,"</div>");	// Used for automatic update, only when displayed on right column
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    if (!ItsMe)
@@ -1043,7 +1043,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 						  NULL,
 			      "PHOTO21x28",Pho_ZOOM,false);
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 
 	    /***** Write full name and link *****/
 	    Font = (ThisCrs ? "CON_NAME_WIDE CON_CRS" :
@@ -1075,7 +1075,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    fprintf (Gbl.F.Out,"</div>");
 	    if (PutLinkToRecord)
 	       Frm_EndForm ();
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 
 	    /***** Write time from last access *****/
 	    Font = (ThisCrs ? "CON_SINCE CON_CRS" :
@@ -1083,7 +1083,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    fprintf (Gbl.F.Out,"<td class=\"%s COLOR%u\">",
 		     Font,Gbl.RowEvenOdd);
 	    Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 	    Tbl_EndRow ();
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;

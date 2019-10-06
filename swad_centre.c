@@ -213,13 +213,13 @@ void Ctr_SeeCtrWithPendingDegs (void)
                   BgColor);
          Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeDeg,
                                             "DAT_NOBR","CENTER_MIDDLE");
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
          /* Number of pending degrees (row[1]) */
          fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-	                    "%s"
-	                    "</td>",
+	                    "%s",
                   BgColor,row[1]);
+         Tbl_EndCell ();
 
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
          Tbl_EndRow ();
@@ -410,11 +410,11 @@ static void Ctr_Configuration (bool PrintView)
    /***** Institution *****/
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"OthInsCod\" class=\"%s\">%s:</label>"
-		      "</td>"
-		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+		      "<label for=\"OthInsCod\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Institution);
+   Tbl_EndCell ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE\">");
 
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -446,17 +446,18 @@ static void Ctr_Configuration (bool PrintView)
    else	// I can not move centre to another institution
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.FullName);
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Centre full name *****/
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"FullName\" class=\"%s\">%s:</label>"
-		      "</td>"
-		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+		      "<label for=\"FullName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Centre);
+   Tbl_EndCell ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE\">");
+
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       // Only institution admins and system admins can edit centre full name
@@ -475,17 +476,18 @@ static void Ctr_Configuration (bool PrintView)
      }
    else	// I can not edit centre full name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.FullName);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Centre short name *****/
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"ShortName\" class=\"%s\">%s:</label>"
-		      "</td>"
-		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+		      "<label for=\"ShortName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Short_name);
+   Tbl_EndCell ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE\">");
+
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       // Only institution admins and system admins can edit centre short name
@@ -504,7 +506,7 @@ static void Ctr_Configuration (bool PrintView)
      }
    else	// I can not edit centre short name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.ShrtName);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Place *****/
@@ -512,11 +514,12 @@ static void Ctr_Configuration (bool PrintView)
    Plc_GetDataOfPlaceByCod (&Plc);
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:"
-		      "</td>"
-		      "<td class=\"DAT LEFT_MIDDLE\">",
+		      "%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Place);
+   Tbl_EndCell ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -551,17 +554,18 @@ static void Ctr_Configuration (bool PrintView)
      }
    else	// I can not change centre place
       fprintf (Gbl.F.Out,"%s",Plc.FullName);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Centre WWW *****/
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"WWW\" class=\"%s\">%s:</label>"
-		      "</td>"
-		      "<td class=\"LEFT_MIDDLE\">",
+		      "<label for=\"WWW\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Web);
+   Tbl_EndCell ();
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -586,41 +590,44 @@ static void Ctr_Configuration (bool PrintView)
 			 "</div>",
 	       Gbl.Hierarchy.Ctr.WWW,
 	       Gbl.Hierarchy.Ctr.WWW);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Shortcut to the centre *****/
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:"
-		      "</td>"
-		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "%s:",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Shortcut);
+   Tbl_EndCell ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 		      "<a href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\">"
 		      "%s/%s?ctr=%ld"
-		      "</a>"
-		      "</td>",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],
-	    Txt_Shortcut,
+		      "</a>",
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Ctr.CtrCod,
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Ctr.CtrCod);
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    if (PrintView)
      {
       /***** QR code with link to the centre *****/
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">",
+			 "%s:",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_QR_code);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       QR_LinkTo (250,"ctr",Gbl.Hierarchy.Ctr.CtrCod);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
    else
@@ -628,24 +635,24 @@ static void Ctr_Configuration (bool PrintView)
       /***** Number of users who claim to belong to this centre *****/
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">"
-			 "%u"
-			 "</td>",
+			 "%s:",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Users_of_the_centre,
+	       Txt_Users_of_the_centre);
+      Tbl_EndCell ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+			 "%u",
 	       Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Number of degrees *****/
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"LEFT_MIDDLE\">",
+			 "%s:",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Degrees);
+      Tbl_EndCell ();
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
 
       /* Form to go to see degrees of this centre */
       Frm_StartFormGoTo (ActSeeDeg);
@@ -658,20 +665,20 @@ static void Ctr_Configuration (bool PrintView)
 	       Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Number of courses *****/
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">"
-			 "%u"
-			 "</td>",
+			 "%s:",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Courses,
+	       Txt_Courses);
+      Tbl_EndCell ();
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+			 "%u",
 	       Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Number of users in courses of this centre *****/
@@ -748,16 +755,19 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:"
-		      "</td>"
-		      "<td class=\"DAT LEFT_MIDDLE\">"
-		      "%u"
-		      "</td>",
+		      "%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
-		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
+		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+		      "%u",
 	    Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.Hierarchy.Ctr.CtrCod));
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
   }
 
@@ -904,54 +914,55 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "LIGHT_BLUE" :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
 
-   /***** Number of centre in this list *****/
    Tbl_StartRow ();
+
+   /***** Number of centre in this list *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-                      "%u"
-                      "</td>",
+                      "%u",
 	    TxtClassNormal,BgColor,
             NumCtr);
+   Tbl_EndCell ();
 
    /***** Centre logo and name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
    Ctr_DrawCentreLogoAndNameWithLink (Ctr,ActSeeDeg,
                                       TxtClassStrong,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Number of users who claim to belong to this centre *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-		      "%u"
-		      "</td>",
+		      "%u",
 	    TxtClassNormal,BgColor,
 	    Ctr->NumUsrsWhoClaimToBelongToCtr);
+   Tbl_EndCell ();
 
    /***** Place *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
-		      "%s"
-		      "</td>",
+		      "%s",
 	    TxtClassNormal,BgColor,
 	    Plc.ShrtName);
+   Tbl_EndCell ();
 
    /***** Number of degrees *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-		      "%u"
-		      "</td>",
+		      "%u",
 	    TxtClassNormal,BgColor,
 	    Ctr->Degs.Num);
+   Tbl_EndCell ();
 
    /***** Number of courses *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-		      "%u"
-		      "</td>",
+		      "%u",
 	    TxtClassNormal,BgColor,
 	    Ctr->NumCrss);
+   Tbl_EndCell ();
 
    /***** Number of users in courses of this centre *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-		      "%u"
-		      "</td>",
+		      "%u",
 	    TxtClassNormal,BgColor,
 	    Ctr->NumUsrs);
+   Tbl_EndCell ();
 
    /***** Centre status *****/
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
@@ -959,7 +970,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 	    TxtClassNormal,BgColor);
    if (StatusTxt != Ctr_STATUS_ACTIVE) // If active ==> do not show anything
       fprintf (Gbl.F.Out,"%s",Txt_CENTRE_STATUS[StatusTxt]);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -1510,20 +1521,20 @@ static void Ctr_ListCentresForEdition (void)
          Ico_PutIconRemove ();
          Frm_EndForm ();
         }
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Centre code */
       fprintf (Gbl.F.Out,"<td class=\"DAT CODE\">"
-	                 "%ld"
-	                 "</td>",
+	                 "%ld",
                Ctr->CtrCod);
+      Tbl_EndCell ();
 
       /* Centre logo */
       fprintf (Gbl.F.Out,"<td title=\"%s\" class=\"LEFT_MIDDLE\""
 	                 " style=\"width:25px;\">",
                Ctr->FullName);
       Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Place */
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
@@ -1555,7 +1566,7 @@ static void Ctr_ListCentresForEdition (void)
 	      NumPlc++)
 	    if (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod)
 	       fprintf (Gbl.F.Out,"%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Centre short name */
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
@@ -1569,11 +1580,11 @@ static void Ctr_ListCentresForEdition (void)
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,Gbl.Form.Id);
 	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ctr->ShrtName);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Centre full name */
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
@@ -1587,11 +1598,11 @@ static void Ctr_ListCentresForEdition (void)
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,Gbl.Form.Id);
 	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ctr->FullName);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Centre WWW */
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
@@ -1618,32 +1629,32 @@ static void Ctr_ListCentresForEdition (void)
                             "</div>",
                   Ctr->WWW,Ctr->WWW,WWW);
 	}
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Number of users who claim to belong to this centre */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-			 "%u"
-			 "</td>",
+			 "%u",
 	       Ctr->NumUsrsWhoClaimToBelongToCtr);
+      Tbl_EndCell ();
 
       /* Number of degrees */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u"
-	                 "</td>",
+	                 "%u",
                Ctr->Degs.Num);
+      Tbl_EndCell ();
 
       /* Number of users in courses of this centre */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u"
-	                 "</td>",
+	                 "%u",
                Ctr->NumUsrs);
+      Tbl_EndCell ();
 
       /* Centre requester */
       UsrDat.UsrCod = Ctr->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
       fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Centre status */
       StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
@@ -1667,7 +1678,7 @@ static void Ctr_ListCentresForEdition (void)
 	}
       else if (StatusTxt != Ctr_STATUS_ACTIVE)	// If active ==> do not show anything
 	 fprintf (Gbl.F.Out,"%s",Txt_CENTRE_STATUS[StatusTxt]);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
 
@@ -2522,15 +2533,17 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Column to remove centre, disabled here *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
+   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_EndCell ();
 
    /***** Centre code *****/
-   fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
+   fprintf (Gbl.F.Out,"<td class=\"CODE\">");
+   Tbl_EndCell ();
 
    /***** Centre logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
    Log_DrawLogo (Hie_CTR,-1L,"",20,NULL,true);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Place *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2547,59 +2560,59 @@ static void Ctr_PutFormToCreateCentre (void)
                (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr_EditingCtr->PlcCod) ? " selected=\"selected\"" :
         	                                                         "",
                Gbl.Plcs.Lst[NumPlc].ShrtName);
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Centre short name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Hie_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName);
+   Tbl_EndCell ();
 
    /***** Centre full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Hie_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName);
+   Tbl_EndCell ();
 
    /***** Centre WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Cns_MAX_CHARS_WWW,Ctr_EditingCtr->WWW);
+   Tbl_EndCell ();
 
    /***** Number of users who claim to belong to this centre *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "0"
-	              "</td>");
+	              "0");
+   Tbl_EndCell ();
 
    /***** Number of degrees *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "0"
-	              "</td>");
+	              "0");
+   Tbl_EndCell ();
 
    /***** Number of users in courses of this centre *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "0"
-	              "</td>");
+	              "0");
+   Tbl_EndCell ();
 
    /***** Centre requester *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Centre status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-	              "</td>");
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/

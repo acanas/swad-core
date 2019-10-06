@@ -1735,7 +1735,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	                    " style=\"height:50px;\">",
 	          Gbl.RowEvenOdd);
 	 Str_WriteFloatNum (Gbl.F.Out,NumClicksPerDay);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 	}
 
@@ -1797,5 +1797,5 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
       Frm_EndForm ();
      }
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }

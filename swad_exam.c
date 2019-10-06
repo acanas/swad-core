@@ -1069,7 +1069,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Title *****/
@@ -1106,7 +1106,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    else
       fprintf (Gbl.F.Out,"<strong>%s</strong>",
                Gbl.ExamAnns.ExaDat.CrsFullName);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Year/semester (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
@@ -1138,7 +1138,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    else
       fprintf (Gbl.F.Out,"%s",
                Txt_YEAR_OF_DEGREE[Gbl.ExamAnns.ExaDat.Year]);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Exam session *****/
@@ -1157,7 +1157,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                Exa_MAX_CHARS_SESSION,Gbl.ExamAnns.ExaDat.Session);
    else
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Session);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Date of the exam *****/
@@ -1175,7 +1175,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                          Gbl.Now.Date.Year + 1,"Exam",
                          &(Gbl.ExamAnns.ExaDat.ExamDate),
                          false,false);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
    else
      {
@@ -1231,7 +1231,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"%2u:%02u",
                Gbl.ExamAnns.ExaDat.StartTime.Hour,
                Gbl.ExamAnns.ExaDat.StartTime.Minute);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Approximate duration of the exam *****/
@@ -1297,7 +1297,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                      Gbl.ExamAnns.ExaDat.Duration.Minute,Txt_minutes);
         }
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Place where the exam will be made *****/
@@ -1322,7 +1322,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                         Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Place);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Exam mode *****/
@@ -1347,7 +1347,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                         Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Mode);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Structure of the exam *****/
@@ -1372,7 +1372,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                         Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Structure);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Documentation required *****/
@@ -1397,7 +1397,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                         Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.DocRequired);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Material required *****/
@@ -1422,7 +1422,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                         Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.MatRequired);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Material allowed *****/
@@ -1447,7 +1447,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                         Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.MatAllowed);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Other information to students *****/
@@ -1471,7 +1471,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                         Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.OtherInfo);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/

@@ -182,23 +182,24 @@ void Cty_SeeCtyWithPendingInss (void)
          /* Get data of country */
          Cty_GetDataOfCountryByCod (&Cty,Cty_GET_BASIC_DATA);
 
-         /* Country map */
          Tbl_StartRow ();
+
+         /* Country map */
          fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
          Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
                                             "COUNTRY_SMALL",
                                             "COUNTRY_MAP_SMALL",
                                             "DAT");
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
          /* Number of pending institutions (row[1]) */
          fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-	                    "%s"
-	                    "</td>",
+	                    "%s",
                   BgColor,row[1]);
          Tbl_EndRow ();
 
+         Tbl_EndRow ();
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
@@ -338,7 +339,7 @@ static void Cty_Configuration (bool PrintView)
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    if (!PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0])
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Link to the country inside platform *****/
@@ -371,7 +372,7 @@ static void Cty_Configuration (bool PrintView)
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_QR_code);
       QR_LinkTo (250,"cty",Gbl.Hierarchy.Cty.CtyCod);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
    else
@@ -409,7 +410,7 @@ static void Cty_Configuration (bool PrintView)
 	       Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Number of centres *****/
@@ -724,7 +725,7 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
 				      "COUNTRY_SMALL",
 				      "COUNTRY_MAP_SMALL",
 				      "DAT_N");
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /* Write stats of this country */
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
@@ -1626,7 +1627,7 @@ static void Cty_ListCountriesForEdition (void)
          Ico_PutIconRemove ();
          Frm_EndForm ();
         }
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Numerical country code (ISO 3166-1) */
       fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
@@ -1680,7 +1681,7 @@ static void Cty_ListCountriesForEdition (void)
                   Cty_MAX_CHARS_NAME,
                   Cty->Name[Lan],Gbl.Form.Id);
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
          /* WWW */
          fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
@@ -1694,7 +1695,7 @@ static void Cty_ListCountriesForEdition (void)
                   Cns_MAX_CHARS_WWW,
                   Cty->WWW[Lan],Gbl.Form.Id);
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
          Tbl_EndRow ();
         }

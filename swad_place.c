@@ -534,7 +534,7 @@ static void Plc_ListPlacesForEdition (void)
          Ico_PutIconRemove ();
          Frm_EndForm ();
         }
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Place code */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -552,7 +552,7 @@ static void Plc_ListPlacesForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Place full name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -564,7 +564,7 @@ static void Plc_ListPlacesForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Number of centres */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"

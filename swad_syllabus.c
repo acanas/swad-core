@@ -617,7 +617,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
             Ico_PutIconRemove ();
             Frm_EndForm ();
 	   }
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
 	 /***** Icon to get up an item *****/
 	 Syl_CalculateUpSubtreeSyllabus (&Subtree,NumItem);
@@ -636,7 +636,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	   }
 	 else
             Ico_PutIconOff ("arrow-up.svg",Txt_Movement_not_allowed);
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
 	 /***** Icon to get down item *****/
 	 Syl_CalculateDownSubtreeSyllabus (&Subtree,NumItem);
@@ -655,7 +655,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	   }
 	 else
             Ico_PutIconOff ("arrow-down.svg",Txt_Movement_not_allowed);
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
 	 /***** Icon to increase the level of an item *****/
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
@@ -672,7 +672,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	   }
 	 else
             Ico_PutIconOff ("arrow-left.svg",Txt_Movement_not_allowed);
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
 	 /***** Icon to decrease level item *****/
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
@@ -690,7 +690,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	   }
 	 else
             Ico_PutIconOff ("arrow-right.svg",Txt_Movement_not_allowed);
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
 	 LastLevel = Level;
 	}
@@ -925,7 +925,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\" />",
 	    Gbl.Form.Id);
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/

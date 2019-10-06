@@ -207,7 +207,7 @@ void Dup_ListDuplicateUsrs (void)
 	    /* Button to remove from list of possible duplicate users */
 	    Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
 
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 	    Tbl_EndRow ();
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -333,7 +333,7 @@ static void Dup_ListSimilarUsrs (void)
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_NET);
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);
 
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 	    Tbl_EndRow ();
 
 	    Tbl_StartRow ();
@@ -352,7 +352,7 @@ static void Dup_ListSimilarUsrs (void)
 	    if (Dup_CheckIfUsrIsDup (UsrDat.UsrCod))
 	       Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
 
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 	    Tbl_EndRow ();
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;

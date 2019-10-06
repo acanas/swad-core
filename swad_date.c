@@ -477,7 +477,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 				                SetHMS000000To235959 ? Dat_HMS_TO_235959 :	// Set hour, minute and second to 23:59:59
 				                                       Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                false);						// Don't submit on change
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
   }
 
@@ -517,7 +517,7 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
 				                   FormSeconds,
 				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                   false);		// Don't submit on change
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
   }

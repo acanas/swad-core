@@ -526,7 +526,7 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
    else
       Ico_PutIconRemovalNotAllowed ();
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -538,7 +538,7 @@ static void Mch_ListOneOrMoreMatchesAuthor (const struct Match *Match)
    /***** Match author (teacher) *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
    Usr_WriteAuthor1Line (Match->UsrCod,false);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -586,7 +586,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
    if (Gbl.Crs.Grps.NumGrps)
       Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (Match);
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -716,7 +716,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
 	 break;
      }
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -780,7 +780,7 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
 	 break;
      }
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -1284,7 +1284,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
 
       /***** End table and box *****/
       Box_EndBoxTable ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
 
@@ -2516,7 +2516,7 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	    Frm_EndForm ();
 
 	    /* End table cell */
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 
 	    /***** End row *****/
 	    Tbl_EndRow ();

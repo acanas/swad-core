@@ -431,7 +431,7 @@ static void DT_ListDegreeTypesForEdition (void)
                Gbl.DegTypes.Lst[NumDegTyp].DegTypName,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Number of degrees of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"

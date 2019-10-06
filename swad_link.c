@@ -429,7 +429,7 @@ static void Lnk_ListLinksForEdition (void)
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Link code */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -448,7 +448,7 @@ static void Lnk_ListLinksForEdition (void)
                Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Link full name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -461,7 +461,7 @@ static void Lnk_ListLinksForEdition (void)
                Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Link WWW */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -474,7 +474,7 @@ static void Lnk_ListLinksForEdition (void)
                Cns_MAX_CHARS_WWW,Lnk->WWW,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
 

@@ -520,7 +520,7 @@ static void Dpt_ListDepartmentsForEdition (void)
          Ico_PutIconRemove ();
          Frm_EndForm ();
         }
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Department code */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -549,7 +549,7 @@ static void Dpt_ListDepartmentsForEdition (void)
                   Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
       fprintf (Gbl.F.Out,"</select>");
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Department short name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -561,7 +561,7 @@ static void Dpt_ListDepartmentsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Department full name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -573,7 +573,7 @@ static void Dpt_ListDepartmentsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Hie_MAX_CHARS_FULL_NAME,Dpt->FullName,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Department WWW */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -585,7 +585,7 @@ static void Dpt_ListDepartmentsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_CHARS_WWW,Dpt->WWW,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Number of teachers */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"

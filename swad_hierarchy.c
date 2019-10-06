@@ -110,7 +110,7 @@ void Hie_WriteMenuHierarchy (void)
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Country);
    Cty_WriteSelectorOfCountry ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
@@ -124,7 +124,7 @@ void Hie_WriteMenuHierarchy (void)
                          "<td class=\"LEFT_MIDDLE\">",
                The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Institution);
       Ins_WriteSelectorOfInstitution ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       if (Gbl.Hierarchy.Ins.InsCod > 0)
@@ -138,7 +138,7 @@ void Hie_WriteMenuHierarchy (void)
                             "<td class=\"LEFT_MIDDLE\">",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Centre);
          Ctr_WriteSelectorOfCentre ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
          Tbl_EndRow ();
 
          if (Gbl.Hierarchy.Ctr.CtrCod > 0)
@@ -152,7 +152,7 @@ void Hie_WriteMenuHierarchy (void)
                                "<td class=\"LEFT_MIDDLE\">",
                      The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Degree);
             Deg_WriteSelectorOfDegree ();
-            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndCell ();
             Tbl_EndRow ();
 
 	    if (Gbl.Hierarchy.Deg.DegCod > 0)
@@ -166,7 +166,7 @@ void Hie_WriteMenuHierarchy (void)
 				  "<td class=\"LEFT_MIDDLE\">",
 			The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Course);
 	       Crs_WriteSelectorOfCourse ();
-	       fprintf (Gbl.F.Out,"</td>");
+	       Tbl_EndCell ();
 	       Tbl_EndRow ();
 	      }
            }

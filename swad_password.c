@@ -706,7 +706,7 @@ void Pwd_ShowFormChgMyPwd (void)
    fprintf (Gbl.F.Out,"<td colspan=\"2\">");
    Ale_ShowAlert (Ale_INFO,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
 	          Pwd_MIN_CHARS_PLAIN_PASSWORD);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** New password *****/

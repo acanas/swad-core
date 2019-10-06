@@ -399,7 +399,7 @@ static void Plg_ListPluginsForEdition (void)
       Plg_PutParamPlgCod (Plg->PlgCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Plugin code */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -428,7 +428,7 @@ static void Plg_ListPluginsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Plugin description */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -439,7 +439,7 @@ static void Plg_ListPluginsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Plugin logo */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -450,7 +450,7 @@ static void Plg_ListPluginsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Plugin application key */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -461,7 +461,7 @@ static void Plg_ListPluginsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Plugin URL */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -472,7 +472,7 @@ static void Plg_ListPluginsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_CHARS_WWW,Plg->URL,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Plugin IP */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -484,7 +484,7 @@ static void Plg_ListPluginsForEdition (void)
                Cns_MAX_CHARS_IP,Plg->IP,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
 

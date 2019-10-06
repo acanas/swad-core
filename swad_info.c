@@ -1157,7 +1157,7 @@ void Inf_FormsToSelSendInfo (void)
 	}
       fprintf (Gbl.F.Out," />");
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Form for this info source */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
@@ -1172,7 +1172,7 @@ void Inf_FormsToSelSendInfo (void)
                   Txt_INFO_SRC_HELP[InfoSrc]);
       if (Inf_FormsForEditionTypes[InfoSrc])
          Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
 

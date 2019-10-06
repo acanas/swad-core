@@ -1300,7 +1300,7 @@ static void Grp_ListGroupTypesForEdition (void)
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Name of group type */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
@@ -1313,7 +1313,7 @@ static void Grp_ListGroupTypesForEdition (void)
                Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Is it mandatory to register in any group? */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -1335,7 +1335,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	                 "</select>",
                Txt_It_is_mandatory_to_choose_a_group);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Is it possible to register in multiple groups? */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -1357,7 +1357,7 @@ static void Grp_ListGroupTypesForEdition (void)
 	                 "</select>",
                Txt_A_student_can_belong_to_several_groups);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Open time */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
@@ -1389,11 +1389,11 @@ static void Grp_ListGroupTypesForEdition (void)
 				                   Dat_FORM_SECONDS_ON,
 				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                   true);		// Submit on change
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
       Tbl_EndTable ();
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Number of groups of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
@@ -1516,7 +1516,7 @@ static void Grp_ListGroupsForEdition (void)
          Grp_PutParamGrpCod (Grp->GrpCod);
          Ico_PutIconRemove ();
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
          /***** Icon to open/close group *****/
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
@@ -1532,7 +1532,7 @@ static void Grp_ListGroupsForEdition (void)
                 	              "lock.svg",
                           Gbl.Title);
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
          /***** Icon to activate file zones for this group *****/
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
@@ -1548,7 +1548,7 @@ static void Grp_ListGroupsForEdition (void)
                 	                   "folder-red.svg",
                           Gbl.Title);
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
          /***** Group type *****/
          /* Start selector */
@@ -1574,7 +1574,7 @@ static void Grp_ListGroupsForEdition (void)
          /* End selector */
          fprintf (Gbl.F.Out,"</select>");
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
          /***** Group name *****/
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -1585,7 +1585,7 @@ static void Grp_ListGroupsForEdition (void)
                             " onchange=\"document.getElementById('%s').submit();\" />",
                   Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,Gbl.Form.Id);
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
 	 /***** Classroom *****/
 	 /* Start selector */
@@ -1626,7 +1626,7 @@ static void Grp_ListGroupsForEdition (void)
 	 /* End selector */
 	 fprintf (Gbl.F.Out,"</select>");
          Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 
          /***** Current number of users in this group *****/
          for (Role = Rol_TCH;
@@ -1647,7 +1647,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"\" onchange=\"document.getElementById('%s').submit();\" />",
                   Gbl.Form.Id);
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
          Tbl_EndRow ();
         }
      }
@@ -2164,7 +2164,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       fprintf (Gbl.F.Out," />");
 
       /* End cell for checkbox */
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Write cell for group */
       Grp_WriteRowGrp (Grp,UsrBelongsToThisGroup);
@@ -2364,7 +2364,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
                UniqueId,(long) GrpTyp->OpenTimeUTC,
                (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Head row with title of each column *****/
@@ -2419,7 +2419,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    Ico_PutIconOff (Grp->Open ? "unlock.svg" :
         	               "lock.svg",
 	           Gbl.Title);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Group name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
@@ -2477,7 +2477,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
                Vacant > 0 ? (unsigned) Vacant :
         	                       0);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -2577,10 +2577,10 @@ static void Grp_PutFormToCreateGroupType (void)
 				                Dat_FORM_SECONDS_ON,
 				                Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                false);			// Don't submit on change
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
    Tbl_EndTable ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Number of groups of this type *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
@@ -2630,12 +2630,12 @@ static void Grp_PutFormToCreateGroup (void)
    /***** Disabled icon to open group *****/
    fprintf (Gbl.F.Out,"<td class=\"BM\">");
    Ico_PutIconOff ("lock.svg",Txt_Group_closed);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Disabled icon for archive zone *****/
    fprintf (Gbl.F.Out,"<td class=\"BM\">");
    Ico_PutIconOff ("folder-red.svg",Txt_File_zones_disabled);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Group type *****/
    /* Start selector */

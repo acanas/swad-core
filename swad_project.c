@@ -993,7 +993,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 					      "DATE_BLUE",
 	          Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%u",NumIndex);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 break;
       default:
 	 break;
@@ -1009,7 +1009,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	    fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
          fprintf (Gbl.F.Out,"\">");
          Prj_PutFormsToRemEditOnePrj (Prj,Anchor,ICanViewProjectFiles);
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 	 break;
       default:
 	 break;
@@ -1071,7 +1071,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    else
       fprintf (Gbl.F.Out,"%s",Prj->Title);
    Lay_EndArticle ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /* Department */
    Prj_ShowOneProjectDepartment (Prj,ProjectView);
@@ -1112,7 +1112,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
         	                                    Txt_No);
    Ico_PutIconOff (PreassignedNonpreassigImage[Prj->Preassigned],
 		   Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned]);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Number of students *****/
@@ -1162,27 +1162,27 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 fprintf (Gbl.F.Out,"<td colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\">",
 	          Gbl.RowEvenOdd);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 
 	 Tbl_StartRowAttr ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
 	 fprintf (Gbl.F.Out,"<td colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\">",
 	          Gbl.RowEvenOdd);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 Tbl_StartRowAttr ("id=\"prj_exp_%u\"",UniqueId);
 	 fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"CENTER_MIDDLE\">");
 	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 
 	 Tbl_StartRowAttr ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
 	 fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"CENTER_MIDDLE\">");
 	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 	 break;
       default:
@@ -1411,7 +1411,7 @@ static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
    fprintf (Gbl.F.Out,"%s",Dpt.FullName);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
   }
 
@@ -1560,7 +1560,7 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
    fprintf (Gbl.F.Out,"%s",Prj->URL);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
   }
 
@@ -1720,7 +1720,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 					      Prj_PutCurrentParams,
 					      "trash.svg",
 					      Txt_Remove);
-	       fprintf (Gbl.F.Out,"</td>");
+	       Tbl_EndCell ();
 	      }
 
 	    /* Put user's photo */
@@ -1729,7 +1729,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
 								 NULL,
 			      "PHOTO21x28",Pho_ZOOM,false);
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 
 	    /* Write user's name */
 	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_NAM\">%s</td>",
@@ -1766,7 +1766,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
       Tbl_EndTable ();
 
       /***** End row with label and listing of users *****/
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
 
@@ -1822,7 +1822,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** End column with list of all members with this role *****/
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -3354,7 +3354,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                                 0,				// First option
                                 Txt_Another_department,		// Text when no department selected
                                 false);				// Don't submit on change
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /* Preassigned? */

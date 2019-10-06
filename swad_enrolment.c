@@ -2301,7 +2301,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeEnr",true);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /* Users' roles in listing */
@@ -2316,7 +2316,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                            1 << Rol_TCH,
                            RolesSelected,
                            false,true);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /* End table and form */
@@ -2882,7 +2882,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
         	               "</a>",
                      Deg.ShrtName,Crs.ShrtName);
             Frm_EndForm ();
-            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndCell ();
 
             /***** Number of teachers in the course *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP\">"
@@ -2897,7 +2897,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
                               "PHOTO21x28",Pho_ZOOM,false);
-            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndCell ();
 
             /***** User name *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">"
@@ -2938,7 +2938,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Btn_PutCreateButtonInline (Txt_Register);
             Frm_EndForm ();
-            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndCell ();
 
             /***** Button to reject the request *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
@@ -2947,7 +2947,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Btn_PutRemoveButtonInline (Txt_Reject);
             Frm_EndForm ();
-            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndCell ();
             Tbl_EndRow ();
 
             /***** Mark possible notification as seen *****/

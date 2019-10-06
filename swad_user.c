@@ -3647,7 +3647,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
       Usr_PutCheckboxToSelectUser (Role,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
 
    /***** User has accepted enrolment? *****/
@@ -3683,7 +3683,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO21x28",Pho_ZOOM,false);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
 
    /****** Write user's IDs ******/
@@ -3692,7 +3692,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                                "DAT_SMALL",
             BgColor);
    ID_WriteUsrIDs (UsrDat,NULL);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write rest of main user's data *****/
    Ins.InsCod = UsrDat->InsCod;
@@ -3700,7 +3700,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
    Ins_DrawInstitutionLogoWithLink (&Ins,25);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** End row *****/
    Tbl_EndRow ();
@@ -3730,7 +3730,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO21x28",Pho_NO_ZOOM,false);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
 
    /****** Write user's ID ******/
@@ -3832,7 +3832,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO21x28",Pho_NO_ZOOM,false);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
 
    /****** Write user's ID ******/
@@ -3951,7 +3951,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO21x28",Pho_NO_ZOOM,false);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
 
    /****** Write the user's ID ******/
@@ -4030,7 +4030,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO21x28",Pho_ZOOM,false);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
 
    /****** Write the user's ID ******/
@@ -4047,7 +4047,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",Gbl.ColorRows[Gbl.RowEvenOdd]);
    Ins_DrawInstitutionLogoWithLink (&Ins,25);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Write degrees which are administrated by this administrator *****/
@@ -6558,7 +6558,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
          fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"TIT CENTER_MIDDLE\">",
                   1 + Usr_NUM_MAIN_FIELDS_DATA_USR);
          Grp_WriteNamesOfSelectedGrps ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
          Tbl_EndRow ();
         }
 
@@ -6887,7 +6887,7 @@ void Usr_ListAllDataStds (void)
          fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"TIT CENTER_MIDDLE\">",
                   NumColumnsTotal);
          Grp_WriteNamesOfSelectedGrps ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
          Tbl_EndRow ();
         }
 
@@ -7251,7 +7251,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	      }
 	    else
 	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Role);
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 	    Tbl_EndRow ();
 	   }
 
@@ -8981,7 +8981,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	 fprintf (Gbl.F.Out,"</div>");
 
 	 /***** End user's cell *****/
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 
 	 if ((++NumUsr % Gbl.Usrs.ClassPhoto.Cols) == 0)
 	   {
@@ -9749,7 +9749,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
                      "PHOTO45x60",Pho_ZOOM,false);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Start form to go to user's record card *****/
    fprintf (Gbl.F.Out,"<td ");
@@ -9787,6 +9787,6 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 
    /***** End form *****/
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 

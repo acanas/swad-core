@@ -1037,7 +1037,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             ClassData,Gbl.RowEvenOdd);
    if (!QuestionExists)
       fprintf (Gbl.F.Out,"%u&nbsp;",++NumNonExistingQst);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write the question tags *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
@@ -1067,7 +1067,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
       fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;(%s)&nbsp;</span>",
                ClassData,Txt_no_tags);
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write the question type *****/
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP COLOR%u\">"
@@ -1091,7 +1091,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                   Txt_TST_Answer_given_by_the_teachers,
                   QuestionExists ? "ICO_HIDDEN " :
                 	           "");
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write the stem and the answers *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
@@ -1161,7 +1161,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                         Txt_TST_Answer_given_by_the_teachers,
                         QuestionExists ? "ICO_HIDDEN " :
                                          "");
-            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndCell ();
 
             /* Write the number of option */
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
@@ -1180,7 +1180,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 		                  "%s"
 		                  "</div>",
 			AnswerFeedback);
-            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndCell ();
             Tbl_EndRow ();
 
 	    /* Free memory allocated for the answer and the feedback */
@@ -1193,6 +1193,6 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
       default:
          break;
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
   }

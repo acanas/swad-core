@@ -313,7 +313,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       Tbl_EndTable ();
      }
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Subject and content sections *****/
@@ -2972,7 +2972,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    Gbl.Msg.MsgCod = MsgCod;	// Message to be deleted
    Ico_PutContextualIconToRemove (ActionDelMsg[Gbl.Msg.TypeOfMessages],
                                   Msg_PutHiddenParamsOneMsg);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write message number *****/
    Msg_WriteMsgNumber (MsgNum,!Open);
@@ -2984,7 +2984,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
             Open ? "MSG_AUT_BG" :
 	           "MSG_AUT_BG_NEW");
    Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write subject *****/
    Msg_WriteSentOrReceivedMsgSubject (MsgCod,Subject,Open,Expanded);
@@ -3005,7 +3005,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       FromThisCrs = Msg_WriteCrsOrgMsg (CrsCod);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Form to reply message *****/
@@ -3015,11 +3015,11 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 	  Gbl.Usrs.Me.Role.Logged >= Rol_USR)
 	 // Guests (users without courses) can read messages but not reply them
          Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,Replied,&UsrDat);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       Tbl_EndTable ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /***** Write "From:" *****/
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP MSG_TIT\">"
@@ -3028,7 +3028,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
                          "<td colspan=\"2\" class=\"LEFT_TOP\">",
                Txt_MSG_From);
       Msg_WriteMsgFrom (&UsrDat,Deleted);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Write "To:" *****/
@@ -3039,7 +3039,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
                          "<td colspan=\"2\" class=\"LEFT_TOP\">",
                Txt_MSG_To);
       Msg_WriteMsgTo (MsgCod);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Write "Content:" *****/
@@ -3060,7 +3060,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       if (Content[0])
          Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
       Med_ShowMedia (&Media,"MSG_IMG_CONTAINER","MSG_IMG");
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Free image *****/
@@ -3175,7 +3175,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
    Frm_EndForm ();
 
    /***** End cell *****/
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -3212,7 +3212,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO30x40",Pho_ZOOM,false);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /***** Second column with user name (if author has a web page, put a link to it) *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
@@ -3238,7 +3238,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
      }
 
    /***** End second column *****/
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** End table *****/
@@ -3391,7 +3391,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    else
       fprintf (Gbl.F.Out,"[%s]",
                Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
    Tbl_EndTable ();
   }
@@ -3541,7 +3541,7 @@ static void Msg_WriteMsgTo (long MsgCod)
             fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
          else
             fprintf (Gbl.F.Out,"[%s]",Txt_unknown_recipient);	// User not found, likely a user who has been removed
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
          Tbl_EndRow ();
         }
 
@@ -3575,7 +3575,7 @@ static void Msg_WriteMsgTo (long MsgCod)
                   NumRecipientsKnown - NumRecipientsToShow);
          fprintf (Gbl.F.Out,"</a>");
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
          Tbl_EndRow ();
         }
 
@@ -3616,7 +3616,7 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /***** End cell *****/
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -3857,7 +3857,7 @@ void Msg_ListBannedUsrs (void)
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
             Frm_EndForm ();
-            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndCell ();
 
             /* Show photo */
             fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
@@ -3866,7 +3866,7 @@ void Msg_ListBannedUsrs (void)
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
                               "PHOTO21x28",Pho_ZOOM,false);
-            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndCell ();
 
             /* Write user's full name */
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"

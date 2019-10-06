@@ -410,7 +410,7 @@ void Gam_ShowOneGame (long GamCod,
       /* Icons to remove/edit this game */
       Gam_PutFormsToRemEditOneGame (&Game,Anchor);
 
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
 
    /***** Start/end date/time *****/
@@ -434,7 +434,7 @@ void Gam_ShowOneGame (long GamCod,
 		  (unsigned) StartEndTime,UniqueId,
 		  Game.TimeUTC[StartEndTime],
 		  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
 
    /***** Game title and main data *****/
@@ -463,7 +463,7 @@ void Gam_ShowOneGame (long GamCod,
             Txt_No_of_questions,
             Game.NumQsts);
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Number of matches in game *****/
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP");
@@ -482,7 +482,7 @@ void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"%u</a>",Game.NumMchs);
    Frm_EndForm ();
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** End 1st row of this game *****/
    Tbl_EndRow ();
@@ -496,7 +496,7 @@ void Gam_ShowOneGame (long GamCod,
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    Gam_WriteAuthor (&Game);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Text of the game *****/
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
@@ -1730,7 +1730,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       if (ICanEditQuestions)
 	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,Tst_PutParamQstCod);
 
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Write number of question */
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">"
@@ -1754,7 +1754,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
                Gbl.RowEvenOdd);
       Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Write stem (row[3]) */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
@@ -1776,7 +1776,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       /* Show answers */
       Tst_WriteAnswersEdit (Gbl.Test.QstCod);
 
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Destroy test question *****/

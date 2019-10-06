@@ -301,14 +301,19 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 	{
 	 /* Get next chat room */
 	 row = mysql_fetch_row (mysql_res);
+
          Tbl_StartRow ();
+
          fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-                            "%s"
-                            "</td>"
-                            "<td class=\"DAT RIGHT_MIDDLE\">"
-                            "%s"
-                            "</td>",
-                  row[0],row[1]);
+                            "%s",
+		  row[0]);
+         Tbl_EndCell ();
+
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+                            "%s",
+                  row[1]);
+	 Tbl_EndCell ();
+
          Tbl_EndRow ();
         }
 

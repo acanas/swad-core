@@ -507,7 +507,7 @@ void Ntf_ShowMyNotifications (void)
          else
             Ico_PutIconOff (Ntf_Icons[NotifyEvent],
         	            Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
          /* Write event type */
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
@@ -525,12 +525,12 @@ void Ntf_ShowMyNotifications (void)
          else
             fprintf (Gbl.F.Out,"<span class=\"%s\">%s</span>",
                      ClassAnchor,Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
          /* Write user (from) */
 	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",ClassAuthorBg);
 	 Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 
          /* Write location */
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
@@ -583,7 +583,7 @@ void Ntf_ShowMyNotifications (void)
             else
                fprintf (Gbl.F.Out,"</span>");
            }
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
 
          /* Write date and time */
          Msg_WriteMsgDate (DateTimeUTC,ClassBackground);

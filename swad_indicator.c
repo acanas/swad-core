@@ -127,7 +127,7 @@ void Ind_ReqIndicatorsCourses (void)
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeInd",true);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /* Compute stats for a type of degree */
@@ -158,7 +158,7 @@ void Ind_ReqIndicatorsCourses (void)
                                 -1L,				// First option
                                 Txt_Any_department,		// Text when no department selected
                                 true);				// Submit on change
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Get courses from database *****/
@@ -181,7 +181,7 @@ void Ind_ReqIndicatorsCourses (void)
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_No_of_indicators);
    Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,true);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /* End table and form */

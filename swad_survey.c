@@ -467,7 +467,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    fprintf (Gbl.F.Out,"\">");
    if (Svy.Status.ICanEdit)
       Svy_PutFormsToRemEditOneSvy (&Svy,Anchor);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /* Start date/time */
    UniqueId++;
@@ -576,7 +576,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	}
      }
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Write second row of data of this survey *****/
@@ -667,7 +667,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td colspan=\"5\">");
       Svy_ListSvyQuestions (&Svy,SvyQst);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
 
@@ -1867,7 +1867,7 @@ void Svy_RequestCreatOrEditSvy (void)
    Svy_SetDefaultAndAllowedScope (&Svy);
    Sco_GetScope ("ScopeSvy");
    Sco_PutSelectorScope ("ScopeSvy",false);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Survey title *****/
@@ -1916,7 +1916,7 @@ void Svy_RequestCreatOrEditSvy (void)
                            1 << Rol_TCH,
                            Svy.Roles,
                            false,false);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Groups *****/
@@ -2070,7 +2070,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 
       /***** End table and box *****/
       Box_EndBoxTable ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
 
@@ -2716,7 +2716,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 	                 "</label><br />",
                Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Answers *****/
@@ -2750,7 +2750,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       Tbl_EndRow ();
      }
    Tbl_EndTable ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    Tbl_EndRow ();
 
@@ -3240,7 +3240,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
             Svy_CurrentQstCod = SvyQst->QstCod;
             Ico_PutContextualIconToEdit (ActEdiOneSvyQst,Svy_PutParamsToEditQuestion);
 
-            fprintf (Gbl.F.Out,"</td>");
+            Tbl_EndCell ();
            }
 
          /* Write index of question inside survey (row[1]) */
@@ -3264,7 +3264,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
 	          Gbl.RowEvenOdd);
          Svy_WriteQstStem (row[3]);
          Svy_WriteAnswersOfAQst (Svy,SvyQst,PutFormAnswerSurvey);
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
          Tbl_EndRow ();
         }
 

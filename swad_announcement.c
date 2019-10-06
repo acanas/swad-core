@@ -415,11 +415,11 @@ void Ann_ShowFormAnnouncement (void)
    /***** Users' roles who can view the announcement *****/
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
-                      "%s: "
-                      "</td>"
-                      "<td class=\"DAT LEFT_TOP\">",
+                      "%s: ",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Users);
+   Tbl_EndCell ();
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
    Rol_WriteSelectorRoles (1 << Rol_UNK     |
                            1 << Rol_GST     |
                            1 << Rol_STD     |
@@ -431,7 +431,7 @@ void Ann_ShowFormAnnouncement (void)
                            1 << Rol_NET |
                            1 << Rol_TCH,
                            false,false);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
@@ -452,15 +452,15 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
 
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"%s\" class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"LEFT_TOP\">"
+	              "<label for=\"%s\" class=\"%s\">%s:</label>",
+	    Field,The_ClassFormInBox[Gbl.Prefs.Theme],Label);
+   Tbl_EndCell ();
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
                       "<textarea id=\"%s\" name=\"%s\""
                       " cols=\"75\" rows=\"%u\">"
-                      "</textarea>"
-	              "</td>",
-	    Field,The_ClassFormInBox[Gbl.Prefs.Theme],Label,
+                      "</textarea>",
 	    Field,Field,Rows);
+   Tbl_EndCell ();
    Tbl_EndRow ();
   }
 

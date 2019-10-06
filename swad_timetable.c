@@ -1713,5 +1713,5 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
       Frm_EndForm ();
 
    /***** End cell *****/
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }

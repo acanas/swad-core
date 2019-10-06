@@ -424,7 +424,7 @@ static void Ban_ListBannersForEdition (void)
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td class=\"BM\">");
       Ico_PutContextualIconToRemove (ActRemBan,Ban_PutParamBanCodToEdit);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Put icon to hide/show banner */
       fprintf (Gbl.F.Out,"<td class=\"BM\">");
@@ -432,7 +432,7 @@ static void Ban_ListBannersForEdition (void)
          Ico_PutContextualIconToUnhide (ActShoBan,Anchor,Ban_PutParamBanCodToEdit);
       else
          Ico_PutContextualIconToHide (ActHidBan,Anchor,Ban_PutParamBanCodToEdit);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Banner code */
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">",
@@ -441,7 +441,7 @@ static void Ban_ListBannersForEdition (void)
       Lay_StartArticle (Anchor);
       fprintf (Gbl.F.Out,"%ld",Ban->BanCod);
       Lay_EndArticle ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Banner short name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -453,7 +453,7 @@ static void Ban_ListBannersForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Banner full name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -465,7 +465,7 @@ static void Ban_ListBannersForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Ban_MAX_CHARS_FULL_NAME,Ban->FullName,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Banner image */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -476,7 +476,7 @@ static void Ban_ListBannersForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Ban_MAX_CHARS_IMAGE,Ban->Img,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Banner WWW */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -488,7 +488,7 @@ static void Ban_ListBannersForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_CHARS_WWW,Ban->WWW,Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /* Free anchor string */
@@ -865,8 +865,10 @@ static void Ban_PutFormToCreateBanner (void)
 
    /***** Banner code *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>"
-                      "<td class=\"BM\"></td>");
+   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_EndCell ();
+   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_EndCell ();
    Tbl_PutEmptyCells (1);
 
    /***** Banner short name *****/
@@ -874,35 +876,35 @@ static void Ban_PutFormToCreateBanner (void)
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Ban_MAX_CHARS_SHRT_NAME,Ban_EditingBan->ShrtName);
+   Tbl_EndCell ();
 
    /***** Banner full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Ban_MAX_CHARS_FULL_NAME,Ban_EditingBan->FullName);
+   Tbl_EndCell ();
 
    /***** Banner image *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"Img\""
                       " size=\"12\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Ban_MAX_CHARS_IMAGE,Ban_EditingBan->Img);
+   Tbl_EndCell ();
 
    /***** Banner WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Cns_MAX_CHARS_WWW,Ban_EditingBan->WWW);
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/

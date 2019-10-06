@@ -1629,7 +1629,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (!PrintView)
         fprintf (Gbl.F.Out,"</a>");
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Second column: class photo title *****/
    fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO_TITLE CENTER_MIDDLE\">");
@@ -1665,7 +1665,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
          Grp_WriteNamesOfSelectedGrps ();
         }
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Third column: degree logo *****/
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\" style=\"width:80px;\">");
@@ -1679,7 +1679,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (!PrintView)
          fprintf (Gbl.F.Out,"</a>");
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** End table *****/
    Tbl_EndRow ();

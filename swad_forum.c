@@ -1211,7 +1211,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
      }
    else
       fprintf (Gbl.F.Out,"[%s]",Txt_FORUM_Post_banned);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Form to ban/unban post *****/
@@ -1282,7 +1282,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 	 Frm_EndForm ();
 	}
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write author *****/
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
@@ -1292,7 +1292,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    if (Enabled)
       /* Write number of posts from this user */
       For_WriteNumberOfPosts (UsrDat.UsrCod);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write post content *****/
    fprintf (Gbl.F.Out,"<td class=\"MSG_TXT LEFT_TOP\">");
@@ -1307,7 +1307,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Free image *****/
@@ -3424,7 +3424,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                      Thr.NumMyPosts);
          fprintf (Gbl.F.Out,"\" class=\"PHOTO15x20\" />");
         }
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /***** Put an icon with thread status *****/
       fprintf (Gbl.F.Out,"<td class=\"CONTEXT_COL %s\">"
@@ -3475,7 +3475,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
          Frm_EndForm ();
         }
 
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /***** Write subject and links to thread pages *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP %s\">",BgColor);
@@ -3491,7 +3491,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                              Thr.NumUnreadPosts ? The_ClassFormInBoxBold[Gbl.Prefs.Theme] :
                         	                  The_ClassFormInBox[Gbl.Prefs.Theme],
                              true);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /***** Write the authors and date-times of first and last posts *****/
       for (Order = For_FIRST_MSG;
@@ -3505,7 +3505,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 	    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",Style,BgColor);
             Msg_WriteMsgAuthor (&UsrDat,Thr.Enabled[Order],BgColor);
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
             TimeUTC = Thr.WriteTime[Order];

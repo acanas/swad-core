@@ -283,7 +283,7 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
    Frm_StartForm (Action);
    Btn_PutButtonInline (Button,TxtButton);
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    Tbl_EndRow ();
   }

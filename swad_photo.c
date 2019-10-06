@@ -1810,7 +1810,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
      }
    fprintf (Gbl.F.Out,"</select>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
   }
 
@@ -1871,7 +1871,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
      }
    fprintf (Gbl.F.Out,"</select>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
   }
 
@@ -1932,7 +1932,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
      }
    fprintf (Gbl.F.Out,"</select>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
   }
 
@@ -2152,7 +2152,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 	    /***** Show average photo of students belonging to this degree *****/
 	    fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_MIDDLE\">");
 	    Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Usr_SEX_ALL,NumStds,NumStdsWithPhoto);
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 
 	    if ((++NumDegsNotEmpty % Gbl.Usrs.ClassPhoto.Cols) == 0)
 	      {
@@ -2256,7 +2256,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CENTER_TOP",true);
 	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg.FullName);
 	   }
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 
 	 for (Sex = (Usr_Sex_t) 0;
 	      Sex < Usr_NUM_SEXS;
@@ -2270,7 +2270,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	       Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto);
 	    else
 	       Pho_ShowDegreeStat (NumStds,NumStdsWithPhoto);
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 	   }
 	 Tbl_EndRow ();
 	}

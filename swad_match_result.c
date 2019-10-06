@@ -217,7 +217,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
          Tbl_EndTable ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
          Tbl_EndRow ();
 
          /***** Starting and ending dates in the search *****/
@@ -504,7 +504,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	 if (ShowResultThisMatch)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     ScoreInThisResult);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 
          /* Write average score per question */
 	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",
@@ -513,7 +513,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisResult ? ScoreInThisResult / (double) NumQstsInThisResult :
 			                   0.0);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 
          /* Write score over Tst_SCORE_MAX */
 	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",
@@ -522,7 +522,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisResult ? ScoreInThisResult * Tst_SCORE_MAX / (double) NumQstsInThisResult :
 			                   0.0);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 
 	 /* Link to show this result */
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
@@ -548,7 +548,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	   }
 	 else
 	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 
          Tbl_EndRow ();
         }
@@ -599,21 +599,21 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
 	    Gbl.RowEvenOdd);
    if (NumResults)
       fprintf (Gbl.F.Out,"%u",NumTotalQsts);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write total number of questions not blank *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	    Gbl.RowEvenOdd);
    if (NumResults)
       fprintf (Gbl.F.Out,"%u",NumTotalQstsNotBlank);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write total score *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	    Gbl.RowEvenOdd);
    if (ShowSummaryResults)
       fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllResults);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write average score per question *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
@@ -622,7 +622,7 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
       fprintf (Gbl.F.Out,"%.2lf",
 	       NumTotalQsts ? TotalScoreOfAllResults / (double) NumTotalQsts :
 			      0.0);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Write score over Tst_SCORE_MAX *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
@@ -632,7 +632,7 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
 	       NumTotalQsts ? TotalScoreOfAllResults * Tst_SCORE_MAX /
 			      (double) NumTotalQsts :
 			      0.0);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Last cell *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP COLOR%u\"></td>",
@@ -803,7 +803,7 @@ void McR_ShowOneMchResult (void)
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
 			"PHOTO45x60",Pho_ZOOM,false);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /* Start/end time (for user in this match) */
@@ -867,7 +867,7 @@ void McR_ShowOneMchResult (void)
 			 "<td class=\"DAT LEFT_TOP\">",
 	       Txt_Tags);
       Gam_ShowTstTagsPresentInAGame (Match.GamCod);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Write answers and solutions *****/

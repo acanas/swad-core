@@ -850,7 +850,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 					   NULL,
 			"PHOTO60x80",Pho_ZOOM,false);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Show user's name and icon to follow/unfollow *****/
    fprintf (Gbl.F.Out,"<td class=\"FOLLOW_USR\">");
@@ -882,7 +882,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 	 /* Form to follow */
 	 Fol_PutIconToFollow (UsrDat);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -908,7 +908,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 					    NULL,
 			"PHOTO21x28",Pho_ZOOM,false);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** User's name *****/
    fprintf (Gbl.F.Out,"<td class=\"CON_NAME_FOLLOW CON_CRS COLOR%u\">",
@@ -925,7 +925,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 	                 "</div>");
       Frm_EndForm ();
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Icon to follow *****/
    fprintf (Gbl.F.Out,"<td class=\"CON_ICON_FOLLOW RIGHT_MIDDLE COLOR%u\">",
@@ -944,7 +944,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 	 /* Form to follow */
 	 Fol_PutIconToFollow (UsrDat);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;

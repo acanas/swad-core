@@ -491,7 +491,7 @@ static void Mai_ListMailDomainsForEdition (void)
       Mai_PutParamMaiCod (Mai->MaiCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Mail code */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -509,7 +509,7 @@ static void Mai_ListMailDomainsForEdition (void)
                Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Mail domain info */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -521,7 +521,7 @@ static void Mai_ListMailDomainsForEdition (void)
                Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Number of users */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -1373,10 +1373,10 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
          Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
 			                                        Txt_Use_this_email);
 	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	}
 
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
 
@@ -1417,7 +1417,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
         	                          Txt_Save_changes);		// User has no email address yet
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** End table *****/

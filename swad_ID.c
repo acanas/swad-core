@@ -665,7 +665,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 		                                   "");
       if (NumID == UsrDat->IDs.Num - 1)
 	{
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
          Tbl_EndRow ();
 	}
      }
@@ -676,7 +676,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT CENTER_MIDDLE\">");
       Ale_ShowAlert (Ale_INFO,Txt_The_ID_is_used_in_order_to_facilitate_);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Form to enter new user's ID *****/
@@ -716,7 +716,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 		                 "");	// Show the most recent ID
       Btn_PutCreateButtonInline (Txt_Add_this_ID);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
 

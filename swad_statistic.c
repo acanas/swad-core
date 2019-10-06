@@ -386,7 +386,7 @@ void Sta_AskShowCrsHits (void)
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
          Tbl_EndTable ();
-         fprintf (Gbl.F.Out,"</td>");
+         Tbl_EndCell ();
          Tbl_EndRow ();
 
          /***** Initial and final dates of the search *****/
@@ -576,7 +576,7 @@ void Sta_AskShowGblHits (void)
    Gbl.Scope.Default = Hie_SYS;
    Sco_GetScope ("ScopeSta");
    Sco_PutSelectorScope ("ScopeSta",false);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Count type for the statistic *****/
@@ -1602,7 +1602,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       fprintf (Gbl.F.Out,"<strong>&lt;%s</strong></a>",
                Txt_PAGES_Previous);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    if (FirstRow > 1)
       Frm_EndForm ();
 
@@ -1639,13 +1639,13 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	                 "</a>",
                Txt_PAGES_Next);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    if (LastRow < NumRows)
       Frm_EndForm ();
 
    Tbl_EndRow ();
    Tbl_EndTable ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Write heading *****/
@@ -1756,7 +1756,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",
                Gbl.RowEvenOdd);
       Sta_WriteLogComments (LogCod);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
 
@@ -1864,7 +1864,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
                         "PHOTO15x20",Pho_ZOOM,false);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Write the user's ID if user is a student in current course */
       fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",
@@ -2126,7 +2126,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    fprintf (Gbl.F.Out,"</select>"
 	              "</label>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Compute maximum number of pages generated per day-hour *****/
@@ -2164,7 +2164,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 	              " style=\"width:%upx;\">",
 	    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH);
    Sta_DrawBarColors (SelectedColorType,Hits.Max);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    Tbl_StartRow ();
@@ -2385,14 +2385,14 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
                GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
       Str_WriteFloatNum (Gbl.F.Out,(float) Interval * HitsMax / 5.0);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG RIGHT_BOTTOM\""
 	              " style=\"width:%upx;\">",
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
             (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
    Str_WriteFloatNum (Gbl.F.Out,HitsMax);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    Tbl_StartRow ();
@@ -3057,7 +3057,7 @@ static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
 	                 " style=\"width:%upx;\">",
                Sta_WIDTH_DIVISION_GRAPHIC);
       fprintf (Gbl.F.Out,Format,NumX);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
    Tbl_EndRow ();
   }
@@ -3130,7 +3130,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
                   BarWidth);
 
    /***** End cell of graphic and end row *****/
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
   }
 
@@ -3473,7 +3473,7 @@ static void Sta_WriteCountry (long CtyCod)
       fprintf (Gbl.F.Out,"&nbsp;-&nbsp;");
 
    /***** End cell *****/
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -3569,7 +3569,7 @@ static void Sta_WriteInstitution (long InsCod)
       fprintf (Gbl.F.Out,">&nbsp;-&nbsp;");
 
    /***** End cell *****/
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -3665,7 +3665,7 @@ static void Sta_WriteCentre (long CtrCod)
       fprintf (Gbl.F.Out,">&nbsp;-&nbsp;");
 
    /***** End cell *****/
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -3761,7 +3761,7 @@ static void Sta_WriteDegree (long DegCod)
       fprintf (Gbl.F.Out,">&nbsp;-&nbsp;");
 
    /***** End cell *****/
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -3863,7 +3863,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       fprintf (Gbl.F.Out,"&nbsp;");
       if (CrsOK)
          Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /* Draw bar proportional to number of hits */
       Hits.Num = Str_GetFloatNumFromStr (row[1]);
@@ -4243,7 +4243,7 @@ void Sta_GetAndShowLastClicks (void)
       if (row[8])
 	 if (row[8][0])
 	    fprintf (Gbl.F.Out,"%s",row[8]);			// Action
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
      }
    Tbl_EndTable ();

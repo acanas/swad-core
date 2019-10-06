@@ -213,6 +213,12 @@ void Tbl_EndRow (void)
 /********************************* Table cells *******************************/
 /*****************************************************************************/
 
+void Tbl_EndCell (void)
+  {
+   fprintf (Gbl.F.Out,
+	    "</td>");
+  }
+
 void Tbl_PutEmptyCells (unsigned NumColumns)
   {
    unsigned NumCol;

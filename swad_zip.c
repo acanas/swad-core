@@ -618,7 +618,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
       fprintf (Gbl.F.Out," (%s %s)",
                FileSizeStr,Txt_FILE_uncompressed);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** End table and box *****/

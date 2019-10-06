@@ -3199,7 +3199,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	    Brw_InitializeFileBrowser ();
 	    Brw_ShowFileBrowser ();
 
-	    fprintf (Gbl.F.Out,"</td>");
+	    Tbl_EndCell ();
 	    Tbl_EndRow ();
 	   }
      }
@@ -3367,7 +3367,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
                      "PHOTO60x80",Pho_ZOOM,false);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    /***** Start form to send a message to this user *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
@@ -3415,7 +3415,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</div>");
 
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -5616,7 +5616,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
       /* Icon with file type or link */
       fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
       Brw_PutIconFileWithLinkToViewMetadata (16,&FileMetadata);
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
 
    /* Check if is a new file or folder */
@@ -5630,7 +5630,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /* End column */
    Tbl_EndRow ();
    Tbl_EndTable ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    if (AdminMarks)
       /***** Header and footer rows *****/
@@ -5651,7 +5651,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 	  !SeeMarks &&				// Do not ZIP folders when seeing marks
 	  !(SeeDocsZone && RowSetAsHidden))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
 	 Brw_PutButtonToDownloadZIPOfAFolder ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
    else	// File or link
       /***** User who created the file or folder *****/
@@ -5765,7 +5765,7 @@ static void Brw_PutIconRemove (void)
    else
       Ico_PutIconRemovalNotAllowed ();
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -5780,7 +5780,7 @@ static void Brw_PutIconCopy (void)
    Ico_PutContextualIconToCopy (Brw_ActCopy[Gbl.FileBrowser.Type],
 				Brw_PutImplicitParamsFileBrowser);
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -5807,7 +5807,7 @@ static void Brw_PutIconPaste (unsigned Level)
 	 Ico_PutIconOff ("paste.svg",Txt_Copy_not_allowed);
      }
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -5852,11 +5852,11 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                       false);	// Visible
 	 break;
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    Tbl_EndRow ();
    Tbl_EndTable ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -5952,7 +5952,7 @@ static void Brw_PutIconShow (const char *Anchor)
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
    Ico_PutContextualIconToUnhide (Brw_ActShow[Gbl.FileBrowser.Type],Anchor,
 	                          Brw_PutImplicitParamsFileBrowser);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -5964,7 +5964,7 @@ static void Brw_PutIconHide (const char *Anchor)
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
    Ico_PutContextualIconToHide (Brw_ActHide[Gbl.FileBrowser.Type],Anchor,
 	                        Brw_PutImplicitParamsFileBrowser);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -6055,7 +6055,7 @@ static void Brw_PutIconFolder (unsigned Level,
      }
 
    /***** End cell *****/
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -6285,7 +6285,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
       /***** End cell *****/
       fprintf (Gbl.F.Out,"</div>");
 
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
    else	// File or link
      {
@@ -6414,7 +6414,7 @@ static void Brw_WriteDatesAssignment (void)
    else
       fprintf (Gbl.F.Out,"&nbsp;(%s)",
                Txt_unknown_assignment);
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -6455,7 +6455,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
                UniqueId,(long) FileMetadata->Time,
                (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
      }
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -6497,7 +6497,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
                Txt_Unknown_or_without_photo,
                Txt_Unknown_or_without_photo);
 
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
 
    if (Level && UsrCod > 0)
       /***** Free memory used for user's data *****/
@@ -9498,7 +9498,7 @@ void Brw_ShowFileMetadata (void)
 	 fprintf (Gbl.F.Out,"<td colspan=\"2\""
 			    " class=\"FILENAME_TXT CENTER_MIDDLE\">");
 	 Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 
 	 /***** Filename *****/
@@ -9509,7 +9509,7 @@ void Brw_ShowFileMetadata (void)
 			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Filename);
 	 Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 
 	 /***** Publisher's data *****/
@@ -9534,7 +9534,7 @@ void Brw_ShowFileMetadata (void)
 	 else
 	    /* Unknown publisher */
 	    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 
 	 /***** Free memory used for publisher's data *****/
@@ -9601,7 +9601,7 @@ void Brw_ShowFileMetadata (void)
 	    fprintf (Gbl.F.Out,"%s",
 	             FileMetadata.IsPublic ? Txt_Public_open_educational_resource_OER_for_everyone :
 					     Txt_Private_available_to_certain_users_identified);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 
 	 /***** License *****/
@@ -9628,7 +9628,7 @@ void Brw_ShowFileMetadata (void)
 	   }
 	 else		// I can not edit file properties
 	    fprintf (Gbl.F.Out,"%s",Txt_LICENSES[FileMetadata.License]);
-	 fprintf (Gbl.F.Out,"</td>");
+	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 
 	 /***** Write my number of views *****/
@@ -11941,7 +11941,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsShortName);
 	 Frm_EndForm ();
 	}
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /***** Write centre logo, centre short name *****/
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP %s\">",
@@ -11958,7 +11958,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrShortName);
 	 Frm_EndForm ();
 	}
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /***** Write degree logo, degree short name *****/
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP %s\">",
@@ -11975,7 +11975,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegShortName);
 	 Frm_EndForm ();
 	}
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /***** Write course short name *****/
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP %s\">",
@@ -11991,7 +11991,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 fprintf (Gbl.F.Out,"%s</a>",CrsShortName);
 	 Frm_EndForm ();
 	}
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /***** Write file zone *****/
       switch (FileMetadata.FileBrowser)
@@ -12107,7 +12107,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       /* End form */
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;

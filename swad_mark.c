@@ -138,7 +138,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
 
       /***** Write the number of rows of footer *****/
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
@@ -158,7 +158,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</td>");
+      Tbl_EndCell ();
      }
   }
 

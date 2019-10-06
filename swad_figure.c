@@ -559,7 +559,7 @@ static void Fig_GetAndShowUsersRanking (void)
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"DAT LEFT_TOP\">");
    Prf_GetAndShowRankingMsgSnt ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** End table and box *****/
@@ -1025,7 +1025,7 @@ static void Fig_ShowHierarchyCell (const char *ClassTxt,int Num)
       fprintf (Gbl.F.Out,"%d",Num);
    else		// < 0 ==> do not show number
       fprintf (Gbl.F.Out,"-");
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -1455,7 +1455,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	                NumberThisRow);
 
 	       /***** End user's cell *****/
-	       fprintf (Gbl.F.Out,"</td>");
+	       Tbl_EndCell ();
 
 	       if ((++NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
 		 {
@@ -1514,7 +1514,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       fprintf (Gbl.F.Out,"%s</a>",Ins.FullName);
 	       Frm_EndForm ();
 
-	       fprintf (Gbl.F.Out,"</td>");
+	       Tbl_EndCell ();
 
 	       /***** Write statistic *****/
 	       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"

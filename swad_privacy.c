@@ -196,7 +196,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    fprintf (Gbl.F.Out,"</ul>");
    if (Action != ActUnk)
       Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</td>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
   }
 
