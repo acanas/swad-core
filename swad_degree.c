@@ -212,8 +212,9 @@ void Deg_SeeDegWithPendingCrss (void)
          /* Get data of degree */
          Deg_GetDataOfDegreeByCod (&Deg);
 
-         /* Degree logo and full name */
          Tbl_StartRow ();
+
+         /* Degree logo and full name */
          fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
          Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,
@@ -222,9 +223,10 @@ void Deg_SeeDegWithPendingCrss (void)
 
          /* Number of pending courses (row[1]) */
          fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-	                    "%s"
-	                    "</td>",
+	                    "%s",
                   BgColor,row[1]);
+         Tbl_EndCell ();
+
          Tbl_EndRow ();
 
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -343,13 +345,14 @@ static void Deg_Configuration (bool PrintView)
 
    /***** Centre *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"OthCtrCod\" class=\"%s\">%s:</label>"
-		      "</td>"
-		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+		      "<label for=\"OthCtrCod\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Centre);
+   Tbl_EndCell ();
 
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE\">");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       // Only institution admins and system admin can move a degree to another centre
@@ -379,18 +382,19 @@ static void Deg_Configuration (bool PrintView)
      }
    else	// I can not move degree to another centre
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.FullName);
-
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Degree full name *****/
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"FullName\" class=\"%s\">%s:</label>"
-		      "</td>"
-		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+		      "<label for=\"FullName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Degree);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE\">");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -416,11 +420,11 @@ static void Deg_Configuration (bool PrintView)
    /***** Degree short name *****/
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"ShortName\" class=\"%s\">%s:</label>"
-		      "</td>"
-		      "<td class=\"DAT_N LEFT_MIDDLE\">",
+		      "<label for=\"ShortName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Short_name);
+   fprintf (Gbl.F.Out,"</td>"
+		      "<td class=\"DAT_N LEFT_MIDDLE\">");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -446,11 +450,12 @@ static void Deg_Configuration (bool PrintView)
    /***** Degree WWW *****/
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"WWW\" class=\"%s\">%s:</label>"
-		      "</td>"
-		      "<td class=\"DAT LEFT_MIDDLE\">",
+		      "<label for=\"WWW\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Web);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
       // Only degree admins, centre admins, institution admins
@@ -480,50 +485,58 @@ static void Deg_Configuration (bool PrintView)
 
    /***** Shortcut to the degree *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:"
-		      "</td>"
-		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "%s:",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Shortcut);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 		      "<a href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\">"
 		      "%s/%s?deg=%ld"
-		      "</a>"
-		      "</td>",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],
-	    Txt_Shortcut,
+		      "</a>",
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Deg.DegCod,
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Deg.DegCod);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    if (PrintView)
      {
       /***** QR code with link to the degree *****/
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"DAT LEFT_MIDDLE\">",
+			 "%s:",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_QR_code);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       QR_LinkTo (250,"deg",Gbl.Hierarchy.Deg.DegCod);
       Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
    else
      {
       /***** Number of courses *****/
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"LEFT_MIDDLE\">",
+			 "%s:",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Courses);
+      Tbl_EndCell ();
+
 
       /* Form to go to see courses of this degree */
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Frm_StartFormGoTo (ActSeeCrs);
       Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -533,8 +546,8 @@ static void Deg_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"%u</a>",
 	       Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
       Frm_EndForm ();
-
       Tbl_EndCell ();
+
       Tbl_EndRow ();
 
       /***** Number of users *****/
@@ -578,16 +591,19 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:"
-		      "</td>"
-		      "<td class=\"DAT LEFT_MIDDLE\">"
-		      "%u"
-		      "</td>",
+		      "%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
-		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
+		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+		      "%u",
             Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.Hierarchy.Deg.DegCod));
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
   }
 
@@ -736,9 +752,9 @@ static void Deg_ListDegreesForEdition (void)
 
       /* Degree code */
       fprintf (Gbl.F.Out,"<td class=\"DAT CODE\">"
-	                 "%ld"
-	                 "</td>",
+	                 "%ld",
                Deg->DegCod);
+      Tbl_EndCell ();
 
       /* Degree logo */
       fprintf (Gbl.F.Out,"<td title=\"%s LEFT_MIDDLE\" style=\"width:25px;\">",
@@ -841,9 +857,9 @@ static void Deg_ListDegreesForEdition (void)
 
       /* Current number of courses in this degree */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u"
-	                 "</td>",
+	                 "%u",
                NumCrss);
+      Tbl_EndCell ();
 
       /* Degree requester */
       UsrDat.UsrCod = Deg->RequesterUsrCod;
@@ -964,12 +980,15 @@ static void Deg_PutFormToCreateDegree (void)
    /***** Write heading *****/
    Deg_PutHeadDegreesForEdition ();
 
-   /***** Column to remove degree, disabled here *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
+
+   /***** Column to remove degree, disabled here *****/
+   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_EndCell ();
 
    /***** Degree code *****/
-   fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
+   fprintf (Gbl.F.Out,"<td class=\"CODE\">");
+   Tbl_EndCell ();
 
    /***** Degree logo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
@@ -981,18 +1000,18 @@ static void Deg_PutFormToCreateDegree (void)
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Hie_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName);
+   Tbl_EndCell ();
 
    /***** Degree full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Hie_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName);
+   Tbl_EndCell ();
 
    /***** Degree type *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -1008,22 +1027,22 @@ static void Deg_PutFormToCreateDegree (void)
 		                                                "",
 	       DegTyp->DegTypName);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Degree WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Cns_MAX_CHARS_WWW,Deg_EditingDeg->WWW);
+   Tbl_EndCell ();
 
    /***** Current number of courses in this degree *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "0"
-	              "</td>");
+	              "0");
+   Tbl_EndCell ();
 
    /***** Degree requester *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
@@ -1031,8 +1050,9 @@ static void Deg_PutFormToCreateDegree (void)
    Tbl_EndCell ();
 
    /***** Degree status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-	              "</td>");
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
@@ -1284,23 +1304,24 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
 
-   /***** Put tip if degree has courses *****/
    Tbl_StartRow ();
+
+   /***** Put tip if degree has courses *****/
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\" title=\"%s\">"
-		      "%s"
-		      "</td>",
+		      "%s",
 	    TxtClassNormal,BgColor,
 	    NumCrss ? Txt_DEGREE_With_courses :
 		      Txt_DEGREE_Without_courses,
 	    NumCrss ? "&check;" :
 		      "&nbsp;");
+   Tbl_EndCell ();
 
    /***** Number of degree in this list *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-                      "%u"
-                      "</td>",
+                      "%u",
 	    TxtClassNormal,BgColor,
             NumDeg);
+   Tbl_EndCell ();
 
    /***** Degree logo and name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
@@ -1310,15 +1331,15 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
    /***** Type of degree *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
-	              "%s"
-	              "</td>",
+	              "%s",
 	    TxtClassNormal,BgColor,DegTyp.DegTypName);
+   Tbl_EndCell ();
 
    /***** Current number of courses in this degree *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u"
-	              "</td>",
+	              "%u",
 	    TxtClassNormal,BgColor,NumCrss);
+   Tbl_EndCell ();
 
    /***** Degree status *****/
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
@@ -1327,6 +1348,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    if (StatusTxt != Deg_STATUS_ACTIVE) // If active ==> do not show anything
       fprintf (Gbl.F.Out,"%s",Txt_DEGREE_STATUS[StatusTxt]);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -2521,16 +2543,17 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	   NumRow <= NumRows;
 	   NumRow++)
 	{
-         /***** Indent *****/
          Tbl_StartRow ();
+
+         /***** Indent *****/
          fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">"
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
-                            " class=\"ICO25x25\" />"
-                            "</td>",
+                            " class=\"ICO25x25\" />",
                   Gbl.RowEvenOdd,Cfg_URL_ICON_PUBLIC,
                   NumRow == NumRows ? "subend" :
                 	              "submid");
+         Tbl_EndCell ();
 
          /***** Write institution, centre, degree *****/
          fprintf (Gbl.F.Out,"<td colspan=\"%u\""
@@ -2594,6 +2617,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	       break;
            }
          Tbl_EndCell ();
+
          Tbl_EndRow ();
         }
 

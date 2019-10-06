@@ -427,16 +427,17 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    extern const char *Txt_Yesterday;
    extern const char *Txt_Today;
 
-   /***** Start date-time *****/
    Tbl_StartRow ();
+
+   /***** Start date-time *****/
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-                      "<label class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">",
+                      "<label class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_START_END_TIME[Dat_START_TIME]);
+   Tbl_EndCell ();
 
    /* Date-time */
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("Start",
                                                 "Start",
                                                 Gbl.DateRange.TimeUTC[0],
@@ -446,28 +447,30 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 				                SetHMS000000To235959 ? Dat_HMS_TO_000000 :	// Set hour, minute and second to 00:00:00
 				                                       Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second to 00:00:00
 				                false);						// Don't submit on change
+   Tbl_EndCell ();
 
    /***** "Yesterday" and "Today" buttons *****/
-   fprintf (Gbl.F.Out,"</td>"
-                      "<td rowspan=\"2\" class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_MIDDLE\">"
 	              "<input type=\"button\" name=\"Yesterday\" value=\"%s\""
                       " onclick=\"setDateToYesterday('Start','End');\" />"
 	              "<input type=\"button\" name=\"Today\" value=\"%s\""
-                      " onclick=\"setDateToToday('Start','End');\" />"
-                      "</td>",
+                      " onclick=\"setDateToToday('Start','End');\" />",
             Txt_Yesterday,
             Txt_Today);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
+   Tbl_StartRow ();
 
    /***** End date-time *****/
-   Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-                      "<label class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">",
+                      "<label class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_START_END_TIME[Dat_END_TIME]);
+   Tbl_EndCell ();
+
    /* Date-time */
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("End",
                                                 "End",
                                                 Gbl.DateRange.TimeUTC[1],
@@ -478,6 +481,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 				                                       Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                false);						// Don't submit on change
    Tbl_EndCell ();
+
    Tbl_EndRow ();
   }
 
@@ -503,12 +507,14 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
      {
       /* Date-time */
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	                 "<label class=\"%s\">%s:</label>"
-	                 "</td>"
-                         "<td class=\"LEFT_MIDDLE\">",
+	                 "<label class=\"%s\">%s:</label>",
                The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_START_END_TIME[StartEndTime]);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartEndTime],
                                                    Id[StartEndTime],
 	                                           TimeUTC[StartEndTime],
@@ -518,6 +524,7 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
 				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                   false);		// Don't submit on change
       Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
   }
@@ -569,8 +576,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	Year++)
       fprintf (Gbl.F.Out,"<option value=\"%u\">%u</option>",
                Year,Year);
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Month *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -588,8 +595,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	Month++)
       fprintf (Gbl.F.Out,"<option value=\"%u\">%s</option>",
                Month,Txt_MONTHS_SMALL[Month - 1]);
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Day *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -605,8 +612,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	Day++)
       fprintf (Gbl.F.Out,"<option value=\"%u\">%u</option>",
                Day,Day);
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Hour *****/
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
@@ -622,8 +629,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	Hour++)
       fprintf (Gbl.F.Out,"<option value=\"%u\">%02u h</option>",
                Hour,Hour);
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Minute *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -641,8 +648,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       fprintf (Gbl.F.Out,"<option value=\"%u\">%02u &#39;</option>",
                Minute,Minute);
 
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Second *****/
    if (FormSeconds == Dat_FORM_SECONDS_ON)
@@ -660,8 +667,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	   Second++)
 	 fprintf (Gbl.F.Out,"<option value=\"%u\">%02u &quot;</option>",
 		  Second,Second);
-      fprintf (Gbl.F.Out,"</select>"
-			 "</td>");
+      fprintf (Gbl.F.Out,"</select>");
+      Tbl_EndCell ();
      }
 
    /***** End table *****/
@@ -842,8 +849,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",Year);
      }
-   fprintf (Gbl.F.Out,"</select>"
-                      "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Month *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -866,8 +873,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_MONTHS_SMALL[Month - 1]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Day *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -891,8 +898,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",Day);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** End table *****/
    Tbl_EndRow ();

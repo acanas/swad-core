@@ -333,21 +333,22 @@ static void DT_ListDegreeTypesForSeeing (void)
       /* Number of degree type in this list */
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_MIDDLE %s\">"
-			 "%u"
-			 "</td>",
+			 "%u",
 	       BgColor,NumDegTyp + 1);
+      Tbl_EndCell ();
 
       /* Name of degree type */
       fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE %s\">"
-	                 "%s"
-	                 "</td>",
+	                 "%s",
                BgColor,Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
+      Tbl_EndCell ();
 
       /* Number of degrees of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_MIDDLE %s\">"
-	                 "%u"
-	                 "</td>",
+	                 "%u",
                BgColor,Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -399,8 +400,9 @@ static void DT_ListDegreeTypesForEdition (void)
 	NumDegTyp < Gbl.DegTypes.Num;
 	NumDegTyp++)
      {
-      /* Put icon to remove degree type */
       Tbl_StartRow ();
+
+      /* Put icon to remove degree type */
       fprintf (Gbl.F.Out,"<td class=\"BM\">");
       if (Gbl.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees => deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
@@ -411,13 +413,13 @@ static void DT_ListDegreeTypesForEdition (void)
          Ico_PutIconRemove ();
          Frm_EndForm ();
         }
+      Tbl_EndCell ();
 
       /* Degree type code */
-      fprintf (Gbl.F.Out,"</td>"
-	                 "<td class=\"DAT CODE\">"
-	                 "%ld"
-	                 "</td>",
+      fprintf (Gbl.F.Out,"<td class=\"DAT CODE\">"
+	                 "%ld",
                Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
+      Tbl_EndCell ();
 
       /* Name of degree type */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
@@ -435,9 +437,10 @@ static void DT_ListDegreeTypesForEdition (void)
 
       /* Number of degrees of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u"
-	                 "</td>",
+	                 "%u",
                Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 
@@ -473,25 +476,29 @@ static void DT_PutFormToCreateDegreeType (void)
    /***** Write heading *****/
    DT_PutHeadDegreeTypesForEdition ();
 
-   /***** Column to remove degree type, disabled here *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
+
+   /***** Column to remove degree type, disabled here *****/
+   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_EndCell ();
 
    /***** Degree type code *****/
-   fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
+   fprintf (Gbl.F.Out,"<td class=\"CODE\">");
+   Tbl_EndCell ();
 
    /***** Degree type name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"DegTypName\""
                       " size=\"25\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />"
-                     "</td>",
+                      " required=\"required\" />",
             Deg_MAX_CHARS_DEGREE_TYPE_NAME,DT_EditingDegTyp->DegTypName);
+   Tbl_EndCell ();
 
    /***** Number of degrees of this degree type ****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "0"
-	              "</td>");
+	              "0");
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
