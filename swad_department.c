@@ -147,17 +147,20 @@ void Dpt_SeeDepts (void)
      {
       /* Write data of this department */
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 			 "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 			 "%s"
-			 "</a>"
-			 "</td>"
-			 "<td class=\"DAT RIGHT_MIDDLE\">"
-			 "%u"
-			 "</td>",
+			 "</a>",
 	       Gbl.Dpts.Lst[NumDpt].WWW,
-	       Gbl.Dpts.Lst[NumDpt].FullName,
+	       Gbl.Dpts.Lst[NumDpt].FullName);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+			 "%u",
 	       Gbl.Dpts.Lst[NumDpt].NumTchs);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
 
       /* Update number of teachers from the current institution
@@ -168,36 +171,43 @@ void Dpt_SeeDepts (void)
    /***** Separation row *****/
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"DAT\">"
-		      "&nbsp;"
-		      "</td>");
+		      "&nbsp;");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Write teachers with other department *****/
    NumTchsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-		      "%s"
-		      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%u"
-		      "</td>",
-	    Txt_Other_departments,NumTchsInOtherDpts);
+		      "%s",
+	    Txt_Other_departments);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+		      "%u",
+	    NumTchsInOtherDpts);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
    NumTchsInsWithDpt += NumTchsInOtherDpts;
 
    /***** Write teachers with no department *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-		      "%s"
-		      "</td>"
-		      "<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%u"
-		      "</td>",
-	    Txt_Department_unspecified,
+		      "%s",
+	    Txt_Department_unspecified);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+		      "%u",
 	    Usr_GetTotalNumberOfUsersInCourses (Hie_INS,
 						1 << Rol_NET |
 						1 << Rol_TCH) -
 	    NumTchsInsWithDpt);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table and box *****/
@@ -524,9 +534,9 @@ static void Dpt_ListDepartmentsForEdition (void)
 
       /* Department code */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%ld&nbsp;"
-	                 "</td>",
+	                 "%ld&nbsp;",
                Dpt->DptCod);
+      Tbl_EndCell ();
 
       /* Institution */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -589,9 +599,10 @@ static void Dpt_ListDepartmentsForEdition (void)
 
       /* Number of teachers */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u"
-	                 "</td>",
+	                 "%u",
                Dpt->NumTchs);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 
@@ -926,8 +937,9 @@ static void Dpt_PutFormToCreateDepartment (void)
             Txt_WWW);
    Tbl_EndRow ();
 
-   /***** Institution *****/
    Tbl_StartRow ();
+
+   /***** Institution *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<select name=\"OthInsCod\" style=\"width:62px;\">"
                       "<option value=\"0\"");
@@ -942,35 +954,36 @@ static void Dpt_PutFormToCreateDepartment (void)
                Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt_EditingDpt->InsCod ? " selected=\"selected\"" :
         	                                            "",
                Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Department short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName);
+   Tbl_EndCell ();
 
    /***** Department full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName);
+   Tbl_EndCell ();
 
    /***** Department WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Cns_MAX_CHARS_WWW,Dpt_EditingDpt->WWW);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/

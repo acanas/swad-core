@@ -1052,11 +1052,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
                Ins.WWW,StyleTitle);
    Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
-   fprintf (Gbl.F.Out,"<br />%s%s"
-                      "</td>",
+   fprintf (Gbl.F.Out,"<br />%s%s",
             Ins.FullName,
             TypeViewExamAnnouncement == Exa_PRINT_VIEW ? "</span>" :
  	                                                 "</a>");
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Degree *****/
@@ -1076,26 +1076,28 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"%s CENTER_MIDDLE\">"
 	              "&nbsp;<br />"
-	              "<strong>%s</strong>"
-	              "</td>",
+	              "<strong>%s</strong>",
             StyleNormal,Txt_EXAM_ANNOUNCEMENT);
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    Tbl_StartRow ();
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"%s LEFT_MIDDLE\">"
-	              "&nbsp;"
-	              "</td>",
+	              "&nbsp;",
 	    StyleNormal);
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Name of the course *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_BOTTOM\">"
-	              "<label for=\"CrsName\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"%s LEFT_BOTTOM\">",
+	              "<label for=\"CrsName\" class=\"%s\">%s:</label>",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Course,
+            Txt_EXAM_ANNOUNCEMENT_Course);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_BOTTOM\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -1107,16 +1109,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"<strong>%s</strong>",
                Gbl.ExamAnns.ExaDat.CrsFullName);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Year/semester (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_BOTTOM\">"
-	              "<label for=\"Year\" class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"%s LEFT_BOTTOM\">",
+	              "<label for=\"Year\" class=\"%s\">%s:</label>",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Year_or_semester,
+            Txt_EXAM_ANNOUNCEMENT_Year_or_semester);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_BOTTOM\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -1139,16 +1144,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"%s",
                Txt_YEAR_OF_DEGREE[Gbl.ExamAnns.ExaDat.Year]);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Exam session *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_BOTTOM\">"
-	              "<label for=\"ExamSession\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"%s LEFT_BOTTOM\">",
+	              "<label for=\"ExamSession\" class=\"%s\">%s:</label>",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Session,
+            Txt_EXAM_ANNOUNCEMENT_Session);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_BOTTOM\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<input type=\"text\""
@@ -1158,15 +1166,18 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    else
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Session);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Date of the exam *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_BOTTOM\">"
-	              "%s:"
-	              "</td>",
+	              "%s:",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Exam_date);
+   Tbl_EndCell ();
+
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       fprintf (Gbl.F.Out,"<td class=\"LEFT_BOTTOM\">");
@@ -1182,20 +1193,22 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       Dat_ConvDateToDateStr (&Gbl.ExamAnns.ExaDat.ExamDate,
                              StrExamDate);
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_BOTTOM\">"
-	                 "%s"
-	                 "</td>",
+	                 "%s",
                StyleNormal,StrExamDate);
+      Tbl_EndCell ();
      }
    Tbl_EndRow ();
 
    /***** Start time *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_BOTTOM\">"
-	              "%s:"
-	              "</td>"
-                      "<td class=\"%s LEFT_BOTTOM\">",
+	              "%s:",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Start_time,
+            Txt_EXAM_ANNOUNCEMENT_Start_time);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_BOTTOM\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -1232,16 +1245,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                Gbl.ExamAnns.ExaDat.StartTime.Hour,
                Gbl.ExamAnns.ExaDat.StartTime.Minute);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Approximate duration of the exam *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_BOTTOM\">"
-	              "%s:"
-	              "</td>"
-                      "<td class=\"%s LEFT_BOTTOM\">",
+	              "%s:",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Approximate_duration,
+            Txt_EXAM_ANNOUNCEMENT_Approximate_duration);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_BOTTOM\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -1298,16 +1314,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
         }
      }
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Place where the exam will be made *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Place\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"%s LEFT_TOP\">",
+	              "<label for=\"Place\" class=\"%s\">%s:</label>",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Place_of_exam,
+            Txt_EXAM_ANNOUNCEMENT_Place_of_exam);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea id=\"Place\" name=\"Place\""
@@ -1323,16 +1342,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Place);
      }
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Exam mode *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"ExamMode\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"%s LEFT_TOP\">",
+	              "<label for=\"ExamMode\" class=\"%s\">%s:</label>",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Mode,
+            Txt_EXAM_ANNOUNCEMENT_Mode);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea id=\"ExamMode\" name=\"ExamMode\""
@@ -1348,16 +1370,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Mode);
      }
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Structure of the exam *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Structure\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"%s LEFT_TOP\">",
+	              "<label for=\"Structure\" class=\"%s\">%s:</label>",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam,
+            Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea id=\"Structure\" name=\"Structure\""
@@ -1373,16 +1398,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Structure);
      }
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Documentation required *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"DocRequired\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"%s LEFT_TOP\">",
+	              "<label for=\"DocRequired\" class=\"%s\">%s:</label>",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Documentation_required,
+            Txt_EXAM_ANNOUNCEMENT_Documentation_required);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea id=\"DocRequired\" name=\"DocRequired\""
@@ -1398,16 +1426,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.DocRequired);
      }
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Material required *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"MatRequired\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"%s LEFT_TOP\">",
+	              "<label for=\"MatRequired\" class=\"%s\">%s:</label>",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Material_required,
+            Txt_EXAM_ANNOUNCEMENT_Material_required);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea id=\"MatRequired\" name=\"MatRequired\""
@@ -1423,16 +1454,19 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.MatRequired);
      }
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Material allowed *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"MatAllowed\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"%s LEFT_TOP\">",
+	              "<label for=\"MatAllowed\" class=\"%s\">%s:</label>",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Material_allowed,
+            Txt_EXAM_ANNOUNCEMENT_Material_allowed);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea id=\"MatAllowed\" name=\"MatAllowed\""
@@ -1448,15 +1482,18 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.MatAllowed);
      }
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Other information to students *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"OtherInfo\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"%s LEFT_TOP\">",
-            StyleForm,Txt_EXAM_ANNOUNCEMENT_Other_information,
+	              "<label for=\"OtherInfo\" class=\"%s\">%s:</label>",
+            StyleForm,Txt_EXAM_ANNOUNCEMENT_Other_information);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<textarea id=\"OtherInfo\" name=\"OtherInfo\""
@@ -1472,6 +1509,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.OtherInfo);
      }
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/

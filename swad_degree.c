@@ -419,12 +419,14 @@ static void Deg_Configuration (bool PrintView)
 
    /***** Degree short name *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
 		      "<label for=\"ShortName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Short_name);
-   fprintf (Gbl.F.Out,"</td>"
-		      "<td class=\"DAT_N LEFT_MIDDLE\">");
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE\">");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -445,6 +447,7 @@ static void Deg_Configuration (bool PrintView)
    else	// I can not edit degree short name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.ShrtName);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Degree WWW *****/

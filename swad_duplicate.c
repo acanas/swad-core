@@ -186,10 +186,13 @@ void Dup_ListDuplicateUsrs (void)
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
 
 	    Tbl_StartRow ();
-            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\"></td>"
-			       "<td colspan=\"%u\""
+
+            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\">",
+	             Gbl.RowEvenOdd);
+            Tbl_EndCell ();
+
+	    fprintf (Gbl.F.Out,"<td colspan=\"%u\""
 			       " class=\"DAT LEFT_MIDDLE COLOR%u\">",
-	             Gbl.RowEvenOdd,
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 	             Gbl.RowEvenOdd);
 
@@ -208,6 +211,7 @@ void Dup_ListDuplicateUsrs (void)
 	    Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
 
 	    Tbl_EndCell ();
+
 	    Tbl_EndRow ();
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -319,9 +323,12 @@ static void Dup_ListSimilarUsrs (void)
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
 
 	    Tbl_StartRow ();
-            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\"></td>"
-			       "<td colspan=\"%u\" class=\"COLOR%u\">",
-		     Gbl.RowEvenOdd,
+
+            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\">",
+		     Gbl.RowEvenOdd);
+            Tbl_EndCell ();
+
+	    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"COLOR%u\">",
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 		     Gbl.RowEvenOdd);
 
@@ -337,10 +344,13 @@ static void Dup_ListSimilarUsrs (void)
 	    Tbl_EndRow ();
 
 	    Tbl_StartRow ();
-            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\"></td>"
-			       "<td colspan=\"%u\" class=\"LEFT_TOP COLOR%u\""
+
+            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\">",
+		     Gbl.RowEvenOdd);
+            Tbl_EndCell ();
+
+	    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LEFT_TOP COLOR%u\""
 			       " style=\"padding-bottom:20px;\">",
-		     Gbl.RowEvenOdd,
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 		     Gbl.RowEvenOdd);
 
@@ -353,6 +363,7 @@ static void Dup_ListSimilarUsrs (void)
 	       Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
 
 	    Tbl_EndCell ();
+
 	    Tbl_EndRow ();
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;

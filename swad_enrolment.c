@@ -929,16 +929,19 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    /***** Text area for users' IDs *****/
    Tbl_StartTableCenterPadding (2);
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-                      "<label for=\"UsrsIDs\" class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"UsrsIDs\" name=\"UsrsIDs\""
-                      " cols=\"60\" rows=\"10\">"
-                      "</textarea>"
-                      "</td>",
+                      "<label for=\"UsrsIDs\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
+                      "<textarea id=\"UsrsIDs\" name=\"UsrsIDs\""
+                      " cols=\"60\" rows=\"10\">"
+                      "</textarea>");
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
    Tbl_EndTable ();
   }
@@ -2295,28 +2298,34 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
    /* Scope (whole platform, current centre, current degree or current course) */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"ScopeEnr\" class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">",
+                      "<label for=\"ScopeEnr\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Sco_PutSelectorScope ("ScopeEnr",true);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /* Users' roles in listing */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-                      "<label class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"DAT LEFT_MIDDLE\">",
+                      "<label class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
                            1 << Rol_TCH,
                            RolesSelected,
                            false,true);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /* End table and form */
@@ -2863,9 +2872,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             /***** Number *****/
             Tbl_StartRow ();
 	    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP\">"
-                               "%lu"
-                               "</td>",
+                               "%lu",
                      NumReqs - NumReq);
+	    Tbl_EndCell ();
 
             /***** Link to course *****/
             Crs_GetDataOfCourseByCod (&Crs);
@@ -2886,9 +2895,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
             /***** Number of teachers in the course *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP\">"
-                               "%u"
-                               "</td>",
+                               "%u",
                      Crs.NumUsrs[Rol_TCH]);
+            Tbl_EndCell ();
 
             /***** User photo *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP\""
@@ -2903,14 +2912,14 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">"
         	               "<div class=\"REQUESTER_NAME\">");	// Limited width
             Usr_WriteFirstNameBRSurnames (&UsrDat);
-            fprintf (Gbl.F.Out,"</div>"
-        	               "</td>");
+            fprintf (Gbl.F.Out,"</div>");
+            Tbl_EndCell ();
 
             /***** Requested role (row[3]) *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">"
-        	               "%s"
-        	               "</td>",
+        	               "%s",
                      Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
+            Tbl_EndCell ();
 
             /***** Request time (row[4]) *****/
             Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[4]),"DAT");
