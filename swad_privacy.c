@@ -159,9 +159,9 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 
    /***** Select visibility *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
-	              "</td>",
+	              "%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],TxtLabel);
+   Tbl_EndCell ();
 
    /***** Form with list of options *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");

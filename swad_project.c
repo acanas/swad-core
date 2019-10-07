@@ -1027,10 +1027,10 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('prj_creat_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
-                      "</script>"
-	              "</td>",
+                      "</script>",
             UniqueId,Prj->CreatTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Tbl_EndCell ();
 
    /* Modification date/time */
    UniqueId++;
@@ -1044,10 +1044,10 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('prj_modif_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
-                      "</script>"
-	              "</td>",
+                      "</script>",
             UniqueId,Prj->ModifTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Tbl_EndCell ();
 
    /* Project title */
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",
@@ -1089,11 +1089,12 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
          break;
      }
    fprintf (Gbl.F.Out," %s\">"
-		      "%s:"
-		      "</td>",
+		      "%s:",
 	    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
 					"ASG_LABEL",
 	    Txt_Preassigned_QUESTION);
+   Tbl_EndCell ();
+
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
@@ -1128,11 +1129,12 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
          break;
      }
    fprintf (Gbl.F.Out," %s\">"
-                      "%s:"
-	              "</td>",
+                      "%s:",
             Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
         	                        "ASG_LABEL",
             Txt_Number_of_students);
+   Tbl_EndCell ();
+
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
@@ -1144,11 +1146,12 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
          break;
      }
    fprintf (Gbl.F.Out," %s\">"
-                      "%u"
-                      "</td>",
+                      "%u",
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             Prj->NumStds);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Project members *****/
@@ -1207,20 +1210,22 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 break;
      }
    fprintf (Gbl.F.Out," %s\">"
-                      "%s:"
-	              "</td>"
-                      "<td colspan=\"2\" class=\"LEFT_TOP",
+                      "%s:",
             Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
         	                        "ASG_LABEL",
             Txt_Proposal);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
-                      "%s"
-                      "</td>",
+                      "%s",
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             Txt_PROJECT_STATUS[Prj->Proposal]);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Write rows of data of this project *****/
@@ -1288,14 +1293,14 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 	              "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('prj_creat_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
-                      "</script>"
-	              "</td>",
+                      "</script>",
 	    UniqueId,
             Gbl.RowEvenOdd,
             Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
                                         "DATE_BLUE",
             UniqueId,Prj->CreatTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Tbl_EndCell ();
 
    /***** End date/time *****/
    UniqueId++;
@@ -1303,45 +1308,45 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 	              "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('prj_modif_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
-                      "</script>"
-	              "</td>",
+                      "</script>",
 	    UniqueId,
             Gbl.RowEvenOdd,
             Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
                                         "DATE_BLUE",
             UniqueId,Prj->ModifTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Tbl_EndCell ();
 
    /***** Project title *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s"
-                      "</td>",
+                      "%s",
             Gbl.RowEvenOdd,
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT_N",
             Prj->Title);
+   Tbl_EndCell ();
 
    /***** Department *****/
    Prj_ShowTableAllProjectsDepartment (Prj);
 
    /***** Preassigned? *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s"
-                      "</td>",
+                      "%s",
             Gbl.RowEvenOdd,
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                    Txt_No);
+   Tbl_EndCell ();
 
    /***** Number of students *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%u"
-                      "</td>",
+                      "%u",
             Gbl.RowEvenOdd,
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             Prj->NumStds);
+   Tbl_EndCell ();
 
    /***** Project members *****/
    for (NumRoleToShow = 0;
@@ -1351,12 +1356,12 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 
    /***** Proposal *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s"
-                      "</td>",
+                      "%s",
             Gbl.RowEvenOdd,
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             Txt_PROJECT_STATUS[Prj->Proposal]);
+   Tbl_EndCell ();
 
    /***** Write rows of data of this project *****/
    /* Description of the project */
@@ -1425,12 +1430,12 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Project *Prj)
 
    /***** Show department *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s"
-                      "</td>",
+                      "%s",
             Gbl.RowEvenOdd,
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             Dpt.FullName);
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -1476,20 +1481,22 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
 	 break;
      }
    fprintf (Gbl.F.Out," %s\">"
-                      "%s:"
-	              "</td>"
-                      "<td colspan=\"2\" class=\"LEFT_TOP",
+                      "%s:",
             Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
         	                        "ASG_LABEL",
             Label);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">"
-                      "%s"
-                      "</td>",
+                      "%s",
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             TxtField);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
   }
 
@@ -1502,12 +1509,12 @@ static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
 
    /***** Write text *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s"
-                      "</td>",
+                      "%s",
             Gbl.RowEvenOdd,
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             TxtField);
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -1544,12 +1551,13 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
 	 break;
      }
    fprintf (Gbl.F.Out," %s\">"
-		      "%s:"
-		      "</td>"
-		      "<td colspan=\"2\" class=\"LEFT_TOP",
+		      "%s:",
 	    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
 			                "ASG_LABEL",
 	    Txt_URL);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
    if (ProjectView == Prj_LIST_PROJECTS)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\">",
@@ -1561,6 +1569,7 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
    Tbl_EndCell ();
+
    Tbl_EndRow ();
   }
 
@@ -1568,12 +1577,12 @@ static void Prj_ShowTableAllProjectsURL (const struct Project *Prj)
   {
    /***** Show URL *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s"
-                      "</td>",
+                      "%s",
             Gbl.RowEvenOdd,
             Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
         	                        "DAT",
             Prj->URL);
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -1642,35 +1651,36 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	{
 	 case Prj_LIST_PROJECTS:
 	    fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u %s\">"
-		               "%s:"
-		               "</td>",
+		               "%s:",
 	             Gbl.RowEvenOdd,
 		     Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
 				                 "ASG_LABEL",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
 		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    Tbl_EndCell ();
 	    break;
 	 case Prj_FILE_BROWSER_PROJECT:
 	    fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP %s\">"
-		               "%s:"
-		               "</td>",
+		               "%s:",
 		     Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
 				                 "ASG_LABEL",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
 		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    Tbl_EndCell ();
 	    break;
 	 case Prj_PRINT_ONE_PROJECT:
 	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP %s\">"
-		               "%s:"
-		               "</td>",
+		               "%s:",
 		     Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
 				                 "ASG_LABEL",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
 		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    Tbl_EndCell ();
 	    break;
 	 case Prj_EDIT_ONE_PROJECT:
-	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP ASG_LABEL\">%s:</td>",
+	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP ASG_LABEL\">%s:",
 		     Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
+	    Tbl_EndCell ();
 	    break;
 	}
 
@@ -1732,8 +1742,9 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    Tbl_EndCell ();
 
 	    /* Write user's name */
-	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_NAM\">%s</td>",
+	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_NAM\">%s",
 		     Gbl.Usrs.Other.UsrDat.FullName);
+	    Tbl_EndCell ();
 
 	    /* End row for this user */
 	    Tbl_EndRow ();
@@ -1753,9 +1764,14 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInProject],NULL,
 				        Prj_PutCurrentParams,
 				        Gbl.Title);
-	    fprintf (Gbl.F.Out,"</td>"
-			       "<td class=\"PRJ_MEMBER_PHO\"></td>"	// Column for photo
-	                       "<td class=\"PRJ_MEMBER_NAM\"></td>");	// Column for name
+	    Tbl_EndCell ();
+
+	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_PHO\">");	// Column for photo
+	    Tbl_EndCell ();
+
+	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_NAM\">");	// Column for name
+	    Tbl_EndCell ();
+
 	    Tbl_EndRow ();
 	    break;
 	 default:
@@ -3328,26 +3344,31 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    /* Project title */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"Title\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
+	              "<label for=\"Title\" class=\"%s\">%s:</label>",
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />"
-                      "</td>",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title,
+                      " required=\"required\" />",
             Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /* Department */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"%s\" class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">",
+                      "<label for=\"%s\" class=\"%s\">%s:</label>",
             Dpt_PARAM_DPT_COD_NAME,
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Department);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
                                 Prj->DptCod,			// Selected department
                                 "PRJ_INPUT",			// Selector class
@@ -3355,17 +3376,20 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                                 Txt_Another_department,		// Text when no department selected
                                 false);				// Don't submit on change
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /* Preassigned? */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"Preassigned\">",
+	              "%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Preassigned_QUESTION);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+                      "<select name=\"Preassigned\">");
 
    fprintf (Gbl.F.Out,"<option value=\"Y\"");
    if (Prj->Preassigned == Prj_PREASSIGNED)
@@ -3377,33 +3401,39 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_No);
 
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /* Number of students */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"number\" name=\"NumStds\""
-                      " min=\"0\" value=\"%u\" />"
-                      "</td>",
+	              "%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Number_of_students,
+            Txt_Number_of_students);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+                      "<input type=\"number\" name=\"NumStds\""
+                      " min=\"0\" value=\"%u\" />",
             Prj->NumStds);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /* Proposal */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"Proposal\">",
+	              "%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Proposal);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+                      "<select name=\"Proposal\">");
    for (Proposal  = (Prj_Proposal_t) 0;
 	Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
 	Proposal++)
@@ -3414,8 +3444,9 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>",Txt_PROJECT_STATUS[Proposal]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /* Description of the project */
@@ -3432,16 +3463,19 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    /* URL for additional info */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"WWW\" class=\"%s\">%s:</label>"
-		      "</td>"
-		      "<td class=\"DAT LEFT_MIDDLE\">"
-                      "<input type=\"url\" id=\"URL\" name=\"URL\""
-		      " size=\"45\" maxlength=\"%u\" value=\"%s\" />"
-                      "</td>",
+		      "<label for=\"WWW\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
-	    Txt_URL,
+	    Txt_URL);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+                      "<input type=\"url\" id=\"URL\" name=\"URL\""
+		      " size=\"45\" maxlength=\"%u\" value=\"%s\" />",
 	    Cns_MAX_CHARS_WWW,Prj->URL);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /* End table, send button and end box */
@@ -3468,18 +3502,21 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"%s\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"LEFT_TOP\">"
+	              "<label for=\"%s\" class=\"%s\">%s:</label>",
+            Id,The_ClassFormInBox[Gbl.Prefs.Theme],Label);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
                       "<textarea id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\">"
                       "%s"
-                      "</textarea>"
-                      "</td>",
-            Id,The_ClassFormInBox[Gbl.Prefs.Theme],Label,
+                      "</textarea>",
             Id,Id,
             NumRows,
             TxtField);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
   }
 

@@ -1566,10 +1566,11 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
          Prf_ShowUsrInRanking (&UsrDat,Rank);
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
 	                    " style=\"height:50px;\">"
-	                    "%ld"
-	                    "</td>",
+	                    "%ld",
 		  Gbl.RowEvenOdd,
 		  Figure);
+	 Tbl_EndCell ();
+
 	 Tbl_EndRow ();
 	}
 
@@ -1762,15 +1763,15 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
 
    fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE COLOR%u\""
 	              " style=\"height:50px;\">"
-		      "#%u"
-		      "</td>"
-                      "<td class=\"COLOR%u\""
-                      " style=\"width:35px; height:50px;\">",
+		      "#%u",
 	    Gbl.RowEvenOdd,
-	    Rank,
-            Gbl.RowEvenOdd);
+	    Rank);
+   Tbl_EndCell ();
 
    /***** Check if I can see the public profile *****/
+   fprintf (Gbl.F.Out,"<td class=\"COLOR%u\""
+                      " style=\"width:35px; height:50px;\">",
+            Gbl.RowEvenOdd);
    if (Visible)
      {
       /***** User's photo *****/
@@ -1779,12 +1780,11 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
 					   NULL,
 			"PHOTO30x40",Pho_ZOOM,false);
      }
-
-   fprintf (Gbl.F.Out,"</td>"
-		      "<td class=\"COLOR%u\" style=\"height:50px;\">",
-            Gbl.RowEvenOdd);
+   Tbl_EndCell ();
 
    /***** Put form to go to public profile *****/
+   fprintf (Gbl.F.Out,"<td class=\"COLOR%u\" style=\"height:50px;\">",
+            Gbl.RowEvenOdd);
    if (Visible)
      {
       Frm_StartForm (ActSeeOthPubPrf);
@@ -1796,6 +1796,5 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
 	                 "</div>");
       Frm_EndForm ();
      }
-
    Tbl_EndCell ();
   }

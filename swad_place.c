@@ -141,14 +141,17 @@ void Plc_SeePlaces (void)
 	{
 	 /* Write data of this place */
 	 Tbl_StartRow ();
+
 	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			    "%s"
-			    "</td>"
-	                    "<td class=\"DAT RIGHT_MIDDLE\">"
-	                    "%u"
-	                    "</td>",
-		  Gbl.Plcs.Lst[NumPlc].FullName,
+			    "%s",
+		  Gbl.Plcs.Lst[NumPlc].FullName);
+	 Tbl_EndCell ();
+
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	                    "%u",
 		  Gbl.Plcs.Lst[NumPlc].NumCtrs);
+	 Tbl_EndCell ();
+
 	 Tbl_EndRow ();
 	 NumCtrsWithPlc += Gbl.Plcs.Lst[NumPlc].NumCtrs;
 	}
@@ -156,34 +159,41 @@ void Plc_SeePlaces (void)
       /***** Separation row *****/
       Tbl_StartRow ();
       fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT\">"
-			 "&nbsp;"
-			 "</td>");
+			 "&nbsp;");
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** Write centres (of the current institution) with other place *****/
       NumCtrsInOtherPlcs = Ctr_GetNumCtrsInPlc (0);
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%s"
-			 "</td>"
-			 "<td class=\"DAT RIGHT_MIDDLE\">"
-			 "%u"
-			 "</td>",
-	       Txt_Other_places,NumCtrsInOtherPlcs);
+			 "%s",
+	       Txt_Other_places);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+			 "%u",
+	       NumCtrsInOtherPlcs);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
       NumCtrsWithPlc += NumCtrsInOtherPlcs;
 
       /***** Write centres (of the current institution) with no place *****/
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%s"
-			 "</td>"
-			 "<td class=\"DAT RIGHT_MIDDLE\">"
-			 "%u"
-			 "</td>",
-	       Txt_Place_unspecified,
+			 "%s",
+	       Txt_Place_unspecified);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+			 "%u",
 	       Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
 	       NumCtrsWithPlc);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
 
       /***** End table *****/
@@ -538,9 +548,9 @@ static void Plc_ListPlacesForEdition (void)
 
       /* Place code */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%ld"
-	                 "</td>",
+	                 "%ld",
                Plc->PlcCod);
+      Tbl_EndCell ();
 
       /* Place short name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -568,9 +578,10 @@ static void Plc_ListPlacesForEdition (void)
 
       /* Number of centres */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u"
-	                 "</td>",
+	                 "%u",
                Plc->NumCtrs);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 
@@ -806,33 +817,36 @@ static void Plc_PutFormToCreatePlace (void)
 
    /***** Column to remove place, disabled here *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
+   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_EndCell ();
 
    /***** Place code *****/
-   fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
+   fprintf (Gbl.F.Out,"<td class=\"CODE\">");
+   Tbl_EndCell ();
 
    /***** Place short name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName);
+   Tbl_EndCell ();
 
    /***** Place full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName);
+   Tbl_EndCell ();
 
    /***** Number of centres *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-		      "0"
-		      "</td>");
+		      "0");
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
