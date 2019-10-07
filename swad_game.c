@@ -507,11 +507,11 @@ void Gam_ShowOneGame (long GamCod,
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>"
-                      "</td>",
+   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>",
             Game.Hidden ? "DAT_LIGHT" :
         	          "DAT",
             Txt);
+   Tbl_EndCell ();
 
    /***** End 2nd row of this game *****/
    Tbl_EndRow ();
@@ -1136,33 +1136,39 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 
    /***** Game title *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"Title\" class=\"%s\">%s:</label>"
-		      "</td>"
-		      "<td class=\"LEFT_MIDDLE\">"
+		      "<label for=\"Title\" class=\"%s\">%s:</label>",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],
+	    Txt_Title);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 		      "<input type=\"text\" id=\"Title\" name=\"Title\""
 		      " size=\"45\" maxlength=\"%u\" value=\"%s\""
-		      " required=\"required\" />"
-		      "</td>",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],
-	    Txt_Title,
+		      " required=\"required\" />",
 	    Gam_MAX_CHARS_TITLE,Game->Title);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Game text *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-		      "<label for=\"Txt\" class=\"%s\">%s:</label>"
-		      "</td>"
-		      "<td class=\"LEFT_TOP\">"
-		      "<textarea id=\"Txt\" name=\"Txt\""
-		      " cols=\"60\" rows=\"10\">",
+		      "<label for=\"Txt\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Description);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
+		      "<textarea id=\"Txt\" name=\"Txt\""
+		      " cols=\"60\" rows=\"10\">");
    if (!ItsANewGame)
       fprintf (Gbl.F.Out,"%s",Txt);
-   fprintf (Gbl.F.Out,"</textarea>"
-		      "</td>");
+   fprintf (Gbl.F.Out,"</textarea>");
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
@@ -1740,15 +1746,15 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
       /* Write answer type (row[2]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">%s</div>"
-			 "</td>",
+      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">%s</div>",
 	       Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+      Tbl_EndCell ();
 
       /* Write question code */
       fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
-	                 "%ld&nbsp;"
-	                 "</td>",
+	                 "%ld&nbsp;",
                Gbl.RowEvenOdd,Gbl.Test.QstCod);
+      Tbl_EndCell ();
 
       /* Write the question tags */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",

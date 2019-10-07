@@ -121,37 +121,46 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Scope */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"ScopeInd\" class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">",
+                      "<label for=\"ScopeInd\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Sco_PutSelectorScope ("ScopeInd",true);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /* Compute stats for a type of degree */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"OthDegTypCod\" class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"DAT LEFT_MIDDLE\">",
+                      "<label for=\"OthDegTypCod\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Types_of_degree);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
    DT_WriteSelectorDegreeTypes ();
    fprintf (Gbl.F.Out," (");
    fprintf (Gbl.F.Out,Txt_only_if_the_scope_is_X,
             Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,")</td>");
+   fprintf (Gbl.F.Out,")");
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"%s\" class=\"%s\">%s:</label>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">",
+                      "<label for=\"%s\" class=\"%s\">%s:</label>",
             Dpt_PARAM_DPT_COD_NAME,
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Department);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current insitution
                                 Gbl.Stat.DptCod,		// Selected department
                                 "INDICATORS_INPUT",		// Selector class
@@ -159,6 +168,7 @@ void Ind_ReqIndicatorsCourses (void)
                                 Txt_Any_department,		// Text when no department selected
                                 true);				// Submit on change
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Get courses from database *****/
@@ -174,14 +184,17 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Selection of the number of indicators */
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP %s\">"
-                      "%s:"
-                      "</td>"
-                      "<td class=\"LEFT_TOP\">",
+                      "%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_No_of_indicators);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
    Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,true);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /* End table and form */
@@ -651,6 +664,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
       Class = Gbl.Stat.IndicatorsSelected[Ind] ? ClassHighlight :
                                                  ClassNormal;
       Tbl_StartRow ();
+
       if (PutForm)
 	{
 	 fprintf (Gbl.F.Out,"<td class=\"%s\">"
@@ -660,46 +674,54 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
 		  Class,Ind,Ind);
 	 if (Gbl.Stat.IndicatorsSelected[Ind])
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	 fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\" />"
-	                    "</td>",
+	 fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\" />",
                   Gbl.Form.Id);
+	 Tbl_EndCell ();
 	}
+
       fprintf (Gbl.F.Out,"<td class=\"%s\">"
-                         "<label for=\"Indicators%u\">%u</label>"
-                         "</td>"
-                         "<td class=\"%s\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"%s\">"
-                         "(%.1f%%)"
-                         "</td>",
+                         "<label for=\"Indicators%u\">%u</label>",
                Class,
-               Ind,Ind,
+               Ind,Ind);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"%s\">"
+                         "%u",
                Class,
-               NumCrssWithIndicatorYes[Ind],
+               NumCrssWithIndicatorYes[Ind]);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"%s\">"
+                         "(%.1f%%)",
                Class,
                NumCrss ? (float) NumCrssWithIndicatorYes[Ind] * 100.0 / (float) NumCrss :
         	         0.0);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 
    /***** Write total of courses *****/
    Tbl_StartRow ();
+
    if (PutForm)
-      fprintf (Gbl.F.Out,"<td>"
-			 "</td>");
+      Tbl_PutEmptyCells (1);
+
    fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%s"
-                      "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
-                      "(%.1f%%)"
-                      "</td>",
-            Txt_Total,
-            NumCrss,
+                      "%s",
+            Txt_Total);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "%u",
+            NumCrss);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
+                      "(%.1f%%)",
             100.0);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    Tbl_EndTable ();
@@ -1040,117 +1062,121 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 	      {
 	       case Ind_INDICATORS_BRIEF:
 		  Tbl_StartRow ();
+
 		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">"
+				     "%s",
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[0]);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s",
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[1]);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s",
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[3]);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">"
 				     "<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">"
 				     "%s/?crs=%ld&amp;act=%ld"
-				     "</a>"
-				     "</td>"
-
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%u"
-				     "</td>"
-
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>",
-			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-							   "DAT_SMALL_RED"),
-			   Gbl.RowEvenOdd,
-			   row[0],
-			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-							   "DAT_SMALL_RED"),
-			   Gbl.RowEvenOdd,
-			   row[1],
-			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-							   "DAT_SMALL_RED"),
-			   Gbl.RowEvenOdd,
-			   row[3],
+				     "</a>",
 			   Gbl.RowEvenOdd,Cfg_URL_SWAD_CGI,CrsCod,ActCod,
-					  Cfg_URL_SWAD_CGI,CrsCod,ActCod,
+					  Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+		  Tbl_EndCell ();
 
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u",
 			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
 			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
 							   "DAT_SMALL_RED"),
 			   Gbl.RowEvenOdd,
-			   Indicators.NumIndicators,
+			   Indicators.NumIndicators);
+		  Tbl_EndCell ();
 
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
 			   Indicators.ThereIsSyllabus ? Txt_YES :
-							"",
+							"");
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
 			   Indicators.ThereIsSyllabus ? "" :
-							Txt_NO,
+							Txt_NO);
+		  Tbl_EndCell ();
 
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
 			   Indicators.ThereAreAssignments ? Txt_YES :
-							    "",
+							    "");
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
 			   Indicators.ThereAreAssignments ? "" :
-							    Txt_NO,
+							    Txt_NO);
+		  Tbl_EndCell ();
 
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
 			   Indicators.ThereIsOnlineTutoring ? Txt_YES :
-							      "",
+							      "");
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
 			   Indicators.ThereIsOnlineTutoring ? "" :
-							      Txt_NO,
+							      Txt_NO);
+		  Tbl_EndCell ();
 
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
 			   Indicators.ThereAreMaterials ? Txt_YES :
-							  "",
+							  "");
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
 			   Indicators.ThereAreMaterials ? "" :
-							  Txt_NO,
+							  Txt_NO);
+		  Tbl_EndCell ();
 
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
 			   Indicators.ThereIsAssessment ? Txt_YES :
-							  "",
+							  "");
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
 			   Indicators.ThereIsAssessment ? "" :
 							  Txt_NO);
+		  Tbl_EndCell ();
+
 		  Tbl_EndRow ();
 		  break;
 	       case Ind_INDICATORS_FULL:
@@ -1160,224 +1186,241 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 			    Usr_GetNumUsrsInCrs (Rol_TCH,CrsCod);	// Teachers
 
 		  Tbl_StartRow ();
+
 		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">"
+				     "%s",
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[0]);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s",
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[1]);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s",
+			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
+			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
+							   "DAT_SMALL_RED"),
+			   Gbl.RowEvenOdd,
+			   row[3]);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">"
 				     "<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">"
 				     "%s/?crs=%ld&amp;act=%ld"
-				     "</a>"
-				     "</td>"
-
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%u"
-				     "</td>"
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%u"
-				     "</td>"
-
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%u"
-				     "</td>"
-
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%u"
-				     "</td>"
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%lu"
-				     "</td>"
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%lu"
-				     "</td>"
-
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%u"
-				     "</td>"
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%u"
-				     "</td>"
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%u"
-				     "</td>"
-
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%lu"
-				     "</td>"
-				     "<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
-				     "%lu"
-				     "</td>"
-
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s CENTER_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>"
-				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"
-				     "%s"
-				     "</td>",
-			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-							   "DAT_SMALL_RED"),
-			   Gbl.RowEvenOdd,
-			   row[0],
-			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-							   "DAT_SMALL_RED"),
-			   Gbl.RowEvenOdd,
-			   row[1],
-			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
-			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
-							   "DAT_SMALL_RED"),
-			   Gbl.RowEvenOdd,
-			   row[3],
+				     "</a>",
 			   Gbl.RowEvenOdd,Cfg_URL_SWAD_CGI,CrsCod,ActCod,
-					  Cfg_URL_SWAD_CGI,CrsCod,ActCod,
+					  Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+		  Tbl_EndCell ();
 
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u",
 			   NumTchs != 0 ? "DAT_SMALL_GREEN" :
 					  "DAT_SMALL_RED",
 			   Gbl.RowEvenOdd,
-			   NumTchs,
+			   NumTchs);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u",
 			   NumStds != 0 ? "DAT_SMALL_GREEN" :
 					  "DAT_SMALL_RED",
 			   Gbl.RowEvenOdd,
-			   NumStds,
+			   NumStds);
+		  Tbl_EndCell ();
 
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u",
 			   Indicators.CourseAllOK ? "DAT_SMALL_GREEN" :
 			   (Indicators.CoursePartiallyOK ? "DAT_SMALL" :
 							   "DAT_SMALL_RED"),
 			   Gbl.RowEvenOdd,
-			   Indicators.NumIndicators,
+			   Indicators.NumIndicators);
+		  Tbl_EndCell ();
 
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
 			   Indicators.ThereIsSyllabus ? Txt_YES :
-							"",
+							"");
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
 			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
 			   Indicators.ThereIsSyllabus ? "" :
-							Txt_NO,
+							Txt_NO);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s",
 			   (Indicators.SyllabusLecSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
 									      "DAT_SMALL_RED",
 			   Gbl.RowEvenOdd,
-			   Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusLecSrc],
+			   Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusLecSrc]);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s",
 			   (Indicators.SyllabusPraSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
 									      "DAT_SMALL_RED",
 			   Gbl.RowEvenOdd,
-			   Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusPraSrc],
-			   (Indicators.TeachingGuideSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
-										"DAT_SMALL_RED",
-			   Gbl.RowEvenOdd,
-			   Txt_INFO_SRC_SHORT_TEXT[Indicators.TeachingGuideSrc],
+			   Txt_INFO_SRC_SHORT_TEXT[Indicators.SyllabusPraSrc]);
+		  Tbl_EndCell ();
 
-			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-			   Indicators.ThereAreAssignments ? Txt_YES :
-							    "",
-			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
-			   Indicators.ThereAreAssignments ? "" :
-							    Txt_NO,
-			   (Indicators.NumAssignments != 0) ? "DAT_SMALL_GREEN" :
-							      "DAT_SMALL_RED",
-			   Gbl.RowEvenOdd,
-			   Indicators.NumAssignments,
-			   (Indicators.NumFilesAssignments != 0) ? "DAT_SMALL_GREEN" :
-								   "DAT_SMALL_RED",
-			   Gbl.RowEvenOdd,
-			   Indicators.NumFilesAssignments,
-			   (Indicators.NumFilesWorks != 0) ? "DAT_SMALL_GREEN" :
-							     "DAT_SMALL_RED",
-			   Gbl.RowEvenOdd,
-			   Indicators.NumFilesWorks,
-
-			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-			   Indicators.ThereIsOnlineTutoring ? Txt_YES :
-							      "",
-			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
-			   Indicators.ThereIsOnlineTutoring ? "" :
-							      Txt_NO,
-			   (Indicators.NumThreads != 0) ? "DAT_SMALL_GREEN" :
-							  "DAT_SMALL_RED",
-			   Gbl.RowEvenOdd,
-			   Indicators.NumThreads,
-			   (Indicators.NumPosts != 0) ? "DAT_SMALL_GREEN" :
-							"DAT_SMALL_RED",
-			   Gbl.RowEvenOdd,
-			   Indicators.NumPosts,
-			   (Indicators.NumMsgsSentByTchs != 0) ? "DAT_SMALL_GREEN" :
-								 "DAT_SMALL_RED",
-			   Gbl.RowEvenOdd,
-			   Indicators.NumMsgsSentByTchs,
-
-			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-			   Indicators.ThereAreMaterials ? Txt_YES :
-							  "",
-			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
-			   Indicators.ThereAreMaterials ? "" :
-							  Txt_NO,
-			   (Indicators.NumFilesInDocumentZones != 0) ? "DAT_SMALL_GREEN" :
-								       "DAT_SMALL_RED",
-			   Gbl.RowEvenOdd,
-			   Indicators.NumFilesInDocumentZones,
-			   (Indicators.NumFilesInSharedZones != 0) ? "DAT_SMALL_GREEN" :
-								     "DAT_SMALL_RED",
-			   Gbl.RowEvenOdd,
-			   Indicators.NumFilesInSharedZones,
-
-			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
-			   Indicators.ThereIsAssessment ? Txt_YES :
-							  "",
-			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
-			   Indicators.ThereIsAssessment ? "" :
-							  Txt_NO,
-			   (Indicators.AssessmentSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
-									     "DAT_SMALL_RED",
-			   Gbl.RowEvenOdd,
-			   Txt_INFO_SRC_SHORT_TEXT[Indicators.AssessmentSrc],
+		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s",
 			   (Indicators.TeachingGuideSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
 										"DAT_SMALL_RED",
 			   Gbl.RowEvenOdd,
 			   Txt_INFO_SRC_SHORT_TEXT[Indicators.TeachingGuideSrc]);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereAreAssignments ? Txt_YES :
+							    "");
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereAreAssignments ? "" :
+							    Txt_NO);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u",
+			   (Indicators.NumAssignments != 0) ? "DAT_SMALL_GREEN" :
+							      "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumAssignments);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%lu",
+			   (Indicators.NumFilesAssignments != 0) ? "DAT_SMALL_GREEN" :
+								   "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumFilesAssignments);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%lu",
+			   (Indicators.NumFilesWorks != 0) ? "DAT_SMALL_GREEN" :
+							     "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumFilesWorks);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereIsOnlineTutoring ? Txt_YES :
+							      "");
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereIsOnlineTutoring ? "" :
+							      Txt_NO);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u",
+			   (Indicators.NumThreads != 0) ? "DAT_SMALL_GREEN" :
+							  "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumThreads);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u",
+			   (Indicators.NumPosts != 0) ? "DAT_SMALL_GREEN" :
+							"DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumPosts);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%u",
+			   (Indicators.NumMsgsSentByTchs != 0) ? "DAT_SMALL_GREEN" :
+								 "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumMsgsSentByTchs);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereAreMaterials ? Txt_YES :
+							  "");
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereAreMaterials ? "" :
+							  Txt_NO);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%lu",
+			   (Indicators.NumFilesInDocumentZones != 0) ? "DAT_SMALL_GREEN" :
+								       "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumFilesInDocumentZones);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE COLOR%u\">"
+				     "%lu",
+			   (Indicators.NumFilesInSharedZones != 0) ? "DAT_SMALL_GREEN" :
+								     "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Indicators.NumFilesInSharedZones);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
+			   "DAT_SMALL_GREEN",Gbl.RowEvenOdd,
+			   Indicators.ThereIsAssessment ? Txt_YES :
+							  "");
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE COLOR%u\">"
+				     "%s",
+			   "DAT_SMALL_RED",Gbl.RowEvenOdd,
+			   Indicators.ThereIsAssessment ? "" :
+							  Txt_NO);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s",
+			   (Indicators.AssessmentSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+									     "DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Txt_INFO_SRC_SHORT_TEXT[Indicators.AssessmentSrc]);
+		  Tbl_EndCell ();
+
+		  fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\">"
+				     "%s",
+			   (Indicators.TeachingGuideSrc != Inf_INFO_SRC_NONE) ? "DAT_SMALL_GREEN" :
+										"DAT_SMALL_RED",
+			   Gbl.RowEvenOdd,
+			   Txt_INFO_SRC_SHORT_TEXT[Indicators.TeachingGuideSrc]);
+		  Tbl_EndCell ();
+
 		  Tbl_EndRow ();
 		  break;
 		 }

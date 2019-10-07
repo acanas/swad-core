@@ -1365,19 +1365,21 @@ static void Grp_ListGroupTypesForEdition (void)
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Tbl_StartTableCenterPadding (2);
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:16px;\">"
                          "<img src=\"%s/clock.svg\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"%sCONTEXT_ICO_16x16\" />"
-                         "</td>"
-	                 "<td class=\"LEFT_MIDDLE\">",
+                         " class=\"%sCONTEXT_ICO_16x16\" />",
                Cfg_URL_ICON_PUBLIC,
                Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
-        	                                                                  Txt_The_groups_will_not_automatically_open,
+        	                                                           Txt_The_groups_will_not_automatically_open,
                Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
-        	                                                                  Txt_The_groups_will_not_automatically_open,
+        	                                                           Txt_The_groups_will_not_automatically_open,
                Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "" :
-        	                                                                  "ICO_HIDDEN ");
+        	                                                           "ICO_HIDDEN ");
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       snprintf (Id,sizeof (Id),
 	        "open_time_%u",
 		UniqueId);
@@ -1390,6 +1392,7 @@ static void Grp_ListGroupTypesForEdition (void)
 				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                   true);		// Submit on change
       Tbl_EndCell ();
+
       Tbl_EndRow ();
       Tbl_EndTable ();
       Frm_EndForm ();
@@ -1397,9 +1400,10 @@ static void Grp_ListGroupTypesForEdition (void)
 
       /* Number of groups of this type */
       fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-	                 "%u"
-	                 "</td>",
+	                 "%u",
                Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 
@@ -1632,10 +1636,12 @@ static void Grp_ListGroupsForEdition (void)
          for (Role = Rol_TCH;
               Role >= Rol_STD;
               Role--)
+           {
 	    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-			       "%d"
-			       "</td>",
+			       "%d",
 		     Grp->NumUsrs[Role]);
+	    Tbl_EndCell ();
+           }
 
          /***** Maximum number of students of the group (row[3]) *****/
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -1762,8 +1768,8 @@ void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
       if (!(IBelongToThisGroup ||
             Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckParent(this,'WholeCrs')\" />"
-	                 "</td>");
+      fprintf (Gbl.F.Out," onclick=\"uncheckParent(this,'WholeCrs')\" />");
+      Tbl_EndCell ();
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
 
@@ -2067,8 +2073,8 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
 	 fprintf (Gbl.F.Out,IBelongToThisGroup ? " readonly" :			// I can not unregister (disabled does not work because the value is not submitted)
 						 " disabled=\"disabled\"");	// I can not register
 
-      fprintf (Gbl.F.Out," />"
-	                 "</td>");
+      fprintf (Gbl.F.Out," />");
+      Tbl_EndCell ();
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
 
@@ -2260,7 +2266,8 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	 fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllGroups')\"");
       else
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," /></td>");
+      fprintf (Gbl.F.Out," />");
+      Tbl_EndCell ();
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
 
@@ -2297,31 +2304,33 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
      }
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllGroups')\" />"
-	              "</td>");
+   fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllGroups')\" />");
+   Tbl_EndCell ();
 
    /* Column closed/open */
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-	              "</td>");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   Tbl_EndCell ();
 
    /* Group name = students with no group */
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-	              "<label for=\"Grp%ld\">%s</label>"
-	              "</td>",
+	              "<label for=\"Grp%ld\">%s</label>",
             -(GrpTyp->GrpTypCod),Txt_users_with_no_group);
+   Tbl_EndCell ();
 
    /* Classroom */
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-	              "</td>");
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+   Tbl_EndCell ();
 
    /* Number of students who don't belong to any group of this type */
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
+     {
       fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-			 "%lu"
-			 "</td>",
+			 "%lu",
 	       Grp_CountNumUsrsInNoGrpsOfType (Role,GrpTyp->GrpTypCod));
+      Tbl_EndCell ();
+     }
 
    /* Last empty columns for max. students and vacants */
    Tbl_PutEmptyCells (2);
@@ -2428,19 +2437,19 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    fprintf (Gbl.F.Out,"\">"
                       "<label for=\"Grp%ld\" class=\"DAT\">"
 	              "%s"
-	              "</label>"
-	              "</td>",
+	              "</label>",
 	    Grp->GrpCod,
 	    Grp->GrpName);
+   Tbl_EndCell ();
 
    /***** Classroom *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE");
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
    fprintf (Gbl.F.Out,"\">"
-	              "%s"
-	              "</td>",
+	              "%s",
 	    Grp->Classroom.ShrtName);
+   Tbl_EndCell ();
 
    /***** Current number of users in this group *****/
    for (Role = Rol_TCH;
@@ -2451,9 +2460,9 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
       if (Highlight)
 	 fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">"
-			 "%d"
-			 "</td>",
+			 "%d",
 	       Grp->NumUsrs[Role]);
+      Tbl_EndCell ();
      }
 
    /***** Max. number of students in this group *****/
@@ -2462,8 +2471,8 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
    fprintf (Gbl.F.Out,"\">");
    Grp_WriteMaxStds (Grp->MaxStudents);
-   fprintf (Gbl.F.Out,"&nbsp;"
-	              "</td>");
+   fprintf (Gbl.F.Out,"&nbsp;");
+   Tbl_EndCell ();
 
    /***** Vacants in this group *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE");
@@ -2508,15 +2517,16 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Column to remove group type, disabled here *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
+   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_EndCell ();
 
    /***** Name of group type *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"GrpTypName\""
                       " size=\"12\" maxlength=\"%u\" value=\"%s\""
-	              " required=\"required\" />"
-                      "</td>",
+	              " required=\"required\" />",
             Grp_MAX_CHARS_GROUP_TYPE_NAME,Gbl.Crs.Grps.GrpTyp.GrpTypName);
+   Tbl_EndCell ();
 
    /***** Is it mandatory to register in any groups of this type? *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -2531,9 +2541,9 @@ static void Grp_PutFormToCreateGroupType (void)
    if (Gbl.Crs.Grps.GrpTyp.MandatoryEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"
-	              "</select>"
-	              "</td>",
+	              "</select>",
             Txt_It_is_mandatory_to_choose_a_group);
+   Tbl_EndCell ();
 
    /***** Is it possible to register in multiple groups of this type? *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -2548,27 +2558,29 @@ static void Grp_PutFormToCreateGroupType (void)
    if (Gbl.Crs.Grps.GrpTyp.MultipleEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"
-	              "</select>"
-	              "</td>",
+	              "</select>",
             Txt_A_student_can_belong_to_several_groups);
+   Tbl_EndCell ();
 
    /***** Open time *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Tbl_StartTablePadding (2);
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/clock.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"%sCONTEXT_ICO_16x16\" />"
-                      "</td>"
-	              "<td class=\"LEFT_MIDDLE\">",
+                      " class=\"%sCONTEXT_ICO_16x16\" />",
             Cfg_URL_ICON_PUBLIC,
             Gbl.Crs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
-        	                                      Txt_The_groups_will_not_automatically_open,
+        	                               Txt_The_groups_will_not_automatically_open,
             Gbl.Crs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
-        	                                      Txt_The_groups_will_not_automatically_open,
+        	                               Txt_The_groups_will_not_automatically_open,
             Gbl.Crs.Grps.GrpTyp.MustBeOpened ? "" :
-        	                                      "ICO_HIDDEN ");
+        	                               "ICO_HIDDEN ");
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("open_time",
                                                 "Open",
                                                 Gbl.Crs.Grps.GrpTyp.OpenTimeUTC,
@@ -2578,14 +2590,16 @@ static void Grp_PutFormToCreateGroupType (void)
 				                Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                false);			// Don't submit on change
    Tbl_EndCell ();
+
    Tbl_EndRow ();
    Tbl_EndTable ();
    Tbl_EndCell ();
 
    /***** Number of groups of this type *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-		      "0"	// It's a new group type ==> 0 groups
-		      "</td>");
+		      "0");	// It's a new group type ==> 0 groups
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
@@ -2625,7 +2639,8 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** Empty column to remove *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
+   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_EndCell ();
 
    /***** Disabled icon to open group *****/
    fprintf (Gbl.F.Out,"<td class=\"BM\">");
@@ -2657,16 +2672,16 @@ static void Grp_PutFormToCreateGroup (void)
      }
 
    /* End selector */
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Group name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"GrpName\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\""
-	              " required=\"required\" />"
-	              "</td>",
+	              " required=\"required\" />",
             Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName);
+   Tbl_EndCell ();
 
    /***** Classroom *****/
    /* Start selector */
@@ -2701,24 +2716,27 @@ static void Grp_PutFormToCreateGroup (void)
      }
 
    /* End selector */
-   fprintf (Gbl.F.Out,"</select>"
-		      "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Current number of users in this group *****/
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
+     {
       fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-			 "0"
-			 "</td>");
+			 "0");
+      Tbl_EndCell ();
+     }
 
    /***** Maximum number of students *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<input type=\"text\" name=\"MaxStudents\""
 	              " size=\"3\" maxlength=\"10\" value=\"");
    Grp_WriteMaxStds (Gbl.Crs.Grps.MaxStudents);
-   fprintf (Gbl.F.Out,"\" />"
-	              "</td>");
+   fprintf (Gbl.F.Out,"\" />");
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/

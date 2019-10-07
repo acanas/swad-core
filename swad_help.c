@@ -274,9 +274,9 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
 
    /***** Description *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%s:"
-		      "</td>",
+		      "%s:",
             Description);
+   Tbl_EndCell ();
 
    /***** Button *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");

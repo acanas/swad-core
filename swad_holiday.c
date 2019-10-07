@@ -150,16 +150,19 @@ void Hld_SeeHolidays (void)
 	   {
 	    /* Write data of this holiday */
 	    Tbl_StartRow ();
+
 	    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			       "%s"
-			       "</td>",
+			       "%s",
 		     Gbl.Hlds.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
 							Gbl.Hlds.Lst[NumHld].PlaceFullName);
+	    Tbl_EndCell ();
+
 	    Dat_ConvDateToDateStr (&Gbl.Hlds.Lst[NumHld].StartDate,StrDate);
 	    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			       "&nbsp;%s"
-			       "</td>",
+			       "&nbsp;%s",
 		     StrDate);
+	    Tbl_EndCell ();
+
 	    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 			       "&nbsp;");
 	    switch (Gbl.Hlds.Lst[NumHld].HldTyp)
@@ -171,11 +174,13 @@ void Hld_SeeHolidays (void)
 		  fprintf (Gbl.F.Out,"%s",StrDate);
 		  break;
 	      }
-	    fprintf (Gbl.F.Out,"</td>"
-			       "<td class=\"DAT LEFT_MIDDLE\">"
-			       "&nbsp;%s"
-			       "</td>",
+	    Tbl_EndCell ();
+
+	    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+			       "&nbsp;%s",
 		     Gbl.Hlds.Lst[NumHld].Name);
+	    Tbl_EndCell ();
+
 	    Tbl_EndRow ();
 	   }
 	 Tbl_EndTable ();
@@ -572,9 +577,9 @@ static void Hld_ListHolidaysForEdition (void)
 
       /* Holiday code */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%ld&nbsp;"
-	                 "</td>",
+	                 "%ld&nbsp;",
                Hld->HldCod);
+      Tbl_EndCell ();
 
       /* Holiday place */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -1009,8 +1014,8 @@ static void Hld_PutFormToCreateHoliday (void)
                Gbl.Plcs.Lst[NumPlc].PlcCod == Hld_EditingHld->PlcCod ? " selected=\"selected\"" :
         	                                                       "",
                Gbl.Plcs.Lst[NumPlc].ShrtName);
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Holiday type *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -1023,8 +1028,8 @@ static void Hld_PutFormToCreateHoliday (void)
                HolidayType == Hld_EditingHld->HldTyp ? " selected=\"selected\"" :
         	                                       "",
                Txt_HOLIDAY_TYPES[HolidayType]);
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</select>");
+   Tbl_EndCell ();
 
    /***** Holiday date / Non school period start date *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -1048,9 +1053,9 @@ static void Hld_PutFormToCreateHoliday (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"Name\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name);
+   Tbl_EndCell ();
 
    Tbl_PutEmptyCells (1);
 

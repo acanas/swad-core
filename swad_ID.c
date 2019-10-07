@@ -607,10 +607,11 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	 fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">"
 			    "<label for=\"UsrID\" class=\"%s\">"
 			    "%s:"
-			    "</label>"
-			    "</td>"
-			    "<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">",
+			    "</label>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_ID);
+	 Tbl_EndCell ();
+
+	 fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">");
 	}
       else	// NumID >= 1
          fprintf (Gbl.F.Out,"<br />");
@@ -674,20 +675,24 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
      {
       /***** Write help text *****/
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT CENTER_MIDDLE\">");
       Ale_ShowAlert (Ale_INFO,Txt_The_ID_is_used_in_order_to_facilitate_);
       Tbl_EndCell ();
+
       Tbl_EndRow ();
 
       /***** Form to enter new user's ID *****/
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">"
-			 "<label for=\"NewID\" class=\"%s\">%s:</label>"
-			 "</td>"
-			 "<td class=\"REC_C2_BOT LEFT_TOP DAT\">",
+			 "<label for=\"NewID\" class=\"%s\">%s:</label>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
 		                 Txt_ID);		// The first user's ID
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_TOP DAT\">");
       if (ItsMe)
 	 Frm_StartFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
       else
@@ -717,6 +722,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
       Btn_PutCreateButtonInline (Txt_Add_this_ID);
       Frm_EndForm ();
       Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 
