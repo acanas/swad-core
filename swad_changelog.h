@@ -487,7 +487,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.31.18 (2019-10-07)"
+#define Log_PLATFORM_VERSION	"SWAD 19.31.19 (2019-10-07)"
 #define CSS_FILE		"swad19.29.css"
 #define JS_FILE			"swad19.30.js"
 /*
@@ -495,6 +495,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Un TFG preasignado sin estudiante tiene que salir un triángulo amarillo
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 
+	Version 19.31.19: Oct 07, 2019	Code refactoring in HTML tables. (247211 lines)
 	Version 19.31.18: Oct 07, 2019	Code refactoring in HTML tables. (247239 lines)
 	Version 19.31.17: Oct 07, 2019	Code refactoring in HTML tables. (247221 lines)
 	Version 19.31.16: Oct 07, 2019	Code refactoring in HTML tables. (247185 lines)
