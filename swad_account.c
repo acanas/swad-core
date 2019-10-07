@@ -279,17 +279,16 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 
    /***** Write number of user in the list *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\""
-		      " class=\"USR_LIST_NUM_N RIGHT_TOP COLOR%u\">"
-		      "%u",
-	    Gbl.RowEvenOdd,NumUsr);
+
+   Tbl_StartCellAttr ("rowspan=\"2\" class=\"USR_LIST_NUM_N RIGHT_TOP COLOR%u\"",
+	              Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"%u",NumUsr);
    Tbl_EndCell ();
 
    /***** Write user's ID and name *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP COLOR%u\">"
-		      "%s: %s<br />"
+   Tbl_StartCellAttr ("class=\"DAT_N LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"%s: %s<br />"
 		      "%s: ",
-	    Gbl.RowEvenOdd,
 	    Txt_ID,ID,
 	    Txt_Name);
    if (UsrDat->FullName[0])
@@ -299,24 +298,24 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    Tbl_EndCell ();
 
    /***** Button to login with this account *****/
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
-	    Gbl.RowEvenOdd);
+   Tbl_StartCellAttr ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
    Frm_StartForm (ActLogInNew);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Btn_PutCreateButtonInline (Txt_Its_me);
    Frm_EndForm ();
    Tbl_EndCell ();
+
    Tbl_EndRow ();
+   Tbl_StartRow ();
 
    /***** Courses of this user *****/
-   Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
-	    Gbl.RowEvenOdd);
+   Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
    UsrDat->Sex = Usr_SEX_UNKNOWN;
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NET);
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STD);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
   }
 
@@ -368,13 +367,15 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    else
       NewNicknameWithArroba[0] = '\0';
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"NewNick\" class=\"%s\">%s:</label>",
+
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<label for=\"NewNick\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Nickname);
    Tbl_EndCell ();
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
+
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
                       " required=\"required\" />",
@@ -382,17 +383,20 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
             Txt_HELP_nickname,
             NewNicknameWithArroba);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Email *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"NewEmail\" class=\"%s\">%s:</label>",
+
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<label for=\"NewEmail\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Email);
    Tbl_EndCell ();
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
+
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
                       " required=\"required\" />",
@@ -400,6 +404,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
             Txt_HELP_email,
             NewEmail);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Password *****/

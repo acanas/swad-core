@@ -213,6 +213,44 @@ void Tbl_EndRow (void)
 /********************************* Table cells *******************************/
 /*****************************************************************************/
 
+void Tbl_StartCellAttr (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 fprintf (Gbl.F.Out,
+		  "<tr %s>",Attr);
+
+	 free ((void *) Attr);
+	}
+      else
+         Tbl_StartCell ();
+     }
+   else
+      Tbl_StartCell ();
+  }
+
+void Tbl_StartCell (void)
+  {
+   fprintf (Gbl.F.Out,
+	    "<td>");
+  }
+
 void Tbl_EndCell (void)
   {
    fprintf (Gbl.F.Out,
