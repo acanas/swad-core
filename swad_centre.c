@@ -760,16 +760,14 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
 
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-		      "%u",
-	    Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.Hierarchy.Ctr.CtrCod));
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.Hierarchy.Ctr.CtrCod));
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -921,60 +919,48 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    Tbl_StartRow ();
 
    /***** Number of centre in this list *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-                      "%u",
-	    TxtClassNormal,BgColor,
-            NumCtr);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",NumCtr);
    Tbl_EndCell ();
 
    /***** Centre logo and name *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE %s\"",BgColor);
    Ctr_DrawCentreLogoAndNameWithLink (Ctr,ActSeeDeg,
                                       TxtClassStrong,"CENTER_MIDDLE");
    Tbl_EndCell ();
 
    /***** Number of users who claim to belong to this centre *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-		      "%u",
-	    TxtClassNormal,BgColor,
-	    Ctr->NumUsrsWhoClaimToBelongToCtr);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",Ctr->NumUsrsWhoClaimToBelongToCtr);
    Tbl_EndCell ();
 
    /***** Place *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
-		      "%s",
-	    TxtClassNormal,BgColor,
-	    Plc.ShrtName);
+   Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%s",Plc.ShrtName);
    Tbl_EndCell ();
 
    /***** Number of degrees *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-		      "%u",
-	    TxtClassNormal,BgColor,
-	    Ctr->Degs.Num);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",Ctr->Degs.Num);
    Tbl_EndCell ();
 
    /***** Number of courses *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-		      "%u",
-	    TxtClassNormal,BgColor,
-	    Ctr->NumCrss);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",Ctr->NumCrss);
    Tbl_EndCell ();
 
    /***** Number of users in courses of this centre *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-		      "%u",
-	    TxtClassNormal,BgColor,
-	    Ctr->NumUsrs);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",Ctr->NumUsrs);
    Tbl_EndCell ();
 
    /***** Centre status *****/
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
-	    TxtClassNormal,BgColor);
+   Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE %s\"",TxtClassNormal,BgColor);
    if (StatusTxt != Ctr_STATUS_ACTIVE) // If active ==> do not show anything
       fprintf (Gbl.F.Out,"%s",Txt_CENTRE_STATUS[StatusTxt]);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -1512,7 +1498,7 @@ static void Ctr_ListCentresForEdition (void)
 
       /* Put icon to remove centre */
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"BM\">");
+      Tbl_StartCellAttr ("class=\"BM\"");
       if (Ctr->Degs.Num ||
 	  Ctr->NumUsrsWhoClaimToBelongToCtr ||
 	  Ctr->NumUsrs ||	// Centre has degrees or users ==> deletion forbidden
@@ -1528,20 +1514,18 @@ static void Ctr_ListCentresForEdition (void)
       Tbl_EndCell ();
 
       /* Centre code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT CODE\">"
-	                 "%ld",
-               Ctr->CtrCod);
+      Tbl_StartCellAttr ("class=\"DAT CODE\"");
+      fprintf (Gbl.F.Out,"%ld",Ctr->CtrCod);
       Tbl_EndCell ();
 
       /* Centre logo */
-      fprintf (Gbl.F.Out,"<td title=\"%s\" class=\"LEFT_MIDDLE\""
-	                 " style=\"width:25px;\">",
-               Ctr->FullName);
+      Tbl_StartCellAttr ("title=\"%s\" class=\"LEFT_MIDDLE\" style=\"width:25px;\"",
+                         Ctr->FullName);
       Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
       Tbl_EndCell ();
 
       /* Place */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgCtrPlc);
@@ -1573,7 +1557,7 @@ static void Ctr_ListCentresForEdition (void)
       Tbl_EndCell ();
 
       /* Centre short name */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenCtrSho);
@@ -1591,7 +1575,7 @@ static void Ctr_ListCentresForEdition (void)
       Tbl_EndCell ();
 
       /* Centre full name */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenCtrFul);
@@ -1609,7 +1593,7 @@ static void Ctr_ListCentresForEdition (void)
       Tbl_EndCell ();
 
       /* Centre WWW */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgCtrWWW);
@@ -1636,33 +1620,30 @@ static void Ctr_ListCentresForEdition (void)
       Tbl_EndCell ();
 
       /* Number of users who claim to belong to this centre */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-			 "%u",
-	       Ctr->NumUsrsWhoClaimToBelongToCtr);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Ctr->NumUsrsWhoClaimToBelongToCtr);
       Tbl_EndCell ();
 
       /* Number of degrees */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u",
-               Ctr->Degs.Num);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Ctr->Degs.Num);
       Tbl_EndCell ();
 
       /* Number of users in courses of this centre */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u",
-               Ctr->NumUsrs);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Ctr->NumUsrs);
       Tbl_EndCell ();
 
       /* Centre requester */
       UsrDat.UsrCod = Ctr->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-      fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
+      Tbl_StartCellAttr ("class=\"DAT INPUT_REQUESTER LEFT_TOP\"");
       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
       Tbl_EndCell ();
 
       /* Centre status */
       StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM &&
 	  StatusTxt == Ctr_STATUS_PENDING)
 	{
@@ -2535,23 +2516,24 @@ static void Ctr_PutFormToCreateCentre (void)
    /***** Write heading *****/
    Ctr_PutHeadCentresForEdition ();
 
-   /***** Column to remove centre, disabled here *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+
+   /***** Column to remove centre, disabled here *****/
+   Tbl_StartCellAttr ("class=\"BM\"");
    Tbl_EndCell ();
 
    /***** Centre code *****/
-   fprintf (Gbl.F.Out,"<td class=\"CODE\">");
+   Tbl_StartCellAttr ("class=\"CODE\"");
    Tbl_EndCell ();
 
    /***** Centre logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\" style=\"width:25px;\"");
    Log_DrawLogo (Hie_CTR,-1L,"",20,NULL,true);
    Tbl_EndCell ();
 
    /***** Place *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"PlcCod\" style=\"width:62px;\">"
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\">"
                       "<option value=\"0\"");
    if (Ctr_EditingCtr->PlcCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -2568,8 +2550,8 @@ static void Ctr_PutFormToCreateCentre (void)
    Tbl_EndCell ();
 
    /***** Centre short name *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"ShortName\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
@@ -2577,8 +2559,8 @@ static void Ctr_PutFormToCreateCentre (void)
    Tbl_EndCell ();
 
    /***** Centre full name *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"FullName\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
@@ -2586,8 +2568,8 @@ static void Ctr_PutFormToCreateCentre (void)
    Tbl_EndCell ();
 
    /***** Centre WWW *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"url\" name=\"WWW\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />",
@@ -2595,28 +2577,29 @@ static void Ctr_PutFormToCreateCentre (void)
    Tbl_EndCell ();
 
    /***** Number of users who claim to belong to this centre *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "0");
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"0");
    Tbl_EndCell ();
 
    /***** Number of degrees *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "0");
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"0");
    Tbl_EndCell ();
 
    /***** Number of users in courses of this centre *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "0");
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"0");
    Tbl_EndCell ();
 
    /***** Centre requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
+   Tbl_StartCellAttr ("class=\"DAT INPUT_REQUESTER LEFT_TOP\"");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
    Tbl_EndCell ();
 
    /***** Centre status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table, send button and end box *****/
