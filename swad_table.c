@@ -234,7 +234,7 @@ void Tbl_StartCellAttr (const char *fmt,...)
 
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,
-		  "<tr %s>",Attr);
+		  "<td %s>",Attr);
 
 	 free ((void *) Attr);
 	}
