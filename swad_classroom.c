@@ -143,31 +143,24 @@ void Cla_SeeClassrooms (void)
       Tbl_StartRow ();
 
       /* Short name */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
-			 "%s",
-	       Gbl.ColorRows[RowEvenOdd],
-	       Gbl.Classrooms.Lst[NumCla].ShrtName);
-      Tbl_EndRow ();
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE %s\"",Gbl.ColorRows[RowEvenOdd]);
+      fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].ShrtName);
+      Tbl_EndCell ();
 
       /* Full name */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
-			 "%s",
-	       Gbl.ColorRows[RowEvenOdd],
-	       Gbl.Classrooms.Lst[NumCla].FullName);
-      Tbl_EndRow ();
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE %s\"",Gbl.ColorRows[RowEvenOdd]);
+      fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].FullName);
+      Tbl_EndCell ();
 
       /* Capacity */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">",
-	       Gbl.ColorRows[RowEvenOdd]);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE %s\"",Gbl.ColorRows[RowEvenOdd]);
       Cla_WriteCapacity (Gbl.Classrooms.Lst[NumCla].Capacity);
       Tbl_EndCell ();
 
       /* Location */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
-			 "%s",
-	       Gbl.ColorRows[RowEvenOdd],
-	       Gbl.Classrooms.Lst[NumCla].Location);
-      Tbl_EndRow ();
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE %s\"",Gbl.ColorRows[RowEvenOdd]);
+      fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].Location);
+      Tbl_EndCell ();
 
       Tbl_EndRow ();
      }
@@ -486,9 +479,10 @@ static void Cla_ListClassroomsForEdition (void)
      {
       Cla = &Gbl.Classrooms.Lst[NumCla];
 
-      /* Put icon to remove classroom */
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"BM\">");
+
+      /* Put icon to remove classroom */
+      Tbl_StartCellAttr ("class=\"BM\"");
       Frm_StartForm (ActRemCla);
       Cla_PutParamClaCod (Cla->ClaCod);
       Ico_PutIconRemove ();
@@ -496,13 +490,12 @@ static void Cla_ListClassroomsForEdition (void)
       Tbl_EndCell ();
 
       /* Classroom code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%ld",
-               Cla->ClaCod);
-      Tbl_EndRow ();
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%ld",Cla->ClaCod);
+      Tbl_EndCell ();
 
       /* Classroom short name */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
       Frm_StartForm (ActRenClaSho);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -514,7 +507,7 @@ static void Cla_ListClassroomsForEdition (void)
       Tbl_EndCell ();
 
       /* Classroom full name */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
       Frm_StartForm (ActRenClaFul);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -526,7 +519,7 @@ static void Cla_ListClassroomsForEdition (void)
       Tbl_EndCell ();
 
       /* Seating capacity */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
       Frm_StartForm (ActChgClaMaxStd);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Capacity\""
@@ -538,7 +531,7 @@ static void Cla_ListClassroomsForEdition (void)
       Tbl_EndCell ();
 
       /* Classroom location */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
       Frm_StartForm (ActRenClaLoc);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Location\""
@@ -548,6 +541,7 @@ static void Cla_ListClassroomsForEdition (void)
                Cla_MAX_CHARS_LOCATION,Cla->Location,Gbl.Form.Id);
       Frm_EndForm ();
       Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 
@@ -905,46 +899,46 @@ static void Cla_PutFormToCreateClassroom (void)
    Tbl_StartRow ();
 
    /***** Column to remove classroom, disabled here *****/
-   fprintf (Gbl.F.Out,"<td class=\"BM\">");
-   Tbl_EndRow ();
+   Tbl_StartCellAttr ("class=\"BM\"");
+   Tbl_EndCell ();
 
    /***** Classroom code *****/
-   fprintf (Gbl.F.Out,"<td class=\"CODE\">");
-   Tbl_EndRow ();
+   Tbl_StartCellAttr ("class=\"CODE\"");
+   Tbl_EndCell ();
 
    /***** Classroom short name *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"ShortName\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " size=\"10\" maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
             Cla_MAX_CHARS_SHRT_NAME,Cla_EditingCla->ShrtName);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Classroom full name *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"FullName\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
             Cla_MAX_CHARS_FULL_NAME,Cla_EditingCla->FullName);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Seating capacity *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-	              "<input type=\"text\" name=\"Capacity\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Capacity\""
 	              " size=\"3\" maxlength=\"10\" value=\"");
    Cla_WriteCapacity (Cla_EditingCla->Capacity);
    fprintf (Gbl.F.Out,"\" />");
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Classroom location *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"Location\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Location\""
 		      " size=\"15\" maxlength=\"%u\" value=\"%s\""
 		      " class=\"INPUT_FULL_NAME\" />",
 	    Cla_MAX_CHARS_LOCATION,Cla_EditingCla->Location);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    Tbl_EndRow ();
 

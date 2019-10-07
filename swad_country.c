@@ -185,8 +185,7 @@ void Cty_SeeCtyWithPendingInss (void)
          Tbl_StartRow ();
 
          /* Country map */
-         fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",
-                  BgColor);
+         Tbl_StartCellAttr ("class=\"LEFT_MIDDLE %s\"",BgColor);
          Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
                                             "COUNTRY_SMALL",
                                             "COUNTRY_MAP_SMALL",
@@ -194,9 +193,8 @@ void Cty_SeeCtyWithPendingInss (void)
          Tbl_EndCell ();
 
          /* Number of pending institutions (row[1]) */
-         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-	                    "%s",
-                  BgColor,row[1]);
+         Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE %s\"",BgColor);
+	 fprintf (Gbl.F.Out,"%s",row[1]);
          Tbl_EndCell ();
 
          Tbl_EndRow ();
@@ -328,13 +326,11 @@ static void Cty_Configuration (bool PrintView)
    /***** Country name (an link to WWW if exists) *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],
-	    Txt_Country);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Country);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"DAT_N LEFT_MIDDLE\"");
    if (!PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0])
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
 	       Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
@@ -348,14 +344,12 @@ static void Cty_Configuration (bool PrintView)
    /***** Link to the country inside platform *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],
-	    Txt_Shortcut);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Shortcut);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-		      "<a href=\"%s/%s?cty=%ld\" class=\"DAT\" target=\"_blank\">"
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<a href=\"%s/%s?cty=%ld\" class=\"DAT\" target=\"_blank\">"
 		      "%s/%s?cty=%ld</a>",
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
@@ -372,13 +366,11 @@ static void Cty_Configuration (bool PrintView)
       /***** QR code with link to the country *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_QR_code);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_QR_code);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       QR_LinkTo (250,"cty",Gbl.Hierarchy.Cty.CtyCod);
       Tbl_EndCell ();
 
@@ -389,14 +381,12 @@ static void Cty_Configuration (bool PrintView)
       /***** Number of users who claim to belong to this country *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Users_of_the_country);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Users_of_the_country);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%u",
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",
 	       Usr_GetNumUsrsWhoClaimToBelongToCty (Gbl.Hierarchy.Cty.CtyCod));
       Tbl_EndCell ();
 
@@ -405,14 +395,12 @@ static void Cty_Configuration (bool PrintView)
       /***** Number of institutions *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Institutions);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Institutions);
       Tbl_EndCell ();
 
       /* Form to go to see institutions of this country */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
       Frm_StartFormGoTo (ActSeeIns);
       Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -429,15 +417,12 @@ static void Cty_Configuration (bool PrintView)
       /***** Number of centres *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Centres);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Centres);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%u",
-	       Ctr_GetNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod));
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInCty (Gbl.Hierarchy.Cty.CtyCod));
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -445,15 +430,13 @@ static void Cty_Configuration (bool PrintView)
       /***** Number of degrees *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",
 	       Txt_Degrees);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%u",
-	       Deg_GetNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Deg_GetNumDegsInCty (Gbl.Hierarchy.Cty.CtyCod));
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -461,15 +444,12 @@ static void Cty_Configuration (bool PrintView)
       /***** Number of courses *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Courses);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Courses);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%u",
-	       Crs_GetNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Crs_GetNumCrssInCty (Gbl.Hierarchy.Cty.CtyCod));
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -509,15 +489,14 @@ static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role)
 
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-		      "%u",
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",
             Usr_GetNumUsrsInCrssOfCty (Role,Gbl.Hierarchy.Cty.CtyCod));
    Tbl_EndCell ();
 
@@ -573,50 +552,43 @@ void Cty_ListCountries2 (void)
 
    /***** Separation row *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td colspan=\"8\" class=\"DAT CENTER_MIDDLE\">"
-                      "&nbsp;");
+   Tbl_StartCellAttr ("colspan=\"8\" class=\"DAT CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"&nbsp;");
    Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Write users and institutions in other countries *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-                      "%s",
-            Txt_Other_countries);
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Other_countries);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u",
-            Cty_GetNumUsrsWhoClaimToBelongToCty (0));
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Cty_GetNumUsrsWhoClaimToBelongToCty (0));
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u",
-            Ins_GetNumInssInCty (0));
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Ins_GetNumInssInCty (0));
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u",
-            Ctr_GetNumCtrsInCty (0));
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInCty (0));
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u",
-            Deg_GetNumDegsInCty (0));
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Deg_GetNumDegsInCty (0));
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u",
-            Crs_GetNumCrssInCty (0));
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Crs_GetNumCrssInCty (0));
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u",
-            Usr_GetNumUsrsInCrssOfCty (Rol_TCH,0));
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsInCrssOfCty (Rol_TCH,0));
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -624,41 +596,35 @@ void Cty_ListCountries2 (void)
    /***** Write users and institutions with unknown country *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-                      "%s",
-            Txt_Country_unspecified);
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Country_unspecified);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u",
-            Cty_GetNumUsrsWhoClaimToBelongToCty (-1L));
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Cty_GetNumUsrsWhoClaimToBelongToCty (-1L));
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u",
-            Ins_GetNumInssInCty (-1L));
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Ins_GetNumInssInCty (-1L));
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u",
-            Ctr_GetNumCtrsInCty (-1L));
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInCty (-1L));
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u",
-            Deg_GetNumDegsInCty (-1L));
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Deg_GetNumDegsInCty (-1L));
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "%u",
-            Crs_GetNumCrssInCty (-1L));
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Crs_GetNumCrssInCty (-1L));
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                      "0");
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"0");
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -760,13 +726,12 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
    Tbl_StartRow ();
 
    /***** Number of country in this list *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-                      "%u",
-	    BgColor,NumCty);
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE %s\"",BgColor);
+   fprintf (Gbl.F.Out,"%u",NumCty);
    Tbl_EndCell ();
 
    /***** Country map (and link to WWW if exists) *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE %s\"",BgColor);
    Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
 				      "COUNTRY_SMALL",
 				      "COUNTRY_MAP_SMALL",
@@ -774,34 +739,28 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
    Tbl_EndCell ();
 
    /* Write stats of this country */
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-		      "%u",
-	    BgColor,Cty->NumUsrsWhoClaimToBelongToCty);
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE %s\"",BgColor);
+   fprintf (Gbl.F.Out,"%u",Cty->NumUsrsWhoClaimToBelongToCty);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-		      "%u",
-	    BgColor,Cty->Inss.Num);
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE %s\"",BgColor);
+   fprintf (Gbl.F.Out,"%u",Cty->Inss.Num);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-		      "%u",
-	    BgColor,Cty->NumCtrs);
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE %s\"",BgColor);
+   fprintf (Gbl.F.Out,"%u",Cty->NumCtrs);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-		      "%u",
-	    BgColor,Cty->NumDegs);
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE %s\"",BgColor);
+   fprintf (Gbl.F.Out,"%u",Cty->NumDegs);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-		      "%u",
-	    BgColor,Cty->NumCrss);
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE %s\"",BgColor);
+   fprintf (Gbl.F.Out,"%u",Cty->NumCrss);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-		      "%u",
-	    BgColor,Cty->NumUsrs);
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE %s\"",BgColor);
+   fprintf (Gbl.F.Out,"%u",Cty->NumUsrs);
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -1666,8 +1625,7 @@ static void Cty_ListCountriesForEdition (void)
       Tbl_StartRow ();
 
       /* Put icon to remove country */
-      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"BT\">",
-	       1 + Lan_NUM_LANGUAGES);
+      Tbl_StartCellAttr ("rowspan=\"%u\" class=\"BT\"",1 + Lan_NUM_LANGUAGES);
       if (Cty->Inss.Num ||
 	  Cty->NumUsrsWhoClaimToBelongToCty ||
 	  Cty->NumUsrs)	// Country has institutions or users ==> deletion forbidden
@@ -1682,29 +1640,25 @@ static void Cty_ListCountriesForEdition (void)
       Tbl_EndCell ();
 
       /* Numerical country code (ISO 3166-1) */
-      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
-	                 "%03ld",
-               1 + Lan_NUM_LANGUAGES,Cty->CtyCod);
+      Tbl_StartCellAttr ("rowspan=\"%u\" class=\"DAT RIGHT_TOP\"",1 + Lan_NUM_LANGUAGES);
+      fprintf (Gbl.F.Out,"%03ld",Cty->CtyCod);
       Tbl_EndCell ();
 
       /* Alphabetic country code with 2 letters (ISO 3166-1) */
-      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
-	                 "%s",
-               1 + Lan_NUM_LANGUAGES,Cty->Alpha2);
+      Tbl_StartCellAttr ("rowspan=\"%u\" class=\"DAT RIGHT_TOP\"",1 + Lan_NUM_LANGUAGES);
+      fprintf (Gbl.F.Out,"%s",Cty->Alpha2);
       Tbl_EndCell ();
 
       Tbl_PutEmptyCells (3);
 
       /* Number of users */
-      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
-	                 "%u",
-               1 + Lan_NUM_LANGUAGES,Cty->NumUsrsWhoClaimToBelongToCty);
+      Tbl_StartCellAttr ("rowspan=\"%u\" class=\"DAT RIGHT_TOP\"",1 + Lan_NUM_LANGUAGES);
+      fprintf (Gbl.F.Out,"%u",Cty->NumUsrsWhoClaimToBelongToCty);
       Tbl_EndCell ();
 
       /* Number of institutions */
-      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
-	                 "%u",
-               1 + Lan_NUM_LANGUAGES,Cty->Inss.Num);
+      Tbl_StartCellAttr ("rowspan=\"%u\" class=\"DAT RIGHT_TOP\"",1 + Lan_NUM_LANGUAGES);
+      fprintf (Gbl.F.Out,"%u",Cty->Inss.Num);
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -1717,13 +1671,12 @@ static void Cty_ListCountriesForEdition (void)
          Tbl_StartRow ();
 
 	 /* Language */
-         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                            "%s:",
-                  Txt_STR_LANG_NAME[Lan]);
+         Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+         fprintf (Gbl.F.Out,"%s:",Txt_STR_LANG_NAME[Lan]);
          Tbl_EndCell ();
 
          /* Name */
-         fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
+         Tbl_StartCellAttr ("class=\"LEFT_TOP\"");
          Frm_StartForm (ActRenCty);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
@@ -1736,7 +1689,7 @@ static void Cty_ListCountriesForEdition (void)
          Tbl_EndCell ();
 
          /* WWW */
-         fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
+         Tbl_StartCellAttr ("class=\"LEFT_TOP\"");
          Frm_StartForm (ActChgCtyWWW);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
@@ -2106,40 +2059,35 @@ static void Cty_PutFormToCreateCountry (void)
    Tbl_StartRow ();
 
    /***** Column to remove country, disabled here *****/
-   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"BT\">",
-            1 + Lan_NUM_LANGUAGES);
+   Tbl_StartCellAttr ("rowspan=\"%u\" class=\"BT\"",1 + Lan_NUM_LANGUAGES);
    Tbl_EndCell ();
 
    /***** Numerical country code (ISO 3166-1) *****/
-   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"RIGHT_TOP\">"
-                      "<input type=\"text\" name=\"OthCtyCod\""
-                      " size=\"3\" maxlength=\"10\" value=\"",
-            1 + Lan_NUM_LANGUAGES);
+   Tbl_StartCellAttr ("rowspan=\"%u\" class=\"RIGHT_TOP\"",1 + Lan_NUM_LANGUAGES);
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OthCtyCod\""
+                      " size=\"3\" maxlength=\"10\" value=\"");
    if (Cty_EditingCty->CtyCod > 0)
       fprintf (Gbl.F.Out,"%03ld",Cty_EditingCty->CtyCod);
    fprintf (Gbl.F.Out,"\" required=\"required\" />");
    Tbl_EndCell ();
 
    /***** Alphabetic country code with 2 letters (ISO 3166-1) *****/
-   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"RIGHT_TOP\">"
-                      "<input type=\"text\" name=\"Alpha2\""
+   Tbl_StartCellAttr ("rowspan=\"%u\" class=\"RIGHT_TOP\"",1 + Lan_NUM_LANGUAGES);
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Alpha2\""
                       " size=\"2\" maxlength=\"2\" value=\"%s\""
-                      " required=\"required\" />",
-            1 + Lan_NUM_LANGUAGES,Cty_EditingCty->Alpha2);
+                      " required=\"required\" />",Cty_EditingCty->Alpha2);
    Tbl_EndCell ();
 
    Tbl_PutEmptyCells (3);
 
    /***** Number of users *****/
-   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
-	              "0",
-	    1 + Lan_NUM_LANGUAGES);
+   Tbl_StartCellAttr ("rowspan=\"%u\" class=\"DAT RIGHT_TOP\"",1 + Lan_NUM_LANGUAGES);
+   fprintf (Gbl.F.Out,"0");
    Tbl_EndCell ();
 
    /***** Number of institutions *****/
-   fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"DAT RIGHT_TOP\">"
-	              "0",
-	    1 + Lan_NUM_LANGUAGES);
+   Tbl_StartCellAttr ("rowspan=\"%u\" class=\"DAT RIGHT_TOP\"",1 + Lan_NUM_LANGUAGES);
+   fprintf (Gbl.F.Out,"0");
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -2152,14 +2100,13 @@ static void Cty_PutFormToCreateCountry (void)
       Tbl_StartRow ();
 
       /* Language */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP\">"
-	                 "%s",
-               Txt_STR_LANG_NAME[Lan]);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP\"");
+      fprintf (Gbl.F.Out,"%s",Txt_STR_LANG_NAME[Lan]);
       Tbl_EndCell ();
 
       /* Name */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                         "<input type=\"text\" name=\"Name_%s\""
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name_%s\""
                          " size=\"15\" maxlength=\"%u\" value=\"%s\""
                          " required=\"required\" />",
                Lan_STR_LANG_ID[Lan],
@@ -2168,8 +2115,8 @@ static void Cty_PutFormToCreateCountry (void)
       Tbl_EndCell ();
 
       /* WWW */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                         "<input type=\"url\" name=\"WWW_%s\""
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW_%s\""
                          " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_WWW\" />",
 	       Lan_STR_LANG_ID[Lan],

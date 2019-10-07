@@ -304,14 +304,12 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 
          Tbl_StartRow ();
 
-         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-                            "%s",
-		  row[0]);
+         Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+         fprintf (Gbl.F.Out,"%s",row[0]);
          Tbl_EndCell ();
 
-	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-                            "%s",
-                  row[1]);
+	 Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+         fprintf (Gbl.F.Out,"%s",row[1]);
 	 Tbl_EndCell ();
 
          Tbl_EndRow ();
