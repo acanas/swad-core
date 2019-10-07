@@ -1713,11 +1713,11 @@ void Lay_AdvertisementMobile (void)
                          "<img src=\"%s/SWADroid200x300.png\""
                          " alt=\"SWADroid\" title=\"%s\""
                          " style=\"width:250px; height:375px;\" />"
-                         "</a>"
-	                 "</td>",
+                         "</a>",
                Txt_Stay_connected_with_SWADroid,
                Cfg_URL_ICON_PUBLIC,
                Txt_Stay_connected_with_SWADroid);
+      Tbl_EndCell ();
       Tbl_EndRow ();
 
       /***** End table and box *****/

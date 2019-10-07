@@ -563,11 +563,11 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
 			 "%ld,%u,'<br />','%s',true,true,0x7);"
-			 "</script>"
-			 "</td>",
+			 "</script>",
 	       (unsigned) StartEndTime,UniqueId,
 	       Match->TimeUTC[StartEndTime],
 	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Tbl_EndCell ();
      }
   }
 
@@ -661,10 +661,10 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match)
   {
    /***** Number of players who have answered any question in the match ******/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">"
-		      "%u"
-		      "</td>",
+		      "%u",
 	    Gbl.RowEvenOdd,
 	    Mch_GetNumUsrsWhoHaveAnswerMch (Match->MchCod));
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -1195,17 +1195,20 @@ static void Mch_PutFormNewMatch (struct Game *Game)
 
    /***** Match title *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"Title\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
+	              "<label for=\"Title\" class=\"%s\">%s:</label>",
+            The_ClassFormInBox[Gbl.Prefs.Theme],
+            Txt_Title);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />"
-                      "</td>",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Title,
+                      " required=\"required\" />",
             Gam_MAX_CHARS_TITLE,Game->Title);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Groups *****/
@@ -1250,12 +1253,14 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
      {
       /***** Start box and table *****/
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
-	                 "%s:"
-	                 "</td>"
-                         "<td class=\"LEFT_TOP\">",
+	                 "%s:",
                The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_Groups);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
       Box_StartBoxTable ("95%",NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,0);
 
@@ -1268,9 +1273,10 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
                          " checked=\"checked\""
                          " onclick=\"uncheckChildren(this,'GrpCods')\" />"
 	                 "%s %s"
-	                 "</label>"
-	                 "</td>",
+	                 "</label>",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
 
       /***** List the groups for each group type *****/
@@ -3151,10 +3157,13 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
    for (i = 0;
 	i < 100;
 	i++)
-      fprintf (Gbl.F.Out,"<td class=\"%s\"></td>",
+     {
+      fprintf (Gbl.F.Out,"<td class=\"%s\">",
 	       (i < BarWidth) ? (Correct ? "MATCH_RES_CORRECT" :
 					   "MATCH_RES_WRONG") :
 				"MATCH_RES_VOID");
+      Tbl_EndCell ();
+     }
    Tbl_EndRow ();
    Tbl_EndTable ();
 

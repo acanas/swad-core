@@ -324,6 +324,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
       /***** Row for this web / social network *****/
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT LEFT_MIDDLE\">"
 			 "<label for=\"URL%u\" class=\"%s\">"
 			 "<img src=\"%s/%s\""
@@ -331,21 +332,22 @@ void Net_ShowFormMyWebsAndSocialNets (void)
                          " class=\"CONTEXT_ICO_16x16\""
 			 " style=\"margin-right:6px;\" />"
 			 "%s:"
-			 "</label>"
-			 "</td>"
-
-			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
-			 "<input type=\"url\" id=\"URL%u\" name=\"URL%u\""
-			 " maxlength=\"%u\" value=\"%s\""
-		         " class=\"REC_C2_BOT_INPUT\" />"
-			 "</td>",
+			 "</label>",
 	       (unsigned) NumURL,The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
-	       Net_WebsAndSocialNetworksTitle[NumURL],
+	       Net_WebsAndSocialNetworksTitle[NumURL]);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
+			 "<input type=\"url\" id=\"URL%u\" name=\"URL%u\""
+			 " maxlength=\"%u\" value=\"%s\""
+		         " class=\"REC_C2_BOT_INPUT\" />",
 	       (unsigned) NumURL,(unsigned) NumURL,
 	       Cns_MAX_CHARS_WWW,URL);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 
@@ -591,25 +593,30 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	    Lay_ShowErrorAndExit ("Error when getting number of files.");
 
 	 Tbl_StartRow ();
+
 	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 			    "<img src=\"%s/%s\""
 			    " alt=\"%s\" title=\"%s\""
                             " class=\"CONTEXT_ICO_16x16\""
 			    " style=\"margin-right:6px;\" />"
-			    "%s</td>"
-			    "<td class=\"DAT RIGHT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "<td class=\"DAT RIGHT_MIDDLE\">"
-			    "%.2f%%"
-			    "</td>",
+			    "%s",
 		  Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
-		  Net_WebsAndSocialNetworksTitle[Web],
-		  NumUsrs,
+		  Net_WebsAndSocialNetworksTitle[Web]);
+	 Tbl_EndCell ();
+
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+			    "%u",
+		  NumUsrs);
+	 Tbl_EndCell ();
+
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+			    "%.2f%%",
 		  NumUsrsTotal ? 100.0 * (float) NumUsrs / (float) NumUsrsTotal :
 			         0.0);
+	 Tbl_EndCell ();
+
 	 Tbl_EndRow ();
 	}
      }

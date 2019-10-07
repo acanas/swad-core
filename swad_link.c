@@ -433,9 +433,9 @@ static void Lnk_ListLinksForEdition (void)
 
       /* Link code */
       fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%ld"
-	                 "</td>",
+	                 "%ld",
                Lnk->LnkCod);
+      Tbl_EndCell ();
 
       /* Link short name */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
@@ -748,7 +748,9 @@ static void Lnk_PutFormToCreateLink (void)
    Tbl_StartRow ();
 
    /***** Link code *****/
-   fprintf (Gbl.F.Out,"<td class=\"BM\"></td>");
+   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_EndCell ();
+
    Tbl_PutEmptyCells (1);
 
    /***** Link short name *****/
@@ -756,27 +758,27 @@ static void Lnk_PutFormToCreateLink (void)
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName);
+   Tbl_EndCell ();
 
    /***** Link full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName);
+   Tbl_EndCell ();
 
    /***** Link WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
-                      " required=\"required\" />"
-                      "</td>",
+                      " required=\"required\" />",
             Cns_MAX_CHARS_WWW,Lnk_EditingLnk->WWW);
+   Tbl_EndCell ();
 
    Tbl_EndRow ();
 

@@ -590,9 +590,10 @@ void Ntf_ShowMyNotifications (void)
 
          /* Write status (sent by email / pending to be sent by email) */
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
-                            "%s"
-                            "</td>",
+                            "%s",
                   ClassBackground,Txt_NOTIFICATION_STATUS[StatusTxt]);
+         Tbl_EndCell ();
+
          Tbl_EndRow ();
 
          /***** Write content of the event *****/
@@ -602,14 +603,20 @@ void Ntf_ShowMyNotifications (void)
             Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
                                            Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
                                            false);
+
             Tbl_StartRow ();
-            fprintf (Gbl.F.Out,"<td colspan=\"2\"></td>"
-                               "<td colspan=\"4\" class=\"DAT LEFT_TOP\""
+
+            fprintf (Gbl.F.Out,"<td colspan=\"2\">");
+            Tbl_EndCell ();
+
+            fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"DAT LEFT_TOP\""
                                " style=\"padding-bottom:12px;\">"
-                               "%s"
-                               "</td>",
+                               "%s",
                      SummaryStr);
+            Tbl_EndCell ();
+
             Tbl_EndRow ();
+
             if (ContentStr != NULL)
               {
                free ((void *) ContentStr);
@@ -1958,25 +1965,29 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	NotifyEvent++)	// O is reserved for Ntf_EVENT_UNKNOWN
      {
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s:"
-	                 "</td>"
-	                 "<td class=\"CENTER_MIDDLE\">"
-                         "<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
+	                 "%s:",
                The_ClassFormInBox[Gbl.Prefs.Theme],
-               Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent],
+               Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
+                         "<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent)))
           fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />"
-	                 "</td>"
-	                 "<td class=\"CENTER_MIDDLE\">"
+      fprintf (Gbl.F.Out," />");
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                          "<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent)))
           fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />"
-	                 "</td>");
+      fprintf (Gbl.F.Out," />");
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 

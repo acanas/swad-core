@@ -206,11 +206,13 @@ void McR_SelUsrsToViewUsrsMchResults (void)
          /***** Put list of users to select some of them *****/
          Tbl_StartTableCenterPadding (2);
          Tbl_StartRow ();
+
          fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
-			    "%s:"
-			    "</td>"
-			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">",
-                  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users,
+			    "%s:",
+                  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users);
+         Tbl_EndCell ();
+
+	 fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"%s LEFT_TOP\">",
                   The_ClassFormInBox[Gbl.Prefs.Theme]);
          Tbl_StartTablePadding (2);
          Usr_ListUsersToSelect (Rol_TCH);
@@ -218,6 +220,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
          Usr_ListUsersToSelect (Rol_STD);
          Tbl_EndTable ();
          Tbl_EndCell ();
+
          Tbl_EndRow ();
 
          /***** Starting and ending dates in the search *****/
@@ -457,18 +460,19 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 			       "<script type=\"text/javascript\">"
 			       "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
 			       "%ld,%u,'<br />','%s',true,false,0x7);"
-			       "</script>"
-			       "</td>",
+			       "</script>",
 		     (unsigned) StartEndTime,UniqueId,
 		     Gbl.RowEvenOdd,
 		     (unsigned) StartEndTime,UniqueId,
 		     (long) TimeUTC[StartEndTime],
 		     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	    Tbl_EndCell ();
            }
 
          /* Write match title */
-	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">%s</td>",
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">%s",
 	          Gbl.RowEvenOdd,Match.Title);
+	 Tbl_EndCell ();
 
          /* Get number of questions (row[3]) */
          if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
@@ -491,12 +495,14 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	   }
 
          /* Write number of questions */
-	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">%u</td>",
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">%u",
 	          Gbl.RowEvenOdd,NumQstsInThisResult);
+	 Tbl_EndCell ();
 
          /* Write number of questions not blank */
-	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">%u</td>",
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">%u",
 	          Gbl.RowEvenOdd,NumQstsNotBlankInThisResult);
+	 Tbl_EndCell ();
 
 	 /* Write score */
 	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",
@@ -589,10 +595,10 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
    /***** Row title *****/
    fprintf (Gbl.F.Out,"<td colspan=\"3\""
 	              " class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">"
-		      "%s: %u"
-		      "</td>",
+		      "%s: %u",
 	    Gbl.RowEvenOdd,
 	    Txt_Matches,NumResults);
+   Tbl_EndCell ();
 
    /***** Write total number of questions *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
@@ -635,8 +641,9 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
    Tbl_EndCell ();
 
    /***** Last cell *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP COLOR%u\"></td>",
+   fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
+   Tbl_EndCell ();
 
    /***** End row *****/
    Tbl_EndRow ();
@@ -784,11 +791,13 @@ void McR_ShowOneMchResult (void)
 
       /* User */
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"DAT LEFT_TOP\">",
+			 "%s:",
 	       Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
       ID_WriteUsrIDs (UsrDat,NULL);
       fprintf (Gbl.F.Out," %s",
 	       UsrDat->Surname1);
@@ -804,6 +813,7 @@ void McR_ShowOneMchResult (void)
 					   NULL,
 			"PHOTO45x60",Pho_ZOOM,false);
       Tbl_EndCell ();
+
       Tbl_EndRow ();
 
       /* Start/end time (for user in this match) */
@@ -812,42 +822,50 @@ void McR_ShowOneMchResult (void)
 	   StartEndTime++)
 	{
 	 Tbl_StartRow ();
+
 	 fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\">"
-			    "%s:"
-			    "</td>"
-			    "<td id=\"match_%u\" class=\"DAT LEFT_TOP\">"
+			    "%s:",
+		  Txt_START_END_TIME[StartEndTime]);
+	 Tbl_EndCell ();
+
+	 fprintf (Gbl.F.Out,"<td id=\"match_%u\" class=\"DAT LEFT_TOP\">"
 			    "<script type=\"text/javascript\">"
 			    "writeLocalDateHMSFromUTC('match_%u',%ld,"
 			    "%u,',&nbsp;','%s',true,true,0x7);"
-			    "</script>"
-			    "</td>",
-		  Txt_START_END_TIME[StartEndTime],
+			    "</script>",
 		  (unsigned) StartEndTime,
 		  (unsigned) StartEndTime,
 		  TimeUTC[StartEndTime],
 		  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	 Tbl_EndCell ();
+
 	 Tbl_EndRow ();
 	}
 
       /* Number of questions */
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"DAT LEFT_TOP\">"
-			 "%u (%u %s)"
-			 "</td>",
-	       Txt_Questions,
+			 "%s:",
+	       Txt_Questions);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">"
+			 "%u (%u %s)",
 	       NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
 
       /* Score */
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"DAT LEFT_TOP\">",
+			 "%s:",
 	       Txt_Score);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
       if (ICanViewScore)
 	 fprintf (Gbl.F.Out,"%.2lf (%.2lf",
 		  TotalScore,
@@ -855,19 +873,24 @@ void McR_ShowOneMchResult (void)
 			    0.0);
       else
 	 fprintf (Gbl.F.Out,"? (?");	// No feedback
-      fprintf (Gbl.F.Out," %s %u)</td>",
+      fprintf (Gbl.F.Out," %s %u)",
 	       Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+      Tbl_EndCell ();
+
       Tbl_EndRow ();
 
       /* Tags present in this result */
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP\">"
-			 "%s:"
-			 "</td>"
-			 "<td class=\"DAT LEFT_TOP\">",
+			 "%s:",
 	       Txt_Tags);
+      Tbl_EndCell ();
+
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
       Gam_ShowTstTagsPresentInAGame (Match.GamCod);
       Tbl_EndCell ();
+
       Tbl_EndRow ();
 
       /***** Write answers and solutions *****/

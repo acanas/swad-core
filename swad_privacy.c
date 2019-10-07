@@ -155,15 +155,16 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
    Pri_Visibility_t Visibility;
 
-   /***** Select visibility *****/
    Tbl_StartRow ();
+
+   /***** Select visibility *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
-	              "</td>"
-	              "<td class=\"LEFT_TOP\">",
+	              "</td>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],TxtLabel);
 
    /***** Form with list of options *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
    if (Action != ActUnk)
       Frm_StartFormAnchor (Action,Pri_PRIVACY_ID);
    fprintf (Gbl.F.Out,"<ul class=\"PRI_LIST LIST_LEFT\">");

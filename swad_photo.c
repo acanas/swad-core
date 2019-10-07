@@ -896,18 +896,20 @@ static void Pho_UpdatePhoto2 (void)
    for (NumPhoto = 0;
         NumPhoto < 3;
         NumPhoto++)
+     {
       fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP\" style=\"width:33%%;\">"
                          "<img src=\"%s/%s_paso%u.jpg\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:%upx; height:%upx;\" />"
-                         "<br />%s"
-                         "</td>",
+                         "<br />%s",
                Cfg_URL_PHOTO_TMP_PUBLIC,
                Gbl.Usrs.FileNamePhoto,NumPhoto + 1,
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
                Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT,
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
+      Tbl_EndCell ();
+     }
    Tbl_EndRow ();
    Tbl_EndTable ();
 
@@ -1787,11 +1789,13 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
 
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"AvgType\" class=\"%s\">%s:</label>"
-	              "</td>"
-	              "<td class=\"LEFT_MIDDLE\">",
+	              "<label for=\"AvgType\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Average_type);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1811,6 +1815,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    fprintf (Gbl.F.Out,"</select>");
    Frm_EndForm ();
    Tbl_EndCell ();
+
    Tbl_EndRow ();
   }
 
@@ -1848,11 +1853,13 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Pho_HowComputePhotoSize_t PhoSi;
 
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"PhotoSize\" class=\"%s\">%s:</label>"
-	              "</td>"
-	              "<td class=\"LEFT_MIDDLE\">",
+	              "<label for=\"PhotoSize\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Size_of_photos);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1872,6 +1879,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    fprintf (Gbl.F.Out,"</select>");
    Frm_EndForm ();
    Tbl_EndCell ();
+
    Tbl_EndRow ();
   }
 
@@ -1909,11 +1917,13 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Pho_HowOrderDegrees_t Order;
 
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"Order\" class=\"%s\">%s:</label>"
-	              "</td>"
-	              "<td class=\"LEFT_MIDDLE\">",
+	              "<label for=\"Order\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
@@ -1933,6 +1943,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    fprintf (Gbl.F.Out,"</select>");
    Frm_EndForm ();
    Tbl_EndCell ();
+
    Tbl_EndRow ();
   }
 
@@ -2238,12 +2249,13 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 /* Get data of degree */
 	 Deg_GetDataOfDegreeByCod (&Deg);
 
-	 /***** Show logo and name of this degree *****/
 	 Tbl_StartRow ();
+
+	 /***** Show logo and name of this degree *****/
 	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
-			    "%u"
-			    "</td>",
+			    "%u",
 		  Gbl.RowEvenOdd,++NumDegsNotEmpty);
+	 Tbl_EndCell ();
 
 	 /***** Show logo and name of this degree *****/
 	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE COLOR%u\">",
@@ -2272,6 +2284,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	       Pho_ShowDegreeStat (NumStds,NumStdsWithPhoto);
 	    Tbl_EndCell ();
 	   }
+
 	 Tbl_EndRow ();
 	}
 

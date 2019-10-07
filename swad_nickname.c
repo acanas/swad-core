@@ -268,32 +268,35 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
       /* Get nickname */
       row = mysql_fetch_row (mysql_res);
 
+      Tbl_StartRow ();
       if (NumNick == 1)
 	{
 	 /* The first nickname is the current one */
-	 Tbl_StartRow ();
 	 fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">"
 			    "<label for=\"Nick\" class=\"%s\">"
 			    "%s:"
-			    "</label>"
-			    "</td>"
-			    "<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">",
+			    "</label>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Current_nickname);
+	 Tbl_EndCell ();
+
+	 fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">");
 	}
       else	// NumNick >= 2
 	{
-	 Tbl_StartRow ();
 	 if (NumNick == 2)
+	   {
 	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\""
 			       " class=\"REC_C1_BOT RIGHT_TOP\">"
 			       "<label for=\"Nick\" class=\"%s\">"
 			       "%s:"
-			       "</label>"
-			       "</td>",
+			       "</label>",
 		     NumNicks - 1,
 		     The_ClassFormInBox[Gbl.Prefs.Theme],
 		     Txt_Other_nicknames);
+	    Tbl_EndCell ();
+	   }
+
 	 fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_TOP DAT\">");
 
 	 /* Form to remove old nickname */
@@ -368,15 +371,17 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 
    /***** Form to enter new nickname *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">"
                       "<label for=\"NewNick\" class=\"%s\">"
                       "%s:"
-                      "</label>"
-                      "</td>"
-                      "<td class=\"REC_C2_BOT LEFT_TOP DAT\">",
+                      "</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_TOP DAT\">");
    if (ItsMe)
       Frm_StartFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
    else
@@ -406,6 +411,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
         	                         Txt_Save_changes);	// I have no nickname yet);
    Frm_EndForm ();
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table and box *****/
