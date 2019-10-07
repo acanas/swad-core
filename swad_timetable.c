@@ -1133,21 +1133,25 @@ static void TT_DrawTimeTable (void)
 
    /***** Row with day names *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_HOUR_BIG RIGHT_MIDDLE\""
 	              " style=\"width:%u%%;\">"
-	              "%02u:00"
-	              "</td>",
+	              "%02u:00",
             TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,
             Gbl.TimeTable.Config.Range.Hours.Start);
+   Tbl_EndCell ();
+
    TT_DrawCellAlignTimeTable ();
    TT_TimeTableDrawDaysCells ();
    TT_DrawCellAlignTimeTable ();
+
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_HOUR_BIG LEFT_MIDDLE\""
 	              " style=\"width:%u%%;\">"
-	              "%02u:00"
-	              "</td>",
+	              "%02u:00",
             TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,
             Gbl.TimeTable.Config.Range.Hours.Start);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Get list of groups types and groups in this course *****/
@@ -1273,7 +1277,10 @@ static void TT_TimeTableDrawAdjustRow (void)
    unsigned Minicolumn;
 
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"TT_HOURCOL\"></td>");
+
+   fprintf (Gbl.F.Out,"<td class=\"TT_HOURCOL\">");
+   Tbl_EndCell ();
+
    TT_DrawCellAlignTimeTable ();
    for (Weekday = 0;
 	Weekday < TT_DAYS_PER_WEEK;
@@ -1281,9 +1288,15 @@ static void TT_TimeTableDrawAdjustRow (void)
       for (Minicolumn = 0;
 	   Minicolumn < TT_NUM_MINICOLUMNS_PER_DAY;
 	   Minicolumn++)
-         fprintf (Gbl.F.Out,"<td class=\"TT_MINICOL\"></td>");
+	{
+         fprintf (Gbl.F.Out,"<td class=\"TT_MINICOL\">");
+         Tbl_EndCell ();
+	}
    TT_DrawCellAlignTimeTable ();
-   fprintf (Gbl.F.Out,"<td class=\"TT_HOURCOL\"></td>");
+
+   fprintf (Gbl.F.Out,"<td class=\"TT_HOURCOL\">");
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
   }
 
@@ -1305,13 +1318,13 @@ static void TT_TimeTableDrawDaysCells (void)
       fprintf (Gbl.F.Out,"<td colspan=\"%u\""
 	                 " class=\"%s CENTER_MIDDLE\""
 	                 " style=\"width:%u%%;\">"
-	                 "%s"
-	                 "</td>",
+	                 "%s",
                TT_NUM_MINICOLUMNS_PER_DAY,
                Weekday == 6 ? "TT_SUNDAY" :	// Sunday drawn in red
         	              "TT_DAY",	// Monday to Saturday
                TT_PERCENT_WIDTH_OF_A_DAY,
                Txt_DAYS_CAPS[Weekday]);
+      Tbl_EndCell ();
      }
   }
 
@@ -1322,12 +1335,12 @@ static void TT_TimeTableDrawDaysCells (void)
 static void TT_TimeTableDrawHourCell (unsigned Hour,unsigned Min,const char *Align)
   {
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_HOUR %s %s\">"
-		      "%02u:%02u"
-		      "</td>",
+		      "%02u:%02u",
 	    Min ? "TT_HOUR_SMALL" :
 		  "TT_HOUR_BIG",
             Align,
             Hour,Min);
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -1412,7 +1425,8 @@ static unsigned TT_CalculateColsToDrawInCell (bool TopCall,
 
 static void TT_DrawCellAlignTimeTable (void)
   {
-   fprintf (Gbl.F.Out,"<td class=\"TT_ALIGN\"></td>");
+   fprintf (Gbl.F.Out,"<td class=\"TT_ALIGN\">");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/

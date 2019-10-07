@@ -3714,7 +3714,7 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
       Sta_DrawBarNumHits ('o',	// orange background
 		      	  Hits.Num,Hits.Max,Hits.Total,375);
 
-      Tbl_StartRow ();
+      Tbl_EndRow ();
      }
   }
 
@@ -3802,8 +3802,8 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
       fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
       if (DegCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
-      fprintf (Gbl.F.Out,"&nbsp;"
-	                 "</td>");
+      fprintf (Gbl.F.Out,"&nbsp;");
+      Tbl_EndCell ();
 
       /* Write degree */
       Sta_WriteDegree (DegCod);
@@ -3813,7 +3813,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
       Sta_DrawBarNumHits ('o',	// orange background
 		      	  Hits.Num,Hits.Max,Hits.Total,375);
 
-      Tbl_StartRow ();
+      Tbl_EndRow ();
      }
   }
 
@@ -3958,7 +3958,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       Sta_DrawBarNumHits ('o',	// orange background
 		      	  Hits.Num,Hits.Max,Hits.Total,375);
 
-      Tbl_StartRow ();
+      Tbl_EndRow ();
      }
   }
 
@@ -4032,6 +4032,7 @@ static void Sta_DrawBarNumHits (char Color,
       fprintf (Gbl.F.Out,"0&nbsp;(0");
 
    fprintf (Gbl.F.Out,"%%)&nbsp;");
+
    Tbl_EndCell ();
   }
 

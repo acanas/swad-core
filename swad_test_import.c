@@ -1021,8 +1021,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    fprintf (Gbl.F.Out,"<td class=\"BT%u CENTER_TOP\">"
                       "<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_16x16\" />"
-                      "</td>",
+                      " class=\"CONTEXT_ICO_16x16\" />",
             Gbl.RowEvenOdd,
             Cfg_URL_ICON_PUBLIC,
             QuestionExists ? "tr16x16.gif" :
@@ -1031,6 +1030,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
         	             Txt_New_question,
             QuestionExists ? Txt_Existing_question :
         	             Txt_New_question);
+   Tbl_EndCell ();
 
    /***** Write number of question *****/
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP COLOR%u\">",
@@ -1051,14 +1051,17 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 	   NumTag++)
 	{
          Tbl_StartRow ();
+
 	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
-                            "&nbsp;&#8226;&nbsp;"
-                            "</td>"
-                            "<td class=\"%s LEFT_TOP\">"
-                            "%s"
-                            "</td>",
-                  ClassData,
+                            "&nbsp;&#8226;&nbsp;",
+                  ClassData);
+	 Tbl_EndCell ();
+
+         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
+                            "%s",
                   ClassData,Gbl.Test.Tags.Txt[NumTag]);
+         Tbl_EndCell ();
+
 	 Tbl_EndRow ();
 	}
       Tbl_EndTable ();
@@ -1071,10 +1074,10 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Write the question type *****/
    fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP COLOR%u\">"
-	              "%s&nbsp;"
-	              "</td>",
+	              "%s&nbsp;",
 	    ClassData,Gbl.RowEvenOdd,
             Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+   Tbl_EndCell ();
 
    /***** Write if shuffle is enabled *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP COLOR%u\">",
@@ -1165,9 +1168,9 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
             /* Write the number of option */
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
-        	               "%c)&nbsp;"
-        	               "</td>",
+        	               "%c)&nbsp;",
                      ClassData,'a' + (char) NumOpt);
+            Tbl_EndCell ();
 
             /* Write the text and the feedback of the answer */
             fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"

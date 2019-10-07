@@ -600,9 +600,11 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
    if (Gbl.Syllabus.EditionIsActive)
      {
       if (NewItem)
-         fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"COLOR%u\">"
-                            "</td>",
+	{
+         fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"COLOR%u\">",
 	          Gbl.RowEvenOdd);
+         Tbl_EndCell ();
+	}
       else
 	{
 	 /***** Icon to remove the row *****/
@@ -702,9 +704,11 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
      {
       /***** Indent depending on the level *****/
       if (Level > 1)
-	 fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"COLOR%u\">"
-	                    "</td>",
+	{
+	 fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"COLOR%u\">",
                   Level - 1,Gbl.RowEvenOdd);
+         Tbl_EndCell ();
+	}
 
       /***** Code of the item *****/
       fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\""
@@ -713,16 +717,17 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
                Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)
 	 fprintf (Gbl.F.Out,"&nbsp;");
-      fprintf (Gbl.F.Out,"%s&nbsp;</td>",StrItemCod);
+      fprintf (Gbl.F.Out,"%s&nbsp;",StrItemCod);
+      Tbl_EndCell ();
 
       /***** Text of the item *****/
       fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"%s LEFT_TOP COLOR%u\">"
-                         "%s"
-                         "</td>",
+                         "%s",
                LstItemsSyllabus.NumLevels - Level + 1,
                StyleSyllabus[Level],
                Gbl.RowEvenOdd,
                Text);
+      Tbl_EndCell ();
      }
 
    /***** End of the row *****/
@@ -885,15 +890,19 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
 
    /***** Indent depending on the level *****/
    if (Level > 1)
-      fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"COLOR%u\">"
-	                 "</td>",
+     {
+      fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"COLOR%u\">",
                Level - 1,Gbl.RowEvenOdd);
+      Tbl_EndCell ();
+     }
 
    /***** Write the code of the item *****/
    if (NewItem)	// If the item is new (not stored in the file) ==> it has not a number
-      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\" style=\"width:%dpx;\">"
-	                 "</td>",
+     {
+      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\" style=\"width:%dpx;\">",
                Gbl.RowEvenOdd,Level * Syl_WIDTH_NUM_SYLLABUS);
+      Tbl_EndCell ();
+     }
    else
      {
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\""
@@ -903,7 +912,8 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
       if (Level == 1)
 	 fprintf (Gbl.F.Out,"&nbsp;");
       Syl_WriteNumItem (NULL,Gbl.F.Out,Level,CodItem);
-      fprintf (Gbl.F.Out,"&nbsp;</td>");
+      fprintf (Gbl.F.Out,"&nbsp;");
+      Tbl_EndCell ();
      }
 
    /***** Text of the item *****/

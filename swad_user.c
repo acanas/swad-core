@@ -3657,23 +3657,23 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    else
       fprintf (Gbl.F.Out,"BM%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out," %s\" title=\"%s\">"
-	              "%s"
-	              "</td>",
+	              "%s",
             UsrDat->Accepted ? "USR_LIST_NUM_N" :
         	               "USR_LIST_NUM",
 	    UsrDat->Accepted ? Txt_Enrolment_confirmed :
                                Txt_Enrolment_not_confirmed,
             UsrDat->Accepted ? "&check;" :
         	               "&cross;");
+   Tbl_EndCell ();
 
    /***** Write number of user in the list *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u"
-	              "</td>",
+	              "%u",
             UsrDat->Accepted ? "USR_LIST_NUM_N" :
         	               "USR_LIST_NUM",
             BgColor,
             NumUsr);
+   Tbl_EndCell ();
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
@@ -3737,7 +3737,8 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">",
             Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   fprintf (Gbl.F.Out,"&nbsp;</td>");
+   fprintf (Gbl.F.Out,"&nbsp;");
+   Tbl_EndCell ();
 
    /***** Write rest of guest's main data *****/
    Ins.InsCod = UsrDat->InsCod;
@@ -3841,7 +3842,8 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
         	               "DAT_SMALL",
             Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   fprintf (Gbl.F.Out,"&nbsp;</td>");
+   fprintf (Gbl.F.Out,"&nbsp;");
+   Tbl_EndCell ();
 
    /***** Write rest of main student's data *****/
    Ins.InsCod = UsrDat->InsCod;
@@ -3960,7 +3962,8 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
                                "DAT_SMALL",
             Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   fprintf (Gbl.F.Out,"&nbsp;</td>");
+   fprintf (Gbl.F.Out,"&nbsp;");
+   Tbl_EndCell ();
 
    /***** Write rest of main teacher's data *****/
    Ins.InsCod = UsrDat->InsCod;
@@ -4017,9 +4020,9 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 
    /***** Write number of user *****/
    fprintf (Gbl.F.Out,"<td class=\"USR_LIST_NUM_N CENTER_MIDDLE COLOR%u\">"
-	              "%u"
-	              "</td>",
+	              "%u",
             Gbl.RowEvenOdd,NumUsr);
+   Tbl_EndCell ();
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
@@ -4039,7 +4042,8 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
                                "DAT_SMALL",
             Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
-   fprintf (Gbl.F.Out,"&nbsp;</td>");
+   fprintf (Gbl.F.Out,"&nbsp;");
+   Tbl_EndCell ();
 
    /***** Write rest of main administrator's data *****/
    Ins.InsCod = UsrDat->InsCod;
@@ -4141,8 +4145,8 @@ static void Usr_WriteUsrData (const char *BgColor,
       fprintf (Gbl.F.Out,"</a>");
 
    /***** End container and table cell *****/
-   fprintf (Gbl.F.Out,"</div>"
-	              "</td>");
+   fprintf (Gbl.F.Out,"</div>");
+   Tbl_EndCell ();
   }
 
 /*****************************************************************************/
@@ -6937,8 +6941,10 @@ void Usr_ListAllDataStds (void)
                  NumCol < NumColumnsCardAndGroups;
                  NumCol++)
                if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want it in listing
-                  fprintf (Gbl.F.Out,"<td class=\"VERY_LIGHT_BLUE\">"
-                	             "</td>");
+        	 {
+                  fprintf (Gbl.F.Out,"<td class=\"VERY_LIGHT_BLUE\">");
+                  Tbl_EndCell ();
+        	 }
             for (NumField = 0;
                  NumField < Gbl.Crs.Records.LstFields.Num;
                  NumField++)
@@ -7238,9 +7244,12 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	     Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)		// Only admins can view the courses
 	   {
 	    Tbl_StartRow ();
-	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\"></td>"
-			       "<td colspan=\"%u\" class=\"COLOR%u\">",
-		     Gbl.RowEvenOdd,
+
+	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\">",
+		     Gbl.RowEvenOdd);
+	    Tbl_EndCell ();
+
+	    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"COLOR%u\">",
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 		     Gbl.RowEvenOdd);
 	    if (Role == Rol_UNK)
@@ -7252,6 +7261,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	    else
 	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Role);
 	    Tbl_EndCell ();
+
 	    Tbl_EndRow ();
 	   }
 

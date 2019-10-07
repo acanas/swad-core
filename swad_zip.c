@@ -577,8 +577,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 		      "<img src=\"%s/download.svg\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO40x40\" />"
-		      "</a>"
-		      "</td>",
+		      "</a>",
             URL,FileName,
             CfG_URL_ICON_FILEXT_PUBLIC,
             Txt_ZIP_file,
@@ -587,30 +586,36 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Download,
 	    Txt_Download);
+   Tbl_EndCell ();
    Tbl_EndRow ();
 
    /***** Filename *****/
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:"
-		      "</td>"
-		      "<td class=\"DAT LEFT_MIDDLE\">"
-		      "<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">%s</a>"
-		      "</td>",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Filename,
+		      "%s:",
+	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Filename);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+		      "<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">%s</a>",
 	    URL,FileName,FileName);
+   Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Write the file size *****/
    Fil_WriteFileSizeFull ((double) FileSize,FileSizeStr);
    Tbl_StartRow ();
+
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:"
-		      "</td>"
-		      "<td class=\"DAT LEFT_MIDDLE\">"
-		      "%s",
+		      "%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
-	    Txt_File_size,
+	    Txt_File_size);
+   Tbl_EndCell ();
+
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+		      "%s",
 	    FileSizeStr);
    if (UncompressedSize)
      {
@@ -619,6 +624,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                FileSizeStr,Txt_FILE_uncompressed);
      }
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** End table and box *****/
