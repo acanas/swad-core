@@ -842,7 +842,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/
-   fprintf (Gbl.F.Out,"<td class=\"FOLLOW_PHOTO\">");
+   Tbl_StartCellAttr ("class=\"FOLLOW_PHOTO\"");
    if (Visible)
      {
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
@@ -853,7 +853,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    Tbl_EndCell ();
 
    /***** Show user's name and icon to follow/unfollow *****/
-   fprintf (Gbl.F.Out,"<td class=\"FOLLOW_USR\">");
+   Tbl_StartCellAttr ("class=\"FOLLOW_USR\"");
    if (Visible)
      {
       /* Put form to go to public profile */
@@ -899,8 +899,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 
    /***** Show user's photo *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"CON_PHOTO COLOR%u\">",
-	    Gbl.RowEvenOdd);
+   Tbl_StartCellAttr ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
    if (Visible)
      {
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
@@ -911,8 +910,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    Tbl_EndCell ();
 
    /***** User's name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CON_NAME_FOLLOW CON_CRS COLOR%u\">",
-	    Gbl.RowEvenOdd);
+   Tbl_StartCellAttr ("class=\"CON_NAME_FOLLOW CON_CRS COLOR%u\"",Gbl.RowEvenOdd);
    if (Visible)
      {
       /* Put form to go to public profile */
@@ -928,8 +926,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    Tbl_EndCell ();
 
    /***** Icon to follow *****/
-   fprintf (Gbl.F.Out,"<td class=\"CON_ICON_FOLLOW RIGHT_MIDDLE COLOR%u\">",
-            Gbl.RowEvenOdd);
+   Tbl_StartCellAttr ("class=\"CON_ICON_FOLLOW RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
    if (!Gbl.Usrs.Me.Logged ||	// Not logged
        ItsMe)			// It's me
       /* Inactive icon to follow/unfollow */

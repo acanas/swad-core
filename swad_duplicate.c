@@ -187,14 +187,12 @@ void Dup_ListDuplicateUsrs (void)
 
 	    Tbl_StartRow ();
 
-            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\">",
-	             Gbl.RowEvenOdd);
+            Tbl_StartCellAttr ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
             Tbl_EndCell ();
 
-	    fprintf (Gbl.F.Out,"<td colspan=\"%u\""
-			       " class=\"DAT LEFT_MIDDLE COLOR%u\">",
-		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-	             Gbl.RowEvenOdd);
+	    Tbl_StartCellAttr ("colspan=\"%u\" class=\"DAT LEFT_MIDDLE COLOR%u\"",
+			       Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+			       Gbl.RowEvenOdd);
 
             /* Write number of informants (row[1]) if greater than 1 */
 	    if (sscanf (row[1],"%u",&NumInformants) != 1)
@@ -324,13 +322,12 @@ static void Dup_ListSimilarUsrs (void)
 
 	    Tbl_StartRow ();
 
-            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\">",
-		     Gbl.RowEvenOdd);
+            Tbl_StartCellAttr ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
             Tbl_EndCell ();
 
-	    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"COLOR%u\">",
-		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-		     Gbl.RowEvenOdd);
+	    Tbl_StartCellAttr ("colspan=\"%u\" class=\"COLOR%u\"",
+			       Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+			       Gbl.RowEvenOdd);
 
 	    /* Show details of user's profile */
             Prf_ShowDetailsUserProfile (&UsrDat);
@@ -341,18 +338,18 @@ static void Dup_ListSimilarUsrs (void)
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);
 
 	    Tbl_EndCell ();
+
 	    Tbl_EndRow ();
 
 	    Tbl_StartRow ();
 
-            fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\">",
-		     Gbl.RowEvenOdd);
+            Tbl_StartCellAttr ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
             Tbl_EndCell ();
 
-	    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LEFT_TOP COLOR%u\""
-			       " style=\"padding-bottom:20px;\">",
-		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-		     Gbl.RowEvenOdd);
+	    Tbl_StartCellAttr ("colspan=\"%u\" class=\"LEFT_TOP COLOR%u\""
+			       " style=\"padding-bottom:20px;\"",
+			       Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+			       Gbl.RowEvenOdd);
 
 	    /* Button to remove this user */
 	    if (Acc_CheckIfICanEliminateAccount (UsrDat.UsrCod))

@@ -1177,12 +1177,12 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    Tbl_StartRow ();
 
    /***** Put an icon with post status *****/
-   fprintf (Gbl.F.Out,"<td class=\"CONTEXT_COL %s\">"
-                      "<img src=\"%s/%s\""
+   Tbl_StartCellAttr ("class=\"CONTEXT_COL %s\"",
+            NewPst ? "MSG_TIT_BG_NEW" :
+        	     "MSG_TIT_BG");
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />",
-            NewPst ? "MSG_TIT_BG_NEW" :
-        	     "MSG_TIT_BG",
             Cfg_URL_ICON_PUBLIC,
             NewPst ? "envelope.svg" :
         	     "envelope-open-text.svg",
@@ -1200,9 +1200,8 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 	                                   "MSG_TIT_BG");
 
    /***** Write subject *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
-            NewPst ? "MSG_TIT_BG_NEW" :
-        	     "MSG_TIT_BG");
+   Tbl_StartCellAttr ("class=\"%s LEFT_TOP\"",NewPst ? "MSG_TIT_BG_NEW" :
+        					       "MSG_TIT_BG");
    if (Enabled)
      {
       if (Subject[0])
@@ -1217,7 +1216,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 
    /***** Form to ban/unban post *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"CONTEXT_COL\">");
+   Tbl_StartCellAttr ("class=\"CONTEXT_COL\"");
    if (ICanModerateForum)
      {
       Frm_StartFormAnchor (Enabled ? For_ActionsDisPstFor[Gbl.Forum.ForumSelected.Type] :
@@ -1287,8 +1286,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 
    /***** Write author *****/
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"AUTHOR_TXT LEFT_TOP\""
-	              " style=\"width:150px;\">");
+   Tbl_StartCellAttr ("colspan=\"2\" class=\"AUTHOR_TXT LEFT_TOP\" style=\"width:150px;\"");
    Msg_WriteMsgAuthor (&UsrDat,Enabled,NULL);
    if (Enabled)
       /* Write number of posts from this user */
@@ -1296,7 +1294,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    Tbl_EndCell ();
 
    /***** Write post content *****/
-   fprintf (Gbl.F.Out,"<td class=\"MSG_TXT LEFT_TOP\">");
+   Tbl_StartCellAttr ("class=\"MSG_TXT LEFT_TOP\"");
    if (Enabled)
      {
       Str_Copy (Content,OriginalContent,
@@ -3405,8 +3403,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 
       /***** Show my photo if I have any posts in this thread *****/
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP %s\" style=\"width:20px;\">",
-               BgColor);
+      Tbl_StartCellAttr ("class=\"CENTER_TOP %s\" style=\"width:20px;\"",BgColor);
       if (Thr.NumMyPosts)
         {
          fprintf (Gbl.F.Out,"<img src=\"");
@@ -3428,11 +3425,10 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
       Tbl_EndCell ();
 
       /***** Put an icon with thread status *****/
-      fprintf (Gbl.F.Out,"<td class=\"CONTEXT_COL %s\">"
-                         "<img src=\"%s/%s\""
+      Tbl_StartCellAttr ("class=\"CONTEXT_COL %s\"",BgColor);
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICO16x16\" />",
-               BgColor,
 	       Cfg_URL_ICON_PUBLIC,
                Thr.NumUnreadPosts ? "envelope.svg" :
         	                    "envelope-open-text.svg",
@@ -3479,7 +3475,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
       Tbl_EndCell ();
 
       /***** Write subject and links to thread pages *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP %s\">",BgColor);
+      Tbl_StartCellAttr ("class=\"LEFT_TOP %s\"",BgColor);
       PaginationPsts.NumItems = Thr.NumPosts;
       PaginationPsts.CurrentPage = 1;	// First page
       Pag_CalculatePagination (&PaginationPsts);
@@ -3504,19 +3500,19 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
             /* Write the author of first or last message */
             UsrDat.UsrCod = Thr.UsrCod[Order];
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-	    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",Style,BgColor);
+	    Tbl_StartCellAttr ("class=\"%s LEFT_TOP %s\"",Style,BgColor);
             Msg_WriteMsgAuthor (&UsrDat,Thr.Enabled[Order],BgColor);
 	    Tbl_EndCell ();
 
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
             TimeUTC = Thr.WriteTime[Order];
 	    UniqueId++;
-            fprintf (Gbl.F.Out,"<td id=\"thr_date_%u\" class=\"%s LEFT_TOP %s\">"
-                               "<script type=\"text/javascript\">"
+            Tbl_StartCellAttr ("id=\"thr_date_%u\" class=\"%s LEFT_TOP %s\"",
+                               UniqueId,Style,BgColor);
+	    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			       "writeLocalDateHMSFromUTC('thr_date_%u',%ld,"
 			       "%u,'<br />','%s',true,false,0x6);"
 			       "</script>",
-                     UniqueId,Style,BgColor,
 		     UniqueId,(long) TimeUTC,
 		     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
             Tbl_EndCell ();
@@ -3526,38 +3522,29 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
         	 Column <= 2;
         	 Column++)
               {
-               fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",
-                        Style,BgColor);
+               Tbl_StartCellAttr ("class=\"%s LEFT_TOP %s\"",Style,BgColor);
                Tbl_EndCell ();
               }
         }
 
       /***** Write number of posts in this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
-	                 "%u&nbsp;",
-               Style,BgColor,
-               Thr.NumPosts);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_TOP %s\"",Style,BgColor);
+      fprintf (Gbl.F.Out,"%u&nbsp;",Thr.NumPosts);
       Tbl_EndCell ();
 
       /***** Write number of new posts in this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
-	                 "%u&nbsp;",
-               Style,BgColor,
-               Thr.NumUnreadPosts);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_TOP %s\"",Style,BgColor);
+      fprintf (Gbl.F.Out,"%u&nbsp;",Thr.NumUnreadPosts);
       Tbl_EndCell ();
 
       /***** Write number of users who have write posts in this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
-	                 "%u&nbsp;",
-               Style,BgColor,
-               Thr.NumWriters);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_TOP %s\"",Style,BgColor);
+      fprintf (Gbl.F.Out,"%u&nbsp;",Thr.NumWriters);
       Tbl_EndCell ();
 
       /***** Write number of users who have read this thread *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP %s\">"
-	                 "%u&nbsp;",
-               Style,BgColor,
-               Thr.NumReaders);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_TOP %s\"",Style,BgColor);
+      fprintf (Gbl.F.Out,"%u&nbsp;",Thr.NumReaders);
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -3968,13 +3955,13 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /* Subject */
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"Subject\" class=\"%s\">%s:</label>",
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<label for=\"Subject\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Subject);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-		      "<input type=\"text\" id=\"Subject\" name=\"Subject\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Subject\" name=\"Subject\""
 		      " class=\"MSG_SUBJECT\""
 		      " maxlength=\"%u\" value=\"%s\""
 		      " required=\"required\" />",
@@ -3988,13 +3975,13 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    /* Content */
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Content\" class=\"%s\">%s:</label>",
+   Tbl_StartCellAttr ("class=\"RIGHT_TOP\"");
+   fprintf (Gbl.F.Out,"<label for=\"Content\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Content);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Content\" name=\"Content\""
+   Tbl_StartCellAttr ("class=\"LEFT_TOP\"");
+   fprintf (Gbl.F.Out,"<textarea id=\"Content\" name=\"Content\""
                       " class=\"MSG_CONTENT\""
                       " rows=\"10\">"
                       "</textarea>");

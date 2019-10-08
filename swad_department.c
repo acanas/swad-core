@@ -148,17 +148,16 @@ void Dpt_SeeDepts (void)
       /* Write data of this department */
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-			 "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 			 "%s"
 			 "</a>",
 	       Gbl.Dpts.Lst[NumDpt].WWW,
 	       Gbl.Dpts.Lst[NumDpt].FullName);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-			 "%u",
-	       Gbl.Dpts.Lst[NumDpt].NumTchs);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Gbl.Dpts.Lst[NumDpt].NumTchs);
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -170,8 +169,8 @@ void Dpt_SeeDepts (void)
 
    /***** Separation row *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"DAT\">"
-		      "&nbsp;");
+   Tbl_StartCellAttr ("colspan=\"3\" class=\"DAT\"");
+   fprintf (Gbl.F.Out,"&nbsp;");
    Tbl_EndCell ();
    Tbl_EndRow ();
 
@@ -179,14 +178,12 @@ void Dpt_SeeDepts (void)
    NumTchsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-		      "%s",
-	    Txt_Other_departments);
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Other_departments);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%u",
-	    NumTchsInOtherDpts);
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",NumTchsInOtherDpts);
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -195,13 +192,12 @@ void Dpt_SeeDepts (void)
    /***** Write teachers with no department *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-		      "%s",
-	    Txt_Department_unspecified);
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Department_unspecified);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-		      "%u",
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",
 	    Usr_GetTotalNumberOfUsersInCourses (Hie_INS,
 						1 << Rol_NET |
 						1 << Rol_TCH) -
@@ -518,9 +514,10 @@ static void Dpt_ListDepartmentsForEdition (void)
       Ins.InsCod = Dpt->InsCod;
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
-      /* Put icon to remove department */
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"BM\">");
+
+      /* Put icon to remove department */
+      Tbl_StartCellAttr ("class=\"BM\"");
       if (Dpt->NumTchs)	// Department has teachers ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
@@ -533,13 +530,12 @@ static void Dpt_ListDepartmentsForEdition (void)
       Tbl_EndCell ();
 
       /* Department code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%ld&nbsp;",
-               Dpt->DptCod);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%ld&nbsp;",Dpt->DptCod);
       Tbl_EndCell ();
 
       /* Institution */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActChgDptIns);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\""
@@ -562,7 +558,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Tbl_EndCell ();
 
       /* Department short name */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActRenDptSho);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -574,7 +570,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Tbl_EndCell ();
 
       /* Department full name */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActRenDptFul);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -586,7 +582,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Tbl_EndCell ();
 
       /* Department WWW */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
@@ -598,9 +594,8 @@ static void Dpt_ListDepartmentsForEdition (void)
       Tbl_EndCell ();
 
       /* Number of teachers */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u",
-               Dpt->NumTchs);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Dpt->NumTchs);
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -940,8 +935,8 @@ static void Dpt_PutFormToCreateDepartment (void)
    Tbl_StartRow ();
 
    /***** Institution *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"OthInsCod\" style=\"width:62px;\">"
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\">"
                       "<option value=\"0\"");
    if (Dpt_EditingDpt->InsCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -958,8 +953,8 @@ static void Dpt_PutFormToCreateDepartment (void)
    Tbl_EndCell ();
 
    /***** Department short name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"ShortName\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
@@ -967,8 +962,8 @@ static void Dpt_PutFormToCreateDepartment (void)
    Tbl_EndCell ();
 
    /***** Department full name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"FullName\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
@@ -976,8 +971,8 @@ static void Dpt_PutFormToCreateDepartment (void)
    Tbl_EndCell ();
 
    /***** Department WWW *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"url\" name=\"WWW\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />",
