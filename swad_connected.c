@@ -861,15 +861,13 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    /***** Write time from last access *****/
    Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
 	                                                               "CON_SINCE CON_NO_CRS");
-
    Tbl_StartCellAttr ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
-
    fprintf (Gbl.F.Out,"<div id=\"hm%u\">",
             Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
    Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
    fprintf (Gbl.F.Out,"</div>");	// Used for automatic update, only when displayed on right column
-
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    if (!ItsMe)
