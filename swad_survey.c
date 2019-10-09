@@ -459,28 +459,35 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       Tbl_StartTableWidePadding (2);
 
    /***** Write first row of data of this assignment *****/
-   /* Forms to remove/edit this assignment */
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CONTEXT_COL");
-   if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
+
+   /* Forms to remove/edit this assignment */
+   if (ShowOnlyThisSvyComplete)
+      fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CONTEXT_COL\">");
+   else
+      fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\">",Gbl.RowEvenOdd);
    if (Svy.Status.ICanEdit)
       Svy_PutFormsToRemEditOneSvy (&Svy,Anchor);
    Tbl_EndCell ();
 
    /* Start date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"svy_date_start_%u\" class=\"%s LEFT_TOP",
-	    UniqueId,
-            Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
-        	                                    "DATE_RED") :
-                                 (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-                                                    "DATE_RED_LIGHT"));
-   if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<script type=\"text/javascript\">"
+   if (ShowOnlyThisSvyComplete)
+      fprintf (Gbl.F.Out,"<td id=\"svy_date_start_%u\" class=\"%s LEFT_TOP\">",
+	       UniqueId,
+	       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
+						       "DATE_RED") :
+				    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
+						       "DATE_RED_LIGHT"));
+   else
+      fprintf (Gbl.F.Out,"<td id=\"svy_date_start_%u\" class=\"%s LEFT_TOP COLOR%u\">",
+	       UniqueId,
+	       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
+						       "DATE_RED") :
+				    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
+						       "DATE_RED_LIGHT"),
+	       Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('svy_date_start_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
                       "</script>",
@@ -489,16 +496,22 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Tbl_EndCell ();
 
    /* End date/time */
-   fprintf (Gbl.F.Out,"<td id=\"svy_date_end_%u\" class=\"%s LEFT_TOP",
-            UniqueId,
-            Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
-        	                                    "DATE_RED") :
-                                 (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
-                                                    "DATE_RED_LIGHT"));
-   if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<script type=\"text/javascript\">"
+   if (ShowOnlyThisSvyComplete)
+      fprintf (Gbl.F.Out,"<td id=\"svy_date_end_%u\" class=\"%s LEFT_TOP\">",
+	       UniqueId,
+	       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
+						       "DATE_RED") :
+				    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
+						       "DATE_RED_LIGHT"));
+   else
+      fprintf (Gbl.F.Out,"<td id=\"svy_date_end_%u\" class=\"%s LEFT_TOP COLOR%u\">",
+	       UniqueId,
+	       Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
+						       "DATE_RED") :
+				    (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
+						       "DATE_RED_LIGHT"),
+               Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('svy_date_end_%u',%ld,"
                       "%u,'<br />','%s',false,true,0x7);"
                       "</script>",
@@ -507,10 +520,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Tbl_EndCell ();
 
    /* Survey title */
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
-   if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
+   if (ShowOnlyThisSvyComplete)
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
+   else
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
    Lay_StartArticle (Anchor);
    Frm_StartForm (ActSeeSvy);
    Svy_PutParamSvyCod (SvyCod);
@@ -536,10 +549,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Tbl_EndCell ();
 
    /* Status of the survey */
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP");
-   if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
+   if (ShowOnlyThisSvyComplete)
+      fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP\">");
+   else
+      fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
    Svy_WriteStatus (&Svy);
 
    if (!ShowOnlyThisSvyComplete)
@@ -582,20 +595,18 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /***** Write second row of data of this survey *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
-   if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
-
    /* Author of the survey */
+   if (ShowOnlyThisSvyComplete)
+      fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP\">");
+   else
+      fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
    Svy_WriteAuthor (&Svy);
-
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
-   if (!ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
+   if (ShowOnlyThisSvyComplete)
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
+   else
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
    Tbl_EndCell ();
 
    /* Scope of the survey */
@@ -1863,8 +1874,8 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Scope of the survey *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"ScopeSvy\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<label for=\"ScopeSvy\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Scope);
    Tbl_EndCell ();
@@ -1880,14 +1891,14 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Survey title *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"Title\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Title);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" id=\"Title\" name=\"Title\""
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title);
@@ -1901,14 +1912,14 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Survey text *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Txt\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Description);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Txt\" name=\"Txt\""
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"<textarea id=\"Txt\" name=\"Txt\""
                       " cols=\"60\" rows=\"10\">");
    if (!ItsANewSurvey)
       fprintf (Gbl.F.Out,"%s",Txt);
@@ -1920,9 +1931,8 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Users' roles who can answer the survey *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP %s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Users);
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP %s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Users);
    Tbl_EndCell ();
 
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
@@ -2053,10 +2063,8 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       /***** Start box and table *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
-	                 "%s:",
-               The_ClassFormInBox[Gbl.Prefs.Theme],
-               Txt_Groups);
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Groups);
       Tbl_EndCell ();
 
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
@@ -2066,8 +2074,8 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       /***** First row: checkbox to select the whole course *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">"
-                         "<label>"
+      fprintf (Gbl.F.Out,"<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<label>"
                          "<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
       if (!Svy_CheckIfSvyIsAssociatedToGrps (SvyCod))
@@ -2700,14 +2708,13 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    /***** Stem *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Txt\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Wording);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Txt\" name=\"Txt\""
-                      " cols=\"60\" rows=\"4\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"<textarea id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"4\">"
 	              "%s"
                       "</textarea>",
 	    Txt);
@@ -2718,14 +2725,11 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    /***** Type of answer *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
-	              "%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Type);
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Type);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
    for (AnsType = (Svy_AnswerType_t) 0;
 	AnsType < Svy_NUM_ANS_TYPES;
 	AnsType++)
@@ -2760,14 +2764,14 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       Tbl_StartRow ();
 
       /* Label with the number of the answer */
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	                 "<label for=\"AnsStr%u\" class=\"%s\">%u)</label>",
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">");
+      fprintf (Gbl.F.Out,"<label for=\"AnsStr%u\" class=\"%s\">%u)</label>",
                NumAns,The_ClassFormInBox[Gbl.Prefs.Theme],NumAns + 1);
       Tbl_EndCell ();
 
       /* Answer text */
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-                         "<textarea id=\"AnsStr%u\" name=\"AnsStr%u\""
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">");
+      fprintf (Gbl.F.Out,"<textarea id=\"AnsStr%u\" name=\"AnsStr%u\""
                          " cols=\"50\" rows=\"1\">",
                NumAns,NumAns);
       if (SvyQst->AnsChoice[NumAns].Text)
@@ -3274,22 +3278,18 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
          /* Write index of question inside survey (row[1]) */
          if (sscanf (row[1],"%u",&(SvyQst->QstInd)) != 1)
             Lay_ShowErrorAndExit ("Error: wrong question index.");
-         fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
-                            "%u",
-                  Gbl.RowEvenOdd,SvyQst->QstInd + 1);
+         fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">",Gbl.RowEvenOdd);
+         fprintf (Gbl.F.Out,"%u",SvyQst->QstInd + 1);
          Tbl_EndCell ();
 
          /* Write the question type (row[2]) */
          SvyQst->AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-         fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
-                            "%s",
-	          Gbl.RowEvenOdd,
-                  Txt_SURVEY_STR_ANSWER_TYPES[SvyQst->AnswerType]);
+         fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">",Gbl.RowEvenOdd);
+         fprintf (Gbl.F.Out,"%s",Txt_SURVEY_STR_ANSWER_TYPES[SvyQst->AnswerType]);
          Tbl_EndCell ();
 
          /* Write the stem (row[3]) and the answers of this question */
-         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">",
-	          Gbl.RowEvenOdd);
+         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
          Svy_WriteQstStem (row[3]);
          Svy_WriteAnswersOfAQst (Svy,SvyQst,PutFormAnswerSurvey);
          Tbl_EndCell ();
@@ -3437,8 +3437,8 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 	 if (PutFormAnswerSurvey)
 	   {
 	    /* Write selector to choice this answer */
-	    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-			       "<input type=\"");
+	    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
+	    fprintf (Gbl.F.Out,"<input type=\"");
 	    if (SvyQst->AnswerType == Svy_ANS_UNIQUE_CHOICE)
 	       fprintf (Gbl.F.Out,"radio\""
 				  " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
@@ -3453,16 +3453,16 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 	   }
 
 	 /* Write the number of option */
-	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:50px;\">"
-			    "<label for=\"Ans%010u_%010u\" class=\"DAT\">"
+	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:50px;\">");
+	 fprintf (Gbl.F.Out,"<label for=\"Ans%010u_%010u\" class=\"DAT\">"
 			    "%u)"
 			    "</label>",
 		  (unsigned) SvyQst->QstCod,NumAns,NumAns + 1);
 	 Tbl_EndCell ();
 
 	 /* Write the text of the answer */
-	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-			    "<label for=\"Ans%010u_%010u\" class=\"DAT\">%s</label>",
+	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
+	 fprintf (Gbl.F.Out,"<label for=\"Ans%010u_%010u\" class=\"DAT\">%s</label>",
 		  (unsigned) SvyQst->QstCod,NumAns,
 		  SvyQst->AnsChoice[NumAns].Text);
 	 Tbl_EndCell ();

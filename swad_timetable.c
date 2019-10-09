@@ -1135,10 +1135,9 @@ static void TT_DrawTimeTable (void)
    Tbl_StartRow ();
 
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_HOUR_BIG RIGHT_MIDDLE\""
-	              " style=\"width:%u%%;\">"
-	              "%02u:00",
-            TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,
-            Gbl.TimeTable.Config.Range.Hours.Start);
+	              " style=\"width:%u%%;\">",
+            TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
+   fprintf (Gbl.F.Out,"%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
    Tbl_EndCell ();
 
    TT_DrawCellAlignTimeTable ();
@@ -1146,10 +1145,9 @@ static void TT_DrawTimeTable (void)
    TT_DrawCellAlignTimeTable ();
 
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_HOUR_BIG LEFT_MIDDLE\""
-	              " style=\"width:%u%%;\">"
-	              "%02u:00",
-            TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,
-            Gbl.TimeTable.Config.Range.Hours.Start);
+	              " style=\"width:%u%%;\">",
+            TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
+   fprintf (Gbl.F.Out,"%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -1315,15 +1313,13 @@ static void TT_TimeTableDrawDaysCells (void)
 	DayColumn++)
      {
       Weekday = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
-      fprintf (Gbl.F.Out,"<td colspan=\"%u\""
-	                 " class=\"%s CENTER_MIDDLE\""
-	                 " style=\"width:%u%%;\">"
-	                 "%s",
+      fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"%s CENTER_MIDDLE\""
+	                 " style=\"width:%u%%;\">",
                TT_NUM_MINICOLUMNS_PER_DAY,
                Weekday == 6 ? "TT_SUNDAY" :	// Sunday drawn in red
         	              "TT_DAY",	// Monday to Saturday
-               TT_PERCENT_WIDTH_OF_A_DAY,
-               Txt_DAYS_CAPS[Weekday]);
+               TT_PERCENT_WIDTH_OF_A_DAY);
+      fprintf (Gbl.F.Out,"%s",Txt_DAYS_CAPS[Weekday]);
       Tbl_EndCell ();
      }
   }
@@ -1334,12 +1330,11 @@ static void TT_TimeTableDrawDaysCells (void)
 
 static void TT_TimeTableDrawHourCell (unsigned Hour,unsigned Min,const char *Align)
   {
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_HOUR %s %s\">"
-		      "%02u:%02u",
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_HOUR %s %s\">",
 	    Min ? "TT_HOUR_SMALL" :
 		  "TT_HOUR_BIG",
-            Align,
-            Hour,Min);
+            Align);
+   fprintf (Gbl.F.Out,"%02u:%02u",Hour,Min);
    Tbl_EndCell ();
   }
 

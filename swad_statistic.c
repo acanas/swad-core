@@ -378,12 +378,11 @@ void Sta_AskShowCrsHits (void)
 
          Tbl_StartRow ();
 
-         fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP %s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+         Tbl_StartCellAttr ("class=\"RIGHT_TOP %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          fprintf (Gbl.F.Out,"%s:",Txt_Users);
          Tbl_EndCell ();
 
-	 fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"%s LEFT_TOP\">",
-                  The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 Tbl_StartCellAttr ("colspan=\"2\" class=\"%s LEFT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          Tbl_StartTable ();
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
@@ -402,11 +401,11 @@ void Sta_AskShowCrsHits (void)
          /***** Option a) Listing of clicks distributed by some metric *****/
          Tbl_StartRow ();
 
-         fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE %s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+         Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          fprintf (Gbl.F.Out,"%s:",Txt_Show);
          Tbl_EndCell ();
 
-	 fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_MIDDLE\">");
+	 Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_MIDDLE\"");
 
          if ((Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
               Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
@@ -547,12 +546,12 @@ void Sta_AskShowGblHits (void)
    /***** Users' roles whose accesses we want to see *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"Role\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
    for (RoleStat = (Sta_Role_t) 0;
 	RoleStat < Sta_NUM_ROLES_STAT;
@@ -574,12 +573,12 @@ void Sta_AskShowGblHits (void)
    /***** Clicks made from anywhere, current centre, current degree or current course *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"ScopeSta\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_MIDDLE\"");
    Gbl.Scope.Allowed = 1 << Hie_SYS |
 	               1 << Hie_CTY |
 		       1 << Hie_INS |
@@ -596,12 +595,12 @@ void Sta_AskShowGblHits (void)
    /***** Count type for the statistic *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"CountType\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Show);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_MIDDLE\"");
    Sta_WriteSelectorCountType ();
 
    /***** Type of statistic *****/
@@ -716,12 +715,12 @@ static void Sta_WriteSelectorAction (void)
 
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"StatAct\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Action);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<select id=\"StatAct\" name=\"StatAct\""
                       " style=\"width:375px;\">");
    for (Action = (Act_Action_t) 0;
@@ -1595,7 +1594,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Put heading with backward and forward buttons *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td colspan=\"7\" class=\"LEFT_MIDDLE\">");
+
+   Tbl_StartCellAttr ("colspan=\"7\" class=\"LEFT_MIDDLE\"");
    Tbl_StartTableWidePadding (2);
    Tbl_StartRow ();
 
@@ -1611,7 +1611,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamLong ("RowsPage",Gbl.Stat.RowsPerPage);
       Usr_PutHiddenParSelectedUsrsCods ();
      }
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20%%;\">");
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\" style=\"width:20%%;\"");
    if (FirstRow > 1)
      {
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -1626,7 +1626,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Frm_EndForm ();
 
    /* Write number of current page */
-   fprintf (Gbl.F.Out,"<td class=\"DAT_N CENTER_MIDDLE\" style=\"width:60%%;\">");
+   Tbl_StartCellAttr ("class=\"DAT_N CENTER_MIDDLE\" style=\"width:60%%;\"");
    fprintf (Gbl.F.Out,"<strong>"
                       "%s %lu-%lu %s %lu (%s %ld %s %lu)"
                       "</strong>",
@@ -1647,7 +1647,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamUnsigned ("RowsPage" ,(unsigned) Gbl.Stat.RowsPerPage);
       Usr_PutHiddenParSelectedUsrsCods ();
      }
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:20%%;\">");
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\" style=\"width:20%%;\"");
    if (LastRow < NumRows)
      {
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -1718,33 +1718,34 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       if (sscanf (row[2],"%u",&RoleFromLog) != 1)
 	 Rol_WrongRoleExit ();
 
-      /* Write the number of row */
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+
+      /* Write the number of row */
+      Tbl_StartCellAttr ("class=\"LOG RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%ld&nbsp;",NumRow);
       Tbl_EndCell ();
 
       /* Write the user's ID if user is a student */
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      Tbl_StartCellAttr ("class=\"LOG CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
       ID_WriteUsrIDs (&UsrDat,NULL);
       fprintf (Gbl.F.Out,"&nbsp;");
       Tbl_EndCell ();
 
       /* Write the first name and the surnames */
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      Tbl_StartCellAttr ("class=\"LOG LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%s&nbsp;",UsrDat.FullName);
       Tbl_EndCell ();
 
       /* Write the user's role */
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      Tbl_StartCellAttr ("class=\"LOG CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%s&nbsp;",
 	       RoleFromLog < Rol_NUM_ROLES ? Txt_ROLES_SINGUL_Abc[RoleFromLog][UsrDat.Sex] :
 		                             "?");
       Tbl_EndCell ();
 
       /* Write the date-time (row[3]) */
-      fprintf (Gbl.F.Out,"<td id=\"log_date_%u\" class=\"LOG RIGHT_TOP COLOR%u\">",
-               UniqueId,Gbl.RowEvenOdd);
+      Tbl_StartCellAttr ("id=\"log_date_%u\" class=\"LOG RIGHT_TOP COLOR%u\"",
+                         UniqueId,Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('log_date_%u',%ld,"
 			 "%u,',&nbsp;','%s',true,false,0x7);"
@@ -1758,20 +1759,21 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	 Lay_ShowErrorAndExit ("Wrong action code.");
       if (ActCod >= 0)
 	{
-         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+         Tbl_StartCellAttr ("class=\"LOG LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
          fprintf (Gbl.F.Out,"%s&nbsp;",Act_GetActionTextFromDB (ActCod,ActTxt));
 	}
       else
 	{
-         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+         Tbl_StartCellAttr ("class=\"LOG LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
          fprintf (Gbl.F.Out,"?&nbsp;");
 	}
       Tbl_EndCell ();
 
       /* Write the comments of the access */
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      Tbl_StartCellAttr ("class=\"LOG LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
       Sta_WriteLogComments (LogCod);
       Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 
@@ -1868,12 +1870,12 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
       Tbl_StartRow ();
 
       /* Write the number of row */
-      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      Tbl_StartCellAttr ("class=\"LOG RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%ld&nbsp;",NumRow);
       Tbl_EndCell ();
 
       /* Show the photo */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      Tbl_StartCellAttr ("class=\"CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
@@ -1881,18 +1883,18 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
       Tbl_EndCell ();
 
       /* Write the user's ID if user is a student in current course */
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      Tbl_StartCellAttr ("class=\"LOG LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
       ID_WriteUsrIDs (&UsrDat,NULL);
       fprintf (Gbl.F.Out,"&nbsp;");
       Tbl_EndCell ();
 
       /* Write the name and the surnames */
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      Tbl_StartCellAttr ("class=\"LOG LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%s&nbsp;",UsrDat.FullName);
       Tbl_EndCell ();
 
       /* Write user's role */
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      Tbl_StartCellAttr ("class=\"LOG CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%s&nbsp;",
 	       Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs.Role][UsrDat.Sex]);
       Tbl_EndCell ();
@@ -1909,7 +1911,8 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
         }
       else
          BarWidth = 0;
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+
+      Tbl_StartCellAttr ("class=\"LOG LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
       if (BarWidth)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x1.png\""	// Background
 	                    " alt=\"\" title=\"\""
@@ -2003,16 +2006,16 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
 
          /* Write the date */
 	 Dat_ConvDateToDateStr (&Date,StrDate);
-         fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">",
-	          NumDayWeek == 6 ? "LOG_R" :
-	        	            "LOG");
+         Tbl_StartCellAttr ("class=\"%s RIGHT_TOP\"",
+			    NumDayWeek == 6 ? "LOG_R" :
+					      "LOG");
          fprintf (Gbl.F.Out,"%s&nbsp;",StrDate);
          Tbl_EndCell ();
 
          /* Write the day of the week */
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
-                  NumDayWeek == 6 ? "LOG_R" :
-                	            "LOG");
+         Tbl_StartCellAttr ("class=\"%s LEFT_TOP\"",
+			    NumDayWeek == 6 ? "LOG_R" :
+					      "LOG");
          fprintf (Gbl.F.Out,"%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
          Tbl_EndCell ();
 
@@ -2044,16 +2047,16 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
 
       /* Write the date */
       Dat_ConvDateToDateStr (&Date,StrDate);
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">",
-               NumDayWeek == 6 ? "LOG_R" :
-        	                 "LOG");
+      Tbl_StartCellAttr ("class=\"%s RIGHT_TOP\"",
+			 NumDayWeek == 6 ? "LOG_R" :
+					   "LOG");
       fprintf (Gbl.F.Out,"%s&nbsp;",StrDate);
       Tbl_EndCell ();
 
       /* Write the day of the week */
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
-               NumDayWeek == 6 ? "LOG_R" :
-        	                 "LOG");
+      Tbl_StartCellAttr ("class=\"%s LEFT_TOP\"",
+			 NumDayWeek == 6 ? "LOG_R" :
+					   "LOG");
       fprintf (Gbl.F.Out,"%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
       Tbl_EndCell ();
 
@@ -2108,7 +2111,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 
    /***** Put a selector for the type of color *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td colspan=\"26\" class=\"CENTER_MIDDLE\">");
+
+   Tbl_StartCellAttr ("colspan=\"26\" class=\"CENTER_MIDDLE\"");
 
    Frm_StartFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
    Dat_WriteParamsIniEndDates ();
@@ -2175,8 +2179,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    Tbl_EndRow ();
 
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td colspan=\"24\" class=\"LEFT_TOP\" style=\"width:%upx;\">",
-	    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH);
+   Tbl_StartCellAttr ("colspan=\"24\" class=\"LEFT_TOP\" style=\"width:%upx;\"",
+	              GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH);
    Sta_DrawBarColors (SelectedColorType,Hits.Max);
    Tbl_EndCell ();
    Tbl_EndRow ();
@@ -2186,8 +2190,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 	Hour < 24;
 	Hour++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\" style=\"width:%upx;\">",
-	       GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH);
+      Tbl_StartCellAttr ("class=\"LOG CENTER_TOP\" style=\"width:%upx;\"",
+	                 GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH);
       fprintf (Gbl.F.Out,"%02uh",Hour);
       Tbl_EndCell ();
      }
@@ -2232,19 +2236,20 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
            {
             NumDayWeek = Dat_GetDayOfWeek (Date.Year,Date.Month,Date.Day);
 
+            Tbl_StartRow ();
+
             /* Write the date */
             Dat_ConvDateToDateStr (&Date,StrDate);
-            Tbl_StartRow ();
-            fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">",
-	             NumDayWeek == 6 ? "LOG_R" :
-	        	               "LOG");
+            Tbl_StartCellAttr ("class=\"%s RIGHT_TOP\"",
+			       NumDayWeek == 6 ? "LOG_R" :
+						 "LOG");
             fprintf (Gbl.F.Out,"%s&nbsp;",StrDate);
             Tbl_EndCell ();
 
             /* Write the day of the week */
-            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
-                     NumDayWeek == 6 ? "LOG_R" :
-                	               "LOG");
+            Tbl_StartCellAttr ("class=\"%s LEFT_TOP\"",
+			       NumDayWeek == 6 ? "LOG_R" :
+						 "LOG");
             fprintf (Gbl.F.Out,"%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
             Tbl_EndCell ();
 
@@ -2281,19 +2286,20 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
      {
       NumDayWeek = Dat_GetDayOfWeek (Date.Year,Date.Month,Date.Day);
 
+      Tbl_StartRow ();
+
       /* Write the date */
       Dat_ConvDateToDateStr (&Date,StrDate);
-      Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">",
-               NumDayWeek == 6 ? "LOG_R" :
-        	                 "LOG");
+      Tbl_StartCellAttr ("class=\"%s RIGHT_TOP\"",
+			 NumDayWeek == 6 ? "LOG_R" :
+					   "LOG");
       fprintf (Gbl.F.Out,"%s&nbsp;",StrDate);
       Tbl_EndCell ();
 
       /* Write the day of the week */
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
-               NumDayWeek == 6 ? "LOG_R" :
-        	                 "LOG");
+      Tbl_StartCellAttr ("class=\"%s LEFT_TOP\"",
+			 NumDayWeek == 6 ? "LOG_R" :
+					   "LOG");
       fprintf (Gbl.F.Out,"%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
       Tbl_EndCell ();
 
@@ -2322,16 +2328,16 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 
       /* Write the date */
       Dat_ConvDateToDateStr (&Date,StrDate);
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">",
-               NumDayWeek == 6 ? "LOG_R" :
-        	                 "LOG");
+      Tbl_StartCellAttr ("class=\"%s RIGHT_TOP\"",
+			 NumDayWeek == 6 ? "LOG_R" :
+					   "LOG");
       fprintf (Gbl.F.Out,"%s&nbsp;",StrDate);
       Tbl_EndCell ();
 
       /* Write the day of the week */
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
-               NumDayWeek == 6 ? "LOG_R" :
-        	                 "LOG");
+      Tbl_StartCellAttr ("class=\"%s LEFT_TOP\"",
+			 NumDayWeek == 6 ? "LOG_R" :
+					   "LOG");
       fprintf (Gbl.F.Out,"%s&nbsp;",Txt_DAYS_SMALL[NumDayWeek]);
       Tbl_EndCell ();
 
@@ -2383,9 +2389,9 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
    Tbl_StartTableWide ();
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG LEFT_BOTTOM\" style=\"width:%upx;\">",
-            (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
-            (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
+   Tbl_StartCellAttr ("colspan=\"%u\" class=\"LOG LEFT_BOTTOM\" style=\"width:%upx;\"",
+		      (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
+		      (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
    fprintf (Gbl.F.Out,"0");
    Tbl_EndCell ();
 
@@ -2393,17 +2399,19 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
 	Interval <= 4;
 	Interval++)
      {
-      fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG CENTER_BOTTOM\" style=\"width:%upx;\">",
-               GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
-               GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
+      Tbl_StartCellAttr ("colspan=\"%u\" class=\"LOG CENTER_BOTTOM\" style=\"width:%upx;\"",
+			 GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
+			 GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
       Str_WriteFloatNum (Gbl.F.Out,(float) Interval * HitsMax / 5.0);
       Tbl_EndCell ();
      }
-   fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LOG RIGHT_BOTTOM\" style=\"width:%upx;\">",
-            (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
-            (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
+
+   Tbl_StartCellAttr ("colspan=\"%u\" class=\"LOG RIGHT_BOTTOM\" style=\"width:%upx;\"",
+		      (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
+		      (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
    Str_WriteFloatNum (Gbl.F.Out,HitsMax);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    Tbl_StartRow ();
@@ -2414,9 +2422,8 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
 	NumColor++)
      {
       Sta_SetColor (ColorType,(float) NumColor,(float) GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,&R,&G,&B);
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:1px;"
-	                 " background-color:#%02X%02X%02X;\">",
-	       R,G,B);
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\" style=\"width:1px; background-color:#%02X%02X%02X;\">",
+	                 R,G,B);
       fprintf (Gbl.F.Out,"<img src=\"%s/tr1x14.gif\" alt=\"\" title=\"\" />",
                Cfg_URL_ICON_PUBLIC);
       Tbl_EndCell ();
@@ -2443,8 +2450,7 @@ static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float Hits
       Sta_SetColor (ColorType,HitsNum[Hour],HitsMax,&R,&G,&B);
       fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\" title=\"");
       Str_WriteFloatNum (Gbl.F.Out,HitsNum[Hour]);
-      fprintf (Gbl.F.Out,"\" style=\"width:%upx;"
-	                 " background-color:#%02X%02X%02X;\">",
+      fprintf (Gbl.F.Out,"\" style=\"width:%upx; background-color:#%02X%02X%02X;\">",
                GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH,R,G,B);
       Tbl_EndCell ();
      }
@@ -2587,7 +2593,7 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
          Tbl_StartRow ();
 
          /* Write week */
-         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">");
+         Tbl_StartCellAttr ("class=\"LOG LEFT_TOP\"");
          fprintf (Gbl.F.Out,"%04u-%02u&nbsp;",Date.Year,Date.Week);
          Tbl_EndCell ();
 
@@ -2616,7 +2622,7 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
      Tbl_StartRow ();
 
      /* Write week */
-     fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">");
+     Tbl_StartCellAttr ("class=\"LOG LEFT_TOP\"");
      fprintf (Gbl.F.Out,"%04u-%02u&nbsp;",Date.Year,Date.Week);
      Tbl_EndCell ();
 
@@ -2692,7 +2698,7 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
          Tbl_StartRow ();
 
          /* Write the month */
-         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">");
+         Tbl_StartCellAttr ("class=\"LOG LEFT_TOP\"");
          fprintf (Gbl.F.Out,"%04u-%02u&nbsp;",Date.Year,Date.Month);
          Tbl_EndCell ();
 
@@ -2720,7 +2726,7 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
      Tbl_StartRow ();
 
      /* Write the month */
-     fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">");
+     Tbl_StartCellAttr ("class=\"LOG LEFT_TOP\"");
      fprintf (Gbl.F.Out,"%04u-%02u&nbsp;",Date.Year,Date.Month);
      Tbl_EndCell ();
 
@@ -2796,7 +2802,7 @@ static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
          Tbl_StartRow ();
 
          /* Write the year */
-         fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">");
+         Tbl_StartCellAttr ("class=\"LOG LEFT_TOP\"");
          fprintf (Gbl.F.Out,"%04u&nbsp;",Date.Year);
          Tbl_EndCell ();
 
@@ -2824,7 +2830,7 @@ static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
      Tbl_StartRow ();
 
      /* Write the year */
-     fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">");
+     Tbl_StartCellAttr ("class=\"LOG LEFT_TOP\"");
      fprintf (Gbl.F.Out,"%04u&nbsp;",Date.Year);
      Tbl_EndCell ();
 
@@ -2911,8 +2917,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
   {
    unsigned BarHeight;
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_BOTTOM\" style=\"width:%upx;\">",
-	    ColumnWidth);
+   Tbl_StartCellAttr ("class=\"DAT_SMALL CENTER_BOTTOM\" style=\"width:%upx;\"",ColumnWidth);
 
    /* Draw bar with a height porportional to the number of clicks */
    if (Hits->Num > 0.0)
@@ -3027,8 +3032,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
       Tbl_StartRow ();
 
       /* First division (left) */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-	       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\" style=\"width:%upx;\"",
+	                 Sta_WIDTH_SEMIDIVISION_GRAPHIC);
       fprintf (Gbl.F.Out,"<img src=\"%s/ejexizq24x1.gif\""
 	                 " alt=\"\" title=\"\""
 	                 " style=\"display:block; width:%upx; height:1px;\" />",
@@ -3041,8 +3046,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	   i < Sta_NUM_DIVISIONS_X * 2;
 	   i++)
 	{
-	 fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-		  Sta_WIDTH_SEMIDIVISION_GRAPHIC);
+	 Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\" style=\"width:%upx;\"",
+		            Sta_WIDTH_SEMIDIVISION_GRAPHIC);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ejex24x1.gif\""
 	                    " alt=\"\" title=\"\""
 	                    " style=\"display:block;"
@@ -3053,8 +3058,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	}
 
       /* Last division (right) */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-	       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\" style=\"width:%upx;\"",
+	                 Sta_WIDTH_SEMIDIVISION_GRAPHIC);
       fprintf (Gbl.F.Out,"<img src=\"%s/tr24x1.gif\""
 	                 " alt=\"\" title=\"\""
 	                 " style=\"display:block; width:%upx; height:1px;\" />",
@@ -3085,8 +3090,8 @@ static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
 	i <= Sta_NUM_DIVISIONS_X;
 	i++, NumX += IncX)
      {
-      fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LOG CENTER_BOTTOM\" style=\"width:%upx;\">",
-               Sta_WIDTH_DIVISION_GRAPHIC);
+      Tbl_StartCellAttr ("colspan=\"2\" class=\"LOG CENTER_BOTTOM\" style=\"width:%upx;\"",
+                         Sta_WIDTH_DIVISION_GRAPHIC);
       fprintf (Gbl.F.Out,Format,NumX);
       Tbl_EndCell ();
      }
@@ -3110,11 +3115,11 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
    if (!Minute)
      {
       // If minute 0
-      fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG LEFT_TOP\""
+      Tbl_StartCellAttr ("rowspan=\"30\" class=\"LOG LEFT_TOP\""
 	                 " style=\"width:%upx;"
 	                 " background-image:url('%s/ejey24x30.gif');"
 	                 " background-size:30px 30px;"
-	                 " background-repeat:repeat;\">",
+	                 " background-repeat:repeat;\"",
                Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
       fprintf (Gbl.F.Out,"00h");
       Tbl_EndCell ();
@@ -3122,11 +3127,11 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
    else if (Minute == (Sta_NUM_MINUTES_PER_DAY - 30))
      {
       // If 23:30
-      fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG LEFT_BOTTOM\""
+      Tbl_StartCellAttr ("rowspan=\"30\" class=\"LOG LEFT_BOTTOM\""
 	                 " style=\"width:%upx;"
 	                 " background-image:url('%s/ejey24x30.gif');"
 	                 " background-size:30px 30px;"
-	                 " background-repeat:repeat;\">",
+	                 " background-repeat:repeat;\"",
                Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
       fprintf (Gbl.F.Out,"24h");
       Tbl_EndCell ();
@@ -3134,22 +3139,22 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
    else if (!(Minute % 30) && (Minute % 60))
      {
       // If minute is multiple of 30 but not of 60 (i.e.: 30, 90, 150...)
-      fprintf (Gbl.F.Out,"<td rowspan=\"60\" class=\"LOG LEFT_MIDDLE\""
+      Tbl_StartCellAttr ("rowspan=\"60\" class=\"LOG LEFT_MIDDLE\""
 	                 " style=\"width:%upx;"
 	                 " background-image:url('%s/ejey24x60.gif');"
 	                 " background-size:30px 60px;"
-	                 " background-repeat:repeat;\">",
+	                 " background-repeat:repeat;\"",
 	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Cfg_URL_ICON_PUBLIC);
       fprintf (Gbl.F.Out,"%02uh",(Minute + 30) / 60);
       Tbl_EndCell ();
      }
 
    /***** Start cell for the graphic *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LEFT_BOTTOM\""
+   Tbl_StartCellAttr ("colspan=\"%u\" class=\"LEFT_BOTTOM\""
 	              " style=\"width:%upx; height:1px;"
 	              " background-image:url('%s/malla%c48x1.gif');"
 	              " background-size:60px 1px;"
-	              " background-repeat:repeat;\">",
+	              " background-repeat:repeat;\"",
 	    Sta_NUM_DIVISIONS_X * 2,Sta_WIDTH_GRAPHIC,Cfg_URL_ICON_PUBLIC,
 	    (Minute % 60) == 0 ? 'v' :
 		                 'h');
@@ -3214,16 +3219,11 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
 
       Tbl_StartRow ();
 
+      Tbl_StartCellAttr ("class=\"LOG RIGHT_TOP\"");
       if (ActCod >= 0)
-	{
-	 fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
          fprintf (Gbl.F.Out,"%s&nbsp;",Act_GetActionTextFromDB (ActCod,ActTxt));
-	}
       else
-	{
-         fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
          fprintf (Gbl.F.Out,"?&nbsp;");
-	}
       Tbl_EndCell ();
 
       /* Draw bar proportional to number of hits */
@@ -3277,7 +3277,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
       /* Write the plugin */
       if (sscanf (row[0],"%ld",&Plg.PlgCod) != 1)
 	 Lay_ShowErrorAndExit ("Wrong plugin code.");
-      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
+      Tbl_StartCellAttr ("class=\"LOG RIGHT_TOP\"");
       if (Plg_GetDataOfPluginByCod (&Plg))
          fprintf (Gbl.F.Out,"%s",Plg.Name);
       else
@@ -3337,7 +3337,7 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
       if (sscanf (row[0],"%ld",&FunCod) != 1)
 	 Lay_ShowErrorAndExit ("Wrong function code.");
 
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">");
+      Tbl_StartCellAttr ("class=\"LOG LEFT_TOP\"");
       fprintf (Gbl.F.Out,"%s&nbsp;",API_GetFunctionNameFromFunCod (FunCod));
       Tbl_EndCell ();
 
@@ -3406,7 +3406,7 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
       if (sscanf (row[0],"%ld",&(Ban.BanCod)) != 1)
 	 Lay_ShowErrorAndExit ("Wrong banner code.");
       Ban_GetDataOfBannerByCod (&Ban);
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">");
+      Tbl_StartCellAttr ("class=\"LOG LEFT_TOP\"");
       fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
@@ -3477,7 +3477,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
       Tbl_StartRow ();
 
       /* Write ranking of this country */
-      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LOG RIGHT_MIDDLE\"");
       if (CtyCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;");
@@ -3504,7 +3504,7 @@ static void Sta_WriteCountry (long CtyCod)
    struct Country Cty;
 
    /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"LOG LEFT_MIDDLE\"");
 
    if (CtyCod > 0)	// Hit with a country selected
      {
@@ -3574,7 +3574,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
       Tbl_StartRow ();
 
       /* Write ranking of this institution */
-      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
+      Tbl_StartCellAttr ("class=\"LOG RIGHT_TOP\"");
       if (InsCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;");
@@ -3608,8 +3608,7 @@ static void Sta_WriteInstitution (long InsCod)
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
       /***** Title in cell *****/
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\" title=\"%s\">",
-               Ins.FullName);
+      Tbl_StartCellAttr ("class=\"LOG LEFT_MIDDLE\" title=\"%s\"",Ins.FullName);
 
       /***** Form to go to institution *****/
       Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeInsInf,
@@ -3618,7 +3617,7 @@ static void Sta_WriteInstitution (long InsCod)
    else			// Hit with no institution selected
      {
       /***** No institution selected *****/
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LOG LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"&nbsp;-&nbsp;");
      }
 
@@ -3674,7 +3673,7 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
       Tbl_StartRow ();
 
       /* Write ranking of this centre */
-      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
+      Tbl_StartCellAttr ("class=\"LOG RIGHT_TOP\"");
       if (CtrCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;");
@@ -3708,8 +3707,7 @@ static void Sta_WriteCentre (long CtrCod)
       Ctr_GetDataOfCentreByCod (&Ctr);
 
       /***** Title in cell *****/
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\" title=\"%s\">",
-               Ctr.FullName);
+      Tbl_StartCellAttr ("class=\"LOG LEFT_MIDDLE\" title=\"%s\"",Ctr.FullName);
 
       /***** Form to go to centre *****/
       Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeCtrInf,
@@ -3718,7 +3716,7 @@ static void Sta_WriteCentre (long CtrCod)
    else			// Hit with no centre selected
      {
       /***** No centre selected *****/
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LOG LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"&nbsp;-&nbsp;");
      }
 
@@ -3774,7 +3772,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
       Tbl_StartRow ();
 
       /* Write ranking of this degree */
-      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
+      Tbl_StartCellAttr ("class=\"LOG RIGHT_TOP\"");
       if (DegCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;");
@@ -3808,8 +3806,7 @@ static void Sta_WriteDegree (long DegCod)
       Deg_GetDataOfDegreeByCod (&Deg);
 
       /***** Title in cell *****/
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\" title=\"%s\">",
-               Deg.FullName);
+      Tbl_StartCellAttr ("class=\"LOG LEFT_MIDDLE\" title=\"%s\"",Deg.FullName);
 
       /***** Form to go to degree *****/
       Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
@@ -3818,7 +3815,7 @@ static void Sta_WriteDegree (long DegCod)
    else			// Hit with no degree selected
      {
       /***** No degree selected *****/
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LOG LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"&nbsp;-&nbsp;");
      }
 
@@ -3892,7 +3889,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       Tbl_StartRow ();
 
       /* Write ranking of this course */
-      fprintf (Gbl.F.Out,"<td class=\"LOG RIGHT_TOP\">");
+      Tbl_StartCellAttr ("class=\"LOG RIGHT_TOP\"");
       if (CrsOK)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;");
@@ -3902,14 +3899,14 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
       Sta_WriteDegree (Crs.DegCod);
 
       /* Write degree year */
-      fprintf (Gbl.F.Out,"<td class=\"LOG CENTER_TOP\">");
+      Tbl_StartCellAttr ("class=\"LOG CENTER_TOP\"");
       fprintf (Gbl.F.Out,"%s&nbsp;",
                CrsOK ? Txt_YEAR_OF_DEGREE[Crs.Year] :
         	       "-");
       Tbl_EndCell ();
 
       /* Write course, including link */
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_TOP\">");
+      Tbl_StartCellAttr ("class=\"LOG LEFT_TOP\"");
       if (CrsOK)
         {
          Frm_StartFormGoTo (ActSeeCrsInf);
@@ -3982,7 +3979,7 @@ static void Sta_DrawBarNumHits (char Color,
   {
    unsigned BarWidth;
 
-   fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"LOG LEFT_MIDDLE\"");
 
    if (HitsNum != 0.0)
      {
@@ -4276,36 +4273,36 @@ void Sta_GetAndShowLastClicks (void)
       /* Print table row */
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",ClassRow);
+      Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE\"",ClassRow);
       fprintf (Gbl.F.Out,"%s",row[0]);					// Click
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">",ClassRow);	// Elapsed time
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",ClassRow);		// Elapsed time
       Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",ClassRow);
+      Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE\"",ClassRow);
       fprintf (Gbl.F.Out,"%s",						// Role
 	       Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN]);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",ClassRow);
+      Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE\"",ClassRow);
       fprintf (Gbl.F.Out,"%s",Cty.Name[Gbl.Prefs.Language]);		// Country
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",ClassRow);
+      Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE\"",ClassRow);
       fprintf (Gbl.F.Out,"%s",Ins.ShrtName);				// Institution
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",ClassRow);
+      Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE\"",ClassRow);
       fprintf (Gbl.F.Out,"%s",Ctr.ShrtName);				// Centre
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",ClassRow);
+      Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE\"",ClassRow);
       fprintf (Gbl.F.Out,"%s",Deg.ShrtName);				// Degree
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",ClassRow);
+      Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE\"",ClassRow);
       if (row[8])
 	 if (row[8][0])
 	    fprintf (Gbl.F.Out,"%s",row[8]);				// Action

@@ -601,8 +601,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
      {
       if (NewItem)
 	{
-         fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"COLOR%u\">",
-	          Gbl.RowEvenOdd);
+         fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"COLOR%u\">",Gbl.RowEvenOdd);
          Tbl_EndCell ();
 	}
       else
@@ -711,8 +710,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	}
 
       /***** Code of the item *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\""
-	                 " style=\"width:%dpx;\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\" style=\"width:%dpx;\">",
                StyleSyllabus[Level],Gbl.RowEvenOdd,
                Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)
@@ -721,12 +719,11 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
       Tbl_EndCell ();
 
       /***** Text of the item *****/
-      fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"%s LEFT_TOP COLOR%u\">"
-                         "%s",
+      fprintf (Gbl.F.Out,"<td colspan=\"%d\" class=\"%s LEFT_TOP COLOR%u\">",
                LstItemsSyllabus.NumLevels - Level + 1,
                StyleSyllabus[Level],
-               Gbl.RowEvenOdd,
-               Text);
+               Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"%s",Text);
       Tbl_EndCell ();
      }
 
@@ -905,8 +902,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
      }
    else
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\""
-	                 " style=\"width:%dpx;\">",
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\" style=\"width:%dpx;\">",
                StyleSyllabus[Level],Gbl.RowEvenOdd,
                Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)
