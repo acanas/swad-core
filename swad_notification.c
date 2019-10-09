@@ -493,8 +493,8 @@ void Ntf_ShowMyNotifications (void)
          /***** Write row for this notification *****/
 	 /* Write event icon */
          Tbl_StartRow ();
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\" style=\"width:25px;\">",
-                  ClassBackground);
+
+         Tbl_StartCellAttr ("class=\"%s LEFT_TOP\" style=\"width:25px;\"",ClassBackground);
          if (PutLink)
             PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
@@ -510,7 +510,7 @@ void Ntf_ShowMyNotifications (void)
          Tbl_EndCell ();
 
          /* Write event type */
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",ClassBackground);
+         Tbl_StartCellAttr ("class=\"%s LEFT_TOP\"",ClassBackground);
          if (PutLink)
             PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
@@ -527,12 +527,12 @@ void Ntf_ShowMyNotifications (void)
          Tbl_EndCell ();
 
          /* Write user (from) */
-	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",ClassAuthorBg);
+	 Tbl_StartCellAttr ("class=\"%s LEFT_TOP\"",ClassAuthorBg);
 	 Msg_WriteMsgAuthor (&UsrDat,true,NULL);
 	 Tbl_EndCell ();
 
          /* Write location */
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",ClassBackground);
+         Tbl_StartCellAttr ("class=\"%s LEFT_TOP\"",ClassBackground);
          if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
@@ -587,7 +587,7 @@ void Ntf_ShowMyNotifications (void)
          Msg_WriteMsgDate (DateTimeUTC,ClassBackground);
 
          /* Write status (sent by email / pending to be sent by email) */
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",ClassBackground);
+         Tbl_StartCellAttr ("class=\"%s LEFT_TOP\"",ClassBackground);
          fprintf (Gbl.F.Out,"%s",Txt_NOTIFICATION_STATUS[StatusTxt]);
          Tbl_EndCell ();
 
@@ -603,11 +603,10 @@ void Ntf_ShowMyNotifications (void)
 
             Tbl_StartRow ();
 
-            fprintf (Gbl.F.Out,"<td colspan=\"2\">");
+            Tbl_StartCellAttr ("colspan=\"2\"");
             Tbl_EndCell ();
 
-            fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"DAT LEFT_TOP\""
-                               " style=\"padding-bottom:12px;\">");
+            Tbl_StartCellAttr ("colspan=\"4\" class=\"DAT LEFT_TOP\" style=\"padding-bottom:12px;\"");
             fprintf (Gbl.F.Out,"%s",SummaryStr);
             Tbl_EndCell ();
 
@@ -1962,11 +1961,11 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
      {
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent)))
@@ -1974,7 +1973,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       fprintf (Gbl.F.Out," />");
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent)))

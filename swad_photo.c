@@ -897,7 +897,7 @@ static void Pho_UpdatePhoto2 (void)
         NumPhoto < 3;
         NumPhoto++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP\" style=\"width:33%%;\">");
+      Tbl_StartCellAttr ("class=\"DAT CENTER_TOP\" style=\"width:33%%;\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/%s_paso%u.jpg\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:%upx; height:%upx;\" />"
@@ -1790,12 +1790,12 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"AvgType\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Average_type);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1854,12 +1854,12 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"PhotoSize\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Size_of_photos);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1918,12 +1918,12 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"Order\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
@@ -2161,7 +2161,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 	      }
 
 	    /***** Show average photo of students belonging to this degree *****/
-	    fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_MIDDLE\">");
+	    Tbl_StartCellAttr ("class=\"CLASSPHOTO CENTER_MIDDLE\"");
 	    Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Usr_SEX_ALL,NumStds,NumStdsWithPhoto);
 	    Tbl_EndCell ();
 
@@ -2252,12 +2252,12 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Tbl_StartRow ();
 
 	 /***** Show logo and name of this degree *****/
-	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE COLOR%u\">",Gbl.RowEvenOdd);
+	 Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%u",++NumDegsNotEmpty);
 	 Tbl_EndCell ();
 
 	 /***** Show logo and name of this degree *****/
-	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE COLOR%u\">",Gbl.RowEvenOdd);
+	 Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
 	 if (SeeOrPrint == Pho_DEGREES_SEE)
 	    Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
 					       "DAT","CENTER_TOP");
@@ -2274,7 +2274,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	   {
 	    /***** Show average photo of students belonging to this degree *****/
 	    Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
-	    fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_MIDDLE COLOR%u\">",Gbl.RowEvenOdd);
+	    Tbl_StartCellAttr ("class=\"CLASSPHOTO CENTER_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
 	    if (Gbl.Usrs.Listing.WithPhotos)
 	       Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto);
 	    else

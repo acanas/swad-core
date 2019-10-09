@@ -272,7 +272,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
       if (NumNick == 1)
 	{
 	 /* The first nickname is the current one */
-	 fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">");
+	 Tbl_StartCellAttr ("class=\"REC_C1_BOT RIGHT_TOP\"");
 	 fprintf (Gbl.F.Out,"<label for=\"Nick\" class=\"%s\">"
 			    "%s:"
 			    "</label>",
@@ -280,14 +280,14 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 		  Txt_Current_nickname);
 	 Tbl_EndCell ();
 
-	 fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_TOP USR_ID\">");
+	 Tbl_StartCellAttr ("class=\"REC_C2_BOT LEFT_TOP USR_ID\"");
 	}
       else	// NumNick >= 2
 	{
 	 if (NumNick == 2)
 	   {
-	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"REC_C1_BOT RIGHT_TOP\">",
-		     NumNicks - 1);
+	    Tbl_StartCellAttr ("rowspan=\"%u\" class=\"REC_C1_BOT RIGHT_TOP\"",
+		               NumNicks - 1);
 	    fprintf (Gbl.F.Out,"<label for=\"Nick\" class=\"%s\">"
 			       "%s:"
 			       "</label>",
@@ -296,7 +296,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	    Tbl_EndCell ();
 	   }
 
-	 fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_TOP DAT\">");
+	 Tbl_StartCellAttr ("class=\"REC_C2_BOT LEFT_TOP DAT\"");
 
 	 /* Form to remove old nickname */
 	 if (ItsMe)
@@ -371,7 +371,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    /***** Form to enter new nickname *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">");
+   Tbl_StartCellAttr ("class=\"REC_C1_BOT RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"<label for=\"NewNick\" class=\"%s\">"
                       "%s:"
                       "</label>",
@@ -380,7 +380,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
         	       Txt_Nickname);		// The first nickname
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_TOP DAT\">");
+   Tbl_StartCellAttr ("class=\"REC_C2_BOT LEFT_TOP DAT\"");
    if (ItsMe)
       Frm_StartFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
    else
