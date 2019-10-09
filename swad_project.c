@@ -988,7 +988,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"BIG_INDEX %s RIGHT_TOP COLOR%u\">",
+	 Tbl_StartCellAttr ("rowspan=\"3\" class=\"BIG_INDEX %s RIGHT_TOP COLOR%u\"",
 		  Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
 					      "DATE_BLUE",
 	          Gbl.RowEvenOdd);
@@ -1003,11 +1003,12 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
+         Tbl_StartCellAttr ("rowspan=\"3\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+         Prj_PutFormsToRemEditOnePrj (Prj,Anchor,ICanViewProjectFiles);
+         Tbl_EndCell ();
+	 break;
       case Prj_FILE_BROWSER_PROJECT:
-         fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"CONTEXT_COL");
-         if (ProjectView == Prj_LIST_PROJECTS)
-	    fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-         fprintf (Gbl.F.Out,"\">");
+         Tbl_StartCellAttr ("rowspan=\"3\" class=\"CONTEXT_COL\"");
          Prj_PutFormsToRemEditOnePrj (Prj,Anchor,ICanViewProjectFiles);
          Tbl_EndCell ();
 	 break;
@@ -1017,14 +1018,23 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 
    /* Creation date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"prj_creat_%u\" class=\"%s LEFT_TOP",
-	    UniqueId,
-            Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
-                                        "DATE_BLUE");
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<script type=\"text/javascript\">"
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+	 Tbl_StartCellAttr ("id=\"prj_creat_%u\" class=\"%s LEFT_TOP COLOR%u\"",
+			    UniqueId,
+			    Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
+						        "DATE_BLUE",
+			    Gbl.RowEvenOdd);
+	 break;
+      default:
+	 Tbl_StartCellAttr ("id=\"prj_creat_%u\" class=\"%s LEFT_TOP\"",
+			    UniqueId,
+			    Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
+						        "DATE_BLUE");
+	 break;
+     }
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('prj_creat_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
                       "</script>",
@@ -1034,14 +1044,23 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 
    /* Modification date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"prj_modif_%u\" class=\"%s LEFT_TOP",
-	    UniqueId,
-            Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
-                                        "DATE_BLUE");
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">"
-                      "<script type=\"text/javascript\">"
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+	 Tbl_StartCellAttr ("id=\"prj_modif_%u\" class=\"%s LEFT_TOP COLOR%u\"",
+			    UniqueId,
+			    Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
+						        "DATE_BLUE",
+			    Gbl.RowEvenOdd);
+	 break;
+      default:
+	 Tbl_StartCellAttr ("id=\"prj_modif_%u\" class=\"%s LEFT_TOP\"",
+			    UniqueId,
+			    Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
+						        "DATE_BLUE");
+	 break;
+     }
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('prj_modif_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
                       "</script>",
@@ -1050,12 +1069,20 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    Tbl_EndCell ();
 
    /* Project title */
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",
-	    Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
-        	                        "ASG_TITLE");
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+	 Tbl_StartCellAttr ("class=\"%s LEFT_TOP COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
+						        "ASG_TITLE",
+			    Gbl.RowEvenOdd);
+	 break;
+      default:
+	 Tbl_StartCellAttr ("class=\"%s LEFT_TOP\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_TITLE_LIGHT" :
+						        "ASG_TITLE");
+	 break;
+     }
    Lay_StartArticle (Anchor);
    if (ICanViewProjectFiles)
      {
@@ -1078,78 +1105,81 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 
    /***** Preassigned? *****/
    Tbl_StartRow ();
+
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP COLOR%u",
-                  Gbl.RowEvenOdd);
-         break;
+         Tbl_StartCellAttr ("colspan=\"2\" class=\"RIGHT_TOP %s COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL",
+			    Gbl.RowEvenOdd);
+	 break;
       default:
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP");
+         Tbl_StartCellAttr ("colspan=\"2\" class=\"RIGHT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL");
          break;
      }
-   fprintf (Gbl.F.Out," %s\">"
-		      "%s:",
-	    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
-					"ASG_LABEL",
-	    Txt_Preassigned_QUESTION);
+   fprintf (Gbl.F.Out,"%s:",Txt_Preassigned_QUESTION);
    Tbl_EndCell ();
 
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u",
-                  Gbl.RowEvenOdd);
+         Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT",
+			    Gbl.RowEvenOdd);
          break;
       default:
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
+         Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT");
          break;
      }
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s&nbsp;",
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT",
-            (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
-        	                                    Txt_No);
+   fprintf (Gbl.F.Out,"%s&nbsp;",(Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
+        	                                                         Txt_No);
    Ico_PutIconOff (PreassignedNonpreassigImage[Prj->Preassigned],
 		   Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned]);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Number of students *****/
    Tbl_StartRow ();
+
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP COLOR%u",
-                  Gbl.RowEvenOdd);
+         Tbl_StartCellAttr ("colspan=\"2\" class=\"RIGHT_TOP %s COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL",
+			    Gbl.RowEvenOdd);
          break;
       default:
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP");
+         Tbl_StartCellAttr ("colspan=\"2\" class=\"RIGHT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL");
          break;
      }
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s:",
-            Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
-        	                        "ASG_LABEL",
-            Txt_Number_of_students);
+   fprintf (Gbl.F.Out,"%s:",Txt_Number_of_students);
    Tbl_EndCell ();
 
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u",
-                  Gbl.RowEvenOdd);
+         Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT",
+			    Gbl.RowEvenOdd);
          break;
       default:
-         fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
+         Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT");
          break;
      }
-   fprintf (Gbl.F.Out," %s\">"
-                      "%u",
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT",
-            Prj->NumStds);
+   fprintf (Gbl.F.Out,"%u",Prj->NumStds);
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -1162,28 +1192,28 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
      {
       case Prj_LIST_PROJECTS:
 	 Tbl_StartRowAttr ("id=\"prj_exp_%u\"",UniqueId);
-	 fprintf (Gbl.F.Out,"<td colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\">",
-	          Gbl.RowEvenOdd);
+	 Tbl_StartCellAttr ("colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\"",
+			    Gbl.RowEvenOdd);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
 	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 
 	 Tbl_StartRowAttr ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
-	 fprintf (Gbl.F.Out,"<td colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\">",
-	          Gbl.RowEvenOdd);
+	 Tbl_StartCellAttr ("colspan=\"6\" class=\"CENTER_MIDDLE COLOR%u\"",
+			    Gbl.RowEvenOdd);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
 	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 Tbl_StartRowAttr ("id=\"prj_exp_%u\"",UniqueId);
-	 fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"CENTER_MIDDLE\">");
+	 Tbl_StartCellAttr ("colspan=\"5\" class=\"CENTER_MIDDLE\"");
 	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
 	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 
 	 Tbl_StartRowAttr ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
-	 fprintf (Gbl.F.Out,"<td colspan=\"5\" class=\"CENTER_MIDDLE\">");
+	 Tbl_StartCellAttr ("colspan=\"5\" class=\"CENTER_MIDDLE\"");
 	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
 	 Tbl_EndCell ();
 	 Tbl_EndRow ();
@@ -1197,33 +1227,42 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
      {
       case Prj_LIST_PROJECTS:
 	 Tbl_StartRowAttr ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
-	 fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u",
-	          Gbl.RowEvenOdd);
+	 Tbl_StartCellAttr ("colspan=\"4\" class=\"RIGHT_TOP %s COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL",
+			    Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 Tbl_StartRowAttr ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
-	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP");
+	 Tbl_StartCellAttr ("colspan=\"3\" class=\"RIGHT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL");
 	 break;
       default:
 	 Tbl_StartRow ();
-	 fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP");
+	 Tbl_StartCellAttr ("colspan=\"2\" class=\"RIGHT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL");
 	 break;
      }
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s:",
-            Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
-        	                        "ASG_LABEL",
-            Txt_Proposal);
+   fprintf (Gbl.F.Out,"%s:",Txt_Proposal);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s",
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT",
-            Txt_PROJECT_STATUS[Prj->Proposal]);
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+	 Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT",
+			    Gbl.RowEvenOdd);
+	 break;
+      default:
+	 Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT");
+	 break;
+     }
+   fprintf (Gbl.F.Out,"%s",Txt_PROJECT_STATUS[Prj->Proposal]);
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -1289,63 +1328,60 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 
    /***** Start date/time *****/
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"prj_creat_%u\" class=\"LEFT_TOP COLOR%u %s\">"
-	              "<script type=\"text/javascript\">"
+   Tbl_StartCellAttr ("id=\"prj_creat_%u\" class=\"LEFT_TOP %s COLOR%u\"",
+		      UniqueId,
+		      Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
+						  "DATE_BLUE",
+		      Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('prj_creat_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
                       "</script>",
-	    UniqueId,
-            Gbl.RowEvenOdd,
-            Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
-                                        "DATE_BLUE",
             UniqueId,Prj->CreatTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    Tbl_EndCell ();
 
    /***** End date/time *****/
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"prj_modif_%u\" class=\"LEFT_TOP COLOR%u %s\">"
-	              "<script type=\"text/javascript\">"
+   Tbl_StartCellAttr ("id=\"prj_modif_%u\" class=\"LEFT_TOP %s COLOR%u\"",
+		      UniqueId,
+		      Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
+						  "DATE_BLUE",
+		      Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('prj_modif_%u',%ld,"
                       "%u,'<br />','%s',true,true,0x7);"
                       "</script>",
-	    UniqueId,
-            Gbl.RowEvenOdd,
-            Prj->Hidden == Prj_HIDDEN ? "DATE_BLUE_LIGHT" :
-                                        "DATE_BLUE",
             UniqueId,Prj->ModifTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    Tbl_EndCell ();
 
    /***** Project title *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s",
-            Gbl.RowEvenOdd,
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT_N",
-            Prj->Title);
+   Tbl_StartCellAttr ("class=\"LEFT_TOP %s COLOR%u\"",
+		      Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						  "DAT_N",
+		      Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"%s",Prj->Title);
    Tbl_EndCell ();
 
    /***** Department *****/
    Prj_ShowTableAllProjectsDepartment (Prj);
 
    /***** Preassigned? *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s",
-            Gbl.RowEvenOdd,
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT",
-            (Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
-        	                                    Txt_No);
+   Tbl_StartCellAttr ("class=\"LEFT_TOP %s COLOR%u\"",
+		      Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						  "DAT",
+		      Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"%s",(Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
+        	                                                   Txt_No);
    Tbl_EndCell ();
 
    /***** Number of students *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%u",
-            Gbl.RowEvenOdd,
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT",
-            Prj->NumStds);
+   Tbl_StartCellAttr ("class=\"LEFT_TOP %s COLOR%u\"",
+		      Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						  "DAT",
+		      Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"%u",Prj->NumStds);
    Tbl_EndCell ();
 
    /***** Project members *****/
@@ -1355,12 +1391,11 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
       Prj_ShowTableAllProjectsMembersWithARole (Prj,Prj_RolesToShow[NumRoleToShow]);
 
    /***** Proposal *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s",
-            Gbl.RowEvenOdd,
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT",
-            Txt_PROJECT_STATUS[Prj->Proposal]);
+   Tbl_StartCellAttr ("class=\"LEFT_TOP %s COLOR%u\"",
+		      Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						  "DAT",
+		      Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"%s",Txt_PROJECT_STATUS[Prj->Proposal]);
    Tbl_EndCell ();
 
    /***** Write rows of data of this project *****/
@@ -1401,12 +1436,20 @@ static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
 	      (ProjectView == Prj_LIST_PROJECTS ||
 	       ProjectView == Prj_FILE_BROWSER_PROJECT));
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">",
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT_N");
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+	 Tbl_StartCellAttr ("class=\"LEFT_TOP %s COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT_N",
+			    Gbl.RowEvenOdd);
+	 break;
+      default:
+	 Tbl_StartCellAttr ("class=\"LEFT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT_N");
+	 break;
+     }
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 			 " class=\"%s\">",
@@ -1429,12 +1472,11 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Project *Prj)
    Dpt_GetDataOfDepartmentByCod (&Dpt);
 
    /***** Show department *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s",
-            Gbl.RowEvenOdd,
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT",
-            Dpt.FullName);
+   Tbl_StartCellAttr ("class=\"LEFT_TOP %s COLOR%u\"",
+		      Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						  "DAT",
+		      Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"%s",Dpt.FullName);
    Tbl_EndCell ();
   }
 
@@ -1465,36 +1507,45 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
      {
       case Prj_LIST_PROJECTS:
 	 Tbl_StartRowAttr ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u",
-		  Gbl.RowEvenOdd);
+	 Tbl_StartCellAttr ("colspan=\"4\" class=\"RIGHT_TOP %s COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL",
+			    Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 Tbl_StartRowAttr ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP");
+	 Tbl_StartCellAttr ("colspan=\"3\" class=\"RIGHT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL");
 	 break;
       case Prj_PRINT_ONE_PROJECT:
 	 Tbl_StartRow ();
-	 fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP");
+	 Tbl_StartCellAttr ("colspan=\"2\" class=\"RIGHT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL");
 	 break;
       default:
 	 // Not applicable
 	 break;
      }
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s:",
-            Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
-        	                        "ASG_LABEL",
-            Label);
+   fprintf (Gbl.F.Out,"%s:",Label);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">"
-                      "%s",
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT",
-            TxtField);
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+	 Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT",
+			    Gbl.RowEvenOdd);
+	 break;
+      default:
+	 Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT");
+	 break;
+     }
+   fprintf (Gbl.F.Out,"%s",TxtField);
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -1508,12 +1559,11 @@ static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
                      TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
 
    /***** Write text *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s",
-            Gbl.RowEvenOdd,
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT",
-            TxtField);
+   Tbl_StartCellAttr ("class=\"LEFT_TOP %s COLOR%u\"",
+		      Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						  "DAT",
+		      Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"%s",TxtField);
    Tbl_EndCell ();
   }
 
@@ -1535,34 +1585,44 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
      {
       case Prj_LIST_PROJECTS:
 	 Tbl_StartRowAttr ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u",
-		  Gbl.RowEvenOdd);
+	 Tbl_StartCellAttr ("colspan=\"4\" class=\"RIGHT_TOP %s COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL",
+			    Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
 	 Tbl_StartRowAttr ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP");
+	 Tbl_StartCellAttr ("colspan=\"3\" class=\"RIGHT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL");
 	 break;
       case Prj_PRINT_ONE_PROJECT:
 	 Tbl_StartRow ();
-	 fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP");
+	 Tbl_StartCellAttr ("colspan=\"2\" class=\"RIGHT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+						        "ASG_LABEL");
 	 break;
       default:
 	 // Not applicable
 	 break;
      }
-   fprintf (Gbl.F.Out," %s\">"
-		      "%s:",
-	    Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
-			                "ASG_LABEL",
-	    Txt_URL);
+   fprintf (Gbl.F.Out,"%s:",Txt_URL);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
-   if (ProjectView == Prj_LIST_PROJECTS)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\">",
-	    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-			                "DAT");
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+	 Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s COLOR%u\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT",
+			    Gbl.RowEvenOdd);
+	 break;
+      default:
+	 Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s\"",
+			    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						        "DAT");
+	 break;
+     }
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Prj->URL);
    fprintf (Gbl.F.Out,"%s",Prj->URL);
@@ -1576,12 +1636,11 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
 static void Prj_ShowTableAllProjectsURL (const struct Project *Prj)
   {
    /***** Show URL *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">"
-                      "%s",
-            Gbl.RowEvenOdd,
-            Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-        	                        "DAT",
-            Prj->URL);
+   Tbl_StartCellAttr ("class=\"LEFT_TOP %s COLOR%u\"",
+		      Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						  "DAT",
+		      Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"%s",Prj->URL);
    Tbl_EndCell ();
   }
 
@@ -1650,57 +1709,54 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    fprintf (Gbl.F.Out,"<td colspan=\"4\" class=\"RIGHT_TOP COLOR%u %s\">"
-		               "%s:",
-	             Gbl.RowEvenOdd,
-		     Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
-				                 "ASG_LABEL",
+	    Tbl_StartCellAttr ("colspan=\"4\" class=\"RIGHT_TOP %s COLOR%u\"",
+			       Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+							   "ASG_LABEL",
+			       Gbl.RowEvenOdd);
+	    fprintf (Gbl.F.Out,"%s:",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
 		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
-	    Tbl_EndCell ();
 	    break;
 	 case Prj_FILE_BROWSER_PROJECT:
-	    fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"RIGHT_TOP %s\">"
-		               "%s:",
-		     Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
-				                 "ASG_LABEL",
+	    Tbl_StartCellAttr ("colspan=\"3\" class=\"RIGHT_TOP %s\"",
+			       Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+							   "ASG_LABEL");
+	    fprintf (Gbl.F.Out,"%s:",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
 		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
-	    Tbl_EndCell ();
 	    break;
 	 case Prj_PRINT_ONE_PROJECT:
-	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"RIGHT_TOP %s\">"
-		               "%s:",
-		     Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
-				                 "ASG_LABEL",
+	    Tbl_StartCellAttr ("colspan=\"2\" class=\"RIGHT_TOP %s\"",
+			       Prj->Hidden == Prj_HIDDEN ? "ASG_LABEL_LIGHT" :
+							   "ASG_LABEL");
+	    fprintf (Gbl.F.Out,"%s:",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
 		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
-	    Tbl_EndCell ();
 	    break;
 	 case Prj_EDIT_ONE_PROJECT:
-	    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP ASG_LABEL\">%s:",
-		     Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
-	    Tbl_EndCell ();
+	    Tbl_StartCellAttr ("class=\"RIGHT_TOP ASG_LABEL\"");
+	    fprintf (Gbl.F.Out,"%s:",Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	}
+      Tbl_EndCell ();
 
       /* Start column with list of users */
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u %s\">",
-	             Gbl.RowEvenOdd,
+	    Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s COLOR%u\"",
 		     Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-				                 "DAT");
+				                 "DAT",
+	             Gbl.RowEvenOdd);
 	    break;
 	 case Prj_FILE_BROWSER_PROJECT:
 	 case Prj_PRINT_ONE_PROJECT:
-	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP %s\">",
+	    Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP %s\"",
 		     Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
 				                 "DAT");
 	    break;
 	 case Prj_EDIT_ONE_PROJECT:
-	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP DAT\">");
+	    Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP DAT\"");
 	    break;
 	}
 
@@ -1725,7 +1781,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    /* Icon to remove user */
 	    if (ProjectView == Prj_EDIT_ONE_PROJECT)
 	      {
-	       fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_ICO\">");
+	       Tbl_StartCellAttr ("class=\"PRJ_MEMBER_ICO\"");
 	       Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInProject],NULL,
 					      Prj_PutCurrentParams,
 					      "trash.svg",
@@ -1734,7 +1790,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	      }
 
 	    /* Put user's photo */
-	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_PHO\">");
+	    Tbl_StartCellAttr ("class=\"PRJ_MEMBER_PHO\"");
 	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
 								 NULL,
@@ -1742,8 +1798,8 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    Tbl_EndCell ();
 
 	    /* Write user's name */
-	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_NAM\">%s",
-		     Gbl.Usrs.Other.UsrDat.FullName);
+	    Tbl_StartCellAttr ("class=\"PRJ_MEMBER_NAM\"");
+	    fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
 	    Tbl_EndCell ();
 
 	    /* End row for this user */
@@ -1756,7 +1812,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	{
 	 case Prj_EDIT_ONE_PROJECT:
 	    Tbl_StartRow ();
-	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_ICO\">");
+	    Tbl_StartCellAttr ("class=\"PRJ_MEMBER_ICO\"");
 	    Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Add_USERS,
@@ -1766,10 +1822,10 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 				        Gbl.Title);
 	    Tbl_EndCell ();
 
-	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_PHO\">");	// Column for photo
+	    Tbl_StartCellAttr ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
 	    Tbl_EndCell ();
 
-	    fprintf (Gbl.F.Out,"<td class=\"PRJ_MEMBER_NAM\">");	// Column for name
+	    Tbl_StartCellAttr ("class=\"PRJ_MEMBER_NAM\"");	// Column for name
 	    Tbl_EndCell ();
 
 	    Tbl_EndRow ();
@@ -1802,10 +1858,10 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
    NumUsrs = Prj_GetUsrsInPrj (Prj->PrjCod,RoleInProject,&mysql_res);
 
    /***** Start column with list of all members with this role *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u %s\">",
-	    Gbl.RowEvenOdd,
-	    Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
-			                "DAT");
+   Tbl_StartCellAttr ("class=\"LEFT_TOP %s COLOR%u\"",
+		      Prj->Hidden == Prj_HIDDEN ? "DAT_LIGHT" :
+						  "DAT",
+		      Gbl.RowEvenOdd);
 
    if (NumUsrs)
      {
@@ -3345,13 +3401,13 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Project title */
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"Title\" class=\"%s\">%s:</label>",
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" id=\"Title\" name=\"Title\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title);
@@ -3362,13 +3418,13 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Department */
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"%s\" class=\"%s\">%s:</label>",
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:</label>",
             Dpt_PARAM_DPT_COD_NAME,
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Department);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
                                 Prj->DptCod,			// Selected department
                                 "PRJ_INPUT",			// Selector class
@@ -3382,14 +3438,12 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Preassigned? */
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Preassigned_QUESTION);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Preassigned_QUESTION);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"Preassigned\">");
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<select name=\"Preassigned\">");
 
    fprintf (Gbl.F.Out,"<option value=\"Y\"");
    if (Prj->Preassigned == Prj_PREASSIGNED)
@@ -3409,14 +3463,12 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Number of students */
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Number_of_students);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Number_of_students);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"number\" name=\"NumStds\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"number\" name=\"NumStds\""
                       " min=\"0\" value=\"%u\" />",
             Prj->NumStds);
    Tbl_EndCell ();
@@ -3426,14 +3478,12 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* Proposal */
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Proposal);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Proposal);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select name=\"Proposal\">");
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<select name=\"Proposal\">");
    for (Proposal  = (Prj_Proposal_t) 0;
 	Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
 	Proposal++)
@@ -3464,14 +3514,14 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    /* URL for additional info */
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"WWW\" class=\"%s\">%s:</label>",
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_URL);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-                      "<input type=\"url\" id=\"URL\" name=\"URL\""
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL\" name=\"URL\""
 		      " size=\"45\" maxlength=\"%u\" value=\"%s\" />",
 	    Cns_MAX_CHARS_WWW,Prj->URL);
    Tbl_EndCell ();
@@ -3503,13 +3553,13 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
 
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"%s\" class=\"%s\">%s:</label>",
+   Tbl_StartCellAttr ("class=\"RIGHT_TOP\"");
+   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:</label>",
             Id,The_ClassFormInBox[Gbl.Prefs.Theme],Label);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\">"
+   Tbl_StartCellAttr ("class=\"LEFT_TOP\"");
+   fprintf (Gbl.F.Out,"<textarea id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\">"
                       "%s"
                       "</textarea>",
             Id,Id,

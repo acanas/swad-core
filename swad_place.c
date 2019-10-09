@@ -142,14 +142,12 @@ void Plc_SeePlaces (void)
 	 /* Write data of this place */
 	 Tbl_StartRow ();
 
-	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			    "%s",
-		  Gbl.Plcs.Lst[NumPlc].FullName);
+	 Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+	 fprintf (Gbl.F.Out,"%s",Gbl.Plcs.Lst[NumPlc].FullName);
 	 Tbl_EndCell ();
 
-	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                    "%u",
-		  Gbl.Plcs.Lst[NumPlc].NumCtrs);
+	 Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+	 fprintf (Gbl.F.Out,"%u",Gbl.Plcs.Lst[NumPlc].NumCtrs);
 	 Tbl_EndCell ();
 
 	 Tbl_EndRow ();
@@ -158,8 +156,8 @@ void Plc_SeePlaces (void)
 
       /***** Separation row *****/
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT\">"
-			 "&nbsp;");
+      Tbl_StartCellAttr ("colspan=\"2\" class=\"DAT\"");
+      fprintf (Gbl.F.Out,"&nbsp;");
       Tbl_EndCell ();
       Tbl_EndRow ();
 
@@ -167,14 +165,12 @@ void Plc_SeePlaces (void)
       NumCtrsInOtherPlcs = Ctr_GetNumCtrsInPlc (0);
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%s",
-	       Txt_Other_places);
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Other_places);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-			 "%u",
-	       NumCtrsInOtherPlcs);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",NumCtrsInOtherPlcs);
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -183,15 +179,13 @@ void Plc_SeePlaces (void)
       /***** Write centres (of the current institution) with no place *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%s",
-	       Txt_Place_unspecified);
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Place_unspecified);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-			 "%u",
-	       Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
-	       NumCtrsWithPlc);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
+	                      NumCtrsWithPlc);
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -532,9 +526,10 @@ static void Plc_ListPlacesForEdition (void)
      {
       Plc = &Gbl.Plcs.Lst[NumPlc];
 
-      /* Put icon to remove place */
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"BM\">");
+
+      /* Put icon to remove place */
+      Tbl_StartCellAttr ("class=\"BM\"");
       if (Plc->NumCtrs)	// Place has centres ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
@@ -547,13 +542,12 @@ static void Plc_ListPlacesForEdition (void)
       Tbl_EndCell ();
 
       /* Place code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%ld",
-               Plc->PlcCod);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%ld",Plc->PlcCod);
       Tbl_EndCell ();
 
       /* Place short name */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActRenPlcSho);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -565,7 +559,7 @@ static void Plc_ListPlacesForEdition (void)
       Tbl_EndCell ();
 
       /* Place full name */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActRenPlcFul);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -577,9 +571,8 @@ static void Plc_ListPlacesForEdition (void)
       Tbl_EndCell ();
 
       /* Number of centres */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u",
-               Plc->NumCtrs);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Plc->NumCtrs);
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -815,18 +808,19 @@ static void Plc_PutFormToCreatePlace (void)
    /***** Write heading *****/
    Plc_PutHeadPlaces ();
 
-   /***** Column to remove place, disabled here *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+
+   /***** Column to remove place, disabled here *****/
+   Tbl_StartCellAttr ("class=\"BM\"");
    Tbl_EndCell ();
 
    /***** Place code *****/
-   fprintf (Gbl.F.Out,"<td class=\"CODE\">");
+   Tbl_StartCellAttr ("class=\"CODE\"");
    Tbl_EndCell ();
 
    /***** Place short name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"ShortName\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
@@ -834,8 +828,8 @@ static void Plc_PutFormToCreatePlace (void)
    Tbl_EndCell ();
 
    /***** Place full name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"FullName\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
@@ -843,8 +837,8 @@ static void Plc_PutFormToCreatePlace (void)
    Tbl_EndCell ();
 
    /***** Number of centres *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-		      "0");
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"0");
    Tbl_EndCell ();
 
    Tbl_EndRow ();

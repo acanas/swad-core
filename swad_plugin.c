@@ -138,8 +138,8 @@ void Plg_ListPlugins (void)
       // TODO: Change plugin icons to 32x32
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\" style=\"width:45px;\">"
-                         "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\" style=\"width:45px;\"");
+      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />"
@@ -149,8 +149,8 @@ void Plg_ListPlugins (void)
                Plg->Name,Plg->Name);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-                         "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "%s"
                          "</a>",
                URL,Plg->Name,
@@ -395,9 +395,10 @@ static void Plg_ListPluginsForEdition (void)
      {
       Plg = &Gbl.Plugins.Lst[NumPlg];
 
-      /* Put icon to remove plugin */
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"BM\">");
+
+      /* Put icon to remove plugin */
+      Tbl_StartCellAttr ("class=\"BM\"");
       Frm_StartForm (ActRemPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
       Ico_PutIconRemove ();
@@ -405,15 +406,14 @@ static void Plg_ListPluginsForEdition (void)
       Tbl_EndCell ();
 
       /* Plugin code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%ld",
-               Plg->PlgCod);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%ld",Plg->PlgCod);
       Tbl_EndCell ();
 
       /* Plugin logo */
       // TODO: Change plugin icons to 32x32
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:45px;\">"
-                         "<img src=\"%s/%s24x24.gif\""
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\" style=\"width:45px;\"");
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />",
                Cfg_URL_ICON_PLUGINS_PUBLIC,
@@ -423,7 +423,7 @@ static void Plg_ListPluginsForEdition (void)
       Tbl_EndCell ();
 
       /* Plugin name */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActRenPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
@@ -434,7 +434,7 @@ static void Plg_ListPluginsForEdition (void)
       Tbl_EndCell ();
 
       /* Plugin description */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActChgPlgDes);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Description\""
@@ -445,7 +445,7 @@ static void Plg_ListPluginsForEdition (void)
       Tbl_EndCell ();
 
       /* Plugin logo */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActChgPlgLog);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\""
@@ -456,7 +456,7 @@ static void Plg_ListPluginsForEdition (void)
       Tbl_EndCell ();
 
       /* Plugin application key */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActChgPlgAppKey);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"AppKey\""
@@ -467,7 +467,7 @@ static void Plg_ListPluginsForEdition (void)
       Tbl_EndCell ();
 
       /* Plugin URL */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActChgPlgURL);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"URL\""
@@ -478,7 +478,7 @@ static void Plg_ListPluginsForEdition (void)
       Tbl_EndCell ();
 
       /* Plugin IP */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActChgPlgIP);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"IP\""
@@ -920,48 +920,48 @@ static void Plg_PutFormToCreatePlugin (void)
    Tbl_EndRow ();
 
    /***** Plugin name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"Name\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
                       " size=\"10\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name);
    Tbl_EndCell ();
 
    /***** Plugin description *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"Description\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Description\""
                       " size=\"30\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg_EditingPlg->Description);
    Tbl_EndCell ();
 
    /***** Plugin logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"Logo\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\""
                       " size=\"4\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo);
    Tbl_EndCell ();
 
    /***** Plugin application key *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"AppKey\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"AppKey\""
                       " size=\"16\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
 	    Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey);
    Tbl_EndCell ();
 
    /***** Plugin URL *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"url\" name=\"URL\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"URL\""
                       " size=\"15\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Cns_MAX_CHARS_WWW,Plg_EditingPlg->URL);
    Tbl_EndCell ();
 
    /***** Plugin IP address *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"IP\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"IP\""
                       " size=\"10\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Cns_MAX_CHARS_IP,Plg_EditingPlg->IP);

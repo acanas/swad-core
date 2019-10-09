@@ -1563,12 +1563,11 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
 	 /***** Show row *****/
 	 Tbl_StartRow ();
+
          Prf_ShowUsrInRanking (&UsrDat,Rank);
-	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
-	                    " style=\"height:50px;\">"
-	                    "%ld",
-		  Gbl.RowEvenOdd,
-		  Figure);
+	 Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",
+			    Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"%ld",Figure);
 	 Tbl_EndCell ();
 
 	 Tbl_EndRow ();
@@ -1732,9 +1731,8 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 /***** Show row *****/
 	 Tbl_StartRow ();
 	 Prf_ShowUsrInRanking (&UsrDat,Rank);
-	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE COLOR%u\""
-	                    " style=\"height:50px;\">",
-	          Gbl.RowEvenOdd);
+	 Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",
+			    Gbl.RowEvenOdd);
 	 Str_WriteFloatNum (Gbl.F.Out,NumClicksPerDay);
 	 Tbl_EndCell ();
 	 Tbl_EndRow ();
@@ -1761,17 +1759,14 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
-   fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE COLOR%u\""
-	              " style=\"height:50px;\">"
-		      "#%u",
-	    Gbl.RowEvenOdd,
-	    Rank);
+   Tbl_StartCellAttr ("class=\"RANK RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",
+		      Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"#%u",Rank);
    Tbl_EndCell ();
 
    /***** Check if I can see the public profile *****/
-   fprintf (Gbl.F.Out,"<td class=\"COLOR%u\""
-                      " style=\"width:35px; height:50px;\">",
-            Gbl.RowEvenOdd);
+   Tbl_StartCellAttr ("class=\"COLOR%u\" style=\"width:35px; height:50px;\"",
+		      Gbl.RowEvenOdd);
    if (Visible)
      {
       /***** User's photo *****/
@@ -1783,8 +1778,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    Tbl_EndCell ();
 
    /***** Put form to go to public profile *****/
-   fprintf (Gbl.F.Out,"<td class=\"COLOR%u\" style=\"height:50px;\">",
-            Gbl.RowEvenOdd);
+   Tbl_StartCellAttr ("class=\"COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
    if (Visible)
      {
       Frm_StartForm (ActSeeOthPubPrf);

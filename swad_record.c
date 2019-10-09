@@ -298,7 +298,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Tbl_StartRow ();
 
       /* Write icon to remove the field */
-      fprintf (Gbl.F.Out,"<td class=\"BM\">");
+      Tbl_StartCellAttr ("class=\"BM\"");
       Frm_StartForm (ActReqRemFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       Ico_PutIconRemove ();
@@ -306,7 +306,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Tbl_EndCell ();
 
       /* Name of the field */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
       Frm_StartForm (ActRenFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
@@ -319,7 +319,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Tbl_EndCell ();
 
       /* Number of lines in the form */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActChgRowFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NumLines\""
@@ -331,7 +331,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Tbl_EndCell ();
 
       /* Visibility of a field */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActChgVisFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<select name=\"Visibility\""
@@ -378,7 +378,7 @@ void Rec_ShowFormCreateRecordField (void)
 
    /***** Write disabled icon to remove the field *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_StartCellAttr ("class=\"BM\"");
    Ico_PutIconRemovalNotAllowed ();
    Tbl_EndCell ();
 
