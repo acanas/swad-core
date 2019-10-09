@@ -422,9 +422,10 @@ static void Lnk_ListLinksForEdition (void)
      {
       Lnk = &Gbl.Links.Lst[NumLnk];
 
-      /* Put icon to remove link */
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"BM\">");
+
+      /* Put icon to remove link */
+      Tbl_StartCellAttr ("class=\"BM\"");
       Frm_StartForm (ActRemLnk);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       Ico_PutIconRemove ();
@@ -432,13 +433,12 @@ static void Lnk_ListLinksForEdition (void)
       Tbl_EndCell ();
 
       /* Link code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%ld",
-               Lnk->LnkCod);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%ld",Lnk->LnkCod);
       Tbl_EndCell ();
 
       /* Link short name */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -451,7 +451,7 @@ static void Lnk_ListLinksForEdition (void)
       Tbl_EndCell ();
 
       /* Link full name */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -464,7 +464,7 @@ static void Lnk_ListLinksForEdition (void)
       Tbl_EndCell ();
 
       /* Link WWW */
-      fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActChgLnkWWW);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
@@ -475,6 +475,7 @@ static void Lnk_ListLinksForEdition (void)
                Gbl.Form.Id);
       Frm_EndForm ();
       Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 
@@ -748,14 +749,14 @@ static void Lnk_PutFormToCreateLink (void)
    Tbl_StartRow ();
 
    /***** Link code *****/
-   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_StartCellAttr ("class=\"BM\"");
    Tbl_EndCell ();
 
    Tbl_PutEmptyCells (1);
 
    /***** Link short name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"ShortName\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
@@ -763,8 +764,8 @@ static void Lnk_PutFormToCreateLink (void)
    Tbl_EndCell ();
 
    /***** Link full name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"FullName\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
@@ -772,8 +773,8 @@ static void Lnk_PutFormToCreateLink (void)
    Tbl_EndCell ();
 
    /***** Link WWW *****/
-   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"url\" name=\"WWW\""
+   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />",

@@ -1620,7 +1620,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Tbl_StartRow ();
 
    /***** First column: institution logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:80px;\">");
+   Tbl_StartCellAttr ("class=\"LEFT_TOP\" style=\"width:80px;\"");
    if (InsCod > 0)
      {
       if (!PrintView)
@@ -1632,7 +1632,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Tbl_EndCell ();
 
    /***** Second column: class photo title *****/
-   fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO_TITLE CENTER_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"CLASSPHOTO_TITLE CENTER_MIDDLE\"");
    if (InsCod > 0)
      {
       if (!PrintView)
@@ -1668,7 +1668,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Tbl_EndCell ();
 
    /***** Third column: degree logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\" style=\"width:80px;\">");
+   Tbl_StartCellAttr ("class=\"RIGHT_TOP\" style=\"width:80px;\"");
    if (DegCod > 0)
      {
       if (!PrintView)
@@ -1706,8 +1706,8 @@ void Lay_AdvertisementMobile (void)
 
       /***** Show advertisement *****/
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-	                 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
+      Tbl_StartCellAttr ("class=\"DAT CENTER_MIDDLE\"");
+      fprintf (Gbl.F.Out,"<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 	                 " class=\"DAT\">"
                          "%s<br /><br />"
                          "<img src=\"%s/SWADroid200x300.png\""

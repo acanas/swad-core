@@ -1134,12 +1134,13 @@ void Inf_FormsToSelSendInfo (void)
 	InfoSrc < Inf_NUM_INFO_SOURCES;
 	InfoSrc++)
      {
-      /* Select info source */
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP");
+
+      /* Select info source */
       if (InfoSrc == InfoSrcSelected)
-         fprintf (Gbl.F.Out," LIGHT_BLUE");
-      fprintf (Gbl.F.Out,"\">");
+	 Tbl_StartCellAttr ("class=\"DAT LEFT_TOP LIGHT_BLUE\"");
+      else
+	 Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
       Frm_StartForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
       fprintf (Gbl.F.Out,"<input type=\"radio\""
 	                 " id=\"InfoSrc%u\" name=\"InfoSrc\" value=\"%u\"",
@@ -1173,6 +1174,7 @@ void Inf_FormsToSelSendInfo (void)
       if (Inf_FormsForEditionTypes[InfoSrc])
          Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
       Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 

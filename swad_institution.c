@@ -202,16 +202,14 @@ void Ins_SeeInsWithPendingCtrs (void)
 
          /* Institution logo and name */
          Tbl_StartRow ();
-         fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",
-                  BgColor);
+         Tbl_StartCellAttr ("class=\"LEFT_MIDDLE %s\"",BgColor);
          Ins_DrawInstitutionLogoAndNameWithLink (&Ins,ActSeeCtr,
                                                  "DAT_NOBR","CENTER_MIDDLE");
          Tbl_EndCell ();
 
          /* Number of pending centres (row[1]) */
-         fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-                            "%s",
-                  BgColor,row[1]);
+         Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE %s\"",BgColor);
+         fprintf (Gbl.F.Out,"%s",row[1]);
          Tbl_EndCell ();
 
          Tbl_EndRow ();
@@ -359,13 +357,13 @@ static void Ins_Configuration (bool PrintView)
    /***** Country *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"OthCtyCod\" class=\"%s\">%s:</label>",
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<label for=\"OthCtyCod\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Country);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       // Only system admins can move an institution to another country
@@ -402,13 +400,13 @@ static void Ins_Configuration (bool PrintView)
    /***** Institution full name *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"FullName\" class=\"%s\">%s:</label>",
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Institution);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"DAT_N LEFT_MIDDLE\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       // Only system admins can edit institution full name
@@ -434,13 +432,13 @@ static void Ins_Configuration (bool PrintView)
    /***** Institution short name *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"ShortName\" class=\"%s\">%s:</label>",
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Short_name);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"DAT_N LEFT_MIDDLE\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       // Only system admins can edit institution short name
@@ -466,13 +464,13 @@ static void Ins_Configuration (bool PrintView)
    /***** Institution WWW *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-		      "<label for=\"WWW\" class=\"%s\">%s:</label>",
+   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Web);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       // Only institution admins and system admins
@@ -504,14 +502,12 @@ static void Ins_Configuration (bool PrintView)
    /***** Shortcut to the institution *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],
-	    Txt_Shortcut);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Shortcut);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-		      "<a href=\"%s/%s?ins=%ld\" class=\"DAT\" target=\"_blank\">"
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<a href=\"%s/%s?ins=%ld\" class=\"DAT\" target=\"_blank\">"
 		      "%s/%s?ins=%ld"
 		      "</a>",
 	    Cfg_URL_SWAD_CGI,
@@ -529,13 +525,11 @@ static void Ins_Configuration (bool PrintView)
       /***** QR code with link to the institution *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_QR_code);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_QR_code);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
       QR_LinkTo (250,"ins",Gbl.Hierarchy.Ins.InsCod);
       Tbl_EndCell ();
 
@@ -546,29 +540,24 @@ static void Ins_Configuration (bool PrintView)
       /***** Number of users who claim to belong to this institution *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Users_of_the_institution);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Users_of_the_institution);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%u",
-	       Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsWhoClaimToBelongToIns (Gbl.Hierarchy.Ins.InsCod));
       Tbl_EndCell ();
 
       Tbl_EndRow ();
       Tbl_StartRow ();
 
       /***** Number of centres *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Centres);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Centres);
       Tbl_EndCell ();
 
       /* Form to go to see centres of this institution */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
       Frm_StartFormGoTo (ActSeeCtr);
       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -585,15 +574,12 @@ static void Ins_Configuration (bool PrintView)
       /***** Number of degrees *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Degrees);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Degrees);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%u",
-	       Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Deg_GetNumDegsInIns (Gbl.Hierarchy.Ins.InsCod));
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -601,15 +587,12 @@ static void Ins_Configuration (bool PrintView)
       /***** Number of courses *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Courses);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Courses);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%u",
-	       Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Crs_GetNumCrssInIns (Gbl.Hierarchy.Ins.InsCod));
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -617,15 +600,12 @@ static void Ins_Configuration (bool PrintView)
       /***** Number of departments *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
-	       Txt_Departments);
+      Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Departments);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			 "%u",
-	       Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Dpt_GetNumDepartmentsInInstitution (Gbl.Hierarchy.Ins.InsCod));
       Tbl_EndCell ();
 
       Tbl_EndRow ();
@@ -673,16 +653,14 @@ static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
 
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-		      "%u",
-            Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsInCrssOfIns (Role,Gbl.Hierarchy.Ins.InsCod));
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -824,59 +802,50 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
    Tbl_StartRow ();
 
    /***** Number of institution in this list *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-                      "%u",
-	    TxtClassNormal,BgColor,
-            NumIns);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",NumIns);
    Tbl_EndCell ();
 
    /***** Institution logo and name *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE %s\"",BgColor);
    Ins_DrawInstitutionLogoAndNameWithLink (Ins,ActSeeCtr,
                                            TxtClassStrong,"CENTER_MIDDLE");
    Tbl_EndCell ();
 
    /***** Stats *****/
    /* Number of users who claim to belong to this institution */
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u",
-	    TxtClassNormal,BgColor,Ins->NumUsrsWhoClaimToBelongToIns);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",Ins->NumUsrsWhoClaimToBelongToIns);
    Tbl_EndCell ();
 
    /* Number of centres in this institution */
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u",
-	    TxtClassNormal,BgColor,Ins->Ctrs.Num);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",Ins->Ctrs.Num);
    Tbl_EndCell ();
 
    /* Number of degrees in this institution */
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u",
-	    TxtClassNormal,BgColor,Ins->NumDegs);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",Ins->NumDegs);
    Tbl_EndCell ();
 
    /* Number of courses in this institution */
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u",
-	    TxtClassNormal,BgColor,Ins->NumCrss);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",Ins->NumCrss);
    Tbl_EndCell ();
 
    /* Number of departments in this institution */
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u",
-	    TxtClassNormal,BgColor,Ins->NumDpts);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",Ins->NumDpts);
    Tbl_EndCell ();
 
    /* Number of users in courses of this institution */
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u",
-	    TxtClassNormal,BgColor,Ins->NumUsrs);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",TxtClassNormal,BgColor);
+   fprintf (Gbl.F.Out,"%u",Ins->NumUsrs);
    Tbl_EndCell ();
 
    /***** Institution status *****/
    StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
-	    TxtClassNormal,BgColor);
+   Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE %s\"",TxtClassNormal,BgColor);
    if (StatusTxt != Ins_STATUS_ACTIVE) // If active ==> do not show anything
       fprintf (Gbl.F.Out,"%s",Txt_INSTITUTION_STATUS[StatusTxt]);
    Tbl_EndCell ();
@@ -1516,9 +1485,10 @@ static void Ins_ListInstitutionsForEdition (void)
 
       ICanEdit = Ins_CheckIfICanEdit (Ins);
 
-      /* Put icon to remove institution */
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td class=\"BM\">");
+
+      /* Put icon to remove institution */
+      Tbl_StartCellAttr ("class=\"BM\">");
       if (Ins->Ctrs.Num ||
 	  Ins->NumUsrsWhoClaimToBelongToIns ||
 	  Ins->NumUsrs ||	// Institution has centres or users ==> deletion forbidden
@@ -1534,20 +1504,18 @@ static void Ins_ListInstitutionsForEdition (void)
       Tbl_EndCell ();
 
       /* Institution code */
-      fprintf (Gbl.F.Out,"<td class=\"DAT CODE\">"
-	                 "%ld",
-               Ins->InsCod);
+      Tbl_StartCellAttr ("class=\"DAT CODE\"");
+      fprintf (Gbl.F.Out,"%ld",Ins->InsCod);
       Tbl_EndCell ();
 
       /* Institution logo */
-      fprintf (Gbl.F.Out,"<td title=\"%s\" class=\"LEFT_MIDDLE\""
-	                 " style=\"width:25px;\">",
-               Ins->FullName);
+      Tbl_StartCellAttr ("title=\"%s\" class=\"LEFT_MIDDLE\" style=\"width:25px;\"",
+                         Ins->FullName);
       Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
       Tbl_EndCell ();
 
       /* Institution short name */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenInsSho);
@@ -1565,7 +1533,7 @@ static void Ins_ListInstitutionsForEdition (void)
       Tbl_EndCell ();
 
       /* Institution full name */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenInsFul);
@@ -1584,7 +1552,7 @@ static void Ins_ListInstitutionsForEdition (void)
       Tbl_EndCell ();
 
       /* Institution WWW */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgInsWWW);
@@ -1614,33 +1582,30 @@ static void Ins_ListInstitutionsForEdition (void)
       Tbl_EndCell ();
 
       /* Number of users who claim to belong to this institution */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u",
-               Ins->NumUsrsWhoClaimToBelongToIns);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Ins->NumUsrsWhoClaimToBelongToIns);
       Tbl_EndCell ();
 
       /* Number of centres */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u",
-               Ins->Ctrs.Num);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Ins->Ctrs.Num);
       Tbl_EndCell ();
 
       /* Number of users in courses of this institution */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	                 "%u",
-               Ins->NumUsrs);
+      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%u",Ins->NumUsrs);
       Tbl_EndCell ();
 
       /* Institution requester */
       UsrDat.UsrCod = Ins->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-      fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
+      Tbl_StartCellAttr ("class=\"DAT INPUT_REQUESTER LEFT_TOP\"");
       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
       Tbl_EndCell ();
 
       /* Institution status */
       StatusTxt = Ins_GetStatusTxtFromStatusBits (Ins->Status);
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM &&
 	  StatusTxt == Ins_STATUS_PENDING)
 	{
@@ -2276,21 +2241,21 @@ static void Ins_PutFormToCreateInstitution (void)
    Tbl_StartRow ();
 
    /***** Column to remove institution, disabled here *****/
-   fprintf (Gbl.F.Out,"<td class=\"BM\">");
+   Tbl_StartCellAttr ("class=\"BM\"");
    Tbl_EndCell ();
 
    /***** Institution code *****/
-   fprintf (Gbl.F.Out,"<td class=\"CODE\">");
+   Tbl_StartCellAttr ("class=\"CODE\"");
    Tbl_EndCell ();
 
    /***** Institution logo *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:25px;\">");
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\" style=\"width:25px;\"");
    Log_DrawLogo (Hie_INS,-1L,"",20,NULL,true);
    Tbl_EndCell ();
 
    /***** Institution short name *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"ShortName\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
@@ -2298,8 +2263,8 @@ static void Ins_PutFormToCreateInstitution (void)
    Tbl_EndCell ();
 
    /***** Institution full name *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"FullName\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
@@ -2307,8 +2272,8 @@ static void Ins_PutFormToCreateInstitution (void)
    Tbl_EndCell ();
 
    /***** Institution WWW *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"url\" name=\"WWW\""
+   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />",
@@ -2316,27 +2281,27 @@ static void Ins_PutFormToCreateInstitution (void)
    Tbl_EndCell ();
 
    /***** Number of users who claim to belong to this institution ****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "0");
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"0");
    Tbl_EndCell ();
 
    /***** Number of centres *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "0");
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"0");
    Tbl_EndCell ();
 
    /***** Number of users in courses of this institution ****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-	              "0");
+   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"0");
    Tbl_EndCell ();
 
    /***** Institution requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
+   Tbl_StartCellAttr ("class=\"DAT INPUT_REQUESTER LEFT_TOP\"");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
    Tbl_EndCell ();
 
    /***** Institution status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
    Tbl_EndCell ();
 
    Tbl_EndRow ();
