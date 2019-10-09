@@ -3667,12 +3667,11 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    Tbl_EndCell ();
 
    /***** Write number of user in the list *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
-	              "%u",
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">",
             UsrDat->Accepted ? "USR_LIST_NUM_N" :
         	               "USR_LIST_NUM",
-            BgColor,
-            NumUsr);
+            BgColor);
+   fprintf (Gbl.F.Out,"%u",NumUsr);
    Tbl_EndCell ();
 
    if (Gbl.Usrs.Listing.WithPhotos)
@@ -4019,16 +4018,14 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    Tbl_StartRow ();
 
    /***** Write number of user *****/
-   fprintf (Gbl.F.Out,"<td class=\"USR_LIST_NUM_N CENTER_MIDDLE COLOR%u\">"
-	              "%u",
-            Gbl.RowEvenOdd,NumUsr);
+   fprintf (Gbl.F.Out,"<td class=\"USR_LIST_NUM_N CENTER_MIDDLE COLOR%u\">",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"%u",NumUsr);
    Tbl_EndCell ();
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show administrator's photo *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
-               Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -7245,8 +7242,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	   {
 	    Tbl_StartRow ();
 
-	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\">",
-		     Gbl.RowEvenOdd);
+	    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"COLOR%u\">",Gbl.RowEvenOdd);
 	    Tbl_EndCell ();
 
 	    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"COLOR%u\">",
@@ -9750,11 +9746,11 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    Act_Action_t NextAction;
 
    /***** Show user's photo and name *****/
-   fprintf (Gbl.F.Out,"<td ");
    if (NumRows)
-      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumRows + 1);
-   fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
-	    Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"LEFT_TOP COLOR%u\">",
+	       NumRows + 1,Gbl.RowEvenOdd);
+   else
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
@@ -9762,11 +9758,11 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
    Tbl_EndCell ();
 
    /***** Start form to go to user's record card *****/
-   fprintf (Gbl.F.Out,"<td ");
    if (NumRows)
-      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumRows + 1);
-   fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
-	    Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"LEFT_TOP COLOR%u\">",
+	       NumRows + 1,Gbl.RowEvenOdd);
+   else
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
    switch (UsrDat->Roles.InCurrentCrs.Role)
      {
       case Rol_STD:
