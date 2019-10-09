@@ -272,8 +272,8 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
       if (NumNick == 1)
 	{
 	 /* The first nickname is the current one */
-	 fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">"
-			    "<label for=\"Nick\" class=\"%s\">"
+	 fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">");
+	 fprintf (Gbl.F.Out,"<label for=\"Nick\" class=\"%s\">"
 			    "%s:"
 			    "</label>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],
@@ -286,12 +286,11 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	{
 	 if (NumNick == 2)
 	   {
-	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\""
-			       " class=\"REC_C1_BOT RIGHT_TOP\">"
-			       "<label for=\"Nick\" class=\"%s\">"
+	    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"REC_C1_BOT RIGHT_TOP\">",
+		     NumNicks - 1);
+	    fprintf (Gbl.F.Out,"<label for=\"Nick\" class=\"%s\">"
 			       "%s:"
 			       "</label>",
-		     NumNicks - 1,
 		     The_ClassFormInBox[Gbl.Prefs.Theme],
 		     Txt_Other_nicknames);
 	    Tbl_EndCell ();
@@ -372,8 +371,8 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    /***** Form to enter new nickname *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">"
-                      "<label for=\"NewNick\" class=\"%s\">"
+   fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"<label for=\"NewNick\" class=\"%s\">"
                       "%s:"
                       "</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],

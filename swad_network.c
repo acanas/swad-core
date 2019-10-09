@@ -325,8 +325,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       /***** Row for this web / social network *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT LEFT_MIDDLE\">"
-			 "<label for=\"URL%u\" class=\"%s\">"
+      fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<label for=\"URL%u\" class=\"%s\">"
 			 "<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
                          " class=\"CONTEXT_ICO_16x16\""
@@ -340,8 +340,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       Net_WebsAndSocialNetworksTitle[NumURL]);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
-			 "<input type=\"url\" id=\"URL%u\" name=\"URL%u\""
+      fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL%u\" name=\"URL%u\""
 			 " maxlength=\"%u\" value=\"%s\""
 		         " class=\"REC_C2_BOT_INPUT\" />",
 	       (unsigned) NumURL,(unsigned) NumURL,
@@ -594,8 +594,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
 
 	 Tbl_StartRow ();
 
-	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			    "<img src=\"%s/%s\""
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 			    " alt=\"%s\" title=\"%s\""
                             " class=\"CONTEXT_ICO_16x16\""
 			    " style=\"margin-right:6px;\" />"
@@ -606,13 +606,12 @@ void Net_ShowWebAndSocialNetworksStats (void)
 		  Net_WebsAndSocialNetworksTitle[Web]);
 	 Tbl_EndCell ();
 
-	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-			    "%u",
-		  NumUsrs);
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"%u",NumUsrs);
 	 Tbl_EndCell ();
 
-	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
-			    "%.2f%%",
+	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"%.2f%%",
 		  NumUsrsTotal ? 100.0 * (float) NumUsrs / (float) NumUsrsTotal :
 			         0.0);
 	 Tbl_EndCell ();

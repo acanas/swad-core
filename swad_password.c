@@ -687,14 +687,14 @@ void Pwd_ShowFormChgMyPwd (void)
      {
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
-			 "<label for=\"UsrPwd\" class=\"%s\">%s:</label>",
+      fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<label for=\"UsrPwd\" class=\"%s\">%s:</label>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Current_password);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
-			 "<input type=\"password\""
+      fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<input type=\"password\""
 			 " id=\"UsrPwd\" name=\"UsrPwd\""
 			 " size=\"18\" maxlength=\"%u\""
 			 " autocomplete=\"off\" required=\"required\" />",
@@ -740,14 +740,14 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    Tbl_StartRow ();
 
    /***** Start form element ****/
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"Passwd\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<label for=\"Passwd\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Password);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"password\" id=\"Passwd\" name=\"Paswd\""
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Passwd\" name=\"Paswd\""
                       " size=\"18\" maxlength=\"%u\" placeholder=\"",
             Pwd_MAX_CHARS_PLAIN_PASSWORD);
 
@@ -756,8 +756,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
 	    Pwd_MIN_CHARS_PLAIN_PASSWORD);
 
    /***** End form element ****/
-   fprintf (Gbl.F.Out,"\""
-                      " required=\"required\" />");
+   fprintf (Gbl.F.Out,"\" required=\"required\" />");
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -778,14 +777,14 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    /* Start form element */
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
-	              "<label for=\"Paswd1\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<label for=\"Paswd1\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_New_password);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
-                      "<input type=\"password\" id=\"Paswd1\" name=\"Paswd1\""
+   fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Paswd1\" name=\"Paswd1\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"",
             Pwd_MAX_CHARS_PLAIN_PASSWORD);
@@ -804,21 +803,20 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    /* Start form element */
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
-	              "<label for=\"Paswd2\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<td class=\"REC_C1_BOT RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<label for=\"Paswd2\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Retype_new_password);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_MIDDLE\">"
-                      "<input type=\"password\" id=\"Paswd2\" name=\"Paswd2\""
+   fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Paswd2\" name=\"Paswd2\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"",
             Pwd_MAX_CHARS_PLAIN_PASSWORD);
 
    /* Placeholder */
-   fprintf (Gbl.F.Out,Txt_HELP_password,
-	    Pwd_MIN_CHARS_PLAIN_PASSWORD);
+   fprintf (Gbl.F.Out,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
 
    /* End form element */
    fprintf (Gbl.F.Out,"\" required=\"required\" />");

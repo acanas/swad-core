@@ -292,9 +292,8 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    /***** "To:" section (recipients) *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
-		      "%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_To);
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_MSG_To);
    Tbl_EndCell ();
 
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
@@ -495,11 +494,11 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    /***** Textarea with users' @nicknames, emails or IDs *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td");
    if (Colspan > 1)
-      fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
-   fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\">"
-	              "<textarea id=\"OtherRecipients\" name=\"OtherRecipients\""
+      fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LEFT_MIDDLE\">",Colspan);
+   else
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<textarea id=\"OtherRecipients\" name=\"OtherRecipients\""
 	              " class=\"MSG_RECIPIENTS\" rows=\"2\""
 	              " placeholder=\"%s\">",
             Txt_nicks_emails_or_IDs_separated_by_commas);
@@ -538,16 +537,16 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    /***** Message subject *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	              "<label for=\"MsgSubject\" class=\"%s\">"
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"<label for=\"MsgSubject\" class=\"%s\">"
 	              "%s:"
 	              "</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<textarea id=\"MsgSubject\" name=\"Subject\""
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<textarea id=\"MsgSubject\" name=\"Subject\""
                       " class=\"MSG_SUBJECT\" rows=\"2\">");
 
    /* If message is a reply ==> get original message */
@@ -591,15 +590,15 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       /***** Message content *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	                 "<label for=\"MsgContent\" class=\"%s\">"
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">");
+      fprintf (Gbl.F.Out,"<label for=\"MsgContent\" class=\"%s\">"
 	                 "%s:"
 	                 "</label>",
                The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Content);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                         "<textarea id=\"MsgContent\" name=\"Content\""
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<textarea id=\"MsgContent\" name=\"Content\""
                          " class=\"MSG_CONTENT\" rows=\"20\">");
 
       /* Start textarea with a '\n', that will be not visible in textarea.
@@ -626,16 +625,16 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       /***** Message content *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-	                 "<label for=\"MsgContent\" class=\"%s\">"
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">");
+      fprintf (Gbl.F.Out,"<label for=\"MsgContent\" class=\"%s\">"
 	                 "%s:"
 	                 "</label>",
                The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_MSG_Content);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                         "<textarea id=\"MsgContent\" name=\"Content\""
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<textarea id=\"MsgContent\" name=\"Content\""
                          " class=\"MSG_CONTENT\" rows=\"20\">");
 
       /* Start textarea with a '\n', that will be not visible in textarea.
@@ -2660,8 +2659,8 @@ void Msg_ShowFormToFilterMsgs (void)
    Tbl_StartRow ();
 
    /***** Filter authors/recipients *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<label class=\"%s\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"search\" name=\"FilterFromTo\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
@@ -2672,8 +2671,8 @@ void Msg_ShowFormToFilterMsgs (void)
    Tbl_EndCell ();
 
    /***** Filter message content *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<label class=\"%s\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"search\" name=\"FilterContent\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
@@ -2967,14 +2966,14 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
      }
 
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td class=\"CONTEXT_COL %s\">"
-                      "<img src=\"%s/%s\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO16x16\" />",
+
+   fprintf (Gbl.F.Out,"<td class=\"CONTEXT_COL %s\">",
             Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
         	                                                      "BG_MSG_GREEN") :
-                                                              "BG_MSG_BLUE",
-
+                                                              "BG_MSG_BLUE");
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
+                      " alt=\"%s\" title=\"%s\""
+                      " class=\"ICO16x16\" />",
             Cfg_URL_ICON_PUBLIC,
             Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? "reply.svg" :
         	                                                                 "envelope-open-text.svg") :
@@ -3013,6 +3012,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    if (Expanded)
      {
       Tbl_StartRow ();
+
       fprintf (Gbl.F.Out,"<td rowspan=\"3\" colspan=\"2\" class=\"LEFT_TOP\">");
       Tbl_StartTablePadding (2);
 
@@ -3037,9 +3037,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       Tbl_EndCell ();
 
       /***** Write "From:" *****/
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP MSG_TIT\">"
-	                 "%s:&nbsp;",
-               Txt_MSG_From);
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP MSG_TIT\">");
+      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_From);
       Tbl_EndCell ();
 
       fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP\">");
@@ -3051,9 +3050,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       /***** Write "To:" *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP MSG_TIT\">"
-	                 "%s:&nbsp;",
-               Txt_MSG_To);
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP MSG_TIT\">");
+      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_To);
       Tbl_EndCell ();
 
       fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP\">");
@@ -3065,9 +3063,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       /***** Write "Content:" *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP MSG_TIT\">"
-	                 "%s:&nbsp;",
-               Txt_MSG_Content);
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP MSG_TIT\">");
+      fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_Content);
       Tbl_EndCell ();
 
       /***** Initialize image *****/
@@ -3150,11 +3147,10 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
   {
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\" style=\"width:45px;\">"
-                      "%lu:",
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP\" style=\"width:45px;\">",
 	    NewMsg ? "MSG_TIT_BG_NEW" :
-		     "MSG_TIT_BG",
-            MsgNum);
+		     "MSG_TIT_BG");
+   fprintf (Gbl.F.Out,"%lu:",MsgNum);
    Tbl_EndCell ();
   }
 
@@ -3254,10 +3250,10 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 	       Txt_Unknown_or_without_photo);
       Tbl_EndCell ();
 
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
       if (BgColor)
-         fprintf (Gbl.F.Out," %s",BgColor);
-      fprintf (Gbl.F.Out,"\">");
+         fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
+      else
+	 fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
      }
 
    /***** End second column *****/
@@ -3375,8 +3371,8 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    Tbl_StartRow ();
 
    /***** Put an icon to show if user has read the message *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
-                      "<img src=\"%s/%s\""
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />",
             Cfg_URL_ICON_PUBLIC,
@@ -3537,9 +3533,9 @@ static void Msg_WriteMsgTo (long MsgCod)
                              (Deleted ? Txt_MSG_Deleted_without_opening :
                                         Txt_MSG_Unopened);
          Tbl_StartRow ();
-         fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
-                            "<img src=\"%s/%s\""
-                            " alt=\"%s\" title=\"%s\""
+
+         fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">");
+         fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                             " class=\"ICO16x16\" />",
                   Cfg_URL_ICON_PUBLIC,
                   OpenByDst ? (Deleted ? "envelope-open-text-red.svg"   :
@@ -3567,6 +3563,7 @@ static void Msg_WriteMsgTo (long MsgCod)
          else
             fprintf (Gbl.F.Out,"[%s]",Txt_unknown_recipient);	// User not found, likely a user who has been removed
          Tbl_EndCell ();
+
          Tbl_EndRow ();
         }
 
@@ -3576,8 +3573,8 @@ static void Msg_WriteMsgTo (long MsgCod)
          /***** Start form to show all the users *****/
          Tbl_StartRow ();
 
-	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"AUTHOR_TXT LEFT_MIDDLE\">"
-                            "[%u %s]",
+	 fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"AUTHOR_TXT LEFT_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"[%u %s]",
                   NumRecipientsUnknown,
                   (NumRecipientsUnknown == 1) ? Txt_unknown_recipient :
                                                 Txt_unknown_recipients);
@@ -3591,6 +3588,7 @@ static void Msg_WriteMsgTo (long MsgCod)
         {
          /***** Start form to show all the users *****/
          Tbl_StartRow ();
+
          fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"AUTHOR_TXT LEFT_MIDDLE\">");
          Frm_StartForm (ActionSee[Gbl.Msg.TypeOfMessages]);
          Gbl.Msg.MsgCod = MsgCod;	// Message to be expanded with all recipients visible
@@ -3602,6 +3600,7 @@ static void Msg_WriteMsgTo (long MsgCod)
          fprintf (Gbl.F.Out,"</a>");
          Frm_EndForm ();
          Tbl_EndCell ();
+
          Tbl_EndRow ();
         }
 
@@ -3629,8 +3628,7 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
    UniqueId++;
 
    /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<td id=\"msg_date_%u\" class=\"%s RIGHT_TOP\""
-	              " style=\"width:106px;\">",
+   fprintf (Gbl.F.Out,"<td id=\"msg_date_%u\" class=\"%s RIGHT_TOP\" style=\"width:106px;\">",
             UniqueId,ClassBackground);
 
    /***** Write date and time *****/
@@ -3876,8 +3874,9 @@ void Msg_ListBannedUsrs (void)
          /* Get user's data from database */
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
            {
-            /* Put form to unban user */
             Tbl_StartRow ();
+
+            /* Put form to unban user */
             fprintf (Gbl.F.Out,"<td class=\"BM\">");
             Frm_StartForm (ActUnbUsrLst);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
@@ -3886,8 +3885,7 @@ void Msg_ListBannedUsrs (void)
             Tbl_EndCell ();
 
             /* Show photo */
-            fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
-        	               " style=\"width:30px;\">");
+            fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:30px;\">");
             ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
@@ -3895,9 +3893,8 @@ void Msg_ListBannedUsrs (void)
             Tbl_EndCell ();
 
             /* Write user's full name */
-            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-        	               "%s",
-                     UsrDat.FullName);
+            fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+            fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
             Tbl_EndCell ();
 
             Tbl_EndRow ();

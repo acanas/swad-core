@@ -558,7 +558,7 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 			 " class=\"%s LEFT_TOP COLOR%u\">",
 	       (unsigned) StartEndTime,UniqueId,
 	       Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
-								"DATE_GREEN",
+								 "DATE_GREEN",
 	       Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
@@ -660,10 +660,8 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
 static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match)
   {
    /***** Number of players who have answered any question in the match ******/
-   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">"
-		      "%u",
-	    Gbl.RowEvenOdd,
-	    Mch_GetNumUsrsWhoHaveAnswerMch (Match->MchCod));
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"%u",Mch_GetNumUsrsWhoHaveAnswerMch (Match->MchCod));
    Tbl_EndCell ();
   }
 
@@ -1196,14 +1194,13 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    /***** Match title *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"Title\" class=\"%s\">%s:</label>",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Title);
+   fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
+            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" id=\"Title\" name=\"Title\""
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Gam_MAX_CHARS_TITLE,Game->Title);
@@ -1254,10 +1251,9 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       /***** Start box and table *****/
       Tbl_StartRow ();
 
-      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">"
-	                 "%s:",
-               The_ClassFormInBox[Gbl.Prefs.Theme],
-               Txt_Groups);
+      fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP\">",
+               The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Groups);
       Tbl_EndCell ();
 
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
@@ -1266,8 +1262,8 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
 
       /***** First row: checkbox to select the whole course *****/
       Tbl_StartRow ();
-      fprintf (Gbl.F.Out,"<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">"
-                         "<label>"
+      fprintf (Gbl.F.Out,"<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<label>"
                          "<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\""
                          " checked=\"checked\""

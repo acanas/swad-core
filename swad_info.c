@@ -1161,11 +1161,11 @@ void Inf_FormsToSelSendInfo (void)
       Tbl_EndCell ();
 
       /* Form for this info source */
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
       if (InfoSrc == InfoSrcSelected)
-         fprintf (Gbl.F.Out," LIGHT_BLUE");
-      fprintf (Gbl.F.Out,"\">"
-	                 "<label for=\"InfoSrc%u\" class=\"%s\">%s</label>",
+	 Tbl_StartCellAttr ("class=\"LEFT_TOP LIGHT_BLUE\"");
+      else
+	 Tbl_StartCellAttr ("class=\"LEFT_TOP\"");
+      fprintf (Gbl.F.Out,"<label for=\"InfoSrc%u\" class=\"%s\">%s</label>",
 	       (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
       if (Txt_INFO_SRC_HELP[InfoSrc])
