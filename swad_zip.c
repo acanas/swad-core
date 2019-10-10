@@ -568,7 +568,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
    /***** Link to download the file *****/
    Tbl_StartRow ();
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"FILENAME_TXT CENTER_MIDDLE\">");
+   Tbl_StartCellAttr ("colspan=\"2\" class=\"FILENAME_TXT CENTER_MIDDLE\"");
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\">"
                       "<img src=\"%s32x32/zip32x32.gif\""
                       " alt=\"%s\" title=\"%s\""
@@ -592,11 +592,11 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    /***** Filename *****/
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Filename);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">"
 	              "%s"
 	              "</a>",
@@ -609,11 +609,11 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    Fil_WriteFileSizeFull ((double) FileSize,FileSizeStr);
    Tbl_StartRow ();
 
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_File_size);
    Tbl_EndCell ();
 
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
+   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",FileSizeStr);
    if (UncompressedSize)
      {
