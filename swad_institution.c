@@ -1488,7 +1488,7 @@ static void Ins_ListInstitutionsForEdition (void)
       Tbl_StartRow ();
 
       /* Put icon to remove institution */
-      Tbl_StartCellAttr ("class=\"BM\">");
+      Tbl_StartCellAttr ("class=\"BM\"");
       if (Ins->Ctrs.Num ||
 	  Ins->NumUsrsWhoClaimToBelongToIns ||
 	  Ins->NumUsrs ||	// Institution has centres or users ==> deletion forbidden

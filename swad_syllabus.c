@@ -913,7 +913,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
      }
 
    /***** Text of the item *****/
-   Tbl_StartCellAttr ("colspan=\"%d\" class=\"LEFT_MIDDLE COLOR%u\">",
+   Tbl_StartCellAttr ("colspan=\"%d\" class=\"LEFT_MIDDLE COLOR%u\"",
 		      LstItemsSyllabus.NumLevels - Level + 1,Gbl.RowEvenOdd);
    Frm_StartForm (NewItem ? (Gbl.Crs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
 	                                                                ActInsIteSylPra) :

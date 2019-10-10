@@ -649,7 +649,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteFloatNum (Gbl.F.Rep,
+	 Str_WriteFloatNumToFile (Gbl.F.Rep,
 	                    (float) Report->UsrFigures.NumClicks /
 			    (float) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
@@ -684,7 +684,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteFloatNum (Gbl.F.Rep,
+	 Str_WriteFloatNumToFile (Gbl.F.Rep,
 	                    (float) Report->UsrFigures.NumFileViews /
 			    (float) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
@@ -705,7 +705,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteFloatNum (Gbl.F.Rep,
+	 Str_WriteFloatNumToFile (Gbl.F.Rep,
 	                    (float) Report->UsrFigures.NumForPst /
 			    (float) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
@@ -726,7 +726,7 @@ static void Rep_WriteSectionUsrFigures (const struct Rep_Report *Report)
       if (Report->UsrFigures.NumDays > 0)
 	{
 	 fprintf (Gbl.F.Rep," (");
-	 Str_WriteFloatNum (Gbl.F.Rep,
+	 Str_WriteFloatNumToFile (Gbl.F.Rep,
 	                    (float) Report->UsrFigures.NumMsgSnt /
 			    (float) Report->UsrFigures.NumDays);
 	 fprintf (Gbl.F.Rep," / %s)",Txt_day);
@@ -1372,7 +1372,7 @@ static void Rep_DrawBarNumHits (unsigned long HitsNum,unsigned long HitsMax,
 
       /***** Write the number of hits *****/
       fprintf (Gbl.F.Rep,"&nbsp;");
-      Str_WriteFloatNum (Gbl.F.Rep,HitsNum);
+      Str_WriteFloatNumToFile (Gbl.F.Rep,HitsNum);
      }
   }
 

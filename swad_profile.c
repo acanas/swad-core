@@ -608,7 +608,7 @@ static void Prf_ShowNumClicks (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 fprintf (Gbl.F.Out,"&nbsp;(");
-	 Str_WriteFloatNum (Gbl.F.Out,
+	 Str_WriteFloatNumToFile (Gbl.F.Out,
 			    (float) UsrFigures->NumClicks /
 			    (float) UsrFigures->NumDays);
 	 fprintf (Gbl.F.Out,"/%s&nbsp;",Txt_day);
@@ -650,7 +650,7 @@ static void Prf_ShowNumFileViews (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 fprintf (Gbl.F.Out,"&nbsp;(");
-	 Str_WriteFloatNum (Gbl.F.Out,
+	 Str_WriteFloatNumToFile (Gbl.F.Out,
 			    (float) UsrFigures->NumFileViews /
 			    (float) UsrFigures->NumDays);
 	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
@@ -689,7 +689,7 @@ static void Prf_ShowNumSocialPublications (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 fprintf (Gbl.F.Out,"&nbsp;(");
-	 Str_WriteFloatNum (Gbl.F.Out,
+	 Str_WriteFloatNumToFile (Gbl.F.Out,
 			    (float) UsrFigures->NumSocPub /
 			    (float) UsrFigures->NumDays);
 	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
@@ -728,7 +728,7 @@ static void Prf_ShowNumForumPosts (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 fprintf (Gbl.F.Out,"&nbsp;(");
-	 Str_WriteFloatNum (Gbl.F.Out,
+	 Str_WriteFloatNumToFile (Gbl.F.Out,
 			    (float) UsrFigures->NumForPst /
 			    (float) UsrFigures->NumDays);
 	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
@@ -767,7 +767,7 @@ static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
       if (UsrFigures->NumDays > 0)
 	{
 	 fprintf (Gbl.F.Out,"&nbsp;(");
-	 Str_WriteFloatNum (Gbl.F.Out,
+	 Str_WriteFloatNumToFile (Gbl.F.Out,
 			    (float) UsrFigures->NumMsgSnt /
 			    (float) UsrFigures->NumDays);
 	 fprintf (Gbl.F.Out,"/%s)",Txt_day);
@@ -1733,7 +1733,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 Prf_ShowUsrInRanking (&UsrDat,Rank);
 	 Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",
 			    Gbl.RowEvenOdd);
-	 Str_WriteFloatNum (Gbl.F.Out,NumClicksPerDay);
+	 Str_WriteFloatNumToFile (Gbl.F.Out,NumClicksPerDay);
 	 Tbl_EndCell ();
 	 Tbl_EndRow ();
 	}

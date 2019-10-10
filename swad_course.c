@@ -323,8 +323,6 @@ static void Crs_Configuration (bool PrintView)
 	    Txt_Short_name);
    Tbl_EndCell ();
 
-   Tbl_EndRow ();
-
    Tbl_StartCellAttr ("class=\"DAT_N LEFT_MIDDLE\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
@@ -345,6 +343,7 @@ static void Crs_Configuration (bool PrintView)
    else	// I can not edit course short name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.ShrtName);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    /***** Course year *****/
@@ -355,7 +354,7 @@ static void Crs_Configuration (bool PrintView)
    fprintf (Gbl.F.Out,"<label for=\"OthCrsYear\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Year_OF_A_DEGREE);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
    if (IsForm)
@@ -380,6 +379,7 @@ static void Crs_Configuration (bool PrintView)
                Gbl.Hierarchy.Crs.Year ? Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Year] :
 	                                 Txt_Not_applicable);
    Tbl_EndCell ();
+
    Tbl_EndRow ();
 
    if (!PrintView)
@@ -391,7 +391,7 @@ static void Crs_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"<label for=\"InsCrsCod\" class=\"%s\">%s:</label>",
               The_ClassFormInBox[Gbl.Prefs.Theme],
               Txt_Institutional_code);
-      Tbl_EndRow ();
+      Tbl_EndCell ();
 
       Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       if (IsForm)
@@ -410,6 +410,7 @@ static void Crs_Configuration (bool PrintView)
       else
          fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.InstitutionalCrsCod);
       Tbl_EndCell ();
+
       Tbl_EndRow ();
 
       /***** Internal code of the course *****/
@@ -417,11 +418,11 @@ static void Crs_Configuration (bool PrintView)
 
       Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Internal_code);
-      Tbl_EndRow ();
+      Tbl_EndCell ();
 
       Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%ld",Gbl.Hierarchy.Crs.CrsCod);
-      Tbl_EndRow ();
+      Tbl_EndCell ();
 
       Tbl_EndRow ();
      }
@@ -431,7 +432,7 @@ static void Crs_Configuration (bool PrintView)
 
    Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Shortcut);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<a href=\"%s/%s?crs=%ld\" class=\"DAT\" target=\"_blank\">"
@@ -442,7 +443,7 @@ static void Crs_Configuration (bool PrintView)
             Cfg_URL_SWAD_CGI,
             Lan_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Hierarchy.Crs.CrsCod);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    Tbl_EndRow ();
 
@@ -453,7 +454,7 @@ static void Crs_Configuration (bool PrintView)
 
       Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_QR_code);
-      Tbl_EndRow ();
+      Tbl_EndCell ();
 
       Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
       QR_LinkTo (250,"crs",Gbl.Hierarchy.Crs.CrsCod);
@@ -476,7 +477,7 @@ static void Crs_Configuration (bool PrintView)
 
       Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Indicators);
-      Tbl_EndRow ();
+      Tbl_EndCell ();
 
       Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
       Frm_StartForm (ActReqStaCrs);
@@ -495,6 +496,7 @@ static void Crs_Configuration (bool PrintView)
                Gbl.Title);
       Frm_EndForm ();
       Tbl_EndCell ();
+
       Tbl_EndRow ();
      }
 
@@ -527,11 +529,11 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
 
    Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",Gbl.Hierarchy.Crs.NumUsrs[Role]);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    Tbl_EndRow ();
   }
@@ -1297,22 +1299,22 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 						    Txt_COURSE_Without_users);
 	 fprintf (Gbl.F.Out,"%s",Crs->NumUsrs[Rol_UNK] ? "&check;" :
 				                         "&nbsp;");
-	 Tbl_EndRow ();
+	 Tbl_EndCell ();
 
 	 /* Institutional code of the course */
 	 Tbl_StartCellAttr ("class=\"%s CENTER_MIDDLE %s\"",
 		            TxtClassNormal,BgColor);
 	 fprintf (Gbl.F.Out,"%s",Crs->InstitutionalCrsCod);
-	 Tbl_EndRow ();
+	 Tbl_EndCell ();
 
 	 /* Course year */
 	 Tbl_StartCellAttr ("class=\"%s CENTER_MIDDLE %s\">",
 		            TxtClassNormal,BgColor);
 	 fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Crs->Year]);
-	 Tbl_EndRow ();
+	 Tbl_EndCell ();
 
 	 /* Course full name */
-	 Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE %s\">",
+	 Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE %s\"",
 		            TxtClassStrong,BgColor);
 	 Frm_StartFormGoTo (ActSeeCrsInf);
 	 Crs_PutParamCrsCod (Crs->CrsCod);
@@ -1330,13 +1332,13 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 		            TxtClassNormal,BgColor);
 	 fprintf (Gbl.F.Out,"%u",Crs->NumUsrs[Rol_TCH] +
 		                 Crs->NumUsrs[Rol_NET]);
-	 Tbl_EndRow ();
+	 Tbl_EndCell ();
 
 	 /* Current number of students in this course */
 	 Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE %s\"",
 		            TxtClassNormal,BgColor);
 	 fprintf (Gbl.F.Out,"%u",Crs->NumUsrs[Rol_STD]);
-	 Tbl_EndRow ();
+	 Tbl_EndCell ();
 
 	 /* Course status */
 	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
@@ -1345,6 +1347,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 if (StatusTxt != Crs_STATUS_ACTIVE) // If active ==> do not show anything
 	    fprintf (Gbl.F.Out,"%s",Txt_COURSE_STATUS[StatusTxt]);
 	 Tbl_EndCell ();
+
 	 Tbl_EndRow ();
 	}
      }
@@ -1503,7 +1506,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 /* Course code */
 	 Tbl_StartCellAttr ("class=\"DAT CODE\"");
 	 fprintf (Gbl.F.Out,"%ld",Crs->CrsCod);
-	 Tbl_EndRow ();
+	 Tbl_EndCell ();
 
 	 /* Institutional code of the course */
 	 Tbl_StartCellAttr ("class=\"DAT CENTER_MIDDLE\"");
@@ -1626,6 +1629,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
          else if (StatusTxt != Crs_STATUS_ACTIVE)	// If active ==> do not show anything
 	    fprintf (Gbl.F.Out,"%s",Txt_COURSE_STATUS[StatusTxt]);
 	 Tbl_EndCell ();
+
 	 Tbl_EndRow ();
 	}
      }
@@ -1717,11 +1721,11 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Column to remove course, disabled here *****/
    Tbl_StartCellAttr ("class=\"BM\"");
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Course code *****/
    Tbl_StartCellAttr ("class=\"CODE\"");
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Institutional code of the course *****/
    Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
@@ -1730,7 +1734,7 @@ static void Crs_PutFormToCreateCourse (void)
                       " class=\"INPUT_INS_CODE\" />",
             Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
             Crs_EditingCrs->InstitutionalCrsCod);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Year *****/
    Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
@@ -1744,7 +1748,7 @@ static void Crs_PutFormToCreateCourse (void)
 				              "",
 	       Txt_YEAR_OF_DEGREE[Year]);
    fprintf (Gbl.F.Out,"</select>");
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Course short name *****/
    Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
@@ -1753,7 +1757,7 @@ static void Crs_PutFormToCreateCourse (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
             Hie_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Course full name *****/
    Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
@@ -1762,17 +1766,17 @@ static void Crs_PutFormToCreateCourse (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
             Hie_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Current number of teachers in this course *****/
    Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"0");
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Current number of students in this course *****/
    Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"0");
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Course requester *****/
    Tbl_StartCellAttr ("class=\"DAT INPUT_REQUESTER LEFT_TOP\"");
@@ -1781,7 +1785,7 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Course status *****/
    Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    Tbl_EndRow ();
 
@@ -3303,13 +3307,13 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       fprintf (Gbl.F.Out,"%s",
                Accepted ? "&check;" :
         	          "&cross;");
-      Tbl_EndRow ();
+      Tbl_EndCell ();
      }
 
    /***** Write number of course in this search *****/
    Tbl_StartCellAttr ("class=\"%s RIGHT_TOP %s\"",StyleNoBR,BgColor);
    fprintf (Gbl.F.Out,"%u",NumCrs);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Write degree logo, degree short name (row[2])
           and centre short name (row[6]) *****/
@@ -3330,7 +3334,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    /***** Write year (row[4]) *****/
    Tbl_StartCellAttr ("class=\"%s CENTER_TOP %s\"",Style,BgColor);
    fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
-   Tbl_EndRow ();
+   Tbl_EndCell ();
 
    /***** Write course full name (row[5]) *****/
    Tbl_StartCellAttr ("class=\"%s LEFT_TOP %s\"",Style,BgColor);

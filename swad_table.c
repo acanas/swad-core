@@ -79,8 +79,7 @@ void Tbl_StartTableClass (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,
-		  "<table class=\"%s\">",Class);
+	 fprintf (Gbl.F.Out,"<table class=\"%s\">",Class);
 
 	 free ((void *) Class);
 	}
@@ -94,8 +93,7 @@ void Tbl_StartTableClass (const char *fmt,...)
 void Tbl_StartTablePadding (unsigned CellPadding)
   {
    if (CellPadding)
-      fprintf (Gbl.F.Out,
-	       "<table class=\"CELLS_PAD_%u\">",
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
    else
       Tbl_StartTable ();
@@ -103,15 +101,13 @@ void Tbl_StartTablePadding (unsigned CellPadding)
 
 void Tbl_StartTable (void)
   {
-   fprintf (Gbl.F.Out,
-	    "<table>");
+   fprintf (Gbl.F.Out,"<table>");
   }
 
 void Tbl_StartTableCenterPadding (unsigned CellPadding)
   {
    if (CellPadding)
-      fprintf (Gbl.F.Out,
-	       "<table class=\"FRAME_TBL_CENTER CELLS_PAD_%u\">",
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
    else
       Tbl_StartTableCenter ();
@@ -119,15 +115,13 @@ void Tbl_StartTableCenterPadding (unsigned CellPadding)
 
 void Tbl_StartTableCenter (void)
   {
-   fprintf (Gbl.F.Out,
-	    "<table class=\"FRAME_TBL_CENTER\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER\">");
   }
 
 void Tbl_StartTableWidePadding (unsigned CellPadding)
   {
    if (CellPadding)
-      fprintf (Gbl.F.Out,
-	       "<table class=\"FRAME_TBL_WIDE CELLS_PAD_%u\">",
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
    else
       Tbl_StartTableWide ();
@@ -135,15 +129,13 @@ void Tbl_StartTableWidePadding (unsigned CellPadding)
 
 void Tbl_StartTableWide (void)
   {
-   fprintf (Gbl.F.Out,
-	    "<table class=\"FRAME_TBL_WIDE\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE\">");
   }
 
 void Tbl_StartTableWideMarginPadding (unsigned CellPadding)
   {
    if (CellPadding)
-      fprintf (Gbl.F.Out,
-	       "<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_%u\">",
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
    else
       Tbl_StartTableWideMargin ();
@@ -151,14 +143,12 @@ void Tbl_StartTableWideMarginPadding (unsigned CellPadding)
 
 void Tbl_StartTableWideMargin (void)
   {
-   fprintf (Gbl.F.Out,
-	    "<table class=\"FRAME_TBL_WIDE_MARGIN\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN\">");
   }
 
 void Tbl_EndTable (void)
   {
-   fprintf (Gbl.F.Out,
-	    "</table>");
+   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/
@@ -185,8 +175,7 @@ void Tbl_StartRowAttr (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,
-		  "<tr %s>",Attr);
+	 fprintf (Gbl.F.Out,"<tr %s>",Attr);
 
 	 free ((void *) Attr);
 	}
@@ -199,14 +188,12 @@ void Tbl_StartRowAttr (const char *fmt,...)
 
 void Tbl_StartRow (void)
   {
-   fprintf (Gbl.F.Out,
-	    "<tr>");
+   fprintf (Gbl.F.Out,"<tr>");
   }
 
 void Tbl_EndRow (void)
   {
-   fprintf (Gbl.F.Out,
-	    "</tr>");
+   fprintf (Gbl.F.Out,"</tr>");
   }
 
 /*****************************************************************************/
@@ -233,8 +220,7 @@ void Tbl_StartCellAttr (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-	 fprintf (Gbl.F.Out,
-		  "<td %s>",Attr);
+	 fprintf (Gbl.F.Out,"<td %s>",Attr);
 
 	 free ((void *) Attr);
 	}
@@ -247,14 +233,12 @@ void Tbl_StartCellAttr (const char *fmt,...)
 
 void Tbl_StartCell (void)
   {
-   fprintf (Gbl.F.Out,
-	    "<td>");
+   fprintf (Gbl.F.Out,"<td>");
   }
 
 void Tbl_EndCell (void)
   {
-   fprintf (Gbl.F.Out,
-	    "</td>");
+   fprintf (Gbl.F.Out,"</td>");
   }
 
 void Tbl_PutEmptyCells (unsigned NumColumns)
@@ -264,8 +248,7 @@ void Tbl_PutEmptyCells (unsigned NumColumns)
    for (NumCol = 0;
 	NumCol < NumColumns;
 	NumCol++)
-      fprintf (Gbl.F.Out,
-	       "<td></td>");
+      fprintf (Gbl.F.Out,"<td></td>");
   }
 
 void Tbl_PutEmptyColouredCells (unsigned NumColumns)
@@ -275,7 +258,6 @@ void Tbl_PutEmptyColouredCells (unsigned NumColumns)
    for (NumCol = 0;
 	NumCol < NumColumns;
 	NumCol++)
-      fprintf (Gbl.F.Out,
-	       "<td class=\"COLOR%u\"></td>",
+      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>",
 	       Gbl.RowEvenOdd);
   }

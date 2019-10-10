@@ -1923,7 +1923,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 		  UsrDat.Roles.InCurrentCrs.Role == Rol_STD ? 'o' :	// Student
 			                                      'r',	// Non-editing teacher or teacher
 		  BarWidth);
-      Str_WriteFloatNum (Gbl.F.Out,Hits.Num);
+      Str_WriteFloatNumToFile (Gbl.F.Out,Hits.Num);
       fprintf (Gbl.F.Out,"&nbsp;");
       Tbl_EndCell ();
 
@@ -2402,14 +2402,14 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
       Tbl_StartCellAttr ("colspan=\"%u\" class=\"LOG CENTER_BOTTOM\" style=\"width:%upx;\"",
 			 GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5,
 			 GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5);
-      Str_WriteFloatNum (Gbl.F.Out,(float) Interval * HitsMax / 5.0);
+      Str_WriteFloatNumToFile (Gbl.F.Out,(float) Interval * HitsMax / 5.0);
       Tbl_EndCell ();
      }
 
    Tbl_StartCellAttr ("colspan=\"%u\" class=\"LOG RIGHT_BOTTOM\" style=\"width:%upx;\"",
 		      (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2,
 		      (GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH/5)/2);
-   Str_WriteFloatNum (Gbl.F.Out,HitsMax);
+   Str_WriteFloatNumToFile (Gbl.F.Out,HitsMax);
    Tbl_EndCell ();
 
    Tbl_EndRow ();
@@ -2422,7 +2422,8 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
 	NumColor++)
      {
       Sta_SetColor (ColorType,(float) NumColor,(float) GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,&R,&G,&B);
-      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\" style=\"width:1px; background-color:#%02X%02X%02X;\">",
+      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\""
+	                 " style=\"width:1px; background-color:#%02X%02X%02X;\"",
 	                 R,G,B);
       fprintf (Gbl.F.Out,"<img src=\"%s/tr1x14.gif\" alt=\"\" title=\"\" />",
                Cfg_URL_ICON_PUBLIC);
@@ -2442,22 +2443,31 @@ static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float Hits
    unsigned R;
    unsigned G;
    unsigned B;
+   char *Str;
 
    for (Hour = 0;
 	Hour < 24;
 	Hour++)
      {
+      /***** Set color depending on hits *****/
       Sta_SetColor (ColorType,HitsNum[Hour],HitsMax,&R,&G,&B);
-      fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\" title=\"");
-      Str_WriteFloatNum (Gbl.F.Out,HitsNum[Hour]);
-      fprintf (Gbl.F.Out,"\" style=\"width:%upx; background-color:#%02X%02X%02X;\">",
-               GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH,R,G,B);
+
+      /***** Write from floating point number to string *****/
+      Str_FloatNumToStr (&Str,HitsNum[Hour]);
+
+      /***** Write cell *****/
+      Tbl_StartCellAttr ("class=\"LOG LEFT_MIDDLE\" title=\"%s\""
+	                 " style=\"width:%upx; background-color:#%02X%02X%02X;\"",
+			 Str,GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH,R,G,B);
       Tbl_EndCell ();
+
+      /***** Free memory allocated for string *****/
+      free ((void *) Str);
      }
   }
 
 /*****************************************************************************/
-/************************* Set color depending on ratio **********************/
+/************************* Set color depending on hits ***********************/
 /*****************************************************************************/
 // Hits.Max must be > 0
 /*
@@ -2925,7 +2935,7 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
       fprintf (Gbl.F.Out,"%u%%<br />",
 	       (unsigned) (((Hits->Num * 100.0) /
 		            Hits->Total) + 0.5));
-      Str_WriteFloatNum (Gbl.F.Out,Hits->Num);
+      Str_WriteFloatNumToFile (Gbl.F.Out,Hits->Num);
       fprintf (Gbl.F.Out,"<br />");
       BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
       if (BarHeight == 0)
@@ -3995,7 +4005,7 @@ static void Sta_DrawBarNumHits (char Color,
 	       Cfg_URL_ICON_PUBLIC,Color,BarWidth);
 
       /***** Write the number of hits *****/
-      Str_WriteFloatNum (Gbl.F.Out,HitsNum);
+      Str_WriteFloatNumToFile (Gbl.F.Out,HitsNum);
       fprintf (Gbl.F.Out,"&nbsp;(%u",
                (unsigned) (((HitsNum * 100.0) /
         	            HitsTotal) + 0.5));

@@ -25,10 +25,12 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
 #include <ctype.h>		// For isprint, isspace, etc.
 #include <locale.h>		// For setlocale
 #include <math.h>		// For log10, floor, ceil, modf, sqrt...
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
@@ -878,10 +880,29 @@ char Str_ConvertToLowerLetter (char Ch)
   }
 
 /*****************************************************************************/
-/******** Write a number in floating point with the correct accuracy *********/
+/*** Write a number in floating point with the correct accuracy to a file ****/
 /*****************************************************************************/
 
-void Str_WriteFloatNum (FILE *FileDst,float Number)
+void Str_WriteFloatNumToFile (FILE *FileDst,float Number)
+  {
+   char *Str;
+
+   /***** Write from floating point number to string *****/
+   Str_FloatNumToStr (&Str,Number);
+
+   /***** Write number from string to file *****/
+   fprintf (FileDst,"%s",Str);
+
+   /***** Free memory allocated for string *****/
+   free ((void *) Str);
+  }
+
+/*****************************************************************************/
+/** Write a number in floating point with the correct accuracy to a string ***/
+/*****************************************************************************/
+// Str should be freed after calling this function
+
+void Str_FloatNumToStr (char **Str,float Number)
   {
    double IntegerPart;
    double FractionaryPart;
@@ -890,7 +911,10 @@ void Str_WriteFloatNum (FILE *FileDst,float Number)
    FractionaryPart = modf ((double) Number,&IntegerPart);
 
    if (FractionaryPart == 0.0)
-      fprintf (FileDst,"%.0f",IntegerPart);
+     {
+      if (asprintf (Str,"%.0f",IntegerPart) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
    else
      {
       if (IntegerPart != 0.0)
@@ -907,7 +931,8 @@ void Str_WriteFloatNum (FILE *FileDst,float Number)
          Format = "%.6f";
       else
          Format = "%e";
-      fprintf (FileDst,Format,Number);
+      if (asprintf (Str,Format,Number) < 0)
+	 Lay_NotEnoughMemoryExit ();
      }
   }
 

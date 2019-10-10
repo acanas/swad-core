@@ -8943,16 +8943,17 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	 ID_GetListIDsFromUsrCod (&UsrDat);
 
 	 /***** Begin user's cell *****/
-	 fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_BOTTOM");
 	 if (ClassPhotoType == Usr_CLASS_PHOTO_SEL &&
 	     UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
 	   {
 	    UsrIsTheMsgSender = true;
-	    fprintf (Gbl.F.Out," LIGHT_GREEN");
+	    Tbl_StartCellAttr ("class=\"CLASSPHOTO CENTER_BOTTOM LIGHT_GREEN\"");
 	   }
 	 else
+	   {
 	    UsrIsTheMsgSender = false;
-	 fprintf (Gbl.F.Out,"\">");
+	    Tbl_StartCellAttr ("class=\"CLASSPHOTO CENTER_BOTTOM\"");
+	   }
 
 	 /***** Checkbox to select this user *****/
 	 if (PutCheckBoxToSelectUsr)

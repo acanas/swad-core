@@ -1492,22 +1492,22 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    /* Create rowspan, colspan and class strings */
    if (RowSpan > 1)
      {
-      if (asprintf (&RowSpanStr,"%s","") < 0)
+      if (asprintf (&RowSpanStr,"rowspan=\"%u\" ",RowSpan) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
    else
      {
-      if (asprintf (&RowSpanStr,"rowspan=\"%u\" ",RowSpan) < 0)
+      if (asprintf (&RowSpanStr,"%s","") < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
    if (ColSpan > 1)
      {
-      if (asprintf (&ColSpanStr,"%s","") < 0)
+      if (asprintf (&ColSpanStr,"colspan=\"%u\" ",ColSpan) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
    else
      {
-      if (asprintf (&ColSpanStr,"colspan=\"%u\" ",ColSpan) < 0)
+      if (asprintf (&ColSpanStr,"%s","") < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
    if (ClassType == TT_FREE)

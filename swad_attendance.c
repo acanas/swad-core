@@ -2118,7 +2118,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    Tbl_EndCell ();
 
    /***** Write number of student in the list *****/
-   Tbl_StartCellAttr ("class=\"%s RIGHT_TOP COLOR%u\">",
+   Tbl_StartCellAttr ("class=\"%s RIGHT_TOP COLOR%u\"",
 		      UsrDat->Accepted ? "DAT_N" :
 					 "DAT",
 		      Gbl.RowEvenOdd);
@@ -2128,7 +2128,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    /***** Show student's photo *****/
    if (Gbl.Usrs.Listing.WithPhotos)
      {
-      Tbl_StartCellAttr ("class=\"LEFT_TOP COLOR%u\">",Gbl.RowEvenOdd);
+      Tbl_StartCellAttr ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -2137,7 +2137,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
      }
 
    /***** Write user's ID ******/
-   Tbl_StartCellAttr ("class=\"%s LEFT_TOP COLOR%u\">",
+   Tbl_StartCellAttr ("class=\"%s LEFT_TOP COLOR%u\"",
 		      UsrDat->Accepted ? "DAT_SMALL_N" :
 					 "DAT_SMALL",
 		      Gbl.RowEvenOdd);
@@ -3392,7 +3392,7 @@ static void Att_WriteRowUsrSeveralAttEvents (unsigned NumUsr,struct UsrData *Usr
      }
 
    /***** Write user's ID ******/
-   Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE COLOR%u\">",
+   Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE COLOR%u\"",
 		      UsrDat->Accepted ? "DAT_SMALL_N" :
 					 "DAT_SMALL",
 		      Gbl.RowEvenOdd);
