@@ -1135,7 +1135,7 @@ static void TT_DrawTimeTable (void)
    Tbl_StartRow ();
 
    Tbl_StartCellAttr ("rowspan=\"2\" class=\"TT_HOUR_BIG RIGHT_MIDDLE\""
-	              " style=\"width:%u%%;\">",
+	              " style=\"width:%u%%;\"",
                       TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
    fprintf (Gbl.F.Out,"%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
    Tbl_EndCell ();
@@ -1145,7 +1145,7 @@ static void TT_DrawTimeTable (void)
    TT_DrawCellAlignTimeTable ();
 
    Tbl_StartCellAttr ("rowspan=\"2\" class=\"TT_HOUR_BIG LEFT_MIDDLE\""
-	              " style=\"width:%u%%;\">",
+	              " style=\"width:%u%%;\"",
                       TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
    fprintf (Gbl.F.Out,"%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
    Tbl_EndCell ();
@@ -1452,6 +1452,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    unsigned Dur;
    unsigned MaxDuration;
    unsigned RowSpan = 0;
+   char *RowSpanStr;
+   char *ColSpanStr;
+   char *ClassStr;
    TT_ClassType_t CT;
    struct Course Crs;
    struct GroupType *GrpTyp;
@@ -1486,17 +1489,45 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
      }
 
    /***** Cell start *****/
-   fprintf (Gbl.F.Out,"<td");
+   /* Create rowspan, colspan and class strings */
    if (RowSpan > 1)
-      fprintf (Gbl.F.Out," rowspan=\"%u\"",RowSpan);
-   if (ColSpan > 1)
-      fprintf (Gbl.F.Out," colspan=\"%u\"",ColSpan);
-   fprintf (Gbl.F.Out," class=\"%s",TimeTableClasses[ClassType]);
-   if (ClassType == TT_FREE)
-      fprintf (Gbl.F.Out,"%u",Interval % 4);
+     {
+      if (asprintf (&RowSpanStr,"%s","") < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
    else
-      fprintf (Gbl.F.Out," CENTER_MIDDLE DAT_SMALL");
-   fprintf (Gbl.F.Out,"\">");
+     {
+      if (asprintf (&RowSpanStr,"rowspan=\"%u\" ",RowSpan) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   if (ColSpan > 1)
+     {
+      if (asprintf (&ColSpanStr,"%s","") < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   else
+     {
+      if (asprintf (&ColSpanStr,"colspan=\"%u\" ",ColSpan) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   if (ClassType == TT_FREE)
+     {
+      if (asprintf (&ClassStr,"%s%u",TimeTableClasses[ClassType],Interval % 4) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+   else
+     {
+      if (asprintf (&ClassStr,"%s CENTER_MIDDLE DAT_SMALL",TimeTableClasses[ClassType]) < 0)
+	 Lay_NotEnoughMemoryExit ();
+     }
+
+   /* Start cell */
+   Tbl_StartCellAttr ("%s%sclass=\"%s\"",RowSpanStr,ColSpanStr,ClassStr);
+
+   /* Free allocated memory for rowspan, colspan and class strings */
+   free ((void *) RowSpanStr);
+   free ((void *) ColSpanStr);
+   free ((void *) ClassStr);
 
    /***** Form to modify this cell *****/
    if (Gbl.TimeTable.View == TT_CRS_EDIT)

@@ -4512,28 +4512,29 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
    Tbl_StartRow ();
 
    /***** Write the user answer *****/
-   fprintf (Gbl.F.Out,"<td");
    if (Gbl.Test.StrAnswersOneQst[NumQst][0])		// If user has answered the question
      {
       if (sscanf (Gbl.Test.StrAnswersOneQst[NumQst],"%ld",&IntAnswerUsr) == 1)
-         fprintf (Gbl.F.Out," class=\"%s CENTER_MIDDLE\">"
-                            "%ld",
+	{
+         Tbl_StartCellAttr ("class=\"%s CENTER_MIDDLE\"",
                   (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
                    Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
                    (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
                 	                            "ANS_BAD") :
-                   "ANS_0",
-                  IntAnswerUsr);
+                   "ANS_0");
+         fprintf (Gbl.F.Out,"%ld",IntAnswerUsr);
+         Tbl_EndCell ();
+	}
       else
         {
          Gbl.Test.StrAnswersOneQst[NumQst][0] = '\0';
-         fprintf (Gbl.F.Out," class=\"ANS_0 CENTER_MIDDLE\">"
-                            "?");
+         Tbl_StartCellAttr ("class=\"ANS_0 CENTER_MIDDLE\"");
+         fprintf (Gbl.F.Out,"?");
+         Tbl_EndCell ();
         }
      }
    else							// If user has omitted the answer
-      fprintf (Gbl.F.Out,">");
-   Tbl_EndCell ();
+      Tbl_PutEmptyCells (1);
 
    /***** Write the correct answer *****/
    Tbl_StartCellAttr ("class=\"ANS_0 CENTER_MIDDLE\"");
