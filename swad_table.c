@@ -56,6 +56,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Tbl_TR_BeginWithoutAttr (void);
+static void Tbl_TH_BeginWithoutAttr (void);
 static void Tbl_TD_BeginWithoutAttr (void);
 
 /*****************************************************************************/
@@ -197,6 +198,64 @@ static void Tbl_TR_BeginWithoutAttr (void)
 void Tbl_TR_End (void)
   {
    fprintf (Gbl.F.Out,"</tr>");
+  }
+
+/*****************************************************************************/
+/***************************** Table heading cells ***************************/
+/*****************************************************************************/
+
+void Tbl_TH_Begin (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 fprintf (Gbl.F.Out,"<th %s>",Attr);
+
+	 free ((void *) Attr);
+	}
+      else
+         Tbl_TH_BeginWithoutAttr ();
+     }
+   else
+      Tbl_TH_BeginWithoutAttr ();
+  }
+
+static void Tbl_TH_BeginWithoutAttr (void)
+  {
+   fprintf (Gbl.F.Out,"<th>");
+  }
+
+void Tbl_TH_End (void)
+  {
+   fprintf (Gbl.F.Out,"</th>");
+  }
+
+void Tbl_TH_Empty (unsigned NumColumns)
+  {
+   unsigned NumCol;
+
+   for (NumCol = 0;
+	NumCol < NumColumns;
+	NumCol++)
+     {
+      Tbl_TH_Begin (NULL);
+      Tbl_TH_End ();
+     }
   }
 
 /*****************************************************************************/

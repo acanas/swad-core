@@ -661,7 +661,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th></th>");
+   Tbl_TH_Empty (1);
    for (Order = Cty_ORDER_BY_COUNTRY;
 	Order <= Cty_ORDER_BY_NUM_USRS;
 	Order++)
@@ -685,7 +685,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
 	}
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
      }
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
 	              "%s"
@@ -2155,9 +2155,11 @@ static void Cty_PutHeadCountriesForEdition (void)
                       "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "<th></th>"
-                      "<th class=\"LEFT_MIDDLE\">"
+                      "</th>",
+            Txt_Numeric_BR_code_BR_ISO_3166_1,
+            Txt_Alphabetic_BR_code_BR_ISO_3166_1);
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -2169,8 +2171,6 @@ static void Cty_PutHeadCountriesForEdition (void)
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>",
-            Txt_Numeric_BR_code_BR_ISO_3166_1,
-            Txt_Alphabetic_BR_code_BR_ISO_3166_1,
             Txt_Name,
             Txt_WWW,
             Txt_Users,

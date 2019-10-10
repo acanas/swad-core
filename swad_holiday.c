@@ -131,7 +131,7 @@ void Hld_SeeHolidays (void)
 	       fprintf (Gbl.F.Out,"</u>");
 	    fprintf (Gbl.F.Out,"</a>");
 	    Frm_EndForm ();
-	    fprintf (Gbl.F.Out,"</th>");
+	    Tbl_TH_End ();
 	   }
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 			    "&nbsp;%s&nbsp;"

@@ -434,7 +434,7 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
 
    /***** Column for icons *****/
    if (ICanEditMatches)
-      fprintf (Gbl.F.Out,"<th></th>");
+      Tbl_TH_Empty (1);
 
    /***** The rest of columns *****/
    fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">"

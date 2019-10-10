@@ -567,11 +567,12 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 
    /***** Table head *****/
    Tbl_TR_Begin (NULL);
+
    for (Order = Agd_ORDER_BY_START_DATE;
 	Order <= Agd_ORDER_BY_END_DATE;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       switch (AgendaType)
 	{
 	 case Agd_MY_AGENDA_TODAY:
@@ -595,16 +596,17 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 	 fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
      }
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-		      "%s"
-		      "</th>"
-		      "<th class=\"LEFT_MIDDLE\">"
-		      "%s"
-		      "</th>",
-	    Txt_Event,
-	    Txt_Location);
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Event);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Location);
+   Tbl_TH_End ();
+
    Tbl_TR_End ();
   }
 

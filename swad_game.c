@@ -233,7 +233,7 @@ static void Gam_ListAllGames (void)
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
 
-	 fprintf (Gbl.F.Out,"</th>");
+	 Tbl_TH_End ();
 	}
 
       fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">%s</th>",Txt_Matches);
@@ -1645,8 +1645,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    /***** Write the heading *****/
    Tbl_TABLE_BeginWideMarginPadding (2);
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>"
-                      "<th class=\"CENTER_TOP\">"
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"

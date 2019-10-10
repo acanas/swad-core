@@ -239,12 +239,15 @@ static void Att_ShowAllAttEvents (void)
       /***** Table head *****/
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
+
+      Tbl_TH_Begin ("class=\"CONTEXT_COL\"");	// Column for contextual icons
+      Tbl_TH_End ();
+
       for (Order = Dat_START_TIME;
 	   Order <= Dat_END_TIME;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+	 Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
 	 Frm_StartForm (ActSeeAtt);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
@@ -257,16 +260,17 @@ static void Att_ShowAllAttEvents (void)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</th>");
+	 Tbl_TH_End ();
 	}
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"RIGHT_MIDDLE\">"
-			 "%s"
-			 "</th>",
-	       Txt_Event,
-	       Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Event);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+      Tbl_TH_End ();
+
       Tbl_TR_End ();
 
       /***** Write all the attendance events *****/
@@ -1897,23 +1901,27 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 
    /* Header */
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>"
-		      "<th></th>"
-		      "<th></th>");
+
+   Tbl_TH_Empty (3);
+
    if (Gbl.Usrs.Listing.WithPhotos)
-      fprintf (Gbl.F.Out,"<th style=\"width:22px;\"></th>");
-   fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"TIT_TBL LEFT_MIDDLE\">"
-	              "%s"
-	              "</th>"
-		      "<th class=\"LEFT_MIDDLE\">"
-		      "%s"
-		      "</th>"
-		      "<th class=\"LEFT_MIDDLE\">"
-		      "%s"
-		      "</th>",
-	    Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-	    Txt_Student_comment,
-	    Txt_Teachers_comment);
+     {
+      Tbl_TH_Begin ("style=\"width:22px;\"");
+      Tbl_TH_End ();
+     }
+
+   Tbl_TH_Begin ("colspan=\"2\" class=\"TIT_TBL LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Student_comment);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Teachers_comment);
+   Tbl_TH_End ();
+
    Tbl_TR_End ();
 
    /* List of students (only me) */
@@ -1984,23 +1992,27 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 
       /* Header */
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th></th>"
-                         "<th></th>"
-                         "<th></th>");
+
+      Tbl_TH_Empty (3);
+
       if (Gbl.Usrs.Listing.WithPhotos)
-         fprintf (Gbl.F.Out,"<th style=\"width:22px;\"></th>");
-      fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
-	                 "%s"
-	                 "</th>"
-                         "<th class=\"LEFT_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"LEFT_MIDDLE\">"
-                         "%s"
-                         "</th>",
-               Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-               Txt_Student_comment,
-               Txt_Teachers_comment);
+	{
+         Tbl_TH_Begin ("style=\"width:22px;\"");
+         Tbl_TH_End ();
+	}
+
+      Tbl_TH_Begin ("colspan=\"2\" class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Student_comment);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Teachers_comment);
+      Tbl_TH_End ();
+
       Tbl_TR_End ();
 
       /* List of students */
@@ -3118,14 +3130,15 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th colspan=\"4\" class=\"LEFT_MIDDLE\">"
-		      "%s"
-		      "</th>"
-		      "<th class=\"RIGHT_MIDDLE\">"
-		      "%s"
-		      "</th>",
-	    Txt_Event,
-	    Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+
+   Tbl_TH_Begin ("colspan=\"4\" class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Event);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+   Tbl_TH_End ();
+
    Tbl_TR_End ();
 
    /***** List the events *****/
@@ -3322,12 +3335,13 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
    char StrNumAttEvent[10 + 1];
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th colspan=\"%u\" class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Gbl.Usrs.Listing.WithPhotos ? 4 :
-        	                          3,
-            Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN]);
+
+   Tbl_TH_Begin ("colspan=\"%u\" class=\"LEFT_MIDDLE\"",
+	         Gbl.Usrs.Listing.WithPhotos ? 4 :
+					       3);
+
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN]);
+   Tbl_TH_End ();
 
    for (NumAttEvent = 0;
 	NumAttEvent < Gbl.AttEvents.Num;
@@ -3338,8 +3352,8 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
 
 	 /***** Put link to this attendance event *****/
-	 fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\" title=\"%s\">",
-		  Gbl.AttEvents.Lst[NumAttEvent].Title);
+	 Tbl_TH_Begin ("class=\"CENTER_MIDDLE\" title=\"%s\"",
+		       Gbl.AttEvents.Lst[NumAttEvent].Title);
 	 snprintf (StrNumAttEvent,sizeof (StrNumAttEvent),
 		   "%u",
 		   NumAttEvent + 1);
@@ -3347,13 +3361,13 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 			      Gbl.AttEvents.Lst[NumAttEvent].Title,
 			      StrNumAttEvent,
 			      NULL);
-	 fprintf (Gbl.F.Out,"</th>");
+	 Tbl_TH_End ();
 	}
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-	              "%s"
-	              "</th>",
-            Txt_Attendance);
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Attendance);
+   Tbl_TH_End ();
+
    Tbl_TR_End ();
   }
 

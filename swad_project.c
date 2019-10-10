@@ -738,7 +738,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
 	    break;
 	}
 
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
      }
   }
 

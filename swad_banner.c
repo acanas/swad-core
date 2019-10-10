@@ -933,18 +933,33 @@ static void Ban_PutHeadBanners (void)
    extern const char *Txt_WWW;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                      "<th class=\"BM\"></th>"
-                      "<th class=\"RIGHT_MIDDLE\">%s</th>"
-                      "<th class=\"LEFT_MIDDLE\">%s</th>"
-                      "<th class=\"LEFT_MIDDLE\">%s</th>"
-                      "<th class=\"LEFT_MIDDLE\">%s</th>"
-                      "<th class=\"LEFT_MIDDLE\">%s</th>",
-            Txt_Code,
-            Txt_Short_name,
-            Txt_Full_name,
-            Txt_Image,
-            Txt_WWW);
+
+   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Code);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Short_name);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Full_name);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Image);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_WWW);
+   Tbl_TH_End ();
+
    Tbl_TR_End ();
   }
 

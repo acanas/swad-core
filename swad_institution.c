@@ -871,7 +871,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    Ins_Order_t Order;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>");
+   Tbl_TH_Empty (1);
    for (Order = Ins_ORDER_BY_INSTITUTION;
 	Order <= Ins_ORDER_BY_NUM_USRS;
 	Order++)
@@ -895,7 +895,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
 	}
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
      }
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
@@ -2329,12 +2329,13 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    extern const char *Txt_Requester;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "<th></th>"
-                      "<th class=\"LEFT_MIDDLE\">"
+                      "</th>",
+            Txt_Code);
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -2357,7 +2358,6 @@ static void Ins_PutHeadInstitutionsForEdition (void)
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "</th>",
-            Txt_Code,
             Txt_Short_name_of_the_institution,
             Txt_Full_name_of_the_institution,
             Txt_WWW,

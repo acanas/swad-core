@@ -959,8 +959,8 @@ static void TsI_WriteHeadingListImportedQst (void)
 
    /***** Write the heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>"
-                      "<th class=\"CENTER_TOP\">"
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"

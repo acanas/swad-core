@@ -2811,8 +2811,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
       /* Start table */
       Tbl_TABLE_BeginCenterPadding (2);
-      fprintf (Gbl.F.Out,"<th></th>"
-                         "<th class=\"LEFT_TOP\">"
+      Tbl_TH_Empty (1);
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">"
                          "%s"
                          "</th>"
                          "<th class=\"RIGHT_TOP\">"
@@ -2826,14 +2826,13 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                          "</th>"
                          "<th class=\"CENTER_TOP\">"
                          "%s"
-                         "</th>"
-                         "<th></th>"
-                         "<th></th>",
+                         "</th>",
                Txt_Course,
                Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
                Txt_Requester,
                Txt_Role,
                Txt_Date);
+      Tbl_TH_Empty (2);
       Tbl_TR_End ();
 
       /* List requests */

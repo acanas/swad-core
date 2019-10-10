@@ -991,8 +991,8 @@ static void Plg_PutHeadPlugins (void)
    extern const char *Txt_IP;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th style=\"width:35px;\"></th>"

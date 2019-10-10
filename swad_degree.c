@@ -1065,9 +1065,9 @@ static void Deg_PutHeadDegreesForSeeing (void)
    extern const char *Txt_Courses_ABBREVIATION;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                      "<th></th>"
-                      "<th class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>");
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -1102,9 +1102,10 @@ static void Deg_PutHeadDegreesForEdition (void)
    fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "<th></th>"
-                      "<th class=\"LEFT_MIDDLE\">"
+                      "</th>",
+            Txt_Code);
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -1124,7 +1125,6 @@ static void Deg_PutHeadDegreesForEdition (void)
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "</th>",
-            Txt_Code,
             Txt_Short_name_of_the_degree,
             Txt_Full_name_of_the_degree,
             Txt_Type,

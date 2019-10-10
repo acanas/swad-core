@@ -2586,7 +2586,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
             fprintf (Gbl.F.Out,"</u>");
          fprintf (Gbl.F.Out,"</a>");
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</th>");
+         Tbl_TH_End ();
 	}
       fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
 	                 "%s"

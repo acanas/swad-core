@@ -1942,8 +1942,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    /***** List of notifications *****/
    Tbl_TABLE_BeginCenterPadding (2);
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>"
-		      "<th class=\"CENTER_MIDDLE\">"
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
 		      "%s"
 		      "</th>"
                       "<th class=\"CENTER_MIDDLE\">"

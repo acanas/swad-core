@@ -131,7 +131,7 @@ void Cla_SeeClassrooms (void)
 	 fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
      }
    Tbl_TR_End ();
 

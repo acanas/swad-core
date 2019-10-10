@@ -645,7 +645,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
 
    Tbl_TR_Begin (NULL);
    if (PutForm)
-      fprintf (Gbl.F.Out,"<th></th>");
+      Tbl_TH_Empty (1);
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"

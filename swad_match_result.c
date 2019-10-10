@@ -353,8 +353,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
 		      "</th>"
 		      "<th class=\"RIGHT_TOP\">"
 		      "%s<br />%s<br />%u"
-		      "</th>"
-		      "<th></th>",
+		      "</th>",
 	    Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
 		                           Usr_SEX_UNKNOWN],
 	    Txt_START_END_TIME[Dat_START_TIME],
@@ -365,6 +364,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
 	    Txt_Total_BR_score,
 	    Txt_Average_BR_score_BR_per_question_BR_from_0_to_1,
 	    Txt_Score,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+   Tbl_TH_Empty (1);
    Tbl_TR_End ();
   }
 

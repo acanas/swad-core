@@ -2828,8 +2828,8 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
    /***** Write the heading *****/
    Tbl_TABLE_BeginWideMarginPadding (2);
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>"
-                      "<th class=\"CENTER_TOP\">"
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
@@ -2876,7 +2876,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
          fprintf (Gbl.F.Out,"</a>");
          Frm_EndForm ();
         }
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
      }
 
    Tbl_TR_End ();
@@ -3094,8 +3094,8 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
    /***** Write the heading *****/
    Tbl_TABLE_BeginWideMarginPadding (2);
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>"
-                      "<th class=\"CENTER_TOP\">"
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_TOP\">"
@@ -7726,8 +7726,7 @@ static void Tst_ShowHeaderTestResults (void)
 		      "</th>"
 		      "<th class=\"RIGHT_TOP\">"
 		      "%s<br />%s<br />%u"
-		      "</th>"
-		      "<th></th>",
+		      "</th>",
 	    Txt_User[Usr_SEX_UNKNOWN],
 	    Txt_Date,
 	    Txt_Questions,
@@ -7735,6 +7734,7 @@ static void Tst_ShowHeaderTestResults (void)
 	    Txt_Total_BR_score,
 	    Txt_Average_BR_score_BR_per_question_BR_from_0_to_1,
 	    Txt_Score,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+   Tbl_TH_Empty (1);
    Tbl_TR_End ();
   }
 

@@ -620,8 +620,8 @@ static void Fig_WriteHeadHierarchy (void)
    extern const char *Txt_Courses;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "<img src=\"%s/globe.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
@@ -1481,8 +1481,8 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	 case Usr_LIST_AS_LISTING:
 	    /***** Draw institutions as a list *****/
 	    Tbl_TR_Begin (NULL);
-	    fprintf (Gbl.F.Out,"<th></th>"
-			       "<th class=\"LEFT_MIDDLE\">"
+	    Tbl_TH_Empty (1);
+	    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 			       "%s"
 			       "</th>"
 			       "<th class=\"RIGHT_MIDDLE\">"

@@ -203,12 +203,15 @@ static void Asg_PutHeadForSeeing (bool PrintView)
    Dat_StartEndTime_t Order;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
+
+   Tbl_TH_Begin ("class=\"CONTEXT_COL\"");
+   Tbl_TH_End ();	// Column for contextual icons
+
    for (Order = Dat_START_TIME;
 	Order <= Dat_END_TIME;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
 
       if (!PrintView)
 	{
@@ -229,16 +232,15 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 	 Frm_EndForm ();
 	}
 
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
      }
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-		      "%s"
-		      "</th>"
-		      "<th class=\"LEFT_MIDDLE\">"
-		      "%s"
-		      "</th>",
-	    Txt_Assignment,
-	    Txt_Folder);
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Assignment);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Folder);
+   Tbl_TH_End ();
    Tbl_TR_End ();
   }
 

@@ -515,7 +515,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
    DT_Order_t Order;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>");
+   Tbl_TH_Empty (1);
    for (Order = DT_ORDER_BY_DEGREE_TYPE;
 	Order <= DT_ORDER_BY_NUM_DEGREES;
 	Order++)
@@ -542,7 +542,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       /* End form */
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
      }
   }
 

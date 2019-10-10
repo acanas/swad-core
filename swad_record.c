@@ -435,8 +435,8 @@ static void Rec_WriteHeadingRecordFields (void)
    extern const char *Txt_Visible_by_BR_the_student;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th></th>"
-                      "<th class=\"CENTER_MIDDLE\">"
+   Tbl_TH_Empty (1);
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"

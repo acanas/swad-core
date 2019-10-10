@@ -267,7 +267,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
 
-	 fprintf (Gbl.F.Out,"</th>");
+	 Tbl_TH_End ();
 	}
       fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 			 "%s"
@@ -3226,7 +3226,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
       if (Svy->Status.ICanEdit)
-         fprintf (Gbl.F.Out,"<th></th>");
+         Tbl_TH_Empty (1);
       fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
 	                 "%s"
 	                 "</th>"
