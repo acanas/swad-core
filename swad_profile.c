@@ -1538,7 +1538,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      Tbl_StartTable ();
+      Tbl_TABLE_BeginWithoutAttr ();
 
       for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
 	   NumUsr <= NumUsrs;
@@ -1562,18 +1562,18 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	   }
 
 	 /***** Show row *****/
-	 Tbl_StartRow ();
+	 Tbl_TR_Begin (NULL);
 
          Prf_ShowUsrInRanking (&UsrDat,Rank);
-	 Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",
-			    Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"%ld",Figure);
-	 Tbl_EndCell ();
 
-	 Tbl_EndRow ();
+	 Tbl_TD_Begin ("class=\"RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
+	 fprintf (Gbl.F.Out,"%ld",Figure);
+	 Tbl_TD_End ();
+
+	 Tbl_TR_End ();
 	}
 
-      Tbl_EndTable ();
+      Tbl_TABLE_End ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1707,7 +1707,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      Tbl_StartTable ();
+      Tbl_TABLE_BeginWithoutAttr ();
 
       for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
 	   NumUsr <= NumUsrs;
@@ -1729,16 +1729,15 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	   }
 
 	 /***** Show row *****/
-	 Tbl_StartRow ();
+	 Tbl_TR_Begin (NULL);
 	 Prf_ShowUsrInRanking (&UsrDat,Rank);
-	 Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",
-			    Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
 	 Str_WriteFloatNumToFile (Gbl.F.Out,NumClicksPerDay);
-	 Tbl_EndCell ();
-	 Tbl_EndRow ();
+	 Tbl_TD_End ();
+	 Tbl_TR_End ();
 	}
 
-      Tbl_EndTable ();
+      Tbl_TABLE_End ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1759,14 +1758,12 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
-   Tbl_StartCellAttr ("class=\"RANK RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",
-		      Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"RANK RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"#%u",Rank);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Check if I can see the public profile *****/
-   Tbl_StartCellAttr ("class=\"COLOR%u\" style=\"width:35px; height:50px;\"",
-		      Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"COLOR%u\" style=\"width:35px; height:50px;\"",Gbl.RowEvenOdd);
    if (Visible)
      {
       /***** User's photo *****/
@@ -1775,10 +1772,10 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
 					   NULL,
 			"PHOTO30x40",Pho_ZOOM,false);
      }
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Put form to go to public profile *****/
-   Tbl_StartCellAttr ("class=\"COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
    if (Visible)
      {
       Frm_StartForm (ActSeeOthPubPrf);
@@ -1790,5 +1787,5 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
 	                 "</div>");
       Frm_EndForm ();
      }
-   Tbl_EndCell ();
+   Tbl_TD_End ();
   }

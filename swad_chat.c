@@ -283,7 +283,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
       fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE LIGHT_BLUE\">"
 	                 "%s"
 	                 "</th>"
@@ -292,7 +292,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
                          "</th>",
                Txt_CHAT_Room_code,
                Txt_No_of_users);
-      Tbl_EndRow ();
+      Tbl_TR_End ();
 
       /***** Loop over chat rooms *****/
       for (NumRow = 0;
@@ -302,17 +302,17 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 	 /* Get next chat room */
 	 row = mysql_fetch_row (mysql_res);
 
-         Tbl_StartRow ();
+         Tbl_TR_Begin (NULL);
 
-         Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
          fprintf (Gbl.F.Out,"%s",row[0]);
-         Tbl_EndCell ();
+         Tbl_TD_End ();
 
-	 Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
          fprintf (Gbl.F.Out,"%s",row[1]);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
-         Tbl_EndRow ();
+         Tbl_TR_End ();
         }
 
       /***** End table and box *****/

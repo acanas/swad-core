@@ -99,97 +99,97 @@ void Hie_WriteMenuHierarchy (void)
    extern const char *Txt_Course;
 
    /***** Start table *****/
-   Tbl_StartTableCenterPadding (2);
+   Tbl_TABLE_BeginCenterPadding (2);
 
    /***** Write a 1st selector
           with all the countries *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"cty\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Country);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
    Cty_WriteSelectorOfCountry ();
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
       /***** Write a 2nd selector
              with the institutions of selected country *****/
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"<label for=\"ins\" class=\"%s\">%s:</label>",
                The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Institution);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
       Ins_WriteSelectorOfInstitution ();
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
 
       if (Gbl.Hierarchy.Ins.InsCod > 0)
         {
          /***** Write a 3rd selector
                 with all the centres of selected institution *****/
-         Tbl_StartRow ();
+         Tbl_TR_Begin (NULL);
 
-         Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
          fprintf (Gbl.F.Out,"<label for=\"ctr\" class=\"%s\">%s:</label>",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Centre);
-         Tbl_EndCell ();
+         Tbl_TD_End ();
 
-         Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
          Ctr_WriteSelectorOfCentre ();
-         Tbl_EndCell ();
+         Tbl_TD_End ();
 
-         Tbl_EndRow ();
+         Tbl_TR_End ();
 
          if (Gbl.Hierarchy.Ctr.CtrCod > 0)
            {
             /***** Write a 4th selector
                    with all the degrees of selected centre *****/
-            Tbl_StartRow ();
+            Tbl_TR_Begin (NULL);
 
-	    Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+	    Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
 	    fprintf (Gbl.F.Out,"<label for=\"deg\" class=\"%s\">%s:</label>",
                      The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Degree);
-	    Tbl_EndCell ();
+	    Tbl_TD_End ();
 
-            Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+            Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
             Deg_WriteSelectorOfDegree ();
-            Tbl_EndCell ();
+            Tbl_TD_End ();
 
-            Tbl_EndRow ();
+            Tbl_TR_End ();
 
 	    if (Gbl.Hierarchy.Deg.DegCod > 0)
 	      {
 	       /***** Write a 5th selector
 		      with all the courses of selected degree *****/
-	       Tbl_StartRow ();
+	       Tbl_TR_Begin (NULL);
 
-	       Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+	       Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
 	       fprintf (Gbl.F.Out,"<label for=\"crs\" class=\"%s\">%s:</label>",
 			The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Course);
-	       Tbl_EndCell ();
+	       Tbl_TD_End ();
 
-	       Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+	       Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
 	       Crs_WriteSelectorOfCourse ();
-	       Tbl_EndCell ();
+	       Tbl_TD_End ();
 
-	       Tbl_EndRow ();
+	       Tbl_TR_End ();
 	      }
            }
         }
      }
 
    /***** End table *****/
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
   }
 
 /*****************************************************************************/

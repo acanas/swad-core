@@ -209,8 +209,8 @@ static void Gam_ListAllGames (void)
    if (Gbl.Games.Num)
      {
       /***** Table head *****/
-      Tbl_StartTableWideMarginPadding (2);
-      Tbl_StartRow ();
+      Tbl_TABLE_BeginWideMarginPadding (2);
+      Tbl_TR_Begin (NULL);
       if (Gam_CheckIfICanEditGames ())
          fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
 
@@ -238,7 +238,7 @@ static void Gam_ListAllGames (void)
 
       fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">%s</th>",Txt_Matches);
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
 
       /***** Write all the games *****/
       for (NumGame = Pagination.FirstItemVisible;
@@ -250,7 +250,7 @@ static void Gam_ListAllGames (void)
 	                  false);	// Do not put form to start new match
 
       /***** End table *****/
-      Tbl_EndTable ();
+      Tbl_TABLE_End ();
      }
    else	// No games created
       Ale_ShowAlert (Ale_INFO,Txt_No_games);
@@ -394,23 +394,23 @@ void Gam_ShowOneGame (long GamCod,
 
    /***** Start table *****/
    if (ShowOnlyThisGame)
-      Tbl_StartTableWidePadding (2);
+      Tbl_TABLE_BeginWidePadding (2);
 
    /***** Start first row of this game *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
    /***** Icons related to this game *****/
    if (Gam_CheckIfICanEditGames ())
      {
       if (ShowOnlyThisGame)
-	 Tbl_StartCellAttr ("rowspan=\"2\" class=\"CONTEXT_COL\"");
+	 Tbl_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
       else
-	 Tbl_StartCellAttr ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
 
       /* Icons to remove/edit this game */
       Gam_PutFormsToRemEditOneGame (&Game,Anchor);
 
-      Tbl_EndCell ();
+      Tbl_TD_End ();
      }
 
    /***** Start/end date/time *****/
@@ -420,16 +420,16 @@ void Gam_ShowOneGame (long GamCod,
 	StartEndTime++)
      {
       if (ShowOnlyThisGame)
-	 Tbl_StartCellAttr ("id=\"gam_date_%u_%u\" class=\"%s LEFT_TOP\"",
-		  (unsigned) StartEndTime,UniqueId,
-		  Game.Hidden ? "DATE_GREEN_LIGHT":
-				"DATE_GREEN");
+	 Tbl_TD_Begin ("id=\"gam_date_%u_%u\" class=\"%s LEFT_TOP\"",
+		       (unsigned) StartEndTime,UniqueId,
+		       Game.Hidden ? "DATE_GREEN_LIGHT":
+				     "DATE_GREEN");
       else
-	 Tbl_StartCellAttr ("id=\"gam_date_%u_%u\" class=\"%s LEFT_TOP COLOR%u\"",
-		  (unsigned) StartEndTime,UniqueId,
-		  Game.Hidden ? "DATE_GREEN_LIGHT":
-				"DATE_GREEN",
-		  Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("id=\"gam_date_%u_%u\" class=\"%s LEFT_TOP COLOR%u\"",
+		       (unsigned) StartEndTime,UniqueId,
+		       Game.Hidden ? "DATE_GREEN_LIGHT":
+				     "DATE_GREEN",
+		       Gbl.RowEvenOdd);
       if (Game.TimeUTC[Dat_START_TIME])
 	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			    "writeLocalDateHMSFromUTC('gam_date_%u_%u',%ld,"
@@ -438,14 +438,14 @@ void Gam_ShowOneGame (long GamCod,
 		  (unsigned) StartEndTime,UniqueId,
 		  Game.TimeUTC[StartEndTime],
 		  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
      }
 
    /***** Game title and main data *****/
    if (ShowOnlyThisGame)
-      Tbl_StartCellAttr ("class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"LEFT_TOP\"");
    else
-      Tbl_StartCellAttr ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Game title */
    Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
@@ -467,13 +467,13 @@ void Gam_ShowOneGame (long GamCod,
             Txt_No_of_questions,
             Game.NumQsts);
 
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Number of matches in game *****/
    if (ShowOnlyThisGame)
-      Tbl_StartCellAttr ("class=\"RIGHT_TOP\"");
+      Tbl_TD_Begin ("class=\"RIGHT_TOP\"");
    else
-      Tbl_StartCellAttr ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
 
    Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
    Frm_StartForm (ActSeeGam);
@@ -486,27 +486,27 @@ void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"%u</a>",Game.NumMchs);
    Frm_EndForm ();
 
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** End 1st row of this game *****/
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Start 2nd row of this game *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
    /***** Author of the game *****/
    if (ShowOnlyThisGame)
-      Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP\"");
    else
-      Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
    Gam_WriteAuthor (&Game);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Text of the game *****/
    if (ShowOnlyThisGame)
-      Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP\"");
    else
-      Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
    Gam_GetGameTxtFromDB (Game.GamCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
@@ -515,14 +515,14 @@ void Gam_ShowOneGame (long GamCod,
             Game.Hidden ? "DAT_LIGHT" :
         	          "DAT",
             Txt);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** End 2nd row of this game *****/
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table *****/
    if (ShowOnlyThisGame)
-      Tbl_EndTable ();
+      Tbl_TABLE_End ();
    else
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
@@ -1139,41 +1139,41 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 			 Hlp_ASSESSMENT_Games_edit_game,Box_NOT_CLOSABLE,2);
 
    /***** Game title *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Title);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Title\" name=\"Title\""
 		      " size=\"45\" maxlength=\"%u\" value=\"%s\""
 		      " required=\"required\" />",
 	    Gam_MAX_CHARS_TITLE,Game->Title);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Game text *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Description);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"<textarea id=\"Txt\" name=\"Txt\""
 		      " cols=\"60\" rows=\"10\">");
    if (!ItsANewGame)
       fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</textarea>");
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table, send button and end box *****/
    if (ItsANewGame)
@@ -1643,8 +1643,8 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    MaxQstInd = Gam_GetMaxQuestionIndexInGame (GamCod);
 
    /***** Write the heading *****/
-   Tbl_StartTableWideMarginPadding (2);
-   Tbl_StartRow ();
+   Tbl_TABLE_BeginWideMarginPadding (2);
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th></th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
@@ -1662,7 +1662,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
             Txt_Code,
             Txt_Tags,
             Txt_Question);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Write rows *****/
    for (NumQst = 0;
@@ -1695,9 +1695,9 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       /***** Icons *****/
       Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
       Gam_CurrentQstInd = QstInd;
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"BT%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
       /* Put icon to remove the question */
       if (ICanEditQuestions)
@@ -1741,30 +1741,30 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       if (ICanEditQuestions)
 	 Ico_PutContextualIconToEdit (ActEdiOneTstQst,Tst_PutParamQstCod);
 
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Write number of question */
-      Tbl_StartCellAttr ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">%s</div>",StrQstInd);
 
       /* Write answer type (row[2]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
       fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">%s</div>",
 	       Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Write question code */
-      Tbl_StartCellAttr ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%ld&nbsp;",Gbl.Test.QstCod);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Write the question tags */
-      Tbl_StartCellAttr ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
       Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Write stem (row[3]) */
-      Tbl_StartCellAttr ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[3],"TEST_EDI");
 
       /* Get media (row[5]) */
@@ -1782,15 +1782,15 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       /* Show answers */
       Tst_WriteAnswersEdit (Gbl.Test.QstCod);
 
-      Tbl_EndCell ();
-      Tbl_EndRow ();
+      Tbl_TD_End ();
+      Tbl_TR_End ();
 
       /***** Destroy test question *****/
       Tst_QstDestructor ();
      }
 
    /***** End table *****/
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
   }
 
 /*****************************************************************************/

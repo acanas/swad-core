@@ -204,27 +204,27 @@ void McR_SelUsrsToViewUsrsMchResults (void)
          Grp_PutParamsCodGrps ();
 
          /***** Put list of users to select some of them *****/
-         Tbl_StartTableCenterPadding (2);
-         Tbl_StartRow ();
+         Tbl_TABLE_BeginCenterPadding (2);
+         Tbl_TR_Begin (NULL);
 
-         Tbl_StartCellAttr ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+         Tbl_TD_Begin ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          fprintf (Gbl.F.Out,"%s:",Txt_Users);
-         Tbl_EndCell ();
+         Tbl_TD_End ();
 
-	 Tbl_StartCellAttr ("colspan=\"2\" class=\"%s LEFT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         Tbl_StartTablePadding (2);
+	 Tbl_TD_Begin ("colspan=\"2\" class=\"%s LEFT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+         Tbl_TABLE_BeginPadding (2);
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
-         Tbl_EndTable ();
-         Tbl_EndCell ();
+         Tbl_TABLE_End ();
+         Tbl_TD_End ();
 
-         Tbl_EndRow ();
+         Tbl_TR_End ();
 
          /***** Starting and ending dates in the search *****/
          Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
-         Tbl_EndTable ();
+         Tbl_TABLE_End ();
 
          /***** Send button *****/
 	 Btn_PutConfirmButton (Txt_View_matches_results);
@@ -326,7 +326,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
    extern const char *Txt_Score;
    extern const char *Txt_out_of_PART_OF_A_SCORE;
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_TOP\">"
 		      "%s"
 		      "</th>"
@@ -365,7 +365,7 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
 	    Txt_Total_BR_score,
 	    Txt_Average_BR_score_BR_per_question_BR_from_0_to_1,
 	    Txt_Score,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/
@@ -422,7 +422,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 			      (long) Gbl.DateRange.TimeUTC[Dat_END_TIME]);
 
    /***** Show user's data *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    Usr_ShowTableCellWithUsrData (UsrDat,NumResults);
 
    /***** Get and print matches results *****/
@@ -444,7 +444,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	 ShowSummaryResults = ShowSummaryResults && ShowResultThisMatch;
 
          if (NumResult)
-            Tbl_StartRow ();
+            Tbl_TR_Begin (NULL);
 
          /* Write start/end times (row[1], row[2] hold UTC start/end times) */
          for (StartEndTime = (Dat_StartEndTime_t) 0;
@@ -453,9 +453,9 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
            {
 	    TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
 	    UniqueId++;
-	    Tbl_StartCellAttr ("id =\"mch_time_%u_%u\" class=\"DAT LEFT_TOP COLOR%u\"",
-			       (unsigned) StartEndTime,UniqueId,
-			       Gbl.RowEvenOdd);
+	    Tbl_TD_Begin ("id =\"mch_time_%u_%u\" class=\"DAT LEFT_TOP COLOR%u\"",
+			  (unsigned) StartEndTime,UniqueId,
+			  Gbl.RowEvenOdd);
 	    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			       "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
 			       "%ld,%u,'<br />','%s',true,false,0x7);"
@@ -463,13 +463,13 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 		     (unsigned) StartEndTime,UniqueId,
 		     (long) TimeUTC[StartEndTime],
 		     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-	    Tbl_EndCell ();
+	    Tbl_TD_End ();
            }
 
          /* Write match title */
-	 Tbl_StartCellAttr ("class=\"DAT LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"DAT LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%s",Match.Title);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
          /* Get number of questions (row[3]) */
          if (sscanf (row[3],"%u",&NumQstsInThisResult) != 1)
@@ -492,41 +492,41 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	   }
 
          /* Write number of questions */
-	 Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%u",NumQstsInThisResult);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
          /* Write number of questions not blank */
-	 Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%u",NumQstsNotBlankInThisResult);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
 	 /* Write score */
-	 Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     ScoreInThisResult);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
          /* Write average score per question */
-	 Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisResult ? ScoreInThisResult / (double) NumQstsInThisResult :
 			                   0.0);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
          /* Write score over Tst_SCORE_MAX */
-	 Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisResult ? ScoreInThisResult * Tst_SCORE_MAX /
 			                   (double) NumQstsInThisResult :
 			                   0.0);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
 	 /* Link to show this result */
-	 Tbl_StartCellAttr ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ShowResultThisMatch)
 	   {
 	    Gam_SetParamCurrentGamCod (Match.GamCod);	// Used to pass parameter
@@ -548,9 +548,9 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	   }
 	 else
 	    Ico_PutIconOff ("eye-slash.svg",Txt_Hidden_result);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
-         Tbl_EndRow ();
+         Tbl_TR_End ();
         }
 
       /***** Write totals for this user *****/
@@ -561,8 +561,8 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
      }
    else
      {
-      Tbl_PutEmptyColouredCells (8);
-      Tbl_EndRow ();
+      Tbl_TD_ColouredEmpty (8);
+      Tbl_TR_End ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -584,54 +584,54 @@ static void McR_ShowMchResultsSummaryRow (bool ShowSummaryResults,
    extern const char *Txt_Matches;
 
    /***** Start row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
    /***** Row title *****/
-   Tbl_StartCellAttr ("colspan=\"3\" class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("colspan=\"3\" class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s: %u",Txt_Matches,NumResults);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Write total number of questions *****/
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
    if (NumResults)
       fprintf (Gbl.F.Out,"%u",NumTotalQsts);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Write total number of questions not blank *****/
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
    if (NumResults)
       fprintf (Gbl.F.Out,"%u",NumTotalQstsNotBlank);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Write total score *****/
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
    if (ShowSummaryResults)
       fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllResults);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Write average score per question *****/
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
    if (ShowSummaryResults)
       fprintf (Gbl.F.Out,"%.2lf",
 	       NumTotalQsts ? TotalScoreOfAllResults / (double) NumTotalQsts :
 			      0.0);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Write score over Tst_SCORE_MAX *****/
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
    if (ShowSummaryResults)
       fprintf (Gbl.F.Out,"%.2lf",
 	       NumTotalQsts ? TotalScoreOfAllResults * Tst_SCORE_MAX /
 			      (double) NumTotalQsts :
 			      0.0);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Last cell *****/
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP COLOR%u\"",Gbl.RowEvenOdd);
-   Tbl_EndCell ();
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_End ();
 
    /***** End row *****/
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/
@@ -765,7 +765,7 @@ void McR_ShowOneMchResult (void)
 				 Gbl.Hierarchy.Crs.CrsCod);
 
       /***** Start table *****/
-      Tbl_StartTableWideMarginPadding (10);
+      Tbl_TABLE_BeginWideMarginPadding (10);
 
       /***** Header row *****/
       /* Get data of the user who answer the match */
@@ -775,13 +775,13 @@ void McR_ShowOneMchResult (void)
          Act_NoPermissionExit ();
 
       /* User */
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT_N RIGHT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT_N RIGHT_TOP\"");
       fprintf (Gbl.F.Out,"%s:",Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs.Role][UsrDat->Sex]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
       ID_WriteUsrIDs (UsrDat,NULL);
       fprintf (Gbl.F.Out," %s",
 	       UsrDat->Surname1);
@@ -796,23 +796,22 @@ void McR_ShowOneMchResult (void)
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
 			"PHOTO45x60",Pho_ZOOM,false);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
 
       /* Start/end time (for user in this match) */
       for (StartEndTime = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	   StartEndTime++)
 	{
-	 Tbl_StartRow ();
+	 Tbl_TR_Begin (NULL);
 
-	 Tbl_StartCellAttr ("class=\"DAT_N RIGHT_TOP\"");
+	 Tbl_TD_Begin ("class=\"DAT_N RIGHT_TOP\"");
 	 fprintf (Gbl.F.Out,"%s:",Txt_START_END_TIME[StartEndTime]);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
-	 Tbl_StartCellAttr ("id=\"match_%u\" class=\"DAT LEFT_TOP\"",
-		            (unsigned) StartEndTime);
+	 Tbl_TD_Begin ("id=\"match_%u\" class=\"DAT LEFT_TOP\"",(unsigned) StartEndTime);
 	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			    "writeLocalDateHMSFromUTC('match_%u',%ld,"
 			    "%u,',&nbsp;','%s',true,true,0x7);"
@@ -820,33 +819,33 @@ void McR_ShowOneMchResult (void)
 		  (unsigned) StartEndTime,
 		  TimeUTC[StartEndTime],
 		  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
-	 Tbl_EndRow ();
+	 Tbl_TR_End ();
 	}
 
       /* Number of questions */
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT_N RIGHT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT_N RIGHT_TOP\"");
       fprintf (Gbl.F.Out,"%s:",Txt_Questions);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
       fprintf (Gbl.F.Out,"%u (%u %s)",
 	       NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
 
       /* Score */
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT_N RIGHT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT_N RIGHT_TOP\"");
       fprintf (Gbl.F.Out,"%s:",Txt_Score);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
       if (ICanViewScore)
 	 fprintf (Gbl.F.Out,"%.2lf (%.2lf",
 		  TotalScore,
@@ -856,28 +855,28 @@ void McR_ShowOneMchResult (void)
 	 fprintf (Gbl.F.Out,"? (?");	// No feedback
       fprintf (Gbl.F.Out," %s %u)",
 	       Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
 
       /* Tags present in this result */
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT_N RIGHT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT_N RIGHT_TOP\"");
       fprintf (Gbl.F.Out,"%s:",Txt_Tags);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
       Gam_ShowTstTagsPresentInAGame (Match.GamCod);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
 
       /***** Write answers and solutions *****/
       Tst_ShowTestResult (UsrDat,NumQsts,TimeUTC[Dat_START_TIME]);
 
       /***** End table *****/
-      Tbl_EndTable ();
+      Tbl_TABLE_End ();
 
       /***** Write total mark of match result *****/
       if (ICanViewScore)

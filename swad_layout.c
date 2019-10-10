@@ -1617,10 +1617,10 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table style=\"width:100%%; padding:12px;\">");	// TODO: Change inline style to class
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
    /***** First column: institution logo *****/
-   Tbl_StartCellAttr ("class=\"LEFT_TOP\" style=\"width:80px;\"");
+   Tbl_TD_Begin ("class=\"LEFT_TOP\" style=\"width:80px;\"");
    if (InsCod > 0)
      {
       if (!PrintView)
@@ -1629,10 +1629,10 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (!PrintView)
         fprintf (Gbl.F.Out,"</a>");
      }
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Second column: class photo title *****/
-   Tbl_StartCellAttr ("class=\"CLASSPHOTO_TITLE CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CLASSPHOTO_TITLE CENTER_MIDDLE\"");
    if (InsCod > 0)
      {
       if (!PrintView)
@@ -1665,10 +1665,10 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
          Grp_WriteNamesOfSelectedGrps ();
         }
      }
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Third column: degree logo *****/
-   Tbl_StartCellAttr ("class=\"RIGHT_TOP\" style=\"width:80px;\"");
+   Tbl_TD_Begin ("class=\"RIGHT_TOP\" style=\"width:80px;\"");
    if (DegCod > 0)
      {
       if (!PrintView)
@@ -1679,11 +1679,11 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (!PrintView)
          fprintf (Gbl.F.Out,"</a>");
      }
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** End table *****/
-   Tbl_EndRow ();
-   Tbl_EndTable ();
+   Tbl_TR_End ();
+   Tbl_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -1705,8 +1705,8 @@ void Lay_AdvertisementMobile (void)
                          NULL,Box_NOT_CLOSABLE,8);
 
       /***** Show advertisement *****/
-      Tbl_StartRow ();
-      Tbl_StartCellAttr ("class=\"DAT CENTER_MIDDLE\"");
+      Tbl_TR_Begin (NULL);
+      Tbl_TD_Begin ("class=\"DAT CENTER_MIDDLE\"");
       fprintf (Gbl.F.Out,"<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 	                 " class=\"DAT\">"
                          "%s<br /><br />"
@@ -1717,8 +1717,8 @@ void Lay_AdvertisementMobile (void)
                Txt_Stay_connected_with_SWADroid,
                Cfg_URL_ICON_PUBLIC,
                Txt_Stay_connected_with_SWADroid);
-      Tbl_EndCell ();
-      Tbl_EndRow ();
+      Tbl_TD_End ();
+      Tbl_TR_End ();
 
       /***** End table and box *****/
       Box_EndBoxTable ();

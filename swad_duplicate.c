@@ -159,7 +159,7 @@ void Dup_ListDuplicateUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      Tbl_StartTableCenterPadding (2);
+      Tbl_TABLE_BeginCenterPadding (2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;
@@ -185,14 +185,14 @@ void Dup_ListDuplicateUsrs (void)
             /* Write data of this user */
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
 
-	    Tbl_StartRow ();
+	    Tbl_TR_Begin (NULL);
 
-            Tbl_StartCellAttr ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
-            Tbl_EndCell ();
+            Tbl_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
+            Tbl_TD_End ();
 
-	    Tbl_StartCellAttr ("colspan=\"%u\" class=\"DAT LEFT_MIDDLE COLOR%u\"",
-			       Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-			       Gbl.RowEvenOdd);
+	    Tbl_TD_Begin ("colspan=\"%u\" class=\"DAT LEFT_MIDDLE COLOR%u\"",
+			  Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+			  Gbl.RowEvenOdd);
 
             /* Write number of informants (row[1]) if greater than 1 */
 	    if (sscanf (row[1],"%u",&NumInformants) != 1)
@@ -208,9 +208,9 @@ void Dup_ListDuplicateUsrs (void)
 	    /* Button to remove from list of possible duplicate users */
 	    Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
 
-	    Tbl_EndCell ();
+	    Tbl_TD_End ();
 
-	    Tbl_EndRow ();
+	    Tbl_TR_End ();
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
@@ -220,7 +220,7 @@ void Dup_ListDuplicateUsrs (void)
         }
 
       /***** End table *****/
-      Tbl_EndTable ();
+      Tbl_TABLE_End ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -294,7 +294,7 @@ static void Dup_ListSimilarUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      Tbl_StartTableCenterPadding (2);
+      Tbl_TABLE_BeginCenterPadding (2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;
@@ -320,14 +320,14 @@ static void Dup_ListSimilarUsrs (void)
             /* Write data of this user */
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
 
-	    Tbl_StartRow ();
+	    Tbl_TR_Begin (NULL);
 
-            Tbl_StartCellAttr ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
-            Tbl_EndCell ();
+            Tbl_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
+            Tbl_TD_End ();
 
-	    Tbl_StartCellAttr ("colspan=\"%u\" class=\"COLOR%u\"",
-			       Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-			       Gbl.RowEvenOdd);
+	    Tbl_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
+			  Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+			  Gbl.RowEvenOdd);
 
 	    /* Show details of user's profile */
             Prf_ShowDetailsUserProfile (&UsrDat);
@@ -337,19 +337,19 @@ static void Dup_ListSimilarUsrs (void)
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_NET);
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);
 
-	    Tbl_EndCell ();
+	    Tbl_TD_End ();
 
-	    Tbl_EndRow ();
+	    Tbl_TR_End ();
 
-	    Tbl_StartRow ();
+	    Tbl_TR_Begin (NULL);
 
-            Tbl_StartCellAttr ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
-            Tbl_EndCell ();
+            Tbl_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
+            Tbl_TD_End ();
 
-	    Tbl_StartCellAttr ("colspan=\"%u\" class=\"LEFT_TOP COLOR%u\""
-			       " style=\"padding-bottom:20px;\"",
-			       Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-			       Gbl.RowEvenOdd);
+	    Tbl_TD_Begin ("colspan=\"%u\" class=\"LEFT_TOP COLOR%u\""
+			  " style=\"padding-bottom:20px;\"",
+			  Usr_NUM_MAIN_FIELDS_DATA_USR-2,
+			  Gbl.RowEvenOdd);
 
 	    /* Button to remove this user */
 	    if (Acc_CheckIfICanEliminateAccount (UsrDat.UsrCod))
@@ -359,16 +359,16 @@ static void Dup_ListSimilarUsrs (void)
 	    if (Dup_CheckIfUsrIsDup (UsrDat.UsrCod))
 	       Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
 
-	    Tbl_EndCell ();
+	    Tbl_TD_End ();
 
-	    Tbl_EndRow ();
+	    Tbl_TR_End ();
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
         }
 
       /***** End table *****/
-      Tbl_EndTable ();
+      Tbl_TABLE_End ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

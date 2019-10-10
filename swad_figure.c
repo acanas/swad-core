@@ -371,7 +371,7 @@ static void Fig_GetAndShowUsersStats (void)
                       Hlp_ANALYTICS_Figures_users,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -388,16 +388,16 @@ static void Fig_GetAndShowUsersStats (void)
             Txt_No_of_users,
             Txt_Average_number_of_courses_to_which_a_user_belongs,
             Txt_Average_number_of_users_belonging_to_a_course);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    Fig_GetAndShowNumUsrsInCrss (Rol_STD);		// Students
    Fig_GetAndShowNumUsrsInCrss (Rol_NET);		// Non-editing teachers
    Fig_GetAndShowNumUsrsInCrss (Rol_TCH);		// Teachers
    Fig_GetAndShowNumUsrsInCrss (Rol_UNK);		// Any user in courses
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th colspan=\"4\" style=\"height:10px;\">"
                       "</th>");
-   Tbl_EndRow ();
+   Tbl_TR_End ();
    Fig_GetAndShowNumUsrsNotBelongingToAnyCrs ();	// Users not beloging to any course
 
    /***** End table and box *****/
@@ -434,27 +434,27 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    NumUsrsPerCrs = Usr_GetNumUsrsPerCrs (Role);
 
    /***** Write the total number of users *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"%s\"",Class);
+   Tbl_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%s",
             (Role == Rol_UNK) ? Txt_Total :
         	                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s\"",Class);
+   Tbl_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%u",NumUsrs);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s\"",Class);
+   Tbl_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%.2f",NumCrssPerUsr);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s\"",Class);
+   Tbl_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%.2f",NumUsrsPerCrs);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/
@@ -467,25 +467,25 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
    char *Class = "DAT RIGHT_BOTTOM";
 
    /***** Write the total number of users not belonging to any course *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"%s\"",Class);
+   Tbl_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s\"",Class);
+   Tbl_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsNotBelongingToAnyCrs ());
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s\"",Class);
+   Tbl_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%.2f",0.0);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s\"",Class);
+   Tbl_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%.2f",0.0);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/
@@ -509,7 +509,7 @@ static void Fig_GetAndShowUsersRanking (void)
                       Hlp_ANALYTICS_Figures_ranking,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -538,40 +538,40 @@ static void Fig_GetAndShowUsersRanking (void)
             Txt_Downloads,
             Txt_Forums,
             Txt_Messages);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Rankings *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
    Prf_GetAndShowRankingClicks ();
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
    Prf_GetAndShowRankingClicksPerDay ();
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
    Prf_GetAndShowRankingSocPub ();
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
    Fol_GetAndShowRankingFollowers ();
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
    Prf_GetAndShowRankingFileViews ();
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
    Prf_GetAndShowRankingForPst ();
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
    Prf_GetAndShowRankingMsgSnt ();
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -619,7 +619,7 @@ static void Fig_WriteHeadHierarchy (void)
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "<img src=\"%s/globe.svg\""
@@ -661,7 +661,7 @@ static void Fig_WriteHeadHierarchy (void)
             Cfg_URL_ICON_PUBLIC,Txt_Centres     ,Txt_Centres     ,Txt_Centres,
             Cfg_URL_ICON_PUBLIC,Txt_Degrees     ,Txt_Degrees     ,Txt_Degrees,
             Cfg_URL_ICON_PUBLIC,Txt_Courses     ,Txt_Courses     ,Txt_Courses);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1011,12 +1011,12 @@ static void Fig_ShowHierarchyRow (const char *Text1,const char *Text2,
 				  int NumCrss)	// < 0 ==> do not show number
   {
    /***** Start row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
    /***** Write text *****/
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",ClassTxt);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",ClassTxt);
    fprintf (Gbl.F.Out,"%s%s",Text1,Text2);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Write number of countries *****/
    Fig_ShowHierarchyCell (ClassTxt,NumCtys);
@@ -1026,18 +1026,18 @@ static void Fig_ShowHierarchyRow (const char *Text1,const char *Text2,
    Fig_ShowHierarchyCell (ClassTxt,NumCrss);
 
    /***** End row *****/
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 static void Fig_ShowHierarchyCell (const char *ClassTxt,int Num)
   {
    /***** Write number *****/
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",ClassTxt);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",ClassTxt);
    if (Num >= 0)
       fprintf (Gbl.F.Out,"%d",Num);
    else		// < 0 ==> do not show number
       fprintf (Gbl.F.Out,"-");
-   Tbl_EndCell ();
+   Tbl_TD_End ();
   }
 
 /*****************************************************************************/
@@ -1452,7 +1452,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	      {
 	       if ((NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
 		 {
-		  Tbl_StartRow ();
+		  Tbl_TR_Begin (NULL);
 		  TRIsOpen = true;
 		 }
 
@@ -1460,29 +1460,27 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       NumberThisRow = Fig_GetInsAndStat (&Ins,*mysql_res);
 
 	       /***** Write link to institution *****/
-	       Tbl_StartCellAttr ("class=\"%s CENTER_MIDDLE\"",
-			The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       Tbl_TD_Begin ("class=\"%s CENTER_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       Ins_DrawInstitutionLogoWithLink (&Ins,40);
-               fprintf (Gbl.F.Out,"<br />%u",
-	                NumberThisRow);
-               Tbl_EndCell ();
+               fprintf (Gbl.F.Out,"<br />%u",NumberThisRow);
+               Tbl_TD_End ();
 
 	       /***** End user's cell *****/
-	       Tbl_EndCell ();
+	       Tbl_TD_End ();
 
 	       if ((++NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
 		 {
-		  Tbl_EndRow ();
+		  Tbl_TR_End ();
 		  TRIsOpen = false;
 		 }
 	      }
 	    if (TRIsOpen)
-	       Tbl_EndRow ();
+	       Tbl_TR_End ();
 
 	    break;
 	 case Usr_LIST_AS_LISTING:
 	    /***** Draw institutions as a list *****/
-	    Tbl_StartRow ();
+	    Tbl_TR_Begin (NULL);
 	    fprintf (Gbl.F.Out,"<th></th>"
 			       "<th class=\"LEFT_MIDDLE\">"
 			       "%s"
@@ -1492,7 +1490,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 			       "</th>",
 		     Txt_Institution,
 		     TxtFigure);
-	    Tbl_EndRow ();
+	    Tbl_TR_End ();
 
 	    for (NumIns = 1, NumOrder = 1, NumberLastRow = 0;
 		 NumIns <= NumInss;
@@ -1501,18 +1499,18 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       /***** Get institution data and statistic *****/
 	       NumberThisRow = Fig_GetInsAndStat (&Ins,*mysql_res);
 
-	       Tbl_StartRow ();
+	       Tbl_TR_Begin (NULL);
 
 	       /***** Number of order *****/
 	       if (NumberThisRow != NumberLastRow)
 		  NumOrder = NumIns;
-	       Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+	       Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
 	       fprintf (Gbl.F.Out,"%u",NumOrder);
-	       Tbl_EndCell ();
+	       Tbl_TD_End ();
 
 	       /***** Write link to institution *****/
-	       Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE\"",
-				  The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE\"",
+		             The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       /* Icon and name of this institution */
 	       Frm_StartForm (ActSeeInsInf);
 	       Ins_PutParamInsCod (Ins.InsCod);
@@ -1525,14 +1523,14 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		 }
 	       fprintf (Gbl.F.Out,"%s</a>",Ins.FullName);
 	       Frm_EndForm ();
-	       Tbl_EndCell ();
+	       Tbl_TD_End ();
 
 	       /***** Write statistic *****/
-	       Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+	       Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
 	       fprintf (Gbl.F.Out,"%u",NumberThisRow);
-	       Tbl_EndCell ();
+	       Tbl_TD_End ();
 
-	       Tbl_EndRow ();
+	       Tbl_TR_End ();
 
 	       NumberLastRow = NumberThisRow;
 	      }
@@ -1618,7 +1616,7 @@ static void Fig_GetAndShowFileBrowsersStats (void)
                  Hlp_ANALYTICS_Figures_folders_and_files,Box_NOT_CLOSABLE);
 
    /***** Write sizes of all file zones *****/
-   Tbl_StartTableCenterPadding (2);
+   Tbl_TABLE_BeginCenterPadding (2);
    Fig_WriteStatsExpTreesTableHead1 ();
    for (NumStat = 0;
 	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
@@ -1626,10 +1624,10 @@ static void Fig_GetAndShowFileBrowsersStats (void)
       Fig_WriteRowStatsFileBrowsers1 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
 	                              StatCrsFileZones[NumStat],
 				      &SizeOfFileZones[NumStat]);
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
 
    /***** Write sizes of all file zones per course *****/
-   Tbl_StartTableCenterPadding (2);
+   Tbl_TABLE_BeginCenterPadding (2);
    Fig_WriteStatsExpTreesTableHead2 ();
    for (NumStat = 0;
 	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
@@ -1637,10 +1635,10 @@ static void Fig_GetAndShowFileBrowsersStats (void)
       Fig_WriteRowStatsFileBrowsers2 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
 	                              StatCrsFileZones[NumStat],
 				      &SizeOfFileZones[NumStat]);
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
 
    /***** Write sizes of all file zones per user *****/
-   Tbl_StartTableCenterPadding (2);
+   Tbl_TABLE_BeginCenterPadding (2);
    Fig_WriteStatsExpTreesTableHead3 ();
    for (NumStat = 0;
 	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
@@ -1648,7 +1646,7 @@ static void Fig_GetAndShowFileBrowsersStats (void)
       Fig_WriteRowStatsFileBrowsers3 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
 	                              StatCrsFileZones[NumStat],
 				      &SizeOfFileZones[NumStat]);
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -2511,7 +2509,7 @@ static void Fig_WriteStatsExpTreesTableHead1 (void)
    extern const char *Txt_Files;
    extern const char *Txt_Size;
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -2544,7 +2542,7 @@ static void Fig_WriteStatsExpTreesTableHead1 (void)
             Txt_Folders,
             Txt_Files,
             Txt_Size);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 static void Fig_WriteStatsExpTreesTableHead2 (void)
@@ -2555,7 +2553,7 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
    extern const char *Txt_Size;
    extern const char *Txt_course;
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -2572,7 +2570,7 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
             Txt_Folders,Txt_course,
             Txt_Files,Txt_course,
             Txt_Size,Txt_course);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 static void Fig_WriteStatsExpTreesTableHead3 (void)
@@ -2583,7 +2581,7 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
    extern const char *Txt_Size;
    extern const char *Txt_user[Usr_NUM_SEXS];
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -2600,7 +2598,7 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
             Txt_Folders,Txt_user[Usr_SEX_UNKNOWN],
             Txt_Files,Txt_user[Usr_SEX_UNKNOWN],
             Txt_Size,Txt_user[Usr_SEX_UNKNOWN]);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/
@@ -2644,41 +2642,41 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 	        "%d",
 		SizeOfFileZones->NumUsrs);
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",NameOfFileZones);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumCrss);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumGrps);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumUsrs);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%u",SizeOfFileZones->MaxLevels);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%lu",SizeOfFileZones->NumFolders);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%lu",SizeOfFileZones->NumFiles);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",FileSizeStr);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
@@ -2718,25 +2716,25 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 	                     FileSizePerCrsStr);
      }
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",NameOfFileZones);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumFoldersPerCrs);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumFilesPerCrs);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",FileSizePerCrsStr);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
@@ -2776,25 +2774,25 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 	                     FileSizePerUsrStr);
      }
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"%s LEFT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",NameOfFileZones);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumFoldersPerUsr);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumFilesPerUsr);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",Class);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",Class);
    fprintf (Gbl.F.Out,"%s",FileSizePerUsrStr);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/
@@ -2817,7 +2815,7 @@ static void Fig_GetAndShowOERsStats (void)
                       Hlp_ANALYTICS_Figures_open_educational_resources_oer,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -2830,7 +2828,7 @@ static void Fig_GetAndShowOERsStats (void)
             Txt_License,
             Txt_No_of_private_files,
             Txt_No_of_public_files);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    for (License = 0;
 	License < Brw_NUM_LICENSES;
@@ -2838,21 +2836,21 @@ static void Fig_GetAndShowOERsStats (void)
      {
       Fig_GetNumberOfOERsFromDB (Gbl.Scope.Current,License,NumFiles);
 
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_LICENSES[License]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%lu",NumFiles[0]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%lu",NumFiles[1]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table and box *****/
@@ -3018,7 +3016,7 @@ static void Fig_GetAndShowAssignmentsStats (void)
                       Hlp_ANALYTICS_Figures_assignments,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -3035,28 +3033,28 @@ static void Fig_GetAndShowAssignmentsStats (void)
             Txt_Number_of_BR_courses_with_BR_assignments,
             Txt_Average_number_BR_of_ASSIG_BR_per_course,
             Txt_Number_of_BR_notifications);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Write number of assignments *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumAssignments);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumCoursesWithAssignments);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",NumAssignmentsPerCourse);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumNotif);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3087,7 +3085,7 @@ static void Fig_GetAndShowProjectsStats (void)
                       Hlp_ANALYTICS_Figures_projects,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -3100,24 +3098,24 @@ static void Fig_GetAndShowProjectsStats (void)
             Txt_Number_of_BR_projects,
             Txt_Number_of_BR_courses_with_BR_projects,
             Txt_Average_number_BR_of_projects_BR_per_course);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Write number of projects *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumProjects);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumCoursesWithProjects);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",NumProjectsPerCourse);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3150,7 +3148,7 @@ static void Fig_GetAndShowTestsStats (void)
                       Hlp_ANALYTICS_Figures_tests,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -3187,7 +3185,7 @@ static void Fig_GetAndShowTestsStats (void)
             Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course,
             Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded,
             Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    for (AnsType = (Tst_AnswerType_t) 0;
 	AnsType < Tst_NUM_ANS_TYPES;
@@ -3197,98 +3195,98 @@ static void Fig_GetAndShowTestsStats (void)
       Tst_GetTestStats (AnsType,&Stats);
 
       /***** Write number of assignments *****/
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_TST_STR_ANSWER_TYPES[AnsType]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",Stats.NumCoursesWithQuestions);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u (%.1f%%)",
                Stats.NumCoursesWithPluggableQuestions,
                Stats.NumCoursesWithQuestions ? (float) Stats.NumCoursesWithPluggableQuestions * 100.0 /
         	                               (float) Stats.NumCoursesWithQuestions :
         	                               0.0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",Stats.NumQsts);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%.2f",Stats.AvgQstsPerCourse);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%lu",Stats.NumHits);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerCourse);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerQuestion);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%.2f",Stats.AvgScorePerQuestion);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** Get the stats about test questions from this location *****/
    Tst_GetTestStats (Tst_ANS_ALL,&Stats);
 
    /***** Write number of assignments *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Total);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",Stats.NumCoursesWithQuestions);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u (%.1f%%)",
             Stats.NumCoursesWithPluggableQuestions,
             Stats.NumCoursesWithQuestions ? (float) Stats.NumCoursesWithPluggableQuestions * 100.0 /
         	                            (float) Stats.NumCoursesWithQuestions :
         	                            0.0);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",Stats.NumQsts);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",Stats.AvgQstsPerCourse);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%lu",Stats.NumHits);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerCourse);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerQuestion);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",Stats.AvgScorePerQuestion);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3319,7 +3317,7 @@ static void Fig_GetAndShowGamesStats (void)
                       Hlp_ANALYTICS_Figures_games,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -3332,24 +3330,24 @@ static void Fig_GetAndShowGamesStats (void)
             Txt_Number_of_BR_games,
             Txt_Number_of_BR_courses_with_BR_games,
             Txt_Average_number_BR_of_games_BR_per_course);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Write number of games *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumGames);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumCoursesWithGames);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",NumGamesPerCourse);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3383,7 +3381,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
                       Hlp_ANALYTICS_Figures_timeline,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -3404,7 +3402,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
             Txt_No_of_users,
             Txt_PERCENT_of_users,
             Txt_No_of_posts_BR_per_user);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
@@ -3520,33 +3518,33 @@ static void Fig_GetAndShowSocialActivityStats (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Write number of social notes and number of users *****/
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_TIMELINE_NOTE[NoteType]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%lu",NumSocialNotes);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs * 100.0 / (float) NumUsrsTotal :
         	              0.0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%.2f",
                NumUsrs ? (float) NumSocialNotes / (float) NumUsrs :
         	         0.0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** Get and write totals *****/
@@ -3641,33 +3639,33 @@ static void Fig_GetAndShowSocialActivityStats (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /* Write totals */
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Total);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%lu",NumSocialNotes);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumUsrs);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%5.2f%%",
 	    NumUsrsTotal ? (float) NumUsrs * 100.0 / (float) NumUsrsTotal :
 			   0.0);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",
 	    NumUsrs ? (float) NumSocialNotes / (float) NumUsrs :
 		      0.0);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3704,7 +3702,7 @@ static void Fig_GetAndShowFollowStats (void)
                       Hlp_ANALYTICS_Figures_followed_followers,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -3717,7 +3715,7 @@ static void Fig_GetAndShowFollowStats (void)
             Txt_Users,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
@@ -3817,25 +3815,25 @@ static void Fig_GetAndShowFollowStats (void)
 	}
 
       /***** Write number of followed / followers *****/
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Fol == 0 ? Txt_Followed :
         	                         Txt_Followers);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs * 100.0 /
         	              (float) NumUsrsTotal :
         	              0.0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** Write number of followed/followers per follower/followed *****/
@@ -3948,19 +3946,19 @@ static void Fig_GetAndShowFollowStats (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Write number of followed per follower *****/
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_FollowPerFollow[Fol]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%5.2f",Average);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_PutEmptyCells (1);
+      Tbl_TD_Empty (1);
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table and box *****/
@@ -3997,7 +3995,7 @@ static void Fig_GetAndShowForumStats (void)
                       Hlp_ANALYTICS_Figures_forums,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\" style=\"width:20px;\">"
                       "<img src=\"%s/comments.svg\""
                       " alt=\"%s\" title=\"%s\""
@@ -4038,7 +4036,7 @@ static void Fig_GetAndShowForumStats (void)
             Txt_No_of_threads_BR_per_forum,
             Txt_No_of_posts_BR_per_thread,
             Txt_No_of_posts_BR_per_forum);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Write a row for each type of forum *****/
    switch (Gbl.Scope.Current)
@@ -4225,50 +4223,50 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    FiguresForum->NumUsrsToBeNotifiedByEMail += NumUsrsToBeNotifiedByEMail;
 
    /***** Write forum name and stats *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"LEFT_TOP\" style=\"width:20px;\"");
+   Tbl_TD_Begin ("class=\"LEFT_TOP\" style=\"width:20px;\"");
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s%s\" title=\"%s%s\""
                       " class=\"ICO16x16\" />",
             Cfg_URL_ICON_PUBLIC,Icon,
             ForumName1,ForumName2,
             ForumName1,ForumName2);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s%s",ForumName1,ForumName2);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%u",NumForums);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%u",NumThreads);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%u",NumPosts);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%u",NumUsrsToBeNotifiedByEMail);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%.2f",NumThrsPerForum);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%.2f",NumPostsPerThread);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%.2f",NumPostsPerForum);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/
@@ -4291,44 +4289,44 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
 	                                       0.0);
 
    /***** Write forum name and stats *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP\" style=\"width:20px;\"");
-   Tbl_EndCell ();
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP\" style=\"width:20px;\"");
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Total);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",FiguresForum->NumForums);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",FiguresForum->NumThreads);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",FiguresForum->NumPosts);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",FiguresForum->NumUsrsToBeNotifiedByEMail);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",NumThrsPerForum);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",NumPostsPerThread);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",NumPostsPerForum);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/
@@ -4363,7 +4361,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
                       Hlp_ANALYTICS_Figures_notifications,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -4384,7 +4382,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
             Txt_PERCENT_of_users,
             Txt_Number_of_BR_events,
             Txt_Number_of_BR_emails);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
@@ -4510,61 +4508,61 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
      {
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[NotifyEvent]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[NotifyEvent] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0.0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumEvents[NotifyEvent]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumMails[NotifyEvent]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** Write total number of users who want to be notified by email on some event *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Total);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%5.2f%%",
             NumUsrsTotal ? (float) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
         	           (float) NumUsrsTotal :
         	           0.0);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumEventsTotal);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumMailsTotal);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4608,7 +4606,7 @@ static void Fig_GetAndShowNoticesStats (void)
                       Hlp_ANALYTICS_Figures_notices,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -4629,32 +4627,32 @@ static void Fig_GetAndShowNoticesStats (void)
             Txt_NOTICE_Deleted_BR_notices,
             Txt_Total,
             Txt_Number_of_BR_notifications);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Write number of notices *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumNotices[Not_ACTIVE_NOTICE]);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumNotices[Not_OBSOLETE_NOTICE]);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumNoticesDeleted);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u", NumTotalNotices);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumTotalNotifications);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4692,7 +4690,7 @@ static void Fig_GetAndShowMsgsStats (void)
                       Hlp_ANALYTICS_Figures_messages,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -4713,56 +4711,56 @@ static void Fig_GetAndShowMsgsStats (void)
             Txt_MSGS_Deleted,
             Txt_Total,
             Txt_Number_of_BR_notifications);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Write number of messages *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_MSGS_Sent);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsSentNotDeleted);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsSentDeleted);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsSentNotDeleted + NumMsgsSentDeleted);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"-");
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_MSGS_Received);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsReceivedNotDeleted);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsReceivedAndDeleted);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT_N RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_N RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsReceivedAndNotified);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4800,7 +4798,7 @@ static void Fig_GetAndShowSurveysStats (void)
                       Hlp_ANALYTICS_Figures_surveys,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -4821,32 +4819,32 @@ static void Fig_GetAndShowSurveysStats (void)
             Txt_Average_number_BR_of_surveys_BR_per_course,
             Txt_Average_number_BR_of_questions_BR_per_survey,
             Txt_Number_of_BR_notifications);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Write number of surveys *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumSurveys);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumCoursesWithSurveys);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",NumSurveysPerCourse);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%.2f",NumQstsPerSurvey);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%u",NumNotif);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4903,7 +4901,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
    unsigned NumUsrsTotal = 0;
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -4916,7 +4914,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
             TxtObject,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** For each privacy option... *****/
    for (Visibility = (Pri_Visibility_t) 0;
@@ -4941,24 +4939,24 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	Visibility++)
       if (MaskAllowedVisibility & (1 << Visibility))
 	{
-	 Tbl_StartRow ();
+	 Tbl_TR_Begin (NULL);
 
-         Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
          fprintf (Gbl.F.Out,"%s",Txt_PRIVACY_OPTIONS[Visibility]);
-         Tbl_EndCell ();
+         Tbl_TD_End ();
 
-	 Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
 	 fprintf (Gbl.F.Out,"%u",NumUsrs[Visibility]);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
-	 Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
 	 fprintf (Gbl.F.Out,"%5.2f%%",
 		  NumUsrsTotal ? (float) NumUsrs[Visibility] * 100.0 /
 				 (float) NumUsrsTotal :
 				 0);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
-         Tbl_EndRow ();
+         Tbl_TR_End ();
 	}
    }
 
@@ -4999,7 +4997,7 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
                       Hlp_ANALYTICS_Figures_cookies,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -5012,7 +5010,7 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
             Txt_Cookies,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** For each option... *****/
    for (i = 0;
@@ -5035,24 +5033,24 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
 	i < 2;
 	i++)
      {
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"%s CENTER_MIDDLE\"",AcceptedClass[i]);
+      Tbl_TD_Begin ("class=\"%s CENTER_MIDDLE\"",AcceptedClass[i]);
       fprintf (Gbl.F.Out,"%s",AcceptedSymbol[i]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[i]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[i] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table and box *****/
@@ -5082,7 +5080,7 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
                       Hlp_ANALYTICS_Figures_language,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -5095,7 +5093,7 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
             Txt_Language,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** For each language... *****/
    for (Lan = (Lan_Language_t) 1;
@@ -5118,24 +5116,24 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
 	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
      {
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_STR_LANG_NAME[Lan]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[Lan]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[Lan] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table and box *****/
@@ -5166,7 +5164,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
                       Hlp_ANALYTICS_Figures_calendar,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -5179,7 +5177,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
             Txt_Calendar,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** For each day... *****/
    for (FirstDayOfWeek = 0;	// Monday
@@ -5204,29 +5202,29 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	FirstDayOfWeek++)
       if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
 	{
-	 Tbl_StartRow ();
+	 Tbl_TR_Begin (NULL);
 
-	 Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
 	 fprintf (Gbl.F.Out,"<img src=\"%s/first-day-of-week-%u.png\""
 			    " alt=\"%s\" title=\"%s: %s\""
 			    " class=\"ICO40x40\" />",
 		  Cfg_URL_ICON_PUBLIC,FirstDayOfWeek,
 		  Txt_DAYS_SMALL[FirstDayOfWeek],
 		  Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek]);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
-	 Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
 	 fprintf (Gbl.F.Out,"%u",NumUsrs[FirstDayOfWeek]);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
-	 Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
 	 fprintf (Gbl.F.Out,"%5.2f%%",
 		  NumUsrsTotal ? (float) NumUsrs[FirstDayOfWeek] * 100.0 /
 				 (float) NumUsrsTotal :
 				 0);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
-	 Tbl_EndRow ();
+	 Tbl_TR_End ();
 	}
 
    /***** End table and box *****/
@@ -5254,7 +5252,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
                       Hlp_ANALYTICS_Figures_dates,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -5267,7 +5265,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
             Txt_Format,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** For each format... *****/
    for (Format = (Dat_Format_t) 0;
@@ -5290,25 +5288,25 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
 	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 	Format++)
      {
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"DAT_N LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT_N LEFT_MIDDLE\"");
       Dat_PutSpanDateFormat (Format);
       Dat_PutScriptDateFormat (Format);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[Format]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
 	       NumUsrsTotal ? (float) NumUsrs[Format] * 100.0 /
 			      (float) NumUsrsTotal :
 			      0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table and box *****/
@@ -5338,7 +5336,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
                       Hlp_ANALYTICS_Figures_icons,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -5351,7 +5349,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
             Txt_Icons,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** For each icon set... *****/
    for (IconSet = (Ico_IconSet_t) 0;
@@ -5374,9 +5372,9 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
      {
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/cog.svg\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />",
@@ -5384,20 +5382,20 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
                Ico_IconSetId[IconSet],
                Ico_IconSetNames[IconSet],
                Ico_IconSetNames[IconSet]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[IconSet]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[IconSet] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table and box *****/
@@ -5427,7 +5425,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
                       Hlp_ANALYTICS_Figures_menu,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -5440,7 +5438,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
             Txt_Menu,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** For each menu... *****/
    for (Menu = (Mnu_Menu_t) 0;
@@ -5463,29 +5461,29 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
 	Menu < Mnu_NUM_MENUS;
 	Menu++)
      {
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />",
                Cfg_URL_ICON_PUBLIC,Mnu_MenuIcons[Menu],
                Txt_MENU_NAMES[Menu],
                Txt_MENU_NAMES[Menu]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[Menu]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[Menu] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table and box *****/
@@ -5515,7 +5513,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
                       Hlp_ANALYTICS_Figures_theme,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -5528,7 +5526,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
             Txt_Theme_SKIN,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** For each theme... *****/
    for (Theme = (The_Theme_t) 0;
@@ -5551,29 +5549,29 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
 	Theme < The_NUM_THEMES;
 	Theme++)
      {
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/theme_32x20.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:40px; height:25px;\" />",
                Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Theme],
                The_ThemeNames[Theme],
                The_ThemeNames[Theme]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[Theme]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[Theme] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table and box *****/
@@ -5602,7 +5600,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
                       Hlp_ANALYTICS_Figures_columns,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -5615,7 +5613,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
             Txt_Columns,
             Txt_No_of_users,
             Txt_PERCENT_of_users);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** For each language... *****/
    for (SideCols = 0;
@@ -5638,29 +5636,29 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
      {
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/layout%u%u_32x20.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:40px; height:25px;\" />",
                Cfg_URL_ICON_PUBLIC,SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[SideCols]);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[SideCols] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table and box *****/

@@ -215,14 +215,14 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    if (Gbl.DegTypes.Num)
      {
       /***** Write heading *****/
-      Tbl_StartTableWideMarginPadding (2);
+      Tbl_TABLE_BeginWideMarginPadding (2);
       DT_PutHeadDegreeTypesForSeeing (NextAction,SelectedOrder);
 
       /***** List current degree types for seeing *****/
       DT_ListDegreeTypesForSeeing ();
 
       /***** End table *****/
-      Tbl_EndTable ();
+      Tbl_TABLE_End ();
      }
    else	// No degree types created
       Ale_ShowAlert (Ale_INFO,Txt_No_types_of_degree);
@@ -330,24 +330,24 @@ static void DT_ListDegreeTypesForSeeing (void)
 	         Gbl.Hierarchy.Deg.DegTypCod) ? "LIGHT_BLUE" :
                                                 Gbl.ColorRows[Gbl.RowEvenOdd];
 
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
       /* Number of degree type in this list */
-      Tbl_StartCellAttr ("class=\"DAT_N RIGHT_MIDDLE %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT_N RIGHT_MIDDLE %s\"",BgColor);
       fprintf (Gbl.F.Out,"%u",NumDegTyp + 1);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Name of degree type */
-      Tbl_StartCellAttr ("class=\"DAT_N LEFT_MIDDLE %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT_N LEFT_MIDDLE %s\"",BgColor);
       fprintf (Gbl.F.Out,"%s",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Number of degrees of this type */
-      Tbl_StartCellAttr ("class=\"DAT_N RIGHT_MIDDLE %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT_N RIGHT_MIDDLE %s\"",BgColor);
       fprintf (Gbl.F.Out,"%u",Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
@@ -390,7 +390,7 @@ static void DT_ListDegreeTypesForEdition (void)
    unsigned NumDegTyp;
 
    /***** Write heading *****/
-   Tbl_StartTableWidePadding (2);
+   Tbl_TABLE_BeginWidePadding (2);
    DT_PutHeadDegreeTypesForEdition ();
 
    /***** List degree types with forms for edition *****/
@@ -398,10 +398,10 @@ static void DT_ListDegreeTypesForEdition (void)
 	NumDegTyp < Gbl.DegTypes.Num;
 	NumDegTyp++)
      {
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
       /* Put icon to remove degree type */
-      Tbl_StartCellAttr ("class=\"BM\"");
+      Tbl_TD_Begin ("class=\"BM\"");
       if (Gbl.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees => deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
@@ -411,15 +411,15 @@ static void DT_ListDegreeTypesForEdition (void)
          Ico_PutIconRemove ();
          Frm_EndForm ();
         }
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Degree type code */
-      Tbl_StartCellAttr ("class=\"DAT CODE\"");
+      Tbl_TD_Begin ("class=\"DAT CODE\"");
       fprintf (Gbl.F.Out,"%ld",Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Name of degree type */
-      Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
       Frm_StartForm (ActRenDegTyp);
       DT_PutParamOtherDegTypCod (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\""
@@ -430,18 +430,18 @@ static void DT_ListDegreeTypesForEdition (void)
                Gbl.DegTypes.Lst[NumDegTyp].DegTypName,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Number of degrees of this type */
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%u",Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -472,30 +472,30 @@ static void DT_PutFormToCreateDegreeType (void)
    /***** Write heading *****/
    DT_PutHeadDegreeTypesForEdition ();
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
    /***** Column to remove degree type, disabled here *****/
-   Tbl_StartCellAttr ("class=\"BM\"");
-   Tbl_EndCell ();
+   Tbl_TD_Begin ("class=\"BM\"");
+   Tbl_TD_End ();
 
    /***** Degree type code *****/
-   Tbl_StartCellAttr ("class=\"CODE\"");
-   Tbl_EndCell ();
+   Tbl_TD_Begin ("class=\"CODE\"");
+   Tbl_TD_End ();
 
    /***** Degree type name *****/
-   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\""
                       " size=\"25\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Deg_MAX_CHARS_DEGREE_TYPE_NAME,DT_EditingDegTyp->DegTypName);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Number of degrees of this degree type ****/
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"0");
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_type_of_degree);
@@ -514,7 +514,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
    extern const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS];
    DT_Order_t Order;
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th></th>");
    for (Order = DT_ORDER_BY_DEGREE_TYPE;
 	Order <= DT_ORDER_BY_NUM_DEGREES;
@@ -556,7 +556,7 @@ static void DT_PutHeadDegreeTypesForEdition (void)
    extern const char *Txt_Type_of_degree;
    extern const char *Txt_Degrees;
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
@@ -570,7 +570,7 @@ static void DT_PutHeadDegreeTypesForEdition (void)
             Txt_Code,
             Txt_Type_of_degree,
             Txt_Degrees);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/

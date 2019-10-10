@@ -410,7 +410,7 @@ static void Lnk_ListLinksForEdition (void)
    struct Link *Lnk;
 
    /***** Start table *****/
-   Tbl_StartTableWidePadding (2);
+   Tbl_TABLE_BeginWidePadding (2);
 
    /***** Table head *****/
    Lnk_PutHeadLinks ();
@@ -422,23 +422,23 @@ static void Lnk_ListLinksForEdition (void)
      {
       Lnk = &Gbl.Links.Lst[NumLnk];
 
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
       /* Put icon to remove link */
-      Tbl_StartCellAttr ("class=\"BM\"");
+      Tbl_TD_Begin ("class=\"BM\"");
       Frm_StartForm (ActRemLnk);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Link code */
-      Tbl_StartCellAttr ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%ld",Lnk->LnkCod);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Link short name */
-      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -448,10 +448,10 @@ static void Lnk_ListLinksForEdition (void)
                Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Link full name */
-      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -461,10 +461,10 @@ static void Lnk_ListLinksForEdition (void)
                Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Link WWW */
-      Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
       Frm_StartForm (ActChgLnkWWW);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
@@ -474,13 +474,13 @@ static void Lnk_ListLinksForEdition (void)
                Cns_MAX_CHARS_WWW,Lnk->WWW,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -746,42 +746,42 @@ static void Lnk_PutFormToCreateLink (void)
    /***** Write heading *****/
    Lnk_PutHeadLinks ();
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
    /***** Link code *****/
-   Tbl_StartCellAttr ("class=\"BM\"");
-   Tbl_EndCell ();
+   Tbl_TD_Begin ("class=\"BM\"");
+   Tbl_TD_End ();
 
-   Tbl_PutEmptyCells (1);
+   Tbl_TD_Empty (1);
 
    /***** Link short name *****/
-   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
             Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Link full name *****/
-   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
             Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Link WWW *****/
-   Tbl_StartCellAttr ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
    fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />",
             Cns_MAX_CHARS_WWW,Lnk_EditingLnk->WWW);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
@@ -801,7 +801,7 @@ static void Lnk_PutHeadLinks (void)
    extern const char *Txt_Full_name;
    extern const char *Txt_WWW;
 
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
    fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
@@ -819,7 +819,7 @@ static void Lnk_PutHeadLinks (void)
             Txt_Short_name,
             Txt_Full_name,
             Txt_WWW);
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/

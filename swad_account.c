@@ -278,15 +278,14 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    extern const char *Txt_Its_me;
 
    /***** Write number of user in the list *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("rowspan=\"2\" class=\"USR_LIST_NUM_N RIGHT_TOP COLOR%u\"",
-	              Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("rowspan=\"2\" class=\"USR_LIST_NUM_N RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%u",NumUsr);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Write user's ID and name *****/
-   Tbl_StartCellAttr ("class=\"DAT_N LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s: %s<br />"
 		      "%s: ",
 	    Txt_ID,ID,
@@ -295,28 +294,28 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FullName);
    else
       fprintf (Gbl.F.Out,"<em>%s</em>",Txt_yet_unnamed);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
    /***** Button to login with this account *****/
-   Tbl_StartCellAttr ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
    Frm_StartForm (ActLogInNew);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Btn_PutCreateButtonInline (Txt_Its_me);
    Frm_EndForm ();
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
-   Tbl_StartRow ();
+   Tbl_TR_End ();
+   Tbl_TR_Begin (NULL);
 
    /***** Courses of this user *****/
-   Tbl_StartCellAttr ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
    UsrDat->Sex = Usr_SEX_UNKNOWN;
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NET);
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STD);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/
@@ -366,15 +365,15 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 		NewNicknameWithoutArroba);
    else
       NewNicknameWithArroba[0] = '\0';
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"NewNick\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Nickname);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
@@ -382,20 +381,20 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
             1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
             Txt_HELP_nickname,
             NewNicknameWithArroba);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Email *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"NewEmail\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Email);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
@@ -403,9 +402,9 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
             Cns_MAX_CHARS_EMAIL_ADDRESS,
             Txt_HELP_email,
             NewEmail);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Password *****/
    Pwd_PutFormToGetNewPasswordOnce ();

@@ -368,7 +368,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
    bool ICanEditMatches = Mch_CheckIfICanEditMatches ();
 
    /***** Write the heading *****/
-   Tbl_StartTableWideMarginPadding (2);
+   Tbl_TABLE_BeginWideMarginPadding (2);
    Mch_ListOneOrMoreMatchesHeading (ICanEditMatches);
 
    /***** Write rows *****/
@@ -383,7 +383,7 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
       ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match.MchCod);
 
       /***** Write row for this match ****/
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
       /* Icons */
       if (ICanEditMatches)
@@ -409,11 +409,11 @@ static void Mch_ListOneOrMoreMatches (struct Game *Game,
       Mch_ListOneOrMoreMatchesResult (&Match,
 				      ICanPlayThisMatchBasedOnGrps);
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -430,7 +430,7 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
    extern const char *Txt_Result;
 
    /***** Start row *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
    /***** Column for icons *****/
    if (ICanEditMatches)
@@ -467,7 +467,7 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
             Txt_Result);
 
    /***** End row *****/
-   Tbl_EndRow ();
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/
@@ -511,7 +511,7 @@ static bool Mch_CheckIfICanEditThisMatch (const struct Match *Match)
 
 static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
   {
-   Tbl_StartCellAttr ("class=\"BT%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
    /***** Put icon to remove the match *****/
    if (Mch_CheckIfICanEditThisMatch (Match))
@@ -526,7 +526,7 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
    else
       Ico_PutIconRemovalNotAllowed ();
 
-   Tbl_EndCell ();
+   Tbl_TD_End ();
   }
 
 /*****************************************************************************/
@@ -536,9 +536,9 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
 static void Mch_ListOneOrMoreMatchesAuthor (const struct Match *Match)
   {
    /***** Match author (teacher) *****/
-   Tbl_StartCellAttr ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
    Usr_WriteAuthor1Line (Match->UsrCod,false);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
   }
 
 /*****************************************************************************/
@@ -554,11 +554,11 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
-      Tbl_StartCellAttr ("id=\"mch_time_%u_%u\" class=\"%s LEFT_TOP COLOR%u\"",
-			 (unsigned) StartEndTime,UniqueId,
-			 Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
-									   "DATE_GREEN",
-			 Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("id=\"mch_time_%u_%u\" class=\"%s LEFT_TOP COLOR%u\"",
+		    (unsigned) StartEndTime,UniqueId,
+		    Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
+								      "DATE_GREEN",
+		    Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
 			 "%ld,%u,'<br />','%s',true,true,0x7);"
@@ -566,7 +566,7 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 	       (unsigned) StartEndTime,UniqueId,
 	       Match->TimeUTC[StartEndTime],
 	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
      }
   }
 
@@ -576,7 +576,7 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 
 static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
   {
-   Tbl_StartCellAttr ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<span class=\"ASG_TITLE\">%s</span>",Match->Title);
@@ -585,7 +585,7 @@ static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
    if (Gbl.Crs.Grps.NumGrps)
       Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (Match);
 
-   Tbl_EndCell ();
+   Tbl_TD_End ();
   }
 
 /*****************************************************************************/
@@ -659,9 +659,9 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
 static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match)
   {
    /***** Number of players who have answered any question in the match ******/
-   Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%u",Mch_GetNumUsrsWhoHaveAnswerMch (Match->MchCod));
-   Tbl_EndCell ();
+   Tbl_TD_End ();
   }
 
 /*****************************************************************************/
@@ -674,7 +674,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   Tbl_StartCellAttr ("class=\"DAT CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
 
    if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished match
       /* Current question index / total of questions */
@@ -713,7 +713,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
 	 break;
      }
 
-   Tbl_EndCell ();
+   Tbl_TD_End ();
   }
 
 /*****************************************************************************/
@@ -727,7 +727,7 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
    extern const char *Txt_Hidden_result;
    extern const char *Txt_Visible_result;
 
-   Tbl_StartCellAttr ("class=\"DAT CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -777,7 +777,7 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
 	 break;
      }
 
-   Tbl_EndCell ();
+   Tbl_TD_End ();
   }
 
 /*****************************************************************************/
@@ -1191,27 +1191,27 @@ static void Mch_PutFormNewMatch (struct Game *Game)
 		      Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE,2);
 
    /***** Match title *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Gam_MAX_CHARS_TITLE,Game->Title);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Groups *****/
    Mch_ShowLstGrpsToCreateMatch ();
 
    /***** End table *****/
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
 
    /***** Put icon with link *****/
    Frm_LinkFormSubmit (Txt_Play,NULL,NULL);
@@ -1248,19 +1248,19 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
    if (Gbl.Crs.Grps.GrpTypes.Num)
      {
       /***** Start box and table *****/
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      Tbl_TD_Begin ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Groups);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"LEFT_TOP\"");
       Box_StartBoxTable ("95%",NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/
-      Tbl_StartRow ();
-      Tbl_StartCellAttr ("colspan=\"7\" class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TR_Begin (NULL);
+      Tbl_TD_Begin ("colspan=\"7\" class=\"DAT LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"<label>"
                          "<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\""
@@ -1269,9 +1269,9 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
 	                 "%s %s"
 	                 "</label>",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
@@ -1284,8 +1284,8 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
 
       /***** End table and box *****/
       Box_EndBoxTable ();
-      Tbl_EndCell ();
-      Tbl_EndRow ();
+      Tbl_TD_End ();
+      Tbl_TR_End ();
      }
 
    /***** Free list of groups types and groups in this course *****/
@@ -2481,18 +2481,18 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	 NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
 
 	 /***** Start table *****/
-	 Tbl_StartTableWidePadding (8);
+	 Tbl_TABLE_BeginWidePadding (8);
 
 	 for (NumOpt = 0;
 	      NumOpt < NumOptions;
 	      NumOpt++)
 	   {
 	    /***** Start row *****/
-	    Tbl_StartRow ();
+	    Tbl_TR_Begin (NULL);
 
 	    /***** Write letter for this option *****/
 	    /* Start table cell */
-	    Tbl_StartCellAttr ("class=\"MATCH_STD_CELL\"");
+	    Tbl_TD_Begin ("class=\"MATCH_STD_CELL\"");
 
 	    /* Form with button.
 	       Sumitting onmousedown instead of default onclick
@@ -2516,14 +2516,14 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	    Frm_EndForm ();
 
 	    /* End table cell */
-	    Tbl_EndCell ();
+	    Tbl_TD_End ();
 
 	    /***** End row *****/
-	    Tbl_EndRow ();
+	    Tbl_TR_End ();
 	   }
 
 	 /***** End table *****/
-	 Tbl_EndTable ();
+	 Tbl_TABLE_End ();
 	}
       else
 	 Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
@@ -3146,20 +3146,20 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
 	                       (float) NumAnswerersQst) + 0.5);
 
    /***** Bar proportional to number of users *****/
-   Tbl_StartTableWide ();
-   Tbl_StartRowAttr ("class=\"MATCH_RES_TR\"");
+   Tbl_TABLE_BeginWide ();
+   Tbl_TR_Begin ("class=\"MATCH_RES_TR\"");
    for (i = 0;
 	i < 100;
 	i++)
      {
-      Tbl_StartCellAttr ("class=\"%s\"",
-			 (i < BarWidth) ? (Correct ? "MATCH_RES_CORRECT" :
-						     "MATCH_RES_WRONG") :
-					  "MATCH_RES_VOID");
-      Tbl_EndCell ();
+      Tbl_TD_Begin ("class=\"%s\"",
+		    (i < BarWidth) ? (Correct ? "MATCH_RES_CORRECT" :
+					        "MATCH_RES_WRONG") :
+				     "MATCH_RES_VOID");
+      Tbl_TD_End ();
      }
-   Tbl_EndRow ();
-   Tbl_EndTable ();
+   Tbl_TR_End ();
+   Tbl_TABLE_End ();
 
    /***** Write the number of users *****/
    fprintf (Gbl.F.Out,"%s",Gbl.Title);

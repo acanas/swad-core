@@ -79,7 +79,7 @@ void Box_StartBoxTable (const char *Width,const char *Title,
   {
    Box_StartBox (Width,Title,FunctionToDrawContextualIcons,
                  HelpLink,Closable);
-   Tbl_StartTableWidePadding (CellPadding);
+   Tbl_TABLE_BeginWidePadding (CellPadding);
   }
 
 void Box_StartBoxTableShadow (const char *Width,const char *Title,
@@ -90,7 +90,7 @@ void Box_StartBoxTableShadow (const char *Width,const char *Title,
    Box_StartBoxShadow (Width,Title,
                        FunctionToDrawContextualIcons,
                        HelpLink);
-   Tbl_StartTableWidePadding (CellPadding);
+   Tbl_TABLE_BeginWidePadding (CellPadding);
   }
 
 void Box_StartBox (const char *Width,const char *Title,
@@ -204,13 +204,13 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
 
 void Box_EndBoxTable (void)
   {
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
    Box_EndBox ();
   }
 
 void Box_EndBoxTableWithButton (Btn_Button_t Button,const char *TxtButton)
   {
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
    Box_EndBoxWithButton (Button,TxtButton);
   }
 

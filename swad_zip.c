@@ -567,8 +567,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
 
    /***** Link to download the file *****/
-   Tbl_StartRow ();
-   Tbl_StartCellAttr ("colspan=\"2\" class=\"FILENAME_TXT CENTER_MIDDLE\"");
+   Tbl_TR_Begin (NULL);
+   Tbl_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CENTER_MIDDLE\"");
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\">"
                       "<img src=\"%s32x32/zip32x32.gif\""
                       " alt=\"%s\" title=\"%s\""
@@ -586,34 +586,34 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Download,
 	    Txt_Download);
-   Tbl_EndCell ();
-   Tbl_EndRow ();
+   Tbl_TD_End ();
+   Tbl_TR_End ();
 
    /***** Filename *****/
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Filename);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">"
 	              "%s"
 	              "</a>",
 	    URL,FileName,FileName);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** Write the file size *****/
    Fil_WriteFileSizeFull ((double) FileSize,FileSizeStr);
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_File_size);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",FileSizeStr);
    if (UncompressedSize)
      {
@@ -621,9 +621,9 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
       fprintf (Gbl.F.Out," (%s %s)",
                FileSizeStr,Txt_FILE_uncompressed);
      }
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();

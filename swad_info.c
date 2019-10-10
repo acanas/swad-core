@@ -1134,13 +1134,13 @@ void Inf_FormsToSelSendInfo (void)
 	InfoSrc < Inf_NUM_INFO_SOURCES;
 	InfoSrc++)
      {
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
       /* Select info source */
       if (InfoSrc == InfoSrcSelected)
-	 Tbl_StartCellAttr ("class=\"DAT LEFT_TOP LIGHT_BLUE\"");
+	 Tbl_TD_Begin ("class=\"DAT LEFT_TOP LIGHT_BLUE\"");
       else
-	 Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+	 Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
       Frm_StartForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
       fprintf (Gbl.F.Out,"<input type=\"radio\""
 	                 " id=\"InfoSrc%u\" name=\"InfoSrc\" value=\"%u\"",
@@ -1158,13 +1158,13 @@ void Inf_FormsToSelSendInfo (void)
 	}
       fprintf (Gbl.F.Out," />");
       Frm_EndForm ();
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
       /* Form for this info source */
       if (InfoSrc == InfoSrcSelected)
-	 Tbl_StartCellAttr ("class=\"LEFT_TOP LIGHT_BLUE\"");
+	 Tbl_TD_Begin ("class=\"LEFT_TOP LIGHT_BLUE\"");
       else
-	 Tbl_StartCellAttr ("class=\"LEFT_TOP\"");
+	 Tbl_TD_Begin ("class=\"LEFT_TOP\"");
       fprintf (Gbl.F.Out,"<label for=\"InfoSrc%u\" class=\"%s\">%s</label>",
 	       (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
@@ -1173,9 +1173,9 @@ void Inf_FormsToSelSendInfo (void)
                   Txt_INFO_SRC_HELP[InfoSrc]);
       if (Inf_FormsForEditionTypes[InfoSrc])
          Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table and box *****/

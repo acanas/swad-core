@@ -39,25 +39,23 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tbl_StartTableClass (const char *fmt,...);
-void Tbl_StartTablePadding (unsigned CellPadding);
-void Tbl_StartTable (void);
-void Tbl_StartTableCenterPadding (unsigned CellPadding);
-void Tbl_StartTableCenter (void);
-void Tbl_StartTableWidePadding (unsigned CellPadding);
-void Tbl_StartTableWide (void);
-void Tbl_StartTableWideMarginPadding (unsigned CellPadding);
-void Tbl_StartTableWideMargin (void);
-void Tbl_EndTable (void);
+void Tbl_TABLE_Begin (const char *fmt,...);
+void Tbl_TABLE_BeginPadding (unsigned CellPadding);
+void Tbl_TABLE_BeginWithoutAttr (void);
+void Tbl_TABLE_BeginCenterPadding (unsigned CellPadding);
+void Tbl_TABLE_BeginCenter (void);
+void Tbl_TABLE_BeginWidePadding (unsigned CellPadding);
+void Tbl_TABLE_BeginWide (void);
+void Tbl_TABLE_BeginWideMarginPadding (unsigned CellPadding);
+void Tbl_TABLE_BeginWideMargin (void);
+void Tbl_TABLE_End (void);
 
-void Tbl_StartRowAttr (const char *fmt,...);
-void Tbl_StartRow (void);
-void Tbl_EndRow (void);
+void Tbl_TR_Begin (const char *fmt,...);
+void Tbl_TR_End (void);
 
-void Tbl_StartCellAttr (const char *fmt,...);
-void Tbl_StartCell (void);
-void Tbl_EndCell (void);
-void Tbl_PutEmptyCells (unsigned NumColumns);
-void Tbl_PutEmptyColouredCells (unsigned NumColumns);
+void Tbl_TD_Begin (const char *fmt,...);
+void Tbl_TD_End (void);
+void Tbl_TD_Empty (unsigned NumColumns);
+void Tbl_TD_ColouredEmpty (unsigned NumColumns);
 
 #endif

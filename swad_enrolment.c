@@ -927,23 +927,23 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
    /***** Text area for users' IDs *****/
-   Tbl_StartTableCenterPadding (2);
-   Tbl_StartRow ();
+   Tbl_TABLE_BeginCenterPadding (2);
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"<label for=\"UsrsIDs\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"<textarea id=\"UsrsIDs\" name=\"UsrsIDs\""
                       " cols=\"60\" rows=\"10\">"
                       "</textarea>");
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
-   Tbl_EndTable ();
+   Tbl_TR_End ();
+   Tbl_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -2294,42 +2294,42 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    /***** Selection of scope and roles *****/
    /* Start form and table */
    Frm_StartForm (ActUpdSignUpReq);
-   Tbl_StartTableWideMarginPadding (2);
+   Tbl_TABLE_BeginWideMarginPadding (2);
 
    /* Scope (whole platform, current centre, current degree or current course) */
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"<label for=\"ScopeEnr\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
    Sco_PutSelectorScope ("ScopeEnr",true);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /* Users' roles in listing */
-   Tbl_StartRow ();
+   Tbl_TR_Begin (NULL);
 
-   Tbl_StartCellAttr ("class=\"RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_StartCellAttr ("class=\"DAT LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
                            1 << Rol_TCH,
                            RolesSelected,
                            false,true);
-   Tbl_EndCell ();
+   Tbl_TD_End ();
 
-   Tbl_EndRow ();
+   Tbl_TR_End ();
 
    /* End table and form */
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
    Frm_EndForm ();
 
    /***** Build query *****/
@@ -2810,7 +2810,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       Usr_UsrDataConstructor (&UsrDat);
 
       /* Start table */
-      Tbl_StartTableCenterPadding (2);
+      Tbl_TABLE_BeginCenterPadding (2);
       fprintf (Gbl.F.Out,"<th></th>"
                          "<th class=\"LEFT_TOP\">"
                          "%s"
@@ -2834,7 +2834,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                Txt_Requester,
                Txt_Role,
                Txt_Date);
-      Tbl_EndRow ();
+      Tbl_TR_End ();
 
       /* List requests */
       for (NumReq = 0;
@@ -2870,16 +2870,16 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
               DesiredRole == Rol_TCH))
            {
             /***** Number *****/
-            Tbl_StartRow ();
-	    Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP\"");
+            Tbl_TR_Begin (NULL);
+	    Tbl_TD_Begin ("class=\"DAT RIGHT_TOP\"");
 	    fprintf (Gbl.F.Out,"%lu",NumReqs - NumReq);
-	    Tbl_EndCell ();
+	    Tbl_TD_End ();
 
             /***** Link to course *****/
             Crs_GetDataOfCourseByCod (&Crs);
             Deg.DegCod = Crs.DegCod;
             Deg_GetDataOfDegreeByCod (&Deg);
-            Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+            Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
             Frm_StartFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
             snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -2890,38 +2890,38 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
         	               "</a>",
                      Deg.ShrtName,Crs.ShrtName);
             Frm_EndForm ();
-            Tbl_EndCell ();
+            Tbl_TD_End ();
 
             /***** Number of teachers in the course *****/
-            Tbl_StartCellAttr ("class=\"DAT RIGHT_TOP\"");
+            Tbl_TD_Begin ("class=\"DAT RIGHT_TOP\"");
             fprintf (Gbl.F.Out,"%u",Crs.NumUsrs[Rol_TCH]);
-            Tbl_EndCell ();
+            Tbl_TD_End ();
 
             /***** User photo *****/
-            Tbl_StartCellAttr ("class=\"DAT CENTER_TOP\" style=\"width:22px;\"");
+            Tbl_TD_Begin ("class=\"DAT CENTER_TOP\" style=\"width:22px;\"");
             ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
                               "PHOTO21x28",Pho_ZOOM,false);
-            Tbl_EndCell ();
+            Tbl_TD_End ();
 
             /***** User name *****/
-            Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+            Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
             fprintf (Gbl.F.Out,"<div class=\"REQUESTER_NAME\">");	// Limited width
             Usr_WriteFirstNameBRSurnames (&UsrDat);
             fprintf (Gbl.F.Out,"</div>");
-            Tbl_EndCell ();
+            Tbl_TD_End ();
 
             /***** Requested role (row[3]) *****/
-            Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+            Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
             fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
-            Tbl_EndCell ();
+            Tbl_TD_End ();
 
             /***** Request time (row[4]) *****/
             Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[4]),"DAT");
 
             /***** Button to confirm the request *****/
-            Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+            Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
             switch (DesiredRole)
               {
                case Rol_STD:
@@ -2943,18 +2943,18 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Btn_PutCreateButtonInline (Txt_Register);
             Frm_EndForm ();
-            Tbl_EndCell ();
+            Tbl_TD_End ();
 
             /***** Button to reject the request *****/
-            Tbl_StartCellAttr ("class=\"DAT LEFT_TOP\"");
+            Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
             Frm_StartForm (ActReqRejSignUp);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Btn_PutRemoveButtonInline (Txt_Reject);
             Frm_EndForm ();
-            Tbl_EndCell ();
+            Tbl_TD_End ();
 
-            Tbl_EndRow ();
+            Tbl_TR_End ();
 
             /***** Mark possible notification as seen *****/
             Ntf_MarkNotifAsSeen (Ntf_EVENT_ENROLMENT_REQUEST,
@@ -2966,7 +2966,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
         }
 
       /* End table */
-      Tbl_EndTable ();
+      Tbl_TABLE_End ();
 
       /* Free memory used for user's data */
       Usr_UsrDataDestructor (&UsrDat);

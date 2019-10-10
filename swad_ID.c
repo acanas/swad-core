@@ -594,7 +594,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_ID);
 
    /***** Start table *****/
-   Tbl_StartTableWidePadding (2);
+   Tbl_TABLE_BeginWidePadding (2);
 
    /***** List existing user's IDs *****/
    for (NumID = 0;
@@ -603,16 +603,16 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
      {
       if (NumID == 0)
 	{
-	 Tbl_StartRow ();
+	 Tbl_TR_Begin (NULL);
 
-	 Tbl_StartCellAttr ("class=\"REC_C1_BOT RIGHT_TOP\"");
+	 Tbl_TD_Begin ("class=\"REC_C1_BOT RIGHT_TOP\"");
 	 fprintf (Gbl.F.Out,"<label for=\"UsrID\" class=\"%s\">"
 			    "%s:"
 			    "</label>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_ID);
-	 Tbl_EndCell ();
+	 Tbl_TD_End ();
 
-	 Tbl_StartCellAttr ("class=\"REC_C2_BOT LEFT_TOP USR_ID\"");
+	 Tbl_TD_Begin ("class=\"REC_C2_BOT LEFT_TOP USR_ID\"");
 	}
       else	// NumID >= 1
          fprintf (Gbl.F.Out,"<br />");
@@ -667,33 +667,33 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 		                                   "");
       if (NumID == UsrDat->IDs.Num - 1)
 	{
-	 Tbl_EndCell ();
-         Tbl_EndRow ();
+	 Tbl_TD_End ();
+         Tbl_TR_End ();
 	}
      }
 
    if (UsrDat->IDs.Num < ID_MAX_IDS_PER_USER)
      {
       /***** Write help text *****/
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("colspan=\"2\" class=\"DAT CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("colspan=\"2\" class=\"DAT CENTER_MIDDLE\"");
       Ale_ShowAlert (Ale_INFO,Txt_The_ID_is_used_in_order_to_facilitate_);
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
 
       /***** Form to enter new user's ID *****/
-      Tbl_StartRow ();
+      Tbl_TR_Begin (NULL);
 
-      Tbl_StartCellAttr ("class=\"REC_C1_BOT RIGHT_TOP\"");
+      Tbl_TD_Begin ("class=\"REC_C1_BOT RIGHT_TOP\"");
       fprintf (Gbl.F.Out,"<label for=\"NewID\" class=\"%s\">%s:</label>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       UsrDat->IDs.Num ? Txt_Another_ID :	// A new user's ID
 		                 Txt_ID);		// The first user's ID
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_StartCellAttr ("class=\"REC_C2_BOT LEFT_TOP DAT\"");
+      Tbl_TD_Begin ("class=\"REC_C2_BOT LEFT_TOP DAT\"");
       if (ItsMe)
 	 Frm_StartFormAnchor (ActChgMyID,ID_ID_SECTION_ID);
       else
@@ -722,13 +722,13 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 		                 "");	// Show the most recent ID
       Btn_PutCreateButtonInline (Txt_Add_this_ID);
       Frm_EndForm ();
-      Tbl_EndCell ();
+      Tbl_TD_End ();
 
-      Tbl_EndRow ();
+      Tbl_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_EndTable ();
+   Tbl_TABLE_End ();
   }
 
 /*****************************************************************************/

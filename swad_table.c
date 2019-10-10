@@ -55,11 +55,14 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Tbl_TR_BeginWithoutAttr (void);
+static void Tbl_TD_BeginWithoutAttr (void);
+
 /*****************************************************************************/
 /******************************* Start/end table *****************************/
 /*****************************************************************************/
 
-void Tbl_StartTableClass (const char *fmt,...)
+void Tbl_TABLE_Begin (const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -84,69 +87,69 @@ void Tbl_StartTableClass (const char *fmt,...)
 	 free ((void *) Class);
 	}
       else
-         Tbl_StartTable ();
+         Tbl_TABLE_BeginWithoutAttr ();
      }
    else
-      Tbl_StartTable ();
+      Tbl_TABLE_BeginWithoutAttr ();
   }
 
-void Tbl_StartTablePadding (unsigned CellPadding)
+void Tbl_TABLE_BeginPadding (unsigned CellPadding)
   {
    if (CellPadding)
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
    else
-      Tbl_StartTable ();
+      Tbl_TABLE_BeginWithoutAttr ();
   }
 
-void Tbl_StartTable (void)
+void Tbl_TABLE_BeginWithoutAttr (void)
   {
    fprintf (Gbl.F.Out,"<table>");
   }
 
-void Tbl_StartTableCenterPadding (unsigned CellPadding)
+void Tbl_TABLE_BeginCenterPadding (unsigned CellPadding)
   {
    if (CellPadding)
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
    else
-      Tbl_StartTableCenter ();
+      Tbl_TABLE_BeginCenter ();
   }
 
-void Tbl_StartTableCenter (void)
+void Tbl_TABLE_BeginCenter (void)
   {
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER\">");
   }
 
-void Tbl_StartTableWidePadding (unsigned CellPadding)
+void Tbl_TABLE_BeginWidePadding (unsigned CellPadding)
   {
    if (CellPadding)
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
    else
-      Tbl_StartTableWide ();
+      Tbl_TABLE_BeginWide ();
   }
 
-void Tbl_StartTableWide (void)
+void Tbl_TABLE_BeginWide (void)
   {
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE\">");
   }
 
-void Tbl_StartTableWideMarginPadding (unsigned CellPadding)
+void Tbl_TABLE_BeginWideMarginPadding (unsigned CellPadding)
   {
    if (CellPadding)
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
    else
-      Tbl_StartTableWideMargin ();
+      Tbl_TABLE_BeginWideMargin ();
   }
 
-void Tbl_StartTableWideMargin (void)
+void Tbl_TABLE_BeginWideMargin (void)
   {
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN\">");
   }
 
-void Tbl_EndTable (void)
+void Tbl_TABLE_End (void)
   {
    fprintf (Gbl.F.Out,"</table>");
   }
@@ -155,7 +158,7 @@ void Tbl_EndTable (void)
 /**************************** Start/end table row ****************************/
 /*****************************************************************************/
 
-void Tbl_StartRowAttr (const char *fmt,...)
+void Tbl_TR_Begin (const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -180,18 +183,18 @@ void Tbl_StartRowAttr (const char *fmt,...)
 	 free ((void *) Attr);
 	}
       else
-         Tbl_StartRow ();
+         Tbl_TR_BeginWithoutAttr ();
      }
    else
-      Tbl_StartRow ();
+      Tbl_TR_BeginWithoutAttr ();
   }
 
-void Tbl_StartRow (void)
+static void Tbl_TR_BeginWithoutAttr (void)
   {
    fprintf (Gbl.F.Out,"<tr>");
   }
 
-void Tbl_EndRow (void)
+void Tbl_TR_End (void)
   {
    fprintf (Gbl.F.Out,"</tr>");
   }
@@ -200,7 +203,7 @@ void Tbl_EndRow (void)
 /********************************* Table cells *******************************/
 /*****************************************************************************/
 
-void Tbl_StartCellAttr (const char *fmt,...)
+void Tbl_TD_Begin (const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -225,39 +228,44 @@ void Tbl_StartCellAttr (const char *fmt,...)
 	 free ((void *) Attr);
 	}
       else
-         Tbl_StartCell ();
+         Tbl_TD_BeginWithoutAttr ();
      }
    else
-      Tbl_StartCell ();
+      Tbl_TD_BeginWithoutAttr ();
   }
 
-void Tbl_StartCell (void)
+static void Tbl_TD_BeginWithoutAttr (void)
   {
    fprintf (Gbl.F.Out,"<td>");
   }
 
-void Tbl_EndCell (void)
+void Tbl_TD_End (void)
   {
    fprintf (Gbl.F.Out,"</td>");
   }
 
-void Tbl_PutEmptyCells (unsigned NumColumns)
+void Tbl_TD_Empty (unsigned NumColumns)
   {
    unsigned NumCol;
 
    for (NumCol = 0;
 	NumCol < NumColumns;
 	NumCol++)
-      fprintf (Gbl.F.Out,"<td></td>");
+     {
+      Tbl_TD_Begin (NULL);
+      Tbl_TD_End ();
+     }
   }
 
-void Tbl_PutEmptyColouredCells (unsigned NumColumns)
+void Tbl_TD_ColouredEmpty (unsigned NumColumns)
   {
    unsigned NumCol;
 
    for (NumCol = 0;
 	NumCol < NumColumns;
 	NumCol++)
-      fprintf (Gbl.F.Out,"<td class=\"COLOR%u\"></td>",
-	       Gbl.RowEvenOdd);
+     {
+      Tbl_TD_Begin ("class=\"COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_End ();
+     }
   }
