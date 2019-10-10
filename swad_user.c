@@ -3651,19 +3651,21 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
      }
 
    /***** User has accepted enrolment? *****/
-   fprintf (Gbl.F.Out,"<td class=\"");
    if (UsrIsTheMsgSender)
-      fprintf (Gbl.F.Out,"BM_SEL");
+      Tbl_StartCellAttr ("class=\"BM_SEL %s\" title=\"%s\"",
+			 UsrDat->Accepted ? "USR_LIST_NUM_N" :
+					    "USR_LIST_NUM",
+			 UsrDat->Accepted ? Txt_Enrolment_confirmed :
+					    Txt_Enrolment_not_confirmed);
    else
-      fprintf (Gbl.F.Out,"BM%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out," %s\" title=\"%s\">"
-	              "%s",
-            UsrDat->Accepted ? "USR_LIST_NUM_N" :
-        	               "USR_LIST_NUM",
-	    UsrDat->Accepted ? Txt_Enrolment_confirmed :
-                               Txt_Enrolment_not_confirmed,
-            UsrDat->Accepted ? "&check;" :
-        	               "&cross;");
+      Tbl_StartCellAttr ("class=\"BM%u %s\" title=\"%s\"",
+			 Gbl.RowEvenOdd,
+			 UsrDat->Accepted ? "USR_LIST_NUM_N" :
+					    "USR_LIST_NUM",
+			 UsrDat->Accepted ? Txt_Enrolment_confirmed :
+					    Txt_Enrolment_not_confirmed);
+   fprintf (Gbl.F.Out,"%s",UsrDat->Accepted ? "&check;" :
+        	                              "&cross;");
    Tbl_EndCell ();
 
    /***** Write number of user in the list *****/

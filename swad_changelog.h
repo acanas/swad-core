@@ -487,14 +487,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.31.36 (2019-10-10)"
+#define Log_PLATFORM_VERSION	"SWAD 19.31.37 (2019-10-10)"
 #define CSS_FILE		"swad19.29.css"
 #define JS_FILE			"swad19.30.js"
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
-// TODO: Un TFG preasignado sin estudiante tiene que salir un triángulo amarillo
+// TODO: En un TFG preasignado sin estudiante tiene que salir un triángulo amarillo
+// TODO: En un TFG no preasignado con estudiante tiene que salir un triángulo amarillo
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 
+	Version 19.31.37: Oct 10, 2019	Code refactoring in HTML tables. (246626 lines)
 	Version 19.31.36: Oct 10, 2019	Code refactoring in HTML tables. (246620 lines)
 	Version 19.31.35: Oct 10, 2019	Code refactoring in HTML tables. (246629 lines)
 	Version 19.31.34: Oct 10, 2019	Code refactoring in HTML tables. (246628 lines)

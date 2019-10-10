@@ -4345,7 +4345,6 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    Tbl_StartRow ();
 
    /***** Write the user answer *****/
-   fprintf (Gbl.F.Out,"<td");
    if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has answered the question
      {
       /* Filter the user answer */
@@ -4374,17 +4373,16 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
             break;
            }
         }
-      fprintf (Gbl.F.Out," class=\"%s CENTER_TOP\">"
-	                 "%s",
-               (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
-                Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
-                (Correct ? "ANS_OK" :
-                           "ANS_BAD") :
-                "ANS_0",
-               Gbl.Test.StrAnswersOneQst[NumQst]);
+      Tbl_StartCellAttr ("class=\"%s CENTER_TOP\"",
+			 (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
+			  Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
+			  (Correct ? "ANS_OK" :
+				     "ANS_BAD") :
+                          "ANS_0");
+      fprintf (Gbl.F.Out,"%s",Gbl.Test.StrAnswersOneQst[NumQst]);
      }
    else						// If user has omitted the answer
-      fprintf (Gbl.F.Out,">");
+      Tbl_StartCell ();
    Tbl_EndCell ();
 
    /***** Write the correct answers *****/
@@ -4641,24 +4639,28 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
    Tbl_StartRow ();
 
    /***** Write the user answer *****/
-   fprintf (Gbl.F.Out,"<td");
    if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has answered the question
      {
       FloatAnsUsr = Tst_GetFloatAnsFromStr (Gbl.Test.StrAnswersOneQst[NumQst]);
       if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// It's a correct floating point number
-         fprintf (Gbl.F.Out," class=\"%s CENTER_MIDDLE\">%lg",
+        {
+         Tbl_StartCellAttr ("class=\"%s CENTER_MIDDLE\"",
                   (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
                    Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
                    ((FloatAnsUsr >= FloatAnsCorr[0] &&
                      FloatAnsUsr <= FloatAnsCorr[1]) ? "ANS_OK" :
                 	                               "ANS_BAD") :
-                   "ANS_0",
-                  FloatAnsUsr);
+                   "ANS_0");
+         fprintf (Gbl.F.Out,"%lg",FloatAnsUsr);
+        }
       else				// Not a floating point number
-         fprintf (Gbl.F.Out," class=\"ANS_0 CENTER_MIDDLE\">?");
+	{
+         Tbl_StartCellAttr ("class=\"ANS_0 CENTER_MIDDLE\"");
+         fprintf (Gbl.F.Out,"?");
+	}
      }
    else					// If user has omitted the answer
-      fprintf (Gbl.F.Out,">");
+      Tbl_StartCell ();
    Tbl_EndCell ();
 
    /***** Write the correct answer *****/
