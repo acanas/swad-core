@@ -2217,21 +2217,24 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       /***** Write heading *****/
       Tbl_TABLE_BeginCenterPadding (2);
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"CENTER_TOP\">"
-			 "%s"
-			 "</th>",
-	       Txt_No_INDEX,
-	       Txt_Degree);
+
+      fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+      fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Degree);
+      fprintf (Gbl.F.Out,"</th>");
+
       for (Sex = (Usr_Sex_t) 0;
 	   Sex < Usr_NUM_SEXS;
 	   Sex++)
-	 fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
-			    "%s"
-			    "</th>",
-		  Txt_SEX_PLURAL_Abc[Sex]);
+	{
+	 fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+	 fprintf (Gbl.F.Out,"%s",Txt_SEX_PLURAL_Abc[Sex]);
+	 fprintf (Gbl.F.Out,"</th>");
+	}
+
       Tbl_TR_End ();
 
       /***** Get degrees *****/

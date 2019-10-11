@@ -2560,10 +2560,17 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       /***** Heading row *****/
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th style=\"width:20px;\"></th>"
-                         "<th class=\"CONTEXT_COL\"></th>"	// Column for contextual icons
-                         "<th class=\"LEFT_MIDDLE\">%s</th>",
-               Txt_MSG_Subject);
+
+      fprintf (Gbl.F.Out,"<th style=\"width:20px;\">");
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\">");	// Column for contextual icons
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_MSG_Subject);
+      fprintf (Gbl.F.Out,"</th>");
+
       for (Order = For_FIRST_MSG;
 	   Order <= For_LAST_MSG;
 	   Order++)
@@ -2588,22 +2595,23 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
          Frm_EndForm ();
          Tbl_TH_End ();
 	}
-      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-	                 "%s"
-	                 "</th>"
-                         "<th class=\"RIGHT_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"RIGHT_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"RIGHT_MIDDLE\">"
-                         "%s"
-                         "</th>",
-               Txt_No_BR_msgs,
-               Txt_Unread_BR_msgs,
-               Txt_WriBRters,
-               Txt_ReaBRders);
+
+      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_No_BR_msgs);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Unread_BR_msgs);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_WriBRters);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_ReaBRders);
+      fprintf (Gbl.F.Out,"</th>");
+
       Tbl_TR_End ();
 
       /***** List the threads *****/

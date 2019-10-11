@@ -753,14 +753,15 @@ static void Mai_PutFormToCreateMailDomain (void)
 
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],
-            Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO]);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    Tbl_TR_Begin (NULL);
@@ -802,23 +803,26 @@ static void Mai_PutHeadMailDomains (void)
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Code,
-            Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],
-            Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ],
-            Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
+
+   fprintf (Gbl.F.Out,"<th class=\"BM\">");
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Code);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 

@@ -862,23 +862,26 @@ static void Plc_PutHeadPlaces (void)
    extern const char *Txt_Centres;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Code,
-            Txt_Short_name,
-            Txt_Full_name,
-            Txt_Centres);
+
+   fprintf (Gbl.F.Out,"<th class=\"BM\">");
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Code);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Short_name);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Full_name);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Centres);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 

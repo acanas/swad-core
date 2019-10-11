@@ -437,34 +437,33 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
       Tbl_TH_Empty (1);
 
    /***** The rest of columns *****/
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s"
-                      "</th>",
-            Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
-	    Txt_START_END_TIME[Gam_ORDER_BY_START_DATE],
-	    Txt_START_END_TIME[Gam_ORDER_BY_END_DATE],
-            Txt_Match,
-	    Txt_Players,
-            Txt_Status,
-            Txt_Result);
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Gam_ORDER_BY_END_DATE]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Match);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Players);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Status);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Result);
+   fprintf (Gbl.F.Out,"</th>");
 
    /***** End row *****/
    Tbl_TR_End ();

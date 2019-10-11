@@ -174,14 +174,15 @@ void Ins_SeeInsWithPendingCtrs (void)
 
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"RIGHT_MIDDLE\">"
-                         "%s"
-                         "</th>",
-               Txt_Institution,
-               Txt_Centres_ABBREVIATION);
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Institution);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Centres_ABBREVIATION);
+      fprintf (Gbl.F.Out,"</th>");
+
       Tbl_TR_End ();
 
       /***** List the institutions *****/
@@ -897,29 +898,32 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	}
       Tbl_TH_End ();
      }
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s+<br />%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "</th>",
-            Txt_Centres_ABBREVIATION,
-            Txt_Degrees_ABBREVIATION,
-            Txt_Courses_ABBREVIATION,
-            Txt_Departments_ABBREVIATION,
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Centres_ABBREVIATION);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Degrees_ABBREVIATION);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Courses_ABBREVIATION);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Departments_ABBREVIATION);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s+<br />%s",
+	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 
@@ -2329,43 +2333,49 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    extern const char *Txt_Requester;
 
    Tbl_TR_Begin (NULL);
+
    Tbl_TH_Empty (1);
+
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>",
             Txt_Code);
+
    Tbl_TH_Empty (1);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s+<br />%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "</th>",
-            Txt_Short_name_of_the_institution,
-            Txt_Full_name_of_the_institution,
-            Txt_WWW,
-            Txt_Users,
-            Txt_Centres_ABBREVIATION,
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
-            Txt_Requester);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Short_name_of_the_institution);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Full_name_of_the_institution);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_WWW);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Centres_ABBREVIATION);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s+<br />%s",
+	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Requester);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 

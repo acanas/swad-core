@@ -4829,26 +4829,27 @@ static void Fig_GetAndShowSurveysStats (void)
 
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Number_of_BR_surveys,
-            Txt_Number_of_BR_courses_with_BR_surveys,
-            Txt_Average_number_BR_of_surveys_BR_per_course,
-            Txt_Average_number_BR_of_questions_BR_per_survey,
-            Txt_Number_of_BR_notifications);
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_surveys);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_with_BR_surveys);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Average_number_BR_of_surveys_BR_per_course);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Average_number_BR_of_questions_BR_per_survey);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_notifications);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Write number of surveys *****/
@@ -4932,18 +4933,19 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            TxtObject,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",TxtObject);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** For each privacy option... *****/
@@ -5028,18 +5030,19 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Cookies,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Cookies);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** For each option... *****/
@@ -5111,18 +5114,19 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Language,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Language);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** For each language... *****/
@@ -5195,18 +5199,19 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Calendar,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Calendar);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** For each day... *****/
@@ -5283,18 +5288,19 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Format,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Format);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** For each format... *****/
@@ -5367,18 +5373,19 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Icons,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Icons);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** For each icon set... *****/
@@ -5456,18 +5463,19 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Menu,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Menu);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** For each menu... *****/
@@ -5544,18 +5552,19 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Theme_SKIN,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Theme_SKIN);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** For each theme... *****/
@@ -5631,18 +5640,19 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Columns,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Columns);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** For each language... *****/

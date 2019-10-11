@@ -395,26 +395,27 @@ void Ntf_ShowMyNotifications (void)
       /***** Start table *****/
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"LEFT_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"LEFT_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"CENTER_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"LEFT_MIDDLE\">"
-                         "%s"
-                         "</th>",
-               Txt_Event,
-               Txt_MSG_From,
-               Txt_Location,
-               Txt_Date,
-               Txt_Email);	// Date and time, in YYYY-MM-DD HH:MM:SS format
+
+      fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Event);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_MSG_From);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Location);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Date);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Email);
+      fprintf (Gbl.F.Out,"</th>");
+
       Tbl_TR_End ();
 
       /***** List notifications one by one *****/
@@ -1942,15 +1943,17 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    /***** List of notifications *****/
    Tbl_TABLE_BeginCenterPadding (2);
    Tbl_TR_Begin (NULL);
+
    Tbl_TH_Empty (1);
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
-		      "%s"
-		      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>",
-	    Txt_Create_BR_notification,
-	    Txt_Notify_me_BR_by_email);
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Create_BR_notification);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Notify_me_BR_by_email);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Checkbox to activate internal notifications and email notifications

@@ -246,7 +246,10 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       /***** Table head *****/
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
+
+      fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\">");	// Column for contextual icons
+      fprintf (Gbl.F.Out,"</th>");
+
       for (Order = Svy_ORDER_BY_START_DATE;
 	   Order <= Svy_ORDER_BY_END_DATE;
 	   Order++)
@@ -269,14 +272,15 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 
 	 Tbl_TH_End ();
 	}
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"CENTER_MIDDLE\">"
-			 "%s"
-			 "</th>",
-	       Txt_Survey,
-	       Txt_Status);
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Survey);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Status);
+      fprintf (Gbl.F.Out,"</th>");
+
       Tbl_TR_End ();
 
       /***** Write all the surveys *****/
@@ -3219,20 +3223,22 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
       /***** Write the heading *****/
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
+
       if (Svy->Status.ICanEdit)
          Tbl_TH_Empty (1);
-      fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
-	                 "%s"
-	                 "</th>"
-                         "<th class=\"CENTER_TOP\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"LEFT_TOP\">"
-                         "%s"
-                         "</th>",
-               Txt_No_INDEX,
-               Txt_Type,
-               Txt_Question);
+
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+      fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Type);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Question);
+      fprintf (Gbl.F.Out,"</th>");
+
       Tbl_TR_End ();
 
       /***** Write questions one by one *****/

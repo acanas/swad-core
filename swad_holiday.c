@@ -133,14 +133,15 @@ void Hld_SeeHolidays (void)
 	    Frm_EndForm ();
 	    Tbl_TH_End ();
 	   }
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-			    "&nbsp;%s&nbsp;"
-			    "</th>"
-			    "<th class=\"LEFT_MIDDLE\">"
-			    "%s"
-			    "</th>",
-		  Txt_End_date,
-		  Txt_Holiday);
+
+	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",Txt_End_date);
+	 fprintf (Gbl.F.Out,"</th>");
+
+	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"%s",Txt_Holiday);
+	 fprintf (Gbl.F.Out,"</th>");
+
 	 Tbl_TR_End ();
 
 	 /***** Write all the holidays *****/
@@ -973,26 +974,27 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Place,
-            Txt_Type,
-            Txt_START_END_TIME[Dat_START_TIME],
-            Txt_START_END_TIME[Dat_END_TIME],
-            Txt_Holiday);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Place);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Type);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_START_TIME]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_END_TIME]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Holiday);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    Tbl_TR_Begin (NULL);
@@ -1079,31 +1081,34 @@ static void Hld_PutHeadHolidays (void)
    extern const char *Txt_Holiday;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Code,
-            Txt_Place,
-            Txt_Type,
-            Txt_START_END_TIME[Dat_START_TIME],
-            Txt_START_END_TIME[Dat_END_TIME],
-            Txt_Holiday);
+
+   fprintf (Gbl.F.Out,"<th class=\"BM\">");
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Code);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Place);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Type);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_START_TIME]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_END_TIME]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Holiday);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 

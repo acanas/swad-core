@@ -212,7 +212,10 @@ static void Gam_ListAllGames (void)
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
       if (Gam_CheckIfICanEditGames ())
-         fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
+	{
+         fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\">");	// Column for contextual icons
+         fprintf (Gbl.F.Out,"</th>");
+	}
 
       for (Order  = (Gam_Order_t) 0;
 	   Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
@@ -236,7 +239,9 @@ static void Gam_ListAllGames (void)
 	 Tbl_TH_End ();
 	}
 
-      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">%s</th>",Txt_Matches);
+      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Matches);
+      fprintf (Gbl.F.Out,"</th>");
 
       Tbl_TR_End ();
 
@@ -1645,23 +1650,25 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
    /***** Write the heading *****/
    Tbl_TABLE_BeginWideMarginPadding (2);
    Tbl_TR_Begin (NULL);
+
    Tbl_TH_Empty (1);
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s"
-                      "</th>",
-            Txt_No_INDEX,
-            Txt_Code,
-            Txt_Tags,
-            Txt_Question);
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Code);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Tags);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Question);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Write rows *****/

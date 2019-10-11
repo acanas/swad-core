@@ -481,14 +481,16 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 
    /***** Title *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th");
+
    if (Colspan > 1)
-      fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
-   fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE LIGHT_BLUE\">"
-	              "<label for=\"OtherRecipients\">%s:</label>"
-	              "</th>",
-            StdsAndTchsWritten ? Txt_Other_recipients :
-        	                 Txt_Recipients);
+      fprintf (Gbl.F.Out,"<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">",Colspan);
+   else
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
+   fprintf (Gbl.F.Out,"<label for=\"OtherRecipients\">%s:</label>",
+	    StdsAndTchsWritten ? Txt_Other_recipients :
+				 Txt_Recipients);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Textarea with users' @nicknames, emails or IDs *****/

@@ -644,17 +644,20 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    Tbl_TABLE_BeginPadding (2);
 
    Tbl_TR_Begin (NULL);
+
    if (PutForm)
       Tbl_TH_Empty (1);
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th colspan=\"2\" class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Indicators,
-            Txt_Courses);
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Indicators);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Courses);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
+
    for (Ind = 0;
 	Ind <= Ind_NUM_INDICATORS;
 	Ind++)
@@ -766,258 +769,256 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
      {
       case Ind_INDICATORS_BRIEF:
          Tbl_TR_Begin (NULL);
-         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th colspan=\"11\" class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>",
-                  Txt_Degree,
-                  Txt_Course,
-                  Txt_Institutional_BR_code,
-                  Txt_Web_page_of_the_course,
-                  Txt_Indicators);
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Degree);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Course);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Institutional_BR_code);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Web_page_of_the_course);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"11\" class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Indicators);
+         fprintf (Gbl.F.Out,"</th>");
+
          Tbl_TR_End ();
 
          Tbl_TR_Begin (NULL);
-         fprintf (Gbl.F.Out,"<th rowspan=\"2\" class=\"CENTER_TOP COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">"
-                            "(A) %s"
-                            "</th>"
-                            "<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">"
-                            "(B) %s"
-                            "</th>"
-                            "<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">"
-                            "(C) %s"
-                            "</th>"
-                            "<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">"
-                            "(D) %s"
-                            "</th>"
-                            "<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">"
-                            "(E) %s"
-                            "</th>",
-                  Txt_No_INDEX,
-                  Txt_Syllabus_of_the_course,
-                  Txt_Guided_academic_assignments,
-                  Txt_Online_tutoring,
-                  Txt_Materials,
-                  Txt_Assessment_criteria);
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"2\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"(A) %s",Txt_Syllabus_of_the_course);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"(B) %s",Txt_Guided_academic_assignments);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"(C) %s",Txt_Online_tutoring);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"(D) %s",Txt_Materials);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"(E) %s",Txt_Assessment_criteria);
+         fprintf (Gbl.F.Out,"</th>");
+
          Tbl_TR_End ();
 
          Tbl_TR_Begin (NULL);
-         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>",
-                  Txt_YES,
-                  Txt_NO,
 
-                  Txt_YES,
-                  Txt_NO,
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_YES);
+         fprintf (Gbl.F.Out,"</th>");
 
-                  Txt_YES,
-                  Txt_NO,
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_NO);
+         fprintf (Gbl.F.Out,"</th>");
 
-                  Txt_YES,
-                  Txt_NO,
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_YES);
+         fprintf (Gbl.F.Out,"</th>");
 
-                  Txt_YES,
-                  Txt_NO);
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_NO);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_YES);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_NO);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_YES);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_NO);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_YES);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_NO);
+         fprintf (Gbl.F.Out,"</th>");
+
          Tbl_TR_End ();
          break;
       case Ind_INDICATORS_FULL:
          Tbl_TR_Begin (NULL);
-         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th colspan=\"24\" class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>",
-                  Txt_Degree,
-                  Txt_Course,
-                  Txt_Institutional_BR_code,
-                  Txt_Web_page_of_the_course,
-                  Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-                  Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
-                  Txt_Indicators);
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Degree);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Course);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Institutional_BR_code);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Web_page_of_the_course);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"24\" class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Indicators);
+         fprintf (Gbl.F.Out,"</th>");
+
          Tbl_TR_End ();
 
          Tbl_TR_Begin (NULL);
-         fprintf (Gbl.F.Out,"<th rowspan=\"2\" class=\"CENTER_TOP COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th colspan=\"5\" class=\"CENTER_TOP COLOR0\">"
-                            "(A) %s"
-                            "</th>"
-                            "<th colspan=\"5\" class=\"CENTER_TOP COLOR0\">"
-                            "(B) %s"
-                            "</th>"
-                            "<th colspan=\"5\" class=\"CENTER_TOP COLOR0\">"
-                            "(C) %s"
-                            "</th>"
-                            "<th colspan=\"4\" class=\"CENTER_TOP COLOR0\">"
-                            "(D) %s"
-                            "</th>"
-                            "<th colspan=\"4\" class=\"CENTER_TOP COLOR0\">"
-                            "(E) %s"
-                            "</th>",
-                  Txt_No_INDEX,
-                  Txt_Syllabus_of_the_course,
-                  Txt_Guided_academic_assignments,
-                  Txt_Online_tutoring,
-                  Txt_Materials,
-                  Txt_Assessment_criteria);
+
+         fprintf (Gbl.F.Out,"<th rowspan=\"2\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"5\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"(A) %s",Txt_Syllabus_of_the_course);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"5\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"(B) %s",Txt_Guided_academic_assignments);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"5\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"(C) %s",Txt_Online_tutoring);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"4\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"(D) %s",Txt_Materials);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th colspan=\"4\" class=\"CENTER_TOP COLOR0\">");
+         fprintf (Gbl.F.Out,"(E) %s",Txt_Assessment_criteria);
+         fprintf (Gbl.F.Out,"</th>");
+
          Tbl_TR_End ();
 
          Tbl_TR_Begin (NULL);
-         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"RIGHT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"RIGHT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"RIGHT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"RIGHT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"RIGHT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"RIGHT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"RIGHT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"RIGHT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"CENTER_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>"
-                            "<th class=\"LEFT_MIDDLE COLOR0\">"
-                            "%s"
-                            "</th>",
-                  Txt_YES,
-                  Txt_NO,
-                  Txt_INFO_TITLE[Inf_LECTURES],
-                  Txt_INFO_TITLE[Inf_PRACTICALS],
-                  Txt_INFO_TITLE[Inf_TEACHING_GUIDE],
 
-                  Txt_YES,
-                  Txt_NO,
-                  Txt_Assignments,
-                  Txt_Files_assignments,
-                  Txt_Files_works,
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_YES);
+         fprintf (Gbl.F.Out,"</th>");
 
-                  Txt_YES,
-                  Txt_NO,
-                  Txt_Forum_threads,
-                  Txt_Forum_posts,
-                  Txt_Messages_sent_by_teachers,
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_NO);
+         fprintf (Gbl.F.Out,"</th>");
 
-                  Txt_YES,
-                  Txt_NO,
-                  Txt_No_of_files_in_DOCUM_zones,
-                  Txt_No_of_files_in_SHARE_zones,
+         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_INFO_TITLE[Inf_LECTURES]);
+         fprintf (Gbl.F.Out,"</th>");
 
-                  Txt_YES,
-                  Txt_NO,
-                  Txt_INFO_TITLE[Inf_ASSESSMENT],
-                  Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
+         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_INFO_TITLE[Inf_PRACTICALS]);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_YES);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_NO);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Assignments);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Files_assignments);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Files_works);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_YES);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_NO);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Forum_threads);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Forum_posts);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_Messages_sent_by_teachers);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_YES);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_NO);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_No_of_files_in_DOCUM_zones);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_No_of_files_in_SHARE_zones);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_YES);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_NO);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_INFO_TITLE[Inf_ASSESSMENT]);
+         fprintf (Gbl.F.Out,"</th>");
+
+         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE COLOR0\">");
+         fprintf (Gbl.F.Out,"%s",Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
+         fprintf (Gbl.F.Out,"</th>");
+
          Tbl_TR_End ();
       break;
      }

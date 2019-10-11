@@ -959,27 +959,29 @@ static void TsI_WriteHeadingListImportedQst (void)
 
    /***** Write the heading *****/
    Tbl_TR_Begin (NULL);
+
    Tbl_TH_Empty (1);
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_TOP\">"
-                      "%s"
-                      "</th>",
-            Txt_No_INDEX,
-            Txt_Tags,
-            Txt_Type,
-            Txt_Shuffle,
-            Txt_Question);
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Tags);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Type);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Shuffle);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Question);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 

@@ -435,19 +435,21 @@ static void Rec_WriteHeadingRecordFields (void)
    extern const char *Txt_Visible_by_BR_the_student;
 
    Tbl_TR_Begin (NULL);
+
    Tbl_TH_Empty (1);
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Field_BR_name,
-            Txt_No_of_BR_lines,
-            Txt_Visible_by_BR_the_student);
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Field_BR_name);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_BR_lines);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Visible_by_BR_the_student);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 

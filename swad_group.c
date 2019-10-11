@@ -1452,27 +1452,30 @@ static void Grp_WriteHeadingGroupTypes (void)
    extern const char *Txt_No_of_BR_groups;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s<br />(%s)"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Type_of_group,Txt_eg_Lectures_Practicals,
-            Txt_Mandatory_enrolment,
-            Txt_Multiple_enrolment,
-            Txt_Opening_of_groups,
-            Txt_No_of_BR_groups);
+
+   fprintf (Gbl.F.Out,"<th class=\"BM\">");
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s<br />(%s)",Txt_Type_of_group,Txt_eg_Lectures_Practicals);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Mandatory_enrolment);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Multiple_enrolment);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Opening_of_groups);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_BR_groups);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 
@@ -1678,32 +1681,41 @@ static void Grp_WriteHeadingGroups (void)
    Rol_Role_t Role;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                      "<th class=\"BM\"></th>"
-                      "<th class=\"BM\"></th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s<br />(%s)"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Type_BR_of_group,
-            Txt_Group_name,Txt_eg_A_B,
-	    Txt_Classroom);
+
+   fprintf (Gbl.F.Out,"<th class=\"BM\">");
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"BM\">");
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"BM\">");
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Type_BR_of_group);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s<br />(%s)",Txt_Group_name,Txt_eg_A_B);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Classroom);
+   fprintf (Gbl.F.Out,"</th>");
+
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
-      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
-			 "%s"
-			 "</th>",
-	       Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Max_BR_students);
+     {
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
+      fprintf (Gbl.F.Out,"</th>");
+     }
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Max_BR_students);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 
@@ -2380,30 +2392,35 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
 
    /***** Head row with title of each column *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th colspan=\"2\"></th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-           Txt_Group,
-	   Txt_Classroom);
+
+   fprintf (Gbl.F.Out,"<th colspan=\"2\">");
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Group);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Classroom);
+   fprintf (Gbl.F.Out,"</th>");
+
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
-      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
-			 "%s"
-			 "</th>",
-	       Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Max_BR_students,
-            Txt_Vacants);
+     {
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
+      fprintf (Gbl.F.Out,"</th>");
+     }
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Max_BR_students);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Vacants);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 

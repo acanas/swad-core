@@ -11806,31 +11806,34 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-			 "<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-                         "<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>",
-	       Txt_Institution,
-	       Txt_Centre,
-	       Txt_Degree,
-	       Txt_Course,
-	       Txt_File_zone,
-	       Txt_Document);
+
+      fprintf (Gbl.F.Out,"<th class=\"BM\">");
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Institution);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Centre);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Degree);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Course);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_File_zone);
+      fprintf (Gbl.F.Out,"</th>");
+
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"%s",Txt_Document);
+      fprintf (Gbl.F.Out,"</th>");
+
       Tbl_TR_End ();
 
       /***** List documents found *****/
@@ -11846,17 +11849,19 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 	}
 
       /***** Write footer *****/
-      /* Number of documents not hidden found */
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th colspan=\"7\" class=\"CENTER_MIDDLE\">"
-			 "(");
+      fprintf (Gbl.F.Out,"<th colspan=\"7\" class=\"CENTER_MIDDLE\">");
+
+      /* Number of documents not hidden found */
+      fprintf (Gbl.F.Out,"(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
       if (NumDocsHidden == 1)
 	 fprintf (Gbl.F.Out,"1 %s",Txt_hidden_document);
       else
 	 fprintf (Gbl.F.Out,"%lu %s",NumDocsHidden,Txt_hidden_documents);
-      fprintf (Gbl.F.Out,")"
-	                 "</th>");
+      fprintf (Gbl.F.Out,")");
+
+      fprintf (Gbl.F.Out,"</th>");
       Tbl_TR_End ();
 
       /***** End table and box *****/
