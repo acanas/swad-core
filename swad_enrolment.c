@@ -2811,28 +2811,31 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
       /* Start table */
       Tbl_TABLE_BeginCenterPadding (2);
+
       Tbl_TH_Empty (1);
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"RIGHT_TOP\">"
-                         "%s"
-                         "</th>"
-                         "<th colspan=\"2\" class=\"LEFT_TOP\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"LEFT_TOP\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"CENTER_TOP\">"
-                         "%s"
-                         "</th>",
-               Txt_Course,
-               Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-               Txt_Requester,
-               Txt_Role,
-               Txt_Date);
+
+      Tbl_TH_Begin ("class=\"LEFT_TOP\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Course);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("colspan=\"2\" class=\"LEFT_TOP\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Requester);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"LEFT_TOP\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Role);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"CENTER_TOP\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Date);
+      Tbl_TH_End ();
+
       Tbl_TH_Empty (2);
+
       Tbl_TR_End ();
 
       /* List requests */

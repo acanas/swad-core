@@ -125,7 +125,7 @@ void Dpt_SeeDepts (void)
 	Order <= Dpt_ORDER_BY_NUM_TCHS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       Frm_StartForm (ActSeeDpt);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Frm_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL",NULL);
@@ -914,22 +914,23 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Institution,
-            Txt_Short_name,
-            Txt_Full_name,
-            Txt_WWW);
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Institution);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Short_name);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Full_name);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_WWW);
+   Tbl_TH_End ();
+
    Tbl_TR_End ();
 
    Tbl_TR_Begin (NULL);
@@ -1002,32 +1003,34 @@ static void Dpt_PutHeadDepartments (void)
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Code,
-            Txt_Institution,
-            Txt_Short_name,
-            Txt_Full_name,
-            Txt_WWW,
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+
+   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Code);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Institution);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Short_name);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Full_name);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_WWW);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   Tbl_TH_End ();
+
    Tbl_TR_End ();
   }
 

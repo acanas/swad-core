@@ -372,32 +372,37 @@ static void Fig_GetAndShowUsersStats (void)
 
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Users,
-            Txt_No_of_users,
-            Txt_Average_number_of_courses_to_which_a_user_belongs,
-            Txt_Average_number_of_users_belonging_to_a_course);
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Average_number_of_courses_to_which_a_user_belongs);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Average_number_of_users_belonging_to_a_course);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    Fig_GetAndShowNumUsrsInCrss (Rol_STD);		// Students
    Fig_GetAndShowNumUsrsInCrss (Rol_NET);		// Non-editing teachers
    Fig_GetAndShowNumUsrsInCrss (Rol_TCH);		// Teachers
    Fig_GetAndShowNumUsrsInCrss (Rol_UNK);		// Any user in courses
+
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th colspan=\"4\" style=\"height:10px;\">"
-                      "</th>");
+
+   fprintf (Gbl.F.Out,"<th colspan=\"4\" style=\"height:10px;\">");
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
+
    Fig_GetAndShowNumUsrsNotBelongingToAnyCrs ();	// Users not beloging to any course
 
    /***** End table and box *****/
@@ -510,34 +515,35 @@ static void Fig_GetAndShowUsersRanking (void)
 
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Clicks,
-            Txt_Clicks_per_day,
-            Txt_Timeline,
-            Txt_Followers,
-            Txt_Downloads,
-            Txt_Forums,
-            Txt_Messages);
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Clicks);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Clicks_per_day);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Timeline);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Followers);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Downloads);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Forums);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Messages);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Rankings *****/
@@ -620,47 +626,54 @@ static void Fig_WriteHeadHierarchy (void)
    extern const char *Txt_Courses;
 
    Tbl_TR_Begin (NULL);
+
    Tbl_TH_Empty (1);
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-                      "<img src=\"%s/globe.svg\""
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/globe.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
                       "<br />"
-                      "%s"
-		      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "<img src=\"%s/university.svg\""
+                      "%s",
+            Cfg_URL_ICON_PUBLIC,Txt_Countries,Txt_Countries,Txt_Countries);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/university.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
                       "<br />"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "<img src=\"%s/building.svg\""
+                      "%s",
+            Cfg_URL_ICON_PUBLIC,Txt_Institutions,Txt_Institutions,Txt_Institutions);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/building.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
                       "<br />"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "<img src=\"%s/graduation-cap.svg\""
+                      "%s",
+            Cfg_URL_ICON_PUBLIC,Txt_Centres,Txt_Centres,Txt_Centres);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/graduation-cap.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
                       "<br />"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "<img src=\"%s/list-ol.svg\""
+                      "%s",
+            Cfg_URL_ICON_PUBLIC,Txt_Degrees,Txt_Degrees,Txt_Degrees);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
                       "<br />"
-                      "%s"
-                      "</th>",
-            Cfg_URL_ICON_PUBLIC,Txt_Countries   ,Txt_Countries   ,Txt_Countries,
-            Cfg_URL_ICON_PUBLIC,Txt_Institutions,Txt_Institutions,Txt_Institutions,
-            Cfg_URL_ICON_PUBLIC,Txt_Centres     ,Txt_Centres     ,Txt_Centres,
-            Cfg_URL_ICON_PUBLIC,Txt_Degrees     ,Txt_Degrees     ,Txt_Degrees,
-            Cfg_URL_ICON_PUBLIC,Txt_Courses     ,Txt_Courses     ,Txt_Courses);
+                      "%s",
+            Cfg_URL_ICON_PUBLIC,Txt_Courses,Txt_Courses,Txt_Courses);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 
@@ -1481,15 +1494,17 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	 case Usr_LIST_AS_LISTING:
 	    /***** Draw institutions as a list *****/
 	    Tbl_TR_Begin (NULL);
+
 	    Tbl_TH_Empty (1);
-	    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-			       "%s"
-			       "</th>"
-			       "<th class=\"RIGHT_MIDDLE\">"
-			       "%s"
-			       "</th>",
-		     Txt_Institution,
-		     TxtFigure);
+
+	    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+	    fprintf (Gbl.F.Out,"%s",Txt_Institution);
+	    fprintf (Gbl.F.Out,"</th>");
+
+	    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+	    fprintf (Gbl.F.Out,"%s",TxtFigure);
+	    fprintf (Gbl.F.Out,"</th>");
+
 	    Tbl_TR_End ();
 
 	    for (NumIns = 1, NumOrder = 1, NumberLastRow = 0;
@@ -2510,38 +2525,39 @@ static void Fig_WriteStatsExpTreesTableHead1 (void)
    extern const char *Txt_Size;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_File_zones,
-            Txt_Courses,
-            Txt_Groups,
-            Txt_Users,
-            Txt_Max_levels,
-            Txt_Folders,
-            Txt_Files,
-            Txt_Size);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_File_zones);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Courses);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Groups);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Max_levels);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Folders);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Files);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Size);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 
@@ -2554,22 +2570,23 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
    extern const char *Txt_course;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s/<br />%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s/<br />%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s/<br />%s"
-                      "</th>",
-            Txt_File_zones,
-            Txt_Folders,Txt_course,
-            Txt_Files,Txt_course,
-            Txt_Size,Txt_course);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_File_zones);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Folders,Txt_course);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Files,Txt_course);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Size,Txt_course);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 
@@ -2582,22 +2599,23 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
    extern const char *Txt_user[Usr_NUM_SEXS];
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s/<br />%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s/<br />%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s/<br />%s"
-                      "</th>",
-            Txt_File_zones,
-            Txt_Folders,Txt_user[Usr_SEX_UNKNOWN],
-            Txt_Files,Txt_user[Usr_SEX_UNKNOWN],
-            Txt_Size,Txt_user[Usr_SEX_UNKNOWN]);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_File_zones);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Folders,Txt_user[Usr_SEX_UNKNOWN]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Files,Txt_user[Usr_SEX_UNKNOWN]);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Size,Txt_user[Usr_SEX_UNKNOWN]);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
   }
 
@@ -2816,18 +2834,19 @@ static void Fig_GetAndShowOERsStats (void)
 
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_License,
-            Txt_No_of_private_files,
-            Txt_No_of_public_files);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_License);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_private_files);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_public_files);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    for (License = 0;
@@ -3017,22 +3036,23 @@ static void Fig_GetAndShowAssignmentsStats (void)
 
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Number_of_BR_assignments,
-            Txt_Number_of_BR_courses_with_BR_assignments,
-            Txt_Average_number_BR_of_ASSIG_BR_per_course,
-            Txt_Number_of_BR_notifications);
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_assignments);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_with_BR_assignments);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Average_number_BR_of_ASSIG_BR_per_course);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_notifications);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Write number of assignments *****/
@@ -3086,18 +3106,19 @@ static void Fig_GetAndShowProjectsStats (void)
 
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Number_of_BR_projects,
-            Txt_Number_of_BR_courses_with_BR_projects,
-            Txt_Average_number_BR_of_projects_BR_per_course);
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_projects);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_with_BR_projects);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Average_number_BR_of_projects_BR_per_course);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Write number of projects *****/
@@ -3149,42 +3170,43 @@ static void Fig_GetAndShowTestsStats (void)
 
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Type_of_BR_answers,
-            Txt_Number_of_BR_courses_BR_with_test_BR_questions,
-            Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions,
-            Txt_Number_BR_of_test_BR_questions,
-            Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course,
-            Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded,
-            Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course,
-            Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded,
-            Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Type_of_BR_answers);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_BR_with_test_BR_questions);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_BR_of_test_BR_questions);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    for (AnsType = (Tst_AnswerType_t) 0;
@@ -3318,18 +3340,19 @@ static void Fig_GetAndShowGamesStats (void)
 
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Number_of_BR_games,
-            Txt_Number_of_BR_courses_with_BR_games,
-            Txt_Average_number_BR_of_games_BR_per_course);
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_games);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_with_BR_games);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Average_number_BR_of_games_BR_per_course);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Write number of games *****/
@@ -3382,26 +3405,27 @@ static void Fig_GetAndShowSocialActivityStats (void)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Type,
-            Txt_No_of_social_posts,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users,
-            Txt_No_of_posts_BR_per_user);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Type);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_social_posts);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_posts_BR_per_user);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Get total number of users *****/
@@ -3703,18 +3727,19 @@ static void Fig_GetAndShowFollowStats (void)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Users,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Get total number of users *****/
@@ -3996,46 +4021,48 @@ static void Fig_GetAndShowForumStats (void)
 
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\" style=\"width:20px;\">"
-                      "<img src=\"%s/comments.svg\""
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\" style=\"width:20px;\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO16x16\" />"
-                      "</th>"
-                      "<th class=\"LEFT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_TOP\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_TOP\">"
-                      "%s"
-                      "</th>",
+                      " class=\"ICO16x16\" />",
             Cfg_URL_ICON_PUBLIC,
             Txt_Scope,
-            Txt_Scope,
-            Txt_Forums,
-            Txt_No_of_forums,
-            Txt_No_of_threads,
-            Txt_No_of_posts,
-            Txt_Number_of_BR_notifications,
-            Txt_No_of_threads_BR_per_forum,
-            Txt_No_of_posts_BR_per_thread,
-            Txt_No_of_posts_BR_per_forum);
+            Txt_Scope);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Forums);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_forums);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_threads);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_posts);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_notifications);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_threads_BR_per_forum);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_posts_BR_per_thread);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_posts_BR_per_forum);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Write a row for each type of forum *****/
@@ -4362,26 +4389,27 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Event,
-            Txt_No_of_users,
-            Txt_PERCENT_of_users,
-            Txt_Number_of_BR_events,
-            Txt_Number_of_BR_emails);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Event);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_events);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_emails);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Get total number of users *****/
@@ -4607,26 +4635,27 @@ static void Fig_GetAndShowNoticesStats (void)
 
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_NOTICE_Active_BR_notices,
-            Txt_NOTICE_Obsolete_BR_notices,
-            Txt_NOTICE_Deleted_BR_notices,
-            Txt_Total,
-            Txt_Number_of_BR_notifications);
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_NOTICE_Active_BR_notices);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_NOTICE_Obsolete_BR_notices);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_NOTICE_Deleted_BR_notices);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Total);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_notifications);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Write number of notices *****/
@@ -4691,26 +4720,27 @@ static void Fig_GetAndShowMsgsStats (void)
 
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Messages,
-            Txt_MSGS_Not_deleted,
-            Txt_MSGS_Deleted,
-            Txt_Total,
-            Txt_Number_of_BR_notifications);
+
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Messages);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_MSGS_Not_deleted);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_MSGS_Deleted);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Total);
+   fprintf (Gbl.F.Out,"</th>");
+
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_notifications);
+   fprintf (Gbl.F.Out,"</th>");
+
    Tbl_TR_End ();
 
    /***** Write number of messages *****/
