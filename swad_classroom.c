@@ -120,7 +120,7 @@ void Cla_SeeClassrooms (void)
 	Order <= (Cla_Order_t) (Cla_NUM_ORDERS - 1);
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       Frm_StartForm (ActSeeCla);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Frm_LinkFormSubmit (Txt_CLASSROOMS_HELP_ORDER[Order],"TIT_TBL",NULL);
@@ -962,27 +962,30 @@ static void Cla_PutHeadClassrooms (void)
    extern const char *Txt_Location;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Code,
-            Txt_Short_name,
-            Txt_Full_name,
-            Txt_Capacity_OF_A_CLASSROOM,
-            Txt_Location);
+
+   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Code);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Short_name);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Full_name);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Capacity_OF_A_CLASSROOM);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Location);
+   Tbl_TH_End ();
+
    Tbl_TR_End ();
   }
 

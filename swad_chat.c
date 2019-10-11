@@ -284,14 +284,15 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE LIGHT_BLUE\">"
-	                 "%s"
-	                 "</th>"
-                         "<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
-                         "%s"
-                         "</th>",
-               Txt_CHAT_Room_code,
-               Txt_No_of_users);
+
+      Tbl_TH_Begin ("class=\"CENTER_MIDDLE LIGHT_BLUE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_CHAT_Room_code);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
+      Tbl_TH_End ();
+
       Tbl_TR_End ();
 
       /***** Loop over chat rooms *****/

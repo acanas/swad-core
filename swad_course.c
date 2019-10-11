@@ -1804,29 +1804,33 @@ static void Crs_PutHeadCoursesForSeeing (void)
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "</th>",
-            Txt_Institutional_BR_code,
-            Txt_Year_OF_A_DEGREE,
-            Txt_Course,
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+
+   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Institutional_BR_code);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Year_OF_A_DEGREE);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Course);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_End ();
+
    Tbl_TR_End ();
   }
 
@@ -1846,41 +1850,45 @@ static void Crs_PutHeadCoursesForEdition (void)
    extern const char *Txt_Requester;
 
    Tbl_TR_Begin (NULL);
-   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s (%s)"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "</th>",
-            Txt_Code,
-            Txt_Institutional_code,Txt_optional,
-            Txt_Year_OF_A_DEGREE,
-            Txt_Short_name_of_the_course,
-            Txt_Full_name_of_the_course,
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
-            Txt_Requester);
+
+   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Code);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s (%s)",Txt_Institutional_code,Txt_optional);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Year_OF_A_DEGREE);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Short_name_of_the_course);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Full_name_of_the_course);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Requester);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_End ();
+
    Tbl_TR_End ();
   }
 
@@ -3109,34 +3117,43 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
 	        Txt_USER_in_COURSE,
                 Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
         	                  Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
+
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th colspan=\"7\" class=\"LEFT_MIDDLE\">%s:</th>",
-               Gbl.Title);
+
+      Tbl_TH_Begin ("colspan=\"7\" class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s:",Gbl.Title);
+      Tbl_TH_End ();
+
       Tbl_TR_End ();
 
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                         "<th class=\"BM\"></th>"
-                         "<th class=\"LEFT_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"CENTER_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"LEFT_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"RIGHT_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"RIGHT_MIDDLE\">"
-                         "%s"
-                         "</th>",
-               Txt_Degree,
-               Txt_Year_OF_A_DEGREE,
-               Txt_Course,
-               Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-               Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+
+      Tbl_TH_Begin ("class=\"BM\"");
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"BM\"");
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Degree);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Year_OF_A_DEGREE);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Course);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+      Tbl_TH_End ();
+
       Tbl_TR_End ();
 
       /* Write courses */
@@ -3188,27 +3205,30 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
 
       /***** Heading row *****/
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-			 "<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"CENTER_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"RIGHT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"RIGHT_MIDDLE\">"
-			 "%s"
-			 "</th>",
-	       Txt_Degree,
-	       Txt_Year_OF_A_DEGREE,
-	       Txt_Course,
-	       Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
-	       Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+
+      Tbl_TH_Begin ("class=\"BM\"");
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Degree);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Year_OF_A_DEGREE);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Course);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s", Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+      Tbl_TH_End ();
+
       Tbl_TR_End ();
 
       /***** Write courses *****/

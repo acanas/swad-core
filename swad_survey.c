@@ -595,7 +595,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /***** Write second row of data of this survey *****/
    Tbl_TR_Begin (NULL);
 
-   /* Author of the survey */
+   /* 1st column: Author of the survey */
    if (ShowOnlyThisSvyComplete)
       Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP\"");
    else
@@ -603,11 +603,11 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Svy_WriteAuthor (&Svy);
    Tbl_TD_End ();
 
+   /* 2nd column: Scope, Users, Groups and Text */
    if (ShowOnlyThisSvyComplete)
       Tbl_TD_Begin ("class=\"LEFT_TOP\"");
    else
       Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
-   Tbl_TD_End ();
 
    /* Scope of the survey */
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
@@ -620,28 +620,22 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
          Lay_ShowErrorAndExit ("Wrong survey scope.");
          break;
       case Hie_SYS:	// System
-         fprintf (Gbl.F.Out,"%s",
-                  Cfg_PLATFORM_SHORT_NAME);
+         fprintf (Gbl.F.Out,"%s",Cfg_PLATFORM_SHORT_NAME);
 	 break;
       case Hie_CTY:	// Country
-         fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+         fprintf (Gbl.F.Out,"%s %s",Txt_Country,Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
 	 break;
       case Hie_INS:	// Institution
-         fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
+         fprintf (Gbl.F.Out,"%s %s",Txt_Institution,Gbl.Hierarchy.Ins.ShrtName);
 	 break;
       case Hie_CTR:	// Centre
-         fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Centre,Gbl.Hierarchy.Ctr.ShrtName);
+         fprintf (Gbl.F.Out,"%s %s",Txt_Centre,Gbl.Hierarchy.Ctr.ShrtName);
 	 break;
       case Hie_DEG:	// Degree
-         fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Degree,Gbl.Hierarchy.Deg.ShrtName);
+         fprintf (Gbl.F.Out,"%s %s",Txt_Degree,Gbl.Hierarchy.Deg.ShrtName);
  	 break;
       case Hie_CRS:	// Course
-	 fprintf (Gbl.F.Out,"%s %s",
-	          Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
+	 fprintf (Gbl.F.Out,"%s %s",Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
 	 break;
      }
    fprintf (Gbl.F.Out,"</div>");

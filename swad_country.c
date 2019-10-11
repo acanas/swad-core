@@ -156,14 +156,15 @@ void Cty_SeeCtyWithPendingInss (void)
 
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                         "%s"
-                         "</th>"
-                         "<th class=\"RIGHT_MIDDLE\">"
-                         "%s"
-                         "</th>",
-               Txt_Country,
-               Txt_Institutions_ABBREVIATION);
+
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Country);
+      Tbl_TH_End ();
+
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Institutions_ABBREVIATION);
+      Tbl_TH_End ();
+
       Tbl_TR_End ();
 
       /***** List the countries *****/
@@ -666,9 +667,9 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	Order <= Cty_ORDER_BY_NUM_USRS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"%s\">",
-               Order == Cty_ORDER_BY_COUNTRY ? "LEFT_MIDDLE" :
-        	                               "RIGHT_MIDDLE");
+      Tbl_TH_Begin ("class=\"%s\"",
+		    Order == Cty_ORDER_BY_COUNTRY ? "LEFT_MIDDLE" :
+						    "RIGHT_MIDDLE");
       if (OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeCty);
@@ -687,27 +688,28 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	}
       Tbl_TH_End ();
      }
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-	              "%s"
-	              "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-	              "%s"
-	              "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-	              "%s"
-	              "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-	              "%s"
-	              "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s+<br />%s"
-                      "</th>",
-            Txt_Institutions_ABBREVIATION,
-            Txt_Centres_ABBREVIATION,
-            Txt_Degrees_ABBREVIATION,
-            Txt_Courses_ABBREVIATION,
-            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Institutions_ABBREVIATION);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Centres_ABBREVIATION);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Degrees_ABBREVIATION);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Courses_ABBREVIATION);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s+<br />%s",
+	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
   }
@@ -2149,32 +2151,34 @@ static void Cty_PutHeadCountriesForEdition (void)
 
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"BM\"></th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Numeric_BR_code_BR_ISO_3166_1,
-            Txt_Alphabetic_BR_code_BR_ISO_3166_1);
+   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Numeric_BR_code_BR_ISO_3166_1);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Alphabetic_BR_code_BR_ISO_3166_1);
+   Tbl_TH_End ();
+
    Tbl_TH_Empty (1);
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Name,
-            Txt_WWW,
-            Txt_Users,
-            Txt_Institutions_ABBREVIATION);
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Name);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_WWW);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Users);
+   Tbl_TH_End ();
+
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Institutions_ABBREVIATION);
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
   }

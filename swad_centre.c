@@ -183,14 +183,12 @@ void Ctr_SeeCtrWithPendingDegs (void)
       Tbl_TR_Begin (NULL);
 
       Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
-      fprintf (Gbl.F.Out,"%s"
-                         "</th>",
-               Txt_Centre);
+      fprintf (Gbl.F.Out,"%s",Txt_Centre);
+      Tbl_TH_End ();
 
       Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
-      fprintf (Gbl.F.Out,"%s"
-                         "</th>",
-               Txt_Degrees_ABBREVIATION);
+      fprintf (Gbl.F.Out,"%s",Txt_Degrees_ABBREVIATION);
+      Tbl_TH_End ();
 
       Tbl_TR_End ();
 
@@ -2701,9 +2699,8 @@ static void Ctr_PutHeadCentresForEdition (void)
    Tbl_TH_Empty (1);
 
    Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
-   fprintf (Gbl.F.Out,"%s"
-                      "</th>",
-            Txt_Code);
+   fprintf (Gbl.F.Out,"%s",Txt_Code);
+   Tbl_TH_End ();
 
    Tbl_TH_Empty (1);
 

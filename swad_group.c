@@ -5051,8 +5051,8 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) (void))
       if (FuncParams)	// Extra parameters depending on the action
 	 FuncParams ();
       Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :
-		                                             "sitemap.svg",
-			   Txt_GROUP_WHICH_GROUPS[WhichGrps]);
+		                                           "sitemap.svg",
+			      Txt_GROUP_WHICH_GROUPS[WhichGrps]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
