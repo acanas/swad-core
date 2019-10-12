@@ -11807,30 +11807,30 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin ("class=\"BM\"");
+      Tbl_TH_Begin (1,1,"BM");;
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Institution);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Centre);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Degree);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Course);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_File_zone);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Document);
       Tbl_TH_End ();
 
@@ -11850,9 +11850,9 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 
       /***** Write footer *****/
       Tbl_TR_Begin (NULL);
-      Tbl_TH_Begin ("colspan=\"7\" class=\"CENTER_MIDDLE\"");
 
       /* Number of documents not hidden found */
+      Tbl_TH_Begin (1,7,"CENTER_MIDDLE");
       fprintf (Gbl.F.Out,"(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
       if (NumDocsHidden == 1)
@@ -11860,8 +11860,8 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
       else
 	 fprintf (Gbl.F.Out,"%lu %s",NumDocsHidden,Txt_hidden_documents);
       fprintf (Gbl.F.Out,")");
-
       Tbl_TH_End ();
+
       Tbl_TR_End ();
 
       /***** End table and box *****/

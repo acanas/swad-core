@@ -572,7 +572,7 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 	Order <= Agd_ORDER_BY_END_DATE;
 	Order++)
      {
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       switch (AgendaType)
 	{
 	 case Agd_MY_AGENDA_TODAY:
@@ -599,11 +599,11 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
       Tbl_TH_End ();
      }
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Event);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Location);
    Tbl_TH_End ();
 

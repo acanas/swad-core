@@ -962,23 +962,23 @@ static void TsI_WriteHeadingListImportedQst (void)
 
    Tbl_TH_Empty (1);
 
-   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
+   Tbl_TH_Begin (1,1,"CENTER_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
+   Tbl_TH_Begin (1,1,"CENTER_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_Tags);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
+   Tbl_TH_Begin (1,1,"CENTER_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_Type);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
+   Tbl_TH_Begin (1,1,"CENTER_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_Shuffle);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TH_Begin (1,1,"LEFT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_Question);
    Tbl_TH_End ();
 

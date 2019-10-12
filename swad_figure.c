@@ -373,19 +373,19 @@ static void Fig_GetAndShowUsersStats (void)
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Average_number_of_courses_to_which_a_user_belongs);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Average_number_of_users_belonging_to_a_course);
    Tbl_TH_End ();
 
@@ -398,7 +398,7 @@ static void Fig_GetAndShowUsersStats (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("colspan=\"4\" style=\"height:10px;\"");
+   Tbl_TH_Begin (1,4,"SEPAR_ROW");
    Tbl_TH_End ();
 
    Tbl_TR_End ();
@@ -516,31 +516,31 @@ static void Fig_GetAndShowUsersRanking (void)
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Clicks);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Clicks_per_day);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Timeline);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Followers);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Downloads);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Forums);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Messages);
    Tbl_TH_End ();
 
@@ -629,7 +629,7 @@ static void Fig_WriteHeadHierarchy (void)
 
    Tbl_TH_Empty (1);
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"<img src=\"%s/globe.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
@@ -638,7 +638,7 @@ static void Fig_WriteHeadHierarchy (void)
             Cfg_URL_ICON_PUBLIC,Txt_Countries,Txt_Countries,Txt_Countries);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"<img src=\"%s/university.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
@@ -647,7 +647,7 @@ static void Fig_WriteHeadHierarchy (void)
             Cfg_URL_ICON_PUBLIC,Txt_Institutions,Txt_Institutions,Txt_Institutions);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"<img src=\"%s/building.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
@@ -656,7 +656,7 @@ static void Fig_WriteHeadHierarchy (void)
             Cfg_URL_ICON_PUBLIC,Txt_Centres,Txt_Centres,Txt_Centres);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"<img src=\"%s/graduation-cap.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
@@ -665,7 +665,7 @@ static void Fig_WriteHeadHierarchy (void)
             Cfg_URL_ICON_PUBLIC,Txt_Degrees,Txt_Degrees,Txt_Degrees);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
@@ -1497,11 +1497,11 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 
 	    Tbl_TH_Empty (1);
 
-	    Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+	    Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
 	    fprintf (Gbl.F.Out,"%s",Txt_Institution);
 	    Tbl_TH_End ();
 
-	    Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+	    Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
 	    fprintf (Gbl.F.Out,"%s",TxtFigure);
 	    Tbl_TH_End ();
 
@@ -2526,35 +2526,35 @@ static void Fig_WriteStatsExpTreesTableHead1 (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_File_zones);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Courses);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Groups);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Max_levels);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Folders);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Files);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Size);
    Tbl_TH_End ();
 
@@ -2571,19 +2571,19 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_File_zones);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Folders,Txt_course);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Files,Txt_course);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Size,Txt_course);
    Tbl_TH_End ();
 
@@ -2600,19 +2600,19 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_File_zones);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Folders,Txt_user[Usr_SEX_UNKNOWN]);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Files,Txt_user[Usr_SEX_UNKNOWN]);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Size,Txt_user[Usr_SEX_UNKNOWN]);
    Tbl_TH_End ();
 
@@ -2835,15 +2835,15 @@ static void Fig_GetAndShowOERsStats (void)
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_License);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_private_files);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_public_files);
    Tbl_TH_End ();
 
@@ -3037,19 +3037,19 @@ static void Fig_GetAndShowAssignmentsStats (void)
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_assignments);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_with_BR_assignments);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Average_number_BR_of_ASSIG_BR_per_course);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_notifications);
    Tbl_TH_End ();
 
@@ -3107,15 +3107,15 @@ static void Fig_GetAndShowProjectsStats (void)
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_projects);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_with_BR_projects);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Average_number_BR_of_projects_BR_per_course);
    Tbl_TH_End ();
 
@@ -3171,39 +3171,39 @@ static void Fig_GetAndShowTestsStats (void)
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Type_of_BR_answers);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_BR_with_test_BR_questions);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_BR_of_test_BR_questions);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
    Tbl_TH_End ();
 
@@ -3341,15 +3341,15 @@ static void Fig_GetAndShowGamesStats (void)
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_games);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_with_BR_games);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Average_number_BR_of_games_BR_per_course);
    Tbl_TH_End ();
 
@@ -3406,23 +3406,23 @@ static void Fig_GetAndShowSocialActivityStats (void)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Type);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_social_posts);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_posts_BR_per_user);
    Tbl_TH_End ();
 
@@ -3728,15 +3728,15 @@ static void Fig_GetAndShowFollowStats (void)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 
@@ -4022,7 +4022,7 @@ static void Fig_GetAndShowForumStats (void)
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_TOP\" style=\"width:20px;\"");
+   Tbl_TH_Begin (1,1,"BT");
    fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />",
@@ -4031,35 +4031,35 @@ static void Fig_GetAndShowForumStats (void)
             Txt_Scope);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TH_Begin (1,1,"LEFT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_Forums);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_forums);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_threads);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_posts);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_notifications);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_threads_BR_per_forum);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_posts_BR_per_thread);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_posts_BR_per_forum);
    Tbl_TH_End ();
 
@@ -4069,38 +4069,38 @@ static void Fig_GetAndShowForumStats (void)
    switch (Gbl.Scope.Current)
      {
       case Hie_SYS:
-         Fig_ShowStatOfAForumType (For_FORUM_GLOBAL_USRS     ,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_GLOBAL_TCHS     ,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM__SWAD__USRS       ,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM__SWAD__TCHS       ,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_GLOBAL_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_GLOBAL_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM__SWAD__USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM__SWAD__TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_USRS     ,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS     ,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS     ,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS     ,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS     ,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS     ,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,-1L,-1L,-1L,-1L,&FiguresForum);
          break;
       case Hie_CTY:
          Fig_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_USRS     ,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS     ,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS     ,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS     ,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS     ,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS     ,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,Gbl.Hierarchy.Cty.CtyCod,-1L,-1L,-1L,-1L,&FiguresForum);
          break;
       case Hie_INS:
          Fig_ShowStatOfAForumType (For_FORUM_INSTIT_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
          Fig_ShowStatOfAForumType (For_FORUM_INSTIT_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_USRS     ,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS     ,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS     ,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS     ,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS     ,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
-         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS     ,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_CENTRE_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_DEGREE_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_COURSE_USRS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
+         Fig_ShowStatOfAForumType (For_FORUM_COURSE_TCHS,-1L,Gbl.Hierarchy.Ins.InsCod,-1L,-1L,-1L,&FiguresForum);
          break;
       case Hie_CTR:
          Fig_ShowStatOfAForumType (For_FORUM_CENTRE_USRS,-1L,-1L,Gbl.Hierarchy.Ctr.CtrCod,-1L,-1L,&FiguresForum);
@@ -4252,7 +4252,7 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    /***** Write forum name and stats *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"LEFT_TOP\" style=\"width:20px;\"");
+   Tbl_TD_Begin ("class=\"BT\"");
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s%s\" title=\"%s%s\""
                       " class=\"ICO16x16\" />",
@@ -4390,23 +4390,23 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Event);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_events);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_emails);
    Tbl_TH_End ();
 
@@ -4636,23 +4636,23 @@ static void Fig_GetAndShowNoticesStats (void)
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_NOTICE_Active_BR_notices);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_NOTICE_Obsolete_BR_notices);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_NOTICE_Deleted_BR_notices);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Total);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_notifications);
    Tbl_TH_End ();
 
@@ -4721,23 +4721,23 @@ static void Fig_GetAndShowMsgsStats (void)
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Messages);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_MSGS_Not_deleted);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_MSGS_Deleted);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Total);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_notifications);
    Tbl_TH_End ();
 
@@ -4830,23 +4830,23 @@ static void Fig_GetAndShowSurveysStats (void)
    /***** Write table heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_surveys);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_courses_with_BR_surveys);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Average_number_BR_of_surveys_BR_per_course);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Average_number_BR_of_questions_BR_per_survey);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_BR_notifications);
    Tbl_TH_End ();
 
@@ -4934,15 +4934,15 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",TxtObject);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 
@@ -5031,15 +5031,15 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Cookies);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 
@@ -5115,15 +5115,15 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Language);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 
@@ -5200,15 +5200,15 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Calendar);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 
@@ -5289,15 +5289,15 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Format);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 
@@ -5374,15 +5374,15 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Icons);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 
@@ -5464,15 +5464,15 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Menu);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 
@@ -5553,15 +5553,15 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Theme_SKIN);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 
@@ -5641,15 +5641,15 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Columns);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
    Tbl_TH_End ();
 

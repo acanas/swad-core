@@ -328,40 +328,40 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("colspan=\"2\" class=\"CENTER_TOP\"");
+   Tbl_TH_Begin (1,2,"CENTER_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
 		                                          Usr_SEX_UNKNOWN]);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TH_Begin (1,1,"LEFT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_START_TIME]);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TH_Begin (1,1,"LEFT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_END_TIME]);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TH_Begin (1,1,"LEFT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_Match);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_Questions);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_Non_blank_BR_questions);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_Total_BR_score);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TH_Begin (1,1,"RIGHT_TOP");
    fprintf (Gbl.F.Out,"%s<br />%s<br />%u",Txt_Score,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
    Tbl_TH_End ();
 

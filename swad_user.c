@@ -6313,8 +6313,7 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\"",
-            Usr_GetColumnsForSelectUsrs ());
+   Tbl_TH_Begin (1,Usr_GetColumnsForSelectUsrs (),"LEFT_MIDDLE LIGHT_BLUE");
 
    fprintf (Gbl.F.Out,"<label>");
    if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
@@ -6468,7 +6467,7 @@ void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr)
    /***** First column used for selection *****/
    if (PutCheckBoxToSelectUsr)
      {
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE");
       Tbl_TH_End ();
      }
 
@@ -6478,7 +6477,7 @@ void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr)
         NumCol++)
       if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
 	{
-         Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+         Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE");
          fprintf (Gbl.F.Out,"%s&nbsp;",Usr_UsrDatMainFieldNames[NumCol]);
          Tbl_TH_End ();
 	}
@@ -6635,7 +6634,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
 	{
-	 Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+	 Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE");
 	 fprintf (Gbl.F.Out,"&nbsp;");
 	 Tbl_TH_End ();
 	}
@@ -6646,7 +6645,7 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
            {
-            Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+            Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE");
             fprintf (Gbl.F.Out,"%s&nbsp;",Usr_UsrDatMainFieldNames[NumCol]);
             Tbl_TH_End ();
            }
@@ -6753,7 +6752,7 @@ void Usr_ListAllDataGsts (void)
            NumCol < NumColumnsCommonCard;
            NumCol++)
 	{
-         Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+         Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE");
          fprintf (Gbl.F.Out,"%s&nbsp;",FieldNames[NumCol]);
          Tbl_TH_End ();
 	}
@@ -6911,7 +6910,7 @@ void Usr_ListAllDataStds (void)
            NumCol < NumColumnsCommonCard;
            NumCol++)
 	{
-         Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+         Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE");
          fprintf (Gbl.F.Out,"%s&nbsp;",FieldNames[NumCol]);
          Tbl_TH_End ();
 	}
@@ -6925,7 +6924,7 @@ void Usr_ListAllDataStds (void)
                  NumGrpTyp++)
                if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
         	 {
-                  Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+                  Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE");
                   fprintf (Gbl.F.Out,"%s %s&nbsp;",
                            Txt_Group,
                            Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
@@ -6939,7 +6938,7 @@ void Usr_ListAllDataStds (void)
                  NumField < Gbl.Crs.Records.LstFields.Num;
                  NumField++)
               {
-               Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+               Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE\"");
                fprintf (Gbl.F.Out,"%s&nbsp;",
                         Gbl.Crs.Records.LstFields.Lst[NumField].Name);
                Tbl_TH_End ();
@@ -6960,7 +6959,7 @@ void Usr_ListAllDataStds (void)
                  NumField < Gbl.Crs.Records.LstFields.Num;
                  NumField++)
               {
-               Tbl_TH_Begin ("class=\"LEFT_MIDDLE VERY_LIGHT_BLUE\"");
+               Tbl_TH_Begin (1,1,"LEFT_MIDDLE VERY_LIGHT_BLUE");
                fprintf (Gbl.F.Out,"(%s)&nbsp;",
                         Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
                Tbl_TH_End ();
@@ -7160,7 +7159,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 	NumCol < NumColumns;
 	NumCol++)
      {
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE");
       fprintf (Gbl.F.Out,"%s&nbsp;",FieldNames[NumCol]);
       Tbl_TH_End ();
      }
@@ -7415,7 +7414,7 @@ void Usr_ListDataAdms (void)
            NumCol++)
          if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
            {
-            Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+            Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE");
             fprintf (Gbl.F.Out,"%s&nbsp;",FieldNames[NumCol]);
             Tbl_TH_End ();
            }

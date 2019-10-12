@@ -803,22 +803,22 @@ static void Lnk_PutHeadLinks (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_Begin (1,1,"BM");;
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Code);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Short_name);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Full_name);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_WWW);
    Tbl_TH_End ();
 

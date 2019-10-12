@@ -648,11 +648,11 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    if (PutForm)
       Tbl_TH_Empty (1);
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Indicators);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("colspan=\"2\" class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,2,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Courses);
    Tbl_TH_End ();
 
@@ -770,23 +770,23 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
       case Ind_INDICATORS_BRIEF:
          Tbl_TR_Begin (NULL);
 
-         Tbl_TH_Begin ("rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (3,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Degree);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (3,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Course);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (3,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Institutional_BR_code);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (3,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Web_page_of_the_course);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"11\" class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (11,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Indicators);
          Tbl_TH_End ();
 
@@ -794,27 +794,27 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
          Tbl_TR_Begin (NULL);
 
-         Tbl_TH_Begin ("rowspan=\"2\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (2,1,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"2\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (1,2,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"(A) %s",Txt_Syllabus_of_the_course);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"2\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (1,2,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"(B) %s",Txt_Guided_academic_assignments);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"2\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (1,2,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"(C) %s",Txt_Online_tutoring);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"2\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (1,2,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"(D) %s",Txt_Materials);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"2\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (1,2,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"(E) %s",Txt_Assessment_criteria);
          Tbl_TH_End ();
 
@@ -822,43 +822,43 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
          Tbl_TR_Begin (NULL);
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_YES);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_NO);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_YES);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_NO);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_YES);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_NO);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_YES);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_NO);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_YES);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_NO);
          Tbl_TH_End ();
 
@@ -867,31 +867,31 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
       case Ind_INDICATORS_FULL:
          Tbl_TR_Begin (NULL);
 
-         Tbl_TH_Begin ("rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (3,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Degree);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (3,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Course);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (3,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Institutional_BR_code);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (3,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Web_page_of_the_course);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (3,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("rowspan=\"3\" class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (3,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"24\" class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,24,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Indicators);
          Tbl_TH_End ();
 
@@ -899,27 +899,27 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
          Tbl_TR_Begin (NULL);
 
-         Tbl_TH_Begin ("rowspan=\"2\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (2,1,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"5\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (1,5,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"(A) %s",Txt_Syllabus_of_the_course);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"5\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (1,5,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"(B) %s",Txt_Guided_academic_assignments);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"5\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (1,5,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"(C) %s",Txt_Online_tutoring);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"4\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (1,4,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"(D) %s",Txt_Materials);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("colspan=\"4\" class=\"CENTER_TOP COLOR0\"");
+         Tbl_TH_Begin (1,4,"CENTER_TOP COLOR0");
          fprintf (Gbl.F.Out,"(E) %s",Txt_Assessment_criteria);
          Tbl_TH_End ();
 
@@ -927,95 +927,95 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 
          Tbl_TR_Begin (NULL);
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_YES);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_NO);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_INFO_TITLE[Inf_LECTURES]);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_INFO_TITLE[Inf_PRACTICALS]);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_YES);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_NO);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"RIGHT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"RIGHT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Assignments);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"RIGHT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"RIGHT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Files_assignments);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"RIGHT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"RIGHT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Files_works);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_YES);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_NO);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"RIGHT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"class=\"RIGHT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Forum_threads);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"RIGHT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"RIGHT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Forum_posts);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"RIGHT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"RIGHT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_Messages_sent_by_teachers);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_YES);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_NO);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"RIGHT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"RIGHT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_No_of_files_in_DOCUM_zones);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"RIGHT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"RIGHT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_No_of_files_in_SHARE_zones);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_YES);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"CENTER_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"CENTER_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_NO);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_INFO_TITLE[Inf_ASSESSMENT]);
          Tbl_TH_End ();
 
-         Tbl_TH_Begin ("class=\"LEFT_MIDDLE COLOR0\"");
+         Tbl_TH_Begin (1,1,"LEFT_MIDDLE COLOR0");
          fprintf (Gbl.F.Out,"%s",Txt_INFO_TITLE[Inf_TEACHING_GUIDE]);
          Tbl_TH_End ();
 

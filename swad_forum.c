@@ -2561,13 +2561,13 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin ("style=\"width:20px;\"");
+      Tbl_TH_Begin (1,1,"BT");
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"CONTEXT_COL\"");	// Column for contextual icons
+      Tbl_TH_Begin (1,1,"CONTEXT_COL");	// Column for contextual icons
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_MSG_Subject);
       Tbl_TH_End ();
 
@@ -2575,7 +2575,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 	   Order <= For_LAST_MSG;
 	   Order++)
 	{
-	 Tbl_TH_Begin ("colspan=\"2\" class=\"CENTER_MIDDLE\"");
+	 Tbl_TH_Begin (1,2,"CENTER_MIDDLE");
          Frm_StartFormAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                               For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
@@ -2596,19 +2596,19 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
          Tbl_TH_End ();
 	}
 
-      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_No_BR_msgs);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Unread_BR_msgs);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_WriBRters);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_ReaBRders);
       Tbl_TH_End ();
 
@@ -3411,7 +3411,8 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 
       /***** Show my photo if I have any posts in this thread *****/
       Tbl_TR_Begin (NULL);
-      Tbl_TD_Begin ("class=\"CENTER_TOP %s\" style=\"width:20px;\"",BgColor);
+
+      Tbl_TD_Begin ("class=\"BT %s\"",BgColor);
       if (Thr.NumMyPosts)
         {
          fprintf (Gbl.F.Out,"<img src=\"");

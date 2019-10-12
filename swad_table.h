@@ -53,7 +53,7 @@ void Tbl_TABLE_End (void);
 void Tbl_TR_Begin (const char *fmt,...);
 void Tbl_TR_End (void);
 
-void Tbl_TH_Begin (const char *fmt,...);
+void Tbl_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *Class);
 void Tbl_TH_End (void);
 void Tbl_TH_Empty (unsigned NumColumns);
 

@@ -187,11 +187,11 @@ void Deg_SeeDegWithPendingCrss (void)
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Degree);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Courses_ABBREVIATION);
       Tbl_TH_End ();
 
@@ -1067,24 +1067,24 @@ static void Deg_PutHeadDegreesForSeeing (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_Begin (1,1,"BM");;
    Tbl_TH_End ();
 
    Tbl_TH_Empty (1);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Degree);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Type);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Courses_ABBREVIATION);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    Tbl_TH_End ();
 
    Tbl_TR_End ();
@@ -1106,40 +1106,40 @@ static void Deg_PutHeadDegreesForEdition (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_Begin (1,1,"BM");;
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Code);
    Tbl_TH_End ();
 
    Tbl_TH_Empty (1);
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Short_name_of_the_degree);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Full_name_of_the_degree);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Type);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_WWW);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Courses_ABBREVIATION);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Requester);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    Tbl_TH_End ();
 
    Tbl_TR_End ();

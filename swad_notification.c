@@ -396,23 +396,23 @@ void Ntf_ShowMyNotifications (void)
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin ("colspan=\"2\" class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,2,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Event);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_MSG_From);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Location);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Date);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Email);
       Tbl_TH_End ();
 
@@ -1946,11 +1946,11 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    Tbl_TH_Empty (1);
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Create_BR_notification);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Notify_me_BR_by_email);
    Tbl_TH_End ();
 

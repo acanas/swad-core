@@ -520,9 +520,8 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
 	Order <= DT_ORDER_BY_NUM_DEGREES;
 	Order++)
      {
-      Tbl_TH_Begin ("class=\"%s\"",
-		    Order == DT_ORDER_BY_DEGREE_TYPE ? "LEFT_MIDDLE" :
-						       "RIGHT_MIDDLE");
+      Tbl_TH_Begin (1,1,Order == DT_ORDER_BY_DEGREE_TYPE ? "LEFT_MIDDLE" :
+						                "RIGHT_MIDDLE");
 
       /* Start form to change order */
       Frm_StartForm (NextAction);
@@ -558,18 +557,18 @@ static void DT_PutHeadDegreeTypesForEdition (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_Begin (1,1,"BM");;
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Code);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Type_of_degree);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Degrees);
    Tbl_TH_End ();
 

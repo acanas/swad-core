@@ -468,24 +468,21 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
    char Nickname[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
-   unsigned Colspan;
+   unsigned ColSpan;
    bool StdsAndTchsWritten = Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
                              (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// I belong to it
                               Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
 
    /***** How many columns? *****/
    if (StdsAndTchsWritten)
-      Colspan = Usr_GetColumnsForSelectUsrs ();
+      ColSpan = Usr_GetColumnsForSelectUsrs ();
    else
-      Colspan = 1;
+      ColSpan = 1;
 
    /***** Title *****/
    Tbl_TR_Begin (NULL);
 
-   if (Colspan > 1)
-      Tbl_TH_Begin ("colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\"",Colspan);
-   else
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+   Tbl_TH_Begin (1,ColSpan,"LEFT_MIDDLE LIGHT_BLUE");
    fprintf (Gbl.F.Out,"<label for=\"OtherRecipients\">%s:</label>",
 	    StdsAndTchsWritten ? Txt_Other_recipients :
 				 Txt_Recipients);
@@ -496,10 +493,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    /***** Textarea with users' @nicknames, emails or IDs *****/
    Tbl_TR_Begin (NULL);
 
-   if (Colspan > 1)
-      Tbl_TD_Begin ("colspan=\"%u\" class=\"LEFT_MIDDLE\"",Colspan);
-   else
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,ColSpan,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"<textarea id=\"OtherRecipients\" name=\"OtherRecipients\""
 	              " class=\"MSG_RECIPIENTS\" rows=\"2\""
 	              " placeholder=\"%s\">",

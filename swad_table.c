@@ -57,6 +57,8 @@ extern struct Globals Gbl;
 
 static void Tbl_TR_BeginWithoutAttr (void);
 static void Tbl_TH_BeginWithoutAttr (void);
+
+static void Tbl_TH_BeginAttr (const char *fmt,...);
 static void Tbl_TD_BeginWithoutAttr (void);
 
 /*****************************************************************************/
@@ -204,7 +206,46 @@ void Tbl_TR_End (void)
 /***************************** Table heading cells ***************************/
 /*****************************************************************************/
 
-void Tbl_TH_Begin (const char *fmt,...)
+void Tbl_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *Class)
+  {
+   if (RowSpan > 1 && ColSpan > 1)
+     {
+      if (Class)
+	 Tbl_TH_BeginAttr ("rowspan=\"%u\" colspan=\"%u\" class=\"%s\"",
+		       RowSpan,ColSpan,Class);
+      else
+	 Tbl_TH_BeginAttr ("rowspan=\"%u\" colspan=\"%u\"",
+		       RowSpan,ColSpan);
+     }
+   else if (RowSpan > 1)
+     {
+      if (Class)
+	 Tbl_TH_BeginAttr ("rowspan=\"%u\" class=\"%s\"",
+		       RowSpan,Class);
+      else
+	 Tbl_TH_BeginAttr ("rowspan=\"%u\"",
+		       RowSpan);
+     }
+   else if (ColSpan > 1)
+     {
+      if (Class)
+	 Tbl_TH_BeginAttr ("colspan=\"%u\" class=\"%s\"",
+		       ColSpan,Class);
+      else
+	 Tbl_TH_BeginAttr ("colspan=\"%u\"",
+		       ColSpan);
+     }
+   else
+     {
+      if (Class)
+         Tbl_TH_BeginAttr ("class=\"%s\"",
+		       Class);
+      else
+	 Tbl_TH_BeginWithoutAttr ();
+     }
+  }
+
+void Tbl_TH_BeginAttr (const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -253,7 +294,7 @@ void Tbl_TH_Empty (unsigned NumColumns)
 	NumCol < NumColumns;
 	NumCol++)
      {
-      Tbl_TH_Begin (NULL);
+      Tbl_TH_BeginAttr (NULL);
       Tbl_TH_End ();
      }
   }

@@ -240,14 +240,14 @@ static void Att_ShowAllAttEvents (void)
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin ("class=\"CONTEXT_COL\"");	// Column for contextual icons
+      Tbl_TH_Begin (1,1,"CONTEXT_COL");	// Column for contextual icons
       Tbl_TH_End ();
 
       for (Order = Dat_START_TIME;
 	   Order <= Dat_END_TIME;
 	   Order++)
 	{
-	 Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+	 Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
 	 Frm_StartForm (ActSeeAtt);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
@@ -263,11 +263,11 @@ static void Att_ShowAllAttEvents (void)
 	 Tbl_TH_End ();
 	}
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Event);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
       Tbl_TH_End ();
 
@@ -1905,20 +1905,17 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    Tbl_TH_Empty (3);
 
    if (Gbl.Usrs.Listing.WithPhotos)
-     {
-      Tbl_TH_Begin ("style=\"width:22px;\"");
-      Tbl_TH_End ();
-     }
+      Tbl_TH_Empty (1);
 
-   Tbl_TH_Begin ("colspan=\"2\" class=\"TIT_TBL LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,2,"TIT_TBL LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Student_comment);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Teachers_comment);
    Tbl_TH_End ();
 
@@ -1996,20 +1993,17 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Tbl_TH_Empty (3);
 
       if (Gbl.Usrs.Listing.WithPhotos)
-	{
-         Tbl_TH_Begin ("style=\"width:22px;\"");
-         Tbl_TH_End ();
-	}
+         Tbl_TH_Empty (1);
 
-      Tbl_TH_Begin ("colspan=\"2\" class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,2,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Student_comment);
       Tbl_TH_End ();
 
-      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
       fprintf (Gbl.F.Out,"%s",Txt_Teachers_comment);
       Tbl_TH_End ();
 
@@ -3131,11 +3125,11 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("colspan=\"4\" class=\"LEFT_MIDDLE\"");
+   Tbl_TH_Begin (1,4,"LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Event);
    Tbl_TH_End ();
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
    Tbl_TH_End ();
 
@@ -3336,10 +3330,9 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin ("colspan=\"%u\" class=\"LEFT_MIDDLE\"",
-	         Gbl.Usrs.Listing.WithPhotos ? 4 :
-					       3);
-
+   Tbl_TH_Begin (1,Gbl.Usrs.Listing.WithPhotos ? 4 :
+					            3,
+		      "LEFT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN]);
    Tbl_TH_End ();
 
@@ -3352,8 +3345,7 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 	 Att_GetDataOfAttEventByCodAndCheckCrs (&Gbl.AttEvents.Lst[NumAttEvent]);
 
 	 /***** Put link to this attendance event *****/
-	 Tbl_TH_Begin ("class=\"CENTER_MIDDLE\" title=\"%s\"",
-		       Gbl.AttEvents.Lst[NumAttEvent].Title);
+	 Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
 	 snprintf (StrNumAttEvent,sizeof (StrNumAttEvent),
 		   "%u",
 		   NumAttEvent + 1);
@@ -3364,7 +3356,7 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 	 Tbl_TH_End ();
 	}
 
-   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s",Txt_Attendance);
    Tbl_TH_End ();
 
