@@ -157,13 +157,8 @@ void Cty_SeeCtyWithPendingInss (void)
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Country);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Institutions_ABBREVIATION);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Country);
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Institutions_ABBREVIATION);
 
       Tbl_TR_End ();
 
@@ -668,7 +663,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	Order++)
      {
       Tbl_TH_Begin (1,1,Order == Cty_ORDER_BY_COUNTRY ? "LEFT_MIDDLE" :
-						             "RIGHT_MIDDLE");
+						        "RIGHT_MIDDLE");
       if (OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeCty);
@@ -688,22 +683,10 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
       Tbl_TH_End ();
      }
 
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Institutions_ABBREVIATION);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Centres_ABBREVIATION);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Degrees_ABBREVIATION);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Courses_ABBREVIATION);
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Institutions_ABBREVIATION);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Centres_ABBREVIATION);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Degrees_ABBREVIATION);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Courses_ABBREVIATION);
    Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s+<br />%s",
 	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
@@ -2150,34 +2133,14 @@ static void Cty_PutHeadCountriesForEdition (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Numeric_BR_code_BR_ISO_3166_1);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Alphabetic_BR_code_BR_ISO_3166_1);
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"BM",NULL);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Numeric_BR_code_BR_ISO_3166_1);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Alphabetic_BR_code_BR_ISO_3166_1);
    Tbl_TH_Empty (1);
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Name);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_WWW);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Users);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Institutions_ABBREVIATION);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Name);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_WWW);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Users);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Institutions_ABBREVIATION);
 
    Tbl_TR_End ();
   }

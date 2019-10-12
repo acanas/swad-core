@@ -599,13 +599,8 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
       Tbl_TH_End ();
      }
 
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Event);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Location);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Event);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Location);
 
    Tbl_TR_End ();
   }

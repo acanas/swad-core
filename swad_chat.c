@@ -285,13 +285,8 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,1,"CENTER_MIDDLE LIGHT_BLUE");
-      fprintf (Gbl.F.Out,"%s",Txt_CHAT_Room_code);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE");
-      fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"CENTER_MIDDLE LIGHT_BLUE",Txt_CHAT_Room_code);
+      Tbl_TH (1,1,"LEFT_MIDDLE LIGHT_BLUE",Txt_No_of_users);
 
       Tbl_TR_End ();
 

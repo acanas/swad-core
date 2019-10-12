@@ -934,31 +934,13 @@ static void Ban_PutHeadBanners (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Code);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Short_name);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Full_name);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Image);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_WWW);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"BM",NULL);
+   Tbl_TH (1,1,"BM",NULL);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Short_name);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Full_name);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Image);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_WWW);
 
    Tbl_TR_End ();
   }

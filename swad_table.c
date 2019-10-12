@@ -206,6 +206,15 @@ void Tbl_TR_End (void)
 /***************************** Table heading cells ***************************/
 /*****************************************************************************/
 
+void Tbl_TH (unsigned RowSpan,unsigned ColSpan,const char *Class,const char *Txt)
+  {
+   Tbl_TH_Begin (RowSpan,ColSpan,Class);
+   if (Txt)
+      if (Txt[0])
+         fprintf (Gbl.F.Out,"%s",Txt);
+   Tbl_TH_End ();
+  }
+
 void Tbl_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *Class)
   {
    if (RowSpan > 1 && ColSpan > 1)
@@ -245,7 +254,7 @@ void Tbl_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *Class)
      }
   }
 
-void Tbl_TH_BeginAttr (const char *fmt,...)
+static void Tbl_TH_BeginAttr (const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;

@@ -240,14 +240,13 @@ static void Att_ShowAllAttEvents (void)
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,1,"CONTEXT_COL");	// Column for contextual icons
-      Tbl_TH_End ();
-
+      Tbl_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
       for (Order = Dat_START_TIME;
 	   Order <= Dat_END_TIME;
 	   Order++)
 	{
 	 Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
+
 	 Frm_StartForm (ActSeeAtt);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
@@ -260,16 +259,11 @@ static void Att_ShowAllAttEvents (void)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
+
 	 Tbl_TH_End ();
 	}
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Event);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Event);
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
 
       Tbl_TR_End ();
 
@@ -1903,21 +1897,11 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    Tbl_TR_Begin (NULL);
 
    Tbl_TH_Empty (3);
-
    if (Gbl.Usrs.Listing.WithPhotos)
       Tbl_TH_Empty (1);
-
-   Tbl_TH_Begin (1,2,"TIT_TBL LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Student_comment);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Teachers_comment);
-   Tbl_TH_End ();
+   Tbl_TH (1,2,"TIT_TBL LEFT_MIDDLE",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Student_comment);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Teachers_comment);
 
    Tbl_TR_End ();
 
@@ -1991,21 +1975,11 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Tbl_TR_Begin (NULL);
 
       Tbl_TH_Empty (3);
-
       if (Gbl.Usrs.Listing.WithPhotos)
          Tbl_TH_Empty (1);
-
-      Tbl_TH_Begin (1,2,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Student_comment);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Teachers_comment);
-      Tbl_TH_End ();
+      Tbl_TH (1,2,"LEFT_MIDDLE",Txt_ROLES_SINGUL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Student_comment);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Teachers_comment);
 
       Tbl_TR_End ();
 
@@ -3125,13 +3099,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    /***** Heading row *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,4,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Event);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
-   Tbl_TH_End ();
+   Tbl_TH (1,4,"LEFT_MIDDLE",Txt_Event);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN]);
 
    Tbl_TR_End ();
 
@@ -3330,11 +3299,9 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,Gbl.Usrs.Listing.WithPhotos ? 4 :
-					            3,
-		      "LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN]);
-   Tbl_TH_End ();
+   Tbl_TH (1,Gbl.Usrs.Listing.WithPhotos ? 4 :
+				           3,
+           "LEFT_MIDDLE",Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN]);
 
    for (NumAttEvent = 0;
 	NumAttEvent < Gbl.AttEvents.Num;
@@ -3356,9 +3323,7 @@ static void Att_WriteTableHeadSeveralAttEvents (void)
 	 Tbl_TH_End ();
 	}
 
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Attendance);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Attendance);
 
    Tbl_TR_End ();
   }

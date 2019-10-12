@@ -182,13 +182,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
       /***** Wrtie heading *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Centre);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Degrees_ABBREVIATION);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Centre);
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Degrees_ABBREVIATION);
 
       Tbl_TR_End ();
 
@@ -2633,7 +2628,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	Order++)
      {
       Tbl_TH_Begin (1,1,Order == Ctr_ORDER_BY_CENTRE ? "LEFT_MIDDLE" :
-						          "RIGHT_MIDDLE");
+						       "RIGHT_MIDDLE");
       if (OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeCtr);
@@ -2653,26 +2648,15 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
       Tbl_TH_End ();
      }
 
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Place);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Degrees_ABBREVIATION);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Courses_ABBREVIATION);
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Place);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Degrees_ABBREVIATION);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Courses_ABBREVIATION);
    Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s+<br />%s",
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   Tbl_TH_End ();
+   Tbl_TH_Empty (1);
 
    Tbl_TR_End ();
   }
@@ -2696,49 +2680,21 @@ static void Ctr_PutHeadCentresForEdition (void)
    Tbl_TR_Begin (NULL);
 
    Tbl_TH_Empty (1);
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Code);
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
    Tbl_TH_Empty (1);
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Place);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Short_name_of_the_centre);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Full_name_of_the_centre);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_WWW);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Users);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Degrees_ABBREVIATION);
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Place);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Short_name_of_the_centre);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Full_name_of_the_centre);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_WWW);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Users);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Degrees_ABBREVIATION);
    Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
    fprintf (Gbl.F.Out,"%s+<br />%s",
 	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Requester);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Requester);
+   Tbl_TH_Empty (1);
 
    Tbl_TR_End ();
   }
