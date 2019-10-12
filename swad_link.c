@@ -803,24 +803,24 @@ static void Lnk_PutHeadLinks (void)
 
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"BM\">");
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Code);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Short_name);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Full_name);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_WWW);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
   }

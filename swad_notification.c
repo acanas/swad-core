@@ -396,25 +396,25 @@ void Ntf_ShowMyNotifications (void)
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
 
-      fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("colspan=\"2\" class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Event);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_MSG_From);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Location);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Date);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Email);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
       Tbl_TR_End ();
 
@@ -1946,13 +1946,13 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    Tbl_TH_Empty (1);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Create_BR_notification);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Notify_me_BR_by_email);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 

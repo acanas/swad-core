@@ -11807,32 +11807,32 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
 
-      fprintf (Gbl.F.Out,"<th class=\"BM\">");
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_Begin ("class=\"BM\"");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Institution);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Centre);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Degree);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Course);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_File_zone);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Document);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
       Tbl_TR_End ();
 
@@ -11850,7 +11850,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 
       /***** Write footer *****/
       Tbl_TR_Begin (NULL);
-      fprintf (Gbl.F.Out,"<th colspan=\"7\" class=\"CENTER_MIDDLE\">");
+      Tbl_TH_Begin ("colspan=\"7\" class=\"CENTER_MIDDLE\"");
 
       /* Number of documents not hidden found */
       fprintf (Gbl.F.Out,"(");
@@ -11861,7 +11861,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 	 fprintf (Gbl.F.Out,"%lu %s",NumDocsHidden,Txt_hidden_documents);
       fprintf (Gbl.F.Out,")");
 
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
       Tbl_TR_End ();
 
       /***** End table and box *****/

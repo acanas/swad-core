@@ -437,33 +437,33 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
       Tbl_TH_Empty (1);
 
    /***** The rest of columns *****/
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Gam_ORDER_BY_END_DATE]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Match);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Players);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Status);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Result);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    /***** End row *****/
    Tbl_TR_End ();

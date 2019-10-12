@@ -213,15 +213,15 @@ static void Gam_ListAllGames (void)
       Tbl_TR_Begin (NULL);
       if (Gam_CheckIfICanEditGames ())
 	{
-         fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\">");	// Column for contextual icons
-         fprintf (Gbl.F.Out,"</th>");
+         Tbl_TH_Begin ("class=\"CONTEXT_COL\"");	// Column for contextual icons
+         Tbl_TH_End ();
 	}
 
       for (Order  = (Gam_Order_t) 0;
 	   Order <= (Gam_Order_t) (Gam_NUM_ORDERS - 1);
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+	 Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
 
 	 /* Form to change order */
 	 Frm_StartForm (ActSeeAllGam);
@@ -239,9 +239,9 @@ static void Gam_ListAllGames (void)
 	 Tbl_TH_End ();
 	}
 
-      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Matches);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
       Tbl_TR_End ();
 
@@ -1653,21 +1653,21 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
 
    Tbl_TH_Empty (1);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Code);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Tags);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Question);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 

@@ -120,7 +120,7 @@ void Hld_SeeHolidays (void)
 	      Order <= Hld_ORDER_BY_START_DATE;
 	      Order++)
 	   {
-	    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+	    Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
 	    Frm_StartForm (ActSeeHld);
 	    Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	    Frm_LinkFormSubmit (Txt_HOLIDAYS_HELP_ORDER[Order],"TIT_TBL",NULL);
@@ -134,13 +134,13 @@ void Hld_SeeHolidays (void)
 	    Tbl_TH_End ();
 	   }
 
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+	 Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
 	 fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",Txt_End_date);
-	 fprintf (Gbl.F.Out,"</th>");
+	 Tbl_TH_End ();
 
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+	 Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
 	 fprintf (Gbl.F.Out,"%s",Txt_Holiday);
-	 fprintf (Gbl.F.Out,"</th>");
+	 Tbl_TH_End ();
 
 	 Tbl_TR_End ();
 
@@ -975,25 +975,25 @@ static void Hld_PutFormToCreateHoliday (void)
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Place);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Type);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_START_TIME]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_END_TIME]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Holiday);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -1082,32 +1082,32 @@ static void Hld_PutHeadHolidays (void)
 
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"BM\">");
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_Begin ("class=\"BM\"");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Code);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Place);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Type);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_START_TIME]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_END_TIME]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Holiday);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
   }

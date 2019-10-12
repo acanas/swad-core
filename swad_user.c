@@ -6313,7 +6313,7 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">",
+   Tbl_TH_Begin ("colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\"",
             Usr_GetColumnsForSelectUsrs ());
 
    fprintf (Gbl.F.Out,"<label>");
@@ -6331,7 +6331,7 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 	    Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
                                                   Txt_ROLES_PLURAL_Abc[Role][Sex]);
 
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
   }
@@ -6468,8 +6468,8 @@ void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr)
    /***** First column used for selection *****/
    if (PutCheckBoxToSelectUsr)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
+      Tbl_TH_End ();
      }
 
    /***** Columns for user's data fields *****/
@@ -6478,9 +6478,9 @@ void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr)
         NumCol++)
       if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
 	{
-         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
+         Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
          fprintf (Gbl.F.Out,"%s&nbsp;",Usr_UsrDatMainFieldNames[NumCol]);
-         fprintf (Gbl.F.Out,"</th>");
+         Tbl_TH_End ();
 	}
 
    Tbl_TR_End ();
@@ -6635,9 +6635,9 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
 	{
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
+	 Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
 	 fprintf (Gbl.F.Out,"&nbsp;");
-	 fprintf (Gbl.F.Out,"</th>");
+	 Tbl_TH_End ();
 	}
 
       /* Columns for the data */
@@ -6646,9 +6646,9 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
            {
-            fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
+            Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
             fprintf (Gbl.F.Out,"%s&nbsp;",Usr_UsrDatMainFieldNames[NumCol]);
-            fprintf (Gbl.F.Out,"</th>");
+            Tbl_TH_End ();
            }
 
       /* End row */
@@ -6753,9 +6753,9 @@ void Usr_ListAllDataGsts (void)
            NumCol < NumColumnsCommonCard;
            NumCol++)
 	{
-         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
+         Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
          fprintf (Gbl.F.Out,"%s&nbsp;",FieldNames[NumCol]);
-         fprintf (Gbl.F.Out,"</th>");
+         Tbl_TH_End ();
 	}
 
       /* End row */
@@ -6911,9 +6911,9 @@ void Usr_ListAllDataStds (void)
            NumCol < NumColumnsCommonCard;
            NumCol++)
 	{
-         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
+         Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
          fprintf (Gbl.F.Out,"%s&nbsp;",FieldNames[NumCol]);
-         fprintf (Gbl.F.Out,"</th>");
+         Tbl_TH_End ();
 	}
 
       /* 2. Columns for the groups */
@@ -6925,11 +6925,11 @@ void Usr_ListAllDataStds (void)
                  NumGrpTyp++)
                if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
         	 {
-                  fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
+                  Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
                   fprintf (Gbl.F.Out,"%s %s&nbsp;",
                            Txt_Group,
                            Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
-                  fprintf (Gbl.F.Out,"</th>");
+                  Tbl_TH_End ();
         	 }
 
          if (Gbl.Crs.Records.LstFields.Num)
@@ -6939,10 +6939,10 @@ void Usr_ListAllDataStds (void)
                  NumField < Gbl.Crs.Records.LstFields.Num;
                  NumField++)
               {
-               fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
+               Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
                fprintf (Gbl.F.Out,"%s&nbsp;",
                         Gbl.Crs.Records.LstFields.Lst[NumField].Name);
-               fprintf (Gbl.F.Out,"</th>");
+               Tbl_TH_End ();
               }
 
             /* 4. Visibility type for the record fields that depend on the course, in other row */
@@ -6960,10 +6960,10 @@ void Usr_ListAllDataStds (void)
                  NumField < Gbl.Crs.Records.LstFields.Num;
                  NumField++)
               {
-               fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE VERY_LIGHT_BLUE\">");
+               Tbl_TH_Begin ("class=\"LEFT_MIDDLE VERY_LIGHT_BLUE\"");
                fprintf (Gbl.F.Out,"(%s)&nbsp;",
                         Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
-               fprintf (Gbl.F.Out,"</th>");
+               Tbl_TH_End ();
               }
            }
         }
@@ -7160,9 +7160,9 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 	NumCol < NumColumns;
 	NumCol++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
       fprintf (Gbl.F.Out,"%s&nbsp;",FieldNames[NumCol]);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
      }
 
    Tbl_TR_End ();
@@ -7415,9 +7415,9 @@ void Usr_ListDataAdms (void)
            NumCol++)
          if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
            {
-            fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
+            Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
             fprintf (Gbl.F.Out,"%s&nbsp;",FieldNames[NumCol]);
-            fprintf (Gbl.F.Out,"</th>");
+            Tbl_TH_End ();
            }
 
       Tbl_TR_End ();

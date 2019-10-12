@@ -175,13 +175,13 @@ void Ins_SeeInsWithPendingCtrs (void)
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
 
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Institution);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Centres_ABBREVIATION);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
       Tbl_TR_End ();
 
@@ -877,9 +877,9 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	Order <= Ins_ORDER_BY_NUM_USRS;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"%s\">",
-               Order == Ins_ORDER_BY_INSTITUTION ? "LEFT_MIDDLE" :
-        	                                   "RIGHT_MIDDLE");
+      Tbl_TH_Begin ("class=\"%s\"",
+		    Order == Ins_ORDER_BY_INSTITUTION ? "LEFT_MIDDLE" :
+						        "RIGHT_MIDDLE");
       if (OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeIns);
@@ -899,30 +899,30 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
       Tbl_TH_End ();
      }
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Centres_ABBREVIATION);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Degrees_ABBREVIATION);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Courses_ABBREVIATION);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Departments_ABBREVIATION);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s+<br />%s",
 	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
 	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
   }
@@ -2336,45 +2336,44 @@ static void Ins_PutHeadInstitutionsForEdition (void)
 
    Tbl_TH_Empty (1);
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>",
-            Txt_Code);
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
+   fprintf (Gbl.F.Out,"%s",Txt_Code);
+   Tbl_TH_End ();
 
    Tbl_TH_Empty (1);
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Short_name_of_the_institution);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Full_name_of_the_institution);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_WWW);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Users);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Centres_ABBREVIATION);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s+<br />%s",
 	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
 	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Requester);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
   }

@@ -557,17 +557,17 @@ void Net_ShowWebAndSocialNetworksStats (void)
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Web_social_network);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_users);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_PERCENT_of_users);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 

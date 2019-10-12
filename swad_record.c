@@ -438,17 +438,17 @@ static void Rec_WriteHeadingRecordFields (void)
 
    Tbl_TH_Empty (1);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Field_BR_name);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_of_BR_lines);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+   Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
    fprintf (Gbl.F.Out,"%s",Txt_Visible_by_BR_the_student);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
   }

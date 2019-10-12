@@ -2561,21 +2561,21 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
 
-      fprintf (Gbl.F.Out,"<th style=\"width:20px;\">");
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_Begin ("style=\"width:20px;\"");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\">");	// Column for contextual icons
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_Begin ("class=\"CONTEXT_COL\"");	// Column for contextual icons
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_MSG_Subject);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
       for (Order = For_FIRST_MSG;
 	   Order <= For_LAST_MSG;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_MIDDLE\">");
+	 Tbl_TH_Begin ("colspan=\"2\" class=\"CENTER_MIDDLE\"");
          Frm_StartFormAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                               For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
@@ -2596,21 +2596,21 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
          Tbl_TH_End ();
 	}
 
-      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_No_BR_msgs);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_Unread_BR_msgs);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_WriBRters);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
-      fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\"");
       fprintf (Gbl.F.Out,"%s",Txt_ReaBRders);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
 
       Tbl_TR_End ();
 

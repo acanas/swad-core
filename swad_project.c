@@ -691,9 +691,9 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+	 Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
 	 fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-	 fprintf (Gbl.F.Out,"</th>");
+	 Tbl_TH_End ();
 	 break;
       default:
 	 break;
@@ -704,8 +704,8 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
      {
       case Prj_LIST_PROJECTS:
       case Prj_FILE_BROWSER_PROJECT:
-	 fprintf (Gbl.F.Out,"<th class=\"CONTEXT_COL\">");
-	 fprintf (Gbl.F.Out,"</th>");
+	 Tbl_TH_Begin ("class=\"CONTEXT_COL\"");
+	 Tbl_TH_End ();
 	 break;
       default:
 	 break;
@@ -716,7 +716,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
 	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+      Tbl_TH_Begin ("class=\"CENTER_MIDDLE\"");
 
       switch (ProjectView)
 	{
@@ -765,47 +765,47 @@ static void Prj_ShowTableAllProjectsHead (void)
 	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">");
+      Tbl_TH_Begin ("class=\"LEFT_TOP DAT_N\"");
       fprintf (Gbl.F.Out,"%s",Txt_PROJECT_ORDER[Order]);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
      }
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP DAT_N\"");
    fprintf (Gbl.F.Out,"%s",Txt_Preassigned_QUESTION);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP DAT_N\"");
    fprintf (Gbl.F.Out,"%s",Txt_Number_of_students);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    for (NumRoleToShow = 0;
 	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
 	NumRoleToShow++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">");
+      Tbl_TH_Begin ("class=\"LEFT_TOP DAT_N\"");
       fprintf (Gbl.F.Out,"%s",Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
-      fprintf (Gbl.F.Out,"</th>");
+      Tbl_TH_End ();
      }
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP DAT_N\"");
    fprintf (Gbl.F.Out,"%s",Txt_Proposal);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP DAT_N\"");
    fprintf (Gbl.F.Out,"%s",Txt_Description);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP DAT_N\"");
    fprintf (Gbl.F.Out,"%s",Txt_Required_knowledge);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP DAT_N\"");
    fprintf (Gbl.F.Out,"%s",Txt_Required_materials);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP DAT_N\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP DAT_N\"");
    fprintf (Gbl.F.Out,"%s",Txt_URL);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
   }

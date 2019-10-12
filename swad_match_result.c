@@ -328,42 +328,42 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
 
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("colspan=\"2\" class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_User[MeOrOther == Usr_ME ? Gbl.Usrs.Me.UsrDat.Sex :
 		                                          Usr_SEX_UNKNOWN]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_START_TIME]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Dat_END_TIME]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Match);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Questions);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Non_blank_BR_questions);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Total_BR_score);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s<br />%s<br />%u",Txt_Score,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TH_Empty (1);
 

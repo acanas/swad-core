@@ -483,13 +483,13 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    Tbl_TR_Begin (NULL);
 
    if (Colspan > 1)
-      fprintf (Gbl.F.Out,"<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">",Colspan);
+      Tbl_TH_Begin ("colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\"",Colspan);
    else
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">");
+      Tbl_TH_Begin ("class=\"LEFT_MIDDLE LIGHT_BLUE\"");
    fprintf (Gbl.F.Out,"<label for=\"OtherRecipients\">%s:</label>",
 	    StdsAndTchsWritten ? Txt_Other_recipients :
 				 Txt_Recipients);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 

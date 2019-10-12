@@ -2831,25 +2831,25 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
    Tbl_TH_Empty (1);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Code);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Date);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Tags);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Shuffle);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    /* Stem and answers of question */
    /* Number of times that the question has been answered */
@@ -2858,7 +2858,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 	Order < (Tst_QuestionsOrder_t) Tst_NUM_TYPES_ORDER_QST;
 	Order++)
      {
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+      Tbl_TH_Begin ("class=\"LEFT_TOP\"");
       if (NumRows > 1)
         {
          Frm_StartForm (ActLstTstQst);
@@ -3098,33 +3098,33 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
 
    Tbl_TH_Empty (1);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Code);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Date);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Tags);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Type);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Shuffle);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Question);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -7710,33 +7710,33 @@ static void Tst_ShowHeaderTestResults (void)
 
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("colspan=\"2\" class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_User[Usr_SEX_UNKNOWN]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Date);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Questions);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Non_blank_BR_questions);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Total_BR_score);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s<br />%s<br />%u",Txt_Score,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TH_Empty (1);
 

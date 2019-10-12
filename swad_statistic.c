@@ -1670,33 +1670,33 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_User_ID);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Name);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Role);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Date);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Action);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\" style=\"width:10%%;\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\" style=\"width:10%%;\"");
    fprintf (Gbl.F.Out,"%s",Txt_LOG_More_info);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -1832,29 +1832,29 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Photo);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_ID);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Name);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Role);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("colspan=\"2\" class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -1963,17 +1963,17 @@ static void Sta_ShowNumHitsPerDay (unsigned long NumRows,MYSQL_RES *mysql_res)
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Date);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Day);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -2162,18 +2162,18 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("rowspan=\"3\" class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Date);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th rowspan=\"3\" class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("rowspan=\"3\" class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Day);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th colspan=\"24\" class=\"LEFT_TOP\" style=\"width:%upx;\">",
-	    GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH);
+   Tbl_TH_Begin ("colspan=\"24\" class=\"LEFT_TOP\" style=\"width:%upx;\"",
+	         GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH);
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -2559,13 +2559,13 @@ static void Sta_ShowNumHitsPerWeek (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Week);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -2664,13 +2664,13 @@ static void Sta_ShowNumHitsPerMonth (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Month);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -2769,13 +2769,13 @@ static void Sta_ShowNumHitsPerYear (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Year);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -3199,13 +3199,13 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Action);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -3258,13 +3258,13 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_TOP\">");
+   Tbl_TH_Begin ("class=\"RIGHT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Plugin);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -3318,13 +3318,13 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Function);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -3377,13 +3377,13 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Banner);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -3457,17 +3457,17 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Country);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -3555,17 +3555,17 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Institution);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -3655,17 +3655,17 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Centre);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -3755,17 +3755,17 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Degree);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -3860,25 +3860,25 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Degree);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Year_OF_A_DEGREE);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">");
+   Tbl_TH_Begin ("class=\"CENTER_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_Course);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_TOP\">");
+   Tbl_TH_Begin ("class=\"LEFT_TOP\"");
    fprintf (Gbl.F.Out,"%s",Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType]);
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
@@ -4206,37 +4206,37 @@ void Sta_GetAndShowLastClicks (void)
    Tbl_TABLE_BeginCenterPadding (1);
    Tbl_TR_Begin (NULL);
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\" style=\"width:85px;\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\" style=\"width:85px;\"");
    fprintf (Gbl.F.Out,"%s",Txt_Click);			// Click
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\" style=\"width:50px;\">");
+   Tbl_TH_Begin ("class=\"RIGHT_MIDDLE\" style=\"width:50px;\"");
    fprintf (Gbl.F.Out,"%s",Txt_ELAPSED_TIME);		// Elapsed time
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\" style=\"width:100px;\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\" style=\"width:100px;\"");
    fprintf (Gbl.F.Out,"%s",Txt_Role);			// Role
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\" style=\"width:100px;\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\" style=\"width:100px;\"");
    fprintf (Gbl.F.Out,"%s",Txt_Country);		// Country
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\" style=\"width:150px;\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\" style=\"width:150px;\"");
    fprintf (Gbl.F.Out,"%s",Txt_Institution);		// Institution
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\" style=\"width:150px;\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\" style=\"width:150px;\"");
    fprintf (Gbl.F.Out,"%s",Txt_Centre);			// Centre
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\" style=\"width:200px;\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\" style=\"width:200px;\"");
    fprintf (Gbl.F.Out,"%s",Txt_Degree);			// Degree
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
-   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\" style=\"width:275px;\">");
+   Tbl_TH_Begin ("class=\"LEFT_MIDDLE\" style=\"width:275px;\"");
    fprintf (Gbl.F.Out,"%s",Txt_Action);			// Action
-   fprintf (Gbl.F.Out,"</th>");
+   Tbl_TH_End ();
 
    Tbl_TR_End ();
 
