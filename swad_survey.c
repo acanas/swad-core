@@ -247,8 +247,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,1,"CONTEXT_COL");	// Column for contextual icons
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
 
       for (Order = Svy_ORDER_BY_START_DATE;
 	   Order <= Svy_ORDER_BY_END_DATE;
@@ -273,13 +272,8 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Tbl_TH_End ();
 	}
 
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Survey);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Status);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Survey);
+      Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Status);
 
       Tbl_TR_End ();
 
@@ -3226,18 +3220,9 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
 
       if (Svy->Status.ICanEdit)
          Tbl_TH_Empty (1);
-
-      Tbl_TH_Begin (1,1,"CENTER_TOP");
-      fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"CENTER_TOP");
-      fprintf (Gbl.F.Out,"%s",Txt_Type);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_TOP");
-      fprintf (Gbl.F.Out,"%s",Txt_Question);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"CENTER_TOP",Txt_No_INDEX);
+      Tbl_TH (1,1,"CENTER_TOP",Txt_Type);
+      Tbl_TH (1,1,"LEFT_TOP",Txt_Question);
 
       Tbl_TR_End ();
 
