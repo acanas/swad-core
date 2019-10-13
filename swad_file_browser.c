@@ -5545,21 +5545,27 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    if (asprintf (&Anchor,"fil_brw_%u_%s",
 		 Gbl.FileBrowser.Id,RowId) < 0)
       Lay_NotEnoughMemoryExit ();
-   Tbl_TR_Begin ("id=\"%s\"",Anchor);
    switch (IconThisRow)
      {
       case Brw_ICON_TREE_NOTHING:
+	 if (TreeContracted)	// This row is inside a contracted subtree
+            Tbl_TR_Begin ("id=\"%s\" style=\"display:none;\"",Anchor);
+	 else
+            Tbl_TR_Begin ("id=\"%s\"",Anchor);
 	 break;
       case Brw_ICON_TREE_EXPAND:
-         fprintf (Gbl.F.Out," data-folder=\"contracted\"");
+	 if (TreeContracted)	// This row is inside a contracted subtree
+            Tbl_TR_Begin ("id=\"%s\" data-folder=\"contracted\" style=\"display:none;\"",Anchor);
+	 else
+            Tbl_TR_Begin ("id=\"%s\" data-folder=\"contracted\"",Anchor);
 	 break;
       case Brw_ICON_TREE_CONTRACT:
-         fprintf (Gbl.F.Out," data-folder=\"expanded\"");
+	 if (TreeContracted)	// This row is inside a contracted subtree
+            Tbl_TR_Begin ("id=\"%s\" data-folder=\"expanded\" style=\"display:none;\"",Anchor);
+	 else
+            Tbl_TR_Begin ("id=\"%s\" data-folder=\"expanded\"",Anchor);
 	 break;
      }
-   if (TreeContracted)	// This row is inside a contracted subtree
-      fprintf (Gbl.F.Out," style=\"display:none;\"");
-   fprintf (Gbl.F.Out,">");
 
    /****** If current action allows file administration... ******/
    Gbl.FileBrowser.ICanEditFileOrFolder = false;
