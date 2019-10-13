@@ -691,9 +691,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-	 fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-	 Tbl_TH_End ();
+	 Tbl_TH (1,1,"CENTER_MIDDLE",Txt_No_INDEX);
 	 break;
       default:
 	 break;
@@ -704,8 +702,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
      {
       case Prj_LIST_PROJECTS:
       case Prj_FILE_BROWSER_PROJECT:
-	 Tbl_TH_Begin (1,1,"CONTEXT_COL");
-	 Tbl_TH_End ();
+	 Tbl_TH (1,1,"CONTEXT_COL",NULL);
 	 break;
       default:
 	 break;
@@ -764,48 +761,18 @@ static void Prj_ShowTableAllProjectsHead (void)
    for (Order = (Prj_Order_t) 0;
 	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	Order++)
-     {
-      Tbl_TH_Begin (1,1,"LEFT_TOP DAT_N");
-      fprintf (Gbl.F.Out,"%s",Txt_PROJECT_ORDER[Order]);
-      Tbl_TH_End ();
-     }
-
-   Tbl_TH_Begin (1,1,"LEFT_TOP DAT_N");
-   fprintf (Gbl.F.Out,"%s",Txt_Preassigned_QUESTION);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_TOP DAT_N");
-   fprintf (Gbl.F.Out,"%s",Txt_Number_of_students);
-   Tbl_TH_End ();
-
+      Tbl_TH (1,1,"LEFT_TOP DAT_N",Txt_PROJECT_ORDER[Order]);
+   Tbl_TH (1,1,"LEFT_TOP DAT_N",Txt_Preassigned_QUESTION);
+   Tbl_TH (1,1,"LEFT_TOP DAT_N",Txt_Number_of_students);
    for (NumRoleToShow = 0;
 	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
 	NumRoleToShow++)
-     {
-      Tbl_TH_Begin (1,1,"LEFT_TOP DAT_N");
-      fprintf (Gbl.F.Out,"%s",Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
-      Tbl_TH_End ();
-     }
-
-   Tbl_TH_Begin (1,1,"LEFT_TOP DAT_N");
-   fprintf (Gbl.F.Out,"%s",Txt_Proposal);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_TOP DAT_N");
-   fprintf (Gbl.F.Out,"%s",Txt_Description);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_TOP DAT_N");
-   fprintf (Gbl.F.Out,"%s",Txt_Required_knowledge);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_TOP DAT_N");
-   fprintf (Gbl.F.Out,"%s",Txt_Required_materials);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_TOP DAT_N");
-   fprintf (Gbl.F.Out,"%s",Txt_URL);
-   Tbl_TH_End ();
+      Tbl_TH (1,1,"LEFT_TOP DAT_N",Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
+   Tbl_TH (1,1,"LEFT_TOP DAT_N",Txt_Proposal);
+   Tbl_TH (1,1,"LEFT_TOP DAT_N",Txt_Description);
+   Tbl_TH (1,1,"LEFT_TOP DAT_N",Txt_Required_knowledge);
+   Tbl_TH (1,1,"LEFT_TOP DAT_N",Txt_Required_materials);
+   Tbl_TH (1,1,"LEFT_TOP DAT_N",Txt_URL);
 
    Tbl_TR_End ();
   }

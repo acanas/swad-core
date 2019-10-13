@@ -437,18 +437,9 @@ static void Rec_WriteHeadingRecordFields (void)
    Tbl_TR_Begin (NULL);
 
    Tbl_TH_Empty (1);
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Field_BR_name);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_No_of_BR_lines);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Visible_by_BR_the_student);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Field_BR_name);
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_No_of_BR_lines);
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Visible_by_BR_the_student);
 
    Tbl_TR_End ();
   }

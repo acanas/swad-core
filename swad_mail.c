@@ -134,6 +134,7 @@ void Mai_SeeMailDomains (void)
 	Order++)
      {
       Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
+
       Frm_StartForm (ActSeeMai);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Frm_LinkFormSubmit (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL",NULL);
@@ -144,6 +145,7 @@ void Mai_SeeMailDomains (void)
          fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
       Frm_EndForm ();
+
       Tbl_TH_End ();
      }
    Tbl_TR_End ();
@@ -754,13 +756,8 @@ static void Mai_PutFormToCreateMailDomain (void)
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO]);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO]);
 
    Tbl_TR_End ();
 
@@ -804,24 +801,11 @@ static void Mai_PutHeadMailDomains (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Code);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"BM",NULL);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
 
    Tbl_TR_End ();
   }

@@ -117,10 +117,7 @@ void Plg_ListPlugins (void)
    Tbl_TR_Begin (NULL);
 
    Tbl_TH_Empty (1);
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Plugin);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Plugin);
 
    Tbl_TR_End ();
 
@@ -895,29 +892,12 @@ static void Plg_PutFormToCreatePlugin (void)
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Name);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Description);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Logo);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Application_key);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_URL);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_IP);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Name);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Description);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Logo);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Application_key);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_URL);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_IP);
 
    Tbl_TR_End ();
 
@@ -995,36 +975,14 @@ static void Plg_PutHeadPlugins (void)
    Tbl_TR_Begin (NULL);
 
    Tbl_TH_Empty (1);
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Code);
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
    Tbl_TH_Empty (1);
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Name);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Description);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Logo);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Application_key);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_URL);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_IP);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Name);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Description);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Logo);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Application_key);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_URL);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_IP);
 
    Tbl_TR_End ();
   }

@@ -120,6 +120,7 @@ void Plc_SeePlaces (void)
 	   Order++)
 	{
 	 Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
+
 	 Frm_StartForm (ActSeePlc);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_PLACES_HELP_ORDER[Order],"TIT_TBL",NULL);
@@ -130,6 +131,7 @@ void Plc_SeePlaces (void)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
+
 	 Tbl_TH_End ();
 	}
       Tbl_TR_End ();
@@ -863,24 +865,11 @@ static void Plc_PutHeadPlaces (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Code);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Short_name);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Full_name);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Centres);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"BM",NULL);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Short_name);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Full_name);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Centres);
 
    Tbl_TR_End ();
   }

@@ -2218,22 +2218,12 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       Tbl_TABLE_BeginCenterPadding (2);
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,1,"RIGHT_TOP");
-      fprintf (Gbl.F.Out,"%s",Txt_No_INDEX);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"CENTER_TOP");
-      fprintf (Gbl.F.Out,"%s",Txt_Degree);
-      Tbl_TH_End ();
-
+      Tbl_TH (1,1,"RIGHT_TOP",Txt_No_INDEX);
+      Tbl_TH (1,1,"CENTER_TOP",Txt_Degree);
       for (Sex = (Usr_Sex_t) 0;
 	   Sex < Usr_NUM_SEXS;
 	   Sex++)
-	{
-	 Tbl_TH_Begin (1,1,"CENTER_TOP");
-	 fprintf (Gbl.F.Out,"%s",Txt_SEX_PLURAL_Abc[Sex]);
-	 Tbl_TH_End ();
-	}
+	 Tbl_TH (1,1,"CENTER_TOP",Txt_SEX_PLURAL_Abc[Sex]);
 
       Tbl_TR_End ();
 

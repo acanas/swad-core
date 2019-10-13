@@ -437,33 +437,13 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
       Tbl_TH_Empty (1);
 
    /***** The rest of columns *****/
-   Tbl_TH_Begin (1,1,"LEFT_TOP");
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_TOP");
-   fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_TOP");
-   fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Gam_ORDER_BY_END_DATE]);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_TOP");
-   fprintf (Gbl.F.Out,"%s",Txt_Match);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_TOP");
-   fprintf (Gbl.F.Out,"%s",Txt_Players);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_TOP");
-   fprintf (Gbl.F.Out,"%s",Txt_Status);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_TOP");
-   fprintf (Gbl.F.Out,"%s",Txt_Result);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"LEFT_TOP",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
+   Tbl_TH (1,1,"LEFT_TOP",Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]);
+   Tbl_TH (1,1,"LEFT_TOP",Txt_START_END_TIME[Gam_ORDER_BY_END_DATE]);
+   Tbl_TH (1,1,"LEFT_TOP",Txt_Match);
+   Tbl_TH (1,1,"RIGHT_TOP",Txt_Players);
+   Tbl_TH (1,1,"CENTER_TOP",Txt_Status);
+   Tbl_TH (1,1,"CENTER_TOP",Txt_Result);
 
    /***** End row *****/
    Tbl_TR_End ();
