@@ -1040,8 +1040,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
      }
 
    /***** Start table *****/
-   Tbl_TABLE_Begin ("%s CELLS_PAD_2\">",
-                        ClassExaAnnouncement[TypeViewExamAnnouncement][Gbl.ExamAnns.ExaDat.Status]);
+   Tbl_TABLE_Begin ("%s CELLS_PAD_2",
+                    ClassExaAnnouncement[TypeViewExamAnnouncement][Gbl.ExamAnns.ExaDat.Status]);
 
    /***** Institution logo *****/
    Tbl_TR_Begin (NULL);

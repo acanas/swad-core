@@ -3278,6 +3278,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
          Svy_WriteQstStem (row[3]);
          Svy_WriteAnswersOfAQst (Svy,SvyQst,PutFormAnswerSurvey);
          Tbl_TD_End ();
+
          Tbl_TR_End ();
         }
 
@@ -3396,6 +3397,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 
       /* Write one row for each answer */
       Tbl_TABLE_BeginPadding (5);
+
       for (NumAns = 0;
 	   NumAns < NumAnswers;
 	   NumAns++)
@@ -3461,6 +3463,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 	 /* Free memory allocated for the answer */
 	 Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
 	}
+
       Tbl_TABLE_End ();
      }
 
@@ -3491,8 +3494,9 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 	        "0&nbsp;(0%%&nbsp;%s&nbsp;%u)",
                 Txt_of_PART_OF_A_TOTAL,MaxUsrs);
 
-   /***** Draw bar with a with proportional to the number of clicks *****/
    Tbl_TD_Begin ("class=\"DAT LEFT_TOP\" style=\"width:%upx;\"",Svy_MAX_BAR_WIDTH + 125);
+
+   /***** Draw bar with a with proportional to the number of clicks *****/
    if (NumUsrs && MaxUsrs)
       BarWidth = (unsigned) ((((float) NumUsrs * (float) Svy_MAX_BAR_WIDTH) /
 	                       (float) MaxUsrs) + 0.5);
@@ -3511,9 +3515,8 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
    /***** Write the number of users *****/
    fprintf (Gbl.F.Out,"%s",
             Gbl.Title);
-   Tbl_TD_End ();
 
-   Tbl_TR_End ();
+   Tbl_TD_End ();
   }
 
 /*****************************************************************************/

@@ -487,7 +487,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.33.5 (2019-10-13)"
+#define Log_PLATFORM_VERSION	"SWAD 19.33.7 (2019-10-13)"
 #define CSS_FILE		"swad19.33.css"
 #define JS_FILE			"swad19.30.js"
 /*
@@ -496,6 +496,8 @@ ps2pdf source.ps destination.pdf
 // TODO: En un TFG no preasignado con estudiante tiene que salir un triángulo amarillo
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 
+	Version 19.33.7:  Oct 13, 2019	Fixed bug in surveys. (245317 lines)
+	Version 19.33.6:  Oct 13, 2019	Fixed bug in exam announcements. (245299 lines)
 	Version 19.33.5:  Oct 13, 2019	Fixed bug in file browser. (245298 lines)
 	Version 19.33.4:  Oct 13, 2019	Code refactoring in HTML table headings. (245291 lines)
 	Version 19.33.3:  Oct 13, 2019	Code refactoring in HTML table headings. (245499 lines)

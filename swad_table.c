@@ -52,6 +52,14 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
+/***************************** Private vatiables *****************************/
+/*****************************************************************************/
+
+static unsigned Tbl_TR_NestingLevel = 0;
+static unsigned Tbl_TH_NestingLevel = 0;
+static unsigned Tbl_TD_NestingLevel = 0;
+
+/*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
@@ -190,6 +198,8 @@ void Tbl_TR_Begin (const char *fmt,...)
      }
    else
       Tbl_TR_BeginWithoutAttr ();
+
+   Tbl_TR_NestingLevel++;
   }
 
 static void Tbl_TR_BeginWithoutAttr (void)
@@ -199,7 +209,12 @@ static void Tbl_TR_BeginWithoutAttr (void)
 
 void Tbl_TR_End (void)
   {
+   if (Tbl_TR_NestingLevel == 0)	// No TR open
+      Lay_ShowErrorAndExit ("Trying to close unopened TR.");
+
    fprintf (Gbl.F.Out,"</tr>");
+
+   Tbl_TR_NestingLevel--;
   }
 
 /*****************************************************************************/
@@ -283,6 +298,8 @@ static void Tbl_TH_BeginAttr (const char *fmt,...)
      }
    else
       Tbl_TH_BeginWithoutAttr ();
+
+   Tbl_TH_NestingLevel++;
   }
 
 static void Tbl_TH_BeginWithoutAttr (void)
@@ -292,7 +309,12 @@ static void Tbl_TH_BeginWithoutAttr (void)
 
 void Tbl_TH_End (void)
   {
+   if (Tbl_TH_NestingLevel == 0)	// No TH open
+      Lay_ShowErrorAndExit ("Trying to close unopened TR.");
+
    fprintf (Gbl.F.Out,"</th>");
+
+   Tbl_TH_NestingLevel--;
   }
 
 void Tbl_TH_Empty (unsigned NumColumns)
@@ -341,6 +363,8 @@ void Tbl_TD_Begin (const char *fmt,...)
      }
    else
       Tbl_TD_BeginWithoutAttr ();
+
+   Tbl_TD_NestingLevel++;
   }
 
 static void Tbl_TD_BeginWithoutAttr (void)
@@ -350,7 +374,12 @@ static void Tbl_TD_BeginWithoutAttr (void)
 
 void Tbl_TD_End (void)
   {
+   if (Tbl_TD_NestingLevel == 0)	// No TH open
+      Lay_ShowErrorAndExit ("Trying to close unopened TR.");
+
    fprintf (Gbl.F.Out,"</td>");
+
+   Tbl_TD_NestingLevel--;
   }
 
 void Tbl_TD_Empty (unsigned NumColumns)
