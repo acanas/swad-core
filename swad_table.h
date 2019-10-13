@@ -41,7 +41,6 @@
 
 void Tbl_TABLE_Begin (const char *fmt,...);
 void Tbl_TABLE_BeginPadding (unsigned CellPadding);
-void Tbl_TABLE_BeginWithoutAttr (void);
 void Tbl_TABLE_BeginCenterPadding (unsigned CellPadding);
 void Tbl_TABLE_BeginCenter (void);
 void Tbl_TABLE_BeginWidePadding (unsigned CellPadding);

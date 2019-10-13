@@ -383,7 +383,7 @@ void Sta_AskShowCrsHits (void)
          Tbl_TD_End ();
 
 	 Tbl_TD_Begin ("colspan=\"2\" class=\"%s LEFT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-         Tbl_TABLE_BeginWithoutAttr ();
+         Tbl_TABLE_Begin (NULL);
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);

@@ -217,7 +217,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
       Frm_EndForm ();
 
       /***** Start table *****/
-      Tbl_TABLE_BeginWithoutAttr ();
+      Tbl_TABLE_Begin (NULL);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);

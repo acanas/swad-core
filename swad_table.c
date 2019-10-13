@@ -55,6 +55,7 @@ extern struct Globals Gbl;
 /***************************** Private vatiables *****************************/
 /*****************************************************************************/
 
+static unsigned Tbl_TABLE_NestingLevel = 0;
 static unsigned Tbl_TR_NestingLevel = 0;
 static unsigned Tbl_TH_NestingLevel = 0;
 static unsigned Tbl_TD_NestingLevel = 0;
@@ -63,10 +64,13 @@ static unsigned Tbl_TD_NestingLevel = 0;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Tbl_TR_BeginWithoutAttr (void);
-static void Tbl_TH_BeginWithoutAttr (void);
+static void Tbl_TABLE_BeginWithoutAttr (void);
 
+static void Tbl_TR_BeginWithoutAttr (void);
+
+static void Tbl_TH_BeginWithoutAttr (void);
 static void Tbl_TH_BeginAttr (const char *fmt,...);
+
 static void Tbl_TD_BeginWithoutAttr (void);
 
 /*****************************************************************************/
@@ -95,6 +99,8 @@ void Tbl_TABLE_Begin (const char *fmt,...)
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<table class=\"%s\">",Class);
 
+	 Tbl_TABLE_NestingLevel++;
+
 	 free ((void *) Class);
 	}
       else
@@ -107,22 +113,32 @@ void Tbl_TABLE_Begin (const char *fmt,...)
 void Tbl_TABLE_BeginPadding (unsigned CellPadding)
   {
    if (CellPadding)
+     {
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+
+      Tbl_TABLE_NestingLevel++;
+     }
    else
       Tbl_TABLE_BeginWithoutAttr ();
   }
 
-void Tbl_TABLE_BeginWithoutAttr (void)
+static void Tbl_TABLE_BeginWithoutAttr (void)
   {
    fprintf (Gbl.F.Out,"<table>");
+
+   Tbl_TABLE_NestingLevel++;
   }
 
 void Tbl_TABLE_BeginCenterPadding (unsigned CellPadding)
   {
    if (CellPadding)
+     {
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+
+      Tbl_TABLE_NestingLevel++;
+     }
    else
       Tbl_TABLE_BeginCenter ();
   }
@@ -130,13 +146,19 @@ void Tbl_TABLE_BeginCenterPadding (unsigned CellPadding)
 void Tbl_TABLE_BeginCenter (void)
   {
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER\">");
+
+   Tbl_TABLE_NestingLevel++;
   }
 
 void Tbl_TABLE_BeginWidePadding (unsigned CellPadding)
   {
    if (CellPadding)
+     {
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+
+      Tbl_TABLE_NestingLevel++;
+     }
    else
       Tbl_TABLE_BeginWide ();
   }
@@ -144,13 +166,19 @@ void Tbl_TABLE_BeginWidePadding (unsigned CellPadding)
 void Tbl_TABLE_BeginWide (void)
   {
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE\">");
+
+   Tbl_TABLE_NestingLevel++;
   }
 
 void Tbl_TABLE_BeginWideMarginPadding (unsigned CellPadding)
   {
    if (CellPadding)
+     {
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+
+      Tbl_TABLE_NestingLevel++;
+     }
    else
       Tbl_TABLE_BeginWideMargin ();
   }
@@ -158,11 +186,18 @@ void Tbl_TABLE_BeginWideMarginPadding (unsigned CellPadding)
 void Tbl_TABLE_BeginWideMargin (void)
   {
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN\">");
+
+   Tbl_TABLE_NestingLevel++;
   }
 
 void Tbl_TABLE_End (void)
   {
+   if (Tbl_TABLE_NestingLevel == 0)	// No TABLE open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TABLE.");
+
    fprintf (Gbl.F.Out,"</table>");
+
+   Tbl_TABLE_NestingLevel--;
   }
 
 /*****************************************************************************/
@@ -210,7 +245,7 @@ static void Tbl_TR_BeginWithoutAttr (void)
 void Tbl_TR_End (void)
   {
    if (Tbl_TR_NestingLevel == 0)	// No TR open
-      Lay_ShowErrorAndExit ("Trying to close unopened TR.");
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TR.");
 
    fprintf (Gbl.F.Out,"</tr>");
 
@@ -310,7 +345,7 @@ static void Tbl_TH_BeginWithoutAttr (void)
 void Tbl_TH_End (void)
   {
    if (Tbl_TH_NestingLevel == 0)	// No TH open
-      Lay_ShowErrorAndExit ("Trying to close unopened TR.");
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TR.");
 
    fprintf (Gbl.F.Out,"</th>");
 
@@ -375,7 +410,7 @@ static void Tbl_TD_BeginWithoutAttr (void)
 void Tbl_TD_End (void)
   {
    if (Tbl_TD_NestingLevel == 0)	// No TH open
-      Lay_ShowErrorAndExit ("Trying to close unopened TR.");
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TR.");
 
    fprintf (Gbl.F.Out,"</td>");
 

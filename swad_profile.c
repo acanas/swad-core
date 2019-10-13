@@ -1538,7 +1538,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      Tbl_TABLE_BeginWithoutAttr ();
+      Tbl_TABLE_Begin (NULL);
 
       for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
 	   NumUsr <= NumUsrs;
@@ -1707,7 +1707,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      Tbl_TABLE_BeginWithoutAttr ();
+      Tbl_TABLE_Begin (NULL);
 
       for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
 	   NumUsr <= NumUsrs;

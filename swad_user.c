@@ -7374,7 +7374,7 @@ void Usr_ListDataAdms (void)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Heading row with column names *****/
-      Tbl_TABLE_BeginWithoutAttr ();
+      Tbl_TABLE_Begin (NULL);
       Tbl_TR_Begin (NULL);
 
       for (NumCol = 0;

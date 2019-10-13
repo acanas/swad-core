@@ -1616,11 +1616,11 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Crs_GetDataOfCourseByCod (&Crs);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table style=\"width:100%%; padding:12px;\">");	// TODO: Change inline style to class
+   Tbl_TABLE_BeginWidePadding (10);
    Tbl_TR_Begin (NULL);
 
    /***** First column: institution logo *****/
-   Tbl_TD_Begin ("class=\"LEFT_TOP\" style=\"width:80px;\"");
+   Tbl_TD_Begin ("class=\"LEFT_TOP\" style=\"width:60px;\"");
    if (InsCod > 0)
      {
       if (!PrintView)
@@ -1668,7 +1668,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Tbl_TD_End ();
 
    /***** Third column: degree logo *****/
-   Tbl_TD_Begin ("class=\"RIGHT_TOP\" style=\"width:80px;\"");
+   Tbl_TD_Begin ("class=\"RIGHT_TOP\" style=\"width:60px;\"");
    if (DegCod > 0)
      {
       if (!PrintView)

@@ -2510,8 +2510,8 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
          Tbl_TD_End ();
 
          /***** Write institution, centre, degree *****/
-         Tbl_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LEFT_TOP COLOR%u\">",
-                            ColSpan - 1,Gbl.RowEvenOdd);
+         Tbl_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LEFT_TOP COLOR%u\"",
+                       ColSpan - 1,Gbl.RowEvenOdd);
 
          /* Get next institution, centre, degree */
          row = mysql_fetch_row (mysql_res);

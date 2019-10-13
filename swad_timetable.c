@@ -1126,7 +1126,7 @@ static void TT_DrawTimeTable (void)
    unsigned ContinuousFreeMinicolumns;
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table id=\"timetable\">");
+   Tbl_TABLE_Begin ("id=\"timetable\"");
 
    /***** Top row used for column adjustement *****/
    TT_TimeTableDrawAdjustRow ();

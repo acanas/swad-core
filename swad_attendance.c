@@ -3519,7 +3519,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 
    /***** Write user's ID ******/
    Tbl_TD_Begin ("class=\"LEFT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
-   Tbl_TABLE_BeginWithoutAttr ();
+   Tbl_TABLE_Begin (NULL);
    Tbl_TR_Begin (NULL);
 
    Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE\"",

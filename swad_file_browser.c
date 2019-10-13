@@ -5596,7 +5596,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    /* Start column */
    Tbl_TD_Begin ("class=\"NO_BR LEFT_TOP COLOR%u\" style=\"width:99%%;\"",Gbl.RowEvenOdd);
 
-   Tbl_TABLE_BeginWithoutAttr ();
+   Tbl_TABLE_Begin (NULL);
    Tbl_TR_Begin (NULL);
 
    /* Indent depending on level */
@@ -5824,7 +5824,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                                   Brw_IconTree_t IconThisRow)
   {
    Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
-   Tbl_TABLE_BeginWithoutAttr ();
+   Tbl_TABLE_Begin (NULL);
    Tbl_TR_Begin (NULL);
    Brw_IndentDependingOnLevel (Level);
 
@@ -8512,7 +8512,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	          FileNameToShow);
 
    /***** URL *****/
-   Tbl_TABLE_BeginWithoutAttr ();
+   Tbl_TABLE_Begin (NULL);
    Tbl_TR_Begin (NULL);
 
    Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");

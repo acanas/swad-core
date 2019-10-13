@@ -3363,7 +3363,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
 
-   Tbl_TABLE_BeginWithoutAttr ();
+   Tbl_TABLE_Begin (NULL);
    Tbl_TR_Begin (NULL);
 
    /***** Put an icon to show if user has read the message *****/
@@ -3492,7 +3492,7 @@ static void Msg_WriteMsgTo (long MsgCod)
    if (NumRecipientsTotal)
      {
       /***** Start table *****/
-      Tbl_TABLE_BeginWithoutAttr ();
+      Tbl_TABLE_Begin (NULL);
 
       /***** How many recipients will be shown? *****/
       if (NumRecipientsKnown <= Msg_MAX_RECIPIENTS_TO_SHOW)
