@@ -1805,31 +1805,13 @@ static void Crs_PutHeadCoursesForSeeing (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Institutional_BR_code);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Year_OF_A_DEGREE);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Course);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"BM",NULL);
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Institutional_BR_code);
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Year_OF_A_DEGREE);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Course);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   Tbl_TH_Empty (1);
 
    Tbl_TR_End ();
   }
@@ -1851,43 +1833,18 @@ static void Crs_PutHeadCoursesForEdition (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Code);
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"BM",NULL);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
    Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s (%s)",Txt_Institutional_code,Txt_optional);
    Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Year_OF_A_DEGREE);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Short_name_of_the_course);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Full_name_of_the_course);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Requester);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Year_OF_A_DEGREE);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Short_name_of_the_course);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Full_name_of_the_course);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Requester);
+   Tbl_TH_Empty (1);
 
    Tbl_TR_End ();
   }
@@ -3128,31 +3085,13 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
 
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,1,"BM");;
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"BM");;
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Degree);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Year_OF_A_DEGREE);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Course);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"BM",NULL);
+      Tbl_TH (1,1,"BM",NULL);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Degree);
+      Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Year_OF_A_DEGREE);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Course);
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
 
       Tbl_TR_End ();
 
@@ -3206,28 +3145,12 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
       /***** Heading row *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,1,"BM");;
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Degree);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Year_OF_A_DEGREE);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Course);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s", Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"BM",NULL);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Degree);
+      Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Year_OF_A_DEGREE);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Course);
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
 
       Tbl_TR_End ();
 

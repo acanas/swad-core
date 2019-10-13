@@ -187,13 +187,8 @@ void Deg_SeeDegWithPendingCrss (void)
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Degree);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Courses_ABBREVIATION);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Degree);
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Courses_ABBREVIATION);
 
       Tbl_TR_End ();
 
@@ -1067,25 +1062,12 @@ static void Deg_PutHeadDegreesForSeeing (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"BM",NULL);
    Tbl_TH_Empty (1);
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Degree);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Type);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Courses_ABBREVIATION);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Degree);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Type);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Courses_ABBREVIATION);
+   Tbl_TH_Empty (1);
 
    Tbl_TR_End ();
   }
@@ -1106,41 +1088,16 @@ static void Deg_PutHeadDegreesForEdition (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Code);
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"BM",NULL);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
    Tbl_TH_Empty (1);
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Short_name_of_the_degree);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Full_name_of_the_degree);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Type);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_WWW);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Courses_ABBREVIATION);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Requester);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Short_name_of_the_degree);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Full_name_of_the_degree);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Type);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_WWW);
+   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Courses_ABBREVIATION);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Requester);
+   Tbl_TH_Empty (1);
 
    Tbl_TR_End ();
   }

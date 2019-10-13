@@ -11807,32 +11807,13 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,1,"BM");;
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Institution);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Centre);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Degree);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Course);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_File_zone);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Document);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"BM",NULL);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Institution);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Centre);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Degree);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Course);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_File_zone);
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Document);
 
       Tbl_TR_End ();
 

@@ -2813,27 +2813,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       Tbl_TABLE_BeginCenterPadding (2);
 
       Tbl_TH_Empty (1);
-
-      Tbl_TH_Begin (1,1,"LEFT_TOP");
-      fprintf (Gbl.F.Out,"%s",Txt_Course);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_TOP");
-      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,2,"LEFT_TOP");
-      fprintf (Gbl.F.Out,"%s",Txt_Requester);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_TOP");
-      fprintf (Gbl.F.Out,"%s",Txt_Role);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"CENTER_TOP");
-      fprintf (Gbl.F.Out,"%s",Txt_Date);
-      Tbl_TH_End ();
-
+      Tbl_TH (1,1,"LEFT_TOP",Txt_Course);
+      Tbl_TH (1,1,"RIGHT_TOP",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      Tbl_TH (1,2,"LEFT_TOP",Txt_Requester);
+      Tbl_TH (1,1,"LEFT_TOP",Txt_Role);
+      Tbl_TH (1,1,"CENTER_TOP",Txt_Date);
       Tbl_TH_Empty (2);
 
       Tbl_TR_End ();

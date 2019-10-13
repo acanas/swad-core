@@ -2561,21 +2561,16 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,1,"BT");
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"CONTEXT_COL");	// Column for contextual icons
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_MSG_Subject);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"BT",NULL);
+      Tbl_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
+      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_MSG_Subject);
 
       for (Order = For_FIRST_MSG;
 	   Order <= For_LAST_MSG;
 	   Order++)
 	{
 	 Tbl_TH_Begin (1,2,"CENTER_MIDDLE");
+
          Frm_StartFormAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                               For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
@@ -2593,24 +2588,14 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
             fprintf (Gbl.F.Out,"</u>");
          fprintf (Gbl.F.Out,"</a>");
          Frm_EndForm ();
+
          Tbl_TH_End ();
 	}
 
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_No_BR_msgs);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_Unread_BR_msgs);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_WriBRters);
-      Tbl_TH_End ();
-
-      Tbl_TH_Begin (1,1,"RIGHT_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_ReaBRders);
-      Tbl_TH_End ();
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_No_BR_msgs);
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Unread_BR_msgs);
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_WriBRters);
+      Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ReaBRders);
 
       Tbl_TR_End ();
 

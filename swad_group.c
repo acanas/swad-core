@@ -1453,28 +1453,14 @@ static void Grp_WriteHeadingGroupTypes (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"BM",NULL);
    Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s<br />(%s)",Txt_Type_of_group,Txt_eg_Lectures_Practicals);
    Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Mandatory_enrolment);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Multiple_enrolment);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Opening_of_groups);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_No_of_BR_groups);
-   Tbl_TH_End ();
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Mandatory_enrolment);
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Multiple_enrolment);
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Opening_of_groups);
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_No_of_BR_groups);
 
    Tbl_TR_End ();
   }
@@ -1682,39 +1668,19 @@ static void Grp_WriteHeadingGroups (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"BM");;
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Type_BR_of_group);
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"BM",NULL);
+   Tbl_TH (1,1,"BM",NULL);
+   Tbl_TH (1,1,"BM",NULL);
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Type_BR_of_group);
    Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
    fprintf (Gbl.F.Out,"%s<br />(%s)",Txt_Group_name,Txt_eg_A_B);
    Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Classroom);
-   Tbl_TH_End ();
-
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Classroom);
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
-     {
-      Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
-      Tbl_TH_End ();
-     }
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Max_BR_students);
-   Tbl_TH_End ();
+      Tbl_TH (1,1,"CENTER_MIDDLE",Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Max_BR_students);
 
    Tbl_TR_End ();
   }
@@ -2393,33 +2359,15 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    /***** Head row with title of each column *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,2,NULL);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Group);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Classroom);
-   Tbl_TH_End ();
-
+   Tbl_TH_Empty (2);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Group);
+   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Classroom);
    for (Role = Rol_TCH;
 	Role >= Rol_STD;
 	Role--)
-     {
-      Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-      fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
-      Tbl_TH_End ();
-     }
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Max_BR_students);
-   Tbl_TH_End ();
-
-   Tbl_TH_Begin (1,1,"CENTER_MIDDLE");
-   fprintf (Gbl.F.Out,"%s",Txt_Vacants);
-   Tbl_TH_End ();
+      Tbl_TH (1,1,"CENTER_MIDDLE",Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Max_BR_students);
+   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Vacants);
 
    Tbl_TR_End ();
   }
