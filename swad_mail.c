@@ -1366,7 +1366,6 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
          Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
 			                                        Txt_Use_this_email);
 	 Frm_EndForm ();
-	 Tbl_TD_End ();
 	}
 
       Tbl_TD_End ();

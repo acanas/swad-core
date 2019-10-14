@@ -1126,7 +1126,7 @@ static void TT_DrawTimeTable (void)
    unsigned ContinuousFreeMinicolumns;
 
    /***** Start table *****/
-   Tbl_TABLE_Begin ("id=\"timetable\"");
+   Tbl_TABLE_Begin ("TT");
 
    /***** Top row used for column adjustement *****/
    TT_TimeTableDrawAdjustRow ();

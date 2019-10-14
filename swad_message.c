@@ -493,7 +493,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    /***** Textarea with users' @nicknames, emails or IDs *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,ColSpan,"LEFT_MIDDLE");
+   Tbl_TD_Begin ("colspan=\"%u\" class=\"LEFT_MIDDLE\"",ColSpan);
    fprintf (Gbl.F.Out,"<textarea id=\"OtherRecipients\" name=\"OtherRecipients\""
 	              " class=\"MSG_RECIPIENTS\" rows=\"2\""
 	              " placeholder=\"%s\">",
@@ -576,9 +576,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       /* Write subject */
       if (!SubjectAndContentComeFromForm)
 	 fprintf (Gbl.F.Out,"Re: ");
-      fprintf (Gbl.F.Out,"%s"
-                         "</textarea>",
-	       Gbl.Msg.Subject);
+      fprintf (Gbl.F.Out,"%s</textarea>",Gbl.Msg.Subject);
       Tbl_TD_End ();
 
       Tbl_TR_End ();
@@ -612,8 +610,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    else	// It's not a reply
      {
       /* End message subject */
-      fprintf (Gbl.F.Out,"%s</textarea>",
-	       Gbl.Msg.Subject);
+      fprintf (Gbl.F.Out,"%s</textarea>",Gbl.Msg.Subject);
       Tbl_TD_End ();
 
       Tbl_TR_End ();
@@ -3092,7 +3089,6 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                           char **ContentStr,long MsgCod,bool GetContent)
   {
-   extern const char *Txt_MSG_Subject;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t Length;

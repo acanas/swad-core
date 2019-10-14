@@ -196,8 +196,8 @@ void Hld_SeeHolidays (void)
 	 Frm_EndForm ();
 	}
 
-      /***** End table and box *****/
-      Box_EndBoxTable ();
+      /***** End box *****/
+      Box_EndBox ();
 
       /***** Free list of holidays *****/
       Hld_FreeListHolidays ();

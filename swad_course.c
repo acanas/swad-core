@@ -1308,7 +1308,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 Tbl_TD_End ();
 
 	 /* Course year */
-	 Tbl_TD_Begin ("class=\"%s CENTER_MIDDLE %s\">",
+	 Tbl_TD_Begin ("class=\"%s CENTER_MIDDLE %s\"",
 		            TxtClassNormal,BgColor);
 	 fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Crs->Year]);
 	 Tbl_TD_End ();

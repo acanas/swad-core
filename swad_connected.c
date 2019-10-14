@@ -109,7 +109,6 @@ void Con_ShowConnectedUsrs (void)
                       "</script>",
             (long) Gbl.StartExecutionTimeUTC,
             (unsigned) Gbl.Prefs.DateFormat);
-   Tbl_TR_End ();
 
    /***** Number of connected users in the whole platform *****/
    Con_ShowGlobalConnectedUsrs ();

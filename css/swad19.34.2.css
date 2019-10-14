@@ -2871,7 +2871,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BT_J	{background-color:#f5e800; border-color:#b8ad00;} /* light yellow */
 
 /******************************* Time table **********************************/
-#timetable
+.TT
 	{
 	width:100%;
 	margin:0 auto;
