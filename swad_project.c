@@ -145,6 +145,7 @@ static void Prj_PutIconsToLockUnlockAllProjects (void);
 
 static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
                                 Prj_ProjectView_t ProjectView);
+static void Prj_PutWarningIcon (void);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
                                         const char *Icon,const char *Text);
 static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj);
@@ -154,7 +155,8 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Project *Prj);
 static void Prj_ShowOneProjectTxtField (struct Project *Prj,
                                         Prj_ProjectView_t ProjectView,
                                         const char *id,unsigned UniqueId,
-                                        const char *Label,char *TxtField);
+                                        const char *Label,char *TxtField,
+					bool Warning);
 static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
                                               char *TxtField);
 static void Prj_ShowOneProjectURL (const struct Project *Prj,
@@ -203,7 +205,7 @@ static void Prj_RequestCreatOrEditPrj (long PrjCod);
 static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject);
 static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
-                                       unsigned NumRows);
+                                       unsigned NumRows,bool Required);
 
 static void Prj_CreateProject (struct Project *Prj);
 static void Prj_UpdateProject (struct Project *Prj);
@@ -970,6 +972,9 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    const char *ClassTitle;
    const char *ClassData;
    unsigned NumStdsInPrj;
+   bool WrongTitle;
+   bool WrongNumStds;
+   bool WrongDescription;
    static unsigned UniqueId = 0;
 
    /***** Set CSS classes *****/
@@ -985,6 +990,14 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Prj->PrjCod,&Anchor);
 
+   /***** Check warnings */
+   WrongTitle = !Prj->Title[0];
+   NumStdsInPrj = Prj_GetNumUsrsInPrj (Prj->PrjCod,Prj_ROLE_STD);
+   WrongNumStds = (Prj->NumStds == 0 ||				// Number of students can not be 0
+                  (Prj->Preassigned == Prj_PREASSIGNED && 	// Project preassigned
+	           Prj->NumStds != NumStdsInPrj));		// Number of proposed students != number of registered students
+   WrongDescription = !Prj->Description[0];
+
    /***** Write first row of data of this project *****/
    Tbl_TR_Begin (NULL);
 
@@ -995,6 +1008,13 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 Tbl_TD_Begin ("rowspan=\"3\" class=\"BIG_INDEX RIGHT_TOP COLOR%u\"",
 		       Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%u",NumIndex);
+
+	 if (WrongTitle || WrongNumStds || WrongDescription)
+	   {
+	    fprintf (Gbl.F.Out,"<br />");
+	    Prj_PutWarningIcon ();
+	   }
+
 	 Tbl_TD_End ();
 	 break;
       default:
@@ -1071,16 +1091,21 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 break;
      }
    Lay_StartArticle (Anchor);
-   if (ICanViewProjectFiles)
-     {
-      Frm_StartForm (ActAdmDocPrj);
-      Prj_PutCurrentParams ();
-      Frm_LinkFormSubmit (Txt_Project_files,ClassTitle,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Prj->Title);
-      Frm_EndForm ();
-     }
+   if (WrongTitle)
+      Prj_PutWarningIcon ();
    else
-      fprintf (Gbl.F.Out,"%s",Prj->Title);
+     {
+      if (ICanViewProjectFiles)
+	{
+	 Frm_StartForm (ActAdmDocPrj);
+	 Prj_PutCurrentParams ();
+	 Frm_LinkFormSubmit (Txt_Project_files,ClassTitle,NULL);
+	 fprintf (Gbl.F.Out,"%s</a>",Prj->Title);
+	 Frm_EndForm ();
+	}
+      else
+	 fprintf (Gbl.F.Out,"%s",Prj->Title);
+     }
    Lay_EndArticle ();
    Tbl_TD_End ();
 
@@ -1152,16 +1177,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
          break;
      }
    fprintf (Gbl.F.Out,"%u",Prj->NumStds);
-
-   /* Get number of students registered in project */
-   NumStdsInPrj = Prj_GetNumUsrsInPrj (Prj->PrjCod,Prj_ROLE_STD);
-
-   if (Prj->NumStds != NumStdsInPrj ||
-       (Prj->Preassigned == Prj_PREASSIGNED && NumStdsInPrj == 0))
-      fprintf (Gbl.F.Out,"&nbsp;"
-	                 "<img src=\"%s/%s\" alt=\"\" class=\"ICO16x16\" />",
-	       Cfg_URL_ICON_PUBLIC,"exclamation-triangle.svg");
-
+   if (WrongNumStds)
+      Prj_PutWarningIcon ();
    Tbl_TD_End ();
 
    Tbl_TR_End ();
@@ -1242,15 +1259,18 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    /***** Write rows of data of this project *****/
    /* Description of the project */
    Prj_ShowOneProjectTxtField (Prj,ProjectView,"prj_dsc_",UniqueId,
-                               Txt_Description,Prj->Description);
+                               Txt_Description,Prj->Description,
+			       WrongDescription);
 
    /* Required knowledge to carry out the project */
    Prj_ShowOneProjectTxtField (Prj,ProjectView,"prj_knw_",UniqueId,
-                               Txt_Required_knowledge,Prj->Knowledge);
+                               Txt_Required_knowledge,Prj->Knowledge,
+			       false);	// No warning
 
    /* Required materials to carry out the project */
    Prj_ShowOneProjectTxtField (Prj,ProjectView,"prj_mtr_",UniqueId,
-                               Txt_Required_materials,Prj->Materials);
+                               Txt_Required_materials,Prj->Materials,
+			       false);	// No warning
 
    /* Link to view more info about the project */
    Prj_ShowOneProjectURL (Prj,ProjectView,"prj_url_",UniqueId);
@@ -1259,6 +1279,16 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    Frm_FreeAnchorStr (Anchor);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+  }
+
+/*****************************************************************************/
+/********** Put an icon to toggle on/off some fields of a project ************/
+/*****************************************************************************/
+
+static void Prj_PutWarningIcon (void)
+  {
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"\" class=\"ICO16x16\" />",
+	    Cfg_URL_ICON_PUBLIC,"exclamation-triangle.svg");
   }
 
 /*****************************************************************************/
@@ -1451,7 +1481,8 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Project *Prj)
 static void Prj_ShowOneProjectTxtField (struct Project *Prj,
                                         Prj_ProjectView_t ProjectView,
                                         const char *id,unsigned UniqueId,
-                                        const char *Label,char *TxtField)
+                                        const char *Label,char *TxtField,
+					bool Warning)
   {
    const char *ClassLabel;
    const char *ClassData;
@@ -1462,20 +1493,7 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
    ClassData = (Prj->Hidden == Prj_HIDDEN) ? "DAT_LIGHT" :
 					     "DAT";
 
-   /***** Change format *****/
-   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
-   switch (ProjectView)
-     {
-      case Prj_LIST_PROJECTS:
-      case Prj_FILE_BROWSER_PROJECT:
-         Str_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);		// Insert links
-	 break;
-      default:
-	 break;
-     }
-
-   /***** Write row with label and text *****/
+   /***** Label *****/
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
@@ -1497,6 +1515,20 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
    fprintf (Gbl.F.Out,"%s:",Label);
    Tbl_TD_End ();
 
+   /***** Change text format *****/
+   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                     TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
+   switch (ProjectView)
+     {
+      case Prj_LIST_PROJECTS:
+      case Prj_FILE_BROWSER_PROJECT:
+         Str_InsertLinks (TxtField,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	 break;
+      default:
+	 break;
+     }
+
+   /***** Text *****/
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
@@ -1509,6 +1541,8 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
 	 break;
      }
    fprintf (Gbl.F.Out,"%s",TxtField);
+   if (Warning)
+      Prj_PutWarningIcon ();
    Tbl_TD_End ();
 
    Tbl_TR_End ();
@@ -3484,15 +3518,18 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    /* Description of the project */
    Prj_EditOneProjectTxtArea ("Description",Txt_Description,
-                              Prj->Description,12);
+                              Prj->Description,12,
+			      true);	// Required
 
    /* Required knowledge to carry out the project */
    Prj_EditOneProjectTxtArea ("Knowledge",Txt_Required_knowledge,
-                              Prj->Knowledge,4);
+                              Prj->Knowledge,4,
+			      false);	// Not required
 
    /* Required materials to carry out the project */
    Prj_EditOneProjectTxtArea ("Materials",Txt_Required_materials,
-                              Prj->Materials,4);
+                              Prj->Materials,4,
+			      false);	// Not required
 
    /* URL for additional info */
    Tbl_TR_Begin (NULL);
@@ -3530,7 +3567,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
 static void Prj_EditOneProjectTxtArea (const char *Id,
                                        const char *Label,char *TxtField,
-                                       unsigned NumRows)
+                                       unsigned NumRows,bool Required)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
@@ -3542,12 +3579,11 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
    Tbl_TD_End ();
 
    Tbl_TD_Begin ("class=\"LEFT_TOP\"");
-   fprintf (Gbl.F.Out,"<textarea id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\">"
-                      "%s"
-                      "</textarea>",
-            Id,Id,
-            NumRows,
-            TxtField);
+   fprintf (Gbl.F.Out,"<textarea id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\"",
+            Id,Id,NumRows);
+   if (Required)
+      fprintf (Gbl.F.Out," required=\"required\"");
+   fprintf (Gbl.F.Out,">%s</textarea>",TxtField);
    Tbl_TD_End ();
 
    Tbl_TR_End ();
