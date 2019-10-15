@@ -285,7 +285,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    Frm_EndForm ();
 
    /***** Write list of frequently used actions *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<ul>");
    for (NumAct = 0;
 	NumAct < ListMFUActions->NumActions;
 	NumAct++)

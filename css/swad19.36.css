@@ -533,6 +533,12 @@ a:hover						/* Default ==> underlined */
 	margin:1px;
 	}
 
+/******************************** Search *************************************/
+.WHAT_TO_SEARCH
+	{
+	width:186px;
+	}
+	
 /***************************** Notifications *********************************/
 #msg	/* Notifications, used for AJAX based refresh */
 	{
@@ -1248,7 +1254,6 @@ a:hover						/* Default ==> underlined */
 	{
 	box-sizing:border-box;
 	width:148px;
-	margin:6px 0;
 	background:white;
 	border-style:solid;
 	border-width:1px;
@@ -1260,13 +1265,17 @@ a:hover						/* Default ==> underlined */
 	}
 #MFU_actions ul
 	{
+	display:inline-block;
 	box-sizing:border-box;
 	width:138px;
-	margin-top:2px;
-	padding-top:2px;
+	margin:2px 0;
+	padding:2px 0 0 0;
 	border-style:solid;
 	border-width:1px 0 0 0;
 	border-color:#DDECF1;
+	list-style-type:none;
+	text-align:left;
+	vertical-align:middle;
 	}
 #MFU_actions li
 	{
@@ -2174,12 +2183,21 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /*********************************** Lists ***********************************/
-.LIST_LEFT
+.LIST_TABS
 	{
 	display:inline-block;
 	list-style-type:none;
 	padding:0;
 	margin:0;
+	text-align:left;
+	vertical-align:middle;
+	}
+.LIST_LEFT
+	{
+	display:inline-block;
+	list-style-type:none;
+	padding:0;
+	margin:12px 0;
 	text-align:left;
 	vertical-align:middle;
 	}
@@ -2589,6 +2607,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:top;
 	}
+	
+.TEST_FILE_CONTENT
+	{
+	padding-bottom:20px;
+	}
 
 /********************************** Matches **********************************/
 .MATCH_CONT
@@ -2897,6 +2920,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BT_I	{background-color:#642075; border-color:#4b1858;} /* purple */
 .BT_J	{background-color:#f5e800; border-color:#b8ad00;} /* light yellow */
 
+/********************************* Surveys ***********************************/
+.SVY_OPT
+	{
+	width:50px;
+	}
+
 /******************************* Time table **********************************/
 .TT
 	{
@@ -2962,9 +2991,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 .TT_LECT	{box-sizing:border-box; height:16px; background-color:#C0DAE4; border:solid 2px; border-color:#D5F1FC #AAC1C9 #AAC1C9 #D5F1FC;}
 .TT_PRAC	{box-sizing:border-box; height:16px; background-color:#DBE5E9; border:solid 2px; border-color:#EDF8FC #C7D0D4 #C7D0D4 #EDF8FC;}
 .TT_TUTO	{box-sizing:border-box; height:16px; background-color:#D6E9C3; border:solid 2px; border-color:#E8FCD3 #C2D4B1 #C2D4B1 #E8FCD3;}
-
+.TT_TYP, .TT_DUR, .TT_GRP, .TT_INF
+	{
+	width:80px;
+	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
+	font-size:10pt;
+	border:0;
+	}
+	
 /********************************* Preference ********************************/
-
 .PREF_CONTAINERS
 	{
 	margin:0 auto;
@@ -3536,7 +3571,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:13pt;
  	line-height:1.4;
 	}
-.MSG_TIT		{color:#4D88A1; font-size:13pt;}
+.MSG_TIT	{color:#4D88A1; font-size:13pt;}
 .MSG_TIT_NEW	{color:#4D88A1; font-size:13pt; font-weight:bold;}
 .MSG_TIT_REM	{color:#AFC4CC; font-size:13pt;}
 .MSG_TIT_BG
@@ -3684,6 +3719,25 @@ a.PAG:hover, .PAG_CUR
 	{
 	height:10px;
 	}
+
+/********************************** Statistics *******************************/
+.STAT_SEL
+	{
+	width:300px;
+	}
+	
+/******************************** User's report ******************************/
+.TITLE_REPORT
+	{
+	margin-bottom:10px;
+	}
+	
+/******************************* Users' ranking ******************************/
+.RANK_PHOTO
+	{
+	width:34px;
+	height:48px;
+ 	}
 
 /***************************** Public user's profile *************************/
 .PRF_FIG_LEFT_CONTAINER

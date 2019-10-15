@@ -1311,8 +1311,7 @@ static void TT_TimeTableDrawDaysCells (void)
 	DayColumn++)
      {
       Weekday = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
-      Tbl_TD_Begin ("colspan=\"%u\" class=\"%s CM\""
-		    " style=\"width:%u%%;\"",
+      Tbl_TD_Begin ("colspan=\"%u\" class=\"%s CM\" style=\"width:%u%%;\"",
 		    TT_NUM_MINICOLUMNS_PER_DAY,
 		    Weekday == 6 ? "TT_SUNDAY" :	// Sunday drawn in red
 				   "TT_DAY",	// Monday to Saturday
@@ -1596,7 +1595,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
          Par_PutHiddenParamUnsigned ("TTCol",Column);
 
 	 /***** Class type *****/
-	 fprintf (Gbl.F.Out,"<select name=\"TTTyp\" style=\"width:68px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"TTTyp\" class=\"TT_TYP\""
 	                    " onchange=\"document.getElementById('%s').submit();\">",
 	          Gbl.Form.Id);
 	 for (CT = (TT_ClassType_t) 0;
@@ -1634,7 +1633,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	 else
 	   {
 	    /***** Class duration *****/
-	    fprintf (Gbl.F.Out,"<select name=\"TTDur\" style=\"width:57px;\""
+	    fprintf (Gbl.F.Out,"<select name=\"TTDur\" class=\"TT_DUR\""
 		               " onchange=\"document.getElementById('%s').submit();\">",
 		     Gbl.Form.Id);
             for (i = Interval + TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
@@ -1667,7 +1666,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		                  "%s"
 		                  "</label>"
 	                          "<select id=\"TTGrp%s\" name=\"TTGrp\""
-	                          " style=\"width:110px;\""
+	                          " class=\"TT_GRP\""
 		                  " onchange=\"document.getElementById('%s').submit();\">",
 			CellStr,
 		        Txt_Group,
@@ -1710,7 +1709,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		                  "</label>"
 	                          "<input id=\"TTInf%s\" name=\"TTInf\""
 	                          " type=\"text\" size=\"1\" maxlength=\"%u\""
-	                          " value=\"%s\""
+	                          " value=\"%s\" class=\"TT_INF\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />",
 			CellStr,
 		        Txt_Info,
@@ -1729,7 +1728,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		                  "</label>"
                                   "<input id=\"TTInf%s\" name=\"TTInf\""
                                   " type=\"text\" size=\"12\" maxlength=\"%u\""
-                                  " value=\"%s\""
+                                  " value=\"%s\" class=\"TT_INF\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />",
 			CellStr,
 		        Txt_Info,

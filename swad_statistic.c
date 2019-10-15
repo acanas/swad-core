@@ -552,7 +552,7 @@ void Sta_AskShowGblHits (void)
    Tbl_TD_End ();
 
    Tbl_TD_Begin ("colspan=\"2\" class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
+   fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\" class=\"STAT_SEL\">");
    for (RoleStat = (Sta_Role_t) 0;
 	RoleStat < Sta_NUM_ROLES_STAT;
 	RoleStat++)
@@ -721,8 +721,7 @@ static void Sta_WriteSelectorAction (void)
    Tbl_TD_End ();
 
    Tbl_TD_Begin ("colspan=\"2\" class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select id=\"StatAct\" name=\"StatAct\""
-                      " style=\"width:375px;\">");
+   fprintf (Gbl.F.Out,"<select id=\"StatAct\" name=\"StatAct\" class=\"STAT_SEL\">");
    for (Action = (Act_Action_t) 0;
 	Action < Act_NUM_ACTIONS;
 	Action++)
@@ -1611,7 +1610,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamLong ("RowsPage",Gbl.Stat.RowsPerPage);
       Usr_PutHiddenParSelectedUsrsCods ();
      }
-   Tbl_TD_Begin ("class=\"LM\" style=\"width:20%%;\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    if (FirstRow > 1)
      {
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -1626,7 +1625,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Frm_EndForm ();
 
    /* Write number of current page */
-   Tbl_TD_Begin ("class=\"DAT_N CM\" style=\"width:60%%;\"");
+   Tbl_TD_Begin ("class=\"DAT_N CM\"");
    fprintf (Gbl.F.Out,"<strong>"
                       "%s %lu-%lu %s %lu (%s %ld %s %lu)"
                       "</strong>",
@@ -1647,7 +1646,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamUnsigned ("RowsPage" ,(unsigned) Gbl.Stat.RowsPerPage);
       Usr_PutHiddenParSelectedUsrsCods ();
      }
-   Tbl_TD_Begin ("class=\"RM\" style=\"width:20%%;\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    if (LastRow < NumRows)
      {
       snprintf (Gbl.Title,sizeof (Gbl.Title),

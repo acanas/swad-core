@@ -472,8 +472,7 @@ void Tst_ShowNewTest (void)
 	    Tbl_TABLE_End ();
 
 	    /***** Test result will be saved? *****/
-	    fprintf (Gbl.F.Out,"<div class=\"CM\""
-		               " style=\"margin-top:20px;\">"
+	    fprintf (Gbl.F.Out,"<div class=\"CM\">"
 	                       "<label class=\"%s\">"
 			       "<input type=\"checkbox\" name=\"Save\""
 			       " value=\"Y\"",
@@ -645,8 +644,7 @@ void Tst_ShowTstTotalMark (unsigned NumQsts,double TotalScore)
    double TotalScoreOverSCORE_MAX = TotalScore * Tst_SCORE_MAX / (double) NumQsts;
 
    /***** Write total mark ****/
-   fprintf (Gbl.F.Out,"<div class=\"DAT CM\""
-	              " style=\"margin-top:20px;\">"
+   fprintf (Gbl.F.Out,"<div class=\"DAT CM\">"
 		      "%s: <span class=\"%s\">%.2lf (%.2lf %s %u)</span>"
 		      "</div>",
 	    Txt_Score,

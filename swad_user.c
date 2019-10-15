@@ -7365,12 +7365,14 @@ void Usr_ListDataAdms (void)
    if (Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs)
      {
       /****** Show photos? *****/
-      fprintf (Gbl.F.Out,"<div class=\"CM\" style=\"margin-bottom:8px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">"
+                         "<div class=\"PREF_OFF\">");
       Frm_StartForm (ActLstOth);
       Sco_PutParamCurrentScope ();
       Usr_PutCheckboxListWithPhotos ();
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      fprintf (Gbl.F.Out,"</div>"
+                         "</div>");
 
       /***** Heading row with column names *****/
       Tbl_TABLE_Begin (NULL);
@@ -8367,7 +8369,7 @@ static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NU
 
    /***** Write list of options *****/
    /* Start list of options */
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\">",
 	    The_ClassFormInBox[Gbl.Prefs.Theme]);
 
    /* Show option items */

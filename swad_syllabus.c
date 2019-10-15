@@ -139,18 +139,16 @@ void Syl_PutFormWhichSyllabus (void)
    extern const char *Txt_SYLLABUS_WHICH_SYLLABUS[Syl_NUM_WHICH_SYLLABUS];
    Syl_WhichSyllabus_t WhichSyllabus;
 
-   /***** Form to select which forums I want to see
-          (all my forums or only the forums of current institution/degree/course) *****/
+   /***** Form to select which syllabus I want to see (lectures/practicals) *****/
    Frm_StartForm (ActSeeSyl);
    fprintf (Gbl.F.Out,"<div class=\"CM\">"
-                      "<ul class=\"LIST_LEFT\" style=\"margin:12px;\">");
+                      "<ul class=\"LIST_LEFT\">");
 
    for (WhichSyllabus = (Syl_WhichSyllabus_t) 0;
 	WhichSyllabus < For_NUM_FORUM_SETS;
 	WhichSyllabus++)
      {
-      fprintf (Gbl.F.Out,"<li class=\"DAT LM\""
-	                 " style=\"display:inline;\">"
+      fprintf (Gbl.F.Out,"<li class=\"DAT LM\">"
                          "<label>"
                          "<input type=\"radio\" name=\"WhichSyllabus\" value=\"%u\"",
                (unsigned) WhichSyllabus);

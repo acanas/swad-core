@@ -3440,7 +3440,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 	   }
 
 	 /* Write the number of option */
-	 Tbl_TD_Begin ("class=\"LT\" style=\"width:50px;\"");
+	 Tbl_TD_Begin ("class=\"SVY_OPT LT\"");
 	 fprintf (Gbl.F.Out,"<label for=\"Ans%010u_%010u\" class=\"DAT\">"
 			    "%u)"
 			    "</label>",
@@ -3502,7 +3502,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 	                       (float) MaxUsrs) + 0.5);
    if (BarWidth < 2)
       BarWidth = 2;
-   fprintf (Gbl.F.Out,"<img src=\"%s/c1x16.gif\" alt=\"%s\" title=\"%s\""
+   fprintf (Gbl.F.Out,"<img src=\"%s/o1x1.png\" alt=\"%s\" title=\"%s\""
                       " class=\"LT\" style=\"width:%upx; height:20px;\" />"
 	              "&nbsp;",
       Cfg_URL_ICON_PUBLIC,

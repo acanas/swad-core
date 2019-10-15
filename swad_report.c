@@ -106,7 +106,7 @@ extern struct Globals Gbl;
 
 static void Rep_CreateMyUsageReport (struct Rep_Report *Report);
 static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report);
-static void Req_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC);
+static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC);
 
 static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report);
 
@@ -163,7 +163,7 @@ void Rep_ReqMyUsageReport (void)
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
 
    /***** Header *****/
-   Req_TitleReport (NULL);	// NULL means do not write date
+   Rep_TitleReport (NULL);	// NULL means do not write date
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Generate_report);
@@ -270,7 +270,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
 
    /***** Header *****/
-   Req_TitleReport (&Report->CurrentTimeUTC);
+   Rep_TitleReport (&Report->CurrentTimeUTC);
 
    /***** Put anchor and report filename *****/
    fprintf (Gbl.F.Out,"<div class=\"FILENAME_TXT CM\">"
@@ -298,12 +298,12 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 /*****************************************************************************/
 // CurrentTimeUTC == NULL ==> do not write date
 
-static void Req_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
+static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
   {
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_Date;
 
-   fprintf (Gbl.F.Out,"<div class=\"DAT\" style=\"margin-bottom:10px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"TITLE_REPORT DAT\">");
 
    /***** User *****/
    fprintf (Gbl.F.Out,"%s: <span class=\"DAT_N_BOLD\">%s</span>",

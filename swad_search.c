@@ -164,7 +164,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              " %s&nbsp;",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_SEARCH_X_in_Y);
-   fprintf (Gbl.F.Out,"<select name=\"WhatToSearch\" style=\"width:186px;\">");
+   fprintf (Gbl.F.Out,"<select name=\"WhatToSearch\" class=\"WHAT_TO_SEARCH\">");
    for (WhatToSearch = (Sch_WhatToSearch_t) 0;
         WhatToSearch < Sch_NUM_WHAT_TO_SEARCH;
         WhatToSearch++)
@@ -257,7 +257,7 @@ void Sch_PutInputStringToSearch (const char *IdInputText)
    if (!Gbl.Search.Str[0])
       fprintf (Gbl.F.Out," placeholder=\"%s&hellip;\"",
 	       Txt_Search);
-   fprintf (Gbl.F.Out," style=\"margin:0;\" />");
+   fprintf (Gbl.F.Out," />");
   }
 
 /*****************************************************************************/

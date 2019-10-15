@@ -509,7 +509,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Print XML tree *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\" style=\"padding-bottom:20px;\">"
+   fprintf (Gbl.F.Out,"<div class=\"TEST_FILE_CONTENT\">"
 	              "<textarea title=\"%s\" cols=\"60\" rows=\"5\""
 	              " spellcheck=\"false\" readonly>",
 	    Txt_XML_file_content);

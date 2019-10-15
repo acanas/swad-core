@@ -960,7 +960,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    extern const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1;
 
    /***** Start list of options *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\">",
             The_ClassFormInBox[Gbl.Prefs.Theme]);
 
    /***** Register / remove users listed or not listed *****/
@@ -1505,7 +1505,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
      }
 
    /***** Start list of options *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\">",
 	    The_ClassFormInBox[Gbl.Prefs.Theme]);
 
    /***** Register user in course / Modify user's data *****/
@@ -2288,7 +2288,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Sco_GetScope ("ScopeEnr");
 
    /***** Start box *****/
-   Box_StartBox ("100%",Txt_Enrolment_requests,NULL,
+   Box_StartBox (NULL,Txt_Enrolment_requests,NULL,
                  Hlp_USERS_Requests,Box_NOT_CLOSABLE);
 
    /***** Selection of scope and roles *****/

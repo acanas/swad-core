@@ -100,7 +100,7 @@ void Tab_DrawTabs (void)
    /***** Start tabs container *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">"
                       "<nav id=\"tabs\">"
-	              "<ul class=\"LIST_LEFT\">",
+	              "<ul class=\"LIST_TABS\">",
             ClassHeadRow3[Gbl.Prefs.Theme]);
 
    /***** Draw the tabs *****/
