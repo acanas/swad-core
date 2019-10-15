@@ -125,7 +125,7 @@ void Dpt_SeeDepts (void)
 	Order <= Dpt_ORDER_BY_NUM_TCHS;
 	Order++)
      {
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
+      Tbl_TH_Begin (1,1,"LM");
 
       Frm_StartForm (ActSeeDpt);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
@@ -150,7 +150,7 @@ void Dpt_SeeDepts (void)
       /* Write data of this department */
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LM\"");
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 			 "%s"
 			 "</a>",
@@ -158,7 +158,7 @@ void Dpt_SeeDepts (void)
 	       Gbl.Dpts.Lst[NumDpt].FullName);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Gbl.Dpts.Lst[NumDpt].NumTchs);
       Tbl_TD_End ();
 
@@ -180,11 +180,11 @@ void Dpt_SeeDepts (void)
    NumTchsInOtherDpts = Usr_GetNumTchsCurrentInsInDepartment (0);
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"%s",Txt_Other_departments);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumTchsInOtherDpts);
    Tbl_TD_End ();
 
@@ -194,11 +194,11 @@ void Dpt_SeeDepts (void)
    /***** Write teachers with no department *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"%s",Txt_Department_unspecified);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",
 	    Usr_GetTotalNumberOfUsersInCourses (Hie_INS,
 						1 << Rol_NET |
@@ -532,12 +532,12 @@ static void Dpt_ListDepartmentsForEdition (void)
       Tbl_TD_End ();
 
       /* Department code */
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%ld&nbsp;",Dpt->DptCod);
       Tbl_TD_End ();
 
       /* Institution */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgDptIns);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\""
@@ -560,7 +560,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Tbl_TD_End ();
 
       /* Department short name */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptSho);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -572,7 +572,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Tbl_TD_End ();
 
       /* Department full name */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptFul);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -584,7 +584,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Tbl_TD_End ();
 
       /* Department WWW */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
@@ -596,7 +596,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Tbl_TD_End ();
 
       /* Number of teachers */
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Dpt->NumTchs);
       Tbl_TD_End ();
 
@@ -917,17 +917,17 @@ static void Dpt_PutFormToCreateDepartment (void)
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Institution);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Short_name);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Full_name);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_WWW);
+   Tbl_TH (1,1,"LM",Txt_Institution);
+   Tbl_TH (1,1,"LM",Txt_Short_name);
+   Tbl_TH (1,1,"LM",Txt_Full_name);
+   Tbl_TH (1,1,"LM",Txt_WWW);
 
    Tbl_TR_End ();
 
    Tbl_TR_Begin (NULL);
 
    /***** Institution *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\">"
                       "<option value=\"0\"");
    if (Dpt_EditingDpt->InsCod == 0)
@@ -945,7 +945,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Tbl_TD_End ();
 
    /***** Department short name *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
@@ -954,7 +954,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Tbl_TD_End ();
 
    /***** Department full name *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
@@ -963,7 +963,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Tbl_TD_End ();
 
    /***** Department WWW *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
@@ -996,12 +996,12 @@ static void Dpt_PutHeadDepartments (void)
    Tbl_TR_Begin (NULL);
 
    Tbl_TH_Empty (1);
-   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Institution);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Short_name);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Full_name);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_WWW);
-   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   Tbl_TH (1,1,"RM",Txt_Code);
+   Tbl_TH (1,1,"LM",Txt_Institution);
+   Tbl_TH (1,1,"LM",Txt_Short_name);
+   Tbl_TH (1,1,"LM",Txt_Full_name);
+   Tbl_TH (1,1,"LM",Txt_WWW);
+   Tbl_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 
    Tbl_TR_End ();
   }

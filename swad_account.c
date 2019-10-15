@@ -280,12 +280,12 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    /***** Write number of user in the list *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("rowspan=\"2\" class=\"USR_LIST_NUM_N RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("rowspan=\"2\" class=\"USR_LIST_NUM_N RT COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%u",NumUsr);
    Tbl_TD_End ();
 
    /***** Write user's ID and name *****/
-   Tbl_TD_Begin ("class=\"DAT_N LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s: %s<br />"
 		      "%s: ",
 	    Txt_ID,ID,
@@ -297,7 +297,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    Tbl_TD_End ();
 
    /***** Button to login with this account *****/
-   Tbl_TD_Begin ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
    Frm_StartForm (ActLogInNew);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Btn_PutCreateButtonInline (Txt_Its_me);
@@ -308,7 +308,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    Tbl_TR_Begin (NULL);
 
    /***** Courses of this user *****/
-   Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    UsrDat->Sex = Usr_SEX_UNKNOWN;
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NET);
@@ -367,13 +367,13 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
       NewNicknameWithArroba[0] = '\0';
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"NewNick\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Nickname);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
@@ -388,13 +388,13 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    /***** Email *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"NewEmail\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Email);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""

@@ -355,14 +355,14 @@ void Tst_ShowFormAskTst (void)
          /***** Number of questions to generate ****/
          Tbl_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"RM\"");
          fprintf (Gbl.F.Out,"<label for=\"NumQst\" class=\"%s\">"
                             "%s:"
                             "</label>",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_No_of_questions);
          Tbl_TD_End ();
 
-         Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"LM\"");
          fprintf (Gbl.F.Out,"<input type=\"number\""
                             " id=\"NumQst\" name=\"NumQst\""
                             " min=\"%u\" max=\"%u\" value=\"%u\"",
@@ -472,7 +472,7 @@ void Tst_ShowNewTest (void)
 	    Tbl_TABLE_End ();
 
 	    /***** Test result will be saved? *****/
-	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	    fprintf (Gbl.F.Out,"<div class=\"CM\""
 		               " style=\"margin-top:20px;\">"
 	                       "<label class=\"%s\">"
 			       "<input type=\"checkbox\" name=\"Save\""
@@ -645,7 +645,7 @@ void Tst_ShowTstTotalMark (unsigned NumQsts,double TotalScore)
    double TotalScoreOverSCORE_MAX = TotalScore * Tst_SCORE_MAX / (double) NumQsts;
 
    /***** Write total mark ****/
-   fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\""
+   fprintf (Gbl.F.Out,"<div class=\"DAT CM\""
 	              " style=\"margin-top:20px;\">"
 		      "%s: <span class=\"%s\">%.2lf (%.2lf %s %u)</span>"
 		      "</div>",
@@ -997,11 +997,11 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 	 /***** Question does not exists *****/
          Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"BIG_INDEX RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"BIG_INDEX RT COLOR%u\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%u",NumQst + 1);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT_LIGHT LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%s",Txt_Question_removed);
 	 Tbl_TD_End ();
 
@@ -1043,7 +1043,7 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
    Tbl_TR_Begin (NULL);
 
    /***** Write number of question *****/
-   Tbl_TD_Begin ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">%u</div>",NumQst + 1);
 
    /***** Write answer type (row[2]) *****/
@@ -1053,7 +1053,7 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
    Tbl_TD_End ();
 
    /***** Write stem (row[4]) *****/
-   Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    Tst_WriteQstStem (row[4],"TEST_EXA");
 
    /***** Get and show media (row[6]) *****/
@@ -1698,22 +1698,22 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    Tbl_TR_Begin (NULL);
 
    /***** Label *****/
-   Tbl_TD_Begin ("class=\"RIGHT_TOP %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Tags);
    Tbl_TD_End ();
 
    /***** Select all tags *****/
    if (NumCols > 1)
-      Tbl_TD_Begin ("colspan=\"%u\" class=\"LEFT_TOP\"",NumCols);
+      Tbl_TD_Begin ("colspan=\"%u\" class=\"LT\"",NumCols);
    else
-      Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"LT\"");
 
    Tbl_TABLE_BeginPadding (2);
    Tbl_TR_Begin (NULL);
    if (!ShowOnlyEnabledTags)
       Tbl_TD_Empty (1);
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "<input type=\"checkbox\" name=\"AllTags\" value=\"Y\"",
             The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -1738,7 +1738,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
       if (!ShowOnlyEnabledTags)
         {
          TagHidden = (row[2][0] == 'Y');
-         Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"LM\"");
          fprintf (Gbl.F.Out,"<img src=\"%s/",Cfg_URL_ICON_PUBLIC);
          if (TagHidden)
             fprintf (Gbl.F.Out,"eye-slash.svg\" alt=\"%s\" title=\"%s",
@@ -1752,7 +1752,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
          Tbl_TD_End ();
         }
 
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LM\"");
       fprintf (Gbl.F.Out,"<label class=\"DAT\">"
 	                 "<input type=\"checkbox\" name=\"ChkTag\" value=\"%s\"",
 	       row[1]);
@@ -1824,7 +1824,7 @@ static void Tst_ShowFormEditTags (void)
             Tst_PutIconDisable (TagCod,row[1]);
 
          /* Form to rename this tag */
-         Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"LM\"");
          Frm_StartForm (ActRenTag);
          Par_PutHiddenParamString ("OldTagTxt",row[1]);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewTagTxt\""
@@ -1921,11 +1921,11 @@ static void Tst_ShowFormConfigTst (void)
    Tbl_TABLE_BeginPadding (2);
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Plugins);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_BOTTOM\"");
+   Tbl_TD_Begin ("class=\"LB\"");
    for (Pluggable = Tst_PLUGGABLE_NO;
 	Pluggable <= Tst_PLUGGABLE_YES;
 	Pluggable++)
@@ -1947,11 +1947,11 @@ static void Tst_ShowFormConfigTst (void)
    /***** Number of questions *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_No_of_questions);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_BOTTOM\"");
+   Tbl_TD_Begin ("class=\"LB\"");
    Tbl_TABLE_BeginPadding (2);
    Tst_PutInputFieldNumQst ("NumQstMin",Txt_minimum,
                             Gbl.Test.Config.Min);	// Minimum number of questions
@@ -1967,7 +1967,7 @@ static void Tst_ShowFormConfigTst (void)
    /***** Minimum time between consecutive tests, per question *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label for=\"MinTimeNxtTstPerQst\" class=\"%s\">"
 	              "%s:"
 	              "</label>",
@@ -1975,7 +1975,7 @@ static void Tst_ShowFormConfigTst (void)
             Txt_Minimum_time_seconds_per_question_between_two_tests);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_BOTTOM\"");
+   Tbl_TD_Begin ("class=\"LB\"");
    fprintf (Gbl.F.Out,"<input type=\"text\""
                       " id=\"MinTimeNxtTstPerQst\" name=\"MinTimeNxtTstPerQst\""
                       " size=\"7\" maxlength=\"7\" value=\"%lu\""
@@ -1988,11 +1988,11 @@ static void Tst_ShowFormConfigTst (void)
    /***** Feedback to students *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Feedback_to_students);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_BOTTOM\"");
+   Tbl_TD_Begin ("class=\"LB\"");
    for (Feedback = (Tst_Feedback_t) 0;
 	Feedback < Tst_NUM_TYPES_FEEDBACK;
 	Feedback++)
@@ -2031,12 +2031,12 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
   {
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"DAT\">%s</label>",
            Field,Label);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\""
                       " id=\"%s\" name=\"%s\""
                       " size=\"3\" maxlength=\"3\" value=\"%u\""
@@ -2333,20 +2333,20 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    Tbl_TR_Begin (NULL);
 
    /***** Label *****/
-   Tbl_TD_Begin ("class=\"RIGHT_TOP %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Types_of_answers);
    Tbl_TD_End ();
 
    /***** Select all types of answers *****/
    if (NumCols > 1)
-      Tbl_TD_Begin ("colspan=\"%u\" class=\"LEFT_TOP\"",NumCols);
+      Tbl_TD_Begin ("colspan=\"%u\" class=\"LT\"",NumCols);
    else
-      Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"LT\"");
    Tbl_TABLE_BeginPadding (2);
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "<input type=\"checkbox\" name=\"AllAnsTypes\" value=\"Y\"",
             The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -2367,7 +2367,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
      {
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LM\"");
       fprintf (Gbl.F.Out,"<label class=\"DAT\">"
                          "<input type=\"checkbox\" name=\"AnswerType\" value=\"%u\"",
                (unsigned) AnsType);
@@ -2831,11 +2831,11 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
    Tbl_TH_Empty (1);
 
-   Tbl_TH (1,1,"CENTER_TOP",Txt_No_INDEX);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Code);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Date);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Tags);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Shuffle);
+   Tbl_TH (1,1,"CT",Txt_No_INDEX);
+   Tbl_TH (1,1,"CT",Txt_Code);
+   Tbl_TH (1,1,"CT",Txt_Date);
+   Tbl_TH (1,1,"CT",Txt_Tags);
+   Tbl_TH (1,1,"CT",Txt_Shuffle);
 
    /* Stem and answers of question */
    /* Number of times that the question has been answered */
@@ -2844,7 +2844,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 	Order < (Tst_QuestionsOrder_t) Tst_NUM_TYPES_ORDER_QST;
 	Order++)
      {
-      Tbl_TH_Begin (1,1,"LEFT_TOP");
+      Tbl_TH_Begin (1,1,"LT");
 
       if (NumRows > 1)
         {
@@ -2918,7 +2918,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       Tbl_TD_End ();
 
       /* Write number of question */
-      Tbl_TD_Begin ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">%lu</div>",NumRow + 1);
 
       /* Write answer type (row[2]) */
@@ -2928,13 +2928,13 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       Tbl_TD_End ();
 
       /* Write question code */
-      Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%ld&nbsp;",Gbl.Test.QstCod);
       Tbl_TD_End ();
 
       /* Write the date (row[1] has the UTC date-time) */
       TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
-      Tbl_TD_Begin ("id=\"tst_date_%u\" class=\"DAT_SMALL CENTER_TOP COLOR%u\"",
+      Tbl_TD_Begin ("id=\"tst_date_%u\" class=\"DAT_SMALL CT COLOR%u\"",
 			 UniqueId,Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                          "writeLocalDateHMSFromUTC('tst_date_%u',%ld,"
@@ -2945,12 +2945,12 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       Tbl_TD_End ();
 
       /* Write the question tags */
-      Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
       Tbl_TD_End ();
 
       /* Write if shuffle is enabled (row[3]) */
-      Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
           Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
         {
@@ -2971,7 +2971,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       Tbl_TD_End ();
 
       /* Write stem (row[4]) */
-      Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
 
       /***** Get and show media (row[6]) *****/
@@ -3005,12 +3005,12 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       Str_SetDecimalPointToLocal ();	// Return to local system
 
       /* Write number of times this question has been answered */
-      Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%lu",NumHitsThisQst);
       Tbl_TD_End ();
 
       /* Write average score */
-      Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (NumHitsThisQst)
          fprintf (Gbl.F.Out,"%.2f",TotalScoreThisQst /
                                    (double) NumHitsThisQst);
@@ -3019,12 +3019,12 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       Tbl_TD_End ();
 
       /* Write number of times this question has been answered (not blank) */
-      Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%lu",NumHitsNotBlankThisQst);
       Tbl_TD_End ();
 
       /* Write average score (not blank) */
-      Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       if (NumHitsNotBlankThisQst)
          fprintf (Gbl.F.Out,"%.2f",TotalScoreThisQst /
                                    (double) NumHitsNotBlankThisQst);
@@ -3086,13 +3086,13 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
 
    Tbl_TH_Empty (1);
 
-   Tbl_TH (1,1,"CENTER_TOP",Txt_No_INDEX);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Code);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Date);
-   Tbl_TH (1,1,"LEFT_TOP",Txt_Tags);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Type);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Shuffle);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Question);
+   Tbl_TH (1,1,"CT",Txt_No_INDEX);
+   Tbl_TH (1,1,"CT",Txt_Code);
+   Tbl_TH (1,1,"CT",Txt_Date);
+   Tbl_TH (1,1,"LT",Txt_Tags);
+   Tbl_TH (1,1,"CT",Txt_Type);
+   Tbl_TH (1,1,"CT",Txt_Shuffle);
+   Tbl_TH (1,1,"CT",Txt_Question);
 
    Tbl_TR_End ();
 
@@ -3134,18 +3134,18 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
 	       Gbl.Test.QstCod);
 
       /* Write number of question */
-      Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%lu&nbsp;",NumRow + 1);
       Tbl_TD_End ();
 
       /* Write question code */
-      Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%ld&nbsp;",Gbl.Test.QstCod);
       Tbl_TD_End ();
 
       /* Write the date (row[1] has the UTC date-time) */
       TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
-      Tbl_TD_Begin ("id=\"tst_date_%u\" class=\"DAT_SMALL CENTER_TOP COLOR%u\">",
+      Tbl_TD_Begin ("id=\"tst_date_%u\" class=\"DAT_SMALL CT COLOR%u\">",
 	            UniqueId,Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                          "writeLocalDateHMSFromUTC('tst_date_%u',%ld,"
@@ -3156,18 +3156,18 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
       Tbl_TD_End ();
 
       /* Write the question tags */
-      Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       Tst_GetAndWriteTagsQst (Gbl.Test.QstCod);
       Tbl_TD_End ();
 
       /* Write the question type (row[2]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
       Tbl_TD_End ();
 
       /* Write if shuffle is enabled (row[3]) */
-      Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
 
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
       if (row[3][0] == 'Y')
@@ -3177,7 +3177,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
       Tbl_TD_End ();
 
       /* Write stem (row[4]) */
-      Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
       Tst_WriteQstStem (row[4],"TEST_EDI");
 
       /***** Get and show media (row[6]) *****/
@@ -3403,11 +3403,11 @@ void Tst_WriteAnswersEdit (long QstCod)
             Tbl_TD_End ();
 
             /* Write the number of option */
-            Tbl_TD_Begin ("class=\"DAT_SMALL LEFT_TOP\"");
+            Tbl_TD_Begin ("class=\"DAT_SMALL LT\"");
             fprintf (Gbl.F.Out,"%c)&nbsp;",'a' + (char) NumOpt);
             Tbl_TD_End ();
 
-            Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+            Tbl_TD_Begin ("class=\"LT\"");
 
             /* Write the text of the answer and the media */
             fprintf (Gbl.F.Out,"<div class=\"TEST_EDI\">"
@@ -3640,7 +3640,7 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
    Tbl_TR_Begin (NULL);
 
    /***** Write the user answer *****/
-   Tbl_TD_Begin ("class=\"%s CENTER_MIDDLE\"",
+   Tbl_TD_Begin ("class=\"%s CM\"",
 		      (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
 		       Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
 		      (AnsTF == row[1][0] ? "ANS_OK" :
@@ -3650,7 +3650,7 @@ static void Tst_WriteTFAnsAssessTest (struct UsrData *UsrDat,
    Tbl_TD_End ();
 
    /***** Write the correct answer *****/
-   Tbl_TD_Begin ("class=\"ANS_0 CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"ANS_0 CM\"");
    if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
       Tst_WriteAnsTF (row[1][0]);
@@ -3743,7 +3743,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
       Tbl_TR_Begin (NULL);
 
       /***** Write selectors and letter of this option *****/
-      Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"LT\"");
       snprintf (ParamName,sizeof (ParamName),
 	        "Ind%06u",
 		NumQst);
@@ -3760,7 +3760,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
                NumQst,Index);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"LT\"");
       fprintf (Gbl.F.Out,"<label for=\"Ans%06u_%u\" class=\"ANS_TXT\">"
 	                 "%c)&nbsp;"
 	                 "</label>",
@@ -3769,7 +3769,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
       Tbl_TD_End ();
 
       /***** Write the option text *****/
-      Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"LT\"");
       fprintf (Gbl.F.Out,"<label for=\"Ans%06u_%u\" class=\"ANS_TXT\">"
 	                 "%s"
 	                 "</label>",
@@ -3859,7 +3859,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 	    Ans.Str   = "&bull;";
 	   }
 
-	 Tbl_TD_Begin ("class=\"%s CENTER_TOP\" title=\"%s\"",
+	 Tbl_TD_Begin ("class=\"%s CT\" title=\"%s\"",
 		       Ans.Class,Txt_TST_Answer_given_by_the_user);
 	 fprintf (Gbl.F.Out,"%s",Ans.Str);
 	 Tbl_TD_End ();
@@ -3873,7 +3873,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
         {
          if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
            {
-	    Tbl_TD_Begin ("class=\"ANS_0 CENTER_TOP\" title=\"%s\"",
+	    Tbl_TD_Begin ("class=\"ANS_0 CT\" title=\"%s\"",
 		          Txt_TST_Answer_given_by_the_teachers);
 	    fprintf (Gbl.F.Out,"&bull;");
 	    Tbl_TD_End ();
@@ -3883,18 +3883,18 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
         }
       else
 	{
-	 Tbl_TD_Begin ("class=\"ANS_0 CENTER_TOP\"");
+	 Tbl_TD_Begin ("class=\"ANS_0 CT\"");
 	 fprintf (Gbl.F.Out,"?");
          Tbl_TD_End ();
 	}
 
       /* Answer letter (a, b, c,...) */
-      Tbl_TD_Begin ("class=\"ANS_TXT LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"ANS_TXT LT\"");
       fprintf (Gbl.F.Out,"%c)&nbsp;",'a' + (char) NumOpt);
       Tbl_TD_End ();
 
       /* Answer text and feedback */
-      Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"LT\"");
       fprintf (Gbl.F.Out,"<div class=\"ANS_TXT\">"
 	                 "%s",
                Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
@@ -4210,7 +4210,7 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
       Tbl_TD_End ();
 
       /***** Write the option text and the result *****/
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LM\"");
       fprintf (Gbl.F.Out,"<label for=\"Ans%06u_%u\" class=\"%s\">"
 	                 "%s"
 	                 "</label>",
@@ -4344,7 +4344,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
             break;
            }
         }
-      Tbl_TD_Begin ("class=\"%s CENTER_TOP\"",
+      Tbl_TD_Begin ("class=\"%s CT\"",
 			 (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
 			  Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
 			  (Correct ? "ANS_OK" :
@@ -4360,7 +4360,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
    if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
      {
-      Tbl_TD_Begin ("class=\"CENTER_TOP\"");
+      Tbl_TD_Begin ("class=\"CT\"");
       Tbl_TABLE_BeginPadding (2);
 
       for (NumOpt = 0;
@@ -4370,12 +4370,12 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 	 Tbl_TR_Begin (NULL);
 
          /* Answer letter (a, b, c,...) */
-         Tbl_TD_Begin ("class=\"ANS_0 LEFT_TOP\"");
+         Tbl_TD_Begin ("class=\"ANS_0 LT\"");
          fprintf (Gbl.F.Out,"%c)&nbsp;",'a' + (char) NumOpt);
          Tbl_TD_End ();
 
          /* Answer text and feedback */
-         Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+         Tbl_TD_Begin ("class=\"LT\"");
          fprintf (Gbl.F.Out,"<div class=\"ANS_0\">"
                             "%s"
                             "</div>",
@@ -4397,7 +4397,7 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
      }
    else
      {
-      Tbl_TD_Begin ("class=\"ANS_0 CENTER_TOP\"");
+      Tbl_TD_Begin ("class=\"ANS_0 CT\"");
       fprintf (Gbl.F.Out,"?");
       Tbl_TD_End ();
      }
@@ -4487,7 +4487,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
      {
       if (sscanf (Gbl.Test.StrAnswersOneQst[NumQst],"%ld",&IntAnswerUsr) == 1)
 	{
-         Tbl_TD_Begin ("class=\"%s CENTER_MIDDLE\"",
+         Tbl_TD_Begin ("class=\"%s CM\"",
 		       (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
 		        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
 		        (IntAnswerUsr == IntAnswerCorr ? "ANS_OK" :
@@ -4499,7 +4499,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
       else
         {
          Gbl.Test.StrAnswersOneQst[NumQst][0] = '\0';
-         Tbl_TD_Begin ("class=\"ANS_0 CENTER_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"ANS_0 CM\"");
          fprintf (Gbl.F.Out,"?");
          Tbl_TD_End ();
         }
@@ -4508,7 +4508,7 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
       Tbl_TD_Empty (1);
 
    /***** Write the correct answer *****/
-   Tbl_TD_Begin ("class=\"ANS_0 CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"ANS_0 CM\"");
    if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
       fprintf (Gbl.F.Out,"%ld",IntAnswerCorr);
@@ -4616,7 +4616,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
       FloatAnsUsr = Tst_GetFloatAnsFromStr (Gbl.Test.StrAnswersOneQst[NumQst]);
       if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// It's a correct floating point number
         {
-         Tbl_TD_Begin ("class=\"%s CENTER_MIDDLE\"",
+         Tbl_TD_Begin ("class=\"%s CM\"",
 		       (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
 		        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK) ?
 		        ((FloatAnsUsr >= FloatAnsCorr[0] &&
@@ -4627,7 +4627,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
         }
       else				// Not a floating point number
 	{
-         Tbl_TD_Begin ("class=\"ANS_0 CENTER_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"ANS_0 CM\"");
          fprintf (Gbl.F.Out,"?");
 	}
      }
@@ -4636,7 +4636,7 @@ static void Tst_WriteFloatAnsAssessTest (struct UsrData *UsrDat,
    Tbl_TD_End ();
 
    /***** Write the correct answer *****/
-   Tbl_TD_Begin ("class=\"ANS_0 CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"ANS_0 CM\"");
    if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_EACH_GOOD_BAD ||
        Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
       fprintf (Gbl.F.Out,"[%lg; %lg]",FloatAnsCorr[0],FloatAnsCorr[1]);
@@ -4691,11 +4691,11 @@ static void Tst_WriteHeadUserCorrect (struct UsrData *UsrDat)
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
-   Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_SMALL CM\"");
    fprintf (Gbl.F.Out,"%s",Txt_User[UsrDat->Sex]);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_SMALL CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT_SMALL CM\"");
    fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
    Tbl_TD_End ();
   }
@@ -4709,7 +4709,7 @@ static void Tst_WriteScoreStart (unsigned ColSpan)
    extern const char *Txt_Score;
 
    Tbl_TR_Begin (NULL);
-   Tbl_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL LEFT_MIDDLE\"",ColSpan);
+   Tbl_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL LM\"",ColSpan);
    fprintf (Gbl.F.Out,"%s: <span class=\"",Txt_Score);
   }
 
@@ -5087,11 +5087,11 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Write the tags *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_TOP %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Tags);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
    Tbl_TABLE_BeginPadding (2);	// Table for tags
 
    for (NumTag = 0;
@@ -5101,7 +5101,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       Tbl_TR_Begin (NULL);
 
       /***** Write the tags already existing in a selector *****/
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LM\"");
       fprintf (Gbl.F.Out,"<select id=\"SelDesc%u\" name=\"SelDesc%u\""
 	                 " class=\"TAG_SEL\" onchange=\"changeTxtTag('%u')\">",
                NumTag,NumTag,NumTag);
@@ -5136,7 +5136,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       Tbl_TD_End ();
 
       /***** Input of a new tag *****/
-      Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"RM\"");
       fprintf (Gbl.F.Out,"<input type=\"text\" id=\"TagTxt%u\" name=\"TagTxt%u\""
                          " class=\"TAG_TXT\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"changeSelTag('%u')\" />",
@@ -5157,13 +5157,13 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Stem and image *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label for=\"Stem\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Wording);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
    fprintf (Gbl.F.Out,"<textarea id=\"Stem\" name=\"Stem\""
                       " class=\"STEM_TEXTAREA\" rows=\"5\" required=\"required\">"
                       "%s"
@@ -5191,11 +5191,11 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Type of answer *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_TOP %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Type);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s LEFT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    for (AnsType = (Tst_AnswerType_t) 0;
 	AnsType < Tst_NUM_ANS_TYPES;
 	AnsType++)
@@ -5218,11 +5218,11 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /* Integer answer */
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_TOP %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"RT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Answers);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"text\" name=\"AnsInt\""
@@ -5240,7 +5240,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /* Floating point answer */
    Tbl_TR_Begin (NULL);
    Tbl_TD_Empty (1);
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
    Tst_PutFloatInputField (Txt_Real_number_between_A_and_B_1,"AnsFloatMin",
                            Gbl.Test.Answer.FloatingPoint[0]);
    Tst_PutFloatInputField (Txt_Real_number_between_A_and_B_2,"AnsFloatMax",
@@ -5251,7 +5251,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /* T/F answer */
    Tbl_TR_Begin (NULL);
    Tbl_TD_Empty (1);
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
    Tst_PutTFInputField (Txt_TF_QST[0],'T');
    Tst_PutTFInputField (Txt_TF_QST[1],'F');
    Tbl_TD_End ();
@@ -5262,7 +5262,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    Tbl_TD_Empty (1);
 
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"",
             The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -5282,7 +5282,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /* Simple or multiple choice answers */
    Tbl_TR_Begin (NULL);
    Tbl_TD_Empty (1);
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
    Tbl_TABLE_BeginPadding (2);	// Table with choice answers
 
    OptionsDisabled = Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
@@ -7468,11 +7468,11 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
 
          Tbl_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+         Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          fprintf (Gbl.F.Out,"%s:",Txt_Users);
          Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"%s LEFT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 Tbl_TD_Begin ("colspan=\"2\" class=\"%s LT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          Tbl_TABLE_BeginPadding (2);
          Usr_ListUsersToSelect (Rol_TCH);
          Usr_ListUsersToSelect (Rol_NET);
@@ -7678,13 +7678,13 @@ static void Tst_ShowHeaderTestResults (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH (1,2,"CENTER_TOP",Txt_User[Usr_SEX_UNKNOWN]);
-   Tbl_TH (1,1,"RIGHT_TOP",Txt_Date);
-   Tbl_TH (1,1,"RIGHT_TOP",Txt_Questions);
-   Tbl_TH (1,1,"RIGHT_TOP",Txt_Non_blank_BR_questions);
-   Tbl_TH (1,1,"RIGHT_TOP",Txt_Total_BR_score);
-   Tbl_TH (1,1,"RIGHT_TOP",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
-   Tbl_TH_Begin (1,1,"RIGHT_TOP");
+   Tbl_TH (1,2,"CT",Txt_User[Usr_SEX_UNKNOWN]);
+   Tbl_TH (1,1,"RT",Txt_Date);
+   Tbl_TH (1,1,"RT",Txt_Questions);
+   Tbl_TH (1,1,"RT",Txt_Non_blank_BR_questions);
+   Tbl_TH (1,1,"RT",Txt_Total_BR_score);
+   Tbl_TH (1,1,"RT",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
+   Tbl_TH_Begin (1,1,"RT");
    fprintf (Gbl.F.Out,"%s<br />%s<br />%u",Txt_Score,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
    Tbl_TH_End ();
    Tbl_TH_Empty (1);
@@ -7792,7 +7792,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
          /* Write date and time (row[2] holds UTC date-time) */
          TimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
          UniqueId++;
-	 Tbl_TD_Begin ("id=\"tst_date_%u\" class=\"%s RIGHT_TOP COLOR%u\"",
+	 Tbl_TD_Begin ("id=\"tst_date_%u\" class=\"%s RT COLOR%u\"",
 		       UniqueId,ClassDat,Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			    "writeLocalDateHMSFromUTC('tst_date_%u',%ld,"
@@ -7823,25 +7823,25 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 	    TotalScoreOfAllTests += ScoreInThisTest;
 
          /* Write number of questions */
-	 Tbl_TD_Begin ("class=\"%s RIGHT_TOP COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewTest)
 	    fprintf (Gbl.F.Out,"%u",NumQstsInThisTest);
 	 Tbl_TD_End ();
 
          /* Write number of questions not blank */
-	 Tbl_TD_Begin ("class=\"%s RIGHT_TOP COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewTest)
 	    fprintf (Gbl.F.Out,"%u",NumQstsNotBlankInThisTest);
 	 Tbl_TD_End ();
 
 	 /* Write score */
-	 Tbl_TD_Begin ("class=\"%s RIGHT_TOP COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	    fprintf (Gbl.F.Out,"%.2lf",ScoreInThisTest);
 	 Tbl_TD_End ();
 
          /* Write average score per question */
-	 Tbl_TD_Begin ("class=\"%s RIGHT_TOP COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisTest ? ScoreInThisTest / (double) NumQstsInThisTest :
@@ -7849,7 +7849,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 	 Tbl_TD_End ();
 
          /* Write score over Tst_SCORE_MAX */
-	 Tbl_TD_Begin ("class=\"%s RIGHT_TOP COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"%s RT COLOR%u\"",ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	    fprintf (Gbl.F.Out,"%.2lf",
 		     NumQstsInThisTest ? ScoreInThisTest * Tst_SCORE_MAX / (double) NumQstsInThisTest :
@@ -7857,7 +7857,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 	 Tbl_TD_End ();
 
 	 /* Link to show this result */
-	 Tbl_TD_Begin ("class=\"RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 	 if (ICanViewTest)
 	   {
 	    Frm_StartForm (Gbl.Action.Act == ActSeeMyTstRes ? ActSeeOneTstResMe :
@@ -7948,30 +7948,30 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
    Tbl_TR_Begin (NULL);
 
    /***** Row title *****/
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s: %u",Txt_Visible_tests,NumExams);
    Tbl_TD_End ();
 
    /***** Write total number of questions *****/
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumExams)
       fprintf (Gbl.F.Out,"%u",NumTotalQsts);
    Tbl_TD_End ();
 
    /***** Write total number of questions not blank *****/
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (NumExams)
       fprintf (Gbl.F.Out,"%u",NumTotalQstsNotBlank);
    Tbl_TD_End ();
 
    /***** Write total score *****/
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
       fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllTests);
    Tbl_TD_End ();
 
    /***** Write average score per question *****/
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
       fprintf (Gbl.F.Out,"%.2lf",
 	       NumTotalQsts ? TotalScoreOfAllTests / (double) NumTotalQsts :
@@ -7979,7 +7979,7 @@ static void Tst_ShowTestResultsSummaryRow (bool ItsMe,
    Tbl_TD_End ();
 
    /***** Write score over Tst_SCORE_MAX *****/
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanViewTotalScore)
       fprintf (Gbl.F.Out,"%.2lf",
 	       NumTotalQsts ? TotalScoreOfAllTests * Tst_SCORE_MAX /
@@ -8102,12 +8102,12 @@ void Tst_ShowOneTstResult (void)
       /* User */
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT_N RIGHT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT_N RT\"");
       fprintf (Gbl.F.Out,"%s:",
 	       Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role][Gbl.Usrs.Other.UsrDat.Sex]);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT LT\"");
       ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
       fprintf (Gbl.F.Out," %s",
 	       Gbl.Usrs.Other.UsrDat.Surname1);
@@ -8129,11 +8129,11 @@ void Tst_ShowOneTstResult (void)
       /* Test date */
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT_N RIGHT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT_N RT\"");
       fprintf (Gbl.F.Out,"%s:",Txt_Date);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("id=\"test\" class=\"DAT LEFT_TOP\"");
+      Tbl_TD_Begin ("id=\"test\" class=\"DAT LT\"");
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('test',%ld,"
 			 "%u,',&nbsp;','%s',true,true,0x7);"
@@ -8147,11 +8147,11 @@ void Tst_ShowOneTstResult (void)
       /* Number of questions */
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT_N RIGHT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT_N RT\"");
       fprintf (Gbl.F.Out,"%s:",Txt_Questions);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT LT\"");
       fprintf (Gbl.F.Out,"%u (%u %s)",
 	       Gbl.Test.NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
       Tbl_TD_End ();
@@ -8161,11 +8161,11 @@ void Tst_ShowOneTstResult (void)
       /* Score */
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT_N RIGHT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT_N RT\"");
       fprintf (Gbl.F.Out,"%s:",Txt_Score);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT LT\"");
       if (ICanViewScore)
 	 fprintf (Gbl.F.Out,"%.2lf (%.2lf",
 		  TotalScore,
@@ -8182,11 +8182,11 @@ void Tst_ShowOneTstResult (void)
       /* Tags present in this test */
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT_N RIGHT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT_N RT\"");
       fprintf (Gbl.F.Out,"%s:",Txt_Tags);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"DAT LT\"");
       Tst_ShowTstTagsPresentInATestResult (TstCod);
       Tbl_TD_End ();
 
@@ -8263,11 +8263,11 @@ void Tst_ShowTestResult (struct UsrData *UsrDat,
 	    /***** Question has been edited *****/
 	    Tbl_TR_Begin (NULL);
 
-	    Tbl_TD_Begin ("class=\"BIG_INDEX RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	    Tbl_TD_Begin ("class=\"BIG_INDEX RT COLOR%u\"",Gbl.RowEvenOdd);
 	    fprintf (Gbl.F.Out,"%u",NumQst + 1);
 	    Tbl_TD_End ();
 
-	    Tbl_TD_Begin ("class=\"DAT_LIGHT LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	    Tbl_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
 	    fprintf (Gbl.F.Out,"%s",Txt_Question_modified);
 	    Tbl_TD_End ();
 
@@ -8292,11 +8292,11 @@ void Tst_ShowTestResult (struct UsrData *UsrDat,
 	 /***** Question does not exists *****/
          Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"BIG_INDEX RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"BIG_INDEX RT COLOR%u\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%u",NumQst + 1);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT_LIGHT LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"DAT_LIGHT LT COLOR%u\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%s",Txt_Question_removed);
 	 Tbl_TD_End ();
 

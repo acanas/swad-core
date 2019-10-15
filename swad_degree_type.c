@@ -333,17 +333,17 @@ static void DT_ListDegreeTypesForSeeing (void)
       Tbl_TR_Begin (NULL);
 
       /* Number of degree type in this list */
-      Tbl_TD_Begin ("class=\"DAT_N RIGHT_MIDDLE %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT_N RM %s\"",BgColor);
       fprintf (Gbl.F.Out,"%u",NumDegTyp + 1);
       Tbl_TD_End ();
 
       /* Name of degree type */
-      Tbl_TD_Begin ("class=\"DAT_N LEFT_MIDDLE %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT_N LM %s\"",BgColor);
       fprintf (Gbl.F.Out,"%s",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
       Tbl_TD_End ();
 
       /* Number of degrees of this type */
-      Tbl_TD_Begin ("class=\"DAT_N RIGHT_MIDDLE %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT_N RM %s\"",BgColor);
       fprintf (Gbl.F.Out,"%u",Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
       Tbl_TD_End ();
 
@@ -419,7 +419,7 @@ static void DT_ListDegreeTypesForEdition (void)
       Tbl_TD_End ();
 
       /* Name of degree type */
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenDegTyp);
       DT_PutParamOtherDegTypCod (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\""
@@ -433,7 +433,7 @@ static void DT_ListDegreeTypesForEdition (void)
       Tbl_TD_End ();
 
       /* Number of degrees of this type */
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Gbl.DegTypes.Lst[NumDegTyp].NumDegs);
       Tbl_TD_End ();
 
@@ -483,7 +483,7 @@ static void DT_PutFormToCreateDegreeType (void)
    Tbl_TD_End ();
 
    /***** Degree type name *****/
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\""
                       " size=\"25\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
@@ -491,7 +491,7 @@ static void DT_PutFormToCreateDegreeType (void)
    Tbl_TD_End ();
 
    /***** Number of degrees of this degree type ****/
-   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"0");
    Tbl_TD_End ();
 
@@ -520,8 +520,8 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
 	Order <= DT_ORDER_BY_NUM_DEGREES;
 	Order++)
      {
-      Tbl_TH_Begin (1,1,Order == DT_ORDER_BY_DEGREE_TYPE ? "LEFT_MIDDLE" :
-						           "RIGHT_MIDDLE");
+      Tbl_TH_Begin (1,1,Order == DT_ORDER_BY_DEGREE_TYPE ? "LM" :
+						           "RM");
 
       /* Start form to change order */
       Frm_StartForm (NextAction);
@@ -558,9 +558,9 @@ static void DT_PutHeadDegreeTypesForEdition (void)
    Tbl_TR_Begin (NULL);
 
    Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Code);
-   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Type_of_degree);
-   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Degrees);
+   Tbl_TH (1,1,"CM",Txt_Code);
+   Tbl_TH (1,1,"CM",Txt_Type_of_degree);
+   Tbl_TH (1,1,"RM",Txt_Degrees);
 
    Tbl_TR_End ();
   }

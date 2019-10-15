@@ -285,8 +285,8 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
       /***** Write heading *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH (1,1,"CENTER_MIDDLE LIGHT_BLUE",Txt_CHAT_Room_code);
-      Tbl_TH (1,1,"LEFT_MIDDLE LIGHT_BLUE",Txt_No_of_users);
+      Tbl_TH (1,1,"CM LIGHT_BLUE",Txt_CHAT_Room_code);
+      Tbl_TH (1,1,"LM LIGHT_BLUE",Txt_No_of_users);
 
       Tbl_TR_End ();
 
@@ -300,11 +300,11 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 
          Tbl_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"DAT LM\"");
          fprintf (Gbl.F.Out,"%s",row[0]);
          Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT RM\"");
          fprintf (Gbl.F.Out,"%s",row[1]);
 	 Tbl_TD_End ();
 

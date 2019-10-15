@@ -396,11 +396,11 @@ void Ntf_ShowMyNotifications (void)
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH (1,2,"LEFT_MIDDLE",Txt_Event);
-      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_MSG_From);
-      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Location);
-      Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Date);
-      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Email);
+      Tbl_TH (1,2,"LM",Txt_Event);
+      Tbl_TH (1,1,"LM",Txt_MSG_From);
+      Tbl_TH (1,1,"LM",Txt_Location);
+      Tbl_TH (1,1,"CM",Txt_Date);
+      Tbl_TH (1,1,"LM",Txt_Email);
 
       Tbl_TR_End ();
 
@@ -481,7 +481,7 @@ void Ntf_ShowMyNotifications (void)
 	 /* Write event icon */
          Tbl_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("class=\"%s LEFT_TOP\" style=\"width:25px;\"",ClassBackground);
+         Tbl_TD_Begin ("class=\"%s LT\" style=\"width:25px;\"",ClassBackground);
          if (PutLink)
             PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
@@ -497,7 +497,7 @@ void Ntf_ShowMyNotifications (void)
          Tbl_TD_End ();
 
          /* Write event type */
-         Tbl_TD_Begin ("class=\"%s LEFT_TOP\"",ClassBackground);
+         Tbl_TD_Begin ("class=\"%s LT\"",ClassBackground);
          if (PutLink)
             PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
@@ -514,12 +514,12 @@ void Ntf_ShowMyNotifications (void)
          Tbl_TD_End ();
 
          /* Write user (from) */
-	 Tbl_TD_Begin ("class=\"%s LEFT_TOP\"",ClassAuthorBg);
+	 Tbl_TD_Begin ("class=\"%s LT\"",ClassAuthorBg);
 	 Msg_WriteMsgAuthor (&UsrDat,true,NULL);
 	 Tbl_TD_End ();
 
          /* Write location */
-         Tbl_TD_Begin ("class=\"%s LEFT_TOP\"",ClassBackground);
+         Tbl_TD_Begin ("class=\"%s LT\"",ClassBackground);
          if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
@@ -574,7 +574,7 @@ void Ntf_ShowMyNotifications (void)
          Msg_WriteMsgDate (DateTimeUTC,ClassBackground);
 
          /* Write status (sent by email / pending to be sent by email) */
-         Tbl_TD_Begin ("class=\"%s LEFT_TOP\"",ClassBackground);
+         Tbl_TD_Begin ("class=\"%s LT\"",ClassBackground);
          fprintf (Gbl.F.Out,"%s",Txt_NOTIFICATION_STATUS[StatusTxt]);
          Tbl_TD_End ();
 
@@ -593,7 +593,7 @@ void Ntf_ShowMyNotifications (void)
             Tbl_TD_Begin ("colspan=\"2\"");
             Tbl_TD_End ();
 
-            Tbl_TD_Begin ("colspan=\"4\" class=\"DAT LEFT_TOP\" style=\"padding-bottom:12px;\"");
+            Tbl_TD_Begin ("colspan=\"4\" class=\"DAT LT\" style=\"padding-bottom:12px;\"");
             fprintf (Gbl.F.Out,"%s",SummaryStr);
             Tbl_TD_End ();
 
@@ -1932,8 +1932,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    Tbl_TH_Empty (1);
 
-   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Create_BR_notification);
-   Tbl_TH (1,1,"CENTER_MIDDLE",Txt_Notify_me_BR_by_email);
+   Tbl_TH (1,1,"CM",Txt_Create_BR_notification);
+   Tbl_TH (1,1,"CM",Txt_Notify_me_BR_by_email);
 
    Tbl_TR_End ();
 
@@ -1945,11 +1945,11 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
      {
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent)))
@@ -1957,7 +1957,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       fprintf (Gbl.F.Out," />");
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent)))

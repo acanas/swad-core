@@ -56,8 +56,8 @@ extern struct Globals Gbl;
 
 const unsigned Not_ContainerWidth[Not_NUM_TYPES_LISTING] =
   {
-   148,	// Not_LIST_BRIEF_NOTICES
-   500,	// Not_LIST_FULL_NOTICES
+   148 + 50,	// Not_LIST_BRIEF_NOTICES
+   500 + 50,	// Not_LIST_FULL_NOTICES
   };
 
 const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
@@ -468,7 +468,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
 
 	 /* Put a link to the RSS file */
-	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+	 fprintf (Gbl.F.Out,"<div class=\"CM\">"
 			    "<a href=\"");
 	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.Hierarchy.Crs.CrsCod);
 	 fprintf (Gbl.F.Out,"\" target=\"_blank\">"
@@ -621,6 +621,11 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       "NOTICE_CONTAINER_ACTIVE",	// Not_ACTIVE_NOTICE
       "NOTICE_CONTAINER_OBSOLETE",	// Not_OBSOLETE_NOTICE
      };
+   const char *ContainerWidthClass[Not_NUM_TYPES_LISTING] =
+     {
+      "NOTICE_CONTAINER_NARROW",	// Not_LIST_BRIEF_NOTICES
+      "NOTICE_CONTAINER_WIDE",		// Not_LIST_FULL_NOTICES
+     };
    static const char *DateClass[Not_NUM_STATUS] =
      {
       "NOTICE_DATE_ACTIVE",		// Not_ACTIVE_NOTICE
@@ -652,9 +657,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      }
 
    /***** Start yellow note *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"width:%upx;\">",
-	    ContainerClass[Status],
-	    Not_ContainerWidth[TypeNoticesListing]);
+   fprintf (Gbl.F.Out,"<div class=\"%s %s\">",
+	    ContainerClass[Status],ContainerWidthClass[TypeNoticesListing]);
 
    /***** Write the date in the top part of the yellow note *****/
    /* Write symbol to indicate if notice is obsolete or active */
@@ -681,8 +685,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
    /* Write the date */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            DateClass[Status]);
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",DateClass[Status]);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       /* Form to view full notice */
@@ -711,7 +714,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT_BRIEF\">%s</div>",Content);
 
       /* Put form to view full notice */
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"CM\">");
       Not_SetNotCodToEdit (NotCod);	// To be used as parameter
       Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,Not_PutParams,
 				     "ellipsis-h.svg",

@@ -209,7 +209,7 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 	Order <= Dat_END_TIME;
 	Order++)
      {
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
+      Tbl_TH_Begin (1,1,"LM");
 
       if (!PrintView)
 	{
@@ -232,8 +232,8 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 
       Tbl_TH_End ();
      }
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Assignment);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Folder);
+   Tbl_TH (1,1,"LM",Txt_Assignment);
+   Tbl_TH (1,1,"LM",Txt_Folder);
 
    Tbl_TR_End ();
   }
@@ -372,14 +372,14 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 	StartEndTime++)
      {
       if (PrintView)
-	 Tbl_TD_Begin ("id=\"asg_date_%u_%u\" class=\"%s LEFT_BOTTOM\"",
+	 Tbl_TD_Begin ("id=\"asg_date_%u_%u\" class=\"%s LB\"",
 		       (unsigned) StartEndTime,UniqueId,
 		       Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
 					        "DATE_RED_LIGHT") :
 				    (Asg.Open ? "DATE_GREEN" :
 					        "DATE_RED"));
       else
-	 Tbl_TD_Begin ("id=\"asg_date_%u_%u\" class=\"%s LEFT_BOTTOM COLOR%u\"",
+	 Tbl_TD_Begin ("id=\"asg_date_%u_%u\" class=\"%s LB COLOR%u\"",
 		       (unsigned) StartEndTime,UniqueId,
 		       Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
 					        "DATE_RED_LIGHT") :
@@ -397,11 +397,11 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 
    /* Assignment title */
    if (PrintView)
-      Tbl_TD_Begin ("class=\"%s LEFT_TOP\"",
+      Tbl_TD_Begin ("class=\"%s LT\"",
 		    Asg.Hidden ? "ASG_TITLE_LIGHT" :
 				 "ASG_TITLE");
    else
-      Tbl_TD_Begin ("class=\"%s LEFT_TOP COLOR%u\"",
+      Tbl_TD_Begin ("class=\"%s LT COLOR%u\"",
 		    Asg.Hidden ? "ASG_TITLE_LIGHT" :
 				 "ASG_TITLE",
 		    Gbl.RowEvenOdd);
@@ -411,7 +411,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    Tbl_TD_End ();
 
    /* Assignment folder */
-   Tbl_TD_Begin ("class=\"DAT LEFT_TOP");
+   Tbl_TD_Begin ("class=\"DAT LT");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
@@ -426,9 +426,9 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 
    /* Author of the assignment */
    if (PrintView)
-      Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("colspan=\"2\" class=\"LT\"");
    else
-      Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    Asg_WriteAsgAuthor (&Asg);
    Tbl_TD_End ();
 
@@ -438,9 +438,9 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    if (PrintView)
-      Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("colspan=\"2\" class=\"LT\"");
    else
-      Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Gbl.Crs.Grps.NumGrps)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
    fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>",
@@ -1164,12 +1164,12 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Assignment title *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
@@ -1184,11 +1184,11 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Send work? *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Upload_files_QUESTION);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<label class=\"DAT\">%s:"
                       "<input type=\"text\" name=\"Folder\""
                       " size=\"30\" maxlength=\"%u\" value=\"%s\" />"
@@ -1202,12 +1202,12 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Assignment text *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Description);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
    fprintf (Gbl.F.Out,"<textarea id=\"Txt\" name=\"Txt\""
                       " cols=\"60\" rows=\"10\">");
    if (!ItsANewAssignment)
@@ -1253,18 +1253,18 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       /***** Start box and table *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Groups);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"LT\"");
       Box_StartBoxTable ("100%",NULL,NULL,
                          Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("colspan=\"7\" class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"<label>"
                          "<input type=\"checkbox\" id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
       if (!Asg_CheckIfAsgIsAssociatedToGrps (AsgCod))

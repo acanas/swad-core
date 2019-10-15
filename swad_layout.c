@@ -275,7 +275,7 @@ void Lay_WriteStartOfPage (void)
 			    "<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
 			    " alt=\"\" title=\"\""
 			    " class=\"IMG_USR\" />"
-			    "<div id=\"zoomTxt\" class=\"CENTER_MIDDLE\">"
+			    "<div id=\"zoomTxt\" class=\"CM\">"
 			    "</div>"
 			    "</div>",
 		  Cfg_URL_ICON_PUBLIC);
@@ -926,7 +926,7 @@ static void Lay_WritePageTopHeading (void)
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_small\">");
    Frm_LinkFormSubmit (Txt_System,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-                      " class=\"CENTER_MIDDLE\""
+                      " class=\"CM\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>",	// head_row_1_logo_small
             Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
@@ -936,7 +936,7 @@ static void Lay_WritePageTopHeading (void)
                       "<div id=\"head_row_1_logo_big\">");
    Frm_LinkFormSubmit (Txt_System,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-                      " class=\"CENTER_MIDDLE\""
+                      " class=\"CM\""
 	              " style=\"width:%upx; height:%upx;\" />"
                       "</a>",	// head_row_1_logo_big
             Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,
@@ -1620,7 +1620,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Tbl_TR_Begin (NULL);
 
    /***** First column: institution logo *****/
-   Tbl_TD_Begin ("class=\"LEFT_TOP\" style=\"width:60px;\"");
+   Tbl_TD_Begin ("class=\"LT\" style=\"width:60px;\"");
    if (InsCod > 0)
      {
       if (!PrintView)
@@ -1632,7 +1632,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Tbl_TD_End ();
 
    /***** Second column: class photo title *****/
-   Tbl_TD_Begin ("class=\"CLASSPHOTO_TITLE CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CLASSPHOTO_TITLE CM\"");
    if (InsCod > 0)
      {
       if (!PrintView)
@@ -1668,7 +1668,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Tbl_TD_End ();
 
    /***** Third column: degree logo *****/
-   Tbl_TD_Begin ("class=\"RIGHT_TOP\" style=\"width:60px;\"");
+   Tbl_TD_Begin ("class=\"RT\" style=\"width:60px;\"");
    if (DegCod > 0)
      {
       if (!PrintView)
@@ -1706,7 +1706,7 @@ void Lay_AdvertisementMobile (void)
 
       /***** Show advertisement *****/
       Tbl_TR_Begin (NULL);
-      Tbl_TD_Begin ("class=\"DAT CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT CM\"");
       fprintf (Gbl.F.Out,"<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 	                 " class=\"DAT\">"
                          "%s<br /><br />"

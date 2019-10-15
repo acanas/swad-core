@@ -190,7 +190,7 @@ void Dup_ListDuplicateUsrs (void)
             Tbl_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
             Tbl_TD_End ();
 
-	    Tbl_TD_Begin ("colspan=\"%u\" class=\"DAT LEFT_MIDDLE COLOR%u\"",
+	    Tbl_TD_Begin ("colspan=\"%u\" class=\"DAT LM COLOR%u\"",
 			  Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 			  Gbl.RowEvenOdd);
 
@@ -346,7 +346,7 @@ static void Dup_ListSimilarUsrs (void)
             Tbl_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
             Tbl_TD_End ();
 
-	    Tbl_TD_Begin ("colspan=\"%u\" class=\"LEFT_TOP COLOR%u\""
+	    Tbl_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\""
 			  " style=\"padding-bottom:20px;\"",
 			  Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 			  Gbl.RowEvenOdd);

@@ -142,14 +142,14 @@ void Syl_PutFormWhichSyllabus (void)
    /***** Form to select which forums I want to see
           (all my forums or only the forums of current institution/degree/course) *****/
    Frm_StartForm (ActSeeSyl);
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\">"
                       "<ul class=\"LIST_LEFT\" style=\"margin:12px;\">");
 
    for (WhichSyllabus = (Syl_WhichSyllabus_t) 0;
 	WhichSyllabus < For_NUM_FORUM_SETS;
 	WhichSyllabus++)
      {
-      fprintf (Gbl.F.Out,"<li class=\"DAT LEFT_MIDDLE\""
+      fprintf (Gbl.F.Out,"<li class=\"DAT LM\""
 	                 " style=\"display:inline;\">"
                          "<label>"
                          "<input type=\"radio\" name=\"WhichSyllabus\" value=\"%u\"",
@@ -709,7 +709,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 	}
 
       /***** Code of the item *****/
-      Tbl_TD_Begin ("class=\"%s RIGHT_TOP COLOR%u\" style=\"width:%dpx;\"",
+      Tbl_TD_Begin ("class=\"%s RT COLOR%u\" style=\"width:%dpx;\"",
 		    StyleSyllabus[Level],Gbl.RowEvenOdd,
 		    Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)
@@ -718,7 +718,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
       Tbl_TD_End ();
 
       /***** Text of the item *****/
-      Tbl_TD_Begin ("colspan=\"%d\" class=\"%s LEFT_TOP COLOR%u\"",
+      Tbl_TD_Begin ("colspan=\"%d\" class=\"%s LT COLOR%u\"",
 		    LstItemsSyllabus.NumLevels - Level + 1,
 		    StyleSyllabus[Level],
 		    Gbl.RowEvenOdd);
@@ -846,7 +846,7 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
 		  LstItemsSyllabus.Lst[NumItem].Level - 1);
 
       /***** Code of the item *****/
-      fprintf (FileHTMLTmp,"<td class=\"%s RIGHT_TOP\" style=\"width:%dpx;\">",
+      fprintf (FileHTMLTmp,"<td class=\"%s RT\" style=\"width:%dpx;\">",
 	       StyleSyllabus[LstItemsSyllabus.Lst[NumItem].Level],
 	       LstItemsSyllabus.Lst[NumItem].Level * Syl_WIDTH_NUM_SYLLABUS);
       if (LstItemsSyllabus.Lst[NumItem].Level == 1)
@@ -857,7 +857,7 @@ static void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp)
       fprintf (FileHTMLTmp,"&nbsp;</td>");
 
       /***** Text of the item *****/
-      fprintf (FileHTMLTmp,"<td colspan=\"%d\" class=\"%s LEFT_TOP\">"
+      fprintf (FileHTMLTmp,"<td colspan=\"%d\" class=\"%s LT\">"
 			   "%s"
 			   "</td>",
 	       LstItemsSyllabus.NumLevels - LstItemsSyllabus.Lst[NumItem].Level + 1,
@@ -900,7 +900,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
      }
    else
      {
-      Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE COLOR%u\" style=\"width:%dpx;\"",
+      Tbl_TD_Begin ("class=\"%s LM COLOR%u\" style=\"width:%dpx;\"",
 		    StyleSyllabus[Level],Gbl.RowEvenOdd,
 		    Level * Syl_WIDTH_NUM_SYLLABUS);
       if (Level == 1)
@@ -911,7 +911,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
      }
 
    /***** Text of the item *****/
-   Tbl_TD_Begin ("colspan=\"%d\" class=\"LEFT_MIDDLE COLOR%u\"",
+   Tbl_TD_Begin ("colspan=\"%d\" class=\"LM COLOR%u\"",
 		 LstItemsSyllabus.NumLevels - Level + 1,Gbl.RowEvenOdd);
    Frm_StartForm (NewItem ? (Gbl.Crs.Info.Type == Inf_LECTURES ? ActInsIteSylLec :
 	                                                                ActInsIteSylPra) :

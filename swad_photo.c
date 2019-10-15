@@ -784,7 +784,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 	     "%s/%s_map.jpg",
              Cfg_PATH_PHOTO_TMP_PUBLIC,
 	     Gbl.UniqueNameEncrypted);
-   fprintf (Gbl.F.Out,"<div class=\"TIT CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"TIT CM\">"
                       "<img src=\"%s/%s_map.jpg\""
                       " usemap=\"#faces_map\""
                       " alt=\"%s\" title=\"%s\" />"
@@ -897,7 +897,7 @@ static void Pho_UpdatePhoto2 (void)
         NumPhoto < 3;
         NumPhoto++)
      {
-      Tbl_TD_Begin ("class=\"DAT CENTER_TOP\" style=\"width:33%%;\"");
+      Tbl_TD_Begin ("class=\"DAT CT\" style=\"width:33%%;\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/%s_paso%u.jpg\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:%upx; height:%upx;\" />"
@@ -1790,12 +1790,12 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"AvgType\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Average_type);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1854,12 +1854,12 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"PhotoSize\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Size_of_photos);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamOrderDegrees ();
@@ -1918,12 +1918,12 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Order\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    Frm_StartForm (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
@@ -2161,7 +2161,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 	      }
 
 	    /***** Show average photo of students belonging to this degree *****/
-	    Tbl_TD_Begin ("class=\"CLASSPHOTO CENTER_MIDDLE\"");
+	    Tbl_TD_Begin ("class=\"CLASSPHOTO CM\"");
 	    Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Usr_SEX_ALL,NumStds,NumStdsWithPhoto);
 	    Tbl_TD_End ();
 
@@ -2218,12 +2218,12 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       Tbl_TABLE_BeginCenterPadding (2);
       Tbl_TR_Begin (NULL);
 
-      Tbl_TH (1,1,"RIGHT_TOP",Txt_No_INDEX);
-      Tbl_TH (1,1,"CENTER_TOP",Txt_Degree);
+      Tbl_TH (1,1,"RT",Txt_No_INDEX);
+      Tbl_TH (1,1,"CT",Txt_Degree);
       for (Sex = (Usr_Sex_t) 0;
 	   Sex < Usr_NUM_SEXS;
 	   Sex++)
-	 Tbl_TH (1,1,"CENTER_TOP",Txt_SEX_PLURAL_Abc[Sex]);
+	 Tbl_TH (1,1,"CT",Txt_SEX_PLURAL_Abc[Sex]);
 
       Tbl_TR_End ();
 
@@ -2245,18 +2245,18 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Tbl_TR_Begin (NULL);
 
 	 /***** Show logo and name of this degree *****/
-	 Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"DAT RM COLOR%u\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%u",++NumDegsNotEmpty);
 	 Tbl_TD_End ();
 
 	 /***** Show logo and name of this degree *****/
-	 Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"DAT LM COLOR%u\"",Gbl.RowEvenOdd);
 	 if (SeeOrPrint == Pho_DEGREES_SEE)
 	    Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,
-					       "DAT","CENTER_TOP");
+					       "DAT","CT");
 	 else	// Pho_DEGREES_PRINT
 	   {
-	    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CENTER_TOP",true);
+	    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
 	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg.FullName);
 	   }
 	 Tbl_TD_End ();
@@ -2267,7 +2267,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	   {
 	    /***** Show average photo of students belonging to this degree *****/
 	    Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
-	    Tbl_TD_Begin ("class=\"CLASSPHOTO CENTER_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+	    Tbl_TD_Begin ("class=\"CLASSPHOTO CM COLOR%u\"",Gbl.RowEvenOdd);
 	    if (Gbl.Usrs.Listing.WithPhotos)
 	       Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto);
 	    else

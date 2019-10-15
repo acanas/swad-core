@@ -433,12 +433,12 @@ static void Lnk_ListLinksForEdition (void)
       Tbl_TD_End ();
 
       /* Link code */
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%ld",Lnk->LnkCod);
       Tbl_TD_End ();
 
       /* Link short name */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -451,7 +451,7 @@ static void Lnk_ListLinksForEdition (void)
       Tbl_TD_End ();
 
       /* Link full name */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -464,7 +464,7 @@ static void Lnk_ListLinksForEdition (void)
       Tbl_TD_End ();
 
       /* Link WWW */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgLnkWWW);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
@@ -755,7 +755,7 @@ static void Lnk_PutFormToCreateLink (void)
    Tbl_TD_Empty (1);
 
    /***** Link short name *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
@@ -764,7 +764,7 @@ static void Lnk_PutFormToCreateLink (void)
    Tbl_TD_End ();
 
    /***** Link full name *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
@@ -773,7 +773,7 @@ static void Lnk_PutFormToCreateLink (void)
    Tbl_TD_End ();
 
    /***** Link WWW *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
@@ -804,10 +804,10 @@ static void Lnk_PutHeadLinks (void)
    Tbl_TR_Begin (NULL);
 
    Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Short_name);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Full_name);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_WWW);
+   Tbl_TH (1,1,"RM",Txt_Code);
+   Tbl_TH (1,1,"LM",Txt_Short_name);
+   Tbl_TH (1,1,"LM",Txt_Full_name);
+   Tbl_TH (1,1,"LM",Txt_WWW);
 
    Tbl_TR_End ();
   }

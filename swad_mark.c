@@ -121,7 +121,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       Mrk_GetNumRowsHeaderAndFooter (&Marks);
 
       /***** Write the number of rows of header *****/
-      Tbl_TD_Begin ("class=\"%s RIGHT_TOP COLOR%u\"",
+      Tbl_TD_Begin ("class=\"%s RT COLOR%u\"",
 		    The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
 		    Gbl.RowEvenOdd);
       Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
@@ -141,7 +141,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       Tbl_TD_End ();
 
       /***** Write the number of rows of footer *****/
-      Tbl_TD_Begin ("class=\"%s RIGHT_TOP COLOR%u\"",
+      Tbl_TD_Begin ("class=\"%s RT COLOR%u\"",
 		    The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
 		    Gbl.RowEvenOdd);
       Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone

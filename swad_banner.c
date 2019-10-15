@@ -436,7 +436,7 @@ static void Ban_ListBannersForEdition (void)
       Tbl_TD_End ();
 
       /* Banner code */
-      Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",
+      Tbl_TD_Begin ("class=\"%s RM\"",
 		    Ban->Hidden ? "DAT_LIGHT" :
 				  "DAT");
       Lay_StartArticle (Anchor);
@@ -445,7 +445,7 @@ static void Ban_ListBannersForEdition (void)
       Tbl_TD_End ();
 
       /* Banner short name */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenBanSho);
       Ban_PutParamBanCodToEdit ();
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -457,7 +457,7 @@ static void Ban_ListBannersForEdition (void)
       Tbl_TD_End ();
 
       /* Banner full name */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenBanFul);
       Ban_PutParamBanCodToEdit ();
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -469,7 +469,7 @@ static void Ban_ListBannersForEdition (void)
       Tbl_TD_End ();
 
       /* Banner image */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgBanImg);
       Ban_PutParamBanCodToEdit ();
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\""
@@ -480,7 +480,7 @@ static void Ban_ListBannersForEdition (void)
       Tbl_TD_End ();
 
       /* Banner WWW */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgBanWWW);
       Ban_PutParamBanCodToEdit ();
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
@@ -877,7 +877,7 @@ static void Ban_PutFormToCreateBanner (void)
    Tbl_TD_Empty (1);
 
    /***** Banner short name *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
@@ -886,7 +886,7 @@ static void Ban_PutFormToCreateBanner (void)
    Tbl_TD_End ();
 
    /***** Banner full name *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
@@ -895,7 +895,7 @@ static void Ban_PutFormToCreateBanner (void)
    Tbl_TD_End ();
 
    /***** Banner image *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\""
                       " size=\"12\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
@@ -903,7 +903,7 @@ static void Ban_PutFormToCreateBanner (void)
    Tbl_TD_End ();
 
    /***** Banner WWW *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
@@ -936,11 +936,11 @@ static void Ban_PutHeadBanners (void)
 
    Tbl_TH (1,1,"BM",NULL);
    Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Short_name);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Full_name);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Image);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_WWW);
+   Tbl_TH (1,1,"RM",Txt_Code);
+   Tbl_TH (1,1,"LM",Txt_Short_name);
+   Tbl_TH (1,1,"LM",Txt_Full_name);
+   Tbl_TH (1,1,"LM",Txt_Image);
+   Tbl_TH (1,1,"LM",Txt_WWW);
 
    Tbl_TR_End ();
   }
@@ -1045,7 +1045,7 @@ void Ban_WriteMenuWithBanners (void)
 	NumBan++)
      {
       /* Write data of this banner */
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"CM\">");
       Frm_StartForm (ActClkBan);
       Ban_PutParamBanCod (Gbl.Banners.Lst[NumBan].BanCod);
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);

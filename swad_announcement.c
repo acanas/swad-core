@@ -234,7 +234,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
    /***** Show the announcements *****/
    if (NumAnnouncements)
      {
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"CM\">");
 
       for (NumAnn = 0;
 	   NumAnn < NumAnnouncements;
@@ -279,8 +279,8 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    extern const char *Txt_Do_not_show_again;
    static const char *ContainerClass[Ann_NUM_STATUS] =
      {
-      "NOTICE_CONTAINER_ACTIVE",	// Ann_ACTIVE_ANNOUNCEMENT
-      "NOTICE_CONTAINER_OBSOLETE",	// Ann_OBSOLETE_ANNOUNCEMENT
+      "NOTICE_CONTAINER_ACTIVE NOTICE_CONTAINER_WIDE",		// Ann_ACTIVE_ANNOUNCEMENT
+      "NOTICE_CONTAINER_OBSOLETE NOTICE_CONTAINER_WIDE",	// Ann_OBSOLETE_ANNOUNCEMENT
      };
    static const char *SubjectClass[Ann_NUM_STATUS] =
      {
@@ -294,8 +294,8 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
      };
    static const char *UsersClass[Ann_NUM_STATUS] =
      {
-      "NOTICE_AUTHOR_ACTIVE",		// Ann_ACTIVE_ANNOUNCEMENT
-      "NOTICE_AUTHOR_OBSOLETE",		// Ann_OBSOLETE_ANNOUNCEMENT
+      "NOTICE_USERS_ACTIVE",		// Ann_ACTIVE_ANNOUNCEMENT
+      "NOTICE_USERS_OBSOLETE",		// Ann_OBSOLETE_ANNOUNCEMENT
      };
    Rol_Role_t Role;
    bool SomeRolesAreSelected;
@@ -303,7 +303,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    Gbl.Announcements.AnnCod = AnnCod;	// Parameter for forms
 
    /***** Start yellow note *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"width:500px;\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	    ContainerClass[Status]);
 
    if (ICanEdit)
@@ -332,13 +332,12 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
             ContentClass[Status],Content);
 
    /***** Write form *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"margin:12px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"NOTICE_USERS %s\">",UsersClass[Status]);
 
    if (ShowAllAnnouncements)
      {
       /* Users' roles who can view this announcement */
-      fprintf (Gbl.F.Out,"<p class=\"%s\">%s:",
-	       UsersClass[Status],Txt_Users);
+      fprintf (Gbl.F.Out,"%s:",Txt_Users);
       for (Role = Rol_UNK, SomeRolesAreSelected = false;
 	   Role <= Rol_TCH;
 	   Role++)
@@ -415,11 +414,11 @@ void Ann_ShowFormAnnouncement (void)
    /***** Users' roles who can view the announcement *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s: ",Txt_Users);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"DAT LT\"");
    Rol_WriteSelectorRoles (1 << Rol_UNK |
                            1 << Rol_GST |
                            1 << Rol_STD |
@@ -453,12 +452,12 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:</label>",
 	    Field,The_ClassFormInBox[Gbl.Prefs.Theme],Label);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
    fprintf (Gbl.F.Out,"<textarea id=\"%s\" name=\"%s\""
                       " cols=\"75\" rows=\"%u\">"
                       "</textarea>",

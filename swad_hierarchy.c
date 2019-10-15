@@ -105,12 +105,12 @@ void Hie_WriteMenuHierarchy (void)
           with all the countries *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"cty\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Country);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    Cty_WriteSelectorOfCountry ();
    Tbl_TD_End ();
 
@@ -122,12 +122,12 @@ void Hie_WriteMenuHierarchy (void)
              with the institutions of selected country *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"RM\"");
       fprintf (Gbl.F.Out,"<label for=\"ins\" class=\"%s\">%s:</label>",
                The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Institution);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LM\"");
       Ins_WriteSelectorOfInstitution ();
       Tbl_TD_End ();
 
@@ -139,12 +139,12 @@ void Hie_WriteMenuHierarchy (void)
                 with all the centres of selected institution *****/
          Tbl_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"RM\"");
          fprintf (Gbl.F.Out,"<label for=\"ctr\" class=\"%s\">%s:</label>",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Centre);
          Tbl_TD_End ();
 
-         Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+         Tbl_TD_Begin ("class=\"LM\"");
          Ctr_WriteSelectorOfCentre ();
          Tbl_TD_End ();
 
@@ -156,12 +156,12 @@ void Hie_WriteMenuHierarchy (void)
                    with all the degrees of selected centre *****/
             Tbl_TR_Begin (NULL);
 
-	    Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+	    Tbl_TD_Begin ("class=\"RM\"");
 	    fprintf (Gbl.F.Out,"<label for=\"deg\" class=\"%s\">%s:</label>",
                      The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Degree);
 	    Tbl_TD_End ();
 
-            Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+            Tbl_TD_Begin ("class=\"LM\"");
             Deg_WriteSelectorOfDegree ();
             Tbl_TD_End ();
 
@@ -173,12 +173,12 @@ void Hie_WriteMenuHierarchy (void)
 		      with all the courses of selected degree *****/
 	       Tbl_TR_Begin (NULL);
 
-	       Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+	       Tbl_TD_Begin ("class=\"RM\"");
 	       fprintf (Gbl.F.Out,"<label for=\"crs\" class=\"%s\">%s:</label>",
 			The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Course);
 	       Tbl_TD_End ();
 
-	       Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+	       Tbl_TD_Begin ("class=\"LM\"");
 	       Crs_WriteSelectorOfCourse ();
 	       Tbl_TD_End ();
 

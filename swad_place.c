@@ -119,7 +119,7 @@ void Plc_SeePlaces (void)
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
 	   Order++)
 	{
-	 Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
+	 Tbl_TH_Begin (1,1,"LM");
 
 	 Frm_StartForm (ActSeePlc);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
@@ -144,11 +144,11 @@ void Plc_SeePlaces (void)
 	 /* Write data of this place */
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"%s",Gbl.Plcs.Lst[NumPlc].FullName);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%u",Gbl.Plcs.Lst[NumPlc].NumCtrs);
 	 Tbl_TD_End ();
 
@@ -167,11 +167,11 @@ void Plc_SeePlaces (void)
       NumCtrsInOtherPlcs = Ctr_GetNumCtrsInPlc (0);
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%s",Txt_Other_places);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumCtrsInOtherPlcs);
       Tbl_TD_End ();
 
@@ -181,11 +181,11 @@ void Plc_SeePlaces (void)
       /***** Write centres (of the current institution) with no place *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%s",Txt_Place_unspecified);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
 	                      NumCtrsWithPlc);
       Tbl_TD_End ();
@@ -544,12 +544,12 @@ static void Plc_ListPlacesForEdition (void)
       Tbl_TD_End ();
 
       /* Place code */
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%ld",Plc->PlcCod);
       Tbl_TD_End ();
 
       /* Place short name */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlcSho);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -561,7 +561,7 @@ static void Plc_ListPlacesForEdition (void)
       Tbl_TD_End ();
 
       /* Place full name */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlcFul);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -573,7 +573,7 @@ static void Plc_ListPlacesForEdition (void)
       Tbl_TD_End ();
 
       /* Number of centres */
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Plc->NumCtrs);
       Tbl_TD_End ();
 
@@ -821,7 +821,7 @@ static void Plc_PutFormToCreatePlace (void)
    Tbl_TD_End ();
 
    /***** Place short name *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
@@ -830,7 +830,7 @@ static void Plc_PutFormToCreatePlace (void)
    Tbl_TD_End ();
 
    /***** Place full name *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
@@ -839,7 +839,7 @@ static void Plc_PutFormToCreatePlace (void)
    Tbl_TD_End ();
 
    /***** Number of centres *****/
-   Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"0");
    Tbl_TD_End ();
 
@@ -866,10 +866,10 @@ static void Plc_PutHeadPlaces (void)
    Tbl_TR_Begin (NULL);
 
    Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Short_name);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Full_name);
-   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Centres);
+   Tbl_TH (1,1,"RM",Txt_Code);
+   Tbl_TH (1,1,"LM",Txt_Short_name);
+   Tbl_TH (1,1,"LM",Txt_Full_name);
+   Tbl_TH (1,1,"RM",Txt_Centres);
 
    Tbl_TR_End ();
   }

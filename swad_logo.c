@@ -277,7 +277,7 @@ void Log_RequestLogo (Hie_Level_t Scope)
    if (Fil_CheckIfPathExists (PathLogo))
      {
       /***** Form to remove photo *****/
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"CM\">");
       Lay_PutContextualLinkIconText (ActionRem,NULL,NULL,
 				     "trash.svg",
 				     Txt_Remove_logo);

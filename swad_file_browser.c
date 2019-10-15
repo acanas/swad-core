@@ -3187,7 +3187,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	    Tbl_TR_Begin (NULL);
 	    Brw_ShowDataOwnerAsgWrk (&Gbl.Usrs.Other.UsrDat);
 
-	    Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+	    Tbl_TD_Begin ("class=\"LT\"");
 
 	    /***** Show the tree with the assignments *****/
 	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;
@@ -3370,7 +3370,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    Tbl_TD_End ();
 
    /***** Start form to send a message to this user *****/
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
 
    fprintf (Gbl.F.Out,"<div class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
 
@@ -4101,7 +4101,7 @@ static void Brw_ShowAndStoreSizeOfFileTree (void)
    extern const char *Txt_of_PART_OF_A_TOTAL;
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
-   fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"DAT CM\">");
 
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
      {
@@ -5594,7 +5594,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /***** Indentation depending on level, icon, and file/folder name *****/
    /* Start column */
-   Tbl_TD_Begin ("class=\"NO_BR LEFT_TOP COLOR%u\" style=\"width:99%%;\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"NO_BR LT COLOR%u\" style=\"width:99%%;\"",Gbl.RowEvenOdd);
 
    Tbl_TABLE_Begin (NULL);
    Tbl_TR_Begin (NULL);
@@ -5823,7 +5823,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                                   const char *FileBrowserId,const char *RowId,
                                                   Brw_IconTree_t IconThisRow)
   {
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    Tbl_TABLE_Begin (NULL);
    Tbl_TR_Begin (NULL);
    Brw_IndentDependingOnLevel (Level);
@@ -6001,7 +6001,7 @@ static void Brw_PutIconFolder (unsigned Level,
    bool ICanCreate;
 
    /***** Start cell *****/
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\" style=\"width:%upx;\"",Level * 20);
+   Tbl_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",Level * 20);
 
    /***** Put icon to create a new file or folder *****/
    if ((ICanCreate = Brw_CheckIfICanCreateIntoFolder (Level)))	// I can create a new file or folder
@@ -6244,10 +6244,10 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
      {
       /***** Start cell *****/
       if (Gbl.FileBrowser.Clipboard.IsThisFile)
-	 Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE LIGHT_GREEN\" style=\"width:99%%;\"",
+	 Tbl_TD_Begin ("class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
       else
-	 Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE\" style=\"width:99%%;\"",
+	 Tbl_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
 
       fprintf (Gbl.F.Out,"<div class=\"FILENAME\">");
@@ -6296,10 +6296,10 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
    else	// File or link
      {
       if (Gbl.FileBrowser.Clipboard.IsThisFile)
-	 Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE LIGHT_GREEN\" style=\"width:99%%;\"",
+	 Tbl_TD_Begin ("class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
       else
-	 Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE\" style=\"width:99%%;\"",
+	 Tbl_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
 
       fprintf (Gbl.F.Out,"&nbsp;"
@@ -6388,7 +6388,7 @@ static void Brw_WriteDatesAssignment (void)
    extern const char *Txt_unknown_assignment;
    static unsigned UniqueId = 0;
 
-   Tbl_TD_Begin ("colspan=\"2\" class=\"%s RIGHT_MIDDLE COLOR%u\"",
+   Tbl_TD_Begin ("colspan=\"2\" class=\"%s RM COLOR%u\"",
 		 Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
 					    "ASG_LST_DATE_RED",
 		 Gbl.RowEvenOdd);
@@ -6439,13 +6439,13 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
       Fil_WriteFileSizeBrief ((double) FileMetadata->Size,FileSizeStr);
    else
       FileSizeStr[0] = '\0';
-   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE COLOR%u\"",
+   Tbl_TD_Begin ("class=\"%s RM COLOR%u\"",
                  Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"&nbsp;%s",FileSizeStr);
    Tbl_TD_End ();
 
    /***** Write the date *****/
-   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE COLOR%u\"",
+   Tbl_TD_Begin ("class=\"%s RM COLOR%u\"",
                  Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"&nbsp;");
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FILE ||
@@ -8515,14 +8515,14 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    Tbl_TABLE_Begin (NULL);
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"NewLinkURL\" class=\"%s\">"
 	              "%s:&nbsp;"
 	              "</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_URL);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"url\""
                       " id=\"NewLinkURL\" name=\"NewLinkURL\""
                       " size=\"30\" maxlength=\"%u\" value=\"\""
@@ -8535,14 +8535,14 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    /***** Link name *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"NewLinkName\" class=\"%s\">"
 	              "%s&nbsp;(%s):&nbsp;"
 	              "</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\""
                       " id=\"NewLinkName\" name=\"NewLinkName\""
                       " size=\"30\" maxlength=\"%u\" value=\"\" />",
@@ -9508,7 +9508,7 @@ void Brw_ShowFileMetadata (void)
 	 /***** Link to download the file *****/
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CENTER_MIDDLE\"");
+	 Tbl_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
 	 Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 	 Tbl_TD_End ();
 
@@ -9517,11 +9517,11 @@ void Brw_ShowFileMetadata (void)
 	 /***** Filename *****/
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_Filename);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT LM\"");
 	 Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 	 Tbl_TD_End ();
 
@@ -9530,11 +9530,11 @@ void Brw_ShowFileMetadata (void)
 	 /***** Publisher's data *****/
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_Uploaded_by);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT LM\"");
 	 if (FileHasPublisher)
 	   {
 	    /* Show photo */
@@ -9562,11 +9562,11 @@ void Brw_ShowFileMetadata (void)
 	 Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_File_size);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"%s",FileSizeStr);
 	 Tbl_TD_End ();
 
@@ -9575,11 +9575,11 @@ void Brw_ShowFileMetadata (void)
 	 /***** Write the date *****/
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_Date_of_creation);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("id=\"filedate\" class=\"DAT LEFT_MIDDLE\"");
+	 Tbl_TD_Begin ("id=\"filedate\" class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 		            "writeLocalDateHMSFromUTC('filedate',%ld,"
 		            "%u,',&nbsp;','%s',true,true,0x7);"
@@ -9593,14 +9593,14 @@ void Brw_ShowFileMetadata (void)
 	 /***** Private or public? *****/
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"RM\"");
 	 fprintf (Gbl.F.Out,"<label for=\"PublicFile\" class=\"%s\">"
 			    "%s:"
 			    "</label>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Availability);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT LM\"");
 	 if (ICanChangePublic)	// I can change file to public
 	   {
 	    fprintf (Gbl.F.Out,"<select id=\"PublicFile\" name=\"PublicFile\">");
@@ -9628,12 +9628,12 @@ void Brw_ShowFileMetadata (void)
 	 /***** License *****/
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"RM\"");
 	 fprintf (Gbl.F.Out,"<label for=\"License\" class=\"%s\">%s:</label>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_License);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT LM\"");
 	 if (ICanEdit)	// I can edit file properties
 	   {
 	    fprintf (Gbl.F.Out,"<select id=\"License\" name=\"License\">");
@@ -9660,11 +9660,11 @@ void Brw_ShowFileMetadata (void)
 	   {
 	    Tbl_TR_Begin (NULL);
 
-	    Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"%s:",Txt_My_views);
 	    Tbl_TD_End ();
 
-	    Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	    Tbl_TD_Begin ("class=\"DAT LM\"");
 	    fprintf (Gbl.F.Out,"%u",FileMetadata.NumMyViews);
 	    Tbl_TD_End ();
 
@@ -9674,11 +9674,11 @@ void Brw_ShowFileMetadata (void)
 	 /***** Write number of identificated views *****/
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_Identified_views);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"%u (%u %s)",
 		  FileMetadata.NumViewsFromLoggedUsrs,
 		  FileMetadata.NumLoggedUsrs,
@@ -9691,11 +9691,11 @@ void Brw_ShowFileMetadata (void)
 	 /***** Write number of public views *****/
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_Public_views);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"%u",FileMetadata.NumPublicViews);
 	 Tbl_TD_End ();
 
@@ -11814,12 +11814,12 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
       Tbl_TR_Begin (NULL);
 
       Tbl_TH (1,1,"BM",NULL);
-      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Institution);
-      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Centre);
-      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Degree);
-      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Course);
-      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_File_zone);
-      Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Document);
+      Tbl_TH (1,1,"LM",Txt_Institution);
+      Tbl_TH (1,1,"LM",Txt_Centre);
+      Tbl_TH (1,1,"LM",Txt_Degree);
+      Tbl_TH (1,1,"LM",Txt_Course);
+      Tbl_TH (1,1,"LM",Txt_File_zone);
+      Tbl_TH (1,1,"LM",Txt_Document);
 
       Tbl_TR_End ();
 
@@ -11839,7 +11839,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
       Tbl_TR_Begin (NULL);
 
       /* Number of documents not hidden found */
-      Tbl_TH_Begin (1,7,"CENTER_MIDDLE");
+      Tbl_TH_Begin (1,7,"CM");
       fprintf (Gbl.F.Out,"(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
       if (NumDocsHidden == 1)
@@ -11936,12 +11936,12 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       Tbl_TR_Begin (NULL);
 
       /***** Write number of document in this search *****/
-      Tbl_TD_Begin ("class=\"DAT RIGHT_TOP %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT RT %s\"",BgColor);
       fprintf (Gbl.F.Out,"%lu",++(*NumDocsNotHidden));
       Tbl_TD_End ();
 
       /***** Write institution logo, institution short name *****/
-      Tbl_TD_Begin ("class=\"DAT LEFT_TOP %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT LT %s\"",BgColor);
       if (InsCod > 0)
 	{
          Frm_StartFormGoTo (ActSeeInsInf);
@@ -11950,14 +11950,14 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
                    Txt_Go_to_X,
 		   InsShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-         Log_DrawLogo (Hie_INS,InsCod,InsShortName,20,"CENTER_TOP",true);
+         Log_DrawLogo (Hie_INS,InsCod,InsShortName,20,"CT",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsShortName);
 	 Frm_EndForm ();
 	}
       Tbl_TD_End ();
 
       /***** Write centre logo, centre short name *****/
-      Tbl_TD_Begin ("class=\"DAT LEFT_TOP %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT LT %s\"",BgColor);
       if (CtrCod > 0)
 	{
          Frm_StartFormGoTo (ActSeeCtrInf);
@@ -11966,14 +11966,14 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
                    Txt_Go_to_X,
 		   CtrShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-         Log_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"CENTER_TOP",true);
+         Log_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"CT",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrShortName);
 	 Frm_EndForm ();
 	}
       Tbl_TD_End ();
 
       /***** Write degree logo, degree short name *****/
-      Tbl_TD_Begin ("class=\"DAT LEFT_TOP %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT LT %s\"",BgColor);
       if (DegCod > 0)
 	{
          Frm_StartFormGoTo (ActSeeDegInf);
@@ -11982,14 +11982,14 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
                    Txt_Go_to_X,
 		   DegShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-         Log_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"CENTER_TOP",true);
+         Log_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"CT",true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegShortName);
 	 Frm_EndForm ();
 	}
       Tbl_TD_End ();
 
       /***** Write course short name *****/
-      Tbl_TD_Begin ("class=\"DAT LEFT_TOP %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT LT %s\"",BgColor);
       if (CrsCod > 0)
 	{
 	 Frm_StartFormGoTo (ActSeeCrsInf);
@@ -12048,7 +12048,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	    break;
 	}
 
-      Tbl_TD_Begin ("class=\"DAT LEFT_TOP %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT LT %s\"",BgColor);
       fprintf (Gbl.F.Out,"%s",Title);
       Tbl_TD_End ();
 
@@ -12058,7 +12058,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
                              FileNameToShow);
 
       /***** Write file name using path (row[1]) *****/
-      Tbl_TD_Begin ("class=\"DAT_N LEFT_TOP %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"DAT_N LT %s\"",BgColor);
 
       /* Start form */
       Action = Brw_ActReqDatFile[Brw_FileBrowserForFoundDocs[FileMetadata.FileBrowser]];

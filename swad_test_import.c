@@ -509,8 +509,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Print XML tree *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"padding-bottom:20px;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\" style=\"padding-bottom:20px;\">"
 	              "<textarea title=\"%s\" cols=\"60\" rows=\"5\""
 	              " spellcheck=\"false\" readonly>",
 	    Txt_XML_file_content);
@@ -962,11 +961,11 @@ static void TsI_WriteHeadingListImportedQst (void)
 
    Tbl_TH_Empty (1);
 
-   Tbl_TH (1,1,"CENTER_TOP",Txt_No_INDEX);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Tags);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Type);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Shuffle);
-   Tbl_TH (1,1,"LEFT_TOP",Txt_Question);
+   Tbl_TH (1,1,"CT",Txt_No_INDEX);
+   Tbl_TH (1,1,"CT",Txt_Tags);
+   Tbl_TH (1,1,"CT",Txt_Type);
+   Tbl_TH (1,1,"CT",Txt_Shuffle);
+   Tbl_TH (1,1,"LT",Txt_Question);
 
    Tbl_TR_End ();
   }
@@ -1007,7 +1006,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    Tbl_TR_Begin (NULL);
 
    /***** Put icon to indicate that a question does not exist in database *****/
-   Tbl_TD_Begin ("class=\"BT%u CENTER_TOP\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"BT%u CT\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_16x16\" />",
@@ -1021,13 +1020,13 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    Tbl_TD_End ();
 
    /***** Write number of question *****/
-   Tbl_TD_Begin ("class=\"%s CENTER_TOP COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"%s CT COLOR%u\"",ClassData,Gbl.RowEvenOdd);
    if (!QuestionExists)
       fprintf (Gbl.F.Out,"%u&nbsp;",++NumNonExistingQst);
    Tbl_TD_End ();
 
    /***** Write the question tags *****/
-   Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Gbl.Test.Tags.Num)
      {
       /***** Write the tags *****/
@@ -1038,11 +1037,11 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 	{
          Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s LEFT_TOP\"",ClassData);
+	 Tbl_TD_Begin ("class=\"%s LT\"",ClassData);
 	 fprintf (Gbl.F.Out,"&nbsp;&#8226;&nbsp;");
 	 Tbl_TD_End ();
 
-         Tbl_TD_Begin ("class=\"%s LEFT_TOP\"",ClassData);
+         Tbl_TD_Begin ("class=\"%s LT\"",ClassData);
          fprintf (Gbl.F.Out,"%s",Gbl.Test.Tags.Txt[NumTag]);
          Tbl_TD_End ();
 
@@ -1057,12 +1056,12 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    Tbl_TD_End ();
 
    /***** Write the question type *****/
-   Tbl_TD_Begin ("class=\"%s CENTER_TOP COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"%s CT COLOR%u\"",ClassData,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
    Tbl_TD_End ();
 
    /***** Write if shuffle is enabled *****/
-   Tbl_TD_Begin ("class=\"CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
        Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
       /* Put an icon that indicates whether shuffle is enabled or not */
@@ -1078,7 +1077,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
    Tbl_TD_End ();
 
    /***** Write the stem and the answers *****/
-   Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    Tst_WriteQstStem (Stem,ClassStem);
    Tst_WriteQstFeedback (Feedback,"TEST_EDI_LIGHT");
    switch (Gbl.Test.AnswerType)
@@ -1147,12 +1146,12 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             Tbl_TD_End ();
 
             /* Write the number of option */
-            Tbl_TD_Begin ("class=\"%s LEFT_TOP\"",ClassData);
+            Tbl_TD_Begin ("class=\"%s LT\"",ClassData);
             fprintf (Gbl.F.Out,"%c)&nbsp;",'a' + (char) NumOpt);
             Tbl_TD_End ();
 
             /* Write the text and the feedback of the answer */
-            Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+            Tbl_TD_Begin ("class=\"LT\"");
             fprintf (Gbl.F.Out,"<div class=\"%s\">"
         	               "%s"
         	               "</div>",

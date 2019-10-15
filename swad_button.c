@@ -98,7 +98,7 @@ void Btn_PutButtonInline (Btn_Button_t Button,const char *TxtButton)
 
 void Btn_PutCreateButton (const char *TxtButton)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\">"
                       "<button type=\"submit\" class=\"BT_SUBMIT BT_CREATE\">"
                       "%s"
                       "</button>"
@@ -116,7 +116,7 @@ void Btn_PutCreateButtonInline (const char *TxtButton)
 
 void Btn_PutConfirmButton (const char *TxtButton)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\">"
                       "<button type=\"submit\" class=\"BT_SUBMIT BT_CONFIRM\">"
                       "%s"
                       "</button>"
@@ -134,7 +134,7 @@ void Btn_PutConfirmButtonInline (const char *TxtButton)
 
 void Btn_PutRemoveButton (const char *TxtButton)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\">"
                       "<button type=\"submit\" class=\"BT_SUBMIT BT_REMOVE\">"
                       "%s"
                       "</button>"
@@ -152,7 +152,7 @@ void Btn_PutRemoveButtonInline (const char *TxtButton)
 /*
 void Btn_PutCloseTabButton (const char *TxtButton)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\">"
                       "<button type=\"submit\" class=\"BT_SUBMIT BT_REMOVE\""
                       " onclick=\"window.close();\">"
                       "%s"

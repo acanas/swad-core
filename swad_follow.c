@@ -926,7 +926,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    Tbl_TD_End ();
 
    /***** Icon to follow *****/
-   Tbl_TD_Begin ("class=\"CON_ICON_FOLLOW RIGHT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"CON_ICON_FOLLOW RM COLOR%u\"",Gbl.RowEvenOdd);
    if (!Gbl.Usrs.Me.Logged ||	// Not logged
        ItsMe)			// It's me
       /* Inactive icon to follow/unfollow */

@@ -411,7 +411,7 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
       Frm_SetUniqueId (IdAlert);
       fprintf (Gbl.F.Out," id=\"%s\"",IdAlert);
      }
-   fprintf (Gbl.F.Out," class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out," class=\"CM\">"
 	              "<div class=\"ALERT\">");
 
    /***** Icon to close the alert *****/

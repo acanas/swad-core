@@ -232,7 +232,7 @@ static void TT_ShowTimeTableGrpsSelected (void)
    extern const char *Txt_Groups_OF_A_USER;
    extern const char *Txt_All_groups;
 
-   fprintf (Gbl.F.Out,"<div class=\"CLASSPHOTO_TITLE CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"CLASSPHOTO_TITLE CM\">");
    switch (Gbl.Crs.Grps.WhichGrps)
      {
       case Grp_MY_GROUPS:
@@ -1134,8 +1134,7 @@ static void TT_DrawTimeTable (void)
    /***** Row with day names *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG RIGHT_MIDDLE\""
-		 " style=\"width:%u%%;\"",
+   Tbl_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG RM\" style=\"width:%u%%;\"",
 		 TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
    fprintf (Gbl.F.Out,"%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
    Tbl_TD_End ();
@@ -1144,8 +1143,7 @@ static void TT_DrawTimeTable (void)
    TT_TimeTableDrawDaysCells ();
    TT_DrawCellAlignTimeTable ();
 
-   Tbl_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG LEFT_MIDDLE\""
-		 " style=\"width:%u%%;\"",
+   Tbl_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG LM\" style=\"width:%u%%;\"",
 		 TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
    fprintf (Gbl.F.Out,"%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
    Tbl_TD_End ();
@@ -1171,7 +1169,7 @@ static void TT_DrawTimeTable (void)
 	 TT_TimeTableDrawHourCell (Gbl.TimeTable.Config.Range.Hours.Start +
 	                           (Interval + 2) / Gbl.TimeTable.Config.IntervalsPerHour,
 	                           Min,
-	                           "RIGHT_MIDDLE");
+	                           "RM");
 
       /* Empty column used to adjust height */
       TT_DrawCellAlignTimeTable ();
@@ -1241,7 +1239,7 @@ static void TT_DrawTimeTable (void)
 	 TT_TimeTableDrawHourCell (Gbl.TimeTable.Config.Range.Hours.Start +
 	                           (Interval + 2) / Gbl.TimeTable.Config.IntervalsPerHour,
 	                           Min,
-	                           "LEFT_MIDDLE");
+	                           "LM");
 
       Tbl_TR_End ();
      }
@@ -1313,7 +1311,7 @@ static void TT_TimeTableDrawDaysCells (void)
 	DayColumn++)
      {
       Weekday = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
-      Tbl_TD_Begin ("colspan=\"%u\" class=\"%s CENTER_MIDDLE\""
+      Tbl_TD_Begin ("colspan=\"%u\" class=\"%s CM\""
 		    " style=\"width:%u%%;\"",
 		    TT_NUM_MINICOLUMNS_PER_DAY,
 		    Weekday == 6 ? "TT_SUNDAY" :	// Sunday drawn in red
@@ -1517,7 +1515,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
      }
    else
      {
-      if (asprintf (&ClassStr,"%s CENTER_MIDDLE DAT_SMALL",TimeTableClasses[ClassType]) < 0)
+      if (asprintf (&ClassStr,"%s CM DAT_SMALL",TimeTableClasses[ClassType]) < 0)
 	 Lay_NotEnoughMemoryExit ();
      }
 

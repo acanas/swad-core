@@ -121,7 +121,7 @@ void Hld_SeeHolidays (void)
 	      Order <= Hld_ORDER_BY_START_DATE;
 	      Order++)
 	   {
-	    Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
+	    Tbl_TH_Begin (1,1,"LM");
 
 	    Frm_StartForm (ActSeeHld);
 	    Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
@@ -137,11 +137,11 @@ void Hld_SeeHolidays (void)
 	    Tbl_TH_End ();
 	   }
 
-	 Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
+	 Tbl_TH_Begin (1,1,"LM");
 	 fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",Txt_End_date);
 	 Tbl_TH_End ();
 
-	 Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Holiday);
+	 Tbl_TH (1,1,"LM",Txt_Holiday);
 
 	 Tbl_TR_End ();
 
@@ -153,18 +153,18 @@ void Hld_SeeHolidays (void)
 	    /* Write data of this holiday */
 	    Tbl_TR_Begin (NULL);
 
-	    Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	    Tbl_TD_Begin ("class=\"DAT LM\"");
 	    fprintf (Gbl.F.Out,"%s",
 		     Gbl.Hlds.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
 							Gbl.Hlds.Lst[NumHld].PlaceFullName);
 	    Tbl_TD_End ();
 
 	    Dat_ConvDateToDateStr (&Gbl.Hlds.Lst[NumHld].StartDate,StrDate);
-	    Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	    Tbl_TD_Begin ("class=\"DAT LM\"");
 	    fprintf (Gbl.F.Out,"&nbsp;%s",StrDate);
 	    Tbl_TD_End ();
 
-	    Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	    Tbl_TD_Begin ("class=\"DAT LM\"");
 	    fprintf (Gbl.F.Out,"&nbsp;");
 	    switch (Gbl.Hlds.Lst[NumHld].HldTyp)
 	      {
@@ -177,7 +177,7 @@ void Hld_SeeHolidays (void)
 	      }
 	    Tbl_TD_End ();
 
-	    Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	    Tbl_TD_Begin ("class=\"DAT LM\"");
 	    fprintf (Gbl.F.Out,"&nbsp;%s",Gbl.Hlds.Lst[NumHld].Name);
 	    Tbl_TD_End ();
 
@@ -577,12 +577,12 @@ static void Hld_ListHolidaysForEdition (void)
       Tbl_TD_End ();
 
       /* Holiday code */
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%ld&nbsp;",Hld->HldCod);
       Tbl_TD_End ();
 
       /* Holiday place */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldPlc);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\""
@@ -605,7 +605,7 @@ static void Hld_ListHolidaysForEdition (void)
       Tbl_TD_End ();
 
       /* Holiday type */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldTyp);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<select name=\"HldTyp\" style=\"width:62px;\""
@@ -624,7 +624,7 @@ static void Hld_ListHolidaysForEdition (void)
       Tbl_TD_End ();
 
       /* Holiday date / Non school period start date */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldStrDat);
       Hld_PutParamHldCod (Hld->HldCod);
       Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
@@ -636,7 +636,7 @@ static void Hld_ListHolidaysForEdition (void)
       Tbl_TD_End ();
 
       /* Non school period end date */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldEndDat);
       Hld_PutParamHldCod (Hld->HldCod);
       Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
@@ -648,7 +648,7 @@ static void Hld_ListHolidaysForEdition (void)
       Tbl_TD_End ();
 
       /* Holiday name */
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenHld);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
@@ -976,18 +976,18 @@ static void Hld_PutFormToCreateHoliday (void)
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Place);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Type);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_START_END_TIME[Dat_START_TIME]);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_START_END_TIME[Dat_END_TIME]);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Holiday);
+   Tbl_TH (1,1,"LM",Txt_Place);
+   Tbl_TH (1,1,"LM",Txt_Type);
+   Tbl_TH (1,1,"LM",Txt_START_END_TIME[Dat_START_TIME]);
+   Tbl_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME]);
+   Tbl_TH (1,1,"LM",Txt_Holiday);
 
    Tbl_TR_End ();
 
    Tbl_TR_Begin (NULL);
 
    /***** Holiday place *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\">"
                       "<option value=\"-1\"");
    if (Hld_EditingHld->PlcCod <= 0)
@@ -1005,7 +1005,7 @@ static void Hld_PutFormToCreateHoliday (void)
    Tbl_TD_End ();
 
    /***** Holiday type *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<select name=\"HldTyp\" style=\"width:62px;\">");
    for (HolidayType = (Hld_HolidayType_t) 0;
 	HolidayType < Hld_NUM_TYPES_HOLIDAY;
@@ -1019,7 +1019,7 @@ static void Hld_PutFormToCreateHoliday (void)
    Tbl_TD_End ();
 
    /***** Holiday date / Non school period start date *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
 	              Gbl.Now.Date.Year + 1,
 	              "Start",
@@ -1028,7 +1028,7 @@ static void Hld_PutFormToCreateHoliday (void)
    Tbl_TD_End ();
 
    /***** Non school period end date *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    Dat_WriteFormDate (Gbl.Now.Date.Year - 1,
 	              Gbl.Now.Date.Year + 1,
 	              "End",
@@ -1037,7 +1037,7 @@ static void Hld_PutFormToCreateHoliday (void)
    Tbl_TD_End ();
 
    /***** Holiday name *****/
-   Tbl_TD_Begin ("class=\"CENTER_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
@@ -1070,12 +1070,12 @@ static void Hld_PutHeadHolidays (void)
    Tbl_TR_Begin (NULL);
 
    Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Place);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Type);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_START_END_TIME[Dat_START_TIME]);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_START_END_TIME[Dat_END_TIME]);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Holiday);
+   Tbl_TH (1,1,"RM",Txt_Code);
+   Tbl_TH (1,1,"LM",Txt_Place);
+   Tbl_TH (1,1,"LM",Txt_Type);
+   Tbl_TH (1,1,"LM",Txt_START_END_TIME[Dat_START_TIME]);
+   Tbl_TH (1,1,"LM",Txt_START_END_TIME[Dat_END_TIME]);
+   Tbl_TH (1,1,"LM",Txt_Holiday);
 
    Tbl_TR_End ();
   }

@@ -158,12 +158,12 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    Tbl_TR_Begin (NULL);
 
    /***** Select visibility *****/
-   Tbl_TD_Begin ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",TxtLabel);
    Tbl_TD_End ();
 
    /***** Form with list of options *****/
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
    if (Action != ActUnk)
       Frm_StartFormAnchor (Action,Pri_PRIVACY_ID);
    fprintf (Gbl.F.Out,"<ul class=\"PRI_LIST LIST_LEFT\">");

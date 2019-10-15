@@ -272,7 +272,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
       if (NumNick == 1)
 	{
 	 /* The first nickname is the current one */
-	 Tbl_TD_Begin ("class=\"REC_C1_BOT RIGHT_TOP\"");
+	 Tbl_TD_Begin ("class=\"REC_C1_BOT RT\"");
 	 fprintf (Gbl.F.Out,"<label for=\"Nick\" class=\"%s\">"
 			    "%s:"
 			    "</label>",
@@ -280,13 +280,13 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 		  Txt_Current_nickname);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"REC_C2_BOT LEFT_TOP USR_ID\"");
+	 Tbl_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
 	}
       else	// NumNick >= 2
 	{
 	 if (NumNick == 2)
 	   {
-	    Tbl_TD_Begin ("rowspan=\"%u\" class=\"REC_C1_BOT RIGHT_TOP\"",
+	    Tbl_TD_Begin ("rowspan=\"%u\" class=\"REC_C1_BOT RT\"",
 		          NumNicks - 1);
 	    fprintf (Gbl.F.Out,"<label for=\"Nick\" class=\"%s\">"
 			       "%s:"
@@ -296,7 +296,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	    Tbl_TD_End ();
 	   }
 
-	 Tbl_TD_Begin ("class=\"REC_C2_BOT LEFT_TOP DAT\"");
+	 Tbl_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
 
 	 /* Form to remove old nickname */
 	 if (ItsMe)
@@ -371,7 +371,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    /***** Form to enter new nickname *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"REC_C1_BOT RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"REC_C1_BOT RT\"");
    fprintf (Gbl.F.Out,"<label for=\"NewNick\" class=\"%s\">"
                       "%s:"
                       "</label>",
@@ -380,7 +380,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
         	       Txt_Nickname);		// The first nickname
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"REC_C2_BOT LEFT_TOP DAT\"");
+   Tbl_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
    if (ItsMe)
       Frm_StartFormAnchor (ActChgMyNck,Nck_NICKNAME_SECTION_ID);
    else

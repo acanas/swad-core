@@ -437,13 +437,13 @@ static void Mch_ListOneOrMoreMatchesHeading (bool ICanEditMatches)
       Tbl_TH_Empty (1);
 
    /***** The rest of columns *****/
-   Tbl_TH (1,1,"LEFT_TOP",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
-   Tbl_TH (1,1,"LEFT_TOP",Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]);
-   Tbl_TH (1,1,"LEFT_TOP",Txt_START_END_TIME[Gam_ORDER_BY_END_DATE]);
-   Tbl_TH (1,1,"LEFT_TOP",Txt_Match);
-   Tbl_TH (1,1,"RIGHT_TOP",Txt_Players);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Status);
-   Tbl_TH (1,1,"CENTER_TOP",Txt_Result);
+   Tbl_TH (1,1,"LT",Txt_ROLES_SINGUL_Abc[Rol_TCH][Usr_SEX_UNKNOWN]);
+   Tbl_TH (1,1,"LT",Txt_START_END_TIME[Gam_ORDER_BY_START_DATE]);
+   Tbl_TH (1,1,"LT",Txt_START_END_TIME[Gam_ORDER_BY_END_DATE]);
+   Tbl_TH (1,1,"LT",Txt_Match);
+   Tbl_TH (1,1,"RT",Txt_Players);
+   Tbl_TH (1,1,"CT",Txt_Status);
+   Tbl_TH (1,1,"CT",Txt_Result);
 
    /***** End row *****/
    Tbl_TR_End ();
@@ -515,7 +515,7 @@ static void Mch_ListOneOrMoreMatchesIcons (const struct Match *Match)
 static void Mch_ListOneOrMoreMatchesAuthor (const struct Match *Match)
   {
    /***** Match author (teacher) *****/
-   Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    Usr_WriteAuthor1Line (Match->UsrCod,false);
    Tbl_TD_End ();
   }
@@ -533,7 +533,7 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
-      Tbl_TD_Begin ("id=\"mch_time_%u_%u\" class=\"%s LEFT_TOP COLOR%u\"",
+      Tbl_TD_Begin ("id=\"mch_time_%u_%u\" class=\"%s LT COLOR%u\"",
 		    (unsigned) StartEndTime,UniqueId,
 		    Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
 								      "DATE_GREEN",
@@ -555,7 +555,7 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 
 static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Match *Match)
   {
-   Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<span class=\"ASG_TITLE\">%s</span>",Match->Title);
@@ -638,7 +638,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
 static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Match *Match)
   {
    /***** Number of players who have answered any question in the match ******/
-   Tbl_TD_Begin ("class=\"DAT RIGHT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%u",Mch_GetNumUsrsWhoHaveAnswerMch (Match->MchCod));
    Tbl_TD_End ();
   }
@@ -653,7 +653,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   Tbl_TD_Begin ("class=\"DAT CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
 
    if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished match
       /* Current question index / total of questions */
@@ -706,7 +706,7 @@ static void Mch_ListOneOrMoreMatchesResult (const struct Match *Match,
    extern const char *Txt_Hidden_result;
    extern const char *Txt_Visible_result;
 
-   Tbl_TD_Begin ("class=\"DAT CENTER_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -1172,12 +1172,12 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    /***** Match title *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
@@ -1229,17 +1229,17 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       /***** Start box and table *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RIGHT_TOP\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Groups);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+      Tbl_TD_Begin ("class=\"LT\"");
       Box_StartBoxTable ("95%",NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/
       Tbl_TR_Begin (NULL);
-      Tbl_TD_Begin ("colspan=\"7\" class=\"DAT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"<label>"
                          "<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\""

@@ -325,7 +325,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       /***** Row for this web / social network *****/
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"REC_C1_BOT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"REC_C1_BOT LM\"");
       fprintf (Gbl.F.Out,"<label for=\"URL%u\" class=\"%s\">"
 			 "<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
@@ -340,7 +340,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       Net_WebsAndSocialNetworksTitle[NumURL]);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"REC_C2_BOT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"REC_C2_BOT LM\"");
       fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL%u\" name=\"URL%u\""
 			 " maxlength=\"%u\" value=\"%s\""
 		         " class=\"REC_C2_BOT_INPUT\" />",
@@ -557,9 +557,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
    /***** Write heading *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Web_social_network);
-   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_No_of_users);
-   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_PERCENT_of_users);
+   Tbl_TH (1,1,"LM",Txt_Web_social_network);
+   Tbl_TH (1,1,"RM",Txt_No_of_users);
+   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
 
    Tbl_TR_End ();
 
@@ -587,7 +587,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 			    " alt=\"%s\" title=\"%s\""
                             " class=\"CONTEXT_ICO_16x16\""
@@ -599,11 +599,11 @@ void Net_ShowWebAndSocialNetworksStats (void)
 		  Net_WebsAndSocialNetworksTitle[Web]);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%u",NumUsrs);
 	 Tbl_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+	 Tbl_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%.2f%%",
 		  NumUsrsTotal ? 100.0 * (float) NumUsrs / (float) NumUsrsTotal :
 			         0.0);

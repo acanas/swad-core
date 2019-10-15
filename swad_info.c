@@ -599,7 +599,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    Ale_ShowAlert (Ale_WARNING,Txt_You_should_read_the_following_information);
 
    /***** Write every information I must read *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\">"
 	              "<ul class=\"LIST_LEFT\""
 	              " style=\"list-style-type:initial;\">");
    for (InfoType = (Inf_InfoType_t) 0;
@@ -1138,9 +1138,9 @@ void Inf_FormsToSelSendInfo (void)
 
       /* Select info source */
       if (InfoSrc == InfoSrcSelected)
-	 Tbl_TD_Begin ("class=\"DAT LEFT_TOP LIGHT_BLUE\"");
+	 Tbl_TD_Begin ("class=\"DAT LT LIGHT_BLUE\"");
       else
-	 Tbl_TD_Begin ("class=\"DAT LEFT_TOP\"");
+	 Tbl_TD_Begin ("class=\"DAT LT\"");
       Frm_StartForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
       fprintf (Gbl.F.Out,"<input type=\"radio\""
 	                 " id=\"InfoSrc%u\" name=\"InfoSrc\" value=\"%u\"",
@@ -1162,9 +1162,9 @@ void Inf_FormsToSelSendInfo (void)
 
       /* Form for this info source */
       if (InfoSrc == InfoSrcSelected)
-	 Tbl_TD_Begin ("class=\"LEFT_TOP LIGHT_BLUE\"");
+	 Tbl_TD_Begin ("class=\"LT LIGHT_BLUE\"");
       else
-	 Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+	 Tbl_TD_Begin ("class=\"LT\"");
       fprintf (Gbl.F.Out,"<label for=\"InfoSrc%u\" class=\"%s\">%s</label>",
 	       (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
@@ -1272,7 +1272,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
 
    /***** File *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\">"
 	              "<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" />"
@@ -1307,7 +1307,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
 
    /***** Link *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\">"
                       "<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"url\" name=\"InfoSrcURL\""
@@ -1798,7 +1798,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
           Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
          Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
 
-      fprintf (Gbl.F.Out,"<div class=\"DAT LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"DAT LM\">");
 
       /***** Convert to respectful HTML and insert links *****/
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1882,7 +1882,7 @@ static bool Inf_CheckAndShowRichTxt (void)
           Gbl.Crs.Info.Type == Inf_TEACHING_GUIDE)
          Lay_WriteHeaderClassPhoto (false,false,Gbl.Hierarchy.Ins.InsCod,Gbl.Hierarchy.Deg.DegCod,Gbl.Hierarchy.Crs.CrsCod);
 
-      fprintf (Gbl.F.Out,"<div id=\"crs_info\" class=\"LEFT_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div id=\"crs_info\" class=\"LM\">");
 
       /***** Store text into a temporary .md file in HTML output directory *****/
       // TODO: change to another directory?
@@ -1991,7 +1991,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
       /***** Write start of HTML code *****/
       Lay_StartHTMLFile (FileHTMLTmp,Txt_INFO_TITLE[Gbl.Crs.Info.Type]);
       fprintf (FileHTMLTmp,"<body>\n"
-                           "<div class=\"DAT LEFT_MIDDLE\">\n");
+                           "<div class=\"DAT LM\">\n");
 
       /***** Write plain text into text buffer *****/
       /* Convert to respectful HTML and insert links */
@@ -2078,7 +2078,7 @@ void Inf_EditPlainTxtInfo (void)
                          TxtHTML,NULL);
 
    /***** Edition area *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
    Lay_HelpPlainEditor ();
    fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
 	              "%s"
@@ -2129,7 +2129,7 @@ void Inf_EditRichTxtInfo (void)
                          TxtHTML,NULL);
 
    /***** Edition area *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
    Lay_HelpRichEditor ();
    fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
 	              "%s"

@@ -572,7 +572,7 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 	Order <= Agd_ORDER_BY_END_DATE;
 	Order++)
      {
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
+      Tbl_TH_Begin (1,1,"LM");
       switch (AgendaType)
 	{
 	 case Agd_MY_AGENDA_TODAY:
@@ -599,8 +599,8 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
       Tbl_TH_End ();
      }
 
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Event);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Location);
+   Tbl_TH (1,1,"LM",Txt_Event);
+   Tbl_TH (1,1,"LM",Txt_Location);
 
    Tbl_TR_End ();
   }
@@ -745,7 +745,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
-      Tbl_TD_Begin ("id=\"agd_date_%u_%u\" class=\"%s LEFT_BOTTOM COLOR%u\"",
+      Tbl_TD_Begin ("id=\"agd_date_%u_%u\" class=\"%s LB COLOR%u\"",
 		    (unsigned) StartEndTime,UniqueId,
 		    AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
 				      Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
@@ -761,7 +761,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
      }
 
    /* Event */
-   Tbl_TD_Begin ("class=\"%s LEFT_TOP COLOR%u\"",
+   Tbl_TD_Begin ("class=\"%s LT COLOR%u\"",
 		 AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
 				   "ASG_TITLE",
 		 Gbl.RowEvenOdd);
@@ -771,7 +771,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    Tbl_TD_End ();
 
    /* Location */
-   Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
             AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
         	              "ASG_TITLE",
@@ -783,7 +783,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    /***** Write second row of data of this event *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    switch (AgendaType)
      {
       case Agd_MY_AGENDA_TODAY:
@@ -802,7 +802,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
 
-   Tbl_TD_Begin ("colspan=\"2\" class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>",
             AgdEvent.Hidden ? "DAT_LIGHT" :
         	              "DAT",
@@ -1498,13 +1498,13 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Event *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Event\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Event);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Event\" name=\"Event\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
@@ -1516,13 +1516,13 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Location *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Location\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Location);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Location\" name=\"Location\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
@@ -1538,13 +1538,13 @@ void Agd_RequestCreatOrEditEvent (void)
    /***** Text *****/
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RIGHT_TOP\"");
+   Tbl_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Description);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_TOP\"");
+   Tbl_TD_Begin ("class=\"LT\"");
    fprintf (Gbl.F.Out,"<textarea id=\"Txt\" name=\"Txt\""
                       " cols=\"60\" rows=\"10\">");
    if (!ItsANewEvent)

@@ -120,7 +120,7 @@ void Cla_SeeClassrooms (void)
 	Order <= (Cla_Order_t) (Cla_NUM_ORDERS - 1);
 	Order++)
      {
-      Tbl_TH_Begin (1,1,"LEFT_MIDDLE");
+      Tbl_TH_Begin (1,1,"LM");
       Frm_StartForm (ActSeeCla);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Frm_LinkFormSubmit (Txt_CLASSROOMS_HELP_ORDER[Order],"TIT_TBL",NULL);
@@ -143,22 +143,22 @@ void Cla_SeeClassrooms (void)
       Tbl_TR_Begin (NULL);
 
       /* Short name */
-      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE %s\"",Gbl.ColorRows[RowEvenOdd]);
+      Tbl_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
       fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].ShrtName);
       Tbl_TD_End ();
 
       /* Full name */
-      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE %s\"",Gbl.ColorRows[RowEvenOdd]);
+      Tbl_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
       fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].FullName);
       Tbl_TD_End ();
 
       /* Capacity */
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE %s\"",Gbl.ColorRows[RowEvenOdd]);
+      Tbl_TD_Begin ("class=\"DAT RM %s\"",Gbl.ColorRows[RowEvenOdd]);
       Cla_WriteCapacity (Gbl.Classrooms.Lst[NumCla].Capacity);
       Tbl_TD_End ();
 
       /* Location */
-      Tbl_TD_Begin ("class=\"DAT LEFT_MIDDLE %s\"",Gbl.ColorRows[RowEvenOdd]);
+      Tbl_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
       fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].Location);
       Tbl_TD_End ();
 
@@ -490,12 +490,12 @@ static void Cla_ListClassroomsForEdition (void)
       Tbl_TD_End ();
 
       /* Classroom code */
-      Tbl_TD_Begin ("class=\"DAT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%ld",Cla->ClaCod);
       Tbl_TD_End ();
 
       /* Classroom short name */
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenClaSho);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -507,7 +507,7 @@ static void Cla_ListClassroomsForEdition (void)
       Tbl_TD_End ();
 
       /* Classroom full name */
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenClaFul);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -519,7 +519,7 @@ static void Cla_ListClassroomsForEdition (void)
       Tbl_TD_End ();
 
       /* Seating capacity */
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActChgClaMaxStd);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Capacity\""
@@ -531,7 +531,7 @@ static void Cla_ListClassroomsForEdition (void)
       Tbl_TD_End ();
 
       /* Classroom location */
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenClaLoc);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Location\""
@@ -907,7 +907,7 @@ static void Cla_PutFormToCreateClassroom (void)
    Tbl_TD_End ();
 
    /***** Classroom short name *****/
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " size=\"10\" maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
@@ -916,7 +916,7 @@ static void Cla_PutFormToCreateClassroom (void)
    Tbl_TD_End ();
 
    /***** Classroom full name *****/
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
@@ -925,7 +925,7 @@ static void Cla_PutFormToCreateClassroom (void)
    Tbl_TD_End ();
 
    /***** Seating capacity *****/
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Capacity\""
 	              " size=\"3\" maxlength=\"10\" value=\"");
    Cla_WriteCapacity (Cla_EditingCla->Capacity);
@@ -933,7 +933,7 @@ static void Cla_PutFormToCreateClassroom (void)
    Tbl_TD_End ();
 
    /***** Classroom location *****/
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Location\""
 		      " size=\"15\" maxlength=\"%u\" value=\"%s\""
 		      " class=\"INPUT_FULL_NAME\" />",
@@ -964,11 +964,11 @@ static void Cla_PutHeadClassrooms (void)
    Tbl_TR_Begin (NULL);
 
    Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"RIGHT_MIDDLE",Txt_Code);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Short_name);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Full_name);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Capacity_OF_A_CLASSROOM);
-   Tbl_TH (1,1,"LEFT_MIDDLE",Txt_Location);
+   Tbl_TH (1,1,"RM",Txt_Code);
+   Tbl_TH (1,1,"LM",Txt_Short_name);
+   Tbl_TH (1,1,"LM",Txt_Full_name);
+   Tbl_TH (1,1,"LM",Txt_Capacity_OF_A_CLASSROOM);
+   Tbl_TH (1,1,"LM",Txt_Location);
 
    Tbl_TR_End ();
   }

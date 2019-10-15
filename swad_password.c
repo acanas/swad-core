@@ -687,13 +687,13 @@ void Pwd_ShowFormChgMyPwd (void)
      {
       Tbl_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"REC_C1_BOT RIGHT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"REC_C1_BOT RM\"");
       fprintf (Gbl.F.Out,"<label for=\"UsrPwd\" class=\"%s\">%s:</label>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Current_password);
       Tbl_TD_End ();
 
-      Tbl_TD_Begin ("class=\"REC_C2_BOT LEFT_MIDDLE\"");
+      Tbl_TD_Begin ("class=\"REC_C2_BOT LM\"");
       fprintf (Gbl.F.Out,"<input type=\"password\""
 			 " id=\"UsrPwd\" name=\"UsrPwd\""
 			 " size=\"18\" maxlength=\"%u\""
@@ -740,13 +740,13 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    Tbl_TR_Begin (NULL);
 
    /***** Start form element ****/
-   Tbl_TD_Begin ("class=\"RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Passwd\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Password);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Passwd\" name=\"Paswd\""
                       " size=\"18\" maxlength=\"%u\" placeholder=\"",
             Pwd_MAX_CHARS_PLAIN_PASSWORD);
@@ -777,13 +777,13 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    /* Start form element */
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"REC_C1_BOT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"REC_C1_BOT RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Paswd1\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_New_password);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"REC_C2_BOT LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"REC_C2_BOT LM\"");
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Paswd1\" name=\"Paswd1\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"",
@@ -802,13 +802,13 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    /* Start form element */
    Tbl_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"REC_C1_BOT RIGHT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"REC_C1_BOT RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Paswd2\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Retype_new_password);
    Tbl_TD_End ();
 
-   Tbl_TD_Begin ("class=\"REC_C2_BOT LEFT_MIDDLE\"");
+   Tbl_TD_Begin ("class=\"REC_C2_BOT LM\"");
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Paswd2\" name=\"Paswd2\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"",
@@ -888,7 +888,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
    extern const char *Txt_I_understand_that_this_action_can_not_be_undone;
    extern const char *Txt_For_security_enter_your_password;
 
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"margin:12px;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\" style=\"margin:12px;\">"
                       "<label class=\"%s\">"
 		      "<input type=\"checkbox\" name=\"Consent\" value=\"Y\" />"
 		      "%s"

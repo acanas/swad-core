@@ -504,7 +504,7 @@
 												// This delay is increased 1 second on each refresh
 
 #define Cfg_SECONDS_TO_REFRESH_MATCH_TCH		1							// Refresh period of match being played in seconds (for teachers)
-#define Cfg_SECONDS_TO_REFRESH_MATCH_STD		5							// Refresh period of match being played in seconds (for students)
+#define Cfg_SECONDS_TO_REFRESH_MATCH_STD		3							// Refresh period of match being played in seconds (for students)
 #define Cfg_TIME_TO_REFRESH_MATCH_TCH			((time_t)(Cfg_SECONDS_TO_REFRESH_MATCH_TCH * 1000UL))	// Refresh period of match being played in miliseconds (for teachers)
 #define Cfg_TIME_TO_REFRESH_MATCH_STD			((time_t)(Cfg_SECONDS_TO_REFRESH_MATCH_STD * 1000UL))	// Refresh period of match being played in miliseconds (for students)
 

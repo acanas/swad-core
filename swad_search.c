@@ -133,7 +133,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    Sch_WhatToSearch_t WhatToSearch;
 
    /***** Start box *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
    Box_StartBox (NULL,Txt_Search,Crs_PutIconToSelectMyCourses,
                  Hlp_START_Search,Box_NOT_CLOSABLE);
 
@@ -142,7 +142,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 
    /***** Scope (whole platform, current country, current institution,
                  current centre, current degree or current course) *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\">"
 	              "<label class=\"%s\">%s:&nbsp;",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Hie_SYS |

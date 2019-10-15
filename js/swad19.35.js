@@ -1400,7 +1400,7 @@ function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
 	var MonthId;
 
 	/***** Draw several months *****/
-	Gbl_HTMLContent += '<table style="margin:0 auto; border-spacing:6px;">';
+	Gbl_HTMLContent += '<table class="CALENDAR">';
 
 	for (Row = 0;
 		 Row < 5;
@@ -1412,7 +1412,7 @@ function Cal_DrawCalendar (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,PrintView,
 			MonthIdNum++;
 			MonthId = id + '_month_' + MonthIdNum;
 
-			Gbl_HTMLContent += '<td class="CENTER_TOP" style="width:150px;">';
+			Gbl_HTMLContent += '<td class="CT" style="width:150px;">';
 			DrawMonth (MonthId,FirstDayOfWeek,Year,Month,CurrentMonth,CurrentDay,
 						CurrentPlcCod,true,PrintView,CGI,
 						FormGoToCalendarParams,FormEventParams);

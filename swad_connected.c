@@ -264,8 +264,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    struct ConnectedUsrs Usrs;
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONNECTED\""
-		      " style=\"margin-top:6px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONNECTED\">");
 
    /***** Number of connected users who belong to scope *****/
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
@@ -357,7 +356,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
    if (Usrs.NumUsrs)
      {
       Tbl_TR_Begin (NULL);
-      Tbl_TD_Begin ("colspan=\"3\" class=\"CENTER_TOP\"");
+      Tbl_TD_Begin ("colspan=\"3\" class=\"CT\"");
       fprintf (Gbl.F.Out,"%u %s",
 	       Usrs.NumUsrs,
 	       (Usrs.NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
@@ -409,7 +408,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	{
 	 Tbl_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("colspan=\"3\" class=\"CENTER_TOP\"");
+	 Tbl_TD_Begin ("colspan=\"3\" class=\"CT\"");
 	 Frm_StartFormUnique (ActLstCon);	// Must be unique because
 						// the list of connected users
 						// is dynamically updated via AJAX

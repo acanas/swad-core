@@ -273,7 +273,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    Req_TitleReport (&Report->CurrentTimeUTC);
 
    /***** Put anchor and report filename *****/
-   fprintf (Gbl.F.Out,"<div class=\"FILENAME_TXT CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"FILENAME_TXT CM\">"
                       "<a href=\"%s\" class=\"FILENAME_TXT\""
 		      " title=\"%s\" target=\"_blank\">"
                       "<img src=\"%s/file-alt.svg\" alt=\"%s\""

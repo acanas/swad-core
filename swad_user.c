@@ -2596,7 +2596,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 
    fprintf (Gbl.F.Out,"</div>");
 
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
 
    /***** Start form *****/
    Frm_StartForm (NextAction);
@@ -2608,7 +2608,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
                       Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE,2);
 
    /***** User's ID/nickname *****/
-   fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"LM\">"
 	              "<label for=\"UsrId\">"
                       "<img src=\"%s/user.svg\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_ICO_16x16\" />"
@@ -2626,7 +2626,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
             Gbl.Usrs.Me.UsrIdLogin);
 
    /***** User's password *****/
-   fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"LM\">"
 	              "<label for=\"UsrPwd\">"
                       "<img src=\"%s/key.svg\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_ICO_16x16\" />"
@@ -3645,7 +3645,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
    if (PutCheckBoxToSelectUsr)
      {
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"CM %s\"",BgColor);
       Usr_PutCheckboxToSelectUser (Role,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender);
       Tbl_TD_End ();
      }
@@ -3669,7 +3669,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    Tbl_TD_End ();
 
    /***** Write number of user in the list *****/
-   Tbl_TD_Begin ("class=\"%s RIGHT_MIDDLE %s\"",
+   Tbl_TD_Begin ("class=\"%s RM %s\"",
 	         UsrDat->Accepted ? "USR_LIST_NUM_N" :
 				    "USR_LIST_NUM",
 	         BgColor);
@@ -3679,7 +3679,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show user's photo *****/
-      Tbl_TD_Begin ("class=\"CENTER_MIDDLE %s\"",BgColor);
+      Tbl_TD_Begin ("class=\"CM %s\"",BgColor);
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -3688,7 +3688,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
      }
 
    /****** Write user's IDs ******/
-   Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE %s\"",
+   Tbl_TD_Begin ("class=\"%s LM %s\"",
 		 UsrDat->Accepted ? "DAT_SMALL_N" :
 				    "DAT_SMALL",
 		 BgColor);
@@ -3699,7 +3699,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE %s\"",BgColor);
+   Tbl_TD_Begin ("class=\"LM %s\"",BgColor);
    Ins_DrawInstitutionLogoWithLink (&Ins,25);
    Tbl_TD_End ();
 
@@ -3725,7 +3725,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show guest's photo *****/
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -3734,7 +3734,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
      }
 
    /****** Write user's ID ******/
-   Tbl_TD_Begin ("class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
    ID_WriteUsrIDs (UsrDat,NULL);
    fprintf (Gbl.F.Out,"&nbsp;");
    Tbl_TD_End ();
@@ -3826,7 +3826,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show student's photo *****/
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -3835,7 +3835,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
      }
 
    /****** Write user's ID ******/
-   Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE COLOR%u\"",
+   Tbl_TD_Begin ("class=\"%s LM COLOR%u\"",
 		 UsrDat->Accepted ? "DAT_SMALL_N" :
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
@@ -3945,7 +3945,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show teacher's photo *****/
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -3954,7 +3954,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
      }
 
    /****** Write the user's ID ******/
-   Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE COLOR%u\"",
+   Tbl_TD_Begin ("class=\"%s LM COLOR%u\"",
 		 UsrDat->Accepted ? "DAT_SMALL_N" :
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
@@ -4016,14 +4016,14 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    Tbl_TR_Begin (NULL);
 
    /***** Write number of user *****/
-   Tbl_TD_Begin ("class=\"USR_LIST_NUM_N CENTER_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"USR_LIST_NUM_N CM COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%u",NumUsr);
    Tbl_TD_End ();
 
    if (Gbl.Usrs.Listing.WithPhotos)
      {
       /***** Show administrator's photo *****/
-      Tbl_TD_Begin ("class=\"LEFT_MIDDLE COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
@@ -4032,7 +4032,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
      }
 
    /****** Write the user's ID ******/
-   Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE COLOR%u\"",
+   Tbl_TD_Begin ("class=\"%s LM COLOR%u\"",
 		 UsrDat->Accepted ? "DAT_SMALL_N" :
 				    "DAT_SMALL",
 		 Gbl.RowEvenOdd);
@@ -4045,7 +4045,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
 
-   Tbl_TD_Begin ("class=\"LEFT_MIDDLE %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
+   Tbl_TD_Begin ("class=\"LM %s\"",Gbl.ColorRows[Gbl.RowEvenOdd]);
    Ins_DrawInstitutionLogoWithLink (&Ins,25);
    Tbl_TD_End ();
    Tbl_TR_End ();
@@ -4114,7 +4114,7 @@ static void Usr_WriteUsrData (const char *BgColor,
                               bool NonBreak,bool Accepted)
   {
    /***** Start table cell *****/
-   Tbl_TD_Begin ("class=\"%s LEFT_MIDDLE %s\"",
+   Tbl_TD_Begin ("class=\"%s LM %s\"",
 		 Accepted ? (NonBreak ? "DAT_SMALL_NOBR_N" :
 				        "DAT_SMALL_N") :
 			    (NonBreak ? "DAT_SMALL_NOBR" :
@@ -6313,7 +6313,7 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 
    Tbl_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,Usr_GetColumnsForSelectUsrs (),"LEFT_MIDDLE LIGHT_BLUE");
+   Tbl_TH_Begin (1,Usr_GetColumnsForSelectUsrs (),"LM LIGHT_BLUE");
 
    fprintf (Gbl.F.Out,"<label>");
    if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
@@ -6466,14 +6466,14 @@ void Usr_WriteHeaderFieldsUsrDat (bool PutCheckBoxToSelectUsr)
 
    /***** First column used for selection *****/
    if (PutCheckBoxToSelectUsr)
-      Tbl_TH (1,1,"LEFT_MIDDLE LIGHT_BLUE",NULL);
+      Tbl_TH (1,1,"LM LIGHT_BLUE",NULL);
 
    /***** Columns for user's data fields *****/
    for (NumCol = 0;
         NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
         NumCol++)
       if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-         Tbl_TH (1,1,"LEFT_MIDDLE LIGHT_BLUE",Usr_UsrDatMainFieldNames[NumCol]);
+         Tbl_TH (1,1,"LM LIGHT_BLUE",Usr_UsrDatMainFieldNames[NumCol]);
 
    Tbl_TR_End ();
   }
@@ -6554,7 +6554,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
          Tbl_TR_Begin (NULL);
-         Tbl_TD_Begin ("colspan=\"%u\" class=\"TIT CENTER_MIDDLE\"",
+         Tbl_TD_Begin ("colspan=\"%u\" class=\"TIT CM\"",
 		       1 + Usr_NUM_MAIN_FIELDS_DATA_USR);
          Grp_WriteNamesOfSelectedGrps ();
          Tbl_TD_End ();
@@ -6626,14 +6626,14 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
 
       /* First column used for selection  */
       if (PutCheckBoxToSelectUsr)
-	 Tbl_TH (1,1,"LEFT_MIDDLE LIGHT_BLUE",NULL);
+	 Tbl_TH (1,1,"LM LIGHT_BLUE",NULL);
 
       /* Columns for the data */
       for (NumCol = 0;
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_USR;
            NumCol++)
          if (NumCol != 2 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            Tbl_TH (1,1,"LEFT_MIDDLE LIGHT_BLUE",Usr_UsrDatMainFieldNames[NumCol]);
+            Tbl_TH (1,1,"LM LIGHT_BLUE",Usr_UsrDatMainFieldNames[NumCol]);
 
       /* End row */
       Tbl_TR_End ();
@@ -6736,7 +6736,7 @@ void Usr_ListAllDataGsts (void)
 	                                           1);
            NumCol < NumColumnsCommonCard;
            NumCol++)
-         Tbl_TH (1,1,"LEFT_MIDDLE LIGHT_BLUE",FieldNames[NumCol]);
+         Tbl_TH (1,1,"LM LIGHT_BLUE",FieldNames[NumCol]);
 
       /* End row */
       Tbl_TR_End ();
@@ -6875,7 +6875,7 @@ void Usr_ListAllDataStds (void)
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
          Tbl_TR_Begin (NULL);
-         Tbl_TD_Begin ("colspan=\"%u\" class=\"TIT CENTER_MIDDLE\"",NumColumnsTotal);
+         Tbl_TD_Begin ("colspan=\"%u\" class=\"TIT CM\"",NumColumnsTotal);
          Grp_WriteNamesOfSelectedGrps ();
          Tbl_TD_End ();
          Tbl_TR_End ();
@@ -6890,7 +6890,7 @@ void Usr_ListAllDataStds (void)
 	                                           1);
            NumCol < NumColumnsCommonCard;
            NumCol++)
-         Tbl_TH (1,1,"LEFT_MIDDLE LIGHT_BLUE",FieldNames[NumCol]);
+         Tbl_TH (1,1,"LM LIGHT_BLUE",FieldNames[NumCol]);
 
       /* 2. Columns for the groups */
       if (Gbl.Scope.Current == Hie_CRS)
@@ -6901,7 +6901,7 @@ void Usr_ListAllDataStds (void)
                  NumGrpTyp++)
                if (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)         // If current course tiene groups of este type
         	 {
-                  Tbl_TH_Begin (1,1,"LEFT_MIDDLE LIGHT_BLUE");
+                  Tbl_TH_Begin (1,1,"LM LIGHT_BLUE");
                   fprintf (Gbl.F.Out,"%s %s",
                            Txt_Group,
                            Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
@@ -6914,7 +6914,7 @@ void Usr_ListAllDataStds (void)
             for (NumField = 0;
                  NumField < Gbl.Crs.Records.LstFields.Num;
                  NumField++)
-               Tbl_TH (1,1,"LEFT_MIDDLE LIGHT_BLUE",Gbl.Crs.Records.LstFields.Lst[NumField].Name);
+               Tbl_TH (1,1,"LM LIGHT_BLUE",Gbl.Crs.Records.LstFields.Lst[NumField].Name);
 
             /* 4. Visibility type for the record fields that depend on the course, in other row */
             Tbl_TR_End ();
@@ -6931,7 +6931,7 @@ void Usr_ListAllDataStds (void)
                  NumField < Gbl.Crs.Records.LstFields.Num;
                  NumField++)
               {
-               Tbl_TH_Begin (1,1,"LEFT_MIDDLE VERY_LIGHT_BLUE");
+               Tbl_TH_Begin (1,1,"LM VERY_LIGHT_BLUE");
                fprintf (Gbl.F.Out,"(%s)",
                         Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.Crs.Records.LstFields.Lst[NumField].Visibility]);
                Tbl_TH_End ();
@@ -7130,7 +7130,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
 						1);
 	NumCol < NumColumns;
 	NumCol++)
-      Tbl_TH (1,1,"LEFT_MIDDLE LIGHT_BLUE",FieldNames[NumCol]);
+      Tbl_TH (1,1,"LM LIGHT_BLUE",FieldNames[NumCol]);
 
    Tbl_TR_End ();
 
@@ -7352,7 +7352,7 @@ void Usr_ListDataAdms (void)
                  Hlp_USERS_Administrators,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
    Frm_StartForm (ActLstOth);
    Usr_PutParamListWithPhotos ();
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
@@ -7365,8 +7365,7 @@ void Usr_ListDataAdms (void)
    if (Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs)
      {
       /****** Show photos? *****/
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	                 " style=\"margin-bottom:8px;\">");
+      fprintf (Gbl.F.Out,"<div class=\"CM\" style=\"margin-bottom:8px;\">");
       Frm_StartForm (ActLstOth);
       Sco_PutParamCurrentScope ();
       Usr_PutCheckboxListWithPhotos ();
@@ -7381,7 +7380,7 @@ void Usr_ListDataAdms (void)
            NumCol < Usr_NUM_MAIN_FIELDS_DATA_ADM;
            NumCol++)
          if (NumCol != 1 || Gbl.Usrs.Listing.WithPhotos)        // Skip photo column if I don't want this column
-            Tbl_TH (1,1,"LEFT_MIDDLE LIGHT_BLUE",FieldNames[NumCol]);
+            Tbl_TH (1,1,"LM LIGHT_BLUE",FieldNames[NumCol]);
 
       Tbl_TR_End ();
 
@@ -7825,7 +7824,7 @@ void Usr_SeeGuests (void)
    /***** Form to select scope *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"CM\">");
       Frm_StartForm (ActLstGst);
       Usr_PutParamsPrefsAboutUsrList ();
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
@@ -7976,7 +7975,7 @@ void Usr_SeeStudents (void)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<div class=\"CM\">");
 	 Frm_StartForm (ActLstStd);
 	 Usr_PutParamsPrefsAboutUsrList ();
 	 fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
@@ -8154,7 +8153,7 @@ void Usr_SeeTeachers (void)
 		 Hlp_USERS_Teachers,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
    Frm_StartForm (ActLstTch);
    Usr_PutParamsPrefsAboutUsrList ();
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
@@ -8933,12 +8932,12 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	     UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
 	   {
 	    UsrIsTheMsgSender = true;
-	    Tbl_TD_Begin ("class=\"CLASSPHOTO CENTER_BOTTOM LIGHT_GREEN\"");
+	    Tbl_TD_Begin ("class=\"CLASSPHOTO CB LIGHT_GREEN\"");
 	   }
 	 else
 	   {
 	    UsrIsTheMsgSender = false;
-	    Tbl_TD_Begin ("class=\"CLASSPHOTO CENTER_BOTTOM\"");
+	    Tbl_TD_Begin ("class=\"CLASSPHOTO CB\"");
 	   }
 
 	 /***** Checkbox to select this user *****/
@@ -9733,10 +9732,10 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 
    /***** Show user's photo and name *****/
    if (NumRows)
-      Tbl_TD_Begin ("rowspan=\"%u\" class=\"LEFT_TOP COLOR%u\"",
+      Tbl_TD_Begin ("rowspan=\"%u\" class=\"LT COLOR%u\"",
 	            NumRows + 1,Gbl.RowEvenOdd);
    else
-      Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
@@ -9745,10 +9744,10 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
 
    /***** Start form to go to user's record card *****/
    if (NumRows)
-      Tbl_TD_Begin ("rowspan=\"%u\" class=\"LEFT_TOP COLOR%u\"",
+      Tbl_TD_Begin ("rowspan=\"%u\" class=\"LT COLOR%u\"",
 	            NumRows + 1,Gbl.RowEvenOdd);
    else
-      Tbl_TD_Begin ("class=\"LEFT_TOP COLOR%u\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    switch (UsrDat->Roles.InCurrentCrs.Role)
      {
       case Rol_STD:

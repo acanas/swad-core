@@ -1566,7 +1566,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 
          Prf_ShowUsrInRanking (&UsrDat,Rank);
 
-	 Tbl_TD_Begin ("class=\"RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"RM COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%ld",Figure);
 	 Tbl_TD_End ();
 
@@ -1731,7 +1731,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	 /***** Show row *****/
 	 Tbl_TR_Begin (NULL);
 	 Prf_ShowUsrInRanking (&UsrDat,Rank);
-	 Tbl_TD_Begin ("class=\"RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
+	 Tbl_TD_Begin ("class=\"RM COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
 	 Str_WriteFloatNumToFile (Gbl.F.Out,NumClicksPerDay);
 	 Tbl_TD_End ();
 	 Tbl_TR_End ();
@@ -1758,7 +1758,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
-   Tbl_TD_Begin ("class=\"RANK RIGHT_MIDDLE COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
+   Tbl_TD_Begin ("class=\"RANK RM COLOR%u\" style=\"height:50px;\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"#%u",Rank);
    Tbl_TD_End ();
 
