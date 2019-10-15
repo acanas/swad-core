@@ -30859,7 +30859,6 @@ const char *Txt_PROJECT_ROLES_PLURAL_abc[Prj_NUM_ROLES_IN_PROJECT] =
 #endif
 	};
 
-
 const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 	{
 #if   L==1	// ca	// Prj_PROPOSAL_NEW
@@ -30920,6 +30919,51 @@ const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES] =
 	"Proponowany projekt we wcze&sacute;niejszych rozmowach bez modyfikacji"
 #elif L==9	// pt
 	"Projeto proposto em chamadas anteriores, sem modifica&ccedil;&otilde;es"
+#endif
+	};
+
+const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS] =
+	{
+	 // Prj_FAULTY
+#if   L==1	// ca
+	"Projectes defectuosos"
+#elif L==2	// de
+	"Fehlerhafte Projekte"
+#elif L==3	// en
+	"Faulty projects"
+#elif L==4	// es
+	"Proyectos defectuosos"
+#elif L==5	// fr
+	"Projets d&eacute;fectueux"
+#elif L==6	// gn
+	"Proyectos defectuosos"	// Okoteve traducción
+#elif L==7	// it
+	"Progetti difettosi"
+#elif L==8	// pl
+	"Wadliwe projekty"
+#elif L==9	// pt
+	"Projetos defeituosos"
+#endif
+	,
+	// Prj_FAULTLESS
+#if   L==1	// ca
+	"Projectes correctos"
+#elif L==2	// de
+	"Fehlerfreie Projekte"
+#elif L==3	// en
+	"Faultless projects"
+#elif L==4	// es
+	"Proyectos correctos"
+#elif L==5	// fr
+	"Projets sans faille"
+#elif L==6	// gn
+	"Proyectos correctos"	// Okoteve traducción
+#elif L==7	// it
+	"Progetti corretti"
+#elif L==8	// pl
+	"Bezb&lstrok;&eogon;dne projekty"
+#elif L==9	// pt
+	"Projetos sem falhas"
 #endif
 	};
 

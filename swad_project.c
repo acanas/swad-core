@@ -61,6 +61,7 @@ extern struct Globals Gbl;
 #define Prj_PARAM_MY__ALL_NAME	"My_All"
 #define Prj_PARAM_PRE_NON_NAME	"PreNon"
 #define Prj_PARAM_HID_VIS_NAME	"HidVis"
+#define Prj_PARAM_FAULTIN_NAME	"Faulti"
 
 /***** Type of view when writing one project *****/
 typedef enum
@@ -121,16 +122,19 @@ static void Prj_ShowProjectsInCurrentPage (void);
 static void Prj_ShowFormToFilterByMy_All (void);
 static void Prj_ShowFormToFilterByPreassignedNonPreassig (void);
 static void Prj_ShowFormToFilterByHidden (void);
+static void Prj_ShowFormToFilterByWarning (void);
 static void Prj_ShowFormToFilterByDpt (void);
 
 static void Prj_PutCurrentParams (void);
 static void Prj_PutHiddenParamMy_All (Prj_WhoseProjects_t My_All);
 static void Prj_PutHiddenParamPreNon (unsigned PreNon);
 static void Prj_PutHiddenParamHidVis (unsigned HidVis);
+static void Prj_PutHiddenParamFaulti (unsigned Faulti);
 static void Prj_PutHiddenParamDptCod (long DptCod);
 static void Prj_GetHiddenParamMy_All (void);
 static void Prj_GetHiddenParamPreNon (void);
 static void Prj_GetHiddenParamHidVis (void);
+static void Prj_GetHiddenParamFaulti (void);
 static void Prj_GetHiddenParamDptCod (void);
 static void Prj_GetParams (void);
 
@@ -312,7 +316,9 @@ static void Prj_ShowProjectsInCurrentPage (void)
       default:	// Students will see only visible projects
          break;
      }
+   Prj_ShowFormToFilterByWarning ();
    Set_EndSettingsHead ();
+
    /* 2nd. row */
    Prj_ShowFormToFilterByDpt ();
 
@@ -411,6 +417,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
       Filter.My_All = My_All;
       Filter.PreNon = Gbl.Prjs.Filter.PreNon;
       Filter.HidVis = Gbl.Prjs.Filter.HidVis;
+      Filter.Faulti = Gbl.Prjs.Filter.Faulti;
       Filter.DptCod = Gbl.Prjs.Filter.DptCod;
       Prj_PutParams (&Filter,
                      Gbl.Prjs.SelectedOrder,
@@ -446,6 +453,7 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
       Filter.My_All = Gbl.Prjs.Filter.My_All;
       Filter.PreNon = Gbl.Prjs.Filter.PreNon ^ (1 << PreNon);	// Toggle
       Filter.HidVis = Gbl.Prjs.Filter.HidVis;
+      Filter.Faulti = Gbl.Prjs.Filter.Faulti;
       Filter.DptCod = Gbl.Prjs.Filter.DptCod;
       Prj_PutParams (&Filter,
                      Gbl.Prjs.SelectedOrder,
@@ -486,6 +494,7 @@ static void Prj_ShowFormToFilterByHidden (void)
       Filter.My_All = Gbl.Prjs.Filter.My_All;
       Filter.PreNon = Gbl.Prjs.Filter.PreNon;
       Filter.HidVis = Gbl.Prjs.Filter.HidVis ^ (1 << HidVis);	// Toggle
+      Filter.Faulti = Gbl.Prjs.Filter.Faulti;
       Filter.DptCod = Gbl.Prjs.Filter.DptCod;
       Prj_PutParams (&Filter,
                      Gbl.Prjs.SelectedOrder,
@@ -493,6 +502,47 @@ static void Prj_ShowFormToFilterByHidden (void)
                      -1L);
       Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis],
 	                      Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
+      Frm_EndForm ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   Set_EndOneSettingSelector ();
+  }
+
+/*****************************************************************************/
+/************** Show form to select faulty/faultless projects ****************/
+/*****************************************************************************/
+
+static void Prj_ShowFormToFilterByWarning (void)
+  {
+   extern const char *Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Prj_NUM_FAULTINESS];
+   struct Prj_Filter Filter;
+   Prj_Faultiness_t Faultiness;
+   static const char *FaultinessIcon[Prj_NUM_FAULTINESS] =
+     {
+      "exclamation-triangle.svg",	// Prj_FAULTY
+      "check-circle.svg",		// Prj_FAULTLESS
+     };
+
+   Set_StartOneSettingSelector ();
+   for (Faultiness =  (Prj_Faultiness_t) 0;
+	Faultiness <= (Prj_Faultiness_t) (Prj_NUM_FAULTINESS - 1);
+	Faultiness++)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	       (Gbl.Prjs.Filter.Faulti & (1 << Faultiness)) ? "PREF_ON" :
+						              "PREF_OFF");
+      Frm_StartForm (ActSeePrj);
+      Filter.My_All = Gbl.Prjs.Filter.My_All;
+      Filter.PreNon = Gbl.Prjs.Filter.PreNon;
+      Filter.HidVis = Gbl.Prjs.Filter.HidVis;
+      Filter.Faulti = Gbl.Prjs.Filter.Faulti ^ (1 << Faultiness);	// Toggle
+      Filter.DptCod = Gbl.Prjs.Filter.DptCod;
+      Prj_PutParams (&Filter,
+                     Gbl.Prjs.SelectedOrder,
+                     Gbl.Prjs.CurrentPage,
+                     -1L);
+      Ico_PutSettingIconLink (FaultinessIcon[Faultiness],
+	                      Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -514,6 +564,7 @@ static void Prj_ShowFormToFilterByDpt (void)
    Filter.My_All = Gbl.Prjs.Filter.My_All;
    Filter.PreNon = Gbl.Prjs.Filter.PreNon;
    Filter.HidVis = Gbl.Prjs.Filter.HidVis;
+   Filter.Faulti = Gbl.Prjs.Filter.Faulti;
    Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
    Prj_PutParams (&Filter,
 		  Gbl.Prjs.SelectedOrder,
@@ -566,6 +617,10 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 	                  (unsigned) Prj_FILTER_VISIBL_DEFAULT))
       Prj_PutHiddenParamHidVis (Filter->HidVis);
 
+   if (Filter->Faulti != ((unsigned) Prj_FILTER_FAULTY_DEFAULT |
+	                  (unsigned) Prj_FILTER_FAULTLESS_DEFAULT))
+      Prj_PutHiddenParamFaulti (Filter->Faulti);
+
    if (Filter->DptCod != Prj_FILTER_DPT_DEFAULT)
       Prj_PutHiddenParamDptCod (Filter->DptCod);
 
@@ -603,6 +658,11 @@ static void Prj_PutHiddenParamPreNon (unsigned PreNon)
 static void Prj_PutHiddenParamHidVis (unsigned HidVis)
   {
    Par_PutHiddenParamUnsigned (Prj_PARAM_HID_VIS_NAME,HidVis);
+  }
+
+static void Prj_PutHiddenParamFaulti (unsigned Faulti)
+  {
+   Par_PutHiddenParamUnsigned (Prj_PARAM_FAULTIN_NAME,Faulti);
   }
 
 static void Prj_PutHiddenParamDptCod (long DptCod)
@@ -655,6 +715,16 @@ static void Prj_GetHiddenParamHidVis (void)
      }
   }
 
+static void Prj_GetHiddenParamFaulti (void)
+  {
+   Gbl.Prjs.Filter.Faulti = (unsigned) Par_GetParToUnsignedLong (Prj_PARAM_FAULTIN_NAME,
+                                                                 0,
+                                                                 (1 << Prj_FAULTY) |
+                                                                 (1 << Prj_FAULTLESS),
+                                                                 (unsigned) Prj_FILTER_FAULTY_DEFAULT |
+                                                                 (unsigned) Prj_FILTER_FAULTLESS_DEFAULT);
+  }
+
 static void Prj_GetHiddenParamDptCod (void)
   {
    Gbl.Prjs.Filter.DptCod = Par_GetParToLong (Dpt_PARAM_DPT_COD_NAME);
@@ -670,6 +740,7 @@ static void Prj_GetParams (void)
    Prj_GetHiddenParamMy_All ();
    Prj_GetHiddenParamPreNon ();
    Prj_GetHiddenParamHidVis ();
+   Prj_GetHiddenParamFaulti ();
    Prj_GetHiddenParamDptCod ();
 
    /***** Get order and page *****/

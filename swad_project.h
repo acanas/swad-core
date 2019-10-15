@@ -76,6 +76,16 @@ typedef enum
 #define Prj_FILTER_HIDDEN_DEFAULT	(1 << Prj_HIDDEN)	// on
 #define Prj_FILTER_VISIBL_DEFAULT	(1 << Prj_VISIBL)	// on
 
+/* Faulty/faultless project */
+#define Prj_NUM_FAULTINESS 2
+typedef enum
+  {
+   Prj_FAULTY    = 0,
+   Prj_FAULTLESS = 1,
+  } Prj_Faultiness_t;
+#define Prj_FILTER_FAULTY_DEFAULT	(1 << Prj_FAULTY)	// on
+#define Prj_FILTER_FAULTLESS_DEFAULT	(1 << Prj_FAULTLESS)	// on
+
 /* Project department */
 #define Prj_FILTER_DPT_DEFAULT -1L	// Any department
 
@@ -85,6 +95,7 @@ struct Prj_Filter
    Prj_WhoseProjects_t My_All;	// Show my / all projects
    unsigned PreNon;		// Show preassigned / non preassigned projects
    unsigned HidVis;		// Show hidden / visible projects
+   unsigned Faulti;		// Show faulty / faultless projects
    long DptCod;			// Show projects of this department
   };
 
