@@ -13078,7 +13078,13 @@ DELETE FROM mch_times;
 
 
 
+----------------------
 
+
+
+
+
+SELECT projects.PrjCod,COUNT(prj_usr.UsrCod) AS NumStds FROM projects LEFT JOIN prj_usr ON projects.PrjCod=prj_usr.UsrCod WHERE projects.CrsCod=19 AND prj_usr.RoleInProject=3 GROUP BY projects.PrjCod ORDER BY projects.Title;
 
 
 

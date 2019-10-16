@@ -110,8 +110,15 @@ static const Act_Action_t Prj_LockActions[Prj_NUM_LOCKED_UNLOCKED] =
   };
 
 /*****************************************************************************/
-/***************************** Private variables *****************************/
+/******************************* Private types *******************************/
 /*****************************************************************************/
+
+struct Prj_Faults
+  {
+   bool WrongTitle;
+   bool WrongDescription;
+   bool WrongNumStds;
+  };
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -149,6 +156,7 @@ static void Prj_PutIconsToLockUnlockAllProjects (void);
 
 static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
                                 Prj_ProjectView_t ProjectView);
+static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults);
 static void Prj_PutWarningIcon (void);
 static void Prj_PutIconToToggleProject (unsigned UniqueId,
                                         const char *Icon,const char *Text);
@@ -1042,10 +1050,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    const char *ClassDate;
    const char *ClassTitle;
    const char *ClassData;
-   unsigned NumStdsInPrj;
-   bool WrongTitle;
-   bool WrongNumStds;
-   bool WrongDescription;
+   struct Prj_Faults Faults;
+   bool PrjIsFaulty;
    static unsigned UniqueId = 0;
 
    /***** Set CSS classes *****/
@@ -1061,13 +1067,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Prj->PrjCod,&Anchor);
 
-   /***** Check warnings */
-   WrongTitle = !Prj->Title[0];
-   NumStdsInPrj = Prj_GetNumUsrsInPrj (Prj->PrjCod,Prj_ROLE_STD);
-   WrongNumStds = (Prj->NumStds == 0 ||				// Number of students can not be 0
-                  (Prj->Preassigned == Prj_PREASSIGNED && 	// Project preassigned
-	           Prj->NumStds != NumStdsInPrj));		// Number of proposed students != number of registered students
-   WrongDescription = !Prj->Description[0];
+   /***** Check if project is faulty or faultless *****/
+   PrjIsFaulty = Prj_CheckIfPrjIsFaulty (Prj->PrjCod,&Faults);
 
    /***** Write first row of data of this project *****/
    Tbl_TR_Begin (NULL);
@@ -1080,7 +1081,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%u",NumIndex);
 
-	 if (WrongTitle || WrongNumStds || WrongDescription)
+	 if (PrjIsFaulty)
 	   {
 	    fprintf (Gbl.F.Out,"<br />");
 	    Prj_PutWarningIcon ();
@@ -1162,9 +1163,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 break;
      }
    Lay_StartArticle (Anchor);
-   if (WrongTitle)
-      Prj_PutWarningIcon ();
-   else
+   if (Prj->Title[0])
      {
       if (ICanViewProjectFiles)
 	{
@@ -1177,6 +1176,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
       else
 	 fprintf (Gbl.F.Out,"%s",Prj->Title);
      }
+   if (Faults.WrongTitle)
+      Prj_PutWarningIcon ();
    Lay_EndArticle ();
    Tbl_TD_End ();
 
@@ -1248,7 +1249,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
          break;
      }
    fprintf (Gbl.F.Out,"%u",Prj->NumStds);
-   if (WrongNumStds)
+   if (Faults.WrongNumStds)
       Prj_PutWarningIcon ();
    Tbl_TD_End ();
 
@@ -1331,7 +1332,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    /* Description of the project */
    Prj_ShowOneProjectTxtField (Prj,ProjectView,"prj_dsc_",UniqueId,
                                Txt_Description,Prj->Description,
-			       WrongDescription);
+			       Faults.WrongDescription);
 
    /* Required knowledge to carry out the project */
    Prj_ShowOneProjectTxtField (Prj,ProjectView,"prj_knw_",UniqueId,
@@ -1353,7 +1354,84 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
   }
 
 /*****************************************************************************/
-/********** Put an icon to toggle on/off some fields of a project ************/
+/********************** Check if a project has faults ************************/
+/*****************************************************************************/
+
+static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   long LongNum;
+   bool IsPreassigned;
+   bool HasTitle;
+   bool HasDescription;
+   unsigned NumProposedStds;
+   unsigned NumStdsRegisteredInPrj;
+
+   /***** Reset faults *****/
+   Faults->WrongTitle       =
+   Faults->WrongDescription =
+   Faults->WrongNumStds     = false;
+
+   /***** Get some project date and check faults ****/
+   if (PrjCod > 0)
+     {
+      /***** Query database *****/
+      if (DB_QuerySELECT (&mysql_res,"can not get project data",
+			  "SELECT Preassigned='Y',"		// row[0] = 0 / 1
+				 "NumStds,"			// row[1] =
+				 "Title<>'',"			// row[2] = 0 / 1
+				 "Description<>''"		// row[3] = 0 / 1
+			  " FROM projects"
+			  " WHERE PrjCod=%ld",
+			  PrjCod))	// Project found...
+	{
+         /***** Get some data of project *****/
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get if project is preassigned or not (row[0]) */
+	 IsPreassigned = (row[0][0] != '0');
+
+	 /* Get if project is preassigned or not (row[1]) */
+	 LongNum = Str_ConvertStrCodToLongCod (row[1]);
+	 NumProposedStds = (LongNum > 0) ? (unsigned) LongNum :
+	                                              0;
+
+	 /* Get the title of the project (row[2]) */
+	 HasTitle = (row[2][0] != '0');
+
+	 /* Get the description of the project (row[3]) */
+	 HasDescription = (row[3][0] != '0');
+
+	 /***** Check faults *****/
+	 /* 1. Check title */
+	 Faults->WrongTitle       = !HasTitle;
+
+	 /* 2. Check description */
+	 Faults->WrongDescription = !HasDescription;
+
+	 /* 3. Check number of students */
+	 if (NumProposedStds == 0)
+	    Faults->WrongNumStds = true;
+	 else if (IsPreassigned)
+	   {
+	    NumStdsRegisteredInPrj = Prj_GetNumUsrsInPrj (PrjCod,Prj_ROLE_STD);
+	    Faults->WrongNumStds = (NumProposedStds != NumStdsRegisteredInPrj);
+	   }
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
+
+   return Faults->WrongTitle       ||
+	  Faults->WrongDescription ||
+	  Faults->WrongNumStds;
+  }
+
+/*****************************************************************************/
+/************** Put an icon to warn about a fault in a project ***************/
 /*****************************************************************************/
 
 static void Prj_PutWarningIcon (void)
@@ -2581,16 +2659,19 @@ void Prj_GetListProjects (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows = 0;	// Initialized to avoid warning
+   unsigned NumPrjsFromDB;
+   unsigned NumPrjsAfterFilter = 0;
    unsigned NumPrj;
+   struct Prj_Faults Faults;
+   long PrjCod;
 
    if (Gbl.Prjs.LstIsRead)
       Prj_FreeListProjects ();
 
    /***** Get list of projects from database *****/
-   if (Gbl.Prjs.Filter.PreNon == 0 ||	// All selectors are off
-       Gbl.Prjs.Filter.HidVis == 0)	// All selectors are off
-      Gbl.Prjs.Num = 0;		// Nothing to get from database
-   else
+   if (Gbl.Prjs.Filter.PreNon &&	// Any selector is on
+       Gbl.Prjs.Filter.HidVis &&	// Any selector is on
+       Gbl.Prjs.Filter.Faulti)		// Any selector is on
      {
       /* Preassigned subquery */
       switch (Gbl.Prjs.Filter.PreNon)
@@ -2726,7 +2807,8 @@ void Prj_GetListProjects (void)
 
       if (NumRows) // Projects found...
 	{
-	 Gbl.Prjs.Num = (unsigned) NumRows;
+	 /***** Initialize number of projects *****/
+	 NumPrjsFromDB = (unsigned) NumRows;
 
 	 /***** Create list of projects *****/
 	 if ((Gbl.Prjs.LstPrjCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
@@ -2734,22 +2816,37 @@ void Prj_GetListProjects (void)
 
 	 /***** Get the projects codes *****/
 	 for (NumPrj = 0;
-	      NumPrj < Gbl.Prjs.Num;
+	      NumPrj < NumPrjsFromDB;
 	      NumPrj++)
 	   {
 	    /* Get next project code */
 	    row = mysql_fetch_row (mysql_res);
-	    if ((Gbl.Prjs.LstPrjCods[NumPrj] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	    if ((PrjCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	       Lay_ShowErrorAndExit ("Error: wrong project code.");
+
+	    /* Filter projects depending on faultiness */
+	    switch (Gbl.Prjs.Filter.Faulti)
+	      {
+	       case (1 << Prj_FAULTY):		// Faulty projects
+		  if (Prj_CheckIfPrjIsFaulty (PrjCod,&Faults))
+		     Gbl.Prjs.LstPrjCods[NumPrjsAfterFilter++] = PrjCod;
+		  break;
+	       case (1 << Prj_FAULTLESS):	// Faultless projects
+		  if (!Prj_CheckIfPrjIsFaulty (PrjCod,&Faults))
+		     Gbl.Prjs.LstPrjCods[NumPrjsAfterFilter++] = PrjCod;
+		  break;
+	       default:				// All projects
+		  Gbl.Prjs.LstPrjCods[NumPrjsAfterFilter++] = PrjCod;
+		  break;
+	      }
 	   }
 	}
-      else
-	 Gbl.Prjs.Num = 0;
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
 
+   Gbl.Prjs.Num = NumPrjsAfterFilter;
    Gbl.Prjs.LstIsRead = true;
   }
 
@@ -2848,10 +2945,8 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
 
 	 /* Get if project is preassigned or not (row[6]) */
 	 LongNum = Str_ConvertStrCodToLongCod (row[6]);
-	 if (LongNum >= 0)
-	    Prj->NumStds = (unsigned) LongNum;
-	 else
-	    Prj->NumStds = 1;
+	 Prj->NumStds = (LongNum > 0) ? (unsigned) LongNum :
+	                                           0;
 
 	 /* Get project status (row[7]) */
 	 Prj->Proposal = Prj_PROPOSAL_DEFAULT;

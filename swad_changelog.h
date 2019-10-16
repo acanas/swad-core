@@ -487,14 +487,15 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.37 (2019-10-16)"
+#define Log_PLATFORM_VERSION	"SWAD 19.37 (2019-10-17)"
 #define CSS_FILE		"swad19.36.css"
 #define JS_FILE			"swad19.35.js"
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 
-	Version 19.37:    Oct 16, 2019	New filter to select projects with problems. Not yet filtered. (245543 lines)
+	Version 19.38:    Oct 17, 2019	Filter to select faulty/faltless projects. (245624 lines)
+	Version 19.37:    Oct 16, 2019	New filter to select faulty/faltless projects. Not yet filtered. (245543 lines)
 	Version 19.36:    Oct 16, 2019	Some CSS styles converted to CSS classes. (245424 lines)
 	Version 19.35:    Oct 15, 2019	Changes in CSS. (245373 lines)
 	Version 19.34.2:  Oct 14, 2019	Fixed bug in IDs.
