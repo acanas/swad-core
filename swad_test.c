@@ -4188,7 +4188,7 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
    Mch_GetIndexes (MchCod,QstInd,Indexes);
 
    /***** Start table *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   Tbl_TABLE_BeginWidePadding (5);
 
    /***** Show one row for each option *****/
    for (NumOpt = 0;

@@ -614,7 +614,7 @@ Assessment:
         464. ActNewMch			Create a new match showing first question in a new browser tab
         465. ActResMch			Resume an unfinished match showing current question in a new browser tab
         466. ActBckMch			Go back when playing a match
-        467. ActPlyPauMch			Play/pause current match
+        467. ActPlyPauMch		Play/pause current match
         469. ActFwdMch			Go forward when playing a match
         471. ActChgVisResMchQst		Change visibility of question results when playing a match
         470. ActRefMchTch		Refresh current question when playing a match (as teacher)
@@ -2162,7 +2162,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewMch		*/{1671,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_CreateNewMatchTch		,Mch_ResumeMatch		,NULL},
    /* ActResMch		*/{1785,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,Mch_GetMatchBeingPlayed	,Mch_ResumeMatch		,NULL},
    /* ActBckMch		*/{1790,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_BackMatch			,NULL},
-   /* ActPlyPauMch		*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_PlayMatch			,NULL},
+   /* ActPlyPauMch	*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_PlayPauseMatch		,NULL},
    /* ActFwdMch		*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ForwardMatch		,NULL},
    /* ActChgVisResMchQst*/{1794,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ToggleVisibilResultsMchQst	,NULL},
    /* ActRefMchTch	*/{1788,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchTch		,NULL},

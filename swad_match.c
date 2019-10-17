@@ -1718,10 +1718,10 @@ static void Mch_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
   }
 
 /*****************************************************************************/
-/** Show current match status (current question, answers...) (by a teacher) **/
+/********************** Play/pause match (by a teacher) **********************/
 /*****************************************************************************/
 
-void Mch_PlayMatch (void)
+void Mch_PlayPauseMatch (void)
   {
    struct Match Match;
 
@@ -1742,8 +1742,8 @@ void Mch_PlayMatch (void)
       /* If unfinished, update status */
       if (Match.Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
 	{
-	 if (Match.Status.QstInd == 0)			// Match has been created, but it has not started
-	    Mch_SetMatchStatusToNext (&Match);
+	 // if (Match.Status.QstInd == 0)			// Match has been created, but it has not started
+	 //    Mch_SetMatchStatusToNext (&Match);
 	 Match.Status.Playing = true;			// Start/resume match
 	}
      }
@@ -2102,21 +2102,18 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
 	    Txt_MATCH_respond);
    if (Match->Status.QstInd > 0 &&
        Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)
-     {
       fprintf (Gbl.F.Out,"%u",NumAnswerersQst);
-      if (Match->Status.Playing)
-	{
-	 /* Get current number of players */
-	 Mch_GetNumPlayers (Match);
-
-	 /* Show current number of players */
-	 fprintf (Gbl.F.Out,"/%u",
-		  Match->Status.NumPlayers);
-	}
-     }
    else
       fprintf (Gbl.F.Out,"-");
+   if (Match->Status.Playing)
+     {
+      /* Get current number of players */
+      Mch_GetNumPlayers (Match);
 
+      /* Show current number of players */
+      fprintf (Gbl.F.Out,"/%u",
+	       Match->Status.NumPlayers);
+     }
    fprintf (Gbl.F.Out,"</strong>"
 		      "</div>");
   }
