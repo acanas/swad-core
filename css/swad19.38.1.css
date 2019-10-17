@@ -1304,6 +1304,30 @@ a:hover						/* Default ==> underlined */
 	vertical-align:middle;
 	}
 
+/********************************* Hierarchy *********************************/
+.HIE_SEL
+	{
+	width:175px;
+	}
+.HIE_LOGO
+	{
+	text-align:left;
+	vertical-align:middle;
+	width:25px;
+	}
+
+#chart_div
+	{
+	width:600px;
+	margin:12px auto;
+	}
+
+/********************************* Hierarchy *********************************/
+.PLC_SEL
+	{
+	width:60px;
+	}
+
 /*********************************** Month ***********************************/
 .CALENDAR
 	{

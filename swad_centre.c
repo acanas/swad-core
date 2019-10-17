@@ -1409,7 +1409,7 @@ void Ctr_WriteSelectorOfCentre (void)
 
    /***** Start form *****/
    Frm_StartFormGoTo (ActSeeDeg);
-   fprintf (Gbl.F.Out,"<select id=\"ctr\" name=\"ctr\" style=\"width:175px;\"");
+   fprintf (Gbl.F.Out,"<select id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Ins.InsCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);
@@ -1515,8 +1515,7 @@ static void Ctr_ListCentresForEdition (void)
       Tbl_TD_End ();
 
       /* Centre logo */
-      Tbl_TD_Begin ("title=\"%s\" class=\"LM\" style=\"width:25px;\"",
-                    Ctr->FullName);
+      Tbl_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr->FullName);
       Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
       Tbl_TD_End ();
 
@@ -1526,7 +1525,7 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Frm_StartForm (ActChgCtrPlc);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_SEL\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.Form.Id);
 	 fprintf (Gbl.F.Out,"<option value=\"0\"");
@@ -1564,7 +1563,6 @@ static void Ctr_ListCentresForEdition (void)
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,Gbl.Form.Id);
 	 Frm_EndForm ();
-	 Tbl_TD_End ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ctr->ShrtName);
@@ -1582,7 +1580,6 @@ static void Ctr_ListCentresForEdition (void)
 			    " onchange=\"document.getElementById('%s').submit();\" />",
 		  Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,Gbl.Form.Id);
 	 Frm_EndForm ();
-	 Tbl_TD_End ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ctr->FullName);
@@ -2523,13 +2520,13 @@ static void Ctr_PutFormToCreateCentre (void)
    Tbl_TD_End ();
 
    /***** Centre logo *****/
-   Tbl_TD_Begin ("class=\"LM\" style=\"width:25px;\"");
+   Tbl_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
    Log_DrawLogo (Hie_CTR,-1L,"",20,NULL,true);
    Tbl_TD_End ();
 
    /***** Place *****/
    Tbl_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\">"
+   fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_SEL\">"
                       "<option value=\"0\"");
    if (Ctr_EditingCtr->PlcCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");

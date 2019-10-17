@@ -630,11 +630,7 @@ void Cty_ListCountries2 (void)
 
    /***** Div for Google Geochart *****/
    if (Gbl.Action.Act == ActSeeCty)
-     {
-      fprintf (Gbl.F.Out,"<div id=\"chart_div\""
-	                 " style=\"width:600px; margin:12px auto;\">"
-                         "</div>");
-     }
+      fprintf (Gbl.F.Out,"<div id=\"chart_div\"></div>");
 
    /***** Free list of countries *****/
    Cty_FreeListCountries ();
@@ -1224,7 +1220,7 @@ void Cty_WriteSelectorOfCountry (void)
 
    /***** Start form *****/
    Frm_StartFormGoTo (ActSeeIns);
-   fprintf (Gbl.F.Out,"<select id=\"cty\" name=\"cty\" style=\"width:175px;\""
+   fprintf (Gbl.F.Out,"<select id=\"cty\" name=\"cty\" class=\"HIE_SEL\""
                       " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"\"",
 	    Gbl.Form.Id);

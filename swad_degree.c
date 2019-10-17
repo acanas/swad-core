@@ -611,7 +611,7 @@ void Deg_WriteSelectorOfDegree (void)
 
    /***** Start form *****/
    Frm_StartFormGoTo (ActSeeCrs);
-   fprintf (Gbl.F.Out,"<select id=\"deg\" name=\"deg\" style=\"width:175px;\"");
+   fprintf (Gbl.F.Out,"<select id=\"deg\" name=\"deg\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);
@@ -746,8 +746,7 @@ static void Deg_ListDegreesForEdition (void)
       Tbl_TD_End ();
 
       /* Degree logo */
-      Tbl_TD_Begin ("title=\"%s LM\" style=\"width:25px;\"",
-                         Deg->FullName);
+      Tbl_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg->FullName);
       Log_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,20,NULL,true);
       Tbl_TD_End ();
 
@@ -979,7 +978,7 @@ static void Deg_PutFormToCreateDegree (void)
    Tbl_TD_End ();
 
    /***** Degree logo *****/
-   Tbl_TD_Begin ("class=\"LM\" style=\"width:25px;\"");
+   Tbl_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg_EditingDeg->FullName);
    Log_DrawLogo (Hie_DEG,-1L,"",20,NULL,true);
    Tbl_TD_End ();
 

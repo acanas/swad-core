@@ -1387,7 +1387,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
    /***** Start form *****/
    Frm_StartFormGoTo (ActSeeCtr);
-   fprintf (Gbl.F.Out,"<select id=\"ins\" name=\"ins\" style=\"width:175px;\"");
+   fprintf (Gbl.F.Out,"<select id=\"ins\" name=\"ins\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);
@@ -1492,8 +1492,7 @@ static void Ins_ListInstitutionsForEdition (void)
       Tbl_TD_End ();
 
       /* Institution logo */
-      Tbl_TD_Begin ("title=\"%s\" class=\"LM\" style=\"width:25px;\"",
-                    Ins->FullName);
+      Tbl_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins->FullName);
       Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
       Tbl_TD_End ();
 
@@ -2232,7 +2231,7 @@ static void Ins_PutFormToCreateInstitution (void)
    Tbl_TD_End ();
 
    /***** Institution logo *****/
-   Tbl_TD_Begin ("class=\"LM\" style=\"width:25px;\"");
+   Tbl_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ins_EditingIns->FullName);
    Log_DrawLogo (Hie_INS,-1L,"",20,NULL,true);
    Tbl_TD_End ();
 

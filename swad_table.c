@@ -410,7 +410,7 @@ static void Tbl_TD_BeginWithoutAttr (void)
 void Tbl_TD_End (void)
   {
    if (Tbl_TD_NestingLevel == 0)	// No TH open
-      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TR.");
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TD.");
 
    fprintf (Gbl.F.Out,"</td>");
 

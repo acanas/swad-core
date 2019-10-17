@@ -3353,7 +3353,7 @@ static void Att_WriteRowUsrSeveralAttEvents (unsigned NumUsr,struct UsrData *Usr
    /***** Show user's photo *****/
    if (Gbl.Usrs.Listing.WithPhotos)
      {
-      Tbl_TD_Begin ("class=\"LM COLOR%u\" style=\"width:22px;\"",Gbl.RowEvenOdd);
+      Tbl_TD_Begin ("class=\"LM COLOR%u\"",Gbl.RowEvenOdd);
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,

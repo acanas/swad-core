@@ -585,7 +585,7 @@ static void Hld_ListHolidaysForEdition (void)
       Tbl_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgHldPlc);
       Hld_PutParamHldCod (Hld->HldCod);
-      fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\""
+      fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_COD\""
 	                 " onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"-1\"",
 	       Gbl.Form.Id);
@@ -988,7 +988,7 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Holiday place *****/
    Tbl_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"PlcCod\" style=\"width:62px;\">"
+   fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_COD\">"
                       "<option value=\"-1\"");
    if (Hld_EditingHld->PlcCod <= 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");

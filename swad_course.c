@@ -487,8 +487,7 @@ static void Crs_Configuration (bool PrintView)
 		Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
       fprintf (Gbl.F.Out,"%s "
-                         "<img src=\"%s/%s\" alt=\"%s\""
-                         " class=\"ICO16x16\" />",
+                         "<img src=\"%s/%s\" alt=\"%s\" class=\"ICO16x16\" />",
                Gbl.Title,
                Cfg_URL_ICON_PUBLIC,
                (Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
@@ -928,7 +927,7 @@ void Crs_WriteSelectorOfCourse (void)
 
    /***** Start form *****/
    Frm_StartFormGoTo (ActSeeCrsInf);
-   fprintf (Gbl.F.Out,"<select id=\"crs\" name=\"crs\" style=\"width:175px;\"");
+   fprintf (Gbl.F.Out,"<select id=\"crs\" name=\"crs\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Deg.DegCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);
