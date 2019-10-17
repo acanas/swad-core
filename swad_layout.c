@@ -703,8 +703,7 @@ static void Lay_WriteScriptInit (void)
       case ActNewMch:
       case ActResMch:
       case ActBckMch:
-      case ActPlyMch:
-      case ActPauMch:
+      case ActPlyPauMch:
       case ActFwdMch:
       case ActChgVisResMchQst:
 	 RefreshMatchTch = true;
@@ -763,6 +762,7 @@ static void Lay_WriteScriptParamsAJAX (void)
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
    /***** Parameters with code of session and current course code *****/
+   // Refresh parameters
    fprintf (Gbl.F.Out,"var RefreshParamIdSes = \"ses=%s\";\n"
                       "var RefreshParamCrsCod = \"crs=%ld\";\n",
 	    Gbl.Session.Id,
@@ -770,6 +770,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 
    /***** Parameter to refresh connected users *****/
    if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
+      // Refresh parameter
       fprintf (Gbl.F.Out,"var RefreshParamNxtActCon = \"act=%ld\";\n",
 	       Act_GetActCod (ActRefCon));
 
@@ -777,6 +778,7 @@ static void Lay_WriteScriptParamsAJAX (void)
    if (Gbl.FileBrowser.Type != Brw_UNKNOWN)
       /* In all the actions related to file browsers ==>
 	 put parameters used by AJAX */
+      // Refresh parameters
       fprintf (Gbl.F.Out,"var RefreshParamExpand = \"act=%ld\";\n"
 			 "var RefreshParamContract = \"act=%ld\";\n",
 	       Act_GetActCod (Brw_GetActionExpand   ()),
@@ -795,6 +797,7 @@ static void Lay_WriteScriptParamsAJAX (void)
       case ActRemSocComGbl:
 	 /* In all the actions related to view or editing global timeline ==>
 	    put parameters used by AJAX */
+	 // Refresh parameters
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
 			    "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
 			    "var RefreshParamWhichUsrs = \"WhichUsrs=%u\";\n",
@@ -817,6 +820,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 if (!Gbl.Usrs.Other.UsrDat.Nickname[0])
 	    Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,
 				       Gbl.Usrs.Other.UsrDat.Nickname);
+	 // Refresh parameters
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActOldPub = \"act=%ld\";\n"
 			    "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
 		  Act_GetActCod (ActRefOldSocPubUsr),
@@ -825,6 +829,7 @@ static void Lay_WriteScriptParamsAJAX (void)
       /* Parameters related with match refreshing (for students) */
       case ActJoiMch:
       case ActAnsMchQstStd:
+	 // Refresh parameters
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActMch = \"act=%ld\";\n"
 			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
 		  Act_GetActCod (ActRefMchStd),
@@ -834,10 +839,12 @@ static void Lay_WriteScriptParamsAJAX (void)
       case ActNewMch:
       case ActResMch:
       case ActBckMch:
-      case ActPlyMch:
-      case ActPauMch:
+      case ActPlyPauMch:
       case ActFwdMch:
       case ActChgVisResMchQst:
+	 // Handle keys in keyboard/presenter
+	 fprintf (Gbl.F.Out,"document.addEventListener(\"keydown\",handleMatchKeys);\n");
+	 // Refresh parameters
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActMch = \"act=%ld\";\n"
 			    "var RefreshParamMchCod = \"MchCod=%ld\";\n",
 		  Act_GetActCod (ActRefMchTch),
@@ -845,6 +852,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 break;
       /* Parameter related with clicks refreshing */
       case ActLstClk:
+	 // Refresh parameter
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActLstClk = \"act=%ld\";\n",
 		  Act_GetActCod (ActRefLstClk));
 	 break;

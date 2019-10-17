@@ -487,13 +487,19 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.38.1 (2019-10-17)"
-#define CSS_FILE		"swad19.38.1.css"
-#define JS_FILE			"swad19.35.js"
+#define Log_PLATFORM_VERSION	"SWAD 19.39 (2019-10-17)"
+#define CSS_FILE		"swad19.39.css"
+#define JS_FILE			"swad19.39.js"
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 
+	Version 19.39:    Oct 17, 2019	Keyboard/presenter is allowed for playing matches. (245657 lines)
+					2 changes necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod=1791;
+UPDATE actions SET Txt='Lugar/pausar partida' WHERE ActCod='1789' AND Language='es';
+
+	Version 19.38.2:  Oct 17, 2019	Some CSS styles converted to CSS classes. (? lines)
 	Version 19.38.1:  Oct 17, 2019	Some CSS styles converted to CSS classes. (245636 lines)
 	Version 19.38:    Oct 17, 2019	Filter to select faulty/faltless projects. (245624 lines)
 	Version 19.37:    Oct 16, 2019	New filter to select faulty/faltless projects. Not yet filtered. (245543 lines)

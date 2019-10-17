@@ -4,7 +4,7 @@
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
     and used to support university teaching.
-    Copyright (C) 1999-2019 Antonio Ca�as-Vargas
+    Copyright (C) 1999-2019 Antonio Cañas-Vargas
     University of Granada (SPAIN) (acanas@ugr.es)
 
     This program is free software: you can redistribute it and/or modify
@@ -27,6 +27,41 @@ var Gbl_HTMLContent;
 
 // Global variable used to call SWAD via AJAX
 var ActionAJAX;
+
+/*****************************************************************************/
+/************************** Handle match keystrokes **************************/
+/*****************************************************************************/
+
+function handleMatchKeys(event) {
+	switch (event.key) {
+		case 'PageUp':
+		case 'ArrowLeft':
+		case 'ArrowUp':
+			submitForm('backward');
+			break;
+		case ' ':	// Space
+			submitForm('play_pause');
+			break;
+		case 'PageDown':
+		case 'ArrowRight':
+		case 'ArrowDown':
+			submitForm('forward');
+			break;
+	}
+}
+
+/*****************************************************************************/
+/************************ Submit a form given its id *************************/
+/*****************************************************************************/
+
+function submitForm(FormId) {
+	var Form = document.getElementById(FormId);
+	
+	if (Form)
+		Form.submit();
+
+	return false;
+}
 
 /*****************************************************************************/
 /*************** Write a date-time in client local time **********************/

@@ -165,8 +165,8 @@ static void Mch_ShowMatchPodium (struct Match *Match);
 static void Mch_PutParamNumOpt (unsigned NumOpt);
 static unsigned Mch_GetParamNumOpt (void);
 
-static void Mch_PutBigButton (Act_Action_t NextAction,long MchCod,
-			      const char *Icon,const char *Txt);
+static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
+			      long MchCod,const char *Icon,const char *Txt);
 static void Mch_PutBigButtonOff (const char *Icon);
 static void Mch_PutBigButtonClose (void);
 
@@ -1718,35 +1718,6 @@ static void Mch_GetElapsedTime (unsigned NumRows,MYSQL_RES *mysql_res,
   }
 
 /*****************************************************************************/
-/********************* Pause current match (by a teacher) ********************/
-/*****************************************************************************/
-
-void Mch_PauseMatch (void)
-  {
-   struct Match Match;
-
-   /***** Remove old players.
-          This function must be called by a teacher
-          before getting match status. *****/
-   Mch_RemoveOldPlayers ();
-
-   /***** Get data of the match from database *****/
-   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
-   Mch_GetDataOfMatchByCod (&Match);
-
-   /***** Update status *****/
-   Match.Status.Playing = false;	// Pause match
-
-   /***** Update match status in database *****/
-   Mch_UpdateMatchStatusInDB (&Match);
-
-   /***** Show current match status *****/
-   fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MATCH_CONT\">");
-   Mch_ShowMatchStatusForTch (&Match);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
 /** Show current match status (current question, answers...) (by a teacher) **/
 /*****************************************************************************/
 
@@ -1763,12 +1734,18 @@ void Mch_PlayMatch (void)
    Match.MchCod = Gbl.Games.MchCodBeingPlayed;
    Mch_GetDataOfMatchByCod (&Match);
 
-   /***** If not yet finished, update status *****/
-   if (Match.Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
+   /***** Update status *****/
+   if (Match.Status.Playing)	// match is being played ==> pause it
+      Match.Status.Playing = false;	// Pause match
+   else				// match is paused       ==> play it
      {
-      if (Match.Status.QstInd == 0)			// Match has been created, but it has not started
-	 Mch_SetMatchStatusToNext (&Match);
-      Match.Status.Playing = true;			// Start/resume match
+      /* If unfinished, update status */
+      if (Match.Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished
+	{
+	 if (Match.Status.QstInd == 0)			// Match has been created, but it has not started
+	    Mch_SetMatchStatusToNext (&Match);
+	 Match.Status.Playing = true;			// Start/resume match
+	}
      }
 
    /***** Update match status in database *****/
@@ -2264,7 +2241,7 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
       Mch_PutBigButtonClose ();
    else
       /* Put button to go back */
-      Mch_PutBigButton (ActBckMch,Match->MchCod,
+      Mch_PutBigButton (ActBckMch,"backward",Match->MchCod,
 			Mch_ICON_PREVIOUS,Txt_Go_back);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2272,15 +2249,13 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MATCH_BUTTON_CENTER_CONTAINER\">");
    if (Match->Status.Playing)					// Being played
       /* Put button to pause match */
-      Mch_PutBigButton (ActPauMch,
-			Match->MchCod,
+      Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
 			Mch_ICON_PAUSE,Txt_Pause);
    else								// Paused
      {
       if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Not finished
 	 /* Put button to play match */
-	 Mch_PutBigButton (ActPlyMch,
-			   Match->MchCod,
+	 Mch_PutBigButton (ActPlyPauMch,"play_pause",Match->MchCod,
 			   Mch_ICON_PLAY,Match->Status.QstInd == 0 ? Txt_Start :
 								     Txt_Resume);
       else							// Finished
@@ -2296,7 +2271,7 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
       Mch_PutBigButtonClose ();
    else
       /* Put button to show answers */
-      Mch_PutBigButton (ActFwdMch,Match->MchCod,
+      Mch_PutBigButton (ActFwdMch,"forward",Match->MchCod,
 			Mch_ICON_NEXT,Txt_Go_forward);
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2625,11 +2600,11 @@ static unsigned Mch_GetParamNumOpt (void)
 /*********************** Put a big button to do action ***********************/
 /*****************************************************************************/
 
-static void Mch_PutBigButton (Act_Action_t NextAction,long MchCod,
-			      const char *Icon,const char *Txt)
+static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
+			      long MchCod,const char *Icon,const char *Txt)
   {
    /***** Start form *****/
-   Frm_StartForm (NextAction);
+   Frm_StartFormId (NextAction,Id);
    Mch_PutParamMchCod (MchCod);
 
    /***** Put icon with link *****/
@@ -2641,7 +2616,7 @@ static void Mch_PutBigButton (Act_Action_t NextAction,long MchCod,
 	              "</a>"
 	              "</div>",
 	    Txt,
-	    Gbl.Form.Id,
+	    Id,
 	    Icon);
 
    /***** End form *****/

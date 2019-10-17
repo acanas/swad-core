@@ -101,7 +101,6 @@ void Mch_GetIndexes (long MchCod,unsigned QstInd,
 void Mch_RemoveGroup (long GrpCod);
 void Mch_RemoveGroupsOfType (long GrpTypCod);
 
-void Mch_PauseMatch (void);
 void Mch_PlayMatch (void);
 void Mch_ToggleVisibilResultsMchQst (void);
 void Mch_BackMatch (void);
