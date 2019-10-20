@@ -1075,7 +1075,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       Att_GetAttEventDescriptionFromDB (Att.AttCod,Description);
      }
 
-   /***** Start form *****/
+   /***** Begin form *****/
    if (ItsANewAttEvent)
       Frm_StartForm (ActNewAtt);
    else
@@ -1878,7 +1878,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    /***** Get my setting about photos in users' list for current course *****/
    Usr_GetMyPrefAboutListWithPhotosFromDB ();
 
-   /***** Start form *****/
+   /***** Begin form *****/
    if (Att->Open)
      {
       Frm_StartForm (ActRecAttMe);
@@ -1890,7 +1890,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
    Box_StartBox (NULL,Txt_Attendance,NULL,
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
-   /* Start table */
+   /* Begin table */
    Tbl_TABLE_BeginWideMarginPadding (2);
 
    /* Header */
@@ -1963,12 +1963,12 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /* Start form */
+      /* Begin form */
       Frm_StartForm (ActRecAttStd);
       Att_PutParamAttCod (Att->AttCod);
       Grp_PutParamsCodGrps ();
 
-      /* Start table */
+      /* Begin table */
       Tbl_TABLE_BeginWideMarginPadding (2);
 
       /* Header */
@@ -3084,7 +3084,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
                  NULL,
 		 Box_NOT_CLOSABLE);
 
-   /***** Start form to update the attendance
+   /***** Begin form to update the attendance
 	  depending on the events selected *****/
    if (NormalView)
      {
@@ -3093,7 +3093,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       Usr_PutHiddenParSelectedUsrsCods ();
      }
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** Heading row *****/
@@ -3221,7 +3221,7 @@ static void Att_ListUsrsAttendanceTable (Att_TypeOfView_t TypeOfView,
    /***** Start section with attendance table *****/
    Lay_StartSection (Att_ATTENDANCE_TABLE_ID);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginCenterPadding (2);
 
    /***** Heading row *****/

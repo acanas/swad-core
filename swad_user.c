@@ -2598,7 +2598,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 
    fprintf (Gbl.F.Out,"<div class=\"CM\">");
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (NextAction);
    if (FuncParams)
       FuncParams ();
@@ -4113,7 +4113,7 @@ static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted)
   {
-   /***** Start table cell *****/
+   /***** Begin table cell *****/
    Tbl_TD_Begin ("class=\"%s LM %s\"",
 		 Accepted ? (NonBreak ? "DAT_SMALL_NOBR_N" :
 				        "DAT_SMALL_N") :
@@ -6130,7 +6130,7 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
    extern const char *The_ClassFormInBoxNoWrap[The_NUM_THEMES];
    extern const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES];
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormAnchor (Gbl.Action.Act,			// Repeat current action
 	                Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
@@ -6209,7 +6209,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
 	 /***** Put link to register students *****/
 	 Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
-         /* Start form */
+         /* Begin form */
          Frm_StartForm (NextAction);
          if (FuncParams)
             FuncParams ();
@@ -6550,7 +6550,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
                                          Gbl.Crs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
          Lay_NotEnoughMemoryExit ();
 
-      /***** Start table with list of students *****/
+      /***** Begin table with list of students *****/
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
          Tbl_TR_Begin (NULL);
@@ -6725,7 +6725,7 @@ void Usr_ListAllDataGsts (void)
       /***** Set number of columns *****/
       NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_GST;
 
-      /***** Start table with list of guests *****/
+      /***** Begin table with list of guests *****/
       Tbl_TABLE_BeginWide ();
 
       /* Start row */
@@ -6870,7 +6870,7 @@ void Usr_ListAllDataStds (void)
             Lay_NotEnoughMemoryExit ();
 	}
 
-      /***** Start table with list of students *****/
+      /***** Begin table with list of students *****/
       Tbl_TABLE_BeginWide ();
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
@@ -7091,7 +7091,7 @@ void Usr_ListAllDataTchs (void)
       /***** Initialize number of columns *****/
       NumColumns = Usr_NUM_ALL_FIELDS_DATA_TCH;
 
-      /***** Start table with lists of teachers *****/
+      /***** Begin table with lists of teachers *****/
       Tbl_TABLE_BeginWide ();
 
       /***** List teachers and non-editing teachers *****/
@@ -7860,11 +7860,11 @@ void Usr_SeeGuests (void)
          /* Set options allowed */
          PutForm = Usr_SetOptionsListUsrsAllowed (Rol_GST,ICanChooseOption);
 
-         /* Start form */
+         /* Begin form */
          if (PutForm)
 	    Frm_StartForm (ActDoActOnSevGst);
 
-         /* Start table */
+         /* Begin table */
 	 Tbl_TABLE_BeginWide ();
 
          /* Draw the classphoto/list */
@@ -8024,14 +8024,14 @@ void Usr_SeeStudents (void)
          /* Set options allowed */
          PutForm = Usr_SetOptionsListUsrsAllowed (Rol_STD,ICanChooseOption);
 
-         /* Start form */
+         /* Begin form */
          if (PutForm)
            {
 	    Frm_StartForm (ActDoActOnSevStd);
 	    Grp_PutParamsCodGrps ();
            }
 
-         /* Start table */
+         /* Begin table */
          Tbl_TABLE_BeginWide ();
 
          /* Draw the classphoto/list */
@@ -8198,14 +8198,14 @@ void Usr_SeeTeachers (void)
          /* Set options allowed */
          PutForm = Usr_SetOptionsListUsrsAllowed (Rol_TCH,ICanChooseOption);
 
-         /* Start form */
+         /* Begin form */
          if (PutForm)
            {
             Frm_StartForm (ActDoActOnSevTch);
 	    Grp_PutParamsCodGrps ();
            }
 
-         /* Start table */
+         /* Begin table */
          Tbl_TABLE_BeginWide ();
 
          /***** Draw the classphoto/list  *****/
@@ -9744,7 +9744,7 @@ void Usr_ShowTableCellWithUsrData (struct UsrData *UsrDat,unsigned NumRows)
                      "PHOTO45x60",Pho_ZOOM,false);
    Tbl_TD_End ();
 
-   /***** Start form to go to user's record card *****/
+   /***** Begin form to go to user's record card *****/
    if (NumRows)
       Tbl_TD_Begin ("rowspan=\"%u\" class=\"LT COLOR%u\"",
 	            NumRows + 1,Gbl.RowEvenOdd);

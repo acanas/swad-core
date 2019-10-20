@@ -216,7 +216,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
       fprintf (Gbl.F.Out,"%s</a>",Txt_Who_to_follow);
       Frm_EndForm ();
 
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_Begin (NULL);
 
       /***** Initialize structure with user's data *****/

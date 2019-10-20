@@ -363,7 +363,7 @@ void Mnu_WriteMenuThisTab (void)
                   IsTheSelectedAction ? "MENU_OPT_ON" :
                 	                "MENU_OPT_OFF");
 
-         /***** Start form and link *****/
+         /***** Begin form and link *****/
          Frm_StartForm (NumAct);
          Frm_LinkFormSubmit (Title,The_ClassTxtMenu[Gbl.Prefs.Theme],NULL);
 

@@ -927,7 +927,7 @@ static void Lay_WritePageTopHeading (void)
    /* 1st. row, 1st. column: logo, tagline and search */
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_left\">");
 
-   /* Start form to go to home page */
+   /* Begin form to go to home page */
    Frm_StartFormGoTo (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
 
@@ -1176,7 +1176,7 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 				    const char *Icon,
 				    const char *Title)
   {
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormAnchor (NextAction,Anchor);
    if (FuncParams)
       FuncParams ();
@@ -1203,7 +1203,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
    fprintf (Gbl.F.Out," ");	// This space is necessary to enable
 				// jumping to the next line on narrow screens
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormAnchor (NextAction,Anchor);
    if (FuncParams)
       FuncParams ();
@@ -1237,7 +1237,7 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
    fprintf (Gbl.F.Out," ");	// This space is necessary to enable
 				// jumping to the next line on narrow screens
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormAnchor (NextAction,Anchor);
    if (FuncParams)
       FuncParams ();
@@ -1272,7 +1272,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
       fprintf (Gbl.F.Out," ");	// This space is necessary to enable
 				// jumping to the next line on narrow screens
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (NextAction);
    if (FuncParams)
       FuncParams ();
@@ -1623,7 +1623,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Crs.CrsCod = CrsCod;
    Crs_GetDataOfCourseByCod (&Crs);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (10);
    Tbl_TR_Begin (NULL);
 

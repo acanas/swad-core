@@ -452,7 +452,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Svy.SvyCod,&Anchor);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    if (ShowOnlyThisSvyComplete)
       Tbl_TABLE_BeginWidePadding (2);
 
@@ -1846,7 +1846,7 @@ void Svy_RequestCreatOrEditSvy (void)
       Svy_GetSurveyTxtFromDB (Svy.SvyCod,Txt);
      }
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Svy_CurrentSvyCod = Svy.SvyCod;
    Frm_StartForm (ItsANewSurvey ? ActNewSvy :
 	                          ActChgSvy);
@@ -2688,13 +2688,13 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       Box_StartBox (NULL,Txt_New_question,NULL,
                     Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActRcvSvyQst);
    Svy_PutParamSvyCod (SvyCod);
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
       Svy_PutParamQstCod (SvyQst->QstCod);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** Stem *****/
@@ -3209,7 +3209,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
      {
       if (PutFormAnswerSurvey)
 	{
-	 /***** Start form to send answers to survey *****/
+	 /***** Begin form to send answers to survey *****/
 	 Frm_StartForm (ActAnsSvy);
 	 Svy_PutParamSvyCod (Svy->SvyCod);
 	}

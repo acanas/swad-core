@@ -104,7 +104,7 @@ void Not_ShowFormNotice (void)
    Ale_ShowAlert (Ale_INFO,Txt_The_notice_will_appear_as_a_yellow_note_,
                   Gbl.Hierarchy.Crs.FullName);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActRcvNot);
 
    /***** Start box *****/

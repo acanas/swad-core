@@ -392,7 +392,7 @@ void Ntf_ShowMyNotifications (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_BeginWideMarginPadding (2);
       Tbl_TR_Begin (NULL);
 
@@ -1919,7 +1919,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
                  Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActChgNtfPrf);
 
    /***** Warning if I can not receive email notifications *****/
@@ -2054,7 +2054,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
    if ((NumUnseenNtfs = Ntf_GetNumberOfAllMyUnseenNtfs ()))
       NumNewNtfs = Ntf_GetNumberOfMyNewUnseenNtfs ();
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormId (ActSeeNewNtf,"form_ntf");
    Frm_LinkFormSubmitId (Txt_See_notifications,
 			 The_ClassNotif[Gbl.Prefs.Theme],"form_ntf",NULL);

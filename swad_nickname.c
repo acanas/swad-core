@@ -257,7 +257,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    if (IMustFillNickname)
       Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** List nicknames *****/

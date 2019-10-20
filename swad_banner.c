@@ -403,7 +403,7 @@ static void Ban_ListBannersForEdition (void)
    struct Banner *Ban;
    char *Anchor = NULL;
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** Table head *****/
@@ -855,7 +855,7 @@ static void Ban_PutFormToCreateBanner (void)
    extern const char *Txt_New_banner;
    extern const char *Txt_Create_banner;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewBan);
 
    /***** Start box and table *****/

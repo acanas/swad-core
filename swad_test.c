@@ -460,7 +460,7 @@ void Tst_ShowNewTest (void)
 				       Gbl.Hierarchy.Deg.DegCod,
 				       Gbl.Hierarchy.Crs.CrsCod);
 
-            /***** Start form *****/
+            /***** Begin form *****/
             Frm_StartForm (ActAssTst);
   	    Gbl.Test.NumQsts = (unsigned) NumRows;
             Par_PutHiddenParamUnsigned ("NumTst",NumAccessesTst);
@@ -1912,7 +1912,7 @@ static void Tst_ShowFormConfigTst (void)
    Box_StartBox (NULL,Txt_Configure_tests,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActRcvCfgTst);
 
    /***** Tests are visible from plugins? *****/
@@ -3074,7 +3074,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
    Box_StartBox (NULL,Txt_Questions,NULL,
 		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActAddTstQstToGam);
    Gam_PutParams ();
 
@@ -3699,7 +3699,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
    row[4] Correct
    */
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginPadding (2);
 
    for (NumOpt = 0;
@@ -3820,7 +3820,7 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
    /***** Compute the total score of this question *****/
    Tst_ComputeScoreQst (Indexes,AnswersUsr,ScoreThisQst,AnswerIsNotBlank);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginPadding (2);
    Tbl_TR_Begin (NULL);
    Tst_WriteHeadUserCorrect (UsrDat);
@@ -4187,7 +4187,7 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
    /***** Get indexes for this question in match *****/
    Mch_GetIndexes (MchCod,QstInd,Indexes);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (5);
 
    /***** Show one row for each option *****/
@@ -5064,12 +5064,12 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       Box_StartBox (NULL,Txt_New_question,NULL,
                     Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActRcvTstQst);
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
       Tst_PutParamQstCod ();
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginPadding (2);	// Table for this question
 
    /***** Help for text editor *****/
@@ -7457,7 +7457,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
 	 /***** Form to select type of list used for select several users *****/
 	 Usr_ShowFormsToSelectUsrListType (NULL);
 
-         /***** Start form *****/
+         /***** Begin form *****/
          Frm_StartForm (ActSeeUsrTstRes);
          Grp_PutParamsCodGrps ();
 
@@ -7524,7 +7524,7 @@ void Tst_SelDatesToSeeMyTstResults (void)
    extern const char *Txt_Results;
    extern const char *Txt_View_test_results;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActSeeMyTstRes);
 
    /***** Start box and table *****/
@@ -8087,7 +8087,7 @@ void Tst_ShowOneTstResult (void)
 				 Gbl.Hierarchy.Deg.DegCod,
 				 Gbl.Hierarchy.Crs.CrsCod);
 
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_BeginWideMarginPadding (10);
 
       /***** Header row *****/

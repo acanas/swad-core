@@ -316,7 +316,7 @@ static void Cty_Configuration (bool PrintView)
       Cty_FreeMapAttribution (&MapAttribution);
      }
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** Country name (an link to WWW if exists) *****/
@@ -808,7 +808,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    extern const char *Txt_Go_to_X;
    char CountryName[Cty_MAX_BYTES_NAME + 1];
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormGoTo (Action);
    Cty_PutParamCtyCod (Cty->CtyCod);
    fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassContainer);
@@ -1218,7 +1218,7 @@ void Cty_WriteSelectorOfCountry (void)
    unsigned NumCty;
    long CtyCod;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeIns);
    fprintf (Gbl.F.Out,"<select id=\"cty\" name=\"cty\" class=\"HIE_SEL\""
                       " onchange=\"document.getElementById('%s').submit();\">"
@@ -2026,7 +2026,7 @@ static void Cty_PutFormToCreateCountry (void)
    extern const char *Txt_Create_country;
    Lan_Language_t Lan;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewCty);
 
    /***** Start box and table *****/

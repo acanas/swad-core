@@ -3255,7 +3255,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
       /* Get list of group with file zones which I belong to */
       Grp_GetLstCodGrpsWithFileZonesIBelong (&LstMyGrps);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (Brw_ActChgZone[Gbl.FileBrowser.Type]);
    Brw_PutHiddenParamFullTreeIfSelected ();
 
@@ -3369,7 +3369,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
                      "PHOTO60x80",Pho_ZOOM,false);
    Tbl_TD_End ();
 
-   /***** Start form to send a message to this user *****/
+   /***** Begin form to send a message to this user *****/
    Tbl_TD_Begin ("class=\"LT\"");
 
    fprintf (Gbl.F.Out,"<div class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
@@ -6149,7 +6149,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
   {
    extern const char *Txt_View_data;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
    Brw_PutParamsFileBrowser (NULL,		// Not used
 			     NULL,		// Not used
@@ -8337,7 +8337,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    extern const char *Txt_You_can_create_a_new_folder_inside_the_folder_X;
    extern const char *Txt_Folder;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
    Brw_PutImplicitParamsFileBrowser ();
 
@@ -8467,7 +8467,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    extern const char *Txt_Paste;
    extern const char *Txt_or_you_can_make_a_file_copy_to_the_folder_X;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
    Brw_PutImplicitParamsFileBrowser ();
 
@@ -8499,7 +8499,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    extern const char *Txt_Save_as;
    extern const char *Txt_optional;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
    Brw_PutImplicitParamsFileBrowser ();
 
@@ -9477,7 +9477,7 @@ void Brw_ShowFileMetadata (void)
 	                        FileMetadata.FilFolLnk.Name,
 	                        FileNameToShow);
 
-	 /***** Start form to update the metadata of a file *****/
+	 /***** Begin form to update the metadata of a file *****/
 	 if (ICanEdit)	// I can edit file properties
 	   {
 	    /* Can the file be public? */
@@ -12060,7 +12060,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       /***** Write file name using path (row[1]) *****/
       Tbl_TD_Begin ("class=\"DAT_N LT %s\"",BgColor);
 
-      /* Start form */
+      /* Begin form */
       Action = Brw_ActReqDatFile[Brw_FileBrowserForFoundDocs[FileMetadata.FileBrowser]];
 
       if (CrsCod > 0)
@@ -12153,7 +12153,7 @@ void Brw_AskRemoveOldFiles (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActRemOldBrf);
    Brw_PutHiddenParamFullTreeIfSelected ();
 

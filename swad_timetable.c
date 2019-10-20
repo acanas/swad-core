@@ -1125,7 +1125,7 @@ static void TT_DrawTimeTable (void)
    unsigned ColumnsToDrawIncludingExtraColumn;
    unsigned ContinuousFreeMinicolumns;
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_Begin ("TT");
 
    /***** Top row used for column adjustement *****/

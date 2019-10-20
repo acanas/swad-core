@@ -566,7 +566,7 @@ static void Prj_ShowFormToFilterByDpt (void)
    extern const char *Txt_Any_department;
    struct Prj_Filter Filter;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    fprintf (Gbl.F.Out,"<div>");
    Frm_StartForm (ActSeePrj);
    Filter.My_All = Gbl.Prjs.Filter.My_All;
@@ -975,7 +975,7 @@ static void Prj_PutIconsToLockUnlockAllProjects (void)
 
 void Prj_ShowOneUniqueProject (struct Project *Prj)
   {
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** Write project head *****/
@@ -1909,7 +1909,7 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    break;
 	}
 
-      /***** Start table with all members with this role *****/
+      /***** Begin table with all members with this role *****/
       Tbl_TABLE_BeginPadding (2);
 
       /***** Write users *****/

@@ -1030,7 +1030,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
                                         Gbl.Forum.ForumSelected.ThrCod,
                                         &PaginationPsts);
 
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_BeginWidePadding (2);
 
       /***** Show posts from this page, the author and the date of last reply *****/
@@ -3928,7 +3928,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
       Box_StartBox (NULL,Txt_New_thread,NULL,
 		    Hlp_MESSAGES_Forums_new_thread,Box_NOT_CLOSABLE);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    if (IsReply)	// Form to write a reply to a post of an existing thread
      {
       Frm_StartFormAnchor (For_ActionsRecRepFor[Gbl.Forum.ForumSelected.Type],

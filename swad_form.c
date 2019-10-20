@@ -124,7 +124,7 @@ static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
 
    if (!Gbl.Form.Inside)
      {
-      /* Start form */
+      /* Begin form */
       fprintf (Gbl.F.Out,"<form method=\"post\" action=\"%s/%s",
 	       Cfg_URL_SWAD_CGI,
 	       Lan_STR_LANG_ID[Gbl.Prefs.Language]);

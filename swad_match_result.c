@@ -110,7 +110,7 @@ void McR_SelDatesToSeeMyMchResults (void)
    extern const char *Txt_Results;
    extern const char *Txt_View_matches_results;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActSeeMyMchRes);
 
    /***** Start box and table *****/
@@ -199,7 +199,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
 	 /***** Form to select type of list used for select several users *****/
 	 Usr_ShowFormsToSelectUsrListType (NULL);
 
-         /***** Start form *****/
+         /***** Begin form *****/
          Frm_StartForm (ActSeeUsrMchRes);
          Grp_PutParamsCodGrps ();
 
@@ -741,7 +741,7 @@ void McR_ShowOneMchResult (void)
 				 Gbl.Hierarchy.Deg.DegCod,
 				 Gbl.Hierarchy.Crs.CrsCod);
 
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_BeginWideMarginPadding (10);
 
       /***** Header row *****/

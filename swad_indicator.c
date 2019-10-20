@@ -115,7 +115,7 @@ void Ind_ReqIndicatorsCourses (void)
                  Hlp_ANALYTICS_Indicators,Box_NOT_CLOSABLE);
 
    /***** Form to update indicators *****/
-   /* Start form and table */
+   /* Begin form and table */
    Frm_StartForm (ActReqStaCrs);
    Tbl_TABLE_BeginWidePadding (2);
 
@@ -755,7 +755,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    struct Ind_IndicatorsCrs Indicators;
    long ActCod;
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_Begin ("INDICATORS");
 
    /***** Write table heading *****/

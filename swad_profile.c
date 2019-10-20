@@ -194,7 +194,7 @@ void Prf_RequestUserProfile (void)
       fprintf (Gbl.F.Out,"</div>");
      }
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActSeeOthPubPrf);
 
    /***** Start box *****/

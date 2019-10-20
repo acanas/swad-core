@@ -459,7 +459,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
    extern const char *Txt_Confirm_ID;
    Act_Action_t NextAction;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    switch (UsrDat->Roles.InCurrentCrs.Role)
      {
       case Rol_STD:
@@ -593,7 +593,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
    if (IShouldFillInID)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_ID);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** List existing user's IDs *****/

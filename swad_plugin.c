@@ -882,7 +882,7 @@ static void Plg_PutFormToCreatePlugin (void)
    extern const char *Txt_IP;
    extern const char *Txt_Create_plugin;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewPlg);
 
    /***** Start box and table *****/

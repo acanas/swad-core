@@ -1136,7 +1136,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Asg_GetAssignmentTxtFromDB (Asg.AsgCod,Txt);
      }
 
-   /***** Start form *****/
+   /***** Begin form *****/
    if (ItsANewAssignment)
      {
       Frm_StartForm (ActNewAsg);

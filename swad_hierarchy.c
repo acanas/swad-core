@@ -98,7 +98,7 @@ void Hie_WriteMenuHierarchy (void)
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginCenterPadding (2);
 
    /***** Write a 1st selector

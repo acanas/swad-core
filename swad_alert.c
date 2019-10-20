@@ -452,7 +452,7 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
        TxtButton)
       if (TxtButton[0])
 	{
-         /* Start form */
+         /* Begin form */
          Frm_StartFormAnchorOnSubmit (NextAction,Anchor,OnSubmit);
 	 if (FuncParams)
 	    FuncParams ();

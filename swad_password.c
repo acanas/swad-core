@@ -271,7 +271,7 @@ void Pwd_ShowFormSendNewPwd (void)
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Get_a_new_password;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActSndNewPwd);
 
    /***** Start box *****/
@@ -657,7 +657,7 @@ void Pwd_ShowFormChgMyPwd (void)
    /***** Start section *****/
    Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormAnchor (ActChgMyPwd,Pwd_PASSWORD_SECTION_ID);
 
    /***** Start box *****/
@@ -679,7 +679,7 @@ void Pwd_ShowFormChgMyPwd (void)
 	 Ale_ShowAlert (Ale_WARNING,Txt_Your_password_is_not_secure_enough);
      }
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** Current password *****/
@@ -739,7 +739,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
 
    Tbl_TR_Begin (NULL);
 
-   /***** Start form element ****/
+   /***** Begin form element ****/
    Tbl_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Passwd\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
@@ -774,7 +774,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    extern const char *Txt_Retype_new_password;
 
    /***** 1st password *****/
-   /* Start form element */
+   /* Begin form element */
    Tbl_TR_Begin (NULL);
 
    Tbl_TD_Begin ("class=\"REC_C1_BOT RM\"");
@@ -799,7 +799,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    Tbl_TR_End ();
 
    /***** 2nd password *****/
-   /* Start form element */
+   /* Begin form element */
    Tbl_TR_Begin (NULL);
 
    Tbl_TD_Begin ("class=\"REC_C1_BOT RM\"");
@@ -845,7 +845,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);
 
    /***** Form to change password *****/
-   /* Start form */
+   /* Begin form */
    switch (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs.Role)
      {
       case Rol_STD:

@@ -307,7 +307,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
 	                                Pho_PutIconToRequestRemoveOtherUsrPhoto,
 		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    if (ItsMe)
       Frm_StartForm (ActDetMyPho);
    else
@@ -1186,7 +1186,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    char MainDegreeShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
    Rol_Role_t MaxRole;	// Maximum user's role in his/her main degree
 
-   /***** Start form to go to public profile *****/
+   /***** Begin form to go to public profile *****/
    if (PutLinkToPublicProfile)
      {
       if (FormUnique)
@@ -2013,7 +2013,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       /***** Start div *****/
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-      /***** Start form *****/
+      /***** Begin form *****/
       Frm_StartForm (ActCalPhoDeg);
       Pho_PutHiddenParamTypeOfAvg ();
       Pho_PutHiddenParamPhotoSize ();

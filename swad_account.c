@@ -351,7 +351,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    extern const char *Txt_Email;
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
-   /***** Start form to enter some data of the new user *****/
+   /***** Begin form to enter some data of the new user *****/
    Frm_StartForm (ActCreUsrAcc);
 
    /***** Start box and table *****/

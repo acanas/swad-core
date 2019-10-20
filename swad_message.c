@@ -272,7 +272,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       Usr_GetListMsgRecipientsWrittenExplicitelyBySender (false);
      }
 
-   /***** Start form to select recipients and write the message *****/
+   /***** Begin form to select recipients and write the message *****/
    Frm_StartForm (ActRcvMsgUsr);
    if (Gbl.Msg.Reply.IsReply)
      {
@@ -286,7 +286,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	 Par_PutHiddenParamChar ("ShowOnlyOneRecipient",'Y');
      }
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginCenterPadding (2);
 
    /***** "To:" section (recipients) *****/
@@ -2646,7 +2646,7 @@ void Msg_ShowFormToFilterMsgs (void)
       Txt_MSG_To
      };
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginCenterPadding (2);
 
    Tbl_TR_Begin (NULL);
@@ -3160,7 +3160,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
    Tbl_TD_Begin ("class=\"%s LT\"",Open ? "MSG_TIT_BG" :
         	                                "MSG_TIT_BG_NEW");
 
-   /***** Start form to expand/contract the message *****/
+   /***** Begin form to expand/contract the message *****/
    Frm_StartForm (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Expanded ? ActConRcvMsg :
 	                                                                        ActExpRcvMsg) :
                                                                     (Expanded ? ActConSntMsg :
@@ -3198,7 +3198,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
    char PhotoURL[PATH_MAX + 1];
    bool WriteAuthor = false;
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginPadding (2);
 
    Tbl_TR_Begin (NULL);
@@ -3487,7 +3487,7 @@ static void Msg_WriteMsgTo (long MsgCod)
    /***** Check number of recipients *****/
    if (NumRecipientsTotal)
      {
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_Begin (NULL);
 
       /***** How many recipients will be shown? *****/
@@ -3561,7 +3561,7 @@ static void Msg_WriteMsgTo (long MsgCod)
       /***** If any recipients are unknown *****/
       if ((NumRecipientsUnknown = NumRecipientsTotal - NumRecipientsKnown))
 	{
-         /***** Start form to show all the users *****/
+         /***** Begin form to show all the users *****/
          Tbl_TR_Begin (NULL);
 
 	 Tbl_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
@@ -3577,7 +3577,7 @@ static void Msg_WriteMsgTo (long MsgCod)
       /***** If any known recipient is not listed *****/
       if (NumRecipientsToShow < NumRecipientsKnown)
         {
-         /***** Start form to show all the users *****/
+         /***** Begin form to show all the users *****/
          Tbl_TR_Begin (NULL);
 
          Tbl_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");

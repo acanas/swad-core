@@ -392,7 +392,7 @@ void Gam_ShowOneGame (long GamCod,
    /***** Set anchor string *****/
    Frm_SetAnchorStr (Game.GamCod,&Anchor);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    if (ShowOnlyThisGame)
       Tbl_TABLE_BeginWidePadding (2);
 
@@ -1121,7 +1121,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
       Gam_GetGameTxtFromDB (Game->GamCod,Txt);
      }
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Frm_StartForm (ItsANewGame ? ActNewGam :
 				ActChgGam);

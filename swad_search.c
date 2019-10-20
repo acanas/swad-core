@@ -137,7 +137,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    Box_StartBox (NULL,Txt_Search,Crs_PutIconToSelectMyCourses,
                  Hlp_START_Search,Box_NOT_CLOSABLE);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (Action);
 
    /***** Scope (whole platform, current country, current institution,

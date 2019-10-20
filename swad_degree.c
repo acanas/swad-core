@@ -245,7 +245,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
   {
    extern const char *Txt_Go_to_X;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormGoTo (Action);
    Deg_PutParamDegCod (Deg->DegCod);
 
@@ -334,7 +334,7 @@ static void Deg_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</a>");
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** Centre *****/
@@ -609,7 +609,7 @@ void Deg_WriteSelectorOfDegree (void)
    unsigned NumDeg;
    long DegCod;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeCrs);
    fprintf (Gbl.F.Out,"<select id=\"deg\" name=\"deg\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
@@ -952,7 +952,7 @@ static void Deg_PutFormToCreateDegree (void)
    struct DegreeType *DegTyp;
    unsigned NumDegTyp;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       Frm_StartForm (ActNewDeg);
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)

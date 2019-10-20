@@ -409,7 +409,7 @@ static void Lnk_ListLinksForEdition (void)
    unsigned NumLnk;
    struct Link *Lnk;
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** Table head *****/
@@ -736,7 +736,7 @@ static void Lnk_PutFormToCreateLink (void)
    extern const char *Txt_New_link;
    extern const char *Txt_Create_link;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewLnk);
 
    /***** Start box and table *****/

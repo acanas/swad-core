@@ -2335,7 +2335,7 @@ static void TL_PutFormToWriteNewPost (void)
    /* Start container */
    fprintf (Gbl.F.Out,"<div class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\">");
 
-   /* Start form to write the post */
+   /* Begin form to write the post */
    TL_FormStart (ActRcvSocPstGbl,ActRcvSocPstUsr);
 
    /* Textarea and button */
@@ -2552,7 +2552,7 @@ static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
    /* Start right container */
    fprintf (Gbl.F.Out,"<div class=\"TL_COM_CONT TL_COMM_WIDTH\">");
 
-   /* Start form to write the post */
+   /* Begin form to write the post */
    TL_FormStart (ActRcvSocComGbl,ActRcvSocComUsr);
    TL_PutHiddenParamNotCod (NotCod);
 

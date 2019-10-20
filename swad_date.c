@@ -556,7 +556,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
      };
 
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_Begin (NULL);
    Tbl_TR_Begin (NULL);
 
@@ -823,7 +823,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    unsigned Day;
    unsigned NumDaysSelectedMonth;
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_Begin (NULL);
    Tbl_TR_Begin (NULL);
 

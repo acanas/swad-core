@@ -284,7 +284,7 @@ void Log_RequestLogo (Hie_Level_t Scope)
       fprintf (Gbl.F.Out,"</div>");
      }
 
-   /***** Start form to upload logo *****/
+   /***** Begin form to upload logo *****/
    Frm_StartForm (ActionRec);
 
    /***** Start box *****/

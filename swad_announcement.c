@@ -400,7 +400,7 @@ void Ann_ShowFormAnnouncement (void)
    extern const char *Txt_Users;
    extern const char *Txt_Create_announcement;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActRcvAnn);
 
    /***** Start box and table *****/

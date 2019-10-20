@@ -499,7 +499,7 @@ static void Dpt_ListDepartmentsForEdition (void)
    struct Instit Ins;
    unsigned NumIns;
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginPadding (2);
 
    /***** Write heading *****/
@@ -907,7 +907,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    extern const char *Txt_Create_department;
    unsigned NumIns;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewDpt);
 
    /***** Start box and table *****/

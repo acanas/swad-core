@@ -1033,13 +1033,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
-      /***** Start form *****/
+      /***** Begin form *****/
       Frm_StartFormAnchor (ActRcvExaAnn,Anchor);
       if (ExaCod > 0)	// Existing announcement of exam
          Exa_PutHiddenParamExaCod (ExaCod);
      }
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_Begin ("%s CELLS_PAD_2",
                     ClassExaAnnouncement[TypeViewExamAnnouncement][Gbl.ExamAnns.ExaDat.Status]);
 

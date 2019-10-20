@@ -158,7 +158,7 @@ void Dup_ListDuplicateUsrs (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_BeginCenterPadding (2);
 
       /***** Heading row with column names *****/
@@ -293,7 +293,7 @@ static void Dup_ListSimilarUsrs (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_BeginCenterPadding (2);
 
       /***** Heading row with column names *****/

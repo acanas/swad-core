@@ -239,7 +239,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
   {
    extern const char *Txt_Go_to_X;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormGoTo (Action);
    Ctr_PutParamCtrCod (Ctr->CtrCod);
 
@@ -399,7 +399,7 @@ static void Ctr_Configuration (bool PrintView)
       Ctr_FreePhotoAttribution (&PhotoAttribution);
      }
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** Institution *****/
@@ -817,7 +817,7 @@ static void Ctr_ListCentres (void)
 
    if (Gbl.Hierarchy.Ins.Ctrs.Num)	// There are centres in the current institution
      {
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_BeginWideMarginPadding (2);
       Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
@@ -1407,7 +1407,7 @@ void Ctr_WriteSelectorOfCentre (void)
    unsigned NumCtr;
    long CtrCod;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeDeg);
    fprintf (Gbl.F.Out,"<select id=\"ctr\" name=\"ctr\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Ins.InsCod > 0)
@@ -2306,7 +2306,7 @@ void Ctr_RequestPhoto (void)
    extern const char *Txt_XxY_pixels_or_higher;
    extern const char *Txt_File_with_the_photo;
 
-   /***** Start form to upload photo *****/
+   /***** Begin form to upload photo *****/
    Frm_StartForm (ActRecCtrPho);
 
    /***** Start box *****/
@@ -2494,7 +2494,7 @@ static void Ctr_PutFormToCreateCentre (void)
    extern const char *Txt_Create_centre;
    unsigned NumPlc;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       Frm_StartForm (ActNewCtr);
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)

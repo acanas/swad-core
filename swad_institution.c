@@ -255,7 +255,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
   {
    extern const char *Txt_Go_to_X;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormGoTo (Action);
    Ins_PutParamInsCod (Ins->InsCod);
 
@@ -347,7 +347,7 @@ static void Ins_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</a>");
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** Country *****/
@@ -709,7 +709,7 @@ static void Ins_ListInstitutions (void)
 
    if (Gbl.Hierarchy.Cty.Inss.Num)	// There are institutions in the current country
      {
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_BeginWideMarginPadding (2);
       Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
@@ -1385,7 +1385,7 @@ void Ins_WriteSelectorOfInstitution (void)
    unsigned NumIns;
    long InsCod;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeCtr);
    fprintf (Gbl.F.Out,"<select id=\"ins\" name=\"ins\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
@@ -2205,7 +2205,7 @@ static void Ins_PutFormToCreateInstitution (void)
    extern const char *Txt_New_institution;
    extern const char *Txt_Create_institution;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Frm_StartForm (ActNewIns);
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)

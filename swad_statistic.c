@@ -366,7 +366,7 @@ void Sta_AskShowCrsHits (void)
 	 /***** Put link to register students *****/
          Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
-	 /***** Start form *****/
+	 /***** Begin form *****/
          Frm_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
 
          Grp_PutParamsCodGrps ();
@@ -533,7 +533,7 @@ void Sta_AskShowGblHits (void)
 
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
    /***** Start box and table *****/

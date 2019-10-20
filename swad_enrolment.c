@@ -806,7 +806,7 @@ void Enr_AskRemoveOldUsrs (void)
    extern const char *Txt_Eliminate;
    unsigned Months;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActRemOldUsr);
 
    /***** Start box *****/
@@ -2292,7 +2292,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                  Hlp_USERS_Requests,Box_NOT_CLOSABLE);
 
    /***** Selection of scope and roles *****/
-   /* Start form and table */
+   /* Begin form and table */
    Frm_StartForm (ActUpdSignUpReq);
    Tbl_TABLE_BeginWideMarginPadding (2);
 
@@ -2809,8 +2809,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       /* Initialize structure with user's data */
       Usr_UsrDataConstructor (&UsrDat);
 
-      /* Start table */
+      /* Begin table */
       Tbl_TABLE_BeginCenterPadding (2);
+
+      /* Table heading */
+      Tbl_TR_Begin (NULL);
 
       Tbl_TH_Empty (1);
       Tbl_TH (1,1,"LT",Txt_Course);

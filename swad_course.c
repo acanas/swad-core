@@ -234,7 +234,7 @@ static void Crs_Configuration (bool PrintView)
                       "</div>",
             Gbl.Hierarchy.Crs.FullName);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** Degree *****/
@@ -925,7 +925,7 @@ void Crs_WriteSelectorOfCourse (void)
    unsigned NumCrs;
    long CrsCod;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeCrsInf);
    fprintf (Gbl.F.Out,"<select id=\"crs\" name=\"crs\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Deg.DegCod > 0)
@@ -1095,7 +1095,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
    if (Gbl.Usrs.Me.Logged)
       Usr_GetMyCourses ();
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormGoTo (Gbl.Usrs.Me.MyCrss.Num ? ActSeeCrsInf :
                                                ActReqSch);
 
@@ -1181,7 +1181,7 @@ static void Crs_ListCourses (void)
 
    if (Gbl.Hierarchy.Deg.Crss.Num)	// There are courses in the current degree
      {
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_BeginWideMarginPadding (2);
       Crs_PutHeadCoursesForSeeing ();
 
@@ -1697,7 +1697,7 @@ static void Crs_PutFormToCreateCourse (void)
    extern const char *Txt_Create_course;
    unsigned Year;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
       Frm_StartForm (ActNewCrs);
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
@@ -2952,7 +2952,7 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
 
    if (Gbl.Usrs.Me.Logged)		// I am logged
      {
-      /***** Start form *****/
+      /***** Begin form *****/
       Frm_StartForm (ActMyCrs);
 
       /***** Put icon with link *****/
@@ -3345,7 +3345,7 @@ void Crs_AskRemoveOldCrss (void)
    unsigned MonthsWithoutAccess = Crs_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
    unsigned i;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActRemOldCrs);
 
    /***** Start box *****/

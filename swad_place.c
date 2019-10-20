@@ -800,7 +800,7 @@ static void Plc_PutFormToCreatePlace (void)
    extern const char *Txt_New_place;
    extern const char *Txt_Create_place;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewPlc);
 
    /***** Start box and table *****/

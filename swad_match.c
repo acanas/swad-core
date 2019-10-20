@@ -1160,7 +1160,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    /***** Start section for a new match *****/
    Lay_StartSection (Mch_NEW_MATCH_SECTION_ID);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewMch);
    Gam_PutParamGameCod (Game->GamCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
@@ -2287,7 +2287,7 @@ static void Mch_PutCheckboxResult (struct Match *Match)
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"MATCH_SHOW_RESULTS\">");
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActChgVisResMchQst);
    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
@@ -2431,7 +2431,7 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	 /***** Get number of options in this question *****/
 	 NumOptions = Tst_GetNumAnswersQst (Match->Status.QstCod);
 
-	 /***** Start table *****/
+	 /***** Begin table *****/
 	 Tbl_TABLE_BeginWidePadding (8);
 
 	 for (NumOpt = 0;
@@ -2442,7 +2442,7 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	    Tbl_TR_Begin (NULL);
 
 	    /***** Write letter for this option *****/
-	    /* Start table cell */
+	    /* Begin table cell */
 	    Tbl_TD_Begin ("class=\"MATCH_STD_CELL\"");
 
 	    /* Form with button.
@@ -2600,7 +2600,7 @@ static unsigned Mch_GetParamNumOpt (void)
 static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 			      long MchCod,const char *Icon,const char *Txt)
   {
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormId (NextAction,Id);
    Mch_PutParamMchCod (MchCod);
 

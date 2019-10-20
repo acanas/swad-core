@@ -291,10 +291,10 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	         Net_PutIconsWebsSocialNetworks,
                  Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginPadding (2);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
 
    /***** List webs and social networks *****/

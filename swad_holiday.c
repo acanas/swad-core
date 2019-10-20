@@ -966,7 +966,7 @@ static void Hld_PutFormToCreateHoliday (void)
    unsigned NumPlc;
    Hld_HolidayType_t HolidayType;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewHld);
 
    /***** Start box and table *****/

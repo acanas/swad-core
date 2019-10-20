@@ -465,7 +465,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
 
    if (Gbl.Agenda.Num)
      {
-      /***** Start table *****/
+      /***** Begin table *****/
       Tbl_TABLE_BeginWideMarginPadding (2);
 
       /***** Table head *****/
@@ -1474,7 +1474,7 @@ void Agd_RequestCreatOrEditEvent (void)
       Agd_GetEventTxtFromDB (&AgdEvent,Txt);
      }
 
-   /***** Start form *****/
+   /***** Begin form *****/
    if (ItsANewEvent)
      {
       Frm_StartForm (ActNewEvtMyAgd);

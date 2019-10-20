@@ -886,7 +886,7 @@ static void Cla_PutFormToCreateClassroom (void)
    extern const char *Txt_New_classroom;
    extern const char *Txt_Create_classroom;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewCla);
 
    /***** Start box and table *****/

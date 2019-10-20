@@ -366,7 +366,7 @@ void Rec_ShowFormCreateRecordField (void)
    extern const char *Txt_Create_record_field;
    Rec_VisibilityRecordFields_t Vis;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewFie);
 
    /***** Start box and table *****/
@@ -2299,7 +2299,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
          Tbl_TABLE_End ();
 	}
 
-      /***** Start form *****/
+      /***** Begin form *****/
       switch (TypeOfView)
         {
 	 case Rec_SHA_SIGN_UP_IN_CRS_FORM:
@@ -4044,7 +4044,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       Cty_GetListCountries (Cty_GET_BASIC_DATA);
      }
 
-   /* Start form to select the country of my institution */
+   /* Begin form to select the country of my institution */
    Frm_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
 		      " class=\"REC_C2_BOT_INPUT\""
@@ -4086,7 +4086,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod > 0)
       Ins_GetListInstitutions (Gbl.Usrs.Me.UsrDat.InsCtyCod,Ins_GET_BASIC_DATA);
 
-   /* Start form to select institution */
+   /* Begin form to select institution */
    Frm_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
 		      " class=\"REC_C2_BOT_INPUT\""
@@ -4135,7 +4135,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       if (Gbl.Usrs.Me.UsrDat.InsCod > 0)
 	 Ctr_GetListCentres (Gbl.Usrs.Me.UsrDat.InsCod);
 
-      /* Start form to select centre */
+      /* Begin form to select centre */
       Frm_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
 		         " class=\"REC_C2_BOT_INPUT\""

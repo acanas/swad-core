@@ -1268,7 +1268,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    extern const char *Txt_File;
    extern const char *Txt_Upload_file;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
 
    /***** File *****/
@@ -1303,7 +1303,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    /***** Build path to file containing URL *****/
    Inf_BuildPathURL (Gbl.Hierarchy.Crs.CrsCod,Gbl.Crs.Info.Type,PathFile);
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
 
    /***** Link *****/
@@ -2064,7 +2064,7 @@ void Inf_EditPlainTxtInfo (void)
    /***** Set info type *****/
    Gbl.Crs.Info.Type = Inf_AsignInfoType ();
 
-   /***** Start form and box *****/
+   /***** Begin form and box *****/
    Frm_StartForm (Inf_ActionsRcvPlaTxtInfo[Gbl.Crs.Info.Type]);
    Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,
                  HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
@@ -2115,7 +2115,7 @@ void Inf_EditRichTxtInfo (void)
    /***** Set info type *****/
    Gbl.Crs.Info.Type = Inf_AsignInfoType ();
 
-   /***** Start form and box *****/
+   /***** Begin form and box *****/
    Frm_StartForm (Inf_ActionsRcvRchTxtInfo[Gbl.Crs.Info.Type]);
    Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,
                  HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);

@@ -382,7 +382,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
 					    NULL,
 		 Hlp_USERS_Groups,Box_CLOSABLE);
 
-   /***** Start form to update the students listed
+   /***** Begin form to update the students listed
 	  depending on the groups selected *****/
    Frm_StartFormAnchor (Gbl.Action.Act,			// Repeat current action
 			Usr_USER_LIST_SECTION_ID);
@@ -1809,7 +1809,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 
    if (Gbl.Crs.Grps.NumGrps) // This course has groups
      {
-      /***** Start form *****/
+      /***** Begin form *****/
       if (PutFormToChangeGrps)
 	 Frm_StartForm (ActChgGrp);
 
@@ -2469,7 +2469,7 @@ static void Grp_PutFormToCreateGroupType (void)
    extern const char *Txt_The_groups_will_not_automatically_open;
    extern const char *Txt_Create_type_of_group;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Lay_StartSection (Grp_NEW_GROUP_TYPE_SECTION_ID);
    Frm_StartFormAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
@@ -2592,7 +2592,7 @@ static void Grp_PutFormToCreateGroup (void)
    unsigned NumCla;
    Rol_Role_t Role;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Lay_StartSection (Grp_NEW_GROUP_SECTION_ID);
    Frm_StartFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 

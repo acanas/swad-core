@@ -71,7 +71,7 @@ void Coo_EditMyPrefsOnCookies (void)
                       Hlp_PROFILE_Settings_cookies,Box_NOT_CLOSABLE,2);
 
    /***** Edit my preference about cookies *****/
-   /* Start form */
+   /* Begin form */
    Frm_StartFormAnchor (ActChgCooPrf,Coo_COOKIES_ID);
 
    /* Start container */

@@ -462,7 +462,7 @@ static void DT_PutFormToCreateDegreeType (void)
    extern const char *Txt_New_type_of_degree;
    extern const char *Txt_Create_type_of_degree;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewDegTyp);
 
    /***** Start box and table *****/
@@ -523,7 +523,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       Tbl_TH_Begin (1,1,Order == DT_ORDER_BY_DEGREE_TYPE ? "LM" :
 						           "RM");
 
-      /* Start form to change order */
+      /* Begin form to change order */
       Frm_StartForm (NextAction);
       if (NextAction == ActSeeUseGbl)
          Fig_PutHiddenParamFigures ();

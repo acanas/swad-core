@@ -746,7 +746,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
    extern const char *Txt_Create_email_domain;
 
-   /***** Start form *****/
+   /***** Begin form *****/
    Frm_StartForm (ActNewMai);
 
    /***** Start box and table *****/
@@ -1250,7 +1250,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 					  " ORDER BY CreatTime DESC",
 					  UsrDat->UsrCod);
 
-   /***** Start table *****/
+   /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (2);
 
    /***** List emails *****/
