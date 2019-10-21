@@ -4199,8 +4199,8 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
       Tbl_TR_Begin (NULL);
 
       /***** Write letter for this option *****/
-      Tbl_TD_Begin ("class=\"MATCH_TCH_BUTTON_TD\"");
-      fprintf (Gbl.F.Out,"<div class=\"MATCH_TCH_BUTTON BT_%c\">"
+      Tbl_TD_Begin ("class=\"MCH_TCH_BUTTON_TD\"");
+      fprintf (Gbl.F.Out,"<div class=\"MCH_TCH_BUTTON BT_%c\">"
 			 "%c"
 	                 "</div>",
 	       'A' + (char) NumOpt,
