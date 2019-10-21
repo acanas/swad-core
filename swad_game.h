@@ -130,4 +130,6 @@ void Gam_ShowTstTagsPresentInAGame (long GamCod);
 
 void Gam_SetParamCurrentGamCod (long GamCod);
 
+void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore);
+
 #endif

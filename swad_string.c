@@ -908,7 +908,7 @@ void Str_FloatNumToStr (char **Str,float Number)
    double FractionaryPart;
    char *Format;
 
-   FractionaryPart = modf ((double) Number,&IntegerPart);
+   FractionaryPart = fabs (modf ((double) Number,&IntegerPart));
 
    if (FractionaryPart == 0.0)
      {

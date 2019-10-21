@@ -13094,7 +13094,7 @@ SELECT projects.PrjCod,COUNT(prj_usr.UsrCod) AS NumStds FROM projects LEFT JOIN 
 
 
 
-
+SELECT COUNT(*) FROM tst_answers,gam_questions WHERE gam_questions.GamCod=6 AND gam_questions.QstCod=tst_answers.QstCod;
 
 
 

@@ -160,7 +160,10 @@ static void Mch_PutCheckboxResult (struct Match *Match);
 static void Mch_ShowMatchTitle (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersStd (struct Match *Match);
-static void Mch_ShowMatchPodium (struct Match *Match);
+
+static void Mch_ShowMatchScore (struct Match *Match);
+static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxScore);
+static void Mch_DrawScoreRow (double Score,unsigned MaxUsrs,unsigned NumUsrs);
 
 static void Mch_PutParamNumOpt (unsigned NumOpt);
 static unsigned Mch_GetParamNumOpt (void);
@@ -2134,7 +2137,7 @@ static void Mch_ShowRightColumnTch (struct Match *Match)
    if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Not finished
       Mch_ShowQuestionAndAnswersTch (Match);
    else							// Finished
-      Mch_ShowMatchPodium (Match);
+      Mch_ShowMatchScore (Match);
 
    /***** End right container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -2482,91 +2485,173 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
   }
 
 /*****************************************************************************/
-/***************************** Show match podium *****************************/
+/***************************** Show match scores *****************************/
 /*****************************************************************************/
 
-static void Mch_ShowMatchPodium (struct Match *Match)
+#define Mch_NUM_ROWS_SCORE 41
+
+static void Mch_ShowMatchScore (struct Match *Match)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows;
+   unsigned NumScores;
+   unsigned NumScore;
+   double MinScore;
+   double MaxScore;
+   double Range;
+   double NumRowsPerScorePoint;
+   double Score;
+   unsigned MaxUsrs = 0;
+   unsigned NumUsrs;
+   unsigned NumRowForThisScore;
    unsigned NumRow;
-   struct
-     {
-      double Score;
-      unsigned NumUsrs;
-     } Podium[3];
-   unsigned i;
-   static const unsigned Position[3] =
-     {
-      1,	// 2nd position
-      0,	// 1st position
-      2		// 3rd position
-     };
 
-   /***** Get podium from database *****/
-   NumRows = (unsigned)
-	     DB_QuerySELECT (&mysql_res,"can not get data of a question",
-			     "SELECT Score,"			// row[0]
-				     "COUNT(*) AS NumUsrs"	// row[1]
-			     " FROM mch_results"
-			     " WHERE MchCod=%ld"
-			     " GROUP BY Score"
-			     " ORDER BY Score DESC LIMIT 3",
-			     Match->MchCod);
+   /***** Get minimum and maximum scores *****/
+   Gam_GetScoreRange (Match->GamCod,&MinScore,&MaxScore);
+   Range = MaxScore - MinScore;
+   if (Range == 0.0)
+      return;
+   NumRowsPerScorePoint = (double) Mch_NUM_ROWS_SCORE / Range;
 
-   /* Get podium */
-   for (NumRow = 0;
-	NumRow < NumRows;
-	NumRow++)
+   /***** Get maximum number of users *****/
+   if (DB_QuerySELECT (&mysql_res,"can not get max users",
+		       "SELECT MAX(NumUsrs)"
+		       " FROM "
+		       "(SELECT COUNT(*) AS NumUsrs"	// row[1]
+		       " FROM mch_results"
+		       " WHERE MchCod=%ld"
+		       " GROUP BY Score"
+		       " ORDER BY Score) AS Scores",
+		       Match->MchCod))
      {
       row = mysql_fetch_row (mysql_res);
 
+      /* Get maximum number of users (row[0]) *****/
+      if (row)
+         if (row[0])
+	    if (sscanf (row[0],"%u",&MaxUsrs) != 1)
+	       MaxUsrs = 0;
+     }
+
+   /* Free structure that stores the query result */
+   DB_FreeMySQLResult (&mysql_res);
+
+   /***** Get scores from database *****/
+   NumScores = (unsigned)
+	       DB_QuerySELECT (&mysql_res,"can not get scores",
+			       "SELECT Score,"			// row[0]
+				      "COUNT(*) AS NumUsrs"	// row[1]
+			       " FROM mch_results"
+			       " WHERE MchCod=%ld"
+			       " GROUP BY Score"
+			       " ORDER BY Score DESC",
+			       Match->MchCod);
+
+   /***** Begin table ****/
+   Tbl_TABLE_BeginWide ();
+
+   /***** Get and draw scores *****/
+   for (NumScore = 0, NumRow = 0;
+	NumScore < NumScores;
+	NumScore++)
+     {
+      /***** Get score and number of users from database *****/
+      row = mysql_fetch_row (mysql_res);
+
       /* Get score (row[0]) */
-      Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-      if (sscanf (row[0],"%lf",&(Podium[NumRow].Score)) != 1)
-	 Podium[NumRow].Score = 0.0;
+      Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+      if (sscanf (row[0],"%lf",&Score) != 1)
+	 Score = 0.0;
       Str_SetDecimalPointToLocal ();	// Return to local system
 
       /* Get number of users (row[1]) *****/
-      if (sscanf (row[1],"%u",&(Podium[NumRow].NumUsrs)) != 1)
-	 Podium[NumRow].NumUsrs = 0;
+      if (sscanf (row[1],"%u",&NumUsrs) != 1)
+	 NumUsrs = 0;
+
+      /***** Draw empty rows until reaching the adequate row *****/
+      NumRowForThisScore = (unsigned) ((MaxScore - Score) * NumRowsPerScorePoint);
+      for (;
+	   NumRow < NumRowForThisScore;
+	   NumRow++)
+         Mch_DrawEmptyRowScore (NumRow,MinScore,MaxScore);
+
+      /***** Draw row for this score *****/
+      Mch_DrawScoreRow (Score,MaxUsrs,NumUsrs);
+      NumRow++;
      }
 
-   /* Reset remaining positions */
+   /***** Draw final empty rows *****/
    for (;
-	NumRow < 3;
+	NumRow < Mch_NUM_ROWS_SCORE;
 	NumRow++)
+      Mch_DrawEmptyRowScore (NumRow,MinScore,MaxScore);
+
+   /***** End table *****/
+   Tbl_TABLE_End ();
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxScore)
+  {
+   /***** Draw row *****/
+   Tbl_TR_Begin (NULL);
+
+   /* Write score */
+   Tbl_TD_Begin ("class=\"MATCH_SCORE_SCO\"");
+   if (NumRow == 0)
      {
-      /* Score */
-      Podium[NumRow].Score = 0.0;
-
-      /* Number of users */
-      Podium[NumRow].NumUsrs = 0;
+      Str_WriteFloatNumToFile (Gbl.F.Out,MaxScore);
+      fprintf (Gbl.F.Out,"&nbsp;");
      }
-
-   /***** Show podium *****/
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_BOTTOM\">");	// Bottom
-
-   fprintf (Gbl.F.Out,"<div class=\"MATCH_PODIUM\">");	// Podium
-
-   for (i = 0;
-	i < 3;
-	i++)
+   else if (NumRow == Mch_NUM_ROWS_SCORE - 1)
      {
-      fprintf (Gbl.F.Out,"<div class=\"MATCH_PODIUM_%u\">",Position[i]);
-      if (Podium[Position[i]].NumUsrs)
-	 fprintf (Gbl.F.Out,"<div class=\"MATCH_PODIUM_POSITION\">%u</div>"
-			    "<div class=\"MATCH_PODIUM_SCORE\">%.2lf (%u)</div>",
-		  Position[i] + 1,
-		  Podium[Position[i]].Score,
-		  Podium[Position[i]].NumUsrs);
-      fprintf (Gbl.F.Out,"</div>");
+      Str_WriteFloatNumToFile (Gbl.F.Out,MinScore);
+      fprintf (Gbl.F.Out,"&nbsp;");
      }
+   Tbl_TD_End ();
 
-   fprintf (Gbl.F.Out,"</div>");			// Podium
+   /* Empty column with bar and number of users */
+   Tbl_TD_Begin ("class=\"MATCH_SCORE_NUM\"");
+   Tbl_TD_End ();
 
-   fprintf (Gbl.F.Out,"</div>");			// Bottom
+   Tbl_TR_End ();
+  }
+
+static void Mch_DrawScoreRow (double Score,unsigned MaxUsrs,unsigned NumUsrs)
+  {
+   unsigned BarWidth;
+
+   /***** Compute bar width *****/
+   if (MaxUsrs > 0)
+     {
+      BarWidth = (unsigned) (((NumUsrs * 95.0) / MaxUsrs) + 0.5);
+      if (BarWidth == 0)
+	 BarWidth = 1;
+     }
+   else
+      BarWidth = 0;
+
+   /***** Draw row *****/
+   Tbl_TR_Begin (NULL);
+
+   /* Write score */
+   Tbl_TD_Begin ("class=\"MATCH_SCORE_SCO\"");
+   Str_WriteFloatNumToFile (Gbl.F.Out,Score);
+   fprintf (Gbl.F.Out,"&nbsp;");
+   Tbl_TD_End ();
+
+   /* Draw bar and write number of users for this score */
+   Tbl_TD_Begin ("class=\"MATCH_SCORE_NUM\"");
+   fprintf (Gbl.F.Out,"<img src=\"%s/o1x1.png\""	// Background
+		      " alt=\"\" class=\"MATCH_SCORE_BAR\""
+		      " style=\"width:%u%%;\" />"
+		      "&nbsp;%u",
+	    Cfg_URL_ICON_PUBLIC,BarWidth,NumUsrs);
+   Tbl_TD_End ();
+
+   Tbl_TR_End ();
   }
 
 /*****************************************************************************/

@@ -2545,3 +2545,45 @@ static long Gam_GetParamCurrentGamCod (void)
   {
    return Gam_CurrentGamCod;
   }
+
+/*****************************************************************************/
+/*************** Get maximum score of a game from database *******************/
+/*****************************************************************************/
+
+void Gam_GetScoreRange (long GamCod,double *MinScore,double *MaxScore)
+  {
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumRows;
+   unsigned NumRow;
+   unsigned NumAnswers;
+
+   /***** Get maximum score of a game from database *****/
+   NumRows = (unsigned)
+	     DB_QuerySELECT (&mysql_res,"can not get data of a question",
+			     "SELECT COUNT(tst_answers.AnsInd) AS N"
+			     " FROM tst_answers,gam_questions"
+			     " WHERE gam_questions.GamCod=%ld"
+			     " AND gam_questions.QstCod=tst_answers.QstCod"
+			     " GROUP BY tst_answers.QstCod",
+			     GamCod);
+   for (NumRow = 0, *MinScore = *MaxScore = 0.0;
+	NumRow < NumRows;
+	NumRow++)
+     {
+      row = mysql_fetch_row (mysql_res);
+
+      /* Get min answers (row[0]) */
+      if (sscanf (row[0],"%u",&NumAnswers) != 1)
+         NumAnswers = 0;
+
+      /* Accumulate minimum and maximum score */
+      if (NumAnswers < 2)
+	 Lay_ShowErrorAndExit ("Wrong number of answers.");
+      *MinScore += -1.0 / (double) (NumAnswers - 1);
+      *MaxScore +=  1.0;
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }

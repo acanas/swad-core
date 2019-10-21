@@ -2804,56 +2804,30 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:25%;
 	}
 
-.MATCH_PODIUM
+.MATCH_SCORE_SCO
 	{
-	display:table;
-	box-sizing:border-box;
-	width:100%;
-	text-align:center;
-	}
-.MATCH_PODIUM_POSITION
-	{
-	color:white;
-	font-size:32pt;
+	width:5%;
+	text-align:right;
+	vertical-align:middle;
+	height:12px;
+	font-size:7pt;
 	font-weight:bold;
 	}
-.MATCH_PODIUM_SCORE
+.MATCH_SCORE_NUM
 	{
-	color:white;
-	font-size:24pt;
+	width:95%;
+	text-align:left;
+	vertical-align:middle;
+	background:white;
+	height:12px;
+	font-size:7pt;
 	font-weight:bold;
 	}
-.MATCH_PODIUM_1
+.MATCH_SCORE_BAR
 	{
-	display:table-cell;
-	box-sizing:border-box;
-	float:left;
-	width:33%;
-	margin-top:200px;
-	height:200px;
-	margin-top:200px;
-	background:grey;
-	}
-.MATCH_PODIUM_0
-	{
-	display:table-cell;
-	box-sizing:border-box;
-	float:left;
-	width:34%;
-	margin-top:100px;
-	height:300px;
-	margin-top:100px;
-	background:grey;
-	}
-.MATCH_PODIUM_2
-	{
-	display:table-cell;
-	box-sizing:border-box;
-	float:left;
-	width:33%;
-	height:100px;
-	margin-top:300px;
-	background:grey;
+	display:inline-block;
+	height:10px;
+	vertical-align:middle;
 	}
 
 .MATCH_TCH_BUTTON_TD
