@@ -2571,6 +2571,8 @@ static void Mch_ShowMatchScore (struct Match *Match)
 
       /***** Draw empty rows until reaching the adequate row *****/
       NumRowForThisScore = (unsigned) ((MaxScore - Score) * NumRowsPerScorePoint);
+      if (NumRowForThisScore == Mch_NUM_ROWS_SCORE)
+	 NumRowForThisScore = Mch_NUM_ROWS_SCORE - 1;
       for (;
 	   NumRow < NumRowForThisScore;
 	   NumRow++)
@@ -2651,7 +2653,7 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
    +----------------- MinScore
    */
    Color = (unsigned) (((Score - MinScore) / (MaxScore - MinScore)) * 10.0);
-   if (Color >= 10)
+   if (Color == 10)
       Color = 9;
 
    /***** Compute bar width *****/
