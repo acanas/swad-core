@@ -163,7 +163,8 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match);
 
 static void Mch_ShowMatchScore (struct Match *Match);
 static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxScore);
-static void Mch_DrawScoreRow (double Score,unsigned MaxUsrs,unsigned NumUsrs);
+static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
+			      unsigned NumUsrs,unsigned MaxUsrs);
 
 static void Mch_PutParamNumOpt (unsigned NumOpt);
 static unsigned Mch_GetParamNumOpt (void);
@@ -2576,7 +2577,7 @@ static void Mch_ShowMatchScore (struct Match *Match)
          Mch_DrawEmptyRowScore (NumRow,MinScore,MaxScore);
 
       /***** Draw row for this score *****/
-      Mch_DrawScoreRow (Score,MaxUsrs,NumUsrs);
+      Mch_DrawScoreRow (Score,MinScore,MaxScore,NumUsrs,MaxUsrs);
       NumRow++;
      }
 
@@ -2619,9 +2620,39 @@ static void Mch_DrawEmptyRowScore (unsigned NumRow,double MinScore,double MaxSco
    Tbl_TR_End ();
   }
 
-static void Mch_DrawScoreRow (double Score,unsigned MaxUsrs,unsigned NumUsrs)
+static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
+			      unsigned NumUsrs,unsigned MaxUsrs)
   {
+   unsigned Color;
    unsigned BarWidth;
+
+   /***** Compute color *****/
+   /*
+   +----------------- MaxScore
+   | score9_1x1.png
+   +-----------------
+   | score8_1x1.png
+   +-----------------
+   | score7_1x1.png
+   +-----------------
+   | score6_1x1.png
+   +-----------------
+   | score5_1x1.png
+   +-----------------
+   | score4_1x1.png
+   +-----------------
+   | score3_1x1.png
+   +-----------------
+   | score2_1x1.png
+   +-----------------
+   | score1_1x1.png
+   +-----------------
+   | score0_1x1.png
+   +----------------- MinScore
+   */
+   Color = (unsigned) (((Score - MinScore) / (MaxScore - MinScore)) * 10.0);
+   if (Color >= 10)
+      Color = 9;
 
    /***** Compute bar width *****/
    if (MaxUsrs > 0)
@@ -2644,11 +2675,11 @@ static void Mch_DrawScoreRow (double Score,unsigned MaxUsrs,unsigned NumUsrs)
 
    /* Draw bar and write number of users for this score */
    Tbl_TD_Begin ("class=\"MATCH_SCORE_NUM\"");
-   fprintf (Gbl.F.Out,"<img src=\"%s/o1x1.png\""	// Background
+   fprintf (Gbl.F.Out,"<img src=\"%s/score%u_1x1.png\""	// Background
 		      " alt=\"\" class=\"MATCH_SCORE_BAR\""
 		      " style=\"width:%u%%;\" />"
 		      "&nbsp;%u",
-	    Cfg_URL_ICON_PUBLIC,BarWidth,NumUsrs);
+	    Cfg_URL_ICON_PUBLIC,Color,BarWidth,NumUsrs);
    Tbl_TD_End ();
 
    Tbl_TR_End ();
