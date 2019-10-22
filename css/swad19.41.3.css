@@ -2642,14 +2642,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	display:table;
-	margin:4%;
-	width:92%;
+	margin:2%;
+	width:96%;
 	}
 .MCH_LEFT
 	{
 	box-sizing:border-box;
 	float:left;
-	width:25%;
+	width:20%;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
@@ -2659,7 +2659,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	box-sizing:border-box;
 	display:table;
 	float:left;
-	width:75%;
+	width:80%;
 	}
 .MCH_TOP
 	{

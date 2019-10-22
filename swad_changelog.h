@@ -487,14 +487,15 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.41.2 (2019-10-23)"
-#define CSS_FILE		"swad19.40.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.41.3 (2019-10-23)"
+#define CSS_FILE		"swad19.41.3.css"
 #define JS_FILE			"swad19.39.js"
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Change icon to upload file in timeline to photo-video.svg
 
+	Version 19.41.3:  Oct 23, 2019	Changes in layout of matches. (245952 lines)
 	Version 19.41.2:  Oct 23, 2019	Display match answers in columns. (245951 lines)
 	Version 19.41.1:  Oct 22, 2019	Change number of columns from form. (245944 lines)
 					1 change necessary in database:
