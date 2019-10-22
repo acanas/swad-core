@@ -640,6 +640,7 @@ CREATE TABLE IF NOT EXISTS mch_matches (
 	QstInd INT NOT NULL DEFAULT 0,
 	QstCod INT NOT NULL DEFAULT -1,
 	Showing ENUM('nothing','stem','answers','results') NOT NULL DEFAULT 'nothing',
+	NumCols INT NOT NULL DEFAULT 1,
 	ShowQstResults ENUM('N','Y') NOT NULL DEFAULT 'N',
 	ShowUsrResults ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UNIQUE INDEX(MchCod),

@@ -487,7 +487,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.40.5 (2019-10-22)"
+#define Log_PLATFORM_VERSION	"SWAD 19.41 (2019-10-22)"
 #define CSS_FILE		"swad19.40.3.css"
 #define JS_FILE			"swad19.39.js"
 /*
@@ -495,7 +495,11 @@ ps2pdf source.ps destination.pdf
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Change icon to upload file in timeline to photo-video.svg
 
-	Version 19.40.5:  Oct 22, 2019	New icons to view match in two columns. (245882 lines)
+	Version 19.41:    Oct 22, 2019	Number of columns in match is stored in database. (245930 lines)
+					1 change necessary in database:
+ALTER TABLE mch_matches ADD COLUMN NumCols INT NOT NULL DEFAULT 1 AFTER Showing;
+
+	Version 19.40.5:  Oct 22, 2019	New icons to view match in several columns. (245882 lines)
 					Copy the following 3 icons to icon public directory:
 sudo cp -a icon/bars.svg /var/www/html/swad/icon/
 sudo cp -a icon/grip-vertical.svg /var/www/html/swad/icon/

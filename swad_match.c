@@ -77,7 +77,7 @@ const char *Mch_ShowingStringsDB[Mch_NUM_SHOWING] =
    "results",
   };
 
-#define Mch_NUM_COLS 3
+#define Mch_MAX_COLS 3
 #define Mch_NUM_COLS_DEFAULT 1
 
 /*****************************************************************************/
@@ -241,8 +241,9 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 						  "QstInd,"				// row[ 6]
 						  "QstCod,"				// row[ 7]
 						  "Showing,"				// row[ 8]
-					          "ShowQstResults,"			// row[ 9]
-					          "ShowUsrResults"			// row[10]
+						  "NumCols,"				// row[ 9]
+					          "ShowQstResults,"			// row[10]
+					          "ShowUsrResults"			// row[11]
 					   " FROM mch_matches"
 					   " WHERE GamCod=%ld%s"
 					   " ORDER BY MchCod",
@@ -313,8 +314,9 @@ void Mch_GetDataOfMatchByCod (struct Match *Match)
 					       "QstInd,"			// row[ 6]
 					       "QstCod,"			// row[ 7]
 					       "Showing,"			// row[ 8]
-					       "ShowQstResults,"		// row[ 9]
-					       "ShowUsrResults"			// row[10]
+					       "NumCols,"			// row[ 9]
+					       "ShowQstResults,"		// row[10]
+					       "ShowUsrResults"			// row[11]
 					" FROM mch_matches"
 					" WHERE MchCod=%ld"
 					" AND GamCod IN"		// Extra check
@@ -812,6 +814,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
   {
    MYSQL_ROW row;
    Dat_StartEndTime_t StartEndTime;
+   long LongNum;
 
    /***** Get match data *****/
    row = mysql_fetch_row (mysql_res);
@@ -853,8 +856,9 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    row[ 6]	QstInd
    row[ 7]	QstCod
    row[ 8]	Showing
-   row[ 9]	ShowQstResults
-   row[10]	ShowUsrResults
+   row[ 9]	NumCols
+   row[10]	ShowQstResults
+   row[11]	ShowUsrResults
    */
    /* Current question index (row[6]) */
    Match->Status.QstInd = Gam_GetQstIndFromStr (row[6]);
@@ -865,11 +869,17 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
    /* Get what to show (stem, answers, results) (row(8)) */
    Match->Status.Showing = Mch_GetShowingFromStr (row[8]);
 
-   /* Get whether to show question results or not (row(9)) */
-   Match->Status.ShowQstResults = (row[9][0] == 'Y');
+   /* Get number of columns (row[9]) */
+   LongNum = Str_ConvertStrCodToLongCod (row[9]);
+   Match->Status.NumCols =  (LongNum <= 1           ) ? 1 :
+                           ((LongNum >= Mch_MAX_COLS) ? Mch_MAX_COLS :
+                        	                        (unsigned) LongNum);
 
-   /* Get whether to show user results or not (row(10)) */
-   Match->Status.ShowUsrResults = (row[10][0] == 'Y');
+   /* Get whether to show question results or not (row(10)) */
+   Match->Status.ShowQstResults = (row[10][0] == 'Y');
+
+   /* Get whether to show user results or not (row(11)) */
+   Match->Status.ShowUsrResults = (row[11][0] == 'Y');
 
    /***** Get whether the match is being played or not *****/
    if (Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION)	// Finished
@@ -1351,7 +1361,7 @@ static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
    MchCod = DB_QueryINSERTandReturnCode ("can not create match",
 				         "INSERT mch_matches "
 				         "(GamCod,UsrCod,StartTime,EndTime,Title,"
-				         "QstInd,QstCod,Showing,"
+				         "QstInd,QstCod,Showing,NumCols,"
 				         "ShowQstResults,ShowUsrResults)"
 				         " VALUES "
 				         "(%ld,"	// GamCod
@@ -1362,12 +1372,14 @@ static long Mch_CreateMatch (long GamCod,char Title[Gam_MAX_BYTES_TITLE + 1])
 				         "0,"		// QstInd: Match has not started, so not the first question yet
 				         "-1,"		// QstCod: Non-existent question
 				         "'%s',"	// Showing: What is being shown
+					 "%u,"		// NumCols: Number of columns in answers
 				         "'N',"		// ShowQstResults: Don't show question results initially
 				         "'N')",	// ShowUsrResults: Don't show user results initially
 				         GamCod,
 				         Gbl.Usrs.Me.UsrDat.UsrCod,	// Game creator
 				         Title,
-					 Mch_ShowingStringsDB[Mch_SHOWING_DEFAULT]);
+					 Mch_ShowingStringsDB[Mch_SHOWING_DEFAULT],
+					 Mch_NUM_COLS_DEFAULT);
 
    /***** Create indexes for answers *****/
    Mch_CreateIndexes (GamCod,MchCod);
@@ -1615,6 +1627,7 @@ static void Mch_UpdateMatchStatusInDB (struct Match *Match)
 			"mch_matches.QstInd=%u,"
 			"mch_matches.QstCod=%ld,"
 			"mch_matches.Showing='%s',"
+		        "mch_matches.NumCols=%u,"
 			"mch_matches.ShowQstResults='%c'"
 		   " WHERE mch_matches.MchCod=%ld"
 		   " AND mch_matches.GamCod=gam_games.GamCod"
@@ -1622,6 +1635,7 @@ static void Mch_UpdateMatchStatusInDB (struct Match *Match)
 		   MchSubQuery,
 		   Match->Status.QstInd,Match->Status.QstCod,
 		   Mch_ShowingStringsDB[Match->Status.Showing],
+		   Match->Status.NumCols,
 		   Match->Status.ShowQstResults ? 'Y' : 'N',
 		   Match->MchCod,Gbl.Hierarchy.Crs.CrsCod);
 
@@ -2300,18 +2314,22 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
 
 static void Mch_ShowFormColumns (struct Match *Match)
   {
+   extern const char *Txt_column;
    extern const char *Txt_columns;
    unsigned NumCols;
-   static const char *NumColsIcon[Mch_NUM_COLS] =
+   static const char *NumColsIcon[1 + Mch_MAX_COLS] =
      {
+      "",			// Not used
       "bars.svg",		// 1 column
       "grip-vertical.svg",	// 2 columns
       "th.svg",			// 3 columns
      };
 
+   /***** Begin selector *****/
    Set_StartOneSettingSelector ();
-   for (NumCols = 0;
-	NumCols < Mch_NUM_COLS;
+
+   for (NumCols  = 1;
+	NumCols <= Mch_MAX_COLS;
 	NumCols++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
@@ -2321,10 +2339,19 @@ static void Mch_ShowFormColumns (struct Match *Match)
       Frm_StartForm (ActChgVisResMchQst);
       Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
-      Ico_PutSettingIconLink (NumColsIcon[NumCols],Txt_columns);
+      snprintf (Gbl.Title,sizeof (Gbl.Title),
+		"%u %s",
+		NumCols,NumCols == 1 ? Txt_column :
+		                       Txt_columns);
+      Ico_PutSettingIconLink (NumColsIcon[NumCols],Gbl.Title);
+
+      /***** End form *****/
       Frm_EndForm ();
+
       fprintf (Gbl.F.Out,"</div>");
      }
+
+   /***** End selector *****/
    Set_EndOneSettingSelector ();
   }
 

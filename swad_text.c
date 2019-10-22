@@ -4204,6 +4204,27 @@ const char *Txt_Color_of_the_graphic =
 	"Cor do gr&aacute;fico";
 #endif
 
+const char *Txt_column =
+#if   L==1	// ca
+	"columna";
+#elif L==2	// de
+	"Spalte";
+#elif L==3	// en
+	"column";
+#elif L==4	// es
+	"columna";
+#elif L==5	// fr
+	"colonne";
+#elif L==6	// gn
+	"columna";	// Okoteve traducción
+#elif L==7	// it
+	"colonna";
+#elif L==8	// pl
+	"kolumna";
+#elif L==9	// pt
+	"coluna";
+#endif
+
 const char *Txt_Columns =
 #if   L==1	// ca
 	"Columnes";
