@@ -487,7 +487,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.41 (2019-10-22)"
+#define Log_PLATFORM_VERSION	"SWAD 19.41.2 (2019-10-23)"
 #define CSS_FILE		"swad19.40.3.css"
 #define JS_FILE			"swad19.39.js"
 /*
@@ -495,6 +495,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Change icon to upload file in timeline to photo-video.svg
 
+	Version 19.41.2:  Oct 23, 2019	Display match answers in columns. (245951 lines)
 	Version 19.41.1:  Oct 22, 2019	Change number of columns from form. (245944 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1802','es','N','Cambiar n&uacute;mero de columnas en partida');

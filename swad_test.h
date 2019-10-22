@@ -157,8 +157,6 @@ unsigned Tst_GetNumAnswersQst (long QstCod);
 unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle);
 void Tst_GetCorrectAnswersFromDB (long QstCod);
 void Tst_WriteAnswersEdit (long QstCod);
-void Tst_WriteAnswersMatchResult (long MchCod,unsigned QstInd,long QstCod,
-                                  const char *Class,bool ShowResult);
 bool Tst_CheckIfQuestionIsValidForGame (long QstCod);
 void Tst_WriteAnsTF (char AnsTF);
 void Tst_GetChoiceAns (MYSQL_RES *mysql_res);
@@ -169,6 +167,8 @@ void Tst_GetAnswersFromStr (const char StrAnswersOneQst[Tst_MAX_BYTES_ANSWERS_ON
 void Tst_ComputeScoreQst (unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],
                           bool AnswersUsr[Tst_MAX_OPTIONS_PER_QUESTION],
 			  double *ScoreThisQst,bool *AnswerIsNotBlank);
+void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
+				  unsigned NumCols,const char *Class,bool ShowResult);
 void Tst_CheckIfNumberOfAnswersIsOne (void);
 
 unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res);

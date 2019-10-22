@@ -165,6 +165,8 @@ static void Mch_PutParamNumCols (unsigned NumCols);
 static void Mch_ShowMatchTitle (struct Match *Match);
 static void Mch_ShowFormViewResult (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
+static void Mch_WriteAnswersMatchResult (struct Match *Match,
+                                         const char *Class,bool ShowResult);
 static void Mch_ShowQuestionAndAnswersStd (struct Match *Match);
 
 static void Mch_ShowMatchScore (struct Match *Match);
@@ -2497,9 +2499,7 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
       case Mch_ANSWERS:
 	 if (Match->Status.Playing)			// Being played
 	    /* Write answers */
-	    Tst_WriteAnswersMatchResult (Match->MchCod,
-					 Match->Status.QstInd,
-					 Match->Status.QstCod,
+	    Mch_WriteAnswersMatchResult (Match,
 					 "MCH_TCH_ANS",
 					 false);	// Don't show result
 	 else						// Not being played
@@ -2507,15 +2507,28 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
 	 break;
       case Mch_RESULTS:
 	 /* Write answers with results */
-	 Tst_WriteAnswersMatchResult (Match->MchCod,
-				      Match->Status.QstInd,
-				      Match->Status.QstCod,
+	 Mch_WriteAnswersMatchResult (Match,
 				      "MCH_TCH_ANS",
 				      true);		// Show result
 	 break;
      }
 
    fprintf (Gbl.F.Out,"</div>");			// Bottom
+  }
+
+/*****************************************************************************/
+/************* Write answers of a question when viewing a match **************/
+/*****************************************************************************/
+
+static void Mch_WriteAnswersMatchResult (struct Match *Match,
+                                         const char *Class,bool ShowResult)
+  {
+   /***** Write answer depending on type *****/
+   if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
+      Tst_WriteChoiceAnsViewMatch (Match->MchCod,Match->Status.QstInd,Match->Status.QstCod,
+				   Match->Status.NumCols,Class,ShowResult);
+   else
+      Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
   }
 
 /*****************************************************************************/

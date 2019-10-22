@@ -206,9 +206,6 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 				          unsigned NumQst,MYSQL_RES *mysql_res,
                                           double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
-                                         const char *Class,
-                                         bool ShowResult);
 
 static void Tst_WriteTextAnsViewTest (unsigned NumQst);
 static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
@@ -3521,21 +3518,6 @@ static void Tst_WriteAnswersTestResult (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/************* Write answers of a question when viewing a match **************/
-/*****************************************************************************/
-
-void Tst_WriteAnswersMatchResult (long MchCod,unsigned QstInd,long QstCod,
-                                  const char *Class,bool ShowResult)
-  {
-   /***** Write answer depending on type *****/
-   if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
-      Tst_WriteChoiceAnsViewMatch (MchCod,QstInd,QstCod,
-                                   Class,ShowResult);
-   else
-      Ale_ShowAlert (Ale_ERROR,"Type of answer not valid in a game.");
-  }
-
-/*****************************************************************************/
 /***************** Check if a question is valid for a game *******************/
 /*****************************************************************************/
 
@@ -4131,11 +4113,11 @@ void Tst_ComputeScoreQst (unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION],	// Ind
 /******** Write single or multiple choice answer when viewing a match ********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
-                                         const char *Class,
-                                         bool ShowResult)
+void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
+				  unsigned NumCols,const char *Class,bool ShowResult)
   {
    unsigned NumOpt;
+   bool RowIsOpen = false;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAnswerersQst;
@@ -4190,13 +4172,17 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
    /***** Begin table *****/
    Tbl_TABLE_BeginWidePadding (5);
 
-   /***** Show one row for each option *****/
+   /***** Show options distributed in columns *****/
    for (NumOpt = 0;
 	NumOpt < Gbl.Test.Answer.NumOptions;
 	NumOpt++)
      {
-      /***** Start row for this option *****/
-      Tbl_TR_Begin (NULL);
+      /***** Start row? *****/
+      if (NumOpt % NumCols == 0)
+	{
+	 Tbl_TR_Begin (NULL);
+	 RowIsOpen = true;
+	}
 
       /***** Write letter for this option *****/
       Tbl_TD_Begin ("class=\"MCH_TCH_BUTTON_TD\"");
@@ -4208,7 +4194,7 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
       Tbl_TD_End ();
 
       /***** Write the option text and the result *****/
-      Tbl_TD_Begin ("class=\"LM\"");
+      Tbl_TD_Begin ("class=\"LT\"");
       fprintf (Gbl.F.Out,"<label for=\"Ans%06u_%u\" class=\"%s\">"
 	                 "%s"
 	                 "</label>",
@@ -4229,9 +4215,17 @@ static void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod
 
       Tbl_TD_End ();
 
-      /***** End row for this option *****/
-      Tbl_TR_End ();
+      /***** End row? *****/
+      if (NumOpt % NumCols == NumCols - 1)
+	{
+         Tbl_TR_End ();
+	 RowIsOpen = false;
+	}
      }
+
+   /***** End row? *****/
+   if (RowIsOpen)
+      Tbl_TR_End ();
 
    /***** End table *****/
    Tbl_TABLE_End ();
