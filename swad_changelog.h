@@ -487,15 +487,22 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.40.4 (2019-10-22)"
+#define Log_PLATFORM_VERSION	"SWAD 19.40.5 (2019-10-22)"
 #define CSS_FILE		"swad19.40.3.css"
 #define JS_FILE			"swad19.39.js"
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
+// TODO: Change icon to upload file in timeline to photo-video.svg
+
+	Version 19.40.5:  Oct 22, 2019	New icons to view match in two columns. (245882 lines)
+					Copy the following 3 icons to icon public directory:
+sudo cp -a icon/bars.svg /var/www/html/swad/icon/
+sudo cp -a icon/grip-vertical.svg /var/www/html/swad/icon/
+sudo cp -a icon/th.svg /var/www/html/swad/icon/
 
 	Version 19.40.4:  Oct 22, 2019	New icon to view results in matches. (245838 lines)
-					Copy the following 10 icons to icon public directory:
+					Copy the following icon to icon public directory:
 sudo cp -a icon/poll-h.svg /var/www/html/swad/icon/
 
 	Version 19.40.3:  Oct 21, 2019	Changes in score table. (245810 lines)

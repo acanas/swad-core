@@ -60,6 +60,7 @@ struct Match
       long QstCod;
       time_t QstStartTimeUTC;
       Mch_Showing_t Showing;	// What is shown on teacher's screen
+      unsigned NumCols;		// Number of columns for answers on teacher's screen
       bool ShowQstResults;	// Show global results of current question while playing
       bool ShowUsrResults;	// Show exam with results of all questions for the student
       bool Playing;		// Is being played now?

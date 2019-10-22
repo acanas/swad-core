@@ -77,6 +77,9 @@ const char *Mch_ShowingStringsDB[Mch_NUM_SHOWING] =
    "results",
   };
 
+#define Mch_NUM_COLS 3
+#define Mch_NUM_COLS_DEFAULT 1
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -156,7 +159,8 @@ static void Mch_ShowRightColumnStd (struct Match *Match);
 
 static void Mch_ShowNumQstInMatch (struct Match *Match);
 static void Mch_PutMatchControlButtons (struct Match *Match);
-static void Mch_PutCheckboxResult (struct Match *Match);
+static void Mch_ShowFormColumns (struct Match *Match);
+// static void Mch_PutCheckboxResult (struct Match *Match);
 static void Mch_ShowMatchTitle (struct Match *Match);
 static void Mch_ShowFormViewResult (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
@@ -338,6 +342,7 @@ void Mch_GetDataOfMatchByCod (struct Match *Match)
       Match->Status.Showing          = Mch_STEM;
       Match->Status.Playing          = false;
       Match->Status.NumPlayers       = 0;
+      Match->Status.NumCols          = Mch_NUM_COLS_DEFAULT;
       Match->Status.ShowQstResults   = false;
       Match->Status.ShowUsrResults   = false;
      }
@@ -2065,6 +2070,7 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
    /***** Put forms to choice which projects to show *****/
    /* 1st. row */
    Set_StartSettingsHead ();
+   Mch_ShowFormColumns (Match);
    Mch_ShowFormViewResult (Match);
    Set_EndSettingsHead ();
 
@@ -2289,21 +2295,55 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
   }
 
 /*****************************************************************************/
-/***************** Put checkbox to select if show results ********************/
+/** Show form to choice whether to show answers in one column or two columns */
 /*****************************************************************************/
 
+static void Mch_ShowFormColumns (struct Match *Match)
+  {
+   extern const char *Txt_columns;
+   unsigned NumCols;
+   static const char *NumColsIcon[Mch_NUM_COLS] =
+     {
+      "bars.svg",		// 1 column
+      "grip-vertical.svg",	// 2 columns
+      "th.svg",			// 3 columns
+     };
+
+   Set_StartOneSettingSelector ();
+   for (NumCols = 0;
+	NumCols < Mch_NUM_COLS;
+	NumCols++)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	       (Match->Status.NumCols == NumCols) ? "PREF_ON" :
+					            "PREF_OFF");
+      /***** Begin form *****/
+      Frm_StartForm (ActChgVisResMchQst);
+      Mch_PutParamMchCod (Match->MchCod);	// Current match being played
+
+      Ico_PutSettingIconLink (NumColsIcon[NumCols],Txt_columns);
+      Frm_EndForm ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   Set_EndOneSettingSelector ();
+  }
+
+/*****************************************************************************/
+/***************** Put checkbox to select if show results ********************/
+/*****************************************************************************/
+/*
 static void Mch_PutCheckboxResult (struct Match *Match)
   {
    extern const char *Txt_View_results;
 
-   /***** Start container *****/
+   ***** Start container *****
    fprintf (Gbl.F.Out,"<div class=\"MCH_SHOW_RESULTS\">");
 
-   /***** Begin form *****/
+   ***** Begin form *****
    Frm_StartForm (ActChgVisResMchQst);
    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
-   /***** Put icon with link *****/
+   ***** Put icon with link *****
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">"
 	              "<a href=\"\" class=\"ICO_HIGHLIGHT\""
 	              " title=\"%s\" "
@@ -2319,13 +2359,13 @@ static void Mch_PutCheckboxResult (struct Match *Match)
 		                           "fas fa-toggle-off",
 	    Txt_View_results);
 
-   /***** End form *****/
+   ***** End form *****
    Frm_EndForm ();
 
-   /***** End container *****/
+   ***** End container *****
    fprintf (Gbl.F.Out,"</div>");
   }
-
+*/
 static void Mch_ShowFormViewResult (struct Match *Match)
   {
    extern const char *Txt_View_results;

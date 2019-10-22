@@ -432,7 +432,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
                      Gbl.Prjs.CurrentPage,
                      -1L);
       Ico_PutSettingIconLink (WhoseProjectsIcon[My_All],
-	                   Txt_PROJECT_MY_ALL_PROJECTS[My_All]);
+	                      Txt_PROJECT_MY_ALL_PROJECTS[My_All]);
       Frm_EndForm ();
       fprintf (Gbl.F.Out,"</div>");
      }

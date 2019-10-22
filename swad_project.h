@@ -36,7 +36,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-/***** Filters to list departments *****/
+/***** Filters to list projects *****/
 /* My projects / all projects */
 #define Prj_NUM_WHOSE_PROJECTS 2
 typedef enum
