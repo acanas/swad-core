@@ -160,7 +160,8 @@ static void Mch_ShowRightColumnStd (struct Match *Match);
 static void Mch_ShowNumQstInMatch (struct Match *Match);
 static void Mch_PutMatchControlButtons (struct Match *Match);
 static void Mch_ShowFormColumns (struct Match *Match);
-// static void Mch_PutCheckboxResult (struct Match *Match);
+static void Mch_PutParamNumCols (unsigned NumCols);
+
 static void Mch_ShowMatchTitle (struct Match *Match);
 static void Mch_ShowFormViewResult (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
@@ -1783,6 +1784,39 @@ void Mch_PlayPauseMatch (void)
   }
 
 /*****************************************************************************/
+/******* Change number of columns in answers of a match (by a teacher) *******/
+/*****************************************************************************/
+
+void Mch_ChangeNumColsMch (void)
+  {
+   struct Match Match;
+
+   /***** Remove old players.
+          This function must be called by a teacher
+          before getting match status. *****/
+   Mch_RemoveOldPlayers ();
+
+   /***** Get data of the match from database *****/
+   Match.MchCod = Gbl.Games.MchCodBeingPlayed;
+   Mch_GetDataOfMatchByCod (&Match);
+
+   /***** Get number of columns *****/
+   Match.Status.NumCols = (unsigned)
+	                  Par_GetParToUnsignedLong ("NumCols",
+						    1,
+						    Mch_MAX_COLS,
+						    Mch_NUM_COLS_DEFAULT);
+
+   /***** Update match status in database *****/
+   Mch_UpdateMatchStatusInDB (&Match);
+
+   /***** Show current match status *****/
+   fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MCH_CONT\">");
+   Mch_ShowMatchStatusForTch (&Match);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
 /********* Toggle the display of results in a match (by a teacher) ***********/
 /*****************************************************************************/
 
@@ -2336,8 +2370,9 @@ static void Mch_ShowFormColumns (struct Match *Match)
 	       (Match->Status.NumCols == NumCols) ? "PREF_ON" :
 					            "PREF_OFF");
       /***** Begin form *****/
-      Frm_StartForm (ActChgVisResMchQst);
+      Frm_StartForm (ActChgNumColMch);
       Mch_PutParamMchCod (Match->MchCod);	// Current match being played
+      Mch_PutParamNumCols (NumCols);		// Number of columns
 
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 		"%u %s",
@@ -2356,43 +2391,18 @@ static void Mch_ShowFormColumns (struct Match *Match)
   }
 
 /*****************************************************************************/
-/***************** Put checkbox to select if show results ********************/
+/******** Write parameter with number of columns in answers of match *********/
 /*****************************************************************************/
-/*
-static void Mch_PutCheckboxResult (struct Match *Match)
+
+static void Mch_PutParamNumCols (unsigned NumCols)	// Number of columns
   {
-   extern const char *Txt_View_results;
-
-   ***** Start container *****
-   fprintf (Gbl.F.Out,"<div class=\"MCH_SHOW_RESULTS\">");
-
-   ***** Begin form *****
-   Frm_StartForm (ActChgVisResMchQst);
-   Mch_PutParamMchCod (Match->MchCod);	// Current match being played
-
-   ***** Put icon with link *****
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">"
-	              "<a href=\"\" class=\"ICO_HIGHLIGHT\""
-	              " title=\"%s\" "
-	              " onclick=\"document.getElementById('%s').submit();"
-	              " return false;\">"
-	              "<i class=\"%s\"></i>"
-	              "&nbsp;%s"
-	              "</a>"
-	              "</div>",
-	    Txt_View_results,
-	    Gbl.Form.Id,
-	    Match->Status.ShowQstResults ? "fas fa-toggle-on" :
-		                           "fas fa-toggle-off",
-	    Txt_View_results);
-
-   ***** End form *****
-   Frm_EndForm ();
-
-   ***** End container *****
-   fprintf (Gbl.F.Out,"</div>");
+   Par_PutHiddenParamUnsigned ("NumCols",NumCols);
   }
-*/
+
+/*****************************************************************************/
+/******************* Put form to select if show results **********************/
+/*****************************************************************************/
+
 static void Mch_ShowFormViewResult (struct Match *Match)
   {
    extern const char *Txt_View_results;

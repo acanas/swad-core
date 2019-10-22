@@ -615,9 +615,10 @@ Assessment:
         465. ActResMch			Resume an unfinished match showing current question in a new browser tab
         466. ActBckMch			Go back when playing a match
         467. ActPlyPauMch		Play/pause current match
-        469. ActFwdMch			Go forward when playing a match
-        471. ActChgVisResMchQst		Change visibility of question results when playing a match
-        470. ActRefMchTch		Refresh current question when playing a match (as teacher)
+        468. ActFwdMch			Go forward when playing a match
+        469. ActChgNumColMch		Change number of columns when playing a match
+        470. ActChgVisResMchQst		Change visibility of question results when playing a match
+        471. ActRefMchTch		Refresh current question when playing a match (as teacher)
 
         473. ActJoiMch			Show current question when playing a game (as student)
         474. ActAnsMchQstStd		Answer a match question (as student)
@@ -2164,6 +2165,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActBckMch		*/{1790,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_BackMatch			,NULL},
    /* ActPlyPauMch	*/{1789,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_PlayPauseMatch		,NULL},
    /* ActFwdMch		*/{1672,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ForwardMatch		,NULL},
+   /* ActChgNumColMch	*/{1802,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ChangeNumColsMch		,NULL},
    /* ActChgVisResMchQst*/{1794,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_2ND_TAB,Mch_GetMatchBeingPlayed	,Mch_ToggleVisibilResultsMchQst	,NULL},
    /* ActRefMchTch	*/{1788,-1,TabUnk,ActSeeAllGam		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_RFRESH,Mch_GetMatchBeingPlayed	,Mch_RefreshMatchTch		,NULL},
 
@@ -5030,6 +5032,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeUsrMchRes,	// #1799
 	ActSeeOneMchResOth,	// #1800
 	ActChgVisResMchUsr,	// #1801
+	ActChgNumColMch,	// #1802
 	};
 
 /*****************************************************************************/

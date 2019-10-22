@@ -495,6 +495,10 @@ ps2pdf source.ps destination.pdf
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Change icon to upload file in timeline to photo-video.svg
 
+	Version 19.41.1:  Oct 22, 2019	Change number of columns from form. (245944 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1802','es','N','Cambiar n&uacute;mero de columnas en partida');
+
 	Version 19.41:    Oct 22, 2019	Number of columns in match is stored in database. (245930 lines)
 					1 change necessary in database:
 ALTER TABLE mch_matches ADD COLUMN NumCols INT NOT NULL DEFAULT 1 AFTER Showing;

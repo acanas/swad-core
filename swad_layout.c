@@ -705,6 +705,7 @@ static void Lay_WriteScriptInit (void)
       case ActBckMch:
       case ActPlyPauMch:
       case ActFwdMch:
+      case ActChgNumColMch:
       case ActChgVisResMchQst:
 	 RefreshMatchTch = true;
 	 break;
@@ -841,6 +842,7 @@ static void Lay_WriteScriptParamsAJAX (void)
       case ActBckMch:
       case ActPlyPauMch:
       case ActFwdMch:
+      case ActChgNumColMch:
       case ActChgVisResMchQst:
 	 // Handle keys in keyboard/presenter
 	 fprintf (Gbl.F.Out,"document.addEventListener(\"keydown\",handleMatchKeys);\n");
