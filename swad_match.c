@@ -158,6 +158,7 @@ static void Mch_ShowNumQstInMatch (struct Match *Match);
 static void Mch_PutMatchControlButtons (struct Match *Match);
 static void Mch_PutCheckboxResult (struct Match *Match);
 static void Mch_ShowMatchTitle (struct Match *Match);
+static void Mch_ShowFormViewResult (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersStd (struct Match *Match);
 
@@ -2061,8 +2062,14 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
    /***** Buttons *****/
    Mch_PutMatchControlButtons (Match);
 
+   /***** Put forms to choice which projects to show *****/
+   /* 1st. row */
+   Set_StartSettingsHead ();
+   Mch_ShowFormViewResult (Match);
+   Set_EndSettingsHead ();
+
    /***** Write button to request viewing results *****/
-   Mch_PutCheckboxResult (Match);
+   // Mch_PutCheckboxResult (Match);
 
    /***** End left container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -2317,6 +2324,30 @@ static void Mch_PutCheckboxResult (struct Match *Match)
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Mch_ShowFormViewResult (struct Match *Match)
+  {
+   extern const char *Txt_View_results;
+
+   /***** Begin selector *****/
+   Set_StartOneSettingSelector ();
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	    (Match->Status.ShowQstResults) ? "PREF_ON" :
+					     "PREF_OFF");
+
+   /***** Begin form *****/
+   Frm_StartForm (ActChgVisResMchQst);
+   Mch_PutParamMchCod (Match->MchCod);	// Current match being played
+
+   Ico_PutSettingIconLink ("poll-h.svg",Txt_View_results);
+
+   /***** End form *****/
+   Frm_EndForm ();
+
+   /***** End selector *****/
+   fprintf (Gbl.F.Out,"</div>");
+   Set_EndOneSettingSelector ();
   }
 
 /*****************************************************************************/

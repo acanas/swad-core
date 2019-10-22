@@ -2318,9 +2318,9 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
   {
    unsigned Interval;
    unsigned NumColor;
-   unsigned R;
-   unsigned G;
-   unsigned B;
+   unsigned R = 0;	// Initialized to avoid warning
+   unsigned G = 0;	// Initialized to avoid warning
+   unsigned B = 0;	// Initialized to avoid warning
 
    /***** Write numbers from 0 to Hits.Max *****/
    Tbl_TABLE_BeginWide ();
@@ -2376,9 +2376,9 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
 static void Sta_DrawAccessesPerHourForADay (Sta_ColorType_t ColorType,float HitsNum[24],float HitsMax)
   {
    unsigned Hour;
-   unsigned R;
-   unsigned G;
-   unsigned B;
+   unsigned R = 0;	// Initialized to avoid warning
+   unsigned G = 0;	// Initialized to avoid warning
+   unsigned B = 0;	// Initialized to avoid warning
    char *Str;
 
    for (Hour = 0;
