@@ -30,9 +30,9 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
-#include "swad_table.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -412,13 +412,13 @@ void Ann_ShowFormAnnouncement (void)
    Ann_PutSubjectMessage ("Content",Txt_MSG_Content,20);
 
    /***** Users' roles who can view the announcement *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s: ",Txt_Users);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    Rol_WriteSelectorRoles (1 << Rol_UNK |
                            1 << Rol_GST |
                            1 << Rol_STD |
@@ -430,9 +430,9 @@ void Ann_ShowFormAnnouncement (void)
                            1 << Rol_NET |
                            1 << Rol_TCH,
                            false,false);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_announcement);
@@ -450,21 +450,21 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RT\"");
+   HTM_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:</label>",
 	    Field,The_ClassFormInBox[Gbl.Prefs.Theme],Label);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LT\"");
    fprintf (Gbl.F.Out,"<textarea id=\"%s\" name=\"%s\""
                       " cols=\"75\" rows=\"%u\">"
                       "</textarea>",
 	    Field,Field,Rows);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

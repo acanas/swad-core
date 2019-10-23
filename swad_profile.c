@@ -34,6 +34,7 @@
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_network.h"
 #include "swad_nickname.h"
@@ -44,7 +45,6 @@
 #include "swad_role.h"
 #include "swad_role_type.h"
 #include "swad_setting.h"
-#include "swad_table.h"
 #include "swad_theme.h"
 #include "swad_timeline.h"
 #include "swad_user.h"
@@ -1538,7 +1538,7 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      Tbl_TABLE_Begin (NULL);
+      HTM_TABLE_Begin (NULL);
 
       for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
 	   NumUsr <= NumUsrs;
@@ -1562,18 +1562,18 @@ void Prf_ShowRankingFigure (MYSQL_RES **mysql_res,unsigned NumUsrs)
 	   }
 
 	 /***** Show row *****/
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
          Prf_ShowUsrInRanking (&UsrDat,Rank);
 
-	 Tbl_TD_Begin ("class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%ld",Figure);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 	}
 
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1707,7 +1707,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      Tbl_TABLE_Begin (NULL);
+      HTM_TABLE_Begin (NULL);
 
       for (NumUsr = 1, Rank = 1, Gbl.RowEvenOdd = 0;
 	   NumUsr <= NumUsrs;
@@ -1729,15 +1729,15 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 	   }
 
 	 /***** Show row *****/
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 	 Prf_ShowUsrInRanking (&UsrDat,Rank);
-	 Tbl_TD_Begin ("class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"RM COLOR%u\"",Gbl.RowEvenOdd);
 	 Str_WriteFloatNumToFile (Gbl.F.Out,NumClicksPerDay);
-	 Tbl_TD_End ();
-	 Tbl_TR_End ();
+	 HTM_TD_End ();
+	 HTM_TR_End ();
 	}
 
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1758,12 +1758,12 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat);
 
-   Tbl_TD_Begin ("class=\"RANK RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RANK RM COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"#%u",Rank);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Check if I can see the public profile *****/
-   Tbl_TD_Begin ("class=\"RANK_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RANK_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
    if (Visible)
      {
       /***** User's photo *****/
@@ -1772,10 +1772,10 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
 					   NULL,
 			"PHOTO30x40",Pho_ZOOM,false);
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Put form to go to public profile *****/
-   Tbl_TD_Begin ("class=\"COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"COLOR%u\"",Gbl.RowEvenOdd);
    if (Visible)
      {
       Frm_StartForm (ActSeeOthPubPrf);
@@ -1787,5 +1787,5 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
 	                 "</div>");
       Frm_EndForm ();
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }

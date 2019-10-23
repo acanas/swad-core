@@ -31,9 +31,9 @@
 #include "swad_box.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_privacy.h"
-#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -155,15 +155,15 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    extern const char *Txt_PRIVACY_OPTIONS[Pri_NUM_OPTIONS_PRIVACY];
    Pri_Visibility_t Visibility;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Select visibility *****/
-   Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",TxtLabel);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Form with list of options *****/
-   Tbl_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LT\"");
    if (Action != ActUnk)
       Frm_StartFormAnchor (Action,Pri_PRIVACY_ID);
    fprintf (Gbl.F.Out,"<ul class=\"PRI_LIST LIST_LEFT\">");
@@ -196,8 +196,8 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
    fprintf (Gbl.F.Out,"</ul>");
    if (Action != ActUnk)
       Frm_EndForm ();
-   Tbl_TD_End ();
-   Tbl_TR_End ();
+   HTM_TD_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

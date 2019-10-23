@@ -46,6 +46,7 @@
 #include "swad_file_MIME.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_logo.h"
 #include "swad_mark.h"
@@ -55,7 +56,6 @@
 #include "swad_profile.h"
 #include "swad_role.h"
 #include "swad_string.h"
-#include "swad_table.h"
 #include "swad_timeline.h"
 #include "swad_zip.h"
 
@@ -3184,10 +3184,10 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	 if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat))
 	   {
 	    /***** Show a row with the data of the owner of the works *****/
-	    Tbl_TR_Begin (NULL);
+	    HTM_TR_Begin (NULL);
 	    Brw_ShowDataOwnerAsgWrk (&Gbl.Usrs.Other.UsrDat);
 
-	    Tbl_TD_Begin ("class=\"LT\"");
+	    HTM_TD_Begin ("class=\"LT\"");
 
 	    /***** Show the tree with the assignments *****/
 	    Gbl.FileBrowser.Type = Brw_ADMI_ASG_CRS;
@@ -3199,8 +3199,8 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 	    Brw_InitializeFileBrowser ();
 	    Brw_ShowFileBrowser ();
 
-	    Tbl_TD_End ();
-	    Tbl_TR_End ();
+	    HTM_TD_End ();
+	    HTM_TR_End ();
 	   }
      }
 
@@ -3362,15 +3362,15 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    Act_Action_t NextAction;
 
    /***** Show user's photo *****/
-   Tbl_TD_Begin ("class=\"OWNER_WORKS_PHOTO\"");
+   HTM_TD_Begin ("class=\"OWNER_WORKS_PHOTO\"");
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
                      "PHOTO60x80",Pho_ZOOM,false);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Begin form to send a message to this user *****/
-   Tbl_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LT\"");
 
    fprintf (Gbl.F.Out,"<div class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
 
@@ -3415,7 +3415,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</div>");
 
 
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -3656,7 +3656,7 @@ static void Brw_ShowFileBrowser (void)
    Brw_WriteSubtitleOfFileBrowser ();
 
    /***** List recursively the directory *****/
-   Tbl_TABLE_Begin ("BROWSER_TABLE");
+   HTM_TABLE_Begin ("BROWSER_TABLE");
    Str_Copy (Gbl.FileBrowser.FilFolLnk.Path,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type],
 	     PATH_MAX);
    Str_Copy (Gbl.FileBrowser.FilFolLnk.Name,".",
@@ -3670,7 +3670,7 @@ static void Brw_ShowFileBrowser (void)
                    false,	// Tree not contracted
                    Gbl.FileBrowser.Priv.PathRootFolder,
                    Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]);
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** Show and store number of documents found *****/
    Brw_ShowAndStoreSizeOfFileTree ();
@@ -5549,21 +5549,21 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
      {
       case Brw_ICON_TREE_NOTHING:
 	 if (TreeContracted)	// This row is inside a contracted subtree
-            Tbl_TR_Begin ("id=\"%s\" style=\"display:none;\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\" style=\"display:none;\"",Anchor);
 	 else
-            Tbl_TR_Begin ("id=\"%s\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\"",Anchor);
 	 break;
       case Brw_ICON_TREE_EXPAND:
 	 if (TreeContracted)	// This row is inside a contracted subtree
-            Tbl_TR_Begin ("id=\"%s\" data-folder=\"contracted\" style=\"display:none;\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\" style=\"display:none;\"",Anchor);
 	 else
-            Tbl_TR_Begin ("id=\"%s\" data-folder=\"contracted\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\"",Anchor);
 	 break;
       case Brw_ICON_TREE_CONTRACT:
 	 if (TreeContracted)	// This row is inside a contracted subtree
-            Tbl_TR_Begin ("id=\"%s\" data-folder=\"expanded\" style=\"display:none;\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\" style=\"display:none;\"",Anchor);
 	 else
-            Tbl_TR_Begin ("id=\"%s\" data-folder=\"expanded\"",Anchor);
+            HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\"",Anchor);
 	 break;
      }
 
@@ -5594,10 +5594,10 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /***** Indentation depending on level, icon, and file/folder name *****/
    /* Start column */
-   Tbl_TD_Begin ("class=\"NO_BR LT COLOR%u\" style=\"width:99%%;\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"NO_BR LT COLOR%u\" style=\"width:99%%;\"",Gbl.RowEvenOdd);
 
-   Tbl_TABLE_Begin (NULL);
-   Tbl_TR_Begin (NULL);
+   HTM_TABLE_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /* Indent depending on level */
    if (Level)
@@ -5619,9 +5619,9 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    else	// File or link
      {
       /* Icon with file type or link */
-      Tbl_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
       Brw_PutIconFileWithLinkToViewMetadata (16,&FileMetadata);
-      Tbl_TD_End ();
+      HTM_TD_End ();
      }
 
    /* Check if is a new file or folder */
@@ -5633,9 +5633,9 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    Brw_WriteFileName (Level,FileMetadata.IsPublic);
 
    /* End column */
-   Tbl_TR_End ();
-   Tbl_TABLE_End ();
-   Tbl_TD_End ();
+   HTM_TR_End ();
+   HTM_TABLE_End ();
+   HTM_TD_End ();
 
    if (AdminMarks)
       /***** Header and footer rows *****/
@@ -5651,12 +5651,12 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
      {
       /***** Put icon to download ZIP of folder *****/
-      Tbl_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
       if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
 	  !SeeMarks &&				// Do not ZIP folders when seeing marks
 	  !(SeeDocsZone && RowSetAsHidden))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
 	 Brw_PutButtonToDownloadZIPOfAFolder ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
      }
    else	// File or link
       /***** User who created the file or folder *****/
@@ -5664,7 +5664,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,const char *RowId,
 
    /***** End this row *****/
    free ((void *) Anchor);
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 
@@ -5748,7 +5748,7 @@ static bool Brw_CheckIfCanPasteIn (unsigned Level)
 
 static void Brw_PutIconRemove (void)
   {
-   Tbl_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
    if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I remove this?
       switch (Gbl.FileBrowser.FilFolLnk.Type)
@@ -5770,7 +5770,7 @@ static void Brw_PutIconRemove (void)
    else
       Ico_PutIconRemovalNotAllowed ();
 
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -5779,13 +5779,13 @@ static void Brw_PutIconRemove (void)
 
 static void Brw_PutIconCopy (void)
   {
-   Tbl_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
    /***** Form to copy into the clipboard *****/
    Ico_PutContextualIconToCopy (Brw_ActCopy[Gbl.FileBrowser.Type],
 				Brw_PutImplicitParamsFileBrowser);
 
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -5796,7 +5796,7 @@ static void Brw_PutIconPaste (unsigned Level)
   {
    extern const char *Txt_Copy_not_allowed;
 
-   Tbl_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
 
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)	// Can't paste in a file or link
      {
@@ -5812,7 +5812,7 @@ static void Brw_PutIconPaste (unsigned Level)
 	 Ico_PutIconOff ("paste.svg",Txt_Copy_not_allowed);
      }
 
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -5823,13 +5823,13 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                                   const char *FileBrowserId,const char *RowId,
                                                   Brw_IconTree_t IconThisRow)
   {
-   Tbl_TD_Begin ("class=\"LM\"");
-   Tbl_TABLE_Begin (NULL);
-   Tbl_TR_Begin (NULL);
+   HTM_TD_Begin ("class=\"LM\"");
+   HTM_TABLE_Begin (NULL);
+   HTM_TR_Begin (NULL);
    Brw_IndentDependingOnLevel (Level);
 
    /***** Icon to expand/contract *****/
-   Tbl_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
    switch (IconThisRow)
      {
       case Brw_ICON_TREE_NOTHING:
@@ -5857,11 +5857,11 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
                                       false);	// Visible
 	 break;
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
-   Tbl_TABLE_End ();
-   Tbl_TD_End ();
+   HTM_TR_End ();
+   HTM_TABLE_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -5876,12 +5876,12 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 	i < Level;
 	i++)
      {
-      Tbl_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\""
 	                 " alt=\"\" title=\"\""
 	                 " class=\"ICO20x20\" />",
 	       Cfg_URL_ICON_PUBLIC);
-      Tbl_TD_End ();
+      HTM_TD_End ();
      }
   }
 
@@ -5955,10 +5955,10 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
 
 static void Brw_PutIconShow (const char *Anchor)
   {
-   Tbl_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
    Ico_PutContextualIconToUnhide (Brw_ActShow[Gbl.FileBrowser.Type],Anchor,
 	                          Brw_PutImplicitParamsFileBrowser);
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -5967,10 +5967,10 @@ static void Brw_PutIconShow (const char *Anchor)
 
 static void Brw_PutIconHide (const char *Anchor)
   {
-   Tbl_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
    Ico_PutContextualIconToHide (Brw_ActHide[Gbl.FileBrowser.Type],Anchor,
 	                        Brw_PutImplicitParamsFileBrowser);
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -6001,7 +6001,7 @@ static void Brw_PutIconFolder (unsigned Level,
    bool ICanCreate;
 
    /***** Start cell *****/
-   Tbl_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",Level * 20);
+   HTM_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",Level * 20);
 
    /***** Put icon to create a new file or folder *****/
    if ((ICanCreate = Brw_CheckIfICanCreateIntoFolder (Level)))	// I can create a new file or folder
@@ -6060,7 +6060,7 @@ static void Brw_PutIconFolder (unsigned Level,
      }
 
    /***** End cell *****/
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -6129,14 +6129,14 @@ static void Brw_PutIconNewFileOrFolder (void)
    extern const char *Txt_New_FILE_OR_FOLDER;
 
    /***** Icon that indicates new file *****/
-   Tbl_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"<img src=\"%s/star16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
             Cfg_URL_ICON_PUBLIC,
             Txt_New_FILE_OR_FOLDER,
             Txt_New_FILE_OR_FOLDER);
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -6244,10 +6244,10 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
      {
       /***** Start cell *****/
       if (Gbl.FileBrowser.Clipboard.IsThisFile)
-	 Tbl_TD_Begin ("class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"",
+	 HTM_TD_Begin ("class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
       else
-	 Tbl_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
+	 HTM_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
 
       fprintf (Gbl.F.Out,"<div class=\"FILENAME\">");
@@ -6291,15 +6291,15 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
       /***** End cell *****/
       fprintf (Gbl.F.Out,"</div>");
 
-      Tbl_TD_End ();
+      HTM_TD_End ();
      }
    else	// File or link
      {
       if (Gbl.FileBrowser.Clipboard.IsThisFile)
-	 Tbl_TD_Begin ("class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"",
+	 HTM_TD_Begin ("class=\"%s LM LIGHT_GREEN\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
       else
-	 Tbl_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
+	 HTM_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
 
       fprintf (Gbl.F.Out,"&nbsp;"
@@ -6323,7 +6323,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
                          Txt_Public_open_educational_resource_OER_for_everyone);
 
       fprintf (Gbl.F.Out,"</div>");
-      Tbl_TD_End ();
+      HTM_TD_End ();
      }
   }
 
@@ -6388,7 +6388,7 @@ static void Brw_WriteDatesAssignment (void)
    extern const char *Txt_unknown_assignment;
    static unsigned UniqueId = 0;
 
-   Tbl_TD_Begin ("colspan=\"2\" class=\"%s RM COLOR%u\"",
+   HTM_TD_Begin ("colspan=\"2\" class=\"%s RM COLOR%u\"",
 		 Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
 					    "ASG_LST_DATE_RED",
 		 Gbl.RowEvenOdd);
@@ -6421,7 +6421,7 @@ static void Brw_WriteDatesAssignment (void)
    else
       fprintf (Gbl.F.Out,"&nbsp;(%s)",
                Txt_unknown_assignment);
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -6439,13 +6439,13 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
       Fil_WriteFileSizeBrief ((double) FileMetadata->Size,FileSizeStr);
    else
       FileSizeStr[0] = '\0';
-   Tbl_TD_Begin ("class=\"%s RM COLOR%u\"",
+   HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
                  Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"&nbsp;%s",FileSizeStr);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write the date *****/
-   Tbl_TD_Begin ("class=\"%s RM COLOR%u\"",
+   HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
                  Gbl.FileBrowser.TxtStyle,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"&nbsp;");
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FILE ||
@@ -6461,7 +6461,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
                UniqueId,(long) FileMetadata->Time,
                (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -6486,7 +6486,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
       ShowUsr = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);	// Get user's data from database
      }
 
-   Tbl_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
    if (ShowUsr)
      {
       /***** Show photo *****/
@@ -6503,7 +6503,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
                Txt_Unknown_or_without_photo,
                Txt_Unknown_or_without_photo);
 
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    if (Level && UsrCod > 0)
       /***** Free memory used for user's data *****/
@@ -8512,45 +8512,45 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	          FileNameToShow);
 
    /***** URL *****/
-   Tbl_TABLE_Begin (NULL);
-   Tbl_TR_Begin (NULL);
+   HTM_TABLE_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"NewLinkURL\" class=\"%s\">"
 	              "%s:&nbsp;"
 	              "</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_URL);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"url\""
                       " id=\"NewLinkURL\" name=\"NewLinkURL\""
                       " size=\"30\" maxlength=\"%u\" value=\"\""
                       " required=\"required\" />",
             PATH_MAX);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Link name *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"NewLinkName\" class=\"%s\">"
 	              "%s&nbsp;(%s):&nbsp;"
 	              "</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\""
                       " id=\"NewLinkName\" name=\"NewLinkName\""
                       " size=\"30\" maxlength=\"%u\" value=\"\" />",
             Brw_MAX_CHARS_FOLDER);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
-   Tbl_TABLE_End ();
+   HTM_TR_End ();
+   HTM_TABLE_End ();
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
@@ -9506,35 +9506,35 @@ void Brw_ShowFileMetadata (void)
 	 Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
 
 	 /***** Link to download the file *****/
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
+	 HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
 	 Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 
 	 /***** Filename *****/
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_Filename);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 Brw_WriteSmallLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 
 	 /***** Publisher's data *****/
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_Uploaded_by);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 if (FileHasPublisher)
 	   {
 	    /* Show photo */
@@ -9550,9 +9550,9 @@ void Brw_ShowFileMetadata (void)
 	 else
 	    /* Unknown publisher */
 	    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 
 	 /***** Free memory used for publisher's data *****/
 	 if (FileMetadata.PublisherUsrCod > 0)
@@ -9560,47 +9560,47 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Write the file size *****/
 	 Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_File_size);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"%s",FileSizeStr);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 
 	 /***** Write the date *****/
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_Date_of_creation);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("id=\"filedate\" class=\"DAT LM\"");
+	 HTM_TD_Begin ("id=\"filedate\" class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 		            "writeLocalDateHMSFromUTC('filedate',%ld,"
 		            "%u,',&nbsp;','%s',true,true,0x7);"
 		            "</script>",
 	          (long) FileMetadata.Time,
 	          (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 
 	 /***** Private or public? *****/
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"RM\"");
+	 HTM_TD_Begin ("class=\"RM\"");
 	 fprintf (Gbl.F.Out,"<label for=\"PublicFile\" class=\"%s\">"
 			    "%s:"
 			    "</label>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Availability);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 if (ICanChangePublic)	// I can change file to public
 	   {
 	    fprintf (Gbl.F.Out,"<select id=\"PublicFile\" name=\"PublicFile\">");
@@ -9621,19 +9621,19 @@ void Brw_ShowFileMetadata (void)
 	    fprintf (Gbl.F.Out,"%s",
 	             FileMetadata.IsPublic ? Txt_Public_open_educational_resource_OER_for_everyone :
 					     Txt_Private_available_to_certain_users_identified);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 
 	 /***** License *****/
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"RM\"");
+	 HTM_TD_Begin ("class=\"RM\"");
 	 fprintf (Gbl.F.Out,"<label for=\"License\" class=\"%s\">%s:</label>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_License);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 if (ICanEdit)	// I can edit file properties
 	   {
 	    fprintf (Gbl.F.Out,"<select id=\"License\" name=\"License\">");
@@ -9651,55 +9651,55 @@ void Brw_ShowFileMetadata (void)
 	   }
 	 else		// I can not edit file properties
 	    fprintf (Gbl.F.Out,"%s",Txt_LICENSES[FileMetadata.License]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 
 	 /***** Write my number of views *****/
 	 if (Gbl.Usrs.Me.Logged)
 	   {
-	    Tbl_TR_Begin (NULL);
+	    HTM_TR_Begin (NULL);
 
-	    Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"%s:",Txt_My_views);
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
-	    Tbl_TD_Begin ("class=\"DAT LM\"");
+	    HTM_TD_Begin ("class=\"DAT LM\"");
 	    fprintf (Gbl.F.Out,"%u",FileMetadata.NumMyViews);
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
-	    Tbl_TR_End ();
+	    HTM_TR_End ();
 	   }
 
 	 /***** Write number of identificated views *****/
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_Identified_views);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"%u (%u %s)",
 		  FileMetadata.NumViewsFromLoggedUsrs,
 		  FileMetadata.NumLoggedUsrs,
 		  (FileMetadata.NumLoggedUsrs == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
 			                              Txt_users[Usr_SEX_UNKNOWN]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 
 	 /***** Write number of public views *****/
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_Public_views);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"%u",FileMetadata.NumPublicViews);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 
 	 /***** End box *****/
 	 if (ICanEdit)	// I can edit file properties
@@ -11811,17 +11811,17 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TH (1,1,"BM",NULL);
-      Tbl_TH (1,1,"LM",Txt_Institution);
-      Tbl_TH (1,1,"LM",Txt_Centre);
-      Tbl_TH (1,1,"LM",Txt_Degree);
-      Tbl_TH (1,1,"LM",Txt_Course);
-      Tbl_TH (1,1,"LM",Txt_File_zone);
-      Tbl_TH (1,1,"LM",Txt_Document);
+      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,"LM",Txt_Institution);
+      HTM_TH (1,1,"LM",Txt_Centre);
+      HTM_TH (1,1,"LM",Txt_Degree);
+      HTM_TH (1,1,"LM",Txt_Course);
+      HTM_TH (1,1,"LM",Txt_File_zone);
+      HTM_TH (1,1,"LM",Txt_Document);
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** List documents found *****/
       for (NumDoc = 1;
@@ -11836,10 +11836,10 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
 	}
 
       /***** Write footer *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /* Number of documents not hidden found */
-      Tbl_TH_Begin (1,7,"CM");
+      HTM_TH_Begin (1,7,"CM");
       fprintf (Gbl.F.Out,"(");
       NumDocsHidden = NumDocs - NumDocsNotHidden;
       if (NumDocsHidden == 1)
@@ -11847,9 +11847,9 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
       else
 	 fprintf (Gbl.F.Out,"%lu %s",NumDocsHidden,Txt_hidden_documents);
       fprintf (Gbl.F.Out,")");
-      Tbl_TH_End ();
+      HTM_TH_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** End table and box *****/
       Box_EndBoxTable ();
@@ -11933,15 +11933,15 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	         CrsCod == Gbl.Hierarchy.Crs.CrsCod) ? "LIGHT_BLUE" :
                                                         Gbl.ColorRows[Gbl.RowEvenOdd];
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /***** Write number of document in this search *****/
-      Tbl_TD_Begin ("class=\"DAT RT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"DAT RT %s\"",BgColor);
       fprintf (Gbl.F.Out,"%lu",++(*NumDocsNotHidden));
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /***** Write institution logo, institution short name *****/
-      Tbl_TD_Begin ("class=\"DAT LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
       if (InsCod > 0)
 	{
          Frm_StartFormGoTo (ActSeeInsInf);
@@ -11954,10 +11954,10 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsShortName);
 	 Frm_EndForm ();
 	}
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /***** Write centre logo, centre short name *****/
-      Tbl_TD_Begin ("class=\"DAT LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
       if (CtrCod > 0)
 	{
          Frm_StartFormGoTo (ActSeeCtrInf);
@@ -11970,10 +11970,10 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrShortName);
 	 Frm_EndForm ();
 	}
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /***** Write degree logo, degree short name *****/
-      Tbl_TD_Begin ("class=\"DAT LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
       if (DegCod > 0)
 	{
          Frm_StartFormGoTo (ActSeeDegInf);
@@ -11986,10 +11986,10 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegShortName);
 	 Frm_EndForm ();
 	}
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /***** Write course short name *****/
-      Tbl_TD_Begin ("class=\"DAT LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
       if (CrsCod > 0)
 	{
 	 Frm_StartFormGoTo (ActSeeCrsInf);
@@ -12001,7 +12001,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	 fprintf (Gbl.F.Out,"%s</a>",CrsShortName);
 	 Frm_EndForm ();
 	}
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /***** Write file zone *****/
       switch (FileMetadata.FileBrowser)
@@ -12048,9 +12048,9 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	    break;
 	}
 
-      Tbl_TD_Begin ("class=\"DAT LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"DAT LT %s\"",BgColor);
       fprintf (Gbl.F.Out,"%s",Title);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /***** Get the name of the file to show *****/
       Brw_GetFileNameToShow (FileMetadata.FilFolLnk.Type,
@@ -12058,7 +12058,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
                              FileNameToShow);
 
       /***** Write file name using path (row[1]) *****/
-      Tbl_TD_Begin ("class=\"DAT_N LT %s\"",BgColor);
+      HTM_TD_Begin ("class=\"DAT_N LT %s\"",BgColor);
 
       /* Begin form */
       Action = Brw_ActReqDatFile[Brw_FileBrowserForFoundDocs[FileMetadata.FileBrowser]];
@@ -12116,8 +12116,8 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       /* End form */
       Frm_EndForm ();
 
-      Tbl_TD_End ();
-      Tbl_TR_End ();
+      HTM_TD_End ();
+      HTM_TR_End ();
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }

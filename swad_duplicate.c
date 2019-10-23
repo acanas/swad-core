@@ -32,10 +32,10 @@
 #include "swad_enrolment.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_layout.h"
 #include "swad_profile.h"
 #include "swad_role_type.h"
-#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -159,7 +159,7 @@ void Dup_ListDuplicateUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Begin table *****/
-      Tbl_TABLE_BeginCenterPadding (2);
+      HTM_TABLE_BeginCenterPadding (2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;
@@ -185,12 +185,12 @@ void Dup_ListDuplicateUsrs (void)
             /* Write data of this user */
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
 
-	    Tbl_TR_Begin (NULL);
+	    HTM_TR_Begin (NULL);
 
-            Tbl_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
-            Tbl_TD_End ();
+            HTM_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
+            HTM_TD_End ();
 
-	    Tbl_TD_Begin ("colspan=\"%u\" class=\"DAT LM COLOR%u\"",
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"DAT LM COLOR%u\"",
 			  Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 			  Gbl.RowEvenOdd);
 
@@ -208,9 +208,9 @@ void Dup_ListDuplicateUsrs (void)
 	    /* Button to remove from list of possible duplicate users */
 	    Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
 
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
-	    Tbl_TR_End ();
+	    HTM_TR_End ();
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
@@ -220,7 +220,7 @@ void Dup_ListDuplicateUsrs (void)
         }
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -294,7 +294,7 @@ static void Dup_ListSimilarUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Begin table *****/
-      Tbl_TABLE_BeginCenterPadding (2);
+      HTM_TABLE_BeginCenterPadding (2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;
@@ -320,12 +320,12 @@ static void Dup_ListSimilarUsrs (void)
             /* Write data of this user */
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
 
-	    Tbl_TR_Begin (NULL);
+	    HTM_TR_Begin (NULL);
 
-            Tbl_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
-            Tbl_TD_End ();
+            HTM_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
+            HTM_TD_End ();
 
-	    Tbl_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
 			  Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 			  Gbl.RowEvenOdd);
 
@@ -337,16 +337,16 @@ static void Dup_ListSimilarUsrs (void)
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_NET);
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);
 
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
-	    Tbl_TR_End ();
+	    HTM_TR_End ();
 
-	    Tbl_TR_Begin (NULL);
+	    HTM_TR_Begin (NULL);
 
-            Tbl_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
-            Tbl_TD_End ();
+            HTM_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
+            HTM_TD_End ();
 
-	    Tbl_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\""
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\""
 			  " style=\"padding-bottom:20px;\"",
 			  Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 			  Gbl.RowEvenOdd);
@@ -359,16 +359,16 @@ static void Dup_ListSimilarUsrs (void)
 	    if (Dup_CheckIfUsrIsDup (UsrDat.UsrCod))
 	       Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
 
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
-	    Tbl_TR_End ();
+	    HTM_TR_End ();
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
            }
         }
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

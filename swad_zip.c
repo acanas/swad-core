@@ -36,13 +36,13 @@
 
 #include "swad_box.h"
 #include "swad_config.h"
+#include "swad_file_browser.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_file_browser.h"
+#include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
-#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -567,8 +567,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
 
    /***** Link to download the file *****/
-   Tbl_TR_Begin (NULL);
-   Tbl_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
+   HTM_TR_Begin (NULL);
+   HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\">"
                       "<img src=\"%s32x32/zip32x32.gif\""
                       " alt=\"%s\" title=\"%s\""
@@ -586,34 +586,34 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Download,
 	    Txt_Download);
-   Tbl_TD_End ();
-   Tbl_TR_End ();
+   HTM_TD_End ();
+   HTM_TR_End ();
 
    /***** Filename *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Filename);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">"
 	              "%s"
 	              "</a>",
 	    URL,FileName,FileName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write the file size *****/
    Fil_WriteFileSizeFull ((double) FileSize,FileSizeStr);
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_File_size);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"%s",FileSizeStr);
    if (UncompressedSize)
      {
@@ -621,9 +621,9 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
       fprintf (Gbl.F.Out," (%s %s)",
                FileSizeStr,Txt_FILE_uncompressed);
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();

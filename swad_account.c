@@ -37,6 +37,7 @@
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_language.h"
 #include "swad_nickname.h"
@@ -44,7 +45,6 @@
 #include "swad_parameter.h"
 #include "swad_profile.h"
 #include "swad_report.h"
-#include "swad_table.h"
 #include "swad_timeline.h"
 
 /*****************************************************************************/
@@ -278,14 +278,14 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    extern const char *Txt_Its_me;
 
    /***** Write number of user in the list *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("rowspan=\"2\" class=\"USR_LIST_NUM_N RT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("rowspan=\"2\" class=\"USR_LIST_NUM_N RT COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%u",NumUsr);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write user's ID and name *****/
-   Tbl_TD_Begin ("class=\"DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"DAT_N LT COLOR%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s: %s<br />"
 		      "%s: ",
 	    Txt_ID,ID,
@@ -294,28 +294,28 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FullName);
    else
       fprintf (Gbl.F.Out,"<em>%s</em>",Txt_yet_unnamed);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Button to login with this account *****/
-   Tbl_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
    Frm_StartForm (ActLogInNew);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Btn_PutCreateButtonInline (Txt_Its_me);
    Frm_EndForm ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
-   Tbl_TR_Begin (NULL);
+   HTM_TR_End ();
+   HTM_TR_Begin (NULL);
 
    /***** Courses of this user *****/
-   Tbl_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    UsrDat->Sex = Usr_SEX_UNKNOWN;
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NET);
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STD);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -365,15 +365,15 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 		NewNicknameWithoutArroba);
    else
       NewNicknameWithArroba[0] = '\0';
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"NewNick\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Nickname);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
@@ -381,20 +381,20 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
             1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
             Txt_HELP_nickname,
             NewNicknameWithArroba);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Email *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"NewEmail\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Email);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
@@ -402,9 +402,9 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
             Cns_MAX_CHARS_EMAIL_ADDRESS,
             Txt_HELP_email,
             NewEmail);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Password *****/
    Pwd_PutFormToGetNewPasswordOnce ();

@@ -44,6 +44,7 @@
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
+#include "swad_HTML.h"
 #include "swad_indicator.h"
 #include "swad_info.h"
 #include "swad_language.h"
@@ -54,7 +55,6 @@
 #include "swad_RSS.h"
 #include "swad_string.h"
 #include "swad_tab.h"
-#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -185,12 +185,12 @@ void Deg_SeeDegWithPendingCrss (void)
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TH (1,1,"LM",Txt_Degree);
-      Tbl_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+      HTM_TH (1,1,"LM",Txt_Degree);
+      HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** List the degrees *****/
       for (NumDeg = 0;
@@ -208,20 +208,20 @@ void Deg_SeeDegWithPendingCrss (void)
          /* Get data of degree */
          Deg_GetDataOfDegreeByCod (&Deg);
 
-         Tbl_TR_Begin (NULL);
+         HTM_TR_Begin (NULL);
 
          /* Degree logo and full name */
-         Tbl_TD_Begin ("class=\"LM %s\"",BgColor);
+         HTM_TD_Begin ("class=\"LM %s\"",BgColor);
          Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,
                                             "DAT_NOBR","CM");
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
          /* Number of pending courses (row[1]) */
-         Tbl_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+         HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
 	 fprintf (Gbl.F.Out,"%s",row[1]);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
-         Tbl_TR_End ();
+         HTM_TR_End ();
 
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
@@ -335,18 +335,18 @@ static void Deg_Configuration (bool PrintView)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
 
    /***** Centre *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"OthCtrCod\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Centre);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       // Only institution admins and system admin can move a degree to another centre
@@ -376,19 +376,19 @@ static void Deg_Configuration (bool PrintView)
      }
    else	// I can not move degree to another centre
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Degree full name *****/
-   Tbl_TR_Begin (NULL);
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TR_Begin (NULL);
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Degree);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -408,19 +408,19 @@ static void Deg_Configuration (bool PrintView)
      }
    else	// I can not edit degree full name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
-   Tbl_TD_End ();
-   Tbl_TR_End ();
+   HTM_TD_End ();
+   HTM_TR_End ();
 
    /***** Degree short name *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Short_name);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -440,19 +440,19 @@ static void Deg_Configuration (bool PrintView)
      }
    else	// I can not edit degree short name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.ShrtName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Degree WWW *****/
-   Tbl_TR_Begin (NULL);
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TR_Begin (NULL);
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Web);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
       // Only degree admins, centre admins, institution admins
@@ -477,17 +477,17 @@ static void Deg_Configuration (bool PrintView)
 			 "</div>",
 	       Gbl.Hierarchy.Deg.WWW,
 	       Gbl.Hierarchy.Deg.WWW);
-   Tbl_TD_End ();
-   Tbl_TR_End ();
+   HTM_TD_End ();
+   HTM_TR_End ();
 
    /***** Shortcut to the degree *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Shortcut);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"<a href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\">"
 		      "%s/%s?deg=%ld"
 		      "</a>",
@@ -497,36 +497,36 @@ static void Deg_Configuration (bool PrintView)
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Deg.DegCod);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    if (PrintView)
      {
       /***** QR code with link to the degree *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_QR_code);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       QR_LinkTo (250,"deg",Gbl.Hierarchy.Deg.DegCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
    else
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /***** Number of courses *****/
-      Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Courses);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Form to go to see courses of this degree */
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormGoTo (ActSeeCrs);
       Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -536,9 +536,9 @@ static void Deg_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"%u</a>",
 	       Crs_GetNumCrssInDeg (Gbl.Hierarchy.Deg.DegCod));
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Number of users *****/
       Deg_ShowNumUsrsInCrssOfDeg (Rol_TCH);
@@ -548,7 +548,7 @@ static void Deg_Configuration (bool PrintView)
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -580,20 +580,20 @@ static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"%u",
             Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.Hierarchy.Deg.DegCod));
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -710,7 +710,7 @@ static void Deg_ListDegreesForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
    Deg_PutHeadDegreesForEdition ();
 
    /***** List the degrees *****/
@@ -724,10 +724,10 @@ static void Deg_ListDegreesForEdition (void)
 
       ICanEdit = Deg_CheckIfICanEditADegree (Deg);
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /* Put icon to remove degree */
-      Tbl_TD_Begin ("class=\"BM\"");
+      HTM_TD_Begin ("class=\"BM\"");
       if (NumCrss ||	// Degree has courses ==> deletion forbidden
 	  !ICanEdit)
          Ico_PutIconRemovalNotAllowed ();
@@ -738,20 +738,20 @@ static void Deg_ListDegreesForEdition (void)
          Ico_PutIconRemove ();
          Frm_EndForm ();
         }
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Degree code */
-      Tbl_TD_Begin ("class=\"DAT CODE\"");
+      HTM_TD_Begin ("class=\"DAT CODE\"");
       fprintf (Gbl.F.Out,"%ld",Deg->DegCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Degree logo */
-      Tbl_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg->FullName);
+      HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg->FullName);
       Log_DrawLogo (Hie_DEG,Deg->DegCod,Deg->ShrtName,20,NULL,true);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Degree short name */
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenDegSho);
@@ -765,10 +765,10 @@ static void Deg_ListDegreesForEdition (void)
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Deg->ShrtName);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Degree full name */
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenDegFul);
@@ -782,10 +782,10 @@ static void Deg_ListDegreesForEdition (void)
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Deg->FullName);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Degree type */
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgDegTyp);
@@ -814,10 +814,10 @@ static void Deg_ListDegreesForEdition (void)
 	      NumDegTyp++)
 	    if (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod == Deg->DegTypCod)
 	       fprintf (Gbl.F.Out,"%s",Gbl.DegTypes.Lst[NumDegTyp].DegTypName);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Degree WWW */
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgDegWWW);
@@ -841,23 +841,23 @@ static void Deg_ListDegreesForEdition (void)
                             "</div>",
                   Deg->WWW,Deg->WWW,WWW);
 	}
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Current number of courses in this degree */
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumCrss);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Degree requester */
       UsrDat.UsrCod = Deg->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-      Tbl_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+      HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Degree status */
       StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM &&
 	  StatusTxt == Deg_STATUS_PENDING)
 	{
@@ -877,12 +877,12 @@ static void Deg_ListDegreesForEdition (void)
 	}
       else if (StatusTxt != Deg_STATUS_ACTIVE)	// If active ==> do not show anything
 	 fprintf (Gbl.F.Out,"%s",Txt_DEGREE_STATUS[StatusTxt]);
-      Tbl_TD_End ();
-      Tbl_TR_End ();
+      HTM_TD_End ();
+      HTM_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -967,41 +967,41 @@ static void Deg_PutFormToCreateDegree (void)
    /***** Write heading *****/
    Deg_PutHeadDegreesForEdition ();
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Column to remove degree, disabled here *****/
-   Tbl_TD_Begin ("class=\"BM\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"BM\"");
+   HTM_TD_End ();
 
    /***** Degree code *****/
-   Tbl_TD_Begin ("class=\"CODE\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"CODE\"");
+   HTM_TD_End ();
 
    /***** Degree logo *****/
-   Tbl_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg_EditingDeg->FullName);
+   HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Deg_EditingDeg->FullName);
    Log_DrawLogo (Hie_DEG,-1L,"",20,NULL,true);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Degree short name *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
             Hie_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Degree full name *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
             Hie_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Degree type *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\" style=\"width:62px;\">");
    for (NumDegTyp = 0;
 	NumDegTyp < Gbl.DegTypes.Num;
@@ -1015,32 +1015,32 @@ static void Deg_PutFormToCreateDegree (void)
 	       DegTyp->DegTypName);
      }
    fprintf (Gbl.F.Out,"</select>");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Degree WWW *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />",
             Cns_MAX_CHARS_WWW,Deg_EditingDeg->WWW);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Current number of courses in this degree *****/
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"0");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Degree requester *****/
-   Tbl_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+   HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Degree status *****/
-   Tbl_TD_Begin ("class=\"DAT LM\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_degree);
@@ -1059,16 +1059,16 @@ static void Deg_PutHeadDegreesForSeeing (void)
    extern const char *Txt_Type;
    extern const char *Txt_Courses_ABBREVIATION;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH_Empty (1);
-   Tbl_TH (1,1,"LM",Txt_Degree);
-   Tbl_TH (1,1,"LM",Txt_Type);
-   Tbl_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
-   Tbl_TH_Empty (1);
+   HTM_TH (1,1,"BM",NULL);
+   HTM_TH_Empty (1);
+   HTM_TH (1,1,"LM",Txt_Degree);
+   HTM_TH (1,1,"LM",Txt_Type);
+   HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+   HTM_TH_Empty (1);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1085,20 +1085,20 @@ static void Deg_PutHeadDegreesForEdition (void)
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_Requester;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"RM",Txt_Code);
-   Tbl_TH_Empty (1);
-   Tbl_TH (1,1,"LM",Txt_Short_name_of_the_degree);
-   Tbl_TH (1,1,"LM",Txt_Full_name_of_the_degree);
-   Tbl_TH (1,1,"LM",Txt_Type);
-   Tbl_TH (1,1,"LM",Txt_WWW);
-   Tbl_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
-   Tbl_TH (1,1,"LM",Txt_Requester);
-   Tbl_TH_Empty (1);
+   HTM_TH (1,1,"BM",NULL);
+   HTM_TH (1,1,"RM",Txt_Code);
+   HTM_TH_Empty (1);
+   HTM_TH (1,1,"LM",Txt_Short_name_of_the_degree);
+   HTM_TH (1,1,"LM",Txt_Full_name_of_the_degree);
+   HTM_TH (1,1,"LM",Txt_Type);
+   HTM_TH (1,1,"LM",Txt_WWW);
+   HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+   HTM_TH (1,1,"LM",Txt_Requester);
+   HTM_TH_Empty (1);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1162,7 +1162,7 @@ static void Deg_ListDegrees (void)
    if (Gbl.Hierarchy.Ctr.Degs.Num)	// There are degrees in the current centre
      {
       /***** Write heading *****/
-      Tbl_TABLE_BeginWideMarginPadding (2);
+      HTM_TABLE_BeginWideMarginPadding (2);
       Deg_PutHeadDegreesForSeeing ();
 
       /***** List the degrees *****/
@@ -1172,7 +1172,7 @@ static void Deg_ListDegrees (void)
 	 Deg_ListOneDegreeForSeeing (&(Gbl.Hierarchy.Ctr.Degs.Lst[NumDeg]),NumDeg + 1);
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
      }
    else	// No degrees created in the current centre
       Ale_ShowAlert (Ale_INFO,Txt_No_degrees);
@@ -1263,46 +1263,46 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    BgColor = (Deg->DegCod == Gbl.Hierarchy.Deg.DegCod) ? "LIGHT_BLUE" :
                                                           Gbl.ColorRows[Gbl.RowEvenOdd];
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Put tip if degree has courses *****/
-   Tbl_TD_Begin ("class=\"%s CM %s\" title=\"%s\"",
+   HTM_TD_Begin ("class=\"%s CM %s\" title=\"%s\"",
 		 TxtClassNormal,BgColor,
 		 NumCrss ? Txt_DEGREE_With_courses :
 			   Txt_DEGREE_Without_courses);
    fprintf (Gbl.F.Out,"%s",NumCrss ? "&check;" :
 		                     "&nbsp;");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Number of degree in this list *****/
-   Tbl_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    fprintf (Gbl.F.Out,"%u",NumDeg);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Degree logo and name *****/
-   Tbl_TD_Begin ("class=\"LM %s\"",BgColor);
+   HTM_TD_Begin ("class=\"LM %s\"",BgColor);
    Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,
                                       TxtClassStrong,"CM");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Type of degree *****/
-   Tbl_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
+   HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
    fprintf (Gbl.F.Out,"%s",DegTyp.DegTypName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Current number of courses in this degree *****/
-   Tbl_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    fprintf (Gbl.F.Out,"%u",NumCrss);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Degree status *****/
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
-   Tbl_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
+   HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
    if (StatusTxt != Deg_STATUS_ACTIVE) // If active ==> do not show anything
       fprintf (Gbl.F.Out,"%s",Txt_DEGREE_STATUS[StatusTxt]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -2496,20 +2496,20 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	   NumRow <= NumRows;
 	   NumRow++)
 	{
-         Tbl_TR_Begin (NULL);
+         HTM_TR_Begin (NULL);
 
          /***** Indent *****/
-         Tbl_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
+         HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
          fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
                             " class=\"ICO25x25\" />",
                   Cfg_URL_ICON_PUBLIC,
                   NumRow == NumRows ? "subend" :
                 	              "submid");
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
          /***** Write institution, centre, degree *****/
-         Tbl_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LT COLOR%u\"",
+         HTM_TD_Begin ("colspan=\"%u\" class=\"DAT_SMALL_NOBR LT COLOR%u\"",
                        ColSpan - 1,Gbl.RowEvenOdd);
 
          /* Get next institution, centre, degree */
@@ -2568,9 +2568,9 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	       Lay_WrongScopeExit ();
 	       break;
            }
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
-         Tbl_TR_End ();
+         HTM_TR_End ();
         }
 
    /***** Free structure that stores the query result *****/

@@ -36,12 +36,12 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_mail.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_tab.h"
-#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -128,12 +128,12 @@ void Mai_SeeMailDomains (void)
                       Hlp_START_Domains,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
    for (Order = Mai_ORDER_BY_DOMAIN;
 	Order <= Mai_ORDER_BY_USERS;
 	Order++)
      {
-      Tbl_TH_Begin (1,1,"LM");
+      HTM_TH_Begin (1,1,"LM");
 
       Frm_StartForm (ActSeeMai);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
@@ -146,9 +146,9 @@ void Mai_SeeMailDomains (void)
       fprintf (Gbl.F.Out,"</a>");
       Frm_EndForm ();
 
-      Tbl_TH_End ();
+      HTM_TH_End ();
      }
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write all the mail domains *****/
    for (NumMai = 0;
@@ -156,21 +156,21 @@ void Mai_SeeMailDomains (void)
 	NumMai++)
      {
       /* Write data of this mail domain */
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LT\"");
+      HTM_TD_Begin ("class=\"DAT LT\"");
       fprintf (Gbl.F.Out,"%s",Gbl.Mails.Lst[NumMai].Domain);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LT\"");
+      HTM_TD_Begin ("class=\"DAT LT\"");
       fprintf (Gbl.F.Out,"%s",Gbl.Mails.Lst[NumMai].Info);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RT\"");
+      HTM_TD_Begin ("class=\"DAT RT\"");
       fprintf (Gbl.F.Out,"%u",Gbl.Mails.Lst[NumMai].NumUsrs);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/
@@ -487,23 +487,23 @@ static void Mai_ListMailDomainsForEdition (void)
      {
       Mai = &Gbl.Mails.Lst[NumMai];
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /* Put icon to remove mail */
-      Tbl_TD_Begin ("class=\"BM\"");
+      HTM_TD_Begin ("class=\"BM\"");
       Frm_StartForm (ActRemMai);
       Mai_PutParamMaiCod (Mai->MaiCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Mail code */
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%ld",Mai->MaiCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Mail domain */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenMaiSho);
       Mai_PutParamMaiCod (Mai->MaiCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Domain\""
@@ -512,10 +512,10 @@ static void Mai_ListMailDomainsForEdition (void)
                Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Mail domain info */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenMaiFul);
       Mai_PutParamMaiCod (Mai->MaiCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Info\""
@@ -524,14 +524,14 @@ static void Mai_ListMailDomainsForEdition (void)
                Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Number of users */
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Mai->NumUsrs);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/
@@ -754,34 +754,34 @@ static void Mai_PutFormToCreateMailDomain (void)
                       Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
-   Tbl_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO]);
+   HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
+   HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO]);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Mail domain *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Domain\""
                       " size=\"15\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Mail domain info *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Info\""
                       " size=\"40\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Empty (1);
+   HTM_TD_Empty (1);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_email_domain);
@@ -799,15 +799,15 @@ static void Mai_PutHeadMailDomains (void)
    extern const char *Txt_Code;
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"RM",Txt_Code);
-   Tbl_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
-   Tbl_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
-   Tbl_TH (1,1,"RM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
+   HTM_TH (1,1,"BM",NULL);
+   HTM_TH (1,1,"RM",Txt_Code);
+   HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN]);
+   HTM_TH (1,1,"LM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
+   HTM_TH (1,1,"RM",Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1251,7 +1251,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 					  UsrDat->UsrCod);
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
 
    /***** List emails *****/
    for (NumEmail = 1;
@@ -1262,36 +1262,36 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       row = mysql_fetch_row (mysql_res);
       Confirmed = (row[1][0] == 'Y');
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       if (NumEmail == 1)
 	{
 	 /* The first mail is the current one */
-	 Tbl_TD_Begin ("class=\"REC_C1_BOT RT\"");
+	 HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
 	 fprintf (Gbl.F.Out,"<label for=\"Email\" class=\"%s\">"
 			    "%s:"
 			    "</label>",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Current_email);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
 	}
       else	// NumEmail >= 2
 	{
 	 if (NumEmail == 2)
 	   {
-	    Tbl_TD_Begin ("rowspan=\"%u\" class=\"REC_C1_BOT RT\"",
+	    HTM_TD_Begin ("rowspan=\"%u\" class=\"REC_C1_BOT RT\"",
 		          NumEmails - 1);
 	    fprintf (Gbl.F.Out,"<label for=\"Email\" class=\"%s\">"
 			       "%s:"
 			       "</label>",
 		     The_ClassFormInBox[Gbl.Prefs.Theme],
 		     Txt_Other_emails);
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 	   }
 
-	 Tbl_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+	 HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
 	}
 
       /* Form to remove email */
@@ -1368,21 +1368,21 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	 Frm_EndForm ();
 	}
 
-      Tbl_TD_End ();
-      Tbl_TR_End ();
+      HTM_TD_End ();
+      HTM_TR_End ();
      }
 
    /***** Form to enter new email *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"REC_C1_BOT RT\"");
+   HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
    fprintf (Gbl.F.Out,"<label for=\"NewEmail\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             NumEmails ? Txt_New_email :	// A new email
         	        Txt_Email);	// The first email
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
+   HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");
    if (ItsMe)
       Frm_StartFormAnchor (ActChgMyMai,Mai_EMAIL_SECTION_ID);
    else
@@ -1411,12 +1411,12 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
         	                          Txt_Save_changes);		// User has no email address yet
    Frm_EndForm ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/

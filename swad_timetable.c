@@ -36,10 +36,10 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_parameter.h"
 #include "swad_setting.h"
-#include "swad_table.h"
 #include "swad_timetable.h"
 
 /*****************************************************************************/
@@ -1126,29 +1126,29 @@ static void TT_DrawTimeTable (void)
    unsigned ContinuousFreeMinicolumns;
 
    /***** Begin table *****/
-   Tbl_TABLE_Begin ("TT");
+   HTM_TABLE_Begin ("TT");
 
    /***** Top row used for column adjustement *****/
    TT_TimeTableDrawAdjustRow ();
 
    /***** Row with day names *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG RM\" style=\"width:%u%%;\"",
+   HTM_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG RM\" style=\"width:%u%%;\"",
 		 TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
    fprintf (Gbl.F.Out,"%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    TT_DrawCellAlignTimeTable ();
    TT_TimeTableDrawDaysCells ();
    TT_DrawCellAlignTimeTable ();
 
-   Tbl_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG LM\" style=\"width:%u%%;\"",
+   HTM_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR_BIG LM\" style=\"width:%u%%;\"",
 		 TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN);
    fprintf (Gbl.F.Out,"%02u:00",Gbl.TimeTable.Config.Range.Hours.Start);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Get list of groups types and groups in this course *****/
    if (Gbl.Action.Act == ActEdiCrsTT ||
@@ -1162,7 +1162,7 @@ static void TT_DrawTimeTable (void)
 	Min = (Min + Gbl.TimeTable.Config.Range.MinutesPerInterval) %
 	      TT_SECONDS_PER_MINUTE)
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /* Left hour:minutes cell */
       if (Interval % 2)
@@ -1241,7 +1241,7 @@ static void TT_DrawTimeTable (void)
 	                           Min,
 	                           "LM");
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** Free list of groups types and groups in this course *****/
@@ -1250,17 +1250,17 @@ static void TT_DrawTimeTable (void)
       Grp_FreeListGrpTypesAndGrps ();
 
    /***** Row with day names *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
    TT_DrawCellAlignTimeTable ();
    TT_TimeTableDrawDaysCells ();
    TT_DrawCellAlignTimeTable ();
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Bottom row used for column adjustement *****/
    TT_TimeTableDrawAdjustRow ();
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -1272,10 +1272,10 @@ static void TT_TimeTableDrawAdjustRow (void)
    unsigned Weekday;
    unsigned Minicolumn;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"TT_HOURCOL\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"TT_HOURCOL\"");
+   HTM_TD_End ();
 
    TT_DrawCellAlignTimeTable ();
    for (Weekday = 0;
@@ -1285,15 +1285,15 @@ static void TT_TimeTableDrawAdjustRow (void)
 	   Minicolumn < TT_NUM_MINICOLUMNS_PER_DAY;
 	   Minicolumn++)
 	{
-         Tbl_TD_Begin ("class=\"TT_MINICOL\"");
-         Tbl_TD_End ();
+         HTM_TD_Begin ("class=\"TT_MINICOL\"");
+         HTM_TD_End ();
 	}
    TT_DrawCellAlignTimeTable ();
 
-   Tbl_TD_Begin ("class=\"TT_HOURCOL\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"TT_HOURCOL\"");
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1311,13 +1311,13 @@ static void TT_TimeTableDrawDaysCells (void)
 	DayColumn++)
      {
       Weekday = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
-      Tbl_TD_Begin ("colspan=\"%u\" class=\"%s CM\" style=\"width:%u%%;\"",
+      HTM_TD_Begin ("colspan=\"%u\" class=\"%s CM\" style=\"width:%u%%;\"",
 		    TT_NUM_MINICOLUMNS_PER_DAY,
 		    Weekday == 6 ? "TT_SUNDAY" :	// Sunday drawn in red
 				   "TT_DAY",	// Monday to Saturday
 		    TT_PERCENT_WIDTH_OF_A_DAY);
       fprintf (Gbl.F.Out,"%s",Txt_DAYS_CAPS[Weekday]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
      }
   }
 
@@ -1327,12 +1327,12 @@ static void TT_TimeTableDrawDaysCells (void)
 
 static void TT_TimeTableDrawHourCell (unsigned Hour,unsigned Min,const char *Align)
   {
-   Tbl_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR %s %s\"",
+   HTM_TD_Begin ("rowspan=\"2\" class=\"TT_HOUR %s %s\"",
 		 Min ? "TT_HOUR_SMALL" :
 		       "TT_HOUR_BIG",
 		 Align);
    fprintf (Gbl.F.Out,"%02u:%02u",Hour,Min);
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -1417,8 +1417,8 @@ static unsigned TT_CalculateColsToDrawInCell (bool TopCall,
 
 static void TT_DrawCellAlignTimeTable (void)
   {
-   Tbl_TD_Begin ("class=\"TT_ALIGN\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"TT_ALIGN\"");
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -1519,7 +1519,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
      }
 
    /* Start cell */
-   Tbl_TD_Begin ("%s%sclass=\"%s\"",RowSpanStr,ColSpanStr,ClassStr);
+   HTM_TD_Begin ("%s%sclass=\"%s\"",RowSpanStr,ColSpanStr,ClassStr);
 
    /* Free allocated memory for rowspan, colspan and class strings */
    free ((void *) RowSpanStr);
@@ -1750,5 +1750,5 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
       Frm_EndForm ();
 
    /***** End cell *****/
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }

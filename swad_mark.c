@@ -36,12 +36,12 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_mark.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
-#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -114,14 +114,14 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
    struct MarksProperties Marks;
 
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
-      Tbl_TD_ColouredEmpty (2);
+      HTM_TD_ColouredEmpty (2);
    else	// File or link
      {
       /***** Get number of rows in header or footer *****/
       Mrk_GetNumRowsHeaderAndFooter (&Marks);
 
       /***** Write the number of rows of header *****/
-      Tbl_TD_Begin ("class=\"%s RT COLOR%u\"",
+      HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
 		    The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
 		    Gbl.RowEvenOdd);
       Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
@@ -138,10 +138,10 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /***** Write the number of rows of footer *****/
-      Tbl_TD_Begin ("class=\"%s RT COLOR%u\"",
+      HTM_TD_Begin ("class=\"%s RT COLOR%u\"",
 		    The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],
 		    Gbl.RowEvenOdd);
       Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
@@ -158,7 +158,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
      }
   }
 

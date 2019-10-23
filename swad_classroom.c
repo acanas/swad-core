@@ -30,11 +30,11 @@
 #include <string.h>		// For string functions
 
 #include "swad_box.h"
+#include "swad_classroom.h"
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
-#include "swad_classroom.h"
-#include "swad_table.h"
+#include "swad_HTML.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -114,13 +114,13 @@ void Cla_SeeClassrooms (void)
    /***** Table head *****/
    Box_StartBox (NULL,Txt_Classrooms,Cla_PutIconsListingClassrooms,
 		 Hlp_CENTRE_Classrooms,Box_NOT_CLOSABLE);
-   Tbl_TABLE_BeginWideMarginPadding (2);
-   Tbl_TR_Begin (NULL);
+   HTM_TABLE_BeginWideMarginPadding (2);
+   HTM_TR_Begin (NULL);
    for (Order  = (Cla_Order_t) 0;
 	Order <= (Cla_Order_t) (Cla_NUM_ORDERS - 1);
 	Order++)
      {
-      Tbl_TH_Begin (1,1,"LM");
+      HTM_TH_Begin (1,1,"LM");
       Frm_StartForm (ActSeeCla);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Frm_LinkFormSubmit (Txt_CLASSROOMS_HELP_ORDER[Order],"TIT_TBL",NULL);
@@ -131,42 +131,42 @@ void Cla_SeeClassrooms (void)
 	 fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
       Frm_EndForm ();
-      Tbl_TH_End ();
+      HTM_TH_End ();
      }
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write list of classrooms *****/
    for (NumCla = 0, RowEvenOdd = 1;
 	NumCla < Gbl.Classrooms.Num;
 	NumCla++, RowEvenOdd = 1 - RowEvenOdd)
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /* Short name */
-      Tbl_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
+      HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
       fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].ShrtName);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Full name */
-      Tbl_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
+      HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
       fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].FullName);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Capacity */
-      Tbl_TD_Begin ("class=\"DAT RM %s\"",Gbl.ColorRows[RowEvenOdd]);
+      HTM_TD_Begin ("class=\"DAT RM %s\"",Gbl.ColorRows[RowEvenOdd]);
       Cla_WriteCapacity (Gbl.Classrooms.Lst[NumCla].Capacity);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Location */
-      Tbl_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
+      HTM_TD_Begin ("class=\"DAT LM %s\"",Gbl.ColorRows[RowEvenOdd]);
       fprintf (Gbl.F.Out,"%s",Gbl.Classrooms.Lst[NumCla].Location);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** Button to create classroom *****/
    if (Cla_CheckIfICanCreateClassrooms ())
@@ -469,7 +469,7 @@ static void Cla_ListClassroomsForEdition (void)
    struct Classroom *Cla;
 
    /***** Write heading *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
    Cla_PutHeadClassrooms ();
 
    /***** Write all the classrooms *****/
@@ -479,23 +479,23 @@ static void Cla_ListClassroomsForEdition (void)
      {
       Cla = &Gbl.Classrooms.Lst[NumCla];
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /* Put icon to remove classroom */
-      Tbl_TD_Begin ("class=\"BM\"");
+      HTM_TD_Begin ("class=\"BM\"");
       Frm_StartForm (ActRemCla);
       Cla_PutParamClaCod (Cla->ClaCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Classroom code */
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%ld",Cla->ClaCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Classroom short name */
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenClaSho);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -504,10 +504,10 @@ static void Cla_ListClassroomsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cla_MAX_CHARS_SHRT_NAME,Cla->ShrtName,Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Classroom full name */
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenClaFul);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -516,10 +516,10 @@ static void Cla_ListClassroomsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cla_MAX_CHARS_FULL_NAME,Cla->FullName,Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Seating capacity */
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActChgClaMaxStd);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Capacity\""
@@ -528,10 +528,10 @@ static void Cla_ListClassroomsForEdition (void)
       fprintf (Gbl.F.Out,"\" onchange=\"document.getElementById('%s').submit();\" />",
 	       Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Classroom location */
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenClaLoc);
       Cla_PutParamClaCod (Cla->ClaCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Location\""
@@ -540,13 +540,13 @@ static void Cla_ListClassroomsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cla_MAX_CHARS_LOCATION,Cla->Location,Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -896,51 +896,51 @@ static void Cla_PutFormToCreateClassroom (void)
    /***** Write heading *****/
    Cla_PutHeadClassrooms ();
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Column to remove classroom, disabled here *****/
-   Tbl_TD_Begin ("class=\"BM\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"BM\"");
+   HTM_TD_End ();
 
    /***** Classroom code *****/
-   Tbl_TD_Begin ("class=\"CODE\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"CODE\"");
+   HTM_TD_End ();
 
    /***** Classroom short name *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " size=\"10\" maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
             Cla_MAX_CHARS_SHRT_NAME,Cla_EditingCla->ShrtName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Classroom full name *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
             Cla_MAX_CHARS_FULL_NAME,Cla_EditingCla->FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Seating capacity *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Capacity\""
 	              " size=\"3\" maxlength=\"10\" value=\"");
    Cla_WriteCapacity (Cla_EditingCla->Capacity);
    fprintf (Gbl.F.Out,"\" />");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Classroom location *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Location\""
 		      " size=\"15\" maxlength=\"%u\" value=\"%s\""
 		      " class=\"INPUT_FULL_NAME\" />",
 	    Cla_MAX_CHARS_LOCATION,Cla_EditingCla->Location);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_classroom);
@@ -961,16 +961,16 @@ static void Cla_PutHeadClassrooms (void)
    extern const char *Txt_Capacity_OF_A_CLASSROOM;
    extern const char *Txt_Location;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"RM",Txt_Code);
-   Tbl_TH (1,1,"LM",Txt_Short_name);
-   Tbl_TH (1,1,"LM",Txt_Full_name);
-   Tbl_TH (1,1,"LM",Txt_Capacity_OF_A_CLASSROOM);
-   Tbl_TH (1,1,"LM",Txt_Location);
+   HTM_TH (1,1,"BM",NULL);
+   HTM_TH (1,1,"RM",Txt_Code);
+   HTM_TH (1,1,"LM",Txt_Short_name);
+   HTM_TH (1,1,"LM",Txt_Full_name);
+   HTM_TH (1,1,"LM",Txt_Capacity_OF_A_CLASSROOM);
+   HTM_TH (1,1,"LM",Txt_Location);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

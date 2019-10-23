@@ -42,11 +42,11 @@ TODO: Check if web service is called from an authorized IP.
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_parameter.h"
 #include "swad_plugin.h"
 #include "swad_session.h"
-#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -114,12 +114,12 @@ void Plg_ListPlugins (void)
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH_Empty (1);
-   Tbl_TH (1,1,"LM",Txt_Plugin);
+   HTM_TH_Empty (1);
+   HTM_TH (1,1,"LM",Txt_Plugin);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write all the plugins *****/
    for (NumPlg = 0;
@@ -134,9 +134,9 @@ void Plg_ListPlugins (void)
 
       /* Plugin logo */
       // TODO: Change plugin icons to 32x32
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LM\" style=\"width:45px;\"");
+      HTM_TD_Begin ("class=\"DAT LM\" style=\"width:45px;\"");
       fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
@@ -145,17 +145,17 @@ void Plg_ListPlugins (void)
                URL,Plg->Name,
                Cfg_URL_ICON_PLUGINS_PUBLIC,Gbl.Plugins.Lst[NumPlg].Logo,
                Plg->Name,Plg->Name);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "%s"
                          "</a>",
                URL,Plg->Name,
                Plg->Name);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/
@@ -383,7 +383,7 @@ static void Plg_ListPluginsForEdition (void)
    struct Plugin *Plg;
 
    /***** Write heading *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
    Plg_PutHeadPlugins ();
 
    /***** Write all the plugins *****/
@@ -393,24 +393,24 @@ static void Plg_ListPluginsForEdition (void)
      {
       Plg = &Gbl.Plugins.Lst[NumPlg];
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /* Put icon to remove plugin */
-      Tbl_TD_Begin ("class=\"BM\"");
+      HTM_TD_Begin ("class=\"BM\"");
       Frm_StartForm (ActRemPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Plugin code */
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%ld",Plg->PlgCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Plugin logo */
       // TODO: Change plugin icons to 32x32
-      Tbl_TD_Begin ("class=\"CM\" style=\"width:45px;\"");
+      HTM_TD_Begin ("class=\"CM\" style=\"width:45px;\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />",
@@ -418,10 +418,10 @@ static void Plg_ListPluginsForEdition (void)
                Gbl.Plugins.Lst[NumPlg].Logo,
                Gbl.Plugins.Lst[NumPlg].Name,
                Gbl.Plugins.Lst[NumPlg].Name);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Plugin name */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
@@ -429,10 +429,10 @@ static void Plg_ListPluginsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Plugin description */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgDes);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Description\""
@@ -440,10 +440,10 @@ static void Plg_ListPluginsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Plugin logo */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgLog);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\""
@@ -451,10 +451,10 @@ static void Plg_ListPluginsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Plugin application key */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgAppKey);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"AppKey\""
@@ -462,10 +462,10 @@ static void Plg_ListPluginsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Plugin URL */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgURL);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"URL\""
@@ -473,10 +473,10 @@ static void Plg_ListPluginsForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_CHARS_WWW,Plg->URL,Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Plugin IP */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgIP);
       Plg_PutParamPlgCod (Plg->PlgCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"IP\""
@@ -485,12 +485,12 @@ static void Plg_ListPluginsForEdition (void)
                Cns_MAX_CHARS_IP,Plg->IP,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
-      Tbl_TR_End ();
+      HTM_TD_End ();
+      HTM_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -890,66 +890,66 @@ static void Plg_PutFormToCreatePlugin (void)
                       NULL,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Name);
-   Tbl_TH (1,1,"LM",Txt_Description);
-   Tbl_TH (1,1,"LM",Txt_Logo);
-   Tbl_TH (1,1,"LM",Txt_Application_key);
-   Tbl_TH (1,1,"LM",Txt_URL);
-   Tbl_TH (1,1,"LM",Txt_IP);
+   HTM_TH (1,1,"LM",Txt_Name);
+   HTM_TH (1,1,"LM",Txt_Description);
+   HTM_TH (1,1,"LM",Txt_Logo);
+   HTM_TH (1,1,"LM",Txt_Application_key);
+   HTM_TH (1,1,"LM",Txt_URL);
+   HTM_TH (1,1,"LM",Txt_IP);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Plugin name *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
                       " size=\"10\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Plugin description *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Description\""
                       " size=\"30\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg_EditingPlg->Description);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Plugin logo *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\""
                       " size=\"4\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Plugin application key *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"AppKey\""
                       " size=\"16\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
 	    Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Plugin URL *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"url\" name=\"URL\""
                       " size=\"15\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Cns_MAX_CHARS_WWW,Plg_EditingPlg->URL);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Plugin IP address *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"IP\""
                       " size=\"10\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Cns_MAX_CHARS_IP,Plg_EditingPlg->IP);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_plugin);
@@ -972,19 +972,19 @@ static void Plg_PutHeadPlugins (void)
    extern const char *Txt_URL;
    extern const char *Txt_IP;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH_Empty (1);
-   Tbl_TH (1,1,"RM",Txt_Code);
-   Tbl_TH_Empty (1);
-   Tbl_TH (1,1,"LM",Txt_Name);
-   Tbl_TH (1,1,"LM",Txt_Description);
-   Tbl_TH (1,1,"LM",Txt_Logo);
-   Tbl_TH (1,1,"LM",Txt_Application_key);
-   Tbl_TH (1,1,"LM",Txt_URL);
-   Tbl_TH (1,1,"LM",Txt_IP);
+   HTM_TH_Empty (1);
+   HTM_TH (1,1,"RM",Txt_Code);
+   HTM_TH_Empty (1);
+   HTM_TH (1,1,"LM",Txt_Name);
+   HTM_TH (1,1,"LM",Txt_Description);
+   HTM_TH (1,1,"LM",Txt_Logo);
+   HTM_TH (1,1,"LM",Txt_Application_key);
+   HTM_TH (1,1,"LM",Txt_URL);
+   HTM_TH (1,1,"LM",Txt_IP);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

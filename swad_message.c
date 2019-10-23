@@ -42,13 +42,13 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_group.h"
+#include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_message.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_profile.h"
-#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -287,23 +287,23 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginCenterPadding (2);
+   HTM_TABLE_BeginCenterPadding (2);
 
    /***** "To:" section (recipients) *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_MSG_To);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LT\"");
    if (Gbl.Msg.ShowOnlyOneRecipient)
       /***** Show only one user as recipient *****/
       Msg_ShowOneUniqueRecipient ();
    else
      {
       /***** Show potential recipients *****/
-      Tbl_TABLE_BeginWide ();
+      HTM_TABLE_BeginWide ();
       if (ShowUsrsInCrs)
 	{
 	 Usr_ListUsersToSelect (Rol_TCH);	// All teachers in course
@@ -311,17 +311,17 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	 Usr_ListUsersToSelect (Rol_STD);	// All students in selected groups
 	}
       Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Subject and content sections *****/
    Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** Help for text editor and send button *****/
    Lay_HelpPlainEditor ();
@@ -480,20 +480,20 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
       ColSpan = 1;
 
    /***** Title *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,ColSpan,"LM LIGHT_BLUE");
+   HTM_TH_Begin (1,ColSpan,"LM LIGHT_BLUE");
    fprintf (Gbl.F.Out,"<label for=\"OtherRecipients\">%s:</label>",
 	    StdsAndTchsWritten ? Txt_Other_recipients :
 				 Txt_Recipients);
-   Tbl_TH_End ();
+   HTM_TH_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Textarea with users' @nicknames, emails or IDs *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
+   HTM_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
    fprintf (Gbl.F.Out,"<textarea id=\"OtherRecipients\" name=\"OtherRecipients\""
 	              " class=\"MSG_RECIPIENTS\" rows=\"2\""
 	              " placeholder=\"%s\">",
@@ -506,9 +506,9 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
       if (Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname))
          fprintf (Gbl.F.Out,"@%s",Nickname);
    fprintf (Gbl.F.Out,"</textarea>");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -531,17 +531,17 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    MsgCod = Msg_GetParamMsgCod ();
 
    /***** Message subject *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RT\"");
+   HTM_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label for=\"MsgSubject\" class=\"%s\">"
 	              "%s:"
 	              "</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<textarea id=\"MsgSubject\" name=\"Subject\""
                       " class=\"MSG_SUBJECT\" rows=\"2\">");
 
@@ -577,21 +577,21 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       if (!SubjectAndContentComeFromForm)
 	 fprintf (Gbl.F.Out,"Re: ");
       fprintf (Gbl.F.Out,"%s</textarea>",Gbl.Msg.Subject);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Message content *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"RT\"");
+      HTM_TD_Begin ("class=\"RT\"");
       fprintf (Gbl.F.Out,"<label for=\"MsgContent\" class=\"%s\">"
 	                 "%s:"
 	                 "</label>",
                The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Content);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LM\"");
       fprintf (Gbl.F.Out,"<textarea id=\"MsgContent\" name=\"Content\""
                          " class=\"MSG_CONTENT\" rows=\"20\">");
 
@@ -611,22 +611,22 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
      {
       /* End message subject */
       fprintf (Gbl.F.Out,"%s</textarea>",Gbl.Msg.Subject);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Message content *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"RT\"");
+      HTM_TD_Begin ("class=\"RT\"");
       fprintf (Gbl.F.Out,"<label for=\"MsgContent\" class=\"%s\">"
 	                 "%s:"
 	                 "</label>",
                The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_MSG_Content);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LM\"");
       fprintf (Gbl.F.Out,"<textarea id=\"MsgContent\" name=\"Content\""
                          " class=\"MSG_CONTENT\" rows=\"20\">");
 
@@ -637,9 +637,9 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       fprintf (Gbl.F.Out,"\n%s",Content);
      }
    fprintf (Gbl.F.Out,"</textarea>");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1817,7 +1817,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
                                         &Pagination);
 
       /***** Show received / sent messages in this page *****/
-      Tbl_TABLE_BeginWidePadding (2);
+      HTM_TABLE_BeginWidePadding (2);
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -1832,7 +1832,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
          Msg_ShowASentOrReceivedMessage (NumMsg,MsgCod);
         }
 
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /***** Write again links to pages *****/
       if (Pagination.MoreThanOnePage)
@@ -2647,12 +2647,12 @@ void Msg_ShowFormToFilterMsgs (void)
      };
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginCenterPadding (2);
+   HTM_TABLE_BeginCenterPadding (2);
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Filter authors/recipients *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"search\" name=\"FilterFromTo\""
@@ -2661,10 +2661,10 @@ void Msg_ShowFormToFilterMsgs (void)
             The_ClassFormInBox[Gbl.Prefs.Theme],
             TxtFromTo[Gbl.Msg.TypeOfMessages],
             Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,Gbl.Msg.FilterFromTo);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Filter message content *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"search\" name=\"FilterContent\""
@@ -2673,12 +2673,12 @@ void Msg_ShowFormToFilterMsgs (void)
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_MSG_Content,
             Msg_MAX_CHARS_FILTER_CONTENT,Gbl.Msg.FilterContent);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -2958,9 +2958,9 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 	 break;
      }
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"CONTEXT_COL %s\"",
+   HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",
 		 Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
 									   "BG_MSG_GREEN") :
 								   "BG_MSG_BLUE");
@@ -2979,7 +2979,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    Gbl.Msg.MsgCod = MsgCod;	// Message to be deleted
    Ico_PutContextualIconToRemove (ActionDelMsg[Gbl.Msg.TypeOfMessages],
                                   Msg_PutHiddenParamsOneMsg);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write message number *****/
    Msg_WriteMsgNumber (MsgNum,!Open);
@@ -2987,10 +2987,10 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    /***** Write message author *****/
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
 
-   Tbl_TD_Begin ("class=\"%s LT\"",Open ? "MSG_AUT_BG" :
+   HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_AUT_BG" :
 			                        "MSG_AUT_BG_NEW");
    Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write subject *****/
    Msg_WriteSentOrReceivedMsgSubject (MsgCod,Subject,Open,Expanded);
@@ -2999,65 +2999,65 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    Msg_WriteMsgDate (CreatTimeUTC,Open ? "MSG_TIT_BG" :
 	                                 "MSG_TIT_BG_NEW");
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    if (Expanded)
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("rowspan=\"3\" colspan=\"2\" class=\"LT\"");
-      Tbl_TABLE_BeginPadding (2);
+      HTM_TD_Begin ("rowspan=\"3\" colspan=\"2\" class=\"LT\"");
+      HTM_TABLE_BeginPadding (2);
 
       /***** Write course origin of message *****/
-      Tbl_TR_Begin (NULL);
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TR_Begin (NULL);
+      HTM_TD_Begin ("class=\"LM\"");
       FromThisCrs = Msg_WriteCrsOrgMsg (CrsCod);
-      Tbl_TD_End ();
-      Tbl_TR_End ();
+      HTM_TD_End ();
+      HTM_TR_End ();
 
       /***** Form to reply message *****/
-      Tbl_TR_Begin (NULL);
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TR_Begin (NULL);
+      HTM_TD_Begin ("class=\"LM\"");
       if (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED &&
 	  Gbl.Usrs.Me.Role.Logged >= Rol_USR)
 	 // Guests (users without courses) can read messages but not reply them
          Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,Replied,&UsrDat);
-      Tbl_TD_End ();
-      Tbl_TR_End ();
+      HTM_TD_End ();
+      HTM_TR_End ();
 
-      Tbl_TABLE_End ();
-      Tbl_TD_End ();
+      HTM_TABLE_End ();
+      HTM_TD_End ();
 
       /***** Write "From:" *****/
-      Tbl_TD_Begin ("class=\"RT MSG_TIT\"");
+      HTM_TD_Begin ("class=\"RT MSG_TIT\"");
       fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_From);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       Msg_WriteMsgFrom (&UsrDat,Deleted);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Write "To:" *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"RT MSG_TIT\"");
+      HTM_TD_Begin ("class=\"RT MSG_TIT\"");
       fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_To);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       Msg_WriteMsgTo (MsgCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /***** Write "Content:" *****/
-      Tbl_TD_Begin ("class=\"RT MSG_TIT\"");
+      HTM_TD_Begin ("class=\"RT MSG_TIT\"");
       fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_Content);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /***** Initialize image *****/
       Med_MediaConstructor (&Media);
@@ -3066,13 +3066,13 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       Msg_GetMsgContent (MsgCod,Content,&Media);
 
       /***** Show content and image *****/
-      Tbl_TD_Begin ("colspan=\"2\" class=\"MSG_TXT LT\"");
+      HTM_TD_Begin ("colspan=\"2\" class=\"MSG_TXT LT\"");
       if (Content[0])
          Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
       Med_ShowMedia (&Media,"MSG_IMG_CONTAINER","MSG_IMG");
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Free image *****/
       Med_MediaDestructor (&Media);
@@ -3139,11 +3139,11 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg)
   {
-   Tbl_TD_Begin ("class=\"%s CT\" style=\"width:45px;\"",
+   HTM_TD_Begin ("class=\"%s CT\" style=\"width:45px;\"",
 		 NewMsg ? "MSG_TIT_BG_NEW" :
 			  "MSG_TIT_BG");
    fprintf (Gbl.F.Out,"%lu:",MsgNum);
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -3157,7 +3157,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
    extern const char *Txt_no_subject;
 
    /***** Start cell *****/
-   Tbl_TD_Begin ("class=\"%s LT\"",Open ? "MSG_TIT_BG" :
+   HTM_TD_Begin ("class=\"%s LT\"",Open ? "MSG_TIT_BG" :
         	                                "MSG_TIT_BG_NEW");
 
    /***** Begin form to expand/contract the message *****/
@@ -3183,7 +3183,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
    Frm_EndForm ();
 
    /***** End cell *****/
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -3199,15 +3199,15 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
    bool WriteAuthor = false;
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginPadding (2);
+   HTM_TABLE_BeginPadding (2);
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Start first column *****/
    if (BgColor)
-      Tbl_TD_Begin ("class=\"CT %s\" style=\"width:30px;\"",BgColor);
+      HTM_TD_Begin ("class=\"CT %s\" style=\"width:30px;\"",BgColor);
    else
-      Tbl_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
+      HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
 
    /***** Write author name or don't write it? *****/
    if (Enabled)
@@ -3221,13 +3221,13 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO30x40",Pho_ZOOM,false);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /***** Second column with user name (if author has a web page, put a link to it) *****/
       if (BgColor)
-	 Tbl_TD_Begin ("class=\"LT %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"LT %s\"",BgColor);
       else
-	 Tbl_TD_Begin ("class=\"LT\"");
+	 HTM_TD_Begin ("class=\"LT\"");
       fprintf (Gbl.F.Out,"<div class=\"AUTHOR_2_LINES\">");	// Limited width
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</div>");
@@ -3240,20 +3240,20 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
                Cfg_URL_ICON_PUBLIC,
                Txt_Unknown_or_without_photo,
 	       Txt_Unknown_or_without_photo);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       if (BgColor)
-         Tbl_TD_Begin ("class=\"LM %s\"",BgColor);
+         HTM_TD_Begin ("class=\"LM %s\"",BgColor);
       else
-	 Tbl_TD_Begin ("class=\"LM\"");
+	 HTM_TD_Begin ("class=\"LM\"");
      }
 
    /***** End second column *****/
-   Tbl_TD_End ();
-   Tbl_TR_End ();
+   HTM_TD_End ();
+   HTM_TR_End ();
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -3359,11 +3359,11 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
 
-   Tbl_TABLE_Begin (NULL);
-   Tbl_TR_Begin (NULL);
+   HTM_TABLE_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Put an icon to show if user has read the message *****/
-   Tbl_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
+   HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />",
@@ -3374,18 +3374,18 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
                       Txt_MSG_Sent,
             Deleted ? Txt_MSG_Sent_and_deleted :
                       Txt_MSG_Sent);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Put user's photo *****/
-   Tbl_TD_Begin ("class=\"CM\" style=\"width:30px;\"");
+   HTM_TD_Begin ("class=\"CM\" style=\"width:30px;\"");
    ShowPhoto = (Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL));
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
                      "PHOTO21x28",Pho_ZOOM,false);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write user's name *****/
-   Tbl_TD_Begin ("class=\"AUTHOR_TXT LM\"");
+   HTM_TD_Begin ("class=\"AUTHOR_TXT LM\"");
    if (UsrDat->UsrCod > 0)
      {
       fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
@@ -3403,10 +3403,10 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    else
       fprintf (Gbl.F.Out,"[%s]",
                Txt_ROLES_SINGUL_abc[Rol_UNK][Usr_SEX_UNKNOWN]);	// User not found, likely an old user who has been removed
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
-   Tbl_TABLE_End ();
+   HTM_TR_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -3488,7 +3488,7 @@ static void Msg_WriteMsgTo (long MsgCod)
    if (NumRecipientsTotal)
      {
       /***** Begin table *****/
-      Tbl_TABLE_Begin (NULL);
+      HTM_TABLE_Begin (NULL);
 
       /***** How many recipients will be shown? *****/
       if (NumRecipientsKnown <= Msg_MAX_RECIPIENTS_TO_SHOW)
@@ -3524,9 +3524,9 @@ static void Msg_WriteMsgTo (long MsgCod)
                                         Txt_MSG_Open) :
                              (Deleted ? Txt_MSG_Deleted_without_opening :
                                         Txt_MSG_Unopened);
-         Tbl_TR_Begin (NULL);
+         HTM_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
+         HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
          fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                             " class=\"ICO16x16\" />",
                   Cfg_URL_ICON_PUBLIC,
@@ -3535,52 +3535,52 @@ static void Msg_WriteMsgTo (long MsgCod)
                               (Deleted ? "envelope-red.svg" :
                         	         "envelope.svg"),
                   Title,Title);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
          /* Put user's photo */
-         Tbl_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
+         HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
          ShowPhoto = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
                                  false);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	               NULL,
                            "PHOTO21x28",Pho_ZOOM,false);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
          /* Write user's name */
-         Tbl_TD_Begin ("class=\"%s LM\"",OpenByDst ? "AUTHOR_TXT" :
+         HTM_TD_Begin ("class=\"%s LM\"",OpenByDst ? "AUTHOR_TXT" :
                 	                                      "AUTHOR_TXT_NEW");
          if (UsrValid)
             fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
          else
             fprintf (Gbl.F.Out,"[%s]",Txt_unknown_recipient);	// User not found, likely a user who has been removed
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
-         Tbl_TR_End ();
+         HTM_TR_End ();
         }
 
       /***** If any recipients are unknown *****/
       if ((NumRecipientsUnknown = NumRecipientsTotal - NumRecipientsKnown))
 	{
          /***** Begin form to show all the users *****/
-         Tbl_TR_Begin (NULL);
+         HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
+	 HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
 	 fprintf (Gbl.F.Out,"[%u %s]",
                   NumRecipientsUnknown,
                   (NumRecipientsUnknown == 1) ? Txt_unknown_recipient :
                                                 Txt_unknown_recipients);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 	}
 
       /***** If any known recipient is not listed *****/
       if (NumRecipientsToShow < NumRecipientsKnown)
         {
          /***** Begin form to show all the users *****/
-         Tbl_TR_Begin (NULL);
+         HTM_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
+         HTM_TD_Begin ("colspan=\"3\" class=\"AUTHOR_TXT LM\"");
          Frm_StartForm (ActionSee[Gbl.Msg.TypeOfMessages]);
          Gbl.Msg.MsgCod = MsgCod;	// Message to be expanded with all recipients visible
          Msg_PutHiddenParamsOneMsg ();
@@ -3590,16 +3590,16 @@ static void Msg_WriteMsgTo (long MsgCod)
                   NumRecipientsKnown - NumRecipientsToShow);
          fprintf (Gbl.F.Out,"</a>");
          Frm_EndForm ();
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
-         Tbl_TR_End ();
+         HTM_TR_End ();
         }
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3619,7 +3619,7 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
    UniqueId++;
 
    /***** Start cell *****/
-   Tbl_TD_Begin ("id=\"msg_date_%u\" class=\"%s RT\" style=\"width:106px;\"",
+   HTM_TD_Begin ("id=\"msg_date_%u\" class=\"%s RT\" style=\"width:106px;\"",
                  UniqueId,ClassBackground);
 
    /***** Write date and time *****/
@@ -3631,7 +3631,7 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /***** End cell *****/
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -3865,30 +3865,30 @@ void Msg_ListBannedUsrs (void)
          /* Get user's data from database */
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
            {
-            Tbl_TR_Begin (NULL);
+            HTM_TR_Begin (NULL);
 
             /* Put form to unban user */
-            Tbl_TD_Begin ("class=\"BM\"");
+            HTM_TD_Begin ("class=\"BM\"");
             Frm_StartForm (ActUnbUsrLst);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Ico_PutIconLink ("lock.svg",Txt_Sender_banned_click_to_unban_him);
             Frm_EndForm ();
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
             /* Show photo */
-            Tbl_TD_Begin ("class=\"LM\" style=\"width:30px;\"");
+            HTM_TD_Begin ("class=\"LM\" style=\"width:30px;\"");
             ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
                               "PHOTO21x28",Pho_ZOOM,false);
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
             /* Write user's full name */
-            Tbl_TD_Begin ("class=\"DAT LM\"");
+            HTM_TD_Begin ("class=\"DAT LM\"");
             fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
-            Tbl_TR_End ();
+            HTM_TR_End ();
            }
         }
 

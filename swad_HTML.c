@@ -1,4 +1,4 @@
-// swad_table.c: tables
+// swad_HTML.c: tables, divs
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -30,8 +30,8 @@
 #include <stdio.h>		// For fprintf, vasprintf
 #include <stdlib.h>		// For free
 
-#include "swad_table.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -55,29 +55,29 @@ extern struct Globals Gbl;
 /***************************** Private vatiables *****************************/
 /*****************************************************************************/
 
-static unsigned Tbl_TABLE_NestingLevel = 0;
-static unsigned Tbl_TR_NestingLevel = 0;
-static unsigned Tbl_TH_NestingLevel = 0;
-static unsigned Tbl_TD_NestingLevel = 0;
+static unsigned HTM_TABLE_NestingLevel = 0;
+static unsigned HTM_TR_NestingLevel = 0;
+static unsigned HTM_TH_NestingLevel = 0;
+static unsigned HTM_TD_NestingLevel = 0;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Tbl_TABLE_BeginWithoutAttr (void);
+static void HTM_TABLE_BeginWithoutAttr (void);
 
-static void Tbl_TR_BeginWithoutAttr (void);
+static void HTM_TR_BeginWithoutAttr (void);
 
-static void Tbl_TH_BeginWithoutAttr (void);
-static void Tbl_TH_BeginAttr (const char *fmt,...);
+static void HTM_TH_BeginWithoutAttr (void);
+static void HTM_TH_BeginAttr (const char *fmt,...);
 
-static void Tbl_TD_BeginWithoutAttr (void);
+static void HTM_TD_BeginWithoutAttr (void);
 
 /*****************************************************************************/
 /******************************* Start/end table *****************************/
 /*****************************************************************************/
 
-void Tbl_TABLE_Begin (const char *fmt,...)
+void HTM_TABLE_Begin (const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -99,112 +99,112 @@ void Tbl_TABLE_Begin (const char *fmt,...)
 	 /***** Print HTML *****/
 	 fprintf (Gbl.F.Out,"<table class=\"%s\">",Class);
 
-	 Tbl_TABLE_NestingLevel++;
+	 HTM_TABLE_NestingLevel++;
 
 	 free ((void *) Class);
 	}
       else
-         Tbl_TABLE_BeginWithoutAttr ();
+         HTM_TABLE_BeginWithoutAttr ();
      }
    else
-      Tbl_TABLE_BeginWithoutAttr ();
+      HTM_TABLE_BeginWithoutAttr ();
   }
 
-void Tbl_TABLE_BeginPadding (unsigned CellPadding)
+void HTM_TABLE_BeginPadding (unsigned CellPadding)
   {
    if (CellPadding)
      {
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
 
-      Tbl_TABLE_NestingLevel++;
+      HTM_TABLE_NestingLevel++;
      }
    else
-      Tbl_TABLE_BeginWithoutAttr ();
+      HTM_TABLE_BeginWithoutAttr ();
   }
 
-static void Tbl_TABLE_BeginWithoutAttr (void)
+static void HTM_TABLE_BeginWithoutAttr (void)
   {
    fprintf (Gbl.F.Out,"<table>");
 
-   Tbl_TABLE_NestingLevel++;
+   HTM_TABLE_NestingLevel++;
   }
 
-void Tbl_TABLE_BeginCenterPadding (unsigned CellPadding)
+void HTM_TABLE_BeginCenterPadding (unsigned CellPadding)
   {
    if (CellPadding)
      {
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
 
-      Tbl_TABLE_NestingLevel++;
+      HTM_TABLE_NestingLevel++;
      }
    else
-      Tbl_TABLE_BeginCenter ();
+      HTM_TABLE_BeginCenter ();
   }
 
-void Tbl_TABLE_BeginCenter (void)
+void HTM_TABLE_BeginCenter (void)
   {
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER\">");
 
-   Tbl_TABLE_NestingLevel++;
+   HTM_TABLE_NestingLevel++;
   }
 
-void Tbl_TABLE_BeginWidePadding (unsigned CellPadding)
+void HTM_TABLE_BeginWidePadding (unsigned CellPadding)
   {
    if (CellPadding)
      {
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
 
-      Tbl_TABLE_NestingLevel++;
+      HTM_TABLE_NestingLevel++;
      }
    else
-      Tbl_TABLE_BeginWide ();
+      HTM_TABLE_BeginWide ();
   }
 
-void Tbl_TABLE_BeginWide (void)
+void HTM_TABLE_BeginWide (void)
   {
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE\">");
 
-   Tbl_TABLE_NestingLevel++;
+   HTM_TABLE_NestingLevel++;
   }
 
-void Tbl_TABLE_BeginWideMarginPadding (unsigned CellPadding)
+void HTM_TABLE_BeginWideMarginPadding (unsigned CellPadding)
   {
    if (CellPadding)
      {
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_%u\">",
 	       CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
 
-      Tbl_TABLE_NestingLevel++;
+      HTM_TABLE_NestingLevel++;
      }
    else
-      Tbl_TABLE_BeginWideMargin ();
+      HTM_TABLE_BeginWideMargin ();
   }
 
-void Tbl_TABLE_BeginWideMargin (void)
+void HTM_TABLE_BeginWideMargin (void)
   {
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN\">");
 
-   Tbl_TABLE_NestingLevel++;
+   HTM_TABLE_NestingLevel++;
   }
 
-void Tbl_TABLE_End (void)
+void HTM_TABLE_End (void)
   {
-   if (Tbl_TABLE_NestingLevel == 0)	// No TABLE open
+   if (HTM_TABLE_NestingLevel == 0)	// No TABLE open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TABLE.");
 
    fprintf (Gbl.F.Out,"</table>");
 
-   Tbl_TABLE_NestingLevel--;
+   HTM_TABLE_NestingLevel--;
   }
 
 /*****************************************************************************/
 /**************************** Start/end table row ****************************/
 /*****************************************************************************/
 
-void Tbl_TR_Begin (const char *fmt,...)
+void HTM_TR_Begin (const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -229,82 +229,82 @@ void Tbl_TR_Begin (const char *fmt,...)
 	 free ((void *) Attr);
 	}
       else
-         Tbl_TR_BeginWithoutAttr ();
+         HTM_TR_BeginWithoutAttr ();
      }
    else
-      Tbl_TR_BeginWithoutAttr ();
+      HTM_TR_BeginWithoutAttr ();
 
-   Tbl_TR_NestingLevel++;
+   HTM_TR_NestingLevel++;
   }
 
-static void Tbl_TR_BeginWithoutAttr (void)
+static void HTM_TR_BeginWithoutAttr (void)
   {
    fprintf (Gbl.F.Out,"<tr>");
   }
 
-void Tbl_TR_End (void)
+void HTM_TR_End (void)
   {
-   if (Tbl_TR_NestingLevel == 0)	// No TR open
+   if (HTM_TR_NestingLevel == 0)	// No TR open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TR.");
 
    fprintf (Gbl.F.Out,"</tr>");
 
-   Tbl_TR_NestingLevel--;
+   HTM_TR_NestingLevel--;
   }
 
 /*****************************************************************************/
 /***************************** Table heading cells ***************************/
 /*****************************************************************************/
 
-void Tbl_TH (unsigned RowSpan,unsigned ColSpan,const char *Class,const char *Txt)
+void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Class,const char *Txt)
   {
-   Tbl_TH_Begin (RowSpan,ColSpan,Class);
+   HTM_TH_Begin (RowSpan,ColSpan,Class);
    if (Txt)
       if (Txt[0])
          fprintf (Gbl.F.Out,"%s",Txt);
-   Tbl_TH_End ();
+   HTM_TH_End ();
   }
 
-void Tbl_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *Class)
+void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *Class)
   {
    if (RowSpan > 1 && ColSpan > 1)
      {
       if (Class)
-	 Tbl_TH_BeginAttr ("rowspan=\"%u\" colspan=\"%u\" class=\"%s\"",
+	 HTM_TH_BeginAttr ("rowspan=\"%u\" colspan=\"%u\" class=\"%s\"",
 		       RowSpan,ColSpan,Class);
       else
-	 Tbl_TH_BeginAttr ("rowspan=\"%u\" colspan=\"%u\"",
+	 HTM_TH_BeginAttr ("rowspan=\"%u\" colspan=\"%u\"",
 		       RowSpan,ColSpan);
      }
    else if (RowSpan > 1)
      {
       if (Class)
-	 Tbl_TH_BeginAttr ("rowspan=\"%u\" class=\"%s\"",
+	 HTM_TH_BeginAttr ("rowspan=\"%u\" class=\"%s\"",
 		       RowSpan,Class);
       else
-	 Tbl_TH_BeginAttr ("rowspan=\"%u\"",
+	 HTM_TH_BeginAttr ("rowspan=\"%u\"",
 		       RowSpan);
      }
    else if (ColSpan > 1)
      {
       if (Class)
-	 Tbl_TH_BeginAttr ("colspan=\"%u\" class=\"%s\"",
+	 HTM_TH_BeginAttr ("colspan=\"%u\" class=\"%s\"",
 		       ColSpan,Class);
       else
-	 Tbl_TH_BeginAttr ("colspan=\"%u\"",
+	 HTM_TH_BeginAttr ("colspan=\"%u\"",
 		       ColSpan);
      }
    else
      {
       if (Class)
-         Tbl_TH_BeginAttr ("class=\"%s\"",
+         HTM_TH_BeginAttr ("class=\"%s\"",
 		       Class);
       else
-	 Tbl_TH_BeginWithoutAttr ();
+	 HTM_TH_BeginWithoutAttr ();
      }
   }
 
-static void Tbl_TH_BeginAttr (const char *fmt,...)
+static void HTM_TH_BeginAttr (const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -329,30 +329,30 @@ static void Tbl_TH_BeginAttr (const char *fmt,...)
 	 free ((void *) Attr);
 	}
       else
-         Tbl_TH_BeginWithoutAttr ();
+         HTM_TH_BeginWithoutAttr ();
      }
    else
-      Tbl_TH_BeginWithoutAttr ();
+      HTM_TH_BeginWithoutAttr ();
 
-   Tbl_TH_NestingLevel++;
+   HTM_TH_NestingLevel++;
   }
 
-static void Tbl_TH_BeginWithoutAttr (void)
+static void HTM_TH_BeginWithoutAttr (void)
   {
    fprintf (Gbl.F.Out,"<th>");
   }
 
-void Tbl_TH_End (void)
+void HTM_TH_End (void)
   {
-   if (Tbl_TH_NestingLevel == 0)	// No TH open
+   if (HTM_TH_NestingLevel == 0)	// No TH open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TR.");
 
    fprintf (Gbl.F.Out,"</th>");
 
-   Tbl_TH_NestingLevel--;
+   HTM_TH_NestingLevel--;
   }
 
-void Tbl_TH_Empty (unsigned NumColumns)
+void HTM_TH_Empty (unsigned NumColumns)
   {
    unsigned NumCol;
 
@@ -360,8 +360,8 @@ void Tbl_TH_Empty (unsigned NumColumns)
 	NumCol < NumColumns;
 	NumCol++)
      {
-      Tbl_TH_BeginAttr (NULL);
-      Tbl_TH_End ();
+      HTM_TH_BeginAttr (NULL);
+      HTM_TH_End ();
      }
   }
 
@@ -369,7 +369,7 @@ void Tbl_TH_Empty (unsigned NumColumns)
 /********************************* Table cells *******************************/
 /*****************************************************************************/
 
-void Tbl_TD_Begin (const char *fmt,...)
+void HTM_TD_Begin (const char *fmt,...)
   {
    va_list ap;
    int NumBytesPrinted;
@@ -394,30 +394,30 @@ void Tbl_TD_Begin (const char *fmt,...)
 	 free ((void *) Attr);
 	}
       else
-         Tbl_TD_BeginWithoutAttr ();
+         HTM_TD_BeginWithoutAttr ();
      }
    else
-      Tbl_TD_BeginWithoutAttr ();
+      HTM_TD_BeginWithoutAttr ();
 
-   Tbl_TD_NestingLevel++;
+   HTM_TD_NestingLevel++;
   }
 
-static void Tbl_TD_BeginWithoutAttr (void)
+static void HTM_TD_BeginWithoutAttr (void)
   {
    fprintf (Gbl.F.Out,"<td>");
   }
 
-void Tbl_TD_End (void)
+void HTM_TD_End (void)
   {
-   if (Tbl_TD_NestingLevel == 0)	// No TH open
+   if (HTM_TD_NestingLevel == 0)	// No TH open
       Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TD.");
 
    fprintf (Gbl.F.Out,"</td>");
 
-   Tbl_TD_NestingLevel--;
+   HTM_TD_NestingLevel--;
   }
 
-void Tbl_TD_Empty (unsigned NumColumns)
+void HTM_TD_Empty (unsigned NumColumns)
   {
    unsigned NumCol;
 
@@ -425,12 +425,12 @@ void Tbl_TD_Empty (unsigned NumColumns)
 	NumCol < NumColumns;
 	NumCol++)
      {
-      Tbl_TD_Begin (NULL);
-      Tbl_TD_End ();
+      HTM_TD_Begin (NULL);
+      HTM_TD_End ();
      }
   }
 
-void Tbl_TD_ColouredEmpty (unsigned NumColumns)
+void HTM_TD_ColouredEmpty (unsigned NumColumns)
   {
    unsigned NumCol;
 
@@ -438,7 +438,7 @@ void Tbl_TD_ColouredEmpty (unsigned NumColumns)
 	NumCol < NumColumns;
 	NumCol++)
      {
-      Tbl_TD_Begin ("class=\"COLOR%u\"",Gbl.RowEvenOdd);
-      Tbl_TD_End ();
+      HTM_TD_Begin ("class=\"COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_End ();
      }
   }

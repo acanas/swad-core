@@ -32,8 +32,8 @@
 #include "swad_degree.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_logo.h"
-#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -99,97 +99,97 @@ void Hie_WriteMenuHierarchy (void)
    extern const char *Txt_Course;
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginCenterPadding (2);
+   HTM_TABLE_BeginCenterPadding (2);
 
    /***** Write a 1st selector
           with all the countries *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"cty\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Country);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    Cty_WriteSelectorOfCountry ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
       /***** Write a 2nd selector
              with the institutions of selected country *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"RM\"");
+      HTM_TD_Begin ("class=\"RM\"");
       fprintf (Gbl.F.Out,"<label for=\"ins\" class=\"%s\">%s:</label>",
                The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Institution);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LM\"");
       Ins_WriteSelectorOfInstitution ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       if (Gbl.Hierarchy.Ins.InsCod > 0)
         {
          /***** Write a 3rd selector
                 with all the centres of selected institution *****/
-         Tbl_TR_Begin (NULL);
+         HTM_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("class=\"RM\"");
+         HTM_TD_Begin ("class=\"RM\"");
          fprintf (Gbl.F.Out,"<label for=\"ctr\" class=\"%s\">%s:</label>",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Centre);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
-         Tbl_TD_Begin ("class=\"LM\"");
+         HTM_TD_Begin ("class=\"LM\"");
          Ctr_WriteSelectorOfCentre ();
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
-         Tbl_TR_End ();
+         HTM_TR_End ();
 
          if (Gbl.Hierarchy.Ctr.CtrCod > 0)
            {
             /***** Write a 4th selector
                    with all the degrees of selected centre *****/
-            Tbl_TR_Begin (NULL);
+            HTM_TR_Begin (NULL);
 
-	    Tbl_TD_Begin ("class=\"RM\"");
+	    HTM_TD_Begin ("class=\"RM\"");
 	    fprintf (Gbl.F.Out,"<label for=\"deg\" class=\"%s\">%s:</label>",
                      The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Degree);
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
-            Tbl_TD_Begin ("class=\"LM\"");
+            HTM_TD_Begin ("class=\"LM\"");
             Deg_WriteSelectorOfDegree ();
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
-            Tbl_TR_End ();
+            HTM_TR_End ();
 
 	    if (Gbl.Hierarchy.Deg.DegCod > 0)
 	      {
 	       /***** Write a 5th selector
 		      with all the courses of selected degree *****/
-	       Tbl_TR_Begin (NULL);
+	       HTM_TR_Begin (NULL);
 
-	       Tbl_TD_Begin ("class=\"RM\"");
+	       HTM_TD_Begin ("class=\"RM\"");
 	       fprintf (Gbl.F.Out,"<label for=\"crs\" class=\"%s\">%s:</label>",
 			The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Course);
-	       Tbl_TD_End ();
+	       HTM_TD_End ();
 
-	       Tbl_TD_Begin ("class=\"LM\"");
+	       HTM_TD_Begin ("class=\"LM\"");
 	       Crs_WriteSelectorOfCourse ();
-	       Tbl_TD_End ();
+	       HTM_TD_End ();
 
-	       Tbl_TR_End ();
+	       HTM_TR_End ();
 	      }
            }
         }
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/

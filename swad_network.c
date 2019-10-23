@@ -31,9 +31,9 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
-#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -292,7 +292,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
                  Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginPadding (2);
+   HTM_TABLE_BeginPadding (2);
 
    /***** Begin form *****/
    Frm_StartFormAnchor (ActChgMyNet,Net_MY_WEBS_ID);
@@ -323,9 +323,9 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Row for this web / social network *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"REC_C1_BOT LM\"");
+      HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
       fprintf (Gbl.F.Out,"<label for=\"URL%u\" class=\"%s\">"
 			 "<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
@@ -338,21 +338,21 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"REC_C2_BOT LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL%u\" name=\"URL%u\""
 			 " maxlength=\"%u\" value=\"%s\""
 		         " class=\"REC_C2_BOT_INPUT\" />",
 	       (unsigned) NumURL,(unsigned) NumURL,
 	       Cns_MAX_CHARS_WWW,URL);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** Confirm button *****/
    Btn_PutConfirmButton (Txt_Save_changes);
@@ -555,13 +555,13 @@ void Net_ShowWebAndSocialNetworksStats (void)
                       Hlp_ANALYTICS_Figures_webs_social_networks,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Web_social_network);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"LM",Txt_Web_social_network);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** For each web / social network... *****/
    for (NumRow = 0;
@@ -585,9 +585,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	 if (sscanf (row[1],"%u",&NumUsrs) != 1)
 	    Lay_ShowErrorAndExit ("Error when getting number of files.");
 
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 			    " alt=\"%s\" title=\"%s\""
                             " class=\"CONTEXT_ICO_16x16\""
@@ -597,19 +597,19 @@ void Net_ShowWebAndSocialNetworksStats (void)
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  Net_WebsAndSocialNetworksTitle[Web]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%u",NumUsrs);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%.2f%%",
 		  NumUsrsTotal ? 100.0 * (float) NumUsrs / (float) NumUsrsTotal :
 			         0.0);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 	}
      }
 

@@ -44,6 +44,7 @@
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
+#include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_logo.h"
 #include "swad_MFU.h"
@@ -52,7 +53,6 @@
 #include "swad_parameter.h"
 #include "swad_setting.h"
 #include "swad_tab.h"
-#include "swad_table.h"
 #include "swad_theme.h"
 #include "swad_timeline.h"
 
@@ -1626,11 +1626,11 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    Crs_GetDataOfCourseByCod (&Crs);
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginWidePadding (10);
-   Tbl_TR_Begin (NULL);
+   HTM_TABLE_BeginWidePadding (10);
+   HTM_TR_Begin (NULL);
 
    /***** First column: institution logo *****/
-   Tbl_TD_Begin ("class=\"LT\" style=\"width:60px;\"");
+   HTM_TD_Begin ("class=\"LT\" style=\"width:60px;\"");
    if (InsCod > 0)
      {
       if (!PrintView)
@@ -1639,10 +1639,10 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (!PrintView)
         fprintf (Gbl.F.Out,"</a>");
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Second column: class photo title *****/
-   Tbl_TD_Begin ("class=\"CLASSPHOTO_TITLE CM\"");
+   HTM_TD_Begin ("class=\"CLASSPHOTO_TITLE CM\"");
    if (InsCod > 0)
      {
       if (!PrintView)
@@ -1675,10 +1675,10 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
          Grp_WriteNamesOfSelectedGrps ();
         }
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Third column: degree logo *****/
-   Tbl_TD_Begin ("class=\"RT\" style=\"width:60px;\"");
+   HTM_TD_Begin ("class=\"RT\" style=\"width:60px;\"");
    if (DegCod > 0)
      {
       if (!PrintView)
@@ -1689,11 +1689,11 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (!PrintView)
          fprintf (Gbl.F.Out,"</a>");
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** End table *****/
-   Tbl_TR_End ();
-   Tbl_TABLE_End ();
+   HTM_TR_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -1715,8 +1715,8 @@ void Lay_AdvertisementMobile (void)
                          NULL,Box_NOT_CLOSABLE,8);
 
       /***** Show advertisement *****/
-      Tbl_TR_Begin (NULL);
-      Tbl_TD_Begin ("class=\"DAT CM\"");
+      HTM_TR_Begin (NULL);
+      HTM_TD_Begin ("class=\"DAT CM\"");
       fprintf (Gbl.F.Out,"<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 	                 " class=\"DAT\">"
                          "%s<br /><br />"
@@ -1727,8 +1727,8 @@ void Lay_AdvertisementMobile (void)
                Txt_Stay_connected_with_SWADroid,
                Cfg_URL_ICON_PUBLIC,
                Txt_Stay_connected_with_SWADroid);
-      Tbl_TD_End ();
-      Tbl_TR_End ();
+      HTM_TD_End ();
+      HTM_TR_End ();
 
       /***** End table and box *****/
       Box_EndBoxTable ();

@@ -38,12 +38,12 @@
 #include "swad_enrolment.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_match.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
-#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -927,23 +927,23 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
    /***** Text area for users' IDs *****/
-   Tbl_TABLE_BeginCenterPadding (2);
-   Tbl_TR_Begin (NULL);
+   HTM_TABLE_BeginCenterPadding (2);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RT\"");
+   HTM_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label for=\"UsrsIDs\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LT\"");
    fprintf (Gbl.F.Out,"<textarea id=\"UsrsIDs\" name=\"UsrsIDs\""
                       " cols=\"60\" rows=\"10\">"
                       "</textarea>");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
-   Tbl_TABLE_End ();
+   HTM_TR_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -2294,42 +2294,42 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    /***** Selection of scope and roles *****/
    /* Begin form and table */
    Frm_StartForm (ActUpdSignUpReq);
-   Tbl_TABLE_BeginWideMarginPadding (2);
+   HTM_TABLE_BeginWideMarginPadding (2);
 
    /* Scope (whole platform, current centre, current degree or current course) */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"ScopeEnr\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    Sco_PutSelectorScope ("ScopeEnr",true);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /* Users' roles in listing */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RT\"");
+   HTM_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
                            1 << Rol_TCH,
                            RolesSelected,
                            false,true);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /* End table and form */
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
    Frm_EndForm ();
 
    /***** Build query *****/
@@ -2810,20 +2810,20 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       Usr_UsrDataConstructor (&UsrDat);
 
       /* Begin table */
-      Tbl_TABLE_BeginCenterPadding (2);
+      HTM_TABLE_BeginCenterPadding (2);
 
       /* Table heading */
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TH_Empty (1);
-      Tbl_TH (1,1,"LT",Txt_Course);
-      Tbl_TH (1,1,"RT",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-      Tbl_TH (1,2,"LT",Txt_Requester);
-      Tbl_TH (1,1,"LT",Txt_Role);
-      Tbl_TH (1,1,"CT",Txt_Date);
-      Tbl_TH_Empty (2);
+      HTM_TH_Empty (1);
+      HTM_TH (1,1,"LT",Txt_Course);
+      HTM_TH (1,1,"RT",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      HTM_TH (1,2,"LT",Txt_Requester);
+      HTM_TH (1,1,"LT",Txt_Role);
+      HTM_TH (1,1,"CT",Txt_Date);
+      HTM_TH_Empty (2);
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /* List requests */
       for (NumReq = 0;
@@ -2859,16 +2859,16 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
               DesiredRole == Rol_TCH))
            {
             /***** Number *****/
-            Tbl_TR_Begin (NULL);
-	    Tbl_TD_Begin ("class=\"DAT RT\"");
+            HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("class=\"DAT RT\"");
 	    fprintf (Gbl.F.Out,"%lu",NumReqs - NumReq);
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
             /***** Link to course *****/
             Crs_GetDataOfCourseByCod (&Crs);
             Deg.DegCod = Crs.DegCod;
             Deg_GetDataOfDegreeByCod (&Deg);
-            Tbl_TD_Begin ("class=\"DAT LT\"");
+            HTM_TD_Begin ("class=\"DAT LT\"");
             Frm_StartFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
             snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -2879,38 +2879,38 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
         	               "</a>",
                      Deg.ShrtName,Crs.ShrtName);
             Frm_EndForm ();
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
             /***** Number of teachers in the course *****/
-            Tbl_TD_Begin ("class=\"DAT RT\"");
+            HTM_TD_Begin ("class=\"DAT RT\"");
             fprintf (Gbl.F.Out,"%u",Crs.NumUsrs[Rol_TCH]);
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
             /***** User photo *****/
-            Tbl_TD_Begin ("class=\"DAT CT\" style=\"width:22px;\"");
+            HTM_TD_Begin ("class=\"DAT CT\" style=\"width:22px;\"");
             ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
                               "PHOTO21x28",Pho_ZOOM,false);
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
             /***** User name *****/
-            Tbl_TD_Begin ("class=\"DAT LT\"");
+            HTM_TD_Begin ("class=\"DAT LT\"");
             fprintf (Gbl.F.Out,"<div class=\"REQUESTER_NAME\">");	// Limited width
             Usr_WriteFirstNameBRSurnames (&UsrDat);
             fprintf (Gbl.F.Out,"</div>");
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
             /***** Requested role (row[3]) *****/
-            Tbl_TD_Begin ("class=\"DAT LT\"");
+            HTM_TD_Begin ("class=\"DAT LT\"");
             fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_abc[DesiredRole][UsrDat.Sex]);
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
             /***** Request time (row[4]) *****/
             Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[4]),"DAT");
 
             /***** Button to confirm the request *****/
-            Tbl_TD_Begin ("class=\"DAT LT\"");
+            HTM_TD_Begin ("class=\"DAT LT\"");
             switch (DesiredRole)
               {
                case Rol_STD:
@@ -2932,18 +2932,18 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Btn_PutCreateButtonInline (Txt_Register);
             Frm_EndForm ();
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
             /***** Button to reject the request *****/
-            Tbl_TD_Begin ("class=\"DAT LT\"");
+            HTM_TD_Begin ("class=\"DAT LT\"");
             Frm_StartForm (ActReqRejSignUp);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Btn_PutRemoveButtonInline (Txt_Reject);
             Frm_EndForm ();
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
-            Tbl_TR_End ();
+            HTM_TR_End ();
 
             /***** Mark possible notification as seen *****/
             Ntf_MarkNotifAsSeen (Ntf_EVENT_ENROLMENT_REQUEST,
@@ -2955,7 +2955,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
         }
 
       /* End table */
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /* Free memory used for user's data */
       Usr_UsrDataDestructor (&UsrDat);

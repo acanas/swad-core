@@ -44,6 +44,7 @@
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
+#include "swad_HTML.h"
 #include "swad_indicator.h"
 #include "swad_logo.h"
 #include "swad_notification.h"
@@ -52,7 +53,6 @@
 #include "swad_role.h"
 #include "swad_RSS.h"
 #include "swad_tab.h"
-#include "swad_table.h"
 #include "swad_theme.h"
 
 /*****************************************************************************/
@@ -235,18 +235,18 @@ static void Crs_Configuration (bool PrintView)
             Gbl.Hierarchy.Crs.FullName);
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
 
    /***** Degree *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"OthDegCod\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Degree);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
 
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
@@ -278,20 +278,20 @@ static void Crs_Configuration (bool PrintView)
    else	// I can not move course to another degree
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
 
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Course full name *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Course);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
       // Only degree admins, centre admins, institution admins and system admins can edit course full name
@@ -310,20 +310,20 @@ static void Crs_Configuration (bool PrintView)
      }
    else	// I can not edit course full name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Course short name *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Short_name);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
       // Only degree admins, centre admins, institution admins and system admins can edit course short name
@@ -342,21 +342,21 @@ static void Crs_Configuration (bool PrintView)
      }
    else	// I can not edit course short name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.ShrtName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Course year *****/
    IsForm = (!PrintView && Gbl.Usrs.Me.Role.Logged >= Rol_TCH);
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"OthCrsYear\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Year_OF_A_DEGREE);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    if (IsForm)
      {
       Frm_StartForm (ActChgCrsYeaCfg);
@@ -378,22 +378,22 @@ static void Crs_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"%s",
                Gbl.Hierarchy.Crs.Year ? Txt_YEAR_OF_DEGREE[Gbl.Hierarchy.Crs.Year] :
 	                                 Txt_Not_applicable);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    if (!PrintView)
      {
       /***** Institutional code of the course *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"RM\"");
+      HTM_TD_Begin ("class=\"RM\"");
       fprintf (Gbl.F.Out,"<label for=\"InsCrsCod\" class=\"%s\">%s:</label>",
               The_ClassFormInBox[Gbl.Prefs.Theme],
               Txt_Institutional_code);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       if (IsForm)
 	{
          Frm_StartForm (ActChgInsCrsCodCfg);
@@ -409,32 +409,32 @@ static void Crs_Configuration (bool PrintView)
 	}
       else
          fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.InstitutionalCrsCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Internal code of the course *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Internal_code);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%ld",Gbl.Hierarchy.Crs.CrsCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** Link to the course *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Shortcut);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"<a href=\"%s/%s?crs=%ld\" class=\"DAT\" target=\"_blank\">"
                       "%s/%s?crs=%ld</a>",
             Cfg_URL_SWAD_CGI,
@@ -443,24 +443,24 @@ static void Crs_Configuration (bool PrintView)
             Cfg_URL_SWAD_CGI,
             Lan_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Hierarchy.Crs.CrsCod);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    if (PrintView)
      {
       /***** QR code with link to the course *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_QR_code);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       QR_LinkTo (250,"crs",Gbl.Hierarchy.Crs.CrsCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
    else
      {
@@ -473,13 +473,13 @@ static void Crs_Configuration (bool PrintView)
       NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.Hierarchy.Crs.CrsCod);
       Ind_ComputeAndStoreIndicatorsCrs (Gbl.Hierarchy.Crs.CrsCod,
                                         NumIndicatorsFromDB,&Indicators);
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Indicators);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActReqStaCrs);
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%u %s %u",
@@ -494,13 +494,13 @@ static void Crs_Configuration (bool PrintView)
         	                                                  "exclamation-triangle.svg",
                Gbl.Title);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -524,17 +524,17 @@ static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"%u",Gbl.Hierarchy.Crs.NumUsrs[Role]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1182,7 +1182,7 @@ static void Crs_ListCourses (void)
    if (Gbl.Hierarchy.Deg.Crss.Num)	// There are courses in the current degree
      {
       /***** Begin table *****/
-      Tbl_TABLE_BeginWideMarginPadding (2);
+      HTM_TABLE_BeginWideMarginPadding (2);
       Crs_PutHeadCoursesForSeeing ();
 
       /***** List the courses *****/
@@ -1194,7 +1194,7 @@ static void Crs_ListCourses (void)
       Crs_ListCoursesOfAYearForSeeing (0);		// Courses without a year selected
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
      }
    else	// No courses created in the current degree
       Ale_ShowAlert (Ale_INFO,Txt_No_courses);
@@ -1289,31 +1289,31 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 BgColor = (Usr_CheckIfIBelongToCrs (Crs->CrsCod)) ? "LIGHT_BLUE" :
 				                             Gbl.ColorRows[Gbl.RowEvenOdd];
 
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
 	 /* Put green tip if course has users */
-	 Tbl_TD_Begin ("class=\"%s CM %s\" title=\"%s\"",
+	 HTM_TD_Begin ("class=\"%s CM %s\" title=\"%s\"",
 		       TxtClassNormal,BgColor,
 		       Crs->NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
 					       Txt_COURSE_Without_users);
 	 fprintf (Gbl.F.Out,"%s",Crs->NumUsrs[Rol_UNK] ? "&check;" :
 				                         "&nbsp;");
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Institutional code of the course */
-	 Tbl_TD_Begin ("class=\"%s CM %s\"",
+	 HTM_TD_Begin ("class=\"%s CM %s\"",
 		            TxtClassNormal,BgColor);
 	 fprintf (Gbl.F.Out,"%s",Crs->InstitutionalCrsCod);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Course year */
-	 Tbl_TD_Begin ("class=\"%s CM %s\"",
+	 HTM_TD_Begin ("class=\"%s CM %s\"",
 		            TxtClassNormal,BgColor);
 	 fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Crs->Year]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Course full name */
-	 Tbl_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
+	 HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassStrong,BgColor);
 	 Frm_StartFormGoTo (ActSeeCrsInf);
 	 Crs_PutParamCrsCod (Crs->CrsCod);
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -1323,27 +1323,27 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 fprintf (Gbl.F.Out,"%s</a>",
 		  Crs->FullName);
 	 Frm_EndForm ();
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Current number of teachers in this course */
-	 Tbl_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
 	 fprintf (Gbl.F.Out,"%u",Crs->NumUsrs[Rol_TCH] +
 		                 Crs->NumUsrs[Rol_NET]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Current number of students in this course */
-	 Tbl_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+	 HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
 	 fprintf (Gbl.F.Out,"%u",Crs->NumUsrs[Rol_STD]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Course status */
 	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-	 Tbl_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
+	 HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
 	 if (StatusTxt != Crs_STATUS_ACTIVE) // If active ==> do not show anything
 	    fprintf (Gbl.F.Out,"%s",Txt_COURSE_STATUS[StatusTxt]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 	}
      }
 
@@ -1440,7 +1440,7 @@ static void Crs_ListCoursesForEdition (void)
    unsigned Year;
 
    /***** Write heading *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
    Crs_PutHeadCoursesForEdition ();
 
    /***** List the courses *****/
@@ -1451,7 +1451,7 @@ static void Crs_ListCoursesForEdition (void)
    Crs_ListCoursesOfAYearForEdition (0);
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -1482,10 +1482,10 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	{
 	 ICanEdit = Crs_CheckIfICanEdit (Crs);
 
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
 	 /* Put icon to remove course */
-	 Tbl_TD_Begin ("class=\"BM\"");
+	 HTM_TD_Begin ("class=\"BM\"");
 	 if (Crs->NumUsrs[Rol_UNK] ||	// Course has users ==> deletion forbidden
 	     !ICanEdit)
 	    Ico_PutIconRemovalNotAllowed ();
@@ -1496,15 +1496,15 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Ico_PutIconRemove ();
 	    Frm_EndForm ();
 	   }
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Course code */
-	 Tbl_TD_Begin ("class=\"DAT CODE\"");
+	 HTM_TD_Begin ("class=\"DAT CODE\"");
 	 fprintf (Gbl.F.Out,"%ld",Crs->CrsCod);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Institutional code of the course */
-	 Tbl_TD_Begin ("class=\"DAT CM\"");
+	 HTM_TD_Begin ("class=\"DAT CM\"");
 	 if (ICanEdit)
 	   {
 	    Frm_StartForm (ActChgInsCrsCod);
@@ -1520,10 +1520,10 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"%s",Crs->InstitutionalCrsCod);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Course year */
-	 Tbl_TD_Begin ("class=\"DAT CM\"");
+	 HTM_TD_Begin ("class=\"DAT CM\"");
 	 if (ICanEdit)
 	   {
 	    Frm_StartForm (ActChgCrsYea);
@@ -1545,10 +1545,10 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Crs->Year]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Course short name */
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 if (ICanEdit)
 	   {
 	    Frm_StartForm (ActRenCrsSho);
@@ -1563,10 +1563,10 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"%s",Crs->ShrtName);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Course full name */
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 if (ICanEdit)
 	   {
 	    Frm_StartForm (ActRenCrsFul);
@@ -1581,29 +1581,29 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   }
 	 else
 	    fprintf (Gbl.F.Out,"%s",Crs->FullName);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Current number of teachers in this course */
-	 Tbl_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%u",Crs->NumUsrs[Rol_TCH] +
 				 Crs->NumUsrs[Rol_NET]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Current number of students in this course */
-	 Tbl_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%u",Crs->NumUsrs[Rol_STD]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Course requester */
 	 UsrDat.UsrCod = Crs->RequesterUsrCod;
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-	 Tbl_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+	 HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
 	 Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
 	 /* Course status */
 	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM &&
 	     StatusTxt == Crs_STATUS_PENDING)
 	   {
@@ -1623,9 +1623,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   }
          else if (StatusTxt != Crs_STATUS_ACTIVE)	// If active ==> do not show anything
 	    fprintf (Gbl.F.Out,"%s",Txt_COURSE_STATUS[StatusTxt]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 	}
      }
 
@@ -1712,27 +1712,27 @@ static void Crs_PutFormToCreateCourse (void)
    /***** Write heading *****/
    Crs_PutHeadCoursesForEdition ();
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Column to remove course, disabled here *****/
-   Tbl_TD_Begin ("class=\"BM\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"BM\"");
+   HTM_TD_End ();
 
    /***** Course code *****/
-   Tbl_TD_Begin ("class=\"CODE\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"CODE\"");
+   HTM_TD_End ();
 
    /***** Institutional code of the course *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"InsCrsCod\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_INS_CODE\" />",
             Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
             Crs_EditingCrs->InstitutionalCrsCod);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Year *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\" style=\"width:50px;\">");
    for (Year = 0;
 	Year <= Deg_MAX_YEARS_PER_DEGREE;
@@ -1743,46 +1743,46 @@ static void Crs_PutFormToCreateCourse (void)
 				              "",
 	       Txt_YEAR_OF_DEGREE[Year]);
    fprintf (Gbl.F.Out,"</select>");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Course short name *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
             Hie_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Course full name *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
             Hie_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Current number of teachers in this course *****/
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"0");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Current number of students in this course *****/
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"0");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Course requester *****/
-   Tbl_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+   HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Course status *****/
-   Tbl_TD_Begin ("class=\"DAT LM\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_course);
@@ -1802,17 +1802,17 @@ static void Crs_PutHeadCoursesForSeeing (void)
    extern const char *Txt_Course;
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"CM",Txt_Institutional_BR_code);
-   Tbl_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
-   Tbl_TH (1,1,"LM",Txt_Course);
-   Tbl_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-   Tbl_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   Tbl_TH_Empty (1);
+   HTM_TH (1,1,"BM",NULL);
+   HTM_TH (1,1,"CM",Txt_Institutional_BR_code);
+   HTM_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
+   HTM_TH (1,1,"LM",Txt_Course);
+   HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   HTM_TH_Empty (1);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1830,22 +1830,22 @@ static void Crs_PutHeadCoursesForEdition (void)
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"RM",Txt_Code);
-   Tbl_TH_Begin (1,1,"CM");
+   HTM_TH (1,1,"BM",NULL);
+   HTM_TH (1,1,"RM",Txt_Code);
+   HTM_TH_Begin (1,1,"CM");
    fprintf (Gbl.F.Out,"%s (%s)",Txt_Institutional_code,Txt_optional);
-   Tbl_TH_End ();
-   Tbl_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
-   Tbl_TH (1,1,"LM",Txt_Short_name_of_the_course);
-   Tbl_TH (1,1,"LM",Txt_Full_name_of_the_course);
-   Tbl_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-   Tbl_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   Tbl_TH (1,1,"LM",Txt_Requester);
-   Tbl_TH_Empty (1);
+   HTM_TH_End ();
+   HTM_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
+   HTM_TH (1,1,"LM",Txt_Short_name_of_the_course);
+   HTM_TH (1,1,"LM",Txt_Full_name_of_the_course);
+   HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+   HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+   HTM_TH (1,1,"LM",Txt_Requester);
+   HTM_TH_Empty (1);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -3074,25 +3074,25 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
                 Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
         	                  Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TH_Begin (1,7,"LM");
+      HTM_TH_Begin (1,7,"LM");
       fprintf (Gbl.F.Out,"%s:",Gbl.Title);
-      Tbl_TH_End ();
+      HTM_TH_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TH (1,1,"BM",NULL);
-      Tbl_TH (1,1,"BM",NULL);
-      Tbl_TH (1,1,"LM",Txt_Degree);
-      Tbl_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
-      Tbl_TH (1,1,"LM",Txt_Course);
-      Tbl_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-      Tbl_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,"LM",Txt_Degree);
+      HTM_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
+      HTM_TH (1,1,"LM",Txt_Course);
+      HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /* Write courses */
       for (NumCrs = 1;
@@ -3142,16 +3142,16 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Heading row *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TH (1,1,"BM",NULL);
-      Tbl_TH (1,1,"LM",Txt_Degree);
-      Tbl_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
-      Tbl_TH (1,1,"LM",Txt_Course);
-      Tbl_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
-      Tbl_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
+      HTM_TH (1,1,"BM",NULL);
+      HTM_TH (1,1,"LM",Txt_Degree);
+      HTM_TH (1,1,"CM",Txt_Year_OF_A_DEGREE);
+      HTM_TH (1,1,"LM",Txt_Course);
+      HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
+      HTM_TH (1,1,"RM",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Write courses *****/
       for (NumCrs = 1;
@@ -3232,30 +3232,30 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
                                                      Gbl.ColorRows[RowEvenOdd];
 
    /***** Start row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** User has accepted joining to this course/to any course in degree/to any course? *****/
    if (WriteColumnAccepted)
      {
       Accepted = (row[7][0] == 'Y');
-      Tbl_TD_Begin ("class=\"BT %s\" title=\"%s\"",
+      HTM_TD_Begin ("class=\"BT %s\" title=\"%s\"",
 		    BgColor,
 		    Accepted ? Txt_Enrolment_confirmed :
 			       Txt_Enrolment_not_confirmed);
       fprintf (Gbl.F.Out,"%s",
                Accepted ? "&check;" :
         	          "&cross;");
-      Tbl_TD_End ();
+      HTM_TD_End ();
      }
 
    /***** Write number of course in this search *****/
-   Tbl_TD_Begin ("class=\"%s RT %s\"",StyleNoBR,BgColor);
+   HTM_TD_Begin ("class=\"%s RT %s\"",StyleNoBR,BgColor);
    fprintf (Gbl.F.Out,"%u",NumCrs);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write degree logo, degree short name (row[2])
           and centre short name (row[6]) *****/
-   Tbl_TD_Begin ("class=\"%s LT %s\"",StyleNoBR,BgColor);
+   HTM_TD_Begin ("class=\"%s LT %s\"",StyleNoBR,BgColor);
    Frm_StartFormGoTo (ActSeeDegInf);
    Deg_PutParamDegCod (Deg.DegCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -3267,15 +3267,15 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
                       "</a>",
             row[2],row[6]);
    Frm_EndForm ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write year (row[4]) *****/
-   Tbl_TD_Begin ("class=\"%s CT %s\"",Style,BgColor);
+   HTM_TD_Begin ("class=\"%s CT %s\"",Style,BgColor);
    fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write course full name (row[5]) *****/
-   Tbl_TD_Begin ("class=\"%s LT %s\"",Style,BgColor);
+   HTM_TD_Begin ("class=\"%s LT %s\"",Style,BgColor);
    Frm_StartFormGoTo (ActSeeCrsInf);
    Crs_PutParamCrsCod (CrsCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -3284,19 +3284,19 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    Frm_LinkFormSubmit (Gbl.Title,Style,NULL);
    fprintf (Gbl.F.Out,"%s</a>",row[5]);
    Frm_EndForm ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write number of teachers in course *****/
-   Tbl_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
+   HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
    fprintf (Gbl.F.Out,"%u",NumTchs);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write number of students in course *****/
-   Tbl_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
+   HTM_TD_Begin ("class=\"%s RT %s\"",Style,BgColor);
    fprintf (Gbl.F.Out,"%u",NumStds);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    RowEvenOdd = 1 - RowEvenOdd;
   }

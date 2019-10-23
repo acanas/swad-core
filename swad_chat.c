@@ -35,11 +35,11 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_string.h"
-#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -283,12 +283,12 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
                          NULL,Box_NOT_CLOSABLE,2);
 
       /***** Write heading *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TH (1,1,"CM LIGHT_BLUE",Txt_CHAT_Room_code);
-      Tbl_TH (1,1,"LM LIGHT_BLUE",Txt_No_of_users);
+      HTM_TH (1,1,"CM LIGHT_BLUE",Txt_CHAT_Room_code);
+      HTM_TH (1,1,"LM LIGHT_BLUE",Txt_No_of_users);
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Loop over chat rooms *****/
       for (NumRow = 0;
@@ -298,17 +298,17 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 	 /* Get next chat room */
 	 row = mysql_fetch_row (mysql_res);
 
-         Tbl_TR_Begin (NULL);
+         HTM_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("class=\"DAT LM\"");
+         HTM_TD_Begin ("class=\"DAT LM\"");
          fprintf (Gbl.F.Out,"%s",row[0]);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"DAT RM\"");
          fprintf (Gbl.F.Out,"%s",row[1]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-         Tbl_TR_End ();
+         HTM_TR_End ();
         }
 
       /***** End table and box *****/

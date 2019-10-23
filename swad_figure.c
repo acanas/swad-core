@@ -40,6 +40,7 @@
 #include "swad_forum.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_HTML.h"
 #include "swad_institution.h"
 #include "swad_logo.h"
 #include "swad_network.h"
@@ -47,7 +48,6 @@
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_role.h"
-#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -371,23 +371,23 @@ static void Fig_GetAndShowUsersStats (void)
                       Hlp_ANALYTICS_Figures_users,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"RM",Txt_Users);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_Average_number_of_courses_to_which_a_user_belongs);
-   Tbl_TH (1,1,"RM",Txt_Average_number_of_users_belonging_to_a_course);
+   HTM_TH (1,1,"RM",Txt_Users);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_Average_number_of_courses_to_which_a_user_belongs);
+   HTM_TH (1,1,"RM",Txt_Average_number_of_users_belonging_to_a_course);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    Fig_GetAndShowNumUsrsInCrss (Rol_STD);		// Students
    Fig_GetAndShowNumUsrsInCrss (Rol_NET);		// Non-editing teachers
    Fig_GetAndShowNumUsrsInCrss (Rol_TCH);		// Teachers
    Fig_GetAndShowNumUsrsInCrss (Rol_UNK);		// Any user in courses
 
-   Tbl_TR_Begin (NULL);
-   Tbl_TH (1,4,"SEPAR_ROW",NULL);
-   Tbl_TR_End ();
+   HTM_TR_Begin (NULL);
+   HTM_TH (1,4,"SEPAR_ROW",NULL);
+   HTM_TR_End ();
 
    Fig_GetAndShowNumUsrsNotBelongingToAnyCrs ();	// Users not beloging to any course
 
@@ -425,27 +425,27 @@ static void Fig_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
    NumUsrsPerCrs = Usr_GetNumUsrsPerCrs (Role);
 
    /***** Write the total number of users *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s\"",Class);
+   HTM_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%s",
             (Role == Rol_UNK) ? Txt_Total :
         	                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s\"",Class);
+   HTM_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%u",NumUsrs);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s\"",Class);
+   HTM_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%.2f",NumCrssPerUsr);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s\"",Class);
+   HTM_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%.2f",NumUsrsPerCrs);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -458,25 +458,25 @@ static void Fig_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
    char *Class = "DAT RB";
 
    /***** Write the total number of users not belonging to any course *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s\"",Class);
+   HTM_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s\"",Class);
+   HTM_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsNotBelongingToAnyCrs ());
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s\"",Class);
+   HTM_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%.2f",0.0);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s\"",Class);
+   HTM_TD_Begin ("class=\"%s\"",Class);
    fprintf (Gbl.F.Out,"%.2f",0.0);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -500,50 +500,50 @@ static void Fig_GetAndShowUsersRanking (void)
                       Hlp_ANALYTICS_Figures_ranking,Box_NOT_CLOSABLE,2);
 
    /***** Write heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"CM",Txt_Clicks);
-   Tbl_TH (1,1,"CM",Txt_Clicks_per_day);
-   Tbl_TH (1,1,"CM",Txt_Timeline);
-   Tbl_TH (1,1,"CM",Txt_Followers);
-   Tbl_TH (1,1,"CM",Txt_Downloads);
-   Tbl_TH (1,1,"CM",Txt_Forums);
-   Tbl_TH (1,1,"CM",Txt_Messages);
+   HTM_TH (1,1,"CM",Txt_Clicks);
+   HTM_TH (1,1,"CM",Txt_Clicks_per_day);
+   HTM_TH (1,1,"CM",Txt_Timeline);
+   HTM_TH (1,1,"CM",Txt_Followers);
+   HTM_TH (1,1,"CM",Txt_Downloads);
+   HTM_TH (1,1,"CM",Txt_Forums);
+   HTM_TH (1,1,"CM",Txt_Messages);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Rankings *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    Prf_GetAndShowRankingClicks ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    Prf_GetAndShowRankingClicksPerDay ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    Prf_GetAndShowRankingSocPub ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    Fol_GetAndShowRankingFollowers ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    Prf_GetAndShowRankingFileViews ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    Prf_GetAndShowRankingForPst ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    Prf_GetAndShowRankingMsgSnt ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -591,56 +591,56 @@ static void Fig_WriteHeadHierarchy (void)
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH_Empty (1);
+   HTM_TH_Empty (1);
 
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"<img src=\"%s/globe.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
                       "<br />"
                       "%s",
             Cfg_URL_ICON_PUBLIC,Txt_Countries,Txt_Countries,Txt_Countries);
-   Tbl_TH_End ();
+   HTM_TH_End ();
 
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"<img src=\"%s/university.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
                       "<br />"
                       "%s",
             Cfg_URL_ICON_PUBLIC,Txt_Institutions,Txt_Institutions,Txt_Institutions);
-   Tbl_TH_End ();
+   HTM_TH_End ();
 
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"<img src=\"%s/building.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
                       "<br />"
                       "%s",
             Cfg_URL_ICON_PUBLIC,Txt_Centres,Txt_Centres,Txt_Centres);
-   Tbl_TH_End ();
+   HTM_TH_End ();
 
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"<img src=\"%s/graduation-cap.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
                       "<br />"
                       "%s",
             Cfg_URL_ICON_PUBLIC,Txt_Degrees,Txt_Degrees,Txt_Degrees);
-   Tbl_TH_End ();
+   HTM_TH_End ();
 
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_x16\" />"
                       "<br />"
                       "%s",
             Cfg_URL_ICON_PUBLIC,Txt_Courses,Txt_Courses,Txt_Courses);
-   Tbl_TH_End ();
+   HTM_TH_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -990,12 +990,12 @@ static void Fig_ShowHierarchyRow (const char *Text1,const char *Text2,
 				  int NumCrss)	// < 0 ==> do not show number
   {
    /***** Start row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Write text *****/
-   Tbl_TD_Begin ("class=\"%s RM\"",ClassTxt);
+   HTM_TD_Begin ("class=\"%s RM\"",ClassTxt);
    fprintf (Gbl.F.Out,"%s%s",Text1,Text2);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write number of countries *****/
    Fig_ShowHierarchyCell (ClassTxt,NumCtys);
@@ -1005,18 +1005,18 @@ static void Fig_ShowHierarchyRow (const char *Text1,const char *Text2,
    Fig_ShowHierarchyCell (ClassTxt,NumCrss);
 
    /***** End row *****/
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 static void Fig_ShowHierarchyCell (const char *ClassTxt,int Num)
   {
    /***** Write number *****/
-   Tbl_TD_Begin ("class=\"%s RM\"",ClassTxt);
+   HTM_TD_Begin ("class=\"%s RM\"",ClassTxt);
    if (Num >= 0)
       fprintf (Gbl.F.Out,"%d",Num);
    else		// < 0 ==> do not show number
       fprintf (Gbl.F.Out,"-");
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -1431,7 +1431,7 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	      {
 	       if ((NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
 		 {
-		  Tbl_TR_Begin (NULL);
+		  HTM_TR_Begin (NULL);
 		  TRIsOpen = true;
 		 }
 
@@ -1439,34 +1439,34 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       NumberThisRow = Fig_GetInsAndStat (&Ins,*mysql_res);
 
 	       /***** Write link to institution *****/
-	       Tbl_TD_Begin ("class=\"%s CM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_TD_Begin ("class=\"%s CM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       Ins_DrawInstitutionLogoWithLink (&Ins,40);
                fprintf (Gbl.F.Out,"<br />%u",NumberThisRow);
-               Tbl_TD_End ();
+               HTM_TD_End ();
 
 	       /***** End user's cell *****/
-	       Tbl_TD_End ();
+	       HTM_TD_End ();
 
 	       if ((++NumIns % Gbl.Usrs.ClassPhoto.Cols) == 0)
 		 {
-		  Tbl_TR_End ();
+		  HTM_TR_End ();
 		  TRIsOpen = false;
 		 }
 	      }
 	    if (TRIsOpen)
-	       Tbl_TR_End ();
+	       HTM_TR_End ();
 
 	    break;
 	 case Usr_LIST_AS_LISTING:
 	    /***** Draw institutions as a list *****/
-	    Tbl_TR_Begin (NULL);
+	    HTM_TR_Begin (NULL);
 
-	    Tbl_TH_Empty (1);
+	    HTM_TH_Empty (1);
 
-	    Tbl_TH (1,1,"LM",Txt_Institution);
-	    Tbl_TH (1,1,"RM",TxtFigure);
+	    HTM_TH (1,1,"LM",Txt_Institution);
+	    HTM_TH (1,1,"RM",TxtFigure);
 
-	    Tbl_TR_End ();
+	    HTM_TR_End ();
 
 	    for (NumIns = 1, NumOrder = 1, NumberLastRow = 0;
 		 NumIns <= NumInss;
@@ -1475,17 +1475,17 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 	       /***** Get institution data and statistic *****/
 	       NumberThisRow = Fig_GetInsAndStat (&Ins,*mysql_res);
 
-	       Tbl_TR_Begin (NULL);
+	       HTM_TR_Begin (NULL);
 
 	       /***** Number of order *****/
 	       if (NumberThisRow != NumberLastRow)
 		  NumOrder = NumIns;
-	       Tbl_TD_Begin ("class=\"DAT RM\"");
+	       HTM_TD_Begin ("class=\"DAT RM\"");
 	       fprintf (Gbl.F.Out,"%u",NumOrder);
-	       Tbl_TD_End ();
+	       HTM_TD_End ();
 
 	       /***** Write link to institution *****/
-	       Tbl_TD_Begin ("class=\"%s LM\"",
+	       HTM_TD_Begin ("class=\"%s LM\"",
 		             The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       /* Icon and name of this institution */
 	       Frm_StartForm (ActSeeInsInf);
@@ -1499,14 +1499,14 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		 }
 	       fprintf (Gbl.F.Out,"%s</a>",Ins.FullName);
 	       Frm_EndForm ();
-	       Tbl_TD_End ();
+	       HTM_TD_End ();
 
 	       /***** Write statistic *****/
-	       Tbl_TD_Begin ("class=\"DAT RM\"");
+	       HTM_TD_Begin ("class=\"DAT RM\"");
 	       fprintf (Gbl.F.Out,"%u",NumberThisRow);
-	       Tbl_TD_End ();
+	       HTM_TD_End ();
 
-	       Tbl_TR_End ();
+	       HTM_TR_End ();
 
 	       NumberLastRow = NumberThisRow;
 	      }
@@ -1592,7 +1592,7 @@ static void Fig_GetAndShowFileBrowsersStats (void)
                  Hlp_ANALYTICS_Figures_folders_and_files,Box_NOT_CLOSABLE);
 
    /***** Write sizes of all file zones *****/
-   Tbl_TABLE_BeginCenterPadding (2);
+   HTM_TABLE_BeginCenterPadding (2);
    Fig_WriteStatsExpTreesTableHead1 ();
    for (NumStat = 0;
 	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
@@ -1600,10 +1600,10 @@ static void Fig_GetAndShowFileBrowsersStats (void)
       Fig_WriteRowStatsFileBrowsers1 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
 	                              StatCrsFileZones[NumStat],
 				      &SizeOfFileZones[NumStat]);
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** Write sizes of all file zones per course *****/
-   Tbl_TABLE_BeginCenterPadding (2);
+   HTM_TABLE_BeginCenterPadding (2);
    Fig_WriteStatsExpTreesTableHead2 ();
    for (NumStat = 0;
 	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
@@ -1611,10 +1611,10 @@ static void Fig_GetAndShowFileBrowsersStats (void)
       Fig_WriteRowStatsFileBrowsers2 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
 	                              StatCrsFileZones[NumStat],
 				      &SizeOfFileZones[NumStat]);
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** Write sizes of all file zones per user *****/
-   Tbl_TABLE_BeginCenterPadding (2);
+   HTM_TABLE_BeginCenterPadding (2);
    Fig_WriteStatsExpTreesTableHead3 ();
    for (NumStat = 0;
 	NumStat < Fig_NUM_STAT_CRS_FILE_ZONES;
@@ -1622,7 +1622,7 @@ static void Fig_GetAndShowFileBrowsersStats (void)
       Fig_WriteRowStatsFileBrowsers3 (Txt_STAT_COURSE_FILE_ZONES[NumStat],
 	                              StatCrsFileZones[NumStat],
 				      &SizeOfFileZones[NumStat]);
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -2485,18 +2485,18 @@ static void Fig_WriteStatsExpTreesTableHead1 (void)
    extern const char *Txt_Files;
    extern const char *Txt_Size;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_File_zones);
-   Tbl_TH (1,1,"RM",Txt_Courses);
-   Tbl_TH (1,1,"RM",Txt_Groups);
-   Tbl_TH (1,1,"RM",Txt_Users);
-   Tbl_TH (1,1,"RM",Txt_Max_levels);
-   Tbl_TH (1,1,"RM",Txt_Folders);
-   Tbl_TH (1,1,"RM",Txt_Files);
-   Tbl_TH (1,1,"RM",Txt_Size);
+   HTM_TH (1,1,"LM",Txt_File_zones);
+   HTM_TH (1,1,"RM",Txt_Courses);
+   HTM_TH (1,1,"RM",Txt_Groups);
+   HTM_TH (1,1,"RM",Txt_Users);
+   HTM_TH (1,1,"RM",Txt_Max_levels);
+   HTM_TH (1,1,"RM",Txt_Folders);
+   HTM_TH (1,1,"RM",Txt_Files);
+   HTM_TH (1,1,"RM",Txt_Size);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 static void Fig_WriteStatsExpTreesTableHead2 (void)
@@ -2507,20 +2507,20 @@ static void Fig_WriteStatsExpTreesTableHead2 (void)
    extern const char *Txt_Size;
    extern const char *Txt_course;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_File_zones);
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH (1,1,"LM",Txt_File_zones);
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Folders,Txt_course);
-   Tbl_TH_End ();
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH_End ();
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Files,Txt_course);
-   Tbl_TH_End ();
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH_End ();
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Size,Txt_course);
-   Tbl_TH_End ();
+   HTM_TH_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 static void Fig_WriteStatsExpTreesTableHead3 (void)
@@ -2531,20 +2531,20 @@ static void Fig_WriteStatsExpTreesTableHead3 (void)
    extern const char *Txt_Size;
    extern const char *Txt_user[Usr_NUM_SEXS];
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_File_zones);
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH (1,1,"LM",Txt_File_zones);
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Folders,Txt_user[Usr_SEX_UNKNOWN]);
-   Tbl_TH_End ();
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH_End ();
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Files,Txt_user[Usr_SEX_UNKNOWN]);
-   Tbl_TH_End ();
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH_End ();
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s/<br />%s",Txt_Size,Txt_user[Usr_SEX_UNKNOWN]);
-   Tbl_TH_End ();
+   HTM_TH_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -2588,41 +2588,41 @@ static void Fig_WriteRowStatsFileBrowsers1 (const char *NameOfFileZones,
 	        "%d",
 		SizeOfFileZones->NumUsrs);
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s LM\"",Class);
+   HTM_TD_Begin ("class=\"%s LM\"",Class);
    fprintf (Gbl.F.Out,"%s",NameOfFileZones);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumCrss);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumGrps);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumUsrs);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%u",SizeOfFileZones->MaxLevels);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%lu",SizeOfFileZones->NumFolders);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%lu",SizeOfFileZones->NumFiles);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%s",FileSizeStr);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
@@ -2662,25 +2662,25 @@ static void Fig_WriteRowStatsFileBrowsers2 (const char *NameOfFileZones,
 	                     FileSizePerCrsStr);
      }
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s LM\"",Class);
+   HTM_TD_Begin ("class=\"%s LM\"",Class);
    fprintf (Gbl.F.Out,"%s",NameOfFileZones);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumFoldersPerCrs);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumFilesPerCrs);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%s",FileSizePerCrsStr);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
@@ -2720,25 +2720,25 @@ static void Fig_WriteRowStatsFileBrowsers3 (const char *NameOfFileZones,
 	                     FileSizePerUsrStr);
      }
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s LM\"",Class);
+   HTM_TD_Begin ("class=\"%s LM\"",Class);
    fprintf (Gbl.F.Out,"%s",NameOfFileZones);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumFoldersPerUsr);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%s",StrNumFilesPerUsr);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"%s RM\"",Class);
+   HTM_TD_Begin ("class=\"%s RM\"",Class);
    fprintf (Gbl.F.Out,"%s",FileSizePerUsrStr);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -2761,13 +2761,13 @@ static void Fig_GetAndShowOERsStats (void)
                       Hlp_ANALYTICS_Figures_open_educational_resources_oer,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_License);
-   Tbl_TH (1,1,"RM",Txt_No_of_private_files);
-   Tbl_TH (1,1,"RM",Txt_No_of_public_files);
+   HTM_TH (1,1,"LM",Txt_License);
+   HTM_TH (1,1,"RM",Txt_No_of_private_files);
+   HTM_TH (1,1,"RM",Txt_No_of_public_files);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    for (License = 0;
 	License < Brw_NUM_LICENSES;
@@ -2775,21 +2775,21 @@ static void Fig_GetAndShowOERsStats (void)
      {
       Fig_GetNumberOfOERsFromDB (Gbl.Scope.Current,License,NumFiles);
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%s",Txt_LICENSES[License]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%lu",NumFiles[0]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%lu",NumFiles[1]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/
@@ -2955,35 +2955,35 @@ static void Fig_GetAndShowAssignmentsStats (void)
                       Hlp_ANALYTICS_Figures_assignments,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_assignments);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_assignments);
-   Tbl_TH (1,1,"RM",Txt_Average_number_BR_of_ASSIG_BR_per_course);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_assignments);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_assignments);
+   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_ASSIG_BR_per_course);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write number of assignments *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumAssignments);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumCoursesWithAssignments);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%.2f",NumAssignmentsPerCourse);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumNotif);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3014,30 +3014,30 @@ static void Fig_GetAndShowProjectsStats (void)
                       Hlp_ANALYTICS_Figures_projects,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_projects);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_projects);
-   Tbl_TH (1,1,"RM",Txt_Average_number_BR_of_projects_BR_per_course);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_projects);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_projects);
+   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_projects_BR_per_course);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write number of projects *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumProjects);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumCoursesWithProjects);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%.2f",NumProjectsPerCourse);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3070,19 +3070,19 @@ static void Fig_GetAndShowTestsStats (void)
                       Hlp_ANALYTICS_Figures_tests,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Type_of_BR_answers);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_courses_BR_with_test_BR_questions);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions);
-   Tbl_TH (1,1,"RM",Txt_Number_BR_of_test_BR_questions);
-   Tbl_TH (1,1,"RM",Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded);
-   Tbl_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course);
-   Tbl_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded);
-   Tbl_TH (1,1,"RM",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
+   HTM_TH (1,1,"LM",Txt_Type_of_BR_answers);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_BR_with_test_BR_questions);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_exportable_BR_test_BR_questions);
+   HTM_TH (1,1,"RM",Txt_Number_BR_of_test_BR_questions);
+   HTM_TH (1,1,"RM",Txt_Average_BR_number_BR_of_test_BR_questions_BR_per_course);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_times_that_BR_questions_BR_have_been_BR_responded);
+   HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_questions_BR_have_been_BR_responded_BR_per_course);
+   HTM_TH (1,1,"RM",Txt_Average_BR_number_of_BR_times_that_BR_a_question_BR_has_been_BR_responded);
+   HTM_TH (1,1,"RM",Txt_Average_BR_score_BR_per_question_BR_from_0_to_1);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    for (AnsType = (Tst_AnswerType_t) 0;
 	AnsType < Tst_NUM_ANS_TYPES;
@@ -3092,98 +3092,98 @@ static void Fig_GetAndShowTestsStats (void)
       Tst_GetTestStats (AnsType,&Stats);
 
       /***** Write number of assignments *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%s",Txt_TST_STR_ANSWER_TYPES[AnsType]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Stats.NumCoursesWithQuestions);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u (%.1f%%)",
                Stats.NumCoursesWithPluggableQuestions,
                Stats.NumCoursesWithQuestions ? (float) Stats.NumCoursesWithPluggableQuestions * 100.0 /
         	                               (float) Stats.NumCoursesWithQuestions :
         	                               0.0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Stats.NumQsts);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%.2f",Stats.AvgQstsPerCourse);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%lu",Stats.NumHits);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerCourse);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerQuestion);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%.2f",Stats.AvgScorePerQuestion);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** Get the stats about test questions from this location *****/
    Tst_GetTestStats (Tst_ANS_ALL,&Stats);
 
    /***** Write number of assignments *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
    fprintf (Gbl.F.Out,"%s",Txt_Total);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%u",Stats.NumCoursesWithQuestions);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%u (%.1f%%)",
             Stats.NumCoursesWithPluggableQuestions,
             Stats.NumCoursesWithQuestions ? (float) Stats.NumCoursesWithPluggableQuestions * 100.0 /
         	                            (float) Stats.NumCoursesWithQuestions :
         	                            0.0);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%u",Stats.NumQsts);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%.2f",Stats.AvgQstsPerCourse);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%lu",Stats.NumHits);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerCourse);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%.2f",Stats.AvgHitsPerQuestion);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%.2f",Stats.AvgScorePerQuestion);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3214,30 +3214,30 @@ static void Fig_GetAndShowGamesStats (void)
                       Hlp_ANALYTICS_Figures_games,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_games);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_games);
-   Tbl_TH (1,1,"RM",Txt_Average_number_BR_of_games_BR_per_course);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_games);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_games);
+   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_games_BR_per_course);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write number of games *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumGames);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumCoursesWithGames);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%.2f",NumGamesPerCourse);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3271,15 +3271,15 @@ static void Fig_GetAndShowSocialActivityStats (void)
                       Hlp_ANALYTICS_Figures_timeline,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Type);
-   Tbl_TH (1,1,"RM",Txt_No_of_social_posts);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
-   Tbl_TH (1,1,"RM",Txt_No_of_posts_BR_per_user);
+   HTM_TH (1,1,"LM",Txt_Type);
+   HTM_TH (1,1,"RM",Txt_No_of_social_posts);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"RM",Txt_No_of_posts_BR_per_user);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
@@ -3395,33 +3395,33 @@ static void Fig_GetAndShowSocialActivityStats (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Write number of social notes and number of users *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%s",Txt_TIMELINE_NOTE[NoteType]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%lu",NumSocialNotes);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs * 100.0 / (float) NumUsrsTotal :
         	              0.0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%.2f",
                NumUsrs ? (float) NumSocialNotes / (float) NumUsrs :
         	         0.0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** Get and write totals *****/
@@ -3516,33 +3516,33 @@ static void Fig_GetAndShowSocialActivityStats (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /* Write totals */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
    fprintf (Gbl.F.Out,"%s",Txt_Total);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%lu",NumSocialNotes);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%u",NumUsrs);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%5.2f%%",
 	    NumUsrsTotal ? (float) NumUsrs * 100.0 / (float) NumUsrsTotal :
 			   0.0);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%.2f",
 	    NumUsrs ? (float) NumSocialNotes / (float) NumUsrs :
 		      0.0);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -3579,13 +3579,13 @@ static void Fig_GetAndShowFollowStats (void)
                       Hlp_ANALYTICS_Figures_followed_followers,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Users);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"LM",Txt_Users);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
@@ -3685,25 +3685,25 @@ static void Fig_GetAndShowFollowStats (void)
 	}
 
       /***** Write number of followed / followers *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%s",Fol == 0 ? Txt_Followed :
         	                         Txt_Followers);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs * 100.0 /
         	              (float) NumUsrsTotal :
         	              0.0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** Write number of followed/followers per follower/followed *****/
@@ -3816,19 +3816,19 @@ static void Fig_GetAndShowFollowStats (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Write number of followed per follower *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%s",Txt_FollowPerFollow[Fol]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%5.2f",Average);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Empty (1);
+      HTM_TD_Empty (1);
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/
@@ -3865,26 +3865,26 @@ static void Fig_GetAndShowForumStats (void)
                       Hlp_ANALYTICS_Figures_forums,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH_Begin (1,1,"BT");
+   HTM_TH_Begin (1,1,"BT");
    fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />",
             Cfg_URL_ICON_PUBLIC,
             Txt_Scope,
             Txt_Scope);
-   Tbl_TH_End ();
-   Tbl_TH (1,1,"LT",Txt_Forums);
-   Tbl_TH (1,1,"RT",Txt_No_of_forums);
-   Tbl_TH (1,1,"RT",Txt_No_of_threads);
-   Tbl_TH (1,1,"RT",Txt_No_of_posts);
-   Tbl_TH (1,1,"RT",Txt_Number_of_BR_notifications);
-   Tbl_TH (1,1,"RT",Txt_No_of_threads_BR_per_forum);
-   Tbl_TH (1,1,"RT",Txt_No_of_posts_BR_per_thread);
-   Tbl_TH (1,1,"RT",Txt_No_of_posts_BR_per_forum);
+   HTM_TH_End ();
+   HTM_TH (1,1,"LT",Txt_Forums);
+   HTM_TH (1,1,"RT",Txt_No_of_forums);
+   HTM_TH (1,1,"RT",Txt_No_of_threads);
+   HTM_TH (1,1,"RT",Txt_No_of_posts);
+   HTM_TH (1,1,"RT",Txt_Number_of_BR_notifications);
+   HTM_TH (1,1,"RT",Txt_No_of_threads_BR_per_forum);
+   HTM_TH (1,1,"RT",Txt_No_of_posts_BR_per_thread);
+   HTM_TH (1,1,"RT",Txt_No_of_posts_BR_per_forum);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write a row for each type of forum *****/
    switch (Gbl.Scope.Current)
@@ -4071,50 +4071,50 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    FiguresForum->NumUsrsToBeNotifiedByEMail += NumUsrsToBeNotifiedByEMail;
 
    /***** Write forum name and stats *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"BT\"");
+   HTM_TD_Begin ("class=\"BT\"");
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s%s\" title=\"%s%s\""
                       " class=\"ICO16x16\" />",
             Cfg_URL_ICON_PUBLIC,Icon,
             ForumName1,ForumName2,
             ForumName1,ForumName2);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LT\"");
+   HTM_TD_Begin ("class=\"DAT LT\"");
    fprintf (Gbl.F.Out,"%s%s",ForumName1,ForumName2);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RT\"");
+   HTM_TD_Begin ("class=\"DAT RT\"");
    fprintf (Gbl.F.Out,"%u",NumForums);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RT\"");
+   HTM_TD_Begin ("class=\"DAT RT\"");
    fprintf (Gbl.F.Out,"%u",NumThreads);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RT\"");
+   HTM_TD_Begin ("class=\"DAT RT\"");
    fprintf (Gbl.F.Out,"%u",NumPosts);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RT\"");
+   HTM_TD_Begin ("class=\"DAT RT\"");
    fprintf (Gbl.F.Out,"%u",NumUsrsToBeNotifiedByEMail);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RT\"");
+   HTM_TD_Begin ("class=\"DAT RT\"");
    fprintf (Gbl.F.Out,"%.2f",NumThrsPerForum);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RT\"");
+   HTM_TD_Begin ("class=\"DAT RT\"");
    fprintf (Gbl.F.Out,"%.2f",NumPostsPerThread);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RT\"");
+   HTM_TD_Begin ("class=\"DAT RT\"");
    fprintf (Gbl.F.Out,"%.2f",NumPostsPerForum);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -4137,44 +4137,44 @@ static void Fig_WriteForumTotalStats (struct Fig_FiguresForum *FiguresForum)
 	                                       0.0);
 
    /***** Write forum name and stats *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP\" style=\"width:20px;\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP\" style=\"width:20px;\"");
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
    fprintf (Gbl.F.Out,"%s",Txt_Total);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%u",FiguresForum->NumForums);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%u",FiguresForum->NumThreads);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%u",FiguresForum->NumPosts);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%u",FiguresForum->NumUsrsToBeNotifiedByEMail);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%.2f",NumThrsPerForum);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%.2f",NumPostsPerThread);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%.2f",NumPostsPerForum);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -4209,15 +4209,15 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
                       Hlp_ANALYTICS_Figures_notifications,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Event);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_events);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_emails);
+   HTM_TH (1,1,"LM",Txt_Event);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_events);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_emails);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Hie_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
@@ -4343,61 +4343,61 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%s",Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[NotifyEvent]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[NotifyEvent] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0.0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumEvents[NotifyEvent]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumMails[NotifyEvent]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** Write total number of users who want to be notified by email on some event *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP LM\"");
    fprintf (Gbl.F.Out,"%s",Txt_Total);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%u",NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%5.2f%%",
             NumUsrsTotal ? (float) NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent * 100.0 /
         	           (float) NumUsrsTotal :
         	           0.0);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%u",NumEventsTotal);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
+   HTM_TD_Begin ("class=\"DAT_N_LINE_TOP RM\"");
    fprintf (Gbl.F.Out,"%u",NumMailsTotal);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4441,40 +4441,40 @@ static void Fig_GetAndShowNoticesStats (void)
                       Hlp_ANALYTICS_Figures_notices,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"RM",Txt_NOTICE_Active_BR_notices);
-   Tbl_TH (1,1,"RM",Txt_NOTICE_Obsolete_BR_notices);
-   Tbl_TH (1,1,"RM",Txt_NOTICE_Deleted_BR_notices);
-   Tbl_TH (1,1,"RM",Txt_Total);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+   HTM_TH (1,1,"RM",Txt_NOTICE_Active_BR_notices);
+   HTM_TH (1,1,"RM",Txt_NOTICE_Obsolete_BR_notices);
+   HTM_TH (1,1,"RM",Txt_NOTICE_Deleted_BR_notices);
+   HTM_TH (1,1,"RM",Txt_Total);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write number of notices *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumNotices[Not_ACTIVE_NOTICE]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumNotices[Not_OBSOLETE_NOTICE]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumNoticesDeleted);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N RM\"");
+   HTM_TD_Begin ("class=\"DAT_N RM\"");
    fprintf (Gbl.F.Out,"%u", NumTotalNotices);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumTotalNotifications);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4512,64 +4512,64 @@ static void Fig_GetAndShowMsgsStats (void)
                       Hlp_ANALYTICS_Figures_messages,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Messages);
-   Tbl_TH (1,1,"RM",Txt_MSGS_Not_deleted);
-   Tbl_TH (1,1,"RM",Txt_MSGS_Deleted);
-   Tbl_TH (1,1,"RM",Txt_Total);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+   HTM_TH (1,1,"LM",Txt_Messages);
+   HTM_TH (1,1,"RM",Txt_MSGS_Not_deleted);
+   HTM_TH (1,1,"RM",Txt_MSGS_Deleted);
+   HTM_TH (1,1,"RM",Txt_Total);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write number of messages *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"%s",Txt_MSGS_Sent);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsSentNotDeleted);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsSentDeleted);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N RM\"");
+   HTM_TD_Begin ("class=\"DAT_N RM\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsSentNotDeleted + NumMsgsSentDeleted);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"-");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"%s",Txt_MSGS_Received);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsReceivedNotDeleted);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsReceivedAndDeleted);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N RM\"");
+   HTM_TD_Begin ("class=\"DAT_N RM\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsReceivedNotDeleted + NumMsgsReceivedAndDeleted);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumMsgsReceivedAndNotified);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4607,40 +4607,40 @@ static void Fig_GetAndShowSurveysStats (void)
                       Hlp_ANALYTICS_Figures_surveys,Box_NOT_CLOSABLE,2);
 
    /***** Write table heading *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_surveys);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_surveys);
-   Tbl_TH (1,1,"RM",Txt_Average_number_BR_of_surveys_BR_per_course);
-   Tbl_TH (1,1,"RM",Txt_Average_number_BR_of_questions_BR_per_survey);
-   Tbl_TH (1,1,"RM",Txt_Number_of_BR_notifications);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_surveys);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_courses_with_BR_surveys);
+   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_surveys_BR_per_course);
+   HTM_TH (1,1,"RM",Txt_Average_number_BR_of_questions_BR_per_survey);
+   HTM_TH (1,1,"RM",Txt_Number_of_BR_notifications);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write number of surveys *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumSurveys);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumCoursesWithSurveys);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%.2f",NumSurveysPerCourse);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%.2f",NumQstsPerSurvey);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"%u",NumNotif);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();
@@ -4697,13 +4697,13 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
    unsigned NumUsrsTotal = 0;
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",TxtObject);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"LM",TxtObject);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** For each privacy option... *****/
    for (Visibility = (Pri_Visibility_t) 0;
@@ -4728,24 +4728,24 @@ static void Fig_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,
 	Visibility++)
       if (MaskAllowedVisibility & (1 << Visibility))
 	{
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("class=\"DAT LM\"");
+         HTM_TD_Begin ("class=\"DAT LM\"");
          fprintf (Gbl.F.Out,"%s",Txt_PRIVACY_OPTIONS[Visibility]);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%u",NumUsrs[Visibility]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%5.2f%%",
 		  NumUsrsTotal ? (float) NumUsrs[Visibility] * 100.0 /
 				 (float) NumUsrsTotal :
 				 0);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-         Tbl_TR_End ();
+         HTM_TR_End ();
 	}
    }
 
@@ -4786,13 +4786,13 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
                       Hlp_ANALYTICS_Figures_cookies,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Cookies);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"LM",Txt_Cookies);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** For each option... *****/
    for (i = 0;
@@ -4815,24 +4815,24 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
 	i < 2;
 	i++)
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s CM\"",AcceptedClass[i]);
+      HTM_TD_Begin ("class=\"%s CM\"",AcceptedClass[i]);
       fprintf (Gbl.F.Out,"%s",AcceptedSymbol[i]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[i]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[i] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/
@@ -4862,13 +4862,13 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
                       Hlp_ANALYTICS_Figures_language,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Language);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"LM",Txt_Language);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** For each language... *****/
    for (Lan = (Lan_Language_t) 1;
@@ -4891,24 +4891,24 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
 	Lan <= Lan_NUM_LANGUAGES;
 	Lan++)
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%s",Txt_STR_LANG_NAME[Lan]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[Lan]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[Lan] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/
@@ -4939,13 +4939,13 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
                       Hlp_ANALYTICS_Figures_calendar,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Calendar);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"LM",Txt_Calendar);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** For each day... *****/
    for (FirstDayOfWeek = 0;	// Monday
@@ -4970,29 +4970,29 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	FirstDayOfWeek++)
       if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
 	{
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"CM\"");
+	 HTM_TD_Begin ("class=\"CM\"");
 	 fprintf (Gbl.F.Out,"<img src=\"%s/first-day-of-week-%u.png\""
 			    " alt=\"%s\" title=\"%s: %s\""
 			    " class=\"ICO40x40\" />",
 		  Cfg_URL_ICON_PUBLIC,FirstDayOfWeek,
 		  Txt_DAYS_SMALL[FirstDayOfWeek],
 		  Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%u",NumUsrs[FirstDayOfWeek]);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%5.2f%%",
 		  NumUsrsTotal ? (float) NumUsrs[FirstDayOfWeek] * 100.0 /
 				 (float) NumUsrsTotal :
 				 0);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 	}
 
    /***** End table and box *****/
@@ -5020,13 +5020,13 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
                       Hlp_ANALYTICS_Figures_dates,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Format);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"LM",Txt_Format);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** For each format... *****/
    for (Format = (Dat_Format_t) 0;
@@ -5049,25 +5049,25 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
 	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 	Format++)
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT_N LM\"");
+      HTM_TD_Begin ("class=\"DAT_N LM\"");
       Dat_PutSpanDateFormat (Format);
       Dat_PutScriptDateFormat (Format);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[Format]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
 	       NumUsrsTotal ? (float) NumUsrs[Format] * 100.0 /
 			      (float) NumUsrsTotal :
 			      0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/
@@ -5097,13 +5097,13 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
                       Hlp_ANALYTICS_Figures_icons,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Icons);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"LM",Txt_Icons);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** For each icon set... *****/
    for (IconSet = (Ico_IconSet_t) 0;
@@ -5126,9 +5126,9 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LM\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/cog.svg\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />",
@@ -5136,20 +5136,20 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
                Ico_IconSetId[IconSet],
                Ico_IconSetNames[IconSet],
                Ico_IconSetNames[IconSet]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[IconSet]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[IconSet] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/
@@ -5179,13 +5179,13 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
                       Hlp_ANALYTICS_Figures_menu,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Menu);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"LM",Txt_Menu);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** For each menu... *****/
    for (Menu = (Mnu_Menu_t) 0;
@@ -5208,29 +5208,29 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
 	Menu < Mnu_NUM_MENUS;
 	Menu++)
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />",
                Cfg_URL_ICON_PUBLIC,Mnu_MenuIcons[Menu],
                Txt_MENU_NAMES[Menu],
                Txt_MENU_NAMES[Menu]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[Menu]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[Menu] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/
@@ -5260,13 +5260,13 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
                       Hlp_ANALYTICS_Figures_theme,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"LM",Txt_Theme_SKIN);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"LM",Txt_Theme_SKIN);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** For each theme... *****/
    for (Theme = (The_Theme_t) 0;
@@ -5289,29 +5289,29 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
 	Theme < The_NUM_THEMES;
 	Theme++)
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/theme_32x20.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:40px; height:25px;\" />",
                Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Theme],
                The_ThemeNames[Theme],
                The_ThemeNames[Theme]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[Theme]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[Theme] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/
@@ -5340,13 +5340,13 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
                       Hlp_ANALYTICS_Figures_columns,Box_NOT_CLOSABLE,2);
 
    /***** Heading row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"CM",Txt_Columns);
-   Tbl_TH (1,1,"RM",Txt_No_of_users);
-   Tbl_TH (1,1,"RM",Txt_PERCENT_of_users);
+   HTM_TH (1,1,"CM",Txt_Columns);
+   HTM_TH (1,1,"RM",Txt_No_of_users);
+   HTM_TH (1,1,"RM",Txt_PERCENT_of_users);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** For each language... *****/
    for (SideCols = 0;
@@ -5369,29 +5369,29 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/layout%u%u_32x20.gif\""
                          " alt=\"%s\" title=\"%s\""
                          " style=\"width:40px; height:25px;\" />",
                Cfg_URL_ICON_PUBLIC,SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumUsrs[SideCols]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%5.2f%%",
                NumUsrsTotal ? (float) NumUsrs[SideCols] * 100.0 /
         	              (float) NumUsrsTotal :
         	              0);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table and box *****/

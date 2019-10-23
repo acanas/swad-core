@@ -36,11 +36,11 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
+#include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_role.h"
 #include "swad_string.h"
-#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -280,13 +280,13 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Number of teachers and students *****/
-   Tbl_TABLE_Begin ("CONNECTED_LIST");
+   HTM_TABLE_Begin ("CONNECTED_LIST");
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NET);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** Put link to register students *****/
    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
@@ -328,14 +328,14 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Frm_EndForm ();
 
    /***** Number of teachers and students *****/
-   Tbl_TABLE_Begin ("CONNECTED_LIST");
+   HTM_TABLE_Begin ("CONNECTED_LIST");
    Gbl.Usrs.Connected.NumUsr        = 0;
    Gbl.Usrs.Connected.NumUsrs       = 0;
    Gbl.Usrs.Connected.NumUsrsToList = 0;
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NET);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD);
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
@@ -355,14 +355,14 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Role,&Usrs);
    if (Usrs.NumUsrs)
      {
-      Tbl_TR_Begin (NULL);
-      Tbl_TD_Begin ("colspan=\"3\" class=\"CT\"");
+      HTM_TR_Begin (NULL);
+      HTM_TD_Begin ("colspan=\"3\" class=\"CT\"");
       fprintf (Gbl.F.Out,"%u %s",
 	       Usrs.NumUsrs,
 	       (Usrs.NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
 				     Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
-      Tbl_TD_End ();
-      Tbl_TR_End ();
+      HTM_TD_End ();
+      HTM_TR_End ();
 
       /***** I can see connected users *****/
       Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Role);
@@ -389,16 +389,16 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
       if (Gbl.Usrs.Connected.NumUsrsToList > Cfg_MAX_CONNECTED_SHOWN)
 	 Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("colspan=\"3\" class=\"CON_USR_NARROW_TIT\"");
+      HTM_TD_Begin ("colspan=\"3\" class=\"CON_USR_NARROW_TIT\"");
       fprintf (Gbl.F.Out,"%u %s",
 	       NumUsrsThisRole,
 	       (NumUsrsThisRole == 1) ? Txt_ROLES_SINGUL_abc[Role][UsrSex] :
 					Txt_ROLES_PLURAL_abc[Role][UsrSex]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** I can see connected users *****/
       Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Role);
@@ -406,9 +406,9 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
       /***** Write message with number of users not listed *****/
       if (Gbl.Usrs.Connected.NumUsrsToList < Gbl.Usrs.Connected.NumUsrs)
 	{
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("colspan=\"3\" class=\"CT\"");
+	 HTM_TD_Begin ("colspan=\"3\" class=\"CT\"");
 	 Frm_StartFormUnique (ActLstCon);	// Must be unique because
 						// the list of connected users
 						// is dynamically updated via AJAX
@@ -420,9 +420,9 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Connected_users,Txt_Connected_users);
 	 Frm_EndForm ();
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 	}
      }
   }
@@ -817,20 +817,20 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       UsrDat = &OtherUsrDat;
      }
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Show photo *****/
-   Tbl_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
                      "PHOTO21x28",Pho_ZOOM,true);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write full name and link *****/
    Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_NAME_NARROW CON_CRS" :
 	                                                               "CON_NAME_NARROW CON_NO_CRS");
-   Tbl_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
    // The form must be unique because
    // the list of connected users
    // is dynamically updated via AJAX
@@ -854,19 +854,19 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"</a>"
 	              "</div>");
    Frm_EndForm ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write time from last access *****/
    Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
 	                                                               "CON_SINCE CON_NO_CRS");
-   Tbl_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"<div id=\"hm%u\">",
             Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
    Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
    fprintf (Gbl.F.Out,"</div>");	// Used for automatic update, only when displayed on right column
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    if (!ItsMe)
       /***** Free memory used for user's data *****/
@@ -1033,20 +1033,20 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)
 	       TimeDiff = (time_t) 0;
 
-	    Tbl_TR_Begin (NULL);
+	    HTM_TR_Begin (NULL);
 
 	    /***** Show photo *****/
-	    Tbl_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
 	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 						  NULL,
 			      "PHOTO21x28",Pho_ZOOM,false);
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
 	    /***** Write full name and link *****/
 	    Font = (ThisCrs ? "CON_NAME_WIDE CON_CRS" :
 			      "CON_NAME_WIDE CON_NO_CRS");
-	    Tbl_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
 	    if (PutLinkToRecord)
 	      {
 	       switch (Role)
@@ -1072,16 +1072,16 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    fprintf (Gbl.F.Out,"</div>");
 	    if (PutLinkToRecord)
 	       Frm_EndForm ();
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
 	    /***** Write time from last access *****/
 	    Font = (ThisCrs ? "CON_SINCE CON_CRS" :
 			      "CON_SINCE CON_NO_CRS");
-	    Tbl_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
+	    HTM_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
 	    Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
-	    Tbl_TR_End ();
+	    HTM_TR_End ();
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 	   }

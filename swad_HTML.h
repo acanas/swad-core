@@ -1,7 +1,7 @@
-// swad_table.h: tables
+// swad_HTML.h: tables, divs
 
-#ifndef _SWAD_TBL
-#define _SWAD_TBL
+#ifndef _SWAD_HTM
+#define _SWAD_HTM
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -39,27 +39,27 @@
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Tbl_TABLE_Begin (const char *fmt,...);
-void Tbl_TABLE_BeginPadding (unsigned CellPadding);
-void Tbl_TABLE_BeginCenterPadding (unsigned CellPadding);
-void Tbl_TABLE_BeginCenter (void);
-void Tbl_TABLE_BeginWidePadding (unsigned CellPadding);
-void Tbl_TABLE_BeginWide (void);
-void Tbl_TABLE_BeginWideMarginPadding (unsigned CellPadding);
-void Tbl_TABLE_BeginWideMargin (void);
-void Tbl_TABLE_End (void);
+void HTM_TABLE_Begin (const char *fmt,...);
+void HTM_TABLE_BeginPadding (unsigned CellPadding);
+void HTM_TABLE_BeginCenterPadding (unsigned CellPadding);
+void HTM_TABLE_BeginCenter (void);
+void HTM_TABLE_BeginWidePadding (unsigned CellPadding);
+void HTM_TABLE_BeginWide (void);
+void HTM_TABLE_BeginWideMarginPadding (unsigned CellPadding);
+void HTM_TABLE_BeginWideMargin (void);
+void HTM_TABLE_End (void);
 
-void Tbl_TR_Begin (const char *fmt,...);
-void Tbl_TR_End (void);
+void HTM_TR_Begin (const char *fmt,...);
+void HTM_TR_End (void);
 
-void Tbl_TH (unsigned RowSpan,unsigned ColSpan,const char *Class,const char *Txt);
-void Tbl_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *Class);
-void Tbl_TH_End (void);
-void Tbl_TH_Empty (unsigned NumColumns);
+void HTM_TH (unsigned RowSpan,unsigned ColSpan,const char *Class,const char *Txt);
+void HTM_TH_Begin (unsigned RowSpan,unsigned ColSpan,const char *Class);
+void HTM_TH_End (void);
+void HTM_TH_Empty (unsigned NumColumns);
 
-void Tbl_TD_Begin (const char *fmt,...);
-void Tbl_TD_End (void);
-void Tbl_TD_Empty (unsigned NumColumns);
-void Tbl_TD_ColouredEmpty (unsigned NumColumns);
+void HTM_TD_Begin (const char *fmt,...);
+void HTM_TD_End (void);
+void HTM_TD_Empty (unsigned NumColumns);
+void HTM_TD_ColouredEmpty (unsigned NumColumns);
 
 #endif

@@ -41,11 +41,11 @@
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_mark.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
-#include "swad_table.h"
 #include "swad_timeline.h"
 
 /*****************************************************************************/
@@ -393,16 +393,16 @@ void Ntf_ShowMyNotifications (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Begin table *****/
-      Tbl_TABLE_BeginWideMarginPadding (2);
-      Tbl_TR_Begin (NULL);
+      HTM_TABLE_BeginWideMarginPadding (2);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TH (1,2,"LM",Txt_Event);
-      Tbl_TH (1,1,"LM",Txt_MSG_From);
-      Tbl_TH (1,1,"LM",Txt_Location);
-      Tbl_TH (1,1,"CM",Txt_Date);
-      Tbl_TH (1,1,"LM",Txt_Email);
+      HTM_TH (1,2,"LM",Txt_Event);
+      HTM_TH (1,1,"LM",Txt_MSG_From);
+      HTM_TH (1,1,"LM",Txt_Location);
+      HTM_TH (1,1,"CM",Txt_Date);
+      HTM_TH (1,1,"LM",Txt_Email);
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** List notifications one by one *****/
       for (NumNotif = 0;
@@ -479,9 +479,9 @@ void Ntf_ShowMyNotifications (void)
 
          /***** Write row for this notification *****/
 	 /* Write event icon */
-         Tbl_TR_Begin (NULL);
+         HTM_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("class=\"%s LT\" style=\"width:25px;\"",ClassBackground);
+         HTM_TD_Begin ("class=\"%s LT\" style=\"width:25px;\"",ClassBackground);
          if (PutLink)
             PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
@@ -494,10 +494,10 @@ void Ntf_ShowMyNotifications (void)
          else
             Ico_PutIconOff (Ntf_Icons[NotifyEvent],
         	            Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
          /* Write event type */
-         Tbl_TD_Begin ("class=\"%s LT\"",ClassBackground);
+         HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
          if (PutLink)
             PutLink = Ntf_StartFormGoToAction (NotifyEvent,Crs.CrsCod,&UsrDat,Cod);
 
@@ -511,15 +511,15 @@ void Ntf_ShowMyNotifications (void)
          else
             fprintf (Gbl.F.Out,"<span class=\"%s\">%s</span>",
                      ClassAnchor,Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
          /* Write user (from) */
-	 Tbl_TD_Begin ("class=\"%s LT\"",ClassAuthorBg);
+	 HTM_TD_Begin ("class=\"%s LT\"",ClassAuthorBg);
 	 Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
          /* Write location */
-         Tbl_TD_Begin ("class=\"%s LT\"",ClassBackground);
+         HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
          if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
@@ -568,17 +568,17 @@ void Ntf_ShowMyNotifications (void)
             else
                fprintf (Gbl.F.Out,"</span>");
            }
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
          /* Write date and time */
          Msg_WriteMsgDate (DateTimeUTC,ClassBackground);
 
          /* Write status (sent by email / pending to be sent by email) */
-         Tbl_TD_Begin ("class=\"%s LT\"",ClassBackground);
+         HTM_TD_Begin ("class=\"%s LT\"",ClassBackground);
          fprintf (Gbl.F.Out,"%s",Txt_NOTIFICATION_STATUS[StatusTxt]);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
-         Tbl_TR_End ();
+         HTM_TR_End ();
 
          /***** Write content of the event *****/
          if (PutLink)
@@ -588,16 +588,16 @@ void Ntf_ShowMyNotifications (void)
                                            Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
                                            false);
 
-            Tbl_TR_Begin (NULL);
+            HTM_TR_Begin (NULL);
 
-            Tbl_TD_Begin ("colspan=\"2\"");
-            Tbl_TD_End ();
+            HTM_TD_Begin ("colspan=\"2\"");
+            HTM_TD_End ();
 
-            Tbl_TD_Begin ("colspan=\"4\" class=\"DAT LT\" style=\"padding-bottom:12px;\"");
+            HTM_TD_Begin ("colspan=\"4\" class=\"DAT LT\" style=\"padding-bottom:12px;\"");
             fprintf (Gbl.F.Out,"%s",SummaryStr);
-            Tbl_TD_End ();
+            HTM_TD_End ();
 
-            Tbl_TR_End ();
+            HTM_TR_End ();
 
             if (ContentStr != NULL)
               {
@@ -608,7 +608,7 @@ void Ntf_ShowMyNotifications (void)
         }
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1927,15 +1927,15 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       Mai_WriteWarningEmailNotifications ();
 
    /***** List of notifications *****/
-   Tbl_TABLE_BeginCenterPadding (2);
-   Tbl_TR_Begin (NULL);
+   HTM_TABLE_BeginCenterPadding (2);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH_Empty (1);
+   HTM_TH_Empty (1);
 
-   Tbl_TH (1,1,"CM",Txt_Create_BR_notification);
-   Tbl_TH (1,1,"CM",Txt_Notify_me_BR_by_email);
+   HTM_TH (1,1,"CM",Txt_Create_BR_notification);
+   HTM_TH (1,1,"CM",Txt_Notify_me_BR_by_email);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Checkbox to activate internal notifications and email notifications
           about events *****/
@@ -1943,32 +1943,32 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++)	// O is reserved for Ntf_EVENT_UNKNOWN
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_NOTIFY_EVENTS_PLURAL[NotifyEvent]);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent)))
           fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />");
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
                Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
       if ((Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent)))
           fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />");
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** Button to save changes *****/
    Btn_PutConfirmButton (Txt_Save_changes);

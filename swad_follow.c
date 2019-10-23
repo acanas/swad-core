@@ -33,10 +33,10 @@
 #include "swad_follow.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_notification.h"
 #include "swad_privacy.h"
 #include "swad_profile.h"
-#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -165,12 +165,12 @@ void Fol_SuggestUsrsToFollowMainZone (void)
 
 	 /***** Show user *****/
 	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
-	    Tbl_TR_Begin (NULL);
+	    HTM_TR_Begin (NULL);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
 	    Fol_ShowFollowedOrFollower (&UsrDat);
 	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 	     NumUsr == NumUsrs - 1)
-	    Tbl_TR_End ();
+	    HTM_TR_End ();
 	}
 
       /***** Free memory used for user's data *****/
@@ -217,7 +217,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
       Frm_EndForm ();
 
       /***** Begin table *****/
-      Tbl_TABLE_Begin (NULL);
+      HTM_TABLE_Begin (NULL);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -242,7 +242,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");
@@ -717,12 +717,12 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 
 	    /***** Show user *****/
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
-	       Tbl_TR_Begin (NULL);
+	       HTM_TR_Begin (NULL);
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowingUsrDat,Usr_DONT_GET_PREFS))
 	       Fol_ShowFollowedOrFollower (&FollowingUsrDat);
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 		NumUsr == NumUsrs - 1)
-	       Tbl_TR_End ();
+	       HTM_TR_End ();
 	   }
 
          /***** End table and box *****/
@@ -800,12 +800,12 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 
 	    /***** Show user *****/
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
-	       Tbl_TR_Begin (NULL);
+	       HTM_TR_Begin (NULL);
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&FollowerUsrDat,Usr_DONT_GET_PREFS))
 	       Fol_ShowFollowedOrFollower (&FollowerUsrDat);
 	    if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
 		NumUsr == NumUsrs - 1)
-	       Tbl_TR_End ();
+	       HTM_TR_End ();
 	   }
 
          /***** End table and box *****/
@@ -842,7 +842,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/
-   Tbl_TD_Begin ("class=\"FOLLOW_PHOTO\"");
+   HTM_TD_Begin ("class=\"FOLLOW_PHOTO\"");
    if (Visible)
      {
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
@@ -850,10 +850,10 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 					   NULL,
 			"PHOTO60x80",Pho_ZOOM,false);
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Show user's name and icon to follow/unfollow *****/
-   Tbl_TD_Begin ("class=\"FOLLOW_USR\"");
+   HTM_TD_Begin ("class=\"FOLLOW_USR\"");
    if (Visible)
      {
       /* Put form to go to public profile */
@@ -882,7 +882,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 	 /* Form to follow */
 	 Fol_PutIconToFollow (UsrDat);
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -898,8 +898,8 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Show user's photo *****/
-   Tbl_TR_Begin (NULL);
-   Tbl_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TR_Begin (NULL);
+   HTM_TD_Begin ("class=\"CON_PHOTO COLOR%u\"",Gbl.RowEvenOdd);
    if (Visible)
      {
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
@@ -907,10 +907,10 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 					    NULL,
 			"PHOTO21x28",Pho_ZOOM,false);
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** User's name *****/
-   Tbl_TD_Begin ("class=\"CON_NAME_FOLLOW CON_CRS COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"CON_NAME_FOLLOW CON_CRS COLOR%u\"",Gbl.RowEvenOdd);
    if (Visible)
      {
       /* Put form to go to public profile */
@@ -923,10 +923,10 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 	                 "</div>");
       Frm_EndForm ();
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Icon to follow *****/
-   Tbl_TD_Begin ("class=\"CON_ICON_FOLLOW RM COLOR%u\"",Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM COLOR%u\"",Gbl.RowEvenOdd);
    if (!Gbl.Usrs.Me.Logged ||	// Not logged
        ItsMe)			// It's me
       /* Inactive icon to follow/unfollow */
@@ -941,8 +941,8 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 	 /* Form to follow */
 	 Fol_PutIconToFollow (UsrDat);
      }
-   Tbl_TD_End ();
-   Tbl_TR_End ();
+   HTM_TD_End ();
+   HTM_TR_End ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }

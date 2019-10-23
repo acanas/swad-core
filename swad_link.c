@@ -34,10 +34,10 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_link.h"
 #include "swad_parameter.h"
-#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -410,7 +410,7 @@ static void Lnk_ListLinksForEdition (void)
    struct Link *Lnk;
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
 
    /***** Table head *****/
    Lnk_PutHeadLinks ();
@@ -422,23 +422,23 @@ static void Lnk_ListLinksForEdition (void)
      {
       Lnk = &Gbl.Links.Lst[NumLnk];
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /* Put icon to remove link */
-      Tbl_TD_Begin ("class=\"BM\"");
+      HTM_TD_Begin ("class=\"BM\"");
       Frm_StartForm (ActRemLnk);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Link code */
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%ld",Lnk->LnkCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Link short name */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -448,10 +448,10 @@ static void Lnk_ListLinksForEdition (void)
                Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Link full name */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -461,10 +461,10 @@ static void Lnk_ListLinksForEdition (void)
                Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Link WWW */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgLnkWWW);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
@@ -474,13 +474,13 @@ static void Lnk_ListLinksForEdition (void)
                Cns_MAX_CHARS_WWW,Lnk->WWW,
                Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -746,42 +746,42 @@ static void Lnk_PutFormToCreateLink (void)
    /***** Write heading *****/
    Lnk_PutHeadLinks ();
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Link code *****/
-   Tbl_TD_Begin ("class=\"BM\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"BM\"");
+   HTM_TD_End ();
 
-   Tbl_TD_Empty (1);
+   HTM_TD_Empty (1);
 
    /***** Link short name *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
             Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Link full name *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
             Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Link WWW *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />",
             Cns_MAX_CHARS_WWW,Lnk_EditingLnk->WWW);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_link);
@@ -801,15 +801,15 @@ static void Lnk_PutHeadLinks (void)
    extern const char *Txt_Full_name;
    extern const char *Txt_WWW;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"RM",Txt_Code);
-   Tbl_TH (1,1,"LM",Txt_Short_name);
-   Tbl_TH (1,1,"LM",Txt_Full_name);
-   Tbl_TH (1,1,"LM",Txt_WWW);
+   HTM_TH (1,1,"BM",NULL);
+   HTM_TH (1,1,"RM",Txt_Code);
+   HTM_TH (1,1,"LM",Txt_Short_name);
+   HTM_TH (1,1,"LM",Txt_Full_name);
+   HTM_TH (1,1,"LM",Txt_WWW);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

@@ -36,6 +36,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_notification.h"
 #include "swad_pagination.h"
@@ -45,7 +46,6 @@
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
-#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -257,7 +257,7 @@ void Prj_ShowTableAllProjects (void)
       Prj_AllocMemProject (&Prj);
 
       /***** Table head *****/
-      Tbl_TABLE_BeginWidePadding (2);
+      HTM_TABLE_BeginWidePadding (2);
       Prj_ShowTableAllProjectsHead ();
 
       /***** Write all the projects *****/
@@ -270,7 +270,7 @@ void Prj_ShowTableAllProjects (void)
 	}
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /***** Free memory of the project *****/
       Prj_FreeMemProject (&Prj);
@@ -342,7 +342,7 @@ static void Prj_ShowProjectsInCurrentPage (void)
       Prj_AllocMemProject (&Prj);
 
       /***** Table head *****/
-      Tbl_TABLE_BeginWideMarginPadding (2);
+      HTM_TABLE_BeginWideMarginPadding (2);
       Prj_ShowProjectsHead (Prj_LIST_PROJECTS);
 
       /***** Write all the projects *****/
@@ -373,7 +373,7 @@ static void Prj_ShowProjectsInCurrentPage (void)
 	}
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /***** Free memory of the project *****/
       Prj_FreeMemProject (&Prj);
@@ -767,13 +767,13 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
    extern const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS];
    Prj_Order_t Order;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Column for number of project *****/
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TH (1,1,"CM",Txt_No_INDEX);
+	 HTM_TH (1,1,"CM",Txt_No_INDEX);
 	 break;
       default:
 	 break;
@@ -784,7 +784,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
      {
       case Prj_LIST_PROJECTS:
       case Prj_FILE_BROWSER_PROJECT:
-	 Tbl_TH (1,1,"CONTEXT_COL",NULL);
+	 HTM_TH (1,1,"CONTEXT_COL",NULL);
 	 break;
       default:
 	 break;
@@ -795,7 +795,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
 	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	Order++)
      {
-      Tbl_TH_Begin (1,1,"CM");
+      HTM_TH_Begin (1,1,"CM");
 
       switch (ProjectView)
 	{
@@ -820,7 +820,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
 	    break;
 	}
 
-      Tbl_TH_End ();
+      HTM_TH_End ();
      }
   }
 
@@ -838,25 +838,25 @@ static void Prj_ShowTableAllProjectsHead (void)
    Prj_Order_t Order;
    unsigned NumRoleToShow;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    for (Order = (Prj_Order_t) 0;
 	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	Order++)
-      Tbl_TH (1,1,"LT DAT_N",Txt_PROJECT_ORDER[Order]);
-   Tbl_TH (1,1,"LT DAT_N",Txt_Preassigned_QUESTION);
-   Tbl_TH (1,1,"LT DAT_N",Txt_Number_of_students);
+      HTM_TH (1,1,"LT DAT_N",Txt_PROJECT_ORDER[Order]);
+   HTM_TH (1,1,"LT DAT_N",Txt_Preassigned_QUESTION);
+   HTM_TH (1,1,"LT DAT_N",Txt_Number_of_students);
    for (NumRoleToShow = 0;
 	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
 	NumRoleToShow++)
-      Tbl_TH (1,1,"LT DAT_N",Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
-   Tbl_TH (1,1,"LT DAT_N",Txt_Proposal);
-   Tbl_TH (1,1,"LT DAT_N",Txt_Description);
-   Tbl_TH (1,1,"LT DAT_N",Txt_Required_knowledge);
-   Tbl_TH (1,1,"LT DAT_N",Txt_Required_materials);
-   Tbl_TH (1,1,"LT DAT_N",Txt_URL);
+      HTM_TH (1,1,"LT DAT_N",Txt_PROJECT_ROLES_PLURAL_Abc[Prj_RolesToShow[NumRoleToShow]]);
+   HTM_TH (1,1,"LT DAT_N",Txt_Proposal);
+   HTM_TH (1,1,"LT DAT_N",Txt_Description);
+   HTM_TH (1,1,"LT DAT_N",Txt_Required_knowledge);
+   HTM_TH (1,1,"LT DAT_N",Txt_Required_materials);
+   HTM_TH (1,1,"LT DAT_N",Txt_URL);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -976,7 +976,7 @@ static void Prj_PutIconsToLockUnlockAllProjects (void)
 void Prj_ShowOneUniqueProject (struct Project *Prj)
   {
    /***** Begin table *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
 
    /***** Write project head *****/
    Prj_ShowProjectsHead (Prj_FILE_BROWSER_PROJECT);
@@ -985,7 +985,7 @@ void Prj_ShowOneUniqueProject (struct Project *Prj)
    Prj_ShowOneProject (0,Prj,Prj_FILE_BROWSER_PROJECT);
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -1010,14 +1010,14 @@ void Prj_PrintOneProject (void)
 			      Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Table head *****/
-   Tbl_TABLE_BeginWideMarginPadding (2);
+   HTM_TABLE_BeginWideMarginPadding (2);
    Prj_ShowProjectsHead (Prj_PRINT_ONE_PROJECT);
 
    /***** Write project *****/
    Prj_ShowOneProject (0,&Prj,Prj_PRINT_ONE_PROJECT);
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -1071,13 +1071,13 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    PrjIsFaulty = Prj_CheckIfPrjIsFaulty (Prj->PrjCod,&Faults);
 
    /***** Write first row of data of this project *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /* Number of project */
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TD_Begin ("rowspan=\"3\" class=\"BIG_INDEX RT COLOR%u\"",
+	 HTM_TD_Begin ("rowspan=\"3\" class=\"BIG_INDEX RT COLOR%u\"",
 		       Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"%u",NumIndex);
 
@@ -1087,7 +1087,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	    Prj_PutWarningIcon ();
 	   }
 
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 	 break;
       default:
 	 break;
@@ -1097,14 +1097,14 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-         Tbl_TD_Begin ("rowspan=\"3\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+         HTM_TD_Begin ("rowspan=\"3\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
          Prj_PutFormsToRemEditOnePrj (Prj,Anchor,ICanViewProjectFiles);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
-         Tbl_TD_Begin ("rowspan=\"3\" class=\"CONTEXT_COL\"");
+         HTM_TD_Begin ("rowspan=\"3\" class=\"CONTEXT_COL\"");
          Prj_PutFormsToRemEditOnePrj (Prj,Anchor,ICanViewProjectFiles);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 	 break;
       default:
 	 break;
@@ -1115,11 +1115,11 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TD_Begin ("id=\"prj_creat_%u\" class=\"%s LT COLOR%u\"",
+	 HTM_TD_Begin ("id=\"prj_creat_%u\" class=\"%s LT COLOR%u\"",
 		       UniqueId,ClassDate,Gbl.RowEvenOdd);
 	 break;
       default:
-	 Tbl_TD_Begin ("id=\"prj_creat_%u\" class=\"%s LT\"",
+	 HTM_TD_Begin ("id=\"prj_creat_%u\" class=\"%s LT\"",
 		       UniqueId,ClassDate);
 	 break;
      }
@@ -1129,18 +1129,18 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
                       "</script>",
             UniqueId,Prj->CreatTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /* Modification date/time */
    UniqueId++;
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TD_Begin ("id=\"prj_modif_%u\" class=\"%s LT COLOR%u\"",
+	 HTM_TD_Begin ("id=\"prj_modif_%u\" class=\"%s LT COLOR%u\"",
 		       UniqueId,ClassDate,Gbl.RowEvenOdd);
 	 break;
       default:
-	 Tbl_TD_Begin ("id=\"prj_modif_%u\" class=\"%s LT\"",
+	 HTM_TD_Begin ("id=\"prj_modif_%u\" class=\"%s LT\"",
 		       UniqueId,ClassDate);
 	 break;
      }
@@ -1150,16 +1150,16 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
                       "</script>",
             UniqueId,Prj->ModifTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /* Project title */
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TD_Begin ("class=\"%s LT COLOR%u\"",ClassTitle,Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"%s LT COLOR%u\"",ClassTitle,Gbl.RowEvenOdd);
 	 break;
       default:
-	 Tbl_TD_Begin ("class=\"%s LT\"",ClassTitle);
+	 HTM_TD_Begin ("class=\"%s LT\"",ClassTitle);
 	 break;
      }
    Lay_StartArticle (Anchor);
@@ -1179,36 +1179,36 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    if (Faults.WrongTitle)
       Prj_PutWarningIcon ();
    Lay_EndArticle ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /* Department */
    Prj_ShowOneProjectDepartment (Prj,ProjectView);
 
    /***** Preassigned? *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-         Tbl_TD_Begin ("colspan=\"2\" class=\"RT %s COLOR%u\"",
+         HTM_TD_Begin ("colspan=\"2\" class=\"RT %s COLOR%u\"",
 		       ClassLabel,Gbl.RowEvenOdd);
 	 break;
       default:
-         Tbl_TD_Begin ("colspan=\"2\" class=\"RT %s\"",
+         HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",
 		       ClassLabel);
          break;
      }
    fprintf (Gbl.F.Out,"%s:",Txt_Preassigned_QUESTION);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-         Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+         HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
 		       ClassData,Gbl.RowEvenOdd);
          break;
       default:
-         Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+         HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
 		       ClassData);
          break;
      }
@@ -1216,44 +1216,44 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
         	                                                         Txt_No);
    Ico_PutIconOff (PreassignedNonpreassigImage[Prj->Preassigned],
 		   Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Number of students *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-         Tbl_TD_Begin ("colspan=\"2\" class=\"RT %s COLOR%u\"",
+         HTM_TD_Begin ("colspan=\"2\" class=\"RT %s COLOR%u\"",
 		       ClassLabel,Gbl.RowEvenOdd);
          break;
       default:
-         Tbl_TD_Begin ("colspan=\"2\" class=\"RT %s\"",
+         HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",
 		       ClassLabel);
          break;
      }
    fprintf (Gbl.F.Out,"%s:",Txt_Number_of_students);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-         Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+         HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
 		       ClassData,Gbl.RowEvenOdd);
          break;
       default:
-         Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+         HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
 		       ClassData);
          break;
      }
    fprintf (Gbl.F.Out,"%u",Prj->NumStds);
    if (Faults.WrongNumStds)
       Prj_PutWarningIcon ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Project members *****/
    Prj_ShowOneProjectMembers (Prj,ProjectView);
@@ -1262,30 +1262,30 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
-	 Tbl_TD_Begin ("colspan=\"6\" class=\"CM COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
+	 HTM_TD_Begin ("colspan=\"6\" class=\"CM COLOR%u\"",Gbl.RowEvenOdd);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
-	 Tbl_TD_End ();
-	 Tbl_TR_End ();
+	 HTM_TD_End ();
+	 HTM_TR_End ();
 
-	 Tbl_TR_Begin ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
-	 Tbl_TD_Begin ("colspan=\"6\" class=\"CM COLOR%u\"",Gbl.RowEvenOdd);
+	 HTM_TR_Begin ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
+	 HTM_TD_Begin ("colspan=\"6\" class=\"CM COLOR%u\"",Gbl.RowEvenOdd);
 	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
-	 Tbl_TD_End ();
-	 Tbl_TR_End ();
+	 HTM_TD_End ();
+	 HTM_TR_End ();
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
-	 Tbl_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
-	 Tbl_TD_Begin ("colspan=\"5\" class=\"CM\"");
+	 HTM_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
+	 HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
 	 Prj_PutIconToToggleProject (UniqueId,"angle-down.svg",Txt_See_more);
-	 Tbl_TD_End ();
-	 Tbl_TR_End ();
+	 HTM_TD_End ();
+	 HTM_TR_End ();
 
-	 Tbl_TR_Begin ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
-	 Tbl_TD_Begin ("colspan=\"5\" class=\"CM\"");
+	 HTM_TR_Begin ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
+	 HTM_TD_Begin ("colspan=\"5\" class=\"CM\"");
 	 Prj_PutIconToToggleProject (UniqueId,"angle-up.svg",Txt_See_less);
-	 Tbl_TD_End ();
-	 Tbl_TR_End ();
+	 HTM_TD_End ();
+	 HTM_TR_End ();
 	 break;
       default:
 	 break;
@@ -1295,38 +1295,38 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
-	 Tbl_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
+	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
+	 HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
 		       ClassLabel,Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
-	 Tbl_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
-	 Tbl_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
+	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
+	 HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
 	 break;
       default:
-	 Tbl_TR_Begin (NULL);
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
+	 HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
 	 break;
      }
    fprintf (Gbl.F.Out,"%s:",Txt_Proposal);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
 		       ClassData,
 		       Gbl.RowEvenOdd);
 	 break;
       default:
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
 		       ClassData);
 	 break;
      }
    fprintf (Gbl.F.Out,"%s",Txt_PROJECT_STATUS[Prj->Proposal]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write rows of data of this project *****/
    /* Description of the project */
@@ -1483,11 +1483,11 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 					     "DAT";
 
    /***** Start row *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Start date/time *****/
    UniqueId++;
-   Tbl_TD_Begin ("id=\"prj_creat_%u\" class=\"LT %s COLOR%u\"",
+   HTM_TD_Begin ("id=\"prj_creat_%u\" class=\"LT %s COLOR%u\"",
 		 UniqueId,ClassDate,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('prj_creat_%u',%ld,"
@@ -1495,11 +1495,11 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
                       "</script>",
             UniqueId,Prj->CreatTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** End date/time *****/
    UniqueId++;
-   Tbl_TD_Begin ("id=\"prj_modif_%u\" class=\"LT %s COLOR%u\"",
+   HTM_TD_Begin ("id=\"prj_modif_%u\" class=\"LT %s COLOR%u\"",
 		 UniqueId,ClassDate,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('prj_modif_%u',%ld,"
@@ -1507,28 +1507,28 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
                       "</script>",
             UniqueId,Prj->ModifTime,
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Project title *****/
-   Tbl_TD_Begin ("class=\"LT %s COLOR%u\"",
+   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",
 		 ClassData,
 		 Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s",Prj->Title);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Department *****/
    Prj_ShowTableAllProjectsDepartment (Prj);
 
    /***** Preassigned? *****/
-   Tbl_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s",(Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
         	                                                   Txt_No);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Number of students *****/
-   Tbl_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%u",Prj->NumStds);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Project members *****/
    for (NumRoleToShow = 0;
@@ -1537,9 +1537,9 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
       Prj_ShowTableAllProjectsMembersWithARole (Prj,Prj_RolesToShow[NumRoleToShow]);
 
    /***** Proposal *****/
-   Tbl_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s",Txt_PROJECT_STATUS[Prj->Proposal]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Write rows of data of this project *****/
    /* Description of the project */
@@ -1555,7 +1555,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
    Prj_ShowTableAllProjectsURL (Prj);
 
    /***** End row *****/
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -1587,10 +1587,10 @@ static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
 	 break;
       default:
-	 Tbl_TD_Begin ("class=\"LT %s\"",ClassData);
+	 HTM_TD_Begin ("class=\"LT %s\"",ClassData);
 	 break;
      }
    if (PutLink)
@@ -1600,8 +1600,8 @@ static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
    fprintf (Gbl.F.Out,"%s",Dpt.FullName);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
-   Tbl_TD_End ();
-   Tbl_TR_End ();
+   HTM_TD_End ();
+   HTM_TR_End ();
   }
 
 static void Prj_ShowTableAllProjectsDepartment (const struct Project *Prj)
@@ -1618,9 +1618,9 @@ static void Prj_ShowTableAllProjectsDepartment (const struct Project *Prj)
    Dpt_GetDataOfDepartmentByCod (&Dpt);
 
    /***** Show department *****/
-   Tbl_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s",Dpt.FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -1646,23 +1646,23 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 Tbl_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",ClassLabel,Gbl.RowEvenOdd);
+	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	 HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",ClassLabel,Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
-	 Tbl_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 Tbl_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
+	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	 HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
 	 break;
       case Prj_PRINT_ONE_PROJECT:
-	 Tbl_TR_Begin (NULL);
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
+	 HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
 	 break;
       default:
 	 // Not applicable
 	 break;
      }
    fprintf (Gbl.F.Out,"%s:",Label);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Change text format *****/
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1681,20 +1681,20 @@ static void Prj_ShowOneProjectTxtField (struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
 		       ClassData,Gbl.RowEvenOdd);
 	 break;
       default:
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
 		       ClassData);
 	 break;
      }
    fprintf (Gbl.F.Out,"%s",TxtField);
    if (Warning)
       Prj_PutWarningIcon ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
@@ -1711,9 +1711,9 @@ static void Prj_ShowTableAllProjectsTxtField (struct Project *Prj,
                      TxtField,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
 
    /***** Write text *****/
-   Tbl_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s",TxtField);
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -1741,32 +1741,32 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 Tbl_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",ClassLabel,Gbl.RowEvenOdd);
+	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	 HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",ClassLabel,Gbl.RowEvenOdd);
 	 break;
       case Prj_FILE_BROWSER_PROJECT:
-	 Tbl_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	 Tbl_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
+	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
+	 HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
 	 break;
       case Prj_PRINT_ONE_PROJECT:
-	 Tbl_TR_Begin (NULL);
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
+	 HTM_TR_Begin (NULL);
+	 HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
 	 break;
       default:
 	 // Not applicable
 	 break;
      }
    fprintf (Gbl.F.Out,"%s:",Txt_URL);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
 		       ClassData,Gbl.RowEvenOdd);
 	 break;
       default:
-	 Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
 		       ClassData);
 	 break;
      }
@@ -1775,9 +1775,9 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
    fprintf (Gbl.F.Out,"%s",Prj->URL);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 static void Prj_ShowTableAllProjectsURL (const struct Project *Prj)
@@ -1789,9 +1789,9 @@ static void Prj_ShowTableAllProjectsURL (const struct Project *Prj)
 					     "DAT";
 
    /***** Show URL *****/
-   Tbl_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"%s",Prj->URL);
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -1861,56 +1861,56 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
    if (WriteRow)
      {
       /***** Start row with label and listing of users *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /* Column for label */
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    Tbl_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s COLOR%u\"",
 			  ClassLabel,Gbl.RowEvenOdd);
 	    fprintf (Gbl.F.Out,"%s:",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
 		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	 case Prj_FILE_BROWSER_PROJECT:
-	    Tbl_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
+	    HTM_TD_Begin ("colspan=\"3\" class=\"RT %s\"",ClassLabel);
 	    fprintf (Gbl.F.Out,"%s:",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
 		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	 case Prj_PRINT_ONE_PROJECT:
-	    Tbl_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
+	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s\"",ClassLabel);
 	    fprintf (Gbl.F.Out,"%s:",
 		     NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInProject] :
 		                    Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	 case Prj_EDIT_ONE_PROJECT:
-	    Tbl_TD_Begin ("class=\"RT ASG_LABEL\"");
+	    HTM_TD_Begin ("class=\"RT ASG_LABEL\"");
 	    fprintf (Gbl.F.Out,"%s:",Txt_PROJECT_ROLES_PLURAL_Abc[RoleInProject]);
 	    break;
 	}
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Start column with list of users */
       switch (ProjectView)
 	{
 	 case Prj_LIST_PROJECTS:
-	    Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s COLOR%u\"",
 			  ClassData,Gbl.RowEvenOdd);
 	    break;
 	 case Prj_FILE_BROWSER_PROJECT:
 	 case Prj_PRINT_ONE_PROJECT:
-	    Tbl_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",
 			  ClassData);
 	    break;
 	 case Prj_EDIT_ONE_PROJECT:
-	    Tbl_TD_Begin ("colspan=\"2\" class=\"LT DAT\"");
+	    HTM_TD_Begin ("colspan=\"2\" class=\"LT DAT\"");
 	    break;
 	}
 
       /***** Begin table with all members with this role *****/
-      Tbl_TABLE_BeginPadding (2);
+      HTM_TABLE_BeginPadding (2);
 
       /***** Write users *****/
       for (NumUsr = 0;
@@ -1925,34 +1925,34 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	   {
 	    /* Start row for this user */
-	    Tbl_TR_Begin (NULL);
+	    HTM_TR_Begin (NULL);
 
 	    /* Icon to remove user */
 	    if (ProjectView == Prj_EDIT_ONE_PROJECT)
 	      {
-	       Tbl_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
+	       HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
 	       Lay_PutContextualLinkOnlyIcon (ActionReqRemUsr[RoleInProject],NULL,
 					      Prj_PutCurrentParams,
 					      "trash.svg",
 					      Txt_Remove);
-	       Tbl_TD_End ();
+	       HTM_TD_End ();
 	      }
 
 	    /* Put user's photo */
-	    Tbl_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");
+	    HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");
 	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
 								 NULL,
 			      "PHOTO21x28",Pho_ZOOM,false);
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
 	    /* Write user's name */
-	    Tbl_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");
+	    HTM_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");
 	    fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
 	    /* End row for this user */
-	    Tbl_TR_End ();
+	    HTM_TR_End ();
 	   }
 	}
 
@@ -1960,8 +1960,8 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
       switch (ProjectView)
 	{
 	 case Prj_EDIT_ONE_PROJECT:
-	    Tbl_TR_Begin (NULL);
-	    Tbl_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
+	    HTM_TR_Begin (NULL);
+	    HTM_TD_Begin ("class=\"PRJ_MEMBER_ICO\"");
 	    Gbl.Prjs.PrjCod = Prj->PrjCod;	// Used to pass project code as a parameter
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Add_USERS,
@@ -1969,26 +1969,26 @@ static void Prj_ShowOneProjectMembersWithARole (const struct Project *Prj,
 	    Ico_PutContextualIconToAdd (ActionReqAddUsr[RoleInProject],NULL,
 				        Prj_PutCurrentParams,
 				        Gbl.Title);
-	    Tbl_TD_End ();
+	    HTM_TD_End ();
 
-	    Tbl_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
-	    Tbl_TD_End ();
+	    HTM_TD_Begin ("class=\"PRJ_MEMBER_PHO\"");	// Column for photo
+	    HTM_TD_End ();
 
-	    Tbl_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");	// Column for name
-	    Tbl_TD_End ();
+	    HTM_TD_Begin ("class=\"PRJ_MEMBER_NAM\"");	// Column for name
+	    HTM_TD_End ();
 
-	    Tbl_TR_End ();
+	    HTM_TR_End ();
 	    break;
 	 default:
 	    break;
 	}
 
       /***** End table with all members with this role *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /***** End row with label and listing of users *****/
-      Tbl_TD_End ();
-      Tbl_TR_End ();
+      HTM_TD_End ();
+      HTM_TR_End ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -2012,7 +2012,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
    NumUsrs = Prj_GetUsrsInPrj (Prj->PrjCod,RoleInProject,&mysql_res);
 
    /***** Start column with list of all members with this role *****/
-   Tbl_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
+   HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
 
    if (NumUsrs)
      {
@@ -2045,7 +2045,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** End column with list of all members with this role *****/
-   Tbl_TD_End ();
+   HTM_TD_End ();
   }
 
 /*****************************************************************************/
@@ -3582,50 +3582,50 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
                       NULL,Box_NOT_CLOSABLE,2);
 
    /* Project title */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /* Department */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:</label>",
             Dpt_PARAM_DPT_COD_NAME,
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Department);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    Dpt_WriteSelectorDepartment (Gbl.Hierarchy.Ins.InsCod,	// Departments in current institution
                                 Prj->DptCod,			// Selected department
                                 "PRJ_INPUT",			// Selector class
                                 0,				// First option
                                 Txt_Another_department,		// Text when no department selected
                                 false);				// Don't submit on change
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /* Preassigned? */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Preassigned_QUESTION);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<select name=\"Preassigned\">");
 
    fprintf (Gbl.F.Out,"<option value=\"Y\"");
@@ -3639,33 +3639,33 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    fprintf (Gbl.F.Out,">%s</option>",Txt_No);
 
    fprintf (Gbl.F.Out,"</select>");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /* Number of students */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Number_of_students);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"number\" name=\"NumStds\""
                       " min=\"0\" value=\"%u\" />",
             Prj->NumStds);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /* Proposal */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Proposal);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<select name=\"Proposal\">");
    for (Proposal  = (Prj_Proposal_t) 0;
 	Proposal <= (Prj_Proposal_t) (Prj_NUM_PROPOSAL_TYPES - 1);
@@ -3678,9 +3678,9 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
       fprintf (Gbl.F.Out,">%s</option>",Txt_PROJECT_STATUS[Proposal]);
      }
    fprintf (Gbl.F.Out,"</select>");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /* Description of the project */
    Prj_EditOneProjectTxtArea ("Description",Txt_Description,
@@ -3698,21 +3698,21 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 			      false);	// Not required
 
    /* URL for additional info */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_URL);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL\" name=\"URL\""
 		      " size=\"45\" maxlength=\"%u\" value=\"%s\" />",
 	    Cns_MAX_CHARS_WWW,Prj->URL);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /* End table, send button and end box */
    if (ItsANewProject)
@@ -3737,22 +3737,22 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RT\"");
+   HTM_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:</label>",
             Id,The_ClassFormInBox[Gbl.Prefs.Theme],Label);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LT\"");
    fprintf (Gbl.F.Out,"<textarea id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\"",
             Id,Id,NumRows);
    if (Required)
       fprintf (Gbl.F.Out," required=\"required\"");
    fprintf (Gbl.F.Out,">%s</textarea>",TxtField);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

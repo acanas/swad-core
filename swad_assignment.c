@@ -37,6 +37,7 @@
 #include "swad_form.h"
 #include "swad_global.h"
 #include "swad_group.h"
+#include "swad_HTML.h"
 #include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
@@ -44,7 +45,6 @@
 #include "swad_role.h"
 #include "swad_setting.h"
 #include "swad_string.h"
-#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -157,7 +157,7 @@ static void Asg_ShowAllAssignments (void)
    if (Gbl.Asgs.Num)
      {
       /***** Table head *****/
-      Tbl_TABLE_BeginWideMarginPadding (2);
+      HTM_TABLE_BeginWideMarginPadding (2);
       Asg_PutHeadForSeeing (false);	// Not print view
 
       /***** Write all the assignments *****/
@@ -168,7 +168,7 @@ static void Asg_ShowAllAssignments (void)
 	                        false);	// Not print view
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
      }
    else	// No assignments created
       Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
@@ -202,14 +202,14 @@ static void Asg_PutHeadForSeeing (bool PrintView)
    extern const char *Txt_Folder;
    Dat_StartEndTime_t Order;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
+   HTM_TH (1,1,"CONTEXT_COL",NULL);	// Column for contextual icons
    for (Order = Dat_START_TIME;
 	Order <= Dat_END_TIME;
 	Order++)
      {
-      Tbl_TH_Begin (1,1,"LM");
+      HTM_TH_Begin (1,1,"LM");
 
       if (!PrintView)
 	{
@@ -230,12 +230,12 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 	 Frm_EndForm ();
 	}
 
-      Tbl_TH_End ();
+      HTM_TH_End ();
      }
-   Tbl_TH (1,1,"LM",Txt_Assignment);
-   Tbl_TH (1,1,"LM",Txt_Folder);
+   HTM_TH (1,1,"LM",Txt_Assignment);
+   HTM_TH (1,1,"LM",Txt_Folder);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -320,7 +320,7 @@ void Asg_PrintOneAssignment (void)
 			      Gbl.Hierarchy.Crs.CrsCod);
 
    /***** Table head *****/
-   Tbl_TABLE_BeginWideMarginPadding (2);
+   HTM_TABLE_BeginWideMarginPadding (2);
    Asg_PutHeadForSeeing (true);		// Print view
 
    /***** Write assignment *****/
@@ -328,7 +328,7 @@ void Asg_PrintOneAssignment (void)
                           true);	// Print view
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -353,16 +353,16 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 
    /***** Write first row of data of this assignment *****/
    /* Forms to remove/edit this assignment */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    if (PrintView)
-      Tbl_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
+      HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
    else
      {
-      Tbl_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\"",Gbl.RowEvenOdd);
       Asg_PutFormsToRemEditOneAsg (&Asg,Anchor);
      }
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /* Start/end date/time */
    UniqueId++;
@@ -372,14 +372,14 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 	StartEndTime++)
      {
       if (PrintView)
-	 Tbl_TD_Begin ("id=\"asg_date_%u_%u\" class=\"%s LB\"",
+	 HTM_TD_Begin ("id=\"asg_date_%u_%u\" class=\"%s LB\"",
 		       (unsigned) StartEndTime,UniqueId,
 		       Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
 					        "DATE_RED_LIGHT") :
 				    (Asg.Open ? "DATE_GREEN" :
 					        "DATE_RED"));
       else
-	 Tbl_TD_Begin ("id=\"asg_date_%u_%u\" class=\"%s LB COLOR%u\"",
+	 HTM_TD_Begin ("id=\"asg_date_%u_%u\" class=\"%s LB COLOR%u\"",
 		       (unsigned) StartEndTime,UniqueId,
 		       Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
 					        "DATE_RED_LIGHT") :
@@ -392,45 +392,45 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 			 "</script>",
 	       (unsigned) StartEndTime,UniqueId,Asg.TimeUTC[StartEndTime],
 	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-      Tbl_TD_End ();
+      HTM_TD_End ();
      }
 
    /* Assignment title */
    if (PrintView)
-      Tbl_TD_Begin ("class=\"%s LT\"",
+      HTM_TD_Begin ("class=\"%s LT\"",
 		    Asg.Hidden ? "ASG_TITLE_LIGHT" :
 				 "ASG_TITLE");
    else
-      Tbl_TD_Begin ("class=\"%s LT COLOR%u\"",
+      HTM_TD_Begin ("class=\"%s LT COLOR%u\"",
 		    Asg.Hidden ? "ASG_TITLE_LIGHT" :
 				 "ASG_TITLE",
 		    Gbl.RowEvenOdd);
    Lay_StartArticle (Anchor);
    fprintf (Gbl.F.Out,"%s",Asg.Title);
    Lay_EndArticle ();
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /* Assignment folder */
-   Tbl_TD_Begin ("class=\"DAT LT");
+   HTM_TD_Begin ("class=\"DAT LT");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
    if (Asg.SendWork == Asg_SEND_WORK)
       Asg_WriteAssignmentFolder (&Asg,PrintView);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Write second row of data of this assignment *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /* Author of the assignment */
    if (PrintView)
-      Tbl_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
    else
-      Tbl_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    Asg_WriteAsgAuthor (&Asg);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /* Text of the assignment */
    Asg_GetAssignmentTxtFromDB (Asg.AsgCod,Txt);
@@ -438,18 +438,18 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
    if (PrintView)
-      Tbl_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
    else
-      Tbl_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Gbl.Crs.Grps.NumGrps)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
    fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>",
             Asg.Hidden ? "DAT_LIGHT" :
         	         "DAT",
             Txt);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);
@@ -1162,60 +1162,60 @@ void Asg_RequestCreatOrEditAsg (void)
 
 
    /***** Assignment title *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
             Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Assignment start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Asg.TimeUTC,Dat_FORM_SECONDS_ON);
 
    /***** Send work? *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Upload_files_QUESTION);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<label class=\"DAT\">%s:"
                       "<input type=\"text\" name=\"Folder\""
                       " size=\"30\" maxlength=\"%u\" value=\"%s\" />"
                       "</label>",
             Txt_Folder,
             Brw_MAX_CHARS_FOLDER,Asg.Folder);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Assignment text *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RT\"");
+   HTM_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Description);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LT\"");
+   HTM_TD_Begin ("class=\"LT\"");
    fprintf (Gbl.F.Out,"<textarea id=\"Txt\" name=\"Txt\""
                       " cols=\"60\" rows=\"10\">");
    if (!ItsANewAssignment)
       fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</textarea>");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Groups *****/
    Asg_ShowLstGrpsToEditAssignment (Asg.AsgCod);
@@ -1251,20 +1251,20 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
    if (Gbl.Crs.Grps.GrpTypes.Num)
      {
       /***** Start box and table *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Groups);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"LT\"");
+      HTM_TD_Begin ("class=\"LT\"");
       Box_StartBoxTable ("100%",NULL,NULL,
                          Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
 
       /***** First row: checkbox to select the whole course *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
+      HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"<label>"
                          "<input type=\"checkbox\" id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
       if (!Asg_CheckIfAsgIsAssociatedToGrps (AsgCod))
@@ -1273,9 +1273,9 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 	                 "%s %s"
                          "</label>",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
@@ -1287,9 +1287,9 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 
       /***** End table and box *****/
       Box_EndBoxTable ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** Free list of groups types and groups in this course *****/

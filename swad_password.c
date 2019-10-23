@@ -37,10 +37,10 @@
 #include "swad_enrolment.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_password.h"
 #include "swad_parameter.h"
-#include "swad_table.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -680,37 +680,37 @@ void Pwd_ShowFormChgMyPwd (void)
      }
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
 
    /***** Current password *****/
    if (IHaveAPasswordInDB) // If I have a password in database...
      {
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"REC_C1_BOT RM\"");
+      HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
       fprintf (Gbl.F.Out,"<label for=\"UsrPwd\" class=\"%s\">%s:</label>",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       Txt_Current_password);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"REC_C2_BOT LM\"");
+      HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       fprintf (Gbl.F.Out,"<input type=\"password\""
 			 " id=\"UsrPwd\" name=\"UsrPwd\""
 			 " size=\"18\" maxlength=\"%u\""
 			 " autocomplete=\"off\" required=\"required\" />",
 	       Pwd_MAX_CHARS_PLAIN_PASSWORD);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** Help message *****/
-   Tbl_TR_Begin (NULL);
-   Tbl_TD_Begin ("colspan=\"2\"");
+   HTM_TR_Begin (NULL);
+   HTM_TD_Begin ("colspan=\"2\"");
    Ale_ShowAlert (Ale_INFO,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
 	          Pwd_MIN_CHARS_PLAIN_PASSWORD);
-   Tbl_TD_End ();
-   Tbl_TR_End ();
+   HTM_TD_End ();
+   HTM_TR_End ();
 
    /***** New password *****/
    Pwd_PutFormToGetNewPasswordTwice ();
@@ -737,16 +737,16 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    extern const char *Txt_Password;
    extern const char *Txt_HELP_password;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Begin form element ****/
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Passwd\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Password);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Passwd\" name=\"Paswd\""
                       " size=\"18\" maxlength=\"%u\" placeholder=\"",
             Pwd_MAX_CHARS_PLAIN_PASSWORD);
@@ -757,9 +757,9 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
 
    /***** End form element ****/
    fprintf (Gbl.F.Out,"\" required=\"required\" />");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -775,15 +775,15 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    /***** 1st password *****/
    /* Begin form element */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"REC_C1_BOT RM\"");
+   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Paswd1\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_New_password);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"REC_C2_BOT LM\"");
+   HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Paswd1\" name=\"Paswd1\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"",
@@ -794,21 +794,21 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    /* End form element */
    fprintf (Gbl.F.Out,"\" required=\"required\" />");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** 2nd password *****/
    /* Begin form element */
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"REC_C1_BOT RM\"");
+   HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    fprintf (Gbl.F.Out,"<label for=\"Paswd2\" class=\"%s\">%s:</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Retype_new_password);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"REC_C2_BOT LM\"");
+   HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Paswd2\" name=\"Paswd2\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"",
@@ -819,9 +819,9 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    /* End form element */
    fprintf (Gbl.F.Out,"\" required=\"required\" />");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -863,9 +863,9 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    Usr_PutParamOtherUsrCodEncrypted ();
 
    /* New password */
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
    Pwd_PutFormToGetNewPasswordTwice ();
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /* End form */
    Btn_PutConfirmButton (Txt_Change_password);

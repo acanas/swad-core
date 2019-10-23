@@ -40,13 +40,13 @@
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
+#include "swad_HTML.h"
 #include "swad_institution.h"
 #include "swad_language.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
 #include "swad_string.h"
-#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -180,12 +180,12 @@ void Ctr_SeeCtrWithPendingDegs (void)
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
       /***** Wrtie heading *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TH (1,1,"LM",Txt_Centre);
-      Tbl_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
+      HTM_TH (1,1,"LM",Txt_Centre);
+      HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** List the centres *****/
       for (NumCtr = 0;
@@ -204,20 +204,20 @@ void Ctr_SeeCtrWithPendingDegs (void)
          Ctr_GetDataOfCentreByCod (&Ctr);
 
          /* Centre logo and full name */
-         Tbl_TR_Begin (NULL);
+         HTM_TR_Begin (NULL);
 
-         Tbl_TD_Begin ("class=\"LM %s\"",BgColor);
+         HTM_TD_Begin ("class=\"LM %s\"",BgColor);
          Ctr_DrawCentreLogoAndNameWithLink (&Ctr,ActSeeDeg,
                                             "DAT_NOBR","CM");
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
          /* Number of pending degrees (row[1]) */
-         Tbl_TD_Begin ("class=\"DAT RM %s\"",BgColor);
+         HTM_TD_Begin ("class=\"DAT RM %s\"",BgColor);
 	 fprintf (Gbl.F.Out,"%s",row[1]);
-         Tbl_TD_End ();
+         HTM_TD_End ();
 
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-         Tbl_TR_End ();
+         HTM_TR_End ();
         }
 
       /***** End table and box *****/
@@ -400,18 +400,18 @@ static void Ctr_Configuration (bool PrintView)
      }
 
    /***** Begin table *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
 
    /***** Institution *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"OthInsCod\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Institution);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
       // Only system admins can move a centre to another institution
@@ -441,20 +441,20 @@ static void Ctr_Configuration (bool PrintView)
      }
    else	// I can not move centre to another institution
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Centre full name *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Centre);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       // Only institution admins and system admins can edit centre full name
@@ -473,20 +473,20 @@ static void Ctr_Configuration (bool PrintView)
      }
    else	// I can not edit centre full name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Centre short name *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Short_name);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT_N LM\"");
+   HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
       // Only institution admins and system admins can edit centre short name
@@ -505,20 +505,20 @@ static void Ctr_Configuration (bool PrintView)
      }
    else	// I can not edit centre short name
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.ShrtName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Place *****/
    Plc.PlcCod = Gbl.Hierarchy.Ctr.PlcCod;
    Plc_GetDataOfPlaceByCod (&Plc);
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Place);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -553,20 +553,20 @@ static void Ctr_Configuration (bool PrintView)
      }
    else	// I can not change centre place
       fprintf (Gbl.F.Out,"%s",Plc.FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Centre WWW *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"RM\"");
+   HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">%s:</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Web);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    if (!PrintView &&
        Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -591,18 +591,18 @@ static void Ctr_Configuration (bool PrintView)
 			 "</div>",
 	       Gbl.Hierarchy.Ctr.WWW,
 	       Gbl.Hierarchy.Ctr.WWW);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** Shortcut to the centre *****/
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Shortcut);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"<a href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\">"
 		      "%s/%s?ctr=%ld"
 		      "</a>",
@@ -612,49 +612,49 @@ static void Ctr_Configuration (bool PrintView)
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Ctr.CtrCod);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    if (PrintView)
      {
       /***** QR code with link to the centre *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_QR_code);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       QR_LinkTo (250,"ctr",Gbl.Hierarchy.Ctr.CtrCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
    else
      {
       /***** Number of users who claim to belong to this centre *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Users_of_the_centre);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsWhoClaimToBelongToCtr (Gbl.Hierarchy.Ctr.CtrCod));
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Number of degrees *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Degrees);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Form to go to see degrees of this centre */
-      Tbl_TD_Begin ("class=\"LM\"");
+      HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormGoTo (ActSeeDeg);
       Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -664,22 +664,22 @@ static void Ctr_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"%u</a>",
 	       Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Number of courses *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Courses);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%u",Crs_GetNumCrssInCtr (Gbl.Hierarchy.Ctr.CtrCod));
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Number of users in courses of this centre *****/
       Ctr_ShowNumUsrsInCrssOfCtr (Rol_TCH);
@@ -689,7 +689,7 @@ static void Ctr_Configuration (bool PrintView)
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -754,19 +754,19 @@ static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
    extern const char *Txt_Users_in_courses;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",
 	    (Role == Rol_UNK) ? Txt_Users_in_courses :
 		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_Begin ("class=\"DAT LM\"");
    fprintf (Gbl.F.Out,"%u",Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.Hierarchy.Ctr.CtrCod));
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -818,7 +818,7 @@ static void Ctr_ListCentres (void)
    if (Gbl.Hierarchy.Ins.Ctrs.Num)	// There are centres in the current institution
      {
       /***** Begin table *****/
-      Tbl_TABLE_BeginWideMarginPadding (2);
+      HTM_TABLE_BeginWideMarginPadding (2);
       Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
       /***** Write all the centres and their nuber of teachers *****/
@@ -828,7 +828,7 @@ static void Ctr_ListCentres (void)
 	 Ctr_ListOneCentreForSeeing (&(Gbl.Hierarchy.Ins.Ctrs.Lst[NumCtr]),NumCtr + 1);
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
      }
    else	// No centres created in the current institution
       Ale_ShowAlert (Ale_INFO,Txt_No_centres);
@@ -912,52 +912,52 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    BgColor = (Ctr->CtrCod == Gbl.Hierarchy.Ctr.CtrCod) ? "LIGHT_BLUE" :
                                                          Gbl.ColorRows[Gbl.RowEvenOdd];
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Number of centre in this list *****/
-   Tbl_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    fprintf (Gbl.F.Out,"%u",NumCtr);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Centre logo and name *****/
-   Tbl_TD_Begin ("class=\"LM %s\"",BgColor);
+   HTM_TD_Begin ("class=\"LM %s\"",BgColor);
    Ctr_DrawCentreLogoAndNameWithLink (Ctr,ActSeeDeg,
                                       TxtClassStrong,"CM");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Number of users who claim to belong to this centre *****/
-   Tbl_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    fprintf (Gbl.F.Out,"%u",Ctr->NumUsrsWhoClaimToBelongToCtr);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Place *****/
-   Tbl_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
+   HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
    fprintf (Gbl.F.Out,"%s",Plc.ShrtName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Number of degrees *****/
-   Tbl_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    fprintf (Gbl.F.Out,"%u",Ctr->Degs.Num);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Number of courses *****/
-   Tbl_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    fprintf (Gbl.F.Out,"%u",Ctr->NumCrss);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Number of users in courses of this centre *****/
-   Tbl_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
+   HTM_TD_Begin ("class=\"%s RM %s\"",TxtClassNormal,BgColor);
    fprintf (Gbl.F.Out,"%u",Ctr->NumUsrs);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Centre status *****/
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-   Tbl_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
+   HTM_TD_Begin ("class=\"%s LM %s\"",TxtClassNormal,BgColor);
    if (StatusTxt != Ctr_STATUS_ACTIVE) // If active ==> do not show anything
       fprintf (Gbl.F.Out,"%s",Txt_CENTRE_STATUS[StatusTxt]);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -1480,7 +1480,7 @@ static void Ctr_ListCentresForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
    Ctr_PutHeadCentresForEdition ();
 
    /***** Write all the centres *****/
@@ -1493,8 +1493,8 @@ static void Ctr_ListCentresForEdition (void)
       ICanEdit = Ctr_CheckIfICanEditACentre (Ctr);
 
       /* Put icon to remove centre */
-      Tbl_TR_Begin (NULL);
-      Tbl_TD_Begin ("class=\"BM\"");
+      HTM_TR_Begin (NULL);
+      HTM_TD_Begin ("class=\"BM\"");
       if (Ctr->Degs.Num ||
 	  Ctr->NumUsrsWhoClaimToBelongToCtr ||
 	  Ctr->NumUsrs ||	// Centre has degrees or users ==> deletion forbidden
@@ -1507,20 +1507,20 @@ static void Ctr_ListCentresForEdition (void)
          Ico_PutIconRemove ();
          Frm_EndForm ();
         }
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Centre code */
-      Tbl_TD_Begin ("class=\"DAT CODE\"");
+      HTM_TD_Begin ("class=\"DAT CODE\"");
       fprintf (Gbl.F.Out,"%ld",Ctr->CtrCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Centre logo */
-      Tbl_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr->FullName);
+      HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr->FullName);
       Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Place */
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgCtrPlc);
@@ -1549,10 +1549,10 @@ static void Ctr_ListCentresForEdition (void)
 	      NumPlc++)
 	    if (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod)
 	       fprintf (Gbl.F.Out,"%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Centre short name */
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenCtrSho);
@@ -1566,10 +1566,10 @@ static void Ctr_ListCentresForEdition (void)
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ctr->ShrtName);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Centre full name */
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActRenCtrFul);
@@ -1583,10 +1583,10 @@ static void Ctr_ListCentresForEdition (void)
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Ctr->FullName);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Centre WWW */
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       if (ICanEdit)
 	{
 	 Frm_StartForm (ActChgCtrWWW);
@@ -1610,33 +1610,33 @@ static void Ctr_ListCentresForEdition (void)
                             "</div>",
                   Ctr->WWW,Ctr->WWW,WWW);
 	}
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Number of users who claim to belong to this centre */
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Ctr->NumUsrsWhoClaimToBelongToCtr);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Number of degrees */
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Ctr->Degs.Num);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Number of users in courses of this centre */
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Ctr->NumUsrs);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Centre requester */
       UsrDat.UsrCod = Ctr->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS);
-      Tbl_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+      HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
       Msg_WriteMsgAuthor (&UsrDat,true,NULL);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Centre status */
       StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM &&
 	  StatusTxt == Ctr_STATUS_PENDING)
 	{
@@ -1656,12 +1656,12 @@ static void Ctr_ListCentresForEdition (void)
 	}
       else if (StatusTxt != Ctr_STATUS_ACTIVE)	// If active ==> do not show anything
 	 fprintf (Gbl.F.Out,"%s",Txt_CENTRE_STATUS[StatusTxt]);
-      Tbl_TD_End ();
-      Tbl_TR_End ();
+      HTM_TD_End ();
+      HTM_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -2509,23 +2509,23 @@ static void Ctr_PutFormToCreateCentre (void)
    /***** Write heading *****/
    Ctr_PutHeadCentresForEdition ();
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Column to remove centre, disabled here *****/
-   Tbl_TD_Begin ("class=\"BM\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"BM\"");
+   HTM_TD_End ();
 
    /***** Centre code *****/
-   Tbl_TD_Begin ("class=\"CODE\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"CODE\"");
+   HTM_TD_End ();
 
    /***** Centre logo *****/
-   Tbl_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
+   HTM_TD_Begin ("title=\"%s\" class=\"HIE_LOGO\"",Ctr_EditingCtr->FullName);
    Log_DrawLogo (Hie_CTR,-1L,"",20,NULL,true);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Place *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_SEL\">"
                       "<option value=\"0\"");
    if (Ctr_EditingCtr->PlcCod == 0)
@@ -2540,60 +2540,60 @@ static void Ctr_PutFormToCreateCentre (void)
         	                                                         "",
                Gbl.Plcs.Lst[NumPlc].ShrtName);
    fprintf (Gbl.F.Out,"</select>");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Centre short name *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
             Hie_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Centre full name *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
             Hie_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Centre WWW *****/
-   Tbl_TD_Begin ("class=\"LM\"");
+   HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />",
             Cns_MAX_CHARS_WWW,Ctr_EditingCtr->WWW);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Number of users who claim to belong to this centre *****/
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"0");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Number of degrees *****/
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"0");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Number of users in courses of this centre *****/
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"0");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Centre requester *****/
-   Tbl_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
+   HTM_TD_Begin ("class=\"DAT INPUT_REQUESTER LT\"");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Centre status *****/
-   Tbl_TD_Begin ("class=\"DAT LM\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"DAT LM\"");
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_centre);
@@ -2616,15 +2616,15 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    Ctr_Order_t Order;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH_Empty (1);
+   HTM_TH_Empty (1);
 
    for (Order = Ctr_ORDER_BY_CENTRE;
 	Order <= Ctr_ORDER_BY_NUM_TCHS;
 	Order++)
      {
-      Tbl_TH_Begin (1,1,Order == Ctr_ORDER_BY_CENTRE ? "LM" :
+      HTM_TH_Begin (1,1,Order == Ctr_ORDER_BY_CENTRE ? "LM" :
 						       "RM");
       if (OrderSelectable)
 	{
@@ -2642,20 +2642,20 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
 	}
-      Tbl_TH_End ();
+      HTM_TH_End ();
      }
 
-   Tbl_TH (1,1,"LM",Txt_Place);
-   Tbl_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
-   Tbl_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH (1,1,"LM",Txt_Place);
+   HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
+   HTM_TH (1,1,"RM",Txt_Courses_ABBREVIATION);
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s+<br />%s",
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   Tbl_TH_End ();
-   Tbl_TH_Empty (1);
+   HTM_TH_End ();
+   HTM_TH_Empty (1);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -2674,26 +2674,26 @@ static void Ctr_PutHeadCentresForEdition (void)
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH_Empty (1);
-   Tbl_TH (1,1,"RM",Txt_Code);
-   Tbl_TH_Empty (1);
-   Tbl_TH (1,1,"LM",Txt_Place);
-   Tbl_TH (1,1,"LM",Txt_Short_name_of_the_centre);
-   Tbl_TH (1,1,"LM",Txt_Full_name_of_the_centre);
-   Tbl_TH (1,1,"LM",Txt_WWW);
-   Tbl_TH (1,1,"RM",Txt_Users);
-   Tbl_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
-   Tbl_TH_Begin (1,1,"RM");
+   HTM_TH_Empty (1);
+   HTM_TH (1,1,"RM",Txt_Code);
+   HTM_TH_Empty (1);
+   HTM_TH (1,1,"LM",Txt_Place);
+   HTM_TH (1,1,"LM",Txt_Short_name_of_the_centre);
+   HTM_TH (1,1,"LM",Txt_Full_name_of_the_centre);
+   HTM_TH (1,1,"LM",Txt_WWW);
+   HTM_TH (1,1,"RM",Txt_Users);
+   HTM_TH (1,1,"RM",Txt_Degrees_ABBREVIATION);
+   HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"%s+<br />%s",
 	    Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
             Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
-   Tbl_TH_End ();
-   Tbl_TH (1,1,"LM",Txt_Requester);
-   Tbl_TH_Empty (1);
+   HTM_TH_End ();
+   HTM_TH (1,1,"LM",Txt_Requester);
+   HTM_TH_Empty (1);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/

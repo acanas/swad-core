@@ -34,10 +34,10 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_parameter.h"
 #include "swad_place.h"
-#include "swad_table.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -113,13 +113,13 @@ void Plc_SeePlaces (void)
       /***** Table head *****/
       Box_StartBox (NULL,Txt_Places,Plc_PutIconsListingPlaces,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
-      Tbl_TABLE_BeginWideMarginPadding (2);
-      Tbl_TR_Begin (NULL);
+      HTM_TABLE_BeginWideMarginPadding (2);
+      HTM_TR_Begin (NULL);
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
 	   Order++)
 	{
-	 Tbl_TH_Begin (1,1,"LM");
+	 HTM_TH_Begin (1,1,"LM");
 
 	 Frm_StartForm (ActSeePlc);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
@@ -132,9 +132,9 @@ void Plc_SeePlaces (void)
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
 
-	 Tbl_TH_End ();
+	 HTM_TH_End ();
 	}
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** Write all places and their nuber of centres *****/
       for (NumPlc = 0;
@@ -142,58 +142,58 @@ void Plc_SeePlaces (void)
 	   NumPlc++)
 	{
 	 /* Write data of this place */
-	 Tbl_TR_Begin (NULL);
+	 HTM_TR_Begin (NULL);
 
-	 Tbl_TD_Begin ("class=\"DAT LM\"");
+	 HTM_TD_Begin ("class=\"DAT LM\"");
 	 fprintf (Gbl.F.Out,"%s",Gbl.Plcs.Lst[NumPlc].FullName);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TD_Begin ("class=\"DAT RM\"");
+	 HTM_TD_Begin ("class=\"DAT RM\"");
 	 fprintf (Gbl.F.Out,"%u",Gbl.Plcs.Lst[NumPlc].NumCtrs);
-	 Tbl_TD_End ();
+	 HTM_TD_End ();
 
-	 Tbl_TR_End ();
+	 HTM_TR_End ();
 	 NumCtrsWithPlc += Gbl.Plcs.Lst[NumPlc].NumCtrs;
 	}
 
       /***** Separation row *****/
-      Tbl_TR_Begin (NULL);
-      Tbl_TD_Begin ("colspan=\"2\" class=\"DAT\"");
+      HTM_TR_Begin (NULL);
+      HTM_TD_Begin ("colspan=\"2\" class=\"DAT\"");
       fprintf (Gbl.F.Out,"&nbsp;");
-      Tbl_TD_End ();
-      Tbl_TR_End ();
+      HTM_TD_End ();
+      HTM_TR_End ();
 
       /***** Write centres (of the current institution) with other place *****/
       NumCtrsInOtherPlcs = Ctr_GetNumCtrsInPlc (0);
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%s",Txt_Other_places);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",NumCtrsInOtherPlcs);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
       NumCtrsWithPlc += NumCtrsInOtherPlcs;
 
       /***** Write centres (of the current institution) with no place *****/
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
-      Tbl_TD_Begin ("class=\"DAT LM\"");
+      HTM_TD_Begin ("class=\"DAT LM\"");
       fprintf (Gbl.F.Out,"%s",Txt_Place_unspecified);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod) -
 	                      NumCtrsWithPlc);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
 
       /***** End table *****/
-      Tbl_TABLE_End ();
+      HTM_TABLE_End ();
 
       /***** Button to create place *****/
       if (Plc_CheckIfICanCreatePlaces ())
@@ -518,7 +518,7 @@ static void Plc_ListPlacesForEdition (void)
    struct Place *Plc;
 
    /***** Write heading *****/
-   Tbl_TABLE_BeginWidePadding (2);
+   HTM_TABLE_BeginWidePadding (2);
    Plc_PutHeadPlaces ();
 
    /***** Write all the places *****/
@@ -528,10 +528,10 @@ static void Plc_ListPlacesForEdition (void)
      {
       Plc = &Gbl.Plcs.Lst[NumPlc];
 
-      Tbl_TR_Begin (NULL);
+      HTM_TR_Begin (NULL);
 
       /* Put icon to remove place */
-      Tbl_TD_Begin ("class=\"BM\"");
+      HTM_TD_Begin ("class=\"BM\"");
       if (Plc->NumCtrs)	// Place has centres ==> deletion forbidden
          Ico_PutIconRemovalNotAllowed ();
       else
@@ -541,15 +541,15 @@ static void Plc_ListPlacesForEdition (void)
          Ico_PutIconRemove ();
          Frm_EndForm ();
         }
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Place code */
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%ld",Plc->PlcCod);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Place short name */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlcSho);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
@@ -558,10 +558,10 @@ static void Plc_ListPlacesForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Place full name */
-      Tbl_TD_Begin ("class=\"CM\"");
+      HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlcFul);
       Plc_PutParamPlcCod (Plc->PlcCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
@@ -570,18 +570,18 @@ static void Plc_ListPlacesForEdition (void)
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,Gbl.Form.Id);
       Frm_EndForm ();
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
       /* Number of centres */
-      Tbl_TD_Begin ("class=\"DAT RM\"");
+      HTM_TD_Begin ("class=\"DAT RM\"");
       fprintf (Gbl.F.Out,"%u",Plc->NumCtrs);
-      Tbl_TD_End ();
+      HTM_TD_End ();
 
-      Tbl_TR_End ();
+      HTM_TR_End ();
      }
 
    /***** End table *****/
-   Tbl_TABLE_End ();
+   HTM_TABLE_End ();
   }
 
 /*****************************************************************************/
@@ -810,40 +810,40 @@ static void Plc_PutFormToCreatePlace (void)
    /***** Write heading *****/
    Plc_PutHeadPlaces ();
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
    /***** Column to remove place, disabled here *****/
-   Tbl_TD_Begin ("class=\"BM\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"BM\"");
+   HTM_TD_End ();
 
    /***** Place code *****/
-   Tbl_TD_Begin ("class=\"CODE\"");
-   Tbl_TD_End ();
+   HTM_TD_Begin ("class=\"CODE\"");
+   HTM_TD_End ();
 
    /***** Place short name *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />",
             Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Place full name *****/
-   Tbl_TD_Begin ("class=\"CM\"");
+   HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />",
             Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName);
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
    /***** Number of centres *****/
-   Tbl_TD_Begin ("class=\"DAT RM\"");
+   HTM_TD_Begin ("class=\"DAT RM\"");
    fprintf (Gbl.F.Out,"0");
-   Tbl_TD_End ();
+   HTM_TD_End ();
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CREATE_BUTTON,Txt_Create_place);
@@ -863,15 +863,15 @@ static void Plc_PutHeadPlaces (void)
    extern const char *Txt_Full_name;
    extern const char *Txt_Centres;
 
-   Tbl_TR_Begin (NULL);
+   HTM_TR_Begin (NULL);
 
-   Tbl_TH (1,1,"BM",NULL);
-   Tbl_TH (1,1,"RM",Txt_Code);
-   Tbl_TH (1,1,"LM",Txt_Short_name);
-   Tbl_TH (1,1,"LM",Txt_Full_name);
-   Tbl_TH (1,1,"RM",Txt_Centres);
+   HTM_TH (1,1,"BM",NULL);
+   HTM_TH (1,1,"RM",Txt_Code);
+   HTM_TH (1,1,"LM",Txt_Short_name);
+   HTM_TH (1,1,"LM",Txt_Full_name);
+   HTM_TH (1,1,"RM",Txt_Centres);
 
-   Tbl_TR_End ();
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
