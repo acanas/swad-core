@@ -76,9 +76,9 @@ void Coo_EditMyPrefsOnCookies (void)
    Frm_StartFormAnchor (ActChgCooPrf,Coo_COOKIES_ID);
 
    /* Start container */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	    (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies) ? "DAT_N LIGHT_BLUE" :
-								 "DAT");
+   HTM_DIV_Begin ("class=\"%s\"",
+	          (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies) ? "DAT_N LIGHT_BLUE" :
+								       "DAT");
    /* Check box */
    fprintf (Gbl.F.Out,"<label>"
 	              "<input type=\"checkbox\""

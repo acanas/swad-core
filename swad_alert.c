@@ -413,12 +413,12 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
       fprintf (Gbl.F.Out," id=\"%s\"",IdAlert);
      }
    fprintf (Gbl.F.Out," class=\"CM\">");
-   fprintf (Gbl.F.Out,"<div class=\"ALERT\">");
+   HTM_DIV_Begin ("class=\"ALERT\"");
 
    /***** Icon to close the alert *****/
    if (AlertClosable[AlertType])
      {
-      fprintf (Gbl.F.Out,"<div class=\"ALERT_CLOSE\">");
+      HTM_DIV_Begin ("class=\"ALERT_CLOSE\"");
       fprintf (Gbl.F.Out,"<a href=\"\""
 			 " onclick=\"toggleDisplay('%s');return false;\" />"
 			 "<img src=\"%s/close.svg\""

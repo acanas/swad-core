@@ -172,14 +172,14 @@ void Att_SeeAttEvents (void)
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
-	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	    HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 	    Att_PutFormToListMyAttendance ();
 	    HTM_DIV_End ();
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	    HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 	    Att_PutFormToListStdsAttendance ();
 	    HTM_DIV_End ();
 	    break;
@@ -481,9 +481,8 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Gbl.Crs.Grps.NumGrps)
       Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Att);
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            Att->Hidden ? "DAT_LIGHT" :
-        	          "DAT");
+   HTM_DIV_Begin ("class=\"%s\"",Att->Hidden ? "DAT_LIGHT" :
+        	                               "DAT");
    fprintf (Gbl.F.Out,"%s",Description);
    HTM_DIV_End ();
    HTM_TD_End ();
@@ -1523,9 +1522,8 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
 					Att->AttCod);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            Att->Hidden ? "ASG_GRP_LIGHT" :
-        	          "ASG_GRP");
+   HTM_DIV_Begin ("class=\"%s\"",Att->Hidden ? "ASG_GRP_LIGHT" :
+        	                               "ASG_GRP");
    fprintf (Gbl.F.Out,"%s: ",
             (NumGrps == 1) ? Txt_Group  :
                              Txt_Groups);

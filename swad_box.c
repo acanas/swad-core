@@ -155,18 +155,18 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
    fprintf (Gbl.F.Out,">");
 
    /***** Row for left and right icons *****/
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO\">");
+   HTM_DIV_Begin ("class=\"FRAME_ICO\"");
 
    /* Contextual icons at left */
    if (FunctionToDrawContextualIcons)
      {
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO_LEFT\">");
+      HTM_DIV_Begin ("class=\"FRAME_ICO_LEFT\"");
       FunctionToDrawContextualIcons ();
       HTM_DIV_End ();
      }
 
    /* Icons at right: help and close */
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO_RIGHT\">");
+   HTM_DIV_Begin ("class=\"FRAME_ICO_RIGHT\"");
 
    if (HelpLink)	// Link to help
      {
@@ -195,9 +195,9 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
    /***** Frame title *****/
    if (Title)
      {
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE %s\">",
-	       Gbl.Box.Nested ? "FRAME_TITLE_SMALL" :
-		                "FRAME_TITLE_BIG");
+      HTM_DIV_Begin ("class=\"FRAME_TITLE %s\"",
+	             Gbl.Box.Nested ? "FRAME_TITLE_SMALL" :
+		                      "FRAME_TITLE_BIG");
       fprintf (Gbl.F.Out,"%s",Title);
       HTM_DIV_End ();
      }

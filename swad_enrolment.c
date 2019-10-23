@@ -670,7 +670,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    /***** Put contextual links *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)	 	// Course selected
      {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
       switch (Role)
 	{
@@ -728,7 +728,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	         Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
 
    /***** Step 1: List of students to be enroled / removed *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s LM\">",The_ClassTitle[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s",Txt_Step_1_Provide_a_list_of_users);
    HTM_DIV_End ();
 
@@ -736,13 +736,13 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    Enr_PutAreaToEnterUsrsIDs ();
 
    /***** Step 2: Put different actions to register/remove users to/from current course *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s LM\">",The_ClassTitle[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s",Txt_Step_2_Select_the_desired_action);
    HTM_DIV_End ();
    Enr_PutActionsRegRemSeveralUsrs ();
 
    /***** Step 3: Select groups in which register / remove users *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s LM\">",The_ClassTitle[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s",Txt_Step_3_Optionally_select_groups);
    HTM_DIV_End ();
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
@@ -759,7 +759,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
      }
 
    /***** Step 4: Confirm register / remove students *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s LM\">",The_ClassTitle[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"%s LM\"",The_ClassTitle[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s",Txt_Step_4_Confirm_the_enrolment_removing);
    HTM_DIV_End ();
    Pwd_AskForConfirmationOnDangerousAction ();
@@ -2888,7 +2888,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
             /***** User name *****/
             HTM_TD_Begin ("class=\"DAT LT\"");
-            fprintf (Gbl.F.Out,"<div class=\"REQUESTER_NAME\">");	// Limited width
+            HTM_DIV_Begin ("class=\"REQUESTER_NAME\"");	// Limited width
             Usr_WriteFirstNameBRSurnames (&UsrDat);
             HTM_DIV_End ();
             HTM_TD_End ();
@@ -3086,7 +3086,7 @@ void Enr_ReqRegRemStd (void)
    if (Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged])
      {
       /***** Put contextual links *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
       /* Put link to go to admin several students */
       Enr_PutLinkToAdminSeveralUsrs (Rol_STD);

@@ -263,7 +263,7 @@ static void Cty_Configuration (bool PrintView)
 
    /***** Title *****/
    PutLink = !PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0];
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
+   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 			 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
@@ -281,7 +281,7 @@ static void Cty_Configuration (bool PrintView)
       Cty_GetMapAttribution (Gbl.Hierarchy.Cty.CtyCod,&MapAttribution);
 
       /* Map image */
-      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CM\">");
+      HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",
 		  Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
@@ -294,7 +294,7 @@ static void Cty_Configuration (bool PrintView)
       /* Map attribution */
       if (!PrintView && Cty_CheckIfICanEditCountries ())
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"CM\">");
+	 HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_StartForm (ActChgCtyMapAtt);
 	 fprintf (Gbl.F.Out,"<textarea name=\"Attribution\""
 			    " cols=\"50\" rows=\"2\""
@@ -308,7 +308,7 @@ static void Cty_Configuration (bool PrintView)
 	}
       else if (MapAttribution)
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">");
+	 HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
 	 fprintf (Gbl.F.Out,"%s",MapAttribution);
 	 HTM_DIV_End ();
 	}
@@ -632,7 +632,7 @@ void Cty_ListCountries2 (void)
    /***** Div for Google Geochart *****/
    if (Gbl.Action.Act == ActSeeCty)
      {
-      fprintf (Gbl.F.Out,"<div id=\"chart_div\">");
+      HTM_DIV_Begin ("id=\"chart_div\"");
       HTM_DIV_End ();
      }
 
@@ -815,7 +815,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    /***** Begin form *****/
    Frm_StartFormGoTo (Action);
    Cty_PutParamCtyCod (Cty->CtyCod);
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassContainer);
+   HTM_DIV_Begin ("class=\"%s\"",ClassContainer);
 
    /***** Link to action *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),

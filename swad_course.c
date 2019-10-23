@@ -145,7 +145,7 @@ static void Crs_EditingCourseDestructor (void);
 void Crs_ShowIntroduction (void)
   {
    /***** Course configuration *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   HTM_DIV_Begin ("class=\"CM\"");
    Crs_Configuration (false);
    HTM_DIV_End ();
 
@@ -204,7 +204,7 @@ static void Crs_Configuration (bool PrintView)
       if (Gbl.Usrs.Me.Role.Logged == Rol_GST ||
 	  Gbl.Usrs.Me.Role.Logged == Rol_USR)
 	{
-         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+         HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
          Enr_PutLinkToRequestSignUp ();
          HTM_DIV_End ();
 	}
@@ -220,7 +220,7 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Title *****/
    PutLink = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
+   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",

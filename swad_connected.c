@@ -86,7 +86,7 @@ void Con_ShowConnectedUsrs (void)
    /***** Link to show last clicks in real time *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
       Sta_PutLinkToLastClicks ();
       HTM_DIV_End ();
      }
@@ -161,7 +161,7 @@ void Con_ShowGlobalConnectedUsrs (void)
      }
 
    /***** Container start *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONNECTED\">");
+   HTM_DIV_Begin ("class=\"CONNECTED\"");
 
    /***** Number of sessions *****/
    /* Link to view more details about connected users */
@@ -181,7 +181,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 
    if (NumUsrsTotal)
      {
-      fprintf (Gbl.F.Out,"<div class=\"CONNECTED_LIST\">");
+      HTM_DIV_Begin ("class=\"CONNECTED_LIST\"");
 
       /***** Write total number of users *****/
       fprintf (Gbl.F.Out,"%u %s:",
@@ -264,11 +264,11 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    struct ConnectedUsrs Usrs;
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONNECTED\">");
+   HTM_DIV_Begin ("class=\"CONNECTED\"");
 
    /***** Number of connected users who belong to scope *****/
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
-   fprintf (Gbl.F.Out,"<div class=\"CONNECTED_TXT\">");
+   HTM_DIV_Begin ("class=\"CONNECTED_TXT\"");
    fprintf (Gbl.F.Out,"%u %s ",Usrs.NumUsrs,Txt_from);
 
    /* Put form to change scope */
@@ -310,7 +310,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
       return;
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONNECTED\">");
+   HTM_DIV_Begin ("class=\"CONNECTED\"");
 
    /***** Number of connected users who belong to course *****/
    /* Link to view more details about connected users */
@@ -847,11 +847,13 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	 break;
      }
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// Limited width
+
+   HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
    Frm_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
    Usr_WriteFirstNameBRSurnames (UsrDat);
    fprintf (Gbl.F.Out,"</a>");
    HTM_DIV_End ();
+
    Frm_EndForm ();
    HTM_TD_End ();
 
@@ -859,10 +861,9 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
 	                                                               "CON_SINCE CON_NO_CRS");
    HTM_TD_Begin ("class=\"%s COLOR%u\"",Font,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<div id=\"hm%u\">",
-            Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
+   HTM_DIV_Begin ("id=\"hm%u\"",Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
    Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
-   HTM_DIV_End ();	// Used for automatic update, only when displayed on right column
+   HTM_DIV_End ();						// Used for automatic update, only when displayed on right column
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1062,13 +1063,15 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		 }
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	      }
-            fprintf (Gbl.F.Out,"<div class=\"CON_NAME_WIDE\">");	// Limited width
+
+            HTM_DIV_Begin ("class=\"CON_NAME_WIDE\"");	// Limited width
 	    if (PutLinkToRecord)
 	       Frm_LinkFormSubmit (UsrDat.FullName,Font,NULL);
             Usr_WriteFirstNameBRSurnames (&UsrDat);
 	    if (PutLinkToRecord)
 	       fprintf (Gbl.F.Out,"</a>");
 	    HTM_DIV_End ();
+
 	    if (PutLinkToRecord)
 	       Frm_EndForm ();
 	    HTM_TD_End ();

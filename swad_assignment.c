@@ -443,9 +443,8 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
       HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Gbl.Crs.Grps.NumGrps)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
-   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">",
-            Asg.Hidden ? "DAT_LIGHT" :
-        	         "DAT");
+   HTM_DIV_Begin ("class=\"PAR %s\"",Asg.Hidden ? "DAT_LIGHT" :
+        	                                  "DAT");
    fprintf (Gbl.F.Out,"%s",Txt);
    HTM_DIV_End ();
    HTM_TD_End ();
@@ -1632,12 +1631,10 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
 			     Asg->AsgCod);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            Asg->Hidden ? "ASG_GRP_LIGHT" :
-        	          "ASG_GRP");
-   fprintf (Gbl.F.Out,"%s: ",
-            (NumRows == 1) ? Txt_Group  :
-                             Txt_Groups);
+   HTM_DIV_Begin ("class=\"%s\"",Asg->Hidden ? "ASG_GRP_LIGHT" :
+        	                               "ASG_GRP");
+   fprintf (Gbl.F.Out,"%s: ",(NumRows == 1) ? Txt_Group  :
+                                              Txt_Groups);
 
    /***** Write groups *****/
    if (NumRows) // Groups found...

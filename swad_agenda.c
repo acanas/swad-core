@@ -193,9 +193,9 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
 	PstFut <= Agd_FUTURE_EVENTS;
 	PstFut++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Agenda.Past__FutureEvents & (1 << PstFut)) ? "PREF_ON" :
-							         "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",
+	             (Gbl.Agenda.Past__FutureEvents & (1 << PstFut)) ? "PREF_ON" :
+							               "PREF_OFF");
       Frm_StartForm (ActSeeMyAgd);
       Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents ^ (1 << PstFut),	// Toggle
 		             Gbl.Agenda.PrivatPublicEvents,
@@ -229,9 +229,9 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
 	PrvPub <= Agd_PUBLIC_EVENTS;
 	PrvPub++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Agenda.PrivatPublicEvents & (1 << PrvPub)) ? "PREF_ON" :
-							         "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",
+	             (Gbl.Agenda.PrivatPublicEvents & (1 << PrvPub)) ? "PREF_ON" :
+							               "PREF_OFF");
       Frm_StartForm (ActSeeMyAgd);
       Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
 		             Gbl.Agenda.PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
@@ -265,9 +265,9 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
 	HidVis <= Agd_VISIBL_EVENTS;
 	HidVis++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Agenda.HiddenVisiblEvents & (1 << HidVis)) ? "PREF_ON" :
-							         "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",
+	             (Gbl.Agenda.HiddenVisiblEvents & (1 << HidVis)) ? "PREF_ON" :
+							               "PREF_OFF");
       Frm_StartForm (ActSeeMyAgd);
       Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
 		             Gbl.Agenda.PrivatPublicEvents,
@@ -772,11 +772,9 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 
    /* Location */
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<div class=\"%s\">"
-	              "%s",
-            AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
-        	              "ASG_TITLE",
-            AgdEvent.Location);
+   HTM_DIV_Begin ("class=\"%s\"",AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
+        	                                   "ASG_TITLE");
+   fprintf (Gbl.F.Out,"%s",AgdEvent.Location);
    HTM_DIV_End ();
    HTM_TD_End ();
 
@@ -805,11 +803,9 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
 
    HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">"
-	              "%s",
-            AgdEvent.Hidden ? "DAT_LIGHT" :
-        	              "DAT",
-            Txt);
+   HTM_DIV_Begin ("class=\"PAR %s\"",AgdEvent.Hidden ? "DAT_LIGHT" :
+        	                                       "DAT");
+   fprintf (Gbl.F.Out,"%s",Txt);
    HTM_DIV_End ();
    HTM_TD_End ();
 

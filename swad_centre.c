@@ -332,7 +332,7 @@ static void Ctr_Configuration (bool PrintView)
 
    /***** Title *****/
    PutLink = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
+   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 			 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
@@ -352,7 +352,7 @@ static void Ctr_Configuration (bool PrintView)
       Ctr_GetPhotoAttribution (Gbl.Hierarchy.Ctr.CtrCod,&PhotoAttribution);
 
       /* Photo image */
-      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CM\">");
+      HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
 		  Gbl.Hierarchy.Ctr.WWW);
@@ -377,7 +377,7 @@ static void Ctr_Configuration (bool PrintView)
 	 // Only centre admins, institution admins and centre admins
 	 // have permission to edit photo attribution
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"CM\">");
+	 HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_StartForm (ActChgCtrPhoAtt);
 	 fprintf (Gbl.F.Out,"<textarea id=\"AttributionArea\""
 			    " name=\"Attribution\" rows=\"2\""
@@ -391,7 +391,7 @@ static void Ctr_Configuration (bool PrintView)
 	}
       else if (PhotoAttribution)
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">");
+	 HTM_DIV_Begin ("class=\"ATTRIBUTION\"");
 	 fprintf (Gbl.F.Out,"%s",PhotoAttribution);
 	 HTM_DIV_End ();
 	}
@@ -586,7 +586,7 @@ static void Ctr_Configuration (bool PrintView)
      }
    else	// I can not change centre WWW
      {
-      fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">");
+      HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 			 "%s"
 			 "</a>",
@@ -1605,7 +1605,7 @@ static void Ctr_ListCentresForEdition (void)
 	{
          Str_Copy (WWW,Ctr->WWW,
                    Cns_MAX_BYTES_WWW);
-         fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_SHORT\">");
+         HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
                             "%s"

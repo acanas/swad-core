@@ -117,9 +117,9 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (vo
 	FirstDayOfWeek++)
       if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
 	{
-         fprintf (Gbl.F.Out,"<div class=\"%s\">",
-		  FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek ? "PREF_ON" :
-							       "PREF_OFF");
+         HTM_DIV_Begin ("class=\"%s\"",
+		        FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek ? "PREF_ON" :
+							             "PREF_OFF");
 	 Frm_StartForm (Action);
 	 Par_PutHiddenParamUnsigned ("FirstDayOfWeek",FirstDayOfWeek);
 	 if (FuncParams)	// Extra parameters depending on the action
@@ -210,7 +210,7 @@ void Cal_DrawCurrentMonth (void)
 
    /***** Draw the month in JavaScript *****/
    /* JavaScript will write HTML here */
-   fprintf (Gbl.F.Out,"<div id=\"CurrentMonth\">");
+   HTM_DIV_Begin ("id=\"CurrentMonth\"");
    HTM_DIV_End ();
 
    /* Write script to draw the month */
@@ -278,7 +278,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 
    /***** Draw several months *****/
    /* JavaScript will write HTML here */
-   fprintf (Gbl.F.Out,"<div id=\"calendar\">");
+   HTM_DIV_Begin ("id=\"calendar\"");
    HTM_DIV_End ();
 
    /* Write script to draw the month */

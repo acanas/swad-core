@@ -116,7 +116,7 @@ void Acc_ShowFormMyAccount (void)
    else	// Not logged
      {
       /***** Links to other actions *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
       Usr_PutLinkToLogin ();
       Pwd_PutLinkToSendNewPasswd ();
       Lan_PutLinkToChangeLanguage ();
@@ -189,7 +189,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    MYSQL_ROW row;
 
    /***** Links to other actions *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
    Usr_PutLinkToLogin ();
    Pwd_PutLinkToSendNewPasswd ();
    Lan_PutLinkToChangeLanguage ();
@@ -325,7 +325,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 void Acc_ShowFormCreateMyAccount (void)
   {
    /***** Links to other actions *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
    Usr_PutLinkToLogin ();
    Pwd_PutLinkToSendNewPasswd ();
    Lan_PutLinkToChangeLanguage ();
@@ -486,16 +486,16 @@ void Acc_ShowFormChgMyAccount (void)
      }
 
    /***** Start container for this user *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
+   HTM_DIV_Begin ("class=\"REC_USR\"");
 
    /***** Show form to change my password and my nickname ****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+   HTM_DIV_Begin ("class=\"REC_LEFT\"");
    Pwd_ShowFormChgMyPwd ();
    Nck_ShowFormChangeMyNickname (IMustCreateMyNicknameNow);
    HTM_DIV_End ();
 
    /***** Show form to change my email and my ID *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+   HTM_DIV_Begin ("class=\"REC_RIGHT\"");
    Mai_ShowFormChangeMyEmail (IMustFillInMyEmailNow,IShouldConfirmMyEmailNow);
    ID_ShowFormChangeMyID (IShouldFillInMyIDNow);
    HTM_DIV_End ();
@@ -525,16 +525,16 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 				  &Gbl.Usrs.Other.UsrDat,NULL);
 
 	 /***** Start container for this user *****/
-	 fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
+	 HTM_DIV_Begin ("class=\"REC_USR\"");
 
 	 /***** Show form to change password and nickname *****/
-	 fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+	 HTM_DIV_Begin ("class=\"REC_LEFT\"");
 	 Pwd_ShowFormChgOtherUsrPwd ();
 	 Nck_ShowFormChangeOtherUsrNickname ();
 	 HTM_DIV_End ();
 
 	 /***** Show form to change email and ID *****/
-	 fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+	 HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 	 Mai_ShowFormChangeOtherUsrEmail ();
 	 ID_ShowFormChangeOtherUsrID ();
 	 HTM_DIV_End ();

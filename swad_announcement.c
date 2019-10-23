@@ -234,7 +234,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
    /***** Show the announcements *****/
    if (NumAnnouncements)
      {
-      fprintf (Gbl.F.Out,"<div class=\"CM\">");
+      HTM_DIV_Begin ("class=\"CM\"");
 
       for (NumAnn = 0;
 	   NumAnn < NumAnnouncements;
@@ -303,8 +303,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    Gbl.Announcements.AnnCod = AnnCod;	// Parameter for forms
 
    /***** Start yellow note *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	    ContainerClass[Status]);
+   HTM_DIV_Begin ("class=\"%s\"",ContainerClass[Status]);
 
    if (ICanEdit)
      {
@@ -324,17 +323,17 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
      }
 
    /***** Write the subject of the announcement *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",SubjectClass[Status]);
+   HTM_DIV_Begin ("class=\"%s\"",SubjectClass[Status]);
    fprintf (Gbl.F.Out,"%s",Subject);
    HTM_DIV_End ();
 
    /***** Write the content of the announcement *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",ContentClass[Status]);
+   HTM_DIV_Begin ("class=\"%s\"",ContentClass[Status]);
    fprintf (Gbl.F.Out,"%s",Content);
    HTM_DIV_End ();
 
    /***** Write form *****/
-   fprintf (Gbl.F.Out,"<div class=\"NOTICE_USERS %s\">",UsersClass[Status]);
+   HTM_DIV_Begin ("class=\"NOTICE_USERS %s\"",UsersClass[Status]);
 
    if (ShowAllAnnouncements)
      {

@@ -310,10 +310,10 @@ void Dat_ShowClientLocalTime (void)
 
    /***** Draw the current date and time *****/
    /* Start container */
-   fprintf (Gbl.F.Out,"<div id=\"current_date\">");
+   HTM_DIV_Begin ("id=\"current_date\"");
 
    /* Month with link to calendar */
-   fprintf (Gbl.F.Out,"<div id=\"current_month\">");
+   HTM_DIV_Begin ("id=\"current_month\"");
    Frm_StartForm (ActSeeCal);
    Frm_LinkFormSubmit (Txt_Show_calendar,"CURRENT_MONTH",NULL);
    fprintf (Gbl.F.Out,"<span id=\"current_month_txt\">"	// JavaScript will write HTML here
@@ -323,7 +323,7 @@ void Dat_ShowClientLocalTime (void)
    HTM_DIV_End ();
 
    /* Day with link to agenda (if I am logged) */
-   fprintf (Gbl.F.Out,"<div id=\"current_day\">");
+   HTM_DIV_Begin ("id=\"current_day\"");
    if (Gbl.Usrs.Me.Logged)
      {
       Frm_StartForm (ActSeeMyAgd);
@@ -339,7 +339,7 @@ void Dat_ShowClientLocalTime (void)
    HTM_DIV_End ();
 
    /* Time */
-   fprintf (Gbl.F.Out,"<div id=\"current_time\">");	// JavaScript will write HTML here
+   HTM_DIV_Begin ("id=\"current_time\"");	// JavaScript will write HTML here
    HTM_DIV_End ();
 
    /* End container */

@@ -1045,7 +1045,7 @@ void Ban_WriteMenuWithBanners (void)
 	NumBan++)
      {
       /* Write data of this banner */
-      fprintf (Gbl.F.Out,"<div class=\"CM\">");
+      HTM_DIV_Begin ("class=\"CM\"");
       Frm_StartForm (ActClkBan);
       Ban_PutParamBanCod (Gbl.Banners.Lst[NumBan].BanCod);
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
