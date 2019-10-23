@@ -409,7 +409,7 @@ static void Tst_PutFormToViewTstResults (Act_Action_t Action)
    Lay_PutContextualLinkIconText (Action,NULL,NULL,
 				  "tasks.svg",
 				  Txt_Results);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -478,9 +478,9 @@ void Tst_ShowNewTest (void)
 	       fprintf (Gbl.F.Out," checked=\"checked\"");
 	    fprintf (Gbl.F.Out," />"
 		               "&nbsp;%s"
-	                       "</label>"
-			       "</div>",
+	                       "</label>",
 		     Txt_Allow_teachers_to_consult_this_test);
+	    HTM_DIV_End ();
 
             /***** End form *****/
             Btn_PutConfirmButton (Txt_Done_assess_test);
@@ -560,7 +560,7 @@ void Tst_AssessTest (void)
 	   {
 	    fprintf (Gbl.F.Out,"<div class=\"TEST_SUBTITLE\">");
 	    fprintf (Gbl.F.Out,Txt_Test_No_X_that_you_make_in_this_course,NumTst);
-	    fprintf (Gbl.F.Out,"</div>");
+	    HTM_DIV_End ();
 	   }
 
 	 /***** Write answers and solutions *****/
@@ -642,13 +642,13 @@ void Tst_ShowTstTotalMark (unsigned NumQsts,double TotalScore)
 
    /***** Write total mark ****/
    fprintf (Gbl.F.Out,"<div class=\"DAT CM\">"
-		      "%s: <span class=\"%s\">%.2lf (%.2lf %s %u)</span>"
-		      "</div>",
+		      "%s: <span class=\"%s\">%.2lf (%.2lf %s %u)</span>",
 	    Txt_Score,
 	    (TotalScoreOverSCORE_MAX >= (double) TotalScoreOverSCORE_MAX / 2.0) ? "ANS_OK" :
 					                                          "ANS_BAD",
 	    TotalScore,
 	    TotalScoreOverSCORE_MAX,Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1036,15 +1036,21 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
    Gbl.Test.QstCod = QstCod;
 
    HTM_TR_Begin (NULL);
+   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 
    /***** Write number of question *****/
-   HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">%u</div>",NumQst + 1);
+   fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">"
+	              "%u",
+	    NumQst + 1);
+   HTM_DIV_End ();
 
    /***** Write answer type (row[2]) *****/
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-   fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">"
+	              "%s",
             Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+   HTM_DIV_End ();
+
    HTM_TD_End ();
 
    /***** Write stem (row[4]) *****/
@@ -1102,9 +1108,9 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 
    /***** Write the stem *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">"
-	              "%s"
-	              "</div>",
+	              "%s",
 	    ClassStem,StemRigorousHTML);
+   HTM_DIV_End ();
 
    /***** Free memory allocated for the stem *****/
    free ((void *) StemRigorousHTML);
@@ -1177,7 +1183,7 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
       Med_PutMediaUploader (NumMediaInForm,"TEST_MED_INPUT");
 
       /***** End container *****/
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    else	// No current image
       /***** Attached media *****/
@@ -1207,9 +1213,9 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 
 	 /***** Write the feedback *****/
 	 fprintf (Gbl.F.Out,"<div class=\"%s\">"
-			    "%s"
-			    "</div>",
+			    "%s",
 		  ClassFeedback,FeedbackRigorousHTML);
+	 HTM_DIV_End ();
 
 	 /***** Free memory allocated for the feedback *****/
 	 free ((void *) FeedbackRigorousHTML);
@@ -1285,7 +1291,7 @@ void Tst_ShowFormAskEditTsts (void)
    /***** Contextual menu *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    TsI_PutFormToImportQuestions ();	// Put link (form) to import questions from XML file
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
@@ -2410,7 +2416,7 @@ void Tst_ListQuestionsToEdit (void)
          else
             /* Button to export questions */
             TsI_PutFormToExportQuestions ();
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 
 	 /* Show the table with the questions */
          Tst_ListOneOrMoreQuestionsForEdition (NumRows,mysql_res);
@@ -2912,14 +2918,21 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
       HTM_TD_End ();
 
-      /* Write number of question */
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">%lu</div>",NumRow + 1);
+
+      /* Write number of question */
+      fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">"
+	                 "%lu",
+	       NumRow + 1);
+      HTM_DIV_End ();
 
       /* Write answer type (row[2]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">%s</div>",
+      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">"
+	                 "%s",
 	       Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+      HTM_DIV_End ();
+
       HTM_TD_End ();
 
       /* Write question code */
@@ -3411,13 +3424,13 @@ void Tst_WriteAnswersEdit (long QstCod)
 	    Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
 	                   "TEST_MED_EDIT_LIST_CONTAINER",
 	                   "TEST_MED_EDIT_LIST");
-            fprintf (Gbl.F.Out,"</div>");
+            HTM_DIV_End ();
 
             /* Write the text of the feedback */
             fprintf (Gbl.F.Out,"<div class=\"TEST_EDI_LIGHT\">");
             if (LengthFeedback)
 	       fprintf (Gbl.F.Out,"%s",Feedback);
-            fprintf (Gbl.F.Out,"</div>");
+            HTM_DIV_End ();
             HTM_TD_End ();
 
             HTM_TR_End ();
@@ -3881,14 +3894,16 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
       Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
                      "TEST_MED_SHOW_CONTAINER",
                      "TEST_MED_SHOW");
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
       if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
 	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
+	      {
 	       fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\">"
-				  "%s"
-				  "</div>",
+				  "%s",
 			Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback);
+	       HTM_DIV_End ();
+	      }
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -4187,10 +4202,10 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
       /***** Write letter for this option *****/
       HTM_TD_Begin ("class=\"MCH_TCH_BUTTON_TD\"");
       fprintf (Gbl.F.Out,"<div class=\"MCH_TCH_BUTTON BT_%c\">"
-			 "%c"
-	                 "</div>",
+			 "%c",
 	       'A' + (char) NumOpt,
 	       'a' + (char) NumOpt);
+      HTM_DIV_End ();
       HTM_TD_End ();
 
       /***** Write the option text and the result *****/
@@ -4369,16 +4384,18 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
          /* Answer text and feedback */
          HTM_TD_Begin ("class=\"LT\"");
          fprintf (Gbl.F.Out,"<div class=\"ANS_0\">"
-                            "%s"
-                            "</div>",
+                            "%s",
                   Gbl.Test.Answer.Options[NumOpt].Text);
+         HTM_DIV_End ();
 	 if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
 	    if (Gbl.Test.Answer.Options[NumOpt].Feedback)
 	       if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
+		 {
 		  fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\">"
-				     "%s"
-				     "</div>",
+				     "%s",
 			   Gbl.Test.Answer.Options[NumOpt].Feedback);
+		  HTM_DIV_End ();
+		 }
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -5395,7 +5412,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	                 "</label>");
 
       /* End of right column */
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
       HTM_TD_End ();
 
       HTM_TR_End ();

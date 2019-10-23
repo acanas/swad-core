@@ -514,8 +514,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	              " spellcheck=\"false\" readonly>",
 	    Txt_XML_file_content);
    XML_PrintTree (RootElem);
-   fprintf (Gbl.F.Out,"</textarea>"
-                      "</div>");
+   fprintf (Gbl.F.Out,"</textarea>");
+   HTM_DIV_End ();
 
    /***** Get questions from XML tree and print them *****/
    /* Go to <test> element */
@@ -1153,14 +1153,16 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             /* Write the text and the feedback of the answer */
             HTM_TD_Begin ("class=\"LT\"");
             fprintf (Gbl.F.Out,"<div class=\"%s\">"
-        	               "%s"
-        	               "</div>",
+        	               "%s",
                      ClassStem,AnswerText);
+            HTM_DIV_End ();
             if (AnswerFeedbackLength)
+              {
 	       fprintf (Gbl.F.Out,"<div class=\"TEST_EDI_LIGHT\">"
-		                  "%s"
-		                  "</div>",
+		                  "%s",
 			AnswerFeedback);
+	       HTM_DIV_End ();
+              }
             HTM_TD_End ();
 
             HTM_TR_End ();

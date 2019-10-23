@@ -641,7 +641,7 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
       fprintf (Gbl.F.Out,"%s %s",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -672,9 +672,13 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
    HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
 
    if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished match
+     {
       /* Current question index / total of questions */
-      fprintf (Gbl.F.Out,"<div class=\"DAT\">%u/%u</div>",
+      fprintf (Gbl.F.Out,"<div class=\"DAT\">"
+	                 "%u/%u",
 	       Match->Status.QstInd,NumQsts);
+      HTM_DIV_End ();
+     }
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {
@@ -1349,7 +1353,7 @@ void Mch_ResumeMatch (void)
    /***** Show current match status *****/
    fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1782,7 +1786,7 @@ void Mch_PlayPauseMatch (void)
    /***** Show current match status *****/
    fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1815,7 +1819,7 @@ void Mch_ChangeNumColsMch (void)
    /***** Show current match status *****/
    fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1847,7 +1851,7 @@ void Mch_ToggleVisibilResultsMchQst (void)
    /***** Show current match status *****/
    fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1876,7 +1880,7 @@ void Mch_BackMatch (void)
    /***** Show current match status *****/
    fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1905,7 +1909,7 @@ void Mch_ForwardMatch (void)
    /***** Show current match status *****/
    fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MCH_CONT\">");
    Mch_ShowMatchStatusForTch (&Match);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2112,7 +2116,7 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
    fprintf (Gbl.F.Out,"<div id=\"match_left\""
 	              " class=\"MCH_REFRESHABLE_TEACHER\">");
    Mch_ShowRefreshablePartTch (Match);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Buttons *****/
    Mch_PutMatchControlButtons (Match);
@@ -2128,7 +2132,7 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
    // Mch_PutCheckboxResult (Match);
 
    /***** End left container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 static void Mch_ShowRefreshablePartTch (struct Match *Match)
@@ -2144,7 +2148,7 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
    Mch_GetElapsedTimeInMatch (Match,&Time);
    Dat_WriteHoursMinutesSeconds (&Time);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Write number of question *****/
    Mch_ShowNumQstInMatch (Match);
@@ -2159,7 +2163,7 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
      }
    else
       fprintf (Gbl.F.Out,"-");
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Number of users who have answered this question *****/
    NumAnswerersQst = Mch_GetNumUsrsWhoHaveAnswerQst (Match->MchCod,
@@ -2182,8 +2186,8 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
       fprintf (Gbl.F.Out,"/%u",
 	       Match->Status.NumPlayers);
      }
-   fprintf (Gbl.F.Out,"</strong>"
-		      "</div>");
+   fprintf (Gbl.F.Out,"</strong>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2205,7 +2209,7 @@ static void Mch_ShowRightColumnTch (struct Match *Match)
       Mch_ShowMatchScore (Match);
 
    /***** End right container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2218,13 +2222,14 @@ static void Mch_ShowLeftColumnStd (struct Match *Match)
    fprintf (Gbl.F.Out,"<div class=\"MCH_LEFT\">");
 
    /***** Top *****/
-   fprintf (Gbl.F.Out,"<div class=\"MCH_TOP\"></div>");
+   fprintf (Gbl.F.Out,"<div class=\"MCH_TOP\">");
+   HTM_DIV_End ();
 
    /***** Write number of question *****/
    Mch_ShowNumQstInMatch (Match);
 
    /***** End left container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2254,14 +2259,14 @@ static void Mch_ShowRightColumnStd (struct Match *Match)
 	 /* Show current question and possible answers */
 	 Mch_ShowQuestionAndAnswersStd (Match);
 
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	}
      }
    else	// Not being played
       Mch_ShowWaitImage (Txt_Please_wait_);
 
    /***** End right container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2281,7 +2286,7 @@ static void Mch_ShowNumQstInMatch (struct Match *Match)
       fprintf (Gbl.F.Out,"%s",Txt_MATCH_End);
    else
       fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2308,7 +2313,7 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
       /* Put button to go back */
       Mch_PutBigButton (ActBckMch,"backward",Match->MchCod,
 			Mch_ICON_PREVIOUS,Txt_Go_back);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Center button *****/
    fprintf (Gbl.F.Out,"<div class=\"MCH_BUTTON_CENTER_CONTAINER\">");
@@ -2327,7 +2332,7 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
 	 /* Put disabled button to play match */
 	 Mch_PutBigButtonOff (Mch_ICON_PLAY);
      }
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Right button *****/
    fprintf (Gbl.F.Out,"<div class=\"MCH_BUTTON_RIGHT_CONTAINER\">");
@@ -2338,10 +2343,10 @@ static void Mch_PutMatchControlButtons (struct Match *Match)
       /* Put button to show answers */
       Mch_PutBigButton (ActFwdMch,"forward",Match->MchCod,
 			Mch_ICON_NEXT,Txt_Go_forward);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** End buttons container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2386,7 +2391,7 @@ static void Mch_ShowFormColumns (struct Match *Match)
       /***** End form *****/
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** End selector *****/
@@ -2426,7 +2431,7 @@ static void Mch_ShowFormViewResult (struct Match *Match)
    Frm_EndForm ();
 
    /***** End selector *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
    Set_EndOneSettingSelector ();
   }
 
@@ -2437,7 +2442,10 @@ static void Mch_ShowFormViewResult (struct Match *Match)
 static void Mch_ShowMatchTitle (struct Match *Match)
   {
    /***** Match title *****/
-   fprintf (Gbl.F.Out,"<div class=\"MCH_TOP\">%s</div>",Match->Title);
+   fprintf (Gbl.F.Out,"<div class=\"MCH_TOP\">"
+	              "%s",
+	    Match->Title);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2514,7 +2522,7 @@ static void Mch_ShowQuestionAndAnswersTch (struct Match *Match)
 	 break;
      }
 
-   fprintf (Gbl.F.Out,"</div>");			// Bottom
+   HTM_DIV_End ();			// Bottom
   }
 
 /*****************************************************************************/
@@ -2866,11 +2874,11 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 	              " onclick=\"document.getElementById('%s').submit();"
 	              " return false;\">"
 	              "<i class=\"%s\"></i>"
-	              "</a>"
-	              "</div>",
+	              "</a>",
 	    Txt,
 	    Id,
 	    Icon);
+   HTM_DIV_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -2881,10 +2889,10 @@ static void Mch_PutBigButtonOff (const char *Icon)
    /***** Put inactive icon *****/
    fprintf (Gbl.F.Out,"<div class=\"MCH_BUTTON_CONTAINER\">"
                       "<div class=\"MCH_BUTTON_OFF\">"
-	              "<i class=\"%s\"></i>"
-	              "</div>"
-	              "</div>",
+	              "<i class=\"%s\"></i>",
 	    Icon);
+   HTM_DIV_End ();
+   HTM_DIV_End ();
   }
 
 static void Mch_PutBigButtonClose (void)
@@ -2897,9 +2905,9 @@ static void Mch_PutBigButtonClose (void)
 	              " onclick=\"window.close();"
 	              " return false;\"\">"
 	              "<i class=\"%s\"></i>"
-	              "</a>"
-	              "</div>",
+	              "</a>",
 	    Txt_Close,Mch_ICON_CLOSE);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2911,11 +2919,11 @@ static void Mch_ShowWaitImage (const char *Txt)
    fprintf (Gbl.F.Out,"<div class=\"MCH_WAIT_CONTAINER\">"
 		      "<img src=\"%s/wait.gif\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"MCH_WAIT_IMG\" />"
-		      "</div>",
+		      " class=\"MCH_WAIT_IMG\" />",
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt,
 	    Txt);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -3014,7 +3022,7 @@ void Mch_JoinMatchAsStd (void)
    /***** Show current match status *****/
    fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MCH_CONT\">");
    Mch_ShowMatchStatusForStd (&Match);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -3219,7 +3227,7 @@ void Mch_ReceiveQuestionAnswer (void)
    /***** Show current match status *****/
    fprintf (Gbl.F.Out,"<div id=\"match\" class=\"MCH_CONT\">");
    Mch_ShowMatchStatusForStd (&Match);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -3372,7 +3380,7 @@ static void Mch_DrawBarNumUsrs (unsigned NumAnswerersAns,unsigned NumAnswerersQs
    fprintf (Gbl.F.Out,"%s",Gbl.Title);
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

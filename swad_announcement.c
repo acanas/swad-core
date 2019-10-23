@@ -260,7 +260,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 	                         0,false,false);
 	}
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
   }
 
@@ -324,12 +324,16 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
      }
 
    /***** Write the subject of the announcement *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+	              "%s",
             SubjectClass[Status],Subject);
+   HTM_DIV_End ();
 
    /***** Write the content of the announcement *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+	              "%s",
             ContentClass[Status],Content);
+   HTM_DIV_End ();
 
    /***** Write form *****/
    fprintf (Gbl.F.Out,"<div class=\"NOTICE_USERS %s\">",UsersClass[Status]);
@@ -356,10 +360,10 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 				     "close.svg",
 				     Txt_Do_not_show_again);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** End yellow note *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

@@ -787,11 +787,11 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    fprintf (Gbl.F.Out,"<div class=\"TIT CM\">"
                       "<img src=\"%s/%s_map.jpg\""
                       " usemap=\"#faces_map\""
-                      " alt=\"%s\" title=\"%s\" />"
-                      "</div>",
+                      " alt=\"%s\" title=\"%s\" />",
             Cfg_URL_PHOTO_TMP_PUBLIC,
             Gbl.UniqueNameEncrypted,
             Txt_Faces_detected,Txt_Faces_detected);
+   HTM_DIV_End ();
 
    /***** End alert *****/
    Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);
@@ -1213,22 +1213,23 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       /* First name and surnames */
       fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_N_BOLD\">");	// Limited width
       Usr_WriteFirstNameBRSurnames (UsrDat);
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
 
       /* Nickname */
       if (UsrDat->Nickname[0])
+	{
 	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_N\">"
-			    "@%s"
-			    "</div>",
+			    "@%s",
 		  UsrDat->Nickname);
-
+	 HTM_DIV_End ();
+	}
 
       /* Institution full name and institution country */
       if (UsrDat->InsCod > 0)
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">");
 	 Ins_WriteInstitutionNameAndCty (UsrDat->InsCod);
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	}
       /* User's country */
       else if (UsrDat->CtyCod > 0)
@@ -1236,20 +1237,22 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">");
 	 Cty_WriteCountryName (UsrDat->CtyCod,
 			       NULL);	// Don't put link to country
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	}
 
       /* Main degree (in which the user has more courses) short name */
       Usr_GetMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
       if (MainDegreeShrtName[0])
+	{
 	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
 		            "<div class=\"ZOOM_DEG\""
 		            " style=\"background-image:url('%s/%s');\">"
-			    "%s"
-			    "</div>"
-			    "</div>",
+			    "%s",
 		  Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
 		  MainDegreeShrtName);
+	 HTM_DIV_End ();
+	 HTM_DIV_End ();
+	}
 
       /* Following and followers */
       if (UsrDat->Nickname[0])	// Get social data only if nickname is retrieved (in some actions)
@@ -1259,13 +1262,13 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 			    "<span class=\"DAT_N_BOLD\">%u</span>"
 			    "<span class=\"DAT_SMALL\">&nbsp;%s&nbsp;</span>"
 			    "<span class=\"DAT_N_BOLD\">%u</span>"
-			    "<span class=\"DAT_SMALL\">&nbsp;%s</span>"
-			    "</div>",
+			    "<span class=\"DAT_SMALL\">&nbsp;%s</span>",
 		  NumFollowing,Txt_Following,
 		  NumFollowers,Txt_Followers);
+	 HTM_DIV_End ();
         }
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Start image *****/
@@ -2053,7 +2056,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       /***** End selector, form and div *****/
       fprintf (Gbl.F.Out,"</select>");
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
 
       /***** Free list of all the degrees with students *****/
       Deg_FreeListDegs (&Degs);
@@ -2490,10 +2493,10 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 	    Frm_SetUniqueId (IdCaption);
 	    fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">"
 	                       "<div class=\"ZOOM_TXT_LINE DAT_N\">"
-			       "%s"
-	                       "</div>"
-			       "</div>",
+			       "%s",
 		     IdCaption,PhotoCaption);
+	    HTM_DIV_End ();
+	    HTM_DIV_End ();
 	   }
 	}
      }
@@ -2520,13 +2523,13 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 	              "%s<br />"
 	              "%d&nbsp;%s<br />"
 	              "%d&nbsp;%s<br />"
-	              "(%d%%)"
-	              "</div>",
+	              "(%d%%)",
             Deg->ShrtName,
             NumStds,Txt_students_ABBREVIATION,
             NumStdsWithPhoto,Txt_photos,
             NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
         	          0);
+   HTM_DIV_End ();
    if (SeeOrPrint == Pho_DEGREES_SEE)
      {
       fprintf (Gbl.F.Out,"</a>");

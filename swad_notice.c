@@ -36,6 +36,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
@@ -475,9 +476,9 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 			    "<img src=\"%s/rss-square.svg\""
 			    " alt=\"RSS\" title=\"RSS\""
 			    " class=\"ICO16x16\" />"
-			    "</a>"
-			    "</div>",
+			    "</a>",
 		  Cfg_URL_ICON_PUBLIC);
+	 HTM_DIV_End ();
 	 break;
       case Not_LIST_FULL_NOTICES:
 	 /***** Button to add new notice *****/
@@ -703,15 +704,18 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('not_date_%u',%ld,"
                       "%u,'<br />','%s',true,false,0x6);"
-                      "</script>"
-	              "</div>",
+                      "</script>",
 	    UniqueId,(long) TimeUTC,
 	    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   HTM_DIV_End ();
 
    /***** Write the content of the notice *****/
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
-      fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT_BRIEF\">%s</div>",Content);
+      fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT_BRIEF\">"
+	                 "%s",
+	       Content);
+      HTM_DIV_End ();
 
       /* Put form to view full notice */
       fprintf (Gbl.F.Out,"<div class=\"CM\">");
@@ -719,11 +723,15 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,Not_PutParams,
 				     "ellipsis-h.svg",
 				     Txt_See_full_notice);
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    else
-      fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
+     {
+      fprintf (Gbl.F.Out,"<div class=\"%s\">"
+	                 "%s",
 	       TextClass[Status],Content);
+      HTM_DIV_End ();
+     }
 
    /***** Write the author *****/
    fprintf (Gbl.F.Out,"<div class=\"NOTICE_AUTHOR %s\">",	// Limited width
@@ -733,16 +741,16 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS)) // Get from the database the data of the autor
       Usr_WriteFirstNameBRSurnames (&UsrDat);
    Usr_UsrDataDestructor (&UsrDat);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** End yellow note *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** End article for this notice *****/
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
      {
       if (Highlight)
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
       Lay_EndArticle ();
      }
 

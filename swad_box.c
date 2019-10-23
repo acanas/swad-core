@@ -162,7 +162,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
      {
       fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO_LEFT\">");
       FunctionToDrawContextualIcons ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /* Icons at right: help and close */
@@ -187,19 +187,21 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
       fprintf (Gbl.F.Out,"</a>");
      }
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** End row for left and right icons *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Frame title *****/
    if (Title)
+     {
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE %s\">"
-	                 "%s"
-	                 "</div>",
+	                 "%s",
 	       Gbl.Box.Nested ? "FRAME_TITLE_SMALL" :
 		            "FRAME_TITLE_BIG",
 	       Title);
+      HTM_DIV_End ();
+     }
   }
 
 void Box_EndBoxTable (void)
@@ -231,8 +233,8 @@ void Box_EndBox (void)
       free (Gbl.Box.Ids[Gbl.Box.Nested]);
 
    /***** End box and box container *****/
-   fprintf (Gbl.F.Out,"</div>"
-		      "</div>");
+   HTM_DIV_End ();
+   HTM_DIV_End ();
 
    /***** Decrease level of nesting *****/
    Gbl.Box.Nested--;

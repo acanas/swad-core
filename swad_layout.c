@@ -275,10 +275,10 @@ void Lay_WriteStartOfPage (void)
 			    "<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
 			    " alt=\"\" title=\"\""
 			    " class=\"IMG_USR\" />"
-			    "<div id=\"zoomTxt\" class=\"CM\">"
-			    "</div>"
-			    "</div>",
+			    "<div id=\"zoomTxt\" class=\"CM\">",
 		  Cfg_URL_ICON_PUBLIC);
+	 HTM_DIV_End ();
+	 HTM_DIV_End ();
 	 break;
       case Act_BRW_NEW_TAB:
       case Act_BRW_2ND_TAB:
@@ -402,18 +402,18 @@ static void Lay_WriteEndOfPage (void)
    if (!Gbl.Layout.DivsEndWritten)
      {
       /***** End of central part of main zone *****/
-      fprintf (Gbl.F.Out,"</div>"	// Canvas (main zone to output content of the current action)
-                         "</div>"	// Layout with horizontal or vertical menu
-			 "</div>");	// main_zone_central_container
+      HTM_DIV_End ();	// Canvas (main zone to output content of the current action)
+      HTM_DIV_End ();	// Layout with horizontal or vertical menu
+      HTM_DIV_End ();	// main_zone_central_container
 
       /***** Write page footer *****/
       if (Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB)
          Lay_WriteFootFromHTMLFile ();
 
       /***** End of main zone and page *****/
-      fprintf (Gbl.F.Out,"</div>"	// main_zone_central
-			 "</div>"	// main_zone
-                         "</div>\n");	// whole_page_* (box that contains the whole page except the foot)
+      HTM_DIV_End ();	// main_zone_central
+      HTM_DIV_End ();	// main_zone
+      HTM_DIV_End ();	// whole_page_* (box that contains the whole page except the foot)
 
       Gbl.Layout.DivsEndWritten = true;
      }
@@ -942,8 +942,8 @@ static void Lay_WritePageTopHeading (void)
             Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
-   fprintf (Gbl.F.Out,"</div>"
-                      "<div id=\"head_row_1_logo_big\">");
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_big\">");
    Frm_LinkFormSubmit (Txt_System,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CM\""
@@ -952,20 +952,20 @@ static void Lay_WritePageTopHeading (void)
             Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
-   fprintf (Gbl.F.Out,"</div>"
-                      "<div id=\"head_row_1_tagline\">");
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_tagline\">");
    Frm_LinkFormSubmit (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"%s"
-	              "</a>"
-                      "</div>",	// head_row_1_tagline
+	              "</a>",
             Txt_TAGLINE_BR);
+   HTM_DIV_End ();	// head_row_1_tagline
 
    /* End form to go to home page */
    Frm_EndForm ();
 
    Sch_PutFormToSearchInPageTopHeading ();
 
-   fprintf (Gbl.F.Out,"</div>");	// head_row_1_left
+   HTM_DIV_End ();	// head_row_1_left
 
    /* 1st. row, 3rd. column: logged user or language selection,
       and link to open/close session */
@@ -980,11 +980,11 @@ static void Lay_WritePageTopHeading (void)
       Usr_PutFormLogOut ();
    else
       Usr_PutFormLogIn ();
-   fprintf (Gbl.F.Out,"</div>"		// login_box
-	              "</div>");	// head_row_1_right
+   HTM_DIV_End ();	// login_box
+   HTM_DIV_End ();	// head_row_1_right
 
    /* End 1st. row */
-   fprintf (Gbl.F.Out,"</div>");	// head_row_1
+   HTM_DIV_End ();	// head_row_1
 
    /***** 2nd. row *****/
    /* Start second row */
@@ -995,22 +995,22 @@ static void Lay_WritePageTopHeading (void)
       Clock with hour:minute (server hour is shown) */
    fprintf (Gbl.F.Out,"<div id=\"head_row_2_time\">");
    Dat_ShowClientLocalTime ();
-   fprintf (Gbl.F.Out,"</div>");	// End first column
+   HTM_DIV_End ();	// End first column
 
    /* 2nd. row, 2nd. column: degree and course */
    fprintf (Gbl.F.Out,"<div id=\"head_row_2_hierarchy\">");
    Lay_WriteBreadcrumb ();
    Hie_WriteBigNameCtyInsCtrDegCrs ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /* 2nd. row, 3rd. column */
    fprintf (Gbl.F.Out,"<div id=\"msg\">");	// Used for AJAX based refresh
    if (Gbl.Usrs.Me.Logged)
       Ntf_WriteNumberOfNewNtfs ();
-   fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
+   HTM_DIV_End ();		// Used for AJAX based refresh
 
    /* End 2nd. row */
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** End header *****/
    fprintf (Gbl.F.Out,"</header>");
@@ -1046,18 +1046,22 @@ static void Lay_WriteTitleAction (void)
 	    Act_GetIcon (Act_GetSuperAction (Gbl.Action.Act)));
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s &gt; %s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+	              "%s &gt; %s",
 	    The_ClassTitleAction[Gbl.Prefs.Theme],
 	    Txt_TABS_TXT[Act_GetTab (Gbl.Action.Act)],
 	    Act_GetTitleAction (Gbl.Action.Act));
+   HTM_DIV_End ();
 
    /***** Subtitle *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+	              "%s",
 	    The_ClassSubtitleAction[Gbl.Prefs.Theme],
 	    Act_GetSubtitleAction (Gbl.Action.Act));
+   HTM_DIV_End ();
 
    /***** Container end *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1082,12 +1086,12 @@ static void Lay_ShowLeftColumn (void)
    else
       /***** Institutional links *****/
       Lnk_WriteMenuWithInstitutionalLinks ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Month *****/
    fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
    Cal_DrawCurrentMonth ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Notices (yellow notes) *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)
@@ -1095,10 +1099,10 @@ static void Lay_ShowLeftColumn (void)
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
       Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
 	               -1L);	// No notice highlighted
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1120,7 +1124,7 @@ static void Lay_ShowRightColumn (void)
       fprintf (Gbl.F.Out,"<div id=\"globalconnected\""	// Used for AJAX based refresh
 			 " class=\"LEFT_RIGHT_CELL\">");
       Con_ShowGlobalConnectedUsrs ();
-      fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
+      HTM_DIV_End ();			// Used for AJAX based refresh
      }
 
    /***** Number of connected users in the current course *****/
@@ -1130,7 +1134,7 @@ static void Lay_ShowRightColumn (void)
 	                 " class=\"LEFT_RIGHT_CELL\">");
       Gbl.Scope.Current = Hie_CRS;
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
-      fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
+      HTM_DIV_End ();			// Used for AJAX based refresh
      }
    else if (Gbl.Usrs.Me.Logged)		// I am logged
      {
@@ -1152,10 +1156,11 @@ static void Lay_ShowRightColumn (void)
 		      " (NOW(),'Fol_SuggestUsrsToFollowMainZoneOnRightColumn: %ld us')",
 		      tv_usecs);
       */
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    if (!Gbl.Usrs.Me.Logged)
+     {
       /***** SWADroid advertisement *****/
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">"
 			 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
@@ -1163,10 +1168,11 @@ static void Lay_ShowRightColumn (void)
 			 "<img src=\"%s/SWADroid120x200.png\""
 			 " alt=\"SWADroid\" title=\"SWADroid\""
 			 " style=\"width:150px; height:250px;\" />"
-			 "</a>"
-			 "</div>",
+			 "</a>",
 	       Txt_If_you_have_an_Android_device_try_SWADroid,
 	       Cfg_URL_ICON_PUBLIC);
+      HTM_DIV_End ();
+     }
   }
 
 /*****************************************************************************/
@@ -1304,8 +1310,8 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 		  Text);
 
    /***** End label and container *****/
-   fprintf (Gbl.F.Out,"</label>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</label>");
+   HTM_DIV_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1467,21 +1473,23 @@ static void Lay_WriteAboutZone (void)
 		      "<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
 		      " style=\"width:%upx; height:%upx;\" />"
-		      "<div>%s</div>"
-		      "</a>",
+		      "<div>"
+		      "%s",
 	    Cfg_ABOUT_URL,
 	    Cfg_URL_ICON_PUBLIC,Cfg_ABOUT_LOGO,
 	    Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
 	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
 	    Cfg_ABOUT_NAME);
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"</a>");
 
    /***** Questions and problems *****/
    fprintf (Gbl.F.Out,"<div>"
 		      "%s: "
-		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">%s</a>"
-		      "</div>",
+		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">%s</a>",
 	    Txt_Questions_and_problems,
 	    Cfg_PLATFORM_RESPONSIBLE_EMAIL,Cfg_PLATFORM_RESPONSIBLE_EMAIL);
+   HTM_DIV_End ();
 
    /***** About and time to generate and send page *****/
    fprintf (Gbl.F.Out,"<div>");
@@ -1496,7 +1504,7 @@ static void Lay_WriteAboutZone (void)
    /* Time to generate and send page */
    Sta_WriteTimeToGenerateAndSendPage ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** End about zone *****/
    fprintf (Gbl.F.Out,"</address>");	// about_zone
@@ -1733,7 +1741,7 @@ void Lay_AdvertisementMobile (void)
       /***** End table and box *****/
       Box_EndBoxTable ();
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
   }
 
@@ -1799,11 +1807,11 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
                       " "
                       "%s: <code>%s</code>"
                       " "
-                      "%s: <code>%s</code>"
-                      "</div>",
+                      "%s: <code>%s</code>",
             Txt_Text,Text,
             Txt_Inline_math,InlineMath,
             Txt_Equation_centered,Equation);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

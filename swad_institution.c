@@ -345,7 +345,7 @@ static void Ins_Configuration (bool PrintView)
    fprintf (Gbl.F.Out,"<br />%s",Gbl.Hierarchy.Ins.FullName);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -484,13 +484,15 @@ static void Ins_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else	// I can not change institution WWW
+     {
       fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
 			 "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 			 "%s"
-			 "</a>"
-			 "</div>",
+			 "</a>",
 	       Gbl.Hierarchy.Ins.WWW,
 	       Gbl.Hierarchy.Ins.WWW);
+      HTM_DIV_End ();
+     }
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1557,9 +1559,9 @@ static void Ins_ListInstitutionsForEdition (void)
                             "<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
                             "%s"
-                            "</a>"
-                            "</div>",
+                            "</a>",
                   Ins->WWW,Ins->WWW,WWW);
+         HTM_DIV_End ();
 	}
       HTM_TD_End ();
 

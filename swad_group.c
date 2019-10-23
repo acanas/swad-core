@@ -416,7 +416,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
 			       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
 			       "CopyMessageToHiddenFields();");
    Ico_PutCalculateIconWithText (Txt_Update_users);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -467,10 +467,10 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
    fprintf (Gbl.F.Out," />"
 		      "<label for=\"AllGroups\" class=\"%s\">"
 		      "&nbsp;%s"
-		      "</label>"
-		      "</div>",
+		      "</label>",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_All_groups);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -5019,7 +5019,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) (void))
 		                                           "sitemap.svg",
 			      Txt_GROUP_WHICH_GROUPS[WhichGrps]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** End setting selector *****/

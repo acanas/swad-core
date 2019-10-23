@@ -3412,7 +3412,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 	      UsrDat->Email,UsrDat->Email);
    Frm_EndForm ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
 
    HTM_TD_End ();
@@ -3786,7 +3786,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
 	 ZIP_PutLinkToCreateZIPAsgWrk ();
      }
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Initialize hidden levels *****/
    switch (Gbl.FileBrowser.Type)
@@ -4068,8 +4068,12 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
          return;
      }
    if (Subtitle[0])
-      fprintf (Gbl.F.Out,"<div class=\"BROWSER_SUBTITLE\">%s</div>",
+     {
+      fprintf (Gbl.F.Out,"<div class=\"BROWSER_SUBTITLE\">"
+	                 "%s",
                Subtitle);
+      HTM_DIV_End ();
+     }
   }
 
 /*****************************************************************************/
@@ -4133,7 +4137,7 @@ static void Brw_ShowAndStoreSizeOfFileTree (void)
    else
      fprintf (Gbl.F.Out,"&nbsp;");	// Blank to occupy the same space as the text for the browser size
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -5914,7 +5918,7 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
    Frm_EndForm ();
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -5946,7 +5950,7 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    Frm_EndForm ();
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -6092,7 +6096,7 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
 	    Txt_Folder);
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -6117,7 +6121,7 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 					  Open);
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -6289,7 +6293,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
         }
 
       /***** End cell *****/
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
 
       HTM_TD_End ();
      }
@@ -6322,7 +6326,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
          Ico_PutIconOff ("unlock.svg",
                          Txt_Public_open_educational_resource_OER_for_everyone);
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
       HTM_TD_End ();
      }
   }
@@ -8402,10 +8406,10 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    Brw_PutImplicitParamsFileBrowser ();
 
    fprintf (Gbl.F.Out,"<div class=\"dz-message\">"
-		      "<span class=\"DAT_LIGHT\">%s</span>"
-		      "</div>"
-                      "</form>",
+		      "<span class=\"DAT_LIGHT\">%s</span>",
             Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
+   HTM_DIV_End ();
+   Frm_EndForm ();
 
    /***** Put button to refresh file browser after upload *****/
    Frm_StartForm (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type]);
@@ -8422,7 +8426,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** End box *****/
    Box_EndBox ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -8455,7 +8459,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /***** End box *****/
    Box_EndBox ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

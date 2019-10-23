@@ -983,7 +983,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       Usr_PutHiddenParSelectedUsrsCods ();
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Initialize structure with user's data *****/
@@ -1020,10 +1020,10 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 	 /* Shared record */
 	 fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
 	 Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,RecordSectionId);
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 
          /* End container for this user */
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	 Lay_EndSection ();
 
 	 NumUsr++;
@@ -1083,7 +1083,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    Rec_ShowLinkToPrintPreviewOfRecords ();
    Frm_EndForm ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Show optional alert (result of editing data in course record) *****/
    Ale_ShowAlerts (NULL);
@@ -1094,7 +1094,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    /***** Shared record *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Record of the student in the course *****/
    if (Gbl.Crs.Records.LstFields.Num)	// There are fields in the record
@@ -1107,7 +1107,7 @@ static void Rec_ShowRecordOneStdCrs (void)
 	      {
 	       fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
 	       Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
-	       fprintf (Gbl.F.Out,"</div>");
+	       HTM_DIV_End ();
 	      }
             break;
          case Rol_NET:
@@ -1115,7 +1115,7 @@ static void Rec_ShowRecordOneStdCrs (void)
          case Rol_SYS_ADM:
 	    fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
 	    Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,&Gbl.Usrs.Other.UsrDat,NULL);
-	    fprintf (Gbl.F.Out,"</div>");
+	    HTM_DIV_End ();
 	    break;
          default:
             break;
@@ -1123,7 +1123,7 @@ static void Rec_ShowRecordOneStdCrs (void)
      }
 
    /***** End container for this user *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Free list of fields of records *****/
    Rec_FreeListFields ();
@@ -1183,7 +1183,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       Usr_PutHiddenParSelectedUsrsCods ();
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Initialize structure with user's data *****/
@@ -1222,7 +1222,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
             /* Shared record */
             fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
             Rec_ShowSharedUsrRecord (ShaTypeOfView,&UsrDat,RecordSectionId);
-            fprintf (Gbl.F.Out,"</div>");
+            HTM_DIV_End ();
 
             /* Record of the student in the course */
             if (Gbl.Crs.Records.LstFields.Num)	// There are fields in the record
@@ -1236,12 +1236,12 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 		 {
 		  fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
 		  Rec_ShowCrsRecord (CrsTypeOfView,&UsrDat,RecordSectionId);
-                  fprintf (Gbl.F.Out,"</div>");
+                  HTM_DIV_End ();
 		 }
               }
 
             /* End container for this user */
-            fprintf (Gbl.F.Out,"</div>");
+            HTM_DIV_End ();
             Lay_EndSection ();
 
             NumUsr++;
@@ -1315,7 +1315,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    Rec_ShowLinkToPrintPreviewOfRecords ();
    Frm_EndForm ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Start container for this user *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
@@ -1323,7 +1323,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    /***** Shared record *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Office hours *****/
    if (ShowOfficeHours)
@@ -1334,11 +1334,11 @@ static void Rec_ShowRecordOneTchCrs (void)
                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
       TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
       Box_EndBox ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Start container for this user *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1404,7 +1404,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Initialize structure with user's data *****/
@@ -1443,7 +1443,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	    /* Shared record */
             fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
             Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,RecordSectionId);
-            fprintf (Gbl.F.Out,"</div>");
+            HTM_DIV_End ();
 
             /* Office hours */
             if (ShowOfficeHours)
@@ -1454,11 +1454,11 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
 	       TT_ShowTimeTable (UsrDat.UsrCod);
 	       Box_EndBox ();
-               fprintf (Gbl.F.Out,"</div>");
+               HTM_DIV_End ();
               }
 
             /* End container for this user */
-            fprintf (Gbl.F.Out,"</div>");
+            HTM_DIV_End ();
             Lay_EndSection ();
 
             NumUsr++;
@@ -2106,7 +2106,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
    /***** Show user's record *****/
    fprintf (Gbl.F.Out,"<div class=\"CM\">");
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_USR_CHECK,UsrDat,NULL);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2631,7 +2631,7 @@ static void Rec_PutIconsCommands (void)
       Acc_PutIconToChangeUsrAccount ();
 
       /***** End container *****/
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
   }
 
@@ -2757,7 +2757,7 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
    /***** Surname 2 *****/
    fprintf (Gbl.F.Out,"%s",UsrDat->Surname2);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
    HTM_TD_End ();
   }
 
@@ -2792,7 +2792,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	 Frm_EndForm ();
 	}
      }
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
    HTM_TD_End ();
   }
 
@@ -2849,7 +2849,7 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
 		  UsrDat->Email);
       else
 	 fprintf (Gbl.F.Out,"********");
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    HTM_TD_End ();
 
@@ -3766,10 +3766,10 @@ static void Rec_WriteLinkToDataProtectionClause (void)
    extern const char *Txt_DATA_PROTECTION_CLAUSE;
 
    fprintf (Gbl.F.Out,"<div class=\"CM\">"
-	              "<a class=\"TIT\" href=\"%s/\" target=\"_blank\">%s</a>"
-	              "</div>",
+	              "<a class=\"TIT\" href=\"%s/\" target=\"_blank\">%s</a>",
             Cfg_URL_DATA_PROTECTION_PUBLIC,
             Txt_DATA_PROTECTION_CLAUSE);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -3971,7 +3971,7 @@ void Rec_ShowMySharedRecordAndMore (void)
    /* My shared record card */
    Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Right part *****/
    /* Start container for right part */
@@ -3984,10 +3984,10 @@ void Rec_ShowMySharedRecordAndMore (void)
    Net_ShowFormMyWebsAndSocialNets ();
 
    /* End container for right part */
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Data protection clause *****/
    Rec_WriteLinkToDataProtectionClause ();

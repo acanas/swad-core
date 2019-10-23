@@ -88,7 +88,7 @@ void Con_ShowConnectedUsrs (void)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Sta_PutLinkToLastClicks ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Get scope *****/
@@ -195,11 +195,11 @@ void Con_ShowGlobalConnectedUsrs (void)
 	   Role++)
 	 Con_ShowGlobalConnectedUsrsRole (Role,NumUsrs[Role]);
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Container end *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
@@ -277,7 +277,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    Sco_PutSelectorScope ("ScopeCon",true);
    Frm_EndForm ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Number of teachers and students *****/
    HTM_TABLE_Begin ("CONNECTED_LIST");
@@ -292,7 +292,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -338,7 +338,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    HTM_TABLE_End ();
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -851,8 +851,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// Limited width
    Frm_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
    Usr_WriteFirstNameBRSurnames (UsrDat);
-   fprintf (Gbl.F.Out,"</a>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</a>");
+   HTM_DIV_End ();
    Frm_EndForm ();
    HTM_TD_End ();
 
@@ -863,7 +863,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"<div id=\"hm%u\">",
             Gbl.Usrs.Connected.NumUsr);	// Used for automatic update, only when displayed on right column
    Dat_WriteHoursMinutesSecondsFromSeconds (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].TimeDiff);
-   fprintf (Gbl.F.Out,"</div>");	// Used for automatic update, only when displayed on right column
+   HTM_DIV_End ();	// Used for automatic update, only when displayed on right column
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1069,7 +1069,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
             Usr_WriteFirstNameBRSurnames (&UsrDat);
 	    if (PutLinkToRecord)
 	       fprintf (Gbl.F.Out,"</a>");
-	    fprintf (Gbl.F.Out,"</div>");
+	    HTM_DIV_End ();
 	    if (PutLinkToRecord)
 	       Frm_EndForm ();
 	    HTM_TD_End ();

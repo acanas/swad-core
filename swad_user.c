@@ -2594,7 +2594,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    Pwd_PutLinkToSendNewPasswd ();
    Lan_PutLinkToChangeLanguage ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    fprintf (Gbl.F.Out,"<div class=\"CM\">");
 
@@ -2616,14 +2616,14 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
                       "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
                       " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
                       " value=\"%s\""
-                      " autofocus=\"autofocus\" required=\"required\" />"
-	              "</div>",
+                      " autofocus=\"autofocus\" required=\"required\" />",
             Cfg_URL_ICON_PUBLIC,
             Txt_User[Usr_SEX_UNKNOWN],
             Txt_User[Usr_SEX_UNKNOWN],
             Cns_MAX_CHARS_EMAIL_ADDRESS,
             Txt_nick_email_or_ID,
             Gbl.Usrs.Me.UsrIdLogin);
+   HTM_DIV_End ();
 
    /***** User's password *****/
    fprintf (Gbl.F.Out,"<div class=\"LM\">"
@@ -2632,13 +2632,13 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 	              " class=\"CONTEXT_ICO_16x16\" />"
 	              "</label>"
 		      "<input type=\"password\" id=\"UsrPwd\" name=\"UsrPwd\""
-		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />"
-	              "</div>",
+		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />",
             Cfg_URL_ICON_PUBLIC,
             Txt_Password,
             Txt_Password,
             Pwd_MAX_CHARS_PLAIN_PASSWORD,
             Txt_password);
+   HTM_DIV_End ();
 
    /***** End table, send button and end box *****/
    Box_EndBoxTableWithButton (Btn_CONFIRM_BUTTON,Txt_Log_in);
@@ -2646,7 +2646,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    /***** End form *****/
    Frm_EndForm ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2841,7 +2841,7 @@ void Usr_WriteLoggedUsrHead (void)
    if (Gbl.Usrs.Me.UsrDat.FirstName[0])
       fprintf (Gbl.F.Out,"&nbsp;%s",Gbl.Usrs.Me.UsrDat.FirstName);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -4141,7 +4141,7 @@ static void Usr_WriteUsrData (const char *BgColor,
       fprintf (Gbl.F.Out,"</a>");
 
    /***** End container and table cell *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
    HTM_TD_End ();
   }
 
@@ -6097,7 +6097,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void))
    if (FuncParams)
       FuncParams ();
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Select Usr_LIST_AS_LISTING *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
@@ -6114,7 +6114,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void))
       FuncParams ();
    Usr_PutCheckboxListWithPhotos ();
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    Set_EndOneSettingSelector ();
    Set_EndSettingsHead ();
@@ -7315,7 +7315,7 @@ void Usr_ListDataAdms (void)
 	    /* Put link to remove old users */
 	    Enr_PutLinkToRemOldUsrs ();
 
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	 break;
       default:
 	 break;
@@ -7360,7 +7360,7 @@ void Usr_ListDataAdms (void)
    Sco_PutSelectorScope ("ScopeUsr",true);
    fprintf (Gbl.F.Out,"</label>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    if (Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs)
      {
@@ -7371,8 +7371,8 @@ void Usr_ListDataAdms (void)
       Sco_PutParamCurrentScope ();
       Usr_PutCheckboxListWithPhotos ();
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>"
-                         "</div>");
+      HTM_DIV_End ();
+      HTM_DIV_End ();
 
       /***** Heading row with column names *****/
       HTM_TABLE_Begin (NULL);
@@ -7805,7 +7805,7 @@ void Usr_SeeGuests (void)
       /* Put link to remove old users */
       Enr_PutLinkToRemOldUsrs ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -7834,7 +7834,7 @@ void Usr_SeeGuests (void)
       Sco_PutSelectorScope ("ScopeUsr",true);
       fprintf (Gbl.F.Out,"</label>");
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Start section with user list *****/
@@ -7944,7 +7944,7 @@ void Usr_SeeStudents (void)
 	    Rec_PutLinkToEditRecordFields ();
 	   }
 
-         fprintf (Gbl.F.Out,"</div>");
+         HTM_DIV_End ();
 	 break;
       default:
 	 break;
@@ -7985,7 +7985,7 @@ void Usr_SeeStudents (void)
 	 Sco_PutSelectorScope ("ScopeUsr",true);
 	 fprintf (Gbl.F.Out,"</label>");
 	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	 break;
       default:
 	 break;
@@ -8113,7 +8113,7 @@ void Usr_SeeTeachers (void)
 	    Enr_PutLinkToAdminSeveralUsrs (Rol_TCH);
 	   }
 
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 
          break;
       default:
@@ -8163,7 +8163,7 @@ void Usr_SeeTeachers (void)
    Sco_PutSelectorScope ("ScopeUsr",true);
    fprintf (Gbl.F.Out,"</label>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Hie_CRS)
@@ -8971,7 +8971,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	 else
 	    fprintf (Gbl.F.Out,"&nbsp;");
 
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 
 	 /***** End user's cell *****/
 	 HTM_TD_End ();
@@ -9713,10 +9713,12 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
 	             "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_1_LINE %s\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_1_LINE %s\">"
+	              "%s",
             Hidden ? "AUTHOR_TXT_LIGHT" :
         	     "AUTHOR_TXT",
             UsrDat.FullName);
+   HTM_DIV_End ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);

@@ -31,6 +31,7 @@
 #include "swad_box.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_scope.h"
 #include "swad_theme.h"
 
@@ -281,7 +282,7 @@ void Log_RequestLogo (Hie_Level_t Scope)
       Lay_PutContextualLinkIconText (ActionRem,NULL,NULL,
 				     "trash.svg",
 				     Txt_Remove_logo);
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Begin form to upload logo *****/

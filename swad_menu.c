@@ -31,6 +31,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_layout.h"
 #include "swad_menu.h"
 #include "swad_parameter.h"
@@ -375,18 +376,18 @@ void Mnu_WriteMenuThisTab (void)
 
          /***** Text *****/
 	 fprintf (Gbl.F.Out,"<div class=\"MENU_TEXT %s\">"
-	                    "%s"
-	                    "</div>",
+	                    "%s",
 		  The_ClassTxtMenu[Gbl.Prefs.Theme],
 		  Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
+	 HTM_DIV_End ();
 
          /***** End link and form *****/
-         fprintf (Gbl.F.Out,"</div>"
-	                    "</a>");
+	 HTM_DIV_End ();
+         fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
 
          /***** End container used to highlight this option *****/
-         fprintf (Gbl.F.Out,"</div>");
+         HTM_DIV_End ();
 
          /***** End element *****/
          fprintf (Gbl.F.Out,"</li>");
@@ -424,7 +425,7 @@ void Mnu_PutIconsToSelectMenu (void)
       Par_PutHiddenParamUnsigned ("Menu",(unsigned) Menu);
       Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
    Set_EndSettingsHead ();

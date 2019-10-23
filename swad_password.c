@@ -899,13 +899,13 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 		      "<input type=\"password\" name=\"OthUsrPwd\""
 		      " size=\"16\" maxlength=\"%u\""
 		      " autocomplete=\"off\" required=\"required\" />"
-		      "</label>"
-		      "</div>",
+		      "</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_I_understand_that_this_action_can_not_be_undone,
             The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_For_security_enter_your_password,
 	    Pwd_MAX_CHARS_PLAIN_PASSWORD);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

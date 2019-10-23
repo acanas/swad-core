@@ -62,4 +62,6 @@ void HTM_TD_End (void);
 void HTM_TD_Empty (unsigned NumColumns);
 void HTM_TD_ColouredEmpty (unsigned NumColumns);
 
+void HTM_DIV_End (void);
+
 #endif

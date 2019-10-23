@@ -272,7 +272,7 @@ static void Cty_Configuration (bool PrintView)
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Country map (and link to WWW if exists) *****/
    if (Cty_CheckIfCountryMapExists (&Gbl.Hierarchy.Cty))
@@ -289,7 +289,7 @@ static void Cty_Configuration (bool PrintView)
 							  "COUNTRY_MAP_SHOW");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
 
       /* Map attribution */
       if (!PrintView && Cty_CheckIfICanEditCountries ())
@@ -304,13 +304,15 @@ static void Cty_Configuration (bool PrintView)
 	    fprintf (Gbl.F.Out,"%s",MapAttribution);
 	 fprintf (Gbl.F.Out,"</textarea>");
 	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	}
       else if (MapAttribution)
+	{
 	 fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">"
-			    "%s"
-			    "</div>",
+			    "%s",
 		  MapAttribution);
+	 HTM_DIV_End ();
+	}
 
       /* Free memory used for map attribution */
       Cty_FreeMapAttribution (&MapAttribution);
@@ -630,7 +632,10 @@ void Cty_ListCountries2 (void)
 
    /***** Div for Google Geochart *****/
    if (Gbl.Action.Act == ActSeeCty)
-      fprintf (Gbl.F.Out,"<div id=\"chart_div\"></div>");
+     {
+      fprintf (Gbl.F.Out,"<div id=\"chart_div\">");
+      HTM_DIV_End ();
+     }
 
    /***** Free list of countries *****/
    Cty_FreeListCountries ();
@@ -826,10 +831,10 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    Str_Copy (CountryName,Cty->Name[Gbl.Prefs.Language],
              Cty_MAX_BYTES_NAME);
    fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;(%s)"
-	              "</a>"
-	              "</div>",
+	              "</a>",
 	    CountryName,
 	    Cty->Alpha2);
+   HTM_DIV_End ();
 
    /***** End form *****/
    Frm_EndForm ();

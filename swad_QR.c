@@ -27,6 +27,7 @@
 
 #include "swad_action.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
@@ -109,14 +110,14 @@ void QR_ImageQRCode (const char *QRString)
                       "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s\""
                       " alt=\"%s\" title=\"%s\""
                       " style=\"width:%upx; height:%upx;"
-                      " border:1px dashed silver;\" />"
-                      "</div>",
+                      " border:1px dashed silver;\" />",
             QR_CODE_SIZE,
             QR_CODE_SIZE,QR_CODE_SIZE,
             QRString,
             QRString,
             QRString,
             QR_CODE_SIZE,QR_CODE_SIZE);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -152,10 +153,10 @@ void QR_ExamAnnnouncement (void)
    fprintf (Gbl.F.Out,"<div class=\"CM\">"
                       "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld\""
                       " alt=\"%s\" title=\"%s\""
-                      " style=\"width:250px; height:250px;\" />"
-                      "</div>",
+                      " style=\"width:250px; height:250px;\" />",
             300,300,
             Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Crs.CrsCod,Act_GetActCod (ActSeeAllExaAnn),
             Txt_Link_to_announcement_of_exam,
             Txt_Link_to_announcement_of_exam);
+   HTM_DIV_End ();
   }

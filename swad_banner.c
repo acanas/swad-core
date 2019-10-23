@@ -1059,7 +1059,7 @@ void Ban_WriteMenuWithBanners (void)
                Gbl.Banners.Lst[NumBan].ShrtName,
                Gbl.Banners.Lst[NumBan].FullName);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Free list of banners *****/

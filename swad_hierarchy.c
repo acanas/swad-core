@@ -70,7 +70,7 @@ void Hie_SeePending (void)
    /* Put link to remove old courses */
    Crs_PutLinkToRemoveOldCrss ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** List countries with pending institutions *****/
    Cty_SeeCtyWithPendingInss ();
@@ -215,7 +215,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    fprintf (Gbl.F.Out,"%s</a>",Txt_System);
    Frm_EndForm ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    if (Gbl.Hierarchy.Cty.CtyCod > 0)		// Country selected...
      {
@@ -231,7 +231,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"%s</a>",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    else
      {
@@ -246,7 +246,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"%s</a>",Txt_Country);
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    if (Gbl.Hierarchy.Ins.InsCod > 0)		// Institution selected...
@@ -263,7 +263,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"%s</a>",Gbl.Hierarchy.Ins.ShrtName);
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    else if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
@@ -278,7 +278,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"%s</a>",Txt_Institution);
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    else
      {
@@ -290,7 +290,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Hidden institution *****/
       fprintf (Gbl.F.Out,"%s",Txt_Institution);
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Centre selected...
@@ -307,7 +307,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"%s</a>",Gbl.Hierarchy.Ctr.ShrtName);
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    else if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
@@ -322,7 +322,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"%s</a>",Txt_Centre);
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    else
      {
@@ -334,7 +334,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Hidden centre *****/
       fprintf (Gbl.F.Out,"%s",Txt_Centre);
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    if (Gbl.Hierarchy.Deg.DegCod > 0)	// Degree selected...
@@ -351,7 +351,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"%s</a>",Gbl.Hierarchy.Deg.ShrtName);
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    else if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
@@ -366,7 +366,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       fprintf (Gbl.F.Out,"%s</a>",Txt_Degree);
       Frm_EndForm ();
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    else
      {
@@ -378,7 +378,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Hidden degree *****/
       fprintf (Gbl.F.Out,"%s",Txt_Degree);
 
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    fprintf (Gbl.F.Out,"<div class=\"BC%s %s\">",
@@ -390,7 +390,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    /***** Separator *****/
    fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -438,39 +438,43 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    /***** Text *****/
    fprintf (Gbl.F.Out,"<div id=\"big_name_container\">");
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
+     {
       fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
-			 "%s"	// Full name
-			 "</div>"
-			 "<div class=\"NOT_SHOWN\">"
-			 " / "	// To separate
-			 "</div>"
-			 "<div id=\"big_short_name\">"
-			 "%s"	// Short name
-			 "</div>",
+			 "%s",		// Full name
 		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_CTR) ? Gbl.Hierarchy.Ctr.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_INS) ? Gbl.Hierarchy.Ins.FullName :
-	                                           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))),
+	                                           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
+      HTM_DIV_End ();
+      fprintf (Gbl.F.Out,"<div class=\"NOT_SHOWN\">"
+			 " / ");	// To separate
+      HTM_DIV_End ();
+      fprintf (Gbl.F.Out,"<div id=\"big_short_name\">"
+			 "%s",		// Short name
 		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.ShrtName :
 	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.ShrtName :
 	       ((Gbl.Hierarchy.Level == Hie_CTR) ? Gbl.Hierarchy.Ctr.ShrtName :
 	       ((Gbl.Hierarchy.Level == Hie_INS) ? Gbl.Hierarchy.Ins.ShrtName :
 	                                           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
+      HTM_DIV_End ();
+     }
    else	// No country specified ==> home page
+     {
       fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
-			 "%s: %s"	// Full name
-			 "</div>"
-			 "<div class=\"NOT_SHOWN\">"
-			 " / "		// To separate
-			 "</div>"
-			 "<div id=\"big_short_name\">"
-			 "%s"		// Short name
-			 "</div>",
-	       Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE,
+			 "%s: %s",	// Full name
+	       Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
+      HTM_DIV_End ();
+      fprintf (Gbl.F.Out,"<div class=\"NOT_SHOWN\">"
+			 " / ");	// To separate
+      HTM_DIV_End ();
+      fprintf (Gbl.F.Out,"<div id=\"big_short_name\">"
+			 "%s",		// Short name
 	       Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,"</div>"
-	              "</h1>");
+      HTM_DIV_End ();
+     }
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"</h1>");
   }
 
 /*****************************************************************************/

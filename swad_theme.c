@@ -33,6 +33,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_layout.h"
 #include "swad_parameter.h"
 #include "swad_setting.h"
@@ -285,7 +286,7 @@ void The_PutIconsToSelectTheme (void)
                 The_ThemeId[Theme]);
       Ico_PutSettingIconLink (Icon,The_ThemeNames[Theme]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
    Set_EndSettingsHead ();

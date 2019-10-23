@@ -35,6 +35,7 @@
 #include "swad_alert.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -416,26 +417,28 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
 
    /***** Icon to close the alert *****/
    if (AlertClosable[AlertType])
+     {
       fprintf (Gbl.F.Out,"<div class=\"ALERT_CLOSE\">"
 			 "<a href=\"\""
 			 " onclick=\"toggleDisplay('%s');return false;\" />"
 			 "<img src=\"%s/close.svg\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICO16x16\" />"
-			 "</a>"
-			 "</div>",
+			 "</a>",
 	       IdAlert,
 	       Cfg_URL_ICON_PUBLIC,
 	       Txt_Close,Txt_Close);
+      HTM_DIV_End ();
+     }
 
    /***** Write message *****/
    fprintf (Gbl.F.Out,"<div class=\"ALERT_TXT\"");
    if (AlertType != Ale_NONE)
       fprintf (Gbl.F.Out," style=\"background-image:url('%s/%s');\"",
 	       Cfg_URL_ICON_PUBLIC,Ale_AlertIcons[AlertType]);
-   fprintf (Gbl.F.Out,">%s"
-	              "</div>",
+   fprintf (Gbl.F.Out,">%s",
             Txt);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -465,8 +468,8 @@ void Ale_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,const c
 	}
 
    /***** End box *****/
-   fprintf (Gbl.F.Out,"</div>"
-	              "</div>");
+   HTM_DIV_End ();
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

@@ -32,6 +32,7 @@
 #include "swad_form.h"
 #include "swad_forum.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_project.h"
 
@@ -131,7 +132,7 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
    Pag_WriteLinksToPages (WhatPaginate,
                           ThrCod,
                           Pagination,true,NULL,"PAG_TXT",false);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -253,7 +254,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	}
       else
 	 fprintf (Gbl.F.Out,"</span>");
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Links to several pages start here *****/

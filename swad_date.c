@@ -320,7 +320,7 @@ void Dat_ShowClientLocalTime (void)
                       "</span>"
                       "</a>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /* Day with link to agenda (if I am logged) */
    fprintf (Gbl.F.Out,"<div id=\"current_day\">");
@@ -336,14 +336,14 @@ void Dat_ShowClientLocalTime (void)
       fprintf (Gbl.F.Out,"</a>");
       Frm_EndForm ();
      }
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /* Time */
-   fprintf (Gbl.F.Out,"<div id=\"current_time\">"	// JavaScript will write HTML here
-            	      "</div>");
+   fprintf (Gbl.F.Out,"<div id=\"current_time\">");	// JavaScript will write HTML here
+   HTM_DIV_End ();
 
    /* End container */
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /* Write script to draw the month */
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"

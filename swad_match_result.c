@@ -97,7 +97,7 @@ void McR_PutFormToViewMchResults (Act_Action_t Action)
    Lay_PutContextualLinkIconText (Action,NULL,NULL,
 				  "tasks.svg",
 				  Txt_Results);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

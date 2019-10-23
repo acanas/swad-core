@@ -33,6 +33,7 @@
 #include "swad_exam.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_setting.h"
 
@@ -131,7 +132,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (vo
 	           FirstDayOfWeek);
 	 Ico_PutSettingIconLink (Icon,Gbl.Title);
 	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
         }
    Set_EndOneSettingSelector ();
   }
@@ -209,8 +210,8 @@ void Cal_DrawCurrentMonth (void)
 
    /***** Draw the month in JavaScript *****/
    /* JavaScript will write HTML here */
-   fprintf (Gbl.F.Out,"<div id=\"CurrentMonth\">"
-	              "</div>");
+   fprintf (Gbl.F.Out,"<div id=\"CurrentMonth\">");
+   HTM_DIV_End ();
 
    /* Write script to draw the month */
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
@@ -277,8 +278,8 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 
    /***** Draw several months *****/
    /* JavaScript will write HTML here */
-   fprintf (Gbl.F.Out,"<div id=\"calendar\">"
-	              "</div>");
+   fprintf (Gbl.F.Out,"<div id=\"calendar\">");
+   HTM_DIV_End ();
 
    /* Write script to draw the month */
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"

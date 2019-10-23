@@ -172,7 +172,7 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
       Frm_EndForm ();
 
       Lnk_WriteListOfLinks ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Free list of links *****/

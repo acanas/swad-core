@@ -138,7 +138,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Prf_PutLinkMyPublicProfile ();
    Prf_PutLinkRequestAnotherUserProfile ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Get users *****/
    if ((NumUsrs = Fol_GetUsrsToFollow (Fol_MAX_USRS_TO_FOLLOW_MAIN_ZONE,
@@ -245,7 +245,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
       HTM_TABLE_End ();
 
       /***** End container *****/
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -525,7 +525,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    fprintf (Gbl.F.Out,"<div id=\"follows_me\" class=\"DAT_LIGHT\">");
    if (UsrFollowsMe)
       fprintf (Gbl.F.Out,"%s",Txt_FOLLOWS_YOU);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /* Number of followed */
    Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
@@ -533,8 +533,8 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
                                          ActSeeFlg,Txt_Following);
 
    /* End following side */
-   fprintf (Gbl.F.Out,"</div>"
-                      "</div>");
+   HTM_DIV_End ();
+   HTM_DIV_End ();
 
    /***** Followers *****/
    fprintf (Gbl.F.Out,"<div id=\"followers_side\">"
@@ -559,11 +559,11 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 			    " style=\"display:inline;\" >"
 			    "<img src=\"%s/user-check.svg\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO40x40\" />"
-			    "</div>"
-			    "</a>",
+			    " class=\"ICO40x40\" />",
 		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Unfollow,Txt_Following_unfollow);
+	 HTM_DIV_End ();
+	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
 	}
       else		// I do not follow this user
@@ -575,19 +575,19 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 			    " style=\"display:inline;\" >"
 			    "<img src=\"%s/user-plus.svg\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO40x40\" />"
-			    "</div>"
-			    "</a>",
+			    " class=\"ICO40x40\" />",
 		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Follow,Txt_Follow);
+	 HTM_DIV_End ();
+	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
 	}
      }
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /* End followers side */
-   fprintf (Gbl.F.Out,"</div>"
-	              "</div>");
+   HTM_DIV_End ();
+   HTM_DIV_End ();
 
    /***** End section *****/
    Lay_EndSection ();
@@ -651,10 +651,10 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"</a>");
       Frm_EndForm ();
      }
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -862,8 +862,8 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_NAME\">");	// Limited width
       Frm_LinkFormSubmit (Txt_Another_user_s_profile,"DAT",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
-      fprintf (Gbl.F.Out,"</a>"
-	                 "</div>");
+      fprintf (Gbl.F.Out,"</a>");
+      HTM_DIV_End ();
       Frm_EndForm ();
      }
 
@@ -919,8 +919,8 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"<div class=\"CON_NAME_FOLLOW\">");	// Limited width
       Frm_LinkFormSubmit (Txt_Another_user_s_profile,"CON_CRS",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
-      fprintf (Gbl.F.Out,"</a>"
-	                 "</div>");
+      fprintf (Gbl.F.Out,"</a>");
+      HTM_DIV_End ();
       Frm_EndForm ();
      }
    HTM_TD_End ();
@@ -957,9 +957,9 @@ static void Fol_PutInactiveIconToFollowUnfollow (void)
    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIDDEN\">"
 		      "<img src=\"%s/user.svg\""
 		      " alt=\"\""
-		      " class=\"ICO16x16\" />"
-		      "</div>",
+		      " class=\"ICO16x16\" />",
 	    Cfg_URL_ICON_PUBLIC);
+   HTM_DIV_End ();
    }
 
 /*****************************************************************************/
@@ -977,11 +977,11 @@ static void Fol_PutIconToFollow (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\">"
 		      "<img src=\"%s/user-plus.svg\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO16x16\" />"
-		      "</div>"
-		      "</a>",
+		      " class=\"ICO16x16\" />",
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Follow,Txt_Follow);
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"</a>");
    Frm_EndForm ();
   }
 
@@ -1000,11 +1000,11 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\">"
 		      "<img src=\"%s/user-check.svg\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO16x16\" />"
-		      "</div>"
-		      "</a>",
+		      " class=\"ICO16x16\" />",
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Unfollow,Txt_Unfollow);
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"</a>");
    Frm_EndForm ();
   }
 

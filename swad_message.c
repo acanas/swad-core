@@ -370,7 +370,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void)
 					  "users.svg",
 					  Txt_Show_more_recipients,
 					  "CopyMessageToHiddenFields();");
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -446,13 +446,15 @@ static void Msg_ShowOneUniqueRecipient (void)
             Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
         	                             "DAT_SMALL_NOBR");
    ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Write user's name *****/
-   fprintf (Gbl.F.Out,"<div class=\"MSG_TO_ONE_RCP %s\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"MSG_TO_ONE_RCP %s\">"
+	              "%s",
             Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
         	                             "DAT_SMALL_NOBR",
             Gbl.Usrs.Other.UsrDat.FullName);
+   HTM_DIV_End ();
 
    /***** Hidden parameter with user's nickname *****/
    Msg_PutHiddenParamAnotherRecipient (&Gbl.Usrs.Other.UsrDat);
@@ -1666,7 +1668,7 @@ void Msg_ShowRecMsgs (void)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Msg_PutLinkToViewBannedUsers ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Show the received messages *****/
@@ -1762,7 +1764,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Msg_ShowFormSelectCourseSentOrRecMsgs ();
    if (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED)
       Msg_ShowFormToShowOnlyUnreadMessages ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
    Msg_ShowFormToFilterMsgs ();
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -1770,7 +1772,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
 	                       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
 			       NULL);
    Ico_PutCalculateIconWithText (Txt_Update_messages);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    Frm_EndForm ();
 
@@ -3230,7 +3232,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 	 HTM_TD_Begin ("class=\"LT\"");
       fprintf (Gbl.F.Out,"<div class=\"AUTHOR_2_LINES\">");	// Limited width
       Usr_WriteFirstNameBRSurnames (UsrDat);
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    else
      {
@@ -3280,10 +3282,12 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
         {
          ThereIsOrgCrs = true;
          if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Crs.CrsCod)))	// Message sent from current course
-             fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
-        	                "(%s)"
-        	                "</div>",
-                      Txt_from_this_course);
+           {
+            fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
+        	               "(%s)",
+                     Txt_from_this_course);
+            HTM_DIV_End ();
+           }
          else	// Message sent from another course
            {
             /* Write course, including link */
@@ -3295,18 +3299,20 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
         	      Txt_Go_to_X,
 		      Crs.FullName);
             Frm_LinkFormSubmit (Gbl.Title,"AUTHOR_TXT",NULL);
-            fprintf (Gbl.F.Out,"%s</a>)"
-        	               "</div>",
+            fprintf (Gbl.F.Out,"%s</a>)",
         	     Crs.ShrtName);
+            HTM_DIV_End ();
             Frm_EndForm ();
            }
 	}
      }
    if (!ThereIsOrgCrs)	// It's an old message without origin source specified, or is a message sent from none course
+     {
       fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
-	                 "(%s)"
-	                 "</div>",
+	                 "(%s)",
                Txt_no_course_of_origin);
+      HTM_DIV_End ();
+     }
 
    return FromThisCrs;
   }

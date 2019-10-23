@@ -191,7 +191,7 @@ void Prf_RequestUserProfile (void)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Prf_PutLinkMyPublicProfile ();
       Fol_PutLinkWhoToFollow ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
 
    /***** Begin form *****/
@@ -300,7 +300,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	 /* Put link to show users to follow */
 	 Fol_PutLinkWhoToFollow ();
 
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	}
 
       /***** Shared record card *****/
@@ -420,8 +420,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    Prf_ShowNumFilesCurrentlyPublished (UsrDat);
 
    /* End left list */
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</ul>");
+   HTM_DIV_End ();
 
    /***** Right list *****/
    fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_RIGHT_CONTAINER\">");
@@ -451,7 +451,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"</ul>");
      }
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1783,8 +1783,8 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
       fprintf (Gbl.F.Out,"<div class=\"RANK_USR\">");	// Limited width
       Frm_LinkFormSubmit (Txt_Another_user_s_profile,"DAT_SMALL",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
-      fprintf (Gbl.F.Out,"</a>"
-	                 "</div>");
+      fprintf (Gbl.F.Out,"</a>");
+      HTM_DIV_End ();
       Frm_EndForm ();
      }
    HTM_TD_End ();

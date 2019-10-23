@@ -434,7 +434,7 @@ static void Prj_ShowFormToFilterByMy_All (void)
       Ico_PutSettingIconLink (WhoseProjectsIcon[My_All],
 	                      Txt_PROJECT_MY_ALL_PROJECTS[My_All]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
   }
@@ -470,7 +470,7 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
       Ico_PutSettingIconLink (PreassignedNonpreassigImage[PreNon],
 	                   Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[PreNon]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
   }
@@ -511,7 +511,7 @@ static void Prj_ShowFormToFilterByHidden (void)
       Ico_PutSettingIconLink (HiddenVisiblIcon[HidVis],
 	                      Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
   }
@@ -552,7 +552,7 @@ static void Prj_ShowFormToFilterByWarning (void)
       Ico_PutSettingIconLink (FaultinessIcon[Faultiness],
 	                      Txt_PROJECT_FAULTY_FAULTLESS_PROJECTS[Faultiness]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
   }
@@ -589,7 +589,7 @@ static void Prj_ShowFormToFilterByDpt (void)
 
    /***** End form *****/
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2516,7 +2516,7 @@ static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
       /* Put form to lock/unlock project edition */
       fprintf (Gbl.F.Out,"<div id=\"prj_lck_%ld\">",Prj->PrjCod);
       Prj_FormLockUnlock (Prj);
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    else
       /* Put icon toinform about locked/unlocked project edition */

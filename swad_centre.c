@@ -343,7 +343,7 @@ static void Ctr_Configuration (bool PrintView)
    fprintf (Gbl.F.Out,"<br />%s",Gbl.Hierarchy.Ctr.FullName);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Centre photo *****/
    if (PhotoExists)
@@ -369,7 +369,7 @@ static void Ctr_Configuration (bool PrintView)
 			   "CENTRE_PHOTO_SHOW");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
 
       /* Photo attribution */
       if (!PrintView &&
@@ -387,13 +387,15 @@ static void Ctr_Configuration (bool PrintView)
 	    fprintf (Gbl.F.Out,"%s",PhotoAttribution);
 	 fprintf (Gbl.F.Out,"</textarea>");
 	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	}
       else if (PhotoAttribution)
+	{
 	 fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">"
-			    "%s"
-			    "</div>",
+			    "%s",
 		  PhotoAttribution);
+	 HTM_DIV_End ();
+	}
 
       /* Free memory used for photo attribution */
       Ctr_FreePhotoAttribution (&PhotoAttribution);
@@ -584,13 +586,15 @@ static void Ctr_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else	// I can not change centre WWW
+     {
       fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
 			 "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 			 "%s"
-			 "</a>"
-			 "</div>",
+			 "</a>",
 	       Gbl.Hierarchy.Ctr.WWW,
 	       Gbl.Hierarchy.Ctr.WWW);
+      HTM_DIV_End ();
+     }
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1606,9 +1610,9 @@ static void Ctr_ListCentresForEdition (void)
                             "<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
                             "%s"
-                            "</a>"
-                            "</div>",
+                            "</a>",
                   Ctr->WWW,Ctr->WWW,WWW);
+         HTM_DIV_End ();
 	}
       HTM_TD_End ();
 

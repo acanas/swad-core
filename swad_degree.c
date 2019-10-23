@@ -332,7 +332,7 @@ static void Deg_Configuration (bool PrintView)
 	    Gbl.Hierarchy.Deg.FullName);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -470,13 +470,15 @@ static void Deg_Configuration (bool PrintView)
       Frm_EndForm ();
      }
    else	// I can not change degree WWW
+     {
       fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
 			 "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 			 "%s"
-			 "</a>"
-			 "</div>",
+			 "</a>",
 	       Gbl.Hierarchy.Deg.WWW,
 	       Gbl.Hierarchy.Deg.WWW);
+      HTM_DIV_End ();
+     }
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -837,9 +839,9 @@ static void Deg_ListDegreesForEdition (void)
                             "<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
                             "%s"
-                            "</a>"
-                            "</div>",
+                            "</a>",
                   Deg->WWW,Deg->WWW,WWW);
+         HTM_DIV_End ();
 	}
       HTM_TD_End ();
 

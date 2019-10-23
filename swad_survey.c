@@ -537,13 +537,15 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Lay_EndArticle ();
 
    /* Number of questions and number of distinct users who have already answered this survey */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: %u; %s: %u</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+	              "%s: %u; %s: %u",
             Svy.Status.Visible ? "ASG_GRP" :
         	                 "ASG_GRP_LIGHT",
             Txt_No_of_questions,
             Svy.NumQsts,
             Txt_No_of_users,
             Svy.NumUsrs);
+   HTM_DIV_End ();
    HTM_TD_End ();
 
    /* Status of the survey */
@@ -568,7 +570,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	 Btn_PutCreateButtonInline (Txt_Answer_survey);
 	 Frm_EndForm ();
 
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	}
       /* Possible button to see the result of the survey */
       else if (Svy.Status.ICanViewResults)
@@ -583,7 +585,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	 Btn_PutConfirmButtonInline (Txt_View_survey_results);
 	 Frm_EndForm ();
 
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	}
      }
 
@@ -636,7 +638,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	 fprintf (Gbl.F.Out,"%s %s",Txt_Course,Gbl.Hierarchy.Crs.ShrtName);
 	 break;
      }
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /* Users' roles who can answer the survey */
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s:<br />",
@@ -648,7 +650,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 			   1 << Rol_TCH,
 			   Svy.Roles,
 			   true,false);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /* Groups whose users can answer this survey */
    if (Svy.Scope == Hie_CRS)
@@ -660,10 +662,12 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">"
+	              "%s",
             Svy.Status.Visible ? "DAT" :
         	                 "DAT_LIGHT",
             Txt);
+   HTM_DIV_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2476,7 +2480,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
       fprintf (Gbl.F.Out,"%s %s",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

@@ -324,7 +324,7 @@ void Sta_AskShowCrsHits (void)
    /* Link to show last clicks in real time */
    Sta_PutLinkToLastClicks ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -531,7 +531,7 @@ void Sta_AskShowGblHits (void)
    /* Link to show last clicks in real time */
    Sta_PutLinkToLastClicks ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Begin form *****/
    Frm_StartFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
@@ -4003,7 +4003,7 @@ void Sta_ShowLastClicks (void)
    /* Put form to go to test edition and configuration */
    Sta_PutLinkToCourseHits ();
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Last_clicks_in_real_time,NULL,
@@ -4013,7 +4013,7 @@ void Sta_ShowLastClicks (void)
    fprintf (Gbl.F.Out,"<div id=\"lastclicks\""	// Used for AJAX based refresh
 	              " class=\"CM\">");
    Sta_GetAndShowLastClicks ();
-   fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
+   HTM_DIV_End ();		// Used for AJAX based refresh
 
    /***** End box *****/
    Box_EndBox ();

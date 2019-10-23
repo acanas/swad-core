@@ -243,7 +243,7 @@ static void TT_ShowTimeTableGrpsSelected (void)
         fprintf (Gbl.F.Out,"%s",Txt_All_groups);
         break;
      }
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1579,7 +1579,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	          fprintf (Gbl.F.Out,"<br />%s",Info);
 
 	    /***** End cell *****/
-            fprintf (Gbl.F.Out,"</div>");
+            HTM_DIV_End ();
 	   }
 	 break;
       case TT_CRS_EDIT:

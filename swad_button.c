@@ -29,6 +29,7 @@
 
 #include "swad_button.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -101,9 +102,9 @@ void Btn_PutCreateButton (const char *TxtButton)
    fprintf (Gbl.F.Out,"<div class=\"CM\">"
                       "<button type=\"submit\" class=\"BT_SUBMIT BT_CREATE\">"
                       "%s"
-                      "</button>"
-                      "</div>",
+                      "</button>",
             TxtButton);
+   HTM_DIV_End ();
   }
 
 void Btn_PutCreateButtonInline (const char *TxtButton)
@@ -119,9 +120,9 @@ void Btn_PutConfirmButton (const char *TxtButton)
    fprintf (Gbl.F.Out,"<div class=\"CM\">"
                       "<button type=\"submit\" class=\"BT_SUBMIT BT_CONFIRM\">"
                       "%s"
-                      "</button>"
-                      "</div>",
+                      "</button>",
             TxtButton);
+   HTM_DIV_End ();
   }
 
 void Btn_PutConfirmButtonInline (const char *TxtButton)
@@ -137,9 +138,9 @@ void Btn_PutRemoveButton (const char *TxtButton)
    fprintf (Gbl.F.Out,"<div class=\"CM\">"
                       "<button type=\"submit\" class=\"BT_SUBMIT BT_REMOVE\">"
                       "%s"
-                      "</button>"
-                      "</div>",
+                      "</button>",
             TxtButton);
+   HTM_DIV_End ();
   }
 
 void Btn_PutRemoveButtonInline (const char *TxtButton)
@@ -149,15 +150,3 @@ void Btn_PutRemoveButtonInline (const char *TxtButton)
                       "</button>",
             TxtButton);
   }
-/*
-void Btn_PutCloseTabButton (const char *TxtButton)
-  {
-   fprintf (Gbl.F.Out,"<div class=\"CM\">"
-                      "<button type=\"submit\" class=\"BT_SUBMIT BT_REMOVE\""
-                      " onclick=\"window.close();\">"
-                      "%s"
-                      "</button>"
-                      "</div>",
-            TxtButton);
-  }
-*/

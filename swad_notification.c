@@ -380,7 +380,7 @@ void Ntf_ShowMyNotifications (void)
 				  "envelope.svg",
 				  Txt_Domains);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,

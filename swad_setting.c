@@ -38,6 +38,7 @@
 #include "swad_date.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_language.h"
 #include "swad_layout.h"
 #include "swad_notification.h"
@@ -80,13 +81,13 @@ void Set_EditSettings (void)
                  Hlp_PROFILE_Settings_internationalization,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    Lan_PutBoxToSelectLanguage ();		// 1. Language
-   fprintf (Gbl.F.Out,"</div>"
-                      "<div class=\"FRAME_INLINE\">");
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    Cal_PutIconsToSelectFirstDayOfWeek ();	// 2. First day of week
-   fprintf (Gbl.F.Out,"</div>"
-                      "<div class=\"FRAME_INLINE\">");
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    Dat_PutBoxToSelectDateFormat ();		// 3. Date format
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
    Box_EndBox ();
 
    /***** Design: icon set, menu, theme, side columns *****/
@@ -94,16 +95,16 @@ void Set_EditSettings (void)
                  Hlp_PROFILE_Settings_design,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    Ico_PutIconsToSelectIconSet ();		// 4. Icon set
-   fprintf (Gbl.F.Out,"</div>"
-                      "<div class=\"FRAME_INLINE\">");
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    Mnu_PutIconsToSelectMenu ();			// 5. Menu
-   fprintf (Gbl.F.Out,"</div>"
-	              "<div class=\"FRAME_INLINE\">");
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    The_PutIconsToSelectTheme ();		// 6. Theme
-   fprintf (Gbl.F.Out,"</div>"
-                      "<div class=\"FRAME_INLINE\">");
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    Set_PutIconsToSelectSideCols ();		// 7. Side columns
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
    Box_EndBox ();
 
    if (Gbl.Usrs.Me.Logged)
@@ -255,7 +256,7 @@ static void Set_PutIconsToSelectSideCols (void)
                 SideCols >> 1,SideCols & 1);
       Ico_PutSettingIconLink (Icon,Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
    Set_EndSettingsHead ();
@@ -390,7 +391,7 @@ void Set_StartSettingsHead (void)
 
 void Set_EndSettingsHead (void)
   {
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 void Set_StartOneSettingSelector (void)
@@ -400,5 +401,5 @@ void Set_StartOneSettingSelector (void)
 
 void Set_EndOneSettingSelector (void)
   {
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }

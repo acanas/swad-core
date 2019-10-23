@@ -240,7 +240,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
      }
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -257,11 +257,11 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
 		      "<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />"
-		      "</a>"
-		      "</div>",
+		      "</a>",
 	    URL,Title,
 	    Cfg_URL_ICON_PUBLIC,Icon,
 	    Title,Title);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

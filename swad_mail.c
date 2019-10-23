@@ -975,19 +975,19 @@ static void Mai_ListEmails (void)
    Usr_UsrDataDestructor (&UsrDat);
 
    /***** End list with users' email addresses *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Show a message with the number of users with email ****/
    fprintf (Gbl.F.Out,"<div class=\"DAT CM\">");
    fprintf (Gbl.F.Out,Txt_X_users_who_have_email,
 	    NumUsrsWithEmail);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Show a message with the number of users who have accepted and have email ****/
    fprintf (Gbl.F.Out,"<div class=\"DAT CM\">");
    fprintf (Gbl.F.Out,Txt_X_users_who_have_accepted_and_who_have_email,
 	    NumAcceptedUsrsWithEmail);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Icon to open the client email program *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">"
@@ -1001,8 +1001,8 @@ static void Mai_ListEmails (void)
 	    The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
    Ico_PutIconTextLink ("marker.svg",
 			Txt_Create_email_message);
-   fprintf (Gbl.F.Out,"</a>"
-		      "</div>");
+   fprintf (Gbl.F.Out,"</a>");
+   HTM_DIV_End ();
 
    /***** End the box used to list the emails *****/
    Box_EndBox ();

@@ -120,7 +120,7 @@ void Acc_ShowFormMyAccount (void)
       Usr_PutLinkToLogin ();
       Pwd_PutLinkToSendNewPasswd ();
       Lan_PutLinkToChangeLanguage ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
 
       /**** Show form to check if I have an account *****/
       Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered);
@@ -193,7 +193,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    Usr_PutLinkToLogin ();
    Pwd_PutLinkToSendNewPasswd ();
    Lan_PutLinkToChangeLanguage ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Get new user's ID from form *****/
    Par_GetParToText ("ID",ID,ID_MAX_BYTES_USR_ID);
@@ -329,7 +329,7 @@ void Acc_ShowFormCreateMyAccount (void)
    Usr_PutLinkToLogin ();
    Pwd_PutLinkToSendNewPasswd ();
    Lan_PutLinkToChangeLanguage ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /**** Show form to create a new account *****/
    Acc_ShowFormRequestNewAccountWithParams ("","");
@@ -492,16 +492,16 @@ void Acc_ShowFormChgMyAccount (void)
    fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
    Pwd_ShowFormChgMyPwd ();
    Nck_ShowFormChangeMyNickname (IMustCreateMyNicknameNow);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Show form to change my email and my ID *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
    Mai_ShowFormChangeMyEmail (IMustFillInMyEmailNow,IShouldConfirmMyEmailNow);
    ID_ShowFormChangeMyID (IShouldFillInMyIDNow);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Start container for this user *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -531,16 +531,16 @@ void Acc_ShowFormChgOtherUsrAccount (void)
 	 fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
 	 Pwd_ShowFormChgOtherUsrPwd ();
 	 Nck_ShowFormChangeOtherUsrNickname ();
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 
 	 /***** Show form to change email and ID *****/
 	 fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
 	 Mai_ShowFormChangeOtherUsrEmail ();
 	 ID_ShowFormChangeOtherUsrID ();
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 
 	 /***** Start container for this user *****/
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	}
       else
 	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();

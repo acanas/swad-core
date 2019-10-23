@@ -174,14 +174,14 @@ void Att_SeeAttEvents (void)
 	 case Rol_STD:
 	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 	    Att_PutFormToListMyAttendance ();
-	    fprintf (Gbl.F.Out,"</div>");
+	    HTM_DIV_End ();
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
 	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 	    Att_PutFormToListStdsAttendance ();
-	    fprintf (Gbl.F.Out,"</div>");
+	    HTM_DIV_End ();
 	    break;
 	 default:
 	    break;
@@ -481,10 +481,12 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Gbl.Crs.Grps.NumGrps)
       Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Att);
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+	              "%s",
             Att->Hidden ? "DAT_LIGHT" :
         	          "DAT",
             Description);
+   HTM_DIV_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1562,7 +1564,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
       fprintf (Gbl.F.Out,"%s %s",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3431,7 +3433,7 @@ static void Att_PutCheckOrCross (bool Present)
 			 "&cross;",
 	       Txt_Absent);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

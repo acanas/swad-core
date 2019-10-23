@@ -27,6 +27,7 @@
 
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_tab.h"
 
@@ -138,8 +139,8 @@ void Tab_DrawTabs (void)
 							The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 			    " class=\"TAB_ICO\" />"
-			    "<div class=\"TAB_TXT %s\">%s</div>"
-			    "</a>",
+			    "<div class=\"TAB_TXT %s\">"
+			    "%s",
 		  Gbl.Prefs.URLIconSet,
 		  Tab_GetIcon (NumTab),
 		  Txt_TABS_TXT[NumTab],
@@ -147,17 +148,19 @@ void Tab_DrawTabs (void)
 		  NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 					     The_ClassTxtTabOff[Gbl.Prefs.Theme],
 		  Txt_TABS_TXT[NumTab]);
+	 HTM_DIV_End ();
+	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();
 
-	 fprintf (Gbl.F.Out,"</div>"
-			    "</li>");
+	 HTM_DIV_End ();
+	 fprintf (Gbl.F.Out,"</li>");
 	}
      }
 
    /***** End tabs container *****/
    fprintf (Gbl.F.Out,"</ul>"
-	              "</nav>"
-                      "</div>");
+	              "</nav>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

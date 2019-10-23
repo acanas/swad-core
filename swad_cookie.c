@@ -30,6 +30,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_layout.h"
 #include "swad_setting.h"
 
@@ -91,7 +92,7 @@ void Coo_EditMyPrefsOnCookies (void)
 	    Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
 
    /* End container */
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** End table and box *****/
    Box_EndBoxTable ();

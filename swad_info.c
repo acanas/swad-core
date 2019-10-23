@@ -386,7 +386,7 @@ void Inf_ShowInfo (void)
            {
             fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
             Inf_PutCheckboxConfirmIHaveReadInfo ();
-            fprintf (Gbl.F.Out,"</div>");
+            HTM_DIV_End ();
            }
          break;
       case Rol_NET:
@@ -398,7 +398,7 @@ void Inf_ShowInfo (void)
             fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
             Disabled = (Gbl.Usrs.Me.Role.Logged == Rol_NET);	// Non-editing teachers can not change the status of checkbox
             Inf_PutCheckboxForceStdsToReadInfo (MustBeRead,Disabled);
-            fprintf (Gbl.F.Out,"</div>");
+            HTM_DIV_End ();
            }
          break;
       default:
@@ -617,8 +617,8 @@ void Inf_WriteMsgYouMustReadInfo (void)
          Frm_EndForm ();
          fprintf (Gbl.F.Out,"</li>");
         }
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</ul>");
+   HTM_DIV_End ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -1276,10 +1276,10 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
 	              "<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" />"
-                      "</label>"
-                      "</div>",
+                      "</label>",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_File,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
+   HTM_DIV_End ();
 
    /***** Send button *****/
    Btn_PutCreateButton (Txt_Upload_file);
@@ -1324,8 +1324,8 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
       fprintf (Gbl.F.Out,"%s",Gbl.Crs.Info.URL);
      }
    fprintf (Gbl.F.Out,"\" />"
-                      "</label>"
-	              "</div>");
+                      "</label>");
+   HTM_DIV_End ();
 
    /***** Send button *****/
    Btn_PutCreateButton (Txt_Send_URL);
@@ -1809,7 +1809,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
       fprintf (Gbl.F.Out,"%s",TxtHTML);
 
       /***** End box *****/
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
       Box_EndBox ();
 
       return true;
@@ -1946,7 +1946,7 @@ static bool Inf_CheckAndShowRichTxt (void)
       unlink (PathFileHTML);
 
       /***** End box *****/
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
       Box_EndBox ();
 
       return true;
@@ -2082,9 +2082,9 @@ void Inf_EditPlainTxtInfo (void)
    Lay_HelpPlainEditor ();
    fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
 	              "%s"
-	              "</textarea>"
-	              "</div>",
+	              "</textarea>",
             TxtHTML);
+   HTM_DIV_End ();
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);
@@ -2133,9 +2133,9 @@ void Inf_EditRichTxtInfo (void)
    Lay_HelpRichEditor ();
    fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
 	              "%s"
-	              "</textarea>"
-	              "</div>",
+	              "</textarea>",
             TxtHTML);
+   HTM_DIV_End ();
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Save_changes);

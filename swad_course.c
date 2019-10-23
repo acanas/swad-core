@@ -147,7 +147,7 @@ void Crs_ShowIntroduction (void)
    /***** Course configuration *****/
    fprintf (Gbl.F.Out,"<div class=\"CM\">");
    Crs_Configuration (false);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Course introduction *****/
    Inf_ShowInfo ();
@@ -206,7 +206,7 @@ static void Crs_Configuration (bool PrintView)
 	{
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
          Enr_PutLinkToRequestSignUp ();
-         fprintf (Gbl.F.Out,"</div>");
+         HTM_DIV_End ();
 	}
      }
 
@@ -230,9 +230,9 @@ static void Crs_Configuration (bool PrintView)
                  Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"<br />%s"
-                      "</div>",
+   fprintf (Gbl.F.Out,"<br />%s",
             Gbl.Hierarchy.Crs.FullName);
+   HTM_DIV_End ();
 
    /***** Begin table *****/
    HTM_TABLE_BeginWidePadding (2);

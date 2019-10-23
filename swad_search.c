@@ -32,6 +32,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_layout.h"
 #include "swad_parameter.h"
 
@@ -154,8 +155,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    Gbl.Scope.Default = DefaultScope;
    Sco_GetScope ("ScopeSch");
    Sco_PutSelectorScope ("ScopeSch",false);
-   fprintf (Gbl.F.Out,"</label>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</label>");
+   HTM_DIV_End ();
 
    /***** String to find *****/
    Sch_PutInputStringToSearch (NULL);
@@ -191,7 +192,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 
    /***** End box *****/
    Box_EndBox ();
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -234,7 +235,7 @@ void Sch_PutFormToSearchInPageTopHeading (void)
    Sch_PutInputStringToSearch ("head_search_text");
    Sch_PutMagnifyingGlassButton ("search-white.svg");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</div>");	// head_row_1_search
+   HTM_DIV_End ();	// head_row_1_search
   }
 
 /*****************************************************************************/

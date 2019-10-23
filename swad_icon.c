@@ -32,6 +32,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_icon.h"
 #include "swad_layout.h"
 #include "swad_parameter.h"
@@ -134,7 +135,7 @@ void Ico_PutIconsToSelectIconSet (void)
                 Ico_IconSetId[IconSet]);
       Ico_PutSettingIconLink (Icon,Ico_IconSetNames[IconSet]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
    Set_EndSettingsHead ();
@@ -334,11 +335,11 @@ void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
    fprintf (Gbl.F.Out,"<div class=\"%s\">"
 		      "<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO_16x16\" />"
-		      "</div>",
+		      " class=\"CONTEXT_ICO_16x16\" />",
 	    DivClass,
 	    Cfg_URL_ICON_PUBLIC,Icon,
 	    Title,Title);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -349,7 +350,7 @@ void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title
   {
    fprintf (Gbl.F.Out,"<div class=\"%s\">",DivClass);
    Ico_PutIconLink (Icon,Title);
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -375,10 +376,10 @@ void Ico_PutIconTextLink (const char *Icon,const char *Text)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_ICO_x16\" />"
-	              "&nbsp;%s"
-	              "</div>",
+	              "&nbsp;%s",
             Cfg_URL_ICON_PUBLIC,Icon,Text,Text,
 	    Text);
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -418,11 +419,12 @@ void Ico_PutCalculateIcon (const char *Title)
 		      " class=\"CONTEXT_ICO_16x16\" />"
 		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""	// TODO: change name and resolution to refreshing64x64.gif
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO_16x16\" style=\"display:none;\" />"	// Animated icon hidden
-		      "</div>"
-		      "</a>",
+		      " class=\"CONTEXT_ICO_16x16\" style=\"display:none;\" />",	// Animated icon hidden
 	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Title,Title,
 	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Title,Title);
+   HTM_DIV_End ();
+
+   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/
@@ -440,12 +442,13 @@ void Ico_PutCalculateIconWithText (const char *Text)
 		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" style=\"display:none;\" />"	// Animated icon hidden
-		      "&nbsp;%s"
-		      "</div>"
-		      "</a>",
+		      "&nbsp;%s",
 	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Text,Text,
 	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Text,Text,
 	    Text);
+   HTM_DIV_End ();
+
+   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/

@@ -443,10 +443,12 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
       HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
    if (Gbl.Crs.Grps.NumGrps)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
-   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">"
+	              "%s",
             Asg.Hidden ? "DAT_LIGHT" :
         	         "DAT",
             Txt);
+   HTM_DIV_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1665,7 +1667,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
       fprintf (Gbl.F.Out,"%s %s",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

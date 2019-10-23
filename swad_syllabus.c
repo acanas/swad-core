@@ -160,8 +160,8 @@ void Syl_PutFormWhichSyllabus (void)
                          "</li>",
                Gbl.Form.Id,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
      }
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</ul>");
+   HTM_DIV_End ();
    Frm_EndForm ();
   }
 

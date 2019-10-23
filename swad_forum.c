@@ -1465,7 +1465,7 @@ static void For_WriteNumberOfPosts (long UsrCod)
       fprintf (Gbl.F.Out,"[%u %s]",NumPsts,Txt_FORUM_posts);
 
    /***** End table cell *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1777,8 +1777,8 @@ static void For_PutFormWhichForums (void)
                          "</li>",
                Gbl.Form.Id,Txt_FORUM_WHICH_FORUM[ForumSet]);
      }
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</ul>");
+   HTM_DIV_End ();
    Frm_EndForm ();
   }
 

@@ -40,10 +40,11 @@
 #include "swad_config.h"
 #include "swad_cookie.h"
 #include "swad_database.h"
-#include "swad_global.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
 #include "swad_form.h"
+#include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_media.h"
 
 /*****************************************************************************/
@@ -359,11 +360,11 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 		      "<img src=\"%s/paperclip.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO_HIGHLIGHT ICOx16\" />"
-                      "</a>"
-	              "</div>",					// <id>_med_ico
+                      "</a>",
             Id,Id,
 	    Cfg_URL_ICON_PUBLIC,
             Txt_Multimedia,Txt_Multimedia);
+   HTM_DIV_End ();						// <id>_med_ico
 
    /***** Start media uploader *****/
    fprintf (Gbl.F.Out,"<div id=\"%s_med_upl\""			// container <id>_med_upl
@@ -401,8 +402,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 			     "Embed");
 
    /* End icons */
-   fprintf (Gbl.F.Out,"</div>"					// icons container
-		      "</div>");				// icons containers
+   HTM_DIV_End ();						// icons container
+   HTM_DIV_End ();						// icons containers
 
    /***** Hidden field with form type *****/
    /* Upload file */
@@ -423,11 +424,11 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 	              "<input id=\"%s_fil\" type=\"file\""	// <id>_fil
 	              " name=\"%s\" accept=\"image/,video/\""
 	              " class=\"%s\" disabled=\"disabled\""
-	              " style=\"display:none;\" />"
-	              "</div>",					// <id>_fil
+	              " style=\"display:none;\" />",
 	    Id,
             ParamUploadMedia.File,
 	    ClassInput);
+   HTM_DIV_End ();						// <id>_fil
 
    /***** Media URL *****/
    fprintf (Gbl.F.Out,"<div>"
@@ -435,11 +436,11 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 		      " name=\"%s\" placeholder=\"%s\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\""
 	              " disabled=\"disabled\""
-	              " style=\"display:none;\" />"
-	              "</div>",		// <id>_url
+	              " style=\"display:none;\" />",
 	    Id,
             ParamUploadMedia.URL,Txt_Link,
             ClassInput,Cns_MAX_CHARS_WWW);
+   HTM_DIV_End ();						// <id>_url
 
    /***** Media title *****/
    fprintf (Gbl.F.Out,"<div>"
@@ -447,20 +448,20 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 		      " name=\"%s\" placeholder=\"%s\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\""
 	              " disabled=\"disabled\""
-	              " style=\"display:none;\" />"
-	              "</div>",		// <id>_tit
+	              " style=\"display:none;\" />",
 	    Id,
             ParamUploadMedia.Title,Txt_Title_attribution,
             ClassInput,Med_MAX_CHARS_TITLE);
+   HTM_DIV_End ();						// <id>_tit
 
    /***** End box *****/
    Box_EndBox ();
 
    /***** End media uploader *****/
-   fprintf (Gbl.F.Out,"</div>");				// container <id>_med_upl
+   HTM_DIV_End ();				// container <id>_med_upl
 
    /***** End media uploader container *****/
-   fprintf (Gbl.F.Out,"</div>");				// container
+   HTM_DIV_End ();				// container
   }
 
 /*****************************************************************************/
@@ -478,11 +479,11 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
                       "<a href=\"\" onclick=\"%s('%s');return false;\">"
                       "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"ICO_HIGHLIGHT ICOx16\" />"
-                      "</a>"
-                      "</div>",					// <id>_IdSuffix
+                      "</a>",
             UniqueId,IdSuffix,
 	    FunctionName,UniqueId,
             Cfg_URL_ICON_PUBLIC,Icon,Title,Title);
+   HTM_DIV_End ();						// <id>_IdSuffix
   }
 
 /*****************************************************************************/
@@ -1510,7 +1511,7 @@ void Med_ShowMedia (struct Media *Media,
      }
 
    /***** End media container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -1642,7 +1643,7 @@ static void Med_ShowGIF (struct Media *Media,
 			    "GIF"
 			    "</span>");
 
-	 fprintf (Gbl.F.Out,"</div>");
+	 HTM_DIV_End ();
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
@@ -1734,8 +1735,8 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
 	    if (Media->Title[0])
 	       fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
 	 fprintf (Gbl.F.Out,">"
-			    "</iframe>"
-			    "</div>");
+			    "</iframe>");
+	 HTM_DIV_End ();
         }
       else
          /***** Alert to inform about third party cookies *****/
@@ -1773,8 +1774,8 @@ static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia)
 	    if (Media->Title[0])
 	       fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
 	 fprintf (Gbl.F.Out,">"
-			    "</iframe>"
-			    "</div>");
+			    "</iframe>");
+	 HTM_DIV_End ();
         }
       else
          /***** Alert to inform about third party cookies *****/

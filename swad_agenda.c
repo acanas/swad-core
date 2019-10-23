@@ -205,7 +205,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (void)
       Ico_PutSettingIconLink (Icon[PstFut],
 	                   Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
   }
@@ -241,7 +241,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (void)
       Ico_PutSettingIconLink (Icon[PrvPub],
 	                   Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
   }
@@ -277,7 +277,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
       Ico_PutSettingIconLink (Icon[HidVis],
 	                   Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</div>");
+      HTM_DIV_End ();
      }
    Set_EndOneSettingSelector ();
   }
@@ -772,10 +772,12 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 
    /* Location */
    HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+	              "%s",
             AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
         	              "ASG_TITLE",
             AgdEvent.Location);
+   HTM_DIV_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -803,10 +805,12 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
 
    HTM_TD_Begin ("colspan=\"2\" class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">"
+	              "%s",
             AgdEvent.Hidden ? "DAT_LIGHT" :
         	              "DAT",
             Txt);
+   HTM_DIV_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

@@ -35,6 +35,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_MFU.h"
 #include "swad_tab.h"
 #include "swad_theme.h"
@@ -255,7 +256,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
      }
 
    /***** End box *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
    Box_EndBox ();
   }
 
@@ -319,7 +320,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    fprintf (Gbl.F.Out,"</ul>");
 
    /***** End div *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/

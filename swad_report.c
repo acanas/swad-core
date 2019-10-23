@@ -32,6 +32,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_ID.h"
 #include "swad_profile.h"
 #include "swad_tab.h"
@@ -279,15 +280,17 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
                       "<img src=\"%s/file-alt.svg\" alt=\"%s\""
 	              " class=\"ICO64x64\" /><br />"
                       "%s"
-		      "</a>"
-		      "</div>",
+		      "</a>",
 	    Report->Permalink,
 	    Txt_Report,
             Cfg_URL_ICON_PUBLIC,
             Txt_Report,
 	    Report->FilenameReport);
-   fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">%s</div>",
+   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">"
+	              "%s",
             Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists);
+   HTM_DIV_End ();
 
    /***** End box *****/
    Box_EndBox ();
@@ -318,7 +321,7 @@ static void Rep_TitleReport (struct Rep_CurrentTimeUTC *CurrentTimeUTC)
 	       CurrentTimeUTC->StrDate,
 	       CurrentTimeUTC->StrTime);
 
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
