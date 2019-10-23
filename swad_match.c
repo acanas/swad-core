@@ -77,7 +77,7 @@ const char *Mch_ShowingStringsDB[Mch_NUM_SHOWING] =
    "results",
   };
 
-#define Mch_MAX_COLS 3
+#define Mch_MAX_COLS 4
 #define Mch_NUM_COLS_DEFAULT 1
 
 /*****************************************************************************/
@@ -2355,10 +2355,11 @@ static void Mch_ShowFormColumns (struct Match *Match)
    unsigned NumCols;
    static const char *NumColsIcon[1 + Mch_MAX_COLS] =
      {
-      "",			// Not used
-      "bars.svg",		// 1 column
-      "grip-vertical.svg",	// 2 columns
-      "th.svg",			// 3 columns
+      "",		// Not used
+      "1col.png",	// 1 column
+      "2col.png",	// 2 columns
+      "3col.png",	// 3 columns
+      "4col.png",	// 4 columns
      };
 
    /***** Begin selector *****/

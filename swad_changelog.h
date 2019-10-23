@@ -487,7 +487,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.41.3 (2019-10-23)"
+#define Log_PLATFORM_VERSION	"SWAD 19.41.4 (2019-10-23)"
 #define CSS_FILE		"swad19.41.3.css"
 #define JS_FILE			"swad19.39.js"
 /*
@@ -495,6 +495,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Change icon to upload file in timeline to photo-video.svg
 
+	Version 19.41.4:  Oct 23, 2019	Number of cols in match in range [1...4]. (245955 lines)
 	Version 19.41.3:  Oct 23, 2019	Changes in layout of matches. (245952 lines)
 	Version 19.41.2:  Oct 23, 2019	Display match answers in columns. (245951 lines)
 	Version 19.41.1:  Oct 22, 2019	Change number of columns from form. (245944 lines)
@@ -506,10 +507,11 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1802','es','N','Camb
 ALTER TABLE mch_matches ADD COLUMN NumCols INT NOT NULL DEFAULT 1 AFTER Showing;
 
 	Version 19.40.5:  Oct 22, 2019	New icons to view match in several columns. (245882 lines)
-					Copy the following 3 icons to icon public directory:
-sudo cp -a icon/bars.svg /var/www/html/swad/icon/
-sudo cp -a icon/grip-vertical.svg /var/www/html/swad/icon/
-sudo cp -a icon/th.svg /var/www/html/swad/icon/
+					Copy the following 4 icons to icon public directory:
+sudo cp -a icon/1col.png /var/www/html/swad/icon/
+sudo cp -a icon/2col.png /var/www/html/swad/icon/
+sudo cp -a icon/3col.png /var/www/html/swad/icon/
+sudo cp -a icon/4col.png /var/www/html/swad/icon/
 
 	Version 19.40.4:  Oct 22, 2019	New icon to view results in matches. (245838 lines)
 					Copy the following icon to icon public directory:
