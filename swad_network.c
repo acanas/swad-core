@@ -251,9 +251,8 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
                                      const char *Icon,const char *Title)
   {
    /***** Write link and icon *****/
-   fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
-		      " style=\"display:inline;\">"
-		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">"
+   fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\" style=\"display:inline;\">");
+   fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" title=\"%s\">"
 		      "<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />"

@@ -404,8 +404,8 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** Left list *****/
    /* Start left list */
-   fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_LEFT_CONTAINER\">"
-	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
+   fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_LEFT_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 
    /* Time since first click */
    Prf_ShowTimeSinceFirstClick (UsrDat,&UsrFigures);

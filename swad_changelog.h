@@ -487,7 +487,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.42.1 (2019-10-23)"
+#define Log_PLATFORM_VERSION	"SWAD 19.42.2 (2019-10-23)"
 #define CSS_FILE		"swad19.41.3.css"
 #define JS_FILE			"swad19.39.js"
 /*
@@ -495,6 +495,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Change icon to upload file in timeline to photo-video.svg
 
+	Version 19.42.2:  Oct 23, 2019	Code refactoring in HTML divs. (246025 lines)
 	Version 19.42.1:  Oct 23, 2019	Code refactoring in HTML divs. (246088 lines)
 	Version 19.42:    Oct 23, 2019	Module swad_table is renamed as swad_HTML. (245956 lines)
 	Version 19.41.4:  Oct 23, 2019	Number of cols in match in range [1...4]. (245955 lines)

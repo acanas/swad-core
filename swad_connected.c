@@ -268,9 +268,8 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
 
    /***** Number of connected users who belong to scope *****/
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
-   fprintf (Gbl.F.Out,"<div class=\"CONNECTED_TXT\">%u %s ",
-	    Usrs.NumUsrs,
-	    Txt_from);
+   fprintf (Gbl.F.Out,"<div class=\"CONNECTED_TXT\">");
+   fprintf (Gbl.F.Out,"%u %s ",Usrs.NumUsrs,Txt_from);
 
    /* Put form to change scope */
    Frm_StartForm (ActLstCon);

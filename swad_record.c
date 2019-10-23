@@ -3765,8 +3765,8 @@ static void Rec_WriteLinkToDataProtectionClause (void)
   {
    extern const char *Txt_DATA_PROTECTION_CLAUSE;
 
-   fprintf (Gbl.F.Out,"<div class=\"CM\">"
-	              "<a class=\"TIT\" href=\"%s/\" target=\"_blank\">%s</a>",
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   fprintf (Gbl.F.Out,"<a class=\"TIT\" href=\"%s/\" target=\"_blank\">%s</a>",
             Cfg_URL_DATA_PROTECTION_PUBLIC,
             Txt_DATA_PROTECTION_CLAUSE);
    HTM_DIV_End ();

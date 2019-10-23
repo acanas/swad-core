@@ -990,8 +990,8 @@ static void Mai_ListEmails (void)
    HTM_DIV_End ();
 
    /***** Icon to open the client email program *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">"
-		      "<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
 		      " title=\"%s\" class=\"%s\">",
 	    Gbl.Usrs.Me.UsrDat.Email,
 	    Gbl.Hierarchy.Crs.FullName,

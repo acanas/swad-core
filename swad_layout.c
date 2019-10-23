@@ -270,13 +270,13 @@ void Lay_WriteStartOfPage (void)
    switch (BrowserTab)
      {
       case Act_BRW_1ST_TAB:
-	 fprintf (Gbl.F.Out,"<body onload=\"init();\">\n"
-			    "<div id=\"zoomLyr\" class=\"ZOOM\">"
-			    "<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
+	 fprintf (Gbl.F.Out,"<body onload=\"init();\">\n");
+	 fprintf (Gbl.F.Out,"<div id=\"zoomLyr\" class=\"ZOOM\">");
+	 fprintf (Gbl.F.Out,"<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
 			    " alt=\"\" title=\"\""
-			    " class=\"IMG_USR\" />"
-			    "<div id=\"zoomTxt\" class=\"CM\">",
+			    " class=\"IMG_USR\" />",
 		  Cfg_URL_ICON_PUBLIC);
+	 fprintf (Gbl.F.Out,"<div id=\"zoomTxt\" class=\"CM\">");
 	 HTM_DIV_End ();
 	 HTM_DIV_End ();
 	 break;
@@ -1046,17 +1046,17 @@ static void Lay_WriteTitleAction (void)
 	    Act_GetIcon (Act_GetSuperAction (Gbl.Action.Act)));
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">"
-	              "%s &gt; %s",
-	    The_ClassTitleAction[Gbl.Prefs.Theme],
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	    The_ClassTitleAction[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s &gt; %s",
 	    Txt_TABS_TXT[Act_GetTab (Gbl.Action.Act)],
 	    Act_GetTitleAction (Gbl.Action.Act));
    HTM_DIV_End ();
 
    /***** Subtitle *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">"
-	              "%s",
-	    The_ClassSubtitleAction[Gbl.Prefs.Theme],
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	    The_ClassSubtitleAction[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s",
 	    Act_GetSubtitleAction (Gbl.Action.Act));
    HTM_DIV_End ();
 
@@ -1162,8 +1162,8 @@ static void Lay_ShowRightColumn (void)
    if (!Gbl.Usrs.Me.Logged)
      {
       /***** SWADroid advertisement *****/
-      fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">"
-			 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
+      fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
+      fprintf (Gbl.F.Out,"<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 			 " target=\"_blank\" title=\"%s\">"
 			 "<img src=\"%s/SWADroid120x200.png\""
 			 " alt=\"SWADroid\" title=\"SWADroid\""
@@ -1286,12 +1286,12 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
       FuncParams ();
 
    /***** Start container and label *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT %s %s\" title=\"%s\">"
-	              "<label>",
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT %s %s\" title=\"%s\">",
             Checked ? "CHECKBOX_CHECKED" :
         	      "CHECKBOX_UNCHECKED",
             The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
             Title);
+   fprintf (Gbl.F.Out,"<label>");
 
    /****** Checkbox and text *****/
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
@@ -1472,20 +1472,19 @@ static void Lay_WriteAboutZone (void)
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">"
 		      "<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
-		      " style=\"width:%upx; height:%upx;\" />"
-		      "<div>"
-		      "%s",
+		      " style=\"width:%upx; height:%upx;\" />",
 	    Cfg_ABOUT_URL,
 	    Cfg_URL_ICON_PUBLIC,Cfg_ABOUT_LOGO,
 	    Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
-	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT,
-	    Cfg_ABOUT_NAME);
+	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT);
+   fprintf (Gbl.F.Out,"<div>");
+   fprintf (Gbl.F.Out,"%s",Cfg_ABOUT_NAME);
    HTM_DIV_End ();
    fprintf (Gbl.F.Out,"</a>");
 
    /***** Questions and problems *****/
-   fprintf (Gbl.F.Out,"<div>"
-		      "%s: "
+   fprintf (Gbl.F.Out,"<div>");
+   fprintf (Gbl.F.Out,"%s: "
 		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">%s</a>",
 	    Txt_Questions_and_problems,
 	    Cfg_PLATFORM_RESPONSIBLE_EMAIL,Cfg_PLATFORM_RESPONSIBLE_EMAIL);
@@ -1802,8 +1801,8 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
    extern const char *Txt_Inline_math;
    extern const char *Txt_Equation_centered;
 
-   fprintf (Gbl.F.Out,"<div class=\"HELP_EDIT\">"
-	              "%s: %s"
+   fprintf (Gbl.F.Out,"<div class=\"HELP_EDIT\">");
+   fprintf (Gbl.F.Out,"%s: %s"
                       " "
                       "%s: <code>%s</code>"
                       " "

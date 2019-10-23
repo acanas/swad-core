@@ -354,14 +354,14 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    fprintf (Gbl.F.Out,"<div class=\"MED_UPLOADER\">");		// container
 
    /***** Icon 'clip' *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s_med_ico\">"			// <id>_med_ico
-                      "<a href=\"\""
+   fprintf (Gbl.F.Out,"<div id=\"%s_med_ico\">",Id);		// <id>_med_ico
+   fprintf (Gbl.F.Out,"<a href=\"\""
                       " onclick=\"mediaActivateMediaUploader('%s');return false;\">"
 		      "<img src=\"%s/paperclip.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO_HIGHLIGHT ICOx16\" />"
                       "</a>",
-            Id,Id,
+            Id,
 	    Cfg_URL_ICON_PUBLIC,
             Txt_Multimedia,Txt_Multimedia);
    HTM_DIV_End ();						// <id>_med_ico
@@ -380,8 +380,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
    /***** Icons *****/
    /* Start icons */
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINERS\">"		// icons containers
-		      "<div class=\"PREF_CONTAINER\">");	// icons container
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINERS\">");	// icons containers
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");	// icons container
 
    /* Upload icon */
    Med_PutIconMediaUploader (Id,"ico_upl",			// <id>_ico_upl
@@ -420,8 +420,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
 
    /***** Media file *****/
-   fprintf (Gbl.F.Out,"<div>"
-	              "<input id=\"%s_fil\" type=\"file\""	// <id>_fil
+   fprintf (Gbl.F.Out,"<div>");
+   fprintf (Gbl.F.Out,"<input id=\"%s_fil\" type=\"file\""	// <id>_fil
 	              " name=\"%s\" accept=\"image/,video/\""
 	              " class=\"%s\" disabled=\"disabled\""
 	              " style=\"display:none;\" />",
@@ -431,8 +431,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    HTM_DIV_End ();						// <id>_fil
 
    /***** Media URL *****/
-   fprintf (Gbl.F.Out,"<div>"
-	              "<input id=\"%s_url\" type=\"url\""	// <id>_url
+   fprintf (Gbl.F.Out,"<div>");
+   fprintf (Gbl.F.Out,"<input id=\"%s_url\" type=\"url\""	// <id>_url
 		      " name=\"%s\" placeholder=\"%s\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\""
 	              " disabled=\"disabled\""
@@ -443,8 +443,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    HTM_DIV_End ();						// <id>_url
 
    /***** Media title *****/
-   fprintf (Gbl.F.Out,"<div>"
-	              "<input id=\"%s_tit\" type=\"text\""	// <id>_tit
+   fprintf (Gbl.F.Out,"<div>");
+   fprintf (Gbl.F.Out,"<input id=\"%s_tit\" type=\"text\""	// <id>_tit
 		      " name=\"%s\" placeholder=\"%s\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\""
 	              " disabled=\"disabled\""
@@ -475,12 +475,12 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 				      const char *Title)
   {
    /***** Icon to activate form in media uploader *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s_%s\" class=\"PREF_OFF\">"	// <id>_IdSuffix
-                      "<a href=\"\" onclick=\"%s('%s');return false;\">"
+   fprintf (Gbl.F.Out,"<div id=\"%s_%s\" class=\"PREF_OFF\">",	// <id>_IdSuffix
+            UniqueId,IdSuffix);
+   fprintf (Gbl.F.Out,"<a href=\"\" onclick=\"%s('%s');return false;\">"
                       "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"ICO_HIGHLIGHT ICOx16\" />"
                       "</a>",
-            UniqueId,IdSuffix,
 	    FunctionName,UniqueId,
             Cfg_URL_ICON_PUBLIC,Icon,Title,Title);
    HTM_DIV_End ();						// <id>_IdSuffix
@@ -1723,8 +1723,8 @@ static void Med_ShowYoutube (struct Media *Media,const char *ClassMedia)
 	 // 	allow="accelerometer; autoplay; encrypted-media;
 	 // 	gyroscope; picture-in-picture" allowfullscreen>
 	 // </iframe>
-	 fprintf (Gbl.F.Out,"<div class=\"MED_VIDEO_CONT\">"
-			    "<iframe src=\"https://www.youtube.com/embed/%s\""
+	 fprintf (Gbl.F.Out,"<div class=\"MED_VIDEO_CONT\">");
+	 fprintf (Gbl.F.Out,"<iframe src=\"https://www.youtube.com/embed/%s\""
 			    " frameborder=\"0\""
 			    " allow=\"accelerometer; autoplay; encrypted-media;"
 			    " gyroscope; picture-in-picture\""
@@ -1763,8 +1763,8 @@ static void Med_ShowEmbed (struct Media *Media,const char *ClassMedia)
 	 // 	style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;"
 	 // 	allowfullscreen>
 	 // </iframe>
-	 fprintf (Gbl.F.Out,"<div class=\"MED_EMBED_CONT\">"
-			    "<iframe src=\"%s\""
+	 fprintf (Gbl.F.Out,"<div class=\"MED_EMBED_CONT\">");
+	 fprintf (Gbl.F.Out,"<iframe src=\"%s\""
 			    " frameborder=\"0\""
 	 	            " marginwidth=\"0\" marginheight=\"0\" scrolling=\"no\""
 			    " allowfullscreen=\"allowfullscreen\""

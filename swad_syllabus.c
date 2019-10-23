@@ -141,8 +141,8 @@ void Syl_PutFormWhichSyllabus (void)
 
    /***** Form to select which syllabus I want to see (lectures/practicals) *****/
    Frm_StartForm (ActSeeSyl);
-   fprintf (Gbl.F.Out,"<div class=\"CM\">"
-                      "<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
    for (WhichSyllabus = (Syl_WhichSyllabus_t) 0;
 	WhichSyllabus < For_NUM_FORUM_SETS;

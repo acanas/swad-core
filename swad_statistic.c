@@ -4013,7 +4013,7 @@ void Sta_ShowLastClicks (void)
    fprintf (Gbl.F.Out,"<div id=\"lastclicks\""	// Used for AJAX based refresh
 	              " class=\"CM\">");
    Sta_GetAndShowLastClicks ();
-   HTM_DIV_End ();		// Used for AJAX based refresh
+   HTM_DIV_End ();				// Used for AJAX based refresh
 
    /***** End box *****/
    Box_EndBox ();

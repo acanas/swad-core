@@ -2608,8 +2608,8 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
                       Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE,2);
 
    /***** User's ID/nickname *****/
-   fprintf (Gbl.F.Out,"<div class=\"LM\">"
-	              "<label for=\"UsrId\">"
+   fprintf (Gbl.F.Out,"<div class=\"LM\">");
+   fprintf (Gbl.F.Out,"<label for=\"UsrId\">"
                       "<img src=\"%s/user.svg\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_ICO_16x16\" />"
 	              "</label>"
@@ -2626,8 +2626,8 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    HTM_DIV_End ();
 
    /***** User's password *****/
-   fprintf (Gbl.F.Out,"<div class=\"LM\">"
-	              "<label for=\"UsrPwd\">"
+   fprintf (Gbl.F.Out,"<div class=\"LM\">");
+   fprintf (Gbl.F.Out,"<label for=\"UsrPwd\">"
                       "<img src=\"%s/key.svg\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_ICO_16x16\" />"
 	              "</label>"
@@ -7365,8 +7365,8 @@ void Usr_ListDataAdms (void)
    if (Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs)
      {
       /****** Show photos? *****/
-      fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">"
-                         "<div class=\"PREF_OFF\">");
+      fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+      fprintf (Gbl.F.Out,"<div class=\"PREF_OFF\">");
       Frm_StartForm (ActLstOth);
       Sco_PutParamCurrentScope ();
       Usr_PutCheckboxListWithPhotos ();
@@ -9713,11 +9713,10 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
 	             "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_1_LINE %s\">"
-	              "%s",
+   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_1_LINE %s\">",
             Hidden ? "AUTHOR_TXT_LIGHT" :
-        	     "AUTHOR_TXT",
-            UsrDat.FullName);
+        	     "AUTHOR_TXT");
+   fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
    HTM_DIV_End ();
 
    /***** Free memory used for user's data *****/

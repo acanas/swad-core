@@ -469,8 +469,8 @@ void Tst_ShowNewTest (void)
 	    HTM_TABLE_End ();
 
 	    /***** Test result will be saved? *****/
-	    fprintf (Gbl.F.Out,"<div class=\"CM\">"
-	                       "<label class=\"%s\">"
+	    fprintf (Gbl.F.Out,"<div class=\"CM\">");
+	    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 			       "<input type=\"checkbox\" name=\"Save\""
 			       " value=\"Y\"",
 		     The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -641,8 +641,8 @@ void Tst_ShowTstTotalMark (unsigned NumQsts,double TotalScore)
    double TotalScoreOverSCORE_MAX = TotalScore * Tst_SCORE_MAX / (double) NumQsts;
 
    /***** Write total mark ****/
-   fprintf (Gbl.F.Out,"<div class=\"DAT CM\">"
-		      "%s: <span class=\"%s\">%.2lf (%.2lf %s %u)</span>",
+   fprintf (Gbl.F.Out,"<div class=\"DAT CM\">");
+   fprintf (Gbl.F.Out,"%s: <span class=\"%s\">%.2lf (%.2lf %s %u)</span>",
 	    Txt_Score,
 	    (TotalScoreOverSCORE_MAX >= (double) TotalScoreOverSCORE_MAX / 2.0) ? "ANS_OK" :
 					                                          "ANS_BAD",
@@ -1039,16 +1039,14 @@ static void Tst_WriteQstAndAnsTest (Tst_ActionToDoWithQuestions_t ActionToDoWith
    HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 
    /***** Write number of question *****/
-   fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">"
-	              "%u",
-	    NumQst + 1);
+   fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">");
+   fprintf (Gbl.F.Out,"%u",NumQst + 1);
    HTM_DIV_End ();
 
    /***** Write answer type (row[2]) *****/
    Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-   fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">"
-	              "%s",
-            Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+   fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">");
+   fprintf (Gbl.F.Out,"%s",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
    HTM_DIV_End ();
 
    HTM_TD_End ();
@@ -1107,9 +1105,8 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 	             StemRigorousHTML,StemLength,false);
 
    /***** Write the stem *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">"
-	              "%s",
-	    ClassStem,StemRigorousHTML);
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassStem);
+   fprintf (Gbl.F.Out,"%s",StemRigorousHTML);
    HTM_DIV_End ();
 
    /***** Free memory allocated for the stem *****/
@@ -1212,9 +1209,8 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 			   FeedbackRigorousHTML,FeedbackLength,false);
 
 	 /***** Write the feedback *****/
-	 fprintf (Gbl.F.Out,"<div class=\"%s\">"
-			    "%s",
-		  ClassFeedback,FeedbackRigorousHTML);
+	 fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassFeedback);
+	 fprintf (Gbl.F.Out,"%s",FeedbackRigorousHTML);
 	 HTM_DIV_End ();
 
 	 /***** Free memory allocated for the feedback *****/
@@ -2921,16 +2917,14 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 
       /* Write number of question */
-      fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">"
-	                 "%lu",
-	       NumRow + 1);
+      fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">");
+      fprintf (Gbl.F.Out,"%lu",NumRow + 1);
       HTM_DIV_End ();
 
       /* Write answer type (row[2]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">"
-	                 "%s",
-	       Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
+      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">");
+      fprintf (Gbl.F.Out,"%s",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
       HTM_DIV_End ();
 
       HTM_TD_End ();
@@ -3418,9 +3412,8 @@ void Tst_WriteAnswersEdit (long QstCod)
             HTM_TD_Begin ("class=\"LT\"");
 
             /* Write the text of the answer and the media */
-            fprintf (Gbl.F.Out,"<div class=\"TEST_EDI\">"
-        	               "%s",
-                     Answer);
+            fprintf (Gbl.F.Out,"<div class=\"TEST_EDI\">");
+            fprintf (Gbl.F.Out,"%s",Answer);
 	    Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
 	                   "TEST_MED_EDIT_LIST_CONTAINER",
 	                   "TEST_MED_EDIT_LIST");
@@ -3888,9 +3881,8 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 
       /* Answer text and feedback */
       HTM_TD_Begin ("class=\"LT\"");
-      fprintf (Gbl.F.Out,"<div class=\"ANS_TXT\">"
-	                 "%s",
-               Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
+      fprintf (Gbl.F.Out,"<div class=\"ANS_TXT\">");
+      fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
                      "TEST_MED_SHOW_CONTAINER",
                      "TEST_MED_SHOW");
@@ -3899,9 +3891,8 @@ static void Tst_WriteChoiceAnsAssessTest (struct UsrData *UsrDat,
 	 if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback)
 	    if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback[0])
 	      {
-	       fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\">"
-				  "%s",
-			Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback);
+	       fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\">");
+	       fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[Indexes[NumOpt]].Feedback);
 	       HTM_DIV_End ();
 	      }
       HTM_TD_End ();
@@ -4201,10 +4192,9 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 
       /***** Write letter for this option *****/
       HTM_TD_Begin ("class=\"MCH_TCH_BUTTON_TD\"");
-      fprintf (Gbl.F.Out,"<div class=\"MCH_TCH_BUTTON BT_%c\">"
-			 "%c",
-	       'A' + (char) NumOpt,
-	       'a' + (char) NumOpt);
+      fprintf (Gbl.F.Out,"<div class=\"MCH_TCH_BUTTON BT_%c\">",
+	       'A' + (char) NumOpt);
+      fprintf (Gbl.F.Out,"%c",'a' + (char) NumOpt);
       HTM_DIV_End ();
       HTM_TD_End ();
 
@@ -4383,17 +4373,15 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 
          /* Answer text and feedback */
          HTM_TD_Begin ("class=\"LT\"");
-         fprintf (Gbl.F.Out,"<div class=\"ANS_0\">"
-                            "%s",
-                  Gbl.Test.Answer.Options[NumOpt].Text);
+         fprintf (Gbl.F.Out,"<div class=\"ANS_0\">");
+         fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
          HTM_DIV_End ();
 	 if (Gbl.Test.Config.Feedback == Tst_FEEDBACK_FULL_FEEDBACK)
 	    if (Gbl.Test.Answer.Options[NumOpt].Feedback)
 	       if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
 		 {
-		  fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\">"
-				     "%s",
-			   Gbl.Test.Answer.Options[NumOpt].Feedback);
+		  fprintf (Gbl.F.Out,"<div class=\"TEST_EXA_LIGHT\">");
+		  fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Feedback);
 		  HTM_DIV_End ();
 		 }
 	 HTM_TD_End ();

@@ -207,7 +207,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    const char *ClassTxt = The_ClassBreadcrumb[Gbl.Prefs.Theme];
 
    /***** Form to go to the system *****/
-   fprintf (Gbl.F.Out,"<div class=\"BC %s\">&nbsp;",ClassTxt);
+   fprintf (Gbl.F.Out,"<div class=\"BC %s\">",ClassTxt);
+   fprintf (Gbl.F.Out,"&nbsp;");
 
    Frm_StartFormGoTo (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
@@ -439,19 +440,19 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    fprintf (Gbl.F.Out,"<div id=\"big_name_container\">");
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
-      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
-			 "%s",		// Full name
+      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">");
+      fprintf (Gbl.F.Out,"%s",		// Full name
 		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_CTR) ? Gbl.Hierarchy.Ctr.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_INS) ? Gbl.Hierarchy.Ins.FullName :
 	                                           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
       HTM_DIV_End ();
-      fprintf (Gbl.F.Out,"<div class=\"NOT_SHOWN\">"
-			 " / ");	// To separate
+      fprintf (Gbl.F.Out,"<div class=\"NOT_SHOWN\">");
+      fprintf (Gbl.F.Out," / ");	// To separate
       HTM_DIV_End ();
-      fprintf (Gbl.F.Out,"<div id=\"big_short_name\">"
-			 "%s",		// Short name
+      fprintf (Gbl.F.Out,"<div id=\"big_short_name\">");
+      fprintf (Gbl.F.Out,"%s",		// Short name
 		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.ShrtName :
 	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.ShrtName :
 	       ((Gbl.Hierarchy.Level == Hie_CTR) ? Gbl.Hierarchy.Ctr.ShrtName :
@@ -461,15 +462,15 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
      }
    else	// No country specified ==> home page
      {
-      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
-			 "%s: %s",	// Full name
+      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">");
+      fprintf (Gbl.F.Out,"%s: %s",	// Full name
 	       Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
       HTM_DIV_End ();
-      fprintf (Gbl.F.Out,"<div class=\"NOT_SHOWN\">"
-			 " / ");	// To separate
+      fprintf (Gbl.F.Out,"<div class=\"NOT_SHOWN\">");
+      fprintf (Gbl.F.Out," / ");	// To separate
       HTM_DIV_End ();
-      fprintf (Gbl.F.Out,"<div id=\"big_short_name\">"
-			 "%s",		// Short name
+      fprintf (Gbl.F.Out,"<div id=\"big_short_name\">");
+      fprintf (Gbl.F.Out,"%s",		// Short name
 	       Cfg_PLATFORM_SHORT_NAME);
       HTM_DIV_End ();
      }

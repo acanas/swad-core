@@ -469,8 +469,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
 
 	 /* Put a link to the RSS file */
-	 fprintf (Gbl.F.Out,"<div class=\"CM\">"
-			    "<a href=\"");
+	 fprintf (Gbl.F.Out,"<div class=\"CM\">");
+	 fprintf (Gbl.F.Out,"<a href=\"");
 	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.Hierarchy.Crs.CrsCod);
 	 fprintf (Gbl.F.Out,"\" target=\"_blank\">"
 			    "<img src=\"%s/rss-square.svg\""
@@ -712,9 +712,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    /***** Write the content of the notice *****/
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
-      fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT_BRIEF\">"
-	                 "%s",
-	       Content);
+      fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT_BRIEF\">");
+      fprintf (Gbl.F.Out,"%s",Content);
       HTM_DIV_End ();
 
       /* Put form to view full notice */
@@ -727,9 +726,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      }
    else
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">"
-	                 "%s",
-	       TextClass[Status],Content);
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",TextClass[Status]);
+      fprintf (Gbl.F.Out,"%s",Content);
       HTM_DIV_End ();
      }
 

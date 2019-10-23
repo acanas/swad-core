@@ -412,14 +412,14 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
       Frm_SetUniqueId (IdAlert);
       fprintf (Gbl.F.Out," id=\"%s\"",IdAlert);
      }
-   fprintf (Gbl.F.Out," class=\"CM\">"
-	              "<div class=\"ALERT\">");
+   fprintf (Gbl.F.Out," class=\"CM\">");
+   fprintf (Gbl.F.Out,"<div class=\"ALERT\">");
 
    /***** Icon to close the alert *****/
    if (AlertClosable[AlertType])
      {
-      fprintf (Gbl.F.Out,"<div class=\"ALERT_CLOSE\">"
-			 "<a href=\"\""
+      fprintf (Gbl.F.Out,"<div class=\"ALERT_CLOSE\">");
+      fprintf (Gbl.F.Out,"<a href=\"\""
 			 " onclick=\"toggleDisplay('%s');return false;\" />"
 			 "<img src=\"%s/close.svg\""
 			 " alt=\"%s\" title=\"%s\""
@@ -436,8 +436,8 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
    if (AlertType != Ale_NONE)
       fprintf (Gbl.F.Out," style=\"background-image:url('%s/%s');\"",
 	       Cfg_URL_ICON_PUBLIC,Ale_AlertIcons[AlertType]);
-   fprintf (Gbl.F.Out,">%s",
-            Txt);
+   fprintf (Gbl.F.Out,">");
+   fprintf (Gbl.F.Out,"%s",Txt);
    HTM_DIV_End ();
   }
 

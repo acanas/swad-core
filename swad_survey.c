@@ -537,10 +537,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Lay_EndArticle ();
 
    /* Number of questions and number of distinct users who have already answered this survey */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">"
-	              "%s: %u; %s: %u",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
             Svy.Status.Visible ? "ASG_GRP" :
-        	                 "ASG_GRP_LIGHT",
+        	                 "ASG_GRP_LIGHT");
+   fprintf (Gbl.F.Out,"%s: %u; %s: %u",
             Txt_No_of_questions,
             Svy.NumQsts,
             Txt_No_of_users,
@@ -610,10 +610,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Scope of the survey */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
             Svy.Status.Visible ? "ASG_GRP" :
-        	                 "ASG_GRP_LIGHT",
-            Txt_Scope);
+        	                 "ASG_GRP_LIGHT");
+   fprintf (Gbl.F.Out,"%s: ",Txt_Scope);
    switch (Svy.Scope)
      {
       case Hie_UNK:	// Unknown
@@ -641,10 +641,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    HTM_DIV_End ();
 
    /* Users' roles who can answer the survey */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s:<br />",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
             Svy.Status.Visible ? "ASG_GRP" :
-        	                 "ASG_GRP_LIGHT",
-            Txt_Users);
+        	                 "ASG_GRP_LIGHT");
+   fprintf (Gbl.F.Out,"%s:<br />",Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
 			   1 << Rol_TCH,
@@ -662,11 +662,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">"
-	              "%s",
+   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">",
             Svy.Status.Visible ? "DAT" :
-        	                 "DAT_LIGHT",
-            Txt);
+        	                 "DAT_LIGHT");
+   fprintf (Gbl.F.Out,"%s",Txt);
    HTM_DIV_End ();
    HTM_TD_End ();
 
@@ -2446,11 +2445,11 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
 			     Svy->SvyCod);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
             Svy->Status.Visible ? "ASG_GRP" :
-        	                  "ASG_GRP_LIGHT",
-            NumRows == 1 ? Txt_Group  :
-                           Txt_Groups);
+        	                  "ASG_GRP_LIGHT");
+   fprintf (Gbl.F.Out,"%s: ",NumRows == 1 ? Txt_Group  :
+                                            Txt_Groups);
 
    /***** Write groups *****/
    if (NumRows) // Groups found...

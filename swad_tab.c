@@ -99,10 +99,9 @@ void Tab_DrawTabs (void)
       };
 
    /***** Start tabs container *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">"
-                      "<nav id=\"tabs\">"
-	              "<ul class=\"LIST_TABS\">",
-            ClassHeadRow3[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassHeadRow3[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<nav id=\"tabs\">"
+	              "<ul class=\"LIST_TABS\">");
 
    /***** Draw the tabs *****/
    for (NumTab = (Tab_Tab_t) 1;
@@ -138,16 +137,15 @@ void Tab_DrawTabs (void)
 			     NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 							The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-			    " class=\"TAB_ICO\" />"
-			    "<div class=\"TAB_TXT %s\">"
-			    "%s",
+			    " class=\"TAB_ICO\" />",
 		  Gbl.Prefs.URLIconSet,
 		  Tab_GetIcon (NumTab),
 		  Txt_TABS_TXT[NumTab],
-		  Txt_TABS_TXT[NumTab],
-		  NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
-					     The_ClassTxtTabOff[Gbl.Prefs.Theme],
 		  Txt_TABS_TXT[NumTab]);
+	 fprintf (Gbl.F.Out,"<div class=\"TAB_TXT %s\">",
+		  NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
+					     The_ClassTxtTabOff[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"%s",Txt_TABS_TXT[NumTab]);
 	 HTM_DIV_End ();
 	 fprintf (Gbl.F.Out,"</a>");
 	 Frm_EndForm ();

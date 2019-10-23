@@ -3372,7 +3372,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    /***** Begin form to send a message to this user *****/
    HTM_TD_Begin ("class=\"LT\"");
 
-   fprintf (Gbl.F.Out,"<div class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
+   fprintf (Gbl.F.Out,"<div class=\"OWNER_WORKS_DATA AUTHOR_TXT\">");
 
    switch (UsrDat->Roles.InCurrentCrs.Role)
      {
@@ -4069,9 +4069,8 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
      }
    if (Subtitle[0])
      {
-      fprintf (Gbl.F.Out,"<div class=\"BROWSER_SUBTITLE\">"
-	                 "%s",
-               Subtitle);
+      fprintf (Gbl.F.Out,"<div class=\"BROWSER_SUBTITLE\">");
+      fprintf (Gbl.F.Out,"%s",Subtitle);
       HTM_DIV_End ();
      }
   }
@@ -6306,8 +6305,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	 HTM_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
 
-      fprintf (Gbl.F.Out,"&nbsp;"
-	                 "<div class=\"FILENAME\">");
+      fprintf (Gbl.F.Out,"&nbsp;");
+      fprintf (Gbl.F.Out,"<div class=\"FILENAME\">");
 
       Frm_StartForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
       Brw_PutImplicitParamsFileBrowser ();
@@ -8405,8 +8404,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    Par_PutHiddenParamString ("ses",Gbl.Session.Id);
    Brw_PutImplicitParamsFileBrowser ();
 
-   fprintf (Gbl.F.Out,"<div class=\"dz-message\">"
-		      "<span class=\"DAT_LIGHT\">%s</span>",
+   fprintf (Gbl.F.Out,"<div class=\"dz-message\">");
+   fprintf (Gbl.F.Out,"<span class=\"DAT_LIGHT\">%s</span>",
             Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
    HTM_DIV_End ();
    Frm_EndForm ();

@@ -274,8 +274,8 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    Rep_TitleReport (&Report->CurrentTimeUTC);
 
    /***** Put anchor and report filename *****/
-   fprintf (Gbl.F.Out,"<div class=\"FILENAME_TXT CM\">"
-                      "<a href=\"%s\" class=\"FILENAME_TXT\""
+   fprintf (Gbl.F.Out,"<div class=\"FILENAME_TXT CM\">");
+   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME_TXT\""
 		      " title=\"%s\" target=\"_blank\">"
                       "<img src=\"%s/file-alt.svg\" alt=\"%s\""
 	              " class=\"ICO64x64\" /><br />"
@@ -287,8 +287,8 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
             Txt_Report,
 	    Report->FilenameReport);
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">"
-	              "%s",
+   fprintf (Gbl.F.Out,"<div class=\"DAT_LIGHT\">");
+   fprintf (Gbl.F.Out,"%s",
             Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists);
    HTM_DIV_End ();
 

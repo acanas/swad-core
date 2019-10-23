@@ -609,7 +609,8 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Match *Mat
 			     Match->MchCod);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<div class=\"ASG_GRP\">%s: ",
+   fprintf (Gbl.F.Out,"<div class=\"ASG_GRP\">");
+   fprintf (Gbl.F.Out,"%s: ",
             NumRows == 1 ? Txt_Group  :
                            Txt_Groups);
 
@@ -674,9 +675,8 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Match *Match,unsigned N
    if (Match->Status.QstInd < Mch_AFTER_LAST_QUESTION)	// Unfinished match
      {
       /* Current question index / total of questions */
-      fprintf (Gbl.F.Out,"<div class=\"DAT\">"
-	                 "%u/%u",
-	       Match->Status.QstInd,NumQsts);
+      fprintf (Gbl.F.Out,"<div class=\"DAT\">");
+      fprintf (Gbl.F.Out,"%u/%u",Match->Status.QstInd,NumQsts);
       HTM_DIV_End ();
      }
 
@@ -2168,8 +2168,8 @@ static void Mch_ShowRefreshablePartTch (struct Match *Match)
    /***** Number of users who have answered this question *****/
    NumAnswerersQst = Mch_GetNumUsrsWhoHaveAnswerQst (Match->MchCod,
 						     Match->Status.QstInd);
-   fprintf (Gbl.F.Out,"<div class=\"MCH_NUM_ANSWERERS\">"
-		      "%s<br />"
+   fprintf (Gbl.F.Out,"<div class=\"MCH_NUM_ANSWERERS\">");
+   fprintf (Gbl.F.Out,"%s<br />"
 		      "<strong>",
 	    Txt_MATCH_respond);
    if (Match->Status.QstInd > 0 &&
@@ -2442,9 +2442,8 @@ static void Mch_ShowFormViewResult (struct Match *Match)
 static void Mch_ShowMatchTitle (struct Match *Match)
   {
    /***** Match title *****/
-   fprintf (Gbl.F.Out,"<div class=\"MCH_TOP\">"
-	              "%s",
-	    Match->Title);
+   fprintf (Gbl.F.Out,"<div class=\"MCH_TOP\">");
+   fprintf (Gbl.F.Out,"%s",Match->Title);
    HTM_DIV_End ();
   }
 
@@ -2869,8 +2868,8 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
    Mch_PutParamMchCod (MchCod);
 
    /***** Put icon with link *****/
-   fprintf (Gbl.F.Out,"<div class=\"MCH_BUTTON_CONTAINER\">"
-                      "<a href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
+   fprintf (Gbl.F.Out,"<div class=\"MCH_BUTTON_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<a href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
 	              " onclick=\"document.getElementById('%s').submit();"
 	              " return false;\">"
 	              "<i class=\"%s\"></i>"
@@ -2887,10 +2886,9 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 static void Mch_PutBigButtonOff (const char *Icon)
   {
    /***** Put inactive icon *****/
-   fprintf (Gbl.F.Out,"<div class=\"MCH_BUTTON_CONTAINER\">"
-                      "<div class=\"MCH_BUTTON_OFF\">"
-	              "<i class=\"%s\"></i>",
-	    Icon);
+   fprintf (Gbl.F.Out,"<div class=\"MCH_BUTTON_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<div class=\"MCH_BUTTON_OFF\">");
+   fprintf (Gbl.F.Out,"<i class=\"%s\"></i>",Icon);
    HTM_DIV_End ();
    HTM_DIV_End ();
   }
@@ -2900,8 +2898,8 @@ static void Mch_PutBigButtonClose (void)
    extern const char *Txt_Close;
 
    /***** Put icon with link *****/
-   fprintf (Gbl.F.Out,"<div class=\"MCH_BUTTON_CONTAINER\">"
-                      "<a href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
+   fprintf (Gbl.F.Out,"<div class=\"MCH_BUTTON_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<a href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
 	              " onclick=\"window.close();"
 	              " return false;\"\">"
 	              "<i class=\"%s\"></i>"
@@ -2916,10 +2914,9 @@ static void Mch_PutBigButtonClose (void)
 
 static void Mch_ShowWaitImage (const char *Txt)
   {
-   fprintf (Gbl.F.Out,"<div class=\"MCH_WAIT_CONTAINER\">"
-		      "<img src=\"%s/wait.gif\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"MCH_WAIT_IMG\" />",
+   fprintf (Gbl.F.Out,"<div class=\"MCH_WAIT_CONTAINER\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/wait.gif\""
+		      " alt=\"%s\" title=\"%s\" class=\"MCH_WAIT_IMG\" />",
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt,
 	    Txt);

@@ -410,8 +410,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
    Grp_FreeListGrpTypesAndGrps ();
 
    /***** Submit button *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\""
-		      " style=\"padding-top:12px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CM\" style=\"padding-top:12px;\">");
    Frm_LinkFormSubmitAnimated (Txt_Update_users,
 			       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
 			       "CopyMessageToHiddenFields();");
@@ -453,8 +452,8 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
 	 break;
      }
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">"
-		      "<input type=\"checkbox\""
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">");
+   fprintf (Gbl.F.Out,"<input type=\"checkbox\""
 		      " id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"");
    if (ICanSelUnselGroup)
      {

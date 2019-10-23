@@ -1394,8 +1394,8 @@ static void TL_PutLinkToViewNewPublications (void)
    // div is hidden. When new posts arrive to the client via AJAX, div is shown
    fprintf (Gbl.F.Out,"<div id=\"view_new_posts_container\""
 	              " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\""
-	              " style=\"display:none;\">"
-                      "<a href=\"\" class=\"%s\""
+	              " style=\"display:none;\">");
+   fprintf (Gbl.F.Out,"<a href=\"\" class=\"%s\""
                       " onclick=\"moveNewTimelineToTimeline(); return false;\" />"
                       "%s (<span id=\"view_new_posts_count\">0</span>)"
 	              "</a>",
@@ -1415,8 +1415,8 @@ static void TL_PutLinkToViewOldPublications (void)
 
    /***** Animated link to view old publications *****/
    fprintf (Gbl.F.Out,"<div id=\"view_old_posts_container\""
-	              " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\">"
-                      "<a href=\"\" class=\"%s\" onclick=\""
+	              " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\">");
+   fprintf (Gbl.F.Out,"<a href=\"\" class=\"%s\" onclick=\""
    		      "document.getElementById('get_old_timeline').style.display='none';"	// Icon to be hidden on click
 		      "document.getElementById('getting_old_timeline').style.display='';"	// Icon to be shown on click
                       "refreshOldTimeline();"
@@ -1578,25 +1578,22 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_INS_DOC_PUB_FILE:
 	       case TL_NOTE_INS_SHA_PUB_FILE:
 		  /* Write location (institution) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">"
-			             "%s: %s",
-			   Txt_Institution,Ins.ShrtName);
+		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">");
+		  fprintf (Gbl.F.Out,"%s: %s",Txt_Institution,Ins.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_CTR_DOC_PUB_FILE:
 	       case TL_NOTE_CTR_SHA_PUB_FILE:
 		  /* Write location (centre) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">"
-			             "%s: %s",
-			   Txt_Centre,Ctr.ShrtName);
+		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">");
+		  fprintf (Gbl.F.Out,"%s: %s",Txt_Centre,Ctr.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_DEG_DOC_PUB_FILE:
 	       case TL_NOTE_DEG_SHA_PUB_FILE:
 		  /* Write location (degree) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">"
-			             "%s: %s",
-			   Txt_Degree,Deg.ShrtName);
+		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">");
+		  fprintf (Gbl.F.Out,"%s: %s",Txt_Degree,Deg.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_CRS_DOC_PUB_FILE:
@@ -1604,16 +1601,14 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_EXAM_ANNOUNCEMENT:
 	       case TL_NOTE_NOTICE:
 		  /* Write location (course) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">"
-			             "%s: %s",
-			   Txt_Course,Crs.ShrtName);
+		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">");
+		  fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_FORUM_POST:
 		  /* Write forum name */
-		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">"
-			             "%s: %s",
-			   Txt_Forum,ForumName);
+		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">");
+		  fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
 		  HTM_DIV_End ();
 		  break;
 	       default:
@@ -1622,9 +1617,8 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 
 	 /* Write note summary */
 	 TL_GetNoteSummary (SocNot,SummaryStr);
-	 fprintf (Gbl.F.Out,"<div class=\"TL_TXT\">"
-	                    "%s",
-	          SummaryStr);
+	 fprintf (Gbl.F.Out,"<div class=\"TL_TXT\">");
+	 fprintf (Gbl.F.Out,"%s",SummaryStr);
 	 HTM_DIV_End ();
 	}
 
@@ -1954,9 +1948,8 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
        Gbl.Form.Inside)		// Inside another form
      {
       /***** Do not put form *****/
-      fprintf (Gbl.F.Out,"<div class=\"TL_FORM_OFF\">"
-	                 "%s",
-               Txt_TIMELINE_NOTE[SocNot->NoteType]);
+      fprintf (Gbl.F.Out,"<div class=\"TL_FORM_OFF\">");
+      fprintf (Gbl.F.Out,"%s",Txt_TIMELINE_NOTE[SocNot->NoteType]);
       if (SocNot->Unavailable)
          fprintf (Gbl.F.Out," (%s)",Txt_not_available);
       HTM_DIV_End ();
@@ -2339,8 +2332,8 @@ static void TL_PutFormToWriteNewPost (void)
    fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\">");
 
    /* Write author's full name and nickname */
-   fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\">"
-		      "<span class=\"DAT_N_BOLD\">%s</span>"
+   fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\">");
+   fprintf (Gbl.F.Out,"<span class=\"DAT_N_BOLD\">%s</span>"
 		      "<span class=\"DAT_LIGHT\"> @%s</span>",
 	    Gbl.Usrs.Me.UsrDat.FullName,Gbl.Usrs.Me.UsrDat.Nickname);
    HTM_DIV_End ();
@@ -2507,13 +2500,13 @@ static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID 
    extern const char *Txt_Comment;
 
    /***** Link to toggle on/off the form to comment a note *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s_ico\" class=\"TL_ICO_COM_OFF\">"
-                      "<a href=\"\""
+   fprintf (Gbl.F.Out,"<div id=\"%s_ico\" class=\"TL_ICO_COM_OFF\">",UniqueId);
+   fprintf (Gbl.F.Out,"<a href=\"\""
                       " onclick=\"toggleNewComment ('%s');return false;\">"
                       "<img src=\"%s/edit.svg\" alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_16x16\" />"
                       "</a>",
-            UniqueId,UniqueId,
+            UniqueId,
             Cfg_URL_ICON_PUBLIC,
             Txt_Comment,Txt_Comment);
    HTM_DIV_End ();
@@ -2528,8 +2521,8 @@ static void TL_PutIconCommentDisabled (void)
    extern const char *Txt_Comment;
 
    /***** Disabled icon to comment a note *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_ICO_COM_OFF TL_ICO_DISABLED\">"
- 		      "<img src=\"%s/edit.svg\""
+   fprintf (Gbl.F.Out,"<div class=\"TL_ICO_COM_OFF TL_ICO_DISABLED\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/edit.svg\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO16x16\" />",
 	    Cfg_URL_ICON_PUBLIC,
@@ -2752,8 +2745,8 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
 
       fprintf (Gbl.F.Out,"<div class=\"TL_LEFT_PHOTO\">");
       HTM_DIV_End ();
-      fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\">"
-                         "<ul class=\"LIST_LEFT\">");
+      fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\">");
+      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
      }
 
    /***** Start list item *****/

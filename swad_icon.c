@@ -332,11 +332,9 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,void (*FuncParams) (voi
 
 void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
   {
-   fprintf (Gbl.F.Out,"<div class=\"%s\">"
-		      "<img src=\"%s/%s\""
-		      " alt=\"%s\" title=\"%s\""
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",DivClass);
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 		      " class=\"CONTEXT_ICO_16x16\" />",
-	    DivClass,
 	    Cfg_URL_ICON_PUBLIC,Icon,
 	    Title,Title);
    HTM_DIV_End ();
@@ -373,8 +371,8 @@ void Ico_PutIconLink (const char *Icon,const char *Title)
 void Ico_PutIconTextLink (const char *Icon,const char *Text)
   {
    /***** Print icon and optional text *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_ICO_x16\" />"
 	              "&nbsp;%s",
             Cfg_URL_ICON_PUBLIC,Icon,Text,Text,
@@ -413,8 +411,8 @@ void Ico_PutIconOff (const char *Icon,const char *Title)
 
 void Ico_PutCalculateIcon (const char *Title)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""	// TODO: change name and resolution to refresh64x64.png
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">");
+   fprintf (Gbl.F.Out,"<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""	// TODO: change name and resolution to refresh64x64.png
 	              " alt=\"%s\" title=\"%s\""
 		      " class=\"CONTEXT_ICO_16x16\" />"
 		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""	// TODO: change name and resolution to refreshing64x64.gif
@@ -435,8 +433,8 @@ void Ico_PutCalculateIcon (const char *Title)
 void Ico_PutCalculateIconWithText (const char *Text)
   {
    fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
-	              " style=\"margin:0 6px 0 0; display:inline;\">"
-	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""
+	              " style=\"margin:0 6px 0 0; display:inline;\">");
+   fprintf (Gbl.F.Out,"<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
 		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""

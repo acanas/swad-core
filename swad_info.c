@@ -599,8 +599,8 @@ void Inf_WriteMsgYouMustReadInfo (void)
    Ale_ShowAlert (Ale_WARNING,Txt_You_should_read_the_following_information);
 
    /***** Write every information I must read *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\">"
-	              "<ul class=\"LIST_LEFT\""
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\""
 	              " style=\"list-style-type:initial;\">");
    for (InfoType = (Inf_InfoType_t) 0;
 	InfoType < Inf_NUM_INFO_TYPES;
@@ -1272,8 +1272,8 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
 
    /***** File *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\">"
-	              "<label class=\"%s\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" />"
                       "</label>",
@@ -1307,8 +1307,8 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
 
    /***** Link *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\">"
-                      "<label class=\"%s\">"
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"url\" name=\"InfoSrcURL\""
                       " size=\"50\" maxlength=\"256\" value=\"",

@@ -195,11 +195,10 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
    /***** Frame title *****/
    if (Title)
      {
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE %s\">"
-	                 "%s",
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE %s\">",
 	       Gbl.Box.Nested ? "FRAME_TITLE_SMALL" :
-		            "FRAME_TITLE_BIG",
-	       Title);
+		                "FRAME_TITLE_BIG");
+      fprintf (Gbl.F.Out,"%s",Title);
       HTM_DIV_End ();
      }
   }

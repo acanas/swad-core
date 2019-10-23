@@ -143,8 +143,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 
    /***** Scope (whole platform, current country, current institution,
                  current centre, current degree or current course) *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\">"
-	              "<label class=\"%s\">%s:&nbsp;",
+   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Hie_SYS |
 	               1 << Hie_CTY |

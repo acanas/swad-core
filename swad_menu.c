@@ -375,10 +375,9 @@ void Mnu_WriteMenuThisTab (void)
 		  Act_GetIcon (NumAct));
 
          /***** Text *****/
-	 fprintf (Gbl.F.Out,"<div class=\"MENU_TEXT %s\">"
-	                    "%s",
-		  The_ClassTxtMenu[Gbl.Prefs.Theme],
-		  Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
+	 fprintf (Gbl.F.Out,"<div class=\"MENU_TEXT %s\">",
+		  The_ClassTxtMenu[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"%s",Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
 	 HTM_DIV_End ();
 
          /***** End link and form *****/

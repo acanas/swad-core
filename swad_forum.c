@@ -1757,8 +1757,8 @@ static void For_PutFormWhichForums (void)
           - only the forums of current institution/degree/course *****/
    Frm_StartForm (ActSeeFor);
    For_PutParamForumOrder (Gbl.Forum.ThreadsOrder);
-   fprintf (Gbl.F.Out,"<div class=\"SEL_BELOW_TITLE\">"
-	              "<ul>");
+   fprintf (Gbl.F.Out,"<div class=\"SEL_BELOW_TITLE\">");
+   fprintf (Gbl.F.Out,"<ul>");
 
    for (ForumSet = (For_ForumSet_t) 0;
 	ForumSet < For_NUM_FORUM_SETS;

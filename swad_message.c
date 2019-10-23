@@ -449,11 +449,10 @@ static void Msg_ShowOneUniqueRecipient (void)
    HTM_DIV_End ();
 
    /***** Write user's name *****/
-   fprintf (Gbl.F.Out,"<div class=\"MSG_TO_ONE_RCP %s\">"
-	              "%s",
+   fprintf (Gbl.F.Out,"<div class=\"MSG_TO_ONE_RCP %s\">",
             Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
-        	                             "DAT_SMALL_NOBR",
-            Gbl.Usrs.Other.UsrDat.FullName);
+        	                             "DAT_SMALL_NOBR");
+   fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
    HTM_DIV_End ();
 
    /***** Hidden parameter with user's nickname *****/
@@ -3283,9 +3282,8 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
          ThereIsOrgCrs = true;
          if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Crs.CrsCod)))	// Message sent from current course
            {
-            fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
-        	               "(%s)",
-                     Txt_from_this_course);
+            fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">");
+            fprintf (Gbl.F.Out,"(%s)",Txt_from_this_course);
             HTM_DIV_End ();
            }
          else	// Message sent from another course
@@ -3293,8 +3291,8 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             /* Write course, including link */
             Frm_StartFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
-        	               "(");
+            fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">");
+            fprintf (Gbl.F.Out,"(");
             snprintf (Gbl.Title,sizeof (Gbl.Title),
         	      Txt_Go_to_X,
 		      Crs.FullName);
@@ -3308,9 +3306,8 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
      }
    if (!ThereIsOrgCrs)	// It's an old message without origin source specified, or is a message sent from none course
      {
-      fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
-	                 "(%s)",
-               Txt_no_course_of_origin);
+      fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">");
+      fprintf (Gbl.F.Out,"(%s)",Txt_no_course_of_origin);
       HTM_DIV_End ();
      }
 

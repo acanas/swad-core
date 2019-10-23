@@ -308,9 +308,8 @@ static void Cty_Configuration (bool PrintView)
 	}
       else if (MapAttribution)
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">"
-			    "%s",
-		  MapAttribution);
+	 fprintf (Gbl.F.Out,"<div class=\"ATTRIBUTION\">");
+	 fprintf (Gbl.F.Out,"%s",MapAttribution);
 	 HTM_DIV_End ();
 	}
 

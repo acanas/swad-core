@@ -324,15 +324,13 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
      }
 
    /***** Write the subject of the announcement *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">"
-	              "%s",
-            SubjectClass[Status],Subject);
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",SubjectClass[Status]);
+   fprintf (Gbl.F.Out,"%s",Subject);
    HTM_DIV_End ();
 
    /***** Write the content of the announcement *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">"
-	              "%s",
-            ContentClass[Status],Content);
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",ContentClass[Status]);
+   fprintf (Gbl.F.Out,"%s",Content);
    HTM_DIV_End ();
 
    /***** Write form *****/

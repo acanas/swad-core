@@ -784,8 +784,8 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 	     "%s/%s_map.jpg",
              Cfg_PATH_PHOTO_TMP_PUBLIC,
 	     Gbl.UniqueNameEncrypted);
-   fprintf (Gbl.F.Out,"<div class=\"TIT CM\">"
-                      "<img src=\"%s/%s_map.jpg\""
+   fprintf (Gbl.F.Out,"<div class=\"TIT CM\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s_map.jpg\""
                       " usemap=\"#faces_map\""
                       " alt=\"%s\" title=\"%s\" />",
             Cfg_URL_PHOTO_TMP_PUBLIC,
@@ -1218,9 +1218,8 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       /* Nickname */
       if (UsrDat->Nickname[0])
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_N\">"
-			    "@%s",
-		  UsrDat->Nickname);
+	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL_N\">");
+	 fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
 	 HTM_DIV_End ();
 	}
 
@@ -1244,11 +1243,11 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       Usr_GetMainDeg (UsrDat->UsrCod,MainDegreeShrtName,&MaxRole);
       if (MainDegreeShrtName[0])
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">"
-		            "<div class=\"ZOOM_DEG\""
-		            " style=\"background-image:url('%s/%s');\">"
-			    "%s",
-		  Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole],
+	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">");
+	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_DEG\""
+		            " style=\"background-image:url('%s/%s');\">",
+		  Cfg_URL_ICON_PUBLIC,Rol_Icons[MaxRole]);
+	 fprintf (Gbl.F.Out,"%s",
 		  MainDegreeShrtName);
 	 HTM_DIV_End ();
 	 HTM_DIV_End ();
@@ -1258,8 +1257,8 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       if (UsrDat->Nickname[0])	// Get social data only if nickname is retrieved (in some actions)
         {
 	 Fol_GetNumFollow (UsrDat->UsrCod,&NumFollowing,&NumFollowers);
-	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE\">"
-			    "<span class=\"DAT_N_BOLD\">%u</span>"
+	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE\">");
+	 fprintf (Gbl.F.Out,"<span class=\"DAT_N_BOLD\">%u</span>"
 			    "<span class=\"DAT_SMALL\">&nbsp;%s&nbsp;</span>"
 			    "<span class=\"DAT_N_BOLD\">%u</span>"
 			    "<span class=\"DAT_SMALL\">&nbsp;%s</span>",
@@ -2491,10 +2490,9 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 		      NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
 				    0);
 	    Frm_SetUniqueId (IdCaption);
-	    fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">"
-	                       "<div class=\"ZOOM_TXT_LINE DAT_N\">"
-			       "%s",
-		     IdCaption,PhotoCaption);
+	    fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">",IdCaption);
+	    fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_N\">");
+	    fprintf (Gbl.F.Out,"%s",PhotoCaption);
 	    HTM_DIV_End ();
 	    HTM_DIV_End ();
 	   }
@@ -2519,8 +2517,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
             PhotoWidth,PhotoHeight);
 
    /***** Caption *****/
-   fprintf (Gbl.F.Out,"<div class=\"CLASSPHOTO_CAPTION\">"
-	              "%s<br />"
+   fprintf (Gbl.F.Out,"<div class=\"CLASSPHOTO_CAPTION\">");
+   fprintf (Gbl.F.Out,"%s<br />"
 	              "%d&nbsp;%s<br />"
 	              "%d&nbsp;%s<br />"
 	              "(%d%%)",

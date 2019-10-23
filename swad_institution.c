@@ -485,8 +485,8 @@ static void Ins_Configuration (bool PrintView)
      }
    else	// I can not change institution WWW
      {
-      fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
-			 "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
+      fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">");
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 			 "%s"
 			 "</a>",
 	       Gbl.Hierarchy.Ins.WWW,
@@ -1555,8 +1555,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
          Str_Copy (WWW,Ins->WWW,
                    Cns_MAX_BYTES_WWW);
-         fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_SHORT\">"
-                            "<a href=\"%s\" target=\"_blank\""
+         fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_SHORT\">");
+         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
                             "%s"
                             "</a>",

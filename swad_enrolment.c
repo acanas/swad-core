@@ -728,28 +728,22 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	         Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
 
    /***** Step 1: List of students to be enroled / removed *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s LM\">"
-                      "%s",
-            The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Step_1_Provide_a_list_of_users);
+   fprintf (Gbl.F.Out,"<div class=\"%s LM\">",The_ClassTitle[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s",Txt_Step_1_Provide_a_list_of_users);
    HTM_DIV_End ();
 
    Ale_ShowAlert (Ale_INFO,Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_);
    Enr_PutAreaToEnterUsrsIDs ();
 
    /***** Step 2: Put different actions to register/remove users to/from current course *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s LM\">"
-                      "%s",
-            The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Step_2_Select_the_desired_action);
+   fprintf (Gbl.F.Out,"<div class=\"%s LM\">",The_ClassTitle[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s",Txt_Step_2_Select_the_desired_action);
    HTM_DIV_End ();
    Enr_PutActionsRegRemSeveralUsrs ();
 
    /***** Step 3: Select groups in which register / remove users *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s LM\">"
-                      "%s",
-            The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Step_3_Optionally_select_groups);
+   fprintf (Gbl.F.Out,"<div class=\"%s LM\">",The_ClassTitle[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s",Txt_Step_3_Optionally_select_groups);
    HTM_DIV_End ();
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
      {
@@ -765,10 +759,8 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
      }
 
    /***** Step 4: Confirm register / remove students *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s LM\">"
-                      "%s",
-            The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Step_4_Confirm_the_enrolment_removing);
+   fprintf (Gbl.F.Out,"<div class=\"%s LM\">",The_ClassTitle[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s",Txt_Step_4_Confirm_the_enrolment_removing);
    HTM_DIV_End ();
    Pwd_AskForConfirmationOnDangerousAction ();
 
