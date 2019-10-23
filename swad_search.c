@@ -134,7 +134,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    Sch_WhatToSearch_t WhatToSearch;
 
    /***** Start box *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   HTM_DIV_Begin ("class=\"CM\"");
    Box_StartBox (NULL,Txt_Search,Crs_PutIconToSelectMyCourses,
                  Hlp_START_Search,Box_NOT_CLOSABLE);
 
@@ -143,7 +143,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 
    /***** Scope (whole platform, current country, current institution,
                  current centre, current degree or current course) *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   HTM_DIV_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Hie_SYS |
@@ -228,13 +228,15 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
 
 void Sch_PutFormToSearchInPageTopHeading (void)
   {
+   HTM_DIV_Begin ("id=\"head_row_1_search\"");
+
    /***** Put form *****/
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
    Frm_StartForm (ActSch);
    Sco_PutParamScope ("ScopeSch",Hie_SYS);
    Sch_PutInputStringToSearch ("head_search_text");
    Sch_PutMagnifyingGlassButton ("search-white.svg");
    Frm_EndForm ();
+
    HTM_DIV_End ();	// head_row_1_search
   }
 

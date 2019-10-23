@@ -207,7 +207,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
    char URL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_WEBS\">");
+   HTM_DIV_Begin ("class=\"REC_WEBS\"");
 
    /***** Show link to public profile *****/
    Net_ShowAWebOrSocialNet (Prf_GetURLPublicProfile (URL,UsrDat->Nickname),
@@ -251,7 +251,7 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
                                      const char *Icon,const char *Title)
   {
    /***** Write link and icon *****/
-   fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\" style=\"display:inline;\">");
+   HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\" style=\"display:inline;\"");
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" title=\"%s\">"
 		      "<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""

@@ -220,7 +220,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    /***** Start box *****/
    Box_StartBox (NULL,Txt_My_frequent_actions,NULL,
                  Hlp_ANALYTICS_Frequent,Box_NOT_CLOSABLE);
-   fprintf (Gbl.F.Out,"<div id=\"MFU_actions_big\">");
+   HTM_DIV_Begin ("id=\"MFU_actions_big\"");
 
    /***** Write list of frequently used actions *****/
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
@@ -277,7 +277,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
 
    /***** Start div and link *****/
-   fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">");
+   HTM_DIV_Begin ("id=\"MFU_actions\"");
    Frm_StartForm (ActMFUAct);
    Frm_LinkFormSubmit (Txt_My_frequent_actions,NULL,NULL);
    fprintf (Gbl.F.Out," %s"

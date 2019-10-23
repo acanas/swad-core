@@ -275,9 +275,8 @@ void The_PutIconsToSelectTheme (void)
 	Theme < The_NUM_THEMES;
 	Theme++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-               Theme == Gbl.Prefs.Theme ? "PREF_ON" :
-        	                          "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",Theme == Gbl.Prefs.Theme ? "PREF_ON" :
+        	                                               "PREF_OFF");
       Frm_StartForm (ActChgThe);
       Par_PutHiddenParamString ("Theme",The_ThemeId[Theme]);
       snprintf (Icon,sizeof (Icon),

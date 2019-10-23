@@ -3372,7 +3372,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    /***** Begin form to send a message to this user *****/
    HTM_TD_Begin ("class=\"LT\"");
 
-   fprintf (Gbl.F.Out,"<div class=\"OWNER_WORKS_DATA AUTHOR_TXT\">");
+   HTM_DIV_Begin ("class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
 
    switch (UsrDat->Roles.InCurrentCrs.Role)
      {
@@ -3768,7 +3768,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    Brw_UpdateLastAccess ();
 
    /***** Write contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
    /* Put checkbox to show the full tree */
    Brw_PutCheckboxFullTree ();
@@ -4069,7 +4069,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
      }
    if (Subtitle[0])
      {
-      fprintf (Gbl.F.Out,"<div class=\"BROWSER_SUBTITLE\">");
+      HTM_DIV_Begin ("class=\"BROWSER_SUBTITLE\"");
       fprintf (Gbl.F.Out,"%s",Subtitle);
       HTM_DIV_End ();
      }
@@ -4104,7 +4104,7 @@ static void Brw_ShowAndStoreSizeOfFileTree (void)
    extern const char *Txt_of_PART_OF_A_TOTAL;
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
-   fprintf (Gbl.F.Out,"<div class=\"DAT CM\">");
+   HTM_DIV_Begin ("class=\"DAT CM\"");
 
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
      {
@@ -5899,11 +5899,10 @@ static void Brw_PutIconToExpandFolder (const char *FileBrowserId,const char *Row
    char JavaScriptFuncToExpandFolder[256 + Brw_MAX_ROW_ID];
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div id=\"expand_%s_%s\"",
-	    FileBrowserId,RowId);
    if (Hidden)
-      fprintf (Gbl.F.Out," style=\"display:none;\"");
-   fprintf (Gbl.F.Out,">");
+      HTM_DIV_Begin ("id=\"expand_%s_%s\" style=\"display:none;\"",FileBrowserId,RowId);
+   else
+      HTM_DIV_Begin ("id=\"expand_%s_%s\"",FileBrowserId,RowId);
 
    /***** Form and icon *****/
    snprintf (JavaScriptFuncToExpandFolder,sizeof (JavaScriptFuncToExpandFolder),
@@ -5931,11 +5930,10 @@ static void Brw_PutIconToContractFolder (const char *FileBrowserId,const char *R
    char JavaScriptFuncToContractFolder[256 + Brw_MAX_ROW_ID];
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div id=\"contract_%s_%s\"",
-	    FileBrowserId,RowId);
    if (Hidden)
-      fprintf (Gbl.F.Out," style=\"display:none;\"");
-   fprintf (Gbl.F.Out,">");
+      HTM_DIV_Begin ("id=\"contract_%s_%s\" style=\"display:none;\"",FileBrowserId,RowId);
+   else
+      HTM_DIV_Begin ("id=\"contract_%s_%s\"",FileBrowserId,RowId);
 
    /***** Form and icon *****/
    snprintf (JavaScriptFuncToContractFolder,sizeof (JavaScriptFuncToContractFolder),
@@ -6076,13 +6074,16 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
    extern const char *Txt_Folder;
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div id=\"folder_%s_%s_%s\"",
-	    Open ? "open" :
-		   "closed",
-	    FileBrowserId,RowId);
    if (Hidden)
-      fprintf (Gbl.F.Out," style=\"display:none;\"");
-   fprintf (Gbl.F.Out,">");
+      HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" style=\"display:none;\"",
+		     Open ? "open" :
+			    "closed",
+		     FileBrowserId,RowId);
+   else
+      HTM_DIV_Begin ("id=\"folder_%s_%s_%s\"",
+		     Open ? "open" :
+			    "closed",
+		     FileBrowserId,RowId);
 
    /***** Icon *****/
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
@@ -6106,13 +6107,16 @@ static void Brw_PutIconFolderWithPlus (const char *FileBrowserId,const char *Row
 				       bool Open,bool Hidden)
   {
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div id=\"folder_%s_%s_%s\"",
-	    Open ? "open" :
-		   "closed",
-	    FileBrowserId,RowId);
    if (Hidden)
-      fprintf (Gbl.F.Out," style=\"display:none;\"");
-   fprintf (Gbl.F.Out,">");
+      HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" style=\"display:none;\"",
+		     Open ? "open" :
+			    "closed",
+		     FileBrowserId,RowId);
+   else
+      HTM_DIV_Begin ("id=\"folder_%s_%s_%s\"",
+		     Open ? "open" :
+			    "closed",
+		     FileBrowserId,RowId);
 
    /***** Form and icon *****/
    Ico_PutContextualIconToCreateInFolder (Brw_ActFormCreate[Gbl.FileBrowser.Type],
@@ -6253,7 +6257,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	 HTM_TD_Begin ("class=\"%s LM\" style=\"width:99%%;\"",
 		       Gbl.FileBrowser.TxtStyle);
 
-      fprintf (Gbl.F.Out,"<div class=\"FILENAME\">");
+      HTM_DIV_Begin ("class=\"FILENAME\"");
 
       /***** Form to rename folder *****/
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
@@ -6306,7 +6310,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 		       Gbl.FileBrowser.TxtStyle);
 
       fprintf (Gbl.F.Out,"&nbsp;");
-      fprintf (Gbl.F.Out,"<div class=\"FILENAME\">");
+      HTM_DIV_Begin ("class=\"FILENAME\"");
 
       Frm_StartForm (Brw_ActDowFile[Gbl.FileBrowser.Type]);
       Brw_PutImplicitParamsFileBrowser ();
@@ -8380,7 +8384,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    extern const char *Txt_Done;
 
    /***** Start box *****/
-   fprintf (Gbl.F.Out,"<div id=\"dropzone-upload\">");
+   HTM_DIV_Begin ("id=\"dropzone-upload\"");
    Box_StartBox ("95%",Txt_Upload_files,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
@@ -8404,7 +8408,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    Par_PutHiddenParamString ("ses",Gbl.Session.Id);
    Brw_PutImplicitParamsFileBrowser ();
 
-   fprintf (Gbl.F.Out,"<div class=\"dz-message\">");
+   HTM_DIV_Begin ("class=\"dz-message\"");
    fprintf (Gbl.F.Out,"<span class=\"DAT_LIGHT\">%s</span>",
             Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here);
    HTM_DIV_End ();
@@ -8438,7 +8442,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    extern const char *Txt_or_you_can_upload_a_new_file_to_the_folder_X;
 
    /***** Start box *****/
-   fprintf (Gbl.F.Out,"<div id=\"classic-upload\" style=\"display:none;\">");
+   HTM_DIV_Begin ("id=\"classic-upload\" style=\"display:none;\"");
    Box_StartBox (NULL,Txt_Upload_file,NULL,
                  NULL,Box_NOT_CLOSABLE);
 

@@ -1440,7 +1440,7 @@ static void For_WriteNumberOfPosts (long UsrCod)
    unsigned NumPsts;
 
    /***** Star table cell *****/
-   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT LT\">");
+   HTM_DIV_Begin ("class=\"AUTHOR_TXT LT\"");
 
    /***** Get number of posts from database *****/
    if (Gbl.Forum.ForumSelected.Location > 0)
@@ -1757,7 +1757,7 @@ static void For_PutFormWhichForums (void)
           - only the forums of current institution/degree/course *****/
    Frm_StartForm (ActSeeFor);
    For_PutParamForumOrder (Gbl.Forum.ThreadsOrder);
-   fprintf (Gbl.F.Out,"<div class=\"SEL_BELOW_TITLE\">");
+   HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE\"");
    fprintf (Gbl.F.Out,"<ul>");
 
    for (ForumSet = (For_ForumSet_t) 0;

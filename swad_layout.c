@@ -271,12 +271,12 @@ void Lay_WriteStartOfPage (void)
      {
       case Act_BRW_1ST_TAB:
 	 fprintf (Gbl.F.Out,"<body onload=\"init();\">\n");
-	 fprintf (Gbl.F.Out,"<div id=\"zoomLyr\" class=\"ZOOM\">");
+	 HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM\"");
 	 fprintf (Gbl.F.Out,"<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
 			    " alt=\"\" title=\"\""
 			    " class=\"IMG_USR\" />",
 		  Cfg_URL_ICON_PUBLIC);
-	 fprintf (Gbl.F.Out,"<div id=\"zoomTxt\" class=\"CM\">");
+	 HTM_DIV_Begin ("id=\"zoomTxt\" class=\"CM\"");
 	 HTM_DIV_End ();
 	 HTM_DIV_End ();
 	 break;
@@ -296,7 +296,7 @@ void Lay_WriteStartOfPage (void)
      }
 
    /***** Start box that contains the whole page except the foot *****/
-   fprintf (Gbl.F.Out,"<div id=\"whole_page\">");
+   HTM_DIV_Begin ("id=\"whole_page\"");
 
    /***** Header of layout *****/
    Lay_WritePageTopHeading ();
@@ -305,7 +305,7 @@ void Lay_WriteStartOfPage (void)
    Tab_DrawTabs ();
 
    /***** 4th row: main zone *****/
-   fprintf (Gbl.F.Out,"<div id=\"main_zone\">");
+   HTM_DIV_Begin ("id=\"main_zone\"");
 
    /* Left column */
    if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
@@ -331,29 +331,29 @@ void Lay_WriteStartOfPage (void)
    switch (Gbl.Prefs.SideCols)
      {
       case 0:
-         fprintf (Gbl.F.Out,"<div id=\"main_zone_central_none\">");
+         HTM_DIV_Begin ("id=\"main_zone_central_none\"");
 	 break;
       case Lay_SHOW_LEFT_COLUMN:
-         fprintf (Gbl.F.Out,"<div id=\"main_zone_central_left\">");
+         HTM_DIV_Begin ("id=\"main_zone_central_left\"");
 	 break;
       case Lay_SHOW_RIGHT_COLUMN:
-         fprintf (Gbl.F.Out,"<div id=\"main_zone_central_right\">");
+         HTM_DIV_Begin ("id=\"main_zone_central_right\"");
 	 break;
       case (Lay_SHOW_LEFT_COLUMN | Lay_SHOW_RIGHT_COLUMN):
-         fprintf (Gbl.F.Out,"<div id=\"main_zone_central_both\">");
+         HTM_DIV_Begin ("id=\"main_zone_central_both\"");
          break;
      }
-   fprintf (Gbl.F.Out,"<div id=\"main_zone_central_container\" class=\"%s\">",
-	    The_TabOnBgColors[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("id=\"main_zone_central_container\" class=\"%s\"",
+	          The_TabOnBgColors[Gbl.Prefs.Theme]);
 
    /* Layout with horizontal or vertical menu */
-   fprintf (Gbl.F.Out,"<div id=\"%s\">",LayoutMainZone[Gbl.Prefs.Menu]);
+   HTM_DIV_Begin ("id=\"%s\"",LayoutMainZone[Gbl.Prefs.Menu]);
 
    /* Menu */
    Mnu_WriteMenuThisTab ();
 
    /* Start canvas: main zone for actions output */
-   fprintf (Gbl.F.Out,"<div class=\"MAIN_ZONE_CANVAS\">");
+   HTM_DIV_Begin ("class=\"MAIN_ZONE_CANVAS\"");
 
    /* If it is mandatory to read any information about course */
    if (Gbl.Crs.Info.ShowMsgMustBeRead)
@@ -923,17 +923,16 @@ static void Lay_WritePageTopHeading (void)
 
    /***** 1st. row *****/
    /* Start 1st. row */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1\" class=\"%s\">",
-            ClassHeadRow1[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("id=\"head_row_1\" class=\"%s\"",ClassHeadRow1[Gbl.Prefs.Theme]);
 
    /* 1st. row, 1st. column: logo, tagline and search */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_left\">");
+   HTM_DIV_Begin ("id=\"head_row_1_left\"");
 
    /* Begin form to go to home page */
    Frm_StartFormGoTo (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
 
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_small\">");
+   HTM_DIV_Begin ("id=\"head_row_1_logo_small\"");
    Frm_LinkFormSubmit (Txt_System,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CM\""
@@ -943,7 +942,7 @@ static void Lay_WritePageTopHeading (void)
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_logo_big\">");
+   HTM_DIV_Begin ("id=\"head_row_1_logo_big\"");
    Frm_LinkFormSubmit (Txt_System,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CM\""
@@ -953,7 +952,7 @@ static void Lay_WritePageTopHeading (void)
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_tagline\">");
+   HTM_DIV_Begin ("id=\"head_row_1_tagline\"");
    Frm_LinkFormSubmit (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"%s"
 	              "</a>",
@@ -969,13 +968,13 @@ static void Lay_WritePageTopHeading (void)
 
    /* 1st. row, 3rd. column: logged user or language selection,
       and link to open/close session */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_right\">");
+   HTM_DIV_Begin ("id=\"head_row_1_right\"");
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();
    else
       Lan_PutSelectorToSelectLanguage ();
 
-   fprintf (Gbl.F.Out,"<div id=\"login_box\">");
+   HTM_DIV_Begin ("id=\"login_box\"");
    if (Gbl.Usrs.Me.Logged)
       Usr_PutFormLogOut ();
    else
@@ -988,23 +987,22 @@ static void Lay_WritePageTopHeading (void)
 
    /***** 2nd. row *****/
    /* Start second row */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_2\" class=\"%s\">",
-            ClassHeadRow2[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("id=\"head_row_2\" class=\"%s\"",ClassHeadRow2[Gbl.Prefs.Theme]);
 
    /* 2nd. row, 1st. column
       Clock with hour:minute (server hour is shown) */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_2_time\">");
+   HTM_DIV_Begin ("id=\"head_row_2_time\"");
    Dat_ShowClientLocalTime ();
    HTM_DIV_End ();	// End first column
 
    /* 2nd. row, 2nd. column: degree and course */
-   fprintf (Gbl.F.Out,"<div id=\"head_row_2_hierarchy\">");
+   HTM_DIV_Begin ("id=\"head_row_2_hierarchy\"");
    Lay_WriteBreadcrumb ();
    Hie_WriteBigNameCtyInsCtrDegCrs ();
    HTM_DIV_End ();
 
    /* 2nd. row, 3rd. column */
-   fprintf (Gbl.F.Out,"<div id=\"msg\">");	// Used for AJAX based refresh
+   HTM_DIV_Begin ("id=\"msg\"");	// Used for AJAX based refresh
    if (Gbl.Usrs.Me.Logged)
       Ntf_WriteNumberOfNewNtfs ();
    HTM_DIV_End ();		// Used for AJAX based refresh
@@ -1040,24 +1038,20 @@ static void Lay_WriteTitleAction (void)
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
 
    /***** Container start *****/
-   fprintf (Gbl.F.Out,"<div id=\"action_title\""
-	              " style=\"background-image:url('%s/%s');\">",
-	    Gbl.Prefs.URLIconSet,
-	    Act_GetIcon (Act_GetSuperAction (Gbl.Action.Act)));
+   HTM_DIV_Begin ("id=\"action_title\" style=\"background-image:url('%s/%s');\"",
+	          Gbl.Prefs.URLIconSet,
+	          Act_GetIcon (Act_GetSuperAction (Gbl.Action.Act)));
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	    The_ClassTitleAction[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"%s\"",The_ClassTitleAction[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s &gt; %s",
 	    Txt_TABS_TXT[Act_GetTab (Gbl.Action.Act)],
 	    Act_GetTitleAction (Gbl.Action.Act));
    HTM_DIV_End ();
 
    /***** Subtitle *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	    The_ClassSubtitleAction[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s",
-	    Act_GetSubtitleAction (Gbl.Action.Act));
+   HTM_DIV_Begin ("class=\"%s\"",The_ClassSubtitleAction[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s",Act_GetSubtitleAction (Gbl.Action.Act));
    HTM_DIV_End ();
 
    /***** Container end *****/
@@ -1072,9 +1066,9 @@ static void Lay_ShowLeftColumn (void)
   {
    struct MFU_ListMFUActions ListMFUActions;
 
-   fprintf (Gbl.F.Out,"<div style=\"width:160px;\">");
+   HTM_DIV_Begin ("style=\"width:160px;\"");
 
-   fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
+   HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
    if (Gbl.Usrs.Me.Logged)
      {
       /***** Most frequently used actions *****/
@@ -1089,14 +1083,14 @@ static void Lay_ShowLeftColumn (void)
    HTM_DIV_End ();
 
    /***** Month *****/
-   fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
+   HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
    Cal_DrawCurrentMonth ();
    HTM_DIV_End ();
 
    /***** Notices (yellow notes) *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)
      {
-      fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
+      HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
       Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
 	               -1L);	// No notice highlighted
       HTM_DIV_End ();
@@ -1121,20 +1115,18 @@ static void Lay_ShowRightColumn (void)
    /***** Number of connected users in the whole platform *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
-      fprintf (Gbl.F.Out,"<div id=\"globalconnected\""	// Used for AJAX based refresh
-			 " class=\"LEFT_RIGHT_CELL\">");
+      HTM_DIV_Begin ("id=\"globalconnected\" class=\"LEFT_RIGHT_CELL\"");	// Used for AJAX based refresh
       Con_ShowGlobalConnectedUsrs ();
-      HTM_DIV_End ();			// Used for AJAX based refresh
+      HTM_DIV_End ();								// Used for AJAX based refresh
      }
 
    /***** Number of connected users in the current course *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)	// There is a course selected
      {
-      fprintf (Gbl.F.Out,"<div id=\"courseconnected\""	// Used for AJAX based refresh
-	                 " class=\"LEFT_RIGHT_CELL\">");
+      HTM_DIV_Begin ("id=\"courseconnected\" class=\"LEFT_RIGHT_CELL\"");	// Used for AJAX based refresh
       Gbl.Scope.Current = Hie_CRS;
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
-      HTM_DIV_End ();			// Used for AJAX based refresh
+      HTM_DIV_End ();								// Used for AJAX based refresh
      }
    else if (Gbl.Usrs.Me.Logged)		// I am logged
      {
@@ -1142,7 +1134,7 @@ static void Lay_ShowRightColumn (void)
       gettimeofday (&tv1,NULL);
       */
       /***** Suggest one user to follow *****/
-      fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
+      HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
       Fol_SuggestUsrsToFollowMainZoneOnRightColumn ();
       /*
       gettimeofday (&tv2,NULL);
@@ -1162,7 +1154,7 @@ static void Lay_ShowRightColumn (void)
    if (!Gbl.Usrs.Me.Logged)
      {
       /***** SWADroid advertisement *****/
-      fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
+      HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
       fprintf (Gbl.F.Out,"<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 			 " target=\"_blank\" title=\"%s\">"
 			 "<img src=\"%s/SWADroid120x200.png\""
@@ -1286,11 +1278,11 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
       FuncParams ();
 
    /***** Start container and label *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT %s %s\" title=\"%s\">",
-            Checked ? "CHECKBOX_CHECKED" :
-        	      "CHECKBOX_UNCHECKED",
-            The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
-            Title);
+   HTM_DIV_Begin ("class=\"CONTEXT_OPT %s %s\" title=\"%s\"",
+		  Checked ? "CHECKBOX_CHECKED" :
+			    "CHECKBOX_UNCHECKED",
+		  The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
+		  Title);
    fprintf (Gbl.F.Out,"<label>");
 
    /****** Checkbox and text *****/
@@ -1715,7 +1707,7 @@ void Lay_AdvertisementMobile (void)
 
    if (!(rand () % Lay_SHOW_ADVERTISEMENT_ONE_TIME_OF_X))
      {
-      fprintf (Gbl.F.Out,"<div style=\"margin-top:25px;\">");
+      HTM_DIV_Begin ("style=\"margin-top:25px;\"");
 
       /***** Start box and table *****/
       Box_StartBoxTable (NULL,NULL,NULL,
@@ -1801,7 +1793,7 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
    extern const char *Txt_Inline_math;
    extern const char *Txt_Equation_centered;
 
-   fprintf (Gbl.F.Out,"<div class=\"HELP_EDIT\">");
+   HTM_DIV_Begin ("class=\"HELP_EDIT\"");
    fprintf (Gbl.F.Out,"%s: %s"
                       " "
                       "%s: <code>%s</code>"

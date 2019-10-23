@@ -65,7 +65,7 @@ extern struct Globals Gbl;
 void Hie_SeePending (void)
   {
    /***** Put contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
    /* Put link to remove old courses */
    Crs_PutLinkToRemoveOldCrss ();
@@ -207,7 +207,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    const char *ClassTxt = The_ClassBreadcrumb[Gbl.Prefs.Theme];
 
    /***** Form to go to the system *****/
-   fprintf (Gbl.F.Out,"<div class=\"BC %s\">",ClassTxt);
+   HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
    fprintf (Gbl.F.Out,"&nbsp;");
 
    Frm_StartFormGoTo (ActMnu);
@@ -220,7 +220,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Cty.CtyCod > 0)		// Country selected...
      {
-      fprintf (Gbl.F.Out,"<div class=\"BC %s\">",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
       /***** Separator *****/
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -236,7 +236,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      fprintf (Gbl.F.Out,"<div class=\"BC BC_SEMIOFF %s\">",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
       /***** Separator *****/
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -252,7 +252,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Ins.InsCod > 0)		// Institution selected...
      {
-      fprintf (Gbl.F.Out,"<div class=\"BC %s\">",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
       /***** Separator *****/
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -268,7 +268,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
-      fprintf (Gbl.F.Out,"<div class=\"BC BC_SEMIOFF %s\">",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
       /***** Separator *****/
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -283,7 +283,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      fprintf (Gbl.F.Out,"<div class=\"BC BC_OFF %s\">",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
 
       /***** Separator *****/
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -296,7 +296,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)	// Centre selected...
      {
-      fprintf (Gbl.F.Out,"<div class=\"BC %s\">",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
       /***** Separator *****/
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -312,7 +312,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else if (Gbl.Hierarchy.Ins.InsCod > 0)
      {
-      fprintf (Gbl.F.Out,"<div class=\"BC BC_SEMIOFF %s\">",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
       /***** Separator *****/
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -327,7 +327,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      fprintf (Gbl.F.Out,"<div class=\"BC BC_OFF %s\">",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
 
       /***** Separator *****/
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -340,7 +340,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
 
    if (Gbl.Hierarchy.Deg.DegCod > 0)	// Degree selected...
      {
-      fprintf (Gbl.F.Out,"<div class=\"BC %s\">",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC %s\"",ClassTxt);
 
       /***** Separator *****/
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -356,7 +356,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else if (Gbl.Hierarchy.Ctr.CtrCod > 0)
      {
-      fprintf (Gbl.F.Out,"<div class=\"BC BC_SEMIOFF %s\">",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_SEMIOFF %s\"",ClassTxt);
 
       /***** Separator *****/
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -371,7 +371,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
      }
    else
      {
-      fprintf (Gbl.F.Out,"<div class=\"BC BC_OFF %s\">",ClassTxt);
+      HTM_DIV_Begin ("class=\"BC BC_OFF %s\"",ClassTxt);
 
       /***** Separator *****/
       fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -382,11 +382,11 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       HTM_DIV_End ();
      }
 
-   fprintf (Gbl.F.Out,"<div class=\"BC%s %s\">",
-	     (Gbl.Hierarchy.Level == Hie_CRS) ? "" :
-            ((Gbl.Hierarchy.Deg.DegCod > 0) ? " BC_SEMIOFF" :
-		                              " BC_OFF"),
-            ClassTxt);
+   HTM_DIV_Begin ("class=\"BC%s %s\"",
+		   (Gbl.Hierarchy.Level == Hie_CRS) ? "" :
+		  ((Gbl.Hierarchy.Deg.DegCod > 0) ? " BC_SEMIOFF" :
+						    " BC_OFF"),
+		  ClassTxt);
 
    /***** Separator *****/
    fprintf (Gbl.F.Out,"&nbsp;&gt;&nbsp;");
@@ -437,10 +437,10 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
      }
 
    /***** Text *****/
-   fprintf (Gbl.F.Out,"<div id=\"big_name_container\">");
+   HTM_DIV_Begin ("id=\"big_name_container\"");
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
      {
-      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">");
+      HTM_DIV_Begin ("id=\"big_full_name\"");
       fprintf (Gbl.F.Out,"%s",		// Full name
 		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.FullName :
 	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.FullName :
@@ -448,10 +448,12 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
 	       ((Gbl.Hierarchy.Level == Hie_INS) ? Gbl.Hierarchy.Ins.FullName :
 	                                           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]))));
       HTM_DIV_End ();
-      fprintf (Gbl.F.Out,"<div class=\"NOT_SHOWN\">");
+
+      HTM_DIV_Begin ("class=\"NOT_SHOWN\"");
       fprintf (Gbl.F.Out," / ");	// To separate
       HTM_DIV_End ();
-      fprintf (Gbl.F.Out,"<div id=\"big_short_name\">");
+
+      HTM_DIV_Begin ("id=\"big_short_name\"");
       fprintf (Gbl.F.Out,"%s",		// Short name
 		(Gbl.Hierarchy.Level == Hie_CRS) ? Gbl.Hierarchy.Crs.ShrtName :
 	       ((Gbl.Hierarchy.Level == Hie_DEG) ? Gbl.Hierarchy.Deg.ShrtName :
@@ -462,14 +464,16 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
      }
    else	// No country specified ==> home page
      {
-      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">");
+      HTM_DIV_Begin ("id=\"big_full_name\"");
       fprintf (Gbl.F.Out,"%s: %s",	// Full name
 	       Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE);
       HTM_DIV_End ();
-      fprintf (Gbl.F.Out,"<div class=\"NOT_SHOWN\">");
+
+      HTM_DIV_Begin ("class=\"NOT_SHOWN\"");
       fprintf (Gbl.F.Out," / ");	// To separate
       HTM_DIV_End ();
-      fprintf (Gbl.F.Out,"<div id=\"big_short_name\">");
+
+      HTM_DIV_Begin ("id=\"big_short_name\"");
       fprintf (Gbl.F.Out,"%s",		// Short name
 	       Cfg_PLATFORM_SHORT_NAME);
       HTM_DIV_End ();

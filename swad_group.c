@@ -410,7 +410,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
    Grp_FreeListGrpTypesAndGrps ();
 
    /***** Submit button *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\" style=\"padding-top:12px;\">");
+   HTM_DIV_Begin ("class=\"CM\" style=\"padding-top:12px;\"");
    Frm_LinkFormSubmitAnimated (Txt_Update_users,
 			       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
 			       "CopyMessageToHiddenFields();");
@@ -452,7 +452,7 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
 	 break;
      }
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
    fprintf (Gbl.F.Out,"<input type=\"checkbox\""
 		      " id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"");
    if (ICanSelUnselGroup)
@@ -5007,9 +5007,9 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) (void))
 	WhichGrps <= Grp_ALL_GROUPS;
 	WhichGrps++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
-						     "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",
+	              WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
+						            "PREF_OFF");
       Frm_StartForm (Action);
       Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) WhichGrps);
       if (FuncParams)	// Extra parameters depending on the action

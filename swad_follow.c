@@ -135,7 +135,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
    struct UsrData UsrDat;
 
    /***** Put links to request my public profile and another user's profile *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
    Prf_PutLinkMyPublicProfile ();
    Prf_PutLinkRequestAnotherUserProfile ();
    HTM_DIV_End ();
@@ -208,7 +208,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
                                        &mysql_res)))
      {
       /***** Start container *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONNECTED\">");
+      HTM_DIV_Begin ("class=\"CONNECTED\"");
 
       /***** Title with link to suggest more users to follow *****/
       Frm_StartForm (ActSeeSocPrf);
@@ -518,11 +518,11 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    Lay_StartSection (Fol_FOLLOW_SECTION_ID);
 
    /***** Followed users *****/
-   fprintf (Gbl.F.Out,"<div id=\"following_side\">");
-   fprintf (Gbl.F.Out,"<div class=\"FOLLOW_SIDE\">");
+   HTM_DIV_Begin ("id=\"following_side\"");
+   HTM_DIV_Begin ("class=\"FOLLOW_SIDE\"");
 
    /* User follows me? */
-   fprintf (Gbl.F.Out,"<div id=\"follows_me\" class=\"DAT_LIGHT\">");
+   HTM_DIV_Begin ("id=\"follows_me\" class=\"DAT_LIGHT\"");
    if (UsrFollowsMe)
       fprintf (Gbl.F.Out,"%s",Txt_FOLLOWS_YOU);
    HTM_DIV_End ();
@@ -537,8 +537,8 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    HTM_DIV_End ();
 
    /***** Followers *****/
-   fprintf (Gbl.F.Out,"<div id=\"followers_side\">");
-   fprintf (Gbl.F.Out,"<div class=\"FOLLOW_SIDE\">");
+   HTM_DIV_Begin ("id=\"followers_side\"");
+   HTM_DIV_Begin ("class=\"FOLLOW_SIDE\"");
 
    /* Number of followers */
    Fol_ShowNumberOfFollowingOrFollowers (UsrDat,
@@ -546,7 +546,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
                                          ActSeeFlr,Txt_Followers);
 
    /* I follow user? */
-   fprintf (Gbl.F.Out,"<div id=\"follow_usr\">");
+   HTM_DIV_Begin ("id=\"follow_usr\"");
    if (Gbl.Usrs.Me.Logged &&	// Logged
        !ItsMe)			// Not me!
      {
@@ -555,8 +555,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	 Frm_StartForm (ActUnfUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Frm_LinkFormSubmit (Txt_Following_unfollow,"REC_DAT_BOLD",NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
-			    " style=\"display:inline;\" >");
+	 HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\" style=\"display:inline;\"");
 	 fprintf (Gbl.F.Out,"<img src=\"%s/user-check.svg\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO40x40\" />",
@@ -571,8 +570,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	 Frm_StartForm (ActFolUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Frm_LinkFormSubmit (Txt_Follow,"REC_DAT_BOLD",NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
-			    " style=\"display:inline;\" >");
+	 HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\" style=\"display:inline;\"");
 	 fprintf (Gbl.F.Out,"<img src=\"%s/user-plus.svg\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO40x40\" />",
@@ -606,7 +604,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    extern const char *The_ClassFormOutBoxBold[The_NUM_THEMES];
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"FOLLOW_BOX\">");
+   HTM_DIV_Begin ("class=\"FOLLOW_BOX\"");
 
    /***** Number *****/
    if (NumUsrs)
@@ -632,9 +630,9 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"</span>");
 
    /***** Text *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            (Gbl.Action.Act == Action) ? The_ClassFormOutBoxBold[Gbl.Prefs.Theme] :
-        	                         The_ClassFormOutBox    [Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"%s\"",
+                  (Gbl.Action.Act == Action) ? The_ClassFormOutBoxBold[Gbl.Prefs.Theme] :
+        	                               The_ClassFormOutBox    [Gbl.Prefs.Theme]);
    if (NumUsrs)
      {
       /* Form to list users */
@@ -859,7 +857,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
       /* Put form to go to public profile */
       Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_NAME\">");	// Limited width
+      HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
       Frm_LinkFormSubmit (Txt_Another_user_s_profile,"DAT",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</a>");
@@ -916,7 +914,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
       /* Put form to go to public profile */
       Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"<div class=\"CON_NAME_FOLLOW\">");	// Limited width
+      HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW\"");	// Limited width
       Frm_LinkFormSubmit (Txt_Another_user_s_profile,"CON_CRS",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</a>");
@@ -954,7 +952,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
 static void Fol_PutInactiveIconToFollowUnfollow (void)
   {
    /***** Inactive icon to follow/unfollow *****/
-   fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIDDEN\">");
+   HTM_DIV_Begin ("class=\"FOLLOW_USR_ICO ICO_HIDDEN\"");
    fprintf (Gbl.F.Out,"<img src=\"%s/user.svg\" alt=\"\" class=\"ICO16x16\" />",
 	    Cfg_URL_ICON_PUBLIC);
    HTM_DIV_End ();
@@ -972,7 +970,7 @@ static void Fol_PutIconToFollow (struct UsrData *UsrDat)
    Frm_StartForm (ActFolUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Frm_LinkFormSubmit (Txt_Follow,NULL,NULL);
-   fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\">");
+   HTM_DIV_Begin ("class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\"");
    fprintf (Gbl.F.Out,"<img src=\"%s/user-plus.svg\""
 		      " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />",
 	    Cfg_URL_ICON_PUBLIC,
@@ -994,7 +992,7 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
    Frm_StartForm (ActUnfUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Frm_LinkFormSubmit (Txt_Unfollow,NULL,NULL);
-   fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\">");
+   HTM_DIV_Begin ("class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\"");
    fprintf (Gbl.F.Out,"<img src=\"%s/user-check.svg\""
 		      " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />",
 	    Cfg_URL_ICON_PUBLIC,

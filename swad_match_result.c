@@ -93,7 +93,7 @@ void McR_PutFormToViewMchResults (Act_Action_t Action)
   {
    extern const char *Txt_Results;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
    Lay_PutContextualLinkIconText (Action,NULL,NULL,
 				  "tasks.svg",
 				  Txt_Results);

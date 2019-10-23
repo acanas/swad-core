@@ -2588,7 +2588,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    extern const char *Txt_password;
 
    /***** Links to other actions *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
    Acc_PutLinkToCreateAccount ();
    Pwd_PutLinkToSendNewPasswd ();
@@ -2596,7 +2596,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 
    HTM_DIV_End ();
 
-   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   HTM_DIV_Begin ("class=\"CM\"");
 
    /***** Begin form *****/
    Frm_StartForm (NextAction);
@@ -2608,7 +2608,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
                       Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE,2);
 
    /***** User's ID/nickname *****/
-   fprintf (Gbl.F.Out,"<div class=\"LM\">");
+   HTM_DIV_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<label for=\"UsrId\">"
                       "<img src=\"%s/user.svg\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_ICO_16x16\" />"
@@ -2626,7 +2626,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    HTM_DIV_End ();
 
    /***** User's password *****/
-   fprintf (Gbl.F.Out,"<div class=\"LM\">");
+   HTM_DIV_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<label for=\"UsrPwd\">"
                       "<img src=\"%s/key.svg\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_ICO_16x16\" />"
@@ -2812,8 +2812,7 @@ void Usr_WriteLoggedUsrHead (void)
    char PhotoURL[PATH_MAX + 1];
    unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
 
-   fprintf (Gbl.F.Out,"<div class=\"HEAD_USR %s\">",
-	    The_ClassUsr[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"HEAD_USR %s\"",The_ClassUsr[Gbl.Prefs.Theme]);
 
    /***** User's role *****/
    if (NumAvailableRoles == 1)
@@ -4122,7 +4121,7 @@ static void Usr_WriteUsrData (const char *BgColor,
 		 BgColor);
 
    /***** Container to limit length *****/
-   fprintf (Gbl.F.Out,"<div class=\"USR_DAT\">");
+   HTM_DIV_Begin ("class=\"USR_DAT\"");
 
    /***** Start link *****/
    if (Link)
@@ -6082,9 +6081,9 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void))
    Set_StartOneSettingSelector ();
 
    /***** Select Usr_LIST_AS_CLASS_PHOTO *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO ? "PREF_ON" :
-        	                                              "PREF_OFF");
+   HTM_DIV_Begin ("class=\"%s\"",
+		  Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO ? "PREF_ON" :
+								    "PREF_OFF");
    Usr_FormToSelectUsrListType (FuncParams,Usr_LIST_AS_CLASS_PHOTO);
 
    /* Number of columns in the class photo */
@@ -6100,9 +6099,9 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncParams) (void))
    HTM_DIV_End ();
 
    /***** Select Usr_LIST_AS_LISTING *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            Gbl.Usrs.Me.ListType == Usr_LIST_AS_LISTING ? "PREF_ON" :
-        	                                          "PREF_OFF");
+   HTM_DIV_Begin ("class=\"%s\"",
+		  Gbl.Usrs.Me.ListType == Usr_LIST_AS_LISTING ? "PREF_ON" :
+								"PREF_OFF");
    Usr_FormToSelectUsrListType (FuncParams,Usr_LIST_AS_LISTING);
 
    /* See the photos in list? */
@@ -7297,7 +7296,7 @@ void Usr_ListDataAdms (void)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	 HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	   {
@@ -7352,7 +7351,7 @@ void Usr_ListDataAdms (void)
                  Hlp_USERS_Administrators,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   HTM_DIV_Begin ("class=\"CM\"");
    Frm_StartForm (ActLstOth);
    Usr_PutParamListWithPhotos ();
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
@@ -7365,8 +7364,8 @@ void Usr_ListDataAdms (void)
    if (Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs)
      {
       /****** Show photos? *****/
-      fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
-      fprintf (Gbl.F.Out,"<div class=\"PREF_OFF\">");
+      HTM_DIV_Begin ("class=\"PREF_CONTAINER\"");
+      HTM_DIV_Begin ("class=\"PREF_OFF\"");
       Frm_StartForm (ActLstOth);
       Sco_PutParamCurrentScope ();
       Usr_PutCheckboxListWithPhotos ();
@@ -7793,7 +7792,7 @@ void Usr_SeeGuests (void)
    bool PutForm;
 
    /***** Put contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
    /* Put link to remove old users */
    Usr_PutLinkToSeeAdmins ();
@@ -7826,7 +7825,7 @@ void Usr_SeeGuests (void)
    /***** Form to select scope *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
-      fprintf (Gbl.F.Out,"<div class=\"CM\">");
+      HTM_DIV_Begin ("class=\"CM\"");
       Frm_StartForm (ActLstGst);
       Usr_PutParamsPrefsAboutUsrList ();
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
@@ -7929,7 +7928,7 @@ void Usr_SeeStudents (void)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+         HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
 	 /* Put link to go to admin student */
 	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
@@ -7977,7 +7976,7 @@ void Usr_SeeStudents (void)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 fprintf (Gbl.F.Out,"<div class=\"CM\">");
+	 HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_StartForm (ActLstStd);
 	 Usr_PutParamsPrefsAboutUsrList ();
 	 fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
@@ -8100,7 +8099,7 @@ void Usr_SeeTeachers (void)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	 HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
 	 /* Put link to go to admin one user */
 	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
@@ -8155,7 +8154,7 @@ void Usr_SeeTeachers (void)
 		 Hlp_USERS_Teachers,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   HTM_DIV_Begin ("class=\"CM\"");
    Frm_StartForm (ActLstTch);
    Usr_PutParamsPrefsAboutUsrList ();
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
@@ -8953,7 +8952,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 			   ClassPhoto,Pho_ZOOM,false);
 
 	 /***** Photo foot *****/
-	 fprintf (Gbl.F.Out,"<div class=\"CLASSPHOTO_CAPTION\">");
+	 HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");
 
 	 /* Name */
 	 if (UsrDat.FirstName[0])
@@ -9713,9 +9712,8 @@ void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
 	             "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_1_LINE %s\">",
-            Hidden ? "AUTHOR_TXT_LIGHT" :
-        	     "AUTHOR_TXT");
+   HTM_DIV_Begin ("class=\"AUTHOR_1_LINE %s\"",Hidden ? "AUTHOR_TXT_LIGHT" :
+        	                                        "AUTHOR_TXT");
    fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
    HTM_DIV_End ();
 

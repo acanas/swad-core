@@ -124,9 +124,9 @@ void Ico_PutIconsToSelectIconSet (void)
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-               IconSet == Gbl.Prefs.IconSet ? "PREF_ON" :
-        	                              "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",
+                     IconSet == Gbl.Prefs.IconSet ? "PREF_ON" :
+        	                                    "PREF_OFF");
       Frm_StartForm (ActChgIco);
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
       snprintf (Icon,sizeof (Icon),
@@ -332,7 +332,7 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,void (*FuncParams) (voi
 
 void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
   {
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",DivClass);
+   HTM_DIV_Begin ("class=\"%s\"",DivClass);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 		      " class=\"CONTEXT_ICO_16x16\" />",
 	    Cfg_URL_ICON_PUBLIC,Icon,
@@ -346,7 +346,7 @@ void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
 
 void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title)
   {
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",DivClass);
+   HTM_DIV_Begin ("class=\"%s\"",DivClass);
    Ico_PutIconLink (Icon,Title);
    HTM_DIV_End ();
   }
@@ -371,7 +371,7 @@ void Ico_PutIconLink (const char *Icon,const char *Title)
 void Ico_PutIconTextLink (const char *Icon,const char *Text)
   {
    /***** Print icon and optional text *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_ICO_x16\" />"
 	              "&nbsp;%s",
@@ -411,7 +411,7 @@ void Ico_PutIconOff (const char *Icon,const char *Title)
 
 void Ico_PutCalculateIcon (const char *Title)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
    fprintf (Gbl.F.Out,"<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""	// TODO: change name and resolution to refresh64x64.png
 	              " alt=\"%s\" title=\"%s\""
 		      " class=\"CONTEXT_ICO_16x16\" />"
@@ -432,8 +432,7 @@ void Ico_PutCalculateIcon (const char *Title)
 
 void Ico_PutCalculateIconWithText (const char *Text)
   {
-   fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
-	              " style=\"margin:0 6px 0 0; display:inline;\">");
+   HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\" style=\"margin:0 6px 0 0; display:inline;\"");
    fprintf (Gbl.F.Out,"<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"

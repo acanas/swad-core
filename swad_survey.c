@@ -537,7 +537,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Lay_EndArticle ();
 
    /* Number of questions and number of distinct users who have already answered this survey */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
+   HTM_DIV_Begin ("class=\"%s\"",
             Svy.Status.Visible ? "ASG_GRP" :
         	                 "ASG_GRP_LIGHT");
    fprintf (Gbl.F.Out,"%s: %u; %s: %u",
@@ -546,6 +546,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
             Txt_No_of_users,
             Svy.NumUsrs);
    HTM_DIV_End ();
+
    HTM_TD_End ();
 
    /* Status of the survey */
@@ -560,7 +561,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       /* Possible button to answer this survey */
       if (Svy.Status.ICanAnswer)
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
+	 HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
 	 Frm_StartForm (ActSeeSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
@@ -575,7 +576,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       /* Possible button to see the result of the survey */
       else if (Svy.Status.ICanViewResults)
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
+	 HTM_DIV_Begin ("class=\"BUTTONS_AFTER_ALERT\"");
 
 	 Frm_StartForm (ActSeeSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
@@ -610,9 +611,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
 
    /* Scope of the survey */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            Svy.Status.Visible ? "ASG_GRP" :
-        	                 "ASG_GRP_LIGHT");
+   HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
+        	                                      "ASG_GRP_LIGHT");
    fprintf (Gbl.F.Out,"%s: ",Txt_Scope);
    switch (Svy.Scope)
      {
@@ -641,9 +641,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    HTM_DIV_End ();
 
    /* Users' roles who can answer the survey */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            Svy.Status.Visible ? "ASG_GRP" :
-        	                 "ASG_GRP_LIGHT");
+   HTM_DIV_Begin ("class=\"%s\"",Svy.Status.Visible ? "ASG_GRP" :
+        	                                      "ASG_GRP_LIGHT");
    fprintf (Gbl.F.Out,"%s:<br />",Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STD |
                            1 << Rol_NET |
@@ -662,9 +661,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">",
-            Svy.Status.Visible ? "DAT" :
-        	                 "DAT_LIGHT");
+   HTM_DIV_Begin ("class=\"PAR %s\"",Svy.Status.Visible ? "DAT" :
+        	                                          "DAT_LIGHT");
    fprintf (Gbl.F.Out,"%s",Txt);
    HTM_DIV_End ();
    HTM_TD_End ();
@@ -2445,9 +2443,8 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
 			     Svy->SvyCod);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            Svy->Status.Visible ? "ASG_GRP" :
-        	                  "ASG_GRP_LIGHT");
+   HTM_DIV_Begin ("class=\"%s\"",Svy->Status.Visible ? "ASG_GRP" :
+        	                                       "ASG_GRP_LIGHT");
    fprintf (Gbl.F.Out,"%s: ",NumRows == 1 ? Txt_Group  :
                                             Txt_Groups);
 

@@ -432,11 +432,11 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
      }
 
    /***** Write message *****/
-   fprintf (Gbl.F.Out,"<div class=\"ALERT_TXT\"");
-   if (AlertType != Ale_NONE)
-      fprintf (Gbl.F.Out," style=\"background-image:url('%s/%s');\"",
-	       Cfg_URL_ICON_PUBLIC,Ale_AlertIcons[AlertType]);
-   fprintf (Gbl.F.Out,">");
+   if (AlertType == Ale_NONE)
+      HTM_DIV_Begin ("class=\"ALERT_TXT\"");
+   else
+      HTM_DIV_Begin ("class=\"ALERT_TXT\" style=\"background-image:url('%s/%s');\"",
+	             Cfg_URL_ICON_PUBLIC,Ale_AlertIcons[AlertType]);
    fprintf (Gbl.F.Out,"%s",Txt);
    HTM_DIV_End ();
   }

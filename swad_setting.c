@@ -79,32 +79,41 @@ void Set_EditSettings (void)
    /***** Internationalization: language, first day of week, date format *****/
    Box_StartBox (NULL,Txt_Internationalization,NULL,
                  Hlp_PROFILE_Settings_internationalization,Box_NOT_CLOSABLE);
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
+
+   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
    Lan_PutBoxToSelectLanguage ();		// 1. Language
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
+
+   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
    Cal_PutIconsToSelectFirstDayOfWeek ();	// 2. First day of week
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
+
+   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
    Dat_PutBoxToSelectDateFormat ();		// 3. Date format
    HTM_DIV_End ();
+
    Box_EndBox ();
 
    /***** Design: icon set, menu, theme, side columns *****/
    Box_StartBox (NULL,Txt_Design,NULL,
                  Hlp_PROFILE_Settings_design,Box_NOT_CLOSABLE);
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
+
+   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
    Ico_PutIconsToSelectIconSet ();		// 4. Icon set
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
+
+   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
    Mnu_PutIconsToSelectMenu ();			// 5. Menu
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
+
+   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
    The_PutIconsToSelectTheme ();		// 6. Theme
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
+
+   HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
    Set_PutIconsToSelectSideCols ();		// 7. Side columns
    HTM_DIV_End ();
+
    Box_EndBox ();
 
    if (Gbl.Usrs.Me.Logged)
@@ -246,9 +255,8 @@ static void Set_PutIconsToSelectSideCols (void)
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-               SideCols == Gbl.Prefs.SideCols ? "PREF_ON" :
-        	                                "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",SideCols == Gbl.Prefs.SideCols ? "PREF_ON" :
+        	                                                     "PREF_OFF");
       Frm_StartForm (ActChgCol);
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
       snprintf (Icon,sizeof (Icon),
@@ -386,7 +394,7 @@ unsigned Set_GetParamSideCols (void)
 */
 void Set_StartSettingsHead (void)
   {
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINERS\">");
+   HTM_DIV_Begin ("class=\"PREF_CONTAINERS\"");
   }
 
 void Set_EndSettingsHead (void)
@@ -396,7 +404,7 @@ void Set_EndSettingsHead (void)
 
 void Set_StartOneSettingSelector (void)
   {
-   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   HTM_DIV_Begin ("class=\"PREF_CONTAINER\"");
   }
 
 void Set_EndOneSettingSelector (void)

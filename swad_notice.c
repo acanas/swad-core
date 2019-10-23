@@ -469,7 +469,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	    RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Crs);
 
 	 /* Put a link to the RSS file */
-	 fprintf (Gbl.F.Out,"<div class=\"CM\">");
+	 HTM_DIV_Begin ("class=\"CM\"");
 	 fprintf (Gbl.F.Out,"<a href=\"");
 	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.Hierarchy.Crs.CrsCod);
 	 fprintf (Gbl.F.Out,"\" target=\"_blank\">"
@@ -654,12 +654,12 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      {
       Lay_StartArticle (Anchor);
       if (Highlight)
-	 fprintf (Gbl.F.Out,"<div class=\"NOTICE_HIGHLIGHT\">");
+	 HTM_DIV_Begin ("class=\"NOTICE_HIGHLIGHT\"");
      }
 
    /***** Start yellow note *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s %s\">",
-	    ContainerClass[Status],ContainerWidthClass[TypeNoticesListing]);
+   HTM_DIV_Begin ("class=\"%s %s\"",
+	          ContainerClass[Status],ContainerWidthClass[TypeNoticesListing]);
 
    /***** Write the date in the top part of the yellow note *****/
    /* Write symbol to indicate if notice is obsolete or active */
@@ -686,7 +686,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 
    /* Write the date */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",DateClass[Status]);
+   HTM_DIV_Begin ("class=\"%s\"",DateClass[Status]);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       /* Form to view full notice */
@@ -712,12 +712,12 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    /***** Write the content of the notice *****/
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
-      fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT_BRIEF\">");
+      HTM_DIV_Begin ("class=\"NOTICE_TEXT_BRIEF\"");
       fprintf (Gbl.F.Out,"%s",Content);
       HTM_DIV_End ();
 
       /* Put form to view full notice */
-      fprintf (Gbl.F.Out,"<div class=\"CM\">");
+      HTM_DIV_Begin ("class=\"CM\"");
       Not_SetNotCodToEdit (NotCod);	// To be used as parameter
       Lay_PutContextualLinkOnlyIcon (ActSeeOneNot,Anchor,Not_PutParams,
 				     "ellipsis-h.svg",
@@ -726,14 +726,14 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      }
    else
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",TextClass[Status]);
+      HTM_DIV_Begin ("class=\"%s\"",TextClass[Status]);
       fprintf (Gbl.F.Out,"%s",Content);
       HTM_DIV_End ();
      }
 
    /***** Write the author *****/
-   fprintf (Gbl.F.Out,"<div class=\"NOTICE_AUTHOR %s\">",	// Limited width
-            AuthorClass[Status]);
+   HTM_DIV_Begin ("class=\"NOTICE_AUTHOR %s\"",	// Limited width
+                  AuthorClass[Status]);
    Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = UsrCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS)) // Get from the database the data of the autor

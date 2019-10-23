@@ -976,13 +976,14 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
    if (TypeOfView == Rec_SHA_RECORD_LIST)	// Listing several records
      {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
       /* Link to print view */
       Frm_StartForm (ActPrnRecSevGst);
       Usr_PutHiddenParSelectedUsrsCods ();
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
+
       HTM_DIV_End ();
      }
 
@@ -1006,19 +1007,20 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 	           "record_%u",
 		   NumUsr);
 	 Lay_StartSection (RecordSectionId);
-	 fprintf (Gbl.F.Out,"<div class=\"REC_USR\"");
+
 	 if (Gbl.Action.Act == ActPrnRecSevGst &&
 	     NumUsr != 0 &&
 	     (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
-	    fprintf (Gbl.F.Out," style=\"page-break-before:always;\"");
-	 fprintf (Gbl.F.Out,">");
+	    HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
+	 else
+	    HTM_DIV_Begin ("class=\"REC_USR\"");
 
 	 /* Show optional alert */
 	 if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
 	    Ale_ShowAlerts (NULL);
 
 	 /* Shared record */
-	 fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+	 HTM_DIV_Begin ("class=\"REC_LEFT\"");
 	 Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,RecordSectionId);
 	 HTM_DIV_End ();
 
@@ -1069,7 +1071,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    Rec_GetListRecordFieldsInCurrentCrs ();
 
    /***** Put contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
    /* Link to edit record fields */
    if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)
@@ -1089,10 +1091,10 @@ static void Rec_ShowRecordOneStdCrs (void)
    Ale_ShowAlerts (NULL);
 
    /***** Start container for this user *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
+   HTM_DIV_Begin ("class=\"REC_USR\"");
 
    /***** Shared record *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+   HTM_DIV_Begin ("class=\"REC_LEFT\"");
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
    HTM_DIV_End ();
 
@@ -1105,7 +1107,7 @@ static void Rec_ShowRecordOneStdCrs (void)
             ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
             if (ItsMe)
 	      {
-	       fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+	       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 	       Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
 	       HTM_DIV_End ();
 	      }
@@ -1113,7 +1115,7 @@ static void Rec_ShowRecordOneStdCrs (void)
          case Rol_NET:
          case Rol_TCH:
          case Rol_SYS_ADM:
-	    fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+	    HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 	    Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,&Gbl.Usrs.Other.UsrDat,NULL);
 	    HTM_DIV_End ();
 	    break;
@@ -1172,7 +1174,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
    if (ShaTypeOfView == Rec_SHA_RECORD_LIST)
      {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
       /* Link to edit record fields */
       if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)
@@ -1183,6 +1185,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       Usr_PutHiddenParSelectedUsrsCods ();
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
+
       HTM_DIV_End ();
      }
 
@@ -1208,19 +1211,20 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 		      "record_%u",
 		      NumUsr);
 	    Lay_StartSection (RecordSectionId);
-	    fprintf (Gbl.F.Out,"<div class=\"REC_USR\"");
-            if (Gbl.Action.Act == ActPrnRecSevStd &&
-                NumUsr != 0 &&
-                (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
-               fprintf (Gbl.F.Out," style=\"page-break-before:always;\"");
-            fprintf (Gbl.F.Out,">");
+
+	    if (Gbl.Action.Act == ActPrnRecSevStd &&
+		NumUsr != 0 &&
+		(NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
+	       HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
+	    else
+	       HTM_DIV_Begin ("class=\"REC_USR\"");
 
 	    /* Show optional alert */
 	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
                Ale_ShowAlerts (NULL);
 
             /* Shared record */
-            fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+            HTM_DIV_Begin ("class=\"REC_LEFT\"");
             Rec_ShowSharedUsrRecord (ShaTypeOfView,&UsrDat,RecordSectionId);
             HTM_DIV_End ();
 
@@ -1234,7 +1238,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 		   (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// I am student in this course...
 		    ItsMe))					// ...and it's me
 		 {
-		  fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+		  HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 		  Rec_ShowCrsRecord (CrsTypeOfView,&UsrDat,RecordSectionId);
                   HTM_DIV_End ();
 		 }
@@ -1299,7 +1303,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    ShowOfficeHours = Rec_GetParamShowOfficeHours ();
 
    /***** Show contextual menu *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
    /* Show office hours? */
    Rec_WriteFormShowOfficeHoursOneTch (ShowOfficeHours);
@@ -1318,17 +1322,17 @@ static void Rec_ShowRecordOneTchCrs (void)
    HTM_DIV_End ();
 
    /***** Start container for this user *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
+   HTM_DIV_Begin ("class=\"REC_USR\"");
 
    /***** Shared record *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+   HTM_DIV_Begin ("class=\"REC_LEFT\"");
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
    HTM_DIV_End ();
 
    /***** Office hours *****/
    if (ShowOfficeHours)
      {
-      fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+      HTM_DIV_Begin ("class=\"REC_RIGHT\"");
       Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
       Box_StartBox (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
@@ -1389,7 +1393,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    if (Gbl.Action.Act == ActSeeRecSevTch)
      {
       /***** Show contextual menu *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
       /* Show office hours? */
       Rec_WriteFormShowOfficeHoursSeveralTchs (ShowOfficeHours);
@@ -1429,26 +1433,27 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 		      "record_%u",
 		      NumUsr);
 	    Lay_StartSection (RecordSectionId);
-	    fprintf (Gbl.F.Out,"<div class=\"REC_USR\"");
-            if (Gbl.Action.Act == ActPrnRecSevTch &&
-                NumUsr != 0 &&
-                (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
-               fprintf (Gbl.F.Out," style=\"page-break-before:always;\"");
-            fprintf (Gbl.F.Out,">");
+
+	    if (Gbl.Action.Act == ActPrnRecSevTch &&
+		NumUsr != 0 &&
+		(NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
+	       HTM_DIV_Begin ("class=\"REC_USR\" style=\"page-break-before:always;\"");
+	    else
+	       HTM_DIV_Begin ("class=\"REC_USR\"");
 
 	    /* Show optional alert */
 	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
 	       Ale_ShowAlerts (NULL);
 
 	    /* Shared record */
-            fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+            HTM_DIV_Begin ("class=\"REC_LEFT\"");
             Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,RecordSectionId);
             HTM_DIV_End ();
 
             /* Office hours */
             if (ShowOfficeHours)
               {
-	       fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+	       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
                Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
 	       Box_StartBox (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
 	                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
@@ -2104,7 +2109,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
    UsrDat->Accepted = Usr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
 
    /***** Show user's record *****/
-   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   HTM_DIV_Begin ("class=\"CM\"");
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_USR_CHECK,UsrDat,NULL);
    HTM_DIV_End ();
   }
@@ -2479,7 +2484,7 @@ static void Rec_PutIconsCommands (void)
 				                 Gbl.Record.UsrDat);
 
       /***** Start container *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO\">");
+      HTM_DIV_Begin ("class=\"FRAME_ICO\"");
 
       if (ItsMe)
          /***** Button to edit my record card *****/
@@ -2746,7 +2751,7 @@ static void Rec_ShowPhoto (struct UsrData *UsrDat)
 static void Rec_ShowFullName (struct UsrData *UsrDat)
   {
    HTM_TD_Begin ("class=\"REC_C2_MID LT\"");
-   fprintf (Gbl.F.Out,"<div class=\"REC_NAME\">");
+   HTM_DIV_Begin ("class=\"REC_NAME\"");
 
    /***** First name *****/
    fprintf (Gbl.F.Out,"%s<br />",UsrDat->FirstName);
@@ -2772,7 +2777,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
    bool ItsMe;
 
    HTM_TD_Begin ("class=\"REC_C2_MID LB\"");
-   fprintf (Gbl.F.Out,"<div class=\"REC_NICK\">");
+   HTM_DIV_Begin ("class=\"REC_NICK\"");
    if (UsrDat->Nickname[0])
      {
       if (PutFormLinks)
@@ -2840,7 +2845,7 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
    if (UsrDat->Email[0])
      {
-      fprintf (Gbl.F.Out,"<div class=\"REC_EMAIL\">");	// Limited width
+      HTM_DIV_Begin ("class=\"REC_EMAIL\"");	// Limited width
       if (Mai_ICanSeeOtherUsrEmail (UsrDat))
 	 fprintf (Gbl.F.Out,"<a href=\"mailto:%s\" class=\"REC_DAT_BOLD\">"
 			    "%s"
@@ -3765,7 +3770,7 @@ static void Rec_WriteLinkToDataProtectionClause (void)
   {
    extern const char *Txt_DATA_PROTECTION_CLAUSE;
 
-   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   HTM_DIV_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<a class=\"TIT\" href=\"%s/\" target=\"_blank\">%s</a>",
             Cfg_URL_DATA_PROTECTION_PUBLIC,
             Txt_DATA_PROTECTION_CLAUSE);
@@ -3963,10 +3968,10 @@ void Rec_ShowMySharedRecordAndMore (void)
      }
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_USR\">");
+   HTM_DIV_Begin ("class=\"REC_USR\"");
 
    /***** Left part *****/
-   fprintf (Gbl.F.Out,"<div class=\"REC_LEFT\">");
+   HTM_DIV_Begin ("class=\"REC_LEFT\"");
 
    /* My shared record card */
    Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
@@ -3975,7 +3980,7 @@ void Rec_ShowMySharedRecordAndMore (void)
 
    /***** Right part *****/
    /* Start container for right part */
-   fprintf (Gbl.F.Out,"<div class=\"REC_RIGHT\">");
+   HTM_DIV_Begin ("class=\"REC_RIGHT\"");
 
    /* My institution, centre and department */
    Rec_ShowFormMyInsCtrDpt (IAmATeacher);

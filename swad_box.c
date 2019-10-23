@@ -139,20 +139,21 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
       Gbl.Box.Ids[Gbl.Box.Nested] = NULL;
 
    /***** Start box container *****/
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_CONTAINER\"");
    if (Closable == Box_CLOSABLE)
      {
       /* Create unique id for alert */
       Frm_SetUniqueId (Gbl.Box.Ids[Gbl.Box.Nested]);
-      fprintf (Gbl.F.Out," id=\"%s\"",Gbl.Box.Ids[Gbl.Box.Nested]);
+
+      HTM_DIV_Begin ("class=\"FRAME_CONTAINER\" id=\"%s\"",Gbl.Box.Ids[Gbl.Box.Nested]);
      }
-   fprintf (Gbl.F.Out,">");
+   else
+      HTM_DIV_Begin ("class=\"FRAME_CONTAINER\"");
 
    /***** Start box *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\"",ClassFrame);
    if (Width)
-       fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
-   fprintf (Gbl.F.Out,">");
+      HTM_DIV_Begin ("class=\"%s\" style=\"width:%s;\"",ClassFrame,Width);
+   else
+      HTM_DIV_Begin ("class=\"%s\"",ClassFrame);
 
    /***** Row for left and right icons *****/
    HTM_DIV_Begin ("class=\"FRAME_ICO\"");

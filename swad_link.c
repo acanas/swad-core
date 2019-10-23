@@ -162,7 +162,7 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
    /***** Write all the links *****/
    if (Gbl.Links.Num)
      {
-      fprintf (Gbl.F.Out,"<div id=\"institutional_links\">");
+      HTM_DIV_Begin ("id=\"institutional_links\"");
 
       Frm_StartForm (ActSeeLnk);
       Frm_LinkFormSubmit (Txt_Links,NULL,NULL);

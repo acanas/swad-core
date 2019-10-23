@@ -922,7 +922,7 @@ static void Mai_ListEmails (void)
 		 Hlp_MESSAGES_Email,Box_NOT_CLOSABLE);
 
    /***** Start list with users' email addresses *****/
-   fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL CM\">");
+   HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -978,19 +978,18 @@ static void Mai_ListEmails (void)
    HTM_DIV_End ();
 
    /***** Show a message with the number of users with email ****/
-   fprintf (Gbl.F.Out,"<div class=\"DAT CM\">");
-   fprintf (Gbl.F.Out,Txt_X_users_who_have_email,
-	    NumUsrsWithEmail);
+   HTM_DIV_Begin ("class=\"DAT CM\"");
+   fprintf (Gbl.F.Out,Txt_X_users_who_have_email,NumUsrsWithEmail);
    HTM_DIV_End ();
 
    /***** Show a message with the number of users who have accepted and have email ****/
-   fprintf (Gbl.F.Out,"<div class=\"DAT CM\">");
+   HTM_DIV_Begin ("class=\"DAT CM\"");
    fprintf (Gbl.F.Out,Txt_X_users_who_have_accepted_and_who_have_email,
 	    NumAcceptedUsrsWithEmail);
    HTM_DIV_End ();
 
    /***** Icon to open the client email program *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
    fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
 		      " title=\"%s\" class=\"%s\">",
 	    Gbl.Usrs.Me.UsrDat.Email,

@@ -232,7 +232,7 @@ static void TT_ShowTimeTableGrpsSelected (void)
    extern const char *Txt_Groups_OF_A_USER;
    extern const char *Txt_All_groups;
 
-   fprintf (Gbl.F.Out,"<div class=\"CLASSPHOTO_TITLE CM\">");
+   HTM_DIV_Begin ("class=\"CLASSPHOTO_TITLE CM\"");
    switch (Gbl.Crs.Grps.WhichGrps)
      {
       case Grp_MY_GROUPS:
@@ -1540,7 +1540,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	 if (IntervalType != TT_FREE_INTERVAL) // If cell is not empty...
 	   {
 	    /***** Start cell *****/
-	    fprintf (Gbl.F.Out,"<div class=\"TT_CELL TT_TXT\">");
+	    HTM_DIV_Begin ("class=\"TT_CELL TT_TXT\"");
 
 	    /***** Course name *****/
 	    if (Gbl.TimeTable.Type == TT_MY_TIMETABLE)

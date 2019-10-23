@@ -418,9 +418,9 @@ static void Prj_ShowFormToFilterByMy_All (void)
 	My_All <= (Prj_WhoseProjects_t) (Prj_NUM_WHOSE_PROJECTS - 1);
 	My_All++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Prjs.Filter.My_All == My_All) ? "PREF_ON" :
-					            "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",
+		     (Gbl.Prjs.Filter.My_All == My_All) ? "PREF_ON" :
+							  "PREF_OFF");
       Frm_StartForm (ActSeePrj);
       Filter.My_All = My_All;
       Filter.PreNon = Gbl.Prjs.Filter.PreNon;
@@ -454,9 +454,9 @@ static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
 	PreNon <= (Prj_PreassignedNonpreassig_t) (Prj_NUM_PREASSIGNED_NONPREASSIG - 1);
 	PreNon++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Prjs.Filter.PreNon & (1 << PreNon)) ? "PREF_ON" :
-						          "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",
+		     (Gbl.Prjs.Filter.PreNon & (1 << PreNon)) ? "PREF_ON" :
+								"PREF_OFF");
       Frm_StartForm (ActSeePrj);
       Filter.My_All = Gbl.Prjs.Filter.My_All;
       Filter.PreNon = Gbl.Prjs.Filter.PreNon ^ (1 << PreNon);	// Toggle
@@ -495,9 +495,9 @@ static void Prj_ShowFormToFilterByHidden (void)
 	HidVis <= (Prj_HiddenVisibl_t) (Prj_NUM_HIDDEN_VISIBL - 1);
 	HidVis++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Prjs.Filter.HidVis & (1 << HidVis)) ? "PREF_ON" :
-						          "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",
+		     (Gbl.Prjs.Filter.HidVis & (1 << HidVis)) ? "PREF_ON" :
+								"PREF_OFF");
       Frm_StartForm (ActSeePrj);
       Filter.My_All = Gbl.Prjs.Filter.My_All;
       Filter.PreNon = Gbl.Prjs.Filter.PreNon;
@@ -536,9 +536,9 @@ static void Prj_ShowFormToFilterByWarning (void)
 	Faultiness <= (Prj_Faultiness_t) (Prj_NUM_FAULTINESS - 1);
 	Faultiness++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Prjs.Filter.Faulti & (1 << Faultiness)) ? "PREF_ON" :
-						              "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",
+		     (Gbl.Prjs.Filter.Faulti & (1 << Faultiness)) ? "PREF_ON" :
+								    "PREF_OFF");
       Frm_StartForm (ActSeePrj);
       Filter.My_All = Gbl.Prjs.Filter.My_All;
       Filter.PreNon = Gbl.Prjs.Filter.PreNon;
@@ -2514,7 +2514,7 @@ static void Prj_PutFormsToRemEditOnePrj (const struct Project *Prj,
    if (Prj_CheckIfICanLockProjects ())
      {
       /* Put form to lock/unlock project edition */
-      fprintf (Gbl.F.Out,"<div id=\"prj_lck_%ld\">",Prj->PrjCod);
+      HTM_DIV_Begin ("id=\"prj_lck_%ld\"",Prj->PrjCod);
       Prj_FormLockUnlock (Prj);
       HTM_DIV_End ();
      }

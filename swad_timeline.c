@@ -1170,9 +1170,9 @@ static void TL_PutFormWhichUsrs (void)
 	WhichUsrs < TL_NUM_WHICH_USRS;
 	WhichUsrs++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       WhichUsrs == Gbl.Timeline.WhichUsrs ? "PREF_ON" :
-						     "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",
+		     WhichUsrs == Gbl.Timeline.WhichUsrs ? "PREF_ON" :
+							   "PREF_OFF");
       Frm_StartForm (ActSeeSocTmlGbl);
       Par_PutHiddenParamUnsigned ("WhichUsrs",WhichUsrs);
       Ico_PutSettingIconLink (Icon[WhichUsrs],Txt_TIMELINE_WHICH_USERS[WhichUsrs]);
@@ -1288,7 +1288,7 @@ static void TL_ShowWarningYouDontFollowAnyUser (void)
       Ale_ShowAlert (Ale_WARNING,Txt_You_dont_follow_any_user);
 
       /***** Put link to show users to follow *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
       Fol_PutLinkWhoToFollow ();
       HTM_DIV_End ();
      }
@@ -1392,9 +1392,9 @@ static void TL_PutLinkToViewNewPublications (void)
 
    /***** Link to view (show hidden) new publications *****/
    // div is hidden. When new posts arrive to the client via AJAX, div is shown
-   fprintf (Gbl.F.Out,"<div id=\"view_new_posts_container\""
-	              " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\""
-	              " style=\"display:none;\">");
+   HTM_DIV_Begin ("id=\"view_new_posts_container\""
+		  " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\""
+		  " style=\"display:none;\"");
    fprintf (Gbl.F.Out,"<a href=\"\" class=\"%s\""
                       " onclick=\"moveNewTimelineToTimeline(); return false;\" />"
                       "%s (<span id=\"view_new_posts_count\">0</span>)"
@@ -1414,8 +1414,8 @@ static void TL_PutLinkToViewOldPublications (void)
    extern const char *Txt_See_more;
 
    /***** Animated link to view old publications *****/
-   fprintf (Gbl.F.Out,"<div id=\"view_old_posts_container\""
-	              " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\">");
+   HTM_DIV_Begin ("id=\"view_old_posts_container\""
+	          " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\"");
    fprintf (Gbl.F.Out,"<a href=\"\" class=\"%s\" onclick=\""
    		      "document.getElementById('get_old_timeline').style.display='none';"	// Icon to be hidden on click
 		      "document.getElementById('getting_old_timeline').style.display='';"	// Icon to be shown on click
@@ -1506,7 +1506,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
       IAmTheAuthor = Usr_ItsMe (UsrDat.UsrCod);
 
       /***** Left: write author's photo *****/
-      fprintf (Gbl.F.Out,"<div class=\"TL_LEFT_PHOTO\">");
+      HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
@@ -1514,7 +1514,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
       HTM_DIV_End ();
 
       /***** Right: author's name, time, summary and buttons *****/
-      fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\">");
+      HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
       /* Write author's full name and nickname */
       TL_WriteAuthorNote (&UsrDat);
@@ -1578,21 +1578,21 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_INS_DOC_PUB_FILE:
 	       case TL_NOTE_INS_SHA_PUB_FILE:
 		  /* Write location (institution) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">");
+		  HTM_DIV_Begin ("class=\"TL_LOC\"");
 		  fprintf (Gbl.F.Out,"%s: %s",Txt_Institution,Ins.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_CTR_DOC_PUB_FILE:
 	       case TL_NOTE_CTR_SHA_PUB_FILE:
 		  /* Write location (centre) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">");
+		  HTM_DIV_Begin ("class=\"TL_LOC\"");
 		  fprintf (Gbl.F.Out,"%s: %s",Txt_Centre,Ctr.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_DEG_DOC_PUB_FILE:
 	       case TL_NOTE_DEG_SHA_PUB_FILE:
 		  /* Write location (degree) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">");
+		  HTM_DIV_Begin ("class=\"TL_LOC\"");
 		  fprintf (Gbl.F.Out,"%s: %s",Txt_Degree,Deg.ShrtName);
 		  HTM_DIV_End ();
 		  break;
@@ -1601,13 +1601,13 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 	       case TL_NOTE_EXAM_ANNOUNCEMENT:
 	       case TL_NOTE_NOTICE:
 		  /* Write location (course) in hierarchy */
-		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">");
+		  HTM_DIV_Begin ("class=\"TL_LOC\"");
 		  fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShrtName);
 		  HTM_DIV_End ();
 		  break;
 	       case TL_NOTE_FORUM_POST:
 		  /* Write forum name */
-		  fprintf (Gbl.F.Out,"<div class=\"TL_LOC\">");
+		  HTM_DIV_Begin ("class=\"TL_LOC\"");
 		  fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
 		  HTM_DIV_End ();
 		  break;
@@ -1617,7 +1617,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 
 	 /* Write note summary */
 	 TL_GetNoteSummary (SocNot,SummaryStr);
-	 fprintf (Gbl.F.Out,"<div class=\"TL_TXT\">");
+	 HTM_DIV_Begin ("class=\"TL_TXT\"");
 	 fprintf (Gbl.F.Out,"%s",SummaryStr);
 	 HTM_DIV_End ();
 	}
@@ -1632,7 +1632,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
       NumComments = TL_GetNumCommentsInNote (SocNot->NotCod);
 
       /* Put icon to add a comment */
-      fprintf (Gbl.F.Out,"<div class=\"TL_BOTTOM_LEFT\">");
+      HTM_DIV_Begin ("class=\"TL_BOTTOM_LEFT\"");
       if (SocNot->Unavailable)		// Unavailable notes can not be commented
 	 TL_PutIconCommentDisabled ();
       else
@@ -1640,27 +1640,25 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
       HTM_DIV_End ();
 
       /* Start container for buttons and comments */
-      fprintf (Gbl.F.Out,"<div class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\">");
+      HTM_DIV_Begin ("class=\"TL_BOTTOM_RIGHT TL_RIGHT_WIDTH\"");
 
       /* Start foot container */
-      fprintf (Gbl.F.Out,"<div class=\"TL_FOOT TL_RIGHT_WIDTH\">");
+      HTM_DIV_Begin ("class=\"TL_FOOT TL_RIGHT_WIDTH\"");
 
       /* Foot column 1: Fav zone */
-      fprintf (Gbl.F.Out,"<div id=\"fav_not_%s_%u\""
-	                 " class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\">",
-	       Gbl.UniqueNameEncrypted,NumDiv);
+      HTM_DIV_Begin ("id=\"fav_not_%s_%u\" class=\"TL_FAV_NOT TL_FAV_NOT_WIDTH\"",
+	             Gbl.UniqueNameEncrypted,NumDiv);
       TL_PutFormToFavUnfNote (SocNot,TL_SHOW_A_FEW_USRS);
       HTM_DIV_End ();
 
       /* Foot column 2: Share zone */
-      fprintf (Gbl.F.Out,"<div id=\"sha_not_%s_%u\""
-	                 " class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\">",
-	       Gbl.UniqueNameEncrypted,NumDiv);
+      HTM_DIV_Begin ("id=\"sha_not_%s_%u\" class=\"TL_SHA_NOT TL_SHA_NOT_WIDTH\"",
+	             Gbl.UniqueNameEncrypted,NumDiv);
       TL_PutFormToShaUnsNote (SocNot,TL_SHOW_A_FEW_USRS);
       HTM_DIV_End ();
 
       /* Foot column 3: Icon to remove this note */
-      fprintf (Gbl.F.Out,"<div class=\"TL_REM\">");
+      HTM_DIV_Begin ("class=\"TL_REM\"");
       if (IAmTheAuthor)
 	 TL_PutFormToRemovePublication (SocNot->NotCod);
       HTM_DIV_End ();
@@ -1714,8 +1712,7 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
       UsrDat.UsrCod = UsrCod;
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))	// Really we only need EncryptedUsrCod and FullName
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"TL_TOP_CONT"
-	                    " TL_TOP_PUBLISHER TL_WIDTH\">");
+	 HTM_DIV_Begin ("class=\"TL_TOP_CONT TL_TOP_PUBLISHER TL_WIDTH\"");
 
 	 /***** Show user's name inside form to go to user's public profile *****/
 	 Frm_StartFormUnique (ActSeeOthPubPrf);
@@ -1728,6 +1725,7 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
 
 	 /***** Show action made *****/
          fprintf (Gbl.F.Out," %s:",Txt_TIMELINE_NOTE_TOP_MESSAGES[TopMessage]);
+
          HTM_DIV_End ();
 	}
 
@@ -1746,7 +1744,7 @@ static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
    extern const char *Txt_Another_user_s_profile;
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
-   fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\">");
+   HTM_DIV_Begin ("class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\"");
 
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
@@ -1783,8 +1781,7 @@ static void TL_WriteDateTime (time_t TimeUTC)
    Frm_SetUniqueId (IdDateTime);
 
    /***** Container where the date-time is written *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"TL_RIGHT_TIME DAT_LIGHT\">",
-            IdDateTime);
+   HTM_DIV_Begin ("id=\"%s\" class=\"TL_RIGHT_TIME DAT_LIGHT\"",IdDateTime);
    HTM_DIV_End ();
 
    /***** Script to write date and time in browser local time *****/
@@ -1844,7 +1841,7 @@ static void TL_GetAndWritePost (long PstCod)
    /***** Write content *****/
    if (Content[0])
      {
-      fprintf (Gbl.F.Out,"<div class=\"TL_TXT\">");
+      HTM_DIV_Begin ("class=\"TL_TXT\"");
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
       HTM_DIV_End ();
      }
@@ -1948,7 +1945,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
        Gbl.Form.Inside)		// Inside another form
      {
       /***** Do not put form *****/
-      fprintf (Gbl.F.Out,"<div class=\"TL_FORM_OFF\">");
+      HTM_DIV_Begin ("class=\"TL_FORM_OFF\"");
       fprintf (Gbl.F.Out,"%s",Txt_TIMELINE_NOTE[SocNot->NoteType]);
       if (SocNot->Unavailable)
          fprintf (Gbl.F.Out," (%s)",Txt_not_available);
@@ -1956,7 +1953,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
      }
    else			// Not inside another form
      {
-      fprintf (Gbl.F.Out,"<div class=\"TL_FORM\">");
+      HTM_DIV_Begin ("class=\"TL_FORM\"");
 
       /***** Parameters depending on the type of note *****/
       switch (SocNot->NoteType)
@@ -2321,7 +2318,7 @@ static void TL_PutFormToWriteNewPost (void)
                       "<li class=\"TL_WIDTH\">");
 
    /***** Left: write author's photo (my photo) *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_LEFT_PHOTO\">");
+   HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
 						     NULL,
@@ -2329,10 +2326,10 @@ static void TL_PutFormToWriteNewPost (void)
    HTM_DIV_End ();
 
    /***** Right: author's name, time, summary and buttons *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\">");
+   HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
 
    /* Write author's full name and nickname */
-   fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\">");
+   HTM_DIV_Begin ("class=\"TL_RIGHT_AUTHOR TL_RIGHT_AUTHOR_WIDTH\"");
    fprintf (Gbl.F.Out,"<span class=\"DAT_N_BOLD\">%s</span>"
 		      "<span class=\"DAT_LIGHT\"> @%s</span>",
 	    Gbl.Usrs.Me.UsrDat.FullName,Gbl.Usrs.Me.UsrDat.Nickname);
@@ -2340,7 +2337,7 @@ static void TL_PutFormToWriteNewPost (void)
 
    /***** Form to write the post *****/
    /* Start container */
-   fprintf (Gbl.F.Out,"<div class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\">");
+   HTM_DIV_Begin ("class=\"TL_FORM_NEW_PST TL_RIGHT_WIDTH\"");
 
    /* Begin form to write the post */
    TL_FormStart (ActRcvSocPstGbl,ActRcvSocPstUsr);
@@ -2383,8 +2380,7 @@ static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
             IdDivImgButton);
 
    /***** Start concealable div *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s\" style=\"display:none;\">",
-            IdDivImgButton);
+   HTM_DIV_Begin ("id=\"%s\" style=\"display:none;\"",IdDivImgButton);
 
    /***** Help on editor *****/
    Lay_HelpPlainEditor ();
@@ -2500,7 +2496,7 @@ static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID 
    extern const char *Txt_Comment;
 
    /***** Link to toggle on/off the form to comment a note *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s_ico\" class=\"TL_ICO_COM_OFF\">",UniqueId);
+   HTM_DIV_Begin ("id=\"%s_ico\" class=\"TL_ICO_COM_OFF\"",UniqueId);
    fprintf (Gbl.F.Out,"<a href=\"\""
                       " onclick=\"toggleNewComment ('%s');return false;\">"
                       "<img src=\"%s/edit.svg\" alt=\"%s\" title=\"%s\""
@@ -2521,7 +2517,7 @@ static void TL_PutIconCommentDisabled (void)
    extern const char *Txt_Comment;
 
    /***** Disabled icon to comment a note *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_ICO_COM_OFF TL_ICO_DISABLED\">");
+   HTM_DIV_Begin ("class=\"TL_ICO_COM_OFF TL_ICO_DISABLED\"");
    fprintf (Gbl.F.Out,"<img src=\"%s/edit.svg\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO16x16\" />",
@@ -2542,13 +2538,12 @@ static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
    char PhotoURL[PATH_MAX + 1];
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div id=\"%s\""
-		      " class=\"TL_FORM_NEW_COM TL_RIGHT_WIDTH\""
-		      " style=\"display:none;\">",
-	    IdNewComment);
+   HTM_DIV_Begin ("id=\"%s\" class=\"TL_FORM_NEW_COM TL_RIGHT_WIDTH\""
+		  " style=\"display:none;\"",
+	          IdNewComment);
 
    /***** Left: write author's photo (my photo) *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_COM_PHOTO\">");
+   HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
 					             NULL,
@@ -2557,7 +2552,7 @@ static void TL_PutHiddenFormToWriteNewCommentToNote (long NotCod,
 
    /***** Right: form to write the comment *****/
    /* Start right container */
-   fprintf (Gbl.F.Out,"<div class=\"TL_COM_CONT TL_COMM_WIDTH\">");
+   HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
 
    /* Begin form to write the post */
    TL_FormStart (ActRcvSocComGbl,ActRcvSocComUsr);
@@ -2632,10 +2627,9 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
 	 Frm_SetUniqueId (IdComments);
 
 	 /***** Link to toggle on/off comments *****/
-	 fprintf (Gbl.F.Out,"<div id=\"con_%s\""
-			    " class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
-			    " style=\"display:none;\">",	// Initially hidden
-		  IdComments);
+	 HTM_DIV_Begin ("id=\"con_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\""
+			" style=\"display:none;\">",	// Initially hidden
+		        IdComments);
 	 TL_PutIconToToggleComments (IdComments,"angle-down.svg",
 	                              Txt_See_only_the_latest_COMMENTS);
 	 HTM_DIV_End ();
@@ -2651,9 +2645,8 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
 	 fprintf (Gbl.F.Out,"</ul>");
 
 	 /***** Link to toggle on/off comments *****/
-	 fprintf (Gbl.F.Out,"<div id=\"exp_%s\""
-			    " class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\">",
-		  IdComments);
+	 HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\"",
+		        IdComments);
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 		   Txt_See_the_previous_X_COMMENTS,
 		   NumCommentsInitiallyHidden);
@@ -2743,9 +2736,10 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       /***** Write sharer/commenter if distinct to author *****/
       TL_WriteTopMessage (TopMessage,UsrCod);
 
-      fprintf (Gbl.F.Out,"<div class=\"TL_LEFT_PHOTO\">");
+      HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
       HTM_DIV_End ();
-      fprintf (Gbl.F.Out,"<div class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\">");
+
+      HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
       fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
      }
 
@@ -2768,7 +2762,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       IAmTheAuthor = Usr_ItsMe (UsrDat.UsrCod);
 
       /***** Left: write author's photo *****/
-      fprintf (Gbl.F.Out,"<div class=\"TL_COM_PHOTO\">");
+      HTM_DIV_Begin ("class=\"TL_COM_PHOTO\"");
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
@@ -2776,7 +2770,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       HTM_DIV_End ();
 
       /***** Right: author's name, time, content, image and buttons *****/
-      fprintf (Gbl.F.Out,"<div class=\"TL_COM_CONT TL_COMM_WIDTH\">");
+      HTM_DIV_Begin ("class=\"TL_COM_CONT TL_COMM_WIDTH\"");
 
       /* Write author's full name and nickname */
       TL_WriteAuthorComment (&UsrDat);
@@ -2787,7 +2781,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       /* Write content of the comment */
       if (SocCom->Content[0])
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"TL_TXT\">");
+	 HTM_DIV_Begin ("class=\"TL_TXT\"");
 	 Msg_WriteMsgContent (SocCom->Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
 	 HTM_DIV_End ();
 	}
@@ -2797,17 +2791,16 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
 	                            "TL_COM_MED TL_COMM_WIDTH");
 
       /* Start foot container */
-      fprintf (Gbl.F.Out,"<div class=\"TL_FOOT TL_COMM_WIDTH\">");
+      HTM_DIV_Begin ("class=\"TL_FOOT TL_COMM_WIDTH\"");
 
       /* Fav zone */
-      fprintf (Gbl.F.Out,"<div id=\"fav_com_%s_%u\""
-	                 " class=\"TL_FAV_COM TL_FAV_WIDTH\">",
-	       Gbl.UniqueNameEncrypted,NumDiv);
+      HTM_DIV_Begin ("id=\"fav_com_%s_%u\" class=\"TL_FAV_COM TL_FAV_WIDTH\"",
+	             Gbl.UniqueNameEncrypted,NumDiv);
       TL_PutFormToFavUnfComment (SocCom,TL_SHOW_A_FEW_USRS);
       HTM_DIV_End ();
 
       /* Put icon to remove this comment */
-      fprintf (Gbl.F.Out,"<div class=\"TL_REM\">");
+      HTM_DIV_Begin ("class=\"TL_REM\"");
       if (IAmTheAuthor && !ShowCommentAlone)
 	 TL_PutFormToRemoveComment (SocCom->PubCod);
       HTM_DIV_End ();
@@ -2841,7 +2834,7 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_COM_AUTHOR TL_COMM_AUTHOR_WIDTH\">");
+   HTM_DIV_Begin ("class=\"TL_COM_AUTHOR TL_COMM_AUTHOR_WIDTH\"");
 
    /***** Show user's name inside form to go to user's public profile *****/
    Frm_StartFormUnique (ActSeeOthPubPrf);
@@ -3268,7 +3261,7 @@ static void TL_PutFormToShaUnsNote (const struct TL_Note *SocNot,
    bool IAmASharerOfThisSocNot;
 
    /***** Put form to share/unshare this note *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_ICO\">");
+   HTM_DIV_Begin ("class=\"TL_ICO\"");
    IAmTheAuthor = Usr_ItsMe (SocNot->UsrCod);
    if (SocNot->Unavailable ||		// Unavailable notes can not be shared
        IAmTheAuthor)			// I am the author
@@ -3398,7 +3391,7 @@ static void TL_PutFormToFavUnfNote (const struct TL_Note *SocNot,
    bool IAmAFaverOfThisSocNot;
 
    /***** Put form to fav/unfav this note *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_ICO\">");
+   HTM_DIV_Begin ("class=\"TL_ICO\"");
    IAmTheAuthor = Usr_ItsMe (SocNot->UsrCod);
    if (SocNot->Unavailable ||		// Unavailable notes can not be favourited
        IAmTheAuthor)			// I am the author
@@ -3566,7 +3559,7 @@ static void TL_PutFormToFavUnfComment (const struct TL_Comment *SocCom,
    bool IAmAFaverOfThisSocCom;
 
    /***** Put form to fav/unfav this comment *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_ICO\">");
+   HTM_DIV_Begin ("class=\"TL_ICO\"");
    IAmTheAuthor = Usr_ItsMe (SocCom->UsrCod);
    if (IAmTheAuthor)			// I am the author
       /* Put disabled icon */
@@ -4520,11 +4513,11 @@ static void TL_ShowUsrsWhoHaveSharedNote (const struct TL_Note *SocNot,
 				                                 TL_MAX_USRS_SHOWN);
 
    /***** Show users *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_NUM_USRS\">");
+   HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
    TL_ShowNumSharersOrFavers (SocNot->NumShared);
    HTM_DIV_End ();
 
-   fprintf (Gbl.F.Out,"<div class=\"TL_USRS\">");
+   HTM_DIV_Begin ("class=\"TL_USRS\"");
    TL_ShowSharersOrFavers (&mysql_res,SocNot->NumShared,NumFirstUsrs);
    if (NumFirstUsrs < SocNot->NumShared)
       TL_PutFormToSeeAllSharersNote (SocNot,HowMany);
@@ -4562,11 +4555,11 @@ static void TL_ShowUsrsWhoHaveMarkedNoteAsFav (const struct TL_Note *SocNot,
      }
 
    /***** Show users *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_NUM_USRS\">");
+   HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
    TL_ShowNumSharersOrFavers (SocNot->NumFavs);
    HTM_DIV_End ();
 
-   fprintf (Gbl.F.Out,"<div class=\"TL_USRS\">");
+   HTM_DIV_Begin ("class=\"TL_USRS\"");
    TL_ShowSharersOrFavers (&mysql_res,SocNot->NumFavs,NumFirstUsrs);
    if (NumFirstUsrs < SocNot->NumFavs)		// Not all are shown
       TL_PutFormToSeeAllFaversNote (SocNot,HowMany);
@@ -4602,11 +4595,11 @@ static void TL_ShowUsrsWhoHaveMarkedCommAsFav (const struct TL_Comment *SocCom,
 				                                 TL_MAX_USRS_SHOWN);
 
    /***** Show users *****/
-   fprintf (Gbl.F.Out,"<div class=\"TL_NUM_USRS\">");
+   HTM_DIV_Begin ("class=\"TL_NUM_USRS\"");
    TL_ShowNumSharersOrFavers (SocCom->NumFavs);
    HTM_DIV_End ();
 
-   fprintf (Gbl.F.Out,"<div class=\"TL_USRS\">");
+   HTM_DIV_Begin ("class=\"TL_USRS\"");
    TL_ShowSharersOrFavers (&mysql_res,SocCom->NumFavs,NumFirstUsrs);
    if (NumFirstUsrs < SocCom->NumFavs)
       TL_PutFormToSeeAllFaversComment (SocCom,HowMany);
@@ -4659,7 +4652,7 @@ static void TL_ShowSharersOrFavers (MYSQL_RES **mysql_res,
 	    /***** Get user's data and show user's photo *****/
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,Usr_DONT_GET_PREFS))
 	      {
-               fprintf (Gbl.F.Out,"<div class=\"TL_SHARER\">");
+               HTM_DIV_Begin ("class=\"TL_SHARER\"");
 	       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 	                                             NULL,

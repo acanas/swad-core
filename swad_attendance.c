@@ -3420,17 +3420,16 @@ static void Att_PutCheckOrCross (bool Present)
    extern const char *Txt_Present;
    extern const char *Txt_Absent;
 
-   fprintf (Gbl.F.Out,"<div class=\"");
-
    if (Present)
-      fprintf (Gbl.F.Out,"ATT_CHECK\" title=\"%s\">"
-			 "&check;",
-	       Txt_Present);
+     {
+      HTM_DIV_Begin ("class=\"ATT_CHECK\" title=\"%s\"",Txt_Present);
+      fprintf (Gbl.F.Out,"&check;");
+     }
    else
-      fprintf (Gbl.F.Out,"ATT_CROSS\" title=\"%s\">"
-			 "&cross;",
-	       Txt_Absent);
-
+     {
+      HTM_DIV_Begin ("class=\"ATT_CROSS\" title=\"%s\"",Txt_Absent);
+      fprintf (Gbl.F.Out,"&cross;");
+     }
    HTM_DIV_End ();
   }
 

@@ -888,7 +888,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
    extern const char *Txt_I_understand_that_this_action_can_not_be_undone;
    extern const char *Txt_For_security_enter_your_password;
 
-   fprintf (Gbl.F.Out,"<div class=\"CM\" style=\"margin:12px;\">");
+   HTM_DIV_Begin ("class=\"CM\" style=\"margin:12px;\"");
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 		      "<input type=\"checkbox\" name=\"Consent\" value=\"Y\" />"
 		      "%s"

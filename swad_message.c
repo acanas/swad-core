@@ -364,7 +364,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void)
   {
    extern const char *Txt_Show_more_recipients;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
    Lay_PutContextualLinkIconTextOnSubmit (ActReqMsgUsr,NULL,
 					  Msg_PutParamsShowMorePotentialRecipients,
 					  "users.svg",
@@ -442,16 +442,16 @@ static void Msg_ShowOneUniqueRecipient (void)
 		     "PHOTO21x28",Pho_ZOOM,false);
 
    /****** Write user's IDs ******/
-   fprintf (Gbl.F.Out,"<div class=\"MSG_TO_ONE_RCP %s\">",
-            Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
-        	                             "DAT_SMALL_NOBR");
+   HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s\"",
+		  Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
+						   "DAT_SMALL_NOBR");
    ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
    HTM_DIV_End ();
 
    /***** Write user's name *****/
-   fprintf (Gbl.F.Out,"<div class=\"MSG_TO_ONE_RCP %s\">",
-            Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
-        	                             "DAT_SMALL_NOBR");
+   HTM_DIV_Begin ("class=\"MSG_TO_ONE_RCP %s\"",
+		  Gbl.Usrs.Other.UsrDat.Accepted ? "DAT_SMALL_NOBR_N" :
+						   "DAT_SMALL_NOBR");
    fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.FullName);
    HTM_DIV_End ();
 
@@ -1665,7 +1665,7 @@ void Msg_ShowRecMsgs (void)
    /***** Link to view banned users *****/
    if (Msg_GetNumUsrsBannedByMe ())
      {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
       Msg_PutLinkToViewBannedUsers ();
       HTM_DIV_End ();
      }
@@ -1759,14 +1759,14 @@ static void Msg_ShowSentOrReceivedMessages (void)
    /* Form to see messages again */
    Frm_StartForm (ActionSee[Gbl.Msg.TypeOfMessages]);
 
-   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   HTM_DIV_Begin ("class=\"CM\"");
    Msg_ShowFormSelectCourseSentOrRecMsgs ();
    if (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED)
       Msg_ShowFormToShowOnlyUnreadMessages ();
    HTM_DIV_End ();
    Msg_ShowFormToFilterMsgs ();
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
    Frm_LinkFormSubmitAnimated (Txt_Update_messages,
 	                       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
 			       NULL);
@@ -3229,7 +3229,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 	 HTM_TD_Begin ("class=\"LT %s\"",BgColor);
       else
 	 HTM_TD_Begin ("class=\"LT\"");
-      fprintf (Gbl.F.Out,"<div class=\"AUTHOR_2_LINES\">");	// Limited width
+      HTM_DIV_Begin ("class=\"AUTHOR_2_LINES\"");	// Limited width
       Usr_WriteFirstNameBRSurnames (UsrDat);
       HTM_DIV_End ();
      }
@@ -3282,7 +3282,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
          ThereIsOrgCrs = true;
          if ((FromThisCrs = (CrsCod == Gbl.Hierarchy.Crs.CrsCod)))	// Message sent from current course
            {
-            fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">");
+            HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
             fprintf (Gbl.F.Out,"(%s)",Txt_from_this_course);
             HTM_DIV_End ();
            }
@@ -3291,7 +3291,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             /* Write course, including link */
             Frm_StartFormGoTo (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">");
+            HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
             fprintf (Gbl.F.Out,"(");
             snprintf (Gbl.Title,sizeof (Gbl.Title),
         	      Txt_Go_to_X,
@@ -3306,7 +3306,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
      }
    if (!ThereIsOrgCrs)	// It's an old message without origin source specified, or is a message sent from none course
      {
-      fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">");
+      HTM_DIV_Begin ("class=\"AUTHOR_TXT\"");
       fprintf (Gbl.F.Out,"(%s)",Txt_no_course_of_origin);
       HTM_DIV_End ();
      }

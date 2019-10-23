@@ -359,7 +359,7 @@ void Ntf_ShowMyNotifications (void)
 				      Gbl.Usrs.Me.UsrDat.UsrCod,SubQuery);
 
    /***** Contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
    /* Write form to show all notifications */
    Ntf_WriteFormAllNotifications (AllNotifications);

@@ -461,9 +461,8 @@ void Gam_ShowOneGame (long GamCod,
    Lay_EndArticle ();
 
    /* Number of questions */
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            Game.Hidden ? "ASG_GRP_LIGHT" :
-        	          "ASG_GRP");
+   HTM_DIV_Begin ("class=\"%s\"",Game.Hidden ? "ASG_GRP_LIGHT" :
+        	                               "ASG_GRP");
    fprintf (Gbl.F.Out,"%s: %u",Txt_No_of_questions,Game.NumQsts);
    HTM_DIV_End ();
 
@@ -511,9 +510,8 @@ void Gam_ShowOneGame (long GamCod,
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<div class=\"PAR %s\">",
-            Game.Hidden ? "DAT_LIGHT" :
-        	          "DAT");
+   HTM_DIV_Begin ("class=\"PAR %s\"",Game.Hidden ? "DAT_LIGHT" :
+        	                                   "DAT");
    fprintf (Gbl.F.Out,"%s",Txt);
    HTM_DIV_End ();
    HTM_TD_End ();
@@ -1738,13 +1736,13 @@ static void Gam_ListOneOrMoreQuestionsForEdition (long GamCod,unsigned NumQsts,
       HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
 
       /* Write number of question */
-      fprintf (Gbl.F.Out,"<div class=\"BIG_INDEX\">");
+      HTM_DIV_Begin ("class=\"BIG_INDEX\"");
       fprintf (Gbl.F.Out,"%s",StrQstInd);
       HTM_DIV_End ();
 
       /* Write answer type (row[2]) */
       Gbl.Test.AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
-      fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL\">");
+      HTM_DIV_Begin ("class=\"DAT_SMALL\"");
       fprintf (Gbl.F.Out,"%s",Txt_TST_STR_ANSWER_TYPES[Gbl.Test.AnswerType]);
       HTM_DIV_End ();
 

@@ -128,7 +128,7 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
                                     long ThrCod,
                                     struct Pagination *Pagination)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CM\">");
+   HTM_DIV_Begin ("class=\"CM\"");
    Pag_WriteLinksToPages (WhatPaginate,
                           ThrCod,
                           Pagination,true,NULL,"PAG_TXT",false);

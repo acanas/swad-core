@@ -188,7 +188,7 @@ void Prf_RequestUserProfile (void)
    if (Gbl.Usrs.Me.Logged)
      {
       /***** Put link to show my public profile and users to follow *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
       Prf_PutLinkMyPublicProfile ();
       Fol_PutLinkWhoToFollow ();
       HTM_DIV_End ();
@@ -288,7 +288,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
       /***** Contextual links *****/
       if (Gbl.Usrs.Me.Logged)
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+	 HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
 	 if (ItsMe)
 	    /* Put link to show another user's profile */
@@ -404,7 +404,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 
    /***** Left list *****/
    /* Start left list */
-   fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_LEFT_CONTAINER\">");
+   HTM_DIV_Begin ("class=\"PRF_FIG_LEFT_CONTAINER\"");
    fprintf (Gbl.F.Out,"<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 
    /* Time since first click */
@@ -424,7 +424,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    HTM_DIV_End ();
 
    /***** Right list *****/
-   fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_RIGHT_CONTAINER\">");
+   HTM_DIV_Begin ("class=\"PRF_FIG_RIGHT_CONTAINER\"");
 
    UsrIsBannedFromRanking = Usr_CheckIfUsrBanned (UsrDat->UsrCod);
    if (!UsrIsBannedFromRanking)
@@ -1780,7 +1780,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
      {
       Frm_StartForm (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"<div class=\"RANK_USR\">");	// Limited width
+      HTM_DIV_Begin ("class=\"RANK_USR\"");	// Limited width
       Frm_LinkFormSubmit (Txt_Another_user_s_profile,"DAT_SMALL",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</a>");

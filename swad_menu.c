@@ -360,23 +360,21 @@ void Mnu_WriteMenuThisTab (void)
 	 fprintf (Gbl.F.Out,"<li class=\"MENU_LIST_ITEM\">");
 
          /***** Start container used to highlight this option *****/
-         fprintf (Gbl.F.Out,"<div class=\"%s\">",
-                  IsTheSelectedAction ? "MENU_OPT_ON" :
-                	                "MENU_OPT_OFF");
+         HTM_DIV_Begin ("class=\"%s\"",
+			IsTheSelectedAction ? "MENU_OPT_ON" :
+					      "MENU_OPT_OFF");
 
          /***** Begin form and link *****/
          Frm_StartForm (NumAct);
          Frm_LinkFormSubmit (Title,The_ClassTxtMenu[Gbl.Prefs.Theme],NULL);
 
          /***** Icon *****/
-	 fprintf (Gbl.F.Out,"<div class=\"MENU_ICO\""
-			    " style=\"background-image:url('%s/%s');\">",
-	          Gbl.Prefs.URLIconSet,
-		  Act_GetIcon (NumAct));
+	 HTM_DIV_Begin ("class=\"MENU_ICO\" style=\"background-image:url('%s/%s');\"",
+			Gbl.Prefs.URLIconSet,
+			Act_GetIcon (NumAct));
 
          /***** Text *****/
-	 fprintf (Gbl.F.Out,"<div class=\"MENU_TEXT %s\">",
-		  The_ClassTxtMenu[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"MENU_TEXT %s\"",The_ClassTxtMenu[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s",Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
 	 HTM_DIV_End ();
 
@@ -417,9 +415,8 @@ void Mnu_PutIconsToSelectMenu (void)
 	Menu < Mnu_NUM_MENUS;
 	Menu++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\">",
-               Menu == Gbl.Prefs.Menu ? "PREF_ON" :
-        	                        "PREF_OFF");
+      HTM_DIV_Begin ("class=\"%s\"",Menu == Gbl.Prefs.Menu ? "PREF_ON" :
+        	                                             "PREF_OFF");
       Frm_StartForm (ActChgMnu);
       Par_PutHiddenParamUnsigned ("Menu",(unsigned) Menu);
       Ico_PutSettingIconLink (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu]);

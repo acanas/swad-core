@@ -316,7 +316,7 @@ void Sta_AskShowCrsHits (void)
    unsigned long i;
 
    /***** Contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
    /* Put form to go to test edition and configuration */
    Sta_PutLinkToGlobalHits ();
@@ -523,7 +523,7 @@ void Sta_AskShowGblHits (void)
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
 
    /***** Contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
    /* Put form to go to test edition and configuration */
    Sta_PutLinkToCourseHits ();
@@ -3995,7 +3995,7 @@ void Sta_ShowLastClicks (void)
    extern const char *Txt_Last_clicks_in_real_time;
 
    /***** Contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
 
    /* Put form to go to test edition and configuration */
    Sta_PutLinkToGlobalHits ();
@@ -4010,10 +4010,9 @@ void Sta_ShowLastClicks (void)
                  Hlp_USERS_Connected_last_clicks,Box_NOT_CLOSABLE);
 
    /***** Get and show last clicks *****/
-   fprintf (Gbl.F.Out,"<div id=\"lastclicks\""	// Used for AJAX based refresh
-	              " class=\"CM\">");
+   HTM_DIV_Begin ("id=\"lastclicks\" class=\"CM\"");	// Used for AJAX based refresh
    Sta_GetAndShowLastClicks ();
-   HTM_DIV_End ();				// Used for AJAX based refresh
+   HTM_DIV_End ();					// Used for AJAX based refresh
 
    /***** End box *****/
    Box_EndBox ();

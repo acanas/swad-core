@@ -334,7 +334,7 @@ static void Ins_Configuration (bool PrintView)
 
    /***** Title *****/
    PutLink = !PrintView && Gbl.Hierarchy.Ins.WWW[0];
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
+   HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 			 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
@@ -485,7 +485,7 @@ static void Ins_Configuration (bool PrintView)
      }
    else	// I can not change institution WWW
      {
-      fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">");
+      HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 			 "%s"
 			 "</a>",
@@ -1555,7 +1555,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
          Str_Copy (WWW,Ins->WWW,
                    Cns_MAX_BYTES_WWW);
-         fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_SHORT\">");
+         HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
                             "%s"

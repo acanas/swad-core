@@ -509,7 +509,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Print XML tree *****/
-   fprintf (Gbl.F.Out,"<div class=\"TEST_FILE_CONTENT\">");
+   HTM_DIV_Begin ("class=\"TEST_FILE_CONTENT\"");
    fprintf (Gbl.F.Out,"<textarea title=\"%s\" cols=\"60\" rows=\"5\""
 	              " spellcheck=\"false\" readonly>",
 	    Txt_XML_file_content);
@@ -1152,15 +1152,18 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
             /* Write the text and the feedback of the answer */
             HTM_TD_Begin ("class=\"LT\"");
-            fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassStem);
+
+            HTM_DIV_Begin ("class=\"%s\"",ClassStem);
             fprintf (Gbl.F.Out,"%s",AnswerText);
             HTM_DIV_End ();
+
             if (AnswerFeedbackLength)
               {
-	       fprintf (Gbl.F.Out,"<div class=\"TEST_EDI_LIGHT\">");
+	       HTM_DIV_Begin ("class=\"TEST_EDI_LIGHT\"");
 	       fprintf (Gbl.F.Out,"%s",AnswerFeedback);
 	       HTM_DIV_End ();
               }
+
             HTM_TD_End ();
 
             HTM_TR_End ();

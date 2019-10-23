@@ -99,7 +99,7 @@ void Tab_DrawTabs (void)
       };
 
    /***** Start tabs container *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassHeadRow3[Gbl.Prefs.Theme]);
+   HTM_DIV_Begin ("class=\"%s\"",ClassHeadRow3[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<nav id=\"tabs\">"
 	              "<ul class=\"LIST_TABS\">");
 
@@ -142,9 +142,9 @@ void Tab_DrawTabs (void)
 		  Tab_GetIcon (NumTab),
 		  Txt_TABS_TXT[NumTab],
 		  Txt_TABS_TXT[NumTab]);
-	 fprintf (Gbl.F.Out,"<div class=\"TAB_TXT %s\">",
-		  NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
-					     The_ClassTxtTabOff[Gbl.Prefs.Theme]);
+	 HTM_DIV_Begin ("class=\"TAB_TXT %s\"",
+			NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
+						   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s",Txt_TABS_TXT[NumTab]);
 	 HTM_DIV_End ();
 	 fprintf (Gbl.F.Out,"</a>");
