@@ -172,17 +172,15 @@ void Att_SeeAttEvents (void)
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
-	    /* List my attendance */
 	    Mnu_ContextMenuBegin ();
-	    Att_PutFormToListMyAttendance ();
+	    Att_PutFormToListMyAttendance ();	// List my attendance
 	    Mnu_ContextMenuEnd ();
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    /* List students' attendance */
 	    Mnu_ContextMenuBegin ();
-	    Att_PutFormToListStdsAttendance ();
+	    Att_PutFormToListStdsAttendance ();	// List students' attendance
 	    Mnu_ContextMenuEnd ();
 	    break;
 	 default:

@@ -540,7 +540,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgDptIns);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\""
+      fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" class=\"HIE_SEL_NARROW\""
 	                 "onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"0\"",
 	       Gbl.Form.Id);
@@ -928,7 +928,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Institution *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:62px;\">"
+   fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" class=\"HIE_SEL_NARROW\">"
                       "<option value=\"0\"");
    if (Dpt_EditingDpt->InsCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
@@ -939,7 +939,7 @@ static void Dpt_PutFormToCreateDepartment (void)
       fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
                Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod,
                Gbl.Hierarchy.Cty.Inss.Lst[NumIns].InsCod == Dpt_EditingDpt->InsCod ? " selected=\"selected\"" :
-        	                                            "",
+        	                                                                     "",
                Gbl.Hierarchy.Cty.Inss.Lst[NumIns].ShrtName);
    fprintf (Gbl.F.Out,"</select>");
    HTM_TD_End ();

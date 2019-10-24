@@ -583,18 +583,18 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    /***** Start box *****/
    Box_StartBox (NULL,Txt_My_courses,Crs_PutIconToSearchCourses,
                  Hlp_PROFILE_Courses,Box_NOT_CLOSABLE);
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_TREE\">");
 
    /***** Write link to platform *****/
    Highlight = (Gbl.Hierarchy.Cty.CtyCod <= 0);
-   fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
-	    Highlight ? ClassHighlight :
-			ClassNormal);
+   fprintf (Gbl.F.Out,"<li class=\"%s\">",Highlight ? ClassHighlight :
+			                              ClassNormal);
    Frm_StartForm (ActMyCrs);
    Cty_PutParamCtyCod (-1L);
    Frm_LinkFormSubmit (Txt_System,
                        Highlight ? ClassHighlight :
-        	                   ClassNormal,NULL);
+        	                   ClassNormal,
+		       NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
 	              " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />&nbsp;%s</a>",
@@ -622,9 +622,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /***** Write link to country *****/
       Highlight = (Gbl.Hierarchy.Ins.InsCod <= 0 &&
 	           Gbl.Hierarchy.Cty.CtyCod == Cty.CtyCod);
-      fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
-               Highlight ? ClassHighlight :
-        	           ClassNormal);
+      fprintf (Gbl.F.Out,"<li class=\"%s\">",Highlight ? ClassHighlight :
+        	                                         ClassNormal);
       IsLastItemInLevel[1] = (NumCty == NumCtys - 1);
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
       Frm_StartForm (ActMyCrs);
@@ -663,8 +662,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 /***** Write link to institution *****/
 	 Highlight = (Gbl.Hierarchy.Ctr.CtrCod <= 0 &&
 	              Gbl.Hierarchy.Ins.InsCod == Ins.InsCod);
-	 fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
-	          Highlight ? ClassHighlight :
+	 fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
+		  Highlight ? ClassHighlight :
 			      ClassNormal);
 	 IsLastItemInLevel[2] = (NumIns == NumInss - 1);
 	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
@@ -696,7 +695,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    /***** Write link to centre *****/
 	    Highlight = (Gbl.Hierarchy.Level == Hie_CTR &&
 			 Gbl.Hierarchy.Ctr.CtrCod == Ctr.CtrCod);
-	    fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
+	    fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
 	             Highlight ? ClassHighlight :
 			         ClassNormal);
 	    IsLastItemInLevel[3] = (NumCtr == NumCtrs - 1);
@@ -729,7 +728,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       /***** Write link to degree *****/
 	       Highlight = (Gbl.Hierarchy.Level == Hie_DEG &&
 			    Gbl.Hierarchy.Deg.DegCod == Deg.DegCod);
-	       fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
+	       fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
 	                Highlight ? ClassHighlight :
 			            ClassNormal);
 	       IsLastItemInLevel[4] = (NumDeg == NumDegs - 1);
@@ -762,7 +761,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  /***** Write link to course *****/
 		  Highlight = (Gbl.Hierarchy.Level == Hie_CRS &&
 			       Gbl.Hierarchy.Crs.CrsCod == Crs.CrsCod);
-		  fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
+		  fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
 	                   Highlight ? ClassHighlight :
 			               ClassNormal);
 		  IsLastItemInLevel[5] = (NumCrs == NumCrss - 1);
@@ -1525,8 +1524,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   {
 	    Frm_StartForm (ActChgCrsYea);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\""
-			       " style=\"width:50px;\""
+	    fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\""
 			       " onchange=\"document.getElementById('%s').submit();\">",
 		     Gbl.Form.Id);
 	    for (YearAux = 0;
@@ -1730,7 +1728,7 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Year *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\" style=\"width:50px;\">");
+   fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\">");
    for (Year = 0;
 	Year <= Deg_MAX_YEARS_PER_DEGREE;
         Year++)

@@ -294,7 +294,7 @@ static void Dup_ListSimilarUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Begin table *****/
-      HTM_TABLE_BeginCenterPadding (2);
+      HTM_TABLE_BeginCenterPadding (5);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;
@@ -317,9 +317,10 @@ static void Dup_ListSimilarUsrs (void)
             else
                UsrDat.Accepted = false;
 
-            /* Write data of this user */
+            /***** Write data of this user *****/
             Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
 
+            /***** Write user's profile and user's courses *****/
 	    HTM_TR_Begin (NULL);
 
             HTM_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
@@ -328,37 +329,31 @@ static void Dup_ListSimilarUsrs (void)
 	    HTM_TD_Begin ("colspan=\"%u\" class=\"COLOR%u\"",
 			  Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 			  Gbl.RowEvenOdd);
-
 	    /* Show details of user's profile */
             Prf_ShowDetailsUserProfile (&UsrDat);
-
 	    /* Write all the courses this user belongs to */
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TCH);
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_NET);
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);
-
 	    HTM_TD_End ();
 
 	    HTM_TR_End ();
 
+            /***** Buttons to remove user / mark as not dubplicated *****/
 	    HTM_TR_Begin (NULL);
 
             HTM_TD_Begin ("colspan=\"2\" class=\"COLOR%u\"",Gbl.RowEvenOdd);
             HTM_TD_End ();
 
-	    HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\""
-			  " style=\"padding-bottom:20px;\"",
+	    HTM_TD_Begin ("colspan=\"%u\" class=\"LT COLOR%u\"",
 			  Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 			  Gbl.RowEvenOdd);
-
 	    /* Button to remove this user */
 	    if (Acc_CheckIfICanEliminateAccount (UsrDat.UsrCod))
 	       Dup_PutButtonToEliminateUsrAccount (&UsrDat);
-
 	    /* Button to remove from list of possible duplicate users */
 	    if (Dup_CheckIfUsrIsDup (UsrDat.UsrCod))
 	       Dup_PutButtonToRemoveFromListOfDupUsrs (&UsrDat);
-
 	    HTM_TD_End ();
 
 	    HTM_TR_End ();

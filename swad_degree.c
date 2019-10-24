@@ -792,8 +792,7 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActChgDegTyp);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\""
-	                    " style=\"width:62px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.Form.Id);
 	 for (NumDegTyp = 0;
@@ -1004,7 +1003,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree type *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\" style=\"width:62px;\">");
+   fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\">");
    for (NumDegTyp = 0;
 	NumDegTyp < Gbl.DegTypes.Num;
 	NumDegTyp++)

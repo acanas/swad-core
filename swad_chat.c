@@ -126,10 +126,10 @@ void Cht_ShowListOfAvailableChatRooms (void)
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Chat_rooms,NULL,
                  NULL,Box_NOT_CLOSABLE);
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_TREE\">");
 
    /***** Title of top level *****/
-   fprintf (Gbl.F.Out,"<li class=\"DAT\" style=\"height:25px;\">"
+   fprintf (Gbl.F.Out,"<li class=\"DAT\">"
                       "<img src=\"%s/comments.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO16x16\" />"
@@ -328,7 +328,7 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
-   fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
+   fprintf (Gbl.F.Out,"<li>");
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
    Frm_StartForm (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);

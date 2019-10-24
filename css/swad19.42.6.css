@@ -1315,6 +1315,10 @@ a:hover						/* Default ==> underlined */
 	vertical-align:middle;
 	width:25px;
 	}
+.HIE_SEL_NARROW
+	{
+	width:64px;
+	}
 
 #chart_div
 	{
@@ -2216,7 +2220,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:middle;
 	}
-.LIST_LEFT
+.LIST_LEFT, .LIST_TREE
 	{
 	display:inline-block;
 	list-style-type:none;
@@ -2224,6 +2228,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 	margin:12px 0;
 	text-align:left;
 	vertical-align:middle;
+	}
+.LIST_TREE li
+	{
+	height:25px;
 	}
 
 /******************************* File browsers *******************************/

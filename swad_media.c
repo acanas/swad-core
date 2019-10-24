@@ -96,6 +96,14 @@ typedef enum
    Med_FORM_EMBED   = 3,
   } Med_FormType_t;
 
+struct MediaUploader
+  {
+   const char *IdSuffix;
+   const char *FunctionName;
+   const char *Icon;
+   const char *Title;
+  };
+
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
 /*****************************************************************************/
@@ -115,10 +123,7 @@ static void Med_FreeMediaURL (struct Media *Media);
 static void Med_FreeMediaTitle (struct Media *Media);
 
 static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
-				      const char *IdSuffix,
-				      const char *FunctionName,
-				      const char *Icon,
-				      const char *Title);
+				      struct MediaUploader *MediaUploader);
 static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 				                const char *IdSuffix,
 					        struct ParamUploadMedia *ParamUploadMedia,
@@ -343,6 +348,30 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    extern const char *Txt_Link;
    struct ParamUploadMedia ParamUploadMedia;
    char Id[Frm_MAX_BYTES_ID + 1];
+   size_t i;
+
+#define Med_NUM_MEDIA_UPLOADERS 3
+   struct MediaUploader MediaUploader[Med_NUM_MEDIA_UPLOADERS] =
+     {
+	{/* Upload icon */
+	 "ico_upl",			// <id>_ico_upl
+	 "mediaClickOnActivateUpload",
+	 "photo-video.svg",
+	 Txt_Image_video
+	},
+	{/* YouTube icon */
+	 "ico_you",			// <id>_ico_you
+	 "mediaClickOnActivateYoutube",
+	 "youtube-brands.svg",
+	 "YouTube"
+	},
+	{/* Embed icon */
+	 "ico_emb",			// <id>_ico_emb
+	 "mediaClickOnActivateEmbed",
+	 "code.svg",
+	 "Embed"
+	}
+     };
 
    /***** Set names of parameters depending on number of media in form *****/
    Med_SetParamNames (&ParamUploadMedia,NumMediaInForm);
@@ -382,23 +411,11 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    HTM_DIV_Begin ("class=\"PREF_CONTAINERS\"");			// icons containers
    HTM_DIV_Begin ("class=\"PREF_CONTAINER\"");			// icons container
 
-   /* Upload icon */
-   Med_PutIconMediaUploader (Id,"ico_upl",			// <id>_ico_upl
-			     "mediaClickOnActivateUpload",
-			     "file-image.svg",
-			     Txt_Image_video);
-
-   /* YouTube icon */
-   Med_PutIconMediaUploader (Id,"ico_you",			// <id>_ico_you
-			     "mediaClickOnActivateYoutube",
-			     "youtube-brands.svg",
-			     "YouTube");
-
-   /* Embed icon */
-   Med_PutIconMediaUploader (Id,"ico_emb",			// <id>_ico_emb
-			     "mediaClickOnActivateEmbed",
-			     "code.svg",
-			     "Embed");
+   /* Draw icons */
+   for (i = 0;
+	i < Med_NUM_MEDIA_UPLOADERS;
+	i++)
+      Med_PutIconMediaUploader (Id,&MediaUploader[i]);
 
    /* End icons */
    HTM_DIV_End ();						// icons container
@@ -468,20 +485,18 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 /*****************************************************************************/
 
 static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
-				      const char *IdSuffix,
-				      const char *FunctionName,
-				      const char *Icon,
-				      const char *Title)
+				      struct MediaUploader *MediaUploader)
   {
    /***** Icon to activate form in media uploader *****/
    HTM_DIV_Begin ("id=\"%s_%s\" class=\"PREF_OFF\"",		// <id>_IdSuffix
-            UniqueId,IdSuffix);
+                  UniqueId,MediaUploader->IdSuffix);
    fprintf (Gbl.F.Out,"<a href=\"\" onclick=\"%s('%s');return false;\">"
                       "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"ICO_HIGHLIGHT ICOx16\" />"
                       "</a>",
-	    FunctionName,UniqueId,
-            Cfg_URL_ICON_PUBLIC,Icon,Title,Title);
+	    MediaUploader->FunctionName,UniqueId,
+            Cfg_URL_ICON_PUBLIC,MediaUploader->Icon,
+	    MediaUploader->Title,MediaUploader->Title);
    HTM_DIV_End ();						// <id>_IdSuffix
   }
 

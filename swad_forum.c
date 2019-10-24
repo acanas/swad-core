@@ -1583,7 +1583,7 @@ static void For_ShowForumList (void)
    For_PutFormWhichForums ();
 
    /***** Start list *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_TREE\">");
 
    /***** Links to global forums *****/
    For_WriteLinksToGblForums (IsLastItemInLevel);
@@ -2049,7 +2049,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
    fprintf (Gbl.F.Out,"<li");
    if (Highlight)
       fprintf (Gbl.F.Out," class=\"LIGHT_BLUE\"");
-   fprintf (Gbl.F.Out," style=\"height:25px;\">");
+   fprintf (Gbl.F.Out,">");
 
    /***** Indent forum title *****/
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);

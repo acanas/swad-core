@@ -487,13 +487,18 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.42.5 (2019-10-24)"
-#define CSS_FILE		"swad19.41.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 19.42.6 (2019-10-24)"
+#define CSS_FILE		"swad19.42.6.css"
 #define JS_FILE			"swad19.39.js"
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
-// TODO: Change icon to upload file in timeline to photo-video.svg
+
+	Version 19.42.6:  Oct 24, 2019	Code refactoring in CSS.
+					Changes icon to upload file in timeline.
+					Code refactoring in media. (246034 lines)
+					Copy the following 4 icons to icon public directory:
+sudo cp -a icon/photo-video.svg /var/www/html/swad/icon/
 
 	Version 19.42.5:  Oct 24, 2019	Code refactoring in contextual menus. (246011 lines)
 	Version 19.42.4:  Oct 23, 2019	Code refactoring in HTML divs. (246016 lines)
