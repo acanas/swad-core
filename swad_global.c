@@ -304,10 +304,12 @@ void Gbl_InitializeGlobals (void)
 
    /* Projects */
    Gbl.Prjs.Filter.My_All = Prj_FILTER_WHOSE_PROJECTS_DEFAULT;
-   Gbl.Prjs.Filter.PreNon = Prj_FILTER_PREASSIGNED_DEFAULT |
-	                    Prj_FILTER_NONPREASSIG_DEFAULT;
-   Gbl.Prjs.Filter.HidVis = Prj_FILTER_HIDDEN_DEFAULT |
+   Gbl.Prjs.Filter.Assign = Prj_FILTER_ASSIGNED_DEFAULT |
+	                    Prj_FILTER_NONASSIG_DEFAULT;
+   Gbl.Prjs.Filter.Hidden = Prj_FILTER_HIDDEN_DEFAULT |
 	                    Prj_FILTER_VISIBL_DEFAULT;
+   Gbl.Prjs.Filter.Faulti = Prj_FILTER_FAULTY_DEFAULT |
+	                    Prj_FILTER_FAULTLESS_DEFAULT;
    Gbl.Prjs.Filter.DptCod = Prj_FILTER_DPT_DEFAULT;
    Gbl.Prjs.LstIsRead = false;	// List is not read
    Gbl.Prjs.Num = 0;

@@ -2051,6 +2051,27 @@ const char *Txt_Assessment_criteria =
 	"Crit&eacute;rios de avalia&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Assigned_QUESTION =
+#if   L==1	// ca
+	"Assignat?";
+#elif L==2	// de
+	"Vorbelegt?";
+#elif L==3	// en
+	"Assigned?";
+#elif L==4	// es
+	"&iquest;Asignado?";
+#elif L==5	// fr
+	"Assign&eacute;?";
+#elif L==6	// gn
+	"&iquest;Asignado?";	// Okoteve traducción
+#elif L==7	// it
+	"Assegnato?";
+#elif L==8	// pl
+	"Zadany?";
+#elif L==9	// pt
+	"Atribu&iacute;do?";
+#endif
+
 const char *Txt_Assignment =
 #if   L==1	// ca
 	"Activitat";
@@ -29732,27 +29753,6 @@ const char *Txt_Post =	// Publish (verb)
 	"Publicar";
 #endif
 
-const char *Txt_Preassigned_QUESTION =
-#if   L==1	// ca
-	"Preassignat?";
-#elif L==2	// de
-	"Vorbelegt?";
-#elif L==3	// en
-	"Preassigned?";
-#elif L==4	// es
-	"&iquest;Preasignado?";
-#elif L==5	// fr
-	"Pr&eacute;assign&eacute;?";
-#elif L==6	// gn
-	"&iquest;Preasignado?";	// Okoteve traducción
-#elif L==7	// it
-	"Preassegnato?";
-#elif L==8	// pl
-	"Zadany?";
-#elif L==9	// pt
-	"Pr&eacute;-atribu&iacute;do?";
-#endif
-
 const char *Txt_Present =
 #if   L==1	// ca
 	"Present";
@@ -31033,7 +31033,7 @@ const char *Txt_PROJECT_MY_ALL_PROJECTS[Prj_NUM_WHOSE_PROJECTS] =
 #endif
 	};
 
-const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[Prj_NUM_PREASSIGNED_NONPREASSIG] =
+const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
 	{
 	 // Prj_PREASSIGNED
 #if   L==1	// ca
@@ -31078,7 +31078,7 @@ const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[Prj_NUM_PREASSIGNED_NO
 #endif
 	};
 
-const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj_NUM_PREASSIGNED_NONPREASSIG] =
+const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG] =
 	{
 	 // Prj_PREASSIGNED
 #if   L==1	// ca

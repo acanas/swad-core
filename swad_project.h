@@ -46,16 +46,16 @@ typedef enum
   } Prj_WhoseProjects_t;
 #define Prj_FILTER_WHOSE_PROJECTS_DEFAULT	Prj_MY__PROJECTS
 
-/* Preassigned projects / non-preassigned projects */
-#define Prj_NUM_PREASSIGNED_NONPREASSIG 2
+/* Assigned projects / non-assigned projects */
+#define Prj_NUM_ASSIGNED_NONASSIG 2
 typedef enum
   {
-   Prj_PREASSIGNED = 0,
-   Prj_NONPREASSIG = 1,
-  } Prj_PreassignedNonpreassig_t;
-#define Prj_NEW_PRJ_PREASSIGNED_NONPREASSIG_DEFAULT Prj_NONPREASSIG
-#define Prj_FILTER_PREASSIGNED_DEFAULT	(1 << Prj_PREASSIGNED)	// on
-#define Prj_FILTER_NONPREASSIG_DEFAULT	(1 << Prj_NONPREASSIG)	// on
+   Prj_ASSIGNED = 0,
+   Prj_NONASSIG = 1,
+  } Prj_AssignedNonassig_t;
+#define Prj_NEW_PRJ_ASSIGNED_NONASSIG_DEFAULT Prj_NONASSIG
+#define Prj_FILTER_ASSIGNED_DEFAULT	(1 << Prj_ASSIGNED)	// on
+#define Prj_FILTER_NONASSIG_DEFAULT	(1 << Prj_NONASSIG)	// on
 
 /* Locked/unlocked project */
 #define Prj_NUM_LOCKED_UNLOCKED 2
@@ -93,8 +93,8 @@ typedef enum
 struct Prj_Filter
   {
    Prj_WhoseProjects_t My_All;	// Show my / all projects
-   unsigned PreNon;		// Show preassigned / non preassigned projects
-   unsigned HidVis;		// Show hidden / visible projects
+   unsigned Assign;		// Show assigned / non assigned projects
+   unsigned Hidden;		// Show hidden / visible projects
    unsigned Faulti;		// Show faulty / faultless projects
    long DptCod;			// Show projects of this department
   };
@@ -142,7 +142,7 @@ struct Project
    long CrsCod;
    Prj_Locked_t Locked;
    Prj_HiddenVisibl_t Hidden;
-   Prj_PreassignedNonpreassig_t Preassigned;
+   Prj_AssignedNonassig_t Assigned;
    unsigned NumStds;
    Prj_Proposal_t Proposal;
    time_t CreatTime;

@@ -3298,7 +3298,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
                   (IsGroupZone &&
                    GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? "BROWSER_TITLE" :
-                                                                  "BROWSER_TITLE_LIGHT",
+                                                           "BROWSER_TITLE_LIGHT",
                   Cfg_URL_ICON_PUBLIC,
                   NumGrp < LstMyGrps.NumGrps - 1 ? "submid" :
                 	                           "subend",

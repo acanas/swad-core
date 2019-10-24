@@ -91,7 +91,7 @@ static const char *Prj_Proposal_DB[Prj_NUM_PROPOSAL_TYPES] =
   };
 
 /***** Preassigned/non-preassigned project *****/
-static const char *PreassignedNonpreassigImage[Prj_NUM_PREASSIGNED_NONPREASSIG] =
+static const char *PreassignedNonpreassigImage[Prj_NUM_ASSIGNED_NONASSIG] =
   {
    "user.svg",		// Prj_PREASSIGNED
    "user-slash.svg",	// Prj_NONPREASSIG
@@ -118,6 +118,7 @@ struct Prj_Faults
    bool WrongTitle;
    bool WrongDescription;
    bool WrongNumStds;
+   bool WrongAssigned;
   };
 
 /*****************************************************************************/
@@ -134,8 +135,8 @@ static void Prj_ShowFormToFilterByDpt (void);
 
 static void Prj_PutCurrentParams (void);
 static void Prj_PutHiddenParamMy_All (Prj_WhoseProjects_t My_All);
-static void Prj_PutHiddenParamPreNon (unsigned PreNon);
-static void Prj_PutHiddenParamHidVis (unsigned HidVis);
+static void Prj_PutHiddenParamAssign (unsigned Assign);
+static void Prj_PutHiddenParamHidden (unsigned Hidden);
 static void Prj_PutHiddenParamFaulti (unsigned Faulti);
 static void Prj_PutHiddenParamDptCod (long DptCod);
 static void Prj_GetHiddenParamMy_All (void);
@@ -423,8 +424,8 @@ static void Prj_ShowFormToFilterByMy_All (void)
 							  "PREF_OFF");
       Frm_StartForm (ActSeePrj);
       Filter.My_All = My_All;
-      Filter.PreNon = Gbl.Prjs.Filter.PreNon;
-      Filter.HidVis = Gbl.Prjs.Filter.HidVis;
+      Filter.Assign = Gbl.Prjs.Filter.Assign;
+      Filter.Hidden = Gbl.Prjs.Filter.Hidden;
       Filter.Faulti = Gbl.Prjs.Filter.Faulti;
       Filter.DptCod = Gbl.Prjs.Filter.DptCod;
       Prj_PutParams (&Filter,
@@ -445,22 +446,22 @@ static void Prj_ShowFormToFilterByMy_All (void)
 
 static void Prj_ShowFormToFilterByPreassignedNonPreassig (void)
   {
-   extern const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[Prj_NUM_PREASSIGNED_NONPREASSIG];
+   extern const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG];
    struct Prj_Filter Filter;
-   Prj_PreassignedNonpreassig_t PreNon;
+   Prj_AssignedNonassig_t PreNon;
 
    Set_StartOneSettingSelector ();
-   for (PreNon =  (Prj_PreassignedNonpreassig_t) 0;
-	PreNon <= (Prj_PreassignedNonpreassig_t) (Prj_NUM_PREASSIGNED_NONPREASSIG - 1);
+   for (PreNon =  (Prj_AssignedNonassig_t) 0;
+	PreNon <= (Prj_AssignedNonassig_t) (Prj_NUM_ASSIGNED_NONASSIG - 1);
 	PreNon++)
      {
       HTM_DIV_Begin ("class=\"%s\"",
-		     (Gbl.Prjs.Filter.PreNon & (1 << PreNon)) ? "PREF_ON" :
+		     (Gbl.Prjs.Filter.Assign & (1 << PreNon)) ? "PREF_ON" :
 								"PREF_OFF");
       Frm_StartForm (ActSeePrj);
       Filter.My_All = Gbl.Prjs.Filter.My_All;
-      Filter.PreNon = Gbl.Prjs.Filter.PreNon ^ (1 << PreNon);	// Toggle
-      Filter.HidVis = Gbl.Prjs.Filter.HidVis;
+      Filter.Assign = Gbl.Prjs.Filter.Assign ^ (1 << PreNon);	// Toggle
+      Filter.Hidden = Gbl.Prjs.Filter.Hidden;
       Filter.Faulti = Gbl.Prjs.Filter.Faulti;
       Filter.DptCod = Gbl.Prjs.Filter.DptCod;
       Prj_PutParams (&Filter,
@@ -496,12 +497,12 @@ static void Prj_ShowFormToFilterByHidden (void)
 	HidVis++)
      {
       HTM_DIV_Begin ("class=\"%s\"",
-		     (Gbl.Prjs.Filter.HidVis & (1 << HidVis)) ? "PREF_ON" :
+		     (Gbl.Prjs.Filter.Hidden & (1 << HidVis)) ? "PREF_ON" :
 								"PREF_OFF");
       Frm_StartForm (ActSeePrj);
       Filter.My_All = Gbl.Prjs.Filter.My_All;
-      Filter.PreNon = Gbl.Prjs.Filter.PreNon;
-      Filter.HidVis = Gbl.Prjs.Filter.HidVis ^ (1 << HidVis);	// Toggle
+      Filter.Assign = Gbl.Prjs.Filter.Assign;
+      Filter.Hidden = Gbl.Prjs.Filter.Hidden ^ (1 << HidVis);	// Toggle
       Filter.Faulti = Gbl.Prjs.Filter.Faulti;
       Filter.DptCod = Gbl.Prjs.Filter.DptCod;
       Prj_PutParams (&Filter,
@@ -541,8 +542,8 @@ static void Prj_ShowFormToFilterByWarning (void)
 								    "PREF_OFF");
       Frm_StartForm (ActSeePrj);
       Filter.My_All = Gbl.Prjs.Filter.My_All;
-      Filter.PreNon = Gbl.Prjs.Filter.PreNon;
-      Filter.HidVis = Gbl.Prjs.Filter.HidVis;
+      Filter.Assign = Gbl.Prjs.Filter.Assign;
+      Filter.Hidden = Gbl.Prjs.Filter.Hidden;
       Filter.Faulti = Gbl.Prjs.Filter.Faulti ^ (1 << Faultiness);	// Toggle
       Filter.DptCod = Gbl.Prjs.Filter.DptCod;
       Prj_PutParams (&Filter,
@@ -570,8 +571,8 @@ static void Prj_ShowFormToFilterByDpt (void)
    HTM_DIV_Begin (NULL);
    Frm_StartForm (ActSeePrj);
    Filter.My_All = Gbl.Prjs.Filter.My_All;
-   Filter.PreNon = Gbl.Prjs.Filter.PreNon;
-   Filter.HidVis = Gbl.Prjs.Filter.HidVis;
+   Filter.Assign = Gbl.Prjs.Filter.Assign;
+   Filter.Hidden = Gbl.Prjs.Filter.Hidden;
    Filter.Faulti = Gbl.Prjs.Filter.Faulti;
    Filter.DptCod = Prj_FILTER_DPT_DEFAULT;	// Do not put department parameter here
    Prj_PutParams (&Filter,
@@ -617,13 +618,13 @@ void Prj_PutParams (struct Prj_Filter *Filter,
    if (Filter->My_All != Prj_FILTER_WHOSE_PROJECTS_DEFAULT)
       Prj_PutHiddenParamMy_All (Filter->My_All);
 
-   if (Filter->PreNon != ((unsigned) Prj_FILTER_PREASSIGNED_DEFAULT |
-	                  (unsigned) Prj_FILTER_NONPREASSIG_DEFAULT))
-      Prj_PutHiddenParamPreNon (Filter->PreNon);
+   if (Filter->Assign != ((unsigned) Prj_FILTER_ASSIGNED_DEFAULT |
+	                  (unsigned) Prj_FILTER_NONASSIG_DEFAULT))
+      Prj_PutHiddenParamAssign (Filter->Assign);
 
-   if (Filter->HidVis != ((unsigned) Prj_FILTER_HIDDEN_DEFAULT |
+   if (Filter->Hidden != ((unsigned) Prj_FILTER_HIDDEN_DEFAULT |
 	                  (unsigned) Prj_FILTER_VISIBL_DEFAULT))
-      Prj_PutHiddenParamHidVis (Filter->HidVis);
+      Prj_PutHiddenParamHidden (Filter->Hidden);
 
    if (Filter->Faulti != ((unsigned) Prj_FILTER_FAULTY_DEFAULT |
 	                  (unsigned) Prj_FILTER_FAULTLESS_DEFAULT))
@@ -658,14 +659,14 @@ static void Prj_PutHiddenParamMy_All (Prj_WhoseProjects_t My_All)
    Par_PutHiddenParamUnsigned (Prj_PARAM_MY__ALL_NAME,(unsigned) My_All);
   }
 
-static void Prj_PutHiddenParamPreNon (unsigned PreNon)
+static void Prj_PutHiddenParamAssign (unsigned Assign)
   {
-   Par_PutHiddenParamUnsigned (Prj_PARAM_PRE_NON_NAME,PreNon);
+   Par_PutHiddenParamUnsigned (Prj_PARAM_PRE_NON_NAME,Assign);
   }
 
-static void Prj_PutHiddenParamHidVis (unsigned HidVis)
+static void Prj_PutHiddenParamHidden (unsigned Hidden)
   {
-   Par_PutHiddenParamUnsigned (Prj_PARAM_HID_VIS_NAME,HidVis);
+   Par_PutHiddenParamUnsigned (Prj_PARAM_HID_VIS_NAME,Hidden);
   }
 
 static void Prj_PutHiddenParamFaulti (unsigned Faulti)
@@ -692,12 +693,12 @@ static void Prj_GetHiddenParamMy_All (void)
 
 static void Prj_GetHiddenParamPreNon (void)
   {
-   Gbl.Prjs.Filter.PreNon = (unsigned) Par_GetParToUnsignedLong (Prj_PARAM_PRE_NON_NAME,
+   Gbl.Prjs.Filter.Assign = (unsigned) Par_GetParToUnsignedLong (Prj_PARAM_PRE_NON_NAME,
                                                                  0,
-                                                                 (1 << Prj_PREASSIGNED) |
-                                                                 (1 << Prj_NONPREASSIG),
-                                                                 (unsigned) Prj_FILTER_PREASSIGNED_DEFAULT |
-                                                                 (unsigned) Prj_FILTER_NONPREASSIG_DEFAULT);
+                                                                 (1 << Prj_ASSIGNED) |
+                                                                 (1 << Prj_NONASSIG),
+                                                                 (unsigned) Prj_FILTER_ASSIGNED_DEFAULT |
+                                                                 (unsigned) Prj_FILTER_NONASSIG_DEFAULT);
   }
 
 static void Prj_GetHiddenParamHidVis (void)
@@ -705,12 +706,12 @@ static void Prj_GetHiddenParamHidVis (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:	// Students can view only visible projects
-	 Gbl.Prjs.Filter.HidVis = (1 << Prj_VISIBL);	// Only visible projects
+	 Gbl.Prjs.Filter.Hidden = (1 << Prj_VISIBL);	// Only visible projects
 	 break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-	 Gbl.Prjs.Filter.HidVis = (unsigned) Par_GetParToUnsignedLong (Prj_PARAM_HID_VIS_NAME,
+	 Gbl.Prjs.Filter.Hidden = (unsigned) Par_GetParToUnsignedLong (Prj_PARAM_HID_VIS_NAME,
 								       0,
 								       (1 << Prj_HIDDEN) |
 								       (1 << Prj_VISIBL),
@@ -827,7 +828,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
 static void Prj_ShowTableAllProjectsHead (void)
   {
    extern const char *Txt_PROJECT_ORDER[Prj_NUM_ORDERS];
-   extern const char *Txt_Preassigned_QUESTION;
+   extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Number_of_students;
    extern const char *Txt_PROJECT_ROLES_PLURAL_Abc[Prj_NUM_ROLES_IN_PROJECT];
    extern const char *Txt_Proposal;
@@ -844,7 +845,7 @@ static void Prj_ShowTableAllProjectsHead (void)
 	Order <= (Prj_Order_t) (Prj_NUM_ORDERS - 1);
 	Order++)
       HTM_TH (1,1,"LT DAT_N",Txt_PROJECT_ORDER[Order]);
-   HTM_TH (1,1,"LT DAT_N",Txt_Preassigned_QUESTION);
+   HTM_TH (1,1,"LT DAT_N",Txt_Assigned_QUESTION);
    HTM_TH (1,1,"LT DAT_N",Txt_Number_of_students);
    for (NumRoleToShow = 0;
 	NumRoleToShow < Brw_NUM_ROLES_TO_SHOW;
@@ -1032,10 +1033,10 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
   {
    extern const char *Txt_Today;
    extern const char *Txt_Project_files;
-   extern const char *Txt_Preassigned_QUESTION;
+   extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
-   extern const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj_NUM_PREASSIGNED_NONPREASSIG];
+   extern const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG];
    extern const char *Txt_Number_of_students;
    extern const char *Txt_See_more;
    extern const char *Txt_See_less;
@@ -1198,7 +1199,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       ClassLabel);
          break;
      }
-   fprintf (Gbl.F.Out,"%s:",Txt_Preassigned_QUESTION);
+   fprintf (Gbl.F.Out,"%s:",Txt_Assigned_QUESTION);
    HTM_TD_End ();
 
    switch (ProjectView)
@@ -1212,10 +1213,14 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       ClassData);
          break;
      }
-   fprintf (Gbl.F.Out,"%s&nbsp;",(Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
+   fprintf (Gbl.F.Out,"%s&nbsp;",(Prj->Assigned == Prj_ASSIGNED) ? Txt_Yes :
         	                                                         Txt_No);
-   Ico_PutIconOff (PreassignedNonpreassigImage[Prj->Preassigned],
-		   Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Preassigned]);
+   Ico_PutIconOff (PreassignedNonpreassigImage[Prj->Assigned],
+		   Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj->Assigned]);
+
+   if (Faults.WrongAssigned)
+      Prj_PutWarningIcon ();
+
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1371,7 +1376,8 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
    /***** Reset faults *****/
    Faults->WrongTitle       =
    Faults->WrongDescription =
-   Faults->WrongNumStds     = false;
+   Faults->WrongNumStds     =
+   Faults->WrongAssigned    = false;
 
    /***** Get some project date and check faults ****/
    if (PrjCod > 0)
@@ -1413,11 +1419,18 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 
 	 /* 3. Check number of students */
 	 if (NumProposedStds == 0)
+	    // The number of proposed students should be > 0
 	    Faults->WrongNumStds = true;
-	 else if (IsPreassigned)
+	 else
 	   {
 	    NumStdsRegisteredInPrj = Prj_GetNumUsrsInPrj (PrjCod,Prj_ROLE_STD);
-	    Faults->WrongNumStds = (NumProposedStds != NumStdsRegisteredInPrj);
+	    if (IsPreassigned)		// Assigned
+	       // In an assigned project the number of proposed students...
+	       // ...should match the number of students registered in it
+	       Faults->WrongNumStds = (NumProposedStds != NumStdsRegisteredInPrj);
+	    else			// Not assigned
+	       // A non assigned project should not have students registered in it
+	       Faults->WrongAssigned = (NumStdsRegisteredInPrj != 0);
 	   }
 	}
 
@@ -1427,7 +1440,8 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 
    return Faults->WrongTitle       ||
 	  Faults->WrongDescription ||
-	  Faults->WrongNumStds;
+	  Faults->WrongNumStds     ||
+	  Faults->WrongAssigned;
   }
 
 /*****************************************************************************/
@@ -1437,7 +1451,7 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 static void Prj_PutWarningIcon (void)
   {
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"\" class=\"ICO16x16\" />",
-	    Cfg_URL_ICON_PUBLIC,"exclamation-triangle.svg");
+	    Cfg_URL_ICON_PUBLIC,"warning64x64.gif");
   }
 
 /*****************************************************************************/
@@ -1521,7 +1535,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 
    /***** Preassigned? *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",ClassData,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"%s",(Prj->Preassigned == Prj_PREASSIGNED) ? Txt_Yes :
+   fprintf (Gbl.F.Out,"%s",(Prj->Assigned == Prj_ASSIGNED) ? Txt_Yes :
         	                                                   Txt_No);
    HTM_TD_End ();
 
@@ -2669,18 +2683,18 @@ void Prj_GetListProjects (void)
       Prj_FreeListProjects ();
 
    /***** Get list of projects from database *****/
-   if (Gbl.Prjs.Filter.PreNon &&	// Any selector is on
-       Gbl.Prjs.Filter.HidVis &&	// Any selector is on
+   if (Gbl.Prjs.Filter.Assign &&	// Any selector is on
+       Gbl.Prjs.Filter.Hidden &&	// Any selector is on
        Gbl.Prjs.Filter.Faulti)		// Any selector is on
      {
       /* Preassigned subquery */
-      switch (Gbl.Prjs.Filter.PreNon)
+      switch (Gbl.Prjs.Filter.Assign)
 	{
-	 case (1 << Prj_PREASSIGNED):	// Preassigned projects
+	 case (1 << Prj_ASSIGNED):	// Preassigned projects
 	    if (asprintf (&PreNonSubQuery," AND projects.Preassigned='Y'") < 0)
 	       Lay_NotEnoughMemoryExit ();
 	    break;
-	 case (1 << Prj_NONPREASSIG):	// Non-preassigned projects
+	 case (1 << Prj_NONASSIG):	// Non-preassigned projects
 	    if (asprintf (&PreNonSubQuery," AND projects.Preassigned='N'") < 0)
 	       Lay_NotEnoughMemoryExit ();
 	    break;
@@ -2700,7 +2714,7 @@ void Prj_GetListProjects (void)
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    switch (Gbl.Prjs.Filter.HidVis)
+	    switch (Gbl.Prjs.Filter.Hidden)
 	      {
 	       case (1 << Prj_HIDDEN):	// Hidden projects
 		  if (asprintf (&HidVisSubQuery," AND projects.Hidden='Y'") < 0)
@@ -2940,8 +2954,8 @@ void Prj_GetDataOfProjectByCod (struct Project *Prj)
 					    Prj_VISIBL;
 
 	 /* Get if project is preassigned or not (row[5]) */
-	 Prj->Preassigned = (row[5][0] == 'Y') ? Prj_PREASSIGNED :
-						 Prj_NONPREASSIG;
+	 Prj->Assigned = (row[5][0] == 'Y') ? Prj_ASSIGNED :
+						 Prj_NONASSIG;
 
 	 /* Get if project is preassigned or not (row[6]) */
 	 LongNum = Str_ConvertStrCodToLongCod (row[6]);
@@ -3008,7 +3022,7 @@ static void Prj_ResetProject (struct Project *Prj)
    Prj->CrsCod = -1L;
    Prj->Locked	    = Prj_UNLOCKED;
    Prj->Hidden      = Prj_NEW_PRJ_HIDDEN_VISIBL_DEFAULT;
-   Prj->Preassigned = Prj_NEW_PRJ_PREASSIGNED_NONPREASSIG_DEFAULT;
+   Prj->Assigned = Prj_NEW_PRJ_ASSIGNED_NONASSIG_DEFAULT;
    Prj->NumStds     = 1;
    Prj->Proposal    = Prj_PROPOSAL_DEFAULT;
    Prj->CreatTime =
@@ -3525,7 +3539,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    extern const char *Txt_Title;
    extern const char *Txt_Department;
    extern const char *Txt_Another_department;
-   extern const char *Txt_Preassigned_QUESTION;
+   extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Number_of_students;
    extern const char *Txt_Proposal;
    extern const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES];
@@ -3622,19 +3636,19 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RM\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:",Txt_Preassigned_QUESTION);
+   fprintf (Gbl.F.Out,"%s:",Txt_Assigned_QUESTION);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<select name=\"Preassigned\">");
 
    fprintf (Gbl.F.Out,"<option value=\"Y\"");
-   if (Prj->Preassigned == Prj_PREASSIGNED)
+   if (Prj->Assigned == Prj_ASSIGNED)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Yes);
 
    fprintf (Gbl.F.Out,"<option value=\"N\"");
-   if (Prj->Preassigned == Prj_NONPREASSIG)
+   if (Prj->Assigned == Prj_NONASSIG)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_No);
 
@@ -3839,8 +3853,8 @@ void Prj_RecFormProject (void)
       Prj.DptCod = Par_GetParToLong (Dpt_PARAM_DPT_COD_NAME);
 
       /* Get whether the project is preassigned */
-      Prj.Preassigned = (Par_GetParToBool ("Preassigned")) ? Prj_PREASSIGNED :
-							     Prj_NONPREASSIG;
+      Prj.Assigned = (Par_GetParToBool ("Preassigned")) ? Prj_ASSIGNED :
+							     Prj_NONASSIG;
 
       /* Get number of students */
       Prj.NumStds = (unsigned)
@@ -3930,7 +3944,7 @@ static void Prj_CreateProject (struct Project *Prj)
 				Prj->DptCod,
 				Prj->Hidden == Prj_HIDDEN ? 'Y' :
 							    'N',
-				Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
+				Prj->Assigned == Prj_ASSIGNED ? 'Y' :
 								      'N',
 				Prj->NumStds,
 				Prj_Proposal_DB[Prj->Proposal],
@@ -3983,7 +3997,7 @@ static void Prj_UpdateProject (struct Project *Prj)
 	           Prj->DptCod,
 	           Prj->Hidden == Prj_HIDDEN ? 'Y' :
 					       'N',
-	           Prj->Preassigned == Prj_PREASSIGNED ? 'Y' :
+	           Prj->Assigned == Prj_ASSIGNED ? 'Y' :
 						         'N',
 	           Prj->NumStds,
 	           Prj_Proposal_DB[Prj->Proposal],
