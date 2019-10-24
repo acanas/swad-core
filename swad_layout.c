@@ -1469,13 +1469,13 @@ static void Lay_WriteAboutZone (void)
 	    Cfg_URL_ICON_PUBLIC,Cfg_ABOUT_LOGO,
 	    Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
 	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT);
-   fprintf (Gbl.F.Out,"<div>");
+   HTM_DIV_Begin (NULL);
    fprintf (Gbl.F.Out,"%s",Cfg_ABOUT_NAME);
    HTM_DIV_End ();
    fprintf (Gbl.F.Out,"</a>");
 
    /***** Questions and problems *****/
-   fprintf (Gbl.F.Out,"<div>");
+   HTM_DIV_Begin (NULL);
    fprintf (Gbl.F.Out,"%s: "
 		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">%s</a>",
 	    Txt_Questions_and_problems,
@@ -1483,7 +1483,7 @@ static void Lay_WriteAboutZone (void)
    HTM_DIV_End ();
 
    /***** About and time to generate and send page *****/
-   fprintf (Gbl.F.Out,"<div>");
+   HTM_DIV_Begin (NULL);
 
    /* About */
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">",

@@ -153,7 +153,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    /***** Link to page 1, including a text *****/
    if (Subject)
      {
-      fprintf (Gbl.F.Out,"<div>");
+      HTM_DIV_Begin (NULL);
       if (LinkToPagCurrent)
         {
          switch (WhatPaginate)

@@ -567,7 +567,7 @@ static void Prj_ShowFormToFilterByDpt (void)
    struct Prj_Filter Filter;
 
    /***** Begin form *****/
-   fprintf (Gbl.F.Out,"<div>");
+   HTM_DIV_Begin (NULL);
    Frm_StartForm (ActSeePrj);
    Filter.My_All = Gbl.Prjs.Filter.My_All;
    Filter.PreNon = Gbl.Prjs.Filter.PreNon;

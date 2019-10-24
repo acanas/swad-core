@@ -98,7 +98,9 @@ typedef enum
 
 struct MediaUploader
   {
-   const char *IdSuffix;
+   Med_FormType_t FormType;
+   const char *IconSuffix;
+   const char *ParamSuffix;
    const char *FunctionName;
    const char *Icon;
    const char *Title;
@@ -125,9 +127,8 @@ static void Med_FreeMediaTitle (struct Media *Media);
 static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 				      struct MediaUploader *MediaUploader);
 static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
-				                const char *IdSuffix,
-					        struct ParamUploadMedia *ParamUploadMedia,
-					        Med_FormType_t FormType);
+						struct MediaUploader *MediaUploader,
+					        struct ParamUploadMedia *ParamUploadMedia);
 
 static Med_Action_t Med_GetMediaActionFromForm (const char *ParamAction);
 static Med_FormType_t Usr_GetFormTypeFromForm (struct ParamUploadMedia *ParamUploadMedia);
@@ -348,25 +349,31 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    extern const char *Txt_Link;
    struct ParamUploadMedia ParamUploadMedia;
    char Id[Frm_MAX_BYTES_ID + 1];
-   size_t i;
+   size_t NumUploader;
 
 #define Med_NUM_MEDIA_UPLOADERS 3
    struct MediaUploader MediaUploader[Med_NUM_MEDIA_UPLOADERS] =
      {
-	{/* Upload icon */
+	{/* Upload */
+	 Med_FORM_FILE,
 	 "ico_upl",			// <id>_ico_upl
+	 "par_upl",			// <id>_par_upl
 	 "mediaClickOnActivateUpload",
 	 "photo-video.svg",
 	 Txt_Image_video
 	},
-	{/* YouTube icon */
+	{/* YouTube */
+	 Med_FORM_YOUTUBE,
 	 "ico_you",			// <id>_ico_you
+	 "par_you",			// <id>_par_you
 	 "mediaClickOnActivateYoutube",
 	 "youtube-brands.svg",
 	 "YouTube"
 	},
-	{/* Embed icon */
+	{/* Embed */
+	 Med_FORM_EMBED,
 	 "ico_emb",			// <id>_ico_emb
+	 "par_emb",			// <id>_par_emb
 	 "mediaClickOnActivateEmbed",
 	 "code.svg",
 	 "Embed"
@@ -412,31 +419,24 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    HTM_DIV_Begin ("class=\"PREF_CONTAINER\"");			// icons container
 
    /* Draw icons */
-   for (i = 0;
-	i < Med_NUM_MEDIA_UPLOADERS;
-	i++)
-      Med_PutIconMediaUploader (Id,&MediaUploader[i]);
+   for (NumUploader = 0;
+	NumUploader < Med_NUM_MEDIA_UPLOADERS;
+	NumUploader++)
+      Med_PutIconMediaUploader (Id,&MediaUploader[NumUploader]);
 
    /* End icons */
    HTM_DIV_End ();						// icons container
    HTM_DIV_End ();						// icons containers
 
-   /***** Hidden field with form type *****/
-   /* Upload file */
-   Med_PutHiddenFormTypeMediaUploader (Id,"par_upl",		// <id>_par_upl
-				       &ParamUploadMedia,Med_FORM_FILE);
-
-   /* YouTube embedded video */
-   Med_PutHiddenFormTypeMediaUploader (Id,"par_you",		// <id>_par_you
-				       &ParamUploadMedia,Med_FORM_YOUTUBE);
-
-   /* Other embedded media */
-   Med_PutHiddenFormTypeMediaUploader (Id,"par_emb",		// <id>_par_emb
-				       &ParamUploadMedia,Med_FORM_EMBED);
-
+   /***** Form types *****/
+   for (NumUploader = 0;
+	NumUploader < Med_NUM_MEDIA_UPLOADERS;
+	NumUploader++)
+      Med_PutHiddenFormTypeMediaUploader (Id,&MediaUploader[NumUploader],
+					  &ParamUploadMedia);
 
    /***** Media file *****/
-   fprintf (Gbl.F.Out,"<div>");
+   HTM_DIV_Begin (NULL);
    fprintf (Gbl.F.Out,"<input id=\"%s_fil\" type=\"file\""	// <id>_fil
 	              " name=\"%s\" accept=\"image/,video/\""
 	              " class=\"%s\" disabled=\"disabled\""
@@ -447,7 +447,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    HTM_DIV_End ();						// <id>_fil
 
    /***** Media URL *****/
-   fprintf (Gbl.F.Out,"<div>");
+   HTM_DIV_Begin (NULL);
    fprintf (Gbl.F.Out,"<input id=\"%s_url\" type=\"url\""	// <id>_url
 		      " name=\"%s\" placeholder=\"%s\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\""
@@ -459,7 +459,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    HTM_DIV_End ();						// <id>_url
 
    /***** Media title *****/
-   fprintf (Gbl.F.Out,"<div>");
+   HTM_DIV_Begin (NULL);
    fprintf (Gbl.F.Out,"<input id=\"%s_tit\" type=\"text\""	// <id>_tit
 		      " name=\"%s\" placeholder=\"%s\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\""
@@ -488,8 +488,8 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 				      struct MediaUploader *MediaUploader)
   {
    /***** Icon to activate form in media uploader *****/
-   HTM_DIV_Begin ("id=\"%s_%s\" class=\"PREF_OFF\"",		// <id>_IdSuffix
-                  UniqueId,MediaUploader->IdSuffix);
+   HTM_DIV_Begin ("id=\"%s_%s\" class=\"PREF_OFF\"",		// <id>_IconSuffix
+                  UniqueId,MediaUploader->IconSuffix);
    fprintf (Gbl.F.Out,"<a href=\"\" onclick=\"%s('%s');return false;\">"
                       "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"ICO_HIGHLIGHT ICOx16\" />"
@@ -497,7 +497,7 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 	    MediaUploader->FunctionName,UniqueId,
             Cfg_URL_ICON_PUBLIC,MediaUploader->Icon,
 	    MediaUploader->Title,MediaUploader->Title);
-   HTM_DIV_End ();						// <id>_IdSuffix
+   HTM_DIV_End ();						// <id>_IconSuffix
   }
 
 /*****************************************************************************/
@@ -505,16 +505,15 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
 /*****************************************************************************/
 
 static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
-				                const char *IdSuffix,
-					        struct ParamUploadMedia *ParamUploadMedia,
-					        Med_FormType_t FormType)
+						struct MediaUploader *MediaUploader,
+					        struct ParamUploadMedia *ParamUploadMedia)
   {
    /***** Hidden field with form type *****/
    /* Upload file */
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"%s_%s\""	// <id>_IdSuffix
+   fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"%s_%s\""	// <id>_ParamSuffix
 		      " name=\"%s\" value=\"%u\" disabled=\"disabled\" />",
-            UniqueId,IdSuffix,
-	    ParamUploadMedia->FormType,(unsigned) FormType);
+            UniqueId,MediaUploader->ParamSuffix,
+	    ParamUploadMedia->FormType,(unsigned) MediaUploader->FormType);
    }
 
 /*****************************************************************************/
