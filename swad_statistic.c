@@ -315,16 +315,11 @@ void Sta_AskShowCrsHits (void)
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned long i;
 
-   /***** Contextual links *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
-   /* Put form to go to test edition and configuration */
-   Sta_PutLinkToGlobalHits ();
-
-   /* Link to show last clicks in real time */
-   Sta_PutLinkToLastClicks ();
-
-   HTM_DIV_End ();
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+   Sta_PutLinkToGlobalHits ();	// Global hits
+   Sta_PutLinkToLastClicks ();	// Last clicks in real time
+   Mnu_ContextMenuEnd ();
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -522,16 +517,11 @@ void Sta_AskShowGblHits (void)
    Sta_Role_t RoleStat;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
 
-   /***** Contextual links *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
-   /* Put form to go to test edition and configuration */
-   Sta_PutLinkToCourseHits ();
-
-   /* Link to show last clicks in real time */
-   Sta_PutLinkToLastClicks ();
-
-   HTM_DIV_End ();
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+   Sta_PutLinkToCourseHits ();	// Course hits
+   Sta_PutLinkToLastClicks ();	// Last clicks in real time
+   Mnu_ContextMenuEnd ();
 
    /***** Begin form *****/
    Frm_StartFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
@@ -3994,16 +3984,11 @@ void Sta_ShowLastClicks (void)
    extern const char *Hlp_USERS_Connected_last_clicks;
    extern const char *Txt_Last_clicks_in_real_time;
 
-   /***** Contextual links *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
-   /* Put form to go to test edition and configuration */
-   Sta_PutLinkToGlobalHits ();
-
-   /* Put form to go to test edition and configuration */
-   Sta_PutLinkToCourseHits ();
-
-   HTM_DIV_End ();
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+   Sta_PutLinkToGlobalHits ();	// Global hits
+   Sta_PutLinkToCourseHits ();	// Course hits
+   Mnu_ContextMenuEnd ();
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Last_clicks_in_real_time,NULL,

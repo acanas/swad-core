@@ -988,8 +988,10 @@ static void Mai_ListEmails (void)
 	    NumAcceptedUsrsWithEmail);
    HTM_DIV_End ();
 
-   /***** Icon to open the client email program *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+
+   /* Open the client email program */
    fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
 		      " title=\"%s\" class=\"%s\">",
 	    Gbl.Usrs.Me.UsrDat.Email,
@@ -1001,7 +1003,8 @@ static void Mai_ListEmails (void)
    Ico_PutIconTextLink ("marker.svg",
 			Txt_Create_email_message);
    fprintf (Gbl.F.Out,"</a>");
-   HTM_DIV_End ();
+
+   Mnu_ContextMenuEnd ();
 
    /***** End the box used to list the emails *****/
    Box_EndBox ();

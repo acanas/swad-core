@@ -83,12 +83,12 @@ void Con_ShowConnectedUsrs (void)
    extern const char *Hlp_USERS_Connected;
    extern const char *Txt_Connected_users;
 
-   /***** Link to show last clicks in real time *****/
+   /***** Contextual menu *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-      Sta_PutLinkToLastClicks ();
-      HTM_DIV_End ();
+      Mnu_ContextMenuBegin ();
+      Sta_PutLinkToLastClicks ();	// Show last clicks in real time
+      Mnu_ContextMenuEnd ();
      }
 
    /***** Get scope *****/

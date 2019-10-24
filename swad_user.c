@@ -2587,14 +2587,12 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    extern const char *Txt_Password;
    extern const char *Txt_password;
 
-   /***** Links to other actions *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
-   Acc_PutLinkToCreateAccount ();
-   Pwd_PutLinkToSendNewPasswd ();
-   Lan_PutLinkToChangeLanguage ();
-
-   HTM_DIV_End ();
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+   Acc_PutLinkToCreateAccount ();	// Create account
+   Pwd_PutLinkToSendNewPasswd ();	// Send new password
+   Lan_PutLinkToChangeLanguage ();	// Change language
+   Mnu_ContextMenuEnd ();
 
    HTM_DIV_Begin ("class=\"CM\"");
 
@@ -7296,25 +7294,17 @@ void Usr_ListDataAdms (void)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
+	 /***** Contextual menu *****/
+	 Mnu_ContextMenuBegin ();
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 	   {
-	    /* Put link to remove old users */
-	    Usr_PutLinkToSeeGuests ();
-
-	    /* Put link to list possible duplicate users */
-	    Dup_PutLinkToListDupUsrs ();
+	    Usr_PutLinkToSeeGuests ();			// List guests
+	    Dup_PutLinkToListDupUsrs ();		// List possible duplicate users
 	   }
-
-	 /* Put link to go to admin one user */
-	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);
-
+	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);	// Admin one user
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	    /* Put link to remove old users */
-	    Enr_PutLinkToRemOldUsrs ();
-
-	 HTM_DIV_End ();
+	    Enr_PutLinkToRemOldUsrs ();			// Remove old users
+	 Mnu_ContextMenuEnd ();
 	 break;
       default:
 	 break;
@@ -7791,20 +7781,13 @@ void Usr_SeeGuests (void)
    bool ICanChooseOption[Usr_LIST_USRS_NUM_OPTIONS];
    bool PutForm;
 
-   /***** Put contextual links *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
-   /* Put link to remove old users */
-   Usr_PutLinkToSeeAdmins ();
-
-   /* Put link to go to admin one user */
-   Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);
-
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+   Usr_PutLinkToSeeAdmins ();			// List admins
+   Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);	// Admin one user
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      /* Put link to remove old users */
-      Enr_PutLinkToRemOldUsrs ();
-
-   HTM_DIV_End ();
+      Enr_PutLinkToRemOldUsrs ();		// Remove old users
+   Mnu_ContextMenuEnd ();
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -7928,22 +7911,16 @@ void Usr_SeeStudents (void)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
-	 /* Put link to go to admin student */
-	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
-
+	 /***** Contextual menu *****/
+         Mnu_ContextMenuBegin ();
+	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);	// Admin one student
 	 if (Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
 	     Gbl.Usrs.Me.Role.Logged != Rol_STD)	// Teacher or admin
 	   {
-	    /* Put link to go to admin several students */
-	    Enr_PutLinkToAdminSeveralUsrs (Rol_STD);
-
-	    /* Put link to edit record fields */
-	    Rec_PutLinkToEditRecordFields ();
+	    Enr_PutLinkToAdminSeveralUsrs (Rol_STD);	// Admin several students
+	    Rec_PutLinkToEditRecordFields ();		// Edit record fields
 	   }
-
-         HTM_DIV_End ();
+         Mnu_ContextMenuEnd ();
 	 break;
       default:
 	 break;
@@ -8099,21 +8076,16 @@ void Usr_SeeTeachers (void)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
-	 /* Put link to go to admin one user */
-	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
-
-	 /* Put link to go to admin several users */
+	 /***** Contextual menu *****/
+	 Mnu_ContextMenuBegin ();
+	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);	// Admin one teacher
 	 if (Gbl.Hierarchy.Level == Hie_CRS &&		// Course selected
 	     Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am logged as admin
 	   {
-	    Enr_PutLinkToAdminSeveralUsrs (Rol_NET);
-	    Enr_PutLinkToAdminSeveralUsrs (Rol_TCH);
+	    Enr_PutLinkToAdminSeveralUsrs (Rol_NET);	// Admin several non-editing teachers
+	    Enr_PutLinkToAdminSeveralUsrs (Rol_TCH);	// Admin several teachers
 	   }
-
-	 HTM_DIV_End ();
-
+	 Mnu_ContextMenuEnd ();
          break;
       default:
 	 break;

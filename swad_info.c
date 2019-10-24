@@ -381,24 +381,27 @@ void Inf_ShowInfo (void)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_STD:
-         /* Put checkbox to force students to read this couse info */
          if (MustBeRead)
            {
-            HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-            Inf_PutCheckboxConfirmIHaveReadInfo ();
-            HTM_DIV_End ();
+            /***** Contextual menu *****/
+            Mnu_ContextMenuBegin ();
+            Inf_PutCheckboxConfirmIHaveReadInfo ();	// Checkbox to confirm that...
+							// ...I have read this couse info
+            Mnu_ContextMenuEnd ();
            }
          break;
       case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
-         /* Put checkbox to force students to read this couse info */
+         /* Put  */
          if (InfoSrc != Inf_INFO_SRC_NONE)
            {
-            HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+            /***** Contextual menu *****/
+            Mnu_ContextMenuBegin ();
             Disabled = (Gbl.Usrs.Me.Role.Logged == Rol_NET);	// Non-editing teachers can not change the status of checkbox
-            Inf_PutCheckboxForceStdsToReadInfo (MustBeRead,Disabled);
-            HTM_DIV_End ();
+            Inf_PutCheckboxForceStdsToReadInfo (MustBeRead,Disabled);	// Checkbox to force students...
+									// ...to read this couse info
+            Mnu_ContextMenuEnd ();
            }
          break;
       default:

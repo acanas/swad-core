@@ -2010,10 +2010,10 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       /***** Get data of the degree from database *****/
       Deg_GetDataOfDegreeByCod (&Deg);
 
-      /***** Start div *****/
-      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+      /***** Contextual menu *****/
+      Mnu_ContextMenuBegin ();
 
-      /***** Begin form *****/
+      /* Begin form */
       Frm_StartForm (ActCalPhoDeg);
       Pho_PutHiddenParamTypeOfAvg ();
       Pho_PutHiddenParamPhotoSize ();
@@ -2024,7 +2024,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
                                   NULL);
       Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_THE_DEGREE_X);
 
-      /***** Put selector with all the degrees with students *****/
+      /* Selector with all the degrees with students */
       fprintf (Gbl.F.Out,"<select name=\"OthDegCod\">");
       for (NumDeg = 0;
 	   NumDeg < Degs.Num;
@@ -2049,11 +2049,11 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
                   Txt_time,
                   StrEstimatedTimeToComputeAvgPhoto);
         }
-
-      /***** End selector, form and div *****/
       fprintf (Gbl.F.Out,"</select>");
+
+      /* End form and contextual menu */
       Frm_EndForm ();
-      HTM_DIV_End ();
+      Mnu_ContextMenuEnd ();
 
       /***** Free list of all the degrees with students *****/
       Deg_FreeListDegs (&Degs);

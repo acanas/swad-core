@@ -1287,10 +1287,10 @@ static void TL_ShowWarningYouDontFollowAnyUser (void)
       /***** Show warning if I do not follow anyone *****/
       Ale_ShowAlert (Ale_WARNING,Txt_You_dont_follow_any_user);
 
-      /***** Put link to show users to follow *****/
-      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-      Fol_PutLinkWhoToFollow ();
-      HTM_DIV_End ();
+      /***** Contextual menu *****/
+      Mnu_ContextMenuBegin ();
+      Fol_PutLinkWhoToFollow ();	// Users to follow
+      Mnu_ContextMenuEnd ();
      }
   }
 

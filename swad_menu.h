@@ -57,4 +57,7 @@ void Mnu_ChangeMenu (void);
 Mnu_Menu_t Mnu_GetParamMenu (void);
 Mnu_Menu_t Mnu_GetMenuFromStr (const char *Str);
 
+void Mnu_ContextMenuBegin (void);
+void Mnu_ContextMenuEnd (void);
+
 #endif

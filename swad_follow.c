@@ -134,11 +134,11 @@ void Fol_SuggestUsrsToFollowMainZone (void)
    unsigned long NumUsr;
    struct UsrData UsrDat;
 
-   /***** Put links to request my public profile and another user's profile *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-   Prf_PutLinkMyPublicProfile ();
-   Prf_PutLinkRequestAnotherUserProfile ();
-   HTM_DIV_End ();
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+   Prf_PutLinkMyPublicProfile ();		// My public profile
+   Prf_PutLinkRequestAnotherUserProfile ();	// Request another user's profile
+   Mnu_ContextMenuEnd ();
 
    /***** Get users *****/
    if ((NumUsrs = Fol_GetUsrsToFollow (Fol_MAX_USRS_TO_FOLLOW_MAIN_ZONE,

@@ -166,22 +166,24 @@ void Att_SeeAttEvents (void)
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_NEWEST_FIRST);
 
-   /***** Put link to show list of attendance *****/
+   /***** Contextual menu *****/
    if (Gbl.AttEvents.Num &&
        Gbl.Usrs.Me.UsrDat.Nickname[0])
       switch (Gbl.Usrs.Me.Role.Logged)
 	{
 	 case Rol_STD:
-	    HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+	    /* List my attendance */
+	    Mnu_ContextMenuBegin ();
 	    Att_PutFormToListMyAttendance ();
-	    HTM_DIV_End ();
+	    Mnu_ContextMenuEnd ();
 	    break;
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+	    /* List students' attendance */
+	    Mnu_ContextMenuBegin ();
 	    Att_PutFormToListStdsAttendance ();
-	    HTM_DIV_End ();
+	    Mnu_ContextMenuEnd ();
 	    break;
 	 default:
 	    break;

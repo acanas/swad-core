@@ -667,10 +667,10 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    Act_Action_t NextAction;
    const char *Title;
 
-   /***** Put contextual links *****/
+   /***** Contextual menu *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)	 	// Course selected
      {
-      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+      Mnu_ContextMenuBegin ();
 
       switch (Role)
 	{
@@ -697,7 +697,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	    break;
 	}
 
-      HTM_DIV_End ();
+      Mnu_ContextMenuEnd ();
      }
 
    /***** Form to send students to be enroled / removed *****/
@@ -3083,15 +3083,12 @@ void Enr_ReqRegRemOth (void)
 
 void Enr_ReqRegRemStd (void)
   {
+   /***** Contextual menu *****/
    if (Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.Role.Logged])
      {
-      /***** Put contextual links *****/
-      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
-      /* Put link to go to admin several students */
-      Enr_PutLinkToAdminSeveralUsrs (Rol_STD);
-
-      HTM_DIV_End ();
+      Mnu_ContextMenuBegin ();
+      Enr_PutLinkToAdminSeveralUsrs (Rol_STD);	// Admin several students
+      Mnu_ContextMenuEnd ();
      }
 
    /***** Form to request user to be administered *****/

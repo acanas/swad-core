@@ -93,11 +93,12 @@ void McR_PutFormToViewMchResults (Act_Action_t Action)
   {
    extern const char *Txt_Results;
 
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
    Lay_PutContextualLinkIconText (Action,NULL,NULL,
 				  "tasks.svg",
-				  Txt_Results);
-   HTM_DIV_End ();
+				  Txt_Results);	// View match results
+   Mnu_ContextMenuEnd ();
   }
 
 /*****************************************************************************/

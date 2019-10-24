@@ -115,12 +115,12 @@ void Acc_ShowFormMyAccount (void)
       Acc_ShowFormChgMyAccount ();
    else	// Not logged
      {
-      /***** Links to other actions *****/
-      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+      /***** Contextual menu *****/
+      Mnu_ContextMenuBegin ();
       Usr_PutLinkToLogin ();
       Pwd_PutLinkToSendNewPasswd ();
       Lan_PutLinkToChangeLanguage ();
-      HTM_DIV_End ();
+      Mnu_ContextMenuEnd ();
 
       /**** Show form to check if I have an account *****/
       Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered);
@@ -188,12 +188,12 @@ void Acc_CheckIfEmptyAccountExists (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   /***** Links to other actions *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
    Usr_PutLinkToLogin ();
    Pwd_PutLinkToSendNewPasswd ();
    Lan_PutLinkToChangeLanguage ();
-   HTM_DIV_End ();
+   Mnu_ContextMenuEnd ();
 
    /***** Get new user's ID from form *****/
    Par_GetParToText ("ID",ID,ID_MAX_BYTES_USR_ID);
@@ -324,12 +324,12 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 
 void Acc_ShowFormCreateMyAccount (void)
   {
-   /***** Links to other actions *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
    Usr_PutLinkToLogin ();
    Pwd_PutLinkToSendNewPasswd ();
    Lan_PutLinkToChangeLanguage ();
-   HTM_DIV_End ();
+   Mnu_ContextMenuEnd ();
 
    /**** Show form to create a new account *****/
    Acc_ShowFormRequestNewAccountWithParams ("","");

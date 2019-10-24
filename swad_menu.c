@@ -485,3 +485,17 @@ Mnu_Menu_t Mnu_GetMenuFromStr (const char *Str)
 
    return Mnu_MENU_DEFAULT;
   }
+
+/*****************************************************************************/
+/******************************** Context menu *******************************/
+/*****************************************************************************/
+
+void Mnu_ContextMenuBegin (void)
+  {
+   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+  }
+
+void Mnu_ContextMenuEnd (void)
+  {
+   HTM_DIV_End ();
+  }

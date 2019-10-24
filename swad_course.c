@@ -197,18 +197,15 @@ static void Crs_Configuration (bool PrintView)
    if (Gbl.Hierarchy.Crs.CrsCod <= 0)	// No course selected
       return;
 
-   /***** Messages and links above the box *****/
+   /***** Contextual menu *****/
    if (!PrintView)
-     {
-      /* Link to request enrolment in the current course */
       if (Gbl.Usrs.Me.Role.Logged == Rol_GST ||
 	  Gbl.Usrs.Me.Role.Logged == Rol_USR)
 	{
-         HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-         Enr_PutLinkToRequestSignUp ();
-         HTM_DIV_End ();
+         Mnu_ContextMenuBegin ();
+         Enr_PutLinkToRequestSignUp ();	// Request enrolment in the current course
+         Mnu_ContextMenuEnd ();
 	}
-     }
 
    /***** Start box *****/
    if (PrintView)

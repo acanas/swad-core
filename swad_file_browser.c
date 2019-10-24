@@ -3767,26 +3767,21 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    /***** Update last access to this file browser *****/
    Brw_UpdateLastAccess ();
 
-   /***** Write contextual links *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
-   /* Put checkbox to show the full tree */
-   Brw_PutCheckboxFullTree ();
-
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+   Brw_PutCheckboxFullTree ();	// Checkbox to show the full tree
    if (Brw_GetIfBriefcaseFileBrowser ())
      {
-      /* Put link to remove old files */
       if (Gbl.Action.Act != ActReqRemOldBrf)
-	 Brw_PutLinkToAskRemOldFiles ();
+	 Brw_PutLinkToAskRemOldFiles ();	// Remove old files
      }
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      /* Put link to create a zip file with all the works of the selected users */
       if (!Gbl.FileBrowser.ZIP.CreateZIP)
-	 ZIP_PutLinkToCreateZIPAsgWrk ();
+	 ZIP_PutLinkToCreateZIPAsgWrk ();	// Create a zip file with the
+						// works of the selected users
      }
-
-   HTM_DIV_End ();
+   Mnu_ContextMenuEnd ();
 
    /***** Initialize hidden levels *****/
    switch (Gbl.FileBrowser.Type)

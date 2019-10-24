@@ -405,11 +405,12 @@ static void Tst_PutFormToViewTstResults (Act_Action_t Action)
   {
    extern const char *Txt_Results;
 
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
    Lay_PutContextualLinkIconText (Action,NULL,NULL,
 				  "tasks.svg",
-				  Txt_Results);
-   HTM_DIV_End ();
+				  Txt_Results);	// Tests results
+   Mnu_ContextMenuEnd ();
   }
 
 /*****************************************************************************/
@@ -1285,9 +1286,9 @@ void Tst_ShowFormAskEditTsts (void)
    unsigned long NumRows;
 
    /***** Contextual menu *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-   TsI_PutFormToImportQuestions ();	// Put link (form) to import questions from XML file
-   HTM_DIV_End ();
+   Mnu_ContextMenuBegin ();
+   TsI_PutFormToImportQuestions ();	// Import questions from XML file
+   Mnu_ContextMenuEnd ();
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
@@ -2403,16 +2404,14 @@ void Tst_ListQuestionsToEdit (void)
      {
       if ((NumRows = Tst_GetQuestions (&mysql_res)) != 0)	// Query database
         {
-	 /* Buttons for edition */
-         HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+	 /***** Contextual menu *****/
+         Mnu_ContextMenuBegin ();
 	 if (Gbl.Test.XML.CreateXML)
-	    /* Create XML file for exporting questions
-	       and put a link to download it */
-            TsI_CreateXML (NumRows,mysql_res);
+            TsI_CreateXML (NumRows,mysql_res);	// Create XML file with exported questions...
+						// ...and put a link to download it
          else
-            /* Button to export questions */
-            TsI_PutFormToExportQuestions ();
-	 HTM_DIV_End ();
+            TsI_PutFormToExportQuestions ();	// Export questions
+	 Mnu_ContextMenuEnd ();
 
 	 /* Show the table with the questions */
          Tst_ListOneOrMoreQuestionsForEdition (NumRows,mysql_res);

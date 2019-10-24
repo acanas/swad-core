@@ -187,11 +187,11 @@ void Prf_RequestUserProfile (void)
 
    if (Gbl.Usrs.Me.Logged)
      {
-      /***** Put link to show my public profile and users to follow *****/
-      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-      Prf_PutLinkMyPublicProfile ();
-      Fol_PutLinkWhoToFollow ();
-      HTM_DIV_End ();
+      /***** Contextual menu *****/
+      Mnu_ContextMenuBegin ();
+      Prf_PutLinkMyPublicProfile ();	// My public profile
+      Fol_PutLinkWhoToFollow ();	// Users to follow
+      Mnu_ContextMenuEnd ();
      }
 
    /***** Begin form *****/
@@ -285,22 +285,16 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
    /***** Check if I can see the public profile *****/
    if (Pri_ShowingIsAllowed (UsrDat->BaPrfVisibility,UsrDat))
      {
-      /***** Contextual links *****/
       if (Gbl.Usrs.Me.Logged)
 	{
-	 HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
+	 /***** Contextual menu *****/
+	 Mnu_ContextMenuBegin ();
 	 if (ItsMe)
-	    /* Put link to show another user's profile */
-	    Prf_PutLinkRequestAnotherUserProfile ();
+	    Prf_PutLinkRequestAnotherUserProfile ();	// Request another user's profile
 	 else	// Not me
-	    /* Put link to show my public profile */
-	    Prf_PutLinkMyPublicProfile ();
-
-	 /* Put link to show users to follow */
-	 Fol_PutLinkWhoToFollow ();
-
-	 HTM_DIV_End ();
+	    Prf_PutLinkMyPublicProfile ();		// My public profile
+	 Fol_PutLinkWhoToFollow ();			// Users to follow
+	 Mnu_ContextMenuEnd ();
 	}
 
       /***** Shared record card *****/

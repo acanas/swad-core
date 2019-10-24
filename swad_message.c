@@ -364,13 +364,14 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void)
   {
    extern const char *Txt_Show_more_recipients;
 
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
    Lay_PutContextualLinkIconTextOnSubmit (ActReqMsgUsr,NULL,
 					  Msg_PutParamsShowMorePotentialRecipients,
 					  "users.svg",
 					  Txt_Show_more_recipients,
-					  "CopyMessageToHiddenFields();");
-   HTM_DIV_End ();
+					  "CopyMessageToHiddenFields();");	// Shor more potential recipients
+   Mnu_ContextMenuEnd ();
   }
 
 /*****************************************************************************/
@@ -1662,12 +1663,12 @@ void Msg_ShowSntMsgs (void)
 
 void Msg_ShowRecMsgs (void)
   {
-   /***** Link to view banned users *****/
    if (Msg_GetNumUsrsBannedByMe ())
      {
-      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-      Msg_PutLinkToViewBannedUsers ();
-      HTM_DIV_End ();
+      /***** Contextual menu *****/
+      Mnu_ContextMenuBegin ();
+      Msg_PutLinkToViewBannedUsers ();	// View banned users
+      Mnu_ContextMenuEnd ();
      }
 
    /***** Show the received messages *****/
@@ -1766,12 +1767,13 @@ static void Msg_ShowSentOrReceivedMessages (void)
    HTM_DIV_End ();
    Msg_ShowFormToFilterMsgs ();
 
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
    Frm_LinkFormSubmitAnimated (Txt_Update_messages,
 	                       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
 			       NULL);
-   Ico_PutCalculateIconWithText (Txt_Update_messages);
-   HTM_DIV_End ();
+   Ico_PutCalculateIconWithText (Txt_Update_messages);	// Animated icon to update messages
+   Mnu_ContextMenuEnd ();
 
    Frm_EndForm ();
 

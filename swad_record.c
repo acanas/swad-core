@@ -976,15 +976,16 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
    if (TypeOfView == Rec_SHA_RECORD_LIST)	// Listing several records
      {
-      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+      /***** Contextual menu *****/
+      Mnu_ContextMenuBegin ();
 
-      /* Link to print view */
+      /* Print view */
       Frm_StartForm (ActPrnRecSevGst);
       Usr_PutHiddenParSelectedUsrsCods ();
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
 
-      HTM_DIV_End ();
+      Mnu_ContextMenuEnd ();
      }
 
    /***** Initialize structure with user's data *****/
@@ -1070,14 +1071,14 @@ static void Rec_ShowRecordOneStdCrs (void)
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsInCurrentCrs ();
 
-   /***** Put contextual links *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
 
-   /* Link to edit record fields */
+   /* Edit record fields */
    if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)
       Rec_PutLinkToEditRecordFields ();
 
-   /* Link to print view */
+   /* Print view */
    Frm_StartForm (ActPrnRecSevStd);
    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr ();
    Usr_PutHiddenParSelectedUsrsCods ();
@@ -1085,7 +1086,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    Rec_ShowLinkToPrintPreviewOfRecords ();
    Frm_EndForm ();
 
-   HTM_DIV_End ();
+   Mnu_ContextMenuEnd ();
 
    /***** Show optional alert (result of editing data in course record) *****/
    Ale_ShowAlerts (NULL);
@@ -1174,19 +1175,20 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
    if (ShaTypeOfView == Rec_SHA_RECORD_LIST)
      {
-      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+      /***** Contextual menu *****/
+      Mnu_ContextMenuBegin ();
 
-      /* Link to edit record fields */
+      /* Edit record fields */
       if (Gbl.Usrs.Me.Role.Logged == Rol_TCH)
          Rec_PutLinkToEditRecordFields ();
 
-      /* Link to print view */
+      /* Print view */
       Frm_StartForm (ActPrnRecSevStd);
       Usr_PutHiddenParSelectedUsrsCods ();
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
 
-      HTM_DIV_End ();
+      Mnu_ContextMenuEnd ();
      }
 
    /***** Initialize structure with user's data *****/
@@ -1302,13 +1304,13 @@ static void Rec_ShowRecordOneTchCrs (void)
    /***** Get if I want to see teachers' office hours in teachers' records *****/
    ShowOfficeHours = Rec_GetParamShowOfficeHours ();
 
-   /***** Show contextual menu *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
 
    /* Show office hours? */
    Rec_WriteFormShowOfficeHoursOneTch (ShowOfficeHours);
 
-   /* Link to print view */
+   /* Print view */
    Frm_StartForm (ActPrnRecSevTch);
    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr ();
    Usr_PutHiddenParSelectedUsrsCods ();
@@ -1319,7 +1321,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    Rec_ShowLinkToPrintPreviewOfRecords ();
    Frm_EndForm ();
 
-   HTM_DIV_End ();
+   Mnu_ContextMenuEnd ();
 
    /***** Start container for this user *****/
    HTM_DIV_Begin ("class=\"REC_USR\"");
@@ -1392,13 +1394,13 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
    if (Gbl.Action.Act == ActSeeRecSevTch)
      {
-      /***** Show contextual menu *****/
-      HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
+      /***** Contextual menu *****/
+      Mnu_ContextMenuBegin ();
 
       /* Show office hours? */
       Rec_WriteFormShowOfficeHoursSeveralTchs (ShowOfficeHours);
 
-      /* Link to print view */
+      /* Print view */
       Frm_StartForm (ActPrnRecSevTch);
       Usr_PutHiddenParSelectedUsrsCods ();
       Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
@@ -1408,7 +1410,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Frm_EndForm ();
 
-      HTM_DIV_End ();
+      Mnu_ContextMenuEnd ();
      }
 
    /***** Initialize structure with user's data *****/

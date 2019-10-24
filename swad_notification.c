@@ -358,29 +358,20 @@ void Ntf_ShowMyNotifications (void)
 				      " ORDER BY TimeNotif DESC",
 				      Gbl.Usrs.Me.UsrDat.UsrCod,SubQuery);
 
-   /***** Contextual links *****/
-   HTM_DIV_Begin ("class=\"CONTEXT_MENU\"");
-
-   /* Write form to show all notifications */
-   Ntf_WriteFormAllNotifications (AllNotifications);
-
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+   Ntf_WriteFormAllNotifications (AllNotifications);	// Show all notifications
    if (NumNotifications)	// TODO: Show message only when I don't have notificacions at all
-      /* Put form to change notification settings */
       Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,NULL,
 				     "eye.svg",
-				     Txt_Mark_all_NOTIFICATIONS_as_read);
-
-   /* Put form to change notification settings */
+				     Txt_Mark_all_NOTIFICATIONS_as_read);	// Mark notifications as read
    Lay_PutContextualLinkIconText (ActReqEdiSet,Ntf_NOTIFICATIONS_ID,NULL,
 				  "cog.svg",
-				  Txt_Settings);
-
-   /* Put form to view allowed mail domains */
+				  Txt_Settings);	// Change notification settings
    Lay_PutContextualLinkIconText (ActSeeMai,NULL,NULL,
 				  "envelope.svg",
-				  Txt_Domains);
-
-   HTM_DIV_End ();
+				  Txt_Domains);		// View allowed mail domains
+   Mnu_ContextMenuEnd ();
 
    /***** Start box *****/
    Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
