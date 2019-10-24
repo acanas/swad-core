@@ -262,6 +262,15 @@ void Ico_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) (vo
 				  Txt_View);
   }
 
+void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,void (*FuncParams) (void))
+  {
+   extern const char *Txt_Configure;
+
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncParams,
+				  "cog.svg",
+				  Txt_Configure);
+  }
+
 void Ico_PutContextualIconToHide (Act_Action_t NextAction,const char *Anchor,void (*FuncParams) (void))
   {
    extern const char *Txt_Hide;

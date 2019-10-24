@@ -487,12 +487,16 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.42.8 (2019-10-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.43 (2019-10-25)"
 #define CSS_FILE		"swad19.42.6.css"
 #define JS_FILE			"swad19.39.js"
 /*
 // TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
+
+	Version 19.43:    Oct 25, 2019	New action to configure all projects. (246064 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1803','es','N','Configurar proyectos');
 
 	Version 19.42.8:  Oct 25, 2019	New warning on projects non-assigned but with registered students. (246052 lines)
 	Version 19.42.7:  Oct 25, 2019	Code refactoring in media. (246037 lines)

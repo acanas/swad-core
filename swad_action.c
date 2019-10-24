@@ -498,6 +498,7 @@ Assessment:
 	355. ActShoAsg			Show assignment
 
 	356. ActSeeTblAllPrj		Show all projects in a table
+	NEW. ActCfgPrj			Configure all projects
 	357. ActFrmNewPrj		Form to create a new project
 	358. ActEdiOnePrj		Edit one project
 	359. ActPrnOnePrj		Print one project
@@ -2061,6 +2062,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActShoAsg		*/{ 965,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ShowAssignment		,NULL},
 
    /* ActSeeTblAllPrj	*/{1696,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_ShowTableAllProjects	,NULL},
+   /* ActCfgPrj		*/{1803,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_ShowTableAllProjects	,NULL},
    /* ActFrmNewPrj	*/{1675,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestCreatePrj		,NULL},
    /* ActEdiOnePrj	*/{1676,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestEditPrj		,NULL},
    /* ActPrnOnePrj	*/{1677,-1,TabUnk,ActSeePrj		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_PrintOneProject		,NULL},
@@ -5033,6 +5035,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeOneMchResOth,	// #1800
 	ActChgVisResMchUsr,	// #1801
 	ActChgNumColMch,	// #1802
+	ActCfgPrj,		// #1803
 	};
 
 /*****************************************************************************/

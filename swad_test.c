@@ -1403,7 +1403,6 @@ static bool Tst_CheckIfICanEditTests (void)
 static void Tst_PutIconsTests (void)
   {
    extern const char *Txt_New_question;
-   extern const char *Txt_Configure;
 
    if (Tst_CheckIfICanEditTests ())
      {
@@ -1418,9 +1417,7 @@ static void Tst_PutIconsTests (void)
 
       /***** Put form to go to test configuration *****/
       if (Gbl.Action.Act != ActCfgTst)
-	 Lay_PutContextualLinkOnlyIcon (ActCfgTst,NULL,NULL,
-				        "cog.svg",
-					Txt_Configure);
+         Ico_PutContextualIconToConfigure (ActCfgTst,NULL);
      }
 
    /***** Put icon to show a figure *****/

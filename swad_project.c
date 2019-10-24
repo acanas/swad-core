@@ -901,6 +901,10 @@ static void Prj_PutIconsListProjects (void)
       /***** Put icons to lock/unlock edition of all projects *****/
       if (Prj_CheckIfICanLockProjects ())
 	 Prj_PutIconsToLockUnlockAllProjects ();
+
+      /***** Put form to go to projects configuration *****/
+      if (Gbl.Action.Act != ActCfgPrj)
+         Ico_PutContextualIconToConfigure (ActCfgPrj,NULL);
      }
 
    /***** Put icon to show a figure *****/
