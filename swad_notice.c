@@ -649,10 +649,10 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    /***** Build anchor string *****/
    Frm_SetAnchorStr (NotCod,&Anchor);
 
-   /***** Start article for this notice *****/
+   /***** Begin article for this notice *****/
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
      {
-      Lay_StartArticle (Anchor);
+      HTM_ARTICLE_Begin (Anchor);
       if (Highlight)
 	 HTM_DIV_Begin ("class=\"NOTICE_HIGHLIGHT\"");
      }
@@ -749,7 +749,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      {
       if (Highlight)
 	 HTM_DIV_End ();
-      Lay_EndArticle ();
+      HTM_ARTICLE_End ();
      }
 
    /***** Free anchor string *****/

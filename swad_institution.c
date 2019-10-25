@@ -1733,7 +1733,7 @@ void Ins_RemoveInstitution (void)
 
    /***** Check if this institution has users *****/
    if (!Ins_CheckIfICanEdit (Ins_EditingIns))
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
    else if (Ins_EditingIns->Ctrs.Num ||
             Ins_EditingIns->NumUsrsWhoClaimToBelongToIns ||
             Ins_EditingIns->NumUsrs)	// Institution has centres or users ==> don't remove
@@ -2213,7 +2213,7 @@ static void Ins_PutFormToCreateInstitution (void)
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
       Frm_StartForm (ActReqIns);
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_institution,NULL,

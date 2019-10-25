@@ -233,7 +233,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    Act_Action_t NextAction;
 
    /***** Start section *****/
-   Lay_StartSection (Nck_NICKNAME_SECTION_ID);
+   HTM_SECTION_Begin (Nck_NICKNAME_SECTION_ID);
 
    /***** Get my nicknames *****/
    NumNicks =
@@ -417,7 +417,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    Box_EndBoxTable ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/

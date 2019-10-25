@@ -765,9 +765,9 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 		 AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
 				   "ASG_TITLE",
 		 Gbl.RowEvenOdd);
-   Lay_StartArticle (Anchor);
+   HTM_ARTICLE_Begin (Anchor);
    fprintf (Gbl.F.Out,"%s",AgdEvent.Event);
-   Lay_EndArticle ();
+   HTM_ARTICLE_End ();
    HTM_TD_End ();
 
    /* Location */

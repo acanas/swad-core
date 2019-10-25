@@ -5494,7 +5494,7 @@ void Act_AdjustCurrentAction (void)
 /*** Write error message and exit when no permission to perform an action ****/
 /*****************************************************************************/
 
-void Act_NoPermissionExit (void)
+void Lay_NoPermissionExit (void)
   {
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
 

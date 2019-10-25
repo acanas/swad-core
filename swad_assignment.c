@@ -405,9 +405,9 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 		    Asg.Hidden ? "ASG_TITLE_LIGHT" :
 				 "ASG_TITLE",
 		    Gbl.RowEvenOdd);
-   Lay_StartArticle (Anchor);
+   HTM_ARTICLE_Begin (Anchor);
    fprintf (Gbl.F.Out,"%s",Asg.Title);
-   Lay_EndArticle ();
+   HTM_ARTICLE_End ();
    HTM_TD_End ();
 
    /* Assignment folder */

@@ -191,7 +191,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
 	                              Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
-   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
      {
@@ -239,7 +239,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End section with user list *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -750,7 +750,7 @@ void McR_ShowOneMchResult (void)
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS))
 	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
       if (!Usr_CheckIfICanViewTst (UsrDat))
-         Act_NoPermissionExit ();
+         Lay_NoPermissionExit ();
 
       /* User */
       HTM_TR_Begin (NULL);
@@ -864,7 +864,7 @@ void McR_ShowOneMchResult (void)
       Box_BoxEnd ();
      }
    else	// I am not allowed to view this match result
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/

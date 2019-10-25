@@ -229,7 +229,7 @@ static void Grp_ReqEditGroupsInternal (Ale_AlertType_t AlertTypeGroupTypes,
 static void Grp_ReqEditGroupsInternal0 (void)
   {
    /***** Start groups types section *****/
-   Lay_StartSection (Grp_GROUP_TYPES_SECTION_ID);
+   HTM_SECTION_Begin (Grp_GROUP_TYPES_SECTION_ID);
   }
 
 static void Grp_ReqEditGroupsInternal1 (Ale_AlertType_t AlertTypeGroupTypes,
@@ -250,10 +250,10 @@ static void Grp_ReqEditGroupsInternal1 (Ale_AlertType_t AlertTypeGroupTypes,
    Grp_EditGroupTypes ();
 
    /***** End groups types section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** Start groups section *****/
-   Lay_StartSection (Grp_GROUPS_SECTION_ID);
+   HTM_SECTION_Begin (Grp_GROUPS_SECTION_ID);
   }
 
 static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
@@ -269,7 +269,7 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,
       Grp_EditGroups ();
 
    /***** End groups section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** Free list of classrooms in this centre *****/
    Cla_FreeListClassrooms ();
@@ -2469,7 +2469,7 @@ static void Grp_PutFormToCreateGroupType (void)
    extern const char *Txt_Create_type_of_group;
 
    /***** Begin form *****/
-   Lay_StartSection (Grp_NEW_GROUP_TYPE_SECTION_ID);
+   HTM_SECTION_Begin (Grp_NEW_GROUP_TYPE_SECTION_ID);
    Frm_StartFormAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
    /***** Start box *****/
@@ -2572,7 +2572,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** End form *****/
    Frm_EndForm ();
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/
@@ -2592,7 +2592,7 @@ static void Grp_PutFormToCreateGroup (void)
    Rol_Role_t Role;
 
    /***** Begin form *****/
-   Lay_StartSection (Grp_NEW_GROUP_SECTION_ID);
+   HTM_SECTION_Begin (Grp_NEW_GROUP_SECTION_ID);
    Frm_StartFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
    /***** Start box and table *****/
@@ -2710,7 +2710,7 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** End form *****/
    Frm_EndForm ();
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/

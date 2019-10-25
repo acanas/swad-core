@@ -1153,7 +1153,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
    char StrRecordWidth[10 + 1];
 
    /***** Start section *****/
-   Lay_StartSection (Mai_EMAIL_SECTION_ID);
+   HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
    /***** Start box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
@@ -1171,7 +1171,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
    Box_BoxEnd ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/
@@ -1185,7 +1185,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    char StrRecordWidth[10 + 1];
 
    /***** Start section *****/
-   Lay_StartSection (Mai_EMAIL_SECTION_ID);
+   HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
    /***** Start box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
@@ -1204,7 +1204,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    Box_BoxEnd ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/

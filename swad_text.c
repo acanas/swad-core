@@ -4393,6 +4393,27 @@ const char *Txt_Configure =
 	"Configurar";
 #endif
 
+const char *Txt_Configure_projects =
+#if   L==1	// ca
+	"Configurar projectes";
+#elif L==2	// de
+	"Konfigurieren Projekte";
+#elif L==3	// en
+	"Configure projects";
+#elif L==4	// es
+	"Configurar proyectos";
+#elif L==5	// fr
+	"Configurer projets";
+#elif L==6	// gn
+	"Configurar proyectos";	// Okoteve traducción
+#elif L==7	// it
+	"Configurare progetti";
+#elif L==8	// pl
+	"Projekty konfiguracja";
+#elif L==9	// pt
+	"Configurar projetos";
+#endif
+
 const char *Txt_Configure_tests =
 #if   L==1	// ca
 	"Configurar tests";
@@ -4409,7 +4430,7 @@ const char *Txt_Configure_tests =
 #elif L==7	// it
 	"Configurare test";
 #elif L==8	// pl
-	"Test Konfiguracja";
+	"Test konfiguracja";
 #elif L==9	// pt
 	"Configurar testes";
 #endif
@@ -9833,44 +9854,44 @@ const char *Txt_Edit_rich_text =
 
 const char *Txt_Editable =
 #if   L==1	// ca
-	"Editable";
+	"Editables";
 #elif L==2	// de
-	"Bearbeitbar";
+	"Bearbeitbare";
 #elif L==3	// en
 	"Editable";
 #elif L==4	// es
-	"Editable";
+	"Editables";
 #elif L==5	// fr
-	"&Eacute;ditable";
+	"&Eacute;ditables";
 #elif L==6	// gn
-	"Editable";		// Okoteve traducción
+	"Editables";		// Okoteve traducción
 #elif L==7	// it
-	"Modificabile";
+	"Modificabili";
 #elif L==8	// pl
 	"Edytowalne";
 #elif L==9	// pt
-	"Edit&aacute;vel";
+	"Edit&aacute;veis";
 #endif
 
 const char *Txt_Editable_by_non_editing_teachers =
 #if   L==1	// ca
-	"Editable per professors no editors";
+	"Editables per professors no editors";
 #elif L==2	// de
-	"Bearbeitbar von nicht bearbeitenden Lehrern";
+	"Bearbeitbare von nicht bearbeitenden Lehrern";
 #elif L==3	// en
 	"Editable by non-editing teachers";
 #elif L==4	// es
-	"Editable por profesores no editores";
+	"Editables por profesores no editores";
 #elif L==5	// fr
-	"Editable par des enseignants non-&eacute;diteurs";
+	"&Eacute;ditables par des enseignants non-&eacute;diteurs";
 #elif L==6	// gn
-	"Editable por profesores no editores";		// Okoteve traducción
+	"Editables por profesores no editores";		// Okoteve traducción
 #elif L==7	// it
-	"Modificabile da professori non-editing";
+	"Modificabili da professori non-editing";
 #elif L==8	// pl
 	"Edytowalne przez nauczycieli, kt&oacute;rzy nie dokonali edycji";
 #elif L==9	// pt
-	"Edit&aacute;vel por professores n&atilde;o editores";
+	"Edit&aacute;veis por professores n&atilde;o editores";
 #endif
 
 const char *Txt_eg_A_B =

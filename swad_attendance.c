@@ -437,11 +437,11 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       HTM_TD_Begin ("class=\"LT\"");
    else
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Lay_StartArticle (Anchor);
+   HTM_ARTICLE_Begin (Anchor);
    Att_PutLinkAttEvent (Att,Txt_View_event,Att->Title,
 	                Att->Hidden ? "ASG_TITLE_LIGHT" :
 	                              "ASG_TITLE");
-   Lay_EndArticle ();
+   HTM_ARTICLE_End ();
    HTM_TD_End ();
 
    /* Number of students in this event */
@@ -1953,7 +1953,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 	                              Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
-   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
@@ -2014,7 +2014,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** End section with user list *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -3219,7 +3219,7 @@ static void Att_ListUsrsAttendanceTable (Att_TypeOfView_t TypeOfView,
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Start section with attendance table *****/
-   Lay_StartSection (Att_ATTENDANCE_TABLE_ID);
+   HTM_SECTION_Begin (Att_ATTENDANCE_TABLE_ID);
 
    /***** Begin table *****/
    HTM_TABLE_BeginCenterPadding (2);
@@ -3280,7 +3280,7 @@ static void Att_ListUsrsAttendanceTable (Att_TypeOfView_t TypeOfView,
       Att_PutButtonToShowDetails ();
 
    /***** End section with attendance table *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -3448,7 +3448,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumUsrsInList,
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Start section with attendance details *****/
-   Lay_StartSection (Att_ATTENDANCE_DETAILS_ID);
+   HTM_SECTION_Begin (Att_ATTENDANCE_DETAILS_ID);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Details,NULL,
@@ -3472,7 +3472,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumUsrsInList,
    Box_EndBoxTable ();
 
    /***** End section with attendance details *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);

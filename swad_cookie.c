@@ -65,7 +65,7 @@ void Coo_EditMyPrefsOnCookies (void)
    extern const char *Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites;
 
    /***** Start section with preferences about cookies *****/
-   Lay_StartSection (Coo_COOKIES_ID);
+   HTM_SECTION_Begin (Coo_COOKIES_ID);
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_Cookies,Coo_PutIconsCookies,
@@ -98,7 +98,7 @@ void Coo_EditMyPrefsOnCookies (void)
    Box_EndBoxTable ();
 
    /***** End section with preferences about cookies *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/

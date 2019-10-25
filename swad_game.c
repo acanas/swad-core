@@ -449,7 +449,7 @@ void Gam_ShowOneGame (long GamCod,
 
    /* Game title */
    Gam_SetParamCurrentGamCod (GamCod);	// Used to pass parameter
-   Lay_StartArticle (Anchor);
+   HTM_ARTICLE_Begin (Anchor);
    Frm_StartForm (ActSeeGam);
    Gam_PutParams ();
    Frm_LinkFormSubmit (Txt_View_game,
@@ -458,7 +458,7 @@ void Gam_ShowOneGame (long GamCod,
    fprintf (Gbl.F.Out,"%s</a>",
             Game.Title);
    Frm_EndForm ();
-   Lay_EndArticle ();
+   HTM_ARTICLE_End ();
 
    /* Number of questions */
    HTM_DIV_Begin ("class=\"%s\"",Game.Hidden ? "ASG_GRP_LIGHT" :
@@ -915,7 +915,7 @@ void Gam_AskRemGame (void)
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show question and button to remove game *****/
    Gam_SetParamCurrentGamCod (Game.GamCod);	// Used to pass parameter
@@ -944,7 +944,7 @@ void Gam_RemoveGame (void)
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Remove game from all tables *****/
    Gam_RemoveGameFromAllTables (Game.GamCod);
@@ -1016,7 +1016,7 @@ void Gam_HideGame (void)
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Hide game *****/
    DB_QueryUPDATE ("can not hide game",
@@ -1042,7 +1042,7 @@ void Gam_UnhideGame (void)
    /***** Get data of the game from database *****/
    Gam_GetDataOfGameByCod (&Game);
    if (!Gam_CheckIfICanEditGames ())
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show game *****/
    DB_QueryUPDATE ("can not show game",
@@ -1079,7 +1079,7 @@ void Gam_RequestCreatOrEditGame (void)
 
    /***** Check if I can create new games *****/
    if (!Gam_CheckIfICanEditGames ())
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Get parameters *****/
    Game.GamCod = Gam_GetParams ();
@@ -1215,7 +1215,7 @@ void Gam_RecFormGame (void)
 	 OldGame.GamCod = NewGame.GamCod;
 	 Gam_GetDataOfGameByCod (&OldGame);
 	 if (!Gam_CheckIfICanEditGames ())
-            Act_NoPermissionExit ();
+            Lay_NoPermissionExit ();
 	}
 
       /***** Get game title *****/
@@ -1256,7 +1256,7 @@ void Gam_RecFormGame (void)
       Gam_PutFormsEditionGame (&NewGame,false);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show games again *****/
    Gam_ListAllGames ();
@@ -1358,7 +1358,7 @@ void Gam_RequestNewQuestion (void)
       Tst_ShowFormAskSelectTstsForGame ();
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -1387,7 +1387,7 @@ void Gam_ListTstQuestionsToSelect (void)
       Tst_ListQuestionsToSelect ();
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -1874,7 +1874,7 @@ void Gam_AddTstQuestionsToGame (void)
       Gam_FreeListsSelectedQuestions ();
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -1973,7 +1973,7 @@ void Gam_RequestRemoveQst (void)
 			      QstInd);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -2031,7 +2031,7 @@ void Gam_RemoveQst (void)
       Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -2080,7 +2080,7 @@ void Gam_MoveUpQst (void)
 	 Ale_ShowAlert (Ale_WARNING,Txt_Movement_not_allowed);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,
@@ -2139,7 +2139,7 @@ void Gam_MoveDownQst (void)
 	 Ale_ShowAlert (Ale_WARNING,Txt_This_game_has_no_questions);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show current game *****/
    Gam_ShowOneGame (Game.GamCod,

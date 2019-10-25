@@ -963,7 +963,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    ReadTimeUTC = For_GetThrReadTime (Gbl.Forum.ForumSelected.ThrCod);
 
    /***** Show alert after action *****/
-   Lay_StartSection (For_FORUM_POSTS_SECTION_ID);
+   HTM_SECTION_Begin (For_FORUM_POSTS_SECTION_ID);
    Ale_ShowAlerts (For_FORUM_POSTS_SECTION_ID);	// Possible pending alerts
    if (Message)
       if (Message[0])
@@ -1096,13 +1096,13 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Form to write a new post in the thread *****/
-   Lay_StartSection (For_NEW_POST_SECTION_ID);
+   HTM_SECTION_Begin (For_NEW_POST_SECTION_ID);
    For_WriteFormForumPst (true,LastSubject);
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/
@@ -2536,7 +2536,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Show alert after action *****/
-   Lay_StartSection (For_FORUM_THREADS_SECTION_ID);
+   HTM_SECTION_Begin (For_FORUM_THREADS_SECTION_ID);
    if (Message)
       if (Message[0])
          Ale_ShowAlert (AlertType,Message);
@@ -2613,13 +2613,13 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
      }
 
    /***** Put a form to write the first post of a new thread *****/
-   Lay_StartSection (For_NEW_THREAD_SECTION_ID);
+   HTM_SECTION_Begin (For_NEW_THREAD_SECTION_ID);
    For_WriteFormForumPst (false,NULL);
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** End box with threads of this forum ****/
    Box_BoxEnd ();
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/
@@ -3902,7 +3902,7 @@ static void For_RestrictAccess (void)
 	 break;
      }
    if (!ICanSeeForum)
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -4161,11 +4161,11 @@ void For_RemovePost (void)
    /* Check if I am the author of the message */
    ItsMe = Usr_ItsMe (UsrDat.UsrCod);
    if (!ItsMe)
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /* Check if the message is the last message in the thread */
    if (Gbl.Forum.ForumSelected.PstCod != For_GetLastPstCod (Gbl.Forum.ForumSelected.ThrCod))
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Remove the post *****/
    ThreadDeleted = For_RemoveForumPst (Gbl.Forum.ForumSelected.PstCod,Media.MedCod);
@@ -4226,7 +4226,7 @@ void For_RequestRemoveThread (void)
    For_ShowForumList ();
 
    /***** Show question and button to remove the thread *****/
-   Lay_StartSection (For_REMOVE_THREAD_SECTION_ID);
+   HTM_SECTION_Begin (For_REMOVE_THREAD_SECTION_ID);
    if (Subject[0])
       Ale_ShowAlertAndButton (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
 			      For_FORUM_THREADS_SECTION_ID,NULL,
@@ -4240,7 +4240,7 @@ void For_RequestRemoveThread (void)
 			      For_PutAllHiddenParamsRemThread,
 			      Btn_REMOVE_BUTTON,Txt_Remove_thread,
 			      Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** Show the threads again *****/
    For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
@@ -4297,7 +4297,7 @@ void For_RemoveThread (void)
 	                                            Ale_SUCCESS,Txt_Thread_removed);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/

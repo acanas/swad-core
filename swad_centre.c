@@ -2503,7 +2503,7 @@ static void Ctr_PutFormToCreateCentre (void)
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
       Frm_StartForm (ActReqCtr);
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_centre,NULL,

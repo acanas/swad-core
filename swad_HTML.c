@@ -497,3 +497,45 @@ void HTM_DIV_End (void)
 
    HTM_TD_NestingLevel--;
   }
+
+/*****************************************************************************/
+/******************************** Main zone **********************************/
+/*****************************************************************************/
+
+void HTM_MAIN_Begin (const char *Class)
+  {
+   fprintf (Gbl.F.Out,"<main class=\"%s\">",Class);
+  }
+
+void HTM_MAIN_End (void)
+  {
+   fprintf (Gbl.F.Out,"</main>");
+  }
+
+/*****************************************************************************/
+/********************************* Articles **********************************/
+/*****************************************************************************/
+
+void HTM_ARTICLE_Begin (const char *ArticleId)
+  {
+   fprintf (Gbl.F.Out,"<article id=\"%s\">",ArticleId);
+  }
+
+void HTM_ARTICLE_End (void)
+  {
+   fprintf (Gbl.F.Out,"</article>");
+  }
+
+/*****************************************************************************/
+/********************************* Sections **********************************/
+/*****************************************************************************/
+
+void HTM_SECTION_Begin (const char *SectionId)
+  {
+   fprintf (Gbl.F.Out,"<section id=\"%s\">",SectionId);
+  }
+
+void HTM_SECTION_End (void)
+  {
+   fprintf (Gbl.F.Out,"</section>");
+  }

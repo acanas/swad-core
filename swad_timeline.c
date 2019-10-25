@@ -2412,14 +2412,14 @@ void TL_ReceivePostUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (TL_TIMELINE_SECTION_ID);
+   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
    /***** Receive and store post, and
           write updated timeline after publication (user) *****/
    TL_ReceivePostGbl ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 void TL_ReceivePostGbl (void)
@@ -3121,14 +3121,14 @@ void TL_ReceiveCommentUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (TL_TIMELINE_SECTION_ID);
+   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
    /***** Receive comment in a note
           and write updated timeline after commenting (user) *****/
    TL_ReceiveCommentGbl ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 void TL_ReceiveCommentGbl (void)
@@ -3771,7 +3771,7 @@ void TL_RequestRemNoteUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (TL_TIMELINE_SECTION_ID);
+   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
    /***** Request the removal of note *****/
    TL_RequestRemovalNote ();
@@ -3780,7 +3780,7 @@ void TL_RequestRemNoteUsr (void)
    TL_ShowTimelineUsr ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 void TL_RequestRemNoteGbl (void)
@@ -3860,7 +3860,7 @@ void TL_RemoveNoteUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (TL_TIMELINE_SECTION_ID);
+   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
    /***** Remove a note *****/
    TL_RemoveNote ();
@@ -3869,7 +3869,7 @@ void TL_RemoveNoteUsr (void)
    TL_ShowTimelineUsr ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 void TL_RemoveNoteGbl (void)
@@ -4078,7 +4078,7 @@ void TL_RequestRemComUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (TL_TIMELINE_SECTION_ID);
+   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
    /***** Request the removal of comment in note *****/
    TL_RequestRemovalComment ();
@@ -4087,7 +4087,7 @@ void TL_RequestRemComUsr (void)
    TL_ShowTimelineUsr ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 void TL_RequestRemComGbl (void)
@@ -4173,7 +4173,7 @@ void TL_RemoveComUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   Lay_StartSection (TL_TIMELINE_SECTION_ID);
+   HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
 
    /***** Remove a comment *****/
    TL_RemoveComment ();
@@ -4182,7 +4182,7 @@ void TL_RemoveComUsr (void)
    TL_ShowTimelineUsr ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 void TL_RemoveComGbl (void)

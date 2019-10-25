@@ -1155,7 +1155,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 HTM_TD_Begin ("class=\"%s LT\"",ClassTitle);
 	 break;
      }
-   Lay_StartArticle (Anchor);
+   HTM_ARTICLE_Begin (Anchor);
    if (Prj->Title[0])
      {
       if (ICanViewProjectFiles)
@@ -1171,7 +1171,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
      }
    if (Faults.WrongTitle)
       Prj_PutWarningIcon ();
-   Lay_EndArticle ();
+   HTM_ARTICLE_End ();
    HTM_TD_End ();
 
    /* Department */
@@ -3028,7 +3028,7 @@ void Prj_ReqRemProject (void)
 	                      Prj.Title);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3091,7 +3091,7 @@ void Prj_RemoveProject (void)
 	             Prj.Title);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3126,7 +3126,7 @@ void Prj_HideProject (void)
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
 	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3161,7 +3161,7 @@ void Prj_ShowProject (void)
 		      " WHERE PrjCod=%ld AND CrsCod=%ld",
 	              Prj.PrjCod,Gbl.Hierarchy.Crs.CrsCod);
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3612,7 +3612,7 @@ void Prj_RecFormProject (void)
       Prj_RequestCreatOrEditPrj (Prj.PrjCod);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3733,7 +3733,7 @@ void Prj_ShowFormConfig (void)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
-   extern const char *Txt_Projects;
+   extern const char *Txt_Configure_projects;
    extern const char *Txt_Editable;
    extern const char *Txt_Editable_by_non_editing_teachers;
    extern const char *Txt_Save_changes;
@@ -3742,7 +3742,7 @@ void Prj_ShowFormConfig (void)
    Prj_GetConfigPrjFromDB ();
 
    /***** Start box *****/
-   Box_BoxBegin (NULL,Txt_Projects,Prj_PutIconsListProjects,
+   Box_BoxBegin (NULL,Txt_Configure_projects,Prj_PutIconsListProjects,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -3909,7 +3909,7 @@ void Prj_ReqLockAllProjectsEdition (void)
       Prj_FreeListProjects ();
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjectsInCurrentPage ();
@@ -3943,7 +3943,7 @@ void Prj_ReqUnlockAllProjectsEdition (void)
       Prj_FreeListProjects ();
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjectsInCurrentPage ();
@@ -3980,7 +3980,7 @@ void Prj_LockAllProjectsEdition (void)
       Prj_FreeListProjects ();
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjectsInCurrentPage ();
@@ -4013,7 +4013,7 @@ void Prj_UnlockAllProjectsEdition (void)
       Prj_FreeListProjects ();
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show projects again *****/
    Prj_ShowProjectsInCurrentPage ();
@@ -4097,7 +4097,7 @@ void Prj_LockProjectEdition (void)
       Prj_FormLockUnlock (&Prj);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -4140,7 +4140,7 @@ void Prj_UnlockProjectEdition (void)
       Prj_FormLockUnlock (&Prj);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);

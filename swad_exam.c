@@ -1005,9 +1005,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Build anchor string *****/
    Frm_SetAnchorStr (ExaCod,&Anchor);
 
-   /***** Start article *****/
+   /***** Begin article *****/
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
-      Lay_StartArticle (Anchor);
+      HTM_ARTICLE_Begin (Anchor);
 
    /***** Start box *****/
    Width = "625px";
@@ -1496,7 +1496,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    /***** End article *****/
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
-      Lay_EndArticle ();
+      HTM_ARTICLE_End ();
 
    /***** Free anchor string *****/
    Frm_FreeAnchorStr (Anchor);

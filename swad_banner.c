@@ -439,9 +439,9 @@ static void Ban_ListBannersForEdition (void)
       HTM_TD_Begin ("class=\"%s RM\"",
 		    Ban->Hidden ? "DAT_LIGHT" :
 				  "DAT");
-      Lay_StartArticle (Anchor);
+      HTM_ARTICLE_Begin (Anchor);
       fprintf (Gbl.F.Out,"%ld",Ban->BanCod);
-      Lay_EndArticle ();
+      HTM_ARTICLE_End ();
       HTM_TD_End ();
 
       /* Banner short name */

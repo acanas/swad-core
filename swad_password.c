@@ -655,7 +655,7 @@ void Pwd_ShowFormChgMyPwd (void)
    bool IHaveAPasswordInDB = (bool) Gbl.Usrs.Me.UsrDat.Password[0];
 
    /***** Start section *****/
-   Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
+   HTM_SECTION_Begin (Pwd_PASSWORD_SECTION_ID);
 
    /***** Begin form *****/
    Frm_StartFormAnchor (ActChgMyPwd,Pwd_PASSWORD_SECTION_ID);
@@ -724,7 +724,7 @@ void Pwd_ShowFormChgMyPwd (void)
    Frm_EndForm ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/
@@ -839,7 +839,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
 		 NULL,Box_NOT_CLOSABLE);
 
    /***** Start section *****/
-   Lay_StartSection (Pwd_PASSWORD_SECTION_ID);
+   HTM_SECTION_Begin (Pwd_PASSWORD_SECTION_ID);
 
    /***** Show possible alerts *****/
    Ale_ShowAlerts (Pwd_PASSWORD_SECTION_ID);
@@ -875,7 +875,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    Box_BoxEnd ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/

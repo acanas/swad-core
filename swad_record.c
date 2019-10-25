@@ -1007,7 +1007,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 	 snprintf (RecordSectionId,sizeof (RecordSectionId),
 	           "record_%u",
 		   NumUsr);
-	 Lay_StartSection (RecordSectionId);
+	 HTM_SECTION_Begin (RecordSectionId);
 
 	 if (Gbl.Action.Act == ActPrnRecSevGst &&
 	     NumUsr != 0 &&
@@ -1027,7 +1027,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
          /* End container for this user */
 	 HTM_DIV_End ();
-	 Lay_EndSection ();
+	 HTM_SECTION_End ();
 
 	 NumUsr++;
 	}
@@ -1212,7 +1212,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 	    snprintf (RecordSectionId,sizeof (RecordSectionId),
 		      "record_%u",
 		      NumUsr);
-	    Lay_StartSection (RecordSectionId);
+	    HTM_SECTION_Begin (RecordSectionId);
 
 	    if (Gbl.Action.Act == ActPrnRecSevStd &&
 		NumUsr != 0 &&
@@ -1248,7 +1248,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
             /* End container for this user */
             HTM_DIV_End ();
-            Lay_EndSection ();
+            HTM_SECTION_End ();
 
             NumUsr++;
            }
@@ -1434,7 +1434,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 	    snprintf (RecordSectionId,sizeof (RecordSectionId),
 		      "record_%u",
 		      NumUsr);
-	    Lay_StartSection (RecordSectionId);
+	    HTM_SECTION_Begin (RecordSectionId);
 
 	    if (Gbl.Action.Act == ActPrnRecSevTch &&
 		NumUsr != 0 &&
@@ -1466,7 +1466,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
             /* End container for this user */
             HTM_DIV_End ();
-            Lay_EndSection ();
+            HTM_SECTION_End ();
 
             NumUsr++;
            }
@@ -1701,7 +1701,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       case Rec_CRS_PRINT_SEVERAL_RECORDS:
 		  break;
 	       default:
-		  Act_NoPermissionExit ();
+		  Lay_NoPermissionExit ();
 		  break;
 	      }
 
@@ -1718,7 +1718,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		    }
 	   }
 	 else	// Not me ==> I am a student trying to do something forbidden
-	    Act_NoPermissionExit ();
+	    Lay_NoPermissionExit ();
 	 break;
       case Rol_NET:
 	 break;
@@ -4024,7 +4024,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    char StrRecordWidth[10 + 1];
 
    /***** Start section *****/
-   Lay_StartSection (Rec_MY_INS_CTR_DPT_ID);
+   HTM_SECTION_Begin (Rec_MY_INS_CTR_DPT_ID);
 
    /***** Start box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
@@ -4249,7 +4249,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    Box_EndBoxTable ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/

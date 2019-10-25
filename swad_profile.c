@@ -245,9 +245,9 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 	 if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
 	   {
 	    /* Show timeline */
-	    Lay_StartSection (TL_TIMELINE_SECTION_ID);
+	    HTM_SECTION_Begin (TL_TIMELINE_SECTION_ID);
    	    TL_ShowTimelineUsr ();
-	    Lay_EndSection ();
+	    HTM_SECTION_End ();
 	   }
 	}
 

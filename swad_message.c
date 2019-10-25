@@ -245,7 +245,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	                                    Grp_MY_GROUPS);
 
 	 /***** Start section with user list *****/
-         Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+         HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
 	 if (NumUsrsInCrs)
 	   {
@@ -265,7 +265,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	   }
 
 	 /***** End section with user list *****/
-         Lay_EndSection ();
+         HTM_SECTION_End ();
         }
 
       /***** Get list of users' IDs or nicknames written explicitely *****/

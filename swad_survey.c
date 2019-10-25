@@ -522,7 +522,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       HTM_TD_Begin ("class=\"LT\"");
    else
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
-   Lay_StartArticle (Anchor);
+   HTM_ARTICLE_Begin (Anchor);
    Frm_StartForm (ActSeeSvy);
    Svy_PutParamSvyCod (SvyCod);
    Svy_PutHiddenParamSvyOrder ();
@@ -534,7 +534,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    fprintf (Gbl.F.Out,"%s</a>",
             Svy.Title);
    Frm_EndForm ();
-   Lay_EndArticle ();
+   HTM_ARTICLE_End ();
 
    /* Number of questions and number of distinct users who have already answered this survey */
    HTM_DIV_Begin ("class=\"%s\"",
@@ -1526,7 +1526,7 @@ void Svy_AskRemSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show question and button to remove survey *****/
    Svy_CurrentSvyCod = Svy.SvyCod;
@@ -1559,7 +1559,7 @@ void Svy_RemoveSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Remove all the users in this survey *****/
    DB_QueryDELETE ("can not remove users who are answered a survey",
@@ -1623,7 +1623,7 @@ void Svy_AskResetSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Ask for confirmation of reset *****/
    Ale_ShowAlert (Ale_WARNING,Txt_Do_you_really_want_to_reset_the_survey_X,
@@ -1671,7 +1671,7 @@ void Svy_ResetSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Remove all the users in this survey *****/
    DB_QueryDELETE ("can not remove users who are answered a survey",
@@ -1717,7 +1717,7 @@ void Svy_HideSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Hide survey *****/
    DB_QueryUPDATE ("can not hide survey",
@@ -1752,7 +1752,7 @@ void Svy_UnhideSurvey (void)
    /***** Get data of the survey from database *****/
    Svy_GetDataOfSurveyByCod (&Svy);
    if (!Svy.Status.ICanEdit)
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show survey *****/
    DB_QueryUPDATE ("can not show survey",
@@ -1816,7 +1816,7 @@ void Svy_RequestCreatOrEditSvy (void)
      {
       /***** Put link (form) to create new survey *****/
       if (!Svy_CheckIfICanCreateSvy ())
-         Act_NoPermissionExit ();
+         Lay_NoPermissionExit ();
 
       /* Initialize to empty survey */
       Svy.SvyCod = -1L;
@@ -1841,7 +1841,7 @@ void Svy_RequestCreatOrEditSvy (void)
       /* Get data of the survey from database */
       Svy_GetDataOfSurveyByCod (&Svy);
       if (!Svy.Status.ICanEdit)
-         Act_NoPermissionExit ();
+         Lay_NoPermissionExit ();
 
       /* Get text of the survey from database */
       Svy_GetSurveyTxtFromDB (Svy.SvyCod,Txt);
@@ -2034,7 +2034,7 @@ static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy)
      }
 
    if (!ICanEdit)
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2129,7 +2129,7 @@ void Svy_RecFormSurvey (void)
       OldSvy.SvyCod = NewSvy.SvyCod;
       Svy_GetDataOfSurveyByCod (&OldSvy);
       if (!OldSvy.Status.ICanEdit)
-         Act_NoPermissionExit ();
+         Lay_NoPermissionExit ();
       NewSvy.Scope = OldSvy.Scope;
      }
 

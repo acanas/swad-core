@@ -600,6 +600,18 @@ a:hover						/* Default ==> underlined */
 	background-image:-webkit-linear-gradient(#c86b85 0,#c86b85 54px,white 54px,white 100%);	/* Safari */
 	background-image:linear-gradient(#c86b85 0,#c86b85 54px,white 54px,white 100%);
 	}
+
+
+.TAB_LIST
+	{
+	display:inline-block;
+	list-style-type:none;
+	padding:0;
+	margin:0;
+	text-align:left;
+	vertical-align:middle;
+	}
+
 @media only screen and (max-width: 480px)
 	{	/* For mobile-phones */
 	#tabs
@@ -2211,15 +2223,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 /*********************************** Lists ***********************************/
-.LIST_TABS
-	{
-	display:inline-block;
-	list-style-type:none;
-	padding:0;
-	margin:0;
-	text-align:left;
-	vertical-align:middle;
-	}
 .LIST_LEFT, .LIST_TREE
 	{
 	display:inline-block;

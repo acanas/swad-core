@@ -353,7 +353,7 @@ void Lay_WriteStartOfPage (void)
    Mnu_WriteMenuThisTab ();
 
    /* Start canvas: main zone for actions output */
-   HTM_DIV_Begin ("class=\"MAIN_ZONE_CANVAS\"");
+   HTM_MAIN_Begin ("MAIN_ZONE_CANVAS");
 
    /* If it is mandatory to read any information about course */
    if (Gbl.Crs.Info.ShowMsgMustBeRead)
@@ -402,7 +402,7 @@ static void Lay_WriteEndOfPage (void)
    if (!Gbl.Layout.DivsEndWritten)
      {
       /***** End of central part of main zone *****/
-      HTM_DIV_End ();	// Canvas (main zone to output content of the current action)
+      HTM_MAIN_End ();	// Canvas (main zone to output content of the current action)
       HTM_DIV_End ();	// Layout with horizontal or vertical menu
       HTM_DIV_End ();	// main_zone_central_container
 
@@ -1312,34 +1312,6 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
    if (Text)
       fprintf (Gbl.F.Out," ");	// This space is necessary to enable
 				// jumping to the next line on narrow screens
-  }
-
-/*****************************************************************************/
-/****************************** Start/end section ****************************/
-/*****************************************************************************/
-
-void Lay_StartSection (const char *SectionId)
-  {
-   fprintf (Gbl.F.Out,"<section id=\"%s\">",SectionId);
-  }
-
-void Lay_EndSection (void)
-  {
-   fprintf (Gbl.F.Out,"</section>");
-  }
-
-/*****************************************************************************/
-/****************************** Start/end article ****************************/
-/*****************************************************************************/
-
-void Lay_StartArticle (const char *ArticleId)
-  {
-   fprintf (Gbl.F.Out,"<article id=\"%s\">",ArticleId);
-  }
-
-void Lay_EndArticle (void)
-  {
-   fprintf (Gbl.F.Out,"</article>");
   }
 
 /*****************************************************************************/

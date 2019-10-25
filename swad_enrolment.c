@@ -640,7 +640,7 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
 	    Enr_ReqAnotherUsrIDToRegisterRemove (Role);
 	 break;
       default:
-	 Act_NoPermissionExit ();
+	 Lay_NoPermissionExit ();
 	 break;
      }
   }
@@ -1077,13 +1077,13 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       case Rol_STD:
 	 if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)		// Can I register/remove students?
 	    // No, I can not
-	    Act_NoPermissionExit ();
+	    Lay_NoPermissionExit ();
 	 break;
       case Rol_NET:
       case Rol_TCH:
 	 if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)	// Can I register/remove teachers?
 	    // No, I can not
-	    Act_NoPermissionExit ();
+	    Lay_NoPermissionExit ();
 	 break;
       default:
 	 Rol_WrongRoleExit ();
@@ -1140,7 +1140,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	    WhatToDo.RegisterUsrs = false;
 	   }
 	 else
-	    Act_NoPermissionExit ();
+	    Lay_NoPermissionExit ();
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong registering / removing specification.");
@@ -2210,7 +2210,7 @@ void Enr_ShowEnrolmentRequests (void)
 			                      (1 << Rol_TCH));
 	 break;
       default:
-	 Act_NoPermissionExit ();
+	 Lay_NoPermissionExit ();
 	 break;
      }
   }
@@ -2421,7 +2421,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Act_NoPermissionExit ();
+               Lay_NoPermissionExit ();
                break;
            }
          break;
@@ -2543,7 +2543,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Act_NoPermissionExit ();
+               Lay_NoPermissionExit ();
                break;
            }
          break;
@@ -2639,7 +2639,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Act_NoPermissionExit ();
+               Lay_NoPermissionExit ();
                break;
            }
          break;
@@ -2711,7 +2711,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Act_NoPermissionExit ();
+               Lay_NoPermissionExit ();
                break;
            }
          break;
@@ -2761,7 +2761,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Act_NoPermissionExit ();
+               Lay_NoPermissionExit ();
                break;
            }
          break;
@@ -2786,7 +2786,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 					 RolesSelected);
                break;
             default:
-               Act_NoPermissionExit ();
+               Lay_NoPermissionExit ();
                break;
            }
          break;

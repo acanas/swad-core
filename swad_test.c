@@ -7449,7 +7449,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
 	                              Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
-   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
      {
@@ -7498,7 +7498,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End section with user list *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -8096,7 +8096,7 @@ void Tst_ShowOneTstResult (void)
       if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	 Lay_ShowErrorAndExit (Txt_The_user_does_not_exist);
       if (!Usr_CheckIfICanViewTst (&Gbl.Usrs.Other.UsrDat))
-         Act_NoPermissionExit ();
+         Lay_NoPermissionExit ();
 
       /* User */
       HTM_TR_Begin (NULL);
@@ -8206,7 +8206,7 @@ void Tst_ShowOneTstResult (void)
       Box_BoxEnd ();
      }
    else	// I am not allowed to view this test result
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/

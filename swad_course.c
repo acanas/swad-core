@@ -1698,7 +1698,7 @@ static void Crs_PutFormToCreateCourse (void)
    else if (Gbl.Usrs.Me.Role.Max >= Rol_GST)
       Frm_StartForm (ActReqCrs);
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Start box and table *****/
    Box_StartBoxTable (NULL,Txt_New_course,NULL,
@@ -2007,7 +2007,7 @@ void Crs_RemoveCourse (void)
         }
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2379,7 +2379,7 @@ void Crs_ChangeInsCrsCod (void)
                           Crs_EditingCrs->ShrtName);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2574,7 +2574,7 @@ void Crs_ChangeCrsYear (void)
 			  NewYear);
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/
@@ -2727,7 +2727,7 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
         }
      }
    else
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
   }
 
 /*****************************************************************************/

@@ -1904,7 +1904,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Ntf_NotifyEvent_t NotifyEvent;
 
    /***** Start section with settings on privacy *****/
-   Lay_StartSection (Ntf_NOTIFICATIONS_ID);
+   HTM_SECTION_Begin (Ntf_NOTIFICATIONS_ID);
 
    /***** Start box *****/
    Box_BoxBegin (NULL,Txt_Notifications,Ntf_PutIconsNotif,
@@ -1971,7 +1971,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Box_BoxEnd ();
 
    /***** End section with settings about notifications *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/

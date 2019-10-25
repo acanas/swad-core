@@ -514,7 +514,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
    char StrRecordWidth[10 + 1];
 
    /***** Start section *****/
-   Lay_StartSection (ID_ID_SECTION_ID);
+   HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
    /***** Start box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
@@ -532,7 +532,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
    Box_BoxEnd ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/
@@ -546,7 +546,7 @@ void ID_ShowFormChangeOtherUsrID (void)
    char StrRecordWidth[10 + 1];
 
    /***** Start section *****/
-   Lay_StartSection (ID_ID_SECTION_ID);
+   HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
    /***** Start box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
@@ -564,7 +564,7 @@ void ID_ShowFormChangeOtherUsrID (void)
    Box_BoxEnd ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/

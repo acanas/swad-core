@@ -3344,7 +3344,7 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
       else if (!Grp_GetIfIBelongToGrp (GrpDat->GrpCod))
         {
          if (AbortOnError)
-            Act_NoPermissionExit ();
+            Lay_NoPermissionExit ();
          GrpDat->GrpCod = -1L;
         }
      }
@@ -3647,7 +3647,7 @@ static void Brw_ShowFileBrowser (void)
    snprintf (FileBrowserSectionId,sizeof (FileBrowserSectionId),
 	     "file_browser_%u",
 	     Gbl.FileBrowser.Id);
-   Lay_StartSection (FileBrowserSectionId);
+   HTM_SECTION_Begin (FileBrowserSectionId);
    Box_BoxBegin ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
                  Brw_PutIconsFileBrowser,
                  Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
@@ -3680,7 +3680,7 @@ static void Brw_ShowFileBrowser (void)
 
    /***** End box *****/
    Box_BoxEnd ();
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/
@@ -10277,7 +10277,7 @@ void Brw_ChgFileMetadata (void)
      }
    else
       /***** Write error message and exit *****/
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();

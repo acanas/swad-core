@@ -65,4 +65,13 @@ void HTM_TD_ColouredEmpty (unsigned NumColumns);
 void HTM_DIV_Begin (const char *fmt,...);
 void HTM_DIV_End (void);
 
+void HTM_MAIN_Begin (const char *Class);
+void HTM_MAIN_End (void);
+
+void HTM_ARTICLE_Begin (const char *ArticleId);
+void HTM_ARTICLE_End (void);
+
+void HTM_SECTION_Begin (const char *SectionId);
+void HTM_SECTION_End (void);
+
 #endif

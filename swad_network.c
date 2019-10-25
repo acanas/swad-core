@@ -280,7 +280,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    char StrRecordWidth[10 + 1];
 
    /***** Start section *****/
-   Lay_StartSection (Net_MY_WEBS_ID);
+   HTM_SECTION_Begin (Net_MY_WEBS_ID);
 
    /***** Start box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
@@ -363,7 +363,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    Box_BoxEnd ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/

@@ -6194,7 +6194,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
 	                              Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
-   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
      {
@@ -6233,7 +6233,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End section with user list *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -7820,7 +7820,7 @@ void Usr_SeeGuests (void)
      }
 
    /***** Start section with user list *****/
-   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
@@ -7880,7 +7880,7 @@ void Usr_SeeGuests (void)
       Usr_ShowWarningNoUsersFound (Rol_GST);
 
    /***** End section with user list *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -7973,7 +7973,7 @@ void Usr_SeeStudents (void)
 	                                 Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
-   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
@@ -8041,7 +8041,7 @@ void Usr_SeeStudents (void)
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** End section with user list *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -8142,7 +8142,7 @@ void Usr_SeeTeachers (void)
 	                                 Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
-   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (NumUsrs)
      {
@@ -8221,7 +8221,7 @@ void Usr_SeeTeachers (void)
       Usr_ShowWarningNoUsersFound (Rol_TCH);
 
    /***** End section with user list *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();

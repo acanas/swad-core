@@ -147,7 +147,7 @@ int main (void)
 
       /***** Check if the user have permission to execute the action *****/
       if (!Act_CheckIfIHavePermissionToExecuteAction (Gbl.Action.Act))
-	 Act_NoPermissionExit ();
+	 Lay_NoPermissionExit ();
 
       /***** Update most frequently used actions *****/
       MFU_UpdateMFUActions ();

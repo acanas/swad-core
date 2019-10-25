@@ -515,7 +515,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Start section *****/
-   Lay_StartSection (Fol_FOLLOW_SECTION_ID);
+   HTM_SECTION_Begin (Fol_FOLLOW_SECTION_ID);
 
    /***** Followed users *****/
    HTM_DIV_Begin ("id=\"following_side\"");
@@ -588,7 +588,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    HTM_DIV_End ();
 
    /***** End section *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/

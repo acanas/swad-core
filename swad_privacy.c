@@ -88,7 +88,7 @@ void Pri_EditMyPrivacy (void)
    extern const char *Txt_Timeline;
 
    /***** Start section with settings on privacy *****/
-   Lay_StartSection (Pri_PRIVACY_ID);
+   HTM_SECTION_Begin (Pri_PRIVACY_ID);
 
    /***** If any of my settings about privacy is unknown *****/
    if (Gbl.Usrs.Me.UsrDat.PhotoVisibility == Pri_VISIBILITY_UNKNOWN ||
@@ -128,7 +128,7 @@ void Pri_EditMyPrivacy (void)
    Box_EndBoxTable ();
 
    /***** End section with settings on privacy *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/

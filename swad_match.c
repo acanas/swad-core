@@ -792,7 +792,7 @@ void Mch_ToggleVisibilResultsMchUsr (void)
 
    /***** Check if I have permission to change visibility *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Toggle visibility of match results *****/
    Match.Status.ShowUsrResults = !Match.Status.ShowUsrResults;
@@ -955,7 +955,7 @@ void Mch_RemoveMatch (void)
 
    /***** Check if I can remove this match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Remove the match from all database tables *****/
    Mch_RemoveMatchFromAllTables (Match.MchCod);
@@ -1185,7 +1185,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    extern const char *Txt_Play;
 
    /***** Start section for a new match *****/
-   Lay_StartSection (Mch_NEW_MATCH_SECTION_ID);
+   HTM_SECTION_Begin (Mch_NEW_MATCH_SECTION_ID);
 
    /***** Begin form *****/
    Frm_StartForm (ActNewMch);
@@ -1234,7 +1234,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    Frm_EndForm ();
 
    /***** End section for a new match *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
   }
 
 /*****************************************************************************/
@@ -1344,7 +1344,7 @@ void Mch_ResumeMatch (void)
 
    /***** Check if I have permission to resume match *****/
    if (!Mch_CheckIfICanEditThisMatch (&Match))
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Update match status in database *****/
    Mch_UpdateMatchStatusInDB (&Match);
@@ -2043,7 +2043,7 @@ static void Mch_ShowMatchStatusForStd (struct Match *Match)
    /***** Can I play this match? *****/
    ICanPlayThisMatchBasedOnGrps = Mch_CheckIfICanPlayThisMatchBasedOnGrps (Match->MchCod);
    if (!ICanPlayThisMatchBasedOnGrps)
-      Act_NoPermissionExit ();
+      Lay_NoPermissionExit ();
 
    /***** Left column *****/
    Mch_ShowLeftColumnStd (Match);

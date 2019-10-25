@@ -349,7 +349,7 @@ void Sta_AskShowCrsHits (void)
 	                              Grp_MY_GROUPS);
 
    /***** Start section with user list *****/
-   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
      {
@@ -484,7 +484,7 @@ void Sta_AskShowCrsHits (void)
       Ale_ShowAlert (Ale_WARNING,Txt_No_teachers_or_students_found);
 
    /***** End section with user list *****/
-   Lay_EndSection ();
+   HTM_SECTION_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -860,7 +860,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 Sta_AskShowGblHits ();
 
 	 /***** Start results section *****/
-	 Lay_StartSection (Sta_STAT_RESULTS_SECTION_ID);
+	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
 
 	 /***** Check selection *****/
 	 if ((Gbl.Stat.Role == Sta_ROLE_ALL_USRS ||
@@ -902,7 +902,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 Sta_AskShowCrsHits ();
 
 	 /***** Start results section *****/
-	 Lay_StartSection (Sta_STAT_RESULTS_SECTION_ID);
+	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
 
 	 /***** Check selection *****/
 	 if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// Error: there are no users selected
@@ -1476,7 +1476,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
       /* End box and section */
       Box_BoxEnd ();
-      Lay_EndSection ();
+      HTM_SECTION_End ();
      }
 
    /***** Free structure that stores the query result *****/
