@@ -4170,6 +4170,11 @@ void Prj_RemoveCrsProjects (long CrsCod)
    /***** Flush cache *****/
    Prj_FlushCacheMyRolesInProject ();
 
+   /***** Remove configuration of projects in the course *****/
+   DB_QueryDELETE ("can not remove configuration of projects of a course",
+		   "DELETE FROM prj_config WHERE CrsCod=%ld",
+		   CrsCod);
+
    /***** Remove projects *****/
    DB_QueryDELETE ("can not remove all the projects of a course",
 		   "DELETE FROM projects WHERE CrsCod=%ld",
