@@ -312,10 +312,10 @@ static void Deg_Configuration (bool PrintView)
 
    /***** Start box *****/
    if (PrintView)
-      Box_StartBox (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_StartBox (NULL,NULL,Deg_PutIconsToPrintAndUpload,
+      Box_BoxBegin (NULL,NULL,Deg_PutIconsToPrintAndUpload,
 		    Hlp_DEGREE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
@@ -553,7 +553,7 @@ static void Deg_Configuration (bool PrintView)
    HTM_TABLE_End ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1157,7 +1157,7 @@ static void Deg_ListDegrees (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Degrees_of_CENTRE_X,
 	     Gbl.Hierarchy.Ctr.ShrtName);
-   Box_StartBox (NULL,Gbl.Title,Deg_PutIconsListingDegrees,
+   Box_BoxBegin (NULL,Gbl.Title,Deg_PutIconsListingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
    if (Gbl.Hierarchy.Ctr.Degs.Num)	// There are degrees in the current centre
@@ -1188,7 +1188,7 @@ static void Deg_ListDegrees (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1343,7 +1343,7 @@ static void Deg_EditDegreesInternal (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Degrees_of_CENTRE_X,
              Gbl.Hierarchy.Ctr.ShrtName);
-   Box_StartBox (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
+   Box_BoxBegin (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
                  Hlp_CENTRE_Degrees,Box_NOT_CLOSABLE);
 
    if (Gbl.DegTypes.Num)
@@ -1366,7 +1366,7 @@ static void Deg_EditDegreesInternal (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();

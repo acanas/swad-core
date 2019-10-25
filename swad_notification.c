@@ -374,7 +374,7 @@ void Ntf_ShowMyNotifications (void)
    Mnu_ContextMenuEnd ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
+   Box_BoxBegin (NULL,Txt_Notifications,Ntf_PutIconsNotif,
                  Hlp_START_Notifications,Box_NOT_CLOSABLE);
 
    /***** List my notifications *****/
@@ -609,7 +609,7 @@ void Ntf_ShowMyNotifications (void)
 	                                         Txt_You_have_no_unread_notifications);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1907,7 +1907,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Lay_StartSection (Ntf_NOTIFICATIONS_ID);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Notifications,Ntf_PutIconsNotif,
+   Box_BoxBegin (NULL,Txt_Notifications,Ntf_PutIconsNotif,
                  Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -1968,7 +1968,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** End section with settings about notifications *****/
    Lay_EndSection ();

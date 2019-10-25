@@ -127,7 +127,7 @@ void Ann_ShowAllAnnouncements (void)
      }
 
    /***** Start box *****/
-   Box_StartBox ("550px",Txt_Announcements,
+   Box_BoxBegin ("550px",Txt_Announcements,
                  ICanEdit ? Ann_PutIconToAddNewAnnouncement :
 			    NULL,
 		 Hlp_MESSAGES_Announcements,Box_NOT_CLOSABLE);
@@ -174,7 +174,7 @@ void Ann_ShowAllAnnouncements (void)
       Ann_PutButtonToAddNewAnnouncement ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

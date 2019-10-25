@@ -3113,7 +3113,7 @@ static void Brw_ShowFileBrowserProject (void)
    Gbl.Prjs.PrjCod = Prj.PrjCod;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Prj.Title,NULL,
+   Box_BoxBegin (NULL,Prj.Title,NULL,
 		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
    /***** Show the project *****/
@@ -3145,7 +3145,7 @@ static void Brw_ShowFileBrowserProject (void)
       Ale_ShowAlert (Ale_WARNING,"You have no access to project files.");
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory of the project *****/
    Prj_FreeMemProject (&Prj);
@@ -3648,7 +3648,7 @@ static void Brw_ShowFileBrowser (void)
 	     "file_browser_%u",
 	     Gbl.FileBrowser.Id);
    Lay_StartSection (FileBrowserSectionId);
-   Box_StartBox ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
+   Box_BoxBegin ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
                  Brw_PutIconsFileBrowser,
                  Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type],Box_NOT_CLOSABLE);
 
@@ -3679,7 +3679,7 @@ static void Brw_ShowFileBrowser (void)
    Brw_PutButtonToShowEdit ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
    Lay_EndSection ();
   }
 
@@ -8344,7 +8344,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    Brw_PutImplicitParamsFileBrowser ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Create_folder,NULL,
+   Box_BoxBegin (NULL,Txt_Create_folder,NULL,
                  NULL,Box_NOT_CLOSABLE);
    Ale_ShowAlert (Ale_INFO,Txt_You_can_create_a_new_folder_inside_the_folder_X,
 	          FileNameToShow);
@@ -8380,7 +8380,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** Start box *****/
    HTM_DIV_Begin ("id=\"dropzone-upload\"");
-   Box_StartBox ("95%",Txt_Upload_files,NULL,
+   Box_BoxBegin ("95%",Txt_Upload_files,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
@@ -8423,7 +8423,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
    HTM_DIV_End ();
   }
 
@@ -8438,7 +8438,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /***** Start box *****/
    HTM_DIV_Begin ("id=\"classic-upload\" style=\"display:none;\"");
-   Box_StartBox (NULL,Txt_Upload_file,NULL,
+   Box_BoxBegin (NULL,Txt_Upload_file,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
@@ -8456,7 +8456,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
    HTM_DIV_End ();
   }
 
@@ -8474,7 +8474,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    Brw_PutImplicitParamsFileBrowser ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Paste,NULL,
+   Box_BoxBegin (NULL,Txt_Paste,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
@@ -8506,7 +8506,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    Brw_PutImplicitParamsFileBrowser ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Create_link,NULL,
+   Box_BoxBegin (NULL,Txt_Create_link,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Help message *****/
@@ -12160,7 +12160,7 @@ void Brw_AskRemoveOldFiles (void)
    Brw_PutHiddenParamFullTreeIfSelected ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Remove_old_files,NULL,
+   Box_BoxBegin (NULL,Txt_Remove_old_files,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months (to remove files older) *****/

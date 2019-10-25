@@ -258,7 +258,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
 
    /***** Start box *****/
    Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
-   Box_StartBox (NULL,Txt_Matches,ICanEditMatches ? Mch_PutIconToCreateNewMatch :
+   Box_BoxBegin (NULL,Txt_Matches,ICanEditMatches ? Mch_PutIconToCreateNewMatch :
 	                                            NULL,
                  Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE);
 
@@ -293,7 +293,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1228,7 +1228,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** End form *****/
    Frm_EndForm ();

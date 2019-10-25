@@ -223,7 +223,7 @@ static void Att_ShowAllAttEvents (void)
                                      &Pagination);
 
    /***** Start box *****/
-   Box_StartBox ("100%",Txt_Events,Att_PutIconsInListOfAttEvents,
+   Box_BoxBegin ("100%",Txt_Events,Att_PutIconsInListOfAttEvents,
 		 Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
@@ -284,7 +284,7 @@ static void Att_ShowAllAttEvents (void)
       Att_PutButtonToCreateNewAttEvent ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -1887,7 +1887,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 
    /***** List students (only me) *****/
    /* Start box */
-   Box_StartBox (NULL,Txt_Attendance,NULL,
+   Box_BoxBegin (NULL,Txt_Attendance,NULL,
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /* Begin table */
@@ -1919,7 +1919,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
      }
 
    /* End box */
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1945,7 +1945,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    Usr_GetListUsrs (Hie_CRS,Rol_STD);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Attendance,NULL,
+   Box_BoxBegin (NULL,Txt_Attendance,NULL,
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
    /***** Form to select groups *****/
@@ -2017,7 +2017,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    Lay_EndSection ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (Rol_STD);
@@ -2721,7 +2721,7 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
    Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Attendance,
+   Box_BoxBegin (NULL,Txt_Attendance,
                  TypeOfView == Att_NORMAL_VIEW_ONLY_ME ? Att_PutIconsMyAttList :
                                                          NULL,
                  TypeOfView == Att_NORMAL_VIEW_ONLY_ME ? Hlp_USERS_Attendance_attendance_list :
@@ -2742,7 +2742,7 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
       Att_ListStdsWithAttEventsDetails (1,&Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory for list of attendance events selected *****/
    free ((void *) Gbl.AttEvents.StrAttCodsSelected);
@@ -2807,7 +2807,7 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
       Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
 
       /***** Start box *****/
-      Box_StartBox (NULL,Txt_Attendance_list,
+      Box_BoxBegin (NULL,Txt_Attendance_list,
 	            TypeOfView == Att_NORMAL_VIEW_STUDENTS ? Att_PutIconsStdsAttList :
 						             NULL,
 		    TypeOfView == Att_NORMAL_VIEW_STUDENTS ? Hlp_USERS_Attendance_attendance_list :
@@ -2828,7 +2828,7 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
 	 Att_ListStdsWithAttEventsDetails (NumUsrsInList,LstSelectedUsrCods);
 
       /***** End box *****/
-      Box_EndBox ();
+      Box_BoxEnd ();
 
       /***** Free memory for list of attendance events selected *****/
       free ((void *) Gbl.AttEvents.StrAttCodsSelected);
@@ -3077,7 +3077,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
                       TypeOfView == Att_NORMAL_VIEW_STUDENTS);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Events,
+   Box_BoxBegin (NULL,Txt_Events,
 	          TypeOfView == Att_NORMAL_VIEW_ONLY_ME  ? Att_PutIconToViewAttEvents :
 	         (TypeOfView == Att_NORMAL_VIEW_STUDENTS ? Att_PutIconToEditAttEvents :
 	                     	                           NULL),
@@ -3178,7 +3178,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

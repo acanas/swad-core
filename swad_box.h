@@ -55,7 +55,7 @@ void Box_StartBoxTable (const char *Width,const char *Title,
                         void (*FunctionToDrawContextualIcons) (void),
                         const char *HelpLink,Box_Closable_t Closable,
                         unsigned CellPadding);
-void Box_StartBox (const char *Width,const char *Title,
+void Box_BoxBegin (const char *Width,const char *Title,
                    void (*FunctionToDrawContextualIcons) (void),
                    const char *HelpLink,Box_Closable_t Closable);
 void Box_StartBoxShadow (const char *Width,const char *Title,
@@ -68,6 +68,6 @@ void Box_StartBoxTableShadow (const char *Width,const char *Title,
 void Box_EndBoxTable (void);
 void Box_EndBoxTableWithButton (Btn_Button_t Button,const char *TxtButton);
 void Box_EndBoxWithButton (Btn_Button_t Button,const char *TxtButton);
-void Box_EndBox (void);
+void Box_BoxEnd (void);
 
 #endif

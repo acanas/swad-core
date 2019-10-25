@@ -448,14 +448,14 @@ void Inf_ShowInfo (void)
 
    if (ShowWarningNoInfo)
      {
-      Box_StartBox ("100%",Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+      Box_BoxBegin ("100%",Txt_INFO_TITLE[Gbl.Crs.Info.Type],
 		    ICanEdit ? Inf_PutIconToEditInfo :
 			       NULL,
 		    Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
       Ale_ShowAlert (Ale_INFO,Txt_No_information);
       if (ICanEdit)
 	 Inf_PutButtonToEditInfo ();
-      Box_EndBox ();
+      Box_BoxEnd ();
      }
   }
 
@@ -595,7 +595,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    Inf_InfoType_t InfoType;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Required_reading,NULL,
+   Box_BoxBegin (NULL,Txt_Required_reading,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Write message *****/
@@ -624,7 +624,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    HTM_DIV_End ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1044,7 +1044,7 @@ static void Inf_ShowPage (const char *URL)
      };
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+   Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
                  ICanEdit ? Inf_PutIconToEditInfo :
                             NULL,
                  Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
@@ -1057,7 +1057,7 @@ static void Inf_ShowPage (const char *URL)
    fprintf (Gbl.F.Out,"</a>");
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1792,7 +1792,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
    if (TxtHTML[0])
      {
       /***** Start box *****/
-      Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+      Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
                     ICanEdit ? Inf_PutIconToEditInfo :
                                NULL,
                     Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
@@ -1813,7 +1813,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
       /***** End box *****/
       HTM_DIV_End ();
-      Box_EndBox ();
+      Box_BoxEnd ();
 
       return true;
      }
@@ -1876,7 +1876,7 @@ static bool Inf_CheckAndShowRichTxt (void)
    if (TxtMD[0])
      {
       /***** Start box *****/
-      Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
+      Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
                     ICanEdit ? Inf_PutIconToEditInfo :
                                NULL,
                     Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
@@ -1950,7 +1950,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 
       /***** End box *****/
       HTM_DIV_End ();
-      Box_EndBox ();
+      Box_BoxEnd ();
 
       return true;
      }
@@ -2069,7 +2069,7 @@ void Inf_EditPlainTxtInfo (void)
 
    /***** Begin form and box *****/
    Frm_StartForm (Inf_ActionsRcvPlaTxtInfo[Gbl.Crs.Info.Type]);
-   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,
+   Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,
                  HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
    if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||
@@ -2120,7 +2120,7 @@ void Inf_EditRichTxtInfo (void)
 
    /***** Begin form and box *****/
    Frm_StartForm (Inf_ActionsRcvRchTxtInfo[Gbl.Crs.Info.Type]);
-   Box_StartBox (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,
+   Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],NULL,
                  HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
    if (Gbl.Crs.Info.Type == Inf_INTRODUCTION ||

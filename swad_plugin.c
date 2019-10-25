@@ -198,7 +198,7 @@ static void Plg_EditPluginsInternal (void)
    Plg_GetListPlugins ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Plugins,NULL,
+   Box_BoxBegin (NULL,Txt_Plugins,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new plugin *****/
@@ -209,7 +209,7 @@ static void Plg_EditPluginsInternal (void)
       Plg_ListPluginsForEdition ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of plugins *****/
    Plg_FreeListPlugins ();

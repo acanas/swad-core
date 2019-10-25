@@ -160,7 +160,7 @@ void Rep_ReqMyUsageReport (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Report_of_use_of_PLATFORM,
 	     Cfg_PLATFORM_SHORT_NAME);
-   Box_StartBox (NULL,Gbl.Title,NULL,
+   Box_BoxBegin (NULL,Gbl.Title,NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
 
    /***** Header *****/
@@ -267,7 +267,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Report_of_use_of_PLATFORM,
 	     Cfg_PLATFORM_SHORT_NAME);
-   Box_StartBox (NULL,Gbl.Title,NULL,
+   Box_BoxBegin (NULL,Gbl.Title,NULL,
                  Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
 
    /***** Header *****/
@@ -294,7 +294,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    HTM_DIV_End ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

@@ -88,10 +88,10 @@ void Lan_PutBoxToSelectLanguage (void)
    extern const char *Hlp_PROFILE_Settings_language;
    extern const char *Txt_Language;
 
-   Box_StartBox (NULL,Txt_Language,Lan_PutIconsLanguage,
+   Box_BoxBegin (NULL,Txt_Language,Lan_PutIconsLanguage,
                  Hlp_PROFILE_Settings_language,Box_NOT_CLOSABLE);
    Lan_PutSelectorToSelectLanguage ();
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

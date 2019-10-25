@@ -209,10 +209,10 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Start box *****/
    if (PrintView)
-      Box_StartBox (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_StartBox (NULL,NULL,Crs_PutIconToPrint,
+      Box_BoxBegin (NULL,NULL,Crs_PutIconToPrint,
 		    Hlp_COURSE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
@@ -500,7 +500,7 @@ static void Crs_Configuration (bool PrintView)
    HTM_TABLE_End ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -581,7 +581,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	     The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_My_courses,Crs_PutIconToSearchCourses,
+   Box_BoxBegin (NULL,Txt_My_courses,Crs_PutIconToSearchCourses,
                  Hlp_PROFILE_Courses,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<ul class=\"LIST_TREE\">");
 
@@ -812,7 +812,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** End box *****/
    fprintf (Gbl.F.Out,"</ul>");
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1172,7 +1172,7 @@ static void Crs_ListCourses (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Courses_of_DEGREE_X,
 	     Gbl.Hierarchy.Deg.ShrtName);
-   Box_StartBox (NULL,Gbl.Title,Crs_PutIconsListCourses,
+   Box_BoxBegin (NULL,Gbl.Title,Crs_PutIconsListCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
 
    if (Gbl.Hierarchy.Deg.Crss.Num)	// There are courses in the current degree
@@ -1205,7 +1205,7 @@ static void Crs_ListCourses (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1380,7 +1380,7 @@ static void Crs_EditCoursesInternal (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Courses_of_DEGREE_X,
 	     Gbl.Hierarchy.Deg.ShrtName);
-   Box_StartBox (NULL,Gbl.Title,Crs_PutIconsEditingCourses,
+   Box_BoxBegin (NULL,Gbl.Title,Crs_PutIconsEditingCourses,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
 
    /***** Put a form to create or request a new course *****/
@@ -1391,7 +1391,7 @@ static void Crs_EditCoursesInternal (void)
       Crs_ListCoursesForEdition ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of courses in this degree *****/
    Crs_FreeListCoursesInCurrentDegree ();
@@ -3344,7 +3344,7 @@ void Crs_AskRemoveOldCrss (void)
    Frm_StartForm (ActRemOldCrs);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Eliminate_old_courses,NULL,
+   Box_BoxBegin (NULL,Txt_Eliminate_old_courses,NULL,
                  Hlp_SYSTEM_Hierarchy_eliminate_old_courses,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months without clicks *****/

@@ -247,7 +247,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_StartBox (StrRecordWidth,Txt_Nickname,Acc_PutLinkToRemoveMyAccount,
+   Box_BoxBegin (StrRecordWidth,Txt_Nickname,Acc_PutLinkToRemoveMyAccount,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show possible alerts *****/

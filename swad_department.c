@@ -272,7 +272,7 @@ static void Dpt_EditDepartmentsInternal (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Departments_of_INSTITUTION_X,
              Gbl.Hierarchy.Ins.FullName);
-   Box_StartBox (NULL,Gbl.Title,NULL,
+   Box_BoxBegin (NULL,Gbl.Title,NULL,
                  Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new department *****/
@@ -283,7 +283,7 @@ static void Dpt_EditDepartmentsInternal (void)
       Dpt_ListDepartmentsForEdition ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of departments *****/
    Dpt_FreeListDepartments ();

@@ -341,7 +341,7 @@ void Sta_AskShowCrsHits (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Statistics_of_visits_to_the_course_X,
 	     Gbl.Hierarchy.Crs.ShrtName);
-   Box_StartBox (NULL,Gbl.Title,NULL,
+   Box_BoxBegin (NULL,Gbl.Title,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
@@ -487,7 +487,7 @@ void Sta_AskShowCrsHits (void)
    Lay_EndSection ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory used by the lists *****/
    Usr_FreeUsrsList (Rol_TCH);
@@ -1400,10 +1400,10 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      {
       /***** Put the table with the clicks *****/
       if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
-	 Box_StartBox ("100%",Txt_List_of_detailed_clicks,NULL,
+	 Box_BoxBegin ("100%",Txt_List_of_detailed_clicks,NULL,
 	               NULL,Box_NOT_CLOSABLE);
       else
-	 Box_StartBox (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],NULL,
+	 Box_BoxBegin (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],NULL,
 	               NULL,Box_NOT_CLOSABLE);
 
       HTM_TABLE_BeginPadding (Sta_CellPadding[Gbl.Stat.ClicksGroupedBy]);
@@ -1475,7 +1475,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       HTM_TABLE_End ();
 
       /* End box and section */
-      Box_EndBox ();
+      Box_BoxEnd ();
       Lay_EndSection ();
      }
 
@@ -3991,7 +3991,7 @@ void Sta_ShowLastClicks (void)
    Mnu_ContextMenuEnd ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Last_clicks_in_real_time,NULL,
+   Box_BoxBegin (NULL,Txt_Last_clicks_in_real_time,NULL,
                  Hlp_USERS_Connected_last_clicks,Box_NOT_CLOSABLE);
 
    /***** Get and show last clicks *****/
@@ -4000,7 +4000,7 @@ void Sta_ShowLastClicks (void)
    HTM_DIV_End ();					// Used for AJAX based refresh
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

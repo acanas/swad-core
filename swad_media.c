@@ -407,7 +407,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 		  Id);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Multimedia,NULL,
+   Box_BoxBegin (NULL,Txt_Multimedia,NULL,
                  Hlp_Multimedia,Box_NOT_CLOSABLE);
 
    /***** Action to perform on media *****/
@@ -471,7 +471,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    HTM_DIV_End ();						// <id>_tit
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** End media uploader *****/
    HTM_DIV_End ();				// container <id>_med_upl

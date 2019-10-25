@@ -286,7 +286,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_StartBox (StrRecordWidth,Txt_Webs_social_networks,
+   Box_BoxBegin (StrRecordWidth,Txt_Webs_social_networks,
 	         Net_PutIconsWebsSocialNetworks,
                  Hlp_PROFILE_Webs,Box_NOT_CLOSABLE);
 
@@ -360,7 +360,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** End section *****/
    Lay_EndSection ();

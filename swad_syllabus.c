@@ -252,7 +252,7 @@ bool Syl_CheckAndEditSyllabus (void)
 	}
 
       /***** End box *****/
-      Box_EndBox ();
+      Box_BoxEnd ();
 
       return true;
      }

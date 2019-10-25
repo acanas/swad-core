@@ -355,7 +355,7 @@ void TT_ShowClassTimeTable (void)
    Grp_GetParamWhichGrps ();
 
    /***** Start box *****/
-   Box_StartBox ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
                  (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT ||
                   Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
                   Gbl.TimeTable.ContextualIcons.PutIconPrint) ? TT_PutContextualIcons :
@@ -392,7 +392,7 @@ void TT_ShowClassTimeTable (void)
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -440,10 +440,10 @@ void TT_EditCrsTimeTable (void)
 
    /***** Editable time table *****/
    Gbl.TimeTable.Type = TT_COURSE_TIMETABLE;
-   Box_StartBox ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],TT_PutIconToViewCrsTT,
+   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],TT_PutIconToViewCrsTT,
                  Hlp_COURSE_Timetable,Box_NOT_CLOSABLE);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -457,10 +457,10 @@ void TT_EditMyTutTimeTable (void)
 
    /***** Time table *****/
    Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-   Box_StartBox ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],TT_PutIconToViewMyTT,
+   Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],TT_PutIconToViewMyTT,
                  Hlp_PROFILE_Timetable,Box_NOT_CLOSABLE);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

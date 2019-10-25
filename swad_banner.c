@@ -111,7 +111,7 @@ void Ban_SeeBanners (void)
    Ban_GetListBanners (&mysql_res,NumRows);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Banners,Ban_PutIconsListingBanners,
+   Box_BoxBegin (NULL,Txt_Banners,Ban_PutIconsListingBanners,
                  Hlp_SYSTEM_Banners,Box_NOT_CLOSABLE);
 
    /***** Write all banners *****/
@@ -129,7 +129,7 @@ void Ban_SeeBanners (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of banners *****/
    Ban_FreeListBanners ();
@@ -222,7 +222,7 @@ static void Ban_EditBannersInternal (void)
    Ban_GetListBanners (&mysql_res,NumRows);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Banners,Ban_PutIconsEditingBanners,
+   Box_BoxBegin (NULL,Txt_Banners,Ban_PutIconsEditingBanners,
                  Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new banner *****/
@@ -233,7 +233,7 @@ static void Ban_EditBannersInternal (void)
       Ban_ListBannersForEdition ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of banners *****/
    Ban_FreeListBanners ();

@@ -203,7 +203,7 @@ static void Gam_ListAllGames (void)
                                      &Pagination);
 
    /***** Start box *****/
-   Box_StartBox ("100%",Txt_Games,Gam_PutIconsListGames,
+   Box_BoxBegin ("100%",Txt_Games,Gam_PutIconsListGames,
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
    if (Gbl.Games.Num)
@@ -260,7 +260,7 @@ static void Gam_ListAllGames (void)
       Gam_PutButtonToCreateNewGame ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -382,7 +382,7 @@ void Gam_ShowOneGame (long GamCod,
 
    /***** Start box *****/
    if (ShowOnlyThisGame)
-      Box_StartBox (NULL,Txt_Game,NULL,
+      Box_BoxBegin (NULL,Txt_Game,NULL,
                     Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
    /***** Get data of this game *****/
@@ -538,7 +538,7 @@ void Gam_ShowOneGame (long GamCod,
 	 Mch_ListMatches (&Game,PutFormNewMatch);
 
       /***** End box *****/
-      Box_EndBox ();
+      Box_BoxEnd ();
      }
   }
 
@@ -1593,7 +1593,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
 
    /***** Start box *****/
    Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
-   Box_StartBox (NULL,Txt_Questions,ICanEditQuestions ? Gam_PutIconToAddNewQuestions :
+   Box_BoxBegin (NULL,Txt_Questions,ICanEditQuestions ? Gam_PutIconToAddNewQuestions :
                                                         NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
@@ -1612,7 +1612,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

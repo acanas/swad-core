@@ -154,7 +154,7 @@ void Agd_ShowMyAgenda (void)
    Agd_GetParams (Agd_MY_AGENDA);
 
    /***** Start box *****/
-   Box_StartBox ("100%",Txt_My_agenda,Agd_PutIconsMyFullAgenda,
+   Box_BoxBegin ("100%",Txt_My_agenda,Agd_PutIconsMyFullAgenda,
 		 Hlp_PROFILE_Agenda,Box_NOT_CLOSABLE);
 
    /***** Put forms to choice which events to show *****/
@@ -171,7 +171,7 @@ void Agd_ShowMyAgenda (void)
    Agd_ShowEvents (Agd_MY_AGENDA);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -357,7 +357,7 @@ void Agd_ShowUsrAgenda (void)
 	           Txt_Public_agenda_USER,
 		   Gbl.Usrs.Other.UsrDat.FullName);
 	 ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	 Box_StartBox ("100%",Gbl.Title,
+	 Box_BoxBegin ("100%",Gbl.Title,
 		       ItsMe ? Agd_PutIconsMyPublicAgenda :
 			       Agd_PutIconsOtherPublicAgenda,
 		       Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
@@ -369,7 +369,7 @@ void Agd_ShowUsrAgenda (void)
 	 Agd_ShowEvents (Agd_ANOTHER_AGENDA);
 
 	 /***** End box *****/
-	 Box_EndBox ();
+	 Box_BoxEnd ();
 	}
 
    if (Error)
@@ -401,7 +401,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 		      Txt_Public_agenda_USER,
 		      Gbl.Usrs.Other.UsrDat.FullName);
 	    ItsMe = Usr_ItsMe (Gbl.Usrs.Other.UsrDat.UsrCod);
-	    Box_StartBox ("100%",Gbl.Title,
+	    Box_BoxBegin ("100%",Gbl.Title,
 			  ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
 				  Agd_PutIconsOtherPublicAgenda,
 			  Hlp_PROFILE_Agenda_public_agenda,Box_NOT_CLOSABLE);
@@ -413,7 +413,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Agd_ShowEvents (Agd_ANOTHER_AGENDA);
 
 	    /***** End box *****/
-	    Box_EndBox ();
+	    Box_BoxEnd ();
            }
 	 else
 	    Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
@@ -1904,12 +1904,12 @@ void Agd_PrintAgdQRCode (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Where_s_USER,
 	     Gbl.Usrs.Me.UsrDat.FullName);
-   Box_StartBox (NULL,Gbl.Title,NULL,
+   Box_BoxBegin (NULL,Gbl.Title,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Print QR code ****/
    QR_PrintQRCode ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }

@@ -198,7 +198,7 @@ void Prf_RequestUserProfile (void)
    Frm_StartForm (ActSeeOthPubPrf);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Another_user_s_profile,NULL,
+   Box_BoxBegin (NULL,Txt_Another_user_s_profile,NULL,
                  Hlp_START_Profiles_view_public_profile,Box_NOT_CLOSABLE);
 
    /***** Form to request user's @nickname *****/

@@ -133,7 +133,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    extern const char *Txt_XML_file;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Import_questions,NULL,
+   Box_BoxBegin (NULL,Txt_Import_questions,NULL,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write help message *****/
@@ -153,7 +153,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -505,7 +505,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    XML_GetTree (XMLBuffer,&RootElem);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Imported_questions,NULL,
+   Box_BoxBegin (NULL,Txt_Imported_questions,NULL,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Print XML tree *****/
@@ -671,7 +671,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
       Ale_ShowAlert (Ale_ERROR,"Root element &lt;test&gt; not found.");
 
    /***** End table *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free XML tree *****/
    XML_FreeTree (RootElem);

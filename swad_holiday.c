@@ -110,7 +110,7 @@ void Hld_SeeHolidays (void)
       Hld_GetListHolidays ();
 
       /***** Table head *****/
-      Box_StartBox (NULL,Txt_Holidays,Hld_PutIconsSeeHolidays,
+      Box_BoxBegin (NULL,Txt_Holidays,Hld_PutIconsSeeHolidays,
                     Hlp_INSTITUTION_Holidays,Box_NOT_CLOSABLE);
       if (Gbl.Hlds.Num)
 	 {
@@ -197,7 +197,7 @@ void Hld_SeeHolidays (void)
 	}
 
       /***** End box *****/
-      Box_EndBox ();
+      Box_BoxEnd ();
 
       /***** Free list of holidays *****/
       Hld_FreeListHolidays ();

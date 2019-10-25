@@ -324,10 +324,10 @@ static void Ctr_Configuration (bool PrintView)
 
    /***** Start box *****/
    if (PrintView)
-      Box_StartBox (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_StartBox (NULL,NULL,Ctr_PutIconsCtrConfig,
+      Box_BoxBegin (NULL,NULL,Ctr_PutIconsCtrConfig,
 		    Hlp_CENTRE_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
@@ -695,7 +695,7 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TABLE_End ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -815,7 +815,7 @@ static void Ctr_ListCentres (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Centres_of_INSTITUTION_X,
 	     Gbl.Hierarchy.Ins.FullName);
-   Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsListingCentres,
+   Box_BoxBegin (NULL,Gbl.Title,Ctr_PutIconsListingCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
 
    if (Gbl.Hierarchy.Ins.Ctrs.Num)	// There are centres in the current institution
@@ -846,7 +846,7 @@ static void Ctr_ListCentres (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1014,7 +1014,7 @@ static void Ctr_EditCentresInternal (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Centres_of_INSTITUTION_X,
              Gbl.Hierarchy.Ins.FullName);
-   Box_StartBox (NULL,Gbl.Title,Ctr_PutIconsEditingCentres,
+   Box_BoxBegin (NULL,Gbl.Title,Ctr_PutIconsEditingCentres,
                  Hlp_INSTITUTION_Centres,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new centre *****/
@@ -1025,7 +1025,7 @@ static void Ctr_EditCentresInternal (void)
       Ctr_ListCentresForEdition ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of centres *****/
    Ctr_FreeListCentres ();
@@ -2313,7 +2313,7 @@ void Ctr_RequestPhoto (void)
    Frm_StartForm (ActRecCtrPho);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Photo,NULL,
+   Box_BoxBegin (NULL,Txt_Photo,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Write help message *****/
@@ -2338,7 +2338,7 @@ void Ctr_RequestPhoto (void)
             Gbl.Form.Id);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** End form *****/
    Frm_EndForm ();

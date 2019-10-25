@@ -330,7 +330,7 @@ void Tst_ShowFormAskTst (void)
      }
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Take_a_test,Tst_PutIconsTests,
+   Box_BoxBegin (NULL,Txt_Take_a_test,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Get tags *****/
@@ -391,7 +391,7 @@ void Tst_ShowFormAskTst (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -451,7 +451,7 @@ void Tst_ShowNewTest (void)
 	       Tst_UpdateMyNumAccessTst (NumAccessesTst);
 
 	    /***** Start box *****/
-	    Box_StartBox (NULL,Txt_Test,NULL,
+	    Box_BoxBegin (NULL,Txt_Test,NULL,
 	                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 	    Lay_WriteHeaderClassPhoto (false,false,
 				       Gbl.Hierarchy.Ins.InsCod,
@@ -488,7 +488,7 @@ void Tst_ShowNewTest (void)
             Frm_EndForm ();
 
             /***** End box *****/
-	    Box_EndBox ();
+	    Box_BoxEnd ();
 
             /***** Set test status *****/
             Tst_SetTstStatus (NumAccessesTst,Tst_STATUS_SHOWN_BUT_NOT_ASSESSED);
@@ -549,7 +549,7 @@ void Tst_AssessTest (void)
 	 TstCod = Tst_CreateTestResultInDB ();
 
 	 /***** Start box *****/
-	 Box_StartBox (NULL,Txt_Test_result,NULL,
+	 Box_BoxBegin (NULL,Txt_Test_result,NULL,
 	               Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 	 Lay_WriteHeaderClassPhoto (false,false,
 				    Gbl.Hierarchy.Ins.InsCod,
@@ -574,7 +574,7 @@ void Tst_AssessTest (void)
 	    Tst_ShowTstTotalMark (Gbl.Test.NumQsts,TotalScore);
 
 	 /***** End box *****/
-	 Box_EndBox ();
+	 Box_BoxEnd ();
 
 	 /***** Store test result in database *****/
 	 Tst_StoreScoreOfTestResultInDB (TstCod,
@@ -1291,7 +1291,7 @@ void Tst_ShowFormAskEditTsts (void)
    Mnu_ContextMenuEnd ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
+   Box_BoxBegin (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests_editing_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
@@ -1327,7 +1327,7 @@ void Tst_ShowFormAskEditTsts (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -1347,7 +1347,7 @@ void Tst_ShowFormAskSelectTstsForGame (void)
    unsigned long NumRows;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Select_questions,NULL,
+   Box_BoxBegin (NULL,Txt_Select_questions,NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    /***** Get tags already present in the table of questions *****/
@@ -1380,7 +1380,7 @@ void Tst_ShowFormAskSelectTstsForGame (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -1906,14 +1906,14 @@ static void Tst_ShowFormConfigTst (void)
    Tst_GetConfigTstFromDB ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Configure_tests,Tst_PutIconsTests,
+   Box_BoxBegin (NULL,Txt_Configure_tests,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
    Frm_StartForm (ActRcvCfgTst);
 
    /***** Tests are visible from plugins? *****/
-   HTM_TABLE_BeginPadding (2);
+   HTM_TABLE_BeginCenterPadding (2);
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -2014,7 +2014,7 @@ static void Tst_ShowFormConfigTst (void)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -2815,7 +2815,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
    double TotalScoreThisQst;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Questions,Tst_PutIconsTests,
+   Box_BoxBegin (NULL,Txt_Questions,Tst_PutIconsTests,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
    /***** Write the heading *****/
@@ -3043,7 +3043,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
    Tst_PutButtonToAddQuestion ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -3071,7 +3071,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
    time_t TimeUTC;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Questions,NULL,
+   Box_BoxBegin (NULL,Txt_Questions,NULL,
 		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -3207,7 +3207,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -5058,11 +5058,11 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        Txt_Question_code_X,
 		Gbl.Test.QstCod);
-      Box_StartBox (NULL,Gbl.Title,Tst_PutIconToRemoveOneQst,
+      Box_BoxBegin (NULL,Gbl.Title,Tst_PutIconToRemoveOneQst,
                     Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
      }
    else
-      Box_StartBox (NULL,Txt_New_question,NULL,
+      Box_BoxBegin (NULL,Txt_New_question,NULL,
                     Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -5424,7 +5424,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -7441,7 +7441,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Results,NULL,
+   Box_BoxBegin (NULL,Txt_Results,NULL,
                  Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
@@ -7501,7 +7501,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
    Lay_EndSection ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory for users' list *****/
    Usr_FreeUsrsList (Rol_TCH);
@@ -8081,7 +8081,7 @@ void Tst_ShowOneTstResult (void)
       Tst_GetTestResultQuestionsFromDB (TstCod);
 
       /***** Start box *****/
-      Box_StartBox (NULL,Txt_Test_result,NULL,
+      Box_BoxBegin (NULL,Txt_Test_result,NULL,
                     Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.Hierarchy.Ins.InsCod,
@@ -8203,7 +8203,7 @@ void Tst_ShowOneTstResult (void)
 	 Tst_ShowTstTotalMark (Gbl.Test.NumQsts,TotalScore);
 
       /***** End box *****/
-      Box_EndBox ();
+      Box_BoxEnd ();
      }
    else	// I am not allowed to view this test result
       Act_NoPermissionExit ();

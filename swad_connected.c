@@ -101,7 +101,7 @@ void Con_ShowConnectedUsrs (void)
 	     "%s"
 	     "<div id=\"connected_current_time\"></div>",
 	     Txt_Connected_users);
-   Box_StartBox (NULL,Gbl.Title,Con_PutIconToUpdateConnected,
+   Box_BoxBegin (NULL,Gbl.Title,Con_PutIconToUpdateConnected,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('connected_current_time',%ld,"
@@ -118,7 +118,7 @@ void Con_ShowConnectedUsrs (void)
       Con_ShowConnectedUsrsBelongingToLocation ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

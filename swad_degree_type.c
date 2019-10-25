@@ -201,11 +201,11 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    switch (NextAction)
      {
       case ActSeeDegTyp:
-	 Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconsListingDegTypes,
+	 Box_BoxBegin (NULL,Txt_Types_of_degree,DT_PutIconsListingDegTypes,
 		       Hlp_CENTRE_DegreeTypes,Box_NOT_CLOSABLE);
 	 break;
       case ActSeeUseGbl:
-	 Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconToEditDegTypes,
+	 Box_BoxBegin (NULL,Txt_Types_of_degree,DT_PutIconToEditDegTypes,
 		       Hlp_ANALYTICS_Figures_types_of_degree,Box_NOT_CLOSABLE);
 	 break;
       default:	// Bad call
@@ -237,7 +237,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -265,7 +265,7 @@ static void DT_EditDegreeTypesInternal (void)
    DT_GetListDegreeTypes (Hie_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Types_of_degree,DT_PutIconsEditingDegreeTypes,
+   Box_BoxBegin (NULL,Txt_Types_of_degree,DT_PutIconsEditingDegreeTypes,
                  Hlp_CENTRE_DegreeTypes_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new degree type *****/
@@ -276,7 +276,7 @@ static void DT_EditDegreeTypesInternal (void)
       DT_ListDegreeTypesForEdition ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();

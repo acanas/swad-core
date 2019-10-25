@@ -918,7 +918,7 @@ static void Mai_ListEmails (void)
    const char *Ptr;
 
    /***** Start the box used to list the emails *****/
-   Box_StartBox (NULL,Txt_Email_addresses,NULL,
+   Box_BoxBegin (NULL,Txt_Email_addresses,NULL,
 		 Hlp_MESSAGES_Email,Box_NOT_CLOSABLE);
 
    /***** Start list with users' email addresses *****/
@@ -1007,7 +1007,7 @@ static void Mai_ListEmails (void)
    Mnu_ContextMenuEnd ();
 
    /***** End the box used to list the emails *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1159,7 +1159,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_StartBox (StrRecordWidth,Txt_Email,Acc_PutLinkToRemoveMyAccount,
+   Box_BoxBegin (StrRecordWidth,Txt_Email,Acc_PutLinkToRemoveMyAccount,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change email *****/
@@ -1168,7 +1168,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
 			       IMustFillInEmail,IShouldConfirmEmail);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** End section *****/
    Lay_EndSection ();
@@ -1191,7 +1191,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_StartBox (StrRecordWidth,Txt_Email,NULL,
+   Box_BoxBegin (StrRecordWidth,Txt_Email,NULL,
                  Hlp_PROFILE_Account,Box_NOT_CLOSABLE);
 
    /***** Show form to change email *****/
@@ -1201,7 +1201,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
 			       false);	// IShouldConfirmEmail
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** End section *****/
    Lay_EndSection ();

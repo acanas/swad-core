@@ -487,12 +487,22 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.43 (2019-10-25)"
+#define Log_PLATFORM_VERSION	"SWAD 19.44 (2019-10-25)"
 #define CSS_FILE		"swad19.42.6.css"
 #define JS_FILE			"swad19.39.js"
 /*
-// TODO: Perico: poner un candado de bloqueo de creación/edición de proyectos (por ejemplo en asignaturas obsoletas)
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
+// TODO: Impedir la creación y edición de proyectos si no son editables.
+// TODO: Eliminar asignatura de prj_config al eliminar una asignatura.
+
+	Version 19.44:    Oct 25, 2019	Configuration of all projects.
+				        Changed preassigned (projects) to assigned in database and messages. (246280 lines)
+					3/4 changes necessary in database:
+ALTER TABLE projects CHANGE COLUMN Preassigned Assigned ENUM('N','Y') NOT NULL DEFAULT 'N';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1804','es','N','Recibir configuraci&oacute;n proyectos');
+CREATE TABLE IF NOT EXISTS prj_config (CrsCod INT NOT NULL DEFAULT -1,Editable ENUM('N','Y') NOT NULL DEFAULT 'Y',UNIQUE INDEX(CrsCod));
+Only if you use MyISAM:
+ALTER TABLE prj_config ENGINE=MyISAM;
 
 	Version 19.43:    Oct 25, 2019	New action to configure all projects. (246064 lines)
 					1 change necessary in database:

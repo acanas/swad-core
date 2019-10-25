@@ -36,6 +36,9 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
+/***** Configuration *****/
+#define Prj_EDITABLE_DEFAULT true
+
 /***** Filters to list projects *****/
 /* My projects / all projects */
 #define Prj_NUM_WHOSE_PROJECTS 2
@@ -211,15 +214,17 @@ void Prj_ReqRemProject (void);
 void Prj_RemoveProject (void);
 void Prj_HideProject (void);
 void Prj_ShowProject (void);
-void Prj_LockProjectEdition (void);
-void Prj_UnlockProjectEdition (void);
 
+void Prj_RecFormProject (void);
+
+void Prj_ShowFormConfig (void);
+void Prj_ReceiveConfigPrj (void);
 void Prj_ReqLockAllProjectsEdition (void);
 void Prj_ReqUnlockAllProjectsEdition (void);
 void Prj_LockAllProjectsEdition (void);
 void Prj_UnlockAllProjectsEdition (void);
-
-void Prj_RecFormProject (void);
+void Prj_LockProjectEdition (void);
+void Prj_UnlockProjectEdition (void);
 
 void Prj_RemoveCrsProjects (long CrsCod);
 void Prj_RemoveUsrFromProjects (long UsrCod);

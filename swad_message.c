@@ -228,7 +228,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Start box *****/
-   Box_StartBox (NULL,Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
+   Box_BoxBegin (NULL,Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
 					      Txt_New_message,NULL,
 		 Hlp_MESSAGES_Write,Box_NOT_CLOSABLE);
 
@@ -336,7 +336,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory used by the list of nicknames *****/
    Usr_FreeListOtherRecipients ();
@@ -1749,12 +1749,12 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Gbl.Msg.NumMsgs = (unsigned) NumRows;
 
    /***** Start box with messages *****/
-   Box_StartBox ("97%",Msg_WriteNumMsgs (NumUnreadMsgs),Msg_PutIconsListMsgs,
+   Box_BoxBegin ("97%",Msg_WriteNumMsgs (NumUnreadMsgs),Msg_PutIconsListMsgs,
                  Help[Gbl.Msg.TypeOfMessages],Box_NOT_CLOSABLE);
 
    /***** Filter messages *****/
    /* Start box with filter */
-   Box_StartBox (NULL,Txt_Filter,NULL,
+   Box_BoxBegin (NULL,Txt_Filter,NULL,
                  HelpFilter[Gbl.Msg.TypeOfMessages],Box_CLOSABLE);
 
    /* Form to see messages again */
@@ -1778,7 +1778,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Frm_EndForm ();
 
    /* End box */
-   Box_EndBox ();
+   Box_BoxEnd ();
 
 
    if (Gbl.Msg.NumMsgs)		// If there are messages...
@@ -1845,7 +1845,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

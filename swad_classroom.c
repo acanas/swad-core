@@ -112,7 +112,7 @@ void Cla_SeeClassrooms (void)
    Cla_GetListClassrooms (Cla_ALL_DATA);
 
    /***** Table head *****/
-   Box_StartBox (NULL,Txt_Classrooms,Cla_PutIconsListingClassrooms,
+   Box_BoxBegin (NULL,Txt_Classrooms,Cla_PutIconsListingClassrooms,
 		 Hlp_CENTRE_Classrooms,Box_NOT_CLOSABLE);
    HTM_TABLE_BeginWideMarginPadding (2);
    HTM_TR_Begin (NULL);
@@ -177,7 +177,7 @@ void Cla_SeeClassrooms (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of classrooms *****/
    Cla_FreeListClassrooms ();
@@ -250,7 +250,7 @@ static void Cla_EditClassroomsInternal (void)
    Cla_GetListClassrooms (Cla_ALL_DATA);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Classrooms,Cla_PutIconsEditingClassrooms,
+   Box_BoxBegin (NULL,Txt_Classrooms,Cla_PutIconsEditingClassrooms,
                  Hlp_CENTRE_Classrooms_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new classroom *****/
@@ -261,7 +261,7 @@ static void Cla_EditClassroomsInternal (void)
       Cla_ListClassroomsForEdition ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of classrooms *****/
    Cla_FreeListClassrooms ();

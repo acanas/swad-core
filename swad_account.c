@@ -141,7 +141,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    extern const char *Txt_Skip_this_step;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Title,NULL,
+   Box_BoxBegin (NULL,Title,NULL,
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
 
    /***** Help alert *****/
@@ -166,7 +166,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -430,7 +430,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_New_on_PLATFORM_Sign_up,
 	     Cfg_PLATFORM_SHORT_NAME);
-   Box_StartBox (NULL,Gbl.Title,NULL,
+   Box_BoxBegin (NULL,Gbl.Title,NULL,
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
 
    /***** Button to go to request the creation of a new account *****/
@@ -439,7 +439,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

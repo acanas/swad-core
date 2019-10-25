@@ -973,7 +973,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    snprintf (FrameTitle,sizeof (FrameTitle),
 	     "%s: %s",
 	     Txt_Thread,Thr.Subject);
-   Box_StartBox (NULL,FrameTitle,For_PutIconNewPost,
+   Box_BoxBegin (NULL,FrameTitle,For_PutIconNewPost,
                  Hlp_MESSAGES_Forums_posts,Box_NOT_CLOSABLE);
 
    /***** Get posts of a thread from database *****/
@@ -1101,7 +1101,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    Lay_EndSection ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
    Lay_EndSection ();
   }
 
@@ -1576,7 +1576,7 @@ static void For_ShowForumList (void)
    Usr_GetMyInstits ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Forums,For_PutIconsForums,
+   Box_BoxBegin (NULL,Txt_Forums,For_PutIconsForums,
                  Hlp_MESSAGES_Forums,Box_NOT_CLOSABLE);
 
    /***** Put a form to select which forums *****/
@@ -1729,7 +1729,7 @@ static void For_ShowForumList (void)
    fprintf (Gbl.F.Out,"</ul>");
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -2545,7 +2545,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    snprintf (FrameTitle,sizeof (FrameTitle),
 	     "%s: %s",
 	     Txt_Forum,ForumName);
-   Box_StartBox (NULL,FrameTitle,For_PutIconNewThread,
+   Box_BoxBegin (NULL,FrameTitle,For_PutIconNewThread,
 		 Hlp_MESSAGES_Forums_threads,Box_NOT_CLOSABLE);
 
    /***** List the threads *****/
@@ -2618,7 +2618,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    Lay_EndSection ();
 
    /***** End box with threads of this forum ****/
-   Box_EndBox ();
+   Box_BoxEnd ();
    Lay_EndSection ();
   }
 
@@ -3922,10 +3922,10 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 
    /***** Start box *****/
    if (IsReply)
-      Box_StartBox (NULL,Txt_New_post,NULL,
+      Box_BoxBegin (NULL,Txt_New_post,NULL,
 		    Hlp_MESSAGES_Forums_new_post,Box_NOT_CLOSABLE);
    else
-      Box_StartBox (NULL,Txt_New_thread,NULL,
+      Box_BoxBegin (NULL,Txt_New_thread,NULL,
 		    Hlp_MESSAGES_Forums_new_thread,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -3998,7 +3998,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

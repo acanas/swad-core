@@ -9831,6 +9831,48 @@ const char *Txt_Edit_rich_text =
 	"Editar texto rico";
 #endif
 
+const char *Txt_Editable =
+#if   L==1	// ca
+	"Editable";
+#elif L==2	// de
+	"Bearbeitbar";
+#elif L==3	// en
+	"Editable";
+#elif L==4	// es
+	"Editable";
+#elif L==5	// fr
+	"&Eacute;ditable";
+#elif L==6	// gn
+	"Editable";		// Okoteve traducción
+#elif L==7	// it
+	"Modificabile";
+#elif L==8	// pl
+	"Edytowalne";
+#elif L==9	// pt
+	"Edit&aacute;vel";
+#endif
+
+const char *Txt_Editable_by_non_editing_teachers =
+#if   L==1	// ca
+	"Editable per professors no editors";
+#elif L==2	// de
+	"Bearbeitbar von nicht bearbeitenden Lehrern";
+#elif L==3	// en
+	"Editable by non-editing teachers";
+#elif L==4	// es
+	"Editable por profesores no editores";
+#elif L==5	// fr
+	"Editable par des enseignants non-&eacute;diteurs";
+#elif L==6	// gn
+	"Editable por profesores no editores";		// Okoteve traducción
+#elif L==7	// it
+	"Modificabile da professori non-editing";
+#elif L==8	// pl
+	"Edytowalne przez nauczycieli, kt&oacute;rzy nie dokonali edycji";
+#elif L==9	// pt
+	"Edit&aacute;vel por professores n&atilde;o editores";
+#endif
+
 const char *Txt_eg_A_B =
 #if   L==1	// ca
 	"per ex.: A, B,&hellip;";
@@ -31033,93 +31075,93 @@ const char *Txt_PROJECT_MY_ALL_PROJECTS[Prj_NUM_WHOSE_PROJECTS] =
 #endif
 	};
 
-const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
+const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_PLURAL[Prj_NUM_ASSIGNED_NONASSIG] =
 	{
-	 // Prj_PREASSIGNED
+	 // Prj_ASSIGNED
 #if   L==1	// ca
-	"Projectes preassignats"
+	"Projectes assignats"
 #elif L==2	// de
 	"Vorbelegt Projekte"
 #elif L==3	// en
-	"Preassigned projects"
+	"Assigned projects"
 #elif L==4	// es
-	"Proyectos preasignados"
+	"Proyectos asignados"
 #elif L==5	// fr
-	"Projets pr&eacute;assign&eacute;s"
+	"Projets assign&eacute;s"
 #elif L==6	// gn
-	"Proyectos preasignados"	// Okoteve traducción
+	"Proyectos asignados"	// Okoteve traducción
 #elif L==7	// it
-	"Progetti preassegnati"
+	"Progetti assegnati"
 #elif L==8	// pl
 	"Zadany projekty"
 #elif L==9	// pt
-	"Projetos pr&eacute;-atribu&iacute;dos"
+	"Projetos atribu&iacute;dos"
 #endif
 	,
-	// Prj_NONPREASSIG
+	// Prj_NONASSIG
 #if   L==1	// ca
-	"Projectes no preassignats"
+	"Projectes no assignats"
 #elif L==2	// de
 	"Nicht vorbelegt Projekte"
 #elif L==3	// en
-	"Non-preassigned projects"
+	"Non-assigned projects"
 #elif L==4	// es
-	"Proyectos no preasignados"
+	"Proyectos no asignados"
 #elif L==5	// fr
-	"Projets non pr&eacute;assign&eacute;s"
+	"Projets non assign&eacute;s"
 #elif L==6	// gn
-	"Proyectos no preasignados"	// Okoteve traducción
+	"Proyectos no asignados"	// Okoteve traducción
 #elif L==7	// it
-	"Progetti non-preassegnati"
+	"Progetti non-assegnati"
 #elif L==8	// pl
 	"Nieprzypisane projekty"
 #elif L==9	// pt
-	"Projetos n&atilde;o pr&eacute;-atribu&iacute;dos"
+	"Projetos n&atilde;o atribu&iacute;dos"
 #endif
 	};
 
-const char *Txt_PROJECT_PREASSIGNED_NONPREASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG] =
+const char *Txt_PROJECT_ASSIGNED_NONASSIGNED_SINGUL[Prj_NUM_ASSIGNED_NONASSIG] =
 	{
-	 // Prj_PREASSIGNED
+	 // Prj_ASSIGNED
 #if   L==1	// ca
-	"Projecte preassignat"
+	"Projecte assignat"
 #elif L==2	// de
 	"Vorbelegt Projekt"
 #elif L==3	// en
-	"Preassigned project"
+	"Assigned project"
 #elif L==4	// es
-	"Proyecto preasignado"
+	"Proyecto asignado"
 #elif L==5	// fr
-	"Projet pr&eacute;assign&eacute;"
+	"Projet assign&eacute;"
 #elif L==6	// gn
-	"Proyecto preasignado"	// Okoteve traducción
+	"Proyecto asignado"	// Okoteve traducción
 #elif L==7	// it
-	"Progetto preassegnato"
+	"Progetto assegnato"
 #elif L==8	// pl
 	"Zadany projekt"
 #elif L==9	// pt
-	"Projeto pr&eacute;-atribu&iacute;do"
+	"Projeto atribu&iacute;do"
 #endif
 	,
-	// Prj_NONPREASSIG
+	// Prj_NONASSIG
 #if   L==1	// ca
-	"Projecte no preassignat"
+	"Projecte no assignat"
 #elif L==2	// de
 	"Nicht vorbelegt Projekt"
 #elif L==3	// en
-	"Non-preassigned project"
+	"Non-assigned project"
 #elif L==4	// es
-	"Proyecto no preasignado"
+	"Proyecto no asignado"
 #elif L==5	// fr
-	"Projet non pr&eacute;assign&eacute;"
+	"Projet non assign&eacute;"
 #elif L==6	// gn
-	"Proyecto no preasignado"	// Okoteve traducción
+	"Proyecto no asignado"	// Okoteve traducción
 #elif L==7	// it
-	"Progetto non-preassegnato"
+	"Progetto non-assegnato"
 #elif L==8	// pl
 	"Nieprzypisane projekt"
 #elif L==9	// pt
-	"Projeto n&atilde;o pr&eacute;-atribu&iacute;do"
+	"Projeto n&atilde;o atribu&iacute;do"
 #endif
 	};
 
@@ -43521,6 +43563,27 @@ const char *Txt_The_comment_no_longer_exists =
 	"O coment&aacute;rio n&atilde;o existe mais.";
 #endif
 
+const char *Txt_The_configuration_of_the_projects_has_been_updated =
+#if   L==1	// ca
+	"La configuraci&oacute; dels projectes s'ha actualitzat.";
+#elif L==2	// de
+	"Die Konfiguration der Projekte wurde aktualisiert.";
+#elif L==3	// en
+	"The configuration of the projects has been updated.";
+#elif L==4	// es
+	"La configuraci&oacute;n de los proyectos se ha actualizado.";
+#elif L==5	// fr
+	"La configuration des projets a &eacute;t&eacute; mise &agrave; jour.";
+#elif L==6	// gn
+	"La configuraci&oacute;n de los proyectos se ha actualizado.";	// Okoteve traducción
+#elif L==7	// it
+	"La configurazione dei progetti &egrave; stata aggiornata.";
+#elif L==8	// pl
+	"Konfiguracja projekt&oacute;w zosta&lstrok;a zaktualizowana.";
+#elif L==9	// pt
+	"A configura&ccedil;&atilde;o dos projetos foi atualizada.";
+#endif
+
 const char *Txt_The_contents_of_the_folder_are_too_big =
 #if   L==1	// ca
 	"El contingut de la carpeta &eacute;s massa gran.";
@@ -47189,21 +47252,21 @@ const char *Txt_The_test_X_has_already_been_assessed_previously =	// Warning: it
 
 const char *Txt_The_test_configuration_has_been_updated =
 #if   L==1	// ca
-	"La configuraci&oacute;n de tests se ha actualizado.";	// Necessita traduccio
+	"La configuraci&oacute; dels test s'ha actualitzat.";
 #elif L==2	// de
-	"The test configuration has been updated.";		// Need Übersetzung
+	"Die Testkonfiguration wurde aktualisiert.";
 #elif L==3	// en
 	"The test configuration has been updated.";
 #elif L==4	// es
 	"La configuraci&oacute;n de los test se ha actualizado.";
 #elif L==5	// fr
-	"The test configuration has been updated.";		// Besoin de traduction
+	"La configuration des tests a &eacute;t&eacute; mise &agrave; jour.";
 #elif L==6	// gn
 	"La configuraci&oacute;n de los test se ha actualizado.";	// Okoteve traducción
 #elif L==7	// it
 	"La configurazione di test &egrave; stata aggiornata.";
 #elif L==8	// pl
-	"The test configuration has been updated.";		// Potrzebujesz tlumaczenie
+	"Konfiguracja testowa zosta&lstrok;a zaktualizowana.";
 #elif L==9	// pt
 	"A configura&ccedil;&atilde;o de teste foi atualizada.";
 #endif

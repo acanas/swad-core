@@ -124,7 +124,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    Usr_GetMyDegrees ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Chat_rooms,NULL,
+   Box_BoxBegin (NULL,Txt_Chat_rooms,NULL,
                  NULL,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<ul class=\"LIST_TREE\">");
 
@@ -254,7 +254,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</ul>");
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

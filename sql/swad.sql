@@ -1020,6 +1020,13 @@ CREATE TABLE IF NOT EXISTS plugins (
 	IP CHAR(15) NOT NULL,
 	UNIQUE INDEX(PlgCod));
 --
+-- Table prj_config: stores the configuration of projects for each course
+--
+CREATE TABLE IF NOT EXISTS prj_config (
+	CrsCod INT NOT NULL DEFAULT -1,
+	Editable ENUM('N','Y') NOT NULL DEFAULT 'Y',
+	UNIQUE INDEX(CrsCod));
+--
 -- Table prj_usr: stores the users inside projects
 --
 CREATE TABLE IF NOT EXISTS prj_usr (
@@ -1036,7 +1043,7 @@ CREATE TABLE IF NOT EXISTS projects (
 	DptCod INT NOT NULL DEFAULT -1,
 	Locked ENUM('N','Y') NOT NULL DEFAULT 'N',	
 	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',
+	Assigned ENUM('N','Y') NOT NULL DEFAULT 'N',
 	NumStds INT NOT NULL DEFAULT 1,
 	Proposal ENUM('new','modified','unmodified') NOT NULL DEFAULT 'new',
 	CreatTime DATETIME NOT NULL,

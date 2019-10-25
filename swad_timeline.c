@@ -996,7 +996,7 @@ static void TL_ShowTimeline (char *Query,
 				"%s",
 				Query);
    /***** Start box *****/
-   Box_StartBox (NULL,Title,TL_PutIconsTimeline,
+   Box_BoxBegin (NULL,Title,TL_PutIconsTimeline,
                  Hlp_START_Timeline,Box_NOT_CLOSABLE);
 
    /***** Put form to select users whom public activity is displayed *****/
@@ -1059,7 +1059,7 @@ static void TL_ShowTimeline (char *Query,
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1469,7 +1469,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
    /***** Start box ****/
    if (ShowNoteAlone)
      {
-      Box_StartBox (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,NULL,
                     NULL,Box_CLOSABLE);
       fprintf (Gbl.F.Out,"<ul class=\"TL_LIST\">");
      }
@@ -1687,7 +1687,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
    if (ShowNoteAlone)
      {
       fprintf (Gbl.F.Out,"</ul>");
-      Box_EndBox ();
+      Box_BoxEnd ();
      }
   }
 
@@ -2730,7 +2730,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
 
    if (ShowCommentAlone)
      {
-      Box_StartBox (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,NULL,
                     NULL,Box_NOT_CLOSABLE);
 
       /***** Write sharer/commenter if distinct to author *****/
@@ -2819,7 +2819,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
      {
       fprintf (Gbl.F.Out,"</ul>");
       HTM_DIV_End ();
-      Box_EndBox ();
+      Box_BoxEnd ();
      }
   }
 

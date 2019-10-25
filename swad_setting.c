@@ -77,7 +77,7 @@ void Set_EditSettings (void)
    extern const char *Txt_Design;
 
    /***** Internationalization: language, first day of week, date format *****/
-   Box_StartBox (NULL,Txt_Internationalization,NULL,
+   Box_BoxBegin (NULL,Txt_Internationalization,NULL,
                  Hlp_PROFILE_Settings_internationalization,Box_NOT_CLOSABLE);
 
    HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
@@ -92,10 +92,10 @@ void Set_EditSettings (void)
    Dat_PutBoxToSelectDateFormat ();		// 3. Date format
    HTM_DIV_End ();
 
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Design: icon set, menu, theme, side columns *****/
-   Box_StartBox (NULL,Txt_Design,NULL,
+   Box_BoxBegin (NULL,Txt_Design,NULL,
                  Hlp_PROFILE_Settings_design,Box_NOT_CLOSABLE);
 
    HTM_DIV_Begin ("class=\"FRAME_INLINE\"");
@@ -114,7 +114,7 @@ void Set_EditSettings (void)
    Set_PutIconsToSelectSideCols ();		// 7. Side columns
    HTM_DIV_End ();
 
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -247,7 +247,7 @@ static void Set_PutIconsToSelectSideCols (void)
    unsigned SideCols;
    char Icon[32 + 1];
 
-   Box_StartBox (NULL,Txt_Columns,Set_PutIconsSideColumns,
+   Box_BoxBegin (NULL,Txt_Columns,Set_PutIconsSideColumns,
                  Hlp_PROFILE_Settings_columns,Box_NOT_CLOSABLE);
    Set_StartSettingsHead ();
    Set_StartOneSettingSelector ();
@@ -268,7 +268,7 @@ static void Set_PutIconsToSelectSideCols (void)
      }
    Set_EndOneSettingSelector ();
    Set_EndSettingsHead ();
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

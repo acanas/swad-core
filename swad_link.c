@@ -101,7 +101,7 @@ void Lnk_SeeLinks (void)
    Lnk_GetListLinks ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Links,Lnk_PutIconsListingLinks,
+   Box_BoxBegin (NULL,Txt_Links,Lnk_PutIconsListingLinks,
 		 Hlp_SYSTEM_Links,Box_NOT_CLOSABLE);
 
    /***** Write all links *****/
@@ -119,7 +119,7 @@ void Lnk_SeeLinks (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of links *****/
    Lnk_FreeListLinks ();
@@ -234,7 +234,7 @@ static void Lnk_EditLinksInternal (void)
    Lnk_GetListLinks ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Links,Lnk_PutIconsEditingLinks,
+   Box_BoxBegin (NULL,Txt_Links,Lnk_PutIconsEditingLinks,
                  Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new link *****/
@@ -245,7 +245,7 @@ static void Lnk_EditLinksInternal (void)
       Lnk_ListLinksForEdition ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of links *****/
    Lnk_FreeListLinks ();

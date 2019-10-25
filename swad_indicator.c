@@ -111,7 +111,7 @@ void Ind_ReqIndicatorsCourses (void)
    Ind_GetParamsIndicators ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Indicators_of_courses,NULL,
+   Box_BoxBegin (NULL,Txt_Indicators_of_courses,NULL,
                  Hlp_ANALYTICS_Indicators,Box_NOT_CLOSABLE);
 
    /***** Form to update indicators *****/
@@ -222,7 +222,7 @@ void Ind_ReqIndicatorsCourses (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

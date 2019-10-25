@@ -3505,7 +3505,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 	             Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Session,Usr_PutLinkToLogOut,
+   Box_BoxBegin (NULL,Txt_Session,Usr_PutLinkToLogOut,
                  Hlp_PROFILE_Session_role,Box_NOT_CLOSABLE);
 
    /***** Put a form to change my role *****/
@@ -3523,7 +3523,7 @@ void Usr_ShowFormsLogoutAndRole (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -6168,7 +6168,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
    unsigned NumTotalUsrs;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Title,NULL,HelpLink,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,Title,NULL,HelpLink,Box_NOT_CLOSABLE);
 
    /***** Get and update type of list,
           number of columns in class photo
@@ -6187,7 +6187,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Draw class photos to select users *****/
-   Box_StartBox (NULL,Txt_Select_users,NULL,HelpLink,Box_NOT_CLOSABLE);
+   Box_BoxBegin (NULL,Txt_Select_users,NULL,HelpLink,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (FuncParams,
@@ -6236,7 +6236,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
    Lay_EndSection ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory for users' list *****/
    Usr_FreeUsrsList (Rol_TCH);
@@ -6247,7 +6247,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
    Grp_FreeListCodSelectedGrps ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 void Usr_GetSelectedUsrsAndGoToAct (void (*FuncWhenUsrsSelected) (),
@@ -7337,7 +7337,7 @@ void Usr_ListDataAdms (void)
    Usr_GetAdmsLst (Gbl.Scope.Current);
 
    /***** Start box with list of administrators *****/
-   Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL,
+   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL,
                  Hlp_USERS_Administrators,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -7403,7 +7403,7 @@ void Usr_ListDataAdms (void)
       Usr_ShowWarningNoUsersFound (Rol_DEG_ADM);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory for administrators list *****/
    Usr_FreeUsrsList (Rol_DEG_ADM);
@@ -7802,7 +7802,7 @@ void Usr_SeeGuests (void)
    Usr_GetGstsLst (Gbl.Scope.Current);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],Usr_PutIconsListGsts,
+   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],Usr_PutIconsListGsts,
 		 Hlp_USERS_Guests,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -7883,7 +7883,7 @@ void Usr_SeeGuests (void)
    Lay_EndSection ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory for guests list *****/
    Usr_FreeUsrsList (Rol_GST);
@@ -7943,7 +7943,7 @@ void Usr_SeeStudents (void)
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Usr_PutIconsListStds,
+   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Usr_PutIconsListStds,
 		 Hlp_USERS_Students,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -8044,7 +8044,7 @@ void Usr_SeeStudents (void)
    Lay_EndSection ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (Rol_STD);
@@ -8122,7 +8122,7 @@ void Usr_SeeTeachers (void)
 						    1 << Rol_TCH);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],Usr_PutIconsListTchs,
+   Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],Usr_PutIconsListTchs,
 		 Hlp_USERS_Teachers,Box_NOT_CLOSABLE);
 
    /***** Form to select scope *****/
@@ -8224,7 +8224,7 @@ void Usr_SeeTeachers (void)
    Lay_EndSection ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory for teachers lists *****/
    Usr_FreeUsrsList (Rol_TCH);	// Teachers
@@ -9641,7 +9641,7 @@ void Usr_PrintUsrQRCode (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       /***** Start box *****/
-      Box_StartBox (NULL,Gbl.Usrs.Other.UsrDat.FullName,NULL,
+      Box_BoxBegin (NULL,Gbl.Usrs.Other.UsrDat.FullName,NULL,
                     NULL,Box_NOT_CLOSABLE);
 
       /***** Show QR code *****/
@@ -9654,7 +9654,7 @@ void Usr_PrintUsrQRCode (void)
 	}
 
       /***** End box *****/
-      Box_EndBox ();
+      Box_BoxEnd ();
      }
    else
       Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();

@@ -289,7 +289,7 @@ static void Grp_EditGroupTypes (void)
    extern const char *Txt_There_are_no_types_of_group_in_the_course_X;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Types_of_group,Grp_PutIconsEditingGroupTypes,
+   Box_BoxBegin (NULL,Txt_Types_of_group,Grp_PutIconsEditingGroupTypes,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new group type *****/
@@ -303,7 +303,7 @@ static void Grp_EditGroupTypes (void)
                      Gbl.Hierarchy.Crs.ShrtName);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -317,7 +317,7 @@ static void Grp_EditGroups (void)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
+   Box_BoxBegin (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new group *****/
@@ -331,7 +331,7 @@ static void Grp_EditGroups (void)
                      Gbl.Hierarchy.Crs.ShrtName);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -378,7 +378,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
    ICanEdit = !Gbl.Form.Inside &&
 	      (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
-   Box_StartBox (NULL,Txt_Groups,ICanEdit ? Grp_PutIconToEditGroups :
+   Box_BoxBegin (NULL,Txt_Groups,ICanEdit ? Grp_PutIconToEditGroups :
 					    NULL,
 		 Hlp_USERS_Groups,Box_CLOSABLE);
 
@@ -421,7 +421,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1802,7 +1802,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      }
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_My_groups,ICanEdit ? Grp_PutIconToEditGroups :
+   Box_BoxBegin (NULL,Txt_My_groups,ICanEdit ? Grp_PutIconToEditGroups :
                                                NULL,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
@@ -1849,7 +1849,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
      }
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    if (Gbl.Crs.Grps.NumGrps) // This course has groups
       /***** Free list of groups types and groups in this course *****/

@@ -111,7 +111,7 @@ void Plc_SeePlaces (void)
       Plc_GetListPlaces ();
 
       /***** Table head *****/
-      Box_StartBox (NULL,Txt_Places,Plc_PutIconsListingPlaces,
+      Box_BoxBegin (NULL,Txt_Places,Plc_PutIconsListingPlaces,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
       HTM_TABLE_BeginWideMarginPadding (2);
       HTM_TR_Begin (NULL);
@@ -204,7 +204,7 @@ void Plc_SeePlaces (void)
 	}
 
       /***** End box *****/
-      Box_EndBox ();
+      Box_BoxEnd ();
 
       /***** Free list of places *****/
       Plc_FreeListPlaces ();
@@ -281,7 +281,7 @@ static void Plc_EditPlacesInternal (void)
    Plc_GetListPlaces ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Places,Plc_PutIconsEditingPlaces,
+   Box_BoxBegin (NULL,Txt_Places,Plc_PutIconsEditingPlaces,
                  Hlp_INSTITUTION_Places_edit,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new place *****/
@@ -292,7 +292,7 @@ static void Plc_EditPlacesInternal (void)
       Plc_ListPlacesForEdition ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of places *****/
    Plc_FreeListPlaces ();

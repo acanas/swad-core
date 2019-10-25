@@ -109,7 +109,7 @@ void Not_ShowFormNotice (void)
    Frm_StartForm (ActRcvNot);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_New_notice,NULL,
+   Box_BoxBegin (NULL,Txt_New_notice,NULL,
                  Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
 
    /***** Message body *****/
@@ -410,7 +410,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
       snprintf (StrWidth,sizeof (StrWidth),
 		"%upx",
 		Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
-      Box_StartBox (StrWidth,
+      Box_BoxBegin (StrWidth,
 		    Txt_Notices,
 		    Not_PutIconsListNotices,
 		    Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
@@ -486,7 +486,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	    Not_PutButtonToAddNewNotice ();
 
 	 /***** End box *****/
-	 Box_EndBox ();
+	 Box_BoxEnd ();
 	 break;
      }
 

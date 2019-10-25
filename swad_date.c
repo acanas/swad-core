@@ -105,7 +105,7 @@ void Dat_PutBoxToSelectDateFormat (void)
    Dat_Format_t Format;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Dates,Dat_PutIconsDateFormat,
+   Box_BoxBegin (NULL,Txt_Dates,Dat_PutIconsDateFormat,
                  Hlp_PROFILE_Settings_dates,Box_NOT_CLOSABLE);
 
    /***** Form with list of options *****/
@@ -139,7 +139,7 @@ void Dat_PutBoxToSelectDateFormat (void)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

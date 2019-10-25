@@ -574,7 +574,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 				Gbl.Hierarchy.Crs.CrsCod,SubQueryStatus);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Announcements_of_exams,
+   Box_BoxBegin (NULL,Txt_Announcements_of_exams,
 		 ICanEdit ? Exa_PutIconToCreateNewExamAnnouncement :
 			    NULL,
 		 Hlp_ASSESSMENT_Announcements,Box_NOT_CLOSABLE);
@@ -626,7 +626,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
       Exa_PutButtonToCreateNewExamAnnouncement ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1028,7 +1028,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
      }
    else	// Don't highlight
       /* Start normal box */
-      Box_StartBox (Width,NULL,FunctionToDrawContextualIcons,HelpLink,
+      Box_BoxBegin (Width,NULL,FunctionToDrawContextualIcons,HelpLink,
 		    Box_NOT_CLOSABLE);
 
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)

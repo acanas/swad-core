@@ -408,7 +408,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Ntf_NotifyEvent_t NotifyEvent;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Enrolment,NULL,
+   Box_BoxBegin (NULL,Txt_Enrolment,NULL,
                  Hlp_USERS_SignUp_confirm_enrolment,Box_NOT_CLOSABLE);
 
    /***** Show message *****/
@@ -453,7 +453,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Mark possible notification as seen *****/
    switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs.Role)
@@ -724,7 +724,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    Frm_StartForm (NextAction);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Title,NULL,
+   Box_BoxBegin (NULL,Title,NULL,
 	         Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
 
    /***** Step 1: List of students to be enroled / removed *****/
@@ -802,7 +802,7 @@ void Enr_AskRemoveOldUsrs (void)
    Frm_StartForm (ActRemOldUsr);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Eliminate_old_users,NULL,
+   Box_BoxBegin (NULL,Txt_Eliminate_old_users,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months without clicks *****/
@@ -1855,7 +1855,7 @@ void Enr_AskRemAllStdsThisCrs (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Remove_all_students,NULL,
+   Box_BoxBegin (NULL,Txt_Remove_all_students,NULL,
                  Hlp_USERS_Administration_remove_all_students,Box_NOT_CLOSABLE);
 
    if (Gbl.Hierarchy.Crs.NumUsrs[Rol_STD])
@@ -1881,7 +1881,7 @@ void Enr_AskRemAllStdsThisCrs (void)
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -2280,7 +2280,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Sco_GetScope ("ScopeEnr");
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Enrolment_requests,NULL,
+   Box_BoxBegin (NULL,Txt_Enrolment_requests,NULL,
                  Hlp_USERS_Requests,Box_NOT_CLOSABLE);
 
    /***** Selection of scope and roles *****/
@@ -2956,7 +2956,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       Ale_ShowAlert (Ale_INFO,Txt_No_enrolment_requests);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -3122,7 +3122,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
    Act_Action_t NextAction;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Administer_one_user,NULL,
+   Box_BoxBegin (NULL,Txt_Administer_one_user,NULL,
                  Hlp_USERS_Administration_administer_one_user,Box_NOT_CLOSABLE);
 
    /***** Write form to request another user's ID *****/
@@ -3148,7 +3148,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
    Enr_WriteFormToReqAnotherUsrID (NextAction,NULL);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

@@ -183,7 +183,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Results,NULL,
+   Box_BoxBegin (NULL,Txt_Results,NULL,
                  Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
    /***** Show form to select the groups *****/
@@ -242,7 +242,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
    Lay_EndSection ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory for users' list *****/
    Usr_FreeUsrsList (Rol_TCH);
@@ -735,7 +735,7 @@ void McR_ShowOneMchResult (void)
 					 &NumQsts,&NumQstsNotBlank);
 
       /***** Start box *****/
-      Box_StartBox (NULL,Txt_Match_result,NULL,
+      Box_BoxBegin (NULL,Txt_Match_result,NULL,
                     Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.Hierarchy.Ins.InsCod,
@@ -861,7 +861,7 @@ void McR_ShowOneMchResult (void)
          Tst_ShowTstTotalMark (NumQsts,TotalScore);
 
       /***** End box *****/
-      Box_EndBox ();
+      Box_BoxEnd ();
      }
    else	// I am not allowed to view this match result
       Act_NoPermissionExit ();

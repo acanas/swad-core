@@ -289,7 +289,7 @@ void Log_RequestLogo (Hie_Level_t Scope)
    Frm_StartForm (ActionRec);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Logo,NULL,
+   Box_BoxBegin (NULL,Txt_Logo,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Write help message *****/
@@ -308,7 +308,7 @@ void Log_RequestLogo (Hie_Level_t Scope)
             Gbl.Form.Id);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** End form *****/
    Frm_EndForm ();

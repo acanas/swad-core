@@ -230,7 +230,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
                                      &Pagination);
 
    /***** Start box *****/
-   Box_StartBox ("100%",Txt_Surveys,Svy_PutIconsListSurveys,
+   Box_BoxBegin ("100%",Txt_Surveys,Svy_PutIconsListSurveys,
                  Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
@@ -294,7 +294,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Svy_PutButtonToCreateNewSvy ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -442,7 +442,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /***** Start box *****/
    if (ShowOnlyThisSvyComplete)
-      Box_StartBox (NULL,Txt_Survey,NULL,
+      Box_BoxBegin (NULL,Txt_Survey,NULL,
                     Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
 
    /***** Get data of this survey *****/
@@ -693,7 +693,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       HTM_TABLE_End ();
 
       /***** End box *****/
-      Box_EndBox ();
+      Box_BoxEnd ();
      }
 
    /***** Free anchor string *****/
@@ -2681,11 +2681,11 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%s %u",
                 Txt_Question,SvyQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
-      Box_StartBox (NULL,Gbl.Title,Svy_PutIconToRemoveOneQst,
+      Box_BoxBegin (NULL,Gbl.Title,Svy_PutIconToRemoveOneQst,
                     NULL,Box_NOT_CLOSABLE);
      }
    else
-      Box_StartBox (NULL,Txt_New_question,NULL,
+      Box_BoxBegin (NULL,Txt_New_question,NULL,
                     Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
 
    /***** Begin form *****/
@@ -2791,7 +2791,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free memory for answers *****/
    Svy_FreeTextChoiceAnswers (SvyQst,NumAnswers);
@@ -3201,7 +3201,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
 
    /***** Start box *****/
    Svy_CurrentSvyCod = Svy->SvyCod;
-   Box_StartBox (NULL,Txt_Questions,Svy->Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
+   Box_BoxBegin (NULL,Txt_Questions,Svy->Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
                                                            NULL,
                  Hlp_ASSESSMENT_Surveys_questions,Box_NOT_CLOSABLE);
 
@@ -3306,7 +3306,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

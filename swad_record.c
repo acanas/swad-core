@@ -1336,10 +1336,10 @@ static void Rec_ShowRecordOneTchCrs (void)
      {
       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
       Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-      Box_StartBox (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
+      Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
       TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
-      Box_EndBox ();
+      Box_BoxEnd ();
       HTM_DIV_End ();
      }
 
@@ -1457,10 +1457,10 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
               {
 	       HTM_DIV_Begin ("class=\"REC_RIGHT\"");
                Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
-	       Box_StartBox (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
+	       Box_BoxBegin (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL,
 	                     Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
 	       TT_ShowTimeTable (UsrDat.UsrCod);
-	       Box_EndBox ();
+	       Box_BoxEnd ();
                HTM_DIV_End ();
               }
 

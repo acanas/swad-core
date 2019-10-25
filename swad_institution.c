@@ -326,10 +326,10 @@ static void Ins_Configuration (bool PrintView)
 
    /***** Start box *****/
    if (PrintView)
-      Box_StartBox (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_StartBox (NULL,NULL,Ins_PutIconsToPrintAndUpload,
+      Box_BoxBegin (NULL,NULL,Ins_PutIconsToPrintAndUpload,
 		    Hlp_INSTITUTION_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
@@ -619,7 +619,7 @@ static void Ins_Configuration (bool PrintView)
    HTM_TABLE_End ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -706,7 +706,7 @@ static void Ins_ListInstitutions (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Institutions_of_COUNTRY_X,
 	     Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-   Box_StartBox (NULL,Gbl.Title,Ins_PutIconsListingInstitutions,
+   Box_BoxBegin (NULL,Gbl.Title,Ins_PutIconsListingInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
 
    if (Gbl.Hierarchy.Cty.Inss.Num)	// There are institutions in the current country
@@ -736,7 +736,7 @@ static void Ins_ListInstitutions (void)
       Frm_EndForm ();
      }
 
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -952,7 +952,7 @@ static void Ins_EditInstitutionsInternal (void)
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Institutions_of_COUNTRY_X,
              Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
-   Box_StartBox (NULL,Gbl.Title,Ins_PutIconsEditingInstitutions,
+   Box_BoxBegin (NULL,Gbl.Title,Ins_PutIconsEditingInstitutions,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new institution *****/
@@ -963,7 +963,7 @@ static void Ins_EditInstitutionsInternal (void)
       Ins_ListInstitutionsForEdition ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of institutions *****/
    Ins_FreeListInstitutions ();

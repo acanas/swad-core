@@ -275,7 +275,7 @@ void Pwd_ShowFormSendNewPwd (void)
    Frm_StartForm (ActSndNewPwd);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Forgotten_password,NULL,
+   Box_BoxBegin (NULL,Txt_Forgotten_password,NULL,
                  Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
    /***** Help text *****/
@@ -664,7 +664,7 @@ void Pwd_ShowFormChgMyPwd (void)
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
-   Box_StartBox (StrRecordWidth,Txt_Password,NULL,
+   Box_BoxBegin (StrRecordWidth,Txt_Password,NULL,
 		 Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
    /***** Show possible alerts *****/
@@ -835,7 +835,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    Act_Action_t NextAction;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Password,NULL,
+   Box_BoxBegin (NULL,Txt_Password,NULL,
 		 NULL,Box_NOT_CLOSABLE);
 
    /***** Start section *****/
@@ -872,7 +872,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    Frm_EndForm ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** End section *****/
    Lay_EndSection ();

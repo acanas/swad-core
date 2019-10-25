@@ -218,7 +218,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_My_frequent_actions,NULL,
+   Box_BoxBegin (NULL,Txt_My_frequent_actions,NULL,
                  Hlp_ANALYTICS_Frequent,Box_NOT_CLOSABLE);
    HTM_DIV_Begin ("id=\"MFU_actions_big\"");
 
@@ -257,7 +257,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
    /***** End box *****/
    HTM_DIV_End ();
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

@@ -201,7 +201,7 @@ void Fig_ReqShowFigures (void)
    Frm_StartForm (ActSeeUseGbl);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Figures,NULL,
+   Box_BoxBegin (NULL,Txt_Figures,NULL,
                  Hlp_ANALYTICS_Figures,Box_NOT_CLOSABLE);
 
    /***** Compute stats for anywhere, degree or course? *****/
@@ -1029,7 +1029,7 @@ static void Fig_GetAndShowInstitutionsStats (void)
    extern const char *Txt_Institutions;
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Institutions,NULL,
+   Box_BoxBegin (NULL,Txt_Institutions,NULL,
                  Hlp_ANALYTICS_Figures_institutions,Box_NOT_CLOSABLE);
 
    /***** Form to select type of list used to display degree photos *****/
@@ -1052,7 +1052,7 @@ static void Fig_GetAndShowInstitutionsStats (void)
    Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -1588,7 +1588,7 @@ static void Fig_GetAndShowFileBrowsersStats (void)
 				   &SizeOfFileZones[NumStat]);
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_FIGURE_TYPES[Fig_FOLDERS_AND_FILES],NULL,
+   Box_BoxBegin (NULL,Txt_FIGURE_TYPES[Fig_FOLDERS_AND_FILES],NULL,
                  Hlp_ANALYTICS_Figures_folders_and_files,Box_NOT_CLOSABLE);
 
    /***** Write sizes of all file zones *****/
@@ -1625,7 +1625,7 @@ static void Fig_GetAndShowFileBrowsersStats (void)
    HTM_TABLE_End ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/

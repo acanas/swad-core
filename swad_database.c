@@ -2177,7 +2177,23 @@ mysql> DESCRIBE plugins;
 			"IP CHAR(15) NOT NULL,"			// Cns_MAX_BYTES_IP
 		   "UNIQUE INDEX(PlgCod))");
 
-   /***** Table prj_grp *****/
+   /***** Table prj_config *****/
+/*
+mysql> DESCRIBE prj_config;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| CrsCod   | int(11)       | NO   | PRI | -1      |       |
+| Editable | enum('N','Y') | NO   |     | Y       |       |
++----------+---------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS prj_config ("
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"Editable ENUM('N','Y') NOT NULL DEFAULT 'Y',"
+		   "UNIQUE INDEX(CrsCod))");
+
+   /***** Table prj_usr *****/
 /*
 mysql> DESCRIBE prj_usr;
 +---------------+------------+------+-----+---------+-------+
@@ -2206,7 +2222,7 @@ mysql> DESCRIBE projects;
 | DptCod      | int(11)                             | NO   |     | -1      |                |
 | Locked      | enum('N','Y')                       | NO   |     | N       |                |
 | Hidden      | enum('N','Y')                       | NO   |     | N       |                |
-| Preassigned | enum('N','Y')                       | NO   |     | N       |                |
+| Assigned    | enum('N','Y')                       | NO   |     | N       |                |
 | NumStds     | int(11)                             | NO   |     | 1       |                |
 | Proposal    | enum('new','modified','unmodified') | NO   |     | new     |                |
 | CreatTime   | datetime                            | NO   |     | NULL    |                |
@@ -2225,7 +2241,7 @@ mysql> DESCRIBE projects;
 			"DptCod INT NOT NULL DEFAULT -1,"
 			"Locked ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"Preassigned ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Assigned ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"NumStds INT NOT NULL DEFAULT 1,"
 			"Proposal ENUM('new','modified','unmodified') NOT NULL DEFAULT 'new',"
 			"CreatTime DATETIME NOT NULL,"

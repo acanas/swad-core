@@ -303,6 +303,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Asgs.SelectedOrder = Asg_ORDER_DEFAULT;
 
    /* Projects */
+   Gbl.Prjs.Config.Editable = Prj_EDITABLE_DEFAULT;
    Gbl.Prjs.Filter.My_All = Prj_FILTER_WHOSE_PROJECTS_DEFAULT;
    Gbl.Prjs.Filter.Assign = Prj_FILTER_ASSIGNED_DEFAULT |
 	                    Prj_FILTER_NONASSIG_DEFAULT;

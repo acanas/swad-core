@@ -255,10 +255,10 @@ static void Cty_Configuration (bool PrintView)
 
    /***** Start box *****/
    if (PrintView)
-      Box_StartBox (NULL,NULL,NULL,
+      Box_BoxBegin (NULL,NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
    else
-      Box_StartBox (NULL,NULL,Cty_PutIconToPrint,
+      Box_BoxBegin (NULL,NULL,Cty_PutIconToPrint,
 		    Hlp_COUNTRY_Information,Box_NOT_CLOSABLE);
 
    /***** Title *****/
@@ -462,7 +462,7 @@ static void Cty_Configuration (bool PrintView)
    HTM_TABLE_End ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
   }
 
 /*****************************************************************************/
@@ -979,7 +979,7 @@ static void Cty_EditCountriesInternal (void)
    Hie_WriteMenuHierarchy ();
 
    /***** Start box *****/
-   Box_StartBox (NULL,Txt_Countries,Cty_PutIconsEditingCountries,
+   Box_BoxBegin (NULL,Txt_Countries,Cty_PutIconsEditingCountries,
                  Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
 
    /***** Put a form to create a new country *****/
@@ -990,7 +990,7 @@ static void Cty_EditCountriesInternal (void)
       Cty_ListCountriesForEdition ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Free list of countries *****/
    Cty_FreeListCountries ();

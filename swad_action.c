@@ -499,6 +499,12 @@ Assessment:
 
 	356. ActSeeTblAllPrj		Show all projects in a table
 	NEW. ActCfgPrj			Configure all projects
+	NEW. ActRcvCfgPrj		Receive configuration of all projects
+	368. ActReqLckAllPrj		Request locking of all projects
+	369. ActReqUnlAllPrj		Request unlocking of all projects
+	370. ActLckAllPrj		Lock all projects
+	371. ActUnlAllPrj		Unlock all projects
+
 	357. ActFrmNewPrj		Form to create a new project
 	358. ActEdiOnePrj		Edit one project
 	359. ActPrnOnePrj		Print one project
@@ -510,10 +516,6 @@ Assessment:
 	365. ActShoPrj			Show project
 	366. ActLckPrj			Lock project edition
 	367. ActUnlPrj			Unlock project edition
-	368. ActReqLckAllPrj		Request locking of all projects
-	369. ActReqUnlAllPrj		Request unlocking of all projects
-	370. ActLckAllPrj		Lock all projects
-	371. ActUnlAllPrj		Unlock all projects
 	372. ActReqAddStdPrj		Request adding a student to a project
 	373. ActReqAddTutPrj		Request adding a tutor to a project
 	374. ActReqAddEvlPrj		Request adding an evaluator to a project
@@ -2062,7 +2064,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActShoAsg		*/{ 965,-1,TabUnk,ActSeeAsg		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Asg_ShowAssignment		,NULL},
 
    /* ActSeeTblAllPrj	*/{1696,-1,TabUnk,ActSeePrj		,0x238,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_ShowTableAllProjects	,NULL},
-   /* ActCfgPrj		*/{1803,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_ShowTableAllProjects	,NULL},
+   /* ActCfgPrj		*/{1803,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ShowFormConfig		,NULL},
+   /* ActRcvCfgPrj	*/{1804,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReceiveConfigPrj		,NULL},
+   /* ActReqLckAllPrj	*/{1775,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqLockAllProjectsEdition	,NULL},
+   /* ActReqUnlAllPrj	*/{1776,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqUnlockAllProjectsEdition,NULL},
+   /* ActLckAllPrj	*/{1777,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_LockAllProjectsEdition	,NULL},
+   /* ActUnlAllPrj	*/{1778,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnlockAllProjectsEdition	,NULL},
    /* ActFrmNewPrj	*/{1675,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestCreatePrj		,NULL},
    /* ActEdiOnePrj	*/{1676,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_RequestEditPrj		,NULL},
    /* ActPrnOnePrj	*/{1677,-1,TabUnk,ActSeePrj		,0x3F8,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_NEW_TAB,NULL				,Prj_PrintOneProject		,NULL},
@@ -2074,10 +2081,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActShoPrj		*/{1683,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ShowProject		,NULL},
    /* ActLckPrj		*/{1773,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_LockProjectEdition		,NULL},
    /* ActUnlPrj		*/{1774,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_AJAX_NORMAL,NULL				,Prj_UnlockProjectEdition	,NULL},
-   /* ActReqLckAllPrj	*/{1775,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqLockAllProjectsEdition	,NULL},
-   /* ActReqUnlAllPrj	*/{1776,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqUnlockAllProjectsEdition,NULL},
-   /* ActLckAllPrj	*/{1777,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_LockAllProjectsEdition	,NULL},
-   /* ActUnlAllPrj	*/{1778,-1,TabUnk,ActSeePrj		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_UnlockAllProjectsEdition	,NULL},
    /* ActReqAddStdPrj	*/{1684,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddStds			,NULL},
    /* ActReqAddTutPrj	*/{1685,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddTuts			,NULL},
    /* ActReqAddEvlPrj	*/{1686,-1,TabUnk,ActSeePrj		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BRW_1ST_TAB,NULL				,Prj_ReqAddEvls			,NULL},
@@ -5036,6 +5039,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgVisResMchUsr,	// #1801
 	ActChgNumColMch,	// #1802
 	ActCfgPrj,		// #1803
+	ActRcvCfgPrj,		// #1804
 	};
 
 /*****************************************************************************/

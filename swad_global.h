@@ -554,6 +554,10 @@ struct Globals
      } Asgs;
    struct
      {
+      struct
+        {
+	 bool Editable;
+        } Config;
       struct Prj_Filter Filter;
       bool LstIsRead;		// Is the list already read from database, or it needs to be read?
       unsigned Num;		// Number of projects

@@ -143,7 +143,7 @@ static void Asg_ShowAllAssignments (void)
                                      &Pagination);
 
    /***** Start box *****/
-   Box_StartBox ("100%",Txt_Assignments,Asg_PutIconsListAssignments,
+   Box_BoxBegin ("100%",Txt_Assignments,Asg_PutIconsListAssignments,
                  Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 
    /***** Select whether show only my groups or all groups *****/
@@ -178,7 +178,7 @@ static void Asg_ShowAllAssignments (void)
       Asg_PutButtonToCreateNewAsg ();
 
    /***** End box *****/
-   Box_EndBox ();
+   Box_BoxEnd ();
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
