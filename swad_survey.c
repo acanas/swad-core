@@ -731,59 +731,84 @@ static void Svy_WriteStatus (struct Survey *Svy)
 
    /* Write whether survey is visible or hidden */
    if (Svy->Status.Visible)
-      fprintf (Gbl.F.Out,"<li class=\"STATUS_GREEN\">%s</li>",
-               Txt_Visible_survey);
+     {
+      HTM_LI_Begin ("class=\"STATUS_GREEN\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Visible_survey);
+     }
    else
-      fprintf (Gbl.F.Out,"<li class=\"STATUS_RED_LIGHT\">%s</li>",
-               Txt_Hidden_survey);
+     {
+      HTM_LI_Begin ("class=\"STATUS_RED_LIGHT\"");
+      fprintf (Gbl.F.Out,"%s",Txt_Hidden_survey);
+     }
+   HTM_LI_End ();
 
    /* Write whether survey is open or closed */
    if (Svy->Status.Open)
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Svy->Status.Visible ? "STATUS_GREEN" :
-        	                     "STATUS_GREEN_LIGHT",
-               Txt_Open_survey);
+     {
+      HTM_LI_Begin ("class=\"%s\"",
+                    Svy->Status.Visible ? "STATUS_GREEN" :
+        	                          "STATUS_GREEN_LIGHT");
+      fprintf (Gbl.F.Out,"%s",Txt_Open_survey);
+     }
    else
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Svy->Status.Visible ? "STATUS_RED" :
-        	                     "STATUS_RED_LIGHT",
-               Txt_Closed_survey);
+     {
+      HTM_LI_Begin ("class=\"%s\"",
+                    Svy->Status.Visible ? "STATUS_RED" :
+        	                          "STATUS_RED_LIGHT");
+      fprintf (Gbl.F.Out,"%s",Txt_Closed_survey);
+     }
+   HTM_LI_End ();
 
    /* Write whether survey can be answered by me or not depending on user type */
    if (Svy->Status.IAmLoggedWithAValidRoleToAnswer)
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Svy->Status.Visible ? "STATUS_GREEN" :
-        	                     "STATUS_GREEN_LIGHT",
-               Txt_SURVEY_Type_of_user_allowed);
+     {
+      HTM_LI_Begin ("class=\"%s\"",
+                    Svy->Status.Visible ? "STATUS_GREEN" :
+        	                          "STATUS_GREEN_LIGHT");
+      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_Type_of_user_allowed);
+     }
    else
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Svy->Status.Visible ? "STATUS_RED" :
-        	                     "STATUS_RED_LIGHT",
-               Txt_SURVEY_Type_of_user_not_allowed);
+     {
+      HTM_LI_Begin ("class=\"%s\"",
+                    Svy->Status.Visible ? "STATUS_RED" :
+        	                          "STATUS_RED_LIGHT");
+      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_Type_of_user_not_allowed);
+     }
+   HTM_LI_End ();
 
    /* Write whether survey can be answered by me or not depending on groups */
    if (Svy->Status.IBelongToScope)
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Svy->Status.Visible ? "STATUS_GREEN" :
-        	                     "STATUS_GREEN_LIGHT",
-               Txt_SURVEY_You_belong_to_the_scope_of_the_survey);
+     {
+      HTM_LI_Begin ("class=\"%s\"",
+                    Svy->Status.Visible ? "STATUS_GREEN" :
+        	                          "STATUS_GREEN_LIGHT");
+      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_You_belong_to_the_scope_of_the_survey);
+     }
    else
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Svy->Status.Visible ? "STATUS_RED" :
-        	                     "STATUS_RED_LIGHT",
-               Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey);
+     {
+      HTM_LI_Begin ("class=\"%s\"",
+                    Svy->Status.Visible ? "STATUS_RED" :
+        	                          "STATUS_RED_LIGHT");
+      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_You_dont_belong_to_the_scope_of_the_survey);
+     }
+   HTM_LI_End ();
 
    /* Write whether survey has been already answered by me or not */
    if (Svy->Status.IHaveAnswered)
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Svy->Status.Visible ? "STATUS_GREEN" :
-        	                     "STATUS_GREEN_LIGHT",
-               Txt_SURVEY_You_have_already_answered);
+     {
+      HTM_LI_Begin ("class=\"%s\"",
+                    Svy->Status.Visible ? "STATUS_GREEN" :
+        	                          "STATUS_GREEN_LIGHT");
+      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_You_have_already_answered);
+     }
    else
-      fprintf (Gbl.F.Out,"<li class=\"%s\">%s</li>",
-               Svy->Status.Visible ? "STATUS_RED" :
-        	                     "STATUS_RED_LIGHT",
-               Txt_SURVEY_You_have_not_answered);
+     {
+      HTM_LI_Begin ("class=\"%s\"",
+                    Svy->Status.Visible ? "STATUS_RED" :
+        	                          "STATUS_RED_LIGHT");
+      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_You_have_not_answered);
+     }
+   HTM_LI_End ();
 
    /***** End list with items of status *****/
    HTM_UL_End ();

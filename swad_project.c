@@ -2037,10 +2037,12 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))
 	   {
 	    /* Write user's name in "Surname1 Surname2, FirstName" format */
-            fprintf (Gbl.F.Out,"<li>%s",Gbl.Usrs.Other.UsrDat.Surname1);
+            HTM_LI_Begin (NULL);
+            fprintf (Gbl.F.Out,"%s",Gbl.Usrs.Other.UsrDat.Surname1);
 	    if (Gbl.Usrs.Other.UsrDat.Surname2[0])
                fprintf (Gbl.F.Out," %s",Gbl.Usrs.Other.UsrDat.Surname2);
-            fprintf (Gbl.F.Out,", %s</li>",Gbl.Usrs.Other.UsrDat.FirstName);
+            fprintf (Gbl.F.Out,", %s",Gbl.Usrs.Other.UsrDat.FirstName);
+            HTM_LI_End ();
 	   }
 	}
 

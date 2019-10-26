@@ -8363,8 +8363,9 @@ static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NU
 static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label)
   {
-   fprintf (Gbl.F.Out,"<li>"
-		      "<input type=\"radio\" id=\"ListUsrsAction%u\""
+   HTM_LI_Begin (NULL);
+
+   fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"ListUsrsAction%u\""
 		      " name=\"ListUsrsAction\" value=\"%u\"",
 	    (unsigned) ListUsrsAction,
 	    (unsigned) ListUsrsAction);
@@ -8373,10 +8374,11 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
    fprintf (Gbl.F.Out," />"
 		      "<label for=\"ListUsrsAction%u\">"
 		      "%s"
-		      "</label>"
-		      "</li>",
+		      "</label>",
 	    (unsigned) ListUsrsAction,
             Label);
+
+   HTM_LI_End ();
   }
 
 /*****************************************************************************/

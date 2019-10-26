@@ -912,8 +912,9 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
 	   NumTag++)
         {
          row = mysql_fetch_row (mysql_res);
-         fprintf (Gbl.F.Out,"<li>%s</li>",
-                  row[0]);
+         HTM_LI_Begin (NULL);
+         fprintf (Gbl.F.Out,"%s",row[0]);
+         HTM_LI_End ();
         }
       HTM_UL_End ();
      }
@@ -4779,7 +4780,9 @@ void Tst_GetAndWriteTagsQst (long QstCod)
 	   NumRow++)
         {
          row = mysql_fetch_row (mysql_res);
-         fprintf (Gbl.F.Out,"<li>%s</li>",row[0]);
+         HTM_LI_Begin (NULL);
+         fprintf (Gbl.F.Out,"%s",row[0]);
+         HTM_LI_End ();
         }
       HTM_UL_End ();
      }

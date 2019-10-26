@@ -36,6 +36,7 @@
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_language.h"
 
 /*****************************************************************************/
@@ -3236,7 +3237,10 @@ mysql> DESCRIBE ws_keys;
 
 static void DB_CreateTable (const char *Query)
   {
-   fprintf (Gbl.F.Out,"<li class=\"DAT\">%s</li>",Query);
+   HTM_LI_Begin ("class=\"DAT\"");
+   fprintf (Gbl.F.Out,"%s",Query);
+   HTM_LI_End ();
+
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create table");
   }

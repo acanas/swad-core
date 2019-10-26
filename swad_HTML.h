@@ -77,4 +77,7 @@ void HTM_SECTION_End (void);
 void HTM_UL_Begin (const char *fmt,...);
 void HTM_UL_End (void);
 
+void HTM_LI_Begin (const char *fmt,...);
+void HTM_LI_End (void);
+
 #endif

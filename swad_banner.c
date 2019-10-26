@@ -150,20 +150,22 @@ static void Ban_WriteListOfBanners (void)
    for (NumBan = 0;
 	NumBan < Gbl.Banners.Num;
 	NumBan++)
+     {
       /* Write data of this banner */
-      fprintf (Gbl.F.Out,"<li>"
-			 "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
+      HTM_LI_Begin (NULL);
+      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER\" />"
-                         "</a>"
-			 "</li>",
+                         "</a>",
                Gbl.Banners.Lst[NumBan].WWW,
                Gbl.Banners.Lst[NumBan].FullName,
                Cfg_URL_BANNER_PUBLIC,
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShrtName,
                Gbl.Banners.Lst[NumBan].FullName);
+      HTM_LI_End ();
+     }
 
    /***** List end *****/
    HTM_UL_End ();

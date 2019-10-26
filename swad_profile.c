@@ -780,15 +780,15 @@ static void Prf_ShowNumMessagesSent (const struct UsrData *UsrDat,
 
 static void Prf_StartListItem (const char *Title,const char *Icon)
   {
-   fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
-		      " style=\"background-image:url('%s/%s');\">",
+   HTM_LI_Begin ("title=\"%s\" class=\"PRF_FIG_LI\""
+		 " style=\"background-image:url('%s/%s');\"",
 	    Title,
 	    Cfg_URL_ICON_PUBLIC,Icon);
   }
 
 static void Prf_EndListItem (void)
   {
-   fprintf (Gbl.F.Out,"</li>");
+   HTM_LI_End ();
   }
 
 /*****************************************************************************/

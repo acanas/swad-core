@@ -120,11 +120,11 @@ void Tab_DrawTabs (void)
       if (ICanViewTab)	// Don't show the first hidden tabs
 	{
 	 /* Form, icon (at top) and text (at bottom) of the tab */
-	 fprintf (Gbl.F.Out,"<li class=\"%s %s\">",
-		  NumTab == Gbl.Action.Tab ? "TAB_ON" :
-					     "TAB_OFF",
-		  NumTab == Gbl.Action.Tab ? The_TabOnBgColors[Gbl.Prefs.Theme] :
-					     The_TabOffBgColors[Gbl.Prefs.Theme]);
+	 HTM_LI_Begin ("class=\"%s %s\"",
+		       NumTab == Gbl.Action.Tab ? "TAB_ON" :
+						  "TAB_OFF",
+		       NumTab == Gbl.Action.Tab ? The_TabOnBgColors[Gbl.Prefs.Theme] :
+						  The_TabOffBgColors[Gbl.Prefs.Theme]);
 
 	 if (NumTab == Gbl.Action.Tab)
 	    HTM_DIV_Begin (NULL);	// This div must be present even in current tab in order to render properly the tab
@@ -151,7 +151,7 @@ void Tab_DrawTabs (void)
 	 Frm_EndForm ();
 
 	 HTM_DIV_End ();
-	 fprintf (Gbl.F.Out,"</li>");
+	 HTM_LI_End ();
 	}
      }
 

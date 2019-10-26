@@ -61,6 +61,7 @@ static unsigned HTM_TH_NestingLevel = 0;
 static unsigned HTM_TD_NestingLevel = 0;
 static unsigned HTM_DIV_NestingLevel = 0;
 static unsigned HTM_UL_NestingLevel = 0;
+static unsigned HTM_LI_NestingLevel = 0;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -78,6 +79,7 @@ static void HTM_TD_BeginWithoutAttr (void);
 static void HTM_DIV_BeginWithoutAttr (void);
 
 static void HTM_UL_BeginWithoutAttr (void);
+static void HTM_LI_BeginWithoutAttr (void);
 
 /*****************************************************************************/
 /******************************* Start/end table *****************************/
@@ -593,4 +595,56 @@ void HTM_UL_End (void)
    fprintf (Gbl.F.Out,"</ul>");
 
    HTM_UL_NestingLevel--;
+  }
+
+/*****************************************************************************/
+/******************************** List items *********************************/
+/*****************************************************************************/
+
+void HTM_LI_Begin (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 fprintf (Gbl.F.Out,"<li %s>",Attr);
+
+	 free ((void *) Attr);
+	}
+      else
+         HTM_LI_BeginWithoutAttr ();
+     }
+   else
+      HTM_LI_BeginWithoutAttr ();
+
+   HTM_LI_NestingLevel++;
+  }
+
+static void HTM_LI_BeginWithoutAttr (void)
+  {
+   fprintf (Gbl.F.Out,"<li>");
+  }
+
+void HTM_LI_End (void)
+  {
+   if (HTM_LI_NestingLevel == 0)	// No LI open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened LI.");
+
+   fprintf (Gbl.F.Out,"</li>");
+
+   HTM_LI_NestingLevel--;
   }

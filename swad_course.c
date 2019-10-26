@@ -587,9 +587,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** Write link to platform *****/
    Highlight = (Gbl.Hierarchy.Cty.CtyCod <= 0);
-   fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
-	    Highlight ? ClassHighlight :
-			ClassNormal);
+   HTM_LI_Begin ("class=\"%s\"",Highlight ? ClassHighlight :
+			                    ClassNormal);
    Frm_StartForm (ActMyCrs);
    Cty_PutParamCtyCod (-1L);
    Frm_LinkFormSubmit (Txt_System,
@@ -604,7 +603,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Txt_System,
 	    Txt_System);
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</li>");
+   HTM_LI_End ();
 
    /***** Get my countries *****/
    NumCtys = Usr_GetCtysFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_resCty);
@@ -623,9 +622,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /***** Write link to country *****/
       Highlight = (Gbl.Hierarchy.Ins.InsCod <= 0 &&
 	           Gbl.Hierarchy.Cty.CtyCod == Cty.CtyCod);
-      fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
-	       Highlight ? ClassHighlight :
-        	           ClassNormal);
+      HTM_LI_Begin ("class=\"%s\"",Highlight ? ClassHighlight :
+			                       ClassNormal);
       IsLastItemInLevel[1] = (NumCty == NumCtys - 1);
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
       Frm_StartForm (ActMyCrs);
@@ -644,7 +642,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Cty.Name[Gbl.Prefs.Language],
                Cty.Name[Gbl.Prefs.Language]);
       Frm_EndForm ();
-      fprintf (Gbl.F.Out,"</li>");
+      HTM_LI_End ();
 
       /***** Get my institutions in this country *****/
       NumInss = (unsigned) Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -664,9 +662,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 /***** Write link to institution *****/
 	 Highlight = (Gbl.Hierarchy.Ctr.CtrCod <= 0 &&
 	              Gbl.Hierarchy.Ins.InsCod == Ins.InsCod);
-	 fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
-		  Highlight ? ClassHighlight :
-			      ClassNormal);
+	 HTM_LI_Begin ("class=\"%s\"",Highlight ? ClassHighlight :
+			                          ClassNormal);
 	 IsLastItemInLevel[2] = (NumIns == NumInss - 1);
 	 Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
          Frm_StartForm (ActMyCrs);
@@ -677,7 +674,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins.FullName);
 	 Frm_EndForm ();
-	 fprintf (Gbl.F.Out,"</li>");
+	 HTM_LI_End ();
 
 	 /***** Get my centres in this institution *****/
 	 NumCtrs = (unsigned) Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -697,9 +694,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    /***** Write link to centre *****/
 	    Highlight = (Gbl.Hierarchy.Level == Hie_CTR &&
 			 Gbl.Hierarchy.Ctr.CtrCod == Ctr.CtrCod);
-	    fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
-	             Highlight ? ClassHighlight :
-			         ClassNormal);
+	    HTM_LI_Begin ("class=\"%s\"",Highlight ? ClassHighlight :
+			                             ClassNormal);
 	    IsLastItemInLevel[3] = (NumCtr == NumCtrs - 1);
 	    Lay_IndentDependingOnLevel (3,IsLastItemInLevel);
             Frm_StartForm (ActMyCrs);
@@ -710,7 +706,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Log_DrawLogo (Hie_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
 	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr.FullName);
 	    Frm_EndForm ();
-	    fprintf (Gbl.F.Out,"</li>");
+	    HTM_LI_End ();
 
 	    /***** Get my degrees in this centre *****/
 	    NumDegs = (unsigned) Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -730,9 +726,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       /***** Write link to degree *****/
 	       Highlight = (Gbl.Hierarchy.Level == Hie_DEG &&
 			    Gbl.Hierarchy.Deg.DegCod == Deg.DegCod);
-	       fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
-	                Highlight ? ClassHighlight :
-			            ClassNormal);
+	       HTM_LI_Begin ("class=\"%s\"",Highlight ? ClassHighlight :
+			                                ClassNormal);
 	       IsLastItemInLevel[4] = (NumDeg == NumDegs - 1);
 	       Lay_IndentDependingOnLevel (4,IsLastItemInLevel);
                Frm_StartForm (ActMyCrs);
@@ -743,7 +738,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
 	       fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg.FullName);
 	       Frm_EndForm ();
-	       fprintf (Gbl.F.Out,"</li>");
+	       HTM_LI_End ();
 
 	       /***** Get my courses in this degree *****/
 	       NumCrss = (unsigned) Usr_GetCrssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -763,9 +758,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  /***** Write link to course *****/
 		  Highlight = (Gbl.Hierarchy.Level == Hie_CRS &&
 			       Gbl.Hierarchy.Crs.CrsCod == Crs.CrsCod);
-		  fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
-	                   Highlight ? ClassHighlight :
-			               ClassNormal);
+		  HTM_LI_Begin ("class=\"%s\"",Highlight ? ClassHighlight :
+			                                   ClassNormal);
 		  IsLastItemInLevel[5] = (NumCrs == NumCrss - 1);
 		  Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
                   Frm_StartForm (ActMyCrs);
@@ -790,7 +784,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  /***** Put link to register students *****/
 		  Enr_PutButtonInlineToRegisterStds (Crs.CrsCod);
 
-		  fprintf (Gbl.F.Out,"</li>");
+		  HTM_LI_End ();
 		 }
 
 	       /* Free structure that stores the query result */

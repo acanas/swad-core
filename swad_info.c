@@ -609,7 +609,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
 	InfoType++)
       if (Gbl.Crs.Info.MustBeRead[InfoType])
         {
-         fprintf (Gbl.F.Out,"<li>");
+         HTM_LI_Begin (NULL);
          Frm_StartForm (Inf_ActionsSeeInfo[InfoType]);
          Frm_LinkFormSubmit (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
                              The_ClassFormInBox[Gbl.Prefs.Theme],NULL);
@@ -617,7 +617,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
                             "</a>",
                   Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</li>");
+         HTM_LI_End ();
         }
    HTM_UL_End ();
    HTM_DIV_End ();

@@ -956,55 +956,61 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 
    /***** Register / remove users listed or not listed *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
-      fprintf (Gbl.F.Out,"<li>"
-			 "<input type=\"radio\" id=\"RegRemAction%u\""
+     {
+      HTM_LI_Begin (NULL);
+      fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"RegRemAction%u\""
 			 " name=\"RegRemAction\" value=\"%u\" checked=\"checked\" />"
 			 "<label for=\"RegRemAction%u\">"
 			 "%s"
-			 "</label>"
-			 "</li>"
-			 "<li>"
-			 "<input type=\"radio\" id=\"RegRemAction%u\""
+			 "</label>",
+      	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
+	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
+	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
+	       Txt_Register_the_users_indicated_in_step_1);
+      HTM_LI_End ();
+
+      HTM_LI_Begin (NULL);
+      fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"RegRemAction%u\""
 			 " name=\"RegRemAction\" value=\"%u\" />"
 			 "<label for=\"RegRemAction%u\">"
 			 "%s"
-			 "</label>"
-			 "</li>"
-			 "<li>"
-			 "<input type=\"radio\" id=\"RegRemAction%u\""
+			 "</label>",
+	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
+	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
+	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
+	       Txt_Remove_the_users_indicated_in_step_1);
+      HTM_LI_End ();
+
+      HTM_LI_Begin (NULL);
+      fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"RegRemAction%u\""
 			 " name=\"RegRemAction\" value=\"%u\" />"
 			 "<label for=\"RegRemAction%u\">"
 			 "%s"
-			 "</label>"
-			 "</li>"
-			 "<li>"
-			 "<input id=\"RegRemAction%u\" type=\"radio\""
+			 "</label>",
+	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
+	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
+	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
+	       Txt_Remove_the_users_not_indicated_in_step_1);
+      HTM_LI_End ();
+
+      HTM_LI_Begin (NULL);
+      fprintf (Gbl.F.Out,"<input id=\"RegRemAction%u\" type=\"radio\""
 			 " name=\"RegRemAction\" value=\"%u\" />"
 			 "<label for=\"RegRemAction%u\">"
 			 "%s"
-			 "</label>"
-			 "</li>",
-	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
-	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
-	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
-	       Txt_Register_the_users_indicated_in_step_1,
-	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
-	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
-	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
-	       Txt_Remove_the_users_indicated_in_step_1,
-	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
-	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
-	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
-	       Txt_Remove_the_users_not_indicated_in_step_1,
+			 "</label>",
 	       (unsigned) Enr_UPDATE_USRS_IN_CRS,
 	       (unsigned) Enr_UPDATE_USRS_IN_CRS,
 	       (unsigned) Enr_UPDATE_USRS_IN_CRS,
 	       Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
+      HTM_LI_End ();
+     }
 
    /***** Only for superusers *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      fprintf (Gbl.F.Out,"<li>"
-                         "<input type=\"radio\" id=\"RegRemAction%u\""
+     {
+      HTM_LI_Begin (NULL);
+      fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"RegRemAction%u\""
                          " name=\"RegRemAction\" value=\"%u\" />"
 			 "<label for=\"RegRemAction%u\">"
                          "%s"
@@ -1014,6 +1020,8 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
                (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM,
                (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM,
                Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
+      HTM_LI_End ();
+     }
 
    /***** End list of options *****/
    HTM_UL_End ();
@@ -1758,8 +1766,8 @@ static void Enr_PutActionRemUsrAcc (bool *OptionChecked,bool ItsMe)
 static void Enr_StartRegRemOneUsrAction (Enr_RegRemOneUsrAction_t RegRemOneUsrAction,
                                          bool *OptionChecked)
   {
-   fprintf (Gbl.F.Out,"<li>"
-		      "<input type=\"radio\" id=\"RegRemAction%u\""
+   HTM_LI_Begin (NULL);
+   fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"RegRemAction%u\""
 		      " name=\"RegRemAction\" value=\"%u\"",
 	    (unsigned) RegRemOneUsrAction,
 	    (unsigned) RegRemOneUsrAction);
@@ -1775,8 +1783,8 @@ static void Enr_StartRegRemOneUsrAction (Enr_RegRemOneUsrAction_t RegRemOneUsrAc
 
 static void Enr_EndRegRemOneUsrAction (void)
   {
-   fprintf (Gbl.F.Out,"</label>"
-		      "</li>");
+   fprintf (Gbl.F.Out,"</label>");
+   HTM_LI_End ();
   }
 
 /*****************************************************************************/

@@ -1976,18 +1976,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	margin:12px;
 	}
 
-/********************* List of my courses ************************************/
-.MY_CRSS_LNK
-	{
-	box-sizing:border-box;
-	max-width:500px;
-	text-align:left;
-	vertical-align:middle;
-	white-space:nowrap;
-	overflow:hidden;
-	text-overflow:ellipsis;
-	}
-
 /******************* Web of institution, centre, degree **********************/
 .EXTERNAL_WWW_SHORT
 	{
@@ -2234,7 +2222,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .LIST_TREE li
 	{
+	box-sizing:border-box;
+	max-width:500px;
 	height:25px;
+	text-align:left;
+	vertical-align:middle;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
 	}
 
 .LIST_I_MUST_READ

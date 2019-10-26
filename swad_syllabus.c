@@ -148,17 +148,17 @@ void Syl_PutFormWhichSyllabus (void)
 	WhichSyllabus < For_NUM_FORUM_SETS;
 	WhichSyllabus++)
      {
-      fprintf (Gbl.F.Out,"<li class=\"DAT LM\">"
-                         "<label>"
+      HTM_LI_Begin ("class=\"DAT LM\"");
+      fprintf (Gbl.F.Out,"<label>"
                          "<input type=\"radio\" name=\"WhichSyllabus\" value=\"%u\"",
                (unsigned) WhichSyllabus);
       if (WhichSyllabus == Gbl.Syllabus.WhichSyllabus)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 	                 "%s"
-                         "</label>"
-                         "</li>",
+                         "</label>",
                Gbl.Form.Id,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
+      HTM_LI_End ();
      }
    HTM_UL_End ();
    HTM_DIV_End ();

@@ -242,7 +242,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		   TabStr,MenuStr);
 
          /* Icon and text */
-         fprintf (Gbl.F.Out,"<li class=\"ICO_HIGHLIGHT\">");
+         HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
          Frm_StartForm (Action);
          Frm_LinkFormSubmit (TabMenuStr,The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],NULL);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" />",
@@ -251,7 +251,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		  MenuStr);
          fprintf (Gbl.F.Out," %s</a>",TabMenuStr);
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</li>");
+         HTM_LI_End ();
         }
      }
 
@@ -305,7 +305,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		   TabStr,MenuStr);
 
          /* Icon and text */
-         fprintf (Gbl.F.Out,"<li class=\"ICO_HIGHLIGHT\">");
+         HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
          Frm_StartForm (Action);
          Frm_LinkFormSubmit (TabMenuStr,NULL,NULL);
          fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" />",
@@ -314,7 +314,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
                   MenuStr);
 	 fprintf (Gbl.F.Out," %s</a>",MenuStr);
          Frm_EndForm ();
-         fprintf (Gbl.F.Out,"</li>");
+         HTM_LI_End ();
         }
      }
    HTM_UL_End ();

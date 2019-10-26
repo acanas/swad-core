@@ -172,11 +172,11 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 	Visibility++)
       if (MaskAllowedVisibility & (1 << Visibility))
 	{
-	 fprintf (Gbl.F.Out,"<li class=\"%s\">"
-	                    "<label>"
+	 HTM_LI_Begin ("class=\"%s\"",
+		       (Visibility == CurrentVisibilityInDB) ? "DAT_N LIGHT_BLUE" :
+							       "DAT");
+	 fprintf (Gbl.F.Out,"<label>"
 			    "<input type=\"radio\" name=\"%s\" value=\"%u\"",
-		  (Visibility == CurrentVisibilityInDB) ? "DAT_N LIGHT_BLUE" :
-							  "DAT",
 		  ParamName,(unsigned) Visibility);
 	 if (Visibility == CurrentVisibilityInDB)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -187,9 +187,9 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 		     Gbl.Form.Id);
 	 fprintf (Gbl.F.Out," />"
 			    "%s"
-	                    "</label>"
-			    "</li>",
+	                    "</label>",
 		  Txt_PRIVACY_OPTIONS[Visibility]);
+	 HTM_LI_End ();
 	}
 
    /***** End list and form *****/

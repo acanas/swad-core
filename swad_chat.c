@@ -129,16 +129,16 @@ void Cht_ShowListOfAvailableChatRooms (void)
    HTM_UL_Begin ("class=\"LIST_TREE\"");
 
    /***** Title of top level *****/
-   fprintf (Gbl.F.Out,"<li class=\"DAT\">"
-                      "<img src=\"%s/comments.svg\""
+   HTM_LI_Begin ("class=\"DAT\"");
+   fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO16x16\" />"
-                      " %s"
-                      "</li>",
+                      " %s",
             Cfg_URL_ICON_PUBLIC,
             Txt_Chat_rooms,
             Txt_Chat_rooms,
             Txt_Chat_rooms);
+   HTM_LI_End ();
 
    /***** Link to chat available for all the users *****/
    IsLastItemInLevel[1] = (!Gbl.Usrs.Me.IBelongToCurrentCrs &&
@@ -328,7 +328,7 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
-   fprintf (Gbl.F.Out,"<li>");
+   HTM_LI_Begin (NULL);
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
    Frm_StartForm (ActCht);
    Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
@@ -354,7 +354,7 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
       fprintf (Gbl.F.Out,"</strong>");
    fprintf (Gbl.F.Out,"</a>");
    Frm_EndForm ();
-   fprintf (Gbl.F.Out,"</li>");
+   HTM_LI_End ();
   }
 
 /*****************************************************************************/

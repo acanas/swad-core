@@ -116,11 +116,10 @@ void Dat_PutBoxToSelectDateFormat (void)
 	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 	Format++)
      {
-      fprintf (Gbl.F.Out,"<li class=\"%s\">"
-			 "<label>"
+      HTM_LI_Begin ("class=\%s\"",(Format == Gbl.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
+						                     "DAT");
+      fprintf (Gbl.F.Out,"<label>"
 			 "<input type=\"radio\" name=\"DateFormat\" value=\"%u\"",
-	       (Format == Gbl.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
-						  "DAT",
 	       (unsigned) Format);
       if (Format == Gbl.Prefs.DateFormat)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -128,8 +127,8 @@ void Dat_PutBoxToSelectDateFormat (void)
 	       Gbl.Form.Id);
       Dat_PutSpanDateFormat (Format);
       Dat_PutScriptDateFormat (Format);
-      fprintf (Gbl.F.Out,"</label>"
-			 "</li>");
+      fprintf (Gbl.F.Out,"</label>");
+      HTM_LI_End ();
      }
 
    /***** End list *****/

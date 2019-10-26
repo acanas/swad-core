@@ -1764,8 +1764,8 @@ static void For_PutFormWhichForums (void)
 	ForumSet < For_NUM_FORUM_SETS;
 	ForumSet++)
      {
-      fprintf (Gbl.F.Out,"<li>"
-                         "<label>"
+      HTM_LI_Begin (NULL);
+      fprintf (Gbl.F.Out,"<label>"
                          "<input type=\"radio\" name=\"ForumSet\""
                          " value=\"%u\"",
                (unsigned) ForumSet);
@@ -1773,9 +1773,9 @@ static void For_PutFormWhichForums (void)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 	                 "%s"
-                         "</label>"
-                         "</li>",
+                         "</label>",
                Gbl.Form.Id,Txt_FORUM_WHICH_FORUM[ForumSet]);
+      HTM_LI_End ();
      }
    HTM_UL_End ();
    HTM_DIV_End ();
@@ -2046,10 +2046,8 @@ static void For_WriteLinkToForum (struct Forum *Forum,
 	                          The_ClassFormInBox[Gbl.Prefs.Theme]);
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<li");
-   if (Highlight)
-      fprintf (Gbl.F.Out," class=\"LIGHT_BLUE\"");
-   fprintf (Gbl.F.Out,">");
+   HTM_LI_Begin (Highlight ? "class=\"LIGHT_BLUE\"" :
+			     NULL);
 
    /***** Indent forum title *****/
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
@@ -2151,7 +2149,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
    if (Forum->Type == For_FORUM_COURSE_USRS)
       Enr_PutButtonInlineToRegisterStds (Forum->Location);
 
-   fprintf (Gbl.F.Out,"</li>");
+   HTM_LI_End ();
   }
 
 /*****************************************************************************/

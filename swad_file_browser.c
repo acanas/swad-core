@@ -3263,19 +3263,18 @@ static void Brw_FormToChangeCrsGrpZone (void)
    HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
    /***** Select the complete course, not a group *****/
-   fprintf (Gbl.F.Out,"<li class=\"%s\">"
-                      "<label>"
-                      "<input type=\"radio\" name=\"GrpCod\" value=\"-1\"",
-            IsCourseZone ? "BROWSER_TITLE" :
-                           "BROWSER_TITLE_LIGHT");
+   HTM_LI_Begin ("class=\"%s\"",IsCourseZone ? "BROWSER_TITLE" :
+                                               "BROWSER_TITLE_LIGHT");
+   fprintf (Gbl.F.Out,"<label>"
+                      "<input type=\"radio\" name=\"GrpCod\" value=\"-1\"");
    if (IsCourseZone)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                       "%s"
-                      "</label>"
-                      "</li>",
+                      "</label>",
             Gbl.Form.Id,
             Gbl.Hierarchy.Crs.FullName);
+   HTM_LI_End ();
 
    /***** List my groups for unique selection *****/
    if (Gbl.Crs.Grps.NumGrps)	// This course has groups?
@@ -3289,16 +3288,16 @@ static void Brw_FormToChangeCrsGrpZone (void)
          Grp_GetDataOfGroupByCod (&GrpDat);
 
          /* Select this group */
-         fprintf (Gbl.F.Out,"<li class=\"%s\">"
-                            "<img src=\"%s/%s20x20.gif\""
+         HTM_LI_Begin ("class=\%s\"",
+		       (IsGroupZone &&
+                        GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? "BROWSER_TITLE" :
+                                                                "BROWSER_TITLE_LIGHT");
+         fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
                             " class=\"ICO25x25\""
                             " style=\"margin-left:6px;\" />"
                             "<label>"
 	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
-                  (IsGroupZone &&
-                   GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? "BROWSER_TITLE" :
-                                                           "BROWSER_TITLE_LIGHT",
                   Cfg_URL_ICON_PUBLIC,
                   NumGrp < LstMyGrps.NumGrps - 1 ? "submid" :
                 	                           "subend",
@@ -3307,10 +3306,10 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
 	 fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 			    "%s %s"
-			    "</label>"
-			    "</li>",
+			    "</label>",
 		  Gbl.Form.Id,
                   GrpDat.GrpTypName,GrpDat.GrpName);
+	 HTM_LI_End ();
         }
 
       /***** Free memory with the list of groups I belong to *****/

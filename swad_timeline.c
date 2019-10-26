@@ -1478,12 +1478,11 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
      }
 
    /***** Start list item *****/
-   fprintf (Gbl.F.Out,"<li class=\"TL_WIDTH");
-   if (!ShowNoteAlone)
-      fprintf (Gbl.F.Out," TL_SEP");
-   if (Highlight)
-      fprintf (Gbl.F.Out," TL_NEW_PUB");
-   fprintf (Gbl.F.Out,"\">");
+   HTM_LI_Begin ("class=\"%s\"",
+		 ShowNoteAlone ? (Highlight ? "TL_WIDTH TL_NEW_PUB" :
+					      "TL_WIDTH") :
+				 (Highlight ? "TL_WIDTH TL_SEP TL_NEW_PUB" :
+					      "TL_WIDTH TL_SEP"));
 
    if (SocNot->NotCod   <= 0 ||
        SocNot->NoteType == TL_NOTE_UNKNOWN ||
@@ -1684,7 +1683,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
      }
 
    /***** End list item *****/
-   fprintf (Gbl.F.Out,"</li>");
+   HTM_LI_End ();
 
    /***** End box ****/
    if (ShowNoteAlone)
@@ -2318,7 +2317,7 @@ static void TL_PutFormToWriteNewPost (void)
 
    /***** Start list *****/
    HTM_UL_Begin ("class=\"TL_LIST\"");
-   fprintf (Gbl.F.Out,"<li class=\"TL_WIDTH\">");
+   HTM_LI_Begin ("class=\"TL_WIDTH\"");
 
    /***** Left: write author's photo (my photo) *****/
    HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
@@ -2356,7 +2355,7 @@ static void TL_PutFormToWriteNewPost (void)
    HTM_DIV_End ();
 
    /***** End list *****/
-   fprintf (Gbl.F.Out,"</li>");
+   HTM_LI_End ();
    HTM_UL_End ();
   }
 
@@ -2746,10 +2745,10 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
      }
 
    /***** Start list item *****/
-   fprintf (Gbl.F.Out,"<li");
-   if (!ShowCommentAlone)
-      fprintf (Gbl.F.Out," class=\"TL_COM\"");
-   fprintf (Gbl.F.Out,">");
+   if (ShowCommentAlone)
+      HTM_LI_Begin (NULL);
+   else
+      HTM_LI_Begin ("class=\"TL_COM\"");
 
    if (SocCom->PubCod <= 0 ||
        SocCom->NotCod <= 0 ||
@@ -2815,7 +2814,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
      }
 
    /***** End list item *****/
-   fprintf (Gbl.F.Out,"</li>");
+   HTM_LI_End ();
 
    if (ShowCommentAlone)
      {

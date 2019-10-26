@@ -357,7 +357,7 @@ void Mnu_WriteMenuThisTab (void)
          Title = Act_GetSubtitleAction (NumAct);
 
          /***** Start element *****/
-	 fprintf (Gbl.F.Out,"<li class=\"MENU_LIST_ITEM\">");
+	 HTM_LI_Begin ("class=\"MENU_LIST_ITEM\"");
 
          /***** Start container used to highlight this option *****/
          HTM_DIV_Begin ("class=\"%s\"",
@@ -387,7 +387,7 @@ void Mnu_WriteMenuThisTab (void)
          HTM_DIV_End ();
 
          /***** End element *****/
-         fprintf (Gbl.F.Out,"</li>");
+         HTM_LI_End ();
         }
      }
 
