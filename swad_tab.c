@@ -100,8 +100,8 @@ void Tab_DrawTabs (void)
 
    /***** Start tabs container *****/
    HTM_DIV_Begin ("class=\"%s\"",ClassHeadRow3[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<nav id=\"tabs\">"
-	              "<ul class=\"TAB_LIST\">");
+   fprintf (Gbl.F.Out,"<nav id=\"tabs\">");
+   HTM_UL_Begin ("class=\"TAB_LIST\"");
 
    /***** Draw the tabs *****/
    for (NumTab = (Tab_Tab_t) 1;

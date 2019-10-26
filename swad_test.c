@@ -906,7 +906,7 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
    if (NumTags)
      {
       /***** Write the tags *****/
-      fprintf (Gbl.F.Out,"<ul>");
+      HTM_UL_Begin (NULL);
       for (NumTag = 0;
 	   NumTag < NumTags;
 	   NumTag++)
@@ -4773,7 +4773,7 @@ void Tst_GetAndWriteTagsQst (long QstCod)
    if ((NumRows = Tst_GetTagsQst (QstCod,&mysql_res)))	// Result: TagTxt
      {
       /***** Write the tags *****/
-      fprintf (Gbl.F.Out,"<ul class=\"TEST_TAG_LIST DAT_SMALL\">");
+      HTM_UL_Begin ("class=\"TEST_TAG_LIST DAT_SMALL\"");
       for (NumRow = 0;
 	   NumRow < NumRows;
 	   NumRow++)

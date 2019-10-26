@@ -74,7 +74,7 @@ form
 	}
 address
 	{
-	font-style: normal;
+	font-style:normal;
 	}
 
 /*********************** Text decoration of links ****************************/
@@ -2235,6 +2235,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LIST_TREE li
 	{
 	height:25px;
+	}
+
+.LIST_I_MUST_READ
+	{
+	display:inline-block;
+	padding:0;
+	margin:12px 0;
+	text-align:left;
+	vertical-align:middle;
 	}
 
 /******************************* File browsers *******************************/

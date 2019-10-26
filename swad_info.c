@@ -603,8 +603,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
 
    /***** Write every information I must read *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\""
-	              " style=\"list-style-type:initial;\">");
+   HTM_UL_Begin ("class=\"LIST_I_MUST_READ\"");
    for (InfoType = (Inf_InfoType_t) 0;
 	InfoType < Inf_NUM_INFO_TYPES;
 	InfoType++)

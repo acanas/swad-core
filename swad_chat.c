@@ -126,7 +126,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Chat_rooms,NULL,
                  NULL,Box_NOT_CLOSABLE);
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_TREE\">");
+   HTM_UL_Begin ("class=\"LIST_TREE\"");
 
    /***** Title of top level *****/
    fprintf (Gbl.F.Out,"<li class=\"DAT\">"

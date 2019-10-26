@@ -952,8 +952,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    extern const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1;
 
    /***** Start list of options *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_UL_Begin ("class=\"LIST_LEFT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 
    /***** Register / remove users listed or not listed *****/
    if (Gbl.Hierarchy.Level == Hie_CRS)	// Course selected
@@ -1497,8 +1496,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
      }
 
    /***** Start list of options *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_UL_Begin ("class=\"LIST_LEFT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 
    /***** Register user in course / Modify user's data *****/
    if (Gbl.Hierarchy.Level == Hie_CRS && Gbl.Usrs.Me.Role.Logged >= Rol_STD)

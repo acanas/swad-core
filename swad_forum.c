@@ -1583,7 +1583,7 @@ static void For_ShowForumList (void)
    For_PutFormWhichForums ();
 
    /***** Start list *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_TREE\">");
+   HTM_UL_Begin ("class=\"LIST_TREE\"");
 
    /***** Links to global forums *****/
    For_WriteLinksToGblForums (IsLastItemInLevel);
@@ -1758,7 +1758,7 @@ static void For_PutFormWhichForums (void)
    Frm_StartForm (ActSeeFor);
    For_PutParamForumOrder (Gbl.Forum.ThreadsOrder);
    HTM_DIV_Begin ("class=\"SEL_BELOW_TITLE\"");
-   fprintf (Gbl.F.Out,"<ul>");
+   HTM_UL_Begin (NULL);
 
    for (ForumSet = (For_ForumSet_t) 0;
 	ForumSet < For_NUM_FORUM_SETS;

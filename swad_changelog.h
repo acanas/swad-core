@@ -488,14 +488,13 @@ En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
 #define Log_PLATFORM_VERSION	"SWAD 19.44.3 (2019-10-26)"
-#define CSS_FILE		"swad19.44.2.css"
+#define CSS_FILE		"swad19.44.3.css"
 #define JS_FILE			"swad19.39.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
-// TODO: Buscar emparejamientos <ul de HTM_UL_End ();
 
-	Version 19.44.3:  Oct 26, 2019	Code refactoring in HTML lists. (? lines)
+	Version 19.44.3:  Oct 26, 2019	Code refactoring in HTML lists. (246369 lines)
 	Version 19.44.2:  Oct 26, 2019	Changes in layout. (246318 lines)
 	Version 19.44.1:  Oct 26, 2019	Remove course from project configuration when removing course. (246284 lines)
 	Version 19.44:    Oct 25, 2019	Configuration of all projects.

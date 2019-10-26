@@ -727,7 +727,7 @@ static void Svy_WriteStatus (struct Survey *Svy)
    extern const char *Txt_SURVEY_You_have_not_answered;
 
    /***** Start list with items of status *****/
-   fprintf (Gbl.F.Out,"<ul>");
+   HTM_UL_Begin (NULL);
 
    /* Write whether survey is visible or hidden */
    if (Svy->Status.Visible)

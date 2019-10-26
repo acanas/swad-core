@@ -144,7 +144,7 @@ static void Ban_WriteListOfBanners (void)
    unsigned NumBan;
 
    /***** List start *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+   HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
    /***** Write all the banners *****/
    for (NumBan = 0;

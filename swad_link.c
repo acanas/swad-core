@@ -188,7 +188,7 @@ static void Lnk_WriteListOfLinks (void)
    unsigned NumLnk;
 
    /***** List start *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+   HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
    /***** Write all links *****/
    for (NumLnk = 0;

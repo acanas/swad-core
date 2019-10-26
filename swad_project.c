@@ -2023,7 +2023,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
    if (NumUsrs)
      {
       /***** Write users *****/
-      fprintf (Gbl.F.Out,"<ul class=\"PRJ_LST_USR\">");
+      HTM_UL_Begin ("class=\"PRJ_LST_USR\"");
 
       for (NumUsr = 0;
 	   NumUsr < NumUsrs;

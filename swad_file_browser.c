@@ -3260,7 +3260,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
    Brw_PutHiddenParamFullTreeIfSelected ();
 
    /***** List start *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+   HTM_UL_Begin ("class=\"LIST_LEFT\"");
 
    /***** Select the complete course, not a group *****/
    fprintf (Gbl.F.Out,"<li class=\"%s\">"

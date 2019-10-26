@@ -111,7 +111,7 @@ void Dat_PutBoxToSelectDateFormat (void)
    /***** Form with list of options *****/
    Frm_StartForm (ActChgDatFmt);
 
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+   HTM_UL_Begin ("class=\"LIST_LEFT\"");
    for (Format = (Dat_Format_t) 0;
 	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 	Format++)

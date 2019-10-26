@@ -8340,8 +8340,7 @@ static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NU
 
    /***** Write list of options *****/
    /* Start list of options */
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_UL_Begin ("class=\"LIST_LEFT %s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 
    /* Show option items */
    for (Opt  = (Usr_ListUsrsOption_t) 1;	// Skip unknown option

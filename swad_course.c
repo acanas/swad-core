@@ -583,7 +583,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_courses,Crs_PutIconToSearchCourses,
                  Hlp_PROFILE_Courses,Box_NOT_CLOSABLE);
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_TREE\">");
+   HTM_UL_Begin ("class=\"LIST_TREE\"");
 
    /***** Write link to platform *****/
    Highlight = (Gbl.Hierarchy.Cty.CtyCod <= 0);

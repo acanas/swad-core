@@ -223,7 +223,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    HTM_DIV_Begin ("id=\"MFU_actions_big\"");
 
    /***** Write list of frequently used actions *****/
-   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+   HTM_UL_Begin ("class=\"LIST_LEFT\"");
    for (NumAct = 0;
 	NumAct < ListMFUActions->NumActions;
 	NumAct++)
@@ -286,7 +286,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    Frm_EndForm ();
 
    /***** Write list of frequently used actions *****/
-   fprintf (Gbl.F.Out,"<ul>");
+   HTM_UL_Begin (NULL);
    for (NumAct = 0;
 	NumAct < ListMFUActions->NumActions;
 	NumAct++)

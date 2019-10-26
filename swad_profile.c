@@ -399,7 +399,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /***** Left list *****/
    /* Start left list */
    HTM_DIV_Begin ("class=\"PRF_FIG_LEFT_CONTAINER\"");
-   fprintf (Gbl.F.Out,"<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
+   HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_NOBR_N\"");
 
    /* Time since first click */
    Prf_ShowTimeSinceFirstClick (UsrDat,&UsrFigures);
@@ -424,7 +424,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    if (!UsrIsBannedFromRanking)
      {
       /* Start right list */
-      fprintf (Gbl.F.Out,"<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
+      HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_NOBR_N\"");
 
       /* Number of clicks */
       Prf_ShowNumClicks (UsrDat,&UsrFigures);

@@ -1014,16 +1014,16 @@ static void TL_ShowTimeline (char *Query,
       TL_PutLinkToViewNewPublications ();
 
       /* Hidden list where insert just received (not visible) publications via AJAX */
-      fprintf (Gbl.F.Out,"<ul id=\"just_now_timeline_list\" class=\"TL_LIST\">");
+      HTM_UL_Begin ("id=\"just_now_timeline_list\" class=\"TL_LIST\"");
       HTM_UL_End ();
 
       /* Hidden list where insert new (not visible) publications via AJAX */
-      fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\" class=\"TL_LIST\">");
+      HTM_UL_Begin ("id=\"new_timeline_list\" class=\"TL_LIST\"");
       HTM_UL_End ();
      }
 
    /***** List recent publications in timeline *****/
-   fprintf (Gbl.F.Out,"<ul id=\"timeline_list\" class=\"TL_LIST\">");
+   HTM_UL_Begin ("id=\"timeline_list\" class=\"TL_LIST\"");
 
    for (NumPub = 0, SocPub.PubCod = 0;
 	NumPub < NumPubsGot;
@@ -1057,7 +1057,7 @@ static void TL_ShowTimeline (char *Query,
       TL_PutLinkToViewOldPublications ();
 
       /***** Hidden list where insert old publications via AJAX *****/
-      fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\" class=\"TL_LIST\">");
+      HTM_UL_Begin ("id=\"old_timeline_list\" class=\"TL_LIST\"");
       HTM_UL_End ();
      }
 
@@ -1474,7 +1474,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
      {
       Box_BoxBegin (NULL,NULL,NULL,
                     NULL,Box_CLOSABLE);
-      fprintf (Gbl.F.Out,"<ul class=\"TL_LIST\">");
+      HTM_UL_Begin ("class=\"TL_LIST\"");
      }
 
    /***** Start list item *****/
@@ -2317,8 +2317,8 @@ static void TL_PutFormToWriteNewPost (void)
    char PhotoURL[PATH_MAX + 1];
 
    /***** Start list *****/
-   fprintf (Gbl.F.Out,"<ul class=\"TL_LIST\">"
-                      "<li class=\"TL_WIDTH\">");
+   HTM_UL_Begin ("class=\"TL_LIST\"");
+   fprintf (Gbl.F.Out,"<li class=\"TL_WIDTH\">");
 
    /***** Left: write author's photo (my photo) *****/
    HTM_DIV_Begin ("class=\"TL_LEFT_PHOTO\"");
@@ -2638,9 +2638,8 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
 	 HTM_DIV_End ();
 
 	 /***** First list with comments initially hidden *****/
-	 fprintf (Gbl.F.Out,"<ul id=\"com_%s\" class=\"LIST_LEFT\""
-			    " style=\"display:none;\">",	// Initially hidden
-		  IdComments);
+	 HTM_UL_Begin ("id=\"com_%s\" class=\"LIST_LEFT\" style=\"display:none;\"",	// Initially hidden
+		       IdComments);
 	 for (NumCom = 0;
 	      NumCom < NumCommentsInitiallyHidden;
 	      NumCom++)
@@ -2658,7 +2657,7 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
         }
 
       /***** Second list with comments initially visible *****/
-      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+      HTM_UL_Begin ("class=\"LIST_LEFT\"");
       for (NumCom = NumCommentsInitiallyHidden;
 	   NumCom < NumComments;
 	   NumCom++)
@@ -2743,7 +2742,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
       HTM_DIV_End ();
 
       HTM_DIV_Begin ("class=\"TL_RIGHT_CONT TL_RIGHT_WIDTH\"");
-      fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+      HTM_UL_Begin ("class=\"LIST_LEFT\"");
      }
 
    /***** Start list item *****/
