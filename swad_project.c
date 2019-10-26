@@ -311,7 +311,7 @@ static void Prj_ShowProjectsInCurrentPage (void)
    Pag_CalculatePagination (&Pagination);
    Gbl.Prjs.CurrentPage = (unsigned) Pagination.CurrentPage;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Projects,Prj_PutIconsListProjects,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
@@ -2044,7 +2044,7 @@ static void Prj_ShowTableAllProjectsMembersWithARole (const struct Project *Prj,
 	   }
 	}
 
-      fprintf (Gbl.F.Out,"</ul>");
+      HTM_UL_End ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -3290,7 +3290,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 	                           ActChgPrj);
    Prj_PutCurrentParams ();
 
-   /* Start box and table */
+   /* Begin box and table */
    Box_StartBoxTable (NULL,Txt_Data,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
@@ -3741,7 +3741,7 @@ void Prj_ShowFormConfig (void)
    /***** Read projects configuration from database *****/
    Prj_GetConfigPrjFromDB ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Configure_projects,Prj_PutIconsListProjects,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 

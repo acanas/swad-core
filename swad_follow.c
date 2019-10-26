@@ -145,7 +145,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
                                        Fol_SUGGEST_ANY_USER,
                                        &mysql_res)))
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       Box_StartBoxTable ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow,
                          Hlp_START_Profiles_who_to_follow,Box_NOT_CLOSABLE,2);
 
@@ -699,7 +699,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&FollowingUsrDat);
 
-         /***** Start box and table *****/
+         /***** Begin box and table *****/
 	 Box_StartBoxTable ("560px",Txt_Following,NULL,
 	                    NULL,Box_NOT_CLOSABLE,2);
 
@@ -782,7 +782,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&FollowerUsrDat);
 
-         /***** Start box and table *****/
+         /***** Begin box and table *****/
 	 Box_StartBoxTable ("560px",Txt_Followers,NULL,
 	                    NULL,Box_NOT_CLOSABLE,2);
 

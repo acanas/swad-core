@@ -995,7 +995,7 @@ static void TL_ShowTimeline (char *Query,
    NumPubsGot = DB_QuerySELECT (&mysql_res,"can not get timeline",
 				"%s",
 				Query);
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Title,TL_PutIconsTimeline,
                  Hlp_START_Timeline,Box_NOT_CLOSABLE);
 
@@ -1014,10 +1014,12 @@ static void TL_ShowTimeline (char *Query,
       TL_PutLinkToViewNewPublications ();
 
       /* Hidden list where insert just received (not visible) publications via AJAX */
-      fprintf (Gbl.F.Out,"<ul id=\"just_now_timeline_list\" class=\"TL_LIST\"></ul>");
+      fprintf (Gbl.F.Out,"<ul id=\"just_now_timeline_list\" class=\"TL_LIST\">");
+      HTM_UL_End ();
 
       /* Hidden list where insert new (not visible) publications via AJAX */
-      fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\" class=\"TL_LIST\"></ul>");
+      fprintf (Gbl.F.Out,"<ul id=\"new_timeline_list\" class=\"TL_LIST\">");
+      HTM_UL_End ();
      }
 
    /***** List recent publications in timeline *****/
@@ -1041,7 +1043,7 @@ static void TL_ShowTimeline (char *Query,
 		    SocNot.NotCod == NotCodToHighlight,
 		    false);
      }
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1055,7 +1057,8 @@ static void TL_ShowTimeline (char *Query,
       TL_PutLinkToViewOldPublications ();
 
       /***** Hidden list where insert old publications via AJAX *****/
-      fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\" class=\"TL_LIST\"></ul>");
+      fprintf (Gbl.F.Out,"<ul id=\"old_timeline_list\" class=\"TL_LIST\">");
+      HTM_UL_End ();
      }
 
    /***** End box *****/
@@ -1466,7 +1469,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
 
    NumDiv++;
 
-   /***** Start box ****/
+   /***** Begin box ****/
    if (ShowNoteAlone)
      {
       Box_BoxBegin (NULL,NULL,NULL,
@@ -1686,7 +1689,7 @@ static void TL_WriteNote (const struct TL_Note *SocNot,
    /***** End box ****/
    if (ShowNoteAlone)
      {
-      fprintf (Gbl.F.Out,"</ul>");
+      HTM_UL_End ();
       Box_BoxEnd ();
      }
   }
@@ -2353,8 +2356,8 @@ static void TL_PutFormToWriteNewPost (void)
    HTM_DIV_End ();
 
    /***** End list *****/
-   fprintf (Gbl.F.Out,"</li>"
-	              "</ul>");
+   fprintf (Gbl.F.Out,"</li>");
+   HTM_UL_End ();
   }
 
 /*****************************************************************************/
@@ -2642,7 +2645,7 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
 	      NumCom < NumCommentsInitiallyHidden;
 	      NumCom++)
 	    TL_WriteOneCommentInList (mysql_res);
-	 fprintf (Gbl.F.Out,"</ul>");
+	 HTM_UL_End ();
 
 	 /***** Link to toggle on/off comments *****/
 	 HTM_DIV_Begin ("id=\"exp_%s\" class=\"TL_EXPAND_COM TL_RIGHT_WIDTH\"",
@@ -2660,7 +2663,7 @@ static void TL_WriteCommentsInNote (const struct TL_Note *SocNot)
 	   NumCom < NumComments;
 	   NumCom++)
 	 TL_WriteOneCommentInList (mysql_res);
-      fprintf (Gbl.F.Out,"</ul>");
+      HTM_UL_End ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -2817,7 +2820,7 @@ static void TL_WriteComment (struct TL_Comment *SocCom,
 
    if (ShowCommentAlone)
      {
-      fprintf (Gbl.F.Out,"</ul>");
+      HTM_UL_End ();
       HTM_DIV_End ();
       Box_BoxEnd ();
      }

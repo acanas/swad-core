@@ -552,7 +552,7 @@ static void Hld_ListHolidaysForEdition (void)
    struct Holiday *Hld;
    Hld_HolidayType_t HolidayType;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Holidays,Cal_PutIconToSeeCalendar,
                       Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE,2);
 
@@ -969,7 +969,7 @@ static void Hld_PutFormToCreateHoliday (void)
    /***** Begin form *****/
    Frm_StartForm (ActNewHld);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_holiday,NULL,
                       Hlp_INSTITUTION_Holidays_edit,Box_NOT_CLOSABLE,2);
 

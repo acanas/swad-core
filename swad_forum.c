@@ -969,7 +969,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
       if (Message[0])
          Ale_ShowAlert (AlertType,Message);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (FrameTitle,sizeof (FrameTitle),
 	     "%s: %s",
 	     Txt_Thread,Thr.Subject);
@@ -1575,7 +1575,7 @@ static void For_ShowForumList (void)
    /***** Fill the list with the institutions I belong to *****/
    Usr_GetMyInstits ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Forums,For_PutIconsForums,
                  Hlp_MESSAGES_Forums,Box_NOT_CLOSABLE);
 
@@ -1726,7 +1726,7 @@ static void For_ShowForumList (void)
      }
 
    /***** End list *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1777,7 +1777,7 @@ static void For_PutFormWhichForums (void)
                          "</li>",
                Gbl.Form.Id,Txt_FORUM_WHICH_FORUM[ForumSet]);
      }
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
    HTM_DIV_End ();
    Frm_EndForm ();
   }
@@ -2541,7 +2541,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       if (Message[0])
          Ale_ShowAlert (AlertType,Message);
 
-   /***** Start box for threads of this forum *****/
+   /***** Begin box for threads of this forum *****/
    snprintf (FrameTitle,sizeof (FrameTitle),
 	     "%s: %s",
 	     Txt_Forum,ForumName);
@@ -3920,7 +3920,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    extern const char *Txt_MSG_Content;
    extern const char *Txt_Send;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    if (IsReply)
       Box_BoxBegin (NULL,Txt_New_post,NULL,
 		    Hlp_MESSAGES_Forums_new_post,Box_NOT_CLOSABLE);

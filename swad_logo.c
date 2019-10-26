@@ -288,7 +288,7 @@ void Log_RequestLogo (Hie_Level_t Scope)
    /***** Begin form to upload logo *****/
    Frm_StartForm (ActionRec);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Logo,NULL,
                  NULL,Box_NOT_CLOSABLE);
 

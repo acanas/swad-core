@@ -295,7 +295,7 @@ void Lay_WriteStartOfPage (void)
 	 return;
      }
 
-   /***** Start box that contains the whole page except the foot *****/
+   /***** Begin box that contains the whole page except the foot *****/
    HTM_DIV_Begin ("id=\"whole_page\"");
 
    /***** Header of layout *****/
@@ -1681,7 +1681,7 @@ void Lay_AdvertisementMobile (void)
      {
       HTM_DIV_Begin ("style=\"margin-top:25px;\"");
 
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       Box_StartBoxTable (NULL,NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,8);
 

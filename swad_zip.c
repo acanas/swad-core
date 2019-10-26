@@ -563,7 +563,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    extern const char *Txt_FILE_uncompressed;
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
 
    /***** Link to download the file *****/

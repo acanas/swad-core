@@ -96,7 +96,7 @@ void Pri_EditMyPrivacy (void)
        Gbl.Usrs.Me.UsrDat.ExPrfVisibility == Pri_VISIBILITY_UNKNOWN)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_check_your_privacy_settings);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Privacy,Pri_PutIconsPrivacy,
                       Hlp_PROFILE_Settings_privacy,Box_NOT_CLOSABLE,2);
 
@@ -193,7 +193,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 	}
 
    /***** End list and form *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
    if (Action != ActUnk)
       Frm_EndForm ();
    HTM_TD_End ();

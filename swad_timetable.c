@@ -354,7 +354,7 @@ void TT_ShowClassTimeTable (void)
    /***** Get whether to show only my groups or all groups *****/
    Grp_GetParamWhichGrps ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
                  (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT ||
                   Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||

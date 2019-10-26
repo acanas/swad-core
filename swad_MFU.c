@@ -217,7 +217,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char MenuStr[MFU_MAX_BYTES_MENU + 1];
    char TabMenuStr[MFU_MAX_BYTES_TAB + 6 + MFU_MAX_BYTES_MENU + 1];
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_frequent_actions,NULL,
                  Hlp_ANALYTICS_Frequent,Box_NOT_CLOSABLE);
    HTM_DIV_Begin ("id=\"MFU_actions_big\"");
@@ -317,7 +317,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          fprintf (Gbl.F.Out,"</li>");
         }
      }
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
 
    /***** End div *****/
    HTM_DIV_End ();

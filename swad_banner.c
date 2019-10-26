@@ -110,7 +110,7 @@ void Ban_SeeBanners (void)
 			     " ORDER BY ShortName");
    Ban_GetListBanners (&mysql_res,NumRows);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,Ban_PutIconsListingBanners,
                  Hlp_SYSTEM_Banners,Box_NOT_CLOSABLE);
 
@@ -166,7 +166,7 @@ static void Ban_WriteListOfBanners (void)
                Gbl.Banners.Lst[NumBan].FullName);
 
    /***** List end *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
   }
 
 /*****************************************************************************/
@@ -221,7 +221,7 @@ static void Ban_EditBannersInternal (void)
 			     " FROM banners ORDER BY ShortName");
    Ban_GetListBanners (&mysql_res,NumRows);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Banners,Ban_PutIconsEditingBanners,
                  Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE);
 
@@ -858,7 +858,7 @@ static void Ban_PutFormToCreateBanner (void)
    /***** Begin form *****/
    Frm_StartForm (ActNewBan);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_banner,NULL,
                       Hlp_SYSTEM_Banners_edit,Box_NOT_CLOSABLE,2);
 

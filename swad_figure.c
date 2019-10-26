@@ -200,7 +200,7 @@ void Fig_ReqShowFigures (void)
    /***** Form to show statistic *****/
    Frm_StartForm (ActSeeUseGbl);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Figures,NULL,
                  Hlp_ANALYTICS_Figures,Box_NOT_CLOSABLE);
 
@@ -366,7 +366,7 @@ static void Fig_GetAndShowUsersStats (void)
    extern const char *Txt_Average_number_of_courses_to_which_a_user_belongs;
    extern const char *Txt_Average_number_of_users_belonging_to_a_course;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_USERS],NULL,
                       Hlp_ANALYTICS_Figures_users,Box_NOT_CLOSABLE,2);
 
@@ -495,7 +495,7 @@ static void Fig_GetAndShowUsersRanking (void)
    extern const char *Txt_Messages;
    extern const char *Txt_Followers;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_USERS_RANKING],NULL,
                       Hlp_ANALYTICS_Figures_ranking,Box_NOT_CLOSABLE,2);
 
@@ -560,7 +560,7 @@ static void Fig_GetAndShowHierarchyStats (void)
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
    Rol_Role_t Role;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_HIERARCHY],NULL,
                       Hlp_ANALYTICS_Figures_hierarchy,Box_NOT_CLOSABLE,2);
 
@@ -1028,7 +1028,7 @@ static void Fig_GetAndShowInstitutionsStats (void)
    extern const char *Hlp_ANALYTICS_Figures_institutions;
    extern const char *Txt_Institutions;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Institutions,NULL,
                  Hlp_ANALYTICS_Figures_institutions,Box_NOT_CLOSABLE);
 
@@ -1066,7 +1066,7 @@ static void Fig_GetAndShowInssOrderedByNumCtrs (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_centres,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
@@ -1131,7 +1131,7 @@ static void Fig_GetAndShowInssOrderedByNumDegs (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_degrees,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
@@ -1199,7 +1199,7 @@ static void Fig_GetAndShowInssOrderedByNumCrss (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_courses,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
@@ -1270,7 +1270,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsInCrss (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_users_in_courses,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
@@ -1345,7 +1345,7 @@ static void Fig_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    MYSQL_RES *mysql_res;
    unsigned NumInss;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable ("100%",Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
                       NULL,
                       NULL,Box_NOT_CLOSABLE,2);
@@ -1587,7 +1587,7 @@ static void Fig_GetAndShowFileBrowsersStats (void)
 	                           StatCrsFileZones[NumStat],
 				   &SizeOfFileZones[NumStat]);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_FIGURE_TYPES[Fig_FOLDERS_AND_FILES],NULL,
                  Hlp_ANALYTICS_Figures_folders_and_files,Box_NOT_CLOSABLE);
 
@@ -2756,7 +2756,7 @@ static void Fig_GetAndShowOERsStats (void)
    Brw_License_t License;
    unsigned long NumFiles[2];
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_OER],NULL,
                       Hlp_ANALYTICS_Figures_open_educational_resources_oer,Box_NOT_CLOSABLE,2);
 
@@ -2950,7 +2950,7 @@ static void Fig_GetAndShowAssignmentsStats (void)
       if ((NumCoursesWithAssignments = Asg_GetNumCoursesWithAssignments (Gbl.Scope.Current)) != 0)
          NumAssignmentsPerCourse = (float) NumAssignments / (float) NumCoursesWithAssignments;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_ASSIGNMENTS],NULL,
                       Hlp_ANALYTICS_Figures_assignments,Box_NOT_CLOSABLE,2);
 
@@ -3009,7 +3009,7 @@ static void Fig_GetAndShowProjectsStats (void)
       if ((NumCoursesWithProjects = Prj_GetNumCoursesWithProjects (Gbl.Scope.Current)) != 0)
          NumProjectsPerCourse = (float) NumProjects / (float) NumCoursesWithProjects;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_PROJECTS],NULL,
                       Hlp_ANALYTICS_Figures_projects,Box_NOT_CLOSABLE,2);
 
@@ -3065,7 +3065,7 @@ static void Fig_GetAndShowTestsStats (void)
    Tst_AnswerType_t AnsType;
    struct Tst_Stats Stats;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_TESTS],NULL,
                       Hlp_ANALYTICS_Figures_tests,Box_NOT_CLOSABLE,2);
 
@@ -3209,7 +3209,7 @@ static void Fig_GetAndShowGamesStats (void)
       if ((NumCoursesWithGames = Gam_GetNumCoursesWithGames (Gbl.Scope.Current)) != 0)
          NumGamesPerCourse = (float) NumGames / (float) NumCoursesWithGames;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_GAMES],NULL,
                       Hlp_ANALYTICS_Figures_games,Box_NOT_CLOSABLE,2);
 
@@ -3266,7 +3266,7 @@ static void Fig_GetAndShowSocialActivityStats (void)
    unsigned NumUsrs;
    unsigned NumUsrsTotal;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_TIMELINE],NULL,
                       Hlp_ANALYTICS_Figures_timeline,Box_NOT_CLOSABLE,2);
 
@@ -3574,7 +3574,7 @@ static void Fig_GetAndShowFollowStats (void)
    unsigned NumUsrs;
    float Average;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_FOLLOW],NULL,
                       Hlp_ANALYTICS_Figures_followed_followers,Box_NOT_CLOSABLE,2);
 
@@ -3860,7 +3860,7 @@ static void Fig_GetAndShowForumStats (void)
    FiguresForum.NumPosts            = 0;
    FiguresForum.NumUsrsToBeNotifiedByEMail = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_FORUMS],NULL,
                       Hlp_ANALYTICS_Figures_forums,Box_NOT_CLOSABLE,2);
 
@@ -4204,7 +4204,7 @@ static void Fig_GetAndShowNumUsrsPerNotifyEvent (void)
    unsigned NumMailsTotal = 0;
    unsigned NumMails[Ntf_NUM_NOTIFY_EVENTS];
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_NOTIFY_EVENTS],NULL,
                       Hlp_ANALYTICS_Figures_notifications,Box_NOT_CLOSABLE,2);
 
@@ -4436,7 +4436,7 @@ static void Fig_GetAndShowNoticesStats (void)
    NumTotalNotices += NumNoticesDeleted;
    NumTotalNotifications += NumNotif;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_NOTICES],NULL,
                       Hlp_ANALYTICS_Figures_notices,Box_NOT_CLOSABLE,2);
 
@@ -4507,7 +4507,7 @@ static void Fig_GetAndShowMsgsStats (void)
    NumMsgsReceivedAndDeleted  = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_DELETED );
    NumMsgsReceivedAndNotified = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_NOTIFIED);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_MESSAGES],NULL,
                       Hlp_ANALYTICS_Figures_messages,Box_NOT_CLOSABLE,2);
 
@@ -4602,7 +4602,7 @@ static void Fig_GetAndShowSurveysStats (void)
       NumQstsPerSurvey = Svy_GetNumQstsPerCrsSurvey (Gbl.Scope.Current);
      }
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_SURVEYS],NULL,
                       Hlp_ANALYTICS_Figures_surveys,Box_NOT_CLOSABLE,2);
 
@@ -4658,7 +4658,7 @@ static void Fig_GetAndShowNumUsrsPerPrivacy (void)
    extern const char *Txt_Extended_public_profile;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_PRIVACY],NULL,
                       Hlp_ANALYTICS_Figures_privacy,Box_NOT_CLOSABLE,2);
 
@@ -4781,7 +4781,7 @@ static void Fig_GetAndShowNumUsrsPerCookies (void)
    unsigned NumUsrs[Mnu_NUM_MENUS];
    unsigned NumUsrsTotal = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_COOKIES],NULL,
                       Hlp_ANALYTICS_Figures_cookies,Box_NOT_CLOSABLE,2);
 
@@ -4857,7 +4857,7 @@ static void Fig_GetAndShowNumUsrsPerLanguage (void)
    unsigned NumUsrs[1 + Lan_NUM_LANGUAGES];
    unsigned NumUsrsTotal = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_LANGUAGES],NULL,
                       Hlp_ANALYTICS_Figures_language,Box_NOT_CLOSABLE,2);
 
@@ -4934,7 +4934,7 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    unsigned NumUsrs[7];	// 7: seven days in a week
    unsigned NumUsrsTotal = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_FIRST_DAY_OF_WEEK],NULL,
                       Hlp_ANALYTICS_Figures_calendar,Box_NOT_CLOSABLE,2);
 
@@ -5015,7 +5015,7 @@ static void Fig_GetAndShowNumUsrsPerDateFormat (void)
    unsigned NumUsrs[Dat_NUM_OPTIONS_FORMAT];
    unsigned NumUsrsTotal = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_DATE_FORMAT],NULL,
                       Hlp_ANALYTICS_Figures_dates,Box_NOT_CLOSABLE,2);
 
@@ -5092,7 +5092,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
    unsigned NumUsrs[Ico_NUM_ICON_SETS];
    unsigned NumUsrsTotal = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_ICON_SETS],NULL,
                       Hlp_ANALYTICS_Figures_icons,Box_NOT_CLOSABLE,2);
 
@@ -5174,7 +5174,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
    unsigned NumUsrs[Mnu_NUM_MENUS];
    unsigned NumUsrsTotal = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_MENUS],NULL,
                       Hlp_ANALYTICS_Figures_menu,Box_NOT_CLOSABLE,2);
 
@@ -5255,7 +5255,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
    unsigned NumUsrs[The_NUM_THEMES];
    unsigned NumUsrsTotal = 0;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_THEMES],NULL,
                       Hlp_ANALYTICS_Figures_theme,Box_NOT_CLOSABLE,2);
 
@@ -5335,7 +5335,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
    unsigned NumUsrsTotal = 0;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_SIDE_COLUMNS],NULL,
                       Hlp_ANALYTICS_Figures_columns,Box_NOT_CLOSABLE,2);
 

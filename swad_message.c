@@ -227,7 +227,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 		     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;		// Teachers
      }
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
 					      Txt_New_message,NULL,
 		 Hlp_MESSAGES_Write,Box_NOT_CLOSABLE);
@@ -1748,12 +1748,12 @@ static void Msg_ShowSentOrReceivedMessages (void)
 				        &mysql_res);
    Gbl.Msg.NumMsgs = (unsigned) NumRows;
 
-   /***** Start box with messages *****/
+   /***** Begin box with messages *****/
    Box_BoxBegin ("97%",Msg_WriteNumMsgs (NumUnreadMsgs),Msg_PutIconsListMsgs,
                  Help[Gbl.Msg.TypeOfMessages],Box_NOT_CLOSABLE);
 
    /***** Filter messages *****/
-   /* Start box with filter */
+   /* Begin box with filter */
    Box_BoxBegin (NULL,Txt_Filter,NULL,
                  HelpFilter[Gbl.Msg.TypeOfMessages],Box_CLOSABLE);
 
@@ -3853,7 +3853,7 @@ void Msg_ListBannedUsrs (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Banned_users,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 

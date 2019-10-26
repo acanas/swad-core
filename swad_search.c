@@ -133,7 +133,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
      };
    Sch_WhatToSearch_t WhatToSearch;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    HTM_DIV_Begin ("class=\"CM\"");
    Box_BoxBegin (NULL,Txt_Search,Crs_PutIconToSelectMyCourses,
                  Hlp_START_Search,Box_NOT_CLOSABLE);

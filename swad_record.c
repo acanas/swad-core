@@ -194,7 +194,7 @@ void Rec_ReqEditRecordFields (void)
    /***** List the current fields of records for edit them *****/
    if (Gbl.Crs.Records.LstFields.Num)	// Fields found...
      {
-      /* Start box and table */
+      /* Begin box and table */
       Box_StartBoxTable (NULL,Txt_Record_fields,NULL,
                          Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
 
@@ -369,7 +369,7 @@ void Rec_ShowFormCreateRecordField (void)
    /***** Begin form *****/
    Frm_StartForm (ActNewFie);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_record_field,NULL,
                       Hlp_USERS_Students_course_record_card,Box_NOT_CLOSABLE,2);
 
@@ -1740,7 +1740,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	 Rol_WrongRoleExit ();
      }
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
@@ -2253,7 +2253,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    if (Ins.InsCod > 0)
       Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Gbl.Record.UsrDat = UsrDat;
    Gbl.Record.TypeOfView = TypeOfView;
@@ -4026,7 +4026,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    /***** Start section *****/
    HTM_SECTION_Begin (Rec_MY_INS_CTR_DPT_ID);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Box_StartBoxTable (StrRecordWidth,
                       IAmATeacher ? Txt_Institution_centre_and_department :

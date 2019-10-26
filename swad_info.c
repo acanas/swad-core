@@ -594,7 +594,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    extern const char *Txt_You_should_read_the_following_information;
    Inf_InfoType_t InfoType;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Required_reading,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
@@ -620,7 +620,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
          Frm_EndForm ();
          fprintf (Gbl.F.Out,"</li>");
         }
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
    HTM_DIV_End ();
 
    /***** End box *****/
@@ -1043,7 +1043,7 @@ static void Inf_ShowPage (const char *URL)
       Hlp_ASSESSMENT_System,			// Inf_ASSESSMENT
      };
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
                  ICanEdit ? Inf_PutIconToEditInfo :
                             NULL,
@@ -1128,7 +1128,7 @@ void Inf_FormsToSelSendInfo (void)
      }
 
    /***** Form to choice between alternatives *****/
-   /* Start box and table */
+   /* Begin box and table */
    Box_StartBoxTable (NULL,Txt_Source_of_information,Inf_PutIconToViewInfo,
                       HelpEdit[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE,4);
 
@@ -1791,7 +1791,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
    if (TxtHTML[0])
      {
-      /***** Start box *****/
+      /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
                     ICanEdit ? Inf_PutIconToEditInfo :
                                NULL,
@@ -1875,7 +1875,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 
    if (TxtMD[0])
      {
-      /***** Start box *****/
+      /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
                     ICanEdit ? Inf_PutIconToEditInfo :
                                NULL,

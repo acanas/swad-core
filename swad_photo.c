@@ -302,7 +302,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
    bool ItsMe = Usr_ItsMe (UsrDat->UsrCod);
    Act_Action_t NextAction;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Photo,ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
 	                                Pho_PutIconToRequestRemoveOtherUsrPhoto,
 		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
@@ -1717,7 +1717,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    switch (SeeOrPrint)
      {
       case Pho_DEGREES_SEE:
-	 /***** Start box *****/
+	 /***** Begin box *****/
 	 Box_BoxBegin (NULL,Txt_Degrees,Pho_PutIconToPrintDegreeStats,
 		       Hlp_ANALYTICS_Degrees,Box_NOT_CLOSABLE);
 	 HTM_TABLE_BeginCenterPadding (2);
@@ -1738,7 +1738,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 
 	 break;
       case Pho_DEGREES_PRINT:
-	 /***** Start box *****/
+	 /***** Begin box *****/
 	 Box_BoxBegin (NULL,Txt_Degrees,NULL,
 	               NULL,Box_NOT_CLOSABLE);
 	 break;

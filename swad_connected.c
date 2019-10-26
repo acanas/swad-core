@@ -95,7 +95,7 @@ void Con_ShowConnectedUsrs (void)
    Sco_SetScopesForListingStudents ();
    Sco_GetScope ("ScopeCon");
 
-   /***** Start box *****/
+   /***** Begin box *****/
    /* Current time */
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     "%s"

@@ -340,7 +340,7 @@ void Mnu_WriteMenuThisTab (void)
 
    /***** Menu start *****/
    fprintf (Gbl.F.Out,"<nav class=\"MENU_LIST_CONTAINER\">"
-	              "<menu class=\"MENU_LIST\">");
+	              "<ul class=\"MENU_LIST\">");
 
    /***** Loop to write all options in menu. Each row holds an option *****/
    for (NumOptInMenu = 0;
@@ -392,8 +392,8 @@ void Mnu_WriteMenuThisTab (void)
      }
 
    /***** Menu end *****/
-   fprintf (Gbl.F.Out,"</menu>"
-	              "</nav>");
+   HTM_UL_End ();
+   fprintf (Gbl.F.Out,"</nav>");
   }
 
 /*****************************************************************************/

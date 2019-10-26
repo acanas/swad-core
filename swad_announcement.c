@@ -126,7 +126,7 @@ void Ann_ShowAllAnnouncements (void)
 						    (unsigned) (1 << Rol_UNK));
      }
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin ("550px",Txt_Announcements,
                  ICanEdit ? Ann_PutIconToAddNewAnnouncement :
 			    NULL,
@@ -404,7 +404,7 @@ void Ann_ShowFormAnnouncement (void)
    /***** Begin form *****/
    Frm_StartForm (ActRcvAnn);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_announcement,NULL,
                       Hlp_MESSAGES_Announcements,Box_NOT_CLOSABLE,2);
 

@@ -110,7 +110,7 @@ void Ind_ReqIndicatorsCourses (void)
    /***** Get parameters *****/
    Ind_GetParamsIndicators ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Indicators_of_courses,NULL,
                  Hlp_ANALYTICS_Indicators,Box_NOT_CLOSABLE);
 

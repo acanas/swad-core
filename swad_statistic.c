@@ -337,7 +337,7 @@ void Sta_AskShowCrsHits (void)
 	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Statistics_of_visits_to_the_course_X,
 	     Gbl.Hierarchy.Crs.ShrtName);
@@ -526,7 +526,7 @@ void Sta_AskShowGblHits (void)
    /***** Begin form *****/
    Frm_StartFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Statistics_of_all_visits,NULL,
                       Hlp_ANALYTICS_Visits_global_visits,Box_NOT_CLOSABLE,2);
 
@@ -3990,7 +3990,7 @@ void Sta_ShowLastClicks (void)
    Sta_PutLinkToCourseHits ();	// Course hits
    Mnu_ContextMenuEnd ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Last_clicks_in_real_time,NULL,
                  Hlp_USERS_Connected_last_clicks,Box_NOT_CLOSABLE);
 

@@ -259,7 +259,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
       Hld_GetListHolidays ();
      }
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,NULL,FunctionToDrawContextualIcons,
 	         PrintView ? NULL :
 	                     Hlp_START_Calendar,Box_NOT_CLOSABLE);

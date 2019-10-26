@@ -156,7 +156,7 @@ void Rep_ReqMyUsageReport (void)
    /***** Form to show my usage report *****/
    Frm_StartForm (ActSeeMyUsgRep);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Report_of_use_of_PLATFORM,
 	     Cfg_PLATFORM_SHORT_NAME);
@@ -263,7 +263,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    extern const char *Txt_Report;
    extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Report_of_use_of_PLATFORM,
 	     Cfg_PLATFORM_SHORT_NAME);

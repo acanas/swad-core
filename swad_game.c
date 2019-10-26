@@ -202,7 +202,7 @@ static void Gam_ListAllGames (void)
                                      0,
                                      &Pagination);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Games,Gam_PutIconsListGames,
                  Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
@@ -380,7 +380,7 @@ void Gam_ShowOneGame (long GamCod,
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Start box *****/
+   /***** Begin box *****/
    if (ShowOnlyThisGame)
       Box_BoxBegin (NULL,Txt_Game,NULL,
                     Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
@@ -1126,7 +1126,7 @@ static void Gam_PutFormsEditionGame (struct Game *Game,bool ItsANewGame)
 				ActChgGam);
    Gam_PutParams ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    if (ItsANewGame)
       Box_StartBoxTable (NULL,Txt_New_game,NULL,
 			 Hlp_ASSESSMENT_Games_new_game,Box_NOT_CLOSABLE,2);
@@ -1591,7 +1591,7 @@ static void Gam_ListGameQuestions (struct Game *Game)
 					" ORDER BY gam_questions.QstInd",
 					Game->GamCod);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Box_BoxBegin (NULL,Txt_Questions,ICanEditQuestions ? Gam_PutIconToAddNewQuestions :
                                                         NULL,

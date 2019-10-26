@@ -229,7 +229,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
                                      0,
                                      &Pagination);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Surveys,Svy_PutIconsListSurveys,
                  Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
 
@@ -440,7 +440,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    struct Survey Svy;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
-   /***** Start box *****/
+   /***** Begin box *****/
    if (ShowOnlyThisSvyComplete)
       Box_BoxBegin (NULL,Txt_Survey,NULL,
                     Hlp_ASSESSMENT_Surveys,Box_NOT_CLOSABLE);
@@ -786,7 +786,7 @@ static void Svy_WriteStatus (struct Survey *Svy)
                Txt_SURVEY_You_have_not_answered);
 
    /***** End list with items of status *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
   }
 
 /*****************************************************************************/
@@ -1853,7 +1853,7 @@ void Svy_RequestCreatOrEditSvy (void)
 	                          ActChgSvy);
    Svy_PutParams ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    if (ItsANewSurvey)
       Box_StartBoxTable (NULL,Txt_New_survey,NULL,
                          Hlp_ASSESSMENT_Surveys_new_survey,Box_NOT_CLOSABLE,2);
@@ -2053,7 +2053,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 
    if (Gbl.Crs.Grps.GrpTypes.Num)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -2671,7 +2671,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
         }
      }
 
-   /***** Start box *****/
+   /***** Begin box *****/
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
      {
       /* Parameters for contextual icon */
@@ -3199,7 +3199,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,
 				        " WHERE SvyCod=%ld ORDER BY QstInd",
 				        Svy->SvyCod);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Svy_CurrentSvyCod = Svy->SvyCod;
    Box_BoxBegin (NULL,Txt_Questions,Svy->Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
                                                            NULL,

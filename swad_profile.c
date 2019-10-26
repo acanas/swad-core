@@ -197,7 +197,7 @@ void Prf_RequestUserProfile (void)
    /***** Begin form *****/
    Frm_StartForm (ActSeeOthPubPrf);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Another_user_s_profile,NULL,
                  Hlp_START_Profiles_view_public_profile,Box_NOT_CLOSABLE);
 
@@ -414,7 +414,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    Prf_ShowNumFilesCurrentlyPublished (UsrDat);
 
    /* End left list */
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
    HTM_DIV_End ();
 
    /***** Right list *****/
@@ -442,7 +442,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
       Prf_ShowNumMessagesSent (UsrDat,&UsrFigures);
 
       /* End right list */
-      fprintf (Gbl.F.Out,"</ul>");
+      HTM_UL_End ();
      }
 
    HTM_DIV_End ();

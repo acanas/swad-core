@@ -142,7 +142,7 @@ static void Asg_ShowAllAssignments (void)
                                      0,
                                      &Pagination);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Assignments,Asg_PutIconsListAssignments,
                  Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 
@@ -1149,7 +1149,7 @@ void Asg_RequestCreatOrEditAsg (void)
      }
    Asg_PutParams ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    if (ItsANewAssignment)
       Box_StartBoxTable (NULL,Txt_New_assignment,NULL,
 			 Hlp_ASSESSMENT_Assignments_new_assignment,Box_NOT_CLOSABLE,2);
@@ -1250,7 +1250,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 
    if (Gbl.Crs.Grps.GrpTypes.Num)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);

@@ -108,7 +108,7 @@ void Not_ShowFormNotice (void)
    /***** Begin form *****/
    Frm_StartForm (ActRcvNot);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_New_notice,NULL,
                  Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
 
@@ -406,7 +406,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
      {
-      /***** Start box *****/
+      /***** Begin box *****/
       snprintf (StrWidth,sizeof (StrWidth),
 		"%upx",
 		Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);

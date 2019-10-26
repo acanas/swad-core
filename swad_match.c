@@ -256,7 +256,7 @@ void Mch_ListMatches (struct Game *Game,bool PutFormNewMatch)
    /* Free allocated memory for subquery */
    free ((void *) SubQuery);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Gam_SetParamCurrentGamCod (Game->GamCod);	// Used to pass parameter
    Box_BoxBegin (NULL,Txt_Matches,ICanEditMatches ? Mch_PutIconToCreateNewMatch :
 	                                            NULL,
@@ -1192,7 +1192,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    Gam_PutParamGameCod (Game->GamCod);
    Gam_PutParamQstInd (0);	// Start by first question in game
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_match,NULL,
 		      Hlp_ASSESSMENT_Games_matches,Box_NOT_CLOSABLE,2);
 
@@ -1253,7 +1253,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
 
    if (Gbl.Crs.Grps.GrpTypes.Num)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);

@@ -197,7 +197,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    extern const char *Txt_Create_another_type_of_degree;
    extern const char *Txt_Create_type_of_degree;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    switch (NextAction)
      {
       case ActSeeDegTyp:
@@ -264,7 +264,7 @@ static void DT_EditDegreeTypesInternal (void)
    /***** Get list of degree types *****/
    DT_GetListDegreeTypes (Hie_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Types_of_degree,DT_PutIconsEditingDegreeTypes,
                  Hlp_CENTRE_DegreeTypes_edit,Box_NOT_CLOSABLE);
 
@@ -465,7 +465,7 @@ static void DT_PutFormToCreateDegreeType (void)
    /***** Begin form *****/
    Frm_StartForm (ActNewDegTyp);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_type_of_degree,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 

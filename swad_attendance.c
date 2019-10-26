@@ -222,7 +222,7 @@ static void Att_ShowAllAttEvents (void)
                                      0,
                                      &Pagination);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_Events,Att_PutIconsInListOfAttEvents,
 		 Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
@@ -1087,7 +1087,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    if (ItsANewAttEvent)
       Box_StartBoxTable (NULL,Txt_New_event,NULL,
 			 Hlp_USERS_Attendance_new_event,Box_NOT_CLOSABLE,2);
@@ -1196,7 +1196,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 
    if (Gbl.Crs.Grps.GrpTypes.Num)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"%s RT\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -1835,7 +1835,7 @@ void Att_SeeOneAttEvent (void)
    Grp_GetParamWhichGrps ();
    Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Event,NULL,
                       Hlp_USERS_Attendance,Box_NOT_CLOSABLE,2);
 
@@ -1886,7 +1886,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
      }
 
    /***** List students (only me) *****/
-   /* Start box */
+   /* Begin box */
    Box_BoxBegin (NULL,Txt_Attendance,NULL,
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
@@ -1944,7 +1944,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    /***** Get and order list of students in this course *****/
    Usr_GetListUsrs (Hie_CRS,Rol_STD);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Attendance,NULL,
                  Hlp_USERS_Attendance,Box_NOT_CLOSABLE);
 
@@ -2720,7 +2720,7 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
    /***** Get list of attendance events selected *****/
    Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Attendance,
                  TypeOfView == Att_NORMAL_VIEW_ONLY_ME ? Att_PutIconsMyAttList :
                                                          NULL,
@@ -2806,7 +2806,7 @@ static void Usr_ListOrPrintUsrsAttendanceCrs (Att_TypeOfView_t TypeOfView)
       /***** Get list of attendance events selected *****/
       Att_GetListSelectedAttCods (&Gbl.AttEvents.StrAttCodsSelected);
 
-      /***** Start box *****/
+      /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Attendance_list,
 	            TypeOfView == Att_NORMAL_VIEW_STUDENTS ? Att_PutIconsStdsAttList :
 						             NULL,
@@ -3076,7 +3076,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    bool NormalView = (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
                       TypeOfView == Att_NORMAL_VIEW_STUDENTS);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Events,
 	          TypeOfView == Att_NORMAL_VIEW_ONLY_ME  ? Att_PutIconToViewAttEvents :
 	         (TypeOfView == Att_NORMAL_VIEW_STUDENTS ? Att_PutIconToEditAttEvents :
@@ -3450,7 +3450,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumUsrsInList,
    /***** Start section with attendance details *****/
    HTM_SECTION_Begin (Att_ATTENDANCE_DETAILS_ID);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Details,NULL,
 	              NULL,Box_NOT_CLOSABLE,2);
 

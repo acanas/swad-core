@@ -274,7 +274,7 @@ void Pwd_ShowFormSendNewPwd (void)
    /***** Begin form *****/
    Frm_StartForm (ActSndNewPwd);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Forgotten_password,NULL,
                  Hlp_PROFILE_Password,Box_NOT_CLOSABLE);
 
@@ -660,7 +660,7 @@ void Pwd_ShowFormChgMyPwd (void)
    /***** Begin form *****/
    Frm_StartFormAnchor (ActChgMyPwd,Pwd_PASSWORD_SECTION_ID);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
@@ -834,7 +834,7 @@ void Pwd_ShowFormChgOtherUsrPwd (void)
    extern const char *Txt_Change_password;
    Act_Action_t NextAction;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Password,NULL,
 		 NULL,Box_NOT_CLOSABLE);
 

@@ -373,7 +373,7 @@ void Ntf_ShowMyNotifications (void)
 				  Txt_Domains);		// View allowed mail domains
    Mnu_ContextMenuEnd ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Notifications,Ntf_PutIconsNotif,
                  Hlp_START_Notifications,Box_NOT_CLOSABLE);
 
@@ -1906,7 +1906,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    /***** Start section with settings on privacy *****/
    HTM_SECTION_Begin (Ntf_NOTIFICATIONS_ID);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Notifications,Ntf_PutIconsNotif,
                  Hlp_PROFILE_Settings_notifications,Box_NOT_CLOSABLE);
 

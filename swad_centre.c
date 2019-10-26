@@ -175,7 +175,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
      }
    if (NumCtrs)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Centres_with_pending_degrees,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
@@ -322,7 +322,7 @@ static void Ctr_Configuration (bool PrintView)
 	     (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
    PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    if (PrintView)
       Box_BoxBegin (NULL,NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
@@ -811,7 +811,7 @@ static void Ctr_ListCentres (void)
    extern const char *Txt_Create_centre;
    unsigned NumCtr;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Centres_of_INSTITUTION_X,
 	     Gbl.Hierarchy.Ins.FullName);
@@ -1010,7 +1010,7 @@ static void Ctr_EditCentresInternal (void)
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Centres_of_INSTITUTION_X,
              Gbl.Hierarchy.Ins.FullName);
@@ -2312,7 +2312,7 @@ void Ctr_RequestPhoto (void)
    /***** Begin form to upload photo *****/
    Frm_StartForm (ActRecCtrPho);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Photo,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
@@ -2505,7 +2505,7 @@ static void Ctr_PutFormToCreateCentre (void)
    else
       Lay_NoPermissionExit ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_centre,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
@@ -2928,7 +2928,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
    /***** Query database *****/
    if (NumCtrs)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       /* Number of centres found */
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%u %s",

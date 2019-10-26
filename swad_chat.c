@@ -123,7 +123,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    /***** Fill the list with the degrees I belong to *****/ 
    Usr_GetMyDegrees ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Chat_rooms,NULL,
                  NULL,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<ul class=\"LIST_TREE\">");
@@ -252,8 +252,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   /***** End box *****/
+   HTM_UL_End ();
    Box_BoxEnd ();
   }
 
@@ -278,7 +278,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 			     " ORDER BY NumUsrs DESC,RoomCode");
    if (NumRows > 0) // If not empty chat rooms found
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Rooms_with_users,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 

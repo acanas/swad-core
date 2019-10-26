@@ -168,7 +168,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    /***** Get institutions *****/
    if (NumInss)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Institutions_with_pending_centres,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
@@ -324,7 +324,7 @@ static void Ins_Configuration (bool PrintView)
    if (Gbl.Hierarchy.Ins.InsCod <= 0)		// No institution selected
       return;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    if (PrintView)
       Box_BoxBegin (NULL,NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
@@ -702,7 +702,7 @@ static void Ins_ListInstitutions (void)
    extern const char *Txt_Create_institution;
    unsigned NumIns;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Institutions_of_COUNTRY_X,
 	     Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
@@ -948,7 +948,7 @@ static void Ins_EditInstitutionsInternal (void)
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Institutions_of_COUNTRY_X,
              Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
@@ -2215,7 +2215,7 @@ static void Ins_PutFormToCreateInstitution (void)
    else
       Lay_NoPermissionExit ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_institution,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
@@ -2543,7 +2543,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
    /***** List the institutions (one row per institution) *****/
    if (NumInss)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       /* Number of institutions found */
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%u %s",

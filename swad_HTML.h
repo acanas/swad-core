@@ -74,4 +74,6 @@ void HTM_ARTICLE_End (void);
 void HTM_SECTION_Begin (const char *SectionId);
 void HTM_SECTION_End (void);
 
+void HTM_UL_End (void);
+
 #endif

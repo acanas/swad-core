@@ -207,7 +207,7 @@ static void Crs_Configuration (bool PrintView)
          Mnu_ContextMenuEnd ();
 	}
 
-   /***** Start box *****/
+   /***** Begin box *****/
    if (PrintView)
       Box_BoxBegin (NULL,NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
@@ -580,7 +580,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	     "%s LIGHT_BLUE",
 	     The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_courses,Crs_PutIconToSearchCourses,
                  Hlp_PROFILE_Courses,Box_NOT_CLOSABLE);
    fprintf (Gbl.F.Out,"<ul class=\"LIST_TREE\">");
@@ -811,7 +811,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    DB_FreeMySQLResult (&mysql_resCty);
 
    /***** End box *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
    Box_BoxEnd ();
   }
 
@@ -1168,7 +1168,7 @@ static void Crs_ListCourses (void)
    extern const char *Txt_Create_course;
    unsigned Year;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Courses_of_DEGREE_X,
 	     Gbl.Hierarchy.Deg.ShrtName);
@@ -1376,7 +1376,7 @@ static void Crs_EditCoursesInternal (void)
    /***** Write menu to select country, institution, centre and degree *****/
    Hie_WriteMenuHierarchy ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Courses_of_DEGREE_X,
 	     Gbl.Hierarchy.Deg.ShrtName);
@@ -1700,7 +1700,7 @@ static void Crs_PutFormToCreateCourse (void)
    else
       Lay_NoPermissionExit ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_course,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
@@ -3059,7 +3059,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    /***** List the courses (one row per course) *****/
    if (NumCrss)
      {
-      /* Start box and table */
+      /* Begin box and table */
       Box_StartBoxTable ("100%",NULL,NULL,
                          NULL,Box_NOT_CLOSABLE,2);
 
@@ -3127,7 +3127,7 @@ void Crs_ListCrssFound (MYSQL_RES **mysql_res,unsigned NumCrss)
    /***** List the courses (one row per course) *****/
    if (NumCrss)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       /* Number of courses found */
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%u %s",
@@ -3343,7 +3343,7 @@ void Crs_AskRemoveOldCrss (void)
    /***** Begin form *****/
    Frm_StartForm (ActRemOldCrs);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Eliminate_old_courses,NULL,
                  Hlp_SYSTEM_Hierarchy_eliminate_old_courses,Box_NOT_CLOSABLE);
 

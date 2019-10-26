@@ -539,3 +539,17 @@ void HTM_SECTION_End (void)
   {
    fprintf (Gbl.F.Out,"</section>");
   }
+
+/*****************************************************************************/
+/****************************** Unordered lists ******************************/
+/*****************************************************************************/
+/*
+void HTM_UL_Begin (const char *SectionId)
+  {
+   fprintf (Gbl.F.Out,"<ul id=\"%s\">",SectionId);
+  }
+*/
+void HTM_UL_End (void)
+  {
+   fprintf (Gbl.F.Out,"</ul>");
+  }

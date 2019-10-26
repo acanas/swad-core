@@ -140,7 +140,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    extern const char *Txt_Check;
    extern const char *Txt_Skip_this_step;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Title,NULL,
                  Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE);
 
@@ -213,7 +213,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 					   ID);
       if (NumUsrs)
 	{
-         /***** Start box and table *****/
+         /***** Begin box and table *****/
 	 Box_StartBoxTable (NULL,
 	                    (NumUsrs == 1) ? Txt_Do_you_think_you_are_this_user :
 					     Txt_Do_you_think_you_are_one_of_these_users,
@@ -354,7 +354,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    /***** Begin form to enter some data of the new user *****/
    Frm_StartForm (ActCreUsrAcc);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Create_account,NULL,
                       Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
@@ -426,7 +426,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_New_on_PLATFORM_Sign_up,
 	     Cfg_PLATFORM_SHORT_NAME);

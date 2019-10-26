@@ -407,7 +407,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    extern const char *Txt_Remove_me_from_this_course;
    Ntf_NotifyEvent_t NotifyEvent;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Enrolment,NULL,
                  Hlp_USERS_SignUp_confirm_enrolment,Box_NOT_CLOSABLE);
 
@@ -723,7 +723,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
      }
    Frm_StartForm (NextAction);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Title,NULL,
 	         Hlp_USERS_Administration_administer_multiple_users,Box_NOT_CLOSABLE);
 
@@ -801,7 +801,7 @@ void Enr_AskRemoveOldUsrs (void)
    /***** Begin form *****/
    Frm_StartForm (ActRemOldUsr);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Eliminate_old_users,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
@@ -1017,7 +1017,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
                Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
 
    /***** End list of options *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
   }
 
 /*****************************************************************************/
@@ -1585,7 +1585,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
      }
 
    /***** End list of options *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
 
    return OptionsShown;
   }
@@ -1854,7 +1854,7 @@ void Enr_AskRemAllStdsThisCrs (void)
    extern const char *Txt_Remove_all_students;
    extern const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Remove_all_students,NULL,
                  Hlp_USERS_Administration_remove_all_students,Box_NOT_CLOSABLE);
 
@@ -2279,7 +2279,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Gbl.Scope.Default = Hie_CRS;
    Sco_GetScope ("ScopeEnr");
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Enrolment_requests,NULL,
                  Hlp_USERS_Requests,Box_NOT_CLOSABLE);
 
@@ -3121,7 +3121,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
    extern const char *Txt_Administer_one_user;
    Act_Action_t NextAction;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Administer_one_user,NULL,
                  Hlp_USERS_Administration_administer_one_user,Box_NOT_CLOSABLE);
 

@@ -280,7 +280,7 @@ static void Plc_EditPlacesInternal (void)
    /***** Get list of places *****/
    Plc_GetListPlaces ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Places,Plc_PutIconsEditingPlaces,
                  Hlp_INSTITUTION_Places_edit,Box_NOT_CLOSABLE);
 
@@ -803,7 +803,7 @@ static void Plc_PutFormToCreatePlace (void)
    /***** Begin form *****/
    Frm_StartForm (ActNewPlc);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_place,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 

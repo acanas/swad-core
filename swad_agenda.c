@@ -153,7 +153,7 @@ void Agd_ShowMyAgenda (void)
    /***** Get parameters *****/
    Agd_GetParams (Agd_MY_AGENDA);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin ("100%",Txt_My_agenda,Agd_PutIconsMyFullAgenda,
 		 Hlp_PROFILE_Agenda,Box_NOT_CLOSABLE);
 
@@ -352,7 +352,7 @@ void Agd_ShowUsrAgenda (void)
 	{
 	 Error = false;
 
-	 /***** Start box *****/
+	 /***** Begin box *****/
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Public_agenda_USER,
 		   Gbl.Usrs.Other.UsrDat.FullName);
@@ -396,7 +396,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	 /* If nickname is correct, user code is already got from nickname */
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,Usr_DONT_GET_PREFS))        // Existing user
 	   {
-	    /***** Start box *****/
+	    /***** Begin box *****/
 	    snprintf (Gbl.Title,sizeof (Gbl.Title),
 		      Txt_Public_agenda_USER,
 		      Gbl.Usrs.Other.UsrDat.FullName);
@@ -519,7 +519,7 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
 
    if (Gbl.Agenda.Num)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       switch (AgendaType)
         {
 	 case Agd_MY_AGENDA_TODAY:
@@ -1487,7 +1487,7 @@ void Agd_RequestCreatOrEditEvent (void)
      }
    Agd_PutCurrentParamsMyAgenda ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    if (ItsANewEvent)
       Box_StartBoxTable (NULL,Txt_New_event,NULL,
 			 Hlp_PROFILE_Agenda_new_event,Box_NOT_CLOSABLE,2);
@@ -1900,7 +1900,7 @@ void Agd_PrintAgdQRCode (void)
   {
    extern const char *Txt_Where_s_USER;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Where_s_USER,
 	     Gbl.Usrs.Me.UsrDat.FullName);

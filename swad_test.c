@@ -329,7 +329,7 @@ void Tst_ShowFormAskTst (void)
 	 break;
      }
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Take_a_test,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
@@ -450,7 +450,7 @@ void Tst_ShowNewTest (void)
             if (Gbl.Usrs.Me.IBelongToCurrentCrs)
 	       Tst_UpdateMyNumAccessTst (NumAccessesTst);
 
-	    /***** Start box *****/
+	    /***** Begin box *****/
 	    Box_BoxBegin (NULL,Txt_Test,NULL,
 	                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 	    Lay_WriteHeaderClassPhoto (false,false,
@@ -548,7 +548,7 @@ void Tst_AssessTest (void)
 	 /***** Create new test in database to store the result *****/
 	 TstCod = Tst_CreateTestResultInDB ();
 
-	 /***** Start box *****/
+	 /***** Begin box *****/
 	 Box_BoxBegin (NULL,Txt_Test_result,NULL,
 	               Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 	 Lay_WriteHeaderClassPhoto (false,false,
@@ -915,7 +915,7 @@ void Tst_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res)
          fprintf (Gbl.F.Out,"<li>%s</li>",
                   row[0]);
         }
-      fprintf (Gbl.F.Out,"</ul>");
+      HTM_UL_End ();
      }
    else
       fprintf (Gbl.F.Out,"%s",
@@ -1290,7 +1290,7 @@ void Tst_ShowFormAskEditTsts (void)
    TsI_PutFormToImportQuestions ();	// Import questions from XML file
    Mnu_ContextMenuEnd ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_List_edit_questions,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests_editing_questions,Box_NOT_CLOSABLE);
 
@@ -1346,7 +1346,7 @@ void Tst_ShowFormAskSelectTstsForGame (void)
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Select_questions,NULL,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
@@ -1792,7 +1792,7 @@ static void Tst_ShowFormEditTags (void)
    /***** Get current tags in current course *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Tags,NULL,
                          Hlp_ASSESSMENT_Tests_writing_a_question,Box_NOT_CLOSABLE,2);
 
@@ -1905,7 +1905,7 @@ static void Tst_ShowFormConfigTst (void)
    /***** Read test configuration from database *****/
    Tst_GetConfigTstFromDB ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Configure_tests,Tst_PutIconsTests,
                  Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
@@ -2814,7 +2814,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
    unsigned long NumHitsNotBlankThisQst;
    double TotalScoreThisQst;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,Tst_PutIconsTests,
 		 Hlp_ASSESSMENT_Tests,Box_NOT_CLOSABLE);
 
@@ -3070,7 +3070,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
    unsigned UniqueId;
    time_t TimeUTC;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Questions,NULL,
 		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
@@ -4781,7 +4781,7 @@ void Tst_GetAndWriteTagsQst (long QstCod)
          row = mysql_fetch_row (mysql_res);
          fprintf (Gbl.F.Out,"<li>%s</li>",row[0]);
         }
-      fprintf (Gbl.F.Out,"</ul>");
+      HTM_UL_End ();
      }
    else
       fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\">(%s)</span>",
@@ -5052,7 +5052,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    bool AnswerHasContent;
    bool DisplayRightColumn;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
      {
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -7440,7 +7440,7 @@ void Tst_SelUsrsToViewUsrsTstResults (void)
 	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Results,NULL,
                  Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
 
@@ -7528,7 +7528,7 @@ void Tst_SelDatesToSeeMyTstResults (void)
    /***** Begin form *****/
    Frm_StartForm (ActSeeMyTstRes);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Results,NULL,
                       Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
@@ -7552,7 +7552,7 @@ void Tst_ShowMyTstResults (void)
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Results,NULL,
                       Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
@@ -7625,7 +7625,7 @@ void Tst_ShowUsrsTstResults (void)
    /***** Check the number of users whose tests results will be shown *****/
    if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Results,NULL,
                          Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE,2);
 
@@ -8080,7 +8080,7 @@ void Tst_ShowOneTstResult (void)
       /***** Get questions and user's answers of the test result from database *****/
       Tst_GetTestResultQuestionsFromDB (TstCod);
 
-      /***** Start box *****/
+      /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Test_result,NULL,
                     Hlp_ASSESSMENT_Tests_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,

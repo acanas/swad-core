@@ -516,7 +516,7 @@ void ID_ShowFormChangeMyID (bool IShouldFillInID)
    /***** Start section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
@@ -548,7 +548,7 @@ void ID_ShowFormChangeOtherUsrID (void)
    /***** Start section *****/
    HTM_SECTION_Begin (ID_ID_SECTION_ID);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);

@@ -100,7 +100,7 @@ void Lnk_SeeLinks (void)
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Links,Lnk_PutIconsListingLinks,
 		 Hlp_SYSTEM_Links,Box_NOT_CLOSABLE);
 
@@ -206,7 +206,7 @@ static void Lnk_WriteListOfLinks (void)
 	       Gbl.Links.Lst[NumLnk].ShrtName);
 
    /***** List end *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
   }
 
 /*****************************************************************************/
@@ -233,7 +233,7 @@ static void Lnk_EditLinksInternal (void)
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Links,Lnk_PutIconsEditingLinks,
                  Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE);
 
@@ -739,7 +739,7 @@ static void Lnk_PutFormToCreateLink (void)
    /***** Begin form *****/
    Frm_StartForm (ActNewLnk);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_link,NULL,
                       Hlp_SYSTEM_Links_edit,Box_NOT_CLOSABLE,2);
 

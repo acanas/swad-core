@@ -121,7 +121,7 @@ void Mai_SeeMailDomains (void)
    /***** Get list of mail domains *****/
    Mai_GetListMailDomainsAllowedForNotif ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,
                       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
                                                                NULL,
@@ -473,7 +473,7 @@ static void Mai_ListMailDomainsForEdition (void)
    unsigned NumMai;
    struct Mail *Mai;
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Email_domains_allowed_for_notifications,NULL,
                       Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
@@ -749,7 +749,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    /***** Begin form *****/
    Frm_StartForm (ActNewMai);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_email_domain,NULL,
                       Hlp_START_Domains_edit,Box_NOT_CLOSABLE,2);
 
@@ -1155,7 +1155,7 @@ void Mai_ShowFormChangeMyEmail (bool IMustFillInEmail,bool IShouldConfirmEmail)
    /***** Start section *****/
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
@@ -1187,7 +1187,7 @@ void Mai_ShowFormChangeOtherUsrEmail (void)
    /***** Start section *****/
    HTM_SECTION_Begin (Mai_EMAIL_SECTION_ID);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);

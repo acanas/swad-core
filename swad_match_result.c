@@ -114,7 +114,7 @@ void McR_SelDatesToSeeMyMchResults (void)
    /***** Begin form *****/
    Frm_StartForm (ActSeeMyMchRes);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Results,NULL,
                       Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
@@ -138,7 +138,7 @@ void McR_ShowMyMchResults (void)
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Results,NULL,
                       Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
 
@@ -182,7 +182,7 @@ void McR_SelUsrsToViewUsrsMchResults (void)
 	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Results,NULL,
                  Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
 
@@ -276,7 +276,7 @@ void McR_ShowUsrsMchResults (void)
    /***** Check the number of users whose matches results will be shown *****/
    if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Results,NULL,
                          Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE,2);
 
@@ -734,7 +734,7 @@ void McR_ShowOneMchResult (void)
       McR_GetMatchResultQuestionsFromDB (Match.MchCod,UsrDat->UsrCod,
 					 &NumQsts,&NumQstsNotBlank);
 
-      /***** Start box *****/
+      /***** Begin box *****/
       Box_BoxBegin (NULL,Txt_Match_result,NULL,
                     Hlp_ASSESSMENT_Games_results,Box_NOT_CLOSABLE);
       Lay_WriteHeaderClassPhoto (false,false,

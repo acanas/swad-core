@@ -288,7 +288,7 @@ static void Grp_EditGroupTypes (void)
    extern const char *Txt_Types_of_group;
    extern const char *Txt_There_are_no_types_of_group_in_the_course_X;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Types_of_group,Grp_PutIconsEditingGroupTypes,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
@@ -316,7 +316,7 @@ static void Grp_EditGroups (void)
    extern const char *Txt_Groups;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
 
@@ -374,7 +374,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
    if (!Gbl.Crs.Grps.NumGrps)
       return;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    ICanEdit = !Gbl.Form.Inside &&
 	      (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);
@@ -1801,7 +1801,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	 Grp_ShowWarningToStdsToChangeGrps ();
      }
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_My_groups,ICanEdit ? Grp_PutIconToEditGroups :
                                                NULL,
                  Hlp_USERS_Groups,Box_NOT_CLOSABLE);
@@ -2082,7 +2082,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    /***** Get list of groups types and groups in current course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Groups,NULL,
                       Hlp_USERS_Groups,Box_NOT_CLOSABLE,0);
 
@@ -2472,7 +2472,7 @@ static void Grp_PutFormToCreateGroupType (void)
    HTM_SECTION_Begin (Grp_NEW_GROUP_TYPE_SECTION_ID);
    Frm_StartFormAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_StartBoxTable (NULL,Txt_New_type_of_group,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
@@ -2595,7 +2595,7 @@ static void Grp_PutFormToCreateGroup (void)
    HTM_SECTION_Begin (Grp_NEW_GROUP_SECTION_ID);
    Frm_StartFormAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_group,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 

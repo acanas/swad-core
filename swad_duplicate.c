@@ -137,7 +137,7 @@ void Dup_ListDuplicateUsrs (void)
    struct UsrData UsrDat;
    unsigned NumInformants;
 
-   /***** Start box with list of possible duplicate users *****/
+   /***** Begin box with list of possible duplicate users *****/
    Box_BoxBegin (NULL,Txt_Possibly_duplicate_users,NULL,
                  Hlp_USERS_Duplicates_possibly_duplicate_users,Box_NOT_CLOSABLE);
 
@@ -259,7 +259,7 @@ static void Dup_ListSimilarUsrs (void)
    unsigned NumUsrs;
    unsigned NumUsr;
 
-   /***** Start box with list of possible duplicate users *****/
+   /***** Begin box with list of possible duplicate users *****/
    Box_BoxBegin (NULL,Txt_Similar_users,NULL,
                  Hlp_USERS_Duplicates_similar_users,Box_NOT_CLOSABLE);
 

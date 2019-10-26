@@ -2601,7 +2601,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    if (FuncParams)
       FuncParams ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Log_in,NULL,
                       Hlp_PROFILE_LogIn,Box_NOT_CLOSABLE,2);
 
@@ -3504,7 +3504,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 	             Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
 	             Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Session,Usr_PutLinkToLogOut,
                  Hlp_PROFILE_Session_role,Box_NOT_CLOSABLE);
 
@@ -6167,7 +6167,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (Act_Action_t NextAction,void (*FuncParams
    extern const char *Txt_Select_users;
    unsigned NumTotalUsrs;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Title,NULL,HelpLink,Box_NOT_CLOSABLE);
 
    /***** Get and update type of list,
@@ -7183,7 +7183,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
    Usr_SearchListUsrs (Role);
    if ((NumUsrs = Gbl.Usrs.LstUsrs[Role].NumUsrs))
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       /* Number of users found */
       Sex = Usr_GetSexOfUsrsLst (Role);
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -7336,7 +7336,7 @@ void Usr_ListDataAdms (void)
    /***** Get list of administrators *****/
    Usr_GetAdmsLst (Gbl.Scope.Current);
 
-   /***** Start box with list of administrators *****/
+   /***** Begin box with list of administrators *****/
    Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL,
                  Hlp_USERS_Administrators,Box_NOT_CLOSABLE);
 
@@ -7801,7 +7801,7 @@ void Usr_SeeGuests (void)
    /***** Get list of guests in current scope *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],Usr_PutIconsListGsts,
 		 Hlp_USERS_Guests,Box_NOT_CLOSABLE);
 
@@ -7942,7 +7942,7 @@ void Usr_SeeStudents (void)
    /***** Get list of students *****/
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Usr_PutIconsListStds,
 		 Hlp_USERS_Students,Box_NOT_CLOSABLE);
 
@@ -8121,7 +8121,7 @@ void Usr_SeeTeachers (void)
 						    1 << Rol_NET |
 						    1 << Rol_TCH);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],Usr_PutIconsListTchs,
 		 Hlp_USERS_Teachers,Box_NOT_CLOSABLE);
 
@@ -8351,7 +8351,7 @@ static void Usr_PutOptionsListUsrs (const bool ICanChooseOption[Usr_LIST_USRS_NU
 	 Usr_ShowOneListUsrsOption (Opt,Label[Opt]);
 
    /* End list of options */
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
 
    /***** Put button to confirm *****/
    Btn_PutConfirmButton (Txt_Continue);
@@ -9640,7 +9640,7 @@ void Usr_PrintUsrQRCode (void)
 
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /***** Start box *****/
+      /***** Begin box *****/
       Box_BoxBegin (NULL,Gbl.Usrs.Other.UsrDat.FullName,NULL,
                     NULL,Box_NOT_CLOSABLE);
 

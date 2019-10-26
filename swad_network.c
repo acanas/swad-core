@@ -282,7 +282,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    /***** Start section *****/
    HTM_SECTION_Begin (Net_MY_WEBS_ID);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);
@@ -549,7 +549,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	 break;
      }
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_FIGURE_TYPES[Fig_SOCIAL_NETWORKS],NULL,
                       Hlp_ANALYTICS_Figures_webs_social_networks,Box_NOT_CLOSABLE,2);
 

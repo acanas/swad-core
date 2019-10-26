@@ -573,7 +573,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 				" ORDER BY ExamDate DESC",
 				Gbl.Hierarchy.Crs.CrsCod,SubQueryStatus);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Announcements_of_exams,
 		 ICanEdit ? Exa_PutIconToCreateNewExamAnnouncement :
 			    NULL,
@@ -1009,7 +1009,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
       HTM_ARTICLE_Begin (Anchor);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Width = "625px";
    Gbl.ExamAnns.Anchor = Anchor;	// Used to put contextual icons
    Gbl.ExamAnns.ExaCod = ExaCod;	// Used to put contextual icons

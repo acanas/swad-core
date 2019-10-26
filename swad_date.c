@@ -104,7 +104,7 @@ void Dat_PutBoxToSelectDateFormat (void)
    extern const char *Txt_Dates;
    Dat_Format_t Format;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Dates,Dat_PutIconsDateFormat,
                  Hlp_PROFILE_Settings_dates,Box_NOT_CLOSABLE);
 
@@ -132,8 +132,8 @@ void Dat_PutBoxToSelectDateFormat (void)
 			 "</li>");
      }
 
-   /***** End list and form *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   /***** End list *****/
+   HTM_UL_End ();
 
    /***** End form *****/
    Frm_EndForm ();

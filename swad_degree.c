@@ -180,7 +180,7 @@ void Deg_SeeDegWithPendingCrss (void)
    /***** Get degrees *****/
    if (NumDegs)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Degrees_with_pending_courses,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
@@ -310,7 +310,7 @@ static void Deg_Configuration (bool PrintView)
    if (Gbl.Hierarchy.Deg.DegCod <= 0)		// No degree selected
       return;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    if (PrintView)
       Box_BoxBegin (NULL,NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
@@ -961,7 +961,7 @@ static void Deg_PutFormToCreateDegree (void)
    else
       Lay_NoPermissionExit ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_degree,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
@@ -1153,7 +1153,7 @@ static void Deg_ListDegrees (void)
    extern const char *Txt_Create_degree;
    unsigned NumDeg;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Degrees_of_CENTRE_X,
 	     Gbl.Hierarchy.Ctr.ShrtName);
@@ -1339,7 +1339,7 @@ static void Deg_EditDegreesInternal (void)
    /***** Write menu to select country, institution and centre *****/
    Hie_WriteMenuHierarchy ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Degrees_of_CENTRE_X,
              Gbl.Hierarchy.Ctr.ShrtName);
@@ -2593,7 +2593,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
    /***** Query database *****/
    if (NumDegs)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       /* Number of degrees found */
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%u %s",

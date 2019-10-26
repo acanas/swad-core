@@ -150,7 +150,7 @@ void Cty_SeeCtyWithPendingInss (void)
    /***** Get countries *****/
    if (NumCtys)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       Box_StartBoxTable (NULL,Txt_Countries_with_pending_institutions,NULL,
                          Hlp_SYSTEM_Hierarchy_pending,Box_NOT_CLOSABLE,2);
 
@@ -253,7 +253,7 @@ static void Cty_Configuration (bool PrintView)
    if (Gbl.Hierarchy.Cty.CtyCod <= 0)		// No country selected
       return;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    if (PrintView)
       Box_BoxBegin (NULL,NULL,NULL,
 		    NULL,Box_NOT_CLOSABLE);
@@ -534,7 +534,7 @@ void Cty_ListCountries2 (void)
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Countries,Cty_PutIconsListingCountries,
                       Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE,2);
 
@@ -978,7 +978,7 @@ static void Cty_EditCountriesInternal (void)
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Countries,Cty_PutIconsEditingCountries,
                  Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
 
@@ -2033,7 +2033,7 @@ static void Cty_PutFormToCreateCountry (void)
    /***** Begin form *****/
    Frm_StartForm (ActNewCty);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_country,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
@@ -2430,7 +2430,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
    /***** Query database *****/
    if (NumCtys)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       /* Number of countries found */
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%u %s",

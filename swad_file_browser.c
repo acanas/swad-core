@@ -3112,7 +3112,7 @@ static void Brw_ShowFileBrowserProject (void)
    Prj_GetDataOfProjectByCod (&Prj);
    Gbl.Prjs.PrjCod = Prj.PrjCod;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Prj.Title,NULL,
 		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
@@ -3168,7 +3168,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
    /***** Write top before showing file browser *****/
    Brw_WriteTopBeforeShowingFileBrowser ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable ("100%",Txt_Assignments_and_other_works,
 		      Brw_PutIconShowFigure,
 		      Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE,0);
@@ -3318,7 +3318,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
      }
 
    /***** End list and form *****/
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
    Frm_EndForm ();
   }
 
@@ -3642,7 +3642,7 @@ static void Brw_ShowFileBrowser (void)
    /***** Check if the clipboard is in this tree *****/
    Gbl.FileBrowser.Clipboard.IsThisTree = Brw_CheckIfClipboardIsInThisTree ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Gbl.FileBrowser.Id++;
    snprintf (FileBrowserSectionId,sizeof (FileBrowserSectionId),
 	     "file_browser_%u",
@@ -8343,7 +8343,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    Frm_StartForm (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
    Brw_PutImplicitParamsFileBrowser ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Create_folder,NULL,
                  NULL,Box_NOT_CLOSABLE);
    Ale_ShowAlert (Ale_INFO,Txt_You_can_create_a_new_folder_inside_the_folder_X,
@@ -8378,7 +8378,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Done;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    HTM_DIV_Begin ("id=\"dropzone-upload\"");
    Box_BoxBegin ("95%",Txt_Upload_files,NULL,
                  NULL,Box_NOT_CLOSABLE);
@@ -8436,7 +8436,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    extern const char *Txt_Upload_file;
    extern const char *Txt_or_you_can_upload_a_new_file_to_the_folder_X;
 
-   /***** Start box *****/
+   /***** Begin box *****/
    HTM_DIV_Begin ("id=\"classic-upload\" style=\"display:none;\"");
    Box_BoxBegin (NULL,Txt_Upload_file,NULL,
                  NULL,Box_NOT_CLOSABLE);
@@ -8473,7 +8473,7 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
    Frm_StartForm (Brw_ActPaste[Gbl.FileBrowser.Type]);
    Brw_PutImplicitParamsFileBrowser ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Paste,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
@@ -8505,7 +8505,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    Frm_StartForm (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
    Brw_PutImplicitParamsFileBrowser ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Create_link,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
@@ -9504,7 +9504,7 @@ void Brw_ShowFileMetadata (void)
 	    Brw_PutImplicitParamsFileBrowser ();
 	   }
 
-         /***** Start box and table *****/
+         /***** Begin box and table *****/
 	 Box_StartBoxTableShadow (NULL,NULL,NULL,NULL,2);
 
 	 /***** Link to download the file *****/
@@ -11803,7 +11803,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,unsigned long NumDocs,
    /***** Query database *****/
    if (NumDocs)
      {
-      /***** Start box and table *****/
+      /***** Begin box and table *****/
       /* Number of documents found */
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%lu %s",
@@ -12159,7 +12159,7 @@ void Brw_AskRemoveOldFiles (void)
    Frm_StartForm (ActRemOldBrf);
    Brw_PutHiddenParamFullTreeIfSelected ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Remove_old_files,NULL,
                  NULL,Box_NOT_CLOSABLE);
 

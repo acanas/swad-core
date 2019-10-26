@@ -249,7 +249,7 @@ static void Cla_EditClassroomsInternal (void)
    /***** Get list of classrooms *****/
    Cla_GetListClassrooms (Cla_ALL_DATA);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Classrooms,Cla_PutIconsEditingClassrooms,
                  Hlp_CENTRE_Classrooms_edit,Box_NOT_CLOSABLE);
 
@@ -889,7 +889,7 @@ static void Cla_PutFormToCreateClassroom (void)
    /***** Begin form *****/
    Frm_StartForm (ActNewCla);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_classroom,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 

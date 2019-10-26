@@ -67,7 +67,7 @@ void Coo_EditMyPrefsOnCookies (void)
    /***** Start section with preferences about cookies *****/
    HTM_SECTION_Begin (Coo_COOKIES_ID);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Cookies,Coo_PutIconsCookies,
                       Hlp_PROFILE_Settings_cookies,Box_NOT_CLOSABLE,2);
 

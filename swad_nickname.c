@@ -243,7 +243,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 			      " ORDER BY CreatTime DESC",
 			      UsrDat->UsrCod);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (StrRecordWidth,sizeof (StrRecordWidth),
 	     "%upx",
 	     Rec_RECORD_WIDTH);

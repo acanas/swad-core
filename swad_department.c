@@ -110,7 +110,7 @@ void Dpt_SeeDepts (void)
    /***** Get list of departments *****/
    Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Departments_of_INSTITUTION_X,
              Gbl.Hierarchy.Ins.FullName);
@@ -268,7 +268,7 @@ static void Dpt_EditDepartmentsInternal (void)
    /***** Get list of departments *****/
    Dpt_GetListDepartments (Gbl.Hierarchy.Ins.InsCod);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Departments_of_INSTITUTION_X,
              Gbl.Hierarchy.Ins.FullName);
@@ -910,7 +910,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    /***** Begin form *****/
    Frm_StartForm (ActNewDpt);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_department,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 

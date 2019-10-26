@@ -160,7 +160,7 @@ void Syl_PutFormWhichSyllabus (void)
                          "</li>",
                Gbl.Form.Id,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
      }
-   fprintf (Gbl.F.Out,"</ul>");
+   HTM_UL_End ();
    HTM_DIV_End ();
    Frm_EndForm ();
   }
@@ -518,7 +518,7 @@ static void Syl_ShowSyllabus (bool PutIconToEdit)
 				Gbl.Action.Act == ActRgtIteSylLec || Gbl.Action.Act == ActRgtIteSylPra ||
                                 Gbl.Action.Act == ActLftIteSylLec || Gbl.Action.Act == ActLftIteSylPra);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_INFO_TITLE[Gbl.Crs.Info.Type],
 		      PutIconToEdit ? Inf_PutIconToEditInfo :
 				      NULL,

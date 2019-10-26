@@ -406,7 +406,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    HTM_DIV_Begin ("id=\"%s_med_upl\" style=\"display:none;\"",	// container <id>_med_upl
 		  Id);
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Multimedia,NULL,
                  Hlp_Multimedia,Box_NOT_CLOSABLE);
 

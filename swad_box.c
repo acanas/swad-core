@@ -138,7 +138,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
    else
       Gbl.Box.Ids[Gbl.Box.Nested] = NULL;
 
-   /***** Start box container *****/
+   /***** Begin box container *****/
    if (Closable == Box_CLOSABLE)
      {
       /* Create unique id for alert */
@@ -149,7 +149,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
    else
       HTM_DIV_Begin ("class=\"FRAME_CONTAINER\"");
 
-   /***** Start box *****/
+   /***** Begin box *****/
    if (Width)
       HTM_DIV_Begin ("class=\"%s\" style=\"width:%s;\"",ClassFrame,Width);
    else

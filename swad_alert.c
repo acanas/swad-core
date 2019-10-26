@@ -404,7 +404,7 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
    if (!Gbl.Layout.HTMLStartWritten)
       Lay_WriteStartOfPage ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    fprintf (Gbl.F.Out,"<div");
    if (AlertClosable[AlertType])
      {

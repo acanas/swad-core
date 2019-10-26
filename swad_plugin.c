@@ -107,7 +107,7 @@ void Plg_ListPlugins (void)
    /***** Get list of plugins *****/
    Plg_GetListPlugins ();
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_Plugins,
                       Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
                                                                NULL,
@@ -197,7 +197,7 @@ static void Plg_EditPluginsInternal (void)
    /***** Get list of plugins *****/
    Plg_GetListPlugins ();
 
-   /***** Start box *****/
+   /***** Begin box *****/
    Box_BoxBegin (NULL,Txt_Plugins,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
@@ -885,7 +885,7 @@ static void Plg_PutFormToCreatePlugin (void)
    /***** Begin form *****/
    Frm_StartForm (ActNewPlg);
 
-   /***** Start box and table *****/
+   /***** Begin box and table *****/
    Box_StartBoxTable (NULL,Txt_New_plugin,NULL,
                       NULL,Box_NOT_CLOSABLE,2);
 
