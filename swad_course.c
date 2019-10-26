@@ -587,8 +587,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** Write link to platform *****/
    Highlight = (Gbl.Hierarchy.Cty.CtyCod <= 0);
-   fprintf (Gbl.F.Out,"<li class=\"%s\">",Highlight ? ClassHighlight :
-			                              ClassNormal);
+   fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
+	    Highlight ? ClassHighlight :
+			ClassNormal);
    Frm_StartForm (ActMyCrs);
    Cty_PutParamCtyCod (-1L);
    Frm_LinkFormSubmit (Txt_System,
@@ -622,8 +623,9 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /***** Write link to country *****/
       Highlight = (Gbl.Hierarchy.Ins.InsCod <= 0 &&
 	           Gbl.Hierarchy.Cty.CtyCod == Cty.CtyCod);
-      fprintf (Gbl.F.Out,"<li class=\"%s\">",Highlight ? ClassHighlight :
-        	                                         ClassNormal);
+      fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\">",
+	       Highlight ? ClassHighlight :
+        	           ClassNormal);
       IsLastItemInLevel[1] = (NumCty == NumCtys - 1);
       Lay_IndentDependingOnLevel (1,IsLastItemInLevel);
       Frm_StartForm (ActMyCrs);

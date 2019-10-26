@@ -159,8 +159,6 @@ void Lay_WriteStartOfPage (void)
    // in httpd.conf to enable meta tag
    fprintf (Gbl.F.Out,"<html lang=\"%s\">\n"
                       "<head>\n"
-// "<meta http-equiv=\"Page-Enter\" content=\"blendTrans(Duration=0)\">\n"
-// "<meta http-equiv=\"Page-Exit\" content=\"blendTrans(Duration=0)\">\n"
                       "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
                       "<meta name=\"description\" content=\"A free-software, educational, online tool for managing courses and students.\" />\n"
                       "<meta name=\"keywords\" content=\""

@@ -405,14 +405,14 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
       Lay_WriteStartOfPage ();
 
    /***** Begin box *****/
-   fprintf (Gbl.F.Out,"<div");
    if (AlertClosable[AlertType])
      {
       /* Create unique id for alert */
       Frm_SetUniqueId (IdAlert);
-      fprintf (Gbl.F.Out," id=\"%s\"",IdAlert);
+      HTM_DIV_Begin ("id=\"%s\" class=\"CM\"",IdAlert);
      }
-   fprintf (Gbl.F.Out," class=\"CM\">");
+   else
+      HTM_DIV_Begin ("class=\"CM\"");
    HTM_DIV_Begin ("class=\"ALERT\"");
 
    /***** Icon to close the alert *****/

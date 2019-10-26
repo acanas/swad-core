@@ -126,10 +126,10 @@ void Tab_DrawTabs (void)
 		  NumTab == Gbl.Action.Tab ? The_TabOnBgColors[Gbl.Prefs.Theme] :
 					     The_TabOffBgColors[Gbl.Prefs.Theme]);
 
-	 fprintf (Gbl.F.Out,"<div");	// This div must be present even in current tab in order to render properly the tab
-	 if (NumTab != Gbl.Action.Tab)
-	    fprintf (Gbl.F.Out," class=\"ICO_HIGHLIGHT\"");
-	 fprintf (Gbl.F.Out,">");
+	 if (NumTab == Gbl.Action.Tab)
+	    HTM_DIV_Begin (NULL);	// This div must be present even in current tab in order to render properly the tab
+	 else
+	    HTM_DIV_Begin ("class=\"class=\"ICO_HIGHLIGHT\"");
 
 	 Frm_StartForm (ActMnu);
 	 Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
