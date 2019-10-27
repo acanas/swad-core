@@ -818,7 +818,7 @@ static void Prj_ShowProjectsHead (Prj_ProjectView_t ProjectView)
             fprintf (Gbl.F.Out,"%s",Txt_PROJECT_ORDER[Order]);
 	    if (Order == Gbl.Prjs.SelectedOrder)
 	       fprintf (Gbl.F.Out,"</u>");
-	    fprintf (Gbl.F.Out,"</a>");
+	    Frm_LinkFormEnd ();
 	    Frm_EndForm ();
 	    break;
 	 default:
@@ -1163,7 +1163,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 Frm_StartForm (ActAdmDocPrj);
 	 Prj_PutCurrentParams ();
 	 Frm_LinkFormSubmit (Txt_Project_files,ClassTitle,NULL);
-	 fprintf (Gbl.F.Out,"%s</a>",Prj->Title);
+	 fprintf (Gbl.F.Out,"%s",Prj->Title);
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
       else

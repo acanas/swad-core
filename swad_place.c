@@ -129,7 +129,7 @@ void Plc_SeePlaces (void)
 	 fprintf (Gbl.F.Out,"%s",Txt_PLACES_ORDER[Order]);
 	 if (Order == Gbl.Plcs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 
 	 HTM_TH_End ();

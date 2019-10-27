@@ -964,7 +964,8 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    Sco_PutParamScope ("ScopeSta",Hie_SYS);
    Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Fig_USERS_RANKING);
    Frm_LinkFormSubmit (Gbl.Title,The_ClassFormOutBox[Gbl.Prefs.Theme],NULL);
-   fprintf (Gbl.F.Out,"#%lu</a>",Rank);
+   fprintf (Gbl.F.Out,"#%lu",Rank);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
   }
 
@@ -1778,7 +1779,7 @@ static void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
       HTM_DIV_Begin ("class=\"RANK_USR\"");	// Limited width
       Frm_LinkFormSubmit (Txt_Another_user_s_profile,"DAT_SMALL",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
       HTM_DIV_End ();
       Frm_EndForm ();
      }

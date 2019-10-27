@@ -1722,7 +1722,8 @@ static void TL_WriteTopMessage (TL_TopMessage_t TopMessage,long UsrCod)
 	 Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 					   Txt_Another_user_s_profile,
 				   "TL_TOP_PUBLISHER");
-	 fprintf (Gbl.F.Out,"%s</a>",UsrDat.FullName);
+	 fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 
 	 /***** Show action made *****/
@@ -1754,7 +1755,8 @@ static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
    Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_N_BOLD");
-   fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
+   fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
 
    /***** Show user's nickname inside form to go to user's public profile *****/
@@ -1763,7 +1765,8 @@ static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
    Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_LIGHT");
-   fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
+   fprintf (Gbl.F.Out," @%s",UsrDat->Nickname);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
 
    HTM_DIV_End ();
@@ -2032,12 +2035,12 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"CONTEXT_ICO_x16\" />"
-	                 "&nbsp;%s"
-	                 "</a>",
+	                 "&nbsp;%s",
             Cfg_URL_ICON_PUBLIC,TL_Icons[SocNot->NoteType],
             Txt_TIMELINE_NOTE[SocNot->NoteType],
             Txt_TIMELINE_NOTE[SocNot->NoteType],
             Txt_TIMELINE_NOTE[SocNot->NoteType]);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       HTM_DIV_End ();
@@ -2843,7 +2846,8 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
    Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_BOLD");
-   fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
+   fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
 
    /***** Show user's nickname inside form to go to user's public profile *****/
@@ -2852,7 +2856,8 @@ static void TL_WriteAuthorComment (struct UsrData *UsrDat)
    Frm_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_LIGHT");
-   fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
+   fprintf (Gbl.F.Out," @%s",UsrDat->Nickname);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
 
    /***** End container *****/

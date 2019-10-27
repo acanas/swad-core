@@ -249,7 +249,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          fprintf (Gbl.F.Out,"[%s]",Txt_FORUM_Post_banned);
       if (LinkToPagCurrent)
 	{
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
       else
@@ -351,8 +351,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                    Txt_Page_X_of_Y,
                    1,Pagination->NumPags);
          Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
-         fprintf (Gbl.F.Out,"1"
-                            "</a>");
+         fprintf (Gbl.F.Out,"1");
+         Frm_LinkFormEnd ();
          Frm_EndForm ();
          if (Pagination->LeftPage > 2)
             fprintf (Gbl.F.Out,"<span class=\"%s\">&hellip;</span>",Font);
@@ -447,8 +447,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                    Pagination->LeftPage,
                    Pagination->NumPags);
          Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
-         fprintf (Gbl.F.Out,"%u</a>",
-                  Pagination->LeftPage);
+         fprintf (Gbl.F.Out,"%u",Pagination->LeftPage);
+         Frm_LinkFormEnd ();
          Frm_EndForm ();
          if (Pagination->LeftPage < Pagination->StartPage - 1)
             fprintf (Gbl.F.Out,"<span class=\"%s\">&hellip;</span>",Font);
@@ -550,8 +550,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   break;
               }
             Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
-            fprintf (Gbl.F.Out,"%u</a>",
-                     NumPage);
+            fprintf (Gbl.F.Out,"%u",NumPage);
+            Frm_LinkFormEnd ();
             Frm_EndForm ();
            }
         }
@@ -646,7 +646,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                    Txt_Page_X_of_Y,
                    Pagination->RightPage,Pagination->NumPags);
          Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
-         fprintf (Gbl.F.Out,"%u</a>",Pagination->RightPage);
+         fprintf (Gbl.F.Out,"%u",Pagination->RightPage);
+         Frm_LinkFormEnd ();
          Frm_EndForm ();
         }
 
@@ -739,7 +740,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                    Txt_Page_X_of_Y,
                    Pagination->NumPags,Pagination->NumPags);
          Frm_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
-         fprintf (Gbl.F.Out,"%u</a>",Pagination->NumPags);
+         fprintf (Gbl.F.Out,"%u",Pagination->NumPags);
+         Frm_LinkFormEnd ();
          Frm_EndForm ();
         }
      }

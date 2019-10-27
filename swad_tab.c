@@ -147,7 +147,7 @@ void Tab_DrawTabs (void)
 						   The_ClassTxtTabOff[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s",Txt_TABS_TXT[NumTab]);
 	 HTM_DIV_End ();
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 
 	 HTM_DIV_End ();

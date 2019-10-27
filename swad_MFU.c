@@ -249,7 +249,8 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 		  Gbl.Prefs.URLIconSet,
 		  Act_GetIcon (Action),
 		  MenuStr);
-         fprintf (Gbl.F.Out," %s</a>",TabMenuStr);
+         fprintf (Gbl.F.Out," %s",TabMenuStr);
+         Frm_LinkFormEnd ();
          Frm_EndForm ();
          HTM_LI_End ();
         }
@@ -280,9 +281,8 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    HTM_DIV_Begin ("id=\"MFU_actions\"");
    Frm_StartForm (ActMFUAct);
    Frm_LinkFormSubmit (Txt_My_frequent_actions,NULL,NULL);
-   fprintf (Gbl.F.Out," %s"
-	              "</a>",
-	    Txt_Frequent_ACTIONS);
+   fprintf (Gbl.F.Out," %s",Txt_Frequent_ACTIONS);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
 
    /***** Write list of frequently used actions *****/
@@ -312,7 +312,8 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
                   Gbl.Prefs.URLIconSet,
                   Act_GetIcon (Action),
                   MenuStr);
-	 fprintf (Gbl.F.Out," %s</a>",MenuStr);
+	 fprintf (Gbl.F.Out," %s",MenuStr);
+	 Frm_LinkFormEnd ();
          Frm_EndForm ();
          HTM_LI_End ();
         }

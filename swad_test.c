@@ -2855,7 +2855,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
         {
          if (Order == Gbl.Test.SelectedOrder)
             fprintf (Gbl.F.Out,"</u>");
-         fprintf (Gbl.F.Out,"</a>");
+         Frm_LinkFormEnd ();
          Frm_EndForm ();
         }
 

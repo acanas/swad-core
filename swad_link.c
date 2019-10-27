@@ -166,9 +166,8 @@ void Lnk_WriteMenuWithInstitutionalLinks (void)
 
       Frm_StartForm (ActSeeLnk);
       Frm_LinkFormSubmit (Txt_Links,NULL,NULL);
-      fprintf (Gbl.F.Out," %s"
-			 "</a>",
-	       Txt_Links);
+      fprintf (Gbl.F.Out," %s",Txt_Links);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       Lnk_WriteListOfLinks ();

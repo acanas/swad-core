@@ -934,27 +934,26 @@ static void Lay_WritePageTopHeading (void)
    Frm_LinkFormSubmit (Txt_System,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CM\""
-	              " style=\"width:%upx; height:%upx;\" />"
-                      "</a>",	// head_row_1_logo_small
+	              " style=\"width:%upx; height:%upx;\" />",
             Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
-   HTM_DIV_End ();
+   Frm_LinkFormEnd ();
+   HTM_DIV_End ();	// head_row_1_logo_small
    HTM_DIV_Begin ("id=\"head_row_1_logo_big\"");
    Frm_LinkFormSubmit (Txt_System,NULL,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"CM\""
-	              " style=\"width:%upx; height:%upx;\" />"
-                      "</a>",	// head_row_1_logo_big
+	              " style=\"width:%upx; height:%upx;\" />",
             Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,
             Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
             Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
-   HTM_DIV_End ();
+   Frm_LinkFormEnd ();
+   HTM_DIV_End ();	// head_row_1_logo_big
    HTM_DIV_Begin ("id=\"head_row_1_tagline\"");
    Frm_LinkFormSubmit (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
-   fprintf (Gbl.F.Out,"%s"
-	              "</a>",
-            Txt_TAGLINE_BR);
+   fprintf (Gbl.F.Out,"%s",Txt_TAGLINE_BR);
+   Frm_LinkFormEnd ();
    HTM_DIV_End ();	// head_row_1_tagline
 
    /* End form to go to home page */
@@ -1209,7 +1208,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
    /***** Put icon and text with link *****/
    Frm_LinkFormSubmit (Text,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink (Icon,Text);
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1243,7 +1242,7 @@ void Lay_PutContextualLinkIconTextOnSubmit (Act_Action_t NextAction,const char *
    /***** Put icon with link *****/
    Frm_LinkFormSubmit (Text,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],OnSubmit);
    Ico_PutIconTextLink (Icon,Text);
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1447,7 +1446,9 @@ static void Lay_WriteAboutZone (void)
    /***** Questions and problems *****/
    HTM_DIV_Begin (NULL);
    fprintf (Gbl.F.Out,"%s: "
-		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">%s</a>",
+		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">"
+		      "%s"
+		      "</a>",
 	    Txt_Questions_and_problems,
 	    Cfg_PLATFORM_RESPONSIBLE_EMAIL,Cfg_PLATFORM_RESPONSIBLE_EMAIL);
    HTM_DIV_End ();

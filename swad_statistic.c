@@ -1607,8 +1607,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	        Txt_Show_previous_X_clicks,
                 Gbl.Stat.RowsPerPage);
       Frm_LinkFormSubmit (Gbl.Title,"TIT_TBL",NULL);
-      fprintf (Gbl.F.Out,"<strong>&lt;%s</strong></a>",
-               Txt_PAGES_Previous);
+      fprintf (Gbl.F.Out,"<strong>&lt;%s</strong>",Txt_PAGES_Previous);
+      Frm_LinkFormEnd ();
      }
    HTM_TD_End ();
    if (FirstRow > 1)
@@ -1643,9 +1643,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	        Txt_Show_next_X_clicks,
                 Gbl.Stat.RowsPerPage);
       Frm_LinkFormSubmit (Gbl.Title,"TIT_TBL",NULL);
-      fprintf (Gbl.F.Out,"<strong>%s&gt;</strong>"
-	                 "</a>",
-               Txt_PAGES_Next);
+      fprintf (Gbl.F.Out,"<strong>%s&gt;</strong>",Txt_PAGES_Next);
+      Frm_LinkFormEnd ();
      }
    HTM_TD_End ();
    if (LastRow < NumRows)
@@ -3782,9 +3781,8 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
                    Txt_Go_to_X,
 		   Crs.FullName);
          Frm_LinkFormSubmit (Gbl.Title,"LOG",NULL);
-         fprintf (Gbl.F.Out,"%s"
-                            "</a>",
-                  Crs.ShrtName);
+         fprintf (Gbl.F.Out,"%s",Crs.ShrtName);
+         Frm_LinkFormEnd ();
         }
       else
          fprintf (Gbl.F.Out,"-");

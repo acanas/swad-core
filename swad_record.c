@@ -1494,8 +1494,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    Frm_LinkFormSubmit (Txt_Print,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink ("print.svg",
 			Txt_Print);
-   fprintf (Gbl.F.Out,"</a>"
-                      "<label class=\"%s\">"
+   Frm_LinkFormEnd ();
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "(<select name=\"RecsPerPag\">",
 	    The_ClassFormInBox[Gbl.Prefs.Theme]);
    for (i = Rec_MIN_RECORDS_PER_PAGE;
@@ -2702,7 +2702,7 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
                     Rec_INSTITUTION_LOGO_SIZE,NULL,true);
       if (PutFormLinks)
 	{
-         fprintf (Gbl.F.Out,"</a>");
+         Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
      }
@@ -2722,7 +2722,7 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
       fprintf (Gbl.F.Out,"%s",Ins->FullName);
       if (PutFormLinks)
 	{
-         fprintf (Gbl.F.Out,"</a>");
+         Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
      }
@@ -2795,7 +2795,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
       fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
       if (PutFormLinks)
 	{
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
      }
@@ -3463,7 +3463,9 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
 		  Usr_MAX_CHARS_PHONE,
 		  UsrDat->LocalPhone);
       else if (UsrDat->LocalPhone[0])
-	 fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">%s</a>",
+	 fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">"
+	                    "%s"
+	                    "</a>",
 	          UsrDat->LocalPhone,
 	          UsrDat->LocalPhone);
      }
@@ -3539,7 +3541,9 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 		  Usr_MAX_CHARS_PHONE,
 		  UsrDat->FamilyPhone);
       else if (UsrDat->FamilyPhone[0])
-	 fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">%s</a>",
+	 fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">"
+	                    "%s"
+	                    "</a>",
 	          UsrDat->FamilyPhone,
 	          UsrDat->FamilyPhone);
      }
@@ -3756,7 +3760,9 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
    if (ShowData)
-      fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">%s</a>",
+      fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">"
+	                 "%s"
+	                 "</a>",
 	       UsrDat->Tch.OfficePhone,
 	       UsrDat->Tch.OfficePhone);
    HTM_TD_End ();
@@ -3773,7 +3779,9 @@ static void Rec_WriteLinkToDataProtectionClause (void)
    extern const char *Txt_DATA_PROTECTION_CLAUSE;
 
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<a class=\"TIT\" href=\"%s/\" target=\"_blank\">%s</a>",
+   fprintf (Gbl.F.Out,"<a class=\"TIT\" href=\"%s/\" target=\"_blank\">"
+	              "%s"
+	              "</a>",
             Cfg_URL_DATA_PROTECTION_PUBLIC,
             Txt_DATA_PROTECTION_CLAUSE);
    HTM_DIV_End ();

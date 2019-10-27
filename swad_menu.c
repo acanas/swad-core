@@ -368,19 +368,17 @@ void Mnu_WriteMenuThisTab (void)
          Frm_StartForm (NumAct);
          Frm_LinkFormSubmit (Title,The_ClassTxtMenu[Gbl.Prefs.Theme],NULL);
 
-         /***** Icon *****/
+         /***** Icon and text *****/
 	 HTM_DIV_Begin ("class=\"MENU_ICO\" style=\"background-image:url('%s/%s');\"",
 			Gbl.Prefs.URLIconSet,
 			Act_GetIcon (NumAct));
-
-         /***** Text *****/
 	 HTM_DIV_Begin ("class=\"MENU_TEXT %s\"",The_ClassTxtMenu[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s",Txt_MENU_TITLE[Gbl.Action.Tab][NumOptInMenu]);
 	 HTM_DIV_End ();
+	 HTM_DIV_End ();
 
          /***** End link and form *****/
-	 HTM_DIV_End ();
-         fprintf (Gbl.F.Out,"</a>");
+         Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 
          /***** End container used to highlight this option *****/

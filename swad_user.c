@@ -2817,8 +2817,8 @@ void Usr_WriteLoggedUsrHead (void)
      {
       Frm_StartForm (ActFrmRolSes);
       Frm_LinkFormSubmit (Txt_Role,The_ClassUsr[Gbl.Prefs.Theme],NULL);
-      fprintf (Gbl.F.Out,"%s</a>",
-               Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
+      fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
       fprintf (Gbl.F.Out,":&nbsp;");
      }
@@ -6144,12 +6144,13 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
-                      " %s</a>",
+                      " %s",
             Cfg_URL_ICON_PUBLIC,
             Usr_IconsClassPhotoOrList[ListType],
             Txt_USR_LIST_TYPES[ListType],
             Txt_USR_LIST_TYPES[ListType],
             Txt_USR_LIST_TYPES[ListType]);
+   Frm_LinkFormEnd ();
 
    /***** End form *****/
    Frm_EndForm ();

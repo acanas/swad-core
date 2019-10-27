@@ -143,7 +143,7 @@ void Mai_SeeMailDomains (void)
       fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Order]);
       if (Order == Gbl.Mails.SelectedOrder)
          fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       HTM_TH_End ();

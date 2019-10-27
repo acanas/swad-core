@@ -3183,7 +3183,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
       fprintf (Gbl.F.Out,"[%s]",Txt_no_subject);
 
    /***** End form to expand the message *****/
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
 
    /***** End cell *****/
@@ -3300,8 +3300,9 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
         	      Txt_Go_to_X,
 		      Crs.FullName);
             Frm_LinkFormSubmit (Gbl.Title,"AUTHOR_TXT",NULL);
-            fprintf (Gbl.F.Out,"%s</a>)",
-        	     Crs.ShrtName);
+            fprintf (Gbl.F.Out,"%s",Crs.ShrtName);
+            Frm_LinkFormEnd ();
+            fprintf (Gbl.F.Out,")");
             HTM_DIV_End ();
             Frm_EndForm ();
            }
@@ -3594,7 +3595,7 @@ static void Msg_WriteMsgTo (long MsgCod)
          Frm_LinkFormSubmit (Txt_View_all_recipients,"AUTHOR_TXT",NULL);
          fprintf (Gbl.F.Out,Txt_and_X_other_recipients,
                   NumRecipientsKnown - NumRecipientsToShow);
-         fprintf (Gbl.F.Out,"</a>");
+         Frm_LinkFormEnd ();
          Frm_EndForm ();
          HTM_TD_End ();
 

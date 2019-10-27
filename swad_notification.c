@@ -495,8 +495,8 @@ void Ntf_ShowMyNotifications (void)
          if (PutLink)
            {
             Frm_LinkFormSubmit (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],ClassAnchor,NULL);
-            fprintf (Gbl.F.Out,"%s</a>",
-                     Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+            fprintf (Gbl.F.Out,"%s",Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent]);
+            Frm_LinkFormEnd ();
             Frm_EndForm ();
            }
          else
@@ -524,7 +524,7 @@ void Ntf_ShowMyNotifications (void)
             fprintf (Gbl.F.Out,"%s: %s",Txt_Forum,ForumName);
             if (PutLink)
               {
-               fprintf (Gbl.F.Out,"</a>");
+               Frm_LinkFormEnd ();
                Frm_EndForm ();
               }
             else
@@ -553,7 +553,7 @@ void Ntf_ShowMyNotifications (void)
 
             if (PutLink)
               {
-               fprintf (Gbl.F.Out,"</a>");
+               Frm_LinkFormEnd ();
                Frm_EndForm ();
               }
             else
@@ -2070,7 +2070,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
 				 Txt_NOTIF_new_PLURAL);
 
    /***** End form *****/
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
   }
 

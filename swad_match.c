@@ -1225,7 +1225,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
 		      " alt=\"%s\" title=\"%s\""
 	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\" />",
             Cfg_URL_ICON_PUBLIC,Txt_Play,Txt_Play);
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
 
    /***** End box *****/
    Box_BoxEnd ();

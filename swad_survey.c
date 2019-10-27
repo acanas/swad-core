@@ -266,7 +266,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
 	 if (Order == Gbl.Svys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 
 	 HTM_TH_End ();
@@ -531,8 +531,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Frm_LinkFormSubmit (Txt_View_survey,
                        Svy.Status.Visible ? "ASG_TITLE" :
 	                                    "ASG_TITLE_LIGHT",NULL);
-   fprintf (Gbl.F.Out,"%s</a>",
-            Svy.Title);
+   fprintf (Gbl.F.Out,"%s",Svy.Title);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_ARTICLE_End ();
 

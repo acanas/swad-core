@@ -698,7 +698,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
             UniqueId);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
