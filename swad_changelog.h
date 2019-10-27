@@ -487,13 +487,15 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.45 (2019-10-26)"
+#define Log_PLATFORM_VERSION	"SWAD 19.45.1 (2019-10-27)"
 #define CSS_FILE		"swad19.45.css"
 #define JS_FILE			"swad19.39.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
+// TODO: Cambiar </a> por Frm_LinkFormEnd (); a partir de swad_layout incluido.
 
+	Version 19.45.1:  Oct 27, 2019	Code refactoring in HTML forms. (246481 lines)
 	Version 19.45:    Oct 26, 2019	Code refactoring in HTML lists. (246444 lines)
 	Version 19.44.4:  Oct 26, 2019	Fixed bug in HTML divs. (246370 lines)
 	Version 19.44.3:  Oct 26, 2019	Code refactoring in HTML lists. (246369 lines)

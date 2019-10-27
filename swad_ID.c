@@ -497,7 +497,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
    Frm_LinkFormSubmit (Txt_Confirm_ID,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],NULL);
    Ico_PutIconTextLink ("check.svg",
 			Txt_Confirm_ID);
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
 
    /***** End form *****/
    Frm_EndForm ();

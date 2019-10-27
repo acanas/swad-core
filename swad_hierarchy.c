@@ -210,7 +210,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    Frm_StartFormGoTo (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
    Frm_LinkFormSubmit (Txt_System,ClassTxt,NULL);
-   fprintf (Gbl.F.Out,"%s</a>",Txt_System);
+   fprintf (Gbl.F.Out,"%s",Txt_System);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
 
    HTM_DIV_End ();
@@ -226,7 +227,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       Frm_StartFormGoTo (ActSeeIns);
       Cty_PutParamCtyCod (Gbl.Hierarchy.Cty.CtyCod);
       Frm_LinkFormSubmit (Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language],ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       HTM_DIV_End ();
@@ -241,7 +243,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Form to go to select countries *****/
       Frm_StartFormGoTo (ActSeeCty);
       Frm_LinkFormSubmit (Txt_Country,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Txt_Country);
+      fprintf (Gbl.F.Out,"%s",Txt_Country);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       HTM_DIV_End ();
@@ -258,7 +261,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       Frm_StartFormGoTo (ActSeeCtr);
       Ins_PutParamInsCod (Gbl.Hierarchy.Ins.InsCod);
       Frm_LinkFormSubmit (Gbl.Hierarchy.Ins.FullName,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Gbl.Hierarchy.Ins.ShrtName);
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.ShrtName);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       HTM_DIV_End ();
@@ -273,7 +277,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Form to go to select institutions *****/
       Frm_StartFormGoTo (ActSeeIns);
       Frm_LinkFormSubmit (Txt_Institution,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Txt_Institution);
+      fprintf (Gbl.F.Out,"%s",Txt_Institution);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       HTM_DIV_End ();
@@ -302,7 +307,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       Frm_StartFormGoTo (ActSeeDeg);
       Ctr_PutParamCtrCod (Gbl.Hierarchy.Ctr.CtrCod);
       Frm_LinkFormSubmit (Gbl.Hierarchy.Ctr.FullName,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Gbl.Hierarchy.Ctr.ShrtName);
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.ShrtName);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       HTM_DIV_End ();
@@ -317,7 +323,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Form to go to select centres *****/
       Frm_StartFormGoTo (ActSeeCtr);
       Frm_LinkFormSubmit (Txt_Centre,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Txt_Centre);
+      fprintf (Gbl.F.Out,"%s",Txt_Centre);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       HTM_DIV_End ();
@@ -346,7 +353,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       Frm_StartFormGoTo (ActSeeCrs);
       Deg_PutParamDegCod (Gbl.Hierarchy.Deg.DegCod);
       Frm_LinkFormSubmit (Gbl.Hierarchy.Deg.FullName,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Gbl.Hierarchy.Deg.ShrtName);
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.ShrtName);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       HTM_DIV_End ();
@@ -361,7 +369,8 @@ void Hie_WriteHierarchyInBreadcrumb (void)
       /***** Form to go to select degrees *****/
       Frm_StartFormGoTo (ActSeeDeg);
       Frm_LinkFormSubmit (Txt_Degree,ClassTxt,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Txt_Degree);
+      fprintf (Gbl.F.Out,"%s",Txt_Degree);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       HTM_DIV_End ();

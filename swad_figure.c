@@ -1497,7 +1497,8 @@ static void Fig_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 				40,NULL,true);
 	          fprintf (Gbl.F.Out,"&nbsp;");
 		 }
-	       fprintf (Gbl.F.Out,"%s</a>",Ins.FullName);
+	       fprintf (Gbl.F.Out,"%s",Ins.FullName);
+	       Frm_LinkFormEnd ();
 	       Frm_EndForm ();
 	       HTM_TD_End ();
 

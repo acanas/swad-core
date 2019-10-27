@@ -129,7 +129,7 @@ void Cla_SeeClassrooms (void)
       fprintf (Gbl.F.Out,"%s",Txt_CLASSROOMS_ORDER[Order]);
       if (Order == Gbl.Classrooms.SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_TH_End ();
      }

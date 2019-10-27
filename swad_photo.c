@@ -2023,6 +2023,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
 	                          The_ClassFormInBoxBold[Gbl.Prefs.Theme],
                                   NULL);
       Ico_PutCalculateIconWithText (Txt_Calculate_average_photo_of_THE_DEGREE_X);
+      Frm_LinkFormEnd ();
 
       /* Selector with all the degrees with students */
       fprintf (Gbl.F.Out,"<select name=\"OthDegCod\">");

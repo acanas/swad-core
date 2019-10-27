@@ -131,7 +131,7 @@ void Hld_SeeHolidays (void)
 	    fprintf (Gbl.F.Out,"%s",Txt_HOLIDAYS_ORDER[Order]);
 	    if (Order == Gbl.Hlds.SelectedOrder)
 	       fprintf (Gbl.F.Out,"</u>");
-	    fprintf (Gbl.F.Out,"</a>");
+	    Frm_LinkFormEnd ();
 	    Frm_EndForm ();
 
 	    HTM_TH_End ();

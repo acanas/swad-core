@@ -2142,7 +2142,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
          For_WriteNumberOfThrs (NumThrs,NumThrsWithNewPosts);
 
    /***** End row *****/
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
 
    /***** Put link to register students *****/
@@ -2584,7 +2584,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 	 fprintf (Gbl.F.Out,"%s",Txt_FORUM_THREAD_ORDER[Order]);
          if (Order == Gbl.Forum.ThreadsOrder)
             fprintf (Gbl.F.Out,"</u>");
-         fprintf (Gbl.F.Out,"</a>");
+         Frm_LinkFormEnd ();
          Frm_EndForm ();
 
          HTM_TH_End ();

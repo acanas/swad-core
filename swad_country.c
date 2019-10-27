@@ -404,8 +404,8 @@ static void Cty_Configuration (bool PrintView)
 		Txt_Institutions_of_COUNTRY_X,
 		Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-      fprintf (Gbl.F.Out,"%u</a>",
-	       Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
+      fprintf (Gbl.F.Out,"%u",Ins_GetNumInssInCty (Gbl.Hierarchy.Cty.CtyCod));
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -677,7 +677,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
 	{
 	 if (Order == Gbl.Hierarchy.Sys.Ctys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
       HTM_TH_End ();
@@ -1291,7 +1291,8 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
       Cty_PutParamCtyCod (CtyCod);
       Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
 		          ClassLink,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",CtyName);
+      fprintf (Gbl.F.Out,"%s",CtyName);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
    else

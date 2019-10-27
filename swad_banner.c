@@ -1054,12 +1054,12 @@ void Ban_WriteMenuWithBanners (void)
       Frm_LinkFormSubmit (Gbl.Banners.Lst[NumBan].FullName,"BANNER",NULL);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"BANNER\" />"
-                         "</a>",
+                         " class=\"BANNER\" />",
                Cfg_URL_BANNER_PUBLIC,
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShrtName,
                Gbl.Banners.Lst[NumBan].FullName);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_DIV_End ();
      }

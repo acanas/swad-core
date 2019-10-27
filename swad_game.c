@@ -230,7 +230,7 @@ static void Gam_ListAllGames (void)
 	 fprintf (Gbl.F.Out,"%s",Txt_GAMES_ORDER[Order]);
 	 if (Order == Gbl.Games.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 
 	 HTM_TH_End ();
@@ -455,8 +455,8 @@ void Gam_ShowOneGame (long GamCod,
    Frm_LinkFormSubmit (Txt_View_game,
                        Game.Hidden ? "ASG_TITLE_LIGHT":
                 	             "ASG_TITLE",NULL);
-   fprintf (Gbl.F.Out,"%s</a>",
-            Game.Title);
+   fprintf (Gbl.F.Out,"%s",Game.Title);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_ARTICLE_End ();
 
@@ -482,7 +482,8 @@ void Gam_ShowOneGame (long GamCod,
                 	             "ASG_TITLE",NULL);
    if (ShowOnlyThisGame)
       fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Matches);
-   fprintf (Gbl.F.Out,"%u</a>",Game.NumMchs);
+   fprintf (Gbl.F.Out,"%u",Game.NumMchs);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
 
    HTM_TD_End ();

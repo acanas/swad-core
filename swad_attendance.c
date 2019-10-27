@@ -257,7 +257,7 @@ static void Att_ShowAllAttEvents (void)
 	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
 	 if (Order == Gbl.AttEvents.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 
 	 HTM_TH_End ();
@@ -2183,7 +2183,8 @@ static void Att_PutLinkAttEvent (struct AttendanceEvent *AttEvent,
    Att_PutParamAttCod (AttEvent->AttCod);
    Att_PutParamsCodGrps (AttEvent->AttCod);
    Frm_LinkFormSubmit (Title,LinkStyle,NULL);
-   fprintf (Gbl.F.Out,"%s</a>",Txt);
+   fprintf (Gbl.F.Out,"%s",Txt);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
   }
 
@@ -3165,6 +3166,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 	                          The_ClassFormInBoxBold[Gbl.Prefs.Theme],
 				  NULL);
       Ico_PutCalculateIconWithText (Txt_Update_attendance);
+      Frm_LinkFormEnd ();
       HTM_TD_End ();
 
       HTM_TR_End ();

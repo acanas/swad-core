@@ -213,7 +213,8 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
       /***** Title with link to suggest more users to follow *****/
       Frm_StartForm (ActSeeSocPrf);
       Frm_LinkFormSubmit (Txt_Who_to_follow,"CONNECTED_TXT",NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Txt_Who_to_follow);
+      fprintf (Gbl.F.Out,"%s",Txt_Who_to_follow);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       /***** Begin table *****/
@@ -436,6 +437,7 @@ static void Fol_PutIconToUpdateWhoToFollow (void)
    Frm_StartForm (ActSeeSocPrf);
    Frm_LinkFormSubmitAnimated (Txt_Update,NULL,NULL);
    Ico_PutCalculateIcon (Txt_Update);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
   }
 
@@ -562,7 +564,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Unfollow,Txt_Following_unfollow);
 	 HTM_DIV_End ();
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
       else		// I do not follow this user
@@ -577,7 +579,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Follow,Txt_Follow);
 	 HTM_DIV_End ();
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
      }
@@ -623,7 +625,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    fprintf (Gbl.F.Out,"%u",NumUsrs);
    if (NumUsrs)
      {
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
    else
@@ -646,7 +648,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    fprintf (Gbl.F.Out,"%s",Title);
    if (NumUsrs)
      {
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
    HTM_DIV_End ();
@@ -860,7 +862,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
       HTM_DIV_Begin ("class=\"FOLLOW_USR_NAME\"");	// Limited width
       Frm_LinkFormSubmit (Txt_Another_user_s_profile,"DAT",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
       HTM_DIV_End ();
       Frm_EndForm ();
      }
@@ -917,7 +919,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW\"");	// Limited width
       Frm_LinkFormSubmit (Txt_Another_user_s_profile,"CON_CRS",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
       HTM_DIV_End ();
       Frm_EndForm ();
      }
@@ -976,7 +978,7 @@ static void Fol_PutIconToFollow (struct UsrData *UsrDat)
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Follow,Txt_Follow);
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
   }
 
@@ -998,7 +1000,7 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Unfollow,Txt_Unfollow);
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
   }
 

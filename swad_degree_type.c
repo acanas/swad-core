@@ -536,7 +536,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       fprintf (Gbl.F.Out,"%s",Txt_DEGREE_TYPES_ORDER[Order]);
       if (Order == SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
 
       /* End form */
       Frm_EndForm ();

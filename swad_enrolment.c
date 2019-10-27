@@ -2873,9 +2873,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
         	      Txt_Go_to_X,
 		      Crs.FullName);
             Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-            fprintf (Gbl.F.Out,"%s &gt; %s"
-        	               "</a>",
-                     Deg.ShrtName,Crs.ShrtName);
+            fprintf (Gbl.F.Out,"%s &gt; %s",Deg.ShrtName,Crs.ShrtName);
+            Frm_LinkFormEnd ();
             Frm_EndForm ();
             HTM_TD_End ();
 

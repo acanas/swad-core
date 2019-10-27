@@ -1773,6 +1773,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
 	                       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
 			       NULL);
    Ico_PutCalculateIconWithText (Txt_Update_messages);	// Animated icon to update messages
+   Frm_LinkFormEnd ();
    Mnu_ContextMenuEnd ();
 
    Frm_EndForm ();

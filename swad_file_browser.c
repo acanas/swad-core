@@ -3395,13 +3395,14 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
    /***** Show user's name *****/
    fprintf (Gbl.F.Out,"<br />");
+
    Frm_LinkFormSubmit (Txt_View_record_for_this_course,"AUTHOR_TXT",NULL);
    fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
    if (UsrDat->FirstName[0])
       fprintf (Gbl.F.Out,", %s",UsrDat->FirstName);
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
 
    /***** Show user's email *****/
    if (UsrDat->Email[0])
@@ -6164,7 +6165,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
    Brw_PutIconFile (Size,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
 
    /***** End link and form *****/
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
   }
 
@@ -6314,8 +6315,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
 	                   Gbl.FileBrowser.Type == Brw_SHOW_MRK_GRP) ? Txt_Check_marks_in_the_file :
 	                                                               Txt_Download,
 			  Gbl.FileBrowser.TxtStyle,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",
-	       FileNameToShow);
+      fprintf (Gbl.F.Out,"%s",FileNameToShow);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       /* Put icon to make public/private file */
@@ -10049,10 +10050,10 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
 			 "<img src=\"%s/grades32x32.gif\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO40x40\" />"
-			 "</a>",
+			 " class=\"ICO40x40\" />",
 	       FileNameToShow,Cfg_URL_ICON_PUBLIC,
 	       Txt_Check_marks_in_the_file,Txt_Check_marks_in_the_file);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
    else
@@ -10103,13 +10104,18 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
       /* Link begin */
       Frm_LinkFormSubmit (Txt_Check_marks_in_the_file,"DAT",NULL);
 
-      /* Name of the file of marks, link end and form end */
-      fprintf (Gbl.F.Out,"%s</a>",FileNameToShow);
+      /* Name of the file of marks */
+      fprintf (Gbl.F.Out,"%s",FileNameToShow);
+
+      /* Link end and form end */
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
    else
       /* Put anchor and filename */
-      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">%s</a>",
+      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">"
+	                 "%s"
+	                 "</a>",
 	       URL,FileNameToShow,FileNameToShow);
   }
 
@@ -11952,7 +11958,8 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 		   InsShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Hie_INS,InsCod,InsShortName,20,"CT",true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsShortName);
+	 fprintf (Gbl.F.Out,"&nbsp;%s",InsShortName);
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
       HTM_TD_End ();
@@ -11968,7 +11975,8 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 		   CtrShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Hie_CTR,CtrCod,CtrShortName,20,"CT",true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrShortName);
+	 fprintf (Gbl.F.Out,"&nbsp;%s",CtrShortName);
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
       HTM_TD_End ();
@@ -11984,7 +11992,8 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 		   DegShortName);
          Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
          Log_DrawLogo (Hie_DEG,DegCod,DegShortName,20,"CT",true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegShortName);
+	 fprintf (Gbl.F.Out,"&nbsp;%s",DegShortName);
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
       HTM_TD_End ();
@@ -11999,7 +12008,8 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
 	           Txt_Go_to_X,
 		   CrsShortName);
 	 Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-	 fprintf (Gbl.F.Out,"%s</a>",CrsShortName);
+	 fprintf (Gbl.F.Out,"%s",CrsShortName);
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
       HTM_TD_End ();
@@ -12110,9 +12120,8 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       else
 	 /* Icon with file type or link */
 	 Brw_PutIconFile (16,FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name);
-      fprintf (Gbl.F.Out,"&nbsp;%s"
-	                 "</a>",
-	       FileNameToShow);
+      fprintf (Gbl.F.Out,"&nbsp;%s",FileNameToShow);
+      Frm_LinkFormEnd ();
 
       /* End form */
       Frm_EndForm ();

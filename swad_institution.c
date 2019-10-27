@@ -241,7 +241,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size)
 		 Size,NULL,true);
    if (PutLink)
      {
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
   }
@@ -265,11 +265,12 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Act
 	     Ins->FullName);
    Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
-   /***** Draw institution logo *****/
+   /***** Institution logo and name *****/
    Log_DrawLogo (Hie_INS,Ins->InsCod,Ins->ShrtName,16,ClassLogo,true);
+   fprintf (Gbl.F.Out,"&nbsp;%s",Ins->FullName);
 
    /***** End link *****/
-   fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins->FullName);
+   Frm_LinkFormEnd ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -562,8 +563,8 @@ static void Ins_Configuration (bool PrintView)
 		Txt_Centres_of_INSTITUTION_X,
 		Gbl.Hierarchy.Ins.ShrtName);
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-      fprintf (Gbl.F.Out,"%u</a>",
-	       Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
+      fprintf (Gbl.F.Out,"%u",Ctr_GetNumCtrsInIns (Gbl.Hierarchy.Ins.InsCod));
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -889,7 +890,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	{
 	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
       HTM_TH_End ();

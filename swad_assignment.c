@@ -226,7 +226,7 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 	{
 	 if (Order == Gbl.Asgs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
 

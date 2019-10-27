@@ -135,7 +135,7 @@ void Dpt_SeeDepts (void)
       fprintf (Gbl.F.Out,"%s",Txt_DEPARTMENTS_ORDER[Order]);
       if (Order == Gbl.Dpts.SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
 
       HTM_TH_End ();

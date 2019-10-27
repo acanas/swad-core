@@ -249,11 +249,12 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
 	     Ctr->FullName);
    Frm_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
-   /***** Draw centre logo *****/
+   /***** Centre logo and name *****/
    Log_DrawLogo (Hie_CTR,Ctr->CtrCod,Ctr->ShrtName,16,ClassLogo,true);
+   fprintf (Gbl.F.Out,"&nbsp;%s",Ctr->FullName);
 
    /***** End link *****/
-   fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr->FullName);
+   Frm_LinkFormEnd ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -664,8 +665,8 @@ static void Ctr_Configuration (bool PrintView)
 		Txt_Degrees_of_CENTRE_X,
 		Gbl.Hierarchy.Ctr.ShrtName);
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-      fprintf (Gbl.F.Out,"%u</a>",
-	       Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+      fprintf (Gbl.F.Out,"%u",Deg_GetNumDegsInCtr (Gbl.Hierarchy.Ctr.CtrCod));
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -2642,7 +2643,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	{
 	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	}
       HTM_TH_End ();

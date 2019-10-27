@@ -806,6 +806,7 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
 			       The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
 			       NULL);
    Ico_PutCalculateIconWithText (Txt_Calculate);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
   }
 

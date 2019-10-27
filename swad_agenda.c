@@ -588,13 +588,15 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 	    break;
 	}
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+
       Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Agenda.SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
       fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
       if (Order == Gbl.Agenda.SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
+
       Frm_EndForm ();
       HTM_TH_End ();
      }

@@ -430,8 +430,6 @@ void Ico_PutCalculateIcon (const char *Title)
 	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Title,Title,
 	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Title,Title);
    HTM_DIV_End ();
-
-   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/
@@ -453,8 +451,6 @@ void Ico_PutCalculateIconWithText (const char *Text)
 	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Text,Text,
 	    Text);
    HTM_DIV_End ();
-
-   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/

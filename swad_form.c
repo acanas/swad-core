@@ -233,7 +233,6 @@ void Frm_EndForm (void)
 /*****************************************************************************/
 /******************* Anchor directive used to send a form ********************/
 /*****************************************************************************/
-// Requires an extern </a>
 
 void Frm_LinkFormSubmit (const char *Title,const char *LinkClass,
                          const char *OnSubmit)
@@ -291,6 +290,11 @@ void Frm_LinkFormSubmitAnimated (const char *Title,const char *LinkClass,
 		      "return false;\">",
 	    Gbl.Form.Num,
 	    Gbl.Form.Id);
+  }
+
+void Frm_LinkFormEnd (void)
+  {
+   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/

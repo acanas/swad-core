@@ -316,8 +316,8 @@ void Dat_ShowClientLocalTime (void)
    Frm_StartForm (ActSeeCal);
    Frm_LinkFormSubmit (Txt_Show_calendar,"CURRENT_MONTH",NULL);
    fprintf (Gbl.F.Out,"<span id=\"current_month_txt\">"	// JavaScript will write HTML here
-                      "</span>"
-                      "</a>");
+                      "</span>");
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_DIV_End ();
 
@@ -332,7 +332,7 @@ void Dat_ShowClientLocalTime (void)
 		      "</span>");
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"</a>");
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
    HTM_DIV_End ();

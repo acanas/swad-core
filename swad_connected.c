@@ -133,6 +133,7 @@ static void Con_PutIconToUpdateConnected (void)
    Sco_PutParamScope ("ScopeCon",Gbl.Scope.Current);
    Frm_LinkFormSubmitAnimated (Txt_Update,NULL,NULL);
    Ico_PutCalculateIcon (Txt_Update);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
   }
 
@@ -176,7 +177,7 @@ void Con_ShowGlobalConnectedUsrs (void)
             (Gbl.Session.NumSessions == 1) ? Txt_session :
         	                             Txt_sessions);
    /* End link to view more details about connected users */
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
 
    if (NumUsrsTotal)
@@ -321,9 +322,8 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Str_Copy (CourseName,Gbl.Hierarchy.Crs.ShrtName,
              Hie_MAX_BYTES_SHRT_NAME);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
-   fprintf (Gbl.F.Out,"%u %s %s"
-	              "</a>",
-            Usrs.NumUsrs,Txt_from,CourseName);
+   fprintf (Gbl.F.Out,"%u %s %s",Usrs.NumUsrs,Txt_from,CourseName);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
 
    /***** Number of teachers and students *****/
@@ -414,10 +414,10 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	 Sco_PutParamScope ("ScopeCon",Hie_CRS);
 	 Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis-h.svg\""
-			    " alt=\"%s\" title=\"%s\" class=\"ICO40x40\" />"
-			    "</a>",
+			    " alt=\"%s\" title=\"%s\" class=\"ICO40x40\" />",
 		  Cfg_URL_ICON_PUBLIC,
 		  Txt_Connected_users,Txt_Connected_users);
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	 HTM_TD_End ();
 
@@ -851,7 +851,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
    Frm_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
    Usr_WriteFirstNameBRSurnames (UsrDat);
-   fprintf (Gbl.F.Out,"</a>");
+   Frm_LinkFormEnd ();
    HTM_DIV_End ();
 
    Frm_EndForm ();
@@ -1069,7 +1069,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       Frm_LinkFormSubmit (UsrDat.FullName,Font,NULL);
             Usr_WriteFirstNameBRSurnames (&UsrDat);
 	    if (PutLinkToRecord)
-	       fprintf (Gbl.F.Out,"</a>");
+	       Frm_LinkFormEnd ();
 	    HTM_DIV_End ();
 
 	    if (PutLinkToRecord)

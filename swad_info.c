@@ -613,9 +613,8 @@ void Inf_WriteMsgYouMustReadInfo (void)
          Frm_StartForm (Inf_ActionsSeeInfo[InfoType]);
          Frm_LinkFormSubmit (Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]),
                              The_ClassFormInBox[Gbl.Prefs.Theme],NULL);
-         fprintf (Gbl.F.Out,"%s"
-                            "</a>",
-                  Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
+         fprintf (Gbl.F.Out,"%s",Act_GetTitleAction (Inf_ActionsSeeInfo[InfoType]));
+         Frm_LinkFormEnd ();
          Frm_EndForm ();
          HTM_LI_End ();
         }

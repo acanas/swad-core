@@ -69,6 +69,7 @@ void Frm_LinkFormSubmitId (const char *Title,const char *LinkClass,
                            const char *Id,const char *OnSubmit);
 void Frm_LinkFormSubmitAnimated (const char *Title,const char *LinkClass,
                                  const char *OnSubmit);
+void Frm_LinkFormEnd (void);
 
 void Frm_SetUniqueId (char UniqueId[Frm_MAX_BYTES_ID + 1]);
 

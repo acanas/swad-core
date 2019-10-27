@@ -415,6 +415,7 @@ void Grp_ShowFormToSelectSeveralGroups (void (*FuncParams) (void),
 			       The_ClassFormInBoxBold[Gbl.Prefs.Theme],
 			       "CopyMessageToHiddenFields();");
    Ico_PutCalculateIconWithText (Txt_Update_users);
+   Frm_LinkFormEnd ();
    HTM_DIV_End ();
 
    /***** End form *****/

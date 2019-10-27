@@ -597,11 +597,12 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		       NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
 	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO16x16\" />&nbsp;%s</a>",
+                      " class=\"ICO16x16\" />&nbsp;%s",
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_System,
 	    Txt_System,
 	    Txt_System);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_LI_End ();
 
@@ -634,13 +635,14 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /* Country map */
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s.png\""
 	                 " alt=\"%s\" title=\"%s\""
-                         " class=\"ICO16x16\" />&nbsp;%s</a>",
+                         " class=\"ICO16x16\" />&nbsp;%s",
 	       Cfg_URL_ICON_COUNTRIES_PUBLIC,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
 	       Cty.Name[Gbl.Prefs.Language],
                Cty.Name[Gbl.Prefs.Language]);
+      Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_LI_End ();
 
@@ -672,7 +674,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                     Highlight ? ClassHighlight :
         	                         ClassNormal,NULL);
 	 Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,16,NULL,true);
-	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins.FullName);
+	 fprintf (Gbl.F.Out,"&nbsp;%s",Ins.FullName);
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	 HTM_LI_End ();
 
@@ -704,7 +707,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                        Highlight ? ClassHighlight :
         	                            ClassNormal,NULL);
 	    Log_DrawLogo (Hie_CTR,Ctr.CtrCod,Ctr.ShrtName,16,NULL,true);
-	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr.FullName);
+	    fprintf (Gbl.F.Out,"&nbsp;%s",Ctr.FullName);
+	    Frm_LinkFormEnd ();
 	    Frm_EndForm ();
 	    HTM_LI_End ();
 
@@ -736,7 +740,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                           Highlight ? ClassHighlight :
         	                               ClassNormal,NULL);
 	       Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,16,NULL,true);
-	       fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg.FullName);
+	       fprintf (Gbl.F.Out,"&nbsp;%s",Deg.FullName);
+	       Frm_LinkFormEnd ();
 	       Frm_EndForm ();
 	       HTM_LI_End ();
 
@@ -773,12 +778,12 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
 			             " alt=\"%s\" title=\"%s\""
 			             " class=\"ICO16x16\" />"
-			             "&nbsp;%s"
-			             "</a>",
+			             "&nbsp;%s",
 		           Cfg_URL_ICON_PUBLIC,
 		           Crs.ShrtName,
 		           Crs.FullName,
 		           Crs.FullName);
+		  Frm_LinkFormEnd ();
 		  Frm_EndForm ();
 
 		  /***** Put link to register students *****/
@@ -1312,8 +1317,8 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	           Txt_Go_to_X,
 		   Crs->FullName);
 	 Frm_LinkFormSubmit (Gbl.Title,TxtClassStrong,NULL);
-	 fprintf (Gbl.F.Out,"%s</a>",
-		  Crs->FullName);
+	 fprintf (Gbl.F.Out,"%s",Crs->FullName);
+	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	 HTM_TD_End ();
 
@@ -2950,10 +2955,10 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
       Frm_LinkFormSubmit (Txt_My_courses,NULL,NULL);
       fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"BC_ICON ICO_HIGHLIGHT\" />"
-			 "</a>",
+			 " class=\"BC_ICON ICO_HIGHLIGHT\" />",
 	       Gbl.Prefs.URLTheme,
 	       Txt_My_courses,Txt_My_courses);
+      Frm_LinkFormEnd ();
 
       /***** End form *****/
       Frm_EndForm ();
@@ -3254,9 +3259,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	     row[2]);
    Frm_LinkFormSubmit (Gbl.Title,StyleNoBR,NULL);
    Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,20,"CT",true);
-   fprintf (Gbl.F.Out," %s (%s)"
-                      "</a>",
-            row[2],row[6]);
+   fprintf (Gbl.F.Out," %s (%s)",row[2],row[6]);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_TD_End ();
 
@@ -3273,7 +3277,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 	     Txt_Go_to_X,
 	     row[6]);
    Frm_LinkFormSubmit (Gbl.Title,Style,NULL);
-   fprintf (Gbl.F.Out,"%s</a>",row[5]);
+   fprintf (Gbl.F.Out,"%s",row[5]);
+   Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_TD_End ();
 
