@@ -10065,9 +10065,8 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
                                                         Txt_Download;
 
       /* Put anchor and filename */
-      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME_TXT\""
-                         " title=\"%s\" target=\"_blank\">",
-	       URL,Title);
+      HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
+	           URL,Title);
       Brw_PutIconFile (32,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
 			 "<img src=\"%s/download.svg\""
@@ -10117,8 +10116,8 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
    else
      {
       /* Put anchor and filename */
-      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">",
-	       URL,FileNameToShow);
+      HTM_A_Begin ("href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\"",
+	           URL,FileNameToShow);
       fprintf (Gbl.F.Out,"%s",FileNameToShow);
       HTM_A_End ();
      }

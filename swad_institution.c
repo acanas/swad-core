@@ -337,10 +337,9 @@ static void Ins_Configuration (bool PrintView)
    PutLink = !PrintView && Gbl.Hierarchy.Ins.WWW[0];
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-			 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
-	       Gbl.Hierarchy.Ins.WWW,
-	       Gbl.Hierarchy.Ins.FullName);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"FRAME_TITLE_BIG\" title=\"%s\"",
+	           Gbl.Hierarchy.Ins.WWW,
+	           Gbl.Hierarchy.Ins.FullName);
    Log_DrawLogo (Hie_INS,Gbl.Hierarchy.Ins.InsCod,
 		 Gbl.Hierarchy.Ins.ShrtName,64,NULL,true);
    fprintf (Gbl.F.Out,"<br />%s",Gbl.Hierarchy.Ins.FullName);
@@ -487,10 +486,9 @@ static void Ins_Configuration (bool PrintView)
    else	// I can not change institution WWW
      {
       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
-			 "%s",
-	       Gbl.Hierarchy.Ins.WWW,
-	       Gbl.Hierarchy.Ins.WWW);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\">",
+	           Gbl.Hierarchy.Ins.WWW);
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ins.WWW);
       HTM_A_End ();
       HTM_DIV_End ();
      }
@@ -506,11 +504,11 @@ static void Ins_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s/%s?ins=%ld\" class=\"DAT\" target=\"_blank\">"
-		      "%s/%s?ins=%ld",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Hierarchy.Ins.InsCod,
+   HTM_A_Begin ("href=\"%s/%s?ins=%ld\" class=\"DAT\" target=\"_blank\"",
+	       Cfg_URL_SWAD_CGI,
+	       Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	       Gbl.Hierarchy.Ins.InsCod);
+   fprintf (Gbl.F.Out,"%s/%s?ins=%ld",
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Ins.InsCod);
@@ -1557,8 +1555,8 @@ static void Ins_ListInstitutionsForEdition (void)
          Str_Copy (WWW,Ins->WWW,
                    Cns_MAX_BYTES_WWW);
          HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-                            " class=\"DAT\" title=\"%s\">",Ins->WWW,Ins->WWW);
+         HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\"",
+		      Ins->WWW,Ins->WWW);
          fprintf (Gbl.F.Out,"%s",WWW);
          HTM_A_End ();
          HTM_DIV_End ();

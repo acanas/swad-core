@@ -963,8 +963,8 @@ static void Mai_ListEmails (void)
 	       Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
 	    Str_Concat (StrAddresses,UsrDat.Email,
 			Mai_MAX_BYTES_STR_ADDR);
-	    fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">",
-		     UsrDat.Email,Gbl.Hierarchy.Crs.FullName);
+	    HTM_A_Begin ("href=\"mailto:%s?subject=%s\"",
+		         UsrDat.Email,Gbl.Hierarchy.Crs.FullName);
 	    fprintf (Gbl.F.Out,"%s",UsrDat.Email);
 	    HTM_A_End ();
 
@@ -994,14 +994,14 @@ static void Mai_ListEmails (void)
    Mnu_ContextMenuBegin ();
 
    /* Open the client email program */
-   fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
-		      " title=\"%s\" class=\"%s\">",
-	    Gbl.Usrs.Me.UsrDat.Email,
-	    Gbl.Hierarchy.Crs.FullName,
-	    Gbl.Usrs.Me.UsrDat.Email,
-	    StrAddresses,
-	    Txt_Create_email_message,
-	    The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
+   HTM_A_Begin ("href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
+		" title=\"%s\" class=\"%s\"",
+	        Gbl.Usrs.Me.UsrDat.Email,
+	        Gbl.Hierarchy.Crs.FullName,
+	        Gbl.Usrs.Me.UsrDat.Email,
+	        StrAddresses,
+	        Txt_Create_email_message,
+	        The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
    Ico_PutIconTextLink ("marker.svg",
 			Txt_Create_email_message);
    HTM_A_End ();

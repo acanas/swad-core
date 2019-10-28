@@ -2850,8 +2850,7 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
       HTM_DIV_Begin ("class=\"REC_EMAIL\"");	// Limited width
       if (Mai_ICanSeeOtherUsrEmail (UsrDat))
 	{
-	 fprintf (Gbl.F.Out,"<a href=\"mailto:%s\" class=\"REC_DAT_BOLD\">",
-		  UsrDat->Email);
+	 HTM_A_Begin ("href=\"mailto:%s\" class=\"REC_DAT_BOLD\"",UsrDat->Email);
 	 fprintf (Gbl.F.Out,"%s",UsrDat->Email);
          HTM_A_End ();
         }
@@ -3465,8 +3464,7 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
 		  UsrDat->LocalPhone);
       else if (UsrDat->LocalPhone[0])
 	{
-	 fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">",
-	          UsrDat->LocalPhone);
+	 HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",UsrDat->LocalPhone);
 	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalPhone);
 	 HTM_A_End ();
 	}
@@ -3544,8 +3542,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 		  UsrDat->FamilyPhone);
       else if (UsrDat->FamilyPhone[0])
 	{
-	 fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">",
-	          UsrDat->FamilyPhone);
+	 HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",UsrDat->FamilyPhone);
 	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
 	 HTM_A_End ();
 	}
@@ -3637,9 +3634,8 @@ static void Rec_ShowInstitution (struct Instit *Ins,
       if (Ins->InsCod > 0)
 	{
 	 if (Ins->WWW[0])
-	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-			       " class=\"REC_DAT_BOLD\">",
-		     Ins->WWW);
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"REC_DAT_BOLD\"",
+		         Ins->WWW);
 	 fprintf (Gbl.F.Out,"%s",Ins->FullName);
 	 if (Ins->WWW[0])
 	    HTM_A_End ();
@@ -3673,9 +3669,8 @@ static void Rec_ShowCentre (struct UsrData *UsrDat,
 	 Ctr.CtrCod = UsrDat->Tch.CtrCod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
 	 if (Ctr.WWW[0])
-	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-			       " class=\"REC_DAT_BOLD\">",
-		     Ctr.WWW);
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"REC_DAT_BOLD\"",
+		         Ctr.WWW);
 	 fprintf (Gbl.F.Out,"%s",Ctr.FullName);
 	 if (Ctr.WWW[0])
 	    HTM_A_End ();
@@ -3710,9 +3705,8 @@ static void Rec_ShowDepartment (struct UsrData *UsrDat,
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
 	 Dpt_GetDataOfDepartmentByCod (&Dpt);
 	 if (Dpt.WWW[0])
-	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-			       " class=\"REC_DAT_BOLD\">",
-		     Dpt.WWW);
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"REC_DAT_BOLD\"",
+		         Dpt.WWW);
 	 fprintf (Gbl.F.Out,"%s",Dpt.FullName);
 	 if (Dpt.WWW[0])
 	    HTM_A_End ();
@@ -3764,8 +3758,8 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
    if (ShowData)
      {
-      fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">",
-	       UsrDat->Tch.OfficePhone);
+      HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",
+	           UsrDat->Tch.OfficePhone);
       fprintf (Gbl.F.Out,"%s",UsrDat->Tch.OfficePhone);
       HTM_A_End ();
      }
@@ -3783,9 +3777,9 @@ static void Rec_WriteLinkToDataProtectionClause (void)
    extern const char *Txt_DATA_PROTECTION_CLAUSE;
 
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<a class=\"TIT\" href=\"%s/\" target=\"_blank\">",
-            Cfg_URL_DATA_PROTECTION_PUBLIC);
-  fprintf (Gbl.F.Out,"%s",Txt_DATA_PROTECTION_CLAUSE);
+   HTM_A_Begin ("class=\"TIT\" href=\"%s/\" target=\"_blank\"",
+                Cfg_URL_DATA_PROTECTION_PUBLIC);
+   fprintf (Gbl.F.Out,"%s",Txt_DATA_PROTECTION_CLAUSE);
    HTM_A_End ();
    HTM_DIV_End ();
   }

@@ -275,10 +275,9 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 
    /***** Put anchor and report filename *****/
    HTM_DIV_Begin ("class=\"FILENAME_TXT CM\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME_TXT\""
-		      " title=\"%s\" target=\"_blank\">",
-	    Report->Permalink,
-	    Txt_Report);
+   HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
+	        Report->Permalink,
+	        Txt_Report);
    fprintf (Gbl.F.Out,"<img src=\"%s/file-alt.svg\" alt=\"%s\""
 	              " class=\"ICO64x64\" /><br />"
                       "%s",

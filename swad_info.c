@@ -1048,8 +1048,8 @@ static void Inf_ShowPage (const char *URL)
                  Help[Gbl.Crs.Info.Type],Box_NOT_CLOSABLE);
 
    /***** Link to view in a new window *****/
-   fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
-	    URL,The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
+   HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+	        URL,The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
    Ico_PutIconTextLink ("expand-arrows-alt.svg",
 		        Txt_View_in_a_new_window);
    HTM_A_End ();

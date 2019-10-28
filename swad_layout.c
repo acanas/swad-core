@@ -1152,9 +1152,9 @@ static void Lay_ShowRightColumn (void)
      {
       /***** SWADroid advertisement *****/
       HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
-      fprintf (Gbl.F.Out,"<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
-			 " target=\"_blank\" title=\"%s\">",
-	       Txt_If_you_have_an_Android_device_try_SWADroid);
+      HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
+		   " target=\"_blank\" title=\"%s\"",
+	           Txt_If_you_have_an_Android_device_try_SWADroid);
       fprintf (Gbl.F.Out,"<img src=\"%s/SWADroid120x200.png\""
 			 " alt=\"SWADroid\" title=\"SWADroid\""
 			 " style=\"width:150px; height:250px;\" />",
@@ -1430,8 +1430,7 @@ static void Lay_WriteAboutZone (void)
    fprintf (Gbl.F.Out,"<address id=\"about_zone\" class=\"ABOUT\">");
 
    /***** Institution and centre hosting the platform *****/
-   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">",
-	    Cfg_ABOUT_URL);
+   HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_URL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
 		      " style=\"width:%upx; height:%upx;\" />",
@@ -1457,8 +1456,7 @@ static void Lay_WriteAboutZone (void)
    HTM_DIV_Begin (NULL);
 
    /* About */
-   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">",
-	    Cfg_ABOUT_SWAD_URL);
+   HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_SWAD_URL);
    fprintf (Gbl.F.Out,Txt_About_X,Log_PLATFORM_VERSION);
    HTM_A_End ();
    fprintf (Gbl.F.Out,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
@@ -1604,7 +1602,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    if (InsCod > 0)
      {
       if (!PrintView)
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Ins.WWW);
+         HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Ins.WWW);
       Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,40,NULL,true);
       if (!PrintView)
          HTM_A_End ();
@@ -1616,9 +1614,8 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    if (InsCod > 0)
      {
       if (!PrintView)
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-                            " class=\"CLASSPHOTO_TITLE\">",
-                  Ins.WWW);
+         HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
+                      Ins.WWW);
       fprintf (Gbl.F.Out,"%s",Ins.FullName);
       if (!PrintView)
          HTM_A_End ();
@@ -1628,9 +1625,8 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (Ins.InsCod > 0)
          fprintf (Gbl.F.Out," - ");
       if (!PrintView)
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-                            " class=\"CLASSPHOTO_TITLE\">",
-                  Deg.WWW);
+         HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
+                      Deg.WWW);
       fprintf (Gbl.F.Out,"%s",Deg.FullName);
       if (!PrintView)
          HTM_A_End ();
@@ -1652,9 +1648,8 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    if (DegCod > 0)
      {
       if (!PrintView)
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-                            " class=\"CLASSPHOTO_TITLE\">",
-                  Deg.WWW);
+         HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"CLASSPHOTO_TITLE\"",
+                      Deg.WWW);
       Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,40,NULL,true);
       if (!PrintView)
          HTM_A_End ();
@@ -1687,8 +1682,8 @@ void Lay_AdvertisementMobile (void)
       /***** Show advertisement *****/
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("class=\"DAT CM\"");
-      fprintf (Gbl.F.Out,"<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
-	                 " class=\"DAT\">");
+      HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
+	           " class=\"DAT\"");
       fprintf (Gbl.F.Out,"%s<br /><br />"
                          "<img src=\"%s/SWADroid200x300.png\""
                          " alt=\"SWADroid\" title=\"%s\""

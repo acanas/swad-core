@@ -252,8 +252,7 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
   {
    /***** Write link and icon *****/
    HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\" style=\"display:inline;\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" title=\"%s\">",
-	    URL,Title);
+   HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\"",URL,Title);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
                       " class=\"ICO16x16\" />",

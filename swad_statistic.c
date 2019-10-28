@@ -3314,9 +3314,9 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
 	 Lay_ShowErrorAndExit ("Wrong banner code.");
       Ban_GetDataOfBannerByCod (&Ban);
       HTM_TD_Begin ("class=\"LOG LT\"");
-      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
-               Ban.WWW,
-               Ban.FullName);
+      HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
+                   Ban.WWW,
+                   Ban.FullName);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER_SMALL\""

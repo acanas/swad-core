@@ -62,6 +62,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
    char PathRelPublRSSDir[PATH_MAX + 1];
    char PathRelPublRSSFile[PATH_MAX + 1];
    FILE *FileRSS;
+   char RSSLink[Cns_MAX_BYTES_WWW + 1];
    struct tm *tm;
 
    /***** Create RSS directory if not exists *****/
@@ -85,7 +86,8 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
    fprintf (FileRSS,"<channel>\n");
 
    fprintf (FileRSS,"<atom:link href=\"");
-   RSS_WriteRSSLink (FileRSS,Crs->CrsCod);
+   RSS_BuildRSSLink (RSSLink,Crs->CrsCod);
+   fprintf (FileRSS,"%s",RSSLink);
    fprintf (FileRSS,"\" rel=\"self\" type=\"application/rss+xml\" />\n");
 
    fprintf (FileRSS,"<title>%s: %s</title>\n",
@@ -322,8 +324,9 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 /********* Write URL to RSS archive with active notices in a course **********/
 /*****************************************************************************/
 
-void RSS_WriteRSSLink (FILE *FileTgt,long CrsCod)
+void RSS_BuildRSSLink (char RSSLink[Cns_MAX_BYTES_WWW + 1],long CrsCod)
   {
-   fprintf (FileTgt,"%s/%ld/%s/%s",
-            Cfg_URL_CRS_PUBLIC,CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
+   snprintf (RSSLink,Cns_MAX_BYTES_WWW + 1,
+	     "%s/%ld/%s/%s",
+             Cfg_URL_CRS_PUBLIC,CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
   }

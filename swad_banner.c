@@ -153,9 +153,9 @@ static void Ban_WriteListOfBanners (void)
      {
       /* Write data of this banner */
       HTM_LI_Begin (NULL);
-      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
-               Gbl.Banners.Lst[NumBan].WWW,
-               Gbl.Banners.Lst[NumBan].FullName);
+      HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
+                   Gbl.Banners.Lst[NumBan].WWW,
+                   Gbl.Banners.Lst[NumBan].FullName);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER\" />",

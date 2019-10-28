@@ -369,6 +369,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    long UsrCod;
    unsigned UnsignedNum;
    Not_Status_t Status;
+   char RSSLink[Cns_MAX_BYTES_WWW + 1];
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Level != Hie_CRS)	// No course selected
@@ -470,9 +471,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 
 	 /* Put a link to the RSS file */
 	 HTM_DIV_Begin ("class=\"CM\"");
-	 fprintf (Gbl.F.Out,"<a href=\"");
-	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.Hierarchy.Crs.CrsCod);
-	 fprintf (Gbl.F.Out,"\" target=\"_blank\">");
+	 RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Crs.CrsCod);
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",RSSLink);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/rss-square.svg\""
 			    " alt=\"RSS\" title=\"RSS\""
 			    " class=\"ICO16x16\" />",

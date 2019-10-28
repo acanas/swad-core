@@ -391,8 +391,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
 
    /***** Icon 'clip' *****/
    HTM_DIV_Begin ("id=\"%s_med_ico\"",Id);		// <id>_med_ico
-   fprintf (Gbl.F.Out,"<a href=\"\""
-                      " onclick=\"mediaActivateMediaUploader('%s');return false;\">",
+   HTM_A_Begin ("href=\"\" onclick=\"mediaActivateMediaUploader('%s');return false;\"",
             Id);
    fprintf (Gbl.F.Out,"<img src=\"%s/paperclip.svg\""
 	              " alt=\"%s\" title=\"%s\""
@@ -490,8 +489,8 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
    /***** Icon to activate form in media uploader *****/
    HTM_DIV_Begin ("id=\"%s_%s\" class=\"PREF_OFF\"",		// <id>_IconSuffix
                   UniqueId,MediaUploader->IconSuffix);
-   fprintf (Gbl.F.Out,"<a href=\"\" onclick=\"%s('%s');return false;\">",
-	    MediaUploader->FunctionName,UniqueId);
+   HTM_A_Begin ("href=\"\" onclick=\"%s('%s');return false;\"",
+	        MediaUploader->FunctionName,UniqueId);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
                       " class=\"ICO_HIGHLIGHT ICOx16\" />",
             Cfg_URL_ICON_PUBLIC,MediaUploader->Icon,
@@ -1477,7 +1476,7 @@ void Med_ShowMedia (struct Media *Media,
 	    if (Media->URL[0])
 	       PutLink = true;
 	 if (PutLink)
-	    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Media->URL);
+	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Media->URL);
 
 	 /* Create a temporary public directory used to show the media */
 	 Brw_CreateDirDownloadTmp ();

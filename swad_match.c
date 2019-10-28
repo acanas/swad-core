@@ -2867,9 +2867,9 @@ static void Mch_PutBigButton (Act_Action_t NextAction,const char *Id,
 
    /***** Put icon with link *****/
    HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
-   fprintf (Gbl.F.Out,"<a href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
-	              " onclick=\"document.getElementById('%s').submit();"
-	              " return false;\">",Txt,Id);
+   HTM_A_Begin ("href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
+	        " onclick=\"document.getElementById('%s').submit();return false;\"",
+		Txt,Id);
    fprintf (Gbl.F.Out,"<i class=\"%s\"></i>",Icon);
    HTM_A_End ();
    HTM_DIV_End ();
@@ -2894,9 +2894,8 @@ static void Mch_PutBigButtonClose (void)
 
    /***** Put icon with link *****/
    HTM_DIV_Begin ("class=\"MCH_BUTTON_CONTAINER\"");
-   fprintf (Gbl.F.Out,"<a href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
-	              " onclick=\"window.close();"
-	              " return false;\"\">",Txt_Close);
+   HTM_A_Begin ("href=\"\" class=\"MCH_BUTTON_ON\" title=\"%s\" "
+	        " onclick=\"window.close();return false;\"\"",Txt_Close);
    fprintf (Gbl.F.Out,"<i class=\"%s\"></i>",Mch_ICON_CLOSE);
    HTM_A_End ();
    HTM_DIV_End ();

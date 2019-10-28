@@ -265,10 +265,10 @@ static void Cty_Configuration (bool PrintView)
    PutLink = !PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0];
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-			 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
-	       Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
-	       Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
+	           Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language],
+	           Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    if (PutLink)
       HTM_A_End ();
@@ -283,10 +283,10 @@ static void Cty_Configuration (bool PrintView)
       /* Map image */
       HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
       if (PutLink)
-	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",
-		  Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
+		      Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
       Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,PrintView ? "COUNTRY_MAP_PRINT" :
-							  "COUNTRY_MAP_SHOW");
+							 "COUNTRY_MAP_SHOW");
       if (PutLink)
 	 HTM_A_End ();
       HTM_DIV_End ();
@@ -329,8 +329,8 @@ static void Cty_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
    if (!PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0])
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
-	       Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
+	           Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    if (!PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0])
       HTM_A_End ();
@@ -346,10 +346,10 @@ static void Cty_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s/%s?cty=%ld\" class=\"DAT\" target=\"_blank\">",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Hierarchy.Cty.CtyCod);
+   HTM_A_Begin ("href=\"%s/%s?cty=%ld\" class=\"DAT\" target=\"_blank\"",
+	        Cfg_URL_SWAD_CGI,
+	        Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	        Gbl.Hierarchy.Cty.CtyCod);
    fprintf (Gbl.F.Out,"%s/%s?cty=%ld",
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],

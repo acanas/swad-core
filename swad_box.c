@@ -171,8 +171,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
 
    if (HelpLink)	// Link to help
      {
-      fprintf (Gbl.F.Out,"<a href=\"%s%s\" target=\"_blank\">",
-	       Hlp_WIKI,HelpLink);
+      HTM_A_Begin ("href=\"%s%s\" target=\"_blank\"",Hlp_WIKI,HelpLink);
       Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
 		      "question.svg",Txt_Help);
       HTM_A_End ();
@@ -180,9 +179,8 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
 
    if (Closable == Box_CLOSABLE)	// Icon to close the box
      {
-      fprintf (Gbl.F.Out,"<a href=\"\""
-			 " onclick=\"toggleDisplay('%s');return false;\" />",
-	       Gbl.Box.Ids[Gbl.Box.Nested]);
+      HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\"",
+	           Gbl.Box.Ids[Gbl.Box.Nested]);
       Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
 		      "close.svg",Txt_Close);
       HTM_A_End ();

@@ -335,10 +335,10 @@ static void Ctr_Configuration (bool PrintView)
    PutLink = !PrintView && Gbl.Hierarchy.Ctr.WWW[0];
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-			 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
-	       Gbl.Hierarchy.Ctr.WWW,
-	       Gbl.Hierarchy.Ctr.FullName);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
+	           Gbl.Hierarchy.Ctr.WWW,
+	           Gbl.Hierarchy.Ctr.FullName);
    Log_DrawLogo (Hie_CTR,Gbl.Hierarchy.Ctr.CtrCod,
 		 Gbl.Hierarchy.Ctr.ShrtName,64,NULL,true);
    fprintf (Gbl.F.Out,"<br />%s",Gbl.Hierarchy.Ctr.FullName);
@@ -355,8 +355,8 @@ static void Ctr_Configuration (bool PrintView)
       /* Photo image */
       HTM_DIV_Begin ("class=\"DAT_SMALL CM\"");
       if (PutLink)
-	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT_N\">",
-		  Gbl.Hierarchy.Ctr.WWW);
+	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
+		      Gbl.Hierarchy.Ctr.WWW);
       fprintf (Gbl.F.Out,"<img src=\"%s/%02u/%u/%u.jpg\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"%s\" />",
@@ -588,8 +588,8 @@ static void Ctr_Configuration (bool PrintView)
    else	// I can not change centre WWW
      {
       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">",
-	       Gbl.Hierarchy.Ctr.WWW);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT\"",
+	           Gbl.Hierarchy.Ctr.WWW);
       fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.WWW);
       HTM_A_End ();
       HTM_DIV_End ();
@@ -606,10 +606,10 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\">",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Hierarchy.Ctr.CtrCod);
+   HTM_A_Begin ("href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\"",
+	        Cfg_URL_SWAD_CGI,
+	        Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	        Gbl.Hierarchy.Ctr.CtrCod);
    fprintf (Gbl.F.Out,"%s/%s?ctr=%ld",
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
@@ -1606,8 +1606,8 @@ static void Ctr_ListCentresForEdition (void)
          Str_Copy (WWW,Ctr->WWW,
                    Cns_MAX_BYTES_WWW);
          HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-                            " class=\"DAT\" title=\"%s\">",Ctr->WWW,Ctr->WWW);
+         HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+                      " class=\"DAT\" title=\"%s\"",Ctr->WWW,Ctr->WWW);
          fprintf (Gbl.F.Out,"%s",WWW);
          HTM_A_End ();
          HTM_DIV_End ();

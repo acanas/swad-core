@@ -1398,9 +1398,9 @@ static void TL_PutLinkToViewNewPublications (void)
    HTM_DIV_Begin ("id=\"view_new_posts_container\""
 		  " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\""
 		  " style=\"display:none;\"");
-   fprintf (Gbl.F.Out,"<a href=\"\" class=\"%s\""
-                      " onclick=\"moveNewTimelineToTimeline(); return false;\" />",
-	    The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
+   HTM_A_Begin ("href=\"\" class=\"%s\""
+                " onclick=\"moveNewTimelineToTimeline();return false;\"",
+	        The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s (<span id=\"view_new_posts_count\">0</span>)",
 	    Txt_See_new_activity);
    HTM_A_End ();
@@ -1419,12 +1419,12 @@ static void TL_PutLinkToViewOldPublications (void)
    /***** Animated link to view old publications *****/
    HTM_DIV_Begin ("id=\"view_old_posts_container\""
 	          " class=\"TL_WIDTH TL_SEP VERY_LIGHT_BLUE\"");
-   fprintf (Gbl.F.Out,"<a href=\"\" class=\"%s\" onclick=\""
-   		      "document.getElementById('get_old_timeline').style.display='none';"	// Icon to be hidden on click
-		      "document.getElementById('getting_old_timeline').style.display='';"	// Icon to be shown on click
-                      "refreshOldTimeline();"
-		      "return false;\">",
-	    The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
+   HTM_A_Begin ("href=\"\" class=\"%s\" onclick=\""
+   		"document.getElementById('get_old_timeline').style.display='none';"	// Icon to be hidden on click
+		"document.getElementById('getting_old_timeline').style.display='';"	// Icon to be shown on click
+                "refreshOldTimeline();"
+		"return false;\"",
+	        The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img id=\"get_old_timeline\""
 	              " src=\"%s/recycle16x16.gif\" alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
@@ -2502,9 +2502,8 @@ static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID 
 
    /***** Link to toggle on/off the form to comment a note *****/
    HTM_DIV_Begin ("id=\"%s_ico\" class=\"TL_ICO_COM_OFF\"",UniqueId);
-   fprintf (Gbl.F.Out,"<a href=\"\""
-                      " onclick=\"toggleNewComment ('%s');return false;\">",
-            UniqueId);
+   HTM_A_Begin ("href=\"\" onclick=\"toggleNewComment ('%s');return false;\"",
+                UniqueId);
    fprintf (Gbl.F.Out,"<img src=\"%s/edit.svg\" alt=\"%s\" title=\"%s\""
                       " class=\"CONTEXT_ICO_16x16\" />",
             Cfg_URL_ICON_PUBLIC,
@@ -2702,11 +2701,11 @@ static void TL_PutIconToToggleComments (const char *UniqueId,
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
    /***** Link to toggle on/off some divs *****/
-   fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"%s\""
-                      " onclick=\"toggleComments('%s');"
-                                 "return false;\" />",
-            Text,The_ClassFormInBox[Gbl.Prefs.Theme],
-            UniqueId);
+   HTM_A_Begin ("href=\"\" title=\"%s\" class=\"%s\""
+                " onclick=\"toggleComments('%s');"
+                           "return false;\"",
+                Text,The_ClassFormInBox[Gbl.Prefs.Theme],
+                UniqueId);
    Ico_PutIconTextLink (Icon,Text);
    HTM_A_End ();
   }

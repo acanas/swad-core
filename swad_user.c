@@ -4123,10 +4123,9 @@ static void Usr_WriteUsrData (const char *BgColor,
 
    /***** Start link *****/
    if (Link)
-      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"%s\" target=\"_blank\">",
-               Link,
-               Accepted ? "DAT_SMALL_NOBR_N" :
-			  "DAT_SMALL_NOBR");
+      HTM_A_Begin ("href=\"%s\" class=\"%s\" target=\"_blank\"",
+                   Link,Accepted ? "DAT_SMALL_NOBR_N" :
+			           "DAT_SMALL_NOBR");
 
    /***** Write data *****/
    fprintf (Gbl.F.Out,"%s",Data);

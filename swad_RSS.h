@@ -40,6 +40,6 @@
 /*****************************************************************************/
 
 void RSS_UpdateRSSFileForACrs (struct Course *Crs);
-void RSS_WriteRSSLink (FILE *FileTgt,long CrsCod);
+void RSS_BuildRSSLink (char RSSLink[Cns_MAX_BYTES_WWW + 1],long CrsCod);
 
 #endif

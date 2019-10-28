@@ -1457,10 +1457,10 @@ static void Prj_PutIconToToggleProject (unsigned UniqueId,
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
    /***** Link to toggle on/off some fields of project *****/
-   fprintf (Gbl.F.Out,"<a href=\"\" title=\"%s\" class=\"%s\""
-                      " onclick=\"toggleProject('%u');return false;\" />",
-            Text,The_ClassFormInBox[Gbl.Prefs.Theme],
-            UniqueId);
+   HTM_A_Begin ("href=\"\" title=\"%s\" class=\"%s\""
+                " onclick=\"toggleProject('%u');return false;\"",
+               Text,The_ClassFormInBox[Gbl.Prefs.Theme],
+               UniqueId);
    Ico_PutIconTextLink (Icon,Text);
    HTM_A_End ();
   }
@@ -1601,8 +1601,8 @@ static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
 	 break;
      }
    if (PutLink)
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
-	       Dpt.WWW,ClassData);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s\"",
+	           Dpt.WWW,ClassData);
    fprintf (Gbl.F.Out,"%s",Dpt.FullName);
    if (PutLink)
       HTM_A_End ();
@@ -1777,7 +1777,7 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
 	 break;
      }
    if (PutLink)
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Prj->URL);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Prj->URL);
    fprintf (Gbl.F.Out,"%s",Prj->URL);
    if (PutLink)
       HTM_A_End ();

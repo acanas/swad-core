@@ -137,8 +137,8 @@ void Plg_ListPlugins (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT LM\" style=\"width:45px;\"");
-      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
-               URL,Plg->Name);
+      HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
+                   URL,Plg->Name);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s24x24.gif\" alt=\"%s\" title=\"%s\""
                          " class=\"ICO40x40\" />",
                Cfg_URL_ICON_PLUGINS_PUBLIC,Gbl.Plugins.Lst[NumPlg].Logo,
@@ -147,8 +147,8 @@ void Plg_ListPlugins (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
-               URL,Plg->Name);
+      HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
+                   URL,Plg->Name);
       fprintf (Gbl.F.Out,"%s",Plg->Name);
       HTM_A_End ();
       HTM_TD_End ();

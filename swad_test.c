@@ -5340,11 +5340,12 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%s %c)",
 		Txt_Expand,'a' + (char) NumOpt);
-      fprintf (Gbl.F.Out,"<a href=\"\" id=\"exp_%u\"",NumOpt);
-      if (DisplayRightColumn)	// Answer does not have content
-	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
-      fprintf (Gbl.F.Out," onclick=\"toggleAnswer('%u'); return false;\" />",
-	       NumOpt);
+      HTM_A_Begin ("href=\"\" id=\"exp_%u\"%s"
+	           " onclick=\"toggleAnswer('%u');return false;\"",
+                   NumOpt,
+		   DisplayRightColumn ?	" style=\"display:none;\"" :	// Answer does have content ==> Hide icon
+	                                "",
+	           NumOpt);
       fprintf (Gbl.F.Out,"<img src=\"%s/caret-right.svg\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />",
                Cfg_URL_ICON_PUBLIC,
@@ -5355,10 +5356,12 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       snprintf (Gbl.Title,sizeof (Gbl.Title),
 	        "%s %c)",
 		Txt_Contract,'a' + (char) NumOpt);
-      fprintf (Gbl.F.Out,"<a href=\"\" id=\"con_%u\"",NumOpt);
-      if (!DisplayRightColumn)	// Answer does not have content
-	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
-      fprintf (Gbl.F.Out," onclick=\"toggleAnswer(%u); return false;\" />",NumOpt);
+      HTM_A_Begin ("href=\"\" id=\"con_%u\"%s"
+	           " onclick=\"toggleAnswer(%u);return false;\"",
+		   NumOpt,
+                   DisplayRightColumn ? "" :
+	                                " style=\"display:none;\"",	// Answer does not have content ==> Hide icon
+                   NumOpt);
       fprintf (Gbl.F.Out,"<img src=\"%s/caret-down.svg\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />",
                Cfg_URL_ICON_PUBLIC,
@@ -5369,10 +5372,10 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
       /***** Right column: content of the answer *****/
       HTM_TD_Begin ("class=\"TEST_EDI_ANS_RIGHT_COL COLOR%u\"",Gbl.RowEvenOdd);
-      HTM_DIV_Begin ("id=\"ans_%u\"",NumOpt);
-      if (!DisplayRightColumn)	// Answer does not have content
-	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide column
-      fprintf (Gbl.F.Out,">");
+      HTM_DIV_Begin ("id=\"ans_%u\"%s",
+		     NumOpt,
+		     DisplayRightColumn ? "" :
+	                                  " style=\"display:none;\"");	// Answer does not have content ==> Hide column
 
       /* Answer text */
       fprintf (Gbl.F.Out,"<textarea name=\"AnsStr%u\""

@@ -928,8 +928,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">",
-			   Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+		  HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
+			       Cfg_URL_SWAD_CGI,CrsCod,ActCod);
 		  fprintf (Gbl.F.Out,"%s/?crs=%ld&amp;act=%ld",
 			   Cfg_URL_SWAD_CGI,CrsCod,ActCod);
 		  HTM_A_End ();
@@ -1038,8 +1038,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">",
-			   Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+		  HTM_A_Begin ("href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\"",
+			       Cfg_URL_SWAD_CGI,CrsCod,ActCod);
 		  fprintf (Gbl.F.Out,"%s/?crs=%ld&amp;act=%ld",
 			   Cfg_URL_SWAD_CGI,CrsCod,ActCod);
 		  HTM_A_End ();

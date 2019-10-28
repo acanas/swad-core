@@ -219,16 +219,15 @@ static void Crs_Configuration (bool PrintView)
    PutLink = !PrintView && Gbl.Hierarchy.Deg.WWW[0];
    HTM_DIV_Begin ("class=\"FRAME_TITLE FRAME_TITLE_BIG\"");
    if (PutLink)
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-	                 " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
-	       Gbl.Hierarchy.Deg.WWW,
-	       Gbl.Hierarchy.Deg.FullName);
+      HTM_A_Begin ("href=\"%s\" target=\"_blank\""
+	           " class=\"FRAME_TITLE_BIG\" title=\"%s\"",
+	           Gbl.Hierarchy.Deg.WWW,
+	           Gbl.Hierarchy.Deg.FullName);
    Log_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
                  Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
    if (PutLink)
       HTM_A_End ();
-   fprintf (Gbl.F.Out,"<br />%s",
-            Gbl.Hierarchy.Crs.FullName);
+   fprintf (Gbl.F.Out,"<br />%s",Gbl.Hierarchy.Crs.FullName);
    HTM_DIV_End ();
 
    /***** Begin table *****/
@@ -432,10 +431,10 @@ static void Crs_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s/%s?crs=%ld\" class=\"DAT\" target=\"_blank\">",
-            Cfg_URL_SWAD_CGI,
-            Lan_STR_LANG_ID[Gbl.Prefs.Language],
-            Gbl.Hierarchy.Crs.CrsCod);
+   HTM_A_Begin ("href=\"%s/%s?crs=%ld\" class=\"DAT\" target=\"_blank\"",
+                Cfg_URL_SWAD_CGI,
+                Lan_STR_LANG_ID[Gbl.Prefs.Language],
+                Gbl.Hierarchy.Crs.CrsCod);
    fprintf (Gbl.F.Out,"%s/%s?crs=%ld",
             Cfg_URL_SWAD_CGI,
             Lan_STR_LANG_ID[Gbl.Prefs.Language],
