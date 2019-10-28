@@ -3528,16 +3528,15 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
    if (BarWidth < 2)
       BarWidth = 2;
    fprintf (Gbl.F.Out,"<img src=\"%s/o1x1.png\" alt=\"%s\" title=\"%s\""
-                      " class=\"LT\" style=\"width:%upx; height:20px;\" />"
-	              "&nbsp;",
-      Cfg_URL_ICON_PUBLIC,
-      Gbl.Title,
-      Gbl.Title,
-      BarWidth);
+                      " class=\"LT\" style=\"width:%upx; height:20px;\" />",
+            Cfg_URL_ICON_PUBLIC,
+            Gbl.Title,
+            Gbl.Title,
+            BarWidth);
+   fprintf (Gbl.F.Out,"&nbsp;");
 
    /***** Write the number of users *****/
-   fprintf (Gbl.F.Out,"%s",
-            Gbl.Title);
+   fprintf (Gbl.F.Out,"%s",Gbl.Title);
 
    HTM_TD_End ();
   }

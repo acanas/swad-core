@@ -279,11 +279,10 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
 	        Report->Permalink,
 	        Txt_Report);
    fprintf (Gbl.F.Out,"<img src=\"%s/file-alt.svg\" alt=\"%s\""
-	              " class=\"ICO64x64\" /><br />"
-                      "%s",
+	              " class=\"ICO64x64\" />",
             Cfg_URL_ICON_PUBLIC,
-            Txt_Report,
-	    Report->FilenameReport);
+            Txt_Report);
+   fprintf (Gbl.F.Out,"<br />%s",Report->FilenameReport);
    HTM_A_End ();
    HTM_DIV_End ();
 

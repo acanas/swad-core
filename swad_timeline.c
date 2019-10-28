@@ -1427,14 +1427,13 @@ static void TL_PutLinkToViewOldPublications (void)
 	        The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<img id=\"get_old_timeline\""
 	              " src=\"%s/recycle16x16.gif\" alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />"
-		      "<img id=\"getting_old_timeline\""
+		      " class=\"ICO20x20\" />",
+	    Cfg_URL_ICON_PUBLIC,Txt_See_more,Txt_See_more);
+   fprintf (Gbl.F.Out,"<img id=\"getting_old_timeline\""
 		      " src=\"%s/working16x16.gif\" alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" style=\"display:none;\" />"				// Animated icon hidden
-		      "&nbsp;%s",
-	    Cfg_URL_ICON_PUBLIC,Txt_See_more,Txt_See_more,
-	    Cfg_URL_ICON_PUBLIC,Txt_See_more,Txt_See_more,
-	    Txt_See_more);
+		      " class=\"ICO20x20\" style=\"display:none;\" />",				// Animated icon hidden
+	    Cfg_URL_ICON_PUBLIC,Txt_See_more,Txt_See_more);
+   fprintf (Gbl.F.Out,"&nbsp;%s",Txt_See_more);
    HTM_A_End ();
    HTM_DIV_End ();
   }
@@ -2034,12 +2033,11 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
       Frm_LinkFormSubmitUnique (Txt_TIMELINE_NOTE[SocNot->NoteType],Class);
       fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"CONTEXT_ICO_x16\" />"
-	                 "&nbsp;%s",
+	                 " class=\"CONTEXT_ICO_x16\" />",
             Cfg_URL_ICON_PUBLIC,TL_Icons[SocNot->NoteType],
             Txt_TIMELINE_NOTE[SocNot->NoteType],
-            Txt_TIMELINE_NOTE[SocNot->NoteType],
             Txt_TIMELINE_NOTE[SocNot->NoteType]);
+      fprintf (Gbl.F.Out,"&nbsp;%s",Txt_TIMELINE_NOTE[SocNot->NoteType]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
 

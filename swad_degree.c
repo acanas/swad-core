@@ -2521,12 +2521,11 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	    case Hie_SYS:	// System
 	       fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.png\""
         	                  " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICO16x16\" />"
-                                  "&nbsp;%s",
+                                  " class=\"ICO16x16\" />",
                      Cfg_URL_ICON_PUBLIC,
                      Txt_all_degrees,
-                     Txt_all_degrees,
                      Txt_all_degrees);
+	       fprintf (Gbl.F.Out,"&nbsp;%s",Txt_all_degrees);
 	       break;
 	    case Hie_INS:	// Institution
 	       Ins.InsCod = Str_ConvertStrCodToLongCod (row[1]);

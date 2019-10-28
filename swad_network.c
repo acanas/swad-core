@@ -324,17 +324,17 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
-      fprintf (Gbl.F.Out,"<label for=\"URL%u\" class=\"%s\">"
-			 "<img src=\"%s/%s\""
+      fprintf (Gbl.F.Out,"<label for=\"URL%u\" class=\"%s\">",
+	       (unsigned) NumURL,The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
                          " class=\"CONTEXT_ICO_16x16\""
-			 " style=\"margin-right:6px;\" />"
-			 "%s:"
-			 "</label>",
-	       (unsigned) NumURL,The_ClassFormInBox[Gbl.Prefs.Theme],
+			 " style=\"margin-right:6px;\" />",
 	       Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
-	       Net_WebsAndSocialNetworksTitle[NumURL],
+	       Net_WebsAndSocialNetworksTitle[NumURL]);
+      fprintf (Gbl.F.Out,"%s:"
+			 "</label>",
 	       Net_WebsAndSocialNetworksTitle[NumURL]);
       HTM_TD_End ();
 
@@ -589,12 +589,11 @@ void Net_ShowWebAndSocialNetworksStats (void)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 			    " alt=\"%s\" title=\"%s\""
                             " class=\"CONTEXT_ICO_16x16\""
-			    " style=\"margin-right:6px;\" />"
-			    "%s",
+			    " style=\"margin-right:6px;\" />",
 		  Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
-		  Net_WebsAndSocialNetworksTitle[Web],
 		  Net_WebsAndSocialNetworksTitle[Web]);
+	 fprintf (Gbl.F.Out,"%s",Net_WebsAndSocialNetworksTitle[Web]);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");

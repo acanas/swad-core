@@ -597,11 +597,11 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		       NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
 	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO16x16\" />&nbsp;%s",
+                      " class=\"ICO16x16\" />);",
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_System,
-	    Txt_System,
 	    Txt_System);
+   fprintf (Gbl.F.Out,"&nbsp;%s",Txt_System);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
    HTM_LI_End ();
@@ -635,13 +635,13 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /* Country map */
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s.png\""
 	                 " alt=\"%s\" title=\"%s\""
-                         " class=\"ICO16x16\" />&nbsp;%s",
+                         " class=\"ICO16x16\" />);",
 	       Cfg_URL_ICON_COUNTRIES_PUBLIC,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
-	       Cty.Name[Gbl.Prefs.Language],
-               Cty.Name[Gbl.Prefs.Language]);
+	       Cty.Name[Gbl.Prefs.Language]);
+      fprintf (Gbl.F.Out,"&nbsp;%s",Cty.Name[Gbl.Prefs.Language]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_LI_End ();
@@ -777,12 +777,11 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
         	                                  ClassNormal,NULL);
 		  fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
 			             " alt=\"%s\" title=\"%s\""
-			             " class=\"ICO16x16\" />"
-			             "&nbsp;%s",
+			             " class=\"ICO16x16\" />",
 		           Cfg_URL_ICON_PUBLIC,
 		           Crs.ShrtName,
-		           Crs.FullName,
 		           Crs.FullName);
+		  fprintf (Gbl.F.Out,"&nbsp;%s",Crs.FullName);
 		  Frm_LinkFormEnd ();
 		  Frm_EndForm ();
 

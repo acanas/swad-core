@@ -598,46 +598,51 @@ static void Fig_WriteHeadHierarchy (void)
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"<img src=\"%s/globe.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_x16\" />"
-                      "<br />"
-                      "%s",
-            Cfg_URL_ICON_PUBLIC,Txt_Countries,Txt_Countries,Txt_Countries);
+                      " class=\"CONTEXT_ICO_x16\" />",
+            Cfg_URL_ICON_PUBLIC,
+	    Txt_Countries,
+	    Txt_Countries);
+   fprintf (Gbl.F.Out,"<br />%s",Txt_Countries);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"<img src=\"%s/university.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_x16\" />"
-                      "<br />"
-                      "%s",
-            Cfg_URL_ICON_PUBLIC,Txt_Institutions,Txt_Institutions,Txt_Institutions);
+                      " class=\"CONTEXT_ICO_x16\" />",
+	    Cfg_URL_ICON_PUBLIC,
+	    Txt_Institutions,
+	    Txt_Institutions);
+   fprintf (Gbl.F.Out,"<br />%s",Txt_Institutions);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"<img src=\"%s/building.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_x16\" />"
-                      "<br />"
-                      "%s",
-            Cfg_URL_ICON_PUBLIC,Txt_Centres,Txt_Centres,Txt_Centres);
+                      " class=\"CONTEXT_ICO_x16\" />",
+            Cfg_URL_ICON_PUBLIC,
+	    Txt_Centres,
+	    Txt_Centres);
+   fprintf (Gbl.F.Out,"<br />%s",Txt_Centres);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"<img src=\"%s/graduation-cap.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_x16\" />"
-                      "<br />"
-                      "%s",
-            Cfg_URL_ICON_PUBLIC,Txt_Degrees,Txt_Degrees,Txt_Degrees);
+                      " class=\"CONTEXT_ICO_x16\" />",
+            Cfg_URL_ICON_PUBLIC,
+	    Txt_Degrees,
+	    Txt_Degrees);
+   fprintf (Gbl.F.Out,"<br />%s",Txt_Degrees);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
    fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_x16\" />"
-                      "<br />"
-                      "%s",
-            Cfg_URL_ICON_PUBLIC,Txt_Courses,Txt_Courses,Txt_Courses);
+                      " class=\"CONTEXT_ICO_x16\" />",
+	    Cfg_URL_ICON_PUBLIC,
+	    Txt_Courses,
+	    Txt_Courses);
+   fprintf (Gbl.F.Out,"<br />%s",Txt_Courses);
    HTM_TH_End ();
 
    HTM_TR_End ();

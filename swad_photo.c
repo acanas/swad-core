@@ -900,14 +900,13 @@ static void Pho_UpdatePhoto2 (void)
       HTM_TD_Begin ("class=\"DAT CT\" style=\"width:33%%;\"");
       fprintf (Gbl.F.Out,"<img src=\"%s/%s_paso%u.jpg\""
                          " alt=\"%s\" title=\"%s\""
-                         " style=\"width:%upx; height:%upx;\" />"
-                         "<br />%s",
+                         " style=\"width:%upx; height:%upx;\" />",
                Cfg_URL_PHOTO_TMP_PUBLIC,
                Gbl.Usrs.FileNamePhoto,NumPhoto + 1,
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
-               Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT,
-               Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
+               Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT);
+      fprintf (Gbl.F.Out,"<br />%s",Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
       HTM_TD_End ();
      }
    HTM_TR_End ();

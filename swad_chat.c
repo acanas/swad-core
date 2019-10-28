@@ -132,12 +132,11 @@ void Cht_ShowListOfAvailableChatRooms (void)
    HTM_LI_Begin ("class=\"DAT\"");
    fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO16x16\" />"
-                      " %s",
+	              " class=\"ICO16x16\" />",
             Cfg_URL_ICON_PUBLIC,
             Txt_Chat_rooms,
-            Txt_Chat_rooms,
             Txt_Chat_rooms);
+   fprintf (Gbl.F.Out," %s",Txt_Chat_rooms);
    HTM_LI_End ();
 
    /***** Link to chat available for all the users *****/

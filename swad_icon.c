@@ -382,10 +382,9 @@ void Ico_PutIconTextLink (const char *Icon,const char *Text)
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_ICO_x16\" />"
-	              "&nbsp;%s",
-            Cfg_URL_ICON_PUBLIC,Icon,Text,Text,
-	    Text);
+	              " class=\"CONTEXT_ICO_x16\" />",
+            Cfg_URL_ICON_PUBLIC,Icon,Text,Text);
+   fprintf (Gbl.F.Out,"&nbsp;%s",Text);
    HTM_DIV_End ();
   }
 
@@ -421,14 +420,17 @@ void Ico_PutIconOff (const char *Icon,const char *Title)
 void Ico_PutCalculateIcon (const char *Title)
   {
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
+
    fprintf (Gbl.F.Out,"<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""	// TODO: change name and resolution to refresh64x64.png
 	              " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO_16x16\" />"
-		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""	// TODO: change name and resolution to refreshing64x64.gif
+		      " class=\"CONTEXT_ICO_16x16\" />",
+	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Title,Title);
+
+   fprintf (Gbl.F.Out,"<img id=\"updating_%d\" src=\"%s/working16x16.gif\""	// TODO: change name and resolution to refreshing64x64.gif
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"CONTEXT_ICO_16x16\" style=\"display:none;\" />",	// Animated icon hidden
-	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Title,Title,
 	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Title,Title);
+
    HTM_DIV_End ();
   }
 
@@ -440,16 +442,19 @@ void Ico_PutCalculateIcon (const char *Title)
 void Ico_PutCalculateIconWithText (const char *Text)
   {
    HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\" style=\"margin:0 6px 0 0; display:inline;\"");
+
    fprintf (Gbl.F.Out,"<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />"
-		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""
+		      " class=\"ICO20x20\" />",
+	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Text,Text);
+
+   fprintf (Gbl.F.Out,"<img id=\"updating_%d\" src=\"%s/working16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" style=\"display:none;\" />"	// Animated icon hidden
-		      "&nbsp;%s",
-	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Text,Text,
-	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Text,Text,
-	    Text);
+		      " class=\"ICO20x20\" style=\"display:none;\" />",	// Animated icon hidden
+	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Text,Text);
+
+   fprintf (Gbl.F.Out,"&nbsp;%s",Text);
+
    HTM_DIV_End ();
   }
 

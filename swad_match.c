@@ -2809,11 +2809,12 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
    HTM_TD_Begin ("class=\"MCH_SCO_NUM%s\"",Mch_GetClassBorder (NumRow));
    fprintf (Gbl.F.Out,"<img src=\"%s/score%u_1x1.png\""	// Background
 		      " alt=\"\" title=\"%u %s\" class=\"MCH_SCO_BAR\""
-		      " style=\"width:%u%%;\" />&nbsp;%u",
+		      " style=\"width:%u%%;\" />",
 	    Cfg_URL_ICON_PUBLIC,Color,
 	    NumUsrs,NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
 		                   Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN],
-	    BarWidth,NumUsrs);
+	    BarWidth);
+   fprintf (Gbl.F.Out,"&nbsp;%u",NumUsrs);
    HTM_TD_End ();
 
    HTM_TR_End ();

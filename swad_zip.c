@@ -573,15 +573,14 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                 URL,FileName);
    fprintf (Gbl.F.Out,"<img src=\"%s32x32/zip32x32.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO40x40\" />"
-                      "&nbsp;%s&nbsp;"
-		      "<img src=\"%s/download.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO40x40\" />",
+                      " class=\"ICO40x40\" />",
             CfG_URL_ICON_FILEXT_PUBLIC,
             Txt_ZIP_file,
-            Txt_ZIP_file,
-	    FileName,
+            Txt_ZIP_file);
+   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",FileName);
+   fprintf (Gbl.F.Out,"<img src=\"%s/download.svg\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICO40x40\" />",
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Download,
 	    Txt_Download);

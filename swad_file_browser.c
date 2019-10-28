@@ -3295,12 +3295,12 @@ static void Brw_FormToChangeCrsGrpZone (void)
          fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
                             " class=\"ICO25x25\""
-                            " style=\"margin-left:6px;\" />"
-                            "<label>"
-	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
+                            " style=\"margin-left:6px;\" />",
                   Cfg_URL_ICON_PUBLIC,
                   NumGrp < LstMyGrps.NumGrps - 1 ? "submid" :
-                	                           "subend",
+                	                           "subend");
+         fprintf (Gbl.F.Out,"<label>"
+	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
 	          GrpDat.GrpCod);
 	 if (IsGroupZone && GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -10050,12 +10050,13 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       Brw_PutIconFile (32,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
 
       /* Name of the file of marks, link end and form end */
-      fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
-			 "<img src=\"%s/grades32x32.gif\""
+      fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",FileNameToShow);
+      fprintf (Gbl.F.Out,"<img src=\"%s/grades32x32.gif\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICO40x40\" />",
-	       FileNameToShow,Cfg_URL_ICON_PUBLIC,
-	       Txt_Check_marks_in_the_file,Txt_Check_marks_in_the_file);
+	       Cfg_URL_ICON_PUBLIC,
+	       Txt_Check_marks_in_the_file,
+	       Txt_Check_marks_in_the_file);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
@@ -10068,11 +10069,10 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
 	           URL,Title);
       Brw_PutIconFile (32,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
-      fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
-			 "<img src=\"%s/download.svg\""
+      fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",FileNameToShow);
+      fprintf (Gbl.F.Out,"<img src=\"%s/download.svg\""
 			 " alt=\"%s\" title=\"%s\""
 			 " class=\"ICO40x40\" />",
-	       FileNameToShow,
 	       Cfg_URL_ICON_PUBLIC,
 	       Title,Title);
       HTM_A_End ();

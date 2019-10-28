@@ -1867,15 +1867,17 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
 
       HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
       if (BarWidth)
+	{
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x1.png\""	// Background
 	                    " alt=\"\" title=\"\""
                             " class=\"LT\""
-	                    " style=\"width:%upx; height:10px; padding-top:4px;\" />"
-	                    "&nbsp;",
+	                    " style=\"width:%upx; height:10px; padding-top:4px;\" />",
 		  Cfg_URL_ICON_PUBLIC,
 		  UsrDat.Roles.InCurrentCrs.Role == Rol_STD ? 'o' :	// Student
 			                                      'r',	// Non-editing teacher or teacher
 		  BarWidth);
+	 fprintf (Gbl.F.Out,"&nbsp;");
+	}
       Str_WriteFloatNumToFile (Gbl.F.Out,Hits.Num);
       fprintf (Gbl.F.Out,"&nbsp;");
       HTM_TD_End ();
@@ -3855,9 +3857,9 @@ static void Sta_DrawBarNumHits (char Color,
       fprintf (Gbl.F.Out,"<img src=\"%s/%c1x1.png\""	// Background
 	                 " alt=\"\" title=\"\""
                          " class=\"LM\""
-	                 " style=\"width:%upx; height:10px;\" />"
-                         "&nbsp;",
+	                 " style=\"width:%upx; height:10px;\" />",
 	       Cfg_URL_ICON_PUBLIC,Color,BarWidth);
+      fprintf (Gbl.F.Out,"&nbsp;");
 
       /***** Write the number of hits *****/
       Str_WriteFloatNumToFile (Gbl.F.Out,HitsNum);

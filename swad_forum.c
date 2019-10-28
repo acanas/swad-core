@@ -1245,17 +1245,16 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 	        Enabled ? Txt_FORUM_Post_X_allowed :
 			  Txt_FORUM_Post_X_banned,
 	        PstNum);
-      fprintf (Gbl.F.Out,"<span title=\"%s\">"
-			 "<img src=\"%s/%s\""
+      fprintf (Gbl.F.Out,"<span title=\"%s\">",Gbl.Title);	// TODO: Remove?
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO_HIDDEN ICO16x16\" />"
-			 "</span>",
-	       Gbl.Title,
+			 " class=\"ICO_HIDDEN ICO16x16\" />",
 	       Cfg_URL_ICON_PUBLIC,
 	       Enabled ? "eye.svg" :
 			 "eye-slash.svg",
 	       Gbl.Title,
 	       Gbl.Title);
+      fprintf (Gbl.F.Out,"</span>");				// TODO: Remove?
      }
 
    /***** Form to remove post *****/

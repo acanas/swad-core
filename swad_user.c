@@ -2607,17 +2607,17 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 
    /***** User's ID/nickname *****/
    HTM_DIV_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<label for=\"UsrId\">"
-                      "<img src=\"%s/user.svg\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_ICO_16x16\" />"
-	              "</label>"
-                      "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
+   fprintf (Gbl.F.Out,"<label for=\"UsrId\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/user.svg\" alt=\"%s\" title=\"%s\""
+	              " class=\"CONTEXT_ICO_16x16\" />",
+            Cfg_URL_ICON_PUBLIC,
+            Txt_User[Usr_SEX_UNKNOWN],
+            Txt_User[Usr_SEX_UNKNOWN]);
+   fprintf (Gbl.F.Out,"</label>");
+   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
                       " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
                       " value=\"%s\""
                       " autofocus=\"autofocus\" required=\"required\" />",
-            Cfg_URL_ICON_PUBLIC,
-            Txt_User[Usr_SEX_UNKNOWN],
-            Txt_User[Usr_SEX_UNKNOWN],
             Cns_MAX_CHARS_EMAIL_ADDRESS,
             Txt_nick_email_or_ID,
             Gbl.Usrs.Me.UsrIdLogin);
@@ -2625,15 +2625,15 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 
    /***** User's password *****/
    HTM_DIV_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<label for=\"UsrPwd\">"
-                      "<img src=\"%s/key.svg\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_ICO_16x16\" />"
-	              "</label>"
-		      "<input type=\"password\" id=\"UsrPwd\" name=\"UsrPwd\""
-		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />",
+   fprintf (Gbl.F.Out,"<label for=\"UsrPwd\">");
+   fprintf (Gbl.F.Out,"<img src=\"%s/key.svg\" alt=\"%s\" title=\"%s\""
+	              " class=\"CONTEXT_ICO_16x16\" />",
             Cfg_URL_ICON_PUBLIC,
             Txt_Password,
-            Txt_Password,
+            Txt_Password);
+   fprintf (Gbl.F.Out,"</label>");
+   fprintf (Gbl.F.Out,"<input type=\"password\" id=\"UsrPwd\" name=\"UsrPwd\""
+		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />",
             Pwd_MAX_CHARS_PLAIN_PASSWORD,
             Txt_password);
    HTM_DIV_End ();
@@ -6142,13 +6142,12 @@ static void Usr_FormToSelectUsrListType (void (*FuncParams) (void),
                                                         NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
-                      " %s",
+                      " class=\"ICO20x20\" />",
             Cfg_URL_ICON_PUBLIC,
             Usr_IconsClassPhotoOrList[ListType],
             Txt_USR_LIST_TYPES[ListType],
-            Txt_USR_LIST_TYPES[ListType],
             Txt_USR_LIST_TYPES[ListType]);
+   fprintf (Gbl.F.Out," %s",Txt_USR_LIST_TYPES[ListType]);
    Frm_LinkFormEnd ();
 
    /***** End form *****/
