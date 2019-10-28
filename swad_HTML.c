@@ -62,6 +62,7 @@ static unsigned HTM_TD_NestingLevel = 0;
 static unsigned HTM_DIV_NestingLevel = 0;
 static unsigned HTM_UL_NestingLevel = 0;
 static unsigned HTM_LI_NestingLevel = 0;
+static unsigned HTM_A_NestingLevel = 0;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -80,6 +81,8 @@ static void HTM_DIV_BeginWithoutAttr (void);
 
 static void HTM_UL_BeginWithoutAttr (void);
 static void HTM_LI_BeginWithoutAttr (void);
+
+static void HTM_A_BeginWithoutAttr (void);
 
 /*****************************************************************************/
 /******************************* Start/end table *****************************/
@@ -647,4 +650,56 @@ void HTM_LI_End (void)
    fprintf (Gbl.F.Out,"</li>");
 
    HTM_LI_NestingLevel--;
+  }
+
+/*****************************************************************************/
+/********************************** Anchors **********************************/
+/*****************************************************************************/
+
+void HTM_A_Begin (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 fprintf (Gbl.F.Out,"<a %s>",Attr);
+
+	 free ((void *) Attr);
+	}
+      else
+         HTM_A_BeginWithoutAttr ();
+     }
+   else
+      HTM_A_BeginWithoutAttr ();
+
+   HTM_A_NestingLevel++;
+  }
+
+static void HTM_A_BeginWithoutAttr (void)
+  {
+   fprintf (Gbl.F.Out,"<a>");
+  }
+
+void HTM_A_End (void)
+  {
+   if (HTM_A_NestingLevel == 0)	// No A open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened A.");
+
+   fprintf (Gbl.F.Out,"</a>");
+
+   HTM_A_NestingLevel--;
   }

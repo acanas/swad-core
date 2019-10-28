@@ -963,8 +963,10 @@ static void Mai_ListEmails (void)
 	       Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
 	    Str_Concat (StrAddresses,UsrDat.Email,
 			Mai_MAX_BYTES_STR_ADDR);
-	    fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">%s</a>",
-		     UsrDat.Email,Gbl.Hierarchy.Crs.FullName,UsrDat.Email);
+	    fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">",
+		     UsrDat.Email,Gbl.Hierarchy.Crs.FullName);
+	    fprintf (Gbl.F.Out,"%s",UsrDat.Email);
+	    HTM_A_End ();
 
 	    NumAcceptedUsrsWithEmail++;
 	   }
@@ -1002,7 +1004,7 @@ static void Mai_ListEmails (void)
 	    The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
    Ico_PutIconTextLink ("marker.svg",
 			Txt_Create_email_message);
-   fprintf (Gbl.F.Out,"</a>");
+   HTM_A_End ();
 
    Mnu_ContextMenuEnd ();
 

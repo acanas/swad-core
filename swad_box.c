@@ -175,7 +175,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
 	       Hlp_WIKI,HelpLink);
       Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
 		      "question.svg",Txt_Help);
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
      }
 
    if (Closable == Box_CLOSABLE)	// Icon to close the box
@@ -185,7 +185,7 @@ static void Box_StartBoxInternal (const char *Width,const char *Title,
 	       Gbl.Box.Ids[Gbl.Box.Nested]);
       Ico_PutDivIcon ("CONTEXT_OPT HLP_HIGHLIGHT",
 		      "close.svg",Txt_Close);
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
      }
 
    HTM_DIV_End ();

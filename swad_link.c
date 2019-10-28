@@ -197,12 +197,11 @@ static void Lnk_WriteListOfLinks (void)
       /* Write data of this link */
       HTM_LI_Begin ("class=\"INS_LNK\"");
       fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"INS_LNK\""
-			 " target=\"_blank\">"
-			 "%s"
-			 "</a>",
+			 " target=\"_blank\">",
 	       Gbl.Links.Lst[NumLnk].WWW,
-	       Gbl.Links.Lst[NumLnk].FullName,
-	       Gbl.Links.Lst[NumLnk].ShrtName);
+	       Gbl.Links.Lst[NumLnk].FullName);
+      fprintf (Gbl.F.Out,"%s",Gbl.Links.Lst[NumLnk].ShrtName);
+      HTM_A_End ();
       HTM_LI_End ();
      }
 

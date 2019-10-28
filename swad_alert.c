@@ -419,15 +419,14 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
    if (AlertClosable[AlertType])
      {
       HTM_DIV_Begin ("class=\"ALERT_CLOSE\"");
-      fprintf (Gbl.F.Out,"<a href=\"\""
-			 " onclick=\"toggleDisplay('%s');return false;\" />"
-			 "<img src=\"%s/close.svg\""
+      HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\" /",
+	           IdAlert);
+      fprintf (Gbl.F.Out,"<img src=\"%s/close.svg\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO16x16\" />"
-			 "</a>",
-	       IdAlert,
+			 " class=\"ICO16x16\" />",
 	       Cfg_URL_ICON_PUBLIC,
 	       Txt_Close,Txt_Close);
+      HTM_A_End ();
       HTM_DIV_End ();
      }
 

@@ -5343,12 +5343,13 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       fprintf (Gbl.F.Out,"<a href=\"\" id=\"exp_%u\"",NumOpt);
       if (DisplayRightColumn)	// Answer does not have content
 	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
-      fprintf (Gbl.F.Out," onclick=\"toggleAnswer('%u'); return false;\" />"
-                         "<img src=\"%s/caret-right.svg\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />"
-	                 "</a>",
-               NumOpt,Cfg_URL_ICON_PUBLIC,
+      fprintf (Gbl.F.Out," onclick=\"toggleAnswer('%u'); return false;\" />",
+	       NumOpt);
+      fprintf (Gbl.F.Out,"<img src=\"%s/caret-right.svg\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />",
+               Cfg_URL_ICON_PUBLIC,
 	       Gbl.Title,Gbl.Title);
+      HTM_A_End ();
 
       /* Icon to contract (hide the answer) */
       snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -5357,12 +5358,12 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       fprintf (Gbl.F.Out,"<a href=\"\" id=\"con_%u\"",NumOpt);
       if (!DisplayRightColumn)	// Answer does not have content
 	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
-      fprintf (Gbl.F.Out," onclick=\"toggleAnswer(%u); return false;\" />"
-                         "<img src=\"%s/caret-down.svg\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />"
-	                 "</a>",
-               NumOpt,Cfg_URL_ICON_PUBLIC,
+      fprintf (Gbl.F.Out," onclick=\"toggleAnswer(%u); return false;\" />",NumOpt);
+      fprintf (Gbl.F.Out,"<img src=\"%s/caret-down.svg\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />",
+               Cfg_URL_ICON_PUBLIC,
 	       Gbl.Title,Gbl.Title);
+      HTM_A_End ();
 
       HTM_TD_End ();
 

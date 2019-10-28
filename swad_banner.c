@@ -153,17 +153,17 @@ static void Ban_WriteListOfBanners (void)
      {
       /* Write data of this banner */
       HTM_LI_Begin (NULL);
-      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
-                         "<img src=\"%s/%s\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"BANNER\" />"
-                         "</a>",
+      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
                Gbl.Banners.Lst[NumBan].WWW,
-               Gbl.Banners.Lst[NumBan].FullName,
+               Gbl.Banners.Lst[NumBan].FullName);
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
+                         " alt=\"%s\" title=\"%s\""
+                         " class=\"BANNER\" />",
                Cfg_URL_BANNER_PUBLIC,
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShrtName,
                Gbl.Banners.Lst[NumBan].FullName);
+      HTM_A_End ();
       HTM_LI_End ();
      }
 

@@ -226,7 +226,7 @@ static void Crs_Configuration (bool PrintView)
    Log_DrawLogo (Hie_DEG,Gbl.Hierarchy.Deg.DegCod,
                  Gbl.Hierarchy.Deg.ShrtName,64,NULL,true);
    if (PutLink)
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
    fprintf (Gbl.F.Out,"<br />%s",
             Gbl.Hierarchy.Crs.FullName);
    HTM_DIV_End ();
@@ -432,14 +432,15 @@ static void Crs_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s/%s?crs=%ld\" class=\"DAT\" target=\"_blank\">"
-                      "%s/%s?crs=%ld</a>",
-            Cfg_URL_SWAD_CGI,
-            Lan_STR_LANG_ID[Gbl.Prefs.Language],
-            Gbl.Hierarchy.Crs.CrsCod,
+   fprintf (Gbl.F.Out,"<a href=\"%s/%s?crs=%ld\" class=\"DAT\" target=\"_blank\">",
             Cfg_URL_SWAD_CGI,
             Lan_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Hierarchy.Crs.CrsCod);
+   fprintf (Gbl.F.Out,"%s/%s?crs=%ld",
+            Cfg_URL_SWAD_CGI,
+            Lan_STR_LANG_ID[Gbl.Prefs.Language],
+            Gbl.Hierarchy.Crs.CrsCod);
+   HTM_A_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

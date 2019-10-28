@@ -1052,10 +1052,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
                Ins.WWW,StyleTitle);
    Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
-   fprintf (Gbl.F.Out,"<br />%s%s",
-            Ins.FullName,
-            TypeViewExamAnnouncement == Exa_PRINT_VIEW ? "</span>" :
- 	                                                 "</a>");
+   fprintf (Gbl.F.Out,"<br />%s",
+            Ins.FullName);
+   if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
+      fprintf (Gbl.F.Out,"</span>");
+   else
+      HTM_A_End ();
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -1067,7 +1069,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
                Gbl.Hierarchy.Deg.WWW,StyleTitle);
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.FullName);
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
    HTM_TD_End ();
    HTM_TR_End ();
 

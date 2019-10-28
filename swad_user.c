@@ -4135,7 +4135,7 @@ static void Usr_WriteUsrData (const char *BgColor,
 
    /***** End link *****/
    if (Link)
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
 
    /***** End container and table cell *****/
    HTM_DIV_End ();

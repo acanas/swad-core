@@ -1153,13 +1153,13 @@ static void Lay_ShowRightColumn (void)
       /***** SWADroid advertisement *****/
       HTM_DIV_Begin ("class=\"LEFT_RIGHT_CELL\"");
       fprintf (Gbl.F.Out,"<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
-			 " target=\"_blank\" title=\"%s\">"
-			 "<img src=\"%s/SWADroid120x200.png\""
+			 " target=\"_blank\" title=\"%s\">",
+	       Txt_If_you_have_an_Android_device_try_SWADroid);
+      fprintf (Gbl.F.Out,"<img src=\"%s/SWADroid120x200.png\""
 			 " alt=\"SWADroid\" title=\"SWADroid\""
-			 " style=\"width:150px; height:250px;\" />"
-			 "</a>",
-	       Txt_If_you_have_an_Android_device_try_SWADroid,
+			 " style=\"width:150px; height:250px;\" />",
 	       Cfg_URL_ICON_PUBLIC);
+      HTM_A_End ();
       HTM_DIV_End ();
      }
   }
@@ -1430,27 +1430,27 @@ static void Lay_WriteAboutZone (void)
    fprintf (Gbl.F.Out,"<address id=\"about_zone\" class=\"ABOUT\">");
 
    /***** Institution and centre hosting the platform *****/
-   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">"
-		      "<img src=\"%s/%s\""
+   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">",
+	    Cfg_ABOUT_URL);
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
 		      " style=\"width:%upx; height:%upx;\" />",
-	    Cfg_ABOUT_URL,
 	    Cfg_URL_ICON_PUBLIC,Cfg_ABOUT_LOGO,
 	    Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
 	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT);
    HTM_DIV_Begin (NULL);
    fprintf (Gbl.F.Out,"%s",Cfg_ABOUT_NAME);
    HTM_DIV_End ();
-   fprintf (Gbl.F.Out,"</a>");
+   HTM_A_End ();
 
    /***** Questions and problems *****/
    HTM_DIV_Begin (NULL);
    fprintf (Gbl.F.Out,"%s: "
 		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">"
-		      "%s"
-		      "</a>",
+		      "%s",
 	    Txt_Questions_and_problems,
 	    Cfg_PLATFORM_RESPONSIBLE_EMAIL,Cfg_PLATFORM_RESPONSIBLE_EMAIL);
+   HTM_A_End ();
    HTM_DIV_End ();
 
    /***** About and time to generate and send page *****/
@@ -1460,8 +1460,8 @@ static void Lay_WriteAboutZone (void)
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">",
 	    Cfg_ABOUT_SWAD_URL);
    fprintf (Gbl.F.Out,Txt_About_X,Log_PLATFORM_VERSION);
-   fprintf (Gbl.F.Out,"</a>"
-	              "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+   HTM_A_End ();
+   fprintf (Gbl.F.Out,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 
    /* Time to generate and send page */
    Sta_WriteTimeToGenerateAndSendPage ();
@@ -1607,7 +1607,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Ins.WWW);
       Log_DrawLogo (Hie_INS,Ins.InsCod,Ins.ShrtName,40,NULL,true);
       if (!PrintView)
-        fprintf (Gbl.F.Out,"</a>");
+         HTM_A_End ();
      }
    HTM_TD_End ();
 
@@ -1621,7 +1621,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
                   Ins.WWW);
       fprintf (Gbl.F.Out,"%s",Ins.FullName);
       if (!PrintView)
-         fprintf (Gbl.F.Out,"</a>");
+         HTM_A_End ();
      }
    if (DegCod > 0)
      {
@@ -1633,7 +1633,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
                   Deg.WWW);
       fprintf (Gbl.F.Out,"%s",Deg.FullName);
       if (!PrintView)
-         fprintf (Gbl.F.Out,"</a>");
+         HTM_A_End ();
      }
    fprintf (Gbl.F.Out,"<br />");
    if (CrsCod > 0)
@@ -1657,7 +1657,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
                   Deg.WWW);
       Log_DrawLogo (Hie_DEG,Deg.DegCod,Deg.ShrtName,40,NULL,true);
       if (!PrintView)
-         fprintf (Gbl.F.Out,"</a>");
+         HTM_A_End ();
      }
    HTM_TD_End ();
 
@@ -1688,15 +1688,15 @@ void Lay_AdvertisementMobile (void)
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("class=\"DAT CM\"");
       fprintf (Gbl.F.Out,"<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
-	                 " class=\"DAT\">"
-                         "%s<br /><br />"
+	                 " class=\"DAT\">");
+      fprintf (Gbl.F.Out,"%s<br /><br />"
                          "<img src=\"%s/SWADroid200x300.png\""
                          " alt=\"SWADroid\" title=\"%s\""
-                         " style=\"width:250px; height:375px;\" />"
-                         "</a>",
+                         " style=\"width:250px; height:375px;\" />",
                Txt_Stay_connected_with_SWADroid,
                Cfg_URL_ICON_PUBLIC,
                Txt_Stay_connected_with_SWADroid);
+      HTM_A_End ();
       HTM_TD_End ();
       HTM_TR_End ();
 

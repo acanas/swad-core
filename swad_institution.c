@@ -345,7 +345,7 @@ static void Ins_Configuration (bool PrintView)
 		 Gbl.Hierarchy.Ins.ShrtName,64,NULL,true);
    fprintf (Gbl.F.Out,"<br />%s",Gbl.Hierarchy.Ins.FullName);
    if (PutLink)
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
    HTM_DIV_End ();
 
    /***** Begin table *****/
@@ -488,10 +488,10 @@ static void Ins_Configuration (bool PrintView)
      {
       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
-			 "%s"
-			 "</a>",
+			 "%s",
 	       Gbl.Hierarchy.Ins.WWW,
 	       Gbl.Hierarchy.Ins.WWW);
+      HTM_A_End ();
       HTM_DIV_End ();
      }
    HTM_TD_End ();
@@ -507,14 +507,14 @@ static void Ins_Configuration (bool PrintView)
 
    HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<a href=\"%s/%s?ins=%ld\" class=\"DAT\" target=\"_blank\">"
-		      "%s/%s?ins=%ld"
-		      "</a>",
+		      "%s/%s?ins=%ld",
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Ins.InsCod,
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Ins.InsCod);
+   HTM_A_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1558,10 +1558,9 @@ static void Ins_ListInstitutionsForEdition (void)
                    Cns_MAX_BYTES_WWW);
          HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-                            " class=\"DAT\" title=\"%s\">"
-                            "%s"
-                            "</a>",
-                  Ins->WWW,Ins->WWW,WWW);
+                            " class=\"DAT\" title=\"%s\">",Ins->WWW,Ins->WWW);
+         fprintf (Gbl.F.Out,"%s",WWW);
+         HTM_A_End ();
          HTM_DIV_End ();
 	}
       HTM_TD_End ();

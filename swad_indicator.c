@@ -927,13 +927,12 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 		  fprintf (Gbl.F.Out,"%s",row[3]);
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">"
-				     "%s/?crs=%ld&amp;act=%ld"
-				     "</a>",
-			   Cfg_URL_SWAD_CGI,CrsCod,ActCod,
+		  HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
+		  fprintf (Gbl.F.Out,"<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">",
 			   Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+		  fprintf (Gbl.F.Out,"%s/?crs=%ld&amp;act=%ld",
+			   Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+		  HTM_A_End ();
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",
@@ -1038,13 +1037,12 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 		  fprintf (Gbl.F.Out,"%s",row[3]);
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",
-			        Gbl.RowEvenOdd);
-		  fprintf (Gbl.F.Out,"<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">"
-				     "%s/?crs=%ld&amp;act=%ld"
-				     "</a>",
-			   Cfg_URL_SWAD_CGI,CrsCod,ActCod,
+		  HTM_TD_Begin ("class=\"DAT_SMALL LM COLOR%u\"",Gbl.RowEvenOdd);
+		  fprintf (Gbl.F.Out,"<a href=\"%s/?crs=%ld&amp;act=%ld\" target=\"_blank\">",
 			   Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+		  fprintf (Gbl.F.Out,"%s/?crs=%ld&amp;act=%ld",
+			   Cfg_URL_SWAD_CGI,CrsCod,ActCod);
+		  HTM_A_End ();
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"%s RM COLOR%u\"",

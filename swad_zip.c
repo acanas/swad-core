@@ -569,16 +569,15 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    /***** Link to download the file *****/
    HTM_TR_Begin (NULL);
    HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\">"
-                      "<img src=\"%s32x32/zip32x32.gif\""
+   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\">",
+            URL,FileName);
+   fprintf (Gbl.F.Out,"<img src=\"%s32x32/zip32x32.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO40x40\" />"
                       "&nbsp;%s&nbsp;"
 		      "<img src=\"%s/download.svg\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO40x40\" />"
-		      "</a>",
-            URL,FileName,
+		      " class=\"ICO40x40\" />",
             CfG_URL_ICON_FILEXT_PUBLIC,
             Txt_ZIP_file,
             Txt_ZIP_file,
@@ -586,6 +585,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 	    Cfg_URL_ICON_PUBLIC,
 	    Txt_Download,
 	    Txt_Download);
+   HTM_A_End ();
    HTM_TD_End ();
    HTM_TR_End ();
 
@@ -597,10 +597,10 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">"
-	              "%s"
-	              "</a>",
-	    URL,FileName,FileName);
+   fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">",
+	    URL,FileName);
+   fprintf (Gbl.F.Out,"%s",FileName);
+   HTM_A_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

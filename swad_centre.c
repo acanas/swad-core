@@ -343,7 +343,7 @@ static void Ctr_Configuration (bool PrintView)
 		 Gbl.Hierarchy.Ctr.ShrtName,64,NULL,true);
    fprintf (Gbl.F.Out,"<br />%s",Gbl.Hierarchy.Ctr.FullName);
    if (PutLink)
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
    HTM_DIV_End ();
 
    /***** Centre photo *****/
@@ -369,7 +369,7 @@ static void Ctr_Configuration (bool PrintView)
 	       PrintView ? "CENTRE_PHOTO_PRINT" :
 			   "CENTRE_PHOTO_SHOW");
       if (PutLink)
-	 fprintf (Gbl.F.Out,"</a>");
+	 HTM_A_End ();
       HTM_DIV_End ();
 
       /* Photo attribution */
@@ -588,11 +588,10 @@ static void Ctr_Configuration (bool PrintView)
    else	// I can not change centre WWW
      {
       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
-			 "%s"
-			 "</a>",
-	       Gbl.Hierarchy.Ctr.WWW,
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">",
 	       Gbl.Hierarchy.Ctr.WWW);
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Ctr.WWW);
+      HTM_A_End ();
       HTM_DIV_End ();
      }
    HTM_TD_End ();
@@ -607,15 +606,15 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\">"
-		      "%s/%s?ctr=%ld"
-		      "</a>",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Hierarchy.Ctr.CtrCod,
+   fprintf (Gbl.F.Out,"<a href=\"%s/%s?ctr=%ld\" class=\"DAT\" target=\"_blank\">",
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Ctr.CtrCod);
+   fprintf (Gbl.F.Out,"%s/%s?ctr=%ld",
+	    Cfg_URL_SWAD_CGI,
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Hierarchy.Ctr.CtrCod);
+   HTM_A_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1608,10 +1607,9 @@ static void Ctr_ListCentresForEdition (void)
                    Cns_MAX_BYTES_WWW);
          HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-                            " class=\"DAT\" title=\"%s\">"
-                            "%s"
-                            "</a>",
-                  Ctr->WWW,Ctr->WWW,WWW);
+                            " class=\"DAT\" title=\"%s\">",Ctr->WWW,Ctr->WWW);
+         fprintf (Gbl.F.Out,"%s",WWW);
+         HTM_A_End ();
          HTM_DIV_End ();
 	}
       HTM_TD_End ();

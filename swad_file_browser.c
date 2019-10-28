@@ -3406,10 +3406,13 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
    /***** Show user's email *****/
    if (UsrDat->Email[0])
+     {
       fprintf (Gbl.F.Out,"<br />"
 	                 "<a href=\"mailto:%s\" target=\"_blank\""
-	                 " class=\"AUTHOR_TXT\">%s</a>",
+	                 " class=\"AUTHOR_TXT\">%s",
 	      UsrDat->Email,UsrDat->Email);
+      HTM_A_End ();
+     }
    Frm_EndForm ();
 
    HTM_DIV_End ();
@@ -10069,11 +10072,11 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
 			 "<img src=\"%s/download.svg\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO40x40\" />"
-			 "</a>",
+			 " class=\"ICO40x40\" />",
 	       FileNameToShow,
 	       Cfg_URL_ICON_PUBLIC,
 	       Title,Title);
+      HTM_A_End ();
      }
   }
 
@@ -10112,11 +10115,13 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
       Frm_EndForm ();
      }
    else
+     {
       /* Put anchor and filename */
-      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">"
-	                 "%s"
-	                 "</a>",
-	       URL,FileNameToShow,FileNameToShow);
+      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"DAT\" title=\"%s\" target=\"_blank\">",
+	       URL,FileNameToShow);
+      fprintf (Gbl.F.Out,"%s",FileNameToShow);
+      HTM_A_End ();
+     }
   }
 
 /*****************************************************************************/

@@ -1052,7 +1052,7 @@ static void Inf_ShowPage (const char *URL)
 	    URL,The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
    Ico_PutIconTextLink ("expand-arrows-alt.svg",
 		        Txt_View_in_a_new_window);
-   fprintf (Gbl.F.Out,"</a>");
+   HTM_A_End ();
 
    /***** End box *****/
    Box_BoxEnd ();

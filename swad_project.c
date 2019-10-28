@@ -1462,7 +1462,7 @@ static void Prj_PutIconToToggleProject (unsigned UniqueId,
             Text,The_ClassFormInBox[Gbl.Prefs.Theme],
             UniqueId);
    Ico_PutIconTextLink (Icon,Text);
-   fprintf (Gbl.F.Out,"</a>");
+   HTM_A_End ();
   }
 
 /*****************************************************************************/
@@ -1601,12 +1601,11 @@ static void Prj_ShowOneProjectDepartment (const struct Project *Prj,
 	 break;
      }
    if (PutLink)
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-			 " class=\"%s\">",
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
 	       Dpt.WWW,ClassData);
    fprintf (Gbl.F.Out,"%s",Dpt.FullName);
    if (PutLink)
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
    HTM_TD_End ();
    HTM_TR_End ();
   }
@@ -1781,7 +1780,7 @@ static void Prj_ShowOneProjectURL (const struct Project *Prj,
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Prj->URL);
    fprintf (Gbl.F.Out,"%s",Prj->URL);
    if (PutLink)
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

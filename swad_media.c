@@ -392,14 +392,14 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    /***** Icon 'clip' *****/
    HTM_DIV_Begin ("id=\"%s_med_ico\"",Id);		// <id>_med_ico
    fprintf (Gbl.F.Out,"<a href=\"\""
-                      " onclick=\"mediaActivateMediaUploader('%s');return false;\">"
-		      "<img src=\"%s/paperclip.svg\""
+                      " onclick=\"mediaActivateMediaUploader('%s');return false;\">",
+            Id);
+   fprintf (Gbl.F.Out,"<img src=\"%s/paperclip.svg\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO_HIGHLIGHT ICOx16\" />"
-                      "</a>",
-            Id,
+	              " class=\"ICO_HIGHLIGHT ICOx16\" />",
 	    Cfg_URL_ICON_PUBLIC,
             Txt_Multimedia,Txt_Multimedia);
+   HTM_A_End ();
    HTM_DIV_End ();						// <id>_med_ico
 
    /***** Start media uploader *****/
@@ -490,13 +490,13 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
    /***** Icon to activate form in media uploader *****/
    HTM_DIV_Begin ("id=\"%s_%s\" class=\"PREF_OFF\"",		// <id>_IconSuffix
                   UniqueId,MediaUploader->IconSuffix);
-   fprintf (Gbl.F.Out,"<a href=\"\" onclick=\"%s('%s');return false;\">"
-                      "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-                      " class=\"ICO_HIGHLIGHT ICOx16\" />"
-                      "</a>",
-	    MediaUploader->FunctionName,UniqueId,
+   fprintf (Gbl.F.Out,"<a href=\"\" onclick=\"%s('%s');return false;\">",
+	    MediaUploader->FunctionName,UniqueId);
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
+                      " class=\"ICO_HIGHLIGHT ICOx16\" />",
             Cfg_URL_ICON_PUBLIC,MediaUploader->Icon,
 	    MediaUploader->Title,MediaUploader->Title);
+   HTM_A_End ();
    HTM_DIV_End ();						// <id>_IconSuffix
   }
 
@@ -1509,7 +1509,7 @@ void Med_ShowMedia (struct Media *Media,
 
 	 /* End optional link to external URL */
 	 if (PutLink)
-	    fprintf (Gbl.F.Out,"</a>");
+	    HTM_A_End ();
 	 break;
       case Med_YOUTUBE:
 	 /***** Show embed YouTube video *****/

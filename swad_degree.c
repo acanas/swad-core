@@ -332,7 +332,7 @@ static void Deg_Configuration (bool PrintView)
    fprintf (Gbl.F.Out,"<br />%s",
 	    Gbl.Hierarchy.Deg.FullName);
    if (PutLink)
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
    HTM_DIV_End ();
 
    /***** Begin table *****/
@@ -473,11 +473,10 @@ static void Deg_Configuration (bool PrintView)
    else	// I can not change degree WWW
      {
       HTM_DIV_Begin ("class=\"EXTERNAL_WWW_LONG\"");
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
-			 "%s"
-			 "</a>",
-	       Gbl.Hierarchy.Deg.WWW,
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">",
 	       Gbl.Hierarchy.Deg.WWW);
+      fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Deg.WWW);
+      HTM_A_End ();
       HTM_DIV_End ();
      }
    HTM_TD_End ();
@@ -491,15 +490,15 @@ static void Deg_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\">"
-		      "%s/%s?deg=%ld"
-		      "</a>",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Hierarchy.Deg.DegCod,
+   fprintf (Gbl.F.Out,"<a href=\"%s/%s?deg=%ld\" class=\"DAT\" target=\"_blank\">",
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Deg.DegCod);
+   fprintf (Gbl.F.Out,"%s/%s?deg=%ld",
+	    Cfg_URL_SWAD_CGI,
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Hierarchy.Deg.DegCod);
+   HTM_A_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -837,10 +836,9 @@ static void Deg_ListDegreesForEdition (void)
                    Cns_MAX_BYTES_WWW);
          HTM_DIV_Begin ("class=\"EXTERNAL_WWW_SHORT\"");
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-                            " class=\"DAT\" title=\"%s\">"
-                            "%s"
-                            "</a>",
-                  Deg->WWW,Deg->WWW,WWW);
+                            " class=\"DAT\" title=\"%s\">",Deg->WWW,Deg->WWW);
+         fprintf (Gbl.F.Out,"%s",WWW);
+         HTM_A_End ();
          HTM_DIV_End ();
 	}
       HTM_TD_End ();

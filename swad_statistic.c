@@ -3314,18 +3314,18 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
 	 Lay_ShowErrorAndExit ("Wrong banner code.");
       Ban_GetDataOfBannerByCod (&Ban);
       HTM_TD_Begin ("class=\"LOG LT\"");
-      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
-                         "<img src=\"%s/%s\""
+      fprintf (Gbl.F.Out,"<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">",
+               Ban.WWW,
+               Ban.FullName);
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER_SMALL\""
-                         " style=\"margin:0 10px 5px 0;\" />"
-                         "</a>",
-               Ban.WWW,
-               Ban.FullName,
+                         " style=\"margin:0 10px 5px 0;\" />",
                Cfg_URL_BANNER_PUBLIC,
                Ban.Img,
                Ban.ShrtName,
                Ban.FullName);
+      HTM_A_End ();
 
       /* Draw bar proportional to number of clicks */
       NumClicks = Str_GetFloatNumFromStr (row[1]);

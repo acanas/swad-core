@@ -151,11 +151,10 @@ void Dpt_SeeDepts (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
-			 "%s"
-			 "</a>",
-	       Gbl.Dpts.Lst[NumDpt].WWW,
-	       Gbl.Dpts.Lst[NumDpt].FullName);
+      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\">",
+	       Gbl.Dpts.Lst[NumDpt].WWW);
+      fprintf (Gbl.F.Out,"%s",Gbl.Dpts.Lst[NumDpt].FullName);
+      HTM_A_End ();
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");

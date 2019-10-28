@@ -472,12 +472,12 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	 HTM_DIV_Begin ("class=\"CM\"");
 	 fprintf (Gbl.F.Out,"<a href=\"");
 	 RSS_WriteRSSLink (Gbl.F.Out,Gbl.Hierarchy.Crs.CrsCod);
-	 fprintf (Gbl.F.Out,"\" target=\"_blank\">"
-			    "<img src=\"%s/rss-square.svg\""
+	 fprintf (Gbl.F.Out,"\" target=\"_blank\">");
+	 fprintf (Gbl.F.Out,"<img src=\"%s/rss-square.svg\""
 			    " alt=\"RSS\" title=\"RSS\""
-			    " class=\"ICO16x16\" />"
-			    "</a>",
+			    " class=\"ICO16x16\" />",
 		  Cfg_URL_ICON_PUBLIC);
+	 HTM_A_End ();
 	 HTM_DIV_End ();
 	 break;
       case Not_LIST_FULL_NOTICES:

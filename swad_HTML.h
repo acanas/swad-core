@@ -80,4 +80,7 @@ void HTM_UL_End (void);
 void HTM_LI_Begin (const char *fmt,...);
 void HTM_LI_End (void);
 
+void HTM_A_Begin (const char *fmt,...);
+void HTM_A_End (void);
+
 #endif

@@ -271,7 +271,7 @@ static void Cty_Configuration (bool PrintView)
 	       Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    if (PutLink)
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
    HTM_DIV_End ();
 
    /***** Country map (and link to WWW if exists) *****/
@@ -288,7 +288,7 @@ static void Cty_Configuration (bool PrintView)
       Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,PrintView ? "COUNTRY_MAP_PRINT" :
 							  "COUNTRY_MAP_SHOW");
       if (PutLink)
-	 fprintf (Gbl.F.Out,"</a>");
+	 HTM_A_End ();
       HTM_DIV_End ();
 
       /* Map attribution */
@@ -333,7 +333,7 @@ static void Cty_Configuration (bool PrintView)
 	       Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language]);
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Cty.Name[Gbl.Prefs.Language]);
    if (!PrintView && Gbl.Hierarchy.Cty.WWW[Gbl.Prefs.Language][0])
-      fprintf (Gbl.F.Out,"</a>");
+      HTM_A_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -346,14 +346,15 @@ static void Cty_Configuration (bool PrintView)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"<a href=\"%s/%s?cty=%ld\" class=\"DAT\" target=\"_blank\">"
-		      "%s/%s?cty=%ld</a>",
-	    Cfg_URL_SWAD_CGI,
-	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Hierarchy.Cty.CtyCod,
+   fprintf (Gbl.F.Out,"<a href=\"%s/%s?cty=%ld\" class=\"DAT\" target=\"_blank\">",
 	    Cfg_URL_SWAD_CGI,
 	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Hierarchy.Cty.CtyCod);
+   fprintf (Gbl.F.Out,"%s/%s?cty=%ld",
+	    Cfg_URL_SWAD_CGI,
+	    Lan_STR_LANG_ID[Gbl.Prefs.Language],
+	    Gbl.Hierarchy.Cty.CtyCod);
+   HTM_A_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -826,16 +827,16 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    /***** Draw country map *****/
    Cty_DrawCountryMap (Cty,ClassMap);
 
-   /***** Write country name and end link *****/
+   /***** Write country name *****/
    Str_Copy (CountryName,Cty->Name[Gbl.Prefs.Language],
              Cty_MAX_BYTES_NAME);
-   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;(%s)"
-	              "</a>",
-	    CountryName,
-	    Cty->Alpha2);
-   HTM_DIV_End ();
+   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;(%s)",CountryName,Cty->Alpha2);
+
+   /***** End link *****/
+   Frm_LinkFormEnd ();
 
    /***** End form *****/
+   HTM_DIV_End ();
    Frm_EndForm ();
   }
 

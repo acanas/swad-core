@@ -265,7 +265,7 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
             The_ClassFormOutBoxBold[Gbl.Prefs.Theme]);
    Ico_PutIconTextLink ("file.svg",
 			Txt_XML_file);
-   fprintf (Gbl.F.Out,"</a>");
+   HTM_A_End ();
   }
 
 /*****************************************************************************/
