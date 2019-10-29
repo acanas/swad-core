@@ -416,11 +416,7 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    switch (Gbl.Hierarchy.Level)
      {
       case Hie_SYS:	// System
-	 fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.png\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO40x40 TOP_LOGO\" />",
-		  Cfg_URL_ICON_PUBLIC,
-		  Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME);
+	 Ico_PutIcon ("swad64x64.png",Cfg_PLATFORM_FULL_NAME,"ICO40x40 TOP_LOGO");
          break;
       case Hie_CTY:	// Country
          Cty_DrawCountryMap (&Gbl.Hierarchy.Cty,"COUNTRY_MAP_TITLE");

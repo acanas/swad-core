@@ -2498,21 +2498,26 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
      }
 
    /***** Show photo *****/
-   fprintf (Gbl.F.Out,"<img src=\"");
    if (PhotoURL[0])
      {
-      fprintf (Gbl.F.Out,"%s\"",PhotoURL);
+      fprintf (Gbl.F.Out,"<img src=\"%s\"",PhotoURL);
       if (PhotoCaption[0])
 	 fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s');\""
 	                    " onmouseout=\"noZoom();\"",
 		  PhotoURL,IdCaption);
+      fprintf (Gbl.F.Out," alt=\"%s\""
+			 " style=\"width:%upx; height:%upx;\" />",
+	       Deg->ShrtName,
+	       PhotoWidth,PhotoHeight);
      }
    else
-      fprintf (Gbl.F.Out,"%s/usr_bl.jpg\"",Cfg_URL_ICON_PUBLIC);
-   fprintf (Gbl.F.Out," alt=\"%s\""
-	              " style=\"width:%upx; height:%upx;\" />",
-            Deg->ShrtName,
-            PhotoWidth,PhotoHeight);
+     {
+      fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\" alt=\"%s\""
+			 " style=\"width:%upx; height:%upx;\" />",
+	       Cfg_URL_ICON_PUBLIC,
+	       Deg->ShrtName,
+	       PhotoWidth,PhotoHeight);
+     }
 
    /***** Caption *****/
    HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");

@@ -1334,11 +1334,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),
 	           Txt_Email_X_confirmed,
 		   row[0]);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/check-circle.svg\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO16x16\" />",
-		  Cfg_URL_ICON_PUBLIC,
-		  Gbl.Title,Gbl.Title);
+	 Ico_PutIcon ("check-circle.svg",Gbl.Title,"ICO16x16");
 	}
 
       /* Form to change user's email */

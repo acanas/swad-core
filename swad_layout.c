@@ -1714,21 +1714,15 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
    for (i = 1;
 	i < Level;
 	i++)
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
-	                 " alt=\"\" title=\"\""
-                         " class=\"ICO25x25\" />",
-		  Cfg_URL_ICON_PUBLIC,
-		  IsLastItemInLevel[i] ? "tr" :
-		                         "subleft");
+      Ico_PutIcon (IsLastItemInLevel[i] ? "tr20x20.gif" :
+		                          "subleft20x20.gif",
+		   "","ICO25x25");
 
    /***** Level *****/
    if (Level)
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
-			 " alt=\"\" title=\"\""
-			 " class=\"ICO25x25\" />",
-	       Cfg_URL_ICON_PUBLIC,
-	       IsLastItemInLevel[Level] ? "subend" :
-					  "submid");
+      Ico_PutIcon (IsLastItemInLevel[Level] ? "subend20x20.gif" :
+					      "submid20x20.gif",
+		   "","ICO25x25");
   }
 
 /*****************************************************************************/

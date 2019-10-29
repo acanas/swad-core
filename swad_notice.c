@@ -473,10 +473,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
 	 HTM_DIV_Begin ("class=\"CM\"");
 	 RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Crs.CrsCod);
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",RSSLink);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/rss-square.svg\""
-			    " alt=\"RSS\" title=\"RSS\""
-			    " class=\"ICO16x16\" />",
-		  Cfg_URL_ICON_PUBLIC);
+	 Ico_PutIcon ("rss-square.svg","RSS","ICO16x16");
 	 HTM_A_End ();
 	 HTM_DIV_End ();
 	 break;

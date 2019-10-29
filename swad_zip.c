@@ -578,12 +578,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
             Txt_ZIP_file,
             Txt_ZIP_file);
    fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",FileName);
-   fprintf (Gbl.F.Out,"<img src=\"%s/download.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO40x40\" />",
-	    Cfg_URL_ICON_PUBLIC,
-	    Txt_Download,
-	    Txt_Download);
+   Ico_PutIcon ("download.svg",Txt_Download,"ICO40x40");
    HTM_A_End ();
    HTM_TD_End ();
    HTM_TR_End ();

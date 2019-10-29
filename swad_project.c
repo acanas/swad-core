@@ -1443,8 +1443,7 @@ static bool Prj_CheckIfPrjIsFaulty (long PrjCod,struct Prj_Faults *Faults)
 
 static void Prj_PutWarningIcon (void)
   {
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"\" class=\"ICO16x16\" />",
-	    Cfg_URL_ICON_PUBLIC,"warning64x64.gif");
+   Ico_PutIcon ("warning64x64.gif","","ICO16x16");
   }
 
 /*****************************************************************************/

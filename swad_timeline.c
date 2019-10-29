@@ -2031,12 +2031,7 @@ static void TL_PutFormGoToAction (const struct TL_Note *SocNot)
 	        "%s ICO_HIGHLIGHT",
 		The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
       Frm_LinkFormSubmitUnique (Txt_TIMELINE_NOTE[SocNot->NoteType],Class);
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"CONTEXT_ICO_x16\" />",
-            Cfg_URL_ICON_PUBLIC,TL_Icons[SocNot->NoteType],
-            Txt_TIMELINE_NOTE[SocNot->NoteType],
-            Txt_TIMELINE_NOTE[SocNot->NoteType]);
+      Ico_PutIcon (TL_Icons[SocNot->NoteType],Txt_TIMELINE_NOTE[SocNot->NoteType],"CONTEXT_ICO_x16");
       fprintf (Gbl.F.Out,"&nbsp;%s",Txt_TIMELINE_NOTE[SocNot->NoteType]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
@@ -2502,10 +2497,7 @@ static void TL_PutIconToToggleCommentNote (const char UniqueId[Frm_MAX_BYTES_ID 
    HTM_DIV_Begin ("id=\"%s_ico\" class=\"TL_ICO_COM_OFF\"",UniqueId);
    HTM_A_Begin ("href=\"\" onclick=\"toggleNewComment ('%s');return false;\"",
                 UniqueId);
-   fprintf (Gbl.F.Out,"<img src=\"%s/edit.svg\" alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_16x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-            Txt_Comment,Txt_Comment);
+   Ico_PutIcon ("edit.svg",Txt_Comment,"CONTEXT_ICO_16x16");
    HTM_A_End ();
    HTM_DIV_End ();
   }
@@ -2520,11 +2512,7 @@ static void TL_PutIconCommentDisabled (void)
 
    /***** Disabled icon to comment a note *****/
    HTM_DIV_Begin ("class=\"TL_ICO_COM_OFF TL_ICO_DISABLED\"");
-   fprintf (Gbl.F.Out,"<img src=\"%s/edit.svg\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO16x16\" />",
-	    Cfg_URL_ICON_PUBLIC,
-	    Txt_Comment,Txt_Comment);
+   Ico_PutIcon ("edit.svg",Txt_Comment,"ICO16x16");
    HTM_DIV_End ();
   }
 

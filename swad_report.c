@@ -278,10 +278,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
 	        Report->Permalink,
 	        Txt_Report);
-   fprintf (Gbl.F.Out,"<img src=\"%s/file-alt.svg\" alt=\"%s\""
-	              " class=\"ICO64x64\" />",
-            Cfg_URL_ICON_PUBLIC,
-            Txt_Report);
+   Ico_PutIcon ("file-alt.svg",Txt_Report,"ICO64x64");
    fprintf (Gbl.F.Out,"<br />%s",Report->FilenameReport);
    HTM_A_End ();
    HTM_DIV_End ();

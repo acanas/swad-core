@@ -1180,16 +1180,11 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",
 	         NewPst ? "MSG_TIT_BG_NEW" :
 			  "MSG_TIT_BG");
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO16x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-            NewPst ? "envelope.svg" :
-        	     "envelope-open-text.svg",
-            NewPst ? Txt_MSG_New :
-        	     Txt_MSG_Open,
-            NewPst ? Txt_MSG_New :
-        	     Txt_MSG_Open);
+   Ico_PutIcon (NewPst ? "envelope.svg" :
+        	         "envelope-open-text.svg",
+		NewPst ? Txt_MSG_New :
+        	         Txt_MSG_Open,
+	        "ICO16x16");
    HTM_TD_End ();
 
    /***** Write post number *****/
@@ -1246,14 +1241,9 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 			  Txt_FORUM_Post_X_banned,
 	        PstNum);
       fprintf (Gbl.F.Out,"<span title=\"%s\">",Gbl.Title);	// TODO: Remove?
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO_HIDDEN ICO16x16\" />",
-	       Cfg_URL_ICON_PUBLIC,
-	       Enabled ? "eye.svg" :
-			 "eye-slash.svg",
-	       Gbl.Title,
-	       Gbl.Title);
+      Ico_PutIcon (Enabled ? "eye.svg" :
+			     "eye-slash.svg",
+	           Gbl.Title,"ICO_HIDDEN ICO16x16");
       fprintf (Gbl.F.Out,"</span>");				// TODO: Remove?
      }
 
@@ -2056,11 +2046,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
      {
       /* Check if thread to move is yet in current forum */
       if (For_CheckIfThrBelongsToForum (Gbl.Forum.ThreadToMove,Forum))
-         fprintf (Gbl.F.Out,"<img src=\"%s/paste.svg\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"CONTEXT_OPT ICO_HIDDEN ICO16x16\" />",
-                  Cfg_URL_ICON_PUBLIC,
-                  Txt_Copy_not_allowed,Txt_Copy_not_allowed);
+         Ico_PutIcon ("paste.svg",Txt_Copy_not_allowed,"CONTEXT_OPT ICO_HIDDEN ICO16x16");
       else
         {
          Frm_StartFormAnchor (For_ActionsPasThrFor[Forum->Type],
@@ -2094,17 +2080,11 @@ static void For_WriteLinkToForum (struct Forum *Forum,
      {
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM_GLOBAL_TCHS:
-         fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO16x16\" />",
-                  Cfg_URL_ICON_PUBLIC,ForumName,ForumName);
+         Ico_PutIcon ("comments.svg",ForumName,"ICO16x16");
          break;
       case For_FORUM__SWAD__USRS:
       case For_FORUM__SWAD__TCHS:
-         fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.png\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO16x16\" />",
-                  Cfg_URL_ICON_PUBLIC,ForumName,ForumName);
+         Ico_PutIcon ("swad64x64.png",ForumName,"ICO16x16");
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
@@ -2120,10 +2100,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO16x16\" />",
-                  Cfg_URL_ICON_PUBLIC,ForumName,ForumName);
+         Ico_PutIcon ("list-ol.svg",ForumName,"ICO16x16");
          break;
       default:
          break;
@@ -3417,16 +3394,11 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 
       /***** Put an icon with thread status *****/
       HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",BgColor);
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-                         " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO16x16\" />",
-	       Cfg_URL_ICON_PUBLIC,
-               Thr.NumUnreadPosts ? "envelope.svg" :
-        	                    "envelope-open-text.svg",
-               Thr.NumUnreadPosts ? Txt_There_are_new_posts :
-                                    Txt_No_new_posts,
-               Thr.NumUnreadPosts ? Txt_There_are_new_posts :
-                                    Txt_No_new_posts);
+      Ico_PutIcon (Thr.NumUnreadPosts ? "envelope.svg" :
+        	                        "envelope-open-text.svg",
+		   Thr.NumUnreadPosts ? Txt_There_are_new_posts :
+                                        Txt_No_new_posts,
+		   "ICO16x16");
 
       /***** Put button to remove the thread *****/
       if (PermissionThreadDeletion[Gbl.Forum.ForumSelected.Type] &

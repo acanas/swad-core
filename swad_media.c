@@ -392,12 +392,8 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
    /***** Icon 'clip' *****/
    HTM_DIV_Begin ("id=\"%s_med_ico\"",Id);		// <id>_med_ico
    HTM_A_Begin ("href=\"\" onclick=\"mediaActivateMediaUploader('%s');return false;\"",
-            Id);
-   fprintf (Gbl.F.Out,"<img src=\"%s/paperclip.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO_HIGHLIGHT ICOx16\" />",
-	    Cfg_URL_ICON_PUBLIC,
-            Txt_Multimedia,Txt_Multimedia);
+                Id);
+   Ico_PutIcon ("paperclip.svg",Txt_Multimedia,"ICO_HIGHLIGHT ICOx16");
    HTM_A_End ();
    HTM_DIV_End ();						// <id>_med_ico
 
@@ -491,10 +487,7 @@ static void Med_PutIconMediaUploader (const char UniqueId[Frm_MAX_BYTES_ID + 1],
                   UniqueId,MediaUploader->IconSuffix);
    HTM_A_Begin ("href=\"\" onclick=\"%s('%s');return false;\"",
 	        MediaUploader->FunctionName,UniqueId);
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-                      " class=\"ICO_HIGHLIGHT ICOx16\" />",
-            Cfg_URL_ICON_PUBLIC,MediaUploader->Icon,
-	    MediaUploader->Title,MediaUploader->Title);
+   Ico_PutIcon (MediaUploader->Icon,MediaUploader->Title,"ICO_HIGHLIGHT ICOx16");
    HTM_A_End ();
    HTM_DIV_End ();						// <id>_IconSuffix
   }
@@ -1642,7 +1635,6 @@ static void Med_ShowGIF (struct Media *Media,
 
 	 /* Image */
 	 fprintf (Gbl.F.Out,"<img src=\"%s\" class=\"%s\" alt=\"\"",
-
 		  URL_PNG,
 		  ClassMedia);
 	 if (Media->Title)

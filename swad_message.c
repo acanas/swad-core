@@ -2968,15 +2968,11 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 		 Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
 									   "BG_MSG_GREEN") :
 								   "BG_MSG_BLUE");
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO16x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-            Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? "reply.svg" :
-        	                                                                 "envelope-open-text.svg") :
-                                                                      "envelope.svg") :
-                                                              "share.svg",
-            Title,Title);
+   Ico_PutIcon (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? (Replied ? "reply.svg" :
+        	                                                                     "envelope-open-text.svg") :
+                                                                           "envelope.svg") :
+                                                                   "share.svg",
+		Title,"ICO16x16");
 
    /***** Form to delete message *****/
    fprintf (Gbl.F.Out,"<br />");
@@ -3200,52 +3196,50 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
    extern const char *Txt_Unknown_or_without_photo;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
-   bool WriteAuthor = false;
+   bool WriteAuthor;
 
-   /***** Begin table *****/
+   /***** Write author name or don't write it? *****/
+   WriteAuthor = false;
+   if (Enabled)
+      if (UsrDat->UsrCod > 0)
+         WriteAuthor = true;
+
+   /***** Begin table and row *****/
    HTM_TABLE_BeginPadding (2);
-
    HTM_TR_Begin (NULL);
 
-   /***** Start first column *****/
+   /***** Start first column with author's photo
+          (if author has a web page, put a link to it) *****/
    if (BgColor)
       HTM_TD_Begin ("class=\"CT %s\" style=\"width:30px;\"",BgColor);
    else
       HTM_TD_Begin ("class=\"CT\" style=\"width:30px;\"");
 
-   /***** Write author name or don't write it? *****/
-   if (Enabled)
-      if (UsrDat->UsrCod > 0)
-         WriteAuthor = true;
-
    if (WriteAuthor)
      {
-      /***** First column with author's photo (if author has a web page, put a link to it) *****/
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO30x40",Pho_ZOOM,false);
-      HTM_TD_End ();
+     }
+   else
+      Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,"PHOTO30x40");
+   HTM_TD_End ();
 
-      /***** Second column with user name (if author has a web page, put a link to it) *****/
+   /***** Second column with user name (if author has a web page, put a link to it) *****/
+   if (WriteAuthor)
+     {
       if (BgColor)
 	 HTM_TD_Begin ("class=\"LT %s\"",BgColor);
       else
 	 HTM_TD_Begin ("class=\"LT\"");
+
       HTM_DIV_Begin ("class=\"AUTHOR_2_LINES\"");	// Limited width
       Usr_WriteFirstNameBRSurnames (UsrDat);
       HTM_DIV_End ();
      }
    else
      {
-      fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"PHOTO30x40\" />",
-               Cfg_URL_ICON_PUBLIC,
-               Txt_Unknown_or_without_photo,
-	       Txt_Unknown_or_without_photo);
-      HTM_TD_End ();
-
       if (BgColor)
          HTM_TD_Begin ("class=\"LM %s\"",BgColor);
       else
@@ -3254,9 +3248,9 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor
 
    /***** End second column *****/
    HTM_TD_End ();
-   HTM_TR_End ();
 
-   /***** End table *****/
+   /***** End row and table *****/
+   HTM_TR_End ();
    HTM_TABLE_End ();
   }
 
@@ -3371,16 +3365,11 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
 
    /***** Put an icon to show if user has read the message *****/
    HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO16x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-            Deleted ? "share-red.svg" :
-        	      "share.svg",
-            Deleted ? Txt_MSG_Sent_and_deleted :
-                      Txt_MSG_Sent,
-            Deleted ? Txt_MSG_Sent_and_deleted :
-                      Txt_MSG_Sent);
+   Ico_PutIcon (Deleted ? "share-red.svg" :
+        	          "share.svg",
+	        Deleted ? Txt_MSG_Sent_and_deleted :
+                          Txt_MSG_Sent,
+		"ICO16x16");
    HTM_TD_End ();
 
    /***** Put user's photo *****/
@@ -3534,14 +3523,11 @@ static void Msg_WriteMsgTo (long MsgCod)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-         fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-                            " class=\"ICO16x16\" />",
-                  Cfg_URL_ICON_PUBLIC,
-                  OpenByDst ? (Deleted ? "envelope-open-text-red.svg"   :
-                	                 "envelope-open-text.svg") :
-                              (Deleted ? "envelope-red.svg" :
-                        	         "envelope.svg"),
-                  Title,Title);
+         Ico_PutIcon (OpenByDst ? (Deleted ? "envelope-open-text-red.svg"   :
+                	                     "envelope-open-text.svg") :
+                                  (Deleted ? "envelope-red.svg" :
+                        	             "envelope.svg"),
+                      Title,"ICO16x16");
          HTM_TD_End ();
 
          /* Put user's photo */

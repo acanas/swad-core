@@ -1368,16 +1368,11 @@ static void Grp_ListGroupTypesForEdition (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"LM\" style=\"width:16px;\"");
-      fprintf (Gbl.F.Out,"<img src=\"%s/clock.svg\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"%sCONTEXT_ICO_16x16\" />",
-               Cfg_URL_ICON_PUBLIC,
-               Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
-        	                                                           Txt_The_groups_will_not_automatically_open,
-               Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
-        	                                                           Txt_The_groups_will_not_automatically_open,
-               Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "" :
-        	                                                           "ICO_HIDDEN ");
+      Ico_PutIcon ("clock.svg",
+		   Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? Txt_The_groups_will_automatically_open :
+        	                                                               Txt_The_groups_will_not_automatically_open,
+		   Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MustBeOpened ? "CONTEXT_ICO_16x16" :
+        	                                                               "ICO_HIDDEN CONTEXT_ICO_16x16");
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM\"");
@@ -2534,16 +2529,11 @@ static void Grp_PutFormToCreateGroupType (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"LM\" style=\"width:20px;\"");
-   fprintf (Gbl.F.Out,"<img src=\"%s/clock.svg\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"%sCONTEXT_ICO_16x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-            Gbl.Crs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
-        	                               Txt_The_groups_will_not_automatically_open,
-            Gbl.Crs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
-        	                               Txt_The_groups_will_not_automatically_open,
-            Gbl.Crs.Grps.GrpTyp.MustBeOpened ? "" :
-        	                               "ICO_HIDDEN ");
+   Ico_PutIcon ("clock.svg",
+		Gbl.Crs.Grps.GrpTyp.MustBeOpened ? Txt_The_groups_will_automatically_open :
+        	                                   Txt_The_groups_will_not_automatically_open,
+		Gbl.Crs.Grps.GrpTyp.MustBeOpened ? "CONTEXT_ICO_16x16" :
+        	                                   "ICO_HIDDEN CONTEXT_ICO_16x16");
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");

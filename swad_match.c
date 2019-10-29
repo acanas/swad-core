@@ -1221,10 +1221,7 @@ static void Mch_PutFormNewMatch (struct Game *Game)
 
    /***** Put icon with link *****/
    Frm_LinkFormSubmit (Txt_Play,NULL,NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/play.svg\""
-		      " alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64\" />",
-            Cfg_URL_ICON_PUBLIC,Txt_Play,Txt_Play);
+   Ico_PutIcon ("play.svg",Txt_Play,"CONTEXT_OPT ICO_HIGHLIGHT ICO64x64");
    Frm_LinkFormEnd ();
 
    /***** End box *****/
@@ -2909,11 +2906,7 @@ static void Mch_PutBigButtonClose (void)
 static void Mch_ShowWaitImage (const char *Txt)
   {
    HTM_DIV_Begin ("class=\"MCH_WAIT_CONTAINER\"");
-   fprintf (Gbl.F.Out,"<img src=\"%s/wait.gif\""
-		      " alt=\"%s\" title=\"%s\" class=\"MCH_WAIT_IMG\" />",
-	    Cfg_URL_ICON_PUBLIC,
-	    Txt,
-	    Txt);
+   Ico_PutIcon ("wait.gif",Txt,"MCH_WAIT_IMG");
    HTM_DIV_End ();
   }
 

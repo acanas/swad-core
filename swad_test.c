@@ -3393,12 +3393,7 @@ void Tst_WriteAnswersEdit (long QstCod)
                is correct or wrong (row[4]) */
             HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
             if (row[4][0] == 'Y')
-               fprintf (Gbl.F.Out,"<img src=\"%s/check.svg\""
-        	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"CONTEXT_ICO_16x16\" />",
-                        Cfg_URL_ICON_PUBLIC,
-                        Txt_TST_Answer_given_by_the_teachers,
-                        Txt_TST_Answer_given_by_the_teachers);
+               Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO_16x16");
             HTM_TD_End ();
 
             /* Write the number of option */
@@ -5346,10 +5341,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 		   DisplayRightColumn ?	" style=\"display:none;\"" :	// Answer does have content ==> Hide icon
 	                                "",
 	           NumOpt);
-      fprintf (Gbl.F.Out,"<img src=\"%s/caret-right.svg\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />",
-               Cfg_URL_ICON_PUBLIC,
-	       Gbl.Title,Gbl.Title);
+      Ico_PutIcon ("caret-right.svg",Gbl.Title,"ICO16x16");
       HTM_A_End ();
 
       /* Icon to contract (hide the answer) */
@@ -5362,10 +5354,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                    DisplayRightColumn ? "" :
 	                                " style=\"display:none;\"",	// Answer does not have content ==> Hide icon
                    NumOpt);
-      fprintf (Gbl.F.Out,"<img src=\"%s/caret-down.svg\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICO16x16\" />",
-               Cfg_URL_ICON_PUBLIC,
-	       Gbl.Title,Gbl.Title);
+      Ico_PutIcon ("caret-down.svg",Gbl.Title,"ICO16x16");
       HTM_A_End ();
 
       HTM_TD_End ();

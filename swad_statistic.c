@@ -2352,8 +2352,7 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
       Sta_SetColor (ColorType,(float) NumColor,(float) GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH,&R,&G,&B);
       HTM_TD_Begin ("class=\"LM\" style=\"width:1px; background-color:#%02X%02X%02X;\"",
 	            R,G,B);
-      fprintf (Gbl.F.Out,"<img src=\"%s/tr1x14.gif\" alt=\"\" title=\"\" />",
-               Cfg_URL_ICON_PUBLIC);
+      Ico_PutIcon ("tr1x14.gif","","");
       HTM_TD_End ();
      }
    HTM_TR_End ();

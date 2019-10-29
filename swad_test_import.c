@@ -1006,16 +1006,11 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 
    /***** Put icon to indicate that a question does not exist in database *****/
    HTM_TD_Begin ("class=\"BT%u CT\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_16x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-            QuestionExists ? "tr16x16.gif" :
-        	             "check-circle.svg",
-            QuestionExists ? Txt_Existing_question :
-        	             Txt_New_question,
-            QuestionExists ? Txt_Existing_question :
-        	             Txt_New_question);
+   Ico_PutIcon (QuestionExists ? "tr16x16.gif" :
+        	                 "check-circle.svg",
+		QuestionExists ? Txt_Existing_question :
+        	                 Txt_New_question,
+		"CONTEXT_ICO_16x16");
    HTM_TD_End ();
 
    /***** Write number of question *****/
@@ -1065,14 +1060,9 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
        Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
       /* Put an icon that indicates whether shuffle is enabled or not */
       if (Gbl.Test.Shuffle)
-         fprintf (Gbl.F.Out,"<img src=\"%s/check.svg\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"%sICO16x16\" />",
-                  Cfg_URL_ICON_PUBLIC,
-                  Txt_TST_Answer_given_by_the_teachers,
-                  Txt_TST_Answer_given_by_the_teachers,
-                  QuestionExists ? "ICO_HIDDEN " :
-                	           "");
+	 Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,
+		      QuestionExists ? "ICO_HIDDEN ICO16x16" :
+                	               "ICO16x16");
    HTM_TD_End ();
 
    /***** Write the stem and the answers *****/
@@ -1134,14 +1124,9 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             /* Put an icon that indicates whether the answer is correct or wrong */
             HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
             if (Gbl.Test.Answer.Options[NumOpt].Correct)
-               fprintf (Gbl.F.Out,"<img src=\"%s/check.svg\""
-        	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"%sCONTEXT_ICO_16x16\" />",
-                        Cfg_URL_ICON_PUBLIC,
-                        Txt_TST_Answer_given_by_the_teachers,
-                        Txt_TST_Answer_given_by_the_teachers,
-                        QuestionExists ? "ICO_HIDDEN " :
-                                         "");
+               Ico_PutIcon ("check.svg",Txt_TST_Answer_given_by_the_teachers,
+		            QuestionExists ? "ICO_HIDDEN CONTEXT_ICO_16x16" :
+                	                     "CONTEXT_ICO_16x16");
             HTM_TD_End ();
 
             /* Write the number of option */
