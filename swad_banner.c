@@ -156,13 +156,8 @@ static void Ban_WriteListOfBanners (void)
       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
                    Gbl.Banners.Lst[NumBan].WWW,
                    Gbl.Banners.Lst[NumBan].FullName);
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"BANNER\" />",
-               Cfg_URL_BANNER_PUBLIC,
-               Gbl.Banners.Lst[NumBan].Img,
-               Gbl.Banners.Lst[NumBan].ShrtName,
-               Gbl.Banners.Lst[NumBan].FullName);
+      HTM_IMG (Cfg_URL_BANNER_PUBLIC,Gbl.Banners.Lst[NumBan].Img,Gbl.Banners.Lst[NumBan].FullName,
+	       "BANNER",NULL,NULL);
       HTM_A_End ();
       HTM_LI_End ();
      }
@@ -1052,13 +1047,8 @@ void Ban_WriteMenuWithBanners (void)
       Ban_PutParamBanCod (Gbl.Banners.Lst[NumBan].BanCod);
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
       Frm_LinkFormSubmit (Gbl.Banners.Lst[NumBan].FullName,"BANNER",NULL);
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"BANNER\" />",
-               Cfg_URL_BANNER_PUBLIC,
-               Gbl.Banners.Lst[NumBan].Img,
-               Gbl.Banners.Lst[NumBan].ShrtName,
-               Gbl.Banners.Lst[NumBan].FullName);
+      HTM_IMG (Cfg_URL_BANNER_PUBLIC,Gbl.Banners.Lst[NumBan].Img,Gbl.Banners.Lst[NumBan].FullName,
+	       "BANNER",NULL,NULL);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_DIV_End ();

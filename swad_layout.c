@@ -270,10 +270,8 @@ void Lay_WriteStartOfPage (void)
       case Act_BRW_1ST_TAB:
 	 fprintf (Gbl.F.Out,"<body onload=\"init();\">\n");
 	 HTM_DIV_Begin ("id=\"zoomLyr\" class=\"ZOOM\"");
-	 fprintf (Gbl.F.Out,"<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
-			    " alt=\"\" title=\"\""
-			    " class=\"IMG_USR\" />",
-		  Cfg_URL_ICON_PUBLIC);
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",NULL,
+	          "IMG_USR",NULL,"zoomImg");
 	 HTM_DIV_Begin ("id=\"zoomTxt\" class=\"CM\"");
 	 HTM_DIV_End ();
 	 HTM_DIV_End ();
@@ -1155,10 +1153,8 @@ static void Lay_ShowRightColumn (void)
       HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 		   " target=\"_blank\" title=\"%s\"",
 	           Txt_If_you_have_an_Android_device_try_SWADroid);
-      fprintf (Gbl.F.Out,"<img src=\"%s/SWADroid120x200.png\""
-			 " alt=\"SWADroid\" title=\"SWADroid\""
-			 " style=\"width:150px; height:250px;\" />",
-	       Cfg_URL_ICON_PUBLIC);
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid120x200.png","SWADroid",
+	       NULL,"width:150px; height:250px;",NULL);
       HTM_A_End ();
       HTM_DIV_End ();
      }
@@ -1444,11 +1440,10 @@ static void Lay_WriteAboutZone (void)
 
    /***** Questions and problems *****/
    HTM_DIV_Begin (NULL);
-   fprintf (Gbl.F.Out,"%s: "
-		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">"
-		      "%s",
-	    Txt_Questions_and_problems,
-	    Cfg_PLATFORM_RESPONSIBLE_EMAIL,Cfg_PLATFORM_RESPONSIBLE_EMAIL);
+   fprintf (Gbl.F.Out,"%s: ",Txt_Questions_and_problems);
+   HTM_A_Begin ("href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\"",
+	        Cfg_PLATFORM_RESPONSIBLE_EMAIL);
+   fprintf (Gbl.F.Out,"%s",Cfg_PLATFORM_RESPONSIBLE_EMAIL);
    HTM_A_End ();
    HTM_DIV_End ();
 
@@ -1685,11 +1680,8 @@ void Lay_AdvertisementMobile (void)
       HTM_A_Begin ("href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 	           " class=\"DAT\"");
       fprintf (Gbl.F.Out,"%s<br /><br />",Txt_Stay_connected_with_SWADroid);
-      fprintf (Gbl.F.Out,"<img src=\"%s/SWADroid200x300.png\""
-                         " alt=\"SWADroid\" title=\"%s\""
-                         " style=\"width:250px; height:375px;\" />",
-               Cfg_URL_ICON_PUBLIC,
-               Txt_Stay_connected_with_SWADroid);
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,"SWADroid200x300.png",Txt_Stay_connected_with_SWADroid,
+	       NULL,"width:250px; height:375px;",NULL);
       HTM_A_End ();
       HTM_TD_End ();
       HTM_TR_End ();

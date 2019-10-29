@@ -1790,6 +1790,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
    unsigned long NumRow;
    struct Sta_Hits Hits;
    unsigned BarWidth;
+   char Style[64];
    struct UsrData UsrDat;
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
@@ -1868,18 +1869,16 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
       HTM_TD_Begin ("class=\"LOG LT COLOR%u\"",Gbl.RowEvenOdd);
       if (BarWidth)
 	{
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x1.png\""	// Background
-	                    " alt=\"\" title=\"\""
-                            " class=\"LT\""
-	                    " style=\"width:%upx; height:10px; padding-top:4px;\" />",
-		  Cfg_URL_ICON_PUBLIC,
-		  UsrDat.Roles.InCurrentCrs.Role == Rol_STD ? 'o' :	// Student
-			                                      'r',	// Non-editing teacher or teacher
-		  BarWidth);
+	 snprintf (Style,sizeof (Style),
+		   "width:%upx; height:10px; padding-top:4px;",BarWidth);
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,
+		  UsrDat.Roles.InCurrentCrs.Role == Rol_STD ? "o1x1.png" :	// Student
+			                                      "r1x1.png",	// Non-editing teacher or teacher
+		  NULL,
+	          "LT",Style,NULL);
 	 fprintf (Gbl.F.Out,"&nbsp;");
 	}
       Str_WriteFloatNumToFile (Gbl.F.Out,Hits.Num);
-      fprintf (Gbl.F.Out,"&nbsp;");
       HTM_TD_End ();
 
       HTM_TR_End ();

@@ -1735,16 +1735,12 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
         {
          TagHidden = (row[2][0] == 'Y');
          HTM_TD_Begin ("class=\"LM\"");
-         fprintf (Gbl.F.Out,"<img src=\"%s/",Cfg_URL_ICON_PUBLIC);
          if (TagHidden)
-            fprintf (Gbl.F.Out,"eye-slash.svg\" alt=\"%s\" title=\"%s",
-                     Txt_Tag_not_allowed,
-                     Txt_Tag_not_allowed);
+            HTM_IMG (Cfg_URL_ICON_PUBLIC,"eye-slash.svg",Txt_Tag_not_allowed,
+	             "ICO_HIDDEN ICO16x16",NULL,NULL);
          else
-            fprintf (Gbl.F.Out,"eye.svg\" alt=\"%s\" title=\"%s",
-                     Txt_Tag_allowed,
-                     Txt_Tag_allowed);
-         fprintf (Gbl.F.Out,"\" class=\"ICO_HIDDEN ICO16x16\" />");
+            HTM_IMG (Cfg_URL_ICON_PUBLIC,"eye.svg",Txt_Tag_allowed,
+	             "ICO_HIDDEN ICO16x16",NULL,NULL);
          HTM_TD_End ();
         }
 

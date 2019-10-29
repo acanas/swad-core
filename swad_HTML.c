@@ -703,3 +703,39 @@ void HTM_A_End (void)
 
    HTM_A_NestingLevel--;
   }
+
+/*****************************************************************************/
+/********************************** Images ***********************************/
+/*****************************************************************************/
+
+void HTM_IMG (const char *Path,const char *Icon,const char *Title,
+	      const char *Class,const char *Style,const char *Id)
+  {
+   fprintf (Gbl.F.Out,"<img");
+
+   if (Id)
+      if (Id[0])
+	 fprintf (Gbl.F.Out," id=\"%s\"",Id);
+
+   fprintf (Gbl.F.Out," src=\"%s/%s\"",Path,Icon);
+
+   if (Title)
+     {
+      if (Title[0])
+         fprintf (Gbl.F.Out," alt=\"%s\" title=\"%s\"",Title,Title);
+      else
+         fprintf (Gbl.F.Out," alt=\"\"");
+     }
+   else
+      fprintf (Gbl.F.Out," alt=\"\"");
+
+   if (Class)
+      if (Class[0])
+         fprintf (Gbl.F.Out," class=\"%s\"",Class);
+
+   if (Style)
+      if (Style[0])
+         fprintf (Gbl.F.Out," style=\"%s\"",Style);
+
+   fprintf (Gbl.F.Out," />");
+  }

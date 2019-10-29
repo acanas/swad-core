@@ -571,12 +571,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    HTM_TD_Begin ("colspan=\"2\" class=\"FILENAME_TXT CM\"");
    HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
                 URL,FileName);
-   fprintf (Gbl.F.Out,"<img src=\"%s32x32/zip32x32.gif\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO40x40\" />",
-            CfG_URL_ICON_FILEXT_PUBLIC,
-            Txt_ZIP_file,
-            Txt_ZIP_file);
+   HTM_IMG (CfG_URL_ICON_FILEXT_PUBLIC "32x32","zip32x32.gif",Txt_ZIP_file,
+	    "ICO40x40",NULL,NULL);
    fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",FileName);
    Ico_PutIcon ("download.svg",Txt_Download,"ICO40x40");
    HTM_A_End ();

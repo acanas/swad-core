@@ -245,10 +245,8 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
          Frm_StartForm (Action);
          Frm_LinkFormSubmit (TabMenuStr,The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],NULL);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" />",
-		  Gbl.Prefs.URLIconSet,
-		  Act_GetIcon (Action),
-		  MenuStr);
+         HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
+	          NULL,NULL,NULL);
          fprintf (Gbl.F.Out," %s",TabMenuStr);
          Frm_LinkFormEnd ();
          Frm_EndForm ();
@@ -308,10 +306,8 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          HTM_LI_Begin ("class=\"ICO_HIGHLIGHT\"");
          Frm_StartForm (Action);
          Frm_LinkFormSubmit (TabMenuStr,NULL,NULL);
-         fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" />",
-                  Gbl.Prefs.URLIconSet,
-                  Act_GetIcon (Action),
-                  MenuStr);
+         HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
+	          NULL,NULL,NULL);
 	 fprintf (Gbl.F.Out," %s",MenuStr);
 	 Frm_LinkFormEnd ();
          Frm_EndForm ();

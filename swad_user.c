@@ -2677,9 +2677,8 @@ void Usr_WelcomeUsr (void)
 			                   Gbl.Usrs.Me.UsrDat.FirstName);
 
 		  /* Show cake icon */
-		  fprintf (Gbl.F.Out,"<img src=\"%s/birthday-cake.svg\""
-                	             " alt=\"\" class=\"ICO160x160\" />",
-                           Gbl.Prefs.URLIconSet);
+		  HTM_IMG (Gbl.Prefs.URLIconSet,"birthday-cake.svg",NULL,
+			   "ICO160x160",NULL,NULL);
 
 		  /* End alert */
 		  Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Btn_NO_BUTTON,NULL);

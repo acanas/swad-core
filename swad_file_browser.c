@@ -3292,13 +3292,11 @@ static void Brw_FormToChangeCrsGrpZone (void)
 		       (IsGroupZone &&
                         GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? "BROWSER_TITLE" :
                                                                 "BROWSER_TITLE_LIGHT");
-         fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
-                            " alt=\"\" title=\"\""
-                            " class=\"ICO25x25\""
-                            " style=\"margin-left:6px;\" />",
-                  Cfg_URL_ICON_PUBLIC,
-                  NumGrp < LstMyGrps.NumGrps - 1 ? "submid" :
-                	                           "subend");
+         HTM_IMG (Cfg_URL_ICON_PUBLIC,
+		  NumGrp < LstMyGrps.NumGrps - 1 ? "submid20x20.gif" :
+                	                           "subend20x20.gif",
+		  NULL,
+	          "ICO25x25","margin-left:6px;",NULL);
          fprintf (Gbl.F.Out,"<label>"
 	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
 	          GrpDat.GrpCod);

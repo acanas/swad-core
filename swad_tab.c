@@ -136,12 +136,8 @@ void Tab_DrawTabs (void)
 	 Frm_LinkFormSubmit (Txt_TABS_TXT[NumTab],
 			     NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 							The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-			    " class=\"TAB_ICO\" />",
-		  Gbl.Prefs.URLIconSet,
-		  Tab_GetIcon (NumTab),
-		  Txt_TABS_TXT[NumTab],
-		  Txt_TABS_TXT[NumTab]);
+	 HTM_IMG (Gbl.Prefs.URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
+	          "TAB_ICO",NULL,NULL);
 	 HTM_DIV_Begin ("class=\"TAB_TXT %s\"",
 			NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 						   The_ClassTxtTabOff[Gbl.Prefs.Theme]);

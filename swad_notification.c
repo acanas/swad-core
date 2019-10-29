@@ -2059,12 +2059,8 @@ void Ntf_WriteNumberOfNewNtfs (void)
    /***** Icon and number of new notifications *****/
    if (NumNewNtfs)
      {
-      fprintf (Gbl.F.Out,"<img src=\"%s/bell.svg\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO16x16\" />",
-	       Gbl.Prefs.URLTheme,
-	       Txt_Notifications,
-	       Txt_Notifications);
+      HTM_IMG (Gbl.Prefs.URLTheme,"bell.svg",Txt_Notifications,
+	       "ICO16x16",NULL,NULL);
       fprintf (Gbl.F.Out,"&nbsp;%u<span id=\"notif_new\">&nbsp;%s</span>",
 	       NumNewNtfs,
 	       NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :

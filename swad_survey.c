@@ -3505,6 +3505,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
   {
    extern const char *Txt_of_PART_OF_A_TOTAL;
+   char Style[64];
    unsigned BarWidth = 0;
 
    /***** String with the number of users *****/
@@ -3527,16 +3528,13 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 	                       (float) MaxUsrs) + 0.5);
    if (BarWidth < 2)
       BarWidth = 2;
-   fprintf (Gbl.F.Out,"<img src=\"%s/o1x1.png\" alt=\"%s\" title=\"%s\""
-                      " class=\"LT\" style=\"width:%upx; height:20px;\" />",
-            Cfg_URL_ICON_PUBLIC,
-            Gbl.Title,
-            Gbl.Title,
-            BarWidth);
-   fprintf (Gbl.F.Out,"&nbsp;");
+   snprintf (Style,sizeof (Style),
+	     "width:%upx; height:20px;",BarWidth);
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,"o1x1.png",Gbl.Title,
+	    "LT",Style,NULL);
 
    /***** Write the number of users *****/
-   fprintf (Gbl.F.Out,"%s",Gbl.Title);
+   fprintf (Gbl.F.Out,"&nbsp;%s",Gbl.Title);
 
    HTM_TD_End ();
   }

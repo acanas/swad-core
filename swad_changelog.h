@@ -487,13 +487,15 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.46.4 (2019-10-28)"
+#define Log_PLATFORM_VERSION	"SWAD 19.46.5 (2019-10-29)"
 #define CSS_FILE		"swad19.45.css"
 #define JS_FILE			"swad19.39.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
+// TODO: Continuar convirtiendo <img a HTM_IMG ()
 
+	Version 19.46.5:  Oct 29, 2019	Code refactoring in HTML images. (246223 lines)
 	Version 19.46.4:  Oct 28, 2019	Code refactoring in HTML images. (246247 lines)
 	Version 19.46.3:  Oct 28, 2019	Code refactoring in HTML images. (246390 lines)
 	Version 19.46.2:  Oct 28, 2019	Code refactoring in HTML images. (246519 lines)

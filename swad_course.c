@@ -2939,11 +2939,8 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
 
       /***** Put icon with link *****/
       Frm_LinkFormSubmit (Txt_My_courses,NULL,NULL);
-      fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"BC_ICON ICO_HIGHLIGHT\" />",
-	       Gbl.Prefs.URLTheme,
-	       Txt_My_courses,Txt_My_courses);
+      HTM_IMG (Gbl.Prefs.URLTheme,"sitemap.svg",Txt_My_courses,
+	       "BC_ICON ICO_HIGHLIGHT",NULL,NULL);
       Frm_LinkFormEnd ();
 
       /***** End form *****/

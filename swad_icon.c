@@ -411,10 +411,8 @@ void Ico_PutIconOff (const char *Icon,const char *Title)
 
 void Ico_PutIcon (const char *Icon,const char *Title,const char *Class)
   {
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-	              " alt=\"%s\" title=\"%s\" class=\"%s\" />",
-            Cfg_URL_ICON_PUBLIC,Icon,
-	    Title,Title,Class);
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
+	    Class,NULL,NULL);
   }
 
 /*****************************************************************************/
