@@ -130,12 +130,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
    /***** Title of top level *****/
    HTM_LI_Begin ("class=\"DAT\"");
-   fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO16x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-            Txt_Chat_rooms,
-            Txt_Chat_rooms);
+   Ico_PutIcon ("comments.svg",Txt_Chat_rooms,"ICO16x16");
    fprintf (Gbl.F.Out," %s",Txt_Chat_rooms);
    HTM_LI_End ();
 
@@ -146,12 +141,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 	     "%s (%s)",
 	     Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
    Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
-   fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO16x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-            ThisRoomFullName,
-            ThisRoomFullName);
+   Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
    Cht_WriteLinkToChat2 ("GBL_USR",ThisRoomFullName);
 
    IsLastItemInLevel[1] = !Gbl.Usrs.Me.MyDegs.Num;
@@ -162,11 +152,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
                    "%s (%s)",
                    Txt_General,Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_ALL]);
          Cht_WriteLinkToChat1 ("GBL_STD",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],ThisRoomFullName,1,IsLastItemInLevel);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO16x16\" />",
-		  Cfg_URL_ICON_PUBLIC,
-		  ThisRoomFullName,ThisRoomFullName);
+	 Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
 	 Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
          break;
       case Rol_NET:
@@ -175,11 +161,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
                    "%s (%s)",
                    Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
          Cht_WriteLinkToChat1 ("GBL_TCH",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],ThisRoomFullName,1,IsLastItemInLevel);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO16x16\" />",
-		  Cfg_URL_ICON_PUBLIC,
-		  ThisRoomFullName,ThisRoomFullName);
+	 Ico_PutIcon ("comments.svg",ThisRoomFullName,"ICO16x16");
 	 Cht_WriteLinkToChat2 ("GBL_TCH",ThisRoomFullName);
          break;
       default:
@@ -238,11 +220,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
         	         "%s %s",
 			 Txt_Course,Crs.ShrtName);
                Cht_WriteLinkToChat1 (ThisRoomCode,ThisRoomShrtName,ThisRoomFullName,2,IsLastItemInLevel);
-               fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
-        	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICO16x16\" />",
-                        Cfg_URL_ICON_PUBLIC,
-                        ThisRoomFullName,ThisRoomFullName);
+               Ico_PutIcon ("list-ol.svg",ThisRoomFullName,"ICO16x16");
                Cht_WriteLinkToChat2 (ThisRoomCode,ThisRoomFullName);
 	      }
 	   }

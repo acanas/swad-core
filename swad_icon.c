@@ -342,10 +342,7 @@ void Ico_PutContextualIconToZIP (Act_Action_t NextAction,void (*FuncParams) (voi
 void Ico_PutDivIcon (const char *DivClass,const char *Icon,const char *Title)
   {
    HTM_DIV_Begin ("class=\"%s\"",DivClass);
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO_16x16\" />",
-	    Cfg_URL_ICON_PUBLIC,Icon,
-	    Title,Title);
+   Ico_PutIcon (Icon,Title,"CONTEXT_ICO_16x16");
    HTM_DIV_End ();
   }
 
@@ -381,9 +378,7 @@ void Ico_PutIconTextLink (const char *Icon,const char *Text)
   {
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_ICO_x16\" />",
-            Cfg_URL_ICON_PUBLIC,Icon,Text,Text);
+   Ico_PutIcon (Icon,Text,"CONTEXT_ICO_x16");
    fprintf (Gbl.F.Out,"&nbsp;%s",Text);
    HTM_DIV_End ();
   }
@@ -407,9 +402,19 @@ void Ico_PutSettingIconLink (const char *Icon,const char *Title)
 
 void Ico_PutIconOff (const char *Icon,const char *Title)
   {
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-	              " class=\"CONTEXT_OPT ICO_HIDDEN CONTEXT_ICO_16x16\" />",
-            Cfg_URL_ICON_PUBLIC,Icon,Title,Title);
+   Ico_PutIcon (Icon,Title,"CONTEXT_OPT ICO_HIDDEN CONTEXT_ICO_16x16");
+  }
+
+/*****************************************************************************/
+/******************************* Put an icon *********************************/
+/*****************************************************************************/
+
+void Ico_PutIcon (const char *Icon,const char *Title,const char *Class)
+  {
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
+	              " alt=\"%s\" title=\"%s\" class=\"%s\" />",
+            Cfg_URL_ICON_PUBLIC,Icon,
+	    Title,Title,Class);
   }
 
 /*****************************************************************************/

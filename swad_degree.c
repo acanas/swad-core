@@ -2500,12 +2500,9 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 
          /***** Indent *****/
          HTM_TD_Begin ("class=\"RT COLOR%u\"",Gbl.RowEvenOdd);
-         fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
-                            " alt=\"\" title=\"\""
-                            " class=\"ICO25x25\" />",
-                  Cfg_URL_ICON_PUBLIC,
-                  NumRow == NumRows ? "subend" :
-                	              "submid");
+         Ico_PutIcon (NumRow == NumRows ? "subend20x20.gif" :
+                	                  "submid20x20.gif",
+		      "","ICO25x25");
          HTM_TD_End ();
 
          /***** Write institution, centre, degree *****/
@@ -2519,12 +2516,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	 switch (Sco_GetScopeFromUnsignedStr (row[0]))
 	   {
 	    case Hie_SYS:	// System
-	       fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.png\""
-        	                  " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICO16x16\" />",
-                     Cfg_URL_ICON_PUBLIC,
-                     Txt_all_degrees,
-                     Txt_all_degrees);
+	       Ico_PutIcon ("swad64x64.png",Txt_all_degrees,"ICO16x16");
 	       fprintf (Gbl.F.Out,"&nbsp;%s",Txt_all_degrees);
 	       break;
 	    case Hie_INS:	// Institution

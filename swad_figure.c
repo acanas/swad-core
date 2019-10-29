@@ -596,52 +596,27 @@ static void Fig_WriteHeadHierarchy (void)
    HTM_TH_Empty (1);
 
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"<img src=\"%s/globe.svg\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-	    Txt_Countries,
-	    Txt_Countries);
+   Ico_PutIcon ("globe.svg",Txt_Countries,"CONTEXT_ICO_x16");
    fprintf (Gbl.F.Out,"<br />%s",Txt_Countries);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"<img src=\"%s/university.svg\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_x16\" />",
-	    Cfg_URL_ICON_PUBLIC,
-	    Txt_Institutions,
-	    Txt_Institutions);
+   Ico_PutIcon ("university.svg",Txt_Institutions,"CONTEXT_ICO_x16");
    fprintf (Gbl.F.Out,"<br />%s",Txt_Institutions);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"<img src=\"%s/building.svg\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-	    Txt_Centres,
-	    Txt_Centres);
+   Ico_PutIcon ("building.svg",Txt_Centres,"CONTEXT_ICO_x16");
    fprintf (Gbl.F.Out,"<br />%s",Txt_Centres);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"<img src=\"%s/graduation-cap.svg\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-	    Txt_Degrees,
-	    Txt_Degrees);
+   Ico_PutIcon ("graduation-cap.svg",Txt_Degrees,"CONTEXT_ICO_x16");
    fprintf (Gbl.F.Out,"<br />%s",Txt_Degrees);
    HTM_TH_End ();
 
    HTM_TH_Begin (1,1,"RM");
-   fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"CONTEXT_ICO_x16\" />",
-	    Cfg_URL_ICON_PUBLIC,
-	    Txt_Courses,
-	    Txt_Courses);
+   Ico_PutIcon ("list-ol.svg",Txt_Courses,"CONTEXT_ICO_x16");
    fprintf (Gbl.F.Out,"<br />%s",Txt_Courses);
    HTM_TH_End ();
 
@@ -3874,12 +3849,7 @@ static void Fig_GetAndShowForumStats (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH_Begin (1,1,"BT");
-   fprintf (Gbl.F.Out,"<img src=\"%s/comments.svg\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO16x16\" />",
-            Cfg_URL_ICON_PUBLIC,
-            Txt_Scope,
-            Txt_Scope);
+   Ico_PutIcon ("comments.svg",Txt_Scope,"ICO16x16");
    HTM_TH_End ();
    HTM_TH (1,1,"LT",Txt_Forums);
    HTM_TH (1,1,"RT",Txt_No_of_forums);
@@ -5217,12 +5187,7 @@ static void Fig_GetAndShowNumUsrsPerMenu (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"CM\"");
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"ICO40x40\" />",
-               Cfg_URL_ICON_PUBLIC,Mnu_MenuIcons[Menu],
-               Txt_MENU_NAMES[Menu],
-               Txt_MENU_NAMES[Menu]);
+      Ico_PutIcon (Mnu_MenuIcons[Menu],Txt_MENU_NAMES[Menu],"ICO40x40");
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");

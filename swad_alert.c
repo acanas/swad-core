@@ -421,11 +421,7 @@ static void Ale_ShowFixAlertAndButton1 (Ale_AlertType_t AlertType,const char *Tx
       HTM_DIV_Begin ("class=\"ALERT_CLOSE\"");
       HTM_A_Begin ("href=\"\" onclick=\"toggleDisplay('%s');return false;\" /",
 	           IdAlert);
-      fprintf (Gbl.F.Out,"<img src=\"%s/close.svg\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO16x16\" />",
-	       Cfg_URL_ICON_PUBLIC,
-	       Txt_Close,Txt_Close);
+      Ico_PutIcon ("close.svg",Txt_Close,"ICO16x16");
       HTM_A_End ();
       HTM_DIV_End ();
      }

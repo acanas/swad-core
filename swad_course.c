@@ -483,13 +483,10 @@ static void Crs_Configuration (bool PrintView)
                 Indicators.NumIndicators,
 		Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
       Frm_LinkFormSubmit (Gbl.Title,"DAT",NULL);
-      fprintf (Gbl.F.Out,"%s "
-                         "<img src=\"%s/%s\" alt=\"%s\" class=\"ICO16x16\" />",
-               Gbl.Title,
-               Cfg_URL_ICON_PUBLIC,
-               (Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
-        	                                                  "exclamation-triangle.svg",
-               Gbl.Title);
+      fprintf (Gbl.F.Out,"%s ",Gbl.Title);
+      Ico_PutIcon ((Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "check-circle.svg" :
+        	                                                      "exclamation-triangle.svg",
+		   Gbl.Title,"ICO16x16");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -595,12 +592,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
                        Highlight ? ClassHighlight :
         	                   ClassNormal,
 		       NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/sitemap.svg\""
-	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO16x16\" />);",
-	    Cfg_URL_ICON_PUBLIC,
-	    Txt_System,
-	    Txt_System);
+   Ico_PutIcon ("sitemap.svg",Txt_System,"ICO16x16");
    fprintf (Gbl.F.Out,"&nbsp;%s",Txt_System);
    Frm_LinkFormEnd ();
    Frm_EndForm ();
@@ -775,12 +767,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Frm_LinkFormSubmit (Gbl.Title,
 		                      Highlight ? ClassHighlight :
         	                                  ClassNormal,NULL);
-		  fprintf (Gbl.F.Out,"<img src=\"%s/list-ol.svg\""
-			             " alt=\"%s\" title=\"%s\""
-			             " class=\"ICO16x16\" />",
-		           Cfg_URL_ICON_PUBLIC,
-		           Crs.ShrtName,
-		           Crs.FullName);
+		  Ico_PutIcon ("list-ol.svg",Crs.FullName,"ICO16x16");
 		  fprintf (Gbl.F.Out,"&nbsp;%s",Crs.FullName);
 		  Frm_LinkFormEnd ();
 		  Frm_EndForm ();

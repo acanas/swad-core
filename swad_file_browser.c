@@ -5834,10 +5834,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,
    switch (IconThisRow)
      {
       case Brw_ICON_TREE_NOTHING:
-	 fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\""
-			    " alt=\"\" title=\"\""
-			    " class=\"ICO20x20\" />",
-		  Cfg_URL_ICON_PUBLIC);
+	 Ico_PutIcon ("tr16x16.gif","","ICO20x20");
 	 break;
       case Brw_ICON_TREE_EXPAND:
 	 /***** Visible icon to expand folder *****/
@@ -5878,10 +5875,7 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 	i++)
      {
       HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\""
-	                 " alt=\"\" title=\"\""
-	                 " class=\"ICO20x20\" />",
-	       Cfg_URL_ICON_PUBLIC);
+      Ico_PutIcon ("tr16x16.gif","","ICO20x20");
       HTM_TD_End ();
      }
   }
@@ -6084,14 +6078,9 @@ static void Brw_PutIconFolderWithoutPlus (const char *FileBrowserId,const char *
 		     FileBrowserId,RowId);
 
    /***** Icon *****/
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_OPT CONTEXT_ICO_16x16\" />",
-	    Cfg_URL_ICON_PUBLIC,
-	    Open ? "folder-open-yellow.png" :
-	           "folder-yellow.png",
-	    Txt_Folder,
-	    Txt_Folder);
+   Ico_PutIcon (Open ? "folder-open-yellow.png" :
+	               "folder-yellow.png",
+		Txt_Folder,"CONTEXT_OPT CONTEXT_ICO_16x16");
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -6135,12 +6124,7 @@ static void Brw_PutIconNewFileOrFolder (void)
 
    /***** Icon that indicates new file *****/
    HTM_TD_Begin ("class=\"BM%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<img src=\"%s/star16x16.gif\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />",
-            Cfg_URL_ICON_PUBLIC,
-            Txt_New_FILE_OR_FOLDER,
-            Txt_New_FILE_OR_FOLDER);
+   Ico_PutIcon ("star16x16.gif",Txt_New_FILE_OR_FOLDER,"ICO20x20");
    HTM_TD_End ();
   }
 
@@ -6501,12 +6485,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
                         "PHOTO15x20B",Pho_ZOOM,false);
      }
    else
-      fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"PHOTO15x20B\" />",
-               Cfg_URL_ICON_PUBLIC,
-               Txt_Unknown_or_without_photo,
-               Txt_Unknown_or_without_photo);
+      Ico_PutIcon ("usr_bl.jpg",Txt_Unknown_or_without_photo,"PHOTO15x20B");
 
    HTM_TD_End ();
 
@@ -10051,12 +10030,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 
       /* Name of the file of marks, link end and form end */
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",FileNameToShow);
-      fprintf (Gbl.F.Out,"<img src=\"%s/grades32x32.gif\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO40x40\" />",
-	       Cfg_URL_ICON_PUBLIC,
-	       Txt_Check_marks_in_the_file,
-	       Txt_Check_marks_in_the_file);
+      Ico_PutIcon ("grades32x32.gif",Txt_Check_marks_in_the_file,"ICO40x40");
       Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
@@ -10070,11 +10044,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 	           URL,Title);
       Brw_PutIconFile (32,FileMetadata->FilFolLnk.Type,FileMetadata->FilFolLnk.Name);
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",FileNameToShow);
-      fprintf (Gbl.F.Out,"<img src=\"%s/download.svg\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO40x40\" />",
-	       Cfg_URL_ICON_PUBLIC,
-	       Title,Title);
+      Ico_PutIcon ("download.svg",Title,"ICO40x40");
       HTM_A_End ();
      }
   }
@@ -12116,11 +12086,7 @@ static void Brw_WriteRowDocData (unsigned long *NumDocsNotHidden,MYSQL_ROW row)
       Frm_LinkFormSubmit (FileNameToShow,"DAT_N",NULL);
       if (FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
 	 /* Icon with folder */
-	 fprintf (Gbl.F.Out,"<img src=\"%s/folder-yellow.png\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"CONTEXT_ICO_16x16\" />",
-		  Cfg_URL_ICON_PUBLIC,
-		  Txt_Folder,Txt_Folder);
+         Ico_PutIcon ("folder-yellow.png",Txt_Folder,"CONTEXT_ICO_16x16");
       else
 	 /* Icon with file type or link */
 	 Brw_PutIconFile (16,FileMetadata.FilFolLnk.Type,FileMetadata.FilFolLnk.Name);

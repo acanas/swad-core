@@ -77,6 +77,7 @@ void Ico_PutIconLink (const char *Icon,const char *Title);
 void Ico_PutIconTextLink (const char *Icon,const char *Text);
 void Ico_PutSettingIconLink (const char *Icon,const char *Title);
 void Ico_PutIconOff (const char *Icon,const char *Title);
+void Ico_PutIcon (const char *Icon,const char *Title,const char *Class);
 
 void Ico_PutCalculateIcon (const char *Title);
 void Ico_PutCalculateIconWithText (const char *Text);

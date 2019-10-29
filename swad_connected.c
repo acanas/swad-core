@@ -413,10 +413,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 						// is dynamically updated via AJAX
 	 Sco_PutParamScope ("ScopeCon",Hie_CRS);
 	 Frm_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
-	 fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis-h.svg\""
-			    " alt=\"%s\" title=\"%s\" class=\"ICO40x40\" />",
-		  Cfg_URL_ICON_PUBLIC,
-		  Txt_Connected_users,Txt_Connected_users);
+	 Ico_PutIcon ("ellipsis-h.svg",Txt_Connected_users,"ICO16x16");
 	 Frm_LinkFormEnd ();
 	 Frm_EndForm ();
 	 HTM_TD_End ();
