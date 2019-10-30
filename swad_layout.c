@@ -895,6 +895,7 @@ static void Lay_WritePageTopHeading (void)
    extern const char *Txt_System;
    extern const char *Txt_TAGLINE;
    extern const char *Txt_TAGLINE_BR;
+   char Style[64];
    const char *ClassHeadRow1[The_NUM_THEMES] =
      {
       "HEAD_ROW_1_WHITE",	// The_THEME_WHITE
@@ -930,22 +931,20 @@ static void Lay_WritePageTopHeading (void)
 
    HTM_DIV_Begin ("id=\"head_row_1_logo_small\"");
    Frm_LinkFormSubmit (Txt_System,NULL,NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-                      " class=\"CM\""
-	              " style=\"width:%upx; height:%upx;\" />",
-            Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
-            Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
-            Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
+   snprintf (Style,sizeof (Style),
+	     "width:%upx; height:%upx;",
+	     Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_SMALL_FILENAME,Cfg_PLATFORM_SHORT_NAME,
+	    "CM",Style,NULL);
    Frm_LinkFormEnd ();
    HTM_DIV_End ();	// head_row_1_logo_small
    HTM_DIV_Begin ("id=\"head_row_1_logo_big\"");
    Frm_LinkFormSubmit (Txt_System,NULL,NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
-                      " class=\"CM\""
-	              " style=\"width:%upx; height:%upx;\" />",
-            Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,
-            Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME,
-            Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
+   snprintf (Style,sizeof (Style),
+	     "width:%upx; height:%upx;",
+	     Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,Cfg_PLATFORM_SHORT_NAME,
+	    "CM",Style,NULL);
    Frm_LinkFormEnd ();
    HTM_DIV_End ();	// head_row_1_logo_big
    HTM_DIV_Begin ("id=\"head_row_1_tagline\"");
@@ -1421,18 +1420,18 @@ static void Lay_WriteAboutZone (void)
   {
    extern const char *Txt_About_X;
    extern const char *Txt_Questions_and_problems;
+   char Style[64];
 
    /***** Start about zone *****/
    fprintf (Gbl.F.Out,"<address id=\"about_zone\" class=\"ABOUT\">");
 
    /***** Institution and centre hosting the platform *****/
    HTM_A_Begin ("href=\"%s\" class=\"ABOUT\" target=\"_blank\"",Cfg_ABOUT_URL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-		      " alt=\"%s\" title=\"%s\""
-		      " style=\"width:%upx; height:%upx;\" />",
-	    Cfg_URL_ICON_PUBLIC,Cfg_ABOUT_LOGO,
-	    Cfg_ABOUT_NAME,Cfg_ABOUT_NAME,
-	    Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT);
+   snprintf (Style,sizeof (Style),
+	     "width:%upx; height:%upx;",
+	     Cfg_ABOUT_LOGO_WIDTH,Cfg_ABOUT_LOGO_HEIGHT);
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_ABOUT_LOGO,Cfg_ABOUT_NAME,
+	    NULL,Style,NULL);
    HTM_DIV_Begin (NULL);
    fprintf (Gbl.F.Out,"%s",Cfg_ABOUT_NAME);
    HTM_DIV_End ();

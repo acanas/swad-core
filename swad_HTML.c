@@ -708,7 +708,7 @@ void HTM_A_End (void)
 /********************************** Images ***********************************/
 /*****************************************************************************/
 
-void HTM_IMG (const char *Path,const char *Icon,const char *Title,
+void HTM_IMG (const char *URL,const char *Icon,const char *Title,
 	      const char *Class,const char *Style,const char *Id)
   {
    fprintf (Gbl.F.Out,"<img");
@@ -717,7 +717,7 @@ void HTM_IMG (const char *Path,const char *Icon,const char *Title,
       if (Id[0])
 	 fprintf (Gbl.F.Out," id=\"%s\"",Id);
 
-   fprintf (Gbl.F.Out," src=\"%s/%s\"",Path,Icon);
+   fprintf (Gbl.F.Out," src=\"%s/%s\"",URL,Icon);
 
    if (Title)
      {

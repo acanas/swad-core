@@ -309,6 +309,8 @@ static void Ctr_Configuration (bool PrintView)
    bool PhotoExists;
    char *PhotoAttribution = NULL;
    bool PutLink;
+   char URL[Cns_MAX_BYTES_WWW + 1];
+   char Icon[NAME_MAX + 1];
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
@@ -357,17 +359,18 @@ static void Ctr_Configuration (bool PrintView)
       if (PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
 		      Gbl.Hierarchy.Ctr.WWW);
-      fprintf (Gbl.F.Out,"<img src=\"%s/%02u/%u/%u.jpg\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"%s\" />",
-	       Cfg_URL_CTR_PUBLIC,
+      snprintf (URL,sizeof (URL),
+		"%s/%02u/%u",
+		Cfg_URL_CTR_PUBLIC,
 	       (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
-	       (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
-	       (unsigned) Gbl.Hierarchy.Ctr.CtrCod,
-	       Gbl.Hierarchy.Ctr.ShrtName,
-	       Gbl.Hierarchy.Ctr.FullName,
+	       (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
+      snprintf (Icon,sizeof (Icon),
+		"%u.jpg",
+		(unsigned) Gbl.Hierarchy.Ctr.CtrCod);
+      HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
 	       PrintView ? "CENTRE_PHOTO_PRINT" :
-			   "CENTRE_PHOTO_SHOW");
+			   "CENTRE_PHOTO_SHOW",
+	       NULL,NULL);
       if (PutLink)
 	 HTM_A_End ();
       HTM_DIV_End ();
