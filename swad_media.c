@@ -1530,7 +1530,7 @@ static void Med_ShowJPG (struct Media *Media,
    extern const char *Txt_File_not_found;
    char FileNameMedia[NAME_MAX + 1];
    char FullPathMediaPriv[PATH_MAX + 1];
-   char URL_JPG[PATH_MAX + 1];
+   char *URL;
 
    /***** Build private path to JPG *****/
    snprintf (FileNameMedia,sizeof (FileNameMedia),
@@ -1547,20 +1547,15 @@ static void Med_ShowJPG (struct Media *Media,
 	     in order to gain access to it for showing/downloading *****/
       Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMedia);
 
-      /***** Build URL pointing to symbolic link *****/
-      snprintf (URL_JPG,sizeof (URL_JPG),
-		"%s/%s/%s/%s",
-		Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		Gbl.FileBrowser.TmpPubDir.L,
-		Gbl.FileBrowser.TmpPubDir.R,
-		FileNameMedia);
-
       /***** Show media *****/
-      fprintf (Gbl.F.Out,"<img src=\"%s\" class=\"%s\" alt=\"\"",URL_JPG,ClassMedia);
-      if (Media->Title)
-	 if (Media->Title[0])
-	    fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
-      fprintf (Gbl.F.Out," lazyload=\"on\" />");	// Lazy load of the media
+      if (asprintf (&URL,"%s/%s/%s",
+		    Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
+		    Gbl.FileBrowser.TmpPubDir.L,
+		    Gbl.FileBrowser.TmpPubDir.R) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_IMG (URL,FileNameMedia,Media->Title,
+	       "class=\"%s\" lazyload=\"on\"",ClassMedia);	// Lazy load of the media
+      free ((void *) URL);
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
@@ -1577,31 +1572,33 @@ static void Med_ShowGIF (struct Media *Media,
    extern const char *Txt_File_not_found;
    char FileNameMedia[NAME_MAX + 1];
    char FullPathMediaPriv[PATH_MAX + 1];
-   char URL_GIF[PATH_MAX + 1];
-   char URL_PNG[PATH_MAX + 1];
+   char *URL;
+   char *URL_GIF;
+   char *URL_PNG;
 
    /***** Build private path to animated GIF image *****/
    snprintf (FileNameMedia,sizeof (FileNameMedia),
 	     "%s.%s",
 	     Media->Name,Med_Extensions[Med_GIF]);
-   snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
+   snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),	// The animated GIF image
 	     "%s/%s",
 	     PathMedPriv,FileNameMedia);
 
    /***** Check if private media file exists *****/
-   if (Fil_CheckIfPathExists (FullPathMediaPriv))	// The animated GIF image
+   if (Fil_CheckIfPathExists (FullPathMediaPriv))		// The animated GIF image
      {
       /***** Create symbolic link from temporary public directory to private file
 	     in order to gain access to it for showing/downloading *****/
       Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMedia);
 
       /***** Create URL pointing to symbolic link *****/
-      snprintf (URL_GIF,sizeof (URL_GIF),
-		"%s/%s/%s/%s",
-		Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		Gbl.FileBrowser.TmpPubDir.L,
-		Gbl.FileBrowser.TmpPubDir.R,
-		FileNameMedia);
+      if (asprintf (&URL,"%s/%s/%s",
+		    Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
+		    Gbl.FileBrowser.TmpPubDir.L,
+		    Gbl.FileBrowser.TmpPubDir.R) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      if (asprintf (&URL_GIF,"%s/%s",URL,FileNameMedia) < 0)
+	 Lay_NotEnoughMemoryExit ();
 
       /***** Build private path to static PNG image *****/
       snprintf (FileNameMedia,sizeof (FileNameMedia),
@@ -1610,21 +1607,15 @@ static void Med_ShowGIF (struct Media *Media,
       snprintf (FullPathMediaPriv,sizeof (FullPathMediaPriv),
 		"%s/%s",
 		PathMedPriv,FileNameMedia);
+      if (asprintf (&URL_PNG,"%s/%s",URL,FileNameMedia) < 0)	// The static PNG image
+	 Lay_NotEnoughMemoryExit ();
 
       /***** Check if private media file exists *****/
-      if (Fil_CheckIfPathExists (FullPathMediaPriv))	// The static PNG image
+      if (Fil_CheckIfPathExists (FullPathMediaPriv))		// The static PNG image
 	{
 	 /***** Create symbolic link from temporary public directory to private file
 		in order to gain access to it for showing/downloading *****/
 	 Brw_CreateTmpPublicLinkToPrivateFile (FullPathMediaPriv,FileNameMedia);
-
-	 /***** Create URL pointing to symbolic link *****/
-	 snprintf (URL_PNG,sizeof (URL_PNG),
-		   "%s/%s/%s/%s",
-		   Cfg_URL_FILE_BROWSER_TMP_PUBLIC,
-		   Gbl.FileBrowser.TmpPubDir.L,
-		   Gbl.FileBrowser.TmpPubDir.R,
-		   FileNameMedia);
 
 	 /***** Show static PNG and animated GIF *****/
 	 HTM_DIV_Begin ("class=\"MED_PLAY\""
@@ -1634,13 +1625,8 @@ static void Med_ShowGIF (struct Media *Media,
 			URL_PNG);
 
 	 /* Image */
-	 fprintf (Gbl.F.Out,"<img src=\"%s\" class=\"%s\" alt=\"\"",
-		  URL_PNG,
-		  ClassMedia);
-	 if (Media->Title)
-	    if (Media->Title[0])
-	       fprintf (Gbl.F.Out," title=\"%s\"",Media->Title);
-	 fprintf (Gbl.F.Out," lazyload=\"on\" />");	// Lazy load of the media
+	 HTM_IMG (URL,FileNameMedia,Media->Title,
+		  "class=\"%s\" lazyload=\"on\"",ClassMedia);	// Lazy load of the media
 
 	 /* Overlay with GIF label */
 	 fprintf (Gbl.F.Out,"<span class=\"MED_PLAY_ICO\">"
@@ -1651,6 +1637,11 @@ static void Med_ShowGIF (struct Media *Media,
 	}
       else
 	 fprintf (Gbl.F.Out,"%s",Txt_File_not_found);
+
+      /***** Free URLs *****/
+      free ((void *) URL_PNG);
+      free ((void *) URL_GIF);
+      free ((void *) URL);
      }
    else
       fprintf (Gbl.F.Out,"%s",Txt_File_not_found);

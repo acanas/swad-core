@@ -25,7 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <math.h>		// For log10, floor, ceil, modf, sqrt...
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For getenv, malloc
 #include <string.h>		// For string functions
 
@@ -2851,10 +2853,8 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
       BarHeight = (unsigned) (((Hits->Num * 500.0) / Hits->Max) + 0.5);
       if (BarHeight == 0)
          BarHeight = 1;
-      fprintf (Gbl.F.Out,"<img src=\"%s/o1x1.png\""	// Orange background
-	                 " alt=\"\" title=\"\""
-	                 " style=\"width:10px; height:%upx;\" />",
-	       Cfg_URL_ICON_PUBLIC,BarHeight);
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,"o1x1.png",NULL,	// Orange background
+	       "style=\"width:10px;height:%upx;\"",BarHeight);
      }
    else
       fprintf (Gbl.F.Out,"0%%<br />0");
@@ -2955,10 +2955,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
       /* First division (left) */
       HTM_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",
 	            Sta_WIDTH_SEMIDIVISION_GRAPHIC);
-      fprintf (Gbl.F.Out,"<img src=\"%s/ejexizq24x1.gif\""
-	                 " alt=\"\" title=\"\""
-	                 " style=\"display:block; width:%upx; height:1px;\" />",
-	       Cfg_URL_ICON_PUBLIC,
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,"ejexizq24x1.gif",NULL,
+	       "style=\"display:block;width:%upx;height:1px;\"",
 	       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
       HTM_TD_End ();
 
@@ -2969,11 +2967,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	{
 	 HTM_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",
 		       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
-	 fprintf (Gbl.F.Out,"<img src=\"%s/ejex24x1.gif\""
-	                    " alt=\"\" title=\"\""
-	                    " style=\"display:block;"
-	                    " width:%upx; height:1px;\" />",
-		  Cfg_URL_ICON_PUBLIC,
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"ejex24x1.gif",NULL,
+		  "style=\"display:block;width:%upx;height:1px;\"",
 		  Sta_WIDTH_SEMIDIVISION_GRAPHIC);
 	 HTM_TD_End ();
 	}
@@ -2981,10 +2976,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
       /* Last division (right) */
       HTM_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",
 	            Sta_WIDTH_SEMIDIVISION_GRAPHIC);
-      fprintf (Gbl.F.Out,"<img src=\"%s/tr24x1.gif\""
-	                 " alt=\"\" title=\"\""
-	                 " style=\"display:block; width:%upx; height:1px;\" />",
-	       Cfg_URL_ICON_PUBLIC,
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,"tr24x1.gif",NULL,
+	       "style=\"display:block;width:%upx;height:1px;\"",
 	       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
       HTM_TD_End ();
 
@@ -3083,14 +3076,12 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
    /***** Draw bar with a width proportional to the number of hits *****/
    if (HitsNum != 0.0)
       if ((BarWidth = (unsigned) (((HitsNum * (float) Sta_WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
-	 fprintf (Gbl.F.Out,"<img src=\"%s/%c1x1.png\""
-	                    " alt=\"\" title=\"\""
-	                    " style=\"display:block;"
-	                    " width:%upx; height:1px;\" />",
-                  Cfg_URL_ICON_PUBLIC,
-                  (Minute % 60) == 0 ? 'r' :	// red background
-                	               'o',	// orange background
-                  BarWidth);
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,
+		  (Minute % 60) == 0 ? "r1x1.png" :	// red background
+                	               "o1x1.png",	// orange background
+		  NULL,
+	          "style=\"display:block;width:%upx;height:1px;\"",
+	          BarWidth);
 
    /***** End cell of graphic and end row *****/
    HTM_TD_End ();
@@ -3315,14 +3306,8 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
                    Ban.WWW,
                    Ban.FullName);
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"BANNER_SMALL\""
-                         " style=\"margin:0 10px 5px 0;\" />",
-               Cfg_URL_BANNER_PUBLIC,
-               Ban.Img,
-               Ban.ShrtName,
-               Ban.FullName);
+      HTM_IMG (Cfg_URL_BANNER_PUBLIC,Ban.Img,Ban.FullName,
+	       "style=\"margin:0 10px 5px 0;\"");
       HTM_A_End ();
 
       /* Draw bar proportional to number of clicks */
@@ -3841,6 +3826,7 @@ static void Sta_DrawBarNumHits (char Color,
 				unsigned MaxBarWidth)
   {
    unsigned BarWidth;
+   char *Icon;
 
    HTM_TD_Begin ("class=\"LOG LM\"");
 
@@ -3850,14 +3836,14 @@ static void Sta_DrawBarNumHits (char Color,
       BarWidth = (unsigned) (((HitsNum * (float) MaxBarWidth) / HitsMax) + 0.5);
       if (BarWidth == 0)
          BarWidth = 1;
-      fprintf (Gbl.F.Out,"<img src=\"%s/%c1x1.png\""	// Background
-	                 " alt=\"\" title=\"\""
-                         " class=\"LM\""
-	                 " style=\"width:%upx; height:10px;\" />",
-	       Cfg_URL_ICON_PUBLIC,Color,BarWidth);
-      fprintf (Gbl.F.Out,"&nbsp;");
+      if (asprintf (&Icon,"%c1x1.png",Color) < 0)	// Background
+	 Lay_NotEnoughMemoryExit ();
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,NULL,
+	       "style=\"width:%upx;height:10px;\"",BarWidth);
+      free ((void *) Icon);
 
       /***** Write the number of hits *****/
+      fprintf (Gbl.F.Out,"&nbsp;");
       Str_WriteFloatNumToFile (Gbl.F.Out,HitsNum);
       fprintf (Gbl.F.Out,"&nbsp;(%u",
                (unsigned) (((HitsNum * 100.0) /

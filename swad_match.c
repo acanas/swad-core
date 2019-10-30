@@ -2754,6 +2754,8 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned Color;
    unsigned BarWidth;
+   char *Icon;
+   char *Title;
 
    /***** Compute color *****/
    /*
@@ -2804,14 +2806,18 @@ static void Mch_DrawScoreRow (double Score,double MinScore,double MaxScore,
 
    /* Draw bar and write number of users for this score */
    HTM_TD_Begin ("class=\"MCH_SCO_NUM%s\"",Mch_GetClassBorder (NumRow));
-   fprintf (Gbl.F.Out,"<img src=\"%s/score%u_1x1.png\""	// Background
-		      " alt=\"\" title=\"%u %s\" class=\"MCH_SCO_BAR\""
-		      " style=\"width:%u%%;\" />",
-	    Cfg_URL_ICON_PUBLIC,Color,
-	    NumUsrs,NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
-		                   Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN],
-	    BarWidth);
+   if (asprintf (&Icon,"score%u_1x1.png",Color) < 0)	// Background
+      Lay_NotEnoughMemoryExit ();
+   if (asprintf (&Title,"%u %s",
+		 NumUsrs,
+		 NumUsrs == 1 ? Txt_ROLES_SINGUL_abc[Rol_STD][Usr_SEX_UNKNOWN] :
+		                Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN]) < 0)
+      Lay_NotEnoughMemoryExit ();
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
+	    "class=\"MCH_SCO_BAR\" style=\"width:%u%%;\"",BarWidth);
    fprintf (Gbl.F.Out,"&nbsp;%u",NumUsrs);
+   free ((void *) Title);
+   free ((void *) Icon);
    HTM_TD_End ();
 
    HTM_TR_End ();

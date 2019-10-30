@@ -28,9 +28,10 @@ TODO: Check if web service is called from an authorized IP.
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
 #include <stdbool.h>		// For boolean type
-#include <stdio.h>		// For fprintf
+#include <stdio.h>		// For fprintf, asprintf
 #include <stdlib.h>		// For calloc, free
 #include <string.h>
 
@@ -97,6 +98,7 @@ void Plg_ListPlugins (void)
    unsigned NumPlg;
    struct Plugin *Plg;
    char URL[Cns_MAX_BYTES_WWW + Cns_BYTES_SESSION_ID + 1];
+   char *Icon;
 
    if (Gbl.Usrs.Me.Role.Logged != Rol_SYS_ADM)
      {
@@ -139,10 +141,12 @@ void Plg_ListPlugins (void)
       HTM_TD_Begin ("class=\"DAT LM\" style=\"width:45px;\"");
       HTM_A_Begin ("href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\"",
                    URL,Plg->Name);
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s24x24.gif\" alt=\"%s\" title=\"%s\""
-                         " class=\"ICO40x40\" />",
-               Cfg_URL_ICON_PLUGINS_PUBLIC,Gbl.Plugins.Lst[NumPlg].Logo,
-               Plg->Name,Plg->Name);
+      if (asprintf (&Icon,"%s24x24.gif",
+		    Gbl.Plugins.Lst[NumPlg].Logo) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Plg->Name,
+	       "class=\"ICO40x40\"");
+      free ((void *) Icon);
       HTM_A_End ();
       HTM_TD_End ();
 
@@ -379,6 +383,7 @@ static void Plg_ListPluginsForEdition (void)
   {
    unsigned NumPlg;
    struct Plugin *Plg;
+   char *Icon;
 
    /***** Write heading *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -409,13 +414,12 @@ static void Plg_ListPluginsForEdition (void)
       /* Plugin logo */
       // TODO: Change plugin icons to 32x32
       HTM_TD_Begin ("class=\"CM\" style=\"width:45px;\"");
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s24x24.gif\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"ICO40x40\" />",
-               Cfg_URL_ICON_PLUGINS_PUBLIC,
-               Gbl.Plugins.Lst[NumPlg].Logo,
-               Gbl.Plugins.Lst[NumPlg].Name,
-               Gbl.Plugins.Lst[NumPlg].Name);
+      if (asprintf (&Icon,"%s24x24.gif",
+		    Gbl.Plugins.Lst[NumPlg].Logo) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_IMG (Cfg_URL_ICON_PLUGINS_PUBLIC,Icon,Gbl.Plugins.Lst[NumPlg].Name,
+	       "class=\"ICO40x40\"");
+      free ((void *) Icon);
       HTM_TD_End ();
 
       /* Plugin name */

@@ -88,6 +88,7 @@ void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
    long DegCod;
    char *URL;
    char *Icon;
+   bool ClassNotEmpty;
 
    /***** Path to logo *****/
    if (HieIcon[Scope])	// Scope is correct
@@ -170,10 +171,17 @@ void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
 	       if (asprintf (&Icon,"%s",HieIcon[Scope]) < 0)
 		  Lay_NotEnoughMemoryExit ();
 	      }
+	    ClassNotEmpty = false;
+	    if (Class)
+	       if (Class[0])
+		  ClassNotEmpty = true;
 	    HTM_IMG (URL,Icon,AltText,
-		     "class=\"ICO%ux%u%s\"",
-		     Size,Size,Class ? Class :
-			               "");
+		     "class=\"ICO%ux%u%s%s\"",
+		     Size,Size,
+		     ClassNotEmpty ? " " :
+			             "",
+		     ClassNotEmpty ? Class :
+			             "");
 	    free ((void *) Icon);
             free ((void *) URL);
 	   }
