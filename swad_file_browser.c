@@ -3296,7 +3296,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 		  NumGrp < LstMyGrps.NumGrps - 1 ? "submid20x20.gif" :
                 	                           "subend20x20.gif",
 		  NULL,
-	          "ICO25x25","margin-left:6px;",NULL);
+	          "class=\"ICO25x25\" style=\"margin-left:6px;\"");
          fprintf (Gbl.F.Out,"<label>"
 	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
 	          GrpDat.GrpCod);
@@ -6164,37 +6164,51 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
    extern const char *Ext_FileExtensionsAllowed[];
    extern const char *Txt_Link;
    extern const char *Txt_X_file;
+   char *URL;
+   char *Icon;
+   char *Title;
    unsigned DocType;
    bool NotFound;
 
    /***** Icon depending on the file extension *****/
    if (FileType == Brw_IS_LINK)
-      fprintf (Gbl.F.Out,"<img src=\"%s/link.svg\" alt=\"%s\"",
-	       Cfg_URL_ICON_PUBLIC,Txt_Link);
+      Ico_PutIcon ("link.svg",Txt_Link,(Size == 16) ? "CONTEXT_ICO_16x16" :
+		                                      "ICO40x40");
    else	// FileType == Brw_IS_FILE
      {
-      fprintf (Gbl.F.Out,"<img src=\"%s%ux%u/",
-	       CfG_URL_ICON_FILEXT_PUBLIC,
-	       Size,Size);
+      if (asprintf (&URL,"%s%ux%u",
+		    CfG_URL_ICON_FILEXT_PUBLIC,
+	            Size,Size) < 0)
+	 Lay_NotEnoughMemoryExit ();
       for (DocType = 0, NotFound = true;
 	   DocType < Ext_NUM_FILE_EXT_ALLOWED && NotFound;
 	   DocType++)
 	 if (Str_FileIs (FileName,Ext_FileExtensionsAllowed[DocType]))
 	   {
-	    fprintf (Gbl.F.Out,"%s%ux%u.gif\" alt=\"",
-		     Ext_FileExtensionsAllowed[DocType],
-		     Size,Size);
-	    fprintf (Gbl.F.Out,Txt_X_file,Ext_FileExtensionsAllowed[DocType]);
-	    fprintf (Gbl.F.Out,"\"");
+	    if (asprintf (&Icon,"%s%ux%u.gif",
+			  Ext_FileExtensionsAllowed[DocType],
+		          Size,Size) < 0)
+	       Lay_NotEnoughMemoryExit ();
+	    if (asprintf (&Title,Txt_X_file,
+			  Ext_FileExtensionsAllowed[DocType]) < 0)
+	       Lay_NotEnoughMemoryExit ();
 	    NotFound = false;
 	   }
       if (NotFound)
-	 fprintf (Gbl.F.Out,"xxx%ux%u.gif\" alt=\"\"",
-	          Size,Size);
+	{
+	 if (asprintf (&Icon,"xxx%ux%u.gif",Size,Size) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 if (asprintf (&Title,"%s","") < 0)
+	    Lay_NotEnoughMemoryExit ();
+	}
+      HTM_IMG (URL,Icon,Title,
+	       "class=\"CONTEXT_OPT ICO_HIGHLIGHT %s\"",
+	       (Size == 16) ? "CONTEXT_ICO_16x16" :
+			      "ICO40x40");
+      free ((void *) Title);
+      free ((void *) Icon);
+      free ((void *) URL);
      }
-   fprintf (Gbl.F.Out," class=\"CONTEXT_OPT ICO_HIGHLIGHT %s\"/>",
-	    (Size == 16) ? "CONTEXT_ICO_16x16" :
-		           "ICO40x40");
   }
 
 /*****************************************************************************/

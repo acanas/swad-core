@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/stddef.h>	// For NULL
 #include <stdbool.h>		// For boolean type
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 #include <sys/wait.h>		// For the macro WEXITSTATUS
@@ -309,8 +311,8 @@ static void Ctr_Configuration (bool PrintView)
    bool PhotoExists;
    char *PhotoAttribution = NULL;
    bool PutLink;
-   char URL[Cns_MAX_BYTES_WWW + 1];
-   char Icon[NAME_MAX + 1];
+   char *URL;
+   char *Icon;
 
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Ctr.CtrCod <= 0)		// No centre selected
@@ -359,18 +361,19 @@ static void Ctr_Configuration (bool PrintView)
       if (PutLink)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_N\"",
 		      Gbl.Hierarchy.Ctr.WWW);
-      snprintf (URL,sizeof (URL),
-		"%s/%02u/%u",
-		Cfg_URL_CTR_PUBLIC,
-	       (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
-	       (unsigned) Gbl.Hierarchy.Ctr.CtrCod);
-      snprintf (Icon,sizeof (Icon),
-		"%u.jpg",
-		(unsigned) Gbl.Hierarchy.Ctr.CtrCod);
+      if (asprintf (&URL,"%s/%02u/%u",
+		    Cfg_URL_CTR_PUBLIC,
+	            (unsigned) (Gbl.Hierarchy.Ctr.CtrCod % 100),
+	            (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      if (asprintf (&Icon,"%u.jpg",
+		    (unsigned) Gbl.Hierarchy.Ctr.CtrCod) < 0)
+	 Lay_NotEnoughMemoryExit ();
       HTM_IMG (URL,Icon,Gbl.Hierarchy.Ctr.FullName,
-	       PrintView ? "CENTRE_PHOTO_PRINT" :
-			   "CENTRE_PHOTO_SHOW",
-	       NULL,NULL);
+	       "class=\"%s\"",PrintView ? "CENTRE_PHOTO_PRINT" :
+			                  "CENTRE_PHOTO_SHOW");
+      free ((void *) Icon);
+      free ((void *) URL);
       if (PutLink)
 	 HTM_A_End ();
       HTM_DIV_End ();

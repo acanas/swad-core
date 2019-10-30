@@ -137,7 +137,7 @@ void Tab_DrawTabs (void)
 			     NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 							The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
 	 HTM_IMG (Gbl.Prefs.URLIconSet,Tab_GetIcon (NumTab),Txt_TABS_TXT[NumTab],
-	          "TAB_ICO",NULL,NULL);
+	          "class=\"TAB_ICO\"");
 	 HTM_DIV_Begin ("class=\"TAB_TXT %s\"",
 			NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 						   The_ClassTxtTabOff[Gbl.Prefs.Theme]);

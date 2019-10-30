@@ -572,7 +572,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    HTM_A_Begin ("href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\"",
                 URL,FileName);
    HTM_IMG (CfG_URL_ICON_FILEXT_PUBLIC "32x32","zip32x32.gif",Txt_ZIP_file,
-	    "ICO40x40",NULL,NULL);
+	    "class=\"ICO40x40\"");
    fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",FileName);
    Ico_PutIcon ("download.svg",Txt_Download,"ICO40x40");
    HTM_A_End ();

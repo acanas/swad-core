@@ -412,7 +412,7 @@ void Ico_PutIconOff (const char *Icon,const char *Title)
 void Ico_PutIcon (const char *Icon,const char *Title,const char *Class)
   {
    HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Title,
-	    Class,NULL,NULL);
+	    "class=\"%s\"",Class);
   }
 
 /*****************************************************************************/
@@ -424,15 +424,13 @@ void Ico_PutCalculateIcon (const char *Title)
   {
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
 
-   fprintf (Gbl.F.Out,"<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""	// TODO: change name and resolution to refresh64x64.png
-	              " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO_16x16\" />",
-	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Title,Title);
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif",Title,		// TODO: change name and resolution to refresh64x64.png
+	    "class=\"CONTEXT_ICO_16x16\""
+	    " id=\"update_%d\"",Gbl.Form.Num);
 
-   fprintf (Gbl.F.Out,"<img id=\"updating_%d\" src=\"%s/working16x16.gif\""	// TODO: change name and resolution to refreshing64x64.gif
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_ICO_16x16\" style=\"display:none;\" />",	// Animated icon hidden
-	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Title,Title);
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,"working16x16.gif",Title,		// TODO: change name and resolution to refreshing64x64.gif
+	    "class=\"CONTEXT_ICO_16x16\" style=\"display:none;\""	// Animated icon hidden
+	    " id=\"updating_%d\"",Gbl.Form.Num);
 
    HTM_DIV_End ();
   }
@@ -446,15 +444,13 @@ void Ico_PutCalculateIconWithText (const char *Text)
   {
    HTM_DIV_Begin ("class=\"ICO_HIGHLIGHT\" style=\"margin:0 6px 0 0; display:inline;\"");
 
-   fprintf (Gbl.F.Out,"<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""
-	              " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" />",
-	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Text,Text);
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif",Text,
+	    "class=\"ICO20x20\""
+	    " id=\"update_%d\"",Gbl.Form.Num);
 
-   fprintf (Gbl.F.Out,"<img id=\"updating_%d\" src=\"%s/working16x16.gif\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20\" style=\"display:none;\" />",	// Animated icon hidden
-	    Gbl.Form.Num,Cfg_URL_ICON_PUBLIC,Text,Text);
+   HTM_IMG (Cfg_URL_ICON_PUBLIC,"working16x16.gif",Text,
+	    "class=\"ICO20x20\" style=\"display:none;\""		// Animated icon hidden
+	    " id=\"updating_%d\"",Gbl.Form.Num);
 
    fprintf (Gbl.F.Out,"&nbsp;%s",Text);
 

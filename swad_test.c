@@ -1737,10 +1737,10 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
          HTM_TD_Begin ("class=\"LM\"");
          if (TagHidden)
             HTM_IMG (Cfg_URL_ICON_PUBLIC,"eye-slash.svg",Txt_Tag_not_allowed,
-	             "ICO_HIDDEN ICO16x16",NULL,NULL);
+	             "class=\"ICO_HIDDEN ICO16x16\"");
          else
             HTM_IMG (Cfg_URL_ICON_PUBLIC,"eye.svg",Txt_Tag_allowed,
-	             "ICO_HIDDEN ICO16x16",NULL,NULL);
+	             "class=\"ICO_HIDDEN ICO16x16\"");
          HTM_TD_End ();
         }
 

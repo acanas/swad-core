@@ -84,6 +84,6 @@ void HTM_A_Begin (const char *fmt,...);
 void HTM_A_End (void);
 
 void HTM_IMG (const char *URL,const char *Icon,const char *Title,
-	      const char *Class,const char *Style,const char *Id);
+	      const char *fmt,...);
 
 #endif

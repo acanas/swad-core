@@ -157,7 +157,7 @@ static void Ban_WriteListOfBanners (void)
                    Gbl.Banners.Lst[NumBan].WWW,
                    Gbl.Banners.Lst[NumBan].FullName);
       HTM_IMG (Cfg_URL_BANNER_PUBLIC,Gbl.Banners.Lst[NumBan].Img,Gbl.Banners.Lst[NumBan].FullName,
-	       "BANNER",NULL,NULL);
+	       "class=\"BANNER\"");
       HTM_A_End ();
       HTM_LI_End ();
      }
@@ -1048,7 +1048,7 @@ void Ban_WriteMenuWithBanners (void)
       Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
       Frm_LinkFormSubmit (Gbl.Banners.Lst[NumBan].FullName,"BANNER",NULL);
       HTM_IMG (Cfg_URL_BANNER_PUBLIC,Gbl.Banners.Lst[NumBan].Img,Gbl.Banners.Lst[NumBan].FullName,
-	       "BANNER",NULL,NULL);
+	       "class=\"BANNER\"");
       Frm_LinkFormEnd ();
       Frm_EndForm ();
       HTM_DIV_End ();

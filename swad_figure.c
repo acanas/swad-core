@@ -4026,6 +4026,7 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    float NumThrsPerForum;
    float NumPostsPerThread;
    float NumPostsPerForum;
+   char *ForumName;
 
    /***** Compute number of forums, number of threads and number of posts *****/
    NumForums  = For_GetNumTotalForumsOfType       (ForumType,CtyCod,InsCod,CtrCod,DegCod,CrsCod);
@@ -4050,12 +4051,11 @@ static void Fig_WriteForumTitleAndStats (For_ForumType_t ForumType,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"BT\"");
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-                      " alt=\"%s%s\" title=\"%s%s\""
-                      " class=\"ICO16x16\" />",
-            Cfg_URL_ICON_PUBLIC,Icon,
-            ForumName1,ForumName2,
-            ForumName1,ForumName2);
+   if (asprintf (&ForumName,"%s%s",
+		 ForumName1,ForumName2) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Ico_PutIcon (Icon,ForumName,"ICO16x16");
+   free ((void *) ForumName);
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LT\"");
@@ -4907,6 +4907,8 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    extern const char *Txt_PERCENT_of_users;
    unsigned FirstDayOfWeek;
    char *SubQuery;
+   char *Icon;
+   char *Title;
    unsigned NumUsrs[7];	// 7: seven days in a week
    unsigned NumUsrsTotal = 0;
 
@@ -4949,12 +4951,15 @@ static void Fig_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"CM\"");
-	 fprintf (Gbl.F.Out,"<img src=\"%s/first-day-of-week-%u.png\""
-			    " alt=\"%s\" title=\"%s: %s\""
-			    " class=\"ICO40x40\" />",
-		  Cfg_URL_ICON_PUBLIC,FirstDayOfWeek,
-		  Txt_DAYS_SMALL[FirstDayOfWeek],
-		  Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek]);
+	 if (asprintf (&Icon,"first-day-of-week-%u.png",
+		       FirstDayOfWeek) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 if (asprintf (&Title,"%s: %s",
+		       Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek]) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 Ico_PutIcon (Icon,Title,"ICO40x40");
+	 free ((void *) Title);
+	 free ((void *) Icon);
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT RM\"");
@@ -5065,6 +5070,7 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
    extern const char *Txt_PERCENT_of_users;
    Ico_IconSet_t IconSet;
    char *SubQuery;
+   char *URL;
    unsigned NumUsrs[Ico_NUM_ICON_SETS];
    unsigned NumUsrsTotal = 0;
 
@@ -5105,13 +5111,12 @@ static void Fig_GetAndShowNumUsrsPerIconSet (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s/cog.svg\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"ICO40x40\" />",
-               Cfg_URL_ICON_SETS_PUBLIC,
-               Ico_IconSetId[IconSet],
-               Ico_IconSetNames[IconSet],
-               Ico_IconSetNames[IconSet]);
+      if (asprintf (&URL,"%s/%s",
+		    Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[IconSet]) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
+	       "class=\"ICO40x40\"");
+      free ((void *) URL);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -5223,6 +5228,7 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
    extern const char *Txt_PERCENT_of_users;
    The_Theme_t Theme;
    char *SubQuery;
+   char *URL;
    unsigned NumUsrs[The_NUM_THEMES];
    unsigned NumUsrsTotal = 0;
 
@@ -5263,12 +5269,12 @@ static void Fig_GetAndShowNumUsrsPerTheme (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"CM\"");
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s/theme_32x20.gif\""
-                         " alt=\"%s\" title=\"%s\""
-                         " style=\"width:40px; height:25px;\" />",
-               Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Theme],
-               The_ThemeNames[Theme],
-               The_ThemeNames[Theme]);
+      if (asprintf (&URL,"%s/%s",
+		    Cfg_URL_ICON_THEMES_PUBLIC,The_ThemeId[Theme]) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_IMG (URL,"theme_32x20.gif",The_ThemeNames[Theme],
+	       "style=\"width:40px;height:25px;\"");
+      free ((void *) URL);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");
@@ -5302,6 +5308,7 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
    extern const char *Txt_PERCENT_of_users;
    unsigned SideCols;
    char *SubQuery;
+   char *Icon;
    unsigned NumUsrs[4];
    unsigned NumUsrsTotal = 0;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
@@ -5343,12 +5350,12 @@ static void Fig_GetAndShowNumUsrsPerSideColumns (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"CM\"");
-      fprintf (Gbl.F.Out,"<img src=\"%s/layout%u%u_32x20.gif\""
-                         " alt=\"%s\" title=\"%s\""
-                         " style=\"width:40px; height:25px;\" />",
-               Cfg_URL_ICON_PUBLIC,SideCols >> 1,SideCols & 1,
-               Txt_LAYOUT_SIDE_COLUMNS[SideCols],
-               Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
+      if (asprintf (&Icon,"layout%u%u_32x20.gif",
+		    SideCols >> 1,SideCols & 1) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Txt_LAYOUT_SIDE_COLUMNS[SideCols],
+	       "style=\"width:40px;height:25px;\"");
+      free ((void *) Icon);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RM\"");

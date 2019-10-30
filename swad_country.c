@@ -846,20 +846,26 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
 
 void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
   {
+   char *URL;
+   char *Icon;
+
    /***** Draw country map *****/
-   fprintf (Gbl.F.Out,"<img src=\"");
    if (Cty_CheckIfCountryMapExists (Cty))
-      fprintf (Gbl.F.Out,"%s/%s/%s.png",
-	       Cfg_URL_ICON_COUNTRIES_PUBLIC,
-	       Cty->Alpha2,
-	       Cty->Alpha2);
+     {
+      if (asprintf (&URL,"%s/%s",
+		    Cfg_URL_ICON_COUNTRIES_PUBLIC,
+	            Cty->Alpha2) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      if (asprintf (&Icon,"%s.png",
+		    Cty->Alpha2) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_IMG (URL,Icon,Cty->Name[Gbl.Prefs.Language],
+	       "class=\"%s\"",Class);
+      free ((void *) Icon);
+      free ((void *) URL);
+     }
    else
-      fprintf (Gbl.F.Out,"%s/tr16x16.gif",	// TODO: Change for a 1x1 image or a generic image
-	       Cfg_URL_ICON_PUBLIC);
-   fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"%s\" class=\"%s\" />",
-	    Cty->Alpha2,
-	    Cty->Name[Gbl.Prefs.Language],
-	    Class);
+      Ico_PutIcon ("tr16x16.gif",Cty->Name[Gbl.Prefs.Language],Class);
   }
 
 /*****************************************************************************/

@@ -25,6 +25,8 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_action.h"
@@ -68,15 +70,15 @@ extern struct Globals Gbl;
 void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
                    unsigned Size,const char *Class,bool PutIconIfNotExists)
   {
-   static const char *Icon[Hie_NUM_LEVELS] =
+   static const char *HieIcon[Hie_NUM_LEVELS] =
      {
-      NULL,			// Hie_UNK
-      NULL,			// Hie_SYS
-      NULL,			// Hie_CTY
+      "sitemap.svg",		// Hie_UNK, not applicable here
+      "sitemap.svg",		// Hie_SYS, not applicable here
+      "sitemap.svg",		// Hie_CTY, not applicable here
       "university.svg",		// Hie_INS
       "building.svg",		// Hie_CTR
       "graduation-cap.svg",	// Hie_DEG
-      NULL,			// Hie_CRS
+      "sitemap.svg",		// Hie_CRS, not applicable here
      };
    const char *Folder = NULL;	// To avoid warning
    char PathLogo[PATH_MAX + 1];
@@ -84,9 +86,11 @@ void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
    long InsCod;
    long CtrCod;
    long DegCod;
+   char *URL;
+   char *Icon;
 
    /***** Path to logo *****/
-   if (Icon[Scope])	// Scope is correct
+   if (HieIcon[Scope])	// Scope is correct
      {
       if (Cod > 0)	// Institution, centre or degree exists
 	{
@@ -149,25 +153,29 @@ void Log_DrawLogo (Hie_Level_t Scope,long Cod,const char *AltText,
 	 if (LogoFound || PutIconIfNotExists)
 	   {
 	    /***** Draw logo *****/
-	    fprintf (Gbl.F.Out,"<img src=\"");
 	    if (LogoFound)
-	       fprintf (Gbl.F.Out,"%s/%s/%02u/%u/logo/%u.png",
-			Cfg_URL_SWAD_PUBLIC,Folder,
-			(unsigned) (Cod % 100),
-			(unsigned) Cod,
-			(unsigned) Cod);
-	    else if (Icon[Scope])
-	       fprintf (Gbl.F.Out,"%s/%s",
-			Cfg_URL_ICON_PUBLIC,Icon[Scope]);
-	    fprintf (Gbl.F.Out,"\""
-			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICO%ux%u",
-		     AltText,AltText,
-		     Size,Size);
-	    if (Class)
-	       if (Class[0])
-		  fprintf (Gbl.F.Out," %s",Class);
-	    fprintf (Gbl.F.Out,"\" />");
+	      {
+	       if (asprintf (&URL,"%s/%s/%02u/%u/logo",
+			     Cfg_URL_SWAD_PUBLIC,Folder,
+			     (unsigned) (Cod % 100),
+			     (unsigned) Cod) < 0)
+		  Lay_NotEnoughMemoryExit ();
+	       if (asprintf (&Icon,"%u.png",(unsigned) Cod) < 0)
+		  Lay_NotEnoughMemoryExit ();
+	      }
+	    else
+	      {
+	       if (asprintf (&URL,"%s",Cfg_URL_ICON_PUBLIC) < 0)
+		  Lay_NotEnoughMemoryExit ();
+	       if (asprintf (&Icon,"%s",HieIcon[Scope]) < 0)
+		  Lay_NotEnoughMemoryExit ();
+	      }
+	    HTM_IMG (URL,Icon,AltText,
+		     "class=\"ICO%ux%u%s\"",
+		     Size,Size,Class ? Class :
+			               "");
+	    free ((void *) Icon);
+            free ((void *) URL);
 	   }
 	}
      }

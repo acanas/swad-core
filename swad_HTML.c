@@ -709,15 +709,13 @@ void HTM_A_End (void)
 /*****************************************************************************/
 
 void HTM_IMG (const char *URL,const char *Icon,const char *Title,
-	      const char *Class,const char *Style,const char *Id)
+	      const char *fmt,...)
   {
-   fprintf (Gbl.F.Out,"<img");
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
 
-   if (Id)
-      if (Id[0])
-	 fprintf (Gbl.F.Out," id=\"%s\"",Id);
-
-   fprintf (Gbl.F.Out," src=\"%s/%s\"",URL,Icon);
+   fprintf (Gbl.F.Out,"<img src=\"%s/%s\"",URL,Icon);
 
    if (Title)
      {
@@ -729,13 +727,25 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
    else
       fprintf (Gbl.F.Out," alt=\"\"");
 
-   if (Class)
-      if (Class[0])
-         fprintf (Gbl.F.Out," class=\"%s\"",Class);
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
 
-   if (Style)
-      if (Style[0])
-         fprintf (Gbl.F.Out," style=\"%s\"",Style);
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 fprintf (Gbl.F.Out," %s",Attr);
+
+	 free ((void *) Attr);
+	}
+     }
 
    fprintf (Gbl.F.Out," />");
   }

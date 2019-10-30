@@ -2060,7 +2060,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
    if (NumNewNtfs)
      {
       HTM_IMG (Gbl.Prefs.URLTheme,"bell.svg",Txt_Notifications,
-	       "ICO16x16",NULL,NULL);
+	       "class=\"ICO16x16\"");
       fprintf (Gbl.F.Out,"&nbsp;%u<span id=\"notif_new\">&nbsp;%s</span>",
 	       NumNewNtfs,
 	       NumNewNtfs == 1 ? Txt_NOTIF_new_SINGULAR :

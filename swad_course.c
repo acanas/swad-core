@@ -624,15 +624,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       Frm_LinkFormSubmit (Act_GetActionTextFromDB (Act_GetActCod (ActSeeCtyInf),ActTxt),
 			  Highlight ? ClassHighlight :
         	                      ClassNormal,NULL);
-      /* Country map */
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s.png\""
-	                 " alt=\"%s\" title=\"%s\""
-                         " class=\"ICO16x16\" />);",
-	       Cfg_URL_ICON_COUNTRIES_PUBLIC,
-	       Cty.Alpha2,
-	       Cty.Alpha2,
-	       Cty.Alpha2,
-	       Cty.Name[Gbl.Prefs.Language]);
+      Cty_DrawCountryMap (&Cty,"ICO16x16");
       fprintf (Gbl.F.Out,"&nbsp;%s",Cty.Name[Gbl.Prefs.Language]);
       Frm_LinkFormEnd ();
       Frm_EndForm ();
@@ -2940,7 +2932,7 @@ void Crs_PutIconToSelectMyCoursesInBreadcrumb (void)
       /***** Put icon with link *****/
       Frm_LinkFormSubmit (Txt_My_courses,NULL,NULL);
       HTM_IMG (Gbl.Prefs.URLTheme,"sitemap.svg",Txt_My_courses,
-	       "BC_ICON ICO_HIGHLIGHT",NULL,NULL);
+	       "class=\"BC_ICON ICO_HIGHLIGHT\"");
       Frm_LinkFormEnd ();
 
       /***** End form *****/

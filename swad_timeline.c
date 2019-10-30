@@ -1426,11 +1426,11 @@ static void TL_PutLinkToViewOldPublications (void)
 		"return false;\"",
 	        The_ClassFormInBoxBold[Gbl.Prefs.Theme]);
    HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
-	    "ICO20x20",NULL,"get_old_timeline");
+	    "class=\"ICO20x20\" id=\"get_old_timeline\"");
    HTM_IMG (Cfg_URL_ICON_PUBLIC,"working16x16.gif",Txt_See_more,
-	    "ICO20x20","display:none;","getting_old_timeline");			// Animated icon hidden
+	    "class=\"ICO20x20\" style=\"display:none;\" id=\"getting_old_timeline\"");	// Animated icon hidden
    HTM_IMG (Cfg_URL_ICON_PUBLIC,"recycle16x16.gif","Txt_See_more",
-	    "ICO20x20","display:none;","get_old_timeline");
+	    "class=\"ICO20x20\" style=\"display:none;\" id=\"get_old_timeline\"");
    fprintf (Gbl.F.Out,"&nbsp;%s",Txt_See_more);
    HTM_A_End ();
    HTM_DIV_End ();

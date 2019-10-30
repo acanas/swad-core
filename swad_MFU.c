@@ -246,7 +246,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          Frm_StartForm (Action);
          Frm_LinkFormSubmit (TabMenuStr,The_ClassFormInBoxNoWrap[Gbl.Prefs.Theme],NULL);
          HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
-	          NULL,NULL,NULL);
+	          NULL);
          fprintf (Gbl.F.Out," %s",TabMenuStr);
          Frm_LinkFormEnd ();
          Frm_EndForm ();
@@ -307,7 +307,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
          Frm_StartForm (Action);
          Frm_LinkFormSubmit (TabMenuStr,NULL,NULL);
          HTM_IMG (Gbl.Prefs.URLIconSet,Act_GetIcon (Action),MenuStr,
-	          NULL,NULL,NULL);
+	          NULL);
 	 fprintf (Gbl.F.Out," %s",MenuStr);
 	 Frm_LinkFormEnd ();
          Frm_EndForm ();
