@@ -715,7 +715,11 @@ void HTM_IMG (const char *URL,const char *Icon,const char *Title,
    int NumBytesPrinted;
    char *Attr;
 
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s\"",URL,Icon);
+   fprintf (Gbl.F.Out,"<img src=\"%s",URL);
+   if (Icon)
+      if (Icon[0])
+         fprintf (Gbl.F.Out,"/%s",Icon);
+   fprintf (Gbl.F.Out,"\"");
 
    if (Title)
      {

@@ -25,9 +25,11 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
 #include <math.h>		// For log10, floor, ceil, modf, sqrt...
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For system, getenv, etc.
 #include <string.h>		// For string functions
 #include <sys/wait.h>		// For the macro WEXITSTATUS
@@ -580,6 +582,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    char FileNamePhotoMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the original image with faces
    char FileNameTxtMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the text neccesary to make the image map
    char PathRelPhoto[PATH_MAX + 1];
+   char *Img;
    FILE *FileTxtMap = NULL;		// Temporary file with the text neccesary to make the image map. Initialized to avoid warning
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    bool WrongType = false;
@@ -785,12 +788,11 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
              Cfg_PATH_PHOTO_TMP_PUBLIC,
 	     Gbl.UniqueNameEncrypted);
    HTM_DIV_Begin ("class=\"TIT CM\"");
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s_map.jpg\""
-                      " usemap=\"#faces_map\""
-                      " alt=\"%s\" title=\"%s\" />",
-            Cfg_URL_PHOTO_TMP_PUBLIC,
-            Gbl.UniqueNameEncrypted,
-            Txt_Faces_detected,Txt_Faces_detected);
+   if (asprintf (&Img,"%s_map.jpg",Gbl.UniqueNameEncrypted) < 0)
+      Lay_NotEnoughMemoryExit ();
+   HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_Faces_detected,
+	    "usemap=\"#faces_map\"");
+   free ((void *) Img);
    HTM_DIV_End ();
 
    /***** End alert *****/
@@ -886,6 +888,7 @@ static void Pho_UpdatePhoto2 (void)
   {
    extern const char *Txt_PHOTO_PROCESSING_CAPTIONS[3];
    unsigned NumPhoto;
+   char *Img;
 
    /***** Start alert *****/
    Ale_ShowLastAlertAndButton1 ();
@@ -898,14 +901,12 @@ static void Pho_UpdatePhoto2 (void)
         NumPhoto++)
      {
       HTM_TD_Begin ("class=\"DAT CT\" style=\"width:33%%;\"");
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s_paso%u.jpg\""
-                         " alt=\"%s\" title=\"%s\""
-                         " style=\"width:%upx; height:%upx;\" />",
-               Cfg_URL_PHOTO_TMP_PUBLIC,
-               Gbl.Usrs.FileNamePhoto,NumPhoto + 1,
-               Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
-               Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
-               Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT);
+      if (asprintf (&Img,"%s_paso%u.jpg",Gbl.Usrs.FileNamePhoto,NumPhoto + 1) < 0)
+         Lay_NotEnoughMemoryExit ();
+      HTM_IMG (Cfg_URL_PHOTO_TMP_PUBLIC,Img,Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
+	       "style=\"width:%upx;height:%upx;\"",
+	       Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT);
+      free ((void *) Img);
       fprintf (Gbl.F.Out,"<br />%s",Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
       HTM_TD_End ();
      }
@@ -1267,35 +1268,35 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       HTM_DIV_End ();
      }
 
-   /***** Start image *****/
-   fprintf (Gbl.F.Out,"<img src=\"");
+   /***** Image zoom *****/
    PhotoExists = false;
    if (PhotoURL)
       if (PhotoURL[0])
 	 PhotoExists = true;
-   if (PhotoExists)
-      fprintf (Gbl.F.Out,"%s",PhotoURL);
-   else
-      fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Cfg_URL_ICON_PUBLIC);
-   fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"%s\""
-	              " class=\"%s\"",
-            UsrDat->FullName,UsrDat->FullName,
-	    ClassPhoto);
-
-   /***** Image zoom *****/
    if (PutZoomCode)
      {
-      fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'");
       if (PhotoExists)
-	 fprintf (Gbl.F.Out,"%s",PhotoURL);
+	 HTM_IMG (PhotoURL,NULL,UsrDat->FullName,
+	          "class=\"%s\""
+	          " onmouseover=\"zoom(this,'%s','%s');\""
+	          " onmouseout=\"noZoom();\"",
+		  ClassPhoto,PhotoURL,IdCaption);
       else
-	 fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Cfg_URL_ICON_PUBLIC);
-      fprintf (Gbl.F.Out,"','%s');\" onmouseout=\"noZoom();\"",
-               IdCaption);
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",UsrDat->FullName,
+	          "class=\"%s\""
+	          " onmouseover=\"zoom(this,'%s/usr_bl.jpg','%s');\""
+	          " onmouseout=\"noZoom();\"",
+		  ClassPhoto,Cfg_URL_ICON_PUBLIC,IdCaption);
      }
-
-   /***** End image *****/
-   fprintf (Gbl.F.Out," />");
+   else
+     {
+      if (PhotoExists)
+	 HTM_IMG (PhotoURL,NULL,UsrDat->FullName,
+		  "class=\"%s\"",ClassPhoto);
+      else
+	 HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",UsrDat->FullName,
+		  "class=\"%s\"",ClassPhoto);
+     }
 
    /***** End form to go to public profile *****/
    if (PutLinkToPublicProfile)
@@ -2500,24 +2501,22 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    /***** Show photo *****/
    if (PhotoURL[0])
      {
-      fprintf (Gbl.F.Out,"<img src=\"%s\"",PhotoURL);
       if (PhotoCaption[0])
-	 fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s');\""
-	                    " onmouseout=\"noZoom();\"",
+         HTM_IMG (PhotoURL,NULL,Deg->ShrtName,
+	          " style=\"width:%upx;height:%upx;\""
+		  " onmouseover=\"zoom(this,'%s','%s');\""
+	          " onmouseout=\"noZoom();\"",
+	          PhotoWidth,PhotoHeight,
 		  PhotoURL,IdCaption);
-      fprintf (Gbl.F.Out," alt=\"%s\""
-			 " style=\"width:%upx; height:%upx;\" />",
-	       Deg->ShrtName,
-	       PhotoWidth,PhotoHeight);
+      else
+         HTM_IMG (PhotoURL,NULL,Deg->ShrtName,
+                  " style=\"width:%upx;height:%upx;\" />",
+	          PhotoWidth,PhotoHeight);
      }
    else
-     {
-      fprintf (Gbl.F.Out,"<img src=\"%s/usr_bl.jpg\" alt=\"%s\""
-			 " style=\"width:%upx; height:%upx;\" />",
-	       Cfg_URL_ICON_PUBLIC,
-	       Deg->ShrtName,
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,"usr_bl.jpg",Deg->ShrtName,
+	       "style=\"width:%upx;height:%upx;\"",
 	       PhotoWidth,PhotoHeight);
-     }
 
    /***** Caption *****/
    HTM_DIV_Begin ("class=\"CLASSPHOTO_CAPTION\"");

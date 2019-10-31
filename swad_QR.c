@@ -25,6 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
+
 #include "swad_action.h"
 #include "swad_global.h"
 #include "swad_HTML.h"
@@ -105,17 +108,19 @@ void QR_PrintQRCode (void)
 
 void QR_ImageQRCode (const char *QRString)
   {
+   char *URL;
+
    HTM_DIV_Begin ("class=\"CM\" style=\"margin:0 auto; width:%upx;\"",
 		  QR_CODE_SIZE);
-   fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s\""
-                      " alt=\"%s\" title=\"%s\""
-                      " style=\"width:%upx; height:%upx;"
-                      " border:1px dashed silver;\" />",
-            QR_CODE_SIZE,QR_CODE_SIZE,
-            QRString,
-            QRString,
-            QRString,
-            QR_CODE_SIZE,QR_CODE_SIZE);
+
+   if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s",
+		 QR_CODE_SIZE,QR_CODE_SIZE,QRString) < 0)
+      Lay_NotEnoughMemoryExit ();
+   HTM_IMG (URL,NULL,QRString,
+	    "style=\"width:%upx;height:%upx;border:1px dashed silver;\"",
+	    QR_CODE_SIZE,QR_CODE_SIZE);
+   free ((void *) URL);
+
    HTM_DIV_End ();
   }
 
@@ -127,17 +132,17 @@ void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
   {
    extern const char *Txt_Shortcut;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
+   char *URL;
 
    /***** Show QR code with direct link to the current centre *****/
-   fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s?%s=%ld\""
-                      " alt=\"%s\" title=\"%s\""
-                      " style=\"width:%upx; height:%upx;\" />",
-            Size,Size,
-            Cfg_URL_SWAD_CGI,
-            Lan_STR_LANG_ID[Gbl.Prefs.Language],ParamStr,Cod,
-            Txt_Shortcut,
-            Txt_Shortcut,
-            Size,Size);
+   if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s?%s=%ld",
+		 Size,Size,
+                 Cfg_URL_SWAD_CGI,
+                 Lan_STR_LANG_ID[Gbl.Prefs.Language],ParamStr,Cod) < 0)
+      Lay_NotEnoughMemoryExit ();
+   HTM_IMG (URL,NULL,Txt_Shortcut,
+	    "style=\"width:%upx;height:%upx;\"",Size,Size);
+   free ((void *) URL);
   }
 
 /*****************************************************************************/
@@ -147,15 +152,19 @@ void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
 void QR_ExamAnnnouncement (void)
   {
    extern const char *Txt_Link_to_announcement_of_exam;
+   char *URL;
 
    /***** Show QR code with direct link to the exam announcement *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld\""
-                      " alt=\"%s\" title=\"%s\""
-                      " style=\"width:250px; height:250px;\" />",
-            300,300,
-            Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Crs.CrsCod,Act_GetActCod (ActSeeAllExaAnn),
-            Txt_Link_to_announcement_of_exam,
-            Txt_Link_to_announcement_of_exam);
+
+   if (asprintf (&URL,"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/?crs=%ld%%26act=%ld",
+		 300,300,
+                 Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Crs.CrsCod,
+		 Act_GetActCod (ActSeeAllExaAnn)) < 0)
+      Lay_NotEnoughMemoryExit ();
+   HTM_IMG (URL,NULL,Txt_Link_to_announcement_of_exam,
+	    "style=\"width:250px;height:250px;\"");
+   free ((void *) URL);
+
    HTM_DIV_End ();
   }

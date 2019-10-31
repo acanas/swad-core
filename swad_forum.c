@@ -3328,8 +3328,6 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *The_ClassFormInBoxBold[The_NUM_THEMES];
-   extern const char *Txt_You_have_written_1_post_in_this_thread;
-   extern const char *Txt_You_have_written_X_posts_in_this_thread;
    extern const char *Txt_Thread_with_posts_from_you;
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
@@ -3373,23 +3371,12 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 
       HTM_TD_Begin ("class=\"BT %s\"",BgColor);
       if (Thr.NumMyPosts)
-        {
-         fprintf (Gbl.F.Out,"<img src=\"");
-         if (Gbl.Usrs.Me.PhotoURL[0])	// If I have photo
-            fprintf (Gbl.F.Out,"%s",
-                     Gbl.Usrs.Me.PhotoURL);
-         else
-            fprintf (Gbl.F.Out,"%s/usr_bl.jpg",
-                     Cfg_URL_ICON_PUBLIC);
-         fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"",
-                  Txt_Thread_with_posts_from_you);
-         if (Thr.NumMyPosts == 1)
-            fprintf (Gbl.F.Out,"%s",Txt_You_have_written_1_post_in_this_thread);
-         else
-            fprintf (Gbl.F.Out,Txt_You_have_written_X_posts_in_this_thread,
-                     Thr.NumMyPosts);
-         fprintf (Gbl.F.Out,"\" class=\"PHOTO15x20\" />");
-        }
+         HTM_IMG (Gbl.Usrs.Me.PhotoURL[0] ? Gbl.Usrs.Me.PhotoURL :
+                                            Cfg_URL_ICON_PUBLIC,
+		  Gbl.Usrs.Me.PhotoURL[0] ? NULL :
+			                    "usr_bl.jpg",
+		  Txt_Thread_with_posts_from_you,
+	          "class=\"PHOTO15x20\"");
       HTM_TD_End ();
 
       /***** Put an icon with thread status *****/

@@ -49160,23 +49160,23 @@ const char *Txt_Thread_X_removed =	// Warning: it is very important to include %
 
 const char *Txt_Thread_with_posts_from_you =
 #if   L==1	// ca
-	"Discusi&oacute;n con comentarios de usted.";	// Necessita traduccio
+	"Discusi&oacute;n con comentarios de usted";	// Necessita traduccio
 #elif L==2	// de
-	"Thread with posts from you.";			// Need Übersetzung
+	"Thread with posts from you";			// Need Übersetzung
 #elif L==3	// en
-	"Thread with posts from you.";
+	"Thread with posts from you";
 #elif L==4	// es
-	"Discusi&oacute;n con comentarios de usted.";
+	"Discusi&oacute;n con comentarios de usted";
 #elif L==5	// fr
-	"Thread with posts from you.";			// Besoin de traduction
+	"Thread with posts from you";			// Besoin de traduction
 #elif L==6	// gn
-	"Discusi&oacute;n con comentarios de usted.";	// Okoteve traducción
+	"Discusi&oacute;n con comentarios de usted";	// Okoteve traducción
 #elif L==7	// it
-	"Discussione con post per te.";
+	"Discussione con post per te";
 #elif L==8	// pl
-	"Thread with posts from you.";			// Potrzebujesz tlumaczenie
+	"Thread with posts from you";			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Discuss&atilde;o com mensagens de voc&ecirc;.";
+	"Discuss&atilde;o com mensagens de voc&ecirc;";
 #endif
 
 const char *Txt_threads =
@@ -55878,48 +55878,6 @@ const char *Txt_You_have_to_register_compulsorily_in_one_group_of_type_X =	// Wa
 	"You have to register compulsorily in one group of type %s.";	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
 	"Voc&ecirc; tem que se registrar obrigatoriamente em um grupo do tipo %s.";
-#endif
-
-const char *Txt_You_have_written_1_post_in_this_thread =
-#if   L==1	// ca
-	"Usted ha escrito 1 comentario en esta discusi&oacute;n";		// Necessita traduccio
-#elif L==2	// de
-	"Sie haben 1 Nachricht in diesem Thread";
-#elif L==3	// en
-	"You have written 1 post in this thread";
-#elif L==4	// es
-	"Usted ha escrito 1 comentario en esta discusi&oacute;n";
-#elif L==5	// fr
-	"Vous avez &eacute;crit 1 post dans ce fil";
-#elif L==6	// gn
-	"Usted ha escrito 1 comentario en esta discusi&oacute;n";		// Okoteve traducción
-#elif L==7	// it
-	"Hai scritto 1 post in questa discussione";
-#elif L==8	// pl
-	"You have written 1 post in this thread";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; escreveu 1 post nesta discuss&atilde;o";
-#endif
-
-const char *Txt_You_have_written_X_posts_in_this_thread =		// Warning: it is very important to include %u in the following sentences
-#if   L==1	// ca
-	"Usted ha escrito %u comentarios en esta discusi&oacute;n";	// Necessita traduccio
-#elif L==2	// de
-	"Sie haben %u Nachrichten in diesem Thread";
-#elif L==3	// en
-	"You have written %u posts in this thread";
-#elif L==4	// es
-	"Usted ha escrito %u comentarios en esta discusi&oacute;n";
-#elif L==5	// fr
-	"Vous avez &eacute;crit %u posts dans ce fil";
-#elif L==6	// gn
-	"Usted ha escrito %u comentarios en esta discusi&oacute;n";	// Okoteve traducción
-#elif L==7	// it
-	"Hai scritto %u post in questa discussione";
-#elif L==8	// pl
-	"You have written %u posts in this thread";			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Voc&ecirc; escreveu %u posts nesta discuss&atilde;o";
 #endif
 
 const char *Txt_You_must_enter_an_integer_value_as_the_correct_answer =
