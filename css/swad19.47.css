@@ -2722,7 +2722,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .MCH_SHOW_RESULTS
 	{
 	text-align:center;
-	padding-bottom:16pt;
+	padding:16pt 0;
 	font-size:13pt;
 	}
 .MCH_NUM_ANSWERERS
