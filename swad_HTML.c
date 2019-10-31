@@ -63,6 +63,7 @@ static unsigned HTM_DIV_NestingLevel = 0;
 static unsigned HTM_UL_NestingLevel = 0;
 static unsigned HTM_LI_NestingLevel = 0;
 static unsigned HTM_A_NestingLevel = 0;
+static unsigned HTM_TEXTAREA_NestingLevel = 0;
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -83,6 +84,8 @@ static void HTM_UL_BeginWithoutAttr (void);
 static void HTM_LI_BeginWithoutAttr (void);
 
 static void HTM_A_BeginWithoutAttr (void);
+
+static void HTM_TEXTAREA_BeginWithoutAttr (void);
 
 /*****************************************************************************/
 /******************************* Start/end table *****************************/
@@ -702,6 +705,58 @@ void HTM_A_End (void)
    fprintf (Gbl.F.Out,"</a>");
 
    HTM_A_NestingLevel--;
+  }
+
+/*****************************************************************************/
+/********************************* Text areas ********************************/
+/*****************************************************************************/
+
+void HTM_TEXTAREA_Begin (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 fprintf (Gbl.F.Out,"<textarea %s>",Attr);
+
+	 free ((void *) Attr);
+	}
+      else
+         HTM_TEXTAREA_BeginWithoutAttr ();
+     }
+   else
+      HTM_TEXTAREA_BeginWithoutAttr ();
+
+   HTM_TEXTAREA_NestingLevel++;
+  }
+
+static void HTM_TEXTAREA_BeginWithoutAttr (void)
+  {
+   fprintf (Gbl.F.Out,"<textarea>");
+  }
+
+void HTM_TEXTAREA_End (void)
+  {
+   if (HTM_TEXTAREA_NestingLevel == 0)	// No TEXTAREA open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened TEXTAREA.");
+
+   fprintf (Gbl.F.Out,"</textarea>");
+
+   HTM_TEXTAREA_NestingLevel--;
   }
 
 /*****************************************************************************/

@@ -386,13 +386,12 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_StartForm (ActChgCtrPhoAtt);
-	 fprintf (Gbl.F.Out,"<textarea id=\"AttributionArea\""
-			    " name=\"Attribution\" rows=\"2\""
-			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.Form.Id);
+	 HTM_TEXTAREA_Begin ("id=\"AttributionArea\" name=\"Attribution\" rows=\"2\""
+			     " onchange=\"document.getElementById('%s').submit();\"",
+		             Gbl.Form.Id);
 	 if (PhotoAttribution)
 	    fprintf (Gbl.F.Out,"%s",PhotoAttribution);
-	 fprintf (Gbl.F.Out,"</textarea>");
+	 HTM_TEXTAREA_End ();
 	 Frm_EndForm ();
 	 HTM_DIV_End ();
 	}

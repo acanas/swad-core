@@ -459,10 +459,9 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<textarea id=\"%s\" name=\"%s\""
-                      " cols=\"75\" rows=\"%u\">"
-                      "</textarea>",
-	    Field,Field,Rows);
+   HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"75\" rows=\"%u\"",
+	               Field,Field,Rows);
+   HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

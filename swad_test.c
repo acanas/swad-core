@@ -5157,26 +5157,25 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<textarea id=\"Stem\" name=\"Stem\""
-                      " class=\"STEM_TEXTAREA\" rows=\"5\" required=\"required\">"
-                      "%s"
-                      "</textarea><br />",
-            Stem);
+   HTM_TEXTAREA_Begin ("id=\"Stem\" name=\"Stem\" class=\"STEM_TEXTAREA\""
+	               " rows=\"5\" required=\"required\"");
+   fprintf (Gbl.F.Out,"%s",Stem);
+   HTM_TEXTAREA_End ();
+   fprintf (Gbl.F.Out,"<br />");
    Tst_PutFormToEditQstMedia (&Gbl.Test.Media,-1,
                               false);
 
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s (%s):<br />"
-                      "<textarea name=\"Feedback\""
-                      " class=\"STEM_TEXTAREA\" rows=\"2\">",
+	              "%s (%s):<br />",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Feedback,Txt_optional);
+   HTM_TEXTAREA_Begin ("name=\"Feedback\" class=\"STEM_TEXTAREA\" rows=\"2\"");
    if (Feedback)
       if (Feedback[0])
 	 fprintf (Gbl.F.Out,"%s",Feedback);
-   fprintf (Gbl.F.Out,"</textarea>"
-                      "</label>");
+   HTM_TEXTAREA_End ();
+   fprintf (Gbl.F.Out,"</label>");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -5363,15 +5362,12 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	                                  " style=\"display:none;\"");	// Answer does not have content ==> Hide column
 
       /* Answer text */
-      fprintf (Gbl.F.Out,"<textarea name=\"AnsStr%u\""
-	                 " class=\"ANSWER_TEXTAREA\" rows=\"5\"",
-	       NumOpt);
-      if (OptionsDisabled)
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out,">");
+      HTM_TEXTAREA_Begin ("name=\"AnsStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"5\"%s",
+	                  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
+	                	                   "");
       if (AnswerHasContent)
          fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
-      fprintf (Gbl.F.Out,"</textarea>");
+      HTM_TEXTAREA_End ();
 
       /* Media */
       Tst_PutFormToEditQstMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
@@ -5379,19 +5375,16 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                                  OptionsDisabled);
 
       /* Feedback */
-      fprintf (Gbl.F.Out,"<label class=\"%s\">%s (%s):<br />"
-	                 "<textarea name=\"FbStr%u\""
-	                 " class=\"ANSWER_TEXTAREA\" rows=\"2\"",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Feedback,Txt_optional,
-	       NumOpt);
-      if (OptionsDisabled)
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out,">");
+      fprintf (Gbl.F.Out,"<label class=\"%s\">%s (%s):<br />",
+	       The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Feedback,Txt_optional);
+      HTM_TEXTAREA_Begin ("name=\"FbStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"2\"%s",
+			  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
+				                   "");
       if (Gbl.Test.Answer.Options[NumOpt].Feedback)
          if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
             fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Feedback);
-      fprintf (Gbl.F.Out,"</textarea>"
-	                 "</label>");
+      HTM_TEXTAREA_End ();
+      fprintf (Gbl.F.Out,"</label>");
 
       /* End of right column */
       HTM_DIV_End ();

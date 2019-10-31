@@ -163,7 +163,6 @@ static void Mch_ShowFormColumns (struct Match *Match);
 static void Mch_PutParamNumCols (unsigned NumCols);
 
 static void Mch_ShowMatchTitle (struct Match *Match);
-// static void Mch_ShowFormViewResult (struct Match *Match);
 static void Mch_PutCheckboxResult (struct Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (struct Match *Match);
 static void Mch_WriteAnswersMatchResult (struct Match *Match,
@@ -2118,10 +2117,8 @@ static void Mch_ShowLeftColumnTch (struct Match *Match)
    Mch_PutMatchControlButtons (Match);
 
    /***** Put forms to choice which projects to show *****/
-   /* 1st. row */
    Set_StartSettingsHead ();
    Mch_ShowFormColumns (Match);
-   // Mch_ShowFormViewResult (Match);
    Set_EndSettingsHead ();
 
    /***** Write button to request viewing results *****/
@@ -2404,33 +2401,6 @@ static void Mch_PutParamNumCols (unsigned NumCols)	// Number of columns
    Par_PutHiddenParamUnsigned ("NumCols",NumCols);
   }
 
-/*****************************************************************************/
-/******************* Put form to select if show results **********************/
-/*****************************************************************************/
-/*
-static void Mch_ShowFormViewResult (struct Match *Match)
-  {
-   extern const char *Txt_View_results;
-
-   ***** Begin selector *****
-   Set_StartOneSettingSelector ();
-   HTM_DIV_Begin ("class=\"%s\"",(Match->Status.ShowQstResults) ? "PREF_ON" :
-					                          "PREF_OFF");
-
-   ***** Begin form *****
-   Frm_StartForm (ActChgVisResMchQst);
-   Mch_PutParamMchCod (Match->MchCod);	// Current match being played
-
-   Ico_PutSettingIconLink ("poll-h.svg",Txt_View_results);
-
-   ***** End form *****
-   Frm_EndForm ();
-
-   ***** End selector *****
-   HTM_DIV_End ();
-   Set_EndOneSettingSelector ();
-  }
-*/
 /*****************************************************************************/
 /***************** Put checkbox to select if show results ********************/
 /*****************************************************************************/

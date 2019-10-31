@@ -1937,11 +1937,10 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<textarea id=\"Txt\" name=\"Txt\""
-                      " cols=\"60\" rows=\"10\">");
+   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"10\"");
    if (!ItsANewSurvey)
       fprintf (Gbl.F.Out,"%s",Txt);
-   fprintf (Gbl.F.Out,"</textarea>");
+   HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2731,10 +2730,9 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<textarea id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"4\">"
-	              "%s"
-                      "</textarea>",
-	    Txt);
+   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"4\"");
+   fprintf (Gbl.F.Out,"%s",Txt);
+   HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2788,12 +2786,11 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 
       /* Answer text */
       HTM_TD_Begin ("class=\"RT\"");
-      fprintf (Gbl.F.Out,"<textarea id=\"AnsStr%u\" name=\"AnsStr%u\""
-                         " cols=\"50\" rows=\"1\">",
-               NumAns,NumAns);
+      HTM_TEXTAREA_Begin ("id=\"AnsStr%u\" name=\"AnsStr%u\" cols=\"50\" rows=\"1\"",
+                          NumAns,NumAns);
       if (SvyQst->AnsChoice[NumAns].Text)
          fprintf (Gbl.F.Out,"%s",SvyQst->AnsChoice[NumAns].Text);
-      fprintf (Gbl.F.Out,"</textarea>");
+      HTM_TEXTAREA_End ();
       HTM_TD_End ();
 
       HTM_TR_End ();

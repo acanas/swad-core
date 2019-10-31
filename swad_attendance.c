@@ -1154,11 +1154,10 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<textarea id=\"Txt\" name=\"Txt\""
-                      " cols=\"60\" rows=\"5\">");
+   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"5\"");
    if (!ItsANewAttEvent)
       fprintf (Gbl.F.Out,"%s",Description);
-   fprintf (Gbl.F.Out,"</textarea>");
+   HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2138,11 +2137,12 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    /***** Student's comment: write form or text */
    HTM_TD_Begin ("class=\"DAT_SMALL LT COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanEditStdComment)	// Show with form
-      fprintf (Gbl.F.Out,"<textarea name=\"CommentStd%ld\""
-	                 " cols=\"40\" rows=\"3\">"
-	                 "%s"
-	                 "</textarea>",
-	       UsrDat->UsrCod,CommentStd);
+     {
+      HTM_TEXTAREA_Begin ("name=\"CommentStd%ld\" cols=\"40\" rows=\"3\"",
+	                  UsrDat->UsrCod);
+      fprintf (Gbl.F.Out,"%s",CommentStd);
+      HTM_TEXTAREA_End ();
+     }
    else				// Show without form
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -2154,11 +2154,12 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    /***** Teacher's comment: write form, text or nothing */
    HTM_TD_Begin ("class=\"DAT_SMALL LT COLOR%u\"",Gbl.RowEvenOdd);
    if (ICanEditTchComment)		// Show with form
-      fprintf (Gbl.F.Out,"<textarea name=\"CommentTch%ld\""
-	                 " cols=\"40\" rows=\"3\">"
-	                 "%s"
-	                 "</textarea>",
-	       UsrDat->UsrCod,CommentTch);
+     {
+      HTM_TEXTAREA_Begin ("name=\"CommentTch%ld\" cols=\"40\" rows=\"3\"",
+			  UsrDat->UsrCod);
+      fprintf (Gbl.F.Out,"%s",CommentTch);
+      HTM_TEXTAREA_End ();
+     }
    else	if (Att->CommentTchVisible)	// Show without form
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,

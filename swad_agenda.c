@@ -1547,11 +1547,10 @@ void Agd_RequestCreatOrEditEvent (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<textarea id=\"Txt\" name=\"Txt\""
-                      " cols=\"60\" rows=\"10\">");
+   HTM_TEXTAREA_Begin ("id=\"Txt\" name=\"Txt\" cols=\"60\" rows=\"10\"");
    if (!ItsANewEvent)
       fprintf (Gbl.F.Out,"%s",Txt);
-   fprintf (Gbl.F.Out,"</textarea>");
+   HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

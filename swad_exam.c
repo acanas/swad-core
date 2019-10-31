@@ -1312,11 +1312,12 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea id=\"Place\" name=\"Place\""
-	                 " cols=\"40\" rows=\"4\">"
-	                 "%s"
-	                 "</textarea>",
+     {
+      HTM_TEXTAREA_Begin ("id=\"Place\" name=\"Place\" cols=\"40\" rows=\"4\"");
+      fprintf (Gbl.F.Out,"%s",
                Gbl.ExamAnns.ExaDat.Place);
+      HTM_TEXTAREA_End ();
+     }
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1338,11 +1339,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea id=\"ExamMode\" name=\"ExamMode\""
-	                 " cols=\"40\" rows=\"2\">"
-	                 "%s"
-	                 "</textarea>",
-               Gbl.ExamAnns.ExaDat.Mode);
+     {
+      HTM_TEXTAREA_Begin ("id=\"ExamMode\" name=\"ExamMode\" cols=\"40\" rows=\"2\"");
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Mode);
+      HTM_TEXTAREA_End ();
+     }
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1364,11 +1365,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea id=\"Structure\" name=\"Structure\""
-	                 " cols=\"40\" rows=\"8\">"
-	                 "%s"
-	                 "</textarea>",
-               Gbl.ExamAnns.ExaDat.Structure);
+     {
+      HTM_TEXTAREA_Begin ("id=\"Structure\" name=\"Structure\" cols=\"40\" rows=\"8\"");
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Structure);
+      HTM_TEXTAREA_End ();
+     }
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1390,11 +1391,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea id=\"DocRequired\" name=\"DocRequired\""
-	                 " cols=\"40\" rows=\"2\">"
-	                 "%s"
-	                 "</textarea>",
-               Gbl.ExamAnns.ExaDat.DocRequired);
+     {
+      HTM_TEXTAREA_Begin ("id=\"DocRequired\" name=\"DocRequired\" cols=\"40\" rows=\"2\"");
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.DocRequired);
+      HTM_TEXTAREA_End ();
+     }
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1416,11 +1417,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea id=\"MatRequired\" name=\"MatRequired\""
-	                 " cols=\"40\" rows=\"4\">"
-	                 "%s"
-	                 "</textarea>",
-               Gbl.ExamAnns.ExaDat.MatRequired);
+     {
+      HTM_TEXTAREA_Begin ("id=\"MatRequired\" name=\"MatRequired\" cols=\"40\" rows=\"4\"");
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.MatRequired);
+      HTM_TEXTAREA_End ();
+     }
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1442,11 +1443,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea id=\"MatAllowed\" name=\"MatAllowed\""
-	                 " cols=\"40\" rows=\"4\">"
-	                 "%s"
-	                 "</textarea>",
-               Gbl.ExamAnns.ExaDat.MatAllowed);
+     {
+      HTM_TEXTAREA_Begin ("id=\"MatAllowed\" name=\"MatAllowed\" cols=\"40\" rows=\"4\"");
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.MatAllowed);
+      HTM_TEXTAREA_End ();
+     }
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -1468,11 +1469,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea id=\"OtherInfo\" name=\"OtherInfo\""
-	                 " cols=\"40\" rows=\"5\">"
-	                 "%s"
-	                 "</textarea>",
-               Gbl.ExamAnns.ExaDat.OtherInfo);
+     {
+      HTM_TEXTAREA_Begin ("id=\"OtherInfo\" name=\"OtherInfo\" cols=\"40\" rows=\"5\"");
+      fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.OtherInfo);
+      HTM_TEXTAREA_End ();
+     }
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,

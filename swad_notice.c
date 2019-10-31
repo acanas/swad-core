@@ -113,9 +113,9 @@ void Not_ShowFormNotice (void)
                  Hlp_MESSAGES_Notices,Box_NOT_CLOSABLE);
 
    /***** Message body *****/
-   fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"30\" rows=\"10\""
-	              " autofocus=\"autofocus\" required=\"required\">"
-                      "</textarea>");
+   HTM_TEXTAREA_Begin ("name=\"Content\" cols=\"30\" rows=\"10\""
+	               " autofocus=\"autofocus\" required=\"required\"");
+   HTM_TEXTAREA_End ();
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_notice);

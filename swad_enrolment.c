@@ -929,9 +929,8 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<textarea id=\"UsrsIDs\" name=\"UsrsIDs\""
-                      " cols=\"60\" rows=\"10\">"
-                      "</textarea>");
+   HTM_TEXTAREA_Begin ("id=\"UsrsIDs\" name=\"UsrsIDs\" cols=\"60\" rows=\"10\"");
+   HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

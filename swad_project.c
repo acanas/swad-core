@@ -3459,11 +3459,11 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<textarea id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\"",
-            Id,Id,NumRows);
-   if (Required)
-      fprintf (Gbl.F.Out," required=\"required\"");
-   fprintf (Gbl.F.Out,">%s</textarea>",TxtField);
+   HTM_TEXTAREA_Begin ("id=\"%s\" name=\"%s\" cols=\"60\" rows=\"%u\"%s",
+                       Id,Id,NumRows,Required ? " required=\"required\"" :
+                	                        "");
+   fprintf (Gbl.F.Out,"%s",TxtField);
+   HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

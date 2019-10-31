@@ -1826,13 +1826,13 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
          HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LT COLOR%u\"",Gbl.RowEvenOdd);
          if (ICanEditThisField)	// Show with form
            {
-            fprintf (Gbl.F.Out,"<textarea name=\"Field%ld\" rows=\"%u\""
-        	               " class=\"REC_C2_BOT_INPUT\">",
-                     Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
-                     Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
+            HTM_TEXTAREA_Begin ("name=\"Field%ld\" rows=\"%u\""
+        	                " class=\"REC_C2_BOT_INPUT\"",
+                                Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod,
+                                Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
             if (ThisFieldHasText)
                fprintf (Gbl.F.Out,"%s",row[0]);
-            fprintf (Gbl.F.Out,"</textarea>");
+            HTM_TEXTAREA_End ();
            }
          else			// Show without form
            {
@@ -3573,11 +3573,12 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
    if (ShowData)
      {
       if (ICanEdit)
-	 fprintf (Gbl.F.Out,"<textarea id=\"Comments\" name=\"Comments\""
-	                    " rows=\"4\" class=\"REC_C2_BOT_INPUT\">"
-			    "%s"
-			    "</textarea>",
-		  UsrDat->Comments);
+	{
+	 HTM_TEXTAREA_Begin ("id=\"Comments\" name=\"Comments\""
+	                     " rows=\"4\" class=\"REC_C2_BOT_INPUT\"");
+	 fprintf (Gbl.F.Out,"%s",UsrDat->Comments);
+	 HTM_TEXTAREA_End ();
+	}
       else if (UsrDat->Comments[0])
 	{
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,     // Convert from HTML to rigorous HTML

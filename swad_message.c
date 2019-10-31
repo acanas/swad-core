@@ -496,10 +496,9 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("colspan=\"%u\" class=\"LM\"",ColSpan);
-   fprintf (Gbl.F.Out,"<textarea id=\"OtherRecipients\" name=\"OtherRecipients\""
-	              " class=\"MSG_RECIPIENTS\" rows=\"2\""
-	              " placeholder=\"%s\">",
-            Txt_nicks_emails_or_IDs_separated_by_commas);
+   HTM_TEXTAREA_Begin ("id=\"OtherRecipients\" name=\"OtherRecipients\""
+	               " class=\"MSG_RECIPIENTS\" rows=\"2\" placeholder=\"%s\"",
+                       Txt_nicks_emails_or_IDs_separated_by_commas);
    if (Gbl.Usrs.ListOtherRecipients[0])
       fprintf (Gbl.F.Out,"%s",Gbl.Usrs.ListOtherRecipients);
    else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If there is a recipient
@@ -507,7 +506,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 						// write @nickname of original sender
       if (Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,Nickname))
          fprintf (Gbl.F.Out,"@%s",Nickname);
-   fprintf (Gbl.F.Out,"</textarea>");
+   HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -544,8 +543,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<textarea id=\"MsgSubject\" name=\"Subject\""
-                      " class=\"MSG_SUBJECT\" rows=\"2\">");
+   HTM_TEXTAREA_Begin ("id=\"MsgSubject\" name=\"Subject\""
+	               " class=\"MSG_SUBJECT\" rows=\"2\"");
 
    /* If message is a reply ==> get original message */
    if (MsgCod > 0)	// It's a reply
@@ -578,7 +577,9 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       /* Write subject */
       if (!SubjectAndContentComeFromForm)
 	 fprintf (Gbl.F.Out,"Re: ");
-      fprintf (Gbl.F.Out,"%s</textarea>",Gbl.Msg.Subject);
+      fprintf (Gbl.F.Out,"%s",Gbl.Msg.Subject);
+
+      HTM_TEXTAREA_End ();
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -594,8 +595,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<textarea id=\"MsgContent\" name=\"Content\""
-                         " class=\"MSG_CONTENT\" rows=\"20\">");
+      HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
+                          " class=\"MSG_CONTENT\" rows=\"20\"");
 
       /* Start textarea with a '\n', that will be not visible in textarea.
          When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
@@ -612,7 +613,9 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
    else	// It's not a reply
      {
       /* End message subject */
-      fprintf (Gbl.F.Out,"%s</textarea>",Gbl.Msg.Subject);
+      fprintf (Gbl.F.Out,"%s",Gbl.Msg.Subject);
+
+      HTM_TEXTAREA_End ();
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -629,8 +632,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<textarea id=\"MsgContent\" name=\"Content\""
-                         " class=\"MSG_CONTENT\" rows=\"20\">");
+      HTM_TEXTAREA_Begin ("id=\"MsgContent\" name=\"Content\""
+                          " class=\"MSG_CONTENT\" rows=\"20\"");
 
       /* Start textarea with a '\n', that will be not visible in textarea.
          When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
@@ -638,7 +641,8 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
          by "Lorem", without the white line */
       fprintf (Gbl.F.Out,"\n%s",Content);
      }
-   fprintf (Gbl.F.Out,"</textarea>");
+
+   HTM_TEXTAREA_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

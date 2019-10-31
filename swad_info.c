@@ -2081,10 +2081,9 @@ void Inf_EditPlainTxtInfo (void)
    /***** Edition area *****/
    HTM_DIV_Begin ("class=\"CM\"");
    Lay_HelpPlainEditor ();
-   fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
-	              "%s"
-	              "</textarea>",
-            TxtHTML);
+   HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\"");
+   fprintf (Gbl.F.Out,"%s",TxtHTML);
+   HTM_TEXTAREA_End ();
    HTM_DIV_End ();
 
    /***** Send button and end box *****/
@@ -2132,10 +2131,9 @@ void Inf_EditRichTxtInfo (void)
    /***** Edition area *****/
    HTM_DIV_Begin ("class=\"CM\"");
    Lay_HelpRichEditor ();
-   fprintf (Gbl.F.Out,"<textarea name=\"Txt\" cols=\"80\" rows=\"20\">"
-	              "%s"
-	              "</textarea>",
-            TxtHTML);
+   HTM_TEXTAREA_Begin ("name=\"Txt\" cols=\"80\" rows=\"20\"");
+   fprintf (Gbl.F.Out,"%s",TxtHTML);
+   HTM_TEXTAREA_End ();
    HTM_DIV_End ();
 
    /***** Send button and end box *****/

@@ -2366,14 +2366,13 @@ static void TL_PutTextarea (const char *Placeholder,const char *ClassTextArea)
    Frm_SetUniqueId (IdDivImgButton);
 
    /***** Textarea to write the content *****/
-   fprintf (Gbl.F.Out,"<textarea name=\"Content\" rows=\"1\" maxlength=\"%u\""
-                      " placeholder=\"%s&hellip;\""
-	              " class=\"%s\""
-	              " onfocus=\"expandTextarea(this,'%s','6');\">"
-		      "</textarea>",
-            TL_MAX_CHARS_IN_POST,
-            Placeholder,ClassTextArea,
-            IdDivImgButton);
+   HTM_TEXTAREA_Begin ("name=\"Content\" rows=\"1\" maxlength=\"%u\""
+                       " placeholder=\"%s&hellip;\" class=\"%s\""
+	               " onfocus=\"expandTextarea(this,'%s','6');\"",
+		       TL_MAX_CHARS_IN_POST,
+		       Placeholder,ClassTextArea,
+		       IdDivImgButton);
+   HTM_TEXTAREA_End ();
 
    /***** Start concealable div *****/
    HTM_DIV_Begin ("id=\"%s\" style=\"display:none;\"",IdDivImgButton);

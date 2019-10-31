@@ -487,15 +487,18 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.47.1 (2019-10-31)"
+#define Log_PLATFORM_VERSION	"SWAD 19.48 (2019-10-31)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.39.js"
 /*
 // TODO: Hacer un nuevo rol en los TFG: tutor externo (profesor de áreas no vinculadas con el centro, profesionales de empresas, etc.)
 // TODO: Impedir la creación y edición de proyectos si no son editables.
+// TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
 
+	Version 19.48:    Oct 31, 2019	Code refactoring in HTML textarea. (246038 lines)
+	Version 19.47.2:  Oct 31, 2019	Removed obsolete function to activate results in match questions. (246009 lines)
 	Version 19.47.1:  Oct 31, 2019	Removed obsolete messages. (246033 lines)
-	Version 19.47:    Oct 31, 2019	Return to old way to activate showing of results in match question. (246230 lines)
+	Version 19.47:    Oct 31, 2019	Return to old way to activate results in match questions. (246230 lines)
 	Version 19.46.10: Oct 31, 2019	Code refactoring in HTML images. (246196 lines)
 	Version 19.46.9:  Oct 30, 2019	Code refactoring in HTML images. (246241 lines)
 	Version 19.46.8:  Oct 30, 2019	Code refactoring in HTML images. (246244 lines)

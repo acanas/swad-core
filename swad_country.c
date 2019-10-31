@@ -296,13 +296,12 @@ static void Cty_Configuration (bool PrintView)
 	{
 	 HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_StartForm (ActChgCtyMapAtt);
-	 fprintf (Gbl.F.Out,"<textarea name=\"Attribution\""
-			    " cols=\"50\" rows=\"2\""
-			    " onchange=\"document.getElementById('%s').submit();\">",
-		  Gbl.Form.Id);
+	 HTM_TEXTAREA_Begin ("name=\"Attribution\" cols=\"50\" rows=\"2\""
+			     " onchange=\"document.getElementById('%s').submit();\"",
+		             Gbl.Form.Id);
 	 if (MapAttribution)
 	    fprintf (Gbl.F.Out,"%s",MapAttribution);
-	 fprintf (Gbl.F.Out,"</textarea>");
+	 HTM_TEXTAREA_End ();
 	 Frm_EndForm ();
 	 HTM_DIV_End ();
 	}
