@@ -4140,28 +4140,7 @@ const char *Txt_Close =
 #elif L==9	// pt
 	"Fechar";
 #endif
-/*
-const char *Txt_Closed_game =
-#if   L==1	// ca
-	"Joc tancat";
-#elif L==2	// de
-	"Geschlossene Spiel";
-#elif L==3	// en
-	"Closed game";
-#elif L==4	// es
-	"Juego cerrado";
-#elif L==5	// fr
-	"Jeu ferm&eacute;";
-#elif L==6	// gn
-	"Juego cerrado";		// Okoteve traducción
-#elif L==7	// it
-	"Gioco chiuso";
-#elif L==8	// pl
-	"Zamkniete gra";
-#elif L==9	// pt
-	"Jogo fechado";
-#endif
-*/
+
 const char *Txt_Closed_survey =
 #if   L==1	// ca
 	"Enquesta tancada";
@@ -12309,50 +12288,7 @@ const char *Txt_Filter =	// As a noun
 #elif L==9	// pt
 	"Filtro";
 #endif
-/*
-const char *Txt_Finish =
-#if   L==1	// ca
-       "Acabar";
-#elif L==2	// de
-       "Fertig";
-#elif L==3	// en
-       "Finish";
-#elif L==4	// es
-       "Terminar";
-#elif L==5	// fr
-       "Terminer";
-#elif L==6	// gn
-       "Momba";
-#elif L==7	// it
-       "Finire";
-#elif L==8	// pl
-       "Koniec";
-#elif L==9	// pt
-       "Terminar";
-#endif
-*/
-/*
-const char *Txt_Finished_match =
-#if   L==1	// ca
-	"Partida finalitzada";
-#elif L==2	// de
-	"Spiel beendet";
-#elif L==3	// en
-	"Finished match";
-#elif L==4	// es
-	"Partida finalizada";
-#elif L==5	// fr
-	"Match termin&eacute;";
-#elif L==6	// gn
-	"Partida finalizada";	// Okoteve traducción
-#elif L==7	// it
-	"Partita finita";
-#elif L==8	// pl
-	"Zako&nacute;czony mecz";
-#elif L==9	// pt
-	"Jogo terminado";
-#endif
-*/
+
 const char *Txt_First_day_of_the_week =
 #if   L==1	// ca
 	"Primer dia de la setmana";
@@ -24569,28 +24505,7 @@ const char *Txt_NEW_YEAR_GREETING =	// Warning: it is very important to include 
 #elif L==9	// pt
 	"Feliz %u!";
 #endif
-/*
-const char *Txt_Next_QUESTION =
-#if   L==1	// ca
-	"Seg&uuml;ent";
-#elif L==2	// de
-	"N&auml;chste";
-#elif L==3	// en
-	"Next";
-#elif L==4	// es
-	"Siguiente";
-#elif L==5	// fr
-	"Suivante";
-#elif L==6	// gn
-	"Siguiente";	// Okoteve traducción
-#elif L==7	// it
-	"Successiva";
-#elif L==8	// pl
-	"Nast&eogon;pne";
-#elif L==9	// pt
-	"Seguinte";
-#endif
-*/
+
 const char *Txt_nick_email_or_ID =
 #if   L==1	// ca
 	"@sobrenom, correu o ID (DNI/c&egrave;dula)";
@@ -28215,28 +28130,7 @@ const char *Txt_open_documents =
 #elif L==9	// pt
 	"documentos abertos";
 #endif
-/*
-const char *Txt_Open_game =
-#if   L==1	// ca
-	"Joc oberto";
-#elif L==2	// de
-	"Ge&ouml;ffneten Spiel";
-#elif L==3	// en
-	"Open game";
-#elif L==4	// es
-	"Juego abierto";
-#elif L==5	// fr
-	"Jeu ouvert";
-#elif L==6	// gn
-	"Juego abierto";	// Okoteve traducción
-#elif L==7	// it
-	"Gioco aperto";
-#elif L==8	// pl
-	"Otwarte gra";
-#elif L==9	// pt
-	"Jogo aberto";
-#endif
-*/
+
 const char *Txt_Open_survey =
 #if   L==1	// ca
 	"Enquesta oberta";
@@ -29857,28 +29751,7 @@ const char *Txt_Presents =
 #elif L==9	// pt
 	"Presentes";
 #endif
-/*
-const char *Txt_Previous_QUESTION =
-#if   L==1	// ca
-	"Anterior";
-#elif L==2	// de
-	"Vorherige";
-#elif L==3	// en
-	"Previous";
-#elif L==4	// es
-	"Anterior";
-#elif L==5	// fr
-	"Pr&eacute;c&eacute;dente";
-#elif L==6	// gn
-	"Anterior";	// Okoteve traducción
-#elif L==7	// it
-	"Precedente";
-#elif L==8	// pl
-	"Poprzednie";
-#elif L==9	// pt
-	"Anterior";
-#endif
-*/
+
 const char *Txt_Print =
 #if   L==1	// ca
 	"Imprimir";
@@ -43136,28 +43009,7 @@ const char *Txt_Thank_you_for_reporting_a_possible_duplicate_user =
 #elif L==9	// pt
 	"Obrigado por relatar um possível usu&aacute;rio duplicado.";
 #endif
-/*
-const char *Txt_Thanks_for_playing_the_game =
-#if   L==1	// ca
-	"Gr&agrave;cies per jugar al joc.";
-#elif L==2	// de
-	"Vielen Dank f&uuml;r das Spiel.";
-#elif L==3	// en
-	"Thanks for playing the game.";
-#elif L==4	// es
-	"Gracias por jugar al juego.";
-#elif L==5	// fr
-	"Merci d'avoir jou&eacute; le jeu.";
-#elif L==6	// gn
-	"Gracias por jugar al juego.";	// Okoteve traducción
-#elif L==7	// it
-	"Grazie per il gioco.";
-#elif L==8	// pl
-	"TDzi&eogon;ki za gr&eogon;.";
-#elif L==9	// pt
-	"Obrigado por jogar o jogo.";
-#endif
-*/
+
 const char *Txt_Thanks_for_answering_the_survey =
 #if   L==1	// ca
 	"Gracias por responder la encuesta.";	// Necessita traduccio
@@ -54122,28 +53974,7 @@ const char *Txt_You_already_answered_this_survey_before =
 #elif L==9	// pt
 	"Voc&ecirc; j&aacute; respondeu a esso inqu&eacute;rito antes.";
 #endif
-/*
-const char *Txt_You_already_played_this_game_before =
-#if   L==1	// ca
-	"Vost&egrave; ja ha jugat aquest joc abans.";
-#elif L==2	// de
-	"Du hast dieses Spiel schon vorher gespielt.";
-#elif L==3	// en
-	"You already played this game before.";
-#elif L==4	// es
-	"Usted ya jug&oacute; este juego anteriormente.";
-#elif L==5	// fr
-	"Vous avez d&eacute;j&agrave; jou&eacute; ce jeu avant.";
-#elif L==6	// gn
-	"Usted ya jug&oacute; este juego anteriormente.";	// Okoteve traducción
-#elif L==7	// it
-	"Hai gi&agrave; giocato questo gioco prima.";
-#elif L==8	// pl
-	"Ju&zdot; wcze&sacute;niej gra&lstrok;e&sacute; w t&eogon; gr&eogon;.";
-#elif L==9	// pt
-	"Voc&ecirc; j&aacute; jogou este jogo antes.";
-#endif
-*/
+
 const char *Txt_You_are_now_LOGGED_IN_as_X =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1	// ca
 	"Vost&egrave; est&agrave; ara %s com a <strong>%s</strong>.";
@@ -54412,28 +54243,7 @@ const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_create
 	"Voc&ecirc; n&atilde;o pode desativar o upload de arquivos,"
 	" uma vez diret&oacute;rios foram criados.";
 #endif
-/*
-const char *Txt_You_can_not_edit_a_game_with_matches =
-#if   L==1	// ca
-	"No es pot editar un joc amb partides.";
-#elif L==2	// de
-	"Sie k&ouml;nnen ein Spiel mit Matche nicht bearbeiten.";
-#elif L==3	// en
-	"You can not edit a game with matches.";
-#elif L==4	// es
-	"No se puede editar un juego con partidas.";
-#elif L==5	// fr
-	"Vous ne pouvez pas &eacute;diter un jeu avec des matchs.";
-#elif L==6	// gn
-	"No se puede editar un juego con partidas.";	// Okoteve traducción
-#elif L==7	// it
-	"Non &egrave; possibile modificare un gioco con i partite.";
-#elif L==8	// pl
-	"Nie mo&zdot;na edytowa&cacute; gry za pomoc&aogon; mecze.";
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o pode editar um jogo com partidas.";
-#endif
-*/
+
 const char *Txt_You_can_not_leave_empty_intermediate_answers =
 #if   L==1	// ca
 	"No puede dejar respuestas intermedias sin rellenar.";	// Necessita traduccio
