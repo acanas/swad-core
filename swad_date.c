@@ -1629,9 +1629,9 @@ void Dat_WriteLocalDateHMSFromUTC (const char *fmt,...)
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Print HTML *****/
-         // HTM_SCRIPT_Begin (NULL,NULL);
-	 // fprintf (Gbl.F.Out,"writeLocalDateHMSFromUTC(%s);",Params);
-         // HTM_SCRIPT_End ();
+         HTM_SCRIPT_Begin (NULL,NULL);
+	 fprintf (Gbl.F.Out,"writeLocalDateHMSFromUTC(%s);",Params);
+         HTM_SCRIPT_End ();
 
 	 free ((void *) Params);
 	}
