@@ -376,6 +376,7 @@ void Gam_ShowOneGame (long GamCod,
    extern const char *Txt_Matches;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
+   char *Id;
    struct Game Game;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -419,24 +420,23 @@ void Gam_ShowOneGame (long GamCod,
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
+      if (asprintf (&Id,"gam_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
       if (ShowOnlyThisGame)
-	 HTM_TD_Begin ("id=\"gam_date_%u_%u\" class=\"%s LT\"",
-		       (unsigned) StartEndTime,UniqueId,
-		       Game.Hidden ? "DATE_GREEN_LIGHT":
-				     "DATE_GREEN");
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+		       Id,Game.Hidden ? "DATE_GREEN_LIGHT":
+				        "DATE_GREEN");
       else
-	 HTM_TD_Begin ("id=\"gam_date_%u_%u\" class=\"%s LT COLOR%u\"",
-		       (unsigned) StartEndTime,UniqueId,
-		       Game.Hidden ? "DATE_GREEN_LIGHT":
-				     "DATE_GREEN",
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+		       Id,Game.Hidden ? "DATE_GREEN_LIGHT":
+				        "DATE_GREEN",
 		       Gbl.RowEvenOdd);
       if (Game.TimeUTC[Dat_START_TIME])
-	 Dat_WriteLocalDateHMSFromUTC ("'gam_date_%u_%u',%ld,"
-			               "%u,'<br />','%s',true,true,0x7",
-				       (unsigned) StartEndTime,UniqueId,
-				       Game.TimeUTC[StartEndTime],
+	 Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
+				       Id,Game.TimeUTC[StartEndTime],
 				       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
+      free ((void *) Id);
      }
 
    /***** Game title and main data *****/

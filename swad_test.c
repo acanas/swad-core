@@ -25,12 +25,13 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <limits.h>		// For UINT_MAX
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stdbool.h>		// For boolean type
-#include <stdio.h>		// For fprintf, etc.
+#include <stdio.h>		// For fprintf, asprintf, etc.
 #include <stdlib.h>		// For exit, system, malloc, free, etc
 #include <string.h>		// For string functions
 #include <sys/stat.h>		// For mkdir
@@ -2806,6 +2807,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
    unsigned long NumRow;
    MYSQL_ROW row;
    unsigned UniqueId;
+   char *Id;
    time_t TimeUTC;
    unsigned long NumHitsThisQst;
    unsigned long NumHitsNotBlankThisQst;
@@ -2929,13 +2931,15 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
 
       /* Write the date (row[1] has the UTC date-time) */
       TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
-      HTM_TD_Begin ("id=\"tst_date_%u\" class=\"DAT_SMALL CT COLOR%u\"",
-			 UniqueId,Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC ("'tst_date_%u',%ld,"
-                                    "%u,'<br />','%s',true,false,0x7",
-				    UniqueId,(long) TimeUTC,
+      if (asprintf (&Id,"tst_date_%u",UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\"",
+	            Id,Gbl.RowEvenOdd);
+      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,false,0x7",
+				    Id,(long) TimeUTC,
 				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
+      free ((void *) Id);
 
       /* Write the question tags */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
@@ -3063,6 +3067,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
    unsigned long NumRow;
    MYSQL_ROW row;
    unsigned UniqueId;
+   char *Id;
    time_t TimeUTC;
 
    /***** Begin box *****/
@@ -3138,13 +3143,15 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
 
       /* Write the date (row[1] has the UTC date-time) */
       TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
-      HTM_TD_Begin ("id=\"tst_date_%u\" class=\"DAT_SMALL CT COLOR%u\">",
-	            UniqueId,Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC ("'tst_date_%u',%ld,"
-                                    "%u,'<br />','%s',true,false,0x7",
-				    UniqueId,(long) TimeUTC,
+      if (asprintf (&Id,"tst_date_%u",UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\">",
+	            Id,Gbl.RowEvenOdd);
+      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,false,0x7",
+				    Id,(long) TimeUTC,
 				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
+      free ((void *) Id);
 
       /* Write the question tags */
       HTM_TD_Begin ("class=\"LT COLOR%u\"",Gbl.RowEvenOdd);
@@ -7685,6 +7692,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
    unsigned NumExams;
    unsigned NumTest;
    static unsigned UniqueId = 0;
+   char *Id;
    long TstCod;
    unsigned NumQstsInThisTest;
    unsigned NumQstsNotBlankInThisTest;
@@ -7772,13 +7780,15 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
          /* Write date and time (row[2] holds UTC date-time) */
          TimeUTC = Dat_GetUNIXTimeFromStr (row[2]);
          UniqueId++;
-	 HTM_TD_Begin ("id=\"tst_date_%u\" class=\"%s RT COLOR%u\"",
-		       UniqueId,ClassDat,Gbl.RowEvenOdd);
-	 Dat_WriteLocalDateHMSFromUTC ("'tst_date_%u',%ld,"
-			               "%u,',&nbsp;','%s',true,false,0x7",
-				       UniqueId,(long) TimeUTC,
+	 if (asprintf (&Id,"tst_date_%u",UniqueId) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s RT COLOR%u\"",
+		       Id,ClassDat,Gbl.RowEvenOdd);
+	 Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,',&nbsp;','%s',true,false,0x7",
+				       Id,(long) TimeUTC,
 				       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 	 HTM_TD_End ();
+         free ((void *) Id);
 
          /* Get number of questions (row[3]) */
          if (sscanf (row[3],"%u",&NumQstsInThisTest) != 1)

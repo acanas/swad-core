@@ -1547,6 +1547,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    long LogCod;
    Rol_Role_t RoleFromLog;
    unsigned UniqueId;
+   char *Id;
    long ActCod;
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
@@ -1715,13 +1716,14 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       HTM_TD_End ();
 
       /* Write the date-time (row[3]) */
-      HTM_TD_Begin ("id=\"log_date_%u\" class=\"LOG RT COLOR%u\"",
-                    UniqueId,Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC ("'log_date_%u',%ld,"
-			            "%u,',&nbsp;','%s',true,false,0x7",
-				    UniqueId,(long) Dat_GetUNIXTimeFromStr (row[3]),
+      if (asprintf (&Id,"log_date_%u",UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_TD_Begin ("id=\"%s\" class=\"LOG RT COLOR%u\"",Id,Gbl.RowEvenOdd);
+      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,',&nbsp;','%s',true,false,0x7",
+				    Id,(long) Dat_GetUNIXTimeFromStr (row[3]),
 				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
+      free ((void *) Id);
 
       /* Write the action */
       if (sscanf (row[4],"%ld",&ActCod) != 1)

@@ -640,6 +640,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       "NOTICE_AUTHOR_OBSOLETE",		// Not_OBSOLETE_NOTICE
      };
    static unsigned UniqueId = 0;
+   char *Id;
    struct UsrData UsrDat;
    char *Anchor = NULL;
 
@@ -691,17 +692,18 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Not_PutHiddenParamNotCod (NotCod);
       Frm_LinkFormSubmit (Txt_See_full_notice,DateClass[Status],NULL);
      }
-   fprintf (Gbl.F.Out,"<span id=\"not_date_%u\"></span>",
-            UniqueId);
+   if (asprintf (&Id,"not_date_%u",UniqueId) < 0)
+      Lay_NotEnoughMemoryExit ();
+   fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",Id);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
       Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
-   Dat_WriteLocalDateHMSFromUTC ("'not_date_%u',%ld,"
-                                 "%u,'<br />','%s',true,false,0x6",
-				 UniqueId,(long) TimeUTC,
+   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,false,0x6",
+				 Id,(long) TimeUTC,
 				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   free ((void *) Id);
    HTM_DIV_End ();
 
    /***** Write the content of the notice *****/

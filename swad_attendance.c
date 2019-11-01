@@ -25,9 +25,11 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
 #include <mysql/mysql.h>	// To access MySQL databases
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -373,6 +375,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    extern const char *Txt_View_event;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
+   char *Id;
    Dat_StartEndTime_t StartEndTime;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
@@ -408,26 +411,28 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
+      if (asprintf (&Id,"att_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
       if (ShowOnlyThisAttEventComplete)
-	 HTM_TD_Begin ("id=\"att_date_%u_%u\" class=\"%s LB\"",
-		       (unsigned) StartEndTime,UniqueId,
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
+		       Id,
 		       Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
 						  "DATE_RED_LIGHT") :
 				     (Att->Open ? "DATE_GREEN" :
 						  "DATE_RED"));
       else
-	 HTM_TD_Begin ("id=\"att_date_%u_%u\" class=\"%s LB COLOR%u\"",
-		       (unsigned) StartEndTime,UniqueId,
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
+		       Id,
 		       Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
 						  "DATE_RED_LIGHT") :
 				     (Att->Open ? "DATE_GREEN" :
 						  "DATE_RED"),
 		       Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC ("'att_date_%u_%u',%ld,"
-				    "%u,'<br />','%s',true,true,0x7",
-				    (unsigned) StartEndTime,UniqueId,Att->TimeUTC[StartEndTime],
+      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
+				    Id,Att->TimeUTC[StartEndTime],
 				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
+      free ((void *) Id);
      }
 
    /* Attendance event title */
@@ -3072,6 +3077,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    extern const char *Txt_Today;
    extern const char *Txt_Update_attendance;
    unsigned UniqueId;
+   char *Id;
    unsigned NumAttEvent;
    bool NormalView = (TypeOfView == Att_NORMAL_VIEW_ONLY_ME ||
                       TypeOfView == Att_NORMAL_VIEW_STUDENTS);
@@ -3131,16 +3137,18 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 	       NumAttEvent,NumAttEvent + 1);
       HTM_TD_End ();
 
+      if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<label for=\"Att%u\">"
-                         "<span id=\"att_date_start_%u\"></span>"
+                         "<span id=\"%s\"></span>"
                          "</label>",
-	       NumAttEvent,UniqueId);
-      Dat_WriteLocalDateHMSFromUTC ("'att_date_start_%u',%ld,"
-			            "%u,',&nbsp;','%s',true,true,0x7",
-				    UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+	       NumAttEvent,Id);
+      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,',&nbsp;','%s',true,true,0x7",
+				    Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
+      free ((void *) Id);
 
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"%s",Gbl.AttEvents.Lst[NumAttEvent].Title);
@@ -3490,6 +3498,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
    bool ShowPhoto;
    unsigned NumAttEvent;
    unsigned UniqueId;
+   char *Id;
    bool Present;
    bool ShowCommentStd;
    bool ShowCommentTch;
@@ -3574,17 +3583,19 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
          Att_PutCheckOrCross (Present);
 	 HTM_TD_End ();
 
+	 if (asprintf (&Id,"att_date_start_%u_%u",NumUsr,UniqueId) < 0)
+	    Lay_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"<span id=\"att_date_start_%u_%u\"></span>"
+	 fprintf (Gbl.F.Out,"<span id=\"%s\"></span>"
 	                    "<br />%s",
-	          NumUsr,UniqueId,
+	          Id,
 	          Gbl.AttEvents.Lst[NumAttEvent].Title);
-	 Dat_WriteLocalDateHMSFromUTC ("'att_date_start_%u_%u',%ld,"
-			               "%u,',&nbsp;','%s',true,true,0x7",
-				       NumUsr,UniqueId,
+	 Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,',&nbsp;','%s',true,true,0x7",
+				       Id,
 				       Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 				       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 	 HTM_TD_End ();
+         free ((void *) Id);
 
 	 HTM_TR_End ();
 

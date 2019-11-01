@@ -544,22 +544,24 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
   {
    extern const char *Txt_Today;
    Dat_StartEndTime_t StartEndTime;
+   char *Id;
 
    for (StartEndTime = (Dat_StartEndTime_t) 0;
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
-      HTM_TD_Begin ("id=\"mch_time_%u_%u\" class=\"%s LT COLOR%u\"",
-		    (unsigned) StartEndTime,UniqueId,
+      if (asprintf (&Id,"mch_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+		    Id,
 		    Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
 								      "DATE_GREEN",
 		    Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC ("'mch_time_%u_%u',"
-			            "%ld,%u,'<br />','%s',true,true,0x7",
-				    (unsigned) StartEndTime,UniqueId,
-				    Match->TimeUTC[StartEndTime],
+      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
+				    Id,Match->TimeUTC[StartEndTime],
 				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
+      free ((void *) Id);
      }
   }
 

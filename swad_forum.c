@@ -3335,6 +3335,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
    unsigned NumThr;
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
    unsigned UniqueId;
+   char *Id;
    struct ForumThread Thr;
    struct UsrData UsrDat;
    For_Order_t Order;
@@ -3457,13 +3458,14 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
             TimeUTC = Thr.WriteTime[Order];
 	    UniqueId++;
-            HTM_TD_Begin ("id=\"thr_date_%u\" class=\"%s LT %s\"",
-                          UniqueId,Style,BgColor);
-	    Dat_WriteLocalDateHMSFromUTC ("'thr_date_%u',%ld,"
-			                  "%u,'<br />','%s',true,false,0x6",
-					  UniqueId,(long) TimeUTC,
+	    if (asprintf (&Id,"thr_date_%u",UniqueId) < 0)
+	       Lay_NotEnoughMemoryExit ();
+            HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",Id,Style,BgColor);
+	    Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,false,0x6",
+					  Id,(long) TimeUTC,
 					  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
             HTM_TD_End ();
+            free ((void *) Id);
            }
          else
             for (Column = 1;

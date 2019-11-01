@@ -363,6 +363,7 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
    unsigned NumResults;
    unsigned NumResult;
    static unsigned UniqueId = 0;
+   char *Id;
    struct Match Match;
    Dat_StartEndTime_t StartEndTime;
    unsigned NumQstsInThisResult;
@@ -431,15 +432,15 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
            {
 	    TimeUTC[StartEndTime] = Dat_GetUNIXTimeFromStr (row[1 + StartEndTime]);
 	    UniqueId++;
-	    HTM_TD_Begin ("id =\"mch_time_%u_%u\" class=\"DAT LT COLOR%u\"",
-			  (unsigned) StartEndTime,UniqueId,
-			  Gbl.RowEvenOdd);
-	    Dat_WriteLocalDateHMSFromUTC ("'mch_time_%u_%u',"
-			                  "%ld,%u,'<br />','%s',true,false,0x7",
-					  (unsigned) StartEndTime,UniqueId,
-					  (long) TimeUTC[StartEndTime],
+	    if (asprintf (&Id,"mch_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	       Lay_NotEnoughMemoryExit ();
+	    HTM_TD_Begin ("id =\"%s\" class=\"DAT LT COLOR%u\"",
+			  Id,Gbl.RowEvenOdd);
+	    Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,false,0x7",
+					  Id,(long) TimeUTC[StartEndTime],
 					  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 	    HTM_TD_End ();
+            free ((void *) Id);
            }
 
          /* Write match title */
@@ -633,6 +634,7 @@ void McR_ShowOneMchResult (void)
    struct UsrData *UsrDat;
    time_t TimeUTC[Dat_NUM_START_END_TIME];	// Match result UTC date-time
    Dat_StartEndTime_t StartEndTime;
+   char *Id;
    unsigned NumQsts;
    unsigned NumQstsNotBlank;
    double TotalScore;
@@ -787,13 +789,14 @@ void McR_ShowOneMchResult (void)
 	 fprintf (Gbl.F.Out,"%s:",Txt_START_END_TIME[StartEndTime]);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("id=\"match_%u\" class=\"DAT LT\"",(unsigned) StartEndTime);
-	 Dat_WriteLocalDateHMSFromUTC ("'match_%u',%ld,"
-			               "%u,',&nbsp;','%s',true,true,0x7",
-				       (unsigned) StartEndTime,
-				       TimeUTC[StartEndTime],
+	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LT\"",Id);
+	 Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,',&nbsp;','%s',true,true,0x7",
+				       Id,TimeUTC[StartEndTime],
 				       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 	 HTM_TD_End ();
+         free ((void *) Id);
 
 	 HTM_TR_End ();
 	}

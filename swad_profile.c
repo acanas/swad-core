@@ -501,8 +501,7 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
 	   }
 	 fprintf (Gbl.F.Out,")");
         }
-      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,"
-			            "%u,',&nbsp;','%s',true,false,0x6",
+      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,',&nbsp;','%s',true,false,0x6",
 				    IdFirstClickTime,(long) UsrFigures->FirstClickTimeUTC,
 				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
      }

@@ -716,6 +716,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    extern const char *Txt_Today;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
+   char *Id;
    struct AgendaEvent AgdEvent;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -747,17 +748,18 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
-      HTM_TD_Begin ("id=\"agd_date_%u_%u\" class=\"%s LB COLOR%u\"",
-		    (unsigned) StartEndTime,UniqueId,
+      if (asprintf (&Id,"agd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
+      HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
+		    Id,
 		    AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
 				      Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
 		    Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC ("'agd_date_%u_%u',%ld,"
-			            "%u,'<br />','%s',true,true,0x6",
-				    (unsigned) StartEndTime,UniqueId,
-				    AgdEvent.TimeUTC[StartEndTime],
+      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x6",
+				    Id,AgdEvent.TimeUTC[StartEndTime],
 				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
+      free ((void *) Id);
      }
 
    /* Event */

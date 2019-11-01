@@ -1046,6 +1046,7 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
    struct Prj_Faults Faults;
    bool PrjIsFaulty;
    static unsigned UniqueId = 0;
+   char *Id;
 
    /***** Set CSS classes *****/
    ClassLabel = (Prj->Hidden == Prj_HIDDEN) ? "ASG_LABEL_LIGHT" :
@@ -1105,41 +1106,45 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 
    /* Creation date/time */
    UniqueId++;
+   if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
+      Lay_NotEnoughMemoryExit ();
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TD_Begin ("id=\"prj_creat_%u\" class=\"%s LT COLOR%u\"",
-		       UniqueId,ClassDate,Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+		       Id,ClassDate,Gbl.RowEvenOdd);
 	 break;
       default:
-	 HTM_TD_Begin ("id=\"prj_creat_%u\" class=\"%s LT\"",
-		       UniqueId,ClassDate);
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+		       Id,ClassDate);
 	 break;
      }
-   Dat_WriteLocalDateHMSFromUTC ("'prj_creat_%u',%ld,"
-                                 "%u,'<br />','%s',true,true,0x7",
-				 UniqueId,Prj->CreatTime,
+   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
+				 Id,Prj->CreatTime,
 				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
+   free ((void *) Id);
 
    /* Modification date/time */
    UniqueId++;
+   if (asprintf (&Id,"prj_modif_%u",UniqueId) < 0)
+      Lay_NotEnoughMemoryExit ();
    switch (ProjectView)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TD_Begin ("id=\"prj_modif_%u\" class=\"%s LT COLOR%u\"",
-		       UniqueId,ClassDate,Gbl.RowEvenOdd);
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+		       Id,ClassDate,Gbl.RowEvenOdd);
 	 break;
       default:
-	 HTM_TD_Begin ("id=\"prj_modif_%u\" class=\"%s LT\"",
-		       UniqueId,ClassDate);
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+		       Id,ClassDate);
 	 break;
      }
-   Dat_WriteLocalDateHMSFromUTC ("'prj_modif_%u',%ld,"
-                                 "%u,'<br />','%s',true,true,0x7",
-				 UniqueId,Prj->ModifTime,
+   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
+				 Id,Prj->ModifTime,
 				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
+   free ((void *) Id);
 
    /* Project title */
    switch (ProjectView)
@@ -1474,6 +1479,7 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
    const char *ClassDate;
    const char *ClassData;
    static unsigned UniqueId = 0;
+   char *Id;
 
    /***** Get data of this project *****/
    Prj_GetDataOfProjectByCod (Prj);
@@ -1489,23 +1495,27 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
 
    /***** Start date/time *****/
    UniqueId++;
-   HTM_TD_Begin ("id=\"prj_creat_%u\" class=\"LT %s COLOR%u\"",
-		 UniqueId,ClassDate,Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC ("'prj_creat_%u',%ld,"
-                                 "%u,'<br />','%s',true,true,0x7",
-				 UniqueId,Prj->CreatTime,
+   if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
+      Lay_NotEnoughMemoryExit ();
+   HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
+		 Id,ClassDate,Gbl.RowEvenOdd);
+   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
+				 Id,Prj->CreatTime,
 				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
+   free ((void *) Id);
 
    /***** End date/time *****/
    UniqueId++;
-   HTM_TD_Begin ("id=\"prj_modif_%u\" class=\"LT %s COLOR%u\"",
-		 UniqueId,ClassDate,Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC ("'prj_modif_%u',%ld,"
-                                 "%u,'<br />','%s',true,true,0x7",
-				 UniqueId,Prj->ModifTime,
+   if (asprintf (&Id,"prj_modif_%u",UniqueId) < 0)
+      Lay_NotEnoughMemoryExit ();
+   HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
+		 Id,ClassDate,Gbl.RowEvenOdd);
+   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
+				 Id,Prj->ModifTime,
 				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
+   free ((void *) Id);
 
    /***** Project title *****/
    HTM_TD_Begin ("class=\"LT %s COLOR%u\"",

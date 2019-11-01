@@ -3612,21 +3612,25 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
   {
    extern const char *Txt_Today;
    static unsigned UniqueId = 0;
+   char *Id;
 
    UniqueId++;
+   if (asprintf (&Id,"msg_date_%u",UniqueId) < 0)
+      Lay_NotEnoughMemoryExit ();
 
    /***** Start cell *****/
-   HTM_TD_Begin ("id=\"msg_date_%u\" class=\"%s RT\" style=\"width:106px;\"",
-                 UniqueId,ClassBackground);
+   HTM_TD_Begin ("id=\"%s\" class=\"%s RT\" style=\"width:106px;\"",
+                 Id,ClassBackground);
 
    /***** Write date and time *****/
-   Dat_WriteLocalDateHMSFromUTC ("'msg_date_%u',%ld,"
-                                 "%u,',&nbsp;','%s',true,false,0x6",
-				 UniqueId,(long) TimeUTC,
+   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,',&nbsp;','%s',true,false,0x6",
+				 Id,(long) TimeUTC,
 				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /***** End cell *****/
    HTM_TD_End ();
+
+   free ((void *) Id);
   }
 
 /*****************************************************************************/

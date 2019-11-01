@@ -437,6 +437,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    extern const char *Txt_View_survey_results;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
+   char *Id;
    struct Survey Svy;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -470,48 +471,52 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /* Start date/time */
    UniqueId++;
+   if (asprintf (&Id,"svy_date_start_%u",UniqueId) < 0)
+      Lay_NotEnoughMemoryExit ();
    if (ShowOnlyThisSvyComplete)
-      HTM_TD_Begin ("id=\"svy_date_start_%u\" class=\"%s LT\"",
-		    UniqueId,
+      HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+		    Id,
 		    Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
 							    "DATE_RED") :
 				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							    "DATE_RED_LIGHT"));
    else
-      HTM_TD_Begin ("id=\"svy_date_start_%u\" class=\"%s LT COLOR%u\"",
-		    UniqueId,
+      HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+		    Id,
 		    Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
 							    "DATE_RED") :
 				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							    "DATE_RED_LIGHT"),
 		    Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC ("'svy_date_start_%u',%ld,"
-                                 "%u,'<br />','%s',true,true,0x7",
-				 UniqueId,Svy.TimeUTC[Svy_START_TIME],
+   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
+				 Id,Svy.TimeUTC[Svy_START_TIME],
 				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
+   free ((void *) Id);
 
    /* End date/time */
+   if (asprintf (&Id,"svy_date_end_%u",UniqueId) < 0)
+      Lay_NotEnoughMemoryExit ();
    if (ShowOnlyThisSvyComplete)
-      HTM_TD_Begin ("id=\"svy_date_end_%u\" class=\"%s LT\"",
-		    UniqueId,
+      HTM_TD_Begin ("id=\"%s\" class=\"%s LT\"",
+		    Id,
 		    Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
 							    "DATE_RED") :
 				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							    "DATE_RED_LIGHT"));
    else
-      HTM_TD_Begin ("id=\"svy_date_end_%u\" class=\"%s LT COLOR%u\"",
-		    UniqueId,
+      HTM_TD_Begin ("id=\"%s\" class=\"%s LT COLOR%u\"",
+		    Id,
 		    Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
 							    "DATE_RED") :
 				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							    "DATE_RED_LIGHT"),
 		    Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC ("'svy_date_end_%u',%ld,"
-                                 "%u,'<br />','%s',false,true,0x7",
-				 UniqueId,Svy.TimeUTC[Svy_END_TIME],
+   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',false,true,0x7",
+				 Id,Svy.TimeUTC[Svy_END_TIME],
 				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
+   free ((void *) Id);
 
    /* Survey title */
    if (ShowOnlyThisSvyComplete)

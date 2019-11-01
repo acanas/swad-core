@@ -2328,6 +2328,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Vacants;
    static unsigned UniqueId = 0;
+   char *Id;
    Rol_Role_t Role;
 
    /***** Name of group type *****/
@@ -2337,14 +2338,16 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    if (GrpTyp->MustBeOpened)
      {
       UniqueId++;
+      if (asprintf (&Id,"open_time_%u",UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
       fprintf (Gbl.F.Out,"<br />%s: "
-                         "<span id=\"open_time_%u\"></span>",
+                         "<span id=\"%s\"></span>",
                Txt_Opening_of_groups,
-               UniqueId);
-      Dat_WriteLocalDateHMSFromUTC ("'open_time_%u',%ld,"
-                                    "%u,',&nbsp;','%s',true,true,0x7",
-                                    UniqueId,(long) GrpTyp->OpenTimeUTC,
+               Id);
+      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,',&nbsp;','%s',true,true,0x7",
+                                    Id,(long) GrpTyp->OpenTimeUTC,
                                     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      free ((void *) Id);
      }
    HTM_TD_End ();
    HTM_TR_End ();

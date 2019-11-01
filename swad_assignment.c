@@ -25,8 +25,10 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
 #include <linux/limits.h>	// For PATH_MAX
 #include <linux/stddef.h>	// For NULL
+#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For calloc
 #include <string.h>		// For string functions
 
@@ -340,6 +342,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    extern const char *Txt_Today;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
+   char *Id;
    struct Assignment Asg;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -371,26 +374,28 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
 	StartEndTime++)
      {
+      if (asprintf (&Id,"asg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	 Lay_NotEnoughMemoryExit ();
       if (PrintView)
-	 HTM_TD_Begin ("id=\"asg_date_%u_%u\" class=\"%s LB\"",
-		       (unsigned) StartEndTime,UniqueId,
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB\"",
+		       Id,
 		       Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
 					        "DATE_RED_LIGHT") :
 				    (Asg.Open ? "DATE_GREEN" :
 					        "DATE_RED"));
       else
-	 HTM_TD_Begin ("id=\"asg_date_%u_%u\" class=\"%s LB COLOR%u\"",
-		       (unsigned) StartEndTime,UniqueId,
+	 HTM_TD_Begin ("id=\"%s\" class=\"%s LB COLOR%u\"",
+		       Id,
 		       Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
 					        "DATE_RED_LIGHT") :
 				    (Asg.Open ? "DATE_GREEN" :
 					        "DATE_RED"),
 		       Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC ("'asg_date_%u_%u',%ld,"
-			            "%u,'<br />','%s',true,true,0x7",
-				    (unsigned) StartEndTime,UniqueId,Asg.TimeUTC[StartEndTime],
+      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
+				    Id,Asg.TimeUTC[StartEndTime],
 				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
+      free ((void *) Id);
      }
 
    /* Assignment title */
