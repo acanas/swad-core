@@ -214,8 +214,8 @@ void Cal_DrawCurrentMonth (void)
    HTM_DIV_End ();
 
    /* Write script to draw the month */
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "	Gbl_HTMLContent = '';"
+   HTM_SCRIPT_Begin (NULL,NULL);
+   fprintf (Gbl.F.Out,"	Gbl_HTMLContent = '';"
 	              "	DrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s/%s',",
 	    Gbl.Prefs.FirstDayOfWeek,
 	    (long) Gbl.StartExecutionTimeUTC,
@@ -225,8 +225,8 @@ void Cal_DrawCurrentMonth (void)
    Frm_SetParamsForm (ParamsStr,ActSeeCal,true);
    fprintf (Gbl.F.Out,"'%s',",ParamsStr);
    Frm_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
-   fprintf (Gbl.F.Out,"'%s');"
-	              "</script>",ParamsStr);
+   fprintf (Gbl.F.Out,"'%s');",ParamsStr);
+   HTM_SCRIPT_End ();
   }
 
 /*****************************************************************************/
@@ -282,8 +282,8 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
    HTM_DIV_End ();
 
    /* Write script to draw the month */
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "	Gbl_HTMLContent = '';"
+   HTM_SCRIPT_Begin (NULL,NULL);
+   fprintf (Gbl.F.Out,"	Gbl_HTMLContent = '';"
 	              "	Cal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s/%s',",
 	    Gbl.Prefs.FirstDayOfWeek,
 	    (long) Gbl.StartExecutionTimeUTC,
@@ -296,9 +296,8 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
    fprintf (Gbl.F.Out,"'%s',",
             ParamsStr);
    Frm_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
-   fprintf (Gbl.F.Out,"'%s');"
-	              "</script>",
-	    ParamsStr);
+   fprintf (Gbl.F.Out,"'%s');",ParamsStr);
+   HTM_SCRIPT_End ();
 
    /***** End box *****/
    Box_BoxEnd ();

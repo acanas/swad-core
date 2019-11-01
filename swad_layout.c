@@ -484,9 +484,8 @@ static void Lay_WriteScripts (void)
    unsigned NumExamAnnouncement;	// Number of exam announcement
 
    /***** General scripts for swad *****/
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\" src=\"%s/%s\">"
-                      "</script>\n",
-	    Cfg_URL_SWAD_PUBLIC,JS_FILE);
+   HTM_SCRIPT_Begin (Cfg_URL_SWAD_PUBLIC "/" JS_FILE,NULL);
+   HTM_SCRIPT_End ();
 
    /***** Script for MathJax *****/
    Lay_WriteScriptMathJax ();
@@ -515,8 +514,9 @@ static void Lay_WriteScripts (void)
       Exa_CreateListDatesOfExamAnnouncements ();
 
       /***** Write script to initialize variables used to draw months *****/
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
-			 "	var DAYS_CAPS = [");
+      HTM_SCRIPT_Begin (NULL,NULL);
+
+      fprintf (Gbl.F.Out,"	var DAYS_CAPS = [");
       for (DayOfWeek = 0;
 	   DayOfWeek < 7;
 	   DayOfWeek++)
@@ -563,7 +563,7 @@ static void Lay_WriteScripts (void)
 		  Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Month,
 		  Gbl.ExamAnns.Lst[NumExamAnnouncement].ExamDate.Day);
 
-      fprintf (Gbl.F.Out,"</script>\n");
+      HTM_SCRIPT_End ();
 
       /***** Free list of dates of exam announcements *****/
       Exa_FreeListExamAnnouncements ();
@@ -604,11 +604,8 @@ static void Lay_WriteScripts (void)
       case ActFrmCreMrkGrp:	// Brw_ADMI_MRK_GRP
       case ActFrmCreBrf:	// Brw_ADMI_BRF_USR
 	 // Use charset="windows-1252" to force error messages in windows-1252 (default is UTF-8)
-	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
-			    " src=\"%s/dropzone/dropzone.js\""
-			    " charset=\"windows-1252\">"
-			    "</script>\n",
-		  Cfg_URL_SWAD_PUBLIC);
+	 HTM_SCRIPT_Begin (Cfg_URL_SWAD_PUBLIC "/dropzone/dropzone.js","windows-1252");
+	 HTM_SCRIPT_End ();
 	 Lay_WriteScriptCustomDropzone ();
          break;
       case ActReqAccGbl:
@@ -616,10 +613,8 @@ static void Lay_WriteScripts (void)
       case ActReqAccCrs:
       case ActSeeAccCrs:
       case ActSeeAllStaCrs:
-	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
-			    " src=\"%s/jstz/jstz.js\">"
-			    "</script>\n",
-		  Cfg_URL_SWAD_PUBLIC);
+	 HTM_SCRIPT_Begin (Cfg_URL_SWAD_PUBLIC "/jstz/jstz.js",NULL);
+	 HTM_SCRIPT_End ();
 	 break;
       default:
 	 break;
@@ -642,27 +637,23 @@ static void Lay_WriteScriptMathJax (void)
   {
    // MathJax configuration
    /*
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-	              " window.MathJax = {"
+   HTM_SCRIPT_Begin (NULL,NULL);
+   fprintf (Gbl.F.Out," window.MathJax = {"
 	              "  tex2jax: {"
 	              "   inlineMath: [ ['$','$'], [\"\\\\(\",\"\\\\)\"] ],"
 	              "   processEscapes: true"
 	              "  }"
-	              " };"
-	              "</script>");
+	              " };");
+   HTM_SCRIPT_End ();
    */
 #ifdef Cfg_MATHJAX_LOCAL
    // Use the local copy of MathJax
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
-	              " src=\"%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML\">"
-	              "</script>\n",
-	    Cfg_URL_SWAD_PUBLIC);
+   HTM_SCRIPT_Begin (Cfg_URL_SWAD_PUBLIC "/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML",NULL);
 #else
    // Use the MathJax Content Delivery Network (CDN)
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
-	              " src=\"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\">"
-	              "</script>\n");
+   HTM_SCRIPT_Begin ("//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML",NULL);
 #endif
+   HTM_SCRIPT_End ();
   }
 
 /*****************************************************************************/
@@ -674,8 +665,8 @@ static void Lay_WriteScriptInit (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    bool RefreshConnected;
    bool RefreshNewTimeline = false;
-   bool RefreshMatchStd       = false;
-   bool RefreshMatchTch   = false;
+   bool RefreshMatchStd    = false;
+   bool RefreshMatchTch    = false;
    bool RefreshLastClicks  = false;
 
    RefreshConnected = Act_GetBrowserTab (Gbl.Action.Act) == Act_BRW_1ST_TAB &&
@@ -712,7 +703,7 @@ static void Lay_WriteScriptInit (void)
 	 break;
      }
 
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
+   HTM_SCRIPT_Begin (NULL,NULL);
 
    Dat_WriteScriptMonths ();
 
@@ -723,6 +714,7 @@ static void Lay_WriteScriptInit (void)
    else if (RefreshMatchTch)	// Refresh match via AJAX
       fprintf (Gbl.F.Out,"\tvar delayMatch = %lu;\n",Cfg_TIME_TO_REFRESH_MATCH_TCH);
 
+   /***** Function init () ******/
    fprintf (Gbl.F.Out,"function init(){\n");
 
    fprintf (Gbl.F.Out,"\tActionAJAX = \"%s\";\n",
@@ -745,8 +737,9 @@ static void Lay_WriteScriptInit (void)
    else if (RefreshNewTimeline)	// Refresh timeline via AJAX
       fprintf (Gbl.F.Out,"\tsetTimeout(\"refreshNewTL()\",delayNewTL);\n");
 
-   fprintf (Gbl.F.Out,"}\n"
-                      "</script>\n");
+   fprintf (Gbl.F.Out,"}\n");
+
+   HTM_SCRIPT_End ();
   }
 
 /*****************************************************************************/
@@ -756,7 +749,7 @@ static void Lay_WriteScriptInit (void)
 static void Lay_WriteScriptParamsAJAX (void)
   {
    /***** Start script *****/
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
+   HTM_SCRIPT_Begin (NULL,NULL);
 
    /***** Parameters with code of session and current course code *****/
    // Refresh parameters
@@ -859,7 +852,7 @@ static void Lay_WriteScriptParamsAJAX (void)
      }
 
    /***** End script *****/
-   fprintf (Gbl.F.Out,"</script>\n");
+   HTM_SCRIPT_End ();
   }
 
 /*****************************************************************************/
@@ -871,8 +864,8 @@ static void Lay_WriteScriptCustomDropzone (void)
   {
    // "myAwesomeDropzone" is the camelized version of the HTML element's ID
    // Add a line "forceFallback: true,\n" to test classic upload
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
-                      "Dropzone.options.myAwesomeDropzone = {\n"
+   HTM_SCRIPT_Begin (NULL,NULL);
+   fprintf (Gbl.F.Out,"Dropzone.options.myAwesomeDropzone = {\n"
 	              "maxFiles: 100,\n"
 		      "parallelUploads: 100,\n"
 		      "maxFilesize: %lu,\n"
@@ -880,9 +873,9 @@ static void Lay_WriteScriptCustomDropzone (void)
 		      "document.getElementById('dropzone-upload').style.display='none';\n"
 		      "document.getElementById('classic-upload').style.display='block';\n"
 		      "}\n"
-		      "};\n"
-                      "</script>\n",
+		      "};\n",
             (unsigned long) (Fil_MAX_FILE_SIZE / (1024ULL * 1024ULL) - 1));
+   HTM_SCRIPT_End ();
   }
 
 /*****************************************************************************/
@@ -935,6 +928,7 @@ static void Lay_WritePageTopHeading (void)
 	    Cfg_PLATFORM_LOGO_SMALL_WIDTH,Cfg_PLATFORM_LOGO_SMALL_HEIGHT);
    Frm_LinkFormEnd ();
    HTM_DIV_End ();	// head_row_1_logo_small
+
    HTM_DIV_Begin ("id=\"head_row_1_logo_big\"");
    Frm_LinkFormSubmit (Txt_System,NULL,NULL);
    HTM_IMG (Cfg_URL_ICON_PUBLIC,Cfg_PLATFORM_LOGO_BIG_FILENAME,Cfg_PLATFORM_SHORT_NAME,
@@ -942,6 +936,7 @@ static void Lay_WritePageTopHeading (void)
 	    Cfg_PLATFORM_LOGO_BIG_WIDTH,Cfg_PLATFORM_LOGO_BIG_HEIGHT);
    Frm_LinkFormEnd ();
    HTM_DIV_End ();	// head_row_1_logo_big
+
    HTM_DIV_Begin ("id=\"head_row_1_tagline\"");
    Frm_LinkFormSubmit (Txt_TAGLINE,The_ClassTagline[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"%s",Txt_TAGLINE_BR);
@@ -969,6 +964,7 @@ static void Lay_WritePageTopHeading (void)
    else
       Usr_PutFormLogIn ();
    HTM_DIV_End ();	// login_box
+
    HTM_DIV_End ();	// head_row_1_right
 
    /* End 1st. row */

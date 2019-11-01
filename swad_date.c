@@ -25,6 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE		// For vasprintf
+#include <stdio.h>		// For vasprintf
 #include <string.h>		// For string functions
 #include <time.h>		// For time functions (mktime...)
 
@@ -164,12 +166,10 @@ void Dat_PutSpanDateFormat (Dat_Format_t Format)
 
 void Dat_PutScriptDateFormat (Dat_Format_t Format)
   {
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-		      "writeLocalDateHMSFromUTC('date_format_%u',%ld,"
-		      "%u,'',null,true,false,0x0);"
-		      "</script>",
-	    (unsigned) Format,(long) Gbl.StartExecutionTimeUTC,
-	    (unsigned) Format);
+   Dat_WriteLocalDateHMSFromUTC ("'date_format_%u',%ld,"
+		                 "%u,'',null,true,false,0x0",
+				 (unsigned) Format,(long) Gbl.StartExecutionTimeUTC,
+				 (unsigned) Format);
   }
 
 /*****************************************************************************/
@@ -345,11 +345,11 @@ void Dat_ShowClientLocalTime (void)
    HTM_DIV_End ();
 
    /* Write script to draw the month */
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
-		      "secondsSince1970UTC = %ld;\n"
-                      "writeLocalClock();\n"
-	              "</script>",
+   HTM_SCRIPT_Begin (NULL,NULL);
+   fprintf (Gbl.F.Out,"secondsSince1970UTC = %ld;\n"
+                      "writeLocalClock();\n",
             (long) Gbl.StartExecutionTimeUTC);
+   HTM_SCRIPT_End ();
   }
 
 /*****************************************************************************/
@@ -680,8 +680,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
             Id,ParamName,(long) TimeUTC);
 
    /***** Script to set selectors to local date and time from UTC time *****/
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "setLocalDateTimeFormFromUTC('%s',%ld);"
+   HTM_SCRIPT_Begin (NULL,NULL);
+   fprintf (Gbl.F.Out,"setLocalDateTimeFormFromUTC('%s',%ld);"
 	              "adjustDateForm('%s');",
 	    Id,(long) TimeUTC,Id);
    switch (SetHMS)
@@ -697,7 +697,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       default:
 	 break;
      }
-   fprintf (Gbl.F.Out,"</script>");
+   HTM_SCRIPT_End ();
   }
 
 /*****************************************************************************/
@@ -723,11 +723,11 @@ void Dat_PutHiddenParBrowserTZDiff (void)
 	              " value=\"\" />"
 	              "<input type=\"hidden\""
 	              " id=\"BrowserTZDiff\" name=\"BrowserTZDiff\""
-	              " value=\"0\" />"
-                      "<script type=\"text/javascript\">"
-		      "setTZname('BrowserTZName');"
-		      "setTZ('BrowserTZDiff');"
-		      "</script>");
+	              " value=\"0\" />");
+   HTM_SCRIPT_Begin (NULL,NULL);
+   fprintf (Gbl.F.Out,"setTZname('BrowserTZName');"
+		      "setTZ('BrowserTZDiff');");
+   HTM_SCRIPT_End ();
   }
 
 /*****************************************************************************/
@@ -1604,4 +1604,35 @@ void Dat_WriteHoursMinutesSeconds (struct Time *Time)
    else
       fprintf (Gbl.F.Out,"%u&quot;",
                Time->Second);
+  }
+
+/*****************************************************************************/
+/**** Write call to JavaScript function to write local date from UTC time ****/
+/*****************************************************************************/
+
+void Dat_WriteLocalDateHMSFromUTC (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Params;
+
+   if (fmt)
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Params,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+         // HTM_SCRIPT_Begin (NULL,NULL);
+	 // fprintf (Gbl.F.Out,"writeLocalDateHMSFromUTC(%s);",Params);
+         // HTM_SCRIPT_End ();
+
+	 free ((void *) Params);
+	}
   }

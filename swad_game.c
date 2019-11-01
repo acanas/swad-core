@@ -431,13 +431,11 @@ void Gam_ShowOneGame (long GamCod,
 				     "DATE_GREEN",
 		       Gbl.RowEvenOdd);
       if (Game.TimeUTC[Dat_START_TIME])
-	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('gam_date_%u_%u',%ld,"
-			    "%u,'<br />','%s',true,true,0x7);"
-			    "</script>",
-		  (unsigned) StartEndTime,UniqueId,
-		  Game.TimeUTC[StartEndTime],
-		  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	 Dat_WriteLocalDateHMSFromUTC ("'gam_date_%u_%u',%ld,"
+			               "%u,'<br />','%s',true,true,0x7",
+				       (unsigned) StartEndTime,UniqueId,
+				       Game.TimeUTC[StartEndTime],
+				       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
      }
 

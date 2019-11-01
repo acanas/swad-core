@@ -1116,12 +1116,10 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       UniqueId,ClassDate);
 	 break;
      }
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('prj_creat_%u',%ld,"
-                      "%u,'<br />','%s',true,true,0x7);"
-                      "</script>",
-            UniqueId,Prj->CreatTime,
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC ("'prj_creat_%u',%ld,"
+                                 "%u,'<br />','%s',true,true,0x7",
+				 UniqueId,Prj->CreatTime,
+				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
 
    /* Modification date/time */
@@ -1137,12 +1135,10 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       UniqueId,ClassDate);
 	 break;
      }
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('prj_modif_%u',%ld,"
-                      "%u,'<br />','%s',true,true,0x7);"
-                      "</script>",
-            UniqueId,Prj->ModifTime,
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC ("'prj_modif_%u',%ld,"
+                                 "%u,'<br />','%s',true,true,0x7",
+				 UniqueId,Prj->ModifTime,
+				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
 
    /* Project title */
@@ -1495,24 +1491,20 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
    UniqueId++;
    HTM_TD_Begin ("id=\"prj_creat_%u\" class=\"LT %s COLOR%u\"",
 		 UniqueId,ClassDate,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('prj_creat_%u',%ld,"
-                      "%u,'<br />','%s',true,true,0x7);"
-                      "</script>",
-            UniqueId,Prj->CreatTime,
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC ("'prj_creat_%u',%ld,"
+                                 "%u,'<br />','%s',true,true,0x7",
+				 UniqueId,Prj->CreatTime,
+				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
 
    /***** End date/time *****/
    UniqueId++;
    HTM_TD_Begin ("id=\"prj_modif_%u\" class=\"LT %s COLOR%u\"",
 		 UniqueId,ClassDate,Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('prj_modif_%u',%ld,"
-                      "%u,'<br />','%s',true,true,0x7);"
-                      "</script>",
-            UniqueId,Prj->ModifTime,
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC ("'prj_modif_%u',%ld,"
+                                 "%u,'<br />','%s',true,true,0x7",
+				 UniqueId,Prj->ModifTime,
+				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
 
    /***** Project title *****/

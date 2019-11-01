@@ -3620,12 +3620,10 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
                  UniqueId,ClassBackground);
 
    /***** Write date and time *****/
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('msg_date_%u',%ld,"
-                      "%u,',&nbsp;','%s',true,false,0x6);"
-                      "</script>",
-            UniqueId,(long) TimeUTC,
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC ("'msg_date_%u',%ld,"
+                                 "%u,',&nbsp;','%s',true,false,0x6",
+				 UniqueId,(long) TimeUTC,
+				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /***** End cell *****/
    HTM_TD_End ();

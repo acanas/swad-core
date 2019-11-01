@@ -434,13 +434,11 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	    HTM_TD_Begin ("id =\"mch_time_%u_%u\" class=\"DAT LT COLOR%u\"",
 			  (unsigned) StartEndTime,UniqueId,
 			  Gbl.RowEvenOdd);
-	    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			       "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
-			       "%ld,%u,'<br />','%s',true,false,0x7);"
-			       "</script>",
-		     (unsigned) StartEndTime,UniqueId,
-		     (long) TimeUTC[StartEndTime],
-		     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	    Dat_WriteLocalDateHMSFromUTC ("'mch_time_%u_%u',"
+			                  "%ld,%u,'<br />','%s',true,false,0x7",
+					  (unsigned) StartEndTime,UniqueId,
+					  (long) TimeUTC[StartEndTime],
+					  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 	    HTM_TD_End ();
            }
 
@@ -790,13 +788,11 @@ void McR_ShowOneMchResult (void)
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("id=\"match_%u\" class=\"DAT LT\"",(unsigned) StartEndTime);
-	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('match_%u',%ld,"
-			    "%u,',&nbsp;','%s',true,true,0x7);"
-			    "</script>",
-		  (unsigned) StartEndTime,
-		  TimeUTC[StartEndTime],
-		  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	 Dat_WriteLocalDateHMSFromUTC ("'match_%u',%ld,"
+			               "%u,',&nbsp;','%s',true,true,0x7",
+				       (unsigned) StartEndTime,
+				       TimeUTC[StartEndTime],
+				       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();

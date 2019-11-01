@@ -3459,12 +3459,10 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 	    UniqueId++;
             HTM_TD_Begin ("id=\"thr_date_%u\" class=\"%s LT %s\"",
                           UniqueId,Style,BgColor);
-	    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			       "writeLocalDateHMSFromUTC('thr_date_%u',%ld,"
-			       "%u,'<br />','%s',true,false,0x6);"
-			       "</script>",
-		     UniqueId,(long) TimeUTC,
-		     (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	    Dat_WriteLocalDateHMSFromUTC ("'thr_date_%u',%ld,"
+			                  "%u,'<br />','%s',true,false,0x6",
+					  UniqueId,(long) TimeUTC,
+					  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
             HTM_TD_End ();
            }
          else

@@ -485,12 +485,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							    "DATE_RED_LIGHT"),
 		    Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('svy_date_start_%u',%ld,"
-                      "%u,'<br />','%s',true,true,0x7);"
-                      "</script>",
-            UniqueId,Svy.TimeUTC[Svy_START_TIME],
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC ("'svy_date_start_%u',%ld,"
+                                 "%u,'<br />','%s',true,true,0x7",
+				 UniqueId,Svy.TimeUTC[Svy_START_TIME],
+				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
 
    /* End date/time */
@@ -509,12 +507,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							    "DATE_RED_LIGHT"),
 		    Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('svy_date_end_%u',%ld,"
-                      "%u,'<br />','%s',false,true,0x7);"
-                      "</script>",
-            UniqueId,Svy.TimeUTC[Svy_END_TIME],
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC ("'svy_date_end_%u',%ld,"
+                                 "%u,'<br />','%s',false,true,0x7",
+				 UniqueId,Svy.TimeUTC[Svy_END_TIME],
+				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_TD_End ();
 
    /* Survey title */

@@ -193,4 +193,6 @@ void Dat_WriteScriptMonths (void);
 void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds);
 void Dat_WriteHoursMinutesSeconds (struct Time *Time);
 
+void Dat_WriteLocalDateHMSFromUTC (const char *fmt,...);
+
 #endif

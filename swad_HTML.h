@@ -83,6 +83,9 @@ void HTM_LI_End (void);
 void HTM_A_Begin (const char *fmt,...);
 void HTM_A_End (void);
 
+void HTM_SCRIPT_Begin (const char *URL,const char *CharSet);
+void HTM_SCRIPT_End (void);
+
 void HTM_TEXTAREA_Begin (const char *fmt,...);
 void HTM_TEXTAREA_End (void);
 

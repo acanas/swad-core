@@ -103,12 +103,10 @@ void Con_ShowConnectedUsrs (void)
 	     Txt_Connected_users);
    Box_BoxBegin (NULL,Gbl.Title,Con_PutIconToUpdateConnected,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('connected_current_time',%ld,"
-                      "%u,',&nbsp;',null,false,true,0x7);"
-                      "</script>",
-            (long) Gbl.StartExecutionTimeUTC,
-            (unsigned) Gbl.Prefs.DateFormat);
+   Dat_WriteLocalDateHMSFromUTC ("'connected_current_time',%ld,"
+                                 "%u,',&nbsp;',null,false,true,0x7",
+				 (long) Gbl.StartExecutionTimeUTC,
+				 (unsigned) Gbl.Prefs.DateFormat);
 
    /***** Number of connected users in the whole platform *****/
    Con_ShowGlobalConnectedUsrs ();

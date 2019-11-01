@@ -501,12 +501,10 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
 	   }
 	 fprintf (Gbl.F.Out,")");
         }
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('%s',%ld,"
-			 "%u,',&nbsp;','%s',true,false,0x6);"
-			 "</script>",
-	       IdFirstClickTime,(long) UsrFigures->FirstClickTimeUTC,
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,"
+			            "%u,',&nbsp;','%s',true,false,0x6",
+				    IdFirstClickTime,(long) UsrFigures->FirstClickTimeUTC,
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
      }
    else	// First click time is unknown or user never logged
       /***** Button to fetch and store user's figures *****/

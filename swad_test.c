@@ -2931,12 +2931,10 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
       HTM_TD_Begin ("id=\"tst_date_%u\" class=\"DAT_SMALL CT COLOR%u\"",
 			 UniqueId,Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                         "writeLocalDateHMSFromUTC('tst_date_%u',%ld,"
-                         "%u,'<br />','%s',true,false,0x7);"
-                         "</script>",
-               UniqueId,(long) TimeUTC,
-               (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Dat_WriteLocalDateHMSFromUTC ("'tst_date_%u',%ld,"
+                                    "%u,'<br />','%s',true,false,0x7",
+				    UniqueId,(long) TimeUTC,
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
 
       /* Write the question tags */
@@ -3142,12 +3140,10 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
       TimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
       HTM_TD_Begin ("id=\"tst_date_%u\" class=\"DAT_SMALL CT COLOR%u\">",
 	            UniqueId,Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                         "writeLocalDateHMSFromUTC('tst_date_%u',%ld,"
-                         "%u,'<br />','%s',true,false,0x7);"
-                         "</script>",
-               UniqueId,(long) TimeUTC,
-               (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Dat_WriteLocalDateHMSFromUTC ("'tst_date_%u',%ld,"
+                                    "%u,'<br />','%s',true,false,0x7",
+				    UniqueId,(long) TimeUTC,
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
 
       /* Write the question tags */
@@ -7778,12 +7774,10 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
          UniqueId++;
 	 HTM_TD_Begin ("id=\"tst_date_%u\" class=\"%s RT COLOR%u\"",
 		       UniqueId,ClassDat,Gbl.RowEvenOdd);
-	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('tst_date_%u',%ld,"
-			    "%u,',&nbsp;','%s',true,false,0x7);"
-			    "</script>",
-	          UniqueId,(long) TimeUTC,
-	          (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	 Dat_WriteLocalDateHMSFromUTC ("'tst_date_%u',%ld,"
+			               "%u,',&nbsp;','%s',true,false,0x7",
+				       UniqueId,(long) TimeUTC,
+				       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 	 HTM_TD_End ();
 
          /* Get number of questions (row[3]) */
@@ -8118,12 +8112,10 @@ void Tst_ShowOneTstResult (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("id=\"test\" class=\"DAT LT\"");
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('test',%ld,"
-			 "%u,',&nbsp;','%s',true,true,0x7);"
-			 "</script>",
-	       TstTimeUTC,
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Dat_WriteLocalDateHMSFromUTC ("'test',%ld,"
+			            "%u,',&nbsp;','%s',true,true,0x7",
+				    TstTimeUTC,
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
 
       HTM_TR_End ();

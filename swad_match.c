@@ -554,13 +554,11 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 		    Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
 								      "DATE_GREEN",
 		    Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('mch_time_%u_%u',"
-			 "%ld,%u,'<br />','%s',true,true,0x7);"
-			 "</script>",
-	       (unsigned) StartEndTime,UniqueId,
-	       Match->TimeUTC[StartEndTime],
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Dat_WriteLocalDateHMSFromUTC ("'mch_time_%u_%u',"
+			            "%ld,%u,'<br />','%s',true,true,0x7",
+				    (unsigned) StartEndTime,UniqueId,
+				    Match->TimeUTC[StartEndTime],
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
      }
   }

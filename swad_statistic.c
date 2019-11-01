@@ -1716,13 +1716,11 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
       /* Write the date-time (row[3]) */
       HTM_TD_Begin ("id=\"log_date_%u\" class=\"LOG RT COLOR%u\"",
-                         UniqueId,Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('log_date_%u',%ld,"
-			 "%u,',&nbsp;','%s',true,false,0x7);"
-			 "</script>",
-               UniqueId,(long) Dat_GetUNIXTimeFromStr (row[3]),
-               (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+                    UniqueId,Gbl.RowEvenOdd);
+      Dat_WriteLocalDateHMSFromUTC ("'log_date_%u',%ld,"
+			            "%u,',&nbsp;','%s',true,false,0x7",
+				    UniqueId,(long) Dat_GetUNIXTimeFromStr (row[3]),
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
 
       /* Write the action */

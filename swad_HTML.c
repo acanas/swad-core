@@ -63,6 +63,7 @@ static unsigned HTM_DIV_NestingLevel = 0;
 static unsigned HTM_UL_NestingLevel = 0;
 static unsigned HTM_LI_NestingLevel = 0;
 static unsigned HTM_A_NestingLevel = 0;
+static unsigned HTM_SCRIPT_NestingLevel = 0;
 static unsigned HTM_TEXTAREA_NestingLevel = 0;
 
 /*****************************************************************************/
@@ -705,6 +706,34 @@ void HTM_A_End (void)
    fprintf (Gbl.F.Out,"</a>");
 
    HTM_A_NestingLevel--;
+  }
+
+/*****************************************************************************/
+/*********************************** Scripts *********************************/
+/*****************************************************************************/
+
+void HTM_SCRIPT_Begin (const char *URL,const char *CharSet)
+  {
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\"");
+   if (URL)
+      if (URL[0])
+         fprintf (Gbl.F.Out," src=\"%s\"",URL);
+   if (CharSet)
+      if (CharSet[0])
+         fprintf (Gbl.F.Out," charset=\"%s\"",CharSet);
+   fprintf (Gbl.F.Out,">");
+
+   HTM_SCRIPT_NestingLevel++;
+  }
+
+void HTM_SCRIPT_End (void)
+  {
+   if (HTM_SCRIPT_NestingLevel == 0)	// No SCRIPT open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened SCRIPT.");
+
+   fprintf (Gbl.F.Out,"</script>");
+
+   HTM_SCRIPT_NestingLevel--;
   }
 
 /*****************************************************************************/

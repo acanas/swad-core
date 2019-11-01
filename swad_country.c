@@ -897,9 +897,11 @@ void Cty_WriteScriptGoogleGeochart (void)
    unsigned NumCtysWithUsrs = 0;
 
    /***** Write start of the script *****/
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>\n"
-                      "<script type=\"text/javascript\">\n"
-                      "	google.load('visualization', '1', {'packages': ['geochart']});\n"
+   HTM_SCRIPT_Begin ("https://www.google.com/jsapi",NULL);
+   HTM_SCRIPT_End ();
+
+   HTM_SCRIPT_Begin (NULL,NULL);
+   fprintf (Gbl.F.Out,"	google.load('visualization', '1', {'packages': ['geochart']});\n"
                       "	google.setOnLoadCallback(drawRegionsMap);\n"
                       "	function drawRegionsMap() {\n"
                       "	var data = new google.visualization.DataTable();\n"
@@ -937,10 +939,10 @@ void Cty_WriteScriptGoogleGeochart (void)
                       "		colorAxis:{colors:['#EAF1F4','#4D88A1'],minValue:0,maxValue:%u}};\n"
                       "	var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));\n"
                       "	chart.draw(data, options);\n"
-                      "	};\n"
-                      "</script>\n",
+                      "	};\n",
             NumCtysWithUsrs ? MaxUsrsInCountry :
         	              0);
+   HTM_SCRIPT_End ();
   }
 
 /*****************************************************************************/

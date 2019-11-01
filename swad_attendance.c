@@ -423,12 +423,10 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 				     (Att->Open ? "DATE_GREEN" :
 						  "DATE_RED"),
 		       Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('att_date_%u_%u',%ld,"
-			 "%u,'<br />','%s',true,true,0x7);"
-			 "</script>",
-	       (unsigned) StartEndTime,UniqueId,Att->TimeUTC[StartEndTime],
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Dat_WriteLocalDateHMSFromUTC ("'att_date_%u_%u',%ld,"
+				    "%u,'<br />','%s',true,true,0x7",
+				    (unsigned) StartEndTime,UniqueId,Att->TimeUTC[StartEndTime],
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
      }
 
@@ -3136,14 +3134,12 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<label for=\"Att%u\">"
                          "<span id=\"att_date_start_%u\"></span>"
-                         "</label>"
-			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,"
-			 "%u,',&nbsp;','%s',true,true,0x7);"
-			 "</script>",
-	       NumAttEvent,UniqueId,
-               UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
-               (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+                         "</label>",
+	       NumAttEvent,UniqueId);
+      Dat_WriteLocalDateHMSFromUTC ("'att_date_start_%u',%ld,"
+			            "%u,',&nbsp;','%s',true,true,0x7",
+				    UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
@@ -3580,16 +3576,14 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 
 	 HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
 	 fprintf (Gbl.F.Out,"<span id=\"att_date_start_%u_%u\"></span>"
-	                    "<br />%s"
-			    "<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('att_date_start_%u_%u',%ld,"
-			    "%u,',&nbsp;','%s',true,true,0x7);"
-			    "</script>",
+	                    "<br />%s",
 	          NumUsr,UniqueId,
-	          Gbl.AttEvents.Lst[NumAttEvent].Title,
-                  NumUsr,UniqueId,
-		  Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
-                  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	          Gbl.AttEvents.Lst[NumAttEvent].Title);
+	 Dat_WriteLocalDateHMSFromUTC ("'att_date_start_%u_%u',%ld,"
+			               "%u,',&nbsp;','%s',true,true,0x7",
+				       NumUsr,UniqueId,
+				       Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
+				       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();

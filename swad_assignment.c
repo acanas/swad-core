@@ -386,12 +386,10 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 				    (Asg.Open ? "DATE_GREEN" :
 					        "DATE_RED"),
 		       Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('asg_date_%u_%u',%ld,"
-			 "%u,'<br />','%s',true,true,0x7);"
-			 "</script>",
-	       (unsigned) StartEndTime,UniqueId,Asg.TimeUTC[StartEndTime],
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Dat_WriteLocalDateHMSFromUTC ("'asg_date_%u_%u',%ld,"
+			            "%u,'<br />','%s',true,true,0x7",
+				    (unsigned) StartEndTime,UniqueId,Asg.TimeUTC[StartEndTime],
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       HTM_TD_End ();
      }
 

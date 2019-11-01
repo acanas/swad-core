@@ -698,12 +698,10 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('not_date_%u',%ld,"
-                      "%u,'<br />','%s',true,false,0x6);"
-                      "</script>",
-	    UniqueId,(long) TimeUTC,
-	    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC ("'not_date_%u',%ld,"
+                                 "%u,'<br />','%s',true,false,0x6",
+				 UniqueId,(long) TimeUTC,
+				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
    HTM_DIV_End ();
 
    /***** Write the content of the notice *****/

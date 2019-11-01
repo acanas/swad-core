@@ -6399,29 +6399,22 @@ static void Brw_WriteDatesAssignment (void)
       UniqueId++;
 
       /***** Write start and end dates *****/
-      fprintf (Gbl.F.Out,"<span id=\"asg_start_date_%u\">"
-			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('asg_start_date_%u',%ld,"
-			 "%u,',&nbsp;','%s',true,false,0x7);"
-			 "</script>"
-			 "</span>"
+      fprintf (Gbl.F.Out,"<span id=\"asg_start_date_%u\">",UniqueId);
+      Dat_WriteLocalDateHMSFromUTC ("'asg_start_date_%u',%ld,"
+			            "%u,',&nbsp;','%s',true,false,0x7",
+				    UniqueId,(long) Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      fprintf (Gbl.F.Out,"</span>"
                          "&rarr;"
-                         "<span id=\"asg_end_date_%u\">"
-                         "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('asg_end_date_%u',%ld,"
-			 "%u,',&nbsp;','%s',false,false,0x7);"
-			 "</script>"
-			 "</span>",
-               UniqueId,
-               UniqueId,(long) Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today,
-               UniqueId,
-               UniqueId,(long) Gbl.FileBrowser.Asg.TimeUTC[Dat_END_TIME],
-	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+                         "<span id=\"asg_end_date_%u\">",UniqueId);
+      Dat_WriteLocalDateHMSFromUTC ("'asg_end_date_%u',%ld,"
+			            "%u,',&nbsp;','%s',false,false,0x7",
+				    UniqueId,(long) Gbl.FileBrowser.Asg.TimeUTC[Dat_END_TIME],
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      fprintf (Gbl.F.Out,"</span>");
      }
    else
-      fprintf (Gbl.F.Out,"&nbsp;(%s)",
-               Txt_unknown_assignment);
+      fprintf (Gbl.F.Out,"&nbsp;(%s)",Txt_unknown_assignment);
    HTM_TD_End ();
   }
 
@@ -6453,14 +6446,11 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
        Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_LINK)
      {
       UniqueId++;
-      fprintf (Gbl.F.Out,"<span id=\"filedate%u\"></span>"
-	                 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('filedate%u',%ld,"
-			 "%u,',&nbsp;','%s',true,false,0x6);"
-                         "</script>",
-               UniqueId,
-               UniqueId,(long) FileMetadata->Time,
-               (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      fprintf (Gbl.F.Out,"<span id=\"filedate%u\"></span>",UniqueId);
+      Dat_WriteLocalDateHMSFromUTC ("'filedate%u',%ld,"
+			            "%u,',&nbsp;','%s',true,false,0x6",
+				    UniqueId,(long) FileMetadata->Time,
+				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
      }
    HTM_TD_End ();
   }
@@ -9576,12 +9566,10 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("id=\"filedate\" class=\"DAT LM\"");
-	 fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-		            "writeLocalDateHMSFromUTC('filedate',%ld,"
-		            "%u,',&nbsp;','%s',true,true,0x7);"
-		            "</script>",
-	          (long) FileMetadata.Time,
-	          (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	 Dat_WriteLocalDateHMSFromUTC ("'filedate',%ld,"
+		                       "%u,',&nbsp;','%s',true,true,0x7",
+				       (long) FileMetadata.Time,
+				       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();

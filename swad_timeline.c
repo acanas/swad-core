@@ -1789,12 +1789,10 @@ static void TL_WriteDateTime (time_t TimeUTC)
    /***** Script to write date and time in browser local time *****/
    // This must be out of the div where the output is written
    // because it will be evaluated in a loop in JavaScript
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-		      "writeLocalDateHMSFromUTC('%s',%ld,"
-		      "%u,',&nbsp;','%s',true,false,0x6);"
-                      "</script>",
-            IdDateTime,(long) TimeUTC,
-            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,"
+		                 "%u,',&nbsp;','%s',true,false,0x6",
+				 IdDateTime,(long) TimeUTC,
+				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
   }
 
 /*****************************************************************************/
