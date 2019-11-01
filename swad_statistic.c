@@ -1719,9 +1719,9 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       if (asprintf (&Id,"log_date_%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"LOG RT COLOR%u\"",Id,Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,',&nbsp;','%s',true,false,0x7",
-				    Id,(long) Dat_GetUNIXTimeFromStr (row[3]),
-				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Dat_WriteLocalDateHMSFromUTC (Id,Dat_GetUNIXTimeFromStr (row[3]),
+				    Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
+				    true,false,0x7);
       HTM_TD_End ();
       free ((void *) Id);
 

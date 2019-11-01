@@ -1119,9 +1119,9 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       Id,ClassDate);
 	 break;
      }
-   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
-				 Id,Prj->CreatTime,
-				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
+				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+				 true,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 
@@ -1140,9 +1140,9 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 		       Id,ClassDate);
 	 break;
      }
-   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
-				 Id,Prj->ModifTime,
-				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
+				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+				 true,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 
@@ -1499,9 +1499,9 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
       Lay_NotEnoughMemoryExit ();
    HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
 		 Id,ClassDate,Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
-				 Id,Prj->CreatTime,
-				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
+				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+				 true,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 
@@ -1511,9 +1511,9 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
       Lay_NotEnoughMemoryExit ();
    HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
 		 Id,ClassDate,Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
-				 Id,Prj->ModifTime,
-				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
+				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+				 true,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 

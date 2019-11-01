@@ -2344,9 +2344,9 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
                          "<span id=\"%s\"></span>",
                Txt_Opening_of_groups,
                Id);
-      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,',&nbsp;','%s',true,true,0x7",
-                                    Id,(long) GrpTyp->OpenTimeUTC,
-                                    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Dat_WriteLocalDateHMSFromUTC (Id,GrpTyp->OpenTimeUTC,
+				    Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
+				    true,true,0x7);
       free ((void *) Id);
      }
    HTM_TD_End ();

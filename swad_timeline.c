@@ -1789,10 +1789,9 @@ static void TL_WriteDateTime (time_t TimeUTC)
    /***** Script to write date and time in browser local time *****/
    // This must be out of the div where the output is written
    // because it will be evaluated in a loop in JavaScript
-   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,"
-		                 "%u,',&nbsp;','%s',true,false,0x6",
-				 IdDateTime,(long) TimeUTC,
-				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC (IdDateTime,TimeUTC,
+		                 Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
+				 true,false,0x6);
   }
 
 /*****************************************************************************/

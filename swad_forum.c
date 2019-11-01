@@ -3461,9 +3461,9 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 	    if (asprintf (&Id,"thr_date_%u",UniqueId) < 0)
 	       Lay_NotEnoughMemoryExit ();
             HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",Id,Style,BgColor);
-	    Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,false,0x6",
-					  Id,(long) TimeUTC,
-					  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
+					  Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+					  true,false,0x6);
             HTM_TD_End ();
             free ((void *) Id);
            }

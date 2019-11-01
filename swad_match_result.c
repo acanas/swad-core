@@ -436,9 +436,9 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	       Lay_NotEnoughMemoryExit ();
 	    HTM_TD_Begin ("id =\"%s\" class=\"DAT LT COLOR%u\"",
 			  Id,Gbl.RowEvenOdd);
-	    Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,false,0x7",
-					  Id,(long) TimeUTC[StartEndTime],
-					  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC[StartEndTime],
+					  Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+					  true,false,0x7);
 	    HTM_TD_End ();
             free ((void *) Id);
            }
@@ -792,9 +792,9 @@ void McR_ShowOneMchResult (void)
 	 if (asprintf (&Id,"match_%u",(unsigned) StartEndTime) < 0)
 	    Lay_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LT\"",Id);
-	 Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,',&nbsp;','%s',true,true,0x7",
-				       Id,TimeUTC[StartEndTime],
-				       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	 Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC[StartEndTime],
+				       Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
+				       true,true,0x7);
 	 HTM_TD_End ();
          free ((void *) Id);
 

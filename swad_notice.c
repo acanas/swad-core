@@ -700,9 +700,9 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Frm_LinkFormEnd ();
       Frm_EndForm ();
      }
-   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,false,0x6",
-				 Id,(long) TimeUTC,
-				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
+				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+				 true,false,0x6);
    free ((void *) Id);
    HTM_DIV_End ();
 

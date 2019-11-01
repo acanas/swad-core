@@ -432,9 +432,9 @@ void Gam_ShowOneGame (long GamCod,
 				        "DATE_GREEN",
 		       Gbl.RowEvenOdd);
       if (Game.TimeUTC[Dat_START_TIME])
-	 Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
-				       Id,Game.TimeUTC[StartEndTime],
-				       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+	 Dat_WriteLocalDateHMSFromUTC (Id,Game.TimeUTC[StartEndTime],
+				       Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+				       true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);
      }

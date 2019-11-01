@@ -391,9 +391,9 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 				    (Asg.Open ? "DATE_GREEN" :
 					        "DATE_RED"),
 		       Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
-				    Id,Asg.TimeUTC[StartEndTime],
-				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Dat_WriteLocalDateHMSFromUTC (Id,Asg.TimeUTC[StartEndTime],
+				    Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+				    true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);
      }

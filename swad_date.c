@@ -170,9 +170,9 @@ void Dat_PutScriptDateFormat (Dat_Format_t Format)
 
    if (asprintf (&Id,"date_format_%u",(unsigned) Format) < 0)
       Lay_NotEnoughMemoryExit ();
-   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'',null,true,false,0x0",
-				 Id,(long) Gbl.StartExecutionTimeUTC,
-				 (unsigned) Format);
+   Dat_WriteLocalDateHMSFromUTC (Id,Gbl.StartExecutionTimeUTC,
+				 Format,"","",
+				 true,false,0x0);
    free ((void *) Id);
   }
 
@@ -1614,29 +1614,18 @@ void Dat_WriteHoursMinutesSeconds (struct Time *Time)
 /**** Write call to JavaScript function to write local date from UTC time ****/
 /*****************************************************************************/
 
-void Dat_WriteLocalDateHMSFromUTC (const char *fmt,...)
+void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
+				   Dat_Format_t DateFormat,const char *Separator,const char *StrToday,
+				   bool WriteDateOnSameDay,bool WriteWeekDay,unsigned WriteHMS)
   {
-   va_list ap;
-   int NumBytesPrinted;
-   char *Params;
-
-   if (fmt)
-      if (fmt[0])
-	{
-	 va_start (ap,fmt);
-	 NumBytesPrinted = vasprintf (&Params,fmt,ap);
-	 va_end (ap);
-
-	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
-					// or some other error occurs,
-					// vasprintf will return -1
-	    Lay_NotEnoughMemoryExit ();
-
-	 /***** Print HTML *****/
-         HTM_SCRIPT_Begin (NULL,NULL);
-	 fprintf (Gbl.F.Out,"writeLocalDateHMSFromUTC(%s);",Params);
-         HTM_SCRIPT_End ();
-
-	 free ((void *) Params);
-	}
+   HTM_SCRIPT_Begin (NULL,NULL);
+   fprintf (Gbl.F.Out,"writeLocalDateHMSFromUTC('%s',%ld,%u,'%s','%s',%s,%s,0x%x);",
+	    Id,(long) TimeUTC,(unsigned) DateFormat,Separator,
+	    StrToday,
+	    WriteDateOnSameDay ? "true" :
+		                 "false",
+	    WriteWeekDay ? "true" :
+		           "false",
+	    WriteHMS);
+   HTM_SCRIPT_End ();
   }

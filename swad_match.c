@@ -557,9 +557,9 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 		    Match->Status.QstInd >= Mch_AFTER_LAST_QUESTION ? "DATE_RED" :
 								      "DATE_GREEN",
 		    Gbl.RowEvenOdd);
-      Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
-				    Id,Match->TimeUTC[StartEndTime],
-				    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+      Dat_WriteLocalDateHMSFromUTC (Id,Match->TimeUTC[StartEndTime],
+				    Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+				    true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);
      }

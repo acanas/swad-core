@@ -488,9 +488,9 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							    "DATE_RED_LIGHT"),
 		    Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',true,true,0x7",
-				 Id,Svy.TimeUTC[Svy_START_TIME],
-				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Svy_START_TIME],
+				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+				 true,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 
@@ -512,9 +512,9 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 				         (Svy.Status.Open ? "DATE_GREEN_LIGHT" :
 							    "DATE_RED_LIGHT"),
 		    Gbl.RowEvenOdd);
-   Dat_WriteLocalDateHMSFromUTC ("'%s',%ld,%u,'<br />','%s',false,true,0x7",
-				 Id,Svy.TimeUTC[Svy_END_TIME],
-				 (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+   Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Svy_END_TIME],
+				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
+				 false,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 
