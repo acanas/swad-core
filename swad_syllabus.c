@@ -149,8 +149,8 @@ void Syl_PutFormWhichSyllabus (void)
 	WhichSyllabus++)
      {
       HTM_LI_Begin ("class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"<label>"
-                         "<input type=\"radio\" name=\"WhichSyllabus\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label>");
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"WhichSyllabus\" value=\"%u\"",
                (unsigned) WhichSyllabus);
       if (WhichSyllabus == Gbl.Syllabus.WhichSyllabus)
          fprintf (Gbl.F.Out," checked=\"checked\"");

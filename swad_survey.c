@@ -1893,9 +1893,9 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"ScopeSvy\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Scope);
+   fprintf (Gbl.F.Out,"<label for=\"ScopeSvy\" class=\"%s\">",
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Scope);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1911,9 +1911,9 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Title);
+   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1933,9 +1933,9 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Description);
+   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">",
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2095,8 +2095,8 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"<label>"
-                         "<input type=\"checkbox\""
+      fprintf (Gbl.F.Out,"<label>");
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
       if (!Svy_CheckIfSvyIsAssociatedToGrps (SvyCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -2728,8 +2728,9 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Wording);
+   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">",
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Wording);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2753,9 +2754,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 	AnsType < Svy_NUM_ANS_TYPES;
 	AnsType++)
      {
-      fprintf (Gbl.F.Out,"<label>"
-	                 "<input type=\"radio\" name=\"AnswerType\""
-	                 " value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label>");
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AnswerType\" value=\"%u\"",
                (unsigned) AnsType);
       if (AnsType == SvyQst->AnswerType)
          fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -2784,8 +2784,9 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 
       /* Label with the number of the answer */
       HTM_TD_Begin ("class=\"RT\"");
-      fprintf (Gbl.F.Out,"<label for=\"AnsStr%u\" class=\"%s\">%u)",
-               NumAns,The_ClassFormInBox[Gbl.Prefs.Theme],NumAns + 1);
+      fprintf (Gbl.F.Out,"<label for=\"AnsStr%u\" class=\"%s\">",
+               NumAns,The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%u)",NumAns + 1);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -3468,17 +3469,17 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 
 	 /* Write the number of option */
 	 HTM_TD_Begin ("class=\"SVY_OPT LT\"");
-	 fprintf (Gbl.F.Out,"<label for=\"Ans%010u_%010u\" class=\"DAT\">"
-			    "%u)",
-		  (unsigned) SvyQst->QstCod,NumAns,NumAns + 1);
+	 fprintf (Gbl.F.Out,"<label for=\"Ans%010u_%010u\" class=\"DAT\">",
+		  (unsigned) SvyQst->QstCod,NumAns);
+	 fprintf (Gbl.F.Out,"%u)",NumAns + 1);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
 	 /* Write the text of the answer */
 	 HTM_TD_Begin ("class=\"LT\"");
-	 fprintf (Gbl.F.Out,"<label for=\"Ans%010u_%010u\" class=\"DAT\">%s",
-		  (unsigned) SvyQst->QstCod,NumAns,
-		  SvyQst->AnsChoice[NumAns].Text);
+	 fprintf (Gbl.F.Out,"<label for=\"Ans%010u_%010u\" class=\"DAT\">",
+		  (unsigned) SvyQst->QstCod,NumAns);
+	 fprintf (Gbl.F.Out,"%s",SvyQst->AnsChoice[NumAns].Text);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 

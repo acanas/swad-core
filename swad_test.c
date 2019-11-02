@@ -354,9 +354,9 @@ void Tst_ShowFormAskTst (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"RM\"");
-         fprintf (Gbl.F.Out,"<label for=\"NumQst\" class=\"%s\">"
-                            "%s:",
-                  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_No_of_questions);
+         fprintf (Gbl.F.Out,"<label for=\"NumQst\" class=\"%s\">",
+                  The_ClassFormInBox[Gbl.Prefs.Theme]);
+         fprintf (Gbl.F.Out,"%s:",Txt_No_of_questions);
          HTM_LABEL_End ();
          HTM_TD_End ();
 
@@ -472,10 +472,9 @@ void Tst_ShowNewTest (void)
 
 	    /***** Test result will be saved? *****/
 	    HTM_DIV_Begin ("class=\"CM\"");
-	    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-			       "<input type=\"checkbox\" name=\"Save\""
-			       " value=\"Y\"",
+	    fprintf (Gbl.F.Out,"<label class=\"%s\">",
 		     The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Save\" value=\"Y\"");
 	    if (Gbl.Test.AllowTeachers)
 	       fprintf (Gbl.F.Out," checked=\"checked\"");
 	    fprintf (Gbl.F.Out," />"
@@ -1139,9 +1138,8 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
       HTM_DIV_Begin ("class=\"TEST_MED_EDIT_FORM\"");
 
       /***** Choice 1: No media *****/
-      fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	                 "<input type=\"radio\" name=\"%s\" value=\"%u\"",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
+      fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\"",
 	       ParamUploadMedia.Action,Med_ACTION_NO_MEDIA);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -1152,10 +1150,9 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
       fprintf (Gbl.F.Out,"<br />");
 
       /***** Choice 2: Current media *****/
-      fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	                 "<input type=\"radio\" name=\"%s\" value=\"%u\""
+      fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\""
 	                 " checked=\"checked\"",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       ParamUploadMedia.Action,Med_ACTION_KEEP_MEDIA);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -1169,10 +1166,9 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 
       /***** Choice 3: Change media *****/
       UniqueId++;
-      fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	                 "<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
+      fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
 			 " value=\"%u\"",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],
 	       UniqueId,ParamUploadMedia.Action,
 	       Med_ACTION_NEW_MEDIA);	// Replace existing image by new image
       if (OptionsDisabled)
@@ -1712,9 +1708,8 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
       HTM_TD_Empty (1);
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "<input type=\"checkbox\" name=\"AllTags\" value=\"Y\"",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AllTags\" value=\"Y\"");
    if (Gbl.Test.Tags.All)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'ChkTag');\" />"
@@ -1747,8 +1742,8 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
         }
 
       HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<label class=\"DAT\">"
-	                 "<input type=\"checkbox\" name=\"ChkTag\" value=\"%s\"",
+      fprintf (Gbl.F.Out,"<label class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"ChkTag\" value=\"%s\"",
 	       row[1]);
       if (Gbl.Test.Tags.List)
         {
@@ -1924,8 +1919,8 @@ static void Tst_ShowFormConfigTst (void)
 	Pluggable <= Tst_PLUGGABLE_YES;
 	Pluggable++)
      {
-      fprintf (Gbl.F.Out,"<label class=\"DAT\">"
-	                 "<input type=\"radio\" name=\"Pluggable\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Pluggable\" value=\"%u\"",
 	       (unsigned) Pluggable);
       if (Pluggable == Gbl.Test.Config.Pluggable)
          fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -1963,10 +1958,9 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"MinTimeNxtTstPerQst\" class=\"%s\">"
-	              "%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Minimum_time_seconds_per_question_between_two_tests);
+   fprintf (Gbl.F.Out,"<label for=\"MinTimeNxtTstPerQst\" class=\"%s\">",
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Minimum_time_seconds_per_question_between_two_tests);
     HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1992,8 +1986,8 @@ static void Tst_ShowFormConfigTst (void)
 	Feedback < Tst_NUM_TYPES_FEEDBACK;
 	Feedback++)
      {
-      fprintf (Gbl.F.Out,"<label class=\"DAT\">"
-	                 "<input type=\"radio\" name=\"Feedback\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Feedback\" value=\"%u\"",
 	       (unsigned) Feedback);
       if (Feedback == Gbl.Test.Config.Feedback)
          fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -2028,8 +2022,8 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"DAT\">%s",
-           Field,Label);
+   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"DAT\">",Field);
+   fprintf (Gbl.F.Out,"%s",Label);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2344,9 +2338,8 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "<input type=\"checkbox\" name=\"AllAnsTypes\" value=\"Y\"",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AllAnsTypes\" value=\"Y\"");
    if (Gbl.Test.AllAnsTypes)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'AnswerType');\" />"
@@ -2365,8 +2358,8 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<label class=\"DAT\">"
-                         "<input type=\"checkbox\" name=\"AnswerType\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label class=\"DAT\">");
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AnswerType\" value=\"%u\"",
                (unsigned) AnsType);
       Ptr = Gbl.Test.ListAnsTypes;
       while (*Ptr)
@@ -3741,19 +3734,17 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
-      fprintf (Gbl.F.Out,"<label for=\"Ans%06u_%u\" class=\"ANS_TXT\">"
-	                 "%c)&nbsp;",
-	       NumQst,NumOpt,
-	       'a' + (char) NumOpt);
+      fprintf (Gbl.F.Out,"<label for=\"Ans%06u_%u\" class=\"ANS_TXT\">",
+	       NumQst,NumOpt);
+      fprintf (Gbl.F.Out,"%c)&nbsp;",'a' + (char) NumOpt);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
       /***** Write the option text *****/
       HTM_TD_Begin ("class=\"LT\"");
-      fprintf (Gbl.F.Out,"<label for=\"Ans%06u_%u\" class=\"ANS_TXT\">"
-	                 "%s",
-               NumQst,NumOpt,
-               Gbl.Test.Answer.Options[NumOpt].Text);
+      fprintf (Gbl.F.Out,"<label for=\"Ans%06u_%u\" class=\"ANS_TXT\">",
+               NumQst,NumOpt);
+      fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
       HTM_LABEL_End ();
       Med_ShowMedia (&Gbl.Test.Answer.Options[NumOpt].Media,
                      "TEST_MED_SHOW_CONTAINER",
@@ -4196,11 +4187,8 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 
       /***** Write the option text and the result *****/
       HTM_TD_Begin ("class=\"LT\"");
-      fprintf (Gbl.F.Out,"<label for=\"Ans%06u_%u\" class=\"%s\">"
-	                 "%s",
-               QstInd,NumOpt,
-	       Class,
-               Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
+      fprintf (Gbl.F.Out,"<label for=\"Ans%06u_%u\" class=\"%s\">",QstInd,NumOpt,Class);
+      fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[Indexes[NumOpt]].Text);
       HTM_LABEL_End ();
       Med_ShowMedia (&Gbl.Test.Answer.Options[Indexes[NumOpt]].Media,
                      "TEST_MED_SHOW_CONTAINER",
@@ -5156,9 +5144,9 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Stem\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Wording);
+   fprintf (Gbl.F.Out,"<label for=\"Stem\" class=\"%s\">",
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Wording);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -5172,10 +5160,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                               false);
 
    /***** Feedback *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s (%s):<br />",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Feedback,Txt_optional);
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s (%s):<br />",Txt_Feedback,Txt_optional);
    HTM_TEXTAREA_Begin ("name=\"Feedback\" class=\"STEM_TEXTAREA\" rows=\"2\"");
    if (Feedback)
       if (Feedback[0])
@@ -5198,8 +5184,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	AnsType < Tst_NUM_ANS_TYPES;
 	AnsType++)
      {
-      fprintf (Gbl.F.Out,"<label>"
-	                 "<input type=\"radio\" name=\"AnswerType\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label>");
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AnswerType\" value=\"%u\"",
                (unsigned) AnsType);
       if (AnsType == Gbl.Test.AnswerType)
          fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -5222,11 +5208,11 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "%s:&nbsp;"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<input type=\"text\" name=\"AnsInt\""
                       " size=\"11\" maxlength=\"11\" value=\"%ld\"",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Integer_number,
+            Txt_Integer_number,
             Gbl.Test.Answer.Integer);
    if (Gbl.Test.AnswerType != Tst_ANS_INT)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -5262,9 +5248,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TD_Empty (1);
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
    if (Gbl.Test.Shuffle)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
@@ -5382,8 +5367,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                                  OptionsDisabled);
 
       /* Feedback */
-      fprintf (Gbl.F.Out,"<label class=\"%s\">%s (%s):<br />",
-	       The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Feedback,Txt_optional);
+      fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s (%s):<br />",Txt_Feedback,Txt_optional);
       HTM_TEXTAREA_Begin ("name=\"FbStr%u\" class=\"ANSWER_TEXTAREA\" rows=\"2\"%s",
 			  NumOpt,OptionsDisabled ? " disabled=\"disabled\"" :
 				                   "");
@@ -5428,12 +5413,12 @@ static void Tst_PutFloatInputField (const char *Label,const char *Field,
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
-   fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s&nbsp;"
                       "<input type=\"text\" name=\"%s\""
                       " size=\"11\" maxlength=\"%u\""
                       " value=\"%lg\"",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Label,
-            Field,
+            Label,Field,
             Tst_MAX_BYTES_FLOAT_ANSWER,
             Value);
    if (Gbl.Test.AnswerType != Tst_ANS_FLOAT)
@@ -5450,9 +5435,8 @@ static void Tst_PutTFInputField (const char *Label,char Value)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "<input type=\"radio\" name=\"AnsTF\" value=\"%c\"",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Value);
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AnsTF\" value=\"%c\"",Value);
    if (Gbl.Test.Answer.TF == Value)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    if (Gbl.Test.AnswerType != Tst_ANS_TRUE_FALSE)

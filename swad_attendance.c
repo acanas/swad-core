@@ -1104,8 +1104,9 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
+   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1125,8 +1126,9 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"ComTchVisible\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Teachers_comment);
+   fprintf (Gbl.F.Out,"<label for=\"ComTchVisible\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Teachers_comment);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1153,8 +1155,9 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Description);
+   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1215,8 +1218,9 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"<label>"
-                         "<input type=\"checkbox\" id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
+      fprintf (Gbl.F.Out,"<label>");
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\" id=\"WholeCrs\""
+	                 " name=\"WholeCrs\" value=\"Y\"");
       if (!Att_CheckIfAttEventIsAssociatedToGrps (AttCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
@@ -3134,17 +3138,16 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<label for=\"Att%u\">%u:",
-	       NumAttEvent,NumAttEvent + 1);
+      fprintf (Gbl.F.Out,"<label for=\"Att%u\">",NumAttEvent);
+      fprintf (Gbl.F.Out,"%u:",NumAttEvent + 1);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
       if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<label for=\"Att%u\">"
-                         "<span id=\"%s\"></span>",
-	       NumAttEvent,Id);
+      fprintf (Gbl.F.Out,"<label for=\"Att%u\">",NumAttEvent);
+      fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",Id);
       HTM_LABEL_End ();
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,

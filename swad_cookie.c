@@ -80,8 +80,8 @@ void Coo_EditMyPrefsOnCookies (void)
 	          (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies) ? "DAT_N LIGHT_BLUE" :
 								       "DAT");
    /* Check box */
-   fprintf (Gbl.F.Out,"<label>"
-	              "<input type=\"checkbox\""
+   fprintf (Gbl.F.Out,"<label>");
+   fprintf (Gbl.F.Out,"<input type=\"checkbox\""
 		      " name=\"cookies\" value=\"Y\"");
    if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies)
       fprintf (Gbl.F.Out," checked=\"checked\"");

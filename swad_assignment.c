@@ -1167,8 +1167,9 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
+   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1192,7 +1193,8 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<label class=\"DAT\">%s:"
+   fprintf (Gbl.F.Out,"<label class=\"DAT\">");
+   fprintf (Gbl.F.Out,"%s:"
                       "<input type=\"text\" name=\"Folder\""
                       " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
             Txt_Folder,
@@ -1206,8 +1208,9 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Description);
+   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1268,8 +1271,9 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"<label>"
-                         "<input type=\"checkbox\" id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
+      fprintf (Gbl.F.Out,"<label>");
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\" id=\"WholeCrs\""
+	                 " name=\"WholeCrs\" value=\"Y\"");
       if (!Asg_CheckIfAsgIsAssociatedToGrps (AsgCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"

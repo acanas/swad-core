@@ -1661,11 +1661,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    if (Gbl.TimeTable.View == TT_CRS_EDIT)
 	      {
 	       /***** Group *****/
-	       fprintf (Gbl.F.Out,"<br />"
-		                  "<label for=\"TTGrp%s\">"
-		                  "%s",
-			CellStr,
-		        Txt_Group);
+	       fprintf (Gbl.F.Out,"<br />");
+	       fprintf (Gbl.F.Out,"<label for=\"TTGrp%s\">",CellStr);
+	       fprintf (Gbl.F.Out,"%s",Txt_Group);
 	       HTM_LABEL_End ();
 	       fprintf (Gbl.F.Out,"<select id=\"TTGrp%s\" name=\"TTGrp\""
 	                          " class=\"TT_GRP\""
@@ -1703,11 +1701,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       fprintf (Gbl.F.Out,"</select>");
 
 	       /***** Info *****/
-	       fprintf (Gbl.F.Out,"<br />"
-		                  "<label for=\"TTInf%s\">"
-		                  "%s",
-			CellStr,
-		        Txt_Info);
+	       fprintf (Gbl.F.Out,"<br />");
+	       fprintf (Gbl.F.Out,"<label for=\"TTInf%s\">",CellStr);
+	       fprintf (Gbl.F.Out,"%s",Txt_Info);
 	       HTM_LABEL_End ();
 	       fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""
 	                          " type=\"text\" size=\"1\" maxlength=\"%u\""
@@ -1722,11 +1718,10 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    else // TimeTableView == TT_TUT_EDIT
 	      {
 	       /***** Info *****/
-	       fprintf (Gbl.F.Out,"<br />"
-		                  "<label for=\"TTInf%s\" class=\"DAT_SMALL\">"
-		                  "%s",
-			CellStr,
-		        Txt_Info);
+	       fprintf (Gbl.F.Out,"<br />");
+	       fprintf (Gbl.F.Out,"<label for=\"TTInf%s\" class=\"DAT_SMALL\">",
+			CellStr);
+	       fprintf (Gbl.F.Out,"%s",Txt_Info);
 	       HTM_LABEL_End ();
                fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""
                                   " type=\"text\" size=\"12\" maxlength=\"%u\""

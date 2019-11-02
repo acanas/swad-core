@@ -335,11 +335,10 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
    Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
 
    /***** Form to upload photo *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "%s:&nbsp;"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" accept=\"image/*\""
                       " onchange=\"document.getElementById('%s').submit();\" />",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);
@@ -1791,8 +1790,9 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"AvgType\" class=\"%s\">%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Average_type);
+   fprintf (Gbl.F.Out,"<label for=\"AvgType\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Average_type);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1856,8 +1856,9 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"PhotoSize\" class=\"%s\">%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Size_of_photos);
+   fprintf (Gbl.F.Out,"<label for=\"PhotoSize\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Size_of_photos);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1921,8 +1922,9 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Order\" class=\"%s\">%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
+   fprintf (Gbl.F.Out,"<label for=\"Order\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Sort_degrees_by);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

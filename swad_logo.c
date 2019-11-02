@@ -313,11 +313,11 @@ void Log_RequestLogo (Hie_Level_t Scope)
 	          64,64);
 
    /***** Upload logo *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s:&nbsp;"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\""
                       " onchange=\"document.getElementById('%s').submit();\" />",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_File_with_the_logo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);

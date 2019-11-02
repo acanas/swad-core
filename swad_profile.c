@@ -204,11 +204,10 @@ void Prf_RequestUserProfile (void)
    /***** Form to request user's @nickname *****/
    /* By default, the nickname is filled with my nickname
       If no user logged ==> the nickname is empty */
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "%s:&nbsp;"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<input type=\"text\" name=\"usr\""
                       " size=\"18\" maxlength=\"%u\" value=\"@%s\" />",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Nickname,
             Nck_MAX_BYTES_NICKNAME_FROM_FORM,
             Gbl.Usrs.Me.UsrDat.Nickname);

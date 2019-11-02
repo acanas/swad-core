@@ -237,9 +237,9 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"OthDegCod\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Degree);
+   fprintf (Gbl.F.Out,"<label for=\"OthDegCod\" class=\"%s\">",
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Degree);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -283,9 +283,9 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],
-	    Txt_Course);
+   fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Course);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -316,9 +316,9 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">%s:",
-	    The_ClassFormInBox[Gbl.Prefs.Theme],
-	    Txt_Short_name);
+   fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Short_name);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -350,9 +350,9 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"OthCrsYear\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Year_OF_A_DEGREE);
+   fprintf (Gbl.F.Out,"<label for=\"OthCrsYear\" class=\"%s\">",
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Year_OF_A_DEGREE);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -388,9 +388,9 @@ static void Crs_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM\"");
-      fprintf (Gbl.F.Out,"<label for=\"InsCrsCod\" class=\"%s\">%s:",
-              The_ClassFormInBox[Gbl.Prefs.Theme],
-              Txt_Institutional_code);
+      fprintf (Gbl.F.Out,"<label for=\"InsCrsCod\" class=\"%s\">",
+	       The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_Institutional_code);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -3329,9 +3329,9 @@ void Crs_AskRemoveOldCrss (void)
                  Hlp_SYSTEM_Hierarchy_eliminate_old_courses,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months without clicks *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s&nbsp;"
 	              "<select name=\"Months\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
         i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;

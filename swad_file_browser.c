@@ -3265,8 +3265,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
    /***** Select the complete course, not a group *****/
    HTM_LI_Begin ("class=\"%s\"",IsCourseZone ? "BROWSER_TITLE" :
                                                "BROWSER_TITLE_LIGHT");
-   fprintf (Gbl.F.Out,"<label>"
-                      "<input type=\"radio\" name=\"GrpCod\" value=\"-1\"");
+   fprintf (Gbl.F.Out,"<label>");
+   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GrpCod\" value=\"-1\"");
    if (IsCourseZone)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
@@ -3297,8 +3297,8 @@ static void Brw_FormToChangeCrsGrpZone (void)
                 	                           "subend20x20.gif",
 		  NULL,
 	          "class=\"ICO25x25\" style=\"margin-left:6px;\"");
-         fprintf (Gbl.F.Out,"<label>"
-	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
+         fprintf (Gbl.F.Out,"<label>");
+         fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
 	          GrpDat.GrpCod);
 	 if (IsGroupZone && GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -8344,12 +8344,12 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 	          FileNameToShow);
 
    /***** Folder *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s: "
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s: "
                       "<input type=\"text\" name=\"NewFolderName\""
                       " size=\"30\" maxlength=\"%u\" value=\"\""
                       " required=\"required\" />",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Folder,
+            Txt_Folder,
             Brw_MAX_CHARS_FOLDER);
    HTM_LABEL_End ();
 
@@ -8512,9 +8512,9 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"NewLinkURL\" class=\"%s\">"
-	              "%s:&nbsp;",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_URL);
+   fprintf (Gbl.F.Out,"<label for=\"NewLinkURL\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_URL);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -8532,9 +8532,9 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"NewLinkName\" class=\"%s\">"
-	              "%s&nbsp;(%s):&nbsp;",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional);
+   fprintf (Gbl.F.Out,"<label for=\"NewLinkName\" class=\"%s\">",
+	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s&nbsp;(%s):&nbsp;",Txt_Save_as,Txt_optional);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -9586,9 +9586,9 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"RM\"");
-	 fprintf (Gbl.F.Out,"<label for=\"PublicFile\" class=\"%s\">"
-			    "%s:",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Availability);
+	 fprintf (Gbl.F.Out,"<label for=\"PublicFile\" class=\"%s\">",
+		  The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"%s:",Txt_Availability);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
@@ -9621,8 +9621,9 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"RM\"");
-	 fprintf (Gbl.F.Out,"<label for=\"License\" class=\"%s\">%s:",
-		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_License);
+	 fprintf (Gbl.F.Out,"<label for=\"License\" class=\"%s\">",
+		  The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 fprintf (Gbl.F.Out,"%s:",Txt_License);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
@@ -12151,9 +12152,8 @@ void Brw_AskRemoveOldFiles (void)
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months (to remove files older) *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_Remove_files_older_than_PART_1_OF_2);
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
    fprintf (Gbl.F.Out,"<select name=\"Months\">");
    for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
         Months <= Brw_MAX_MONTHS_IN_BRIEFCASE;

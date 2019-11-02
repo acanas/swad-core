@@ -1199,8 +1199,9 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
+   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">",
+            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -1264,8 +1265,8 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       /***** First row: checkbox to select the whole course *****/
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"<label>"
-                         "<input type=\"checkbox\""
+      fprintf (Gbl.F.Out,"<label>");
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\""
                          " checked=\"checked\""
                          " onclick=\"uncheckChildren(this,'GrpCods')\" />"

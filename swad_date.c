@@ -120,8 +120,8 @@ void Dat_PutBoxToSelectDateFormat (void)
      {
       HTM_LI_Begin ("class=\%s\"",(Format == Gbl.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
 						                     "DAT");
-      fprintf (Gbl.F.Out,"<label>"
-			 "<input type=\"radio\" name=\"DateFormat\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label>");
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"DateFormat\" value=\"%u\"",
 	       (unsigned) Format);
       if (Format == Gbl.Prefs.DateFormat)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -434,9 +434,8 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 
    /***** Start date-time *****/
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_START_END_TIME[Dat_START_TIME]);
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_START_END_TIME[Dat_START_TIME]);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -468,9 +467,8 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 
    /***** End date-time *****/
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_START_END_TIME[Dat_END_TIME]);
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:",Txt_START_END_TIME[Dat_END_TIME]);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -514,9 +512,8 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM\"");
-      fprintf (Gbl.F.Out,"<label class=\"%s\">%s:",
-               The_ClassFormInBox[Gbl.Prefs.Theme],
-               Txt_START_END_TIME[StartEndTime]);
+      fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s:",Txt_START_END_TIME[StartEndTime]);
       HTM_LABEL_End ();
       HTM_TD_End ();
 

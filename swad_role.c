@@ -546,8 +546,8 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
         Role++)
       if ((RolesAllowed & (1 << Role)))
 	{
-	 fprintf (Gbl.F.Out,"<label>"
-	                    "<input type=\"checkbox\" name=\"Role\" value=\"%u\"",
+	 fprintf (Gbl.F.Out,"<label>");
+	 fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Role\" value=\"%u\"",
 		  (unsigned) Role);
 
 	 if ((RolesSelected & (1 << Role)))

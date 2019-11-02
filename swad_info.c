@@ -1166,9 +1166,9 @@ void Inf_FormsToSelSendInfo (void)
 	 HTM_TD_Begin ("class=\"LT LIGHT_BLUE\"");
       else
 	 HTM_TD_Begin ("class=\"LT\"");
-      fprintf (Gbl.F.Out,"<label for=\"InfoSrc%u\" class=\"%s\">%s",
-	       (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme],
-               Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
+      fprintf (Gbl.F.Out,"<label for=\"InfoSrc%u\" class=\"%s\">",
+	       (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"%s",Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
       HTM_LABEL_End ();
       if (Txt_INFO_SRC_HELP[InfoSrc])
          fprintf (Gbl.F.Out,"<span class=\"DAT\"><br />(%s)</span>",
@@ -1275,10 +1275,10 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
 
    /***** File *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "%s:&nbsp;"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" />",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_File,
+            Txt_File,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
    HTM_LABEL_End ();
    HTM_DIV_End ();
@@ -1310,11 +1310,11 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
 
    /***** Link *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "%s:&nbsp;"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<input type=\"url\" name=\"InfoSrcURL\""
                       " size=\"50\" maxlength=\"256\" value=\"",
-            The_ClassFormInBox[Gbl.Prefs.Theme],Txt_URL);
+            Txt_URL);
    if ((FileURL = fopen (PathFile,"rb")) == NULL)
       fprintf (Gbl.F.Out,"http://");
    else
