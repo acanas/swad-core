@@ -3331,7 +3331,6 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
    extern const char *Txt_Thread_with_posts_from_you;
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
-   extern const char *Txt_Today;
    unsigned NumThr;
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
    unsigned UniqueId;
@@ -3462,8 +3461,8 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 	       Lay_NotEnoughMemoryExit ();
             HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",Id,Style,BgColor);
 	    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-					  Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-					  true,false,0x6);
+					  Gbl.Prefs.DateFormat,"<br />",
+					  true,true,false,0x6);
             HTM_TD_End ();
             free ((void *) Id);
            }

@@ -352,7 +352,6 @@ static void McR_ShowHeaderMchResults (Usr_MeOrOther_t MeOrOther)
 
 static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
   {
-   extern const char *Txt_Today;
    extern const char *Txt_Match_result;
    extern const char *Txt_Hidden_result;
    MYSQL_RES *mysql_res;
@@ -437,8 +436,8 @@ static void McR_ShowMchResults (Usr_MeOrOther_t MeOrOther)
 	    HTM_TD_Begin ("id =\"%s\" class=\"DAT LT COLOR%u\"",
 			  Id,Gbl.RowEvenOdd);
 	    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC[StartEndTime],
-					  Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-					  true,false,0x7);
+					  Gbl.Prefs.DateFormat,"<br />",
+					  true,true,false,0x7);
 	    HTM_TD_End ();
             free ((void *) Id);
            }
@@ -622,7 +621,6 @@ void McR_ShowOneMchResult (void)
    extern const char *Txt_The_user_does_not_exist;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
-   extern const char *Txt_Today;
    extern const char *Txt_Questions;
    extern const char *Txt_non_blank_QUESTIONS;
    extern const char *Txt_Score;
@@ -793,8 +791,8 @@ void McR_ShowOneMchResult (void)
 	    Lay_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"DAT LT\"",Id);
 	 Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC[StartEndTime],
-				       Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				       true,true,0x7);
+				       Gbl.Prefs.DateFormat,",&nbsp;",
+				       true,true,true,0x7);
 	 HTM_TD_End ();
          free ((void *) Id);
 

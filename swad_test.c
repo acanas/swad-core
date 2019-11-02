@@ -2802,7 +2802,6 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
    extern const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST];
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Shuffle;
-   extern const char *Txt_Today;
    Tst_QuestionsOrder_t Order;
    unsigned long NumRow;
    MYSQL_ROW row;
@@ -2936,8 +2935,8 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\"",
 	            Id,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				    Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				    true,false,0x7);
+				    Gbl.Prefs.DateFormat,"<br />",
+				    true,true,false,0x7);
       HTM_TD_End ();
       free ((void *) Id);
 
@@ -3062,7 +3061,6 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    extern const char *Txt_Shuffle;
    extern const char *Txt_Question;
-   extern const char *Txt_Today;
    extern const char *Txt_Add_questions;
    unsigned long NumRow;
    MYSQL_ROW row;
@@ -3148,8 +3146,8 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
       HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\">",
 	            Id,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				    Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				    true,false,0x7);
+				    Gbl.Prefs.DateFormat,"<br />",
+				    true,true,false,0x7);
       HTM_TD_End ();
       free ((void *) Id);
 
@@ -7685,7 +7683,6 @@ static void Tst_ShowHeaderTestResults (void)
 
 static void Tst_ShowTstResults (struct UsrData *UsrDat)
   {
-   extern const char *Txt_Today;
    extern const char *Txt_View_test;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -7785,8 +7782,8 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s RT COLOR%u\"",
 		       Id,ClassDat,Gbl.RowEvenOdd);
 	 Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				       Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				       true,false,0x7);
+				       Gbl.Prefs.DateFormat,",&nbsp;",
+				       true,true,false,0x7);
 	 HTM_TD_End ();
          free ((void *) Id);
 
@@ -7994,7 +7991,6 @@ void Tst_ShowOneTstResult (void)
    extern const char *Txt_The_user_does_not_exist;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date;
-   extern const char *Txt_Today;
    extern const char *Txt_Questions;
    extern const char *Txt_non_blank_QUESTIONS;
    extern const char *Txt_Score;
@@ -8123,8 +8119,8 @@ void Tst_ShowOneTstResult (void)
 
       HTM_TD_Begin ("id=\"test\" class=\"DAT LT\"");
       Dat_WriteLocalDateHMSFromUTC ("test",TstTimeUTC,
-				    Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				    true,true,0x7);
+				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    true,true,true,0x7);
       HTM_TD_End ();
 
       HTM_TR_End ();

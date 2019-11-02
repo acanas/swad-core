@@ -713,7 +713,6 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
   {
    extern const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS];
    extern const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS];
-   extern const char *Txt_Today;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -756,8 +755,8 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 				      Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
 		    Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,AgdEvent.TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				    true,true,0x6);
+				    Gbl.Prefs.DateFormat,"<br />",
+				    true,true,true,0x6);
       HTM_TD_End ();
       free ((void *) Id);
      }

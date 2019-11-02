@@ -1535,7 +1535,6 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    extern const char *Txt_Action;
    extern const char *Txt_LOG_More_info;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Today;
    unsigned long NumRow;
    unsigned long FirstRow;	// First row to show
    unsigned long LastRow;	// Last rows to show
@@ -1720,8 +1719,8 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"LOG RT COLOR%u\"",Id,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Dat_GetUNIXTimeFromStr (row[3]),
-				    Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				    true,false,0x7);
+				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    true,true,false,0x7);
       HTM_TD_End ();
       free ((void *) Id);
 

@@ -1023,7 +1023,6 @@ void Prj_PrintOneProject (void)
 static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
                                 Prj_ProjectView_t ProjectView)
   {
-   extern const char *Txt_Today;
    extern const char *Txt_Project_files;
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_Yes;
@@ -1120,8 +1119,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 break;
      }
    Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
-				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				 true,true,0x7);
+				 Gbl.Prefs.DateFormat,"<br />",
+				 true,true,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 
@@ -1141,8 +1140,8 @@ static void Prj_ShowOneProject (unsigned NumIndex,struct Project *Prj,
 	 break;
      }
    Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
-				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				 true,true,0x7);
+				 Gbl.Prefs.DateFormat,"<br />",
+				 true,true,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 
@@ -1471,7 +1470,6 @@ static void Prj_PutIconToToggleProject (unsigned UniqueId,
 
 static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
   {
-   extern const char *Txt_Today;
    extern const char *Txt_Yes;
    extern const char *Txt_No;
    extern const char *Txt_PROJECT_STATUS[Prj_NUM_PROPOSAL_TYPES];
@@ -1500,8 +1498,8 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
    HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
 		 Id,ClassDate,Gbl.RowEvenOdd);
    Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
-				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				 true,true,0x7);
+				 Gbl.Prefs.DateFormat,"<br />",
+				 true,true,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 
@@ -1512,8 +1510,8 @@ static void Prj_ShowTableAllProjectsOneRow (struct Project *Prj)
    HTM_TD_Begin ("id=\"%s\" class=\"LT %s COLOR%u\"",
 		 Id,ClassDate,Gbl.RowEvenOdd);
    Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
-				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				 true,true,0x7);
+				 Gbl.Prefs.DateFormat,"<br />",
+				 true,true,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 

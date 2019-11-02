@@ -542,7 +542,6 @@ static void Mch_ListOneOrMoreMatchesAuthor (const struct Match *Match)
 
 static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned UniqueId)
   {
-   extern const char *Txt_Today;
    Dat_StartEndTime_t StartEndTime;
    char *Id;
 
@@ -558,8 +557,8 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 								      "DATE_GREEN",
 		    Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Match->TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				    true,true,0x7);
+				    Gbl.Prefs.DateFormat,"<br />",
+				    true,true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);
      }

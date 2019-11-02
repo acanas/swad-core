@@ -462,7 +462,6 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
    extern const char *Txt_months;
    extern const char *Txt_day;
    extern const char *Txt_days;
-   extern const char *Txt_Today;
    char IdFirstClickTime[Frm_MAX_BYTES_ID + 1];
    int NumYears;
    int NumMonths;
@@ -502,8 +501,8 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
 	 fprintf (Gbl.F.Out,")");
         }
       Dat_WriteLocalDateHMSFromUTC (IdFirstClickTime,UsrFigures->FirstClickTimeUTC,
-				    Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				    true,false,0x6);
+				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    true,true,false,0x6);
      }
    else	// First click time is unknown or user never logged
       /***** Button to fetch and store user's figures *****/

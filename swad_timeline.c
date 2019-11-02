@@ -1776,7 +1776,6 @@ static void TL_WriteAuthorNote (const struct UsrData *UsrDat)
 
 static void TL_WriteDateTime (time_t TimeUTC)
   {
-   extern const char *Txt_Today;
    char IdDateTime[Frm_MAX_BYTES_ID + 1];
 
    /***** Create unique Id *****/
@@ -1790,8 +1789,8 @@ static void TL_WriteDateTime (time_t TimeUTC)
    // This must be out of the div where the output is written
    // because it will be evaluated in a loop in JavaScript
    Dat_WriteLocalDateHMSFromUTC (IdDateTime,TimeUTC,
-		                 Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				 true,false,0x6);
+		                 Gbl.Prefs.DateFormat,",&nbsp;",
+				 true,true,false,0x6);
   }
 
 /*****************************************************************************/

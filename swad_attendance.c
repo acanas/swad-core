@@ -371,7 +371,6 @@ static void Att_PutParamsToCreateNewAttEvent (void)
 
 static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAttEventComplete)
   {
-   extern const char *Txt_Today;
    extern const char *Txt_View_event;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -429,8 +428,8 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 						  "DATE_RED"),
 		       Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Att->TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				    true,true,0x7);
+				    Gbl.Prefs.DateFormat,"<br />",
+				    true,true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);
      }
@@ -3074,7 +3073,6 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
    extern const char *Txt_Events;
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Today;
    extern const char *Txt_Update_attendance;
    unsigned UniqueId;
    char *Id;
@@ -3145,8 +3143,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
                          "</label>",
 	       NumAttEvent,Id);
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
-				    Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				    true,true,0x7);
+				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    true,true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);
 
@@ -3491,7 +3489,6 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumUsrsInList,
 
 static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
   {
-   extern const char *Txt_Today;
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
    char PhotoURL[PATH_MAX + 1];
@@ -3591,8 +3588,8 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	          Id,
 	          Gbl.AttEvents.Lst[NumAttEvent].Title);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
-				       Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				       true,true,0x7);
+				       Gbl.Prefs.DateFormat,",&nbsp;",
+				       true,true,true,0x7);
 	 HTM_TD_End ();
          free ((void *) Id);
 

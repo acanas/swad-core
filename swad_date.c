@@ -171,8 +171,8 @@ void Dat_PutScriptDateFormat (Dat_Format_t Format)
    if (asprintf (&Id,"date_format_%u",(unsigned) Format) < 0)
       Lay_NotEnoughMemoryExit ();
    Dat_WriteLocalDateHMSFromUTC (Id,Gbl.StartExecutionTimeUTC,
-				 Format,"","",
-				 true,false,0x0);
+				 Format,"",
+				 false,true,false,0x0);
    free ((void *) Id);
   }
 
@@ -1615,13 +1615,17 @@ void Dat_WriteHoursMinutesSeconds (struct Time *Time)
 /*****************************************************************************/
 
 void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
-				   Dat_Format_t DateFormat,const char *Separator,const char *StrToday,
-				   bool WriteDateOnSameDay,bool WriteWeekDay,unsigned WriteHMS)
+				   Dat_Format_t DateFormat,const char *Separator,
+				   bool WriteToday,bool WriteDateOnSameDay,
+				   bool WriteWeekDay,unsigned WriteHMS)
   {
+   extern const char *Txt_Today;
+
    HTM_SCRIPT_Begin (NULL,NULL);
    fprintf (Gbl.F.Out,"writeLocalDateHMSFromUTC('%s',%ld,%u,'%s','%s',%s,%s,0x%x);",
 	    Id,(long) TimeUTC,(unsigned) DateFormat,Separator,
-	    StrToday,
+	    WriteToday ? Txt_Today :
+		         "",
 	    WriteDateOnSameDay ? "true" :
 		                 "false",
 	    WriteWeekDay ? "true" :

@@ -613,7 +613,6 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              Not_Status_t Status)
   {
    extern const char *Txt_See_full_notice;
-   extern const char *Txt_Today;
    static const char *ContainerClass[Not_NUM_STATUS] =
      {
       "NOTICE_CONTAINER_ACTIVE",	// Not_ACTIVE_NOTICE
@@ -701,8 +700,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Frm_EndForm ();
      }
    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				 true,false,0x6);
+				 Gbl.Prefs.DateFormat,"<br />",
+				 true,true,false,0x6);
    free ((void *) Id);
    HTM_DIV_End ();
 

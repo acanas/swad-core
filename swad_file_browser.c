@@ -6385,7 +6385,6 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
 
 static void Brw_WriteDatesAssignment (void)
   {
-   extern const char *Txt_Today;
    extern const char *Txt_unknown_assignment;
    static unsigned UniqueId = 0;
    char *Id;
@@ -6404,8 +6403,8 @@ static void Brw_WriteDatesAssignment (void)
 	 Lay_NotEnoughMemoryExit ();
       fprintf (Gbl.F.Out,"<span id=\"%s\">",Id);
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],
-				    Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				    true,false,0x7);
+				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    true,true,false,0x7);
       fprintf (Gbl.F.Out,"</span>");
       free ((void *) Id);
 
@@ -6417,8 +6416,8 @@ static void Brw_WriteDatesAssignment (void)
 	 Lay_NotEnoughMemoryExit ();
       fprintf (Gbl.F.Out,"<span id=\"%s\">",Id);
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_END_TIME],
-				    Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				    false,false,0x7);
+				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    true,false,false,0x7);
       fprintf (Gbl.F.Out,"</span>");
       free ((void *) Id);
      }
@@ -6433,7 +6432,6 @@ static void Brw_WriteDatesAssignment (void)
 
 static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
   {
-   extern const char *Txt_Today;
    static unsigned UniqueId = 0;
    char *Id;
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
@@ -6460,8 +6458,8 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
 	 Lay_NotEnoughMemoryExit ();
       fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",Id);
       Dat_WriteLocalDateHMSFromUTC (Id,FileMetadata->Time,
-				    Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				    true,false,0x6);
+				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    true,true,false,0x6);
       free ((void *) Id);
      }
    HTM_TD_End ();
@@ -9367,7 +9365,6 @@ void Brw_ShowFileMetadata (void)
    extern const char *Txt_Uploaded_by;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date_of_creation;
-   extern const char *Txt_Today;
    extern const char *Txt_Availability;
    extern const char *Txt_Private_available_to_certain_users_identified;
    extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
@@ -9579,8 +9576,8 @@ void Brw_ShowFileMetadata (void)
 
 	 HTM_TD_Begin ("id=\"filedate\" class=\"DAT LM\"");
 	 Dat_WriteLocalDateHMSFromUTC ("filedate",FileMetadata.Time,
-				       Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				       true,true,0x7);
+				       Gbl.Prefs.DateFormat,",&nbsp;",
+				       true,true,true,0x7);
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();

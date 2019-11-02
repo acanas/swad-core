@@ -422,7 +422,6 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
   {
    extern const char *Hlp_ASSESSMENT_Surveys;
    extern const char *Txt_Survey;
-   extern const char *Txt_Today;
    extern const char *Txt_View_survey;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_No_of_users;
@@ -489,8 +488,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 							    "DATE_RED_LIGHT"),
 		    Gbl.RowEvenOdd);
    Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Svy_START_TIME],
-				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				 true,true,0x7);
+				 Gbl.Prefs.DateFormat,"<br />",
+				 true,true,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 
@@ -513,8 +512,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 							    "DATE_RED_LIGHT"),
 		    Gbl.RowEvenOdd);
    Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Svy_END_TIME],
-				 Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				 false,true,0x7);
+				 Gbl.Prefs.DateFormat,"<br />",
+				 true,false,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
 

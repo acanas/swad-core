@@ -370,7 +370,6 @@ void Gam_ShowOneGame (long GamCod,
   {
    extern const char *Hlp_ASSESSMENT_Games;
    extern const char *Txt_Game;
-   extern const char *Txt_Today;
    extern const char *Txt_View_game;
    extern const char *Txt_No_of_questions;
    extern const char *Txt_Matches;
@@ -433,8 +432,8 @@ void Gam_ShowOneGame (long GamCod,
 		       Gbl.RowEvenOdd);
       if (Game.TimeUTC[Dat_START_TIME])
 	 Dat_WriteLocalDateHMSFromUTC (Id,Game.TimeUTC[StartEndTime],
-				       Gbl.Prefs.DateFormat,"<br />",Txt_Today,
-				       true,true,0x7);
+				       Gbl.Prefs.DateFormat,"<br />",
+				       true,true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);
      }

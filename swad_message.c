@@ -3610,7 +3610,6 @@ static void Msg_WriteMsgTo (long MsgCod)
 
 void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
   {
-   extern const char *Txt_Today;
    static unsigned UniqueId = 0;
    char *Id;
 
@@ -3624,8 +3623,8 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
 
    /***** Write date and time *****/
    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				 Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				 true,false,0x6);
+				 Gbl.Prefs.DateFormat,",&nbsp;",
+				 true,true,false,0x6);
 
    /***** End cell *****/
    HTM_TD_End ();

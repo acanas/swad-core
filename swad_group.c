@@ -2321,7 +2321,6 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
   {
    extern const char *Txt_Opening_of_groups;
-   extern const char *Txt_Today;
    extern const char *Txt_Group;
    extern const char *Txt_Classroom;
    extern const char *Txt_Max_BR_students;
@@ -2345,8 +2344,8 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
                Txt_Opening_of_groups,
                Id);
       Dat_WriteLocalDateHMSFromUTC (Id,GrpTyp->OpenTimeUTC,
-				    Gbl.Prefs.DateFormat,",&nbsp;",Txt_Today,
-				    true,true,0x7);
+				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    true,true,true,0x7);
       free ((void *) Id);
      }
    HTM_TD_End ();
