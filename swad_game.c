@@ -432,7 +432,7 @@ void Gam_ShowOneGame (long GamCod,
 		       Gbl.RowEvenOdd);
       if (Game.TimeUTC[Dat_START_TIME])
 	 Dat_WriteLocalDateHMSFromUTC (Id,Game.TimeUTC[StartEndTime],
-				       Gbl.Prefs.DateFormat,"<br />",
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       true,true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);

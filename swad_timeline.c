@@ -1789,7 +1789,7 @@ static void TL_WriteDateTime (time_t TimeUTC)
    // This must be out of the div where the output is written
    // because it will be evaluated in a loop in JavaScript
    Dat_WriteLocalDateHMSFromUTC (IdDateTime,TimeUTC,
-		                 Gbl.Prefs.DateFormat,",&nbsp;",
+		                 Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				 true,true,false,0x6);
   }
 

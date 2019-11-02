@@ -113,6 +113,13 @@ typedef enum
   } Dat_Format_t;	// Do not change these numbers because they are used in database
 #define Dat_FORMAT_DEFAULT Dat_FORMAT_YYYY_MM_DD
 
+typedef enum
+  {
+   Dat_SEPARATOR_NONE,	// No separator
+   Dat_SEPARATOR_COMMA,	// Comma + space
+   Dat_SEPARATOR_BREAK,	// Line break
+  } Dat_Separator_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -194,7 +201,7 @@ void Dat_WriteHoursMinutesSecondsFromSeconds (time_t Seconds);
 void Dat_WriteHoursMinutesSeconds (struct Time *Time);
 
 void Dat_WriteLocalDateHMSFromUTC (const char *Id,time_t TimeUTC,
-				   Dat_Format_t DateFormat,const char *Separator,
+				   Dat_Format_t DateFormat,Dat_Separator_t Separator,
 				   bool WriteToday,bool WriteDateOnSameDay,
 				   bool WriteWeekDay,unsigned WriteHMS);
 

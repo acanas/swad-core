@@ -557,7 +557,7 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Match *Match,unsigned Un
 								      "DATE_GREEN",
 		    Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Match->TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,"<br />",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);

@@ -2935,7 +2935,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
       HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\"",
 	            Id,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				    Gbl.Prefs.DateFormat,"<br />",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,false,0x7);
       HTM_TD_End ();
       free ((void *) Id);
@@ -3146,7 +3146,7 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
       HTM_TD_Begin ("id=\"%s\" class=\"DAT_SMALL CT COLOR%u\">",
 	            Id,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				    Gbl.Prefs.DateFormat,"<br />",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,false,0x7);
       HTM_TD_End ();
       free ((void *) Id);
@@ -7782,7 +7782,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 	 HTM_TD_Begin ("id=\"%s\" class=\"%s RT COLOR%u\"",
 		       Id,ClassDat,Gbl.RowEvenOdd);
 	 Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				       Gbl.Prefs.DateFormat,",&nbsp;",
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,false,0x7);
 	 HTM_TD_End ();
          free ((void *) Id);
@@ -8119,7 +8119,7 @@ void Tst_ShowOneTstResult (void)
 
       HTM_TD_Begin ("id=\"test\" class=\"DAT LT\"");
       Dat_WriteLocalDateHMSFromUTC ("test",TstTimeUTC,
-				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,true,0x7);
       HTM_TD_End ();
 

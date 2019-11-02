@@ -391,7 +391,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 					        "DATE_RED"),
 		       Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Asg.TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,"<br />",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);

@@ -3623,7 +3623,7 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
 
    /***** Write date and time *****/
    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				 Gbl.Prefs.DateFormat,",&nbsp;",
+				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				 true,true,false,0x6);
 
    /***** End cell *****/

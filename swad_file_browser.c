@@ -6403,7 +6403,7 @@ static void Brw_WriteDatesAssignment (void)
 	 Lay_NotEnoughMemoryExit ();
       fprintf (Gbl.F.Out,"<span id=\"%s\">",Id);
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],
-				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,false,0x7);
       fprintf (Gbl.F.Out,"</span>");
       free ((void *) Id);
@@ -6416,7 +6416,7 @@ static void Brw_WriteDatesAssignment (void)
 	 Lay_NotEnoughMemoryExit ();
       fprintf (Gbl.F.Out,"<span id=\"%s\">",Id);
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.FileBrowser.Asg.TimeUTC[Dat_END_TIME],
-				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,false,false,0x7);
       fprintf (Gbl.F.Out,"</span>");
       free ((void *) Id);
@@ -6458,7 +6458,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
 	 Lay_NotEnoughMemoryExit ();
       fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",Id);
       Dat_WriteLocalDateHMSFromUTC (Id,FileMetadata->Time,
-				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,false,0x6);
       free ((void *) Id);
      }
@@ -9576,7 +9576,7 @@ void Brw_ShowFileMetadata (void)
 
 	 HTM_TD_Begin ("id=\"filedate\" class=\"DAT LM\"");
 	 Dat_WriteLocalDateHMSFromUTC ("filedate",FileMetadata.Time,
-				       Gbl.Prefs.DateFormat,",&nbsp;",
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
 	 HTM_TD_End ();
 

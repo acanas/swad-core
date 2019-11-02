@@ -3461,7 +3461,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 	       Lay_NotEnoughMemoryExit ();
             HTM_TD_Begin ("id=\"%s\" class=\"%s LT %s\"",Id,Style,BgColor);
 	    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-					  Gbl.Prefs.DateFormat,"<br />",
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  true,true,false,0x6);
             HTM_TD_End ();
             free ((void *) Id);

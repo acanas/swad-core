@@ -1719,7 +1719,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("id=\"%s\" class=\"LOG RT COLOR%u\"",Id,Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Dat_GetUNIXTimeFromStr (row[3]),
-				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,false,0x7);
       HTM_TD_End ();
       free ((void *) Id);

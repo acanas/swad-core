@@ -104,7 +104,7 @@ void Con_ShowConnectedUsrs (void)
    Box_BoxBegin (NULL,Gbl.Title,Con_PutIconToUpdateConnected,
 		 Hlp_USERS_Connected,Box_NOT_CLOSABLE);
    Dat_WriteLocalDateHMSFromUTC ("connected_current_time",Gbl.StartExecutionTimeUTC,
-                                 Gbl.Prefs.DateFormat,",&nbsp;",
+                                 Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				 false,false,true,0x7);
 
    /***** Number of connected users in the whole platform *****/

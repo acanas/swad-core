@@ -428,7 +428,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 						  "DATE_RED"),
 		       Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,Att->TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,"<br />",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);
@@ -3143,7 +3143,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
                          "</label>",
 	       NumAttEvent,Id);
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
-				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,true,0x7);
       HTM_TD_End ();
       free ((void *) Id);
@@ -3588,7 +3588,7 @@ static void Att_ListAttEventsForAStd (unsigned NumUsr,struct UsrData *UsrDat)
 	          Id,
 	          Gbl.AttEvents.Lst[NumAttEvent].Title);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
-				       Gbl.Prefs.DateFormat,",&nbsp;",
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				       true,true,true,0x7);
 	 HTM_TD_End ();
          free ((void *) Id);

@@ -501,7 +501,7 @@ static void Prf_ShowTimeSinceFirstClick (const struct UsrData *UsrDat,
 	 fprintf (Gbl.F.Out,")");
         }
       Dat_WriteLocalDateHMSFromUTC (IdFirstClickTime,UsrFigures->FirstClickTimeUTC,
-				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,false,0x6);
      }
    else	// First click time is unknown or user never logged

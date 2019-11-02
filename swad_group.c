@@ -2344,7 +2344,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
                Txt_Opening_of_groups,
                Id);
       Dat_WriteLocalDateHMSFromUTC (Id,GrpTyp->OpenTimeUTC,
-				    Gbl.Prefs.DateFormat,",&nbsp;",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,true,0x7);
       free ((void *) Id);
      }

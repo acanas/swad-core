@@ -700,7 +700,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Frm_EndForm ();
      }
    Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
-				 Gbl.Prefs.DateFormat,"<br />",
+				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				 true,true,false,0x6);
    free ((void *) Id);
    HTM_DIV_End ();

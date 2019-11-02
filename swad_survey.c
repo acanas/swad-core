@@ -488,7 +488,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 							    "DATE_RED_LIGHT"),
 		    Gbl.RowEvenOdd);
    Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Svy_START_TIME],
-				 Gbl.Prefs.DateFormat,"<br />",
+				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				 true,true,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);
@@ -512,7 +512,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 							    "DATE_RED_LIGHT"),
 		    Gbl.RowEvenOdd);
    Dat_WriteLocalDateHMSFromUTC (Id,Svy.TimeUTC[Svy_END_TIME],
-				 Gbl.Prefs.DateFormat,"<br />",
+				 Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				 true,false,true,0x7);
    HTM_TD_End ();
    free ((void *) Id);

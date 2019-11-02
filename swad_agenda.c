@@ -755,7 +755,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 				      Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
 		    Gbl.RowEvenOdd);
       Dat_WriteLocalDateHMSFromUTC (Id,AgdEvent.TimeUTC[StartEndTime],
-				    Gbl.Prefs.DateFormat,"<br />",
+				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				    true,true,true,0x6);
       HTM_TD_End ();
       free ((void *) Id);
