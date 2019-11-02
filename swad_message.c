@@ -485,9 +485,10 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    HTM_TR_Begin (NULL);
 
    HTM_TH_Begin (1,ColSpan,"LM LIGHT_BLUE");
-   fprintf (Gbl.F.Out,"<label for=\"OtherRecipients\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"OtherRecipients\">%s:",
 	    StdsAndTchsWritten ? Txt_Other_recipients :
 				 Txt_Recipients);
+   HTM_LABEL_End ();
    HTM_TH_End ();
 
    HTM_TR_End ();
@@ -536,10 +537,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
 
    HTM_TD_Begin ("class=\"RT\"");
    fprintf (Gbl.F.Out,"<label for=\"MsgSubject\" class=\"%s\">"
-	              "%s:"
-	              "</label>",
+	              "%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -589,9 +590,9 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
 
       HTM_TD_Begin ("class=\"RT\"");
       fprintf (Gbl.F.Out,"<label for=\"MsgContent\" class=\"%s\">"
-	                 "%s:"
-	                 "</label>",
+	                 "%s:",
                The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Content);
+      HTM_LABEL_End ();
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM\"");
@@ -625,10 +626,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
 
       HTM_TD_Begin ("class=\"RT\"");
       fprintf (Gbl.F.Out,"<label for=\"MsgContent\" class=\"%s\">"
-	                 "%s:"
-	                 "</label>",
+	                 "%s:",
                The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_MSG_Content);
+      HTM_LABEL_End ();
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM\"");
@@ -2634,8 +2635,8 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
         fprintf (Gbl.F.Out," selected=\"selected\"");	// Select origin course
       fprintf (Gbl.F.Out,">%s</option>",Gbl.Msg.Courses[NumOriginCrs].ShrtName);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</label>");
+   fprintf (Gbl.F.Out,"</select>");
+   HTM_LABEL_End ();
   }
 
 /*****************************************************************************/
@@ -2664,11 +2665,11 @@ void Msg_ShowFormToFilterMsgs (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"search\" name=\"FilterFromTo\""
-                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
-                      "</label>",
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             TxtFromTo[Gbl.Msg.TypeOfMessages],
             Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,Gbl.Msg.FilterFromTo);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    /***** Filter message content *****/
@@ -2676,11 +2677,11 @@ void Msg_ShowFormToFilterMsgs (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"search\" name=\"FilterContent\""
-                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
-                      "</label>",
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_MSG_Content,
             Msg_MAX_CHARS_FILTER_CONTENT,Gbl.Msg.FilterContent);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2706,9 +2707,9 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (void)
    if (Gbl.Msg.ShowOnlyUnreadMsgs)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," />"
-	              "%s"
-	              "</label>",
+	              "%s",
             Txt_only_unread_messages);
+   HTM_LABEL_End ();
   }
 
 /*****************************************************************************/

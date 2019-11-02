@@ -1166,9 +1166,10 @@ void Inf_FormsToSelSendInfo (void)
 	 HTM_TD_Begin ("class=\"LT LIGHT_BLUE\"");
       else
 	 HTM_TD_Begin ("class=\"LT\"");
-      fprintf (Gbl.F.Out,"<label for=\"InfoSrc%u\" class=\"%s\">%s</label>",
+      fprintf (Gbl.F.Out,"<label for=\"InfoSrc%u\" class=\"%s\">%s",
 	       (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
+      HTM_LABEL_End ();
       if (Txt_INFO_SRC_HELP[InfoSrc])
          fprintf (Gbl.F.Out,"<span class=\"DAT\"><br />(%s)</span>",
                   Txt_INFO_SRC_HELP[InfoSrc]);
@@ -1276,10 +1277,10 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    HTM_DIV_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
-                      "<input type=\"file\" name=\"%s\" />"
-                      "</label>",
+                      "<input type=\"file\" name=\"%s\" />",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_File,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
+   HTM_LABEL_End ();
    HTM_DIV_End ();
 
    /***** Send button *****/
@@ -1324,8 +1325,8 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
       fclose (FileURL);
       fprintf (Gbl.F.Out,"%s",Gbl.Crs.Info.URL);
      }
-   fprintf (Gbl.F.Out,"\" />"
-                      "</label>");
+   fprintf (Gbl.F.Out,"\" />");
+   HTM_LABEL_End ();
    HTM_DIV_End ();
 
    /***** Send button *****/

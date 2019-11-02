@@ -1761,9 +1761,9 @@ static void For_PutFormWhichForums (void)
       if (ForumSet == Gbl.Forum.ForumSet)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-	                 "%s"
-                         "</label>",
+	                 "%s",
                Gbl.Form.Id,Txt_FORUM_WHICH_FORUM[ForumSet]);
+      HTM_LABEL_End ();
       HTM_LI_End ();
      }
    HTM_UL_End ();
@@ -3905,8 +3905,9 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Subject\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Subject\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Subject);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -3925,8 +3926,9 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Content\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Content\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_MSG_Content);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");

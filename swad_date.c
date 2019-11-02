@@ -129,7 +129,7 @@ void Dat_PutBoxToSelectDateFormat (void)
 	       Gbl.Form.Id);
       Dat_PutSpanDateFormat (Format);
       Dat_PutScriptDateFormat (Format);
-      fprintf (Gbl.F.Out,"</label>");
+      HTM_LABEL_End ();
       HTM_LI_End ();
      }
 
@@ -434,9 +434,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 
    /***** Start date-time *****/
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_START_END_TIME[Dat_START_TIME]);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    /* Date-time */
@@ -467,9 +468,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 
    /***** End date-time *****/
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_START_END_TIME[Dat_END_TIME]);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    /* Date-time */
@@ -512,9 +514,10 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM\"");
-      fprintf (Gbl.F.Out,"<label class=\"%s\">%s:</label>",
+      fprintf (Gbl.F.Out,"<label class=\"%s\">%s:",
                The_ClassFormInBox[Gbl.Prefs.Theme],
                Txt_START_END_TIME[StartEndTime]);
+      HTM_LABEL_End ();
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM\"");

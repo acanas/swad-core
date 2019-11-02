@@ -237,9 +237,10 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"OthDegCod\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"OthDegCod\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Degree);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -282,9 +283,10 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Course);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
@@ -314,9 +316,10 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Short_name);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
@@ -347,9 +350,10 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"OthCrsYear\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"OthCrsYear\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Year_OF_A_DEGREE);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -384,9 +388,10 @@ static void Crs_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM\"");
-      fprintf (Gbl.F.Out,"<label for=\"InsCrsCod\" class=\"%s\">%s:</label>",
+      fprintf (Gbl.F.Out,"<label for=\"InsCrsCod\" class=\"%s\">%s:",
               The_ClassFormInBox[Gbl.Prefs.Theme],
               Txt_Institutional_code);
+      HTM_LABEL_End ();
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT LM\"");
@@ -3340,7 +3345,7 @@ void Crs_AskRemoveOldCrss (void)
    fprintf (Gbl.F.Out,"</select>&nbsp;");
    fprintf (Gbl.F.Out,Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_LABEL_End ();
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Eliminate);

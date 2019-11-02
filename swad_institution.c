@@ -354,9 +354,10 @@ static void Ins_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"OthCtyCod\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"OthCtyCod\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Country);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -397,9 +398,10 @@ static void Ins_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Institution);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
@@ -429,9 +431,10 @@ static void Ins_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Short_name);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
@@ -461,9 +464,10 @@ static void Ins_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Web);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");

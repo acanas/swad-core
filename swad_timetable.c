@@ -1663,13 +1663,13 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       /***** Group *****/
 	       fprintf (Gbl.F.Out,"<br />"
 		                  "<label for=\"TTGrp%s\">"
-		                  "%s"
-		                  "</label>"
-	                          "<select id=\"TTGrp%s\" name=\"TTGrp\""
+		                  "%s",
+			CellStr,
+		        Txt_Group);
+	       HTM_LABEL_End ();
+	       fprintf (Gbl.F.Out,"<select id=\"TTGrp%s\" name=\"TTGrp\""
 	                          " class=\"TT_GRP\""
 		                  " onchange=\"document.getElementById('%s').submit();\">",
-			CellStr,
-		        Txt_Group,
 			CellStr,
 			Gbl.Form.Id);
                fprintf (Gbl.F.Out,"<option value=\"-1\"");
@@ -1705,14 +1705,14 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       /***** Info *****/
 	       fprintf (Gbl.F.Out,"<br />"
 		                  "<label for=\"TTInf%s\">"
-		                  "%s"
-		                  "</label>"
-	                          "<input id=\"TTInf%s\" name=\"TTInf\""
+		                  "%s",
+			CellStr,
+		        Txt_Info);
+	       HTM_LABEL_End ();
+	       fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""
 	                          " type=\"text\" size=\"1\" maxlength=\"%u\""
 	                          " value=\"%s\" class=\"TT_INF\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />",
-			CellStr,
-		        Txt_Info,
 			CellStr,
 			TT_MAX_CHARS_INFO,
 			Info ? Info :
@@ -1724,14 +1724,14 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       /***** Info *****/
 	       fprintf (Gbl.F.Out,"<br />"
 		                  "<label for=\"TTInf%s\" class=\"DAT_SMALL\">"
-		                  "%s"
-		                  "</label>"
-                                  "<input id=\"TTInf%s\" name=\"TTInf\""
+		                  "%s",
+			CellStr,
+		        Txt_Info);
+	       HTM_LABEL_End ();
+               fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""
                                   " type=\"text\" size=\"12\" maxlength=\"%u\""
                                   " value=\"%s\" class=\"TT_INF\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />",
-			CellStr,
-		        Txt_Info,
 			CellStr,
 			TT_MAX_CHARS_INFO,Info,
 			Gbl.Form.Id);

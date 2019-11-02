@@ -64,6 +64,7 @@ static unsigned HTM_UL_NestingLevel = 0;
 static unsigned HTM_LI_NestingLevel = 0;
 static unsigned HTM_A_NestingLevel = 0;
 static unsigned HTM_SCRIPT_NestingLevel = 0;
+static unsigned HTM_LABEL_NestingLevel = 0;
 static unsigned HTM_TEXTAREA_NestingLevel = 0;
 
 /*****************************************************************************/
@@ -85,6 +86,8 @@ static void HTM_UL_BeginWithoutAttr (void);
 static void HTM_LI_BeginWithoutAttr (void);
 
 static void HTM_A_BeginWithoutAttr (void);
+
+static void HTM_LABEL_BeginWithoutAttr (void);
 
 static void HTM_TEXTAREA_BeginWithoutAttr (void);
 
@@ -734,6 +737,58 @@ void HTM_SCRIPT_End (void)
    fprintf (Gbl.F.Out,"</script>");
 
    HTM_SCRIPT_NestingLevel--;
+  }
+
+/*****************************************************************************/
+/*********************************** Labels **********************************/
+/*****************************************************************************/
+
+void HTM_LABEL_Begin (const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print HTML *****/
+	 fprintf (Gbl.F.Out,"<label %s>",Attr);
+
+	 free ((void *) Attr);
+	}
+      else
+         HTM_LABEL_BeginWithoutAttr ();
+     }
+   else
+      HTM_LABEL_BeginWithoutAttr ();
+
+   HTM_LABEL_NestingLevel++;
+  }
+
+static void HTM_LABEL_BeginWithoutAttr (void)
+  {
+   fprintf (Gbl.F.Out,"<label>");
+  }
+
+void HTM_LABEL_End (void)
+  {
+   if (HTM_LABEL_NestingLevel == 0)	// No LABEL open
+      Ale_ShowAlert (Ale_ERROR,"Trying to close unopened LABEL.");
+
+   fprintf (Gbl.F.Out,"</label>");
+
+   HTM_LABEL_NestingLevel--;
   }
 
 /*****************************************************************************/

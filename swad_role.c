@@ -28,6 +28,7 @@
 #include "swad_database.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_HTML.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
 #include "swad_role_type.h"
@@ -560,10 +561,9 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
 		     Gbl.Form.Id);
 
 	 fprintf (Gbl.F.Out," />"
-	                    "%s"
-	                    "</label>"
-	                    "<br />",
-		  Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+	                    "%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+	 HTM_LABEL_End ();
+	 fprintf (Gbl.F.Out,"<br />");
         }
   }
 

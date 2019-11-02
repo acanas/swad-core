@@ -216,7 +216,8 @@ void Fig_ReqShowFigures (void)
    Gbl.Scope.Default = Hie_SYS;
    Sco_GetScope ("ScopeFig");
    Sco_PutSelectorScope ("ScopeFig",false);
-   fprintf (Gbl.F.Out,"</label><br />");
+   HTM_LABEL_End ();
+   fprintf (Gbl.F.Out,"<br />");
 
    /***** Type of statistic *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;"
@@ -235,8 +236,8 @@ void Fig_ReqShowFigures (void)
 	                 "</option>",
                Txt_FIGURE_TYPES[FigureType]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</label>");
+   fprintf (Gbl.F.Out,"</select>");
+   HTM_LABEL_End ();
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Show_statistic);

@@ -103,8 +103,9 @@ void Hie_WriteMenuHierarchy (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"cty\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"cty\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Country);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -120,8 +121,9 @@ void Hie_WriteMenuHierarchy (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM\"");
-      fprintf (Gbl.F.Out,"<label for=\"ins\" class=\"%s\">%s:</label>",
+      fprintf (Gbl.F.Out,"<label for=\"ins\" class=\"%s\">%s:",
                The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Institution);
+      HTM_LABEL_End ();
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LM\"");
@@ -137,8 +139,9 @@ void Hie_WriteMenuHierarchy (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"RM\"");
-         fprintf (Gbl.F.Out,"<label for=\"ctr\" class=\"%s\">%s:</label>",
+         fprintf (Gbl.F.Out,"<label for=\"ctr\" class=\"%s\">%s:",
                   The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Centre);
+         HTM_LABEL_End ();
          HTM_TD_End ();
 
          HTM_TD_Begin ("class=\"LM\"");
@@ -154,8 +157,9 @@ void Hie_WriteMenuHierarchy (void)
             HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RM\"");
-	    fprintf (Gbl.F.Out,"<label for=\"deg\" class=\"%s\">%s:</label>",
+	    fprintf (Gbl.F.Out,"<label for=\"deg\" class=\"%s\">%s:",
                      The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Degree);
+	    HTM_LABEL_End ();
 	    HTM_TD_End ();
 
             HTM_TD_Begin ("class=\"LM\"");
@@ -171,8 +175,9 @@ void Hie_WriteMenuHierarchy (void)
 	       HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"RM\"");
-	       fprintf (Gbl.F.Out,"<label for=\"crs\" class=\"%s\">%s:</label>",
+	       fprintf (Gbl.F.Out,"<label for=\"crs\" class=\"%s\">%s:",
 			The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Course);
+	       HTM_LABEL_End ();
 	       HTM_TD_End ();
 
 	       HTM_TD_Begin ("class=\"LM\"");

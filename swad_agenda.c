@@ -1500,9 +1500,10 @@ void Agd_RequestCreatOrEditEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Event\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Event\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Event);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -1518,9 +1519,10 @@ void Agd_RequestCreatOrEditEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Location\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Location\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Location);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -1540,9 +1542,10 @@ void Agd_RequestCreatOrEditEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Description);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");

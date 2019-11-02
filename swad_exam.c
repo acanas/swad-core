@@ -1092,8 +1092,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RB\"");
-   fprintf (Gbl.F.Out,"<label for=\"CrsName\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"CrsName\" class=\"%s\">%s:",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Course);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LB\"",StyleNormal);
@@ -1114,8 +1115,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RB\"");
-   fprintf (Gbl.F.Out,"<label for=\"Year\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Year\" class=\"%s\">%s:",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Year_or_semester);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LB\"",StyleNormal);
@@ -1147,8 +1149,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RB\"");
-   fprintf (Gbl.F.Out,"<label for=\"ExamSession\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"ExamSession\" class=\"%s\">%s:",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Session);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LB\"",StyleNormal);
@@ -1306,8 +1309,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Place\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Place\" class=\"%s\">%s:",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Place_of_exam);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
@@ -1333,8 +1337,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"ExamMode\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"ExamMode\" class=\"%s\">%s:",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Mode);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
@@ -1359,8 +1364,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Structure\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Structure\" class=\"%s\">%s:",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
@@ -1385,8 +1391,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"DocRequired\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"DocRequired\" class=\"%s\">%s:",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Documentation_required);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
@@ -1411,8 +1418,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"MatRequired\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"MatRequired\" class=\"%s\">%s:",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Material_required);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
@@ -1437,8 +1445,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"MatAllowed\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"MatAllowed\" class=\"%s\">%s:",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Material_allowed);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
@@ -1463,8 +1472,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"OtherInfo\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"OtherInfo\" class=\"%s\">%s:",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Other_information);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);

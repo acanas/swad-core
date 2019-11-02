@@ -131,12 +131,12 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
                          " class=\"LST_EDIT_ROWS COLOR%u\""
-                         " onchange=\"document.getElementById('%s').submit();\" />"
-                         "</label>",
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Txt_TABLE_Header,
                Mrk_HeadOrFootStr[Brw_HEADER],Marks.Header,
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
+      HTM_LABEL_End ();
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -151,12 +151,12 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
                          " class=\"LST_EDIT_ROWS COLOR%u\""
-                         " onchange=\"document.getElementById('%s').submit();\" />"
-                         "</label>",
+                         " onchange=\"document.getElementById('%s').submit();\" />",
                Txt_TABLE_Footer,
                Mrk_HeadOrFootStr[Brw_FOOTER],Marks.Footer,
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
+      HTM_LABEL_End ();
       Frm_EndForm ();
       HTM_TD_End ();
      }

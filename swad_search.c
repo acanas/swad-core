@@ -155,7 +155,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    Gbl.Scope.Default = DefaultScope;
    Sco_GetScope ("ScopeSch");
    Sco_PutSelectorScope ("ScopeSch",false);
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_LABEL_End ();
    HTM_DIV_End ();
 
    /***** String to find *****/
@@ -178,8 +178,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
 	 fprintf (Gbl.F.Out,">%s</option>",
 		  Titles[WhatToSearch]);
         }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</label>");
+   fprintf (Gbl.F.Out,"</select>");
+   HTM_LABEL_End ();
 
    /***** Magnifying glass icon *****/
    Sch_PutMagnifyingGlassButton ("search.svg");

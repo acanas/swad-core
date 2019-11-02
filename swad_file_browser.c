@@ -3270,10 +3270,10 @@ static void Brw_FormToChangeCrsGrpZone (void)
    if (IsCourseZone)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-                      "%s"
-                      "</label>",
+                      "%s",
             Gbl.Form.Id,
             Gbl.Hierarchy.Crs.FullName);
+   HTM_LABEL_End ();
    HTM_LI_End ();
 
    /***** List my groups for unique selection *****/
@@ -3303,10 +3303,10 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	 if (IsGroupZone && GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
 	 fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-			    "%s %s"
-			    "</label>",
+			    "%s %s",
 		  Gbl.Form.Id,
                   GrpDat.GrpTypName,GrpDat.GrpName);
+	 HTM_LABEL_End ();
 	 HTM_LI_End ();
         }
 
@@ -8348,10 +8348,10 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 	              "%s: "
                       "<input type=\"text\" name=\"NewFolderName\""
                       " size=\"30\" maxlength=\"%u\" value=\"\""
-                      " required=\"required\" />"
-	              "</label>",
+                      " required=\"required\" />",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Folder,
             Brw_MAX_CHARS_FOLDER);
+   HTM_LABEL_End ();
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CREATE_BUTTON,Txt_Create_folder);
@@ -8513,9 +8513,9 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"NewLinkURL\" class=\"%s\">"
-	              "%s:&nbsp;"
-	              "</label>",
+	              "%s:&nbsp;",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_URL);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -8533,9 +8533,9 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    HTM_TD_Begin ("class=\"RM\"");
    fprintf (Gbl.F.Out,"<label for=\"NewLinkName\" class=\"%s\">"
-	              "%s&nbsp;(%s):&nbsp;"
-	              "</label>",
+	              "%s&nbsp;(%s):&nbsp;",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -9587,9 +9587,9 @@ void Brw_ShowFileMetadata (void)
 
 	 HTM_TD_Begin ("class=\"RM\"");
 	 fprintf (Gbl.F.Out,"<label for=\"PublicFile\" class=\"%s\">"
-			    "%s:"
-			    "</label>",
+			    "%s:",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Availability);
+	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LM\"");
@@ -9621,8 +9621,9 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"RM\"");
-	 fprintf (Gbl.F.Out,"<label for=\"License\" class=\"%s\">%s:</label>",
+	 fprintf (Gbl.F.Out,"<label for=\"License\" class=\"%s\">%s:",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_License);
+	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"DAT LM\"");
@@ -12166,7 +12167,7 @@ void Brw_AskRemoveOldFiles (void)
    fprintf (Gbl.F.Out,"</select>&nbsp;");
    fprintf (Gbl.F.Out,Txt_Remove_files_older_than_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_LABEL_End ();
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Remove);

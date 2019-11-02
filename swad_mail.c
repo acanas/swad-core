@@ -1273,10 +1273,10 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	 /* The first mail is the current one */
 	 HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
 	 fprintf (Gbl.F.Out,"<label for=\"Email\" class=\"%s\">"
-			    "%s:"
-			    "</label>",
+			    "%s:",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Current_email);
+	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
@@ -1288,10 +1288,10 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	    HTM_TD_Begin ("rowspan=\"%u\" class=\"REC_C1_BOT RT\"",
 		          NumEmails - 1);
 	    fprintf (Gbl.F.Out,"<label for=\"Email\" class=\"%s\">"
-			       "%s:"
-			       "</label>",
+			       "%s:",
 		     The_ClassFormInBox[Gbl.Prefs.Theme],
 		     Txt_Other_emails);
+	    HTM_LABEL_End ();
 	    HTM_TD_End ();
 	   }
 
@@ -1376,10 +1376,11 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"NewEmail\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"NewEmail\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             NumEmails ? Txt_New_email :	// A new email
         	        Txt_Email);	// The first email
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");

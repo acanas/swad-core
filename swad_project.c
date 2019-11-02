@@ -3299,8 +3299,9 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -3316,9 +3317,10 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:",
             Dpt_PARAM_DPT_COD_NAME,
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Department);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -3415,9 +3417,10 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_URL);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
@@ -3454,8 +3457,9 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:",
             Id,The_ClassFormInBox[Gbl.Prefs.Theme],Label);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -3763,9 +3767,9 @@ void Prj_ShowFormConfig (void)
    if (Gbl.Prjs.Config.Editable)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," />"
-		      "%s"
-		      "</label>",
+		      "%s",
 	    Txt_Editable_by_non_editing_teachers);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();

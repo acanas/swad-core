@@ -338,12 +338,12 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" accept=\"image/*\""
-                      " onchange=\"document.getElementById('%s').submit();\" />"
-                      "</label>",
+                      " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);
+   HTM_LABEL_End ();
 
    /***** End form *****/
    Frm_EndForm ();
@@ -1791,8 +1791,9 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"AvgType\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"AvgType\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Average_type);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -1855,8 +1856,9 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"PhotoSize\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"PhotoSize\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Size_of_photos);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -1919,8 +1921,9 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Order\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Order\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");

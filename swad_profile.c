@@ -207,12 +207,12 @@ void Prf_RequestUserProfile (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"text\" name=\"usr\""
-                      " size=\"18\" maxlength=\"%u\" value=\"@%s\" />"
-                      "</label>",
+                      " size=\"18\" maxlength=\"%u\" value=\"@%s\" />",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Nickname,
             Nck_MAX_BYTES_NICKNAME_FROM_FORM,
             Gbl.Usrs.Me.UsrDat.Nickname);
+   HTM_LABEL_End ();
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_CONFIRM_BUTTON,Txt_Continue);

@@ -1104,8 +1104,9 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -1124,8 +1125,9 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"ComTchVisible\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"ComTchVisible\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Teachers_comment);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -1151,8 +1153,9 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Description);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -1217,9 +1220,9 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
       if (!Att_CheckIfAttEventIsAssociatedToGrps (AttCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
-	                 "%s %s"
-                         "</label>",
+	                 "%s %s",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_LABEL_End ();
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -2083,7 +2086,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"<label for=\"Std%u\">",NumUsr);
    Att_PutCheckOrCross (Present);
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    /***** Checkbox to select user *****/
@@ -3131,17 +3134,18 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<label for=\"Att%u\">%u:</label>",
+      fprintf (Gbl.F.Out,"<label for=\"Att%u\">%u:",
 	       NumAttEvent,NumAttEvent + 1);
+      HTM_LABEL_End ();
       HTM_TD_End ();
 
       if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
       fprintf (Gbl.F.Out,"<label for=\"Att%u\">"
-                         "<span id=\"%s\"></span>"
-                         "</label>",
+                         "<span id=\"%s\"></span>",
 	       NumAttEvent,Id);
+      HTM_LABEL_End ();
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
 				    Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 				    true,true,true,0x7);

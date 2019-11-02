@@ -2609,7 +2609,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    HTM_DIV_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<label for=\"UsrId\">");
    Ico_PutIcon ("user.svg",Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO_16x16");
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_LABEL_End ();
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
                       " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
                       " value=\"%s\""
@@ -2623,7 +2623,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    HTM_DIV_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<label for=\"UsrPwd\">");
    Ico_PutIcon ("key.svg",Txt_Password,"CONTEXT_ICO_16x16");
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_LABEL_End ();
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"UsrPwd\" name=\"UsrPwd\""
 		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />",
             Pwd_MAX_CHARS_PLAIN_PASSWORD,
@@ -3510,7 +3510,7 @@ void Usr_ShowFormsLogoutAndRole (void)
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
                The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Role);
       Rol_PutFormToChangeMyRole (NULL);
-      fprintf (Gbl.F.Out,"</label>");
+      HTM_LABEL_End ();
      }
 
    /***** End box *****/
@@ -6306,10 +6306,10 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
    else
       Rol_WrongRoleExit ();
    Sex = Usr_GetSexOfUsrsLst (Role);
-   fprintf (Gbl.F.Out,"%s:"
-	              "</label>",
+   fprintf (Gbl.F.Out,"%s:",
 	    Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :
                                                   Txt_ROLES_PLURAL_Abc[Role][Sex]);
+   HTM_LABEL_End ();
 
    HTM_TH_End ();
 
@@ -6405,9 +6405,9 @@ static void Usr_PutCheckboxListWithPhotos (void)
    if (Gbl.Usrs.Listing.WithPhotos)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-                      "%s"
-                      "</label>",
+                      "%s",
 	    Gbl.Form.Id,Txt_Display_photos);
+   HTM_LABEL_End ();
   }
 
 /*****************************************************************************/
@@ -7331,7 +7331,7 @@ void Usr_ListDataAdms (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_LABEL_End ();
    Frm_EndForm ();
    HTM_DIV_End ();
 
@@ -7798,7 +7798,7 @@ void Usr_SeeGuests (void)
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 	       The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
       Sco_PutSelectorScope ("ScopeUsr",true);
-      fprintf (Gbl.F.Out,"</label>");
+      HTM_LABEL_End ();
       Frm_EndForm ();
       HTM_DIV_End ();
      }
@@ -7943,7 +7943,7 @@ void Usr_SeeStudents (void)
 	 fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
 	 Sco_PutSelectorScope ("ScopeUsr",true);
-	 fprintf (Gbl.F.Out,"</label>");
+	 HTM_LABEL_End ();
 	 Frm_EndForm ();
 	 HTM_DIV_End ();
 	 break;
@@ -8116,7 +8116,7 @@ void Usr_SeeTeachers (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_LABEL_End ();
    Frm_EndForm ();
    HTM_DIV_End ();
 
@@ -8357,10 +8357,10 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," />"
 		      "<label for=\"ListUsrsAction%u\">"
-		      "%s"
-		      "</label>",
+		      "%s",
 	    (unsigned) ListUsrsAction,
             Label);
+   HTM_LABEL_End ();
 
    HTM_LI_End ();
   }
@@ -8975,8 +8975,9 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 
    /***** End selector *****/
    fprintf (Gbl.F.Out,"</select>"
-	              "%s</label>",
+	              "%s",
             Txt_columns);
+   HTM_LABEL_End ();
   }
 
 /*****************************************************************************/

@@ -153,10 +153,10 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 		      "%s:&nbsp;"
 		      "<input type=\"text\" name=\"ID\""
 		      " size=\"18\" maxlength=\"%u\" value=\"\""
-		      " required=\"required\" />"
-		      "</label>",
+		      " required=\"required\" />",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],Txt_ID,
 	    ID_MAX_CHARS_USR_ID);
+   HTM_LABEL_End ();
    Btn_PutCreateButtonInline (Txt_Check);
    Frm_EndForm ();
 
@@ -368,9 +368,10 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"NewNick\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"NewNick\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Nickname);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -389,9 +390,10 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"NewEmail\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"NewEmail\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_Email);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");

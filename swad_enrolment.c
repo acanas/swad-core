@@ -379,13 +379,13 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
       FuncParams ();
    fprintf (Gbl.F.Out,"<label for=\"OtherUsrIDNickOrEMail\""
 	              " class=\"%s RM\">"
-                      "%s:&nbsp;"
-                      "</label>"
-                      "<input type=\"text\" id=\"OtherUsrIDNickOrEMail\""
+                      "%s:&nbsp;",
+            The_ClassFormInBox[Gbl.Prefs.Theme],
+            Txt_nick_email_or_ID);
+   HTM_LABEL_End ();
+   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"OtherUsrIDNickOrEMail\""
                       " name=\"OtherUsrIDNickOrEMail\""
                       " size=\"18\" maxlength=\"%u\" required=\"required\" />",
-            The_ClassFormInBox[Gbl.Prefs.Theme],
-            Txt_nick_email_or_ID,
             Cns_MAX_CHARS_EMAIL_ADDRESS);
 
    /***** Send button*****/
@@ -822,7 +822,7 @@ void Enr_AskRemoveOldUsrs (void)
    fprintf (Gbl.F.Out,"</select>&nbsp;");
    fprintf (Gbl.F.Out,Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_LABEL_End ();
 
    /***** Send button and end box *****/
    Box_EndBoxWithButton (Btn_REMOVE_BUTTON,Txt_Eliminate);
@@ -923,9 +923,10 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"UsrsIDs\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"UsrsIDs\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
@@ -960,48 +961,48 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
       fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"RegRemAction%u\""
 			 " name=\"RegRemAction\" value=\"%u\" checked=\"checked\" />"
 			 "<label for=\"RegRemAction%u\">"
-			 "%s"
-			 "</label>",
+			 "%s",
       	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
 	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
 	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
 	       Txt_Register_the_users_indicated_in_step_1);
+      HTM_LABEL_End ();
       HTM_LI_End ();
 
       HTM_LI_Begin (NULL);
       fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"RegRemAction%u\""
 			 " name=\"RegRemAction\" value=\"%u\" />"
 			 "<label for=\"RegRemAction%u\">"
-			 "%s"
-			 "</label>",
+			 "%s",
 	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
 	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
 	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
 	       Txt_Remove_the_users_indicated_in_step_1);
+      HTM_LABEL_End ();
       HTM_LI_End ();
 
       HTM_LI_Begin (NULL);
       fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"RegRemAction%u\""
 			 " name=\"RegRemAction\" value=\"%u\" />"
 			 "<label for=\"RegRemAction%u\">"
-			 "%s"
-			 "</label>",
+			 "%s",
 	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
 	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
 	       (unsigned) Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS,
 	       Txt_Remove_the_users_not_indicated_in_step_1);
+      HTM_LABEL_End ();
       HTM_LI_End ();
 
       HTM_LI_Begin (NULL);
       fprintf (Gbl.F.Out,"<input id=\"RegRemAction%u\" type=\"radio\""
 			 " name=\"RegRemAction\" value=\"%u\" />"
 			 "<label for=\"RegRemAction%u\">"
-			 "%s"
-			 "</label>",
+			 "%s",
 	       (unsigned) Enr_UPDATE_USRS_IN_CRS,
 	       (unsigned) Enr_UPDATE_USRS_IN_CRS,
 	       (unsigned) Enr_UPDATE_USRS_IN_CRS,
 	       Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_indicated);
+      HTM_LABEL_End ();
       HTM_LI_End ();
      }
 
@@ -1012,13 +1013,12 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
       fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"RegRemAction%u\""
                          " name=\"RegRemAction\" value=\"%u\" />"
 			 "<label for=\"RegRemAction%u\">"
-                         "%s"
-			 "</label>"
-                         "</li>",
+                         "%s",
                (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM,
                (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM,
                (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM,
                Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
+      HTM_LABEL_End ();
       HTM_LI_End ();
      }
 
@@ -1782,7 +1782,7 @@ static void Enr_StartRegRemOneUsrAction (Enr_RegRemOneUsrAction_t RegRemOneUsrAc
 
 static void Enr_EndRegRemOneUsrAction (void)
   {
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_LABEL_End ();
    HTM_LI_End ();
   }
 
@@ -2297,8 +2297,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"ScopeEnr\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"ScopeEnr\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -2311,8 +2312,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");

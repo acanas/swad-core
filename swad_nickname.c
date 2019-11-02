@@ -274,10 +274,10 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	 /* The first nickname is the current one */
 	 HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
 	 fprintf (Gbl.F.Out,"<label for=\"Nick\" class=\"%s\">"
-			    "%s:"
-			    "</label>",
+			    "%s:",
 		  The_ClassFormInBox[Gbl.Prefs.Theme],
 		  Txt_Current_nickname);
+	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LT USR_ID\"");
@@ -289,10 +289,10 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	    HTM_TD_Begin ("rowspan=\"%u\" class=\"REC_C1_BOT RT\"",
 		          NumNicks - 1);
 	    fprintf (Gbl.F.Out,"<label for=\"Nick\" class=\"%s\">"
-			       "%s:"
-			       "</label>",
+			       "%s:",
 		     The_ClassFormInBox[Gbl.Prefs.Theme],
 		     Txt_Other_nicknames);
+	    HTM_LABEL_End ();
 	    HTM_TD_End ();
 	   }
 
@@ -373,11 +373,11 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RT\"");
    fprintf (Gbl.F.Out,"<label for=\"NewNick\" class=\"%s\">"
-                      "%s:"
-                      "</label>",
+                      "%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             NumNicks ? Txt_New_nickname :	// A new nickname
         	       Txt_Nickname);		// The first nickname
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT\"");

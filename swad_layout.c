@@ -1285,7 +1285,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 		  Text);
 
    /***** End label and container *****/
-   fprintf (Gbl.F.Out,"</label>");
+   HTM_LABEL_End ();
    HTM_DIV_End ();
 
    /***** End form *****/

@@ -1199,8 +1199,9 @@ static void Mch_PutFormNewMatch (struct Game *Game)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Title);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -1268,9 +1269,9 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\""
                          " checked=\"checked\""
                          " onclick=\"uncheckChildren(this,'GrpCods')\" />"
-	                 "%s %s"
-	                 "</label>",
+	                 "%s %s",
                Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      HTM_LABEL_End ();
       HTM_TD_End ();
 
       HTM_TR_End ();

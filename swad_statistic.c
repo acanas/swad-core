@@ -432,8 +432,9 @@ void Sta_AskShowCrsHits (void)
 	       fprintf (Gbl.F.Out," selected=\"selected\"");
             fprintf (Gbl.F.Out,">%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
            }
-         fprintf (Gbl.F.Out,"</select>"
-                            "</label><br />");
+         fprintf (Gbl.F.Out,"</select>");
+         HTM_LABEL_End ();
+         fprintf (Gbl.F.Out,"<br />");
 
          /***** Option b) Listing of detailed clicks to this course *****/
          fprintf (Gbl.F.Out,"<label>"
@@ -443,9 +444,9 @@ void Sta_AskShowCrsHits (void)
          if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
             fprintf (Gbl.F.Out," checked=\"checked\"");
          fprintf (Gbl.F.Out," onclick=\"enableDetailedClicks()\" />"
-                            "%s"
-                            "</label>",
+                            "%s",
                   Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
+         HTM_LABEL_End ();
 
          /* Number of rows per page */
          // To use getElementById in Firefox, it's necessary to have the id attribute
@@ -465,8 +466,8 @@ void Sta_AskShowCrsHits (void)
 	       fprintf (Gbl.F.Out," selected=\"selected\"");
             fprintf (Gbl.F.Out,">%lu",RowsPerPage[i]);
            }
-         fprintf (Gbl.F.Out,"</select>)"
-                            "</label>");
+         fprintf (Gbl.F.Out,"</select>)");
+         HTM_LABEL_End ();
          HTM_TD_End ();
 
          HTM_TR_End ();
@@ -539,8 +540,9 @@ void Sta_AskShowGblHits (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Role\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"Role\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Users);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
@@ -566,8 +568,9 @@ void Sta_AskShowGblHits (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"ScopeSta\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"ScopeSta\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Scope);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
@@ -588,8 +591,9 @@ void Sta_AskShowGblHits (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"CountType\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"CountType\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Show);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
@@ -614,8 +618,8 @@ void Sta_AskShowGblHits (void)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</label>");
+   fprintf (Gbl.F.Out,"</select>");
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -708,8 +712,9 @@ static void Sta_WriteSelectorAction (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"StatAct\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"StatAct\" class=\"%s\">%s:",
             The_ClassFormInBox[Gbl.Prefs.Theme],Txt_Action);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("colspan=\"2\" class=\"LM\"");
@@ -2084,8 +2089,8 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s",Txt_STAT_COLOR_TYPES[ColorType]);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</label>");
+   fprintf (Gbl.F.Out,"</select>");
+   HTM_LABEL_End ();
    Frm_EndForm ();
    HTM_TD_End ();
    HTM_TR_End ();

@@ -144,12 +144,12 @@ void TsI_ShowFormImportQstsFromXML (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" accept=\".xml\""
-                      " onchange=\"document.getElementById('%s').submit();\" />"
-                      "</label>",
+                      " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_XML_file,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);
+   HTM_LABEL_End ();
    Frm_EndForm ();
 
    /***** End box *****/

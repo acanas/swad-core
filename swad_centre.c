@@ -413,9 +413,10 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"OthInsCod\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"OthInsCod\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Institution);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
@@ -456,9 +457,10 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Centre);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
@@ -488,9 +490,10 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Short_name);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT_N LM\"");
@@ -568,9 +571,10 @@ static void Ctr_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">%s:",
 	    The_ClassFormInBox[Gbl.Prefs.Theme],
 	    Txt_Web);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
@@ -2334,12 +2338,12 @@ void Ctr_RequestPhoto (void)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" accept=\"image/*\""
-                      " onchange=\"document.getElementById('%s').submit();\" />"
-	              "</label>",
+                      " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);
+   HTM_LABEL_End ();
 
    /***** End box *****/
    Box_BoxEnd ();

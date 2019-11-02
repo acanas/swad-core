@@ -316,12 +316,12 @@ void Log_RequestLogo (Hie_Level_t Scope)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\""
-                      " onchange=\"document.getElementById('%s').submit();\" />"
-	              "</label>",
+                      " onchange=\"document.getElementById('%s').submit();\" />",
             The_ClassFormInBox[Gbl.Prefs.Theme],
             Txt_File_with_the_logo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,
             Gbl.Form.Id);
+   HTM_LABEL_End ();
 
    /***** End box *****/
    Box_BoxEnd ();

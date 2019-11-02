@@ -454,8 +454,9 @@ static void Ann_PutSubjectMessage (const char *Field,const char *Label,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:</label>",
+   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">%s:",
 	    Field,The_ClassFormInBox[Gbl.Prefs.Theme],Label);
+   HTM_LABEL_End ();
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");

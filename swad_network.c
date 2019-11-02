@@ -324,9 +324,9 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       (unsigned) NumURL,The_ClassFormInBox[Gbl.Prefs.Theme]);
       HTM_IMG (Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[NumURL],Net_WebsAndSocialNetworksTitle[NumURL],
 	       "class=\"CONTEXT_ICO_16x16\" style=\"margin-right:6px;\"");
-      fprintf (Gbl.F.Out,"%s:"
-			 "</label>",
+      fprintf (Gbl.F.Out,"%s:",
 	       Net_WebsAndSocialNetworksTitle[NumURL]);
+      HTM_LABEL_End ();
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
