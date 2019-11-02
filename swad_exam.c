@@ -1091,13 +1091,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Name of the course *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RB\"");
+   HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"CrsName\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Course);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s LB\"",StyleNormal);
+   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       fprintf (Gbl.F.Out,"<input type=\"text\" id=\"CrsName\" name=\"CrsName\""
@@ -1114,13 +1114,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Year/semester (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RB\"");
+   HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"Year\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Year_or_semester);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s LB\"",StyleNormal);
+   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       fprintf (Gbl.F.Out,"<select id=\"Year\" name=\"Year\">");
@@ -1148,13 +1148,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Exam session *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"RB\"");
+   HTM_TD_Begin ("class=\"RT\"");
    HTM_LABEL_Begin ("for=\"ExamSession\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Session);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s LB\"",StyleNormal);
+   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
       fprintf (Gbl.F.Out,"<input type=\"text\""
 	                 " id=\"ExamSession\" name=\"ExamSession\""
@@ -1169,13 +1169,13 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Date of the exam *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RB\"",StyleForm);
+   HTM_TD_Begin ("class=\"%s RT\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Exam_date);
    HTM_TD_End ();
 
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
-      HTM_TD_Begin ("class=\"LB\"");
+      HTM_TD_Begin ("class=\"LT\"");
       Dat_WriteFormDate (Gbl.ExamAnns.ExaDat.ExamDate.Year < Gbl.Now.Date.Year ? Gbl.ExamAnns.ExaDat.ExamDate.Year :
                                                                                  Gbl.Now.Date.Year,
                          Gbl.Now.Date.Year + 1,"Exam",
@@ -1187,7 +1187,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
      {
       Dat_ConvDateToDateStr (&Gbl.ExamAnns.ExaDat.ExamDate,
                              StrExamDate);
-      HTM_TD_Begin ("class=\"%s LB\"",StyleNormal);
+      HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
       fprintf (Gbl.F.Out,"%s",StrExamDate);
       HTM_TD_End ();
      }
@@ -1196,11 +1196,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Start time *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RB\"",StyleForm);
+   HTM_TD_Begin ("class=\"%s RT\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Start_time);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s LB\"",StyleNormal);
+   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       fprintf (Gbl.F.Out,"<select name=\"ExamHour\">"
@@ -1242,11 +1242,11 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    /***** Approximate duration of the exam *****/
    HTM_TR_Begin (NULL);
 
-   HTM_TD_Begin ("class=\"%s RB\"",StyleForm);
+   HTM_TD_Begin ("class=\"%s RT\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Approximate_duration);
    HTM_TD_End ();
 
-   HTM_TD_Begin ("class=\"%s LB\"",StyleNormal);
+   HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
       fprintf (Gbl.F.Out,"<select name=\"DurationHour\">");
