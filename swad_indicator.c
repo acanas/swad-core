@@ -123,8 +123,7 @@ void Ind_ReqIndicatorsCourses (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"ScopeInd\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"ScopeInd\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Scope);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -139,8 +138,8 @@ void Ind_ReqIndicatorsCourses (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"OthDegTypCod\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"OthDegTypCod\" class=\"%s\"",
+	            The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Types_of_degree);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -159,8 +158,8 @@ void Ind_ReqIndicatorsCourses (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">",
-	    Dpt_PARAM_DPT_COD_NAME,The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
+	            Dpt_PARAM_DPT_COD_NAME,The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Department);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -680,7 +679,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
 	}
 
       HTM_TD_Begin ("class=\"%s\"",Class);
-      fprintf (Gbl.F.Out,"<label for=\"Indicators%u\">",Ind);
+      HTM_LABEL_Begin ("for=\"Indicators%u\"",Ind);
       fprintf (Gbl.F.Out,"%u",Ind);
       HTM_LABEL_End ();
       HTM_TD_End ();

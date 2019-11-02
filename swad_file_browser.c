@@ -8344,7 +8344,7 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 	          FileNameToShow);
 
    /***** Folder *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s: "
                       "<input type=\"text\" name=\"NewFolderName\""
                       " size=\"30\" maxlength=\"%u\" value=\"\""
@@ -8512,8 +8512,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"NewLinkURL\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"NewLinkURL\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_URL);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -8532,8 +8531,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"NewLinkName\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"NewLinkName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s&nbsp;(%s):&nbsp;",Txt_Save_as,Txt_optional);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -9586,8 +9584,8 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"RM\"");
-	 fprintf (Gbl.F.Out,"<label for=\"PublicFile\" class=\"%s\">",
-		  The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("for=\"PublicFile\" class=\"%s\"",
+		          The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_Availability);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
@@ -9621,8 +9619,8 @@ void Brw_ShowFileMetadata (void)
 	 HTM_TR_Begin (NULL);
 
 	 HTM_TD_Begin ("class=\"RM\"");
-	 fprintf (Gbl.F.Out,"<label for=\"License\" class=\"%s\">",
-		  The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("for=\"License\" class=\"%s\"",
+		          The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:",Txt_License);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
@@ -12152,7 +12150,7 @@ void Brw_AskRemoveOldFiles (void)
                  NULL,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months (to remove files older) *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s&nbsp;",Txt_Remove_files_older_than_PART_1_OF_2);
    fprintf (Gbl.F.Out,"<select name=\"Months\">");
    for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;

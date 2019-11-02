@@ -237,8 +237,7 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"OthDegCod\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"OthDegCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Degree);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -283,8 +282,7 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"FullName\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"FullName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Course);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -316,8 +314,7 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"ShortName\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"ShortName\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Short_name);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -350,8 +347,7 @@ static void Crs_Configuration (bool PrintView)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"OthCrsYear\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"OthCrsYear\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Year_OF_A_DEGREE);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -388,8 +384,7 @@ static void Crs_Configuration (bool PrintView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM\"");
-      fprintf (Gbl.F.Out,"<label for=\"InsCrsCod\" class=\"%s\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("for=\"InsCrsCod\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Institutional_code);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -3329,7 +3324,7 @@ void Crs_AskRemoveOldCrss (void)
                  Hlp_SYSTEM_Hierarchy_eliminate_old_courses,Box_NOT_CLOSABLE);
 
    /***** Form to request number of months without clicks *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s&nbsp;"
 	              "<select name=\"Months\">",
             Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);

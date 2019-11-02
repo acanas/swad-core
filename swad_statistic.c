@@ -419,7 +419,7 @@ void Sta_AskShowCrsHits (void)
          /* Selection of count type (number of pages generated, accesses per user, etc.) */
          Sta_WriteSelectorCountType ();
 
-         fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+         HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
                             "<select id=\"GroupedBy\" name=\"GroupedBy\">",
                   Txt_distributed_by);
@@ -541,8 +541,7 @@ void Sta_AskShowGblHits (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Role\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Role\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Users);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -570,8 +569,7 @@ void Sta_AskShowGblHits (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"ScopeSta\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"ScopeSta\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Scope);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -594,8 +592,7 @@ void Sta_AskShowGblHits (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"CountType\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"CountType\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Show);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -604,7 +601,7 @@ void Sta_AskShowGblHits (void)
    Sta_WriteSelectorCountType ();
 
    /***** Type of statistic *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;",Txt_distributed_by);
 
    if (Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAY ||
@@ -716,8 +713,7 @@ static void Sta_WriteSelectorAction (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"StatAct\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"StatAct\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Action);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2079,7 +2075,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
       Sta_PutHiddenParamScopeSta ();
      }
 
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<select name=\"ColorType\""
                       " onchange=\"document.getElementById('%s').submit();\">",

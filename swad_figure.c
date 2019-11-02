@@ -205,7 +205,7 @@ void Fig_ReqShowFigures (void)
                  Hlp_ANALYTICS_Figures,Box_NOT_CLOSABLE);
 
    /***** Compute stats for anywhere, degree or course? *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Scope);
    Gbl.Scope.Allowed = 1 << Hie_SYS |
 	               1 << Hie_CTY |
@@ -220,7 +220,7 @@ void Fig_ReqShowFigures (void)
    fprintf (Gbl.F.Out,"<br />");
 
    /***** Type of statistic *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;"
 	              "<select name=\"FigureType\">",
 	    Txt_Statistic);

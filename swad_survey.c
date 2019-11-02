@@ -1893,8 +1893,7 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"ScopeSvy\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"ScopeSvy\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Scope);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1911,8 +1910,7 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1933,8 +1931,7 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2728,8 +2725,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Wording);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2784,8 +2780,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 
       /* Label with the number of the answer */
       HTM_TD_Begin ("class=\"RT\"");
-      fprintf (Gbl.F.Out,"<label for=\"AnsStr%u\" class=\"%s\">",
-               NumAns,The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("for=\"AnsStr%u\" class=\"%s\">",
+                       NumAns,The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%u)",NumAns + 1);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -3469,16 +3465,16 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 
 	 /* Write the number of option */
 	 HTM_TD_Begin ("class=\"SVY_OPT LT\"");
-	 fprintf (Gbl.F.Out,"<label for=\"Ans%010u_%010u\" class=\"DAT\">",
-		  (unsigned) SvyQst->QstCod,NumAns);
+	 HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT\"",
+		          (unsigned) SvyQst->QstCod,NumAns);
 	 fprintf (Gbl.F.Out,"%u)",NumAns + 1);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();
 
 	 /* Write the text of the answer */
 	 HTM_TD_Begin ("class=\"LT\"");
-	 fprintf (Gbl.F.Out,"<label for=\"Ans%010u_%010u\" class=\"DAT\">",
-		  (unsigned) SvyQst->QstCod,NumAns);
+	 HTM_LABEL_Begin ("for=\"Ans%010u_%010u\" class=\"DAT\"",
+		          (unsigned) SvyQst->QstCod,NumAns);
 	 fprintf (Gbl.F.Out,"%s",SvyQst->AnsChoice[NumAns].Text);
 	 HTM_LABEL_End ();
 	 HTM_TD_End ();

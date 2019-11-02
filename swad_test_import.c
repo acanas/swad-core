@@ -141,7 +141,7 @@ void TsI_ShowFormImportQstsFromXML (void)
 
    /***** Write a form to import questions *****/
    Frm_StartForm (ActImpTstQst);
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" accept=\".xml\""
                       " onchange=\"document.getElementById('%s').submit();\" />",

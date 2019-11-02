@@ -149,7 +149,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 
    /***** Form to request user's ID for possible account already created *****/
    Frm_StartForm (ActChkUsrAcc);
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;"
 		      "<input type=\"text\" name=\"ID\""
 		      " size=\"18\" maxlength=\"%u\" value=\"\""
@@ -368,8 +368,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"NewNick\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"NewNick\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Nickname);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -390,8 +389,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"NewEmail\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"NewEmail\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Email);
    HTM_LABEL_End ();
    HTM_TD_End ();

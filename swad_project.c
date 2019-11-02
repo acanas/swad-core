@@ -3299,8 +3299,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -3318,9 +3317,9 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">",
-	    Dpt_PARAM_DPT_COD_NAME,
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",
+		    Dpt_PARAM_DPT_COD_NAME,
+                    The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Department);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -3419,8 +3418,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"WWW\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"WWW\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_URL);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -3459,8 +3457,7 @@ static void Prj_EditOneProjectTxtArea (const char *Id,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"%s\" class=\"%s\">",
-	    Id,The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"%s\" class=\"%s\"",Id,The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Label);
    HTM_LABEL_End ();
    HTM_TD_End ();

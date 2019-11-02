@@ -1167,8 +1167,7 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1193,7 +1192,7 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<label class=\"DAT\">");
+   HTM_LABEL_Begin ("class=\"DAT\"");
    fprintf (Gbl.F.Out,"%s:"
                       "<input type=\"text\" name=\"Folder\""
                       " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
@@ -1208,8 +1207,7 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();

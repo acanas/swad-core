@@ -2607,7 +2607,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 
    /***** User's ID/nickname *****/
    HTM_DIV_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<label for=\"UsrId\">");
+   HTM_LABEL_Begin ("for=\"UsrId\"");
    Ico_PutIcon ("user.svg",Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO_16x16");
    HTM_LABEL_End ();
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
@@ -2621,7 +2621,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
 
    /***** User's password *****/
    HTM_DIV_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<label for=\"UsrPwd\">");
+   HTM_LABEL_Begin ("for=\"UsrPwd\"");
    Ico_PutIcon ("key.svg",Txt_Password,"CONTEXT_ICO_16x16");
    HTM_LABEL_End ();
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"UsrPwd\" name=\"UsrPwd\""
@@ -3507,7 +3507,7 @@ void Usr_ShowFormsLogoutAndRole (void)
                Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
    else
      {
-      fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Role);
       Rol_PutFormToChangeMyRole (NULL);
       HTM_LABEL_End ();
@@ -6398,7 +6398,7 @@ static void Usr_PutCheckboxListWithPhotos (void)
    Par_PutHiddenParamChar ("WithPhotosExists",'Y');
 
    /***** Put checkbox to select whether list users with photos *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"WithPhotos\""
 	              " value=\"Y\"");
    if (Gbl.Usrs.Listing.WithPhotos)
@@ -7327,7 +7327,7 @@ void Usr_ListDataAdms (void)
    HTM_DIV_Begin ("class=\"CM\"");
    Frm_StartForm (ActLstOth);
    Usr_PutParamListWithPhotos ();
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    HTM_LABEL_End ();
@@ -7794,7 +7794,7 @@ void Usr_SeeGuests (void)
       HTM_DIV_Begin ("class=\"CM\"");
       Frm_StartForm (ActLstGst);
       Usr_PutParamsPrefsAboutUsrList ();
-      fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Scope);
       Sco_PutSelectorScope ("ScopeUsr",true);
       HTM_LABEL_End ();
@@ -7939,7 +7939,7 @@ void Usr_SeeStudents (void)
 	 HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_StartForm (ActLstStd);
 	 Usr_PutParamsPrefsAboutUsrList ();
-	 fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+	 HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Scope);
 	 Sco_PutSelectorScope ("ScopeUsr",true);
 	 HTM_LABEL_End ();
@@ -8112,7 +8112,7 @@ void Usr_SeeTeachers (void)
    HTM_DIV_Begin ("class=\"CM\"");
    Frm_StartForm (ActLstTch);
    Usr_PutParamsPrefsAboutUsrList ();
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Scope);
    Sco_PutSelectorScope ("ScopeUsr",true);
    HTM_LABEL_End ();
@@ -8355,7 +8355,7 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
    if (ListUsrsAction == Gbl.Usrs.Selected.Option)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," />");
-   fprintf (Gbl.F.Out,"<label for=\"ListUsrsAction%u\">",(unsigned) ListUsrsAction);
+   HTM_LABEL_Begin ("for=\"ListUsrsAction%u\"",(unsigned) ListUsrsAction);
    fprintf (Gbl.F.Out,"%s",Label);
    HTM_LABEL_End ();
 
@@ -8954,9 +8954,10 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    unsigned Cols;
 
    /***** Start selector *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<select name=\"ColsClassPhoto\""
-                      " onchange=\"document.getElementById('%s').submit();\">",Gbl.Form.Id);
+                      " onchange=\"document.getElementById('%s').submit();\">",
+	    Gbl.Form.Id);
 
    /***** Put a row in selector for every number from 1 to Usr_CLASS_PHOTO_COLS_MAX *****/
    for (Cols = 1;

@@ -313,8 +313,7 @@ void Log_RequestLogo (Hie_Level_t Scope)
 	          64,64);
 
    /***** Upload logo *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\""
                       " onchange=\"document.getElementById('%s').submit();\" />",

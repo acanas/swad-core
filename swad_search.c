@@ -144,7 +144,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    /***** Scope (whole platform, current country, current institution,
                  current centre, current degree or current course) *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Scope);
    Gbl.Scope.Allowed = 1 << Hie_SYS |
 	               1 << Hie_CTY |
@@ -162,7 +162,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    Sch_PutInputStringToSearch (NULL);
 
    /***** What to search? *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out," %s&nbsp;",Txt_SEARCH_X_in_Y);
    fprintf (Gbl.F.Out,"<select name=\"WhatToSearch\" class=\"WHAT_TO_SEARCH\">");
    for (WhatToSearch = (Sch_WhatToSearch_t) 0;

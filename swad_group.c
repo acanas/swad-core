@@ -465,8 +465,7 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out," />");
-   fprintf (Gbl.F.Out,"<label for=\"AllGroups\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"AllGroups\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"&nbsp;%s",Txt_All_groups);
    HTM_LABEL_End ();
    HTM_DIV_End ();
@@ -2289,7 +2288,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 
    /* Group name = students with no group */
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Grp%ld\">",-GrpTyp->GrpTypCod);
+   HTM_LABEL_Begin ("for=\"Grp%ld\"",-GrpTyp->GrpTypCod);
    fprintf (Gbl.F.Out,"%s",Txt_users_with_no_group);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2397,7 +2396,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
       HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
    else
       HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Grp%ld\" class=\"DAT\">",Grp->GrpCod);
+   HTM_LABEL_Begin ("for=\"Grp%ld\" class=\"DAT\"",Grp->GrpCod);
    fprintf (Gbl.F.Out,"%s",Grp->GrpName);
    HTM_LABEL_End ();
    HTM_TD_End ();

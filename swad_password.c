@@ -282,7 +282,7 @@ void Pwd_ShowFormSendNewPwd (void)
    Ale_ShowAlert (Ale_INFO,Txt_If_you_have_forgotten_your_password_);
 
    /***** User's ID/nickname *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<input type=\"text\" name=\"UsrId\""
                       " size=\"8\" maxlength=\"%u\" value=\"%s\""
@@ -688,8 +688,7 @@ void Pwd_ShowFormChgMyPwd (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-      fprintf (Gbl.F.Out,"<label for=\"UsrPwd\" class=\"%s\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("for=\"UsrPwd\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Current_password);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -742,8 +741,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
 
    /***** Begin form element ****/
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Passwd\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Passwd\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Password);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -780,8 +778,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Paswd1\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Paswd1\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_New_password);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -806,8 +803,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"Paswd2\" class=\"%s\">",
-            The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Paswd2\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Retype_new_password);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -893,13 +889,13 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
    extern const char *Txt_For_security_enter_your_password;
 
    HTM_DIV_Begin ("class=\"CM\" style=\"margin:12px;\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Consent\" value=\"Y\" />"
 		      "%s",
 	    Txt_I_understand_that_this_action_can_not_be_undone);
    HTM_LABEL_End ();
    fprintf (Gbl.F.Out,"<br />");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;"
 		      "<input type=\"password\" name=\"OthUsrPwd\""
 		      " size=\"16\" maxlength=\"%u\""

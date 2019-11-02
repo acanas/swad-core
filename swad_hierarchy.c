@@ -103,8 +103,7 @@ void Hie_WriteMenuHierarchy (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
-   fprintf (Gbl.F.Out,"<label for=\"cty\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"cty\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Country);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -122,8 +121,7 @@ void Hie_WriteMenuHierarchy (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"RM\"");
-      fprintf (Gbl.F.Out,"<label for=\"ins\" class=\"%s\">",
-	       The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("for=\"ins\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s:",Txt_Institution);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -141,8 +139,7 @@ void Hie_WriteMenuHierarchy (void)
          HTM_TR_Begin (NULL);
 
          HTM_TD_Begin ("class=\"RM\"");
-         fprintf (Gbl.F.Out,"<label for=\"ctr\" class=\"%s\">",
-		  The_ClassFormInBox[Gbl.Prefs.Theme]);
+         HTM_LABEL_Begin ("for=\"ctr\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
          fprintf (Gbl.F.Out,"%s:",Txt_Centre);
          HTM_LABEL_End ();
          HTM_TD_End ();
@@ -160,8 +157,8 @@ void Hie_WriteMenuHierarchy (void)
             HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RM\"");
-	    fprintf (Gbl.F.Out,"<label for=\"deg\" class=\"%s\">",
-		     The_ClassFormInBox[Gbl.Prefs.Theme]);
+	    HTM_LABEL_Begin ("for=\"deg\" class=\"%s\"",
+			     The_ClassFormInBox[Gbl.Prefs.Theme]);
 	    fprintf (Gbl.F.Out,"%s:",Txt_Degree);
 	    HTM_LABEL_End ();
 	    HTM_TD_End ();
@@ -179,8 +176,8 @@ void Hie_WriteMenuHierarchy (void)
 	       HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"RM\"");
-	       fprintf (Gbl.F.Out,"<label for=\"crs\" class=\"%s\">",
-			The_ClassFormInBox[Gbl.Prefs.Theme]);
+	       HTM_LABEL_Begin ("for=\"crs\" class=\"%s\"",
+			        The_ClassFormInBox[Gbl.Prefs.Theme]);
 	       fprintf (Gbl.F.Out,"%s:",Txt_Course);
 	       HTM_LABEL_End ();
 	       HTM_TD_End ();

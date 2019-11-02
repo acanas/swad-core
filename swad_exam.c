@@ -1092,7 +1092,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RB\"");
-   fprintf (Gbl.F.Out,"<label for=\"CrsName\" class=\"%s\">",StyleForm);
+   HTM_LABEL_Begin ("for=\"CrsName\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Course);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1115,7 +1115,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RB\"");
-   fprintf (Gbl.F.Out,"<label for=\"Year\" class=\"%s\">",StyleForm);
+   HTM_LABEL_Begin ("for=\"Year\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Year_or_semester);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1149,7 +1149,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RB\"");
-   fprintf (Gbl.F.Out,"<label for=\"ExamSession\" class=\"%s\">",StyleForm);
+   HTM_LABEL_Begin ("for=\"ExamSession\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Session);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1309,7 +1309,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Place\" class=\"%s\">",StyleForm);
+   HTM_LABEL_Begin ("for=\"Place\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Place_of_exam);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1337,7 +1337,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"ExamMode\" class=\"%s\">",StyleForm);
+   HTM_LABEL_Begin ("for=\"ExamMode\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Mode);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1364,7 +1364,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Structure\" class=\"%s\">",StyleForm);
+   HTM_LABEL_Begin ("for=\"Structure\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1391,7 +1391,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"DocRequired\" class=\"%s\">",StyleForm);
+   HTM_LABEL_Begin ("for=\"DocRequired\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Documentation_required);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1418,7 +1418,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"MatRequired\" class=\"%s\">",StyleForm);
+   HTM_LABEL_Begin ("for=\"MatRequired\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Material_required);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1445,7 +1445,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"MatAllowed\" class=\"%s\">",StyleForm);
+   HTM_LABEL_Begin ("for=\"MatAllowed\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Material_allowed);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1472,7 +1472,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"OtherInfo\" class=\"%s\">",StyleForm);
+   HTM_LABEL_Begin ("for=\"OtherInfo\" class=\"%s\"",StyleForm);
    fprintf (Gbl.F.Out,"%s:",Txt_EXAM_ANNOUNCEMENT_Other_information);
    HTM_LABEL_End ();
    HTM_TD_End ();

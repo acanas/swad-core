@@ -1662,7 +1662,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	      {
 	       /***** Group *****/
 	       fprintf (Gbl.F.Out,"<br />");
-	       fprintf (Gbl.F.Out,"<label for=\"TTGrp%s\">",CellStr);
+	       HTM_LABEL_Begin ("for=\"TTGrp%s\"",CellStr);
 	       fprintf (Gbl.F.Out,"%s",Txt_Group);
 	       HTM_LABEL_End ();
 	       fprintf (Gbl.F.Out,"<select id=\"TTGrp%s\" name=\"TTGrp\""
@@ -1702,7 +1702,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 
 	       /***** Info *****/
 	       fprintf (Gbl.F.Out,"<br />");
-	       fprintf (Gbl.F.Out,"<label for=\"TTInf%s\">",CellStr);
+	       HTM_LABEL_Begin ("for=\"TTInf%s\"",CellStr);
 	       fprintf (Gbl.F.Out,"%s",Txt_Info);
 	       HTM_LABEL_End ();
 	       fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""
@@ -1719,8 +1719,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	      {
 	       /***** Info *****/
 	       fprintf (Gbl.F.Out,"<br />");
-	       fprintf (Gbl.F.Out,"<label for=\"TTInf%s\" class=\"DAT_SMALL\">",
-			CellStr);
+	       HTM_LABEL_Begin ("for=\"TTInf%s\" class=\"DAT_SMALL\"",CellStr);
 	       fprintf (Gbl.F.Out,"%s",Txt_Info);
 	       HTM_LABEL_End ();
                fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""

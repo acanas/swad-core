@@ -1104,8 +1104,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Title\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Title\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Title);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1126,8 +1125,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"ComTchVisible\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"ComTchVisible\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Teachers_comment);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1155,8 +1153,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RT\"");
-   fprintf (Gbl.F.Out,"<label for=\"Txt\" class=\"%s\">",
-	    The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("for=\"Txt\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Description);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2088,7 +2085,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<label for=\"Std%u\">",NumUsr);
+   HTM_LABEL_Begin ("for=\"Std%u\"",NumUsr);
    Att_PutCheckOrCross (Present);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -3138,7 +3135,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<label for=\"Att%u\">",NumAttEvent);
+      HTM_LABEL_Begin ("for=\"Att%u\"",NumAttEvent);
       fprintf (Gbl.F.Out,"%u:",NumAttEvent + 1);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -3146,7 +3143,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
 	 Lay_NotEnoughMemoryExit ();
       HTM_TD_Begin ("class=\"DAT LT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<label for=\"Att%u\">",NumAttEvent);
+      HTM_LABEL_Begin ("for=\"Att%u\"",NumAttEvent);
       fprintf (Gbl.F.Out,"<span id=\"%s\"></span>",Id);
       HTM_LABEL_End ();
       Dat_WriteLocalDateHMSFromUTC (Id,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],

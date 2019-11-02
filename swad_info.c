@@ -1166,8 +1166,8 @@ void Inf_FormsToSelSendInfo (void)
 	 HTM_TD_Begin ("class=\"LT LIGHT_BLUE\"");
       else
 	 HTM_TD_Begin ("class=\"LT\"");
-      fprintf (Gbl.F.Out,"<label for=\"InfoSrc%u\" class=\"%s\">",
-	       (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("for=\"InfoSrc%u\" class=\"%s\"",
+	               (unsigned) InfoSrc,The_ClassFormInBox[Gbl.Prefs.Theme]);
       fprintf (Gbl.F.Out,"%s",Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
       HTM_LABEL_End ();
       if (Txt_INFO_SRC_HELP[InfoSrc])
@@ -1275,7 +1275,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
 
    /***** File *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" />",
             Txt_File,
@@ -1310,7 +1310,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
 
    /***** Link *****/
    HTM_DIV_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<label class=\"%s\">",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<input type=\"url\" name=\"InfoSrcURL\""
                       " size=\"50\" maxlength=\"256\" value=\"",

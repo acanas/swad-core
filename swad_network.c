@@ -320,8 +320,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"REC_C1_BOT LM\"");
-      fprintf (Gbl.F.Out,"<label for=\"URL%u\" class=\"%s\">",
-	       (unsigned) NumURL,The_ClassFormInBox[Gbl.Prefs.Theme]);
+      HTM_LABEL_Begin ("for=\"URL%u\" class=\"%s\"",
+	               (unsigned) NumURL,The_ClassFormInBox[Gbl.Prefs.Theme]);
       HTM_IMG (Cfg_URL_ICON_PUBLIC,Net_WebsAndSocialNetworksIcons[NumURL],Net_WebsAndSocialNetworksTitle[NumURL],
 	       "class=\"CONTEXT_ICO_16x16\" style=\"margin-right:6px;\"");
       fprintf (Gbl.F.Out,"%s:",

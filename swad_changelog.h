@@ -496,7 +496,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
 // TODO: Buscar <label... y sustituir por HTM_LABEL_Begin ()
 
-	Version 19.51.2:  Nov 02, 2019	Code refactoring in HTML labels. (? lines)
+	Version 19.51.2:  Nov 02, 2019	Code refactoring in HTML labels. (246127 lines)
 	Version 19.51.1:  Nov 02, 2019	Code refactoring in HTML labels. Not finished. (246198 lines)
 	Version 19.51:    Nov 02, 2019	Code refactoring in HTML labels. Not finished. (246220 lines)
 	Version 19.50.4:  Nov 02, 2019	Code refactoring related with writing of local date-time. (246072 lines)
