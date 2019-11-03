@@ -1177,7 +1177,7 @@ static void TL_PutFormWhichUsrs (void)
 		     WhichUsrs == Gbl.Timeline.WhichUsrs ? "PREF_ON" :
 							   "PREF_OFF");
       Frm_StartForm (ActSeeSocTmlGbl);
-      Par_PutHiddenParamUnsigned ("WhichUsrs",WhichUsrs);
+      Par_PutHiddenParamUnsigned (NULL,"WhichUsrs",WhichUsrs);
       Ico_PutSettingIconLink (Icon[WhichUsrs],Txt_TIMELINE_WHICH_USERS[WhichUsrs]);
       Frm_EndForm ();
       HTM_DIV_End ();
@@ -1196,7 +1196,7 @@ static void TL_PutFormWhichUsrs (void)
 
 static void TL_PutParamWhichUsrs (void)
   {
-   Par_PutHiddenParamUnsigned ("WhichUsrs",Gbl.Timeline.WhichUsrs);
+   Par_PutHiddenParamUnsigned (NULL,"WhichUsrs",Gbl.Timeline.WhichUsrs);
   }
 
 /*****************************************************************************/
@@ -3060,7 +3060,7 @@ static void TL_PutFormToRemovePublication (long NotCod)
 
 static void TL_PutHiddenParamNotCod (long NotCod)
   {
-   Par_PutHiddenParamLong ("NotCod",NotCod);
+   Par_PutHiddenParamLong (NULL,"NotCod",NotCod);
   }
 
 /*****************************************************************************/
@@ -3069,7 +3069,7 @@ static void TL_PutHiddenParamNotCod (long NotCod)
 
 void TL_PutHiddenParamPubCod (long PubCod)
   {
-   Par_PutHiddenParamLong ("PubCod",PubCod);
+   Par_PutHiddenParamLong (NULL,"PubCod",PubCod);
   }
 
 /*****************************************************************************/

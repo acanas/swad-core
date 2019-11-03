@@ -1637,7 +1637,7 @@ void Deg_RemoveDegree (void)
 
 void Deg_PutParamDegCod (long DegCod)
   {
-   Par_PutHiddenParamLong ("deg",DegCod);
+   Par_PutHiddenParamLong (NULL,"deg",DegCod);
   }
 
 /*****************************************************************************/
@@ -1646,7 +1646,7 @@ void Deg_PutParamDegCod (long DegCod)
 
 static void Deg_PutParamOtherDegCod (long DegCod)
   {
-   Par_PutHiddenParamLong ("OthDegCod",DegCod);
+   Par_PutHiddenParamLong (NULL,"OthDegCod",DegCod);
   }
 
 /*****************************************************************************/

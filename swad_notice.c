@@ -1009,7 +1009,7 @@ static void Not_PutParams (void)
 
 void Not_PutHiddenParamNotCod (long NotCod)
   {
-   Par_PutHiddenParamLong ("NotCod",NotCod);
+   Par_PutHiddenParamLong (NULL,"NotCod",NotCod);
   }
 
 /*****************************************************************************/

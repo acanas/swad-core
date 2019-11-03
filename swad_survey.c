@@ -259,7 +259,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Frm_StartForm (ActSeeAllSvy);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Svys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
@@ -833,7 +833,7 @@ static void Svy_GetParamSvyOrder (void)
 
 void Svy_PutHiddenParamSvyOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Svys.SelectedOrder);
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Svys.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -1512,7 +1512,7 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 static void Svy_PutParamSvyCod (long SvyCod)
   {
-   Par_PutHiddenParamLong ("SvyCod",SvyCod);
+   Par_PutHiddenParamLong (NULL,"SvyCod",SvyCod);
   }
 
 /*****************************************************************************/
@@ -2843,7 +2843,7 @@ static void Svy_InitQst (struct SurveyQuestion *SvyQst)
 
 static void Svy_PutParamQstCod (long QstCod)
   {
-   Par_PutHiddenParamLong ("QstCod",QstCod);
+   Par_PutHiddenParamLong (NULL,"QstCod",QstCod);
   }
 
 /*****************************************************************************/

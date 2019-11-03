@@ -878,7 +878,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
       if (OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeIns);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_INSTITUTIONS_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Hierarchy.Cty.Inss.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
@@ -1677,7 +1677,7 @@ static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt)
 
 void Ins_PutParamInsCod (long InsCod)
   {
-   Par_PutHiddenParamLong ("ins",InsCod);
+   Par_PutHiddenParamLong (NULL,"ins",InsCod);
   }
 
 /*****************************************************************************/
@@ -1686,7 +1686,7 @@ void Ins_PutParamInsCod (long InsCod)
 
 static void Ins_PutParamOtherInsCod (long InsCod)
   {
-   Par_PutHiddenParamLong ("OthInsCod",InsCod);
+   Par_PutHiddenParamLong (NULL,"OthInsCod",InsCod);
   }
 
 /*****************************************************************************/

@@ -527,7 +527,7 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t S
       Frm_StartForm (NextAction);
       if (NextAction == ActSeeUseGbl)
          Fig_PutHiddenParamFigures ();
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
       /* Link with the head of this column */
       Frm_LinkFormSubmit (Txt_DEGREE_TYPES_HELP_ORDER[Order],"TIT_TBL",NULL);
@@ -803,7 +803,7 @@ void DT_RemoveDegreeType (void)
 
 static void DT_PutParamOtherDegTypCod (long DegTypCod)
   {
-   Par_PutHiddenParamLong ("OthDegTypCod",DegTypCod);
+   Par_PutHiddenParamLong (NULL,"OthDegTypCod",DegTypCod);
   }
 
 /*****************************************************************************/

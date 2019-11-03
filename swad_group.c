@@ -477,7 +477,11 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
 
 void Grp_PutParamsCodGrps (void)
   {
+   extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    unsigned NumGrpSel;
+   size_t MaxLengthGrpCods;
+   char *GrpCods;
+   char GrpCod[20 + 1];
 
    /***** Write the boolean parameter that indicates if all the groups must be listed *****/
    Par_PutHiddenParamChar ("AllGroups",
@@ -488,16 +492,25 @@ void Grp_PutParamsCodGrps (void)
    if (!Gbl.Usrs.ClassPhoto.AllGroups &&
        Gbl.Crs.Grps.LstGrpsSel.NumGrps)
      {
-      fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"GrpCods\" value=\"");
+      MaxLengthGrpCods = Gbl.Crs.Grps.LstGrpsSel.NumGrps * (1 + 20) - 1;
+      if ((GrpCods = (char *) malloc (MaxLengthGrpCods + 1)) == NULL)
+	 Lay_NotEnoughMemoryExit ();
+
       for (NumGrpSel = 0;
 	   NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	   NumGrpSel++)
         {
+         /* Append group code to list */
          if (NumGrpSel)
-            fprintf (Gbl.F.Out,"%c",Par_SEPARATOR_PARAM_MULTIPLE);
-         fprintf (Gbl.F.Out,"%ld",Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+            Str_Concat (GrpCods,Par_SEPARATOR_PARAM_MULTIPLE,MaxLengthGrpCods);
+         snprintf (GrpCod,sizeof (GrpCod),
+		   "%ld",
+		   Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
+         Str_Concat (GrpCods,GrpCod,MaxLengthGrpCods);
         }
-      fprintf (Gbl.F.Out,"\" />");
+
+      Par_PutHiddenParamString (NULL,"GrpCods",GrpCods);
+      free ((void *) GrpCods);
      }
   }
 
@@ -4848,7 +4861,7 @@ static long Grp_GetParamGrpCod (void)
 
 static void Grp_PutParamGrpTypCod (long GrpTypCod)
   {
-   Par_PutHiddenParamLong ("GrpTypCod",GrpTypCod);
+   Par_PutHiddenParamLong (NULL,"GrpTypCod",GrpTypCod);
   }
 
 /*****************************************************************************/
@@ -4857,7 +4870,7 @@ static void Grp_PutParamGrpTypCod (long GrpTypCod)
 
 void Grp_PutParamGrpCod (long GrpCod)
   {
-   Par_PutHiddenParamLong ("GrpCod",GrpCod);
+   Par_PutHiddenParamLong (NULL,"GrpCod",GrpCod);
   }
 
 /*****************************************************************************/
@@ -4965,17 +4978,17 @@ void Grp_PutParamWhichGrps (void)
   {
    Grp_GetParamWhichGrps ();
 
-   Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) Gbl.Crs.Grps.WhichGrps);
+   Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) Gbl.Crs.Grps.WhichGrps);
   }
 
 void Grp_PutParamWhichGrpsOnlyMyGrps (void)
   {
-   Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) Grp_MY_GROUPS);
+   Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) Grp_MY_GROUPS);
   }
 
 void Grp_PutParamWhichGrpsAllGrps (void)
   {
-   Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) Grp_ALL_GROUPS);
+   Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) Grp_ALL_GROUPS);
   }
 
 /*****************************************************************************/
@@ -4999,7 +5012,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) (void))
 	              WhichGrps == Gbl.Crs.Grps.WhichGrps ? "PREF_ON" :
 						            "PREF_OFF");
       Frm_StartForm (Action);
-      Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) WhichGrps);
+      Par_PutHiddenParamUnsigned (NULL,"WhichGrps",(unsigned) WhichGrps);
       if (FuncParams)	// Extra parameters depending on the action
 	 FuncParams ();
       Ico_PutSettingIconLink (WhichGrps == Grp_MY_GROUPS ? "mysitemap.png" :

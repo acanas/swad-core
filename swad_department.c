@@ -128,7 +128,7 @@ void Dpt_SeeDepts (void)
       HTM_TH_Begin (1,1,"LM");
 
       Frm_StartForm (ActSeeDpt);
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       Frm_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Dpts.SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
@@ -612,7 +612,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 
 static void Dpt_PutParamDptCod (long DptCod)
   {
-   Par_PutHiddenParamLong (Dpt_PARAM_DPT_COD_NAME,DptCod);
+   Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,DptCod);
   }
 
 /*****************************************************************************/

@@ -369,7 +369,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 
 static void Ann_PutParams (void)
   {
-   Par_PutHiddenParamLong ("AnnCod",Gbl.Announcements.AnnCod);
+   Par_PutHiddenParamLong (NULL,"AnnCod",Gbl.Announcements.AnnCod);
   }
 
 /*****************************************************************************/

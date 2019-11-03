@@ -919,7 +919,7 @@ static void Lay_WritePageTopHeading (void)
 
    /* Begin form to go to home page */
    Frm_StartFormGoTo (ActMnu);
-   Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
+   Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
 
    HTM_DIV_Begin ("id=\"head_row_1_logo_small\"");
    Frm_LinkFormSubmit (Txt_System,NULL,NULL);

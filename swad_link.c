@@ -488,7 +488,7 @@ static void Lnk_ListLinksForEdition (void)
 
 static void Lnk_PutParamLnkCod (long LnkCod)
   {
-   Par_PutHiddenParamLong ("LnkCod",LnkCod);
+   Par_PutHiddenParamLong (NULL,"LnkCod",LnkCod);
   }
 
 /*****************************************************************************/

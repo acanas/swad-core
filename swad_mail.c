@@ -136,7 +136,7 @@ void Mai_SeeMailDomains (void)
       HTM_TH_Begin (1,1,"LM");
 
       Frm_StartForm (ActSeeMai);
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       Frm_LinkFormSubmit (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Mails.SelectedOrder)
          fprintf (Gbl.F.Out,"<u>");
@@ -544,7 +544,7 @@ static void Mai_ListMailDomainsForEdition (void)
 
 static void Mai_PutParamMaiCod (long MaiCod)
   {
-   Par_PutHiddenParamLong ("MaiCod",MaiCod);
+   Par_PutHiddenParamLong (NULL,"MaiCod",MaiCod);
   }
 
 /*****************************************************************************/
@@ -1317,9 +1317,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	 Frm_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
-      fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Email\""
-	                 " value=\"%s\" />",
-	       row[0]);
+      Par_PutHiddenParamString (NULL,"Email",row[0]);
       Ico_PutIconRemove ();
       Frm_EndForm ();
 
@@ -1359,8 +1357,7 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
 	    Frm_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	   }
-	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewEmail\" value=\"%s\" />",
-		  row[0]);	// Email
+	 Par_PutHiddenParamString (NULL,"NewEmail",row[0]);
          Btn_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
 			                                        Txt_Use_this_email);
 	 Frm_EndForm ();

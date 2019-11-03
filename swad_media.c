@@ -406,7 +406,7 @@ void Med_PutMediaUploader (int NumMediaInForm,const char *ClassInput)
                  Hlp_Multimedia,Box_NOT_CLOSABLE);
 
    /***** Action to perform on media *****/
-   Par_PutHiddenParamUnsigned (ParamUploadMedia.Action,(unsigned) Med_ACTION_NEW_MEDIA);
+   Par_PutHiddenParamUnsigned (NULL,ParamUploadMedia.Action,(unsigned) Med_ACTION_NEW_MEDIA);
 
    /***** Icons *****/
    /* Start icons */
@@ -500,12 +500,14 @@ static void Med_PutHiddenFormTypeMediaUploader (const char UniqueId[Frm_MAX_BYTE
 						struct MediaUploader *MediaUploader,
 					        struct ParamUploadMedia *ParamUploadMedia)
   {
+   char *Id;
+
    /***** Hidden field with form type *****/
-   /* Upload file */
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"%s_%s\""	// <id>_ParamSuffix
-		      " name=\"%s\" value=\"%u\" disabled=\"disabled\" />",
-            UniqueId,MediaUploader->ParamSuffix,
-	    ParamUploadMedia->FormType,(unsigned) MediaUploader->FormType);
+   if (asprintf (&Id,"%s_%s",UniqueId,MediaUploader->ParamSuffix) < 0)	// <id>_ParamSuffix
+      Lay_NotEnoughMemoryExit ();
+   Par_PutHiddenParamUnsignedDisabled (Id,ParamUploadMedia->FormType,
+			               (unsigned) MediaUploader->FormType);
+   free ((void *) Id);
    }
 
 /*****************************************************************************/

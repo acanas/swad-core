@@ -291,7 +291,7 @@ void Fig_PutHiddenParamFigures (void)
 
 static void Fig_PutHiddenParamFigureType (void)
   {
-   Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Gbl.Figures.FigureType);
+   Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Gbl.Figures.FigureType);
   }
 
 /*****************************************************************************/

@@ -121,7 +121,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (vo
 		        FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek ? "PREF_ON" :
 							             "PREF_OFF");
 	 Frm_StartForm (Action);
-	 Par_PutHiddenParamUnsigned ("FirstDayOfWeek",FirstDayOfWeek);
+	 Par_PutHiddenParamUnsigned (NULL,"FirstDayOfWeek",FirstDayOfWeek);
 	 if (FuncParams)	// Extra parameters depending on the action
 	    FuncParams ();
 	 snprintf (Gbl.Title,sizeof (Gbl.Title),

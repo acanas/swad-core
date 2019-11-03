@@ -640,7 +640,7 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 
    /***** Put order field *****/
    if (Order != Prj_ORDER_DEFAULT)
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
    /***** Put number of page *****/
    if (NumPage > 1)
@@ -661,27 +661,27 @@ void Prj_PutParams (struct Prj_Filter *Filter,
 
 static void Prj_PutHiddenParamMy_All (Prj_WhoseProjects_t My_All)
   {
-   Par_PutHiddenParamUnsigned (Prj_PARAM_MY__ALL_NAME,(unsigned) My_All);
+   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_MY__ALL_NAME,(unsigned) My_All);
   }
 
 static void Prj_PutHiddenParamAssign (unsigned Assign)
   {
-   Par_PutHiddenParamUnsigned (Prj_PARAM_PRE_NON_NAME,Assign);
+   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_PRE_NON_NAME,Assign);
   }
 
 static void Prj_PutHiddenParamHidden (unsigned Hidden)
   {
-   Par_PutHiddenParamUnsigned (Prj_PARAM_HID_VIS_NAME,Hidden);
+   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_HID_VIS_NAME,Hidden);
   }
 
 static void Prj_PutHiddenParamFaulti (unsigned Faulti)
   {
-   Par_PutHiddenParamUnsigned (Prj_PARAM_FAULTIN_NAME,Faulti);
+   Par_PutHiddenParamUnsigned (NULL,Prj_PARAM_FAULTIN_NAME,Faulti);
   }
 
 static void Prj_PutHiddenParamDptCod (long DptCod)
   {
-   Par_PutHiddenParamUnsigned (Dpt_PARAM_DPT_COD_NAME,DptCod);
+   Par_PutHiddenParamUnsigned (NULL,Dpt_PARAM_DPT_COD_NAME,DptCod);
   }
 
 /*****************************************************************************/
@@ -2477,7 +2477,7 @@ static void Prj_GetParamPrjOrder (void)
 
 void Prj_PutHiddenParamPrjOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Prjs.SelectedOrder);
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Prjs.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -2985,7 +2985,7 @@ void Prj_FreeListProjects (void)
 
 void Prj_PutParamPrjCod (long PrjCod)
   {
-   Par_PutHiddenParamLong ("PrjCod",PrjCod);
+   Par_PutHiddenParamLong (NULL,"PrjCod",PrjCod);
   }
 
 /*****************************************************************************/

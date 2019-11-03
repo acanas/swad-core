@@ -367,8 +367,8 @@ void Sta_AskShowCrsHits (void)
          Frm_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
 
          Grp_PutParamsCodGrps ();
-         Par_PutHiddenParamLong ("FirstRow",0);
-         Par_PutHiddenParamLong ("LastRow",0);
+         Par_PutHiddenParamLong (NULL,"FirstRow",0);
+         Par_PutHiddenParamLong (NULL,"LastRow",0);
 
          /***** Put list of users to select some of them *****/
          HTM_TABLE_BeginCenterPadding (2);
@@ -1605,11 +1605,11 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
      {
       Frm_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
       Dat_WriteParamsIniEndDates ();
-      Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-      Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
-      Par_PutHiddenParamLong ("FirstRow",FirstRow - Gbl.Stat.RowsPerPage);
-      Par_PutHiddenParamLong ("LastRow" ,FirstRow - 1);
-      Par_PutHiddenParamLong ("RowsPage",Gbl.Stat.RowsPerPage);
+      Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
+      Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Gbl.Stat.NumAction);
+      Par_PutHiddenParamLong (NULL,"FirstRow",FirstRow - Gbl.Stat.RowsPerPage);
+      Par_PutHiddenParamLong (NULL,"LastRow" ,FirstRow - 1);
+      Par_PutHiddenParamLong (NULL,"RowsPage",Gbl.Stat.RowsPerPage);
       Usr_PutHiddenParSelectedUsrsCods ();
      }
    HTM_TD_Begin ("class=\"LM\"");
@@ -1641,11 +1641,11 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
      {
       Frm_StartFormAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
       Dat_WriteParamsIniEndDates ();
-      Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-      Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
-      Par_PutHiddenParamUnsigned ("FirstRow" ,(unsigned) (LastRow + 1));
-      Par_PutHiddenParamUnsigned ("LastRow"  ,(unsigned) (LastRow + Gbl.Stat.RowsPerPage));
-      Par_PutHiddenParamUnsigned ("RowsPage" ,(unsigned) Gbl.Stat.RowsPerPage);
+      Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
+      Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Gbl.Stat.NumAction);
+      Par_PutHiddenParamUnsigned (NULL,"FirstRow" ,(unsigned) (LastRow + 1));
+      Par_PutHiddenParamUnsigned (NULL,"LastRow"  ,(unsigned) (LastRow + Gbl.Stat.RowsPerPage));
+      Par_PutHiddenParamUnsigned (NULL,"RowsPage" ,(unsigned) Gbl.Stat.RowsPerPage);
       Usr_PutHiddenParSelectedUsrsCods ();
      }
    HTM_TD_Begin ("class=\"RM\"");
@@ -2068,14 +2068,14 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
 
    Frm_StartFormAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
    Dat_WriteParamsIniEndDates ();
-   Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Gbl.Stat.ClicksGroupedBy);
-   Par_PutHiddenParamUnsigned ("CountType",(unsigned) Gbl.Stat.CountType);
-   Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
+   Par_PutHiddenParamUnsigned (NULL,"GroupedBy",(unsigned) Gbl.Stat.ClicksGroupedBy);
+   Par_PutHiddenParamUnsigned (NULL,"CountType",(unsigned) Gbl.Stat.CountType);
+   Par_PutHiddenParamUnsigned (NULL,"StatAct"  ,(unsigned) Gbl.Stat.NumAction);
    if (Gbl.Action.Act == ActSeeAccCrs)
       Usr_PutHiddenParSelectedUsrsCods ();
    else // Gbl.Action.Act == ActSeeAccGbl
      {
-      Par_PutHiddenParamUnsigned ("Role",(unsigned) Gbl.Stat.Role);
+      Par_PutHiddenParamUnsigned (NULL,"Role",(unsigned) Gbl.Stat.Role);
       Sta_PutHiddenParamScopeSta ();
      }
 

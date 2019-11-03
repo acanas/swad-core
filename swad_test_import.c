@@ -102,7 +102,7 @@ static void TsI_PutParamsExportQsts (void)
    Dat_WriteParamsIniEndDates ();
    Tst_WriteParamEditQst ();
    Par_PutHiddenParamChar ("OnlyThisQst",'N');
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Test.SelectedOrder);
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Test.SelectedOrder);
    Par_PutHiddenParamChar ("CreateXML",'Y');
   }
 

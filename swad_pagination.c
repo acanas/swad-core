@@ -753,7 +753,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 
 void Pag_PutHiddenParamPagNum (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
   {
-   Par_PutHiddenParamUnsigned (Pag_ParamNumPag[WhatPaginate],NumPage);
+   Par_PutHiddenParamUnsigned (NULL,Pag_ParamNumPag[WhatPaginate],NumPage);
   }
 
 /*****************************************************************************/

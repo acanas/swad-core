@@ -2964,7 +2964,7 @@ void Usr_PutParamOtherUsrCodEncrypted (void)
 
 void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
-   Par_PutHiddenParamString ("OtherUsrCod",EncryptedUsrCod);
+   Par_PutHiddenParamString (NULL,"OtherUsrCod",EncryptedUsrCod);
   }
 
 /*****************************************************************************/
@@ -5688,7 +5688,7 @@ void Usr_PutHiddenParSelectedUsrsCods (void)
    if (Gbl.Session.IsOpen)
       Ses_InsertHiddenParInDB (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK]);
    else
-      Par_PutHiddenParamString (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK]);
+      Par_PutHiddenParamString (NULL,Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Selected.List[Rol_UNK]);
   }
 
 /*****************************************************************************/
@@ -5714,6 +5714,7 @@ void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (void)
 
 void Usr_GetListsSelectedUsrsCods (void)
   {
+   extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    unsigned Length;
    Rol_Role_t Role;
 
@@ -5751,7 +5752,7 @@ void Usr_GetListsSelectedUsrsCods (void)
 		  if ((Length = strlen (Gbl.Usrs.Selected.List[Rol_UNK])) <
 		      Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
 		    {
-		     Gbl.Usrs.Selected.List[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
+		     Gbl.Usrs.Selected.List[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE[0];
 		     Gbl.Usrs.Selected.List[Rol_UNK][Length + 1] = '\0';
 		    }
 	       Str_Concat (Gbl.Usrs.Selected.List[Rol_UNK],Gbl.Usrs.Selected.List[Role],
@@ -5771,6 +5772,7 @@ void Usr_GetListsSelectedUsrsCods (void)
 
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
   {
+   extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    extern const char *Txt_There_is_no_user_with_nickname_X;
    extern const char *Txt_There_is_no_user_with_email_X;
    extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
@@ -5918,7 +5920,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
                 	 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
                        {
                         /* Add separator */
-                        Gbl.Usrs.Selected.List[Rol_UNK][LengthSelectedUsrsCods] = Par_SEPARATOR_PARAM_MULTIPLE;
+                        Gbl.Usrs.Selected.List[Rol_UNK][LengthSelectedUsrsCods] = Par_SEPARATOR_PARAM_MULTIPLE[0];
                         LengthSelectedUsrsCods++;
 
                         /* Add user */
@@ -7447,7 +7449,7 @@ static void Usr_GetAndUpdateUsrListType (void)
 
 void Usr_PutParamUsrListType (Usr_ShowUsrsType_t ListType)
   {
-   Par_PutHiddenParamUnsigned ("UsrListType",(unsigned) ListType);
+   Par_PutHiddenParamUnsigned (NULL,"UsrListType",(unsigned) ListType);
   }
 
 /*****************************************************************************/
@@ -7545,7 +7547,7 @@ void Usr_GetAndUpdateColsClassPhoto (void)
 
 void Usr_PutParamColsClassPhoto (void)
   {
-   Par_PutHiddenParamUnsigned ("ColsClassPhoto",Gbl.Usrs.ClassPhoto.Cols);
+   Par_PutHiddenParamUnsigned (NULL,"ColsClassPhoto",Gbl.Usrs.ClassPhoto.Cols);
   }
 
 /*****************************************************************************/

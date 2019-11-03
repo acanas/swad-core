@@ -566,7 +566,7 @@ void Acc_PutLinkToRemoveMyAccount (void)
 static void Acc_PutParamsToRemoveMyAccount (void)
   {
    Usr_PutParamMyUsrCodEncrypted ();
-   Par_PutHiddenParamUnsigned ("RegRemAction",
+   Par_PutHiddenParamUnsigned (NULL,"RegRemAction",
                                (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
   }
 

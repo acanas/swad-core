@@ -138,7 +138,7 @@ void Agd_PutParamAgd (void)
    snprintf (Nickname,sizeof (Nickname),
 	     "@%s",
 	     Gbl.Usrs.Other.UsrDat.Nickname);
-   Par_PutHiddenParamString ("agd",Nickname);
+   Par_PutHiddenParamString (NULL,"agd",Nickname);
   }
 
 /*****************************************************************************/
@@ -288,17 +288,17 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (void)
 
 static void Agd_PutHiddenParamPast__FutureEvents (unsigned Past__FutureEvents)
   {
-   Par_PutHiddenParamUnsigned (ParamPast__FutureName,Past__FutureEvents);
+   Par_PutHiddenParamUnsigned (NULL,ParamPast__FutureName,Past__FutureEvents);
   }
 
 static void Agd_PutHiddenParamPrivatPublicEvents (unsigned PrivatPublicEvents)
   {
-   Par_PutHiddenParamUnsigned (ParamPrivatPublicName,PrivatPublicEvents);
+   Par_PutHiddenParamUnsigned (NULL,ParamPrivatPublicName,PrivatPublicEvents);
   }
 
 static void Agd_PutHiddenParamHiddenVisiblEvents (unsigned HiddenVisiblEvents)
   {
-   Par_PutHiddenParamUnsigned (ParamHiddenVisiblName,HiddenVisiblEvents);
+   Par_PutHiddenParamUnsigned (NULL,ParamHiddenVisiblName,HiddenVisiblEvents);
   }
 
 /*****************************************************************************/
@@ -587,7 +587,7 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
             Pag_PutHiddenParamPagNum (Pag_ANOTHER_AGENDA,Gbl.Agenda.CurrentPage);
 	    break;
 	}
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 
       Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Agenda.SelectedOrder)
@@ -891,13 +891,13 @@ void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
       Agd_PutHiddenParamHiddenVisiblEvents (HiddenVisiblEvents);
 
    if (Gbl.Agenda.SelectedOrder != Agd_ORDER_DEFAULT)
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Agenda.SelectedOrder);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Agenda.SelectedOrder);
 
    if (NumPage > 1)
       Pag_PutHiddenParamPagNum (Pag_MY_AGENDA,NumPage);
 
    if (AgdCodToEdit > 0)
-      Par_PutHiddenParamLong ("AgdCod",AgdCodToEdit);
+      Par_PutHiddenParamLong (NULL,"AgdCod",AgdCodToEdit);
   }
 
 /*****************************************************************************/
@@ -931,7 +931,7 @@ static void Agd_GetParams (Agd_AgendaType_t AgendaType)
 void Agd_PutHiddenParamEventsOrder (void)
   {
    if (Gbl.Agenda.SelectedOrder != Agd_ORDER_DEFAULT)
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Agenda.SelectedOrder);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Agenda.SelectedOrder);
   }
 
 /*****************************************************************************/

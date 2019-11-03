@@ -956,7 +956,7 @@ static void Prf_ShowRanking (unsigned long Rank,unsigned long NumUsrs)
    /***** Rank in form to go to ranking *****/
    Frm_StartForm (ActSeeUseGbl);
    Sco_PutParamScope ("ScopeSta",Hie_SYS);
-   Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Fig_USERS_RANKING);
+   Par_PutHiddenParamUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
    Frm_LinkFormSubmit (Gbl.Title,The_ClassFormOutBox[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"#%lu",Rank);
    Frm_LinkFormEnd ();

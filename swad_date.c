@@ -557,7 +557,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       5,   // Dat_FORM_SECONDS_OFF
       1,   // Dat_FORM_SECONDS_ON
      };
-
+   char *ParamTimeUTC;
 
    /***** Begin table *****/
    HTM_TABLE_Begin (NULL);
@@ -679,9 +679,10 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    HTM_TABLE_End ();
 
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
-   fprintf (Gbl.F.Out,"<input type=\"hidden\""
-	              " id=\"%sTimeUTC\" name=\"%sTimeUTC\" value=\"%ld\" />",
-            Id,ParamName,(long) TimeUTC);
+   if (asprintf (&ParamTimeUTC,"%sTimeUTC",Id) < 0)
+      Lay_NotEnoughMemoryExit ();
+   Par_PutHiddenParamLong (ParamTimeUTC,ParamTimeUTC,(long) TimeUTC);
+   free ((void *) ParamTimeUTC);
 
    /***** Script to set selectors to local date and time from UTC time *****/
    HTM_SCRIPT_Begin (NULL,NULL);
@@ -722,12 +723,8 @@ time_t Dat_GetTimeUTCFromForm (const char *ParamName)
 
 void Dat_PutHiddenParBrowserTZDiff (void)
   {
-   fprintf (Gbl.F.Out,"<input type=\"hidden\""
-	              " id=\"BrowserTZName\" name=\"BrowserTZName\""
-	              " value=\"\" />");
-   fprintf (Gbl.F.Out,"<input type=\"hidden\""
-	              " id=\"BrowserTZDiff\" name=\"BrowserTZDiff\""
-	              " value=\"0\" />");
+   Par_PutHiddenParamString ("BrowserTZName","BrowserTZName","");
+   Par_PutHiddenParamLong ("BrowserTZDiff","BrowserTZDiff",0);
    HTM_SCRIPT_Begin (NULL,NULL);
    fprintf (Gbl.F.Out,"setTZname('BrowserTZName');"
 		      "setTZ('BrowserTZDiff');");
@@ -941,8 +938,8 @@ void Dat_SetIniEndDates (void)
 
 void Dat_WriteParamsIniEndDates (void)
   {
-   Par_PutHiddenParamUnsigned ("StartTimeUTC",Gbl.DateRange.TimeUTC[0]);
-   Par_PutHiddenParamUnsigned ("EndTimeUTC"  ,Gbl.DateRange.TimeUTC[1]);
+   Par_PutHiddenParamUnsigned (NULL,"StartTimeUTC",Gbl.DateRange.TimeUTC[0]);
+   Par_PutHiddenParamUnsigned (NULL,"EndTimeUTC"  ,Gbl.DateRange.TimeUTC[1]);
   }
 
 /*****************************************************************************/

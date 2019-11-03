@@ -798,7 +798,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 
 static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent)
   {
-   Par_PutHiddenParamUnsigned ("NotifyEvent",(unsigned) NotifyEvent);
+   Par_PutHiddenParamUnsigned (NULL,"NotifyEvent",(unsigned) NotifyEvent);
   }
 
 /*****************************************************************************/

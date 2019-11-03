@@ -2268,7 +2268,7 @@ static void Brw_GetDataCurrentGrp (void)
 
 void Brw_PutHiddenParamFilCod (long FilCod)
   {
-   Par_PutHiddenParamLong ("FilCod",FilCod);
+   Par_PutHiddenParamLong (NULL,"FilCod",FilCod);
   }
 
 /*****************************************************************************/
@@ -2314,9 +2314,9 @@ static void Brw_PutParamsFileBrowser (const char *PathInTree,const char *FilFolL
 
    /***** Path and file *****/
    if (PathInTree)
-      Par_PutHiddenParamString ("Path",PathInTree);
+      Par_PutHiddenParamString (NULL,"Path",PathInTree);
    if (FilFolLnkName)
-      Par_PutHiddenParamString (Brw_FileTypeParamName[FileType],FilFolLnkName);
+      Par_PutHiddenParamString (NULL,Brw_FileTypeParamName[FileType],FilFolLnkName);
    if (FilCod > 0)
       Brw_PutHiddenParamFilCod (FilCod);
   }
@@ -8390,8 +8390,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
             Cfg_URL_SWAD_CGI,
             Lan_STR_LANG_ID[Gbl.Prefs.Language],
             Cfg_URL_ICON_PUBLIC);
-   Par_PutHiddenParamLong ("act",Act_GetActCod (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]));
-   Par_PutHiddenParamString ("ses",Gbl.Session.Id);
+   Par_PutHiddenParamLong (NULL,"act",Act_GetActCod (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]));
+   Par_PutHiddenParamString (NULL,"ses",Gbl.Session.Id);
    Brw_PutImplicitParamsFileBrowser ();
 
    HTM_DIV_Begin ("class=\"dz-message\"");

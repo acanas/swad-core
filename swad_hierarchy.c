@@ -215,7 +215,7 @@ void Hie_WriteHierarchyInBreadcrumb (void)
    fprintf (Gbl.F.Out,"&nbsp;");
 
    Frm_StartFormGoTo (ActMnu);
-   Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
+   Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) TabSys);
    Frm_LinkFormSubmit (Txt_System,ClassTxt,NULL);
    fprintf (Gbl.F.Out,"%s",Txt_System);
    Frm_LinkFormEnd ();

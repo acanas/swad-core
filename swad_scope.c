@@ -176,7 +176,7 @@ void Sco_PutParamCurrentScope (void)
 
 void Sco_PutParamScope (const char *ParamName,Hie_Level_t Scope)
   {
-   Par_PutHiddenParamUnsigned (ParamName,(unsigned) Scope);
+   Par_PutHiddenParamUnsigned (NULL,ParamName,(unsigned) Scope);
   }
 
 /*****************************************************************************/

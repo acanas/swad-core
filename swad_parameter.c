@@ -45,6 +45,12 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+const char *Par_SEPARATOR_PARAM_MULTIPLE = "\0x0A";	// Must be 1 <= character <= 31
+
+/*****************************************************************************/
 /*********************** Private types and constants *************************/
 /*****************************************************************************/
 
@@ -484,6 +490,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
                            char *ParamValue,size_t MaxBytes,
                            struct Param **ParamPtr)	// NULL if not used
   {
+   extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    size_t BytesAlreadyCopied = 0;
    unsigned i;
    struct Param *Param;
@@ -566,7 +573,7 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 
 		  /* Copy separator */
 		  if (PtrDst)
-		     *PtrDst++ = Par_SEPARATOR_PARAM_MULTIPLE;	// Separator in the destination string
+		     *PtrDst++ = Par_SEPARATOR_PARAM_MULTIPLE[0];	// Separator in the destination string
 		  BytesAlreadyCopied++;
 		 }
 
@@ -1021,31 +1028,49 @@ void Par_ReplaceSeparatorMultipleByComma (const char *StrSrc,char *StrDst)
 
 void Par_ReplaceCommaBySeparatorMultiple (char *Str)
   {
+   extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
+
    for (;
 	*Str;
 	Str++)
       if (*Str == ',')
-	 *Str = Par_SEPARATOR_PARAM_MULTIPLE;
+	 *Str = Par_SEPARATOR_PARAM_MULTIPLE[0];
   }
 
 /*****************************************************************************/
 /********************** Put an unsigned hidden parameter *********************/
 /*****************************************************************************/
 
-void Par_PutHiddenParamUnsigned (const char *ParamName,unsigned Value)
+void Par_PutHiddenParamUnsigned (const char *Id,const char *ParamName,unsigned Value)
   {
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"%s\" value=\"%u\" />",
-            ParamName,Value);
+   fprintf (Gbl.F.Out,"<input type=\"hidden\"");
+   if (Id)
+      if (Id[0])
+         fprintf (Gbl.F.Out," id=\"%s\"",Id);
+   fprintf (Gbl.F.Out," name=\"%s\" value=\"%u\" />",ParamName,Value);
+  }
+
+void Par_PutHiddenParamUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value)
+  {
+   fprintf (Gbl.F.Out,"<input type=\"hidden\"");
+   if (Id)
+      if (Id[0])
+         fprintf (Gbl.F.Out," id=\"%s\"",Id);
+   fprintf (Gbl.F.Out," name=\"%s\" value=\"%u\" disabled=\"disabled\" />",
+	    ParamName,Value);
   }
 
 /*****************************************************************************/
 /************************* Put a long hidden parameter ***********************/
 /*****************************************************************************/
 
-void Par_PutHiddenParamLong (const char *ParamName,long Value)
+void Par_PutHiddenParamLong (const char *Id,const char *ParamName,long Value)
   {
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"%s\" value=\"%ld\" />",
-            ParamName,Value);
+   fprintf (Gbl.F.Out,"<input type=\"hidden\"");
+   if (Id)
+      if (Id[0])
+         fprintf (Gbl.F.Out," id=\"%s\"",Id);
+   fprintf (Gbl.F.Out," name=\"%s\" value=\"%ld\" />",ParamName,Value);
   }
 
 /*****************************************************************************/
@@ -1062,8 +1087,11 @@ void Par_PutHiddenParamChar (const char *ParamName,char Value)
 /************************ Put a string hidden parameter **********************/
 /*****************************************************************************/
 
-void Par_PutHiddenParamString (const char *ParamName,const char *Value)
+void Par_PutHiddenParamString (const char *Id,const char *ParamName,const char *Value)
   {
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"%s\" value=\"%s\" />",
-            ParamName,Value);
+   fprintf (Gbl.F.Out,"<input type=\"hidden\"");
+   if (Id)
+      if (Id[0])
+         fprintf (Gbl.F.Out," id=\"%s\"",Id);
+   fprintf (Gbl.F.Out," name=\"%s\" value=\"%s\" />",ParamName,Value);
   }

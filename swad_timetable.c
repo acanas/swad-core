@@ -1448,6 +1448,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    unsigned i;
    unsigned Dur;
    unsigned MaxDuration;
+   char *TTDur;
    unsigned RowSpan = 0;
    char *RowSpanStr;
    char *ColSpanStr;
@@ -1590,9 +1591,9 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	    Lay_NotEnoughMemoryExit ();
 
 	 /***** Put hidden parameters *****/
-         Par_PutHiddenParamUnsigned ("TTDay",Weekday);
-         Par_PutHiddenParamUnsigned ("TTInt",Interval);
-         Par_PutHiddenParamUnsigned ("TTCol",Column);
+         Par_PutHiddenParamUnsigned (NULL,"TTDay",Weekday);
+         Par_PutHiddenParamUnsigned (NULL,"TTInt",Interval);
+         Par_PutHiddenParamUnsigned (NULL,"TTCol",Column);
 
 	 /***** Class type *****/
 	 fprintf (Gbl.F.Out,"<select name=\"TTTyp\" class=\"TT_TYP\""
@@ -1616,7 +1617,6 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 
 	 if (IntervalType == TT_FREE_INTERVAL)
 	   {
-	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"TTDur\" value=\"");
             for (i = Interval + 1;
         	 i < Gbl.TimeTable.Config.IntervalsPerDay;
         	 i++)
@@ -1625,10 +1625,13 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
             MaxDuration = i - Interval;
 	    Dur = (MaxDuration >= Gbl.TimeTable.Config.IntervalsPerHour) ? Gbl.TimeTable.Config.IntervalsPerHour :	// MaxDuration >= 1h ==> Dur = 1h
 	                                                                   MaxDuration;					// MaxDuration  < 1h ==> Dur = MaxDuration
-	    fprintf (Gbl.F.Out,"%u:%02u\" />",
-		     (Dur / Gbl.TimeTable.Config.IntervalsPerHour),	// Hours
-		     (Dur % Gbl.TimeTable.Config.IntervalsPerHour) *
-		     Gbl.TimeTable.Config.Range.MinutesPerInterval);	// Minutes
+	    if (asprintf (&TTDur,"%u:%02u",
+		          (Dur / Gbl.TimeTable.Config.IntervalsPerHour),	// Hours
+		          (Dur % Gbl.TimeTable.Config.IntervalsPerHour) *
+		          Gbl.TimeTable.Config.Range.MinutesPerInterval) < 0)	// Minutes
+	       Lay_NotEnoughMemoryExit ();
+	    Par_PutHiddenParamString (NULL,"TTDur",TTDur);
+	    free ((void *) TTDur);
 	   }
 	 else
 	   {

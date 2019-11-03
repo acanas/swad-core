@@ -1559,7 +1559,7 @@ static void Exa_PutParamExaCodToEdit (void)
 
 void Exa_PutHiddenParamExaCod (long ExaCod)
   {
-   Par_PutHiddenParamLong ("ExaCod",ExaCod);
+   Par_PutHiddenParamLong (NULL,"ExaCod",ExaCod);
   }
 
 /*****************************************************************************/

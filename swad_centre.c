@@ -1733,7 +1733,7 @@ static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt)
 
 void Ctr_PutParamCtrCod (long CtrCod)
   {
-   Par_PutHiddenParamLong ("ctr",CtrCod);
+   Par_PutHiddenParamLong (NULL,"ctr",CtrCod);
   }
 
 /*****************************************************************************/
@@ -1742,7 +1742,7 @@ void Ctr_PutParamCtrCod (long CtrCod)
 
 static void Ctr_PutParamOtherCtrCod (long CtrCod)
   {
-   Par_PutHiddenParamLong ("OthCtrCod",CtrCod);
+   Par_PutHiddenParamLong (NULL,"OthCtrCod",CtrCod);
   }
 
 /*****************************************************************************/
@@ -2634,7 +2634,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
       if (OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeCtr);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_CENTRES_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Hierarchy.Ins.Ctrs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");

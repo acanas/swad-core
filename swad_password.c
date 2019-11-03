@@ -255,7 +255,7 @@ void Pwd_PutLinkToSendNewPasswd (void)
 
 static void Pwd_PutLinkToSendNewPasswdParams (void)
   {
-   Par_PutHiddenParamString ("UsrId",Gbl.Usrs.Me.UsrIdLogin);
+   Par_PutHiddenParamString (NULL,"UsrId",Gbl.Usrs.Me.UsrIdLogin);
   }
 
 /*****************************************************************************/

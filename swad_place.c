@@ -122,7 +122,7 @@ void Plc_SeePlaces (void)
 	 HTM_TH_Begin (1,1,"LM");
 
 	 Frm_StartForm (ActSeePlc);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_PLACES_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Plcs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
@@ -590,7 +590,7 @@ static void Plc_ListPlacesForEdition (void)
 
 static void Plc_PutParamPlcCod (long PlcCod)
   {
-   Par_PutHiddenParamLong ("PlcCod",PlcCod);
+   Par_PutHiddenParamLong (NULL,"PlcCod",PlcCod);
   }
 
 /*****************************************************************************/

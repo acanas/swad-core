@@ -223,7 +223,7 @@ static void Gam_ListAllGames (void)
 	 /* Form to change order */
 	 Frm_StartForm (ActSeeAllGam);
 	 Pag_PutHiddenParamPagNum (Pag_GAMES,Gbl.Games.CurrentPage);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_GAMES_ORDER_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Games.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
@@ -555,7 +555,7 @@ static void Gam_WriteAuthor (struct Game *Game)
 
 void Gam_PutHiddenParamGameOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Games.SelectedOrder);
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Games.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -617,7 +617,7 @@ long Gam_GetParams (void)
 
 static void Gam_PutHiddenParamOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Games.SelectedOrder);
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Games.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -883,7 +883,7 @@ static void Gam_GetGameTxtFromDB (long GamCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 
 void Gam_PutParamGameCod (long GamCod)
   {
-   Par_PutHiddenParamLong ("GamCod",GamCod);
+   Par_PutHiddenParamLong (NULL,"GamCod",GamCod);
   }
 
 /*****************************************************************************/
@@ -1393,7 +1393,7 @@ void Gam_ListTstQuestionsToSelect (void)
 
 void Gam_PutParamQstInd (unsigned QstInd)
   {
-   Par_PutHiddenParamUnsigned ("QstInd",QstInd);
+   Par_PutHiddenParamUnsigned (NULL,"QstInd",QstInd);
   }
 
 /*****************************************************************************/

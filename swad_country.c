@@ -667,7 +667,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
       if (OrderSelectable)
 	{
 	 Frm_StartForm (ActSeeCty);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_COUNTRIES_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Hierarchy.Sys.Ctys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
@@ -1672,7 +1672,7 @@ static void Cty_ListCountriesForEdition (void)
          HTM_TD_Begin ("class=\"LT\"");
          Frm_StartForm (ActRenCty);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
-         Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
+         Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
                             " size=\"15\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
@@ -1685,7 +1685,7 @@ static void Cty_ListCountriesForEdition (void)
          HTM_TD_Begin ("class=\"LT\"");
          Frm_StartForm (ActChgCtyWWW);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
-         Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
+         Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
          fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                             " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
@@ -1709,7 +1709,7 @@ static void Cty_ListCountriesForEdition (void)
 
 void Cty_PutParamCtyCod (long CtyCod)
   {
-   Par_PutHiddenParamLong ("cty",CtyCod);
+   Par_PutHiddenParamLong (NULL,"cty",CtyCod);
   }
 
 /*****************************************************************************/
@@ -1718,7 +1718,7 @@ void Cty_PutParamCtyCod (long CtyCod)
 
 static void Cty_PutParamOtherCtyCod (long CtyCod)
   {
-   Par_PutHiddenParamLong ("OthCtyCod",CtyCod);
+   Par_PutHiddenParamLong (NULL,"OthCtyCod",CtyCod);
   }
 
 /*****************************************************************************/

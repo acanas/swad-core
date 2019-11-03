@@ -280,7 +280,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 
 void ID_PutParamOtherUsrIDPlain (void)
   {
-   Par_PutHiddenParamString ("OtherUsrID",
+   Par_PutHiddenParamString (NULL,"OtherUsrID",
 	                     (Gbl.Usrs.Other.UsrDat.IDs.Num &&
 	                      Gbl.Usrs.Other.UsrDat.IDs.List) ? Gbl.Usrs.Other.UsrDat.IDs.List[0].ID :
 	                                                        "");
@@ -476,7 +476,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
    Frm_StartFormAnchor (NextAction,Anchor);
    if (Gbl.Action.Original != ActUnk)
      {
-      Par_PutHiddenParamLong ("OriginalActCod",
+      Par_PutHiddenParamLong (NULL,"OriginalActCod",
                               Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
       switch (Gbl.Action.Original)
 	{
@@ -490,8 +490,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 	}
      }
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
-	    UsrDat->IDs.List[NumID].ID);
+   Par_PutHiddenParamString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
 
    /***** Put link *****/
    Frm_LinkFormSubmit (Txt_Confirm_ID,The_ClassFormOutBoxBold[Gbl.Prefs.Theme],NULL);
@@ -645,9 +644,7 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	       Frm_StartFormAnchor (NextAction,ID_ID_SECTION_ID);
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	      }
-	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\""
-			       " value=\"%s\" />",
-		     UsrDat->IDs.List[NumID].ID);
+            Par_PutHiddenParamString (NULL,"UsrID",UsrDat->IDs.List[NumID].ID);
 	    Ico_PutIconRemove ();
 	    Frm_EndForm ();
 	   }

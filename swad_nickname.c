@@ -25,6 +25,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For asprintf
+#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
@@ -231,6 +233,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    unsigned NumNicks;
    unsigned NumNick;
    Act_Action_t NextAction;
+   char *NewNick;
 
    /***** Start section *****/
    HTM_SECTION_Begin (Nck_NICKNAME_SECTION_ID);
@@ -316,9 +319,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	    Frm_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	   }
-	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Nick\""
-	                    " value=\"%s\" />",
-		  row[0]);
+	 Par_PutHiddenParamString (NULL,"Nick",row[0]);
 	 Ico_PutIconRemove ();
 	 Frm_EndForm ();
 	}
@@ -354,9 +355,11 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	    Frm_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	   }
-	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewNick\""
-	                    " value=\"@%s\" />",
-		  row[0]);	// Nickname
+
+	 if (asprintf (&NewNick,"@%s",row[0]) < 0)
+	    Lay_NotEnoughMemoryExit ();
+	 Par_PutHiddenParamString (NULL,"NewNick",NewNick);	// Nickname
+	 free ((void *) NewNick);
 	 Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
 	 Frm_EndForm ();
 	}

@@ -501,7 +501,7 @@ static void Plg_ListPluginsForEdition (void)
 
 static void Plg_PutParamPlgCod (long PlgCod)
   {
-   Par_PutHiddenParamLong ("PlgCod",PlgCod);
+   Par_PutHiddenParamLong (NULL,"PlgCod",PlgCod);
   }
 
 /*****************************************************************************/

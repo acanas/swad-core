@@ -509,7 +509,7 @@ static void Ban_PutParamBanCodToEdit (void)
 
 static void Ban_PutParamBanCod (long BanCod)
   {
-   Par_PutHiddenParamLong ("BanCod",BanCod);
+   Par_PutHiddenParamLong (NULL,"BanCod",BanCod);
   }
 
 /*****************************************************************************/
@@ -1045,7 +1045,7 @@ void Ban_WriteMenuWithBanners (void)
       HTM_DIV_Begin ("class=\"CM\"");
       Frm_StartForm (ActClkBan);
       Ban_PutParamBanCod (Gbl.Banners.Lst[NumBan].BanCod);
-      Par_PutHiddenParamString ("URL",Gbl.Banners.Lst[NumBan].WWW);
+      Par_PutHiddenParamString (NULL,"URL",Gbl.Banners.Lst[NumBan].WWW);
       Frm_LinkFormSubmit (Gbl.Banners.Lst[NumBan].FullName,"BANNER",NULL);
       HTM_IMG (Cfg_URL_BANNER_PUBLIC,Gbl.Banners.Lst[NumBan].Img,Gbl.Banners.Lst[NumBan].FullName,
 	       "class=\"BANNER\"");

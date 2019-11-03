@@ -573,8 +573,7 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
 
 void Rol_PutHiddenParamRoles (unsigned Roles)
   {
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Roles\" value=\"%u\" />",
-	    Roles);
+   Par_PutHiddenParamUnsigned (NULL,"Roles",Roles);
   }
 
 /*****************************************************************************/

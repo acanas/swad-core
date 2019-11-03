@@ -1134,7 +1134,7 @@ static void Mch_PutParamsPlay (void)
 
 static void Mch_PutParamMchCod (long MchCod)
   {
-   Par_PutHiddenParamLong ("MchCod",MchCod);
+   Par_PutHiddenParamLong (NULL,"MchCod",MchCod);
   }
 
 /*****************************************************************************/
@@ -2397,7 +2397,7 @@ static void Mch_ShowFormColumns (struct Match *Match)
 
 static void Mch_PutParamNumCols (unsigned NumCols)	// Number of columns
   {
-   Par_PutHiddenParamUnsigned ("NumCols",NumCols);
+   Par_PutHiddenParamUnsigned (NULL,"NumCols",NumCols);
   }
 
 /*****************************************************************************/
@@ -2847,7 +2847,7 @@ static const char *Mch_GetClassBorder (unsigned NumRow)
 
 static void Mch_PutParamNumOpt (unsigned NumOpt)
   {
-   Par_PutHiddenParamUnsigned ("NumOpt",NumOpt);
+   Par_PutHiddenParamUnsigned (NULL,"NumOpt",NumOpt);
   }
 
 /*****************************************************************************/

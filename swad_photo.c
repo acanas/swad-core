@@ -704,7 +704,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 		  Frm_StartForm (NextAction);
                   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
         	 }
-               Par_PutHiddenParamString ("FileName",StrFileName);
+               Par_PutHiddenParamString (NULL,"FileName",StrFileName);
                Frm_EndForm ();
               }
             else
@@ -1824,7 +1824,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
 
 void Pho_PutHiddenParamTypeOfAvg (void)
   {
-   Par_PutHiddenParamUnsigned ("AvgType",(unsigned) Gbl.Stat.DegPhotos.TypeOfAverage);
+   Par_PutHiddenParamUnsigned (NULL,"AvgType",(unsigned) Gbl.Stat.DegPhotos.TypeOfAverage);
   }
 
 /*****************************************************************************/
@@ -1889,7 +1889,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
 
 void Pho_PutHiddenParamPhotoSize (void)
   {
-   Par_PutHiddenParamUnsigned ("PhotoSize",(unsigned) Gbl.Stat.DegPhotos.HowComputePhotoSize);
+   Par_PutHiddenParamUnsigned (NULL,"PhotoSize",(unsigned) Gbl.Stat.DegPhotos.HowComputePhotoSize);
   }
 
 /*****************************************************************************/
@@ -1954,7 +1954,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 
 void Pho_PutHiddenParamOrderDegrees (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Stat.DegPhotos.HowOrderDegrees);
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Stat.DegPhotos.HowOrderDegrees);
   }
 
 /*****************************************************************************/

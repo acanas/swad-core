@@ -1484,7 +1484,7 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
 
 static void For_PutParamForumSet (For_ForumSet_t ForumSet)
   {
-   Par_PutHiddenParamUnsigned ("ForumSet",(unsigned) ForumSet);
+   Par_PutHiddenParamUnsigned (NULL,"ForumSet",(unsigned) ForumSet);
   }
 
 /*****************************************************************************/
@@ -1493,7 +1493,7 @@ static void For_PutParamForumSet (For_ForumSet_t ForumSet)
 
 static void For_PutParamForumOrder (For_Order_t Order)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
   }
 
 /*****************************************************************************/
@@ -1506,7 +1506,7 @@ static void For_PutParamForumLocation (long Location)
    if (Location > 0)
       /***** Put a hidden parameter with the
              institution, centre, degree or course of the forum *****/
-      Par_PutHiddenParamLong ("Location",Location);
+      Par_PutHiddenParamLong (NULL,"Location",Location);
   }
 
 /*****************************************************************************/
@@ -1516,7 +1516,7 @@ static void For_PutParamForumLocation (long Location)
 static void For_PutHiddenParamThrCod (long ThrCod)
   {
    if (ThrCod > 0)
-      Par_PutHiddenParamLong ("ThrCod",ThrCod);
+      Par_PutHiddenParamLong (NULL,"ThrCod",ThrCod);
   }
 
 /*****************************************************************************/
@@ -1526,7 +1526,7 @@ static void For_PutHiddenParamThrCod (long ThrCod)
 static void For_PutHiddenParamPstCod (long PstCod)
   {
    if (PstCod > 0)
-      Par_PutHiddenParamLong ("PstCod",PstCod);
+      Par_PutHiddenParamLong (NULL,"PstCod",PstCod);
   }
 
 /*****************************************************************************/

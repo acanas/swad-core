@@ -165,7 +165,7 @@ void Lan_AskChangeLanguage (void)
 
 static void Lan_PutParamLanguage (void)
   {
-   Par_PutHiddenParamUnsigned ("Lan",(unsigned) Gbl.Prefs.Language);
+   Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Gbl.Prefs.Language);
   }
 
 /*****************************************************************************/

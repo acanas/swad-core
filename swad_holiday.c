@@ -124,7 +124,7 @@ void Hld_SeeHolidays (void)
 	    HTM_TH_Begin (1,1,"LM");
 
 	    Frm_StartForm (ActSeeHld);
-	    Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	    Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	    Frm_LinkFormSubmit (Txt_HOLIDAYS_HELP_ORDER[Order],"TIT_TBL",NULL);
 	    if (Order == Gbl.Hlds.SelectedOrder)
 	       fprintf (Gbl.F.Out,"<u>");
@@ -670,7 +670,7 @@ static void Hld_ListHolidaysForEdition (void)
 
 static void Hld_PutParamHldCod (long HldCod)
   {
-   Par_PutHiddenParamLong ("HldCod",HldCod);
+   Par_PutHiddenParamLong (NULL,"HldCod",HldCod);
   }
 
 /*****************************************************************************/

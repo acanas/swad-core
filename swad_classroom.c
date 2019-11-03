@@ -122,7 +122,7 @@ void Cla_SeeClassrooms (void)
      {
       HTM_TH_Begin (1,1,"LM");
       Frm_StartForm (ActSeeCla);
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
       Frm_LinkFormSubmit (Txt_CLASSROOMS_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Classrooms.SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
@@ -555,7 +555,7 @@ static void Cla_ListClassroomsForEdition (void)
 
 static void Cla_PutParamClaCod (long ClaCod)
   {
-   Par_PutHiddenParamLong ("ClaCod",ClaCod);
+   Par_PutHiddenParamLong (NULL,"ClaCod",ClaCod);
   }
 
 /*****************************************************************************/

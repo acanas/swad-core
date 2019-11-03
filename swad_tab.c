@@ -132,7 +132,7 @@ void Tab_DrawTabs (void)
 	    HTM_DIV_Begin ("class=\"class=\"ICO_HIGHLIGHT\"");
 
 	 Frm_StartForm (ActMnu);
-	 Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
+	 Par_PutHiddenParamUnsigned (NULL,"NxtTab",(unsigned) NumTab);
 	 Frm_LinkFormSubmit (Txt_TABS_TXT[NumTab],
 			     NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 							The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);

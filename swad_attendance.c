@@ -252,7 +252,7 @@ static void Att_ShowAllAttEvents (void)
 	 Frm_StartForm (ActSeeAtt);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.AttEvents.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
@@ -525,7 +525,7 @@ static void Att_GetParamAttOrder (void)
 
 void Att_PutHiddenParamAttOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.AttEvents.SelectedOrder);
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.AttEvents.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -860,7 +860,7 @@ void Att_PutParamSelectedAttCod (void)
 
 void Att_PutParamAttCod (long AttCod)
   {
-   Par_PutHiddenParamLong ("AttCod",AttCod);
+   Par_PutHiddenParamLong (NULL,"AttCod",AttCod);
   }
 
 /*****************************************************************************/
@@ -2200,10 +2200,13 @@ static void Att_PutLinkAttEvent (struct AttendanceEvent *AttEvent,
 
 static void Att_PutParamsCodGrps (long AttCod)
   {
+   extern const char *Par_SEPARATOR_PARAM_MULTIPLE;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumGrp;
    unsigned NumGrps;
+   size_t MaxLengthGrpCods;
+   char *GrpCods;
 
    /***** Get groups associated to an attendance event from database *****/
    if (Gbl.Crs.Grps.NumGrps)
@@ -2217,7 +2220,9 @@ static void Att_PutParamsCodGrps (long AttCod)
    /***** Get groups *****/
    if (NumGrps) // Groups found...
      {
-      fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"GrpCods\" value=\"");
+      MaxLengthGrpCods = NumGrps * (1 + 20) - 1;
+      if ((GrpCods = (char *) malloc (MaxLengthGrpCods + 1)) == NULL)
+	 Lay_NotEnoughMemoryExit ();
 
       /* Get groups */
       for (NumGrp = 0;
@@ -2227,13 +2232,14 @@ static void Att_PutParamsCodGrps (long AttCod)
          /* Get next group */
          row = mysql_fetch_row (mysql_res);
 
-         /* Write group code */
+         /* Append group code to list */
          if (NumGrp)
-            fprintf (Gbl.F.Out,"%c",Par_SEPARATOR_PARAM_MULTIPLE);
-         fprintf (Gbl.F.Out,"%s",row[0]);
+            Str_Concat (GrpCods,Par_SEPARATOR_PARAM_MULTIPLE,MaxLengthGrpCods);
+         Str_Concat (GrpCods,row[0],MaxLengthGrpCods);
         }
 
-      fprintf (Gbl.F.Out,"\" />");
+      Par_PutHiddenParamString (NULL,"GrpCods",GrpCods);
+      free ((void *) GrpCods);
      }
    else
       /***** Write the boolean parameter that indicates if all the groups must be listed *****/
@@ -3019,7 +3025,7 @@ static void Att_PutFormToPrintMyListParams (void)
       Par_PutHiddenParamChar ("ShowDetails",'Y');
    if (Gbl.AttEvents.StrAttCodsSelected)
       if (Gbl.AttEvents.StrAttCodsSelected[0])
-	 Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
+	 Par_PutHiddenParamString (NULL,"AttCods",Gbl.AttEvents.StrAttCodsSelected);
   }
 
 /*****************************************************************************/
@@ -3043,7 +3049,7 @@ static void Att_PutParamsToPrintStdsList (void)
    Usr_PutHiddenParSelectedUsrsCods ();
    if (Gbl.AttEvents.StrAttCodsSelected)
       if (Gbl.AttEvents.StrAttCodsSelected[0])
-	 Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
+	 Par_PutHiddenParamString (NULL,"AttCods",Gbl.AttEvents.StrAttCodsSelected);
   }
 
 /*****************************************************************************/
@@ -3061,7 +3067,7 @@ static void Att_PutButtonToShowDetails (void)
    Usr_PutHiddenParSelectedUsrsCods ();
    if (Gbl.AttEvents.StrAttCodsSelected)
       if (Gbl.AttEvents.StrAttCodsSelected[0])
-	 Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
+	 Par_PutHiddenParamString (NULL,"AttCods",Gbl.AttEvents.StrAttCodsSelected);
    Btn_PutConfirmButton (Txt_Show_more_details);
    Frm_EndForm ();
   }

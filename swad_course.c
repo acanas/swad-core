@@ -2913,7 +2913,7 @@ static void Crs_PutIconToSearchCourses (void)
 static void Sch_PutLinkToSearchCoursesParams (void)	// TODO: Move to search module
   {
    Sco_PutParamScope ("ScopeSch",Hie_SYS);
-   Par_PutHiddenParamUnsigned ("WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
+   Par_PutHiddenParamUnsigned (NULL,"WhatToSearch",(unsigned) Sch_SEARCH_COURSES);
   }
 
 /*****************************************************************************/
@@ -2961,7 +2961,7 @@ void Crs_PutIconToSelectMyCourses (void)
 
 void Crs_PutParamCrsCod (long CrsCod)
   {
-   Par_PutHiddenParamLong ("crs",CrsCod);
+   Par_PutHiddenParamLong (NULL,"crs",CrsCod);
   }
 
 /*****************************************************************************/
@@ -2970,7 +2970,7 @@ void Crs_PutParamCrsCod (long CrsCod)
 
 static void Crs_PutParamOtherCrsCod (long CrsCod)
   {
-   Par_PutHiddenParamLong ("OthCrsCod",CrsCod);
+   Par_PutHiddenParamLong (NULL,"OthCrsCod",CrsCod);
   }
 
 /*****************************************************************************/

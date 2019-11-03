@@ -218,7 +218,7 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 	 Frm_StartForm (ActSeeAsg);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
 	 Frm_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Asgs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
@@ -558,7 +558,7 @@ static void Asg_GetParamAsgOrder (void)
 
 void Asg_PutHiddenParamAsgOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Asgs.SelectedOrder);
+   Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Asgs.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -937,7 +937,7 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 static void Asg_PutParamAsgCod (long AsgCod)
   {
-   Par_PutHiddenParamLong ("AsgCod",AsgCod);
+   Par_PutHiddenParamLong (NULL,"AsgCod",AsgCod);
   }
 
 /*****************************************************************************/

@@ -57,8 +57,6 @@ typedef enum
    Par_PARAM_MULTIPLE,
   } tParamType; // Parameter is present only one time / multiple times
 
-#define Par_SEPARATOR_PARAM_MULTIPLE	((char) 0x0A)		// Must be 1 <= character <= 31
-
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -89,9 +87,10 @@ bool Par_GetNextStrUntilComma (const char **StrSrc,char *StrDst,size_t LongMax);
 void Par_ReplaceSeparatorMultipleByComma (const char *StrSrc,char *StrDst);
 void Par_ReplaceCommaBySeparatorMultiple (char *Str);
 
-void Par_PutHiddenParamUnsigned (const char *ParamName,unsigned Value);
-void Par_PutHiddenParamLong (const char *ParamName,long Value);
+void Par_PutHiddenParamUnsigned (const char *Id,const char *ParamName,unsigned Value);
+void Par_PutHiddenParamUnsignedDisabled (const char *Id,const char *ParamName,unsigned Value);
+void Par_PutHiddenParamLong (const char *Id,const char *ParamName,long Value);
 void Par_PutHiddenParamChar (const char *ParamName,char Value);
-void Par_PutHiddenParamString (const char *ParamName,const char *Value);
+void Par_PutHiddenParamString (const char *Id,const char *ParamName,const char *Value);
 
 #endif

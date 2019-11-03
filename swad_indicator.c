@@ -217,10 +217,10 @@ void Ind_ReqIndicatorsCourses (void)
       /* Button to show more details */
       Frm_StartForm (ActSeeAllStaCrs);
       Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
-      Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
-      Par_PutHiddenParamLong (Dpt_PARAM_DPT_COD_NAME,Gbl.Stat.DptCod);
+      Par_PutHiddenParamLong (NULL,"OthDegTypCod",Gbl.Stat.DegTypCod);
+      Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,Gbl.Stat.DptCod);
       if (Gbl.Stat.StrIndicatorsSelected[0])
-         Par_PutHiddenParamString ("Indicators",Gbl.Stat.StrIndicatorsSelected);
+         Par_PutHiddenParamString (NULL,"Indicators",Gbl.Stat.StrIndicatorsSelected);
       Btn_PutConfirmButton (Txt_Show_more_details);
       Frm_EndForm ();
      }
@@ -585,10 +585,10 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
 static void Ind_PutParamsConfirmIWantToSeeBigList (void)
   {
    Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
-   Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
-   Par_PutHiddenParamLong (Dpt_PARAM_DPT_COD_NAME,Gbl.Stat.DptCod);
+   Par_PutHiddenParamLong (NULL,"OthDegTypCod",Gbl.Stat.DegTypCod);
+   Par_PutHiddenParamLong (NULL,Dpt_PARAM_DPT_COD_NAME,Gbl.Stat.DptCod);
    if (Gbl.Stat.StrIndicatorsSelected[0])
-      Par_PutHiddenParamString ("Indicators",Gbl.Stat.StrIndicatorsSelected);
+      Par_PutHiddenParamString (NULL,"Indicators",Gbl.Stat.StrIndicatorsSelected);
    Par_PutHiddenParamChar ("ShowBigList",'Y');
   }
 

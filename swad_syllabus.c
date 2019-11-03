@@ -936,7 +936,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
 
 static void Syl_PutParamNumItem (void)
   {
-   Par_PutHiddenParamUnsigned ("NumI",Gbl.Syllabus.ParamNumItem);
+   Par_PutHiddenParamUnsigned (NULL,"NumI",Gbl.Syllabus.ParamNumItem);
   }
 
 /*****************************************************************************/

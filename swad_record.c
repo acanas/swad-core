@@ -300,7 +300,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       /* Write icon to remove the field */
       HTM_TD_Begin ("class=\"BM\"");
       Frm_StartForm (ActReqRemFie);
-      Par_PutHiddenParamLong ("FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+      Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       Ico_PutIconRemove ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -308,7 +308,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       /* Name of the field */
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenFie);
-      Par_PutHiddenParamLong ("FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+      Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
 	                 " class=\"REC_FIELDNAME\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
@@ -321,7 +321,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       /* Number of lines in the form */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgRowFie);
-      Par_PutHiddenParamLong ("FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+      Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NumLines\""
 	                 " size=\"2\" maxlength=\"2\" value=\"%u\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
@@ -333,7 +333,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       /* Visibility of a field */
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgVisFie);
-      Par_PutHiddenParamLong ("FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
+      Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<select name=\"Visibility\""
                          " onchange=\"document.getElementById('%s').submit();\">",
                Gbl.Form.Id);
@@ -687,7 +687,7 @@ void Rec_RemoveFieldFromDB (void)
 
 static void Rec_PutParamFielCod (void)
   {
-   Par_PutHiddenParamLong ("FieldCod",Gbl.Crs.Records.Field.FieldCod);
+   Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.Field.FieldCod);
   }
 
 /*****************************************************************************/
@@ -1728,7 +1728,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	   {
 	    ICanEdit = true;
 	    Frm_StartFormAnchor (ActRcvRecOthUsr,Anchor);
-	    Par_PutHiddenParamLong ("OriginalActCod",
+	    Par_PutHiddenParamLong (NULL,"OriginalActCod",
 				    Act_GetActCod (ActSeeRecSevStd));	// Original action, used to know where we came from
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	    if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
@@ -2669,7 +2669,7 @@ static void Rec_PutParamsWorks (void)
 
 static void Rec_PutParamsStudent (void)
   {
-   Par_PutHiddenParamString ("UsrCodStd",Gbl.Record.UsrDat->EncryptedUsrCod);
+   Par_PutHiddenParamString (NULL,"UsrCodStd",Gbl.Record.UsrDat->EncryptedUsrCod);
    Grp_PutParamAllGroups ();
   }
 

@@ -461,8 +461,8 @@ void Tst_ShowNewTest (void)
             /***** Begin form *****/
             Frm_StartForm (ActAssTst);
   	    Gbl.Test.NumQsts = (unsigned) NumRows;
-            Par_PutHiddenParamUnsigned ("NumTst",NumAccessesTst);
-            Par_PutHiddenParamUnsigned ("NumQst",Gbl.Test.NumQsts);
+            Par_PutHiddenParamUnsigned (NULL,"NumTst",NumAccessesTst);
+            Par_PutHiddenParamUnsigned (NULL,"NumQst",Gbl.Test.NumQsts);
 
             /***** List the questions *****/
             HTM_TABLE_BeginWideMarginPadding (10);
@@ -1291,7 +1291,7 @@ void Tst_ShowFormAskEditTsts (void)
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       Frm_StartForm (ActLstTstQst);
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Tst_ORDER_STEM);
+      Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Tst_ORDER_STEM);
 
       HTM_TABLE_BeginPadding (2);
 
@@ -1807,7 +1807,7 @@ static void Tst_ShowFormEditTags (void)
          /* Form to rename this tag */
          HTM_TD_Begin ("class=\"LM\"");
          Frm_StartForm (ActRenTag);
-         Par_PutHiddenParamString ("OldTagTxt",row[1]);
+         Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewTagTxt\""
                             " size=\"36\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
@@ -1838,7 +1838,7 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
 
    HTM_TD_Begin ("class=\"BM\"");
    Frm_StartForm (ActEnableTag);
-   Par_PutHiddenParamLong ("TagCod",TagCod);
+   Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Tag_X_not_allowed_Click_to_allow_it,
 	     TagTxt);
@@ -1857,7 +1857,7 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
 
    HTM_TD_Begin ("class=\"BM\"");
    Frm_StartForm (ActDisableTag);
-   Par_PutHiddenParamLong ("TagCod",TagCod);
+   Par_PutHiddenParamLong (NULL,"TagCod",TagCod);
    snprintf (Gbl.Title,sizeof (Gbl.Title),
 	     Txt_Tag_X_allowed_Click_to_disable_it,
 	     TagTxt);
@@ -2827,7 +2827,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
          Frm_StartForm (ActLstTstQst);
          Dat_WriteParamsIniEndDates ();
          Tst_WriteParamEditQst ();
-         Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+         Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Order);
          Frm_LinkFormSubmit (Txt_TST_STR_ORDER_FULL[Order],"TIT_TBL",NULL);
          if (Order == Gbl.Test.SelectedOrder)
             fprintf (Gbl.F.Out,"<u>");
@@ -2941,7 +2941,7 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
          Tst_WriteParamEditQst ();
          if (NumRows == 1)
 	    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If editing only one question, don't edit others
-         Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Test.SelectedOrder);
+         Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Test.SelectedOrder);
          fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
          if (row[3][0] == 'Y')
             fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -3202,13 +3202,13 @@ void Tst_WriteParamEditQst (void)
    Par_PutHiddenParamChar   ("AllTags",
                              Gbl.Test.Tags.All ? 'Y' :
                         	                'N');
-   Par_PutHiddenParamString ("ChkTag",
+   Par_PutHiddenParamString (NULL,"ChkTag",
                              Gbl.Test.Tags.List ? Gbl.Test.Tags.List :
                         	                 "");
    Par_PutHiddenParamChar   ("AllAnsTypes",
                              Gbl.Test.AllAnsTypes ? 'Y' :
                         	                    'N');
-   Par_PutHiddenParamString ("AnswerType",Gbl.Test.ListAnsTypes);
+   Par_PutHiddenParamString (NULL,"AnswerType",Gbl.Test.ListAnsTypes);
   }
 
 /*****************************************************************************/
@@ -3708,7 +3708,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
       snprintf (ParamName,sizeof (ParamName),
 	        "Ind%06u",
 		NumQst);
-      Par_PutHiddenParamUnsigned (ParamName,Index);
+      Par_PutHiddenParamUnsigned (NULL,ParamName,Index);
       fprintf (Gbl.F.Out,"<input type=\"");
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
          fprintf (Gbl.F.Out,"radio\""
@@ -4701,7 +4701,7 @@ static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod)
    snprintf (ParamName,sizeof (ParamName),
 	     "Qst%06u",
 	     NumQst);
-   Par_PutHiddenParamLong (ParamName,QstCod);
+   Par_PutHiddenParamLong (NULL,ParamName,QstCod);
   }
 
 /*****************************************************************************/
@@ -6538,7 +6538,7 @@ static long Tst_GetQstCod (void)
 
 void Tst_PutParamQstCod (void)
   {
-   Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
+   Par_PutHiddenParamLong (NULL,"QstCod",Gbl.Test.QstCod);
   }
 
 /*****************************************************************************/
@@ -7852,7 +7852,7 @@ static void Tst_ShowTstResults (struct UsrData *UsrDat)
 
 static void Tst_PutParamTstCod (long TstCod)
   {
-   Par_PutHiddenParamLong ("TstCod",TstCod);
+   Par_PutHiddenParamLong (NULL,"TstCod",TstCod);
   }
 
 /*****************************************************************************/

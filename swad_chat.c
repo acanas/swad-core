@@ -340,9 +340,9 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
 
 void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName)
   {
-   Par_PutHiddenParamString ("RoomCode",RoomCode);
-   Par_PutHiddenParamString ("RoomShrtName",RoomShrtName);
-   Par_PutHiddenParamString ("RoomFullName",RoomFullName);
+   Par_PutHiddenParamString (NULL,"RoomCode",RoomCode);
+   Par_PutHiddenParamString (NULL,"RoomShrtName",RoomShrtName);
+   Par_PutHiddenParamString (NULL,"RoomFullName",RoomFullName);
   }
 
 /*****************************************************************************/

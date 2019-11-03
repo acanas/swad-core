@@ -423,8 +423,8 @@ void Msg_PutHiddenParamsSubjectAndContent (void)
    /***** Hidden params to send subject and content.
           When the user edit the subject or the content,
           they are copied here. *****/
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"HiddenSubject\" value=\"\" />");
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"HiddenContent\" value=\"\" />");
+   Par_PutHiddenParamString (NULL,"HiddenSubject","");
+   Par_PutHiddenParamString (NULL,"HiddenContent","");
   }
 
 /*****************************************************************************/
@@ -658,7 +658,7 @@ void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
    snprintf (NicknameWithArroba,sizeof (NicknameWithArroba),
 	     "@%s",
 	     UsrDat->Nickname);
-   Par_PutHiddenParamString ("OtherRecipients",NicknameWithArroba);
+   Par_PutHiddenParamString (NULL,"OtherRecipients",NicknameWithArroba);
   }
 
 /*****************************************************************************/
@@ -669,7 +669,7 @@ void Msg_PutHiddenParamOtherRecipients (void)
   {
    if (Gbl.Usrs.ListOtherRecipients)
       if (Gbl.Usrs.ListOtherRecipients[0])
-         Par_PutHiddenParamString ("OtherRecipients",Gbl.Usrs.ListOtherRecipients);
+         Par_PutHiddenParamString (NULL,"OtherRecipients",Gbl.Usrs.ListOtherRecipients);
   }
 
 /*****************************************************************************/
@@ -2524,11 +2524,11 @@ static void Msg_PutHiddenParamsOneMsg (void)
 void Msg_PutHiddenParamsMsgsFilters (void)
   {
    if (Gbl.Msg.FilterCrsCod >= 0)
-      Par_PutHiddenParamLong ("FilterCrsCod",Gbl.Msg.FilterCrsCod);
+      Par_PutHiddenParamLong (NULL,"FilterCrsCod",Gbl.Msg.FilterCrsCod);
    if (Gbl.Msg.FilterFromTo[0])
-      Par_PutHiddenParamString ("FilterFromTo",Gbl.Msg.FilterFromTo);
+      Par_PutHiddenParamString (NULL,"FilterFromTo",Gbl.Msg.FilterFromTo);
    if (Gbl.Msg.FilterContent[0])
-      Par_PutHiddenParamString ("FilterContent",Gbl.Msg.FilterContent);
+      Par_PutHiddenParamString (NULL,"FilterContent",Gbl.Msg.FilterContent);
    if (Gbl.Msg.ShowOnlyUnreadMsgs)
       Par_PutHiddenParamChar ("OnlyUnreadMsgs",'Y');
   }
@@ -3648,7 +3648,7 @@ void Msg_WriteMsgContent (char *Content,unsigned long MaxLength,bool InsertLinks
 
 void Msg_PutHiddenParamMsgCod (long MsgCod)
   {
-   Par_PutHiddenParamLong ("MsgCod",MsgCod);
+   Par_PutHiddenParamLong (NULL,"MsgCod",MsgCod);
   }
 
 /*****************************************************************************/
