@@ -150,11 +150,10 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    /***** Form to request user's ID for possible account already created *****/
    Frm_StartForm (ActChkUsrAcc);
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;"
-		      "<input type=\"text\" name=\"ID\""
+   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_ID);
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ID\""
 		      " size=\"18\" maxlength=\"%u\" value=\"\""
 		      " required=\"required\" />",
-	    Txt_ID,
 	    ID_MAX_CHARS_USR_ID);
    HTM_LABEL_End ();
    Btn_PutCreateButtonInline (Txt_Check);

@@ -6296,7 +6296,7 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 
    HTM_TH_Begin (1,Usr_GetColumnsForSelectUsrs (),"LM LIGHT_BLUE");
 
-   fprintf (Gbl.F.Out,"<label>");
+   HTM_LABEL_Begin (NULL);
    if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
       fprintf (Gbl.F.Out,"<input type=\"checkbox\""
 			 " name=\"%s\" value=\"\""

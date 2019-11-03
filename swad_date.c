@@ -120,7 +120,7 @@ void Dat_PutBoxToSelectDateFormat (void)
      {
       HTM_LI_Begin ("class=\%s\"",(Format == Gbl.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
 						                     "DAT");
-      fprintf (Gbl.F.Out,"<label>");
+      HTM_LABEL_Begin (NULL);
       fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"DateFormat\" value=\"%u\"",
 	       (unsigned) Format);
       if (Format == Gbl.Prefs.DateFormat)

@@ -3265,7 +3265,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
    /***** Select the complete course, not a group *****/
    HTM_LI_Begin ("class=\"%s\"",IsCourseZone ? "BROWSER_TITLE" :
                                                "BROWSER_TITLE_LIGHT");
-   fprintf (Gbl.F.Out,"<label>");
+   HTM_LABEL_Begin (NULL);
    fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GrpCod\" value=\"-1\"");
    if (IsCourseZone)
       fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -3297,7 +3297,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
                 	                           "subend20x20.gif",
 		  NULL,
 	          "class=\"ICO25x25\" style=\"margin-left:6px;\"");
-         fprintf (Gbl.F.Out,"<label>");
+         HTM_LABEL_Begin (NULL);
          fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
 	          GrpDat.GrpCod);
 	 if (IsGroupZone && GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod)

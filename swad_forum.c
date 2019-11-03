@@ -1754,7 +1754,7 @@ static void For_PutFormWhichForums (void)
 	ForumSet++)
      {
       HTM_LI_Begin (NULL);
-      fprintf (Gbl.F.Out,"<label>");
+      HTM_LABEL_Begin (NULL);
       fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"ForumSet\""
                          " value=\"%u\"",
                (unsigned) ForumSet);

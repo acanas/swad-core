@@ -1266,7 +1266,7 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 			    "CHECKBOX_UNCHECKED",
 		  The_ClassFormOutBoxBold[Gbl.Prefs.Theme],
 		  Title);
-   fprintf (Gbl.F.Out,"<label>");
+   HTM_LABEL_Begin (NULL);
 
    /****** Checkbox and text *****/
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",

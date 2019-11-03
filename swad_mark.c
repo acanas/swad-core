@@ -127,7 +127,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
                                                ActChgNumRowHeaCrs);	// Course zone
       Brw_PutImplicitParamsFileBrowser ();
-      fprintf (Gbl.F.Out,"<label>");
+      HTM_LABEL_Begin (NULL);
       fprintf (Gbl.F.Out,"&nbsp;%s: "
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
@@ -148,7 +148,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       Frm_StartForm (Gbl.Crs.Grps.GrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
 	                                       ActChgNumRowFooCrs);	// Course zone
       Brw_PutImplicitParamsFileBrowser ();
-      fprintf (Gbl.F.Out,"<label>");
+      HTM_LABEL_Begin (NULL);
       fprintf (Gbl.F.Out,"&nbsp;%s: "
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""

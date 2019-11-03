@@ -1215,7 +1215,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"<label>");
+      HTM_LABEL_Begin (NULL);
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" id=\"WholeCrs\""
 	                 " name=\"WholeCrs\" value=\"Y\"");
       if (!Att_CheckIfAttEventIsAssociatedToGrps (AttCod))

@@ -435,10 +435,12 @@ void Sta_AskShowCrsHits (void)
            }
          fprintf (Gbl.F.Out,"</select>");
          HTM_LABEL_End ();
+
+         /***** Separator *****/
          fprintf (Gbl.F.Out,"<br />");
 
          /***** Option b) Listing of detailed clicks to this course *****/
-         fprintf (Gbl.F.Out,"<label>");
+         HTM_LABEL_Begin (NULL);
          fprintf (Gbl.F.Out,"<input type=\"radio\""
                             " name=\"GroupedOrDetailed\" value=\"%u\"",
                   (unsigned) Sta_CLICKS_DETAILED);
@@ -449,10 +451,12 @@ void Sta_AskShowCrsHits (void)
                   Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
          HTM_LABEL_End ();
 
+         /* Separator */
+         fprintf (Gbl.F.Out," ");
+
          /* Number of rows per page */
          // To use getElementById in Firefox, it's necessary to have the id attribute
-         fprintf (Gbl.F.Out," ");
-         fprintf (Gbl.F.Out,"<label>");
+         HTM_LABEL_Begin (NULL);
          fprintf (Gbl.F.Out,"(%s: <select id=\"RowsPage\" name=\"RowsPage\"",
                   Txt_results_per_page);
          if (Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)

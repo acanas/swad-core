@@ -5179,7 +5179,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	AnsType < Tst_NUM_ANS_TYPES;
 	AnsType++)
      {
-      fprintf (Gbl.F.Out,"<label>");
+      HTM_LABEL_Begin (NULL);
       fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AnswerType\" value=\"%u\"",
                (unsigned) AnsType);
       if (AnsType == Gbl.Test.AnswerType)

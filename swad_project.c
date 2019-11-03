@@ -3762,7 +3762,7 @@ void Prj_ShowFormConfig (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   fprintf (Gbl.F.Out,"<label>");
+   HTM_LABEL_Begin (NULL);
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" id=\"Editable\""
 	              " name=\"Editable\" value=\"Y\"");
    if (Gbl.Prjs.Config.Editable)

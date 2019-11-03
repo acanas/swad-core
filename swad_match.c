@@ -1264,7 +1264,7 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       /***** First row: checkbox to select the whole course *****/
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
-      fprintf (Gbl.F.Out,"<label>");
+      HTM_LABEL_Begin (NULL);
       fprintf (Gbl.F.Out,"<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\""
                          " checked=\"checked\""
