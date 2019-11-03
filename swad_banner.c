@@ -445,11 +445,10 @@ static void Ban_ListBannersForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenBanSho);
       Ban_PutParamBanCodToEdit ();
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                 " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_SHORT_NAME\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
+		      "class=\"INPUT_SHORT_NAME\""
+                      " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -457,11 +456,10 @@ static void Ban_ListBannersForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenBanFul);
       Ban_PutParamBanCodToEdit ();
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                 " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_FULL_NAME\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Ban_MAX_CHARS_FULL_NAME,Ban->FullName,Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
+		      "class=\"INPUT_FULL_NAME\""
+                      " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -469,10 +467,10 @@ static void Ban_ListBannersForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgBanImg);
       Ban_PutParamBanCodToEdit ();
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\""
-	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Ban_MAX_CHARS_IMAGE,Ban->Img,Gbl.Form.Id);
+      HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
+		      "size=\"12\""
+                      " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -875,28 +873,20 @@ static void Ban_PutFormToCreateBanner (void)
 
    /***** Banner short name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />",
-            Ban_MAX_CHARS_SHRT_NAME,Ban_EditingBan->ShrtName);
+   HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban_EditingBan->ShrtName,
+		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Banner full name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />",
-            Ban_MAX_CHARS_FULL_NAME,Ban_EditingBan->FullName);
+   HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban_EditingBan->FullName,
+		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Banner image *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\""
-                      " size=\"12\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />",
-            Ban_MAX_CHARS_IMAGE,Ban_EditingBan->Img);
+   HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban_EditingBan->Img,
+		   "size=\"12\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Banner WWW *****/

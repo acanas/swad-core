@@ -1673,11 +1673,10 @@ static void Cty_ListCountriesForEdition (void)
          Frm_StartForm (ActRenCty);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
-         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
-                            " size=\"15\" maxlength=\"%u\" value=\"%s\""
-                            " onchange=\"document.getElementById('%s').submit();\" />",
-                  Cty_MAX_CHARS_NAME,
-                  Cty->Name[Lan],Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
+			 "size=\"15\""
+			 " onchange=\"document.getElementById('%s').submit();\"",
+			 Gbl.Form.Id);
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -2038,6 +2037,8 @@ static void Cty_PutFormToCreateCountry (void)
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Txt_Create_country;
    Lan_Language_t Lan;
+   char StrCtyCod[20 + 1];
+   char StrName[32];
 
    /***** Begin form *****/
    Frm_StartForm (ActNewCty);
@@ -2057,18 +2058,20 @@ static void Cty_PutFormToCreateCountry (void)
 
    /***** Numerical country code (ISO 3166-1) *****/
    HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OthCtyCod\""
-                      " size=\"3\" maxlength=\"10\" value=\"");
    if (Cty_EditingCty->CtyCod > 0)
-      fprintf (Gbl.F.Out,"%03ld",Cty_EditingCty->CtyCod);
-   fprintf (Gbl.F.Out,"\" required=\"required\" />");
+      snprintf (StrCtyCod,sizeof (StrCtyCod),
+		"%03ld",
+		Cty_EditingCty->CtyCod);
+   else
+      StrCtyCod[0] = '\0';
+   HTM_INPUT_TEXT ("OthCtyCod",10,StrCtyCod,
+		   "size=\"3\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Alphabetic country code with 2 letters (ISO 3166-1) *****/
    HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Alpha2\""
-                      " size=\"2\" maxlength=\"2\" value=\"%s\""
-                      " required=\"required\" />",Cty_EditingCty->Alpha2);
+   HTM_INPUT_TEXT ("Alpha2",2,Cty_EditingCty->Alpha2,
+		   "size=\"2\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TD_Empty (3);
@@ -2099,12 +2102,11 @@ static void Cty_PutFormToCreateCountry (void)
 
       /* Name */
       HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name_%s\""
-                         " size=\"15\" maxlength=\"%u\" value=\"%s\""
-                         " required=\"required\" />",
-               Lan_STR_LANG_ID[Lan],
-               Cty_MAX_CHARS_NAME,
-               Cty_EditingCty->Name[Lan]);
+      snprintf (StrName,sizeof (StrName),
+		"Name_%s",
+		Lan_STR_LANG_ID[Lan]);
+      HTM_INPUT_TEXT (StrName,Cty_MAX_CHARS_NAME,Cty_EditingCty->Name[Lan],
+		      "size=\"15\" required=\"required\"");
       HTM_TD_End ();
 
       /* WWW */

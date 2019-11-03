@@ -151,10 +151,8 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    Frm_StartForm (ActChkUsrAcc);
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_ID);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ID\""
-		      " size=\"18\" maxlength=\"%u\" value=\"\""
-		      " required=\"required\" />",
-	    ID_MAX_CHARS_USR_ID);
+   HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",
+		   "size=\"18\" required=\"required\"");
    HTM_LABEL_End ();
    Btn_PutCreateButtonInline (Txt_Check);
    Frm_EndForm ();
@@ -373,13 +371,10 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
-                      " size=\"18\" maxlength=\"%u\""
-                      " placeholder=\"%s\" value=\"%s\""
-                      " required=\"required\" />",
-            1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
-            Txt_HELP_nickname,
-            NewNicknameWithArroba);
+   HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
+		   NewNicknameWithArroba,
+		   "size=\"18\" placeholder=\"%s\" required=\"required\"",
+		   Txt_HELP_nickname);
    HTM_TD_End ();
 
    HTM_TR_End ();

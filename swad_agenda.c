@@ -1506,10 +1506,8 @@ void Agd_RequestCreatOrEditEvent (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Event\" name=\"Event\""
-                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />",
-            Agd_MAX_CHARS_EVENT,AgdEvent.Event);
+   HTM_INPUT_TEXT ("Event",Agd_MAX_CHARS_EVENT,AgdEvent.Event,
+		   "size=\"45\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1524,10 +1522,8 @@ void Agd_RequestCreatOrEditEvent (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Location\" name=\"Location\""
-                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />",
-            Agd_MAX_CHARS_LOCATION,AgdEvent.Location);
+   HTM_INPUT_TEXT ("Location",Agd_MAX_CHARS_LOCATION,AgdEvent.Location,
+		   "size=\"45\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

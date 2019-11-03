@@ -468,14 +468,10 @@ static void Ctr_Configuration (bool PrintView)
      {
       /* Form to change centre full name */
       Frm_StartForm (ActRenCtrFulCfg);
-      fprintf (Gbl.F.Out,"<input type=\"text\""
-			 " id=\"FullName\" name=\"FullName\""
-			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"INPUT_FULL_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Hie_MAX_CHARS_FULL_NAME,
-	       Gbl.Hierarchy.Ctr.FullName,
-	       Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ctr.FullName,
+		      "class=\"INPUT_FULL_NAME\""
+		      " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
      }
    else	// I can not edit centre full name
@@ -500,14 +496,10 @@ static void Ctr_Configuration (bool PrintView)
      {
       /* Form to change centre short name */
       Frm_StartForm (ActRenCtrShoCfg);
-      fprintf (Gbl.F.Out,"<input type=\"text\""
-			 " id=\"ShortName\" name=\"ShortName\""
-			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Hie_MAX_CHARS_SHRT_NAME,
-	       Gbl.Hierarchy.Ctr.ShrtName,
-	       Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ctr.ShrtName,
+		      "class=\"INPUT_SHORT_NAME\""
+		      " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
      }
    else	// I can not edit centre short name
@@ -1565,11 +1557,10 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Frm_StartForm (ActRenCtrSho);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_SHORT_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
+			 "class=\"INPUT_SHORT_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\"",
+			 Gbl.Form.Id);
 	 Frm_EndForm ();
 	}
       else
@@ -1582,11 +1573,10 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Frm_StartForm (ActRenCtrFul);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_FULL_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,
+			 "class=\"INPUT_FULL_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\"",
+			 Gbl.Form.Id);
 	 Frm_EndForm ();
 	}
       else
@@ -2549,20 +2539,14 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />",
-            Hie_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName);
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
+		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Centre full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />",
-            Hie_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName);
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
+		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Centre WWW *****/
