@@ -6262,15 +6262,13 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic)
       fprintf (Gbl.F.Out,"&nbsp;");
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
-      	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewFolderName\""
-      	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"%s %s\""
-                            " onchange=\"document.getElementById('%s').submit();\" />",
-                  Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,
-                  Gbl.FileBrowser.InputStyle,
-                  Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
-                	                                 Gbl.ColorRows[Gbl.RowEvenOdd],
-                  Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,Gbl.FileBrowser.FilFolLnk.Name,
+			 " class=\"%s %s\""
+                         " onchange=\"document.getElementById('%s').submit();\"",
+			 Gbl.FileBrowser.InputStyle,
+			 Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
+							        Gbl.ColorRows[Gbl.RowEvenOdd],
+			 Gbl.Form.Id);
          Frm_EndForm ();
         }
       else
@@ -8344,10 +8342,8 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
    /***** Folder *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s: ",Txt_Folder);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewFolderName\""
-                      " size=\"30\" maxlength=\"%u\" value=\"\""
-                      " required=\"required\" />",
-            Brw_MAX_CHARS_FOLDER);
+   HTM_INPUT_TEXT ("NewFolderName",Brw_MAX_CHARS_FOLDER,"",
+		   " size=\"30\" required=\"required\"");
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/
@@ -8534,10 +8530,8 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\""
-                      " id=\"NewLinkName\" name=\"NewLinkName\""
-                      " size=\"30\" maxlength=\"%u\" value=\"\" />",
-            Brw_MAX_CHARS_FOLDER);
+   HTM_INPUT_TEXT ("NewLinkName",Brw_MAX_CHARS_FOLDER,"",
+		   " size=\"30\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

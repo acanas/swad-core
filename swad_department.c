@@ -562,11 +562,10 @@ static void Dpt_ListDepartmentsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptSho);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                 " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_SHORT_NAME\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
+		      " class=\"INPUT_SHORT_NAME\""
+		      " onchange=\"document.getElementById('%s').submit();\"",
+                      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -574,11 +573,10 @@ static void Dpt_ListDepartmentsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptFul);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                 " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_FULL_NAME\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Hie_MAX_CHARS_FULL_NAME,Dpt->FullName,Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt->FullName,
+		      " class=\"INPUT_FULL_NAME\""
+		      " onchange=\"document.getElementById('%s').submit();\"",
+                      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -945,20 +943,14 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Department short name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />",
-            Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName);
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
+		   " class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Department full name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />",
-            Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName);
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
+		   " class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Department WWW *****/

@@ -3911,13 +3911,9 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Subject\" name=\"Subject\""
-		      " class=\"MSG_SUBJECT\""
-		      " maxlength=\"%u\" value=\"%s\""
-		      " required=\"required\" />",
-	    Cns_MAX_CHARS_SUBJECT,
-	    IsReply ? Subject :
-		      "");
+   HTM_INPUT_TEXT ("Subject",Cns_MAX_CHARS_SUBJECT,IsReply ? Subject :
+		                                             "",
+		   " class=\"MSG_SUBJECT\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

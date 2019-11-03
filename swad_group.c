@@ -151,7 +151,7 @@ static void Grp_PutParamRemGrp (void);
 static void Grp_RemoveGroupTypeCompletely (void);
 static void Grp_RemoveGroupCompletely (void);
 
-static void Grp_WriteMaxStds (unsigned MaxStudents);
+static void Grp_WriteMaxStds (char Str[10 + 1],unsigned MaxStudents);
 static long Grp_GetParamGrpTypCod (void);
 static long Grp_GetParamGrpCod (void);
 static void Grp_PutParamGrpTypCod (long GrpTypCod);
@@ -1318,12 +1318,10 @@ static void Grp_ListGroupTypesForEdition (void)
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpTypName\""
-	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Grp_MAX_CHARS_GROUP_TYPE_NAME,
-               Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
-               Gbl.Form.Id);
+      HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
+		      " size=\"12\""
+		      " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -1491,6 +1489,7 @@ static void Grp_ListGroupsForEdition (void)
    struct GroupType *GrpTypAux;
    struct Group *Grp;
    Rol_Role_t Role;
+   char StrMaxStudents[10 + 1];
 
    /***** Write heading *****/
    HTM_TABLE_BeginWidePadding (2);
@@ -1580,10 +1579,10 @@ static void Grp_ListGroupsForEdition (void)
          HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\""
-                            " size=\"20\" maxlength=\"%u\" value=\"%s\""
-                            " onchange=\"document.getElementById('%s').submit();\" />",
-                  Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,
+			 " size=\"20\""
+			 " onchange=\"document.getElementById('%s').submit();\"",
+			 Gbl.Form.Id);
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -1642,11 +1641,11 @@ static void Grp_ListGroupsForEdition (void)
          HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"MaxStudents\""
-                            " size=\"3\" maxlength=\"10\" value=\"");
-         Grp_WriteMaxStds (Grp->MaxStudents);
-         fprintf (Gbl.F.Out,"\" onchange=\"document.getElementById('%s').submit();\" />",
-                  Gbl.Form.Id);
+         Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
+	 HTM_INPUT_TEXT ("MaxStudents",10,StrMaxStudents,
+			 " size=\"3\""
+			 " onchange=\"document.getElementById('%s').submit();\"",
+			 Gbl.Form.Id);
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -2389,6 +2388,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    extern const char *Txt_Group_X_closed;
    int Vacant;
    Rol_Role_t Role;
+   char StrMaxStudents[10 + 1];
 
    /***** Write icon to show if group is open or closed *****/
    snprintf (Gbl.Title,sizeof (Gbl.Title),
@@ -2440,8 +2440,8 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
       HTM_TD_Begin ("class=\"DAT CM LIGHT_BLUE\"");
    else
       HTM_TD_Begin ("class=\"DAT CM\"");
-   Grp_WriteMaxStds (Grp->MaxStudents);
-   fprintf (Gbl.F.Out,"&nbsp;");
+   Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
+   fprintf (Gbl.F.Out,"%s&nbsp;",StrMaxStudents);
    HTM_TD_End ();
 
    /***** Vacants in this group *****/
@@ -2493,10 +2493,8 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Name of group type *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpTypName\""
-                      " size=\"12\" maxlength=\"%u\" value=\"%s\""
-	              " required=\"required\" />",
-            Grp_MAX_CHARS_GROUP_TYPE_NAME,Gbl.Crs.Grps.GrpTyp.GrpTypName);
+   HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,Gbl.Crs.Grps.GrpTyp.GrpTypName,
+		   " size=\"12\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Is it mandatory to register in any groups of this type? *****/
@@ -2591,6 +2589,7 @@ static void Grp_PutFormToCreateGroup (void)
    unsigned NumGrpTyp;
    unsigned NumCla;
    Rol_Role_t Role;
+   char StrMaxStudents[10 + 1];
 
    /***** Begin form *****/
    HTM_SECTION_Begin (Grp_NEW_GROUP_SECTION_ID);
@@ -2644,10 +2643,8 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** Group name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\""
-                      " size=\"20\" maxlength=\"%u\" value=\"%s\""
-	              " required=\"required\" />",
-            Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName);
+   HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName,
+		   " size=\"20\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Classroom *****/
@@ -2698,10 +2695,9 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** Maximum number of students *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"MaxStudents\""
-	              " size=\"3\" maxlength=\"10\" value=\"");
-   Grp_WriteMaxStds (Gbl.Crs.Grps.MaxStudents);
-   fprintf (Gbl.F.Out,"\" />");
+   Grp_WriteMaxStds (StrMaxStudents,Gbl.Crs.Grps.MaxStudents);
+   HTM_INPUT_TEXT ("MaxStudents",10,StrMaxStudents,
+		   " size=\"3\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4656,10 +4652,14 @@ void Grp_ChangeMaxStdsGrp (void)
 /************* Write the maximum number of students in a group ***************/
 /*****************************************************************************/
 
-static void Grp_WriteMaxStds (unsigned MaxStudents)
+static void Grp_WriteMaxStds (char Str[10 + 1],unsigned MaxStudents)
   {
    if (MaxStudents <= Grp_MAX_STUDENTS_IN_A_GROUP)
-      fprintf (Gbl.F.Out,"%u",MaxStudents);
+      snprintf (Str,10 + 1,
+		"%u",
+		MaxStudents);
+   else
+      Str[0] = '\0';
   }
 
 /*****************************************************************************/

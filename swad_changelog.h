@@ -487,7 +487,7 @@ enscript -2 --landscape --color --file-align=2 --highlight --line-numbers -o - *
 En OpenSWAD:
 ps2pdf source.ps destination.pdf
 */
-#define Log_PLATFORM_VERSION	"SWAD 19.51.6 (2019-11-03)"
+#define Log_PLATFORM_VERSION	"SWAD 19.51.7 (2019-11-03)"
 #define CSS_FILE		"swad19.47.css"
 #define JS_FILE			"swad19.39.js"
 /*
@@ -496,6 +496,7 @@ ps2pdf source.ps destination.pdf
 // TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
 // TODO: Seguir cambiando input text
  *
+	Version 19.51.7:  Nov 03, 2019	Code refactoring in HTML inputs. (246051 lines)
 	Version 19.51.6:  Nov 03, 2019	Code refactoring in HTML inputs. (246125 lines)
 	Version 19.51.5:  Nov 03, 2019	Code refactoring in HTML inputs. (246132 lines)
 	Version 19.51.4:  Nov 03, 2019	Code refactoring in HTML labels.
