@@ -1220,9 +1220,8 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 	                 " name=\"WholeCrs\" value=\"Y\"");
       if (!Att_CheckIfAttEventIsAssociatedToGrps (AttCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
-	                 "%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />");
+      fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 

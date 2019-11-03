@@ -154,9 +154,9 @@ void Syl_PutFormWhichSyllabus (void)
                (unsigned) WhichSyllabus);
       if (WhichSyllabus == Gbl.Syllabus.WhichSyllabus)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-	                 "%s",
-               Gbl.Form.Id,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
+	       Gbl.Form.Id);
+      fprintf (Gbl.F.Out,"%s",Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
       HTM_LABEL_End ();
       HTM_LI_End ();
      }

@@ -455,10 +455,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
    /***** "Yesterday" and "Today" buttons *****/
    HTM_TD_Begin ("rowspan=\"2\" class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"button\" name=\"Yesterday\" value=\"%s\""
-                      " onclick=\"setDateToYesterday('Start','End');\" />"
-	              "<input type=\"button\" name=\"Today\" value=\"%s\""
+                      " onclick=\"setDateToYesterday('Start','End');\" />",
+	    Txt_Yesterday);
+   fprintf (Gbl.F.Out,"<input type=\"button\" name=\"Today\" value=\"%s\""
                       " onclick=\"setDateToToday('Start','End');\" />",
-            Txt_Yesterday,
             Txt_Today);
    HTM_TD_End ();
 
@@ -724,8 +724,8 @@ void Dat_PutHiddenParBrowserTZDiff (void)
   {
    fprintf (Gbl.F.Out,"<input type=\"hidden\""
 	              " id=\"BrowserTZName\" name=\"BrowserTZName\""
-	              " value=\"\" />"
-	              "<input type=\"hidden\""
+	              " value=\"\" />");
+   fprintf (Gbl.F.Out,"<input type=\"hidden\""
 	              " id=\"BrowserTZDiff\" name=\"BrowserTZDiff\""
 	              " value=\"0\" />");
    HTM_SCRIPT_Begin (NULL,NULL);

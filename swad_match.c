@@ -1268,9 +1268,8 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       fprintf (Gbl.F.Out,"<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\""
                          " checked=\"checked\""
-                         " onclick=\"uncheckChildren(this,'GrpCods')\" />"
-	                 "%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+                         " onclick=\"uncheckChildren(this,'GrpCods')\" />");
+      fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 

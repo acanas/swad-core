@@ -423,8 +423,8 @@ void Msg_PutHiddenParamsSubjectAndContent (void)
    /***** Hidden params to send subject and content.
           When the user edit the subject or the content,
           they are copied here. *****/
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"HiddenSubject\" value=\"\" />"
-                      "<input type=\"hidden\" name=\"HiddenContent\" value=\"\" />");
+   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"HiddenSubject\" value=\"\" />");
+   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"HiddenContent\" value=\"\" />");
   }
 
 /*****************************************************************************/
@@ -2661,10 +2661,9 @@ void Msg_ShowFormToFilterMsgs (void)
    /***** Filter authors/recipients *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;"
-                      "<input type=\"search\" name=\"FilterFromTo\""
+   fprintf (Gbl.F.Out,"%s:&nbsp;",TxtFromTo[Gbl.Msg.TypeOfMessages]);
+   fprintf (Gbl.F.Out,"<input type=\"search\" name=\"FilterFromTo\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\" />",
-            TxtFromTo[Gbl.Msg.TypeOfMessages],
             Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,Gbl.Msg.FilterFromTo);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2672,10 +2671,9 @@ void Msg_ShowFormToFilterMsgs (void)
    /***** Filter message content *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;"
-                      "<input type=\"search\" name=\"FilterContent\""
+   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_Content);
+   fprintf (Gbl.F.Out,"<input type=\"search\" name=\"FilterContent\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\" />",
-            Txt_MSG_Content,
             Msg_MAX_CHARS_FILTER_CONTENT,Gbl.Msg.FilterContent);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2701,9 +2699,8 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (void)
 	              " value=\"Y\"");
    if (Gbl.Msg.ShowOnlyUnreadMsgs)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," />"
-	              "%s",
-            Txt_only_unread_messages);
+   fprintf (Gbl.F.Out," />");
+   fprintf (Gbl.F.Out,"%s",Txt_only_unread_messages);
    HTM_LABEL_End ();
   }
 

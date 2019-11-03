@@ -1760,9 +1760,9 @@ static void For_PutFormWhichForums (void)
                (unsigned) ForumSet);
       if (ForumSet == Gbl.Forum.ForumSet)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-	                 "%s",
-               Gbl.Form.Id,Txt_FORUM_WHICH_FORUM[ForumSet]);
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
+	       Gbl.Form.Id);
+      fprintf (Gbl.F.Out,"%s",Txt_FORUM_WHICH_FORUM[ForumSet]);
       HTM_LABEL_End ();
       HTM_LI_End ();
      }

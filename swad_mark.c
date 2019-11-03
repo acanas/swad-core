@@ -128,12 +128,11 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
                                                ActChgNumRowHeaCrs);	// Course zone
       Brw_PutImplicitParamsFileBrowser ();
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"&nbsp;%s: "
-                         "<input type=\"text\" name=\"%s\""
+      fprintf (Gbl.F.Out,"&nbsp;%s: ",Txt_TABLE_Header);
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
                          " class=\"LST_EDIT_ROWS COLOR%u\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Txt_TABLE_Header,
                Mrk_HeadOrFootStr[Brw_HEADER],Marks.Header,
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
@@ -149,12 +148,11 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 	                                       ActChgNumRowFooCrs);	// Course zone
       Brw_PutImplicitParamsFileBrowser ();
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"&nbsp;%s: "
-                         "<input type=\"text\" name=\"%s\""
+      fprintf (Gbl.F.Out,"&nbsp;%s: ",Txt_TABLE_Footer);
+      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
                          " class=\"LST_EDIT_ROWS COLOR%u\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Txt_TABLE_Footer,
                Mrk_HeadOrFootStr[Brw_FOOTER],Marks.Footer,
                Gbl.RowEvenOdd,
                Gbl.Form.Id);

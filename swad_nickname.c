@@ -398,10 +398,10 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
    fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
-	              " size=\"18\" maxlength=\"%u\" value=\"@%s\" />"
-	              "<br />",
+	              " size=\"18\" maxlength=\"%u\" value=\"@%s\" />",
             1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
             Gbl.Usrs.Me.UsrDat.Nickname);
+   fprintf (Gbl.F.Out,"<br />");
    Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
         	                         Txt_Save_changes);	// I have no nickname yet);
    Frm_EndForm ();

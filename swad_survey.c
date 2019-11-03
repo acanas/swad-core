@@ -2097,9 +2097,8 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
       if (!Svy_CheckIfSvyIsAssociatedToGrps (SvyCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
-	                 "%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />");
+      fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 
@@ -2755,8 +2754,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
                (unsigned) AnsType);
       if (AnsType == SvyQst->AnswerType)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />"
-	                 "%s",Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
+      fprintf (Gbl.F.Out," />");
+      fprintf (Gbl.F.Out,"%s",Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
       HTM_LABEL_End ();
       fprintf (Gbl.F.Out,"<br />");
      }

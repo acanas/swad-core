@@ -283,11 +283,10 @@ void Pwd_ShowFormSendNewPwd (void)
 
    /***** User's ID/nickname *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;"
-                      "<input type=\"text\" name=\"UsrId\""
+   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_nick_email_or_ID);
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"UsrId\""
                       " size=\"8\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />",
-            Txt_nick_email_or_ID,
             Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin);
    HTM_LABEL_End ();
 
@@ -739,23 +738,20 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
 
    HTM_TR_Begin (NULL);
 
-   /***** Begin form element ****/
+   /***** Label ****/
    HTM_TD_Begin ("class=\"RM\"");
    HTM_LABEL_Begin ("for=\"Passwd\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Password);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
+   /***** Input ****/
    HTM_TD_Begin ("class=\"LM\"");
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Passwd\" name=\"Paswd\""
                       " size=\"18\" maxlength=\"%u\" placeholder=\"",
             Pwd_MAX_CHARS_PLAIN_PASSWORD);
-
-   /***** Placeholder *****/
    fprintf (Gbl.F.Out,Txt_HELP_password,
 	    Pwd_MIN_CHARS_PLAIN_PASSWORD);
-
-   /***** End form element ****/
    fprintf (Gbl.F.Out,"\" required=\"required\" />");
    HTM_TD_End ();
 
@@ -777,22 +773,20 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    /* Begin form element */
    HTM_TR_Begin (NULL);
 
+   /* Label */
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"Paswd1\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_New_password);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
+   /* Input */
    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Paswd1\" name=\"Paswd1\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"",
             Pwd_MAX_CHARS_PLAIN_PASSWORD);
-
-   /* Placeholder */
    fprintf (Gbl.F.Out,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
-
-   /* End form element */
    fprintf (Gbl.F.Out,"\" required=\"required\" />");
    HTM_TD_End ();
 
@@ -802,22 +796,20 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    /* Begin form element */
    HTM_TR_Begin (NULL);
 
+   /* Label */
    HTM_TD_Begin ("class=\"REC_C1_BOT RM\"");
    HTM_LABEL_Begin ("for=\"Paswd2\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:",Txt_Retype_new_password);
    HTM_LABEL_End ();
    HTM_TD_End ();
 
+   /* Input */
    HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"Paswd2\" name=\"Paswd2\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"",
             Pwd_MAX_CHARS_PLAIN_PASSWORD);
-
-   /* Placeholder */
    fprintf (Gbl.F.Out,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
-
-   /* End form element */
    fprintf (Gbl.F.Out,"\" required=\"required\" />");
    HTM_TD_End ();
 
@@ -889,20 +881,24 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
    extern const char *Txt_For_security_enter_your_password;
 
    HTM_DIV_Begin ("class=\"CM\" style=\"margin:12px;\"");
+
+   /***** Checkbox *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Consent\" value=\"Y\" />"
-		      "%s",
-	    Txt_I_understand_that_this_action_can_not_be_undone);
+   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Consent\" value=\"Y\" />");
+   fprintf (Gbl.F.Out,"%s",Txt_I_understand_that_this_action_can_not_be_undone);
    HTM_LABEL_End ();
+
    fprintf (Gbl.F.Out,"<br />");
+
+   /***** Password *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;"
-		      "<input type=\"password\" name=\"OthUsrPwd\""
+   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_For_security_enter_your_password);
+   fprintf (Gbl.F.Out,"<input type=\"password\" name=\"OthUsrPwd\""
 		      " size=\"16\" maxlength=\"%u\""
 		      " autocomplete=\"off\" required=\"required\" />",
-	    Txt_For_security_enter_your_password,
 	    Pwd_MAX_CHARS_PLAIN_PASSWORD);
    HTM_LABEL_End ();
+
    HTM_DIV_End ();
   }
 

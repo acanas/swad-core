@@ -85,10 +85,9 @@ void Coo_EditMyPrefsOnCookies (void)
 		      " name=\"cookies\" value=\"Y\"");
    if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-	              "%s",
-	    Gbl.Form.Id,
-	    Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
+   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
+	    Gbl.Form.Id);
+   fprintf (Gbl.F.Out,"%s",Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
    HTM_LABEL_End ();
 
    /* End container */

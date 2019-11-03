@@ -185,9 +185,8 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 	 else
 	    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
 		     Gbl.Form.Id);
-	 fprintf (Gbl.F.Out," />"
-			    "%s",
-		  Txt_PRIVACY_OPTIONS[Visibility]);
+	 fprintf (Gbl.F.Out," />");
+	 fprintf (Gbl.F.Out,"%s",Txt_PRIVACY_OPTIONS[Visibility]);
 	 HTM_LABEL_End ();
 	 HTM_LI_End ();
 	}

@@ -1276,9 +1276,8 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    /***** File *****/
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;"
-                      "<input type=\"file\" name=\"%s\" />",
-            Txt_File,
+   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_File);
+   fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" />",
             Fil_NAME_OF_PARAM_FILENAME_ORG);
    HTM_LABEL_End ();
    HTM_DIV_End ();
@@ -1311,10 +1310,9 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    /***** Link *****/
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;"
-                      "<input type=\"url\" name=\"InfoSrcURL\""
-                      " size=\"50\" maxlength=\"256\" value=\"",
-            Txt_URL);
+   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_URL);
+   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"InfoSrcURL\""
+                      " size=\"50\" maxlength=\"256\" value=\"");
    if ((FileURL = fopen (PathFile,"rb")) == NULL)
       fprintf (Gbl.F.Out,"http://");
    else

@@ -3269,10 +3269,9 @@ static void Brw_FormToChangeCrsGrpZone (void)
    fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GrpCod\" value=\"-1\"");
    if (IsCourseZone)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-                      "%s",
-            Gbl.Form.Id,
-            Gbl.Hierarchy.Crs.FullName);
+   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
+            Gbl.Form.Id);
+   fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.FullName);
    HTM_LABEL_End ();
    HTM_LI_End ();
 
@@ -3302,10 +3301,9 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	          GrpDat.GrpCod);
 	 if (IsGroupZone && GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	 fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-			    "%s %s",
-		  Gbl.Form.Id,
-                  GrpDat.GrpTypName,GrpDat.GrpName);
+	 fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
+		  Gbl.Form.Id);
+	 fprintf (Gbl.F.Out,"%s %s",GrpDat.GrpTypName,GrpDat.GrpName);
 	 HTM_LABEL_End ();
 	 HTM_LI_End ();
         }
@@ -8345,11 +8343,10 @@ static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
 
    /***** Folder *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s: "
-                      "<input type=\"text\" name=\"NewFolderName\""
+   fprintf (Gbl.F.Out,"%s: ",Txt_Folder);
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewFolderName\""
                       " size=\"30\" maxlength=\"%u\" value=\"\""
                       " required=\"required\" />",
-            Txt_Folder,
             Brw_MAX_CHARS_FOLDER);
    HTM_LABEL_End ();
 

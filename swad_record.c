@@ -3126,9 +3126,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	          (unsigned) Sex);
 	 if (Sex == Gbl.Usrs.Me.UsrDat.Sex)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	 fprintf (Gbl.F.Out," required=\"required\" />"
-			    "%s %s",
-		  Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
+	 fprintf (Gbl.F.Out," required=\"required\" />");
+	 fprintf (Gbl.F.Out,"%s %s",Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
 	 HTM_LABEL_End ();
 	}
       HTM_TD_End ();

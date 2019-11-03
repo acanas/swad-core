@@ -1193,10 +1193,9 @@ void Asg_RequestCreatOrEditAsg (void)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"DAT\"");
-   fprintf (Gbl.F.Out,"%s:"
-                      "<input type=\"text\" name=\"Folder\""
+   fprintf (Gbl.F.Out,"%s:",Txt_Folder);
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Folder\""
                       " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
-            Txt_Folder,
             Brw_MAX_CHARS_FOLDER,Asg.Folder);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1274,9 +1273,8 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 	                 " name=\"WholeCrs\" value=\"Y\"");
       if (!Asg_CheckIfAsgIsAssociatedToGrps (AsgCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
-	                 "%s %s",
-               Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
+      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />");
+      fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
 

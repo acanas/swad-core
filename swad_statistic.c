@@ -446,8 +446,8 @@ void Sta_AskShowCrsHits (void)
                   (unsigned) Sta_CLICKS_DETAILED);
          if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
             fprintf (Gbl.F.Out," checked=\"checked\"");
-         fprintf (Gbl.F.Out," onclick=\"enableDetailedClicks()\" />"
-                            "%s",
+         fprintf (Gbl.F.Out," onclick=\"enableDetailedClicks()\" />");
+         fprintf (Gbl.F.Out,"%s",
                   Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
          HTM_LABEL_End ();
 

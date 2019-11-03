@@ -495,7 +495,8 @@ ps2pdf source.ps destination.pdf
 // TODO: Impedir la creación y edición de proyectos si no son editables.
 // TODO: Importante: filtrar proyectos por usuarios (igual que en trabajos o en asistencia)
 
-	Version 19.51.4:  Nov 02, 2019	Code refactoring in HTML labels. (? lines)
+	Version 19.51.4:  Nov 03, 2019	Code refactoring in HTML labels.
+					Code refactoring in HTML inputs. (246091 lines)
 	Version 19.51.3:  Nov 02, 2019	Changes in form of exam announcement. (246127 lines)
 	Version 19.51.2:  Nov 02, 2019	Code refactoring in HTML labels. Not finished. (246127 lines)
 	Version 19.51.1:  Nov 02, 2019	Code refactoring in HTML labels. Not finished. (246198 lines)

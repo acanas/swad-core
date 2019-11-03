@@ -560,8 +560,8 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
 	    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
 		     Gbl.Form.Id);
 
-	 fprintf (Gbl.F.Out," />"
-	                    "%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
+	 fprintf (Gbl.F.Out," />");
+	 fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 	 HTM_LABEL_End ();
 	 fprintf (Gbl.F.Out,"<br />");
         }

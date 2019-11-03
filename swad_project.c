@@ -3767,9 +3767,8 @@ void Prj_ShowFormConfig (void)
 	              " name=\"Editable\" value=\"Y\"");
    if (Gbl.Prjs.Config.Editable)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," />"
-		      "%s",
-	    Txt_Editable_by_non_editing_teachers);
+   fprintf (Gbl.F.Out," />");
+   fprintf (Gbl.F.Out,"%s",Txt_Editable_by_non_editing_teachers);
    HTM_LABEL_End ();
    HTM_TD_End ();
 

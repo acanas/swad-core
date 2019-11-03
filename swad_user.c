@@ -6403,9 +6403,9 @@ static void Usr_PutCheckboxListWithPhotos (void)
 	              " value=\"Y\"");
    if (Gbl.Usrs.Listing.WithPhotos)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-                      "%s",
-	    Gbl.Form.Id,Txt_Display_photos);
+   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
+	    Gbl.Form.Id);
+   fprintf (Gbl.F.Out,"%s",Txt_Display_photos);
    HTM_LABEL_End ();
   }
 
@@ -8355,6 +8355,7 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
    if (ListUsrsAction == Gbl.Usrs.Selected.Option)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," />");
+
    HTM_LABEL_Begin ("for=\"ListUsrsAction%u\"",(unsigned) ListUsrsAction);
    fprintf (Gbl.F.Out,"%s",Label);
    HTM_LABEL_End ();

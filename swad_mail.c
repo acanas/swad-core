@@ -1404,10 +1404,10 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
    fprintf (Gbl.F.Out,"<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
-	              " size=\"18\" maxlength=\"%u\" value=\"%s\" />"
-	              "<br />",
+	              " size=\"18\" maxlength=\"%u\" value=\"%s\" />",
             Cns_MAX_CHARS_EMAIL_ADDRESS,
             Gbl.Usrs.Me.UsrDat.Email);
+   fprintf (Gbl.F.Out,"<br />");
    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
         	                          Txt_Save_changes);		// User has no email address yet
    Frm_EndForm ();
