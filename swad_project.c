@@ -3366,9 +3366,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"number\" name=\"NumStds\""
-                      " min=\"0\" value=\"%u\" />",
-            Prj->NumStds);
+   HTM_INPUT_NUMBER ("NumStds",(long) 0,(long) UINT_MAX,(long) Prj->NumStds,false);
    HTM_TD_End ();
 
    HTM_TR_End ();

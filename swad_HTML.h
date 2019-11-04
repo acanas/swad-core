@@ -100,6 +100,7 @@ void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr);
 void HTM_INPUT_IMAGE (const char *ImgFile,const char *Title,const char *Class);
 void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 			 const char *AutoComplete,bool Required);
+void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabled);
 
 void HTM_TEXTAREA_Begin (const char *fmt,...);
 void HTM_TEXTAREA_End (void);

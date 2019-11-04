@@ -360,15 +360,11 @@ void Tst_ShowFormAskTst (void)
          HTM_TD_End ();
 
          HTM_TD_Begin ("class=\"LM\"");
-         fprintf (Gbl.F.Out,"<input type=\"number\""
-                            " id=\"NumQst\" name=\"NumQst\""
-                            " min=\"%u\" max=\"%u\" value=\"%u\"",
-                  Gbl.Test.Config.Min,
-                  Gbl.Test.Config.Max,
-                  Gbl.Test.Config.Def);
-         if (Gbl.Test.Config.Min == Gbl.Test.Config.Max)
-            fprintf (Gbl.F.Out," disabled=\"disabled\"");
-         fprintf (Gbl.F.Out," />");
+         HTM_INPUT_NUMBER ("NumQst",
+			   (long) Gbl.Test.Config.Min,
+			   (long) Gbl.Test.Config.Max,
+			   (long) Gbl.Test.Config.Def,
+                           Gbl.Test.Config.Min == Gbl.Test.Config.Max);
          HTM_TD_End ();
 
          HTM_TR_End ();

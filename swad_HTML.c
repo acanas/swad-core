@@ -946,6 +946,17 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
    fprintf (Gbl.F.Out," />");
   }
 
+void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabled)
+  {
+   fprintf (Gbl.F.Out,"<input type=\"number\" id=\"%s\" name=\"%s\""
+	              " min=\"%ld\" max=\"%ld\" value=\"%ld\"",
+	    Name,Name,
+	    Min,Max,Value);
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out," />");
+  }
+
 /*****************************************************************************/
 /********************************* Text areas ********************************/
 /*****************************************************************************/
