@@ -770,7 +770,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
          HTM_TH (3,1,"LM COLOR0",Txt_Course);
          HTM_TH (3,1,"LM COLOR0",Txt_Institutional_BR_code);
          HTM_TH (3,1,"LM COLOR0",Txt_Web_page_of_the_course);
-         HTM_TH (11,1,"CM COLOR0",Txt_Indicators);
+         HTM_TH (1,11,"CM COLOR0",Txt_Indicators);
 
          HTM_TR_End ();
 
