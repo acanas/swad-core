@@ -413,10 +413,10 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    HTM_TD_End ();
 
    /* Assignment folder */
-   HTM_TD_Begin ("class=\"DAT LT");
-   if (!PrintView)
-      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"\">");
+   if (PrintView)
+      HTM_TD_Begin ("class=\"DAT LT");
+   else
+      HTM_TD_Begin ("class=\"DAT LT COLOR%u",Gbl.RowEvenOdd);
    if (Asg.SendWork == Asg_SEND_WORK)
       Asg_WriteAssignmentFolder (&Asg,PrintView);
    HTM_TD_End ();

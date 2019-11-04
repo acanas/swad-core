@@ -2663,7 +2663,7 @@ void Msg_ShowFormToFilterMsgs (void)
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",TxtFromTo[Gbl.Msg.TypeOfMessages]);
    HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
-		     Gbl.Msg.FilterFromTo,false,
+		     Gbl.Msg.FilterFromTo,
 	             "size=\"20\"");
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2673,7 +2673,7 @@ void Msg_ShowFormToFilterMsgs (void)
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_Content);
    HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
-		     Gbl.Msg.FilterContent,false,
+		     Gbl.Msg.FilterContent,
 	             "size=\"20\"");
    HTM_LABEL_End ();
    HTM_TD_End ();

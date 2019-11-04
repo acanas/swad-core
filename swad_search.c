@@ -159,7 +159,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Hie
    HTM_DIV_End ();
 
    /***** String to find *****/
-   Sch_PutInputStringToSearch (NULL);
+   Sch_PutInputStringToSearch ("");
 
    /***** What to search? *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
@@ -249,17 +249,9 @@ void Sch_PutInputStringToSearch (const char *IdInputText)
 
    /***** String to find *****/
    // Input field not required, because it can be hidden (display:none)
-   fprintf (Gbl.F.Out,"<input");
-   if (IdInputText)
-      fprintf (Gbl.F.Out," id=\"%s\"",IdInputText);
-   fprintf (Gbl.F.Out," type=\"search\" name=\"Search\""
-	              " size=\"18\" maxlength=\"%u\" value=\"%s\"",
-	    Sch_MAX_CHARS_STRING_TO_FIND,
-            Gbl.Search.Str);
-   if (!Gbl.Search.Str[0])
-      fprintf (Gbl.F.Out," placeholder=\"%s&hellip;\"",
-	       Txt_Search);
-   fprintf (Gbl.F.Out," />");
+   HTM_INPUT_SEARCH ("Search",Sch_MAX_CHARS_STRING_TO_FIND,Gbl.Search.Str,
+	             "id=\"%s\" size=\"18\" placeholder=\"%s&hellip;\"",
+		     IdInputText,Txt_Search);
   }
 
 /*****************************************************************************/

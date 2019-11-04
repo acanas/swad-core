@@ -833,7 +833,7 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool 
    fprintf (Gbl.F.Out," />");
   }
 
-void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,bool SubmitOnChange,
+void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
 	               const char *fmt,...)
   {
    va_list ap;
@@ -863,10 +863,6 @@ void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,boo
 	 free ((void *) Attr);
 	}
      }
-
-   if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-	       Gbl.Form.Id);
 
    fprintf (Gbl.F.Out," />");
   }

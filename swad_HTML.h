@@ -91,7 +91,7 @@ void HTM_LABEL_End (void);
 
 void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool SubmitOnChange,
 	             const char *fmt,...);
-void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,bool SubmitOnChange,
+void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,
 	               const char *fmt,...);
 void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
 	            const char *fmt,...);
