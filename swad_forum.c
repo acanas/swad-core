@@ -1755,13 +1755,10 @@ static void For_PutFormWhichForums (void)
      {
       HTM_LI_Begin (NULL);
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"ForumSet\""
-                         " value=\"%u\"",
-               (unsigned) ForumSet);
-      if (ForumSet == Gbl.Forum.ForumSet)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
-	       Gbl.Form.Id);
+      HTM_INPUT_RADIO ("ForumSet",true,
+		       "value=\"%u\"%s",
+		       (unsigned) ForumSet,
+		       (ForumSet == Gbl.Forum.ForumSet) ? " checked=\"checked\"" : "");
       fprintf (Gbl.F.Out,"%s",Txt_FORUM_WHICH_FORUM[ForumSet]);
       HTM_LABEL_End ();
       HTM_LI_End ();

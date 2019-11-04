@@ -3120,11 +3120,10 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	   Sex++)
 	{
 	 HTM_LABEL_Begin ("class=\"REC_DAT_BOLD\"");
-	 fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Sex\" value=\"%u\"",
-	          (unsigned) Sex);
-	 if (Sex == Gbl.Usrs.Me.UsrDat.Sex)
-	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	 fprintf (Gbl.F.Out," required=\"required\" />");
+	 HTM_INPUT_RADIO ("Sex",false,
+			  "value=\"%u\"%s  required=\"required\"",
+			  (unsigned) Sex,
+			  Sex == Gbl.Usrs.Me.UsrDat.Sex ? " checked=\"checked\"" : "");
 	 fprintf (Gbl.F.Out,"%s %s",Usr_StringsSexIcons[Sex],Txt_SEX_SINGULAR_Abc[Sex]);
 	 HTM_LABEL_End ();
 	}

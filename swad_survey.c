@@ -2748,11 +2748,10 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 	AnsType++)
      {
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AnswerType\" value=\"%u\"",
-               (unsigned) AnsType);
-      if (AnsType == SvyQst->AnswerType)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_RADIO ("AnswerType",false,
+		       "value=\"%u\"%s",
+		       (unsigned) AnsType,
+		       AnsType == SvyQst->AnswerType ? " checked=\"checked\"" : "");
       fprintf (Gbl.F.Out,"%s",Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
       HTM_LABEL_End ();
       fprintf (Gbl.F.Out,"<br />");

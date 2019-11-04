@@ -3266,11 +3266,9 @@ static void Brw_FormToChangeCrsGrpZone (void)
    HTM_LI_Begin ("class=\"%s\"",IsCourseZone ? "BROWSER_TITLE" :
                                                "BROWSER_TITLE_LIGHT");
    HTM_LABEL_Begin (NULL);
-   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GrpCod\" value=\"-1\"");
-   if (IsCourseZone)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
-            Gbl.Form.Id);
+   HTM_INPUT_RADIO ("GrpCod",true,
+		    "value=\"-1\"%s",
+		    IsCourseZone ? " checked=\"checked\"" : "");
    fprintf (Gbl.F.Out,"%s",Gbl.Hierarchy.Crs.FullName);
    HTM_LABEL_End ();
    HTM_LI_End ();
@@ -3297,12 +3295,11 @@ static void Brw_FormToChangeCrsGrpZone (void)
 		  NULL,
 	          "class=\"ICO25x25\" style=\"margin-left:6px;\"");
          HTM_LABEL_Begin (NULL);
-         fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
-	          GrpDat.GrpCod);
-	 if (IsGroupZone && GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod)
-	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	 fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
-		  Gbl.Form.Id);
+	 HTM_INPUT_RADIO ("GrpCod",true,
+			  "value=\"%ld\"%s",
+			  GrpDat.GrpCod,
+			  (IsGroupZone &&
+			   GrpDat.GrpCod == Gbl.Crs.Grps.GrpCod) ? " checked=\"checked\"" : "");
 	 fprintf (Gbl.F.Out,"%s %s",GrpDat.GrpTypName,GrpDat.GrpName);
 	 HTM_LABEL_End ();
 	 HTM_LI_End ();

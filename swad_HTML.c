@@ -972,7 +972,7 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
   {
    fprintf (Gbl.F.Out,"<input type=\"password\" id=\"%s\" name=\"%s\""
                       " size=\"18\" maxlength=\"%u\"",
-	    Name,Name,Pwd_MIN_CHARS_PLAIN_PASSWORD);
+	    Name,Name,Pwd_MAX_CHARS_PLAIN_PASSWORD);
    if (PlaceHolder)
       if (PlaceHolder[0])
 	 fprintf (Gbl.F.Out," placeholder=\"%s\"",PlaceHolder);
@@ -992,6 +992,41 @@ void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabl
 	    Min,Max,Value);
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out," />");
+  }
+
+void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
+		      const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\"",Name);
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 fprintf (Gbl.F.Out," %s",Attr);
+
+	 free ((void *) Attr);
+	}
+     }
+
+   if (SubmitOnClick)
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+	       Gbl.Form.Id);
    fprintf (Gbl.F.Out," />");
   }
 

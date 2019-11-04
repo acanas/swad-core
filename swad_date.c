@@ -121,12 +121,10 @@ void Dat_PutBoxToSelectDateFormat (void)
       HTM_LI_Begin ("class=\%s\"",(Format == Gbl.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
 						                     "DAT");
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"DateFormat\" value=\"%u\"",
-	       (unsigned) Format);
-      if (Format == Gbl.Prefs.DateFormat)
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
-	       Gbl.Form.Id);
+      HTM_INPUT_RADIO ("DateFormat",true,
+		       " value=\"%u\"%s",
+	               (unsigned) Format,
+                       Format == Gbl.Prefs.DateFormat ? " checked=\"checked\"" : "");
       Dat_PutSpanDateFormat (Format);
       Dat_PutScriptDateFormat (Format);
       HTM_LABEL_End ();

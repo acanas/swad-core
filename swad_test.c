@@ -1132,23 +1132,20 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
 
       /***** Choice 1: No media *****/
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\"",
-	       ParamUploadMedia.Action,Med_ACTION_NO_MEDIA);
-      if (OptionsDisabled)
-	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
+		       "value=\"%u\"%s",
+		       (unsigned) Med_ACTION_NO_MEDIA,
+		       OptionsDisabled ? " disabled=\"disabled\"" : "");
       fprintf (Gbl.F.Out,"%s",Txt_No_image_video);
       HTM_LABEL_End ();
       fprintf (Gbl.F.Out,"<br />");
 
       /***** Choice 2: Current media *****/
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\""
-	                 " checked=\"checked\"",
-	       ParamUploadMedia.Action,Med_ACTION_KEEP_MEDIA);
-      if (OptionsDisabled)
-	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
+		       "value=\"%u\"%s checked=\"checked\"",
+		       (unsigned) Med_ACTION_KEEP_MEDIA,
+		       OptionsDisabled ? " disabled=\"disabled\"" : "");
       fprintf (Gbl.F.Out,"%s",Txt_Current_image_video);
       HTM_LABEL_End ();
       Med_ShowMedia (Media,
@@ -1158,13 +1155,11 @@ static void Tst_PutFormToEditQstMedia (struct Media *Media,int NumMediaInForm,
       /***** Choice 3: Change media *****/
       UniqueId++;
       HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-      fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
-			 " value=\"%u\"",
-	       UniqueId,ParamUploadMedia.Action,
-	       Med_ACTION_NEW_MEDIA);	// Replace existing image by new image
-      if (OptionsDisabled)
-	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_RADIO (ParamUploadMedia.Action,false,
+		       "id=\"chg_img_%u\" value=\"%u\"%s",
+		       UniqueId,
+		       (unsigned) Med_ACTION_NEW_MEDIA,
+		       OptionsDisabled ? " disabled=\"disabled\"" : "");
       fprintf (Gbl.F.Out,"%s: ",Txt_Change_image_video);
       HTM_LABEL_End ();
       Med_PutMediaUploader (NumMediaInForm,"TEST_MED_INPUT");
@@ -1907,11 +1902,10 @@ static void Tst_ShowFormConfigTst (void)
 	Pluggable++)
      {
       HTM_LABEL_Begin ("class=\"DAT\"");
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Pluggable\" value=\"%u\"",
-	       (unsigned) Pluggable);
-      if (Pluggable == Gbl.Test.Config.Pluggable)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_RADIO ("Pluggable",false,
+		       "value=\"%u\"%s",
+		       (unsigned) Pluggable,
+		       Pluggable == Gbl.Test.Config.Pluggable ? " checked=\"checked\"" : "");
       fprintf (Gbl.F.Out,"%s",Txt_TST_PLUGGABLE[Pluggable]);
       HTM_LABEL_End ();
       fprintf (Gbl.F.Out,"<br />");
@@ -1973,11 +1967,10 @@ static void Tst_ShowFormConfigTst (void)
 	Feedback++)
      {
       HTM_LABEL_Begin ("class=\"DAT\"");
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Feedback\" value=\"%u\"",
-	       (unsigned) Feedback);
-      if (Feedback == Gbl.Test.Config.Feedback)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_RADIO ("Feedback",false,
+		       "value=\"%u\"%s",
+		       (unsigned) Feedback,
+		       Feedback == Gbl.Test.Config.Feedback ? " checked=\"checked\"" : "");
       fprintf (Gbl.F.Out,"%s",Txt_TST_STR_FEEDBACK[Feedback]);
       HTM_LABEL_End ();
       fprintf (Gbl.F.Out,"<br />");
@@ -5182,11 +5175,10 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	AnsType++)
      {
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AnswerType\" value=\"%u\"",
-               (unsigned) AnsType);
-      if (AnsType == Gbl.Test.AnswerType)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"enableDisableAns(this.form);\" />");
+      HTM_INPUT_RADIO ("AnswerType",false,
+		       "value=\"%u\"%s onclick=\"enableDisableAns(this.form);\"",
+		       (unsigned) AnsType,
+		       AnsType == Gbl.Test.AnswerType ? " checked=\"checked\"" : "");
       fprintf (Gbl.F.Out,"%s&nbsp;",Txt_TST_STR_ANSWER_TYPES[AnsType]);
       HTM_LABEL_End ();
       fprintf (Gbl.F.Out,"<br />");
@@ -5287,15 +5279,12 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       HTM_TD_Begin ("class=\"TEST_EDI_ANS_LEFT_COL COLOR%u\"",Gbl.RowEvenOdd);
 
       /* Radio selector for unique choice answers */
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AnsUni\" value=\"%u\"",
-	       NumOpt);
-      if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE)
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      if (Gbl.Test.Answer.Options[NumOpt].Correct)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      if (NumOpt < 2)	// First or second options required
-         fprintf (Gbl.F.Out," required=\"required\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_RADIO ("AnsUni",false,
+		       "value=\"%u\"%s%s%s onclick=\"enableDisableAns(this.form);\"",
+		       NumOpt,
+		       Gbl.Test.Answer.Options[NumOpt].Correct ? " checked=\"checked\"" : "",
+		       NumOpt < 2 ? " required=\"required\"" : "",	// First or second options required
+		       Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ? "" : " disabled=\"disabled\"");
 
       /* Checkbox for multiple choice answers */
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AnsMulti\" value=\"%u\"",
@@ -5430,12 +5419,11 @@ static void Tst_PutTFInputField (const char *Label,char Value)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AnsTF\" value=\"%c\"",Value);
-   if (Gbl.Test.Answer.TF == Value)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   if (Gbl.Test.AnswerType != Tst_ANS_TRUE_FALSE)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," required=\"required\" />");
+   HTM_INPUT_RADIO ("AnsTF",false,
+		    "value=\"%c\"%s%s required=\"required\"",
+		    Value,
+		    Gbl.Test.Answer.TF == Value ? " checked=\"checked\"" : "",
+		    Gbl.Test.AnswerType == Tst_ANS_TRUE_FALSE ? "" : " disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"%s",Label);
    HTM_LABEL_End ();
   }

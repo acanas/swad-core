@@ -150,12 +150,10 @@ void Syl_PutFormWhichSyllabus (void)
      {
       HTM_LI_Begin ("class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"WhichSyllabus\" value=\"%u\"",
-               (unsigned) WhichSyllabus);
-      if (WhichSyllabus == Gbl.Syllabus.WhichSyllabus)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
-	       Gbl.Form.Id);
+      HTM_INPUT_RADIO ("WhichSyllabus",true,
+		       "value=\"%u\"%s",
+		       (unsigned) WhichSyllabus,
+		       WhichSyllabus == Gbl.Syllabus.WhichSyllabus ? " checked=\"checked\"" : "");
       fprintf (Gbl.F.Out,"%s",Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
       HTM_LABEL_End ();
       HTM_LI_End ();

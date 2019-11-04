@@ -1143,21 +1143,16 @@ void Inf_FormsToSelSendInfo (void)
       else
 	 HTM_TD_Begin ("class=\"DAT LT\"");
       Frm_StartForm (Inf_ActionsSelecInfoSrc[Gbl.Crs.Info.Type]);
-      fprintf (Gbl.F.Out,"<input type=\"radio\""
-	                 " id=\"InfoSrc%u\" name=\"InfoSrc\" value=\"%u\"",
-	       (unsigned) InfoSrc,(unsigned) InfoSrc);
-      if (InfoSrc == InfoSrcSelected)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      else
-	{
-	 if (InfoSrc == Inf_INFO_SRC_NONE ||
-	     InfoAvailable[InfoSrc])	// If no info available for this source
-	    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\"",
-		     Gbl.Form.Id);
-	 else
-	    fprintf (Gbl.F.Out," disabled=\"disabled\"");
-	}
-      fprintf (Gbl.F.Out," />");
+
+      HTM_INPUT_RADIO ("InfoSrc",InfoSrc != InfoSrcSelected &&
+	                         (InfoSrc == Inf_INFO_SRC_NONE ||
+	                          InfoAvailable[InfoSrc]),	// Info available for this source
+		       "id=\"InfoSrc%u\" value=\"%u\"%s",
+		       (unsigned) InfoSrc,(unsigned) InfoSrc,
+		       InfoSrc == InfoSrcSelected ? " checked=\"checked\"" :
+			                            (InfoSrc == Inf_INFO_SRC_NONE ||
+	                                            InfoAvailable[InfoSrc]) ? "" :	// Info available for this source
+						                              " disabled=\"disabled\"");
       Frm_EndForm ();
       HTM_TD_End ();
 

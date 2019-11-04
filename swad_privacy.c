@@ -176,16 +176,11 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 		       (Visibility == CurrentVisibilityInDB) ? "DAT_N LIGHT_BLUE" :
 							       "DAT");
 	 HTM_LABEL_Begin (NULL);
-	 fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\"",
-		  ParamName,(unsigned) Visibility);
-	 if (Visibility == CurrentVisibilityInDB)
-	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	 if (Action == ActUnk)
-	    fprintf (Gbl.F.Out," disabled=\"disabled\"");
-	 else
-	    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-		     Gbl.Form.Id);
-	 fprintf (Gbl.F.Out," />");
+	 HTM_INPUT_RADIO (ParamName,Action != ActUnk,
+			  "value=\"%u\"%s%s",
+			  (unsigned) Visibility,
+			  Visibility == CurrentVisibilityInDB ? " checked=\"checked\"" : "",
+			  Action == ActUnk ? " disabled=\"disabled\"" : "");
 	 fprintf (Gbl.F.Out,"%s",Txt_PRIVACY_OPTIONS[Visibility]);
 	 HTM_LABEL_End ();
 	 HTM_LI_End ();

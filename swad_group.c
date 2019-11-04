@@ -1918,6 +1918,7 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
    bool IBelongToAClosedGroup;
    bool ICanChangeMySelectionForThisGrpTyp;
    bool ICanChangeMySelectionForThisGrp;
+   char StrGrpCod[32];
 
    /***** Write heading *****/
    Grp_WriteGrpHead (GrpTyp);
@@ -2009,28 +2010,6 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
       else
 	 HTM_TD_Begin ("class=\"LM\"");
 
-      if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
-          !GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
-          GrpTyp->NumGrps > 1)			// ...and there are more than one group
-	{
-	 /* Put a radio item */
-         fprintf (Gbl.F.Out,"<input type=\"radio\""
-                            " id=\"Grp%ld\" name=\"GrpCod%ld\" value=\"%ld\"",
-                  Grp->GrpCod,GrpTyp->GrpTypCod,Grp->GrpCod);
-         if (!GrpTyp->MandatoryEnrolment)	// If the enrolment is not mandatory, I can select no groups
-            fprintf (Gbl.F.Out," onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
-                     GrpTyp->GrpTypCod,GrpTyp->NumGrps);
-	}
-      else
-	 /* Put a checkbox item */
-         fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-                            " id=\"Grp%ld\" name=\"GrpCod%ld\" value=\"%ld\"",
-                  Grp->GrpCod,GrpTyp->GrpTypCod,Grp->GrpCod);
-
-      /* Group checked? */
-      if (IBelongToThisGroup)
-	 fprintf (Gbl.F.Out," checked=\"checked\"");		// Group selected
-
       /* Selection disabled? */
       if (ICanChangeMySelectionForThisGrpTyp)	// I can change my selection for this group type
 	{
@@ -2050,11 +2029,51 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
       else					// I can not change my selection for this group type
 	 ICanChangeMySelectionForThisGrp = false;
 
-      if (!ICanChangeMySelectionForThisGrp)	// I can not change my selection for this group
-	 fprintf (Gbl.F.Out,IBelongToThisGroup ? " readonly" :			// I can not unregister (disabled does not work because the value is not submitted)
-						 " disabled=\"disabled\"");	// I can not register
+      snprintf (StrGrpCod,sizeof (StrGrpCod),
+		"GrpCod%ld",
+		GrpTyp->GrpTypCod);
+      if (Gbl.Usrs.Me.Role.Logged == Rol_STD &&	// If I am a student
+          !GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
+          GrpTyp->NumGrps > 1)			// ...and there are more than one group
+	{
+	 /* Put a radio item */
+         if (GrpTyp->MandatoryEnrolment)
+	    HTM_INPUT_RADIO (StrGrpCod,false,
+			     "id=\"Grp%ld\" value=\"%ld\"%s%s",
+			     Grp->GrpCod,Grp->GrpCod,
+			     IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
+         	             ICanChangeMySelectionForThisGrp ? "" :
+	                                                       IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+						                                    " disabled=\"disabled\"");	// I can not register
+         else	// If the enrolment is not mandatory, I can select no groups
+	    HTM_INPUT_RADIO (StrGrpCod,false,
+			     "id=\"Grp%ld\" value=\"%ld\"%s%s"
+			     " onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
+			     Grp->GrpCod,Grp->GrpCod,
+			     IBelongToThisGroup ? " checked=\"checked\"" : "", // Group selected?
+         	             ICanChangeMySelectionForThisGrp ? "" :
+	                                                       IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+						                                    " disabled=\"disabled\"",	// I can not register
+                             GrpTyp->GrpTypCod,GrpTyp->NumGrps);
+	}
+      else
+	{
+	 /* Put a checkbox item */
+         fprintf (Gbl.F.Out,"<input type=\"checkbox\""
+                            " id=\"Grp%ld\" name=\"GrpCod%ld\" value=\"%ld\"",
+                  Grp->GrpCod,GrpTyp->GrpTypCod,Grp->GrpCod);
 
-      fprintf (Gbl.F.Out," />");
+	 /* Group checked? */
+	 if (IBelongToThisGroup)
+	    fprintf (Gbl.F.Out," checked=\"checked\"");		// Group selected
+
+	 if (!ICanChangeMySelectionForThisGrp)	// I can not change my selection for this group
+	    fprintf (Gbl.F.Out,IBelongToThisGroup ? " readonly" :			// I can not unregister (disabled does not work because the value is not submitted)
+						    " disabled=\"disabled\"");	// I can not register
+
+	 fprintf (Gbl.F.Out," />");
+	}
+
       HTM_TD_End ();
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);

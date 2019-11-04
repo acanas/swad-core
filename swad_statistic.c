@@ -409,12 +409,10 @@ void Sta_AskShowCrsHits (void)
               Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
             Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
 
-         fprintf (Gbl.F.Out,"<input type=\"radio\""
-                            " name=\"GroupedOrDetailed\" value=\"%u\"",
-                  (unsigned) Sta_CLICKS_GROUPED);
-         if (Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
-            fprintf (Gbl.F.Out," checked=\"checked\"");
-         fprintf (Gbl.F.Out," onclick=\"disableDetailedClicks()\" />");
+	 HTM_INPUT_RADIO ("GroupedOrDetailed",false,
+			  "value=\"%u\"%s onclick=\"disableDetailedClicks();\"",
+			  (unsigned) Sta_CLICKS_GROUPED,
+			  Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? "" : " checked=\"checked\"");
 
          /* Selection of count type (number of pages generated, accesses per user, etc.) */
          Sta_WriteSelectorCountType ();
@@ -441,12 +439,10 @@ void Sta_AskShowCrsHits (void)
 
          /***** Option b) Listing of detailed clicks to this course *****/
          HTM_LABEL_Begin (NULL);
-         fprintf (Gbl.F.Out,"<input type=\"radio\""
-                            " name=\"GroupedOrDetailed\" value=\"%u\"",
-                  (unsigned) Sta_CLICKS_DETAILED);
-         if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
-            fprintf (Gbl.F.Out," checked=\"checked\"");
-         fprintf (Gbl.F.Out," onclick=\"enableDetailedClicks()\" />");
+	 HTM_INPUT_RADIO ("GroupedOrDetailed",false,
+			  "value=\"%u\"%s onclick=\"enableDetailedClicks();\"",
+			  (unsigned) Sta_CLICKS_DETAILED,
+			  Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? " checked=\"checked\"" : "");
          fprintf (Gbl.F.Out,"%s",
                   Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
          HTM_LABEL_End ();

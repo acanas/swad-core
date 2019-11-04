@@ -8343,19 +8343,13 @@ static void Usr_ShowOneListUsrsOption (Usr_ListUsrsOption_t ListUsrsAction,
                                        const char *Label)
   {
    HTM_LI_Begin (NULL);
-
-   fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"ListUsrsAction%u\""
-		      " name=\"ListUsrsAction\" value=\"%u\"",
-	    (unsigned) ListUsrsAction,
-	    (unsigned) ListUsrsAction);
-   if (ListUsrsAction == Gbl.Usrs.Selected.Option)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," />");
-
-   HTM_LABEL_Begin ("for=\"ListUsrsAction%u\"",(unsigned) ListUsrsAction);
+   HTM_LABEL_Begin (NULL);
+   HTM_INPUT_RADIO ("ListUsrsAction",false,
+		    "value=\"%u\"%s",
+		    (unsigned) ListUsrsAction,
+		    ListUsrsAction == Gbl.Usrs.Selected.Option ? " checked=\"checked\"" : "");
    fprintf (Gbl.F.Out,"%s",Label);
    HTM_LABEL_End ();
-
    HTM_LI_End ();
   }
 
