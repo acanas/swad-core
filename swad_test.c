@@ -5126,7 +5126,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       snprintf (StrTagTxt,sizeof (StrTagTxt),
 		"TagTxt%u",
 		NumTag);
-      HTM_INPUT_TEXT (StrTagTxt,Tst_MAX_CHARS_TAG,StrTagTxt,false,
+      HTM_INPUT_TEXT (StrTagTxt,Tst_MAX_CHARS_TAG,Gbl.Test.Tags.Txt[NumTag],false,
 		      "class=\"TAG_TXT\" onchange=\"changeSelTag('%u')\"",
 	              NumTag);
       HTM_TD_End ();
