@@ -552,11 +552,10 @@ static void Plc_ListPlacesForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlcSho);
       Plc_PutParamPlcCod (Plc->PlcCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                 " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_SHORT_NAME\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,
+		      " class=\"INPUT_SHORT_NAME\""
+                      " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -564,11 +563,10 @@ static void Plc_ListPlacesForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlcFul);
       Plc_PutParamPlcCod (Plc->PlcCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                 " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_FULL_NAME\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,
+		      " class=\"INPUT_FULL_NAME\""
+                      " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -822,20 +820,14 @@ static void Plc_PutFormToCreatePlace (void)
 
    /***** Place short name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />",
-            Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName);
+   HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName,
+		   " class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Place full name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />",
-            Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName);
+   HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName,
+		   " class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Number of centres *****/

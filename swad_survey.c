@@ -1916,10 +1916,8 @@ void Svy_RequestCreatOrEditSvy (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Title\" name=\"Title\""
-                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />",
-            Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title);
+   HTM_INPUT_TEXT ("Title",Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title,
+		   " size=\"45\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

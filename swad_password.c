@@ -284,10 +284,8 @@ void Pwd_ShowFormSendNewPwd (void)
    /***** User's ID/nickname *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_nick_email_or_ID);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"UsrId\""
-                      " size=\"8\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />",
-            Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin);
+   HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
+		   " size=\"8\" required=\"required\"");
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/

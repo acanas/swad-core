@@ -1808,10 +1808,10 @@ static void Tst_ShowFormEditTags (void)
          HTM_TD_Begin ("class=\"LM\"");
          Frm_StartForm (ActRenTag);
          Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
-         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewTagTxt\""
-                            " size=\"36\" maxlength=\"%u\" value=\"%s\""
-                            " onchange=\"document.getElementById('%s').submit();\" />",
-                  Tst_MAX_CHARS_TAG,row[1],Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("NewTagTxt",Tst_MAX_CHARS_TAG,row[1],
+			 "size=\"36\""
+			 " onchange=\"document.getElementById('%s').submit();\"",
+			 Gbl.Form.Id);
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -1887,6 +1887,7 @@ static void Tst_ShowFormConfigTst (void)
    extern const char *Txt_Save_changes;
    Tst_Pluggable_t Pluggable;
    Tst_Feedback_t Feedback;
+   char StrMinTimeNxtTstPerQst[20 + 1];
 
    /***** Read test configuration from database *****/
    Tst_GetConfigTstFromDB ();
@@ -1956,11 +1957,11 @@ static void Tst_ShowFormConfigTst (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LB\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\""
-                      " id=\"MinTimeNxtTstPerQst\" name=\"MinTimeNxtTstPerQst\""
-                      " size=\"7\" maxlength=\"7\" value=\"%lu\""
-                      " required=\"required\" />",
-            Gbl.Test.Config.MinTimeNxtTstPerQst);
+   snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),
+             "%lu",
+	     Gbl.Test.Config.MinTimeNxtTstPerQst);
+   HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",7,StrMinTimeNxtTstPerQst,
+		   "size=\"7\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -2009,6 +2010,8 @@ static void Tst_ShowFormConfigTst (void)
 static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
                                      unsigned Value)
   {
+   char StrValue[10 + 1];
+
    HTM_TR_Begin (NULL);
 
    HTM_TD_Begin ("class=\"RM\"");
@@ -2018,12 +2021,11 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\""
-                      " id=\"%s\" name=\"%s\""
-                      " size=\"3\" maxlength=\"3\" value=\"%u\""
-                      " required=\"required\" />",
-           Field,Field,
-           Value);
+   snprintf (StrValue,sizeof (StrValue),
+	     "%u",
+	     Value);
+   HTM_INPUT_TEXT (Field,3,StrValue,
+		   "size=\"3\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -4212,10 +4214,14 @@ void Tst_WriteChoiceAnsViewMatch (long MchCod,unsigned QstInd,long QstCod,
 
 static void Tst_WriteTextAnsViewTest (unsigned NumQst)
   {
+   char StrAns[3 + 6 + 1];
+
    /***** Write input field for the answer *****/
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\""
-	              " size=\"40\" maxlength=\"%u\" value=\"\" />",
-            NumQst,Tst_MAX_BYTES_ANSWERS_ONE_QST);
+   snprintf (StrAns,sizeof (StrAns),
+	     "Ans%06u",
+	     NumQst);
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_ANSWERS_ONE_QST,"",
+		   "size=\"40\"");
   }
 
 /*****************************************************************************/
@@ -4412,10 +4418,14 @@ static void Tst_WriteTextAnsAssessTest (struct UsrData *UsrDat,
 
 static void Tst_WriteIntAnsViewTest (unsigned NumQst)
   {
+   char StrAns[3 + 6 + 1];
+
    /***** Write input field for the answer *****/
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\""
-	              " size=\"11\" maxlength=\"11\" value=\"\" />",
-            NumQst);
+   snprintf (StrAns,sizeof (StrAns),
+	     "Ans%06u",
+	     NumQst);
+   HTM_INPUT_TEXT (StrAns,11,"",
+		   "size=\"11\"");
   }
 
 /*****************************************************************************/
@@ -4527,10 +4537,14 @@ static void Tst_WriteIntAnsAssessTest (struct UsrData *UsrDat,
 
 static void Tst_WriteFloatAnsViewTest (unsigned NumQst)
   {
+   char StrAns[3 + 6 + 1];
+
    /***** Write input field for the answer *****/
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\""
-	              " size=\"11\" maxlength=\"%u\" value=\"\" />",
-            NumQst,Tst_MAX_BYTES_FLOAT_ANSWER);
+   snprintf (StrAns,sizeof (StrAns),
+	     "Ans%06u",
+	     NumQst);
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,"",
+		   "size=\"11\"");
   }
 
 /*****************************************************************************/
@@ -5024,6 +5038,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    bool OptionsDisabled;
    bool AnswerHasContent;
    bool DisplayRightColumn;
+   char StrTagTxt[6 + 10 + 1];
+   char StrInteger[20 + 1];
 
    /***** Begin box *****/
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
@@ -5109,10 +5125,13 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
       /***** Input of a new tag *****/
       HTM_TD_Begin ("class=\"RM\"");
-      fprintf (Gbl.F.Out,"<input type=\"text\" id=\"TagTxt%u\" name=\"TagTxt%u\""
-                         " class=\"TAG_TXT\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"changeSelTag('%u')\" />",
-	       NumTag,NumTag,Tst_MAX_CHARS_TAG,Gbl.Test.Tags.Txt[NumTag],NumTag);
+      snprintf (StrTagTxt,sizeof (StrTagTxt),
+		"TagTxt%u",
+		NumTag);
+      HTM_INPUT_TEXT (StrTagTxt,Tst_MAX_CHARS_TAG,StrTagTxt,
+		      "class=\"TAG_TXT\""
+                      " onchange=\"changeSelTag('%u')\"",
+	              NumTag);
       HTM_TD_End ();
 
       HTM_TR_End ();
@@ -5194,12 +5213,13 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    HTM_TD_Begin ("class=\"LT\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Integer_number);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"AnsInt\""
-                      " size=\"11\" maxlength=\"11\" value=\"%ld\"",
-            Gbl.Test.Answer.Integer);
-   if (Gbl.Test.AnswerType != Tst_ANS_INT)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," required=\"required\" />");
+   snprintf (StrInteger,sizeof (StrInteger),
+	     "%ld",
+	     Gbl.Test.Answer.Integer);
+   HTM_INPUT_TEXT ("AnsInt",11,StrInteger,
+		   "size=\"11\" required=\"required\"%s",
+                   Gbl.Test.AnswerType == Tst_ANS_INT ? "" :
+                                                        " disabled=\"disabled\"");
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -5394,18 +5414,17 @@ static void Tst_PutFloatInputField (const char *Label,const char *Field,
                                     double Value)
   {
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
+   char StrFloat[32];
 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s&nbsp;",Label);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"%s\""
-                      " size=\"11\" maxlength=\"%u\""
-                      " value=\"%lg\"",
-            Field,
-            Tst_MAX_BYTES_FLOAT_ANSWER,
-            Value);
-   if (Gbl.Test.AnswerType != Tst_ANS_FLOAT)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," required=\"required\" />");
+   snprintf (StrFloat,sizeof (StrFloat),
+	     "%lg",
+	     Value);
+   HTM_INPUT_TEXT (Field,Tst_MAX_BYTES_FLOAT_ANSWER,StrFloat,
+		   "size=\"11\" required=\"required\"%s",
+                   Gbl.Test.AnswerType == Tst_ANS_FLOAT ? "" :
+                                                          " disabled=\"disabled\"");
    HTM_LABEL_End ();
   }
 

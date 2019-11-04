@@ -3305,10 +3305,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Title\" name=\"Title\""
-                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />",
-            Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title);
+   HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,
+		   " size=\"45\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

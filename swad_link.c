@@ -440,12 +440,10 @@ static void Lnk_ListLinksForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                 " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_SHORT_NAME\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
-               Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
+		      " class=\"INPUT_SHORT_NAME\""
+                      " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -453,12 +451,10 @@ static void Lnk_ListLinksForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                 " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_FULL_NAME\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
-               Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
+		      " class=\"INPUT_FULL_NAME\""
+                      " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -755,20 +751,14 @@ static void Lnk_PutFormToCreateLink (void)
 
    /***** Link short name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />",
-            Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName);
+   HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName,
+		   " class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Link full name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />",
-            Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName);
+   HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName,
+		   " class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Link WWW *****/

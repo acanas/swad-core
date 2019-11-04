@@ -409,14 +409,10 @@ static void Ins_Configuration (bool PrintView)
      {
       /* Form to change institution full name */
       Frm_StartForm (ActRenInsFulCfg);
-      fprintf (Gbl.F.Out,"<input type=\"text\""
-			 " id=\"FullName\" name=\"FullName\""
-			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"INPUT_FULL_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Hie_MAX_CHARS_FULL_NAME,
-	       Gbl.Hierarchy.Ins.FullName,
-	       Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ins.FullName,
+		      " class=\"INPUT_FULL_NAME\""
+	              " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
      }
    else	// I can not edit institution full name
@@ -441,14 +437,10 @@ static void Ins_Configuration (bool PrintView)
      {
       /* Form to change institution short name */
       Frm_StartForm (ActRenInsShoCfg);
-      fprintf (Gbl.F.Out,"<input type=\"text\""
-			 " id=\"ShortName\" name=\"ShortName\""
-			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Hie_MAX_CHARS_SHRT_NAME,
-	       Gbl.Hierarchy.Ins.ShrtName,
-	       Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ins.ShrtName,
+		      " class=\"INPUT_SHORT_NAME\""
+	              " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
      }
    else	// I can not edit institution short name
@@ -1503,12 +1495,10 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActRenInsSho);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_SHORT_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
-		  Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
+			 " class=\"INPUT_SHORT_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\"",
+			 Gbl.Form.Id);
 	 Frm_EndForm ();
 	}
       else
@@ -1521,13 +1511,10 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActRenInsFul);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_FULL_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Hie_MAX_CHARS_FULL_NAME,
-		  Ins->FullName,
-		  Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins->FullName,
+			 " class=\"INPUT_FULL_NAME\""
+			 " onchange=\"document.getElementById('%s').submit();\"",
+			 Gbl.Form.Id);
 	 Frm_EndForm ();
 	}
       else
@@ -2237,20 +2224,14 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\""
-                      " required=\"required\" />",
-            Hie_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName);
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
+		   " class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Institution full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\""
-                      " required=\"required\" />",
-            Hie_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName);
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
+		   " class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Institution WWW *****/

@@ -184,6 +184,7 @@ void Prf_RequestUserProfile (void)
    extern const char *The_ClassFormInBox[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
+   char NicknameWithArroba[1 + Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -206,10 +207,12 @@ void Prf_RequestUserProfile (void)
       If no user logged ==> the nickname is empty */
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_Nickname);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"usr\""
-                      " size=\"18\" maxlength=\"%u\" value=\"@%s\" />",
-            Nck_MAX_BYTES_NICKNAME_FROM_FORM,
-            Gbl.Usrs.Me.UsrDat.Nickname);
+
+   snprintf (NicknameWithArroba,sizeof (NicknameWithArroba),
+	     "@%s",
+	     Gbl.Usrs.Me.UsrDat.Nickname);
+   HTM_INPUT_TEXT ("usr",Nck_MAX_BYTES_NICKNAME_FROM_FORM,NicknameWithArroba,
+		   " size=\"18\"");
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/

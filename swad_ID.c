@@ -713,11 +713,10 @@ static void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,
 	 Frm_StartFormAnchor (NextAction,ID_ID_SECTION_ID);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
-      fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewID\" name=\"NewID\""
-	                 " size=\"18\" maxlength=\"%u\" value=\"%s\" />",
-	       ID_MAX_BYTES_USR_ID,
-	       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
-		                 "");	// Show the most recent ID
+      HTM_INPUT_TEXT ("NewID",ID_MAX_BYTES_USR_ID,
+		      UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
+		                        "",	// Show the most recent ID
+		      " size=\"18\"");
       fprintf (Gbl.F.Out,"<br />");
       Btn_PutCreateButtonInline (Txt_Add_this_ID);
       Frm_EndForm ();

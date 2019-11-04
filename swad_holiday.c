@@ -651,10 +651,10 @@ static void Hld_ListHolidaysForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenHld);
       Hld_PutParamHldCod (Hld->HldCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
-	                 " size=\"20\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,Gbl.Form.Id);
+      HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,
+		      " size=\"20\""
+		      " onchange=\"document.getElementById('%s').submit();\"",
+		      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
       HTM_TR_End ();
@@ -1038,10 +1038,8 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Holiday name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
-                      " size=\"20\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />",
-            Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name);
+   HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name,
+		   " size=\"20\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TD_Empty (1);

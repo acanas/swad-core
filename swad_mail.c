@@ -506,11 +506,10 @@ static void Mai_ListMailDomainsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenMaiSho);
       Mai_PutParamMaiCod (Mai->MaiCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Domain\""
-	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
-               Gbl.Form.Id);
+      HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
+		      " size=\"15\""
+		      " onchange=\"document.getElementById('%s').submit();\"",
+                      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -518,11 +517,10 @@ static void Mai_ListMailDomainsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenMaiFul);
       Mai_PutParamMaiCod (Mai->MaiCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Info\""
-	                 " size=\"40\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
-               Gbl.Form.Id);
+      HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
+		      " size=\"40\""
+		      " onchange=\"document.getElementById('%s').submit();\"",
+                      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -765,18 +763,14 @@ static void Mai_PutFormToCreateMailDomain (void)
 
    /***** Mail domain *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Domain\""
-                      " size=\"15\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />",
-            Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain);
+   HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
+		   " size=\"15\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Mail domain info *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Info\""
-                      " size=\"40\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />",
-            Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info);
+   HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
+		   " size=\"40\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TD_Empty (1);

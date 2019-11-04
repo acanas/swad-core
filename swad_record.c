@@ -286,6 +286,7 @@ void Rec_ListFieldsRecordsForEdition (void)
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    unsigned NumField;
    Rec_VisibilityRecordFields_t Vis;
+   char StrNumLines[10 + 1];
 
    /***** Write heading *****/
    Rec_WriteHeadingRecordFields ();
@@ -309,12 +310,10 @@ void Rec_ListFieldsRecordsForEdition (void)
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenFie);
       Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
-	                 " class=\"REC_FIELDNAME\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Rec_MAX_CHARS_NAME_FIELD,
-               Gbl.Crs.Records.LstFields.Lst[NumField].Name,
-               Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.LstFields.Lst[NumField].Name,
+		      " class=\"REC_FIELDNAME\""
+                      " onchange=\"document.getElementById('%s').submit();\"",
+                      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -322,11 +321,13 @@ void Rec_ListFieldsRecordsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgRowFie);
       Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NumLines\""
-	                 " size=\"2\" maxlength=\"2\" value=\"%u\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Gbl.Crs.Records.LstFields.Lst[NumField].NumLines,
-               Gbl.Form.Id);
+      snprintf (StrNumLines,sizeof (StrNumLines),
+		"%u",
+		Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
+      HTM_INPUT_TEXT ("NumLines",2,StrNumLines,
+		      " size=\"2\""
+                      " onchange=\"document.getElementById('%s').submit();\"",
+                      Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -365,6 +366,7 @@ void Rec_ShowFormCreateRecordField (void)
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Create_record_field;
    Rec_VisibilityRecordFields_t Vis;
+   char StrNumLines[10 + 1];
 
    /***** Begin form *****/
    Frm_StartForm (ActNewFie);
@@ -384,18 +386,17 @@ void Rec_ShowFormCreateRecordField (void)
 
    /***** Field name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
-                      " class=\"REC_FIELDNAME\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />",
-            Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name);
+   HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,
+		   " class=\"REC_FIELDNAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Number of lines in form ******/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NumLines\""
-	              " size=\"2\" maxlength=\"2\" value=\"%u\""
-	              " required=\"required\" />",
-            Gbl.Crs.Records.Field.NumLines);
+   snprintf (StrNumLines,sizeof (StrNumLines),
+	     "%u",
+	     Gbl.Crs.Records.Field.NumLines);
+   HTM_INPUT_TEXT ("NumLines",2,StrNumLines,
+		   " size=\"2\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Visibility to students *****/
@@ -3172,17 +3173,10 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
    if (ICanEdit)
-     {
-      fprintf (Gbl.F.Out,"<input type=\"text\""
-	                 " id=\"Surname1\" name=\"Surname1\""
-			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"REC_C2_BOT_INPUT\"",
-	       Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
-	       UsrDat->Surname1);
-      if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
-         fprintf (Gbl.F.Out," required=\"required\"");
-      fprintf (Gbl.F.Out," />");
-     }
+      HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
+		      " class=\"REC_C2_BOT_INPUT\"%s",
+		      TypeOfView == Rec_SHA_MY_RECORD_FORM ? " required=\"required\"" :
+			                                     "");
    else if (UsrDat->Surname1[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
    HTM_TD_End ();
@@ -3210,12 +3204,8 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
    if (ICanEdit)
-      fprintf (Gbl.F.Out,"<input type=\"text\""
-	                 " id=\"Surname2\" name=\"Surname2\""
-			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"REC_C2_BOT_INPUT\" />",
-	       Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
-	       UsrDat->Surname2);
+      HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname2,
+		      " class=\"REC_C2_BOT_INPUT\"");
    else if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname2);
    HTM_TD_End ();
@@ -3247,17 +3237,10 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
 
    HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
    if (ICanEdit)
-     {
-      fprintf (Gbl.F.Out,"<input type=\"text\""
-	                 " id=\"FirstName\" name=\"FirstName\""
-                         " maxlength=\"%u\" value=\"%s\""
-			 " class=\"REC_C2_BOT_INPUT\"",
-	       Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
-	       UsrDat->FirstName);
-      if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
-         fprintf (Gbl.F.Out," required=\"required\"");
-      fprintf (Gbl.F.Out," />");
-     }
+      HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->FirstName,
+		      " class=\"REC_C2_BOT_INPUT\"%s",
+		      TypeOfView == Rec_SHA_MY_RECORD_FORM ? " required=\"required\"" :
+			                                     "");
    else if (UsrDat->FirstName[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
    HTM_TD_End ();
@@ -3345,12 +3328,8 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
    if (ShowData)
      {
       if (ICanEdit)
-	 fprintf (Gbl.F.Out,"<input type=\"text\""
-	                    " id=\"OriginPlace\" name=\"OriginPlace\""
-			    " maxlength=\"%u\" value=\"%s\""
-			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Usr_MAX_CHARS_ADDRESS,
-		  UsrDat->OriginPlace);
+	 HTM_INPUT_TEXT ("OriginPlace",Usr_MAX_CHARS_ADDRESS,UsrDat->OriginPlace,
+			 " class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->OriginPlace[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
      }
@@ -3414,12 +3393,8 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
    if (ShowData)
      {
       if (ICanEdit)
-	 fprintf (Gbl.F.Out,"<input type=\"text\""
-	                    " id=\"LocalAddress\" name=\"LocalAddress\""
-			    " maxlength=\"%u\" value=\"%s\""
-			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Usr_MAX_CHARS_ADDRESS,
-		  UsrDat->LocalAddress);
+	 HTM_INPUT_TEXT ("LocalAddress",Usr_MAX_CHARS_ADDRESS,UsrDat->LocalAddress,
+			 " class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->LocalAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
      }
@@ -3490,12 +3465,8 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
    if (ShowData)
      {
       if (ICanEdit)
-	 fprintf (Gbl.F.Out,"<input type=\"text\""
-	                    " id=\"FamilyAddress\" name=\"FamilyAddress\""
-			    " maxlength=\"%u\" value=\"%s\""
-			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Usr_MAX_CHARS_ADDRESS,
-		  UsrDat->FamilyAddress);
+	 HTM_INPUT_TEXT ("FamilyAddress",Usr_MAX_CHARS_ADDRESS,UsrDat->FamilyAddress,
+			 " class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->FamilyAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
      }
@@ -4209,13 +4180,10 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       Frm_StartFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
-      fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Office\" name=\"Office\""
-			 " maxlength=\"%u\" value=\"%s\""
-		         " class=\"REC_C2_BOT_INPUT\""
-			 " onchange=\"document.getElementById('%s').submit();\" />",
-               Usr_MAX_CHARS_ADDRESS,
-	       Gbl.Usrs.Me.UsrDat.Tch.Office,
-	       Gbl.Form.Id);
+      HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
+		      " class=\"REC_C2_BOT_INPUT\""
+	              " onchange=\"document.getElementById('%s').submit();\"",
+	              Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 

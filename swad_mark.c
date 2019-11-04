@@ -112,6 +112,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
    struct MarksProperties Marks;
+   char StrHeadOrFoot[10 + 1];
 
    if (Gbl.FileBrowser.FilFolLnk.Type == Brw_IS_FOLDER)
       HTM_TD_ColouredEmpty (2);
@@ -129,13 +130,14 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       Brw_PutImplicitParamsFileBrowser ();
       HTM_LABEL_Begin (NULL);
       fprintf (Gbl.F.Out,"&nbsp;%s: ",Txt_TABLE_Header);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"%s\""
-                         " size=\"1\" maxlength=\"5\" value=\"%u\""
-                         " class=\"LST_EDIT_ROWS COLOR%u\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Mrk_HeadOrFootStr[Brw_HEADER],Marks.Header,
-               Gbl.RowEvenOdd,
-               Gbl.Form.Id);
+      snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),
+		"%u",
+		Marks.Header);
+      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],5,StrHeadOrFoot,
+		      " size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\""
+		      " onchange=\"document.getElementById('%s').submit();\"",
+                      Gbl.RowEvenOdd,
+		      Gbl.Form.Id);
       HTM_LABEL_End ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -149,13 +151,14 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       Brw_PutImplicitParamsFileBrowser ();
       HTM_LABEL_Begin (NULL);
       fprintf (Gbl.F.Out,"&nbsp;%s: ",Txt_TABLE_Footer);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"%s\""
-                         " size=\"1\" maxlength=\"5\" value=\"%u\""
-                         " class=\"LST_EDIT_ROWS COLOR%u\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Mrk_HeadOrFootStr[Brw_FOOTER],Marks.Footer,
-               Gbl.RowEvenOdd,
-               Gbl.Form.Id);
+      snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),
+		"%u",
+		Marks.Footer);
+      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],5,StrHeadOrFoot,
+		      " size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\""
+		      " onchange=\"document.getElementById('%s').submit();\"",
+                      Gbl.RowEvenOdd,
+		      Gbl.Form.Id);
       HTM_LABEL_End ();
       Frm_EndForm ();
       HTM_TD_End ();

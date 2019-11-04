@@ -25,8 +25,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
-#include <stdio.h>		// For asprintf
 #include <string.h>		// For string functions
 
 #include "swad_account.h"
@@ -233,7 +231,7 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    unsigned NumNicks;
    unsigned NumNick;
    Act_Action_t NextAction;
-   char *NewNick;
+   char NicknameWithArroba[1 + Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
 
    /***** Start section *****/
    HTM_SECTION_Begin (Nck_NICKNAME_SECTION_ID);
@@ -356,10 +354,10 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	   }
 
-	 if (asprintf (&NewNick,"@%s",row[0]) < 0)
-	    Lay_NotEnoughMemoryExit ();
-	 Par_PutHiddenParamString (NULL,"NewNick",NewNick);	// Nickname
-	 free ((void *) NewNick);
+	 snprintf (NicknameWithArroba,sizeof (NicknameWithArroba),
+		   "@%s",
+		   row[0]);
+	 Par_PutHiddenParamString (NULL,"NewNick",NicknameWithArroba);	// Nickname
 	 Btn_PutConfirmButtonInline (Txt_Use_this_nickname);
 	 Frm_EndForm ();
 	}
@@ -400,10 +398,11 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
       Frm_StartFormAnchor (NextAction,Nck_NICKNAME_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
-   fprintf (Gbl.F.Out,"<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
-	              " size=\"18\" maxlength=\"%u\" value=\"@%s\" />",
-            1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
-            Gbl.Usrs.Me.UsrDat.Nickname);
+   snprintf (NicknameWithArroba,sizeof (NicknameWithArroba),
+	     "@%s",
+	     Gbl.Usrs.Me.UsrDat.Nickname);
+   HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,NicknameWithArroba,
+		   " size=\"18\"");
    fprintf (Gbl.F.Out,"<br />");
    Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
         	                         Txt_Save_changes);	// I have no nickname yet);
