@@ -8435,8 +8435,7 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
    /***** Form to upload one files using the classic way *****/
    Frm_StartForm (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
    Brw_PutImplicitParamsFileBrowser ();
-   fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" />",
-            Fil_NAME_OF_PARAM_FILENAME_ORG);
+   HTM_INPUT_FILE ("*",false);
 
    /* Button to send */
    Btn_PutCreateButton (Txt_Upload_file);

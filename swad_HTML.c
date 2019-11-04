@@ -897,6 +897,16 @@ void HTM_INPUT_URL (const char *Name,const char *Value,
    fprintf (Gbl.F.Out," />");
   }
 
+void HTM_INPUT_FILE (const char *Accept,bool SubmitOnChange)
+  {
+   fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" accept=\"%s\"",
+	    Fil_NAME_OF_PARAM_FILENAME_ORG,Accept);
+   if (SubmitOnChange)
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+	       Gbl.Form.Id);
+   fprintf (Gbl.F.Out," />");
+  }
+
 /*****************************************************************************/
 /********************************* Text areas ********************************/
 /*****************************************************************************/

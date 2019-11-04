@@ -1277,8 +1277,7 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_File);
-   fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" />",
-            Fil_NAME_OF_PARAM_FILENAME_ORG);
+   HTM_INPUT_FILE (".htm,.html,.pdf",false);
    HTM_LABEL_End ();
    HTM_DIV_End ();
 
