@@ -134,7 +134,7 @@ static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
       fprintf (Gbl.F.Out,"\" id=\"%s\"",Id);
       if (OnSubmit)
          if (OnSubmit[0])
-            fprintf (Gbl.F.Out," onsubmit=\"%s;return false;\"",OnSubmit);
+            fprintf (Gbl.F.Out," onsubmit=\"%s;\"",OnSubmit);
       switch (Act_GetBrowserTab (NextAction))
 	{
 	 case Act_BRW_NEW_TAB:
