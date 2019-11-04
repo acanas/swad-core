@@ -921,6 +921,14 @@ void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr)
 	    Name,Value,Attr);
   }
 
+void HTM_INPUT_IMAGE (const char *ImgFile,const char *Title,const char *Class)
+  {
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+		      " alt=\"%s\" title=\"%s\" class=\"%s\" />",
+	    Cfg_URL_ICON_PUBLIC,ImgFile,
+	    Title,Title,Class);
+  }
+
 /*****************************************************************************/
 /********************************* Text areas ********************************/
 /*****************************************************************************/

@@ -363,11 +363,7 @@ void Ico_PutDivIconLink (const char *DivClass,const char *Icon,const char *Title
 
 void Ico_PutIconLink (const char *Icon,const char *Title)
   {
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16\" />",
-	    Cfg_URL_ICON_PUBLIC,Icon,
-	    Title,Title);
+   HTM_INPUT_IMAGE (Icon,Title,"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO_16x16");
   }
 
 /*****************************************************************************/
@@ -389,11 +385,7 @@ void Ico_PutIconTextLink (const char *Icon,const char *Text)
 
 void Ico_PutSettingIconLink (const char *Icon,const char *Title)
   {
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO_HIGHLIGHT ICOx20\" />",
-	    Cfg_URL_ICON_PUBLIC,Icon,
-	    Title,Title);
+   HTM_INPUT_IMAGE (Icon,Title,"ICO_HIGHLIGHT ICOx20");
   }
 
 /*****************************************************************************/

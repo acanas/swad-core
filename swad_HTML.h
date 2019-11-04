@@ -97,6 +97,7 @@ void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
 	            const char *fmt,...);
 void HTM_INPUT_FILE (const char *Accept,bool SubmitOnChange);
 void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr);
+void HTM_INPUT_IMAGE (const char *ImgFile,const char *Title,const char *Class);
 
 void HTM_TEXTAREA_Begin (const char *fmt,...);
 void HTM_TEXTAREA_End (void);
