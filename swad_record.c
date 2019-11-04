@@ -3426,12 +3426,8 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
    if (ShowData)
      {
       if (ICanEdit)
-	 fprintf (Gbl.F.Out,"<input type=\"tel\""
-	                    " id=\"LocalPhone\" name=\"LocalPhone\""
-			    " maxlength=\"%u\" value=\"%s\""
-			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Usr_MAX_CHARS_PHONE,
-		  UsrDat->LocalPhone);
+	 HTM_INPUT_TEL ("LocalPhone",UsrDat->LocalPhone,false,
+	                " class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->LocalPhone[0])
 	{
 	 HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",UsrDat->LocalPhone);
@@ -3499,12 +3495,8 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
    if (ShowData)
      {
       if (ICanEdit)
-	 fprintf (Gbl.F.Out,"<input type=\"tel\""
-	                    " id=\"FamilyPhone\" name=\"FamilyPhone\""
-			    " maxlength=\"%u\" value=\"%s\""
-			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Usr_MAX_CHARS_PHONE,
-		  UsrDat->FamilyPhone);
+	 HTM_INPUT_TEL ("FamilyPhone",UsrDat->FamilyPhone,false,
+	                " class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->FamilyPhone[0])
 	{
 	 HTM_A_Begin ("href=\"tel:%s\" class=\"REC_DAT_BOLD\"",UsrDat->FamilyPhone);
@@ -4200,14 +4192,8 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
 
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       Frm_StartFormAnchor (ActChgMyOffPho,Rec_MY_INS_CTR_DPT_ID);
-      fprintf (Gbl.F.Out,"<input type=\"tel\""
-	                 " id=\"OfficePhone\" name=\"OfficePhone\""
-			 " maxlength=\"%u\" value=\"%s\""
-		         " class=\"REC_C2_BOT_INPUT\""
-			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Usr_MAX_CHARS_PHONE,
-	       Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
-	       Gbl.Form.Id);
+      HTM_INPUT_TEL ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,true,
+		     " class=\"REC_C2_BOT_INPUT\"");
       Frm_EndForm ();
       HTM_TD_End ();
 

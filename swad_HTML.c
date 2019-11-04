@@ -833,6 +833,44 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool 
    fprintf (Gbl.F.Out," />");
   }
 
+void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
+	            const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Attr;
+
+   fprintf (Gbl.F.Out,"<input type=\"tel\" id=\"%s\" name=\"%s\""
+		      " maxlength=\"%u\" value=\"%s\"",
+	    Name,Name,Usr_MAX_CHARS_PHONE,Value);
+
+   if (fmt)
+     {
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Attr,fmt,ap);
+	 va_end (ap);
+
+	 if (NumBytesPrinted < 0)	// If memory allocation wasn't possible,
+					// or some other error occurs,
+					// vasprintf will return -1
+	    Lay_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 fprintf (Gbl.F.Out," %s",Attr);
+
+	 free ((void *) Attr);
+	}
+     }
+
+   if (SubmitOnChange)
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+	       Gbl.Form.Id);
+
+   fprintf (Gbl.F.Out," />");
+  }
+
 void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
 	              const char *fmt,...)
   {
