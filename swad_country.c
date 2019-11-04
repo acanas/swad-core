@@ -1685,12 +1685,10 @@ static void Cty_ListCountriesForEdition (void)
          Frm_StartForm (ActChgCtyWWW);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
-         fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-                            " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_WWW\""
-                            " onchange=\"document.getElementById('%s').submit();\" />",
-                  Cns_MAX_CHARS_WWW,
-                  Cty->WWW[Lan],Gbl.Form.Id);
+	 HTM_INPUT_URL ("WWW",Cty->WWW[Lan],
+			"class=\"INPUT_WWW\""
+			" onchange=\"document.getElementById('%s').submit();\"",
+                        Gbl.Form.Id);
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -2111,12 +2109,11 @@ static void Cty_PutFormToCreateCountry (void)
 
       /* WWW */
       HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW_%s\""
-                         " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_WWW\" />",
-	       Lan_STR_LANG_ID[Lan],
-	       Cns_MAX_CHARS_WWW,
-	       Cty_EditingCty->WWW[Lan]);
+      snprintf (StrName,sizeof (StrName),
+		"WWW_%s",
+		Lan_STR_LANG_ID[Lan]);
+      HTM_INPUT_URL (StrName,Cty_EditingCty->WWW[Lan],
+		     "class=\"INPUT_WWW\"");
       HTM_TD_End ();
 
       HTM_TR_End ();

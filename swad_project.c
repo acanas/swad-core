@@ -3306,7 +3306,7 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("Title",Prj_MAX_CHARS_PROJECT_TITLE,Prj->Title,
-		   " size=\"45\" required=\"required\"");
+		   "size=\"45\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3422,9 +3422,8 @@ static void Prj_PutFormProject (struct Project *Prj,bool ItsANewProject)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"DAT LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL\" name=\"URL\""
-		      " size=\"45\" maxlength=\"%u\" value=\"%s\" />",
-	    Cns_MAX_CHARS_WWW,Prj->URL);
+   HTM_INPUT_URL ("URL",Prj->URL,
+		  "size=\"45\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

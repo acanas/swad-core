@@ -1474,7 +1474,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_StartForm (ActChgInsCrsCod);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,Crs->InstitutionalCrsCod,
-			    " class=\"INPUT_INS_CODE\""
+			    "class=\"INPUT_INS_CODE\""
 			    " onchange=\"document.getElementById('%s').submit();\"",
 		            Gbl.Form.Id);
 	    Frm_EndForm ();
@@ -1514,7 +1514,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_StartForm (ActRenCrsSho);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
-			    " class=\"INPUT_SHORT_NAME\""
+			    "class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\"",
 		            Gbl.Form.Id);
 	    Frm_EndForm ();
@@ -1530,7 +1530,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_StartForm (ActRenCrsFul);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs->FullName,
-			    " class=\"INPUT_FULL_NAME\""
+			    "class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\"",
 		            Gbl.Form.Id);
 	    Frm_EndForm ();
@@ -1681,7 +1681,7 @@ static void Crs_PutFormToCreateCourse (void)
    /***** Institutional code of the course *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,Crs_EditingCrs->InstitutionalCrsCod,
-		   " class=\"INPUT_INS_CODE\"");
+		   "class=\"INPUT_INS_CODE\"");
    HTM_TD_End ();
 
    /***** Year *****/
@@ -1701,13 +1701,13 @@ static void Crs_PutFormToCreateCourse (void)
    /***** Course short name *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName,
-		   " class=\"INPUT_SHORT_NAME\" required=\"required\"");
+		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Course full name *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName,
-		   " class=\"INPUT_FULL_NAME\" required=\"required\"");
+		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Current number of teachers in this course *****/

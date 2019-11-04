@@ -91,6 +91,10 @@ void HTM_LABEL_End (void);
 
 void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
 	             const char *fmt,...);
+void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
+	              const char *fmt,...);
+void HTM_INPUT_URL (const char *Name,const char *Value,
+	            const char *fmt,...);
 
 void HTM_TEXTAREA_Begin (const char *fmt,...);
 void HTM_TEXTAREA_End (void);

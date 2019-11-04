@@ -273,6 +273,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    Net_WebsAndSocialNetworks_t NumURL;
    char URL[Cns_MAX_BYTES_WWW + 1];
    char StrRecordWidth[10 + 1];
+   char StrName[32];
 
    /***** Start section *****/
    HTM_SECTION_Begin (Net_MY_WEBS_ID);
@@ -330,11 +331,11 @@ void Net_ShowFormMyWebsAndSocialNets (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
-      fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL%u\" name=\"URL%u\""
-			 " maxlength=\"%u\" value=\"%s\""
-		         " class=\"REC_C2_BOT_INPUT\" />",
-	       (unsigned) NumURL,(unsigned) NumURL,
-	       Cns_MAX_CHARS_WWW,URL);
+      snprintf (StrName,sizeof (StrName),
+		"URL%u",
+		(unsigned) NumURL);
+      HTM_INPUT_URL ("WWW",StrName,
+		     "class=\"REC_C2_BOT_INPUT\"");
       HTM_TD_End ();
 
       HTM_TR_End ();

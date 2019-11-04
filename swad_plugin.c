@@ -427,7 +427,7 @@ static void Plg_ListPluginsForEdition (void)
       Frm_StartForm (ActRenPlg);
       Plg_PutParamPlgCod (Plg->PlgCod);
       HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,
-		      " size=\"10\""
+		      "size=\"10\""
 		      " onchange=\"document.getElementById('%s').submit();\"",
 		      Gbl.Form.Id);
       Frm_EndForm ();
@@ -438,7 +438,7 @@ static void Plg_ListPluginsForEdition (void)
       Frm_StartForm (ActChgPlgDes);
       Plg_PutParamPlgCod (Plg->PlgCod);
       HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,
-		      " size=\"30\""
+		      "size=\"30\""
 		      " onchange=\"document.getElementById('%s').submit();\"",
 		      Gbl.Form.Id);
       Frm_EndForm ();
@@ -449,7 +449,7 @@ static void Plg_ListPluginsForEdition (void)
       Frm_StartForm (ActChgPlgLog);
       Plg_PutParamPlgCod (Plg->PlgCod);
       HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,
-		      " size=\"4\""
+		      "size=\"4\""
 		      " onchange=\"document.getElementById('%s').submit();\"",
 		      Gbl.Form.Id);
       Frm_EndForm ();
@@ -460,7 +460,7 @@ static void Plg_ListPluginsForEdition (void)
       Frm_StartForm (ActChgPlgAppKey);
       Plg_PutParamPlgCod (Plg->PlgCod);
       HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,
-		      " size=\"16\""
+		      "size=\"16\""
 		      " onchange=\"document.getElementById('%s').submit();\"",
 		      Gbl.Form.Id);
       Frm_EndForm ();
@@ -470,10 +470,10 @@ static void Plg_ListPluginsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgPlgURL);
       Plg_PutParamPlgCod (Plg->PlgCod);
-      fprintf (Gbl.F.Out,"<input type=\"url\" name=\"URL\""
-	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_CHARS_WWW,Plg->URL,Gbl.Form.Id);
+      HTM_INPUT_URL ("URL",Plg->URL,
+		     "size=\"15\""
+		     " onchange=\"document.getElementById('%s').submit();\"",
+		     Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -482,7 +482,7 @@ static void Plg_ListPluginsForEdition (void)
       Frm_StartForm (ActChgPlgIP);
       Plg_PutParamPlgCod (Plg->PlgCod);
       HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg->IP,
-		      " size=\"10\""
+		      "size=\"10\""
 		      " onchange=\"document.getElementById('%s').submit();\"",
 		      Gbl.Form.Id);
       Frm_EndForm ();
@@ -905,39 +905,37 @@ static void Plg_PutFormToCreatePlugin (void)
    /***** Plugin name *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("Name",Plg_MAX_CHARS_PLUGIN_NAME,Plg_EditingPlg->Name,
-		   " size=\"10\" required=\"required\"");
+		   "size=\"10\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Plugin description *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("Description",Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg_EditingPlg->Description,
-		   " size=\"30\" required=\"required\"");
+		   "size=\"30\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Plugin logo *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("Logo",Plg_MAX_CHARS_PLUGIN_LOGO,Plg_EditingPlg->Logo,
-		   " size=\"4\" required=\"required\"");
+		   "size=\"4\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Plugin application key *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("AppKey",Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg_EditingPlg->AppKey,
-		   " size=\"16\" required=\"required\"");
+		   "size=\"16\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Plugin URL *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"URL\""
-                      " size=\"15\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />",
-            Cns_MAX_CHARS_WWW,Plg_EditingPlg->URL);
+   HTM_INPUT_URL ("URL",Plg_EditingPlg->URL,
+		  "size=\"15\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Plugin IP address *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("IP",Cns_MAX_CHARS_IP,Plg_EditingPlg->IP,
-		   " size=\"10\" required=\"required\"");
+		   "size=\"10\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

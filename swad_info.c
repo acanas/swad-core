@@ -1308,22 +1308,21 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    Frm_StartForm (Inf_ActionsInfo[InfoSrc][Gbl.Crs.Info.Type]);
 
    /***** Link *****/
-   HTM_DIV_Begin ("class=\"CM\"");
-   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_URL);
-   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"InfoSrcURL\""
-                      " size=\"50\" maxlength=\"256\" value=\"");
-   if ((FileURL = fopen (PathFile,"rb")) == NULL)
-      fprintf (Gbl.F.Out,"http://");
-   else
+   if ((FileURL = fopen (PathFile,"rb")) != NULL)
      {
       if (fgets (Gbl.Crs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
          Gbl.Crs.Info.URL[0] = '\0';
-      /* File is not needed now. Close it */
+      /* File is not longer needed. Close it */
       fclose (FileURL);
-      fprintf (Gbl.F.Out,"%s",Gbl.Crs.Info.URL);
      }
-   fprintf (Gbl.F.Out,"\" />");
+   else
+      Gbl.Crs.Info.URL[0] = '\0';
+
+   HTM_DIV_Begin ("class=\"CM\"");
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_URL);
+   HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,
+		  "size=\"50\"");
    HTM_LABEL_End ();
    HTM_DIV_End ();
 

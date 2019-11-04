@@ -134,7 +134,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 		"%u",
 		Marks.Header);
       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],5,StrHeadOrFoot,
-		      " size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\""
+		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\""
 		      " onchange=\"document.getElementById('%s').submit();\"",
                       Gbl.RowEvenOdd,
 		      Gbl.Form.Id);
@@ -155,7 +155,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
 		"%u",
 		Marks.Footer);
       HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],5,StrHeadOrFoot,
-		      " size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\""
+		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\""
 		      " onchange=\"document.getElementById('%s').submit();\"",
                       Gbl.RowEvenOdd,
 		      Gbl.Form.Id);

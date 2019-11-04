@@ -382,7 +382,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncParams) 
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_nick_email_or_ID);
    HTM_LABEL_End ();
    HTM_INPUT_TEXT ("OtherUsrIDNickOrEMail",Cns_MAX_CHARS_EMAIL_ADDRESS,"",
-		   " size=\"18\" required=\"required\"");
+		   "size=\"18\" required=\"required\"");
 
    /***** Send button*****/
    Btn_PutConfirmButton (Txt_Continue);

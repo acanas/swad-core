@@ -311,7 +311,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Frm_StartForm (ActRenFie);
       Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.LstFields.Lst[NumField].Name,
-		      " class=\"REC_FIELDNAME\""
+		      "class=\"REC_FIELDNAME\""
                       " onchange=\"document.getElementById('%s').submit();\"",
                       Gbl.Form.Id);
       Frm_EndForm ();
@@ -325,7 +325,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 		"%u",
 		Gbl.Crs.Records.LstFields.Lst[NumField].NumLines);
       HTM_INPUT_TEXT ("NumLines",2,StrNumLines,
-		      " size=\"2\""
+		      "size=\"2\""
                       " onchange=\"document.getElementById('%s').submit();\"",
                       Gbl.Form.Id);
       Frm_EndForm ();
@@ -387,7 +387,7 @@ void Rec_ShowFormCreateRecordField (void)
    /***** Field name *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("FieldName",Rec_MAX_CHARS_NAME_FIELD,Gbl.Crs.Records.Field.Name,
-		   " class=\"REC_FIELDNAME\" required=\"required\"");
+		   "class=\"REC_FIELDNAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Number of lines in form ******/
@@ -396,7 +396,7 @@ void Rec_ShowFormCreateRecordField (void)
 	     "%u",
 	     Gbl.Crs.Records.Field.NumLines);
    HTM_INPUT_TEXT ("NumLines",2,StrNumLines,
-		   " size=\"2\" required=\"required\"");
+		   "size=\"2\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Visibility to students *****/
@@ -3174,7 +3174,7 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
    if (ICanEdit)
       HTM_INPUT_TEXT ("Surname1",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname1,
-		      " class=\"REC_C2_BOT_INPUT\"%s",
+		      "class=\"REC_C2_BOT_INPUT\"%s",
 		      TypeOfView == Rec_SHA_MY_RECORD_FORM ? " required=\"required\"" :
 			                                     "");
    else if (UsrDat->Surname1[0])
@@ -3205,7 +3205,7 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
    HTM_TD_Begin ("class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
    if (ICanEdit)
       HTM_INPUT_TEXT ("Surname2",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->Surname2,
-		      " class=\"REC_C2_BOT_INPUT\"");
+		      "class=\"REC_C2_BOT_INPUT\"");
    else if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname2);
    HTM_TD_End ();
@@ -3238,7 +3238,7 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
    HTM_TD_Begin ("colspan=\"2\" class=\"REC_C2_BOT REC_DAT_BOLD LM\"");
    if (ICanEdit)
       HTM_INPUT_TEXT ("FirstName",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,UsrDat->FirstName,
-		      " class=\"REC_C2_BOT_INPUT\"%s",
+		      "class=\"REC_C2_BOT_INPUT\"%s",
 		      TypeOfView == Rec_SHA_MY_RECORD_FORM ? " required=\"required\"" :
 			                                     "");
    else if (UsrDat->FirstName[0])
@@ -3329,7 +3329,7 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
      {
       if (ICanEdit)
 	 HTM_INPUT_TEXT ("OriginPlace",Usr_MAX_CHARS_ADDRESS,UsrDat->OriginPlace,
-			 " class=\"REC_C2_BOT_INPUT\"");
+			 "class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->OriginPlace[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
      }
@@ -3394,7 +3394,7 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
      {
       if (ICanEdit)
 	 HTM_INPUT_TEXT ("LocalAddress",Usr_MAX_CHARS_ADDRESS,UsrDat->LocalAddress,
-			 " class=\"REC_C2_BOT_INPUT\"");
+			 "class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->LocalAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
      }
@@ -3466,7 +3466,7 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
      {
       if (ICanEdit)
 	 HTM_INPUT_TEXT ("FamilyAddress",Usr_MAX_CHARS_ADDRESS,UsrDat->FamilyAddress,
-			 " class=\"REC_C2_BOT_INPUT\"");
+			 "class=\"REC_C2_BOT_INPUT\"");
       else if (UsrDat->FamilyAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
      }
@@ -4181,7 +4181,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       HTM_TD_Begin ("class=\"REC_C2_BOT LM\"");
       Frm_StartFormAnchor (ActChgMyOff,Rec_MY_INS_CTR_DPT_ID);
       HTM_INPUT_TEXT ("Office",Usr_MAX_CHARS_ADDRESS,Gbl.Usrs.Me.UsrDat.Tch.Office,
-		      " class=\"REC_C2_BOT_INPUT\""
+		      "class=\"REC_C2_BOT_INPUT\""
 	              " onchange=\"document.getElementById('%s').submit();\"",
 	              Gbl.Form.Id);
       Frm_EndForm ();

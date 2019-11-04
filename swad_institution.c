@@ -410,7 +410,7 @@ static void Ins_Configuration (bool PrintView)
       /* Form to change institution full name */
       Frm_StartForm (ActRenInsFulCfg);
       HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ins.FullName,
-		      " class=\"INPUT_FULL_NAME\""
+		      "class=\"INPUT_FULL_NAME\""
 	              " onchange=\"document.getElementById('%s').submit();\"",
 		      Gbl.Form.Id);
       Frm_EndForm ();
@@ -438,7 +438,7 @@ static void Ins_Configuration (bool PrintView)
       /* Form to change institution short name */
       Frm_StartForm (ActRenInsShoCfg);
       HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ins.ShrtName,
-		      " class=\"INPUT_SHORT_NAME\""
+		      "class=\"INPUT_SHORT_NAME\""
 	              " onchange=\"document.getElementById('%s').submit();\"",
 		      Gbl.Form.Id);
       Frm_EndForm ();
@@ -466,13 +466,10 @@ static void Ins_Configuration (bool PrintView)
      {
       /* Form to change institution WWW */
       Frm_StartForm (ActChgInsWWWCfg);
-      fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
-			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"INPUT_WWW\""
-			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Cns_MAX_CHARS_WWW,
-	       Gbl.Hierarchy.Ins.WWW,
-	       Gbl.Form.Id);
+      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ins.WWW,
+		     "class=\"INPUT_WWW\""
+	             " onchange=\"document.getElementById('%s').submit();\"",
+	             Gbl.Form.Id);
       Frm_EndForm ();
      }
    else	// I can not change institution WWW
@@ -1496,7 +1493,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Frm_StartForm (ActRenInsSho);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
-			 " class=\"INPUT_SHORT_NAME\""
+			 "class=\"INPUT_SHORT_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\"",
 			 Gbl.Form.Id);
 	 Frm_EndForm ();
@@ -1512,7 +1509,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Frm_StartForm (ActRenInsFul);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins->FullName,
-			 " class=\"INPUT_FULL_NAME\""
+			 "class=\"INPUT_FULL_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\"",
 			 Gbl.Form.Id);
 	 Frm_EndForm ();
@@ -1527,13 +1524,10 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActChgInsWWW);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_WWW\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_CHARS_WWW,
-		  Ins->WWW,
-		  Gbl.Form.Id);
+	 HTM_INPUT_URL ("WWW",Ins->WWW,
+			"class=\"INPUT_WWW\""
+			" onchange=\"document.getElementById('%s').submit();\"",
+			Gbl.Form.Id);
 	 Frm_EndForm ();
 	 HTM_TD_End ();
 	}
@@ -2225,22 +2219,19 @@ static void Ins_PutFormToCreateInstitution (void)
    /***** Institution short name *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
-		   " class=\"INPUT_SHORT_NAME\" required=\"required\"");
+		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Institution full name *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
-		   " class=\"INPUT_FULL_NAME\" required=\"required\"");
+		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Institution WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_WWW\""
-                      " required=\"required\" />",
-            Cns_MAX_CHARS_WWW,Ins_EditingIns->WWW);
+   HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,
+		  "class=\"INPUT_WWW\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Number of users who claim to belong to this institution ****/

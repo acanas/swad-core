@@ -507,7 +507,7 @@ static void Mai_ListMailDomainsForEdition (void)
       Frm_StartForm (ActRenMaiSho);
       Mai_PutParamMaiCod (Mai->MaiCod);
       HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
-		      " size=\"15\""
+		      "size=\"15\""
 		      " onchange=\"document.getElementById('%s').submit();\"",
                       Gbl.Form.Id);
       Frm_EndForm ();
@@ -518,7 +518,7 @@ static void Mai_ListMailDomainsForEdition (void)
       Frm_StartForm (ActRenMaiFul);
       Mai_PutParamMaiCod (Mai->MaiCod);
       HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
-		      " size=\"40\""
+		      "size=\"40\""
 		      " onchange=\"document.getElementById('%s').submit();\"",
                       Gbl.Form.Id);
       Frm_EndForm ();
@@ -764,13 +764,13 @@ static void Mai_PutFormToCreateMailDomain (void)
    /***** Mail domain *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
-		   " size=\"15\" required=\"required\"");
+		   "size=\"15\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Mail domain info *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
-		   " size=\"40\" required=\"required\"");
+		   "size=\"40\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TD_Empty (1);
@@ -1394,10 +1394,8 @@ static void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe,
       Frm_StartFormAnchor (NextAction,Mai_EMAIL_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
-   fprintf (Gbl.F.Out,"<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
-	              " size=\"18\" maxlength=\"%u\" value=\"%s\" />",
-            Cns_MAX_CHARS_EMAIL_ADDRESS,
-            Gbl.Usrs.Me.UsrDat.Email);
+   HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrDat.Email,
+	            "size=\"18\"");
    fprintf (Gbl.F.Out,"<br />");
    Btn_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
         	                          Txt_Save_changes);		// User has no email address yet

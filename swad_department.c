@@ -563,7 +563,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Frm_StartForm (ActRenDptSho);
       Dpt_PutParamDptCod (Dpt->DptCod);
       HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
-		      " class=\"INPUT_SHORT_NAME\""
+		      "class=\"INPUT_SHORT_NAME\""
 		      " onchange=\"document.getElementById('%s').submit();\"",
                       Gbl.Form.Id);
       Frm_EndForm ();
@@ -574,7 +574,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Frm_StartForm (ActRenDptFul);
       Dpt_PutParamDptCod (Dpt->DptCod);
       HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt->FullName,
-		      " class=\"INPUT_FULL_NAME\""
+		      "class=\"INPUT_FULL_NAME\""
 		      " onchange=\"document.getElementById('%s').submit();\"",
                       Gbl.Form.Id);
       Frm_EndForm ();
@@ -584,11 +584,10 @@ static void Dpt_ListDepartmentsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-	                 " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_WWW\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_CHARS_WWW,Dpt->WWW,Gbl.Form.Id);
+      HTM_INPUT_URL ("WWW",Dpt->WWW,
+		     "class=\"INPUT_WWW\""
+		     " onchange=\"document.getElementById('%s').submit();\"",
+                     Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -944,22 +943,19 @@ static void Dpt_PutFormToCreateDepartment (void)
    /***** Department short name *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
-		   " class=\"INPUT_SHORT_NAME\" required=\"required\"");
+		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Department full name *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
-		   " class=\"INPUT_FULL_NAME\" required=\"required\"");
+		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Department WWW *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_WWW\""
-                      " required=\"required\" />",
-            Cns_MAX_CHARS_WWW,Dpt_EditingDpt->WWW);
+   HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,
+		  "class=\"INPUT_WWW\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

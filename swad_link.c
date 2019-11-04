@@ -441,7 +441,7 @@ static void Lnk_ListLinksForEdition (void)
       Frm_StartForm (ActRenLnkSho);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
-		      " class=\"INPUT_SHORT_NAME\""
+		      "class=\"INPUT_SHORT_NAME\""
                       " onchange=\"document.getElementById('%s').submit();\"",
 		      Gbl.Form.Id);
       Frm_EndForm ();
@@ -452,7 +452,7 @@ static void Lnk_ListLinksForEdition (void)
       Frm_StartForm (ActRenLnkFul);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
       HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
-		      " class=\"INPUT_FULL_NAME\""
+		      "class=\"INPUT_FULL_NAME\""
                       " onchange=\"document.getElementById('%s').submit();\"",
 		      Gbl.Form.Id);
       Frm_EndForm ();
@@ -462,12 +462,10 @@ static void Lnk_ListLinksForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgLnkWWW);
       Lnk_PutParamLnkCod (Lnk->LnkCod);
-      fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-	                 " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_WWW\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_CHARS_WWW,Lnk->WWW,
-               Gbl.Form.Id);
+      HTM_INPUT_URL ("WWW",Lnk->WWW,
+		     "class=\"INPUT_WWW\""
+		     " onchange=\"document.getElementById('%s').submit();\"",
+                     Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -752,22 +750,19 @@ static void Lnk_PutFormToCreateLink (void)
    /***** Link short name *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("ShortName",Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk_EditingLnk->ShrtName,
-		   " class=\"INPUT_SHORT_NAME\" required=\"required\"");
+		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Link full name *****/
    HTM_TD_Begin ("class=\"CM\"");
    HTM_INPUT_TEXT ("FullName",Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk_EditingLnk->FullName,
-		   " class=\"INPUT_FULL_NAME\" required=\"required\"");
+		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Link WWW *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_WWW\""
-                      " required=\"required\" />",
-            Cns_MAX_CHARS_WWW,Lnk_EditingLnk->WWW);
+   HTM_INPUT_URL ("WWW",Lnk_EditingLnk->WWW,
+		  "class=\"INPUT_WWW\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

@@ -389,13 +389,9 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
-                      " size=\"18\" maxlength=\"%u\""
-                      " placeholder=\"%s\" value=\"%s\""
-                      " required=\"required\" />",
-            Cns_MAX_CHARS_EMAIL_ADDRESS,
-            Txt_HELP_email,
-            NewEmail);
+   HTM_INPUT_EMAIL ("NewEmail",Cns_MAX_CHARS_EMAIL_ADDRESS,NewEmail,
+	            "size=\"18\" placeholder=\"%s\" required=\"required\"",
+                    Txt_HELP_email);
    HTM_TD_End ();
 
    HTM_TR_End ();

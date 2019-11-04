@@ -212,7 +212,7 @@ void Prf_RequestUserProfile (void)
 	     "@%s",
 	     Gbl.Usrs.Me.UsrDat.Nickname);
    HTM_INPUT_TEXT ("usr",Nck_MAX_BYTES_NICKNAME_FROM_FORM,NicknameWithArroba,
-		   " size=\"18\"");
+		   "size=\"18\"");
    HTM_LABEL_End ();
 
    /***** Send button and end box *****/

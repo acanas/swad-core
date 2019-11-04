@@ -478,11 +478,10 @@ static void Ban_ListBannersForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgBanWWW);
       Ban_PutParamBanCodToEdit ();
-      fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-	                 " maxlength=\"%u\" value=\"%s\""
-                         " class=\"INPUT_WWW\""
-                         " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_CHARS_WWW,Ban->WWW,Gbl.Form.Id);
+      HTM_INPUT_URL ("WWW",Ban->WWW,
+		     "class=\"INPUT_WWW\""
+                     " onchange=\"document.getElementById('%s').submit();\"",
+		     Gbl.Form.Id);
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -891,11 +890,8 @@ static void Ban_PutFormToCreateBanner (void)
 
    /***** Banner WWW *****/
    HTM_TD_Begin ("class=\"CM\"");
-   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_WWW\""
-                      " required=\"required\" />",
-            Cns_MAX_CHARS_WWW,Ban_EditingBan->WWW);
+   HTM_INPUT_URL ("WWW",Ban_EditingBan->WWW,
+		  "class=\"INPUT_WWW\" required=\"required\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

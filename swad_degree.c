@@ -398,7 +398,7 @@ static void Deg_Configuration (bool PrintView)
       /* Form to change degree full name */
       Frm_StartForm (ActRenDegFulCfg);
       HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Deg.FullName,
-		      " class=\"INPUT_FULL_NAME\""
+		      "class=\"INPUT_FULL_NAME\""
 	              " onchange=\"document.getElementById('%s').submit();\"",
 		      Gbl.Form.Id);
       Frm_EndForm ();
@@ -426,7 +426,7 @@ static void Deg_Configuration (bool PrintView)
       /* Form to change degree short name */
       Frm_StartForm (ActRenDegShoCfg);
       HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Deg.ShrtName,
-		      " class=\"INPUT_SHORT_NAME\""
+		      "class=\"INPUT_SHORT_NAME\""
 	              " onchange=\"document.getElementById('%s').submit();\"",
 		      Gbl.Form.Id);
       Frm_EndForm ();
@@ -453,13 +453,10 @@ static void Deg_Configuration (bool PrintView)
      {
       /* Form to change degree WWW */
       Frm_StartForm (ActChgDegWWWCfg);
-      fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
-			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"INPUT_WWW\""
-			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Cns_MAX_CHARS_WWW,
-	       Gbl.Hierarchy.Deg.WWW,
-	       Gbl.Form.Id);
+      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Deg.WWW,
+		     "class=\"INPUT_WWW\""
+		     " onchange=\"document.getElementById('%s').submit();\"",
+	             Gbl.Form.Id);
       Frm_EndForm ();
      }
    else	// I can not change degree WWW
@@ -751,7 +748,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Frm_StartForm (ActRenDegSho);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
-			 " class=\"INPUT_SHORT_NAME\""
+			 "class=\"INPUT_SHORT_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\"",
 			 Gbl.Form.Id);
 	 Frm_EndForm ();
@@ -767,7 +764,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Frm_StartForm (ActRenDegFul);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg->FullName,
-			 " class=\"INPUT_FULL_NAME\""
+			 "class=\"INPUT_FULL_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\"",
 			 Gbl.Form.Id);
 	 Frm_EndForm ();
@@ -813,11 +810,10 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActChgDegWWW);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_WWW\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_CHARS_WWW,Deg->WWW,Gbl.Form.Id);
+	 HTM_INPUT_URL ("WWW",Deg->WWW,
+			"class=\"INPUT_WWW\""
+			" onchange=\"document.getElementById('%s').submit();\"",
+			Gbl.Form.Id);
 	 Frm_EndForm ();
 	}
       else
@@ -975,13 +971,13 @@ static void Deg_PutFormToCreateDegree (void)
    /***** Degree short name *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
-		   " class=\"INPUT_SHORT_NAME\" required=\"required\"");
+		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Degree full name *****/
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
-		   " class=\"INPUT_FULL_NAME\" required=\"required\"");
+		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Degree type *****/
@@ -1003,11 +999,8 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_WWW\""
-                      " required=\"required\" />",
-            Cns_MAX_CHARS_WWW,Deg_EditingDeg->WWW);
+   HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,
+		  "class=\"INPUT_WWW\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Current number of courses in this degree *****/

@@ -573,13 +573,10 @@ static void Ctr_Configuration (bool PrintView)
      {
       /* Form to change centre WWW */
       Frm_StartForm (ActChgCtrWWWCfg);
-      fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
-			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"INPUT_WWW\""
-			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Cns_MAX_CHARS_WWW,
-	       Gbl.Hierarchy.Ctr.WWW,
-	       Gbl.Form.Id);
+      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ctr.WWW,
+		     "class=\"INPUT_WWW\""
+		     " onchange=\"document.getElementById('%s').submit();\"",
+	             Gbl.Form.Id);
       Frm_EndForm ();
      }
    else	// I can not change centre WWW
@@ -1589,11 +1586,10 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Frm_StartForm (ActChgCtrWWW);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-	                    " maxlength=\"%u\" value=\"%s\""
-                            " class=\"INPUT_WWW\""
-			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_CHARS_WWW,Ctr->WWW,Gbl.Form.Id);
+	 HTM_INPUT_URL ("WWW",Ctr->WWW,
+			"class=\"INPUT_WWW\""
+			" onchange=\"document.getElementById('%s').submit();\"",
+			Gbl.Form.Id);
 	 Frm_EndForm ();
 	}
       else
@@ -2551,11 +2547,8 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_WWW\""
-                      " required=\"required\" />",
-            Cns_MAX_CHARS_WWW,Ctr_EditingCtr->WWW);
+   HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,
+		  "class=\"INPUT_WWW\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Number of users who claim to belong to this centre *****/
