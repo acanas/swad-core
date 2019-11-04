@@ -1263,10 +1263,9 @@ static void Mch_ShowLstGrpsToCreateMatch (void)
       HTM_TR_Begin (NULL);
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-                         " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\""
-                         " checked=\"checked\""
-                         " onclick=\"uncheckChildren(this,'GrpCods')\" />");
+      HTM_INPUT_CHECKBOX ("WholeCrs",true,
+			  "id=\"WholeCrs\" value=\"Y\" checked=\"checked\""
+			  " onclick=\"uncheckChildren(this,'GrpCods')\"");
       fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();

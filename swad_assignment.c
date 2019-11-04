@@ -1266,11 +1266,10 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" id=\"WholeCrs\""
-	                 " name=\"WholeCrs\" value=\"Y\"");
-      if (!Asg_CheckIfAsgIsAssociatedToGrps (AsgCod))
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />");
+      HTM_INPUT_CHECKBOX ("WholeCrs",false,
+		          "id=\"WholeCrs\" value=\"Y\"%s"
+		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
+			  Asg_CheckIfAsgIsAssociatedToGrps (AsgCod) ? "" : " checked=\"checked\"");
       fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();

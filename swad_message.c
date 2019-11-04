@@ -2662,9 +2662,9 @@ void Msg_ShowFormToFilterMsgs (void)
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",TxtFromTo[Gbl.Msg.TypeOfMessages]);
-   fprintf (Gbl.F.Out,"<input type=\"search\" name=\"FilterFromTo\""
-                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />",
-            Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,Gbl.Msg.FilterFromTo);
+   HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
+		     Gbl.Msg.FilterFromTo,false,
+	             "size=\"20\"");
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2672,9 +2672,9 @@ void Msg_ShowFormToFilterMsgs (void)
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_MSG_Content);
-   fprintf (Gbl.F.Out,"<input type=\"search\" name=\"FilterContent\""
-                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />",
-            Msg_MAX_CHARS_FILTER_CONTENT,Gbl.Msg.FilterContent);
+   HTM_INPUT_SEARCH ("FilterContent",Msg_MAX_CHARS_FILTER_CONTENT,
+		     Gbl.Msg.FilterContent,false,
+	             "size=\"20\"");
    HTM_LABEL_End ();
    HTM_TD_End ();
 
@@ -2695,11 +2695,9 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (void)
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"OnlyUnreadMsgs\""
-	              " value=\"Y\"");
-   if (Gbl.Msg.ShowOnlyUnreadMsgs)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," />");
+   HTM_INPUT_CHECKBOX ("OnlyUnreadMsgs",false,
+		       "value=\"Y\"%s",
+		       Gbl.Msg.ShowOnlyUnreadMsgs ? " checked=\"checked\"" : "");
    fprintf (Gbl.F.Out,"%s",Txt_only_unread_messages);
    HTM_LABEL_End ();
   }

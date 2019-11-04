@@ -667,14 +667,10 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
       if (PutForm)
 	{
 	 HTM_TD_Begin ("class=\"%s\"",Class);
-	 fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-			    " id=\"Indicators%u\" name=\"Indicators\""
-			    " value=\"%u\"",
-		  Ind,Ind);
-	 if (Gbl.Stat.IndicatorsSelected[Ind])
-	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	 fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\" />",
-                  Gbl.Form.Id);
+	 HTM_INPUT_CHECKBOX ("Indicators",true,
+			     "id=\"Indicators%u\" value=\"%u\"%s",
+			     Ind,Ind,
+			     Gbl.Stat.IndicatorsSelected[Ind] ? " checked=\"checked\"" : "");
 	 HTM_TD_End ();
 	}
 

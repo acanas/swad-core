@@ -3758,11 +3758,9 @@ void Prj_ShowFormConfig (void)
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_LABEL_Begin (NULL);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" id=\"Editable\""
-	              " name=\"Editable\" value=\"Y\"");
-   if (Gbl.Prjs.Config.Editable)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," />");
+   HTM_INPUT_CHECKBOX ("Editable",false,
+		       "id=\"Editable\" value=\"Y\"%s",
+		       Gbl.Prjs.Config.Editable ? " checked=\"checked\"" : "");
    fprintf (Gbl.F.Out,"%s",Txt_Editable_by_non_editing_teachers);
    HTM_LABEL_End ();
    HTM_TD_End ();

@@ -6294,11 +6294,9 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 
    HTM_LABEL_Begin (NULL);
    if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-			 " name=\"%s\" value=\"\""
-			 " onclick=\"togglecheckChildren(this,'%s')\" />",
-	       Usr_NameSelUnsel[Role],
-	       Usr_ParamUsrCod[Role]);
+      HTM_INPUT_CHECKBOX (Usr_NameSelUnsel[Role],false,
+			  "value=\"\" onclick=\"togglecheckChildren(this,'%s')\"",
+			  Usr_ParamUsrCod[Role]);
    else
       Rol_WrongRoleExit ();
    Sex = Usr_GetSexOfUsrsLst (Role);
@@ -6369,14 +6367,11 @@ static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 	 CheckboxChecked = Usr_FindUsrCodInListOfSelectedUsrs (EncryptedUsrCod);
 
       /***** Check box *****/
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"%s\""
-			 " onclick=\"checkParent(this,'%s')\"",
-	       Usr_ParamUsrCod[Role],
-	       EncryptedUsrCod,
-	       Usr_NameSelUnsel[Role]);
-      if (CheckboxChecked)
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_CHECKBOX (Usr_ParamUsrCod[Role],false,
+			  "value=\"%s\"%s onclick=\"checkParent(this,'%s')\"",
+			  EncryptedUsrCod,
+			  CheckboxChecked ? " checked=\"checked\"" : "",
+			  Usr_NameSelUnsel[Role]);
      }
    else
       Rol_WrongRoleExit ();
@@ -6395,12 +6390,9 @@ static void Usr_PutCheckboxListWithPhotos (void)
 
    /***** Put checkbox to select whether list users with photos *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"WithPhotos\""
-	              " value=\"Y\"");
-   if (Gbl.Usrs.Listing.WithPhotos)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
-	    Gbl.Form.Id);
+   HTM_INPUT_CHECKBOX ("WithPhotos",true,
+		       "value=\"Y\"%s",
+		       Gbl.Usrs.Listing.WithPhotos ? " checked=\"checked\"" : "");
    fprintf (Gbl.F.Out,"%s",Txt_Display_photos);
    HTM_LABEL_End ();
   }

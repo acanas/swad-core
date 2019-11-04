@@ -1269,16 +1269,10 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
    HTM_LABEL_Begin (NULL);
 
    /****** Checkbox *****/
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
-            CheckboxName);
-   if (Checked)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   if (Disabled)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   else
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\"",
-	       Gbl.Form.Id);
-   fprintf (Gbl.F.Out," />");
+   HTM_INPUT_CHECKBOX (CheckboxName,true,
+		       "value=\"Y\"%s%s",
+		       Checked ? " checked=\"checked\"" : "",
+		       Disabled ? " disabled=\"disabled\"" : "");
 
    /***** Text *****/
    if (Text)

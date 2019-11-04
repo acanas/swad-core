@@ -1214,11 +1214,10 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" id=\"WholeCrs\""
-	                 " name=\"WholeCrs\" value=\"Y\"");
-      if (!Att_CheckIfAttEventIsAssociatedToGrps (AttCod))
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />");
+      HTM_INPUT_CHECKBOX ("WholeCrs",false,
+		          "id=\"WholeCrs\" value=\"Y\"%s"
+		          " onclick=\"uncheckChildren(this,'GrpCods')\"",
+			  Att_CheckIfAttEventIsAssociatedToGrps (AttCod) ? "" : " checked=\"checked\"");
       fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -2089,14 +2088,11 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 
    /***** Checkbox to select user *****/
    HTM_TD_Begin ("class=\"CT COLOR%u\"",Gbl.RowEvenOdd);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-	              " id=\"Std%u\" name=\"UsrCodStd\" value=\"%s\"",
-	    NumUsr,UsrDat->EncryptedUsrCod);
-   if (Present)	// This student has attended to the event?
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   if (!ICanChangeStdAttendance)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," />");
+   HTM_INPUT_CHECKBOX ("UsrCodStd",false,
+		       "id=\"Std%u\" value=\"%s\"%s%s",
+	               NumUsr,UsrDat->EncryptedUsrCod,
+		       Present ? " checked=\"checked\"" : "",
+		       ICanChangeStdAttendance ? "" : " disabled=\"disabled\"");
    HTM_TD_End ();
 
    /***** Write number of student in the list *****/
@@ -3128,13 +3124,10 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       HTM_TR_Begin (NULL);
 
       HTM_TD_Begin ("class=\"DAT CT COLOR%u\"",Gbl.RowEvenOdd);
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-			 " id=\"Att%u\" name=\"AttCods\" value=\"%ld\"",
-	       NumAttEvent,
-	       Gbl.AttEvents.Lst[NumAttEvent].AttCod);
-      if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_CHECKBOX ("AttCods",false,
+			  "id=\"Att%u\" value=\"%ld\"%s",
+			  NumAttEvent,Gbl.AttEvents.Lst[NumAttEvent].AttCod,
+			  Gbl.AttEvents.Lst[NumAttEvent].Selected ? " checked=\"checked\"" : "");
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"DAT RT COLOR%u\"",Gbl.RowEvenOdd);

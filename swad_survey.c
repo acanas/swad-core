@@ -2091,11 +2091,9 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
 
       HTM_TD_Begin ("colspan=\"7\" class=\"DAT LM\"");
       HTM_LABEL_Begin (NULL);
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-                         " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
-      if (!Svy_CheckIfSvyIsAssociatedToGrps (SvyCod))
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />");
+      HTM_INPUT_CHECKBOX ("WholeCrs",false,
+			  "id=\"WholeCrs\" value=\"Y\"%s onclick=\"uncheckChildren(this,'GrpCods')\"",
+			  Svy_CheckIfSvyIsAssociatedToGrps (SvyCod) ? "" : " checked=\"checked\"");
       fprintf (Gbl.F.Out,"%s %s",Txt_The_whole_course,Gbl.Hierarchy.Crs.ShrtName);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -3404,6 +3402,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrsThisAnswer;
+   char StrAns[32];
 
    /***** Get answers of this question *****/
    NumAnswers = Svy_GetAnswersQst (SvyQst->QstCod,&mysql_res);	// Result: AnsInd,NumUsrs,Answer
@@ -3445,17 +3444,21 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,
 	   {
 	    /* Write selector to choice this answer */
 	    HTM_TD_Begin ("class=\"LT\"");
-	    fprintf (Gbl.F.Out,"<input type=\"");
+	    snprintf (StrAns,sizeof (StrAns),
+		      "Ans%010u",
+		      (unsigned) SvyQst->QstCod);
 	    if (SvyQst->AnswerType == Svy_ANS_UNIQUE_CHOICE)
-	       fprintf (Gbl.F.Out,"radio\""
-				  " onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
-			(unsigned) SvyQst->QstCod,NumAnswers);
+	       HTM_INPUT_RADIO (StrAns,false,
+				"id=\"Ans%010u_%010u\" value=\"%u\""
+				" onclick=\"selectUnselectRadio(this,this.form.Ans%010u,%u)\"",
+				(unsigned) SvyQst->QstCod,NumAns,NumAns,
+				NumAns,
+			        (unsigned) SvyQst->QstCod,NumAnswers);
 	    else // SvyQst->AnswerType == Svy_ANS_MULTIPLE_CHOICE
-	       fprintf (Gbl.F.Out,"checkbox\"");
-	    fprintf (Gbl.F.Out," id=\"Ans%010u_%010u\" name=\"Ans%010u\""
-		               " value=\"%u\" />",
-		     (unsigned) SvyQst->QstCod,NumAns,(unsigned) SvyQst->QstCod,
-		     NumAns);
+	       HTM_INPUT_CHECKBOX (StrAns,false,
+				   "id=\"Ans%010u_%010u\" value=\"%u\"",
+			           (unsigned) SvyQst->QstCod,NumAns,NumAns,
+				   NumAns);
 	    HTM_TD_End ();
 	   }
 

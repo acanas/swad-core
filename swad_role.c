@@ -547,20 +547,11 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
       if ((RolesAllowed & (1 << Role)))
 	{
 	 HTM_LABEL_Begin (NULL);
-	 fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Role\" value=\"%u\"",
-		  (unsigned) Role);
-
-	 if ((RolesSelected & (1 << Role)))
-	    fprintf (Gbl.F.Out," checked=\"checked\"");
-
-	 if (Disabled)
-	    fprintf (Gbl.F.Out," disabled=\"disabled\"");
-
-	 if (SendOnChange)
-	    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
-		     Gbl.Form.Id);
-
-	 fprintf (Gbl.F.Out," />");
+	 HTM_INPUT_CHECKBOX ("Role",SendOnChange,
+			     "value=\"%u\"%s%s",
+			     (unsigned) Role,
+			     (RolesSelected & (1 << Role)) ? " checked=\"checked\"" : "",
+		             Disabled ? " disabled=\"disabled\"" : "");
 	 fprintf (Gbl.F.Out,"%s",Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
 	 HTM_LABEL_End ();
 	 fprintf (Gbl.F.Out,"<br />");

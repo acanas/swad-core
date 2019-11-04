@@ -1941,19 +1941,17 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"CM\"");
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
-               Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent]);
-      if ((Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif & (1 << NotifyEvent)))
-          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_CHECKBOX (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent],false,
+			  "value=\"Y\"%s",
+			  (Gbl.Usrs.Me.UsrDat.NtfEvents.CreateNotif &
+			   (1 << NotifyEvent)) ? " checked=\"checked\"" : "");
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"CM\"");
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
-               Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
-      if ((Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail & (1 << NotifyEvent)))
-          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_CHECKBOX (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent],false,
+			  "value=\"Y\"%s",
+			  (Gbl.Usrs.Me.UsrDat.NtfEvents.SendEmail &
+			   (1 << NotifyEvent)) ? " checked=\"checked\"" : "");
       HTM_TD_End ();
 
       HTM_TR_End ();

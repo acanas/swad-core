@@ -81,13 +81,11 @@ void Coo_EditMyPrefsOnCookies (void)
 								       "DAT");
    /* Check box */
    HTM_LABEL_Begin (NULL);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-		      " name=\"cookies\" value=\"Y\"");
-   if (Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
-	    Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"%s",Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
+   HTM_INPUT_CHECKBOX ("cookies",true,
+		       "value=\"Y\"%s",
+		       Gbl.Usrs.Me.UsrDat.Prefs.AcceptThirdPartyCookies ? " checked=\"checked\"" : "");
+   fprintf (Gbl.F.Out,"%s",
+	    Txt_Accept_third_party_cookies_to_view_multimedia_content_from_other_websites);
    HTM_LABEL_End ();
 
    /* End container */

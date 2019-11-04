@@ -91,6 +91,8 @@ void HTM_LABEL_End (void);
 
 void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool SubmitOnChange,
 	             const char *fmt,...);
+void HTM_INPUT_SEARCH (const char *Name,unsigned MaxLength,const char *Value,bool SubmitOnChange,
+	               const char *fmt,...);
 void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
 	            const char *fmt,...);
 void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
@@ -105,6 +107,8 @@ void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
 void HTM_INPUT_NUMBER (const char *Name,long Min,long Max,long Value,bool Disabled);
 void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
 		      const char *fmt,...);
+void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
+		         const char *fmt,...);
 
 void HTM_TEXTAREA_Begin (const char *fmt,...);
 void HTM_TEXTAREA_End (void);

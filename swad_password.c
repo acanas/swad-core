@@ -863,7 +863,8 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 
    /***** Checkbox *****/
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Consent\" value=\"Y\" />");
+   HTM_INPUT_CHECKBOX ("Consent",false,
+		       "value=\"Y\"");
    fprintf (Gbl.F.Out,"%s",Txt_I_understand_that_this_action_can_not_be_undone);
    HTM_LABEL_End ();
 

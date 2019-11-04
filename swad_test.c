@@ -468,10 +468,9 @@ void Tst_ShowNewTest (void)
 	    /***** Test result will be saved? *****/
 	    HTM_DIV_Begin ("class=\"CM\"");
 	    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-	    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Save\" value=\"Y\"");
-	    if (Gbl.Test.AllowTeachers)
-	       fprintf (Gbl.F.Out," checked=\"checked\"");
-	    fprintf (Gbl.F.Out," />");
+	    HTM_INPUT_CHECKBOX ("Save",false,
+				"value=\"Y\"%s",
+				Gbl.Test.AllowTeachers ? " checked=\"checked\"" : "");
 	    fprintf (Gbl.F.Out,"&nbsp;%s",Txt_Allow_teachers_to_consult_this_test);
 	    HTM_LABEL_End ();
 	    HTM_DIV_End ();
@@ -1667,6 +1666,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    unsigned long NumRow;
    MYSQL_ROW row;
    bool TagHidden = false;
+   bool Checked;
    const char *Ptr;
    char TagText[Tst_MAX_BYTES_TAG + 1];
    /*
@@ -1694,10 +1694,9 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AllTags\" value=\"Y\"");
-   if (Gbl.Test.Tags.All)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'ChkTag');\" />");
+   HTM_INPUT_CHECKBOX ("AllTags",false,
+		       "value=\"Y\"%s onclick=\"togglecheckChildren(this,'ChkTag');\"",
+		       Gbl.Test.Tags.All ? " checked=\"checked\"" : "");
    fprintf (Gbl.F.Out,"&nbsp;%s",Txt_All_tags);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -1725,10 +1724,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
          HTM_TD_End ();
         }
 
-      HTM_TD_Begin ("class=\"LM\"");
-      HTM_LABEL_Begin ("class=\"DAT\"");
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"ChkTag\" value=\"%s\"",
-	       row[1]);
+      Checked = false;
       if (Gbl.Test.Tags.List)
         {
          Ptr = Gbl.Test.Tags.List;
@@ -1736,10 +1732,19 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
            {
             Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tst_MAX_BYTES_TAG);
             if (!strcmp (row[1],TagText))
-               fprintf (Gbl.F.Out," checked=\"checked\"");
+              {
+               Checked = true;
+               break;
+              }
            }
         }
-      fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllTags');\" />");
+
+      HTM_TD_Begin ("class=\"LM\"");
+      HTM_LABEL_Begin ("class=\"DAT\"");
+      HTM_INPUT_CHECKBOX ("ChkTag",false,
+			  "value=\"%s\"%s onclick=\"checkParent(this,'AllTags');\"",
+			  row[1],
+			  Checked ? " checked=\"checked\"" : "");
       fprintf (Gbl.F.Out,"&nbsp;%s",row[1]);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -2297,6 +2302,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    extern const char *Txt_All_types_of_answers;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    Tst_AnswerType_t AnsType;
+   bool Checked;
    char UnsignedStr[10 + 1];
    const char *Ptr;
 
@@ -2318,10 +2324,9 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AllAnsTypes\" value=\"Y\"");
-   if (Gbl.Test.AllAnsTypes)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'AnswerType');\" />");
+   HTM_INPUT_CHECKBOX ("AllAnsTypes",false,
+		       "value=\"Y\"%s onclick=\"togglecheckChildren(this,'AnswerType');\"",
+		       Gbl.Test.AllAnsTypes ? " checked=\"checked\"" : "");
    fprintf (Gbl.F.Out,"&nbsp;%s",Txt_All_types_of_answers);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -2335,18 +2340,23 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
      {
       HTM_TR_Begin (NULL);
 
-      HTM_TD_Begin ("class=\"LM\"");
-      HTM_LABEL_Begin ("class=\"DAT\"");
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AnswerType\" value=\"%u\"",
-               (unsigned) AnsType);
+      Checked = false;
       Ptr = Gbl.Test.ListAnsTypes;
       while (*Ptr)
         {
          Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
          if (Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr) == AnsType)
-            fprintf (Gbl.F.Out," checked=\"checked\"");
+           {
+            Checked = true;
+            break;
+           }
         }
-      fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllAnsTypes');\" />");
+      HTM_TD_Begin ("class=\"LM\"");
+      HTM_LABEL_Begin ("class=\"DAT\"");
+      HTM_INPUT_CHECKBOX ("AnswerType",false,
+			  "value=\"%u\"%s onclick=\"checkParent(this,'AllAnsTypes');\"",
+			  (unsigned) AnsType,
+			  Checked ? " checked=\"checked\"" : "");
       fprintf (Gbl.F.Out,"&nbsp;%s",Txt_TST_STR_ANSWER_TYPES[AnsType]);
       HTM_LABEL_End ();
       HTM_TD_End ();
@@ -2931,11 +2941,9 @@ static void Tst_ListOneOrMoreQuestionsForEdition (unsigned long NumRows,
          if (NumRows == 1)
 	    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If editing only one question, don't edit others
          Par_PutHiddenParamUnsigned (NULL,"Order",(unsigned) Gbl.Test.SelectedOrder);
-         fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
-         if (row[3][0] == 'Y')
-            fprintf (Gbl.F.Out," checked=\"checked\"");
-         fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
-                  Gbl.Form.Id);
+         HTM_INPUT_CHECKBOX ("Shuffle",true,
+		             "value=\"Y\"%s",
+		             row[3][0] == 'Y' ? " checked=\"checked\"" : "");
          Frm_EndForm ();
         }
       HTM_TD_End ();
@@ -3099,9 +3107,9 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
       HTM_TD_Begin ("class=\"BT%u\"",Gbl.RowEvenOdd);
 
       /* Write checkbox to select the question */
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"QstCods\""
-	                 " value=\"%ld\" />",
-	       Gbl.Test.QstCod);
+      HTM_INPUT_CHECKBOX ("QstCods",false,
+			  "value=\"%ld\"",
+			  Gbl.Test.QstCod);
 
       /* Write number of question */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
@@ -3138,12 +3146,9 @@ static void Tst_ListOneOrMoreQuestionsForSelection (unsigned long NumRows,
 
       /* Write if shuffle is enabled (row[3]) */
       HTM_TD_Begin ("class=\"DAT_SMALL CT COLOR%u\"",Gbl.RowEvenOdd);
-
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
-      if (row[3][0] == 'Y')
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," disabled=\"disabled\" />");
-
+      HTM_INPUT_CHECKBOX ("Shuffle",false,
+			  "value=\"Y\"%s  disabled=\"disabled\"",
+			  row[3][0] == 'Y' ? " checked=\"checked\"" : "");
       HTM_TD_End ();
 
       /* Write stem (row[4]) */
@@ -3640,6 +3645,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
    unsigned Index;
    bool ErrorInIndex = false;
    char ParamName[3 + 6 + 1];
+   char StrAns[32];
 
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);
@@ -3698,16 +3704,21 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 	        "Ind%06u",
 		NumQst);
       Par_PutHiddenParamUnsigned (NULL,ParamName,Index);
-      fprintf (Gbl.F.Out,"<input type=\"");
+      snprintf (StrAns,sizeof (StrAns),
+		"Ans%06u",
+		NumQst);
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
-         fprintf (Gbl.F.Out,"radio\""
-                            " onclick=\"selectUnselectRadio(this,this.form.Ans%06u,%u);\"",
-                  NumQst,Gbl.Test.Answer.NumOptions);
+	 HTM_INPUT_RADIO (StrAns,false,
+			  "id=\"Ans%06u_%u\" value=\"%u\""
+			  " onclick=\"selectUnselectRadio(this,this.form.Ans%06u,%u);\"",
+			  NumQst,NumOpt,
+			  Index,
+                          NumQst,Gbl.Test.Answer.NumOptions);
       else // Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE
-         fprintf (Gbl.F.Out,"checkbox\"");
-      fprintf (Gbl.F.Out," id=\"Ans%06u_%u\" name=\"Ans%06u\" value=\"%u\" />",
-               NumQst,NumOpt,
-               NumQst,Index);
+	 HTM_INPUT_CHECKBOX (StrAns,false,
+			     "id=\"Ans%06u_%u\" value=\"%u\"",
+			     NumQst,NumOpt,
+			     Index);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"LT\"");
@@ -5237,13 +5248,11 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 
    HTM_TD_Begin ("class=\"LT\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
-   if (Gbl.Test.Shuffle)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
-       Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," />");
+   HTM_INPUT_CHECKBOX ("Shuffle",false,
+		       "value=\"Y\"%s%s",
+		       Gbl.Test.Shuffle ? " checked=\"checked\"" : "",
+   		       Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
+                       Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE ? " disabled=\"disabled\"" : "");
    fprintf (Gbl.F.Out,"%s",Txt_Shuffle);
    HTM_LABEL_End ();
    HTM_TD_End ();
@@ -5287,13 +5296,11 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 		       Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ? "" : " disabled=\"disabled\"");
 
       /* Checkbox for multiple choice answers */
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AnsMulti\" value=\"%u\"",
-	       NumOpt);
-      if (Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE)
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      if (Gbl.Test.Answer.Options[NumOpt].Correct)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_CHECKBOX ("AnsMulti",false,
+			  "value=\"%u\"%s%s",
+			  NumOpt,
+			  Gbl.Test.Answer.Options[NumOpt].Correct ? " checked=\"checked\"" : "",
+			  Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE ? "" : " disabled=\"disabled\"");
 
       HTM_TD_End ();
 

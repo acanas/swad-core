@@ -454,18 +454,13 @@ static void Grp_PutCheckboxAllGrps (Grp_WhichGroups_t GroupsSelectableByStdsOrNE
      }
 
    HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-		      " id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"");
-   if (ICanSelUnselGroup)
-     {
-      if (Gbl.Usrs.ClassPhoto.AllGroups)
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'GrpCods')\"");
-     }
-   else
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," />");
-   HTM_LABEL_Begin ("for=\"AllGroups\" class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
+   HTM_INPUT_CHECKBOX ("AllGroups",false,
+		       "value=\"Y\"%s",
+		       ICanSelUnselGroup ? (Gbl.Usrs.ClassPhoto.AllGroups ? " checked=\"checked\""
+			                                                    " onclick=\"togglecheckChildren(this,'GrpCods')\"" :
+			                                                    " onclick=\"togglecheckChildren(this,'GrpCods')\"") :
+			                   " disabled=\"disabled\"");
    fprintf (Gbl.F.Out,"&nbsp;%s",Txt_All_groups);
    HTM_LABEL_End ();
    HTM_DIV_End ();
@@ -1714,19 +1709,8 @@ void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
       Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 
-      /* Put checkbox to select the group */
-      HTM_TR_Begin (NULL);
-
-      if (IBelongToThisGroup)
-	 HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
-      else
-	 HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-	                 " id=\"Grp%ld\" name=\"GrpCods\" value=\"%ld\"",
-               Grp->GrpCod,
-               Grp->GrpCod);
+      AssociatedToGrp = false;
       if (Cod > 0)	// Cod == -1L means new assignment or survey
-        {
          switch (Grp_AsgAttOrSvy)
            {
             case Grp_ASSIGNMENT:
@@ -1742,13 +1726,21 @@ void Grp_ListGrpsToEditAsgAttSvyMch (struct GroupType *GrpTyp,long Cod,
                AssociatedToGrp = Gam_CheckIfMatchIsAssociatedToGrp (Cod,Grp->GrpCod);
                break;
            }
-         if (AssociatedToGrp)
-            fprintf (Gbl.F.Out," checked=\"checked\"");
-        }
-      if (!(IBelongToThisGroup ||
-            Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckParent(this,'WholeCrs')\" />");
+
+      /* Put checkbox to select the group */
+      HTM_TR_Begin (NULL);
+
+      if (IBelongToThisGroup)
+	 HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
+      else
+	 HTM_TD_Begin ("class=\"LM\"");
+      HTM_INPUT_CHECKBOX ("GrpCods",false,
+		          "id=\"Grp%ld\" value=\"%ld\"%s%s"
+		          " onclick=\"uncheckParent(this,'WholeCrs')\"",
+			  Grp->GrpCod,Grp->GrpCod,
+			  AssociatedToGrp ? " checked=\"checked\"" : "",
+			  (IBelongToThisGroup ||
+                           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ? "" : " disabled=\"disabled\"");
       HTM_TD_End ();
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
@@ -2002,14 +1994,6 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
       Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 
-      /* Put radio item or checkbox to select the group */
-      HTM_TR_Begin (NULL);
-
-      if (IBelongToThisGroup)
-	 HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
-      else
-	 HTM_TD_Begin ("class=\"LM\"");
-
       /* Selection disabled? */
       if (ICanChangeMySelectionForThisGrpTyp)	// I can change my selection for this group type
 	{
@@ -2028,6 +2012,14 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
         }
       else					// I can not change my selection for this group type
 	 ICanChangeMySelectionForThisGrp = false;
+
+      /* Put radio item or checkbox to select the group */
+      HTM_TR_Begin (NULL);
+
+      if (IBelongToThisGroup)
+	 HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
+      else
+	 HTM_TD_Begin ("class=\"LM\"");
 
       snprintf (StrGrpCod,sizeof (StrGrpCod),
 		"GrpCod%ld",
@@ -2057,22 +2049,14 @@ static bool Grp_ListGrpsForChangeMySelection (struct GroupType *GrpTyp,
                              GrpTyp->GrpTypCod,GrpTyp->NumGrps);
 	}
       else
-	{
 	 /* Put a checkbox item */
-         fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-                            " id=\"Grp%ld\" name=\"GrpCod%ld\" value=\"%ld\"",
-                  Grp->GrpCod,GrpTyp->GrpTypCod,Grp->GrpCod);
-
-	 /* Group checked? */
-	 if (IBelongToThisGroup)
-	    fprintf (Gbl.F.Out," checked=\"checked\"");		// Group selected
-
-	 if (!ICanChangeMySelectionForThisGrp)	// I can not change my selection for this group
-	    fprintf (Gbl.F.Out,IBelongToThisGroup ? " readonly" :			// I can not unregister (disabled does not work because the value is not submitted)
-						    " disabled=\"disabled\"");	// I can not register
-
-	 fprintf (Gbl.F.Out," />");
-	}
+	 HTM_INPUT_CHECKBOX (StrGrpCod,false,
+			     "id=\"Grp%ld\" value=\"%ld\"%s%s",
+			     Grp->GrpCod,Grp->GrpCod,
+			     IBelongToThisGroup ? " checked=\"checked\"" : "",
+			     ICanChangeMySelectionForThisGrp ? "" :
+				                               IBelongToThisGroup ? " readonly" :		// I can not unregister (disabled does not work because the value is not submitted)
+				                        	                    " disabled=\"disabled\"");	// I can not register
 
       HTM_TD_End ();
 
@@ -2132,6 +2116,7 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
    unsigned NumGrpThisType;
    bool UsrBelongsToThisGroup;
    struct Group *Grp;
+   char StrGrpCod[32];
 
    /***** Write heading *****/
    Grp_WriteGrpHead (GrpTyp);
@@ -2162,12 +2147,13 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       /* Put checkbox to select the group */
       // Always checkbox, not radio, because the role in the form may be teacher,
       // so if he/she is registered as teacher, he/she can belong to several groups
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-	                 " id=\"Grp%ld\" name=\"GrpCod%ld\" value=\"%ld\"",
-               Grp->GrpCod,GrpTyp->GrpTypCod,Grp->GrpCod);
-      if (UsrBelongsToThisGroup)
-      	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />");
+      snprintf (StrGrpCod,sizeof (StrGrpCod),
+		"GrpCod%ld",
+		GrpTyp->GrpTypCod);
+      HTM_INPUT_CHECKBOX (StrGrpCod,false,
+			  "id=\"Grp%ld\" value=\"%ld\"%s%s",
+			  Grp->GrpCod,Grp->GrpCod,
+			  UsrBelongsToThisGroup ? " checked=\"checked\"" : "");	// I can not register
 
       /* End cell for checkbox */
       HTM_TD_End ();
@@ -2197,6 +2183,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    struct ListCodGrps LstGrpsIBelong;
    bool IBelongToThisGroup;
    bool ICanSelUnselGroup;
+   bool Checked;
    struct Group *Grp;
    Rol_Role_t Role;
 
@@ -2241,6 +2228,19 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	       break;
 	   }
 
+      /* This group should be checked? */
+      if (Gbl.Usrs.ClassPhoto.AllGroups)
+         Checked = true;
+      else
+         for (NumGrpSel = 0, Checked = false;
+              NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
+              NumGrpSel++)
+            if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == Grp->GrpCod)
+              {
+               Checked = true;
+               break;
+              }
+
       /* Put checkbox to select the group */
       HTM_TR_Begin (NULL);
 
@@ -2248,26 +2248,12 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
 	 HTM_TD_Begin ("class=\"LM LIGHT_BLUE\"");
       else
 	 HTM_TD_Begin ("class=\"LM\"");
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-	                 " id=\"Grp%ld\" name=\"GrpCods\" value=\"%ld\"",
-               Grp->GrpCod,
-               Grp->GrpCod);
-      if (Gbl.Usrs.ClassPhoto.AllGroups)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      else
-         for (NumGrpSel = 0;
-              NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
-              NumGrpSel++)
-            if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == Grp->GrpCod)
-              {
-               fprintf (Gbl.F.Out," checked=\"checked\"");
-               break;
-              }
-      if (ICanSelUnselGroup)
-	 fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllGroups')\"");
-      else
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," />");
+      HTM_INPUT_CHECKBOX ("GrpCods",false,
+			  "id=\"Grp%ld\" value=\"%ld\"%s%s",
+			  Grp->GrpCod,Grp->GrpCod,
+			  Checked ? " checked=\"checked\"" : "",
+			  ICanSelUnselGroup ? " onclick=\"checkParent(this,'AllGroups')\"" :
+				              " disabled=\"disabled\"");
       HTM_TD_End ();
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
@@ -2282,30 +2268,34 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp,
    /* To get the students who don't belong to a type of group, use group code -(GrpTyp->GrpTypCod) */
    /* Write checkbox to select the group */
    ICanSelUnselGroup = (Gbl.Usrs.Me.Role.Logged >= Rol_STD);
-   HTM_TR_Begin (NULL);
-
-   HTM_TD_Begin ("class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" id=\"Grp%ld\" name=\"GrpCods\""
-                      " value=\"%ld\"",
-            -(GrpTyp->GrpTypCod),
-            -(GrpTyp->GrpTypCod));
    if (ICanSelUnselGroup)
      {
       if (Gbl.Usrs.ClassPhoto.AllGroups)
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
+	 Checked = true;
       else
-	 for (NumGrpSel = 0;
+	 for (NumGrpSel = 0, Checked = false;
 	      NumGrpSel < Gbl.Crs.Grps.LstGrpsSel.NumGrps;
 	      NumGrpSel++)
 	    if (Gbl.Crs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == -(GrpTyp->GrpTypCod))
 	      {
-	       fprintf (Gbl.F.Out," checked=\"checked\"");
+	       Checked = true;
 	       break;
 	      }
      }
    else
+     {
+      Checked = false;
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllGroups')\" />");
+     }
+
+   HTM_TR_Begin (NULL);
+
+   HTM_TD_Begin ("class=\"LM\"");
+   HTM_INPUT_CHECKBOX ("GrpCods",false,
+		       "id=\"Grp%ld\" value=\"%ld\"%s%s onclick=\"checkParent(this,'AllGroups')\"",
+		       -(GrpTyp->GrpTypCod),-(GrpTyp->GrpTypCod),
+		       ICanSelUnselGroup ? (Checked ? " checked=\"checked\"" : "") :
+			                   " disabled=\"disabled\"");
    HTM_TD_End ();
 
    /* Column closed/open */
