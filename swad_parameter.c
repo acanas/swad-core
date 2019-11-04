@@ -48,7 +48,7 @@ extern struct Globals Gbl;
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-const char *Par_SEPARATOR_PARAM_MULTIPLE = "\0x0A";	// Must be 1 <= character <= 31
+const char *Par_SEPARATOR_PARAM_MULTIPLE = "\x0a";	// Must be 1 <= character <= 31
 
 /*****************************************************************************/
 /*********************** Private types and constants *************************/

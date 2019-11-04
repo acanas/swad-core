@@ -3195,10 +3195,10 @@ void Tst_WriteParamEditQst (void)
   {
    Par_PutHiddenParamChar   ("AllTags",
                              Gbl.Test.Tags.All ? 'Y' :
-                        	                'N');
+                        	                 'N');
    Par_PutHiddenParamString (NULL,"ChkTag",
                              Gbl.Test.Tags.List ? Gbl.Test.Tags.List :
-                        	                 "");
+                        	                  "");
    Par_PutHiddenParamChar   ("AllAnsTypes",
                              Gbl.Test.AllAnsTypes ? 'Y' :
                         	                    'N');

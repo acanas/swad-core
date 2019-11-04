@@ -27,6 +27,7 @@
 
 #define _GNU_SOURCE		// For vasprintf
 #include <stdio.h>		// For vasprintf
+#include <stdlib.h>		// For free
 #include <string.h>		// For string functions
 #include <time.h>		// For time functions (mktime...)
 
