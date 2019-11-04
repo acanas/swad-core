@@ -454,12 +454,10 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
 
    /***** "Yesterday" and "Today" buttons *****/
    HTM_TD_Begin ("rowspan=\"2\" class=\"LM\"");
-   fprintf (Gbl.F.Out,"<input type=\"button\" name=\"Yesterday\" value=\"%s\""
-                      " onclick=\"setDateToYesterday('Start','End');\" />",
-	    Txt_Yesterday);
-   fprintf (Gbl.F.Out,"<input type=\"button\" name=\"Today\" value=\"%s\""
-                      " onclick=\"setDateToToday('Start','End');\" />",
-            Txt_Today);
+   HTM_INPUT_BUTTON ("Yesterday",Txt_Yesterday,
+		     "onclick=\"setDateToYesterday('Start','End');\"");
+   HTM_INPUT_BUTTON ("Today",Txt_Today,
+		     "onclick=\"setDateToToday('Start','End');\"");
    HTM_TD_End ();
 
    HTM_TR_End ();

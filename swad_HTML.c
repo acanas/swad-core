@@ -915,6 +915,12 @@ void HTM_INPUT_FILE (const char *Accept,bool SubmitOnChange)
    fprintf (Gbl.F.Out," />");
   }
 
+void HTM_INPUT_BUTTON (const char *Name,const char *Value,const char *Attr)
+  {
+   fprintf (Gbl.F.Out,"<input type=\"button\" name=\"%s\" value=\"%s\"%s />",
+	    Name,Value,Attr);
+  }
+
 /*****************************************************************************/
 /********************************* Text areas ********************************/
 /*****************************************************************************/
