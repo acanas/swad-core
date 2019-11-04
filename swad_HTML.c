@@ -929,6 +929,23 @@ void HTM_INPUT_IMAGE (const char *ImgFile,const char *Title,const char *Class)
 	    Title,Title,Class);
   }
 
+void HTM_INPUT_PASSWORD (const char *Name,const char *PlaceHolder,
+			 const char *AutoComplete,bool Required)
+  {
+   fprintf (Gbl.F.Out,"<input type=\"password\" id=\"%s\" name=\"%s\""
+                      " size=\"18\" maxlength=\"%u\"",
+	    Name,Name,Pwd_MIN_CHARS_PLAIN_PASSWORD);
+   if (PlaceHolder)
+      if (PlaceHolder[0])
+	 fprintf (Gbl.F.Out," placeholder=\"%s\"",PlaceHolder);
+   if (AutoComplete)
+      if (AutoComplete[0])
+         fprintf (Gbl.F.Out," autocomplete=\"%s\"",AutoComplete);
+   if (Required)
+      fprintf (Gbl.F.Out," required=\"required\"");
+   fprintf (Gbl.F.Out," />");
+  }
+
 /*****************************************************************************/
 /********************************* Text areas ********************************/
 /*****************************************************************************/

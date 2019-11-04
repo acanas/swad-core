@@ -2621,10 +2621,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    HTM_LABEL_Begin ("for=\"UsrPwd\"");
    Ico_PutIcon ("key.svg",Txt_Password,"CONTEXT_ICO_16x16");
    HTM_LABEL_End ();
-   fprintf (Gbl.F.Out,"<input type=\"password\" id=\"UsrPwd\" name=\"UsrPwd\""
-		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />",
-            Pwd_MAX_CHARS_PLAIN_PASSWORD,
-            Txt_password);
+   HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,false);
    HTM_DIV_End ();
 
    /***** End table, send button and end box *****/

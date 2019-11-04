@@ -14372,25 +14372,25 @@ const char *Txt_HELP_nickname =
 	"Exemplo: @silva";
 #endif
 
-const char *Txt_HELP_password =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_HELP_password =
 #if   L==1	// ca
-	"%u o m&eacute;s car&agrave;cters";
+	"8 o m&eacute;s car&agrave;cters";
 #elif L==2	// de
-	"%u oder mehr Zeichen";
+	"8 oder mehr Zeichen";
 #elif L==3	// en
-	"%u or more characters";
+	"8 or more characters";
 #elif L==4	// es
-	"%u o m&aacute;s caracteres";
+	"8 o m&aacute;s caracteres";
 #elif L==5	// fr
-	"%u ou plusieurs caract&egrave;res";
+	"8 ou plusieurs caract&egrave;res";
 #elif L==6	// gn
-	"%u o m&aacute;s caracteres";	// Okoteve traducción
+	"8 o m&aacute;s caracteres";	// Okoteve traducción
 #elif L==7	// it
-	"%u o pi&ugrave; caratteri";
+	"8 o pi&ugrave; caratteri";
 #elif L==8	// pl
-	"%u lub wi&eogon;cej znak&oacute;w";
+	"8 lub wi&eogon;cej znak&oacute;w";
 #elif L==9	// pt
-	"%u ou mais caracteres";
+	"8 ou mais caracteres";
 #endif
 
 const char *Txt_Hidden_MALE_PLURAL =
