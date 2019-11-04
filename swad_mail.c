@@ -506,10 +506,8 @@ static void Mai_ListMailDomainsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenMaiSho);
       Mai_PutParamMaiCod (Mai->MaiCod);
-      HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,
-		      "size=\"15\""
-		      " onchange=\"document.getElementById('%s').submit();\"",
-                      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai->Domain,true,
+		      "size=\"15\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -517,10 +515,8 @@ static void Mai_ListMailDomainsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenMaiFul);
       Mai_PutParamMaiCod (Mai->MaiCod);
-      HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
-		      "size=\"40\""
-		      " onchange=\"document.getElementById('%s').submit();\"",
-                      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai->Info,true,
+		      "size=\"40\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -763,13 +759,13 @@ static void Mai_PutFormToCreateMailDomain (void)
 
    /***** Mail domain *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,
+   HTM_INPUT_TEXT ("Domain",Cns_MAX_CHARS_EMAIL_ADDRESS,Mai_EditingMai->Domain,false,
 		   "size=\"15\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Mail domain info *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,
+   HTM_INPUT_TEXT ("Info",Mai_MAX_CHARS_MAIL_INFO,Mai_EditingMai->Info,false,
 		   "size=\"40\" required=\"required\"");
    HTM_TD_End ();
 

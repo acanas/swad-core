@@ -133,11 +133,9 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),
 		"%u",
 		Marks.Header);
-      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],5,StrHeadOrFoot,
-		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\""
-		      " onchange=\"document.getElementById('%s').submit();\"",
-                      Gbl.RowEvenOdd,
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_HEADER],5,StrHeadOrFoot,true,
+		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
+                      Gbl.RowEvenOdd);
       HTM_LABEL_End ();
       Frm_EndForm ();
       HTM_TD_End ();
@@ -154,11 +152,9 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (void)
       snprintf (StrHeadOrFoot,sizeof (StrHeadOrFoot),
 		"%u",
 		Marks.Footer);
-      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],5,StrHeadOrFoot,
-		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\""
-		      " onchange=\"document.getElementById('%s').submit();\"",
-                      Gbl.RowEvenOdd,
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT (Mrk_HeadOrFootStr[Brw_FOOTER],5,StrHeadOrFoot,true,
+		      "size=\"1\" class=\"LST_EDIT_ROWS COLOR%u\"",
+                      Gbl.RowEvenOdd);
       HTM_LABEL_End ();
       Frm_EndForm ();
       HTM_TD_End ();

@@ -1099,7 +1099,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      HTM_INPUT_TEXT ("CrsName",Hie_MAX_CHARS_FULL_NAME,Gbl.ExamAnns.ExaDat.CrsFullName,
+      HTM_INPUT_TEXT ("CrsName",Hie_MAX_CHARS_FULL_NAME,Gbl.ExamAnns.ExaDat.CrsFullName,false,
 		      "size=\"30\"");
    else
       fprintf (Gbl.F.Out,"<strong>%s</strong>",Gbl.ExamAnns.ExaDat.CrsFullName);
@@ -1152,7 +1152,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,
 
    HTM_TD_Begin ("class=\"%s LT\"",StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      HTM_INPUT_TEXT ("ExamSession",Exa_MAX_CHARS_SESSION,Gbl.ExamAnns.ExaDat.Session,
+      HTM_INPUT_TEXT ("ExamSession",Exa_MAX_CHARS_SESSION,Gbl.ExamAnns.ExaDat.Session,false,
 		      "size=\"30\"");
    else
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Session);

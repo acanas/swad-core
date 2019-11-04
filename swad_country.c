@@ -1673,10 +1673,8 @@ static void Cty_ListCountriesForEdition (void)
          Frm_StartForm (ActRenCty);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
-	 HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],
-			 "size=\"15\""
-			 " onchange=\"document.getElementById('%s').submit();\"",
-			 Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("Name",Cty_MAX_CHARS_NAME,Cty->Name[Lan],true,
+			 "size=\"15\"");
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -1685,10 +1683,8 @@ static void Cty_ListCountriesForEdition (void)
          Frm_StartForm (ActChgCtyWWW);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned (NULL,"Lan",(unsigned) Lan);
-	 HTM_INPUT_URL ("WWW",Cty->WWW[Lan],
-			"class=\"INPUT_WWW\""
-			" onchange=\"document.getElementById('%s').submit();\"",
-                        Gbl.Form.Id);
+	 HTM_INPUT_URL ("WWW",Cty->WWW[Lan],true,
+			"class=\"INPUT_WWW\"");
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -2062,13 +2058,13 @@ static void Cty_PutFormToCreateCountry (void)
 		Cty_EditingCty->CtyCod);
    else
       StrCtyCod[0] = '\0';
-   HTM_INPUT_TEXT ("OthCtyCod",10,StrCtyCod,
+   HTM_INPUT_TEXT ("OthCtyCod",10,StrCtyCod,false,
 		   "size=\"3\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Alphabetic country code with 2 letters (ISO 3166-1) *****/
    HTM_TD_Begin ("rowspan=\"%u\" class=\"RT\"",1 + Lan_NUM_LANGUAGES);
-   HTM_INPUT_TEXT ("Alpha2",2,Cty_EditingCty->Alpha2,
+   HTM_INPUT_TEXT ("Alpha2",2,Cty_EditingCty->Alpha2,false,
 		   "size=\"2\" required=\"required\"");
    HTM_TD_End ();
 
@@ -2103,7 +2099,7 @@ static void Cty_PutFormToCreateCountry (void)
       snprintf (StrName,sizeof (StrName),
 		"Name_%s",
 		Lan_STR_LANG_ID[Lan]);
-      HTM_INPUT_TEXT (StrName,Cty_MAX_CHARS_NAME,Cty_EditingCty->Name[Lan],
+      HTM_INPUT_TEXT (StrName,Cty_MAX_CHARS_NAME,Cty_EditingCty->Name[Lan],false,
 		      "size=\"15\" required=\"required\"");
       HTM_TD_End ();
 
@@ -2112,7 +2108,7 @@ static void Cty_PutFormToCreateCountry (void)
       snprintf (StrName,sizeof (StrName),
 		"WWW_%s",
 		Lan_STR_LANG_ID[Lan]);
-      HTM_INPUT_URL (StrName,Cty_EditingCty->WWW[Lan],
+      HTM_INPUT_URL (StrName,Cty_EditingCty->WWW[Lan],false,
 		     "class=\"INPUT_WWW\"");
       HTM_TD_End ();
 

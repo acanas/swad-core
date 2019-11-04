@@ -2610,7 +2610,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) (void))
    HTM_LABEL_Begin ("for=\"UsrId\"");
    Ico_PutIcon ("user.svg",Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO_16x16");
    HTM_LABEL_End ();
-   HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
+   HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,false,
 		   "size=\"18\" placeholder=\"%s\""
 		   " autofocus=\"autofocus\" required=\"required\"",
 	           Txt_nick_email_or_ID);

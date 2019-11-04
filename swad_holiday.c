@@ -651,10 +651,8 @@ static void Hld_ListHolidaysForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenHld);
       Hld_PutParamHldCod (Hld->HldCod);
-      HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,
-		      "size=\"20\""
-		      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,true,
+		      "size=\"20\"");
       Frm_EndForm ();
       HTM_TD_End ();
       HTM_TR_End ();
@@ -1038,7 +1036,7 @@ static void Hld_PutFormToCreateHoliday (void)
 
    /***** Holiday name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name,
+   HTM_INPUT_TEXT ("Name",Hld_MAX_CHARS_HOLIDAY_NAME,Hld_EditingHld->Name,false,
 		   "size=\"20\" required=\"required\"");
    HTM_TD_End ();
 

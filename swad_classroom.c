@@ -501,10 +501,8 @@ static void Cla_ListClassroomsForEdition (void)
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenClaSho);
       Cla_PutParamClaCod (Cla->ClaCod);
-      HTM_INPUT_TEXT ("ShortName",Cla_MAX_CHARS_SHRT_NAME,Cla->ShrtName,
-		      "size=\"10\" class=\"INPUT_SHORT_NAME\""
-                      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Cla_MAX_CHARS_SHRT_NAME,Cla->ShrtName,true,
+		      "size=\"10\" class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -512,10 +510,8 @@ static void Cla_ListClassroomsForEdition (void)
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenClaFul);
       Cla_PutParamClaCod (Cla->ClaCod);
-      HTM_INPUT_TEXT ("FullName",Cla_MAX_CHARS_FULL_NAME,Cla->FullName,
-		      "size=\"20\" class=\"INPUT_FULL_NAME\""
-                      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Cla_MAX_CHARS_FULL_NAME,Cla->FullName,true,
+		      "size=\"20\" class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -524,10 +520,8 @@ static void Cla_ListClassroomsForEdition (void)
       Frm_StartForm (ActChgClaMaxStd);
       Cla_PutParamClaCod (Cla->ClaCod);
       Cla_WriteCapacity (StrCapacity,Cla->Capacity);
-      HTM_INPUT_TEXT ("Capacity",10,StrCapacity,
-		      "size=\"3\""
-                      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("Capacity",10,StrCapacity,true,
+		      "size=\"3\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -535,10 +529,8 @@ static void Cla_ListClassroomsForEdition (void)
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenClaLoc);
       Cla_PutParamClaCod (Cla->ClaCod);
-      HTM_INPUT_TEXT ("Location",Cla_MAX_CHARS_LOCATION,Cla->Location,
-		      "size=\"15\" class=\"INPUT_FULL_NAME\""
-                      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("Location",Cla_MAX_CHARS_LOCATION,Cla->Location,true,
+		      "size=\"15\" class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -913,26 +905,26 @@ static void Cla_PutFormToCreateClassroom (void)
 
    /***** Classroom short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Cla_MAX_CHARS_SHRT_NAME,Cla_EditingCla->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Cla_MAX_CHARS_SHRT_NAME,Cla_EditingCla->ShrtName,false,
 		   "size=\"10\" class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Classroom full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Cla_MAX_CHARS_FULL_NAME,Cla_EditingCla->FullName,
+   HTM_INPUT_TEXT ("FullName",Cla_MAX_CHARS_FULL_NAME,Cla_EditingCla->FullName,false,
 		   "size=\"20\" class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Seating capacity *****/
    HTM_TD_Begin ("class=\"LM\"");
    Cla_WriteCapacity (StrCapacity,Cla_EditingCla->Capacity);
-   HTM_INPUT_TEXT ("Capacity",10,StrCapacity,
+   HTM_INPUT_TEXT ("Capacity",10,StrCapacity,false,
 		   "size=\"3\"");
    HTM_TD_End ();
 
    /***** Classroom location *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("Location",Cla_MAX_CHARS_LOCATION,Cla_EditingCla->Location,
+   HTM_INPUT_TEXT ("Location",Cla_MAX_CHARS_LOCATION,Cla_EditingCla->Location,false,
 		   "size=\"15\" class=\"INPUT_FULL_NAME\"");
    HTM_TD_End ();
 

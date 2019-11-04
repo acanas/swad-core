@@ -397,10 +397,8 @@ static void Deg_Configuration (bool PrintView)
      {
       /* Form to change degree full name */
       Frm_StartForm (ActRenDegFulCfg);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Deg.FullName,
-		      "class=\"INPUT_FULL_NAME\""
-	              " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Deg.FullName,true,
+		      "class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit degree full name
@@ -425,10 +423,8 @@ static void Deg_Configuration (bool PrintView)
      {
       /* Form to change degree short name */
       Frm_StartForm (ActRenDegShoCfg);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Deg.ShrtName,
-		      "class=\"INPUT_SHORT_NAME\""
-	              " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Deg.ShrtName,true,
+		      "class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit degree short name
@@ -453,10 +449,8 @@ static void Deg_Configuration (bool PrintView)
      {
       /* Form to change degree WWW */
       Frm_StartForm (ActChgDegWWWCfg);
-      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Deg.WWW,
-		     "class=\"INPUT_WWW\""
-		     " onchange=\"document.getElementById('%s').submit();\"",
-	             Gbl.Form.Id);
+      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Deg.WWW,true,
+		     "class=\"INPUT_WWW\"");
       Frm_EndForm ();
      }
    else	// I can not change degree WWW
@@ -747,10 +741,8 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActRenDegSho);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg->ShrtName,
-			 "class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\"",
-			 Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg->ShrtName,true,
+			 "class=\"INPUT_SHORT_NAME\"");
 	 Frm_EndForm ();
 	}
       else
@@ -763,10 +755,8 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActRenDegFul);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg->FullName,
-			 "class=\"INPUT_FULL_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\"",
-			 Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg->FullName,true,
+			 "class=\"INPUT_FULL_NAME\"");
 	 Frm_EndForm ();
 	}
       else
@@ -810,10 +800,8 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Frm_StartForm (ActChgDegWWW);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 HTM_INPUT_URL ("WWW",Deg->WWW,
-			"class=\"INPUT_WWW\""
-			" onchange=\"document.getElementById('%s').submit();\"",
-			Gbl.Form.Id);
+	 HTM_INPUT_URL ("WWW",Deg->WWW,true,
+			"class=\"INPUT_WWW\"");
 	 Frm_EndForm ();
 	}
       else
@@ -970,13 +958,13 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Deg_EditingDeg->ShrtName,false,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Degree full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Deg_EditingDeg->FullName,false,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
@@ -999,7 +987,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,
+   HTM_INPUT_URL ("WWW",Deg_EditingDeg->WWW,false,
 		  "class=\"INPUT_WWW\" required=\"required\"");
    HTM_TD_End ();
 

@@ -917,7 +917,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
                         	                                        ActModIteSylPra));
    Gbl.Syllabus.ParamNumItem = NumItem;
    Syl_PutParamNumItem ();
-   HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,
+   HTM_INPUT_TEXT ("Txt",Syl_MAX_CHARS_TEXT_ITEM,Text,false,
 		   "size=\"60\" placeholder=\"%s\"",
 	           Txt_Enter_a_new_item_here);
    if (NewItem)

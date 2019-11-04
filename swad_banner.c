@@ -445,10 +445,8 @@ static void Ban_ListBannersForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenBanSho);
       Ban_PutParamBanCodToEdit ();
-      HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,
-		      "class=\"INPUT_SHORT_NAME\""
-                      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,true,
+		      "class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -456,10 +454,8 @@ static void Ban_ListBannersForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenBanFul);
       Ban_PutParamBanCodToEdit ();
-      HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,
-		      "class=\"INPUT_FULL_NAME\""
-                      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban->FullName,true,
+		      "class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -467,10 +463,8 @@ static void Ban_ListBannersForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgBanImg);
       Ban_PutParamBanCodToEdit ();
-      HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,
-		      "size=\"12\""
-                      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban->Img,true,
+		      "size=\"12\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -478,10 +472,8 @@ static void Ban_ListBannersForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgBanWWW);
       Ban_PutParamBanCodToEdit ();
-      HTM_INPUT_URL ("WWW",Ban->WWW,
-		     "class=\"INPUT_WWW\""
-                     " onchange=\"document.getElementById('%s').submit();\"",
-		     Gbl.Form.Id);
+      HTM_INPUT_URL ("WWW",Ban->WWW,true,
+		     "class=\"INPUT_WWW\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -872,25 +864,25 @@ static void Ban_PutFormToCreateBanner (void)
 
    /***** Banner short name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban_EditingBan->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Ban_MAX_CHARS_SHRT_NAME,Ban_EditingBan->ShrtName,false,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Banner full name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban_EditingBan->FullName,
+   HTM_INPUT_TEXT ("FullName",Ban_MAX_CHARS_FULL_NAME,Ban_EditingBan->FullName,false,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Banner image *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban_EditingBan->Img,
+   HTM_INPUT_TEXT ("Img",Ban_MAX_CHARS_IMAGE,Ban_EditingBan->Img,false,
 		   "size=\"12\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Banner WWW *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_URL ("WWW",Ban_EditingBan->WWW,
+   HTM_INPUT_URL ("WWW",Ban_EditingBan->WWW,false,
 		  "class=\"INPUT_WWW\" required=\"required\"");
    HTM_TD_End ();
 

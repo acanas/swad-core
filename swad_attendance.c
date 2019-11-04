@@ -1110,7 +1110,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LT\"");
-   HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Att.Title,
+   HTM_INPUT_TEXT ("Title",Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Att.Title,false,
 		   "size=\"45\"");
    HTM_TD_End ();
 

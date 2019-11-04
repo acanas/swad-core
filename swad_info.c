@@ -1320,7 +1320,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    HTM_DIV_Begin ("class=\"CM\"");
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_URL);
-   HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,
+   HTM_INPUT_URL ("InfoSrcURL",Gbl.Crs.Info.URL,false,
 		  "size=\"50\"");
    HTM_LABEL_End ();
    HTM_DIV_End ();

@@ -562,10 +562,8 @@ static void Dpt_ListDepartmentsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptSho);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,
-		      "class=\"INPUT_SHORT_NAME\""
-		      " onchange=\"document.getElementById('%s').submit();\"",
-                      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt->ShrtName,true,
+		      "class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -573,10 +571,8 @@ static void Dpt_ListDepartmentsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenDptFul);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt->FullName,
-		      "class=\"INPUT_FULL_NAME\""
-		      " onchange=\"document.getElementById('%s').submit();\"",
-                      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt->FullName,true,
+		      "class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -584,10 +580,8 @@ static void Dpt_ListDepartmentsForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      HTM_INPUT_URL ("WWW",Dpt->WWW,
-		     "class=\"INPUT_WWW\""
-		     " onchange=\"document.getElementById('%s').submit();\"",
-                     Gbl.Form.Id);
+      HTM_INPUT_URL ("WWW",Dpt->WWW,true,
+		     "class=\"INPUT_WWW\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -942,19 +936,19 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Department short name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Dpt_EditingDpt->ShrtName,false,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Department full name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Dpt_EditingDpt->FullName,false,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Department WWW *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,
+   HTM_INPUT_URL ("WWW",Dpt_EditingDpt->WWW,false,
 		  "class=\"INPUT_WWW\" required=\"required\"");
    HTM_TD_End ();
 

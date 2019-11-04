@@ -795,7 +795,7 @@ void HTM_LABEL_End (void)
 /************************* Input text, email, url ****************************/
 /*****************************************************************************/
 
-void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
+void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool SubmitOnChange,
 	             const char *fmt,...)
   {
    va_list ap;
@@ -825,6 +825,10 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
 	 free ((void *) Attr);
 	}
      }
+
+   if (SubmitOnChange)
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+	       Gbl.Form.Id);
 
    fprintf (Gbl.F.Out," />");
   }
@@ -863,7 +867,7 @@ void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
    fprintf (Gbl.F.Out," />");
   }
 
-void HTM_INPUT_URL (const char *Name,const char *Value,
+void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
 	            const char *fmt,...)
   {
    va_list ap;
@@ -893,6 +897,10 @@ void HTM_INPUT_URL (const char *Name,const char *Value,
 	 free ((void *) Attr);
 	}
      }
+
+   if (SubmitOnChange)
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+	       Gbl.Form.Id);
 
    fprintf (Gbl.F.Out," />");
   }

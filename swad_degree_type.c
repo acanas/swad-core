@@ -422,10 +422,9 @@ static void DT_ListDegreeTypesForEdition (void)
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartForm (ActRenDegTyp);
       DT_PutParamOtherDegTypCod (Gbl.DegTypes.Lst[NumDegTyp].DegTypCod);
-      HTM_INPUT_TEXT ("DegTypName",Deg_MAX_CHARS_DEGREE_TYPE_NAME,Gbl.DegTypes.Lst[NumDegTyp].DegTypName,
-		      "size=\"25\" required=\"required\""
-		      " onchange=\"document.getElementById('%s').submit();\"",
-                      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("DegTypName",Deg_MAX_CHARS_DEGREE_TYPE_NAME,
+		      Gbl.DegTypes.Lst[NumDegTyp].DegTypName,true,
+		      "size=\"25\" required=\"required\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -481,9 +480,8 @@ static void DT_PutFormToCreateDegreeType (void)
 
    /***** Degree type name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("DegTypName",Deg_MAX_CHARS_DEGREE_TYPE_NAME,DT_EditingDegTyp->DegTypName,
-		   "size=\"25\" required=\"required\"",
-		   Gbl.Form.Id);
+   HTM_INPUT_TEXT ("DegTypName",Deg_MAX_CHARS_DEGREE_TYPE_NAME,DT_EditingDegTyp->DegTypName,false,
+		   "size=\"25\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Number of degrees of this degree type ****/

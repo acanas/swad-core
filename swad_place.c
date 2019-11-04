@@ -552,10 +552,8 @@ static void Plc_ListPlacesForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlcSho);
       Plc_PutParamPlcCod (Plc->PlcCod);
-      HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,
-		      "class=\"INPUT_SHORT_NAME\""
-                      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,true,
+		      "class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -563,10 +561,8 @@ static void Plc_ListPlacesForEdition (void)
       HTM_TD_Begin ("class=\"CM\"");
       Frm_StartForm (ActRenPlcFul);
       Plc_PutParamPlcCod (Plc->PlcCod);
-      HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,
-		      "class=\"INPUT_FULL_NAME\""
-                      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,true,
+		      "class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -820,13 +816,13 @@ static void Plc_PutFormToCreatePlace (void)
 
    /***** Place short name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc_EditingPlc->ShrtName,false,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Place full name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName,
+   HTM_INPUT_TEXT ("FullName",Plc_MAX_CHARS_PLACE_FULL_NAME,Plc_EditingPlc->FullName,false,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 

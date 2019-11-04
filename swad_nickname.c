@@ -401,7 +401,8 @@ static void Nck_ShowFormChangeUsrNickname (const struct UsrData *UsrDat,bool Its
    snprintf (NicknameWithArroba,sizeof (NicknameWithArroba),
 	     "@%s",
 	     Gbl.Usrs.Me.UsrDat.Nickname);
-   HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,NicknameWithArroba,
+   HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
+		   NicknameWithArroba,false,
 		   "size=\"18\"");
    fprintf (Gbl.F.Out,"<br />");
    Btn_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname

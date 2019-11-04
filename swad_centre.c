@@ -468,10 +468,8 @@ static void Ctr_Configuration (bool PrintView)
      {
       /* Form to change centre full name */
       Frm_StartForm (ActRenCtrFulCfg);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ctr.FullName,
-		      "class=\"INPUT_FULL_NAME\""
-		      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ctr.FullName,true,
+		      "class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit centre full name
@@ -496,10 +494,8 @@ static void Ctr_Configuration (bool PrintView)
      {
       /* Form to change centre short name */
       Frm_StartForm (ActRenCtrShoCfg);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ctr.ShrtName,
-		      "class=\"INPUT_SHORT_NAME\""
-		      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ctr.ShrtName,true,
+		      "class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit centre short name
@@ -573,10 +569,8 @@ static void Ctr_Configuration (bool PrintView)
      {
       /* Form to change centre WWW */
       Frm_StartForm (ActChgCtrWWWCfg);
-      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ctr.WWW,
-		     "class=\"INPUT_WWW\""
-		     " onchange=\"document.getElementById('%s').submit();\"",
-	             Gbl.Form.Id);
+      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ctr.WWW,true,
+		     "class=\"INPUT_WWW\"");
       Frm_EndForm ();
      }
    else	// I can not change centre WWW
@@ -1554,10 +1548,8 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Frm_StartForm (ActRenCtrSho);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,
-			 "class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\"",
-			 Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName,true,
+			 "class=\"INPUT_SHORT_NAME\"");
 	 Frm_EndForm ();
 	}
       else
@@ -1570,10 +1562,8 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Frm_StartForm (ActRenCtrFul);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,
-			 "class=\"INPUT_FULL_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\"",
-			 Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr->FullName,true,
+			 "class=\"INPUT_FULL_NAME\"");
 	 Frm_EndForm ();
 	}
       else
@@ -1586,10 +1576,8 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Frm_StartForm (ActChgCtrWWW);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 HTM_INPUT_URL ("WWW",Ctr->WWW,
-			"class=\"INPUT_WWW\""
-			" onchange=\"document.getElementById('%s').submit();\"",
-			Gbl.Form.Id);
+	 HTM_INPUT_URL ("WWW",Ctr->WWW,true,
+			"class=\"INPUT_WWW\"");
 	 Frm_EndForm ();
 	}
       else
@@ -2532,19 +2520,19 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ctr_EditingCtr->ShrtName,false,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Centre full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ctr_EditingCtr->FullName,false,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Centre WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,
+   HTM_INPUT_URL ("WWW",Ctr_EditingCtr->WWW,false,
 		  "class=\"INPUT_WWW\" required=\"required\"");
    HTM_TD_End ();
 

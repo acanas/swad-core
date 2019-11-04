@@ -151,7 +151,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    Frm_StartForm (ActChkUsrAcc);
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;",Txt_ID);
-   HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",
+   HTM_INPUT_TEXT ("ID",ID_MAX_CHARS_USR_ID,"",false,
 		   "size=\"18\" required=\"required\"");
    HTM_LABEL_End ();
    Btn_PutCreateButtonInline (Txt_Check);
@@ -372,7 +372,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    HTM_TD_Begin ("class=\"LM\"");
    HTM_INPUT_TEXT ("NewNick",1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
-		   NewNicknameWithArroba,
+		   NewNicknameWithArroba,false,
 		   "size=\"18\" placeholder=\"%s\" required=\"required\"",
 		   Txt_HELP_nickname);
    HTM_TD_End ();

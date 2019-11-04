@@ -409,10 +409,8 @@ static void Ins_Configuration (bool PrintView)
      {
       /* Form to change institution full name */
       Frm_StartForm (ActRenInsFulCfg);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ins.FullName,
-		      "class=\"INPUT_FULL_NAME\""
-	              " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Ins.FullName,true,
+		      "class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit institution full name
@@ -437,10 +435,8 @@ static void Ins_Configuration (bool PrintView)
      {
       /* Form to change institution short name */
       Frm_StartForm (ActRenInsShoCfg);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ins.ShrtName,
-		      "class=\"INPUT_SHORT_NAME\""
-	              " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Ins.ShrtName,true,
+		      "class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit institution short name
@@ -466,10 +462,8 @@ static void Ins_Configuration (bool PrintView)
      {
       /* Form to change institution WWW */
       Frm_StartForm (ActChgInsWWWCfg);
-      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ins.WWW,
-		     "class=\"INPUT_WWW\""
-	             " onchange=\"document.getElementById('%s').submit();\"",
-	             Gbl.Form.Id);
+      HTM_INPUT_URL ("WWW",Gbl.Hierarchy.Ins.WWW,true,
+		     "class=\"INPUT_WWW\"");
       Frm_EndForm ();
      }
    else	// I can not change institution WWW
@@ -1492,10 +1486,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActRenInsSho);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
-			 "class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\"",
-			 Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,true,
+			 "class=\"INPUT_SHORT_NAME\"");
 	 Frm_EndForm ();
 	}
       else
@@ -1508,10 +1500,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActRenInsFul);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins->FullName,
-			 "class=\"INPUT_FULL_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\"",
-			 Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins->FullName,true,
+			 "class=\"INPUT_FULL_NAME\"");
 	 Frm_EndForm ();
 	}
       else
@@ -1524,10 +1514,8 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Frm_StartForm (ActChgInsWWW);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 HTM_INPUT_URL ("WWW",Ins->WWW,
-			"class=\"INPUT_WWW\""
-			" onchange=\"document.getElementById('%s').submit();\"",
-			Gbl.Form.Id);
+	 HTM_INPUT_URL ("WWW",Ins->WWW,true,
+			"class=\"INPUT_WWW\"");
 	 Frm_EndForm ();
 	 HTM_TD_End ();
 	}
@@ -2218,19 +2206,19 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Ins_EditingIns->ShrtName,false,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Institution full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Ins_EditingIns->FullName,false,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Institution WWW *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,
+   HTM_INPUT_URL ("WWW",Ins_EditingIns->WWW,false,
 		  "class=\"INPUT_WWW\" required=\"required\"");
    HTM_TD_End ();
 

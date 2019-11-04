@@ -1808,10 +1808,8 @@ static void Tst_ShowFormEditTags (void)
          HTM_TD_Begin ("class=\"LM\"");
          Frm_StartForm (ActRenTag);
          Par_PutHiddenParamString (NULL,"OldTagTxt",row[1]);
-	 HTM_INPUT_TEXT ("NewTagTxt",Tst_MAX_CHARS_TAG,row[1],
-			 "size=\"36\""
-			 " onchange=\"document.getElementById('%s').submit();\"",
-			 Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("NewTagTxt",Tst_MAX_CHARS_TAG,row[1],true,
+			 "size=\"36\"");
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -1960,7 +1958,7 @@ static void Tst_ShowFormConfigTst (void)
    snprintf (StrMinTimeNxtTstPerQst,sizeof (StrMinTimeNxtTstPerQst),
              "%lu",
 	     Gbl.Test.Config.MinTimeNxtTstPerQst);
-   HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",7,StrMinTimeNxtTstPerQst,
+   HTM_INPUT_TEXT ("MinTimeNxtTstPerQst",7,StrMinTimeNxtTstPerQst,false,
 		   "size=\"7\" required=\"required\"");
    HTM_TD_End ();
 
@@ -2024,7 +2022,7 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
    snprintf (StrValue,sizeof (StrValue),
 	     "%u",
 	     Value);
-   HTM_INPUT_TEXT (Field,3,StrValue,
+   HTM_INPUT_TEXT (Field,3,StrValue,false,
 		   "size=\"3\" required=\"required\"");
    HTM_TD_End ();
 
@@ -4220,7 +4218,7 @@ static void Tst_WriteTextAnsViewTest (unsigned NumQst)
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%06u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_ANSWERS_ONE_QST,"",
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_ANSWERS_ONE_QST,"",false,
 		   "size=\"40\"");
   }
 
@@ -4424,7 +4422,7 @@ static void Tst_WriteIntAnsViewTest (unsigned NumQst)
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%06u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,11,"",
+   HTM_INPUT_TEXT (StrAns,11,"",false,
 		   "size=\"11\"");
   }
 
@@ -4543,7 +4541,7 @@ static void Tst_WriteFloatAnsViewTest (unsigned NumQst)
    snprintf (StrAns,sizeof (StrAns),
 	     "Ans%06u",
 	     NumQst);
-   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,"",
+   HTM_INPUT_TEXT (StrAns,Tst_MAX_BYTES_FLOAT_ANSWER,"",false,
 		   "size=\"11\"");
   }
 
@@ -5128,9 +5126,8 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
       snprintf (StrTagTxt,sizeof (StrTagTxt),
 		"TagTxt%u",
 		NumTag);
-      HTM_INPUT_TEXT (StrTagTxt,Tst_MAX_CHARS_TAG,StrTagTxt,
-		      "class=\"TAG_TXT\""
-                      " onchange=\"changeSelTag('%u')\"",
+      HTM_INPUT_TEXT (StrTagTxt,Tst_MAX_CHARS_TAG,StrTagTxt,false,
+		      "class=\"TAG_TXT\" onchange=\"changeSelTag('%u')\"",
 	              NumTag);
       HTM_TD_End ();
 
@@ -5216,7 +5213,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    snprintf (StrInteger,sizeof (StrInteger),
 	     "%ld",
 	     Gbl.Test.Answer.Integer);
-   HTM_INPUT_TEXT ("AnsInt",11,StrInteger,
+   HTM_INPUT_TEXT ("AnsInt",11,StrInteger,false,
 		   "size=\"11\" required=\"required\"%s",
                    Gbl.Test.AnswerType == Tst_ANS_INT ? "" :
                                                         " disabled=\"disabled\"");
@@ -5421,7 +5418,7 @@ static void Tst_PutFloatInputField (const char *Label,const char *Field,
    snprintf (StrFloat,sizeof (StrFloat),
 	     "%lg",
 	     Value);
-   HTM_INPUT_TEXT (Field,Tst_MAX_BYTES_FLOAT_ANSWER,StrFloat,
+   HTM_INPUT_TEXT (Field,Tst_MAX_BYTES_FLOAT_ANSWER,StrFloat,false,
 		   "size=\"11\" required=\"required\"%s",
                    Gbl.Test.AnswerType == Tst_ANS_FLOAT ? "" :
                                                           " disabled=\"disabled\"");

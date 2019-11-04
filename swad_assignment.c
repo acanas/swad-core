@@ -1173,7 +1173,7 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TD_End ();
 
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,
+   HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title,false,
 		   "size=\"45\" required=\"required\"");
    HTM_TD_End ();
 
@@ -1192,7 +1192,7 @@ void Asg_RequestCreatOrEditAsg (void)
    HTM_TD_Begin ("class=\"LM\"");
    HTM_LABEL_Begin ("class=\"DAT\"");
    fprintf (Gbl.F.Out,"%s:",Txt_Folder);
-   HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,
+   HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asg.Folder,false,
 		   "size=\"30\"");
    HTM_LABEL_End ();
    HTM_TD_End ();

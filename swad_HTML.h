@@ -89,11 +89,11 @@ void HTM_SCRIPT_End (void);
 void HTM_LABEL_Begin (const char *fmt,...);
 void HTM_LABEL_End (void);
 
-void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,
+void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool SubmitOnChange,
 	             const char *fmt,...);
 void HTM_INPUT_EMAIL (const char *Name,unsigned MaxLength,const char *Value,
 	              const char *fmt,...);
-void HTM_INPUT_URL (const char *Name,const char *Value,
+void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
 	            const char *fmt,...);
 void HTM_INPUT_FILE (const char *Accept,bool SubmitOnChange);
 

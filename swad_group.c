@@ -1318,10 +1318,9 @@ static void Grp_ListGroupTypesForEdition (void)
       HTM_TD_Begin ("class=\"LM\"");
       Frm_StartFormAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
-		      "size=\"12\""
-		      " onchange=\"document.getElementById('%s').submit();\"",
-		      Gbl.Form.Id);
+      HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
+		      Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,true,
+		      "size=\"12\"");
       Frm_EndForm ();
       HTM_TD_End ();
 
@@ -1579,10 +1578,8 @@ static void Grp_ListGroupsForEdition (void)
          HTM_TD_Begin ("class=\"CM\"");
          Frm_StartFormAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
-	 HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,
-			 "size=\"20\""
-			 " onchange=\"document.getElementById('%s').submit();\"",
-			 Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Grp->GrpName,true,
+			 "size=\"20\"");
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -1642,10 +1639,8 @@ static void Grp_ListGroupsForEdition (void)
          Frm_StartFormAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          Grp_WriteMaxStds (StrMaxStudents,Grp->MaxStudents);
-	 HTM_INPUT_TEXT ("MaxStudents",10,StrMaxStudents,
-			 "size=\"3\""
-			 " onchange=\"document.getElementById('%s').submit();\"",
-			 Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("MaxStudents",10,StrMaxStudents,true,
+			 "size=\"3\"");
          Frm_EndForm ();
          HTM_TD_End ();
 
@@ -2493,7 +2488,8 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Name of group type *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,Gbl.Crs.Grps.GrpTyp.GrpTypName,
+   HTM_INPUT_TEXT ("GrpTypName",Grp_MAX_CHARS_GROUP_TYPE_NAME,
+		   Gbl.Crs.Grps.GrpTyp.GrpTypName,false,
 		   "size=\"12\" required=\"required\"");
    HTM_TD_End ();
 
@@ -2643,7 +2639,7 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** Group name *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName,
+   HTM_INPUT_TEXT ("GrpName",Grp_MAX_CHARS_GROUP_NAME,Gbl.Crs.Grps.GrpName,false,
 		   "size=\"20\" required=\"required\"");
    HTM_TD_End ();
 
@@ -2696,7 +2692,7 @@ static void Grp_PutFormToCreateGroup (void)
    /***** Maximum number of students *****/
    HTM_TD_Begin ("class=\"CM\"");
    Grp_WriteMaxStds (StrMaxStudents,Gbl.Crs.Grps.MaxStudents);
-   HTM_INPUT_TEXT ("MaxStudents",10,StrMaxStudents,
+   HTM_INPUT_TEXT ("MaxStudents",10,StrMaxStudents,false,
 		   "size=\"3\"");
    HTM_TD_End ();
 

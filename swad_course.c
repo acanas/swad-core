@@ -294,10 +294,8 @@ static void Crs_Configuration (bool PrintView)
      {
       /* Form to change course full name */
       Frm_StartForm (ActRenCrsFulCfg);
-      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Crs.FullName,
-		      "class=\"INPUT_FULL_NAME\""
-	              " onchange=\"document.getElementById('%s').submit();\"",
-	              Gbl.Form.Id);
+      HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Gbl.Hierarchy.Crs.FullName,true,
+		      "class=\"INPUT_FULL_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit course full name
@@ -322,10 +320,8 @@ static void Crs_Configuration (bool PrintView)
      {
       /* Form to change course short name */
       Frm_StartForm (ActRenCrsShoCfg);
-      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Crs.ShrtName,
-		      "class=\"INPUT_SHORT_NAME\""
-	              " onchange=\"document.getElementById('%s').submit();\"",
-	              Gbl.Form.Id);
+      HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Gbl.Hierarchy.Crs.ShrtName,true,
+		      "class=\"INPUT_SHORT_NAME\"");
       Frm_EndForm ();
      }
    else	// I can not edit course short name
@@ -385,11 +381,10 @@ static void Crs_Configuration (bool PrintView)
       if (IsForm)
 	{
          Frm_StartForm (ActChgInsCrsCodCfg);
-	 HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,Gbl.Hierarchy.Crs.InstitutionalCrsCod,
-			 "size=\"%u\""
-	                 " onchange=\"document.getElementById('%s').submit();\"",
-			 Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
-			 Gbl.Form.Id);
+	 HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
+			 Gbl.Hierarchy.Crs.InstitutionalCrsCod,true,
+			 "size=\"%u\"",
+			 Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD);
          Frm_EndForm ();
 	}
       else
@@ -1473,10 +1468,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   {
 	    Frm_StartForm (ActChgInsCrsCod);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,Crs->InstitutionalCrsCod,
-			    "class=\"INPUT_INS_CODE\""
-			    " onchange=\"document.getElementById('%s').submit();\"",
-		            Gbl.Form.Id);
+	    HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
+			    Crs->InstitutionalCrsCod,true,
+			    "class=\"INPUT_INS_CODE\"");
 	    Frm_EndForm ();
 	   }
 	 else
@@ -1513,10 +1507,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   {
 	    Frm_StartForm (ActRenCrsSho);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
-			    "class=\"INPUT_SHORT_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\"",
-		            Gbl.Form.Id);
+	    HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs->ShrtName,true,
+			    "class=\"INPUT_SHORT_NAME\"");
 	    Frm_EndForm ();
 	   }
 	 else
@@ -1529,10 +1521,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	   {
 	    Frm_StartForm (ActRenCrsFul);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
-	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs->FullName,
-			    "class=\"INPUT_FULL_NAME\""
-			    " onchange=\"document.getElementById('%s').submit();\"",
-		            Gbl.Form.Id);
+	    HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs->FullName,true,
+			    "class=\"INPUT_FULL_NAME\"");
 	    Frm_EndForm ();
 	   }
 	 else
@@ -1680,7 +1670,8 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Institutional code of the course *****/
    HTM_TD_Begin ("class=\"CM\"");
-   HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,Crs_EditingCrs->InstitutionalCrsCod,
+   HTM_INPUT_TEXT ("InsCrsCod",Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
+		   Crs_EditingCrs->InstitutionalCrsCod,false,
 		   "class=\"INPUT_INS_CODE\"");
    HTM_TD_End ();
 
@@ -1700,13 +1691,13 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Course short name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName,
+   HTM_INPUT_TEXT ("ShortName",Hie_MAX_CHARS_SHRT_NAME,Crs_EditingCrs->ShrtName,false,
 		   "class=\"INPUT_SHORT_NAME\" required=\"required\"");
    HTM_TD_End ();
 
    /***** Course full name *****/
    HTM_TD_Begin ("class=\"LM\"");
-   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName,
+   HTM_INPUT_TEXT ("FullName",Hie_MAX_CHARS_FULL_NAME,Crs_EditingCrs->FullName,false,
 		   "class=\"INPUT_FULL_NAME\" required=\"required\"");
    HTM_TD_End ();
 

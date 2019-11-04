@@ -211,7 +211,7 @@ void Prf_RequestUserProfile (void)
    snprintf (NicknameWithArroba,sizeof (NicknameWithArroba),
 	     "@%s",
 	     Gbl.Usrs.Me.UsrDat.Nickname);
-   HTM_INPUT_TEXT ("usr",Nck_MAX_BYTES_NICKNAME_FROM_FORM,NicknameWithArroba,
+   HTM_INPUT_TEXT ("usr",Nck_MAX_BYTES_NICKNAME_FROM_FORM,NicknameWithArroba,false,
 		   "size=\"18\"");
    HTM_LABEL_End ();
 
