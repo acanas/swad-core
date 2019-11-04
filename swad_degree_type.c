@@ -111,7 +111,7 @@ void DT_WriteSelectorDegreeTypes (void)
 
    /* List degree types */
    fprintf (Gbl.F.Out,"<select id=\"OthDegTypCod\" name=\"OthDegTypCod\""
-	              " onchange=\"document.getElementById('%s').submit();\">",
+	              " onchange=\"document.getElementById('%s').submit();return false;\">",
             Gbl.Form.Id);
 
    fprintf (Gbl.F.Out,"<option value=\"-1\"");

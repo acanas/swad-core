@@ -1325,7 +1325,7 @@ static void Grp_ListGroupTypesForEdition (void)
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrolment\""
 	                 " style=\"width:150px;\""
-	                 " onchange=\"document.getElementById('%s').submit();\">"
+	                 " onchange=\"document.getElementById('%s').submit();return false;\">"
                          "<option value=\"N\"",
                Gbl.Form.Id);
       if (!Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
@@ -1347,7 +1347,7 @@ static void Grp_ListGroupTypesForEdition (void)
       Grp_PutParamGrpTypCod (Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MultipleEnrolment\""
 	                 " style=\"width:150px;\""
-	                 " onchange=\"document.getElementById('%s').submit();\">"
+	                 " onchange=\"document.getElementById('%s').submit();return false;\">"
                          "<option value=\"N\"",
                Gbl.Form.Id);
       if (!Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
@@ -1549,7 +1549,7 @@ static void Grp_ListGroupsForEdition (void)
          Frm_StartFormAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\" style=\"width:100px;\""
-                            " onchange=\"document.getElementById('%s').submit();\">",
+                            " onchange=\"document.getElementById('%s').submit();return false;\">",
                   Gbl.Form.Id);
 
          /* Options for group types */
@@ -1584,7 +1584,7 @@ static void Grp_ListGroupsForEdition (void)
          Frm_StartFormAnchor (ActChgGrpCla,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
 	 fprintf (Gbl.F.Out,"<select name=\"ClaCod\" style=\"width:100px;\""
-                            " onchange=\"document.getElementById('%s').submit();\">",
+                            " onchange=\"document.getElementById('%s').submit();return false;\">",
                   Gbl.Form.Id);
 
 	 /* Option for no assigned classroom */

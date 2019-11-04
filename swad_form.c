@@ -134,7 +134,7 @@ static void Frm_StartFormInternal (Act_Action_t NextAction,bool PutParameterLoca
       fprintf (Gbl.F.Out,"\" id=\"%s\"",Id);
       if (OnSubmit)
          if (OnSubmit[0])
-            fprintf (Gbl.F.Out," onsubmit=\"%s\"",OnSubmit);
+            fprintf (Gbl.F.Out," onsubmit=\"%s;return false;\"",OnSubmit);
       switch (Act_GetBrowserTab (NextAction))
 	{
 	 case Act_BRW_NEW_TAB:
@@ -265,8 +265,7 @@ void Frm_LinkFormSubmitId (const char *Title,const char *LinkClass,
 			// before submitting the form
       if (OnSubmit[0])
          fprintf (Gbl.F.Out,"%s;",OnSubmit);
-   fprintf (Gbl.F.Out,"document.getElementById('%s').submit();"
-		      "return false;\">",
+   fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;\">",
 	    Id);
   }
 
@@ -286,8 +285,7 @@ void Frm_LinkFormSubmitAnimated (const char *Title,const char *LinkClass,
       if (OnSubmit[0])
          fprintf (Gbl.F.Out,"%s;",OnSubmit);
    fprintf (Gbl.F.Out,"AnimateIcon(%d);"
-		      "document.getElementById('%s').submit();"
-		      "return false;\">",
+		      "document.getElementById('%s').submit();return false;\">",
 	    Gbl.Form.Num,
 	    Gbl.Form.Id);
   }

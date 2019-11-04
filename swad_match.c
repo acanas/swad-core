@@ -2406,33 +2406,31 @@ static void Mch_PutCheckboxResult (struct Match *Match)
    extern const char *Txt_View_results;
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"MCH_SHOW_RESULTS\">");
+   HTM_DIV_Begin ("class=\"MCH_SHOW_RESULTS\"");
 
    /***** Start form *****/
    Frm_StartForm (ActChgVisResMchQst);
    Mch_PutParamMchCod (Match->MchCod);	// Current match being played
 
    /***** Put icon with link *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">"
-	              "<a href=\"\" class=\"ICO_HIGHLIGHT\""
-	              " title=\"%s\" "
-	              " onclick=\"document.getElementById('%s').submit();"
-	              " return false;\">"
-	              "<i class=\"%s\"></i>"
-	              "&nbsp;%s"
-	              "</a>"
-	              "</div>",
-	    Txt_View_results,
-	    Gbl.Form.Id,
+   HTM_DIV_Begin ("class=\"CONTEXT_OPT\"");
+   HTM_A_Begin ("href=\"\" class=\"ICO_HIGHLIGHT\" title=\"%s\" "
+		" onclick=\"document.getElementById('%s').submit();return false;\"",
+	        Txt_View_results,
+	        Gbl.Form.Id);
+   fprintf (Gbl.F.Out,"<i class=\"%s\"></i>"
+	              "&nbsp;%s",
 	    Match->Status.ShowQstResults ? "fas fa-toggle-on" :
 		                           "fas fa-toggle-off",
 	    Txt_View_results);
+   HTM_A_End ();
+   HTM_DIV_End ();
 
    /***** End form *****/
    Frm_EndForm ();
 
    /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   HTM_DIV_End ();
   }
 
 /*****************************************************************************/
@@ -2587,8 +2585,8 @@ static void Mch_ShowQuestionAndAnswersStd (struct Match *Match)
 	    Gam_PutParamQstInd (Match->Status.QstInd);	// Current question index shown
 	    Mch_PutParamNumOpt (NumOpt);		// Number of button
 	    fprintf (Gbl.F.Out,"<button type=\"submit\""
-			       " onmousedown=\"document.getElementById('%s').submit();"
-			       "return false;\" class=\"",
+			       " onmousedown=\"document.getElementById('%s').submit();return false;\""
+			       " class=\"",
 		     Gbl.Form.Id);
 	    if (UsrAnswer.NumOpt == (int) NumOpt)	// Student's answer
 	       fprintf (Gbl.F.Out,"MCH_STD_ANSWER_SELECTED ");

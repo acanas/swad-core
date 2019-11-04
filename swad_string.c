@@ -333,8 +333,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	    snprintf (Anchor2Nick,sizeof (Anchor2Nick),
 		      "\">"
 		      "<a href=\"\""
-		      " onclick=\"document.getElementById('%s').submit();"
-		      "return false;\">",
+		      " onclick=\"document.getElementById('%s').submit();return false;\">",
 		      Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
 			                   Gbl.Form.Id);
 	    Anchor2NickLength = strlen (Anchor2Nick);

@@ -920,7 +920,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
 	           Txt_Enter_a_new_item_here);
    if (NewItem)
       fprintf (Gbl.F.Out," autofocus=\"autofocus\"");
-   fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\" />",
+   fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\" />",
 	    Gbl.Form.Id);
    Frm_EndForm ();
    HTM_TD_End ();

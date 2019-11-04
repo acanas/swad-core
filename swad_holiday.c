@@ -586,7 +586,7 @@ static void Hld_ListHolidaysForEdition (void)
       Frm_StartForm (ActChgHldPlc);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<select name=\"PlcCod\" class=\"PLC_COD\""
-	                 " onchange=\"document.getElementById('%s').submit();\">"
+	                 " onchange=\"document.getElementById('%s').submit();return false;\">"
                          "<option value=\"-1\"",
 	       Gbl.Form.Id);
       if (Hld->PlcCod <= 0)
@@ -609,7 +609,7 @@ static void Hld_ListHolidaysForEdition (void)
       Frm_StartForm (ActChgHldTyp);
       Hld_PutParamHldCod (Hld->HldCod);
       fprintf (Gbl.F.Out,"<select name=\"HldTyp\" style=\"width:62px;\""
-	                 " onchange=\"document.getElementById('%s').submit();\">",
+	                 " onchange=\"document.getElementById('%s').submit();return false;\">",
 	       Gbl.Form.Id);
       for (HolidayType = (Hld_HolidayType_t) 0;
 	   HolidayType < Hld_NUM_TYPES_HOLIDAY;

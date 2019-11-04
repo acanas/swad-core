@@ -1597,7 +1597,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 
 	 /***** Class type *****/
 	 fprintf (Gbl.F.Out,"<select name=\"TTTyp\" class=\"TT_TYP\""
-	                    " onchange=\"document.getElementById('%s').submit();\">",
+	                    " onchange=\"document.getElementById('%s').submit();return false;\">",
 	          Gbl.Form.Id);
 	 for (CT = (TT_ClassType_t) 0;
 	      CT < (TT_ClassType_t) TT_NUM_CLASS_TYPES;
@@ -1637,7 +1637,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	   {
 	    /***** Class duration *****/
 	    fprintf (Gbl.F.Out,"<select name=\"TTDur\" class=\"TT_DUR\""
-		               " onchange=\"document.getElementById('%s').submit();\">",
+		               " onchange=\"document.getElementById('%s').submit();return false;\">",
 		     Gbl.Form.Id);
             for (i = Interval + TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
         	 i < Gbl.TimeTable.Config.IntervalsPerDay;
@@ -1670,7 +1670,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       HTM_LABEL_End ();
 	       fprintf (Gbl.F.Out,"<select id=\"TTGrp%s\" name=\"TTGrp\""
 	                          " class=\"TT_GRP\""
-		                  " onchange=\"document.getElementById('%s').submit();\">",
+		                  " onchange=\"document.getElementById('%s').submit();return false;\">",
 			CellStr,
 			Gbl.Form.Id);
                fprintf (Gbl.F.Out,"<option value=\"-1\"");
@@ -1711,7 +1711,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""
 	                          " type=\"text\" size=\"1\" maxlength=\"%u\""
 	                          " value=\"%s\" class=\"TT_INF\""
-		                  " onchange=\"document.getElementById('%s').submit();\" />",
+		                  " onchange=\"document.getElementById('%s').submit();return false;\" />",
 			CellStr,
 			TT_MAX_CHARS_INFO,
 			Info ? Info :
@@ -1728,7 +1728,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
                fprintf (Gbl.F.Out,"<input id=\"TTInf%s\" name=\"TTInf\""
                                   " type=\"text\" size=\"12\" maxlength=\"%u\""
                                   " value=\"%s\" class=\"TT_INF\""
-		                  " onchange=\"document.getElementById('%s').submit();\" />",
+		                  " onchange=\"document.getElementById('%s').submit();return false;\" />",
 			CellStr,
 			TT_MAX_CHARS_INFO,Info,
 			Gbl.Form.Id);

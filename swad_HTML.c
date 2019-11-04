@@ -827,7 +827,7 @@ void HTM_INPUT_TEXT (const char *Name,unsigned MaxLength,const char *Value,bool 
      }
 
    if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
 	       Gbl.Form.Id);
 
    fprintf (Gbl.F.Out," />");
@@ -899,7 +899,7 @@ void HTM_INPUT_TEL (const char *Name,const char *Value,bool SubmitOnChange,
      }
 
    if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
 	       Gbl.Form.Id);
 
    fprintf (Gbl.F.Out," />");
@@ -971,7 +971,7 @@ void HTM_INPUT_URL (const char *Name,const char *Value,bool SubmitOnChange,
      }
 
    if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
 	       Gbl.Form.Id);
 
    fprintf (Gbl.F.Out," />");
@@ -982,7 +982,7 @@ void HTM_INPUT_FILE (const char *Accept,bool SubmitOnChange)
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" accept=\"%s\"",
 	    Fil_NAME_OF_PARAM_FILENAME_ORG,Accept);
    if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
 	       Gbl.Form.Id);
    fprintf (Gbl.F.Out," />");
   }
@@ -1059,7 +1059,7 @@ void HTM_INPUT_RADIO (const char *Name,bool SubmitOnClick,
      }
 
    if (SubmitOnClick)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
 	       Gbl.Form.Id);
    fprintf (Gbl.F.Out," />");
   }
@@ -1094,7 +1094,7 @@ void HTM_INPUT_CHECKBOX (const char *Name,bool SubmitOnChange,
      }
 
    if (SubmitOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
 	       Gbl.Form.Id);
    fprintf (Gbl.F.Out," />");
   }

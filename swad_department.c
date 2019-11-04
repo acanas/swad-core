@@ -540,7 +540,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       Frm_StartForm (ActChgDptIns);
       Dpt_PutParamDptCod (Dpt->DptCod);
       fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" class=\"HIE_SEL_NARROW\""
-	                 "onchange=\"document.getElementById('%s').submit();\">"
+	                 "onchange=\"document.getElementById('%s').submit();return false;\">"
                          "<option value=\"0\"",
 	       Gbl.Form.Id);
       if (Dpt->InsCod == 0)
@@ -1109,7 +1109,7 @@ void Dpt_WriteSelectorDepartment (long InsCod,long DptCod,
 	    Dpt_PARAM_DPT_COD_NAME,Dpt_PARAM_DPT_COD_NAME,
 	    SelectClass);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
                Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
 

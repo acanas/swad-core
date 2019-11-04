@@ -767,7 +767,8 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
         	      "form_%d",
 		      NumLastForm + NumFace);
             fprintf (Gbl.F.Out,"<area shape=\"circle\""
-                               " href=\"javascript:document.getElementById('%s').submit();\""
+                               " href=\"\""
+                               " onclick=\"javascript:document.getElementById('%s').submit();return false;\""
                                " coords=\"%u,%u,%u\">\n",
                      FormId,X,Y,Radius);
            }
@@ -1797,7 +1798,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamsPrefsAboutUsrList ();
    fprintf (Gbl.F.Out,"<select id=\"AvgType\" name=\"AvgType\""
-                      " onchange=\"document.getElementById('%s').submit();\">",
+                      " onchange=\"document.getElementById('%s').submit();return false;\">",
             Gbl.Form.Id);
    for (TypeOfAvg = (Pho_AvgPhotoTypeOfAverage_t) 0;
 	TypeOfAvg < Pho_NUM_AVERAGE_PHOTO_TYPES;
@@ -1862,7 +1863,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamsPrefsAboutUsrList ();
    fprintf (Gbl.F.Out,"<select id=\"PhotoSize\" name=\"PhotoSize\""
-                      " onchange=\"document.getElementById('%s').submit();\">",
+                      " onchange=\"document.getElementById('%s').submit();return false;\">",
             Gbl.Form.Id);
    for (PhoSi = (Pho_HowComputePhotoSize_t) 0;
 	PhoSi < Pho_NUM_HOW_COMPUTE_PHOTO_SIZES;
@@ -1927,7 +1928,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Pho_PutHiddenParamPhotoSize ();
    Usr_PutParamsPrefsAboutUsrList ();
    fprintf (Gbl.F.Out,"<select id=\"Order\" name=\"Order\""
-                      " onchange=\"document.getElementById('%s').submit();\">",
+                      " onchange=\"document.getElementById('%s').submit();return false;\">",
             Gbl.Form.Id);
    for (Order = (Pho_HowOrderDegrees_t) 0;
 	Order < Pho_NUM_HOW_ORDER_DEGREES;

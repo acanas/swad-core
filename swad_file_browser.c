@@ -3400,10 +3400,10 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    /***** Show user's email *****/
    if (UsrDat->Email[0])
      {
-      fprintf (Gbl.F.Out,"<br />"
-	                 "<a href=\"mailto:%s\" target=\"_blank\""
-	                 " class=\"AUTHOR_TXT\">%s",
-	      UsrDat->Email,UsrDat->Email);
+      fprintf (Gbl.F.Out,"<br />");
+      HTM_A_Begin ("href=\"mailto:%s\" target=\"_blank\" class=\"AUTHOR_TXT\"",
+	           UsrDat->Email);
+      fprintf (Gbl.F.Out,"%s",UsrDat->Email);
       HTM_A_End ();
      }
    Frm_EndForm ();

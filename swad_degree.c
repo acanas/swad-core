@@ -359,7 +359,7 @@ static void Deg_Configuration (bool PrintView)
       Frm_StartForm (ActChgDegCtrCfg);
       fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
 			 " class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\">",
+			 " onchange=\"document.getElementById('%s').submit();return false;\">",
 	       Gbl.Form.Id);
       for (NumCtr = 0;
 	   NumCtr < Gbl.Hierarchy.Ins.Ctrs.Num;
@@ -598,7 +598,7 @@ void Deg_WriteSelectorOfDegree (void)
    Frm_StartFormGoTo (ActSeeCrs);
    fprintf (Gbl.F.Out,"<select id=\"deg\" name=\"deg\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Ctr.CtrCod > 0)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -770,7 +770,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Frm_StartForm (ActChgDegTyp);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\" class=\"HIE_SEL_NARROW\""
-			    " onchange=\"document.getElementById('%s').submit();\">",
+			    " onchange=\"document.getElementById('%s').submit();return false;\">",
 		  Gbl.Form.Id);
 	 for (NumDegTyp = 0;
 	      NumDegTyp < Gbl.DegTypes.Num;
@@ -838,7 +838,7 @@ static void Deg_ListDegreesForEdition (void)
 	 Frm_StartForm (ActChgDegSta);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-			    " onchange=\"document.getElementById('%s').submit();\">"
+			    " onchange=\"document.getElementById('%s').submit();return false;\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
 			    "</select>",

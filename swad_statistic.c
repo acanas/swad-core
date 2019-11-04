@@ -2078,7 +2078,7 @@ static void Sta_ShowDistrAccessesPerDayAndHour (unsigned long NumRows,MYSQL_RES 
    HTM_LABEL_Begin ("class=\"%s\"",The_ClassFormInBox[Gbl.Prefs.Theme]);
    fprintf (Gbl.F.Out,"%s:&nbsp;"
                       "<select name=\"ColorType\""
-                      " onchange=\"document.getElementById('%s').submit();\">",
+                      " onchange=\"document.getElementById('%s').submit();return false;\">",
             Txt_Color_of_the_graphic,
             Gbl.Form.Id);
    for (ColorType = (Sta_ColorType_t) 0;

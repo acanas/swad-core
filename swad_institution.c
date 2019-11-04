@@ -371,7 +371,7 @@ static void Ins_Configuration (bool PrintView)
       Frm_StartForm (ActChgInsCtyCfg);
       fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
 			 " class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\">",
+			 " onchange=\"document.getElementById('%s').submit();return false;\">",
 	       Gbl.Form.Id);
       for (NumCty = 0;
 	   NumCty < Gbl.Hierarchy.Sys.Ctys.Num;
@@ -1373,7 +1373,7 @@ void Ins_WriteSelectorOfInstitution (void)
    Frm_StartFormGoTo (ActSeeCtr);
    fprintf (Gbl.F.Out,"<select id=\"ins\" name=\"ins\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Cty.CtyCod > 0)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -1563,7 +1563,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	 Frm_StartForm (ActChgInsSta);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
 	 fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-			    " onchange=\"document.getElementById('%s').submit();\">"
+			    " onchange=\"document.getElementById('%s').submit();return false;\">"
 			    "<option value=\"%u\" selected=\"selected\">%s</option>"
 			    "<option value=\"%u\">%s</option>"
 			    "</select>",

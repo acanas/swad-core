@@ -297,7 +297,7 @@ static void Cty_Configuration (bool PrintView)
 	 HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_StartForm (ActChgCtyMapAtt);
 	 HTM_TEXTAREA_Begin ("name=\"Attribution\" cols=\"50\" rows=\"2\""
-			     " onchange=\"document.getElementById('%s').submit();\"",
+			     " onchange=\"document.getElementById('%s').submit();return false;\"",
 		             Gbl.Form.Id);
 	 if (MapAttribution)
 	    fprintf (Gbl.F.Out,"%s",MapAttribution);
@@ -1233,7 +1233,7 @@ void Cty_WriteSelectorOfCountry (void)
    /***** Begin form *****/
    Frm_StartFormGoTo (ActSeeIns);
    fprintf (Gbl.F.Out,"<select id=\"cty\" name=\"cty\" class=\"HIE_SEL\""
-                      " onchange=\"document.getElementById('%s').submit();\">"
+                      " onchange=\"document.getElementById('%s').submit();return false;\">"
                       "<option value=\"\"",
 	    Gbl.Form.Id);
    if (Gbl.Hierarchy.Cty.CtyCod < 0)

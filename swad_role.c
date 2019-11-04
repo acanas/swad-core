@@ -477,7 +477,7 @@ void Rol_PutFormToChangeMyRole (const char *ClassSelect)
    if (ClassSelect)
       if (ClassSelect[0])
          fprintf (Gbl.F.Out," class=\"%s\"",ClassSelect);
-   fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\">",
+   fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\">",
             Gbl.Form.Id);
    for (Role = Rol_GST;
         Role < Rol_NUM_ROLES;

@@ -333,7 +333,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       Frm_StartForm (ActChgVisFie);
       Par_PutHiddenParamLong (NULL,"FieldCod",Gbl.Crs.Records.LstFields.Lst[NumField].FieldCod);
       fprintf (Gbl.F.Out,"<select name=\"Visibility\""
-                         " onchange=\"document.getElementById('%s').submit();\">",
+                         " onchange=\"document.getElementById('%s').submit();return false;\">",
                Gbl.Form.Id);
       for (Vis = (Rec_VisibilityRecordFields_t) 0;
 	   Vis < (Rec_VisibilityRecordFields_t) Rec_NUM_TYPES_VISIBILITY;
@@ -4019,7 +4019,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    Frm_StartFormAnchor (ActChgCtyMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
 		      " class=\"REC_C2_BOT_INPUT\""
-	              " onchange=\"document.getElementById('%s').submit();\">"
+	              " onchange=\"document.getElementById('%s').submit();return false;\">"
                       "<option value=\"-1\"",
 	    Gbl.Form.Id);
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod <= 0)
@@ -4062,7 +4062,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
    Frm_StartFormAnchor (ActChgMyIns,Rec_MY_INS_CTR_DPT_ID);
    fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
 		      " class=\"REC_C2_BOT_INPUT\""
-	              " onchange=\"document.getElementById('%s').submit();\">"
+	              " onchange=\"document.getElementById('%s').submit();return false;\">"
                       "<option value=\"-1\"",
 	    Gbl.Form.Id);
    if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
@@ -4112,7 +4112,7 @@ static void Rec_ShowFormMyInsCtrDpt (bool IAmATeacher)
       Frm_StartFormAnchor (ActChgMyCtr,Rec_MY_INS_CTR_DPT_ID);
       fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
 		         " class=\"REC_C2_BOT_INPUT\""
-			 " onchange=\"document.getElementById('%s').submit();\">"
+			 " onchange=\"document.getElementById('%s').submit();return false;\">"
 			 "<option value=\"-1\"",
 	       Gbl.Form.Id);
       if (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0)

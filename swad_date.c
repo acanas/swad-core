@@ -567,7 +567,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                       "setUTCFromLocalDateTimeForm('%s');",
 	    Id,ParamName,Id,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
                Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
    for (Year = FirstYear;
@@ -586,7 +586,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                       "setUTCFromLocalDateTimeForm('%s');",
 	    Id,ParamName,Id,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
                Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
    for (Month = 1;
@@ -603,7 +603,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	              " onchange=\"setUTCFromLocalDateTimeForm('%s');",
             Id,ParamName,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
                Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
    for (Day = 1;
@@ -620,7 +620,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                       " onchange=\"setUTCFromLocalDateTimeForm('%s');",
             Id,ParamName,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
                Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
    for (Hour = 0;
@@ -637,7 +637,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                       " onchange=\"setUTCFromLocalDateTimeForm('%s');",
 	    Id,ParamName,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
                Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
 
@@ -658,7 +658,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 			 " onchange=\"setUTCFromLocalDateTimeForm('%s');",
 	       Id,ParamName,Id);
       if (SubmitFormOnChange)
-	 fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+	 fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
 		  Gbl.Form.Id);
       fprintf (Gbl.F.Out,"\">");
       for (Second = 0;
@@ -829,7 +829,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
                       " onchange=\"adjustDateForm('%s');",
 	    Id,Id,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
                Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\"");
    if (Disabled)
@@ -854,7 +854,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
                       " onchange=\"adjustDateForm('%s');",
 	    Id,Id,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();return false;",
                Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\"");
    if (Disabled)
@@ -876,7 +876,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    HTM_TD_Begin ("class=\"CM\"");
    fprintf (Gbl.F.Out,"<select id=\"%sDay\" name=\"%sDay\"",Id,Id);
    if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
                Gbl.Form.Id);
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");

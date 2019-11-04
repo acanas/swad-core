@@ -255,7 +255,7 @@ static void Crs_Configuration (bool PrintView)
       Frm_StartForm (ActChgCrsDegCfg);
       fprintf (Gbl.F.Out,"<select id=\"OthDegCod\" name=\"OthDegCod\""
 			 " class=\"INPUT_SHORT_NAME\""
-			 " onchange=\"document.getElementById('%s').submit();\">",
+			 " onchange=\"document.getElementById('%s').submit();return false;\">",
 	       Gbl.Form.Id);
       for (NumDeg = 0;
 	   NumDeg < Gbl.Hierarchy.Ctr.Degs.Num;
@@ -345,7 +345,7 @@ static void Crs_Configuration (bool PrintView)
      {
       Frm_StartForm (ActChgCrsYeaCfg);
       fprintf (Gbl.F.Out,"<select id=\"OthCrsYear\" name=\"OthCrsYear\""
-	                 " onchange=\"document.getElementById('%s').submit();\">",
+	                 " onchange=\"document.getElementById('%s').submit();return false;\">",
                Gbl.Form.Id);
       for (Year = 0;
 	   Year <= Deg_MAX_YEARS_PER_DEGREE;
@@ -888,7 +888,7 @@ void Crs_WriteSelectorOfCourse (void)
    Frm_StartFormGoTo (ActSeeCrsInf);
    fprintf (Gbl.F.Out,"<select id=\"crs\" name=\"crs\" class=\"HIE_SEL\"");
    if (Gbl.Hierarchy.Deg.DegCod > 0)
-      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
+      fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();return false;\"",
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -1060,7 +1060,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
    /***** Start selector of courses *****/
    fprintf (Gbl.F.Out,"<select id=\"my_courses\" name=\"crs\""
-                      " onchange=\"document.getElementById('%s').submit();\">",
+                      " onchange=\"document.getElementById('%s').submit();return false;\">",
             Gbl.Form.Id);
 
    /***** Write an option when no course selected *****/
@@ -1484,7 +1484,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_StartForm (ActChgCrsYea);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\" class=\"HIE_SEL_NARROW\""
-			       " onchange=\"document.getElementById('%s').submit();\">",
+			       " onchange=\"document.getElementById('%s').submit();return false;\">",
 		     Gbl.Form.Id);
 	    for (YearAux = 0;
 		 YearAux <= Deg_MAX_YEARS_PER_DEGREE;
@@ -1556,7 +1556,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	    Frm_StartForm (ActChgCrsSta);
 	    Crs_PutParamOtherCrsCod (Crs->CrsCod);
 	    fprintf (Gbl.F.Out,"<select name=\"Status\" class=\"INPUT_STATUS\""
-			       " onchange=\"document.getElementById('%s').submit();\">"
+			       " onchange=\"document.getElementById('%s').submit();return false;\">"
 			       "<option value=\"%u\" selected=\"selected\">%s</option>"
 			       "<option value=\"%u\">%s</option>"
 			       "</select>",
